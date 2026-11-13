@@ -5,6 +5,11 @@ Runtime selection, cameras, jobs and revision counters are separate from authore
 Command handlers validate before committing an edit. Snapshot history restores the entire
 document; failed commands do not mutate it. All delivered interfaces use the same registry.
 
+The first model slice contains pages only. IDs are nonzero u32 values; dimensions are finite
+f64 points with validated construction/deserialization and a documented 100,000-point bound.
+One point is 1/72 inch; native display scale is a view concern. A new document has one A4 page
+with ID 1. Atoms, bonds, text and reactions will be added with their first verified behaviors.
+
 Format crates own their syntax and source-preserving representations. They do not depend
 on the model. The io layer translates supported data and retains original backing for
 unknown content; unsupported edits must fail explicitly rather than discard data.

@@ -57,3 +57,22 @@ three tests reject equal/upward edges, misclassified/new packages, format-to-wor
 dependencies and a transitive GUI dependency; valid lower-layer edges pass. The actual
 all-features Cargo resolution passes `cargo xtask layers`. Focused xtask clippy passes
 after collapsing the nested condition required by the pinned compiler.
+
+## Page model, 2026-11-13
+
+RED: `cargo test -p bondline-model` failed for missing PageId/PageSize/Document APIs. GREEN:
+three tests pass against independent physical-unit expectations (72 points per inch, A4
+210 by 297 mm), invalid dimensions including non-finite values, checked deserialization,
+nonzero IDs and failed-edit atomicity. Focused model clippy and actual layer gate pass.
+
+## External artifact inspection, 2026-11-13
+
+REA 6.9.0 ran as an external development tool under an already installed Node 26.12.1.
+`rea audit-release-exposure target/dev/Bondline.app --json` completed with exit 0. This
+selected the earlier read-only development bundle, not any proprietary program. Evidence
+ID `ev_a770a1af9d192bd3602b3081084097908158b625f86fbdcf35ff496f2a904c99`, directory
+digest `b691b23c9b8b3f131dc99480ffe78828adc22e9ce00ba78dad1b4560ff8d86d9`. No source-map,
+credential-marker or debug-companion condition was observed within the reported bounds.
+Go/Rust metadata remained unknown; hardening, hardened runtime and Android were not assessed.
+Raw report: ignored build output `target/rea-graphics-audit.json`. This is neither a license
+audit nor a security pass. No REA code is bundled with the app.

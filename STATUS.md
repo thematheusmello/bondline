@@ -17,12 +17,15 @@ These are NOT native Windows/Linux runtime verification.
 Tests cover IEEE boundary vectors and 256 Python-generated float cases, malformed inputs,
 OS loader vs standard-library PID, UTF-16/CF_HTML validation and resource/hash/license gates.
 
-Missing: document/command engine, CLI/MCP/control, complete parity inventory, corpus,
+The pure model now has a validated A4 page, stable page ID and no native/GUI dependency.
+Its three tests pass against physical-unit expectations and malformed-input cases.
+
+Missing: command engine, CLI/MCP/control, complete parity inventory, corpus,
 CDXML parser, native CI workflows, native Windows/Linux execution and human-approved goldens.
 The M5 browser candidate still includes Unicode-licensed data and is not approved for shipment.
 
 Next executable tasks:
-1. Add model + shared registry with typed schemas and exact undo/redo property tests.
+1. Add the shared registry with typed schemas and exact undo/redo property tests.
 2. Route native actions and CLI/MCP/control through it; add layer/corpus/CI tooling.
 3. Add the standalone source-preserving CDXML parser with independent reference tests.
 
