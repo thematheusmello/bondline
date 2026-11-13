@@ -1,10 +1,9 @@
-use std::{error::Error, io::Write, path::Path, process::Command};
+use std::{error::Error, io::Write, process::Command};
 
 pub fn check() -> Result<(), Box<dyn Error>> {
-    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .ok_or("missing workspace root")?;
-    std::env::set_current_dir(root)?;
+    let root = super::workspace::root()?;
+    std::env::set_current_dir(&root)?;
+    writeln!(std::io::stdout(), "checking workspace: {}", root.display())?;
     for arguments in [
         ["fmt", "--all", "--", "--check"].as_slice(),
         &[

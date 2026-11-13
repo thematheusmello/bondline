@@ -989,3 +989,22 @@ Windows202 tests, actual native windows on all three and both Linux ASan targets
 job IDs and adapter limits are in STATUS.md/ci.md. Main was fast-forwarded to this tested
 product source; the integration/status commit changes no product code. No hosted CDX job
 remains active. This closes that platform regression, not M0 or full M1/CDX parity.
+
+## Runtime workspace identity for quality gates, 2026-11-13
+
+An attempted shared-close aggregate reused a target-directory xtask binary containing the
+other checkout's compile-time CARGO_MANIFEST_DIR. Its passing log names .cache/cdx-integration,
+so it is explicitly excluded from shared-close evidence (target/shared-close-ci-wrong-workspace.log).
+A subsequent correct-root attempt encountered incompatible cached first-party metadata;
+shared-close-ci-stale-metadata.log is also not a pass. These were integration setup failures,
+not missing close APIs in the actual source. Affected first-party artifacts were removed;
+future worktrees must keep separate target directories.
+
+CI, standalone asset lookup and corpus lookup now share Cargo's runtime workspace locator.
+It uses frozen JSON output, validates the absolute manifest and fails without falling back
+to another checkout. CI prints its resolved root. Two independent temp-workspace tests
+first failed against the old compile-time selection (xtask-runtime-root-red.log), then
+passed for root/member/nested invocation and invalid-manifest refusal without creating a
+lockfile. All16 xtask tests and warnings-denied clippy pass; logs xtask-runtime-root-green.log
+and xtask-runtime-root-clippy-green.log. The corrected integration run is recorded separately
+with its actual source/test scope; neither discarded attempt contributes to that claim.

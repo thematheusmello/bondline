@@ -4,6 +4,7 @@ mod ci;
 mod corpus;
 mod layers;
 mod licenses;
+mod workspace;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut args = std::env::args().skip(1);

@@ -30,6 +30,14 @@ and `cargo xtask licenses`, plus `cargo xtask corpus` (see corpus/README.md for 
 require an actual supported adapter and fail if it is absent. Source cross-compilation is
 useful evidence but does not establish runtime behavior on that operating system.
 
+Keep each worktree's default target directory separate. Reusing another checkout's target
+produced a stale xtask binary and incompatible first-party metadata during actual integration.
+The gate runner now uses read-only `cargo locate-project --workspace --frozen` at runtime;
+CI prints the selected root before checks. A failed locator is an error, never a fallback to
+the build-time checkout. This also applies to standalone asset/corpus lookup and works from
+nested package directories. If artifacts were mixed, discard the affected first-party build
+outputs and rerun the real gate; an earlier pass for another checkout is not evidence.
+
 On Ubuntu 24.04, install the Linux packages listed in .github/workflows/ci.yml before
 building/running the native app. X11 needs libxkbcommon-x11-0 at runtime in addition to
 libxkbcommon-dev; the first hosted window launch exposed that missing dependency.

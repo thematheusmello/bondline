@@ -7,7 +7,6 @@ use std::{
     ffi::OsString,
     fs,
     io::{Read, Write},
-    path::Path,
     process::{Command, Stdio},
 };
 
@@ -208,13 +207,11 @@ fn compare_graph(bytes: &[u8], projection: &Value) -> Result<(), Box<dyn Error>>
 }
 
 pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
-    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .ok_or("missing workspace root")?;
+    let root = super::workspace::root()?;
     let manifest: Manifest =
         serde_json::from_slice(&fs::read(root.join("docs/corpus/manifest.json"))?)?;
     validate(&manifest)?;
-    let notice = super::licenses::confined_path(root, &manifest.notice)?;
+    let notice = super::licenses::confined_path(&root, &manifest.notice)?;
     if !notice.is_file() || notice.metadata()?.len() == 0 {
         return Err("corpus notice is empty".into());
     }

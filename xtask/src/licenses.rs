@@ -105,17 +105,18 @@ pub(super) fn confined_path(root: &Path, relative: &str) -> Result<PathBuf, Box<
 }
 
 fn check_assets() -> Result<(), Box<dyn Error>> {
-    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .ok_or("missing workspace root")?;
+    let root = super::workspace::root()?;
     let manifest: serde_json::Value =
         serde_json::from_slice(&std::fs::read(root.join("assets/manifest.json"))?)?;
     let files = manifest["files"]
         .as_array()
         .ok_or("missing asset inventory")?;
     for file in files {
-        let path = confined_path(root, file["path"].as_str().ok_or("missing asset path")?)?;
-        let notice = confined_path(root, file["notice"].as_str().ok_or("missing asset notice")?)?;
+        let path = confined_path(&root, file["path"].as_str().ok_or("missing asset path")?)?;
+        let notice = confined_path(
+            &root,
+            file["notice"].as_str().ok_or("missing asset notice")?,
+        )?;
         if !notice.is_file() || notice.metadata()?.len() == 0 {
             return Err("missing nonempty asset license notice".into());
         }

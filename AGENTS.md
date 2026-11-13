@@ -135,7 +135,10 @@ When the workspace exists: cargo fmt --all -- --check;
 cargo clippy --workspace --all-targets --locked -- -D warnings;
 cargo test --workspace --locked; cargo xtask layers; cargo xtask licenses;
 cargo xtask corpus; cargo xtask ci. Until implemented, a documented future command is not a pass.
-Use local Git commits. Small conventional commits: one command or format feature, with its
+Keep Cargo target directories separate for each worktree. Shared artifacts caused a real
+wrong-checkout CI run and stale metadata; runtime workspace discovery does not make shared
+binary outputs safe. xtask locates the invoked workspace through Cargo, and ci prints its
+root. Verify that root before counting results. Use local Git commits. Small conventional commits: one command or format feature, with its
 tests, provenance and relevant docs. Keep main green; record red evidence without committing
 failing main. Commit all intentional project files, never caches, secrets or build outputs.
 Do not push or publish without an explicit request. Update STATUS.md with verified state,
