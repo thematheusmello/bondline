@@ -8,6 +8,7 @@ license.workspace = true
 [dependencies]
 serde.workspace = true
 bondline-cdxml = { path = "../crates/cdxml" }
+bondline-io = { path = "../crates/io" }
 serde_json.workspace = true
 spdx.workspace = true
 sha2 = "=0.10.9"

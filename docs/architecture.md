@@ -44,10 +44,13 @@ Format crates own their syntax and source-preserving representations. They do no
 on the model. The io layer translates supported data and retains original backing for
 unknown content; unsupported edits must fail explicitly rather than discard data.
 CDXML's borrowed tree remains read-only. Its attribute replacement returns revalidated
-source bytes with untouched spans retained; no chemical-document mapping or application file
-adapter exists yet. Io's limited Geometry adapter owns the borrowed syntax view and validated
-positions. It retains original source IDs as strings and writes only an existing p value;
-it does not allocate application IDs or build a chemical graph. See file-formats.md.
+source bytes with untouched spans retained; no complete application file adapter exists yet.
+Io's Geometry adapter maps direct-fragment positions and writes only an existing p value.
+The read-only ElementalGraph adapter maps supported elemental properties and connectivity,
+assigning separate application identities while retaining the original syntax. Its local
+reference maps handle scoped source IDs and zero's unassigned meaning. Group hierarchy,
+styles, captions and other unmodelled data stay in source backing, not in its flat projection.
+See file-formats.md; neither projection is a complete application document or editable codec.
 
 The native canvas now consumes the render crate's page scene instead of owning a parallel
 page-layout algorithm. CPU and instanced GPU reference paths consume that same scene;

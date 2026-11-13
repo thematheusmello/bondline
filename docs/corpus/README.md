@@ -21,7 +21,7 @@ Current coverage is deliberately separate:
 
 | Entry | Integrity | Syntax/semantic check | Chemistry |
 |---|---|---|---|
-| rdkit-chain1.cdxml | Exact 727 bytes and SHA-256 | Byte-preserving round trip; complete element/attribute/text view agrees with external Expat | Missing |
+| rdkit-chain1.cdxml | Exact 727 bytes and SHA-256 | Byte-preserving round trip; full XML view agrees with Expat; typed elemental projection agrees with independent Expat/Decimal | Calculations missing |
 | rdkit-methyl-radical.mol | Exact 170 bytes and SHA-256 | Missing MOL parser; printed as integrity-only | Missing |
 | CDX | No reviewed entry fetched yet | Missing parser | Missing |
 
@@ -30,3 +30,11 @@ checks. It explicitly prints missing MOL checks; it does not certify M1 or all-f
 round trips. A manifest without any implemented parser coverage is an error. Extending
 the corpus requires source/license review, pinned bytes and the matching parser/oracle
 checks. Root repository licensing does not authorize copying third-party asset libraries.
+
+The elemental oracle is original developer-only Python under xtask/oracles. It independently
+derives fresh IDs, scoped endpoint references, atom metadata and authored bond kinds from
+Expat events and Decimal arithmetic. A deliberate model-property mutation is rejected by
+its verifier test; another test checks scopes, direction and explicit metadata. It does
+not use our parser/writer or compute chemistry. Source bytes are syntax-validated and
+bounded before either external oracle runs; neither fetches DTD/entity resources.
+The gate now also prints the missing formula/mass/aromaticity/stereo/SMILES/InChI checks.

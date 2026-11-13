@@ -78,4 +78,24 @@ fuzz_target!(|data: &[u8]| {
             }
         }
     }
+    if let Ok(graph) = bondline_io::cdxml::ElementalGraph::parse(data) {
+        assert_eq!(graph.as_bytes(), data);
+        assert_eq!(graph.to_bytes(), data);
+        let mut fragments = std::collections::BTreeSet::new();
+        let mut atoms = std::collections::BTreeSet::new();
+        let mut bonds = std::collections::BTreeSet::new();
+        for fragment in graph.fragments() {
+            assert!(fragments.insert(fragment.id()));
+            let local: std::collections::BTreeSet<_> =
+                fragment.atoms().iter().map(|atom| atom.id).collect();
+            for atom in fragment.atoms() {
+                assert!(atoms.insert(atom.id));
+            }
+            for bond in fragment.bonds() {
+                assert!(bonds.insert(bond.id));
+                assert!(local.contains(&bond.begin) && local.contains(&bond.end));
+                assert_ne!(bond.begin, bond.end);
+            }
+        }
+    }
 });

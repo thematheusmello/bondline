@@ -1,4 +1,7 @@
-//! Source-backed node geometry, not a chemical graph or application document importer.
+//! Source-backed CDXML projections; application document import remains separate.
+
+mod graph;
+pub use graph::{ElementalGraph, MappingError};
 
 use bondline_model::Point2;
 use std::collections::BTreeSet;
@@ -134,4 +137,8 @@ fn parse_position(value: &str) -> Result<Point2, Error> {
         return Err(Error::InvalidPosition);
     }
     Point2::new(x, y).map_err(|_| Error::InvalidPosition)
+}
+
+fn is_element(node: roxmltree::Node<'_, '_>, name: &str) -> bool {
+    node.is_element() && node.tag_name().namespace().is_none() && node.tag_name().name() == name
 }

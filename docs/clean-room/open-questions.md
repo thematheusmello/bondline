@@ -25,9 +25,18 @@
   deliberately narrower than complete identity mapping. Exact numeric helpers are delivered.
 - Integral-property exponent notation and non-integral numeric-ID spellings have no complete
   grammar in the reviewed archive. Helpers reject these; the syntax layer preserves them.
-- Grouped/nested-fragment geometry, absent-position generation and dependent label/bounding
-  box updates still need complete mapping/command behavior. The format utility rejects
-  unsupported n layouts and never presents its p-only patch as a complete atom move.
+- The elemental reader now supports fragments under pages/nested groups, with local
+  source-reference resolution. Cross-fragment nearest/tied references, alternative groups
+  and nested nickname fragments remain unsupported. Other object/reference classes are
+  still opaque; no full file-wide semantic validation is claimed.
+- The Node guide permits text-only writers while individual property pages define metadata
+  defaults. Complete label/metadata interpretation still needs implementation/evidence.
+  The elemental view rejects text-labeled nodes without explicit Element metadata; it
+  never silently converts a label-only nitrogen into carbon. Explicit metadata is projected,
+  but labels/styles/stereo and other unmodelled data remain only in the retained source.
+- Absent-position generation and dependent label/bounding box updates still need complete
+  mapping/command behavior. The older Geometry utility keeps its direct-fragment scope and
+  never presents a p-only patch as a complete atom move.
 - Native declared license closure now passes all three desktop targets. Native Windows/Linux
   execution and complete release notice assembly remain; every dependency upgrade needs new
   closure/source/asset evidence. Crate labels alone are insufficient.

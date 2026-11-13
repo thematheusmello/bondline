@@ -2,7 +2,7 @@
 
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
-| CDXML | Bounded syntax/source preservation, existing-attribute replacement and a limited source-backed node geometry view | Original fixture + independent external Expat; published 72/144 point vector; one pinned unchanged RDKit corpus file; exact unrelated-byte preservation; bounds and ASan parse/edit/geometry fuzz smoke | Chemical graph/application ID mapping, dependent geometry edits, broader corpus coverage, registry/native open/save |
+| CDXML | Bounded syntax/source preservation, attribute replacement, geometry and read-only elemental projections with fresh application IDs | Original fixtures/public vectors; independent Expat/Decimal; one pinned RDKit syntax/elemental corpus check; ASan parser/edit/mapping smoke | Complete application document, queries/labels/styles/stereo, reference scopes beyond each fragment, dependent edits, broader corpus and registry/native open/save |
 | CDX | None | Published specification recorded | Parser, preservation, writer and model mapping |
 | MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
@@ -69,3 +69,33 @@ exponents, empty fractions and nondecimal notation fail. ObjectId checks the uns
 resolve references. Source IDs may repeat across containers; a graph importer must respect
 scope and must not create references to unassigned zero. The older string-based geometry
 view is unchanged. Original numeric spelling remains in the authoritative source bytes.
+
+`ElementalGraph` is a separate read-only projection. It maps fragments directly under
+pages or nested groups, retaining the complete source as its authoritative backing. It
+assigns fresh nonzero application IDs in document order; source IDs are decoded exactly
+and resolved within each fragment. Reused IDs in different containers and unassigned
+zero/missing IDs do not alias application atoms. A reference to zero or outside the local
+fragment fails. The mapper checks sibling identity for the common CDXML/page/group/
+fragment/n/b/t/graphic/curve/objecttag classes; other object IDs/references remain opaque.
+This is not a general nearest-object resolver or full CDXML semantic validator.
+
+Supported atom fields are Element, optional p, Isotope, Charge, Radical and NumHydrogens.
+The archive's missing-value defaults are retained without valence/label inference; missing
+positions and hydrogen counts stay absent. Isotope zero maps to natural/unspecified mass.
+Only Element NodeType is supported. A text-labeled node without explicit Element is
+rejected: the public Node guide permits text-only writers, and their labels cannot safely
+be guessed as carbon by this projection. Full chemical label parsing remains missing.
+
+All sixteen published single-term bond kinds are mapped. Decimal integer/half-integer
+orders are checked exactly, including trailing-zero spellings; tiny nonzero fractions are
+not rounded into another order. Begin/end direction is retained. Query combinations and
+undefined orders fail. The pure model validates endpoint/identity/topology budgets too.
+
+Unknown attributes/objects, group hierarchy, text, display styles and stereo annotations
+remain byte-exact in the source, but are not represented by the flat elemental projection.
+to_bytes returns that unchanged source; changing a copied model value is not an editable
+file workflow. Application document integration, source bindings for structural edits,
+chemical rendering, native/registry open/save and full chemistry interpretation remain missing.
+The corpus gate checks one pinned projection against independent external Expat/Decimal,
+in addition to its unchanged-byte/XML checks. It explicitly reports chemistry calculations
+as missing rather than treating the projection as formula/stereo/SMILES/InChI verification.

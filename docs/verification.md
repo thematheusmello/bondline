@@ -443,3 +443,38 @@ examples. No proprietary assets, sample libraries or program binaries were used.
 `cargo xtask ci` passes all 84 tests and all current gates. Windows/Linux all-targets
 source checks pass; their native execution remains missing. Dependency/asset counts are
 unchanged, no new UI behavior is claimed and no Cargo/native job remains running.
+
+## Read-only source-backed CDXML elemental mapping, 2026-11-13
+
+RED: `cargo test -p bondline-io --test cdxml_graph --locked` failed for the absent mapper/
+error exports. GREEN: six tests pass for the original unknown-data fixture, documented atom
+defaults/properties, local ID resolution, zero/unassigned and repeated source IDs, nested
+groups, all sixteen single-term bond orders and begin/end direction. Forward references,
+UINT32 maxima, decimal identity/order spelling, unsupported types/orders/layouts, duplicate
+source IDs and invalid/range/fractional properties are covered. Model identities are fresh,
+not copied from source. Unknown data remains in exact original bytes.
+
+Review added an actual failing case: `cargo test -p bondline-io --test cdxml_labels --locked`
+accepted a text-only N label as default carbon. The public Node guide permits text-only
+writers, so this is now explicitly rejected without guessing. The regression passes with
+UnsupportedLabelOnlyAtom; complete label parsing remains missing. Explicit element metadata
+is projected without label reinterpretation. Two nested-if lint findings were corrected;
+no warning allowance or failing source was committed.
+
+RED: `cargo test -p xtask independent_elemental_projection_detects_mapping_disagreements`
+failed for the missing comparator. GREEN: developer-only Expat/Decimal independently derives
+the model projection from source events. It detects an intentionally corrupted element;
+a second test checks scoped IDs, direction, metadata and defaults. The real corpus gate
+now checks its pinned RDKit graph as well as source bytes/XML. Shared process setup retains
+ASCII stdout and no external DTD resolution. Formula/mass/aromaticity/stereo/SMILES/InChI
+calculations are explicitly printed MISSING, as are MOL decoding/chemistry. No broad M1 pass.
+
+The isolated ASan harness checks unchanged source, global application-ID uniqueness and
+fragment-local distinct endpoints. Final reviewed smoke: 10000 runs, seed 3641879538,
+max_len 65536, timeout 5, coverage 2879 and 515 retained entries (151 KiB). Log: ignored
+target/elemental-cdxml-reviewed-fuzz.log. This is bounded evidence, not exhaustive coverage
+or a security audit. Only existing package edges changed; no new dependency versions.
+`cargo xtask ci` passes all 93 tests and gates, including the new corpus projection check.
+Windows/Linux all-targets source checks pass; native execution remains unverified. No UI/
+application import-save/chemical calculation claim. Runtime licenses/assets remain 150/161/219
+packages plus two assets. No Cargo/fuzz/native process remains running.

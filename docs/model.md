@@ -40,3 +40,8 @@ CLI/MCP/loopback authored snapshots now include each page's fragments array, emp
 current default application. These interfaces still have only page/history/capture commands;
 no chemical import/editing UI or chemical renderer is connected. This model is not a native
 project format, complete CDXML mapping or a working chemical authoring workflow.
+
+Io's ElementalGraph now projects supported CDXML properties into these types and retains
+the source separately. Copying its fragments into Document does not automatically copy
+that backing. Application import/history/save must retain both and test unknown-data
+preservation before exposing an editable file workflow.

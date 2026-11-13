@@ -29,5 +29,9 @@ Raw UTF-8 inputs and parsed attribute values also exercise exact integral-proper
 UINT32 source-ID decoding. Successful conversions must agree with integer range checks
 and retain their exact value after canonical decimal formatting. Independent Decimal
 expectations live in the numeric integration tests.
+The read-only elemental mapper also checks unchanged source plus unique application IDs
+and fragment-local, distinct bond endpoints on accepted inputs. Its local reference maps
+are exercised with the original fixture seed. Chemistry perception and a complete editable
+document remain outside this harness's claims.
 Independent XML semantic assertions live in the external Expat tests. A short smoke run is
 not exhaustive parser conformance or a security audit.

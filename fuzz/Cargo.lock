@@ -116,6 +116,7 @@ dependencies = [
  "bondline-model",
  "bondline-render",
  "png",
+ "roxmltree",
  "thiserror 2.0.21",
 ]
 

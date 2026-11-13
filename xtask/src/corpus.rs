@@ -159,7 +159,8 @@ fn compare_xml(
         .filter_map(|node| node.text())
         .collect();
     let expected = json!({"elements":elements,"text":text});
-    let mut oracle = Command::new(python()).args(["-c", r#"
+    let independent = xml_oracle(
+        r#"
 import json,sys,xml.parsers.expat as expat
 parser=expat.ParserCreate(namespace_separator='|')
 elements=[]
@@ -169,7 +170,23 @@ parser.CharacterDataHandler=text.append
 parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_NEVER)
 parser.Parse(sys.stdin.buffer.read(),True)
 json.dump({'elements':elements,'text':''.join(text)},sys.stdout)
-"#]).env("PYTHONIOENCODING", "ascii").stdin(Stdio::piped()).stdout(Stdio::piped()).stderr(Stdio::piped()).spawn()?;
+"#,
+        bytes,
+    )?;
+    if independent != expected {
+        return Err("CDXML semantic view differs from independent Expat".into());
+    }
+    Ok(())
+}
+
+fn xml_oracle(script: &str, bytes: &[u8]) -> Result<Value, Box<dyn Error>> {
+    let mut oracle = Command::new(python())
+        .args(["-c", script])
+        .env("PYTHONIOENCODING", "ascii")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()?;
     oracle
         .stdin
         .take()
@@ -179,9 +196,13 @@ json.dump({'elements':elements,'text':''.join(text)},sys.stdout)
     if !result.status.success() {
         return Err(String::from_utf8_lossy(&result.stderr).into_owned().into());
     }
-    let independent: Value = serde_json::from_slice(&result.stdout)?;
-    if independent != expected {
-        return Err("CDXML semantic view differs from independent Expat".into());
+    Ok(serde_json::from_slice(&result.stdout)?)
+}
+
+fn compare_graph(bytes: &[u8], projection: &Value) -> Result<(), Box<dyn Error>> {
+    let independent = xml_oracle(include_str!("../oracles/cdxml_graph.py"), bytes)?;
+    if independent != *projection {
+        return Err("CDXML elemental projection differs from independent Expat/Decimal".into());
     }
     Ok(())
 }
@@ -238,6 +259,9 @@ pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
                     return Err(format!("CDXML byte loss: {}", file.name).into());
                 }
                 compare_xml(&output, &document)?;
+                drop(document);
+                let graph = bondline_io::cdxml::ElementalGraph::parse(&output)?;
+                compare_graph(&output, &serde_json::to_value(graph.fragments())?)?;
                 round_trips += 1;
             }
             Format::Mol => pending.push(&file.name),
@@ -245,7 +269,7 @@ pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
     }
     writeln!(
         std::io::stdout(),
-        "corpus integrity: {} pinned licensed files; CDXML byte/Expat checks: {round_trips}",
+        "corpus integrity: {} pinned licensed files; CDXML byte/Expat checks: {round_trips}; elemental projections: {round_trips}",
         manifest.files.len()
     )?;
     for name in pending {
@@ -254,6 +278,10 @@ pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
             "{name}: integrity only; MOL parser/chemistry checks MISSING"
         )?;
     }
+    writeln!(
+        std::io::stdout(),
+        "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
+    )?;
     if round_trips == 0 {
         return Err("corpus has no implemented parser coverage".into());
     }
@@ -315,6 +343,27 @@ mod tests {
         super::compare_xml(bytes, &document)?;
         let changed = std::str::from_utf8(bytes)?.replace("Order='2.00'", "Order='1.00'");
         assert!(super::compare_xml(changed.as_bytes(), &document).is_err());
+        Ok(())
+    }
+
+    #[test]
+    fn independent_elemental_projection_detects_mapping_disagreements()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let bytes = include_bytes!("../../crates/cdxml/tests/fixtures/unknown.cdxml");
+        let graph = bondline_io::cdxml::ElementalGraph::parse(bytes)?;
+        let mut projection = serde_json::to_value(graph.fragments())?;
+        super::compare_graph(bytes, &projection)?;
+        projection[0]["atoms"][0]["element"] = serde_json::json!(8);
+        assert!(super::compare_graph(bytes, &projection).is_err());
+        Ok(())
+    }
+
+    #[test]
+    fn projection_oracle_checks_scoped_references_and_explicit_metadata()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let bytes=br#"<CDXML><page><fragment id="11"><n id="29.00" Isotope="13" Charge="-1" Radical="Doublet" NumHydrogens="0" p="72 144"/><n id="30" Element="8"/><b B="30" E="29" Order="dative"/></fragment><group><fragment id="11"><n id="29"/><n id="30" Element="7" Radical="Singlet" NumHydrogens="3"/><b B="29" E="30" Order="1.500"/></fragment></group></page></CDXML>"#;
+        let graph = bondline_io::cdxml::ElementalGraph::parse(bytes)?;
+        super::compare_graph(bytes, &serde_json::to_value(graph.fragments())?)?;
         Ok(())
     }
 }

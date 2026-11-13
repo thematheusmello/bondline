@@ -8,7 +8,7 @@ macOS arm64 150 packages, Windows x64 161, Linux x64 219, plus two SHA-verified 
 See docs/dependency-policy.md for the original compatibility adapters, fork and source evidence.
 This declaration gate is distinct from a complete release-notice/source review.
 
-Verified: 84 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
+Verified: 93 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
 actual layer gate, and whole-workspace Windows/Linux all-targets source checks. These are
 NOT native Windows/Linux runtime passes. CPU/GPU clear and ordered page-scene pixels agree on Apple M3 Max/Metal.
 
@@ -60,15 +60,22 @@ the published x/y point units. Missing positions remain None. Coordinate edits p
 all other bytes and numeric no-ops. Grouped/nested node layouts fail explicitly. Source IDs
 remain strings, not application/global numeric identities. This does not map chemical graphs
 or update dependent labels/bounding boxes. The 10000-run ASan parse/edit/geometry smoke
-passes with the pinned toolchain/seed 3641879538. The corpus tool
+passes with the pinned toolchain/seed 3641879538. A separate read-only ElementalGraph now
+maps elemental properties and all sixteen single-term bond kinds into fresh application
+IDs, resolving source references within each fragment. Nested groups are followed and their
+hierarchy remains in source backing. Queries, label-only atoms without explicit Element,
+cross-fragment references and unsupported layouts fail explicitly. This prevents a reproduced
+label-only nitrogen-to-carbon misinterpretation; label parsing remains missing. The corpus tool
 now fetches two pinned BSD-3-Clause RDKit documents and verifies hashes on download/cache.
-One CDXML round trip and its complete element/attribute/text view agree with external Expat.
+One CDXML byte/XML round trip and typed elemental projection agree with independent external
+Expat/Decimal. An intentional projection corruption is detected by the oracle's test.
 The MOL file has integrity coverage only, printed explicitly. No CDX corpus entry yet.
-No structural/text writer edits, CDXML chemical graph mapping, application file workflow or CDX/MOL
+No structural/text writer edits, complete application mapping/file workflow or CDX/MOL
 compatibility is implemented.
 Exact integral-property and UINT32 source-ID helpers now have independent Python Decimal
 evidence. IDs are container-scoped; zero is unassigned. Tiny fractions are rejected instead
-of rounded. The syntax bytes remain authoritative; identity resolution is not yet implemented.
+of rounded. The syntax bytes remain authoritative; reference resolution beyond each fragment
+is not implemented. The latest 10000-run ASan smoke also covers elemental mapping.
 There are no chemical tools.
 Missing M0 evidence: complete public menu/tool/hotkey inventory,
 broader corpus/chemistry coverage, actual three-platform CI execution, native
@@ -80,11 +87,11 @@ Next exact tasks:
    parity-checklist.md now has 573 stable-ID cited control/action rows, including 26.x
    desktop deltas. This is not complete modern parity. Review conflicts/open questions;
    never fill them from product memory or inspect installed application files.
-2. Map CDXML graphs into the new validated model with source backing and fresh internal IDs, then
-   open/save through the registry. Existing-attribute replacement and limited source-backed
-   geometry are delivered; preserve backing and explicit absence/unsupported diagnostics.
-   Apply the researched 32-bit/container-scoped ID rules and keep fresh internal IDs separate;
-   resolve remaining cross-container ties and grouped/nested fragment behavior from sources.
+2. Add source-backed application document/history integration, then chemical rendering and
+   registry open/save. Retain original bytes/unknown data when taking an elemental projection
+   into application state; require undo/redo and failed-import retention tests. The read-only
+   mapper is delivered, not an editable codec. Extend label/query/style/stereo mapping and
+   resolve cross-container ties/nested nickname fragments from public sources.
    Session authorization is now implemented on loopback; preserve that boundary when adding
    private data and file commands. Research/pin a licensed CDX fixture before decoding.
 3. Record the pending human golden response without treating silence as approval; no new
@@ -94,7 +101,7 @@ Next exact tasks:
    only to this blank-page preview; add a durable golden and regression check after approval.
 
 The graphics checkpoint is db94cd5; subsequent atomic commits add layers, model, commands,
-CLI and native controls. The current elemental graph-model checkpoint includes this status record; use Git log
+CLI and native controls. The current source-backed elemental mapping checkpoint includes this status record; use Git log
 for its final hash. No confirmed Cargo/npm jobs remain running.
 
 The disposable development bundle target/dev/Bondline.app (org.bondline.development) contains
@@ -106,7 +113,7 @@ smoke also accepted an escaped JSON token, served inspection and exited 0 on Met
 Earlier REA evidence is historical and
 bound to its previous digest. Build artifacts and reports remain ignored.
 
-CI: the real aggregate `cargo xtask ci` passes locally (84 tests and all existing gates).
+CI: the real aggregate `cargo xtask ci` passes locally (93 tests and all existing gates).
 Its fail-fast behavior was checked with a deliberate formatting defect and restored source.
 The three-platform native/window workflow and separate Linux ASan job are wired, not run.
 Pinned action manifests and runner labels were researched; YAML parses with PyYAML 6.0.3.
