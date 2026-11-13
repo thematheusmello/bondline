@@ -28,6 +28,8 @@ The smoke command launches the actual wgpu window, reports its adapter, and clos
 three frames. [The dependency policy](docs/dependency-policy.md) records pinned forks,
 original compatibility adapters and verification limits. There is no license exception
 for ISC, Boost, Zlib, Unicode or OFL. The hypothetical browser graph is not yet approved.
+Agent clients can launch `cargo run --quiet -p bondline-cli -- mcp` as a stdio subprocess;
+it opens its own in-memory document. See [the command contract](docs/control-protocol.md).
 
 Current work: connect native actions and automation, then add lossless CDXML.
 See [STATUS.md](STATUS.md) for actual progress and [ROADMAP.md](ROADMAP.md) for the full target.

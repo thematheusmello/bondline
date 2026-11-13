@@ -7,6 +7,9 @@ macOS, Windows and Linux, eventually also WebAssembly. Original code is MIT OR A
 The reference is publicly documented Professional 26.1 behavior, not proprietary code.
 Read STATUS.md, ROADMAP.md, docs/architecture.md, docs/parity-checklist.md and
 docs/clean-room/sources.md before selecting work. Continue existing work; do not restart.
+The persistent project goal is active. M0's native license blocker is resolved; this does
+not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
+docs/verification.md for exact RED/GREEN and platform evidence.
 
 ## Clean room: mandatory
 
@@ -33,6 +36,13 @@ xtask checks layers and licenses, fetches a pinned SHA-256 corpus, and orchestra
 No GUI dependencies below ui; wgpu belongs in render. Add crates when useful behavior lands,
 not empty successful-looking API stubs. Document any isolated OS FFI exception explicitly.
 
+Current map: model (L0, validated pages); render (L1, CPU/GPU RGBA reference); commands
+(L3, registry and Arc snapshot history); mcp (L4, official SDK stdio adapter); cli/ui (L5,
+headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
+and `compat/clipboard-win` alone opt into reviewed OS unsafe; `compat/hexf-parse` forbids
+unsafe. These three original compatibility packages retain upstream package names solely
+for Cargo patch routing. The eframe source fork and Apache font retain upstream notices.
+
 ## Test first, then implement
 
 For each behavior: write one test using independent expectations, observe the intended
@@ -44,6 +54,12 @@ Documentation/configuration-only work needs relevant checks, not artificial test
 Keep invalid input, resource bounds, error handling, accessibility and data preservation.
 No production panic/unwrap/expect/todo/unimplemented and no unsafe outside an explicitly
 reviewed OS boundary. Borrow where practical; use typed Result errors in libraries.
+
+To add a command: first add its independent behavioral/error/history tests, register its
+typed closed parameter object once in command_registry!, implement it below the UI, wire
+delivered adapters, update CLI/MCP wire tests as needed, then update provenance and parity.
+For UI changes, launch the actual native app and inspect the workflow. Eguis's input tests
+and source cross-checks do not substitute for native platform execution.
 
 ## Pick and finish the next task
 
@@ -65,3 +81,6 @@ tests, provenance and relevant docs. Keep main green; record red evidence withou
 failing main. Commit all intentional project files, never caches, secrets or build outputs.
 Do not push or publish without an explicit request. Update STATUS.md with verified state,
 actual failures, remaining work, next executable steps and live job handles before stopping.
+Currently implemented xtask gates: layers and licenses. Corpus and aggregate CI are still
+missing and must be implemented, not replaced with successful no-ops. Development bundles
+and REA reports under target/ are disposable build outputs and must not be committed.

@@ -32,5 +32,11 @@ not save a project or make a multi-command transaction. `--help` lists actual op
 
 Native Page presets/rotation, Edit Undo/Redo and history shortcuts call these same commands.
 The canvas reads the authored dimensions; no native control edits the model directly.
-Stdio MCP, loopback transport and offscreen command captures are still missing. There is no
-socket listener or MCP server yet.
+`bondline-cli mcp` serves a process-local document over stdio using rmcp 3.9.0. It negotiates
+MCP lifecycle, exposes the registry as tools and returns structured content plus text. Domain
+errors are tool results with `isError`; unknown tools are protocol errors. Input lines are
+bounded to 1 MiB and oversized lines are discarded before parsing. EOF closes the session.
+This process has its own engine; it does not attach to the open desktop window. No network
+listener, HTTP transport, account or hosted service is enabled.
+
+Opt-in desktop loopback control and offscreen command captures are still missing.

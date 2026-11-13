@@ -115,3 +115,18 @@ CLI subprocess checks and generated history cases. Workspace rustfmt/clippy pass
 and Linux all-targets source cross-checks pass; both product roots retain allowed declared
 runtime licenses (116/127/193 packages for macOS/Windows/Linux respectively). Native
 Windows/Linux execution, CI runs and human golden approval are still missing.
+
+## Stdio MCP, 2026-11-13
+
+RED: `cargo test -p bondline-cli --test mcp --locked` failed because the executable did not
+provide MCP. GREEN: an independent line-oriented JSON-RPC client, using public 2025-11-25
+messages, verifies negotiated protocol, tool discovery/schemas, Letter edit, undo, structured
+invalid-parameter errors, unknown-tool protocol error, recovery after an oversized line, and
+clean EOF shutdown. The executable is the real CLI, not a mock server. CLI regression tests
+also pass. The actual layer gate passes; native runtime declaration checks pass with the SDK:
+macOS 143, Windows 154, Linux 213 packages. Two bundled asset hashes/notices remain verified.
+
+MCP checkpoint: 35 workspace tests, workspace/all-targets clippy, rustfmt, native declared
+license/asset gates and layer gate pass. Windows/Linux all-targets source checks also pass
+after boxing the SDK initialization error to satisfy clippy. No native Windows/Linux,
+three-platform CI or browser execution is claimed.

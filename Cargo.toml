@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/model", "crates/commands", "crates/cli", "crates/ui", "crates/render", "compat/hexf-parse", "compat/libloading", "compat/clipboard-win", "xtask"]
+members = ["crates/model", "crates/commands", "crates/mcp", "crates/cli", "crates/ui", "crates/render", "compat/hexf-parse", "compat/libloading", "compat/clipboard-win", "xtask"]
 resolver = "3"
 exclude = ["vendor/eframe"]
 

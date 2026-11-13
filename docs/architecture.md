@@ -16,15 +16,20 @@ clone the small document. Returned snapshots remain immutable across later edits
 state excludes revision/history, so exact undo assertions compare authored bytes separately.
 See control-protocol.md for the actual registered operations and explicit limits.
 
+The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while
+holding it. Stdio is a separate process-local session. Only server/stdio SDK features are
+enabled. Future expensive jobs must run on immutable input snapshots outside this lock and
+reject stale revisions; this is not yet a background-job implementation.
+
 Format crates own their syntax and source-preserving representations. They do not depend
 on the model. The io layer translates supported data and retains original backing for
 unknown content; unsupported edits must fail explicitly rather than discard data.
 
 Layer 0: model, cdxml, cdx. Layer 1: chem, render. Layer 2: io. Layer 3: commands.
 Layer 4: mcp/loopback adapters. Layer 5: cli, ui. Tooling lives in xtask. Core is GUI-free.
-An independently implemented dynamic-library OS boundary may be necessary to keep the
-graphics runtime within the strict license policy. Its exact API and unsafe surface must
-be isolated, documented and tested against platform APIs before it is used.
+Original dynamic-loader and Win32 clipboard boundaries now isolate OS FFI needed to retain
+the strict graphics license policy. Their exact pinned-consumer APIs, unsafe surface and
+platform evidence are documented in dependency-policy.md; native Windows/Linux tests remain.
 
 `cargo xtask layers` reads Cargo's complete all-features dependency resolution. It rejects
 unclassified Bondline packages, incorrect layer declarations, equal/upward workspace edges,

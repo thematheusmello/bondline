@@ -21,6 +21,8 @@ proprietary implementation, help text or assets. Record more specific sections a
 | VOICE-REVIEW | https://github.com/debpalash/VoiceStudio/blob/main/docs/licensing/model-review-workflow.md | Evidence records distinguish declarations, exact bytes and review state. Conceptual reference only; AGPL code not copied. |
 | RUST-GUIDE | https://github.com/apollographql/skills/blob/main/skills/rust-best-practices/SKILL.md | Ownership, typed errors, lints and focused tests; verify recommendations against actual APIs. |
 | MCP-TOOLS | https://modelcontextprotocol.io/specification/2025-11-25/server/tools | Shared tool schemas, discovery, invocation and errors. |
+| MCP-SDK | https://docs.rs/rmcp/3.9.0/rmcp/ | Official Rust SDK, server and stdio only; inspected ServerHandler, structured tool results, lifecycle and bounded AsyncRwTransport APIs. |
+| TOKIO | https://docs.rs/tokio/1.54.1/tokio/runtime/struct.Builder.html | Native adapter runtime with I/O/time drivers; engine and model remain independent of the runtime. |
 | SCHEMARS | https://docs.rs/schemars/1.2.3/schemars/ | Generate schemas from the exact serializable parameter types; closed objects and validation bounds are tested. |
 | PROPTEST | https://docs.rs/proptest/1.12.0/proptest/ | Fixed-seed generated edit sequences independently assert exact undo/redo invariants and expected page dimensions. Build/test dependency only. |
 | REA-AUDIT | https://github.com/morluto/rea/blob/main/docs/release-exposure.md | External inspection of Bondline artifacts only; not proof of security or feature parity. |

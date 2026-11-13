@@ -10,6 +10,7 @@ layer = 5
 
 [dependencies]
 bondline-commands = { path = "../commands" }
+bondline-mcp = { path = "../mcp" }
 serde_json.workspace = true
 thiserror = "2"
 
