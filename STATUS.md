@@ -27,7 +27,11 @@ The CLI now discovers the same schemas and runs sequential JSON commands. Execut
 tests verify page size -> undo -> redo and structured errors. License gates discover every
 workspace product binary, so headless adapters cannot escape dependency review.
 
-Missing: MCP/control, desktop editing controls, complete parity inventory, corpus,
+Native page presets/rotation and Edit history menus now call that registry. Actual macOS
+interaction verified Letter page -> Cmd+Z -> Shift+Cmd+Z with dimensions observed in the
+accessibility tree and the real wgpu window. There are no chemical drawing tools yet.
+
+Missing: MCP/control, complete parity inventory, corpus,
 CDXML parser, native CI workflows, native Windows/Linux execution and human-approved goldens.
 The M5 browser candidate still includes Unicode-licensed data and is not approved for shipment.
 
@@ -37,5 +41,6 @@ Next executable tasks:
 3. Add the standalone source-preserving CDXML parser with independent reference tests.
 
 Development bundle target/dev/Bondline.app (org.bondline.development) was launched for
-visual inspection. It may still be open; inspect the running process before relaunching.
-Do not confuse that old executable with a newly built binary. Build artifacts are untracked.
+visual inspection and remains open on the disposable Letter-sized test page. It now contains
+the page-control build. The earlier REA report refers to its previous digest. Inspect the
+running process before replacing/relaunching it. Build artifacts are untracked.

@@ -6,7 +6,7 @@ The compatibility target includes CDXML and CDX files used by ChemDraw Professio
 No file compatibility or chemical drawing workflow is implemented yet. Bondline is not affiliated
 with, endorsed by, or sponsored by ChemDraw or Revvity Signals.
 
-Current capabilities: a native read-only blank workspace, independently sourced Apache-2.0
+Current capabilities: native page sizing/rotation and Undo/Redo, independently sourced Apache-2.0
 font, original icon, CPU/GPU clear-and-readback reference, and strict native runtime/asset
 license gates. Native macOS launch was visually inspected; Windows/Linux are cross-checked,
 with native runtime validation pending. This is a development foundation, not a chemical editor yet.

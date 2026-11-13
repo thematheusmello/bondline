@@ -11,7 +11,7 @@ Record scope: headless evidence does not establish desktop behavior.
 | Capability | Source | State | Evidence / next work |
 |---|---|---|---|
 | New/open/save documents | GUIDE-25 | missing | Registry and persistent formats |
-| Undo/redo | GUIDE-25 | missing in desktop | Page-only engine verified with fixed-seed exact-restoration properties; chemistry edits still missing |
+| Undo/redo | GUIDE-25 / MAC-HISTORY | verified for page size only | Engine properties, egui input and actual Mac Letter -> undo -> redo. Chemistry edits and Windows/Linux runtime missing |
 | Selection and transforms | GUIDE-25 | missing | M2 |
 | Bond, ring, chain tools | GUIDE-25 | missing | M2 |
 | Atom labels, charges, isotopes, radicals | GUIDE-25 | missing | M2 |

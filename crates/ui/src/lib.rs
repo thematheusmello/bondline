@@ -1,5 +1,6 @@
-//! Native GPU workspace. Chemical editing is added through the command engine in later slices.
+//! Native GPU workspace. Authoring controls dispatch through the shared command registry.
 
+use bondline_commands::{Command, Engine, NoParams, PageSetSize};
 use eframe::egui;
 
 /// Native startup configuration: use the audited wgpu backend on every desktop platform.
@@ -48,20 +49,98 @@ pub fn configure_context(context: &egui::Context) {
     context.set_visuals(egui::Visuals::light());
 }
 
-/// Paint the original blank document workspace used to validate native startup.
-pub fn show_workspace(context: &egui::Context) {
+/// Paint document state and route every authored edit through the engine.
+pub fn show_workspace(context: &egui::Context, engine: &mut Engine, error: &mut Option<String>) {
+    let undo = egui::KeyboardShortcut::new(egui::Modifiers::COMMAND, egui::Key::Z);
+    let redo = egui::KeyboardShortcut::new(
+        egui::Modifiers::COMMAND | egui::Modifiers::SHIFT,
+        egui::Key::Z,
+    );
+    let state = engine.state();
+    let mut selected = context.input_mut(|input| {
+        if input.consume_shortcut(&redo) {
+            (state.redo_depth > 0).then_some(Command::Redo(NoParams {}))
+        } else if input.consume_shortcut(&undo) {
+            (state.undo_depth > 0).then_some(Command::Undo(NoParams {}))
+        } else {
+            None
+        }
+    });
+    let page = engine
+        .document()
+        .pages()
+        .first()
+        .map(|page| (page.id().get(), page.size()));
     egui::TopBottomPanel::top("title").show(context, |ui| {
         ui.horizontal(|ui| {
             ui.label(egui::RichText::new("bondline").strong().size(22.0));
             ui.separator();
             ui.label("Untitled");
+            ui.separator();
+            ui.menu_button("Edit", |ui| {
+                let modifier = if cfg!(target_os = "macos") {
+                    "Cmd"
+                } else {
+                    "Ctrl"
+                };
+                if ui
+                    .add_enabled(
+                        state.undo_depth > 0,
+                        egui::Button::new("Undo").shortcut_text(format!("{modifier}+Z")),
+                    )
+                    .clicked()
+                {
+                    selected = Some(Command::Undo(NoParams {}));
+                    ui.close_menu();
+                }
+                if ui
+                    .add_enabled(
+                        state.redo_depth > 0,
+                        egui::Button::new("Redo").shortcut_text(format!("{modifier}+Shift+Z")),
+                    )
+                    .clicked()
+                {
+                    selected = Some(Command::Redo(NoParams {}));
+                    ui.close_menu();
+                }
+            });
+            ui.menu_button("Page", |ui| {
+                if let Some((page_id, size)) = page {
+                    for (label, width_pt, height_pt) in [
+                        ("A4 portrait", 210.0 * 72.0 / 25.4, 297.0 * 72.0 / 25.4),
+                        ("Letter portrait", 612.0, 792.0),
+                        ("Rotate page", size.height_pt(), size.width_pt()),
+                    ] {
+                        if ui.button(label).clicked() {
+                            selected = Some(Command::PageSetSize(PageSetSize {
+                                page_id,
+                                width_pt,
+                                height_pt,
+                            }));
+                            ui.close_menu();
+                        }
+                    }
+                }
+            });
         });
     });
+    if let Some(command) = selected {
+        *error = engine.execute(command).err().map(|error| error.to_string());
+    }
     egui::TopBottomPanel::bottom("status").show(context, |ui| {
         ui.horizontal(|ui| {
-            ui.label("Page 1");
-            ui.separator();
-            ui.label("A4");
+            if let Some(page) = engine.document().pages().first() {
+                ui.label(format!("Page {}", page.id().get()));
+                ui.separator();
+                ui.label(format!(
+                    "{:.1} x {:.1} pt",
+                    page.size().width_pt(),
+                    page.size().height_pt()
+                ));
+            }
+            if let Some(message) = error {
+                ui.colored_label(egui::Color32::DARK_RED, message.as_str());
+            }
         });
     });
     egui::CentralPanel::default()
@@ -72,13 +151,18 @@ pub fn show_workspace(context: &egui::Context) {
         )
         .show(context, |ui| {
             let available = ui.available_rect_before_wrap();
-            let width = available
-                .width()
-                .min(available.height() / std::f32::consts::SQRT_2)
-                .max(1.0);
+            let Some(page) = engine.document().pages().first() else {
+                return;
+            };
+            let size = page.size();
+            let maximum = size.width_pt().max(size.height_pt());
+            let width = (size.width_pt() / maximum) as f32;
+            let height = (size.height_pt() / maximum) as f32;
+            let scale = (available.width() / width).min(available.height() / height);
+            // shortcut: an extreme aspect ratio occupies at least one display pixel; physical export uses authored dimensions.
             let paper = egui::Rect::from_center_size(
                 available.center(),
-                egui::vec2(width, width * std::f32::consts::SQRT_2),
+                egui::vec2((width * scale).max(1.0), (height * scale).max(1.0)),
             );
             ui.painter().rect_filled(
                 paper.translate(egui::vec2(3.0, 4.0)),
@@ -97,6 +181,8 @@ pub fn show_workspace(context: &egui::Context) {
 /// Native application state for startup and bounded smoke verification.
 pub struct BondlineApp {
     smoke_frames: Option<u8>,
+    engine: Engine,
+    error: Option<String>,
 }
 
 impl BondlineApp {
@@ -119,13 +205,15 @@ impl BondlineApp {
         configure_context(&cc.egui_ctx);
         Ok(Self {
             smoke_frames: smoke.then_some(0),
+            engine: Engine::default(),
+            error: None,
         })
     }
 }
 
 impl eframe::App for BondlineApp {
     fn update(&mut self, context: &egui::Context, _frame: &mut eframe::Frame) {
-        show_workspace(context);
+        show_workspace(context, &mut self.engine, &mut self.error);
         if let Some(frames) = &mut self.smoke_frames {
             *frames = frames.saturating_add(1);
             if *frames >= 3 {
@@ -159,8 +247,80 @@ mod tests {
             )),
             ..Default::default()
         });
-        super::show_workspace(&context);
+        super::show_workspace(
+            &context,
+            &mut bondline_commands::Engine::default(),
+            &mut None,
+        );
         let frame = context.end_pass();
         assert!(frame.shapes.iter().any(|shape| matches!(&shape.shape, eframe::egui::Shape::Rect(rect) if rect.fill == eframe::egui::Color32::WHITE)));
+    }
+
+    #[test]
+    fn native_shortcuts_use_shared_history_and_page_dimensions()
+    -> Result<(), Box<dyn std::error::Error>> {
+        use eframe::egui::{self, Event, Key, Modifiers};
+        let context = egui::Context::default();
+        super::configure_context(&context);
+        let mut engine = bondline_commands::Engine::default();
+        engine.dispatch(
+            "page.set_size",
+            serde_json::json!({"page_id":1,"width_pt":612,"height_pt":792}),
+        )?;
+        let mut error = None;
+        for redo in [false, true] {
+            let modifiers = Modifiers {
+                shift: redo,
+                ..Modifiers::COMMAND
+            };
+            context.begin_pass(egui::RawInput {
+                screen_rect: Some(egui::Rect::from_min_size(
+                    egui::Pos2::ZERO,
+                    egui::vec2(1000.0, 700.0),
+                )),
+                modifiers,
+                events: vec![
+                    Event::Key {
+                        key: Key::Z,
+                        physical_key: None,
+                        pressed: false,
+                        repeat: false,
+                        modifiers,
+                    },
+                    Event::Key {
+                        key: Key::Z,
+                        physical_key: None,
+                        pressed: true,
+                        repeat: false,
+                        modifiers,
+                    },
+                ],
+                ..Default::default()
+            });
+            super::show_workspace(&context, &mut engine, &mut error);
+            let frame = context.end_pass();
+            let page = engine.document().pages().first().ok_or("missing page")?;
+            if redo {
+                assert_eq!(page.size().width_pt(), 612.0);
+            } else {
+                assert!((page.size().width_pt() - 595.2755905511812).abs() < 1e-10);
+            }
+            let rect = frame
+                .shapes
+                .iter()
+                .find_map(|shape| match &shape.shape {
+                    egui::Shape::Rect(rect) if rect.fill == egui::Color32::WHITE => Some(rect.rect),
+                    _ => None,
+                })
+                .ok_or("page was not painted")?;
+            assert!(
+                (f64::from(rect.width() / rect.height())
+                    - page.size().width_pt() / page.size().height_pt())
+                .abs()
+                    < 1e-5
+            );
+            assert!(error.is_none());
+        }
+        Ok(())
     }
 }

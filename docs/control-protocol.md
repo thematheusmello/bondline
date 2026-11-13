@@ -30,5 +30,7 @@ sequential operations in one in-memory engine; stdout is one final JSON snapshot
 prints a structured error to stderr and exits 2 (I/O/serialization failures exit 1). It does
 not save a project or make a multi-command transaction. `--help` lists actual operations.
 
-Stdio MCP, loopback transport, offscreen command captures and desktop authoring controls
-are still missing. There is no socket listener or MCP server yet.
+Native Page presets/rotation, Edit Undo/Redo and history shortcuts call these same commands.
+The canvas reads the authored dimensions; no native control edits the model directly.
+Stdio MCP, loopback transport and offscreen command captures are still missing. There is no
+socket listener or MCP server yet.

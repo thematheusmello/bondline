@@ -99,3 +99,19 @@ The license product-discovery test first failed for the missing selector, then p
 with all nine xtask tests. The actual declared runtime audit now covers UI and CLI: macOS
 116 packages, Windows 127, Linux 193, plus two verified bundled assets. Layer and focused
 CLI/tooling clippy checks pass.
+
+## Native page controls, 2026-11-13
+
+RED: `cargo test -p bondline-ui` failed because the workspace did not accept engine state.
+GREEN: three UI tests pass, including keyboard events through the shared history engine and
+page geometry against physical aspect ratios. The actual newly built macOS development app
+was opened: Page -> Letter portrait displayed 612.0 x 792.0 pt, Cmd+Z restored 595.3 x 841.9,
+and Shift+Cmd+Z restored Letter. Accessibility and a real-window screenshot confirmed the
+result. This is AI workflow inspection, not a human-approved golden. No chemical editing or
+Windows/Linux runtime claim. The prior REA report remains historical and bound to its old digest.
+
+Integrated page-control checkpoint: 34 workspace tests pass, including actual Metal readback,
+CLI subprocess checks and generated history cases. Workspace rustfmt/clippy pass. Windows
+and Linux all-targets source cross-checks pass; both product roots retain allowed declared
+runtime licenses (116/127/193 packages for macOS/Windows/Linux respectively). Native
+Windows/Linux execution, CI runs and human golden approval are still missing.

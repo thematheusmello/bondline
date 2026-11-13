@@ -10,6 +10,7 @@ proprietary implementation, help text or assets. Record more specific sections a
 | CDX-COORDS | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm | CDXML points (72 per inch), origin at top-left, positive right/down; binary coordinate order differs and is not inferred from XML. |
 | PAGE-UNITS | https://www.w3.org/TR/css-values-4/#absolute-lengths | Physical point/inch/mm conversion, independent numeric test reference. |
 | PAGE-SIZES | https://www.w3.org/TR/css-page-3/#page-size-prop | A4 210 by 297 mm. A4 as Bondline's initial page and the 100,000-point authoring bound are independent product choices, not reference parity claims. |
+| MAC-HISTORY | https://support.apple.com/en-us/102650 | Documented Cmd+Z and Shift+Cmd+Z history shortcuts. Non-macOS currently uses Ctrl in the same bindings as a Bondline policy, pending reference-platform inventory. |
 | CDX-ARCHIVE | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/ | Archived 2019 documentation, recovered 2024; not proof of all modern properties. |
 | CDX-OBJECTS | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/AllCDXObjects.htm | Public document/page/fragment/node/bond/text and other object inventory. |
 | PROFESSIONAL-26.1 | https://support.revvitysignals.com/hc/en-us/articles/54009539308052-Release-Announcement-ChemDraw-Desktop-26-1 | Public desktop release baseline; separate from cloud-only features. |

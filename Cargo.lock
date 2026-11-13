@@ -517,6 +517,7 @@ dependencies = [
 name = "bondline-ui"
 version = "0.1.0"
 dependencies = [
+ "bondline-commands",
  "bondline-render",
  "eframe",
  "serde_json",

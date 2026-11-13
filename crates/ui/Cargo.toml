@@ -12,6 +12,7 @@ layer = 5
 eframe.workspace = true
 serde_json.workspace = true
 bondline-render = { path = "../render" }
+bondline-commands = { path = "../commands" }
 
 [[bin]]
 name = "bondline"
