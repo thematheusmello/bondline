@@ -8,7 +8,7 @@ macOS arm64 150 packages, Windows x64 161, Linux x64 219, plus two SHA-verified 
 See docs/dependency-policy.md for the original compatibility adapters, fork and source evidence.
 This declaration gate is distinct from a complete release-notice/source review.
 
-Verified: 74 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
+Verified: 77 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
 actual layer gate, and whole-workspace Windows/Linux all-targets source checks. These are
 NOT native Windows/Linux runtime passes. CPU/GPU clear and ordered page-scene pixels agree on Apple M3 Max/Metal.
 
@@ -64,6 +64,9 @@ One CDXML round trip and its complete element/attribute/text view agree with ext
 The MOL file has integrity coverage only, printed explicitly. No CDX corpus entry yet.
 No structural/text writer edits, chemical graph mapping, application file workflow or CDX/MOL
 compatibility is implemented.
+Exact integral-property and UINT32 source-ID helpers now have independent Python Decimal
+evidence. IDs are container-scoped; zero is unassigned. Tiny fractions are rejected instead
+of rounded. The syntax bytes remain authoritative; identity resolution is not yet implemented.
 There are no chemical tools.
 Missing M0 evidence: complete public menu/tool/hotkey inventory,
 broader corpus/chemistry coverage, actual three-platform CI execution, native
@@ -78,7 +81,8 @@ Next exact tasks:
 2. Continue the unblocked M1 work with chemical graph and application ID mapping, then
    open/save through the registry. Existing-attribute replacement and limited source-backed
    geometry are delivered; preserve backing and explicit absence/unsupported diagnostics.
-   Resolve ID spelling/scope and grouped/nested fragment mappings from public evidence.
+   Apply the researched 32-bit/container-scoped ID rules and keep fresh internal IDs separate;
+   resolve remaining cross-container ties and grouped/nested fragment behavior from sources.
    Session authorization is now implemented on loopback; preserve that boundary when adding
    private data and file commands. Research/pin a licensed CDX fixture before decoding.
 3. Record the pending human golden response without treating silence as approval; no new
@@ -88,7 +92,7 @@ Next exact tasks:
    only to this blank-page preview; add a durable golden and regression check after approval.
 
 The graphics checkpoint is db94cd5; subsequent atomic commits add layers, model, commands,
-CLI and native controls. The current source-backed geometry checkpoint includes this status record; use Git log
+CLI and native controls. The current exact-numeric decoding checkpoint includes this status record; use Git log
 for its final hash. No confirmed Cargo/npm jobs remain running.
 
 The disposable development bundle target/dev/Bondline.app (org.bondline.development) contains
@@ -100,7 +104,7 @@ smoke also accepted an escaped JSON token, served inspection and exited 0 on Met
 Earlier REA evidence is historical and
 bound to its previous digest. Build artifacts and reports remain ignored.
 
-CI: the real aggregate `cargo xtask ci` passes locally (74 tests and all existing gates).
+CI: the real aggregate `cargo xtask ci` passes locally (77 tests and all existing gates).
 Its fail-fast behavior was checked with a deliberate formatting defect and restored source.
 The three-platform native/window workflow and separate Linux ASan job are wired, not run.
 Pinned action manifests and runner labels were researched; YAML parses with PyYAML 6.0.3.

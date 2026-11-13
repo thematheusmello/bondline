@@ -397,3 +397,24 @@ closure is 150/161/219 packages for macOS/Windows/Linux plus two unchanged check
 the new product reachability is the existing standalone syntax crate and its two XML parsers.
 Whole-workspace all-targets Windows/Linux source checks pass. No UI change or new platform
 execution claim; existing native evidence is unchanged. No running Cargo/fuzz/native job.
+
+## Exact CDXML integral properties and source IDs, 2026-11-13
+
+RED: `cargo test -p bondline-cdxml --test numbers --locked` failed for the absent ObjectId
+and parse_integer exports. GREEN: three tests pass. Published 255/255.0/255.00 and bond
+ID/endpoint examples are checked. External Python Decimal.as_integer_ratio independently
+confirms accepted values, including i64 boundaries. UINT32 maxima, unassigned zero, long
+leading-zero strings, whitespace/sign policy and invalid syntax are covered. Tiny nonzero
+fractions, nonfinite values and overflow are rejected without floating-point conversion.
+Exponent notation and empty fractions are explicit unsupported grammar, not silently rounded.
+
+The public general record/data-type sources resolve 32-bit/container-scoped identity and
+zero's meaning despite the broken id.htm link and old table labels. Source IDs remain
+separate from future internal identities; no reference resolver is claimed yet.
+
+The ASan harness now exercises integral properties and ID range invariants on raw UTF-8
+and XML attributes. A 10000-run smoke passed with seed 3641879538, max_len 65536, timeout 5,
+edge coverage 2324 and 434 retained entries (136 KiB). Log: ignored target/cdxml-numbers-fuzz.log.
+`cargo xtask ci` passes all 77 tests and the real gates; runtime closures/assets are unchanged.
+Windows/Linux all-targets source checks pass, not native execution. No UI change or full
+chemistry/identity compatibility claim. No live Cargo/fuzz job remains.

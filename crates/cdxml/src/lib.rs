@@ -1,6 +1,8 @@
 //! Standalone source-preserving CDXML syntax. No document model or native I/O.
 
 mod edit;
+mod numbers;
+pub use numbers::{ObjectId, parse_integer};
 
 pub const MAX_INPUT_BYTES: usize = 64 * 1024 * 1024;
 pub const MAX_NODES: u32 = 100_000;
@@ -30,6 +32,12 @@ pub enum Error {
     InvalidAttributeValue,
     #[error("attribute source range is inconsistent with the validated XML")]
     InvalidAttributeRange,
+    #[error(
+        "an exact decimal integer is required; fractional values and exponents are unsupported"
+    )]
+    InvalidInteger,
+    #[error("object ids must fit an unsigned 32-bit integer")]
+    InvalidObjectId,
     #[error(transparent)]
     Utf8(#[from] std::str::Utf8Error),
     #[error(transparent)]

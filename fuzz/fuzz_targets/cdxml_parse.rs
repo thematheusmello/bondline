@@ -2,11 +2,34 @@
 
 use libfuzzer_sys::fuzz_target;
 
+fn integer_property(value: &str) {
+    let id = value.parse::<bondline_cdxml::ObjectId>();
+    if let Ok(integer) = bondline_cdxml::parse_integer(value) {
+        assert_eq!(
+            bondline_cdxml::parse_integer(&integer.to_string()).unwrap(),
+            integer
+        );
+        assert_eq!(id.ok().map(|id| id.get()), u32::try_from(integer).ok());
+    } else {
+        assert!(id.is_err());
+    }
+}
+
 fuzz_target!(|data: &[u8]| {
+    if let Ok(value) = std::str::from_utf8(data) {
+        integer_property(value);
+    }
     if let Ok(document) = bondline_cdxml::Document::parse(data) {
         assert_eq!(document.as_bytes(), data);
         assert_eq!(document.to_bytes(), data);
         assert_eq!(document.xml().root_element().tag_name().name(), "CDXML");
+        for attribute in document
+            .xml()
+            .descendants()
+            .flat_map(|node| node.attributes())
+        {
+            integer_property(attribute.value());
+        }
         for element in document
             .xml()
             .descendants()

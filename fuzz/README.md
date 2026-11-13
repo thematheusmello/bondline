@@ -25,5 +25,9 @@ This pulls the io/render dependencies into the isolated build, but does not init
 GPU or fuzz renderer behavior. The isolated workspace uses the same original loader/hex
 compatibility patches and pins gpu-descriptor 0.3.0 in its own lockfile. Existing parser/
 libFuzzer package pins remain unchanged. This extra build graph is test-only.
+Raw UTF-8 inputs and parsed attribute values also exercise exact integral-property and
+UINT32 source-ID decoding. Successful conversions must agree with integer range checks
+and retain their exact value after canonical decimal formatting. Independent Decimal
+expectations live in the numeric integration tests.
 Independent XML semantic assertions live in the external Expat tests. A short smoke run is
 not exhaustive parser conformance or a security audit.

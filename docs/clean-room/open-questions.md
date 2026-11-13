@@ -17,10 +17,14 @@
   exact palette variants remain unresolved. Never inspect installed toolbar/hotkey XML,
   help bundles or program binaries to fill these gaps; use further public documentation.
 - The archived CDX SDK does not establish every modern extension. Preserve unknown data.
-- The archived object tables' linked properties/id.htm page returns 404. Before chemical
-  graph/application ID mapping, resolve numeric identity spelling, scope and ranges from
-  further public evidence. The current geometry view retains decoded source strings,
-  checks only mapped-node duplicates and makes no global object/font-ID validation claim.
+- The archived properties/id.htm link returns 404, but CDX-IDENTITY/CDX-OBJECT-ID now establish
+  32-bit IDs, zero as unassigned and per-container identity. Older object tables label IDs
+  UINT16; the implementation follows the agreeing record/data-type descriptions. Shared-
+  container reference precedence is documented; general cross-container ties and modern
+  extensions still need evidence. The existing geometry view remains string-based and
+  deliberately narrower than complete identity mapping. Exact numeric helpers are delivered.
+- Integral-property exponent notation and non-integral numeric-ID spellings have no complete
+  grammar in the reviewed archive. Helpers reject these; the syntax layer preserves them.
 - Grouped/nested-fragment geometry, absent-position generation and dependent label/bounding
   box updates still need complete mapping/command behavior. The format utility rejects
   unsupported n layouts and never presents its p-only patch as a complete atom move.

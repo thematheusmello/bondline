@@ -59,3 +59,13 @@ label positions and bounding boxes are not recomputed. This is a format utility,
 complete atom-move command or application import/save workflow. All unmodelled properties
 and objects stay in the source; the four geometry tests include independent Expat evidence.
 The corpus gate still checks its unchanged fixture, not this geometry edit path.
+
+The standalone syntax crate also exposes parse_integer for supported integral property
+spellings and ObjectId for UINT32 source identity. The integer helper uses exact signed
+decimal conversion with an optional nonempty all-zero fraction; it never rounds through
+f64. XML whitespace and an optional ASCII sign are accepted. Fractional values, overflow,
+exponents, empty fractions and nondecimal notation fail. ObjectId checks the unsigned
+32-bit range and reports zero as unassigned. This does not allocate application IDs or
+resolve references. Source IDs may repeat across containers; a graph importer must respect
+scope and must not create references to unassigned zero. The older string-based geometry
+view is unchanged. Original numeric spelling remains in the authoritative source bytes.
