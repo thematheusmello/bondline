@@ -277,3 +277,22 @@ The committed native matrix and sanitizer workflow configuration uses researched
 pinned action commits and no write credentials. Its YAML parsed with existing PyYAML 6.0.3;
 actionlint/Go were absent. Hosted jobs, their GPU availability and Windows/Linux native
 launches have NOT run. See ci.md for limits and the distinction from source cross-checks.
+
+## Public control inventory, 2026-11-13
+
+Documentation-only change: no artificial unit tests. Downloaded the public vendor-authored
+guide from its recorded university URL into ignored .cache/research; exact byte length,
+SHA-256, metadata and 439-page count are recorded in sources.md. Printed page numbers are
+one less than PDF page indices. Poppler rendered the shortcut table pages; their column
+layout, continued rows and literal keys were visually checked. Explicit menu-path references
+were collected across all pages (288 lines on 165 pages) and manually screened for host
+application/OS context. Official 26.0/26.1 desktop deltas were reviewed separately from cloud.
+
+parity-checklist.md now has 573 stable-ID detailed rows: 569 missing, two wired CTRL history
+bindings, and two page-only Mac history menu workflows verified by prior evidence. IDs,
+Markdown row widths, state values and source-page bounds were checked. Labels inferred
+only as functional actions are distinguished from explicit paths. Source conflicts and
+remaining modern/palette/context-menu gaps stay open; row count does not certify M0 parity.
+No guide, help prose, screenshot, sample library, installed XML configuration or binary is
+redistributed or inspected beyond the public PDF. `cargo xtask ci` passed all 60 existing
+tests and the formatting, lint, layer, license/asset and current corpus gates.

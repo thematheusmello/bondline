@@ -59,9 +59,11 @@ Windows/Linux workflow checks and human-approved render goldens. The browser can
 still includes Unicode-licensed data and is not approved for shipment.
 
 Next exact tasks:
-1. Extract the public guide's complete menu/tool/shortcut inventory with version/page evidence.
-   The current 20-row index explicitly remains incomplete; never infer labels from memory.
-2. Continue M1 with checked source-preserving attribute edits and independent tests, then
+1. Continue the source inventory where further public modern/context-menu evidence exists.
+   parity-checklist.md now has 573 stable-ID cited control/action rows, including 26.x
+   desktop deltas. This is not complete modern parity. Review conflicts/open questions;
+   never fill them from product memory or inspect installed application files.
+2. Continue the unblocked M1 work with checked source-preserving attribute edits and independent tests, then
    chemical model mapping/open-save through the registry. Add session authorization before
    exposing private file data on loopback. Research/pin a licensed CDX fixture before decoding.
 3. Record the pending human golden response without treating silence as approval; no new
@@ -71,7 +73,7 @@ Next exact tasks:
    only to this blank-page preview; add a durable golden and regression check after approval.
 
 The graphics checkpoint is db94cd5; subsequent atomic commits add layers, model, commands,
-CLI and native controls. The current CI checkpoint includes this status record; use Git log
+CLI and native controls. The current inventory checkpoint includes this status record; use Git log
 for its final hash. No confirmed Cargo/npm jobs remain running.
 
 The disposable development bundle target/dev/Bondline.app (org.bondline.development) contains
@@ -84,3 +86,9 @@ Its fail-fast behavior was checked with a deliberate formatting defect and resto
 The three-platform native/window workflow and separate Linux ASan job are wired, not run.
 Pinned action manifests and runner labels were researched; YAML parses with PyYAML 6.0.3.
 actionlint and hosted executions remain unverified. No push, workflow dispatch or publication.
+
+Public inventory research: the university-hosted vendor PDF was downloaded only to ignored
+.cache/research (439 pages, exact hash in sources.md). Printed/PDF page numbering and shortcut
+table layout were checked with Poppler; functional facts were screened across 288 explicit
+menu-path mentions. The committed 573 rows retain source pages and missing/wired/verified
+scope. No reference guide, help prose, screenshots, presets or proprietary assets were committed.
