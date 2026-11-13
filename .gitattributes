@@ -1,0 +1,2 @@
+# These regression vectors have pinned bytes; never rewrite their source line endings.
+/crates/io/tests/fixtures/mol/*.mol -text
