@@ -1137,3 +1137,12 @@ source/configuration checks alone are not a claim of their displayed result.
 In parallel, user-directed M1 implementation now starts MOLV2000. Its source/tests are
 separate from this documentation commit; see the next codec evidence, not these doc checks,
 for any new format claim.
+
+Published documentation91e2f73 was checked in a new isolated Chrome tab on the public
+repository page: all8 README images loaded, headings/navigation were present, and actual
+rendered banner, badges and native workspace image were visually inspected. GitHub also
+recognized Contributing, both licenses and Security in repository navigation. The issue
+chooser redirected the unauthenticated preview to sign-in; form submission/rendered fields
+remain unverified, and no login/issue/report/PR was submitted. The preview tab was closed.
+A requested screenshot file path was outside the browser tool's permitted roots, so inline
+viewport evidence was inspected instead; no saved browser screenshot is claimed.
