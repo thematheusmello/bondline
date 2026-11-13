@@ -1,18 +1,22 @@
 # Pinned public corpus
 
-`cargo xtask corpus` fetches only reviewed files from two mandatory version1 source bundles:
+`cargo xtask corpus` fetches only reviewed files from three mandatory version1 source bundles:
 
 - [manifest.json](manifest.json) retains the two RDKit documents and their original pinned
   revision unchanged. Its checked-in BSD-3-Clause notice applies to those files.
 - [bondline-manifest.json](bondline-manifest.json) pins one original MIT OR Apache-2.0 SDF
   vector from published Bondline commit `fb86832a0c9b7744fb3ef8f8115c7ed296164505`.
   `LICENSE-MIT` supplies the applicable MIT notice; both original project licenses remain.
+- [bondline-cdx-manifest.json](bondline-cdx-manifest.json) pins the original explicit-root
+  chemical CDX vector from published Bondline commit `30ae30e73a4ee3b68d41069376fc5690faa99bc4`.
+  It retains the original MIT OR Apache-2.0 declaration and the applicable MIT notice.
+  A separate revision bundle leaves both earlier source pins unchanged.
 
 Each entry records source path, exact byte length, SHA-256 and provenance. Proprietary
 sample/template libraries, application binaries, fonts and icons are excluded.
 
-Both manifests and their confined, nonempty notices are validated before cache or network
-I/O. Neither bundle is optional. The reviewed manifest path list is explicit in xtask;
+All manifests and their confined, nonempty notices are validated before cache or network
+I/O. Every bundle is mandatory. The reviewed manifest path list is explicit in xtask;
 each manifest is capped at1MiB and all bundles together at1024 files. The existing8MiB
 per-file limit remains. Flat cache names must be unique across bundles, including ASCII
 case aliases on case-insensitive filesystems. Adding a source does not change another
@@ -41,11 +45,12 @@ Current coverage is deliberately separate:
 | rdkit-chain1.cdxml | Exact 727 bytes and SHA-256 | Byte-preserving syntax and owned-snapshot passthrough; full XML view agrees with Expat; stored model projection agrees with independent Expat/Decimal | Calculations missing |
 | rdkit-methyl-radical.mol | Exact 170 bytes and SHA-256 | V2000 parse and exact source passthrough; strict elemental projection agrees with external RDKit/Decimal for one methyl radical | Calculations missing |
 | bondline-ordered-fields-v2000.sdf | Exact 690 bytes and SHA-256 | Exact source; two separate MOL records; every ordered field/raw span agrees with an independent scanner; each elemental projection agrees with a direct external RDKit read | Calculations missing |
-| CDX | No reviewed entry fetched yet | Corpus coverage missing; standalone syntax/edit tests are separate | Missing |
+| bondline-original-ethane-explicit.cdx | Exact 65,750 bytes and SHA-256 | Original explicit scene; byte-exact parser passthrough and all29 events match independent struct; external RDKit verifies ethane | Bondline calculations missing |
 
-The command succeeds for the implemented CDXML, single-input MOL and single-input SDF V2000 subsets.
-It explicitly prints missing CDX corpus and chemistry checks; it does not certify M1,
-general MOL compatibility or all-format round trips. A manifest without any implemented
+The command succeeds for the implemented CDXML, single-input MOL/SDF V2000 and original
+CDX field-vector subsets. It explicitly prints missing foreign/general/application CDX
+compatibility and Bondline chemistry checks; it does not certify M1, general MOL
+compatibility or all-format round trips. A manifest without any implemented
 parser coverage is an error. Extending the corpus requires source/license review, pinned bytes and the matching parser/oracle
 checks. Root repository licensing does not authorize copying third-party asset libraries.
 
@@ -71,8 +76,7 @@ shape. Adding a different MOL entry requires extending its independent evidence.
 
 MOL checks cover original-byte passthrough and read-only model projection. They do not test
 the writer, edited-source export, application import/export, V3000, SDF or chemistry
-calculations. The RDKit manifest remains the same two reviewed files. CDX standalone tests do
-not substitute for a fetched and independently verified CDX corpus entry.
+calculations. The RDKit manifest remains the same two reviewed files.
 
 The original SDF vector has two ethane records with an empty second title and seven ordered
 items: empty/multiline values, combined and DT-only identities, duplicate names and literal
@@ -90,3 +94,20 @@ zip or filtering step substitutes for missing fields or records. See the
 changed duplicate values, dropped/reordered fields, raw ranges and model metadata are rejected
 by corpus verifier tests. Exact source retention does not certify edited-file export,
 application SDF import/export, V3000, general SDF interoperability or M1 completion.
+
+The fetched CDX input is the original 65,750-byte explicit-root ethane scene, not a foreign
+file or reference-application output. Both Rust source views and reserialized bytes must
+equal the downloaded bytes. The existing independent Python `struct` decoder checks every
+record range, payload span, short/extended length, parent and matched end. Its separate,
+unchanged RDKit `verify 1 explicit` guard requires the exact original scene, including opaque
+payloads, then checks CC/C2H6, two carbons, one single bond and the known raw-coordinate
+mapping. It never treats an empty molecular result as a chemical pass. Negative tests reject
+altered record spans, opaque payloads, a valid double-bond graph and a different explicit
+scene without weakening that guard.
+
+RDKit's CDX conformer values retain raw16.16 magnitudes and reverse y for this vector;
+document-point coordinates are independently checked with `struct`. No inferred physical
+units, Bondline chemistry algorithm, application CDX Open/Save or general CDX compatibility
+is established. See [fixture provenance](../../crates/cdx/tests/fixtures/README.md) and
+[external-reader provenance/limits](../../xtask/oracles/cdx-README.md). The original70-byte
+empty syntax fixture and generated-scene edits remain separate standalone regressions.

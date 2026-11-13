@@ -37,6 +37,7 @@ struct Fixture {
 #[serde(rename_all = "lowercase")]
 enum Format {
     Cdxml,
+    Cdx,
     Mol,
     Sdf,
 }
@@ -44,6 +45,7 @@ enum Format {
 const MANIFESTS: &[&str] = &[
     "docs/corpus/manifest.json",
     "docs/corpus/bondline-manifest.json",
+    "docs/corpus/bondline-cdx-manifest.json",
 ];
 const MAX_MANIFEST_BYTES: usize = 1024 * 1024;
 const MAX_FIXTURES: usize = 1024;
@@ -72,6 +74,7 @@ fn validate(manifest: &Manifest) -> Result<(), Box<dyn Error>> {
     for file in &manifest.files {
         let extension = match file.format {
             Format::Cdxml => ".cdxml",
+            Format::Cdx => ".cdx",
             Format::Mol => ".mol",
             Format::Sdf => ".sdf",
         };
@@ -223,8 +226,17 @@ json.dump({'elements':elements,'text':''.join(text)},sys.stdout)
 }
 
 fn python_oracle(script: &str, bytes: &[u8]) -> Result<Value, Box<dyn Error>> {
+    Ok(serde_json::from_slice(&python_output(script, &[], bytes)?)?)
+}
+
+fn python_output(
+    script: &str,
+    arguments: &[&str],
+    bytes: &[u8],
+) -> Result<Vec<u8>, Box<dyn Error>> {
     let mut oracle = Command::new(python())
         .args(["-B", "-c", script])
+        .args(arguments)
         .env("PYTHONIOENCODING", "ascii")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
@@ -239,7 +251,7 @@ fn python_oracle(script: &str, bytes: &[u8]) -> Result<Value, Box<dyn Error>> {
     if !result.status.success() {
         return Err(String::from_utf8_lossy(&result.stderr).into_owned().into());
     }
-    Ok(serde_json::from_slice(&result.stdout)?)
+    Ok(result.stdout)
 }
 
 fn compare_graph(bytes: &[u8], projection: &Value) -> Result<(), Box<dyn Error>> {
@@ -393,6 +405,64 @@ fn check_sdf(bytes: &[u8]) -> Result<(usize, usize), Box<dyn Error>> {
     compare_sdf(bytes, &sdf_table(&file)?)
 }
 
+fn cdx_table(document: &bondline_cdx::Document<'_>) -> String {
+    fn index(index: Option<usize>) -> String {
+        index.map_or_else(|| "-".to_owned(), |value| value.to_string())
+    }
+    let mut lines = Vec::new();
+    for record in document.records() {
+        let parent = index(record.parent());
+        let range = record.range();
+        let suffix = format!("{parent} {} {}", range.start, range.end);
+        lines.push(match record.kind() {
+            bondline_cdx::RecordKind::ObjectStart { tag, id } => {
+                format!("start {tag} {id} {suffix}")
+            }
+            bondline_cdx::RecordKind::Property {
+                tag,
+                length,
+                payload,
+            } => {
+                let encoding = match length {
+                    bondline_cdx::LengthEncoding::Short => "short",
+                    bondline_cdx::LengthEncoding::Extended => "extended",
+                };
+                format!(
+                    "prop {tag} {encoding} {} {} {} {suffix}",
+                    payload.len(),
+                    payload.start,
+                    payload.end
+                )
+            }
+            bondline_cdx::RecordKind::ObjectEnd { start } => {
+                format!("end {} {suffix}", index(*start))
+            }
+        });
+    }
+    lines.join("\n") + "\n"
+}
+
+fn compare_cdx(bytes: &[u8], table: &str) -> Result<(), Box<dyn Error>> {
+    let script = include_str!("../oracles/cdx_oracle.py");
+    if python_output(script, &["describe"], bytes)? != table.as_bytes() {
+        return Err("CDX record spans/lengths/ownership differ from independent struct".into());
+    }
+    // Keep the original scene/opaque-byte guard: this is not a general CDX validator.
+    python_output(script, &["verify", "1", "explicit"], bytes)?;
+    Ok(())
+}
+
+fn check_cdx(bytes: &[u8]) -> Result<(), Box<dyn Error>> {
+    let document = bondline_cdx::Document::parse(bytes)?;
+    if document.framing() != bondline_cdx::Framing::ExplicitDocument {
+        return Err("CDX corpus expects the original explicit-root field-vector scene".into());
+    }
+    if document.as_bytes() != bytes || document.to_bytes() != bytes {
+        return Err("CDX source byte loss".into());
+    }
+    compare_cdx(bytes, &cdx_table(&document))
+}
+
 pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
     let root = super::workspace::root()?;
     check_at(&root, offline, &mut std::io::stdout().lock())
@@ -422,6 +492,7 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
     }
     let mut round_trips = 0;
     let mut mol_checks = 0;
+    let mut cdx_checks = 0;
     let mut sdf_checks = 0;
     let mut sdf_records = 0;
     let mut supplier_entries = 0;
@@ -481,6 +552,10 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
                     check_mol(&bytes)?;
                     mol_checks += 1;
                 }
+                Format::Cdx => {
+                    check_cdx(&bytes)?;
+                    cdx_checks += 1;
+                }
                 Format::Sdf => {
                     let (records, entries) = check_sdf(&bytes)?;
                     sdf_checks += 1;
@@ -492,7 +567,7 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
     }
     writeln!(
         output,
-        "corpus integrity: {fixture_count} pinned licensed files from {} sources; CDXML byte/Expat checks: {round_trips}; elemental projections: {round_trips}; source-backed snapshots: {round_trips}",
+        "corpus integrity: {fixture_count} pinned licensed files from {} source bundles; CDXML byte/Expat checks: {round_trips}; elemental projections: {round_trips}; source-backed snapshots: {round_trips}",
         manifests.len()
     )?;
     writeln!(
@@ -507,12 +582,19 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
         output,
         "SDF full-supplier entries: {supplier_entries} (diagnostic only; DT-only consumer loss is separate from raw fidelity)"
     )?;
-    writeln!(output, "CDX corpus checks MISSING (no reviewed entry)")?;
+    writeln!(
+        output,
+        "CDX original explicit field-vector byte/struct/RDKit checks: {cdx_checks}"
+    )?;
+    writeln!(
+        output,
+        "CDX foreign/general/application compatibility MISSING"
+    )?;
     writeln!(
         output,
         "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
     )?;
-    if round_trips == 0 && mol_checks == 0 && sdf_checks == 0 {
+    if round_trips == 0 && mol_checks == 0 && sdf_checks == 0 && cdx_checks == 0 {
         return Err("corpus has no implemented parser coverage".into());
     }
     Ok(())
@@ -549,6 +631,10 @@ mod tests {
                 include_bytes!("../../docs/corpus/bondline-manifest.json"),
             )?;
             fs::write(
+                directory.0.join(super::MANIFESTS[2]),
+                include_bytes!("../../docs/corpus/bondline-cdx-manifest.json"),
+            )?;
+            fs::write(
                 directory.0.join("docs/corpus/rdkit-license.txt"),
                 include_bytes!("../../docs/corpus/rdkit-license.txt"),
             )?;
@@ -578,6 +664,29 @@ mod tests {
     }
 
     #[test]
+    fn new_cdx_bundle_pins_the_public_original_chemical_scene()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let manifest: Manifest = serde_json::from_slice(include_bytes!(
+            "../../docs/corpus/bondline-cdx-manifest.json"
+        ))?;
+        validate(&manifest)?;
+        assert_eq!(manifest.repository, "thematheusmello/bondline");
+        assert_eq!(
+            manifest.revision,
+            "30ae30e73a4ee3b68d41069376fc5690faa99bc4"
+        );
+        assert_eq!(manifest.files.len(), 1);
+        let fixture = manifest.files.first().ok_or("CDX fixture")?;
+        assert_eq!(fixture.license, "MIT OR Apache-2.0");
+        assert_eq!(fixture.size, 65750);
+        verify(
+            fixture,
+            include_bytes!("../../crates/cdx/tests/fixtures/original-ethane-explicit.cdx"),
+        )?;
+        Ok(())
+    }
+
+    #[test]
     fn new_sdf_bundle_retains_original_license_and_real_published_source_pin()
     -> Result<(), Box<dyn std::error::Error>> {
         let manifest: Manifest =
@@ -600,17 +709,17 @@ mod tests {
     }
 
     #[test]
-    fn both_bundles_are_mandatory_and_all_validation_precedes_cache_io()
+    fn all_bundles_are_mandatory_and_all_validation_precedes_cache_io()
     -> Result<(), Box<dyn std::error::Error>> {
         let directory = CorpusDirectory::new()?;
         let manifests = super::load_manifests(&directory.0)?;
-        assert_eq!(manifests.len(), 2);
+        assert_eq!(manifests.len(), 3);
         assert_eq!(
             manifests
                 .iter()
                 .map(|bundle| bundle.files.len())
                 .sum::<usize>(),
-            3
+            4
         );
         assert_eq!(
             format!(
@@ -618,6 +727,13 @@ mod tests {
                 sha2::Sha256::digest(include_bytes!("../../docs/corpus/manifest.json"))
             ),
             "820739ca30312745b53df2839f0238b30d1470e73446430b4c954a142cb88ca0"
+        );
+        assert_eq!(
+            format!(
+                "{:x}",
+                sha2::Sha256::digest(include_bytes!("../../docs/corpus/bondline-manifest.json"))
+            ),
+            "2a81637144941b3a64e407b07f6caf5c93bd02718059ac5548b96f11de9d77b9"
         );
         let original: serde_json::Value =
             serde_json::from_slice(include_bytes!("../../docs/corpus/bondline-manifest.json"))?;
@@ -660,6 +776,13 @@ mod tests {
         assert!(
             super::check_at(&directory.0, true, &mut Vec::new()).is_err(),
             "missing second bundle cannot silently fall back"
+        );
+        assert!(!directory.0.join(".cache").exists());
+        directory.write_manifest(1, &original)?;
+        fs::remove_file(directory.0.join(super::MANIFESTS[2]))?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new()).is_err(),
+            "missing CDX bundle cannot silently fall back"
         );
         assert!(!directory.0.join(".cache").exists());
         Ok(())
@@ -706,6 +829,44 @@ mod tests {
         Ok(())
     }
 
+    #[test]
+    fn third_bundle_names_and_limits_are_validated_before_cache_io()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let original: serde_json::Value = serde_json::from_slice(include_bytes!(
+            "../../docs/corpus/bondline-cdx-manifest.json"
+        ))?;
+        directory.write_manifest(0, &original)?;
+        let mut alias = original.clone();
+        alias["files"][0]["name"] = serde_json::json!("BONDLINE-ORIGINAL-ETHANE-EXPLICIT.cdx");
+        directory.write_manifest(2, &alias)?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("accepted third-bundle alias")?
+                .to_string()
+                .contains("duplicate corpus cache name")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        fs::write(
+            directory.0.join(super::MANIFESTS[0]),
+            include_bytes!("../../docs/corpus/manifest.json"),
+        )?;
+        fs::write(
+            directory.0.join(super::MANIFESTS[2]),
+            vec![b' '; super::MAX_MANIFEST_BYTES + 1],
+        )?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("unbounded third manifest")?
+                .to_string()
+                .contains("exceeds 1 MiB")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        Ok(())
+    }
+
     #[cfg(unix)]
     #[test]
     fn corpus_manifest_and_notice_symlinks_cannot_escape_the_workspace()
@@ -747,7 +908,7 @@ mod tests {
     }
 
     #[test]
-    fn offline_runner_counts_sdf_records_and_rejects_missing_or_corrupt_cache()
+    fn offline_runner_counts_sdf_cdx_and_rejects_missing_or_corrupt_cache()
     -> Result<(), Box<dyn std::error::Error>> {
         let directory = CorpusDirectory::new()?;
         // Select the same pinned, committed MOL entry so this unit test needs no network/CDXML cache.
@@ -781,17 +942,86 @@ mod tests {
             &sdf_path,
             include_bytes!("../../crates/io/tests/fixtures/sdf/ordered-fields-v2000.sdf"),
         )?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("missing CDX ignored")?
+                .to_string()
+                .contains("offline corpus entry is missing")
+        );
+        let cdx_path = cache.join("bondline-original-ethane-explicit.cdx");
+        fs::write(&cdx_path, b"corrupt")?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("corrupt CDX accepted")?
+                .to_string()
+                .contains("length/SHA-256 mismatch")
+        );
+        fs::write(
+            &cdx_path,
+            include_bytes!("../../crates/cdx/tests/fixtures/original-ethane-explicit.cdx"),
+        )?;
         let mut output = Vec::new();
         super::check_at(&directory.0, true, &mut output)?;
         let output = String::from_utf8(output)?;
-        assert!(output.contains("corpus integrity: 2 pinned licensed files from 2 sources"));
+        assert!(output.contains("corpus integrity: 3 pinned licensed files from 3 source bundles"));
         assert!(
             output.contains("SDF V2000 byte/ordered-field/per-record RDKit checks: 1; records: 2")
         );
-        assert!(output.contains("CDX corpus checks MISSING"));
+        assert!(output.contains("CDX original explicit field-vector byte/struct/RDKit checks: 1"));
+        assert!(output.contains("CDX foreign/general/application compatibility MISSING"));
         assert!(output.contains(
             "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
         ));
+        Ok(())
+    }
+
+    #[test]
+    fn cdx_original_checker_rejects_changed_spans_opaque_payload_bond_and_explicit_scene()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let source = include_bytes!("../../crates/cdx/tests/fixtures/original-ethane-explicit.cdx");
+        let document = bondline_cdx::Document::parse(source)?;
+        let table = super::cdx_table(&document);
+        assert_eq!(document.records().len(), 29);
+        super::check_cdx(source)?;
+        let wrong_table = table.replacen("start 32768 0 - 28 34", "start 32768 0 - 29 34", 1);
+        assert_ne!(wrong_table, table);
+        assert!(super::compare_cdx(source, &wrong_table).is_err());
+        for (tag, payload) in [
+            (0x4003, b"atom\0\xfe".as_slice()),
+            (0x0600, b"\x02\0".as_slice()),
+        ] {
+            let property=document.records().iter().find(|record|matches!(record.kind(),bondline_cdx::RecordKind::Property{tag:actual,..} if *actual==tag)).ok_or("target property")?;
+            let altered = document.replace_property(property, payload)?;
+            let altered_document = bondline_cdx::Document::parse(&altered)?;
+            assert_eq!(
+                super::cdx_table(&altered_document),
+                table,
+                "same-length changes still have the same valid binary record layout"
+            );
+            if tag == 0x0600 {
+                super::python_output(
+                    include_str!("../oracles/cdx_oracle.py"),
+                    &["verify", "2", "explicit"],
+                    &altered,
+                )?;
+            }
+            assert!(
+                super::compare_cdx(&altered, &table).is_err(),
+                "original scene guard accepted changed tag{tag}"
+            );
+        }
+        let mut different_explicit = source.to_vec();
+        different_explicit
+            .get_mut(30..34)
+            .ok_or("root ID span")?
+            .copy_from_slice(&1_u32.to_le_bytes());
+        assert_eq!(
+            bondline_cdx::Document::parse(&different_explicit)?.framing(),
+            bondline_cdx::Framing::ExplicitDocument
+        );
+        assert!(super::check_cdx(&different_explicit).is_err());
         Ok(())
     }
 

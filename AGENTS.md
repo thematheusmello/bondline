@@ -115,7 +115,8 @@ attributes: preserve exact hashes on Windows, never normalize them in an oracle/
 Declared valence yields exact authored H by the published finite arithmetic; do not infer
 periodic-table valence. Preserve the documented normative M ISO/RDKit discrepancy, and the
 original/independent test vectors. The corpus now actually checks one MOL input, not only
-its hash; CDX corpus and chemistry calculations remain missing.
+its hash. An original explicit-root CDX scene has fetched byte/struct/RDKit checks;
+foreign/general/application CDX and Bondline chemistry calculations remain missing.
 
 SDF is currently a library container, not an application document command. Preserve exact
 record/MOL/item spans, duplicate order, raw headers/DT digits, empty/multiline values and
@@ -124,8 +125,8 @@ full supplier loses records/data at the original valid DT-only vector. Independe
 checks and per-record molecular consumers have different jobs. The writer must refuse
 reserved delimiter prefixes in embedded MOL blocks before output, not normalize the source.
 Strict EOF/header/ASCII bounds and the documented post-item empty-padding accommodation
-must stay explicit. See file-formats.md. Corpus now has two mandatory pinned source manifests;
-validate both licenses/notices/global cache names before cache/network I/O. The original
+must stay explicit. See file-formats.md. Corpus now has three mandatory pinned source bundles;
+validate all licenses/notices/global cache names before cache/network I/O. The original
 SDF fixture is fetched from its actual public source commit; never invent a future pin or
 rewrite existing RDKit metadata. Cache ancestry must be confined before directory creation.
 
@@ -189,8 +190,9 @@ failing main. Commit all intentional project files, never caches, secrets or bui
 Do not push or publish without an explicit request. Update STATUS.md with verified state,
 actual failures, remaining work, next executable steps and live job handles before stopping.
 Currently implemented xtask gates: layers, licenses, corpus and ci. Corpus checks the delivered
-CDXML syntax/elemental projection subset plus pinned file integrity; its output identifies missing CDX/chemistry and broader format
-coverage. The aggregate gate passes locally and on all three hosted platforms at 3d3dd44.
+CDXML syntax/elemental projection, MOL, ordered SDF and one original explicit CDX scene,
+plus pinned file integrity; its output identifies missing foreign/general/application CDX,
+chemistry and broader format coverage. New source needs its own hosted evidence; see STATUS.md.
 Hosted native-window smoke passes on all three platforms, plus Linux ASan, after the
 Linux runtime-package correction. These are window/API checks, not interactive Windows/
 Linux chemical-workflow evidence; see docs/ci.md.

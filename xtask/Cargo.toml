@@ -7,6 +7,7 @@ license.workspace = true
 
 [dependencies]
 serde.workspace = true
+bondline-cdx = { path = "../crates/cdx" }
 bondline-cdxml = { path = "../crates/cdxml" }
 bondline-io = { path = "../crates/io" }
 bondline-model = { path = "../crates/model" }

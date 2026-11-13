@@ -3,7 +3,7 @@
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Standalone bounded binary syntax and checked opaque property replacement | Original published-field vectors, independent Python struct spans/bytes, external RDKit connectivity/order consumers | Application import/export, model/reference mapping, new-tree writer, broader pinned corpus and modern extensions |
+| CDX | Standalone bounded binary syntax and checked opaque property replacement | Original published-field vectors, one fetched positive chemical scene, independent Python struct spans/bytes, external RDKit connectivity/order consumers | Application import/export, model/reference mapping, new-tree writer, foreign/general corpus and modern extensions |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000 | Source-preserving library records, ordered data fields and validated wrapper writer | Original source spans; fetched pinned two-record corpus; external raw scanner/per-record RDKit; named-field supplier and external-writer vectors | Application data/multiple-record workflow and broader syntax/encodings |
 | V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
@@ -151,6 +151,14 @@ is preserved; the original input stays unchanged. The utility never adds/removes
 or properties and is not wired into application CDX open/save commands. Independent RDKit
 checks two carbons/one bond and CC/C2H6 changing to C=C/C2H4 for one original fixture; that
 consumer's raw16.16/y-flipped coordinates are kept separate from point-unit assertions.
+
+The fetched corpus pins the original65750-byte explicit-root chemical vector at public
+30ae30e73a4ee3b68d41069376fc5690faa99bc4. All29 record spans/parents/length encodings and
+every opaque source byte are checked; the exact-scene external consumer checks ethane.
+Changed opaque bytes, bond order, spans or a different explicit scene fail this original-
+vector gate. It deliberately does not claim to validate arbitrary CDX chemistry or foreign
+files. Four pinned files now span three mandatory source bundles; chemistry calculations
+and application CDX remain separate missing coverage.
 
 ## CDXML syntax and mapping
 

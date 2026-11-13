@@ -173,3 +173,21 @@ binary4a5425b0...; no interactive Windows/Linux or hardware-performance claim fo
 Source was fast-forwarded into main after GREEN, with documentation-only updates after the
 tested source. All jobs are terminal; do not rerun unchanged source or substitute an older
 run for future changes. No release, signing or installer publication occurred.
+
+## Original CDX fixture and standalone V3000
+
+[Run43520991476](https://github.com/thematheusmello/bondline/actions/runs/43520991476) at
+30ae30e passes Mac335 tests (332 workspace plus3 bridge), Linux333 and Windows325.
+Jobs132214903242/132214903791/132214903835 execute the real aggregate and actual native
+window; sanitizer job132214903870 runs CDXML/CDX/MOL/SDF10000 iterations each. CDX now
+includes the complete65750-byte original positive seed under max_len131072.
+
+[Run43519338382](https://github.com/thematheusmello/bondline/actions/runs/43519338382) at
+5caf6ce separately passes Mac341 (338 workspace plus3 bridge), Linux339 and Windows333.
+Jobs132209347432/132209347777/132209347969 execute their aggregates and native windows;
+132209347869 passes all five10000-run parser sanitizer targets, including V3000. This
+source predates the fetched SDF/CDX corpus integration and V3000 application workflow.
+
+All jobs are terminal. Mac uses Metal/Apple Paravirtual IntegratedGpu; Linux uses Vulkan/
+llvmpipe Cpu; Windows uses Dx12/Microsoft Basic Render Driver Cpu. These are launch and
+automated execution results, not interactive Windows/Linux workflows or performance claims.

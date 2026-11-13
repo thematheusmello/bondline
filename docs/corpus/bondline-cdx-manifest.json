@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "repository": "thematheusmello/bondline",
+  "revision": "30ae30e73a4ee3b68d41069376fc5690faa99bc4",
+  "notice": "LICENSE-MIT",
+  "files": [
+    {
+      "name": "bondline-original-ethane-explicit.cdx",
+      "path": "crates/cdx/tests/fixtures/original-ethane-explicit.cdx",
+      "format": "cdx",
+      "size": 65750,
+      "sha256": "63ef1a74133e45de915d5fd25b2ca3321a95dbe5114873a5a59f2f45217000d2",
+      "license": "MIT OR Apache-2.0",
+      "provenance": "Original Bondline explicit-root ethane field-vector scene, materialized unchanged from the project-original struct generator; opaque records and its extended property are retained. Authorship, public numeric sources and exact scene limits are recorded in crates/cdx/tests/fixtures/README.md. This is not a foreign/reference-application file or general CDX compatibility claim."
+    }
+  ]
+}

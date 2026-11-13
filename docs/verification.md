@@ -1381,3 +1381,35 @@ The corpus metadata correction c797262 now passes every job in run43518162847: M
 Linux332, Windows324 and four bounded parser targets, with all actual window smokes.
 Main was fast-forwarded only after GREEN. Exact IDs/adapters are in ci.md. Earlier
 run43515232724 remains terminal failed; no assertion or semantic/source data was weakened.
+
+## Fetched original positive CDX corpus,2026-11-13
+
+Actual RED: the new manifest failed unknown-format decoding, and the old successful corpus
+runner failed the independent expected-CDX-count assertion (0 instead of1). Logs:
+target/cdx-corpus-{loader-red,coverage-red}.log. The new mandatory third source bundle pins
+the real published original fixture at30ae30e73a4ee3b68d41069376fc5690faa99bc4. An actual
+cache-missing bounded HTTPS download matched65750 bytes and
+SHA63ef1a74133e45de915d5fd25b2ca3321a95dbe5114873a5a59f2f45217000d2;
+target/cdx-corpus-fetch-attestation.log records the source/identity. No local substitution.
+
+GREEN:28 xtask tests, targeted clippy/fmt and actual-root cargo xtask ci pass335 workspace
+plus three bridge tests; target/cdx-corpus-ci-integrated.log. Four pinned files from three
+source bundles cover one CDXML, one MOL, two SDF records and this one original CDX scene.
+Normal/offline output agrees. Every29-record span/parent/length encoding agrees with the
+independent Python struct table; exact source bytes and unchanged RDKit ethane guard pass.
+Changed spans, opaque payload, bond order and a different valid explicit scene refuse.
+The changed double bond independently passes C=C/C2H4, without weakening the original guard.
+Foreign/general/application CDX and Bondline chemistry calculations remain missing.
+
+An actual isolated core.autocrlf checkout first changed both Bondline manifest byte
+identities. Exactly two -text rules restore them; existing manifest bodies/pins/notices
+remain byte-identical. Logs target/cdx-corpus-checkout-{red,green}.log. The only lock change
+is the existing first-party bondline-cdx xtask edge; runtime closures153/164/219 and two
+assets remain unchanged. No parser, fixture, oracle, UI, renderer, golden or fuzz-lock change.
+New hosted evidence must follow this feature's own source commit.
+
+The preceding fixture source30ae30e passes every job in43520991476: Mac335/Linux333/
+Windows325 tests, three actual native windows and four10000-run ASAN targets. Separately,
+standalone V3000 source5caf6ce passes43519338382: Mac341/Linux339/Windows333, three native
+windows and five10000-run ASAN targets. Neither run proves the uncommitted V3000 application
+integration or the new fetched-CDX feature; do not substitute their results.

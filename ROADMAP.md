@@ -77,7 +77,9 @@ The first standalone CDX slice now indexes bounded little-endian records, preser
 source bytes and checks opaque property replacements. Original vectors face independent
 Python struct and external RDKit consumers. Implicit/explicit roots have specific probe
 evidence; no general file compatibility, new-tree writer or application import/export is
-claimed. Broader CDX corpus and reference/chemical mapping remain M1 work.
+claimed. One original explicit chemical scene is now fetched from its real public commit,
+SHA-verified and checked against independent struct/RDKit consumers. Foreign/general CDX
+corpus and reference/chemical mapping remain M1 work.
 
 ## M2: drawing — in progress
 

@@ -149,7 +149,7 @@ observed/inferred limits; no strict program-inspection isolation is now claimed.
 | CARGO-GRAPH | https://doc.rust-lang.org/cargo/commands/cargo-metadata.html | Resolve opaque package IDs and dependency edges across targets/features for the layer gate. |
 | CARGO-WORKSPACE | https://doc.rust-lang.org/cargo/commands/cargo-locate-project.html | Cargo's JSON workspace-manifest locator, inspected on1.94.1, now selects the invoked workspace for CI/assets/corpus. Frozen lookup is read-only and errors never fall back to a compile-time path. An actual reused worktree artifact validated the wrong checkout; tests use a distinct Unicode-path workspace/nested member and an invalid manifest. Keep build outputs isolated as documented. |
 | CORPUS-RDKIT | https://github.com/rdkit/rdkit/tree/c686c2c945df370c2f95ebe20aae2872a36f7c17 | BSD-licensed independently authored interchange fixtures; exclude proprietary template collections; record per-file provenance/hashes when added. |
-| CORPUS-NOTICE | https://github.com/rdkit/rdkit/blob/c686c2c945df370c2f95ebe20aae2872a36f7c17/license.txt | Exact BSD-3-Clause notice retained under docs/corpus; two reviewed paths/hashes/limits in its manifest. CDX corpus provenance is still pending. |
+| CORPUS-NOTICE | https://github.com/rdkit/rdkit/blob/c686c2c945df370c2f95ebe20aae2872a36f7c17/license.txt | Exact BSD-3-Clause notice retained under docs/corpus; two reviewed paths/hashes/limits in its manifest. Original Bondline SDF/CDX corpus bundles retain their own MIT OR Apache-2.0 provenance and separate real public revision pins. |
 | CORPUS-HTTPS | https://docs.python.org/3/library/urllib.request.html | External developer-only bounded HTTPS fetching; application/core stay offline and independent of Python. |
 | SHA256-ABC | https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA256.pdf | Independent published abc digest vector for the corpus integrity checker. |
 | CI-RUNNERS | https://docs.github.com/en/actions/reference/runners/github-hosted-runners | Reviewed native runner labels/architectures; configured jobs are not executed-platform evidence. |
@@ -176,7 +176,7 @@ Bondline profile policies. No SDF application workflow is inferred from library 
 The original SDF corpus input is pinned to public Bondline source
 fb86832a0c9b7744fb3ef8f8115c7ed296164505 with its original MIT OR Apache-2.0 declaration.
 A real bounded cold fetch matched690 bytes/SHA f95838cbb55c107c649ce2eb99ac62e191f747ce6994a171e64019f8e6c53d1a.
-The two-source bundle loader retains the existing BSD RDKit manifest byte-for-byte;
+The source-bundle loader retains the existing BSD RDKit manifest byte-for-byte;
 original notices, hashes, global cache names and complete manifests are validated before
 cache/network I/O. Existing-ancestor and post-creation canonical checks prevent the reproduced cache
 symlink escape; they are independent developer-tool policy, not an OS sandbox/race guarantee.
@@ -197,6 +197,16 @@ Independent struct events/full-byte edit checks and external RDKit verify CC/C2H
 C=C/C2H4 after only the bond-order change. Its65535-byte opaque property remains preserved.
 The CDX sanitizer bound increases to131072 to include this complete seed. No foreign-file,
 application-CDX or general chemistry compatibility is inferred from this authored vector.
+
+The subsequent CDX corpus bundle pins that original scene to its actual public source:
+https://github.com/thematheusmello/bondline/blob/30ae30e73a4ee3b68d41069376fc5690faa99bc4/crates/cdx/tests/fixtures/original-ethane-explicit.cdx .
+An actual bounded cold HTTPS fetch matched all65750 bytes and the SHA above. Source
+declaration is MIT OR Apache-2.0, with the root MIT notice retained; no third-party sample
+authorship is inferred. The existing struct generator and exact-scene RDKit guard remain
+unchanged. All29 event spans/parents/lengths, complete passthrough and opaque-byte/bond-order
+negative checks apply to this one authored vector. Mandatory manifests are three source
+bundles across two repositories, not three distinct repositories. Narrow unset-text rules
+retain every source manifest's exact checkout bytes under core.autocrlf as well.
 
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused
 with their notices. This does not relax the prohibition on proprietary product code/assets.
