@@ -11,20 +11,32 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
-## Clean room: mandatory
+## Research, provenance and implementation
 
-- Use published specifications, public guides, open standards and appropriately licensed
-  open-source engineering references. Record decisions and their sources in the same commit.
-- Never download, execute, inspect, decompile or disassemble ChemDraw program binaries.
-  Never copy its templates, sample libraries, icons, fonts or help text. Independently
-  authored, openly licensed interchange test documents are allowed with provenance.
+- Target one-to-one Professional desktop screens, control roles, icon roles, workflows and
+  functionality, with Bondline branding and the existing offline/open-source commitments.
+  Use public documentation, screenshots, videos and authorized artifact/runtime inspection.
+  The user's 2026-11-13 clarification supersedes the earlier program-binary inspection ban.
+- Use REA for artifact/runtime questions and ordinary source tools for open-source repositories.
+  Record exact source/build/version/platform, URLs or artifact hashes, video timestamps,
+  observations, inferences and unknowns. A screenshot or static string alone proves no flow.
+- Obtain research artifacts from official/public or otherwise authorized sources. Use existing
+  entitlements for licensed runtime access; do not bypass activation/access controls. Record
+  actual access blockers and continue independent public research. Keep reference downloads,
+  screenshots, installers and REA reports in ignored .cache/ or target/, never shipped by default.
+- Implement original Rust logic and original redistributable assets matching documented roles
+  and appearance. Do not transplant proprietary source, decompiled code, fonts, templates,
+  sample libraries, help prose or icon files into Bondline without applicable redistribution
+  rights and the asset/dependency policy. Reference caching is distinct from product reuse.
 - Never use proprietary product marks in Bondline's UI or executable names. README may
   identify compatibility and must state non-affiliation. Parity/source records may name references.
 - Shipped dependencies and bundled assets must permit use under MIT, Apache-2.0 or BSD.
-  Do not silently broaden this allowlist or change license labels to pass a check.
-  Preserve notices. Build-only tools are distinct from shipped runtime dependencies.
-- GPL/LGPL/AGPL software may be used only as external test tools, never linked or copied.
-- Unknown behavior goes in docs/clean-room/open-questions.md; do not guess from memory.
+  Do not broaden this allowlist or change license labels to pass a check. Preserve notices.
+  Build-only tools are distinct from shipped runtime dependencies. GPL/LGPL/AGPL software
+  may be run only as external test programs, never linked or copied into the shipped application.
+- Record sources and behavior decisions in docs/clean-room/sources.md (historical path).
+  Unresolved behavior goes in docs/clean-room/open-questions.md; do not guess from memory.
+  The updated method does not claim strict isolation from runtime/artifact observations.
 
 ## Architecture
 
