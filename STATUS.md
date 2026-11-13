@@ -9,6 +9,8 @@ was published; new parallel file-workflow work is not in that checkpoint.
 Hosted Rust foundation run 43448214670 is confirmed in progress:
 https://github.com/thematheusmello/bondline/actions/runs/43448214670.
 Configured jobs are not passes; inspect the actual run before updating platform evidence.
+The hosted Linux CDXML ASan job has completed successfully; the three native jobs were
+still running at the last poll. Their outcomes are not inferred from the fuzz job.
 
 User-authorized parallel ownership is active: /root/file_io owns bounded filesystem I/O
 and atomic save/recovery; /root/native_file_ui owns the chooser and later native wiring;
@@ -133,5 +135,5 @@ and is closed. It predates history accounting and native encoding. Final native 
 closed. Earlier test builds 22527 and 75463 also exited. Startup credentials remain only
 in ignored private target logs; never copy them into reports. Earlier REA exposure evidence
 is historical and tied to a prior digest, not this build. No confirmed native/Cargo/fuzz
-native/Cargo/fuzz process remains running from that checkpoint. The hosted run and delegated
+process remains running from that checkpoint. The hosted run and delegated
 tasks above are the current live work; recheck their handles on continuation.
