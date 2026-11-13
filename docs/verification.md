@@ -296,3 +296,14 @@ remaining modern/palette/context-menu gaps stay open; row count does not certify
 No guide, help prose, screenshot, sample library, installed XML configuration or binary is
 redistributed or inspected beyond the public PDF. `cargo xtask ci` passed all 60 existing
 tests and the formatting, lint, layer, license/asset and current corpus gates.
+
+## XML oracle locale portability, 2026-11-13
+
+RED: `PYTHONIOENCODING=ascii cargo test -p xtask
+independent_xml_comparison_detects_a_semantic_disagreement --locked` failed with an external
+UnicodeEncodeError for the original Greek-text fixture. The helper had disabled JSON's
+ASCII escapes. GREEN: the helper now emits ordinary escaped JSON and explicitly runs with
+ASCII stdout, so the existing Unicode/mismatch test continuously exercises this boundary.
+Decoded JSON semantics are unchanged; input XML stays raw UTF-8. This fixes developer-tool
+portability and does not establish native Windows application execution.
+`PYTHONIOENCODING=ascii cargo xtask ci` passes all 60 tests and the real gates.

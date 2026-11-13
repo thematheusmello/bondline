@@ -11,6 +11,7 @@ proprietary implementation, help text or assets. Record more specific sections a
 | QUICK-XML | https://docs.rs/quick-xml/0.42.0/quick_xml/ | MIT streaming preflight for declarations, nesting, attribute budgets and doctype boundaries. Pinned published event/reader/declaration APIs inspected. |
 | ROXMLTREE | https://docs.rs/roxmltree/0.21.2/roxmltree/ | MIT/Apache read-only validated tree; pinned source inspected for node limits, DTD/entity behavior and compressed attribute-position limitations. |
 | EXPAT-ORACLE | https://docs.python.org/3/library/pyexpat.html | Independent external XML semantic oracle. Parameter-entity parsing is disabled; no external entity handler fetches resources. |
+| PYTHON-JSON | https://docs.python.org/3.13/library/json.html#json.dump | Default ASCII-escaped JSON retains Unicode semantic values without depending on a subprocess stdout locale; the XML oracle explicitly tests an ASCII channel. |
 | FUZZ-SETUP | https://rust-fuzz.github.io/book/cargo-fuzz/setup.html | External cargo-fuzz 0.13.2, isolated libfuzzer-sys 0.4.13 and pinned nightly ASan harness. Test-only C++/NCSA runtime is never shipped. |
 | CDX-COORDS | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm | CDXML points (72 per inch), origin at top-left, positive right/down; binary coordinate order differs and is not inferred from XML. |
 | PAGE-UNITS | https://www.w3.org/TR/css-values-4/#absolute-lengths | Physical point/inch/mm conversion, independent numeric test reference. |

@@ -168,8 +168,8 @@ parser.StartElementHandler=lambda tag,attributes: elements.append({'tag':tag,'at
 parser.CharacterDataHandler=text.append
 parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_NEVER)
 parser.Parse(sys.stdin.buffer.read(),True)
-json.dump({'elements':elements,'text':''.join(text)},sys.stdout,ensure_ascii=False)
-"#]).stdin(Stdio::piped()).stdout(Stdio::piped()).stderr(Stdio::piped()).spawn()?;
+json.dump({'elements':elements,'text':''.join(text)},sys.stdout)
+"#]).env("PYTHONIOENCODING", "ascii").stdin(Stdio::piped()).stdout(Stdio::piped()).stderr(Stdio::piped()).spawn()?;
     oracle
         .stdin
         .take()

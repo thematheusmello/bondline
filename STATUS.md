@@ -73,7 +73,7 @@ Next exact tasks:
    only to this blank-page preview; add a durable golden and regression check after approval.
 
 The graphics checkpoint is db94cd5; subsequent atomic commits add layers, model, commands,
-CLI and native controls. The current inventory checkpoint includes this status record; use Git log
+CLI and native controls. The current oracle-portability checkpoint includes this status record; use Git log
 for its final hash. No confirmed Cargo/npm jobs remain running.
 
 The disposable development bundle target/dev/Bondline.app (org.bondline.development) contains
@@ -92,3 +92,7 @@ Public inventory research: the university-hosted vendor PDF was downloaded only 
 table layout were checked with Poppler; functional facts were screened across 288 explicit
 menu-path mentions. The committed 573 rows retain source pages and missing/wired/verified
 scope. No reference guide, help prose, screenshots, presets or proprietary assets were committed.
+
+The independent XML oracle now emits escaped JSON under an explicitly ASCII stdout setting;
+its Greek-text/mismatch test passes there. This removes a reproduced locale failure without
+claiming native Windows execution. Application code and file bytes are unaffected.
