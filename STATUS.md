@@ -12,8 +12,7 @@ with typed close, native integration and runtime quality-tool workspace fix. The
 tooling correction is abd35bf. Native corrected binary hash is recorded below.
 Public main8d52e14 contains tested CDX sourcea73bed747059dd1718ac593589509853fc872671 and
 the earlier drawing/CDXML workflows. Hosted CDX GREEN43480423381 is terminal; its first
-Windows failure remains recorded. Shared close is not merged into main until its own hosted
-checks pass. Source publication is authorized; no release/installer action was requested.
+Windows failure remains recorded. Shared close passed all four hosted jobs and is now fast-forwarded into main. Source publication is authorized; no release/installer action was requested.
 
 ## Current integrated scope
 
@@ -150,10 +149,9 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 
 ## Next exact actions
 
-1. Recheck the new shared-close source/head hosted run before main integration; fix any
-   actual failure and fast-forward only after its required jobs pass. The earlier file/CDX
-   runs below are terminal and must not be duplicated. Continue this branch rather than
-   starting the command again. No release publication was requested. Preserve exact scopes.
+1. Shared-close source72742fb passed hosted run43488771976 and was integrated into main.
+   These jobs and the earlier file/CDX runs are terminal; do not duplicate them.
+   Continue shared control discovery/presentation rather than rebuilding document.close. No release publication was requested. Preserve exact scopes.
 2. Continue qualified inventory work, identifying actual26.1 builds and complete tool/context
    menus without claiming completeness from counts, timestamps or cloud imagery.
 3. Shared document.close is now implemented with adapter/native evidence; do not build it
@@ -177,10 +175,13 @@ completed successfully. Source was fast-forwarded into main after GREEN. These j
 terminal; do not restart them. New shared-close hosted work is identified below. No
 release was requested.
 
-Confirmed new hosted run as of2026-11-13 19:12:32 UTC:
+Confirmed terminal hosted run as of2026-11-13:
 https://github.com/thematheusmello/bondline/actions/runs/43488771976 at72742fb.
-Parser ASan132104102647 and Ubuntu132104102999 completed successfully. Windows132104103101
-is running aggregate gates; Mac132104102962 is queued. Overall success is unverified.
-Recheck this exact run before main integration; do not duplicate or cancel live jobs without
-a concrete reason. Preserve the source freeze/evidence scopes; no reference executable was
-acquired or proprietary asset shipped. The persistent full M0–M5 goal remains active.
+Parser ASan132104102647, Ubuntu132104102999, Windows132104103101 and Mac132104102962 all
+completed successfully. Aggregate totals: Mac236 (233 workspace plus3 bridge), Linux234,
+Windows228. All three actual native windows and both bounded Linux parser sanitizer targets
+pass. Adapters remain Metal/Apple Paravirtual, Dx12/Microsoft Basic Render Driver(Cpu),
+Vulkan/llvmpipe(Cpu). This does not verify interactive Windows/Linux file controls or GPU
+hardware performance. No hosted job remains live. Source is integrated into main after
+GREEN; this record changes documentation only. No release was requested. The persistent
+full M0–M5 goal remains active.

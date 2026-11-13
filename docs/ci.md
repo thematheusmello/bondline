@@ -101,3 +101,15 @@ Apple Paravirtual IntegratedGpu, Dx12/Microsoft Basic Render Driver Cpu and Vulk
 Cpu. These verify those execution paths, not hardware performance, interactive Windows/Linux
 editing, general chemical CDX coverage or application CDX import/export. Main was updated
 only after this GREEN; the integration/status commit changes documentation alone.
+
+## Shared close integration
+
+[Run43488771976](https://github.com/thematheusmello/bondline/actions/runs/43488771976) at
+72742fb passes all four jobs: Mac236 tests (233 workspace plus3 native bridge), Linux234,
+Windows228, all actual native three-frame windows and both bounded Linux parser ASan
+targets. Each aggregate printed the invoked checkout root, exercising the runtime locator
+fix. Adapters remain Metal/Apple Paravirtual IntegratedGpu, Dx12/Microsoft Basic Render
+Driver Cpu and Vulkan/llvmpipe Cpu. This verifies shared-close engine/adapter/UI tests and
+window launch, not interactive Windows/Linux closing or hardware performance. Main was
+fast-forwarded after GREEN, with documentation-only status updates afterward. No job
+remains live and no release was published.

@@ -1052,10 +1052,10 @@ of committed-state loss or verified pending-input ordering. All controllers/apps
 credentials stayed memory-only. The approved golden remains unchanged.
 
 Native interactive Windows/Linux, Dock/session/logout/multiwindow close and full reference
-dialog parity remain unverified. A fresh hosted run for this new source is required before
-main integration; the earlier all-green CDX run does not verify the new close command.
-
-Published source72742fb starts hosted run43488771976. As of2026-11-13 19:12:32 UTC, both
-parser sanitizer targets and Ubuntu passed; Windows runs and Mac is queued. No
-terminal full-platform success is claimed for shared close. STATUS.md has exact handles.
-Main8d52e14 remains at the independently verified CDX checkpoint until that source passes.
+dialog parity remain unverified. Shared-close source72742fb now passes all four jobs in
+[hosted run43488771976](https://github.com/thematheusmello/bondline/actions/runs/43488771976).
+Mac236 (233 workspace plus3 bridge), Linux234 and Windows228 aggregate tests pass, as do
+all three actual native window launches and both bounded Linux parser sanitizer targets.
+The adapter scope remains Metal/Apple Paravirtual, Dx12/Microsoft Basic Render Driver(Cpu)
+and Vulkan/llvmpipe(Cpu); no hardware-performance claim follows. Main is fast-forwarded only
+after this GREEN. These jobs are terminal; no local or hosted job remains live.
