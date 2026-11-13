@@ -2,6 +2,20 @@
 
 2026-11-13: persistent full-project goal active. Full M0 is NOT complete.
 
+The user requested GitHub publication. Public repository:
+https://github.com/thematheusmello/bondline, remote origin, branch main. Product checkpoint
+3d3dd44 was pushed and the remote SHA independently checked. Only verified committed work
+was published; new parallel file-workflow work is not in that checkpoint.
+Hosted Rust foundation run 43448214670 is confirmed in progress:
+https://github.com/thematheusmello/bondline/actions/runs/43448214670.
+Configured jobs are not passes; inspect the actual run before updating platform evidence.
+
+User-authorized parallel ownership is active: /root/file_io owns bounded filesystem I/O
+and atomic save/recovery; /root/native_file_ui owns the chooser and later native wiring;
+/root/file_verification owns independent file-command acceptance tests. Root owns shared
+command/work/apply adapters and integration. Their intentional WIP may be uncommitted and
+may contain RED tests. Do not duplicate, stage or publish another agent's unfinished scope.
+
 Target clarification: one-to-one Professional desktop screens, controls, icon roles, flows
 and functionality. The user explicitly authorized reverse engineering; policy checkpoint
 72fafb3 supersedes the earlier program-inspection ban. Public docs/media plus authorized
@@ -108,7 +122,8 @@ Next exact tasks:
 
 The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1, the drawing
 checkpoint is 7043563 and the research checkpoint is 952ded5. The current research policy
-and full goal are active; no push/publication/account action was performed.
+and full goal are active. Publication above was explicitly requested; no reference-product
+account/agreement action, release publication or installer distribution was performed.
 History budgeting is ca9b859 and native encoding is 23ffd33. The profile checkpoint includes this record;
 use Git log for its final hash.
 
@@ -118,4 +133,5 @@ and is closed. It predates history accounting and native encoding. Final native 
 closed. Earlier test builds 22527 and 75463 also exited. Startup credentials remain only
 in ignored private target logs; never copy them into reports. Earlier REA exposure evidence
 is historical and tied to a prior digest, not this build. No confirmed native/Cargo/fuzz
-job remains running at checkpoint completion.
+native/Cargo/fuzz process remains running from that checkpoint. The hosted run and delegated
+tasks above are the current live work; recheck their handles on continuation.

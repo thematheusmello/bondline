@@ -2,6 +2,9 @@
 
 An independent, offline chemical drawing application being built in Rust.
 
+[Source repository](https://github.com/thematheusmello/bondline) ·
+[Build checks](https://github.com/thematheusmello/bondline/actions)
+
 The compatibility target includes CDXML and CDX files used by ChemDraw Professional.
 The first drawing workflow creates an independent C-C bond with terminal hydrogen labels,
 supports Undo/Redo and captures its canvas on CPU or GPU. Connected construction and file
