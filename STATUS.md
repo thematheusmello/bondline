@@ -9,7 +9,8 @@ work. No release/installer distribution or reference account action was performe
 
 Public maina135a24 contains shared-close source72742fb5d08384a314060ce7dae52d41c0c91f3e,
 native integration, runtime quality-tool correctionabd35bf and tested CDX sourcea73bed7.
-Current worktree feat/shared-file-controls adds eleven-command discovery, typed delivered
+Published shared-file-control source65b5fb8db0b7c6fc44986bd59d747bd3a5644a26
+on feat/shared-file-controls adds eleven-command discovery, typed delivered
 bindings and guarded native file-presentation requests. Product Rust is frozen; aggregate
 CI and final native acceptance pass locally. Source publication/hosted work is recorded below.
 Native corrected binary hashes are recorded separately for each checkpoint. Hosted CDX GREEN43480423381 is terminal; its first
@@ -209,8 +210,14 @@ full M0–M5 goal remains active.
 
 Shared-file-control final local/native checkpoint2026-11-13 19:49:29 UTC: all intentional
 product Rust is frozen and passed the aggregate/native evidence above. No local Cargo,
-file worker, native/controller process or CUA task remains. New hosted execution has not yet
-started at this source commit; record the source hash/run/jobs after authorized push.
+file worker, native/controller process or CUA task remains. Hosted run43496010615 is running at this exact source; see handles below.
 A separate read-only agent is comparing two official public capability-chart PDFs with the
 inventory; its ignored report is not product/26.1 runtime evidence. Do not restart completed
 close/file/parser checks or claim full M0 complete from this finite control slice.
+
+New hosted run confirmed2026-11-13 19:51 UTC:
+https://github.com/thematheusmello/bondline/actions/runs/43496010615 at65b5fb8.
+Parser ASan132129175301, Mac132129175728, Ubuntu132129175764 and Windows132129175872 have
+all acquired runners and are in progress. Overall success is unverified. Recheck these exact
+handles before main integration; do not duplicate live jobs. Public maina135a24 remains the
+terminal all-platform shared-close checkpoint. No release/installer action was requested.

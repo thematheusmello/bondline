@@ -1107,3 +1107,8 @@ SHA771fdaf88be2129d633692bfca5a81627885c6bb7022777ca5c1b346016f7347. All process
 See native-file-ui.md for exact binary hash, excluded initial ambiguity, resolved stale-app
 guard and platform limits. No new golden approval or interactive Windows/Linux evidence is
 claimed; the existing approved scene/hash remains unchanged.
+
+Published frozen source65b5fb8 starts
+[run43496010615](https://github.com/thematheusmello/bondline/actions/runs/43496010615).
+As of19:51UTC, all four jobs acquired runners and are running; no full-platform GREEN is
+claimed. Public maina135a24 retains verified shared-close source72742fb until this run passes.
