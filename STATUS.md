@@ -5,15 +5,16 @@ Public repository: https://github.com/thematheusmello/bondline . Continue this r
 
 ## Integrated checkpoint
 
-Main currently contains the verified MOL application c879f4c with native/hosted acceptance
-documentation bac395d. SDF codec source fb86832a0c9b7744fb3ef8f8115c7ed296164505 and its
+Main now includes c797262: verified MOL application c879f4c, the SDF codec and fetched
+SDF corpus with the corrected byte-preserving metadata checkout. Its corrected hosted
+run43518162847 is terminal GREEN (Mac334/Linux332/Windows324, actual windows/four ASAN targets). SDF codec source fb86832a0c9b7744fb3ef8f8115c7ed296164505 and its
 whitespace-attribute child 2d665de are published on feat/sdf-v2000. The codec now passes
 all hosted jobs in run 43512236206: Mac 327/Linux 325/Windows 319, three actual windows and
 four parser sanitizer targets. This corpus feature on feat/sdf-corpus follows 2d665de and
 is locally verified. Its first hosted run43515232724 passed Mac/Linux/ASAN but failed
-Windows because Git changed the pinned manifest to CRLF. A narrow metadata checkout
-correction is now independently verified; its new hosted run follows publication.
-Fast-forward main only after corrected checks pass; the failed run remains recorded.
+Windows because Git changed the pinned manifest to CRLF. The narrow metadata checkout
+correction passes every job in43518162847 and was integrated into main after GREEN.
+The earlier failed run remains recorded; no completed run should be restarted.
 
 Hosted application run 43508330802 is terminal GREEN:
 https://github.com/thematheusmello/bondline/actions/runs/43508330802 .
@@ -110,28 +111,34 @@ despite declared MIT. Browser Unicode-bearing dependencies remain unapproved. Go
 1. Publish the verified corpus metadata checkout correction and follow its new hosted run.
    Corpus run43515232724 is terminal failed on Windows manifest byte identity; the preceding
    codec run43512236206 is GREEN. Do not restart those completed jobs or older MOL runs.
-   Main remains at bac395d until the new source's checks pass.
+   Main is now at c797262 after corrected checks passed.
 2. Continue the active V3000 codec in the persistent sibling worktree:
    /Users/sarenaberg/Workspace/doozle/open-source-world/bondline-mol-v3000
    branch feat/mol-v3000, base 2d665de, its own absolute Cargo target under that worktree.
    file_io owns Rust/tests/fixtures/fuzz/docs there. native_file_ui delivered its external
    oracle and ended all processes. Source is frozen with14 V3000/96 total IO tests,
-   targeted clippy/fmt and final10000-run ASAN GREEN. Root's isolated full gate is still
-   running; source is not committed/integrated. Do not discard it or reuse another target.
+   targeted clippy/fmt and final10000-run ASAN GREEN. Source5caf6ce is now committed/
+   published, with338 workspace plus three bridge tests GREEN. It is not integrated with
+   newer corpus changes yet. Preserve the checkout and its separate Cargo target.
    Research handoff: root target/v3000-next-handoff.md. Never share Cargo targets or clean
    away an active checkout. Root's corpus evidence excludes those separate artifacts.
 3. Finish V3000/application SDF workflows, application CDX/general CDXML, RXN/SMILES/InChI,
    then M2 drawing/labels/styles, M3 chemistry/reactions, M4 publishing/clipboard and M5
    depth/WASM/distribution. Remaining M0 inventory/dialog/job gaps remain visible.
 
-Root corpus jobs are terminal; metadata checkout correction has actual isolated RED/GREEN
+Root corpus jobs are terminal; metadata correction c797262 is published on feat/sdf-corpus.
+Its corrected run43518162847 passed every job and main was fast-forwarded after GREEN. No completed job was restarted. Metadata correction has actual isolated RED/GREEN
 evidence in target/sdf-manifest-autocrlf-yoq1rmg2. No native/controller/CUA process remains.
 Completed runs43508330802/43507660824/43509919220/43512236206 are GREEN;43515232724 failed
 Windows. The next corrected push creates a distinct run, not a retry of passing jobs.
-V3000 source is frozen in its sibling checkout; root full-gate handle49107 writes that
-checkout's target/v3000-worktree-ci.log and may still run. Original CDX chemical fixture/
-expanded-seed checks are separately in progress in root; do not discard their uncommitted
-files. No unrelated reference/account/release action was performed.
+V3000 source5caf6ce is committed/published on feat/mol-v3000 (hosted run43519338382 live at the last check) in its sibling checkout.
+Its full gate338 workspace plus three bridge tests and final ASAN pass; handle49107 is
+terminal. Application integration is still missing. The original positive CDX fixture
+now passes 15 CDX tests, actual struct/RDKit consumers, expanded-seed ASAN10000 and the
+root aggregate 332 workspace plus three bridge tests; its next source commit is identified
+in Git log. It is not yet a fetched corpus entry. No local/native/controller/CUA job
+remains. New source pushes create separate hosted runs; inspect those exact run handles.
+No unrelated reference/account/release action was performed.
 Only root stages/commits/pushes. Development bundles/reports are disposable, never committed.
 Future worktrees must keep separate Cargo targets; stale reuse previously tested the wrong
 checkout. Keep the full project goal active and continue rather than recreating it.

@@ -54,8 +54,8 @@ not exhaustive parser conformance or a security audit.
 
 ```sh
 mkdir -p .cache/fuzz/cdx
-cp crates/cdx/tests/fixtures/unknown-implicit.cdx .cache/fuzz/cdx/
-PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run cdx_parse .cache/fuzz/cdx -- -runs=10000 -seed=721533879 -max_len=65536 -timeout=5
+cp crates/cdx/tests/fixtures/unknown-implicit.cdx crates/cdx/tests/fixtures/original-ethane-explicit.cdx .cache/fuzz/cdx/
+PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run cdx_parse .cache/fuzz/cdx -- -runs=10000 -seed=721533879 -max_len=131072 -timeout=5
 ```
 
 This separate target exercises bounded binary framing, exact original-byte preservation,
@@ -64,6 +64,11 @@ reparse, preserve record count/framing and retain all bytes outside the changed 
 replacing a payload with itself must be byte-exact. The original document stays unchanged.
 The harness does not map CDX chemistry, resolve references, write new object trees or access
 files. Independent Python struct/RDKit expectations live in the crate's integration tests.
+The original explicit ethane seed is 65750 bytes, including a 65535-byte opaque extended
+property. The former 65536-byte run limit could not represent that complete scene; the
+current 131072-byte bound deliberately includes it. Both original fixture identities and
+their generator/source provenance are recorded in the fixture README. An accepted binary
+mutation is syntax/source evidence, not independent chemical interoperability for that mutation.
 The CI sanitizer job runs all four parser targets; these bounded runs are not exhaustive input
 coverage or proof of application CDX support.
 

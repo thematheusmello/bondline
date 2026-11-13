@@ -1,5 +1,14 @@
 # CI contract and execution evidence
 
+Corrected fetched-SDF corpus source `c797262d23524dd949047b3bbe3b4b4022d37fbc` is terminal
+GREEN in [run43518162847](https://github.com/thematheusmello/bondline/actions/runs/43518162847):
+macOS `132205357329`: 334 tests (331 workspace plus three bridge), Linux `132205357320`:
+332, Windows `132205357409`: 324 and ASAN `132205356923`. All three actual window smokes
+and all four bounded parser targets pass. Adapters remain Metal/Apple Paravirtual,
+Vulkan/llvmpipe Cpu and Dx12/Microsoft Basic Render Driver Cpu. Main was fast-forwarded
+only after these checks passed. The failed earlier run remains recorded below. This
+does not verify native SDF authoring, foreign-file CDX or interactive Windows/Linux use.
+
 First fetched-SDF corpus run
 [43515232724](https://github.com/thematheusmello/bondline/actions/runs/43515232724) at504be5f
 is terminal: macOS132195407757, Linux132195408230 and ASAN132195408337 passed; Windows

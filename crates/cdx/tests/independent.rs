@@ -117,19 +117,35 @@ fn record_table(document: &Document<'_>) -> String {
 fn original_fixture_and_bond_edit_are_read_by_external_rdkit() -> TestResult {
     oracle(&["self-test"], &[])?;
     for framing in ["implicit", "explicit"] {
-        check_fixture_and_edit(framing)?;
+        let original = oracle(&["fixture", framing], &[])?;
+        check_source_and_edit(&original, framing)?;
     }
     Ok(())
 }
 
-fn check_fixture_and_edit(framing: &str) -> TestResult {
-    let original = oracle(&["fixture", framing], &[])?;
-    let document = Document::parse(&original)?;
+#[test]
+fn checked_in_explicit_scene_matches_original_generator_and_external_chemistry() -> TestResult {
+    let source = std::fs::read(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/tests/fixtures/original-ethane-explicit.cdx"
+    ))?;
+    assert_eq!(source.len(), 65_750);
+    oracle(&["self-test"], &[])?;
+    assert_eq!(
+        source,
+        oracle(&["fixture", "explicit"], &[])?,
+        "the published original vector must remain unchanged"
+    );
+    check_source_and_edit(&source, "explicit")
+}
+
+fn check_source_and_edit(original: &[u8], framing: &str) -> TestResult {
+    let document = Document::parse(original)?;
     assert_eq!(document.as_bytes(), original);
     assert_eq!(document.to_bytes(), original);
     assert_eq!(
         record_table(&document).as_bytes(),
-        oracle(&["describe"], &original)?
+        oracle(&["describe"], original)?
     );
     oracle(&["verify", "1", framing], &document.to_bytes())?;
 

@@ -1346,3 +1346,38 @@ change. Logs/metadata are under target/sdf-manifest-autocrlf-yoq1rmg2; the resea
 records the source/public rule. CDX byte preservation is also explicit for already published
 original binary vectors. Configuration-only correction: relevant byte/checkout checks pass,
 no artificial Rust test or Cargo rerun claimed. A new hosted source run follows publication.
+
+## Original positive CDX source fixture
+
+The already-published, unchanged original struct generator now has its actual explicit-root
+output committed at crates/cdx/tests/fixtures/original-ethane-explicit.cdx:65750 bytes,
+SHA63ef1a74133e45de915d5fd25b2ca3321a95dbe5114873a5a59f2f45217000d2. Generator SHA remains
+5ef6b183d7933b4d3857d1f36b2dd5df2478b089f543f89a4d04a6c0ae7201b6; the original70-byte
+fixture remains unchanged. Both are original MIT OR Apache-2.0 source vectors, not samples
+from the reference application. The missing-file RED compiled then failed NotFound;
+after materialization all15 CDX tests, targeted clippy/fmt pass. Logs:
+target/cdx-fixture-{red,green,clippy,fmt}.log.
+
+The actual file must match independent generator bytes and all29 struct record events,
+including ownership, extended-length spelling and payloads. Existing external RDKit
+verify1/explicit reads CC/C2H6. Replacing only BondOrder0x0600 with2 must match the exact
+independent double-bond vector and read C=C/C2H4. Its byte guard was not weakened for the
+empty70-byte fixture. No production parser or oracle changed.
+
+This positive scene is65750 bytes, beyond the former65536 fuzz-run limit. Both original
+seeds now run under a deliberate131072-byte bound. Fresh-corpus ASAN passes10000 iterations,
+seed721533879, timeout5: coverage165/features447,57 retained inputs/reported70KiB/RSS136MiB;
+largest exercised input65750 bytes. Log target/cdx-positive-asan.log. This is source/opaque-
+editing fuzzing, not independent chemistry verification for every mutation.
+
+Actual-root aggregate cargo xtask ci passes332 workspace plus three bridge tests, fmt,
+all-target clippy, layers, unchanged runtime licenses/assets and existing CDXML/MOL/SDF
+corpus checks. Log target/cdx-fixture-ci-integrated.log. The new source must be public
+before a subsequent real fetched-CDX pin is added. CDX corpus remains explicitly missing
+in this checkpoint; no foreign-file/general/app CDX compatibility is claimed. All local
+fixture/fuzz/aggregate jobs are terminal. V3000 remains a separate checkout's source.
+
+The corpus metadata correction c797262 now passes every job in run43518162847: Mac334,
+Linux332, Windows324 and four bounded parser targets, with all actual window smokes.
+Main was fast-forwarded only after GREEN. Exact IDs/adapters are in ci.md. Earlier
+run43515232724 remains terminal failed; no assertion or semantic/source data was weakened.

@@ -188,5 +188,15 @@ The corpus manifest's immutable byte assertion also exposed actual Windows CRLF 
 the narrow manifest -text correction and isolated clone RED/GREEN are recorded in
 ../research/corpus-manifest-checkout.md. Source pins, licenses and assertions remain unchanged.
 
+An original explicit-root CDX chemical fixture now materializes the unchanged public
+Bondline struct generator, rather than a proprietary or provenance-incomplete sample.
+CDX-SYNTAX and the public point/bond property records justify its numeric fields;
+the original scene/provenance are in crates/cdx/tests/fixtures/README.md. The65750-byte
+artifact's SHA is63ef1a74133e45de915d5fd25b2ca3321a95dbe5114873a5a59f2f45217000d2.
+Independent struct events/full-byte edit checks and external RDKit verify CC/C2H6 then
+C=C/C2H4 after only the bond-order change. Its65535-byte opaque property remains preserved.
+The CDX sanitizer bound increases to131072 to include this complete seed. No foreign-file,
+application-CDX or general chemistry compatibility is inferred from this authored vector.
+
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused
 with their notices. This does not relax the prohibition on proprietary product code/assets.
