@@ -64,5 +64,31 @@ reparse, preserve record count/framing and retain all bytes outside the changed 
 replacing a payload with itself must be byte-exact. The original document stays unchanged.
 The harness does not map CDX chemistry, resolve references, write new object trees or access
 files. Independent Python struct/RDKit expectations live in the crate's integration tests.
-The CI sanitizer job runs both parser targets; these bounded runs are not exhaustive input
+The CI sanitizer job runs all three parser targets; these bounded runs are not exhaustive input
 coverage or proof of application CDX support.
+
+## MOL V2000 syntax and elemental graph
+
+```sh
+mkdir -p .cache/fuzz/mol
+cp crates/io/tests/fixtures/mol/rdkit-CH3.mol crates/io/tests/fixtures/mol/ethane-v2000.mol .cache/fuzz/mol/
+PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run mol_parse .cache/fuzz/mol -- -runs=10000 -seed=619734821 -max_len=65536 -timeout=5
+```
+
+The seed is the pinned BSD-3-Clause RDKit methyl-radical document; its source, SHA-256
+and retained notice are recorded in `crates/io/tests/fixtures/mol/README.md`. The original
+fixed-column two-carbon vector from `crates/io/tests/mol.rs` may also be copied into this
+ignored corpus. Never use the committed fixtures as a writable mutation corpus.
+
+Accepted input must preserve every original byte and respect the published parser's
+line/count bounds. Strict elemental projection uses a validated identity scale/origin;
+unsupported syntax/model features may be refused explicitly. Successful V2000 export
+must parse and preserve graph identities/connectivity, elements, explicit H, isotopes,
+charges and radicals. Coordinates may change by half of the format's four-decimal step
+plus a bounded floating-point representation term. Canonical output is not claimed to be
+byte-identical to original input; original source remains unchanged throughout.
+
+This target does not infer chemistry, compare every mutation with RDKit, import into an
+application session, or exercise native file I/O. Independent published-field/RDKit
+expectations remain in the IO integration tests. The bounded sanitizer run is not complete
+format conformance or a security audit. It adds no shipped dependency or GPU initialization.

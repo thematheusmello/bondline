@@ -14,6 +14,14 @@ ccf8c50 is the earlier file-workflow UI, not the current UI. Do not restart exis
 All local/native/CUA/research/hosted jobs are closed. No release/installer distribution or
 reference-account action was requested/performed. The full M0–M5 goal remains active.
 
+M1 MOLV2000 codec now passes14new/58totalIO tests, independent writer/model consumers,
+one actual pinned MOL corpus input and10000 bounded ASAN runs. Full actual-root aggregate:
+281workspace+3native bridge tests and all existing gates pass. Source is the next format
+commit in Git log; application MOL import/export is still the next feature, not delivered
+by this library. No new runtime dependency or lockfile change. See file-formats.md and the
+new verification section for metadata/precision/isotope-consumer limits. Hosted checks for
+this new source are pending publication.
+
 ## Current integrated scope
 
 - Native Rust egui/wgpu workspace, eleven typed commands shared by CLI, stdio MCP and opt-in
@@ -171,11 +179,11 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 The user explicitly prioritized continuing M1, then M2–M5. Remaining M0 inventory/dialog/
 job-addressability gaps remain visible; they do not stop the newly authorized format work.
 
-1. Finish the active MOLV2000 codec and independent tests in crates/io/src/mol and its
-   fixtures/oracle. Published BIOVIA2026 fields, retained source/header metadata and strict
-   unsupported-feature diagnostics govern it. Observe RED/GREEN, run targeted clippy, then
-   integrate complete owned source/model data and real registry/file operations. Do not
-   advertise application MOL support from a standalone codec.
+1. MOLV2000 codec/corpus/fuzz slice is locally verified. Publish its source and follow
+   hosted checks. Next integrate OriginalSource::Mol with full bytes/baseline/transform/
+   shared headers in StoredDocument, safe same-format regeneration and retained-size
+   accounting; add bounded atomic MOL I/O, then real registry/adapters/native format choice.
+   Guard cross-format/layout loss explicitly. Do not advertise app support from the codec.
 2. Complete M1 formats: SDF/V3000/RXN/SMILES, application CDX mapping and general source-
    preserving CDXML edits. Keep strict unknown-data/source retention and independent
    consumers; the excluded CDX candidate does not justify trimming or relaxed parsing.

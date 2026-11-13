@@ -104,6 +104,14 @@ delivered adapters, update CLI/MCP wire tests as needed, then update provenance 
 For UI changes, launch the actual native app and inspect the workflow. Eguis's input tests
 and source cross-checks do not substitute for native platform execution.
 
+MOLV2000 is now a source-preserving library codec in io::mol, not an application command.
+Its transform is explicit, headers/raw source stay authoritative, and unsupported projection
+must fail rather than erase data. Native MOL storage/I/O/commands remain the next step.
+Declared valence yields exact authored H by the published finite arithmetic; do not infer
+periodic-table valence. Preserve the documented normative M ISO/RDKit discrepancy, and the
+original/independent test vectors. The corpus now actually checks one MOL input, not only
+its hash; CDX corpus and chemistry calculations remain missing.
+
 The current eleven-command registry includes bond.create for independent C-C fragments with
 three explicitly authored H per carbon, plus native CDXML open/save. It does not attach to
 existing atoms. Save complete StoredDocument data; file.dirty uses the saved snapshot, while
@@ -160,7 +168,7 @@ failing main. Commit all intentional project files, never caches, secrets or bui
 Do not push or publish without an explicit request. Update STATUS.md with verified state,
 actual failures, remaining work, next executable steps and live job handles before stopping.
 Currently implemented xtask gates: layers, licenses, corpus and ci. Corpus checks the delivered
-CDXML syntax/elemental projection subset plus pinned file integrity; its output identifies missing MOL/CDX/chemistry
+CDXML syntax/elemental projection subset plus pinned file integrity; its output identifies missing CDX/chemistry and broader format
 coverage. The aggregate gate passes locally and on all three hosted platforms at 3d3dd44.
 Hosted native-window smoke passes on all three platforms, plus Linux ASan, after the
 Linux runtime-package correction. These are window/API checks, not interactive Windows/

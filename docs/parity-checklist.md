@@ -58,7 +58,7 @@ identify a full26.1 desktop screen specification or increase the count by duplic
 | Associated-data label selection | PROFESSIONAL-26.1 | missing | Documented 26.1 behavior |
 | Separate CDXML/MDL paste entries | PROFESSIONAL-26.1 | missing | M4; platform clipboard evidence |
 | CDXML/CDX interchange | CDXML-INTRO / CDX-INTRO / CDX-SYNTAX | partial: Mac CDXML; standalone CDX only | CDXML registry/native Open/Save/Save As, complete backing, guarded opaque passthrough and editable native-profile reopening have independent/native evidence. Standalone CDX syntax/property edits face original field vectors, Python struct and external RDKit checks; no application CDX import/export. General imported structural editing, labels/queries/styles, broader references/corpus and full format parity remain missing; see file-formats.md |
-| MOL/SDF/RXN/SMILES/InChI | GUIDE-25 | missing | M1/M3 |
+| MOL/SDF/RXN/SMILES/InChI | GUIDE-25 / CTFILE-2026 | partial MOL library only; app workflow missing | V2000 parser/model/writer and one pinned independent corpus input; no native MOL commands yet. SDF/V3000/RXN/SMILES/InChI remain missing. M1/M3 |
 | SVG/PDF/PNG, print and Office clipboard | GUIDE-25 | missing | M4 |
 | Templates and biopolymers/HELM | GUIDE-25 / release notes | missing | Original assets only; M5 |
 | Prediction and advanced reference workflows | GUIDE-25 | missing | Full source audit required |

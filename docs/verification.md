@@ -1146,3 +1146,37 @@ chooser redirected the unauthenticated preview to sign-in; form submission/rende
 remain unverified, and no login/issue/report/PR was submitted. The preview tab was closed.
 A requested screenshot file path was outside the browser tool's permitted roots, so inline
 viewport evidence was inspected instead; no saved browser screenshot is claimed.
+
+## MOL V2000 codec and corpus,2026-11-13
+
+API RED preceded implementation: target/mol-v2000-red.log and mol-header-red.log. A real
+unsupported-diagnostic failure is mol-diagnostic-red.log. The isotope comparison failure in
+mol-precedence-red.log exposed a published-spec versus pinned-consumer disagreement; it was
+not normalized or hidden. Tests now separately assert normative global override, actual
+RDKit legacy-delta behavior, exact original bytes and consistent canonical-output readback.
+The14 MOL tests plus44 existing IO tests pass; target/mol-io-all-green.log. Targeted
+clippy/fmt pass. External RDKit checks CH3/radical/H, CC, charge/isotopes, geometry, all118
+symbols and independently generated input. Decimal independently checks fixed4dp rounding.
+Original fixed-column ethane fixture282bytes/hash828c1b58... supplements the licensed170-byte
+CH3 fixture. Headers and unsupported data retain their stated source/export boundaries.
+
+Corpus RED explicitly required MOL coverage1 while the old command reported0; same assertion
+now passes. All18 xtask tests pass, including deliberately mismatched raw/model element,
+radical/H/coordinate rejection. Both normal and offline corpus commands pass; logs
+mol-corpus-{red,green,default,tests,clippy,fmt}.log. Manifest remains two exact pinned files,
+now one CDXML and one MOL input. Fetched CDX and Bondline chemistry calculations still lack
+coverage; the command prints those gaps.
+
+New mol_parse ASAN target had a missing-target RED, then passed10000runs, seed619734821,
+max_len65536,timeout5 on pinned nightly2026-04-01/cargo-fuzz0.13.2/libfuzzer0.4.13. Final
+coverage947/features2007,163retained inputs28445bytes/RSS66MiB; largest exercised input282bytes.
+This is a bounded smoke, not broad large-input coverage. Log mol-asan-first.log; fuzz target
+clippy/fmt pass. Initial seeds are the reviewedCH3 and original fixed-column ethane, copied
+only into ignored writable corpora. No lock/runtime dependency changed. The workflow now
+runs all three parser targets; hosted execution of this new source remains to be checked.
+
+Actual-root aggregate cargo xtask ci passes281 workspace tests plus3 native AccessKit bridge
+tests, fmt, warnings-denied clippy, layers, unchanged153/164/219 native declarations/two
+assets and the expanded corpus subset. Log target/mol-codec-ci-integrated.log printed this
+checkout. No application MOL command, native MOL file workflow, SDF/V3000 or chemistry
+algorithm is claimed by this library/parser milestone. All local jobs are terminal.

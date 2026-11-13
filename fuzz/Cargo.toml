@@ -29,6 +29,13 @@ test = false
 doc = false
 bench = false
 
+[[bin]]
+name = "mol_parse"
+path = "fuzz_targets/mol_parse.rs"
+test = false
+doc = false
+bench = false
+
 [workspace]
 members = ["."]
 

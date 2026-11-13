@@ -95,3 +95,10 @@
   External RDKit reads ethanol; Bondline rejects the two zero bytes after independently decoded
   root end400. Resolve framing/header/EOF using public specs before changing policy; do not
   trim bytes or treat consumer acceptance as the specification. See [the candidate review](../research/cdx-corpus-candidate.md).
+
+- MOL2026 M ISO semantics reset unlisted atom-block isotope values to natural abundance;
+  pinned RDKit instead retains an unlisted legacy mass delta. Separate source/canonical-
+  output and consumer-diagnostic tests record the disagreement. No general input isotope
+  agreement is claimed. Legacy mass differences without a verified mass table and D/T
+  alias/override precedence remain unsupported; the reviewed CTfile tables do not define
+  those aliases. Query/stereo/3D, broader encodings and SDF/V3000 remain M1 work.

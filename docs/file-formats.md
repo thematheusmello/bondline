@@ -4,10 +4,55 @@
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
 | CDX | Standalone bounded binary syntax and checked opaque property replacement | Original published-field vectors, independent Python struct spans/bytes, external RDKit connectivity/order consumers | Application import/export, model/reference mapping, new-tree writer, broader pinned corpus and modern extensions |
-| MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
+| MOL V2000 | Source-preserving library parser, strict elemental projection and canonical writer | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN | Application commands/native I/O, broader fields and compatibility cases below |
+| SDF/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
+
+## MOL V2000 library
+
+`bondline_io::mol::MolFile` retains accepted original bytes exactly. Parsed views expose
+headers, raw atom/bond fields and line-addressed unsupported features. `as_bytes()` is exact
+passthrough; a partial model must never replace it. This codec does not open/save application
+files or establish a native MOL workflow yet.
+
+The strict graph projection supports the118 elemental symbols, single/double/triple/aromatic
+bonds, charge, radical and absolute isotopes. Its caller supplies MolTransform(scale,origin):
+raw x/y increase right/up, drawing points right/down. No units, typical bond length or
+chemistry are guessed from the file. Declared valence includes implied H in the published
+format; subtracting known integer bond orders decodes authored H exactly. Zero valence is
+encoded15, distinct from unmarked0. The hydrogen-query field is not an exact H count.
+Aromatic declared-valence combinations remain unsupported.
+
+CHG/RAD properties replace legacy charge/radical codes globally; M ISO replaces legacy
+isotope values globally, with unlisted atoms natural. A focused original vector exposes a
+pinned RDKit discrepancy: it retains an unlisted legacy mass difference. Bondline follows
+the published2026 rule and preserves the raw input; separate tests assert the consumer
+behavior. Canonical output has zero legacy mass deltas and explicit absolute properties,
+which the consumer reads consistently. A nonzero mass difference without an overriding
+property remains unsupported until a verified reference-mass table exists. D/T aliases are
+not defined by the reviewed symbol table; no alias/override precedence is invented.
+
+Unknown properties, queries, stereo,3D and unverified metadata stay in raw source and cause
+explicit model-conversion refusal. SDF content and trailing nonblank data are not accepted
+as a MOL record. No mode silently drops them. ASCII with LF/CRLF is supported. Bounds are
+64MiB,999 atoms/bonds,4096bytes per line and100000lines, with checked indices and no recursive
+syntax tree. Broader encoding and format coverage remain M1 work.
+
+`write_v2000` encodes supported graphs; `write_v2000_with_header` retains the three supplied
+ASCII header lines (at most80bytes each). Coordinates use the format's10-column/four-decimal
+representation: maximum rounding error is half a0.0001 raw unit plus floating representation
+error. Missing positions, width/range overflow, unrepresentable metadata and unsupported
+orders fail without output. Known explicit H becomes an exact declared valence; unknown H
+stays unmarked. Canonical writing can change spelling/property order and is not a byte-exact
+edited-source claim. Raw passthrough remains exact.
+
+The reviewed170-byte RDKit CH3 document now has actual corpus parsing/source/model checks;
+formula and SMILES in those checks are external consumer expectations, not Bondline chemistry
+algorithms. Original ethane columns and external-generated vectors independently exercise
+writer interoperability. See [test provenance](../crates/io/tests/fixtures/mol/README.md),
+[verification](verification.md) and [fuzz limits](../fuzz/README.md).
 
 `bondline-cdx` is a standalone syntax utility, with no model, filesystem, GUI or third-party
 dependency. Its flat borrowed index retains the original header, unknown object/property
@@ -162,23 +207,22 @@ export_cdxml borrows the exact original bytes only while the model equals its ba
 Any unsynchronized model edit fails with UnsupportedEdit; exact restoration/undo permits
 passthrough again. That borrowed-only method returns NoCdxmlSource for native data. The new
 to_cdxml method instead returns borrowed exact source or owned freshly encoded native bytes;
-source-backed edits still return UnsupportedEdit. Never regenerate stored.model() to bypass
+unsupported source-backed edits return UnsupportedEdit; the proven native profile below can regenerate edits. Never regenerate stored.model() to bypass
 this guard: the flat model does not include all original content. Source
 bytes survive input lifetime, cloning and history without being exposed in Debug or command
-result serialization. No file command or native open/save workflow is exposed by this API.
+result serialization. Native file commands use this API through the separate filesystem adapter; see native-file-ui.md for their execution scope.
 Source bindings for structural edits, faithful imported-file rendering and full interpretation remain missing.
 An exact current native elemental encoding is now classified as fully mapped. The constructor
 re-encodes the projected model and compares **every source byte**, including metadata and
 layout, before caching that decision; a creator name alone grants nothing. Its original
 source/baseline stay in history. Unchanged export borrows the exact original; edits can encode
 new bytes, and Undo restores original passthrough. Headless rendering and bond.create now
-work after reopening this profile. The native workspace/file commands are still unwired.
+work after reopening this profile. The native workspace/file commands now use this proven profile; see native-file-ui.md.
 Added styles, captions, comments, unknown fields, another version or noncanonical spelling
 retain opaque source and the edit/preview guards. This narrow proof is an initial supported
 profile, not a substitute for general source-preserving CDXML editing. The pinned original
 v0 vector in crates/io/tests/fixtures must remain editable through future migrations; do not
-refresh it when changing the encoder/version. No new file command or native save/reopen flow
-was added here. The external RDKit 2026.09.2 consumer checks one actual engine-created
+refresh it when changing the encoder/version. The profile codec remains separate from the delivered file-command/native workflow. The external RDKit 2026.09.2 consumer checks one actual engine-created
 C-C/three-H case as ethane, not every file property, appearance or advanced bond chemistry.
 The corpus gate checks one owned snapshot's projection against independent external Expat/Decimal,
 in addition to its unchanged-byte/XML checks. It explicitly reports chemistry calculations

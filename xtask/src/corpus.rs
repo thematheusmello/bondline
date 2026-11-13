@@ -158,7 +158,7 @@ fn compare_xml(
         .filter_map(|node| node.text())
         .collect();
     let expected = json!({"elements":elements,"text":text});
-    let independent = xml_oracle(
+    let independent = python_oracle(
         r#"
 import json,sys,xml.parsers.expat as expat
 parser=expat.ParserCreate(namespace_separator='|')
@@ -178,9 +178,9 @@ json.dump({'elements':elements,'text':''.join(text)},sys.stdout)
     Ok(())
 }
 
-fn xml_oracle(script: &str, bytes: &[u8]) -> Result<Value, Box<dyn Error>> {
+fn python_oracle(script: &str, bytes: &[u8]) -> Result<Value, Box<dyn Error>> {
     let mut oracle = Command::new(python())
-        .args(["-c", script])
+        .args(["-B", "-c", script])
         .env("PYTHONIOENCODING", "ascii")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
@@ -189,7 +189,7 @@ fn xml_oracle(script: &str, bytes: &[u8]) -> Result<Value, Box<dyn Error>> {
     oracle
         .stdin
         .take()
-        .ok_or("missing Expat stdin")?
+        .ok_or("missing oracle stdin")?
         .write_all(bytes)?;
     let result = oracle.wait_with_output()?;
     if !result.status.success() {
@@ -199,11 +199,77 @@ fn xml_oracle(script: &str, bytes: &[u8]) -> Result<Value, Box<dyn Error>> {
 }
 
 fn compare_graph(bytes: &[u8], projection: &Value) -> Result<(), Box<dyn Error>> {
-    let independent = xml_oracle(include_str!("../oracles/cdxml_graph.py"), bytes)?;
+    let independent = python_oracle(include_str!("../oracles/cdxml_graph.py"), bytes)?;
     if independent != *projection {
         return Err("CDXML elemental projection differs from independent Expat/Decimal".into());
     }
     Ok(())
+}
+
+fn compare_mol(
+    bytes: &[u8],
+    document: &bondline_io::mol::MolFile<'_>,
+    projection: &Value,
+) -> Result<(), Box<dyn Error>> {
+    let raw_atoms: Vec<_> = document
+        .atoms()
+        .iter()
+        .map(|atom| {
+            json!({
+                "symbol": atom.symbol,
+                "element": atom.element.map(bondline_model::Element::get),
+                "position": [atom.x, atom.y, atom.z],
+                "mass_difference": atom.mass_difference,
+                "isotope": atom.isotope.map(std::num::NonZeroU16::get),
+                "charge": atom.charge,
+                "radical": atom.radical,
+                "declared_valence": atom.declared_valence,
+            })
+        })
+        .collect();
+    let raw_bonds: Vec<_> = document
+        .bonds()
+        .iter()
+        .map(|bond| json!({"begin":bond.begin,"end":bond.end,"order":bond.order}))
+        .collect();
+    let expected = json!({
+        "raw": {"header": document.header(), "atoms":raw_atoms,"bonds":raw_bonds},
+        "fragment": projection,
+    });
+    let mut independent = python_oracle(include_str!("../oracles/mol_graph.py"), bytes)?;
+    // Decimal supplies the reference; binary64 scaling may differ by a few ulps.
+    for axis in ["x_pt", "y_pt"] {
+        let path = format!("/fragment/atoms/0/position/{axis}");
+        let observed = expected
+            .pointer(&path)
+            .and_then(Value::as_f64)
+            .ok_or("MOL projection has no finite coordinate")?;
+        let reference = independent
+            .pointer(&path)
+            .and_then(Value::as_f64)
+            .ok_or("MOL Decimal oracle has no coordinate")?;
+        if !observed.is_finite() || (observed - reference).abs() > 1e-10 {
+            return Err("MOL coordinate differs from independent Decimal transform".into());
+        }
+        *independent
+            .pointer_mut(&path)
+            .ok_or("MOL Decimal oracle coordinate is missing")? = json!(observed);
+    }
+    if independent != expected {
+        return Err("MOL raw/model projection differs from independent RDKit/Decimal".into());
+    }
+    Ok(())
+}
+
+fn check_mol(bytes: &[u8]) -> Result<(), Box<dyn Error>> {
+    let document = bondline_io::mol::MolFile::parse(bytes)?;
+    if document.as_bytes() != bytes {
+        return Err("MOL source byte loss".into());
+    }
+    let transform =
+        bondline_io::mol::MolTransform::new(24.0, bondline_model::Point2::new(0.0, 0.0)?)?;
+    let projection = document.to_fragment(transform)?;
+    compare_mol(bytes, &document, &serde_json::to_value(projection)?)
 }
 
 pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
@@ -221,7 +287,7 @@ pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
         return Err("corpus cache escapes workspace".into());
     }
     let mut round_trips = 0;
-    let mut pending = Vec::new();
+    let mut mol_checks = 0;
     for file in &manifest.files {
         let path = cache.join(&file.name);
         let bytes = if path.try_exists()? {
@@ -273,7 +339,10 @@ pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
                 compare_graph(stored.export_cdxml()?, &serde_json::to_value(fragments)?)?;
                 round_trips += 1;
             }
-            Format::Mol => pending.push(&file.name),
+            Format::Mol => {
+                check_mol(&bytes)?;
+                mol_checks += 1;
+            }
         }
     }
     writeln!(
@@ -281,17 +350,19 @@ pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
         "corpus integrity: {} pinned licensed files; CDXML byte/Expat checks: {round_trips}; elemental projections: {round_trips}; source-backed snapshots: {round_trips}",
         manifest.files.len()
     )?;
-    for name in pending {
-        writeln!(
-            std::io::stdout(),
-            "{name}: integrity only; MOL parser/chemistry checks MISSING"
-        )?;
-    }
+    writeln!(
+        std::io::stdout(),
+        "MOL V2000 byte/source/RDKit/Decimal checks: {mol_checks} (strict elemental input subset)"
+    )?;
+    writeln!(
+        std::io::stdout(),
+        "CDX corpus checks MISSING (no reviewed entry)"
+    )?;
     writeln!(
         std::io::stdout(),
         "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
     )?;
-    if round_trips == 0 {
+    if round_trips == 0 && mol_checks == 0 {
         return Err("corpus has no implemented parser coverage".into());
     }
     Ok(())
@@ -373,6 +444,70 @@ mod tests {
         let bytes=br#"<CDXML><page><fragment id="11"><n id="29.00" Isotope="13" Charge="-1" Radical="Doublet" NumHydrogens="0" p="72 144"/><n id="30" Element="8"/><b B="30" E="29" Order="dative"/></fragment><group><fragment id="11"><n id="29"/><n id="30" Element="7" Radical="Singlet" NumHydrogens="3"/><b B="29" E="30" Order="1.500"/></fragment></group></page></CDXML>"#;
         let graph = bondline_io::cdxml::ElementalGraph::parse(bytes)?;
         super::compare_graph(bytes, &serde_json::to_value(graph.fragments())?)?;
+        Ok(())
+    }
+
+    #[test]
+    fn pinned_mol_source_and_projection_match_independent_rdkit_decimal()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let bytes = include_bytes!("../../crates/io/tests/fixtures/mol/rdkit-CH3.mol");
+        let manifest: Manifest =
+            serde_json::from_slice(include_bytes!("../../docs/corpus/manifest.json"))?;
+        let fixture = manifest
+            .files
+            .iter()
+            .find(|file| matches!(file.format, super::Format::Mol))
+            .ok_or("missing pinned MOL entry")?;
+        assert_eq!(fixture.name, "rdkit-methyl-radical.mol");
+        assert_eq!(fixture.size, 170);
+        assert_eq!(
+            fixture.sha256,
+            "afd2352697ca20c0d580c4981fe8bd24da36c4e1661e9d2aee501a40364fd42d"
+        );
+        verify(fixture, bytes)?;
+        super::check_mol(bytes)?;
+        let document = bondline_io::mol::MolFile::parse(bytes)?;
+        assert_eq!(document.as_bytes(), bytes);
+        let transform =
+            bondline_io::mol::MolTransform::new(24.0, bondline_model::Point2::new(0.0, 0.0)?)?;
+        let fragment = document.to_fragment(transform)?;
+        assert_eq!(fragment.atoms().len(), 1);
+        assert!(fragment.bonds().is_empty());
+        let atom = fragment.atoms().first().ok_or("missing carbon")?;
+        assert_eq!(atom.element.get(), 6);
+        assert_eq!(atom.explicit_hydrogens, Some(3));
+        assert_eq!(atom.radical, bondline_model::Radical::Doublet);
+        let point = atom.position.ok_or("missing point")?;
+        assert!((point.x_pt() + 29.7).abs() < 1e-10);
+        assert!((point.y_pt() + 51.6216).abs() < 1e-10);
+        Ok(())
+    }
+
+    #[test]
+    fn independent_mol_oracle_rejects_wrong_raw_or_model_metadata_and_coordinates()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let bytes = include_bytes!("../../crates/io/tests/fixtures/mol/rdkit-CH3.mol");
+        let document = bondline_io::mol::MolFile::parse(bytes)?;
+        let transform =
+            bondline_io::mol::MolTransform::new(24.0, bondline_model::Point2::new(0.0, 0.0)?)?;
+        let fragment = document.to_fragment(transform)?;
+        let original = serde_json::to_value(fragment)?;
+        for (field, value) in [
+            ("/atoms/0/element", serde_json::json!(8)),
+            ("/atoms/0/radical", serde_json::json!("none")),
+            ("/atoms/0/explicit_hydrogens", serde_json::json!(2)),
+            ("/atoms/0/position/x_pt", serde_json::json!(-28.7)),
+        ] {
+            let mut wrong = original.clone();
+            *wrong.pointer_mut(field).ok_or("missing model field")? = value;
+            assert!(
+                super::compare_mol(bytes, &document, &wrong).is_err(),
+                "{field}"
+            );
+        }
+        let different_source = std::str::from_utf8(bytes)?.replace("-1.2375", "-2.2375");
+        let wrong_raw = bondline_io::mol::MolFile::parse(different_source.as_bytes())?;
+        assert!(super::compare_mol(bytes, &wrong_raw, &original).is_err());
         Ok(())
     }
 }
