@@ -205,3 +205,16 @@ separation and UI/close invalidation are original data-preservation policies, no
 product defaults. The chooser uses one Open family and concrete Save versions because both
 encodings use .mol. No new proprietary evidence or runtime library is used. Independent
 RDKit precision/source/wire results and native status are in verification-v3000-application.md.
+
+The save-order correction follows Rust's public
+https://doc.rust-lang.org/std/sync/struct.Arc.html#method.strong_count and
+https://doc.rust-lang.org/reference/destructors.html#drop-scopes . Reviewed2026-11-13;
+the current generated std docs identify1.100.0, while the actual API compiles on pinned1.94.1
+(the versioned documentation URL was inaccessible). The private token can be cloned only
+by exclusive Engine::prepare; worker/result owners can only move or drop it. Thus another
+thread can make the observed count decrease, causing at most transient busy; it cannot
+acquire a new reservation without exclusive Engine access. A named match-arm binding keeps
+the token alive through finish. This narrowly justified ownership check is not a general
+claim that Arc::strong_count alone provides a synchronization primitive. Single outstanding
+save/busy policy is original Bondline behavior; actual reversed completions independently
+reproduced wrong clean encoding and subsequent coordinate rounding before correction.

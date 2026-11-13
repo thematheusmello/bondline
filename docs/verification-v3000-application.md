@@ -88,3 +88,27 @@ requires this feature's own source publication. Standalone codec43519338382 is G
 on all jobs, but is not application evidence. Interactive Windows/Linux, general imported
 graph editing/rendering, SDF V3000 dispatch, broader fields/queries/stereo and complete
 M0/M1 remain unverified or missing. One-fragment/page and source/layout guards still apply.
+
+## Save and close correction integration
+
+Root correctiona689b0d is integrated here without changing the version-aware codecs or
+frame/metadata guards. The new actual V2/V3 race test first fails in
+target/v3000-save-order-red.log, then passes in target/v3000-save-order-green.log. A
+published-but-unapplied V2 receipt blocks overlapping V3 before I/O and retains whole state/
+bytes. Finishing that receipt releases the save; explicit V3 independently preserves raw
+x28/24 within1e-14, and a following Auto Save keeps exact V3 bytes and association.
+
+The root correction also has six lifecycle and one cross-executor regressions. A second
+actual UI RED caught historical close results approving after later format/baseline ABA;
+private current-completion acknowledgment fixes that post-finish/pre-poll gap. Wire receipt
+fields stay historical. All existing path/format/revision/epoch/clean guards remain.
+See verification.md for root's356+3 gate and exact RED/GREEN logs. This checkout's combined
+source needs its own full gate and a new native executable; the partial earlier native
+binary is not substituted. Source/tests/locks are frozen during those acceptance checks.
+
+The corrected actual-worktree gate now passes372 workspace plus3 bridge tests, rustfmt,
+warnings-denied all-target clippy, layers, unchanged153/164/219 native closures/two assets
+and this checkout's inherited two-file corpus. CARGO_INCREMENTAL=0 was explicit to avoid
+recreating disposable caches; target/v3000-completion-ci-integrated.log identifies the
+invoked sibling root. Session3849 is terminal0. Newer root corpus coverage is not inferred.
+The exact corrected binary's native walkthrough and its own hosted run remain next.

@@ -401,6 +401,15 @@ fn old_close_save_receipt_cannot_renew_after_a_same_path_revision_and_format_aba
             overwrite: *overwrite,
         }),
     )?;
+    // The worker has finished and released its save reservation, but the native
+    // adapter has not polled this successful result yet.
+    let result = engine.finish(prepared.complete()?)?;
+    let receipt = result.file_operation.as_ref().ok_or("receipt")?;
+    assert_eq!(receipt.ui_request_id, Some(intent.request_id));
+    assert_eq!(receipt.ui_request_current, Some(true));
+    assert_eq!(result.file.format, FileFormat::Cdxml);
+    assert_eq!(result.revision, ticket.revision);
+    assert!(!result.file.dirty);
     engine.dispatch(
         "document.save_mol",
         serde_json::json!({"path":path,"overwrite":true}),
@@ -409,14 +418,13 @@ fn old_close_save_receipt_cannot_renew_after_a_same_path_revision_and_format_aba
         "document.save_cdxml",
         serde_json::json!({"path":path,"overwrite":true}),
     )?;
-    let result = engine.finish(prepared.complete()?)?;
-    let receipt = result.file_operation.as_ref().ok_or("receipt")?;
-    assert_eq!(receipt.ui_request_id, Some(intent.request_id));
-    assert_eq!(receipt.ui_request_current, Some(false));
-    assert_eq!(result.file.format, FileFormat::Cdxml);
-    assert_eq!(result.revision, ticket.revision);
-    assert!(!result.file.dirty);
-    let epoch = engine.state().close_epoch;
+    let before_poll = engine.state();
+    assert_eq!(before_poll.close, CloseState::NeedsDecision);
+    assert_eq!(before_poll.file.format, result.file.format);
+    assert_eq!(before_poll.file.path, result.file.path);
+    assert_eq!(before_poll.revision, result.revision);
+    assert!(!before_poll.file.dirty);
+    let epoch = before_poll.close_epoch;
     let (sender, receiver) = mpsc::sync_channel(1);
     workflow.job = Some(FileJob {
         request_id: intent.request_id,
@@ -432,7 +440,11 @@ fn old_close_save_receipt_cannot_renew_after_a_same_path_revision_and_format_aba
     workflow.poll(&mut engine, &mut error);
     assert_eq!(engine.state().close, CloseState::NeedsDecision);
     assert_eq!(engine.state().close_epoch, epoch);
-    assert!(error.is_some());
+    assert!(
+        error
+            .as_deref()
+            .is_some_and(|message| message.contains("Review"))
+    );
     assert!(!workflow.complete_close_if_idle(&mut engine, false, false));
     Ok(())
 }

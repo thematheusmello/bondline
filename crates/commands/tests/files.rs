@@ -483,17 +483,24 @@ fn open_rechecks_unsaved_policy_when_an_older_save_changes_the_baseline() -> Tes
     fs::write(&path, NATIVE)?;
     let mut engine = Engine::default();
     bond(&mut engine, 200.0)?;
-    let older = engine.prepare(Command::parse(
-        "document.save_cdxml",
-        json!({"path":directory.path("older.cdxml")}),
-    )?)?;
     bond(&mut engine, 300.0)?;
     engine.dispatch(
         "document.save_cdxml",
         json!({"path":directory.path("current.cdxml")}),
     )?;
+    engine.dispatch("history.undo", json!({}))?;
+    let older = engine.prepare(Command::parse(
+        "document.save_cdxml",
+        json!({"path":directory.path("older.cdxml")}),
+    )?)?;
+    engine.dispatch("history.redo", json!({}))?;
+    assert!(!engine.state().file.dirty);
     let opening = engine.prepare(Command::parse("document.open_cdxml", json!({"path":path}))?)?;
     engine.finish(older.complete()?)?;
+    assert!(engine.state().file.dirty);
+    assert_eq!(engine.state().undo_depth, 2);
+    assert_eq!(engine.state().redo_depth, 0);
+    assert_eq!(engine.document().pages()[0].fragments().len(), 2);
     let before = snapshot(&engine)?;
     let error = engine
         .finish(opening.complete()?)

@@ -369,27 +369,39 @@ fn path_and_old_save_baseline_changes_permanently_invalidate_approval() -> TestR
     let other = directory.path("second.cdxml")?;
     let mut engine = Engine::default();
     engine.dispatch("document.save_cdxml", json!({"path":path}))?;
+    engine.dispatch("document.save_cdxml", json!({"path":other}))?;
     let old = engine.prepare(Command::parse(
         "document.save_cdxml",
         json!({"path":path,"overwrite":true}),
     )?)?;
     close(&mut engine, CloseAction::Request)?;
-    engine.dispatch("document.save_cdxml", json!({"path":other}))?;
-    assert_eq!(engine.state().close, CloseState::NeedsDecision);
+    assert_eq!(engine.state().close, CloseState::Approved);
     engine.finish(old.complete()?)?;
     assert_eq!(
         engine.state().close,
         CloseState::NeedsDecision,
         "restoring the old path must not resurrect approval"
     );
+    engine.dispatch(
+        "document.save_cdxml",
+        json!({"path":other,"overwrite":true}),
+    )?;
+    assert_eq!(
+        engine.state().close,
+        CloseState::NeedsDecision,
+        "restoring the approved path must not resurrect invalidated approval"
+    );
     close(&mut engine, CloseAction::Cancel)?;
+    edit(&mut engine, 400.0)?;
+    engine.dispatch("document.save_cdxml", json!({"path":path,"overwrite":true}))?;
+    engine.dispatch("history.undo", json!({}))?;
     let older_baseline = engine.prepare(Command::parse(
         "document.save_cdxml",
         json!({"path":path,"overwrite":true}),
     )?)?;
-    edit(&mut engine, 400.0)?;
-    engine.dispatch("document.save_cdxml", json!({"path":path,"overwrite":true}))?;
+    engine.dispatch("history.redo", json!({}))?;
     close(&mut engine, CloseAction::Request)?;
+    assert_eq!(engine.state().close, CloseState::Approved);
     engine.finish(older_baseline.complete()?)?;
     assert!(engine.state().file.dirty);
     assert_eq!(engine.state().close, CloseState::NeedsDecision);

@@ -144,3 +144,39 @@ binary4a5425b0...; no interactive Windows/Linux or hardware-performance claim fo
 Source was fast-forwarded into main after GREEN, with documentation-only updates after the
 tested source. All jobs are terminal; do not rerun unchanged source or substitute an older
 run for future changes. No release, signing or installer publication occurred.
+
+## Original CDX fixture and standalone V3000
+
+[Run43520991476](https://github.com/thematheusmello/bondline/actions/runs/43520991476) at
+30ae30e passes Mac335 tests (332 workspace plus3 bridge), Linux333 and Windows325.
+Jobs132214903242/132214903791/132214903835 execute the real aggregate and actual native
+window; sanitizer job132214903870 runs CDXML/CDX/MOL/SDF10000 iterations each. CDX now
+includes the complete65750-byte original positive seed under max_len131072.
+
+[Run43519338382](https://github.com/thematheusmello/bondline/actions/runs/43519338382) at
+5caf6ce separately passes Mac341 (338 workspace plus3 bridge), Linux339 and Windows333.
+Jobs132209347432/132209347777/132209347969 execute their aggregates and native windows;
+132209347869 passes all five10000-run parser sanitizer targets, including V3000. This
+source predates the fetched SDF/CDX corpus integration and V3000 application workflow.
+
+All jobs are terminal. Mac uses Metal/Apple Paravirtual IntegratedGpu; Linux uses Vulkan/
+llvmpipe Cpu; Windows uses Dx12/Microsoft Basic Render Driver Cpu. These are launch and
+automated execution results, not interactive Windows/Linux workflows or performance claims.
+
+## Fetched CDX and merged standalone V3000
+
+[Run43526004010](https://github.com/thematheusmello/bondline/actions/runs/43526004010) at
+98bc59a passes all four jobs. Mac132231799739 reports 338 tests (335 workspace plus3bridge),
+Linux132231799721 reports 336, Windows132231799481 reports 328. Each executes the actual
+native window and four-file/three-bundle corpus. ASAN132231799170 passes the four parser
+targets 10000 iterations each. This verifies the original authored CDX vector, not foreign
+files, a chemistry engine or application CDX.
+
+[Run43526538340](https://github.com/thematheusmello/bondline/actions/runs/43526538340) at
+226396e combines that source with unchanged standalone V3000 codec5caf6ce and passes all
+jobs. Mac132233587981 reports 352 tests (349 workspace plus3bridge), Linux132233587509
+reports 350 and Windows132233587877 reports 342. Five-target ASAN132233587865 passes,
+including the positive CDX seed/bound and V3000. All actual window smokes pass. These do not
+verify application V3000 or the later save-order/receipt correction, which needs its own run.
+Adapters remain Metal/Apple Paravirtual IntegratedGpu, Vulkan/llvmpipe Cpu and Dx12/
+Microsoft Basic Render Driver Cpu. Every job is terminal; no completed job was restarted.

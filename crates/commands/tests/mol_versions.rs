@@ -276,3 +276,64 @@ fn same_path_version_changes_invalidate_picker_and_known_save_cannot_downgrade()
     file_support::independently_read_file(&xml, 1)?;
     Ok(())
 }
+
+#[test]
+fn an_unapplied_v2000_receipt_cannot_race_a_full_precision_v3000_save() -> TestResult {
+    let directory = FileTestDirectory::new()?;
+    let path = directory.path("version-race.mol");
+    let mut engine = Engine::default();
+    bond(&mut engine)?;
+    let older = engine
+        .prepare(Command::parse(
+            "document.save_mol",
+            json!({"path":path,"version":"v2000"}),
+        )?)?
+        .complete()?;
+    let published = fs::read(&path)?;
+    assert!(
+        std::str::from_utf8(&published)?
+            .lines()
+            .nth(3)
+            .ok_or("version stamp")?
+            .ends_with("V2000")
+    );
+    let before = snapshot(&engine)?;
+    assert_eq!(
+        engine
+            .dispatch(
+                "document.save_mol",
+                json!({"path":path,"version":"v3000","overwrite":true}),
+            )
+            .err()
+            .ok_or("overlapping V3000 save bypassed the unapplied V2000 receipt")?
+            .info()
+            .code,
+        "busy"
+    );
+    assert_eq!(snapshot(&engine)?, before);
+    assert_eq!(fs::read(&path)?, published);
+    engine.finish(older)?;
+    engine.dispatch(
+        "document.save_mol",
+        json!({"path":path,"version":"v3000","overwrite":true}),
+    )?;
+    stamp(&path)?;
+    let precise = fs::read(&path)?;
+    let consumed = external(&path)?;
+    assert!(
+        (consumed["atoms"][0]["position"][0]
+            .as_f64()
+            .ok_or("raw x")?
+            - 28.0 / 24.0)
+            .abs()
+            < 1e-14
+    );
+    let saved = serde_json::to_value(
+        engine.dispatch("document.save_mol", json!({"path":path,"overwrite":true}))?,
+    )?;
+    assert_eq!(saved["file"]["format"], "mol_v3000");
+    assert_eq!(saved["file"]["dirty"], false);
+    assert_eq!(saved["file_operation"]["format"], "mol_v3000");
+    assert_eq!(fs::read(&path)?, precise);
+    Ok(())
+}

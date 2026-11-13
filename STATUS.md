@@ -27,15 +27,22 @@ claimed here. Root integration226396e passed349workspace+3bridge with the four-f
 its own hosted43526538340 is still running at the last check. Fetched CDX98bc59a passes
 all jobs in43526004010. Main remains the prior c797262 checkpoint until matching integration.
 
-## Confirmed must-fix and partial native acceptance
+## Save-order correction and partial earlier native acceptance
 
 Independent read-only review reproduced an existing save-order defect: older Save.complete
 publishesV2; a newer same-pathV3 save publishes/applies; older Engine.finish then falsely
 relabels the clean associationV2 while disk remainsV3. Next Auto rounds full-precision data.
 The target-only probe/report is ROOT target/v3000-integration-review.md. Source is local,
-not published as an accepted V3000 application feature. Root is implementing a per-Engine
-save reservation from prepare through finish/drop on fix/save-completion-order. A second
-outstanding Save must fail busy before writing; other commands remain available.
+not published as an accepted V3000 application feature. Root correctiona689b0d now adds a
+per-Engine reservation through finish/drop and private current-completion acknowledgment
+before UI close renewal. A second outstanding Save fails busy before writing; other
+commands remain available. This checkout incorporates the correction and its regressions.
+Actual V2/V3 RED target/v3000-save-order-red.log turns GREEN in v3000-save-order-green.log:
+no overlapping publication, then full-precision V3 and unchanged Auto encoding. Corrected
+sibling aggregate passed372 workspace plus3 bridge tests and every gate, including this
+checkout's inherited two-file corpus. Session3849 is terminal0; log
+target/v3000-completion-ci-integrated.log. CARGO_INCREMENTAL=0 avoids recreating inactive
+caches after the disk filled again. Source is frozen for corrected native acceptance.
 
 Native walkthrough deliberately stopped after this finding. Exact earlier binary
 6addbfb7603e4e40b174a80d672279a1352d99a7989d0a0411fa11c051376a79;
@@ -49,15 +56,22 @@ ROOT target/native-v3000-ui-handoff.md records exact artifacts and the23:24:48UT
 
 ## Continue exactly
 
-1. Preserve both checkouts and their separate Cargo targets. Root alone runs Git. Finish
-   root save-order TDD correction and its focused/full gates; bring it into this feature.
-2. Run a corrected-source sibling aggregate. Freeze it, then have the sole native agent
+1. Preserve all checkouts and their separate Cargo targets. Root alone runs Git. The root
+   correction passed356workspace+3bridge; hosted43529260274 is queued at the last check.
+   This feature's own hosted execution still follows corrected native acceptance/publication.
+2. Corrected-source sibling aggregate3849 passed; do not rerun unchanged source. Have the sole native agent
    rebuild and complete actual V3000 acceptance. Earlier screenshots are partial old-source
    evidence, not final proof. Publish only the corrected verified source and inspect its
    own hosted run before integrating main.
 3. Merge with newer root corpus features, retaining the positive CDX seed/max_len131072 and
    fifth V3000 target. Continue application SDF, wider CDXML/CDX, RXN/SMILES/InChI; then
    M2 drawing/labels/styles, M3 chemistry/reactions, M4 publishing and M5 depth/distribution.
+
+The new legacy RXN library is being implemented by file_io only in persistent sibling
+/Users/sarenaberg/Workspace/doozle/open-source-world/bondline-rxn, feat/rxn-v2000 from3b1fada,
+using its own target, incremental0/dev-test debug0. No reaction-model/UI or V3000 reaction
+wrapper claim. Preserve primary REAGENT/AGENT, role folding and reader EOF diagnostics in
+ROOT target/rxn-next-handoff.md. Ask the owner for live handles before touching its paths.
 
 Full graph editing/rendering, query/stereo/3D, SDF application/version dispatch, RXN/SMILES/
 InChI, connected drawing, general labels/styles, chemistry, reactions, publishing/Office,

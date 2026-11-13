@@ -191,6 +191,16 @@ trim history for storage accounting. Retaining history differs from G25 printed1
 since-save Undo description; exact26.1 behavior remains an explicit parity question.
 
 `Prepared::complete` returns opaque Completed; Engine::finish applies it after worker I/O.
+Each Engine permits one outstanding save across all formats, paths and adapters. Its
+reservation starts during prepare, survives publication in Completed, and ends only when
+finish returns or the work/result is dropped. Another Save returns `busy` before I/O or
+state changes. This prevents reversed receipt application from replacing the latest saved
+baseline/encoding. Queries, authoring edits, Open and capture remain available; different
+Engines have independent slots. Error/cancellation/pre-completion drop releases the slot.
+An old-generation or committed-session receipt still reports actual published bytes without
+relabeling the current session. Callers must apply successful Completed to its Engine;
+deliberately dropping a published receipt releases the slot without updating association,
+baseline or pretending to roll back bytes. Delivered adapters always finish successful work.
 Open checks cancellation before apply. Save cancellation before publication retains old bytes;
 after publication the worker reports the real outcome. Explicit cancellation awaits that
 outcome, even if an OS syscall exceeds the request deadline. Dropping the awaiting task signals
@@ -351,8 +361,13 @@ are trusted Rust acknowledgements, not additional user-facing JSON dispatchers.
 Trusted host preparation also binds the originating request ID to the opaque file plan.
 Its receipt adds `ui_request_id` and `ui_request_current`; direct file commands omit both.
 The latter is captured under the engine lock before the operation's own baseline/path/format
-update. Any intervening invalidation makes it permanently false, even if values return to
-their original state. Native close-Save requires both markers, the actual format and all
+update. Invalidation before that finish makes it false even if values return. It is a
+historical snapshot after return, not a live permission to close. The Engine separately
+records whether the matching trusted completion remains current after its own update;
+every later real context change permanently clears that private acknowledgment. The native
+host consumes it through finish_ui_file(id,false), which returns false for stale or never-
+completed work while still retiring the matching request. Native close-Save requires this
+current acknowledgment, both receipt markers, the actual format and all
 revision/path/epoch/clean-state checks. A stale publication still reports its real bytes;
 it cannot renew close permission.
 

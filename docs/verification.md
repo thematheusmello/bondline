@@ -1292,6 +1292,128 @@ Fetched SDF corpus coverage is deliberately the next feature, after a real publi
 commit exists for this original fixture. No native SDF app workflow, V3000 or completed M1
 is claimed. All local codec/fuzz/aggregate jobs are terminal.
 
+## SDF fetched corpus and source acceptance
+
+The preceding codec's hosted run43512236206 is now terminal GREEN at source
+fb86832a0c9b7744fb3ef8f8115c7ed296164505: Mac327, Linux325, Windows319 tests, all three
+actual windows and all four bounded sanitizer targets. See ci.md for IDs/adapters.
+The subsequent narrow Git whitespace attribute preserves the intentional three-space data
+value without changing any fixture byte or behavioral assertion.
+
+Corpus now uses two mandatory version1 bundles, retaining the RDKit manifest exactly
+(SHA820739ca30312745b53df2839f0238b30d1470e73446430b4c954a142cb88ca0). The original SDF
+bundle pins that actual public codec commit and its MIT OR Apache-2.0 fixture. The cache was
+absent before the normal command's bounded HTTPS fetch; actual downloaded690 bytes/SHA
+f95838cbb55c107c649ce2eb99ac62e191f747ce6994a171e64019f8e6c53d1a matched the reviewed source.
+No local fixture fallback or invented future pin exists. Fetch attestation is
+target/sdf-corpus-fetch-attestation.log.
+
+Real RED: loader rejected unknown format sdf; the old successful corpus output failed a
+separate expected SDFcoverage(files,records)=(1,2) assertion; a real Unix symlink regression
+showed cache directory creation outside the checkout before confinement. Logs:
+target/sdf-corpus-{loader-red,coverage-red,cache-red}.log. The fix validates all bundles,
+notices/global cache names before cache/network I/O and checks the nearest existing cache
+ancestor before mkdir plus the canonical path afterward. This prevents the reproduced
+existing-symlink case; it does not promise atomic confinement against concurrent renames.
+
+All25 xtask tests pass, including missing/oversized/escaping manifests/notices, global entry
+limits/case aliases, offline missing/corrupt cache, exact counter/record reporting and
+deliberately changed duplicate/DT/order/range/model data. Every ordered span/value agrees
+with the independent scanner; both separately consumed molecular projections agree. The
+full supplier's one-entry result is explicitly diagnostic, preserving the known DT-only
+consumer loss. Normal/offline outputs are identical. Targeted clippy/fmt pass; exact source
+SHA1210a4e96ab23838b8520a092369e424a846ff7477d2d507c30f010785e62b9f.
+
+Actual-root cargo xtask ci passes331 workspace plus three native bridge tests, rustfmt,
+all-target clippy, layers, unchanged153/164/219 runtime closures/two assets and all three
+pinned files from two sources. Log target/sdf-corpus-ci-integrated.log. No runtime/lock,
+IO codec, UI, renderer or golden change. Hosted corpus-feature checks follow publication.
+CDX corpus and Bondline chemistry calculations remain explicitly missing; SDF application
+import/export, V3000 and complete M1 remain unimplemented. V3000 work is isolated in a
+different checkout/target; its preliminary tests are not part of these results.
+
+## Corpus metadata checkout correction
+
+Fetched-SDF source504be5f passed Mac/Linux/ASAN in run43515232724, but Windows
+132195408100 failed the exact original manifest hash: CRLF checkout became1067 bytes/
+cb9c0ddd07eadf12ee4c1723dbb4431746e6d656833d7f83490563b9e04fec3a instead of1041 bytes/
+820739ca30312745b53df2839f0238b30d1470e73446430b4c954a142cb88ca0. The source manifest's
+committed bytes and semantic fields were unchanged. This run is terminal failed.
+
+Actual isolated core.autocrlf=true Git clones reproduce that exact RED and then GREEN
+after `/docs/corpus/manifest.json -text`; no normalization, altered hash/assertion or license
+change. Logs/metadata are under target/sdf-manifest-autocrlf-yoq1rmg2; the research report
+records the source/public rule. CDX byte preservation is also explicit for already published
+original binary vectors. Configuration-only correction: relevant byte/checkout checks pass,
+no artificial Rust test or Cargo rerun claimed. A new hosted source run follows publication.
+
+## Original positive CDX source fixture
+
+The already-published, unchanged original struct generator now has its actual explicit-root
+output committed at crates/cdx/tests/fixtures/original-ethane-explicit.cdx:65750 bytes,
+SHA63ef1a74133e45de915d5fd25b2ca3321a95dbe5114873a5a59f2f45217000d2. Generator SHA remains
+5ef6b183d7933b4d3857d1f36b2dd5df2478b089f543f89a4d04a6c0ae7201b6; the original70-byte
+fixture remains unchanged. Both are original MIT OR Apache-2.0 source vectors, not samples
+from the reference application. The missing-file RED compiled then failed NotFound;
+after materialization all15 CDX tests, targeted clippy/fmt pass. Logs:
+target/cdx-fixture-{red,green,clippy,fmt}.log.
+
+The actual file must match independent generator bytes and all29 struct record events,
+including ownership, extended-length spelling and payloads. Existing external RDKit
+verify1/explicit reads CC/C2H6. Replacing only BondOrder0x0600 with2 must match the exact
+independent double-bond vector and read C=C/C2H4. Its byte guard was not weakened for the
+empty70-byte fixture. No production parser or oracle changed.
+
+This positive scene is65750 bytes, beyond the former65536 fuzz-run limit. Both original
+seeds now run under a deliberate131072-byte bound. Fresh-corpus ASAN passes10000 iterations,
+seed721533879, timeout5: coverage165/features447,57 retained inputs/reported70KiB/RSS136MiB;
+largest exercised input65750 bytes. Log target/cdx-positive-asan.log. This is source/opaque-
+editing fuzzing, not independent chemistry verification for every mutation.
+
+Actual-root aggregate cargo xtask ci passes332 workspace plus three bridge tests, fmt,
+all-target clippy, layers, unchanged runtime licenses/assets and existing CDXML/MOL/SDF
+corpus checks. Log target/cdx-fixture-ci-integrated.log. The new source must be public
+before a subsequent real fetched-CDX pin is added. CDX corpus remains explicitly missing
+in this checkpoint; no foreign-file/general/app CDX compatibility is claimed. All local
+fixture/fuzz/aggregate jobs are terminal. V3000 remains a separate checkout's source.
+
+The corpus metadata correction c797262 now passes every job in run43518162847: Mac334,
+Linux332, Windows324 and four bounded parser targets, with all actual window smokes.
+Main was fast-forwarded only after GREEN. Exact IDs/adapters are in ci.md. Earlier
+run43515232724 remains terminal failed; no assertion or semantic/source data was weakened.
+
+## Fetched original positive CDX corpus,2026-11-13
+
+Actual RED: the new manifest failed unknown-format decoding, and the old successful corpus
+runner failed the independent expected-CDX-count assertion (0 instead of1). Logs:
+target/cdx-corpus-{loader-red,coverage-red}.log. The new mandatory third source bundle pins
+the real published original fixture at30ae30e73a4ee3b68d41069376fc5690faa99bc4. An actual
+cache-missing bounded HTTPS download matched65750 bytes and
+SHA63ef1a74133e45de915d5fd25b2ca3321a95dbe5114873a5a59f2f45217000d2;
+target/cdx-corpus-fetch-attestation.log records the source/identity. No local substitution.
+
+GREEN:28 xtask tests, targeted clippy/fmt and actual-root cargo xtask ci pass335 workspace
+plus three bridge tests; target/cdx-corpus-ci-integrated.log. Four pinned files from three
+source bundles cover one CDXML, one MOL, two SDF records and this one original CDX scene.
+Normal/offline output agrees. Every29-record span/parent/length encoding agrees with the
+independent Python struct table; exact source bytes and unchanged RDKit ethane guard pass.
+Changed spans, opaque payload, bond order and a different valid explicit scene refuse.
+The changed double bond independently passes C=C/C2H4, without weakening the original guard.
+Foreign/general/application CDX and Bondline chemistry calculations remain missing.
+
+An actual isolated core.autocrlf checkout first changed both Bondline manifest byte
+identities. Exactly two -text rules restore them; existing manifest bodies/pins/notices
+remain byte-identical. Logs target/cdx-corpus-checkout-{red,green}.log. The only lock change
+is the existing first-party bondline-cdx xtask edge; runtime closures153/164/219 and two
+assets remain unchanged. No parser, fixture, oracle, UI, renderer, golden or fuzz-lock change.
+New hosted evidence must follow this feature's own source commit.
+
+The preceding fixture source30ae30e passes every job in43520991476: Mac335/Linux333/
+Windows325 tests, three actual native windows and four10000-run ASAN targets. Separately,
+standalone V3000 source5caf6ce passes43519338382: Mac341/Linux339/Windows333, three native
+windows and five10000-run ASAN targets. Neither run proves the uncommitted V3000 application
+integration or the new fetched-CDX feature; do not substitute their results.
+
 ## 2026-11-13: standalone MOL V3000 codec
 
 Work ran only in the isolated `bondline-mol-v3000` worktree from 2d665de, with its own
@@ -1357,7 +1479,52 @@ It passed 338 workspace tests plus three native bridge tests, fmt/clippy/layers/
 licenses/assets and this branch's inherited two-file CDXML/MOL corpus. The tool printed
 this checkout as its root; no main-checkout build artifact or later SDF corpus pass was
 substituted. Log: target/v3000-worktree-ci.log. No runtime dependency or lock changed.
-Hosted checks and integration with newer corpus changes remain subsequent work.
+Hosted checks and integration with newer corpus changes remained subsequent work at that
+checkpoint. Published source5caf6ce subsequently passed43519338382 as recorded above.
+The root now integrates that unchanged codec with98bc59a's fetched SDF/CDX corpus. Both
+verification histories, CDX positive seed/bound and the fifth V3000 sanitizer target survive
+the merge. The combined source requires its own aggregate; no isolated result is substituted.
+
+## Save ordering and current close receipts
+
+Independent review compiled an isolated client against the V3000 application source and
+reproduced a data-loss risk: publish older V2 without finish, publish/apply newer V3,
+then finish older V2. The clean association becomes V2 over V3 disk; the next Auto save
+rounds raw x1.1666666666666667 to1.1667. Root target/v3000-integration-review.md and its
+sibling target/v3000-stale-save-review probe retain exact source and observations. The
+generic ROOT regression first published real CDXML accepted by independent Expat/RDKit,
+then failed because a second same-path MOL Save was accepted before the receipt applied:
+target/save-serialization-red.log. A separate actual V2/V3 regression also fails in the
+sibling target/v3000-save-order-red.log; it will turn GREEN after correction integration.
+
+One private per-Engine Arc reservation moves through FilePlan and Completed to finish.
+Another Save of any format/path fails busy before I/O; queries, edits, capture/Open and
+independent Engines remain available. Six lifecycle tests check exact state/destination
+retention, pre-publication cancellation/refusal, both dropped handles, opaque refusal/Undo,
+old-generation truthful receipts and cancellation after publication. A separate MCP test
+proves distinct executor budgets cannot bypass the Engine's guard. No extra library,
+counter, blocking lock or persistent authoring field was introduced.
+
+The review also identified the post-finish/pre-UI-poll gap. Actual revised UI test
+target/close-post-finish-aba-ui-red.log executes exactly one test and fails: a historically
+true receipt renews Approved after actual MOL→CDXML same-path/revision/clean-state ABA.
+The initial overly narrow filter ran zero tests and is explicitly not RED evidence. A
+private matching-completion bit is now set after the operation's own baseline update and
+cleared permanently by every subsequent real context change. UI poll must consume its
+current acknowledgment before renewing close; existing receipt/path/format/revision/epoch/
+clean checks remain. Uncompleted/dropped work cannot acknowledge successful publication
+(target/save-ui-ack-abandoned-red.log). Returned wire receipt fields remain historical.
+
+GREEN: command package 76 tests, MCP worker 8, UI library 36, scoped clippy/fmt, exact ABA 1/1.
+The full actual-root cargo xtask ci passes 356 workspace plus three bridge tests and all
+gates: target/save-completion-ci-integrated.log. Existing older-baseline/ABA tests use
+baseline-first Undo→prepare→Redo schedules; every stale-ID, whole-state, dirty, history,
+unsaved-Open and approval assertion is retained. Former overlap is either explicitly busy
+or replaced by a valid schedule. Never lower coverage to preserve an obsolete race.
+The earlier merged standalone-V3000/corpus checkout separately passed 349+3 tests in
+target/v3000-corpus-merged-ci.log and all hosted jobs43526538340. Native interaction for the
+corrected save/close feature and its own hosted run remain pending. No parser/IO publication,
+runtime dependency/lock, renderer, font or approved golden changed.
 
 ## Version-aware MOL application slice
 

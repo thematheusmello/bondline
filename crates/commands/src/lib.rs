@@ -147,6 +147,8 @@ pub enum Error {
     UiUnavailable,
     #[error("native file presentation is busy")]
     UiBusy,
+    #[error("another save is still in progress; try again after it finishes")]
+    SaveBusy,
     #[error("native file request or its document context is obsolete")]
     UiStaleRequest,
     #[error("native file request identity counter exhausted")]
@@ -196,6 +198,7 @@ impl Error {
             Self::CloseEpochExhausted => "close_epoch_exhausted",
             Self::UiUnavailable => "ui_unavailable",
             Self::UiBusy => "ui_busy",
+            Self::SaveBusy => "busy",
             Self::UiStaleRequest => "ui_stale_request",
             Self::UiEpochExhausted => "ui_epoch_exhausted",
             Self::FileBackendUnavailable => "backend_unavailable",
@@ -271,6 +274,7 @@ pub struct Engine {
     saved: Arc<StoredDocument>,
     file_path: Option<String>,
     file_format: FileFormat,
+    save_slot: Arc<()>,
     generation: u64,
     identities: bond::Ids,
     revision: u64,
@@ -298,6 +302,7 @@ impl Engine {
             document,
             file_path: None,
             file_format,
+            save_slot: Arc::new(()),
             generation: 0,
             identities: bond::Ids::default(),
             revision: 0,
@@ -393,6 +398,7 @@ impl Engine {
                 ));
             }
             Command::SaveCdxml(params) => {
+                let save_slot = self.reserve_save()?;
                 return Ok(Prepared::file(
                     self.state(),
                     files::FilePlan::Save {
@@ -400,6 +406,7 @@ impl Engine {
                         format: FileFormat::Cdxml,
                         ui_request_id: None,
                         document: Arc::clone(&self.document),
+                        save_slot,
                         revision: self.revision,
                         generation: self.generation,
                     },
@@ -425,6 +432,7 @@ impl Engine {
                 ));
             }
             Command::SaveMol(params) => {
+                let save_slot = self.reserve_save()?;
                 let format = self.mol_save_format(params.version);
                 return Ok(Prepared::file(
                     self.state(),
@@ -436,6 +444,7 @@ impl Engine {
                         format,
                         ui_request_id: None,
                         document: Arc::clone(&self.document),
+                        save_slot,
                         revision: self.revision,
                         generation: self.generation,
                     },
