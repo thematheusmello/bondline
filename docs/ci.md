@@ -76,7 +76,11 @@ Local Mac checks and native UI evidence remain separate.
 
 Complete file/UI/accessibility integration at ccf8c50 is now in
 [run43463687047](https://github.com/thematheusmello/bondline/actions/runs/43463687047), confirmed
-active. Main remains b1e0f4b while the feature branch is checked. Mac's aggregate now also
-executes the three patched native accessibility tests and its clippy from the root lock.
-Local final aggregate passes193 workspace plus3 native bridge tests; this does not replace
-reading actual terminal hosted outcomes before merging or changing platform claims.
+complete with all four jobs successful. Actual aggregate test totals are196 on Mac
+(193 workspace plus3 native bridge),194 on Linux and188 on Windows; differences are
+target-specific tests. All actual native window launches pass, as does Linux ASan.
+Mac's aggregate executes the patched accessibility tests/clippy from the root lock.
+The tested feature branch was fast-forwarded into main. Final native Mac interaction has
+the exact-source binary hash recorded in native-file-ui.md; interactive Windows/Linux
+file gestures remain unverified despite their automated engine/UI/window checks.
+Saved ignored full log: target/github-files-43463687047.log.

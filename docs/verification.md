@@ -905,3 +905,14 @@ undone to confirmed empty before authoring; no unknown geometry counts as accept
 The UI uses the same commands; no render/parser semantics were weakened to pass. A supported
 larger viewport is used for the profile test; minimum-label-scale refusal remains. Existing
 human-approved golden is unchanged; these native screenshots are observations, not new approvals.
+
+## Full hosted file-workflow GREEN and main integration, 2026-11-13
+
+Run43463687047 at exact product ccf8c50 completed all four jobs successfully. Actual tests:
+Mac196 (193 workspace+3 native bridge), Linux194 and Windows188, plus real native-window
+launches on each and the bounded Linux ASan job. Full ignored log:
+target/github-files-43463687047.log. This includes command/CLI/MCP/loopback file workflows;
+it does not substitute for interactive Windows/Linux file-menu or full screen/flow parity.
+The earlier Mac capacity failure remains a separate real infrastructure observation.
+Main was fast-forwarded to these atomic feature commits after GREEN; no code changed during
+merge. Documentation/research commits afterward do not change the tested product source.

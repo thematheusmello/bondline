@@ -2,10 +2,10 @@
 
 2026-11-13: persistent full-project goal active. Full M0 is NOT complete.
 
-Public repository: https://github.com/thematheusmello/bondline . Main is the verified
-b1e0f4b checkpoint; current feature integration is on feat/cdxml-file-workflow. Do not
-restart or discard the branch. Intentional changes are committed in small scopes; inspect
-Git log for the final UI hash. No release/installer distribution or reference account action.
+Public repository: https://github.com/thematheusmello/bondline . The tested file-workflow
+branch was fast-forwarded into main; product checkpoint ccf8c50 contains the final UI.
+Inspect Git log for subsequent documentation hashes. Do not restart or discard existing
+work. No release/installer distribution or reference account action was performed.
 
 ## Current integrated scope
 
@@ -60,11 +60,12 @@ https://github.com/thematheusmello/bondline/actions/runs/43458663480 . Its overa
 unsuccessful: Mac job131999452071 was never acquired after multiple attempts, then cancelled
 for hosted arm64 capacity constraints (empty steps/runner). No Mac test failed or ran in
 that job. Exact provider annotations are in ignored target/file-io-hosted-macos-*.json.
-This run predates the final command/UI/AX integration. Complete feature head ccf8c50 is now
-in confirmed active run43463687047:
-https://github.com/thematheusmello/bondline/actions/runs/43463687047 . Inspect that exact live
-handle before retrying, merging or claiming its success.
-Do not restart an unobserved live run or infer success from queue/configuration.
+This run predates the final command/UI/AX integration. Complete feature ccf8c50 passes all
+four jobs in run43463687047:
+https://github.com/thematheusmello/bondline/actions/runs/43463687047 . Mac196, Linux194 and
+Windows188 aggregate tests pass, as do all actual native windows and Linux ASan. Mac includes
+the three bridge tests. Saved full log: target/github-files-43463687047.log. No hosted job
+remains live. Product code was merged into main without changing the tested source.
 
 Native Mac io44 tests and actual Linux arm64 Docker17 file tests pass. Linux invalid-byte
 paths/FIFO/ACL cases use container-native /tmp with repository read-only, not fake APFS
@@ -86,8 +87,12 @@ in docs/clean-room/sources.md and docs/research. User-authorized artifact/runtim
 uses original Rust/assets; no reference desktop executable was obtained or inspected.
 Download center requires login. Observed Signals cloud slides are not desktop evidence.
 The573-row inventory lacks complete modern menus/unnamed glyphs/context menus. No full
-screen/design/tool parity is claimed. Additional modern inventory audit is delegated to
-/root/file_verification; it owns only docs/research/modern-inventory-audit.md.
+screen/design/tool parity is claimed. The committed modern-inventory-audit.md records eight
+qualified additions/corrections, two support screenshots and actual public desktop-video
+playback. Existing rows/source records now include the qualified gestures/selection/docking
+rules. The video predates26.1 and lacks a build, so its Signals/Search discrepancy stays open.
+/root/file_verification now owns only the next docs/research/support-index-audit.md, screening
+remaining official support titles and seeking stronger version-identified inventory sources.
 
 CDX/MOL/SDF/RXN/SMILES/InChI codecs, chemistry algorithms, connected construction, selection,
 styles, templates, general captions/arrows and publishing/Office/WASM/installers remain.
@@ -99,16 +104,16 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 
 ## Next exact actions
 
-1. Inspect live full feature-branch run43463687047, preserving actual runner-capacity failures.
-   Merge to main only after required integration evidence; no release publication requested.
-2. Read the new inventory audit when ready; reconcile sourced rows and unresolved modern
-   controls without claiming completeness from counts or cloud demo imagery.
+1. Read the support-index audit when ready; the current product/CI integration is complete.
+   No release publication was requested. Preserve all exact native/hosted evidence scopes.
+2. Continue qualified inventory work, identifying actual26.1 builds and complete tool/context
+   menus without claiming completeness from counts, timestamps or cloud imagery.
 3. Close remaining M0 architecture/inventory gaps, including named automation for remaining
    UI lifecycle/dialog actions and broader model/transaction requirements. Do not call M0
    complete from a license fix or one file workflow.
 4. Continue M1 source-preserving structural edits/CDX/other formats and M2 connected bonds,
    snapping/order/labels with independent tests and actual native workflows. Keep M3-M5 full.
 
-Product implementation agents finished; no confirmed Cargo/native/fuzz job remains. Only
-research agent above is active, plus hosted run43463687047. Recheck authoritative agent/job
+Product implementation agents finished; no confirmed Cargo/native/fuzz/hosted job remains.
+Only the research agent above is active. Recheck authoritative agent/job
 state on continuation. Do not duplicate live work.
