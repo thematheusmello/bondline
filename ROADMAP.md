@@ -10,6 +10,8 @@ guides are versioned evidence, not proof of complete modern parity.
       Actual macOS Metal launch/readback verified; Windows/Linux runtime checks remain below.
 - [x] Cargo workspace, pinned toolchain, lints, build-time layer and license gates.
 - [ ] Pure document model, named typed JSON commands, transactions and undo/redo tests.
+      Page controls/history are delivered; headless elemental graphs now have structural/
+      identity/budget tests. Chemical editing commands and gesture transactions remain.
 - [x] CLI, stdio MCP and opt-in loopback control using that registry.
 - [ ] Native UI and CPU/GPU reference canvas with actual launch/render evidence.
 - [ ] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
@@ -22,7 +24,8 @@ guides are versioned evidence, not proof of complete modern parity.
 Standalone CDXML source preservation and checked existing-attribute replacement have
 original-fixture/Expat and ASan smoke evidence plus one pinned unchanged RDKit corpus
 document. A source-backed direct-fragment node geometry view now uses validated model
-points; missing coordinates remain absent. Next: chemical graph/application ID mapping
+points; missing coordinates remain absent. Model atom/bond/fragment storage is validated.
+Next: source-backed chemical graph/application ID mapping
 retaining source backing, lossless CDX records, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.

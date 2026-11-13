@@ -5,16 +5,21 @@ Runtime selection, cameras, jobs and revision counters are separate from authore
 Command handlers validate before committing an edit. Snapshot history restores the entire
 document; failed commands do not mutate it. All delivered interfaces use the same registry.
 
-The authored document still contains pages only. Page IDs are nonzero u32 values; dimensions are finite
+The authored document contains pages and immutable elemental-graph fragments. Page IDs
+are nonzero u32 values; dimensions are finite
 f64 points with validated construction/deserialization and a documented 100,000-point bound.
 One point is 1/72 inch; native display scale is a view concern. A new document has one A4 page
 with ID 1. Point2 provides finite signed coordinates within ±100000 pt for io's source-backed
 CDXML node geometry view. Zero and negative coordinates are valid; absent positions remain
-None. Atoms, bonds, text and reactions will be added with their first verified behaviors.
+None. AtomId, BondId and FragmentId are separate nonzero-u32 application identity domains,
+unique document-wide within each kind. They do not reuse container-scoped source identities.
+See model.md for structural validation, atom metadata, bond direction and resource limits.
+Text, query nodes, reaction models and chemical perception remain missing.
 
 `bondline-commands` owns the registry and history. It validates a candidate document before
 replacing an Arc snapshot. Undo/redo move Arc references in O(1); authoring edits currently
-clone the small document. Returned snapshots remain immutable across later edits. Authored
+clone the document's page/Arc lists while retaining shared immutable fragments. Returned
+snapshots remain immutable across later edits. Authored
 state excludes revision/history, so exact undo assertions compare authored bytes separately.
 See control-protocol.md for the actual registered operations and explicit limits.
 

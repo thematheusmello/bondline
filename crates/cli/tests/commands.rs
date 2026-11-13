@@ -36,7 +36,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
     assert_eq!(state["revision"], 3);
     assert_eq!(
         state["document"]["pages"][0],
-        json!({"id":1,"size":{"width_pt":612.0,"height_pt":792.0}})
+        json!({"id":1,"size":{"width_pt":612.0,"height_pt":792.0},"fragments":[]})
     );
     Ok(())
 }

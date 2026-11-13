@@ -418,3 +418,28 @@ edge coverage 2324 and 434 retained entries (136 KiB). Log: ignored target/cdxml
 `cargo xtask ci` passes all 77 tests and the real gates; runtime closures/assets are unchanged.
 Windows/Linux all-targets source checks pass, not native execution. No UI change or full
 chemistry/identity compatibility claim. No live Cargo/fuzz job remains.
+
+## Authored elemental graph model, 2026-11-13
+
+RED: `cargo test -p bondline-model --test graph --locked` failed for the absent graph types,
+fragment storage and batch insertion API. GREEN: seven graph tests pass against public
+Daylight connectivity/hydrogen/ring/disconnection examples and archived atom/bond property
+definitions. The 1..118 element catalog, nonzero typed IDs, optional positions/isotopes/
+hydrogens, charge and radical serialization are checked. Dative begin/end order stays 2->1
+instead of being normalized by numeric ID. These are authored values, not perceived chemistry.
+
+Dangling/self/parallel bonds, per-fragment and document-wide duplicate IDs, missing target
+pages, batch atomicity and 100000-item budgets are checked. The global atom-limit case
+keeps the accepted fragment after rejecting an extra atom. Page-size edits retain the
+same immutable fragment Arc. No graph mutation can bypass Fragment's validated constructor.
+
+The process CLI test first failed because its old exact page expectation lacked fragments.
+Its complete expected object now includes the empty array; the assertion was not weakened.
+CLI/MCP/loopback still expose only the existing five commands; no chemical editing/import,
+chemical rendering, chemistry calculation or source-backed graph save is claimed.
+OpenSMILES hosting timed out; the public Daylight specification supplied the independent
+examples. No proprietary assets, sample libraries or program binaries were used.
+
+`cargo xtask ci` passes all 84 tests and all current gates. Windows/Linux all-targets
+source checks pass; their native execution remains missing. Dependency/asset counts are
+unchanged, no new UI behavior is claimed and no Cargo/native job remains running.

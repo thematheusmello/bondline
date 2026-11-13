@@ -8,12 +8,14 @@ macOS arm64 150 packages, Windows x64 161, Linux x64 219, plus two SHA-verified 
 See docs/dependency-policy.md for the original compatibility adapters, fork and source evidence.
 This declaration gate is distinct from a complete release-notice/source review.
 
-Verified: 77 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
+Verified: 84 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
 actual layer gate, and whole-workspace Windows/Linux all-targets source checks. These are
 NOT native Windows/Linux runtime passes. CPU/GPU clear and ordered page-scene pixels agree on Apple M3 Max/Metal.
 
 Delivered behavior:
-- Pure model: validated physical page dimensions, stable page ID and bounded signed Point2.
+- Pure model: pages/Point2 plus typed atom/bond/fragment identities and structurally validated
+  elemental graphs. Atomic batch insertion, metadata, direction and budgets are tested.
+  Page snapshots share immutable fragments; graph creation is not yet an application command.
 - Shared typed registry: document.inspect, page.set_size, history.undo, history.redo,
   render.capture (explicit CPU/GPU preview).
 - Exact history: 128 fixed-seed generated edit sequences, no-op/redo/overflow/boundary checks.
@@ -62,7 +64,7 @@ passes with the pinned toolchain/seed 3641879538. The corpus tool
 now fetches two pinned BSD-3-Clause RDKit documents and verifies hashes on download/cache.
 One CDXML round trip and its complete element/attribute/text view agree with external Expat.
 The MOL file has integrity coverage only, printed explicitly. No CDX corpus entry yet.
-No structural/text writer edits, chemical graph mapping, application file workflow or CDX/MOL
+No structural/text writer edits, CDXML chemical graph mapping, application file workflow or CDX/MOL
 compatibility is implemented.
 Exact integral-property and UINT32 source-ID helpers now have independent Python Decimal
 evidence. IDs are container-scoped; zero is unassigned. Tiny fractions are rejected instead
@@ -78,7 +80,7 @@ Next exact tasks:
    parity-checklist.md now has 573 stable-ID cited control/action rows, including 26.x
    desktop deltas. This is not complete modern parity. Review conflicts/open questions;
    never fill them from product memory or inspect installed application files.
-2. Continue the unblocked M1 work with chemical graph and application ID mapping, then
+2. Map CDXML graphs into the new validated model with source backing and fresh internal IDs, then
    open/save through the registry. Existing-attribute replacement and limited source-backed
    geometry are delivered; preserve backing and explicit absence/unsupported diagnostics.
    Apply the researched 32-bit/container-scoped ID rules and keep fresh internal IDs separate;
@@ -92,7 +94,7 @@ Next exact tasks:
    only to this blank-page preview; add a durable golden and regression check after approval.
 
 The graphics checkpoint is db94cd5; subsequent atomic commits add layers, model, commands,
-CLI and native controls. The current exact-numeric decoding checkpoint includes this status record; use Git log
+CLI and native controls. The current elemental graph-model checkpoint includes this status record; use Git log
 for its final hash. No confirmed Cargo/npm jobs remain running.
 
 The disposable development bundle target/dev/Bondline.app (org.bondline.development) contains
@@ -104,7 +106,7 @@ smoke also accepted an escaped JSON token, served inspection and exited 0 on Met
 Earlier REA evidence is historical and
 bound to its previous digest. Build artifacts and reports remain ignored.
 
-CI: the real aggregate `cargo xtask ci` passes locally (77 tests and all existing gates).
+CI: the real aggregate `cargo xtask ci` passes locally (84 tests and all existing gates).
 Its fail-fast behavior was checked with a deliberate formatting defect and restored source.
 The three-platform native/window workflow and separate Linux ASan job are wired, not run.
 Pinned action manifests and runner labels were researched; YAML parses with PyYAML 6.0.3.

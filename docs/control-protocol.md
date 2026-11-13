@@ -18,6 +18,11 @@ the previous redo branch. Undo/redo restore authored state exactly but advance r
 History retains up to 128 document snapshots. This is an explicit Bondline policy, not a
 claim about another application's history limits. Revision overflow rejects the operation.
 
+Page snapshots include a fragments array, empty in the default application. The headless
+model can store validated elemental graphs, but import and chemical editing commands are
+not registered yet. See model.md for that data boundary; a serialized graph is not a native
+project-save workflow.
+
 | Name | Parameters | Effect |
 |---|---|---|
 | `document.inspect` | `{}` | Read-only snapshot |

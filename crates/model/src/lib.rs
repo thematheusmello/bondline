@@ -1,10 +1,15 @@
 //! GUI-free authored document data. Coordinates are points, increasing right and down.
 
+mod graph;
 mod point;
+pub use graph::{
+    Atom, AtomId, Bond, BondId, BondOrder, Element, Fragment, FragmentId, GraphError,
+    MAX_GRAPH_ITEMS, Radical,
+};
 pub use point::{MAX_POSITION_PT, Point2};
 
 use serde::{Deserialize, Serialize};
-use std::num::NonZeroU32;
+use std::{collections::BTreeSet, num::NonZeroU32, sync::Arc};
 
 pub const MAX_PAGE_DIMENSION_PT: f64 = 100_000.0;
 
@@ -78,6 +83,8 @@ impl PageSize {
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error(transparent)]
+    Graph(#[from] GraphError),
     #[error("point coordinates must be finite, within -100000..100000 points")]
     InvalidPosition,
     #[error("page dimensions must be finite and greater than zero, up to 100000 points")]
@@ -90,6 +97,7 @@ pub enum Error {
 pub struct Page {
     id: PageId,
     size: PageSize,
+    fragments: Vec<Arc<Fragment>>,
 }
 
 impl Page {
@@ -98,6 +106,9 @@ impl Page {
     }
     pub const fn size(&self) -> PageSize {
         self.size
+    }
+    pub fn fragments(&self) -> &[Arc<Fragment>] {
+        &self.fragments
     }
 }
 
@@ -113,6 +124,7 @@ impl Default for Document {
             pages: vec![Page {
                 id: PageId(NonZeroU32::MIN),
                 size: PageSize::A4,
+                fragments: Vec::new(),
             }],
         }
     }
@@ -121,6 +133,63 @@ impl Default for Document {
 impl Document {
     pub fn pages(&self) -> &[Page] {
         &self.pages
+    }
+
+    /// Append a batch atomically, validating document-wide identities and resource budgets.
+    pub fn append_fragments(
+        &mut self,
+        page_id: PageId,
+        fragments: Vec<Fragment>,
+    ) -> Result<(), Error> {
+        let index = self
+            .pages
+            .iter()
+            .position(|page| page.id == page_id)
+            .ok_or(Error::MissingPage(page_id.get()))?;
+        if fragments.len() > MAX_GRAPH_ITEMS {
+            return Err(GraphError::Limit("fragments").into());
+        }
+        let mut fragment_ids = BTreeSet::new();
+        let mut atom_ids = BTreeSet::new();
+        let mut bond_ids = BTreeSet::new();
+        let (mut fragment_count, mut atom_count, mut bond_count) = (0_usize, 0_usize, 0_usize);
+        let existing = self
+            .pages
+            .iter()
+            .flat_map(|page| page.fragments.iter().map(Arc::as_ref));
+        for fragment in existing.chain(fragments.iter()) {
+            fragment_count = fragment_count.saturating_add(1);
+            atom_count = atom_count.saturating_add(fragment.atoms().len());
+            bond_count = bond_count.saturating_add(fragment.bonds().len());
+            for (count, kind) in [
+                (fragment_count, "fragments"),
+                (atom_count, "atoms"),
+                (bond_count, "bonds"),
+            ] {
+                if count > MAX_GRAPH_ITEMS {
+                    return Err(GraphError::Limit(kind).into());
+                }
+            }
+            if !fragment_ids.insert(fragment.id()) {
+                return Err(GraphError::DuplicateFragment(fragment.id().get()).into());
+            }
+            for atom in fragment.atoms() {
+                if !atom_ids.insert(atom.id) {
+                    return Err(GraphError::DuplicateAtom(atom.id.get()).into());
+                }
+            }
+            for bond in fragment.bonds() {
+                if !bond_ids.insert(bond.id) {
+                    return Err(GraphError::DuplicateBond(bond.id.get()).into());
+                }
+            }
+        }
+        self.pages
+            .get_mut(index)
+            .ok_or(Error::MissingPage(page_id.get()))?
+            .fragments
+            .extend(fragments.into_iter().map(Arc::new));
+        Ok(())
     }
 
     pub fn set_page_size(&mut self, id: PageId, size: PageSize) -> Result<(), Error> {
