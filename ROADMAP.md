@@ -41,7 +41,10 @@ preserving codec, owned backing/history, atomic filesystem I/O and two shared co
 engine/CLI/MCP tests use published BIOVIA2026 fields and external RDKit consumers. The native
 format choice/Save/reopen/close workflow is verified on Mac; all three hosted aggregates and
 native window smokes pass at c879f4c. One CTAB/fragment and layout/metadata guards
-are partial interoperability, not completed M1. Next are SDF records/V3000 and wider mappings.
+are partial interoperability, not completed M1. SDF V2000 now has a source-preserving
+container library, ordered duplicate/empty/DT data, a wrapper writer and independent
+raw-field/molecular consumers. Application SDF workflows and fetched corpus coverage remain
+separate next work, followed by V3000 and wider mappings.
 Full M0
 inventory/dialog/addressability gaps remain tracked while this format work proceeds.
 

@@ -1246,3 +1246,48 @@ All native/controllers/CUA ended; no credential was logged or committed. This ve
 stated C–C/empty source workflow, not general MOL rendering/editing or interactive Windows/
 Linux. Full M0/M1, broad chemistry, source conversion and later milestones remain incomplete.
 SDF work is a separate next codec feature; no new format support follows from these results.
+
+## SDF V2000 container codec
+
+Primary evidence is the unchanged CTFILE-2026 PDF, chapter10 printed97–99/PDF indices100–102,
+visually reviewed. The original two-ethane/ordered-field fixture is690 bytes, SHA-256
+`f95838cbb55c107c649ce2eb99ac62e191f747ce6994a171e64019f8e6c53d1a`, original MIT OR Apache-2.0.
+No proprietary example/template was copied. The format source and fixture README distinguish
+normative framing from conservative ASCII/header/EOF/resource policies.
+
+Actual RED: missing API in target/sdf-codec-red.log; a writer accepted standalone MOL
+program/comment/property content beginning with a reserved delimiter and emitted invalid
+SDF (sdf-mol-delimiter-red.log). The preflight fix refuses without escaping/changing opaque
+MOL bytes. A separate sdf-header-red.log covers the documented conservative incomplete-
+parenthesis metadata profile; unsupported_content is not a general malformed-standard claim.
+
+All12 final codec tests pass in target/sdf-codec-final-green.log. They compare every ordered
+record/field/raw-value/span with an independent Python scanner; direct external RDKit reads
+both Molfile graphs. A named-field writer faces the full SDF supplier, and an external
+RDKit writer supplies empty-padding input. Empty/multiline/spaces-only/duplicate/DT/combined
+headers, prefix delimiters, CRLF, incomplete later records and hostile writer inputs have
+decisive expectations. Boundaries exercise1024 records,65536 fields, one million lines,
+64MiB input/output and header/value line caps; assertions were not weakened to hide failure.
+
+Pinned RDKit2026.09.2's full supplier loses later data and the second record at this valid
+DT-only header, with either exact or suffixed delimiter. Removing the DT-only item restores
+two records. Its duplicate property map retains only the last value. These are separate
+consumer diagnostics; ordered raw-field fidelity does not rely on that lossy map. The
+independent scanner and primary literal vectors remain the data-preservation oracles.
+
+Final frozen source SHA-256:
+`68745c5cddf98d265ad7eb8ff5df5db91a55e83b03ae81a80d2ef92e2cdf57a3`.
+Warnings-denied IO and fuzz-target clippy, workspace/fuzz formatting pass. New sdf_parse
+had a missing-target RED, then the final fresh-seed ASAN run passed10000 iterations,
+seed826403517, max_len65536, timeout5: coverage813/features2794,240 retained inputs/reported
+102KiB/RSS76MiB. Largest exercised input690 bytes; this is not large-input/security proof.
+Log target/sdf-asan-final.log; seed/fuzz source/locks remain separate from writable mutations.
+The earlier pre-header-guard ASAN pass is not substituted for this frozen-source result.
+
+Actual-root cargo xtask ci passes324 workspace plus three bridge tests, rustfmt, all-target
+clippy, layers, unchanged native licenses/assets and existing CDXML/MOL corpus checks.
+Log target/sdf-codec-ci-integrated.log. No runtime dependency/lock/UI/renderer/golden change.
+The workflow adds a fourth bounded sanitizer target; hosted execution is pending publication.
+Fetched SDF corpus coverage is deliberately the next feature, after a real public source
+commit exists for this original fixture. No native SDF app workflow, V3000 or completed M1
+is claimed. All local codec/fuzz/aggregate jobs are terminal.

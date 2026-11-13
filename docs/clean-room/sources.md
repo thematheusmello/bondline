@@ -165,7 +165,15 @@ actual encoding in file state/receipts, exact-byte unchanged saves and source he
 are tested through the shared engine and external consumers. A trusted presentation receipt
 captures permanent invalidation before its own save changes the baseline; this is an
 independent close/data-loss safeguard. See control-protocol.md and file-formats.md.
-Pinned MOL checkout identity uses Git's public unset-text rule:
+The SDF V2000 container follows CTFILE-2026 chapter10, printed97–99 (PDF zero-based100–102):
+ordered records/data items, named/DT headers, empty terminators and prefix delimiters. All
+three pages were visually reviewed against the pinned PDF. Original fixed vectors and
+an independent raw scanner check ordered spans; external RDKit supplies separate Molfile,
+named-field supplier and writer evidence. Its DT-only supplier data/record loss is recorded,
+not corrected by deleting valid fields. ASCII/resource bounds, strict full-file termination,
+conservative ambiguous-header refusal and post-item empty-padding tolerance are explicit
+Bondline profile policies. No SDF application workflow is inferred from library tests.
+Pinned MOL/SDF checkout identity uses Git's public unset-text rule:
 https://git-scm.com/docs/gitattributes#_text . Reviewed2026-11-13; the isolated
 core.autocrlf RED/GREEN is recorded in ../research/mol-fixture-checkout.md. Parser and oracle
 bytes are not normalized to accommodate an altered checkout.

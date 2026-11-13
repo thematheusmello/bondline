@@ -107,3 +107,9 @@
   layout rather than silently flattening/discarding it. A separate explicit lossy/export-only
   workflow and richer source-to-source conversion remain required; do not call these guards
   final M1 parity. General imported atom edits and rendering remain limited by M2.
+- The first SDF container supports ASCII V2000 only; data-only datfiles, V3000, broader
+  encodings and application data/multiple-record workflows remain missing. Unbalanced free
+  header metadata and multiple identities are conservatively unsupported, not universally
+  declared malformed. Full RDKit supplier loss after a valid DT-only header prevents using
+  that consumer's dictionary/record count as the sole fidelity oracle. Preserve raw fields
+  and the independent diagnostics; do not narrow the standard to its behavior.

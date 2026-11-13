@@ -64,7 +64,7 @@ reparse, preserve record count/framing and retain all bytes outside the changed 
 replacing a payload with itself must be byte-exact. The original document stays unchanged.
 The harness does not map CDX chemistry, resolve references, write new object trees or access
 files. Independent Python struct/RDKit expectations live in the crate's integration tests.
-The CI sanitizer job runs all three parser targets; these bounded runs are not exhaustive input
+The CI sanitizer job runs all four parser targets; these bounded runs are not exhaustive input
 coverage or proof of application CDX support.
 
 ## MOL V2000 syntax and elemental graph
@@ -92,3 +92,23 @@ This target does not infer chemistry, compare every mutation with RDKit, import 
 application session, or exercise native file I/O. Independent published-field/RDKit
 expectations remain in the IO integration tests. The bounded sanitizer run is not complete
 format conformance or a security audit. It adds no shipped dependency or GPU initialization.
+
+## SDF V2000 records and ordered data
+
+```sh
+mkdir -p .cache/fuzz/sdf
+cp crates/io/tests/fixtures/sdf/ordered-fields-v2000.sdf .cache/fuzz/sdf/
+PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --sanitizer address sdf_parse .cache/fuzz/sdf -- -runs=10000 -seed=826403517 -max_len=65536 -timeout=5
+```
+
+The original seed has ordered/duplicate/empty data fields; see its fixture provenance.
+Accepted input must retain exact bytes and bounded record/item/header/value spans, including
+raw Molfile bytes and record delimiters. Ordered data fields remain distinct. The harness
+also writes each accepted record canonically and checks the complete Molfile and ordered
+headers/value lines; new wrapper framing, delimiter tails, padding and line endings may normalize. Source stays
+unchanged. Near-budget canonical output may refuse resource_limit explicitly.
+
+This is parser/codec fuzzing. It does not establish chemistry correctness, application SDF
+import/export, native file workflows or independent compatibility for every mutation. The
+original fixed-field vectors and separately run RDKit consumer remain the independent tests.
+Committed seeds are never writable mutation corpora. No lock/runtime dependency changes.

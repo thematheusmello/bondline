@@ -3,6 +3,7 @@
 pub mod cdxml;
 mod document;
 pub mod mol;
+pub mod sdf;
 pub use document::{DocumentError, SourceInfo, StoredDocument};
 #[cfg(not(target_arch = "wasm32"))]
 pub mod files;

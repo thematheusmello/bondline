@@ -9,7 +9,8 @@ Verified application source: c879f4c95964617a86cc2d1e466515c5aeb31f29. Its compl
 MOL file feature follows codec9e3777e and fixture-checkout correction670178b. This documentation
 checkpoint integrates that tested source into main; inspect Git log for the exact doc head.
 The current feat/sdf-v2000 branch starts from the same source and has separate in-progress
-SDF work. Do not reset, discard or advertise that uncommitted codec as finished.
+SDF work. The next codec commit is locally verified as described below; application SDF
+workflows and fetched SDF corpus coverage remain missing.
 
 Hosted application run43508330802 is terminal GREEN:
 https://github.com/thematheusmello/bondline/actions/runs/43508330802 .
@@ -65,10 +66,11 @@ an explicitly identified earlier build. New MOL acceptance did not alter them or
 
 ## In progress and remaining limits
 
-SDF V2000 is the next active M1 codec slice. IO owns new source/tests/original fixture;
-verification owns the external oracle and a corpus plan; root owns fuzz/CI/provenance/Git.
-Initial missing-module RED and four initial GREEN tests exist, not a final feature pass.
-Final hostile/writer/resource cases, independent consumers, ASAN and aggregate remain.
+SDF V2000 now passes12 independent codec tests, final ASAN10000 iterations and the full
+actual-root aggregate324 workspace plus three bridge tests. Source SHA is recorded in
+docs/verification.md; log target/sdf-codec-ci-integrated.log. IO/oracle source is frozen.
+No runtime dependency, lock, native UI, renderer or golden changed. Hosted execution of
+this new source is pending publication; fetched SDF corpus integration follows its real pin.
 No application SDF command or multi-document flattening is being silently introduced.
 Its data must retain empty/multiline/duplicate/DT/raw headers and exact ordered source spans.
 The pinned RDKit full supplier loses DT-only data/records; independent raw-field checks must
@@ -96,10 +98,9 @@ despite declared MIT. Browser Unicode-bearing dependencies remain unapproved. Go
 
 ## Next exact actions and live work
 
-1. Finish the current SDF codec tests and writer boundary review, then frozen-source ASAN,
-   fmt/clippy/aggregate. In particular, a valid standalone MOL header starting$$$$ must not
-   produce an invalid SDF wrapper. Root/IO coordinate the strict record/field/span contract.
-2. Publish that codec checkpoint, pin its original open-licensed fixture for fetched SDF
+1. Publish the verified SDF codec checkpoint; follow its own native/sanitizer hosted run.
+   The embedded MOL delimiter boundary and resource/field cases now pass independently.
+2. Pin its original open-licensed fixture for fetched SDF
    corpus checks with independent ordered-field/CTAB consumers, and follow its own hosted run.
    Do not mutate existing RDKit pins or invent a future commit hash. Corpus plan is research
    until agreed/implemented; no new SDF corpus pass is claimed yet.
@@ -108,10 +109,11 @@ despite declared MIT. Browser Unicode-bearing dependencies remain unapproved. Go
    Remaining M0 gaps stay visible while the user-prioritized M1 work advances.
 
 Completed application/codec runs43508330802/43507660824 are terminal; do not restart them.
-Main's automatic duplicate run43509919220 at the older670178b may still be live; inspect
-that exact run before acting. Its source is already independently GREEN; it is not the
-c879f4c application run. No native/controller/CUA job remains. SDF agent Cargo work and
-root sanitizer work have separate logs under target/; inspect current handles before restart.
+Main's automatic duplicate run43509919220 at the older670178b is also terminal GREEN.
+No native/controller/CUA, codec/fuzz/aggregate or hosted job remains at this checkpoint;
+the next source push will create a new SDF run. No completed run should be restarted.
+The verifier awaits the actual public source SHA before implementing its approved corpus
+plan. Native UI agent is preparing a bounded V3000 primary-source handoff under target/.
 Only root stages/commits/pushes. Development bundles/reports are disposable, never committed.
 Future worktrees must keep separate Cargo targets; stale reuse previously tested the wrong
 checkout. Keep the full project goal active and continue rather than recreating it.

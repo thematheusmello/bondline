@@ -72,8 +72,9 @@ replacement and a bounded new-syntax writer);
 cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque property
 replacement; no model mapping or application commands);
 render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
-source-backed CDXML projections, native elemental encoding, owned snapshots, PNG encoding and
-bounded native CDXML filesystem I/O; see docs/native-file-io.md for publication/access limits);
+source-backed CDXML/MOL projections, elemental encoding, owned snapshots, PNG encoding,
+bounded native CDXML/MOL filesystem I/O and source-preserving SDF container records;
+see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
 and `compat/clipboard-win` opt into reviewed OS unsafe; `compat/hexf-parse` forbids
@@ -115,6 +116,15 @@ Declared valence yields exact authored H by the published finite arithmetic; do 
 periodic-table valence. Preserve the documented normative M ISO/RDKit discrepancy, and the
 original/independent test vectors. The corpus now actually checks one MOL input, not only
 its hash; CDX corpus and chemistry calculations remain missing.
+
+SDF is currently a library container, not an application document command. Preserve exact
+record/MOL/item spans, duplicate order, raw headers/DT digits, empty/multiline values and
+opaque embedded MOL bytes. Never rebuild these from RDKit's last-value property map: its
+full supplier loses records/data at the original valid DT-only vector. Independent raw
+checks and per-record molecular consumers have different jobs. The writer must refuse
+reserved delimiter prefixes in embedded MOL blocks before output, not normalize the source.
+Strict EOF/header/ASCII bounds and the documented post-item empty-padding accommodation
+must stay explicit. See file-formats.md; fetched SDF corpus coverage is the next slice.
 
 The current thirteen-command registry includes bond.create for independent C-C fragments with
 three explicitly authored H per carbon, plus native CDXML/MOL open/save. It does not attach to

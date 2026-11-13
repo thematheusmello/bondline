@@ -36,6 +36,13 @@ test = false
 doc = false
 bench = false
 
+[[bin]]
+name = "sdf_parse"
+path = "fuzz_targets/sdf_parse.rs"
+test = false
+doc = false
+bench = false
+
 [workspace]
 members = ["."]
 

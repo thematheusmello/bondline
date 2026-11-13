@@ -1,0 +1,40 @@
+Original V2000 vector
+  Bondline test
+Original independent fixed columns
+  2  1  0  0  0  0            999 V2000
+    0.0000    0.0000    0.0000 C   0  0  0  0  0  4  0  0  0  0  0  0
+    1.5000    0.0000    0.0000 C   0  0  0  0  0  4  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+M  END
+> <ID>
+first
+
+> <EMPTY>
+
+
+> 7(BL-001)<NOTES>DT12
+alpha
+beta
+
+> DT0009
+numbered
+
+> <DUP>
+one
+
+> <DUP>
+two
+
+> <SPACES>
+   
+
+$$$$BONDLINE_RECORD
+
+  Bondline test
+Original independent fixed columns
+  2  1  0  0  0  0            999 V2000
+    0.0000    0.0000    0.0000 C   0  0  0  0  0  4  0  0  0  0  0  0
+    1.5000    0.0000    0.0000 C   0  0  0  0  0  4  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+M  END
+$$$$

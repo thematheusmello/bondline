@@ -73,11 +73,15 @@ jobs:
           cp crates/cdx/tests/fixtures/unknown-implicit.cdx .cache/fuzz/cdx/
           mkdir -p .cache/fuzz/mol
           cp crates/io/tests/fixtures/mol/rdkit-CH3.mol crates/io/tests/fixtures/mol/ethane-v2000.mol .cache/fuzz/mol/
+          mkdir -p .cache/fuzz/sdf
+          cp crates/io/tests/fixtures/sdf/ordered-fields-v2000.sdf .cache/fuzz/sdf/
       - name: Run the bounded sanitizer check
         run: PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run cdxml_parse .cache/fuzz/cdxml -- -runs=10000 -seed=3641879538 -max_len=65536 -timeout=5
       - name: Run the bounded binary parser sanitizer check
         run: PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run cdx_parse .cache/fuzz/cdx -- -runs=10000 -seed=721533879 -max_len=65536 -timeout=5
       - name: Run the bounded MOL parser sanitizer check
         run: PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --sanitizer address mol_parse .cache/fuzz/mol -- -runs=10000 -seed=619734821 -max_len=65536 -timeout=5
+      - name: Run the bounded SDF parser sanitizer check
+        run: PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --sanitizer address sdf_parse .cache/fuzz/sdf -- -runs=10000 -seed=826403517 -max_len=65536 -timeout=5
       - name: Check dependency pins were retained
         run: git diff --exit-code -- Cargo.lock fuzz/Cargo.lock

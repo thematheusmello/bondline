@@ -5,7 +5,8 @@
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
 | CDX | Standalone bounded binary syntax and checked opaque property replacement | Original published-field vectors, independent Python struct spans/bytes, external RDKit connectivity/order consumers | Application import/export, model/reference mapping, new-tree writer, broader pinned corpus and modern extensions |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
-| SDF/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
+| SDF V2000 | Source-preserving library records, ordered data fields and validated wrapper writer | Original source spans; external raw scanner and per-record RDKit; named-field full-supplier and external-writer vectors | Application data/multiple-record workflow, fetched SDF corpus and broader syntax/encodings |
+| V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
@@ -85,6 +86,46 @@ the actual associated encoding, independently of the filename extension and orig
 format. Stale imports cannot replace current work; an older published save keeps later edits
 dirty. See [control-protocol.md](control-protocol.md) for schemas and close/request guards.
 
+## SDF V2000 container library
+
+`bondline_io::sdf::SdfFile` validates complete V2000 records and exposes borrowed original
+bytes, record/Molfile/delimiter spans and ordered data items. Each item retains its raw
+header, optional name and textual DT number, value lines and exact raw value/EOL span.
+Duplicates, empty/multiline/spaces-only values and combined registry headers remain distinct;
+they are never reconstructed from a property dictionary. Molfile views use the existing
+codec; callers explicitly choose any later model transform. There is no application SDF
+open/save command or implicit multi-record document conversion yet.
+
+BIOVIA2026 printed pages 97–99 define named/DT headers, line-prefix record delimiters,
+200-character data lines and empty item terminators. This slice supports ASCII, so those
+value lines have a 200-byte limit. Complete M END and column-zero prefix $$$$ delimiters
+are required. Structure-only records have no padding before their delimiter. Empty titles
+are significant; unfinished later records and global trailing blank padding fail. Extra
+empty padding only after a completed data item is a documented reader accommodation for
+external empty-value writers. Spaces-only lines remain values, without trimming.
+
+Independent resource policies are 64 MiB total, 1024 records, 65536 fields, one million
+lines and 4096-byte structural/header lines. Ambiguous multiple header identities and
+unbalanced optional-parenthesis metadata explicitly refuse the supported profile; this is
+a conservative interpretation limit, not a claim that all such free text is forbidden by
+the general standard. Datfiles without structures, V3000 and other encodings remain open.
+
+`write_v2000` takes ordered raw-header/data-line inputs and validated original MOL blocks.
+It keeps MOL bytes/CRLF/unknown properties, adds a final LF if needed, and writes new wrapper
+lines with LF and one item terminator. Canonical delimiter tails/padding may differ from
+an imported file; exact original passthrough is separate. A reserved delimiter prefix in
+an embedded MOL, invalid fields, unsupported syntax or exceeded output budget refuses
+before output. It never escapes, silently trims or regenerates opaque MOL content.
+
+The original 690-byte two-record fixture has independent raw-span/ordered-field checks and
+two direct RDKit Molfile consumers. A separate named-field writer test uses the full SDF
+supplier, and an external writer supplies empty-padding input. The pinned RDKit full supplier
+loses data and the second record at a valid DT-only header; duplicate names also use its
+last-value map. These diagnostics stay separate from preservation assertions. No complete
+supplier agreement is claimed. A fetched pinned SDF corpus entry is the next tooling feature.
+
+## CDX syntax
+
 `bondline-cdx` is a standalone syntax utility, with no model, filesystem, GUI or third-party
 dependency. Its flat borrowed index retains the original header, unknown object/property
 tags, payloads, ordering and length prefixes; passthrough returns exactly the input. It
@@ -108,6 +149,8 @@ is preserved; the original input stays unchanged. The utility never adds/removes
 or properties and is not wired into application CDX open/save commands. Independent RDKit
 checks two carbons/one bond and CC/C2H6 changing to C=C/C2H4 for one original fixture; that
 consumer's raw16.16/y-flipped coordinates are kept separate from point-unit assertions.
+
+## CDXML syntax and mapping
 
 CDXML original bytes are authoritative. The read-only XML tree is a derived view; writing
 does not reserialize it. Unknown nodes, namespaced attributes, property order, quotes,
