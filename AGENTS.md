@@ -36,7 +36,8 @@ xtask checks layers and licenses, fetches a pinned SHA-256 corpus, and orchestra
 No GUI dependencies below ui; wgpu belongs in render. Add crates when useful behavior lands,
 not empty successful-looking API stubs. Document any isolated OS FFI exception explicitly.
 
-Current map: model (L0, validated pages); cdxml (L0, source-preserving read-only syntax);
+Current map: model (L0, validated pages); cdxml (L0, source-preserving syntax and checked
+existing-attribute replacement);
 render (L1, shared CPU/GPU page scenes); io (L2,
 validated PNG encoding); commands
 (L3, registry and Arc snapshot history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,

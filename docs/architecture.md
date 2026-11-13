@@ -32,6 +32,9 @@ on shutdown. Headless stdio remains independent. See control-protocol.md for act
 Format crates own their syntax and source-preserving representations. They do not depend
 on the model. The io layer translates supported data and retains original backing for
 unknown content; unsupported edits must fail explicitly rather than discard data.
+CDXML's borrowed tree remains read-only. Its attribute replacement returns revalidated
+source bytes with untouched spans retained; no model mapping or application file adapter
+exists yet. See file-formats.md for the exact supported edit boundary.
 
 The native canvas now consumes the render crate's page scene instead of owning a parallel
 page-layout algorithm. CPU and instanced GPU reference paths consume that same scene;

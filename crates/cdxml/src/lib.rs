@@ -1,5 +1,7 @@
 //! Standalone source-preserving CDXML syntax. No document model or native I/O.
 
+mod edit;
+
 pub const MAX_INPUT_BYTES: usize = 64 * 1024 * 1024;
 pub const MAX_NODES: u32 = 100_000;
 pub const MAX_DEPTH: usize = 256;
@@ -8,7 +10,7 @@ pub const MAX_ATTRIBUTES: usize = 100_000;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error("CDXML input exceeds the 64 MiB bound")]
+    #[error("CDXML input or output exceeds the 64 MiB bound")]
     InputTooLarge,
     #[error("CDXML nesting exceeds 256 elements")]
     DepthLimit,
@@ -20,6 +22,14 @@ pub enum Error {
     UnsupportedDeclaration,
     #[error("internal DTD subsets and custom entities are not supported")]
     UnsupportedDtd,
+    #[error("attribute edits require an element from this parsed document")]
+    InvalidElement,
+    #[error("the element has no ordinary attribute with that qualified name")]
+    MissingAttribute,
+    #[error("attribute value contains a character forbidden in XML 1.0")]
+    InvalidAttributeValue,
+    #[error("attribute source range is inconsistent with the validated XML")]
+    InvalidAttributeRange,
     #[error(transparent)]
     Utf8(#[from] std::str::Utf8Error),
     #[error(transparent)]

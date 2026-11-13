@@ -307,3 +307,25 @@ ASCII stdout, so the existing Unicode/mismatch test continuously exercises this 
 Decoded JSON semantics are unchanged; input XML stays raw UTF-8. This fixes developer-tool
 portability and does not establish native Windows application execution.
 `PYTHONIOENCODING=ascii cargo xtask ci` passes all 60 tests and the real gates.
+
+## Source-preserving CDXML attribute replacement, 2026-11-13
+
+RED: `cargo test -p bondline-cdxml --test attributes --locked` failed with E0599 for the
+absent replace_attribute method and edit errors. GREEN: five new tests pass. The original
+atom coordinate edit has an independently constructed exact expected byte string; unrelated
+source bytes stay unchanged. External Expat verifies both quote styles, namespaced values,
+all escaped delimiters, numeric tab/LF/CR references and XML character-range boundaries.
+No-op entity spelling, empty values, BOM/CRLF, a 70000-character name and over 255 bytes of
+equals-whitespace are covered. Oracle expectations go through length-prefixed stdin rather
+than potentially oversized platform command arguments; its stdout is explicitly ASCII.
+Foreign/non-element targets, missing attributes, namespace-declaration edits, forbidden
+characters and an escaped-size overflow are rejected with the original source intact.
+
+The isolated ASan harness now exercises accepted parse/edit/reparse inputs. A 10000-run
+smoke passed with seed 3641879538, max_len 65536, timeout 5, final edge coverage 1957 and
+384 retained corpus entries (146 KiB). Log: ignored target/cdxml-attributes-fuzz.log.
+This is bounded fuzz evidence, not exhaustive conformance or a security audit.
+`cargo xtask ci` passes all 65 workspace tests and existing real gates. Windows/Linux
+whole-workspace all-targets source checks pass; their native execution remains unverified.
+No UI change, application file-open/save, model mapping or broader format compatibility
+is claimed. No fuzz or Cargo job remains running.

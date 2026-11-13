@@ -48,7 +48,7 @@ The complete modern inventory gate remains open; see clean-room/open-questions.m
 | Naming and mixtures | PROFESSIONAL-26.1 | missing | M5; public standards/oracles |
 | Associated-data label selection | PROFESSIONAL-26.1 | missing | Documented 26.1 behavior |
 | Separate CDXML/MDL paste entries | PROFESSIONAL-26.1 | missing | M4; platform clipboard evidence |
-| CDXML/CDX interchange | CDXML-INTRO / CDX-INTRO | missing application workflow | CDXML unchanged syntax round trip verified on original fixture/Expat/fuzz smoke. One corpus round trip verified; edits, mapping, CDX and open/save missing; see file-formats.md |
+| CDXML/CDX interchange | CDXML-INTRO / CDX-INTRO | missing application workflow | CDXML syntax round trip and existing-attribute replacement verified on original fixture/Expat/fuzz smoke. One unchanged corpus round trip verified; mapping, further edits, CDX and open/save missing; see file-formats.md |
 | MOL/SDF/RXN/SMILES/InChI | GUIDE-25 | missing | M1/M3 |
 | SVG/PDF/PNG, print and Office clipboard | GUIDE-25 | missing | M4 |
 | Templates and biopolymers/HELM | GUIDE-25 / release notes | missing | Original assets only; M5 |

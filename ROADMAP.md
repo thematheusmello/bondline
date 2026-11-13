@@ -19,8 +19,9 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
-Standalone CDXML unchanged source preservation has original-fixture/Expat and ASan smoke
-evidence plus one pinned RDKit corpus document. Checked attribute editing is next, then
+Standalone CDXML source preservation and checked existing-attribute replacement have
+original-fixture/Expat and ASan smoke evidence plus one pinned unchanged RDKit corpus
+document. Next:
 model mapping retaining source backing, lossless CDX records, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.

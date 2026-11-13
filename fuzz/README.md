@@ -16,5 +16,8 @@ PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run cdxml_pars
 Do not use the committed fixture directory as the writable mutation corpus. Keep generated
 inputs/artifacts ignored; minimize and add any failure as an intentional regression test.
 The harness checks bounded parser execution and exact source preservation on accepted input.
+When an ordinary unnamespaced attribute exists, it also replaces its value with Unicode,
+markup delimiters and whitespace, reparses, verifies the decoded value and checks the
+original stayed unchanged. Inputs too close to the output size bound may reject the edit.
 Independent XML semantic assertions live in the external Expat tests. A short smoke run is
 not exhaustive parser conformance or a security audit.

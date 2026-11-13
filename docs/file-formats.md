@@ -2,7 +2,7 @@
 
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
-| CDXML | Standalone bounded UTF-8 syntax parser; unchanged source-byte writer | Original fixture + independent external Expat; one pinned RDKit corpus file; BOM/CRLF preservation; malformed/resource cases; ASan fuzz smoke | Chemical model mapping, supported edits, broader corpus coverage, registry/native open/save |
+| CDXML | Standalone bounded UTF-8 syntax parser; unchanged source-byte writer; checked existing-attribute value replacement | Original fixture + independent external Expat; one pinned unchanged RDKit corpus file; exact unrelated-byte preservation; BOM/CRLF and hostile-input cases; ASan parse/edit fuzz smoke | Chemical model mapping, additional edit types, broader corpus coverage, registry/native open/save |
 | CDX | None | Published specification recorded | Parser, preservation, writer and model mapping |
 | MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
@@ -25,7 +25,18 @@ supported; other encodings/versions fail. External doctype identifiers are retai
 resolution; no entity resolver is installed. Custom DTD entities are unsupported and rejected.
 There is no recovery mode that drops malformed or unsupported content.
 
-Future source edits must retain untouched spans and revalidate the result. In particular,
-do not blindly use roxmltree's compressed attribute-value positions: its documented QName
-and equals-whitespace position limits require checked handling. No patching API is delivered
-yet. See clean-room/sources.md, verification.md and fuzz/README.md for provenance and checks.
+`Document::replace_attribute(element, qname, value)` returns a new, fully revalidated byte
+buffer. The element must belong to that parsed tree, and qname must match an existing
+ordinary attribute's literal qualified name. Namespace declarations cannot be changed.
+The API never adds attributes, changes text/structure or updates the input in place.
+Every byte outside the value is retained, including the original quote delimiters. A value
+equal to the decoded original is a byte-exact no-op, retaining character-reference spelling.
+Special characters are escaped; tab, LF and CR use numeric references to survive XML
+attribute normalization. Characters forbidden by XML 1.0 fail explicitly. Escaped output
+size is checked against the 64 MiB bound before allocation; no partial output is returned.
+
+The writer uses the full attribute source range, not roxmltree's compressed QName/value
+positions. Tests exercise a 70000-character name and more than 255 bytes of equals-whitespace.
+External Expat verifies decoded values including Unicode character-range boundaries.
+The untouched corpus round-trip gate does not yet exercise edits on its RDKit fixture.
+See clean-room/sources.md, verification.md and fuzz/README.md for provenance and checks.
