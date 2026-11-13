@@ -9,7 +9,12 @@ pub use graph::{
 pub use point::{MAX_POSITION_PT, Point2};
 
 use serde::{Deserialize, Serialize};
-use std::{collections::BTreeSet, num::NonZeroU32, sync::Arc};
+use std::{
+    collections::{BTreeSet, HashSet},
+    mem::size_of,
+    num::NonZeroU32,
+    sync::Arc,
+};
 
 pub const MAX_PAGE_DIMENSION_PT: f64 = 100_000.0;
 
@@ -133,6 +138,35 @@ impl Default for Document {
 impl Document {
     pub fn pages(&self) -> &[Page] {
         &self.pages
+    }
+
+    /// Retained payload/container bytes, including reserved vector capacity, shared once.
+    /// Excludes Arc/allocator headers and unrelated snapshots; saturates on overflow.
+    pub fn retained_bytes<'a>(documents: impl IntoIterator<Item = &'a Self>) -> usize {
+        let mut models = HashSet::new();
+        let mut fragments = HashSet::new();
+        let mut bytes = 0_usize;
+        for document in documents {
+            if !models.insert(std::ptr::from_ref(document)) {
+                continue;
+            }
+            bytes = bytes
+                .saturating_add(size_of::<Self>())
+                .saturating_add(document.pages.capacity().saturating_mul(size_of::<Page>()));
+            for page in &document.pages {
+                bytes = bytes.saturating_add(
+                    page.fragments
+                        .capacity()
+                        .saturating_mul(size_of::<Arc<Fragment>>()),
+                );
+                for fragment in &page.fragments {
+                    if fragments.insert(Arc::as_ptr(fragment)) {
+                        bytes = bytes.saturating_add(fragment.storage_bytes());
+                    }
+                }
+            }
+        }
+        bytes
     }
 
     /// Append a batch atomically, validating document-wide identities and resource budgets.

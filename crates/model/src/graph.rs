@@ -202,4 +202,18 @@ impl Fragment {
     pub fn bonds(&self) -> &[Bond] {
         &self.bonds
     }
+
+    pub(crate) fn storage_bytes(&self) -> usize {
+        std::mem::size_of::<Self>()
+            .saturating_add(
+                self.atoms
+                    .capacity()
+                    .saturating_mul(std::mem::size_of::<Atom>()),
+            )
+            .saturating_add(
+                self.bonds
+                    .capacity()
+                    .saturating_mul(std::mem::size_of::<Bond>()),
+            )
+    }
 }

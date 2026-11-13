@@ -12,11 +12,14 @@ mod capture;
 pub use bond::BondCreate;
 #[cfg(test)]
 mod source_tests;
+#[cfg(test)]
+mod storage_tests;
 pub use bondline_render::Cancellation;
 pub use capture::{CaptureAdapter, PngCapture, Prepared, RenderBackend, RenderCapture};
 
 pub const MAX_REQUEST_BYTES: usize = 1024 * 1024;
 const MAX_HISTORY: usize = 128;
+const MAX_HISTORY_BYTES: usize = 128 * 1024 * 1024;
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -277,13 +280,36 @@ impl Engine {
         let revision = self.next_revision()?;
         self.undo
             .push_back(std::mem::replace(&mut self.document, Arc::new(document)));
-        // shortcut: history is capped at 128 snapshots; add byte budgeting as chemical documents grow.
         if self.undo.len() > MAX_HISTORY {
             self.undo.pop_front();
         }
         self.redo.clear();
+        self.trim_history(MAX_HISTORY_BYTES);
         self.revision = revision;
         Ok(true)
+    }
+
+    fn trim_history(&mut self, budget: usize) {
+        let retained = |skip| {
+            StoredDocument::retained_bytes(
+                std::iter::once(self.document.as_ref())
+                    .chain(self.undo.iter().skip(skip).map(Arc::as_ref)),
+            )
+        };
+        if retained(0) <= budget {
+            return;
+        }
+        let (mut low, mut high) = (0, self.undo.len());
+        // Retained suffixes are monotonic; find the smallest oldest-prefix eviction.
+        while low < high {
+            let middle = low + (high - low) / 2;
+            if retained(middle) > budget {
+                low = middle + 1;
+            } else {
+                high = middle;
+            }
+        }
+        self.undo.drain(..low);
     }
 
     fn undo(&mut self) -> Result<bool, Error> {

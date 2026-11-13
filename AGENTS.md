@@ -46,7 +46,11 @@ preserve unknown data and must never silently drop it. Native I/O stays out of m
 The UI, CLI, loopback channel and MCP call one typed JSON command registry.
 StoredDocument now owns source/model/baseline and Engine history retains it. Keep that backing
 when wiring import; a cloned elemental projection alone loses unknown data. Require failed-
-import/source-retention tests and a source/history byte budget before exposing large imports.
+import/source-retention tests before exposing imports. Retained payload/container accounting
+now enforces 128 prior snapshots and a 128 MiB threshold, deduplicating shared source/model/
+fragment allocations and including baselines/reserved vectors. Keep current data even when
+it alone exceeds the threshold; this excludes allocator headers, caches and external copies.
+Update accounting/tests whenever a new model field owns heap data; do not claim a hard RSS cap.
 Unchanged-source export is guarded; never write stale XML after a model edit.
 xtask checks layers and licenses, fetches a pinned SHA-256 corpus, and orchestrates CI.
 No GUI dependencies below ui; wgpu belongs in render. Add crates when useful behavior lands,

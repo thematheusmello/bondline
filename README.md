@@ -12,6 +12,9 @@ The headless model stores validated atom/bond/fragment data. The io crate maps l
 source-backed node-position and elemental graph views. Engine snapshots/history now retain
 complete original CDXML bytes, with guarded unchanged-source export. Application
 import/save commands and faithful imported-file rendering are not yet connected.
+History now counts shared source/model data once and evicts oldest snapshots at an
+approximate 128 MiB retained-storage threshold; current data is always kept. This is not
+a whole-process memory cap; see [the command contract](docs/control-protocol.md).
 Bondline is not affiliated
 with, endorsed by, or sponsored by ChemDraw or Revvity Signals.
 

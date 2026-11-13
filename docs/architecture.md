@@ -23,8 +23,16 @@ in O(1); copy-on-write authoring edits share immutable fragments and source byte
 includes opaque source content, so equal projections cannot erase source-only changes.
 Returned model snapshots remain immutable across later edits. Authored state excludes
 revision/history. Exact undo assertions compare the whole stored document and original bytes.
-The 128-snapshot count limit is not a byte budget; add a source/history byte budget before
-exposing repeated large imports. A cold-session constructor is delivered, not an import command.
+History is limited to 128 prior snapshots and a 128 MiB accounted-storage threshold for
+the current document plus history. Accounting deduplicates source allocations, models and
+immutable fragments, includes source baselines and reserved vector capacity, and saturates
+on overflow. A changed commit clears redo first and drops the oldest Undo prefix needed
+to retain a recent suffix. Undo/Redo move that existing pool without new payload allocations.
+The current document is always retained, even if it alone exceeds the threshold. This is
+approximate retained payload/container accounting: Arc/allocator headers, temporary work,
+caches and externally held snapshots are excluded, so it is not a process-memory guarantee.
+A cold-session constructor is delivered, not an import command. File import still needs
+failure-retention tests and independent editable export before native exposure.
 See control-protocol.md for the actual registered operations and explicit limits.
 The first bond.create operation appends an independently authored C-C fragment with three
 explicit hydrogens per carbon. Engine identity floors never move backward on Undo/Redo;

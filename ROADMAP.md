@@ -35,7 +35,8 @@ references and retains source backing; an external Expat/Decimal oracle checks t
 Owned application snapshots/history now retain that backing; unsynchronized edits cannot
 export stale XML. This constructor/passthrough API is not a file workflow.
 Native independent C-C/three-H rendering is delivered, with explicit terminal labels.
-Next: editable CDXML writing and registry open/save with source/history byte budgeting;
+Source/history now has shared-allocation accounting and oldest-first byte eviction.
+Next: editable CDXML writing and registry open/save with failed-import/save retention;
 broader query/label/style mapping, lossless CDX records, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.

@@ -22,8 +22,8 @@ MIT/Apache-2.0/BSD shipped policy: Mac arm64 150, Windows x64 161, Linux x64 219
 packages plus two hash/notice-verified bundled assets. Full release notice/source audit
 and the Unicode-bearing browser candidate remain separate work.
 
-Verified in the current drawing checkpoint:
-- 126 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses
+Verified in the current drawing/history checkpoint:
+- 133 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses
   and the pinned corpus gate. Windows/Linux all-targets source checks pass; native runtime
   and hosted CI execution on those platforms remain unverified.
 - Six shared typed commands: document.inspect, page.set_size, bond.create, history.undo,
@@ -40,7 +40,14 @@ Verified in the current drawing checkpoint:
   input-test evidence; those variants are not all individually verified on native platforms.
 - Three 128-case fixed-seed properties now cover native page edits, source-backed history
   and authored bond graphs. Session identity floors survive Undo branches and only advance
-  after successful commits. History is count-bounded to 128; source byte budgeting remains.
+  after successful commits.
+- Retained history has a 128-prior-snapshot cap and a 128 MiB accounted-storage threshold.
+  Sources, models, baselines and fragments are counted by allocation identity; reserved
+  vectors count too. Tests reproduce/release distinct 45 MiB XML allocations, keep 128 edits
+  of a shared 2 MiB source, preserve the newest suffix/current data and release discarded redo.
+  This is headless engine evidence. Arc/allocator headers, temporary work, caches and external
+  snapshots are excluded, and the current document is always kept even if it alone exceeds
+  the threshold. This is not a hard process-memory limit or native import workflow.
 
 Rendering evidence: ordered rectangles/butt strokes, independent integer geometry oracle,
 font metrics from external FontTools 4.61.1 and terminal-label masks compared with external
@@ -73,8 +80,8 @@ Next exact tasks:
 1. Finish/version the screen, palette, icon, dialog and end-to-end flow inventory using the
    newly pinned public research and authorized artifacts. Existing 573 control rows are not
    a complete modern inventory. Separate desktop/platform/tier evidence from cloud demos.
-2. Add source/history byte budgeting and editable CDXML writing, then atomic registry/native
-   open/save with failed-import/save retention tests and independent consumers. Source backing
+2. Add editable CDXML writing, then atomic registry/native open/save with failed-import/save
+   retention tests and independent consumers. Source backing
    must survive every history/edit path. Inspect the pinned reference-project approaches.
 3. Extend single-bond behavior to existing-atom attachment, connected graphs, click creation,
    snapping and order changes, with native workflows and tests. The current independent-bond
@@ -82,12 +89,14 @@ Next exact tasks:
 4. Run hosted three-platform CI and native Windows/Linux workflows when available; continue
    independent work meanwhile. Broaden approved render scenes with actual human review.
 
-The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1 and the drawing
-checkpoint is 7043563. Current research policy
-and the full goal are active; no push/publication/account action was performed.
+The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1, the drawing
+checkpoint is 7043563 and the research checkpoint is 952ded5. The current research policy
+and full goal are active; no push/publication/account action was performed.
+The subsequent history-budget commit includes this record; use Git log for its final hash.
 
 The disposable target/dev/Bondline.app contains the verified ordered-event drawing build
-and is closed. Final native exec 93577 exited 0; 127.0.0.1:50110 was independently confirmed
+and is closed. It predates the subsequent history-accounting change. Final native exec
+93577 exited 0; 127.0.0.1:50110 was independently confirmed
 closed. Earlier test builds 22527 and 75463 also exited. Startup credentials remain only
 in ignored private target logs; never copy them into reports. Earlier REA exposure evidence
 is historical and tied to a prior digest, not this build. No confirmed native/Cargo/fuzz

@@ -15,8 +15,14 @@ before mutation. Raw JSON is bounded to 1 MiB. Results contain an immutable auth
 monotonic revision, `changed` flag and undo/redo depths. Errors expose a stable code and message.
 Inspection and exact no-ops do not advance revision or discard redo. A changed edit discards
 the previous redo branch. Undo/redo restore authored state exactly but advance revision.
-History retains up to 128 document snapshots. This is an explicit Bondline policy, not a
-claim about another application's history limits. Revision overflow rejects the operation.
+History retains up to 128 prior document snapshots, with a 128 MiB accounted-storage
+threshold including the current document. Shared source/model/fragment allocations count
+once; baselines and reserved vector capacity count too. A changed commit discards redo,
+then evicts the oldest Undo prefix until the retained suffix fits. The current document is
+always kept, even if it alone exceeds the threshold. Arc/allocator headers, temporary work,
+caches and client-held snapshots are excluded; this is not a process-memory ceiling.
+These are explicit Bondline policies, not claims about another application's history limits.
+Revision overflow rejects the operation before history eviction or mutation.
 
 Page snapshots include a fragments array, empty in the default application. Engine history
 now retains an owned StoredDocument, including original CDXML data. An engine initialized
@@ -25,7 +31,8 @@ The field is omitted for native in-memory documents. Raw source bytes are not se
 Import/export commands are not registered yet. bond.create now authors a limited native
 chemical fragment; source-backed creation is refused until editable mapping exists. Modified source-backed
 models cannot export stale XML; exact undo restores the original bytes and exportability.
-History has a count limit only; source/history byte budgeting must precede large-file imports.
+The source/history budget is delivered headlessly; editable mapping, failed-import retention
+and actual native file workflows still need implementation and independent evidence.
 See model.md for the data boundary; serialized graphs are not a project-save workflow.
 
 | Name | Parameters | Effect |

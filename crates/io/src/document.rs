@@ -1,7 +1,7 @@
 use crate::cdxml::{ElementalGraph, MappingError};
 use bondline_model::{Document, PageSize};
 use serde::Serialize;
-use std::sync::Arc;
+use std::{collections::HashSet, mem::size_of, sync::Arc};
 
 #[derive(Debug, thiserror::Error)]
 pub enum DocumentError {
@@ -64,6 +64,29 @@ impl StoredDocument {
 
     pub fn model_snapshot(&self) -> Arc<Document> {
         Arc::clone(&self.model)
+    }
+
+    /// Approximate retained storage, deduplicating source/model/fragment allocations.
+    /// Includes baselines and reserved vectors; excludes Arc/allocator headers and caches.
+    pub fn retained_bytes<'a>(documents: impl IntoIterator<Item = &'a Self>) -> usize {
+        let mut snapshots = HashSet::new();
+        let mut sources = HashSet::new();
+        let mut models = Vec::new();
+        let mut bytes = 0_usize;
+        for document in documents {
+            if !snapshots.insert(std::ptr::from_ref(document)) {
+                continue;
+            }
+            bytes = bytes.saturating_add(size_of::<Self>());
+            models.push(document.model.as_ref());
+            if let Some(original) = &document.original {
+                if sources.insert(original.bytes.as_ptr()) {
+                    bytes = bytes.saturating_add(original.bytes.len());
+                }
+                models.push(original.baseline.as_ref());
+            }
+        }
+        bytes.saturating_add(Document::retained_bytes(models))
     }
 
     /// Detached model edits preserve source data, but cannot be exported until synchronized.

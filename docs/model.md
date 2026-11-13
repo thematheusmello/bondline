@@ -50,3 +50,12 @@ Engine history retains the whole snapshot, including opaque data and the export 
 Copying fragments into a bare model Document still does not copy that backing. Source-backed
 undo/redo has unit and generated-sequence evidence; imported chemical editing, an editable
 writer and native open/save remain missing. The model itself stays format independent.
+
+`Document::retained_bytes` accounts for inline models/pages, reserved page/fragment-handle
+vectors and each shared fragment's reserved atom/bond vectors once. Io's corresponding
+StoredDocument function also accounts for distinct XML allocations and export baselines.
+Engine commits use that approximate total to bound retained history. Allocation identities
+are used only during local accounting and never serialized. Arc/allocator headers, caches,
+temporary work and external copies are excluded; this is not a whole-process memory bound.
+When a new authored type gains heap-owned data, extend the accounting and its allocation/
+sharing tests in the same commit. Undo/Redo preserve complete source-backed snapshots.

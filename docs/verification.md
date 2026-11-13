@@ -606,3 +606,41 @@ The captures do not prove a desktop build, complete network traffic or feature c
 The six new screen/flow groups organize existing rows; no parity state was promoted by
 research alone. Documentation checks: Git whitespace and local Markdown targets; prior
 126-test aggregate remains the code checkpoint. No new test was invented for prose changes.
+
+## Shared source/history byte accounting, 2026-11-13
+
+Scope: model/io retained-storage queries and engine commit eviction, using the pinned
+PhotoCraft shared-payload budgeting pattern as a conceptual reference. All Rust logic is
+independently written. No command/schema, renderer, UI layout, dependency or parser behavior
+changed. Native import/export and failed-import/save workflows remain unimplemented.
+
+RED: `cargo test -p bondline-commands oldest_distinct_sources_are_evicted_before_128_snapshots
+--locked` failed with Undo depth **3**, expected **1** after three distinct 45 MiB XML
+allocations. The prior count-only limit retained all source data. Model/io `--test storage`
+checks then failed with E0599 for the missing retained_bytes APIs. Disposable transcripts:
+target/history-budget-red.log, target/model-storage-red.log, target/io-storage-red.log.
+
+GREEN: the same source-history test now evicts the oldest prefix, confirms its source
+allocation is released through a Weak reference, and checks byte-preserving Undo/Redo.
+It also branches from Undo and confirms discarded redo source data is released before the
+new branch's budget is judged. Two further engine regressions preserve all 128 page edits
+of one shared 2 MiB source and check recent-suffix/current-document retention at independent
+small thresholds. Model's two tests use known vector capacity differences and shared Arcs;
+io's two tests distinguish shared bytes from separate equal allocations and retain modified
+documents' original baselines. These are allocation/sharing expectations, not file-codec
+round trips or whole-process memory measurements.
+
+Accounting includes model/page containers, reserved vectors, distinct fragments, source
+bytes and export baselines; allocation identities stay local to the query. Sums saturate.
+A changed commit clears redo, applies the count cap, then uses monotonic suffix accounting
+to find the smallest oldest-prefix eviction at 128 MiB. Current data is never evicted, even
+if it alone exceeds that threshold. Arc/allocator headers, caches, temporary work and
+externally held snapshots are excluded. No hard RSS cap or new native memory-flow claim.
+Undo/Redo retain their existing O(1) payload moves; commit accounting traverses retained data.
+
+The first aggregate run caught a test-helper type_complexity lint; a fixture type alias
+resolved it without allowances. Final `cargo xtask ci` passes **133 tests**, rustfmt,
+warnings-denied all-targets clippy, layer/license gates and the existing pinned corpus.
+All-targets Windows/Linux source checks also pass; neither target's runtime/hosted workflow
+was run. No new parser fuzz run was needed or claimed. The earlier native drawing build
+is unchanged and closed; the new accounting was verified through the headless engine.
