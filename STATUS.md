@@ -2,19 +2,17 @@
 
 2026-11-13: persistent full-project goal active. Full M0 is NOT complete.
 
-Public repository: https://github.com/thematheusmello/bondline . The tested file-workflow
-branch was fast-forwarded into main; product checkpoint ccf8c50 contains the final UI.
-Inspect Git log for subsequent format/documentation hashes. Do not restart or discard existing
-work. No release/installer distribution or reference account action was performed.
+Public repository: https://github.com/thematheusmello/bondline . Main includes tested
+product source65b5fb8db0b7c6fc44986bd59d747bd3a5644a26 with eleven commands, shared native
+file controls and guarded presentation requests. Subsequent status/research commits are
+documentation-only; inspect Git log for the current recoverable documentation head.
 
-Public main now includes shared-file-control source65b5fb8db0b7c6fc44986bd59d747bd3a5644a26,
-shared-close source72742fb, runtime quality-tool correctionabd35bf and tested CDX sourcea73bed7.
-Published shared-file-control source65b5fb8db0b7c6fc44986bd59d747bd3a5644a26
-adds eleven-command discovery, typed delivered
-bindings and guarded native file-presentation requests. Product Rust is frozen; aggregate
-CI and final native acceptance pass locally. Source publication/hosted work is recorded below.
-Native corrected binary hashes are recorded separately for each checkpoint. Hosted CDX GREEN43480423381 is terminal; its first
-Windows failure remains recorded. Shared close passed all four hosted jobs and is now fast-forwarded into main. Source publication is authorized; no release/installer action was requested.
+Hosted run43496010615 passes every required job. Local/native acceptance, exact binary/file
+hashes and earlier checkpoint evidence are recorded below. Shared-close source72742fb,
+runtime quality-tool correctionabd35bf and CDX sourcea73bed7 are integrated predecessors;
+ccf8c50 is the earlier file-workflow UI, not the current UI. Do not restart existing work.
+All local/native/CUA/research/hosted jobs are closed. No release/installer distribution or
+reference-account action was requested/performed. The full M0–M5 goal remains active.
 
 ## Current integrated scope
 
