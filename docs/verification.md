@@ -195,3 +195,32 @@ comparisons. GPU readback now polls without the previous unbounded device wait, 
 cancellation and retains a ten-second readback deadline. Driver calls themselves remain
 non-preemptible. Adapter shutdown and in-flight job cancellation need their own integration
 evidence when the capture command lands.
+
+## Shared offscreen capture command, 2026-11-13
+
+RED: `cargo test -p bondline-commands --test capture --locked` failed for the missing
+preparation/capture API. GREEN: external Python base64/Pillow checks every PNG byte against
+the independent 8x8 page grid after another edit has changed the live document. The query
+keeps its original revision and history. Explicit GPU output matches CPU PNG output and
+reports its real adapter. Invalid dimensions, page IDs, backends and unknown fields fail
+atomically; pre-cancellation rejects GPU work before initialization.
+
+RED: `cargo test -p bondline-mcp --lib --locked` failed for the missing worker implementation.
+GREEN: two-worker budgeting does not block short authoring commands. Explicit cancellation
+and aborting the awaiting future signal an instrumented running worker; its permit remains
+held until actual completion. Real CLI, MCP and loopback wire tests discover and execute
+capture through the same registry; read-only captures do not notify native repaint or alter
+history. Engine guards do not cross rendering/encoding or asynchronous waits.
+
+Actual Mac app (Apple M3 Max / Metal): independent socket captures at 512x512 decoded with
+Pillow and matched CPU/GPU pixels. A concurrent 2048x2048 GPU capture returned input revision
+1 while a page edit reached revision 2. That edit's measured round trip was 0.301 ms in this
+single observation, not a throughput benchmark. Native Cmd+Z visibly restored 72x144 pt;
+the next capture at revision 3 exactly matched the original PNG. Exec session 56032 exited
+0 and 127.0.0.1:53031 was independently confirmed closed. Candidate PNGs and observations are
+ignored outputs under target/captures; human approval was requested and remains pending.
+
+Integrated gates: 54 workspace tests, rustfmt, all-targets clippy, layers, declared native
+licenses (145/156/215 packages for macOS/Windows/Linux), two asset hashes/notices and
+Windows/Linux all-targets source checks pass. Native Windows/Linux, human goldens, full M0
+and chemical rendering/interchange remain unverified or missing.

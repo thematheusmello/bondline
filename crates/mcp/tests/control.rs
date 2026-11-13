@@ -80,6 +80,49 @@ fn independent_socket_clients_share_the_native_engine_and_notify_on_changes()
 }
 
 #[test]
+fn socket_capture_reports_the_backend_and_keeps_shared_history_unchanged()
+-> Result<(), Box<dyn std::error::Error>> {
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, Arc::clone(&engine), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = connect(server.address())?;
+    let before = serde_json::to_vec(&engine.lock().map_err(|_| "poisoned engine")?.state())?;
+    let mut cpu_png = None;
+    for backend in ["cpu", "gpu"] {
+        let response = call(
+            &mut client,
+            &serde_json::json!({"command":"render.capture","params":{
+                "page_id":1,"width_px":8,"height_px":8,"backend":backend
+            }})
+            .to_string(),
+        )?;
+        let result = &response["result"];
+        assert_eq!(result["revision"], 0);
+        assert_eq!(result["changed"], false);
+        let capture = &result["capture"];
+        assert_eq!(capture["backend"], backend);
+        if backend == "cpu" {
+            assert!(capture["adapter"].is_null());
+            cpu_png = Some(capture["png_base64"].clone());
+        } else {
+            assert!(capture["adapter"]["name"].is_string());
+            assert!(capture["adapter"]["backend"].is_string());
+            assert_eq!(Some(capture["png_base64"].clone()), cpu_png);
+        }
+    }
+    assert_eq!(
+        serde_json::to_vec(&engine.lock().map_err(|_| "poisoned engine")?.state())?,
+        before
+    );
+    assert_eq!(changes.load(Ordering::SeqCst), 0);
+    server.shutdown()?;
+    Ok(())
+}
+
+#[test]
 fn framing_is_bounded_and_http_or_truncated_messages_cannot_execute_commands()
 -> Result<(), Box<dyn std::error::Error>> {
     let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));

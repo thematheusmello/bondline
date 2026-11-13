@@ -11,7 +11,7 @@ layer = 4
 [dependencies]
 bondline-commands = { path = "../commands" }
 rmcp = { version = "=3.9.0", default-features = false, features = ["server", "transport-io"] }
-tokio = { version = "=1.54.1", features = ["rt", "time", "io-std", "io-util", "net", "macros"] }
+tokio = { version = "=1.54.1", features = ["rt", "time", "io-std", "io-util", "net", "macros", "sync"] }
 serde_json.workspace = true
 thiserror = "2"
 

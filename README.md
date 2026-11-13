@@ -10,7 +10,8 @@ Current capabilities: native page sizing/rotation and Undo/Redo, independently s
 font, original icon, shared CPU/GPU page-scene reference, and strict native runtime/asset
 license gates. Native macOS launch was visually inspected; Windows/Linux are cross-checked,
 with native runtime validation pending. This is a development foundation, not a chemical editor yet.
-The shared registry and CLI can inspect an in-memory page, set its dimensions, undo and redo.
+The shared registry and CLI can inspect an in-memory page, set its dimensions, undo/redo,
+and capture its shared scene as a CPU or GPU PNG with revision/backend evidence.
 
 ```bash
 cargo run -p bondline-ui --bin bondline
@@ -33,7 +34,7 @@ it opens its own in-memory document. See [the command contract](docs/control-pro
 For the active desktop document, launch with `--control-port 0`; the app reports and displays
 its loopback address. This mode is opt-in and uses bounded newline JSON requests.
 
-Current work: registry-driven offscreen PNG capture, then corpus/CDXML and CI.
+Current work: licensed corpus/CDXML, CI and the public menu/tool/shortcut inventory.
 Workspace PNG tests need the external Pillow oracle described in [development.md](docs/development.md).
 See [STATUS.md](STATUS.md) for actual progress and [ROADMAP.md](ROADMAP.md) for the full target.
 

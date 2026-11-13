@@ -24,6 +24,7 @@ claim about another application's history limits. Revision overflow rejects the 
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
 | `history.undo` | `{}` | Previous authored snapshot |
 | `history.redo` | `{}` | Next authored snapshot |
+| `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only page preview PNG; explicit `cpu` or `gpu` |
 
 The delivered CLI exposes `commands` and `run --cmd '<request>'`. Repeat `--cmd` to execute
 sequential operations in one in-memory engine; stdout is one final JSON snapshot. Failure
@@ -53,4 +54,27 @@ the connection. An HTTP header cannot expose its body as commands. Valid domain 
 leave authored state unchanged. Dropping the server closes the listener and cancels clients;
 explicit `shutdown()` also reports worker errors. No non-loopback bind option is offered.
 
-Offscreen command capture is still missing.
+Capture dimensions are 1..2048 pixels per axis. A successful result adds `capture` with
+`mime_type: "image/png"`, pixel dimensions, the requested backend and padded RFC 4648
+`png_base64`. GPU output includes the actual adapter name/backend/device type; CPU output
+has `adapter: null`. There is no automatic CPU fallback. This captures the shared page
+scene, not window chrome, operating-system dialogs or print-resolution chemical output.
+
+```json
+{"command":"render.capture","params":{"page_id":1,"width_px":512,"height_px":512,"backend":"gpu"}}
+```
+
+Preparation snapshots the document/revision under the engine lock. Rendering and PNG
+encoding run outside that lock; later edits cannot alter the captured revision. The result
+never installs state or overwrites newer edits. Queries leave revision/history unchanged.
+CLI calls finish synchronously; each MCP/loopback server permits at most two capture workers
+and rejects excess work with `busy`. Short authoring commands remain available at that limit.
+
+MCP cancellation uses the SDK request token. Loopback queries have a 30-second execution
+deadline. Aborting a connection task during server shutdown signals its capture worker;
+the worker retains its budget until it actually exits. CPU scanlines, GPU readback polling
+and stage boundaries cooperate. Driver calls and a bounded PNG encoder call cannot be
+preempted. A disconnected client is detected by the next socket I/O, not continuously during
+rendering. A committed authoring edit still succeeds if cancellation arrives afterward.
+Cancellation/error codes include `cancelled`, `render_failed`, `backend_unavailable` and
+`worker_failed`. A missing GPU is an error, not evidence of a CPU capture.

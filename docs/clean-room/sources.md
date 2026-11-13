@@ -22,7 +22,9 @@ proprietary implementation, help text or assets. Record more specific sections a
 | RUST-GUIDE | https://github.com/apollographql/skills/blob/main/skills/rust-best-practices/SKILL.md | Ownership, typed errors, lints and focused tests; verify recommendations against actual APIs. |
 | MCP-TOOLS | https://modelcontextprotocol.io/specification/2025-11-25/server/tools | Shared tool schemas, discovery, invocation and errors. |
 | MCP-SDK | https://docs.rs/rmcp/3.9.0/rmcp/ | Official Rust SDK, server and stdio only; inspected ServerHandler, structured tool results, lifecycle and bounded AsyncRwTransport APIs. |
+| MCP-CANCEL | https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/cancellation | Request cancellation/race semantics; inspected pinned SDK RequestContext token and handler shutdown. |
 | TOKIO | https://docs.rs/tokio/1.54.1/tokio/runtime/struct.Builder.html | Native adapter runtime with I/O/time drivers; engine and model remain independent of the runtime. |
+| TOKIO-WORKERS | https://github.com/tokio-rs/tokio/blob/tokio-1.54.1/tokio/src/task/blocking.rs | Bounded spawn_blocking jobs, semaphore budgeting and cooperative cancellation; a running blocking job cannot be aborted by dropping its JoinHandle. Published source inspected locally. |
 | TCP-LIFETIME | https://doc.rust-lang.org/std/net/struct.TcpListener.html | Bind only IPv4 localhost, obtain the actual port after bind(0), and close the listener with its owned lifetime. APIs checked on the pinned compiler. |
 | TOKIO-TAKE | https://github.com/tokio-rs/tokio/blob/tokio-1.54.1/tokio/src/io/util/take.rs | Bounded AsyncBufRead before JSON parsing; join/cancellation and deadlines are adapter responsibilities. |
 | JSON-GRAMMAR | https://www.rfc-editor.org/rfc/rfc8259 | JSON request grammar. LF framing, connection/deadline caps and reject/close policies are independent Bondline design decisions, not reference parity claims. |
@@ -34,6 +36,7 @@ proprietary implementation, help text or assets. Record more specific sections a
 | WGPU-DRAW | https://docs.rs/crate/wgpu/22.1.0/source/src/lib.rs | Published APIs for pipeline creation, validation scopes, instance draws and readback; actual pinned crate APIs inspected. |
 | PNG-ENCODER | https://docs.rs/png/0.18.1/png/struct.Encoder.html | MIT/Apache encoder; explicit RGBA8 and finalization, with validated frame bounds before encoding. |
 | PNG-ORACLE | https://pillow.readthedocs.io/en/12.3.0/reference/Image.html | Independent external Pillow verification/load; version pinned in requirements-dev.txt, never shipped or linked into the app. |
+| BASE64 | https://docs.rs/base64/0.22.1/base64/ | MIT/Apache-2.0 encoder, explicit padded standard alphabet for PNG JSON results; input is bounded by the renderer/codec, far below usize length overflow. Python base64 independently decodes command captures. |
 | DLOPEN2 | https://docs.rs/dlopen2/0.9.0/dlopen2/raw/struct.Library.html | MIT backend for OS library ownership and symbol resolution; implementation inspected from the published crate. |
 | WIN-MODULE | https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandleexw | Existing modules acquire an owned reference without rerunning library initializers; release with FreeLibrary. |
 | WIN-SYMBOL | https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getprocaddress | Resolve by validated symbol name while retaining that module reference. |

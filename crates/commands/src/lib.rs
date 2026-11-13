@@ -6,6 +6,10 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{collections::VecDeque, sync::Arc};
 
+mod capture;
+pub use bondline_render::Cancellation;
+pub use capture::{CaptureAdapter, PngCapture, Prepared, RenderBackend, RenderCapture};
+
 pub const MAX_REQUEST_BYTES: usize = 1024 * 1024;
 const MAX_HISTORY: usize = 128;
 
@@ -65,6 +69,7 @@ command_registry! {
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
     Redo(NoParams) => ("history.redo", "Restore the next authored document.", false),
+    Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -85,6 +90,12 @@ pub enum Error {
     RequestTooLarge,
     #[error("document revision counter exhausted")]
     RevisionExhausted,
+    #[error(transparent)]
+    Render(#[from] bondline_render::Error),
+    #[error(transparent)]
+    Png(#[from] bondline_io::Error),
+    #[error("GPU capture is not available on this target")]
+    BackendUnavailable,
 }
 
 #[derive(Debug, Serialize)]
@@ -100,6 +111,10 @@ impl Error {
             Self::NothingToUndo | Self::NothingToRedo => "empty_history",
             Self::Model(bondline_model::Error::MissingPage(_)) => "not_found",
             Self::RevisionExhausted => "revision_exhausted",
+            Self::Render(bondline_render::Error::Cancelled) => "cancelled",
+            Self::Render(bondline_render::Error::InvalidDimensions) => "invalid_params",
+            Self::Render(_) | Self::Png(_) => "render_failed",
+            Self::BackendUnavailable => "backend_unavailable",
             _ => "invalid_params",
         };
         ErrorInfo {
@@ -124,6 +139,8 @@ pub struct CommandResult {
     pub document: Arc<Document>,
     pub undo_depth: usize,
     pub redo_depth: usize,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capture: Option<PngCapture>,
 }
 
 #[derive(Debug, Default)]
@@ -146,15 +163,21 @@ impl Engine {
             document: Arc::clone(&self.document),
             undo_depth: self.undo.len(),
             redo_depth: self.redo.len(),
+            capture: None,
         }
     }
 
     pub fn execute_json(&mut self, input: &[u8]) -> Result<CommandResult, Error> {
+        self.prepare_json(input)?.complete()
+    }
+
+    /// Validate and snapshot under the engine lock, then complete outside it.
+    pub fn prepare_json(&mut self, input: &[u8]) -> Result<Prepared, Error> {
         if input.len() > MAX_REQUEST_BYTES {
             return Err(Error::RequestTooLarge);
         }
         let request: Request = serde_json::from_slice(input)?;
-        self.dispatch(&request.command, request.params)
+        self.prepare(Command::parse(&request.command, request.params)?)
     }
 
     pub fn dispatch(&mut self, name: &str, params: Value) -> Result<CommandResult, Error> {
@@ -162,6 +185,10 @@ impl Engine {
     }
 
     pub fn execute(&mut self, command: Command) -> Result<CommandResult, Error> {
+        self.prepare(command)?.complete()
+    }
+
+    pub fn prepare(&mut self, command: Command) -> Result<Prepared, Error> {
         let changed = match command {
             Command::Inspect(_) => false,
             Command::PageSetSize(params) => {
@@ -173,11 +200,22 @@ impl Engine {
             }
             Command::Undo(_) => self.undo()?,
             Command::Redo(_) => self.redo()?,
+            Command::Capture(params) => {
+                let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
+                let size = self
+                    .document
+                    .pages()
+                    .iter()
+                    .find(|page| page.id() == id)
+                    .ok_or(bondline_model::Error::MissingPage(id.get()))?
+                    .size();
+                return Prepared::capture(self.state(), params, size);
+            }
         };
-        Ok(CommandResult {
+        Ok(Prepared::immediate(CommandResult {
             changed,
             ..self.state()
-        })
+        }))
     }
 
     fn next_revision(&self) -> Result<u64, Error> {
@@ -276,7 +314,8 @@ mod tests {
                 "document.inspect",
                 "history.redo",
                 "history.undo",
-                "page.set_size"
+                "page.set_size",
+                "render.capture"
             ]
             .into_iter()
             .collect()

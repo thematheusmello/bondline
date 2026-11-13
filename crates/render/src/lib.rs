@@ -5,6 +5,8 @@ use std::sync::{
     atomic::{AtomicBool, Ordering},
 };
 
+pub const MAX_CAPTURE_DIMENSION_PX: u32 = 2048;
+
 /// Cooperative cancellation shared between an adapter and its rendering worker.
 #[derive(Clone, Debug, Default)]
 pub struct Cancellation(Arc<AtomicBool>);
@@ -74,7 +76,9 @@ pub enum Error {
 
 fn byte_count(width: u32, height: u32) -> Result<usize, Error> {
     // shortcut: captures are bounded to 2048 per axis; use tiled rendering for print-resolution export.
-    if !(1..=2048).contains(&width) || !(1..=2048).contains(&height) {
+    if !(1..=MAX_CAPTURE_DIMENSION_PX).contains(&width)
+        || !(1..=MAX_CAPTURE_DIMENSION_PX).contains(&height)
+    {
         return Err(Error::InvalidDimensions);
     }
     usize::try_from(u64::from(width) * u64::from(height) * 4).map_err(|_| Error::InvalidDimensions)

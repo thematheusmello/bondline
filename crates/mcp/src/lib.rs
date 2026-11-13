@@ -1,8 +1,9 @@
 //! Stdio MCP adapter. The SDK handles protocol lifecycle; the registry handles operations.
 
 pub mod control;
+mod work;
 
-use bondline_commands::{Engine, MAX_REQUEST_BYTES};
+use bondline_commands::{Command, Engine, MAX_REQUEST_BYTES};
 use rmcp::{
     ErrorData as McpError, RoleServer, ServerHandler, ServiceExt,
     model::{
@@ -39,6 +40,7 @@ impl From<rmcp::service::ServerInitializeError> for Error {
 pub struct CommandServer {
     engine: SharedEngine,
     tools: Vec<Tool>,
+    workers: work::Workers,
 }
 
 impl CommandServer {
@@ -61,7 +63,11 @@ impl CommandServer {
                 )
             })
             .collect::<Result<_, Error>>()?;
-        Ok(Self { engine, tools })
+        Ok(Self {
+            engine,
+            tools,
+            workers: work::Workers::default(),
+        })
     }
 }
 
@@ -89,7 +95,7 @@ impl ServerHandler for CommandServer {
     async fn call_tool(
         &self,
         request: CallToolRequestParams,
-        _context: RequestContext<RoleServer>,
+        context: RequestContext<RoleServer>,
     ) -> Result<CallToolResponse, McpError> {
         if self.get_tool(&request.name).is_none() {
             return Err(McpError::new(
@@ -104,21 +110,32 @@ impl ServerHandler for CommandServer {
                 None,
             ));
         }
-        let result = self
-            .engine
-            .lock()
-            .map_err(|_| McpError::internal_error("document engine lock poisoned", None))?
-            .dispatch(
+        let prepared = {
+            let mut engine = self
+                .engine
+                .lock()
+                .map_err(|_| McpError::internal_error("document engine lock poisoned", None))?;
+            Command::parse(
                 &request.name,
                 Value::Object(request.arguments.unwrap_or_default()),
-            );
+            )
+            .and_then(|command| engine.prepare(command))
+        };
+        let result = match prepared {
+            Ok(prepared) => {
+                self.workers
+                    .complete(prepared, context.ct.cancelled())
+                    .await
+            }
+            Err(error) => Err(error.info()),
+        };
         let response = match result {
             Ok(result) => {
                 CallToolResult::structured(serde_json::to_value(result).map_err(|_| {
                     McpError::internal_error("could not serialize command result", None)
                 })?)
             }
-            Err(error) => CallToolResult::structured_error(json!({"error":error.info()})),
+            Err(error) => CallToolResult::structured_error(json!({"error":error})),
         };
         Ok(response.into())
     }

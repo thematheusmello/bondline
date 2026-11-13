@@ -9,7 +9,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
     assert!(list.status.success());
     let commands: Value = serde_json::from_slice(&list.stdout)?;
     let commands = commands.as_array().ok_or("expected command array")?;
-    assert_eq!(commands.len(), 4);
+    assert_eq!(commands.len(), 5);
     assert!(
         commands
             .iter()
@@ -37,6 +37,38 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
     assert_eq!(
         state["document"]["pages"][0],
         json!({"id":1,"size":{"width_pt":612.0,"height_pt":792.0}})
+    );
+    Ok(())
+}
+
+#[test]
+fn executable_returns_a_png_capture_from_the_same_authored_revision()
+-> Result<(), Box<dyn std::error::Error>> {
+    let output = Command::new(env!("CARGO_BIN_EXE_bondline-cli"))
+        .args([
+            "run", "--cmd",
+            r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":72,"height_pt":144}}"#,
+            "--cmd",
+            r#"{"command":"render.capture","params":{"page_id":1,"width_px":8,"height_px":8,"backend":"cpu"}}"#,
+        ]).output()?;
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: Value = serde_json::from_slice(&output.stdout)?;
+    assert_eq!(result["revision"], 1);
+    assert_eq!(result["changed"], false);
+    assert_eq!(result["undo_depth"], 1);
+    assert_eq!(result["capture"]["width_px"], 8);
+    assert_eq!(result["capture"]["height_px"], 8);
+    assert_eq!(result["capture"]["backend"], "cpu");
+    assert_eq!(result["capture"]["adapter"], Value::Null);
+    assert!(
+        result["capture"]["png_base64"]
+            .as_str()
+            .ok_or("missing PNG")?
+            .starts_with("iVBORw0KGgo")
     );
     Ok(())
 }

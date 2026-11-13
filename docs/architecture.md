@@ -18,8 +18,11 @@ See control-protocol.md for the actual registered operations and explicit limits
 
 The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while
 holding it. Stdio is a separate process-local session. Only server/stdio SDK features are
-enabled. Future expensive jobs must run on immutable input snapshots outside this lock and
-reject stale revisions; this is not yet a background-job implementation.
+enabled. `Engine::prepare` completes short edits or returns an immutable capture plan;
+adapters release the lock before rendering/encoding it. Each server bounds capture workers
+to two, keeps permits with the actual worker lifetime and cancels cooperatively when an
+awaiting task is dropped. Captures report their input revision and never apply results to
+authored state. This is a bounded query path, not a general authoring/background-job system.
 
 The native app and opt-in loopback server now share this engine. A dedicated adapter thread
 owns the Tokio listener/tasks. Input is bounded before JSON decoding; no engine guard crosses

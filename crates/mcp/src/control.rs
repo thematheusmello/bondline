@@ -1,6 +1,6 @@
 //! Opt-in, bounded newline JSON control on IPv4 loopback only.
 
-use crate::SharedEngine;
+use crate::{SharedEngine, work::Workers};
 use bondline_commands::{Error as CommandError, ErrorInfo, MAX_REQUEST_BYTES};
 use serde_json::{Value, json};
 use std::{
@@ -102,6 +102,7 @@ async fn serve(
     mut stop: oneshot::Receiver<()>,
 ) -> io::Result<()> {
     let mut clients = JoinSet::new();
+    let workers = Workers::default();
     let result = loop {
         tokio::select! {
             biased;
@@ -110,7 +111,7 @@ async fn serve(
             accepted = listener.accept() => match accepted {
                 Ok((stream, _)) => {
                     if clients.len() < MAX_CLIENTS {
-                        clients.spawn(connection(stream, Arc::clone(&engine), Arc::clone(&on_change)));
+                        clients.spawn(connection(stream, Arc::clone(&engine), Arc::clone(&on_change), workers.clone()));
                     }
                 }
                 Err(error) if matches!(error.kind(), io::ErrorKind::Interrupted | io::ErrorKind::ConnectionAborted) => {},
@@ -135,6 +136,7 @@ async fn connection(
     stream: TcpStream,
     engine: SharedEngine,
     on_change: Arc<dyn Fn() + Send + Sync>,
+    workers: Workers,
 ) -> io::Result<()> {
     let (read, mut write) = stream.into_split();
     let mut reader = BufReader::new(read);
@@ -170,14 +172,22 @@ async fn connection(
         bytes.pop();
         let result = engine
             .lock()
-            .map(|mut engine| engine.execute_json(&bytes))
+            .map(|mut engine| engine.prepare_json(&bytes))
             .map_err(|_| ());
         match result {
-            Ok(Ok(result)) => {
-                if result.changed {
-                    on_change();
+            Ok(Ok(prepared)) => {
+                match workers
+                    .complete(prepared, tokio::time::sleep(IO_DEADLINE))
+                    .await
+                {
+                    Ok(result) => {
+                        if result.changed {
+                            on_change();
+                        }
+                        send(&mut write, json!({"result":result})).await?;
+                    }
+                    Err(error) => send(&mut write, json!({"error":error})).await?,
                 }
-                send(&mut write, json!({"result":result})).await?;
             }
             Ok(Err(error)) => {
                 let malformed = matches!(error, CommandError::InvalidParams(_));
