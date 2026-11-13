@@ -8,6 +8,8 @@ observed/inferred limits; no strict program-inspection isolation is now claimed.
 
 | ID | Public source | Decision / limitations |
 |---|---|---|
+| CHART-MAY26 | https://assets.revvitysignals.com/asset/0b9656e8-339d-47ab-9834-6c08beb6abee/Full-Dot-Chart-ChemDraw-Suite-of-Products.pdf | Exact13-page May2026 chart/hash and nine qualified Professional requirement groups are in research/capability-chart-audit.md. All pages visually reviewed; no26.1 build or workflow proof. Raw artwork stays ignored. The separate December2025 URL returned404, so no comparison is claimed. |
+| CDX-CANDIDATE-EXCLUDED | https://github.com/rdkit/rdkit/blob/c686c2c945df370c2f95ebe20aae2872a36f7c17/Code/GraphMol/test_data/CDX/structure_4.cdx |402-byte candidate/hash/history and actual RDKit-versus-TrailingData probes in research/cdx-corpus-candidate.md. Original file authorship remains unestablished; excluded, not declared unlicensed. No data trimming, corpus admission or parser relaxation. |
 | KB-HELP-ACCESS | https://support.revvitysignals.com/hc/en-us/articles/9130327027220 | Unversioned installed-Help access roles: Contents, Getting Started, Tutorials, Basics. No public full26.1 guide URL/entitlement established. Provisional missing roles, not permission to copy help. |
 | KB-COPY-DRAG | https://support.revvitysignals.com/hc/en-us/articles/4408233546900 | Older Ctrl versus newer Alt copy-drag, with no cutoff/platform/tool context. G25 mapping stays qualified until actual26.1 evidence. |
 | KB-LONG-BOND-21 | https://support.revvitysignals.com/hc/en-us/articles/5309897982484 | Exact21.0.0.28 body specifies75% longer for0 at contextual hotspot; title says2×. Do not choose a26.1 multiplier from that disagreement. Companion8745549205908 is nonnumeric. |

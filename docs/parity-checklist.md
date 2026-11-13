@@ -769,3 +769,13 @@ Pick the next unblocked roadmap item, cite its row ID in verification evidence, 
 through the shared registry with tests before changing a state. Do not mark a row verified
 because its backend, menu button, schema or placeholder exists. Keep exact platform and
 workflow limitations beside the row. Preserve IDs when adding or reorganizing entries.
+
+## Qualified capability refinements
+
+The May2026 official chart adds nine explicit requirement groups in
+[capability-chart-audit.md](research/capability-chart-audit.md), CC-01 through CC-09. They
+refine the existing clipboard, document-style, stereo, query-flag, hydrogen-bond, descriptor,
+format-direction, monomer and optional-integration anchors. All remain missing. These are
+capability cases, not nine new menu controls; the576-control count is unchanged. The chart
+is not a26.1 build or an exact workflow/default specification. Preserve its platform/tier
+qualifications and the independent offline target when choosing implementation tests.

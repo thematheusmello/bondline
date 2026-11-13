@@ -93,3 +93,11 @@ predictions, annotations and file types) visible in the parity backlog until sup
 
 No milestone claims full commercial parity. Account/cloud/licensing services are not required
 for Bondline; unsupported reference integrations remain identified rather than disappearing.
+
+The [May2026 capability audit](docs/research/capability-chart-audit.md) refines existing
+milestones with explicit placement-aware paste, dark drawing styles, axial/M/P stereo,
+chirality-flag interpretation, hydrogen-bond relationships, named descriptors, additional
+format directions and monomer cases. All remain missing with source/platform qualifications.
+Optional scientific-service connectors must not become offline creation dependencies.
+The [CDX candidate review](docs/research/cdx-corpus-candidate.md) adds a concrete unsupported
+framing/provenance question; it does not add a passing corpus file or justify relaxed parsing.

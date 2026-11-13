@@ -86,3 +86,12 @@
   the selected system runtime. It remains a development tool, outside the shipped application.
 - Before the M5 WebAssembly release, resolve the candidate browser graph's Unicode-licensed
   identifier data. Current native license gates do not imply browser approval.
+
+- The May2026 capability chart adds qualified axial stereo, descriptor/platform, file-direction,
+  clipboard-placement and monomer cases; it is not an exact26.1 guide. Its chirality override,
+  hydrogen-bond grouping, ChemScript platform and tier details need behavioral/spec evidence.
+  See [the capability audit](../research/capability-chart-audit.md). A separate December chart URL returned404.
+- One402-byte RDKit CDX candidate has incomplete original-file provenance and remains excluded.
+  External RDKit reads ethanol; Bondline rejects the two zero bytes after independently decoded
+  root end400. Resolve framing/header/EOF using public specs before changing policy; do not
+  trim bytes or treat consumer acceptance as the specification. See [the candidate review](../research/cdx-corpus-candidate.md).

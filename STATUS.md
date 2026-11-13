@@ -211,8 +211,12 @@ full M0–M5 goal remains active.
 Shared-file-control final local/native checkpoint2026-11-13 19:49:29 UTC: all intentional
 product Rust is frozen and passed the aggregate/native evidence above. No local Cargo,
 file worker, native/controller process or CUA task remains. Hosted run43496010615 is running at this exact source; see handles below.
-A separate read-only agent is comparing two official public capability-chart PDFs with the
-inventory; its ignored report is not product/26.1 runtime evidence. Do not restart completed
+The bounded public capability-chart audit is complete:13 May2026 pages visually reviewed,
+nine qualified requirement groups added as refinements without inflating the576 controls.
+The December URL returned404. A402-byte RDKit CDX candidate remains excluded for incomplete
+original-file provenance; external RDKit reads ethanol, current parser rejects trailing zeros.
+See the committed research reports; no product/parser/corpus change followed from them.
+All research agents/processes finished; only the new hosted jobs below remain live. Do not restart completed
 close/file/parser checks or claim full M0 complete from this finite control slice.
 
 New hosted run confirmed2026-11-13 19:51 UTC:
