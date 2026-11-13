@@ -74,9 +74,12 @@ source-backed CDXML projections, native elemental encoding, owned snapshots, PNG
 bounded native CDXML filesystem I/O; see docs/native-file-io.md for publication/access limits);
 commands (L3, registry and complete stored-snapshot Arc history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
-and `compat/clipboard-win` alone opt into reviewed OS unsafe; `compat/hexf-parse` forbids
+and `compat/clipboard-win` opt into reviewed OS unsafe; `compat/hexf-parse` forbids
 unsafe. These three original compatibility packages retain upstream package names solely
-for Cargo patch routing. The eframe source fork and Apache font retain upstream notices.
+for Cargo patch routing. The eframe/winit source forks and Apache font retain upstream notices.
+The pinned winit macOS application-quit callback is the other reviewed OS-boundary exception:
+two standard main-thread AppKit visibility actions, with exact source/pin/native evidence in
+vendor/winit/BONDLINE-PATCH.md. No unsafe enters Bondline's UI/model/command/format crates.
 
 ## Test first, then implement
 

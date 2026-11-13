@@ -776,3 +776,34 @@ dependency entries. Pinned ASan completed 10000 runs with seed3641879538/max_len
 coverage3656/features10813/corpus669 entries175KiB/reported RSS178MiB. Log:
 target/file-io-fuzz.log. Harness and committed fixtures stayed unchanged; this checks the
 existing parser build/smoke with the new graph, not filesystem behavior or exhaustive safety.
+
+## Cancellable macOS native Quit, 2026-11-13
+
+Native RED: on binary86a09496e218b894669135d4659e5619868bc55c6afa9db696fc71126e5cac1c,
+Cmd+Q discarded a fourth unsaved fragment despite the File-menu close guard. Exact source
+inspection showed winit0.30.13's native menu sends terminate: while its delegate lacks
+applicationShouldTerminate:. Apple documents that delegate's termination reply; the pinned
+fork now restores Winit windows and queues their existing CloseRequested events, returning
+Cancel while client approval runs, or Now with no Winit windows. Source/unsafe reasons and
+exact upstream archive/VCS identities are in vendor/winit/BONDLINE-PATCH.md.
+
+Native GREEN with new file UI on binary748b1c655fa8e41575b3c36f939f54d7ccd478b3b49e4957e6c0643fdc1df031:
+dirty Cmd+Q prompts; Cancel retains the document; Cmd+W prompts; Quit then Save opens the
+chooser, saves and exits. Native application-menu Quit separately prompts, and Discard exits.
+External Expat/RDKit checks the one-fragment saved file as CC/C2H6; its SHA-256 is
+023f407a7bca28831b9a1fc6c66ea47410e7fa491fd972726d794d531465b7ea.
+The native red window close also prompts and Cancel retains the dirty document. The test
+used the UI agent's sole CUA session; root sent no concurrent native input. This proves the
+native route with that UI build, not atomic multi-document closing or session logout/shutdown.
+Hidden/Dock visibility and Touch Bar hardware remain unverified.
+
+An archive comparison verified all217 published winit paths. Four CC-BY-SA documentation
+illustrations are omitted from the vendor copy; their attribution is retained. All remaining
+213 files are byte-exact except src/platform_impl/macos/app_state.rs, plus one patch record.
+No runtime source or font is changed by the omission. The retained Apache LICENSE
+SHA-256 is6dc0e068dcf3a5bc8e054205b85b7720e1d49265bbc64bf515d2cf79197df69a.
+Cargo update changed only winit's registry-to-local source; versions/graph stayed fixed.
+Local aggregate with this bridge passes193 tests, formatting, clippy-Dwarnings, layers,
+licenses153/164/219 and the documented corpus subset (target/files-ci-final.log).
+Current native file UI remains a separate integration commit. These checks do not prove
+the outstanding Mac accessibility SetValue bridge, whose upstream selector is empty.

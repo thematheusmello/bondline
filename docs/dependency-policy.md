@@ -23,6 +23,11 @@ fork/pin and evidence practices, not those projects' broader permitted license s
   Disable only the optional native external-URL launcher, eliminating URL/IDNA Unicode data.
   Keep accessibility and native text clipboard. Delete orphaned private DummyStorage.
   Full upstream licenses are adjacent; see BONDLINE-PATCH.md for the exact changes.
+- `vendor/winit`: the unchanged 0.30.13 package plus one macOS application-delegate
+  callback, retaining original notices. Archive SHA-256 and VCS identity are recorded in
+  its BONDLINE-PATCH.md. Native Quit now requests cancellable client close approval; its
+  two standard main-thread AppKit actions are the isolated reviewed unsafe extension.
+  No graphics version, declared license, font or transitive package is changed.
 - `compat/libloading`: original API adapter over MIT `dlopen2 0.9.0`. It does not copy
   upstream ISC code. Preserve symbol lifetimes and lookup errors (including EGL version
   negotiation), validate pointer sizes/C strings, and support native platform loader flags.
@@ -42,7 +47,8 @@ fork/pin and evidence practices, not those projects' broader permitted license s
   MIT/Apache declaration, bytes and notice are also checked in the asset manifest.
 
 OS ABI calls are the only new unsafe exception, isolated in the loader and Win32 clipboard
-adapters. All operations carry local safety reasons; the rest of the workspace forbids unsafe.
+adapters and the pinned winit macOS quit callback. All operations carry local safety reasons;
+Bondline's UI/model/format/command crates continue to forbid unsafe.
 Adapters deliberately implement the inspected pinned consumers' surface, are not published
 as general replacements, and need reinspection when those consumers change.
 
