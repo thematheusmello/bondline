@@ -1108,7 +1108,10 @@ See native-file-ui.md for exact binary hash, excluded initial ambiguity, resolve
 guard and platform limits. No new golden approval or interactive Windows/Linux evidence is
 claimed; the existing approved scene/hash remains unchanged.
 
-Published frozen source65b5fb8 starts
+Published frozen source65b5fb8 passes all four jobs in
 [run43496010615](https://github.com/thematheusmello/bondline/actions/runs/43496010615).
-As of19:51UTC, all four jobs acquired runners and are running; no full-platform GREEN is
-claimed. Public maina135a24 retains verified shared-close source72742fb until this run passes.
+Mac268 (265 workspace plus3 bridge), Linux266 and Windows260 tests pass, as do all actual
+native windows and both bounded Linux parser ASan targets. Source was integrated into main
+only after GREEN; later research/status commits change documentation alone. Software-driver
+scope and interactive Windows/Linux limits remain explicit in ci.md/native-file-ui.md.
+These jobs are terminal; no local/native/CUA/research/hosted work remains live.

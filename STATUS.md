@@ -7,10 +7,10 @@ branch was fast-forwarded into main; product checkpoint ccf8c50 contains the fin
 Inspect Git log for subsequent format/documentation hashes. Do not restart or discard existing
 work. No release/installer distribution or reference account action was performed.
 
-Public maina135a24 contains shared-close source72742fb5d08384a314060ce7dae52d41c0c91f3e,
-native integration, runtime quality-tool correctionabd35bf and tested CDX sourcea73bed7.
+Public main now includes shared-file-control source65b5fb8db0b7c6fc44986bd59d747bd3a5644a26,
+shared-close source72742fb, runtime quality-tool correctionabd35bf and tested CDX sourcea73bed7.
 Published shared-file-control source65b5fb8db0b7c6fc44986bd59d747bd3a5644a26
-on feat/shared-file-controls adds eleven-command discovery, typed delivered
+adds eleven-command discovery, typed delivered
 bindings and guarded native file-presentation requests. Product Rust is frozen; aggregate
 CI and final native acceptance pass locally. Source publication/hosted work is recorded below.
 Native corrected binary hashes are recorded separately for each checkpoint. Hosted CDX GREEN43480423381 is terminal; its first
@@ -66,8 +66,7 @@ known Save, malformed retention, actual failure/retry, committed Quit Cancel/Sav
 reopen and capture reply-drain. Independent XML/RDKit confirms1125bytes/three CC fragments,
 SHA771fdaf88be2129d633692bfca5a81627885c6bb7022777ca5c1b346016f7347. All native/controllers/CUA
 ended. Initial unexplained state is excluded; see native-file-ui.md. Keep this owned copy
-separate from later target/debug builds. The new
-source still needs its own hosted checks before main integration.
+separate from later target/debug builds. Its hosted run43496010615 now passes all four jobs; source is integrated into main after GREEN.
 
 Previous actual-root cargo xtask ci passes233 workspace tests plus3 native AccessKit bridge
 tests, fmt/clippy/layers/licenses/assets/corpus; log target/shared-close-ci-integrated.log.
@@ -171,9 +170,12 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 
 ## Next exact actions
 
-1. Shared-file-control local/native acceptance is complete. Publish this recoverable
-   source checkpoint and follow its new hosted checks before main integration. Shared-close run43488771976 and earlier file/CDX
-   runs are terminal GREEN; do not duplicate or substitute them for new-source evidence.
+1. Current file-control source65b5fb8 passed local/native and hosted43496010615, then was
+   integrated into main. Do not repeat completed gates. Next implement shared discovery/
+   typed bindings for delivered close-dialog Save/Discard/Cancel/Keep Open, reusing the
+   existing document.close/ui.file commands. Read controls.rs, file_workflow::dialogs and
+   mcp/work.rs; test correct busy/context availability before native wiring. Do not rebuild
+   close policy or invent a general scheduler gate.
 2. Continue qualified inventory work, identifying actual26.1 builds and complete tool/context
    menus without claiming completeness from counts, timestamps or cloud imagery.
 3. Shared document.close is now implemented with adapter/native evidence; do not build it
@@ -210,18 +212,22 @@ full M0–M5 goal remains active.
 
 Shared-file-control final local/native checkpoint2026-11-13 19:49:29 UTC: all intentional
 product Rust is frozen and passed the aggregate/native evidence above. No local Cargo,
-file worker, native/controller process or CUA task remains. Hosted run43496010615 is running at this exact source; see handles below.
+file worker, native/controller process or CUA task remains. Hosted run43496010615 is terminal GREEN at this exact source; see handles below.
 The bounded public capability-chart audit is complete:13 May2026 pages visually reviewed,
 nine qualified requirement groups added as refinements without inflating the576 controls.
 The December URL returned404. A402-byte RDKit CDX candidate remains excluded for incomplete
 original-file provenance; external RDKit reads ethanol, current parser rejects trailing zeros.
 See the committed research reports; no product/parser/corpus change followed from them.
-All research agents/processes finished; only the new hosted jobs below remain live. Do not restart completed
+All research agents/processes and hosted jobs finished; none remains live. Do not restart completed
 close/file/parser checks or claim full M0 complete from this finite control slice.
 
-New hosted run confirmed2026-11-13 19:51 UTC:
+Terminal hosted run confirmed2026-11-13 20:00:43 UTC:
 https://github.com/thematheusmello/bondline/actions/runs/43496010615 at65b5fb8.
-Parser ASan132129175301, Mac132129175728, Ubuntu132129175764 and Windows132129175872 have
-all acquired runners and are in progress. Overall success is unverified. Recheck these exact
-handles before main integration; do not duplicate live jobs. Public maina135a24 remains the
-terminal all-platform shared-close checkpoint. No release/installer action was requested.
+Parser ASan132129175301, Mac132129175728, Ubuntu132129175764 and Windows132129175872 all
+completed successfully. Aggregate totals: Mac268 (265 workspace plus3 bridge), Linux266,
+Windows260; all three native window launches and both bounded parser ASan targets pass.
+Adapters remain Metal/Apple Paravirtual IntegratedGpu, Vulkan/llvmpipe Cpu and Dx12/Microsoft
+Basic Render Driver Cpu. These are not interactive Windows/Linux workflows or hardware
+performance. Main was fast-forwarded only after GREEN; subsequent status/research changes
+are documentation-only. No local/native/controller/CUA/research/hosted job remains live.
+No release/installer action was requested. Full M0–M5 remains active and incomplete.

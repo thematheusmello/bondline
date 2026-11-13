@@ -113,3 +113,16 @@ Driver Cpu and Vulkan/llvmpipe Cpu. This verifies shared-close engine/adapter/UI
 window launch, not interactive Windows/Linux closing or hardware performance. Main was
 fast-forwarded after GREEN, with documentation-only status updates afterward. No job
 remains live and no release was published.
+
+## Shared file-control integration
+
+[Run43496010615](https://github.com/thematheusmello/bondline/actions/runs/43496010615) at
+65b5fb8 passes all four jobs. Aggregate tests: Mac268 (265 workspace plus3 native bridge),
+Linux266, Windows260. Every actual native three-frame window launch and both bounded Linux
+parser ASan targets pass. Each aggregate printed its invoked workspace root. Adapters are
+Metal/Apple Paravirtual IntegratedGpu, Vulkan/llvmpipe Cpu and Dx12/Microsoft Basic Render
+Driver Cpu. Interactive native acceptance is separately Mac/Apple M3 Max/Metal, exact owned
+binary4a5425b0...; no interactive Windows/Linux or hardware-performance claim follows.
+Source was fast-forwarded into main after GREEN, with documentation-only updates after the
+tested source. All jobs are terminal; do not rerun unchanged source or substitute an older
+run for future changes. No release, signing or installer publication occurred.
