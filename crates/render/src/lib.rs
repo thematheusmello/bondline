@@ -8,9 +8,21 @@ pub struct Frame {
     pub rgba: Vec<u8>,
 }
 
+impl Frame {
+    /// Validate caller-owned data before any interchange encoder consumes it.
+    pub fn validate(&self) -> Result<(), Error> {
+        if self.rgba.len() != byte_count(self.width, self.height)? {
+            return Err(Error::InvalidFrame);
+        }
+        Ok(())
+    }
+}
+
 /// Failures are explicit; a missing GPU never silently becomes a CPU result.
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("RGBA byte count does not match frame dimensions")]
+    InvalidFrame,
     #[error("capture dimensions must be between 1 and 2048 pixels")]
     InvalidDimensions,
     #[error("viewport dimensions must be between 1 and 100000 pixels")]

@@ -1,0 +1,2 @@
+# External test consumers only; never bundled with the Rust application.
+Pillow==12.3.0

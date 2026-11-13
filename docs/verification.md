@@ -171,3 +171,17 @@ The actual new development bundle was opened and Page -> Rotate page displayed 8
 process remains. This is AI native inspection, not human golden approval. Integrated gates
 pass: 44 tests, rustfmt, workspace/all-targets clippy, layers, native declared licenses/assets,
 and Windows/Linux all-targets source checks. No native Windows/Linux or browser pass.
+
+## PNG interchange backend, 2026-11-13
+
+RED: `cargo test -p bondline-io` failed for missing encode_png. GREEN: an independent external
+Pillow 12.3.0 process verifies PNG integrity, RGBA mode, 3x2 dimensions and all 24 expected
+bytes, including alpha 128 and alpha 0 with nonzero RGB. Malformed byte counts, zero/oversized
+and overflowing dimensions fail before encoding. PNG output is finalized with IEND; no
+filesystem operation or application export workflow is claimed. The native app does not
+need Python; the test interpreter/oracle setup is documented in development.md.
+
+Integrated checkpoint: 46 tests, rustfmt, workspace/all-targets clippy, actual layers and
+native license/asset gates pass. Windows/Linux all-targets source checks pass. The PNG crate
+is already part of the audited graphics dependency graph; Pillow runs externally only.
+No new native runtime, full M0, chemical compatibility or human-golden claim.

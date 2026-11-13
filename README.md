@@ -7,7 +7,7 @@ No file compatibility or chemical drawing workflow is implemented yet. Bondline 
 with, endorsed by, or sponsored by ChemDraw or Revvity Signals.
 
 Current capabilities: native page sizing/rotation and Undo/Redo, independently sourced Apache-2.0
-font, original icon, CPU/GPU clear-and-readback reference, and strict native runtime/asset
+font, original icon, shared CPU/GPU page-scene reference, and strict native runtime/asset
 license gates. Native macOS launch was visually inspected; Windows/Linux are cross-checked,
 with native runtime validation pending. This is a development foundation, not a chemical editor yet.
 The shared registry and CLI can inspect an in-memory page, set its dimensions, undo and redo.
@@ -33,7 +33,8 @@ it opens its own in-memory document. See [the command contract](docs/control-pro
 For the active desktop document, launch with `--control-port 0`; the app reports and displays
 its loopback address. This mode is opt-in and uses bounded newline JSON requests.
 
-Current work: connect native actions and automation, then add lossless CDXML.
+Current work: registry-driven offscreen PNG capture, then corpus/CDXML and CI.
+Workspace PNG tests need the external Pillow oracle described in [development.md](docs/development.md).
 See [STATUS.md](STATUS.md) for actual progress and [ROADMAP.md](ROADMAP.md) for the full target.
 
 Original code is dual-licensed MIT OR Apache-2.0. Third-party notices remain with their files.

@@ -506,6 +506,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "bondline-io"
+version = "0.1.0"
+dependencies = [
+ "bondline-render",
+ "png",
+ "serde_json",
+ "thiserror 2.0.21",
+]
+
+[[package]]
 name = "bondline-mcp"
 version = "0.1.0"
 dependencies = [

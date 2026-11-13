@@ -1,0 +1,20 @@
+[package]
+name = "bondline-io"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[package.metadata.bondline]
+layer = 2
+
+[dependencies]
+bondline-render = { path = "../render" }
+png = "=0.18.1"
+thiserror = "2"
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[lints]
+workspace = true
