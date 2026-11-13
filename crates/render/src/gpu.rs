@@ -1,63 +1,73 @@
-use crate::{Cancellation, Error, Frame, Rectangle, Scene};
+use crate::{Cancellation, Error, Frame, Primitive, Scene};
 use wgpu::util::DeviceExt;
 
 fn draw_resources(
     device: &wgpu::Device,
     scene: &Scene,
 ) -> Option<(wgpu::RenderPipeline, wgpu::BindGroup, wgpu::Buffer, u32)> {
-    // Clip on the host so distant integer coordinates cannot lose precision in the vertex shader.
-    let rectangles: Vec<_> = scene
-        .rectangles
-        .iter()
-        .filter_map(|rectangle| {
-            let right = (rectangle.x + rectangle.width).min(scene.width);
-            let bottom = (rectangle.y + rectangle.height).min(scene.height);
-            (rectangle.x < right && rectangle.y < bottom).then(|| Rectangle {
-                width: right - rectangle.x,
-                height: bottom - rectangle.y,
-                ..rectangle.clone()
-            })
-        })
-        .collect();
-    if rectangles.is_empty() {
-        return None;
-    }
     let mut bytes = Vec::new();
     for value in [scene.width, scene.height] {
         bytes.extend_from_slice(&value.to_le_bytes());
     }
-    for Rectangle {
-        x,
-        y,
-        width,
-        height,
-        color,
-    } in &rectangles
-    {
-        for value in [*x, *y, *width, *height, u32::from_le_bytes(*color)] {
+    let mut count = 0;
+    for primitive in &scene.primitives {
+        // Clip the conservative raster bounds before converting to vertex floats.
+        let Some(bounds) = primitive.bounds(scene.width, scene.height) else {
+            continue;
+        };
+        for value in [bounds.x, bounds.y, bounds.width, bounds.height] {
             bytes.extend_from_slice(&value.to_le_bytes());
         }
+        let (geometry, kind) = match primitive {
+            Primitive::Rectangle(_) => ([0.0; 6], 0u32),
+            Primitive::Stroke(stroke) => {
+                let [ax, ay] = stroke.begin.map(f64::from);
+                let [bx, by] = stroke.end.map(f64::from);
+                let (dx, dy) = (bx - ax, by - ay);
+                let length = dx.hypot(dy);
+                (
+                    [
+                        ax as f32,
+                        ay as f32,
+                        (dx / length) as f32,
+                        (dy / length) as f32,
+                        length as f32,
+                        stroke.width,
+                    ],
+                    1u32,
+                )
+            }
+        };
+        for value in geometry {
+            bytes.extend_from_slice(&value.to_le_bytes());
+        }
+        bytes.extend_from_slice(&u32::from_le_bytes(bounds.color).to_le_bytes());
+        bytes.extend_from_slice(&kind.to_le_bytes());
+        count += 1;
+    }
+    if count == 0 {
+        return None;
     }
     let buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-        label: Some("Bondline rectangle instances"),
+        label: Some("Bondline primitive instances"),
         contents: &bytes,
         usage: wgpu::BufferUsages::STORAGE,
     });
     let layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
-        label: Some("Bondline rectangle storage"),
+        label: Some("Bondline primitive storage"),
         entries: &[wgpu::BindGroupLayoutEntry {
             binding: 0,
-            visibility: wgpu::ShaderStages::VERTEX,
+            visibility: wgpu::ShaderStages::VERTEX_FRAGMENT,
             ty: wgpu::BindingType::Buffer {
                 ty: wgpu::BufferBindingType::Storage { read_only: true },
                 has_dynamic_offset: false,
-                min_binding_size: std::num::NonZeroU64::new(28),
+                min_binding_size: std::num::NonZeroU64::new(56),
             },
             count: None,
         }],
     });
     let group = device.create_bind_group(&wgpu::BindGroupDescriptor {
-        label: Some("Bondline rectangle bindings"),
+        label: Some("Bondline primitive bindings"),
         layout: &layout,
         entries: &[wgpu::BindGroupEntry {
             binding: 0,
@@ -65,16 +75,16 @@ fn draw_resources(
         }],
     });
     let pipeline_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
-        label: Some("Bondline rectangle pipeline layout"),
+        label: Some("Bondline primitive pipeline layout"),
         bind_group_layouts: &[&layout],
         push_constant_ranges: &[],
     });
     let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
-        label: Some("Bondline rectangle shader"),
-        source: wgpu::ShaderSource::Wgsl(include_str!("rectangles.wgsl").into()),
+        label: Some("Bondline primitive shader"),
+        source: wgpu::ShaderSource::Wgsl(include_str!("primitives.wgsl").into()),
     });
     let pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
-        label: Some("Bondline rectangle pipeline"),
+        label: Some("Bondline primitive pipeline"),
         layout: Some(&pipeline_layout),
         vertex: wgpu::VertexState {
             module: &shader,
@@ -98,7 +108,7 @@ fn draw_resources(
         multiview: None,
         cache: None,
     });
-    Some((pipeline, group, buffer, rectangles.len() as u32))
+    Some((pipeline, group, buffer, count))
 }
 
 /// Render and read back an empty native GPU canvas, with the actual adapter identity.
@@ -112,12 +122,12 @@ pub async fn gpu_solid(
         width,
         height,
         background: color,
-        rectangles: Vec::new(),
+        primitives: Vec::new(),
     })
     .await
 }
 
-/// Draw ordered rectangle instances with the GPU rasterizer and read back straight RGBA8.
+/// Draw ordered instances with GPU coverage evaluation and read back straight RGBA8.
 pub async fn gpu_scene(scene: &Scene) -> Result<(Frame, wgpu::AdapterInfo), Error> {
     gpu_scene_with_cancel(scene, &Cancellation::default()).await
 }

@@ -25,6 +25,8 @@ This pulls the io/render dependencies into the isolated build, but does not init
 GPU or fuzz renderer behavior. The isolated workspace uses the same original loader/hex
 compatibility patches and pins gpu-descriptor 0.3.0 in its own lockfile. Existing parser/
 libFuzzer package pins remain unchanged. This extra build graph is test-only.
+The renderer now uses the already-reviewed ab_glyph/font-parser pins; the isolated lockfile
+includes those four packages too. Checking this graph does not fuzz glyphs or rendering.
 Raw UTF-8 inputs and parsed attribute values also exercise exact integral-property and
 UINT32 source-ID decoding. Successful conversions must agree with integer range checks
 and retain their exact value after canonical decimal formatting. Independent Decimal

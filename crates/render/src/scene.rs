@@ -1,4 +1,4 @@
-use crate::{Cancellation, Error, Frame, byte_count, cpu_solid};
+use crate::{Cancellation, Error, Frame, PageViewport, Stroke, byte_count, cpu_solid};
 use bondline_model::PageSize;
 
 /// Integer, half-open rectangle in canvas pixels. Later rectangles replace earlier pixels.
@@ -11,35 +11,63 @@ pub struct Rectangle {
     pub color: [u8; 4],
 }
 
-/// Shared canvas input. No antialiasing, blending or chemical primitives are claimed yet.
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq)]
+pub enum Primitive {
+    Rectangle(Rectangle),
+    Stroke(Stroke),
+}
+
+impl Primitive {
+    pub(crate) fn bounds(&self, width: u32, height: u32) -> Option<Rectangle> {
+        match self {
+            Self::Stroke(stroke) => stroke.bounds(width, height),
+            Self::Rectangle(rectangle) => {
+                let right = (rectangle.x + rectangle.width).min(width);
+                let bottom = (rectangle.y + rectangle.height).min(height);
+                (rectangle.x < right && rectangle.y < bottom).then(|| Rectangle {
+                    width: right - rectangle.x,
+                    height: bottom - rectangle.y,
+                    ..rectangle.clone()
+                })
+            }
+        }
+    }
+}
+
+/// Ordered source-replacement primitives. No blending or antialiasing in readbacks.
+#[derive(Clone, Debug, PartialEq)]
 pub struct Scene {
     pub width: u32,
     pub height: u32,
     pub background: [u8; 4],
-    pub rectangles: Vec<Rectangle>,
+    pub primitives: Vec<Primitive>,
 }
 
 impl Scene {
     pub(crate) fn validate(&self) -> Result<usize, Error> {
         let count = byte_count(self.width, self.height)?;
-        if self.rectangles.len() > 4096 {
+        if self.primitives.len() > 4096 {
             return Err(Error::SceneTooComplex);
         }
-        for rectangle in &self.rectangles {
-            if rectangle.width == 0
-                || rectangle.height == 0
-                || rectangle.x.checked_add(rectangle.width).is_none()
-                || rectangle.y.checked_add(rectangle.height).is_none()
-            {
-                return Err(Error::InvalidGeometry);
+        for primitive in &self.primitives {
+            match primitive {
+                Primitive::Stroke(stroke) => stroke.validate()?,
+                Primitive::Rectangle(rectangle) => {
+                    if rectangle.width == 0
+                        || rectangle.height == 0
+                        || rectangle.x.checked_add(rectangle.width).is_none()
+                        || rectangle.y.checked_add(rectangle.height).is_none()
+                    {
+                        return Err(Error::InvalidGeometry);
+                    }
+                }
             }
         }
         Ok(count)
     }
 }
 
-/// CPU reference: clip each rectangle to the frame and replace straight RGBA8 pixels.
+/// CPU reference: clip primitives and replace covered pixel centers with straight RGBA8.
 pub fn cpu_scene(scene: &Scene) -> Result<Frame, Error> {
     cpu_scene_with_cancel(scene, &Cancellation::default())
 }
@@ -48,21 +76,32 @@ pub fn cpu_scene_with_cancel(scene: &Scene, cancel: &Cancellation) -> Result<Fra
     scene.validate()?;
     cancel.check()?;
     let mut frame = cpu_solid(scene.width, scene.height, scene.background)?;
-    for rectangle in &scene.rectangles {
-        let right = (rectangle.x + rectangle.width).min(scene.width);
-        let bottom = (rectangle.y + rectangle.height).min(scene.height);
-        let left = rectangle.x.min(scene.width);
-        for y in rectangle.y.min(scene.height)..bottom {
+    for primitive in &scene.primitives {
+        let Some(bounds) = primitive.bounds(scene.width, scene.height) else {
+            continue;
+        };
+        let right = bounds.x + bounds.width;
+        let bottom = bounds.y + bounds.height;
+        for y in bounds.y..bottom {
             cancel.check()?;
-            let start = ((y * scene.width + left) * 4) as usize;
+            let start = ((y * scene.width + bounds.x) * 4) as usize;
             let end = ((y * scene.width + right) * 4) as usize;
-            for pixel in frame
+            for (offset, pixel) in frame
                 .rgba
                 .get_mut(start..end)
                 .ok_or(Error::InvalidReadback)?
                 .chunks_exact_mut(4)
+                .enumerate()
             {
-                pixel.copy_from_slice(&rectangle.color);
+                if let Primitive::Stroke(stroke) = primitive
+                    && !stroke.covers(
+                        f64::from(bounds.x) + offset as f64 + 0.5,
+                        f64::from(y) + 0.5,
+                    )
+                {
+                    continue;
+                }
+                pixel.copy_from_slice(&bounds.color);
             }
         }
     }
@@ -72,26 +111,14 @@ pub fn cpu_scene_with_cancel(scene: &Scene, cancel: &Cancellation) -> Result<Fra
 /// Fit the physical page into a viewport with a bounded margin and an original paper style.
 /// Geometry can serve larger native viewports; pixel readbacks remain limited to 2048 per axis.
 pub fn page_scene(width: u32, height: u32, page: PageSize) -> Result<Scene, Error> {
-    if !(1..=100_000).contains(&width) || !(1..=100_000).contains(&height) {
-        return Err(Error::InvalidViewport);
-    }
-    let margin = 32.min(width / 8).min(height / 8);
-    let available_width = width - margin * 2;
-    let available_height = height - margin * 2;
-    let maximum = page.width_pt().max(page.height_pt());
-    let normalized_width = page.width_pt() / maximum;
-    let normalized_height = page.height_pt() / maximum;
-    let scale = (f64::from(available_width) / normalized_width)
-        .min(f64::from(available_height) / normalized_height);
-    // shortcut: extreme page aspect ratios occupy at least one display pixel; exports use authored dimensions.
-    let paper_width = (normalized_width * scale)
-        .round()
-        .clamp(1.0, f64::from(available_width)) as u32;
-    let paper_height = (normalized_height * scale)
-        .round()
-        .clamp(1.0, f64::from(available_height)) as u32;
-    let x = (width - paper_width) / 2;
-    let y = (height - paper_height) / 2;
+    let viewport = PageViewport::new(width, height, page)?;
+    let Rectangle {
+        x,
+        y,
+        width: paper_width,
+        height: paper_height,
+        ..
+    } = *viewport.paper();
     let mut rectangles = vec![Rectangle {
         x: x + 3,
         y: y + 4,
@@ -127,6 +154,6 @@ pub fn page_scene(width: u32, height: u32, page: PageSize) -> Result<Scene, Erro
         width,
         height,
         background: [232, 232, 232, 255],
-        rectangles,
+        primitives: rectangles.into_iter().map(Primitive::Rectangle).collect(),
     })
 }

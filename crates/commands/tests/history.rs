@@ -67,4 +67,27 @@ proptest! {
         for _ in 0..count {engine.execute(Command::Redo(NoParams{}))?;}
         prop_assert_eq!(engine.stored_document(),&final_document);
     }
+
+    #[test]
+    fn generated_bond_edits_restore_full_graphs_and_metadata(
+        positions in proptest::collection::vec((10u32..500,10u32..500),1..40)
+    ) {
+        let mut engine=Engine::default();let original=engine.stored_document().clone();
+        let mut snapshots=Vec::new();
+        for (x,y) in positions {
+            engine.dispatch("bond.create",serde_json::json!({"page_id":1,
+                "begin_x_pt":x,"begin_y_pt":y,"end_x_pt":x+40,"end_y_pt":y+20}))?;
+            snapshots.push(engine.stored_document().clone());
+        }
+        for expected in snapshots.iter().rev().skip(1) {
+            engine.execute(Command::Undo(NoParams{}))?;
+            prop_assert_eq!(engine.stored_document(),expected);
+        }
+        engine.execute(Command::Undo(NoParams{}))?;
+        prop_assert_eq!(engine.stored_document(),&original);
+        for expected in &snapshots {
+            engine.execute(Command::Redo(NoParams{}))?;
+            prop_assert_eq!(engine.stored_document(),expected);
+        }
+    }
 }

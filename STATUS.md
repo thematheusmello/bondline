@@ -1,142 +1,85 @@
 # Status
 
-2026-11-13: persistent implementation goal active. Full M0 is NOT complete.
+2026-11-13: persistent full-project goal active. Full M0 is NOT complete.
 
-The native desktop/GPU license blocker is resolved for the pinned candidate stack without
-broadening the MIT/Apache-2.0/BSD policy. Both product roots pass declared runtime closure:
-macOS arm64 150 packages, Windows x64 161, Linux x64 219, plus two SHA-verified bundled assets.
-See docs/dependency-policy.md for the original compatibility adapters, fork and source evidence.
-This declaration gate is distinct from a complete release-notice/source review.
+Target clarification: one-to-one Professional desktop screens, controls, icon roles, flows
+and functionality. The user explicitly authorized reverse engineering; policy checkpoint
+72fafb3 supersedes the earlier program-inspection ban. Public docs/media plus authorized
+artifact/runtime evidence drive the target. See docs/research/parity-research-policy.md.
+The small current workspace is temporary, not a claim of design parity.
 
-Verified: 101 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
-actual layer gate, and whole-workspace Windows/Linux all-targets source checks. These are
-NOT native Windows/Linux runtime passes. CPU/GPU clear and ordered page-scene pixels agree on Apple M3 Max/Metal.
+The native desktop/GPU declared-license blocker remains resolved without broadening the
+MIT/Apache-2.0/BSD shipped policy: Mac arm64 150, Windows x64 161, Linux x64 219 runtime
+packages plus two hash/notice-verified bundled assets. Full release notice/source audit
+and the Unicode-bearing browser candidate remain separate work.
 
-Delivered behavior:
-- Pure model: pages/Point2 plus typed atom/bond/fragment identities and structurally validated
-  elemental graphs. Atomic batch insertion, metadata, direction and budgets are tested.
-  Page snapshots share immutable fragments; graph creation is not yet an application command.
-- Shared typed registry: document.inspect, page.set_size, history.undo, history.redo,
-  render.capture (explicit CPU/GPU preview).
-- Exact history: 128 fixed-seed native and 128 source-backed generated edit sequences,
-  no-op/redo/overflow/boundary checks. Whole owned snapshots retain opaque CDXML data.
-- CLI: schema discovery, sequential JSON execution and structured errors, tested as a process.
-- Native UI: Page presets/rotation and Edit history actions use the registry. Actual Mac
-  Letter -> Cmd+Z -> Shift+Cmd+Z verified through accessibility and a real-window screenshot.
-- Stdio MCP: official SDK, same registry, process-local engine, 1 MiB input bound. Independent
-  wire client verifies negotiation, discovery, edits/errors, oversized-line recovery and EOF.
+Verified in the current drawing checkpoint:
+- 126 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses
+  and the pinned corpus gate. Windows/Linux all-targets source checks pass; native runtime
+  and hosted CI execution on those platforms remain unverified.
+- Six shared typed commands: document.inspect, page.set_size, bond.create, history.undo,
+  history.redo, render.capture. CLI, stdio MCP, authenticated loopback and native UI use them.
+- The first drawing workflow: drag an independent single C-C fragment, with three authored
+  H per carbon and subscripted H3C/CH3 terminal labels; one undo step, exact Undo/Redo and
+  revision-bound CPU/GPU PNG captures. It does not attach to existing atoms or draw chains.
+- Native Mac/Apple M3 Max/Metal: actual drag from empty at revision 1; Cmd+Z emptied the
+  model at 2; Shift+Cmd+Z restored it at 3. Deliberate overlapping labels at 4 produced a
+  visible error and a capture failure; native Undo at 5 restored exact model and PNG bytes.
+- Two native failures were reproduced in RED tests and fixed: error text clipped below
+  the canvas, and a complete fast drag lost between frames. Ordered events also handle
+  multiple drags per frame. Escape/focus/stale-revision/outside/jitter cancellation has
+  input-test evidence; those variants are not all individually verified on native platforms.
+- Three 128-case fixed-seed properties now cover native page edits, source-backed history
+  and authored bond graphs. Session identity floors survive Undo branches and only advance
+  after successful commits. History is count-bounded to 128; source byte budgeting remains.
 
-Desktop loopback control is now verified: opt-in IPv4 localhost, bounded frames, shared native
-engine/history, repaint notification, concurrent-client cap and clean shutdown. An independent
-socket edit changed the actual Mac canvas; native Undo was visible to another socket request.
-Every new connection now requires a fresh 256-bit server session token before any command
-or engine inspection. The token is delivered only through opt-in startup stdout; keep it
-private. Wrong/missing tokens and ambiguous authentication objects fail closed. This is
-bearer authorization for current commands, not local-account isolation or a security audit.
+Rendering evidence: ordered rectangles/butt strokes, independent integer geometry oracle,
+font metrics from external FontTools 4.61.1 and terminal-label masks compared with external
+Pillow 12.3.0/FreeType. The declared 0.90 ink-IoU threshold yielded 0.9660/0.9669. Oblique f32
+GPU edge comparisons allow only the previously declared 1/32-pixel boundary band. Native
+vector edges may be antialiased by egui; readbacks and label spans are not antialiased.
 
-The native canvas now consumes the shared render page scene. CPU and instanced GPU paths
-match a hand-authored 8x8 pixel grid; layered clipping, alpha source replacement, odd pitches,
-one-pixel frames and resource bounds are checked. Native page rotation was inspected again.
-See docs/rendering.md for exact scope and the pending human golden gate.
+The user approved the displayed specific-scene 1024×1024 Metal capture. Its durable PNG,
+coordinates, approval scope and SHA-256 are in crates/render/tests/goldens. CPU/GPU output
+matches every independently decoded RGBA byte; deliberate corruption fails. Hash:
+1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc.
+This is not approval of final application design or general rendering. The older blank-page
+candidate remains unapproved; no approval was inferred from silence.
 
-The io crate encodes validated RGBA8 frames as PNG. External Pillow 12.3.0 verifies all
-decoded pixels, including transparent RGB and a hand-authored page grid. Registry/CLI/MCP/
-loopback capture now returns PNG base64, input revision and actual backend/adapter evidence.
-Adapters snapshot under the engine lock and render outside it. Two-worker budgets, explicit
-cancellation, dropped-future cancellation and permit lifetime are tested. No chemical export.
+M1 evidence remains: bounded standalone CDXML syntax with exact source preservation and
+checked attribute replacement; independent Expat/Decimal/numeric vectors; direct-position
+and read-only elemental projections; owned source/model/baseline snapshots retained by
+history. Unchanged-source export is byte-exact; unsynchronized model edits cannot export
+stale XML. Source-backed bond creation/preview still fail explicitly. There is no native
+open/save/reopen workflow, editable CDXML codec, CDX parser or MOL/SMILES codec. Drawings are
+session-local. Other atom/bond kinds, connected edits, style sheets and chemistry algorithms
+are missing, even when their pure model types exist.
 
-Actual Mac control capture: 512x512 CPU/GPU pixels matched; a 2048x2048 Metal capture retained
-revision 1 while a page edit reached revision 2 (0.301 ms round trip in one local observation).
-Native Undo reached revision 3, and the next PNG exactly matched the original portrait.
-This is workflow evidence, not a throughput benchmark. Human golden review is pending.
-
-M1 has started: standalone CDXML source preservation passes original-fixture tests
-with external Expat, BOM/CRLF and resource/error checks. Streaming limits precede tree
-construction; internal DTD subsets are rejected and external identifiers never resolve.
-Existing ordinary attribute values can now be replaced with all unrelated source bytes
-retained; external Expat confirms escaping and whitespace/Unicode values. Foreign nodes,
-namespace declarations, invalid XML characters and oversized escaped output are rejected.
-A source-backed io geometry view maps direct-fragment node p values to model points using
-the published x/y point units. Missing positions remain None. Coordinate edits preserve
-all other bytes and numeric no-ops. Grouped/nested node layouts fail explicitly. Source IDs
-remain strings, not application/global numeric identities. This does not map chemical graphs
-or update dependent labels/bounding boxes. The 10000-run ASan parse/edit/geometry smoke
-passes with the pinned toolchain/seed 3641879538. A separate read-only ElementalGraph now
-maps elemental properties and all sixteen single-term bond kinds into fresh application
-IDs, resolving source references within each fragment. Nested groups are followed and their
-hierarchy remains in source backing. Queries, label-only atoms without explicit Element,
-cross-fragment references and unsupported layouts fail explicitly. This prevents a reproduced
-label-only nitrogen-to-carbon misinterpretation; label parsing remains missing. The corpus tool
-now fetches two pinned BSD-3-Clause RDKit documents and verifies hashes on download/cache.
-One CDXML byte/XML round trip and typed elemental projection agree with independent external
-Expat/Decimal. An intentional projection corruption is detected by the oracle's test.
-The MOL file has integrity coverage only, printed explicitly. No CDX corpus entry yet.
-No structural/text writer edits, complete application mapping/file workflow or CDX/MOL
-compatibility is implemented.
-Exact integral-property and UINT32 source-ID helpers now have independent Python Decimal
-evidence. IDs are container-scoped; zero is unassigned. Tiny fractions are rejected instead
-of rounded. The syntax bytes remain authoritative; reference resolution beyond each fragment
-is not implemented. The latest 10000-run ASan smoke also covers elemental mapping.
-Owned StoredDocument application snapshots now retain model, original Arc source bytes and
-baseline across history. The cold-session constructor accepts zero or one direct page with
-explicit preview dimensions; it does not infer paper from graphical bounds. Unchanged models
-export original bytes exactly, modified projections fail instead of exporting stale XML,
-and exact undo restores passthrough. Source-only changes count as changes even when models
-match. The corpus compares that owned model with external Expat/Decimal and checks exact
-passthrough. Raw source is not exposed in snapshot serialization or StoredDocument Debug.
-Capture refuses imported/chemical content before CPU/GPU execution until it can render it.
-These are core APIs, not registered import/export commands or an editable file workflow.
-History retains at most 128 snapshots; byte budgeting remains necessary before large imports.
-The latest 10000-run ASan smoke covers owned-state edit/refusal/restoration too.
-There are no chemical tools.
-Missing M0 evidence: complete public menu/tool/hotkey inventory,
-broader corpus/chemistry coverage, actual three-platform CI execution, native
-Windows/Linux workflow checks and human-approved render goldens. The browser candidate
-still includes Unicode-licensed data and is not approved for shipment.
+Corpus: two pinned BSD-3-Clause RDKit files, one CDXML byte/XML/model/owned-snapshot check;
+MOL integrity only; no CDX entry or chemistry calculation coverage. The isolated parser
+fuzz graph builds with its existing pinned nightly and new renderer dependency edges;
+this was not a new fuzz run. Previous bounded 10000-run ASan evidence remains in verification.md.
 
 Next exact tasks:
-1. Continue the source inventory where further public modern/context-menu evidence exists.
-   parity-checklist.md now has 573 stable-ID cited control/action rows, including 26.x
-   desktop deltas. This is not complete modern parity. Review conflicts/open questions;
-   never fill them from product memory or inspect installed application files.
-2. Add chemical rendering and registry open/save, using the delivered owned source-backed
-   application history. Add source/history byte budgeting and failed-import retention tests
-   before exposing large imports; retain unknown data and refuse unsynchronized export.
-   The read-only mapper/passthrough is delivered, not an editable codec. Extend label/query/style/stereo mapping and
-   resolve cross-container ties/nested nickname fragments from public sources.
-   Session authorization is now implemented on loopback; preserve that boundary when adding
-   private data and file commands. Research/pin a licensed CDX fixture before decoding.
-3. Record the pending human golden response without treating silence as approval; no new
-   golden has been approved. CPU/GPU candidate PNGs are under ignored target/captures/.
-   The displayed GPU candidate is page-gpu.png: 512x512 pixels, 72x144 pt page, PNG SHA-256
-   5cad7d0f59bbee036f8d55319129814cb85efcd4d572e9f35622be77ca519781. Approval would apply
-   only to this blank-page preview; add a durable golden and regression check after approval.
+1. Finish/version the screen, palette, icon, dialog and end-to-end flow inventory using the
+   newly pinned public research and authorized artifacts. Existing 573 control rows are not
+   a complete modern inventory. Separate desktop/platform/tier evidence from cloud demos.
+2. Add source/history byte budgeting and editable CDXML writing, then atomic registry/native
+   open/save with failed-import/save retention tests and independent consumers. Source backing
+   must survive every history/edit path. Inspect the pinned reference-project approaches.
+3. Extend single-bond behavior to existing-atom attachment, connected graphs, click creation,
+   snapping and order changes, with native workflows and tests. The current independent-bond
+   command is partial reference coverage; retain all remaining M1–M5 requirements.
+4. Run hosted three-platform CI and native Windows/Linux workflows when available; continue
+   independent work meanwhile. Broaden approved render scenes with actual human review.
 
-The graphics checkpoint is db94cd5; subsequent atomic commits add layers, model, commands,
-CLI and native controls. The current owned source/history checkpoint includes this status record; use Git log
-for its final hash. No confirmed Cargo/npm jobs remain running.
+The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1. The drawing
+checkpoint includes this record; use Git log for its final hash. Current research policy
+and the full goal are active; no push/publication/account action was performed.
 
-The disposable development bundle target/dev/Bondline.app (org.bondline.development) contains
-the final authentication build and is closed. Native workflow exec session 81217 exited 0;
-its listener at 127.0.0.1:56743 was independently confirmed closed. Its authenticated edit
-set 144x72 pt at revision 1; native Cmd+Z restored A4 at revision 2, independently read by
-the authenticated socket. A credential-free socket was rejected. The final three-frame native
-smoke also accepted an escaped JSON token, served inspection and exited 0 on Metal.
-Earlier REA evidence is historical and
-bound to its previous digest. Build artifacts and reports remain ignored.
-
-CI: the real aggregate `cargo xtask ci` passes locally (101 tests and all existing gates).
-Its fail-fast behavior was checked with a deliberate formatting defect and restored source.
-The three-platform native/window workflow and separate Linux ASan job are wired, not run.
-Pinned action manifests and runner labels were researched; YAML parses with PyYAML 6.0.3.
-actionlint and hosted executions remain unverified. No push, workflow dispatch or publication.
-
-Public inventory research: the university-hosted vendor PDF was downloaded only to ignored
-.cache/research (439 pages, exact hash in sources.md). Printed/PDF page numbering and shortcut
-table layout were checked with Poppler; functional facts were screened across 288 explicit
-menu-path mentions. The committed 573 rows retain source pages and missing/wired/verified
-scope. No reference guide, help prose, screenshots, presets or proprietary assets were committed.
-
-The independent XML oracle now emits escaped JSON under an explicitly ASCII stdout setting;
-its Greek-text/mismatch test passes there. This removes a reproduced locale failure without
-claiming native Windows execution. Application code and file bytes are unaffected.
+The disposable target/dev/Bondline.app contains the verified ordered-event drawing build
+and is closed. Final native exec 93577 exited 0; 127.0.0.1:50110 was independently confirmed
+closed. Earlier test builds 22527 and 75463 also exited. Startup credentials remain only
+in ignored private target logs; never copy them into reports. Earlier REA exposure evidence
+is historical and tied to a prior digest, not this build. No confirmed native/Cargo/fuzz
+job remains running at checkpoint completion.

@@ -513,3 +513,75 @@ x86_64-pc-windows-msvc and x86_64-unknown-linux-gnu pass; neither establishes na
 Runtime closure remains 150/161/219 packages and two assets. No UI behavior, exposed import/
 save command, editable writer, chemical rendering or new human golden is claimed. No native
 app was launched for this core-only change; actual Mac UI evidence above remains historical.
+
+## Independent native single-bond workflow and approved golden, 2026-11-13
+
+RED: `cargo test -p bondline-render --test strokes --locked` failed for missing Primitive,
+Stroke and ordered scene APIs. GREEN: exact horizontal/vertical/45-degree grids, reversed
+endpoints, interleaved alpha source replacement, clipped/fractional/distant cases and mixed
+primitive/resource rejection pass. An independent i128 quarter-pixel dot/cross oracle fixes
+CPU coverage exactly; before implementation GPU ambiguity was restricted to 1/32 pixel of
+true boundaries. Review also reproduced an overly broad oracle boundary flag beyond finite stroke caps;
+the distance check was tightened with a failing regression, without changing the tolerance.
+No assertion was loosened after comparison. A separate winding test failed
+for the native butt outline's orientation and passed after correcting its corner order.
+
+RED: carbon_scene failed for the missing PageViewport/chemical producer. The first line-only
+expectation was then corrected after public IUPAC GR-2.1.2 review: isolated ethane requires
+explicit terminal labels. It was replaced by terminal-mask/ink and exact central-line checks,
+not accepted as a correct final depiction. The first producer is deliberately limited to
+independent C-C fragments with three explicitly authored H per C; no general valence inference.
+Invalid metadata/bond kinds/positions fail rather than being hidden. A guessed Element method
+name failed compilation and was corrected against the actual pinned API before GREEN.
+
+RED: label_tests failed for the absent bounded font module. GREEN: FontTools 4.61.1 independently
+supplied Roboto glyph IDs/advances/bounds and em/ascent/descent vectors. The font is the existing
+SHA-pinned Apache asset. External Pillow 12.3.0/FreeType independently draws H3C/CH3 and
+subscript positions at 96 em; declared ink IoU >=0.90 produced 0.966025/0.966897. FontTools is
+not a runtime or regular CI dependency. Glyph masks, scale/placement/work bounds and same-scene
+CPU/GPU output are checked. There is no claim of smooth/general chemical text rendering.
+
+RED: `cargo test -p bondline-commands --test bonds --locked` returned UnknownCommand(bond.create).
+GREEN: one registered closed schema creates two C/three-H atoms and a single bond in one
+history step. Tests check the complete expected model, fresh IDs, branch nonreuse, invalid
+request/redo retention, identity-domain exhaustion, source-backed rejection, immutable capture
+plans and CPU/GPU PNG agreement. Another 128 fixed-seed generated sequence test restores full
+chemical snapshots through Undo/Redo. CLI/MCP wire tests now discover six commands and exercise
+creation/errors; authenticated loopback checks shared chemical/history/capture state.
+
+RED: the UI drawing test failed for missing gesture state. Input tests cover preview/no edit,
+release/one edit, Escape, stale revisions, focus loss, outside release, jitter and multiple
+batched gestures. A real Mac run then revealed a clipped render error: the RED regression
+could not find visible diagnostic text after canvas allocation. Stable interaction without
+cursor advancement plus a gray error background fixes it. A second RED regression lost a
+complete press-move-release batch because egui clears press_origin on release. Consuming raw
+events in order fixes both complete and multiple drags between frames. One collapsible-if lint
+was fixed without adding allowances. These discoveries show why shape/input tests alone were
+insufficient; no failing source was committed.
+
+Actual native final build: target/dev/Bondline.app, Apple M3 Max/Metal. From empty, CUA drag
+(500,400)->(620,400) created revision 1, one history step, two atoms and one bond. Authenticated
+control independently confirmed the authored graph. Native Cmd+Z produced revision 2 and an
+empty fragment list; Shift+Cmd+Z produced 3 and exact restoration. A deliberate duplicate
+fragment at revision 4 produced an on-canvas/accessibility-visible overlap message and a
+capture error. Native Undo at 5 restored exact model and PNG bytes. Final exec 93577 exited 0
+and its 127.0.0.1:50110 listener was independently refused after shutdown. Earlier test builds
+also exited. No actual token was printed or committed. Native cancellation variants beyond
+this workflow remain input-test evidence, not complete platform execution.
+
+The actual native document's 1024×1024 CPU and GPU PNGs were byte-identical. The user viewed
+and explicitly approved the GPU reference: SHA-256
+1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc (22933 bytes).
+crates/render/tests/goldens records those exact bytes, authored coordinates, date and narrow
+approval. External Pillow verifies the hash and every CPU/GPU RGBA byte; one-byte corruption
+must fail for the pixel-mismatch reason. The older blank preview was not approved. This is
+specific-scene approval, not final UI design or broader rendering approval.
+
+Final gate: `cargo xtask ci` passes 126 tests, rustfmt, warnings-denied all-targets clippy,
+layers, licenses and the existing corpus scope. Windows/Linux whole-workspace all-targets
+source checks pass; native runtime/hosted jobs remain unexecuted. Runtime closure remains
+150/161/219 packages and two bundled assets; the approved PNG is a test/documentation fixture.
+Only dependency edges changed in the native lockfile; the isolated fuzz lock adds the same
+four already-reviewed glyph/font-parser versions. Its pinned-nightly offline check passes;
+no new parser behavior or new ASan run is claimed. No save/reopen, existing-atom attachment,
+general label/chemistry, full UI parity or complete M0/M1 claim is made.

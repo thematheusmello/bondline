@@ -58,7 +58,25 @@ pub enum Error {
     InvalidViewport,
     #[error("rectangle dimensions must be nonzero and their edges must not overflow")]
     InvalidGeometry,
-    #[error("scene exceeds the 4096-rectangle limit")]
+    #[error(
+        "stroke coordinates must be finite within ±100000, width in (0,100000], and squared length normal in f32"
+    )]
+    InvalidStroke,
+    #[error(
+        "the current preview supports independent C-C fragments with three authored hydrogens on each carbon"
+    )]
+    UnsupportedChemicalContent,
+    #[error("the bundled label font could not be decoded")]
+    InvalidFont,
+    #[error(
+        "chemical labels need an em size between 8 and 256 canvas units; enlarge the view or capture"
+    )]
+    LabelScale,
+    #[error("a chemical label would extend beyond the viewport")]
+    LabelPlacement,
+    #[error("chemical labels overlap; undo the edit or place the next bond farther away")]
+    LabelOverlap,
+    #[error("scene exceeds the 4096-primitive limit")]
     SceneTooComplex,
     #[error("GPU validation failed: {0}")]
     Validation(String),
@@ -94,8 +112,15 @@ pub fn cpu_solid(width: u32, height: u32, color: [u8; 4]) -> Result<Frame, Error
     })
 }
 
+mod label;
+#[cfg(test)]
+mod label_tests;
+mod page;
 mod scene;
-pub use scene::{Rectangle, Scene, cpu_scene, cpu_scene_with_cancel, page_scene};
+mod stroke;
+pub use page::{PageViewport, carbon_page_scene};
+pub use scene::{Primitive, Rectangle, Scene, cpu_scene, cpu_scene_with_cancel, page_scene};
+pub use stroke::Stroke;
 
 #[cfg(not(target_arch = "wasm32"))]
 mod gpu;

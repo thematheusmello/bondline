@@ -7,7 +7,9 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{collections::VecDeque, sync::Arc};
 
+mod bond;
 mod capture;
+pub use bond::BondCreate;
 #[cfg(test)]
 mod source_tests;
 pub use bondline_render::Cancellation;
@@ -70,6 +72,7 @@ macro_rules! command_registry {
 command_registry! {
     Inspect(NoParams) => ("document.inspect", "Inspect the authored document and history state.", true),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
+    BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
     Redo(NoParams) => ("history.redo", "Restore the next authored document.", false),
     Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
@@ -93,13 +96,19 @@ pub enum Error {
     RequestTooLarge,
     #[error("document revision counter exhausted")]
     RevisionExhausted,
+    #[error("document identity space exhausted")]
+    IdentityExhausted,
+    #[error("a bond needs two distinct endpoint positions")]
+    CoincidentEndpoints,
+    #[error("bond creation in source-backed documents requires an editable format mapping")]
+    SourceBackedEdit,
     #[error(transparent)]
     Render(#[from] bondline_render::Error),
     #[error(transparent)]
     Png(#[from] bondline_io::Error),
     #[error("GPU capture is not available on this target")]
     BackendUnavailable,
-    #[error("the current renderer cannot preview imported or chemical document content")]
+    #[error("source-backed documents cannot be faithfully previewed yet")]
     UnsupportedDocumentPreview,
 }
 
@@ -116,8 +125,14 @@ impl Error {
             Self::NothingToUndo | Self::NothingToRedo => "empty_history",
             Self::Model(bondline_model::Error::MissingPage(_)) => "not_found",
             Self::RevisionExhausted => "revision_exhausted",
+            Self::IdentityExhausted => "identity_exhausted",
             Self::Render(bondline_render::Error::Cancelled) => "cancelled",
             Self::Render(bondline_render::Error::InvalidDimensions) => "invalid_params",
+            Self::Render(bondline_render::Error::UnsupportedChemicalContent)
+            | Self::Render(bondline_render::Error::LabelPlacement)
+            | Self::Render(bondline_render::Error::LabelOverlap)
+            | Self::SourceBackedEdit => "unsupported_content",
+            Self::Render(bondline_render::Error::LabelScale) => "unsupported_scale",
             Self::Render(_) | Self::Png(_) => "render_failed",
             Self::BackendUnavailable => "backend_unavailable",
             Self::UnsupportedDocumentPreview => "unsupported_content",
@@ -154,6 +169,7 @@ pub struct CommandResult {
 #[derive(Debug, Default)]
 pub struct Engine {
     document: Arc<StoredDocument>,
+    identities: bond::Ids,
     revision: u64,
     undo: VecDeque<Arc<StoredDocument>>,
     redo: VecDeque<Arc<StoredDocument>>,
@@ -164,6 +180,7 @@ impl Engine {
     pub fn from_document(document: StoredDocument) -> Self {
         Self {
             document: Arc::new(document),
+            identities: bond::Ids::default(),
             revision: 0,
             undo: VecDeque::new(),
             redo: VecDeque::new(),
@@ -221,6 +238,12 @@ impl Engine {
                 document.model_mut().set_page_size(id, size)?;
                 self.commit(document)?
             }
+            Command::BondCreate(params) => {
+                let (document, identities) = bond::create(&self.document, params, self.identities)?;
+                let changed = self.commit(document)?;
+                self.identities = identities;
+                changed
+            }
             Command::Undo(_) => self.undo()?,
             Command::Redo(_) => self.redo()?,
             Command::Capture(params) => {
@@ -231,14 +254,10 @@ impl Engine {
                     .iter()
                     .find(|page| page.id() == id)
                     .ok_or(bondline_model::Error::MissingPage(id.get()))?;
-                if self.document.source_info().is_some()
-                    || page.fragments().iter().any(|fragment| {
-                        !fragment.atoms().is_empty() || !fragment.bonds().is_empty()
-                    })
-                {
+                if self.document.source_info().is_some() {
                     return Err(Error::UnsupportedDocumentPreview);
                 }
-                return Prepared::capture(self.state(), params, page.size());
+                return Prepared::capture(self.state(), params, page.clone());
             }
         };
         Ok(Prepared::immediate(CommandResult {
@@ -340,6 +359,7 @@ mod tests {
         assert_eq!(
             names,
             [
+                "bond.create",
                 "document.inspect",
                 "history.redo",
                 "history.undo",

@@ -26,6 +26,10 @@ revision/history. Exact undo assertions compare the whole stored document and or
 The 128-snapshot count limit is not a byte budget; add a source/history byte budget before
 exposing repeated large imports. A cold-session constructor is delivered, not an import command.
 See control-protocol.md for the actual registered operations and explicit limits.
+The first bond.create operation appends an independently authored C-C fragment with three
+explicit hydrogens per carbon. Engine identity floors never move backward on Undo/Redo;
+a new branch cannot reuse deleted session IDs. Floors update only after a successful commit.
+This is a closed creation case, not a general valence or connected-bond editing engine.
 
 The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while
 holding it. Stdio is a separate process-local session. Only server/stdio SDK features are
@@ -59,13 +63,16 @@ page with explicitly chosen preview dimensions; it does not derive print paper f
 bounds. Raw XML is neither serialized in command results nor included in StoredDocument Debug.
 Unchanged models can export the exact original bytes; unsynchronized edits fail explicitly,
 and exact undo restores passthrough. See file-formats.md; this is not an editable codec or
-an exposed file-open/save workflow. Capture refuses imported/chemical content until the
-renderer can represent it rather than returning a misleading blank preview.
+an exposed file-open/save workflow. Capture refuses source-backed or unsupported chemical
+content instead of returning a misleading blank preview; the native C-C creation case works.
 
-The native canvas now consumes the render crate's page scene instead of owning a parallel
-page-layout algorithm. CPU and instanced GPU reference paths consume that same scene;
-tests also compare against an independent expected pixel grid. See rendering.md for exact
-primitive semantics, rounding, resource bounds and the remaining rendering requirements.
+The native canvas consumes the render crate's ordered rectangle/stroke scene and limited
+terminal-label producer. PageViewport shares paper layout and authoring-pointer conversion.
+CPU and GPU paths also face independent pixel/geometry/font oracles and one human-approved
+native-document golden. Native transient gesture state stays outside authored snapshots;
+ordered pointer events preview, commit one registry edit per drag, or cancel. This handles
+an entire drag between frames without losing its released press origin. See rendering.md
+for bounds, native versus headless raster semantics and the substantial remaining work.
 
 Layer 0: model, cdxml, cdx. Layer 1: chem, render. Layer 2: io. Layer 3: commands.
 Layer 4: mcp/loopback adapters. Layer 5: cli, ui. Tooling lives in xtask. Core is GUI-free.
@@ -79,5 +86,5 @@ workspace dependencies in standalone parsers, and GUI dependencies reachable fro
 headless product crate. Compatibility OS shims and build tooling are named exceptions to
 the product-layer map; this is not permission to add GUI dependencies to core crates.
 
-The graphics foundation will adopt PhotoCraft's reviewed, pinned fork approach. Do not
+The graphics foundation adopted PhotoCraft's reviewed, pinned fork approach. Do not
 copy unrelated product features or claim that PhotoCraft meets Bondline's license policy.

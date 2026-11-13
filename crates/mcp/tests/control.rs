@@ -333,3 +333,53 @@ fn excess_connections_are_closed_instead_of_spawning_unbounded_tasks()
     server.shutdown()?;
     Ok(())
 }
+
+#[test]
+fn authenticated_bond_edits_history_and_captures_share_the_live_model()
+-> Result<(), Box<dyn std::error::Error>> {
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, Arc::clone(&engine), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    call(
+        &mut client,
+        r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":60,"height_pt":60}}"#,
+    )?;
+    let created = call(
+        &mut client,
+        r#"{"command":"bond.create","params":{"page_id":1,"begin_x_pt":10,"begin_y_pt":20.5,"end_x_pt":50,"end_y_pt":20.5}}"#,
+    )?;
+    assert_eq!(created["result"]["revision"], 2);
+    assert_eq!(created["result"]["undo_depth"], 2);
+    assert_eq!(
+        created["result"]["document"]["pages"][0]["fragments"][0]["atoms"][0]["explicit_hydrogens"],
+        3
+    );
+    let undo = call(&mut client, r#"{"command":"history.undo","params":{}}"#)?;
+    assert_eq!(
+        undo["result"]["document"]["pages"][0]["fragments"],
+        serde_json::json!([])
+    );
+    let redo = call(&mut client, r#"{"command":"history.redo","params":{}}"#)?;
+    assert_eq!(redo["result"]["document"], created["result"]["document"]);
+    let cpu = call(
+        &mut client,
+        r#"{"command":"render.capture","params":{"page_id":1,"width_px":80,"height_px":80,"backend":"cpu"}}"#,
+    )?;
+    let gpu = call(
+        &mut client,
+        r#"{"command":"render.capture","params":{"page_id":1,"width_px":80,"height_px":80,"backend":"gpu"}}"#,
+    )?;
+    assert_eq!(
+        cpu["result"]["capture"]["png_base64"],
+        gpu["result"]["capture"]["png_base64"]
+    );
+    assert_eq!(gpu["result"]["revision"], 4);
+    assert!(gpu["result"]["capture"]["adapter"].is_object());
+    assert_eq!(changes.load(Ordering::SeqCst), 4);
+    server.shutdown()?;
+    Ok(())
+}

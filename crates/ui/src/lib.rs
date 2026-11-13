@@ -1,7 +1,8 @@
 //! Native GPU workspace. Authoring controls dispatch through the shared command registry.
 
-use bondline_commands::{Command, Engine, NoParams, PageSetSize};
+use bondline_commands::{BondCreate, Command, Engine, NoParams, PageSetSize};
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
+use bondline_model::{PageId, Point2};
 use eframe::egui;
 use std::{
     io::Write,
@@ -54,8 +55,43 @@ pub fn configure_context(context: &egui::Context) {
     context.set_visuals(egui::Visuals::light());
 }
 
+#[derive(Default)]
+pub struct DrawingState {
+    gesture: Option<BondGesture>,
+}
+
+struct BondGesture {
+    begin: Point2,
+    end: Point2,
+    page: PageId,
+    revision: u64,
+}
+
+fn paint_stroke(
+    painter: &egui::Painter,
+    origin: egui::Pos2,
+    stroke: &bondline_render::Stroke,
+) -> Result<(), bondline_render::Error> {
+    let [r, g, b, a] = stroke.color;
+    painter.add(egui::Shape::convex_polygon(
+        stroke
+            .corners()?
+            .into_iter()
+            .map(|[x, y]| origin + egui::vec2(x, y))
+            .collect(),
+        egui::Color32::from_rgba_unmultiplied(r, g, b, a),
+        egui::Stroke::NONE,
+    ));
+    Ok(())
+}
+
 /// Paint document state and route every authored edit through the engine.
-pub fn show_workspace(context: &egui::Context, engine: &mut Engine, error: &mut Option<String>) {
+pub fn show_workspace(
+    context: &egui::Context,
+    engine: &mut Engine,
+    error: &mut Option<String>,
+    drawing: &mut DrawingState,
+) {
     let undo = egui::KeyboardShortcut::new(egui::Modifiers::COMMAND, egui::Key::Z);
     let redo = egui::KeyboardShortcut::new(
         egui::Modifiers::COMMAND | egui::Modifiers::SHIFT,
@@ -132,6 +168,13 @@ pub fn show_workspace(context: &egui::Context, engine: &mut Engine, error: &mut 
     if let Some(command) = selected {
         *error = engine.execute(command).err().map(|error| error.to_string());
     }
+    if drawing
+        .gesture
+        .as_ref()
+        .is_some_and(|gesture| gesture.revision != engine.state().revision)
+    {
+        drawing.gesture = None;
+    }
     egui::TopBottomPanel::bottom("status").show(context, |ui| {
         ui.horizontal(|ui| {
             if let Some(page) = engine.document().pages().first() {
@@ -145,20 +188,122 @@ pub fn show_workspace(context: &egui::Context, engine: &mut Engine, error: &mut 
             }
             if let Some(message) = error {
                 ui.colored_label(egui::Color32::DARK_RED, message.as_str());
+            } else {
+                ui.label("New single bond: drag on the page; Esc cancels");
             }
         });
     });
     egui::CentralPanel::default()
-        .frame(egui::Frame::default().inner_margin(0.0))
+        .frame(
+            egui::Frame::default()
+                .inner_margin(0.0)
+                .fill(egui::Color32::from_gray(232)),
+        )
         .show(context, |ui| {
             let available = ui.available_rect_before_wrap();
+            if engine.stored_document().source_info().is_some() {
+                drawing.gesture = None;
+                ui.colored_label(
+                    egui::Color32::DARK_RED,
+                    bondline_commands::Error::UnsupportedDocumentPreview.to_string(),
+                );
+                return;
+            }
             let Some(page) = engine.document().pages().first() else {
                 return;
             };
-            match bondline_render::page_scene(
+            let width = available.width().floor().max(1.0) as u32;
+            let height = available.height().floor().max(1.0) as u32;
+            let viewport = match bondline_render::PageViewport::new(width, height, page.size()) {
+                Ok(viewport) => viewport,
+                Err(error) => {
+                    ui.colored_label(egui::Color32::DARK_RED, error.to_string());
+                    return;
+                }
+            };
+            let response = ui.interact(
+                available,
+                ui.make_persistent_id("drawing-canvas"),
+                egui::Sense::drag(),
+            );
+            let local = |position: egui::Pos2| {
+                let position = position - available.min;
+                [position.x, position.y]
+            };
+            let mut commits = Vec::new();
+            context.input(|input| {
+                // A native frame may contain the entire drag; press_origin is cleared on release.
+                for event in &input.events {
+                    match event {
+                        egui::Event::WindowFocused(false)
+                        | egui::Event::PointerGone
+                        | egui::Event::Key {
+                            key: egui::Key::Escape,
+                            pressed: true,
+                            ..
+                        } => drawing.gesture = None,
+                        egui::Event::PointerButton {
+                            pos,
+                            button: egui::PointerButton::Primary,
+                            pressed: true,
+                            ..
+                        } if response.contains_pointer()
+                            && !input.key_down(egui::Key::Escape)
+                            && viewport.contains(local(*pos)) =>
+                        {
+                            if let Ok(begin) = viewport.document_position(local(*pos)) {
+                                drawing.gesture = Some(BondGesture {
+                                    begin,
+                                    end: begin,
+                                    page: page.id(),
+                                    revision: engine.state().revision,
+                                });
+                            }
+                        }
+                        egui::Event::PointerMoved(pos) => {
+                            if let Some(gesture) = &mut drawing.gesture
+                                && let Ok(end) = viewport.document_position(local(*pos))
+                            {
+                                gesture.end = end;
+                            }
+                        }
+                        egui::Event::PointerButton {
+                            pos,
+                            button: egui::PointerButton::Primary,
+                            pressed: false,
+                            ..
+                        } => {
+                            if let Some(gesture) = drawing.gesture.take()
+                                && viewport.contains(local(*pos))
+                                && let (Ok(begin_canvas), Ok(end)) = (
+                                    viewport.canvas_position(gesture.begin),
+                                    viewport.document_position(local(*pos)),
+                                )
+                                && (egui::pos2(begin_canvas[0], begin_canvas[1])
+                                    - egui::pos2(local(*pos)[0], local(*pos)[1]))
+                                .length()
+                                    > 3.0
+                            {
+                                commits.push(BondCreate {
+                                    page_id: gesture.page.get(),
+                                    begin_x_pt: gesture.begin.x_pt(),
+                                    begin_y_pt: gesture.begin.y_pt(),
+                                    end_x_pt: end.x_pt(),
+                                    end_y_pt: end.y_pt(),
+                                });
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+                if !input.pointer.primary_down() {
+                    drawing.gesture = None;
+                }
+            });
+            match bondline_render::carbon_page_scene(
                 available.width().floor().max(1.0) as u32,
                 available.height().floor().max(1.0) as u32,
-                page.size(),
+                page,
             ) {
                 Ok(scene) => {
                     let painter = ui.painter_at(available);
@@ -168,21 +313,64 @@ pub fn show_workspace(context: &egui::Context, engine: &mut Engine, error: &mut 
                         0.0,
                         egui::Color32::from_rgba_unmultiplied(r, g, b, a),
                     );
-                    for rectangle in scene.rectangles {
-                        let [r, g, b, a] = rectangle.color;
-                        painter.rect_filled(
-                            egui::Rect::from_min_size(
-                                available.min + egui::vec2(rectangle.x as f32, rectangle.y as f32),
-                                egui::vec2(rectangle.width as f32, rectangle.height as f32),
-                            ),
-                            0.0,
-                            egui::Color32::from_rgba_unmultiplied(r, g, b, a),
-                        );
+                    for primitive in scene.primitives {
+                        match primitive {
+                            bondline_render::Primitive::Rectangle(rectangle) => {
+                                let [r, g, b, a] = rectangle.color;
+                                painter.rect_filled(
+                                    egui::Rect::from_min_size(
+                                        available.min
+                                            + egui::vec2(rectangle.x as f32, rectangle.y as f32),
+                                        egui::vec2(rectangle.width as f32, rectangle.height as f32),
+                                    ),
+                                    0.0,
+                                    egui::Color32::from_rgba_unmultiplied(r, g, b, a),
+                                );
+                            }
+                            bondline_render::Primitive::Stroke(stroke) => {
+                                if let Err(error) = paint_stroke(&painter, available.min, &stroke) {
+                                    ui.colored_label(egui::Color32::DARK_RED, error.to_string());
+                                }
+                            }
+                        }
+                    }
+                    if let Some(gesture) = &drawing.gesture
+                        && gesture.begin != gesture.end
+                        && let (Ok(begin), Ok(end)) = (
+                            viewport.canvas_position(gesture.begin),
+                            viewport.canvas_position(gesture.end),
+                        )
+                        && let Err(error) = paint_stroke(
+                            &painter,
+                            available.min,
+                            &bondline_render::Stroke {
+                                begin,
+                                end,
+                                width: viewport.stroke_width(),
+                                color: [70, 105, 155, 255],
+                            },
+                        )
+                    {
+                        ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                     }
                 }
                 Err(error) => {
                     ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                 }
+            }
+            for params in commits {
+                *error = engine
+                    .execute(Command::BondCreate(params))
+                    .err()
+                    .map(|error| error.to_string());
+                context.request_repaint();
+                if error.is_some() {
+                    drawing.gesture = None;
+                    break;
+                }
+            }
+            if let Some(gesture) = &mut drawing.gesture {
+                gesture.revision = engine.state().revision;
             }
         });
 }
@@ -193,6 +381,7 @@ pub struct BondlineApp {
     engine: SharedEngine,
     control: Option<LoopbackServer>,
     error: Option<String>,
+    drawing: DrawingState,
 }
 
 impl BondlineApp {
@@ -228,6 +417,7 @@ impl BondlineApp {
             engine,
             control,
             error: None,
+            drawing: DrawingState::default(),
         })
     }
 }
@@ -244,7 +434,9 @@ impl eframe::App for BondlineApp {
             });
         }
         match self.engine.lock() {
-            Ok(mut engine) => show_workspace(context, &mut engine, &mut self.error),
+            Ok(mut engine) => {
+                show_workspace(context, &mut engine, &mut self.error, &mut self.drawing)
+            }
             Err(_) => {
                 egui::CentralPanel::default().show(context, |ui| {
                     ui.colored_label(egui::Color32::DARK_RED, "Document engine unavailable");
@@ -288,6 +480,7 @@ mod tests {
             &context,
             &mut bondline_commands::Engine::default(),
             &mut None,
+            &mut super::DrawingState::default(),
         );
         let frame = context.end_pass();
         assert!(frame.shapes.iter().any(|shape| matches!(&shape.shape, eframe::egui::Shape::Rect(rect) if rect.fill == eframe::egui::Color32::WHITE)));
@@ -334,7 +527,12 @@ mod tests {
                 ],
                 ..Default::default()
             });
-            super::show_workspace(&context, &mut engine, &mut error);
+            super::show_workspace(
+                &context,
+                &mut engine,
+                &mut error,
+                &mut super::DrawingState::default(),
+            );
             let frame = context.end_pass();
             let page = engine.document().pages().first().ok_or("missing page")?;
             if redo {

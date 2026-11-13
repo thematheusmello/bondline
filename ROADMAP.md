@@ -11,9 +11,12 @@ guides are versioned evidence, not proof of complete modern parity.
 - [x] Cargo workspace, pinned toolchain, lints, build-time layer and license gates.
 - [ ] Pure document model, named typed JSON commands, transactions and undo/redo tests.
       Page controls/history are delivered; headless elemental graphs now have structural/
-      identity/budget tests. Chemical editing commands and gesture transactions remain.
+      identity/budget tests. Independent C-C creation and transactional drag/history now work;
+      connected editing, broader models and a general transaction/job engine remain.
 - [x] CLI, stdio MCP and opt-in loopback control using that registry.
 - [ ] Native UI and CPU/GPU reference canvas with actual launch/render evidence.
+      Native Mac drawing/history/recovery and one human-approved golden now pass; native
+      Windows/Linux and broader rendering remain unverified.
 - [ ] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.
       573 stable-ID source-cited rows now exist; modern menus, unnamed glyphs and remaining
@@ -29,12 +32,18 @@ Read-only elemental mapping now assigns fresh application IDs, resolves fragment
 references and retains source backing; an external Expat/Decimal oracle checks the corpus.
 Owned application snapshots/history now retain that backing; unsynchronized edits cannot
 export stale XML. This constructor/passthrough API is not a file workflow.
-Next: chemical rendering and registry open/save with source/history byte budgeting;
+Native independent C-C/three-H rendering is delivered, with explicit terminal labels.
+Next: editable CDXML writing and registry open/save with source/history byte budgeting;
 broader query/label/style mapping, lossless CDX records, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.
 
-## M2: drawing — planned
+## M2: drawing — in progress
+
+The first command creates an independent single C-C fragment with three authored H per
+carbon. Native drag creation, exact history, automation and bounded rendering have evidence.
+This is partial solid-bond coverage: click creation, existing-atom attachment, connected
+chains, snapping, order changes and general atom labels remain missing.
 
 Bonds, rings, chains, labels/abbreviations, charges, isotopes, radicals, wedge/hash bonds,
 selection, transforms, hotkeys, undo/redo and style sheets from public journal guidelines.

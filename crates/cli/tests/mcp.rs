@@ -105,7 +105,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("missing tools")?;
-    assert_eq!(tools.len(), 5);
+    assert_eq!(tools.len(), 6);
     assert!(tools.iter().any(|tool| tool["name"] == "page.set_size"
         && tool["inputSchema"]["additionalProperties"] == false));
     let edit = client.call(
@@ -169,6 +169,33 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             .as_str()
             .ok_or("missing MCP PNG")?
             .starts_with("iVBORw0KGgo")
+    );
+    let bond = client.call(
+        9,
+        "tools/call",
+        json!({"name":"bond.create","arguments":{
+            "page_id":1,"begin_x_pt":10,"begin_y_pt":20.5,"end_x_pt":50,"end_y_pt":20.5
+        }}),
+    )?;
+    assert_eq!(bond["result"]["isError"], false);
+    let created = &bond["result"]["structuredContent"];
+    assert_eq!(created["revision"], 3);
+    assert_eq!(created["redo_depth"], 0);
+    assert_eq!(
+        created["document"]["pages"][0]["fragments"][0]["atoms"][0]["explicit_hydrogens"],
+        3
+    );
+    let invalid = client.call(
+        10,
+        "tools/call",
+        json!({"name":"bond.create","arguments":{
+            "page_id":1,"begin_x_pt":10,"begin_y_pt":20.5,"end_x_pt":10,"end_y_pt":20.5
+        }}),
+    )?;
+    assert_eq!(invalid["result"]["isError"], true);
+    assert_eq!(
+        invalid["result"]["structuredContent"]["error"]["code"],
+        "invalid_params"
     );
     client.finish()?;
     Ok(())

@@ -3,28 +3,36 @@
 An independent, offline chemical drawing application being built in Rust.
 
 The compatibility target includes CDXML and CDX files used by ChemDraw Professional.
-No application file-open/save or chemical drawing workflow is implemented yet. The standalone
-CDXML crate preserves syntax and replaces existing attribute values without rewriting
+The first drawing workflow creates an independent C-C bond with terminal hydrogen labels,
+supports Undo/Redo and captures its canvas on CPU or GPU. Connected construction and file
+open/save remain missing. Drawings are session-local and cannot yet be saved/reopened.
+The standalone CDXML crate preserves syntax and replaces existing attribute values without rewriting
 unrelated bytes; see [tested format scope](docs/file-formats.md).
 The headless model stores validated atom/bond/fragment data. The io crate maps limited
 source-backed node-position and elemental graph views. Engine snapshots/history now retain
 complete original CDXML bytes, with guarded unchanged-source export. Application
-import/save commands and chemical rendering are not yet connected.
+import/save commands and faithful imported-file rendering are not yet connected.
 Bondline is not affiliated
 with, endorsed by, or sponsored by ChemDraw or Revvity Signals.
 
 Current capabilities: native page sizing/rotation and Undo/Redo, independently sourced Apache-2.0
 font, original icon, shared CPU/GPU page-scene reference, and strict native runtime/asset
 license gates. Native macOS launch was visually inspected; Windows/Linux are cross-checked,
-with native runtime validation pending. This is a development foundation, not a chemical editor yet.
-The shared registry and CLI can inspect an in-memory page, set its dimensions, undo/redo,
-and capture its shared scene as a CPU or GPU PNG with revision/backend evidence.
+with native runtime validation pending. This remains a development foundation with one limited
+drawing workflow. The registry/CLI can inspect the document, size pages, create independent
+bonds, undo/redo and capture supported scenes with revision/backend evidence.
+
+![Human-approved capture of a native-session single bond](crates/render/tests/goldens/single-bond.png)
+
+This is the actual native document's offscreen canvas capture; window chrome is not included.
+Its [approval record and exact scope](crates/render/tests/goldens/README.md) accompany the test.
 
 ```bash
 cargo run -p bondline-ui --bin bondline
 cargo run -p bondline-ui --bin bondline -- --smoke-test
 cargo run -p bondline-cli -- commands
 cargo run -p bondline-cli -- run --cmd '{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}'
+cargo run -p bondline-cli -- run --cmd '{"command":"bond.create","params":{"page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200}}'
 cargo test --workspace --locked
 cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo fmt --all -- --check

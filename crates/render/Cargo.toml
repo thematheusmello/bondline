@@ -12,9 +12,11 @@ layer = 1
 bondline-model = { path = "../model" }
 wgpu.workspace = true
 thiserror = "2"
+ab_glyph = "=0.2.32"
 
 [dev-dependencies]
 pollster = "=0.3.0"
+serde_json.workspace = true
 
 [lints]
 workspace = true

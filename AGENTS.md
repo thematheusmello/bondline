@@ -58,7 +58,7 @@ is separate and opens no listener. Keep file access bounded and explicitly autho
 Current map: model (L0, pages, Point2 and validated elemental atom/bond/fragment graphs);
 cdxml (L0, source-preserving syntax, exact integral/source-ID decoding and checked
 existing-attribute replacement);
-render (L1, shared CPU/GPU page scenes); io (L2,
+render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
 source-backed CDXML geometry/elemental projections, owned application snapshots and PNG encoding);
 commands (L3, registry and complete stored-snapshot Arc history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
@@ -83,6 +83,15 @@ typed closed parameter object once in command_registry!, implement it below the 
 delivered adapters, update CLI/MCP wire tests as needed, then update provenance and parity.
 For UI changes, launch the actual native app and inspect the workflow. Eguis's input tests
 and source cross-checks do not substitute for native platform execution.
+
+The current six-command registry includes bond.create for independent C-C fragments with
+three explicitly authored H per carbon. It does not attach to existing atoms or save files.
+Identity floors must survive Undo branches and advance only after successful commits.
+Native gestures consume ordered events; press_origin alone loses a drag completed between
+frames. Canvas interaction must not advance layout beyond visible error text.
+The user approved crates/render/tests/goldens/single-bond.png for its exact scene/hash only.
+Its JSON and README record provenance; external Pillow compares every CPU/GPU RGBA byte.
+Do not regenerate that golden without renewed human approval. Other images remain unapproved.
 
 ## Pick and finish the next task
 

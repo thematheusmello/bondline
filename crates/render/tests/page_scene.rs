@@ -1,5 +1,5 @@
 use bondline_model::PageSize;
-use bondline_render::{Error, Rectangle, Scene, cpu_scene, gpu_scene, page_scene};
+use bondline_render::{Error, Primitive, Rectangle, Scene, cpu_scene, gpu_scene, page_scene};
 
 #[test]
 fn page_pixels_match_an_independently_drawn_reference_grid()
@@ -34,21 +34,21 @@ fn layered_clipped_rectangles_match_on_cpu_and_gpu_without_alpha_blending()
         width: 4,
         height: 2,
         background: [255; 4],
-        rectangles: vec![
-            Rectangle {
+        primitives: vec![
+            Primitive::Rectangle(Rectangle {
                 x: 0,
                 y: 0,
                 width: 2,
                 height: 2,
                 color: [255, 0, 0, 255],
-            },
-            Rectangle {
+            }),
+            Primitive::Rectangle(Rectangle {
                 x: 1,
                 y: 1,
                 width: 10,
                 height: 10,
                 color: [0, 255, 0, 128],
-            },
+            }),
         ],
     };
     let cpu = cpu_scene(&scene)?;
@@ -69,13 +69,13 @@ fn renderer_rejects_hostile_geometry_before_gpu_initialization() {
         width: 1,
         height: 1,
         background: [0; 4],
-        rectangles: vec![Rectangle {
+        primitives: vec![Primitive::Rectangle(Rectangle {
             x: u32::MAX,
             y: 0,
             width: 1,
             height: 1,
             color: [255; 4],
-        }],
+        })],
     };
     assert!(matches!(cpu_scene(&scene), Err(Error::InvalidGeometry)));
     assert!(matches!(
@@ -88,14 +88,14 @@ fn renderer_rejects_hostile_geometry_before_gpu_initialization() {
         width: 1,
         height: 1,
         background: [0; 4],
-        rectangles: vec![
-            Rectangle {
+        primitives: vec![
+            Primitive::Rectangle(Rectangle {
                 x: 0,
                 y: 0,
                 width: 1,
                 height: 1,
                 color: [255; 4]
-            };
+            });
             4097
         ],
     };

@@ -34,9 +34,9 @@ The complete modern inventory gate remains open; see clean-room/open-questions.m
 | Capability | Source | State | Evidence / next work |
 |---|---|---|---|
 | New/open/save documents | GUIDE-25 | missing | Registry and persistent formats |
-| Undo/redo | GUIDE-25 / MAC-HISTORY | verified for page size only | Engine properties, egui input and actual Mac Letter -> undo -> redo. Chemistry edits and Windows/Linux runtime missing |
+| Undo/redo | GUIDE-25 / MAC-HISTORY | verified for page size and independent C-C creation, Mac only | Exact engine properties; native page and bond Undo/Redo plus error recovery. Other chemical edits and Windows/Linux runtime missing |
 | Selection and transforms | GUIDE-25 | missing | M2 |
-| Bond, ring, chain tools | GUIDE-25 | missing | M2 |
+| Bond, ring, chain tools | GUIDE-25 | partial: isolated single-bond drag verified on Mac | bond.create, native history/control capture and approved specific-scene golden. Connected construction, other bond kinds, rings/chains and full tool behavior missing |
 | Atom labels, charges, isotopes, radicals | GUIDE-25 | missing | M2 |
 | Stereo bonds and labels | GUIDE-25 | missing | M2/M3 |
 | Text, captions, chemical formatting | GUIDE-25 | missing | M2/M3 |
@@ -91,8 +91,8 @@ The complete modern inventory gate remains open; see clean-room/open-questions.m
 
 | ID | Reference control/action | G25 p. | State | Notes |
 |---|---|---|---|---|
-| ME-001 | Edit > Undo | 78 | verified (page size, Mac only) | history.undo; exact engine properties and actual Mac page workflow. Chemical history missing. |
-| ME-002 | Edit > Redo | 78 | verified (page size, Mac only) | history.redo; exact engine properties and actual Mac page workflow. Chemical history missing. |
+| ME-001 | Edit > Undo | 78 | verified (page size and isolated C-C creation, Mac only) | history.undo; exact generated properties and native workflows/error recovery. Other chemical history missing. |
+| ME-002 | Edit > Redo | 78 | verified (page size and isolated C-C creation, Mac only) | history.redo; exact generated properties and native workflows. Other chemical history missing. |
 | ME-003 | Edit > Undo Autonumber Reaction | 20 | missing | Dynamic history label; autonumbering missing. |
 | ME-004 | Edit > Redo Autonumber Reaction | 21 | missing | Dynamic history label; autonumbering missing. |
 | ME-005 | Edit > Repeat last command | 78 | missing | Separate from redo. |
@@ -285,7 +285,7 @@ The complete modern inventory gate remains open; see clean-room/open-questions.m
 | TD-003 | Structure Perspective | 192, 242-243 | missing | Structure rotation/projection handling. |
 | TD-004 | Eraser | 86, 91, 121 | missing | Deletion and bond-order reduction have distinct contexts. |
 | TD-005 | Text | 91-94 | missing | Atom labels and free captions. |
-| TD-006 | Solid/single bond | 85 | missing | - |
+| TD-006 | Solid/single bond | 85 | verified (partial: isolated drag, Mac only) | bond.create through native/CLI/MCP/control; one history edit per drag and approved specific-scene capture. Click creation, existing-atom attachment, modifiers/snapping, order changes and full tool parity remain missing. |
 | TD-007 | Double bond | 85 | missing | - |
 | TD-008 | Double either/crossed double bond | 86 | missing | - |
 | TD-009 | Triple bond | 86 | missing | - |

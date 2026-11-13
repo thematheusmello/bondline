@@ -9,7 +9,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
     assert!(list.status.success());
     let commands: Value = serde_json::from_slice(&list.stdout)?;
     let commands = commands.as_array().ok_or("expected command array")?;
-    assert_eq!(commands.len(), 5);
+    assert_eq!(commands.len(), 6);
     assert!(
         commands
             .iter()
@@ -109,6 +109,36 @@ fn executable_reports_consistent_errors_without_a_success_payload()
             .output()?
             .status
             .success()
+    );
+    Ok(())
+}
+
+#[test]
+fn executable_creates_and_captures_a_labeled_single_bond() -> Result<(), Box<dyn std::error::Error>>
+{
+    let result=Command::new(env!("CARGO_BIN_EXE_bondline-cli")).args([
+        "run","--cmd",r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":60,"height_pt":60}}"#,
+        "--cmd",r#"{"command":"bond.create","params":{"page_id":1,"begin_x_pt":10,"begin_y_pt":20.5,"end_x_pt":50,"end_y_pt":20.5}}"#,
+        "--cmd",r#"{"command":"render.capture","params":{"page_id":1,"width_px":80,"height_px":80,"backend":"cpu"}}"#,
+    ]).output()?;
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let state: Value = serde_json::from_slice(&result.stdout)?;
+    assert_eq!(state["revision"], 2);
+    assert_eq!(state["undo_depth"], 2);
+    let fragment = &state["document"]["pages"][0]["fragments"][0];
+    assert_eq!(fragment["atoms"].as_array().ok_or("atoms")?.len(), 2);
+    assert_eq!(fragment["atoms"][0]["explicit_hydrogens"], 3);
+    assert_eq!(fragment["bonds"][0]["order"], "single");
+    assert_eq!(state["capture"]["backend"], "cpu");
+    assert!(
+        state["capture"]["png_base64"]
+            .as_str()
+            .ok_or("png")?
+            .starts_with("iVBORw0KGgo")
     );
     Ok(())
 }

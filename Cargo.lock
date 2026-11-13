@@ -565,8 +565,10 @@ dependencies = [
 name = "bondline-render"
 version = "0.1.0"
 dependencies = [
+ "ab_glyph",
  "bondline-model",
  "pollster",
+ "serde_json",
  "thiserror 2.0.21",
  "wgpu",
 ]
@@ -577,6 +579,7 @@ version = "0.1.0"
 dependencies = [
  "bondline-commands",
  "bondline-mcp",
+ "bondline-model",
  "bondline-render",
  "eframe",
  "serde_json",

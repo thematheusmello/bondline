@@ -1,43 +1,71 @@
 # Rendering evidence and scope
 
-The delivered scene contains an RGBA8 background and ordered, axis-aligned integer
-rectangles. Later rectangles replace earlier pixels, including alpha; there is no alpha
-compositing or antialiasing in this reference path. Chemical primitives and text are missing.
+Scenes contain a straight RGBA8 background and an ordered Primitive list of integer
+rectangles and finite constant-width butt strokes. Every primitive replaces covered pixels,
+including alpha. Readbacks have no blending or antialiasing. GPU execution never substitutes
+CPU output. The native view consumes the same scene; egui may antialias vector stroke edges.
 
-The CPU reference clips rectangles and writes straight RGBA8 bytes. The GPU path clips before
-float conversion, uploads a checked storage buffer and draws instanced triangle pairs with
-an original WGSL shader. RGBA8Unorm readback is tightly packed after removing row padding.
-The GPU path never silently substitutes a CPU result. Pipeline validation is returned as
-a typed error. Tested native backend: Apple M3 Max / Metal.
+Stroke coverage samples pixel centers at x+0.5,y+0.5. The CPU reference uses f64 dot/cross
+products to test the closed finite-width segment. GPU WGSL evaluates projection and signed
+perpendicular distance in f32 inside a conservatively clipped integer bounding rectangle.
+An 8-byte viewport header precedes 48-byte primitive records; binding size/alignment and
+vertex/fragment storage access were checked against pinned wgpu 22.1.0 and WGSL APIs.
+RGBA8Unorm readback removes row padding. Backend tested: Apple M3 Max / Metal.
 
-Bounds: readbacks are 1..2048 pixels per axis; scenes have at most 4096 rectangles. Empty or
-overflowing rectangle dimensions fail before GPU initialization. Geometry-only page layout
-accepts native viewports up to 100000 units per axis without allocating a pixel frame.
+Independent expectations precede the implementation: exact horizontal/vertical/diagonal
+pixel grids, reversed endpoints, interleaved source replacement and an i128 dot/cross oracle
+for quarter-pixel inputs. CPU output must match that oracle exactly. GPU differences are
+permitted only within 1/32 pixel of a true boundary, declared before comparison; there is no
+universal bitwise claim for oblique f32 edges. The approved horizontal scene compares exactly.
 
-The page producer uses physical model dimensions. It fits the page inside a margin of
-min(32, width/8, height/8), rounds each dimension to the nearest integer and centers it.
-An extreme aspect ratio still occupies at least one unit. The original paper style has a
-gray 232 background, gray 210 offset shadow, gray 196 one-unit border and white interior.
-This is a Bondline design decision, not a claim about another application's appearance.
+Readbacks are 1..2048 pixels per axis with at most 4096 mixed primitives. Rectangle dimensions
+must be nonzero with no edge overflow. Stroke endpoints are finite within ±100000 canvas
+units, width is finite in (0,100000], and squared length must be normal in f32. Invalid input
+fails before adapter initialization. Geometry-only page layout supports 1..100000 units.
 
-The native UI consumes those same opaque page rectangles in logical egui display units;
-the OS/egui transform applies display scale. Offscreen reference dimensions are pixels.
-These fit-to-viewport previews do not establish print scale or physical-resolution export.
+PageViewport shares paper fitting, physical-to-canvas mapping and pointer conversion. Margin
+is min(32,width/8,height/8); rounded dimensions are centered and occupy at least one unit.
+Separate x/y conversion factors follow that rounding, whose aspect error remains at most
+(1+aspect_ratio)/2 units. One point is 1/72 inch. The original preview style is gray 232
+background, gray 210 shadow, gray 196 border and white interior. This is not a journal preset.
+Existing hand-authored 8×8 page-grid, clipping and odd-pitch tests continue to pass.
 
-The geometry assertion accounts for the declared integer rounding: each outer dimension
-has at most 0.5 unit error, so |width - aspect_ratio * height| <= (1 + aspect_ratio)/2.
-The interior is exactly one unit inside that border. The former continuous float-layout
-assertion was replaced with these pixel-grid invariants before wiring the shared producer.
-An independent, hand-authored 8x8 pixel grid additionally checks every byte on CPU and GPU.
+The first chemical producer supports independent two-carbon fragments with one single bond,
+positions, no isotope/charge/radical, and three explicitly authored hydrogens per carbon.
+The creation command supplies that closed C2H6 case; the renderer performs no valence inference.
+Other structures fail explicitly. Source-backed documents still cannot be faithfully previewed.
+This limited workflow is not general atom/bond, style, stereo or reaction rendering.
 
-Other evidence covers layered source replacement (including alpha), clipped geometry,
-overflow and primitive-count rejection, one-pixel pages, and odd readback row pitches.
-Actual native page rotation was visually/accessibility checked after the shared-scene change.
-Human-approved goldens, native Windows/Linux execution, chemical rendering, blending,
-antialiasing and publication-quality color/output remain unverified or missing.
+IUPAC GR-2.1.2 requires terminal labels for an isolated ethane bond. The producer uses H3C/CH3
+with the 3 subscripted, keeping C centered at its authored endpoint and facing the bond.
+The original style uses one-point strokes and 12-point Roboto labels; subscript em is 2/3
+and baseline shift is 1/4 em. The existing Apache font is the only label font. ab_glyph's
+height-based scale is explicitly converted from em units. Glyph coverage is thresholded at
+0.5 and coalesced into black horizontal spans over white masks; CPU and GPU consume those
+same spans. General shaping, styled captions and smooth text rasterization remain missing.
 
-Render workers accept a shared cooperative cancellation flag. Pre-cancelled work fails
-before frame allocation or adapter creation; CPU drawing checks between scanlines and GPU
-readback uses nonblocking device polling with a ten-second deadline. Cancellation cannot
-preempt an operating-system driver call or an already submitted GPU command. These limits
-must remain explicit when adapters move captures off the document lock.
+Label em is bounded to 8..256 canvas units, with each glyph bitmap at most 512×512. Unreadable
+scales, off-viewport labels, overlap and excessive primitives return errors; content is never
+dropped. Masks may extend beyond the paper into the canvas; physical-page clipping/export
+is not implemented. FontTools 4.61.1 independently supplied glyph IDs/metrics. External Pillow
+12.3.0/FreeType tests require ink intersection-over-union >=0.90 at 96 em, chosen before
+comparison; observed values are 0.9660 and 0.9669. This is separate from golden approval.
+
+The user approved the exact 1024×1024 native-document Metal capture on 2026-11-13. Its PNG,
+coordinates, SHA-256 and approval scope are in crates/render/tests/goldens. External Pillow
+decodes it, verifies its hash and compares every RGBA byte with CPU and actual GPU output;
+deliberate pixel corruption must fail. This approves only that scene. The older blank-page
+candidate was not approved, and broader images/platforms/publication quality remain open.
+
+Actual native Mac evidence now covers drawing from empty, Undo/Redo, visible overlap errors
+and Undo recovery. Raw pointer events are consumed in order, including complete/multiple
+drags in a single frame; stale revisions, Escape, focus loss and outside release cancel
+pending edits. Click jitter up to three logical units does not create a bond. Cancellation
+variants have input-test evidence; native draw/history/error recovery was directly inspected.
+A canvas hit target must not advance layout past its error text: an observed clipped-error
+regression is tested. No native Windows/Linux or universal performance claim.
+
+Render workers retain cooperative cancellation, two-worker budgets and immutable input
+revisions. CPU scanlines and GPU readback polling check cancellation; GPU readback has a
+ten-second deadline. Driver calls and submitted GPU commands cannot be preempted. Label/
+scene preparation is bounded but is not a general cancellable chemistry-job system.

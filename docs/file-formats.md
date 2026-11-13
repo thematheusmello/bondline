@@ -6,7 +6,7 @@
 | CDX | None | Published specification recorded | Parser, preservation, writer and model mapping |
 | MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
-| PNG | Validated RGBA8 encoder and registry page-preview capture | External Pillow, independent page grid, actual native loopback capture | Chemical/print-resolution output and native save workflow |
+| PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
 
 CDXML original bytes are authoritative. The read-only XML tree is a derived view; writing
@@ -103,7 +103,7 @@ Any unsynchronized model edit fails with UnsupportedEdit; exact restoration/undo
 passthrough again. A native document without CDXML backing returns NoCdxmlSource. Source
 bytes survive input lifetime, cloning and history without being exposed in Debug or command
 result serialization. No file command or native open/save workflow is exposed by this API.
-Source bindings for structural edits, chemical rendering and full interpretation remain missing.
+Source bindings for structural edits, faithful imported-file rendering and full interpretation remain missing.
 The corpus gate checks one owned snapshot's projection against independent external Expat/Decimal,
 in addition to its unchanged-byte/XML checks. It explicitly reports chemistry calculations
 as missing rather than treating the projection as formula/stereo/SMILES/InChI verification.

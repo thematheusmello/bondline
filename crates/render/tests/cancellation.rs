@@ -10,7 +10,7 @@ fn cancelled_render_is_rejected_before_allocating_a_frame_or_opening_a_gpu() {
         width: 2048,
         height: 2048,
         background: [255; 4],
-        rectangles: vec![],
+        primitives: vec![],
     };
     assert!(matches!(
         cpu_scene_with_cancel(&scene, &clone),

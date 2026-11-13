@@ -22,7 +22,8 @@ Page snapshots include a fragments array, empty in the default application. Engi
 now retains an owned StoredDocument, including original CDXML data. An engine initialized
 with that API returns an additional source object: {format: "cdxml", byte_length, modified}.
 The field is omitted for native in-memory documents. Raw source bytes are not serialized.
-Import/export and chemical editing commands are not registered yet. Modified source-backed
+Import/export commands are not registered yet. bond.create now authors a limited native
+chemical fragment; source-backed creation is refused until editable mapping exists. Modified source-backed
 models cannot export stale XML; exact undo restores the original bytes and exportability.
 History has a count limit only; source/history byte budgeting must precede large-file imports.
 See model.md for the data boundary; serialized graphs are not a project-save workflow.
@@ -31,6 +32,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 |---|---|---|
 | `document.inspect` | `{}` | Read-only snapshot |
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
+| `bond.create` | `page_id`, `begin_x_pt`, `begin_y_pt`, `end_x_pt`, `end_y_pt` | One independent C-C fragment; two C atoms with three explicitly authored H each, one single bond |
 | `history.undo` | `{}` | Previous authored snapshot |
 | `history.redo` | `{}` | Next authored snapshot |
 | `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only page preview PNG; explicit `cpu` or `gpu` |
@@ -42,6 +44,17 @@ not save a project or make a multi-command transaction. `--help` lists actual op
 
 Native Page presets/rotation, Edit Undo/Redo and history shortcuts call these same commands.
 The canvas reads the authored dimensions; no native control edits the model directly.
+Native drag creation calls bond.create once at release. Temporary preview does not enter
+history. Complete/multiple drags can arrive between frames; ordered raw events preserve each
+transaction. Escape, focus loss, stale revisions and outside release cancel a pending drag.
+Three logical units of click jitter are ignored. These are independent initial policies.
+
+Bond coordinates use finite ±100000 physical points; endpoints must differ. Page/graph
+validation precedes commit. IDs are fresh document-wide per kind and never reused across
+Undo branches within that engine session. Failed commits do not advance the identity floors.
+Creation always makes an independent fragment, including at coincident existing positions;
+it does not attach to existing atoms, snap angles/lengths or change bond order. Overlapping
+labels are a rendering error recoverable with Undo. No save/reopen workflow is implemented.
 `bondline-cli mcp` serves a process-local document over stdio using rmcp 3.9.0. It negotiates
 MCP lifecycle, exposes the registry as tools and returns structured content plus text. Domain
 errors are tool results with `isError`; unknown tools are protocol errors. Input lines are
@@ -88,9 +101,13 @@ Capture dimensions are 1..2048 pixels per axis. A successful result adds `captur
 `png_base64`. GPU output includes the actual adapter name/backend/device type; CPU output
 has `adapter: null`. There is no automatic CPU fallback. This captures the shared page
 scene, not window chrome, operating-system dialogs or print-resolution chemical output.
-Imported/source-backed documents and pages with chemical atoms/bonds return unsupported_content
-before starting CPU/GPU capture. Chemical rendering remains missing; blank success would
-conceal content. This guard applies equally to both requested backends and changes no state.
+Source-backed documents return unsupported_content before rendering. Native empty pages and
+the supported two-carbon/three-H single-bond fragments can be captured. Other chemistry,
+overlapping/off-viewport labels and excessive scenes fail explicitly; no content is dropped.
+Labels use the attributed Apache font at the original 12-point style, bounded to 8..256 em
+canvas units. An unreadable/enormous scale returns unsupported_scale; enlarge the capture
+or change the view. Physical publishing, general labels/styles and file export remain missing.
+The same rules apply to both backends and leave authored state unchanged.
 
 ```json
 {"command":"render.capture","params":{"page_id":1,"width_px":512,"height_px":512,"backend":"gpu"}}

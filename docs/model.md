@@ -36,10 +36,13 @@ the fragment's private vectors after insertion. Page/document cloning shares fra
 Arcs, so page-size edits do not duplicate molecule arrays. History still needs chemical
 command coverage when those commands land.
 
-CLI/MCP/loopback authored snapshots now include each page's fragments array, empty in the
-current default application. These interfaces still have only page/history/capture commands;
-no chemical import/editing UI or chemical renderer is connected. This model is not a native
-project format, complete CDXML mapping or a working chemical authoring workflow.
+CLI/MCP/loopback snapshots include page fragments, empty in a new session. bond.create now
+appends one independent C-C fragment, explicitly authoring three H per carbon from the
+documented ethane case. It does not run general valence inference or attach to existing
+atoms. Native drag creation, history and limited labeled rendering use those same values.
+Identity floors remain in the engine session across Undo branches, updating only on success.
+This model is not a native project format or complete CDXML mapping. General chemical
+editing, connected construction and persistence remain missing.
 
 Io's ElementalGraph projects supported CDXML properties into these types and retains the
 source separately. StoredDocument now owns both the model and original CDXML allocation;

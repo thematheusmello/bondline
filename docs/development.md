@@ -28,6 +28,14 @@ Every connection now authenticates with a fresh 256-bit session token before run
 command. Startup stdout is the owner's credential channel; do not redirect it to public logs
 or commit tokens in artifacts. The UI/errors never show the token. Localhost is a network
 boundary, not an operating-system user identity, and a compromised local account is outside
-this token's protection. Current operations expose only the temporary page model. HTTP
+this token's protection. Current operations expose the temporary page/chemical model. HTTP
 input is rejected and closed. Future file operations still require explicit authorization,
 bounded input, validated paths and data-preserving save/recovery behavior.
+
+The independent single-bond workflow is native on Mac and available through bond.create in
+every adapter. It is session-local: no save/reopen command exists yet. See rendering.md for
+supported content, scale/primitive limits, exact golden scope and the missing connected tools.
+The user-approved render reference lives in crates/render/tests/goldens with its coordinates,
+hash and provenance. Do not refresh it to make a test pass without renewed human approval.
+Pillow tests also compare terminal glyph masks with independent FreeType. FontTools is used
+only to reproduce recorded metric vectors, not required by the regular CI/test command.

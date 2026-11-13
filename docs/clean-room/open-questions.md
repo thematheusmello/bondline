@@ -14,8 +14,9 @@
   use CTRL without a general macOS mapping; only explicitly documented Mac bindings and
   independently verified Bondline behavior may be claimed. Keyboard-layout behavior needs tests.
 - Several attachment-point and BioDraw glyphs share labels in the public guide. Their
-  exact palette variants remain unresolved. Never inspect installed toolbar/hotkey XML,
-  help bundles or program binaries to fill these gaps; use further public documentation.
+  exact palette variants remain unresolved. Authorized toolbar/hotkey resources and runtime
+  observation may now help under the updated AGENTS policy; record version/hash/evidence
+  instead of guessing from memory. No such desktop artifact evidence is established yet.
 - The archived CDX SDK does not establish every modern extension. Preserve unknown data.
 - The archived properties/id.htm link returns 404, but CDX-IDENTITY/CDX-OBJECT-ID now establish
   32-bit IDs, zero as unassigned and per-container identity. Older object tables label IDs
@@ -40,7 +41,9 @@
 - Native declared license closure now passes all three desktop targets. Native Windows/Linux
   execution and complete release notice assembly remain; every dependency upgrade needs new
   closure/source/asset evidence. Crate labels alone are insufficient.
-- CPU/GPU raster tolerances and human-approved goldens remain to be established before claims.
+- One original single-bond scene now has explicit human approval and an exact CPU/GPU/Pillow
+  regression. Broader scenes, smooth text, imported styles and platform raster behavior remain
+  open; that approval does not establish final UI design or general rendering correctness.
 - Editable Office embedding and modern naming/prediction behavior need public evidence.
 - REA 6.9.0 was run externally using an existing Node 26.12.1 installation without changing
   the selected system runtime. It remains a development tool, outside the shipped application.

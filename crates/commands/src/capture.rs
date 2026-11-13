@@ -1,7 +1,9 @@
 use crate::{CommandResult, Error};
 use base64::{Engine as _, engine::general_purpose::STANDARD};
-use bondline_model::PageSize;
-use bondline_render::{Cancellation, MAX_CAPTURE_DIMENSION_PX, cpu_scene_with_cancel, page_scene};
+use bondline_model::Page;
+use bondline_render::{
+    Cancellation, MAX_CAPTURE_DIMENSION_PX, carbon_page_scene, cpu_scene_with_cancel,
+};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -45,7 +47,7 @@ pub struct PngCapture {
 #[derive(Debug)]
 pub struct Prepared {
     result: CommandResult,
-    capture: Option<(RenderCapture, PageSize)>,
+    capture: Option<(RenderCapture, Page)>,
 }
 
 impl Prepared {
@@ -59,7 +61,7 @@ impl Prepared {
     pub(super) fn capture(
         result: CommandResult,
         params: RenderCapture,
-        size: PageSize,
+        page: Page,
     ) -> Result<Self, Error> {
         if [params.width_px, params.height_px]
             .iter()
@@ -69,7 +71,7 @@ impl Prepared {
         }
         Ok(Self {
             result,
-            capture: Some((params, size)),
+            capture: Some((params, page)),
         })
     }
 
@@ -82,9 +84,9 @@ impl Prepared {
     }
 
     pub fn complete_with_cancel(mut self, cancel: &Cancellation) -> Result<CommandResult, Error> {
-        if let Some((params, size)) = self.capture {
+        if let Some((params, page)) = self.capture {
             cancel.check()?;
-            let scene = page_scene(params.width_px, params.height_px, size)?;
+            let scene = carbon_page_scene(params.width_px, params.height_px, &page)?;
             let (frame, adapter) = match params.backend {
                 RenderBackend::Cpu => (cpu_scene_with_cancel(&scene, cancel)?, None),
                 RenderBackend::Gpu => {
