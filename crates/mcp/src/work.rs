@@ -295,6 +295,58 @@ mod tests {
     };
 
     #[test]
+    fn separate_executor_budgets_cannot_bypass_the_engines_outstanding_save()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let engine = Arc::new(Mutex::new(Engine::default()));
+        let first = CommandExecutor::new(Arc::clone(&engine));
+        let second = CommandExecutor::new(Arc::clone(&engine));
+        let mut nonce = [0_u8; 16];
+        getrandom::fill(&mut nonce).map_err(|error| format!("test path nonce: {error}"))?;
+        let path = std::env::temp_dir().join(format!(
+            "bondline-unpublished-save-reservation-{:032x}.cdxml",
+            u128::from_le_bytes(nonce)
+        ));
+        let command = |name| Command::parse(name, json!({"path":path}));
+        let before = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+        let pending = first
+            .prepare_command(command("document.save_cdxml")?)
+            .map_err(|error| error.message)?;
+        assert!(first.has_active_work());
+        assert!(!second.has_active_work());
+        assert_eq!(
+            second
+                .prepare_command(command("document.save_mol")?)
+                .err()
+                .ok_or("independent executor bypassed the Engine save reservation")?
+                .code,
+            "busy"
+        );
+        assert!(!second.has_active_work());
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        let capture = second
+            .prepare_command(Command::parse(
+                "render.capture",
+                json!({"page_id":1,"width_px":8,"height_px":8,"backend":"cpu"}),
+            )?)
+            .map_err(|error| error.message)?;
+        drop(capture);
+        drop(pending);
+        assert!(!first.has_active_work());
+        assert!(!second.has_active_work());
+        drop(
+            second
+                .prepare_command(command("document.save_mol")?)
+                .map_err(|error| error.message)?,
+        );
+        assert!(!path.try_exists()?);
+        assert!(!second.has_active_work());
+        Ok(())
+    }
+
+    #[test]
     fn registered_deferred_work_is_visible_under_the_engine_lock_before_spawning()
     -> Result<(), Box<dyn std::error::Error>> {
         let engine = Arc::new(Mutex::new(Engine::default()));

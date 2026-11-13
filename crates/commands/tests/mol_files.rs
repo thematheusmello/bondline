@@ -393,18 +393,47 @@ fn format_and_baseline_aba_never_restore_a_running_request_receipt() -> TestResu
         return Err("known save opened a picker".into());
     };
     let prepared = engine.prepare_ui_file(id, Command::SaveCdxml(params))?;
+    let before = snapshot(&engine)?;
+    let previous_bytes = fs::read(&path)?;
     for name in ["document.save_mol", "document.save_cdxml"] {
-        let direct =
-            serde_json::to_value(engine.dispatch(name, json!({"path":path,"overwrite":true}))?)?;
-        assert!(direct["file_operation"].get("ui_request_id").is_none());
-        assert!(direct["file_operation"].get("ui_request_current").is_none());
+        let error = engine
+            .dispatch(name, json!({"path":path,"overwrite":true}))
+            .err()
+            .ok_or("a running trusted save allowed another publication")?;
+        assert_eq!(error.info().code, "busy");
+        assert_eq!(snapshot(&engine)?, before);
+        assert_eq!(fs::read(&path)?, previous_bytes);
     }
     let result = serde_json::to_value(engine.finish(prepared.complete()?)?)?;
     assert_eq!(result["revision"], 1);
     assert_eq!(result["file"]["format"], "cdxml");
     assert_eq!(result["file"]["dirty"], false);
     assert_eq!(result["file_operation"]["ui_request_id"], id);
-    assert_eq!(result["file_operation"]["ui_request_current"], false);
+    assert_eq!(result["file_operation"]["ui_request_current"], true);
+    let completed_baseline = snapshot(&engine)?;
+    for name in ["document.save_mol", "document.save_cdxml"] {
+        let direct =
+            serde_json::to_value(engine.dispatch(name, json!({"path":path,"overwrite":true}))?)?;
+        assert!(direct["file_operation"].get("ui_request_id").is_none());
+        assert!(direct["file_operation"].get("ui_request_current").is_none());
+        if name == "document.save_mol" {
+            assert_eq!(read_mol(&path)?["smiles"], "CC");
+        } else {
+            file_support::independently_read_file(&path, 1)?;
+        }
+    }
+    assert_eq!(snapshot(&engine)?, completed_baseline);
+    assert_eq!(
+        engine
+            .claim_ui_file(id)
+            .err()
+            .ok_or("format/baseline ABA revived the obsolete trusted request")?
+            .info()
+            .code,
+        "ui_stale_request"
+    );
+    // The returned receipt is a historical observation, not a fresh host acknowledgement.
+    assert_eq!(result["file_operation"]["ui_request_current"], true);
     assert!(!engine.finish_ui_file(id, true));
     assert!(engine.state().ui_file.request.is_none());
     Ok(())

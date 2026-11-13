@@ -24,7 +24,7 @@ run is evidence for the newly fetched CDX corpus or V3000 application changes.
 ## Root integration: fetched CDX corpus and standalone V3000
 
 Fetched-CDX source98bc59a follows30ae30e and is published on feat/cdx-corpus-checks.
-Its hosted run43526004010 is in progress; inspect that exact run before main integration.
+Its hosted run43526004010 is terminal GREEN: Mac338/Linux336/Windows328, windows and4ASAN.
 The feature now cold-fetches the
 original CDX from that real public commit, checks its65750 bytes/SHA
 63ef1a74133e45de915d5fd25b2ca3321a95dbe5114873a5a59f2f45217000d2 and retains its original
@@ -45,9 +45,27 @@ prior local root tests are terminal.
 The root feat/m1-integration branch now combines that corpus source with standalone
 V3000 codec5caf6ce. Conflict resolution retains both full verification histories, the
 fetched corpus, original positive CDX seed/max_len131072 and the fifth V3000 fuzz target.
-No codec source changed during integration. This combined checkout needs its own aggregate
-and hosted evidence; older isolated successes are not substituted. The separate sibling
-application checkout remains frozen while native acceptance runs.
+No codec source changed during integration. Combined source226396e passes its own actual-
+root349+3 gate and every hosted43526538340 job: Mac352/Linux350/Windows342, windows and
+five ASAN targets. Older isolated successes are not substituted. Main is still c797262;
+the following safety correction will be verified before the next main update.
+
+## Current root: save completion safety
+
+Branch fix/save-completion-order follows226396e. Independent review reproduced an older
+save relabeling a newer disk format; V3000 Auto could then round to V2000. One Engine save
+reservation now lasts from prepare through finish/drop, including the published-result gap.
+Another Save fails busy before I/O; edits/queries/Open/capture and other Engines remain usable.
+The same review exposed historical close receipts approving after later format/baseline ABA.
+Private current-completion acknowledgment now survives the operation's own update but is
+permanently cleared by later real changes; UI poll requires it before renewing close.
+
+Actual REDs and retained old tests are in docs/verification.md. Root cargo xtask ci now
+passes356 workspace plus3 bridge tests and all gates, including the four-file corpus:
+target/save-completion-ci-integrated.log, session96453 terminal0. Six new lifecycle tests,
+one cross-executor proof and the exact post-finish UI regression pass. No IO/parser,
+runtime/lock, renderer, font or approved golden changed. Corrected native interaction and
+this source's own hosted run remain pending. Native processes/CUA are currently stopped.
 
 ## What works within verified scope
 
@@ -75,12 +93,12 @@ application checkout remains frozen while native acceptance runs.
 
 Persistent sibling checkout:
 /Users/sarenaberg/Workspace/doozle/open-source-world/bondline-mol-v3000
-branch feat/mol-v3000-files, parent5caf6ce; Cargo target is that checkout's own target directory.
+branch feat/mol-v3000-files, local commit3b1fada after5caf6ce; its own target directory.
 NEVER share root build outputs or delete an active checkout. Earlier wrong-checkout reuse
 was fixed by Cargo's runtime workspace locator; evidence must identify the invoked root.
 
 Version-aware owned IO, shared commands, exact association/default Save, explicit V2000/
-V3000 Save As and family-based Open are frozen for integration review. IO107 tests, core
+V3000 Save As and family-based Open are locally committed. IO107 tests, core
 command tests, adapter29 CLI/stdio/loopback tests and43 UI library tests pass, with scoped
 clippy/fmt. V3→V2 refuses before publication; V2→V3 also requires a raw-coordinate precision
 proof. Source.format remains mol; file/receipt format records the actual version. No new
@@ -91,21 +109,32 @@ checks remain pending. Its aggregate first stopped during compilation
 because local disk was full (target/mol-versions-ci-disk-full.log). Only the two Bondline
 incremental caches were removed; source, fixtures and evidence were preserved. The rerun
 completed successfully (session42649, sibling target/mol-versions-ci-integrated.log).
+That source predates the confirmed save/close correction. Its new exact V2/V3 concurrency
+regression currently fails in target/v3000-save-order-red.log and is intentionally uncommitted
+until correction integration. No failing code was committed to main or published as verified.
+Partial old-source native Open/copy/format-choice/retention passed, then acceptance stopped.
+Binary6addbfb7…/source manifestf9a42db0… and exact sequence are in root
+target/native-v3000-ui-handoff.md. PID38959/controller38630 exited0; CUA completed.
 
-Root alone stages/commits/pushes. file_io delivered frozen IO and is now doing read-only RXN
-primary-source research (target/rxn-next-handoff.md). file_verification and native_file_ui
-completed their scoped source. native_file_ui is now sole native/CUA owner for the frozen
-V3000 acceptance; its build/process handles will be in root target/native-v3000-ui-handoff.md.
-Source branches and both worktrees remain recoverable; no completed hosted job was restarted.
+Root alone stages/commits/pushes. file_verification and native_file_ui froze root correction
+tests/UI; no job remains from them. file_io completed primary RXN research and now owns only
+the new legacy RXN codec in persistent /Users/sarenaberg/Workspace/doozle/open-source-world/bondline-rxn,
+branch feat/rxn-v2000 at3b1fada. It has a separate absolute Cargo target, incremental off and
+dev/test debug0 to bound disk use. Do not clean/delete/share any active checkout/target.
+This new work is a source-preserving role/container library, not application reactions;
+V3000 reaction wrappers remain separate. Primary REAGENT versus RDKit AGENT, default role
+folding, mixed MOL versions and consumer EOF/data loss are recorded in target/rxn-next-handoff.md.
+Ask file_io for current jobs before starting overlapping work. All completed hosted runs
+above are terminal; no completed job was restarted.
 
 ## Remaining limits and next exact steps
 
-1. Commit/publish the locally verified fetched-CDX feature; inspect its own hosted run and
-   fast-forward main only after matching GREEN. Do not substitute the fixture's older run.
-2. Finish the sole native agent's frozen-binary Open/Save/Save As/reopen/close and refusal
-   checks. The sibling aggregate42649 has passed and is terminal; do not restart unchanged tests.
-   Commit with provenance/control/format/parity/status docs, then run its own hosted checks.
-3. Integrate standalone V3000 and its application source with newer root corpus changes,
+1. Commit/publish root's locally verified save-order/close-receipt correction and inspect
+   its own hosted run. Fast-forward main only after matching GREEN; do not substitute older runs.
+2. Bring the correction into sibling3b1fada and turn its exact V2/V3 regression GREEN. Run
+   the actual sibling gate; then freeze/rebuild and complete sole-agent native acceptance.
+   Keep partial earlier evidence separate. Publish only corrected accepted application source.
+3. Integrate its application source with newer root corpus changes,
    preserving both the positive CDX fuzz seed/bound and the fifth V3000 target. Run the actual
    merged checkout gates. Continue application SDF, broader CDXML/CDX, RXN/SMILES/InChI; then
    M2 drawing/labels/styles, M3 chemistry/reactions, M4 publishing/Office and M5 depth/release.

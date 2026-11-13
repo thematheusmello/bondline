@@ -119,6 +119,7 @@ pub(super) enum FilePlan {
         format: FileFormat,
         ui_request_id: Option<u64>,
         document: Arc<StoredDocument>,
+        save_slot: Arc<()>,
         revision: u64,
         generation: u64,
     },
@@ -150,6 +151,7 @@ pub(super) enum Completion {
         format: FileFormat,
         ui_request_id: Option<u64>,
         document: Arc<StoredDocument>,
+        save_slot: Arc<()>,
         revision: u64,
         generation: u64,
     },
@@ -199,6 +201,7 @@ impl FilePlan {
                     format,
                     ui_request_id,
                     document,
+                    save_slot,
                     revision,
                     generation,
                 } => {
@@ -223,6 +226,7 @@ impl FilePlan {
                         format,
                         ui_request_id,
                         document,
+                        save_slot,
                         revision,
                         generation,
                     }
@@ -238,6 +242,13 @@ impl FilePlan {
 }
 
 impl Engine {
+    pub(super) fn reserve_save(&self) -> Result<Arc<()>, Error> {
+        if Arc::strong_count(&self.save_slot) != 1 {
+            return Err(Error::SaveBusy);
+        }
+        Ok(Arc::clone(&self.save_slot))
+    }
+
     pub fn finish(&mut self, completed: Completed) -> Result<CommandResult, Error> {
         match completed.0 {
             Completion::Result { mut result, cancel } => {
@@ -294,6 +305,7 @@ impl Engine {
                 self.generation = next_generation;
                 self.revision = next_revision;
                 self.invalidate_close();
+                self.mark_ui_file_completed(ui_request_id, ui_request_current);
                 Ok(CommandResult {
                     changed: true,
                     file_operation: Some(FileOperation {
@@ -315,6 +327,8 @@ impl Engine {
                 format,
                 ui_request_id,
                 document,
+                // Keep the reservation through state application, beyond publication.
+                save_slot: _save_slot,
                 revision,
                 generation,
             } => {
@@ -339,6 +353,7 @@ impl Engine {
                     if baseline_changed {
                         self.invalidate_close();
                     }
+                    self.mark_ui_file_completed(ui_request_id, ui_request_current);
                 }
                 Ok(CommandResult {
                     file_operation: Some(FileOperation {

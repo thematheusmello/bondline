@@ -225,3 +225,16 @@ independent consumer/raw-float tests verify that spelling rather than V2000 quan
 
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused
 with their notices. This does not relax the prohibition on proprietary product code/assets.
+
+The save-order correction follows Rust's public
+https://doc.rust-lang.org/std/sync/struct.Arc.html#method.strong_count and
+https://doc.rust-lang.org/reference/destructors.html#drop-scopes . Reviewed2026-11-13;
+the current generated std docs identify1.100.0, while the actual API compiles on pinned1.94.1
+(the versioned documentation URL was inaccessible). The private token can be cloned only
+by exclusive Engine::prepare; worker/result owners can only move or drop it. Thus another
+thread can make the observed count decrease, causing at most transient busy; it cannot
+acquire a new reservation without exclusive Engine access. A named match-arm binding keeps
+the token alive through finish. This narrowly justified ownership check is not a general
+claim that Arc::strong_count alone provides a synchronization primitive. Single outstanding
+save/busy policy is original Bondline behavior; actual reversed completions independently
+reproduced wrong clean encoding and subsequent coordinate rounding before correction.

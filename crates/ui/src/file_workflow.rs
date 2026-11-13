@@ -520,7 +520,7 @@ impl FileWorkflow {
         };
         match completed {
             Ok(result) => {
-                engine.finish_ui_file(job.request_id, false);
+                let current_completion = engine.finish_ui_file(job.request_id, false);
                 *error = None;
                 if let Some(path) = &result.file.path
                     && let Some(parent) = std::path::Path::new(path).parent()
@@ -537,7 +537,8 @@ impl FileWorkflow {
                             && receipt.ui_request_id == Some(job.request_id)
                             && receipt.ui_request_current == Some(true)
                     });
-                    if current_receipt
+                    if current_completion
+                        && current_receipt
                         && current.close == CloseState::NeedsDecision
                         && current.close_epoch == ticket.epoch
                         && current.revision == ticket.revision
@@ -606,7 +607,8 @@ mod tests {
             }
         );
         assert!(!workflow.chooser.is_open());
-        assert!(engine.finish_ui_file(intent.request_id, false));
+        workflow.cancel_picker(&mut engine, &mut None);
+        assert!(engine.state().ui_file.request.is_none());
         workflow.request_file(&mut engine, UiFileAction::SaveAs, None, &mut None);
         assert!(workflow.adopt_request(&mut engine, &mut None).is_none());
         assert!(workflow.chooser.is_open());

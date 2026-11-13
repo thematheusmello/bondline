@@ -261,7 +261,10 @@ fn named_save_cannot_replace_its_path_or_lower_its_overwrite_guard() -> TestResu
             .prepare_ui_file(id, Command::SaveCdxml(params))?
             .is_deferred()
     );
-    assert!(engine.finish_ui_file(id, false));
+    assert!(
+        !engine.finish_ui_file(id, false),
+        "dropping prepared work cannot acknowledge a completed publication"
+    );
     assert!(engine.state().ui_file.request.is_none());
     Ok(())
 }
@@ -625,13 +628,15 @@ fn same_save_keeps_request_but_path_and_saved_baseline_aba_never_revive_it() -> 
         "page.set_size",
         json!({"page_id":1,"width_pt":400,"height_pt":600}),
     )?;
-    let old_save = engine.prepare(save(&first_path))?;
     engine.dispatch(
         "page.set_size",
         json!({"page_id":1,"width_pt":500,"height_pt":600}),
     )?;
     engine.execute(save(&first_path))?;
     let baseline = Arc::clone(&engine.saved);
+    engine.dispatch("history.undo", json!({}))?;
+    let old_save = engine.prepare(save(&first_path))?;
+    engine.dispatch("history.redo", json!({}))?;
     let id = request(&mut engine, UiFileAction::SaveAs)?;
     engine.claim_ui_file(id)?;
     let path = engine.file_path.clone();
@@ -641,14 +646,14 @@ fn same_save_keeps_request_but_path_and_saved_baseline_aba_never_revive_it() -> 
             .file_operation
             .ok_or("old save receipt")?
             .input_revision,
-        1
+        3
     );
     assert!(engine.state().file.dirty);
     assert_eq!(engine.file_path, path);
     assert!(engine.state().ui_file.request.is_none());
     engine.execute(save(&first_path))?;
     assert_eq!(engine.saved, baseline);
-    assert_eq!(engine.state().revision, 2);
+    assert_eq!(engine.state().revision, 4);
     assert_eq!(
         engine
             .claim_ui_file(id)

@@ -1,5 +1,19 @@
 # Architecture
 
+All formats share a per-Engine save reservation acquired by command preparation. The
+owned Arc token moves from FilePlan into Completed and lives through Engine::finish.
+A second outstanding Save fails busy before I/O, including the publication-to-application
+gap; other commands and other Engines remain available. This prevents out-of-order save
+receipts from changing association or baseline after newer publication. Error/cancel/drop
+releases the token. This is a save-order safeguard, not a general job scheduler or a lock
+against independent applications editing the same file. See control-protocol.md.
+
+Trusted file completion has a separate private currentness bit. Its own matching finish
+sets it after baseline changes; subsequent context invalidation clears it permanently.
+UI receipt consumption checks and retires this state before a close continuation. Returned
+JSON receipt fields remain historical snapshots; path/format/revision values returning
+to old values cannot turn them into fresh close authorization.
+
 Engine first. Authored documents are pure data with stable IDs and point-based coordinates.
 Runtime selection, cameras, jobs and revision counters are separate from authored state.
 Command handlers validate before committing an edit. Snapshot history restores the entire

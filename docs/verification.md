@@ -1484,3 +1484,44 @@ checkpoint. Published source5caf6ce subsequently passed43519338382 as recorded a
 The root now integrates that unchanged codec with98bc59a's fetched SDF/CDX corpus. Both
 verification histories, CDX positive seed/bound and the fifth V3000 sanitizer target survive
 the merge. The combined source requires its own aggregate; no isolated result is substituted.
+
+## Save ordering and current close receipts
+
+Independent review compiled an isolated client against the V3000 application source and
+reproduced a data-loss risk: publish older V2 without finish, publish/apply newer V3,
+then finish older V2. The clean association becomes V2 over V3 disk; the next Auto save
+rounds raw x1.1666666666666667 to1.1667. Root target/v3000-integration-review.md and its
+sibling target/v3000-stale-save-review probe retain exact source and observations. The
+generic ROOT regression first published real CDXML accepted by independent Expat/RDKit,
+then failed because a second same-path MOL Save was accepted before the receipt applied:
+target/save-serialization-red.log. A separate actual V2/V3 regression also fails in the
+sibling target/v3000-save-order-red.log; it will turn GREEN after correction integration.
+
+One private per-Engine Arc reservation moves through FilePlan and Completed to finish.
+Another Save of any format/path fails busy before I/O; queries, edits, capture/Open and
+independent Engines remain available. Six lifecycle tests check exact state/destination
+retention, pre-publication cancellation/refusal, both dropped handles, opaque refusal/Undo,
+old-generation truthful receipts and cancellation after publication. A separate MCP test
+proves distinct executor budgets cannot bypass the Engine's guard. No extra library,
+counter, blocking lock or persistent authoring field was introduced.
+
+The review also identified the post-finish/pre-UI-poll gap. Actual revised UI test
+target/close-post-finish-aba-ui-red.log executes exactly one test and fails: a historically
+true receipt renews Approved after actual MOL→CDXML same-path/revision/clean-state ABA.
+The initial overly narrow filter ran zero tests and is explicitly not RED evidence. A
+private matching-completion bit is now set after the operation's own baseline update and
+cleared permanently by every subsequent real context change. UI poll must consume its
+current acknowledgment before renewing close; existing receipt/path/format/revision/epoch/
+clean checks remain. Uncompleted/dropped work cannot acknowledge successful publication
+(target/save-ui-ack-abandoned-red.log). Returned wire receipt fields remain historical.
+
+GREEN: command package 76 tests, MCP worker 8, UI library 36, scoped clippy/fmt, exact ABA 1/1.
+The full actual-root cargo xtask ci passes 356 workspace plus three bridge tests and all
+gates: target/save-completion-ci-integrated.log. Existing older-baseline/ABA tests use
+baseline-first Undo→prepare→Redo schedules; every stale-ID, whole-state, dirty, history,
+unsaved-Open and approval assertion is retained. Former overlap is either explicitly busy
+or replaced by a valid schedule. Never lower coverage to preserve an obsolete race.
+The earlier merged standalone-V3000/corpus checkout separately passed 349+3 tests in
+target/v3000-corpus-merged-ci.log and all hosted jobs43526538340. Native interaction for the
+corrected save/close feature and its own hosted run remain pending. No parser/IO publication,
+runtime dependency/lock, renderer, font or approved golden changed.

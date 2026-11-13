@@ -105,6 +105,13 @@ delivered adapters, update CLI/MCP wire tests as needed, then update provenance 
 For UI changes, launch the actual native app and inspect the workflow. Eguis's input tests
 and source cross-checks do not substitute for native platform execution.
 
+Every native save must use the shared FilePlan/Completed reservation. One outstanding Save
+per Engine is allowed from prepare through finish/drop, including after publication. Never
+release it at the worker/publication boundary or replace it with an adapter-only guard:
+reversed completions reproduced a clean wrong encoding and a later Auto precision downgrade.
+Preserve busy-before-I/O, release on errors/cancellation/drop, independent Engines and
+truthful old-generation/committed receipts. Successful receipts must be finished, not discarded.
+
 MOLV2000 now has a source-preserving codec, owned snapshots, atomic I/O and shared commands.
 Its transform is explicit, headers/raw source stay authoritative, and unsupported projection
 must fail rather than erase data. Associated file.format is independent of source.format and
@@ -142,9 +149,11 @@ Use Engine::controls() / ui.controls as the authoritative delivered File/Edit/Pa
 do not duplicate labels, shortcut tables, preset parameters or enabled rules in the UI.
 ui.file is presentation intent, distinct from actual document.open_cdxml/save_cdxml or MOL I/O.
 Trusted file plans bind ui_request_id; ui_request_current is captured before their own save
-changes state. Native close-Save requires both receipt markers plus format/revision/path/
-close-epoch checks. Intervening format/baseline changes stay invalid after returning to old
-values. A direct save command never fabricates a trusted presentation receipt.
+changes state. This returned marker is historical. Native close-Save also requires the
+current Engine finish_ui_file success acknowledgment; later format/baseline changes clear
+it permanently even after values return. Never acknowledge uncompleted work or release
+close from an old worker result. Keep both receipt markers and format/revision/path/epoch
+checks. A direct save never fabricates trusted completion state.
 Headless engines have no host. Keep request IDs and context guards through native selection,
 worker preparation and retry. Reserve/prepare under one engine lock before spawning; only
 the matching current request may restore a failed picker. A host acknowledgement does not

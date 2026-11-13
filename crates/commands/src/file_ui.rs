@@ -69,6 +69,7 @@ struct ActiveRequest {
     generation: u64,
     close_epoch: u64,
     valid: bool,
+    completed_current: bool,
 }
 
 #[derive(Debug, Default)]
@@ -105,6 +106,7 @@ impl Engine {
             if active.view.phase == UiFilePhase::Running {
                 // Published work must still finish truthfully, but cannot reopen an old picker.
                 active.valid = false;
+                active.completed_current = false;
             } else {
                 self.file_ui.active = None;
             }
@@ -200,6 +202,7 @@ impl Engine {
                 generation: self.generation,
                 close_epoch: self.close_policy.epoch,
                 valid: true,
+                completed_current: false,
             });
         }
         self.file_ui.epoch = next;
@@ -285,9 +288,20 @@ impl Engine {
             .is_ok_and(|active| active.view.phase == UiFilePhase::Running)
     }
 
+    pub(super) fn mark_ui_file_completed(&mut self, id: Option<u64>, current: Option<bool>) {
+        if current == Some(true)
+            && let Some(active) = &mut self.file_ui.active
+            && Some(active.view.id) == id
+        {
+            // Its own publication may change the baseline; later changes invalidate this.
+            active.completed_current = true;
+        }
+    }
+
     /// Consume a native result or retain its same picker for a guarded retry.
     /// A false retry result forbids reopening an obsolete picker. Running publication
-    /// is never cancelled or rolled back by this presentation acknowledgement.
+    /// is never cancelled or rolled back by this presentation acknowledgement. Success
+    /// returns true only while the applied completion has not subsequently been invalidated.
     pub fn finish_ui_file(&mut self, id: u64, retry: bool) -> bool {
         let Some(active) = &self.file_ui.active else {
             return false;
@@ -296,6 +310,7 @@ impl Engine {
             return false;
         }
         let can_retry = self.file_ui.available && self.file_ui_context_matches(active);
+        let can_acknowledge = self.file_ui.available && active.completed_current;
         if retry && can_retry {
             if let Some(active) = &mut self.file_ui.active {
                 active.view.phase = UiFilePhase::Accepted;
@@ -303,7 +318,7 @@ impl Engine {
             true
         } else {
             self.file_ui.active = None;
-            !retry
+            !retry && can_acknowledge
         }
     }
 }
