@@ -7,12 +7,12 @@ use std::{
 
 type TestResult = Result<(), Box<dyn std::error::Error>>;
 
-fn add_bond(engine: &mut Engine, y: f64) -> Result<(), bondline_commands::Error> {
+pub(super) fn add_bond(engine: &mut Engine, y: f64) -> Result<(), bondline_commands::Error> {
     engine.dispatch("bond.create",serde_json::json!({"page_id":1,"begin_x_pt":72.0,"begin_y_pt":y,"end_x_pt":108.0,"end_y_pt":y}))?;
     Ok(())
 }
 
-fn wait_for_file(
+pub(super) fn wait_for_file(
     workflow: &mut FileWorkflow,
     executor: &CommandExecutor,
 ) -> Result<Option<String>, Box<dyn std::error::Error>> {

@@ -178,9 +178,14 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         } else {
             assert_eq!(
                 keys,
-                std::collections::BTreeSet::from(["path", "overwrite"])
+                std::collections::BTreeSet::from(["path", "overwrite", "version"])
             );
             assert_eq!(properties["overwrite"]["default"], false);
+            assert_eq!(properties["version"]["default"], "auto");
+            assert_eq!(
+                schema["$defs"]["MolVersionChoice"]["enum"],
+                json!(["auto", "v2000", "v3000"])
+            );
         }
     }
     let edit = client.call(
@@ -306,6 +311,130 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         rejected["result"]["structuredContent"]["error"]["code"],
         "already_exists"
     );
+    client.finish()?;
+    Ok(())
+}
+
+#[test]
+fn stdio_v3000_preserves_original_bytes_and_redo_across_rejected_versions_and_imports()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let source = directory.path("stdio-original-v3.v2000");
+    let copy = directory.path("stdio-v3-copy.mol");
+    let malformed = directory.path("stdio-v3-truncated.mol");
+    let unknown = directory.path("stdio-unknown-version.mol");
+    let unpublished = directory.path("stdio-invalid-selector.mol");
+    std::fs::write(&source, mol_support::V3000_SOURCE)?;
+    let original = std::str::from_utf8(mol_support::V3000_SOURCE)?;
+    std::fs::write(&malformed, original.replace("M  V30 END CTAB\n", ""))?;
+    std::fs::write(&unknown, original.replace(" V3000", " V4000"))?;
+    let mut client = Client::start()?;
+    client.call(1, "initialize", json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"v3000-wire-test","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let opened = client.call(
+        2,
+        "tools/call",
+        json!({"name":"document.open_mol","arguments":{"path":source}}),
+    )?;
+    assert_eq!(opened["result"]["isError"], false, "{opened}");
+    mol_support::assert_v3000_state(&opened["result"]["structuredContent"])?;
+    let saved = client.call(
+        3,
+        "tools/call",
+        json!({"name":"document.save_mol","arguments":{"path":copy}}),
+    )?;
+    assert_eq!(saved["result"]["isError"], false, "{saved}");
+    mol_support::assert_v3000_state(&saved["result"]["structuredContent"])?;
+    assert_eq!(
+        saved["result"]["structuredContent"]["file_operation"]["format"],
+        "mol_v3000"
+    );
+    assert_eq!(std::fs::read(&copy)?, mol_support::V3000_SOURCE);
+    let external = mol_support::independently_read_v3000(&copy)?;
+    assert_eq!(
+        external["source_sha256"],
+        "1867a5904e742030431b523a31167951ff998007a89b9c3d94ec88cf7d4c4380"
+    );
+    assert_eq!(external["atoms"][0]["explicit_h"], 3);
+    assert_eq!(external["atoms"][1]["explicit_h"], 3);
+    assert_eq!(external["bonds"][0]["order"], 1.0);
+    let edited = client.call(
+        4,
+        "tools/call",
+        json!({"name":"page.set_size","arguments":{"page_id":1,"width_pt":612,"height_pt":792}}),
+    )?;
+    assert_eq!(edited["result"]["isError"], false, "{edited}");
+    let undone = client.call(
+        5,
+        "tools/call",
+        json!({"name":"history.undo","arguments":{}}),
+    )?;
+    assert_eq!(undone["result"]["isError"], false, "{undone}");
+    let baseline = client.call(
+        6,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    let baseline = &baseline["result"]["structuredContent"];
+    assert_eq!(baseline["revision"], 3);
+    assert_eq!(baseline["undo_depth"], 0);
+    assert_eq!(baseline["redo_depth"], 1);
+    mol_support::assert_v3000_state(baseline)?;
+    let mut id = 7;
+    for (name, arguments, code) in [
+        (
+            "document.save_mol",
+            json!({"path":copy,"overwrite":true,"version":"v2000"}),
+            "unsupported_content",
+        ),
+        (
+            "document.open_mol",
+            json!({"path":malformed}),
+            "invalid_mol",
+        ),
+        ("document.open_mol", json!({"path":unknown}), "invalid_mol"),
+        (
+            "document.save_mol",
+            json!({"path":unpublished,"version":"v4000"}),
+            "invalid_params",
+        ),
+        (
+            "document.save_mol",
+            json!({"path":unpublished,"version":null}),
+            "invalid_params",
+        ),
+    ] {
+        let rejected = client.call(id, "tools/call", json!({"name":name,"arguments":arguments}))?;
+        assert_eq!(rejected["result"]["isError"], true, "{rejected}");
+        assert_eq!(
+            rejected["result"]["structuredContent"]["error"]["code"], code,
+            "{rejected}"
+        );
+        let inspected = client.call(
+            id + 1,
+            "tools/call",
+            json!({"name":"document.inspect","arguments":{}}),
+        )?;
+        assert_eq!(&inspected["result"]["structuredContent"], baseline);
+        assert_eq!(std::fs::read(&copy)?, mol_support::V3000_SOURCE);
+        id += 2;
+    }
+    assert!(!unpublished.try_exists()?);
+    let saved = client.call(
+        id,
+        "tools/call",
+        json!({"name":"document.save_mol","arguments":{"path":copy,"overwrite":true}}),
+    )?;
+    assert_eq!(saved["result"]["isError"], false, "{saved}");
+    let saved = &saved["result"]["structuredContent"];
+    mol_support::assert_v3000_state(saved)?;
+    assert_eq!(saved["changed"], false);
+    assert_eq!(saved["revision"], 3);
+    assert_eq!(saved["redo_depth"], 1);
+    assert_eq!(saved["file_operation"]["format"], "mol_v3000");
+    assert_eq!(saved["file_operation"]["input_revision"], 3);
+    assert_eq!(saved["file_operation"]["byte_length"], 344);
+    assert_eq!(std::fs::read(&copy)?, mol_support::V3000_SOURCE);
     client.finish()?;
     Ok(())
 }

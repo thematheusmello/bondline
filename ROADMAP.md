@@ -36,6 +36,14 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
+The V3000 application slice now retains versioned source/header/frame/history and exposes
+both versions through the existing two shared MOL commands. Auto Save keeps its associated
+version; Save As chooses V2000/V3000 explicitly; Open validates the actual family member.
+Independent IO/engine/CLI/stdio/loopback and UI tests plus the full local364+3 gate pass.
+Native acceptance and this feature's own hosted checks remain pending; see
+docs/verification-v3000-application.md. Conservative conversion/layout/source-loss refusals
+remain. Application SDF/version dispatch and broader mappings still follow; this is not M1 completion.
+
 Current user-directed priority: finish M1, then continue M2–M5. MOLV2000 now has a source-
 preserving codec, owned backing/history, atomic filesystem I/O and two shared commands;
 engine/CLI/MCP tests use published BIOVIA2026 fields and external RDKit consumers. The native

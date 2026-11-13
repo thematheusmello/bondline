@@ -105,7 +105,7 @@ delivered adapters, update CLI/MCP wire tests as needed, then update provenance 
 For UI changes, launch the actual native app and inspect the workflow. Eguis's input tests
 and source cross-checks do not substitute for native platform execution.
 
-MOLV2000 now has a source-preserving codec, owned snapshots, atomic I/O and shared commands.
+MOLV2000/V3000 now have source-preserving codecs, owned snapshots, atomic I/O and shared commands.
 Its transform is explicit, headers/raw source stay authoritative, and unsupported projection
 must fail rather than erase data. Associated file.format is independent of source.format and
 filename extension. Open defaults24pt/unit and origin(72,72)pt; source-backed Save keeps its
@@ -116,6 +116,16 @@ Declared valence yields exact authored H by the published finite arithmetic; do 
 periodic-table valence. Preserve the documented normative M ISO/RDKit discrepancy, and the
 original/independent test vectors. The corpus now actually checks one MOL input, not only
 its hash; CDX corpus and chemistry calculations remain missing.
+
+Open selects the actual MOL header version and fully validates that codec; no suffix-based
+version fallback. Save's optional version is auto/v2000/v3000, captured during prepare.
+Auto keeps the associated MOL version, else original MOL version, else V2000. Source info
+still says mol; file state/receipts say mol_v2000/mol_v3000. Original V3000→V2000 refuses;
+V2000→V3000 also requires strict raw-coordinate preservation, never the V2000 rounding
+allowance. The chooser has one MOL Open family and two concrete Save encodings. Preserve
+same-path version-change invalidation, exact failed retry and trusted close-Save receipts.
+Native/hosted evidence must be separate from engine/egui tests; see
+docs/verification-v3000-application.md. No runtime dependency or codec source changed here.
 
 SDF is currently a library container, not an application document command. Preserve exact
 record/MOL/item spans, duplicate order, raw headers/DT digits, empty/multiline values and

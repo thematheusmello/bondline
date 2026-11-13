@@ -1358,3 +1358,12 @@ licenses/assets and this branch's inherited two-file CDXML/MOL corpus. The tool 
 this checkout as its root; no main-checkout build artifact or later SDF corpus pass was
 substituted. Log: target/v3000-worktree-ci.log. No runtime dependency or lock changed.
 Hosted checks and integration with newer corpus changes remain subsequent work.
+
+## Version-aware MOL application slice
+
+The V2000/V3000 shared-file integration and actual local364 workspace plus3 bridge gate
+are recorded in [the application report](verification-v3000-application.md), including
+independent raw-coordinate precision, source retention, atomic stages and closed schema/
+CLI/stdio/loopback/UI evidence. Native acceptance is partial. An independently reproduced
+concurrent-save completion race must be corrected before publication/final acceptance;
+the report distinguishes that finding from passed workflows and expected-error corrections.

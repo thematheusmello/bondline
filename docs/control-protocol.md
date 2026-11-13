@@ -44,8 +44,8 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.inspect` | `{}` | Read-only snapshot |
 | `document.open_cdxml` | `path`, optional `discard_unsaved=false` | Bounded native CDXML read; successful application starts a clean document session and clears history |
 | `document.save_cdxml` | `path`, optional `overwrite=false` | Atomic complete-source save; default no-clobber; authoring revision/history retained |
-| `document.open_mol` | `path`, optional `discard_unsaved=false`, `points_per_unit=24`, `origin_x_pt=72`, `origin_y_pt=72` | Strict MOL V2000 import with complete source and a captured drawing frame; same guarded new-session behavior as CDXML |
-| `document.save_mol` | `path`, optional `overwrite=false` | Atomic MOL V2000 save; refuses unsupported metadata/layout loss; imported source retains its frame |
+| `document.open_mol` | `path`, optional `discard_unsaved=false`, `points_per_unit=24`, `origin_x_pt=72`, `origin_y_pt=72` | Validate and decode the actual V2000/V3000 version; retain complete source/frame; same guarded new-session behavior as CDXML |
+| `document.save_mol` | `path`, optional `overwrite=false`, `version="auto"` (`auto`, `v2000`, `v3000`) | Atomic MOL save with captured output version; refuses unsupported conversion/metadata/layout loss; imported source retains its frame |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request Open/Save/Save As presentation or cancel the matching picker; a native host is required |
@@ -155,7 +155,7 @@ Cancellation/error codes include `cancelled`, `render_failed`, `backend_unavaila
 
 ## File operations and saved state
 
-Every result includes `file: {path: string|null, dirty: boolean, format: "cdxml"|"mol_v2000"}`. Dirty compares the complete
+Every result includes `file: {path: string|null, dirty: boolean, format: "cdxml"|"mol_v2000"|"mol_v3000"}`. Dirty compares the complete
 current snapshot with the last successful save/open baseline, including unknown source data.
 Undo back to that baseline is clean; exact no-ops do not dirty it. `source.modified` instead
 describes the retained original backing's baseline. A changed native-profile file may be
@@ -210,11 +210,25 @@ the model's finite ±100000pt bound. These defaults are an original Bondline pla
 not chemical units or a reference application's preset. `document.save_mol` has no frame
 parameter: imported MOL keeps its captured frame; native/proven native-CDXML uses the
 default frame. V2000 four-decimal coordinates can round by half a0.0001 raw unit plus
-floating error. Unchanged imports preserve every byte, including headers and line endings.
+floating error; V3000 uses shortest-roundtrip f64 spelling without that quantization.
+Unchanged same-version imports preserve every byte, including headers and line endings.
+Save version defaults to the associated MOL encoding, otherwise the original MOL encoding,
+otherwise V2000. This choice is captured during preparation, before deferred work, and
+the receipt reports the actual selected encoding. Explicit choices change the association
+only after successful publication. They do not invent a new original source allocation.
+
+Original V3000 source cannot currently be converted to V2000; it refuses before publication.
+V2000-source export to V3000 requires complete native regeneration and a separate strict
+raw-coordinate precision proof. Native/proven native-CDXML can explicitly export either
+version within the existing layout guards. Unknown/null selectors fail `invalid_params`
+before I/O; an unknown on-disk version stamp is `invalid_mol`. There is no fallback decoder.
+Source info remains `{format:"mol",byte_length,modified}` and never exposes raw data/headers.
 MOL source-to-CDXML, unknown CDXML-to-MOL, multiple authored fragments/pages and changed
 MOL page dimensions refuse `unsupported_content`. No implicit lossy export mode exists.
 Malformed MOL reports `invalid_mol`; valid but unsupported content reports `unsupported_content`.
 See file-formats.md for exact supported fields and remaining M1 scope.
+See [V3000 application evidence](verification-v3000-application.md) for the independent
+RED/GREEN tests, native acceptance status and remaining platform limits.
 
 ## Close requests and host shutdown
 

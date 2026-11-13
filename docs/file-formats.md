@@ -6,7 +6,7 @@
 | CDX | Standalone bounded binary syntax and checked opaque property replacement | Original published-field vectors, independent Python struct spans/bytes, external RDKit connectivity/order consumers | Application import/export, model/reference mapping, new-tree writer, broader pinned corpus and modern extensions |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000 | Source-preserving library records, ordered data fields and validated wrapper writer | Original source spans; external raw scanner and per-record RDKit; named-field full-supplier and external-writer vectors | Application data/multiple-record workflow, fetched SDF corpus and broader syntax/encodings |
-| MOL V3000 | Source-preserving library parser, strict elemental projection and full-precision writer | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files,118-symbol writer; bounded ASan | Version-aware application snapshots/I/O/commands/UI/SDF, broader queries/stereo/blocks and corpus |
+| MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and full-precision writing; chooser wired | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI tests; bounded ASan | Native acceptance/hosted application evidence pending; SDF version dispatch, broader queries/stereo/blocks and fetched corpus |
 | RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
@@ -60,8 +60,8 @@ writer interoperability. See [test provenance](../crates/io/tests/fixtures/mol/R
 
 ## MOL V3000 library
 
-`bondline_io::mol::v3000::MolFile` is a separate library codec; existing application
-MOL commands and SDF records still use V2000. It borrows exact complete source and
+`bondline_io::mol::v3000::MolFile` is a separate library codec. Application MOL commands
+now dispatch V2000/V3000; SDF records still use V2000. It borrows exact complete source and
 three headers, exposes positive noncontiguous atom/bond source IDs and physical
 spans, and keeps a flat bounded block table. Model identities are fresh dense IDs.
 Logical entries remove only final continuation dashes and subsequent exact `M  V30 `
@@ -104,7 +104,8 @@ data. See [fixture provenance](../crates/io/tests/fixtures/v3000/README.md).
 
 ## MOL application snapshots and saving
 
-Owned MOL snapshots share original bytes, baseline model, three headers and the captured
+Owned MOL snapshots retain their decoded V2000/V3000 version and share original bytes,
+baseline model, three headers and the captured
 coordinate transform. History storage accounts for these shared allocations once, including
 header capacities. Raw source/header content is absent from Debug and JSON command results.
 An unchanged model borrows the original bytes exactly. A changed model can regenerate only
@@ -115,8 +116,28 @@ with a separately run RDKit consumer; the codec's known isotope-input discrepanc
 The registry imports into an A4 preview using24points per raw unit and origin(72,72)pt by
 default; callers can supply a positive finite scale and bounded origin. These are original
 drawing-placement choices, not inferred physical units. Source-free and proven-native CDXML
-exports use that default frame. Imported MOL always uses its retained frame. Encoding rounds
-coordinates to four decimal raw units; it does not promise exact model-coordinate reopening.
+exports use that default frame. Imported MOL always uses its retained frame. V2000 rounds
+coordinates to four decimal raw units; V3000 uses shortest-roundtrip f64 spelling and the
+declared reconstruction tolerance above. Neither promises universal bitwise coordinate
+identity after an arbitrary drawing transform. Unchanged same-version source remains exact.
+
+`StoredDocument::from_mol` checks the version stamp at line4 columns34–39, then fully
+validates the selected codec and strict model projection. A literal unknown stamp is
+invalid_mol, not an extension-based fallback. `mol_version` exposes decoded source version;
+`to_mol`/`save_mol_file` retain it. Explicit `to_mol_as`/`save_mol_file_as` select a version.
+Native/proven native-CDXML defaults to V2000 but may explicitly export V3000. V3000-source
+to V2000 conversion always refuses unsupported_content before writing. V2000-source to
+V3000 additionally requires complete native-field coverage and a cached raw-coordinate
+comparison within16*EPSILON*max(1,abs(before),abs(after)); the V2000 four-decimal allowance
+cannot authorize V3000 precision loss. Raw headers/frame/baseline stay shared in history.
+
+The existing two registry MOL commands now support both versions. Auto Save captures the
+associated MOL version, otherwise original-source version, otherwise V2000. Receipts and
+file state distinguish mol_v2000/mol_v3000 while source.format remains mol. Open presents
+one MOL family choice; Save As exposes both concrete versions. A .mol suffix cannot choose
+between them, so name edits/filtering never silently downgrade Save. Known-Save and failed
+retry retain exact path/version; actual version changes invalidate pending UI/close intents.
+See [application verification](verification-v3000-application.md) for evidence and limits.
 
 Saving must preserve one page, one authored fragment and supported metadata. Imported MOL
 also retains its baseline page identity/size. Native MOL exports currently require default

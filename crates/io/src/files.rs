@@ -4,7 +4,7 @@ mod platform;
 #[cfg(test)]
 mod tests;
 
-use crate::mol::MolTransform;
+use crate::mol::{MolTransform, Version};
 use crate::{DocumentError, StoredDocument};
 use bondline_model::PageSize;
 use bondline_render::Cancellation;
@@ -56,26 +56,7 @@ impl FileError {
             Failure::Symlink => "symlink_target",
             Failure::Cancelled => "cancelled",
             Failure::Changed => "file_changed",
-            Failure::Document(
-                DocumentError::UnsupportedEdit
-                | DocumentError::NoCdxmlSource
-                | DocumentError::NoMolSource
-                | DocumentError::UnsupportedMolEdit
-                | DocumentError::CrossFormatSource { .. }
-                | DocumentError::UnsupportedMolLayout(_),
-            ) => "unsupported_content",
-            Failure::Document(DocumentError::Mol(error)) => error.code(),
-            Failure::Document(DocumentError::Mapping(error)) => {
-                use crate::cdxml::MappingError;
-                match error {
-                    MappingError::UnsupportedNodeType
-                    | MappingError::UnsupportedLabelOnlyAtom
-                    | MappingError::UnsupportedBondOrder
-                    | MappingError::UnsupportedLayout
-                    | MappingError::UnsupportedPageLayout => "unsupported_content",
-                    _ => "invalid_document",
-                }
-            }
+            Failure::Document(error) => error.code(),
             Failure::Io(error) => {
                 #[cfg(unix)]
                 if error.raw_os_error() == Some(rustix::io::Errno::ILSEQ.raw_os_error()) {
@@ -220,7 +201,7 @@ pub fn read_cdxml_file(path: &Path, cancel: &Cancellation) -> Result<LoadedFile,
     Ok(LoadedFile { path, document })
 }
 
-/// Read one explicitly selected V2000 molecule through the same bounded native path.
+/// Read a validated V2000/V3000 molecule through the same bounded native path.
 /// The drawing frame is supplied by the host, never inferred from chemical coordinates.
 pub fn read_mol_file(
     path: &Path,
@@ -313,10 +294,30 @@ pub fn save_mol_file(
     )
 }
 
+/// Explicit MOL encoding through the same atomic/security-preserving path.
+pub fn save_mol_file_as(
+    path: &Path,
+    document: &StoredDocument,
+    overwrite: bool,
+    version: Version,
+    native_frame: MolTransform,
+    cancel: &Cancellation,
+) -> Result<SaveReceipt, FileError> {
+    save_format_with_hook(
+        path,
+        document,
+        overwrite,
+        cancel,
+        Encoding::MolAs(version, native_frame),
+        &mut |_| Ok(()),
+    )
+}
+
 #[derive(Clone, Copy)]
 enum Encoding {
     Cdxml,
     Mol(MolTransform),
+    MolAs(Version, MolTransform),
 }
 
 /// Resolve only the chosen parent, retaining the final leaf for no-follow/no-clobber
@@ -369,6 +370,7 @@ fn save_format_with_hook(
     let bytes = match encoding {
         Encoding::Cdxml => document.to_cdxml(),
         Encoding::Mol(frame) => document.to_mol(frame),
+        Encoding::MolAs(version, frame) => document.to_mol_as(version, frame),
     }
     .map_err(|error| FileError::new(&path, Stage::Encode, error.into()))?;
     if bytes.len() > MAX_BYTES {

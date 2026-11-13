@@ -195,3 +195,13 @@ independent consumer/raw-float tests verify that spelling rather than V2000 quan
 
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused
 with their notices. This does not relax the prohibition on proprietary product code/assets.
+
+The V3000 application slice uses the same CTFILE-2026 header/version/coordinate fields and
+the unchanged public codec/fixtures. Open reads line4 columns34–39 and fully validates the
+chosen codec; file extensions are hints only. Auto Save captures associated MOL version,
+then original source version, then V2000. Conservative V3000-source downgrade refusal,
+strict V2000→V3000 raw-coordinate proof, unchanged-source passthrough, source/association
+separation and UI/close invalidation are original data-preservation policies, not reference
+product defaults. The chooser uses one Open family and concrete Save versions because both
+encodings use .mol. No new proprietary evidence or runtime library is used. Independent
+RDKit precision/source/wire results and native status are in verification-v3000-application.md.
