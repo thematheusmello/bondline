@@ -53,4 +53,9 @@ the Linux native launch passes; the first run's overall conclusion remains failu
 
 Correction 8672de0 triggered
 [run 43451706668](https://github.com/thematheusmello/bondline/actions/runs/43451706668),
-confirmed active at the latest check. Its outcomes must be read before updating these states.
+which completed successfully on all three platforms, including the actual native windows
+and the separate 10000-run Linux ASan check. Smoke output identifies macOS Metal on Apple
+Paravirtual device (IntegratedGpu), Windows Dx12 on Microsoft Basic Render Driver (Cpu),
+and Linux Vulkan on llvmpipe LLVM 20.1.2 (Cpu). Software-driver success verifies those API
+paths, not hardware acceleration or performance. No interactive Windows/Linux drawing or
+new file-workflow claim follows from this run; its product code is still 3d3dd44.

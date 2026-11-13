@@ -8,7 +8,7 @@ guides are versioned evidence, not proof of complete modern parity.
 
 - [x] Resolve declared runtime/asset license closure for native egui/wgpu on all three platforms.
       Actual Mac Metal drawing/readback verified; hosted Mac/Windows window smoke passes.
-      Linux native launch needs the runtime-package correction verified below.
+      Linux native launch passes after the runtime-package correction below.
 - [x] Cargo workspace, pinned toolchain, lints, build-time layer and license gates.
 - [ ] Pure document model, named typed JSON commands, transactions and undo/redo tests.
       Page controls/history are delivered; headless elemental graphs now have structural/
@@ -17,11 +17,12 @@ guides are versioned evidence, not proof of complete modern parity.
 - [x] CLI, stdio MCP and opt-in loopback control using that registry.
 - [ ] Native UI and CPU/GPU reference canvas with actual launch/render evidence.
       Native Mac drawing/history/recovery and one human-approved golden now pass; native
-      Windows window smoke passes; interactive Windows/Linux workflows and broader rendering
+      All three hosted window smokes pass; interactive Windows/Linux workflows and broader rendering
       remain unverified.
-- [ ] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
-      First hosted run passes aggregate checks on all three platforms and Linux ASan; Mac/
-      Windows window launches pass. Linux window launch needs its dependency fix rerun.
+- [x] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
+      Corrected hosted run 43451706668 passes aggregate checks and actual window launches
+      on all three platforms plus Linux ASan. Corpus remains its documented CDXML subset;
+      passing infrastructure does not establish missing MOL/CDX/chemistry coverage.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.
       573 stable-ID source-cited rows now exist; modern menus, unnamed glyphs and remaining
       context menus still need evidence. Six versioned screen/flow groups and pinned public

@@ -10,8 +10,8 @@ dependencies or bundled assets. To prepare an isolated oracle environment:
 ```sh
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-dev.txt
-BONDLINE_PYTHON=.venv/bin/python cargo test --workspace --locked
-BONDLINE_PYTHON=.venv/bin/python cargo xtask ci
+BONDLINE_PYTHON="$PWD/.venv/bin/python" cargo test --workspace --locked
+BONDLINE_PYTHON="$PWD/.venv/bin/python" cargo xtask ci
 ```
 
 On Windows, use `python -m venv .venv` and `.venv\Scripts\python.exe`; set BONDLINE_PYTHON
@@ -21,6 +21,8 @@ The current Mac's new consumers are isolated under ignored .cache/oracles/format
 the system environment was not changed. Both documented .venv and BONDLINE_PYTHON selection
 work the same way. RDKit is only an independent file consumer here; Bondline does not gain
 Python runtime chemistry, linking or a general differential-chemistry claim by using it.
+Use an absolute interpreter path: Cargo runs each test binary from its package directory,
+so a workspace-relative executable path does not resolve consistently across the workspace.
 
 Implemented gates: rustfmt, workspace/all-targets clippy, workspace tests, `cargo xtask layers`
 and `cargo xtask licenses`, plus `cargo xtask corpus` (see corpus/README.md for exact subset).

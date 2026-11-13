@@ -131,8 +131,9 @@ actual failures, remaining work, next executable steps and live job handles befo
 Currently implemented xtask gates: layers, licenses, corpus and ci. Corpus checks the delivered
 CDXML syntax/elemental projection subset plus pinned file integrity; its output identifies missing MOL/CDX/chemistry
 coverage. The aggregate gate passes locally and on all three hosted platforms at 3d3dd44.
-Mac/Windows hosted native-window smoke and Linux ASan pass; the Linux native launch failed
-for a missing system library. Its configuration fix needs hosted verification; see docs/ci.md.
+Hosted native-window smoke passes on all three platforms, plus Linux ASan, after the
+Linux runtime-package correction. These are window/API checks, not interactive Windows/
+Linux chemical-workflow evidence; see docs/ci.md.
 Development bundles
 and REA reports under target/ are disposable build outputs and must not be committed.
 Parser fuzzing is isolated under fuzz/; read its README for pinned toolchain/tool versions,

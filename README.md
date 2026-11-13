@@ -25,8 +25,8 @@ with, endorsed by, or sponsored by ChemDraw or Revvity Signals.
 Current capabilities: native page sizing/rotation and Undo/Redo, independently sourced Apache-2.0
 font, original icon, shared CPU/GPU page-scene reference, and strict native runtime/asset
 license gates. Native macOS drawing was visually inspected; hosted macOS/Windows tests and
-three-frame window launches pass. Linux tests pass, but its window launch exposed a missing
-system library; the CI correction awaits a rerun. This remains a development foundation with one limited
+three-frame window launches pass on all three desktop platforms. Linux's initial missing
+system library was fixed and its hosted launch now passes. This remains a development foundation with one limited
 drawing workflow. The registry/CLI can inspect the document, size pages, create independent
 bonds, undo/redo and capture supported scenes with revision/backend evidence.
 
@@ -61,8 +61,8 @@ its loopback address and a fresh session token in startup stdout. This mode is o
 protect that output as a credential. Authenticate each socket before sending bounded
 newline JSON commands, as documented in [the command contract](docs/control-protocol.md).
 
-Current work: the public menu/tool/shortcut inventory, broader file coverage and Linux
-native-launch verification. [CI scope](docs/ci.md) separates configured jobs from evidence.
+Current work: the public menu/tool/shortcut inventory, broader file coverage and interactive
+Windows/Linux verification. [CI scope](docs/ci.md) separates configured jobs from evidence.
 Workspace format/render tests need the pinned external consumers described in [development.md](docs/development.md).
 See [STATUS.md](STATUS.md) for actual progress and [ROADMAP.md](ROADMAP.md) for the full target.
 

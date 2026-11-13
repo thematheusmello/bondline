@@ -735,3 +735,15 @@ PyYAML 6.0.3 validates the corrected workflow, three-platform matrix, package en
 unchanged Linux native smoke command; git diff --check passes. This configuration-only
 correction needs actual hosted GREEN; YAML validation alone is not a successful Linux
 launch. Parallel file-command/UI work is excluded from this change.
+
+GREEN: corrective run 43451706668 at 8672de0 completes successfully: all three hosted
+aggregate checks, actual native-window launches and Linux ASan. Reported backends are Metal/
+Apple Paravirtual device on Mac, Dx12/Microsoft Basic Render Driver on Windows, and Vulkan/
+llvmpipe LLVM20.1.2 on Linux. The latter two are CPU software adapters. These checks cover
+published product code 3d3dd44, not the new file-workflow WIP or interactive Windows/Linux
+chemical editing. Saved ignored log: target/github-native-43451706668.log.
+
+Development command correction: the first local WIP aggregate used a workspace-relative
+BONDLINE_PYTHON and four independent CDXML tests failed to locate it from their package
+working directories. The documented venv examples now use an absolute $PWD-prefixed path.
+The corrected invocation passes the full local WIP gate (192 tests); no assertion changed.

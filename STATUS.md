@@ -10,19 +10,23 @@ Hosted Rust foundation run 43448214670 completed with overall failure:
 https://github.com/thematheusmello/bondline/actions/runs/43448214670.
 All three native jobs passed the aggregate gates. Mac/Windows also passed their actual
 three-frame window launches; Linux failed that step because libxkbcommon-x11-0 was absent.
-Linux CDXML ASan passed. The workflow now installs the missing runtime library; its rerun
-must pass before Linux native launch is verified. See docs/ci.md for exact evidence.
-The correction is pushed as 8672de0. Hosted run 43451706668 is confirmed active:
+Linux CDXML ASan passed. The workflow now installs the missing runtime library.
+The correction is pushed as 8672de0. Hosted run 43451706668 completed successfully:
 https://github.com/thematheusmello/bondline/actions/runs/43451706668.
-Inspect this run's terminal results on continuation; no success is inferred from its start.
+All three aggregate checks, actual native windows and Linux ASan pass. Windows Dx12 and
+Linux Vulkan use software adapters; Mac Metal reports Apple Paravirtual device. These are
+API/window-smoke results, not interactive Windows/Linux chemical workflows or performance.
+See docs/ci.md for exact evidence. The published product code remains checkpoint 3d3dd44.
 
 User-authorized parallel ownership is active: /root/file_io owns bounded filesystem I/O
 and atomic save/recovery; /root/native_file_ui owns the chooser and later native wiring;
 /root/file_verification owns independent acceptance tests and shared command/work/apply
 adapters. Root owns integration, CI and records. Their intentional WIP may be uncommitted and
 may contain RED tests. Do not duplicate, stage or publish another agent's unfinished scope.
-The backend and chooser now have focused GREEN tests, but whole-workspace, native-flow and
-new dependency/platform validation are still in progress. They are not published features.
+The backend/chooser whole-workspace gate passes locally with 192 tests. Real macOS and
+Linux Docker file tests pass. Native testing exposed Cmd+Q bypassing unsaved protection;
+root owns the pinned native-boundary repair. New Windows file runtime validation and
+final native-close verification remain. This work is not yet published.
 The native UI agent owns the only planned CUA session; coordinate before using that surface.
 
 Target clarification: one-to-one Professional desktop screens, controls, icon roles, flows
@@ -48,7 +52,8 @@ and the Unicode-bearing browser candidate remain separate work.
 Verified in the current drawing/history/encoding checkpoint:
 - 147 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses
   and the pinned corpus gate. All three hosted aggregate checks also pass; Mac/Windows
-  native-window smoke passes. Windows interactive workflows and Linux launch remain unverified.
+  native-window smoke passes on all three platforms. Windows/Linux interactive workflows
+  remain unverified.
 - Six shared typed commands: document.inspect, page.set_size, bond.create, history.undo,
   history.redo, render.capture. CLI, stdio MCP, authenticated loopback and native UI use them.
 - The first drawing workflow: drag an independent single C-C fragment, with three authored
@@ -126,8 +131,8 @@ Next exact tasks:
 3. Extend single-bond behavior to existing-atom attachment, connected graphs, click creation,
    snapping and order changes, with native workflows and tests. The current independent-bond
    command is partial reference coverage; retain all remaining M1–M5 requirements.
-4. Verify the Linux runtime-package CI correction, then inspect interactive Windows/Linux
-   workflows when available. Continue independent work meanwhile. Broaden approved render
+4. Inspect interactive Windows/Linux workflows when available; the Linux CI correction now
+   passes. Continue independent work meanwhile. Broaden approved render
    scenes with actual human review.
 
 The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1, the drawing
@@ -144,4 +149,6 @@ closed. Earlier test builds 22527 and 75463 also exited. Startup credentials rem
 in ignored private target logs; never copy them into reports. Earlier REA exposure evidence
 is historical and tied to a prior digest, not this build. No confirmed native/Cargo/fuzz
 process remains running from that checkpoint. The first hosted run is complete; delegated
-tasks above remain active. Recheck their handles and any corrective run on continuation.
+tasks above retain their explicit ownership; recheck live handles on continuation. The
+corrective run is complete. New file-workflow native sessions are disposable and documented
+under ignored target/native-file-ui-native-evidence.md; root has not used that CUA surface.
