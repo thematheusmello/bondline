@@ -1055,7 +1055,7 @@ Native interactive Windows/Linux, Dock/session/logout/multiwindow close and full
 dialog parity remain unverified. A fresh hosted run for this new source is required before
 main integration; the earlier all-green CDX run does not verify the new close command.
 
-Published source72742fb starts hosted run43488771976. As of2026-11-13 19:09:35 UTC, both
-parser sanitizer targets passed; Ubuntu/Windows aggregate jobs run and Mac is queued. No
+Published source72742fb starts hosted run43488771976. As of2026-11-13 19:12:32 UTC, both
+parser sanitizer targets and Ubuntu passed; Windows runs and Mac is queued. No
 terminal full-platform success is claimed for shared close. STATUS.md has exact handles.
 Main8d52e14 remains at the independently verified CDX checkpoint until that source passes.

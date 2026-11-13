@@ -177,10 +177,10 @@ completed successfully. Source was fast-forwarded into main after GREEN. These j
 terminal; do not restart them. New shared-close hosted work is identified below. No
 release was requested.
 
-Confirmed new hosted run as of2026-11-13 19:09:35 UTC:
+Confirmed new hosted run as of2026-11-13 19:12:32 UTC:
 https://github.com/thematheusmello/bondline/actions/runs/43488771976 at72742fb.
-Parser ASan132104102647 completed successfully. Ubuntu132104102999 and Windows132104103101
-are running aggregate gates; Mac132104102962 is queued. Overall success is unverified.
+Parser ASan132104102647 and Ubuntu132104102999 completed successfully. Windows132104103101
+is running aggregate gates; Mac132104102962 is queued. Overall success is unverified.
 Recheck this exact run before main integration; do not duplicate or cancel live jobs without
 a concrete reason. Preserve the source freeze/evidence scopes; no reference executable was
 acquired or proprietary asset shipped. The persistent full M0–M5 goal remains active.
