@@ -283,7 +283,7 @@ launches have NOT run. See ci.md for limits and the distinction from source cros
 Documentation-only change: no artificial unit tests. Downloaded the public vendor-authored
 guide from its recorded university URL into ignored .cache/research; exact byte length,
 SHA-256, metadata and 439-page count are recorded in sources.md. Printed page numbers are
-one less than PDF page indices. Poppler rendered the shortcut table pages; their column
+one less than one-based PDF page numbers, equal to zero-based PDF indices. Poppler rendered the shortcut table pages; their column
 layout, continued rows and literal keys were visually checked. Explicit menu-path references
 were collected across all pages (288 lines on 165 pages) and manually screened for host
 application/OS context. Official 26.0/26.1 desktop deltas were reviewed separately from cloud.

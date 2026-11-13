@@ -17,8 +17,9 @@ Source G25 is the public university-hosted vendor guide in clean-room/sources.md
 filename identifies version 25, its cover is unversioned, metadata dates it 2025-05-22,
 and the footer is © 2025. Exact reviewed PDF: 17721447 bytes, SHA-256
 3f1ebc429df07efdd47b6218a148dc346a215043f60bf89ee9a1cb90629bd5b3.
-It has 439 PDF pages. **G25 page numbers below are printed pages; add one for PDF page
-indices.** The guide stays in the ignored research cache, not in this repository.
+It has 439 PDF pages. **G25 numbers below are printed pages: printed page p is zero-based
+PDF index p, or one-based PDF page p+1.** The cover is index0. The guide stays in the ignored
+research cache, not in this repository.
 
 R26.0 and R26.1 are the official May and September 2026 desktop release announcements.
 Their desktop additions are recorded separately from cloud-only features. Older guide
