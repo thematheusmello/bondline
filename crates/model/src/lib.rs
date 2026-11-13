@@ -3,6 +3,8 @@
 use serde::{Deserialize, Serialize};
 use std::num::NonZeroU32;
 
+pub const MAX_PAGE_DIMENSION_PT: f64 = 100_000.0;
+
 /// Stable page identity, independent of its position in the document.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -53,7 +55,7 @@ impl PageSize {
         // shortcut: authoring dimensions are capped at 100,000 pt; revisit for larger tiled documents.
         if [width_pt, height_pt]
             .iter()
-            .any(|value| !value.is_finite() || *value <= 0.0 || *value > 100_000.0)
+            .any(|value| !value.is_finite() || *value <= 0.0 || *value > MAX_PAGE_DIMENSION_PT)
         {
             return Err(Error::InvalidPageSize);
         }

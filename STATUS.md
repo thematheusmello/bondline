@@ -20,13 +20,16 @@ OS loader vs standard-library PID, UTF-16/CF_HTML validation and resource/hash/l
 The pure model now has a validated A4 page, stable page ID and no native/GUI dependency.
 Its three tests pass against physical-unit expectations and malformed-input cases.
 
-Missing: command engine, CLI/MCP/control, complete parity inventory, corpus,
+The shared registry now exposes inspect, page size, undo and redo with typed schemas.
+Headless page editing/history is verified, including 128 fixed-seed property cases.
+
+Missing: CLI/MCP/control, desktop editing controls, complete parity inventory, corpus,
 CDXML parser, native CI workflows, native Windows/Linux execution and human-approved goldens.
 The M5 browser candidate still includes Unicode-licensed data and is not approved for shipment.
 
 Next executable tasks:
-1. Add the shared registry with typed schemas and exact undo/redo property tests.
-2. Route native actions and CLI/MCP/control through it; add layer/corpus/CI tooling.
+1. Route native actions and CLI/MCP/control through the registry.
+2. Add corpus/CI tooling and finish the public-document parity inventory.
 3. Add the standalone source-preserving CDXML parser with independent reference tests.
 
 Development bundle target/dev/Bondline.app (org.bondline.development) was launched for

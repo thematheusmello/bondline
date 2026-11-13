@@ -1,0 +1,22 @@
+[package]
+name = "bondline-commands"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[package.metadata.bondline]
+layer = 3
+
+[dependencies]
+bondline-model = { path = "../model" }
+serde.workspace = true
+serde_json.workspace = true
+schemars.workspace = true
+thiserror = "2"
+
+[dev-dependencies]
+proptest = { version = "=1.12.0", default-features = false, features = ["std"] }
+
+[lints]
+workspace = true

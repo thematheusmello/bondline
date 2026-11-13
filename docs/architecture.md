@@ -10,6 +10,12 @@ f64 points with validated construction/deserialization and a documented 100,000-
 One point is 1/72 inch; native display scale is a view concern. A new document has one A4 page
 with ID 1. Atoms, bonds, text and reactions will be added with their first verified behaviors.
 
+`bondline-commands` owns the registry and history. It validates a candidate document before
+replacing an Arc snapshot. Undo/redo move Arc references in O(1); authoring edits currently
+clone the small document. Returned snapshots remain immutable across later edits. Authored
+state excludes revision/history, so exact undo assertions compare authored bytes separately.
+See control-protocol.md for the actual registered operations and explicit limits.
+
 Format crates own their syntax and source-preserving representations. They do not depend
 on the model. The io layer translates supported data and retains original backing for
 unknown content; unsupported edits must fail explicitly rather than discard data.

@@ -76,3 +76,13 @@ credential-marker or debug-companion condition was observed within the reported 
 Go/Rust metadata remained unknown; hardening, hardened runtime and Android were not assessed.
 Raw report: ignored build output `target/rea-graphics-audit.json`. This is neither a license
 audit nor a security pass. No REA code is bundled with the app.
+
+## Page command and snapshot history, 2026-11-13
+
+RED: `cargo test -p bondline-commands` failed for the missing registry/engine. GREEN: typed
+closed schemas, published physical page dimensions, malformed/oversized requests, failed-edit
+atomicity, read-only inspection, redo preservation and branch replacement pass. Proptest runs
+128 fixed-seed sequences of up to 63 edits; each edit has independently asserted dimensions,
+exact undo/redo restoration, and full-sequence restoration. Boundary tests additionally check
+the declared 128-snapshot cap and atomic rejection at revision overflow. No desktop or transport
+verification is implied by these headless tests.

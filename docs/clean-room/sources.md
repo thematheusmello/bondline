@@ -20,6 +20,8 @@ proprietary implementation, help text or assets. Record more specific sections a
 | VOICE-REVIEW | https://github.com/debpalash/VoiceStudio/blob/main/docs/licensing/model-review-workflow.md | Evidence records distinguish declarations, exact bytes and review state. Conceptual reference only; AGPL code not copied. |
 | RUST-GUIDE | https://github.com/apollographql/skills/blob/main/skills/rust-best-practices/SKILL.md | Ownership, typed errors, lints and focused tests; verify recommendations against actual APIs. |
 | MCP-TOOLS | https://modelcontextprotocol.io/specification/2025-11-25/server/tools | Shared tool schemas, discovery, invocation and errors. |
+| SCHEMARS | https://docs.rs/schemars/1.2.3/schemars/ | Generate schemas from the exact serializable parameter types; closed objects and validation bounds are tested. |
+| PROPTEST | https://docs.rs/proptest/1.12.0/proptest/ | Fixed-seed generated edit sequences independently assert exact undo/redo invariants and expected page dimensions. Build/test dependency only. |
 | REA-AUDIT | https://github.com/morluto/rea/blob/main/docs/release-exposure.md | External inspection of Bondline artifacts only; not proof of security or feature parity. |
 | WGSL-LITERALS | https://www.w3.org/TR/2026/CRD-WGSL-20261106/ | Exact binary floating point literals; independently implemented conversion tested with IEEE-754 bit vectors. |
 | DLOPEN2 | https://docs.rs/dlopen2/0.9.0/dlopen2/raw/struct.Library.html | MIT backend for OS library ownership and symbol resolution; implementation inspected from the published crate. |
