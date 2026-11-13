@@ -1331,3 +1331,18 @@ IO codec, UI, renderer or golden change. Hosted corpus-feature checks follow pub
 CDX corpus and Bondline chemistry calculations remain explicitly missing; SDF application
 import/export, V3000 and complete M1 remain unimplemented. V3000 work is isolated in a
 different checkout/target; its preliminary tests are not part of these results.
+
+## Corpus metadata checkout correction
+
+Fetched-SDF source504be5f passed Mac/Linux/ASAN in run43515232724, but Windows
+132195408100 failed the exact original manifest hash: CRLF checkout became1067 bytes/
+cb9c0ddd07eadf12ee4c1723dbb4431746e6d656833d7f83490563b9e04fec3a instead of1041 bytes/
+820739ca30312745b53df2839f0238b30d1470e73446430b4c954a142cb88ca0. The source manifest's
+committed bytes and semantic fields were unchanged. This run is terminal failed.
+
+Actual isolated core.autocrlf=true Git clones reproduce that exact RED and then GREEN
+after `/docs/corpus/manifest.json -text`; no normalization, altered hash/assertion or license
+change. Logs/metadata are under target/sdf-manifest-autocrlf-yoq1rmg2; the research report
+records the source/public rule. CDX byte preservation is also explicit for already published
+original binary vectors. Configuration-only correction: relevant byte/checkout checks pass,
+no artificial Rust test or Cargo rerun claimed. A new hosted source run follows publication.

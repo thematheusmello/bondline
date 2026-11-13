@@ -1,5 +1,14 @@
 # CI contract and execution evidence
 
+First fetched-SDF corpus run
+[43515232724](https://github.com/thematheusmello/bondline/actions/runs/43515232724) at504be5f
+is terminal: macOS132195407757, Linux132195408230 and ASAN132195408337 passed; Windows
+132195408100 failed the original manifest's immutable-byte assertion after checkout CRLF
+conversion. This is a failure, not a platform pass. The narrow manifest -text correction
+changes no parser, license/source pin, manifest byte or assertion. An isolated real Git
+clone reproduces the exact bad hash then the original good hash; see
+research/corpus-manifest-checkout.md. Corrected hosted execution follows publication.
+
 SDF codec source `fb86832a0c9b7744fb3ef8f8115c7ed296164505` passes every job in
 [run43512236206](https://github.com/thematheusmello/bondline/actions/runs/43512236206):
 macOS `132185104536`: 327 tests (324 workspace plus three bridge), Linux `132185104144`:

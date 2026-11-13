@@ -180,10 +180,13 @@ The two-source bundle loader retains the existing BSD RDKit manifest byte-for-by
 original notices, hashes, global cache names and complete manifests are validated before
 cache/network I/O. Existing-ancestor and post-creation canonical checks prevent the reproduced cache
 symlink escape; they are independent developer-tool policy, not an OS sandbox/race guarantee.
-Pinned MOL/SDF checkout identity uses Git's public unset-text rule:
+Pinned format-fixture/source-manifest checkout identity uses Git's public unset-text rule:
 https://git-scm.com/docs/gitattributes#_text . Reviewed2026-11-13; the isolated
 core.autocrlf RED/GREEN is recorded in ../research/mol-fixture-checkout.md. Parser and oracle
 bytes are not normalized to accommodate an altered checkout.
+The corpus manifest's immutable byte assertion also exposed actual Windows CRLF conversion;
+the narrow manifest -text correction and isolated clone RED/GREEN are recorded in
+../research/corpus-manifest-checkout.md. Source pins, licenses and assertions remain unchanged.
 
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused
 with their notices. This does not relax the prohibition on proprietary product code/assets.
