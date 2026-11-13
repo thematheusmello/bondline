@@ -1115,3 +1115,25 @@ native windows and both bounded Linux parser ASan targets. Source was integrated
 only after GREEN; later research/status commits change documentation alone. Software-driver
 scope and interactive Windows/Linux limits remain explicit in ci.md/native-file-ui.md.
 These jobs are terminal; no local/native/CUA/research/hosted work remains live.
+
+## Repository presentation and community documentation,2026-11-13
+
+Documentation/configuration checks only: no artificial Rust behavior test or full Cargo
+rerun was needed for this scope. SVG banners were rendered with rsvg-convert and visually
+inspected. Both1160×832 JPEGs are unchanged native capture buffers, hash/MIME/dimension
+checked against their originals. They show product65b5fb8 / owned binary4a5425... on Mac
+Metal; no golden was regenerated. Capture scene is three original CC/C2H6 fragments,
+independently consumed by RDKit. All native/controller/CUA processes exited; exact records
+are in docs/media/provenance.json and SOURCES.md.
+
+Root link/heading/UTF-8/whitespace/SVG/accessibility/JPEG/hash checks pass; log
+ target/readme-captures/docs-validation.log. The community agent separately validated all
+three YAML files against published SchemaStore schemas, checked duplicate keys/form IDs
+and all seven new docs/templates' links; target/community-docs-validation.log records hashes.
+GitHub private reporting was enabled and independently read back as true. No issue, report,
+PR or external message was sent. Rendered GitHub README/form checks follow publication;
+source/configuration checks alone are not a claim of their displayed result.
+
+In parallel, user-directed M1 implementation now starts MOLV2000. Its source/tests are
+separate from this documentation commit; see the next codec evidence, not these doc checks,
+for any new format claim.

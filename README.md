@@ -1,95 +1,180 @@
-# Bondline
+<p align="center">
+  <img src="docs/media/banner.svg" alt="Bondline — an offline chemical drawing editor built in Rust" width="100%">
+</p>
 
-An independent, offline chemical drawing application being built in Rust.
+<h1 align="center">Bondline</h1>
+<p align="center">Free, open-source tools for drawing chemical structures and reactions.</p>
 
-[Source repository](https://github.com/thematheusmello/bondline) ·
-[Build checks](https://github.com/thematheusmello/bondline/actions)
+<p align="center">
+  <a href="https://github.com/thematheusmello/bondline/actions/workflows/ci.yml"><img src="https://github.com/thematheusmello/bondline/actions/workflows/ci.yml/badge.svg?branch=main" alt="Rust foundation CI"></a>
+  <a href="LICENSE-MIT"><img src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-167b72" alt="License: MIT OR Apache-2.0"></a>
+  <a href="rust-toolchain.toml"><img src="https://img.shields.io/badge/Rust-1.94.1-b35936" alt="Rust 1.94.1"></a>
+  <a href="STATUS.md"><img src="https://img.shields.io/badge/status-early%20development-d89b32" alt="Early development"></a>
+</p>
+
+<p align="center">
+  <a href="#what-works-today">Features</a> ·
+  <a href="#get-started">Get started</a> ·
+  <a href="docs/README.md">Documentation</a> ·
+  <a href="ROADMAP.md">Roadmap</a> ·
+  <a href="CONTRIBUTING.md">Contributing</a> ·
+  <a href="#license-and-credits">License</a>
+</p>
+
+Bondline is a native Rust desktop application with an offline command engine, editable
+chemical documents and a thin egui/wgpu interface. No account or hosted service is needed
+for ordinary drawing and saving.
+
+**Early development:** the current drawing workflow creates isolated C–C fragments.
+Connected structures, rings, general labels and chemistry analysis are still being built.
+M1 file interoperability is the active implementation milestone; the complete M1–M5 target
+is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
+
+<p align="center">
+  <img src="docs/media/workspace.jpg" alt="The actual Bondline macOS app displaying three separate C–C fragments with terminal hydrogen labels, File/Edit/Page menus and a physical page" width="100%">
+  <br>
+  <sub>Actual development app on macOS / Metal. Three original, independently authored fragments.<br>Unedited capture; <a href="docs/media/SOURCES.md">build identity, scene and image provenance</a>.</sub>
+</p>
+
+## What works today
+
+| Capability | Delivered scope |
+|---|---|
+| Drawing and history | Drag an isolated C–C bond with explicit hydrogen labels; Undo/Redo restores complete authored snapshots. |
+| Pages | A4 and Letter presets, rotation and validated physical dimensions. |
+| CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files; unknown imported content remains backed by its original bytes. |
+| File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
+| Rendering | Shared CPU/GPU page scenes and PNG captures, with one human-approved regression scene. |
+| Automation | Eleven typed commands shared by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+
+Native drawing/file workflows have been inspected on macOS. CI runs tests and actual
+window smoke checks on macOS, Windows and Linux; interactive Windows/Linux workflows
+remain unverified. [Verification evidence](docs/verification.md) distinguishes those scopes.
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>Keep the document</h3>
+      Supported CDXML opens and saves with source data retained. Unsupported imported edits
+      fail explicitly. Atomic publication, overwrite confirmation and a saved baseline protect
+      the delivered file workflow.
+      <p><a href="docs/file-formats.md">Format capabilities and limits →</a></p>
+    </td>
+    <td width="50%" valign="top">
+      <h3>Inspect every command</h3>
+      The native menus and shortcuts use typed engine bindings. CLI and MCP discover the same
+      command schemas; localhost control can address the actual desktop session.
+      <p><a href="docs/control-protocol.md">Automation contract →</a></p>
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="docs/media/save-as.jpg" alt="The actual Bondline Save CDXML As chooser with editable folder and filename, explicit Save and Cancel buttons, over the drawing" width="100%">
+  <br>
+  <sub>The original CDXML chooser, captured from the running app. This is the current development UI.</sub>
+</p>
+
+## Get started
+
+Source builds are available now. Signed installers and browser delivery are planned in M5;
+there is no published installer release yet.
+
+```sh
+git clone https://github.com/thematheusmello/bondline.git
+cd bondline
+cargo run --locked -p bondline-ui --bin bondline
+```
+
+Rust **1.94.1** is pinned by the repository. Linux prerequisites and the independent test
+environment are documented in [development.md](docs/development.md). Python is used for
+independent developer test oracles, not as an application runtime.
+
+Use File → Open/Save/Save As for supported CDXML. Cmd/Ctrl+O, S, Shift+S and W are wired;
+actual Mac shortcut and accessibility-field evidence is in [native-file-ui.md](docs/native-file-ui.md).
+
+```sh
+# Discover the engine and the current control bindings.
+cargo run --locked -p bondline-cli -- commands
+cargo run --locked -p bondline-cli -- run --cmd '{"command":"ui.controls","params":{}}'
+
+# Create a fragment through the same command used by the native canvas.
+cargo run --locked -p bondline-cli -- run --cmd '{"command":"bond.create","params":{"page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200}}'
+
+# Run a process-local stdio MCP session.
+cargo run --locked -p bondline-cli -- mcp
+```
+
+Headless sessions do not pretend to open native dialogs. `ui.file` requires an attached
+native host; explicit file commands remain available headlessly. To control the desktop
+session, start it with `--control-port 0` and follow the [authentication protocol](docs/control-protocol.md).
+Its startup token is a credential; keep it out of reports and screenshots.
+
+## Files and the road ahead
+
+| Area | Current state | Next work |
+|---|---|---|
+| CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
+| CDX | Standalone bounded parser and opaque property editing, with independent consumer tests | Application model mapping and import/export |
+| MOL / SDF | M1 work in progress | V2000, V3000 and record metadata; independent interoperability |
+| RXN / SMILES / InChI | Planned | Format support and independently verified chemistry |
+| Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
+| Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |
 
 The compatibility target includes CDXML and CDX files used by ChemDraw Professional.
-The first drawing workflow creates an independent C-C bond with terminal hydrogen labels,
-supports Undo/Redo and captures its canvas on CPU or GPU. Native Open, Save and Save As now
-preserve supported CDXML, with unsaved/overwrite protection and editable reopening of proven
-Bondline-native files. Connected construction and general imported-file editing remain missing.
-The standalone CDXML crate preserves syntax and replaces existing attribute values without rewriting
-unrelated bytes. A separate bounded writer and io encoder now produce new elemental CDXML
-with explicit canvas extents; see [tested format scope](docs/file-formats.md).
-The standalone CDX crate now preserves bounded binary records and replaces one opaque
-property without rewriting unrelated records. Independent consumers cover original test
-vectors; CDX is not yet available through application Open/Save or model mapping.
-The headless model stores validated atom/bond/fragment data. The io crate maps limited
-source-backed node-position and elemental graph views. Engine snapshots/history now retain
-complete original CDXML bytes, with guarded unchanged-source export. Application
-import/save commands preserve complete backing; general imported-file rendering remains limited.
-The original single-document chooser is CDXML-only; it does not establish full reference
-file-menu, platform-dialog, multi-document or screen parity. Unknown opaque files save unchanged
-byte-for-byte; unsupported modifications/rendering fail explicitly.
-History now counts shared source/model data once and evicts oldest snapshots at an
-approximate 128 MiB retained-storage threshold; current data is always kept. This is not
-a whole-process memory cap; see [the command contract](docs/control-protocol.md).
-Bondline is not affiliated
-with, endorsed by, or sponsored by ChemDraw or Revvity Signals.
+Bondline is independent and is not affiliated with, endorsed by or sponsored by ChemDraw
+or Revvity Signals. Reference names identify compatibility; no reference icons, fonts,
+templates or application assets are bundled.
 
-Current capabilities: native page sizing/rotation, file workflows and Undo/Redo, independently sourced Apache-2.0
-font, original icon, shared CPU/GPU page-scene reference, and strict native runtime/asset
-license gates. Native macOS drawing was visually inspected; hosted macOS/Windows tests and
-three-frame window launches pass on all three desktop platforms at the recorded checkpoints.
-New filesystem tests also run on native Windows and Linux. Latest hosted integration evidence
-and runner-capacity limits are recorded in [CI scope](docs/ci.md). This is a development foundation with one limited
-drawing workflow. The registry/CLI can inspect the document, size pages, create independent
-bonds, open/save supported CDXML, undo/redo and capture scenes with revision/backend evidence.
+## Engineering and verification
 
-![Human-approved capture of a native-session single bond](crates/render/tests/goldens/single-bond.png)
+The engine is independent of the GUI. Cargo enforces the crate layers; standalone format
+crates preserve unknown data. Complete document snapshots support history, and immutable
+background plans keep I/O and rendering outside the engine lock.
 
-This is the actual native document's offscreen canvas capture; window chrome is not included.
-Its [approval record and exact scope](crates/render/tests/goldens/README.md) accompany the test.
+After setting up the pinned [external test consumers](docs/development.md):
 
-```bash
-cargo run -p bondline-ui --bin bondline
-cargo run -p bondline-ui --bin bondline -- --smoke-test
-cargo run -p bondline-cli -- commands
-cargo run -p bondline-cli -- run --cmd '{"command":"ui.controls","params":{}}'
-cargo run -p bondline-cli -- run --cmd '{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}'
-cargo run -p bondline-cli -- run --cmd '{"command":"bond.create","params":{"page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200}}'
-cargo run -p bondline-cli -- run --cmd '{"command":"document.open_cdxml","params":{"path":"crates/io/tests/fixtures/bondline-v0.cdxml"}}' --cmd '{"command":"document.save_cdxml","params":{"path":"target/example.cdxml"}}'
-cargo test --workspace --locked
-cargo clippy --workspace --all-targets --locked -- -D warnings
+```sh
 cargo fmt --all -- --check
-cargo xtask licenses
-cargo xtask layers
-cargo xtask corpus
+cargo clippy --workspace --all-targets --locked -- -D warnings
+cargo test --workspace --locked
 cargo xtask ci
 ```
 
-The file example needs an unused output path; overwriting requires explicit overwrite:true.
-Native file actions use the same registry in background workers. Cmd/Ctrl+O/S/Shift+S/W,
-unsaved Save/Discard/Cancel and Replace File are wired; the Mac workflow has actual native
-verification. Its two chooser fields support native accessibility entry on the tested Mac.
-Close/Quit decisions now use the shared `document.close` command. Current-revision/epoch
-guards and registered worker/reply draining protect native shutdown; CLI/stdio report close
-intent without terminating their process. The exact Mac workflow and limitations are in
-[native-file-ui.md](docs/native-file-ui.md).
-Delivered File/Edit/Page menus and shortcuts now consume shared typed control bindings.
-`ui.controls` exposes their invocations and contextual disabled reasons. `ui.file` requests
-or cancels the actual native file picker through the authenticated desktop session; headless
-CLI/stdio sessions report `ui_unavailable` and retain direct parameterized file commands.
-Request/context guards prevent stale chooser choices from starting I/O. This is partial
-presentation addressability; folder/name fields and running-job controls remain separate.
-Full VoiceOver and interactive Windows/Linux file workflows remain unverified.
+The aggregate also checks layers, declared native dependency licenses, bundled assets and
+the pinned corpus. Current corpus coverage is limited: a passing gate is not full format or
+chemistry parity. Parser fuzzing has its own [bounded workflow](fuzz/README.md).
 
-The smoke command launches the actual wgpu window, reports its adapter, and closes after
-three frames. [The dependency policy](docs/dependency-policy.md) records pinned forks,
-original compatibility adapters and verification limits. There is no license exception
-for ISC, Boost, Zlib, Unicode or OFL. The hypothetical browser graph is not yet approved.
-Agent clients can launch `cargo run --quiet -p bondline-cli -- mcp` as a stdio subprocess;
-it opens its own in-memory document. See [the command contract](docs/control-protocol.md).
-For the active desktop document, launch with `--control-port 0`; the app reports and displays
-its loopback address and a fresh session token in startup stdout. This mode is opt-in;
-protect that output as a credential. Authenticate each socket before sending bounded
-newline JSON commands, as documented in [the command contract](docs/control-protocol.md).
+| Read | Purpose |
+|---|---|
+| [STATUS.md](STATUS.md) | Exact integrated checkpoint, evidence and next executable tasks |
+| [ROADMAP.md](ROADMAP.md) | Complete M0–M5 target |
+| [Architecture](docs/architecture.md) | Crate responsibilities, commands and data ownership |
+| [Parity checklist](docs/parity-checklist.md) | Sourced feature inventory with explicit missing/wired/verified states |
+| [Source register](docs/clean-room/sources.md) | Public specifications and provenance decisions |
+| [CI evidence](docs/ci.md) | Actual platform results and their limits |
 
-Current work: the public menu/tool/shortcut inventory, broader file coverage and interactive
-Windows/Linux verification. [CI scope](docs/ci.md) separates configured jobs from evidence.
-Workspace format/render tests need the pinned external consumers described in [development.md](docs/development.md).
-See [STATUS.md](STATUS.md) for actual progress and [ROADMAP.md](ROADMAP.md) for the full target.
+## Contribute
 
-Original code is dual-licensed MIT OR Apache-2.0. Third-party notices remain with their files.
+<a href="CONTRIBUTING.md"><img src="docs/media/contribute.svg" alt="Build chemistry tools with us: contribute code, chemistry, tests or documentation" width="100%"></a>
+
+Chemists, Rust developers, documentation writers and test authors are welcome. Pick a
+concrete gap, cite its public source and bring an independent test. Small contributions
+are useful: a clear reproduction, an original licensed fixture or a corrected workflow
+record can move the project forward.
+
+Start with [CONTRIBUTING.md](CONTRIBUTING.md). Use the [issue forms](https://github.com/thematheusmello/bondline/issues/new/choose)
+for bugs and feature requests, [SUPPORT.md](SUPPORT.md) for questions and
+[SECURITY.md](SECURITY.md) for private vulnerability reporting. Parallel agent contributors
+follow the same [AGENTS.md](AGENTS.md), file ownership and verification rules.
+
+## License and credits
+
+Original Bondline code and documentation are dual-licensed under **[MIT](LICENSE-MIT) OR
+[Apache-2.0](LICENSE-APACHE)**, at your option. Copyright © 2026 Bondline contributors.
+
+Third-party software and fonts retain their notices. See [NOTICE](NOTICE),
+[ATTRIBUTION.md](ATTRIBUTION.md) and the [dependency policy](docs/dependency-policy.md).
+The banners are original project artwork; the screenshots show Bondline itself.
+Their [sources and hashes](docs/media/SOURCES.md) are recorded separately from the approved
+render-test golden. No paid service or copied reference artwork is required.

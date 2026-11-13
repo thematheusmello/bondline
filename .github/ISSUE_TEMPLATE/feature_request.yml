@@ -1,0 +1,44 @@
+name: Feature request
+description: Describe a chemical workflow or capability Bondline should support.
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the [roadmap](https://github.com/thematheusmello/bondline/blob/main/ROADMAP.md) and [parity checklist](https://github.com/thematheusmello/bondline/blob/main/docs/parity-checklist.md) for related work.
+        A concrete workflow is enough to request a feature; code or a test implementation is not required.
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow or problem
+      description: What chemical drawing, reaction, publishing or interoperability task are you trying to complete?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired result
+      description: Describe the steps or behavior that would let you complete the task.
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: Public reference
+      description: Optional. Link public documentation, screenshots or videos; include version, platform and timestamps if available. Do not upload proprietary binaries or copied asset libraries.
+    validations:
+      required: false
+  - type: textarea
+    id: verification
+    attributes:
+      label: How could we check it?
+      description: Optional. Describe an example input, expected result or end-to-end workflow that would demonstrate success. Share only original or redistributable samples.
+    validations:
+      required: false
+  - type: input
+    id: related
+    attributes:
+      label: Related issue or parity item
+      description: Optional. Link existing work so the discussion stays connected.
+    validations:
+      required: false

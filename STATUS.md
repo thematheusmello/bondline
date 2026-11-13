@@ -168,21 +168,28 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 
 ## Next exact actions
 
-1. Current file-control source65b5fb8 passed local/native and hosted43496010615, then was
-   integrated into main. Do not repeat completed gates. Next implement shared discovery/
-   typed bindings for delivered close-dialog Save/Discard/Cancel/Keep Open, reusing the
-   existing document.close/ui.file commands. Read controls.rs, file_workflow::dialogs and
-   mcp/work.rs; test correct busy/context availability before native wiring. Do not rebuild
-   close policy or invent a general scheduler gate.
-2. Continue qualified inventory work, identifying actual26.1 builds and complete tool/context
-   menus without claiming completeness from counts, timestamps or cloud imagery.
-3. Shared document.close is now implemented with adapter/native evidence; do not build it
-   again. Read the audit's resolution: delivered menu/shortcut bindings and finite picker requests
-   now exist. Finish broader dialog discovery and address delivered job cancellation. Complete modern
-   inventory remains M0 work. Broader models/transactions stay on the roadmap without
-   inventing new M0 gates. Do not call M0 complete from a license fix or one file workflow.
-4. Continue M1 source-preserving structural edits/application CDX mapping/other formats and M2 connected bonds,
-   snapping/order/labels with independent tests and actual native workflows. Keep M3-M5 full.
+The user explicitly prioritized continuing M1, then M2–M5. Remaining M0 inventory/dialog/
+job-addressability gaps remain visible; they do not stop the newly authorized format work.
+
+1. Finish the active MOLV2000 codec and independent tests in crates/io/src/mol and its
+   fixtures/oracle. Published BIOVIA2026 fields, retained source/header metadata and strict
+   unsupported-feature diagnostics govern it. Observe RED/GREEN, run targeted clippy, then
+   integrate complete owned source/model data and real registry/file operations. Do not
+   advertise application MOL support from a standalone codec.
+2. Complete M1 formats: SDF/V3000/RXN/SMILES, application CDX mapping and general source-
+   preserving CDXML edits. Keep strict unknown-data/source retention and independent
+   consumers; the excluded CDX candidate does not justify trimming or relaxed parsing.
+3. Proceed through M2 connected drawing/labels/styles, M3 chemistry and reactions,
+   M4 publishing/clipboard and M5 depth/WASM/distribution with the full roadmap intact.
+4. Continue M0 close-dialog binding/discovery, delivered job cancellation and qualified
+   modern inventory in parallel. Reuse document.close/ui.file rather than rebuilding
+   their already verified policy or inventing a general scheduler gate.
+
+The repository presentation now includes original banners, actual native screenshots and
+community/license/support/security/issue/PR guidance. Doc/image/config checks passed;
+rendered GitHub checks follow publication. Actual runtime source stays65b5fb8 for this
+separate documentation commit. M1 experimental files are owned by file_io and remain
+uncommitted until their codec is verified. No capture app/controller/CUA remains live.
 
 All shared-close implementation/review/native agents finished. No local Cargo/native/fuzz
 worker or CUA session remains. The temporary main-integration worktree was removed after

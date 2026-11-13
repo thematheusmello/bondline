@@ -36,6 +36,12 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
+Current user-directed priority: finish M1, then continue M2–M5. A MOLV2000 codec is under
+active TDD with the published BIOVIA2026 specification and external RDKit consumers.
+Standalone parser/writer tests do not establish native application import/export. Full M0
+inventory/dialog/addressability gaps remain tracked while this format work proceeds.
+
+
 Standalone CDXML source preservation and checked existing-attribute replacement have
 original-fixture/Expat and ASan smoke evidence plus one pinned unchanged RDKit corpus
 document. A source-backed direct-fragment node geometry view now uses validated model

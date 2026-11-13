@@ -1,0 +1,10 @@
+Bondline
+Copyright 2026 Bondline contributors
+
+Original Bondline work is licensed under MIT OR Apache-2.0, at your option.
+See LICENSE-MIT and LICENSE-APACHE.
+
+This source repository contains third-party code and fonts with their own notices.
+Preserve the license and notice files in assets/, vendor/ and the dependency sources.
+ATTRIBUTION.md and docs/dependency-policy.md identify the retained records and audit scope.
+This file does not replace those notices or claim a completed release notice audit.

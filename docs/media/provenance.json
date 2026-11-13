@@ -1,0 +1,130 @@
+{
+  "capture_session_completed_at_utc": "2026-11-13 20:07:06 UTC",
+  "documentation_head": "1f487446e82b2215c17775c0665e848aa6b55f59",
+  "product_source": "65b5fb8db0b7c6fc44986bd59d747bd3a5644a26",
+  "product_source_verified_unchanged": true,
+  "binary_sha256": "4a5425b0db81cac37fdf1d6ba8e6417fae44e5f7093dc58e2582d3ce2be25ab2",
+  "platform": {
+    "os": "macOS",
+    "version": "27.2",
+    "architecture": "arm64",
+    "adapter": "Apple M3 Max",
+    "backend": "Metal"
+  },
+  "capture_method": "CUA app.getScreenshot; original returned JPEG buffers saved unchanged as .jpg. No crop, resample, composite, image generation, or content edit to these artifacts.",
+  "artifacts": [
+    {
+      "path": "docs/media/workspace.jpg",
+      "mime_type": "image/jpeg",
+      "sha256": "d629c55f5b827bd5b336971c2753eabe12b7d09ed3a2857f27c327631d94929c",
+      "byte_length": 49968,
+      "width_px": 1160,
+      "height_px": 832,
+      "caption": "Actual native development workspace with three independently authored C-C fragments."
+    },
+    {
+      "path": "docs/media/save-as.jpg",
+      "mime_type": "image/jpeg",
+      "sha256": "72e96c09e9d3b7ca22d66d5c383bcd11890cc36b3135a433d992ea9dd15d37dc",
+      "byte_length": 72025,
+      "width_px": 1160,
+      "height_px": 832,
+      "caption": "Actual original CDXML Save As chooser with a relative project location."
+    }
+  ],
+  "scene": {
+    "path": "target/readme-captures/bondline-demo.cdxml",
+    "sha256": "9e9673922977bc083bcbbacc72a2df67194fe9cdbfa2442be4d47a943b50f3de",
+    "byte_length": 924,
+    "canonical_smiles": [
+      "CC",
+      "CC",
+      "CC"
+    ],
+    "formula": [
+      "C2H6",
+      "C2H6",
+      "C2H6"
+    ],
+    "requests": [
+      {
+        "command": "page.set_size",
+        "params": {
+          "page_id": 1,
+          "width_pt": 320,
+          "height_pt": 400
+        }
+      },
+      {
+        "command": "bond.create",
+        "params": {
+          "page_id": 1,
+          "begin_x_pt": 130,
+          "begin_y_pt": 100,
+          "end_x_pt": 190,
+          "end_y_pt": 100
+        }
+      },
+      {
+        "command": "bond.create",
+        "params": {
+          "page_id": 1,
+          "begin_x_pt": 130,
+          "begin_y_pt": 200,
+          "end_x_pt": 190,
+          "end_y_pt": 200
+        }
+      },
+      {
+        "command": "bond.create",
+        "params": {
+          "page_id": 1,
+          "begin_x_pt": 130,
+          "begin_y_pt": 300,
+          "end_x_pt": 190,
+          "end_y_pt": 300
+        }
+      },
+      {
+        "command": "document.save_cdxml",
+        "params": {
+          "path": "target/readme-captures/bondline-demo.cdxml"
+        }
+      }
+    ]
+  },
+  "save_as_interaction": [
+    "Cmd+Shift+S",
+    "AX Folder SetValue: target/readme-captures",
+    "Go",
+    "AX File name SetValue: bondline-demo-copy.cdxml",
+    "Capture without saving a copy",
+    "Escape cancels picker; Cmd+Q closes clean app"
+  ],
+  "provenance": "Original Bondline UI and authored structures; attributed Apache-2.0 Roboto font already shipped by the audited build. No reference application or proprietary assets inspected/copied.",
+  "scope": "Documentation screenshots only, not approved regression goldens or proof of full product parity. Shows the limited independent C-C/native CDXML development workflow.",
+  "privacy": "Only this application window is captured. Relative location/public-safe filename in chooser. The visible opt-in loopback address is not an authentication credential; its listener is now closed. Actual credential stayed only in controller memory.",
+  "shutdown": {
+    "native_exit_code": 0,
+    "controller_stopped": true,
+    "cua_completion_summary_sent": true
+  },
+  "format_note": "Temporary PNG derivatives made for the initial requested extension were not promoted and were removed; only original JPEG screenshots are supplied for publication.",
+  "documentation_note": "These original native captures show product source65b5fb8. Banner SVGs are original project illustration, not screenshots or render-test goldens.",
+  "artwork": [
+    {
+      "path": "docs/media/banner.svg",
+      "sha256": "f3363a2c1931feb95d6ef6b4e829b74460880ef486242f45bfde45d975946081",
+      "license": "MIT OR Apache-2.0",
+      "creator": "Bondline contributors",
+      "kind": "original SVG illustration; generic browser font declarations, no embedded font file"
+    },
+    {
+      "path": "docs/media/contribute.svg",
+      "sha256": "a6b6e5327002822d9ae8a83f07e34f8c6a6cccda86646650a154732b5754282b",
+      "license": "MIT OR Apache-2.0",
+      "creator": "Bondline contributors",
+      "kind": "original SVG illustration; generic browser font declarations, no embedded font file"
+    }
+  ]
+}

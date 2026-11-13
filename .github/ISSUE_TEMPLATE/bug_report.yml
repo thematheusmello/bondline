@@ -1,0 +1,72 @@
+name: Bug report
+description: Reproduce a failure in drawing, files, automation, or builds.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe what you observed; you do not need to diagnose the code.
+        For security concerns, use [private reporting](https://github.com/thematheusmello/bondline/security/advisories/new) and follow [SECURITY.md](https://github.com/thematheusmello/bondline/blob/main/SECURITY.md). Do not post exploit details here.
+        Remove credentials, loopback session tokens and confidential chemical data from all text and attachments.
+  - type: input
+    id: build
+    attributes:
+      label: Commit or build
+      description: Include the commit or build identifier if known; otherwise say unknown.
+      placeholder: Commit hash, build identifier, or unknown
+    validations:
+      required: true
+  - type: dropdown
+    id: interface
+    attributes:
+      label: Where did it happen?
+      options:
+        - Native desktop
+        - CLI
+        - Stdio MCP
+        - Authenticated loopback
+        - Parser or library
+        - Build or tests
+        - Other or unsure
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system/version and architecture; GPU or adapter for rendering issues if known.
+      placeholder: macOS, Windows, or Linux version; arm64 or x64; relevant setup details
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include exact actions or sanitized commands, starting from a known document state.
+      placeholder: |
+        1. Start Bondline with an empty document.
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual result
+      description: What should happen, and what happened instead? Include any data loss or recovery behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant error or log output
+      description: Optional. Remove credentials, session tokens, sensitive paths and confidential data.
+      render: text
+    validations:
+      required: false
+  - type: textarea
+    id: sample
+    attributes:
+      label: Minimal sample or screenshot
+      description: Optional. Share only original or redistributable files and sanitized screenshots. You can report without an attachment.
+    validations:
+      required: false
