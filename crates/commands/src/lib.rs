@@ -111,7 +111,7 @@ pub enum Error {
     Png(#[from] bondline_io::Error),
     #[error("GPU capture is not available on this target")]
     BackendUnavailable,
-    #[error("source-backed documents cannot be faithfully previewed yet")]
+    #[error("source contains unmapped content and cannot be faithfully previewed yet")]
     UnsupportedDocumentPreview,
 }
 
@@ -257,7 +257,7 @@ impl Engine {
                     .iter()
                     .find(|page| page.id() == id)
                     .ok_or(bondline_model::Error::MissingPage(id.get()))?;
-                if self.document.source_info().is_some() {
+                if !self.document.is_fully_mapped() {
                     return Err(Error::UnsupportedDocumentPreview);
                 }
                 return Prepared::capture(self.state(), params, page.clone());

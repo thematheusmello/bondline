@@ -29,8 +29,10 @@ now retains an owned StoredDocument, including original CDXML data. An engine in
 with that API returns an additional source object: {format: "cdxml", byte_length, modified}.
 The field is omitted for native in-memory documents. Raw source bytes are not serialized.
 Import/export commands are not registered yet. bond.create now authors a limited native
-chemical fragment; source-backed creation is refused until editable mapping exists. Modified source-backed
-models cannot export stale XML; exact undo restores the original bytes and exportability.
+chemical fragment; source-backed creation is refused unless a complete profile is proven.
+Exact current native encoding byte equality now permits headless edits/captures after
+reopening. Other modified source-backed models cannot export stale XML; exact undo restores
+original bytes/exportability.
 The source/history budget is delivered headlessly; editable mapping, failed-import retention
 and actual native file workflows still need implementation and independent evidence.
 The io library now encodes fresh elemental CDXML through StoredDocument::to_cdxml; this is

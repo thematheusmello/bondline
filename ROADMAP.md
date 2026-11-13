@@ -38,8 +38,9 @@ connectivity and explicit Poster canvas extents; an external RDKit consumer open
 actual single-bond command's output. Imported structural edits and file workflows remain.
 Native independent C-C/three-H rendering is delivered, with explicit terminal labels.
 Source/history now has shared-allocation accounting and oldest-first byte eviction.
-Next: a completely supported generated-file profile that can reopen/edit/render, source-
-preserving edits and registry open/save with failed-import/save retention;
+A proven generated-file profile now reopens/edits/renders headlessly, retaining source and
+exact history; extended/noncanonical files remain guarded. Next: native workspace wiring,
+general source-preserving edits and registry open/save with failed-import/save retention;
 broader query/label/style mapping, lossless CDX records, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.

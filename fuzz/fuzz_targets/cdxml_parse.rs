@@ -139,6 +139,21 @@ fuzz_target!(|data: &[u8]| {
                     edited.export_cdxml(),
                     Err(bondline_io::DocumentError::UnsupportedEdit)
                 ));
+                if stored.is_fully_mapped() {
+                    let bytes = edited.to_cdxml().unwrap().into_owned();
+                    let reopened = bondline_io::StoredDocument::from_cdxml(
+                        bytes.into(),
+                        bondline_model::PageSize::A4,
+                    )
+                    .unwrap();
+                    assert!(reopened.is_fully_mapped());
+                    assert_eq!(reopened.model(), edited.model());
+                } else {
+                    assert!(matches!(
+                        edited.to_cdxml(),
+                        Err(bondline_io::DocumentError::UnsupportedEdit)
+                    ));
+                }
                 *edited.model_mut() = stored.model().clone();
                 assert_eq!(edited.export_cdxml().unwrap(), data);
             }

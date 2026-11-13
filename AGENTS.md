@@ -53,9 +53,11 @@ it alone exceeds the threshold; this excludes allocator headers, caches and exte
 Update accounting/tests whenever a new model field owns heap data; do not claim a hard RSS cap.
 Unchanged-source export is guarded; never write stale XML after a model edit. StoredDocument::
 to_cdxml borrows unchanged source or encodes new native elemental data. Do not bypass it by
-regenerating stored.model(): that projection omits unknown data. Even our generated files
-currently reopen source-backed; classify a completely supported profile before enabling
-imported editing/rendering, and preserve other files without guessing. Poster Width/Height
+regenerating stored.model(): that projection omits unknown data. A generated profile is fully
+mapped only if re-encoding reproduces every input byte. Its cached classification now permits
+headless editing/rendering; unknown/extended/noncanonical files remain guarded and preserved.
+Keep the pinned v0 fixture editable when changing the encoder/version; add migrations instead
+of refreshing it. Native workspace/file wiring remains separate. Poster Width/Height
 are drawing extents, not inferred paper/printer settings.
 xtask checks layers and licenses, fetches a pinned SHA-256 corpus, and orchestrates CI.
 No GUI dependencies below ui; wgpu belongs in render. Add crates when useful behavior lands,

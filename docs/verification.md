@@ -697,3 +697,23 @@ licenses/assets and the unchanged corpus scope. Windows/Linux all-targets source
 native runtimes and hosted CI remain unexecuted. Runtime package counts remain 150/161/219
 and two bundled assets; Python consumers are test-only. The isolated harness format check
 also passes. No native UI/renderer code changed or new native-window evidence was claimed.
+
+## Reopened native-profile editing, 2026-11-13
+
+RED: the new engine reopening test failed with UnsupportedDocumentPreview on the original
+408-byte native v0 vector. Io tests also failed with the missing is_fully_mapped API.
+GREEN: the constructor now compares the complete original bytes with a native re-encoding,
+caching only a full equality result. The profile keeps original source/baseline and supports
+headless render, bond creation, encode/reopen and exact Undo/Redo; CPU/GPU PNG bytes agree
+after Undo. Independent Expat verifies all revised attributes, and hashlib checks the pinned
+v0 SHA-256. Creator-name-only, changed styles, captions, comments/PIs, unknown properties,
+future versions and noncanonical quotes remain opaque, byte-exact and edit-guarded.
+
+Final cargo xtask ci with the isolated BONDLINE_PYTHON passes **147 tests**, formatting,
+warnings-denied clippy, layers/licenses and the unchanged corpus scope. Windows/Linux
+all-targets source checks pass. The extended pinned ASan run completed 10000 runs with seed
+3641879538, max_len 65536 and timeout 5: coverage 3605, features 10562, corpus 632/168 KiB,
+reported RSS 171 MiB. The harness checks changed-profile encode/reopen or opaque-edit refusal.
+Logs: target/reopened-profile-red.log, native-profile-red.log, native-profile-ci.log and
+native-profile-fuzz.log. No native UI/file workflow or general imported editing is claimed;
+the workspace guard still awaits file-workflow wiring. No dependency or asset changes.

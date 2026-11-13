@@ -23,7 +23,7 @@ packages plus two hash/notice-verified bundled assets. Full release notice/sourc
 and the Unicode-bearing browser candidate remain separate work.
 
 Verified in the current drawing/history/encoding checkpoint:
-- 144 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses
+- 147 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses
   and the pinned corpus gate. Windows/Linux all-targets source checks pass; native runtime
   and hosted CI execution on those platforms remain unverified.
 - Six shared typed commands: document.inspect, page.set_size, bond.create, history.undo,
@@ -73,16 +73,20 @@ StoredDocument::to_cdxml borrows unchanged source or returns newly encoded nativ
 An external RDKit 2026.09.2 process opens actual bond.create output and confirms ethane's
 atoms/bond/hydrogens, SMILES and formula. This is one interoperability scene, not an
 implemented Bondline chemistry engine or general rendering/file parity.
-Source-backed bond creation/preview still fail explicitly, including files generated here
-and then imported. There is no registry/native open/save/reopen workflow, imported structural
+Exact native-profile files now reopen for headless rendering, bond creation, encoding and
+exact Undo/Redo. The full input must match re-encoding byte-for-byte; the producer name alone
+cannot authorize dropping styles, captions, unknown fields or comments. The pinned original
+v0 fixture and independent Expat/hash checks protect that compatibility across upgrades.
+Other source-backed bond creation/preview still fail explicitly. Native workspace/file
+wiring remains separate. There is no registry/native open/save/reopen workflow, general imported structural
 writer, CDX parser or MOL/SMILES codec. Drawings in the application are
 session-local. Other atom/bond kinds, connected edits, style sheets and chemistry algorithms
 are missing, even when their pure model types exist.
 
 Corpus: two pinned BSD-3-Clause RDKit files, one CDXML byte/XML/model/owned-snapshot check;
 MOL integrity only; no CDX entry or chemistry calculation coverage. The extended pinned ASan
-harness completed 10000 runs with writer escaping/rollback and Poster handling, seed
-3641879538/max_len 65536/timeout 5, coverage 3402 and corpus 600/162 KiB. This bounded run is
+harness completed 10000 runs with complete-profile edited re-encoding, seed
+3641879538/max_len 65536/timeout 5, coverage 3605 and corpus 632/168 KiB. This bounded run is
 not exhaustive validation. External Python consumers are isolated under ignored
 .cache/oracles/format-python; requirements-dev.txt pins Pillow/NumPy/RDKit. See development.md
 for BONDLINE_PYTHON selection; system Python was not modified.
@@ -91,9 +95,9 @@ Next exact tasks:
 1. Finish/version the screen, palette, icon, dialog and end-to-end flow inventory using the
    newly pinned public research and authorized artifacts. Existing 573 control rows are not
    a complete modern inventory. Separate desktop/platform/tier evidence from cloud demos.
-2. Classify a completely supported generated-file profile before allowing its editing/rendering
-   after reopen; do not trust CreationProgram alone or drop unknown foreign data. Add source-
-   preserving edits and atomic registry/native open/save with failed-import/save retention
+2. Wire the now-proven native profile into the native workspace and atomic registry open/save;
+   do not trust CreationProgram alone or drop unknown foreign data. Add general source-
+   preserving edits with failed-import/save retention
    tests, bounded path access and independent consumers. Save from the complete StoredDocument,
    never regenerate a bare imported projection. Inspect the pinned reference-project approaches.
 3. Extend single-bond behavior to existing-atom attachment, connected graphs, click creation,
@@ -105,7 +109,7 @@ Next exact tasks:
 The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1, the drawing
 checkpoint is 7043563 and the research checkpoint is 952ded5. The current research policy
 and full goal are active; no push/publication/account action was performed.
-History budgeting is ca9b859. The subsequent native-encoding commit includes this record;
+History budgeting is ca9b859 and native encoding is 23ffd33. The profile checkpoint includes this record;
 use Git log for its final hash.
 
 The disposable target/dev/Bondline.app contains the verified ordered-event drawing build

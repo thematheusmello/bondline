@@ -34,7 +34,7 @@ pub(super) fn create(
     params: BondCreate,
     floor: Ids,
 ) -> Result<(StoredDocument, Ids), Error> {
-    if document.source_info().is_some() {
+    if !document.is_fully_mapped() {
         return Err(Error::SourceBackedEdit);
     }
     let page = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;

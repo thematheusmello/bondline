@@ -44,5 +44,8 @@ may reject the model while syntax remains intact. UTF-8 inputs also exercise the
 writer's attribute escaping and rollback: a successful page attribute decodes exactly;
 rejected values leave no partial child. Original Poster and incomplete-Poster seeds are
 placed only in the ignored mutation corpus, never the committed fixture directory.
+The original native v0 seed also exercises complete-profile classification. Its changed
+model may encode and reopen exactly; other source-backed edits must remain refused. Original
+backing and borrowed-only stale-source guards still apply to both cases.
 Independent XML semantic assertions live in the external Expat tests. A short smoke run is
 not exhaustive parser conformance or a security audit.

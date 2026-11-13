@@ -24,6 +24,7 @@ pub struct SourceInfo {
 struct OriginalCdxml {
     bytes: Arc<[u8]>,
     baseline: Arc<Document>,
+    fully_mapped: bool,
 }
 
 /// Owned application snapshot: derived model plus the complete original interchange data.
@@ -49,11 +50,16 @@ impl StoredDocument {
         let graph = ElementalGraph::parse(&bytes)?;
         let model = Arc::new(graph.preview_document(preview_size)?);
         drop(graph);
+        // A producer name is insufficient: every source byte must match our complete profile.
+        // shortcut: current canonical profile only; broaden with complete mappings and migrations.
+        let fully_mapped = crate::cdxml::write_document(&model)
+            .is_ok_and(|encoded| encoded.as_slice() == bytes.as_ref());
         Ok(Self {
             model: Arc::clone(&model),
             original: Some(OriginalCdxml {
                 bytes,
                 baseline: model,
+                fully_mapped,
             }),
         })
     }
@@ -64,6 +70,14 @@ impl StoredDocument {
 
     pub fn model_snapshot(&self) -> Arc<Document> {
         Arc::clone(&self.model)
+    }
+
+    /// Every authored field is represented by the native elemental codec.
+    /// Noncanonical or extended imports retain source but cannot be regenerated safely.
+    pub fn is_fully_mapped(&self) -> bool {
+        self.original
+            .as_ref()
+            .is_none_or(|source| source.fully_mapped)
     }
 
     /// Approximate retained storage, deduplicating source/model/fragment allocations.
@@ -113,12 +127,16 @@ impl StoredDocument {
     }
 
     /// Borrow exact unchanged source, or encode a new native elemental document.
-    /// Unsynchronized source-backed edits are never regenerated or silently discarded.
+    /// Only a proven complete profile may encode edits; unknown source is never discarded.
     pub fn to_cdxml(&self) -> Result<Cow<'_, [u8]>, DocumentError> {
-        if self.original.is_some() {
-            Ok(Cow::Borrowed(self.export_cdxml()?))
-        } else {
-            Ok(Cow::Owned(crate::cdxml::write_document(&self.model)?))
+        match self.export_cdxml() {
+            Ok(bytes) => Ok(Cow::Borrowed(bytes)),
+            Err(DocumentError::NoCdxmlSource | DocumentError::UnsupportedEdit)
+                if self.is_fully_mapped() =>
+            {
+                Ok(Cow::Owned(crate::cdxml::write_document(&self.model)?))
+            }
+            Err(error) => Err(error),
         }
     }
 }

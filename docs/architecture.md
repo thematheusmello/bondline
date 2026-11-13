@@ -73,11 +73,14 @@ StoredDocument owns that backing beyond parser lifetimes. It accepts zero or one
 page, reads complete explicit Poster extents and otherwise uses caller preview dimensions;
 it does not derive print paper from graphical bounds or decode printer records. Raw XML is
 neither serialized in command results nor included in StoredDocument Debug.
-Unchanged source-backed models export the exact original bytes; unsynchronized edits fail
-explicitly, and exact undo restores passthrough. to_cdxml borrows that source or returns owned
-new native bytes. Save callers must use that full StoredDocument entry point, not regenerate
+Unchanged source-backed models export the exact original bytes. The constructor classifies a
+complete native elemental profile only when re-encoding reproduces every input byte; the
+cached decision is not based on a producer name. Only that profile can safely encode edits
+and participate in headless rendering/bond creation after reopen. Other unsynchronized edits
+fail explicitly, and exact undo restores passthrough. to_cdxml borrows unchanged source or
+returns owned native/profile bytes. Save callers must use that full StoredDocument entry point, not regenerate
 stored.model(), which lacks unknown data. See file-formats.md; imported structural editing
-and exposed file-open/save workflows remain missing. Capture refuses source-backed or unsupported chemical
+and exposed file-open/save workflows remain missing. Capture refuses unmapped or unsupported chemical
 content instead of returning a misleading blank preview; the native C-C creation case works.
 
 The native canvas consumes the render crate's ordered rectangle/stroke scene and limited
