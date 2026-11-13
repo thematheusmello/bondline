@@ -7,11 +7,14 @@ branch was fast-forwarded into main; product checkpoint ccf8c50 contains the fin
 Inspect Git log for subsequent format/documentation hashes. Do not restart or discard existing
 work. No release/installer distribution or reference account action was performed.
 
-Latest recoverable source:8547f4db25dbcf25b6ded0869f457dc89561f565 on the public
-feat/cdx-syntax branch;48982d0 is its separate M0 command/UI audit. Main currently remains
-fefab8afa5349cf77bbb1f421560338920cc58bf. The CDX slice is not merged while its hosted
-checks are unfinished. The public repository/main already contains the earlier verified
-drawing and CDXML workflows. Source publication is authorized; no release was requested.
+Latest CDX work is on feat/cdx-syntax; inspect Git log for the canonical-stdout fix after
+the original8547f4db25dbcf25b6ded0869f457dc89561f565 feature and709329f status checkpoint.
+48982d0 is its separate M0 command/UI audit. Main currently remains
+fefab8afa5349cf77bbb1f421560338920cc58bf. The first CDX hosted run failed Windows's test
+oracle newline protocol; the correction and forced-CRLF regression are in this change.
+The branch stays unmerged pending a new hosted result. The public repository/main already
+contains the earlier verified drawing/CDXML workflows. Source publication is authorized;
+no release was requested. Shared-close implementation is separate work on feat/shared-close.
 
 ## Current integrated scope
 
@@ -41,13 +44,16 @@ drawing and CDXML workflows. Source publication is authorized; no release was re
 
 ## Verification
 
-Latest local cargo xtask ci passes206 workspace tests plus3 native AccessKit bridge tests;
-log target/cdx-ci-integrated.log. The13 added CDX tests use original published-field vectors,
+Latest local cargo xtask ci passes207 workspace tests plus3 native AccessKit bridge tests;
+log target/cdx-stdout-ci.log. The14 added CDX tests use original published-field vectors,
 independent Python struct bytes/spans and actual external RDKit CC/C2H6-to-C=C/C2H4 reads.
 The frozen-source CDX ASan target passes10000 runs, seed721533879, coverage166/features402,
 52 retained mutation entries3092 bytes/reported RSS44 MiB; log target/cdx-asan-final.log.
 This is a standalone syntax/editing slice. The fetched corpus still has no CDX entry.
 See docs/verification.md and xtask/oracles/cdx-README.md for exact limits and provenance.
+The canonical-stdout correction adds one regression: all14 CDX tests and targeted clippy
+pass locally. Its forced CRLF text wrapper reproduces the actual Windows failure without
+normalizing any CDX bytes. See target/cdx-stdout-{red,green,clippy}.log.
 
 The previous native-file checkpoint passed193 workspace tests plus3 native AccessKit bridge tests,
 fmt, warnings-denied clippy (including that bridge), layers, native licenses/assets and
@@ -139,13 +145,13 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 4. Continue M1 source-preserving structural edits/application CDX mapping/other formats and M2 connected bonds,
    snapping/order/labels with independent tests and actual native workflows. Keep M3-M5 full.
 
-Implementation, independent-oracle and final read-only review agents finished. The review
-found no actionable issue in this bounded slice; it did not add a native/CDX workflow claim.
-No local Cargo/native/fuzz worker or CUA session remains.
+The earlier read-only CDX review found no actionable parser issue; it did not establish
+native/CDX workflow or Windows oracle execution. Shared-close implementation agents may
+still be active on that separate branch; inspect authoritative agent/job state on continuation.
 
-Confirmed live hosted work as of2026-11-13 17:49:56 UTC:
-https://github.com/thematheusmello/bondline/actions/runs/43475705005 at8547f4d.
-Parser ASan job132058845734 succeeded (both targets). Ubuntu job132058846409 and Windows
-job132058846940 are running aggregate gates; Mac job132058846748 acquired a runner and is
-selecting the Rust tools. Overall success is unverified. Recheck the authoritative run/job
-state before continuation; do not duplicate or cancel it without a concrete reason.
+Hosted run https://github.com/thematheusmello/bondline/actions/runs/43475705005 at8547f4d
+is now terminal. Parser ASan132058845734, Ubuntu132058846409 and Mac132058846748 succeeded;
+Windows132058846940 failed the LF-versus-CRLF oracle comparison. Overall failure is real.
+The fixed producer/new regression must pass a fresh hosted run before main integration;
+do not rerun the unchanged failed revision and call it a fix. Find the new run by this
+branch/head after publication, then recheck exact job state. No release was requested.

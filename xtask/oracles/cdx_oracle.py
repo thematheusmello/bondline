@@ -196,7 +196,7 @@ def main():
     else:
         source = sys.stdin.buffer.read(LIMIT + 1)
         if command == "describe":
-            print(describe(source), end="")
+            sys.stdout.buffer.write(describe(source).encode("ascii"))
         elif command == "verify":
             verify_rdkit(source, int(sys.argv[2]), explicit=len(sys.argv) > 3 and sys.argv[3] == "explicit")
         elif command == "verify-opaque-edit":

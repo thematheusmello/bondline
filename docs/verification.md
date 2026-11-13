@@ -965,3 +965,21 @@ claimed for this slice, and main remains atfefab8a pending that evidence. A fina
 read-only review found no actionable issue in framing, ranges, ownership, bounded allocation
 or preservation; it did not rerun tests or extend the advertised scope. STATUS.md records
 the live job handles and next exact integration step.
+
+## CDX oracle Windows newline regression, 2026-11-13
+
+Run43475705005 is terminal: Mac/Linux native checks and both Linux ASan targets passed;
+Windows job132058846940 failed at both independent record-table comparisons before RDKit
+was called. Its expected LF protocol received CRLF from Python text stdout; the binary
+fixture was already emitted through the binary buffer. Saved actual log:
+target/cdx-windows-hosted-red.log. No Windows feature success is inferred from this run.
+
+A new regression wraps stdout in a CRLF-translating io.TextIOWrapper on every host. It
+first failed against the actual oracle, while retaining exact binary fixture output;
+target/cdx-stdout-red.log. Emitting ASCII/LF record-table bytes through stdout.buffer fixes
+the protocol at its producer. No assertion is relaxed and no binary content is normalized.
+All14 CDX tests and package clippy now pass; logs cdx-stdout-{green,clippy}.log. Published
+Python stream semantics are recorded in sources.md. The corrected isolated branch also
+passes cargo xtask ci:207 workspace tests plus3 native bridge tests, fmt, clippy, layers,
+unchanged licenses/assets and pinned corpus (target/cdx-stdout-ci.log). A new hosted run is required before
+merging this branch; local success does not replace Windows execution.

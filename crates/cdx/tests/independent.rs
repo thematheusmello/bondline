@@ -8,6 +8,14 @@ use bondline_cdx::{Document, LengthEncoding, RecordKind};
 type TestResult<T = ()> = Result<T, Box<dyn std::error::Error>>;
 
 fn oracle(arguments: &[&str], input: &[u8]) -> TestResult<Vec<u8>> {
+    oracle_with_text_newlines(arguments, input, false)
+}
+
+fn oracle_with_text_newlines(
+    arguments: &[&str],
+    input: &[u8],
+    translate_to_crlf: bool,
+) -> TestResult<Vec<u8>> {
     let python = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
         if cfg!(windows) {
             "python".into()
@@ -15,12 +23,26 @@ fn oracle(arguments: &[&str], input: &[u8]) -> TestResult<Vec<u8>> {
             "python3".into()
         }
     });
-    let mut child = Command::new(python)
-        .arg("-B")
-        .arg(concat!(
-            env!("CARGO_MANIFEST_DIR"),
-            "/../../xtask/oracles/cdx_oracle.py"
-        ))
+    let script = concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../xtask/oracles/cdx_oracle.py"
+    );
+    let mut command = Command::new(python);
+    command.arg("-B");
+    if translate_to_crlf {
+        command
+            .args([
+                "-c",
+                r#"import io,runpy,sys
+sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding="utf-8",newline="\r\n")
+runpy.run_path(sys.argv.pop(1),run_name="__main__")
+"#,
+            ])
+            .arg(script);
+    } else {
+        command.arg(script);
+    }
+    let mut child = command
         .args(arguments)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
@@ -38,6 +60,23 @@ fn oracle(arguments: &[&str], input: &[u8]) -> TestResult<Vec<u8>> {
         String::from_utf8_lossy(&result.stderr)
     );
     Ok(result.stdout)
+}
+
+#[test]
+fn record_protocol_stays_lf_when_python_text_stdout_translates_to_crlf() -> TestResult {
+    let source = oracle(&["fixture"], &[])?;
+    assert_eq!(
+        oracle_with_text_newlines(&["fixture"], &[], true)?,
+        source,
+        "binary fixture output must remain byte-exact"
+    );
+    let document = Document::parse(&source)?;
+    assert_eq!(
+        oracle_with_text_newlines(&["describe"], &source, true)?,
+        record_table(&document).as_bytes(),
+        "record table is an exact LF protocol, independent of text newline translation"
+    );
+    Ok(())
 }
 
 fn index_text(index: Option<usize>) -> String {
