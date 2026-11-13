@@ -1,5 +1,13 @@
 # Status
 
+This isolated V3000 checkpoint follows 2d665de on feat/mol-v3000. The standalone codec
+passes 14 focused/96 IO tests, final ASAN10000 and the actual-worktree full gate: 338
+workspace plus three bridge tests. Source, fixture/consumer limits and exact hashes are
+in docs/verification.md. There is no V3000 application persistence/command/UI/SDF dispatch.
+Root owns commit/integration with the main checkout's later corpus features; do not reset
+this sibling checkout or share its Cargo target. No local job remains. Hosted execution
+follows publication. The older base-state record below is historical for this branch.
+
 2026-11-13: the persistent full M0–M5 goal is active. Full M0 and M1 are incomplete.
 Public repository: https://github.com/thematheusmello/bondline . Continue this repository.
 

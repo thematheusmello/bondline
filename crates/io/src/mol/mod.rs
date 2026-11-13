@@ -3,6 +3,7 @@
 
 mod parse;
 mod symbols;
+pub mod v3000;
 mod write;
 pub use write::{write_v2000, write_v2000_with_header};
 

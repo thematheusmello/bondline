@@ -43,6 +43,13 @@ test = false
 doc = false
 bench = false
 
+[[bin]]
+name = "mol_v3000_parse"
+path = "fuzz_targets/mol_v3000_parse.rs"
+test = false
+doc = false
+bench = false
+
 [workspace]
 members = ["."]
 
