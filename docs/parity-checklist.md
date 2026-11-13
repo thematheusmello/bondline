@@ -283,6 +283,9 @@ identify a full26.1 desktop screen specification or increase the count by duplic
 | MX-028 | Search > Browse Revvity Signals Software Store | 417-418 | missing | Reference commerce destination; outside product scope. |
 | MX-029 | Search > Browse Revvity.com | 417-418 | missing | Reference marketing destination; outside product scope. |
 | MX-030 | Search > Search Reaxys | 418 | missing | External integration; preserve backlog without requiring an account. |
+| MX-031 | Help > Getting Started | KB-HELP-ACCESS | missing, version unconfirmed | Separate installed-guide navigation role;26.1 presence/destination/platform need evidence. Original Bondline help required. |
+| MX-032 | Help > Tutorials | KB-HELP-ACCESS | missing, version unconfirmed | Separate role, not permission to copy installed tutorials. Exact26.1 presence unproven. |
+| MX-033 | Help > ChemDraw Basics | KB-HELP-ACCESS | missing, version unconfirmed | Reference label only; use original Bondline branding/help. Exact26.1 presence unproven. |
 
 ## Drawing and chemistry tools
 
@@ -658,8 +661,8 @@ identify a full26.1 desktop screen specification or increase the count by duplic
 | KP-012 | Move selection right 10 points: Shift+Right | 80 | missing | - |
 | KP-013 | Move selection left 10 points: Shift+Left | 80 | missing | - |
 | KP-014 | Scale around unchanged center: Ctrl+drag | 81 | missing | Scaling context; copy context uses the same modifier. |
-| KP-015 | Copy selection: Ctrl+drag | 82 | missing | - |
-| KP-016 | Copy constrained to x/y: Shift+Ctrl+drag | 82 | missing | - |
+| KP-015 | Copy selection: Ctrl+drag | 82 | missing | KB-COPY-DRAG says newer Alt without cutoff/platform;26.1 needs tool/selection/modifier/source-retention evidence. |
+| KP-016 | Copy constrained to x/y: Shift+Ctrl+drag | 82 | missing | Constrained behavior cannot be inferred from unversioned copy-drag note; same gap as KP-015. |
 | KP-017 | Distort resize along one axis: Shift+drag | 82 | missing | Resize handle context. |
 | KP-018 | Temporary lasso/marquee operation swap: hold Alt | 82 | missing | - |
 | KP-019 | Reverse chain direction: Ctrl+drag | 82 | missing | Chain tool context. |

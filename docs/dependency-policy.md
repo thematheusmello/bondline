@@ -81,7 +81,8 @@ MIT declaration passes the existing declaration gate; the missing LICENSE is a r
 notice-audit gap, not a fabricated notice or completed source audit.
 Latest runtime closures are 153/164/219 packages for macOS/Windows/Linux,
 plus the same two checked assets. This retains the original allowlist.
-Hosted window/API smokes pass on all three targets at product checkpoint 3d3dd44. New file
-I/O has native Mac and Linux Docker execution; Windows file/ACL behavior remains unverified.
+Hosted aggregate/window checks pass on all three targets at product checkpoint ccf8c50.
+File I/O has native Mac/Windows and Linux Docker/hosted execution; interactive Windows/Linux
+file gestures remain unverified.
 Source cross-checks alone are not OS execution. The WebAssembly delivery remains M5: its current
 candidate graph includes Unicode-licensed identifier data and is not approved for shipment.

@@ -24,7 +24,8 @@ guides are versioned evidence, not proof of complete modern parity.
       on all three platforms plus Linux ASan. Corpus remains its documented CDXML subset;
       passing infrastructure does not establish missing MOL/CDX/chemistry coverage.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.
-      573 stable-ID source-cited rows now exist; modern menus, unnamed glyphs and remaining
+      576 stable-ID source-cited control rows now exist, including three provisional
+      unversioned Help roles; modern menus, unnamed glyphs and remaining
       context menus still need evidence. Six versioned screen/flow groups and pinned public
       research now guide implementation; the download center requires login and observed
       Signals demo states are not desktop evidence. Do not infer completeness from row counts.

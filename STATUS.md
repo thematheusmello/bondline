@@ -86,13 +86,16 @@ Public specs, G25,26.x release notes and pinned PhotoCraft/VoiceStudio/REA resea
 in docs/clean-room/sources.md and docs/research. User-authorized artifact/runtime research
 uses original Rust/assets; no reference desktop executable was obtained or inspected.
 Download center requires login. Observed Signals cloud slides are not desktop evidence.
-The573-row inventory lacks complete modern menus/unnamed glyphs/context menus. No full
+The576-control inventory (including three provisional Help roles) lacks complete modern
+menus/unnamed glyphs/context menus. No full
 screen/design/tool parity is claimed. The committed modern-inventory-audit.md records eight
 qualified additions/corrections, two support screenshots and actual public desktop-video
 playback. Existing rows/source records now include the qualified gestures/selection/docking
 rules. The video predates26.1 and lacks a build, so its Signals/Search discrepancy stays open.
-/root/file_verification now owns only the next docs/research/support-index-audit.md, screening
-remaining official support titles and seeking stronger version-identified inventory sources.
+The support-index-audit.md is now complete: all699 unique section titles screened,20 selected
+bodies examined, seven page hashes and further bounded public-video observations recorded.
+It is not a full-body/product audit or an identified26.1 guide. Copy-drag modifier/version
+and long-bond title/body conflicts remain explicit. All owned research browsers closed.
 
 CDX/MOL/SDF/RXN/SMILES/InChI codecs, chemistry algorithms, connected construction, selection,
 styles, templates, general captions/arrows and publishing/Office/WASM/installers remain.
@@ -104,8 +107,8 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 
 ## Next exact actions
 
-1. Read the support-index audit when ready; the current product/CI integration is complete.
-   No release publication was requested. Preserve all exact native/hosted evidence scopes.
+1. Read both inventory audits and the current parity/source notes; product/CI integration
+   is complete. No release publication was requested. Preserve exact evidence scopes.
 2. Continue qualified inventory work, identifying actual26.1 builds and complete tool/context
    menus without claiming completeness from counts, timestamps or cloud imagery.
 3. Close remaining M0 architecture/inventory gaps, including named automation for remaining
@@ -115,5 +118,5 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
    snapping/order/labels with independent tests and actual native workflows. Keep M3-M5 full.
 
 Product implementation agents finished; no confirmed Cargo/native/fuzz/hosted job remains.
-Only the research agent above is active. Recheck authoritative agent/job
-state on continuation. Do not duplicate live work.
+All delegated tasks finished and owned browsers closed. No confirmed live job remains.
+Recheck authoritative agent/job state on continuation. Do not duplicate completed work.

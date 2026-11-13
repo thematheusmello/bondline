@@ -48,7 +48,9 @@ instead of changing privileges. A protected same-volume backup directory retains
 for recovery. Protection cannot revoke an inherited directory handle opened before tightening.
 The 1177 partial-replacement case restores the original by no-clobber hard link. If a different
 creator occupies the destination, the retained backup is reported instead of overwriting it.
-No recursive cleanup deletes unknown files. Native Windows verification is still pending.
+No recursive cleanup deletes unknown files. Native Windows passes seven io unit and six
+file integration cases, including DACL/exclusive temp/Zone.Identifier preservation and
+injected1177 recovery, in run43463687047. This is not a power-loss guarantee.
 
 ## Evidence and provenance
 
@@ -56,8 +58,8 @@ TDD logs are ignored under target/: file-io-red, file-io-cancel-red, file-io-met
 file-io-recovery-red and file-io-security-red. Native Mac passes 44 io tests, including 18
 new file cases. Linux arm64 Docker passes nine file unit and eight integration tests on its
 native filesystem, including non-UTF8 filenames, FIFO and raw access ACL. Linux is not
-simulated on APFS. Three-platform source clippy and declared-license gates pass; Windows
-filesystem behavior is not inferred from compilation. Detailed evidence is in verification.md.
+simulated on APFS. Three-platform source clippy and declared-license gates pass. Native
+Windows tests above and all three hosted aggregate/window checks pass; see verification.md.
 
 PhotoCraft's pinned atomic-save and metadata adapters informed the design; see source IDs
 PHOTO-ATOMIC and PHOTO-METADATA. Bondline uses independently written smaller code and explicit

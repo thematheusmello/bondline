@@ -13,6 +13,11 @@
   Signals instead of the older Search menu, but exact build/About is absent and upload
   predates desktop26.1. See modern-inventory-audit.md for hashes/timestamps and all source
   limits. Do not infer26.1 or a complete flyout/context-menu inventory from those frames.
+- All699 English-section support titles are screened, but only selected bodies read; no
+  public full26.1 guide/build was found. Provisional Help roles are separate. Copy-drag's
+  Ctrl/Alt cutoff remains unknown. A21.0.0.28 long-bond article disagrees between75%-longer
+  body and2× title; neither is a26.1 default. New7:04 video Page Setup is not a version
+  identifier. See support-index-audit.md.
 - G25 atom table p.68 assigns k to potassium, while p.69 assigns k to sprouting sulfonyl.
   Do not invent precedence. Bond table p.73 and the explicitly modified table p.75 assign
   4 to ring fusion, while the legacy drawing paragraph p.86 describes quadruple-bond input.
@@ -58,7 +63,7 @@
 - windows-permissions 0.2.4 declares MIT and author Daniel Dulaney in its exact published Cargo
   metadata, but its archive and reviewed upstream tree contain no LICENSE file. Retain those
   facts/pins in native-file-io.md; resolve release notice/source audit without inventing a notice.
-- New Windows ReplaceFile/ACL behavior is source-checked, not natively executed yet. Mac inherited
+- Windows ReplaceFile/ACL tests pass natively in the hosted feature run. Mac inherited
   allow ACLs and Windows backup directories have a create-to-tighten pre-opened-handle boundary;
   current code cannot revoke such a handle. See native-file-io.md; do not claim universal
   temporary confidentiality. Explicit overwrite checks are not external compare-and-swap.
