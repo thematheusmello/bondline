@@ -9,6 +9,7 @@ license.workspace = true
 layer = 1
 
 [dependencies]
+bondline-model = { path = "../model" }
 wgpu.workspace = true
 thiserror = "2"
 

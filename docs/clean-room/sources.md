@@ -30,6 +30,8 @@ proprietary implementation, help text or assets. Record more specific sections a
 | PROPTEST | https://docs.rs/proptest/1.12.0/proptest/ | Fixed-seed generated edit sequences independently assert exact undo/redo invariants and expected page dimensions. Build/test dependency only. |
 | REA-AUDIT | https://github.com/morluto/rea/blob/main/docs/release-exposure.md | External inspection of Bondline artifacts only; not proof of security or feature parity. |
 | WGSL-LITERALS | https://www.w3.org/TR/2026/CRD-WGSL-20261106/ | Exact binary floating point literals; independently implemented conversion tested with IEEE-754 bit vectors. |
+| WGSL-LAYOUT | https://www.w3.org/TR/2026/CRD-WGSL-20261106/#memory-layouts | Storage buffer alignment/stride and unpack4x8unorm. Original shader uses an 8-byte viewport header and 20-byte rectangle records; no external shader copied. |
+| WGPU-DRAW | https://docs.rs/crate/wgpu/22.1.0/source/src/lib.rs | Published APIs for pipeline creation, validation scopes, instance draws and readback; actual pinned crate APIs inspected. |
 | DLOPEN2 | https://docs.rs/dlopen2/0.9.0/dlopen2/raw/struct.Library.html | MIT backend for OS library ownership and symbol resolution; implementation inspected from the published crate. |
 | WIN-MODULE | https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandleexw | Existing modules acquire an owned reference without rerunning library initializers; release with FreeLibrary. |
 | WIN-SYMBOL | https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getprocaddress | Resolve by validated symbol name while retaining that module reference. |

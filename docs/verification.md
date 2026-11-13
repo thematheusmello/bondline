@@ -150,3 +150,24 @@ the incidental default relaunch was also closed. No development listener is left
 Integrated gates pass: 40 workspace tests, rustfmt, workspace/all-targets clippy, layers,
 native declared licenses (143/154/213 packages), two asset hashes/notices and Windows/Linux
 all-targets source checks. This is not native Windows/Linux execution or a human golden.
+
+## Shared CPU/GPU page scene, 2026-11-13
+
+RED: `cargo test -p bondline-render --test page_scene` failed for absent scene APIs.
+GREEN: both CPU and real GPU agree with a hand-authored 8x8 reference grid, explicit layered
+RGBA bytes (including alpha source replacement), clipping, and checked hostile geometry.
+Additional cases cover one-pixel/odd-pitch readbacks, maximum capture width and the declared
+4096-primitive bound. Native GPU is Metal on the previously identified Apple M3 Max.
+
+Before changing the UI, the new shared-border/pixel-grid geometry assertion failed with
+"shared scene border was not painted". The native adapter now consumes the render scene.
+The integer rounding invariant and exact one-unit interior inset are documented in
+rendering.md; this replaces the prior continuous-layout assertion rather than claiming
+continuous precision for rounded dimensions. Keyboard undo/redo and physical dimensions
+still have their independent checks. All relevant tests pass.
+
+The actual new development bundle was opened and Page -> Rotate page displayed 841.9 x
+595.3 pt with landscape paper, border and shadow visible. It was closed and no development
+process remains. This is AI native inspection, not human golden approval. Integrated gates
+pass: 44 tests, rustfmt, workspace/all-targets clippy, layers, native declared licenses/assets,
+and Windows/Linux all-targets source checks. No native Windows/Linux or browser pass.

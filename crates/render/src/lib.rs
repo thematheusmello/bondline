@@ -13,6 +13,14 @@ pub struct Frame {
 pub enum Error {
     #[error("capture dimensions must be between 1 and 2048 pixels")]
     InvalidDimensions,
+    #[error("viewport dimensions must be between 1 and 100000 pixels")]
+    InvalidViewport,
+    #[error("rectangle dimensions must be nonzero and their edges must not overflow")]
+    InvalidGeometry,
+    #[error("scene exceeds the 4096-rectangle limit")]
+    SceneTooComplex,
+    #[error("GPU validation failed: {0}")]
+    Validation(String),
     #[error("no native GPU adapter is available")]
     NoAdapter,
     #[error(transparent)]
@@ -43,112 +51,13 @@ pub fn cpu_solid(width: u32, height: u32, color: [u8; 4]) -> Result<Frame, Error
     })
 }
 
-/// Render and read back an empty native GPU canvas, with the actual adapter identity.
+mod scene;
+pub use scene::{Rectangle, Scene, cpu_scene, page_scene};
+
 #[cfg(not(target_arch = "wasm32"))]
-pub async fn gpu_solid(
-    width: u32,
-    height: u32,
-    color: [u8; 4],
-) -> Result<(Frame, wgpu::AdapterInfo), Error> {
-    let count = byte_count(width, height)?;
-    let instance = wgpu::Instance::default();
-    let adapter = instance
-        .request_adapter(&wgpu::RequestAdapterOptions::default())
-        .await
-        .ok_or(Error::NoAdapter)?;
-    let info = adapter.get_info();
-    let (device, queue) = adapter
-        .request_device(&wgpu::DeviceDescriptor::default(), None)
-        .await?;
-    let extent = wgpu::Extent3d {
-        width,
-        height,
-        depth_or_array_layers: 1,
-    };
-    let texture = device.create_texture(&wgpu::TextureDescriptor {
-        label: Some("Bondline empty canvas"),
-        size: extent,
-        mip_level_count: 1,
-        sample_count: 1,
-        dimension: wgpu::TextureDimension::D2,
-        format: wgpu::TextureFormat::Rgba8Unorm,
-        usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
-        view_formats: &[],
-    });
-    let view = texture.create_view(&Default::default());
-    let row = width * 4;
-    let pitch = row.div_ceil(256) * 256;
-    let buffer = device.create_buffer(&wgpu::BufferDescriptor {
-        label: Some("Bondline canvas readback"),
-        size: u64::from(pitch) * u64::from(height),
-        usage: wgpu::BufferUsages::MAP_READ | wgpu::BufferUsages::COPY_DST,
-        mapped_at_creation: false,
-    });
-    let mut encoder = device.create_command_encoder(&Default::default());
-    {
-        let _pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-            label: Some("empty canvas reference"),
-            color_attachments: &[Some(wgpu::RenderPassColorAttachment {
-                view: &view,
-                resolve_target: None,
-                ops: wgpu::Operations {
-                    load: wgpu::LoadOp::Clear(wgpu::Color {
-                        r: f64::from(color[0]) / 255.0,
-                        g: f64::from(color[1]) / 255.0,
-                        b: f64::from(color[2]) / 255.0,
-                        a: f64::from(color[3]) / 255.0,
-                    }),
-                    store: wgpu::StoreOp::Store,
-                },
-            })],
-            depth_stencil_attachment: None,
-            timestamp_writes: None,
-            occlusion_query_set: None,
-        });
-    }
-    encoder.copy_texture_to_buffer(
-        wgpu::ImageCopyTexture {
-            texture: &texture,
-            mip_level: 0,
-            origin: wgpu::Origin3d::ZERO,
-            aspect: wgpu::TextureAspect::All,
-        },
-        wgpu::ImageCopyBuffer {
-            buffer: &buffer,
-            layout: wgpu::ImageDataLayout {
-                offset: 0,
-                bytes_per_row: Some(pitch),
-                rows_per_image: Some(height),
-            },
-        },
-        extent,
-    );
-    queue.submit(Some(encoder.finish()));
-    let (sender, receiver) = std::sync::mpsc::channel();
-    buffer
-        .slice(..)
-        .map_async(wgpu::MapMode::Read, move |result| {
-            let _ = sender.send(result);
-        });
-    device.poll(wgpu::Maintain::Wait);
-    receiver.recv_timeout(std::time::Duration::from_secs(10))??;
-    let data = buffer.slice(..).get_mapped_range();
-    let mut rgba = Vec::with_capacity(count);
-    for scanline in data.chunks_exact(pitch as usize) {
-        rgba.extend_from_slice(scanline.get(..row as usize).ok_or(Error::InvalidReadback)?);
-    }
-    if rgba.len() != count {
-        return Err(Error::InvalidReadback);
-    }
-    Ok((
-        Frame {
-            width,
-            height,
-            rgba,
-        },
-        info,
-    ))
-}
+mod gpu;
+#[cfg(not(target_arch = "wasm32"))]
+pub use gpu::{gpu_scene, gpu_solid};
 
 #[cfg(test)]
 mod tests {

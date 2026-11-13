@@ -149,37 +149,41 @@ pub fn show_workspace(context: &egui::Context, engine: &mut Engine, error: &mut 
         });
     });
     egui::CentralPanel::default()
-        .frame(
-            egui::Frame::default()
-                .fill(egui::Color32::from_gray(232))
-                .inner_margin(32.0),
-        )
+        .frame(egui::Frame::default().inner_margin(0.0))
         .show(context, |ui| {
             let available = ui.available_rect_before_wrap();
             let Some(page) = engine.document().pages().first() else {
                 return;
             };
-            let size = page.size();
-            let maximum = size.width_pt().max(size.height_pt());
-            let width = (size.width_pt() / maximum) as f32;
-            let height = (size.height_pt() / maximum) as f32;
-            let scale = (available.width() / width).min(available.height() / height);
-            // shortcut: an extreme aspect ratio occupies at least one display pixel; physical export uses authored dimensions.
-            let paper = egui::Rect::from_center_size(
-                available.center(),
-                egui::vec2((width * scale).max(1.0), (height * scale).max(1.0)),
-            );
-            ui.painter().rect_filled(
-                paper.translate(egui::vec2(3.0, 4.0)),
-                1.0,
-                egui::Color32::from_gray(210),
-            );
-            ui.painter().rect_filled(paper, 1.0, egui::Color32::WHITE);
-            ui.painter().rect_stroke(
-                paper,
-                1.0,
-                egui::Stroke::new(1.0, egui::Color32::from_gray(196)),
-            );
+            match bondline_render::page_scene(
+                available.width().floor().max(1.0) as u32,
+                available.height().floor().max(1.0) as u32,
+                page.size(),
+            ) {
+                Ok(scene) => {
+                    let painter = ui.painter_at(available);
+                    let [r, g, b, a] = scene.background;
+                    painter.rect_filled(
+                        available,
+                        0.0,
+                        egui::Color32::from_rgba_unmultiplied(r, g, b, a),
+                    );
+                    for rectangle in scene.rectangles {
+                        let [r, g, b, a] = rectangle.color;
+                        painter.rect_filled(
+                            egui::Rect::from_min_size(
+                                available.min + egui::vec2(rectangle.x as f32, rectangle.y as f32),
+                                egui::vec2(rectangle.width as f32, rectangle.height as f32),
+                            ),
+                            0.0,
+                            egui::Color32::from_rgba_unmultiplied(r, g, b, a),
+                        );
+                    }
+                }
+                Err(error) => {
+                    ui.colored_label(egui::Color32::DARK_RED, error.to_string());
+                }
+            }
         });
 }
 
@@ -346,11 +350,23 @@ mod tests {
                     _ => None,
                 })
                 .ok_or("page was not painted")?;
+            let border = frame
+                .shapes
+                .iter()
+                .find_map(|shape| match &shape.shape {
+                    egui::Shape::Rect(rect) if rect.fill == egui::Color32::from_gray(196) => {
+                        Some(rect.rect)
+                    }
+                    _ => None,
+                })
+                .ok_or("shared scene border was not painted")?;
+            assert_eq!(rect.min, border.min + egui::vec2(1.0, 1.0));
+            assert_eq!(rect.size(), border.size() - egui::vec2(2.0, 2.0));
+            let ratio = page.size().width_pt() / page.size().height_pt();
+            // Each outer dimension rounds to a pixel: |w - ratio*h| <= (1 + ratio)/2.
             assert!(
-                (f64::from(rect.width() / rect.height())
-                    - page.size().width_pt() / page.size().height_pt())
-                .abs()
-                    < 1e-5
+                (f64::from(border.width()) - ratio * f64::from(border.height())).abs()
+                    <= (1.0 + ratio) / 2.0
             );
             assert!(error.is_none());
         }

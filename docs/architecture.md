@@ -30,6 +30,11 @@ Format crates own their syntax and source-preserving representations. They do no
 on the model. The io layer translates supported data and retains original backing for
 unknown content; unsupported edits must fail explicitly rather than discard data.
 
+The native canvas now consumes the render crate's page scene instead of owning a parallel
+page-layout algorithm. CPU and instanced GPU reference paths consume that same scene;
+tests also compare against an independent expected pixel grid. See rendering.md for exact
+primitive semantics, rounding, resource bounds and the remaining rendering requirements.
+
 Layer 0: model, cdxml, cdx. Layer 1: chem, render. Layer 2: io. Layer 3: commands.
 Layer 4: mcp/loopback adapters. Layer 5: cli, ui. Tooling lives in xtask. Core is GUI-free.
 Original dynamic-loader and Win32 clipboard boundaries now isolate OS FFI needed to retain
