@@ -11,6 +11,8 @@ cargo-fuzz = true
 [dependencies]
 libfuzzer-sys = "=0.4.13"
 bondline-cdxml = { path = "../crates/cdxml" }
+bondline-io = { path = "../crates/io" }
+bondline-model = { path = "../crates/model" }
 
 [[bin]]
 name = "cdxml_parse"
@@ -21,3 +23,7 @@ bench = false
 
 [workspace]
 members = ["."]
+
+[patch.crates-io]
+hexf-parse = { path = "../compat/hexf-parse" }
+libloading = { path = "../compat/libloading" }

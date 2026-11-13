@@ -1,5 +1,7 @@
 //! Interchange adapters; model and standalone format parsers remain free of native I/O.
 
+pub mod cdxml;
+
 use bondline_render::Frame;
 
 #[derive(Debug, thiserror::Error)]

@@ -29,4 +29,30 @@ fuzz_target!(|data: &[u8]| {
             }
         }
     }
+    if let Ok(geometry) = bondline_io::cdxml::Geometry::parse(data) {
+        assert_eq!(geometry.as_bytes(), data);
+        if let Some(node) = geometry
+            .nodes()
+            .iter()
+            .find(|node| node.position().is_some())
+        {
+            let target = bondline_model::Point2::new(72.0, 144.0).unwrap();
+            match geometry.with_node_position(node.id(), target) {
+                Ok(output) => {
+                    let edited = bondline_io::cdxml::Geometry::parse(&output).unwrap();
+                    let moved = edited
+                        .nodes()
+                        .iter()
+                        .find(|edited| edited.id() == node.id())
+                        .unwrap();
+                    assert_eq!(moved.position(), Some(target));
+                    assert_eq!(geometry.as_bytes(), data);
+                }
+                Err(error) => assert!(matches!(
+                    error,
+                    bondline_io::cdxml::Error::Syntax(bondline_cdxml::Error::InputTooLarge)
+                )),
+            }
+        }
+    }
 });

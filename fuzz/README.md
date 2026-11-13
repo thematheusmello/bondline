@@ -19,5 +19,11 @@ The harness checks bounded parser execution and exact source preservation on acc
 When an ordinary unnamespaced attribute exists, it also replaces its value with Unicode,
 markup delimiters and whitespace, reparses, verifies the decoded value and checks the
 original stayed unchanged. Inputs too close to the output size bound may reject the edit.
+The same actual io crate also maps accepted direct-fragment geometry and patches one
+explicit position to the published 72/144 point vector, reparses and checks the original.
+This pulls the io/render dependencies into the isolated build, but does not initialize a
+GPU or fuzz renderer behavior. The isolated workspace uses the same original loader/hex
+compatibility patches and pins gpu-descriptor 0.3.0 in its own lockfile. Existing parser/
+libFuzzer package pins remain unchanged. This extra build graph is test-only.
 Independent XML semantic assertions live in the external Expat tests. A short smoke run is
 not exhaustive parser conformance or a security audit.

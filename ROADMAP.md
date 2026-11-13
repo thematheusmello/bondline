@@ -21,8 +21,9 @@ guides are versioned evidence, not proof of complete modern parity.
 
 Standalone CDXML source preservation and checked existing-attribute replacement have
 original-fixture/Expat and ASan smoke evidence plus one pinned unchanged RDKit corpus
-document. Next:
-model mapping retaining source backing, lossless CDX records, MOL/SDF V2000
+document. A source-backed direct-fragment node geometry view now uses validated model
+points; missing coordinates remain absent. Next: chemical graph/application ID mapping
+retaining source backing, lossless CDX records, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.
 

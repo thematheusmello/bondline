@@ -5,10 +5,12 @@ Runtime selection, cameras, jobs and revision counters are separate from authore
 Command handlers validate before committing an edit. Snapshot history restores the entire
 document; failed commands do not mutate it. All delivered interfaces use the same registry.
 
-The first model slice contains pages only. IDs are nonzero u32 values; dimensions are finite
+The authored document still contains pages only. Page IDs are nonzero u32 values; dimensions are finite
 f64 points with validated construction/deserialization and a documented 100,000-point bound.
 One point is 1/72 inch; native display scale is a view concern. A new document has one A4 page
-with ID 1. Atoms, bonds, text and reactions will be added with their first verified behaviors.
+with ID 1. Point2 provides finite signed coordinates within ±100000 pt for io's source-backed
+CDXML node geometry view. Zero and negative coordinates are valid; absent positions remain
+None. Atoms, bonds, text and reactions will be added with their first verified behaviors.
 
 `bondline-commands` owns the registry and history. It validates a candidate document before
 replacing an Arc snapshot. Undo/redo move Arc references in O(1); authoring edits currently
@@ -37,8 +39,10 @@ Format crates own their syntax and source-preserving representations. They do no
 on the model. The io layer translates supported data and retains original backing for
 unknown content; unsupported edits must fail explicitly rather than discard data.
 CDXML's borrowed tree remains read-only. Its attribute replacement returns revalidated
-source bytes with untouched spans retained; no model mapping or application file adapter
-exists yet. See file-formats.md for the exact supported edit boundary.
+source bytes with untouched spans retained; no chemical-document mapping or application file
+adapter exists yet. Io's limited Geometry adapter owns the borrowed syntax view and validated
+positions. It retains original source IDs as strings and writes only an existing p value;
+it does not allocate application IDs or build a chemical graph. See file-formats.md.
 
 The native canvas now consumes the render crate's page scene instead of owning a parallel
 page-layout algorithm. CPU and instanced GPU reference paths consume that same scene;

@@ -1,5 +1,8 @@
 //! GUI-free authored document data. Coordinates are points, increasing right and down.
 
+mod point;
+pub use point::{MAX_POSITION_PT, Point2};
+
 use serde::{Deserialize, Serialize};
 use std::num::NonZeroU32;
 
@@ -75,6 +78,8 @@ impl PageSize {
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("point coordinates must be finite, within -100000..100000 points")]
+    InvalidPosition,
     #[error("page dimensions must be finite and greater than zero, up to 100000 points")]
     InvalidPageSize,
     #[error("page {0} does not exist")]

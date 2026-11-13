@@ -2,7 +2,7 @@
 
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
-| CDXML | Standalone bounded UTF-8 syntax parser; unchanged source-byte writer; checked existing-attribute value replacement | Original fixture + independent external Expat; one pinned unchanged RDKit corpus file; exact unrelated-byte preservation; BOM/CRLF and hostile-input cases; ASan parse/edit fuzz smoke | Chemical model mapping, additional edit types, broader corpus coverage, registry/native open/save |
+| CDXML | Bounded syntax/source preservation, existing-attribute replacement and a limited source-backed node geometry view | Original fixture + independent external Expat; published 72/144 point vector; one pinned unchanged RDKit corpus file; exact unrelated-byte preservation; bounds and ASan parse/edit/geometry fuzz smoke | Chemical graph/application ID mapping, dependent geometry edits, broader corpus coverage, registry/native open/save |
 | CDX | None | Published specification recorded | Parser, preservation, writer and model mapping |
 | MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
@@ -40,3 +40,22 @@ positions. Tests exercise a 70000-character name and more than 255 bytes of equa
 External Expat verifies decoded values including Unicode character-range boundaries.
 The untouched corpus round-trip gate does not yet exercise edits on its RDKit fixture.
 See clean-room/sources.md, verification.md and fuzz/README.md for provenance and checks.
+
+`bondline_io::cdxml::Geometry` maps unnamespaced n elements directly inside
+CDXML/page/fragment. Other n layouts (including groups and nested fragments) fail explicitly;
+namespaced extension elements remain opaque in the original bytes. Each mapped node needs
+a nonblank ID, unique by its decoded string among mapped nodes. IDs are retained strings,
+not yet interpreted as numeric/global application identities. Font IDs and other object
+classes are not validated by this view. No chemical meaning is inferred from labels or NodeType.
+
+An explicit p is exactly two finite decimal coordinates, x then y, in 1/72-inch points.
+The published "72 144" vector means one inch right/two inches down. The model's ±100000 pt
+bound is an independent product policy, not a CDXML format limit. Malformed/out-of-range
+positions fail; absence remains None instead of generating an origin or running cleanup.
+The adapter never changes its borrowed source. with_node_position returns new bytes for an
+existing p and preserves semantically unchanged numeric spellings/character references.
+It refuses a missing position or unknown target. Only p is replaced: dependent caption/
+label positions and bounding boxes are not recomputed. This is a format utility, not a
+complete atom-move command or application import/save workflow. All unmodelled properties
+and objects stay in the source; the four geometry tests include independent Expat evidence.
+The corpus gate still checks its unchanged fixture, not this geometry edit path.

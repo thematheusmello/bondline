@@ -365,3 +365,35 @@ are not established. No proprietary program or asset was inspected.
 `cargo xtask ci` passes all 68 tests, formatting, clippy, layers, native licenses/assets
 and current corpus checks. Final Windows/Linux whole-workspace all-targets source checks
 pass; neither is native runtime evidence. No Cargo/native job remains running.
+
+## Source-backed CDXML node geometry, 2026-11-13
+
+RED: `cargo test -p bondline-model --test point --locked` failed for the absent Point2;
+`cargo test -p bondline-io --test cdxml_geometry --locked` failed for the absent adapter/
+model dependency. GREEN: two model and four io tests pass. The independent published
+CDX-COORDS "72 144" vector fixes units and axis order. Negative/zero coordinates, finite
+±100000 pt boundaries and strict JSON construction are checked. Missing p remains None.
+The original fixture's coordinate patch has an independently constructed full expected byte
+string, and external Expat confirms its new value, other node position, isotope, bond order
+and namespaced opaque property. Numeric no-ops retain original spelling/character references.
+Malformed/non-finite/out-of-range pairs, missing/duplicate source IDs, unsupported n layouts,
+unknown targets and edits to unpositioned nodes fail explicitly without modifying the input.
+
+This is a source-backed geometry utility, not a chemical graph/app importer or complete atom
+move. Source identifiers stay decoded strings; numeric/global identity and dependent labels/
+boxes are not interpreted. Unknown properties/objects remain in the original syntax bytes.
+The archived ID page returned 404; the remaining mapping questions are recorded explicitly.
+
+The actual io adapter is exercised by the isolated ASan harness, including coordinate edit/
+reparse/source-preservation checks. Its larger tool-only build graph retains original parser/
+libFuzzer package pins and the reviewed loader/hex patches; gpu-descriptor is pinned to 0.3.0
+there as in the product. The final 10000-run smoke passed with seed 3641879538, max_len
+65536, timeout 5, edge coverage 2147 and 387 retained inputs (130 KiB). No GPU is initialized
+by the fuzz path; this is not renderer fuzzing, exhaustive conformance or a security audit.
+Log: ignored target/cdxml-geometry-fuzz-pinned.log.
+
+`cargo xtask ci` passes all 74 tests and the existing real gates. Runtime declaration
+closure is 150/161/219 packages for macOS/Windows/Linux plus two unchanged checked assets;
+the new product reachability is the existing standalone syntax crate and its two XML parsers.
+Whole-workspace all-targets Windows/Linux source checks pass. No UI change or new platform
+execution claim; existing native evidence is unchanged. No running Cargo/fuzz/native job.

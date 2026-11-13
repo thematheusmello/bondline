@@ -17,6 +17,13 @@
   exact palette variants remain unresolved. Never inspect installed toolbar/hotkey XML,
   help bundles or program binaries to fill these gaps; use further public documentation.
 - The archived CDX SDK does not establish every modern extension. Preserve unknown data.
+- The archived object tables' linked properties/id.htm page returns 404. Before chemical
+  graph/application ID mapping, resolve numeric identity spelling, scope and ranges from
+  further public evidence. The current geometry view retains decoded source strings,
+  checks only mapped-node duplicates and makes no global object/font-ID validation claim.
+- Grouped/nested-fragment geometry, absent-position generation and dependent label/bounding
+  box updates still need complete mapping/command behavior. The format utility rejects
+  unsupported n layouts and never presents its p-only patch as a complete atom move.
 - Native declared license closure now passes all three desktop targets. Native Windows/Linux
   execution and complete release notice assembly remain; every dependency upgrade needs new
   closure/source/asset evidence. Crate labels alone are insufficient.

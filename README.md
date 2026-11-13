@@ -6,6 +6,8 @@ The compatibility target includes CDXML and CDX files used by ChemDraw Professio
 No application file-open/save or chemical drawing workflow is implemented yet. The standalone
 CDXML crate preserves syntax and replaces existing attribute values without rewriting
 unrelated bytes; see [tested format scope](docs/file-formats.md).
+The io crate also validates/maps a limited node-position view into model point coordinates;
+it does not yet import a chemical graph into the application.
 Bondline is not affiliated
 with, endorsed by, or sponsored by ChemDraw or Revvity Signals.
 

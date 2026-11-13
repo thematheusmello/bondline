@@ -39,10 +39,10 @@ Loopback connections require the fresh session token emitted only in opt-in star
 Never commit or expose actual tokens in logs, screenshots or verification records. Stdio MCP
 is separate and opens no listener. Keep file access bounded and explicitly authorized.
 
-Current map: model (L0, validated pages); cdxml (L0, source-preserving syntax and checked
+Current map: model (L0, validated pages and Point2); cdxml (L0, source-preserving syntax and checked
 existing-attribute replacement);
 render (L1, shared CPU/GPU page scenes); io (L2,
-validated PNG encoding); commands
+source-backed CDXML node geometry and validated PNG encoding); commands
 (L3, registry and Arc snapshot history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
 and `compat/clipboard-win` alone opt into reviewed OS unsafe; `compat/hexf-parse` forbids

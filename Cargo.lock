@@ -528,6 +528,8 @@ dependencies = [
 name = "bondline-io"
 version = "0.1.0"
 dependencies = [
+ "bondline-cdxml",
+ "bondline-model",
  "bondline-render",
  "png",
  "serde_json",
