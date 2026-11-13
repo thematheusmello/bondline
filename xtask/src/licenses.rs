@@ -46,6 +46,38 @@ fn runtime_packages(tree: &str) -> Result<BTreeSet<(String, String)>, Box<dyn Er
         .collect()
 }
 
+fn product_names(metadata: &serde_json::Value) -> Result<Vec<&str>, Box<dyn Error>> {
+    let members = metadata["workspace_members"]
+        .as_array()
+        .ok_or("missing workspace members")?;
+    let packages = metadata["packages"]
+        .as_array()
+        .ok_or("missing Cargo packages")?;
+    let mut names = Vec::new();
+    for package in packages {
+        let name = package["name"].as_str().ok_or("missing package name")?;
+        if !name.starts_with("bondline-") || !members.contains(&package["id"]) {
+            continue;
+        }
+        let binary = package["targets"]
+            .as_array()
+            .ok_or("missing Cargo targets")?
+            .iter()
+            .any(|target| {
+                target["kind"]
+                    .as_array()
+                    .is_some_and(|kinds| kinds.iter().any(|kind| kind == "bin"))
+            });
+        if binary {
+            names.push(name);
+        }
+    }
+    if names.is_empty() {
+        return Err("no product binaries selected for the license audit".into());
+    }
+    Ok(names)
+}
+
 fn verify_asset(bytes: &[u8], license: &str, expected_hash: &str) -> Result<(), Box<dyn Error>> {
     if !allowed(license) {
         return Err(format!("asset license outside policy: {license}").into());
@@ -121,22 +153,24 @@ pub fn check() -> Result<(), Box<dyn Error>> {
             return Err(String::from_utf8_lossy(&output.stderr).into_owned().into());
         }
         let metadata: serde_json::Value = serde_json::from_slice(&output.stdout)?;
-        let output = Command::new("cargo")
-            .args([
-                "tree",
-                "--locked",
-                "--target",
-                target,
-                "--edges",
-                "normal,no-proc-macro",
-                "--package",
-                "bondline-ui",
-                "--prefix",
-                "none",
-                "--format",
-                "{p}",
-            ])
-            .output()?;
+        let products = product_names(&metadata)?;
+        let mut tree = Command::new("cargo");
+        tree.args([
+            "tree",
+            "--locked",
+            "--target",
+            target,
+            "--edges",
+            "normal,no-proc-macro",
+            "--prefix",
+            "none",
+            "--format",
+            "{p}",
+        ]);
+        for product in products {
+            tree.args(["--package", product]);
+        }
+        let output = tree.output()?;
         if !output.status.success() {
             return Err(String::from_utf8_lossy(&output.stderr).into_owned().into());
         }
@@ -177,6 +211,25 @@ pub fn check() -> Result<(), Box<dyn Error>> {
 #[cfg(test)]
 mod tests {
     use super::{allowed, confined_path, runtime_packages, verify_asset};
+
+    #[test]
+    fn audits_every_workspace_product_binary() -> Result<(), Box<dyn std::error::Error>> {
+        let metadata = serde_json::json!({
+            "workspace_members":["ui", "cli", "tool", "model"],
+            "packages":[
+                {"id":"ui", "name":"bondline-ui", "targets":[{"kind":["lib"]},{"kind":["bin"]}]},
+                {"id":"cli", "name":"bondline-cli", "targets":[{"kind":["bin"]}]},
+                {"id":"tool", "name":"xtask", "targets":[{"kind":["bin"]}]},
+                {"id":"model", "name":"bondline-model", "targets":[{"kind":["lib"]}]},
+                {"id":"external", "name":"bondline-other", "targets":[{"kind":["bin"]}]}
+            ]
+        });
+        assert_eq!(
+            super::product_names(&metadata)?,
+            ["bondline-ui", "bondline-cli"]
+        );
+        Ok(())
+    }
 
     #[test]
     fn asset_paths_stay_inside_the_workspace() -> Result<(), Box<dyn std::error::Error>> {

@@ -10,14 +10,18 @@ Current capabilities: a native read-only blank workspace, independently sourced 
 font, original icon, CPU/GPU clear-and-readback reference, and strict native runtime/asset
 license gates. Native macOS launch was visually inspected; Windows/Linux are cross-checked,
 with native runtime validation pending. This is a development foundation, not a chemical editor yet.
+The shared registry and CLI can inspect an in-memory page, set its dimensions, undo and redo.
 
 ```bash
 cargo run -p bondline-ui --bin bondline
 cargo run -p bondline-ui --bin bondline -- --smoke-test
+cargo run -p bondline-cli -- commands
+cargo run -p bondline-cli -- run --cmd '{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}'
 cargo test --workspace --locked
 cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo fmt --all -- --check
 cargo xtask licenses
+cargo xtask layers
 ```
 
 The smoke command launches the actual wgpu window, reports its adapter, and closes after
@@ -25,7 +29,7 @@ three frames. [The dependency policy](docs/dependency-policy.md) records pinned 
 original compatibility adapters and verification limits. There is no license exception
 for ISC, Boost, Zlib, Unicode or OFL. The hypothetical browser graph is not yet approved.
 
-Current work: extend the test-first foundation with the document/command engine and CDXML.
+Current work: connect native actions and automation, then add lossless CDXML.
 See [STATUS.md](STATUS.md) for actual progress and [ROADMAP.md](ROADMAP.md) for the full target.
 
 Original code is dual-licensed MIT OR Apache-2.0. Third-party notices remain with their files.

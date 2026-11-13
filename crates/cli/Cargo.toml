@@ -1,0 +1,17 @@
+[package]
+name = "bondline-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[package.metadata.bondline]
+layer = 5
+
+[dependencies]
+bondline-commands = { path = "../commands" }
+serde_json.workspace = true
+thiserror = "2"
+
+[lints]
+workspace = true

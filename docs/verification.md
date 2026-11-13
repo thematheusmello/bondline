@@ -86,3 +86,16 @@ atomicity, read-only inspection, redo preservation and branch replacement pass. 
 exact undo/redo restoration, and full-sequence restoration. Boundary tests additionally check
 the declared 128-snapshot cap and atomic rejection at revision overflow. No desktop or transport
 verification is implied by these headless tests.
+
+## CLI adapter, 2026-11-13
+
+RED: `cargo test -p bondline-cli` failed because the executable emitted no discovery/state
+payload and returned success for invalid commands. GREEN: both executable-level tests pass:
+registered schema discovery, physical Letter page dimensions after edit/undo/redo, consistent
+errors on invalid commands and usage, and help. A manual CLI page edit also returned the
+expected 612 by 792 point page. No file persistence is advertised.
+
+The license product-discovery test first failed for the missing selector, then passed along
+with all nine xtask tests. The actual declared runtime audit now covers UI and CLI: macOS
+116 packages, Windows 127, Linux 193, plus two verified bundled assets. Layer and focused
+CLI/tooling clippy checks pass.

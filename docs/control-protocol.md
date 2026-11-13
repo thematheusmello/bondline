@@ -25,5 +25,10 @@ claim about another application's history limits. Revision overflow rejects the 
 | `history.undo` | `{}` | Previous authored snapshot |
 | `history.redo` | `{}` | Next authored snapshot |
 
-CLI, stdio MCP, loopback transport, offscreen command captures and desktop authoring controls
-are still missing at this checkpoint. There is no socket listener or MCP server yet.
+The delivered CLI exposes `commands` and `run --cmd '<request>'`. Repeat `--cmd` to execute
+sequential operations in one in-memory engine; stdout is one final JSON snapshot. Failure
+prints a structured error to stderr and exits 2 (I/O/serialization failures exit 1). It does
+not save a project or make a multi-command transaction. `--help` lists actual operations.
+
+Stdio MCP, loopback transport, offscreen command captures and desktop authoring controls
+are still missing. There is no socket listener or MCP server yet.

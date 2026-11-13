@@ -23,7 +23,11 @@ Its three tests pass against physical-unit expectations and malformed-input case
 The shared registry now exposes inspect, page size, undo and redo with typed schemas.
 Headless page editing/history is verified, including 128 fixed-seed property cases.
 
-Missing: CLI/MCP/control, desktop editing controls, complete parity inventory, corpus,
+The CLI now discovers the same schemas and runs sequential JSON commands. Executable-level
+tests verify page size -> undo -> redo and structured errors. License gates discover every
+workspace product binary, so headless adapters cannot escape dependency review.
+
+Missing: MCP/control, desktop editing controls, complete parity inventory, corpus,
 CDXML parser, native CI workflows, native Windows/Linux execution and human-approved goldens.
 The M5 browser candidate still includes Unicode-licensed data and is not approved for shipment.
 

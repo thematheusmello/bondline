@@ -52,6 +52,8 @@ as general replacements, and need reinspection when those consumers change.
 for each native product target, then evaluates those packages' SPDX declarations. This
 avoids metadata's feature overapproximation. Build tools and unselected target dependencies
 are not shipped runtime code. Never report a declaration check as a full source review.
+Product binaries are discovered from Cargo workspace membership/targets; the current audit
+covers both the desktop and CLI roots, including the shared command engine.
 
 Native license closure has passed on macOS arm64, Windows x64 MSVC and Linux x64 targets.
 Windows/Linux cross-checks verify compilation, not OS execution. Native runtime acceptance
