@@ -18,7 +18,8 @@ Text, query nodes, reaction models and chemical perception remain missing.
 
 `bondline-commands` owns the registry and history. It validates a candidate document before
 replacing an Arc<io::StoredDocument> snapshot. That owned snapshot holds the model and, for
-CDXML, the original Arc<[u8]> plus its baseline model. Undo/redo move whole Arc references
+CDXML/MOL, the original Arc<[u8]> plus its baseline model. MOL also shares three headers
+and its captured coordinate frame. Undo/redo move whole Arc references
 in O(1); copy-on-write authoring edits share immutable fragments and source bytes. Equality
 includes opaque source content, so equal projections cannot erase source-only changes.
 Returned model snapshots remain immutable across later edits. Authored state excludes
@@ -56,7 +57,7 @@ edits dirty. This is a bounded capture/file executor, not a general background-j
 Close intent is transient engine state, outside StoredDocument/history. The typed
 document.close command handles Request/Discard/Cancel with an authored-revision guard;
 its monotonic epoch identifies continuations across Cancel/new Request at the same revision.
-Actual authored/baseline/path changes permanently invalidate approval. A close-specific Save
+Actual authored/baseline/path/format changes permanently invalidate approval. A close-specific Save
 renews Request only after its matching current receipt/epoch; an unrelated save cannot do so.
 The native adapter acknowledges valid approval only while holding the engine mutex, with
 no registered workers/replies, UI file jobs or pending file action. That acknowledgement
@@ -74,7 +75,7 @@ See control-protocol.md for state/output semantics and native-file-ui.md for act
 Delivered File/Edit/Page bindings are typed engine metadata whose invocations contain the
 same registered Command enum. Native menus/shortcuts and ui.controls read those bindings.
 The ui.file command stores one bounded native presentation intent outside authored history;
-headless engines refuse it without a host. IDs, revision/path/baseline and close epochs guard
+headless engines refuse it without a host. IDs, revision/path/baseline/format and close epochs guard
 picker continuations. The native adapter reserves work and prepares a selected file command
 under the same engine lock, then sends an opaque engine-bound plan to a worker. A host
 acknowledgement is distinct from visible pixels or a successful file receipt. See the

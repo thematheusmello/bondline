@@ -134,6 +134,7 @@ fn host_close_waits_for_both_shared_work_and_unconsumed_ui_results() -> TestResu
     assert!(!workflow.complete_close_if_idle(&mut engine, true, false));
     let (_sender, result) = mpsc::sync_channel(1);
     workflow.job = Some(FileJob {
+        format: FileFormat::Cdxml,
         request_id: 0,
         action: FileAction::Save {
             path: "pending.cdxml".to_owned(),
@@ -208,6 +209,7 @@ fn accepted_file_action_failure_keeps_the_window_open_beyond_one_frame() -> Test
     close(&mut engine, CloseAction::Request)?;
     let (sender, result) = mpsc::sync_channel(1);
     workflow.job = Some(FileJob {
+        format: FileFormat::Cdxml,
         request_id: 0,
         action: FileAction::Save {
             path: "failed.cdxml".to_owned(),
@@ -246,6 +248,10 @@ fn only_the_matching_close_save_receipt_can_renew_the_same_close_epoch() -> Test
         "ordinary_save",
         "stale_receipt",
         "wrong_path",
+        "wrong_format",
+        "wrong_receipt_format",
+        "wrong_ui_request",
+        "missing_ui_receipt",
         "new_edit",
         "cancel",
         "cancel_then_request",
@@ -300,6 +306,26 @@ fn only_the_matching_close_save_receipt_can_renew_the_same_close_epoch() -> Test
             if scenario == "wrong_path" {
                 saved.file_operation.as_mut().ok_or("receipt")?.path = "different.cdxml".to_owned();
             }
+            if scenario == "wrong_format" {
+                saved.file.format = FileFormat::MolV2000;
+            }
+            if scenario == "wrong_receipt_format" {
+                saved.file_operation.as_mut().ok_or("receipt")?.format = FileFormat::MolV2000;
+            }
+            if scenario == "wrong_ui_request" {
+                saved
+                    .file_operation
+                    .as_mut()
+                    .ok_or("receipt")?
+                    .ui_request_id = Some(0);
+            }
+            if scenario == "missing_ui_receipt" {
+                saved
+                    .file_operation
+                    .as_mut()
+                    .ok_or("receipt")?
+                    .ui_request_current = None;
+            }
             Ok(saved)
         };
         if scenario == "new_edit" {
@@ -308,6 +334,7 @@ fn only_the_matching_close_save_receipt_can_renew_the_same_close_epoch() -> Test
         let before = engine.state();
         let (sender, result) = mpsc::sync_channel(1);
         workflow.job = Some(FileJob {
+            format: FileFormat::Cdxml,
             request_id: intent.request_id,
             action: intent.action,
             result,
@@ -347,6 +374,70 @@ fn only_the_matching_close_save_receipt_can_renew_the_same_close_epoch() -> Test
 }
 
 #[test]
+fn old_close_save_receipt_cannot_renew_after_a_same_path_revision_and_format_aba() -> TestResult {
+    let directory = Directory::new()?;
+    let path = directory.0.join("closing.cdxml");
+    let mut engine = native_engine();
+    engine.dispatch("document.save_cdxml", serde_json::json!({"path":path}))?;
+    engine.dispatch("bond.create",serde_json::json!({"page_id":1,"begin_x_pt":72,"begin_y_pt":72,"end_x_pt":108,"end_y_pt":72}))?;
+    close(&mut engine, CloseAction::Request)?;
+    let mut workflow = FileWorkflow::new(directory.0.clone());
+    workflow.choose_close(CloseChoice::Save, &mut engine, &mut None);
+    let intent = workflow
+        .adopt_request(&mut engine, &mut None)
+        .ok_or("known Save")?;
+    let ticket = workflow.save_for_close.take().ok_or("close continuation")?;
+    let FileAction::Save {
+        path: exact_path,
+        overwrite,
+    } = &intent.action
+    else {
+        return Err("save action".into());
+    };
+    let prepared = engine.prepare_ui_file(
+        intent.request_id,
+        Command::SaveCdxml(SaveCdxml {
+            path: exact_path.clone(),
+            overwrite: *overwrite,
+        }),
+    )?;
+    engine.dispatch(
+        "document.save_mol",
+        serde_json::json!({"path":path,"overwrite":true}),
+    )?;
+    engine.dispatch(
+        "document.save_cdxml",
+        serde_json::json!({"path":path,"overwrite":true}),
+    )?;
+    let result = engine.finish(prepared.complete()?)?;
+    let receipt = result.file_operation.as_ref().ok_or("receipt")?;
+    assert_eq!(receipt.ui_request_id, Some(intent.request_id));
+    assert_eq!(receipt.ui_request_current, Some(false));
+    assert_eq!(result.file.format, FileFormat::Cdxml);
+    assert_eq!(result.revision, ticket.revision);
+    assert!(!result.file.dirty);
+    let epoch = engine.state().close_epoch;
+    let (sender, receiver) = mpsc::sync_channel(1);
+    workflow.job = Some(FileJob {
+        request_id: intent.request_id,
+        format: intent.format,
+        action: intent.action,
+        result: receiver,
+        cancel: Cancellation::default(),
+        cancelling: false,
+        close_save: Some(ticket),
+    });
+    sender.send(Ok(result)).map_err(|_| "send")?;
+    let mut error = None;
+    workflow.poll(&mut engine, &mut error);
+    assert_eq!(engine.state().close, CloseState::NeedsDecision);
+    assert_eq!(engine.state().close_epoch, epoch);
+    assert!(error.is_some());
+    assert!(!workflow.complete_close_if_idle(&mut engine, false, false));
+    Ok(())
+}
+
+#[test]
 fn escape_cancels_shared_close_from_picker_or_busy_dialog_without_cancelling_work() -> TestResult {
     for mode in ["picker", "ui_work", "shared_work"] {
         let busy = mode != "picker";
@@ -362,6 +453,7 @@ fn escape_cancels_shared_close_from_picker_or_busy_dialog_without_cancelling_wor
             let cancel = Cancellation::default();
             worker_cancel = Some(cancel.clone());
             workflow.job = Some(FileJob {
+                format: FileFormat::Cdxml,
                 request_id: 0,
                 action: FileAction::Save {
                     path: "pending.cdxml".to_owned(),

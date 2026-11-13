@@ -102,3 +102,8 @@
   agreement is claimed. Legacy mass differences without a verified mass table and D/T
   alias/override precedence remain unsupported; the reviewed CTfile tables do not define
   those aliases. Query/stereo/3D, broader encodings and SDF/V3000 remain M1 work.
+- MOL has no authored paper/fragment-partition representation in the delivered subset.
+  Current Save refuses multiple fragments, nondefault native paper or changed imported page
+  layout rather than silently flattening/discarding it. A separate explicit lossy/export-only
+  workflow and richer source-to-source conversion remain required; do not call these guards
+  final M1 parity. General imported atom edits and rendering remain limited by M2.

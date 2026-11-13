@@ -104,16 +104,20 @@ delivered adapters, update CLI/MCP wire tests as needed, then update provenance 
 For UI changes, launch the actual native app and inspect the workflow. Eguis's input tests
 and source cross-checks do not substitute for native platform execution.
 
-MOLV2000 is now a source-preserving library codec in io::mol, not an application command.
+MOLV2000 now has a source-preserving codec, owned snapshots, atomic I/O and shared commands.
 Its transform is explicit, headers/raw source stay authoritative, and unsupported projection
-must fail rather than erase data. Native MOL storage/I/O/commands remain the next step.
+must fail rather than erase data. Associated file.format is independent of source.format and
+filename extension. Open defaults24pt/unit and origin(72,72)pt; source-backed Save keeps its
+captured frame/headers. Multiple fragments, changed page layout and source metadata loss
+remain refused. Do not call this complete M1 support. Pinned MOL fixtures have -text Git
+attributes: preserve exact hashes on Windows, never normalize them in an oracle/parser.
 Declared valence yields exact authored H by the published finite arithmetic; do not infer
 periodic-table valence. Preserve the documented normative M ISO/RDKit discrepancy, and the
 original/independent test vectors. The corpus now actually checks one MOL input, not only
 its hash; CDX corpus and chemistry calculations remain missing.
 
-The current eleven-command registry includes bond.create for independent C-C fragments with
-three explicitly authored H per carbon, plus native CDXML open/save. It does not attach to
+The current thirteen-command registry includes bond.create for independent C-C fragments with
+three explicitly authored H per carbon, plus native CDXML/MOL open/save. It does not attach to
 existing atoms. Save complete StoredDocument data; file.dirty uses the saved snapshot, while
 source.modified describes original backing. Prepare/complete/finish separates I/O from
 revision-checked apply. Count current+saved snapshots and never call a publication error rollback.
@@ -122,7 +126,11 @@ Native gestures consume ordered events; press_origin alone loses a drag complete
 frames. Canvas interaction must not advance layout beyond visible error text.
 Use Engine::controls() / ui.controls as the authoritative delivered File/Edit/Page bindings;
 do not duplicate labels, shortcut tables, preset parameters or enabled rules in the UI.
-ui.file is presentation intent, distinct from actual document.open_cdxml/save_cdxml I/O.
+ui.file is presentation intent, distinct from actual document.open_cdxml/save_cdxml or MOL I/O.
+Trusted file plans bind ui_request_id; ui_request_current is captured before their own save
+changes state. Native close-Save requires both receipt markers plus format/revision/path/
+close-epoch checks. Intervening format/baseline changes stay invalid after returning to old
+values. A direct save command never fabricates a trusted presentation receipt.
 Headless engines have no host. Keep request IDs and context guards through native selection,
 worker preparation and retry. Reserve/prepare under one engine lock before spawning; only
 the matching current request may restore a failed picker. A host acknowledgement does not

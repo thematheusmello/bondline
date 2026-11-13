@@ -87,6 +87,12 @@ impl Prepared {
         })
     }
 
+    pub(super) fn bind_ui_request(&mut self, id: u64) {
+        if let Some(file) = &mut self.file {
+            file.bind_ui_request(id);
+        }
+    }
+
     pub fn is_deferred(&self) -> bool {
         self.capture.is_some() || self.file.is_some()
     }

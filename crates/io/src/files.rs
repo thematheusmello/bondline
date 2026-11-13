@@ -4,6 +4,7 @@ mod platform;
 #[cfg(test)]
 mod tests;
 
+use crate::mol::MolTransform;
 use crate::{DocumentError, StoredDocument};
 use bondline_model::PageSize;
 use bondline_render::Cancellation;
@@ -55,9 +56,15 @@ impl FileError {
             Failure::Symlink => "symlink_target",
             Failure::Cancelled => "cancelled",
             Failure::Changed => "file_changed",
-            Failure::Document(DocumentError::UnsupportedEdit | DocumentError::NoCdxmlSource) => {
-                "unsupported_content"
-            }
+            Failure::Document(
+                DocumentError::UnsupportedEdit
+                | DocumentError::NoCdxmlSource
+                | DocumentError::NoMolSource
+                | DocumentError::UnsupportedMolEdit
+                | DocumentError::CrossFormatSource { .. }
+                | DocumentError::UnsupportedMolLayout(_),
+            ) => "unsupported_content",
+            Failure::Document(DocumentError::Mol(error)) => error.code(),
             Failure::Document(DocumentError::Mapping(error)) => {
                 use crate::cdxml::MappingError;
                 match error {
@@ -206,6 +213,28 @@ fn validate_path(path: &Path) -> Result<(), FileError> {
 /// Read a canonical ordinary file into an owned complete source snapshot. Symlinks chosen
 /// for reading are resolved; nonblocking/no-follow opens guard special files and leaf races.
 pub fn read_cdxml_file(path: &Path, cancel: &Cancellation) -> Result<LoadedFile, FileError> {
+    let (path, bytes) = read_source_bytes(path, cancel)?;
+    let document = StoredDocument::from_cdxml(bytes.into(), PageSize::A4)
+        .map_err(|error| FileError::new(&path, Stage::Decode, error.into()))?;
+    check_cancel(&path, Stage::Decode, cancel)?;
+    Ok(LoadedFile { path, document })
+}
+
+/// Read one explicitly selected V2000 molecule through the same bounded native path.
+/// The drawing frame is supplied by the host, never inferred from chemical coordinates.
+pub fn read_mol_file(
+    path: &Path,
+    frame: MolTransform,
+    cancel: &Cancellation,
+) -> Result<LoadedFile, FileError> {
+    let (path, bytes) = read_source_bytes(path, cancel)?;
+    let document = StoredDocument::from_mol(bytes.into(), PageSize::A4, frame)
+        .map_err(|error| FileError::new(&path, Stage::Decode, error.into()))?;
+    check_cancel(&path, Stage::Decode, cancel)?;
+    Ok(LoadedFile { path, document })
+}
+
+fn read_source_bytes(path: &Path, cancel: &Cancellation) -> Result<(PathBuf, Vec<u8>), FileError> {
     check_cancel(path, Stage::Validate, cancel)?;
     validate_path(path)?;
     let path = fs::canonicalize(path).map_err(|error| FileError::io(path, Stage::Read, error))?;
@@ -242,10 +271,7 @@ pub fn read_cdxml_file(path: &Path, cancel: &Cancellation) -> Result<LoadedFile,
         })?);
     }
     check_cancel(&path, Stage::Decode, cancel)?;
-    let document = StoredDocument::from_cdxml(bytes.into(), PageSize::A4)
-        .map_err(|error| FileError::new(&path, Stage::Decode, error.into()))?;
-    check_cancel(&path, Stage::Decode, cancel)?;
-    Ok(LoadedFile { path, document })
+    Ok((path, bytes))
 }
 
 fn validate_regular(path: &Path, metadata: &Metadata) -> Result<(), FileError> {
@@ -266,6 +292,31 @@ pub fn save_cdxml_file(
     cancel: &Cancellation,
 ) -> Result<SaveReceipt, FileError> {
     save_with_hook(path, document, overwrite, cancel, &mut |_| Ok(()))
+}
+
+/// Save complete MOL backing or a guarded supported graph using the established
+/// atomic/security-preserving publication path. Imported MOL keeps its captured frame.
+pub fn save_mol_file(
+    path: &Path,
+    document: &StoredDocument,
+    overwrite: bool,
+    native_frame: MolTransform,
+    cancel: &Cancellation,
+) -> Result<SaveReceipt, FileError> {
+    save_format_with_hook(
+        path,
+        document,
+        overwrite,
+        cancel,
+        Encoding::Mol(native_frame),
+        &mut |_| Ok(()),
+    )
+}
+
+#[derive(Clone, Copy)]
+enum Encoding {
+    Cdxml,
+    Mol(MolTransform),
 }
 
 /// Resolve only the chosen parent, retaining the final leaf for no-follow/no-clobber
@@ -293,6 +344,17 @@ fn save_with_hook(
     cancel: &Cancellation,
     hook: &mut impl FnMut(Stage) -> io::Result<()>,
 ) -> Result<SaveReceipt, FileError> {
+    save_format_with_hook(chosen, document, overwrite, cancel, Encoding::Cdxml, hook)
+}
+
+fn save_format_with_hook(
+    chosen: &Path,
+    document: &StoredDocument,
+    overwrite: bool,
+    cancel: &Cancellation,
+    encoding: Encoding,
+    hook: &mut impl FnMut(Stage) -> io::Result<()>,
+) -> Result<SaveReceipt, FileError> {
     check_cancel(chosen, Stage::Validate, cancel)?;
     let path = canonical_save_path(chosen)?;
     let parent = path
@@ -304,9 +366,11 @@ fn save_with_hook(
         .map(|_| platform::identity(&path))
         .transpose()
         .map_err(|error| FileError::io(&path, Stage::Validate, error))?;
-    let bytes = document
-        .to_cdxml()
-        .map_err(|error| FileError::new(&path, Stage::Encode, error.into()))?;
+    let bytes = match encoding {
+        Encoding::Cdxml => document.to_cdxml(),
+        Encoding::Mol(frame) => document.to_mol(frame),
+    }
+    .map_err(|error| FileError::new(&path, Stage::Encode, error.into()))?;
     if bytes.len() > MAX_BYTES {
         return Err(FileError::new(&path, Stage::Encode, Failure::TooLarge));
     }

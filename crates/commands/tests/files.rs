@@ -56,7 +56,7 @@ fn file_state(engine: &Engine, path: Option<&Path>, dirty: bool) -> TestResult {
     let path = path.map(fs::canonicalize).transpose()?;
     assert_eq!(
         serde_json::to_value(engine.state())?.get("file"),
-        Some(&json!({"path":path,"dirty":dirty})),
+        Some(&json!({"path":path,"dirty":dirty,"format":"cdxml"})),
         "every result must expose the current saved path and exact dirty state"
     );
     Ok(())

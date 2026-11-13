@@ -199,3 +199,14 @@ fn shifted_save_shortcut_selects_save_as_even_when_ordinary_save_is_available() 
     assert!(workflow.chooser.is_open());
     Ok(())
 }
+
+#[test]
+fn save_as_defaults_to_associated_mol_format_instead_of_the_path_extension() {
+    use bondline_commands::FileFormat;
+    let mut state = Engine::default().state();
+    state.file.format = FileFormat::MolV2000;
+    state.file.path = Some("/tmp/associated.cdxml".to_owned());
+    let mut workflow = FileWorkflow::new(std::env::temp_dir());
+    workflow.begin(FileMode::Save, &state);
+    assert_eq!(workflow.chooser.format(), FileFormat::MolV2000);
+}

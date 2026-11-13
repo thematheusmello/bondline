@@ -1,4 +1,4 @@
-# Native CDXML workflow
+# Native structure-file workflow
 
 The single-document File menu exposes Open, Save, Save As and Close Window. The native Mac
 application menu/Quit and window close enter the same unsaved Save/Discard/Cancel lifecycle.
@@ -10,7 +10,8 @@ shortcut and Windows/Linux gestures remain unverified. Escape cancels the choose
 File operations dispatch registered commands through the shared CommandExecutor off the UI
 thread. One UI file job is shown with cancellation; UI/loopback share two worker permits.
 Late results cannot replace a newer document. Close after Save requires matching receipt
-operation/revision/path, current clean state and unchanged revision; an old receipt never
+operation/revision/path/format, trusted presentation ID/currentness, current clean state and
+unchanged close epoch/revision; an old receipt never
 authorizes discarding newer edits. Published-byte errors keep the window open and state their
 outcome. The worker cannot interrupt OS syscalls. This is not an autosave/recovery journal.
 
@@ -18,8 +19,13 @@ The original egui chooser has editable Folder and File name, Go, Up, directory/f
 Open/Save/Cancel, dirty-discard and explicit Replace File confirmation. It starts at the user
 home directory, falling back to current directory only if home is unavailable. Subsequent
 operations reuse the document/last successful directory. Input is bounded to32768 UTF8 bytes,
-rejects NUL, and supports only CDXML; missing save extension becomes .cdxml and other extensions
-refuse. A persistent bounded directory worker sorts entries, follows selected links, rejects
+rejects NUL, and offers explicit CDXML/MOL V2000 encoding. Open lists both extensions; a
+recognized filename supplies a hint, while the selected decoder validates actual contents.
+The dropdown can override a misleading name. Save As defaults to the associated encoding;
+changing it updates the suffix. Missing extensions are added and mismatched save suffixes
+refuse. Known Save keeps the authoritative path/encoding even when its extension disagrees.
+Failed retries retain the exact attempted basename/path and explicit overwrite decision.
+A persistent bounded directory worker sorts entries, follows selected links, rejects
 unrepresentable names and reports the2048-entry limit; complete paths can address other files.
 Generation checks ignore stale listings. OS directory calls may finish after cancellation.
 
@@ -28,6 +34,11 @@ reviewed native AccessKit bridge delivers those actions; actual Mac AX entry wit
 filename is verified. General VoiceOver/navigation workflows and other controls remain open.
 
 ## Shared file-control execution evidence
+
+The MOL chooser/receipt integration passes43 UI tests plus the312-workspace/3-bridge aggregate
+locally. Actual native MOL execution is pending in this checkpoint; the historical native
+evidence below establishes the earlier CDXML-only implementation. Do not substitute UI tests
+for inspected native format selection, Save/Close or preservation workflows.
 
 The new frozen executable SHA-256 is
 `4a5425b0db81cac37fdf1d6ba8e6417fae44e5f7093dc58e2582d3ce2be25ab2`
@@ -127,7 +138,7 @@ failures were observed RED before fixes. Input tests supplement actual native ex
 
 ## Remaining parity and platform scope
 
-This is an original CDXML-only chooser and single-document app, not a recreation of the
+This is an original structure-file chooser and single-document app, not a recreation of the
 reference's complete File menu, platform dialog or window layout. File New, recent files,
 multi-document switching, format selection, Revert and comments remain missing. Save retains
 Undo history, unlike G25 printed14's description; exact26.1 semantics need further evidence.

@@ -1,6 +1,8 @@
 use serde_json::{Value, json};
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
+#[path = "support/mol.rs"]
+mod mol_support;
 use std::{
     io::{BufRead, BufReader, Write},
     process::{Child, ChildStdin, Command, Stdio},
@@ -119,7 +121,9 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "document.close",
             "document.inspect",
             "document.open_cdxml",
+            "document.open_mol",
             "document.save_cdxml",
+            "document.save_mol",
             "history.redo",
             "history.undo",
             "page.set_size",
@@ -140,6 +144,45 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         && tool["annotations"]["readOnlyHint"] == false));
     assert!(tools.iter().any(|tool| tool["name"] == "page.set_size"
         && tool["inputSchema"]["additionalProperties"] == false));
+    for name in ["document.open_mol", "document.save_mol"] {
+        let tool = tools
+            .iter()
+            .find(|tool| tool["name"] == name)
+            .ok_or("MOL tool")?;
+        assert_eq!(tool["annotations"]["readOnlyHint"], false);
+        let schema = &tool["inputSchema"];
+        assert_eq!(schema["additionalProperties"], false);
+        assert_eq!(schema["required"], json!(["path"]));
+        let properties = schema["properties"].as_object().ok_or("MOL properties")?;
+        let keys: std::collections::BTreeSet<_> = properties.keys().map(String::as_str).collect();
+        if name == "document.open_mol" {
+            assert_eq!(
+                keys,
+                std::collections::BTreeSet::from([
+                    "path",
+                    "discard_unsaved",
+                    "points_per_unit",
+                    "origin_x_pt",
+                    "origin_y_pt"
+                ])
+            );
+            assert_eq!(properties["discard_unsaved"]["default"], false);
+            for (key, default) in [
+                ("points_per_unit", 24.0),
+                ("origin_x_pt", 72.0),
+                ("origin_y_pt", 72.0),
+            ] {
+                assert_eq!(properties[key]["type"], "number");
+                assert_eq!(properties[key]["default"].as_f64(), Some(default));
+            }
+        } else {
+            assert_eq!(
+                keys,
+                std::collections::BTreeSet::from(["path", "overwrite"])
+            );
+            assert_eq!(properties["overwrite"]["default"], false);
+        }
+    }
     let edit = client.call(
         3,
         "tools/call",
@@ -263,6 +306,177 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         rejected["result"]["structuredContent"]["error"]["code"],
         "already_exists"
     );
+    client.finish()?;
+    Ok(())
+}
+
+#[test]
+fn stdio_mol_round_trip_and_failed_imports_preserve_source_history_and_file_state()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let source = directory.path("stdio-methyl.mol");
+    let destination = directory.path("stdio-copy.mol");
+    let malformed = directory.path("malformed.mol");
+    let unsupported = directory.path("unsupported.mol");
+    let cross_format = directory.path("must-not-publish.cdxml");
+    let changed_layout = directory.path("must-not-publish.mol");
+    std::fs::write(&source, mol_support::METHYL)?;
+    std::fs::write(&malformed, b"not a MOL file\n")?;
+    let extended =
+        std::str::from_utf8(mol_support::METHYL)?.replace("M  END", "M  XYZ  1   1   7\nM  END");
+    std::fs::write(&unsupported, extended)?;
+    let mut client = Client::start()?;
+    client.call(
+        1,
+        "initialize",
+        json!({
+            "protocolVersion":"2025-11-25","capabilities":{},
+            "clientInfo":{"name":"mol-wire-test","version":"1"}
+        }),
+    )?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let opened = client.call(
+        2,
+        "tools/call",
+        json!({"name":"document.open_mol","arguments":{
+            "path":source,"points_per_unit":20.0,"origin_x_pt":100.0,"origin_y_pt":200.0
+        }}),
+    )?;
+    assert_eq!(opened["result"]["isError"], false, "{opened}");
+    mol_support::assert_methyl_state(&opened["result"]["structuredContent"], 75.25, 156.982)?;
+    let saved = client.call(
+        3,
+        "tools/call",
+        json!({"name":"document.save_mol","arguments":{"path":destination}}),
+    )?;
+    assert_eq!(saved["result"]["isError"], false, "{saved}");
+    let saved = &saved["result"]["structuredContent"];
+    mol_support::assert_methyl_state(saved, 75.25, 156.982)?;
+    assert_eq!(saved["revision"], 1);
+    assert_eq!(
+        saved["file"],
+        json!({"path":std::fs::canonicalize(&destination)?,"dirty":false,"format":"mol_v2000"})
+    );
+    assert_eq!(saved["file_operation"]["operation"], "save");
+    assert_eq!(saved["file_operation"]["input_revision"], 1);
+    assert_eq!(std::fs::read(&destination)?, mol_support::METHYL);
+    assert_eq!(
+        mol_support::independently_read_mol(&destination)?["smiles"],
+        "[CH3]"
+    );
+    let baseline = client.call(
+        4,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    let baseline = &baseline["result"]["structuredContent"];
+    let mut id = 5;
+    for (name, arguments, code) in [
+        (
+            "document.open_mol",
+            json!({"path":source,"unexpected":true}),
+            "invalid_params",
+        ),
+        (
+            "document.open_mol",
+            json!({"path":source,"points_per_unit":0}),
+            "invalid_params",
+        ),
+        (
+            "document.save_mol",
+            json!({"path":destination}),
+            "already_exists",
+        ),
+        (
+            "document.save_cdxml",
+            json!({"path":cross_format}),
+            "unsupported_content",
+        ),
+    ] {
+        let rejected = client.call(id, "tools/call", json!({"name":name,"arguments":arguments}))?;
+        assert_eq!(rejected["result"]["isError"], true, "{rejected}");
+        assert_eq!(
+            rejected["result"]["structuredContent"]["error"]["code"],
+            code
+        );
+        let inspected = client.call(
+            id + 1,
+            "tools/call",
+            json!({"name":"document.inspect","arguments":{}}),
+        )?;
+        assert_eq!(&inspected["result"]["structuredContent"], baseline);
+        id += 2;
+    }
+    assert!(!cross_format.try_exists()?);
+    let edited = client.call(
+        id,
+        "tools/call",
+        json!({"name":"page.set_size","arguments":{
+            "page_id":1,"width_pt":612,"height_pt":792
+        }}),
+    )?;
+    assert_eq!(edited["result"]["isError"], false, "{edited}");
+    assert_eq!(edited["result"]["structuredContent"]["file"]["dirty"], true);
+    let dirty = client.call(
+        id + 1,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    let dirty = &dirty["result"]["structuredContent"];
+    assert_eq!(dirty["revision"], 2);
+    assert_eq!(dirty["undo_depth"], 1);
+    id += 2;
+    for (name, arguments, code) in [
+        (
+            "document.open_mol",
+            json!({"path":source}),
+            "unsaved_changes",
+        ),
+        (
+            "document.open_mol",
+            json!({"path":malformed,"discard_unsaved":true}),
+            "invalid_mol",
+        ),
+        (
+            "document.open_mol",
+            json!({"path":unsupported,"discard_unsaved":true}),
+            "unsupported_content",
+        ),
+        (
+            "document.save_mol",
+            json!({"path":changed_layout}),
+            "unsupported_content",
+        ),
+    ] {
+        let rejected = client.call(id, "tools/call", json!({"name":name,"arguments":arguments}))?;
+        assert_eq!(rejected["result"]["isError"], true, "{rejected}");
+        assert_eq!(
+            rejected["result"]["structuredContent"]["error"]["code"],
+            code
+        );
+        let inspected = client.call(
+            id + 1,
+            "tools/call",
+            json!({"name":"document.inspect","arguments":{}}),
+        )?;
+        assert_eq!(&inspected["result"]["structuredContent"], dirty);
+        id += 2;
+    }
+    assert!(!changed_layout.try_exists()?);
+    assert_eq!(std::fs::read(&destination)?, mol_support::METHYL);
+    let reopened = client.call(
+        id,
+        "tools/call",
+        json!({"name":"document.open_mol","arguments":{
+            "path":source,"discard_unsaved":true
+        }}),
+    )?;
+    assert_eq!(reopened["result"]["isError"], false, "{reopened}");
+    let reopened = &reopened["result"]["structuredContent"];
+    mol_support::assert_methyl_state(reopened, 42.3, 20.3784)?;
+    assert_eq!(reopened["revision"], 3);
+    assert_eq!(reopened["undo_depth"], 0);
+    assert_eq!(reopened["file"]["dirty"], false);
     client.finish()?;
     Ok(())
 }

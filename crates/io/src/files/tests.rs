@@ -1,5 +1,52 @@
 use super::*;
 
+#[test]
+fn mol_uses_the_same_prepublication_and_postpublication_failure_contracts()
+-> Result<(), Box<dyn std::error::Error>> {
+    const SOURCE: &[u8] = include_bytes!("../../tests/fixtures/mol/rdkit-CH3.mol");
+    let frame = MolTransform::new(24.0, bondline_model::Point2::new(100.0, 200.0)?)?;
+    let document = StoredDocument::from_mol(SOURCE.into(), PageSize::A4, frame)?;
+    for stage in [
+        Stage::CreateTemporary,
+        Stage::Write,
+        Stage::Metadata,
+        Stage::SyncFile,
+        Stage::Publish,
+        Stage::Cleanup,
+        Stage::SyncDirectory,
+    ] {
+        let directory = Directory::new()?;
+        let path = directory.0.join("document.mol");
+        fs::write(&path, b"old MOL bytes")?;
+        let error = save_format_with_hook(
+            &path,
+            &document,
+            true,
+            &Cancellation::default(),
+            Encoding::Mol(frame),
+            &mut |current| {
+                if current == stage {
+                    Err(io::Error::other("injected MOL failure"))
+                } else {
+                    Ok(())
+                }
+            },
+        )
+        .err()
+        .ok_or("ignored MOL failure")?;
+        let published = matches!(stage, Stage::Cleanup | Stage::SyncDirectory);
+        assert_eq!(error.published(), published);
+        assert_eq!(error.stage(), stage.name());
+        assert_eq!(
+            fs::read(&path)?.as_slice(),
+            if published { SOURCE } else { b"old MOL bytes" }
+        );
+        assert_eq!(document.export_mol()?, SOURCE);
+        assert_eq!(fs::read_dir(&directory.0)?.count(), 1);
+    }
+    Ok(())
+}
+
 struct Directory(PathBuf);
 impl Directory {
     fn new() -> io::Result<Self> {

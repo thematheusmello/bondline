@@ -157,5 +157,18 @@ observed/inferred limits; no strict program-inspection isolation is now claimed.
 | CI-CHECKOUT | https://github.com/actions/checkout/releases/tag/v7.0.1 | Release commit 3d3c42e5aac5ba805825da76410c181273ba90b1; published action.yml Node 24 API inspected, credentials disabled. CI-only tool. |
 | CI-PYTHON | https://github.com/actions/setup-python/releases/tag/v7.1.0 | Release commit 6d4fd22b20465ccc0f7354476588e8df7c9ca0e0; published action.yml inputs/runtime inspected. CI-only tool. |
 
+MOL application decisions use CTFILE-2026 for syntax/semantics and RUST-ARC/RUST-STORAGE for
+shared complete-source snapshots. A24pt/unit drawing scale, origin(72,72)pt, A4 fallback,
+one-fragment/page export guard and explicit cross-format metadata refusal are original
+Bondline policies, not reference presets or physical-unit claims. Typed frame parameters,
+actual encoding in file state/receipts, exact-byte unchanged saves and source header retention
+are tested through the shared engine and external consumers. A trusted presentation receipt
+captures permanent invalidation before its own save changes the baseline; this is an
+independent close/data-loss safeguard. See control-protocol.md and file-formats.md.
+Pinned MOL checkout identity uses Git's public unset-text rule:
+https://git-scm.com/docs/gitattributes#_text . Reviewed2026-11-13; the isolated
+core.autocrlf RED/GREEN is recorded in ../research/mol-fixture-checkout.md. Parser and oracle
+bytes are not normalized to accommodate an altered checkout.
+
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused
 with their notices. This does not relax the prohibition on proprietary product code/assets.

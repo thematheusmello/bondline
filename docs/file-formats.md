@@ -4,7 +4,7 @@
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
 | CDX | Standalone bounded binary syntax and checked opaque property replacement | Original published-field vectors, independent Python struct spans/bytes, external RDKit connectivity/order consumers | Application import/export, model/reference mapping, new-tree writer, broader pinned corpus and modern extensions |
-| MOL V2000 | Source-preserving library parser, strict elemental projection and canonical writer | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN | Application commands/native I/O, broader fields and compatibility cases below |
+| MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic native I/O and shared commands | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP file tests | Native format choice is wired pending execution; broader fields and compatibility cases below |
 | SDF/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
@@ -14,8 +14,10 @@
 
 `bondline_io::mol::MolFile` retains accepted original bytes exactly. Parsed views expose
 headers, raw atom/bond fields and line-addressed unsupported features. `as_bytes()` is exact
-passthrough; a partial model must never replace it. This codec does not open/save application
-files or establish a native MOL workflow yet.
+passthrough; a partial model must never replace it. The application adapter now retains that
+complete source in StoredDocument and exposes document.open_mol/document.save_mol through
+the same registry, CLI, MCP and authenticated loopback as CDXML. Native execution evidence
+is recorded separately from these library/adapter tests.
 
 The strict graph projection supports the118 elemental symbols, single/double/triple/aromatic
 bonds, charge, radical and absolute isotopes. Its caller supplies MolTransform(scale,origin):
@@ -53,6 +55,35 @@ formula and SMILES in those checks are external consumer expectations, not Bondl
 algorithms. Original ethane columns and external-generated vectors independently exercise
 writer interoperability. See [test provenance](../crates/io/tests/fixtures/mol/README.md),
 [verification](verification.md) and [fuzz limits](../fuzz/README.md).
+
+## MOL application snapshots and saving
+
+Owned MOL snapshots share original bytes, baseline model, three headers and the captured
+coordinate transform. History storage accounts for these shared allocations once, including
+header capacities. Raw source/header content is absent from Debug and JSON command results.
+An unchanged model borrows the original bytes exactly. A changed model can regenerate only
+when every accepted source field is modeled and headers/coordinates are representable;
+headers and the original drawing frame remain attached. Tests compare actual emitted bytes
+with a separately run RDKit consumer; the codec's known isotope-input discrepancy stays explicit.
+
+The registry imports into an A4 preview using24points per raw unit and origin(72,72)pt by
+default; callers can supply a positive finite scale and bounded origin. These are original
+drawing-placement choices, not inferred physical units. Source-free and proven-native CDXML
+exports use that default frame. Imported MOL always uses its retained frame. Encoding rounds
+coordinates to four decimal raw units; it does not promise exact model-coordinate reopening.
+
+Saving must preserve one page, one authored fragment and supported metadata. Imported MOL
+also retains its baseline page identity/size. Native MOL exports currently require default
+A4/page1. Multiple fragments/pages, changed page layout, MOL-to-CDXML source metadata loss
+and unknown-CDXML-to-MOL refuse explicitly. A deliberately lossy/export-only workflow remains
+missing. Appending another isolated fragment is a valid edit but cannot currently save as
+MOL; Undo restores the savable snapshot. This is partial M1 interoperability, not completion.
+
+Native reads reuse bounded ordinary-file validation; both encodings use the same reviewed
+atomic/no-clobber/overwrite/cancellation/security publication path. File state/receipts carry
+the actual associated encoding, independently of the filename extension and original source
+format. Stale imports cannot replace current work; an older published save keeps later edits
+dirty. See [control-protocol.md](control-protocol.md) for schemas and close/request guards.
 
 `bondline-cdx` is a standalone syntax utility, with no model, filesystem, GUI or third-party
 dependency. Its flat borrowed index retains the original header, unknown object/property

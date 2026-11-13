@@ -1180,3 +1180,44 @@ tests, fmt, warnings-denied clippy, layers, unchanged153/164/219 native declarat
 assets and the expanded corpus subset. Log target/mol-codec-ci-integrated.log printed this
 checkout. No application MOL command, native MOL file workflow, SDF/V3000 or chemistry
 algorithm is claimed by this library/parser milestone. All local jobs are terminal.
+
+## MOL application files — local integrated checkpoint
+
+Test-first logs `target/mol-owned-red.log`/`mol-native-red.log`,
+`mol-command-red.log`, `mol-adapter-red.log` and `native-mol-ui-api-red.log` record missing
+owned-source/I/O/command/adapter/UI behavior before implementation. Core's six original MOL
+tests failed unknown_command. Subsequent integration compile errors were interface migration
+errors, not independent behavioral RED evidence. Additional core receipt regressions were
+added after the private plan markers existed; they are GREEN regression coverage, not a
+claim of earlier TDD. The failed-retry filename regression has its own observed
+`native-mol-ui-retry-name-red.log` before the fix.
+
+GREEN: IO70, commands70, CLI/MCP40 and UI43 tests pass. IO tests cover retained header/frame/
+source/baseline sharing, exact undo/passthrough, explicit layout/metadata refusal and the same
+atomic publication/fault stages as CDXML. Core/adapter tests actually write files, reopen
+through the selected decoder and run the pinned external RDKit consumer. They check declared
+H/radical/formula/SMILES, default/custom coordinate mapping and bounded four-decimal precision;
+these external results do not implement Bondline chemistry algorithms. Schemas expose exactly
+thirteen commands, closed objects/defaults, invalid-frame errors and no source/header leak.
+
+Stale opens retain complete state; an older published save leaves newer edits dirty. Known
+Save uses the associated encoding even with a misleading extension. Same-path format changes
+invalidate close/picker approval, unchanged same-format saves preserve it. Trusted file plans
+carry request ID and pre-mutation currentness; format/baseline ABA cannot restore a stale
+receipt. Direct saves omit those markers. UI tests refuse missing/wrong markers/format and
+preserve existing close-epoch/revision/path guards. A truthful published receipt is not rolled
+back because its presentation became obsolete.
+
+Actual-root `cargo xtask ci` passed312 workspace tests plus3 native AccessKit bridge tests,
+rustfmt, all-target clippy-Dwarnings, layer graph,153/164/219 declared native runtime closures,
+two bundled assets and the actual CDXML/MOL corpus subset. Log
+`target/mol-files-ci-integrated.log` identifies this checkout. No runtime dependency, lock,
+shader, golden or platform publication algorithm changed. CDX corpus and chemistry calculation
+coverage remain explicitly missing. Native MOL workflow inspection and hosted checks for
+this application source are pending; do not infer either from the aggregate.
+
+The standalone codec's first hosted run43504072080 failed Windows fixture checkout identity;
+Mac/Linux/three ASAN targets passed. Correction670178b changes only pinned fixture Git
+attributes and a provenance report, not parser/oracle assertions. The independent
+core.autocrlf=true RED/GREEN is in research/mol-fixture-checkout.md. Corrected hosted run
+43507660824 is in progress at this checkpoint; do not restart it or claim it passed yet.

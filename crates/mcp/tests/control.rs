@@ -3,6 +3,8 @@ use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::Value;
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
+#[path = "../../cli/tests/support/mol.rs"]
+mod mol_support;
 use std::{
     io::{BufRead, BufReader, Read, Write},
     net::{Ipv4Addr, Shutdown, SocketAddr, TcpStream},
@@ -73,7 +75,7 @@ fn authenticated_file_commands_share_native_file_state_and_notify_after_saving()
     assert_eq!(saved["result"]["revision"], 1);
     assert_eq!(
         saved["result"]["file"],
-        serde_json::json!({"path":std::fs::canonicalize(&path)?,"dirty":false})
+        serde_json::json!({"path":std::fs::canonicalize(&path)?,"dirty":false,"format":"cdxml"})
     );
     wait_for_changes(&changes, 2);
     file_support::independently_read_file(&path, 1)?;
@@ -98,6 +100,91 @@ fn authenticated_file_commands_share_native_file_state_and_notify_after_saving()
 }
 
 #[test]
+fn authenticated_mol_io_preserves_bytes_errors_history_and_receipt_repaints()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let source = directory.path("loopback-methyl.mol");
+    let destination = directory.path("loopback-copy.mol");
+    let malformed = directory.path("loopback-malformed.mol");
+    let unsupported = directory.path("loopback-unsupported.mol");
+    std::fs::write(&source, mol_support::METHYL)?;
+    std::fs::write(&malformed, b"not a MOL file\n")?;
+    let extended =
+        std::str::from_utf8(mol_support::METHYL)?.replace("M  END", "M  XYZ  1   1   7\nM  END");
+    std::fs::write(&unsupported, extended)?;
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, Arc::clone(&engine), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    let opened = call(
+        &mut client,
+        &serde_json::json!({"command":"document.open_mol","params":{"path":source}}).to_string(),
+    )?;
+    assert!(opened.get("error").is_none(), "{opened}");
+    mol_support::assert_methyl_state(&opened["result"], 42.3, 20.3784)?;
+    assert_eq!(opened["result"]["revision"], 1);
+    wait_for_changes(&changes, 1);
+    let saved = call(
+        &mut client,
+        &serde_json::json!({"command":"document.save_mol","params":{"path":destination}})
+            .to_string(),
+    )?;
+    let saved = &saved["result"];
+    mol_support::assert_methyl_state(saved, 42.3, 20.3784)?;
+    assert_eq!(saved["revision"], 1);
+    assert_eq!(saved["changed"], false);
+    assert_eq!(
+        saved["file"],
+        serde_json::json!({"path":std::fs::canonicalize(&destination)?,"dirty":false,"format":"mol_v2000"})
+    );
+    assert_eq!(saved["file_operation"]["operation"], "save");
+    assert_eq!(saved["file_operation"]["byte_length"], 170);
+    assert_eq!(saved["file_operation"]["input_revision"], 1);
+    wait_for_changes(&changes, 2);
+    assert_eq!(std::fs::read(&destination)?, mol_support::METHYL);
+    assert_eq!(
+        mol_support::independently_read_mol(&destination)?["smiles"],
+        "[CH3]"
+    );
+    let edited = call(
+        &mut client,
+        r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}"#,
+    )?;
+    assert_eq!(edited["result"]["revision"], 2);
+    assert_eq!(edited["result"]["file"]["dirty"], true);
+    wait_for_changes(&changes, 3);
+    let before = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+    for (path, discard, code) in [
+        (&source, false, "unsaved_changes"),
+        (&malformed, true, "invalid_mol"),
+        (&unsupported, true, "unsupported_content"),
+    ] {
+        let failed = call(&mut client,&serde_json::json!({"command":"document.open_mol","params":{"path":path,"discard_unsaved":discard}}).to_string())?;
+        assert_eq!(failed["error"]["code"], code, "{failed}");
+        let after = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+        assert_eq!(after, before);
+    }
+    assert_eq!(std::fs::read(&destination)?, mol_support::METHYL);
+    let undone = call(&mut client, r#"{"command":"history.undo","params":{}}"#)?;
+    mol_support::assert_methyl_state(&undone["result"], 42.3, 20.3784)?;
+    assert_eq!(undone["result"]["file"], saved["file"]);
+    assert_eq!(undone["result"]["revision"], 3);
+    wait_for_changes(&changes, 4);
+    let saved_again = call(&mut client,&serde_json::json!({"command":"document.save_mol","params":{"path":destination,"overwrite":true}}).to_string())?;
+    assert_eq!(saved_again["result"]["changed"], false);
+    assert_eq!(saved_again["result"]["revision"], 3);
+    assert_eq!(saved_again["result"]["file_operation"]["input_revision"], 3);
+    assert_eq!(saved_again["result"]["file_operation"]["byte_length"], 170);
+    wait_for_changes(&changes, 5);
+    assert_eq!(std::fs::read(&destination)?, mol_support::METHYL);
+    server.shutdown()?;
+    Ok(())
+}
+
+#[test]
 fn unauthenticated_clients_cannot_inspect_or_edit_the_document()
 -> Result<(), Box<dyn std::error::Error>> {
     let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
@@ -109,6 +196,7 @@ fn unauthenticated_clients_cannot_inspect_or_edit_the_document()
     })?;
     for request in [
         r#"{"command":"document.inspect","params":{}}"#,
+        r#"{"command":"document.open_mol","params":{"path":"must-not-read.mol"}}"#,
         r#"{"command":"document.close","params":{"expected_revision":0}}"#,
         r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}"#,
         r#"{"token":"wrong"}"#,
@@ -761,9 +849,14 @@ fn prepared_native_file_work_finishes_only_its_origin_and_same_revision_path_aba
             serde_json::json!({"expected_revision":1,"action":"save"}),
         )?;
         let id = requested.ui_file.request.as_ref().ok_or("save request")?.id;
-        let bondline_commands::UiFilePlan::SaveExisting(save) = engine.claim_ui_file(id)? else {
+        let bondline_commands::UiFilePlan::SaveExisting {
+            format,
+            params: save,
+        } = engine.claim_ui_file(id)?
+        else {
             return Err("known-path Save did not bind its existing path".into());
         };
+        assert_eq!(format, bondline_commands::FileFormat::Cdxml);
         (id, bondline_commands::Command::SaveCdxml(save))
     };
     {

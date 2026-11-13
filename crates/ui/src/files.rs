@@ -1,5 +1,6 @@
-//! Original CDXML file chooser; document reads and writes belong to the shared executor.
+//! Original structure-file chooser; document I/O belongs to the shared executor.
 
+use bondline_commands::FileFormat;
 use eframe::egui;
 use std::{
     path::{Path, PathBuf},
@@ -41,6 +42,7 @@ enum Confirmation {
 #[derive(Default)]
 pub struct FileChooser {
     mode: Option<FileMode>,
+    format: FileFormat,
     directory: PathBuf,
     location: String,
     name: String,
@@ -58,11 +60,49 @@ pub struct FileChooser {
 
 impl FileChooser {
     pub fn begin(&mut self, mode: FileMode, directory: PathBuf, initial_name: String) {
+        self.begin_with_format(mode, directory, initial_name, FileFormat::Cdxml);
+    }
+
+    pub fn begin_with_format(
+        &mut self,
+        mode: FileMode,
+        directory: PathBuf,
+        initial_name: String,
+        format: FileFormat,
+    ) {
         self.mode = Some(mode);
         self.name = initial_name;
+        self.set_format(format);
         self.confirmation = None;
         self.focus_name = true;
         self.navigate(directory);
+    }
+
+    pub fn format(&self) -> FileFormat {
+        self.format
+    }
+
+    fn set_name(&mut self, name: String) {
+        self.name = name;
+        if self.mode == Some(FileMode::Open)
+            && let Some(format) = format_hint(&self.name)
+        {
+            self.format = format;
+        }
+    }
+
+    fn set_format(&mut self, format: FileFormat) {
+        self.format = format;
+        if self.mode == Some(FileMode::Save)
+            && !self.name.is_empty()
+            && format_hint(&self.name) != Some(format)
+        {
+            let mut name = PathBuf::from(&self.name);
+            name.set_extension(format_extension(format));
+            if let Some(name) = name.to_str() {
+                self.name = name.to_owned();
+            }
+        }
     }
 
     pub fn is_open(&self) -> bool {
@@ -71,6 +111,16 @@ impl FileChooser {
 
     /// Restore an unsuccessful intent, preserving the exact requested path for an explicit retry.
     pub fn failed(&mut self, action: FileAction, code: &str, message: String) {
+        self.failed_with_format(action, FileFormat::Cdxml, code, message);
+    }
+
+    pub fn failed_with_format(
+        &mut self,
+        action: FileAction,
+        format: FileFormat,
+        code: &str,
+        message: String,
+    ) {
         let authorized_overwrite = matches!(
             &action,
             FileAction::Save {
@@ -89,7 +139,9 @@ impl FileChooser {
             .and_then(|name| name.to_str())
             .unwrap_or(&path)
             .to_owned();
-        self.begin(mode, directory, name);
+        self.begin_with_format(mode, directory, name.clone(), format);
+        // A failed operation must display its actual attempted name, including a misleading suffix.
+        self.name = name;
         self.confirmation = match (mode, code) {
             (FileMode::Open, "unsaved_changes") => Some(Confirmation::Discard(path)),
             (FileMode::Save, _) if authorized_overwrite => Some(Confirmation::Overwrite(path)),
@@ -194,7 +246,7 @@ impl FileChooser {
 
     fn submit(&mut self, dirty: bool) -> Option<FileAction> {
         let mode = self.mode?;
-        let path = match resolve_path(&self.directory, &self.name, mode) {
+        let path = match resolve_path_as(&self.directory, &self.name, mode, self.format) {
             Ok(path) => path,
             Err(error) => {
                 self.error = Some(error);
@@ -248,9 +300,9 @@ impl FileChooser {
         let mut action = None;
         let mut open = true;
         let title = if mode == FileMode::Open {
-            "Open CDXML"
+            "Open structure"
         } else {
-            "Save CDXML As"
+            "Save structure as"
         };
         egui::Window::new(title)
             .id(egui::Id::new("bondline-file-chooser"))
@@ -300,28 +352,47 @@ impl FileChooser {
                         self.navigate(parent.to_owned());
                     }
                 });
-                ui.label("CDXML files (*.cdxml). Enter a complete path to open a file outside this list.");
+                let mut selected_format=self.format;
+                egui::ComboBox::from_label("Format").selected_text(format_label(self.format))
+                    .show_ui(ui,|ui| {
+                        for format in [FileFormat::Cdxml,FileFormat::MolV2000] {
+                            ui.selectable_value(&mut selected_format,format,format_label(format));
+                        }
+                    });
+                if selected_format!=self.format {
+                    self.set_format(selected_format);
+                }
+                ui.label(if mode==FileMode::Open {
+                    "Structure files (*.cdxml, *.mol). Enter a complete path to open a file outside this list."
+                } else {
+                    match self.format {
+                        FileFormat::Cdxml=>"CDXML files (*.cdxml).",
+                        FileFormat::MolV2000=>"MOL V2000 files (*.mol); unsupported content cannot be saved in this format.",
+                    }
+                });
                 if self.loading {
                     ui.horizontal(|ui| {ui.spinner(); ui.label("Reading folder…");});
                 }
                 let mut navigate = None;
+                let mut select_name=None;
                 let mut submit = false;
                 egui::ScrollArea::vertical().id_salt("bondline-file-list")
                     .max_height((context.screen_rect().height() - 290.0).clamp(80.0, 280.0))
                     .min_scrolled_height(80.0)
                     .show(ui, |ui| {
                         ui.set_min_width(ui.available_width());
-                        if self.entries.is_empty() && !self.loading {
-                            ui.label("No CDXML files or folders listed.");
+                        let visible=|entry:&DirectoryEntry| entry.directory || mode==FileMode::Open || format_hint(&entry.name)==Some(self.format);
+                        if !self.entries.iter().any(visible) && !self.loading {
+                            ui.label("No matching structure files or folders listed.");
                         }
-                        for entry in &self.entries {
+                        for entry in self.entries.iter().filter(|entry|visible(entry)) {
                             let label = if entry.directory {format!("[Folder] {}", entry.name)} else {entry.name.clone()};
                             let response = ui.selectable_label(!entry.directory && self.name == entry.name, label);
                             if response.clicked() {
                                 if entry.directory {
                                     navigate = Some(self.directory.join(&entry.name));
                                 } else {
-                                    self.name.clone_from(&entry.name);
+                                    select_name=Some(entry.name.clone());
                                 }
                             }
                             if response.double_clicked() && !entry.directory {
@@ -332,12 +403,16 @@ impl FileChooser {
                 if let Some(path) = navigate {
                     self.navigate(path);
                 }
+                if let Some(name)=select_name {
+                    self.set_name(name);
+                }
                 if self.truncated {
                     ui.label("Folder list limited to the first 2048 entries. Enter a known file path or choose a smaller folder.");
                 }
                 if self.omitted > 0 {
                     ui.label(format!("{} entries could not be listed (unsupported names or unreadable metadata).", self.omitted));
                 }
+                let previous_name=self.name.clone();
                 ui.horizontal(|ui| {
                     let label = ui.label("File name");
                     let name = ui.add(egui::TextEdit::singleline(&mut self.name)
@@ -352,6 +427,9 @@ impl FileChooser {
                     }
                     submit |= name.lost_focus() && ui.input(|input| input.key_pressed(egui::Key::Enter));
                 });
+                if self.name!=previous_name {
+                    self.set_name(self.name.clone());
+                }
                 if let Some(error) = &self.error {
                     ui.colored_label(egui::Color32::DARK_RED, error);
                 }
@@ -415,7 +493,42 @@ fn accessible_text_value(
     failure.map_or(Ok(()), Err)
 }
 
+pub(crate) fn format_extension(format: FileFormat) -> &'static str {
+    match format {
+        FileFormat::Cdxml => "cdxml",
+        FileFormat::MolV2000 => "mol",
+    }
+}
+
+fn format_label(format: FileFormat) -> &'static str {
+    match format {
+        FileFormat::Cdxml => "CDXML (*.cdxml)",
+        FileFormat::MolV2000 => "MOL V2000 (*.mol)",
+    }
+}
+
+fn format_hint(name: &str) -> Option<FileFormat> {
+    let extension = Path::new(name).extension()?.to_str()?;
+    if extension.eq_ignore_ascii_case("cdxml") {
+        Some(FileFormat::Cdxml)
+    } else if extension.eq_ignore_ascii_case("mol") {
+        Some(FileFormat::MolV2000)
+    } else {
+        None
+    }
+}
+
+#[cfg(test)]
 fn resolve_path(directory: &Path, name: &str, mode: FileMode) -> Result<String, String> {
+    resolve_path_as(directory, name, mode, FileFormat::Cdxml)
+}
+
+fn resolve_path_as(
+    directory: &Path,
+    name: &str,
+    mode: FileMode,
+    format: FileFormat,
+) -> Result<String, String> {
     if name.trim().is_empty() || name.contains('\0') || name.len() > MAX_PATH_BYTES {
         return Err(
             "Enter a nonempty file name without NUL characters (maximum 32768 bytes).".to_owned(),
@@ -423,11 +536,27 @@ fn resolve_path(directory: &Path, name: &str, mode: FileMode) -> Result<String, 
     }
     let mut path = directory.join(name);
     match path.extension().and_then(|extension| extension.to_str()) {
-        Some(extension) if extension.eq_ignore_ascii_case("cdxml") => {}
+        Some(extension)
+            if mode == FileMode::Open
+                && ["cdxml", "mol"]
+                    .iter()
+                    .any(|supported| extension.eq_ignore_ascii_case(supported)) => {}
+        Some(extension)
+            if mode == FileMode::Save
+                && extension.eq_ignore_ascii_case(format_extension(format)) => {}
         None if mode == FileMode::Save => {
-            path.set_extension("cdxml");
+            path.set_extension(format_extension(format));
         }
-        _ => return Err("Only .cdxml files are supported by this workflow.".to_owned()),
+        _ => {
+            return Err(if mode == FileMode::Open {
+                "Choose a .cdxml or .mol structure file.".to_owned()
+            } else {
+                format!(
+                    "Use the .{} extension for the selected format.",
+                    format_extension(format)
+                )
+            });
+        }
     }
     let path = path
         .into_os_string()
@@ -538,12 +667,7 @@ fn scan_directory(request: ScanRequest, latest: &AtomicU64) -> Option<DirectoryS
                     }
                 };
                 let directory = metadata.is_dir();
-                if directory
-                    || metadata.is_file()
-                        && Path::new(&name)
-                            .extension()
-                            .is_some_and(|extension| extension.eq_ignore_ascii_case("cdxml"))
-                {
+                if directory || metadata.is_file() && format_hint(&name).is_some() {
                     result.entries.push(DirectoryEntry { name, directory });
                 }
             }
@@ -590,7 +714,11 @@ mod tests {
         fs::create_dir(directory.0.join("Z folder"))?;
         fs::write(directory.0.join("b.cdxml"), b"not XML")?;
         fs::write(directory.0.join("A.CDXML"), b"also not XML")?;
-        fs::write(directory.0.join("other.mol"), b"not supported")?;
+        fs::write(
+            directory.0.join("other.mol"),
+            b"not a valid MOL; listing never reads it",
+        )?;
+        fs::write(directory.0.join("ignored.cdx"), b"not supported")?;
         let latest = AtomicU64::new(1);
         let result = scan_directory(
             ScanRequest {
@@ -606,7 +734,12 @@ mod tests {
                 .iter()
                 .map(|entry| (entry.name.as_str(), entry.directory))
                 .collect::<Vec<_>>(),
-            vec![("Z folder", true), ("A.CDXML", false), ("b.cdxml", false)]
+            vec![
+                ("Z folder", true),
+                ("A.CDXML", false),
+                ("b.cdxml", false),
+                ("other.mol", false)
+            ]
         );
         assert!(!result.truncated);
         assert!(result.error.is_none());
@@ -723,7 +856,7 @@ mod tests {
             resolve_path(&directory.0, "fresh", FileMode::Save)?,
             directory.0.join("fresh.cdxml").to_str().ok_or("unicode")?
         );
-        for bad in ["", "   ", "bad\0.cdxml", "sample.cdx", "sample.mol"] {
+        for bad in ["", "   ", "bad\0.cdxml", "sample.cdx", "sample.sdf"] {
             assert!(
                 resolve_path(&directory.0, bad, FileMode::Open).is_err(),
                 "{bad:?}"
@@ -942,7 +1075,11 @@ mod tests {
             serde_json::json!({"expected_revision":0,"action":"save"}),
         )?;
         let id = requested.ui_file.request.ok_or("request")?.id;
-        let UiFilePlan::SaveExisting(params) = engine.claim_ui_file(id)? else {
+        let UiFilePlan::SaveExisting {
+            format: FileFormat::Cdxml,
+            params,
+        } = engine.claim_ui_file(id)?
+        else {
             return Err("expected existing Save".into());
         };
         let actual = Command::SaveCdxml(params.clone());
@@ -987,6 +1124,90 @@ mod tests {
         engine.finish(retry.complete()?)?;
         assert!(engine.finish_ui_file(id, false));
         assert_eq!(std::fs::read(&path)?, bytes);
+        Ok(())
+    }
+
+    #[test]
+    fn selected_save_format_controls_extension_and_open_hint_allows_explicit_override()
+    -> Result<(), Box<dyn std::error::Error>> {
+        use bondline_commands::FileFormat;
+        let directory = Directory::new()?;
+        let mut chooser = FileChooser::default();
+        chooser.begin_with_format(
+            FileMode::Save,
+            directory.0.clone(),
+            "λ drawing.cdxml".to_owned(),
+            FileFormat::MolV2000,
+        );
+        assert_eq!(chooser.format(), FileFormat::MolV2000);
+        assert_eq!(chooser.name, "λ drawing.mol");
+        assert_eq!(
+            chooser.submit(false),
+            Some(FileAction::Save {
+                path: directory
+                    .0
+                    .join("λ drawing.mol")
+                    .to_str()
+                    .ok_or("path")?
+                    .to_owned(),
+                overwrite: false
+            })
+        );
+        chooser.begin(
+            FileMode::Save,
+            directory.0.clone(),
+            "Exact.CDXML".to_owned(),
+        );
+        assert_eq!(chooser.name, "Exact.CDXML");
+        chooser.begin_with_format(
+            FileMode::Open,
+            directory.0.clone(),
+            String::new(),
+            FileFormat::Cdxml,
+        );
+        chooser.set_name("mixed.MOL".to_owned());
+        assert_eq!(chooser.format(), FileFormat::MolV2000);
+        chooser.set_format(FileFormat::Cdxml);
+        assert!(matches!(
+            chooser.submit(false),
+            Some(FileAction::Open { .. })
+        ));
+        assert_eq!(
+            chooser.format(),
+            FileFormat::Cdxml,
+            "explicitly selected decoder remains authoritative"
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn failed_mol_save_preserves_selected_format_and_exact_authorized_path()
+    -> Result<(), Box<dyn std::error::Error>> {
+        use bondline_commands::FileFormat;
+        let directory = Directory::new()?;
+        let action = FileAction::Save {
+            path: directory
+                .0
+                .join("associated.cdxml")
+                .to_str()
+                .ok_or("path")?
+                .to_owned(),
+            overwrite: true,
+        };
+        let mut chooser = FileChooser::default();
+        chooser.failed_with_format(
+            action.clone(),
+            FileFormat::MolV2000,
+            "permission_denied",
+            "Save was not published".to_owned(),
+        );
+        assert_eq!(chooser.format(), FileFormat::MolV2000);
+        assert_eq!(
+            chooser.name, "associated.cdxml",
+            "failed known Save must display its exact attempted basename"
+        );
+        assert_eq!(chooser.confirm(), Some(action));
+        assert_eq!(chooser.format(), FileFormat::MolV2000);
         Ok(())
     }
 

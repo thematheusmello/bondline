@@ -223,10 +223,11 @@ fn named_save_cannot_replace_its_path_or_lower_its_overwrite_guard() -> TestResu
     };
     engine.set_ui_file_host(true);
     let id = request(&mut engine, UiFileAction::Save)?;
-    let UiFilePlan::SaveExisting(params) = engine.claim_ui_file(id)? else {
+    let UiFilePlan::SaveExisting { format, params } = engine.claim_ui_file(id)? else {
         return Err("named Save opened an unguarded picker".into());
     };
     assert_eq!(params.path, "/original.cdxml");
+    assert_eq!(format, crate::FileFormat::Cdxml);
     assert!(params.overwrite);
     for actual in [
         json!({"path":"/other.cdxml","overwrite":true}),
@@ -240,6 +241,21 @@ fn named_save_cannot_replace_its_path_or_lower_its_overwrite_guard() -> TestResu
         assert_eq!(error.info().code, "invalid_params");
         assert_eq!(serde_json::to_value(engine.state())?, before);
     }
+    assert_eq!(
+        engine
+            .prepare_ui_file(
+                id,
+                Command::parse(
+                    "document.save_mol",
+                    json!({"path":"/original.cdxml","overwrite":true})
+                )?,
+            )
+            .err()
+            .ok_or("named Save changed associated format")?
+            .info()
+            .code,
+        "invalid_params"
+    );
     assert!(
         engine
             .prepare_ui_file(id, Command::SaveCdxml(params))?

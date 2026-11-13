@@ -17,7 +17,9 @@ pub use bond::BondCreate;
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
 pub use file_ui::{UiFile, UiFileAction, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState};
-pub use files::{Completed, FileOperation, FileState, OpenCdxml, SaveCdxml};
+pub use files::{
+    Completed, FileFormat, FileOperation, FileState, OpenCdxml, OpenMol, SaveCdxml, SaveMol,
+};
 #[cfg(test)]
 mod close_tests;
 #[cfg(test)]
@@ -91,6 +93,8 @@ command_registry! {
     UiControls(NoParams) => ("ui.controls", "Discover delivered native controls, shortcuts, typed bindings and contextual availability.", true),
     OpenCdxml(OpenCdxml) => ("document.open_cdxml", "Open an explicitly selected CDXML file without discarding unsaved edits by default.", false),
     SaveCdxml(SaveCdxml) => ("document.save_cdxml", "Atomically save complete CDXML data to an explicitly selected path; overwrite requires opt-in.", false),
+    OpenMol(OpenMol) => ("document.open_mol", "Open a supported MOL V2000 file with an explicit coordinate frame and retained source.", false),
+    SaveMol(SaveMol) => ("document.save_mol", "Atomically save supported MOL V2000 data without silently losing source metadata or layout.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
@@ -148,6 +152,8 @@ pub enum Error {
     UiEpochExhausted,
     #[error("invalid native file request parameters: {0}")]
     InvalidUiFileParameters(&'static str),
+    #[error(transparent)]
+    Mol(#[from] bondline_io::mol::MolError),
     #[error("native file access is unavailable on this target")]
     FileBackendUnavailable,
     #[error("document engine lock poisoned")]
@@ -192,6 +198,7 @@ impl Error {
             Self::UiStaleRequest => "ui_stale_request",
             Self::UiEpochExhausted => "ui_epoch_exhausted",
             Self::FileBackendUnavailable => "backend_unavailable",
+            Self::Mol(error) => error.code(),
             Self::EngineUnavailable => "engine_unavailable",
             Self::UnrepresentableFilePath { published: true } => "save_published",
             Self::UnrepresentableFilePath { published: false } => "invalid_path",
@@ -262,6 +269,7 @@ pub struct Engine {
     document: Arc<StoredDocument>,
     saved: Arc<StoredDocument>,
     file_path: Option<String>,
+    file_format: FileFormat,
     generation: u64,
     identities: bond::Ids,
     revision: u64,
@@ -280,11 +288,17 @@ impl Default for Engine {
 impl Engine {
     /// Initialize a clean unnamed session, sharing its complete current and saved snapshot.
     pub fn from_document(document: StoredDocument) -> Self {
+        let file_format = if document.mol_transform().is_some() {
+            FileFormat::MolV2000
+        } else {
+            FileFormat::Cdxml
+        };
         let document = Arc::new(document);
         Self {
             saved: Arc::clone(&document),
             document,
             file_path: None,
+            file_format,
             generation: 0,
             identities: bond::Ids::default(),
             revision: 0,
@@ -313,6 +327,7 @@ impl Engine {
             redo_depth: self.redo.len(),
             capture: None,
             file: FileState {
+                format: self.file_format,
                 path: self.file_path.clone(),
                 dirty: self.document != self.saved,
             },
@@ -371,6 +386,8 @@ impl Engine {
                     self.state(),
                     files::FilePlan::Open {
                         params,
+                        encoding: files::OpenEncoding::Cdxml,
+                        ui_request_id: None,
                         revision: self.revision,
                         generation: self.generation,
                     },
@@ -381,6 +398,43 @@ impl Engine {
                     self.state(),
                     files::FilePlan::Save {
                         params,
+                        format: FileFormat::Cdxml,
+                        ui_request_id: None,
+                        document: Arc::clone(&self.document),
+                        revision: self.revision,
+                        generation: self.generation,
+                    },
+                ));
+            }
+            Command::OpenMol(params) => {
+                let transform = params.transform()?;
+                if self.document != self.saved && !params.discard_unsaved {
+                    return Err(Error::UnsavedChanges);
+                }
+                return Ok(Prepared::file(
+                    self.state(),
+                    files::FilePlan::Open {
+                        params: OpenCdxml {
+                            path: params.path,
+                            discard_unsaved: params.discard_unsaved,
+                        },
+                        encoding: files::OpenEncoding::MolV2000(transform),
+                        ui_request_id: None,
+                        revision: self.revision,
+                        generation: self.generation,
+                    },
+                ));
+            }
+            Command::SaveMol(params) => {
+                return Ok(Prepared::file(
+                    self.state(),
+                    files::FilePlan::Save {
+                        params: SaveCdxml {
+                            path: params.path,
+                            overwrite: params.overwrite,
+                        },
+                        format: FileFormat::MolV2000,
+                        ui_request_id: None,
                         document: Arc::clone(&self.document),
                         revision: self.revision,
                         generation: self.generation,
@@ -558,6 +612,8 @@ mod tests {
                 "document.close",
                 "document.open_cdxml",
                 "document.save_cdxml",
+                "document.open_mol",
+                "document.save_mol",
                 "history.redo",
                 "history.undo",
                 "page.set_size",

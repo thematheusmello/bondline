@@ -27,7 +27,7 @@ Revision overflow rejects the operation before history eviction or mutation.
 
 Page snapshots include a fragments array, empty in the default application. Engine history
 now retains an owned StoredDocument, including original CDXML data. An engine initialized
-with that API returns an additional source object: {format: "cdxml", byte_length, modified}.
+with that API returns an additional source object: {format: "cdxml"|"mol", byte_length, modified}.
 The field is omitted for native in-memory documents. Raw source bytes are not serialized.
 The open/save commands below use that complete backing. bond.create authors a limited native
 chemical fragment; source-backed creation is refused unless a complete profile is proven.
@@ -44,6 +44,8 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.inspect` | `{}` | Read-only snapshot |
 | `document.open_cdxml` | `path`, optional `discard_unsaved=false` | Bounded native CDXML read; successful application starts a clean document session and clears history |
 | `document.save_cdxml` | `path`, optional `overwrite=false` | Atomic complete-source save; default no-clobber; authoring revision/history retained |
+| `document.open_mol` | `path`, optional `discard_unsaved=false`, `points_per_unit=24`, `origin_x_pt=72`, `origin_y_pt=72` | Strict MOL V2000 import with complete source and a captured drawing frame; same guarded new-session behavior as CDXML |
+| `document.save_mol` | `path`, optional `overwrite=false` | Atomic MOL V2000 save; refuses unsupported metadata/layout loss; imported source retains its frame |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request Open/Save/Save As presentation or cancel the matching picker; a native host is required |
@@ -57,7 +59,7 @@ The delivered CLI exposes `commands` and `run --cmd '<request>'`. Repeat `--cmd`
 sequential operations in one in-memory engine; stdout is one final JSON snapshot. Failure
 prints a structured error to stderr and exits 2 (I/O/serialization failures exit 1). It does
 not make a multi-command transaction. Explicit open/save commands persist the supported
-CDXML subset; otherwise invocations remain independent. `--help` lists actual operations.
+CDXML/MOL subsets; otherwise invocations remain independent. `--help` lists actual operations.
 
 Native Page presets/rotation, Edit Undo/Redo and history shortcuts call these same commands.
 The canvas reads the authored dimensions; no native control edits the model directly.
@@ -153,7 +155,7 @@ Cancellation/error codes include `cancelled`, `render_failed`, `backend_unavaila
 
 ## File operations and saved state
 
-Every result includes `file: {path: string|null, dirty: boolean}`. Dirty compares the complete
+Every result includes `file: {path: string|null, dirty: boolean, format: "cdxml"|"mol_v2000"}`. Dirty compares the complete
 current snapshot with the last successful save/open baseline, including unknown source data.
 Undo back to that baseline is clean; exact no-ops do not dirty it. `source.modified` instead
 describes the retained original backing's baseline. A changed native-profile file may be
@@ -178,10 +180,13 @@ Default conflict is `already_exists`; overwrite requires `true`. Unsupported mod
 data returns `unsupported_content`. JSON save paths must resolve to representable canonical
 Unicode destinations before writing. Native io PathBuf callers retain Linux non-UTF8 support.
 
-Successful file work adds `file_operation: {operation, path, input_revision, byte_length}`;
+Successful file work adds `file_operation: {operation, format, path, input_revision, byte_length}`;
 save also includes `directory_synced`. Save does not advance authoring revision or add a
 history edit. It associates saved snapshot/path only with the same document generation.
-Later edits stay dirty; a prior-session save cannot relabel a newly opened file. Save may
+Later edits stay dirty; a prior-session save cannot relabel a newly opened file. Associated
+format is authoritative even when a path's extension disagrees; Save As can explicitly
+change it. Source format and associated save format are separate: saving a native snapshot
+as MOL does not invent retained original MOL bytes in that snapshot. Save may
 trim history for storage accounting. Retaining history differs from G25 printed14's
 since-save Undo description; exact26.1 behavior remains an explicit parity question.
 
@@ -198,6 +203,18 @@ error is `save_published`; its message states that new bytes exist and no rollba
 Recovery messages identify a retained original path. Directory-sync false is a capability
 limit, not durable directory metadata evidence. No autosave, recovery journal or general job
 scheduler is implied by this bounded executor.
+
+MOL drawing coordinates use `x_pt = origin_x_pt + points_per_unit*x` and
+`y_pt = origin_y_pt - points_per_unit*y`. Scale must be finite and positive; origins obey
+the model's finite ±100000pt bound. These defaults are an original Bondline placement policy,
+not chemical units or a reference application's preset. `document.save_mol` has no frame
+parameter: imported MOL keeps its captured frame; native/proven native-CDXML uses the
+default frame. V2000 four-decimal coordinates can round by half a0.0001 raw unit plus
+floating error. Unchanged imports preserve every byte, including headers and line endings.
+MOL source-to-CDXML, unknown CDXML-to-MOL, multiple authored fragments/pages and changed
+MOL page dimensions refuse `unsupported_content`. No implicit lossy export mode exists.
+Malformed MOL reports `invalid_mol`; valid but unsupported content reports `unsupported_content`.
+See file-formats.md for exact supported fields and remaining M1 scope.
 
 ## Close requests and host shutdown
 
@@ -230,7 +247,7 @@ snapshot/revision and capture semantics; an old capture is not a fresh inspectio
 document. Inspect current state before issuing a conditional close action.
 
 Normal edits are allowed before host acknowledgement and invalidate approval. Any actual
-authored, saved-baseline or path change permanently invalidates it until a fresh close
+authored, saved-baseline, path or associated-format change permanently invalidates it until a fresh close
 action; returning to old values cannot resurrect permission. The UI's close-specific Save
 continuation captures revision/epoch. Only its matching successful receipt, current path,
 same revision/epoch and clean state renew Request. An ordinary save, old receipt, Cancel
@@ -266,7 +283,7 @@ maps to Command on Mac and Ctrl elsewhere; shifted bindings are matched first. T
 point-in-time description, not permission to bypass command validation or a lease on state.
 It inventories delivered controls only, not every missing reference menu/tool/button.
 
-Direct `document.open_cdxml` / `document.save_cdxml` perform explicit parameterized I/O.
+Direct `document.open_cdxml` / `document.save_cdxml` and their MOL counterparts perform explicit parameterized I/O.
 `ui.file` instead requests native presentation, like using a File menu item:
 
 ```json
@@ -293,7 +310,7 @@ state is refreshed at finish; an older operation marker may identify an earlier 
 Authored snapshots/revision retain their existing immutable input scope.
 
 There is one file-presentation slot. New requests while it is occupied return `ui_busy`.
-Save uses the existing associated path with overwrite permission, or opens a chooser if
+Save uses the existing associated path and format with overwrite permission, or opens a chooser if
 unnamed; Save As always requires a path choice. Host acceptance does not consume the
 request: a remote Cancel can dismiss the same accepted picker. Cancel targets its exact ID:
 
@@ -303,11 +320,11 @@ request: a remote Cancel can dismiss the same accepted picker. Cancel targets it
 
 Accepted request/cancel commands advance a checked epoch without changing authored data,
 history, saved baseline or path. IDs are never reused at the same revision. Actual edits,
-Open, baseline/path changes, host detachment and close-intent changes invalidate a pending
+Open, baseline/path/format changes, host detachment and close-intent changes invalidate a pending
 picker permanently. Returning to old values cannot revive it. No-op edits and an unchanged
 save preserve it. The native host validates the exact selection and context, reserves a
 worker and prepares the real command under the same engine mutex before spawning. A known
-Save cannot silently redirect to another path or lose its overwrite decision. The opaque
+Save cannot silently redirect to another path/format or lose its overwrite decision. The opaque
 prepared work retains its originating engine and worker lifetime.
 
 Presentation Cancel refuses a running operation; it cannot claim published bytes were
@@ -316,6 +333,14 @@ a stale failure cannot reopen it or affect a replacement. Already-published work
 truthfully. Native close-Save retains the separate captured close epoch and matching-receipt
 rules above. Ordinary Save never grants shutdown permission. Host claim/finish/attachment
 are trusted Rust acknowledgements, not additional user-facing JSON dispatchers.
+
+Trusted host preparation also binds the originating request ID to the opaque file plan.
+Its receipt adds `ui_request_id` and `ui_request_current`; direct file commands omit both.
+The latter is captured under the engine lock before the operation's own baseline/path/format
+update. Any intervening invalidation makes it permanently false, even if values return to
+their original state. Native close-Save requires both markers, the actual format and all
+revision/path/epoch/clean-state checks. A stale publication still reports its real bytes;
+it cannot renew close permission.
 
 Folder navigation, filename/location values, directory-list state, confirmation dismissal,
 full close-dialog discovery and addressable running-job cancellation remain separate gaps.

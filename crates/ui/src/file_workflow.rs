@@ -3,12 +3,15 @@
 #[cfg(test)]
 mod close_tests;
 #[cfg(test)]
+mod mol_tests;
+#[cfg(test)]
 mod request_tests;
 
-use crate::files::{FileAction, FileChooser, FileChooserEvent, FileMode};
+use crate::files::{FileAction, FileChooser, FileChooserEvent, FileMode, format_extension};
 use bondline_commands::{
     Cancellation, CloseAction, CloseDocument, CloseState, Command, CommandResult, Engine,
-    ErrorInfo, OpenCdxml, SaveCdxml, UiFile, UiFileAction, UiFilePhase, UiFilePlan,
+    ErrorInfo, FileFormat, OpenCdxml, OpenMol, SaveCdxml, SaveMol, UiFile, UiFileAction,
+    UiFilePhase, UiFilePlan,
 };
 use bondline_mcp::CommandExecutor;
 use eframe::egui;
@@ -20,6 +23,7 @@ use std::{
 
 struct FileJob {
     request_id: u64,
+    format: FileFormat,
     action: FileAction,
     result: Receiver<Result<CommandResult, ErrorInfo>>,
     cancel: Cancellation,
@@ -29,6 +33,7 @@ struct FileJob {
 
 pub(crate) struct FileIntentAction {
     request_id: u64,
+    format: FileFormat,
     action: FileAction,
 }
 
@@ -116,10 +121,13 @@ impl FileWorkflow {
             path.as_ref()
                 .and_then(|path| path.file_name())
                 .and_then(|name| name.to_str())
-                .unwrap_or("Untitled.cdxml")
-                .to_owned()
+                .map_or_else(
+                    || format!("Untitled.{}", format_extension(state.file.format)),
+                    str::to_owned,
+                )
         };
-        self.chooser.begin(mode, directory, name);
+        self.chooser
+            .begin_with_format(mode, directory, name, state.file.format);
     }
 
     pub(crate) fn menu(
@@ -186,9 +194,10 @@ impl FileWorkflow {
         match plan {
             UiFilePlan::OpenPicker => self.begin(FileMode::Open, &state),
             UiFilePlan::SavePicker => self.begin(FileMode::Save, &state),
-            UiFilePlan::SaveExisting(params) => {
+            UiFilePlan::SaveExisting { format, params } => {
                 return Some(FileIntentAction {
                     request_id: request.id,
+                    format,
                     action: FileAction::Save {
                         path: params.path,
                         overwrite: params.overwrite,
@@ -225,9 +234,15 @@ impl FileWorkflow {
             ui.label(if job.cancelling {
                 "Cancelling file operation…"
             } else if matches!(job.action, FileAction::Open { .. }) {
-                "Opening CDXML…"
+                match job.format {
+                    FileFormat::Cdxml => "Opening CDXML…",
+                    FileFormat::MolV2000 => "Opening MOL V2000…",
+                }
             } else {
-                "Saving CDXML…"
+                match job.format {
+                    FileFormat::Cdxml => "Saving CDXML…",
+                    FileFormat::MolV2000 => "Saving MOL V2000…",
+                }
             });
             if ui
                 .add_enabled(!job.cancelling, egui::Button::new("Cancel Operation"))
@@ -325,9 +340,11 @@ impl FileWorkflow {
         if self.chooser.is_open() {
             match self.chooser.show(context, state.file.dirty) {
                 Some(FileChooserEvent::Submit(action)) => {
-                    return self
-                        .request_id
-                        .map(|request_id| FileIntentAction { request_id, action });
+                    return self.request_id.map(|request_id| FileIntentAction {
+                        request_id,
+                        format: self.chooser.format(),
+                        action,
+                    });
                 }
                 Some(FileChooserEvent::Cancel) => self.cancel_picker(engine, error),
                 None => {}
@@ -379,19 +396,47 @@ impl FileWorkflow {
         if self.is_busy() {
             return Err("A file operation is already running.".to_owned());
         }
-        let FileIntentAction { request_id, action } = intent;
-        let command = match &action {
-            FileAction::Open {
-                path,
-                discard_unsaved,
-            } => Command::OpenCdxml(OpenCdxml {
+        let FileIntentAction {
+            request_id,
+            format,
+            action,
+        } = intent;
+        let command = match (format, &action) {
+            (
+                FileFormat::Cdxml,
+                FileAction::Open {
+                    path,
+                    discard_unsaved,
+                },
+            ) => Command::OpenCdxml(OpenCdxml {
                 path: path.clone(),
                 discard_unsaved: *discard_unsaved,
             }),
-            FileAction::Save { path, overwrite } => Command::SaveCdxml(SaveCdxml {
+            (
+                FileFormat::MolV2000,
+                FileAction::Open {
+                    path,
+                    discard_unsaved,
+                },
+            ) => Command::OpenMol(OpenMol {
                 path: path.clone(),
-                overwrite: *overwrite,
+                discard_unsaved: *discard_unsaved,
+                points_per_unit: 24.0,
+                origin_x_pt: 72.0,
+                origin_y_pt: 72.0,
             }),
+            (FileFormat::Cdxml, FileAction::Save { path, overwrite }) => {
+                Command::SaveCdxml(SaveCdxml {
+                    path: path.clone(),
+                    overwrite: *overwrite,
+                })
+            }
+            (FileFormat::MolV2000, FileAction::Save { path, overwrite }) => {
+                Command::SaveMol(SaveMol {
+                    path: path.clone(),
+                    overwrite: *overwrite,
+                })
+            }
         };
         let cancel = Cancellation::default();
         let worker_cancel = cancel.clone();
@@ -399,7 +444,7 @@ impl FileWorkflow {
             Ok(work) => work,
             Err(failure) => {
                 if let Ok(mut engine) = executor.engine().lock() {
-                    self.failed(request_id, action, &failure, &mut engine);
+                    self.failed(request_id, format, action, &failure, &mut engine);
                 }
                 return Err(failure.message);
             }
@@ -418,6 +463,7 @@ impl FileWorkflow {
             if let Ok(mut engine) = executor.engine().lock() {
                 self.failed(
                     request_id,
+                    format,
                     action,
                     &ErrorInfo {
                         code: "worker_failed",
@@ -430,6 +476,7 @@ impl FileWorkflow {
         }
         self.job = Some(FileJob {
             request_id,
+            format,
             action,
             result,
             cancel,
@@ -439,12 +486,19 @@ impl FileWorkflow {
         Ok(())
     }
 
-    fn failed(&mut self, id: u64, action: FileAction, failure: &ErrorInfo, engine: &mut Engine) {
+    fn failed(
+        &mut self,
+        id: u64,
+        format: FileFormat,
+        action: FileAction,
+        failure: &ErrorInfo,
+        engine: &mut Engine,
+    ) {
         let retry = failure.code != "save_published" && failure.code != "recovery_required";
         if engine.finish_ui_file(id, retry) && retry {
             self.request_id = Some(id);
             self.chooser
-                .failed(action, failure.code, failure.message.clone());
+                .failed_with_format(action, format, failure.code, failure.message.clone());
         } else {
             self.sync_close(&engine.state());
         }
@@ -479,6 +533,9 @@ impl FileWorkflow {
                             && matches!(job.action, FileAction::Save { .. })
                             && receipt.operation == "save"
                             && receipt.input_revision == current.revision
+                            && receipt.format == job.format
+                            && receipt.ui_request_id == Some(job.request_id)
+                            && receipt.ui_request_current == Some(true)
                     });
                     if current_receipt
                         && current.close == CloseState::NeedsDecision
@@ -487,6 +544,8 @@ impl FileWorkflow {
                         && !current.file.dirty
                         && result.revision == current.revision
                         && result.file.path == current.file.path
+                        && current.file.format == job.format
+                        && result.file.format == current.file.format
                     {
                         self.request_close(engine, error);
                     } else {
@@ -498,7 +557,7 @@ impl FileWorkflow {
                 *error = Some(failure.message.clone());
                 self.keep_open_after_file_failure(engine, error);
                 self.save_for_close = job.close_save;
-                self.failed(job.request_id, job.action, &failure, engine);
+                self.failed(job.request_id, job.format, job.action, &failure, engine);
             }
         }
     }

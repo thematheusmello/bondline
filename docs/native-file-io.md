@@ -1,4 +1,4 @@
-# Native CDXML filesystem contract
+# Native structure-file filesystem contract
 
 `bondline_io::files` is a library adapter. It reads/writes complete `StoredDocument` values;
 it never regenerates a foreign elemental projection or exposes an extension without decoding.
@@ -8,16 +8,20 @@ Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md
 - `canonical_save_path(&Path)` resolves the parent without following/replacing the final leaf.
 - `save_cdxml_file(&Path, &StoredDocument, overwrite, &Cancellation)` returns the canonical
   destination, encoded byte length and whether the parent directory was synced.
+- `read_mol_file(&Path, MolTransform, &Cancellation)` retains complete MOL source and the
+  explicitly supplied drawing frame. `save_mol_file` takes the native fallback frame; source-
+  backed MOL always keeps its original frame. Both reuse the same native read/publication path.
 - `FileError` exposes stable `code`, `path`, `stage`, `published` and optional `recovery_path`.
 
 Read input is bounded to 64 MiB, including bytes read after metadata inspection. Only ordinary
 files are accepted. Selected read symlinks resolve explicitly; Unix opens use nonblocking,
 no-follow flags and post-open validation, preventing FIFOs from blocking the worker. Invalid
-XML/model input returns an error without an application-state change. Cancellation is checked
+XML/MOL/model input returns an error without an application-state change. Cancellation is checked
 between 64 KiB chunks and around decoding; it cannot interrupt an OS syscall or parser call.
 
-Save encodes through `StoredDocument::to_cdxml`: unchanged unknown data passes through exactly,
-supported native/profile edits encode completely, and unsupported modified opaque data fails.
+Save encodes through `StoredDocument::to_cdxml` or `to_mol`: unchanged accepted source passes
+through exactly, supported native/profile edits encode completely, and unsupported source,
+cross-format metadata or layout loss fails explicitly. See file-formats.md for each guard.
 It prepares a same-directory temporary, writes in chunks, preserves supported security/metadata,
 syncs the file, then publishes. Default no-clobber uses an atomic hard-link create, so a racing
 creator wins without being overwritten. Filesystems lacking hard links fail explicitly.

@@ -1,8 +1,8 @@
 //! One bounded native file-presentation intent, separate from document persistence.
 
 use crate::{
-    CloseAction, CloseDocument, CloseState, Command, CommandResult, Engine, Error, Prepared,
-    SaveCdxml,
+    CloseAction, CloseDocument, CloseState, Command, CommandResult, Engine, Error, FileFormat,
+    Prepared, SaveCdxml,
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -57,7 +57,10 @@ pub struct UiFileState {
 pub enum UiFilePlan {
     OpenPicker,
     SavePicker,
-    SaveExisting(SaveCdxml),
+    SaveExisting {
+        format: FileFormat,
+        params: SaveCdxml,
+    },
 }
 
 #[derive(Debug)]
@@ -220,11 +223,12 @@ impl Engine {
                     .view
                     .input_path
                     .as_ref()
-                    .map_or(UiFilePlan::SavePicker, |path| {
-                        UiFilePlan::SaveExisting(SaveCdxml {
+                    .map_or(UiFilePlan::SavePicker, |path| UiFilePlan::SaveExisting {
+                        format: self.file_format,
+                        params: SaveCdxml {
                             path: path.clone(),
                             overwrite: true,
-                        })
+                        },
                     })
             }
             UiFileAction::SaveAs => UiFilePlan::SavePicker,
@@ -245,13 +249,22 @@ impl Engine {
             return Err(Error::UiBusy);
         }
         let matches = match (&active.view.action, &actual) {
-            (UiFileAction::Open, Command::OpenCdxml(_)) => true,
-            (UiFileAction::SaveAs, Command::SaveCdxml(_)) => true,
-            (UiFileAction::Save, Command::SaveCdxml(params)) => active
-                .view
-                .input_path
-                .as_ref()
-                .is_none_or(|path| path == &params.path && params.overwrite),
+            (UiFileAction::Open, Command::OpenCdxml(_) | Command::OpenMol(_)) => true,
+            (UiFileAction::SaveAs, Command::SaveCdxml(_) | Command::SaveMol(_)) => true,
+            (UiFileAction::Save, Command::SaveCdxml(params)) => {
+                active.view.input_path.as_ref().is_none_or(|path| {
+                    self.file_format == FileFormat::Cdxml
+                        && path == &params.path
+                        && params.overwrite
+                })
+            }
+            (UiFileAction::Save, Command::SaveMol(params)) => {
+                active.view.input_path.as_ref().is_none_or(|path| {
+                    self.file_format == FileFormat::MolV2000
+                        && path == &params.path
+                        && params.overwrite
+                })
+            }
             _ => false,
         };
         if !matches {
@@ -259,11 +272,17 @@ impl Engine {
                 "selection does not match the accepted file request",
             ));
         }
-        let prepared = self.prepare(actual)?;
+        let mut prepared = self.prepare(actual)?;
+        prepared.bind_ui_request(id);
         if let Some(active) = &mut self.file_ui.active {
             active.view.phase = UiFilePhase::Running;
         }
         Ok(prepared)
+    }
+
+    pub(super) fn ui_file_request_is_current(&self, id: u64) -> bool {
+        self.current_ui_file(id)
+            .is_ok_and(|active| active.view.phase == UiFilePhase::Running)
     }
 
     /// Consume a native result or retain its same picker for a guarded retry.
