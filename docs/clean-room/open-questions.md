@@ -43,9 +43,16 @@
 - Absent-position generation and dependent label/bounding box updates still need complete
   mapping/command behavior. The older Geometry utility keeps its direct-fragment scope and
   never presents a p-only patch as a complete atom move.
-- Native declared license closure now passes all three desktop targets. Native Windows/Linux
-  execution and complete release notice assembly remain; every dependency upgrade needs new
-  closure/source/asset evidence. Crate labels alone are insufficient.
+- Native declared license closure and hosted window smokes pass all three desktop targets.
+  Interactive Windows/Linux workflows and complete release notice assembly remain; every
+  dependency upgrade needs new closure/source/asset evidence. Crate labels alone are insufficient.
+- windows-permissions 0.2.4 declares MIT and author Daniel Dulaney in its exact published Cargo
+  metadata, but its archive and reviewed upstream tree contain no LICENSE file. Retain those
+  facts/pins in native-file-io.md; resolve release notice/source audit without inventing a notice.
+- New Windows ReplaceFile/ACL behavior is source-checked, not natively executed yet. Mac inherited
+  allow ACLs and Windows backup directories have a create-to-tighten pre-opened-handle boundary;
+  current code cannot revoke such a handle. See native-file-io.md; do not claim universal
+  temporary confidentiality. Explicit overwrite checks are not external compare-and-swap.
 - One original single-bond scene now has explicit human approval and an exact CPU/GPU/Pillow
   regression. Broader scenes, smooth text, imported styles and platform raster behavior remain
   open; that approval does not establish final UI design or general rendering correctness.

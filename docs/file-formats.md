@@ -17,6 +17,13 @@ The borrowed input must outlive its parsed view. No filesystem, URL fetch, fonts
 dependencies exist in this crate. Font names inside an interchange document are metadata;
 they do not bundle those fonts or select a font substitution policy.
 
+The separate `bondline_io::files` native adapter now provides bounded ordinary-file CDXML
+reads and atomic complete-source saves. Default publication is no-clobber; overwrite needs
+explicit opt-in. It preserves supported access metadata and exposes post-publication/recovery
+outcomes instead of claiming every error rolled back. See [the filesystem contract](native-file-io.md)
+for platform evidence, metadata bounds and concurrency/durability limits. This library adapter
+alone does not establish registry/native file-menu parity or general imported structural editing.
+
 Limits are independent Bondline policies: 64 MiB UTF-8 input, 100000 tree nodes, 256 nested
 elements, 256 attributes per element and 100000 total attributes. A streaming quick-xml
 preflight rejects excessive nesting/attributes, unsupported declarations and internal DTD

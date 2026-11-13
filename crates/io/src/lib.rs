@@ -3,6 +3,8 @@
 pub mod cdxml;
 mod document;
 pub use document::{DocumentError, SourceInfo, StoredDocument};
+#[cfg(not(target_arch = "wasm32"))]
+pub mod files;
 
 use bondline_render::Frame;
 

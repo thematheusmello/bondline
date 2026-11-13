@@ -45,9 +45,17 @@ browser processes all terminated. Six UI/flow IDs now group the existing parity 
 none claims a delivered reference screen. Public desktop video playback remains unverified.
 
 The native desktop/GPU declared-license blocker remains resolved without broadening the
-MIT/Apache-2.0/BSD shipped policy: Mac arm64 150, Windows x64 161, Linux x64 219 runtime
+MIT/Apache-2.0/BSD shipped policy. The new filesystem adapter's exact target-only dependencies
+bring the branch closure to Mac arm64 153, Windows x64 164, Linux x64 219 runtime
 packages plus two hash/notice-verified bundled assets. Full release notice/source audit
 and the Unicode-bearing browser candidate remain separate work.
+
+The new io library provides bounded complete-source reads, atomic no-clobber/explicit overwrite,
+typed publication/recovery outcomes and access-metadata preservation. Native Mac io passes
+44 tests; actual Linux Docker file cases pass 17 tests. Strict source/declared-license checks
+pass; Windows file/ACL execution remains pending. No registry/native file-menu workflow is
+claimed by this library checkpoint. See docs/native-file-io.md for security and durability
+boundaries, dependency archive pins and the missing windows-permissions upstream notice.
 
 Verified in the current drawing/history/encoding checkpoint:
 - 147 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses

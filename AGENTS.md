@@ -70,7 +70,8 @@ Current map: model (L0, pages, Point2 and validated elemental atom/bond/fragment
 cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attribute
 replacement and a bounded new-syntax writer);
 render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
-source-backed CDXML projections, new native elemental encoding, owned snapshots and PNG encoding);
+source-backed CDXML projections, native elemental encoding, owned snapshots, PNG encoding and
+bounded native CDXML filesystem I/O; see docs/native-file-io.md for publication/access limits);
 commands (L3, registry and complete stored-snapshot Arc history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
 and `compat/clipboard-win` alone opt into reviewed OS unsafe; `compat/hexf-parse` forbids

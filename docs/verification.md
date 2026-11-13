@@ -747,3 +747,32 @@ Development command correction: the first local WIP aggregate used a workspace-r
 BONDLINE_PYTHON and four independent CDXML tests failed to locate it from their package
 working directories. The documented venv examples now use an absolute $PWD-prefixed path.
 The corrected invocation passes the full local WIP gate (192 tests); no assertion changed.
+
+## Native filesystem CDXML adapter, 2026-11-13
+
+RED: file-io-red.log lacks the file API; cancellation at Publish incorrectly wrote bytes;
+replacement of an unrelated destination during encoding was not detected; injected same-inode
+chmod0644-to-0600 could republish wider access. The focused behavioral RED logs are
+file-io-cancel-red.log, file-io-metadata-red.log and file-io-security-red.log under target/.
+Recovery-helper RED and GREEN exercise actual original files and a competing destination.
+
+GREEN: cargo test -p bondline-io --locked passes 44 tests on native Mac, including 18 file
+cases. Tests cover source passthrough, independent expected bytes, edited native encoding,
+bounded/malformed/special inputs, cancellation, atomic no-clobber, symlink/readonly handling,
+injected pre/post-publication failures, ACL/quarantine/binary xattrs and recovery retention.
+Actual Linux arm64 Docker on official Rust1.94.1-bookworm passes nine file unit and eight
+integration tests, including raw invalid-byte filenames, FIFO and POSIX ACL bytes on native
+container storage; repository bind mount was read-only. This is not APFS emulation or a GUI
+check. Image digest: sha256:6ae102bdbf528294bc79ad6e1fae682f6f7c2a6e6621506ba959f9685b308a55.
+Logs: target/file-io-green.log and target/file-verification-linux-io.log.
+
+Native/Linux/Windows all-targets io clippy with -Dwarnings and formatting pass. Declared
+runtime license closures are 153/164/219 packages with two assets. Platform/metadata limits,
+dependency pins and missing upstream notice are explicit in native-file-io.md. Windows
+native file/ACL tests remain unexecuted; compilation is not that evidence.
+
+The isolated fuzz lock retains all 157 prior versions and adds only seven required filesystem
+dependency entries. Pinned ASan completed 10000 runs with seed3641879538/max_len65536/timeout5:
+coverage3656/features10813/corpus669 entries175KiB/reported RSS178MiB. Log:
+target/file-io-fuzz.log. Harness and committed fixtures stayed unchanged; this checks the
+existing parser build/smoke with the new graph, not filesystem behavior or exhaustive safety.

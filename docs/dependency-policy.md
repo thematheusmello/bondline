@@ -61,8 +61,15 @@ subtle 2.6.1 (BSD-3-Clause), default features disabled. Only subtle adds a new l
 package; getrandom was already resolved. Their published APIs, error behavior and license
 declarations were inspected. The source-backed io geometry adapter now reaches the existing
 standalone CDXML crate and its pinned MIT/AP2 roxmltree and MIT quick-xml packages from
-product roots. Latest runtime closures are 150/161/219 packages for macOS/Windows/Linux,
+product roots. Native file I/O now reuses rustix 1.1.6 and adds macOS-only exacl 0.13.0 plus
+Windows-only winsafe 0.0.29 and windows-permissions 0.2.4. They supply fallible OS wrappers;
+no unsafe is added to io and Linux does not link libacl. Exact archive/VCS pins, author and
+the missing windows-permissions notice are recorded in native-file-io.md. Its published
+MIT declaration passes the existing declaration gate; the missing LICENSE is a release
+notice-audit gap, not a fabricated notice or completed source audit.
+Latest runtime closures are 153/164/219 packages for macOS/Windows/Linux,
 plus the same two checked assets. This retains the original allowlist.
-Windows/Linux cross-checks verify compilation, not OS execution. Native runtime acceptance
-still needs corresponding runners. The WebAssembly delivery remains M5: its current
+Hosted window/API smokes pass on all three targets at product checkpoint 3d3dd44. New file
+I/O has native Mac and Linux Docker execution; Windows file/ACL behavior remains unverified.
+Source cross-checks alone are not OS execution. The WebAssembly delivery remains M5: its current
 candidate graph includes Unicode-licensed identifier data and is not approved for shipment.
