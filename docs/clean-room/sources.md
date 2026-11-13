@@ -27,6 +27,7 @@ proprietary implementation, help text or assets. Record more specific sections a
 | WIN-FILES | https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-dragqueryfilew | Lossless UTF-16 file list query; bounded paths/count. |
 | ROBOTO | https://github.com/googlefonts/roboto-2/tree/38062f4b4a0be4346d07a928408da21602545e9e | Independently sourced Apache-2.0 UI font; exact file hash/notice in assets/manifest.json. |
 | PYTHON-IEEE | https://docs.python.org/3/library/stdtypes.html#float.hex | Independent IEEE reference conversion. Original seeded test vectors/generator retained under compat/hexf-parse/tests and scripts. |
+| CARGO-GRAPH | https://doc.rust-lang.org/cargo/commands/cargo-metadata.html | Resolve opaque package IDs and dependency edges across targets/features for the layer gate. |
 | CORPUS-RDKIT | https://github.com/rdkit/rdkit/tree/c686c2c945df370c2f95ebe20aae2872a36f7c17 | BSD-licensed independently authored interchange fixtures; exclude proprietary template collections; record per-file provenance/hashes when added. |
 
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused

@@ -50,3 +50,10 @@ warnings`, `cargo test --workspace --locked`, Windows all-targets check and clip
 workspace check. Latest macOS real-window smoke also exited 0 with Metal. No confirmed
 background Cargo jobs remain after polling these checks.
 
+## Layer gate, 2026-11-13
+
+RED: `cargo test -p xtask layers --locked` failed for the absent graph validator. GREEN:
+three tests reject equal/upward edges, misclassified/new packages, format-to-workspace
+dependencies and a transitive GUI dependency; valid lower-layer edges pass. The actual
+all-features Cargo resolution passes `cargo xtask layers`. Focused xtask clippy passes
+after collapsing the nested condition required by the pinned compiler.

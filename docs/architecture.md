@@ -15,5 +15,11 @@ An independently implemented dynamic-library OS boundary may be necessary to kee
 graphics runtime within the strict license policy. Its exact API and unsafe surface must
 be isolated, documented and tested against platform APIs before it is used.
 
+`cargo xtask layers` reads Cargo's complete all-features dependency resolution. It rejects
+unclassified Bondline packages, incorrect layer declarations, equal/upward workspace edges,
+workspace dependencies in standalone parsers, and GUI dependencies reachable from any
+headless product crate. Compatibility OS shims and build tooling are named exceptions to
+the product-layer map; this is not permission to add GUI dependencies to core crates.
+
 The graphics foundation will adopt PhotoCraft's reviewed, pinned fork approach. Do not
 copy unrelated product features or claim that PhotoCraft meets Bondline's license policy.

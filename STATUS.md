@@ -8,6 +8,8 @@ blank workspace, independent CPU/GPU RGBA reference, and a pinned Apache-2.0 fon
 Declared runtime license closure passes macOS arm64, Windows x64 and Linux x64 without
 broadening policy. Original loader/clipboard/hex-float adapters replace the disallowed
 runtime code; fork/pin and source evidence are in docs/dependency-policy.md.
+The graphics checkpoint is committed as db94cd5. `cargo xtask layers` now enforces strict
+lower-layer dependencies, standalone formats and transitive GUI isolation.
 
 Whole-workspace Windows (including tests) and Linux source cross-checks passed after
 the common render extraction. Windows and host clippy pass with warnings denied.
