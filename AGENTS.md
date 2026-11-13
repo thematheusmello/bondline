@@ -57,7 +57,7 @@ regenerating stored.model(): that projection omits unknown data. A generated pro
 mapped only if re-encoding reproduces every input byte. Its cached classification now permits
 headless editing/rendering; unknown/extended/noncanonical files remain guarded and preserved.
 Keep the pinned v0 fixture editable when changing the encoder/version; add migrations instead
-of refreshing it. Native workspace/file wiring remains separate. Poster Width/Height
+of refreshing it. Native file wiring now uses those complete snapshots. Poster Width/Height
 are drawing extents, not inferred paper/printer settings.
 xtask checks layers and licenses, fetches a pinned SHA-256 corpus, and orchestrates CI.
 No GUI dependencies below ui; wgpu belongs in render. Add crates when useful behavior lands,

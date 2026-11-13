@@ -8,6 +8,11 @@
   was located. The 573-row cited baseline in parity-checklist.md covers explicit guide
   controls and shortcut tables plus 26.x desktop deltas; remaining context menus, unnamed
   glyphs and platform-specific controls prevent a complete modern-inventory claim.
+- New official25.5 articles change label gestures and alignment enablement; current Mac
+  docking guidance is separate. Bounded September2026 Professional desktop playback shows
+  Signals instead of the older Search menu, but exact build/About is absent and upload
+  predates desktop26.1. See modern-inventory-audit.md for hashes/timestamps and all source
+  limits. Do not infer26.1 or a complete flyout/context-menu inventory from those frames.
 - G25 atom table p.68 assigns k to potassium, while p.69 assigns k to sprouting sulfonyl.
   Do not invent precedence. Bond table p.73 and the explicitly modified table p.75 assign
   4 to ring fusion, while the legacy drawing paragraph p.86 describes quadruple-bond input.

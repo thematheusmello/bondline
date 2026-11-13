@@ -32,6 +32,10 @@ The versioned visual evidence and first connected-drawing acceptance sequence ar
 [official-ui-evidence.md](research/official-ui-evidence.md). The pinned engineering review
 in [reference-projects.md](research/reference-projects.md) explains which command, gesture,
 history, persistence and verification patterns are useful without importing incompatible assets.
+The [modern audit](research/modern-inventory-audit.md) adds25.5 gesture/selection and Mac
+workspace qualifications plus bounded desktop-video evidence. Its observed Signals menu
+differs from older Search labels; exact build/menu contents remain unresolved. It does not
+identify a full26.1 desktop screen specification or increase the count by duplicating rows.
 
 ## Workflow overview
 
@@ -85,7 +89,7 @@ history, persistence and verification patterns are useful without importing inco
 | MF-021 | File > Open Templates > New Templates | 204 | missing | Author/edit a template palette. |
 | MF-022 | File > Open Samples > Hotkeys Cheat Sheet | 67 | missing | Create Bondline's own explanatory material; never copy the sample. |
 | MF-023 | File > Open Samples > Shortcuts Cheat Sheet | 77 | missing | Create original material. |
-| MF-024 | File > List Nicknames | 97, 207 | missing | Define/remove document abbreviations. |
+| MF-024 | File > List Nicknames | 97, 207 | missing | Define/remove abbreviations with explicit chemistry; KB-NICKNAME-VISUAL warns its particular B(pin) workaround is visual-only for analysis, not every nickname. |
 | MF-025 | File > Run ChemScript | 208-209 | missing | Reference scripting integration; Bondline registry/MCP exists, API parity missing. |
 | MF-026 | File > Re-run Previously Selected ChemScript | 208 | missing | - |
 | MF-027 | File > ChemScripts | 208-209 | missing | Dynamic script catalog; reference scripts are not copied. |
@@ -136,7 +140,7 @@ history, persistence and verification patterns are useful without importing inco
 | MV-001 | View > Show Main Toolbar | 12, 422 | missing | - |
 | MV-002 | View > Show Object Toolbar | 122 | missing | - |
 | MV-003 | View > Show Structure Toolbar | 241 | missing | - |
-| MV-004 | View > Show BioDraw Toolbar | 129 | missing | - |
+| MV-004 | View > Show BioDraw Toolbar | 129 | missing | KB-BIODRAW corroborates Professional template-palette role, build unknown; exact toolbar/palette naming still needs modern evidence. No library copied. |
 | MV-005 | View > Show HELM Monomer Toolbar | 138 | missing | - |
 | MV-006 | View > Show Add-ins Toolbar | 391 | missing | Remote/account integrations are optional, not required for offline creation. |
 | MV-007 | View > Other Toolbars > Pen Tools | 113 | missing | - |
@@ -162,8 +166,8 @@ history, persistence and verification patterns are useful without importing inco
 | MV-027 | View > Show Character Map Window | 94 | missing | - |
 | MV-028 | View > Show Chem3D Hotlink Window | 239 | missing | Guide says separate installation/SKU is required; no proprietary runtime is bundled. |
 | MV-029 | Window > Open-document/template list | 14 | missing | Dynamic active-window selection. |
-| MV-030 | Toolbar > Dock Toolbar | 13 | missing | Context control. |
-| MV-031 | Toolbar > Float Toolbar | 13 | missing | Context control. |
+| MV-030 | Toolbar > Dock Toolbar | 13 | missing | Context control. KB-MAC-DOCK describes Mac application boundary, not drawing-window target; exact26.1/platform persistence unverified. |
+| MV-031 | Toolbar > Float Toolbar | 13 | missing | Keep Mac/Windows workspace evidence separate; KB-MAC-DOCK screenshot age/build unknown. |
 | MV-032 | Toolbar > Tear off a palette | 12-13 | missing | Pointer gesture; original UI implementation required. |
 
 ## Object and layout controls
@@ -193,13 +197,13 @@ history, persistence and verification patterns are useful without importing inco
 | MO-021 | Object > Add Frame (brackets) | 113 | missing | - |
 | MO-022 | Object > Add Frame (parentheses) | 113 | missing | - |
 | MO-023 | Object > Add Frame (braces) | 113 | missing | - |
-| MO-024 | Object > Align > Left edges | 81, 125 | missing | Alignment names also appear in shortcut table. |
-| MO-025 | Object > Align > Centers | 81, 125 | missing | - |
-| MO-026 | Object > Align > Right edges | 81, 125 | missing | - |
-| MO-027 | Object > Align > Top edges | 81, 125 | missing | - |
-| MO-028 | Object > Align > Middle (top/bottom) | 81, 125 | missing | Guide's shortcut description is alignment toward top/bottom center. |
-| MO-029 | Object > Align > Bottom edges | 81, 125 | missing | - |
-| MO-030 | Object > Distribute > Horizontally | 81, 125 | missing | - |
+| MO-024 | Object > Align > Left edges | 81, 125 | missing | KB-ALIGN-25.5 requires whole structures, not partial chemical selections;26.1/mixed objects unobserved. |
+| MO-025 | Object > Align > Centers | 81, 125 | missing | Same version-qualified whole-structure enablement as MO-024. |
+| MO-026 | Object > Align > Right edges | 81, 125 | missing | Same version-qualified whole-structure enablement as MO-024. |
+| MO-027 | Object > Align > Top edges | 81, 125 | missing | Same version-qualified whole-structure enablement as MO-024. |
+| MO-028 | Object > Align > Middle (top/bottom) | 81, 125 | missing | Guide describes top/bottom center; whole-structure qualification as MO-024. |
+| MO-029 | Object > Align > Bottom edges | 81, 125 | missing | Same version-qualified whole-structure enablement as MO-024. |
+| MO-030 | Object > Distribute > Horizontally | 81, 125 | missing | KB-DISTRIBUTE corroborates shortcut/menu/context alternatives; exact context path/build still unknown. |
 | MO-031 | Object > Distribute > Vertically | 81, 125 | missing | - |
 | MO-032 | Object > Show Stereochemistry | 437 | missing | Source path from tutorial; naming differs from other stereo controls. |
 | MO-033 | Group context > Integral | 129 | missing | BioDraw decomposition. |
@@ -288,7 +292,7 @@ history, persistence and verification patterns are useful without importing inco
 | TD-002 | Marquee | 115-116 | missing | Rectangular selection. |
 | TD-003 | Structure Perspective | 192, 242-243 | missing | Structure rotation/projection handling. |
 | TD-004 | Eraser | 86, 91, 121 | missing | Deletion and bond-order reduction have distinct contexts. |
-| TD-005 | Text | 91-94 | missing | Atom labels and free captions. |
+| TD-005 | Text | 91-94 | missing | KB-LABEL-25.5 changes existing-label entry to Alt-click; separate KB-REPEAT-25.5 gives Windows Alt/Mac Option-click repetition. Tool context/version/source-target semantics require tests; no26.1 inference. |
 | TD-006 | Solid/single bond | 85 | verified (partial: isolated drag, Mac only) | bond.create through native/CLI/MCP/control; one history edit per drag and approved specific-scene capture. Click creation, existing-atom attachment, modifiers/snapping, order changes and full tool parity remain missing. |
 | TD-007 | Double bond | 85 | missing | - |
 | TD-008 | Double either/crossed double bond | 86 | missing | - |
