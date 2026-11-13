@@ -1,6 +1,6 @@
 //! Opt-in, bounded newline JSON control on IPv4 loopback only.
 
-use crate::{SharedEngine, work::Workers};
+use crate::{CommandExecutor, SharedEngine};
 use bondline_commands::{Error as CommandError, ErrorInfo, MAX_REQUEST_BYTES};
 use serde::Deserialize;
 use serde_json::{Value, json};
@@ -52,6 +52,14 @@ impl LoopbackServer {
         engine: SharedEngine,
         on_change: impl Fn() + Send + Sync + 'static,
     ) -> Result<Self, Error> {
+        Self::bind_with_executor(port, CommandExecutor::new(engine), on_change)
+    }
+
+    pub fn bind_with_executor(
+        port: u16,
+        executor: CommandExecutor,
+        on_change: impl Fn() + Send + Sync + 'static,
+    ) -> Result<Self, Error> {
         let mut random = [0_u8; 32];
         getrandom::fill(&mut random).map_err(io::Error::other)?;
         let mut token = String::with_capacity(64);
@@ -74,7 +82,7 @@ impl LoopbackServer {
                     let listener = TcpListener::from_std(listener)?;
                     serve(
                         listener,
-                        engine,
+                        executor,
                         Arc::new(on_change),
                         session_token,
                         shutdown,
@@ -128,13 +136,12 @@ impl Drop for LoopbackServer {
 
 async fn serve(
     listener: TcpListener,
-    engine: SharedEngine,
+    executor: CommandExecutor,
     on_change: Arc<dyn Fn() + Send + Sync>,
     token: Arc<str>,
     mut stop: oneshot::Receiver<()>,
 ) -> io::Result<()> {
     let mut clients = JoinSet::new();
-    let workers = Workers::default();
     let result = loop {
         tokio::select! {
             biased;
@@ -143,7 +150,7 @@ async fn serve(
             accepted = listener.accept() => match accepted {
                 Ok((stream, _)) => {
                     if clients.len() < MAX_CLIENTS {
-                        clients.spawn(connection(stream, Arc::clone(&engine), Arc::clone(&on_change), workers.clone(), Arc::clone(&token)));
+                        clients.spawn(connection(stream, executor.clone(), Arc::clone(&on_change), Arc::clone(&token)));
                     }
                 }
                 Err(error) if matches!(error.kind(), io::ErrorKind::Interrupted | io::ErrorKind::ConnectionAborted) => {},
@@ -166,9 +173,8 @@ async fn send(writer: &mut OwnedWriteHalf, value: Value) -> io::Result<()> {
 
 async fn connection(
     stream: TcpStream,
-    engine: SharedEngine,
+    executor: CommandExecutor,
     on_change: Arc<dyn Fn() + Send + Sync>,
-    workers: Workers,
     token: Arc<str>,
 ) -> io::Result<()> {
     let (read, mut write) = stream.into_split();
@@ -214,18 +220,19 @@ async fn connection(
             send(&mut write, json!({"authenticated":true})).await?;
             continue;
         }
-        let result = engine
+        let result = executor
+            .engine()
             .lock()
             .map(|mut engine| engine.prepare_json(&bytes))
             .map_err(|_| ());
         match result {
             Ok(Ok(prepared)) => {
-                match workers
+                match executor
                     .complete(prepared, tokio::time::sleep(IO_DEADLINE))
                     .await
                 {
                     Ok(result) => {
-                        if result.changed {
+                        if result.changed || result.file_operation.is_some() {
                             on_change();
                         }
                         send(&mut write, json!({"result":result})).await?;

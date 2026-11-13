@@ -1,5 +1,9 @@
 # Open questions
 
+- Registry Save currently retains authoring Undo/Redo and records a separate saved baseline.
+  G25 printed14 describes only actions since the last save. Exact26.1 history-across-save
+  behavior needs evidence; keep this explicit gap rather than claiming full File parity.
+
 - Public 26.1 release notes are available, but no full public 26.1 menu/palette reference
   was located. The 573-row cited baseline in parity-checklist.md covers explicit guide
   controls and shortcut tables plus 26.x desktop deltas; remaining context menus, unnamed

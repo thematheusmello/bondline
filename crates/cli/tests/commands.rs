@@ -1,5 +1,7 @@
 use serde_json::{Value, json};
 use std::process::Command;
+#[path = "../../../xtask/oracles/files_test_support.rs"]
+mod file_support;
 
 #[test]
 fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
@@ -9,7 +11,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
     assert!(list.status.success());
     let commands: Value = serde_json::from_slice(&list.stdout)?;
     let commands = commands.as_array().ok_or("expected command array")?;
-    assert_eq!(commands.len(), 6);
+    assert_eq!(commands.len(), 8);
     assert!(
         commands
             .iter()
@@ -140,5 +142,58 @@ fn executable_creates_and_captures_a_labeled_single_bond() -> Result<(), Box<dyn
             .ok_or("png")?
             .starts_with("iVBORw0KGgo")
     );
+    Ok(())
+}
+
+#[test]
+fn executable_saves_reopens_and_edits_real_cdxml_across_processes()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let path = directory.path("drawing.cdxml");
+    let binary = env!("CARGO_BIN_EXE_bondline-cli");
+    let draw = json!({"command":"bond.create","params":{"page_id":1,"begin_x_pt":100.0,"begin_y_pt":200.0,"end_x_pt":140.0,"end_y_pt":200.0}}).to_string();
+    let save = json!({"command":"document.save_cdxml","params":{"path":path}}).to_string();
+    let output = Command::new(binary)
+        .args(["run", "--cmd", &draw, "--cmd", &save])
+        .output()?;
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let saved: Value = serde_json::from_slice(&output.stdout)?;
+    assert_eq!(saved["revision"], 1);
+    assert_eq!(
+        saved["file"],
+        json!({"path":std::fs::canonicalize(&path)?,"dirty":false})
+    );
+    file_support::independently_read_file(&path, 1)?;
+    let open = json!({"command":"document.open_cdxml","params":{"path":path}}).to_string();
+    let draw_more = json!({"command":"bond.create","params":{"page_id":1,"begin_x_pt":100.0,"begin_y_pt":300.0,"end_x_pt":140.0,"end_y_pt":300.0}}).to_string();
+    let overwrite =
+        json!({"command":"document.save_cdxml","params":{"path":path,"overwrite":true}})
+            .to_string();
+    let output = Command::new(binary)
+        .args([
+            "run", "--cmd", &open, "--cmd", &draw_more, "--cmd", &overwrite,
+        ])
+        .output()?;
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let edited: Value = serde_json::from_slice(&output.stdout)?;
+    assert_eq!(edited["revision"], 2);
+    assert_eq!(edited["undo_depth"], 1);
+    assert_eq!(edited["file"]["dirty"], false);
+    file_support::independently_read_file(&path, 2)?;
+    let output = Command::new(binary)
+        .args(["run", "--cmd", &open])
+        .output()?;
+    assert!(output.status.success());
+    let reopened: Value = serde_json::from_slice(&output.stdout)?;
+    assert_eq!(reopened["document"], edited["document"]);
+    assert_eq!(reopened["undo_depth"], 0);
     Ok(())
 }

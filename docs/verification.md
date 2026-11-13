@@ -822,3 +822,33 @@ data-open refusal, protected owner-only ACE and owner read/write checks; no prod
 behavior changed. Cross-target clippy-Dwarnings passes. An actual hosted rerun is required
 before GREEN is claimed. Evidence: target/file-io-windows-hosted-red.log and
 target/file-io-windows-ai-clippy.log; source FILE-WINDOWS-DACL-FLAGS.
+
+## Registry CDXML files and shared executor, 2026-11-13
+
+RED: six independent acceptance tests failed for missing registered commands/state in
+target/file-verification-red.log; prepared completion lacked Engine::finish; adapters still
+reported six commands. GREEN:54 focused command/CLI/MCP/loopback tests, plus nine Mac file
+acceptance cases, check actual files with external Expat/RDKit. Cases cover draw/save, separate
+process reopen/edit/overwrite/reopen, exact opaque passthrough/refusal, missing/malformed/
+multi-page/oversized imports, no-clobber, dirty/Undo/Redo/no-op and complete-state retention.
+CLI, MCP tools and authenticated sockets call the same eight commands; sockets notify repaint.
+Logs: target/file-verification-all-adapters-green.log, file-verification-green.log and
+file-verification-clippy.log.
+
+Deferred tests prepare real opens/saves, edit or replace the session, complete work, then
+apply it. Stale/cancelled opens retain state; old-revision saves keep current dirty; older
+generations cannot relabel new paths. Worker tests cover exhausted budgets, clone sharing,
+already-cancelled work, dropped futures, retained permits and short-edit commit boundaries.
+Storage tests count/retain saved baseline and evict nonessential history. Root reviewed these
+apply/worker/publication boundaries before integration.
+
+Actual Linux RED: valid UTF8 alias to a raw0xFF canonical parent published before returning
+save_published. Canonical preflight now returns invalid_path before create/overwrite, retaining
+old bytes, while native PathBuf writes work. Linux Docker test/clippy pass; source mount stayed
+read-only and invalid-byte fixtures lived only on container-native /tmp. Logs:
+target/file-verification-linux-red.log and linux-green.log. Mac cannot fabricate those filenames.
+
+Full local aggregate with the native Quit bridge passes193 tests and configured gates;
+Windows/Linux all-target workspace checks pass (target/files-{windows,linux}-check.log).
+Native file-menu verification is separate; no generic imported CDXML writer, chemistry
+implementation or full reference File-menu parity is inferred.

@@ -1,3 +1,4 @@
+use crate::files::{Completed, Completion, FilePlan};
 use crate::{CommandResult, Error};
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 use bondline_model::Page;
@@ -43,11 +44,12 @@ pub struct PngCapture {
     pub png_base64: String,
 }
 
-/// An immutable query plan, or the result of an already committed short command.
+/// Immutable deferred work, or the result of an already committed short command.
 #[derive(Debug)]
 pub struct Prepared {
     result: CommandResult,
     capture: Option<(RenderCapture, Page)>,
+    file: Option<FilePlan>,
 }
 
 impl Prepared {
@@ -55,6 +57,15 @@ impl Prepared {
         Self {
             result,
             capture: None,
+            file: None,
+        }
+    }
+
+    pub(super) fn file(result: CommandResult, file: FilePlan) -> Self {
+        Self {
+            result,
+            capture: None,
+            file: Some(file),
         }
     }
 
@@ -72,18 +83,23 @@ impl Prepared {
         Ok(Self {
             result,
             capture: Some((params, page)),
+            file: None,
         })
     }
 
     pub fn is_deferred(&self) -> bool {
-        self.capture.is_some()
+        self.capture.is_some() || self.file.is_some()
     }
 
-    pub fn complete(self) -> Result<CommandResult, Error> {
+    pub fn complete(self) -> Result<Completed, Error> {
         self.complete_with_cancel(&Cancellation::default())
     }
 
-    pub fn complete_with_cancel(mut self, cancel: &Cancellation) -> Result<CommandResult, Error> {
+    pub fn complete_with_cancel(mut self, cancel: &Cancellation) -> Result<Completed, Error> {
+        if let Some(file) = self.file {
+            return file.complete(cancel);
+        }
+        let deferred_query = self.capture.is_some();
         if let Some((params, page)) = self.capture {
             cancel.check()?;
             let scene = carbon_page_scene(params.width_px, params.height_px, &page)?;
@@ -120,6 +136,9 @@ impl Prepared {
                 png_base64: STANDARD.encode(png),
             });
         }
-        Ok(self.result)
+        Ok(Completed(Completion::Result {
+            result: Box::new(self.result),
+            cancel: deferred_query.then(|| cancel.clone()),
+        }))
     }
 }

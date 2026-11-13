@@ -2,6 +2,7 @@
 
 pub mod control;
 mod work;
+pub use work::CommandExecutor;
 
 use bondline_commands::{Command, Engine, MAX_REQUEST_BYTES};
 use rmcp::{
@@ -40,7 +41,7 @@ impl From<rmcp::service::ServerInitializeError> for Error {
 pub struct CommandServer {
     engine: SharedEngine,
     tools: Vec<Tool>,
-    workers: work::Workers,
+    executor: CommandExecutor,
 }
 
 impl CommandServer {
@@ -64,9 +65,9 @@ impl CommandServer {
             })
             .collect::<Result<_, Error>>()?;
         Ok(Self {
+            executor: CommandExecutor::new(Arc::clone(&engine)),
             engine,
             tools,
-            workers: work::Workers::default(),
         })
     }
 }
@@ -123,7 +124,7 @@ impl ServerHandler for CommandServer {
         };
         let result = match prepared {
             Ok(prepared) => {
-                self.workers
+                self.executor
                     .complete(prepared, context.ct.cancelled())
                     .await
             }

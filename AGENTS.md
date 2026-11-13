@@ -99,8 +99,11 @@ delivered adapters, update CLI/MCP wire tests as needed, then update provenance 
 For UI changes, launch the actual native app and inspect the workflow. Eguis's input tests
 and source cross-checks do not substitute for native platform execution.
 
-The current six-command registry includes bond.create for independent C-C fragments with
-three explicitly authored H per carbon. It does not attach to existing atoms or save files.
+The current eight-command registry includes bond.create for independent C-C fragments with
+three explicitly authored H per carbon, plus native CDXML open/save. It does not attach to
+existing atoms. Save complete StoredDocument data; file.dirty uses the saved snapshot, while
+source.modified describes original backing. Prepare/complete/finish separates I/O from
+revision-checked apply. Count current+saved snapshots and never call a publication error rollback.
 Identity floors must survive Undo branches and advance only after successful commits.
 Native gestures consume ordered events; press_origin alone loses a drag completed between
 frames. Canvas interaction must not advance layout beyond visible error text.

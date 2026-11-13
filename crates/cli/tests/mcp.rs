@@ -1,4 +1,6 @@
 use serde_json::{Value, json};
+#[path = "../../../xtask/oracles/files_test_support.rs"]
+mod file_support;
 use std::{
     io::{BufRead, BufReader, Write},
     process::{Child, ChildStdin, Command, Stdio},
@@ -105,7 +107,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("missing tools")?;
-    assert_eq!(tools.len(), 6);
+    assert_eq!(tools.len(), 8);
     assert!(tools.iter().any(|tool| tool["name"] == "page.set_size"
         && tool["inputSchema"]["additionalProperties"] == false));
     let edit = client.call(
@@ -196,6 +198,40 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
     assert_eq!(
         invalid["result"]["structuredContent"]["error"]["code"],
         "invalid_params"
+    );
+    let directory = file_support::FileTestDirectory::new()?;
+    let path = directory.path("mcp.cdxml");
+    // Use a fresh known native source so the same independent geometry oracle can inspect the output.
+    let original = directory.path("original.cdxml");
+    std::fs::write(
+        &original,
+        include_bytes!("../../io/tests/fixtures/bondline-v0.cdxml"),
+    )?;
+    let opened = client.call(
+        11,
+        "tools/call",
+        json!({"name":"document.open_cdxml","arguments":{"path":original,"discard_unsaved":true}}),
+    )?;
+    assert_eq!(opened["result"]["isError"], false);
+    assert_eq!(opened["result"]["structuredContent"]["undo_depth"], 0);
+    let saved = client.call(
+        12,
+        "tools/call",
+        json!({"name":"document.save_cdxml","arguments":{"path":path}}),
+    )?;
+    assert_eq!(saved["result"]["isError"], false);
+    assert_eq!(saved["result"]["structuredContent"]["file"]["dirty"], false);
+    file_support::independently_read_file(&path, 1)?;
+    assert_eq!(std::fs::read(&path)?, std::fs::read(&original)?);
+    let rejected = client.call(
+        13,
+        "tools/call",
+        json!({"name":"document.save_cdxml","arguments":{"path":path}}),
+    )?;
+    assert_eq!(rejected["result"]["isError"], true);
+    assert_eq!(
+        rejected["result"]["structuredContent"]["error"]["code"],
+        "already_exists"
     );
     client.finish()?;
     Ok(())

@@ -2,7 +2,7 @@
 
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
-| CDXML | Source-preserving syntax/attribute edits, elemental projections and owned backing; bounded new-document syntax writer and native elemental encoder with Poster extents | Expat/Decimal vectors; one pinned unchanged corpus document; metadata/order/identity tests; actual bond.create output opened by external RDKit; ASan parser/writer smoke | Imported structural edits, queries/labels/styles/stereo, wider reference scopes/corpus and registry/native open/save |
+| CDXML | Source-preserving syntax/attribute edits, elemental projections/owned backing, native elemental encoding and registry open/save | Expat/Decimal vectors; pinned unchanged corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket files opened by external RDKit; ASan parser/writer smoke | General imported structural edits, queries/labels/styles/stereo, wider corpus and native file-menu parity |
 | CDX | None | Published specification recorded | Parser, preservation, writer and model mapping |
 | MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |

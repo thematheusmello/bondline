@@ -29,6 +29,15 @@ root owns the pinned native-boundary repair. New Windows file runtime validation
 final native-close verification remain. This work is not yet published.
 The native UI agent owns the only planned CUA session; coordinate before using that surface.
 
+Feature integration is on feat/cdxml-file-workflow, keeping main at verified b1e0f4b. Library
+I/O is35a6494; pinned native Quit bridge is3cdb712; Windows exact-DACL oracle correction is
+34d577d. Run43458663480 passes Windows/Ubuntu/ASan; its Mac job was queued at the last poll.
+Native Windows now confirms seven io unit and six file integration cases, including protected
+owner DACL, exclusive temporary, original DACL/Zone.Identifier and recovery. Core registry
+open/save now has54 focused adapter tests and193 full local workspace tests with the native
+Quit bridge; actual native UI delivery is a separate commit. Do not infer new adapter/runtime
+evidence from the earlier library-only hosted run.
+
 Target clarification: one-to-one Professional desktop screens, controls, icon roles, flows
 and functionality. The user explicitly authorized reverse engineering; policy checkpoint
 72fafb3 supersedes the earlier program-inspection ban. Public docs/media plus authorized

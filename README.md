@@ -8,14 +8,15 @@ An independent, offline chemical drawing application being built in Rust.
 The compatibility target includes CDXML and CDX files used by ChemDraw Professional.
 The first drawing workflow creates an independent C-C bond with terminal hydrogen labels,
 supports Undo/Redo and captures its canvas on CPU or GPU. Connected construction and file
-open/save remain missing. Drawings are session-local and cannot yet be saved/reopened.
+menus are a separate native integration. The shared CLI/MCP/control commands now open/save
+supported CDXML, including editable reopening of proven Bondline-native files.
 The standalone CDXML crate preserves syntax and replaces existing attribute values without rewriting
 unrelated bytes. A separate bounded writer and io encoder now produce new elemental CDXML
 with explicit canvas extents; see [tested format scope](docs/file-formats.md).
 The headless model stores validated atom/bond/fragment data. The io crate maps limited
 source-backed node-position and elemental graph views. Engine snapshots/history now retain
 complete original CDXML bytes, with guarded unchanged-source export. Application
-import/save commands and faithful imported-file rendering are not yet connected.
+import/save commands preserve complete backing; general imported-file rendering remains limited.
 History now counts shared source/model data once and evicts oldest snapshots at an
 approximate 128 MiB retained-storage threshold; current data is always kept. This is not
 a whole-process memory cap; see [the command contract](docs/control-protocol.md).
@@ -28,7 +29,7 @@ license gates. Native macOS drawing was visually inspected; hosted macOS/Windows
 three-frame window launches pass on all three desktop platforms. Linux's initial missing
 system library was fixed and its hosted launch now passes. This remains a development foundation with one limited
 drawing workflow. The registry/CLI can inspect the document, size pages, create independent
-bonds, undo/redo and capture supported scenes with revision/backend evidence.
+bonds, open/save supported CDXML, undo/redo and capture scenes with revision/backend evidence.
 
 ![Human-approved capture of a native-session single bond](crates/render/tests/goldens/single-bond.png)
 

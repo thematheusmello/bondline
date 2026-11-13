@@ -124,3 +124,35 @@ fn trimming_keeps_a_recent_suffix_and_always_preserves_the_current_document()
     }
     Ok(())
 }
+
+#[test]
+fn saved_snapshot_counts_after_undo_eviction_and_trimming_drops_farthest_redo()
+-> Result<(), Box<dyn std::error::Error>> {
+    let (saved, held) = padded_source(b'S', 1024 * 1024)?;
+    let mut engine = Engine::from_document(saved);
+    engine.commit(padded_source(b'B', 4096)?.0)?;
+    let (last, released_redo) = padded_source(b'C', 4096)?;
+    engine.commit(last)?;
+    engine.execute(Command::Undo(NoParams {}))?;
+    assert_eq!(engine.state().redo_depth, 1);
+    engine.trim_history(64 * 1024);
+    assert_eq!(engine.state().undo_depth, 0);
+    assert_eq!(
+        engine.state().redo_depth,
+        0,
+        "redo must not hide retained storage"
+    );
+    assert!(
+        held.upgrade().is_some(),
+        "the saved baseline is still essential dirty-state data"
+    );
+    assert!(released_redo.upgrade().is_none());
+    assert!(engine.state().file.dirty);
+    engine.saved = Arc::clone(&engine.document);
+    assert!(
+        held.upgrade().is_none(),
+        "replacing the saved baseline releases its old source"
+    );
+    assert!(!engine.state().file.dirty);
+    Ok(())
+}

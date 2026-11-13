@@ -9,7 +9,9 @@ use std::{collections::VecDeque, sync::Arc};
 
 mod bond;
 mod capture;
+mod files;
 pub use bond::BondCreate;
+pub use files::{Completed, FileOperation, FileState, OpenCdxml, SaveCdxml};
 #[cfg(test)]
 mod source_tests;
 #[cfg(test)]
@@ -74,6 +76,8 @@ macro_rules! command_registry {
 
 command_registry! {
     Inspect(NoParams) => ("document.inspect", "Inspect the authored document and history state.", true),
+    OpenCdxml(OpenCdxml) => ("document.open_cdxml", "Open an explicitly selected CDXML file without discarding unsaved edits by default.", false),
+    SaveCdxml(SaveCdxml) => ("document.save_cdxml", "Atomically save complete CDXML data to an explicitly selected path; overwrite requires opt-in.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
@@ -113,6 +117,19 @@ pub enum Error {
     BackendUnavailable,
     #[error("source contains unmapped content and cannot be faithfully previewed yet")]
     UnsupportedDocumentPreview,
+    #[error("opening a new document requires explicit permission to discard unsaved changes")]
+    UnsavedChanges,
+    #[error("document changed while the open operation was running; open was not applied")]
+    StaleRevision,
+    #[error("native file access is unavailable on this target")]
+    FileBackendUnavailable,
+    #[error("document engine lock poisoned")]
+    EngineUnavailable,
+    #[error("canonical file path is not UTF-8 (file bytes published: {published})")]
+    UnrepresentableFilePath { published: bool },
+    #[cfg(not(target_arch = "wasm32"))]
+    #[error(transparent)]
+    File(#[from] bondline_io::files::FileError),
 }
 
 #[derive(Debug, Serialize)]
@@ -139,12 +156,38 @@ impl Error {
             Self::Render(_) | Self::Png(_) => "render_failed",
             Self::BackendUnavailable => "backend_unavailable",
             Self::UnsupportedDocumentPreview => "unsupported_content",
+            Self::UnsavedChanges => "unsaved_changes",
+            Self::StaleRevision => "stale_revision",
+            Self::FileBackendUnavailable => "backend_unavailable",
+            Self::EngineUnavailable => "engine_unavailable",
+            Self::UnrepresentableFilePath { published: true } => "save_published",
+            Self::UnrepresentableFilePath { published: false } => "invalid_path",
+            #[cfg(not(target_arch = "wasm32"))]
+            Self::File(error) => {
+                if error.published() {
+                    "save_published"
+                } else {
+                    error.code()
+                }
+            }
             _ => "invalid_params",
         };
-        ErrorInfo {
-            code,
-            message: self.to_string(),
+        let mut message = self.to_string();
+        #[cfg(not(target_arch = "wasm32"))]
+        if let Self::File(error) = self {
+            if error.published() {
+                message = format!(
+                    "New file bytes were published; {} at {}. The old file was not restored. {}",
+                    error.code(),
+                    error.stage(),
+                    message
+                );
+            }
+            if let Some(path) = error.recovery_path() {
+                message.push_str(&format!(" Recover the retained original at {path:?}."));
+            }
         }
+        ErrorInfo { code, message }
     }
 }
 
@@ -167,22 +210,38 @@ pub struct CommandResult {
     pub redo_depth: usize,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capture: Option<PngCapture>,
+    pub file: FileState,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_operation: Option<FileOperation>,
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Engine {
     document: Arc<StoredDocument>,
+    saved: Arc<StoredDocument>,
+    file_path: Option<String>,
+    generation: u64,
     identities: bond::Ids,
     revision: u64,
     undo: VecDeque<Arc<StoredDocument>>,
     redo: VecDeque<Arc<StoredDocument>>,
 }
 
+impl Default for Engine {
+    fn default() -> Self {
+        Self::from_document(StoredDocument::default())
+    }
+}
+
 impl Engine {
-    /// Initialize a session from an owned snapshot. Import commands are not yet exposed.
+    /// Initialize a clean unnamed session, sharing its complete current and saved snapshot.
     pub fn from_document(document: StoredDocument) -> Self {
+        let document = Arc::new(document);
         Self {
-            document: Arc::new(document),
+            saved: Arc::clone(&document),
+            document,
+            file_path: None,
+            generation: 0,
             identities: bond::Ids::default(),
             revision: 0,
             undo: VecDeque::new(),
@@ -207,11 +266,17 @@ impl Engine {
             undo_depth: self.undo.len(),
             redo_depth: self.redo.len(),
             capture: None,
+            file: FileState {
+                path: self.file_path.clone(),
+                dirty: self.document != self.saved,
+            },
+            file_operation: None,
         }
     }
 
     pub fn execute_json(&mut self, input: &[u8]) -> Result<CommandResult, Error> {
-        self.prepare_json(input)?.complete()
+        let completed = self.prepare_json(input)?.complete()?;
+        self.finish(completed)
     }
 
     /// Validate and snapshot under the engine lock, then complete outside it.
@@ -228,12 +293,37 @@ impl Engine {
     }
 
     pub fn execute(&mut self, command: Command) -> Result<CommandResult, Error> {
-        self.prepare(command)?.complete()
+        let completed = self.prepare(command)?.complete()?;
+        self.finish(completed)
     }
 
     pub fn prepare(&mut self, command: Command) -> Result<Prepared, Error> {
         let changed = match command {
             Command::Inspect(_) => false,
+            Command::OpenCdxml(params) => {
+                if self.document != self.saved && !params.discard_unsaved {
+                    return Err(Error::UnsavedChanges);
+                }
+                return Ok(Prepared::file(
+                    self.state(),
+                    files::FilePlan::Open {
+                        params,
+                        revision: self.revision,
+                        generation: self.generation,
+                    },
+                ));
+            }
+            Command::SaveCdxml(params) => {
+                return Ok(Prepared::file(
+                    self.state(),
+                    files::FilePlan::Save {
+                        params,
+                        document: Arc::clone(&self.document),
+                        revision: self.revision,
+                        generation: self.generation,
+                    },
+                ));
+            }
             Command::PageSetSize(params) => {
                 let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
                 let size = PageSize::new(params.width_pt, params.height_pt)?;
@@ -293,7 +383,9 @@ impl Engine {
         let retained = |skip| {
             StoredDocument::retained_bytes(
                 std::iter::once(self.document.as_ref())
-                    .chain(self.undo.iter().skip(skip).map(Arc::as_ref)),
+                    .chain(std::iter::once(self.saved.as_ref()))
+                    .chain(self.undo.iter().skip(skip).map(Arc::as_ref))
+                    .chain(self.redo.iter().map(Arc::as_ref)),
             )
         };
         if retained(0) <= budget {
@@ -310,6 +402,16 @@ impl Engine {
             }
         }
         self.undo.drain(..low);
+        while !self.redo.is_empty()
+            && StoredDocument::retained_bytes(
+                std::iter::once(self.document.as_ref())
+                    .chain(std::iter::once(self.saved.as_ref()))
+                    .chain(self.undo.iter().map(Arc::as_ref))
+                    .chain(self.redo.iter().map(Arc::as_ref)),
+            ) > budget
+        {
+            self.redo.pop_front();
+        }
     }
 
     fn undo(&mut self) -> Result<bool, Error> {
@@ -387,6 +489,8 @@ mod tests {
             [
                 "bond.create",
                 "document.inspect",
+                "document.open_cdxml",
+                "document.save_cdxml",
                 "history.redo",
                 "history.undo",
                 "page.set_size",

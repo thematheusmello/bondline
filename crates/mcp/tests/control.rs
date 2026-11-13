@@ -1,6 +1,8 @@
 use bondline_commands::Engine;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::Value;
+#[path = "../../../xtask/oracles/files_test_support.rs"]
+mod file_support;
 use std::{
     io::{BufRead, BufReader, Read, Write},
     net::{Ipv4Addr, Shutdown, SocketAddr, TcpStream},
@@ -39,6 +41,56 @@ fn authenticated(
     )?;
     assert_eq!(response, serde_json::json!({"authenticated":true}));
     Ok(client)
+}
+
+#[test]
+fn authenticated_file_commands_share_native_file_state_and_notify_after_saving()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let path = directory.path("native-loopback.cdxml");
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let executor = bondline_mcp::CommandExecutor::new(Arc::clone(&engine));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind_with_executor(0, executor, move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    let drawn = call(&mut client,&serde_json::json!({"command":"bond.create","params":{"page_id":1,"begin_x_pt":100.0,"begin_y_pt":200.0,"end_x_pt":140.0,"end_y_pt":200.0}}).to_string())?;
+    assert_eq!(drawn["result"]["file"]["dirty"], true);
+    let saved = call(
+        &mut client,
+        &serde_json::json!({"command":"document.save_cdxml","params":{"path":path}}).to_string(),
+    )?;
+    assert_eq!(saved["result"]["revision"], 1);
+    assert_eq!(
+        saved["result"]["file"],
+        serde_json::json!({"path":std::fs::canonicalize(&path)?,"dirty":false})
+    );
+    assert_eq!(
+        changes.load(Ordering::SeqCst),
+        2,
+        "file metadata changes must repaint the native title/status"
+    );
+    file_support::independently_read_file(&path, 1)?;
+    let opened = call(
+        &mut client,
+        &serde_json::json!({"command":"document.open_cdxml","params":{"path":path}}).to_string(),
+    )?;
+    assert_eq!(opened["result"]["revision"], 2);
+    assert_eq!(opened["result"]["undo_depth"], 0);
+    assert_eq!(changes.load(Ordering::SeqCst), 3);
+    assert_eq!(
+        engine.lock().map_err(|_| "engine")?.state().file.path,
+        Some(
+            std::fs::canonicalize(&path)?
+                .to_str()
+                .ok_or("UTF-8 path")?
+                .to_owned()
+        )
+    );
+    server.shutdown()?;
+    Ok(())
 }
 
 #[test]

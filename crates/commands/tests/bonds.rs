@@ -87,7 +87,7 @@ fn captured_bonds_use_an_immutable_input_snapshot_and_cannot_turn_blank()
     engine.dispatch("bond.create", params())?;
     let plan=engine.prepare_json(br#"{"command":"render.capture","params":{"page_id":1,"width_px":80,"height_px":80,"backend":"cpu"}}"#)?;
     engine.execute(Command::Undo(NoParams {}))?;
-    let captured = plan.complete()?;
+    let captured = engine.finish(plan.complete()?)?;
     assert_eq!(captured.revision, 2);
     assert_eq!(engine.state().revision, 3);
     let image = captured.capture.ok_or("capture")?.png_base64;

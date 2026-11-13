@@ -21,7 +21,7 @@ fn deferred_capture_keeps_its_request_revision_and_independent_page_pixels()
         json!({"page_id":1,"width_pt":144,"height_pt":72}),
     )?;
     let before = serde_json::to_vec(&engine.state())?;
-    let result = capture.complete()?;
+    let result = engine.finish(capture.complete()?)?;
     assert_eq!(result.revision, 1);
     assert!(!result.changed);
     assert_eq!(result.undo_depth, 1);
@@ -137,7 +137,7 @@ fn capture_validation_and_cancellation_cannot_mutate_authoring_or_history()
     )?)?;
     assert!(!edit.is_deferred());
     // An already committed authoring edit must still report success if its caller cancels.
-    assert!(edit.complete_with_cancel(&cancel)?.changed);
+    assert!(engine.finish(edit.complete_with_cancel(&cancel)?)?.changed);
     assert_eq!(engine.state().revision, 1);
     Ok(())
 }

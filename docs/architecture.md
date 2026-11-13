@@ -31,8 +31,10 @@ to retain a recent suffix. Undo/Redo move that existing pool without new payload
 The current document is always retained, even if it alone exceeds the threshold. This is
 approximate retained payload/container accounting: Arc/allocator headers, temporary work,
 caches and externally held snapshots are excluded, so it is not a process-memory guarantee.
-A cold-session constructor is delivered, not an import command. File import still needs
-failure-retention tests and independent editable export before native exposure.
+The cold-session constructor creates a clean unassociated baseline. Native open/save are
+registry commands with independent file-consumer and failed-import-retention evidence.
+Every snapshot retains its saved baseline; essential current+saved data may exceed the
+history threshold. Source.modified and file.dirty describe separate original/saved baselines.
 See control-protocol.md for the actual registered operations and explicit limits.
 The first bond.create operation appends an independently authored C-C fragment with three
 explicit hydrogens per carbon. Engine identity floors never move backward on Undo/Redo;
@@ -41,11 +43,14 @@ This is a closed creation case, not a general valence or connected-bond editing 
 
 The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while
 holding it. Stdio is a separate process-local session. Only server/stdio SDK features are
-enabled. `Engine::prepare` completes short edits or returns an immutable capture plan;
-adapters release the lock before rendering/encoding it. Each server bounds capture workers
+enabled. `Engine::prepare` completes short edits or returns an immutable capture/file plan;
+adapters release the lock before long work. Completed work applies through Engine::finish;
+open rejects stale revisions/generations, and old saves cannot relabel a later document.
+A cloneable CommandExecutor shares UI/loopback workers; stdio has its own session. Each bounds workers
 to two, keeps permits with the actual worker lifetime and cancels cooperatively when an
 awaiting task is dropped. Captures report their input revision and never apply results to
-authored state. This is a bounded query path, not a general authoring/background-job system.
+authored state. File saves publish immutable input and report its revision, keeping later
+edits dirty. This is a bounded capture/file executor, not a general background-job scheduler.
 
 The native app and opt-in loopback server now share this engine. A dedicated adapter thread
 owns the Tokio listener/tasks. Input is bounded before JSON decoding; no engine guard crosses
@@ -63,7 +68,8 @@ CDXML's borrowed tree remains read-only. Its attribute replacement returns reval
 source bytes with untouched spans retained. A separate bounded standalone Writer builds new
 syntax without model/native dependencies; it never regenerates an imported tree. Io maps
 new elemental model documents to it with unique source IDs, metadata and Poster canvas
-extents. No complete application file adapter exists yet.
+extents. Native filesystem and registry adapters retain complete StoredDocument backing;
+UI delivery is tracked separately and general imported structural editing remains missing.
 Io's Geometry adapter maps direct-fragment positions and writes only an existing p value.
 The read-only ElementalGraph adapter maps supported elemental properties and connectivity,
 assigning separate application identities while retaining the original syntax. Its local
