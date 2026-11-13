@@ -7,6 +7,12 @@ branch was fast-forwarded into main; product checkpoint ccf8c50 contains the fin
 Inspect Git log for subsequent format/documentation hashes. Do not restart or discard existing
 work. No release/installer distribution or reference account action was performed.
 
+Latest recoverable source:8547f4db25dbcf25b6ded0869f457dc89561f565 on the public
+feat/cdx-syntax branch;48982d0 is its separate M0 command/UI audit. Main currently remains
+fefab8afa5349cf77bbb1f421560338920cc58bf. The CDX slice is not merged while its hosted
+checks are unfinished. The public repository/main already contains the earlier verified
+drawing and CDXML workflows. Source publication is authorized; no release was requested.
+
 ## Current integrated scope
 
 - Native Rust egui/wgpu workspace, eight typed commands shared by CLI, stdio MCP and opt-in
@@ -119,7 +125,10 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 ## Next exact actions
 
 1. Read both inventory audits and the current parity/source notes; product/CI integration
-   is complete. No release publication was requested. Preserve exact evidence scopes.
+   for the earlier file workflow is complete. First recheck hosted CDX run43475705005 below;
+   fix any real failure, then fast-forward main only after its required jobs pass. Do not
+   duplicate that live run or claim success from source checks. No release publication was
+   requested. Preserve exact evidence scopes.
 2. Continue qualified inventory work, identifying actual26.1 builds and complete tool/context
    menus without claiming completeness from counts, timestamps or cloud imagery.
 3. Read docs/research/m0-command-ui-audit.md. Its next bounded implementation is typed
@@ -130,6 +139,13 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 4. Continue M1 source-preserving structural edits/application CDX mapping/other formats and M2 connected bonds,
    snapping/order/labels with independent tests and actual native workflows. Keep M3-M5 full.
 
-Product implementation agents finished; no confirmed Cargo/native/fuzz/hosted job remains.
-All delegated tasks finished and owned browsers closed. No confirmed live job remains.
-Recheck authoritative agent/job state on continuation. Do not duplicate completed work.
+Implementation, independent-oracle and final read-only review agents finished. The review
+found no actionable issue in this bounded slice; it did not add a native/CDX workflow claim.
+No local Cargo/native/fuzz worker or CUA session remains.
+
+Confirmed live hosted work as of2026-11-13 17:49:56 UTC:
+https://github.com/thematheusmello/bondline/actions/runs/43475705005 at8547f4d.
+Parser ASan job132058845734 succeeded (both targets). Ubuntu job132058846409 and Windows
+job132058846940 are running aggregate gates; Mac job132058846748 acquired a runner and is
+selecting the Rust tools. Overall success is unverified. Recheck the authoritative run/job
+state before continuation; do not duplicate or cancel it without a concrete reason.

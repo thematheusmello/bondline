@@ -957,3 +957,11 @@ small original seed plus prior ignored mutations, not a claimed exhaustive64 MiB
 Log:target/cdx-asan-final.log. CI now seeds and runs this target separately from CDXML.
 This is syntax/editing coverage, not filesystem, chemical interpretation or native UI proof.
 No UI source changed; the previously recorded native app evidence remains its exact scope.
+
+Published source checkpoint8547f4d is on feat/cdx-syntax, after the separate M0 audit48982d0.
+Hosted run43475705005 is still in progress as of2026-11-13 17:49:56 UTC: its combined parser
+ASan job passed, all three native jobs are running. No terminal three-platform success is
+claimed for this slice, and main remains atfefab8a pending that evidence. A final independent
+read-only review found no actionable issue in framing, ranges, ownership, bounded allocation
+or preservation; it did not rerun tests or extend the advertised scope. STATUS.md records
+the live job handles and next exact integration step.
