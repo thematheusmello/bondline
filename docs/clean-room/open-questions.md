@@ -17,6 +17,11 @@
   exact palette variants remain unresolved. Authorized toolbar/hotkey resources and runtime
   observation may now help under the updated AGENTS policy; record version/hash/evidence
   instead of guessing from memory. No such desktop artifact evidence is established yet.
+- The official download center now has controlled-browser evidence of an authentication
+  screen, not a public installer link. No reference desktop artifact was acquired or run.
+  The public Walnut playlist's entry and first promotional slide were observed; it is a
+  Signals web demo with no desktop build identity. Neither observation establishes 26.1
+  desktop design or chemical editing behavior. See [the evidence record](../research/official-ui-evidence.md).
 - The archived CDX SDK does not establish every modern extension. Preserve unknown data.
 - The archived properties/id.htm link returns 404, but CDX-IDENTITY/CDX-OBJECT-ID now establish
   32-bit IDs, zero as unassigned and per-container identity. Older object tables label IDs

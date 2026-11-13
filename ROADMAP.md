@@ -20,7 +20,9 @@ guides are versioned evidence, not proof of complete modern parity.
 - [ ] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.
       573 stable-ID source-cited rows now exist; modern menus, unnamed glyphs and remaining
-      context menus still need evidence. Do not infer completeness from this row count.
+      context menus still need evidence. Six versioned screen/flow groups and pinned public
+      research now guide implementation; the download center requires login and observed
+      Signals demo states are not desktop evidence. Do not infer completeness from row counts.
 
 ## M1: files — in progress
 

@@ -8,6 +8,15 @@ and functionality. The user explicitly authorized reverse engineering; policy ch
 artifact/runtime evidence drive the target. See docs/research/parity-research-policy.md.
 The small current workspace is temporary, not a claim of design parity.
 
+Research checkpoint: all three engineering references are pinned in local sparse checkouts;
+docs/research/reference-projects.md records exact source paths, licenses and decisions.
+docs/research/official-ui-evidence.md records reviewed G25 screens, 26.1 deltas, tier
+boundaries and REA-controlled public browser observations. The official download center
+requires login; no reference desktop executable was acquired or inspected. The Signals
+web playlist's entry/first promotional slide is not desktop behavior evidence. Its owned
+browser processes all terminated. Six UI/flow IDs now group the existing parity inventory;
+none claims a delivered reference screen. Public desktop video playback remains unverified.
+
 The native desktop/GPU declared-license blocker remains resolved without broadening the
 MIT/Apache-2.0/BSD shipped policy: Mac arm64 150, Windows x64 161, Linux x64 219 runtime
 packages plus two hash/notice-verified bundled assets. Full release notice/source audit
@@ -73,8 +82,8 @@ Next exact tasks:
 4. Run hosted three-platform CI and native Windows/Linux workflows when available; continue
    independent work meanwhile. Broaden approved render scenes with actual human review.
 
-The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1. The drawing
-checkpoint includes this record; use Git log for its final hash. Current research policy
+The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1 and the drawing
+checkpoint is 7043563. Current research policy
 and the full goal are active; no push/publication/account action was performed.
 
 The disposable target/dev/Bondline.app contains the verified ordered-event drawing build

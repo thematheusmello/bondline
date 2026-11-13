@@ -585,3 +585,24 @@ Only dependency edges changed in the native lockfile; the isolated fuzz lock add
 four already-reviewed glyph/font-parser versions. Its pinned-nightly offline check passes;
 no new parser behavior or new ASan run is claimed. No save/reopen, existing-atom attachment,
 general label/chemistry, full UI parity or complete M0/M1 claim is made.
+
+## Pinned source and public runtime research, 2026-11-13
+
+Documentation-only checkpoint after 7043563; no product code/dependencies changed.
+The three ignored sparse Git checkouts have the exact commits in
+[reference-projects.md](research/reference-projects.md). Source permalinks were checked
+against the corresponding Git objects. No reference application/test/setup script ran.
+PhotoCraft's broader font/icon licenses and VoiceStudio's AGPL application remain excluded
+from shipped reuse. This review is conceptual/source evidence, not their runtime validation.
+
+Using the installed REA 6.9.0 CLI with existing Node 26.12.1 and an explicitly selected
+Chrome executable, controlled scenarios navigated the official download portal and public
+Walnut playlist. The portal displayed authentication; no login or agreement was attempted.
+The playlist entry and first promotional guide slide were captured and visually inspected;
+no chemical editing operation was observed. Exact Evidence IDs, image hashes, action
+sequences, failed/incomplete probes and cleanup are in
+[official-ui-evidence.md](research/official-ui-evidence.md). All owned browsers terminated.
+The captures do not prove a desktop build, complete network traffic or feature correctness.
+The six new screen/flow groups organize existing rows; no parity state was promoted by
+research alone. Documentation checks: Git whitespace and local Markdown targets; prior
+126-test aggregate remains the code checkpoint. No new test was invented for prose changes.

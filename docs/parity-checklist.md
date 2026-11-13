@@ -28,6 +28,10 @@ Inventory limits remain explicit: no full public 26.1 menu reference was located
 current source does not enumerate every palette glyph or every platform-specific menu.
 Dynamic file/style/template lists are controls, not permission to copy their libraries.
 The complete modern inventory gate remains open; see clean-room/open-questions.md.
+The versioned visual evidence and first connected-drawing acceptance sequence are in
+[official-ui-evidence.md](research/official-ui-evidence.md). The pinned engineering review
+in [reference-projects.md](research/reference-projects.md) explains which command, gesture,
+history, persistence and verification patterns are useful without importing incompatible assets.
 
 ## Workflow overview
 
@@ -714,6 +718,28 @@ undocumented menu nesting or exact capitalization.
 | TC-008 | Block-arrow context > Faded | 110 | missing | - |
 | TC-009 | Block-arrow context > Shaded | 110 | missing | - |
 | TC-010 | Bracket context > Define Average Molecular Weight | 113 | missing | Nonnegative explicit override, not a computed mass. |
+
+## Versioned screen and flow map
+
+These screen IDs group the existing control inventory; they do not add to the 573 control
+rows or establish complete glyph coverage. All are **missing** as reference UI workflows.
+Bondline's current workspace and one approved chemical image are narrower implementation
+evidence. G25 screenshots have Windows-style decoration but no independently established
+application build; the filename/metadata are evidence for the guide, not every pictured UI.
+
+| ID | Screen/state and required flow | Source and existing controls | Evidence still required |
+|---|---|---|---|
+| UI-001 | Main document: menus, grouped upper controls, two-column left palette, white paper, scrollbars and status; open/activate/close documents | G25 printed 12–14; MF-001–008, MV-029 | 26.1 Windows/macOS screens, menu nesting, focus, document switching and native execution |
+| UI-002 | Drawing palette: selected/hover/unavailable tools, nested palettes, tear-off, dock/float and visibility | G25 printed 12–14; MV-001–010, MV-030–032, TD-* | Every glyph's role/variant and geometry, activation/hover timing, original vector assets, real tool workflows |
+| UI-003 | Document settings: drawing geometry and separate atom-label typography/terminal-H controls; selection overrides remain distinct | G25 printed 40–43; MF-013, MF-016–017 | Typed settings, persistence, cancel/apply/history, all dialog controls and current platform layouts |
+| UI-004 | Analysis: selection or whole-document calculations; insert a live caption, edit structure and observe update | G25 printed 221–222; MV-024 | Independent formula/mass/isotope/composition oracles, selection, captions, save/reopen and native flow |
+| UI-005 | First connected drawing: empty click, endpoint extension, bond-order input, endpoint atom label, caption and ring fusion | G25 printed 422–424; TD-005–009, TD-024–026, related hotkey rows | Original acceptance scene; complete connected command model, exact history, independent graph/file checks and native workflow |
+| UI-006 | Paste submenu with distinct CDXML-text and MDL-text choices | R26.1; R26-003–004, legacy ME-024/KM-022 | Actual 26.1 platform menu and shortcut, clipboard decoding, retained unknown data and editable reopening |
+
+Implement each flow through registered commands before marking its screen delivered. For
+original tool artwork, use the cited screen to identify appearance and role, then author
+redistributable vector geometry. A disabled familiar control or copied screenshot is no
+substitute for the flow, independent tests, accessibility and actual native execution.
 
 ## Source and completion audit
 
