@@ -50,3 +50,7 @@ Its pinned source and the Ubuntu noble package index identify the omitted runtim
 libxkbcommon-x11-0. The workflow now installs it, retaining the actual window test without
 fallback or skipped assertions. A corrective hosted run is required before claiming that
 the Linux native launch passes; the first run's overall conclusion remains failure.
+
+Correction 8672de0 triggered
+[run 43451706668](https://github.com/thematheusmello/bondline/actions/runs/43451706668),
+confirmed active at the latest check. Its outcomes must be read before updating these states.

@@ -12,12 +12,18 @@ All three native jobs passed the aggregate gates. Mac/Windows also passed their 
 three-frame window launches; Linux failed that step because libxkbcommon-x11-0 was absent.
 Linux CDXML ASan passed. The workflow now installs the missing runtime library; its rerun
 must pass before Linux native launch is verified. See docs/ci.md for exact evidence.
+The correction is pushed as 8672de0. Hosted run 43451706668 is confirmed active:
+https://github.com/thematheusmello/bondline/actions/runs/43451706668.
+Inspect this run's terminal results on continuation; no success is inferred from its start.
 
 User-authorized parallel ownership is active: /root/file_io owns bounded filesystem I/O
 and atomic save/recovery; /root/native_file_ui owns the chooser and later native wiring;
 /root/file_verification owns independent acceptance tests and shared command/work/apply
 adapters. Root owns integration, CI and records. Their intentional WIP may be uncommitted and
 may contain RED tests. Do not duplicate, stage or publish another agent's unfinished scope.
+The backend and chooser now have focused GREEN tests, but whole-workspace, native-flow and
+new dependency/platform validation are still in progress. They are not published features.
+The native UI agent owns the only planned CUA session; coordinate before using that surface.
 
 Target clarification: one-to-one Professional desktop screens, controls, icon roles, flows
 and functionality. The user explicitly authorized reverse engineering; policy checkpoint
