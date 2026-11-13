@@ -28,6 +28,11 @@ and `cargo xtask licenses`, plus `cargo xtask corpus` (see corpus/README.md for 
 require an actual supported adapter and fail if it is absent. Source cross-compilation is
 useful evidence but does not establish runtime behavior on that operating system.
 
+On Ubuntu 24.04, install the Linux packages listed in .github/workflows/ci.yml before
+building/running the native app. X11 needs libxkbcommon-x11-0 at runtime in addition to
+libxkbcommon-dev; the first hosted window launch exposed that missing dependency.
+Mesa Vulkan and Xvfb support the headless CI smoke test, not a hardware-performance claim.
+
 The native loopback channel is opt-in via `--control-port`. Do not broaden its bind address.
 Every connection now authenticates with a fresh 256-bit session token before running any
 command. Startup stdout is the owner's credential channel; do not redirect it to public logs

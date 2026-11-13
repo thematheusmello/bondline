@@ -8,16 +8,17 @@ stage offline; a missing reviewed entry is fetched by the developer-only Python 
 
 The aggregate command has passed locally on macOS arm64/Metal. A deliberate formatting
 defect was rejected before clippy; the exact source was restored and the full command
-rerun. The committed workflow is configured, not evidence that hosted jobs have run.
+rerun. Hosted execution is recorded below; configuration alone is not a pass.
 
 The native matrix targets ubuntu-24.04, windows-2025 and macos-15 (arm64 according to the
 reviewed runner reference). It selects Rust 1.94.1 and Python 3.13.2, installs the pinned
 Pillow/NumPy/RDKit external consumers from requirements-dev.txt, runs
 the aggregate checks and launches the actual window's three-frame smoke mode. Linux gets
 Mesa Vulkan and Xvfb for window tests; a software driver validates the graphics API path,
-not hardware acceleration or performance. GPU tests fail if an adapter is absent. Hosted
-macOS/Windows GPU availability and native window execution remain unverified; infrastructure
-failures must be recorded or moved to suitable runners, never hidden by skipping assertions.
+not hardware acceleration or performance. GPU tests fail if an adapter is absent. X11 also
+requires libxkbcommon-x11-0 at runtime; libxkbcommon-dev alone does not supply that library.
+Infrastructure failures must be recorded or moved to suitable runners, never hidden by
+skipping assertions.
 
 A separate Linux job configures the same isolated ASan parser smoke used locally: pinned
 nightly/cargo-fuzz, committed fuzz lock, original seed in an ignored mutation corpus,
@@ -29,8 +30,23 @@ pins. Checkout credentials are not persisted. Reviewed releases: checkout v7.0.1
 3d3c42e5aac5ba805825da76410c181273ba90b1; setup-python v7.1.0 at
 6d4fd22b20465ccc0f7354476588e8df7c9ca0e0. Both published action manifests use Node 24;
 these CI tools are not application dependencies. No publication, artifact upload, signing,
-deployment or hosted service is configured. No workflow has been triggered by this session.
+deployment or hosted service is configured. Repository publication explicitly requested by
+the user triggered the first hosted workflow.
 
 Static validation: PyYAML 6.0.3 parses the workflow; triggers/matrix were checked against
-the public runner documentation. actionlint and hosted Actions execution were unavailable.
-Only actual successful run URLs/logs may change those workflow states to verified.
+the public runner documentation. actionlint was unavailable.
+
+## First hosted run, 2026-11-13
+
+[Run 43448214670](https://github.com/thematheusmello/bondline/actions/runs/43448214670)
+tested product checkpoint 3d3dd44. All three platforms passed the real aggregate gates,
+including 147 workspace tests and CPU/GPU checks. macos-15 and windows-2025 also passed
+the actual three-frame native-window launch. The separate Linux CDXML ASan job passed
+its bounded 10000-run check. These results do not verify interactive drawing on Windows
+or replace the existing manually inspected Mac workflow.
+
+The Linux window step failed while xkbcommon-dl loaded libxkbcommon-x11.so.0/.so.
+Its pinned source and the Ubuntu noble package index identify the omitted runtime package
+libxkbcommon-x11-0. The workflow now installs it, retaining the actual window test without
+fallback or skipped assertions. A corrective hosted run is required before claiming that
+the Linux native launch passes; the first run's overall conclusion remains failure.

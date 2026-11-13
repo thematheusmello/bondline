@@ -717,3 +717,21 @@ reported RSS 171 MiB. The harness checks changed-profile encode/reopen or opaque
 Logs: target/reopened-profile-red.log, native-profile-red.log, native-profile-ci.log and
 native-profile-fuzz.log. No native UI/file workflow or general imported editing is claimed;
 the workspace guard still awaits file-workflow wiring. No dependency or asset changes.
+
+## First hosted matrix and Linux runtime correction, 2026-11-13
+
+User-requested public repository creation triggered run 43448214670 at product checkpoint
+3d3dd44. Hosted aggregate checks pass on macos-15, windows-2025 and ubuntu-24.04, including
+147 workspace tests and real GPU checks. Mac and Windows actual three-frame native-window
+launches pass. The separate Linux ASan smoke completed successfully. See docs/ci.md for the
+durable run link and evidence limits; Windows interactive chemical editing is not verified.
+
+RED: Ubuntu's actual window step failed loading libxkbcommon-x11.so.0/.so from xkbcommon-dl
+0.4.2, despite its aggregate checks passing. The saved ignored log is
+target/github-linux-43448214670.log. Pinned source tries those exact names; Ubuntu's public
+noble source-package index identifies libxkbcommon-x11-0 as a separate runtime package.
+The CI apt list now includes it. No native test, assertion or product path was disabled.
+PyYAML 6.0.3 validates the corrected workflow, three-platform matrix, package entry and
+unchanged Linux native smoke command; git diff --check passes. This configuration-only
+correction needs actual hosted GREEN; YAML validation alone is not a successful Linux
+launch. Parallel file-command/UI work is excluded from this change.

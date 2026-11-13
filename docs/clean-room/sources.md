@@ -8,6 +8,7 @@ observed/inferred limits; no strict program-inspection isolation is now claimed.
 
 | ID | Public source | Decision / limitations |
 |---|---|---|
+| UBUNTU-XKB-X11 | https://packages.ubuntu.com/en/source/noble/libxkbcommon | Ubuntu 24.04 separates the libxkbcommon-x11-0 runtime from libxkbcommon-dev. First hosted Linux aggregate passed but X11 window launch failed loading libxkbcommon-x11.so.0/.so in pinned xkbcommon-dl 0.4.2. CI now installs the runtime package; actual rerun required before a Linux launch claim. System prerequisites are distinct from bundled Rust packages/assets. |
 | CDX-INTRO | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm | Binary header, little-endian records, object/property lengths and terminators. No ChemDraw executable inspected. |
 | CDX-IDENTITY | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm | Object Identifier section: four-byte IDs, zero unassigned and usable only for unreferenced objects; uniqueness required per container, globally recommended. Internal application IDs are distinct from source IDs. |
 | CDX-OBJECT-ID | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXObjectID.htm | Object references use UINT32; a shared containing object takes precedence over farther matches. This and the binary record description establish 32 bits despite UINT16 labels in older object tables. General cross-container ties remain unresolved. |

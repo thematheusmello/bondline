@@ -42,7 +42,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y libxkbcommon-dev libwayland-dev libx11-dev libxi-dev libxrandr-dev libxcursor-dev libegl1-mesa-dev libvulkan1 mesa-vulkan-drivers xvfb xauth
+          sudo apt-get install --no-install-recommends -y libxkbcommon-dev libxkbcommon-x11-0 libwayland-dev libx11-dev libxi-dev libxrandr-dev libxcursor-dev libegl1-mesa-dev libvulkan1 mesa-vulkan-drivers xvfb xauth
       - name: Run the real aggregate gates
         run: cargo xtask ci
       - name: Launch the actual Linux window

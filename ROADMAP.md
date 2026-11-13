@@ -7,7 +7,8 @@ guides are versioned evidence, not proof of complete modern parity.
 ## M0: foundation — in progress
 
 - [x] Resolve declared runtime/asset license closure for native egui/wgpu on all three platforms.
-      Actual macOS Metal launch/readback verified; Windows/Linux runtime checks remain below.
+      Actual Mac Metal drawing/readback verified; hosted Mac/Windows window smoke passes.
+      Linux native launch needs the runtime-package correction verified below.
 - [x] Cargo workspace, pinned toolchain, lints, build-time layer and license gates.
 - [ ] Pure document model, named typed JSON commands, transactions and undo/redo tests.
       Page controls/history are delivered; headless elemental graphs now have structural/
@@ -16,8 +17,11 @@ guides are versioned evidence, not proof of complete modern parity.
 - [x] CLI, stdio MCP and opt-in loopback control using that registry.
 - [ ] Native UI and CPU/GPU reference canvas with actual launch/render evidence.
       Native Mac drawing/history/recovery and one human-approved golden now pass; native
-      Windows/Linux and broader rendering remain unverified.
+      Windows window smoke passes; interactive Windows/Linux workflows and broader rendering
+      remain unverified.
 - [ ] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
+      First hosted run passes aggregate checks on all three platforms and Linux ASan; Mac/
+      Windows window launches pass. Linux window launch needs its dependency fix rerun.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.
       573 stable-ID source-cited rows now exist; modern menus, unnamed glyphs and remaining
       context menus still need evidence. Six versioned screen/flow groups and pinned public

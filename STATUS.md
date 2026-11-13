@@ -6,16 +6,17 @@ The user requested GitHub publication. Public repository:
 https://github.com/thematheusmello/bondline, remote origin, branch main. Product checkpoint
 3d3dd44 was pushed and the remote SHA independently checked. Only verified committed work
 was published; new parallel file-workflow work is not in that checkpoint.
-Hosted Rust foundation run 43448214670 is confirmed in progress:
+Hosted Rust foundation run 43448214670 completed with overall failure:
 https://github.com/thematheusmello/bondline/actions/runs/43448214670.
-Configured jobs are not passes; inspect the actual run before updating platform evidence.
-The hosted Linux CDXML ASan job has completed successfully; the three native jobs were
-still running at the last poll. Their outcomes are not inferred from the fuzz job.
+All three native jobs passed the aggregate gates. Mac/Windows also passed their actual
+three-frame window launches; Linux failed that step because libxkbcommon-x11-0 was absent.
+Linux CDXML ASan passed. The workflow now installs the missing runtime library; its rerun
+must pass before Linux native launch is verified. See docs/ci.md for exact evidence.
 
 User-authorized parallel ownership is active: /root/file_io owns bounded filesystem I/O
 and atomic save/recovery; /root/native_file_ui owns the chooser and later native wiring;
-/root/file_verification owns independent file-command acceptance tests. Root owns shared
-command/work/apply adapters and integration. Their intentional WIP may be uncommitted and
+/root/file_verification owns independent acceptance tests and shared command/work/apply
+adapters. Root owns integration, CI and records. Their intentional WIP may be uncommitted and
 may contain RED tests. Do not duplicate, stage or publish another agent's unfinished scope.
 
 Target clarification: one-to-one Professional desktop screens, controls, icon roles, flows
@@ -40,8 +41,8 @@ and the Unicode-bearing browser candidate remain separate work.
 
 Verified in the current drawing/history/encoding checkpoint:
 - 147 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses
-  and the pinned corpus gate. Windows/Linux all-targets source checks pass; native runtime
-  and hosted CI execution on those platforms remain unverified.
+  and the pinned corpus gate. All three hosted aggregate checks also pass; Mac/Windows
+  native-window smoke passes. Windows interactive workflows and Linux launch remain unverified.
 - Six shared typed commands: document.inspect, page.set_size, bond.create, history.undo,
   history.redo, render.capture. CLI, stdio MCP, authenticated loopback and native UI use them.
 - The first drawing workflow: drag an independent single C-C fragment, with three authored
@@ -119,8 +120,9 @@ Next exact tasks:
 3. Extend single-bond behavior to existing-atom attachment, connected graphs, click creation,
    snapping and order changes, with native workflows and tests. The current independent-bond
    command is partial reference coverage; retain all remaining M1–M5 requirements.
-4. Run hosted three-platform CI and native Windows/Linux workflows when available; continue
-   independent work meanwhile. Broaden approved render scenes with actual human review.
+4. Verify the Linux runtime-package CI correction, then inspect interactive Windows/Linux
+   workflows when available. Continue independent work meanwhile. Broaden approved render
+   scenes with actual human review.
 
 The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1, the drawing
 checkpoint is 7043563 and the research checkpoint is 952ded5. The current research policy
@@ -135,5 +137,5 @@ and is closed. It predates history accounting and native encoding. Final native 
 closed. Earlier test builds 22527 and 75463 also exited. Startup credentials remain only
 in ignored private target logs; never copy them into reports. Earlier REA exposure evidence
 is historical and tied to a prior digest, not this build. No confirmed native/Cargo/fuzz
-process remains running from that checkpoint. The hosted run and delegated
-tasks above are the current live work; recheck their handles on continuation.
+process remains running from that checkpoint. The first hosted run is complete; delegated
+tasks above remain active. Recheck their handles and any corrective run on continuation.
