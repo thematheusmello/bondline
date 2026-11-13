@@ -13,6 +13,8 @@ Exact fixture: 690 bytes; SHA-256
 The first delimiter has an original suffix to exercise the published prefix rule. Extra
 empty padding follows the EMPTY item as an explicit read-only consumer accommodation;
 the canonical writer emits one blank terminator. Source and EOL bytes remain exact.
+The SPACES value is three literal spaces. Its narrow Git whitespace attribute preserves
+that meaningful data without disabling whitespace checks for code or other fixtures.
 The parser requires complete records and refuses global trailing blank padding, which
 could instead be a truncated next record with an empty title. It accepts only the
 explicit ASCII profile; balanced optional registry parentheses and unambiguous field
