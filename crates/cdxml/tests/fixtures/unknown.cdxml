@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<!DOCTYPE CDXML SYSTEM "http://www.camsoft.com/xml/cdxml.dtd">
+<!-- Independently authored Bondline fixture, MIT OR Apache-2.0. -->
+<?bondline keep-this-processing-instruction?>
+<CDXML CreationProgram="Bondline fixture" xmlns:future="urn:bondline:fixture" future:setting='opaque &amp; quoted'>
+  <page id="1" BoundingBox='0.00 0 612.000 792'>
+    <fragment id="2">
+      <n id="3" p='12.50 25.00' Element="6" Isotope='13'/>
+      <n id='4' p="42.50 25" Element='8'/>
+      <b id="5" B='3' E="4" Order='2.00' future:bond="untouched"/>
+      <future:data future:units="raw"><![CDATA[x < y & z]]><!-- keep -->
+        <future:record value='00255.00'>μ&#x00B2;</future:record>
+      </future:data>
+      <t id="6"><s face='1'>A &amp; B &#916;</s></t>
+    </fragment>
+  </page>
+</CDXML>

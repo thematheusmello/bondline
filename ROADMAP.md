@@ -15,10 +15,10 @@ guides are versioned evidence, not proof of complete modern parity.
 - [ ] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.
 
-## M1: files — planned
+## M1: files — in progress
 
-Start with standalone CDXML source-preserving parsing/writing and independent round-trip
-tests. Then model mapping retaining source backing, lossless CDX records, MOL/SDF V2000
+Standalone CDXML unchanged source preservation has original-fixture/Expat and ASan smoke
+evidence; corpus coverage is next. Then model mapping retaining source backing, lossless CDX records, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.
 

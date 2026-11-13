@@ -4,3 +4,7 @@
 /.venv/
 .DS_Store
 **/*.profraw
+/fuzz/target/
+/fuzz/artifacts/
+/fuzz/corpus/
+/fuzz/coverage/

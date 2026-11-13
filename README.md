@@ -3,7 +3,9 @@
 An independent, offline chemical drawing application being built in Rust.
 
 The compatibility target includes CDXML and CDX files used by ChemDraw Professional.
-No file compatibility or chemical drawing workflow is implemented yet. Bondline is not affiliated
+No application file-open/save or chemical drawing workflow is implemented yet. The standalone
+CDXML crate preserves unchanged syntax; see [tested format scope](docs/file-formats.md).
+Bondline is not affiliated
 with, endorsed by, or sponsored by ChemDraw or Revvity Signals.
 
 Current capabilities: native page sizing/rotation and Undo/Redo, independently sourced Apache-2.0

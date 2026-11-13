@@ -7,6 +7,11 @@ proprietary implementation, help text or assets. Record more specific sections a
 |---|---|---|
 | CDX-INTRO | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm | Binary header, little-endian records, object/property lengths and terminators. No ChemDraw executable inspected. |
 | CDXML-INTRO | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDXML.htm | XML object/attribute mapping, flexible numeric spelling, opaque preservation. |
+| XML-1.0 | https://www.w3.org/TR/2008/REC-xml-20081126/ | XML syntax/character references, quoted attributes, prolog, comments and CDATA. Source bytes remain authoritative instead of normalizing the document. |
+| QUICK-XML | https://docs.rs/quick-xml/0.42.0/quick_xml/ | MIT streaming preflight for declarations, nesting, attribute budgets and doctype boundaries. Pinned published event/reader/declaration APIs inspected. |
+| ROXMLTREE | https://docs.rs/roxmltree/0.21.2/roxmltree/ | MIT/Apache read-only validated tree; pinned source inspected for node limits, DTD/entity behavior and compressed attribute-position limitations. |
+| EXPAT-ORACLE | https://docs.python.org/3/library/pyexpat.html | Independent external XML semantic oracle. Parameter-entity parsing is disabled; no external entity handler fetches resources. |
+| FUZZ-SETUP | https://rust-fuzz.github.io/book/cargo-fuzz/setup.html | External cargo-fuzz 0.13.2, isolated libfuzzer-sys 0.4.13 and pinned nightly ASan harness. Test-only C++/NCSA runtime is never shipped. |
 | CDX-COORDS | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm | CDXML points (72 per inch), origin at top-left, positive right/down; binary coordinate order differs and is not inferred from XML. |
 | PAGE-UNITS | https://www.w3.org/TR/css-values-4/#absolute-lengths | Physical point/inch/mm conversion, independent numeric test reference. |
 | PAGE-SIZES | https://www.w3.org/TR/css-page-3/#page-size-prop | A4 210 by 297 mm. A4 as Bondline's initial page and the 100,000-point authoring bound are independent product choices, not reference parity claims. |

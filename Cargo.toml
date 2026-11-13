@@ -1,7 +1,7 @@
 [workspace]
-members = ["crates/model", "crates/commands", "crates/mcp", "crates/cli", "crates/ui", "crates/render", "crates/io", "compat/hexf-parse", "compat/libloading", "compat/clipboard-win", "xtask"]
+members = ["crates/model", "crates/cdxml", "crates/commands", "crates/mcp", "crates/cli", "crates/ui", "crates/render", "crates/io", "compat/hexf-parse", "compat/libloading", "compat/clipboard-win", "xtask"]
 resolver = "3"
-exclude = ["vendor/eframe"]
+exclude = ["vendor/eframe", "fuzz"]
 
 [workspace.package]
 version = "0.1.0"

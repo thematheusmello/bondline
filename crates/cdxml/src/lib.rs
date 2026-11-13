@@ -1,0 +1,127 @@
+//! Standalone source-preserving CDXML syntax. No document model or native I/O.
+
+pub const MAX_INPUT_BYTES: usize = 64 * 1024 * 1024;
+pub const MAX_NODES: u32 = 100_000;
+pub const MAX_DEPTH: usize = 256;
+pub const MAX_ATTRIBUTES_PER_ELEMENT: usize = 256;
+pub const MAX_ATTRIBUTES: usize = 100_000;
+
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("CDXML input exceeds the 64 MiB bound")]
+    InputTooLarge,
+    #[error("CDXML nesting exceeds 256 elements")]
+    DepthLimit,
+    #[error("CDXML exceeds 256 attributes per element or 100000 attributes in total")]
+    AttributeLimit,
+    #[error("CDXML requires an unnamespaced CDXML root element")]
+    InvalidRoot,
+    #[error("only XML 1.0 with UTF-8 encoding is supported")]
+    UnsupportedDeclaration,
+    #[error("internal DTD subsets and custom entities are not supported")]
+    UnsupportedDtd,
+    #[error(transparent)]
+    Utf8(#[from] std::str::Utf8Error),
+    #[error(transparent)]
+    Xml(#[from] roxmltree::Error),
+    #[error(transparent)]
+    Token(#[from] quick_xml::Error),
+}
+
+/// Validated syntax plus the original source. Unknown content is never regenerated.
+#[derive(Debug)]
+pub struct Document<'input> {
+    source: &'input [u8],
+    xml: roxmltree::Document<'input>,
+}
+
+impl<'input> Document<'input> {
+    pub fn parse(input: &'input [u8]) -> Result<Self, Error> {
+        if input.len() > MAX_INPUT_BYTES {
+            return Err(Error::InputTooLarge);
+        }
+        let source = std::str::from_utf8(input)?;
+        preflight(source)?;
+        let xml = roxmltree::Document::parse_with_options(
+            source,
+            roxmltree::ParsingOptions {
+                // Preflight rejects internal subsets before this parser sees them.
+                allow_dtd: true,
+                nodes_limit: MAX_NODES,
+                entity_resolver: None,
+            },
+        )?;
+        let root = xml.root_element();
+        if root.tag_name().name() != "CDXML" || root.tag_name().namespace().is_some() {
+            return Err(Error::InvalidRoot);
+        }
+        Ok(Self { source: input, xml })
+    }
+
+    pub fn xml(&self) -> &roxmltree::Document<'input> {
+        &self.xml
+    }
+    pub fn as_bytes(&self) -> &'input [u8] {
+        self.source
+    }
+    pub fn to_bytes(&self) -> Vec<u8> {
+        self.source.to_vec()
+    }
+}
+
+fn preflight(source: &str) -> Result<(), Error> {
+    use quick_xml::{Reader, events::Event};
+    let mut reader = Reader::from_str(source);
+    let mut depth = 0_usize;
+    let mut attributes = 0_usize;
+    loop {
+        let event = reader.read_event()?;
+        match &event {
+            Event::Decl(declaration) => {
+                if declaration.version()? != "1.0"
+                    || declaration
+                        .encoding()
+                        .transpose()
+                        .map_err(|_| Error::UnsupportedDeclaration)?
+                        .is_some_and(|encoding| !encoding.eq_ignore_ascii_case("UTF-8"))
+                    || declaration
+                        .standalone()
+                        .transpose()
+                        .map_err(|_| Error::UnsupportedDeclaration)?
+                        .is_some_and(|standalone| standalone != "yes" && standalone != "no")
+                {
+                    return Err(Error::UnsupportedDeclaration);
+                }
+            }
+            Event::DocType(doctype) => {
+                let mut quote = None;
+                for character in doctype.chars() {
+                    match (quote, character) {
+                        (Some(open), close) if open == close => quote = None,
+                        (None, '\'' | '"') => quote = Some(character),
+                        (None, '[') => return Err(Error::UnsupportedDtd),
+                        _ => {}
+                    }
+                }
+            }
+            Event::Start(element) | Event::Empty(element) => {
+                if depth >= MAX_DEPTH {
+                    return Err(Error::DepthLimit);
+                }
+                if matches!(&event, Event::Start(_)) {
+                    depth += 1;
+                }
+                for (index, attribute) in element.attributes().with_checks(false).enumerate() {
+                    attribute.map_err(quick_xml::Error::from)?;
+                    attributes += 1;
+                    if index >= MAX_ATTRIBUTES_PER_ELEMENT || attributes > MAX_ATTRIBUTES {
+                        return Err(Error::AttributeLimit);
+                    }
+                }
+            }
+            Event::End(_) => depth = depth.saturating_sub(1),
+            Event::Eof => return Ok(()),
+            _ => {}
+        }
+    }
+}

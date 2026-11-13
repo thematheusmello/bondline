@@ -36,7 +36,8 @@ xtask checks layers and licenses, fetches a pinned SHA-256 corpus, and orchestra
 No GUI dependencies below ui; wgpu belongs in render. Add crates when useful behavior lands,
 not empty successful-looking API stubs. Document any isolated OS FFI exception explicitly.
 
-Current map: model (L0, validated pages); render (L1, shared CPU/GPU page scenes); io (L2,
+Current map: model (L0, validated pages); cdxml (L0, source-preserving read-only syntax);
+render (L1, shared CPU/GPU page scenes); io (L2,
 validated PNG encoding); commands
 (L3, registry and Arc snapshot history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
@@ -85,3 +86,5 @@ actual failures, remaining work, next executable steps and live job handles befo
 Currently implemented xtask gates: layers and licenses. Corpus and aggregate CI are still
 missing and must be implemented, not replaced with successful no-ops. Development bundles
 and REA reports under target/ are disposable build outputs and must not be committed.
+Parser fuzzing is isolated under fuzz/; read its README for pinned toolchain/tool versions,
+seed setup and bounded runs. Do not mutate committed fixture directories as fuzz corpora.

@@ -1,0 +1,17 @@
+[package]
+name = "bondline-cdxml"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[package.metadata.bondline]
+layer = 0
+
+[dependencies]
+roxmltree = "=0.21.2"
+quick-xml = "=0.42.0"
+thiserror = "2"
+
+[lints]
+workspace = true

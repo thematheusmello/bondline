@@ -224,3 +224,28 @@ Integrated gates: 54 workspace tests, rustfmt, all-targets clippy, layers, decla
 licenses (145/156/215 packages for macOS/Windows/Linux), two asset hashes/notices and
 Windows/Linux all-targets source checks pass. Native Windows/Linux, human goldens, full M0
 and chemical rendering/interchange remain unverified or missing.
+
+## Initial CDXML syntax and parser fuzzing, 2026-11-13
+
+RED: `cargo test -p bondline-cdxml` failed for the absent parser/API. An external-doctype
+fixture then failed with DtdDetected under the tree parser's default configuration. The
+streaming preflight now rejects internal subsets before enabling external-doctype syntax
+with no resolver. No external bytes are fetched or expanded. GREEN: original fixture
+round trip is byte-exact and external Python Expat independently checks element order,
+attributes, numeric spelling, namespaced extensions, Unicode/character references, comments,
+CDATA and processing instructions. UTF-8 BOM and CRLF remain byte-exact. Invalid syntax,
+characters, duplicate attributes, roots, encodings/versions, nesting, input and node caps fail.
+
+RED: the attribute-budget test failed for the missing bound/error. GREEN: 256 attributes
+are accepted; excess per-element and total attributes fail before building the tree.
+A bracket inside a quoted external identifier is preserved rather than mistaken for a subset.
+All 57 workspace tests, rustfmt/clippy, layers, native declared-license/assets and Windows/
+Linux source checks pass. No application open/save or chemical interpretation is claimed.
+
+Fuzz setup: installed external cargo-fuzz 0.13.2 under ignored target/tools and added
+nightly-2026-04-01 (rustc 1.96.0-nightly 48cc71ee8) without changing the project's 1.94.1 pin.
+The isolated fuzz/Cargo.lock pins libfuzzer-sys 0.4.13; its C++/NCSA test runtime is never
+shipped. `cargo +nightly-2026-04-01 fuzz run cdxml_parse .cache/fuzz/cdxml -- -runs=10000
+-max_len=65536 -timeout=5` passed with AddressSanitizer, seed 3641879538, final edge coverage
+1696 and 326 retained inputs. No failure was reported. This bounded smoke run is not
+exhaustive conformance, parser coverage or a security audit. No live fuzz/install job remains.
