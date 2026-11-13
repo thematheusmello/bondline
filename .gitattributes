@@ -4,6 +4,7 @@
 /docs/corpus/bondline-cdx-manifest.json -text
 /crates/cdx/tests/fixtures/*.cdx -text
 /crates/io/tests/fixtures/mol/*.mol -text
+/crates/io/tests/fixtures/v3000/*.mol -text
 /crates/io/tests/fixtures/sdf/*.sdf -text
 # This value is three literal spaces; trimming it changes the ordered-data regression.
 /crates/io/tests/fixtures/sdf/ordered-fields-v2000.sdf whitespace=-blank-at-eol

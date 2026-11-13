@@ -6,7 +6,8 @@
 | CDX | Standalone bounded binary syntax and checked opaque property replacement | Original published-field vectors, one fetched positive chemical scene, independent Python struct spans/bytes, external RDKit connectivity/order consumers | Application import/export, model/reference mapping, new-tree writer, foreign/general corpus and modern extensions |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000 | Source-preserving library records, ordered data fields and validated wrapper writer | Original source spans; fetched pinned two-record corpus; external raw scanner/per-record RDKit; named-field supplier and external-writer vectors | Application data/multiple-record workflow and broader syntax/encodings |
-| V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
+| MOL V3000 | Source-preserving library parser, strict elemental projection and full-precision writer | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files,118-symbol writer; bounded ASan | Version-aware application snapshots/I/O/commands/UI/SDF, broader queries/stereo/blocks and corpus |
+| RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
@@ -56,6 +57,50 @@ formula and SMILES in those checks are external consumer expectations, not Bondl
 algorithms. Original ethane columns and external-generated vectors independently exercise
 writer interoperability. See [test provenance](../crates/io/tests/fixtures/mol/README.md),
 [verification](verification.md) and [fuzz limits](../fuzz/README.md).
+
+## MOL V3000 library
+
+`bondline_io::mol::v3000::MolFile` is a separate library codec; existing application
+MOL commands and SDF records still use V2000. It borrows exact complete source and
+three headers, exposes positive noncontiguous atom/bond source IDs and physical
+spans, and keeps a flat bounded block table. Model identities are fresh dense IDs.
+Logical entries remove only final continuation dashes and subsequent exact `M  V30 `
+prefixes, without adding a space. Quoted strings decode doubled quotes; flat counted
+lists validate declared lengths. Unknown attributes, blocks and order remain in
+original source, and unsupported projection refuses regeneration. Unknown-block
+internal semantic counts/references are not claimed validated.
+
+The strict subset is 2D elements 1..118, mapping 0, charge −15..15, RAD 0..3, positive
+integer MASS fitting nonzero u16, VAL 0/absent unspecified, −1 explicit zero and 1..14
+declared valence, and single/double/triple bonds. Explicit H comes only from checked
+declared valence minus integer bond-order sums. HCOUNT is a query; V3000 type 4 is an
+aromatic query. Neither becomes ordinary authored model data. CFG, collections,
+maps, 3D, queries, extra properties and unknown blocks cause strict mapping refusal.
+MASS's positive-integer profile is a supported subset, not a universal reading of
+the published weight field. RDKit's MASS 13.5 truncation and singlet/triplet collapse
+remain separate consumer diagnostics.
+
+V3000 CTAB counts are authoritative over ignored legacy counts. Atom/bond counts,
+positive unique source IDs and endpoint references are validated. Required COUNTS,
+ATOM and optional BOND ordering and balanced blocks are checked iteratively, without
+a recursive DOM/drop. Complete `M  END` and strict EOF are required. Printable ASCII,
+LF/CRLF and tab-separated entries form the current encoding profile. Limits: 64 MiB
+source/output, 100,000 atoms/bonds and counted object categories, 1 million physical
+lines, 80 ASCII characters/physical line, 65,536 bytes/logical entry, 1,024 segments/entry,
+8,192 tokens/list values per entry, 4 million decoded tokens/list values per file and
+256 block depth. Only the 80-character limit is the cited format rule; the other
+bounds/flat-list/strict-EOF policies are Bondline choices, not a hard RSS cap.
+
+`write_v3000[_with_header]` canonically writes supported authored graphs and retains
+the three supplied ASCII headers. Coordinates use Rust 1.94.1 f64 Display's shortest
+round-trip decimal without V2000's four-decimal quantization. New physical lines
+are at most 80 characters using published continuation, even within tokens. Raw float
+spelling reparses exactly; frame reconstruction is compared within
+`16*EPSILON*max(1,abs(point),abs(origin),abs(raw*scale))` drawing points. Nonfinite
+export through a subnormal scale refuses. Nonzero source coordinate underflow also
+refuses, preventing an underflowing Z from becoming apparently 2D. Canonical writing
+is distinct from unchanged-source passthrough and never authorizes erasing unknown
+data. See [fixture provenance](../crates/io/tests/fixtures/v3000/README.md).
 
 ## MOL application snapshots and saving
 

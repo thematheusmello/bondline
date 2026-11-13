@@ -21,9 +21,11 @@ actual windows and five10000-run ASAN targets. It remains on its published sourc
 with application integration in the persistent sibling checkout below. Neither preceding
 run is evidence for the newly fetched CDX corpus or V3000 application changes.
 
-## Current root feature: fetched original CDX corpus
+## Root integration: fetched CDX corpus and standalone V3000
 
-The root feat/cdx-corpus-checks branch follows30ae30e. The feature now cold-fetches the
+Fetched-CDX source98bc59a follows30ae30e and is published on feat/cdx-corpus-checks.
+Its hosted run43526004010 is in progress; inspect that exact run before main integration.
+The feature now cold-fetches the
 original CDX from that real public commit, checks its65750 bytes/SHA
 63ef1a74133e45de915d5fd25b2ca3321a95dbe5114873a5a59f2f45217000d2 and retains its original
 MIT OR Apache-2.0 provenance. All29 record spans/parents/length encodings match independent
@@ -37,8 +39,15 @@ There are now four pinned files from three mandatory source bundles: one CDXML, 
 one two-record SDF and one original CDX. Normal/offline results agree. All prior pins/notices
 remain byte-identical. Isolated core.autocrlf RED/GREEN proves exact checkout of all three
 manifests. Cargo.lock only adds the existing first-party bondline-cdx xtask edge. Native
-runtime closures153/164/219 and two assets are unchanged. Its own hosted run follows this
-feature's source publication; all local root tests are terminal.
+runtime closures153/164/219 and two assets are unchanged. Its own hosted run is43526004010;
+prior local root tests are terminal.
+
+The root feat/m1-integration branch now combines that corpus source with standalone
+V3000 codec5caf6ce. Conflict resolution retains both full verification histories, the
+fetched corpus, original positive CDX seed/max_len131072 and the fifth V3000 fuzz target.
+No codec source changed during integration. This combined checkout needs its own aggregate
+and hosted evidence; older isolated successes are not substituted. The separate sibling
+application checkout remains frozen while native acceptance runs.
 
 ## What works within verified scope
 

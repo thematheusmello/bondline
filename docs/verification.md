@@ -1413,3 +1413,74 @@ Windows325 tests, three actual native windows and four10000-run ASAN targets. Se
 standalone V3000 source5caf6ce passes43519338382: Mac341/Linux339/Windows333, three native
 windows and five10000-run ASAN targets. Neither run proves the uncommitted V3000 application
 integration or the new fetched-CDX feature; do not substitute their results.
+
+## 2026-11-13: standalone MOL V3000 codec
+
+Work ran only in the isolated `bondline-mol-v3000` worktree from 2d665de, with its own
+absolute CARGO_TARGET_DIR. The original/root working tree and its artifacts were not
+used for builds or product edits. Source decisions follow CTFILE-2026 printed 7–13/32;
+the cached PDF and original fixture hashes are recorded in sources/fixture provenance.
+
+Actual missing-module RED: `target/v3000-red.log`. The first two literal sparse-ID,
+valence/frame and continuation/quote/list tests became GREEN. Independent consumers
+then exposed an attribute-only entry refused inside an opaque block
+(`target/v3000-oracle-first.log`); preserving its complete syntax fixed that RED.
+A separate primary-rule test caught nonzero Z=1e-9999 underflowing to apparently 2D
+(`target/v3000-underflow-red.log`); the parser now refuses nonzero coordinate underflow
+rather than flattening it. Final syntax review added a misplaced second main-CTAB
+COUNTS vector, which failed (`target/v3000-duplicate-counts-red.log`); the parser now
+refuses that known out-of-order control entry while keeping unknown-block internals
+opaque. These were substantive failures, not manufactured passes.
+
+All 14 V3000 integration tests pass in the final `target/v3000-io-regressions.log`.
+The earlier focused pass is in `target/v3000-final-tests.log`. Independent
+RDKit 2026.09.2 reads the original sparse-ID graph, external-generated 314-byte isotope/
+eight-decimal vector, a real 1,000-atom file and canonical 1,000-atom output, and all 118
+element symbols. Source bytes/ranges, doubled quotes, counted list lengths, explicit
+H/VAL0 versus −1, charge, isotope and raw RAD 1 versus 3 have independent literal checks.
+RDKit's spin collapse, MASS 13.5 truncation and ignored-legacy-count disagreement remain
+diagnostics. Query, stereo, maps, 3D, unknown properties/blocks and invalid syntax are
+refused before unsupported model regeneration. Hostile tests cover all truncated
+prefixes, encoding/nonfinite/underflow/overflow, counts/references/order, physical/
+logical/segment/token/list/depth/byte limits, a million physical lines and the separate
+whole-file decoded-token budget. Inputs remain unchanged across errors.
+
+The writer's precision/tolerance policy was selected before tests: shortest-roundtrip
+f64 spelling, no V2000 four-decimal quantization, and frame reconstruction within
+`16*EPSILON*max(1,abs(point),abs(origin),abs(raw*scale))`. A non-four-decimal literal and
+an externally read long finite coordinate verify precision and physical 80-character
+continuation. A smallest-subnormal transform refuses exported infinity before output.
+
+Frozen production source SHA-256, concatenating v3000/mod.rs,parse.rs,tokens.rs,write.rs
+in that order: `38bb313977f8ea002b275c02490ecd4266284c4e497ba7cc2ccc8363adb24897`.
+Targeted IO all-target Clippy and rustfmt pass (`target/v3000-clippy.log`,
+`target/v3000-fmt.log`). No new runtime dependency or lock changes were needed.
+The isolated new fuzz target also passes warnings-denied Clippy and its workspace
+format check (`target/v3000-fuzz-clippy.log`, `target/v3000-fuzz-fmt.log`).
+The complete IO regression suite passes 96 tests with the pinned external interpreter
+(`target/v3000-io-regressions.log`), including the existing V2000/SDF/source/atomic-file
+cases. This is the isolated IO package, not a workspace aggregate or native app run.
+The final fresh-corpus ASan run passes 10,000 iterations, seed 937155923, max_len 65536,
+timeout 5: coverage 1254/features 2799, 169 retained inputs/reported 45 KiB/RSS 74 MiB,
+largest input492 bytes, 1 second fuzz runtime (`target/v3000-asan-final.log`). Both
+original fixtures seed the writable ignored corpus. Earlier provisional/pre-COUNTS
+passes are not substituted for this frozen-source result. See fuzz/README.md for
+reproduction.
+
+These are standalone codec tests on macOS arm64; no V3000 application persistence,
+registry/native workflow, SDF version dispatch, fetched corpus, chemistry perception,
+stereo/CIP implementation or hosted execution is claimed. Root integration/aggregate
+verification and a public commit remain separate steps.
+
+
+Root integration review then ran the full actual-worktree `cargo xtask ci`, explicitly
+setting this sibling checkout's own Cargo target and the root cached external interpreter.
+It passed 338 workspace tests plus three native bridge tests, fmt/clippy/layers/native
+licenses/assets and this branch's inherited two-file CDXML/MOL corpus. The tool printed
+this checkout as its root; no main-checkout build artifact or later SDF corpus pass was
+substituted. Log: target/v3000-worktree-ci.log. No runtime dependency or lock changed.
+Hosted checks and integration with newer corpus changes remained subsequent work at that
+checkpoint. Published source5caf6ce subsequently passed43519338382 as recorded above.
+The root now integrates that unchanged codec with98bc59a's fetched SDF/CDX corpus. Both
+verification histories, CDX positive seed/bound and the fifth V3000 sanitizer target survive
+the merge. The combined source requires its own aggregate; no isolated result is substituted.

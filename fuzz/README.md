@@ -69,7 +69,7 @@ property. The former 65536-byte run limit could not represent that complete scen
 current 131072-byte bound deliberately includes it. Both original fixture identities and
 their generator/source provenance are recorded in the fixture README. An accepted binary
 mutation is syntax/source evidence, not independent chemical interoperability for that mutation.
-The CI sanitizer job runs all four parser targets; these bounded runs are not exhaustive input
+The CI sanitizer job runs all five parser targets; these bounded runs are not exhaustive input
 coverage or proof of application CDX support.
 
 ## MOL V2000 syntax and elemental graph
@@ -117,3 +117,30 @@ This is parser/codec fuzzing. It does not establish chemistry correctness, appli
 import/export, native file workflows or independent compatibility for every mutation. The
 original fixed-field vectors and separately run RDKit consumer remain the independent tests.
 Committed seeds are never writable mutation corpora. No lock/runtime dependency changes.
+
+## MOL V3000 syntax and strict graph projection
+
+```sh
+mkdir -p .cache/fuzz/mol-v3000
+cp crates/io/tests/fixtures/v3000/*.mol .cache/fuzz/mol-v3000/
+CARGO_TARGET_DIR="$PWD/target" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --sanitizer address mol_v3000_parse .cache/fuzz/mol-v3000 -- -runs=10000 -seed=937155923 -max_len=65536 -timeout=5
+```
+
+Use this checkout's own target directory; separate worktrees must never share compiled
+artifacts. cargo-fuzz 0.13.2/libFuzzer 0.4.13 and nightly-2026-04-01 retain the pinned
+test-tool versions above. The original sparse-ID and continuation/quote/list/collection
+seeds are MIT OR Apache-2.0; see their fixture README. Mutations stay in ignored cache,
+never the committed fixture directory. CI seeds and runs this fifth parser target.
+
+Accepted input must preserve exact bytes, bounded source spans and flat block parents,
+positive unique atom source IDs and valid bond endpoints. A strict supported graph is
+written with full f64 precision, reparsed and compared for authored fields/coordinates.
+Unknown/query/stereo/3D data must refuse projection; near-output budgets may refuse
+canonical writing with resource_limit. This does not exercise version-aware application
+files, a native window/GPU, or external chemistry for every mutation.
+
+The fresh final local ASan run passed 10,000 iterations with the exact seed/max_len/timeout
+above: coverage 1254/features 2799, 169 retained inputs/reported 45 KiB/RSS 74 MiB, 1 second of
+fuzzing. Its largest exercised input was 492 bytes, so max_len 65536 is a ceiling rather
+than proof of large-input coverage. Explicit resource/large-graph tests and external
+RDKit consumers provide separate evidence. This bounded pass is not a security audit.
