@@ -7,9 +7,9 @@ branch was fast-forwarded into main; product checkpoint ccf8c50 contains the fin
 Inspect Git log for subsequent format/documentation hashes. Do not restart or discard existing
 work. No release/installer distribution or reference account action was performed.
 
-Recoverable working branch:feat/shared-close, with the typed close command, native integration
-and runtime quality-tool workspace fix. See Git log for this atomic feature checkpoint and
-abd35bf for the separate tooling correction. Native corrected binary hash is recorded below.
+Published recoverable source:72742fb5d08384a314060ce7dae52d41c0c91f3e on feat/shared-close,
+with typed close, native integration and runtime quality-tool workspace fix. The separate
+tooling correction is abd35bf. Native corrected binary hash is recorded below.
 Public main8d52e14 contains tested CDX sourcea73bed747059dd1718ac593589509853fc872671 and
 the earlier drawing/CDXML workflows. Hosted CDX GREEN43480423381 is terminal; its first
 Windows failure remains recorded. Shared close is not merged into main until its own hosted
@@ -165,8 +165,8 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
    snapping/order/labels with independent tests and actual native workflows. Keep M3-M5 full.
 
 All shared-close implementation/review/native agents finished. No local Cargo/native/fuzz
-worker or CUA session remains. The main-integration worktree under .cache/cdx-integration
-contains only the verified main checkpoint; no builds should share its target with this one.
+worker or CUA session remains. The temporary main-integration worktree was removed after
+publishing the verified main checkpoint. Keep future worktree targets isolated.
 
 Hosted run https://github.com/thematheusmello/bondline/actions/runs/43475705005 at8547f4d
 is now terminal. Parser ASan132058845734, Ubuntu132058846409 and Mac132058846748 succeeded;
@@ -174,9 +174,13 @@ Windows132058846940 failed the LF-versus-CRLF oracle comparison. Overall failure
 Corrected sourcea73bed7 passed https://github.com/thematheusmello/bondline/actions/runs/43480423381 .
 Windows132075166916, Ubuntu132075167353, Parser ASan132075167356 and Mac132075167362 all
 completed successfully. Source was fast-forwarded into main after GREEN. These jobs are
-terminal; do not restart them. Other work may remain active on feat/shared-close. No
+terminal; do not restart them. New shared-close hosted work is identified below. No
 release was requested.
 
-The new shared-close hosted run starts after this source is pushed; no result is claimed
-yet. Recheck the branch/head and exact live run before main integration. Preserve the source
-freeze/evidence scopes; no reference executable was acquired or proprietary asset shipped.
+Confirmed new hosted run as of2026-11-13 19:09:35 UTC:
+https://github.com/thematheusmello/bondline/actions/runs/43488771976 at72742fb.
+Parser ASan132104102647 completed successfully. Ubuntu132104102999 and Windows132104103101
+are running aggregate gates; Mac132104102962 is queued. Overall success is unverified.
+Recheck this exact run before main integration; do not duplicate or cancel live jobs without
+a concrete reason. Preserve the source freeze/evidence scopes; no reference executable was
+acquired or proprietary asset shipped. The persistent full M0–M5 goal remains active.
