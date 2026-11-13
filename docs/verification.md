@@ -807,3 +807,18 @@ Local aggregate with this bridge passes193 tests, formatting, clippy-Dwarnings, 
 licenses153/164/219 and the documented corpus subset (target/files-ci-final.log).
 Current native file UI remains a separate integration commit. These checks do not prove
 the outstanding Mac accessibility SetValue bridge, whose upstream selector is empty.
+
+## Windows private-DACL native reference correction, 2026-11-13
+
+Actual Windows job131993129533 in run43456850621 passed six of seven io unit tests,
+including original DACL/Zone.Identifier preservation and recovery. The private-temporary
+test failed because Windows returns D:PAI(A;;FA;;;OW), while the test expected D:P(A;;FA;;;OW).
+Microsoft's security-descriptor format defines P as protected and AI as auto-inherited;
+AI is a descriptor control flag, distinct from an inherited ACE's ID flag. Both exact
+full strings preserve the sole unflagged owner-rights full-access ACE and protection.
+
+The test now accepts only those two complete representations. It retains the competing
+data-open refusal, protected owner-only ACE and owner read/write checks; no production
+behavior changed. Cross-target clippy-Dwarnings passes. An actual hosted rerun is required
+before GREEN is claimed. Evidence: target/file-io-windows-hosted-red.log and
+target/file-io-windows-ai-clippy.log; source FILE-WINDOWS-DACL-FLAGS.

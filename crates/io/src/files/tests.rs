@@ -416,6 +416,18 @@ fn dacl_sddl(path: &Path) -> io::Result<std::ffi::OsString> {
 }
 
 #[cfg(windows)]
+fn assert_owner_private_dacl(path: &Path) -> io::Result<()> {
+    let sddl = dacl_sddl(path)?;
+    // Microsoft SDDL defines AI as a DACL control flag, separate from its ACE list.
+    // Both exact forms require P protection and exactly one owner-only full-access ACE.
+    assert!(
+        matches!(sddl.to_str(), Some("D:P(A;;FA;;;OW)" | "D:PAI(A;;FA;;;OW)")),
+        "unexpected temporary DACL: {sddl:?}"
+    );
+    Ok(())
+}
+
+#[cfg(windows)]
 #[test]
 fn windows_temporary_is_owner_private_before_writing_and_remains_accessible_to_its_owner()
 -> Result<(), Box<dyn std::error::Error>> {
@@ -433,10 +445,7 @@ fn windows_temporary_is_owner_private_before_writing_and_remains_accessible_to_i
                     .next()
                     .ok_or_else(|| io::Error::other("no temporary"))??
                     .path();
-                assert_eq!(
-                    dacl_sddl(&temporary)?,
-                    std::ffi::OsStr::new("D:P(A;;FA;;;OW)")
-                );
+                assert_owner_private_dacl(&temporary)?;
                 assert!(
                     File::open(&temporary).is_err(),
                     "exclusive temporary must deny a competing data-read handle"
@@ -448,7 +457,7 @@ fn windows_temporary_is_owner_private_before_writing_and_remains_accessible_to_i
     )?;
     assert!(inspected);
     OpenOptions::new().read(true).write(true).open(&path)?;
-    assert_eq!(dacl_sddl(&path)?, std::ffi::OsStr::new("D:P(A;;FA;;;OW)"));
+    assert_owner_private_dacl(&path)?;
     Ok(())
 }
 
