@@ -37,7 +37,7 @@ history, persistence and verification patterns are useful without importing inco
 
 | Capability | Source | State | Evidence / next work |
 |---|---|---|---|
-| New/open/save documents | GUIDE-25 | missing | Registry and persistent formats |
+| New/open/save documents | GUIDE-25 / MAC-FILE-KEYS | partial: Mac CDXML Open/Save verified | Complete-source registry persistence, native Save As and dirty-close protection; File New/multi-doc/other formats remain missing. |
 | Undo/redo | GUIDE-25 / MAC-HISTORY | verified for page size and independent C-C creation, Mac only | Exact engine properties; native page and bond Undo/Redo plus error recovery. Other chemical edits and Windows/Linux runtime missing |
 | Selection and transforms | GUIDE-25 | missing | M2 |
 | Bond, ring, chain tools | GUIDE-25 | partial: isolated single-bond drag verified on Mac | bond.create, native history/control capture and approved specific-scene golden. Connected construction, other bond kinds, rings/chains and full tool behavior missing |
@@ -63,13 +63,13 @@ history, persistence and verification patterns are useful without importing inco
 | ID | Reference control/action | G25 p. | State | Notes |
 |---|---|---|---|---|
 | MF-001 | File > New Document | 13, 39 | missing | Style-dependent New label; project creation/persistence missing. |
-| MF-002 | File > Open | 14 | missing | - |
+| MF-002 | File > Open | 14 | partial verified, Mac CDXML | Original chooser; dirty-discard confirmation, failed-open retention, editable native profile and guarded opaque passthrough. Other formats/platform workflows missing. |
 | MF-003 | File > Recent-document list | 14 | missing | Dynamic list; no sample files copied. |
-| MF-004 | File > Save | 14 | missing | - |
-| MF-005 | File > Save As | 39, 59, 356 | missing | Includes format selection; not just an extension change. |
+| MF-004 | File > Save | 14 | partial verified, Mac CDXML | Complete-source atomic save via registry; native CmdS/QuitSave and independent consumer evidence. History-across-save differs G25; general formats/styles missing. |
+| MF-005 | File > Save As | 39, 59, 356 | partial verified, Mac CDXML | Native new-path/overwrite/Cancel and exact opaque copy; original chooser and no format selector. Reference multi-format parity missing. |
 | MF-006 | File > Revert | 14 | missing | Recover last saved document. |
-| MF-007 | File > Close | 78, 259 | missing | - |
-| MF-008 | File > Exit | 78, 290 | missing | Reference label identifies the source product; Bondline branding required. |
+| MF-007 | File > Close | 78, 259 | partial verified, single-window Mac | File Close/red close/CmdW with Save/Discard/Cancel; stale-save receipt guard. Multi-document/platform parity missing. |
+| MF-008 | File > Exit | 78, 290 | partial verified, Mac Quit | Native Quit/CmdQ preserves dirty data; Save and Discard exit. Windows/Linux exit gestures, Dock/session logout remain unverified. |
 | MF-009 | File > Page Setup | 24-25, 78 | missing | Paper size/orientation, margins and printer workflow missing; page-size engine alone is narrower. |
 | MF-010 | File > Print | 25, 78 | missing | - |
 | MF-011 | File > Document Annotations | 14 | missing | Add/delete keywords and their values. |
@@ -569,12 +569,12 @@ history, persistence and verification patterns are useful without importing inco
 | ID | Contextual action / key(s) | G25 p. | State | Scope / evidence |
 |---|---|---|---|---|
 | KM-001 | New document: Ctrl+n | 77 | missing | - |
-| KM-002 | Open document: Ctrl+o | 78 | missing | - |
-| KM-003 | Save: Ctrl+s | 78 | missing | - |
-| KM-004 | Save As: Shift+Ctrl+s | 78 | missing | - |
+| KM-002 | Open document: Ctrl+o | 78 | wired | Mac CmdO verified for CDXML; this Ctrl binding needs native Windows/Linux evidence. |
+| KM-003 | Save: Ctrl+s | 78 | wired | Mac CmdS verified; Windows/Linux Ctrl workflow remains unverified. |
+| KM-004 | Save As: Shift+Ctrl+s | 78 | wired | Typed UI shortcut and native menu flow; exact shortcut needs native evidence. |
 | KM-005 | Print: Ctrl+p | 78 | missing | - |
 | KM-006 | Page Setup: Shift+Ctrl+p | 78 | missing | - |
-| KM-007 | Close document: Ctrl+w | 78 | missing | - |
+| KM-007 | Close document: Ctrl+w | 78 | wired | Mac CmdW/Cancel/Escape verified for single-window workflow; native Ctrl case unverified. |
 | KM-008 | Exit application: Alt+F4 | 78 | missing | - |
 | KM-009 | Cut: Ctrl+x | 78 | missing | - |
 | KM-010 | Copy: Ctrl+c | 78 | missing | - |

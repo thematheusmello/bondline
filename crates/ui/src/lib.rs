@@ -1,9 +1,14 @@
 //! Native GPU workspace. Authoring controls dispatch through the shared command registry.
 
+mod file_workflow;
+pub mod files;
+
 use bondline_commands::{BondCreate, Command, Engine, NoParams, PageSetSize};
-use bondline_mcp::{SharedEngine, control::LoopbackServer};
+use bondline_mcp::{CommandExecutor, SharedEngine, control::LoopbackServer};
 use bondline_model::{PageId, Point2};
 use eframe::egui;
+use file_workflow::FileWorkflow;
+use files::FileAction;
 use std::{
     io::Write,
     sync::{Arc, Mutex},
@@ -92,21 +97,24 @@ pub fn show_workspace(
     error: &mut Option<String>,
     drawing: &mut DrawingState,
 ) {
+    let _ = show_workspace_with_files(context, engine, error, drawing, None);
+}
+
+fn show_workspace_with_files(
+    context: &egui::Context,
+    engine: &mut Engine,
+    error: &mut Option<String>,
+    drawing: &mut DrawingState,
+    mut files: Option<&mut FileWorkflow>,
+) -> Option<FileAction> {
     let undo = egui::KeyboardShortcut::new(egui::Modifiers::COMMAND, egui::Key::Z);
     let redo = egui::KeyboardShortcut::new(
         egui::Modifiers::COMMAND | egui::Modifiers::SHIFT,
         egui::Key::Z,
     );
     let state = engine.state();
-    let mut selected = context.input_mut(|input| {
-        if input.consume_shortcut(&redo) {
-            (state.redo_depth > 0).then_some(Command::Redo(NoParams {}))
-        } else if input.consume_shortcut(&undo) {
-            (state.undo_depth > 0).then_some(Command::Undo(NoParams {}))
-        } else {
-            None
-        }
-    });
+    let mut selected = None;
+    let mut file_action = None;
     let page = engine
         .document()
         .pages()
@@ -116,55 +124,87 @@ pub fn show_workspace(
         ui.horizontal(|ui| {
             ui.label(egui::RichText::new("bondline").strong().size(22.0));
             ui.separator();
-            ui.label("Untitled");
-            ui.separator();
-            ui.menu_button("Edit", |ui| {
-                let modifier = if cfg!(target_os = "macos") {
-                    "Cmd"
-                } else {
-                    "Ctrl"
-                };
-                if ui
-                    .add_enabled(
-                        state.undo_depth > 0,
-                        egui::Button::new("Undo").shortcut_text(format!("{modifier}+Z")),
-                    )
-                    .clicked()
-                {
-                    selected = Some(Command::Undo(NoParams {}));
-                    ui.close_menu();
-                }
-                if ui
-                    .add_enabled(
-                        state.redo_depth > 0,
-                        egui::Button::new("Redo").shortcut_text(format!("{modifier}+Shift+Z")),
-                    )
-                    .clicked()
-                {
-                    selected = Some(Command::Redo(NoParams {}));
-                    ui.close_menu();
-                }
-            });
-            ui.menu_button("Page", |ui| {
-                if let Some((page_id, size)) = page {
-                    for (label, width_pt, height_pt) in [
-                        ("A4 portrait", 210.0 * 72.0 / 25.4, 297.0 * 72.0 / 25.4),
-                        ("Letter portrait", 612.0, 792.0),
-                        ("Rotate page", size.height_pt(), size.width_pt()),
-                    ] {
-                        if ui.button(label).clicked() {
-                            selected = Some(Command::PageSetSize(PageSetSize {
-                                page_id,
-                                width_pt,
-                                height_pt,
-                            }));
-                            ui.close_menu();
+            if let Some(files) = files.as_deref_mut() {
+                file_action = files.menu(ui, &state);
+            }
+            let blocked = files.as_ref().is_some_and(|files| files.blocks_authoring());
+            ui.add_enabled_ui(!blocked, |ui| {
+                ui.menu_button("Edit", |ui| {
+                    let modifier = if cfg!(target_os = "macos") {
+                        "Cmd"
+                    } else {
+                        "Ctrl"
+                    };
+                    if ui
+                        .add_enabled(
+                            state.undo_depth > 0,
+                            egui::Button::new("Undo").shortcut_text(format!("{modifier}+Z")),
+                        )
+                        .clicked()
+                    {
+                        selected = Some(Command::Undo(NoParams {}));
+                        ui.close_menu();
+                    }
+                    if ui
+                        .add_enabled(
+                            state.redo_depth > 0,
+                            egui::Button::new("Redo").shortcut_text(format!("{modifier}+Shift+Z")),
+                        )
+                        .clicked()
+                    {
+                        selected = Some(Command::Redo(NoParams {}));
+                        ui.close_menu();
+                    }
+                });
+                ui.menu_button("Page", |ui| {
+                    if let Some((page_id, size)) = page {
+                        for (label, width_pt, height_pt) in [
+                            ("A4 portrait", 210.0 * 72.0 / 25.4, 297.0 * 72.0 / 25.4),
+                            ("Letter portrait", 612.0, 792.0),
+                            ("Rotate page", size.height_pt(), size.width_pt()),
+                        ] {
+                            if ui.button(label).clicked() {
+                                selected = Some(Command::PageSetSize(PageSetSize {
+                                    page_id,
+                                    width_pt,
+                                    height_pt,
+                                }));
+                                ui.close_menu();
+                            }
                         }
                     }
-                }
+                });
             });
+            ui.separator();
+            let name = state
+                .file
+                .path
+                .as_deref()
+                .and_then(|path| std::path::Path::new(path).file_name())
+                .and_then(|name| name.to_str())
+                .unwrap_or("Untitled");
+            ui.label(format!(
+                "{name}{}",
+                if state.file.dirty { " *" } else { "" }
+            ));
         });
     });
+    let blocked = files.as_ref().is_some_and(|files| files.blocks_authoring());
+    if blocked {
+        drawing.gesture = None;
+    } else {
+        selected = selected.or_else(|| {
+            context.input_mut(|input| {
+                if input.consume_shortcut(&redo) {
+                    (state.redo_depth > 0).then_some(Command::Redo(NoParams {}))
+                } else if input.consume_shortcut(&undo) {
+                    (state.undo_depth > 0).then_some(Command::Undo(NoParams {}))
+                } else {
+                    None
+                }
+            })
+        });
+    }
     if let Some(command) = selected {
         *error = engine.execute(command).err().map(|error| error.to_string());
     }
@@ -191,6 +231,9 @@ pub fn show_workspace(
             } else {
                 ui.label("New single bond: drag on the page; Esc cancels");
             }
+            if let Some(files) = files.as_deref_mut() {
+                files.job_status(ui);
+            }
         });
     });
     egui::CentralPanel::default()
@@ -201,7 +244,7 @@ pub fn show_workspace(
         )
         .show(context, |ui| {
             let available = ui.available_rect_before_wrap();
-            if engine.stored_document().source_info().is_some() {
+            if !engine.stored_document().is_fully_mapped() {
                 drawing.gesture = None;
                 ui.colored_label(
                     egui::Color32::DARK_RED,
@@ -232,6 +275,9 @@ pub fn show_workspace(
             };
             let mut commits = Vec::new();
             context.input(|input| {
+                if blocked {
+                    return;
+                }
                 // A native frame may contain the entire drag; press_origin is cleared on release.
                 for event in &input.events {
                     match event {
@@ -373,15 +419,22 @@ pub fn show_workspace(
                 gesture.revision = engine.state().revision;
             }
         });
+    if let Some(files) = files {
+        file_action = files.dialogs(context, &engine.state()).or(file_action);
+    }
+    file_action
 }
 
 /// Native application state for startup and bounded smoke verification.
 pub struct BondlineApp {
     smoke_frames: Option<u8>,
     engine: SharedEngine,
+    executor: CommandExecutor,
     control: Option<LoopbackServer>,
     error: Option<String>,
     drawing: DrawingState,
+    files: FileWorkflow,
+    exit_approved: bool,
 }
 
 impl BondlineApp {
@@ -397,10 +450,13 @@ impl BondlineApp {
             .ok_or_else(|| std::io::Error::other("wgpu renderer did not initialize"))?;
         let info = state.adapter.get_info();
         let engine = Arc::new(Mutex::new(Engine::default()));
+        let executor = CommandExecutor::new(Arc::clone(&engine));
         let control = control_port
             .map(|port| {
                 let context = cc.egui_ctx.clone();
-                LoopbackServer::bind(port, Arc::clone(&engine), move || context.request_repaint())
+                LoopbackServer::bind_with_executor(port, executor.clone(), move || {
+                    context.request_repaint()
+                })
             })
             .transpose()?;
         if smoke || control.is_some() {
@@ -415,9 +471,12 @@ impl BondlineApp {
         Ok(Self {
             smoke_frames: smoke.then_some(0),
             engine,
+            executor,
             control,
             error: None,
             drawing: DrawingState::default(),
+            files: FileWorkflow::new(std::env::home_dir().map_or_else(std::env::current_dir, Ok)?),
+            exit_approved: false,
         })
     }
 }
@@ -433,15 +492,36 @@ impl eframe::App for BondlineApp {
                 }
             });
         }
+        let mut action = None;
         match self.engine.lock() {
             Ok(mut engine) => {
-                show_workspace(context, &mut engine, &mut self.error, &mut self.drawing)
+                self.files.poll(&engine.state(), &mut self.error);
+                if context.input(|input| input.viewport().close_requested())
+                    && !self.exit_approved
+                    && !self.files.request_close(&engine.state())
+                {
+                    context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
+                }
+                action = show_workspace_with_files(
+                    context,
+                    &mut engine,
+                    &mut self.error,
+                    &mut self.drawing,
+                    Some(&mut self.files),
+                );
+                if self.files.take_close_request(&engine.state()) {
+                    self.exit_approved = true;
+                    context.send_viewport_cmd(egui::ViewportCommand::Close);
+                }
             }
             Err(_) => {
                 egui::CentralPanel::default().show(context, |ui| {
                     ui.colored_label(egui::Color32::DARK_RED, "Document engine unavailable");
                 });
             }
+        }
+        if let Some(action) = action {
+            self.error = self.files.start(action, &self.executor, context).err();
         }
         if let Some(frames) = &mut self.smoke_frames {
             *frames = frames.saturating_add(1);

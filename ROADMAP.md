@@ -40,12 +40,15 @@ references and retains source backing; an external Expat/Decimal oracle checks t
 Owned application snapshots/history retain that backing; unsynchronized edits cannot
 export stale XML. New native elemental CDXML encoding now preserves modeled metadata,
 connectivity and explicit Poster canvas extents; an external RDKit consumer opens the
-actual single-bond command's output. Imported structural edits and file workflows remain.
+actual single-bond command's output. Shared registry/native CDXML Open/Save/Save As and
+Mac safe-close/reopen/edit workflows now have independent file-consumer evidence. Unknown
+source passthrough/refusal, bounded atomic saves and background/stale-result guards pass.
+The original single-document chooser is partial File coverage; broader imported editing remains.
 Native independent C-C/three-H rendering is delivered, with explicit terminal labels.
 Source/history now has shared-allocation accounting and oldest-first byte eviction.
 A proven generated-file profile now reopens/edits/renders headlessly, retaining source and
-exact history; extended/noncanonical files remain guarded. Next: native workspace wiring,
-general source-preserving edits and registry open/save with failed-import/save retention;
+exact history; extended/noncanonical files remain guarded. Next: general source-preserving
+structural edits, broader native file parity and retention/recovery scenarios;
 broader query/label/style mapping, lossless CDX records, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.

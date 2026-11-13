@@ -2,170 +2,110 @@
 
 2026-11-13: persistent full-project goal active. Full M0 is NOT complete.
 
-The user requested GitHub publication. Public repository:
-https://github.com/thematheusmello/bondline, remote origin, branch main. Product checkpoint
-3d3dd44 was pushed and the remote SHA independently checked. Only verified committed work
-was published; new parallel file-workflow work is not in that checkpoint.
-Hosted Rust foundation run 43448214670 completed with overall failure:
-https://github.com/thematheusmello/bondline/actions/runs/43448214670.
-All three native jobs passed the aggregate gates. Mac/Windows also passed their actual
-three-frame window launches; Linux failed that step because libxkbcommon-x11-0 was absent.
-Linux CDXML ASan passed. The workflow now installs the missing runtime library.
-The correction is pushed as 8672de0. Hosted run 43451706668 completed successfully:
-https://github.com/thematheusmello/bondline/actions/runs/43451706668.
-All three aggregate checks, actual native windows and Linux ASan pass. Windows Dx12 and
-Linux Vulkan use software adapters; Mac Metal reports Apple Paravirtual device. These are
-API/window-smoke results, not interactive Windows/Linux chemical workflows or performance.
-See docs/ci.md for exact evidence. The published product code remains checkpoint 3d3dd44.
+Public repository: https://github.com/thematheusmello/bondline . Main is the verified
+b1e0f4b checkpoint; current feature integration is on feat/cdxml-file-workflow. Do not
+restart or discard the branch. Intentional changes are committed in small scopes; inspect
+Git log for the final UI hash. No release/installer distribution or reference account action.
 
-User-authorized parallel ownership is active: /root/file_io owns bounded filesystem I/O
-and atomic save/recovery; /root/native_file_ui owns the chooser and later native wiring;
-/root/file_verification owns independent acceptance tests and shared command/work/apply
-adapters. Root owns integration, CI and records. Their intentional WIP may be uncommitted and
-may contain RED tests. Do not duplicate, stage or publish another agent's unfinished scope.
-The backend/chooser whole-workspace gate passes locally with 192 tests. Real macOS and
-Linux Docker file tests pass. Native testing exposed Cmd+Q bypassing unsaved protection;
-root owns the pinned native-boundary repair. New Windows file runtime validation and
-final native-close verification remain. This work is not yet published.
-The native UI agent owns the only planned CUA session; coordinate before using that surface.
+## Current integrated scope
 
-Feature integration is on feat/cdxml-file-workflow, keeping main at verified b1e0f4b. Library
-I/O is35a6494; pinned native Quit bridge is3cdb712; Windows exact-DACL oracle correction is
-34d577d. Run43458663480 passes Windows/Ubuntu/ASan; its Mac job was queued at the last poll.
-Native Windows now confirms seven io unit and six file integration cases, including protected
-owner DACL, exclusive temporary, original DACL/Zone.Identifier and recovery. Core registry
-open/save now has54 focused adapter tests and193 full local workspace tests with the native
-Quit bridge; actual native UI delivery is a separate commit. Do not infer new adapter/runtime
-evidence from the earlier library-only hosted run.
+- Native Rust egui/wgpu workspace, eight typed commands shared by CLI, stdio MCP and opt-in
+  authenticated localhost. Registry: inspect, page.set_size, bond.create, undo, redo,
+  render.capture, document.open_cdxml, document.save_cdxml. No raw source XML in results.
+- Independent C-C single-bond drag with three explicitly authored H per carbon, terminal
+  labels, physical page controls and exact Undo/Redo. No connected graphs/chains/rings yet.
+- CPU/GPU canvas/PNG and the single human-approved golden. Its SHA remains
+  1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc.
+  Broader rendering/styles/labels and additional approved scenes remain missing.
+- Bounded standalone CDXML parser, exact opaque source, checked attribute edits and native
+  elemental writer. Full native profile requires complete input/re-encoding equality; do
+  not trust producer name. Pinned v0 fixture must stay editable across encoder upgrades.
+- Complete-source filesystem open/save: atomic no-clobber, explicit overwrite, cancellation,
+  access metadata and publication/recovery errors. See native-file-io.md for actual limits.
+- Native single-document Mac Open/Save/Save As, guarded dirty Open, overwrite confirmation,
+  background work, receipt-checked safe close and editable native-profile reopening. Original
+  CDXML-only chooser; not full reference File-menu/platform-dialog/window parity.
+- Exact dirty baseline survives Undo/Redo and is counted with current/history storage.
+  Current+saved essential data may exceed the128MiB threshold. Temporary worker/client
+  snapshots and allocator headers are excluded. This is not an RSS cap. Save preserves
+  history, an explicit difference from G25 printed14 pending exact26.1 evidence.
 
-Target clarification: one-to-one Professional desktop screens, controls, icon roles, flows
-and functionality. The user explicitly authorized reverse engineering; policy checkpoint
-72fafb3 supersedes the earlier program-inspection ban. Public docs/media plus authorized
-artifact/runtime evidence drive the target. See docs/research/parity-research-policy.md.
-The small current workspace is temporary, not a claim of design parity.
+## Verification
 
-Research checkpoint: all three engineering references are pinned in local sparse checkouts;
-docs/research/reference-projects.md records exact source paths, licenses and decisions.
-docs/research/official-ui-evidence.md records reviewed G25 screens, 26.1 deltas, tier
-boundaries and REA-controlled public browser observations. The official download center
-requires login; no reference desktop executable was acquired or inspected. The Signals
-web playlist's entry/first promotional slide is not desktop behavior evidence. Its owned
-browser processes all terminated. Six UI/flow IDs now group the existing parity inventory;
-none claims a delivered reference screen. Public desktop video playback remains unverified.
+Final local cargo xtask ci passes193 workspace tests plus3 native AccessKit bridge tests,
+fmt, warnings-denied clippy (including that bridge), layers, native licenses/assets and
+pinned corpus. Log: target/files-ci-integrated.log. Windows/Linux all-target workspace
+source checks pass. Tests are independent Expat/Decimal/Pillow/RDKit, analytic geometry,
+approved pixels and fixed-seed history properties; not just our own codec round trips.
 
-The native desktop/GPU declared-license blocker remains resolved without broadening the
-MIT/Apache-2.0/BSD shipped policy. The new filesystem adapter's exact target-only dependencies
-bring the branch closure to Mac arm64 153, Windows x64 164, Linux x64 219 runtime
-packages plus two hash/notice-verified bundled assets. Full release notice/source audit
-and the Unicode-bearing browser candidate remain separate work.
+Mac native UI final executable SHA:
+f331610a4689105b11495016c18513e3a2a69c04921acfeb82c3e25e93961b1d.
+Actual AX Folder/Unicode-name, Save/Open, editing, Quit Cancel and Quit Save pass on that
+exact rebuilt binary. Broader native phases cover overwrite/discard, malformed retention,
+opaque byte-exact copy and red close/CmdW. External XML/RDKit confirms the final saved
+file's two CC/C2H6 fragments, SHA b0272acb0013ed45ee2a09bd68989927245faff73bc9f61a7777b5cf30bab590.
+See docs/native-file-ui.md and docs/verification.md. App/CUA session closed; no native
+listener or file-worker handle remains. Protect startup control tokens; never put them in
+reports. target/dev bundle and target/ evidence are disposable, never committed.
 
-The new io library provides bounded complete-source reads, atomic no-clobber/explicit overwrite,
-typed publication/recovery outcomes and access-metadata preservation. Native Mac io passes
-44 tests; actual Linux Docker file cases pass 17 tests. Strict source/declared-license checks
-pass; Windows file/ACL execution remains pending. No registry/native file-menu workflow is
-claimed by this library checkpoint. See docs/native-file-io.md for security and durability
-boundaries, dependency archive pins and the missing windows-permissions upstream notice.
+Hosted baseline run43451706668 succeeded on all three OSes, actual windows and Linux ASan:
+https://github.com/thematheusmello/bondline/actions/runs/43451706668 . It fixed missing Linux
+libxkbcommon-x11-0 after first-run RED. Reported adapters: Mac Metal/Apple Paravirtual,
+Windows Dx12/Microsoft Basic Render Driver(Cpu), Linux Vulkan/llvmpipe(Cpu). API/window
+smoke is not interactive Windows/Linux chemical editing or hardware performance.
 
-Verified in the current drawing/history/encoding checkpoint:
-- 147 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses
-  and the pinned corpus gate. All three hosted aggregate checks also pass; Mac/Windows
-  native-window smoke passes on all three platforms. Windows/Linux interactive workflows
-  remain unverified.
-- Six shared typed commands: document.inspect, page.set_size, bond.create, history.undo,
-  history.redo, render.capture. CLI, stdio MCP, authenticated loopback and native UI use them.
-- The first drawing workflow: drag an independent single C-C fragment, with three authored
-  H per carbon and subscripted H3C/CH3 terminal labels; one undo step, exact Undo/Redo and
-  revision-bound CPU/GPU PNG captures. It does not attach to existing atoms or draw chains.
-- Native Mac/Apple M3 Max/Metal: actual drag from empty at revision 1; Cmd+Z emptied the
-  model at 2; Shift+Cmd+Z restored it at 3. Deliberate overlapping labels at 4 produced a
-  visible error and a capture failure; native Undo at 5 restored exact model and PNG bytes.
-- Two native failures were reproduced in RED tests and fixed: error text clipped below
-  the canvas, and a complete fast drag lost between frames. Ordered events also handle
-  multiple drags per frame. Escape/focus/stale-revision/outside/jitter cancellation has
-  input-test evidence; those variants are not all individually verified on native platforms.
-- Three 128-case fixed-seed properties now cover native page edits, source-backed history
-  and authored bond graphs. Session identity floors survive Undo branches and only advance
-  after successful commits.
-- Retained history has a 128-prior-snapshot cap and a 128 MiB accounted-storage threshold.
-  Sources, models, baselines and fragments are counted by allocation identity; reserved
-  vectors count too. Tests reproduce/release distinct 45 MiB XML allocations, keep 128 edits
-  of a shared 2 MiB source, preserve the newest suffix/current data and release discarded redo.
-  This is headless engine evidence. Arc/allocator headers, temporary work, caches and external
-  snapshots are excluded, and the current document is always kept even if it alone exceeds
-  the threshold. This is not a hard process-memory limit or native import workflow.
+Feature library run43458663480 at34d577d passes native Windows seven io unit +six file
+integration tests, Ubuntu and ASan, including DACL/exclusive temp/Zone.Identifier/recovery:
+https://github.com/thematheusmello/bondline/actions/runs/43458663480 . Its overall result is
+unsuccessful: Mac job131999452071 was never acquired after multiple attempts, then cancelled
+for hosted arm64 capacity constraints (empty steps/runner). No Mac test failed or ran in
+that job. Exact provider annotations are in ignored target/file-io-hosted-macos-*.json.
+This run predates the final command/UI/AX integration; a fresh branch run remains required.
+Do not restart an unobserved live run or infer success from queue/configuration.
 
-Rendering evidence: ordered rectangles/butt strokes, independent integer geometry oracle,
-font metrics from external FontTools 4.61.1 and terminal-label masks compared with external
-Pillow 12.3.0/FreeType. The declared 0.90 ink-IoU threshold yielded 0.9660/0.9669. Oblique f32
-GPU edge comparisons allow only the previously declared 1/32-pixel boundary band. Native
-vector edges may be antialiased by egui; readbacks and label spans are not antialiased.
+Native Mac io44 tests and actual Linux arm64 Docker17 file tests pass. Linux invalid-byte
+paths/FIFO/ACL cases use container-native /tmp with repository read-only, not fake APFS
+fixtures. The isolated pinned ASan harness also passed10000 runs, seed3641879538, max_len65536,
+timeout5, coverage3656/features10813/corpus669 entries175KiB/reported RSS178MiB; no failure.
+It fuzzes parsers/source editing, not filesystem behavior. Locks retained existing versions.
 
-The user approved the displayed specific-scene 1024×1024 Metal capture. Its durable PNG,
-coordinates, approval scope and SHA-256 are in crates/render/tests/goldens. CPU/GPU output
-matches every independently decoded RGBA byte; deliberate corruption fails. Hash:
-1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc.
-This is not approval of final application design or general rendering. The older blank-page
-candidate remains unapproved; no approval was inferred from silence.
+## Provenance and remaining limits
 
-M1 evidence: bounded standalone CDXML syntax with exact source preservation and
-checked attribute replacement; independent Expat/Decimal/numeric vectors; direct-position
-and read-only elemental projections; owned source/model/baseline snapshots retained by
-history. Unchanged-source export is byte-exact; unsynchronized model edits cannot export
-stale XML. New standalone syntax construction and native elemental CDXML encoding now
-preserve modeled metadata, all sixteen bond orders, direction and Poster canvas extents.
-Sparse/maximal app IDs map to unique source IDs; invalid isotope/range/budget cases fail.
-StoredDocument::to_cdxml borrows unchanged source or returns newly encoded native bytes.
-An external RDKit 2026.09.2 process opens actual bond.create output and confirms ethane's
-atoms/bond/hydrogens, SMILES and formula. This is one interoperability scene, not an
-implemented Bondline chemistry engine or general rendering/file parity.
-Exact native-profile files now reopen for headless rendering, bond creation, encoding and
-exact Undo/Redo. The full input must match re-encoding byte-for-byte; the producer name alone
-cannot authorize dropping styles, captions, unknown fields or comments. The pinned original
-v0 fixture and independent Expat/hash checks protect that compatibility across upgrades.
-Other source-backed bond creation/preview still fail explicitly. Native workspace/file
-wiring remains separate. There is no registry/native open/save/reopen workflow, general imported structural
-writer, CDX parser or MOL/SMILES codec. Drawings in the application are
-session-local. Other atom/bond kinds, connected edits, style sheets and chemistry algorithms
-are missing, even when their pure model types exist.
+The native license blocker is resolved without broadening MIT/Apache/BSD policy. Declared
+runtime closure153/164/219 on Mac/Windows/Linux plus two hash/notice-checked bundled assets.
+This is not a completed release source/notice audit: windows-permissions0.2.4 declares MIT
+but upstream omits a LICENSE; exact metadata/author/pins and that gap are recorded. Browser
+Unicode-bearing candidate remains unapproved. No new unsafe in model/parsers/commands/UI;
+reviewed OS boundaries and exact original-source forks are documented in AGENTS and policy.
 
-Corpus: two pinned BSD-3-Clause RDKit files, one CDXML byte/XML/model/owned-snapshot check;
-MOL integrity only; no CDX entry or chemistry calculation coverage. The extended pinned ASan
-harness completed 10000 runs with complete-profile edited re-encoding, seed
-3641879538/max_len 65536/timeout 5, coverage 3605 and corpus 632/168 KiB. This bounded run is
-not exhaustive validation. External Python consumers are isolated under ignored
-.cache/oracles/format-python; requirements-dev.txt pins Pillow/NumPy/RDKit. See development.md
-for BONDLINE_PYTHON selection; system Python was not modified.
+Public specs, G25,26.x release notes and pinned PhotoCraft/VoiceStudio/REA research remain
+in docs/clean-room/sources.md and docs/research. User-authorized artifact/runtime research
+uses original Rust/assets; no reference desktop executable was obtained or inspected.
+Download center requires login. Observed Signals cloud slides are not desktop evidence.
+The573-row inventory lacks complete modern menus/unnamed glyphs/context menus. No full
+screen/design/tool parity is claimed. Additional modern inventory audit is delegated to
+/root/file_verification; it owns only docs/research/modern-inventory-audit.md.
 
-Next exact tasks:
-1. Finish/version the screen, palette, icon, dialog and end-to-end flow inventory using the
-   newly pinned public research and authorized artifacts. Existing 573 control rows are not
-   a complete modern inventory. Separate desktop/platform/tier evidence from cloud demos.
-2. Wire the now-proven native profile into the native workspace and atomic registry open/save;
-   do not trust CreationProgram alone or drop unknown foreign data. Add general source-
-   preserving edits with failed-import/save retention
-   tests, bounded path access and independent consumers. Save from the complete StoredDocument,
-   never regenerate a bare imported projection. Inspect the pinned reference-project approaches.
-3. Extend single-bond behavior to existing-atom attachment, connected graphs, click creation,
-   snapping and order changes, with native workflows and tests. The current independent-bond
-   command is partial reference coverage; retain all remaining M1–M5 requirements.
-4. Inspect interactive Windows/Linux workflows when available; the Linux CI correction now
-   passes. Continue independent work meanwhile. Broaden approved render
-   scenes with actual human review.
+CDX/MOL/SDF/RXN/SMILES/InChI codecs, chemistry algorithms, connected construction, selection,
+styles, templates, general captions/arrows and publishing/Office/WASM/installers remain.
+Corpus has two pinned BSD RDKit files: one CDXML syntax/model/source check, one MOL integrity
+only. No CDX or differential chemistry calculation coverage. External RDKit's ethane checks
+are consumers, not an implemented Bondline formula/SMILES engine. Rendering is limited;
+small viewports can hit label-scale guards. Full VoiceOver, Dock/session logout/shutdown,
+Touch Bar and interactive Windows/Linux file gestures remain unverified. No autosave journal.
 
-The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1, the drawing
-checkpoint is 7043563 and the research checkpoint is 952ded5. The current research policy
-and full goal are active. Publication above was explicitly requested; no reference-product
-account/agreement action, release publication or installer distribution was performed.
-History budgeting is ca9b859 and native encoding is 23ffd33. The profile checkpoint includes this record;
-use Git log for its final hash.
+## Next exact actions
 
-The disposable target/dev/Bondline.app contains the verified ordered-event drawing build
-and is closed. It predates history accounting and native encoding. Final native exec
-93577 exited 0; 127.0.0.1:50110 was independently confirmed
-closed. Earlier test builds 22527 and 75463 also exited. Startup credentials remain only
-in ignored private target logs; never copy them into reports. Earlier REA exposure evidence
-is historical and tied to a prior digest, not this build. No confirmed native/Cargo/fuzz
-process remains running from that checkpoint. The first hosted run is complete; delegated
-tasks above retain their explicit ownership; recheck live handles on continuation. The
-corrective run is complete. New file-workflow native sessions are disposable and documented
-under ignored target/native-file-ui-native-evidence.md; root has not used that CUA surface.
+1. Publish/inspect fresh full feature-branch CI, preserving actual runner-capacity failures.
+   Merge to main only after required integration evidence; no release publication requested.
+2. Read the new inventory audit when ready; reconcile sourced rows and unresolved modern
+   controls without claiming completeness from counts or cloud demo imagery.
+3. Close remaining M0 architecture/inventory gaps, including named automation for remaining
+   UI lifecycle/dialog actions and broader model/transaction requirements. Do not call M0
+   complete from a license fix or one file workflow.
+4. Continue M1 source-preserving structural edits/CDX/other formats and M2 connected bonds,
+   snapping/order/labels with independent tests and actual native workflows. Keep M3-M5 full.
+
+Product implementation agents finished; no confirmed Cargo/native/fuzz job remains. Only
+research agent above is active; root will record any newly started hosted run handle before
+stopping. Recheck authoritative agent/job state on continuation. Do not duplicate live work.

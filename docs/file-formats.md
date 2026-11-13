@@ -2,7 +2,7 @@
 
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
-| CDXML | Source-preserving syntax/attribute edits, elemental projections/owned backing, native elemental encoding and registry open/save | Expat/Decimal vectors; pinned unchanged corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket files opened by external RDKit; ASan parser/writer smoke | General imported structural edits, queries/labels/styles/stereo, wider corpus and native file-menu parity |
+| CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
 | CDX | None | Published specification recorded | Parser, preservation, writer and model mapping |
 | MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |

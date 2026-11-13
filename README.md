@@ -7,9 +7,9 @@ An independent, offline chemical drawing application being built in Rust.
 
 The compatibility target includes CDXML and CDX files used by ChemDraw Professional.
 The first drawing workflow creates an independent C-C bond with terminal hydrogen labels,
-supports Undo/Redo and captures its canvas on CPU or GPU. Connected construction and file
-menus are a separate native integration. The shared CLI/MCP/control commands now open/save
-supported CDXML, including editable reopening of proven Bondline-native files.
+supports Undo/Redo and captures its canvas on CPU or GPU. Native Open, Save and Save As now
+preserve supported CDXML, with unsaved/overwrite protection and editable reopening of proven
+Bondline-native files. Connected construction and general imported-file editing remain missing.
 The standalone CDXML crate preserves syntax and replaces existing attribute values without rewriting
 unrelated bytes. A separate bounded writer and io encoder now produce new elemental CDXML
 with explicit canvas extents; see [tested format scope](docs/file-formats.md).
@@ -17,17 +17,21 @@ The headless model stores validated atom/bond/fragment data. The io crate maps l
 source-backed node-position and elemental graph views. Engine snapshots/history now retain
 complete original CDXML bytes, with guarded unchanged-source export. Application
 import/save commands preserve complete backing; general imported-file rendering remains limited.
+The original single-document chooser is CDXML-only; it does not establish full reference
+file-menu, platform-dialog, multi-document or screen parity. Unknown opaque files save unchanged
+byte-for-byte; unsupported modifications/rendering fail explicitly.
 History now counts shared source/model data once and evicts oldest snapshots at an
 approximate 128 MiB retained-storage threshold; current data is always kept. This is not
 a whole-process memory cap; see [the command contract](docs/control-protocol.md).
 Bondline is not affiliated
 with, endorsed by, or sponsored by ChemDraw or Revvity Signals.
 
-Current capabilities: native page sizing/rotation and Undo/Redo, independently sourced Apache-2.0
+Current capabilities: native page sizing/rotation, file workflows and Undo/Redo, independently sourced Apache-2.0
 font, original icon, shared CPU/GPU page-scene reference, and strict native runtime/asset
 license gates. Native macOS drawing was visually inspected; hosted macOS/Windows tests and
-three-frame window launches pass on all three desktop platforms. Linux's initial missing
-system library was fixed and its hosted launch now passes. This remains a development foundation with one limited
+three-frame window launches pass on all three desktop platforms at the recorded checkpoints.
+New filesystem tests also run on native Windows and Linux. Latest hosted integration evidence
+and runner-capacity limits are recorded in [CI scope](docs/ci.md). This is a development foundation with one limited
 drawing workflow. The registry/CLI can inspect the document, size pages, create independent
 bonds, open/save supported CDXML, undo/redo and capture scenes with revision/backend evidence.
 
@@ -42,6 +46,7 @@ cargo run -p bondline-ui --bin bondline -- --smoke-test
 cargo run -p bondline-cli -- commands
 cargo run -p bondline-cli -- run --cmd '{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}'
 cargo run -p bondline-cli -- run --cmd '{"command":"bond.create","params":{"page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200}}'
+cargo run -p bondline-cli -- run --cmd '{"command":"document.open_cdxml","params":{"path":"crates/io/tests/fixtures/bondline-v0.cdxml"}}' --cmd '{"command":"document.save_cdxml","params":{"path":"target/example.cdxml"}}'
 cargo test --workspace --locked
 cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo fmt --all -- --check
@@ -50,6 +55,12 @@ cargo xtask layers
 cargo xtask corpus
 cargo xtask ci
 ```
+
+The file example needs an unused output path; overwriting requires explicit overwrite:true.
+Native file actions use the same registry in background workers. Cmd/Ctrl+O/S/Shift+S/W,
+unsaved Save/Discard/Cancel and Replace File are wired; the Mac workflow has actual native
+verification. Its two chooser fields support native accessibility entry on the tested Mac.
+Full VoiceOver and interactive Windows/Linux file workflows remain unverified.
 
 The smoke command launches the actual wgpu window, reports its adapter, and closes after
 three frames. [The dependency policy](docs/dependency-policy.md) records pinned forks,

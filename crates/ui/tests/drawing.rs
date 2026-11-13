@@ -31,6 +31,74 @@ fn button(pos: Pos2, pressed: bool) -> Event {
 }
 
 #[test]
+fn reopened_native_profile_is_visible_and_editable_in_the_real_workspace_renderer()
+-> Result<(), Box<dyn std::error::Error>> {
+    let context = egui::Context::default();
+    configure_context(&context);
+    let mut engine = Engine::default();
+    engine.dispatch("document.open_cdxml",serde_json::json!({"path":concat!(env!("CARGO_MANIFEST_DIR"),"/../io/tests/fixtures/bondline-v0.cdxml")}))?;
+    assert!(
+        engine.stored_document().is_fully_mapped(),
+        "pinned native profile must remain fully mapped on file import"
+    );
+    let mut drawing = DrawingState::default();
+    // Isolate source completeness from the renderer's separately tested minimum glyph scale.
+    context.begin_pass(egui::RawInput {
+        screen_rect: Some(egui::Rect::from_min_size(
+            Pos2::ZERO,
+            egui::vec2(1000.0, 900.0),
+        )),
+        ..Default::default()
+    });
+    show_workspace(&context, &mut engine, &mut None, &mut drawing);
+    let output = context.end_pass();
+    let messages = output
+        .shapes
+        .iter()
+        .filter_map(|shape| match &shape.shape {
+            egui::Shape::Text(text) => Some(text.galley.text()),
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+    assert!(output.shapes.iter().any(|shape| matches!(&shape.shape,egui::Shape::Rect(rect) if rect.fill == egui::Color32::WHITE)),"a complete native source profile must paint its editable page: {messages:?}");
+    let before = engine
+        .document()
+        .pages()
+        .first()
+        .ok_or("page")?
+        .fragments()
+        .len();
+    let begin = Pos2::new(420.0, 500.0);
+    let end = Pos2::new(500.0, 500.0);
+    context.begin_pass(egui::RawInput {
+        screen_rect: Some(egui::Rect::from_min_size(
+            Pos2::ZERO,
+            egui::vec2(1000.0, 900.0),
+        )),
+        events: vec![
+            Event::PointerMoved(begin),
+            button(begin, true),
+            Event::PointerMoved(end),
+            button(end, false),
+        ],
+        ..Default::default()
+    });
+    show_workspace(&context, &mut engine, &mut None, &mut drawing);
+    let _ = context.end_pass();
+    assert_eq!(
+        engine
+            .document()
+            .pages()
+            .first()
+            .ok_or("page")?
+            .fragments()
+            .len(),
+        before + 1
+    );
+    Ok(())
+}
+
+#[test]
 fn a_drag_commits_one_bond_but_escape_and_stale_revision_cancel_without_edits()
 -> Result<(), Box<dyn std::error::Error>> {
     let context = egui::Context::default();

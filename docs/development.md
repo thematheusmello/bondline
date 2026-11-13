@@ -45,7 +45,8 @@ input is rejected and closed. Future file operations still require explicit auth
 bounded input, validated paths and data-preserving save/recovery behavior.
 
 The independent single-bond workflow is native on Mac and available through bond.create in
-every adapter. It is session-local: no save/reopen command exists yet. See rendering.md for
+every adapter. CDXML Open/Save/Save As and safe native close/reopen now have Mac evidence;
+see native-file-ui.md for exact scope and UI/keyboard/platform limitations. See rendering.md for
 supported content, scale/primitive limits, exact golden scope and the missing connected tools.
 The user-approved render reference lives in crates/render/tests/goldens with its coordinates,
 hash and provenance. Do not refresh it to make a test pass without renewed human approval.

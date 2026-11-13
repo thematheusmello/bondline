@@ -1,0 +1,991 @@
+//! Original CDXML file chooser; document reads and writes belong to the shared executor.
+
+use eframe::egui;
+use std::{
+    path::{Path, PathBuf},
+    sync::{
+        Arc,
+        atomic::{AtomicU64, Ordering},
+        mpsc::{self, Receiver, SyncSender, TrySendError},
+    },
+    time::Duration,
+};
+
+const MAX_PATH_BYTES: usize = 32_768;
+const MAX_SCAN_ENTRIES: usize = 2_048;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum FileMode {
+    Open,
+    Save,
+}
+
+/// A file chooser never reads or writes document bytes. Dispatch this intent through the registry.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum FileAction {
+    Open { path: String, discard_unsaved: bool },
+    Save { path: String, overwrite: bool },
+}
+
+enum Confirmation {
+    Discard(String),
+    Overwrite(String),
+}
+
+#[derive(Default)]
+pub struct FileChooser {
+    mode: Option<FileMode>,
+    directory: PathBuf,
+    location: String,
+    name: String,
+    entries: Vec<DirectoryEntry>,
+    worker: Option<DirectoryWorker>,
+    pending: Option<ScanRequest>,
+    generation: u64,
+    loading: bool,
+    truncated: bool,
+    omitted: usize,
+    error: Option<String>,
+    confirmation: Option<Confirmation>,
+    focus_name: bool,
+}
+
+impl FileChooser {
+    pub fn begin(&mut self, mode: FileMode, directory: PathBuf, initial_name: String) {
+        self.mode = Some(mode);
+        self.name = initial_name;
+        self.confirmation = None;
+        self.focus_name = true;
+        self.navigate(directory);
+    }
+
+    pub fn is_open(&self) -> bool {
+        self.mode.is_some()
+    }
+
+    /// Restore an unsuccessful intent, preserving the exact requested path for an explicit retry.
+    pub fn failed(&mut self, action: FileAction, code: &str, message: String) {
+        let (mode, path) = match action {
+            FileAction::Open { path, .. } => (FileMode::Open, path),
+            FileAction::Save { path, .. } => (FileMode::Save, path),
+        };
+        let requested = Path::new(&path);
+        let directory = requested.parent().unwrap_or(Path::new(".")).to_owned();
+        let name = requested
+            .file_name()
+            .and_then(|name| name.to_str())
+            .unwrap_or(&path)
+            .to_owned();
+        self.begin(mode, directory, name);
+        self.confirmation = match (mode, code) {
+            (FileMode::Open, "unsaved_changes") => Some(Confirmation::Discard(path)),
+            (FileMode::Save, "already_exists") => Some(Confirmation::Overwrite(path)),
+            _ => None,
+        };
+        self.error = Some(message);
+    }
+
+    pub fn cancel(&mut self) {
+        self.mode = None;
+        self.confirmation = None;
+        self.pending = None;
+        if let Some(worker) = &self.worker {
+            // No filesystem call or thread join may block the UI during cancellation.
+            worker.latest.store(u64::MAX, Ordering::Relaxed);
+        }
+    }
+
+    fn navigate(&mut self, path: PathBuf) {
+        let Some(location) = path.to_str() else {
+            self.error = Some(
+                "This folder cannot be represented by the UTF-8 file command protocol.".to_owned(),
+            );
+            return;
+        };
+        if location.len() > MAX_PATH_BYTES || location.contains('\0') {
+            self.error = Some("The folder path is invalid or exceeds 32768 bytes.".to_owned());
+            return;
+        }
+        let Some(generation) = self
+            .generation
+            .checked_add(1)
+            .filter(|value| *value < u64::MAX)
+        else {
+            self.error =
+                Some("Directory navigation limit reached; restart the application.".to_owned());
+            return;
+        };
+        self.generation = generation;
+        self.location = location.to_owned();
+        self.directory = path.clone();
+        self.entries.clear();
+        self.truncated = false;
+        self.omitted = 0;
+        self.error = None;
+        self.loading = true;
+        if self.worker.is_none() {
+            match DirectoryWorker::new() {
+                Ok(worker) => self.worker = Some(worker),
+                Err(error) => {
+                    self.loading = false;
+                    self.error = Some(format!(
+                        "Cannot start folder browser: {error}. Enter a complete file path instead."
+                    ));
+                    return;
+                }
+            }
+        }
+        if let Some(worker) = &self.worker {
+            worker.latest.store(generation, Ordering::Relaxed);
+        }
+        self.pending = Some(ScanRequest { generation, path });
+    }
+
+    fn poll(&mut self) {
+        let mut completed = Vec::new();
+        if let Some(worker) = &self.worker {
+            while let Ok(scan) = worker.results.try_recv() {
+                completed.push(scan);
+            }
+            if let Some(request) = self.pending.take() {
+                match worker.requests.try_send(request) {
+                    Ok(()) => {}
+                    Err(TrySendError::Full(request)) => self.pending = Some(request),
+                    Err(TrySendError::Disconnected(_)) => {
+                        self.loading = false;
+                        self.error = Some(
+                            "Folder browser stopped. Enter a complete file path instead."
+                                .to_owned(),
+                        );
+                    }
+                }
+            }
+        }
+        for scan in completed {
+            self.accept_scan(scan);
+        }
+    }
+
+    fn accept_scan(&mut self, scan: DirectoryScan) {
+        if scan.generation == self.generation && scan.path == self.directory {
+            self.entries = scan.entries;
+            self.loading = false;
+            self.truncated = scan.truncated;
+            self.omitted = scan.omitted;
+            if scan.error.is_some() {
+                self.error = scan.error;
+            }
+        }
+    }
+
+    fn submit(&mut self, dirty: bool) -> Option<FileAction> {
+        let mode = self.mode?;
+        let path = match resolve_path(&self.directory, &self.name, mode) {
+            Ok(path) => path,
+            Err(error) => {
+                self.error = Some(error);
+                return None;
+            }
+        };
+        self.error = None;
+        if mode == FileMode::Open && dirty {
+            self.confirmation = Some(Confirmation::Discard(path));
+            return None;
+        }
+        self.cancel();
+        Some(match mode {
+            FileMode::Open => FileAction::Open {
+                path,
+                discard_unsaved: false,
+            },
+            FileMode::Save => FileAction::Save {
+                path,
+                overwrite: false,
+            },
+        })
+    }
+
+    fn confirm(&mut self) -> Option<FileAction> {
+        let action = match self.confirmation.take()? {
+            Confirmation::Discard(path) => FileAction::Open {
+                path,
+                discard_unsaved: true,
+            },
+            Confirmation::Overwrite(path) => FileAction::Save {
+                path,
+                overwrite: true,
+            },
+        };
+        self.cancel();
+        Some(action)
+    }
+
+    /// Draw after the workspace. The caller must suppress background authoring while this is open.
+    pub fn show(&mut self, context: &egui::Context, dirty: bool) -> Option<FileAction> {
+        let mode = self.mode?;
+        self.poll();
+        if context.input_mut(|input| input.consume_key(egui::Modifiers::NONE, egui::Key::Escape)) {
+            self.cancel();
+            return None;
+        }
+        if self.loading {
+            context.request_repaint_after(Duration::from_millis(40));
+        }
+        let mut action = None;
+        let mut open = true;
+        let title = if mode == FileMode::Open {
+            "Open CDXML"
+        } else {
+            "Save CDXML As"
+        };
+        egui::Window::new(title)
+            .id(egui::Id::new("bondline-file-chooser"))
+            .order(egui::Order::Foreground)
+            .anchor(egui::Align2::CENTER_CENTER, egui::Vec2::ZERO)
+            .collapsible(false)
+            .resizable(false)
+            .default_width((context.screen_rect().width() - 64.0).clamp(240.0, 640.0))
+            .open(&mut open)
+            .show(context, |ui| {
+                if let Some(confirmation) = &self.confirmation {
+                    let (message, button, path) = match confirmation {
+                        Confirmation::Discard(path) => ("Discard unsaved changes and open this file?", "Discard and Open", path),
+                        Confirmation::Overwrite(path) => ("Replace the existing file with the current document?", "Replace File", path),
+                    };
+                    ui.label(message);
+                    ui.label(egui::RichText::new(path).strong());
+                    if let Some(error) = &self.error {
+                        ui.colored_label(egui::Color32::DARK_RED, error);
+                    }
+                    ui.horizontal(|ui| {
+                        if ui.button("Cancel").clicked() {
+                            self.cancel();
+                        }
+                        if ui.button(button).clicked() {
+                            action = self.confirm();
+                        }
+                    });
+                    return;
+                }
+                ui.horizontal(|ui| {
+                    let label = ui.label("Folder");
+                    let location = ui.add(egui::TextEdit::singleline(&mut self.location)
+                        .id_source("bondline-file-folder").char_limit(MAX_PATH_BYTES)
+                        .desired_width(ui.available_width() - 96.0)).labelled_by(label.id);
+                    if let Err(error) = accessible_text_value(ui, &location, &mut self.location) {
+                        self.error = Some(error);
+                    }
+                    let enter = location.lost_focus() && ui.input(|input| input.key_pressed(egui::Key::Enter));
+                    if ui.button("Go").clicked() || enter {
+                        self.navigate(PathBuf::from(&self.location));
+                    }
+                    if ui.add_enabled(self.directory.parent().is_some(), egui::Button::new("Up")).clicked()
+                        && let Some(parent) = self.directory.parent()
+                    {
+                        self.navigate(parent.to_owned());
+                    }
+                });
+                ui.label("CDXML files (*.cdxml). Enter a complete path to open a file outside this list.");
+                if self.loading {
+                    ui.horizontal(|ui| {ui.spinner(); ui.label("Reading folder…");});
+                }
+                let mut navigate = None;
+                let mut submit = false;
+                egui::ScrollArea::vertical().id_salt("bondline-file-list")
+                    .max_height((context.screen_rect().height() - 290.0).clamp(80.0, 280.0))
+                    .min_scrolled_height(80.0)
+                    .show(ui, |ui| {
+                        ui.set_min_width(ui.available_width());
+                        if self.entries.is_empty() && !self.loading {
+                            ui.label("No CDXML files or folders listed.");
+                        }
+                        for entry in &self.entries {
+                            let label = if entry.directory {format!("[Folder] {}", entry.name)} else {entry.name.clone()};
+                            let response = ui.selectable_label(!entry.directory && self.name == entry.name, label);
+                            if response.clicked() {
+                                if entry.directory {
+                                    navigate = Some(self.directory.join(&entry.name));
+                                } else {
+                                    self.name.clone_from(&entry.name);
+                                }
+                            }
+                            if response.double_clicked() && !entry.directory {
+                                submit = true;
+                            }
+                        }
+                    });
+                if let Some(path) = navigate {
+                    self.navigate(path);
+                }
+                if self.truncated {
+                    ui.label("Folder list limited to the first 2048 entries. Enter a known file path or choose a smaller folder.");
+                }
+                if self.omitted > 0 {
+                    ui.label(format!("{} entries could not be listed (unsupported names or unreadable metadata).", self.omitted));
+                }
+                ui.horizontal(|ui| {
+                    let label = ui.label("File name");
+                    let name = ui.add(egui::TextEdit::singleline(&mut self.name)
+                        .id_source("bondline-file-name").char_limit(MAX_PATH_BYTES)
+                        .desired_width(ui.available_width())).labelled_by(label.id);
+                    if let Err(error) = accessible_text_value(ui, &name, &mut self.name) {
+                        self.error = Some(error);
+                    }
+                    if self.focus_name {
+                        name.request_focus();
+                        self.focus_name = false;
+                    }
+                    submit |= name.lost_focus() && ui.input(|input| input.key_pressed(egui::Key::Enter));
+                });
+                if let Some(error) = &self.error {
+                    ui.colored_label(egui::Color32::DARK_RED, error);
+                }
+                ui.horizontal(|ui| {
+                    if ui.button("Cancel").clicked() {
+                        self.cancel();
+                    }
+                    if ui.button(if mode == FileMode::Open {"Open"} else {"Save"}).clicked() || submit {
+                        action = self.submit(dirty);
+                    }
+                });
+            });
+        if !open {
+            self.cancel();
+        }
+        action
+    }
+}
+
+fn accessible_text_value(
+    ui: &egui::Ui,
+    response: &egui::Response,
+    value: &mut String,
+) -> Result<(), String> {
+    use egui::accesskit::{Action, ActionData};
+    let requested = ui.input(|input| {
+        input
+            .accesskit_action_requests(response.id, Action::SetValue)
+            .last()
+            .and_then(|request| match &request.data {
+                Some(ActionData::Value(value)) => {
+                    Some(if value.len() > MAX_PATH_BYTES || value.contains('\0') {
+                        Err(
+                            "The accessible field value is invalid or exceeds 32768 bytes."
+                                .to_owned(),
+                        )
+                    } else {
+                        Ok(value.to_string())
+                    })
+                }
+                _ => None,
+            })
+    });
+    let failure = match requested {
+        Some(Ok(requested)) => {
+            *value = requested;
+            ui.ctx().request_repaint();
+            None
+        }
+        Some(Err(error)) => Some(error),
+        None => None,
+    };
+    // Pinned egui TextEdit exposes selection, but does not implement SetValue itself.
+    ui.ctx().accesskit_node_builder(response.id, |builder| {
+        builder.add_action(Action::SetValue);
+        builder.set_value(value.as_str());
+    });
+    failure.map_or(Ok(()), Err)
+}
+
+fn resolve_path(directory: &Path, name: &str, mode: FileMode) -> Result<String, String> {
+    if name.trim().is_empty() || name.contains('\0') || name.len() > MAX_PATH_BYTES {
+        return Err(
+            "Enter a nonempty file name without NUL characters (maximum 32768 bytes).".to_owned(),
+        );
+    }
+    let mut path = directory.join(name);
+    match path.extension().and_then(|extension| extension.to_str()) {
+        Some(extension) if extension.eq_ignore_ascii_case("cdxml") => {}
+        None if mode == FileMode::Save => {
+            path.set_extension("cdxml");
+        }
+        _ => return Err("Only .cdxml files are supported by this workflow.".to_owned()),
+    }
+    let path = path
+        .into_os_string()
+        .into_string()
+        .map_err(|_| "The file path is not valid UTF-8.".to_owned())?;
+    if path.len() > MAX_PATH_BYTES {
+        return Err("The complete file path exceeds 32768 bytes.".to_owned());
+    }
+    Ok(path)
+}
+
+struct DirectoryEntry {
+    name: String,
+    directory: bool,
+}
+
+struct ScanRequest {
+    generation: u64,
+    path: PathBuf,
+}
+
+struct DirectoryScan {
+    generation: u64,
+    path: PathBuf,
+    entries: Vec<DirectoryEntry>,
+    truncated: bool,
+    omitted: usize,
+    error: Option<String>,
+}
+
+struct DirectoryWorker {
+    requests: SyncSender<ScanRequest>,
+    results: Receiver<DirectoryScan>,
+    latest: Arc<AtomicU64>,
+}
+
+impl DirectoryWorker {
+    fn new() -> std::io::Result<Self> {
+        let (requests, receiver) = mpsc::sync_channel(1);
+        let (sender, results) = mpsc::sync_channel(1);
+        let latest = Arc::new(AtomicU64::new(0));
+        let worker_latest = Arc::clone(&latest);
+        std::thread::Builder::new()
+            .name("bondline-folder-browser".to_owned())
+            .spawn(move || {
+                while let Ok(request) = receiver.recv() {
+                    if let Some(result) = scan_directory(request, &worker_latest)
+                        && sender.send(result).is_err()
+                    {
+                        break;
+                    }
+                }
+            })?;
+        Ok(Self {
+            requests,
+            results,
+            latest,
+        })
+    }
+}
+
+impl Drop for DirectoryWorker {
+    fn drop(&mut self) {
+        self.latest.store(u64::MAX, Ordering::Relaxed);
+    }
+}
+
+fn scan_directory(request: ScanRequest, latest: &AtomicU64) -> Option<DirectoryScan> {
+    if request.generation != latest.load(Ordering::Relaxed) {
+        return None;
+    }
+    let mut result = DirectoryScan {
+        generation: request.generation,
+        path: request.path,
+        entries: Vec::new(),
+        truncated: false,
+        omitted: 0,
+        error: None,
+    };
+    match std::fs::read_dir(&result.path) {
+        Err(error) => result.error = Some(format!("Cannot read folder: {error}")),
+        Ok(directory) => {
+            // shortcut: list at most 2048 directory entries; add paging for large-library workflows.
+            for (index, entry) in directory.take(MAX_SCAN_ENTRIES + 1).enumerate() {
+                if request.generation != latest.load(Ordering::Relaxed) {
+                    return None;
+                }
+                if index == MAX_SCAN_ENTRIES {
+                    result.truncated = true;
+                    break;
+                }
+                let entry = match entry {
+                    Ok(entry) => entry,
+                    Err(_) => {
+                        result.omitted += 1;
+                        continue;
+                    }
+                };
+                let Ok(name) = entry.file_name().into_string() else {
+                    result.omitted += 1;
+                    continue;
+                };
+                let metadata = match std::fs::metadata(entry.path()) {
+                    Ok(metadata) => metadata,
+                    Err(_) => {
+                        result.omitted += 1;
+                        continue;
+                    }
+                };
+                let directory = metadata.is_dir();
+                if directory
+                    || metadata.is_file()
+                        && Path::new(&name)
+                            .extension()
+                            .is_some_and(|extension| extension.eq_ignore_ascii_case("cdxml"))
+                {
+                    result.entries.push(DirectoryEntry { name, directory });
+                }
+            }
+        }
+    }
+    result.entries.sort_by(|a, b| {
+        b.directory
+            .cmp(&a.directory)
+            .then_with(|| a.name.to_lowercase().cmp(&b.name.to_lowercase()))
+            .then_with(|| a.name.cmp(&b.name))
+    });
+    Some(result)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::{fs, sync::atomic::AtomicUsize};
+
+    static NEXT_DIRECTORY: AtomicUsize = AtomicUsize::new(0);
+
+    struct Directory(PathBuf);
+    impl Directory {
+        fn new() -> Result<Self, Box<dyn std::error::Error>> {
+            let path = std::env::temp_dir().join(format!(
+                "bondline-chooser-{}-{}",
+                std::process::id(),
+                NEXT_DIRECTORY.fetch_add(1, Ordering::Relaxed)
+            ));
+            fs::create_dir(&path)?;
+            Ok(Self(path))
+        }
+    }
+    impl Drop for Directory {
+        fn drop(&mut self) {
+            let _ = fs::remove_dir_all(&self.0);
+        }
+    }
+
+    #[test]
+    fn directory_scan_filters_and_sorts_without_reading_document_contents()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = Directory::new()?;
+        fs::create_dir(directory.0.join("Z folder"))?;
+        fs::write(directory.0.join("b.cdxml"), b"not XML")?;
+        fs::write(directory.0.join("A.CDXML"), b"also not XML")?;
+        fs::write(directory.0.join("other.mol"), b"not supported")?;
+        let latest = AtomicU64::new(1);
+        let result = scan_directory(
+            ScanRequest {
+                generation: 1,
+                path: directory.0.clone(),
+            },
+            &latest,
+        )
+        .ok_or("scan cancelled")?;
+        assert_eq!(
+            result
+                .entries
+                .iter()
+                .map(|entry| (entry.name.as_str(), entry.directory))
+                .collect::<Vec<_>>(),
+            vec![("Z folder", true), ("A.CDXML", false), ("b.cdxml", false)]
+        );
+        assert!(!result.truncated);
+        assert!(result.error.is_none());
+        Ok(())
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn directory_scan_lists_usable_symlinks() -> Result<(), Box<dyn std::error::Error>> {
+        use std::os::unix::fs::symlink;
+        let directory = Directory::new()?;
+        let target = Directory::new()?;
+        fs::write(target.0.join("real.cdxml"), b"opaque")?;
+        symlink(&target.0, directory.0.join("linked folder"))?;
+        symlink(target.0.join("real.cdxml"), directory.0.join("alias.cdxml"))?;
+        let latest = AtomicU64::new(1);
+        let scan = scan_directory(
+            ScanRequest {
+                generation: 1,
+                path: directory.0.clone(),
+            },
+            &latest,
+        )
+        .ok_or("scan cancelled")?;
+        assert_eq!(
+            scan.entries
+                .iter()
+                .map(|entry| (entry.name.as_str(), entry.directory))
+                .collect::<Vec<_>>(),
+            vec![("linked folder", true), ("alias.cdxml", false)]
+        );
+        assert_eq!(scan.omitted, 0);
+        Ok(())
+    }
+
+    #[cfg(target_os = "linux")]
+    #[test]
+    fn directory_scan_reports_names_that_the_json_protocol_cannot_represent()
+    -> Result<(), Box<dyn std::error::Error>> {
+        use std::os::unix::ffi::OsStringExt;
+        let directory = Directory::new()?;
+        fs::write(
+            directory.0.join(std::ffi::OsString::from_vec(vec![0xff])),
+            [],
+        )?;
+        let latest = AtomicU64::new(1);
+        let scan = scan_directory(
+            ScanRequest {
+                generation: 1,
+                path: directory.0.clone(),
+            },
+            &latest,
+        )
+        .ok_or("scan cancelled")?;
+        assert_eq!(scan.omitted, 1);
+        Ok(())
+    }
+
+    #[test]
+    fn scan_cancellation_limits_and_missing_directory_are_explicit()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = Directory::new()?;
+        let latest = AtomicU64::new(2);
+        assert!(
+            scan_directory(
+                ScanRequest {
+                    generation: 1,
+                    path: directory.0.clone()
+                },
+                &latest
+            )
+            .is_none()
+        );
+        let missing = scan_directory(
+            ScanRequest {
+                generation: 2,
+                path: directory.0.join("missing"),
+            },
+            &latest,
+        )
+        .ok_or("scan cancelled")?;
+        assert!(missing.error.is_some());
+        for index in 0..=MAX_SCAN_ENTRIES {
+            fs::write(directory.0.join(format!("{index}.cdxml")), [])?;
+        }
+        let limited = scan_directory(
+            ScanRequest {
+                generation: 2,
+                path: directory.0.clone(),
+            },
+            &latest,
+        )
+        .ok_or("scan cancelled")?;
+        assert!(limited.truncated);
+        assert!(limited.entries.len() <= MAX_SCAN_ENTRIES);
+        Ok(())
+    }
+
+    #[test]
+    fn explicit_path_rules_preserve_spaces_unicode_and_limit_advertised_formats()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = Directory::new()?;
+        let expected = directory
+            .0
+            .join("λ sample.CDXML")
+            .into_os_string()
+            .into_string()
+            .map_err(|_| "unicode")?;
+        assert_eq!(
+            resolve_path(&directory.0, "λ sample.CDXML", FileMode::Open)?,
+            expected
+        );
+        assert_eq!(
+            resolve_path(&directory.0, "fresh", FileMode::Save)?,
+            directory.0.join("fresh.cdxml").to_str().ok_or("unicode")?
+        );
+        for bad in ["", "   ", "bad\0.cdxml", "sample.cdx", "sample.mol"] {
+            assert!(
+                resolve_path(&directory.0, bad, FileMode::Open).is_err(),
+                "{bad:?}"
+            );
+        }
+        assert!(
+            resolve_path(
+                &directory.0,
+                &"a".repeat(MAX_PATH_BYTES + 1),
+                FileMode::Save
+            )
+            .is_err()
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn opening_dirty_work_and_overwriting_require_separate_explicit_choices()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = Directory::new()?;
+        let mut chooser = FileChooser::default();
+        chooser.begin(
+            FileMode::Open,
+            directory.0.clone(),
+            "sample.cdxml".to_owned(),
+        );
+        chooser.error = Some("Previous file failed to decode".to_owned());
+        assert!(chooser.submit(true).is_none());
+        assert!(
+            chooser.error.is_none(),
+            "a valid new intent must clear the previous file's error before confirmation"
+        );
+        assert!(matches!(
+            chooser.confirmation,
+            Some(Confirmation::Discard(_))
+        ));
+        chooser.confirmation = None;
+        let action = chooser.submit(false).ok_or("no open action")?;
+        assert!(matches!(
+            &action,
+            FileAction::Open {
+                discard_unsaved: false,
+                ..
+            }
+        ));
+        assert!(!chooser.is_open());
+        chooser.failed(
+            action,
+            "unsaved_changes",
+            "Document changed while opening".to_owned(),
+        );
+        assert!(chooser.is_open());
+        let discard = chooser.confirm().ok_or("no confirmed open")?;
+        assert!(matches!(
+            discard,
+            FileAction::Open {
+                discard_unsaved: true,
+                ..
+            }
+        ));
+        chooser.begin(
+            FileMode::Save,
+            directory.0.clone(),
+            "sample.cdxml".to_owned(),
+        );
+        let save = chooser.submit(false).ok_or("no save action")?;
+        assert!(matches!(
+            &save,
+            FileAction::Save {
+                overwrite: false,
+                ..
+            }
+        ));
+        chooser.failed(
+            save,
+            "already_exists",
+            "This file already exists".to_owned(),
+        );
+        assert!(matches!(
+            chooser.confirmation,
+            Some(Confirmation::Overwrite(_))
+        ));
+        assert!(matches!(
+            chooser.confirm(),
+            Some(FileAction::Save {
+                overwrite: true,
+                ..
+            })
+        ));
+        assert!(
+            !directory.0.join("sample.cdxml").exists(),
+            "chooser never writes document bytes"
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn stale_scan_results_never_replace_the_current_directory()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = Directory::new()?;
+        let mut chooser = FileChooser::default();
+        chooser.begin(FileMode::Open, directory.0.clone(), String::new());
+        let old = chooser.generation;
+        let old_path = chooser.directory.clone();
+        chooser.navigate(directory.0.join("next"));
+        chooser.accept_scan(DirectoryScan {
+            generation: old,
+            path: old_path,
+            entries: vec![DirectoryEntry {
+                name: "stale.cdxml".to_owned(),
+                directory: false,
+            }],
+            truncated: false,
+            omitted: 0,
+            error: None,
+        });
+        assert!(chooser.entries.is_empty());
+        assert!(chooser.loading);
+        Ok(())
+    }
+
+    #[test]
+    fn escape_closes_the_real_egui_dialog_without_an_action()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = Directory::new()?;
+        let context = egui::Context::default();
+        crate::configure_context(&context);
+        let mut chooser = FileChooser::default();
+        chooser.begin(FileMode::Open, directory.0.clone(), String::new());
+        for events in [
+            vec![],
+            vec![egui::Event::Key {
+                key: egui::Key::Escape,
+                physical_key: Some(egui::Key::Escape),
+                pressed: true,
+                repeat: false,
+                modifiers: egui::Modifiers::NONE,
+            }],
+        ] {
+            context.begin_pass(egui::RawInput {
+                screen_rect: Some(egui::Rect::from_min_size(
+                    egui::Pos2::ZERO,
+                    egui::vec2(1000.0, 700.0),
+                )),
+                events,
+                ..Default::default()
+            });
+            assert!(chooser.show(&context, false).is_none());
+            let _ = context.end_pass();
+        }
+        assert!(!chooser.is_open());
+        Ok(())
+    }
+
+    #[test]
+    fn typed_file_name_and_enter_emit_the_exact_registry_intent()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = Directory::new()?;
+        let context = egui::Context::default();
+        crate::configure_context(&context);
+        let mut chooser = FileChooser::default();
+        chooser.begin(FileMode::Save, directory.0.clone(), String::new());
+        let mut emitted = None;
+        for events in [
+            vec![],
+            vec![egui::Event::Text("λ sample".to_owned())],
+            vec![egui::Event::Key {
+                key: egui::Key::Enter,
+                physical_key: Some(egui::Key::Enter),
+                pressed: true,
+                repeat: false,
+                modifiers: egui::Modifiers::NONE,
+            }],
+        ] {
+            context.begin_pass(egui::RawInput {
+                screen_rect: Some(egui::Rect::from_min_size(
+                    egui::Pos2::ZERO,
+                    egui::vec2(1000.0, 700.0),
+                )),
+                events,
+                ..Default::default()
+            });
+            emitted = chooser.show(&context, false).or(emitted);
+            let _ = context.end_pass();
+        }
+        assert_eq!(
+            emitted,
+            Some(FileAction::Save {
+                path: directory
+                    .0
+                    .join("λ sample.cdxml")
+                    .to_str()
+                    .ok_or("unicode")?
+                    .to_owned(),
+                overwrite: false
+            })
+        );
+        assert!(!chooser.is_open());
+        Ok(())
+    }
+
+    #[test]
+    fn accessibility_set_value_is_advertised_applied_and_bounded()
+    -> Result<(), Box<dyn std::error::Error>> {
+        use egui::accesskit::{Action, ActionData, ActionRequest};
+        let directory = Directory::new()?;
+        let context = egui::Context::default();
+        crate::configure_context(&context);
+        context.enable_accesskit();
+        let mut chooser = FileChooser::default();
+        chooser.begin(
+            FileMode::Save,
+            directory.0.clone(),
+            "Untitled.cdxml".to_owned(),
+        );
+        let raw = |events| egui::RawInput {
+            screen_rect: Some(egui::Rect::from_min_size(
+                egui::Pos2::ZERO,
+                egui::vec2(1000.0, 700.0),
+            )),
+            events,
+            ..Default::default()
+        };
+        context.begin_pass(raw(vec![]));
+        chooser.show(&context, false);
+        let output = context.end_pass();
+        let (id, node) = output
+            .platform_output
+            .accesskit_update
+            .as_ref()
+            .ok_or("accessibility tree")?
+            .nodes
+            .iter()
+            .find(|(_, node)| {
+                node.role() == egui::accesskit::Role::TextInput
+                    && node.value() == Some("Untitled.cdxml")
+            })
+            .ok_or("file-name field")?;
+        assert!(
+            node.supports_action(Action::SetValue),
+            "editable file names must expose SetValue to assistive technology"
+        );
+        let id = *id;
+        for (requested, accepted) in [
+            ("λ sample.cdxml".to_owned(), true),
+            ("bad\0.cdxml".to_owned(), false),
+            ("a".repeat(MAX_PATH_BYTES + 1), false),
+        ] {
+            context.begin_pass(raw(vec![egui::Event::AccessKitActionRequest(
+                ActionRequest {
+                    action: Action::SetValue,
+                    target: id,
+                    data: Some(ActionData::Value(requested.clone().into_boxed_str())),
+                },
+            )]));
+            assert!(chooser.show(&context, false).is_none());
+            let output = context.end_pass();
+            let node = output
+                .platform_output
+                .accesskit_update
+                .as_ref()
+                .ok_or("accessibility update")?
+                .nodes
+                .iter()
+                .find(|(node_id, _)| *node_id == id)
+                .ok_or("file field update")?;
+            assert!(
+                node.1.supports_action(Action::SetValue),
+                "invalid input must not disable the next accessible correction"
+            );
+            assert_eq!(
+                chooser.name,
+                if accepted {
+                    requested.as_str()
+                } else {
+                    "λ sample.cdxml"
+                }
+            );
+            assert_eq!(chooser.error.is_none(), accepted);
+        }
+        Ok(())
+    }
+}

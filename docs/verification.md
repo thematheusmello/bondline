@@ -882,3 +882,26 @@ independently decoded file has the same two-fragment SHA b0272acb0013ed45ee2a09b
 App/CUA session closed. Final cargo xtask ci passes193 workspace tests plus3 native bridge
 tests, clippy (including the bridge), fmt, layers, licenses and corpus. Log:
 target/files-ci-integrated.log. This is not a claim of full platform/reference parity.
+
+## Native file menu and chooser integration, 2026-11-13
+
+RED before code: absent chooser API; hidden linked folders; reopened complete profile refused
+as unmapped; stale receipt allowed close; close shortcut/Escape missing; accessible SetValue
+unhandled; rejected value lost retry action; previous Decode error leaked into valid retry.
+Targeted logs: target/native-file-ui-{red,symlink-red,profile-red,stale-receipt-red,
+close-shortcut-red,accessibility-red,accessibility-retry-red,retry-message-red}.log.
+All24 UI tests and all-targets UI clippy pass after the corresponding fixes.
+
+Actual Mac workflows include pointer-create/Save As/edit/Save/overwrite, dirty Open Cancel
+and explicit discard, close/relaunch/Open/edit/Undo, File Close Cancel/Save, native red close
+Cancel, CmdW/Escape and native Quit/CmdQ Cancel/Save/Discard. Malformed input retains dirty
+data after discard approval; opaque source stays guarded and saves byte-for-byte, hash
+883f079b39c8bae01e82f7a926cf150ce0d579a77f4eb75462652fbf85074006. Folder Go/Up/row selection,
+home initial location and final native AX Unicode filename are observed, not inferred.
+Independent external XML/RDKit checks actual files; exact build/file hashes and limitations
+are in native-file-ui.md. Startup geometry in the first earlier run was ambiguous, explicitly
+undone to confirmed empty before authoring; no unknown geometry counts as acceptance evidence.
+
+The UI uses the same commands; no render/parser semantics were weakened to pass. A supported
+larger viewport is used for the profile test; minimum-label-scale refusal remains. Existing
+human-approved golden is unchanged; these native screenshots are observations, not new approvals.

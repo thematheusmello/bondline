@@ -85,8 +85,11 @@ cached decision is not based on a producer name. Only that profile can safely en
 and participate in headless rendering/bond creation after reopen. Other unsynchronized edits
 fail explicitly, and exact undo restores passthrough. to_cdxml borrows unchanged source or
 returns owned native/profile bytes. Save callers must use that full StoredDocument entry point, not regenerate
-stored.model(), which lacks unknown data. See file-formats.md; imported structural editing
-and exposed file-open/save workflows remain missing. Capture refuses unmapped or unsupported chemical
+stored.model(), which lacks unknown data. See file-formats.md; general imported structural
+editing remains missing. Native file UI dispatches those commands in background workers,
+checks receipt revision/path before closing and protects dirty Open/Save/Close. Directory
+listing is a separate bounded worker; transient dialogs/jobs stay outside authored history.
+Capture refuses unmapped or unsupported chemical
 content instead of returning a misleading blank preview; the native C-C creation case works.
 
 The native canvas consumes the render crate's ordered rectangle/stroke scene and limited
