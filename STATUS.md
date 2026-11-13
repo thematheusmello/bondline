@@ -1,109 +1,117 @@
 # Status
 
 2026-11-13: the persistent full M0–M5 goal is active. Full M0 and M1 are incomplete.
-Public repository: https://github.com/thematheusmello/bondline .
+Public repository: https://github.com/thematheusmello/bondline . Continue this repository.
 
-## Recoverable state
+## Integrated checkpoint
 
-Main currently has the native shared-file-control source65b5fb8 and subsequent original
-README/community documentation through b2fd61a. Hosted run43496010615 is terminal GREEN;
-Mac268/Linux266/Windows260 tests, three actual window smokes and both then-current parser
-ASAN targets passed. The polished README has original banners, real untouched native
-screenshots, licensing/contribution/security/support and issue/PR guidance. Public GitHub
-rendering/images were checked; anonymous issue-form submission remains unverified.
+Verified application source: c879f4c95964617a86cc2d1e466515c5aeb31f29. Its complete-source
+MOL file feature follows codec9e3777e and fixture-checkout correction670178b. This documentation
+checkpoint integrates that tested source into main; inspect Git log for the exact doc head.
+The current feat/sdf-v2000 branch starts from the same source and has separate in-progress
+SDF work. Do not reset, discard or advertise that uncommitted codec as finished.
 
-The standalone MOLV2000 codec checkpoint9e3777e is published on feat/mol-v2000. Its first
-hosted run43504072080 failed Windows because Git altered pinned fixture line endings;
-Mac/Linux and all three ASAN targets passed. Correction670178b preserves fixture checkout
-bytes with a narrow -text attribute. Parser, fixture bytes and assertions are unchanged.
-An isolated core.autocrlf=true check has actual RED/GREEN evidence. Corrected run43507660824
-is live: https://github.com/thematheusmello/bondline/actions/runs/43507660824 . Do not duplicate it.
+Hosted application run43508330802 is terminal GREEN:
+https://github.com/thematheusmello/bondline/actions/runs/43508330802 .
+Mac315 tests (312 workspace plus three bridge), Linux313 and Windows307 pass, along with
+three actual window smokes and CDXML/CDX/MOL sanitizer targets. The standalone codec
+correction also passes all jobs in run43507660824 (Mac284/Linux282/Windows276). First-run
+Windows failures in43504072080 were real Git fixture-byte conversion; the narrow -text
+attribute fix leaves parser/oracle/assertions unchanged. See docs/ci.md and the checkout report.
 
-This application-format feature checkpoint follows670178b on feat/mol-files; Git log
-identifies the exact commit. All intentional product Rust is frozen and the actual-root
-aggregate is GREEN. Native MOL acceptance is starting in the owned development bundle;
-its agent owns app/controller/CUA lifecycle. No reference executable was acquired/inspected.
-Source publication triggers a distinct application CI run; it is pending at this checkpoint.
+Actual Mac MOL acceptance completed 21:21:39 UTC using source c879f4c and unchanged owned
+binary SHA eeb98144f0fe0b7aaba24479d5950ec7de622efe9da985a02995830d3b387927, macOS27.2 arm64,
+Apple M3 Max/Metal. All three native/controller processes exited successfully; CUA ended;
+credentials remained memory-only. No native worker/listener remains. Independent file hashes
+and the precise acceptance sequence are in docs/native-file-ui.md and docs/verification.md.
 
-## What is verified locally
+## What works, within the verified scope
 
 - Thirteen typed commands share one registry across engine, CLI, stdio MCP and authenticated
   opt-in native loopback: inspect, close, open/save CDXML, open/save MOL, page.set_size,
   bond.create, undo/redo, render.capture, ui.controls and ui.file.
-- MOLV2000 source-preserving parser/writer and strict elemental projection, including
-  published valence/H, charge, radical and absolute-isotope handling. Complete source,
-  baseline, three headers and coordinate frame survive owned snapshots/history. Unchanged
-  saves preserve exact bytes; changed supported graphs retain headers/frame and round only
-  within the declared four-decimal V2000 tolerance. External RDKit reads actual output.
-- MOL atomic I/O reuses the reviewed CDXML bounded ordinary-file/security/publication path.
-  Shared open/save commands preserve errors, no-clobber/explicit overwrite, stale-open
-  protection and older-save dirty state. File state/receipts carry authoritative encoding,
-  separately from original source format and filename suffix.
-- Trusted presentation receipts carry request ID/currentness. Intervening format/baseline
-  changes stay invalid after returning to old values. Native close-Save also requires
-  encoding, revision, path and close epoch; direct saves cannot manufacture such a receipt.
-- Shared File/Edit/Page bindings and guarded file-presentation requests. Headless sessions
-  refuse UI presentation while explicit file commands remain available. One finite request
-  slot plus two shared capture/file workers; cancellation never pretends published bytes
-  rolled back. Shutdown drains registered workers/replies under the engine mutex.
-- Independent isolated C–C creation, physical page controls and complete snapshot Undo/Redo.
-  Source-preserving CDXML/profile reopening, standalone bounded CDX syntax/property edits,
-  CPU/GPU scenes/PNG and one human-approved golden remain delivered at their prior scope.
+- MOLV2000 exact source preservation, strict elemental projection and canonical writing,
+  including published valence/H, charge, radical and absolute-isotope fields. Owned history
+  shares complete original bytes, baseline, three headers and captured drawing frame.
+  Unchanged saves preserve every byte; regenerated coordinates have declared four-decimal
+  precision. Actual files face separately run RDKit, Decimal and literal-field expectations.
+- Atomic MOL I/O reuses the reviewed bounded ordinary-file/security/publication path. Shared
+  commands preserve no-clobber/explicit overwrite, failed-import state, stale-open protection
+  and older-save dirty state. File state/receipts distinguish associated encoding, filename
+  extension and original source format.
+- Actual native Mac explicit/default encoding choice, Unicode Save As, reopen/known Save,
+  three retained source headers, malformed retention, layout refusal/Undo and exact failed
+  overwrite retry. Misleading suffixes use the explicitly selected/associated decoder.
+  Source metadata-loss conversion refuses publication. Close Cancel/Save and concurrent
+  CPU/GPU reply draining pass on the actual app, not only egui tests.
+- Trusted presentation receipts bind request ID and pre-save currentness. Intervening
+  format/baseline changes remain invalid after values return. Native close-Save also requires
+  encoding/revision/path/close epoch. Direct saves cannot fabricate a trusted UI receipt.
+- Independent isolated C–C drawing, physical page controls, complete Undo/Redo, CDXML source/
+  profile reopening, standalone bounded CDX syntax/property edits, CPU/GPU scenes/PNG and
+  the prior approved golden remain verified only at their documented scope.
 
-Actual-root cargo xtask ci passes312 workspace tests plus3 native AccessKit bridge tests,
-rustfmt, warnings-denied all-target clippy, layers, native licenses/assets and the corpus.
-Log: target/mol-files-ci-integrated.log. Scoped totals IO70/commands70/adapters40/UI43.
-Runtime closures remain153/164/219 for Mac/Windows/Linux plus two bundled assets. No runtime
-or lock change. The corpus now checks one actual CDXML and one actual MOL input; CDX corpus
-and chemistry calculations remain missing. See docs/verification.md for exact RED/GREEN,
-independent consumers, sanitizer bounds and previous checkpoints.
+Actual-root cargo xtask ci passed312 workspace plus three bridge tests, rustfmt,
+warnings-denied all-target clippy, layers, native licenses/assets and corpus. Log:
+target/mol-files-ci-integrated.log. Scoped totals: IO70, commands70, adapters40, UI43.
+Runtime closures remain153/164/219 for Mac/Windows/Linux and two bundled assets; no runtime
+or lock change. Corpus checks one actual CDXML and one actual MOL input. CDX corpus and
+chemistry calculation coverage remain missing; external formula/SMILES are consumer results.
 
-## Wired and incomplete
+The README/community presentation has original banners, real unedited native photos,
+licensing, contribution/security/support and issue/PR guidance. Public GitHub image/render
+checks pass; anonymous issue forms redirected to sign-in and remain unverified. Images show
+an explicitly identified earlier build. New MOL acceptance did not alter them or the golden.
 
-The original native chooser offers CDXML/MOL encoding, extension hints with explicit decoder
-override, encoding-aware Save As and authoritative known Save. UI tests43 pass, including
-misleading names, malformed retention, format/close ABA and exact failed-retry filename.
-Actual MOL app execution is pending here. Previous real Mac CDXML/drawing/close acceptance
-uses source65b5fb8 and binary SHA4a5425b0db81cac37fdf1d6ba8e6417fae44e5f7093dc58e2582d3ce2be25ab2;
-new native evidence must name its own exact binary. Interactive Windows/Linux remain unverified.
+## In progress and remaining limits
 
-MOL supports one CTAB/fragment and a preserved page. Changed imported page size, nondefault
-native page layout, multiple fragments/pages and cross-format source metadata loss refuse
-unsupported_content. Appending another isolated fragment is editable but cannot currently
-save as MOL; Undo restores eligibility. Explicit lossy export, general imported graph edits,
-query/stereo/3D/legacy isotope mass tables, SDF/V3000/RXN/SMILES/InChI remain M1 work.
-The documented normative M ISO rule and pinned RDKit legacy-delta quirk disagree; separate
-input/output diagnostics retain both facts. Do not claim universal consumer agreement.
+SDF V2000 is the next active M1 codec slice. IO owns new source/tests/original fixture;
+verification owns the external oracle and a corpus plan; root owns fuzz/CI/provenance/Git.
+Initial missing-module RED and four initial GREEN tests exist, not a final feature pass.
+Final hostile/writer/resource cases, independent consumers, ASAN and aggregate remain.
+No application SDF command or multi-document flattening is being silently introduced.
+Its data must retain empty/multiline/duplicate/DT/raw headers and exact ordered source spans.
+The pinned RDKit full supplier loses DT-only data/records; independent raw-field checks must
+remain separate from molecular consumer evidence. Never remove valid fields to satisfy it.
+
+MOL saves currently preserve one CTAB/fragment and one page. Changed imported page size,
+nondefault native layout, multiple fragments/pages and cross-format source metadata loss
+refuse unsupported_content. Another isolated fragment is editable but not currently savable
+as MOL; Undo restores eligibility. Explicit lossy export, broad imported graph editing,
+query/stereo/3D, legacy isotope mass tables, SDF/V3000/RXN/SMILES/InChI remain M1 work.
+The normative M ISO rule and RDKit legacy-delta quirk disagree; record both, do not claim
+universal input agreement. General MOL rendering/editing is not delivered by the native
+C–C/empty-to-first-fragment workflow. Interactive Windows/Linux remain unverified.
 
 Full M0 inventory/dialog discovery/job addressability, connected construction/selection,
 labels/styles, chemistry/CIP/naming, reactions/arrows/text, publishing/Office/printing,
-WASM and signed distribution remain open. The576 control rows are qualified public-source
-coverage, not a complete modern menu inventory. Full commercial screen/workflow parity is
-not claimed. No installer/release publication was requested or performed.
+WASM and signed distribution remain open. The576 qualified control rows are not a complete
+modern inventory. Full commercial screen/workflow parity is not claimed. No release or
+installer publication was requested/performed. See ROADMAP.md and docs/parity-checklist.md.
 
-The original native license blocker is resolved without broadening MIT/Apache/BSD. M5 still
-needs full source/notice auditing, including upstream windows-permissions0.2.4's absent
-LICENSE despite declared MIT. The browser Unicode-bearing graph is unapproved. The approved
-golden SHA remains1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc; do not regenerate it.
+The native license blocker is resolved without broadening MIT/Apache/BSD. M5 still needs
+full source/notice auditing, including windows-permissions0.2.4's missing upstream LICENSE
+despite declared MIT. Browser Unicode-bearing dependencies remain unapproved. Golden SHA:
+1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc. Do not regenerate it.
 
-## Next exact actions and jobs
+## Next exact actions and live work
 
-1. Complete native MOL acceptance using the frozen source: create/save/reopen, explicit
-   format choice/Unicode Save As, byte/header/frame retention, malformed/unsupported refusal,
-   known Save, Cancel/Save close and worker drain. Record binary/file hashes and independent
-   consumers; fix real failures and rerun affected/full gates before publishing source.
-2. Follow corrected codec43507660824 and the forthcoming application source CI. Fast-forward
-   main only after the corresponding checks are GREEN. Keep completed jobs terminal; no reruns
-   merely because a later session starts. Root alone owns Git integration/publication.
-3. Continue M1 with source-preserving SDF records/V3000, application CDX and general CDXML
-   mapping/editing, then RXN/SMILES/InChI. file_verification is preparing a bounded SDF grammar/
-   independent-consumer handoff under target/, without product changes during this freeze.
-4. Proceed through M2 drawing/labels/styles, M3 chemistry/reactions, M4 publishing/clipboard
-   and M5 depth/WASM/distribution. Keep remaining M0 inventory/dialog/job gaps visible.
+1. Finish the current SDF codec tests and writer boundary review, then frozen-source ASAN,
+   fmt/clippy/aggregate. In particular, a valid standalone MOL header starting$$$$ must not
+   produce an invalid SDF wrapper. Root/IO coordinate the strict record/field/span contract.
+2. Publish that codec checkpoint, pin its original open-licensed fixture for fetched SDF
+   corpus checks with independent ordered-field/CTAB consumers, and follow its own hosted run.
+   Do not mutate existing RDKit pins or invent a future commit hash. Corpus plan is research
+   until agreed/implemented; no new SDF corpus pass is claimed yet.
+3. Continue V3000, application CDX/general CDXML, RXN/SMILES/InChI, then M2 drawing/labels/
+   styles, M3 chemistry/reactions, M4 publishing/clipboard and M5 depth/WASM/distribution.
+   Remaining M0 gaps stay visible while the user-prioritized M1 work advances.
 
-No root Cargo/fuzz job remains live after the passing aggregate. native_file_ui owns the
-pending native process/controller/CUA handles; inspect its handoff before touching them.
-Other agents' IO/adapter source is frozen and their test processes/sockets have ended.
-Development bundles/reports under target/ are disposable and never committed. Future
-worktrees must keep separate Cargo targets; stale reused build paths previously validated
-the wrong checkout. Continue this repository and goal; do not restart or mark it complete.
+Completed application/codec runs43508330802/43507660824 are terminal; do not restart them.
+Main's automatic duplicate run43509919220 at the older670178b may still be live; inspect
+that exact run before acting. Its source is already independently GREEN; it is not the
+c879f4c application run. No native/controller/CUA job remains. SDF agent Cargo work and
+root sanitizer work have separate logs under target/; inspect current handles before restart.
+Only root stages/commits/pushes. Development bundles/reports are disposable, never committed.
+Future worktrees must keep separate Cargo targets; stale reuse previously tested the wrong
+checkout. Keep the full project goal active and continue rather than recreating it.

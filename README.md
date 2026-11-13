@@ -43,7 +43,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | Drawing and history | Drag an isolated C–C bond with explicit hydrogen labels; Undo/Redo restores complete authored snapshots. |
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files; unknown imported content remains backed by its original bytes. |
-| MOL V2000 files | Source-preserving open/save through shared commands and atomic I/O; native format selection is wired pending inspection. One-fragment/layout/metadata limits apply. |
+| MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
 | Rendering | Shared CPU/GPU page scenes and PNG captures, with one human-approved regression scene. |
 | Automation | Thirteen typed commands shared by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
@@ -117,7 +117,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
 | CDX | Standalone bounded parser and opaque property editing, with independent consumer tests | Application model mapping and import/export |
-| MOL / SDF | V2000 codec, owned source, atomic I/O and shared commands; native format selector wired; one independently checked corpus input | Native execution evidence, SDF, V3000 and broader metadata/layout workflows |
+| MOL / SDF | V2000 codec, owned source, atomic I/O, shared commands and inspected native Mac workflow; one independently checked corpus input | SDF, V3000 and broader metadata/layout workflows |
 | RXN / SMILES / InChI | Planned | Format support and independently verified chemistry |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |

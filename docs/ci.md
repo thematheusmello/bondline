@@ -1,5 +1,23 @@
 # CI contract and execution evidence
 
+Latest verified application source `c879f4c95964617a86cc2d1e466515c5aeb31f29` passes every job in
+[run43508330802](https://github.com/thematheusmello/bondline/actions/runs/43508330802):
+macOS job `132171702163`: 315 tests (312 workspace plus three bridge), Linux job `132171702255`:
+313 tests and Windows job `132171702213`: 307 tests, plus ASAN job `132171702124`. All three actual
+window smokes pass; the sanitizer job runs CDXML/CDX/MOL 10000 times each. Adapters remain Metal/Apple Paravirtual
+IntegratedGpu, Vulkan/llvmpipe Cpu and Dx12/Microsoft Basic Render Driver Cpu. No interactive
+Windows/Linux workflow or hardware-performance claim follows. Independent native Mac MOL
+acceptance names its separate owned binary in native-file-ui.md.
+
+Standalone codec correction `670178b943ce2e9c7ea477e8064adf09f98eac58` also passes every job in
+[run43507660824](https://github.com/thematheusmello/bondline/actions/runs/43507660824):
+macOS job `132169417129`: 284 tests, Linux job `132169417270`: 282, Windows job `132169417113`: 276
+and ASAN job `132169416475`, all actual windows and all three parser targets. First codec
+[run43504072080](https://github.com/thematheusmello/bondline/actions/runs/43504072080)
+failed Windows fixture checkout byte identity, not a hidden pass. The narrow Git attribute
+correction leaves parser/assertions/oracle input unchanged; see research/mol-fixture-checkout.md.
+Both corrected/source runs above are terminal GREEN; do not restart them.
+
 `cargo xtask ci` runs real rustfmt, all-targets workspace clippy with warnings denied,
 locked workspace tests, layer checks, native declared-license/asset checks and the corpus
 gate. It stops at the first failure. Corpus coverage remains the explicit subset in

@@ -1221,3 +1221,28 @@ Mac/Linux/three ASAN targets passed. Correction670178b changes only pinned fixtu
 attributes and a provenance report, not parser/oracle assertions. The independent
 core.autocrlf=true RED/GREEN is in research/mol-fixture-checkout.md. Corrected hosted run
 43507660824 is in progress at this checkpoint; do not restart it or claim it passed yet.
+
+## MOL application files — native and hosted acceptance
+
+The preceding pending checks are now terminal at source
+`c879f4c95964617a86cc2d1e466515c5aeb31f29`. Hosted run43508330802 passes all jobs:
+Mac315 (312 workspace plus three bridge), Linux313, Windows307; all three actual windows
+and CDXML/CDX/MOL bounded sanitizer targets. Corrected standalone codec run43507660824 also
+passes every job (Mac284/Linux282/Windows276). See ci.md for exact IDs/adapters. First-run
+Windows fixture failures remain recorded, not relabelled as successful.
+
+Native Mac acceptance completed 2026-11-13 21:21:39 UTC on the unchanged owned binary
+`eeb98144f0fe0b7aaba24479d5950ec7de622efe9da985a02995830d3b387927`, Apple M3 Max/Metal.
+Actual canvas/chooser/AX/shortcut execution verified explicit/default format choice,
+Unicode Save As, reopen/known Save, malformed retention, multi-fragment refusal/Undo,
+three retained source headers, misleading suffixes and exact failure/overwrite retry.
+MOL-to-CDXML source loss refused without publication. The CDXML regression under a.mol
+name remained editable, Quit Cancel retained state and Quit Save exited successfully.
+Two pending CPU/GPU capture replies completed before approved shutdown. No product source
+changed after the aggregate/native freeze. Native-file-ui.md records exact file hashes and
+consumer results; original evidence is under target/native-mol-ui.
+
+All native/controllers/CUA ended; no credential was logged or committed. This verifies the
+stated C–C/empty source workflow, not general MOL rendering/editing or interactive Windows/
+Linux. Full M0/M1, broad chemistry, source conversion and later milestones remain incomplete.
+SDF work is a separate next codec feature; no new format support follows from these results.

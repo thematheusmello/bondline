@@ -33,12 +33,47 @@ Folder/name labels have associated accessibility nodes and bounded SetValue hand
 reviewed native AccessKit bridge delivers those actions; actual Mac AX entry with a Unicode
 filename is verified. General VoiceOver/navigation workflows and other controls remain open.
 
-## Shared file-control execution evidence
+## MOL execution evidence
 
-The MOL chooser/receipt integration passes43 UI tests plus the312-workspace/3-bridge aggregate
-locally. Actual native MOL execution is pending in this checkpoint; the historical native
-evidence below establishes the earlier CDXML-only implementation. Do not substitute UI tests
-for inspected native format selection, Save/Close or preservation workflows.
+Source `c879f4c95964617a86cc2d1e466515c5aeb31f29`, owned executable SHA-256
+`eeb98144f0fe0b7aaba24479d5950ec7de622efe9da985a02995830d3b387927`, macOS 27.2 arm64,
+Apple M3 Max/Metal. The copy remained unchanged throughout. Completed 2026-11-13 21:21:39 UTC.
+All 43 UI tests, the 312-workspace/three-bridge aggregate and hosted checks pass separately.
+Actual native observations establish this finite workflow:
+
+- From a fresh clean session, an actual C–C drag followed by Quit, Save, explicit MOL
+  selection and AX Unicode filename saved a file and exited successfully. Its own
+  CDXML-to-MOL association change correctly renewed the trusted close-Save receipt.
+- Actual Open rendered the saved structure; known Save and MOL-default Save As retained
+  exact bytes. Malformed Open retained complete state. A second isolated fragment caused
+  an explicit layout refusal without replacing saved bytes; Cancel/Undo restored eligibility.
+- Opening an original empty MOL, drawing its first fragment and saving retained all three
+  supplied headers and the captured frame. Source modified and saved clean are distinct.
+- An explicit decoder override opened MOL named associated.cdxml. Known Save and a real
+  directory-target failure/restore/Replace retry kept its exact path, encoding and bytes.
+  MOL-to-CDXML Save As refused metadata loss and published no destination.
+- XML named misnamed.mol first failed MOL decoding, then explicit CDXML retry opened it.
+  Actual editing, Quit Cancel and Quit Save preserved the correct associated CDXML encoding.
+- Two concurrent 2048-square CPU/GPU captures were still pending after Close Approved.
+  The native process waited, published both complete replies, then exited successfully.
+
+Independent RDKit/Expat reads confirm these actual files:
+
+| Artifact | Bytes | Independent result | SHA-256 |
+|---|---:|---|---|
+| Native MOL and Unicode copy |234|CC / C2H6|494e85ead31dce31ffc9b68774bf68f00910349df591c6f66af74c540ff8cfda|
+| Edited original-empty MOL |296|Three retained headers; CC / C2H6|70617705ea99cc7b39be0242c1fd77a6fc6ed36acd64d8b9618a1828fe2e5dd1|
+| MOL with .cdxml suffix |282|Exact original ethane fixture|828c1b58b433ed3778bdb0ce7e7d02315f45850507c976a55c82fcebeebf57fc|
+| Edited CDXML with .mol suffix |720|Two CC / C2H6 fragments|0e06ff075fa84c98fbf64c833811e304a46ce307a3af9f0c32ef523673598ee4|
+
+Evidence logs: target/native-mol-ui-handoff.md, target/native-mol-ui/verification.json and
+target/native-mol-ui-build.log. All three native/controller processes exited successfully;
+CUA ended, credentials stayed memory-only and no worker remains. Only the supported C–C
+renderer and empty-to-first-fragment authoring were visually verified. General MOL rendering/
+editing, interactive Windows/Linux and complete reference/platform-dialog parity remain open.
+The approved golden and original README captures were not changed.
+
+## Shared file-control execution evidence
 
 The new frozen executable SHA-256 is
 `4a5425b0db81cac37fdf1d6ba8e6417fae44e5f7093dc58e2582d3ce2be25ab2`

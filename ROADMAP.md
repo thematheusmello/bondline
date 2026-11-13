@@ -39,7 +39,8 @@ guides are versioned evidence, not proof of complete modern parity.
 Current user-directed priority: finish M1, then continue M2–M5. MOLV2000 now has a source-
 preserving codec, owned backing/history, atomic filesystem I/O and two shared commands;
 engine/CLI/MCP tests use published BIOVIA2026 fields and external RDKit consumers. The native
-format choice is wired pending actual execution. One CTAB/fragment and layout/metadata guards
+format choice/Save/reopen/close workflow is verified on Mac; all three hosted aggregates and
+native window smokes pass at c879f4c. One CTAB/fragment and layout/metadata guards
 are partial interoperability, not completed M1. Next are SDF records/V3000 and wider mappings.
 Full M0
 inventory/dialog/addressability gaps remain tracked while this format work proceeds.
