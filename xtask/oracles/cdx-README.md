@@ -126,3 +126,15 @@ passed. This was local macOS arm64 execution. Hosted Windows/Linux consumer beha
 full-workspace gates are separate integration checks, not implied by this result. No
 parser production source, root manifest, CI file, or GUI was changed by this independent
 verification task. No Git operation was performed.
+
+## Windows text-output correction
+
+Hosted run43475705005 passed Mac/Linux and both Linux sanitizer targets, but Windows
+failed both independent tests at record-table comparison before the external chemical
+reader ran. Python text stdout translated LF to CRLF. The describe response now writes
+ASCII bytes directly through sys.stdout.buffer; binary fixtures and CDX assertions stay
+byte-exact. A regression injects a translating CRLF TextIOWrapper on any host, asserts
+that fixture bytes are unchanged and compares the entire canonical LF record table. It
+failed before the fix (target/cdx-stdout-red.log) and now passes with all14 CDX tests
+(cdx-stdout-green.log); package clippy also passes (cdx-stdout-clippy.log). This correction
+does not establish the new Windows hosted result; that rerun must be observed separately.
