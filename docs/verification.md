@@ -644,3 +644,56 @@ warnings-denied all-targets clippy, layer/license gates and the existing pinned 
 All-targets Windows/Linux source checks also pass; neither target's runtime/hosted workflow
 was run. No new parser fuzz run was needed or claimed. The earlier native drawing build
 is unchanged and closed; the new accounting was verified through the headless engine.
+
+## Native elemental CDXML encoding, 2026-11-13
+
+Scope: new-document syntax construction in the standalone crate, native elemental encoding
+in io, explicit Poster extent recovery, and an independent consumer of actual bond.create
+output. Six registry commands remain; no file command, GUI save action or imported structural
+editing is claimed. Original source backing and stale-export rejection remain mandatory.
+
+RED: `cargo test -p bondline-cdxml --test writer --locked` failed with the missing Writer
+API. `cargo test -p bondline-io --test cdxml_write --locked` failed with missing write_document
+and to_cdxml APIs. Separately, existing from_cdxml calls in `--test cdxml_page` reproduced
+the behavioral gap: explicit 312.5×456.25 Poster extents yielded the supplied 72×144 preview,
+and a Poster with only Width was accepted. Logs under ignored target/: cdxml-writer-red.log,
+cdxml-export-red.log and cdxml-poster-red.log.
+
+GREEN: four standalone writer tests cover independent Expat decoding, Unicode/whitespace,
+invalid-operation rollback, root/stack balance, reserved closing-size accounting and exact
+depth/node/attribute bounds. Four io export tests use external Expat/Decimal projection for
+all sixteen model orders and elemental metadata; test sparse/maximal application IDs and
+globally unique source IDs; retain borrowed exact source with modified-source refusal; and
+reject unrepresentable isotopes/syntax-budget excesses without partial export. Two reader
+tests cover complete, absent, default-Pages, partial, non-finite and out-of-range dimensions.
+The native model encoder does not serialize general chemical text/styles/stereo display.
+
+The first external-consumer attempt failed because system Python had no RDKit. An isolated
+ignored .cache/oracles/format-python environment was created; no system environment changed.
+Actual versions: CPython 3.13.0, RDKit 2026.09.2, NumPy 2.5.4, Pillow 12.3.0. requirements-dev.txt
+pins those consumers; CI installs them too, but hosted execution remains unperformed. PyPI
+metadata was reviewed for CPython 3.13 wheels on the three configured native platforms.
+Installed MolsFromCDXML APIs were inspected before use.
+
+The final consumer test starts with registered bond.create, calls StoredDocument::to_cdxml,
+then runs external RDKit. It confirms two carbons, one single bond, three hydrogens per
+carbon, canonical SMILES CC and formula C2H6, with unchanged engine state. This is actual
+engine-to-format interoperability for that scene; it does not verify a Bondline formula,
+SMILES, stereo or mass algorithm, general appearance, native save/reopen or all bond kinds.
+The Python reference remains an external test process, not a linked/shipped dependency.
+
+The extended pinned ASan harness completed 10000 runs with seed 3641879538, max_len 65536
+and timeout 5: coverage 3402, features 9242, corpus 600/162 KiB, reported RSS 161 MiB.
+It now exercises writer escaping/rollback and explicit Poster projection. Its mutation
+chooses a size different from the source, so an already-72×144 Poster cannot produce a
+vacuous stale-source check. Only the new dimension-related model errors were added to its
+existing unsupported-page cases. Seeds and reports are ignored, committed fixtures unchanged.
+Stable rustfmt formatted the isolated harness; the pinned fuzz nightly lacks cargo-fmt and
+was not modified. No fuzz result establishes exhaustive conformance/security.
+
+Final aggregate: `BONDLINE_PYTHON=.cache/oracles/format-python/bin/python cargo xtask ci`
+passes **144 tests**, rustfmt, warnings-denied all-targets clippy, layers, declared native
+licenses/assets and the unchanged corpus scope. Windows/Linux all-targets source checks pass;
+native runtimes and hosted CI remain unexecuted. Runtime package counts remain 150/161/219
+and two bundled assets; Python consumers are test-only. The isolated harness format check
+also passes. No native UI/renderer code changed or new native-window evidence was claimed.

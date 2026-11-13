@@ -11,7 +11,8 @@ defect was rejected before clippy; the exact source was restored and the full co
 rerun. The committed workflow is configured, not evidence that hosted jobs have run.
 
 The native matrix targets ubuntu-24.04, windows-2025 and macos-15 (arm64 according to the
-reviewed runner reference). It selects Rust 1.94.1, Python 3.13.2 and Pillow 12.3.0, runs
+reviewed runner reference). It selects Rust 1.94.1 and Python 3.13.2, installs the pinned
+Pillow/NumPy/RDKit external consumers from requirements-dev.txt, runs
 the aggregate checks and launches the actual window's three-frame smoke mode. Linux gets
 Mesa Vulkan and Xvfb for window tests; a software driver validates the graphics API path,
 not hardware acceleration or performance. GPU tests fail if an adapter is absent. Hosted

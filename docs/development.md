@@ -3,19 +3,24 @@
 Rust is pinned in rust-toolchain.toml. Cargo.lock pins the reviewed dependency closure;
 do not regenerate it casually. Run the native app and headless CLI using README.md.
 
-Independent PNG verification uses Pillow 12.3.0 as an external process. Python/Pillow are
-test tools only, not application dependencies. To prepare an isolated oracle environment:
+Independent render/format verification uses external Pillow 12.3.0 and RDKit 2026.09.2,
+with NumPy 2.5.4, pinned in requirements-dev.txt. They are test tools, not Rust application
+dependencies or bundled assets. To prepare an isolated oracle environment:
 
 ```sh
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-dev.txt
 BONDLINE_PYTHON=.venv/bin/python cargo test --workspace --locked
+BONDLINE_PYTHON=.venv/bin/python cargo xtask ci
 ```
 
 On Windows, use `python -m venv .venv` and `.venv\Scripts\python.exe`; set BONDLINE_PYTHON
 to that interpreter in the invoking shell. If it is unset, tests use python3 on Unix and
 python on Windows. A missing or different oracle version fails explicitly, never skips.
-The current Mac already has Pillow 12.3.0; this work did not change its system environment.
+The current Mac's new consumers are isolated under ignored .cache/oracles/format-python;
+the system environment was not changed. Both documented .venv and BONDLINE_PYTHON selection
+work the same way. RDKit is only an independent file consumer here; Bondline does not gain
+Python runtime chemistry, linking or a general differential-chemistry claim by using it.
 
 Implemented gates: rustfmt, workspace/all-targets clippy, workspace tests, `cargo xtask layers`
 and `cargo xtask licenses`, plus `cargo xtask corpus` (see corpus/README.md for exact subset).

@@ -15,9 +15,31 @@ fn integer_property(value: &str) {
     }
 }
 
+fn writer_property(value: &str) {
+    let mut writer = bondline_cdxml::Writer::new(&[]).unwrap();
+    match writer.empty_element("page", &[("Comment", value)]) {
+        Ok(()) => {
+            let bytes = writer.finish().unwrap();
+            let parsed = bondline_cdxml::Document::parse(&bytes).unwrap();
+            let page = parsed.xml().root_element().first_element_child().unwrap();
+            assert_eq!(page.attribute("Comment"), Some(value));
+        }
+        Err(error) => {
+            assert!(matches!(
+                error,
+                bondline_cdxml::Error::InvalidAttributeValue | bondline_cdxml::Error::InputTooLarge
+            ));
+            let bytes = writer.finish().unwrap();
+            let parsed = bondline_cdxml::Document::parse(&bytes).unwrap();
+            assert!(parsed.xml().root_element().first_element_child().is_none());
+        }
+    }
+}
+
 fuzz_target!(|data: &[u8]| {
     if let Ok(value) = std::str::from_utf8(data) {
         integer_property(value);
+        writer_property(value);
     }
     if let Ok(document) = bondline_cdxml::Document::parse(data) {
         assert_eq!(document.as_bytes(), data);
@@ -105,10 +127,14 @@ fuzz_target!(|data: &[u8]| {
                 assert_eq!(stored.export_cdxml().unwrap(), data);
                 let mut edited = stored.clone();
                 let page = edited.model().pages().first().unwrap().id();
-                edited
-                    .model_mut()
-                    .set_page_size(page, bondline_model::PageSize::new(72.0, 144.0).unwrap())
-                    .unwrap();
+                let target = if stored.model().pages().first().unwrap().size()
+                    == bondline_model::PageSize::new(72.0, 144.0).unwrap()
+                {
+                    bondline_model::PageSize::new(144.0, 72.0).unwrap()
+                } else {
+                    bondline_model::PageSize::new(72.0, 144.0).unwrap()
+                };
+                edited.model_mut().set_page_size(page, target).unwrap();
                 assert!(matches!(
                     edited.export_cdxml(),
                     Err(bondline_io::DocumentError::UnsupportedEdit)
@@ -120,6 +146,10 @@ fuzz_target!(|data: &[u8]| {
                 error,
                 bondline_io::DocumentError::Mapping(
                     bondline_io::cdxml::MappingError::UnsupportedPageLayout
+                        | bondline_io::cdxml::MappingError::InvalidProperty("Width" | "Height")
+                        | bondline_io::cdxml::MappingError::PreviewModel(
+                            bondline_model::Error::InvalidPageSize
+                        )
                 )
             )),
         }

@@ -1,7 +1,7 @@
 use crate::cdxml::{ElementalGraph, MappingError};
 use bondline_model::{Document, PageSize};
 use serde::Serialize;
-use std::{collections::HashSet, mem::size_of, sync::Arc};
+use std::{borrow::Cow, collections::HashSet, mem::size_of, sync::Arc};
 
 #[derive(Debug, thiserror::Error)]
 pub enum DocumentError {
@@ -27,7 +27,7 @@ struct OriginalCdxml {
 }
 
 /// Owned application snapshot: derived model plus the complete original interchange data.
-/// Preview dimensions are explicit; source paper/style settings are not interpreted here.
+/// Explicit Poster extents are read; other printer/style settings remain opaque.
 #[derive(Clone, PartialEq, Default)]
 pub struct StoredDocument {
     model: Arc<Document>,
@@ -110,5 +110,15 @@ impl StoredDocument {
             return Err(DocumentError::UnsupportedEdit);
         }
         Ok(&original.bytes)
+    }
+
+    /// Borrow exact unchanged source, or encode a new native elemental document.
+    /// Unsynchronized source-backed edits are never regenerated or silently discarded.
+    pub fn to_cdxml(&self) -> Result<Cow<'_, [u8]>, DocumentError> {
+        if self.original.is_some() {
+            Ok(Cow::Borrowed(self.export_cdxml()?))
+        } else {
+            Ok(Cow::Owned(crate::cdxml::write_document(&self.model)?))
+        }
     }
 }

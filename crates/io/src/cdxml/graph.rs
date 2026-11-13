@@ -142,6 +142,31 @@ impl<'input> ElementalGraph<'input> {
         {
             return Err(MappingError::UnsupportedPageLayout);
         }
+        let size = if let Some(page) = root.children().find(|node| is_element(*node, "page")) {
+            match (
+                page.attribute("DrawingSpace"),
+                page.attribute("Width"),
+                page.attribute("Height"),
+            ) {
+                (Some("Poster"), Some(width), Some(height)) => bondline_model::PageSize::new(
+                    width
+                        .parse()
+                        .map_err(|_| MappingError::InvalidProperty("Width"))?,
+                    height
+                        .parse()
+                        .map_err(|_| MappingError::InvalidProperty("Height"))?,
+                )?,
+                (Some("Poster"), None, Some(_)) => {
+                    return Err(MappingError::InvalidProperty("Width"));
+                }
+                (Some("Poster"), Some(_), None) => {
+                    return Err(MappingError::InvalidProperty("Height"));
+                }
+                _ => size,
+            }
+        } else {
+            size
+        };
         let mut model = bondline_model::Document::default();
         let id = model
             .pages()

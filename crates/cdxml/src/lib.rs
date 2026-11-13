@@ -2,7 +2,9 @@
 
 mod edit;
 mod numbers;
+mod writer;
 pub use numbers::{ObjectId, parse_integer};
+pub use writer::Writer;
 
 pub const MAX_INPUT_BYTES: usize = 64 * 1024 * 1024;
 pub const MAX_NODES: u32 = 100_000;
@@ -30,6 +32,16 @@ pub enum Error {
     MissingAttribute,
     #[error("attribute value contains a character forbidden in XML 1.0")]
     InvalidAttributeValue,
+    #[error(
+        "new element/attribute names must be unnamespaced ASCII XML names; xmlns is not an ordinary attribute"
+    )]
+    InvalidName,
+    #[error("new elements cannot contain duplicate attributes")]
+    DuplicateAttribute,
+    #[error("writer has unclosed elements or attempted to close its owned root")]
+    UnbalancedElements,
+    #[error("CDXML exceeds 100000 syntax nodes")]
+    NodeLimit,
     #[error("attribute source range is inconsistent with the validated XML")]
     InvalidAttributeRange,
     #[error(

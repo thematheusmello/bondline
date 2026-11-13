@@ -2,7 +2,7 @@
 
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
-| CDXML | Bounded syntax/source preservation, attribute replacement, geometry and read-only elemental projections; owned source-backed history and guarded byte-exact passthrough | Original fixtures/public vectors; independent Expat/Decimal; one pinned RDKit owned-snapshot corpus check; property/history tests; ASan parser/edit/mapping smoke | Complete mapping, editable writer, queries/labels/styles/stereo, reference scopes beyond each fragment, dependent edits, broader corpus and registry/native open/save |
+| CDXML | Source-preserving syntax/attribute edits, elemental projections and owned backing; bounded new-document syntax writer and native elemental encoder with Poster extents | Expat/Decimal vectors; one pinned unchanged corpus document; metadata/order/identity tests; actual bond.create output opened by external RDKit; ASan parser/writer smoke | Imported structural edits, queries/labels/styles/stereo, wider reference scopes/corpus and registry/native open/save |
 | CDX | None | Published specification recorded | Parser, preservation, writer and model mapping |
 | MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
@@ -40,6 +40,34 @@ positions. Tests exercise a 70000-character name and more than 255 bytes of equa
 External Expat verifies decoded values including Unicode character-range boundaries.
 The untouched corpus round-trip gate does not yet exercise edits on its RDKit fixture.
 See clean-room/sources.md, verification.md and fuzz/README.md for provenance and checks.
+
+`bondline_cdxml::Writer` constructs **new syntax** with a CDXML root and UTF-8 XML 1.0
+declaration. It writes nested start/empty/end elements with ordinary unnamespaced ASCII
+names and escaped attribute values. It does not validate chemical containment or regenerate
+an imported tree. Failed operations leave prior writer state unchanged. Output size includes
+reserved closing tags; depth, node and attribute budgets are checked before appending a tag.
+Unbalanced output fails, and finish reparses the complete result. Unicode **values** and
+numeric tab/LF/CR references are supported; new namespace declarations/prefixed or Unicode
+names and text-content writing are not. Imported unknown names/content still remain exact
+on the separate source-preserving path.
+
+`bondline_io::cdxml::write_document` encodes a new native elemental model. Every page,
+fragment, node and bond gets a globally unique positive UINT32 source ID in document order;
+sparse/maximal application IDs do not collide or overflow through a direct domain cast.
+Application IDs are distinct and newly allocated on import. Element, optional position,
+isotope, charge, radical, optional explicit hydrogen count, bond order and begin/end direction
+are retained. All sixteen modeled orders have independent Expat/Decimal projection evidence.
+Isotopes above the format's signed INT16 range and syntax-budget excesses fail without output.
+This is elemental interchange, not general text/style/stereo display serialization.
+
+Native canvas dimensions are represented as `DrawingSpace="Poster"` plus Width/Height in
+points, as documented by the public SDK. This preserves the explicit drawing extent; it
+does not create Windows/macOS printer records or establish a physical printing workflow.
+The owned reader uses complete, valid explicit Poster dimensions. Otherwise the caller's
+preview size remains a fallback: Width/Height have no size meaning for Pages/default mode.
+A Poster with one missing dimension or invalid explicit values is rejected by the model
+projection; standalone syntax still preserves it. Both absent retain the preview fallback.
+BoundingBox is never interpreted as paper size. Printer settings remain opaque.
 
 `bondline_io::cdxml::Geometry` maps unnamespaced n elements directly inside
 CDXML/page/fragment. Other n layouts (including groups and nested fragments) fail explicitly;
@@ -96,14 +124,22 @@ remain byte-exact in the source, but are not represented by the flat elemental p
 to_bytes returns that unchanged source; changing a copied model value is not an editable
 file workflow. StoredDocument now owns the model, original source allocation and baseline,
 and Engine history retains the whole snapshot. It accepts at most one direct page, or an
-empty CDXML document; table-contained/multiple pages fail explicitly. The caller chooses
-preview dimensions, which do not interpret source paper/style settings or BoundingBox.
+empty CDXML document; table-contained/multiple pages fail explicitly. Complete explicit
+Poster extents are read; the caller supplies fallback preview dimensions for other cases.
+This does not decode printer/style settings or infer paper from BoundingBox.
 export_cdxml borrows the exact original bytes only while the model equals its baseline.
 Any unsynchronized model edit fails with UnsupportedEdit; exact restoration/undo permits
-passthrough again. A native document without CDXML backing returns NoCdxmlSource. Source
+passthrough again. That borrowed-only method returns NoCdxmlSource for native data. The new
+to_cdxml method instead returns borrowed exact source or owned freshly encoded native bytes;
+source-backed edits still return UnsupportedEdit. Never regenerate stored.model() to bypass
+this guard: the flat model does not include all original content. Source
 bytes survive input lifetime, cloning and history without being exposed in Debug or command
 result serialization. No file command or native open/save workflow is exposed by this API.
 Source bindings for structural edits, faithful imported-file rendering and full interpretation remain missing.
+Even a file generated by Bondline currently reopens as source-backed library data; it is not
+yet editable/renderable through the application. No file command or native save/reopen flow
+was added by the encoder. The external RDKit 2026.09.2 consumer checks one actual engine-created
+C-C/three-H case as ethane, not every file property, appearance or advanced bond chemistry.
 The corpus gate checks one owned snapshot's projection against independent external Expat/Decimal,
 in addition to its unchanged-byte/XML checks. It explicitly reports chemistry calculations
 as missing rather than treating the projection as formula/stereo/SMILES/InChI verification.

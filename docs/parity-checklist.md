@@ -52,7 +52,7 @@ history, persistence and verification patterns are useful without importing inco
 | Naming and mixtures | PROFESSIONAL-26.1 | missing | M5; public standards/oracles |
 | Associated-data label selection | PROFESSIONAL-26.1 | missing | Documented 26.1 behavior |
 | Separate CDXML/MDL paste entries | PROFESSIONAL-26.1 | missing | M4; platform clipboard evidence |
-| CDXML/CDX interchange | CDXML-INTRO / CDX-INTRO | missing application workflow | CDXML syntax, attribute replacement, geometry and read-only elemental projection verified with independent oracles. Owned history retains source and guards unchanged-byte export. One pinned syntax/model/snapshot corpus check passes; complete mapping, editable writer, labels/queries/styles, references beyond each fragment, CDX and open/save remain missing; see file-formats.md |
+| CDXML/CDX interchange | CDXML-INTRO / CDX-INTRO | missing application workflow | CDXML syntax, attribute edits, projections and source-backed history have independent checks. New native elemental encoding and explicit Poster extents are library-verified, including an external RDKit consumer of actual bond.create output. Complete source-preserving structural edits, generated-file editable reopening, labels/queries/styles, broader references/corpus, CDX and registry/native open/save remain missing; see file-formats.md |
 | MOL/SDF/RXN/SMILES/InChI | GUIDE-25 | missing | M1/M3 |
 | SVG/PDF/PNG, print and Office clipboard | GUIDE-25 | missing | M4 |
 | Templates and biopolymers/HELM | GUIDE-25 / release notes | missing | Original assets only; M5 |

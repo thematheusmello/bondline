@@ -33,6 +33,8 @@ chemical fragment; source-backed creation is refused until editable mapping exis
 models cannot export stale XML; exact undo restores the original bytes and exportability.
 The source/history budget is delivered headlessly; editable mapping, failed-import retention
 and actual native file workflows still need implementation and independent evidence.
+The io library now encodes fresh elemental CDXML through StoredDocument::to_cdxml; this is
+not yet a registered command or native Save action. No command result gained raw XML bytes.
 See model.md for the data boundary; serialized graphs are not a project-save workflow.
 
 | Name | Parameters | Effect |

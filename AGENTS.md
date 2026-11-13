@@ -51,7 +51,12 @@ now enforces 128 prior snapshots and a 128 MiB threshold, deduplicating shared s
 fragment allocations and including baselines/reserved vectors. Keep current data even when
 it alone exceeds the threshold; this excludes allocator headers, caches and external copies.
 Update accounting/tests whenever a new model field owns heap data; do not claim a hard RSS cap.
-Unchanged-source export is guarded; never write stale XML after a model edit.
+Unchanged-source export is guarded; never write stale XML after a model edit. StoredDocument::
+to_cdxml borrows unchanged source or encodes new native elemental data. Do not bypass it by
+regenerating stored.model(): that projection omits unknown data. Even our generated files
+currently reopen source-backed; classify a completely supported profile before enabling
+imported editing/rendering, and preserve other files without guessing. Poster Width/Height
+are drawing extents, not inferred paper/printer settings.
 xtask checks layers and licenses, fetches a pinned SHA-256 corpus, and orchestrates CI.
 No GUI dependencies below ui; wgpu belongs in render. Add crates when useful behavior lands,
 not empty successful-looking API stubs. Document any isolated OS FFI exception explicitly.
@@ -60,10 +65,10 @@ Never commit or expose actual tokens in logs, screenshots or verification record
 is separate and opens no listener. Keep file access bounded and explicitly authorized.
 
 Current map: model (L0, pages, Point2 and validated elemental atom/bond/fragment graphs);
-cdxml (L0, source-preserving syntax, exact integral/source-ID decoding and checked
-existing-attribute replacement);
+cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attribute
+replacement and a bounded new-syntax writer);
 render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
-source-backed CDXML geometry/elemental projections, owned application snapshots and PNG encoding);
+source-backed CDXML projections, new native elemental encoding, owned snapshots and PNG encoding);
 commands (L3, registry and complete stored-snapshot Arc history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
 and `compat/clipboard-win` alone opt into reviewed OS unsafe; `compat/hexf-parse` forbids
@@ -96,6 +101,10 @@ frames. Canvas interaction must not advance layout beyond visible error text.
 The user approved crates/render/tests/goldens/single-bond.png for its exact scene/hash only.
 Its JSON and README record provenance; external Pillow compares every CPU/GPU RGBA byte.
 Do not regenerate that golden without renewed human approval. Other images remain unapproved.
+requirements-dev.txt now pins external RDKit/NumPy as well as Pillow. Select an isolated
+interpreter with BONDLINE_PYTHON as described in docs/development.md; missing consumers fail
+instead of skipping. The RDKit test verifies engine-created CDXML interoperability for
+ethane only, not an implemented chemistry engine or complete differential corpus coverage.
 
 ## Pick and finish the next task
 

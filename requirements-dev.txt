@@ -1,2 +1,4 @@
 # External test consumers only; never bundled with the Rust application.
 Pillow==12.3.0
+numpy==2.5.4
+rdkit==2026.9.2

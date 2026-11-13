@@ -22,8 +22,8 @@ MIT/Apache-2.0/BSD shipped policy: Mac arm64 150, Windows x64 161, Linux x64 219
 packages plus two hash/notice-verified bundled assets. Full release notice/source audit
 and the Unicode-bearing browser candidate remain separate work.
 
-Verified in the current drawing/history checkpoint:
-- 133 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses
+Verified in the current drawing/history/encoding checkpoint:
+- 144 workspace tests; rustfmt, all-targets clippy with warnings denied, layers, licenses
   and the pinned corpus gate. Windows/Linux all-targets source checks pass; native runtime
   and hosted CI execution on those platforms remain unverified.
 - Six shared typed commands: document.inspect, page.set_size, bond.create, history.undo,
@@ -62,27 +62,40 @@ matches every independently decoded RGBA byte; deliberate corruption fails. Hash
 This is not approval of final application design or general rendering. The older blank-page
 candidate remains unapproved; no approval was inferred from silence.
 
-M1 evidence remains: bounded standalone CDXML syntax with exact source preservation and
+M1 evidence: bounded standalone CDXML syntax with exact source preservation and
 checked attribute replacement; independent Expat/Decimal/numeric vectors; direct-position
 and read-only elemental projections; owned source/model/baseline snapshots retained by
 history. Unchanged-source export is byte-exact; unsynchronized model edits cannot export
-stale XML. Source-backed bond creation/preview still fail explicitly. There is no native
-open/save/reopen workflow, editable CDXML codec, CDX parser or MOL/SMILES codec. Drawings are
+stale XML. New standalone syntax construction and native elemental CDXML encoding now
+preserve modeled metadata, all sixteen bond orders, direction and Poster canvas extents.
+Sparse/maximal app IDs map to unique source IDs; invalid isotope/range/budget cases fail.
+StoredDocument::to_cdxml borrows unchanged source or returns newly encoded native bytes.
+An external RDKit 2026.09.2 process opens actual bond.create output and confirms ethane's
+atoms/bond/hydrogens, SMILES and formula. This is one interoperability scene, not an
+implemented Bondline chemistry engine or general rendering/file parity.
+Source-backed bond creation/preview still fail explicitly, including files generated here
+and then imported. There is no registry/native open/save/reopen workflow, imported structural
+writer, CDX parser or MOL/SMILES codec. Drawings in the application are
 session-local. Other atom/bond kinds, connected edits, style sheets and chemistry algorithms
 are missing, even when their pure model types exist.
 
 Corpus: two pinned BSD-3-Clause RDKit files, one CDXML byte/XML/model/owned-snapshot check;
-MOL integrity only; no CDX entry or chemistry calculation coverage. The isolated parser
-fuzz graph builds with its existing pinned nightly and new renderer dependency edges;
-this was not a new fuzz run. Previous bounded 10000-run ASan evidence remains in verification.md.
+MOL integrity only; no CDX entry or chemistry calculation coverage. The extended pinned ASan
+harness completed 10000 runs with writer escaping/rollback and Poster handling, seed
+3641879538/max_len 65536/timeout 5, coverage 3402 and corpus 600/162 KiB. This bounded run is
+not exhaustive validation. External Python consumers are isolated under ignored
+.cache/oracles/format-python; requirements-dev.txt pins Pillow/NumPy/RDKit. See development.md
+for BONDLINE_PYTHON selection; system Python was not modified.
 
 Next exact tasks:
 1. Finish/version the screen, palette, icon, dialog and end-to-end flow inventory using the
    newly pinned public research and authorized artifacts. Existing 573 control rows are not
    a complete modern inventory. Separate desktop/platform/tier evidence from cloud demos.
-2. Add editable CDXML writing, then atomic registry/native open/save with failed-import/save
-   retention tests and independent consumers. Source backing
-   must survive every history/edit path. Inspect the pinned reference-project approaches.
+2. Classify a completely supported generated-file profile before allowing its editing/rendering
+   after reopen; do not trust CreationProgram alone or drop unknown foreign data. Add source-
+   preserving edits and atomic registry/native open/save with failed-import/save retention
+   tests, bounded path access and independent consumers. Save from the complete StoredDocument,
+   never regenerate a bare imported projection. Inspect the pinned reference-project approaches.
 3. Extend single-bond behavior to existing-atom attachment, connected graphs, click creation,
    snapping and order changes, with native workflows and tests. The current independent-bond
    command is partial reference coverage; retain all remaining M1–M5 requirements.
@@ -92,10 +105,11 @@ Next exact tasks:
 The graphics origin checkpoint is db94cd5; source/history parent is 6bccaf1, the drawing
 checkpoint is 7043563 and the research checkpoint is 952ded5. The current research policy
 and full goal are active; no push/publication/account action was performed.
-The subsequent history-budget commit includes this record; use Git log for its final hash.
+History budgeting is ca9b859. The subsequent native-encoding commit includes this record;
+use Git log for its final hash.
 
 The disposable target/dev/Bondline.app contains the verified ordered-event drawing build
-and is closed. It predates the subsequent history-accounting change. Final native exec
+and is closed. It predates history accounting and native encoding. Final native exec
 93577 exited 0; 127.0.0.1:50110 was independently confirmed
 closed. Earlier test builds 22527 and 75463 also exited. Startup credentials remain only
 in ignored private target logs; never copy them into reports. Earlier REA exposure evidence

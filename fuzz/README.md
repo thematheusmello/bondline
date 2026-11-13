@@ -38,5 +38,11 @@ file workflow remain outside this harness's claims. Accepted owned StoredDocumen
 must export byte-exact source. The harness edits preview dimensions, requires stale-source
 export to fail, restores the model and requires exact passthrough again. Unsupported page
 layouts may reject the owned projection without rejecting the standalone syntax.
+Explicit Poster dimensions are now read by the owned projection. The mutation always
+chooses dimensions different from the source; missing/invalid explicit Poster dimensions
+may reject the model while syntax remains intact. UTF-8 inputs also exercise the new
+writer's attribute escaping and rollback: a successful page attribute decodes exactly;
+rejected values leave no partial child. Original Poster and incomplete-Poster seeds are
+placed only in the ignored mutation corpus, never the committed fixture directory.
 Independent XML semantic assertions live in the external Expat tests. A short smoke run is
 not exhaustive parser conformance or a security audit.

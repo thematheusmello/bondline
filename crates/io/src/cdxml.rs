@@ -1,7 +1,9 @@
 //! Source-backed CDXML projections; application document import remains separate.
 
 mod graph;
+mod write;
 pub use graph::{ElementalGraph, MappingError};
+pub use write::write_document;
 
 use bondline_model::Point2;
 use std::collections::BTreeSet;

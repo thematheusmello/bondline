@@ -60,18 +60,24 @@ Format crates own their syntax and source-preserving representations. They do no
 on the model. The io layer translates supported data and retains original backing for
 unknown content; unsupported edits must fail explicitly rather than discard data.
 CDXML's borrowed tree remains read-only. Its attribute replacement returns revalidated
-source bytes with untouched spans retained; no complete application file adapter exists yet.
+source bytes with untouched spans retained. A separate bounded standalone Writer builds new
+syntax without model/native dependencies; it never regenerates an imported tree. Io maps
+new elemental model documents to it with unique source IDs, metadata and Poster canvas
+extents. No complete application file adapter exists yet.
 Io's Geometry adapter maps direct-fragment positions and writes only an existing p value.
 The read-only ElementalGraph adapter maps supported elemental properties and connectivity,
 assigning separate application identities while retaining the original syntax. Its local
 reference maps handle scoped source IDs and zero's unassigned meaning. Group hierarchy,
 styles, captions and other unmodelled data stay in source backing, not in its flat projection.
 StoredDocument owns that backing beyond parser lifetimes. It accepts zero or one direct
-page with explicitly chosen preview dimensions; it does not derive print paper from graphical
-bounds. Raw XML is neither serialized in command results nor included in StoredDocument Debug.
-Unchanged models can export the exact original bytes; unsynchronized edits fail explicitly,
-and exact undo restores passthrough. See file-formats.md; this is not an editable codec or
-an exposed file-open/save workflow. Capture refuses source-backed or unsupported chemical
+page, reads complete explicit Poster extents and otherwise uses caller preview dimensions;
+it does not derive print paper from graphical bounds or decode printer records. Raw XML is
+neither serialized in command results nor included in StoredDocument Debug.
+Unchanged source-backed models export the exact original bytes; unsynchronized edits fail
+explicitly, and exact undo restores passthrough. to_cdxml borrows that source or returns owned
+new native bytes. Save callers must use that full StoredDocument entry point, not regenerate
+stored.model(), which lacks unknown data. See file-formats.md; imported structural editing
+and exposed file-open/save workflows remain missing. Capture refuses source-backed or unsupported chemical
 content instead of returning a misleading blank preview; the native C-C creation case works.
 
 The native canvas consumes the render crate's ordered rectangle/stroke scene and limited

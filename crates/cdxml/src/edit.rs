@@ -57,8 +57,7 @@ impl Document<'_> {
                 .checked_add(suffix.len())
                 .ok_or(Error::InputTooLarge)?;
             for character in value.chars() {
-                if !matches!(character, '\t' | '\n' | '\r' | ' '..='\u{d7ff}' | '\u{e000}'..='\u{fffd}' | '\u{10000}'..='\u{10ffff}')
-                {
+                if !valid_character(character) {
                     return Err(Error::InvalidAttributeValue);
                 }
                 length = length
@@ -83,7 +82,11 @@ impl Document<'_> {
     }
 }
 
-fn escape(character: char) -> Option<&'static str> {
+pub(crate) fn valid_character(character: char) -> bool {
+    matches!(character, '\t' | '\n' | '\r' | ' '..='\u{d7ff}' | '\u{e000}'..='\u{fffd}' | '\u{10000}'..='\u{10ffff}')
+}
+
+pub(crate) fn escape(character: char) -> Option<&'static str> {
     match character {
         '&' => Some("&amp;"),
         '<' => Some("&lt;"),

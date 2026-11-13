@@ -32,11 +32,14 @@ document. A source-backed direct-fragment node geometry view now uses validated 
 points; missing coordinates remain absent. Model atom/bond/fragment storage is validated.
 Read-only elemental mapping now assigns fresh application IDs, resolves fragment-local
 references and retains source backing; an external Expat/Decimal oracle checks the corpus.
-Owned application snapshots/history now retain that backing; unsynchronized edits cannot
-export stale XML. This constructor/passthrough API is not a file workflow.
+Owned application snapshots/history retain that backing; unsynchronized edits cannot
+export stale XML. New native elemental CDXML encoding now preserves modeled metadata,
+connectivity and explicit Poster canvas extents; an external RDKit consumer opens the
+actual single-bond command's output. Imported structural edits and file workflows remain.
 Native independent C-C/three-H rendering is delivered, with explicit terminal labels.
 Source/history now has shared-allocation accounting and oldest-first byte eviction.
-Next: editable CDXML writing and registry open/save with failed-import/save retention;
+Next: a completely supported generated-file profile that can reopen/edit/render, source-
+preserving edits and registry open/save with failed-import/save retention;
 broader query/label/style mapping, lossless CDX records, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.

@@ -7,7 +7,8 @@ The first drawing workflow creates an independent C-C bond with terminal hydroge
 supports Undo/Redo and captures its canvas on CPU or GPU. Connected construction and file
 open/save remain missing. Drawings are session-local and cannot yet be saved/reopened.
 The standalone CDXML crate preserves syntax and replaces existing attribute values without rewriting
-unrelated bytes; see [tested format scope](docs/file-formats.md).
+unrelated bytes. A separate bounded writer and io encoder now produce new elemental CDXML
+with explicit canvas extents; see [tested format scope](docs/file-formats.md).
 The headless model stores validated atom/bond/fragment data. The io crate maps limited
 source-backed node-position and elemental graph views. Engine snapshots/history now retain
 complete original CDXML bytes, with guarded unchanged-source export. Application
@@ -58,7 +59,7 @@ newline JSON commands, as documented in [the command contract](docs/control-prot
 
 Current work: the public menu/tool/shortcut inventory, broader file coverage and actual
 three-platform CI execution. [CI scope](docs/ci.md) separates configured jobs from evidence.
-Workspace PNG tests need the external Pillow oracle described in [development.md](docs/development.md).
+Workspace format/render tests need the pinned external consumers described in [development.md](docs/development.md).
 See [STATUS.md](STATUS.md) for actual progress and [ROADMAP.md](ROADMAP.md) for the full target.
 
 Original code is dual-licensed MIT OR Apache-2.0. Third-party notices remain with their files.
