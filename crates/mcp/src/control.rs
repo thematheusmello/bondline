@@ -182,7 +182,10 @@ async fn publish_result(
     on_change: &(dyn Fn() + Send + Sync),
 ) -> io::Result<()> {
     let notify = result.as_ref().is_ok_and(|result| {
-        result.changed || result.file_operation.is_some() || result.close_operation.is_some()
+        result.changed
+            || result.file_operation.is_some()
+            || result.close_operation.is_some()
+            || result.ui_file_operation.is_some()
     });
     let value = match result {
         Ok(result) => json!({"result":result}),
@@ -456,6 +459,107 @@ mod tests {
             assert_eq!(state.undo_depth, 1);
             assert!(state.file.dirty);
         }
+        Ok(())
+    }
+
+    #[tokio::test(flavor = "current_thread")]
+    async fn presentation_request_repaints_even_when_response_write_fails_without_claiming_display()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let engine = Arc::new(Mutex::new(Engine::default()));
+        engine.lock().map_err(|_| "engine")?.set_ui_file_host(true);
+        let executor = CommandExecutor::new(Arc::clone(&engine));
+        let request = serde_json::to_vec(
+            &json!({"command":"ui.file","params":{"expected_revision":0,"action":"open"}}),
+        )?;
+        let (registered, publication) = executor
+            .prepare_json(&request)
+            .map_err(|error| error.info.message)?;
+        let result = executor
+            .complete(registered, std::future::pending())
+            .await
+            .map_err(|error| error.message)?;
+        assert!(!result.changed);
+        assert!(result.file_operation.is_none());
+        assert!(result.close_operation.is_none());
+        assert_eq!(result.ui_file_operation, Some(1));
+        assert_eq!(
+            result
+                .ui_file
+                .request
+                .as_ref()
+                .ok_or("requested presentation")?
+                .phase,
+            bondline_commands::UiFilePhase::Requested
+        );
+        let notified = AtomicBool::new(false);
+        let sent = publish_result(
+            &mut BrokenWriter { fail_flush: false },
+            Ok(result),
+            publication,
+            &|| {
+                assert!(!executor.has_active_work());
+                notified.store(true, Ordering::SeqCst);
+            },
+        )
+        .await;
+        assert!(sent.is_err());
+        assert!(notified.load(Ordering::SeqCst));
+        let state = engine.lock().map_err(|_| "engine")?.state();
+        assert_eq!(
+            state
+                .ui_file
+                .request
+                .as_ref()
+                .ok_or("retained request")?
+                .phase,
+            bondline_commands::UiFilePhase::Requested
+        );
+        assert_eq!(state.revision, 0);
+        assert_eq!(state.undo_depth, 0);
+        assert!(!state.file.dirty);
+        Ok(())
+    }
+
+    #[tokio::test(flavor = "current_thread")]
+    async fn interleaved_ui_cancel_and_replacement_do_not_relabel_the_original_request_receipt()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let engine = Arc::new(Mutex::new(Engine::default()));
+        engine.lock().map_err(|_| "engine")?.set_ui_file_host(true);
+        let executor = CommandExecutor::new(Arc::clone(&engine));
+        let request = serde_json::to_vec(
+            &json!({"command":"ui.file","params":{"expected_revision":0,"action":"open"}}),
+        )?;
+        let (registered, publication) = executor
+            .prepare_json(&request)
+            .map_err(|error| error.info.message)?;
+        {
+            let mut engine = engine.lock().map_err(|_| "engine")?;
+            engine.dispatch(
+                "ui.file",
+                json!({"expected_revision":0,"action":"cancel","request_id":1}),
+            )?;
+            engine.dispatch("ui.file", json!({"expected_revision":0,"action":"save_as"}))?;
+        }
+        let result = executor
+            .complete(registered, std::future::pending())
+            .await
+            .map_err(|error| error.message)?;
+        assert_eq!(
+            result.ui_file_operation,
+            Some(1),
+            "receipt belongs to the accepted original operation"
+        );
+        assert_eq!(result.ui_file.epoch, 3);
+        let current = result
+            .ui_file
+            .request
+            .as_ref()
+            .ok_or("replacement request")?;
+        assert_eq!(current.id, 3);
+        assert_eq!(current.action, bondline_commands::UiFileAction::SaveAs);
+        assert_eq!(current.phase, bondline_commands::UiFilePhase::Requested);
+        drop(publication);
+        assert!(!executor.has_active_work());
         Ok(())
     }
 }

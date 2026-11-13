@@ -7,11 +7,17 @@ use std::{
 };
 
 type TestResult = Result<(), Box<dyn std::error::Error>>;
+
+fn native_engine() -> Engine {
+    let mut engine = Engine::default();
+    engine.set_ui_file_host(true);
+    engine
+}
 static NEXT_DIRECTORY: AtomicUsize = AtomicUsize::new(0);
 
-struct Directory(PathBuf);
+pub(super) struct Directory(pub(super) PathBuf);
 impl Directory {
-    fn new() -> Result<Self, std::io::Error> {
+    pub(super) fn new() -> Result<Self, std::io::Error> {
         let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../target");
         fs::create_dir_all(&root)?;
         let path = root.join(format!(
@@ -80,7 +86,7 @@ fn has_text(output: &egui::FullOutput, needle: &str) -> bool {
 
 #[test]
 fn remote_close_state_is_adopted_and_ui_decisions_use_the_registry() -> TestResult {
-    let mut engine = Engine::default();
+    let mut engine = native_engine();
     edit(&mut engine, 640)?;
     let original = engine.stored_document().clone();
     let revision = engine.state().revision;
@@ -121,13 +127,14 @@ fn remote_close_state_is_adopted_and_ui_decisions_use_the_registry() -> TestResu
 
 #[test]
 fn host_close_waits_for_both_shared_work_and_unconsumed_ui_results() -> TestResult {
-    let mut engine = Engine::default();
+    let mut engine = native_engine();
     let mut workflow = FileWorkflow::new(std::env::temp_dir());
     assert!(!workflow.complete_close_if_idle(&mut engine, false, false));
     close(&mut engine, CloseAction::Request)?;
     assert!(!workflow.complete_close_if_idle(&mut engine, true, false));
     let (_sender, result) = mpsc::sync_channel(1);
     workflow.job = Some(FileJob {
+        request_id: 0,
         action: FileAction::Save {
             path: "pending.cdxml".to_owned(),
             overwrite: false,
@@ -148,9 +155,9 @@ fn host_close_waits_for_both_shared_work_and_unconsumed_ui_results() -> TestResu
 #[test]
 fn approved_close_cancels_an_ordinary_picker_before_it_can_accept_a_save() -> TestResult {
     for committed in [false, true] {
-        let mut engine = Engine::default();
+        let mut engine = native_engine();
         let mut workflow = FileWorkflow::new(std::env::temp_dir());
-        workflow.request_save(&engine.state(), true);
+        workflow.request_file(&mut engine, UiFileAction::SaveAs, None, &mut None);
         let context = egui::Context::default();
         crate::configure_context(&context);
         let _ = frame(&mut workflow, &mut engine, &context);
@@ -185,7 +192,7 @@ fn approved_close_cancels_an_ordinary_picker_before_it_can_accept_a_save() -> Te
 
 #[test]
 fn accepted_file_action_failure_keeps_the_window_open_beyond_one_frame() -> TestResult {
-    let mut engine = Engine::default();
+    let mut engine = native_engine();
     let mut workflow = FileWorkflow::new(std::env::temp_dir());
     close(&mut engine, CloseAction::Request)?;
     assert!(!workflow.complete_close_if_idle(&mut engine, false, true));
@@ -201,6 +208,7 @@ fn accepted_file_action_failure_keeps_the_window_open_beyond_one_frame() -> Test
     close(&mut engine, CloseAction::Request)?;
     let (sender, result) = mpsc::sync_channel(1);
     workflow.job = Some(FileJob {
+        request_id: 0,
         action: FileAction::Save {
             path: "failed.cdxml".to_owned(),
             overwrite: false,
@@ -218,7 +226,10 @@ fn accepted_file_action_failure_keeps_the_window_open_beyond_one_frame() -> Test
         .map_err(|_| "completion send")?;
     workflow.poll(&mut engine, &mut error);
     assert_eq!(engine.state().close, CloseState::Open);
-    assert!(workflow.chooser.is_open());
+    assert!(
+        !workflow.chooser.is_open(),
+        "invalidated request cannot privately reopen"
+    );
     assert!(
         error
             .as_deref()
@@ -242,15 +253,30 @@ fn only_the_matching_close_save_receipt_can_renew_the_same_close_epoch() -> Test
     ] {
         let directory = Directory::new()?;
         let path = directory.0.join("drawing.cdxml");
-        let mut engine = Engine::default();
+        let mut engine = native_engine();
         engine.dispatch("document.save_cdxml", serde_json::json!({"path":path}))?;
         edit(&mut engine, 640)?;
         close(&mut engine, CloseAction::Request)?;
         let mut workflow = FileWorkflow::new(directory.0.clone());
-        let action = workflow
-            .choose_close(CloseChoice::Save, &mut engine, &mut None)
+        workflow.choose_close(CloseChoice::Save, &mut engine, &mut None);
+        let intent = workflow
+            .adopt_request(&mut engine, &mut None)
             .ok_or("known path save")?;
         let ticket = workflow.save_for_close.take().ok_or("close save ticket")?;
+        let FileAction::Save {
+            path: exact_path,
+            overwrite,
+        } = &intent.action
+        else {
+            return Err("expected save".into());
+        };
+        let prepared = engine.prepare_ui_file(
+            intent.request_id,
+            Command::SaveCdxml(SaveCdxml {
+                path: exact_path.clone(),
+                overwrite: *overwrite,
+            }),
+        )?;
         if scenario == "cancel" || scenario == "cancel_then_request" {
             close(&mut engine, CloseAction::Cancel)?;
         }
@@ -263,10 +289,7 @@ fn only_the_matching_close_save_receipt_can_renew_the_same_close_epoch() -> Test
                 message: "Bytes were published but durability confirmation failed".to_owned(),
             })
         } else {
-            let mut saved = engine.dispatch(
-                "document.save_cdxml",
-                serde_json::json!({"path":path,"overwrite":true}),
-            )?;
+            let mut saved = engine.finish(prepared.complete()?)?;
             if scenario == "stale_receipt" {
                 saved
                     .file_operation
@@ -285,7 +308,8 @@ fn only_the_matching_close_save_receipt_can_renew_the_same_close_epoch() -> Test
         let before = engine.state();
         let (sender, result) = mpsc::sync_channel(1);
         workflow.job = Some(FileJob {
-            action,
+            request_id: intent.request_id,
+            action: intent.action,
             result,
             cancel: Cancellation::default(),
             cancelling: false,
@@ -314,8 +338,8 @@ fn only_the_matching_close_save_receipt_can_renew_the_same_close_epoch() -> Test
             );
             assert!(engine.state().file.dirty);
             assert!(
-                workflow.save_for_close.is_some(),
-                "retrying the same close-specific save must retain its validated continuation"
+                !workflow.chooser.is_open() && workflow.save_for_close.is_none(),
+                "a published error must not reopen an obsolete retry picker"
             );
         }
     }
@@ -327,7 +351,7 @@ fn escape_cancels_shared_close_from_picker_or_busy_dialog_without_cancelling_wor
     for mode in ["picker", "ui_work", "shared_work"] {
         let busy = mode != "picker";
         let shared_work = mode == "shared_work";
-        let mut engine = Engine::default();
+        let mut engine = native_engine();
         edit(&mut engine, 640)?;
         close(&mut engine, CloseAction::Request)?;
         let epoch = engine.state().close_epoch;
@@ -338,6 +362,7 @@ fn escape_cancels_shared_close_from_picker_or_busy_dialog_without_cancelling_wor
             let cancel = Cancellation::default();
             worker_cancel = Some(cancel.clone());
             workflow.job = Some(FileJob {
+                request_id: 0,
                 action: FileAction::Save {
                     path: "pending.cdxml".to_owned(),
                     overwrite: false,
@@ -353,6 +378,7 @@ fn escape_cancels_shared_close_from_picker_or_busy_dialog_without_cancelling_wor
                     .choose_close(CloseChoice::Save, &mut engine, &mut None)
                     .is_none()
             );
+            workflow.adopt_request(&mut engine, &mut None);
             assert!(workflow.chooser.is_open());
         }
         let context = egui::Context::default();

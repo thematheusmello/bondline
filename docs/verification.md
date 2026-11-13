@@ -1059,3 +1059,51 @@ all three actual native window launches and both bounded Linux parser sanitizer 
 The adapter scope remains Metal/Apple Paravirtual, Dx12/Microsoft Basic Render Driver(Cpu)
 and Vulkan/llvmpipe(Cpu); no hardware-performance claim follows. Main is fast-forwarded only
 after this GREEN. These jobs are terminal; no local or hosted job remains live.
+
+## Shared delivered controls and guarded file requests, 2026-11-13
+
+Core API RED preceded implementation (target/file-ui-core-red.log). An enabled headless
+Close Window binding then failed a behavioral assertion and was fixed without disabling
+the underlying document.close intent (file-ui-headless-close-{red,green}.log). A missing
+local .venv interpreter was an environment error, not a behavioral RED; the corrected run
+uses the existing isolated interpreter described in development.md.
+
+Core61 tests now pass, including independent exact storage/history retention, host absence,
+monotonic request/cancel identity and exhaustion, invalid combinations, stale selection,
+close Cancel/new Request, baseline/path ABA and no-op preservation. Real saves exercise
+same-revision baseline/path changes; an old close-Save still reports publication without
+approving a newer close. Logs:file-ui-core-{all-green,clippy,fmt}.log.
+
+Adapter API RED is ui-contract-adapter-api-red.log. All36 CLI/MCP tests pass, with exact
+11-name discovery and closed schemas, headless refusal, typed native bindings, requested
+versus trusted-accepted state, repaint on presentation-only changes, old operation/current
+request separation, Running Cancel refusal, busy reservation before consume, origin-bound
+work, stale/cancel/close/path ABA and external saved-file consumption. Logs:
+ui-contract-adapters-first-green.log and ui-contract-adapters-clippy.log.
+
+UI API RED is native-file-controls-red.log. Review then found two real behavioral failures:
+Cancel from an old picker targeted a replacement, and a known-path Save failure lost its
+required overwrite:true on retry. native-file-controls-regressions-red.log records both;
+the fixes retain identity and an explicit fixed-path retry confirmation. A disposable
+filesystem test turns the target into a directory during prepared work, checks retained
+bytes, restores it and completes the exact guarded retry. UI36 tests pass, including
+shifted SaveAs/Save and Redo/Undo precedence, independent physical page values and existing
+close/file/drawing coverage. Native execution is recorded separately; egui tests alone do
+not establish a displayed window.
+
+The frozen-source aggregate cargo xtask ci passes265 workspace tests plus3 native AccessKit
+bridge tests, fmt, warnings-denied clippy, layers, unchanged153/164/219 native declared
+runtime license closures/two assets and the pinned corpus. It printed the actual root
+checkout; log target/file-controls-ci-integrated.log. No dependency pin, parser, renderer,
+asset or approved golden was changed. Corpus still lacks application CDX/MOL/chemistry
+coverage. The new source needs its own hosted run before main integration; earlier close
+run43488771976 is terminal GREEN and cannot substitute for these changes.
+
+Actual native acceptance on the owned4a5425b0... executable passes the shared menu/shortcut/
+remote picker, stale Cancel, AX SaveAs, known-path Save, malformed retention, actual Save
+failure/explicit fixed-path retry, committed-edit Quit Cancel/Save, reopen and two concurrent
+capture reply-drain workflows. Independent XML/RDKit reads the1125-byte three-fragment file,
+SHA771fdaf88be2129d633692bfca5a81627885c6bb7022777ca5c1b346016f7347. All processes/CUA ended.
+See native-file-ui.md for exact binary hash, excluded initial ambiguity, resolved stale-app
+guard and platform limits. No new golden approval or interactive Windows/Linux evidence is
+claimed; the existing approved scene/hash remains unchanged.

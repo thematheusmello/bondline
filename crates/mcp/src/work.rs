@@ -54,6 +54,23 @@ pub struct CommandExecutor {
     workers: Workers,
 }
 
+/// One native file selection, validated and reserved before its worker is spawned.
+/// The originating engine is private and cannot be replaced by a different session.
+#[must_use = "complete the file work, or report its failed start to finish_ui_file"]
+pub struct UiFileWork {
+    engine: SharedEngine,
+    registered: RegisteredWork,
+}
+
+impl UiFileWork {
+    /// Complete the real file command, not presentation acknowledgement. The native
+    /// host consumes the result with finish_ui_file; a retry must retain the same ID.
+    pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
+        let Self { engine, registered } = self;
+        complete_registered_blocking(&engine, registered, cancel)
+    }
+}
+
 impl CommandExecutor {
     pub fn new(engine: SharedEngine) -> Self {
         Self {
@@ -70,6 +87,23 @@ impl CommandExecutor {
     /// acknowledgement must check this under that mutex before committing shutdown.
     pub fn has_active_work(&self) -> bool {
         self.workers.active.load(Ordering::Acquire) != 0
+    }
+
+    /// Called before the native thread is spawned. File work is known to be deferred;
+    /// reserve first so a full worker budget cannot consume the accepted request.
+    pub fn prepare_ui_file(&self, id: u64, actual: Command) -> Result<UiFileWork, ErrorInfo> {
+        let mut engine = self.engine.lock().map_err(|_| unavailable())?;
+        let permit = self.workers.permit()?;
+        let prepared = engine
+            .prepare_ui_file(id, actual)
+            .map_err(|error| error.info())?;
+        Ok(UiFileWork {
+            engine: Arc::clone(&self.engine),
+            registered: RegisteredWork {
+                prepared,
+                permit: Some(permit),
+            },
+        })
     }
 
     fn prepare_with<T>(
@@ -115,18 +149,7 @@ impl CommandExecutor {
         command: Command,
         cancel: &Cancellation,
     ) -> Result<CommandResult, ErrorInfo> {
-        let RegisteredWork {
-            prepared,
-            permit: _permit,
-        } = self.prepare_command(command)?;
-        let completed = prepared
-            .complete_with_cancel(cancel)
-            .map_err(|error| error.info())?;
-        self.engine
-            .lock()
-            .map_err(|_| unavailable())?
-            .finish(completed)
-            .map_err(|error| error.info())
+        complete_registered_blocking(&self.engine, self.prepare_command(command)?, cancel)
     }
 
     pub async fn execute(
@@ -160,6 +183,25 @@ impl CommandExecutor {
             operation(&Cancellation::default()).map_err(|error| error.info())
         }
     }
+}
+
+fn complete_registered_blocking(
+    engine: &SharedEngine,
+    registered: RegisteredWork,
+    cancel: &Cancellation,
+) -> Result<CommandResult, ErrorInfo> {
+    let RegisteredWork {
+        prepared,
+        permit: _permit,
+    } = registered;
+    let completed = prepared
+        .complete_with_cancel(cancel)
+        .map_err(|error| error.info())?;
+    engine
+        .lock()
+        .map_err(|_| unavailable())?
+        .finish(completed)
+        .map_err(|error| error.info())
 }
 
 fn unavailable() -> ErrorInfo {
@@ -289,6 +331,173 @@ mod tests {
         drop(first);
         assert!(clone.has_active_work());
         drop(second);
+        assert!(!executor.has_active_work());
+        Ok(())
+    }
+
+    fn accepted_open(engine: &mut Engine) -> Result<u64, Box<dyn std::error::Error>> {
+        engine.set_ui_file_host(true);
+        let revision = engine.state().revision;
+        let requested = engine.dispatch(
+            "ui.file",
+            json!({"expected_revision":revision,"action":"open"}),
+        )?;
+        let id = requested.ui_file.request.as_ref().ok_or("UI request")?.id;
+        engine.claim_ui_file(id)?;
+        Ok(id)
+    }
+
+    #[test]
+    fn ui_file_reservation_precedes_consumption_and_survives_the_native_spawn_gap()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let engine = Arc::new(Mutex::new(Engine::default()));
+        let executor = CommandExecutor::new(Arc::clone(&engine));
+        let id = accepted_open(&mut *engine.lock().map_err(|_| "engine")?)?;
+        let before = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+        let actual = || {
+            Command::parse(
+                "document.open_cdxml",
+                json!({"path":"not-read-before-start.cdxml"}),
+            )
+        };
+        let first = executor.workers.permit().map_err(|error| error.message)?;
+        let second = executor.workers.permit().map_err(|error| error.message)?;
+        assert_eq!(
+            executor
+                .prepare_ui_file(id, actual()?)
+                .err()
+                .ok_or("accepted excess UI file work")?
+                .code,
+            "busy"
+        );
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before,
+            "failed worker reservation must not consume the accepted presentation"
+        );
+        drop(second);
+        let work = executor
+            .prepare_ui_file(id, actual()?)
+            .map_err(|error| error.message)?;
+        {
+            let state = engine.lock().map_err(|_| "engine")?.state();
+            assert_eq!(
+                state
+                    .ui_file
+                    .request
+                    .as_ref()
+                    .ok_or("running request")?
+                    .phase,
+                bondline_commands::UiFilePhase::Running
+            );
+            assert!(executor.has_active_work());
+            assert!(executor.clone().has_active_work());
+            assert_eq!(state.revision, 0);
+            assert_eq!(state.undo_depth, 0);
+        }
+        {
+            let mut engine = engine.lock().map_err(|_| "engine")?;
+            let before = serde_json::to_value(engine.state())?;
+            assert_eq!(
+                engine
+                    .dispatch(
+                        "ui.file",
+                        json!({
+                            "expected_revision":0,"action":"cancel","request_id":id
+                        })
+                    )
+                    .err()
+                    .ok_or("presentation Cancel claimed to cancel reserved file I/O")?
+                    .info()
+                    .code,
+                "ui_busy"
+            );
+            assert_eq!(serde_json::to_value(engine.state())?, before);
+        }
+        // A failed std::thread::spawn drops the closure/opaque work before UI reports retry.
+        drop(work);
+        assert!(
+            engine
+                .lock()
+                .map_err(|_| "engine")?
+                .finish_ui_file(id, true)
+        );
+        assert_eq!(
+            engine
+                .lock()
+                .map_err(|_| "engine")?
+                .state()
+                .ui_file
+                .request
+                .as_ref()
+                .ok_or("restored request")?
+                .phase,
+            bondline_commands::UiFilePhase::Accepted
+        );
+        drop(first);
+        assert!(!executor.has_active_work());
+        Ok(())
+    }
+
+    #[test]
+    fn cancelled_replaced_or_edited_ui_requests_never_prepare_a_file_operation()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let engine = Arc::new(Mutex::new(Engine::default()));
+        let executor = CommandExecutor::new(Arc::clone(&engine));
+        let first = accepted_open(&mut *engine.lock().map_err(|_| "engine")?)?;
+        let second = {
+            let mut engine = engine.lock().map_err(|_| "engine")?;
+            engine.dispatch(
+                "ui.file",
+                json!({"expected_revision":0,"action":"cancel","request_id":first}),
+            )?;
+            let next =
+                engine.dispatch("ui.file", json!({"expected_revision":0,"action":"open"}))?;
+            let id = next
+                .ui_file
+                .request
+                .as_ref()
+                .ok_or("replacement request")?
+                .id;
+            engine.claim_ui_file(id)?;
+            id
+        };
+        assert!(second > first);
+        let actual =
+            || Command::parse("document.open_cdxml", json!({"path":"must-not-open.cdxml"}));
+        let before = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+        assert_eq!(
+            executor
+                .prepare_ui_file(first, actual()?)
+                .err()
+                .ok_or("replayed cancelled request")?
+                .code,
+            "ui_stale_request"
+        );
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        assert!(!executor.has_active_work());
+        {
+            engine.lock().map_err(|_| "engine")?.dispatch(
+                "page.set_size",
+                json!({"page_id":1,"width_pt":612,"height_pt":792}),
+            )?;
+        }
+        let edited = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+        assert_eq!(
+            executor
+                .prepare_ui_file(second, actual()?)
+                .err()
+                .ok_or("prepared obsolete dialog selection")?
+                .code,
+            "ui_stale_request"
+        );
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            edited
+        );
         assert!(!executor.has_active_work());
         Ok(())
     }

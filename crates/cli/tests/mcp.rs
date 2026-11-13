@@ -107,10 +107,36 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("missing tools")?;
-    assert_eq!(tools.len(), 9);
+    let mut names = tools
+        .iter()
+        .map(|tool| tool["name"].as_str().ok_or("tool name"))
+        .collect::<Result<Vec<_>, _>>()?;
+    names.sort_unstable();
+    assert_eq!(
+        names,
+        [
+            "bond.create",
+            "document.close",
+            "document.inspect",
+            "document.open_cdxml",
+            "document.save_cdxml",
+            "history.redo",
+            "history.undo",
+            "page.set_size",
+            "render.capture",
+            "ui.controls",
+            "ui.file"
+        ]
+    );
     assert!(tools.iter().any(|tool| tool["name"] == "document.close"
         && tool["inputSchema"]["additionalProperties"] == false
         && tool["inputSchema"]["required"] == json!(["expected_revision"])
+        && tool["annotations"]["readOnlyHint"] == false));
+    assert!(tools.iter().any(|tool| tool["name"] == "ui.controls"
+        && tool["inputSchema"]["additionalProperties"] == false
+        && tool["annotations"]["readOnlyHint"] == true));
+    assert!(tools.iter().any(|tool| tool["name"] == "ui.file"
+        && tool["inputSchema"]["additionalProperties"] == false
         && tool["annotations"]["readOnlyHint"] == false));
     assert!(tools.iter().any(|tool| tool["name"] == "page.set_size"
         && tool["inputSchema"]["additionalProperties"] == false));
@@ -335,6 +361,97 @@ fn stdio_close_policy_supports_decision_cancel_discard_and_errors_without_ending
         json!({"name":"document.inspect","arguments":{}}),
     )?;
     assert_eq!(inspected["result"]["structuredContent"], *inspect);
+    client.finish()?;
+    Ok(())
+}
+
+#[test]
+fn stdio_file_presentation_is_unavailable_without_a_host_and_cannot_forge_acknowledgements()
+-> Result<(), Box<dyn std::error::Error>> {
+    let mut client = Client::start()?;
+    client.call(
+        1,
+        "initialize",
+        json!({
+            "protocolVersion":"2025-11-25","capabilities":{},
+            "clientInfo":{"name":"ui-contract-wire-test","version":"1"}
+        }),
+    )?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let queried = client.call(
+        2,
+        "tools/call",
+        json!({"name":"ui.controls","arguments":{}}),
+    )?;
+    let queried = &queried["result"]["structuredContent"];
+    assert_eq!(
+        queried["ui_file"],
+        json!({"available":false,"epoch":0,"request":null})
+    );
+    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 9);
+    assert!(queried.get("ui_file_operation").is_none());
+    for (id, arguments, code) in [
+        (
+            3,
+            json!({"expected_revision":0,"action":"open"}),
+            "ui_unavailable",
+        ),
+        (
+            4,
+            json!({"expected_revision":0,"action":"save"}),
+            "ui_unavailable",
+        ),
+        (
+            5,
+            json!({"expected_revision":0,"action":"save_as"}),
+            "ui_unavailable",
+        ),
+        (
+            6,
+            json!({"expected_revision":0,"action":"cancel","request_id":1}),
+            "ui_unavailable",
+        ),
+        (
+            7,
+            json!({"expected_revision":0,"action":"open","available":true}),
+            "invalid_params",
+        ),
+        (
+            8,
+            json!({"expected_revision":0,"action":"open","phase":"accepted"}),
+            "invalid_params",
+        ),
+        (
+            9,
+            json!({"expected_revision":0,"action":"save","path":"must-not-write.cdxml"}),
+            "invalid_params",
+        ),
+    ] {
+        let response = client.call(
+            id,
+            "tools/call",
+            json!({"name":"ui.file","arguments":arguments}),
+        )?;
+        assert_eq!(response["result"]["isError"], true);
+        assert_eq!(
+            response["result"]["structuredContent"]["error"]["code"],
+            code
+        );
+    }
+    let inspected = client.call(
+        10,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    let inspected = &inspected["result"]["structuredContent"];
+    assert_eq!(inspected["ui_file"], queried["ui_file"]);
+    assert_eq!(inspected["document"], queried["document"]);
+    assert_eq!(inspected["revision"], 0);
+    assert_eq!(inspected["undo_depth"], 0);
+    assert_eq!(inspected["file"]["dirty"], false);
+    assert!(inspected.get("controls").is_none());
+    assert!(inspected.get("file_operation").is_none());
+    assert!(inspected.get("ui_file_operation").is_none());
     client.finish()?;
     Ok(())
 }

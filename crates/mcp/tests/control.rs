@@ -527,3 +527,272 @@ fn authenticated_close_decisions_repaint_after_reply_and_native_commit_blocks_ne
     server.shutdown()?;
     Ok(())
 }
+
+#[test]
+fn authenticated_presentation_requests_require_a_host_and_remain_requested_until_its_acknowledgement()
+-> Result<(), Box<dyn std::error::Error>> {
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let executor = bondline_mcp::CommandExecutor::new(Arc::clone(&engine));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind_with_executor(0, executor.clone(), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    let headless = call(&mut client, r#"{"command":"ui.controls","params":{}}"#)?;
+    assert_eq!(
+        headless["result"]["ui_file"],
+        serde_json::json!({"available":false,"epoch":0,"request":null})
+    );
+    let absent = call(
+        &mut client,
+        r#"{"command":"ui.file","params":{"expected_revision":0,"action":"open"}}"#,
+    )?;
+    assert_eq!(absent["error"]["code"], "ui_unavailable");
+    assert_eq!(changes.load(Ordering::SeqCst), 0);
+
+    // This test simulates only the trusted host acknowledgement, never displayed pixels.
+    engine.lock().map_err(|_| "engine")?.set_ui_file_host(true);
+    let requested = call(
+        &mut client,
+        r#"{"command":"ui.file","params":{"expected_revision":0,"action":"open"}}"#,
+    )?;
+    let requested = &requested["result"];
+    let first = requested["ui_file"]["request"]["id"]
+        .as_u64()
+        .ok_or("request id")?;
+    assert_eq!(requested["ui_file"]["request"]["phase"], "requested");
+    assert_eq!(requested["ui_file_operation"], first);
+    assert_eq!(requested["changed"], false);
+    assert_eq!(requested["revision"], 0);
+    assert!(requested.get("file_operation").is_none());
+    wait_for_changes(&changes, 1);
+    let controls = call(&mut client, r#"{"command":"ui.controls","params":{}}"#)?;
+    let controls = controls["result"]["controls"]
+        .as_array()
+        .ok_or("controls")?;
+    let cancel = controls
+        .iter()
+        .find(|control| control["id"] == "file.cancel")
+        .ok_or("cancel binding")?;
+    assert_eq!(
+        cancel["command"],
+        serde_json::json!({"command":"ui.file","params":{
+            "expected_revision":0,"action":"cancel","request_id":first
+        }})
+    );
+    assert_eq!(cancel["enabled"], true);
+    let open = controls
+        .iter()
+        .find(|control| control["id"] == "file.open")
+        .ok_or("open binding")?;
+    assert_eq!(open["enabled"], false);
+    assert_eq!(open["disabled_reason"], "ui_busy");
+    {
+        let mut engine = engine.lock().map_err(|_| "engine")?;
+        assert_eq!(
+            engine
+                .state()
+                .ui_file
+                .request
+                .as_ref()
+                .ok_or("still requested")?
+                .phase,
+            bondline_commands::UiFilePhase::Requested
+        );
+        assert!(matches!(
+            engine.claim_ui_file(first)?,
+            bondline_commands::UiFilePlan::OpenPicker
+        ));
+    }
+    let accepted = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+    assert_eq!(
+        accepted["result"]["ui_file"]["request"]["phase"],
+        "accepted"
+    );
+    assert!(accepted["result"].get("ui_file_operation").is_none());
+    assert!(accepted["result"].get("file_operation").is_none());
+    let cancelled = call(
+        &mut client,
+        &serde_json::json!({"command":"ui.file","params":{
+            "expected_revision":0,"action":"cancel","request_id":first
+        }})
+        .to_string(),
+    )?;
+    assert_eq!(cancelled["result"]["ui_file"]["request"], Value::Null);
+    assert_eq!(cancelled["result"]["ui_file_operation"], 2);
+    wait_for_changes(&changes, 2);
+    let next = call(
+        &mut client,
+        r#"{"command":"ui.file","params":{"expected_revision":0,"action":"open"}}"#,
+    )?;
+    let second = next["result"]["ui_file"]["request"]["id"]
+        .as_u64()
+        .ok_or("replacement id")?;
+    assert!(second > first);
+    wait_for_changes(&changes, 3);
+    let old_cancel = call(
+        &mut client,
+        &serde_json::json!({"command":"ui.file","params":{
+            "expected_revision":0,"action":"cancel","request_id":first
+        }})
+        .to_string(),
+    )?;
+    assert_eq!(old_cancel["error"]["code"], "ui_stale_request");
+    {
+        let mut engine = engine.lock().map_err(|_| "engine")?;
+        assert_eq!(
+            engine
+                .claim_ui_file(first)
+                .err()
+                .ok_or("old host claim")?
+                .info()
+                .code,
+            "ui_stale_request"
+        );
+        engine.claim_ui_file(second)?;
+    }
+    let close = call(
+        &mut client,
+        r#"{"command":"document.close","params":{"expected_revision":0}}"#,
+    )?;
+    assert_eq!(close["result"]["close"], "approved");
+    wait_for_changes(&changes, 4);
+    assert_eq!(
+        executor
+            .prepare_ui_file(
+                second,
+                bondline_commands::Command::parse(
+                    "document.open_cdxml",
+                    serde_json::json!({"path":"must-not-open-after-close.cdxml"})
+                )?
+            )
+            .err()
+            .ok_or("obsolete picker survived close")?
+            .code,
+        "ui_stale_request"
+    );
+    assert!(!executor.has_active_work());
+    let cancelled_close = call(
+        &mut client,
+        r#"{"command":"document.close","params":{"expected_revision":0,"action":"cancel"}}"#,
+    )?;
+    assert_eq!(cancelled_close["result"]["close"], "open");
+    assert_eq!(cancelled_close["result"]["ui_file"]["request"], Value::Null);
+    assert_eq!(cancelled_close["result"]["document"], requested["document"]);
+    wait_for_changes(&changes, 5);
+    server.shutdown()?;
+    Ok(())
+}
+
+#[test]
+fn prepared_native_file_work_finishes_only_its_origin_and_same_revision_path_aba_stays_stale()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let path = directory.path("original-profile.cdxml");
+    let other = directory.path("other-name.cdxml");
+    std::fs::write(
+        &path,
+        include_bytes!("../../io/tests/fixtures/bondline-v0.cdxml"),
+    )?;
+    let origin: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let unrelated: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let executor = bondline_mcp::CommandExecutor::new(Arc::clone(&origin));
+    let unrelated_before =
+        serde_json::to_value(unrelated.lock().map_err(|_| "unrelated engine")?.state())?;
+    let request = {
+        let mut engine = origin.lock().map_err(|_| "origin")?;
+        engine.set_ui_file_host(true);
+        let requested = engine.dispatch(
+            "ui.file",
+            serde_json::json!({"expected_revision":0,"action":"open"}),
+        )?;
+        let id = requested.ui_file.request.as_ref().ok_or("request")?.id;
+        engine.claim_ui_file(id)?;
+        id
+    };
+    let work = executor
+        .prepare_ui_file(
+            request,
+            bondline_commands::Command::parse(
+                "document.open_cdxml",
+                serde_json::json!({"path":path}),
+            )?,
+        )
+        .map_err(|error| error.message)?;
+    assert!(
+        executor.has_active_work(),
+        "prepared native work must be registered before std::thread::spawn"
+    );
+    let result = std::thread::spawn(move || {
+        work.complete_blocking(&bondline_commands::Cancellation::default())
+    })
+    .join()
+    .map_err(|_| "native test worker panicked")?
+    .map_err(|error| error.message)?;
+    assert_eq!(
+        result.file.path,
+        Some(
+            std::fs::canonicalize(&path)?
+                .to_str()
+                .ok_or("path")?
+                .to_owned()
+        )
+    );
+    assert_eq!(
+        result
+            .file_operation
+            .as_ref()
+            .ok_or("actual open receipt")?
+            .operation,
+        "open"
+    );
+    assert!(!executor.has_active_work());
+    assert_eq!(
+        serde_json::to_value(unrelated.lock().map_err(|_| "unrelated engine")?.state())?,
+        unrelated_before
+    );
+    let (save_id, actual) = {
+        let mut engine = origin.lock().map_err(|_| "origin")?;
+        assert_eq!(engine.state().revision, 1);
+        assert!(engine.finish_ui_file(request, false));
+        let requested = engine.dispatch(
+            "ui.file",
+            serde_json::json!({"expected_revision":1,"action":"save"}),
+        )?;
+        let id = requested.ui_file.request.as_ref().ok_or("save request")?.id;
+        let bondline_commands::UiFilePlan::SaveExisting(save) = engine.claim_ui_file(id)? else {
+            return Err("known-path Save did not bind its existing path".into());
+        };
+        (id, bondline_commands::Command::SaveCdxml(save))
+    };
+    {
+        let mut engine = origin.lock().map_err(|_| "origin")?;
+        engine.dispatch("document.save_cdxml", serde_json::json!({"path":other}))?;
+        engine.dispatch(
+            "document.save_cdxml",
+            serde_json::json!({"path":path,"overwrite":true}),
+        )?;
+        assert_eq!(
+            engine.state().revision,
+            1,
+            "Save As path changes do not advance authored revision"
+        );
+    }
+    let before = serde_json::to_value(origin.lock().map_err(|_| "origin")?.state())?;
+    assert_eq!(
+        executor
+            .prepare_ui_file(save_id, actual)
+            .err()
+            .ok_or("path ABA resurrected accepted Save")?
+            .code,
+        "ui_stale_request"
+    );
+    assert_eq!(
+        serde_json::to_value(origin.lock().map_err(|_| "origin")?.state())?,
+        before
+    );
+    assert!(!executor.has_active_work());
+    file_support::independently_read_file(&path, 1)?;
+    Ok(())
+}

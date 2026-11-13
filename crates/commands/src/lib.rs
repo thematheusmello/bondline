@@ -10,12 +10,18 @@ use std::{collections::VecDeque, sync::Arc};
 mod bond;
 mod capture;
 mod close;
+mod controls;
+mod file_ui;
 mod files;
 pub use bond::BondCreate;
 pub use close::{CloseAction, CloseDocument, CloseState};
+pub use controls::{ControlInfo, ControlKey, ControlShortcut};
+pub use file_ui::{UiFile, UiFileAction, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState};
 pub use files::{Completed, FileOperation, FileState, OpenCdxml, SaveCdxml};
 #[cfg(test)]
 mod close_tests;
+#[cfg(test)]
+mod file_ui_tests;
 #[cfg(test)]
 mod source_tests;
 #[cfg(test)]
@@ -81,6 +87,8 @@ macro_rules! command_registry {
 command_registry! {
     Inspect(NoParams) => ("document.inspect", "Inspect the authored document and history state.", true),
     Close(CloseDocument) => ("document.close", "Request, explicitly discard, or cancel closing the current document revision.", false),
+    UiFile(UiFile) => ("ui.file", "Request or cancel native file presentation; requires an attached native host.", false),
+    UiControls(NoParams) => ("ui.controls", "Discover delivered native controls, shortcuts, typed bindings and contextual availability.", true),
     OpenCdxml(OpenCdxml) => ("document.open_cdxml", "Open an explicitly selected CDXML file without discarding unsaved edits by default.", false),
     SaveCdxml(SaveCdxml) => ("document.save_cdxml", "Atomically save complete CDXML data to an explicitly selected path; overwrite requires opt-in.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
@@ -130,6 +138,16 @@ pub enum Error {
     CloseCommitted,
     #[error("close operation identity counter exhausted")]
     CloseEpochExhausted,
+    #[error("no native file-presentation host is attached")]
+    UiUnavailable,
+    #[error("native file presentation is busy")]
+    UiBusy,
+    #[error("native file request or its document context is obsolete")]
+    UiStaleRequest,
+    #[error("native file request identity counter exhausted")]
+    UiEpochExhausted,
+    #[error("invalid native file request parameters: {0}")]
+    InvalidUiFileParameters(&'static str),
     #[error("native file access is unavailable on this target")]
     FileBackendUnavailable,
     #[error("document engine lock poisoned")]
@@ -169,6 +187,10 @@ impl Error {
             Self::StaleRevision => "stale_revision",
             Self::CloseCommitted => "close_committed",
             Self::CloseEpochExhausted => "close_epoch_exhausted",
+            Self::UiUnavailable => "ui_unavailable",
+            Self::UiBusy => "ui_busy",
+            Self::UiStaleRequest => "ui_stale_request",
+            Self::UiEpochExhausted => "ui_epoch_exhausted",
             Self::FileBackendUnavailable => "backend_unavailable",
             Self::EngineUnavailable => "engine_unavailable",
             Self::UnrepresentableFilePath { published: true } => "save_published",
@@ -228,6 +250,11 @@ pub struct CommandResult {
     pub close_epoch: u64,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub close_operation: Option<CloseState>,
+    pub ui_file: UiFileState,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_file_operation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub controls: Option<Vec<ControlInfo>>,
 }
 
 #[derive(Debug)]
@@ -241,6 +268,7 @@ pub struct Engine {
     undo: VecDeque<Arc<StoredDocument>>,
     redo: VecDeque<Arc<StoredDocument>>,
     close_policy: close::ClosePolicy,
+    file_ui: file_ui::FileUiPolicy,
 }
 
 impl Default for Engine {
@@ -263,6 +291,7 @@ impl Engine {
             undo: VecDeque::new(),
             redo: VecDeque::new(),
             close_policy: close::ClosePolicy::default(),
+            file_ui: file_ui::FileUiPolicy::default(),
         }
     }
 
@@ -291,6 +320,9 @@ impl Engine {
             close: self.close_state(),
             close_epoch: self.close_policy.epoch,
             close_operation: None,
+            ui_file: self.file_ui_state(),
+            ui_file_operation: None,
+            controls: None,
         }
     }
 
@@ -324,6 +356,13 @@ impl Engine {
         let changed = match command {
             Command::Inspect(_) => false,
             Command::Close(params) => return Ok(Prepared::immediate(self.close(params)?)),
+            Command::UiFile(params) => return Ok(Prepared::immediate(self.ui_file(params)?)),
+            Command::UiControls(_) => {
+                return Ok(Prepared::immediate(CommandResult {
+                    controls: Some(self.controls()),
+                    ..self.state()
+                }));
+            }
             Command::OpenCdxml(params) => {
                 if self.document != self.saved && !params.discard_unsaved {
                     return Err(Error::UnsavedChanges);
@@ -522,7 +561,9 @@ mod tests {
                 "history.redo",
                 "history.undo",
                 "page.set_size",
-                "render.capture"
+                "render.capture",
+                "ui.controls",
+                "ui.file"
             ]
             .into_iter()
             .collect()

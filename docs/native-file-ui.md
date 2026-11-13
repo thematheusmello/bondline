@@ -27,6 +27,43 @@ Folder/name labels have associated accessibility nodes and bounded SetValue hand
 reviewed native AccessKit bridge delivers those actions; actual Mac AX entry with a Unicode
 filename is verified. General VoiceOver/navigation workflows and other controls remain open.
 
+## Shared file-control execution evidence
+
+The new frozen executable SHA-256 is
+`4a5425b0db81cac37fdf1d6ba8e6417fae44e5f7093dc58e2582d3ce2be25ab2`
+on macOS/Apple M3 Max/Metal. Its owned target/dev copy stayed unchanged while the aggregate
+rebuilt normal target/debug artifacts. UI36 tests, targeted clippy/fmt and the full aggregate
+265 workspace plus3 native bridge tests pass. These are separate from actual native checks:
+
+- A fresh process was confirmed revision0/undo0/redo0/fragments0/clean before and after first
+  CUA selection. Remote Open/Cancel and File-menu Open addressed the same inspectable request
+  states. Stale Cancel retained the newer picker; local Escape sent its exact shared Cancel.
+- CmdShiftS opened Save As, actual AX Folder/Unicode-name entry saved a493-byte one-bond
+  document, and a second observed drag plus CmdS saved the associated path at revision2.
+  CmdShiftS on that named document opened a new Save As picker instead of ordinary Save.
+- Native malformed Open retained exact document/path/history and addressable retry state.
+  A disposable destination changed into a directory produced a real Save failure; restoring
+  the target and choosing the fixed-path Replace retry saved through the guarded command.
+- A third committed fragment was independently confirmed dirty at revision3. Actual CmdQ
+  Cancel retained it; CmdQ Save persisted and exited0. A fresh native Open visibly showed
+  all three saved bonds.
+- Two real2048 CPU/GPU captures were pending when remote Close returned Approved. The process
+  remained alive, delivered both complete successful replies and then exited0.
+
+Independent ElementTree/Expat and external RDKit read the actual1125-byte
+`target/native-shared-file-controls-λ.cdxml` as three CC/C2H6 fragments, SHA-256
+`771fdaf88be2129d633692bfca5a81627885c6bb7022777ca5c1b346016f7347`.
+A separate integrating-agent read confirmed the same bytes/hash/chemistry. All native and
+controller processes exited0; the sole CUA task completed. Credentials stayed memory-only.
+Logs/handoff remain ignored under target/native-file-controls-*; none is a product asset.
+
+The first observed process unexpectedly already had revision3 before recorded authoring;
+its cause is unresolved and it is excluded from clean-startup evidence. It was closed before
+the independently confirmed fresh process above. A later CUA stale-app guard was resolved by
+rechecking the exact unchanged bundle hash and refreshing the UI state/indices. No product
+source was changed during acceptance. Interactive Windows/Linux, full dialog-field discovery,
+VoiceOver, pending-gesture/Q ordering and broader reference parity remain unverified.
+
 ## Shared close execution evidence
 
 The corrected native build SHA-256 is

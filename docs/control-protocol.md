@@ -45,6 +45,8 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.open_cdxml` | `path`, optional `discard_unsaved=false` | Bounded native CDXML read; successful application starts a clean document session and clears history |
 | `document.save_cdxml` | `path`, optional `overwrite=false` | Atomic complete-source save; default no-clobber; authoring revision/history retained |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
+| `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
+| `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request Open/Save/Save As presentation or cancel the matching picker; a native host is required |
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
 | `bond.create` | `page_id`, `begin_x_pt`, `begin_y_pt`, `end_x_pt`, `end_y_pt` | One independent C-C fragment; two C atoms with three explicitly authored H each, one single bond |
 | `history.undo` | `{}` | Previous authored snapshot |
@@ -199,7 +201,7 @@ scheduler is implied by this bounded executor.
 
 ## Close requests and host shutdown
 
-The nine-command registry owns single-document close policy. Native File Close, Cmd/Ctrl+W,
+The command registry owns single-document close policy. Native File Close, Cmd/Ctrl+W,
 window Close and Mac Quit, plus close-dialog Discard/Cancel/Escape/Keep Window Open, execute
 `document.close`. Save remains the existing file command. This is Bondline's protected
 lifecycle policy, not proof of a complete26.1 dialog or multi-document implementation.
@@ -251,3 +253,71 @@ session. An old Open cannot resurrect a committed engine. An already-published S
 returns its real receipt while leaving that committed session's baseline/path/history alone.
 The existing publication/error contract remains in force. Broader dialog addressability,
 control metadata and job-ID/cancel automation remain separate M0 gaps.
+
+## Delivered controls and native file presentation
+
+`ui.controls` is a read-only registry command. Its `controls` array describes the delivered
+File Open/Save/Save As/Close, Edit Undo/Redo and Page A4/Letter/Rotate bindings. While a file
+request exists it also describes its Cancel action. Every record has a stable `id`, label,
+menu, optional typed shortcut, actual serialized `command`, `enabled` and `disabled_reason`.
+The native menus and shortcut bridge consume the same typed core binding records; there is
+no second JSON dispatcher or alternate implementation of an authoring operation. `primary`
+maps to Command on Mac and Ctrl elsewhere; shifted bindings are matched first. This is a
+point-in-time description, not permission to bypass command validation or a lease on state.
+It inventories delivered controls only, not every missing reference menu/tool/button.
+
+Direct `document.open_cdxml` / `document.save_cdxml` perform explicit parameterized I/O.
+`ui.file` instead requests native presentation, like using a File menu item:
+
+```json
+{"command":"ui.file","params":{"expected_revision":0,"action":"open"}}
+```
+
+Actions are `open`, `save`, `save_as`, `cancel`. Every action requires the current authored
+revision. `request_id` is required only for Cancel; `close_epoch` is allowed only for Save
+and then must match the current unsaved-close decision. Unknown fields, wrong combinations,
+stale revisions and stale identities fail without consuming a request or changing data.
+Headless CLI/stdio sessions have no attached native host: `ui.file` returns `ui_unavailable`.
+They can still discover disabled file controls and use explicit parameterized file commands.
+An authenticated native loopback client addresses the actual attached desktop session.
+
+Every result includes `ui_file: {available, epoch, request}`. `available` reports host attachment,
+not permission to replace an occupied slot. A request contains its monotonic
+`id`, action, input revision/path, optional close epoch and phase. `requested` means the
+intent is stored; `accepted` means a native host acknowledged it; `running` means actual
+file work was prepared. None of these claims pixels were displayed or bytes were saved.
+Actual I/O is established only by the existing file receipt or error. A successful `ui.file`
+command adds `ui_file_operation` identifying its request/cancel operation, so even a
+`changed:false` response notifies the native UI after reply publication. The current transient
+state is refreshed at finish; an older operation marker may identify an earlier request.
+Authored snapshots/revision retain their existing immutable input scope.
+
+There is one file-presentation slot. New requests while it is occupied return `ui_busy`.
+Save uses the existing associated path with overwrite permission, or opens a chooser if
+unnamed; Save As always requires a path choice. Host acceptance does not consume the
+request: a remote Cancel can dismiss the same accepted picker. Cancel targets its exact ID:
+
+```json
+{"command":"ui.file","params":{"expected_revision":0,"action":"cancel","request_id":1}}
+```
+
+Accepted request/cancel commands advance a checked epoch without changing authored data,
+history, saved baseline or path. IDs are never reused at the same revision. Actual edits,
+Open, baseline/path changes, host detachment and close-intent changes invalidate a pending
+picker permanently. Returning to old values cannot revive it. No-op edits and an unchanged
+save preserve it. The native host validates the exact selection and context, reserves a
+worker and prepares the real command under the same engine mutex before spawning. A known
+Save cannot silently redirect to another path or lose its overwrite decision. The opaque
+prepared work retains its originating engine and worker lifetime.
+
+Presentation Cancel refuses a running operation; it cannot claim published bytes were
+rolled back. A failed worker may restore the same picker only while its context is current;
+a stale failure cannot reopen it or affect a replacement. Already-published work still reports
+truthfully. Native close-Save retains the separate captured close epoch and matching-receipt
+rules above. Ordinary Save never grants shutdown permission. Host claim/finish/attachment
+are trusted Rust acknowledgements, not additional user-facing JSON dispatchers.
+
+Folder navigation, filename/location values, directory-list state, confirmation dismissal,
+full close-dialog discovery and addressable running-job cancellation remain separate gaps.
+The original picker and this protocol do not establish full platform/reference-dialog parity.
+See native-file-ui.md and verification.md for actual execution scope.

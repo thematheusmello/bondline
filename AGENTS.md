@@ -104,7 +104,7 @@ delivered adapters, update CLI/MCP wire tests as needed, then update provenance 
 For UI changes, launch the actual native app and inspect the workflow. Eguis's input tests
 and source cross-checks do not substitute for native platform execution.
 
-The current nine-command registry includes bond.create for independent C-C fragments with
+The current eleven-command registry includes bond.create for independent C-C fragments with
 three explicitly authored H per carbon, plus native CDXML open/save. It does not attach to
 existing atoms. Save complete StoredDocument data; file.dirty uses the saved snapshot, while
 source.modified describes original backing. Prepare/complete/finish separates I/O from
@@ -112,6 +112,13 @@ revision-checked apply. Count current+saved snapshots and never call a publicati
 Identity floors must survive Undo branches and advance only after successful commits.
 Native gestures consume ordered events; press_origin alone loses a drag completed between
 frames. Canvas interaction must not advance layout beyond visible error text.
+Use Engine::controls() / ui.controls as the authoritative delivered File/Edit/Page bindings;
+do not duplicate labels, shortcut tables, preset parameters or enabled rules in the UI.
+ui.file is presentation intent, distinct from actual document.open_cdxml/save_cdxml I/O.
+Headless engines have no host. Keep request IDs and context guards through native selection,
+worker preparation and retry. Reserve/prepare under one engine lock before spawning; only
+the matching current request may restore a failed picker. A host acknowledgement does not
+prove visible pixels or saved bytes. Keep unaddressed dialog fields/job controls explicit.
 Close intent/epoch never belongs in authored history or serialized CDXML. Request/Discard/
 Cancel must use document.close; successful actions advance close_epoch without changing
 authored revision. A close-specific Save must retain its captured epoch/revision and matching

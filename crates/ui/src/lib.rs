@@ -3,12 +3,13 @@
 mod file_workflow;
 pub mod files;
 
-use bondline_commands::{BondCreate, CloseState, Command, Engine, NoParams, PageSetSize};
+use bondline_commands::{
+    BondCreate, CloseState, Command, ControlInfo, ControlKey, ControlShortcut, Engine,
+};
 use bondline_mcp::{CommandExecutor, SharedEngine, control::LoopbackServer};
 use bondline_model::{PageId, Point2};
 use eframe::egui;
-use file_workflow::FileWorkflow;
-use files::FileAction;
+use file_workflow::{FileIntentAction, FileWorkflow};
 use std::{
     io::Write,
     sync::{Arc, Mutex},
@@ -100,6 +101,61 @@ pub fn show_workspace(
     let _ = show_workspace_with_files(context, engine, error, drawing, None, false);
 }
 
+fn control_shortcut_key(shortcut: ControlShortcut) -> egui::KeyboardShortcut {
+    let modifiers = egui::Modifiers {
+        command: shortcut.primary,
+        shift: shortcut.shift,
+        ..egui::Modifiers::NONE
+    };
+    let key = match shortcut.key {
+        ControlKey::O => egui::Key::O,
+        ControlKey::S => egui::Key::S,
+        ControlKey::W => egui::Key::W,
+        ControlKey::Z => egui::Key::Z,
+        ControlKey::Y => egui::Key::Y,
+    };
+    egui::KeyboardShortcut::new(modifiers, key)
+}
+
+fn control_shortcut(
+    context: &egui::Context,
+    controls: &[ControlInfo],
+    menu: &str,
+) -> Option<Command> {
+    // Pinned egui ignores extra Shift: consume specific shortcuts even when disabled.
+    for shifted in [true, false] {
+        for control in controls.iter().filter(|control| control.menu == menu) {
+            if let Some(shortcut) = control
+                .shortcut
+                .filter(|shortcut| shortcut.shift == shifted)
+                && context
+                    .input_mut(|input| input.consume_shortcut(&control_shortcut_key(shortcut)))
+            {
+                return control.enabled.then(|| control.command.clone());
+            }
+        }
+    }
+    None
+}
+
+fn control_menu(ui: &mut egui::Ui, controls: &[ControlInfo], menu: &str) -> Option<Command> {
+    let mut selected = None;
+    ui.menu_button(menu, |ui| {
+        for control in controls.iter().filter(|control| control.menu == menu) {
+            let mut button = egui::Button::new(control.label);
+            if let Some(shortcut) = control.shortcut {
+                button =
+                    button.shortcut_text(ui.ctx().format_shortcut(&control_shortcut_key(shortcut)));
+            }
+            if ui.add_enabled(control.enabled, button).clicked() {
+                selected = Some(control.command.clone());
+                ui.close_menu();
+            }
+        }
+    });
+    selected
+}
+
 fn show_workspace_with_files(
     context: &egui::Context,
     engine: &mut Engine,
@@ -107,20 +163,10 @@ fn show_workspace_with_files(
     drawing: &mut DrawingState,
     mut files: Option<&mut FileWorkflow>,
     active_work: bool,
-) -> Option<FileAction> {
-    let undo = egui::KeyboardShortcut::new(egui::Modifiers::COMMAND, egui::Key::Z);
-    let redo = egui::KeyboardShortcut::new(
-        egui::Modifiers::COMMAND | egui::Modifiers::SHIFT,
-        egui::Key::Z,
-    );
+) -> Option<FileIntentAction> {
     let state = engine.state();
     let mut selected = None;
     let mut file_action = None;
-    let page = engine
-        .document()
-        .pages()
-        .first()
-        .map(|page| (page.id().get(), page.size()));
     egui::TopBottomPanel::top("title").show(context, |ui| {
         ui.horizontal(|ui| {
             ui.label(egui::RichText::new("bondline").strong().size(22.0));
@@ -134,51 +180,10 @@ fn show_workspace_with_files(
                     .as_ref()
                     .is_some_and(|files| files.blocks_authoring(&current));
             ui.add_enabled_ui(!blocked, |ui| {
-                ui.menu_button("Edit", |ui| {
-                    let modifier = if cfg!(target_os = "macos") {
-                        "Cmd"
-                    } else {
-                        "Ctrl"
-                    };
-                    if ui
-                        .add_enabled(
-                            state.undo_depth > 0,
-                            egui::Button::new("Undo").shortcut_text(format!("{modifier}+Z")),
-                        )
-                        .clicked()
-                    {
-                        selected = Some(Command::Undo(NoParams {}));
-                        ui.close_menu();
-                    }
-                    if ui
-                        .add_enabled(
-                            state.redo_depth > 0,
-                            egui::Button::new("Redo").shortcut_text(format!("{modifier}+Shift+Z")),
-                        )
-                        .clicked()
-                    {
-                        selected = Some(Command::Redo(NoParams {}));
-                        ui.close_menu();
-                    }
-                });
-                ui.menu_button("Page", |ui| {
-                    if let Some((page_id, size)) = page {
-                        for (label, width_pt, height_pt) in [
-                            ("A4 portrait", 210.0 * 72.0 / 25.4, 297.0 * 72.0 / 25.4),
-                            ("Letter portrait", 612.0, 792.0),
-                            ("Rotate page", size.height_pt(), size.width_pt()),
-                        ] {
-                            if ui.button(label).clicked() {
-                                selected = Some(Command::PageSetSize(PageSetSize {
-                                    page_id,
-                                    width_pt,
-                                    height_pt,
-                                }));
-                                ui.close_menu();
-                            }
-                        }
-                    }
-                });
+                let controls = engine.controls();
+                let edit = control_menu(ui, &controls, "Edit");
+                let page = control_menu(ui, &controls, "Page");
+                selected = edit.or(page);
             });
             ui.separator();
             let name = state
@@ -202,17 +207,7 @@ fn show_workspace_with_files(
     if blocked {
         drawing.gesture = None;
     } else {
-        selected = selected.or_else(|| {
-            context.input_mut(|input| {
-                if input.consume_shortcut(&redo) {
-                    (state.redo_depth > 0).then_some(Command::Redo(NoParams {}))
-                } else if input.consume_shortcut(&undo) {
-                    (state.undo_depth > 0).then_some(Command::Undo(NoParams {}))
-                } else {
-                    None
-                }
-            })
-        });
+        selected = selected.or_else(|| control_shortcut(context, &engine.controls(), "Edit"));
     }
     if let Some(command) = selected {
         *error = engine.execute(command).err().map(|error| error.to_string());
@@ -459,7 +454,9 @@ impl BondlineApp {
             .as_ref()
             .ok_or_else(|| std::io::Error::other("wgpu renderer did not initialize"))?;
         let info = state.adapter.get_info();
-        let engine = Arc::new(Mutex::new(Engine::default()));
+        let mut document_engine = Engine::default();
+        document_engine.set_ui_file_host(true);
+        let engine = Arc::new(Mutex::new(document_engine));
         let executor = CommandExecutor::new(Arc::clone(&engine));
         let control = control_port
             .map(|port| {
@@ -559,8 +556,90 @@ impl eframe::App for BondlineApp {
     }
 }
 
+impl Drop for BondlineApp {
+    fn drop(&mut self) {
+        if let Ok(mut engine) = self.engine.lock() {
+            engine.set_ui_file_host(false);
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn metadata_shortcuts_prioritize_redo_and_do_not_fall_back_to_undo_when_redo_is_disabled()
+    -> Result<(), Box<dyn std::error::Error>> {
+        use eframe::egui;
+        let context = egui::Context::default();
+        super::configure_context(&context);
+        let mut engine = bondline_commands::Engine::default();
+        for width in [640, 641] {
+            engine.dispatch(
+                "page.set_size",
+                serde_json::json!({"page_id":1,"width_pt":width,"height_pt":480}),
+            )?;
+        }
+        engine.dispatch("history.undo", serde_json::json!({}))?;
+        for expected_revision in [4, 4] {
+            context.begin_pass(egui::RawInput {
+                screen_rect: Some(egui::Rect::from_min_size(
+                    egui::Pos2::ZERO,
+                    egui::vec2(1000.0, 700.0),
+                )),
+                events: vec![egui::Event::Key {
+                    key: egui::Key::Z,
+                    physical_key: Some(egui::Key::Z),
+                    pressed: true,
+                    repeat: false,
+                    modifiers: egui::Modifiers::COMMAND | egui::Modifiers::SHIFT,
+                }],
+                ..Default::default()
+            });
+            super::show_workspace(
+                &context,
+                &mut engine,
+                &mut None,
+                &mut super::DrawingState::default(),
+            );
+            let _ = context.end_pass();
+            assert_eq!(engine.state().revision, expected_revision);
+            assert_eq!(
+                engine
+                    .document()
+                    .pages()
+                    .first()
+                    .ok_or("page")?
+                    .size()
+                    .width_pt(),
+                641.0
+            );
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn delivered_page_controls_retain_independent_physical_point_expectations()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let mut engine = bondline_commands::Engine::default();
+        for (id, width, height) in [
+            ("page.letter", 612.0, 792.0),
+            ("page.rotate", 792.0, 612.0),
+            ("page.a4", 595.2755905511812, 841.8897637795277),
+        ] {
+            let control = engine
+                .controls()
+                .into_iter()
+                .find(|row| row.id == id)
+                .ok_or("page control")?;
+            assert!(control.enabled);
+            engine.execute(control.command)?;
+            let page = engine.document().pages().first().ok_or("page")?;
+            assert!((page.size().width_pt() - width).abs() < 1e-10);
+            assert!((page.size().height_pt() - height).abs() < 1e-10);
+        }
+        Ok(())
+    }
+
     #[test]
     fn native_app_requires_wgpu() -> Result<(), Box<dyn std::error::Error>> {
         assert!(matches!(

@@ -27,6 +27,12 @@ pub enum FileAction {
     Save { path: String, overwrite: bool },
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum FileChooserEvent {
+    Submit(FileAction),
+    Cancel,
+}
+
 enum Confirmation {
     Discard(String),
     Overwrite(String),
@@ -65,6 +71,13 @@ impl FileChooser {
 
     /// Restore an unsuccessful intent, preserving the exact requested path for an explicit retry.
     pub fn failed(&mut self, action: FileAction, code: &str, message: String) {
+        let authorized_overwrite = matches!(
+            &action,
+            FileAction::Save {
+                overwrite: true,
+                ..
+            }
+        );
         let (mode, path) = match action {
             FileAction::Open { path, .. } => (FileMode::Open, path),
             FileAction::Save { path, .. } => (FileMode::Save, path),
@@ -79,6 +92,7 @@ impl FileChooser {
         self.begin(mode, directory, name);
         self.confirmation = match (mode, code) {
             (FileMode::Open, "unsaved_changes") => Some(Confirmation::Discard(path)),
+            (FileMode::Save, _) if authorized_overwrite => Some(Confirmation::Overwrite(path)),
             (FileMode::Save, "already_exists") => Some(Confirmation::Overwrite(path)),
             _ => None,
         };
@@ -221,12 +235,12 @@ impl FileChooser {
     }
 
     /// Draw after the workspace. The caller must suppress background authoring while this is open.
-    pub fn show(&mut self, context: &egui::Context, dirty: bool) -> Option<FileAction> {
+    pub fn show(&mut self, context: &egui::Context, dirty: bool) -> Option<FileChooserEvent> {
         let mode = self.mode?;
         self.poll();
         if context.input_mut(|input| input.consume_key(egui::Modifiers::NONE, egui::Key::Escape)) {
             self.cancel();
-            return None;
+            return Some(FileChooserEvent::Cancel);
         }
         if self.loading {
             context.request_repaint_after(Duration::from_millis(40));
@@ -260,9 +274,10 @@ impl FileChooser {
                     ui.horizontal(|ui| {
                         if ui.button("Cancel").clicked() {
                             self.cancel();
+                            action = Some(FileChooserEvent::Cancel);
                         }
                         if ui.button(button).clicked() {
-                            action = self.confirm();
+                            action = self.confirm().map(FileChooserEvent::Submit);
                         }
                     });
                     return;
@@ -343,14 +358,17 @@ impl FileChooser {
                 ui.horizontal(|ui| {
                     if ui.button("Cancel").clicked() {
                         self.cancel();
+                        action = Some(FileChooserEvent::Cancel);
                     }
-                    if ui.button(if mode == FileMode::Open {"Open"} else {"Save"}).clicked() || submit {
-                        action = self.submit(dirty);
+                    if (ui.button(if mode == FileMode::Open {"Open"} else {"Save"}).clicked() || submit)
+                        && let Some(submitted) = self.submit(dirty) {
+                        action = Some(FileChooserEvent::Submit(submitted));
                     }
                 });
             });
         if !open {
             self.cancel();
+            action = Some(FileChooserEvent::Cancel);
         }
         action
     }
@@ -828,7 +846,7 @@ mod tests {
     }
 
     #[test]
-    fn escape_closes_the_real_egui_dialog_without_an_action()
+    fn escape_emits_presentation_cancel_without_a_file_submission()
     -> Result<(), Box<dyn std::error::Error>> {
         let directory = Directory::new()?;
         let context = egui::Context::default();
@@ -845,6 +863,7 @@ mod tests {
                 modifiers: egui::Modifiers::NONE,
             }],
         ] {
+            let expected = (!events.is_empty()).then_some(FileChooserEvent::Cancel);
             context.begin_pass(egui::RawInput {
                 screen_rect: Some(egui::Rect::from_min_size(
                     egui::Pos2::ZERO,
@@ -853,7 +872,7 @@ mod tests {
                 events,
                 ..Default::default()
             });
-            assert!(chooser.show(&context, false).is_none());
+            assert_eq!(chooser.show(&context, false), expected);
             let _ = context.end_pass();
         }
         assert!(!chooser.is_open());
@@ -893,7 +912,7 @@ mod tests {
         }
         assert_eq!(
             emitted,
-            Some(FileAction::Save {
+            Some(FileChooserEvent::Submit(FileAction::Save {
                 path: directory
                     .0
                     .join("λ sample.cdxml")
@@ -901,9 +920,73 @@ mod tests {
                     .ok_or("unicode")?
                     .to_owned(),
                 overwrite: false
-            })
+            }))
         );
         assert!(!chooser.is_open());
+        Ok(())
+    }
+
+    #[test]
+    fn failed_known_path_save_retries_the_exact_authorized_overwrite()
+    -> Result<(), Box<dyn std::error::Error>> {
+        use bondline_commands::{Command, Engine, UiFilePlan};
+        let directory = Directory::new()?;
+        let path = directory.0.join("known.cdxml");
+        let backup = directory.0.join("retained.cdxml");
+        let mut engine = Engine::default();
+        engine.set_ui_file_host(true);
+        engine.dispatch("document.save_cdxml", serde_json::json!({"path":path}))?;
+        let bytes = std::fs::read(&path)?;
+        let requested = engine.dispatch(
+            "ui.file",
+            serde_json::json!({"expected_revision":0,"action":"save"}),
+        )?;
+        let id = requested.ui_file.request.ok_or("request")?.id;
+        let UiFilePlan::SaveExisting(params) = engine.claim_ui_file(id)? else {
+            return Err("expected existing Save".into());
+        };
+        let actual = Command::SaveCdxml(params.clone());
+        let action = FileAction::Save {
+            path: params.path,
+            overwrite: params.overwrite,
+        };
+        let prepared = engine.prepare_ui_file(id, actual)?;
+        std::fs::rename(&path, &backup)?;
+        std::fs::create_dir(&path)?;
+        let failure = prepared
+            .complete()
+            .err()
+            .ok_or("directory must reject a real file save")?
+            .info();
+        assert_eq!(std::fs::read(&backup)?, bytes);
+        std::fs::remove_dir(&path)?;
+        std::fs::rename(&backup, &path)?;
+        assert!(engine.finish_ui_file(id, true));
+        let mut chooser = FileChooser::default();
+        chooser.failed(action.clone(), failure.code, failure.message);
+        assert!(matches!(
+            chooser.confirmation,
+            Some(Confirmation::Overwrite(_))
+        ));
+        let retry = chooser.confirm().ok_or("retry action")?;
+        assert_eq!(retry, action);
+        let FileAction::Save {
+            path: retry_path,
+            overwrite,
+        } = retry
+        else {
+            return Err("retry changed operation".into());
+        };
+        let retry = engine.prepare_ui_file(
+            id,
+            Command::SaveCdxml(bondline_commands::SaveCdxml {
+                path: retry_path,
+                overwrite,
+            }),
+        )?;
+        engine.finish(retry.complete()?)?;
+        assert!(engine.finish_ui_file(id, false));
+        assert_eq!(std::fs::read(&path)?, bytes);
         Ok(())
     }
 

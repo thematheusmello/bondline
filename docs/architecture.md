@@ -71,6 +71,15 @@ engine mutex prevent that race without a second command registry. Current lifecy
 is refreshed at finish, while an older operation's authored snapshot remains immutable.
 See control-protocol.md for state/output semantics and native-file-ui.md for actual evidence.
 
+Delivered File/Edit/Page bindings are typed engine metadata whose invocations contain the
+same registered Command enum. Native menus/shortcuts and ui.controls read those bindings.
+The ui.file command stores one bounded native presentation intent outside authored history;
+headless engines refuse it without a host. IDs, revision/path/baseline and close epochs guard
+picker continuations. The native adapter reserves work and prepares a selected file command
+under the same engine lock, then sends an opaque engine-bound plan to a worker. A host
+acknowledgement is distinct from visible pixels or a successful file receipt. See the
+control contract for phases, retries, cancellation and still-private dialog fields.
+
 The native app and opt-in loopback server now share this engine. A dedicated adapter thread
 owns the Tokio listener/tasks. Input is bounded before JSON decoding; no engine guard crosses
 an await. The server notifies the UI after committed changes and cancels all connection tasks

@@ -47,6 +47,7 @@ Its [approval record and exact scope](crates/render/tests/goldens/README.md) acc
 cargo run -p bondline-ui --bin bondline
 cargo run -p bondline-ui --bin bondline -- --smoke-test
 cargo run -p bondline-cli -- commands
+cargo run -p bondline-cli -- run --cmd '{"command":"ui.controls","params":{}}'
 cargo run -p bondline-cli -- run --cmd '{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}'
 cargo run -p bondline-cli -- run --cmd '{"command":"bond.create","params":{"page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200}}'
 cargo run -p bondline-cli -- run --cmd '{"command":"document.open_cdxml","params":{"path":"crates/io/tests/fixtures/bondline-v0.cdxml"}}' --cmd '{"command":"document.save_cdxml","params":{"path":"target/example.cdxml"}}'
@@ -67,6 +68,12 @@ Close/Quit decisions now use the shared `document.close` command. Current-revisi
 guards and registered worker/reply draining protect native shutdown; CLI/stdio report close
 intent without terminating their process. The exact Mac workflow and limitations are in
 [native-file-ui.md](docs/native-file-ui.md).
+Delivered File/Edit/Page menus and shortcuts now consume shared typed control bindings.
+`ui.controls` exposes their invocations and contextual disabled reasons. `ui.file` requests
+or cancels the actual native file picker through the authenticated desktop session; headless
+CLI/stdio sessions report `ui_unavailable` and retain direct parameterized file commands.
+Request/context guards prevent stale chooser choices from starting I/O. This is partial
+presentation addressability; folder/name fields and running-job controls remain separate.
 Full VoiceOver and interactive Windows/Linux file workflows remain unverified.
 
 The smoke command launches the actual wgpu window, reports its adapter, and closes after

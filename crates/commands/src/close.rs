@@ -100,6 +100,7 @@ impl Engine {
     }
 
     pub(super) fn invalidate_close(&mut self) {
+        self.invalidate_file_ui();
         if let Some(approval) = &mut self.close_policy.approval {
             approval.approved = false;
         }
@@ -115,6 +116,7 @@ impl Engine {
             self.file_path.as_deref(),
             self.document != self.saved,
         )?;
+        self.invalidate_file_ui();
         let state = self.state();
         Ok(CommandResult {
             close_operation: Some(state.close),
@@ -138,6 +140,10 @@ impl Engine {
     pub(super) fn refresh_close_result(&self, result: &mut CommandResult) {
         result.close = self.close_state();
         result.close_epoch = self.close_policy.epoch;
+        result.ui_file = self.file_ui_state();
+        if result.controls.is_some() {
+            result.controls = Some(self.controls());
+        }
         if result.close_operation.is_some() {
             result.close_operation = Some(result.close);
         }

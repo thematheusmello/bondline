@@ -89,3 +89,13 @@ inventory, shared menu/shortcut/enabled/dialog discovery and addressable job can
 remain open. The next implementation should expose existing controls through authoritative
 registry metadata/presentation requests; do not implement document.close again or treat this
 resolution as complete M0, full dialog addressability or multi-document parity.
+
+The next slice adds ui.controls and ui.file through the existing registry. Delivered
+File/Edit/Page bindings now have one typed core source consumed by native menus/shortcuts
+and discovery. A finite file request drives actual native picker acceptance/cancellation;
+headless engines refuse without a host, and atomic guarded preparation prevents stale
+selection I/O. This resolves the delivered menu/shortcut binding portion of the P1 row,
+not every dialog field/button or running job. Location/name values, directory navigation,
+confirmation dismissal, complete close-dialog discovery and Cancel Operation remain gaps.
+Exact RED/GREEN, native/platform evidence and still-live jobs belong in verification.md and
+STATUS.md. No inventory count or catalog-only assertion establishes a native workflow.

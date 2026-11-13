@@ -68,10 +68,10 @@ identify a full26.1 desktop screen specification or increase the count by duplic
 | ID | Reference control/action | G25 p. | State | Notes |
 |---|---|---|---|---|
 | MF-001 | File > New Document | 13, 39 | missing | Style-dependent New label; project creation/persistence missing. |
-| MF-002 | File > Open | 14 | partial verified, Mac CDXML | Original chooser; dirty-discard confirmation, failed-open retention, editable native profile and guarded opaque passthrough. Other formats/platform workflows missing. |
+| MF-002 | File > Open | 14 | partial verified, Mac CDXML | Shared typed presentation request/Cancel and contextual binding now have native evidence. Original chooser; dirty-discard confirmation, failed-open retention, editable native profile and guarded opaque passthrough. Other formats/platform workflows missing. |
 | MF-003 | File > Recent-document list | 14 | missing | Dynamic list; no sample files copied. |
-| MF-004 | File > Save | 14 | partial verified, Mac CDXML | Complete-source atomic save via registry; native CmdS/QuitSave and independent consumer evidence. History-across-save differs G25; general formats/styles missing. |
-| MF-005 | File > Save As | 39, 59, 356 | partial verified, Mac CDXML | Native new-path/overwrite/Cancel and exact opaque copy; original chooser and no format selector. Reference multi-format parity missing. |
+| MF-004 | File > Save | 14 | partial verified, Mac CDXML | Shared known-path intent, guarded preparation and actual fixed-path error/retry verified. Complete-source atomic save via registry; native CmdS/QuitSave and independent consumer evidence. History-across-save differs G25; general formats/styles missing. |
+| MF-005 | File > Save As | 39, 59, 356 | partial verified, Mac CDXML | Shared binding/shifted shortcut and addressable picker verified. Native new-path/overwrite/Cancel and exact opaque copy; original chooser and no format selector. Reference multi-format parity missing. |
 | MF-006 | File > Revert | 14 | missing | Recover last saved document. |
 | MF-007 | File > Close | 78, 259 | partial verified, single-window Mac | Shared document.close through UI/CLI/MCP/socket; File Close/red close/CmdW and Save/Discard/Cancel, epoch/receipt guards and shared-work drain have exact native evidence. Multi-document/platform/reference-dialog parity missing. |
 | MF-008 | File > Exit | 78, 290 | partial verified, Mac Quit | Native Quit/CmdQ uses shared close policy; committed edits survive Cancel, Save/Discard exit, remote approval waits for replies/work. Windows/Linux exit gestures, Dock/session logout and immediate unobserved gesture/Q ordering remain unverified. |

@@ -2,11 +2,13 @@
 
 #[cfg(test)]
 mod close_tests;
+#[cfg(test)]
+mod request_tests;
 
-use crate::files::{FileAction, FileChooser, FileMode};
+use crate::files::{FileAction, FileChooser, FileChooserEvent, FileMode};
 use bondline_commands::{
     Cancellation, CloseAction, CloseDocument, CloseState, Command, CommandResult, Engine,
-    ErrorInfo, OpenCdxml, SaveCdxml,
+    ErrorInfo, OpenCdxml, SaveCdxml, UiFile, UiFileAction, UiFilePhase, UiFilePlan,
 };
 use bondline_mcp::CommandExecutor;
 use eframe::egui;
@@ -17,11 +19,17 @@ use std::{
 };
 
 struct FileJob {
+    request_id: u64,
     action: FileAction,
     result: Receiver<Result<CommandResult, ErrorInfo>>,
     cancel: Cancellation,
     cancelling: bool,
     close_save: Option<CloseSave>,
+}
+
+pub(crate) struct FileIntentAction {
+    request_id: u64,
+    action: FileAction,
 }
 
 #[derive(Clone, Copy)]
@@ -41,6 +49,7 @@ pub(crate) struct FileWorkflow {
     directory: PathBuf,
     job: Option<FileJob>,
     save_for_close: Option<CloseSave>,
+    request_id: Option<u64>,
 }
 
 impl FileWorkflow {
@@ -50,11 +59,18 @@ impl FileWorkflow {
             directory,
             job: None,
             save_for_close: None,
+            request_id: None,
         }
     }
 
     pub(crate) fn blocks_authoring(&self, state: &CommandResult) -> bool {
-        self.chooser.is_open() || state.close != CloseState::Open
+        self.chooser.is_open()
+            || state.close != CloseState::Open
+            || state
+                .ui_file
+                .request
+                .as_ref()
+                .is_some_and(|request| request.phase != UiFilePhase::Running)
     }
 
     pub(crate) fn is_busy(&self) -> bool {
@@ -62,6 +78,13 @@ impl FileWorkflow {
     }
 
     fn sync_close(&mut self, state: &CommandResult) {
+        if self.request_id.is_some()
+            && self.request_id != state.ui_file.request.as_ref().map(|request| request.id)
+        {
+            self.chooser.cancel();
+            self.request_id = None;
+            self.save_for_close = None;
+        }
         if matches!(state.close, CloseState::Approved | CloseState::Committed) {
             self.chooser.cancel();
         }
@@ -99,100 +122,100 @@ impl FileWorkflow {
         self.chooser.begin(mode, directory, name);
     }
 
-    fn request_save(&mut self, state: &CommandResult, save_as: bool) -> Option<FileAction> {
-        if !save_as && let Some(path) = &state.file.path {
-            return Some(FileAction::Save {
-                path: path.clone(),
-                overwrite: true,
-            });
-        }
-        self.begin(FileMode::Save, state);
-        None
-    }
-
     pub(crate) fn menu(
         &mut self,
         ui: &mut egui::Ui,
         engine: &mut Engine,
         error: &mut Option<String>,
-    ) -> Option<FileAction> {
+    ) -> Option<FileIntentAction> {
         let state = engine.state();
         self.sync_close(&state);
-        let mut action = None;
-        let available = !self.is_busy() && !self.blocks_authoring(&state);
-        let modifier = if cfg!(target_os = "macos") {
-            "Cmd"
-        } else {
-            "Ctrl"
+        let controls = engine.controls();
+        let shortcut = crate::control_shortcut(ui.ctx(), &controls, "File");
+        let menu = crate::control_menu(ui, &controls, "File");
+        let command = shortcut.or(menu);
+        if let Some(command) = command {
+            *error = engine.execute(command).err().map(|error| error.to_string());
+            self.sync_close(&engine.state());
+        }
+        None
+    }
+
+    fn request_file(
+        &mut self,
+        engine: &mut Engine,
+        action: UiFileAction,
+        close_epoch: Option<u64>,
+        error: &mut Option<String>,
+    ) {
+        *error = engine
+            .execute(Command::UiFile(UiFile {
+                expected_revision: engine.state().revision,
+                action,
+                request_id: None,
+                close_epoch,
+            }))
+            .err()
+            .map(|error| error.to_string());
+    }
+
+    fn adopt_request(
+        &mut self,
+        engine: &mut Engine,
+        error: &mut Option<String>,
+    ) -> Option<FileIntentAction> {
+        let state = engine.state();
+        self.sync_close(&state);
+        let request = state.ui_file.request.as_ref()?;
+        if request.phase != UiFilePhase::Requested || self.is_busy() {
+            return None;
+        }
+        let plan = match engine.claim_ui_file(request.id) {
+            Ok(plan) => plan,
+            Err(failure) => {
+                *error = Some(failure.to_string());
+                engine.finish_ui_file(request.id, false);
+                return None;
+            }
         };
-        if !self.blocks_authoring(&state)
-            && ui.input_mut(|input| {
-                input.consume_shortcut(&egui::KeyboardShortcut::new(
-                    egui::Modifiers::COMMAND,
-                    egui::Key::W,
-                ))
-            })
-        {
-            self.request_close(engine, error);
-        } else if available {
-            let selected = ui.input_mut(|input| {
-                if input.consume_shortcut(&egui::KeyboardShortcut::new(
-                    egui::Modifiers::COMMAND | egui::Modifiers::SHIFT,
-                    egui::Key::S,
-                )) {
-                    Some(2)
-                } else if input.consume_shortcut(&egui::KeyboardShortcut::new(
-                    egui::Modifiers::COMMAND,
-                    egui::Key::S,
-                )) {
-                    Some(1)
-                } else if input.consume_shortcut(&egui::KeyboardShortcut::new(
-                    egui::Modifiers::COMMAND,
-                    egui::Key::O,
-                )) {
-                    Some(0)
-                } else {
-                    None
-                }
-            });
-            match selected {
-                Some(0) => self.begin(FileMode::Open, &state),
-                Some(1) => action = self.request_save(&state, false),
-                Some(2) => action = self.request_save(&state, true),
-                _ => {}
+        self.request_id = Some(request.id);
+        self.save_for_close = request.close_epoch.map(|epoch| CloseSave {
+            epoch,
+            revision: request.input_revision,
+        });
+        match plan {
+            UiFilePlan::OpenPicker => self.begin(FileMode::Open, &state),
+            UiFilePlan::SavePicker => self.begin(FileMode::Save, &state),
+            UiFilePlan::SaveExisting(params) => {
+                return Some(FileIntentAction {
+                    request_id: request.id,
+                    action: FileAction::Save {
+                        path: params.path,
+                        overwrite: params.overwrite,
+                    },
+                });
             }
         }
-        ui.menu_button("File", |ui| {
-            for (index, label, shortcut) in [
-                (0, "Open…", format!("{modifier}+O")),
-                (1, "Save", format!("{modifier}+S")),
-                (2, "Save As…", format!("{modifier}+Shift+S")),
-            ] {
-                if ui
-                    .add_enabled(available, egui::Button::new(label).shortcut_text(shortcut))
-                    .clicked()
-                {
-                    match index {
-                        0 => self.begin(FileMode::Open, &state),
-                        1 => action = self.request_save(&state, false),
-                        _ => action = self.request_save(&state, true),
-                    }
-                    ui.close_menu();
-                }
-            }
-            ui.separator();
-            if ui
-                .add_enabled(
-                    !self.blocks_authoring(&engine.state()),
-                    egui::Button::new("Close Window").shortcut_text(format!("{modifier}+W")),
-                )
-                .clicked()
-            {
-                self.request_close(engine, error);
-                ui.close_menu();
-            }
-        });
-        action
+        None
+    }
+
+    fn cancel_picker(&mut self, engine: &mut Engine, error: &mut Option<String>) {
+        let Some(request_id) = self.request_id else {
+            return;
+        };
+        let command = engine
+            .controls()
+            .into_iter()
+            .find(|control| {
+                control.id == "file.cancel"
+                    && control.enabled
+                    && matches!(&control.command, Command::UiFile(params) if params.request_id == Some(request_id))
+            })
+            .map(|control| control.command);
+        if let Some(command) = command {
+            *error = engine.execute(command).err().map(|error| error.to_string());
+        }
+        self.sync_close(&engine.state());
     }
 
     pub(crate) fn job_status(&mut self, ui: &mut egui::Ui) {
@@ -242,18 +265,15 @@ impl FileWorkflow {
         choice: CloseChoice,
         engine: &mut Engine,
         error: &mut Option<String>,
-    ) -> Option<FileAction> {
+    ) -> Option<FileIntentAction> {
         match choice {
             CloseChoice::Save => {
                 let state = engine.state();
                 if state.close != CloseState::NeedsDecision {
                     return None;
                 }
-                self.save_for_close = Some(CloseSave {
-                    revision: state.revision,
-                    epoch: state.close_epoch,
-                });
-                self.request_save(&state, false)
+                self.request_file(engine, UiFileAction::Save, Some(state.close_epoch), error);
+                None
             }
             CloseChoice::Discard => {
                 self.close_command(engine, CloseAction::Discard, error);
@@ -297,16 +317,22 @@ impl FileWorkflow {
         engine: &mut Engine,
         error: &mut Option<String>,
         active_work: bool,
-    ) -> Option<FileAction> {
+    ) -> Option<FileIntentAction> {
+        if let Some(action) = self.adopt_request(engine, error) {
+            return Some(action);
+        }
         let state = engine.state();
-        self.sync_close(&state);
         if self.chooser.is_open() {
-            let close_save = self.save_for_close.is_some();
-            let action = self.chooser.show(context, state.file.dirty);
-            if close_save && !self.chooser.is_open() && action.is_none() {
-                self.close_command(engine, CloseAction::Cancel, error);
+            match self.chooser.show(context, state.file.dirty) {
+                Some(FileChooserEvent::Submit(action)) => {
+                    return self
+                        .request_id
+                        .map(|request_id| FileIntentAction { request_id, action });
+                }
+                Some(FileChooserEvent::Cancel) => self.cancel_picker(engine, error),
+                None => {}
             }
-            return action;
+            return None;
         }
         if matches!(state.close, CloseState::Open | CloseState::Committed) {
             return None;
@@ -346,13 +372,14 @@ impl FileWorkflow {
 
     pub(crate) fn start(
         &mut self,
-        action: FileAction,
+        intent: FileIntentAction,
         executor: &CommandExecutor,
         context: &egui::Context,
     ) -> Result<(), String> {
         if self.is_busy() {
             return Err("A file operation is already running.".to_owned());
         }
+        let FileIntentAction { request_id, action } = intent;
         let command = match &action {
             FileAction::Open {
                 path,
@@ -368,23 +395,41 @@ impl FileWorkflow {
         };
         let cancel = Cancellation::default();
         let worker_cancel = cancel.clone();
-        let worker_executor = executor.clone();
+        let work = match executor.prepare_ui_file(request_id, command) {
+            Ok(work) => work,
+            Err(failure) => {
+                if let Ok(mut engine) = executor.engine().lock() {
+                    self.failed(request_id, action, &failure, &mut engine);
+                }
+                return Err(failure.message);
+            }
+        };
         let context = context.clone();
         let (sender, result) = mpsc::sync_channel(1);
         if let Err(error) = std::thread::Builder::new()
             .name("bondline-ui-file".to_owned())
             .spawn(move || {
-                let result = worker_executor.execute_blocking(command, &worker_cancel);
+                let result = work.complete_blocking(&worker_cancel);
                 let _ = sender.send(result);
                 context.request_repaint();
             })
         {
             let message = format!("Cannot start file operation: {error}");
-            self.chooser
-                .failed(action, "worker_failed", message.clone());
+            if let Ok(mut engine) = executor.engine().lock() {
+                self.failed(
+                    request_id,
+                    action,
+                    &ErrorInfo {
+                        code: "worker_failed",
+                        message: message.clone(),
+                    },
+                    &mut engine,
+                );
+            }
             return Err(message);
         }
         self.job = Some(FileJob {
+            request_id,
             action,
             result,
             cancel,
@@ -392,6 +437,17 @@ impl FileWorkflow {
             close_save: self.save_for_close.take(),
         });
         Ok(())
+    }
+
+    fn failed(&mut self, id: u64, action: FileAction, failure: &ErrorInfo, engine: &mut Engine) {
+        let retry = failure.code != "save_published" && failure.code != "recovery_required";
+        if engine.finish_ui_file(id, retry) && retry {
+            self.request_id = Some(id);
+            self.chooser
+                .failed(action, failure.code, failure.message.clone());
+        } else {
+            self.sync_close(&engine.state());
+        }
     }
 
     pub(crate) fn poll(&mut self, engine: &mut Engine, error: &mut Option<String>) {
@@ -410,6 +466,7 @@ impl FileWorkflow {
         };
         match completed {
             Ok(result) => {
+                engine.finish_ui_file(job.request_id, false);
                 *error = None;
                 if let Some(path) = &result.file.path
                     && let Some(parent) = std::path::Path::new(path).parent()
@@ -441,8 +498,7 @@ impl FileWorkflow {
                 *error = Some(failure.message.clone());
                 self.keep_open_after_file_failure(engine, error);
                 self.save_for_close = job.close_save;
-                self.chooser
-                    .failed(job.action, failure.code, failure.message);
+                self.failed(job.request_id, job.action, &failure, engine);
             }
         }
     }
@@ -470,22 +526,33 @@ mod tests {
     }
 
     #[test]
-    fn ordinary_save_reuses_the_known_path_but_save_as_requires_an_explicit_choice() {
-        let mut state = Engine::default().state();
-        state.file.path = Some("/tmp/known.cdxml".to_owned());
-        state.file.dirty = true;
-        let mut workflow = FileWorkflow::new(std::env::temp_dir());
+    fn ordinary_save_reuses_the_known_path_but_save_as_requires_an_explicit_choice()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = super::close_tests::Directory::new()?;
+        let path = directory.0.join("known.cdxml");
+        let mut engine = Engine::default();
+        engine.set_ui_file_host(true);
+        engine.dispatch("document.save_cdxml", serde_json::json!({"path":path}))?;
+        let canonical = engine.state().file.path.ok_or("saved path")?;
+        let mut workflow = FileWorkflow::new(directory.0.clone());
+        workflow.request_file(&mut engine, UiFileAction::Save, None, &mut None);
+        let intent = workflow
+            .adopt_request(&mut engine, &mut None)
+            .ok_or("save existing")?;
         assert_eq!(
-            workflow.request_save(&state, false),
-            Some(FileAction::Save {
-                path: "/tmp/known.cdxml".to_owned(),
+            intent.action,
+            FileAction::Save {
+                path: canonical,
                 overwrite: true
-            })
+            }
         );
         assert!(!workflow.chooser.is_open());
-        assert!(workflow.request_save(&state, true).is_none());
+        assert!(engine.finish_ui_file(intent.request_id, false));
+        workflow.request_file(&mut engine, UiFileAction::SaveAs, None, &mut None);
+        assert!(workflow.adopt_request(&mut engine, &mut None).is_none());
         assert!(workflow.chooser.is_open());
-        assert!(workflow.blocks_authoring(&state));
+        assert!(workflow.blocks_authoring(&engine.state()));
+        Ok(())
     }
 
     #[test]
@@ -494,6 +561,7 @@ mod tests {
         let context = egui::Context::default();
         crate::configure_context(&context);
         let mut engine = Engine::default();
+        engine.set_ui_file_host(true);
         edit(&mut engine)?;
         let revision = engine.state().revision;
         let mut workflow = FileWorkflow::new(std::env::temp_dir());
@@ -586,6 +654,7 @@ mod tests {
         let context = egui::Context::default();
         crate::configure_context(&context);
         let mut engine = Engine::default();
+        engine.set_ui_file_host(true);
         edit(&mut engine)?;
         let original = engine.stored_document().clone();
         let revision = engine.state().revision;

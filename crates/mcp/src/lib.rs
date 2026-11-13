@@ -2,7 +2,7 @@
 
 pub mod control;
 mod work;
-pub use work::CommandExecutor;
+pub use work::{CommandExecutor, UiFileWork};
 
 use bondline_commands::{Command, Engine, MAX_REQUEST_BYTES};
 use rmcp::{

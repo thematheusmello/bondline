@@ -11,7 +11,27 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
     assert!(list.status.success());
     let commands: Value = serde_json::from_slice(&list.stdout)?;
     let commands = commands.as_array().ok_or("expected command array")?;
-    assert_eq!(commands.len(), 9);
+    let mut names = commands
+        .iter()
+        .map(|info| info["name"].as_str().ok_or("command name"))
+        .collect::<Result<Vec<_>, _>>()?;
+    names.sort_unstable();
+    assert_eq!(
+        names,
+        [
+            "bond.create",
+            "document.close",
+            "document.inspect",
+            "document.open_cdxml",
+            "document.save_cdxml",
+            "history.redo",
+            "history.undo",
+            "page.set_size",
+            "render.capture",
+            "ui.controls",
+            "ui.file"
+        ]
+    );
     assert!(
         commands
             .iter()

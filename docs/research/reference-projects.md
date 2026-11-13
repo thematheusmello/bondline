@@ -123,3 +123,10 @@ discard or overwrite. Close-specific Save must retain the existing close epoch a
 rules. These are original Bondline safety decisions, not inferred reference internals.
 This design record precedes implementation and execution; see the protocol and verification
 records for delivered evidence. No generic UI dispatcher or job framework is required.
+
+The finite shared-file-control slice is now implemented and verified within its documented
+scope: typed core bindings drive File/Edit/Page, ui.file addresses native requests and
+cancellation, and atomic preparation guards actual I/O. See control-protocol.md,
+native-file-ui.md and verification.md. This does not complete reference inventory, every
+dialog field or running-job control; the source observations above remain distinct from
+Bondline's actual execution evidence.
