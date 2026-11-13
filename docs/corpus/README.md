@@ -21,7 +21,7 @@ Current coverage is deliberately separate:
 
 | Entry | Integrity | Syntax/semantic check | Chemistry |
 |---|---|---|---|
-| rdkit-chain1.cdxml | Exact 727 bytes and SHA-256 | Byte-preserving round trip; full XML view agrees with Expat; typed elemental projection agrees with independent Expat/Decimal | Calculations missing |
+| rdkit-chain1.cdxml | Exact 727 bytes and SHA-256 | Byte-preserving syntax and owned-snapshot passthrough; full XML view agrees with Expat; stored model projection agrees with independent Expat/Decimal | Calculations missing |
 | rdkit-methyl-radical.mol | Exact 170 bytes and SHA-256 | Missing MOL parser; printed as integrity-only | Missing |
 | CDX | No reviewed entry fetched yet | Missing parser | Missing |
 
@@ -38,3 +38,4 @@ its verifier test; another test checks scopes, direction and explicit metadata. 
 not use our parser/writer or compute chemistry. Source bytes are syntax-validated and
 bounded before either external oracle runs; neither fetches DTD/entity resources.
 The gate now also prints the missing formula/mass/aromaticity/stereo/SMILES/InChI checks.
+Its owned-snapshot count covers unchanged-source export, not edited-file compatibility.

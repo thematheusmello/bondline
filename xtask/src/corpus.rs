@@ -260,8 +260,20 @@ pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
                 }
                 compare_xml(&output, &document)?;
                 drop(document);
-                let graph = bondline_io::cdxml::ElementalGraph::parse(&output)?;
-                compare_graph(&output, &serde_json::to_value(graph.fragments())?)?;
+                let stored = bondline_io::StoredDocument::from_cdxml(
+                    std::sync::Arc::from(bytes),
+                    bondline_model::PageSize::A4,
+                )?;
+                if stored.export_cdxml()? != output {
+                    return Err(format!("source-backed CDXML byte loss: {}", file.name).into());
+                }
+                let fragments: Vec<_> = stored
+                    .model()
+                    .pages()
+                    .iter()
+                    .flat_map(|page| page.fragments().iter().map(std::sync::Arc::as_ref))
+                    .collect();
+                compare_graph(stored.export_cdxml()?, &serde_json::to_value(fragments)?)?;
                 round_trips += 1;
             }
             Format::Mol => pending.push(&file.name),
@@ -269,7 +281,7 @@ pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
     }
     writeln!(
         std::io::stdout(),
-        "corpus integrity: {} pinned licensed files; CDXML byte/Expat checks: {round_trips}; elemental projections: {round_trips}",
+        "corpus integrity: {} pinned licensed files; CDXML byte/Expat checks: {round_trips}; elemental projections: {round_trips}; source-backed snapshots: {round_trips}",
         manifest.files.len()
     )?;
     for name in pending {

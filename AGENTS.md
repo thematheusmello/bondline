@@ -32,8 +32,10 @@ The intended crate graph is model/cdxml/cdx -> chem/render -> io -> commands -> 
 Packages use bondline- prefixes. cdxml and cdx have no workspace dependencies; formats
 preserve unknown data and must never silently drop it. Native I/O stays out of model/parsers.
 The UI, CLI, loopback channel and MCP call one typed JSON command registry.
-When wiring import, retain the source backing in history/application state. A cloned elemental
-projection alone cannot save unknown data; require source-retention/undo tests before exposure.
+StoredDocument now owns source/model/baseline and Engine history retains it. Keep that backing
+when wiring import; a cloned elemental projection alone loses unknown data. Require failed-
+import/source-retention tests and a source/history byte budget before exposing large imports.
+Unchanged-source export is guarded; never write stale XML after a model edit.
 xtask checks layers and licenses, fetches a pinned SHA-256 corpus, and orchestrates CI.
 No GUI dependencies below ui; wgpu belongs in render. Add crates when useful behavior lands,
 not empty successful-looking API stubs. Document any isolated OS FFI exception explicitly.
@@ -45,8 +47,8 @@ Current map: model (L0, pages, Point2 and validated elemental atom/bond/fragment
 cdxml (L0, source-preserving syntax, exact integral/source-ID decoding and checked
 existing-attribute replacement);
 render (L1, shared CPU/GPU page scenes); io (L2,
-source-backed CDXML geometry/elemental projections and validated PNG encoding); commands
-(L3, registry and Arc snapshot history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,
+source-backed CDXML geometry/elemental projections, owned application snapshots and PNG encoding);
+commands (L3, registry and complete stored-snapshot Arc history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
 and `compat/clipboard-win` alone opt into reviewed OS unsafe; `compat/hexf-parse` forbids
 unsafe. These three original compatibility packages retain upstream package names solely

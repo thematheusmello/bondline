@@ -41,7 +41,9 @@ current default application. These interfaces still have only page/history/captu
 no chemical import/editing UI or chemical renderer is connected. This model is not a native
 project format, complete CDXML mapping or a working chemical authoring workflow.
 
-Io's ElementalGraph now projects supported CDXML properties into these types and retains
-the source separately. Copying its fragments into Document does not automatically copy
-that backing. Application import/history/save must retain both and test unknown-data
-preservation before exposing an editable file workflow.
+Io's ElementalGraph projects supported CDXML properties into these types and retains the
+source separately. StoredDocument now owns both the model and original CDXML allocation;
+Engine history retains the whole snapshot, including opaque data and the export baseline.
+Copying fragments into a bare model Document still does not copy that backing. Source-backed
+undo/redo has unit and generated-sequence evidence; imported chemical editing, an editable
+writer and native open/save remain missing. The model itself stays format independent.

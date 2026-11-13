@@ -1,5 +1,6 @@
 //! One typed command registry and authored document history for every interface.
 
+use bondline_io::{SourceInfo, StoredDocument};
 use bondline_model::{Document, PageId, PageSize};
 use schemars::{JsonSchema, Schema};
 use serde::{Deserialize, Serialize};
@@ -7,6 +8,8 @@ use serde_json::Value;
 use std::{collections::VecDeque, sync::Arc};
 
 mod capture;
+#[cfg(test)]
+mod source_tests;
 pub use bondline_render::Cancellation;
 pub use capture::{CaptureAdapter, PngCapture, Prepared, RenderBackend, RenderCapture};
 
@@ -96,6 +99,8 @@ pub enum Error {
     Png(#[from] bondline_io::Error),
     #[error("GPU capture is not available on this target")]
     BackendUnavailable,
+    #[error("the current renderer cannot preview imported or chemical document content")]
+    UnsupportedDocumentPreview,
 }
 
 #[derive(Debug, Serialize)]
@@ -115,6 +120,7 @@ impl Error {
             Self::Render(bondline_render::Error::InvalidDimensions) => "invalid_params",
             Self::Render(_) | Self::Png(_) => "render_failed",
             Self::BackendUnavailable => "backend_unavailable",
+            Self::UnsupportedDocumentPreview => "unsupported_content",
             _ => "invalid_params",
         };
         ErrorInfo {
@@ -137,6 +143,8 @@ pub struct CommandResult {
     pub changed: bool,
     pub revision: u64,
     pub document: Arc<Document>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<SourceInfo>,
     pub undo_depth: usize,
     pub redo_depth: usize,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -145,22 +153,37 @@ pub struct CommandResult {
 
 #[derive(Debug, Default)]
 pub struct Engine {
-    document: Arc<Document>,
+    document: Arc<StoredDocument>,
     revision: u64,
-    undo: VecDeque<Arc<Document>>,
-    redo: VecDeque<Arc<Document>>,
+    undo: VecDeque<Arc<StoredDocument>>,
+    redo: VecDeque<Arc<StoredDocument>>,
 }
 
 impl Engine {
-    pub fn document(&self) -> &Document {
+    /// Initialize a session from an owned snapshot. Import commands are not yet exposed.
+    pub fn from_document(document: StoredDocument) -> Self {
+        Self {
+            document: Arc::new(document),
+            revision: 0,
+            undo: VecDeque::new(),
+            redo: VecDeque::new(),
+        }
+    }
+
+    pub fn stored_document(&self) -> &StoredDocument {
         &self.document
+    }
+
+    pub fn document(&self) -> &Document {
+        self.document.model()
     }
 
     pub fn state(&self) -> CommandResult {
         CommandResult {
             changed: false,
             revision: self.revision,
-            document: Arc::clone(&self.document),
+            document: self.document.model_snapshot(),
+            source: self.document.source_info(),
             undo_depth: self.undo.len(),
             redo_depth: self.redo.len(),
             capture: None,
@@ -195,21 +218,27 @@ impl Engine {
                 let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
                 let size = PageSize::new(params.width_pt, params.height_pt)?;
                 let mut document = (*self.document).clone();
-                document.set_page_size(id, size)?;
+                document.model_mut().set_page_size(id, size)?;
                 self.commit(document)?
             }
             Command::Undo(_) => self.undo()?,
             Command::Redo(_) => self.redo()?,
             Command::Capture(params) => {
                 let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
-                let size = self
-                    .document
+                let page = self
+                    .document()
                     .pages()
                     .iter()
                     .find(|page| page.id() == id)
-                    .ok_or(bondline_model::Error::MissingPage(id.get()))?
-                    .size();
-                return Prepared::capture(self.state(), params, size);
+                    .ok_or(bondline_model::Error::MissingPage(id.get()))?;
+                if self.document.source_info().is_some()
+                    || page.fragments().iter().any(|fragment| {
+                        !fragment.atoms().is_empty() || !fragment.bonds().is_empty()
+                    })
+                {
+                    return Err(Error::UnsupportedDocumentPreview);
+                }
+                return Prepared::capture(self.state(), params, page.size());
             }
         };
         Ok(Prepared::immediate(CommandResult {
@@ -222,7 +251,7 @@ impl Engine {
         self.revision.checked_add(1).ok_or(Error::RevisionExhausted)
     }
 
-    fn commit(&mut self, document: Document) -> Result<bool, Error> {
+    fn commit(&mut self, document: StoredDocument) -> Result<bool, Error> {
         if *self.document == document {
             return Ok(false);
         }

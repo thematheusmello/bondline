@@ -32,6 +32,9 @@ expectations live in the numeric integration tests.
 The read-only elemental mapper also checks unchanged source plus unique application IDs
 and fragment-local, distinct bond endpoints on accepted inputs. Its local reference maps
 are exercised with the original fixture seed. Chemistry perception and a complete editable
-document remain outside this harness's claims.
+file workflow remain outside this harness's claims. Accepted owned StoredDocument values
+must export byte-exact source. The harness edits preview dimensions, requires stale-source
+export to fail, restores the model and requires exact passthrough again. Unsupported page
+layouts may reject the owned projection without rejecting the standalone syntax.
 Independent XML semantic assertions live in the external Expat tests. A short smoke run is
 not exhaustive parser conformance or a security audit.

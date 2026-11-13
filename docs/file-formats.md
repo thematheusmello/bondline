@@ -2,7 +2,7 @@
 
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
-| CDXML | Bounded syntax/source preservation, attribute replacement, geometry and read-only elemental projections with fresh application IDs | Original fixtures/public vectors; independent Expat/Decimal; one pinned RDKit syntax/elemental corpus check; ASan parser/edit/mapping smoke | Complete application document, queries/labels/styles/stereo, reference scopes beyond each fragment, dependent edits, broader corpus and registry/native open/save |
+| CDXML | Bounded syntax/source preservation, attribute replacement, geometry and read-only elemental projections; owned source-backed history and guarded byte-exact passthrough | Original fixtures/public vectors; independent Expat/Decimal; one pinned RDKit owned-snapshot corpus check; property/history tests; ASan parser/edit/mapping smoke | Complete mapping, editable writer, queries/labels/styles/stereo, reference scopes beyond each fragment, dependent edits, broader corpus and registry/native open/save |
 | CDX | None | Published specification recorded | Parser, preservation, writer and model mapping |
 | MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
@@ -94,8 +94,16 @@ undefined orders fail. The pure model validates endpoint/identity/topology budge
 Unknown attributes/objects, group hierarchy, text, display styles and stereo annotations
 remain byte-exact in the source, but are not represented by the flat elemental projection.
 to_bytes returns that unchanged source; changing a copied model value is not an editable
-file workflow. Application document integration, source bindings for structural edits,
-chemical rendering, native/registry open/save and full chemistry interpretation remain missing.
-The corpus gate checks one pinned projection against independent external Expat/Decimal,
+file workflow. StoredDocument now owns the model, original source allocation and baseline,
+and Engine history retains the whole snapshot. It accepts at most one direct page, or an
+empty CDXML document; table-contained/multiple pages fail explicitly. The caller chooses
+preview dimensions, which do not interpret source paper/style settings or BoundingBox.
+export_cdxml borrows the exact original bytes only while the model equals its baseline.
+Any unsynchronized model edit fails with UnsupportedEdit; exact restoration/undo permits
+passthrough again. A native document without CDXML backing returns NoCdxmlSource. Source
+bytes survive input lifetime, cloning and history without being exposed in Debug or command
+result serialization. No file command or native open/save workflow is exposed by this API.
+Source bindings for structural edits, chemical rendering and full interpretation remain missing.
+The corpus gate checks one owned snapshot's projection against independent external Expat/Decimal,
 in addition to its unchanged-byte/XML checks. It explicitly reports chemistry calculations
 as missing rather than treating the projection as formula/stereo/SMILES/InChI verification.

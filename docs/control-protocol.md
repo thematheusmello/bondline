@@ -18,10 +18,14 @@ the previous redo branch. Undo/redo restore authored state exactly but advance r
 History retains up to 128 document snapshots. This is an explicit Bondline policy, not a
 claim about another application's history limits. Revision overflow rejects the operation.
 
-Page snapshots include a fragments array, empty in the default application. The headless
-model can store validated elemental graphs, but import and chemical editing commands are
-not registered yet. See model.md for that data boundary; a serialized graph is not a native
-project-save workflow.
+Page snapshots include a fragments array, empty in the default application. Engine history
+now retains an owned StoredDocument, including original CDXML data. An engine initialized
+with that API returns an additional source object: {format: "cdxml", byte_length, modified}.
+The field is omitted for native in-memory documents. Raw source bytes are not serialized.
+Import/export and chemical editing commands are not registered yet. Modified source-backed
+models cannot export stale XML; exact undo restores the original bytes and exportability.
+History has a count limit only; source/history byte budgeting must precede large-file imports.
+See model.md for the data boundary; serialized graphs are not a project-save workflow.
 
 | Name | Parameters | Effect |
 |---|---|---|
@@ -84,6 +88,9 @@ Capture dimensions are 1..2048 pixels per axis. A successful result adds `captur
 `png_base64`. GPU output includes the actual adapter name/backend/device type; CPU output
 has `adapter: null`. There is no automatic CPU fallback. This captures the shared page
 scene, not window chrome, operating-system dialogs or print-resolution chemical output.
+Imported/source-backed documents and pages with chemical atoms/bonds return unsupported_content
+before starting CPU/GPU capture. Chemical rendering remains missing; blank success would
+conceal content. This guard applies equally to both requested backends and changes no state.
 
 ```json
 {"command":"render.capture","params":{"page_id":1,"width_px":512,"height_px":512,"backend":"gpu"}}

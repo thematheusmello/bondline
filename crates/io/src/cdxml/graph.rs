@@ -34,6 +34,10 @@ pub enum MappingError {
     UnsupportedLayout,
     #[error("elemental mapping exceeds the application identity budget")]
     IdentityLimit,
+    #[error("the current application projection supports at most one direct document page")]
+    UnsupportedPageLayout,
+    #[error(transparent)]
+    PreviewModel(#[from] bondline_model::Error),
 }
 
 /// Read-only elemental projection plus authoritative, unchanged source backing.
@@ -121,6 +125,32 @@ impl<'input> ElementalGraph<'input> {
     }
     pub fn to_bytes(&self) -> Vec<u8> {
         self.source.to_bytes()
+    }
+
+    pub(crate) fn preview_document(
+        &self,
+        size: bondline_model::PageSize,
+    ) -> Result<bondline_model::Document, MappingError> {
+        let root = self.source.xml().root_element();
+        let mut pages = self
+            .source
+            .xml()
+            .descendants()
+            .filter(|node| is_element(*node, "page"));
+        if let Some(page) = pages.next()
+            && (page.parent() != Some(root) || pages.next().is_some())
+        {
+            return Err(MappingError::UnsupportedPageLayout);
+        }
+        let mut model = bondline_model::Document::default();
+        let id = model
+            .pages()
+            .first()
+            .ok_or(MappingError::UnsupportedPageLayout)?
+            .id();
+        model.set_page_size(id, size)?;
+        model.append_fragments(id, self.fragments.clone())?;
+        Ok(model)
     }
 }
 

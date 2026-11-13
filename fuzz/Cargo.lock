@@ -117,6 +117,7 @@ dependencies = [
  "bondline-render",
  "png",
  "roxmltree",
+ "serde",
  "thiserror 2.0.21",
 ]
 

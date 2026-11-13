@@ -38,4 +38,33 @@ proptest! {
         for _ in 0..count { engine.execute(Command::Redo(NoParams {}))?; }
         prop_assert_eq!(serde_json::to_vec(engine.document())?, final_document);
     }
+
+    #[test]
+    fn source_backed_generated_edits_restore_the_full_snapshot_and_original_bytes(
+        sizes in proptest::collection::vec((1u32..10_000,1u32..10_000),1..64)
+    ) {
+        let source=include_bytes!("../../cdxml/tests/fixtures/unknown.cdxml");
+        let stored=bondline_io::StoredDocument::from_cdxml(std::sync::Arc::from(source.as_slice()),bondline_model::PageSize::A4)?;
+        let mut engine=Engine::from_document(stored);
+        let original=engine.stored_document().clone();
+        let mut count=0;
+        for (width,height) in sizes {
+            let before=engine.stored_document().clone();
+            let result=engine.execute(Command::PageSetSize(PageSetSize {page_id:1,width_pt:f64::from(width),height_pt:f64::from(height)}))?;
+            let after=engine.stored_document().clone();
+            if result.changed {
+                count+=1;
+                engine.execute(Command::Undo(NoParams{}))?;
+                prop_assert_eq!(engine.stored_document(),&before);
+                engine.execute(Command::Redo(NoParams{}))?;
+                prop_assert_eq!(engine.stored_document(),&after);
+            }
+        }
+        let final_document=engine.stored_document().clone();
+        for _ in 0..count {engine.execute(Command::Undo(NoParams{}))?;}
+        prop_assert_eq!(engine.stored_document(),&original);
+        prop_assert_eq!(engine.stored_document().export_cdxml()?,source.as_slice());
+        for _ in 0..count {engine.execute(Command::Redo(NoParams{}))?;}
+        prop_assert_eq!(engine.stored_document(),&final_document);
+    }
 }

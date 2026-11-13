@@ -27,7 +27,9 @@ document. A source-backed direct-fragment node geometry view now uses validated 
 points; missing coordinates remain absent. Model atom/bond/fragment storage is validated.
 Read-only elemental mapping now assigns fresh application IDs, resolves fragment-local
 references and retains source backing; an external Expat/Decimal oracle checks the corpus.
-Next: source-backed application document integration, rendering and registry open/save;
+Owned application snapshots/history now retain that backing; unsynchronized edits cannot
+export stale XML. This constructor/passthrough API is not a file workflow.
+Next: chemical rendering and registry open/save with source/history byte budgeting;
 broader query/label/style mapping, lossless CDX records, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.

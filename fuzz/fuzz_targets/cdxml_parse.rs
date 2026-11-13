@@ -97,5 +97,31 @@ fuzz_target!(|data: &[u8]| {
                 assert_ne!(bond.begin, bond.end);
             }
         }
+        match bondline_io::StoredDocument::from_cdxml(
+            std::sync::Arc::from(data),
+            bondline_model::PageSize::A4,
+        ) {
+            Ok(stored) => {
+                assert_eq!(stored.export_cdxml().unwrap(), data);
+                let mut edited = stored.clone();
+                let page = edited.model().pages().first().unwrap().id();
+                edited
+                    .model_mut()
+                    .set_page_size(page, bondline_model::PageSize::new(72.0, 144.0).unwrap())
+                    .unwrap();
+                assert!(matches!(
+                    edited.export_cdxml(),
+                    Err(bondline_io::DocumentError::UnsupportedEdit)
+                ));
+                *edited.model_mut() = stored.model().clone();
+                assert_eq!(edited.export_cdxml().unwrap(), data);
+            }
+            Err(error) => assert!(matches!(
+                error,
+                bondline_io::DocumentError::Mapping(
+                    bondline_io::cdxml::MappingError::UnsupportedPageLayout
+                )
+            )),
+        }
     }
 });

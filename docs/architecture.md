@@ -17,10 +17,14 @@ See model.md for structural validation, atom metadata, bond direction and resour
 Text, query nodes, reaction models and chemical perception remain missing.
 
 `bondline-commands` owns the registry and history. It validates a candidate document before
-replacing an Arc snapshot. Undo/redo move Arc references in O(1); authoring edits currently
-clone the document's page/Arc lists while retaining shared immutable fragments. Returned
-snapshots remain immutable across later edits. Authored
-state excludes revision/history, so exact undo assertions compare authored bytes separately.
+replacing an Arc<io::StoredDocument> snapshot. That owned snapshot holds the model and, for
+CDXML, the original Arc<[u8]> plus its baseline model. Undo/redo move whole Arc references
+in O(1); copy-on-write authoring edits share immutable fragments and source bytes. Equality
+includes opaque source content, so equal projections cannot erase source-only changes.
+Returned model snapshots remain immutable across later edits. Authored state excludes
+revision/history. Exact undo assertions compare the whole stored document and original bytes.
+The 128-snapshot count limit is not a byte budget; add a source/history byte budget before
+exposing repeated large imports. A cold-session constructor is delivered, not an import command.
 See control-protocol.md for the actual registered operations and explicit limits.
 
 The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while
@@ -50,7 +54,13 @@ The read-only ElementalGraph adapter maps supported elemental properties and con
 assigning separate application identities while retaining the original syntax. Its local
 reference maps handle scoped source IDs and zero's unassigned meaning. Group hierarchy,
 styles, captions and other unmodelled data stay in source backing, not in its flat projection.
-See file-formats.md; neither projection is a complete application document or editable codec.
+StoredDocument owns that backing beyond parser lifetimes. It accepts zero or one direct
+page with explicitly chosen preview dimensions; it does not derive print paper from graphical
+bounds. Raw XML is neither serialized in command results nor included in StoredDocument Debug.
+Unchanged models can export the exact original bytes; unsynchronized edits fail explicitly,
+and exact undo restores passthrough. See file-formats.md; this is not an editable codec or
+an exposed file-open/save workflow. Capture refuses imported/chemical content until the
+renderer can represent it rather than returning a misleading blank preview.
 
 The native canvas now consumes the render crate's page scene instead of owning a parallel
 page-layout algorithm. CPU and instanced GPU reference paths consume that same scene;

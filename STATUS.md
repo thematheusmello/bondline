@@ -8,7 +8,7 @@ macOS arm64 150 packages, Windows x64 161, Linux x64 219, plus two SHA-verified 
 See docs/dependency-policy.md for the original compatibility adapters, fork and source evidence.
 This declaration gate is distinct from a complete release-notice/source review.
 
-Verified: 93 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
+Verified: 101 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
 actual layer gate, and whole-workspace Windows/Linux all-targets source checks. These are
 NOT native Windows/Linux runtime passes. CPU/GPU clear and ordered page-scene pixels agree on Apple M3 Max/Metal.
 
@@ -18,7 +18,8 @@ Delivered behavior:
   Page snapshots share immutable fragments; graph creation is not yet an application command.
 - Shared typed registry: document.inspect, page.set_size, history.undo, history.redo,
   render.capture (explicit CPU/GPU preview).
-- Exact history: 128 fixed-seed generated edit sequences, no-op/redo/overflow/boundary checks.
+- Exact history: 128 fixed-seed native and 128 source-backed generated edit sequences,
+  no-op/redo/overflow/boundary checks. Whole owned snapshots retain opaque CDXML data.
 - CLI: schema discovery, sequential JSON execution and structured errors, tested as a process.
 - Native UI: Page presets/rotation and Edit history actions use the registry. Actual Mac
   Letter -> Cmd+Z -> Shift+Cmd+Z verified through accessibility and a real-window screenshot.
@@ -76,6 +77,17 @@ Exact integral-property and UINT32 source-ID helpers now have independent Python
 evidence. IDs are container-scoped; zero is unassigned. Tiny fractions are rejected instead
 of rounded. The syntax bytes remain authoritative; reference resolution beyond each fragment
 is not implemented. The latest 10000-run ASan smoke also covers elemental mapping.
+Owned StoredDocument application snapshots now retain model, original Arc source bytes and
+baseline across history. The cold-session constructor accepts zero or one direct page with
+explicit preview dimensions; it does not infer paper from graphical bounds. Unchanged models
+export original bytes exactly, modified projections fail instead of exporting stale XML,
+and exact undo restores passthrough. Source-only changes count as changes even when models
+match. The corpus compares that owned model with external Expat/Decimal and checks exact
+passthrough. Raw source is not exposed in snapshot serialization or StoredDocument Debug.
+Capture refuses imported/chemical content before CPU/GPU execution until it can render it.
+These are core APIs, not registered import/export commands or an editable file workflow.
+History retains at most 128 snapshots; byte budgeting remains necessary before large imports.
+The latest 10000-run ASan smoke covers owned-state edit/refusal/restoration too.
 There are no chemical tools.
 Missing M0 evidence: complete public menu/tool/hotkey inventory,
 broader corpus/chemistry coverage, actual three-platform CI execution, native
@@ -87,10 +99,10 @@ Next exact tasks:
    parity-checklist.md now has 573 stable-ID cited control/action rows, including 26.x
    desktop deltas. This is not complete modern parity. Review conflicts/open questions;
    never fill them from product memory or inspect installed application files.
-2. Add source-backed application document/history integration, then chemical rendering and
-   registry open/save. Retain original bytes/unknown data when taking an elemental projection
-   into application state; require undo/redo and failed-import retention tests. The read-only
-   mapper is delivered, not an editable codec. Extend label/query/style/stereo mapping and
+2. Add chemical rendering and registry open/save, using the delivered owned source-backed
+   application history. Add source/history byte budgeting and failed-import retention tests
+   before exposing large imports; retain unknown data and refuse unsynchronized export.
+   The read-only mapper/passthrough is delivered, not an editable codec. Extend label/query/style/stereo mapping and
    resolve cross-container ties/nested nickname fragments from public sources.
    Session authorization is now implemented on loopback; preserve that boundary when adding
    private data and file commands. Research/pin a licensed CDX fixture before decoding.
@@ -101,7 +113,7 @@ Next exact tasks:
    only to this blank-page preview; add a durable golden and regression check after approval.
 
 The graphics checkpoint is db94cd5; subsequent atomic commits add layers, model, commands,
-CLI and native controls. The current source-backed elemental mapping checkpoint includes this status record; use Git log
+CLI and native controls. The current owned source/history checkpoint includes this status record; use Git log
 for its final hash. No confirmed Cargo/npm jobs remain running.
 
 The disposable development bundle target/dev/Bondline.app (org.bondline.development) contains
@@ -113,7 +125,7 @@ smoke also accepted an escaped JSON token, served inspection and exited 0 on Met
 Earlier REA evidence is historical and
 bound to its previous digest. Build artifacts and reports remain ignored.
 
-CI: the real aggregate `cargo xtask ci` passes locally (93 tests and all existing gates).
+CI: the real aggregate `cargo xtask ci` passes locally (101 tests and all existing gates).
 Its fail-fast behavior was checked with a deliberate formatting defect and restored source.
 The three-platform native/window workflow and separate Linux ASan job are wired, not run.
 Pinned action manifests and runner labels were researched; YAML parses with PyYAML 6.0.3.

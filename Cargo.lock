@@ -533,6 +533,7 @@ dependencies = [
  "bondline-render",
  "png",
  "roxmltree",
+ "serde",
  "serde_json",
  "thiserror 2.0.21",
 ]
@@ -4044,6 +4045,7 @@ version = "0.1.0"
 dependencies = [
  "bondline-cdxml",
  "bondline-io",
+ "bondline-model",
  "serde",
  "serde_json",
  "sha2 0.10.9",

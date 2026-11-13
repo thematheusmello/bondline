@@ -478,3 +478,38 @@ or a security audit. Only existing package edges changed; no new dependency vers
 Windows/Linux all-targets source checks pass; native execution remains unverified. No UI/
 application import-save/chemical calculation claim. Runtime licenses/assets remain 150/161/219
 packages plus two assets. No Cargo/fuzz/native process remains running.
+
+## Owned source-backed application history, 2026-11-13
+
+RED: `cargo test -p bondline-io --test stored_document --locked` failed for absent
+StoredDocument/DocumentError APIs. `cargo test -p bondline-commands source_tests --locked`
+failed for the absent owned-snapshot engine constructor. GREEN: three io tests check original
+byte ownership without a source copy, caller lifetime, explicit preview dimensions, source
+metadata, Debug privacy, guarded stale-source export, exact restoration and unsupported
+multiple/table pages. Empty CDXML remains byte-exact. Page dimensions are an independent
+preview policy, not source paper interpretation; the published Page guide distinguishes
+physical paper from graphical BoundingBox and requires no properties.
+
+Four engine tests check whole-source undo/redo, immutable prior results, no-op/redo retention,
+a source-only change with an identical model, revision-overflow atomicity, and capture refusal
+for imported and native chemical data on both requested backends. Neither rejected capture
+starts the GPU or changes authored state. Another fixed-seed property test runs 128 sequences
+of up to 63 edits, checks per-edit whole-snapshot undo/redo, then restores original bytes and
+the final snapshot. This is additional to the existing 128 native-page sequences. A test-only
+variable-name compile error was corrected before GREEN; no failing source was committed.
+
+`cargo xtask corpus` now checks exact passthrough through the owned snapshot and compares
+its model with the independent Expat/Decimal oracle. One pinned CDXML is covered; MOL decoding,
+CDX and chemistry calculations remain explicitly missing. No new dependency version was added.
+
+The isolated ASan harness adds edit/refusal/restoration invariants for accepted owned
+snapshots. Reviewed bounded run: 10000 runs, seed 3641879538, max_len 65536, timeout 5,
+coverage 3123, 541 retained entries (153 KiB), no reported crash. Ignored log:
+target/stored-document-fuzz.log. This is a smoke run, not exhaustive or security certification.
+
+`cargo xtask ci` passes all 101 workspace tests and the formatting, all-targets clippy,
+layer, license and corpus gates. Whole-workspace all-targets `cargo check --locked --target`
+x86_64-pc-windows-msvc and x86_64-unknown-linux-gnu pass; neither establishes native execution.
+Runtime closure remains 150/161/219 packages and two assets. No UI behavior, exposed import/
+save command, editable writer, chemical rendering or new human golden is claimed. No native
+app was launched for this core-only change; actual Mac UI evidence above remains historical.

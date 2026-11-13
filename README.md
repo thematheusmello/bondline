@@ -7,7 +7,8 @@ No application file-open/save or chemical drawing workflow is implemented yet. T
 CDXML crate preserves syntax and replaces existing attribute values without rewriting
 unrelated bytes; see [tested format scope](docs/file-formats.md).
 The headless model stores validated atom/bond/fragment data. The io crate maps limited
-source-backed node-position and elemental graph views, retaining original bytes. Application
+source-backed node-position and elemental graph views. Engine snapshots/history now retain
+complete original CDXML bytes, with guarded unchanged-source export. Application
 import/save commands and chemical rendering are not yet connected.
 Bondline is not affiliated
 with, endorsed by, or sponsored by ChemDraw or Revvity Signals.
