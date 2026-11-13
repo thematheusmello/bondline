@@ -264,3 +264,16 @@ attribute/text values agreed with external Expat. `cargo xtask corpus --offline`
 A same-length mutation in the actual cache was rejected for SHA-256 mismatch; original
 bytes were restored. The MOL decoder/chemistry checks are explicitly printed MISSING.
 No CDX corpus entry or complete M1/all-format round-trip claim. The BSD notice is retained.
+
+## Real CI orchestration, 2026-11-13
+
+Before implementation `cargo xtask ci` failed with the usage error. It now executes fmt,
+clippy, locked workspace tests, layers, licenses/assets and the actual corpus gate. The
+full command passes on this Mac with 60 tests. An intentionally unformatted helper in the
+owned parser source made it fail at fmt before invoking clippy; source bytes were restored
+and the complete gate rerun. No failing source was committed.
+
+The committed native matrix and sanitizer workflow configuration uses researched runner labels,
+pinned action commits and no write credentials. Its YAML parsed with existing PyYAML 6.0.3;
+actionlint/Go were absent. Hosted jobs, their GPU availability and Windows/Linux native
+launches have NOT run. See ci.md for limits and the distinction from source cross-checks.

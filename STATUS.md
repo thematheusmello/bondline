@@ -54,22 +54,33 @@ No edited writer,
 chemical mapping, application file workflow or CDX/MOL compatibility is implemented.
 There are no chemical tools.
 Missing M0 evidence: complete public menu/tool/hotkey inventory,
-broader corpus/chemistry coverage, aggregate CI and actual three-platform CI execution, native
+broader corpus/chemistry coverage, actual three-platform CI execution, native
 Windows/Linux workflow checks and human-approved render goldens. The browser candidate
 still includes Unicode-licensed data and is not approved for shipment.
 
 Next exact tasks:
-1. Add real CI orchestration/workflows around the existing gates, including the actual
-   corpus subset and separate ASan fuzz smoke. Record configured versus executed platforms.
-2. Extract the public guide's complete menu/tool/shortcut inventory with version/page evidence.
+1. Extract the public guide's complete menu/tool/shortcut inventory with version/page evidence.
+   The current 20-row index explicitly remains incomplete; never infer labels from memory.
+2. Continue M1 with checked source-preserving attribute edits and independent tests, then
+   chemical model mapping/open-save through the registry. Add session authorization before
+   exposing private file data on loopback. Research/pin a licensed CDX fixture before decoding.
 3. Record the pending human golden response without treating silence as approval; no new
    golden has been approved. CPU/GPU candidate PNGs are under ignored target/captures/.
+   The displayed GPU candidate is page-gpu.png: 512x512 pixels, 72x144 pt page, PNG SHA-256
+   5cad7d0f59bbee036f8d55319129814cb85efcd4d572e9f35622be77ca519781. Approval would apply
+   only to this blank-page preview; add a durable golden and regression check after approval.
 
 The graphics checkpoint is db94cd5; subsequent atomic commits add layers, model, commands,
-CLI and native controls. The current corpus checkpoint includes this status record; use Git log
+CLI and native controls. The current CI checkpoint includes this status record; use Git log
 for its final hash. No confirmed Cargo/npm jobs remain running.
 
 The disposable development bundle target/dev/Bondline.app (org.bondline.development) contains
 the capture build and is closed. Native test exec session 56032 exited 0; its listener at
 127.0.0.1:53031 was independently confirmed closed. Earlier REA evidence is historical and
 bound to its previous digest. Build artifacts and reports remain ignored.
+
+CI: the real aggregate `cargo xtask ci` passes locally (60 tests and all existing gates).
+Its fail-fast behavior was checked with a deliberate formatting defect and restored source.
+The three-platform native/window workflow and separate Linux ASan job are wired, not run.
+Pinned action manifests and runner labels were researched; YAML parses with PyYAML 6.0.3.
+actionlint and hosted executions remain unverified. No push, workflow dispatch or publication.

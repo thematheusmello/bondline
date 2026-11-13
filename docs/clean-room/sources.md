@@ -55,6 +55,10 @@ proprietary implementation, help text or assets. Record more specific sections a
 | CORPUS-NOTICE | https://github.com/rdkit/rdkit/blob/c686c2c945df370c2f95ebe20aae2872a36f7c17/license.txt | Exact BSD-3-Clause notice retained under docs/corpus; two reviewed paths/hashes/limits in its manifest. CDX corpus provenance is still pending. |
 | CORPUS-HTTPS | https://docs.python.org/3/library/urllib.request.html | External developer-only bounded HTTPS fetching; application/core stay offline and independent of Python. |
 | SHA256-ABC | https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA256.pdf | Independent published abc digest vector for the corpus integrity checker. |
+| CI-RUNNERS | https://docs.github.com/en/actions/reference/runners/github-hosted-runners | Reviewed native runner labels/architectures; configured jobs are not executed-platform evidence. |
+| CI-PINS | https://docs.github.com/en/actions/reference/security/secure-use | Read-only job permissions, separate PR triggers and full commit pins. |
+| CI-CHECKOUT | https://github.com/actions/checkout/releases/tag/v7.0.1 | Release commit 3d3c42e5aac5ba805825da76410c181273ba90b1; published action.yml Node 24 API inspected, credentials disabled. CI-only tool. |
+| CI-PYTHON | https://github.com/actions/setup-python/releases/tag/v7.1.0 | Release commit 6d4fd22b20465ccc0f7354476588e8df7c9ca0e0; published action.yml inputs/runtime inspected. CI-only tool. |
 
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused
 with their notices. This does not relax the prohibition on proprietary product code/assets.

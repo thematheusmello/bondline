@@ -19,7 +19,7 @@ The current Mac already has Pillow 12.3.0; this work did not change its system e
 
 Implemented gates: rustfmt, workspace/all-targets clippy, workspace tests, `cargo xtask layers`
 and `cargo xtask licenses`, plus `cargo xtask corpus` (see corpus/README.md for exact subset).
-Aggregate CI remains missing. GPU tests
+`cargo xtask ci` runs these gates together; see ci.md for configured versus executed platforms. GPU tests
 require an actual supported adapter and fail if it is absent. Source cross-compilation is
 useful evidence but does not establish runtime behavior on that operating system.
 

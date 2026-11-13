@@ -1,5 +1,6 @@
 //! Repository quality gates.
 
+mod ci;
 mod corpus;
 mod layers;
 mod licenses;
@@ -10,6 +11,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     match operation.as_deref() {
         Some("licenses") if args.next().is_none() => licenses::check(),
         Some("layers") if args.next().is_none() => layers::check(),
+        Some("ci") if args.next().is_none() => ci::check(),
         Some("corpus") => {
             let offline = match args.next().as_deref() {
                 None => false,
@@ -18,6 +20,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             };
             corpus::check(offline)
         }
-        _ => Err("usage: cargo xtask <licenses|layers|corpus [--offline]>".into()),
+        _ => Err("usage: cargo xtask <licenses|layers|corpus [--offline]|ci>".into()),
     }
 }

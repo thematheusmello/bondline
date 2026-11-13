@@ -25,6 +25,8 @@ cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo fmt --all -- --check
 cargo xtask licenses
 cargo xtask layers
+cargo xtask corpus
+cargo xtask ci
 ```
 
 The smoke command launches the actual wgpu window, reports its adapter, and closes after
@@ -36,7 +38,8 @@ it opens its own in-memory document. See [the command contract](docs/control-pro
 For the active desktop document, launch with `--control-port 0`; the app reports and displays
 its loopback address. This mode is opt-in and uses bounded newline JSON requests.
 
-Current work: licensed corpus/CDXML, CI and the public menu/tool/shortcut inventory.
+Current work: the public menu/tool/shortcut inventory, broader file coverage and actual
+three-platform CI execution. [CI scope](docs/ci.md) separates configured jobs from evidence.
 Workspace PNG tests need the external Pillow oracle described in [development.md](docs/development.md).
 See [STATUS.md](STATUS.md) for actual progress and [ROADMAP.md](ROADMAP.md) for the full target.
 
