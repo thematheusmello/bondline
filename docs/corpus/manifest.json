@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "repository": "rdkit/rdkit",
+  "revision": "c686c2c945df370c2f95ebe20aae2872a36f7c17",
+  "notice": "docs/corpus/rdkit-license.txt",
+  "files": [
+    {
+      "name": "rdkit-chain1.cdxml",
+      "path": "Code/GraphMol/Wrap/test_data/chain1.cdxml",
+      "format": "cdxml",
+      "size": 727,
+      "sha256": "fadcbe8eee438dfb55232cb2c3baca41ea6613edb0d6163af9486b6c84ff6fc9",
+      "license": "BSD-3-Clause",
+      "provenance": "RDKit's BSD-licensed four-carbon-chain test document, marked CreationProgram=CDXMLWriter; no application assets or proprietary sample library."
+    },
+    {
+      "name": "rdkit-methyl-radical.mol",
+      "path": "Code/GraphMol/FileParsers/test_data/CH3.mol",
+      "format": "mol",
+      "size": 170,
+      "sha256": "afd2352697ca20c0d580c4981fe8bd24da36c4e1661e9d2aee501a40364fd42d",
+      "license": "BSD-3-Clause",
+      "provenance": "RDKit's BSD-licensed CTfile parser regression document for a methyl radical; metadata is retained, no external program or asset is bundled."
+    }
+  ]
+}

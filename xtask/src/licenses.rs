@@ -13,7 +13,7 @@ const TARGETS: &[&str] = &[
     "x86_64-unknown-linux-gnu",
 ];
 
-fn allowed(license: &str) -> bool {
+pub(super) fn allowed(license: &str) -> bool {
     let legacy = match license {
         "MIT/Apache-2.0" | "Apache-2.0/MIT" => "MIT OR Apache-2.0",
         other => other,
@@ -88,7 +88,7 @@ fn verify_asset(bytes: &[u8], license: &str, expected_hash: &str) -> Result<(), 
     Ok(())
 }
 
-fn confined_path(root: &Path, relative: &str) -> Result<PathBuf, Box<dyn Error>> {
+pub(super) fn confined_path(root: &Path, relative: &str) -> Result<PathBuf, Box<dyn Error>> {
     let path = Path::new(relative);
     if path.as_os_str().is_empty()
         || path

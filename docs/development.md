@@ -18,7 +18,8 @@ python on Windows. A missing or different oracle version fails explicitly, never
 The current Mac already has Pillow 12.3.0; this work did not change its system environment.
 
 Implemented gates: rustfmt, workspace/all-targets clippy, workspace tests, `cargo xtask layers`
-and `cargo xtask licenses`. Aggregate CI and corpus commands remain missing. GPU tests
+and `cargo xtask licenses`, plus `cargo xtask corpus` (see corpus/README.md for exact subset).
+Aggregate CI remains missing. GPU tests
 require an actual supported adapter and fail if it is absent. Source cross-compilation is
 useful evidence but does not establish runtime behavior on that operating system.
 

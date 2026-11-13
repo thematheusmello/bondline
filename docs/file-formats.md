@@ -2,7 +2,7 @@
 
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
-| CDXML | Standalone bounded UTF-8 syntax parser; unchanged source-byte writer | Original fixture + independent external Expat; BOM/CRLF preservation; malformed/resource cases; ASan fuzz smoke | Chemical model mapping, supported edits, corpus coverage, registry/native open/save |
+| CDXML | Standalone bounded UTF-8 syntax parser; unchanged source-byte writer | Original fixture + independent external Expat; one pinned RDKit corpus file; BOM/CRLF preservation; malformed/resource cases; ASan fuzz smoke | Chemical model mapping, supported edits, broader corpus coverage, registry/native open/save |
 | CDX | None | Published specification recorded | Parser, preservation, writer and model mapping |
 | MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |

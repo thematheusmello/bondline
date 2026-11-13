@@ -249,3 +249,18 @@ shipped. `cargo +nightly-2026-04-01 fuzz run cdxml_parse .cache/fuzz/cdxml -- -r
 -max_len=65536 -timeout=5` passed with AddressSanitizer, seed 3641879538, final edge coverage
 1696 and 326 retained inputs. No failure was reported. This bounded smoke run is not
 exhaustive conformance, parser coverage or a security audit. No live fuzz/install job remains.
+
+## Licensed corpus gate, 2026-11-13
+
+RED: `cargo test -p xtask --offline` failed for the absent manifest/validation API. GREEN:
+manifest checks reject unpinned commits, traversal, missing provenance, bad hashes and an
+outside-policy license without widening the existing policy. Exact size/SHA checks use the
+independent NIST abc vector. A separate verifier test intentionally changes a bond attribute
+and confirms that the Expat comparison detects the disagreement.
+
+Actual `cargo xtask corpus` fetched the pinned RDKit chain1.cdxml (727 bytes) and CH3.mol
+(170 bytes); hashes matched their reviewed manifest. CDXML byte round trip and all element/
+attribute/text values agreed with external Expat. `cargo xtask corpus --offline` also passed.
+A same-length mutation in the actual cache was rejected for SHA-256 mismatch; original
+bytes were restored. The MOL decoder/chemistry checks are explicitly printed MISSING.
+No CDX corpus entry or complete M1/all-format round-trip claim. The BSD notice is retained.

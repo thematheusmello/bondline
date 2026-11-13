@@ -8,7 +8,7 @@ macOS arm64 145 packages, Windows x64 156, Linux x64 215, plus two SHA-verified 
 See docs/dependency-policy.md for the original compatibility adapters, fork and source evidence.
 This declaration gate is distinct from a complete release-notice/source review.
 
-Verified: 57 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
+Verified: 60 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
 actual layer gate, and whole-workspace Windows/Linux all-targets source checks. These are
 NOT native Windows/Linux runtime passes. CPU/GPU clear and ordered page-scene pixels agree on Apple M3 Max/Metal.
 
@@ -46,23 +46,27 @@ This is workflow evidence, not a throughput benchmark. Human golden review is pe
 M1 has started: standalone CDXML unchanged-byte preservation passes original-fixture tests
 with external Expat, BOM/CRLF and resource/error checks. Streaming limits precede tree
 construction; internal DTD subsets are rejected and external identifiers never resolve.
-A 10000-run ASan fuzz smoke completed without failure (seed 3641879538). No edited writer,
+A 10000-run ASan fuzz smoke completed without failure (seed 3641879538). The corpus tool
+now fetches two pinned BSD-3-Clause RDKit documents and verifies hashes on download/cache.
+One CDXML round trip and its complete element/attribute/text view agree with external Expat.
+The MOL file has integrity coverage only, printed explicitly. No CDX corpus entry yet.
+No edited writer,
 chemical mapping, application file workflow or CDX/MOL compatibility is implemented.
 There are no chemical tools.
 Missing M0 evidence: complete public menu/tool/hotkey inventory,
-licensed corpus tooling, aggregate CI and actual three-platform CI execution, native
+broader corpus/chemistry coverage, aggregate CI and actual three-platform CI execution, native
 Windows/Linux workflow checks and human-approved render goldens. The browser candidate
 still includes Unicode-licensed data and is not approved for shipment.
 
 Next exact tasks:
-1. Add corpus provenance/SHA fetch tooling and CDXML corpus checks, then CI orchestration/
-   workflows. Reuse the standalone parser. No empty parser or successful no-op gates.
+1. Add real CI orchestration/workflows around the existing gates, including the actual
+   corpus subset and separate ASan fuzz smoke. Record configured versus executed platforms.
 2. Extract the public guide's complete menu/tool/shortcut inventory with version/page evidence.
 3. Record the pending human golden response without treating silence as approval; no new
    golden has been approved. CPU/GPU candidate PNGs are under ignored target/captures/.
 
 The graphics checkpoint is db94cd5; subsequent atomic commits add layers, model, commands,
-CLI and native controls. The current CDXML checkpoint includes this status record; use Git log
+CLI and native controls. The current corpus checkpoint includes this status record; use Git log
 for its final hash. No confirmed Cargo/npm jobs remain running.
 
 The disposable development bundle target/dev/Bondline.app (org.bondline.development) contains

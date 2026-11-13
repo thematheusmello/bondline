@@ -52,6 +52,9 @@ proprietary implementation, help text or assets. Record more specific sections a
 | PYTHON-IEEE | https://docs.python.org/3/library/stdtypes.html#float.hex | Independent IEEE reference conversion. Original seeded test vectors/generator retained under compat/hexf-parse/tests and scripts. |
 | CARGO-GRAPH | https://doc.rust-lang.org/cargo/commands/cargo-metadata.html | Resolve opaque package IDs and dependency edges across targets/features for the layer gate. |
 | CORPUS-RDKIT | https://github.com/rdkit/rdkit/tree/c686c2c945df370c2f95ebe20aae2872a36f7c17 | BSD-licensed independently authored interchange fixtures; exclude proprietary template collections; record per-file provenance/hashes when added. |
+| CORPUS-NOTICE | https://github.com/rdkit/rdkit/blob/c686c2c945df370c2f95ebe20aae2872a36f7c17/license.txt | Exact BSD-3-Clause notice retained under docs/corpus; two reviewed paths/hashes/limits in its manifest. CDX corpus provenance is still pending. |
+| CORPUS-HTTPS | https://docs.python.org/3/library/urllib.request.html | External developer-only bounded HTTPS fetching; application/core stay offline and independent of Python. |
+| SHA256-ABC | https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA256.pdf | Independent published abc digest vector for the corpus integrity checker. |
 
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused
 with their notices. This does not relax the prohibition on proprietary product code/assets.

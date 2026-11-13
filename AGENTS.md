@@ -83,8 +83,9 @@ tests, provenance and relevant docs. Keep main green; record red evidence withou
 failing main. Commit all intentional project files, never caches, secrets or build outputs.
 Do not push or publish without an explicit request. Update STATUS.md with verified state,
 actual failures, remaining work, next executable steps and live job handles before stopping.
-Currently implemented xtask gates: layers and licenses. Corpus and aggregate CI are still
-missing and must be implemented, not replaced with successful no-ops. Development bundles
+Currently implemented xtask gates: layers, licenses and corpus. Corpus checks the delivered
+CDXML subset plus pinned file integrity; its output identifies missing MOL/CDX/chemistry
+coverage. Aggregate CI is still missing. Development bundles
 and REA reports under target/ are disposable build outputs and must not be committed.
 Parser fuzzing is isolated under fuzz/; read its README for pinned toolchain/tool versions,
 seed setup and bounded runs. Do not mutate committed fixture directories as fuzz corpora.
