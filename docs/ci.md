@@ -1,6 +1,17 @@
 # CI contract and execution evidence
 
-Latest verified application source `c879f4c95964617a86cc2d1e466515c5aeb31f29` passes every job in
+SDF codec source `fb86832a0c9b7744fb3ef8f8115c7ed296164505` passes every job in
+[run43512236206](https://github.com/thematheusmello/bondline/actions/runs/43512236206):
+macOS `132185104536`: 327 tests (324 workspace plus three bridge), Linux `132185104144`:
+325 tests, Windows `132185104480`: 319 tests and ASAN `132185104428`. All three actual
+windows and all four CDXML/CDX/MOL/SDF bounded sanitizer targets pass. Adapters remain
+Metal/Apple Paravirtual IntegratedGpu, Vulkan/llvmpipe Cpu and Dx12/Microsoft Basic Render
+Driver Cpu. The narrow meaningful-whitespace attribute/doc child2d665de changes no codec
+or fixture bytes. Fetched SDF corpus tooling is a separate subsequent feature; its local
+aggregate passes331 workspace plus three bridge tests and hosted execution follows publication.
+No native SDF workflow or complete M1 claim follows. Source run43512236206 is terminal GREEN.
+
+Earlier MOL application source `c879f4c95964617a86cc2d1e466515c5aeb31f29` passes every job in
 [run43508330802](https://github.com/thematheusmello/bondline/actions/runs/43508330802):
 macOS job `132171702163`: 315 tests (312 workspace plus three bridge), Linux job `132171702255`:
 313 tests and Windows job `132171702213`: 307 tests, plus ASAN job `132171702124`. All three actual

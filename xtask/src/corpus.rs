@@ -7,6 +7,7 @@ use std::{
     ffi::OsString,
     fs,
     io::{Read, Write},
+    path::Path,
     process::{Command, Stdio},
 };
 
@@ -37,7 +38,15 @@ struct Fixture {
 enum Format {
     Cdxml,
     Mol,
+    Sdf,
 }
+
+const MANIFESTS: &[&str] = &[
+    "docs/corpus/manifest.json",
+    "docs/corpus/bondline-manifest.json",
+];
+const MAX_MANIFEST_BYTES: usize = 1024 * 1024;
+const MAX_FIXTURES: usize = 1024;
 
 fn normal_component(name: &str) -> bool {
     !name.is_empty()
@@ -64,6 +73,7 @@ fn validate(manifest: &Manifest) -> Result<(), Box<dyn Error>> {
         let extension = match file.format {
             Format::Cdxml => ".cdxml",
             Format::Mol => ".mol",
+            Format::Sdf => ".sdf",
         };
         if !normal_component(&file.name)
             || !file.name.ends_with(extension)
@@ -81,6 +91,40 @@ fn validate(manifest: &Manifest) -> Result<(), Box<dyn Error>> {
         }
     }
     Ok(())
+}
+
+fn load_manifests(root: &Path) -> Result<Vec<Manifest>, Box<dyn Error>> {
+    let mut manifests = Vec::new();
+    let mut names = BTreeSet::new();
+    let mut count = 0_usize;
+    for relative in MANIFESTS {
+        let path = super::licenses::confined_path(root, relative)?;
+        let mut bytes = Vec::new();
+        fs::File::open(path)?
+            .take(MAX_MANIFEST_BYTES as u64 + 1)
+            .read_to_end(&mut bytes)?;
+        if bytes.len() > MAX_MANIFEST_BYTES {
+            return Err("corpus manifest exceeds 1 MiB".into());
+        }
+        let manifest: Manifest = serde_json::from_slice(&bytes)?;
+        validate(&manifest)?;
+        let notice = super::licenses::confined_path(root, &manifest.notice)?;
+        if !notice.is_file() || notice.metadata()?.len() == 0 {
+            return Err("corpus notice is empty".into());
+        }
+        for fixture in &manifest.files {
+            count = count.checked_add(1).ok_or("corpus count overflow")?;
+            if count > MAX_FIXTURES {
+                return Err("corpus exceeds 1024 total fixtures".into());
+            }
+            // Cache names must remain distinct on case-insensitive native filesystems too.
+            if !names.insert(fixture.name.to_ascii_lowercase()) {
+                return Err(format!("duplicate corpus cache name: {}", fixture.name).into());
+            }
+        }
+        manifests.push(manifest);
+    }
+    Ok(manifests)
 }
 
 fn verify(file: &Fixture, bytes: &[u8]) -> Result<(), Box<dyn Error>> {
@@ -272,97 +316,203 @@ fn check_mol(bytes: &[u8]) -> Result<(), Box<dyn Error>> {
     compare_mol(bytes, &document, &serde_json::to_value(projection)?)
 }
 
+fn sdf_table(file: &bondline_io::sdf::SdfFile<'_>) -> Result<Value, Box<dyn Error>> {
+    fn bounds(range: std::ops::Range<usize>) -> [usize; 2] {
+        [range.start, range.end]
+    }
+    let transform =
+        bondline_io::mol::MolTransform::new(24.0, bondline_model::Point2::new(0.0, 0.0)?)?;
+    let records = file.records().iter().map(|record| {
+        let fields = record.fields().iter().map(|field| Ok(json!({
+            "range":bounds(field.range()),"header_range":bounds(field.header_range()),
+            "value_range":bounds(field.value_range()),"header":field.header(),
+            "name":field.name(),"dt_number":field.dt_number(),
+            "raw_value":std::str::from_utf8(field.raw_value())?,"value_lines":field.value_lines(),
+        }))).collect::<Result<Vec<_>,Box<dyn Error>>>()?;
+        let fragment = bondline_io::mol::MolFile::parse(record.mol_bytes())?.to_fragment(transform)?;
+        Ok(json!({"range":bounds(record.range()),"mol_range":bounds(record.mol_range()),
+            "delimiter_range":bounds(record.delimiter_range()),"fields":fields,"projection":fragment}))
+    }).collect::<Result<Vec<_>,Box<dyn Error>>>()?;
+    Ok(json!(records))
+}
+
+fn sdf_reference_projection(graph: &Value) -> Result<Value, Box<dyn Error>> {
+    let atoms = graph["atoms"].as_array().ok_or("missing RDKit atoms")?.iter().enumerate().map(|(index, atom)| {
+        // Current SDF corpus authors explicit H counts and has no radical-spin ambiguity.
+        if atom["radical_electrons"] != 0 || atom["position"][2] != 0.0 {
+            return Err("SDF corpus radical/3D reference mapping is not verified".into());
+        }
+        let x = atom["position"][0].as_f64().ok_or("missing RDKit x")? * 24.0;
+        let y = -atom["position"][1].as_f64().ok_or("missing RDKit y")? * 24.0;
+        let isotope = if atom["isotope"] == 0 { Value::Null } else { atom["isotope"].clone() };
+        Ok(json!({"id":index.checked_add(1).ok_or("atom ID overflow")?,"element":atom["element"],
+            "position":{"x_pt":x,"y_pt":y},"isotope":isotope,"charge":atom["charge"],
+            "radical":"none","explicit_hydrogens":atom["hydrogens"]}))
+    }).collect::<Result<Vec<_>,Box<dyn Error>>>()?;
+    let bonds = graph["bonds"].as_array().ok_or("missing RDKit bonds")?.iter().enumerate().map(|(index,bond)| {
+        let order = match bond["order"].as_f64() {
+            Some(1.0) => "single",Some(2.0) => "double",Some(3.0) => "triple",Some(1.5) => "aromatic",
+            _ => return Err("unsupported RDKit corpus bond order".into()),
+        };
+        Ok(json!({"id":index.checked_add(1).ok_or("bond ID overflow")?,
+            "begin":bond["begin"].as_u64().and_then(|id|id.checked_add(1)).ok_or("RDKit begin ID")?,
+            "end":bond["end"].as_u64().and_then(|id|id.checked_add(1)).ok_or("RDKit end ID")?,"order":order}))
+    }).collect::<Result<Vec<_>,Box<dyn Error>>>()?;
+    Ok(json!({"id":1,"atoms":atoms,"bonds":bonds}))
+}
+
+fn compare_sdf(bytes: &[u8], projection: &Value) -> Result<(usize, usize), Box<dyn Error>> {
+    let independent = python_oracle(include_str!("../../crates/io/tests/sdf_oracle.py"), bytes)?;
+    if independent["source_sha256"] != format!("{:x}", Sha256::digest(bytes)) {
+        return Err("SDF oracle source identity mismatch".into());
+    }
+    let mut records = independent["records"]
+        .as_array()
+        .ok_or("missing independent SDF records")?
+        .clone();
+    for record in &mut records {
+        let object = record.as_object_mut().ok_or("invalid SDF oracle record")?;
+        let graph = object.remove("rdkit").ok_or("missing direct RDKit graph")?;
+        object.insert("projection".into(), sdf_reference_projection(&graph)?);
+    }
+    if json!(records) != *projection {
+        return Err("SDF ordered spans/data/model differ from independent scanner/RDKit".into());
+    }
+    let consumer_entries = independent["rdkit_records"]
+        .as_array()
+        .ok_or("missing supplier diagnostic")?
+        .len();
+    Ok((records.len(), consumer_entries))
+}
+
+fn check_sdf(bytes: &[u8]) -> Result<(usize, usize), Box<dyn Error>> {
+    let file = bondline_io::sdf::SdfFile::parse(bytes)?;
+    if file.as_bytes() != bytes {
+        return Err("SDF source byte loss".into());
+    }
+    compare_sdf(bytes, &sdf_table(&file)?)
+}
+
 pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
     let root = super::workspace::root()?;
-    let manifest: Manifest =
-        serde_json::from_slice(&fs::read(root.join("docs/corpus/manifest.json"))?)?;
-    validate(&manifest)?;
-    let notice = super::licenses::confined_path(&root, &manifest.notice)?;
-    if !notice.is_file() || notice.metadata()?.len() == 0 {
-        return Err("corpus notice is empty".into());
-    }
+    check_at(&root, offline, &mut std::io::stdout().lock())
+}
+
+fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
+    let manifests = load_manifests(root)?;
+    let fixture_count: usize = manifests.iter().map(|manifest| manifest.files.len()).sum();
     let cache = root.join(".cache/corpus");
+    let confined_root = root.canonicalize()?;
+    let mut ancestor = cache.as_path();
+    loop {
+        match fs::symlink_metadata(ancestor) {
+            Ok(_) => break,
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+                ancestor = ancestor.parent().ok_or("missing corpus cache ancestor")?;
+            }
+            Err(error) => return Err(error.into()),
+        }
+    }
+    if !ancestor.canonicalize()?.starts_with(&confined_root) {
+        return Err("corpus cache ancestor escapes workspace".into());
+    }
     fs::create_dir_all(&cache)?;
-    if !cache.canonicalize()?.starts_with(root.canonicalize()?) {
+    if !cache.canonicalize()?.starts_with(&confined_root) {
         return Err("corpus cache escapes workspace".into());
     }
     let mut round_trips = 0;
     let mut mol_checks = 0;
-    for file in &manifest.files {
-        let path = cache.join(&file.name);
-        let bytes = if path.try_exists()? {
-            let path = super::licenses::confined_path(&cache, &file.name)?;
-            let mut bytes = Vec::new();
-            fs::File::open(path)?
-                .take(file.size as u64 + 1)
-                .read_to_end(&mut bytes)?;
-            verify(file, &bytes)?;
-            bytes
-        } else {
-            if offline {
-                return Err(format!("offline corpus entry is missing: {}", file.name).into());
-            }
-            let bytes = download(&manifest, file)?;
-            let staged = cache.join(format!("{}.{}.part", file.name, std::process::id()));
-            let mut target = fs::OpenOptions::new()
-                .write(true)
-                .create_new(true)
-                .open(&staged)?;
-            target.write_all(&bytes)?;
-            target.sync_all()?;
-            drop(target);
-            fs::rename(staged, path)?;
-            bytes
-        };
-        match file.format {
-            Format::Cdxml => {
-                let document = bondline_cdxml::Document::parse(&bytes)?;
-                let output = document.to_bytes();
-                if output != bytes {
-                    return Err(format!("CDXML byte loss: {}", file.name).into());
+    let mut sdf_checks = 0;
+    let mut sdf_records = 0;
+    let mut supplier_entries = 0;
+    for manifest in &manifests {
+        for file in &manifest.files {
+            let path = cache.join(&file.name);
+            let bytes = if path.try_exists()? {
+                let path = super::licenses::confined_path(&cache, &file.name)?;
+                let mut bytes = Vec::new();
+                fs::File::open(path)?
+                    .take(file.size as u64 + 1)
+                    .read_to_end(&mut bytes)?;
+                verify(file, &bytes)?;
+                bytes
+            } else {
+                if offline {
+                    return Err(format!("offline corpus entry is missing: {}", file.name).into());
                 }
-                compare_xml(&output, &document)?;
-                drop(document);
-                let stored = bondline_io::StoredDocument::from_cdxml(
-                    std::sync::Arc::from(bytes),
-                    bondline_model::PageSize::A4,
-                )?;
-                if stored.export_cdxml()? != output {
-                    return Err(format!("source-backed CDXML byte loss: {}", file.name).into());
+                let bytes = download(manifest, file)?;
+                let staged = cache.join(format!("{}.{}.part", file.name, std::process::id()));
+                let mut target = fs::OpenOptions::new()
+                    .write(true)
+                    .create_new(true)
+                    .open(&staged)?;
+                target.write_all(&bytes)?;
+                target.sync_all()?;
+                drop(target);
+                fs::rename(staged, path)?;
+                bytes
+            };
+            match file.format {
+                Format::Cdxml => {
+                    let document = bondline_cdxml::Document::parse(&bytes)?;
+                    let output = document.to_bytes();
+                    if output != bytes {
+                        return Err(format!("CDXML byte loss: {}", file.name).into());
+                    }
+                    compare_xml(&output, &document)?;
+                    drop(document);
+                    let stored = bondline_io::StoredDocument::from_cdxml(
+                        std::sync::Arc::from(bytes),
+                        bondline_model::PageSize::A4,
+                    )?;
+                    if stored.export_cdxml()? != output {
+                        return Err(format!("source-backed CDXML byte loss: {}", file.name).into());
+                    }
+                    let fragments: Vec<_> = stored
+                        .model()
+                        .pages()
+                        .iter()
+                        .flat_map(|page| page.fragments().iter().map(std::sync::Arc::as_ref))
+                        .collect();
+                    compare_graph(stored.export_cdxml()?, &serde_json::to_value(fragments)?)?;
+                    round_trips += 1;
                 }
-                let fragments: Vec<_> = stored
-                    .model()
-                    .pages()
-                    .iter()
-                    .flat_map(|page| page.fragments().iter().map(std::sync::Arc::as_ref))
-                    .collect();
-                compare_graph(stored.export_cdxml()?, &serde_json::to_value(fragments)?)?;
-                round_trips += 1;
-            }
-            Format::Mol => {
-                check_mol(&bytes)?;
-                mol_checks += 1;
+                Format::Mol => {
+                    check_mol(&bytes)?;
+                    mol_checks += 1;
+                }
+                Format::Sdf => {
+                    let (records, entries) = check_sdf(&bytes)?;
+                    sdf_checks += 1;
+                    sdf_records += records;
+                    supplier_entries += entries;
+                }
             }
         }
     }
     writeln!(
-        std::io::stdout(),
-        "corpus integrity: {} pinned licensed files; CDXML byte/Expat checks: {round_trips}; elemental projections: {round_trips}; source-backed snapshots: {round_trips}",
-        manifest.files.len()
+        output,
+        "corpus integrity: {fixture_count} pinned licensed files from {} sources; CDXML byte/Expat checks: {round_trips}; elemental projections: {round_trips}; source-backed snapshots: {round_trips}",
+        manifests.len()
     )?;
     writeln!(
-        std::io::stdout(),
+        output,
         "MOL V2000 byte/source/RDKit/Decimal checks: {mol_checks} (strict elemental input subset)"
     )?;
     writeln!(
-        std::io::stdout(),
-        "CDX corpus checks MISSING (no reviewed entry)"
+        output,
+        "SDF V2000 byte/ordered-field/per-record RDKit checks: {sdf_checks}; records: {sdf_records}"
     )?;
     writeln!(
-        std::io::stdout(),
+        output,
+        "SDF full-supplier entries: {supplier_entries} (diagnostic only; DT-only consumer loss is separate from raw fidelity)"
+    )?;
+    writeln!(output, "CDX corpus checks MISSING (no reviewed entry)")?;
+    writeln!(
+        output,
         "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
     )?;
-    if round_trips == 0 && mol_checks == 0 {
+    if round_trips == 0 && mol_checks == 0 && sdf_checks == 0 {
         return Err("corpus has no implemented parser coverage".into());
     }
     Ok(())
@@ -371,6 +521,313 @@ pub fn check(offline: bool) -> Result<(), Box<dyn Error>> {
 #[cfg(test)]
 mod tests {
     use super::{Manifest, validate, verify};
+    use sha2::Digest;
+    use std::{
+        fs,
+        path::PathBuf,
+        sync::atomic::{AtomicU64, Ordering},
+    };
+
+    static NEXT: AtomicU64 = AtomicU64::new(0);
+    struct CorpusDirectory(PathBuf);
+    impl CorpusDirectory {
+        fn new() -> Result<Self, Box<dyn std::error::Error>> {
+            let path = std::env::temp_dir().join(format!(
+                "bondline-corpus-{}-{}",
+                std::process::id(),
+                NEXT.fetch_add(1, Ordering::Relaxed)
+            ));
+            fs::create_dir(&path)?;
+            let directory = Self(path);
+            fs::create_dir_all(directory.0.join("docs/corpus"))?;
+            fs::write(
+                directory.0.join(super::MANIFESTS[0]),
+                include_bytes!("../../docs/corpus/manifest.json"),
+            )?;
+            fs::write(
+                directory.0.join(super::MANIFESTS[1]),
+                include_bytes!("../../docs/corpus/bondline-manifest.json"),
+            )?;
+            fs::write(
+                directory.0.join("docs/corpus/rdkit-license.txt"),
+                include_bytes!("../../docs/corpus/rdkit-license.txt"),
+            )?;
+            fs::write(
+                directory.0.join("LICENSE-MIT"),
+                include_bytes!("../../LICENSE-MIT"),
+            )?;
+            Ok(directory)
+        }
+        fn write_manifest(
+            &self,
+            index: usize,
+            data: &serde_json::Value,
+        ) -> Result<(), Box<dyn std::error::Error>> {
+            fs::write(
+                self.0
+                    .join(super::MANIFESTS.get(index).ok_or("manifest index")?),
+                serde_json::to_vec(data)?,
+            )?;
+            Ok(())
+        }
+    }
+    impl Drop for CorpusDirectory {
+        fn drop(&mut self) {
+            let _ = fs::remove_dir_all(&self.0);
+        }
+    }
+
+    #[test]
+    fn new_sdf_bundle_retains_original_license_and_real_published_source_pin()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let manifest: Manifest =
+            serde_json::from_slice(include_bytes!("../../docs/corpus/bondline-manifest.json"))?;
+        validate(&manifest)?;
+        assert_eq!(manifest.repository, "thematheusmello/bondline");
+        assert_eq!(
+            manifest.revision,
+            "fb86832a0c9b7744fb3ef8f8115c7ed296164505"
+        );
+        assert_eq!(manifest.files.len(), 1);
+        let fixture = manifest.files.first().ok_or("SDF fixture")?;
+        assert_eq!(fixture.license, "MIT OR Apache-2.0");
+        assert_eq!(fixture.size, 690);
+        verify(
+            fixture,
+            include_bytes!("../../crates/io/tests/fixtures/sdf/ordered-fields-v2000.sdf"),
+        )?;
+        Ok(())
+    }
+
+    #[test]
+    fn both_bundles_are_mandatory_and_all_validation_precedes_cache_io()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let manifests = super::load_manifests(&directory.0)?;
+        assert_eq!(manifests.len(), 2);
+        assert_eq!(
+            manifests
+                .iter()
+                .map(|bundle| bundle.files.len())
+                .sum::<usize>(),
+            3
+        );
+        assert_eq!(
+            format!(
+                "{:x}",
+                sha2::Sha256::digest(include_bytes!("../../docs/corpus/manifest.json"))
+            ),
+            "820739ca30312745b53df2839f0238b30d1470e73446430b4c954a142cb88ca0"
+        );
+        let original: serde_json::Value =
+            serde_json::from_slice(include_bytes!("../../docs/corpus/bondline-manifest.json"))?;
+        for (field, value) in [
+            ("revision", serde_json::json!("main")),
+            ("notice", serde_json::json!("../LICENSE-MIT")),
+        ] {
+            let mut invalid = original.clone();
+            invalid[field] = value;
+            directory.write_manifest(1, &invalid)?;
+            assert!(super::check_at(&directory.0, true, &mut Vec::new()).is_err());
+            assert!(!directory.0.join(".cache").exists());
+        }
+        let mut invalid = original.clone();
+        invalid["files"][0]["license"] = serde_json::json!("ISC");
+        directory.write_manifest(1, &invalid)?;
+        assert!(super::check_at(&directory.0, true, &mut Vec::new()).is_err());
+        assert!(!directory.0.join(".cache").exists());
+        directory.write_manifest(1, &original)?;
+        fs::write(directory.0.join("LICENSE-MIT"), b"")?;
+        assert!(super::check_at(&directory.0, true, &mut Vec::new()).is_err());
+        assert!(!directory.0.join(".cache").exists());
+        fs::write(
+            directory.0.join("LICENSE-MIT"),
+            include_bytes!("../../LICENSE-MIT"),
+        )?;
+        fs::write(
+            directory.0.join(super::MANIFESTS[1]),
+            vec![b' '; super::MAX_MANIFEST_BYTES + 1],
+        )?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("unbounded manifest")?
+                .to_string()
+                .contains("exceeds 1 MiB")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        fs::remove_file(directory.0.join(super::MANIFESTS[1]))?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new()).is_err(),
+            "missing second bundle cannot silently fall back"
+        );
+        assert!(!directory.0.join(".cache").exists());
+        Ok(())
+    }
+
+    #[test]
+    fn cross_bundle_cache_aliases_and_total_entry_overflow_are_rejected()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let original: serde_json::Value =
+            serde_json::from_slice(include_bytes!("../../docs/corpus/bondline-manifest.json"))?;
+        directory.write_manifest(0, &original)?;
+        let mut alias = original.clone();
+        alias["files"][0]["name"] = serde_json::json!("BONDLINE-ORDERED-FIELDS-V2000.sdf");
+        directory.write_manifest(1, &alias)?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("accepted case alias")?
+                .to_string()
+                .contains("duplicate corpus cache name")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        let mut many = original.clone();
+        many["files"] = serde_json::json!(
+            (0..1024)
+                .map(|index| {
+                    let mut entry = original["files"][0].clone();
+                    entry["name"] = serde_json::json!(format!("original-{index}.sdf"));
+                    entry
+                })
+                .collect::<Vec<_>>()
+        );
+        directory.write_manifest(0, &many)?;
+        directory.write_manifest(1, &original)?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("accepted total overflow")?
+                .to_string()
+                .contains("1024 total fixtures")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        Ok(())
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn corpus_manifest_and_notice_symlinks_cannot_escape_the_workspace()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let outside = CorpusDirectory::new()?;
+        let second = directory.0.join(super::MANIFESTS[1]);
+        fs::remove_file(&second)?;
+        std::os::unix::fs::symlink(outside.0.join(super::MANIFESTS[1]), &second)?;
+        assert!(super::check_at(&directory.0, true, &mut Vec::new()).is_err());
+        assert!(!directory.0.join(".cache").exists());
+        fs::remove_file(&second)?;
+        fs::write(
+            &second,
+            include_bytes!("../../docs/corpus/bondline-manifest.json"),
+        )?;
+        let notice = directory.0.join("LICENSE-MIT");
+        fs::remove_file(&notice)?;
+        std::os::unix::fs::symlink(outside.0.join("LICENSE-MIT"), &notice)?;
+        assert!(super::check_at(&directory.0, true, &mut Vec::new()).is_err());
+        assert!(!directory.0.join(".cache").exists());
+        Ok(())
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn cache_parent_symlink_is_refused_before_creating_outside_directories()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let outside = CorpusDirectory::new()?;
+        std::os::unix::fs::symlink(&outside.0, directory.0.join(".cache"))?;
+        assert!(!outside.0.join("corpus").exists());
+        assert!(super::check_at(&directory.0, true, &mut Vec::new()).is_err());
+        assert!(
+            !outside.0.join("corpus").exists(),
+            "cache validation created an outside directory"
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn offline_runner_counts_sdf_records_and_rejects_missing_or_corrupt_cache()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        // Select the same pinned, committed MOL entry so this unit test needs no network/CDXML cache.
+        let mut rdkit: serde_json::Value =
+            serde_json::from_slice(include_bytes!("../../docs/corpus/manifest.json"))?;
+        rdkit["files"] = serde_json::json!([rdkit["files"][1].clone()]);
+        directory.write_manifest(0, &rdkit)?;
+        let cache = directory.0.join(".cache/corpus");
+        fs::create_dir_all(&cache)?;
+        fs::write(
+            cache.join("rdkit-methyl-radical.mol"),
+            include_bytes!("../../crates/io/tests/fixtures/mol/rdkit-CH3.mol"),
+        )?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("missing SDF ignored")?
+                .to_string()
+                .contains("offline corpus entry is missing")
+        );
+        let sdf_path = cache.join("bondline-ordered-fields-v2000.sdf");
+        fs::write(&sdf_path, b"corrupt")?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("corrupt SDF accepted")?
+                .to_string()
+                .contains("length/SHA-256 mismatch")
+        );
+        fs::write(
+            &sdf_path,
+            include_bytes!("../../crates/io/tests/fixtures/sdf/ordered-fields-v2000.sdf"),
+        )?;
+        let mut output = Vec::new();
+        super::check_at(&directory.0, true, &mut output)?;
+        let output = String::from_utf8(output)?;
+        assert!(output.contains("corpus integrity: 2 pinned licensed files from 2 sources"));
+        assert!(
+            output.contains("SDF V2000 byte/ordered-field/per-record RDKit checks: 1; records: 2")
+        );
+        assert!(output.contains("CDX corpus checks MISSING"));
+        assert!(output.contains(
+            "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
+        ));
+        Ok(())
+    }
+
+    #[test]
+    fn sdf_verifier_rejects_order_data_range_and_model_disagreements()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let source = include_bytes!("../../crates/io/tests/fixtures/sdf/ordered-fields-v2000.sdf");
+        let file = bondline_io::sdf::SdfFile::parse(source)?;
+        let original = super::sdf_table(&file)?;
+        assert_eq!(super::compare_sdf(source, &original)?, (2, 1));
+        for pointer in [
+            "/0/fields/4/value_lines/0",
+            "/0/fields/3/dt_number",
+            "/0/fields/2/range/0",
+            "/1/projection/atoms/0/element",
+        ] {
+            let mut wrong = original.clone();
+            *wrong
+                .pointer_mut(pointer)
+                .ok_or("expected source/model field")? = serde_json::json!("wrong");
+            assert!(super::compare_sdf(source, &wrong).is_err(), "{pointer}");
+        }
+        let mut reordered = original.clone();
+        reordered[0]["fields"]
+            .as_array_mut()
+            .ok_or("fields")?
+            .swap(4, 5);
+        assert!(super::compare_sdf(source, &reordered).is_err());
+        let mut dropped = original.clone();
+        dropped[0]["fields"]
+            .as_array_mut()
+            .ok_or("fields")?
+            .remove(3);
+        assert!(super::compare_sdf(source, &dropped).is_err());
+        Ok(())
+    }
 
     #[test]
     fn manifest_pins_provenance_and_rejects_unlicensed_or_unconfined_sources()

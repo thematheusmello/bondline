@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "repository": "thematheusmello/bondline",
+  "revision": "fb86832a0c9b7744fb3ef8f8115c7ed296164505",
+  "notice": "LICENSE-MIT",
+  "files": [
+    {
+      "name": "bondline-ordered-fields-v2000.sdf",
+      "path": "crates/io/tests/fixtures/sdf/ordered-fields-v2000.sdf",
+      "format": "sdf",
+      "size": 690,
+      "sha256": "f95838cbb55c107c649ce2eb99ac62e191f747ce6994a171e64019f8e6c53d1a",
+      "license": "MIT OR Apache-2.0",
+      "provenance": "Original Bondline two-ethane SDF vector with ordered empty, multiline, combined/DT-only, duplicate and spaces-only data; source authorship and field intent are recorded in crates/io/tests/fixtures/sdf/README.md at this published commit. No proprietary sample or asset is copied."
+    }
+  ]
+}

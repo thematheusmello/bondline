@@ -1291,3 +1291,43 @@ The workflow adds a fourth bounded sanitizer target; hosted execution is pending
 Fetched SDF corpus coverage is deliberately the next feature, after a real public source
 commit exists for this original fixture. No native SDF app workflow, V3000 or completed M1
 is claimed. All local codec/fuzz/aggregate jobs are terminal.
+
+## SDF fetched corpus and source acceptance
+
+The preceding codec's hosted run43512236206 is now terminal GREEN at source
+fb86832a0c9b7744fb3ef8f8115c7ed296164505: Mac327, Linux325, Windows319 tests, all three
+actual windows and all four bounded sanitizer targets. See ci.md for IDs/adapters.
+The subsequent narrow Git whitespace attribute preserves the intentional three-space data
+value without changing any fixture byte or behavioral assertion.
+
+Corpus now uses two mandatory version1 bundles, retaining the RDKit manifest exactly
+(SHA820739ca30312745b53df2839f0238b30d1470e73446430b4c954a142cb88ca0). The original SDF
+bundle pins that actual public codec commit and its MIT OR Apache-2.0 fixture. The cache was
+absent before the normal command's bounded HTTPS fetch; actual downloaded690 bytes/SHA
+f95838cbb55c107c649ce2eb99ac62e191f747ce6994a171e64019f8e6c53d1a matched the reviewed source.
+No local fixture fallback or invented future pin exists. Fetch attestation is
+target/sdf-corpus-fetch-attestation.log.
+
+Real RED: loader rejected unknown format sdf; the old successful corpus output failed a
+separate expected SDFcoverage(files,records)=(1,2) assertion; a real Unix symlink regression
+showed cache directory creation outside the checkout before confinement. Logs:
+target/sdf-corpus-{loader-red,coverage-red,cache-red}.log. The fix validates all bundles,
+notices/global cache names before cache/network I/O and checks the nearest existing cache
+ancestor before mkdir plus the canonical path afterward. This prevents the reproduced
+existing-symlink case; it does not promise atomic confinement against concurrent renames.
+
+All25 xtask tests pass, including missing/oversized/escaping manifests/notices, global entry
+limits/case aliases, offline missing/corrupt cache, exact counter/record reporting and
+deliberately changed duplicate/DT/order/range/model data. Every ordered span/value agrees
+with the independent scanner; both separately consumed molecular projections agree. The
+full supplier's one-entry result is explicitly diagnostic, preserving the known DT-only
+consumer loss. Normal/offline outputs are identical. Targeted clippy/fmt pass; exact source
+SHA1210a4e96ab23838b8520a092369e424a846ff7477d2d507c30f010785e62b9f.
+
+Actual-root cargo xtask ci passes331 workspace plus three native bridge tests, rustfmt,
+all-target clippy, layers, unchanged153/164/219 runtime closures/two assets and all three
+pinned files from two sources. Log target/sdf-corpus-ci-integrated.log. No runtime/lock,
+IO codec, UI, renderer or golden change. Hosted corpus-feature checks follow publication.
+CDX corpus and Bondline chemistry calculations remain explicitly missing; SDF application
+import/export, V3000 and complete M1 remain unimplemented. V3000 work is isolated in a
+different checkout/target; its preliminary tests are not part of these results.

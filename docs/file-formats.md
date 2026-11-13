@@ -5,7 +5,7 @@
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
 | CDX | Standalone bounded binary syntax and checked opaque property replacement | Original published-field vectors, independent Python struct spans/bytes, external RDKit connectivity/order consumers | Application import/export, model/reference mapping, new-tree writer, broader pinned corpus and modern extensions |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
-| SDF V2000 | Source-preserving library records, ordered data fields and validated wrapper writer | Original source spans; external raw scanner and per-record RDKit; named-field full-supplier and external-writer vectors | Application data/multiple-record workflow, fetched SDF corpus and broader syntax/encodings |
+| SDF V2000 | Source-preserving library records, ordered data fields and validated wrapper writer | Original source spans; fetched pinned two-record corpus; external raw scanner/per-record RDKit; named-field supplier and external-writer vectors | Application data/multiple-record workflow and broader syntax/encodings |
 | V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
@@ -122,7 +122,9 @@ two direct RDKit Molfile consumers. A separate named-field writer test uses the 
 supplier, and an external writer supplies empty-padding input. The pinned RDKit full supplier
 loses data and the second record at a valid DT-only header; duplicate names also use its
 last-value map. These diagnostics stay separate from preservation assertions. No complete
-supplier agreement is claimed. A fetched pinned SDF corpus entry is the next tooling feature.
+supplier agreement is claimed. The fetched corpus pins this original source at public
+commit fb86832a0c9b7744fb3ef8f8115c7ed296164505 and checks exact ordered data plus both
+independently consumed molecular projections. See [corpus scope](corpus/README.md).
 
 ## CDX syntax
 

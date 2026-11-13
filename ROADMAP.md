@@ -43,8 +43,10 @@ format choice/Save/reopen/close workflow is verified on Mac; all three hosted ag
 native window smokes pass at c879f4c. One CTAB/fragment and layout/metadata guards
 are partial interoperability, not completed M1. SDF V2000 now has a source-preserving
 container library, ordered duplicate/empty/DT data, a wrapper writer and independent
-raw-field/molecular consumers. Application SDF workflows and fetched corpus coverage remain
-separate next work, followed by V3000 and wider mappings.
+raw-field/molecular consumers. A fetched original SDF corpus now checks two records and
+every ordered field without a lossy property map. Application SDF workflows remain next
+work, followed by V3000 and wider mappings. V3000 codec work is isolated in its own checkout;
+an in-progress parser is not delivered application support.
 Full M0
 inventory/dialog/addressability gaps remain tracked while this format work proceeds.
 

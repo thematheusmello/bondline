@@ -173,6 +173,13 @@ named-field supplier and writer evidence. Its DT-only supplier data/record loss 
 not corrected by deleting valid fields. ASCII/resource bounds, strict full-file termination,
 conservative ambiguous-header refusal and post-item empty-padding tolerance are explicit
 Bondline profile policies. No SDF application workflow is inferred from library tests.
+The original SDF corpus input is pinned to public Bondline source
+fb86832a0c9b7744fb3ef8f8115c7ed296164505 with its original MIT OR Apache-2.0 declaration.
+A real bounded cold fetch matched690 bytes/SHA f95838cbb55c107c649ce2eb99ac62e191f747ce6994a171e64019f8e6c53d1a.
+The two-source bundle loader retains the existing BSD RDKit manifest byte-for-byte;
+original notices, hashes, global cache names and complete manifests are validated before
+cache/network I/O. Existing-ancestor and post-creation canonical checks prevent the reproduced cache
+symlink escape; they are independent developer-tool policy, not an OS sandbox/race guarantee.
 Pinned MOL/SDF checkout identity uses Git's public unset-text rule:
 https://git-scm.com/docs/gitattributes#_text . Reviewed2026-11-13; the isolated
 core.autocrlf RED/GREEN is recorded in ../research/mol-fixture-checkout.md. Parser and oracle
