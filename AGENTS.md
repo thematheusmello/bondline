@@ -80,6 +80,9 @@ for Cargo patch routing. The eframe/winit source forks and Apache font retain up
 The pinned winit macOS application-quit callback is the other reviewed OS-boundary exception:
 two standard main-thread AppKit visibility actions, with exact source/pin/native evidence in
 vendor/winit/BONDLINE-PATCH.md. No unsafe enters Bondline's UI/model/command/format crates.
+The pinned accesskit_macos string-value bridge is another reviewed native boundary; its
+exact source/notices, nullable NSString checks, bounds and tests are in that vendor's
+BONDLINE-PATCH.md. cargo xtask ci includes its native tests/clippy on macOS from the root lock.
 
 ## Test first, then implement
 

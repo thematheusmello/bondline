@@ -17,6 +17,19 @@ pub fn check() -> Result<(), Box<dyn Error>> {
             "warnings",
         ],
         &["test", "--workspace", "--locked"],
+        #[cfg(target_os = "macos")]
+        &["test", "-p", "accesskit_macos", "--lib", "--locked"],
+        #[cfg(target_os = "macos")]
+        &[
+            "clippy",
+            "-p",
+            "accesskit_macos",
+            "--all-targets",
+            "--locked",
+            "--",
+            "-D",
+            "warnings",
+        ],
     ] {
         writeln!(std::io::stdout(), "checking: cargo {}", arguments.join(" "))?;
         if !Command::new("cargo").args(arguments).status()?.success() {

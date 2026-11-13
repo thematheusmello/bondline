@@ -852,3 +852,33 @@ Full local aggregate with the native Quit bridge passes193 tests and configured 
 Windows/Linux all-target workspace checks pass (target/files-{windows,linux}-check.log).
 Native file-menu verification is separate; no generic imported CDXML writer, chemistry
 implementation or full reference File-menu parity is inferred.
+
+## Native accessibility text values, 2026-11-13
+
+Actual native RED: app.setValue on Folder/File name did nothing even after egui input tests
+passed. Exact accesskit_macos0.17.4 source showed an empty setAccessibilityValue: implementation.
+The pinned bridge now dispatches supported editable string values; it validates nullable
+NSObject/NSString, UTF16/UTF8 bounds and NUL, rejects malformed UTF16, and tracks/prunes
+advertised action IDs across partial tree updates. No dependency version/graph was upgraded.
+
+Three native root-lock unit tests and clippy-Dwarnings pass, including exact Unicode payload,
+unsupported/readonly/disabled/numeric targets, size/NUL/surrogate errors, action withdrawal,
+partial updates and removed nodes. Sources/pins/full retained notices and unsafe reasons are
+in vendor/accesskit_macos/BONDLINE-PATCH.md. The root Mac CI now executes those tests/clippy.
+Logs: target/accesskit-macos-{red,green,root-lock-tests,root-lock-clippy}.log.
+
+Native GREEN on binary6a4ff7786a5a74b51710c95e85618536b69a3acee7383a236e7857b89444f891:
+actual Folder+Go and Unicode filename AX SetValue change their fields and save successfully;
+draw a second fragment, Cmd+Q/Save, relaunch/Open, see two fragments, draw a third, Undo to
+clean two, then Quit. Independent Expat/RDKit confirms two CC/C2H6 fragments in saved
+native-file-ui-AX-λ.cdxml, SHA b0272acb0013ed45ee2a09bd68989927245faff73bc9f61a7777b5cf30bab590.
+The UI agent closed the app and its sole CUA session. This is two chooser controls on this
+Mac build, not full VoiceOver, other controls or cross-platform accessibility evidence.
+
+Exact final-source recheck: rebuilt binaryf331610a4689105b11495016c18513e3a2a69c04921acfeb82c3e25e93961b1d
+differs after the cache refactor, so the UI agent repeated actual AX Folder/Unicode filename,
+Save/Open, edit then Quit Cancel (two fragments retained dirty), then Quit Save/exit. Its
+independently decoded file has the same two-fragment SHA b0272acb0013ed45ee2a09bd68989927245faff73bc9f61a7777b5cf30bab590.
+App/CUA session closed. Final cargo xtask ci passes193 workspace tests plus3 native bridge
+tests, clippy (including the bridge), fmt, layers, licenses and corpus. Log:
+target/files-ci-integrated.log. This is not a claim of full platform/reference parity.

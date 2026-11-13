@@ -28,6 +28,12 @@ fork/pin and evidence practices, not those projects' broader permitted license s
   its BONDLINE-PATCH.md. Native Quit now requests cancellable client close approval; its
   two standard main-thread AppKit actions are the isolated reviewed unsafe extension.
   No graphics version, declared license, font or transitive package is changed.
+- `vendor/accesskit_macos`: exact 0.17.4 with a bounded editable-string SetValue bridge.
+  MIT/Apache source and the Chromium-derived BSD notice are retained; missing archive
+  notices were fetched as exact blobs from its published VCS revision. Three source files
+  change; no public API/dependency upgrade. Its BONDLINE-PATCH.md records archive/notice hashes,
+  new unsafe NSString checks, tests and native evidence. The derived BSD notice is additional
+  to its manifest's declaration, not replaced by it.
 - `compat/libloading`: original API adapter over MIT `dlopen2 0.9.0`. It does not copy
   upstream ISC code. Preserve symbol lifetimes and lookup errors (including EGL version
   negotiation), validate pointer sizes/C strings, and support native platform loader flags.
@@ -47,7 +53,7 @@ fork/pin and evidence practices, not those projects' broader permitted license s
   MIT/Apache declaration, bytes and notice are also checked in the asset manifest.
 
 OS ABI calls are the only new unsafe exception, isolated in the loader and Win32 clipboard
-adapters and the pinned winit macOS quit callback. All operations carry local safety reasons;
+adapters, the pinned winit macOS quit callback and AccessKit string-value bridge. All carry safety reasons;
 Bondline's UI/model/format/command crates continue to forbid unsafe.
 Adapters deliberately implement the inspected pinned consumers' surface, are not published
 as general replacements, and need reinspection when those consumers change.

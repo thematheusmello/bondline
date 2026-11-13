@@ -35,6 +35,7 @@ debug = false
 [patch.crates-io]
 eframe = { path = "vendor/eframe" }
 winit = { path = "vendor/winit" }
+accesskit_macos = { path = "vendor/accesskit_macos" }
 hexf-parse = { path = "compat/hexf-parse" }
 libloading = { path = "compat/libloading" }
 clipboard-win = { path = "compat/clipboard-win" }
