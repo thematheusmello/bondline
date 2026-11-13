@@ -8,9 +8,9 @@ guides are versioned evidence, not proof of complete modern parity.
 
 - [x] Resolve declared runtime/asset license closure for native egui/wgpu on all three platforms.
       Actual macOS Metal launch/readback verified; Windows/Linux runtime checks remain below.
-- [ ] Cargo workspace, pinned toolchain, lints, build-time layer and license gates.
+- [x] Cargo workspace, pinned toolchain, lints, build-time layer and license gates.
 - [ ] Pure document model, named typed JSON commands, transactions and undo/redo tests.
-- [ ] CLI, stdio MCP and opt-in loopback control using that registry.
+- [x] CLI, stdio MCP and opt-in loopback control using that registry.
 - [ ] Native UI and CPU/GPU reference canvas with actual launch/render evidence.
 - [ ] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.

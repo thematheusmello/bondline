@@ -1,5 +1,7 @@
 //! Stdio MCP adapter. The SDK handles protocol lifecycle; the registry handles operations.
 
+pub mod control;
+
 use bondline_commands::{Engine, MAX_REQUEST_BYTES};
 use rmcp::{
     ErrorData as McpError, RoleServer, ServerHandler, ServiceExt,

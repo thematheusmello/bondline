@@ -21,6 +21,11 @@ holding it. Stdio is a separate process-local session. Only server/stdio SDK fea
 enabled. Future expensive jobs must run on immutable input snapshots outside this lock and
 reject stale revisions; this is not yet a background-job implementation.
 
+The native app and opt-in loopback server now share this engine. A dedicated adapter thread
+owns the Tokio listener/tasks. Input is bounded before JSON decoding; no engine guard crosses
+an await. The server notifies the UI after committed changes and cancels all connection tasks
+on shutdown. Headless stdio remains independent. See control-protocol.md for actual limits.
+
 Format crates own their syntax and source-preserving representations. They do not depend
 on the model. The io layer translates supported data and retains original backing for
 unknown content; unsupported edits must fail explicitly rather than discard data.

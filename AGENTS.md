@@ -37,7 +37,7 @@ No GUI dependencies below ui; wgpu belongs in render. Add crates when useful beh
 not empty successful-looking API stubs. Document any isolated OS FFI exception explicitly.
 
 Current map: model (L0, validated pages); render (L1, CPU/GPU RGBA reference); commands
-(L3, registry and Arc snapshot history); mcp (L4, official SDK stdio adapter); cli/ui (L5,
+(L3, registry and Arc snapshot history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
 and `compat/clipboard-win` alone opt into reviewed OS unsafe; `compat/hexf-parse` forbids
 unsafe. These three original compatibility packages retain upstream package names solely

@@ -30,6 +30,8 @@ original compatibility adapters and verification limits. There is no license exc
 for ISC, Boost, Zlib, Unicode or OFL. The hypothetical browser graph is not yet approved.
 Agent clients can launch `cargo run --quiet -p bondline-cli -- mcp` as a stdio subprocess;
 it opens its own in-memory document. See [the command contract](docs/control-protocol.md).
+For the active desktop document, launch with `--control-port 0`; the app reports and displays
+its loopback address. This mode is opt-in and uses bounded newline JSON requests.
 
 Current work: connect native actions and automation, then add lossless CDXML.
 See [STATUS.md](STATUS.md) for actual progress and [ROADMAP.md](ROADMAP.md) for the full target.

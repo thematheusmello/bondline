@@ -130,3 +130,23 @@ MCP checkpoint: 35 workspace tests, workspace/all-targets clippy, rustfmt, nativ
 license/asset gates and layer gate pass. Windows/Linux all-targets source checks also pass
 after boxing the SDK initialization error to satisfy clippy. No native Windows/Linux,
 three-platform CI or browser execution is claimed.
+
+## Native loopback control, 2026-11-13
+
+RED: `cargo test -p bondline-mcp --test control --locked` failed for the absent server.
+The launch-argument test then failed for the missing parser. GREEN: four independent std TCP
+client tests cover shared state/history, repaint notifications, domain errors, the 1 MiB
+bound, truncated/HTTP rejection, the 16-client cap, idle-client cancellation and port release.
+The native launch parser rejects missing/invalid/duplicate flags. Engine guards do not cross
+async waits; the compiler caught that boundary before the owned-result refactor.
+
+Actual Mac integration: launched the real Metal app with `--control-port 0`. Startup/UI
+reported 127.0.0.1:50967. An independent Python socket client set 792 x 612 pt; accessibility
+and the canvas showed landscape paper. Native Cmd+Z restored A4; another socket query
+confirmed revision 2 and redo depth 1. App quit exited 0 and the process/listener were
+independently confirmed closed. Computer-use AX observation can relaunch a closed app;
+the incidental default relaunch was also closed. No development listener is left open.
+
+Integrated gates pass: 40 workspace tests, rustfmt, workspace/all-targets clippy, layers,
+native declared licenses (143/154/213 packages), two asset hashes/notices and Windows/Linux
+all-targets source checks. This is not native Windows/Linux execution or a human golden.

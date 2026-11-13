@@ -1,7 +1,12 @@
 //! Native GPU workspace. Authoring controls dispatch through the shared command registry.
 
 use bondline_commands::{Command, Engine, NoParams, PageSetSize};
+use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use eframe::egui;
+use std::{
+    io::Write,
+    sync::{Arc, Mutex},
+};
 
 /// Native startup configuration: use the audited wgpu backend on every desktop platform.
 pub fn native_options() -> Result<eframe::NativeOptions, bondline_render::Error> {
@@ -181,7 +186,8 @@ pub fn show_workspace(context: &egui::Context, engine: &mut Engine, error: &mut 
 /// Native application state for startup and bounded smoke verification.
 pub struct BondlineApp {
     smoke_frames: Option<u8>,
-    engine: Engine,
+    engine: SharedEngine,
+    control: Option<LoopbackServer>,
     error: Option<String>,
 }
 
@@ -190,22 +196,33 @@ impl BondlineApp {
     pub fn new(
         cc: &eframe::CreationContext<'_>,
         smoke: bool,
+        control_port: Option<u16>,
     ) -> Result<Self, Box<dyn std::error::Error + Send + Sync>> {
         let state = cc
             .wgpu_render_state
             .as_ref()
             .ok_or_else(|| std::io::Error::other("wgpu renderer did not initialize"))?;
         let info = state.adapter.get_info();
-        if smoke {
+        let engine = Arc::new(Mutex::new(Engine::default()));
+        let control = control_port
+            .map(|port| {
+                let context = cc.egui_ctx.clone();
+                LoopbackServer::bind(port, Arc::clone(&engine), move || context.request_repaint())
+            })
+            .transpose()?;
+        if smoke || control.is_some() {
+            let mut output = std::io::stdout().lock();
             serde_json::to_writer(
-                std::io::stdout(),
-                &serde_json::json!({"app":"bondline", "backend":format!("{:?}", info.backend), "adapter":info.name, "device_type":format!("{:?}", info.device_type)}),
+                &mut output,
+                &serde_json::json!({"app":"bondline", "backend":format!("{:?}", info.backend), "adapter":info.name, "device_type":format!("{:?}", info.device_type), "control_address":control.as_ref().map(|server| server.address().to_string())}),
             )?;
+            output.write_all(b"\n")?;
         }
         configure_context(&cc.egui_ctx);
         Ok(Self {
             smoke_frames: smoke.then_some(0),
-            engine: Engine::default(),
+            engine,
+            control,
             error: None,
         })
     }
@@ -213,7 +230,23 @@ impl BondlineApp {
 
 impl eframe::App for BondlineApp {
     fn update(&mut self, context: &egui::Context, _frame: &mut eframe::Frame) {
-        show_workspace(context, &mut self.engine, &mut self.error);
+        if let Some(control) = &self.control {
+            egui::TopBottomPanel::bottom("local-control").show(context, |ui| {
+                if control.is_running() {
+                    ui.label(format!("Local control: {}", control.address()));
+                } else {
+                    ui.colored_label(egui::Color32::DARK_RED, "Local control stopped");
+                }
+            });
+        }
+        match self.engine.lock() {
+            Ok(mut engine) => show_workspace(context, &mut engine, &mut self.error),
+            Err(_) => {
+                egui::CentralPanel::default().show(context, |ui| {
+                    ui.colored_label(egui::Color32::DARK_RED, "Document engine unavailable");
+                });
+            }
+        }
         if let Some(frames) = &mut self.smoke_frames {
             *frames = frames.saturating_add(1);
             if *frames >= 3 {

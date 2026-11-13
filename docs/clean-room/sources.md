@@ -23,6 +23,9 @@ proprietary implementation, help text or assets. Record more specific sections a
 | MCP-TOOLS | https://modelcontextprotocol.io/specification/2025-11-25/server/tools | Shared tool schemas, discovery, invocation and errors. |
 | MCP-SDK | https://docs.rs/rmcp/3.9.0/rmcp/ | Official Rust SDK, server and stdio only; inspected ServerHandler, structured tool results, lifecycle and bounded AsyncRwTransport APIs. |
 | TOKIO | https://docs.rs/tokio/1.54.1/tokio/runtime/struct.Builder.html | Native adapter runtime with I/O/time drivers; engine and model remain independent of the runtime. |
+| TCP-LIFETIME | https://doc.rust-lang.org/std/net/struct.TcpListener.html | Bind only IPv4 localhost, obtain the actual port after bind(0), and close the listener with its owned lifetime. APIs checked on the pinned compiler. |
+| TOKIO-TAKE | https://github.com/tokio-rs/tokio/blob/tokio-1.54.1/tokio/src/io/util/take.rs | Bounded AsyncBufRead before JSON parsing; join/cancellation and deadlines are adapter responsibilities. |
+| JSON-GRAMMAR | https://www.rfc-editor.org/rfc/rfc8259 | JSON request grammar. LF framing, connection/deadline caps and reject/close policies are independent Bondline design decisions, not reference parity claims. |
 | SCHEMARS | https://docs.rs/schemars/1.2.3/schemars/ | Generate schemas from the exact serializable parameter types; closed objects and validation bounds are tested. |
 | PROPTEST | https://docs.rs/proptest/1.12.0/proptest/ | Fixed-seed generated edit sequences independently assert exact undo/redo invariants and expected page dimensions. Build/test dependency only. |
 | REA-AUDIT | https://github.com/morluto/rea/blob/main/docs/release-exposure.md | External inspection of Bondline artifacts only; not proof of security or feature parity. |
