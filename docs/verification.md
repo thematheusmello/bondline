@@ -983,3 +983,9 @@ Python stream semantics are recorded in sources.md. The corrected isolated branc
 passes cargo xtask ci:207 workspace tests plus3 native bridge tests, fmt, clippy, layers,
 unchanged licenses/assets and pinned corpus (target/cdx-stdout-ci.log). A new hosted run is required before
 merging this branch; local success does not replace Windows execution.
+
+Corrected sourcea73bed7 subsequently passed full hosted run43480423381: Mac210, Linux208,
+Windows202 tests, actual native windows on all three and both Linux ASan targets. Exact
+job IDs and adapter limits are in STATUS.md/ci.md. Main was fast-forwarded to this tested
+product source; the integration/status commit changes no product code. No hosted CDX job
+remains active. This closes that platform regression, not M0 or full M1/CDX parity.
