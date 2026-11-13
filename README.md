@@ -13,6 +13,9 @@ Bondline-native files. Connected construction and general imported-file editing 
 The standalone CDXML crate preserves syntax and replaces existing attribute values without rewriting
 unrelated bytes. A separate bounded writer and io encoder now produce new elemental CDXML
 with explicit canvas extents; see [tested format scope](docs/file-formats.md).
+The standalone CDX crate now preserves bounded binary records and replaces one opaque
+property without rewriting unrelated records. Independent consumers cover original test
+vectors; CDX is not yet available through application Open/Save or model mapping.
 The headless model stores validated atom/bond/fragment data. The io crate maps limited
 source-backed node-position and elemental graph views. Engine snapshots/history now retain
 complete original CDXML bytes, with guarded unchanged-source export. Application

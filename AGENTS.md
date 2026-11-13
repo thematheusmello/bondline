@@ -69,6 +69,8 @@ is separate and opens no listener. Keep file access bounded and explicitly autho
 Current map: model (L0, pages, Point2 and validated elemental atom/bond/fragment graphs);
 cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attribute
 replacement and a bounded new-syntax writer);
+cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque property
+replacement; no model mapping or application commands);
 render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
 source-backed CDXML projections, native elemental encoding, owned snapshots, PNG encoding and
 bounded native CDXML filesystem I/O; see docs/native-file-io.md for publication/access limits);

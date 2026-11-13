@@ -16,7 +16,7 @@ guides are versioned evidence, not proof of complete modern parity.
       connected editing, broader models and a general transaction/job engine remain.
 - [x] CLI, stdio MCP and opt-in loopback control using that registry.
 - [ ] Native UI and CPU/GPU reference canvas with actual launch/render evidence.
-      Native Mac drawing/history/recovery and one human-approved golden now pass; native
+      Native Mac drawing/history/recovery and one human-approved golden now pass.
       All three hosted window smokes pass; interactive Windows/Linux workflows and broader rendering
       remain unverified.
 - [x] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
@@ -50,9 +50,15 @@ Source/history now has shared-allocation accounting and oldest-first byte evicti
 A proven generated-file profile now reopens/edits/renders headlessly, retaining source and
 exact history; extended/noncanonical files remain guarded. Next: general source-preserving
 structural edits, broader native file parity and retention/recovery scenarios;
-broader query/label/style mapping, lossless CDX records, MOL/SDF V2000
+broader query/label/style mapping, application CDX mapping/editing, MOL/SDF V2000
 and V3000, RXN, SMILES and explicit data-loss diagnostics. Every fixture needs a pinned
 source, license and SHA-256. Never silently treat unsupported formats as passing.
+
+The first standalone CDX slice now indexes bounded little-endian records, preserves unknown
+source bytes and checks opaque property replacements. Original vectors face independent
+Python struct and external RDKit consumers. Implicit/explicit roots have specific probe
+evidence; no general file compatibility, new-tree writer or application import/export is
+claimed. Broader CDX corpus and reference/chemical mapping remain M1 work.
 
 ## M2: drawing — in progress
 

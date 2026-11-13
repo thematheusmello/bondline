@@ -49,3 +49,20 @@ model may encode and reopen exactly; other source-backed edits must remain refus
 backing and borrowed-only stale-source guards still apply to both cases.
 Independent XML semantic assertions live in the external Expat tests. A short smoke run is
 not exhaustive parser conformance or a security audit.
+
+## CDX binary syntax
+
+```sh
+mkdir -p .cache/fuzz/cdx
+cp crates/cdx/tests/fixtures/unknown-implicit.cdx .cache/fuzz/cdx/
+PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run cdx_parse .cache/fuzz/cdx -- -runs=10000 -seed=721533879 -max_len=65536 -timeout=5
+```
+
+This separate target exercises bounded binary framing, exact original-byte preservation,
+contiguous record spans and checked opaque property replacement. Accepted edits must
+reparse, preserve record count/framing and retain all bytes outside the changed property;
+replacing a payload with itself must be byte-exact. The original document stays unchanged.
+The harness does not map CDX chemistry, resolve references, write new object trees or access
+files. Independent Python struct/RDKit expectations live in the crate's integration tests.
+The CI sanitizer job runs both parser targets; these bounded runs are not exhaustive input
+coverage or proof of application CDX support.

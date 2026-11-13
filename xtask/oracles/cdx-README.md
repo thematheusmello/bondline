@@ -1,0 +1,128 @@
+# Independent CDX verification
+
+These original test helpers are MIT OR Apache-2.0. They are not product dependencies and
+do not implement application CDX import/export or a chemistry engine.
+
+Use the existing isolated interpreter described in `docs/development.md`:
+
+```sh
+export BONDLINE_PYTHON="$PWD/.cache/oracles/format-python/bin/python"
+"$BONDLINE_PYTHON" -B xtask/oracles/cdx_oracle.py self-test
+cargo test -p bondline-cdx --test independent --locked
+```
+
+Tests require the external `rdkit==2026.9.2` already pinned in `requirements-dev.txt`.
+They assert the actual `rdBase.rdkitVersion == "2026.09.2"` and
+`Chem.HasChemDrawCDXSupport()` instead of silently skipping an unavailable reader. They
+run offline and need no Java or newly downloaded artifact. `-B` prevents test bytecode caches.
+
+## Original fixture and independent expectations
+
+`cdx_oracle.py fixture` emits an original 65,744-byte implicit-root document. Adding
+`explicit` emits its 65,750-byte explicit-document equivalent. Neither is copied from a
+vendor sample, downloaded corpus, or another reader's writer. The Python authoring logic
+and fixture bytes are project-original under MIT OR Apache-2.0.
+
+The scene contains page 42, fragment 100, carbon nodes 101/102, and bond 103 referencing
+those nodes. Coordinates in document points are (10.25, −3.5) and (26.25, 8.5). The bond
+order starts at the single-bond bit `0x0001`; the property edit replaces it with double-bond
+bit `0x0002`. Independent chemical expectations are CC/C2H6 and C=C/C2H4, two carbons,
+one bond, and the same endpoints. Unknown binary properties exist on root, page, node and
+bond. Nested user-defined objects and a 65,535-byte opaque extended property exercise
+ownership, unknown preservation, and record boundaries.
+
+Numeric format sources are the public archived SDK:
+
+- [Binary header, tagged records and lengths](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm),
+  [simple framing example](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroExampleSimple.htm),
+  and the [object inventory](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/AllCDXObjects.htm).
+- [Coordinate representation](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm)
+  and [2D position](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/2DPosition.htm):
+  signed 16.16 points, binary y before x.
+- [Element](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Node_Element.htm),
+  [bond begin](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Bond_Begin.htm),
+  [bond end](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Bond_End.htm), and
+  [bond-order bit mask](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Bond_Order.htm).
+
+The SDK simple example has inconsistent atom/bond IDs; its hex data was not adopted as a
+chemical oracle. The project-original scene has consistent references. All four complete
+identities are asserted in the oracle self-test:
+
+| Framing / order | Bytes | SHA-256 |
+|---|---:|---|
+| Implicit / single | 65744 | `6e3228ecc2791366c1f23be8e4dd411f7f1fb4c3250b239fdfb812aa698df1f0` |
+| Implicit / double | 65744 | `88b2ac7f0a4028323224647d16eadafca4c022d043010e5da94c46b2ad28a1f1` |
+| Explicit / single | 65750 | `63ef1a74133e45de915d5fd25b2ca3321a95dbe5114873a5a59f2f45217000d2` |
+| Explicit / double | 65750 | `1a183a24e21619084c16c4a39c7a803ad1c73dd3e6ac067dd355cd9122fd4774` |
+
+The standard-library `struct` oracle decodes raw records independently of Rust. It checks
+all event ranges, payload ranges, short/extended encodings, parent ownership and matching
+ends. Edit tests compare every output byte to an independent splice of the fixed original;
+no unrelated data may change. Payload sizes 0, 1, 32767, 32768, 65534, 65535 and 65536
+exercise both sides of the length sentinel. Identical and foreign record-handle tests
+cover no-op fidelity and document ownership. Its 8 MiB input, 100,000-event and 256-depth
+limits are test-oracle limits, not assertions about all valid CDX.
+
+## External reader provenance and limits
+
+The installed RDKit API accepts binary bytes through `MolsFromCDXML` with
+`CDXMLParserParams.format = CDXMLFormat.CDX`. This is a separate format-support path.
+The public [RDKit 2026.09.2 build recipe](https://github.com/rdkit/rdkit/blob/Release_2026_09_2/External/ChemDraw/CMakeLists.txt)
+selects the public Glysade file-format parser v1.0.14. Its tag resolves to commit
+`5dd743230d75ecacacdf8dcd0b0e022f13173b9c`.
+The [README](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/README.md)
+describes the publicly released parser and modifications; the
+[actual parser license](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/license.txt)
+is BSD-3-Clause, copyright 1986–2025 Revvity, CambridgeSoft and others. Exact downloaded
+README/license SHA-256 values are respectively
+`68d5720c7b6a61e5144a1e4f1eafb892867b6962058e6490f1e15c62f5064200` and
+`20060cab135e99992dc5adc0aec48f2d8183f39191e7be4666510c6aba228941`.
+These metadata files remain ignored; no upstream parser implementation was copied into
+Bondline. The release recipe is not attestation that an installed wheel used that exact
+source revision or a complete audit of the wheel's native dependency closure.
+
+The locally observed environment is Python 3.13, macOS arm64, RDKit 2026.09.2;
+`rdmolfiles.so` is 1,056,208 bytes, SHA-256
+`d60f9cf61091f69387d8393fc179b11119c3914078c77648da966902eab0e95a`.
+This identifies that extension only, not the complete wheel or delegated parser library.
+Other platforms must run the same version/API assertions; they are not represented by this
+Mac extension hash.
+
+Observed limitations are explicit:
+
+- RDKit conformers retain the CDX raw 16.16 integer magnitude and reverse y for these
+  fixtures. The test asserts that exact external-reader mapping. Document-point positions
+  are established separately with `struct`; no implicit Angstrom/point scaling is claimed.
+- RDKit accepts both single-terminator implicit and explicit documents. A missing implicit
+  root terminator raises a parsing error. It also accepts extra trailing zero terminators
+  in both forms. Bondline's exact-EOF rejection is its documented strictness policy, not
+  something this permissive consumer proves necessary.
+- Optional OpenChemLib 2026.9.0 was inspected externally and is not required by these
+  tests. Its POM says BSD-3-Clause, but its CDXML parser carries Jmol LGPL-2.1-or-later
+  notices. It starts decoding at byte 22, mishandles signed short lengths 32768–65534, and
+  rounds/normalizes coordinates. Downloaded Java archives/diagnostics stay ignored and are
+  never shipped, linked into the application, copied, or required in CI.
+
+This verifies two original structures, their opaque binary backing and one bond property
+edit. It does not verify all properties, chemistry/stereochemistry, arbitrary scoped IDs,
+reactions, text/fonts, native application interoperability, full corpus coverage, or an
+application CDX Open/Save workflow.
+
+## RED / GREEN evidence
+
+The independent integration target first failed compilation with E0599 because the
+promised `Document::replace_property` API did not exist. Exact command above; saved log:
+`target/cdx-independent-red.log`. The independent oracle self-test and direct external
+ethane/ethene and framing probes passed separately before the implementation.
+After property editing landed, the same integration target still failed the explicit-root
+fixture with `Truncated { offset: 65750 }`; the opaque-length/ownership test passed. That
+framing RED is retained in `target/cdx-independent-first-integration.log`.
+
+After explicit framing landed, both integration tests passed, including all four external
+RDKit reads and seven binary-edit boundary cases. Log: `target/cdx-independent-green.log`.
+`cargo clippy -p bondline-cdx --all-targets --locked -- -D warnings` passed in
+`target/cdx-independent-clippy.log`; targeted rustfmt and the pinned oracle self-test also
+passed. This was local macOS arm64 execution. Hosted Windows/Linux consumer behavior and
+full-workspace gates are separate integration checks, not implied by this result. No
+parser production source, root manifest, CI file, or GUI was changed by this independent
+verification task. No Git operation was performed.

@@ -53,7 +53,7 @@ jobs:
         run: cargo run --locked -p bondline-ui --bin bondline -- --smoke-test
 
   parser-fuzz:
-    name: CDXML ASan smoke
+    name: Parser ASan smoke
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -69,7 +69,11 @@ jobs:
         run: |
           mkdir -p .cache/fuzz/cdxml
           cp crates/cdxml/tests/fixtures/unknown.cdxml .cache/fuzz/cdxml/
+          mkdir -p .cache/fuzz/cdx
+          cp crates/cdx/tests/fixtures/unknown-implicit.cdx .cache/fuzz/cdx/
       - name: Run the bounded sanitizer check
         run: PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run cdxml_parse .cache/fuzz/cdxml -- -runs=10000 -seed=3641879538 -max_len=65536 -timeout=5
+      - name: Run the bounded binary parser sanitizer check
+        run: PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run cdx_parse .cache/fuzz/cdx -- -runs=10000 -seed=721533879 -max_len=65536 -timeout=5
       - name: Check dependency pins were retained
         run: git diff --exit-code -- Cargo.lock fuzz/Cargo.lock

@@ -3,11 +3,35 @@
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | None | Published specification recorded | Parser, preservation, writer and model mapping |
+| CDX | Standalone bounded binary syntax and checked opaque property replacement | Original published-field vectors, independent Python struct spans/bytes, external RDKit connectivity/order consumers | Application import/export, model/reference mapping, new-tree writer, broader pinned corpus and modern extensions |
 | MOL/SDF V2000/V3000, RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
+
+`bondline-cdx` is a standalone syntax utility, with no model, filesystem, GUI or third-party
+dependency. Its flat borrowed index retains the original header, unknown object/property
+tags, payloads, ordering and length prefixes; passthrough returns exactly the input. It
+accepts a header-implied root and a leading explicit8000 Document closed by one end record.
+The known twelve header bytes are validated; the final sixteen reserved bytes stay opaque.
+The archived specification/examples disagree about root framing; external consumer probes
+establish only those original vectors, not every historical or modern file variant.
+
+Binary records are decoded little-endian with checked offsets. Limits are independent
+Bondline policies:64 MiB input/output,100000 records and256 simultaneously open encoded
+objects. Parsing and destruction are iterative. Missing fields/terminators, excessive
+budgets and bytes after the matched root end fail without returning a partial document.
+Standalone syntax does not validate Page requirements, ID uniqueness/references, payload
+types, chemistry or object containment semantics.
+
+`Document::replace_property` requires a property handle belonging to that exact parsed
+document and returns size-checked new bytes. A no-op retains the original length prefix,
+including a small payload encoded in extended form. A changed value uses a UINT16 length
+below65535 or FFFF followed by UINT32 otherwise. Every byte outside that property record
+is preserved; the original input stays unchanged. The utility never adds/removes objects
+or properties and is not wired into application CDX open/save commands. Independent RDKit
+checks two carbons/one bond and CC/C2H6 changing to C=C/C2H4 for one original fixture; that
+consumer's raw16.16/y-flipped coordinates are kept separate from point-unit assertions.
 
 CDXML original bytes are authoritative. The read-only XML tree is a derived view; writing
 does not reserialize it. Unknown nodes, namespaced attributes, property order, quotes,

@@ -916,3 +916,44 @@ it does not substitute for interactive Windows/Linux file-menu or full screen/fl
 The earlier Mac capacity failure remains a separate real infrastructure observation.
 Main was fast-forwarded to these atomic feature commits after GREEN; no code changed during
 merge. Documentation/research commits afterward do not change the tested product source.
+
+## Standalone CDX syntax and checked property edits, 2026-11-13
+
+RED preceded implementation: the actual syntax integration test failed with missing public
+types (target/cdx-syntax-red.log); the property and independent targets failed with E0599
+for missing replace_property (cdx-edit-red.log and cdx-independent-red.log). The first
+external integration then exposed unsupported explicit-root EOF at byte65750; that failure
+is retained in cdx-independent-first-integration.log. An initial all-tests invocation also
+used a nonexistent interpreter path; it is an environment error, not feature RED evidence.
+
+GREEN:13 CDX tests cover original exact spans/opaque bytes, all truncations of the small
+implicit/explicit vectors, known-prefix/opaque-reserved header policy, foreign/stale handles,
+short/extended length boundaries,64 MiB input/output,100000 records and256 open objects.
+External Python struct independently checks record tables and every edited byte. Pinned
+RDKit2026.09.2 actually reads both implicit/explicit originals as CC/C2H6 and their changed
+bond order as C=C/C2H4. Four complete generated fixture hashes are asserted independently;
+see xtask/oracles/cdx-README.md for sources, test-only backend provenance and consumer limits.
+The public example's inconsistent bond IDs were not adopted as an oracle. No upstream
+parser implementation or proprietary sample was copied into the product.
+
+The flat parser never recurses over attacker-controlled data. Property edits retain all
+unrelated bytes by checked splice construction, not an internal second parse; integration
+tests and the fuzz harness reparse the output. Exact EOF is a Bondline strictness policy:
+the external consumer accepts additional zero ends. CDX chemical/reference semantics,
+new object-tree writing and application CDX Open/Save are still missing.
+
+Final local cargo xtask ci passes206 workspace tests plus3 native AccessKit bridge tests,
+fmt, warnings-denied clippy, layers, unchanged native runtime/asset licenses and the existing
+two-file corpus. Log:target/cdx-ci-integrated.log. The corpus gate still has no CDX entry;
+the new original fixture/oracle tests do not expand its fetched-corpus claim. Isolated fuzz
+format checking also passes; both lockfiles only add the dependency-free original CDX crate.
+Standalone CDX all-target source checks pass for Linux/Windows, and its library check passes
+for wasm32-unknown-unknown (target/cdx-{linux,windows,wasm}.log). These are compilation checks,
+not native execution or approval of the application's unresolved browser dependency graph.
+
+The final frozen-source ASan check passes10000 runs, seed721533879, max_len65536, timeout5,
+coverage166/features402/corpus52 entries3092 bytes/reported RSS44 MiB. It starts from the
+small original seed plus prior ignored mutations, not a claimed exhaustive64 MiB corpus.
+Log:target/cdx-asan-final.log. CI now seeds and runs this target separately from CDXML.
+This is syntax/editing coverage, not filesystem, chemical interpretation or native UI proof.
+No UI source changed; the previously recorded native app evidence remains its exact scope.

@@ -11,12 +11,20 @@ cargo-fuzz = true
 [dependencies]
 libfuzzer-sys = "=0.4.13"
 bondline-cdxml = { path = "../crates/cdxml" }
+bondline-cdx = { path = "../crates/cdx" }
 bondline-io = { path = "../crates/io" }
 bondline-model = { path = "../crates/model" }
 
 [[bin]]
 name = "cdxml_parse"
 path = "fuzz_targets/cdxml_parse.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "cdx_parse"
+path = "fuzz_targets/cdx_parse.rs"
 test = false
 doc = false
 bench = false

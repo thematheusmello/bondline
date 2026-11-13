@@ -4,7 +4,7 @@
 
 Public repository: https://github.com/thematheusmello/bondline . The tested file-workflow
 branch was fast-forwarded into main; product checkpoint ccf8c50 contains the final UI.
-Inspect Git log for subsequent documentation hashes. Do not restart or discard existing
+Inspect Git log for subsequent format/documentation hashes. Do not restart or discard existing
 work. No release/installer distribution or reference account action was performed.
 
 ## Current integrated scope
@@ -20,6 +20,9 @@ work. No release/installer distribution or reference account action was performe
 - Bounded standalone CDXML parser, exact opaque source, checked attribute edits and native
   elemental writer. Full native profile requires complete input/re-encoding equality; do
   not trust producer name. Pinned v0 fixture must stay editable across encoder upgrades.
+- Standalone dependency-free CDX syntax now preserves bounded binary records/unknown data
+  and checks opaque property replacements. Both original root forms and one bond-order edit
+  have external consumer evidence. No application CDX import/export or model mapping yet.
 - Complete-source filesystem open/save: atomic no-clobber, explicit overwrite, cancellation,
   access metadata and publication/recovery errors. See native-file-io.md for actual limits.
 - Native single-document Mac Open/Save/Save As, guarded dirty Open, overwrite confirmation,
@@ -32,7 +35,15 @@ work. No release/installer distribution or reference account action was performe
 
 ## Verification
 
-Final local cargo xtask ci passes193 workspace tests plus3 native AccessKit bridge tests,
+Latest local cargo xtask ci passes206 workspace tests plus3 native AccessKit bridge tests;
+log target/cdx-ci-integrated.log. The13 added CDX tests use original published-field vectors,
+independent Python struct bytes/spans and actual external RDKit CC/C2H6-to-C=C/C2H4 reads.
+The frozen-source CDX ASan target passes10000 runs, seed721533879, coverage166/features402,
+52 retained mutation entries3092 bytes/reported RSS44 MiB; log target/cdx-asan-final.log.
+This is a standalone syntax/editing slice. The fetched corpus still has no CDX entry.
+See docs/verification.md and xtask/oracles/cdx-README.md for exact limits and provenance.
+
+The previous native-file checkpoint passed193 workspace tests plus3 native AccessKit bridge tests,
 fmt, warnings-denied clippy (including that bridge), layers, native licenses/assets and
 pinned corpus. Log: target/files-ci-integrated.log. Windows/Linux all-target workspace
 source checks pass. Tests are independent Expat/Decimal/Pillow/RDKit, analytic geometry,
@@ -97,7 +108,7 @@ bodies examined, seven page hashes and further bounded public-video observations
 It is not a full-body/product audit or an identified26.1 guide. Copy-drag modifier/version
 and long-bond title/body conflicts remain explicit. All owned research browsers closed.
 
-CDX/MOL/SDF/RXN/SMILES/InChI codecs, chemistry algorithms, connected construction, selection,
+Application CDX and MOL/SDF/RXN/SMILES/InChI codecs, chemistry algorithms, connected construction, selection,
 styles, templates, general captions/arrows and publishing/Office/WASM/installers remain.
 Corpus has two pinned BSD RDKit files: one CDXML syntax/model/source check, one MOL integrity
 only. No CDX or differential chemistry calculation coverage. External RDKit's ethane checks
@@ -111,10 +122,12 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
    is complete. No release publication was requested. Preserve exact evidence scopes.
 2. Continue qualified inventory work, identifying actual26.1 builds and complete tool/context
    menus without claiming completeness from counts, timestamps or cloud imagery.
-3. Close remaining M0 architecture/inventory gaps, including named automation for remaining
-   UI lifecycle/dialog actions and broader model/transaction requirements. Do not call M0
-   complete from a license fix or one file workflow.
-4. Continue M1 source-preserving structural edits/CDX/other formats and M2 connected bonds,
+3. Read docs/research/m0-command-ui-audit.md. Its next bounded implementation is typed
+   document.close policy delivered through every adapter and native Close/Quit, retaining
+   dirty/stale/save-receipt guards. Dialog/control discovery and the modern inventory remain
+   M0 gaps; broader models/transactions stay on the roadmap without inventing new M0 gates.
+   Do not call M0 complete from a license fix or one file workflow.
+4. Continue M1 source-preserving structural edits/application CDX mapping/other formats and M2 connected bonds,
    snapping/order/labels with independent tests and actual native workflows. Keep M3-M5 full.
 
 Product implementation agents finished; no confirmed Cargo/native/fuzz/hosted job remains.

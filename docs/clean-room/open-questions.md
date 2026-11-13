@@ -37,6 +37,12 @@
   Signals web demo with no desktop build identity. Neither observation establishes 26.1
   desktop design or chemical editing behavior. See [the evidence record](../research/official-ui-evidence.md).
 - The archived CDX SDK does not establish every modern extension. Preserve unknown data.
+- CDX Intro prose begins with a Document object, while its simple example starts with a
+  Page after the header. The original implicit-root and explicit8000/id0 vectors both work
+  in external RDKit2026.09.2, which also tolerates extra terminators. The standalone parser
+  accepts those two root forms with exact EOF; other padding/framing variants remain
+  unsupported rather than being dropped. The published example's two bond-ID listings also
+  disagree, so original independently checked fixtures replace it as test evidence.
 - The archived properties/id.htm link returns 404, but CDX-IDENTITY/CDX-OBJECT-ID now establish
   32-bit IDs, zero as unassigned and per-container identity. Older object tables label IDs
   UINT16; the implementation follows the agreeing record/data-type descriptions. Shared-

@@ -106,6 +106,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0d8c1fef690941d3e7788d328517591fecc684c084084702d6ff1641e993699a"
 
 [[package]]
+name = "bondline-cdx"
+version = "0.1.0"
+
+[[package]]
 name = "bondline-cdxml"
 version = "0.1.0"
 dependencies = [
@@ -118,6 +122,7 @@ dependencies = [
 name = "bondline-fuzz"
 version = "0.0.0"
 dependencies = [
+ "bondline-cdx",
  "bondline-cdxml",
  "bondline-io",
  "bondline-model",

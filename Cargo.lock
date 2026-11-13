@@ -488,6 +488,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "bondline-cdx"
+version = "0.1.0"
+
+[[package]]
 name = "bondline-cdxml"
 version = "0.1.0"
 dependencies = [
