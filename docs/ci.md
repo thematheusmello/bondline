@@ -84,3 +84,20 @@ The tested feature branch was fast-forwarded into main. Final native Mac interac
 the exact-source binary hash recorded in native-file-ui.md; interactive Windows/Linux
 file gestures remain unverified despite their automated engine/UI/window checks.
 Saved ignored full log: target/github-files-43463687047.log.
+
+## Standalone CDX integration
+
+[Run43475705005](https://github.com/thematheusmello/bondline/actions/runs/43475705005) at
+8547f4d passed Mac/Linux and both Linux parser sanitizer targets, but failed Windows's
+independent record-table comparison: Python text stdout emitted CRLF rather than the exact
+LF byte protocol. The producer was corrected without normalizing binary CDX or relaxing
+assertions, and a forced-CRLF regression reproduces the failure on any host.
+
+Corrected sourcea73bed7 passes all four jobs in
+[run43480423381](https://github.com/thematheusmello/bondline/actions/runs/43480423381):
+Mac210 tests, Linux208, Windows202, every actual three-frame native window and both bounded
+Linux ASan targets. The Mac total includes three native bridge tests. Adapters remain Metal/
+Apple Paravirtual IntegratedGpu, Dx12/Microsoft Basic Render Driver Cpu and Vulkan/llvmpipe
+Cpu. These verify those execution paths, not hardware performance, interactive Windows/Linux
+editing, general chemical CDX coverage or application CDX import/export. Main was updated
+only after this GREEN; the integration/status commit changes documentation alone.

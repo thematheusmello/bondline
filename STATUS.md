@@ -7,14 +7,13 @@ branch was fast-forwarded into main; product checkpoint ccf8c50 contains the fin
 Inspect Git log for subsequent format/documentation hashes. Do not restart or discard existing
 work. No release/installer distribution or reference account action was performed.
 
-Latest CDX work is on feat/cdx-syntax; inspect Git log for the canonical-stdout fix after
-the original8547f4db25dbcf25b6ded0869f457dc89561f565 feature and709329f status checkpoint.
-48982d0 is its separate M0 command/UI audit. Main currently remains
-fefab8afa5349cf77bbb1f421560338920cc58bf. The first CDX hosted run failed Windows's test
-oracle newline protocol; the correction and forced-CRLF regression are in this change.
-The branch stays unmerged pending a new hosted result. The public repository/main already
-contains the earlier verified drawing/CDXML workflows. Source publication is authorized;
-no release was requested. Shared-close implementation is separate work on feat/shared-close.
+Latest merged product source:a73bed747059dd1718ac593589509853fc872671, the CDX slice plus
+canonical-stdout correction. Main now includes it after full hosted GREEN43480423381;
+48982d0 is the separate M0 command/UI audit. The initial8547f4d Windows failure remains
+recorded as real evidence. Product code is unchanged by this integration/status commit.
+The public repository/main also retains the earlier verified drawing/CDXML workflows.
+Source publication is authorized; no release was requested. Shared-close implementation
+is separate work on feat/shared-close, not a delivered capability of this checkpoint.
 
 ## Current integrated scope
 
@@ -54,6 +53,10 @@ See docs/verification.md and xtask/oracles/cdx-README.md for exact limits and pr
 The canonical-stdout correction adds one regression: all14 CDX tests and targeted clippy
 pass locally. Its forced CRLF text wrapper reproduces the actual Windows failure without
 normalizing any CDX bytes. See target/cdx-stdout-{red,green,clippy}.log.
+Full corrected hosted run43480423381 passes all four jobs, actual native windows and both
+Linux sanitizer targets. Mac210, Linux208 and Windows202 tests pass; see docs/ci.md for
+runner/adapter scope. These are automated checks, not interactive Windows/Linux workflows
+or application CDX Open/Save. No CDX hosted job remains live.
 
 The previous native-file checkpoint passed193 workspace tests plus3 native AccessKit bridge tests,
 fmt, warnings-denied clippy (including that bridge), layers, native licenses/assets and
@@ -131,10 +134,10 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 ## Next exact actions
 
 1. Read both inventory audits and the current parity/source notes; product/CI integration
-   for the earlier file workflow is complete. First recheck hosted CDX run43475705005 below;
-   fix any real failure, then fast-forward main only after its required jobs pass. Do not
-   duplicate that live run or claim success from source checks. No release publication was
-   requested. Preserve exact evidence scopes.
+   for the earlier file workflow and standalone CDX slice is complete. Do not duplicate
+   the terminal hosted runs below. Continue the existing shared-close branch rather than
+   starting that command again; inspect its worktree and authoritative agent/job state.
+   No release publication was requested. Preserve exact evidence scopes.
 2. Continue qualified inventory work, identifying actual26.1 builds and complete tool/context
    menus without claiming completeness from counts, timestamps or cloud imagery.
 3. Read docs/research/m0-command-ui-audit.md. Its next bounded implementation is typed
@@ -152,6 +155,8 @@ still be active on that separate branch; inspect authoritative agent/job state o
 Hosted run https://github.com/thematheusmello/bondline/actions/runs/43475705005 at8547f4d
 is now terminal. Parser ASan132058845734, Ubuntu132058846409 and Mac132058846748 succeeded;
 Windows132058846940 failed the LF-versus-CRLF oracle comparison. Overall failure is real.
-The fixed producer/new regression must pass a fresh hosted run before main integration;
-do not rerun the unchanged failed revision and call it a fix. Find the new run by this
-branch/head after publication, then recheck exact job state. No release was requested.
+Corrected sourcea73bed7 passed https://github.com/thematheusmello/bondline/actions/runs/43480423381 .
+Windows132075166916, Ubuntu132075167353, Parser ASan132075167356 and Mac132075167362 all
+completed successfully. Source was fast-forwarded into main after GREEN. These jobs are
+terminal; do not restart them. Other work may remain active on feat/shared-close. No
+release was requested.
