@@ -106,3 +106,20 @@ All three clones succeeded. The sparse review omitted large assets/model weights
 fetch/build their external Git dependencies, and did not audit their full transitive
 license graphs. No runtime/performance/feature-completeness claim for these repositories
 was verified. No source or assets were imported into Bondline by this review.
+
+## Shared file controls: selected implementation slice
+
+Rechecked the same PhotoCraft pin on2026-11-13. Its CommandSpec has the metadata needed
+for discovery; its control dispatcher distinguishes a menu request from direct engine I/O.
+Bondline will co-locate delivered control bindings with its existing typed registry and add
+finite transient file-presentation requests. A native host must explicitly acknowledge a
+request; the headless session must refuse it rather than claim a chooser appeared. Actual
+Open/Save remain the existing bounded file commands.
+
+The request must bind its authored revision, path, relevant lifecycle state and a monotonic
+identity. Native selection validation, immutable I/O preparation and worker registration must
+happen under the same engine lock; validating first and submitting later would permit stale
+discard or overwrite. Close-specific Save must retain the existing close epoch and receipt
+rules. These are original Bondline safety decisions, not inferred reference internals.
+This design record precedes implementation and execution; see the protocol and verification
+records for delivered evidence. No generic UI dispatcher or job framework is required.

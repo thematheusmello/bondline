@@ -5,7 +5,7 @@
   behavior needs evidence; keep this explicit gap rather than claiming full File parity.
 
 - Public 26.1 release notes are available, but no full public 26.1 menu/palette reference
-  was located. The 573-row cited baseline in parity-checklist.md covers explicit guide
+  was located. The 576-row cited baseline in parity-checklist.md covers explicit guide
   controls and shortcut tables plus 26.x desktop deltas; remaining context menus, unnamed
   glyphs and platform-specific controls prevent a complete modern-inventory claim.
 - New official25.5 articles change label gestures and alignment enablement; current Mac
