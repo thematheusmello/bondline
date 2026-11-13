@@ -8,7 +8,7 @@ macOS arm64 143 packages, Windows x64 154, Linux x64 213, plus two SHA-verified 
 See docs/dependency-policy.md for the original compatibility adapters, fork and source evidence.
 This declaration gate is distinct from a complete release-notice/source review.
 
-Verified: 46 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
+Verified: 47 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
 actual layer gate, and whole-workspace Windows/Linux all-targets source checks. These are
 NOT native Windows/Linux runtime passes. CPU/GPU clear and ordered page-scene pixels agree on Apple M3 Max/Metal.
 
@@ -49,6 +49,7 @@ Next exact tasks:
    render/encode outside it, bound concurrent captures and cancel safely on shutdown. Verify
    immutable request revisions and native responsiveness. Renderer and PNG codec already
    have independent tests; do not create a second page-layout/encoding implementation.
+   Cooperative CPU/GPU cancellation is now available; adapter integration remains next.
 3. Add corpus provenance/SHA fetch tooling, standalone lossless CDXML parsing and independent
    XML tests, then CI orchestration/workflows. No empty parser or successful no-op gates.
 4. Extract the public guide's complete menu/tool/shortcut inventory with version/page evidence.

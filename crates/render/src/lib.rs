@@ -1,5 +1,30 @@
 //! GUI-free CPU reference and native GPU readback foundation.
 
+use std::sync::{
+    Arc,
+    atomic::{AtomicBool, Ordering},
+};
+
+/// Cooperative cancellation shared between an adapter and its rendering worker.
+#[derive(Clone, Debug, Default)]
+pub struct Cancellation(Arc<AtomicBool>);
+
+impl Cancellation {
+    pub fn cancel(&self) {
+        self.0.store(true, Ordering::Relaxed);
+    }
+    pub fn is_cancelled(&self) -> bool {
+        self.0.load(Ordering::Relaxed)
+    }
+    pub fn check(&self) -> Result<(), Error> {
+        if self.is_cancelled() {
+            Err(Error::Cancelled)
+        } else {
+            Ok(())
+        }
+    }
+}
+
 /// An owned, tightly packed RGBA8 frame.
 #[derive(Debug, PartialEq, Eq)]
 pub struct Frame {
@@ -21,6 +46,8 @@ impl Frame {
 /// Failures are explicit; a missing GPU never silently becomes a CPU result.
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("render cancelled")]
+    Cancelled,
     #[error("RGBA byte count does not match frame dimensions")]
     InvalidFrame,
     #[error("capture dimensions must be between 1 and 2048 pixels")]
@@ -64,12 +91,12 @@ pub fn cpu_solid(width: u32, height: u32, color: [u8; 4]) -> Result<Frame, Error
 }
 
 mod scene;
-pub use scene::{Rectangle, Scene, cpu_scene, page_scene};
+pub use scene::{Rectangle, Scene, cpu_scene, cpu_scene_with_cancel, page_scene};
 
 #[cfg(not(target_arch = "wasm32"))]
 mod gpu;
 #[cfg(not(target_arch = "wasm32"))]
-pub use gpu::{gpu_scene, gpu_solid};
+pub use gpu::{gpu_scene, gpu_scene_with_cancel, gpu_solid};
 
 #[cfg(test)]
 mod tests {

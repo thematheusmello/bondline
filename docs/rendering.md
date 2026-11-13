@@ -35,3 +35,9 @@ overflow and primitive-count rejection, one-pixel pages, and odd readback row pi
 Actual native page rotation was visually/accessibility checked after the shared-scene change.
 Human-approved goldens, native Windows/Linux execution, chemical rendering, blending,
 antialiasing and publication-quality color/output remain unverified or missing.
+
+Render workers accept a shared cooperative cancellation flag. Pre-cancelled work fails
+before frame allocation or adapter creation; CPU drawing checks between scanlines and GPU
+readback uses nonblocking device polling with a ten-second deadline. Cancellation cannot
+preempt an operating-system driver call or an already submitted GPU command. These limits
+must remain explicit when adapters move captures off the document lock.

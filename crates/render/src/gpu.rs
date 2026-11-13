@@ -1,4 +1,4 @@
-use crate::{Error, Frame, Rectangle, Scene};
+use crate::{Cancellation, Error, Frame, Rectangle, Scene};
 use wgpu::util::DeviceExt;
 
 fn draw_resources(
@@ -119,7 +119,15 @@ pub async fn gpu_solid(
 
 /// Draw ordered rectangle instances with the GPU rasterizer and read back straight RGBA8.
 pub async fn gpu_scene(scene: &Scene) -> Result<(Frame, wgpu::AdapterInfo), Error> {
+    gpu_scene_with_cancel(scene, &Cancellation::default()).await
+}
+
+pub async fn gpu_scene_with_cancel(
+    scene: &Scene,
+    cancel: &Cancellation,
+) -> Result<(Frame, wgpu::AdapterInfo), Error> {
     let count = scene.validate()?;
+    cancel.check()?;
     let (width, height, color) = (scene.width, scene.height, scene.background);
     let instance = wgpu::Instance::default();
     let adapter = instance
@@ -130,6 +138,7 @@ pub async fn gpu_scene(scene: &Scene) -> Result<(Frame, wgpu::AdapterInfo), Erro
     let (device, queue) = adapter
         .request_device(&wgpu::DeviceDescriptor::default(), None)
         .await?;
+    cancel.check()?;
     device.push_error_scope(wgpu::ErrorFilter::Validation);
     let resources = draw_resources(&device, scene);
     if let Some(error) = device.pop_error_scope().await {
@@ -141,7 +150,7 @@ pub async fn gpu_scene(scene: &Scene) -> Result<(Frame, wgpu::AdapterInfo), Erro
         depth_or_array_layers: 1,
     };
     let texture = device.create_texture(&wgpu::TextureDescriptor {
-        label: Some("Bondline empty canvas"),
+        label: Some("Bondline canvas"),
         size: extent,
         mip_level_count: 1,
         sample_count: 1,
@@ -162,7 +171,7 @@ pub async fn gpu_scene(scene: &Scene) -> Result<(Frame, wgpu::AdapterInfo), Erro
     let mut encoder = device.create_command_encoder(&Default::default());
     {
         let mut pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-            label: Some("empty canvas reference"),
+            label: Some("canvas reference"),
             color_attachments: &[Some(wgpu::RenderPassColorAttachment {
                 view: &view,
                 resolve_target: None,
@@ -210,11 +219,32 @@ pub async fn gpu_scene(scene: &Scene) -> Result<(Frame, wgpu::AdapterInfo), Erro
         .map_async(wgpu::MapMode::Read, move |result| {
             let _ = sender.send(result);
         });
-    device.poll(wgpu::Maintain::Wait);
-    receiver.recv_timeout(std::time::Duration::from_secs(10))??;
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(10);
+    loop {
+        cancel.check()?;
+        device.poll(wgpu::Maintain::Poll);
+        match receiver.try_recv() {
+            Ok(result) => {
+                result?;
+                break;
+            }
+            Err(std::sync::mpsc::TryRecvError::Disconnected) => {
+                return Err(Error::Timeout(
+                    std::sync::mpsc::RecvTimeoutError::Disconnected,
+                ));
+            }
+            Err(std::sync::mpsc::TryRecvError::Empty) => {
+                if std::time::Instant::now() >= deadline {
+                    return Err(Error::Timeout(std::sync::mpsc::RecvTimeoutError::Timeout));
+                }
+                std::thread::sleep(std::time::Duration::from_millis(1));
+            }
+        }
+    }
     let data = buffer.slice(..).get_mapped_range();
     let mut rgba = Vec::with_capacity(count);
     for scanline in data.chunks_exact(pitch as usize) {
+        cancel.check()?;
         rgba.extend_from_slice(scanline.get(..row as usize).ok_or(Error::InvalidReadback)?);
     }
     if rgba.len() != count {

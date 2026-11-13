@@ -1,4 +1,4 @@
-use crate::{Error, Frame, byte_count, cpu_solid};
+use crate::{Cancellation, Error, Frame, byte_count, cpu_solid};
 use bondline_model::PageSize;
 
 /// Integer, half-open rectangle in canvas pixels. Later rectangles replace earlier pixels.
@@ -41,13 +41,19 @@ impl Scene {
 
 /// CPU reference: clip each rectangle to the frame and replace straight RGBA8 pixels.
 pub fn cpu_scene(scene: &Scene) -> Result<Frame, Error> {
+    cpu_scene_with_cancel(scene, &Cancellation::default())
+}
+
+pub fn cpu_scene_with_cancel(scene: &Scene, cancel: &Cancellation) -> Result<Frame, Error> {
     scene.validate()?;
+    cancel.check()?;
     let mut frame = cpu_solid(scene.width, scene.height, scene.background)?;
     for rectangle in &scene.rectangles {
         let right = (rectangle.x + rectangle.width).min(scene.width);
         let bottom = (rectangle.y + rectangle.height).min(scene.height);
         let left = rectangle.x.min(scene.width);
         for y in rectangle.y.min(scene.height)..bottom {
+            cancel.check()?;
             let start = ((y * scene.width + left) * 4) as usize;
             let end = ((y * scene.width + right) * 4) as usize;
             for pixel in frame

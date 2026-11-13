@@ -185,3 +185,13 @@ Integrated checkpoint: 46 tests, rustfmt, workspace/all-targets clippy, actual l
 native license/asset gates pass. Windows/Linux all-targets source checks pass. The PNG crate
 is already part of the audited graphics dependency graph; Pillow runs externally only.
 No new native runtime, full M0, chemical compatibility or human-golden claim.
+
+## Cooperative render cancellation, 2026-11-13
+
+RED: `cargo test -p bondline-render --test cancellation --locked` failed for the missing
+cancellation API and error. GREEN: a shared pre-cancelled flag rejects both paths before
+allocation/GPU initialization; all seven render tests pass, including real Metal pixel
+comparisons. GPU readback now polls without the previous unbounded device wait, observes
+cancellation and retains a ten-second readback deadline. Driver calls themselves remain
+non-preemptible. Adapter shutdown and in-flight job cancellation need their own integration
+evidence when the capture command lands.
