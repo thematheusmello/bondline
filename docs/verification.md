@@ -329,3 +329,39 @@ This is bounded fuzz evidence, not exhaustive conformance or a security audit.
 whole-workspace all-targets source checks pass; their native execution remains unverified.
 No UI change, application file-open/save, model mapping or broader format compatibility
 is claimed. No fuzz or Cargo job remains running.
+
+## Loopback session authorization, 2026-11-13
+
+RED: `cargo test -p bondline-mcp --test control unauthenticated_clients --locked` returned
+a document snapshot where the independent wire test expected unauthorized. GREEN: an
+unauthenticated connection now receives the exact generic error and closes before dispatch.
+No authored state/history or change callback is touched. Missing/wrong tokens, wrong types,
+malformed JSON, duplicate fields and unknown fields are checked. Existing socket workflows
+now perform the handshake and continue sharing edits, captures, history and bounded lifetime.
+Two live servers reject each other's token; token shape/freshness are checked, not claimed
+as a statistical random-source certification. Credentials are absent from rejection responses.
+
+A further RED test exposed borrowed-str decoding rejecting an equivalent JSON string with
+Unicode escapes. The bounded handshake now owns the decoded String; the escaped-token
+wire test passes. The unchanged engine, CLI and stdio MCP still receive their original
+command shape. The handshake is adapter metadata, not an alternative command registry.
+
+Actual native workflow (Apple M3 Max / Metal): an independent Python socket was rejected
+without credentials, then authenticated using startup stdout kept only in process memory.
+The edit set 144x72 pt at revision 1. Native accessibility and a real-window screenshot
+showed that page; Cmd+Z visibly restored A4. The authenticated socket read revision 2 and
+595.2755905511812x841.8897637795276 pt. Native Quit closed the app; exec 81217 exited 0 and
+127.0.0.1:56743 refused a new connection. The first ad hoc driver had hit its own stdin EOF/
+wait timeout; the completed driver used the controlling terminal. No token was recorded.
+This native run preceded the equivalent-JSON-string decoder refinement. The final built
+native app then passed its real three-frame smoke launch on Metal, accepted an entirely
+Unicode-escaped token string and served document.inspect before exiting 0. Startup
+credentials stayed in the parent process's pipe/memory and were omitted from tool output.
+
+Pinned additions retain the allowlist: getrandom 0.3.4 MIT/Apache and subtle 2.6.1 BSD-3-Clause.
+The native declaration gate now covers 147/158/216 packages plus two assets. Full source/
+release-notice audit, compromised-account isolation and hardware side-channel certification
+are not established. No proprietary program or asset was inspected.
+`cargo xtask ci` passes all 68 tests, formatting, clippy, layers, native licenses/assets
+and current corpus checks. Final Windows/Linux whole-workspace all-targets source checks
+pass; neither is native runtime evidence. No Cargo/native job remains running.

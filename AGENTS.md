@@ -35,6 +35,9 @@ The UI, CLI, loopback channel and MCP call one typed JSON command registry.
 xtask checks layers and licenses, fetches a pinned SHA-256 corpus, and orchestrates CI.
 No GUI dependencies below ui; wgpu belongs in render. Add crates when useful behavior lands,
 not empty successful-looking API stubs. Document any isolated OS FFI exception explicitly.
+Loopback connections require the fresh session token emitted only in opt-in startup stdout.
+Never commit or expose actual tokens in logs, screenshots or verification records. Stdio MCP
+is separate and opens no listener. Keep file access bounded and explicitly authorized.
 
 Current map: model (L0, validated pages); cdxml (L0, source-preserving syntax and checked
 existing-attribute replacement);

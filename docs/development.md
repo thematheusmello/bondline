@@ -24,6 +24,10 @@ require an actual supported adapter and fail if it is absent. Source cross-compi
 useful evidence but does not establish runtime behavior on that operating system.
 
 The native loopback channel is opt-in via `--control-port`. Do not broaden its bind address.
-Before exposing file access or private chemical documents, add session authentication and
-authorization; localhost is a network boundary, not an operating-system user identity.
-Current operations expose only the temporary page model. HTTP input is rejected and closed.
+Every connection now authenticates with a fresh 256-bit session token before running any
+command. Startup stdout is the owner's credential channel; do not redirect it to public logs
+or commit tokens in artifacts. The UI/errors never show the token. Localhost is a network
+boundary, not an operating-system user identity, and a compromised local account is outside
+this token's protection. Current operations expose only the temporary page model. HTTP
+input is rejected and closed. Future file operations still require explicit authorization,
+bounded input, validated paths and data-preserving save/recovery behavior.

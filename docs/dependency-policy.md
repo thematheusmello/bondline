@@ -56,6 +56,11 @@ Product binaries are discovered from Cargo workspace membership/targets; the cur
 covers both the desktop and CLI roots, including the shared command engine.
 
 Native license closure has passed on macOS arm64, Windows x64 MSVC and Linux x64 targets.
+Session authentication pins getrandom 0.3.4 (MIT OR Apache-2.0) with its std feature and
+subtle 2.6.1 (BSD-3-Clause), default features disabled. Only subtle adds a new lockfile
+package; getrandom was already resolved. Their published APIs, error behavior and license
+declarations were inspected. Latest runtime closures are 147/158/216 packages for macOS/
+Windows/Linux, plus the same two checked assets. This retains the original allowlist.
 Windows/Linux cross-checks verify compilation, not OS execution. Native runtime acceptance
 still needs corresponding runners. The WebAssembly delivery remains M5: its current
 candidate graph includes Unicode-licensed identifier data and is not approved for shipment.

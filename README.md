@@ -37,7 +37,9 @@ for ISC, Boost, Zlib, Unicode or OFL. The hypothetical browser graph is not yet 
 Agent clients can launch `cargo run --quiet -p bondline-cli -- mcp` as a stdio subprocess;
 it opens its own in-memory document. See [the command contract](docs/control-protocol.md).
 For the active desktop document, launch with `--control-port 0`; the app reports and displays
-its loopback address. This mode is opt-in and uses bounded newline JSON requests.
+its loopback address and a fresh session token in startup stdout. This mode is opt-in;
+protect that output as a credential. Authenticate each socket before sending bounded
+newline JSON commands, as documented in [the command contract](docs/control-protocol.md).
 
 Current work: the public menu/tool/shortcut inventory, broader file coverage and actual
 three-platform CI execution. [CI scope](docs/ci.md) separates configured jobs from evidence.

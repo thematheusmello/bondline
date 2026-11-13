@@ -4,11 +4,11 @@
 
 The native desktop/GPU license blocker is resolved for the pinned candidate stack without
 broadening the MIT/Apache-2.0/BSD policy. Both product roots pass declared runtime closure:
-macOS arm64 145 packages, Windows x64 156, Linux x64 215, plus two SHA-verified bundled assets.
+macOS arm64 147 packages, Windows x64 158, Linux x64 216, plus two SHA-verified bundled assets.
 See docs/dependency-policy.md for the original compatibility adapters, fork and source evidence.
 This declaration gate is distinct from a complete release-notice/source review.
 
-Verified: 65 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
+Verified: 68 workspace tests, rustfmt, workspace/all-targets clippy with warnings denied,
 actual layer gate, and whole-workspace Windows/Linux all-targets source checks. These are
 NOT native Windows/Linux runtime passes. CPU/GPU clear and ordered page-scene pixels agree on Apple M3 Max/Metal.
 
@@ -26,6 +26,10 @@ Delivered behavior:
 Desktop loopback control is now verified: opt-in IPv4 localhost, bounded frames, shared native
 engine/history, repaint notification, concurrent-client cap and clean shutdown. An independent
 socket edit changed the actual Mac canvas; native Undo was visible to another socket request.
+Every new connection now requires a fresh 256-bit server session token before any command
+or engine inspection. The token is delivered only through opt-in startup stdout; keep it
+private. Wrong/missing tokens and ambiguous authentication objects fail closed. This is
+bearer authorization for current commands, not local-account isolation or a security audit.
 
 The native canvas now consumes the shared render page scene. CPU and instanced GPU paths
 match a hand-authored 8x8 pixel grid; layered clipping, alpha source replacement, odd pitches,
@@ -68,8 +72,8 @@ Next exact tasks:
    never fill them from product memory or inspect installed application files.
 2. Continue the unblocked M1 work with chemical model mapping/open-save through the registry.
    Existing-attribute replacement is delivered; preserve source backing through mapping.
-   Add session authorization before
-   exposing private file data on loopback. Research/pin a licensed CDX fixture before decoding.
+   Session authorization is now implemented on loopback; preserve that boundary when adding
+   private data and file commands. Research/pin a licensed CDX fixture before decoding.
 3. Record the pending human golden response without treating silence as approval; no new
    golden has been approved. CPU/GPU candidate PNGs are under ignored target/captures/.
    The displayed GPU candidate is page-gpu.png: 512x512 pixels, 72x144 pt page, PNG SHA-256
@@ -77,15 +81,19 @@ Next exact tasks:
    only to this blank-page preview; add a durable golden and regression check after approval.
 
 The graphics checkpoint is db94cd5; subsequent atomic commits add layers, model, commands,
-CLI and native controls. The current checked-attribute writer checkpoint includes this status record; use Git log
+CLI and native controls. The current session-authentication checkpoint includes this status record; use Git log
 for its final hash. No confirmed Cargo/npm jobs remain running.
 
 The disposable development bundle target/dev/Bondline.app (org.bondline.development) contains
-the capture build and is closed. Native test exec session 56032 exited 0; its listener at
-127.0.0.1:53031 was independently confirmed closed. Earlier REA evidence is historical and
+the final authentication build and is closed. Native workflow exec session 81217 exited 0;
+its listener at 127.0.0.1:56743 was independently confirmed closed. Its authenticated edit
+set 144x72 pt at revision 1; native Cmd+Z restored A4 at revision 2, independently read by
+the authenticated socket. A credential-free socket was rejected. The final three-frame native
+smoke also accepted an escaped JSON token, served inspection and exited 0 on Metal.
+Earlier REA evidence is historical and
 bound to its previous digest. Build artifacts and reports remain ignored.
 
-CI: the real aggregate `cargo xtask ci` passes locally (65 tests and all existing gates).
+CI: the real aggregate `cargo xtask ci` passes locally (68 tests and all existing gates).
 Its fail-fast behavior was checked with a deliberate formatting defect and restored source.
 The three-platform native/window workflow and separate Linux ASan job are wired, not run.
 Pinned action manifests and runner labels were researched; YAML parses with PyYAML 6.0.3.

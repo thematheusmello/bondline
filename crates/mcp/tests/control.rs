@@ -29,6 +29,122 @@ fn call(
     Ok(serde_json::from_str(&response)?)
 }
 
+fn authenticated(
+    server: &LoopbackServer,
+) -> Result<BufReader<TcpStream>, Box<dyn std::error::Error>> {
+    let mut client = connect(server.address())?;
+    let response = call(
+        &mut client,
+        &serde_json::json!({"token":server.token()}).to_string(),
+    )?;
+    assert_eq!(response, serde_json::json!({"authenticated":true}));
+    Ok(client)
+}
+
+#[test]
+fn unauthenticated_clients_cannot_inspect_or_edit_the_document()
+-> Result<(), Box<dyn std::error::Error>> {
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let before = serde_json::to_vec(&engine.lock().map_err(|_| "poisoned engine")?.state())?;
+    let server = LoopbackServer::bind(0, Arc::clone(&engine), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    for request in [
+        r#"{"command":"document.inspect","params":{}}"#,
+        r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}"#,
+        r#"{"token":"wrong"}"#,
+        r#"{"token":null}"#,
+        r#"{"token":"wrong","extra":true}"#,
+        r#"{"token":"one","token":"two"}"#,
+        "[]",
+        "{",
+    ] {
+        let mut client = connect(server.address())?;
+        assert_eq!(
+            call(&mut client, request)?,
+            serde_json::json!({"error":{
+                "code":"unauthorized", "message":"valid session token required"
+            }})
+        );
+        match client.read(&mut [0; 1]) {
+            Ok(0) => {}
+            Err(error) if error.kind() == std::io::ErrorKind::ConnectionReset => {}
+            other => return Err(format!("rejected client stayed connected: {other:?}").into()),
+        }
+    }
+    assert_eq!(
+        serde_json::to_vec(&engine.lock().map_err(|_| "poisoned engine")?.state())?,
+        before
+    );
+    assert_eq!(changes.load(Ordering::SeqCst), 0);
+    server.shutdown()?;
+    Ok(())
+}
+
+#[test]
+fn tokens_are_session_scoped_and_authentication_rejects_ambiguous_objects()
+-> Result<(), Box<dyn std::error::Error>> {
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let first = LoopbackServer::bind(0, Arc::clone(&engine), || {})?;
+    let second = LoopbackServer::bind(0, engine, || {})?;
+    assert_eq!(first.token().len(), 64);
+    assert!(
+        first
+            .token()
+            .bytes()
+            .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+    );
+    assert_ne!(first.token(), second.token());
+    for request in [
+        serde_json::json!({"token":first.token()}).to_string(),
+        format!("{{\"token\":\"wrong\",\"token\":\"{}\"}}", second.token()),
+        serde_json::json!({"token":second.token(),"command":"document.inspect","params":{}})
+            .to_string(),
+    ] {
+        let mut client = connect(second.address())?;
+        let response = call(&mut client, &request)?;
+        assert_eq!(
+            response,
+            serde_json::json!({"error":{
+                "code":"unauthorized", "message":"valid session token required"
+            }})
+        );
+        assert!(!response.to_string().contains(first.token()));
+        assert!(!response.to_string().contains(second.token()));
+    }
+    let mut client = authenticated(&second)?;
+    assert_eq!(
+        call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?["result"]["revision"],
+        0
+    );
+    first.shutdown()?;
+    second.shutdown()?;
+    Ok(())
+}
+
+#[test]
+fn authentication_compares_decoded_json_strings() -> Result<(), Box<dyn std::error::Error>> {
+    let server = LoopbackServer::bind(0, Arc::new(Mutex::new(Engine::default())), || {})?;
+    let escaped: String = server
+        .token()
+        .chars()
+        .map(|character| format!("\\u{:04x}", u32::from(character)))
+        .collect();
+    let mut client = connect(server.address())?;
+    assert_eq!(
+        call(&mut client, &format!("{{\"token\":\"{escaped}\"}}"))?,
+        serde_json::json!({"authenticated":true})
+    );
+    assert_eq!(
+        call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?["result"]["revision"],
+        0
+    );
+    server.shutdown()?;
+    Ok(())
+}
+
 #[test]
 fn independent_socket_clients_share_the_native_engine_and_notify_on_changes()
 -> Result<(), Box<dyn std::error::Error>> {
@@ -39,8 +155,8 @@ fn independent_socket_clients_share_the_native_engine_and_notify_on_changes()
         counter.fetch_add(1, Ordering::SeqCst);
     })?;
     assert_eq!(server.address().ip(), Ipv4Addr::LOCALHOST);
-    let mut first = connect(server.address())?;
-    let mut second = connect(server.address())?;
+    let mut first = authenticated(&server)?;
+    let mut second = authenticated(&server)?;
     let edited = call(
         &mut first,
         r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}"#,
@@ -88,7 +204,7 @@ fn socket_capture_reports_the_backend_and_keeps_shared_history_unchanged()
     let server = LoopbackServer::bind(0, Arc::clone(&engine), move || {
         counter.fetch_add(1, Ordering::SeqCst);
     })?;
-    let mut client = connect(server.address())?;
+    let mut client = authenticated(&server)?;
     let before = serde_json::to_vec(&engine.lock().map_err(|_| "poisoned engine")?.state())?;
     let mut cpu_png = None;
     for backend in ["cpu", "gpu"] {
@@ -192,7 +308,7 @@ fn excess_connections_are_closed_instead_of_spawning_unbounded_tasks()
     let server = LoopbackServer::bind(0, Arc::new(Mutex::new(Engine::default())), || {})?;
     let mut clients = Vec::new();
     for _ in 0..16 {
-        let mut client = connect(server.address())?;
+        let mut client = authenticated(&server)?;
         assert_eq!(
             call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?["result"]["revision"],
             0

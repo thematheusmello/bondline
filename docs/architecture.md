@@ -28,6 +28,10 @@ The native app and opt-in loopback server now share this engine. A dedicated ada
 owns the Tokio listener/tasks. Input is bounded before JSON decoding; no engine guard crosses
 an await. The server notifies the UI after committed changes and cancels all connection tasks
 on shutdown. Headless stdio remains independent. See control-protocol.md for actual limits.
+The first bounded frame authenticates each loopback connection with an OS-random session
+token before the engine lock or command dispatch is reachable. Startup stdout is the only
+native credential-delivery channel; the UI displays the address only. Tokens last for the
+server lifetime and authorize that connection's current document commands.
 
 Format crates own their syntax and source-preserving representations. They do not depend
 on the model. The io layer translates supported data and retains original backing for

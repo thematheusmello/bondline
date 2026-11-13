@@ -218,7 +218,7 @@ impl BondlineApp {
             let mut output = std::io::stdout().lock();
             serde_json::to_writer(
                 &mut output,
-                &serde_json::json!({"app":"bondline", "backend":format!("{:?}", info.backend), "adapter":info.name, "device_type":format!("{:?}", info.device_type), "control_address":control.as_ref().map(|server| server.address().to_string())}),
+                &serde_json::json!({"app":"bondline", "backend":format!("{:?}", info.backend), "adapter":info.name, "device_type":format!("{:?}", info.device_type), "control_address":control.as_ref().map(|server| server.address().to_string()), "control_token":control.as_ref().map(LoopbackServer::token)}),
             )?;
             output.write_all(b"\n")?;
         }

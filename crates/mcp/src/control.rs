@@ -2,14 +2,17 @@
 
 use crate::{SharedEngine, work::Workers};
 use bondline_commands::{Error as CommandError, ErrorInfo, MAX_REQUEST_BYTES};
+use serde::Deserialize;
 use serde_json::{Value, json};
 use std::{
+    fmt::Write as _,
     io,
     net::{Ipv4Addr, SocketAddr},
     sync::Arc,
     thread::JoinHandle,
     time::Duration,
 };
+use subtle::ConstantTimeEq;
 use tokio::{
     io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader},
     net::{TcpListener, TcpStream, tcp::OwnedWriteHalf},
@@ -20,6 +23,12 @@ use tokio::{
 
 const MAX_CLIENTS: usize = 16;
 const IO_DEADLINE: Duration = Duration::from_secs(30);
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Authentication {
+    token: String,
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -32,6 +41,7 @@ pub enum Error {
 /// Owns the listener, connection tasks and worker. Drop closes all of them.
 pub struct LoopbackServer {
     address: SocketAddr,
+    token: Arc<str>,
     stop: Option<oneshot::Sender<()>>,
     worker: Option<JoinHandle<io::Result<()>>>,
 }
@@ -42,6 +52,14 @@ impl LoopbackServer {
         engine: SharedEngine,
         on_change: impl Fn() + Send + Sync + 'static,
     ) -> Result<Self, Error> {
+        let mut random = [0_u8; 32];
+        getrandom::fill(&mut random).map_err(io::Error::other)?;
+        let mut token = String::with_capacity(64);
+        for byte in random {
+            write!(&mut token, "{byte:02x}").map_err(io::Error::other)?;
+        }
+        let token: Arc<str> = token.into();
+        let session_token = Arc::clone(&token);
         let listener = std::net::TcpListener::bind((Ipv4Addr::LOCALHOST, port))?;
         let address = listener.local_addr()?;
         listener.set_nonblocking(true)?;
@@ -54,11 +72,19 @@ impl LoopbackServer {
             .spawn(move || {
                 runtime.block_on(async move {
                     let listener = TcpListener::from_std(listener)?;
-                    serve(listener, engine, Arc::new(on_change), shutdown).await
+                    serve(
+                        listener,
+                        engine,
+                        Arc::new(on_change),
+                        session_token,
+                        shutdown,
+                    )
+                    .await
                 })
             })?;
         Ok(Self {
             address,
+            token,
             stop: Some(stop),
             worker: Some(worker),
         })
@@ -66,6 +92,11 @@ impl LoopbackServer {
 
     pub fn address(&self) -> SocketAddr {
         self.address
+    }
+
+    /// Secret for the owner's trusted startup channel; never include it in UI or errors.
+    pub fn token(&self) -> &str {
+        &self.token
     }
 
     pub fn is_running(&self) -> bool {
@@ -99,6 +130,7 @@ async fn serve(
     listener: TcpListener,
     engine: SharedEngine,
     on_change: Arc<dyn Fn() + Send + Sync>,
+    token: Arc<str>,
     mut stop: oneshot::Receiver<()>,
 ) -> io::Result<()> {
     let mut clients = JoinSet::new();
@@ -111,7 +143,7 @@ async fn serve(
             accepted = listener.accept() => match accepted {
                 Ok((stream, _)) => {
                     if clients.len() < MAX_CLIENTS {
-                        clients.spawn(connection(stream, Arc::clone(&engine), Arc::clone(&on_change), workers.clone()));
+                        clients.spawn(connection(stream, Arc::clone(&engine), Arc::clone(&on_change), workers.clone(), Arc::clone(&token)));
                     }
                 }
                 Err(error) if matches!(error.kind(), io::ErrorKind::Interrupted | io::ErrorKind::ConnectionAborted) => {},
@@ -137,9 +169,11 @@ async fn connection(
     engine: SharedEngine,
     on_change: Arc<dyn Fn() + Send + Sync>,
     workers: Workers,
+    token: Arc<str>,
 ) -> io::Result<()> {
     let (read, mut write) = stream.into_split();
     let mut reader = BufReader::new(read);
+    let mut authenticated = false;
     loop {
         let mut bytes = Vec::new();
         let count = timeout(
@@ -170,6 +204,16 @@ async fn connection(
             return Ok(());
         }
         bytes.pop();
+        if !authenticated {
+            authenticated = serde_json::from_slice::<Authentication>(&bytes)
+                .is_ok_and(|request| bool::from(request.token.as_bytes().ct_eq(token.as_bytes())));
+            if !authenticated {
+                send(&mut write, json!({"error":{"code":"unauthorized","message":"valid session token required"}})).await?;
+                return Ok(());
+            }
+            send(&mut write, json!({"authenticated":true})).await?;
+            continue;
+        }
         let result = engine
             .lock()
             .map(|mut engine| engine.prepare_json(&bytes))

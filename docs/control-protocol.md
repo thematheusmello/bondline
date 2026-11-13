@@ -41,11 +41,31 @@ This process has its own engine; it does not attach to the open desktop window. 
 process opens no network listener, HTTP transport, account or hosted service.
 
 Start the desktop with `--control-port PORT` to opt into raw newline-delimited JSON on
-127.0.0.1. Port 0 requests an available port; startup emits its address as JSON and the UI
-shows it. Send the same `{command,params}` object followed by LF. Each response is exactly
+127.0.0.1. Port 0 requests an available port. Startup stdout contains `control_address` and
+`control_token`; treat that output as a credential, not a public log. The UI shows only the
+address. Each new connection must first send exactly this object followed by LF:
+
+```json
+{"token":"<control_token from startup>"}
+```
+
+The server replies `{"authenticated":true}` followed by LF. Only then send the same
+`{command,params}` objects used by the engine, each followed by LF. Each command response is exactly
 one `{result:...}` or `{error:{code,message}}` object followed by LF. Requests on a connection
 run in order; connections share the native document and history. Changed state requests a
 native repaint. There is no MCP handshake on this separate raw control channel.
+
+Each server creates 32 bytes from the operating system random source and represents them
+as 64 lowercase hex characters. Random-source failure aborts startup; no predictable fallback
+exists. Tokens are fresh for each server lifetime and cannot authenticate a different server.
+Comparison uses pinned subtle 2.6.1's constant-time slice operation (its published guarantee
+is best effort, not a hardware side-channel certification). Duplicate/unknown fields,
+wrong types, missing/incorrect tokens or a command before authentication return
+`unauthorized` and close. The response never echoes supplied or expected credentials.
+Authentication permits all current document commands for that connection; there are no
+per-command roles, accounts or persistent credentials. Restarting invalidates the token.
+Possession is authorization; this does not isolate an already compromised local account.
+The startup recipient must keep the token private. Stdio MCP and CLI requests are unchanged.
 
 Limits are explicit Bondline policies: 1 MiB per request, 16 simultaneous connections,
 30 seconds for a complete input frame or output write. Excess connections close. Missing
