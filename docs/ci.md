@@ -59,3 +59,24 @@ Paravirtual device (IntegratedGpu), Windows Dx12 on Microsoft Basic Render Drive
 and Linux Vulkan on llvmpipe LLVM 20.1.2 (Cpu). Software-driver success verifies those API
 paths, not hardware acceleration or performance. No interactive Windows/Linux drawing or
 new file-workflow claim follows from this run; its product code is still 3d3dd44.
+
+## Native files and current integration
+
+[Run43458663480](https://github.com/thematheusmello/bondline/actions/runs/43458663480) at
+34d577d passes Windows, Ubuntu and Linux ASan. Windows executes seven io unit and six file
+integration tests, including protected owner DACL/exclusive temporary, DACL/Zone.Identifier
+preservation and recovery, then launches the real window. Its earlier exact-DACL test RED
+was corrected against Microsoft's documented AI control flag, retaining all access checks.
+
+The Mac job131999452071 never started: provider annotations record multiple acquisition
+attempts and hosted arm64 capacity constraints, then cancellation with no runner/steps.
+The overall run is unsuccessful. This is not a Mac test failure or successful execution;
+see [provider annotations](https://api.github.com/repos/thematheusmello/bondline/check-runs/131999452071/annotations).
+Local Mac checks and native UI evidence remain separate.
+
+Complete file/UI/accessibility integration at ccf8c50 is now in
+[run43463687047](https://github.com/thematheusmello/bondline/actions/runs/43463687047), confirmed
+active. Main remains b1e0f4b while the feature branch is checked. Mac's aggregate now also
+executes the three patched native accessibility tests and its clippy from the root lock.
+Local final aggregate passes193 workspace plus3 native bridge tests; this does not replace
+reading actual terminal hosted outcomes before merging or changing platform claims.

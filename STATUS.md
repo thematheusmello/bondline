@@ -60,7 +60,10 @@ https://github.com/thematheusmello/bondline/actions/runs/43458663480 . Its overa
 unsuccessful: Mac job131999452071 was never acquired after multiple attempts, then cancelled
 for hosted arm64 capacity constraints (empty steps/runner). No Mac test failed or ran in
 that job. Exact provider annotations are in ignored target/file-io-hosted-macos-*.json.
-This run predates the final command/UI/AX integration; a fresh branch run remains required.
+This run predates the final command/UI/AX integration. Complete feature head ccf8c50 is now
+in confirmed active run43463687047:
+https://github.com/thematheusmello/bondline/actions/runs/43463687047 . Inspect that exact live
+handle before retrying, merging or claiming its success.
 Do not restart an unobserved live run or infer success from queue/configuration.
 
 Native Mac io44 tests and actual Linux arm64 Docker17 file tests pass. Linux invalid-byte
@@ -96,7 +99,7 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 
 ## Next exact actions
 
-1. Publish/inspect fresh full feature-branch CI, preserving actual runner-capacity failures.
+1. Inspect live full feature-branch run43463687047, preserving actual runner-capacity failures.
    Merge to main only after required integration evidence; no release publication requested.
 2. Read the new inventory audit when ready; reconcile sourced rows and unresolved modern
    controls without claiming completeness from counts or cloud demo imagery.
@@ -107,5 +110,5 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
    snapping/order/labels with independent tests and actual native workflows. Keep M3-M5 full.
 
 Product implementation agents finished; no confirmed Cargo/native/fuzz job remains. Only
-research agent above is active; root will record any newly started hosted run handle before
-stopping. Recheck authoritative agent/job state on continuation. Do not duplicate live work.
+research agent above is active, plus hosted run43463687047. Recheck authoritative agent/job
+state on continuation. Do not duplicate live work.
