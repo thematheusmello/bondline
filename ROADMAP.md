@@ -6,7 +6,8 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M0: foundation — in progress
 
-- [ ] Resolve strict runtime/asset license closure for native egui/wgpu on all three platforms.
+- [x] Resolve declared runtime/asset license closure for native egui/wgpu on all three platforms.
+      Actual macOS Metal launch/readback verified; Windows/Linux runtime checks remain below.
 - [ ] Cargo workspace, pinned toolchain, lints, build-time layer and license gates.
 - [ ] Pure document model, named typed JSON commands, transactions and undo/redo tests.
 - [ ] CLI, stdio MCP and opt-in loopback control using that registry.

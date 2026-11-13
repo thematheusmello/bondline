@@ -9,3 +9,5 @@
 - Editable Office embedding and modern naming/prediction behavior need public evidence.
 - REA 6.9.0 requires a newer Node runtime than the currently selected Node 22.11.0. Keep it
   outside the shipped Rust application; do not install a system-wide replacement as a shortcut.
+- Before the M5 WebAssembly release, resolve the candidate browser graph's Unicode-licensed
+  identifier data. Current native license gates do not imply browser approval.

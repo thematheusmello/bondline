@@ -18,6 +18,15 @@ proprietary implementation, help text or assets. Record more specific sections a
 | RUST-GUIDE | https://github.com/apollographql/skills/blob/main/skills/rust-best-practices/SKILL.md | Ownership, typed errors, lints and focused tests; verify recommendations against actual APIs. |
 | MCP-TOOLS | https://modelcontextprotocol.io/specification/2025-11-25/server/tools | Shared tool schemas, discovery, invocation and errors. |
 | REA-AUDIT | https://github.com/morluto/rea/blob/main/docs/release-exposure.md | External inspection of Bondline artifacts only; not proof of security or feature parity. |
+| WGSL-LITERALS | https://www.w3.org/TR/2026/CRD-WGSL-20261106/ | Exact binary floating point literals; independently implemented conversion tested with IEEE-754 bit vectors. |
+| DLOPEN2 | https://docs.rs/dlopen2/0.9.0/dlopen2/raw/struct.Library.html | MIT backend for OS library ownership and symbol resolution; implementation inspected from the published crate. |
+| WIN-MODULE | https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandleexw | Existing modules acquire an owned reference without rerunning library initializers; release with FreeLibrary. |
+| WIN-SYMBOL | https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getprocaddress | Resolve by validated symbol name while retaining that module reference. |
+| WIN-CLIPBOARD | https://learn.microsoft.com/en-us/windows/win32/dataxchg/using-the-clipboard | Clipboard transaction/window ownership and global memory transfer; no example source copied. |
+| WIN-CFHTML | https://learn.microsoft.com/en-us/windows/win32/dataxchg/html-clipboard-format | UTF-8 and byte-based fragment offsets with bounded validation. |
+| WIN-FILES | https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-dragqueryfilew | Lossless UTF-16 file list query; bounded paths/count. |
+| ROBOTO | https://github.com/googlefonts/roboto-2/tree/38062f4b4a0be4346d07a928408da21602545e9e | Independently sourced Apache-2.0 UI font; exact file hash/notice in assets/manifest.json. |
+| PYTHON-IEEE | https://docs.python.org/3/library/stdtypes.html#float.hex | Independent IEEE reference conversion. Original seeded test vectors/generator retained under compat/hexf-parse/tests and scripts. |
 | CORPUS-RDKIT | https://github.com/rdkit/rdkit/tree/c686c2c945df370c2f95ebe20aae2872a36f7c17 | BSD-licensed independently authored interchange fixtures; exclude proprietary template collections; record per-file provenance/hashes when added. |
 
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused

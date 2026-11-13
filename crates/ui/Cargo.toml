@@ -1,0 +1,21 @@
+[package]
+name = "bondline-ui"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[package.metadata.bondline]
+layer = 5
+
+[dependencies]
+eframe.workspace = true
+serde_json.workspace = true
+bondline-render = { path = "../render" }
+
+[[bin]]
+name = "bondline"
+path = "src/main.rs"
+
+[lints]
+workspace = true

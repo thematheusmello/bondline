@@ -1,0 +1,20 @@
+{
+  "files": [
+    {
+      "path": "assets/fonts/Roboto-Regular.ttf",
+      "source": "https://raw.githubusercontent.com/googlefonts/roboto-2/38062f4b4a0be4346d07a928408da21602545e9e/src/hinted/Roboto-Regular.ttf",
+      "revision": "38062f4b4a0be4346d07a928408da21602545e9e",
+      "sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+      "license": "Apache-2.0",
+      "notice": "assets/fonts/LICENSE-Roboto.txt"
+    },
+    {
+      "path": "vendor/eframe/data/icon.png",
+      "source": "https://crates.io/api/v1/crates/eframe/0.29.1/download",
+      "revision": "0.29.1",
+      "sha256": "31bbc7de655ccdf16efb6adb9959b5c6b9318befa0cdae88499b072549a55e3f",
+      "license": "MIT OR Apache-2.0",
+      "notice": "vendor/eframe/LICENSE-MIT"
+    }
+  ]
+}

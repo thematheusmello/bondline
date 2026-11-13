@@ -1,0 +1,19 @@
+[package]
+name = "bondline-render"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[package.metadata.bondline]
+layer = 1
+
+[dependencies]
+wgpu.workspace = true
+thiserror = "2"
+
+[dev-dependencies]
+pollster = "=0.3.0"
+
+[lints]
+workspace = true
