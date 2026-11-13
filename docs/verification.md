@@ -1008,3 +1008,49 @@ passed for root/member/nested invocation and invalid-manifest refusal without cr
 lockfile. All16 xtask tests and warnings-denied clippy pass; logs xtask-runtime-root-green.log
 and xtask-runtime-root-clippy-green.log. The corrected integration run is recorded separately
 with its actual source/test scope; neither discarded attempt contributes to that claim.
+
+## Shared close registry, adapters and native shutdown, 2026-11-13
+
+TDD RED preceded the new API (shared-close-core-red.log, close-adapters-red.log and
+native-shared-close-red.log). Behavioral RED then caught approval surviving an actual
+saved-baseline change (shared-close-baseline-red.log), repaint before response flush
+(close-response-order-red.log), a lost close-Save retry (native-shared-close-retry-red.log),
+and an ordinary picker accepting Save after shutdown was approved
+(native-shared-close-picker-red.log). These failures were fixed without relaxing the intended
+source/history/receipt/ordering assertions. An independent read-only review found the picker
+ordering issue; its other adapter paths had no actionable finding.
+
+Core47 tests include12 new close tests. They independently assert closed/default schemas,
+exact source/model/history/baseline retention, monotonic epoch/atomic exhaustion, stale
+revision/path/baseline invalidation without resurrection, Cancel/new Request ABA, matching
+Save followed by fresh Request, immutable old authored results with current lifecycle metadata,
+post-commit refusal, late Open rejection and truthful already-published Save receipts.
+CLI/MCP/socket27 targeted tests cover nine-command discovery, all decisions/errors/epochs,
+stdio survival, registered pre-spawn work, clone/drop/cancel lifetimes, reply flush barriers
+and write/flush failure. UI28 tests retain file/drawing coverage and add shared-state adoption,
+receipt/epoch continuation, busy cancellation, obsolete-picker ordering and failure retention.
+Package logs:shared-close-core-final-{green,clippy}, close-adapters-{first-green,clippy},
+native-shared-close-ordering-{green,clippy}.
+
+The final aggregate was invoked from crates/commands, printed the actual root checkout and
+passed233 workspace tests plus3 native AccessKit bridge tests, fmt, warnings-denied clippy,
+layers, unchanged native license/assets and pinned corpus. It includes the named new close
+and runtime-workspace tests, not the other worktree's old suite. Log:
+target/shared-close-ci-integrated.log. The two discarded cache/setup attempts above are not
+counted. No product parser/render/golden or dependency pin was changed for these passes.
+
+Actual corrected native executable68048eaa0d11c2559d7a51dabf2b72fcc95790a54ff244eae5089248838334c3
+on Mac/Apple M3 Max/Metal passed remote prompt/Cancel, stale/malformed retention, File Close,
+CmdW/Escape, red Close and Quit Cancel/Save/Discard, plus actual reopened committed-edit
+protection. Two simultaneous2048 CPU/GPU captures had pending replies after explicit Discard
+approved; the process stayed alive, delivered both full successful replies, then exited0.
+Independent Expat/ElementTree and RDKit confirm the actual493-byte saved Unicode-name file
+as CC/C2H6, SHA9f72459be089ef815f5292478a80e105e4ccfef1b56f57914067f419735204eb.
+Its original bytes survived later Discard. Details, earlier distinct a430 build and the
+ambiguous unobserved drag/Q attempt are in native-file-ui.md. That ambiguity is not a claim
+of committed-state loss or verified pending-input ordering. All controllers/apps/CUA ended;
+credentials stayed memory-only. The approved golden remains unchanged.
+
+Native interactive Windows/Linux, Dock/session/logout/multiwindow close and full reference
+dialog parity remain unverified. A fresh hosted run for this new source is required before
+main integration; the earlier all-green CDX run does not verify the new close command.

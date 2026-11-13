@@ -9,9 +9,13 @@ use std::{collections::VecDeque, sync::Arc};
 
 mod bond;
 mod capture;
+mod close;
 mod files;
 pub use bond::BondCreate;
+pub use close::{CloseAction, CloseDocument, CloseState};
 pub use files::{Completed, FileOperation, FileState, OpenCdxml, SaveCdxml};
+#[cfg(test)]
+mod close_tests;
 #[cfg(test)]
 mod source_tests;
 #[cfg(test)]
@@ -76,6 +80,7 @@ macro_rules! command_registry {
 
 command_registry! {
     Inspect(NoParams) => ("document.inspect", "Inspect the authored document and history state.", true),
+    Close(CloseDocument) => ("document.close", "Request, explicitly discard, or cancel closing the current document revision.", false),
     OpenCdxml(OpenCdxml) => ("document.open_cdxml", "Open an explicitly selected CDXML file without discarding unsaved edits by default.", false),
     SaveCdxml(SaveCdxml) => ("document.save_cdxml", "Atomically save complete CDXML data to an explicitly selected path; overwrite requires opt-in.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
@@ -119,8 +124,12 @@ pub enum Error {
     UnsupportedDocumentPreview,
     #[error("opening a new document requires explicit permission to discard unsaved changes")]
     UnsavedChanges,
-    #[error("document changed while the open operation was running; open was not applied")]
+    #[error("document revision no longer matches the operation; no change was applied")]
     StaleRevision,
+    #[error("the session close is committed; new commands are refused")]
+    CloseCommitted,
+    #[error("close operation identity counter exhausted")]
+    CloseEpochExhausted,
     #[error("native file access is unavailable on this target")]
     FileBackendUnavailable,
     #[error("document engine lock poisoned")]
@@ -158,6 +167,8 @@ impl Error {
             Self::UnsupportedDocumentPreview => "unsupported_content",
             Self::UnsavedChanges => "unsaved_changes",
             Self::StaleRevision => "stale_revision",
+            Self::CloseCommitted => "close_committed",
+            Self::CloseEpochExhausted => "close_epoch_exhausted",
             Self::FileBackendUnavailable => "backend_unavailable",
             Self::EngineUnavailable => "engine_unavailable",
             Self::UnrepresentableFilePath { published: true } => "save_published",
@@ -213,6 +224,10 @@ pub struct CommandResult {
     pub file: FileState,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_operation: Option<FileOperation>,
+    pub close: CloseState,
+    pub close_epoch: u64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub close_operation: Option<CloseState>,
 }
 
 #[derive(Debug)]
@@ -225,6 +240,7 @@ pub struct Engine {
     revision: u64,
     undo: VecDeque<Arc<StoredDocument>>,
     redo: VecDeque<Arc<StoredDocument>>,
+    close_policy: close::ClosePolicy,
 }
 
 impl Default for Engine {
@@ -246,6 +262,7 @@ impl Engine {
             revision: 0,
             undo: VecDeque::new(),
             redo: VecDeque::new(),
+            close_policy: close::ClosePolicy::default(),
         }
     }
 
@@ -271,6 +288,9 @@ impl Engine {
                 dirty: self.document != self.saved,
             },
             file_operation: None,
+            close: self.close_state(),
+            close_epoch: self.close_policy.epoch,
+            close_operation: None,
         }
     }
 
@@ -298,8 +318,12 @@ impl Engine {
     }
 
     pub fn prepare(&mut self, command: Command) -> Result<Prepared, Error> {
+        if self.close_state() == CloseState::Committed && !matches!(command, Command::Inspect(_)) {
+            return Err(Error::CloseCommitted);
+        }
         let changed = match command {
             Command::Inspect(_) => false,
+            Command::Close(params) => return Ok(Prepared::immediate(self.close(params)?)),
             Command::OpenCdxml(params) => {
                 if self.document != self.saved && !params.discard_unsaved {
                     return Err(Error::UnsavedChanges);
@@ -376,6 +400,7 @@ impl Engine {
         self.redo.clear();
         self.trim_history(MAX_HISTORY_BYTES);
         self.revision = revision;
+        self.invalidate_close();
         Ok(true)
     }
 
@@ -421,6 +446,7 @@ impl Engine {
         self.redo
             .push_back(std::mem::replace(&mut self.document, previous));
         self.revision = revision;
+        self.invalidate_close();
         Ok(true)
     }
 
@@ -431,6 +457,7 @@ impl Engine {
         self.undo
             .push_back(std::mem::replace(&mut self.document, next));
         self.revision = revision;
+        self.invalidate_close();
         Ok(true)
     }
 }
@@ -489,6 +516,7 @@ mod tests {
             [
                 "bond.create",
                 "document.inspect",
+                "document.close",
                 "document.open_cdxml",
                 "document.save_cdxml",
                 "history.redo",

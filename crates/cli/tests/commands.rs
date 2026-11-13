@@ -11,7 +11,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
     assert!(list.status.success());
     let commands: Value = serde_json::from_slice(&list.stdout)?;
     let commands = commands.as_array().ok_or("expected command array")?;
-    assert_eq!(commands.len(), 8);
+    assert_eq!(commands.len(), 9);
     assert!(
         commands
             .iter()

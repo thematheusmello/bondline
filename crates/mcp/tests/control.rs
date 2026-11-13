@@ -43,6 +43,14 @@ fn authenticated(
     Ok(client)
 }
 
+fn wait_for_changes(changes: &AtomicUsize, expected: usize) {
+    let deadline = Instant::now() + Duration::from_secs(5);
+    while changes.load(Ordering::SeqCst) < expected && Instant::now() < deadline {
+        std::thread::sleep(Duration::from_millis(1));
+    }
+    assert_eq!(changes.load(Ordering::SeqCst), expected);
+}
+
 #[test]
 fn authenticated_file_commands_share_native_file_state_and_notify_after_saving()
 -> Result<(), Box<dyn std::error::Error>> {
@@ -67,11 +75,7 @@ fn authenticated_file_commands_share_native_file_state_and_notify_after_saving()
         saved["result"]["file"],
         serde_json::json!({"path":std::fs::canonicalize(&path)?,"dirty":false})
     );
-    assert_eq!(
-        changes.load(Ordering::SeqCst),
-        2,
-        "file metadata changes must repaint the native title/status"
-    );
+    wait_for_changes(&changes, 2);
     file_support::independently_read_file(&path, 1)?;
     let opened = call(
         &mut client,
@@ -79,7 +83,7 @@ fn authenticated_file_commands_share_native_file_state_and_notify_after_saving()
     )?;
     assert_eq!(opened["result"]["revision"], 2);
     assert_eq!(opened["result"]["undo_depth"], 0);
-    assert_eq!(changes.load(Ordering::SeqCst), 3);
+    wait_for_changes(&changes, 3);
     assert_eq!(
         engine.lock().map_err(|_| "engine")?.state().file.path,
         Some(
@@ -105,6 +109,7 @@ fn unauthenticated_clients_cannot_inspect_or_edit_the_document()
     })?;
     for request in [
         r#"{"command":"document.inspect","params":{}}"#,
+        r#"{"command":"document.close","params":{"expected_revision":0}}"#,
         r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}"#,
         r#"{"token":"wrong"}"#,
         r#"{"token":null}"#,
@@ -219,7 +224,7 @@ fn independent_socket_clients_share_the_native_engine_and_notify_on_changes()
         inspected["result"]["document"]["pages"][0]["size"]["width_pt"],
         612.0
     );
-    assert_eq!(changes.load(Ordering::SeqCst), 1);
+    wait_for_changes(&changes, 1);
     call(&mut second, r#"{"command":"history.undo","params":{}}"#)?;
     assert_eq!(
         engine
@@ -229,7 +234,7 @@ fn independent_socket_clients_share_the_native_engine_and_notify_on_changes()
             .revision,
         2
     );
-    assert_eq!(changes.load(Ordering::SeqCst), 2);
+    wait_for_changes(&changes, 2);
     let invalid = call(
         &mut first,
         r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":0,"height_pt":72}}"#,
@@ -431,7 +436,94 @@ fn authenticated_bond_edits_history_and_captures_share_the_live_model()
     );
     assert_eq!(gpu["result"]["revision"], 4);
     assert!(gpu["result"]["capture"]["adapter"].is_object());
-    assert_eq!(changes.load(Ordering::SeqCst), 4);
+    wait_for_changes(&changes, 4);
+    server.shutdown()?;
+    Ok(())
+}
+
+#[test]
+fn authenticated_close_decisions_repaint_after_reply_and_native_commit_blocks_new_work()
+-> Result<(), Box<dyn std::error::Error>> {
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let executor = bondline_mcp::CommandExecutor::new(Arc::clone(&engine));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind_with_executor(0, executor.clone(), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    let created = call(
+        &mut client,
+        &serde_json::json!({"command":"bond.create","params":{
+            "page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200
+        }})
+        .to_string(),
+    )?;
+    let document = created["result"]["document"].clone();
+    wait_for_changes(&changes, 1);
+    for params in [
+        serde_json::json!({"expected_revision":1,"action":"quit"}),
+        serde_json::json!({}),
+        serde_json::json!({"expected_revision":1,"force":true}),
+    ] {
+        let mut invalid = authenticated(&server)?;
+        let result = call(
+            &mut invalid,
+            &serde_json::json!({"command":"document.close","params":params}).to_string(),
+        )?;
+        assert_eq!(result["error"]["code"], "invalid_params");
+    }
+    let stale = call(
+        &mut client,
+        r#"{"command":"document.close","params":{"expected_revision":0}}"#,
+    )?;
+    assert_eq!(stale["error"]["code"], "stale_revision");
+    assert_eq!(engine.lock().map_err(|_| "engine")?.state().close_epoch, 0);
+    assert_eq!(changes.load(Ordering::SeqCst), 1);
+    for (action, state, epoch) in [
+        (None, "needs_decision", 1),
+        (Some("cancel"), "open", 2),
+        (None, "needs_decision", 3),
+        (Some("discard"), "approved", 4),
+    ] {
+        let mut params = serde_json::json!({"expected_revision":1});
+        if let Some(action) = action {
+            params["action"] = action.into();
+        }
+        let response = call(
+            &mut client,
+            &serde_json::json!({"command":"document.close","params":params}).to_string(),
+        )?;
+        let result = &response["result"];
+        assert_eq!(result["close"], state);
+        assert_eq!(result["close_operation"], state);
+        assert_eq!(result["close_epoch"], epoch);
+        assert_eq!(result["changed"], false);
+        assert_eq!(result["revision"], 1);
+        assert_eq!(result["undo_depth"], 1);
+        assert_eq!(result["document"], document);
+        assert_eq!(result["file"]["dirty"], true);
+        wait_for_changes(&changes, epoch + 1);
+    }
+    {
+        let mut engine = engine.lock().map_err(|_| "engine")?;
+        assert!(
+            !executor.has_active_work(),
+            "reply publication must drain before native acknowledgement"
+        );
+        assert!(engine.complete_close());
+    }
+    let capture = call(
+        &mut client,
+        r#"{"command":"render.capture","params":{"page_id":1,"width_px":8,"height_px":8,"backend":"cpu"}}"#,
+    )?;
+    assert_eq!(capture["error"]["code"], "close_committed");
+    let inspected = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+    assert_eq!(inspected["result"]["close"], "committed");
+    assert_eq!(inspected["result"]["close_epoch"], 4);
+    assert_eq!(inspected["result"]["document"], document);
+    assert!(inspected["result"].get("close_operation").is_none());
+    assert_eq!(changes.load(Ordering::SeqCst), 5);
     server.shutdown()?;
     Ok(())
 }

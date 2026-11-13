@@ -7,19 +7,24 @@ branch was fast-forwarded into main; product checkpoint ccf8c50 contains the fin
 Inspect Git log for subsequent format/documentation hashes. Do not restart or discard existing
 work. No release/installer distribution or reference account action was performed.
 
-Latest merged product source:a73bed747059dd1718ac593589509853fc872671, the CDX slice plus
-canonical-stdout correction. Main now includes it after full hosted GREEN43480423381;
-48982d0 is the separate M0 command/UI audit. The initial8547f4d Windows failure remains
-recorded as real evidence. Product code is unchanged by this integration/status commit.
-The public repository/main also retains the earlier verified drawing/CDXML workflows.
-Source publication is authorized; no release was requested. Shared-close implementation
-is separate work on feat/shared-close, not a delivered capability of this checkpoint.
+Recoverable working branch:feat/shared-close, with the typed close command, native integration
+and runtime quality-tool workspace fix. See Git log for this atomic feature checkpoint and
+abd35bf for the separate tooling correction. Native corrected binary hash is recorded below.
+Public main8d52e14 contains tested CDX sourcea73bed747059dd1718ac593589509853fc872671 and
+the earlier drawing/CDXML workflows. Hosted CDX GREEN43480423381 is terminal; its first
+Windows failure remains recorded. Shared close is not merged into main until its own hosted
+checks pass. Source publication is authorized; no release/installer action was requested.
 
 ## Current integrated scope
 
-- Native Rust egui/wgpu workspace, eight typed commands shared by CLI, stdio MCP and opt-in
+- Native Rust egui/wgpu workspace, nine typed commands shared by CLI, stdio MCP and opt-in
   authenticated localhost. Registry: inspect, page.set_size, bond.create, undo, redo,
-  render.capture, document.open_cdxml, document.save_cdxml. No raw source XML in results.
+  render.capture, document.open_cdxml, document.save_cdxml and document.close. No raw source XML in results.
+- Shared Request/Discard/Cancel close policy, transient epoch and conditional host shutdown.
+  Actual edits/baseline/path changes invalidate approval. Native waits for registered work,
+  reply publication, UI jobs and pending file actions; close-specific Save needs its exact
+  receipt/epoch. An obsolete picker or failed accepted file action cannot silently exit.
+  CLI/stdio report intent in their own engines; loopback controls the actual native session.
 - Independent C-C single-bond drag with three explicitly authored H per carbon, terminal
   labels, physical page controls and exact Undo/Redo. No connected graphs/chains/rings yet.
 - CPU/GPU canvas/PNG and the single human-approved golden. Its SHA remains
@@ -43,8 +48,11 @@ is separate work on feat/shared-close, not a delivered capability of this checkp
 
 ## Verification
 
-Latest local cargo xtask ci passes207 workspace tests plus3 native AccessKit bridge tests;
-log target/cdx-stdout-ci.log. The14 added CDX tests use original published-field vectors,
+Latest actual-root cargo xtask ci passes233 workspace tests plus3 native AccessKit bridge
+tests, fmt/clippy/layers/licenses/assets/corpus; log target/shared-close-ci-integrated.log.
+It prints this root and includes the new close/runtime-locator tests. A wrong-worktree pass
+and a stale-metadata attempt are explicitly excluded; see verification.md. Each worktree
+must keep separate targets. The14 CDX tests use original published-field vectors,
 independent Python struct bytes/spans and actual external RDKit CC/C2H6-to-C=C/C2H4 reads.
 The frozen-source CDX ASan target passes10000 runs, seed721533879, coverage166/features402,
 52 retained mutation entries3092 bytes/reported RSS44 MiB; log target/cdx-asan-final.log.
@@ -64,7 +72,16 @@ pinned corpus. Log: target/files-ci-integrated.log. Windows/Linux all-target wor
 source checks pass. Tests are independent Expat/Decimal/Pillow/RDKit, analytic geometry,
 approved pixels and fixed-seed history properties; not just our own codec round trips.
 
-Mac native UI final executable SHA:
+Current shared-close native executable SHA:
+68048eaa0d11c2559d7a51dabf2b72fcc95790a54ff244eae5089248838334c3.
+Actual Mac Request/Cancel/stale/malformed retention, File Close/CmdW/red Close/Quit controls,
+Save/reopen/committed-edit Cancel/Discard, obsolete-picker close and two concurrent capture
+reply draining pass. External XML/RDKit verifies the493-byte CC/C2H6 saved file,
+SHA9f72459be089ef815f5292478a80e105e4ccfef1b56f57914067f419735204eb. Earlier a430 evidence
+predates the ordering fix and is not substituted. All native/controller/CUA sessions ended;
+credentials stayed memory-only. Immediate unobserved gesture/Q ordering remains unverified.
+
+Previous file-workflow native executable SHA:
 f331610a4689105b11495016c18513e3a2a69c04921acfeb82c3e25e93961b1d.
 Actual AX Folder/Unicode-name, Save/Open, editing, Quit Cancel and Quit Save pass on that
 exact rebuilt binary. Broader native phases cover overwrite/discard, malformed retention,
@@ -133,24 +150,23 @@ Touch Bar and interactive Windows/Linux file gestures remain unverified. No auto
 
 ## Next exact actions
 
-1. Read both inventory audits and the current parity/source notes; product/CI integration
-   for the earlier file workflow and standalone CDX slice is complete. Do not duplicate
-   the terminal hosted runs below. Continue the existing shared-close branch rather than
-   starting that command again; inspect its worktree and authoritative agent/job state.
-   No release publication was requested. Preserve exact evidence scopes.
+1. Recheck the new shared-close source/head hosted run before main integration; fix any
+   actual failure and fast-forward only after its required jobs pass. The earlier file/CDX
+   runs below are terminal and must not be duplicated. Continue this branch rather than
+   starting the command again. No release publication was requested. Preserve exact scopes.
 2. Continue qualified inventory work, identifying actual26.1 builds and complete tool/context
    menus without claiming completeness from counts, timestamps or cloud imagery.
-3. Read docs/research/m0-command-ui-audit.md. Its next bounded implementation is typed
-   document.close policy delivered through every adapter and native Close/Quit, retaining
-   dirty/stale/save-receipt guards. Dialog/control discovery and the modern inventory remain
-   M0 gaps; broader models/transactions stay on the roadmap without inventing new M0 gates.
-   Do not call M0 complete from a license fix or one file workflow.
+3. Shared document.close is now implemented with adapter/native evidence; do not build it
+   again. Read the audit's resolution and finish authoritative menu/shortcut/enabled/dialog
+   discovery through the registry, then address delivered job cancellation. Complete modern
+   inventory remains M0 work. Broader models/transactions stay on the roadmap without
+   inventing new M0 gates. Do not call M0 complete from a license fix or one file workflow.
 4. Continue M1 source-preserving structural edits/application CDX mapping/other formats and M2 connected bonds,
    snapping/order/labels with independent tests and actual native workflows. Keep M3-M5 full.
 
-The earlier read-only CDX review found no actionable parser issue; it did not establish
-native/CDX workflow or Windows oracle execution. Shared-close implementation agents may
-still be active on that separate branch; inspect authoritative agent/job state on continuation.
+All shared-close implementation/review/native agents finished. No local Cargo/native/fuzz
+worker or CUA session remains. The main-integration worktree under .cache/cdx-integration
+contains only the verified main checkpoint; no builds should share its target with this one.
 
 Hosted run https://github.com/thematheusmello/bondline/actions/runs/43475705005 at8547f4d
 is now terminal. Parser ASan132058845734, Ubuntu132058846409 and Mac132058846748 succeeded;
@@ -160,3 +176,7 @@ Windows132075166916, Ubuntu132075167353, Parser ASan132075167356 and Mac13207516
 completed successfully. Source was fast-forwarded into main after GREEN. These jobs are
 terminal; do not restart them. Other work may remain active on feat/shared-close. No
 release was requested.
+
+The new shared-close hosted run starts after this source is pushed; no result is claimed
+yet. Recheck the branch/head and exact live run before main integration. Preserve the source
+freeze/evidence scopes; no reference executable was acquired or proprietary asset shipped.

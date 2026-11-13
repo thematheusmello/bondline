@@ -1,10 +1,51 @@
 use crate::SharedEngine;
 use bondline_commands::{Cancellation, Command, CommandResult, Error, ErrorInfo, Prepared};
-use std::{future::Future, sync::Arc};
+use std::{
+    future::Future,
+    sync::{
+        Arc,
+        atomic::{AtomicUsize, Ordering},
+    },
+};
 use tokio::sync::Semaphore;
 
 #[derive(Clone)]
-pub(crate) struct Workers(Arc<Semaphore>);
+pub(crate) struct Workers {
+    slots: Arc<Semaphore>,
+    active: Arc<AtomicUsize>,
+}
+
+pub(crate) struct ActivityGuard(Arc<AtomicUsize>);
+
+impl Drop for ActivityGuard {
+    fn drop(&mut self) {
+        self.0.fetch_sub(1, Ordering::AcqRel);
+    }
+}
+
+struct WorkPermit {
+    _slot: tokio::sync::OwnedSemaphorePermit,
+    _activity: ActivityGuard,
+}
+
+pub(crate) struct RegisteredWork {
+    prepared: Prepared,
+    permit: Option<WorkPermit>,
+}
+
+pub(crate) struct Rejected {
+    pub info: ErrorInfo,
+    pub disconnect: bool,
+}
+
+impl Rejected {
+    fn command(error: Error) -> Self {
+        Self {
+            disconnect: matches!(error, Error::InvalidParams(_)),
+            info: error.info(),
+        }
+    }
+}
 
 /// A clone shares the same two-worker budget across native UI and loopback requests.
 #[derive(Clone)]
@@ -25,23 +66,59 @@ impl CommandExecutor {
         &self.engine
     }
 
+    /// Nonblocking, including while the caller holds the Engine mutex. A native close
+    /// acknowledgement must check this under that mutex before committing shutdown.
+    pub fn has_active_work(&self) -> bool {
+        self.workers.active.load(Ordering::Acquire) != 0
+    }
+
+    fn prepare_with<T>(
+        &self,
+        operation: impl FnOnce(&mut bondline_commands::Engine) -> Result<Prepared, Error>,
+        publication: impl FnOnce(&Workers) -> T,
+    ) -> Result<(RegisteredWork, T), Rejected> {
+        let mut engine = self.engine.lock().map_err(|_| Rejected {
+            info: unavailable(),
+            disconnect: true,
+        })?;
+        // Register replies before a short close command can approve shutdown. Deferred
+        // plans also reserve their worker before this same engine lock is released.
+        let publication = publication(&self.workers);
+        let prepared = operation(&mut engine).map_err(Rejected::command)?;
+        let permit = if prepared.is_deferred() {
+            Some(self.workers.permit().map_err(|info| Rejected {
+                info,
+                disconnect: false,
+            })?)
+        } else {
+            None
+        };
+        Ok((RegisteredWork { prepared, permit }, publication))
+    }
+
+    pub(crate) fn prepare_command(&self, command: Command) -> Result<RegisteredWork, ErrorInfo> {
+        self.prepare_with(|engine| engine.prepare(command), |_| ())
+            .map(|(registered, ())| registered)
+            .map_err(|error| error.info)
+    }
+
+    pub(crate) fn prepare_json(
+        &self,
+        request: &[u8],
+    ) -> Result<(RegisteredWork, ActivityGuard), Rejected> {
+        self.prepare_with(|engine| engine.prepare_json(request), Workers::activity)
+    }
+
     /// Call from a background thread. Engine guards cover only preparation and application.
     pub fn execute_blocking(
         &self,
         command: Command,
         cancel: &Cancellation,
     ) -> Result<CommandResult, ErrorInfo> {
-        let prepared = self
-            .engine
-            .lock()
-            .map_err(|_| unavailable())?
-            .prepare(command)
-            .map_err(|error| error.info())?;
-        let _permit = if prepared.is_deferred() {
-            Some(self.workers.permit()?)
-        } else {
-            None
-        };
+        let RegisteredWork {
+            prepared,
+            permit: _permit,
+        } = self.prepare_command(command)?;
         let completed = prepared
             .complete_with_cancel(cancel)
             .map_err(|error| error.info())?;
@@ -57,42 +134,31 @@ impl CommandExecutor {
         command: Command,
         cancelled: impl Future<Output = ()>,
     ) -> Result<CommandResult, ErrorInfo> {
-        let prepared = self
-            .engine
-            .lock()
-            .map_err(|_| unavailable())?
-            .prepare(command)
-            .map_err(|error| error.info())?;
+        let prepared = self.prepare_command(command)?;
         self.complete(prepared, cancelled).await
     }
 
     pub(crate) async fn complete(
         &self,
-        prepared: Prepared,
+        registered: RegisteredWork,
         cancelled: impl Future<Output = ()>,
     ) -> Result<CommandResult, ErrorInfo> {
-        if !prepared.is_deferred() {
-            let completed = prepared.complete().map_err(|error| error.info())?;
-            return self
-                .engine
-                .lock()
-                .map_err(|_| unavailable())?
-                .finish(completed)
-                .map_err(|error| error.info());
-        }
+        let RegisteredWork { prepared, permit } = registered;
         let engine = Arc::clone(&self.engine);
-        self.workers
-            .run(
-                move |cancel| {
-                    let completed = prepared.complete_with_cancel(cancel)?;
-                    engine
-                        .lock()
-                        .map_err(|_| Error::EngineUnavailable)?
-                        .finish(completed)
-                },
-                cancelled,
-            )
-            .await
+        let operation = move |cancel: &Cancellation| {
+            let completed = prepared.complete_with_cancel(cancel)?;
+            engine
+                .lock()
+                .map_err(|_| Error::EngineUnavailable)?
+                .finish(completed)
+        };
+        if let Some(permit) = permit {
+            self.workers.run(permit, operation, cancelled).await
+        } else {
+            // Short commands already committed in prepare; cancellation must not replay
+            // them or report that a completed authoring edit was cancelled.
+            operation(&Cancellation::default()).map_err(|error| error.info())
+        }
     }
 }
 
@@ -105,7 +171,10 @@ fn unavailable() -> ErrorInfo {
 
 impl Default for Workers {
     fn default() -> Self {
-        Self(Arc::new(Semaphore::new(2)))
+        Self {
+            slots: Arc::new(Semaphore::new(2)),
+            active: Arc::new(AtomicUsize::new(0)),
+        }
     }
 }
 
@@ -118,17 +187,27 @@ impl Drop for CancelOnDrop {
 }
 
 impl Workers {
-    fn permit(&self) -> Result<tokio::sync::OwnedSemaphorePermit, ErrorInfo> {
-        Arc::clone(&self.0)
+    fn activity(&self) -> ActivityGuard {
+        self.active.fetch_add(1, Ordering::AcqRel);
+        ActivityGuard(Arc::clone(&self.active))
+    }
+
+    fn permit(&self) -> Result<WorkPermit, ErrorInfo> {
+        let slot = Arc::clone(&self.slots)
             .try_acquire_owned()
             .map_err(|_| ErrorInfo {
                 code: "busy",
                 message: "two document workers are already running; retry later".to_owned(),
-            })
+            })?;
+        Ok(WorkPermit {
+            _slot: slot,
+            _activity: self.activity(),
+        })
     }
 
     async fn run(
         &self,
+        permit: WorkPermit,
         operation: impl FnOnce(&Cancellation) -> Result<CommandResult, Error> + Send + 'static,
         cancelled: impl Future<Output = ()>,
     ) -> Result<CommandResult, ErrorInfo> {
@@ -138,7 +217,6 @@ impl Workers {
             _ = &mut cancelled => return Err(ErrorInfo {code:"cancelled",message:"operation cancelled before work started".to_owned()}),
             _ = std::future::ready(()) => {},
         }
-        let permit = self.permit()?;
         let guard = CancelOnDrop(Cancellation::default());
         let cancel = guard.0.clone();
         let mut job = tokio::task::spawn_blocking(move || {
@@ -174,6 +252,124 @@ mod tests {
         time::timeout,
     };
 
+    #[test]
+    fn registered_deferred_work_is_visible_under_the_engine_lock_before_spawning()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let engine = Arc::new(Mutex::new(Engine::default()));
+        let executor = CommandExecutor::new(Arc::clone(&engine));
+        let clone = executor.clone();
+        assert!(!executor.has_active_work());
+        let capture = || {
+            Command::parse(
+                "render.capture",
+                json!({
+                    "page_id":1,"width_px":8,"height_px":8,"backend":"cpu"
+                }),
+            )
+        };
+        let first = executor
+            .prepare_command(capture()?)
+            .map_err(|error| error.message)?;
+        {
+            let _engine = engine.lock().map_err(|_| "engine")?;
+            assert!(executor.has_active_work());
+            assert!(clone.has_active_work());
+        }
+        let second = clone
+            .prepare_command(capture()?)
+            .map_err(|error| error.message)?;
+        assert_eq!(
+            executor
+                .prepare_command(capture()?)
+                .err()
+                .ok_or("excess prepared work")?
+                .code,
+            "busy"
+        );
+        drop(first);
+        assert!(clone.has_active_work());
+        drop(second);
+        assert!(!executor.has_active_work());
+        Ok(())
+    }
+
+    #[tokio::test(flavor = "current_thread")]
+    async fn committed_close_rejects_new_blocking_async_and_json_work_without_reserving_workers()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let engine = Arc::new(Mutex::new(Engine::default()));
+        let executor = CommandExecutor::new(Arc::clone(&engine));
+        let close = executor
+            .execute_blocking(
+                Command::parse("document.close", json!({"expected_revision":0}))?,
+                &bondline_commands::Cancellation::default(),
+            )
+            .map_err(|error| error.message)?;
+        assert_eq!(close.close, bondline_commands::CloseState::Approved);
+        {
+            let mut engine = engine.lock().map_err(|_| "engine")?;
+            assert!(!executor.has_active_work());
+            assert!(engine.complete_close());
+        }
+        for (name, params) in [
+            (
+                "render.capture",
+                json!({"page_id":1,"width_px":8,"height_px":8,"backend":"cpu"}),
+            ),
+            ("document.open_cdxml", json!({"path":"must-not-open.cdxml"})),
+            (
+                "document.save_cdxml",
+                json!({"path":"must-not-write.cdxml"}),
+            ),
+        ] {
+            assert_eq!(
+                executor
+                    .execute_blocking(
+                        Command::parse(name, params.clone())?,
+                        &bondline_commands::Cancellation::default()
+                    )
+                    .err()
+                    .ok_or("blocking work after close")?
+                    .code,
+                "close_committed"
+            );
+            assert_eq!(
+                executor
+                    .execute(
+                        Command::parse(name, params.clone())?,
+                        std::future::pending()
+                    )
+                    .await
+                    .err()
+                    .ok_or("async work after close")?
+                    .code,
+                "close_committed"
+            );
+            let json = serde_json::to_vec(&json!({"command":name,"params":params}))?;
+            assert_eq!(
+                executor
+                    .prepare_json(&json)
+                    .err()
+                    .ok_or("JSON work after close")?
+                    .info
+                    .code,
+                "close_committed"
+            );
+            assert!(!executor.has_active_work());
+        }
+        let inspected = executor
+            .execute(
+                Command::parse("document.inspect", json!({}))?,
+                std::future::pending(),
+            )
+            .await
+            .map_err(|error| error.message)?;
+        assert_eq!(inspected.close, bondline_commands::CloseState::Committed);
+        assert_eq!(inspected.revision, 0);
+        assert_eq!(inspected.undo_depth, 0);
+        assert!(!executor.has_active_work());
+        Ok(())
+    }
+
     #[tokio::test(flavor = "current_thread")]
     async fn already_cancelled_work_never_starts_and_executor_clones_share_the_budget()
     -> Result<(), Box<dyn std::error::Error>> {
@@ -184,6 +380,7 @@ mod tests {
         assert_eq!(
             workers
                 .run(
+                    workers.permit().map_err(|error| error.message)?,
                     move |_| {
                         observed.store(true, Ordering::SeqCst);
                         Ok(Engine::default().state())
@@ -197,7 +394,7 @@ mod tests {
             "cancelled"
         );
         assert!(!ran.load(Ordering::SeqCst));
-        assert_eq!(workers.0.available_permits(), 2);
+        assert_eq!(workers.slots.available_permits(), 2);
         let engine = Arc::new(Mutex::new(Engine::default()));
         let executor = CommandExecutor { engine, workers };
         let first = executor.workers.permit().map_err(|error| error.message)?;
@@ -216,7 +413,8 @@ mod tests {
             "busy"
         );
         drop((first, second));
-        assert_eq!(executor.workers.0.available_permits(), 2);
+        assert_eq!(executor.workers.slots.available_permits(), 2);
+        assert!(!executor.has_active_work());
         Ok(())
     }
 
@@ -224,37 +422,31 @@ mod tests {
     async fn capture_budget_rejects_work_without_blocking_authoring()
     -> Result<(), Box<dyn std::error::Error>> {
         let workers = Workers::default();
-        assert_eq!(workers.0.available_permits(), 2);
-        let first = Arc::clone(&workers.0).try_acquire_owned()?;
-        let second = Arc::clone(&workers.0).try_acquire_owned()?;
+        assert_eq!(workers.slots.available_permits(), 2);
+        let first = workers.permit().map_err(|error| error.message)?;
+        let second = workers.permit().map_err(|error| error.message)?;
         let engine = Arc::new(Mutex::new(Engine::default()));
         let executor = CommandExecutor {
             engine: Arc::clone(&engine),
             workers: workers.clone(),
         };
-        let capture = engine
-            .lock()
-            .map_err(|_| "engine")?
-            .prepare(Command::parse(
-                "render.capture",
-                json!({"page_id":1,"width_px":8,"height_px":8,"backend":"cpu"}),
-            )?)?;
         assert_eq!(
             executor
-                .complete(capture, std::future::pending())
-                .await
+                .prepare_command(Command::parse(
+                    "render.capture",
+                    json!({"page_id":1,"width_px":8,"height_px":8,"backend":"cpu"}),
+                )?)
                 .err()
                 .ok_or("accepted excess capture")?
                 .code,
             "busy"
         );
-        let edit = engine
-            .lock()
-            .map_err(|_| "engine")?
-            .prepare(Command::parse(
+        let edit = executor
+            .prepare_command(Command::parse(
                 "page.set_size",
                 json!({"page_id":1,"width_pt":612,"height_pt":792}),
-            )?)?;
+            )?)
+            .map_err(|error| error.message)?;
         assert!(
             executor
                 .complete(edit, std::future::ready(()))
@@ -271,15 +463,20 @@ mod tests {
     async fn explicit_cancel_and_dropped_future_cancel_workers_without_releasing_their_budget_early()
     -> Result<(), Box<dyn std::error::Error>> {
         for abort in [false, true] {
-            let workers = Workers(Arc::new(Semaphore::new(1)));
+            let workers = Workers {
+                slots: Arc::new(Semaphore::new(1)),
+                ..Workers::default()
+            };
             let (started, start) = oneshot::channel();
             let (observed, cancelled) = oneshot::channel();
             let (release, wait) = std::sync::mpsc::channel();
             let (stop, stopped) = oneshot::channel();
             let runner = workers.clone();
+            let permit = runner.permit().map_err(|error| error.message)?;
             let task = tokio::spawn(async move {
                 runner
                     .run(
+                        permit,
                         move |cancel| {
                             let _ = started.send(());
                             while !cancel.is_cancelled() {
@@ -305,7 +502,7 @@ mod tests {
             }
             timeout(Duration::from_secs(1), cancelled).await??;
             assert_eq!(
-                workers.0.available_permits(),
+                workers.slots.available_permits(),
                 0,
                 "cancelled worker retains its budget"
             );
@@ -319,7 +516,7 @@ mod tests {
                 );
             }
             timeout(Duration::from_secs(1), async {
-                while workers.0.available_permits() == 0 {
+                while workers.active.load(std::sync::atomic::Ordering::Acquire) != 0 {
                     tokio::task::yield_now().await;
                 }
             })

@@ -1,7 +1,13 @@
 //! Native file-menu, background execution and unsaved-close lifecycle.
 
+#[cfg(test)]
+mod close_tests;
+
 use crate::files::{FileAction, FileChooser, FileMode};
-use bondline_commands::{Cancellation, Command, CommandResult, ErrorInfo, OpenCdxml, SaveCdxml};
+use bondline_commands::{
+    Cancellation, CloseAction, CloseDocument, CloseState, Command, CommandResult, Engine,
+    ErrorInfo, OpenCdxml, SaveCdxml,
+};
 use bondline_mcp::CommandExecutor;
 use eframe::egui;
 use std::{
@@ -15,12 +21,13 @@ struct FileJob {
     result: Receiver<Result<CommandResult, ErrorInfo>>,
     cancel: Cancellation,
     cancelling: bool,
+    close_save: Option<CloseSave>,
 }
 
-struct CloseApproval {
+#[derive(Clone, Copy)]
+struct CloseSave {
     revision: u64,
-    path: Option<String>,
-    discard: bool,
+    epoch: u64,
 }
 
 enum CloseChoice {
@@ -33,8 +40,7 @@ pub(crate) struct FileWorkflow {
     chooser: FileChooser,
     directory: PathBuf,
     job: Option<FileJob>,
-    closing: bool,
-    approved_close: Option<CloseApproval>,
+    save_for_close: Option<CloseSave>,
 }
 
 impl FileWorkflow {
@@ -43,17 +49,36 @@ impl FileWorkflow {
             chooser: FileChooser::default(),
             directory,
             job: None,
-            closing: false,
-            approved_close: None,
+            save_for_close: None,
         }
     }
 
-    pub(crate) fn blocks_authoring(&self) -> bool {
-        self.chooser.is_open() || self.closing
+    pub(crate) fn blocks_authoring(&self, state: &CommandResult) -> bool {
+        self.chooser.is_open() || state.close != CloseState::Open
     }
 
-    fn is_busy(&self) -> bool {
+    pub(crate) fn is_busy(&self) -> bool {
         self.job.is_some()
+    }
+
+    fn sync_close(&mut self, state: &CommandResult) {
+        if matches!(state.close, CloseState::Approved | CloseState::Committed) {
+            self.chooser.cancel();
+        }
+        let current = |ticket: CloseSave| {
+            state.close == CloseState::NeedsDecision
+                && ticket.epoch == state.close_epoch
+                && ticket.revision == state.revision
+        };
+        if self.save_for_close.is_some_and(|ticket| !current(ticket)) {
+            self.save_for_close = None;
+            self.chooser.cancel();
+        }
+        if let Some(job) = &mut self.job
+            && job.close_save.is_some_and(|ticket| !current(ticket))
+        {
+            job.close_save = None;
+        }
     }
 
     fn begin(&mut self, mode: FileMode, state: &CommandResult) {
@@ -85,15 +110,22 @@ impl FileWorkflow {
         None
     }
 
-    pub(crate) fn menu(&mut self, ui: &mut egui::Ui, state: &CommandResult) -> Option<FileAction> {
+    pub(crate) fn menu(
+        &mut self,
+        ui: &mut egui::Ui,
+        engine: &mut Engine,
+        error: &mut Option<String>,
+    ) -> Option<FileAction> {
+        let state = engine.state();
+        self.sync_close(&state);
         let mut action = None;
-        let available = !self.is_busy() && !self.blocks_authoring();
+        let available = !self.is_busy() && !self.blocks_authoring(&state);
         let modifier = if cfg!(target_os = "macos") {
             "Cmd"
         } else {
             "Ctrl"
         };
-        if !self.blocks_authoring()
+        if !self.blocks_authoring(&state)
             && ui.input_mut(|input| {
                 input.consume_shortcut(&egui::KeyboardShortcut::new(
                     egui::Modifiers::COMMAND,
@@ -101,7 +133,7 @@ impl FileWorkflow {
                 ))
             })
         {
-            self.close_from_ui(state);
+            self.request_close(engine, error);
         } else if available {
             let selected = ui.input_mut(|input| {
                 if input.consume_shortcut(&egui::KeyboardShortcut::new(
@@ -124,9 +156,9 @@ impl FileWorkflow {
                 }
             });
             match selected {
-                Some(0) => self.begin(FileMode::Open, state),
-                Some(1) => action = self.request_save(state, false),
-                Some(2) => action = self.request_save(state, true),
+                Some(0) => self.begin(FileMode::Open, &state),
+                Some(1) => action = self.request_save(&state, false),
+                Some(2) => action = self.request_save(&state, true),
                 _ => {}
             }
         }
@@ -141,9 +173,9 @@ impl FileWorkflow {
                     .clicked()
                 {
                     match index {
-                        0 => self.begin(FileMode::Open, state),
-                        1 => action = self.request_save(state, false),
-                        _ => action = self.request_save(state, true),
+                        0 => self.begin(FileMode::Open, &state),
+                        1 => action = self.request_save(&state, false),
+                        _ => action = self.request_save(&state, true),
                     }
                     ui.close_menu();
                 }
@@ -151,12 +183,12 @@ impl FileWorkflow {
             ui.separator();
             if ui
                 .add_enabled(
-                    !self.blocks_authoring(),
+                    !self.blocks_authoring(&engine.state()),
                     egui::Button::new("Close Window").shortcut_text(format!("{modifier}+W")),
                 )
                 .clicked()
             {
-                self.close_from_ui(state);
+                self.request_close(engine, error);
                 ui.close_menu();
             }
         });
@@ -185,90 +217,127 @@ impl FileWorkflow {
         }
     }
 
-    pub(crate) fn request_close(&mut self, state: &CommandResult) -> bool {
-        if !state.file.dirty && !self.is_busy() {
-            return true;
-        }
-        self.closing = true;
-        false
+    pub(crate) fn request_close(&mut self, engine: &mut Engine, error: &mut Option<String>) {
+        self.close_command(engine, CloseAction::Request, error);
     }
 
-    fn close_from_ui(&mut self, state: &CommandResult) {
-        if self.request_close(state) {
-            self.approved_close = Some(CloseApproval {
-                revision: state.revision,
-                path: state.file.path.clone(),
-                discard: false,
-            });
-        }
+    fn close_command(
+        &mut self,
+        engine: &mut Engine,
+        action: CloseAction,
+        error: &mut Option<String>,
+    ) {
+        *error = engine
+            .execute(Command::Close(CloseDocument {
+                expected_revision: engine.state().revision,
+                action,
+            }))
+            .err()
+            .map(|error| error.to_string());
+        self.sync_close(&engine.state());
     }
 
-    fn choose_close(&mut self, choice: CloseChoice, state: &CommandResult) -> Option<FileAction> {
+    fn choose_close(
+        &mut self,
+        choice: CloseChoice,
+        engine: &mut Engine,
+        error: &mut Option<String>,
+    ) -> Option<FileAction> {
         match choice {
-            CloseChoice::Save => self.request_save(state, false),
-            CloseChoice::Discard => {
-                self.approved_close = Some(CloseApproval {
+            CloseChoice::Save => {
+                let state = engine.state();
+                if state.close != CloseState::NeedsDecision {
+                    return None;
+                }
+                self.save_for_close = Some(CloseSave {
                     revision: state.revision,
-                    path: state.file.path.clone(),
-                    discard: true,
+                    epoch: state.close_epoch,
                 });
-                self.closing = false;
+                self.request_save(&state, false)
+            }
+            CloseChoice::Discard => {
+                self.close_command(engine, CloseAction::Discard, error);
                 None
             }
             CloseChoice::Cancel => {
-                self.closing = false;
+                self.close_command(engine, CloseAction::Cancel, error);
                 None
             }
         }
     }
 
-    pub(crate) fn take_close_request(&mut self, current: &CommandResult) -> bool {
-        let Some(approval) = self.approved_close.take() else {
-            return false;
-        };
-        if approval.revision == current.revision
-            && approval.path == current.file.path
-            && (approval.discard || !current.file.dirty)
-        {
-            true
-        } else {
-            self.closing = true;
-            false
+    /// Caller holds the shared Engine mutex; activity includes remote workers/reply publication.
+    pub(crate) fn complete_close_if_idle(
+        &self,
+        engine: &mut Engine,
+        active_work: bool,
+        pending_file_action: bool,
+    ) -> bool {
+        !pending_file_action && !self.is_busy() && !active_work && engine.complete_close()
+    }
+
+    pub(crate) fn keep_open_after_file_failure(
+        &mut self,
+        engine: &mut Engine,
+        error: &mut Option<String>,
+    ) {
+        if engine.state().close == CloseState::Approved {
+            let mut cancellation_error = None;
+            self.close_command(engine, CloseAction::Cancel, &mut cancellation_error);
+            if let Some(failure) = cancellation_error {
+                let original = error.take().unwrap_or_default();
+                *error = Some(format!("{original}; close cancellation failed: {failure}"));
+            }
         }
     }
 
     pub(crate) fn dialogs(
         &mut self,
         context: &egui::Context,
-        state: &CommandResult,
+        engine: &mut Engine,
+        error: &mut Option<String>,
+        active_work: bool,
     ) -> Option<FileAction> {
+        let state = engine.state();
+        self.sync_close(&state);
         if self.chooser.is_open() {
+            let close_save = self.save_for_close.is_some();
             let action = self.chooser.show(context, state.file.dirty);
-            if !self.chooser.is_open() && action.is_none() {
-                self.closing = false;
+            if close_save && !self.chooser.is_open() && action.is_none() {
+                self.close_command(engine, CloseAction::Cancel, error);
             }
             return action;
         }
-        if !self.closing {
+        if matches!(state.close, CloseState::Open | CloseState::Committed) {
+            return None;
+        }
+        let busy = self.is_busy() || active_work;
+        if busy {
+            context.request_repaint_after(Duration::from_millis(40));
+        }
+        if state.close == CloseState::Approved && !busy {
             return None;
         }
         if context.input_mut(|input| input.consume_key(egui::Modifiers::NONE, egui::Key::Escape)) {
-            self.closing = false;
+            self.close_command(engine, CloseAction::Cancel, error);
             return None;
         }
         let mut action = None;
         egui::Window::new("Unsaved changes").id(egui::Id::new("bondline-unsaved-close"))
             .anchor(egui::Align2::CENTER_CENTER,egui::Vec2::ZERO).order(egui::Order::Foreground)
             .collapsible(false).resizable(false).show(context,|ui| {
-                if self.is_busy() {
-                    ui.label("A file operation is still running. The window will stay open until its result is known.");
-                    if ui.button("Keep Window Open").clicked() {self.closing = false;}
+                if busy {
+                    ui.label("Document work is still running. The window will stay open until its result is known.");
+                    if ui.button("Keep Window Open").clicked() {self.close_command(engine,CloseAction::Cancel,error);}
                     return;
                 }
-                ui.label("Save your changes before closing Bondline?");
+                ui.label(if state.file.dirty {"Save your changes before closing Bondline?"} else {"Close this document?"});
                 ui.horizontal(|ui| {
-                    for (label,choice) in [("Cancel",CloseChoice::Cancel),("Discard Changes",CloseChoice::Discard),("Save",CloseChoice::Save)] {
-                        if ui.button(label).clicked() {action = self.choose_close(choice,state);}
+                    for (label,choice) in [("Cancel",CloseChoice::Cancel),("Discard Changes",CloseChoice::Discard)] {
+                        if ui.button(label).clicked() {action = self.choose_close(choice,engine,error);}
+                    }
+                    if ui.button(if state.file.dirty {"Save"} else {"Close"}).clicked() {
+                        if state.file.dirty {action=self.choose_close(CloseChoice::Save,engine,error);} else {self.request_close(engine,error);}
                     }
                 });
             });
@@ -320,11 +389,14 @@ impl FileWorkflow {
             result,
             cancel,
             cancelling: false,
+            close_save: self.save_for_close.take(),
         });
         Ok(())
     }
 
-    pub(crate) fn poll(&mut self, current: &CommandResult, error: &mut Option<String>) {
+    pub(crate) fn poll(&mut self, engine: &mut Engine, error: &mut Option<String>) {
+        let current = engine.state();
+        self.sync_close(&current);
         let Some(job) = &self.job else {
             return;
         };
@@ -344,32 +416,22 @@ impl FileWorkflow {
                 {
                     self.directory = parent.to_owned();
                 }
-                if self.closing {
+                if let Some(ticket) = job.close_save {
                     let current_receipt = result.file_operation.as_ref().is_some_and(|receipt| {
                         current.file.path.as_deref() == Some(receipt.path.as_str())
-                            && match job.action {
-                                FileAction::Save { .. } => {
-                                    receipt.operation == "save"
-                                        && receipt.input_revision == current.revision
-                                }
-                                FileAction::Open { .. } => {
-                                    receipt.operation == "open"
-                                        && receipt.input_revision.checked_add(1)
-                                            == Some(current.revision)
-                                }
-                            }
+                            && matches!(job.action, FileAction::Save { .. })
+                            && receipt.operation == "save"
+                            && receipt.input_revision == current.revision
                     });
                     if current_receipt
+                        && current.close == CloseState::NeedsDecision
+                        && current.close_epoch == ticket.epoch
+                        && current.revision == ticket.revision
                         && !current.file.dirty
                         && result.revision == current.revision
                         && result.file.path == current.file.path
                     {
-                        self.approved_close = Some(CloseApproval {
-                            revision: current.revision,
-                            path: current.file.path.clone(),
-                            discard: false,
-                        });
-                        self.closing = false;
+                        self.request_close(engine, error);
                     } else {
                         *error = Some("The document changed during the file operation. Review the current changes before closing.".to_owned());
                     }
@@ -377,6 +439,8 @@ impl FileWorkflow {
             }
             Err(failure) => {
                 *error = Some(failure.message.clone());
+                self.keep_open_after_file_failure(engine, error);
+                self.save_for_close = job.close_save;
                 self.chooser
                     .failed(job.action, failure.code, failure.message);
             }
@@ -406,105 +470,6 @@ mod tests {
     }
 
     #[test]
-    fn unsaved_close_requires_discard_or_a_successful_current_save()
-    -> Result<(), Box<dyn std::error::Error>> {
-        let mut engine = Engine::default();
-        let mut workflow = FileWorkflow::new(std::env::temp_dir());
-        assert!(workflow.request_close(&engine.state()));
-        edit(&mut engine)?;
-        let state = engine.state();
-        workflow = FileWorkflow::new(std::env::temp_dir());
-        assert!(!workflow.request_close(&state));
-        assert!(workflow.blocks_authoring());
-        assert!(!workflow.take_close_request(&state));
-        workflow.choose_close(CloseChoice::Cancel, &state);
-        assert!(!workflow.blocks_authoring());
-        assert!(!workflow.take_close_request(&state));
-        assert!(!workflow.request_close(&state));
-        workflow.choose_close(CloseChoice::Discard, &state);
-        assert!(workflow.take_close_request(&state));
-        assert_eq!(engine.state().revision, state.revision);
-        assert!(engine.state().file.dirty);
-        Ok(())
-    }
-
-    #[test]
-    fn save_completion_never_closes_over_an_edit_or_a_publication_error()
-    -> Result<(), Box<dyn std::error::Error>> {
-        let mut engine = Engine::default();
-        edit(&mut engine)?;
-        let state = engine.state();
-        let path = std::env::temp_dir()
-            .join("bondline-close-test.cdxml")
-            .into_os_string()
-            .into_string()
-            .map_err(|_| "unicode path")?;
-        let mut saved = state.clone();
-        saved.file.path = Some(path.clone());
-        saved.file.dirty = false;
-        saved.file_operation = Some(bondline_commands::FileOperation {
-            operation: "save",
-            path: path.clone(),
-            input_revision: state.revision,
-            byte_length: 0,
-            directory_synced: Some(true),
-        });
-        let mut stale = saved.clone();
-        stale
-            .file_operation
-            .as_mut()
-            .ok_or("save receipt")?
-            .input_revision = state.revision.saturating_sub(1);
-        let mut wrong_path = saved.clone();
-        wrong_path
-            .file_operation
-            .as_mut()
-            .ok_or("save receipt")?
-            .path = "another-document.cdxml".to_owned();
-        let action = FileAction::Save {
-            path,
-            overwrite: false,
-        };
-        for (completion, current, may_close) in [
-            (Ok(saved.clone()), saved.clone(), true),
-            (Ok(stale), saved.clone(), false),
-            (Ok(wrong_path), saved.clone(), false),
-            (Ok(saved.clone()), state.clone(), false),
-            (
-                Err(ErrorInfo {
-                    code: "save_published",
-                    message: "Bytes were published, but durability confirmation failed".to_owned(),
-                }),
-                state.clone(),
-                false,
-            ),
-        ] {
-            let mut workflow = FileWorkflow::new(std::env::temp_dir());
-            workflow.closing = true;
-            let (sender, receiver) = std::sync::mpsc::sync_channel(1);
-            workflow.job = Some(FileJob {
-                action: action.clone(),
-                result: receiver,
-                cancel: Cancellation::default(),
-                cancelling: false,
-            });
-            sender.send(completion).map_err(|_| "completion channel")?;
-            let mut error = None;
-            workflow.poll(&current, &mut error);
-            assert!(!workflow.is_busy());
-            assert_eq!(workflow.take_close_request(&current), may_close);
-            if error
-                .as_deref()
-                .is_some_and(|message| message.contains("Bytes were published"))
-            {
-                assert!(workflow.chooser.is_open());
-                assert!(current.file.dirty);
-            }
-        }
-        Ok(())
-    }
-
-    #[test]
     fn ordinary_save_reuses_the_known_path_but_save_as_requires_an_explicit_choice() {
         let mut state = Engine::default().state();
         state.file.path = Some("/tmp/known.cdxml".to_owned());
@@ -520,7 +485,7 @@ mod tests {
         assert!(!workflow.chooser.is_open());
         assert!(workflow.request_save(&state, true).is_none());
         assert!(workflow.chooser.is_open());
-        assert!(workflow.blocks_authoring());
+        assert!(workflow.blocks_authoring(&state));
     }
 
     #[test]
@@ -573,7 +538,8 @@ mod tests {
                     &mut engine,
                     &mut error,
                     &mut drawing,
-                    Some(&mut workflow)
+                    Some(&mut workflow),
+                    false,
                 )
                 .is_none()
             );
@@ -607,6 +573,7 @@ mod tests {
             &mut None,
             &mut drawing,
             Some(&mut workflow),
+            false,
         );
         let _ = context.end_pass();
         assert!(!workflow.chooser.is_open());
@@ -648,10 +615,11 @@ mod tests {
                 &mut None,
                 &mut drawing,
                 Some(&mut workflow),
+                false,
             );
             let _ = context.end_pass();
-            assert_eq!(workflow.blocks_authoring(), blocked);
-            assert!(!workflow.take_close_request(&engine.state()));
+            assert_eq!(workflow.blocks_authoring(&engine.state()), blocked);
+            assert!(!workflow.complete_close_if_idle(&mut engine, false, false));
             assert_eq!(engine.state().revision, revision);
             assert_eq!(engine.stored_document(), &original);
         }

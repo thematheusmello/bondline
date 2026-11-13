@@ -14,6 +14,9 @@ guides are versioned evidence, not proof of complete modern parity.
       Page controls/history are delivered; headless elemental graphs now have structural/
       identity/budget tests. Independent C-C creation and transactional drag/history now work;
       connected editing, broader models and a general transaction/job engine remain.
+      Conditional close intent now joins the shared registry, with epoch-bound Save and
+      native worker/reply shutdown barriers. Menu/dialog discovery remains incomplete;
+      see docs/research/m0-command-ui-audit.md for the remaining distinction.
 - [x] CLI, stdio MCP and opt-in loopback control using that registry.
 - [ ] Native UI and CPU/GPU reference canvas with actual launch/render evidence.
       Native Mac drawing/history/recovery and one human-approved golden now pass.

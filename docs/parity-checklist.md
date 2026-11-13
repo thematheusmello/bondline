@@ -73,8 +73,8 @@ identify a full26.1 desktop screen specification or increase the count by duplic
 | MF-004 | File > Save | 14 | partial verified, Mac CDXML | Complete-source atomic save via registry; native CmdS/QuitSave and independent consumer evidence. History-across-save differs G25; general formats/styles missing. |
 | MF-005 | File > Save As | 39, 59, 356 | partial verified, Mac CDXML | Native new-path/overwrite/Cancel and exact opaque copy; original chooser and no format selector. Reference multi-format parity missing. |
 | MF-006 | File > Revert | 14 | missing | Recover last saved document. |
-| MF-007 | File > Close | 78, 259 | partial verified, single-window Mac | File Close/red close/CmdW with Save/Discard/Cancel; stale-save receipt guard. Multi-document/platform parity missing. |
-| MF-008 | File > Exit | 78, 290 | partial verified, Mac Quit | Native Quit/CmdQ preserves dirty data; Save and Discard exit. Windows/Linux exit gestures, Dock/session logout remain unverified. |
+| MF-007 | File > Close | 78, 259 | partial verified, single-window Mac | Shared document.close through UI/CLI/MCP/socket; File Close/red close/CmdW and Save/Discard/Cancel, epoch/receipt guards and shared-work drain have exact native evidence. Multi-document/platform/reference-dialog parity missing. |
+| MF-008 | File > Exit | 78, 290 | partial verified, Mac Quit | Native Quit/CmdQ uses shared close policy; committed edits survive Cancel, Save/Discard exit, remote approval waits for replies/work. Windows/Linux exit gestures, Dock/session logout and immediate unobserved gesture/Q ordering remain unverified. |
 | MF-009 | File > Page Setup | 24-25, 78 | missing | Paper size/orientation, margins and printer workflow missing; page-size engine alone is narrower. |
 | MF-010 | File > Print | 25, 78 | missing | - |
 | MF-011 | File > Document Annotations | 14 | missing | Add/delete keywords and their values. |

@@ -64,6 +64,11 @@
   mapping/command behavior. The older Geometry utility keeps its direct-fragment scope and
   never presents a p-only patch as a complete atom move.
 - Native declared license closure and hosted window smokes pass all three desktop targets.
+  Shared close intent is now delivered through the registry with native Mac evidence;
+  this does not settle full26.1 dialog wording/screens or multi-document close semantics.
+  A batched unobserved drag+Quit exited cleanly, while a separately observed committed
+  edit was retained on Quit/Cancel. Pending gesture/Q ordering remains unverified; do not
+  infer committed-state loss or complete input-order parity from that ambiguous attempt.
   Interactive Windows/Linux workflows and complete release notice assembly remain; every
   dependency upgrade needs new closure/source/asset evidence. Crate labels alone are insufficient.
 - windows-permissions 0.2.4 declares MIT and author Daniel Dulaney in its exact published Cargo

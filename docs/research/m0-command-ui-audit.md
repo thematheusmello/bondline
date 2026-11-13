@@ -74,3 +74,18 @@ distinguishes dialog-opening menu invocation from direct parameterized engine ex
 Use that distinction, without copying its separate UI dispatch tables into Bondline's
 one-registry design. These are pinned source observations; no reference code/assets/tests
 were imported or executed.
+
+## Resolution and remaining work
+
+The identified P0 close-policy slice is now implemented: document.close has typed conditional
+Request/Discard/Cancel, transient epoch and trusted host acknowledgement; CLI/MCP/loopback
+use the registry, and native Mac execution verifies the stated workflows. Registered-work
+and reply-publication barriers plus receipt/epoch guards prevent premature shutdown and
+stale Save continuations. See [the contract](../control-protocol.md#close-requests-and-host-shutdown)
+and [exact native evidence](../native-file-ui.md#shared-close-execution-evidence).
+
+This resolves the first table row for the delivered single-document scope. Complete modern
+inventory, shared menu/shortcut/enabled/dialog discovery and addressable job cancellation
+remain open. The next implementation should expose existing controls through authoritative
+registry metadata/presentation requests; do not implement document.close again or treat this
+resolution as complete M0, full dialog addressability or multi-document parity.

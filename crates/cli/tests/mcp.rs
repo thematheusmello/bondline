@@ -107,7 +107,11 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("missing tools")?;
-    assert_eq!(tools.len(), 8);
+    assert_eq!(tools.len(), 9);
+    assert!(tools.iter().any(|tool| tool["name"] == "document.close"
+        && tool["inputSchema"]["additionalProperties"] == false
+        && tool["inputSchema"]["required"] == json!(["expected_revision"])
+        && tool["annotations"]["readOnlyHint"] == false));
     assert!(tools.iter().any(|tool| tool["name"] == "page.set_size"
         && tool["inputSchema"]["additionalProperties"] == false));
     let edit = client.call(
@@ -233,6 +237,104 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         rejected["result"]["structuredContent"]["error"]["code"],
         "already_exists"
     );
+    client.finish()?;
+    Ok(())
+}
+
+#[test]
+fn stdio_close_policy_supports_decision_cancel_discard_and_errors_without_ending_session()
+-> Result<(), Box<dyn std::error::Error>> {
+    let mut client = Client::start()?;
+    client.call(
+        1,
+        "initialize",
+        json!({
+            "protocolVersion":"2025-11-25","capabilities":{},
+            "clientInfo":{"name":"close-wire-test","version":"1"}
+        }),
+    )?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let draw = client.call(
+        2,
+        "tools/call",
+        json!({"name":"bond.create","arguments":{
+            "page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200
+        }}),
+    )?;
+    let document = draw["result"]["structuredContent"]["document"].clone();
+    assert_eq!(draw["result"]["structuredContent"]["close_epoch"], 0);
+    let requested = client.call(
+        3,
+        "tools/call",
+        json!({"name":"document.close","arguments":{"expected_revision":1}}),
+    )?;
+    let requested = &requested["result"]["structuredContent"];
+    assert_eq!(requested["close"], "needs_decision");
+    assert_eq!(requested["close_operation"], "needs_decision");
+    assert_eq!(requested["close_epoch"], 1);
+    assert_eq!(requested["changed"], false);
+    assert_eq!(requested["revision"], 1);
+    assert_eq!(requested["undo_depth"], 1);
+    assert_eq!(requested["document"], document);
+    let stale = client.call(
+        4,
+        "tools/call",
+        json!({"name":"document.close","arguments":{"expected_revision":0}}),
+    )?;
+    assert_eq!(stale["result"]["isError"], true);
+    assert_eq!(
+        stale["result"]["structuredContent"]["error"]["code"],
+        "stale_revision"
+    );
+    for (id, action, state, epoch) in [(5, "cancel", "open", 2), (6, "discard", "approved", 3)] {
+        let response = client.call(
+            id,
+            "tools/call",
+            json!({"name":"document.close","arguments":{
+                "expected_revision":1,"action":action
+            }}),
+        )?;
+        assert_eq!(response["result"]["isError"], false);
+        let result = &response["result"]["structuredContent"];
+        assert_eq!(result["close"], state);
+        assert_eq!(result["close_operation"], state);
+        assert_eq!(result["close_epoch"], epoch);
+        assert_eq!(result["revision"], 1);
+        assert_eq!(result["undo_depth"], 1);
+        assert_eq!(result["document"], document);
+        assert_eq!(result["file"]["dirty"], true);
+    }
+    let inspect = client.call(
+        7,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    let inspect = &inspect["result"]["structuredContent"];
+    assert_eq!(inspect["close"], "approved");
+    assert_eq!(inspect["close_epoch"], 3);
+    assert!(inspect.get("close_operation").is_none());
+    for (id, arguments) in [
+        (8, json!({"expected_revision":1,"action":"quit"})),
+        (9, json!({"expected_revision":1,"force":true})),
+        (10, json!({})),
+    ] {
+        let invalid = client.call(
+            id,
+            "tools/call",
+            json!({"name":"document.close","arguments":arguments}),
+        )?;
+        assert_eq!(invalid["result"]["isError"], true);
+        assert_eq!(
+            invalid["result"]["structuredContent"]["error"]["code"],
+            "invalid_params"
+        );
+    }
+    let inspected = client.call(
+        11,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    assert_eq!(inspected["result"]["structuredContent"], *inspect);
     client.finish()?;
     Ok(())
 }

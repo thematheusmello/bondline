@@ -39,7 +39,6 @@ impl From<rmcp::service::ServerInitializeError> for Error {
 }
 
 pub struct CommandServer {
-    engine: SharedEngine,
     tools: Vec<Tool>,
     executor: CommandExecutor,
 }
@@ -65,8 +64,7 @@ impl CommandServer {
             })
             .collect::<Result<_, Error>>()?;
         Ok(Self {
-            executor: CommandExecutor::new(Arc::clone(&engine)),
-            engine,
+            executor: CommandExecutor::new(engine),
             tools,
         })
     }
@@ -111,24 +109,25 @@ impl ServerHandler for CommandServer {
                 None,
             ));
         }
-        let prepared = {
-            let mut engine = self
-                .engine
-                .lock()
-                .map_err(|_| McpError::internal_error("document engine lock poisoned", None))?;
-            Command::parse(
-                &request.name,
-                Value::Object(request.arguments.unwrap_or_default()),
-            )
-            .and_then(|command| engine.prepare(command))
-        };
+        let prepared = Command::parse(
+            &request.name,
+            Value::Object(request.arguments.unwrap_or_default()),
+        )
+        .map_err(|error| error.info())
+        .and_then(|command| self.executor.prepare_command(command));
         let result = match prepared {
             Ok(prepared) => {
                 self.executor
                     .complete(prepared, context.ct.cancelled())
                     .await
             }
-            Err(error) => Err(error.info()),
+            Err(error) if error.code == "engine_unavailable" => {
+                return Err(McpError::internal_error(
+                    "document engine lock poisoned",
+                    None,
+                ));
+            }
+            Err(error) => Err(error),
         };
         let response = match result {
             Ok(result) => {

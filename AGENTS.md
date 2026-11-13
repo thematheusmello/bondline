@@ -74,7 +74,7 @@ replacement; no model mapping or application commands);
 render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
 source-backed CDXML projections, native elemental encoding, owned snapshots, PNG encoding and
 bounded native CDXML filesystem I/O; see docs/native-file-io.md for publication/access limits);
-commands (L3, registry and complete stored-snapshot Arc history); mcp (L4, stdio and native loopback adapters); cli/ui (L5,
+commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
 and `compat/clipboard-win` opt into reviewed OS unsafe; `compat/hexf-parse` forbids
 unsafe. These three original compatibility packages retain upstream package names solely
@@ -104,7 +104,7 @@ delivered adapters, update CLI/MCP wire tests as needed, then update provenance 
 For UI changes, launch the actual native app and inspect the workflow. Eguis's input tests
 and source cross-checks do not substitute for native platform execution.
 
-The current eight-command registry includes bond.create for independent C-C fragments with
+The current nine-command registry includes bond.create for independent C-C fragments with
 three explicitly authored H per carbon, plus native CDXML open/save. It does not attach to
 existing atoms. Save complete StoredDocument data; file.dirty uses the saved snapshot, while
 source.modified describes original backing. Prepare/complete/finish separates I/O from
@@ -112,6 +112,14 @@ revision-checked apply. Count current+saved snapshots and never call a publicati
 Identity floors must survive Undo branches and advance only after successful commits.
 Native gestures consume ordered events; press_origin alone loses a drag completed between
 frames. Canvas interaction must not advance layout beyond visible error text.
+Close intent/epoch never belongs in authored history or serialized CDXML. Request/Discard/
+Cancel must use document.close; successful actions advance close_epoch without changing
+authored revision. A close-specific Save must retain its captured epoch/revision and matching
+current receipt; Cancel/new Request must not reuse it. Native complete_close is a trusted
+host acknowledgement under the shared Engine mutex, after executor activity, UI file jobs
+and pending file actions are absent. Register deferred work/replies under that same mutex;
+release response activity after write/flush. Never restore UI-private close approval or let
+an accepted file action start after Committed. Headless close intent does not kill stdio.
 The user approved crates/render/tests/goldens/single-bond.png for its exact scene/hash only.
 Its JSON and README record provenance; external Pillow compares every CPU/GPU RGBA byte.
 Do not regenerate that golden without renewed human approval. Other images remain unapproved.
@@ -138,7 +146,8 @@ cargo xtask corpus; cargo xtask ci. Until implemented, a documented future comma
 Keep Cargo target directories separate for each worktree. Shared artifacts caused a real
 wrong-checkout CI run and stale metadata; runtime workspace discovery does not make shared
 binary outputs safe. xtask locates the invoked workspace through Cargo, and ci prints its
-root. Verify that root before counting results. Use local Git commits. Small conventional commits: one command or format feature, with its
+root. Verify that root before counting results. Use local Git commits. Small conventional
+commits: one command or format feature, with its
 tests, provenance and relevant docs. Keep main green; record red evidence without committing
 failing main. Commit all intentional project files, never caches, secrets or build outputs.
 Do not push or publish without an explicit request. Update STATUS.md with verified state,

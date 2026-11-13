@@ -47,10 +47,29 @@ enabled. `Engine::prepare` completes short edits or returns an immutable capture
 adapters release the lock before long work. Completed work applies through Engine::finish;
 open rejects stale revisions/generations, and old saves cannot relabel a later document.
 A cloneable CommandExecutor shares UI/loopback workers; stdio has its own session. Each bounds workers
-to two, keeps permits with the actual worker lifetime and cancels cooperatively when an
+to two, reserves deferred permits under the engine mutex before releasing a plan, keeps
+permits with the actual worker lifetime and cancels cooperatively when an
 awaiting task is dropped. Captures report their input revision and never apply results to
 authored state. File saves publish immutable input and report its revision, keeping later
 edits dirty. This is a bounded capture/file executor, not a general background-job scheduler.
+
+Close intent is transient engine state, outside StoredDocument/history. The typed
+document.close command handles Request/Discard/Cancel with an authored-revision guard;
+its monotonic epoch identifies continuations across Cancel/new Request at the same revision.
+Actual authored/baseline/path changes permanently invalidate approval. A close-specific Save
+renews Request only after its matching current receipt/epoch; an unrelated save cannot do so.
+The native adapter acknowledges valid approval only while holding the engine mutex, with
+no registered workers/replies, UI file jobs or pending file action. That acknowledgement
+commits shutdown; new commands except Inspect refuse. The retained document/history stays
+intact until the host is destroyed. A late Open cannot resurrect it; a late published Save
+still reports its receipt without relabeling the committed session.
+
+The executor counts loopback reply publication as activity, registered before a short
+command can approve close and released after output write/flush. A callback alone is
+insufficient: another UI frame could poll before it fires. This barrier and the shared
+engine mutex prevent that race without a second command registry. Current lifecycle metadata
+is refreshed at finish, while an older operation's authored snapshot remains immutable.
+See control-protocol.md for state/output semantics and native-file-ui.md for actual evidence.
 
 The native app and opt-in loopback server now share this engine. A dedicated adapter thread
 owns the Tokio listener/tasks. Input is bounded before JSON decoding; no engine guard crosses

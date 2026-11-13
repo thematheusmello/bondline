@@ -44,6 +44,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.inspect` | `{}` | Read-only snapshot |
 | `document.open_cdxml` | `path`, optional `discard_unsaved=false` | Bounded native CDXML read; successful application starts a clean document session and clears history |
 | `document.save_cdxml` | `path`, optional `overwrite=false` | Atomic complete-source save; default no-clobber; authoring revision/history retained |
+| `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
 | `bond.create` | `page_id`, `begin_x_pt`, `begin_y_pt`, `end_x_pt`, `end_y_pt` | One independent C-C fragment; two C atoms with three explicitly authored H each, one single bond |
 | `history.undo` | `{}` | Previous authored snapshot |
@@ -89,8 +90,9 @@ address. Each new connection must first send exactly this object followed by LF:
 The server replies `{"authenticated":true}` followed by LF. Only then send the same
 `{command,params}` objects used by the engine, each followed by LF. Each command response is exactly
 one `{result:...}` or `{error:{code,message}}` object followed by LF. Requests on a connection
-run in order; connections share the native document and history. Changed state requests a
-native repaint. There is no MCP handshake on this separate raw control channel.
+run in order; connections share the native document and history. Authoring, file and close
+effects request repaint after their response is written/flushed; a failed write still
+notifies committed effects. There is no MCP handshake on this separate raw control channel.
 
 Each server creates 32 bytes from the operating system random source and represents them
 as 64 lowercase hex characters. Random-source failure aborts startup; no predictable fallback
@@ -133,8 +135,10 @@ encoding run outside that lock; later edits cannot alter the captured revision. 
 never installs state or overwrites newer edits. Queries leave revision/history unchanged.
 CLI calls finish synchronously. A cloneable CommandExecutor shares two workers across the
 delivered native UI and loopback adapter; stdio has its own process-local executor. Rendering
-and file work share that budget; excess work returns `busy`. Short authoring commands remain
-available. Preparation may already commit a short edit, so adapters must never replay it.
+and file work share that budget; excess work returns `busy`. Each deferred plan reserves
+its worker while the engine mutex is still held, before any spawning/await gap. Short
+authoring commands remain available until host shutdown commits. Preparation may already
+commit a short edit, so adapters must never replay it.
 
 MCP cancellation uses the SDK request token. Deferred loopback requests have a 30-second
 cancellation deadline. Aborting a connection task during server shutdown signals its worker;
@@ -192,3 +196,58 @@ error is `save_published`; its message states that new bytes exist and no rollba
 Recovery messages identify a retained original path. Directory-sync false is a capability
 limit, not durable directory metadata evidence. No autosave, recovery journal or general job
 scheduler is implied by this bounded executor.
+
+## Close requests and host shutdown
+
+The nine-command registry owns single-document close policy. Native File Close, Cmd/Ctrl+W,
+window Close and Mac Quit, plus close-dialog Discard/Cancel/Escape/Keep Window Open, execute
+`document.close`. Save remains the existing file command. This is Bondline's protected
+lifecycle policy, not proof of a complete26.1 dialog or multi-document implementation.
+
+```json
+{"command":"document.close","params":{"expected_revision":0,"action":"request"}}
+```
+
+Parameters are closed and `expected_revision` is required. Missing action defaults to
+request; unknown fields/actions fail. A stale authored revision returns `stale_revision`
+without changing intent. Each successful action advances checked `close_epoch`, including
+Cancel and repeated Request; exhaustion returns `close_epoch_exhausted` before mutation.
+Close never changes authored revision, stored source/model, history or saved baseline.
+
+| `close` state | Meaning |
+|---|---|
+| `open` | No pending close intent. Cancel clears an uncommitted request/approval. |
+| `needs_decision` | Request found dirty data, or an approval was invalidated. Native presents the decision UI. Saving alone never approves it. |
+| `approved` | Clean Request or explicit Discard approved the current revision/path. This is permission to close, not completed shutdown. |
+| `committed` | The trusted host acknowledged valid approval after draining work. New commands fail `close_committed`, except read-only Inspect. Late Cancel cannot claim to stop an already queued shutdown. |
+
+Every result includes `close` and `close_epoch`; close commands also include
+`close_operation`, so adapters notify even when authored `changed=false`. Lifecycle metadata
+is refreshed at finish. Other result fields retain their original operation's authored
+snapshot/revision and capture semantics; an old capture is not a fresh inspection of the
+document. Inspect current state before issuing a conditional close action.
+
+Normal edits are allowed before host acknowledgement and invalidate approval. Any actual
+authored, saved-baseline or path change permanently invalidates it until a fresh close
+action; returning to old values cannot resurrect permission. The UI's close-specific Save
+continuation captures revision/epoch. Only its matching successful receipt, current path,
+same revision/epoch and clean state renew Request. An ordinary save, old receipt, Cancel
+followed by another Request, or a publication error cannot silently close the window.
+
+The native host holds the shared engine mutex, checks that registered workers/replies,
+UI file jobs and emitted-but-not-started file actions are absent, then calls the trusted
+`Engine::complete_close` acknowledgement before issuing native Close. Registration uses the
+same mutex. A loopback reply guard starts before preparation and survives through output
+write/flush, preventing an independent UI frame from closing before that response is sent.
+It is released before repaint. Waiting UI frames repaint periodically; dropped awaiters
+still retain actual worker activity until completion. Obsolete ordinary choosers are
+cancelled before rendering under approved shutdown, and UI file start/result failures retain
+the window rather than allowing a later-frame exit.
+
+The host acknowledgement is infrastructure, like file completion, not a second user-command
+registry. Headless CLI/stdio have their own engines and report policy state; Request does
+not kill the MCP process or claim a native window closed. Loopback controls the actual native
+session. An old Open cannot resurrect a committed engine. An already-published Save still
+returns its real receipt while leaving that committed session's baseline/path/history alone.
+The existing publication/error contract remains in force. Broader dialog addressability,
+control metadata and job-ID/cancel automation remain separate M0 gaps.

@@ -128,10 +128,11 @@ impl FilePlan {
 impl Engine {
     pub fn finish(&mut self, completed: Completed) -> Result<CommandResult, Error> {
         match completed.0 {
-            Completion::Result { result, cancel } => {
+            Completion::Result { mut result, cancel } => {
                 if let Some(cancel) = cancel {
                     cancel.check()?;
                 }
+                self.refresh_close_result(&mut result);
                 Ok(*result)
             }
             #[cfg(not(target_arch = "wasm32"))]
@@ -142,6 +143,9 @@ impl Engine {
                 cancel,
                 discard_unsaved,
             } => {
+                if self.close_state() == crate::CloseState::Committed {
+                    return Err(Error::CloseCommitted);
+                }
                 cancel.check()?;
                 if revision != self.revision || generation != self.generation {
                     return Err(Error::StaleRevision);
@@ -172,6 +176,7 @@ impl Engine {
                 self.redo.clear();
                 self.generation = next_generation;
                 self.revision = next_revision;
+                self.invalidate_close();
                 Ok(CommandResult {
                     changed: true,
                     file_operation: Some(FileOperation {
@@ -196,10 +201,17 @@ impl Engine {
                     .into_os_string()
                     .into_string()
                     .map_err(|_| Error::UnrepresentableFilePath { published: true })?;
-                if generation == self.generation {
+                if generation == self.generation
+                    && self.close_state() != crate::CloseState::Committed
+                {
+                    let baseline_changed =
+                        self.saved != document || self.file_path.as_deref() != Some(path.as_str());
                     self.saved = document;
                     self.file_path = Some(path.clone());
                     self.trim_history(crate::MAX_HISTORY_BYTES);
+                    if baseline_changed {
+                        self.invalidate_close();
+                    }
                 }
                 Ok(CommandResult {
                     file_operation: Some(FileOperation {

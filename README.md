@@ -63,6 +63,10 @@ The file example needs an unused output path; overwriting requires explicit over
 Native file actions use the same registry in background workers. Cmd/Ctrl+O/S/Shift+S/W,
 unsaved Save/Discard/Cancel and Replace File are wired; the Mac workflow has actual native
 verification. Its two chooser fields support native accessibility entry on the tested Mac.
+Close/Quit decisions now use the shared `document.close` command. Current-revision/epoch
+guards and registered worker/reply draining protect native shutdown; CLI/stdio report close
+intent without terminating their process. The exact Mac workflow and limitations are in
+[native-file-ui.md](docs/native-file-ui.md).
 Full VoiceOver and interactive Windows/Linux file workflows remain unverified.
 
 The smoke command launches the actual wgpu window, reports its adapter, and closes after

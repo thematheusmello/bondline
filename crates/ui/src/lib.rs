@@ -3,7 +3,7 @@
 mod file_workflow;
 pub mod files;
 
-use bondline_commands::{BondCreate, Command, Engine, NoParams, PageSetSize};
+use bondline_commands::{BondCreate, CloseState, Command, Engine, NoParams, PageSetSize};
 use bondline_mcp::{CommandExecutor, SharedEngine, control::LoopbackServer};
 use bondline_model::{PageId, Point2};
 use eframe::egui;
@@ -97,7 +97,7 @@ pub fn show_workspace(
     error: &mut Option<String>,
     drawing: &mut DrawingState,
 ) {
-    let _ = show_workspace_with_files(context, engine, error, drawing, None);
+    let _ = show_workspace_with_files(context, engine, error, drawing, None, false);
 }
 
 fn show_workspace_with_files(
@@ -106,6 +106,7 @@ fn show_workspace_with_files(
     error: &mut Option<String>,
     drawing: &mut DrawingState,
     mut files: Option<&mut FileWorkflow>,
+    active_work: bool,
 ) -> Option<FileAction> {
     let undo = egui::KeyboardShortcut::new(egui::Modifiers::COMMAND, egui::Key::Z);
     let redo = egui::KeyboardShortcut::new(
@@ -125,9 +126,13 @@ fn show_workspace_with_files(
             ui.label(egui::RichText::new("bondline").strong().size(22.0));
             ui.separator();
             if let Some(files) = files.as_deref_mut() {
-                file_action = files.menu(ui, &state);
+                file_action = files.menu(ui, engine, error);
             }
-            let blocked = files.as_ref().is_some_and(|files| files.blocks_authoring());
+            let current = engine.state();
+            let blocked = current.close != CloseState::Open
+                || files
+                    .as_ref()
+                    .is_some_and(|files| files.blocks_authoring(&current));
             ui.add_enabled_ui(!blocked, |ui| {
                 ui.menu_button("Edit", |ui| {
                     let modifier = if cfg!(target_os = "macos") {
@@ -189,7 +194,11 @@ fn show_workspace_with_files(
             ));
         });
     });
-    let blocked = files.as_ref().is_some_and(|files| files.blocks_authoring());
+    let current = engine.state();
+    let blocked = current.close != CloseState::Open
+        || files
+            .as_ref()
+            .is_some_and(|files| files.blocks_authoring(&current));
     if blocked {
         drawing.gesture = None;
     } else {
@@ -420,7 +429,9 @@ fn show_workspace_with_files(
             }
         });
     if let Some(files) = files {
-        file_action = files.dialogs(context, &engine.state()).or(file_action);
+        file_action = files
+            .dialogs(context, engine, error, active_work)
+            .or(file_action);
     }
     file_action
 }
@@ -434,7 +445,6 @@ pub struct BondlineApp {
     error: Option<String>,
     drawing: DrawingState,
     files: FileWorkflow,
-    exit_approved: bool,
 }
 
 impl BondlineApp {
@@ -476,7 +486,6 @@ impl BondlineApp {
             error: None,
             drawing: DrawingState::default(),
             files: FileWorkflow::new(std::env::home_dir().map_or_else(std::env::current_dir, Ok)?),
-            exit_approved: false,
         })
     }
 }
@@ -492,15 +501,26 @@ impl eframe::App for BondlineApp {
                 }
             });
         }
+        let native_close = context.input(|input| input.viewport().close_requested());
+        let smoke_close = if let Some(frames) = &mut self.smoke_frames {
+            *frames = frames.saturating_add(1);
+            if *frames < 3 {
+                context.request_repaint();
+            }
+            *frames == 3
+        } else {
+            false
+        };
         let mut action = None;
         match self.engine.lock() {
             Ok(mut engine) => {
-                self.files.poll(&engine.state(), &mut self.error);
-                if context.input(|input| input.viewport().close_requested())
-                    && !self.exit_approved
-                    && !self.files.request_close(&engine.state())
-                {
+                self.files.poll(&mut engine, &mut self.error);
+                if native_close && engine.state().close != CloseState::Committed {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
+                    self.files.request_close(&mut engine, &mut self.error);
+                }
+                if smoke_close {
+                    self.files.request_close(&mut engine, &mut self.error);
                 }
                 action = show_workspace_with_files(
                     context,
@@ -508,13 +528,20 @@ impl eframe::App for BondlineApp {
                     &mut self.error,
                     &mut self.drawing,
                     Some(&mut self.files),
+                    self.executor.has_active_work(),
                 );
-                if self.files.take_close_request(&engine.state()) {
-                    self.exit_approved = true;
+                if self.files.complete_close_if_idle(
+                    &mut engine,
+                    self.executor.has_active_work(),
+                    action.is_some(),
+                ) {
                     context.send_viewport_cmd(egui::ViewportCommand::Close);
                 }
             }
             Err(_) => {
+                if native_close {
+                    context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
+                }
                 egui::CentralPanel::default().show(context, |ui| {
                     ui.colored_label(egui::Color32::DARK_RED, "Document engine unavailable");
                 });
@@ -522,13 +549,11 @@ impl eframe::App for BondlineApp {
         }
         if let Some(action) = action {
             self.error = self.files.start(action, &self.executor, context).err();
-        }
-        if let Some(frames) = &mut self.smoke_frames {
-            *frames = frames.saturating_add(1);
-            if *frames >= 3 {
-                context.send_viewport_cmd(egui::ViewportCommand::Close);
-            } else {
-                context.request_repaint();
+            if self.error.is_some()
+                && let Ok(mut engine) = self.engine.lock()
+            {
+                self.files
+                    .keep_open_after_file_failure(&mut engine, &mut self.error);
             }
         }
     }
