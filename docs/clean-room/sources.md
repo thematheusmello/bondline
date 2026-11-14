@@ -843,3 +843,28 @@ asset copied or new golden approved. Exact excluded probes, cleanup, later CLI-c
 recovery and the observed Open-help omission are recorded. This supplies bounded Mac
 workflow evidence, not missing chemical preview, new point-placement precision, special
 input/DPI cases, interactive Windows/Linux or complete parity.
+
+## Fifth fetched SMILES corpus bundle, 2026-11-14
+
+[verification-smiles-corpus.md](../verification-smiles-corpus.md) records the mandatory
+fifth bundle. The three original seed files and dual-license declaration are pinned to
+[actual public source eabe02f267985b2788496b58f96415d7fa4d1a4d](https://github.com/thematheusmello/bondline/tree/eabe02f267985b2788496b58f96415d7fa4d1a4d/crates/io/tests/fixtures/smiles).
+The same pin's [MIT notice](https://github.com/thematheusmello/bondline/blob/eabe02f267985b2788496b58f96415d7fa4d1a4d/LICENSE-MIT)
+has Git blob a8c01baffbc1cd6550bce6e21f89f261441ee79b; an independent stdlib blob calculation
+matches the retained local notice. A real HTTPS gate fetched three previously absent
+17/21/21-byte cache entries and matched their SHA-256 and independently recorded Git blobs;
+all five older cached inputs and four older manifest pins remain exact. No future/latest
+branch revision, proprietary sample or source normalization was substituted.
+
+Primary OpenSMILES/RDKit sources registered above remain applicable. The unchanged external
+consumer's exact flags, version, source-inclusive hash/length and qualified getter behavior
+are checked separately from independent literal bracket-H/isotope/charge/topology/ring
+expectations. Existing nonaromatic parser ownership is reused without a writer/model bridge.
+The dataset contains three authored vectors; it does not establish broad conformance,
+canonicalization, chemistry or an application/native workflow.
+
+Format tagging, the fifth mandatory path, global metadata-before-cache validation and
+literal corpus accounting are developer-tool policy. Existing license/notice/hash/path/
+case-alias/count/cache-ancestry safeguards retain all old negatives and gain explicit
+fifth-bundle/cache/SMILES-only cases. The original Git unset-text contract now also protects
+the new JSON manifest. Dependency/toolchain/lock/fixture/oracle contents are unchanged.

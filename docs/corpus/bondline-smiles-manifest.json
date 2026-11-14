@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "thematheusmello/bondline",
+  "revision": "eabe02f267985b2788496b58f96415d7fa4d1a4d",
+  "notice": "LICENSE-MIT",
+  "files": [
+    {
+      "name": "bondline-original-isotopic-chain.smi",
+      "path": "crates/io/tests/fixtures/smiles/isotopic-chain.smi",
+      "format": "smiles",
+      "size": 17,
+      "sha256": "6c1fa14e6c1720eb3465e09c7450e2e520a5aa1a6438d279cbf528cdc40c7e9e",
+      "license": "MIT OR Apache-2.0",
+      "provenance": "Original Bondline nonaromatic notation seed: C/C/O chain, isotope13 and literal bracket H3/H2/H1. Source authorship and exact bytes are recorded in crates/io/tests/fixtures/smiles/README.md at this published commit. This is notation/source evidence, not perceived or canonical chemistry."
+    },
+    {
+      "name": "bondline-original-two-ring-labels.smi",
+      "path": "crates/io/tests/fixtures/smiles/two-ring-labels.smi",
+      "format": "smiles",
+      "size": 21,
+      "sha256": "1528ac64991e737bfee28357012b3dd218780006b8b30ac1d25b222f46a5facb",
+      "license": "MIT OR Apache-2.0",
+      "provenance": "Original Bondline nonaromatic notation seed: separate three/four-member carbon rings, distinct numeric labels73/74, bare implicit-H tokens and exact terminal LF. Source authorship and literal topology are recorded in crates/io/tests/fixtures/smiles/README.md. No third-party example corpus is copied."
+    },
+    {
+      "name": "bondline-original-salt-branch.smi",
+      "path": "crates/io/tests/fixtures/smiles/salt-branch.smi",
+      "format": "smiles",
+      "size": 21,
+      "sha256": "357c9e0907672dba5acb80ed9e5263ca9f286cb889e5a221cd518603622dea1c",
+      "license": "MIT OR Apache-2.0",
+      "provenance": "Original Bondline nonaromatic notation seed: separate Na+1 and O-1/CH2/branched-carbon components, preserving bracket-H0 versus bare implicit-H spelling. Source authorship and literal atom/edge expectations are recorded in crates/io/tests/fixtures/smiles/README.md. No chemical validation or application compatibility is inferred."
+    }
+  ]
+}

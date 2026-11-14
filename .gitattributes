@@ -3,6 +3,7 @@
 /docs/corpus/bondline-manifest.json -text
 /docs/corpus/bondline-cdx-manifest.json -text
 /docs/corpus/bondline-v3000-manifest.json -text
+/docs/corpus/bondline-smiles-manifest.json -text
 /crates/cdx/tests/fixtures/*.cdx -text
 /crates/io/tests/fixtures/cdx/metadata-explicit.cdx -text
 /crates/io/tests/fixtures/cdx/metadata-header.cdx -text

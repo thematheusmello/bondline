@@ -11,6 +11,7 @@ use std::{
     process::{Command, Stdio},
 };
 
+mod smiles;
 mod v3000;
 
 #[derive(Deserialize)]
@@ -44,6 +45,7 @@ enum Format {
     #[serde(rename = "mol_v3000")]
     MolV3000,
     Sdf,
+    Smiles,
 }
 
 const MANIFESTS: &[&str] = &[
@@ -51,6 +53,7 @@ const MANIFESTS: &[&str] = &[
     "docs/corpus/bondline-manifest.json",
     "docs/corpus/bondline-cdx-manifest.json",
     "docs/corpus/bondline-v3000-manifest.json",
+    "docs/corpus/bondline-smiles-manifest.json",
 ];
 const MAX_MANIFEST_BYTES: usize = 1024 * 1024;
 const MAX_FIXTURES: usize = 1024;
@@ -82,6 +85,7 @@ fn validate(manifest: &Manifest) -> Result<(), Box<dyn Error>> {
             Format::Cdx => ".cdx",
             Format::Mol | Format::MolV3000 => ".mol",
             Format::Sdf => ".sdf",
+            Format::Smiles => ".smi",
         };
         if !normal_component(&file.name)
             || !file.name.ends_with(extension)
@@ -503,6 +507,7 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
     let mut sdf_checks = 0;
     let mut sdf_records = 0;
     let mut supplier_entries = 0;
+    let mut smiles_checks = 0;
     for manifest in &manifests {
         for file in &manifest.files {
             let path = cache.join(&file.name);
@@ -573,6 +578,10 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
                     sdf_records += records;
                     supplier_entries += entries;
                 }
+                Format::Smiles => {
+                    smiles::check(&bytes)?;
+                    smiles_checks += 1;
+                }
             }
         }
     }
@@ -603,6 +612,10 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
     )?;
     writeln!(
         output,
+        "SMILES source/notation/literal/RDKit checks: {smiles_checks} (original nonaromatic seeds; no generated/canonical chemistry)"
+    )?;
+    writeln!(
+        output,
         "CDX foreign/general/application compatibility MISSING"
     )?;
     writeln!(
@@ -614,6 +627,7 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
         && v3000_checks == 0
         && sdf_checks == 0
         && cdx_checks == 0
+        && smiles_checks == 0
     {
         return Err("corpus has no implemented parser coverage".into());
     }
@@ -659,6 +673,10 @@ mod tests {
                 include_bytes!("../../docs/corpus/bondline-v3000-manifest.json"),
             )?;
             fs::write(
+                directory.0.join(super::MANIFESTS[4]),
+                include_bytes!("../../docs/corpus/bondline-smiles-manifest.json"),
+            )?;
+            fs::write(
                 directory.0.join("docs/corpus/rdkit-license.txt"),
                 include_bytes!("../../docs/corpus/rdkit-license.txt"),
             )?;
@@ -685,6 +703,228 @@ mod tests {
         fn drop(&mut self) {
             let _ = fs::remove_dir_all(&self.0);
         }
+    }
+
+    #[test]
+    fn smiles_is_an_explicit_pinned_format_with_three_original_sources()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let manifest: Manifest = serde_json::from_slice(include_bytes!(
+            "../../docs/corpus/bondline-smiles-manifest.json"
+        ))?;
+        validate(&manifest)?;
+        assert_eq!(manifest.repository, "thematheusmello/bondline");
+        assert_eq!(
+            manifest.revision,
+            "eabe02f267985b2788496b58f96415d7fa4d1a4d"
+        );
+        assert_eq!(manifest.notice, "LICENSE-MIT");
+        assert_eq!(manifest.files.len(), 3);
+        for (file, (name, path, source, size, hash)) in manifest.files.iter().zip([
+            (
+                "bondline-original-isotopic-chain.smi",
+                "crates/io/tests/fixtures/smiles/isotopic-chain.smi",
+                b"[13CH3][CH2][OH]\n".as_slice(),
+                17,
+                "6c1fa14e6c1720eb3465e09c7450e2e520a5aa1a6438d279cbf528cdc40c7e9e",
+            ),
+            (
+                "bondline-original-two-ring-labels.smi",
+                "crates/io/tests/fixtures/smiles/two-ring-labels.smi",
+                b"C%73CC%73.C%74CCC%74\n".as_slice(),
+                21,
+                "1528ac64991e737bfee28357012b3dd218780006b8b30ac1d25b222f46a5facb",
+            ),
+            (
+                "bondline-original-salt-branch.smi",
+                "crates/io/tests/fixtures/smiles/salt-branch.smi",
+                b"[Na+].[O-][CH2]C(C)C\n".as_slice(),
+                21,
+                "357c9e0907672dba5acb80ed9e5263ca9f286cb889e5a221cd518603622dea1c",
+            ),
+        ]) {
+            assert_eq!(file.name, name);
+            assert_eq!(file.path, path);
+            assert_eq!(file.size, size);
+            assert_eq!(file.sha256, hash);
+            assert!(matches!(file.format, super::Format::Smiles));
+            assert_eq!(file.license, "MIT OR Apache-2.0");
+            verify(file, source)?;
+            let mut invalid = serde_json::json!({"name":name,"path":path,"format":"SMILES","size":size,"sha256":hash,"license":"MIT OR Apache-2.0","provenance":"original"});
+            assert!(serde_json::from_value::<super::Fixture>(invalid.clone()).is_err());
+            invalid["format"] = serde_json::json!("smiles");
+            invalid["extra"] = serde_json::json!(true);
+            assert!(serde_json::from_value::<super::Fixture>(invalid).is_err());
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn fifth_smiles_bundle_is_mandatory_before_cache_creation()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let manifests = super::load_manifests(&directory.0)?;
+        assert_eq!(manifests.len(), 5);
+        assert_eq!(manifests.iter().map(|m| m.files.len()).sum::<usize>(), 8);
+        fs::remove_file(
+            directory
+                .0
+                .join("docs/corpus/bondline-smiles-manifest.json"),
+        )?;
+        assert!(super::check_at(&directory.0, true, &mut Vec::new()).is_err());
+        assert!(
+            !directory.0.join(".cache").exists(),
+            "a missing fifth manifest must fail before cache or network IO"
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn fifth_smiles_bundle_keeps_global_license_notice_name_size_and_total_guards()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let original: serde_json::Value = serde_json::from_slice(include_bytes!(
+            "../../docs/corpus/bondline-smiles-manifest.json"
+        ))?;
+        let mut first = original.clone();
+        first["files"] = serde_json::json!([original["files"][0].clone()]);
+        directory.write_manifest(0, &first)?;
+        let mut alias = original.clone();
+        alias["files"][0]["name"] = serde_json::json!("BONDLINE-ORIGINAL-ISOTOPIC-CHAIN.smi");
+        directory.write_manifest(4, &alias)?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("fifth alias")?
+                .to_string()
+                .contains("duplicate corpus cache name")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        fs::write(
+            directory.0.join(super::MANIFESTS[0]),
+            include_bytes!("../../docs/corpus/manifest.json"),
+        )?;
+        for (pointer, value) in [
+            ("/notice", serde_json::json!("../LICENSE-MIT")),
+            ("/files/0/license", serde_json::json!("ISC")),
+            ("/files/0/path", serde_json::json!("../isotopic-chain.smi")),
+            ("/files/0/name", serde_json::json!("wrong.sdf")),
+            ("/files/0/size", serde_json::json!(0)),
+            ("/files/0/format", serde_json::json!("smi")),
+        ] {
+            let mut invalid = original.clone();
+            *invalid.pointer_mut(pointer).ok_or("manifest property")? = value;
+            directory.write_manifest(4, &invalid)?;
+            assert!(
+                super::check_at(&directory.0, true, &mut Vec::new()).is_err(),
+                "{pointer}"
+            );
+            assert!(!directory.0.join(".cache").exists());
+        }
+        let mut invalid = original.clone();
+        invalid["notice"] = serde_json::json!("docs/corpus/empty-smiles-notice.txt");
+        fs::write(directory.0.join("docs/corpus/empty-smiles-notice.txt"), b"")?;
+        directory.write_manifest(4, &invalid)?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("empty fifth notice")?
+                .to_string()
+                .contains("notice is empty")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        let mut many = original.clone();
+        let entries = (0..1020)
+            .map(|i| {
+                let mut item = original["files"][0].clone();
+                item["name"] = serde_json::json!(format!("smiles-{i}.smi"));
+                item
+            })
+            .collect::<Vec<_>>();
+        many["files"] = serde_json::json!(&entries[..1019]);
+        directory.write_manifest(4, &many)?;
+        assert_eq!(
+            super::load_manifests(&directory.0)?
+                .iter()
+                .map(|m| m.files.len())
+                .sum::<usize>(),
+            1024
+        );
+        many["files"] = serde_json::json!(entries);
+        directory.write_manifest(4, &many)?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("fifth global count")?
+                .to_string()
+                .contains("1024 total fixtures")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        fs::write(
+            directory.0.join(super::MANIFESTS[4]),
+            vec![b' '; super::MAX_MANIFEST_BYTES + 1],
+        )?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("fifth byte bound")?
+                .to_string()
+                .contains("exceeds 1 MiB")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        Ok(())
+    }
+
+    #[test]
+    fn smiles_only_offline_bundles_count_as_implemented_parser_coverage()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let original: serde_json::Value = serde_json::from_slice(include_bytes!(
+            "../../docs/corpus/bondline-smiles-manifest.json"
+        ))?;
+        let sources = [
+            include_bytes!("../../crates/io/tests/fixtures/smiles/isotopic-chain.smi").as_slice(),
+            include_bytes!("../../crates/io/tests/fixtures/smiles/two-ring-labels.smi").as_slice(),
+            include_bytes!("../../crates/io/tests/fixtures/smiles/salt-branch.smi").as_slice(),
+        ];
+        let cache = directory.0.join(".cache/corpus");
+        fs::create_dir_all(&cache)?;
+        for bundle in 0..5 {
+            let count = if bundle == 0 {
+                2
+            } else if bundle == 4 {
+                3
+            } else {
+                1
+            };
+            let mut manifest = original.clone();
+            let mut files = Vec::new();
+            for i in 0..count {
+                let mut item = original["files"][i % 3].clone();
+                let name = format!("smiles-only-{bundle}-{i}.smi");
+                item["name"] = serde_json::json!(name);
+                fs::write(cache.join(name), sources[i % 3])?;
+                files.push(item);
+            }
+            manifest["files"] = serde_json::json!(files);
+            directory.write_manifest(bundle, &manifest)?;
+        }
+        let mut output = Vec::new();
+        super::check_at(&directory.0, true, &mut output)?;
+        let output = String::from_utf8(output)?;
+        assert!(output.contains("corpus integrity: 8 pinned licensed files from 5 source bundles"));
+        assert!(output.contains("CDXML byte/Expat checks: 0"));
+        assert!(output.contains("MOL V2000 byte/source/RDKit/Decimal checks: 0"));
+        assert!(
+            output
+                .contains("MOL V3000 original-vector byte/source/literal/Decimal/RDKit checks: 0")
+        );
+        assert!(output.contains("CDX original explicit field-vector byte/struct/RDKit checks: 0"));
+        assert!(output.contains("SDF V2000 byte/ordered-field/per-record RDKit checks: 0"));
+        assert!(output.contains("SMILES source/notation/literal/RDKit checks: 8"));
+        assert!(output.contains(
+            "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
+        ));
+        Ok(())
     }
 
     #[test]
@@ -837,7 +1077,7 @@ mod tests {
         let output = String::from_utf8(output)?;
         assert!(
             output
-                .contains("MOL V3000 original-vector byte/source/literal/Decimal/RDKit checks: 4")
+                .contains("MOL V3000 original-vector byte/source/literal/Decimal/RDKit checks: 5")
         );
         assert!(output.contains("MOL V2000 byte/source/RDKit/Decimal checks: 0"));
         assert!(output.contains(
@@ -896,13 +1136,13 @@ mod tests {
     -> Result<(), Box<dyn std::error::Error>> {
         let directory = CorpusDirectory::new()?;
         let manifests = super::load_manifests(&directory.0)?;
-        assert_eq!(manifests.len(), 4);
+        assert_eq!(manifests.len(), 5);
         assert_eq!(
             manifests
                 .iter()
                 .map(|bundle| bundle.files.len())
                 .sum::<usize>(),
-            5
+            8
         );
         assert_eq!(
             format!(
@@ -985,6 +1225,16 @@ mod tests {
         assert!(
             super::check_at(&directory.0, true, &mut Vec::new()).is_err(),
             "missing V3000 bundle cannot silently fall back"
+        );
+        assert!(!directory.0.join(".cache").exists());
+        fs::write(
+            directory.0.join(super::MANIFESTS[3]),
+            include_bytes!("../../docs/corpus/bondline-v3000-manifest.json"),
+        )?;
+        fs::remove_file(directory.0.join(super::MANIFESTS[4]))?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new()).is_err(),
+            "missing SMILES bundle cannot silently fall back"
         );
         assert!(!directory.0.join(".cache").exists());
         Ok(())
@@ -1095,6 +1345,32 @@ mod tests {
 
     #[cfg(unix)]
     #[test]
+    fn fifth_smiles_manifest_and_confined_notice_cannot_escape_the_workspace()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let outside = CorpusDirectory::new()?;
+        let path = directory.0.join(super::MANIFESTS[4]);
+        fs::remove_file(&path)?;
+        std::os::unix::fs::symlink(outside.0.join(super::MANIFESTS[4]), &path)?;
+        assert!(super::check_at(&directory.0, true, &mut Vec::new()).is_err());
+        assert!(!directory.0.join(".cache").exists());
+        fs::remove_file(&path)?;
+        let mut manifest: serde_json::Value = serde_json::from_slice(include_bytes!(
+            "../../docs/corpus/bondline-smiles-manifest.json"
+        ))?;
+        manifest["notice"] = serde_json::json!("docs/corpus/smiles-notice.txt");
+        directory.write_manifest(4, &manifest)?;
+        std::os::unix::fs::symlink(
+            outside.0.join("LICENSE-MIT"),
+            directory.0.join("docs/corpus/smiles-notice.txt"),
+        )?;
+        assert!(super::check_at(&directory.0, true, &mut Vec::new()).is_err());
+        assert!(!directory.0.join(".cache").exists());
+        Ok(())
+    }
+
+    #[cfg(unix)]
+    #[test]
     fn cache_parent_symlink_is_refused_before_creating_outside_directories()
     -> Result<(), Box<dyn std::error::Error>> {
         let directory = CorpusDirectory::new()?;
@@ -1184,10 +1460,49 @@ mod tests {
             &v3000_path,
             include_bytes!("../../crates/io/tests/fixtures/v3000/noncontiguous-cc.mol"),
         )?;
+        for (name, source) in [
+            (
+                "bondline-original-isotopic-chain.smi",
+                include_bytes!("../../crates/io/tests/fixtures/smiles/isotopic-chain.smi")
+                    .as_slice(),
+            ),
+            (
+                "bondline-original-two-ring-labels.smi",
+                include_bytes!("../../crates/io/tests/fixtures/smiles/two-ring-labels.smi")
+                    .as_slice(),
+            ),
+            (
+                "bondline-original-salt-branch.smi",
+                include_bytes!("../../crates/io/tests/fixtures/smiles/salt-branch.smi").as_slice(),
+            ),
+        ] {
+            assert!(
+                super::check_at(&directory.0, true, &mut Vec::new())
+                    .err()
+                    .ok_or("missing SMILES ignored")?
+                    .to_string()
+                    .contains(&format!("offline corpus entry is missing: {name}"))
+            );
+            let path = cache.join(name);
+            fs::write(&path, b"corrupt")?;
+            assert!(
+                super::check_at(&directory.0, true, &mut Vec::new())
+                    .err()
+                    .ok_or("corrupt SMILES accepted")?
+                    .to_string()
+                    .contains(&format!("length/SHA-256 mismatch: {name}"))
+            );
+            assert_eq!(
+                fs::read(&path)?,
+                b"corrupt",
+                "a corrupt cache must not be normalized or replaced"
+            );
+            fs::write(path, source)?;
+        }
         let mut output = Vec::new();
         super::check_at(&directory.0, true, &mut output)?;
         let output = String::from_utf8(output)?;
-        assert!(output.contains("corpus integrity: 4 pinned licensed files from 4 source bundles"));
+        assert!(output.contains("corpus integrity: 7 pinned licensed files from 5 source bundles"));
         assert!(output.contains("MOL V2000 byte/source/RDKit/Decimal checks: 1"));
         assert!(
             output
@@ -1197,6 +1512,7 @@ mod tests {
             output.contains("SDF V2000 byte/ordered-field/per-record RDKit checks: 1; records: 2")
         );
         assert!(output.contains("CDX original explicit field-vector byte/struct/RDKit checks: 1"));
+        assert!(output.contains("SMILES source/notation/literal/RDKit checks: 3"));
         assert!(output.contains("CDX foreign/general/application compatibility MISSING"));
         assert!(output.contains(
             "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
