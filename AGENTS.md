@@ -135,7 +135,8 @@ same-path version-change invalidation, exact failed retry and trusted close-Save
 Native/hosted evidence must be separate from engine/egui tests; see
 docs/verification-v3000-application.md. No runtime dependency or codec source changed here.
 
-SDF is currently a library container, not an application document command. Preserve exact
+SDF is currently a mixed V2000/V3000 library container, not an application document command.
+Its generic writer preserves actual molecular versions; write_v2000 must refuse V3000. Preserve exact
 record/MOL/item spans, duplicate order, raw headers/DT digits, empty/multiline values and
 opaque embedded MOL bytes. Never rebuild these from RDKit's last-value property map: its
 full supplier loses records/data at the original valid DT-only vector. Independent raw

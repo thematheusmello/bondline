@@ -1595,3 +1595,81 @@ and every delivered corpus check. Log target/m1-application-merged-ci.log ends w
 local CI checks passed. Session7483 is terminal. This is combined local evidence; the new
 merge still needs its own hosted run. Accepted native application observations are tied to
 source1c53312, not a claim of a second native run or interactive Windows/Linux acceptance.
+
+## SDF mixed molecular versions (2026-11-14)
+
+Executed only in the persistent bondline-mol-v3000 checkout on feat/sdf-v3000 from
+accepted 2a69de2; no native/reference UI or hosted/aggregate result is claimed for this
+slice. Every Cargo command used that checkout's absolute CARGO_TARGET_DIR with
+CARGO_INCREMENTAL=0 and development/test debug 0. BONDLINE_PYTHON selected the existing
+isolated external RDKit 2026.09.2 interpreter. Original mixed source was assembled
+independently before the generic writer and has777 bytes/SHA
+165e6f5d5cff37dae6315a07843d84733aa42dbbc497b2920da1702bad9526a0.
+
+Actual missing-API RED: target/sdf-v3000-red.log (sdf::write/mol_version absent).
+Existing-API semantic RED: target/sdf-v3000-parse-red.log (primary-permitted mixed input
+refused before implementation). Minimal generic dispatch then passed. One new negative
+test initially assumed an empty-count V2000 document with opaque M V30 properties was
+invalid; target/sdf-v3000-invalid-vector-diagnostic.log identifies that mistaken case.
+The corrected negative uses actual V2000 atom rows falsely stamped V3000, requiring full
+V3000 syntax validation. A positive test separately requires retaining unknown property
+bytes under their actual validated V2000 stamp. No production or old assertion was
+weakened for that test-authoring correction.
+
+All 12 unchanged SDF tests plus 7 new tests pass in target/sdf-v3000-oracle-green.log.
+Literal expectations check all mixed record/MOL/item ranges and ordered duplicate/DT/
+empty/multiline/spaces data. Tests retain unknown/continued/quoted/query/stereo MOL bytes,
+CRLF/empty titles/missing-final-LF framing, require legacy-writer refusal, and reject
+malformed later records, bad references/counts/stamps, padding/delimiter and molecular
+resource failures. The generic V2000 output equals explicit V2000 output. Existing SDF
+boundaries and DT-only supplier-loss assertions remain intact.
+
+Actual external SDWriter switching produces 667 bytes/SHA
+88516961b6a197950ac83e09c441387bd2e9ed1c2da2d94accdffd1b9c359ca6;
+full ordinary supplier checks pass for both output molecules, EMPTY and multiline data.
+Unchanged V3000 oracle inputs verify exact8 dp coordinates/isotope and1,000 atoms through
+new SDF framing and external consumers, with no conversion/rounding. Existing oracle
+SHA-256 values stay 728a7f5d3adbbcb5097a357a147ae817a461004c0246796f5f39d848969278fb
+(SDF) and e351585c7c15aec4a9c31d5bd6472baace6b5628988fe44fbc7520e216fee697 (V3000).
+The full-supplier DT-only loss remains separately asserted, not filtered or relabeled.
+
+Final scoped `cargo test --locked -p bondline-io` passes 114 tests, zero failures,
+plus zero doctests (target/sdf-v3000-io-green.log). IO all-target warnings-denied
+Clippy passes (target/sdf-v3000-clippy.log), as do workspace/fuzz rustfmt checks
+(target/sdf-v3000-fmt.log and sdf-v3000-fuzz-fmt.log). The existing sdf_parse target's
+warnings-denied isolated Clippy passes (target/sdf-v3000-fuzz-clippy.log). Root and
+isolated fuzz lock hashes and both existing oracle hashes remain unchanged.
+
+Actual AddressSanitizer completed 10,000 runs, seed 826403517, max_len 65536, timeout 5,
+exit 0 (target/sdf-v3000-asan.log), using cargo-fuzz 0.13.2/libFuzzer 0.4.13 and
+nightly-2026-04-01 in this checkout's own target. Six fresh ignored seeds include both
+original SDF fixtures, quoted/continued V3000, external mixed output, 8 dp and a
+49,063-byte 1,000-atom SDfile. Final coverage 1605/features 6242, 341 corpus entries/
+reported 3066 KiB, maximum exercised input 49,063 bytes, reported RSS 462 MiB;
+3 seconds of fuzzing after compilation. Exact source/spans/versions/ordered items and
+generic/strict writer invariants are checked, not chemistry for arbitrary mutations.
+This is bounded smoke evidence, not exhaustive conformance, an RSS bound or a security
+audit. No committed fixture was a writable corpus. All local handles were terminal
+before handoff; no native/reference/hosted/aggregate run was performed for this slice.
+
+## Reviewed mixed-SDF aggregate, 2026-11-14
+
+The actual feat/sdf-v3000 checkout passes379 workspace plus3 macOS bridge tests and every
+cargo xtask ci gate, with its invoked root printed first. Log target/sdf-v3000-full-ci.log
+SHA77da79e40b19347c86782478f29d749e9e0a339a7e4ea5a23b678ed3bf67306d; session29645 terminal0.
+The inherited two-entry corpus is explicitly narrower than root's later five-file corpus.
+The bounded implementation passed independent read-only review; current capability docs
+now distinguish generic mixed writing from strict write_v2000. Production, old tests/oracles,
+locks/dependencies/fixtures/golden are unchanged by that finalization. Hosted and receiving-
+root integration checks remain separate. No native application collection claim follows.
+
+## Receiving-root mixed-SDF integration, 2026-11-14
+
+The actual merge of6aeb9f2 into85bf5eb passes401 workspace plus3 macOS bridge tests and
+all cargo xtask ci gates. Log target/sdf-mixed-merged-ci.log ends with local CI checks passed;
+session24244 terminal0. Direct comparison of the SDF container, moved stamp helper and
+application document caller to accepted6aeb9f2 is empty. Root retains its five-file/four-bundle
+corpus, all old pins/oracles, CDX writer/positive seed/max_len131072, save/close barriers and
+V3000 target. New mixed fixture whitespace attributes preserve spaces-only values. Runtime
+closures153/164/219, assets/locks/font/golden are unchanged. The new combined source still
+needs its own hosted result; no native application SDF workflow is implied.

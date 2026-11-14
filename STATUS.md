@@ -5,14 +5,19 @@ Public repository: https://github.com/thematheusmello/bondline . Continue, do no
 
 ## Current integrated source
 
-Root branch feat/m1-application-integration merges accepted version-aware MOL application
-source1c53312/docs2a69de2 into CDX Writer9306816 and fetched V3000 corpus7596c77. Runtime
-engine/UI/CLI/MCP/application IO source matches the accepted application branch exactly.
-The actual combined cargo xtask ci passes394 workspace plus3 macOS bridge tests, rustfmt,
-all-target warnings-denied clippy, layers, native declared licenses/assets and corpus. Log
- target/m1-application-merged-ci.log ended with local CI checks passed; session7483 is terminal.
-Native closures153/164/219 and two assets are unchanged. No lock/font/golden changes.
-This merge needs its own hosted run before main advances from c797262.
+Root branch feat/m1-container-integration adds reviewed mixed-SDF source6aeb9f2 to accepted
+MOL/CDX/corpus integration85bf5eb. The mixed container and moved version-stamp helper match
+its accepted source exactly; no adapter or UI behavior changes during this merge.
+The actual combined cargo xtask ci passes401 workspace plus3 macOS bridge tests, rustfmt,
+all-target warnings-denied clippy, layers, native declared licenses/assets and five-file/
+four-bundle corpus. Log target/sdf-mixed-merged-ci.log ends with local CI checks passed;
+session24244 is terminal. Native closures153/164/219 and two assets are unchanged.
+No lock/font/golden changes. This merge needs its own hosted run; main remains c797262.
+
+Previous85bf5eb merges accepted MOL application1c53312/docs2a69de2 with CDX Writer9306816
+and fetched V3000 corpus7596c77. Its actual local gate passes394+3, and hosted43537753933
+has Mac/Linux/ASAN GREEN with Windows pending. Engine/UI/CLI/MCP source matched1c53312;
+its accepted native observations are not a fabricated second native run.
 
 Standalone CDX Writer creates bounded explicit-root syntax and independently reproduces
 an original65750-byte chemical scene exactly. Literal balance/length/resource tests and
@@ -31,8 +36,8 @@ fetched CDX98bc59a also have terminal GREEN source runs recorded in docs/ci.md.
 Version-aware MOL application1c533127e57825368e323b438b93e4db022ce0c8 passes every hosted
 43531603511 job: Mac375 (372workspace+3bridge), Linux373, Windows367, actual windows and
 five bounded parser ASAN targets. Docs2a69de2 records actual corrected native acceptance.
-CDX Writer plus V3000 corpus source7596c77 has its own run43536671159: Mac/Linux/ASAN are
-GREEN; Windows is still running at this checkpoint. Do not restart completed jobs.
+CDX Writer plus V3000 corpus source7596c77 passes every43536671159 job: Mac370/Linux368/
+Windows360 tests, actual windows and five ASAN targets. Do not restart completed jobs.
 
 Actual Mac author/save/reopen/version/refusal/dirty-close and2048 CPU/Metal reply draining
 passed at00:04:57UTC. Source manifest digest
@@ -49,7 +54,8 @@ reservation lasts through publication and finish/drop; trusted current completio
 historical close receipts becoming valid after later context changes. Source.modified and
 file.dirty remain distinct. General connected graph drawing/rendering, query/stereo/3D,
 SDF collections, CDX application workflows and interactive Windows/Linux remain missing.
-SDF is a library/corpus, not an application document workflow. External chemistry results
+SDF is a source-preserving mixed V2000/V3000 library with a V2000 corpus, not an application
+collection workflow. Its generic writer retains actual versions; write_v2000 remains strict. External chemistry results
 are oracles, not Bondline chemistry implementations.
 
 ## Installed reference research in progress
@@ -75,7 +81,13 @@ SHA73de4b424e27a01e98be6830d726025fc5f36f8786d02bab594993bac12ed4b5;
  target/reference-ui/owned-original-bond-20261114.cdx,1196bytes,
 SHA7b2b71338595ad12bc34f46459f8389ec6a63cb453b1cf29b51543717139a73c.
 These are local research outputs with vendor metadata, not licensed committed corpus assets.
-Reopen/toolbar restoration/owned-document cleanup and final observation docs are still pending.
+A bounded existing-Rust probe returns exact original CDXML bytes and two-node/one-bond syntax.
+The original CDX refuses TrailingData; public BSD Glysade source explains22-byte prefix,
+six encoded Document bytes inside the historical28-byte header and a separate file end.
+file_verification now owns a narrow TDD framing fix in bondline-cdx-framing, from85bf5eb.
+No bytes are trimmed/normalized or committed as a corpus. Probe evidence is ignored
+ target/reference-ui/parser-probe-evidence.json. Reopen/toolbar restoration/owned-document
+cleanup and final observation docs are still pending.
 Raw vendor screenshots and REA evidence stay ignored. Public factual maps use original prose.
 
 ## Worktrees, jobs and next executable work
@@ -83,26 +95,28 @@ Raw vendor screenshots and REA evidence stay ignored. Public factual maps use or
 Only root runs Git. Keep distinct absolute Cargo targets, CARGO_INCREMENTAL=0 and sibling
 DEV/TEST_DEBUG=0; disk is constrained. Never delete active targets, source, fixtures or evidence.
 
-1. Commit/publish this GREEN combined integration; observe its own hosted run, then fast-forward
-   main only after matching GREEN. Do not substitute older platform evidence.
+1. Commit/publish this GREEN mixed-SDF integration; observe its own hosted run. Fast-forward
+   main only to a matching GREEN source. Do not substitute older platform evidence.
 2. Finish installed observation/map/ticket docs with exact build, state, Evidence and unknowns.
    Independently check ignored original local CDXML/CDX against existing bounded parsers.
-3. Sibling bondline-mol-v3000, feat/sdf-v3000 at2a69de2: mixed V2000/V3000 SDF is frozen with
-   114 IO tests, scoped clippy/fmt and ASAN10000 passing. Reviewer found no declared-profile
-   defect and is correcting current capability docs then running that checkout's aggregate.
-   Handoff target/sdf-v3000-final-handoff.json; root review target/sdf-v3000-integration-review.md.
+3. Sibling bondline-mol-v3000, feat/sdf-v3000 at6aeb9f2: mixed SDF passes114 IO tests,
+   scoped checks/ASAN10000, independent review and own379+3 aggregate. Source is published;
+   hosted43538499719 is running. Reviewed handoff target/sdf-v3000-reviewed-ci-handoff.json.
    Production concat eded429d55b8dd4ab0b520f6e432b859a33269aceaf6ce4aa40595f8dce9f75d.
-4. Sibling bondline-rxn, feat/rxn-v2000 at3b1fada: source-preserving legacy RXN wrapper with
-   ordered roles and raw V2000/V3000 payloads is frozen,116 IO tests/scoped checks/ASAN10000
-   pass. Read-only review found no declared-profile defect. Correct the stale summary row,
-   run its aggregate, commit/publish and integrate, preserving root corpus/positive CDX rules.
-   Handoff target/rxn-final-handoff.json; root target/rxn-integration-review.md. No RXN live job.
+   This root's receiving gate now passes401+3, with newer corpus/positive CDX rules retained.
+4. Sibling bondline-rxn, feat/rxn-v2000 at4cbc89b: bounded ordered legacy wrapper with raw
+   V2000/V3000 payloads passes116 IO tests/scoped checks/ASAN10000, independent review and
+   own373+3 aggregate. Source is published; hosted43538648520 is running. Corrected summary
+   separates missing application reactions/SMILES. Integrate next, preserving newer root
+   corpus/positive CDX rules. Handoff target/rxn-final-handoff.json and root review apply.
+   No local RXN job remains; target/rxn-full-ci.log records the actual invoked checkout.
 5. Continue application SDF/CDX/RXN, broader mappings and SMILES/InChI, then M2–M5 in roadmap
    order. The installed inventory refines workflow tickets; it does not complete any milestone.
 
-Root has no running Cargo/fuzz/Bondline-native job. SDF reviewer may start its own aggregate;
-reference_ui owns live UI research and reference_map owns new map/catalog/ticket docs.
-Hosted43536671159 Windows remains active. Revalidate handles instead of duplicating jobs.
+Root has no running Cargo/fuzz/Bondline-native job. reference_ui owns live UI research;
+reference_map owns new map/catalog/ticket docs; file_verification owns the isolated CDX
+framing implementation. Hosted43537753933 Windows,43538499719 and43538648520 remain active.
+Revalidate handles instead of duplicating jobs.
 
 M0 full inventory/dialog/job discovery, broader rendering and platform interactions remain.
 M2 connected bonds/rings/selection/labels/styles, M3 chemistry/reactions/text, M4 publishing/

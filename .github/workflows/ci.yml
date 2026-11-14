@@ -75,6 +75,7 @@ jobs:
           cp crates/io/tests/fixtures/mol/rdkit-CH3.mol crates/io/tests/fixtures/mol/ethane-v2000.mol .cache/fuzz/mol/
           mkdir -p .cache/fuzz/sdf
           cp crates/io/tests/fixtures/sdf/ordered-fields-v2000.sdf .cache/fuzz/sdf/
+          cp crates/io/tests/fixtures/sdf/mixed-v2000-v3000.sdf .cache/fuzz/sdf/
           mkdir -p .cache/fuzz/mol-v3000
           cp crates/io/tests/fixtures/v3000/*.mol .cache/fuzz/mol-v3000/
       - name: Run the bounded sanitizer check

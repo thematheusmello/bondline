@@ -5,8 +5,8 @@
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
 | CDX | Standalone bounded binary syntax, checked property edits and new-tree writer | Original field vectors, fetched positive scene, full-byte writer equality, independent Python struct/RDKit and bounded ASAN | Application import/export, model/reference mapping, foreign/general corpus and modern extensions |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
-| SDF V2000 | Source-preserving library records, ordered data fields and validated wrapper writer | Original source spans; fetched pinned two-record corpus; external raw scanner/per-record RDKit; named-field supplier and external-writer vectors | Application data/multiple-record workflow and broader syntax/encodings |
-| MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | interactive Windows/Linux, SDF version dispatch, broader queries/stereo/blocks |
+| SDF V2000/V3000 | Source-preserving mixed library records, per-record MOL version, ordered data fields, generic preserving writer and strict V2000 writer | Original spans/order; fetched V2000 two-record corpus; external raw scanner/per-record RDKit; version-switched SDWriter/ordinary full supplier; 8dp/1000-atom inputs; bounded Asan | Application data/multiple-record workflow, fetched mixed-version corpus and broader syntax/encodings |
+| MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
 | RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
@@ -61,7 +61,7 @@ writer interoperability. See [test provenance](../crates/io/tests/fixtures/mol/R
 ## MOL V3000 library
 
 `bondline_io::mol::v3000::MolFile` is a separate library codec. Application MOL commands
-now dispatch V2000/V3000; SDF records still use V2000. It borrows exact complete source and
+and SDF records now dispatch the corresponding V2000/V3000 syntax codec. It borrows exact complete source and
 three headers, exposes positive noncontiguous atom/bond source IDs and physical
 spans, and keeps a flat bounded block table. Model identities are fresh dense IDs.
 Logical entries remove only final continuation dashes and subsequent exact `M  V30 `
@@ -152,14 +152,15 @@ the actual associated encoding, independently of the filename extension and orig
 format. Stale imports cannot replace current work; an older published save keeps later edits
 dirty. See [control-protocol.md](control-protocol.md) for schemas and close/request guards.
 
-## SDF V2000 container library
+## SDF container library
 
-`bondline_io::sdf::SdfFile` validates complete V2000 records and exposes borrowed original
+`bondline_io::sdf::SdfFile` validates complete V2000/V3000 records and exposes borrowed original
 bytes, record/Molfile/delimiter spans and ordered data items. Each item retains its raw
 header, optional name and textual DT number, value lines and exact raw value/EOL span.
 Duplicates, empty/multiline/spaces-only values and combined registry headers remain distinct;
-they are never reconstructed from a property dictionary. Molfile views use the existing
-codec; callers explicitly choose any later model transform. There is no application SDF
+they are never reconstructed from a property dictionary. Each record reports its actual
+MOL version and uses the corresponding existing syntax codec; callers explicitly choose
+any later model transform. There is no application SDF
 open/save command or implicit multi-record document conversion yet.
 
 BIOVIA2026 printed pages 97–99 define named/DT headers, line-prefix record delimiters,
@@ -174,10 +175,11 @@ Independent resource policies are 64 MiB total, 1024 records, 65536 fields, one 
 lines and 4096-byte structural/header lines. Ambiguous multiple header identities and
 unbalanced optional-parenthesis metadata explicitly refuse the supported profile; this is
 a conservative interpretation limit, not a claim that all such free text is forbidden by
-the general standard. Datfiles without structures, V3000 and other encodings remain open.
+the general standard. Datfiles without structures and broader encodings remain open.
 
-`write_v2000` takes ordered raw-header/data-line inputs and validated original MOL blocks.
-It keeps MOL bytes/CRLF/unknown properties, adds a final LF if needed, and writes new wrapper
+`write` takes ordered raw-header/data-line inputs and validated original V2000/V3000 MOL
+blocks. `write_v2000` shares the framing code but refuses V3000 inputs rather than converting
+or silently widening its contract. Both keep MOL bytes/CRLF/unknown properties, add a final LF if needed, and write new wrapper
 lines with LF and one item terminator. Canonical delimiter tails/padding may differ from
 an imported file; exact original passthrough is separate. A reserved delimiter prefix in
 an embedded MOL, invalid fields, unsupported syntax or exceeded output budget refuses
@@ -190,7 +192,7 @@ loses data and the second record at a valid DT-only header; duplicate names also
 last-value map. These diagnostics stay separate from preservation assertions. No complete
 supplier agreement is claimed. The fetched corpus pins this original source at public
 commit fb86832a0c9b7744fb3ef8f8115c7ed296164505 and checks exact ordered data plus both
-independently consumed molecular projections. See [corpus scope](corpus/README.md).
+independently consumed molecular projections. See [corpus scope](corpus/README.md). A fetched mixed-version entry remains separate tooling work.
 
 ## CDX syntax
 
@@ -406,3 +408,38 @@ IDs1/2/bond1 and authored H3/single graph agree with separate literal/Decimal/RD
 The corpus frame24pt/unit, origin(0,0), invertedY is an explicit test policy, not physical
 chemical units or the application's separate default origin(72,72). One original vector
 is checked, not general V3000 interoperability or Bondline chemistry calculations.
+
+## SDF mixed V2000/V3000 molecular payloads
+
+`SdfFile::parse` now validates each complete embedded MOL using its actual fourth-line
+V2000/V3000 stamp and corresponding full syntax codec. `SdfRecord::mol_version()`
+reports that per-record encoding; there is no global SDfile version or extension-based
+conversion. BIOVIA Chemistry 2026 printed 97 explicitly permits either encoding or a
+mixture. The container still borrows exact source and exposes ordered raw fields,
+DT digits, duplicate/empty/multiline values and complete absolute spans. Parsed molecular
+syntax is transient: only the version/raw payload and existing field views are retained.
+No elemental projection or application multi-record document is constructed.
+
+`sdf::write(&[SdfRecordInput])` constructs new SDF framing while preserving each accepted
+MOL payload and its actual version. `write_v2000` remains strictly V2000-only and returns
+unsupported_content for a V3000 input; it does not convert or silently widen its contract.
+Both share one checked preflight/emission body. Unknown accepted molecular properties,
+query/stereo metadata, continued/quoted V3000 data and original headers remain in the raw
+payload. New SDF lines use LF; imported MOL CRLF stays exact, with only a missing final LF
+appended for framing. All existing prefix-delimiter, no-MOL-padding, header, data-value,
+strict EOF, ASCII and output/resource policies remain. Invalid nested syntax/stamps yield
+invalid_sdf; nested resource/unsupported errors retain their codes and record context.
+
+A tiny crate-private version-stamp helper is shared with StoredDocument. Moving the
+existing detector does not change its validation/errors or replace complete parsing.
+SDF retains its 64 MiB/1024-record/65536-field/1M-line/4096-byte structural/200-byte data
+budgets plus each molecular codec's limits. There is no new global graph-count policy or
+hard RSS claim. Generic output preflights the complete file before allocating its bytes.
+
+The old V2000 fixtures/oracles/assertions are unchanged. The original777-byte mixed
+vector has pinned literal spans/order; the supplemental RDKit 2026.09.2 full supplier
+checks ordinary unique properties and external SDWriter version switching. Unchanged
+molecular oracles check8 dp/1,000-atom payloads. The valid DT-only supplier loss remains a
+diagnostic and duplicate dictionaries never establish raw fidelity. Application SDF
+selection/editing/persistence, data-only datfiles, broader encodings/header identities
+and full chemistry remain missing.

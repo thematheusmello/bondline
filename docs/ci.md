@@ -1,5 +1,14 @@
 # CI contract and execution evidence
 
+CDX writer plus fetched original V3000 corpus source7596c777e2a3453dadeefc2b9c82144d7b8850a3
+is terminal GREEN in [43536671159](https://github.com/thematheusmello/bondline/actions/runs/43536671159):
+Mac132267252777:370 tests (367workspace+3bridge), Linux132267252875:368, Windows132267252821:360
+and ASAN132267252522. All actual native window smokes and five bounded targets pass. Adapters
+remain Metal/Apple Paravirtual IntegratedGpu, Vulkan/llvmpipe Cpu and Dx12/Microsoft Basic
+Render Driver Cpu. The new-tree writer and one original V3000 corpus vector do not establish
+application CDX, general V3000 files or Bondline chemistry. Later application/container
+integration sources require their own gates. No passing job was restarted.
+
 Corrected fetched-SDF corpus source `c797262d23524dd949047b3bbe3b4b4022d37fbc` is terminal
 GREEN in [run43518162847](https://github.com/thematheusmello/bondline/actions/runs/43518162847):
 macOS `132205357329`: 334 tests (331 workspace plus three bridge), Linux `132205357320`:

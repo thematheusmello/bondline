@@ -154,3 +154,33 @@ budgets. Invalid semantic references/types are not inferred as chemistry. The fr
 2026-11-14 two-seed pass ran10000 iterations at seed721533879/max_len131072/timeout5:
 coverage305/features878,59 retained inputs/reported150KiB/RSS199MiB; largest65750bytes.
 Use pinned stable cargo fmt/clippy for source checks; the isolated nightly is for ASAN.
+
+## SDF mixed molecular versions
+
+The existing `sdf_parse` target now checks actual per-record V2000/V3000 encodings
+and uses the generic preserving writer. Its explicit write_v2000 assertions still
+require byte-identical output for V2000 and unsupported_content for V3000. It does
+not convert or project a molecule. Ordered raw headers, DT digits, duplicate/empty/
+multiline values, source ranges and all MOL bytes remain checked. The old V2000
+seed and independent oracle assertions stay intact. This extends the fourth target,
+not the number of parser targets.
+
+```sh
+mkdir -p .cache/fuzz/sdf-mixed
+cp crates/io/tests/fixtures/sdf/*.sdf .cache/fuzz/sdf-mixed/
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address sdf_parse .cache/fuzz/sdf-mixed -- -runs=10000 -seed=826403517 -max_len=65536 -timeout=5
+```
+
+Keep this worktree's own absolute target; the local command may select the existing
+main-checkout pinned tool binary read-only via PATH. Extra ignored seeds may wrap the
+original continued/quoted V3000 MOL plus data, or use externally generated8 dp/1,000-atom
+MOL bytes and a complete SDF delimiter. Never normalize input or mutate fixture files.
+No new tool version, lock, native/runtime dependency or application workflow is added.
+Actual bounded-run evidence and input sizes belong in docs/verification.md; max_len
+alone establishes no large-input coverage or security guarantee.
+
+The actual fresh mixed-SDF ASan run passed 10,000 iterations at the exact settings
+above: coverage 1605/features 6242, 341 retained entries/reported 3066 KiB, maximum
+exercised input 49,063 bytes, reported RSS 462 MiB, 3 seconds after compilation.
+The six source seeds and hashes are recorded in ignored target/sdf-v3000-fuzz-seeds.json;
+source fixtures remain unchanged. Scope and independent-consumer limits remain as above.

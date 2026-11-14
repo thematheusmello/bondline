@@ -118,7 +118,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
 | CDX | Standalone bounded parser, property edits and new-tree writer; original chemical bytes checked by independent struct/RDKit consumers | Application model mapping, import/export and foreign/general-file coverage |
-| MOL / SDF | MOL V2000/V3000 native file workflows; source retention and independent consumer checks; SDF V2000 ordered-record/data library and pinned corpus | Application SDF workflows, broader metadata/layout support and interactive Windows/Linux |
+| MOL / SDF | MOL V2000/V3000 native file workflows; source retention and independent consumer checks; mixed V2000/V3000 SDF ordered-record/data library and pinned V2000 corpus | Application SDF workflows, broader metadata/layout support and interactive Windows/Linux |
 | RXN / SMILES / InChI | Planned | Format support and independently verified chemistry |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |

@@ -9,3 +9,4 @@
 /crates/io/tests/fixtures/sdf/*.sdf -text
 # This value is three literal spaces; trimming it changes the ordered-data regression.
 /crates/io/tests/fixtures/sdf/ordered-fields-v2000.sdf whitespace=-blank-at-eol
+/crates/io/tests/fixtures/sdf/mixed-v2000-v3000.sdf whitespace=-blank-at-eol

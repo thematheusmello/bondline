@@ -148,7 +148,7 @@ impl StoredDocument {
         preview_size: PageSize,
         transform: MolTransform,
     ) -> Result<Self, DocumentError> {
-        let version = source_mol_version(&bytes)?;
+        let version = crate::mol::source_version(&bytes)?;
         let (fragment, fully_mapped, v3000_mapped, headers) = match version {
             Version::V2000 => {
                 let parsed = MolFile::parse(&bytes)?;
@@ -443,27 +443,6 @@ impl StoredDocument {
             )?,
             (Version::V3000, None) => v3000::write_v3000(fragment, "", frame)?,
         }))
-    }
-}
-
-fn source_mol_version(bytes: &[u8]) -> Result<Version, MolError> {
-    if bytes.len() > crate::mol::MAX_MOL_BYTES {
-        return Err(MolError::InputTooLarge);
-    }
-    let line = bytes
-        .split(|byte| *byte == b'\n')
-        .nth(3)
-        .ok_or(MolError::Truncated {
-            line: 4,
-            field: "MOL version",
-        })?;
-    match line.get(33..39) {
-        Some(b" V2000") => Ok(Version::V2000),
-        Some(b" V3000") => Ok(Version::V3000),
-        _ => Err(MolError::InvalidField {
-            line: 4,
-            field: "V2000/V3000 version stamp",
-        }),
     }
 }
 
