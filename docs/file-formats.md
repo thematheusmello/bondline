@@ -8,7 +8,7 @@
 | SDF V2000/V3000 | Complete mixed-version session Open/Save, native Mac files, bounded shared ordered-field inspection/existing-value edits; preserving library codecs | Exact raw spans/order/versions, fetched V2000 corpus, unchanged raw/per-MOL consumers, actual Mac777-byte files, command/CLI/stdio/socket history and stale/close guards; bounded ASAN | Chemical preview/layout, field-edit UI, record operations, fetched mixed-version corpus, broader syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
 | RXN V2000 wrapper | Standalone source-preserving reader/new-wrapper writer with ordered roles and raw V2000/V3000 molecular payloads | Published CTfile layout; original field/role/span vectors; external RDKit readers/writers and bounded ASAN | Reaction model, application/native commands, V3000 reaction wrapper, broader registry/extension handling and fetched corpus |
-| SMILES | Bounded graph/source passthrough with literal aromatic markers/bonds, named opt-in fixed-H neutral nonaromatic normalization/export and validated1–12carbon/Single path layout into a new Document, library only; generated notation is noncanonical | Original literal spans/counts/adjacency/output/limits; qualified pinned unsanitized graph and separate sanitized meaning consumers | Application import/backing/live implicit-H policy, source-backed edited regeneration, clipboard/layout, aromatic model mapping, stereo/query/perception and canonicalization |
+| SMILES | Bounded notation/source library; selected-fragment explicit-H file export and restricted carbon-path→CDXML conversion through registry/CLI/MCP/loopback; noncanonical output | Literal source/graph/limits, real LF-framed files and complete-source guards; unchanged external unsanitized graph/separate sanitized consumers; receiving715 and semantic controls | Native export/conversion controls, source-backed Open/Save, general layout/implicit-H policy, aromatic model mapping, stereo/query/perception and canonicalization |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and positioned neutral-carbon/Single graphs with literal authored H | External Pillow/FreeType, independent graph/pixel/geometry/font vectors, actual native capture and one human-approved golden | Other elements/orders/metadata, source-faithful/general chemical publishing, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
@@ -615,3 +615,16 @@ Out-of-profile lowercase symbols, stereo/maps/queries and other unsupported feat
 still refuse. Both aromatic atom markers and aromatic bonds explicitly refuse opt-in
 fixed-H normalization before integer bond sums/count mapping; the model writer is
 unchanged. See [verification-smiles-aromatic.md](verification-smiles-aromatic.md).
+
+## Explicit selected-fragment SMILES files
+
+file.export_smiles_fragment writes one explicitly identified complete-source chemical
+fragment to a new file, through the existing writer and create-only publisher. It leaves
+all active content/baselines/history/association intact and reports excluded geometry/
+document context. App IDs/order, unselected content and original source metadata are not
+encoded; unsupported chemistry refuses instead of becoming an omission. All current writer
+scope remains, including isotopes/physical H, supported orders, branches/rings/components.
+One LF follows the unchanged notation. The logical upper bound is65537file bytes for
+65536notation bytes; current parser/converter raw65536 input caps are unchanged and can
+refuse that boundary. No maximum-size graph/re-import parity or native control is claimed.
+See [exact command/file evidence](verification-smiles-export-command.md).

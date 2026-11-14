@@ -1056,6 +1056,25 @@ one4xBOX policy at96em and the unchanged0.90 whole-label threshold, with bounded
 consistency and explicit scoped negative controls. Failed96em/exploratory measurements
 remain recorded; no production data or old carbon oracle/golden was changed to fit them.
 
+## Shared selected-fragment SMILES export, 2026-11-14
+
+The command reuses the existing independently tested explicit-H writer unchanged. Existing
+OpenSMILES/fixed-H/catalog sources above define its notation/profile; deterministic authored-ID
+traversal remains an original noncanonical policy. The pinned [OpenSMILES SMILES Files
+section](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc#L1371-L1383)
+distinguishes LF/CRLF-terminated file records from bare EOF-terminated notation. The native
+filesystem exporter appends exactly one LF without changing notation, caps or old consumers.
+
+Exact positive page/fragment selection, current whole-owner completeness guard, explicit
+chemical-graph scope/geometry-and-document-context omissions and no session association are
+original export policies. They do not establish reference26.1 native/clipboard behavior.
+Unknown chemical source content must refuse rather than be hidden by an omission label.
+The existing publication lease, immutable snapshots and worker/reply/close barriers are reused.
+Actual selected isotope/H/order/topology file bytes face unchanged external unsanitized and
+separate sanitized consumers after independent exact LF/ASCII/EOF assertions. No model,
+writer, renderer, dependency, asset, fixture or oracle is changed. See
+[verification-smiles-export-command.md](../verification-smiles-export-command.md).
+
 ## Create-only SMILES fragment file export, 2026-11-14
 
 [verification-smiles-export-io.md](../verification-smiles-export-io.md) records the thin

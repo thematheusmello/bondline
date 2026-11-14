@@ -49,7 +49,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. CLI/MCP inspect ordered fields and edit existing values with Undo/Redo. Static summary only; chemical preview and field-edit UI remain missing. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
 | Rendering | Shared CPU/GPU neutral-element graph scenes, literal authored H, hover and PNG captures; independent font checks and one approved carbon regression scene. New element-label native workflows remain unverified. |
-| Automation | 21 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Automation | 22 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. CI runs tests and actual
 window smoke checks on macOS, Windows and Linux; interactive Windows/Linux workflows
@@ -108,6 +108,9 @@ cargo run --locked -p bondline-cli -- run --cmd '{"command":"bond.create","param
 # Convert a supported 1–12 carbon path into a new CDXML file, preserving input.smi.
 cargo run --locked -p bondline-cli -- run --cmd '{"command":"file.convert_smiles_to_cdxml","params":{"expected_revision":0,"input_path":"input.smi","output_path":"new.cdxml","bond_length_pt":48,"origin_x_pt":72,"origin_y_pt":72,"page_width_pt":612,"page_height_pt":792}}'
 
+# Create and export one explicitly identified fragment in the same headless session.
+cargo run --locked -p bondline-cli -- run --cmd '{"command":"bond.create","params":{"page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200}}' --cmd '{"command":"file.export_smiles_fragment","params":{"expected_revision":1,"page_id":1,"fragment_id":1,"output_path":"ethane.smi"}}'
+
 # Run a process-local stdio MCP session.
 cargo run --locked -p bondline-cli -- mcp
 ```
@@ -125,7 +128,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | CDX | Guarded shared/native Mac Open/Save, exact source retention, limited elemental metadata view and standalone syntax/property/new-tree APIs, checked independently | Faithful preview, broader metadata/chemistry, safe edits/new encoding and foreign/general corpus |
 | MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, with independent byte/record/data checks; SDF summary has no chemical preview | Chemical preview/data-edit UI, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
-| SMILES | Bounded notation/source library, explicit-H fragment file-export library, restricted fixed-H layout and carbon-path→CDXML conversion through CLI/MCP/loopback, checked independently | Fragment export command/UI, native conversion control, source-backed application import, general layout/valence, aromaticity/stereo and canonicalization |
+| SMILES | Explicit-H selected-fragment file export and restricted carbon-path→CDXML conversion through CLI/MCP/loopback, plus source/notation libraries, checked independently | Native export/conversion controls, source-backed application import, general layout/valence, aromaticity/stereo and canonicalization |
 | InChI | Planned | Reference-tool comparison and import/export |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |

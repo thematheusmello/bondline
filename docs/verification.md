@@ -2168,3 +2168,16 @@ their truth. Scoped240 and receiving704 gates pass, with fmt/clippy/layers/uncha
 licenses/assets/corpus. Registry/native controls, source-backed SMILES Open/Save and new
 Windows/Linux execution remain missing. The raw-input64KiB versus framed-output upper
 bound65,537-byte qualification is explicit; no old budget or consumer was relaxed.
+
+## Selected-fragment SMILES command reception, 2026-11-14
+
+[Exact shared-export evidence](verification-smiles-export-command.md) records actual
+runtime UnknownCommand RED, full-owner/lease/close/source guards and10 producer tests.
+Actual nonfirst canonical-native export passes CLI/stdio/authenticated-loopback with
+unchanged consumers; the19-atom vector checks full writer metadata/connectivity/orders.
+Root's separate17-atom actual-file graph test gives RED→GREEN unchanged and retains five
+valid semantic decoys, including equal-count/formula topology/order changes. Independent
+source review finds no defect; affected230 and complete Root715 gates pass, including
+fmt/clippy/layers/unchanged licenses/assets/corpus. This remains explicit chemical export,
+with geometry/document context excluded, no Save/association/ACK change and no native
+control. M0/M1 remain incomplete; new native/Windows/Linux/fuzz/hosted execution is absent.

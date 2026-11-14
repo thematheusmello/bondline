@@ -170,6 +170,12 @@ pub struct FileOperation {
 
 #[derive(Debug)]
 pub(super) enum FilePlan {
+    ExportSmiles {
+        params: crate::ExportSmilesFragment,
+        document: Arc<StoredContent>,
+        save_slot: Arc<()>,
+        generation: u64,
+    },
     ConvertSmiles {
         params: crate::ConvertSmilesToCdxml,
         origin: bondline_model::Point2,
@@ -201,6 +207,12 @@ pub struct Completed(pub(super) Completion);
 
 #[derive(Debug)]
 pub(super) enum Completion {
+    #[cfg(not(target_arch = "wasm32"))]
+    SmilesExport {
+        receipt: crate::SmilesExportReceipt,
+        document: Arc<StoredContent>,
+        save_slot: Arc<()>,
+    },
     #[cfg(not(target_arch = "wasm32"))]
     Conversion {
         receipt: crate::ConversionReceipt,
@@ -243,6 +255,9 @@ impl FilePlan {
             Self::ConvertSmiles { .. } => Err(Error::InvalidUiFileParameters(
                 "SMILES conversion is not a native file-presentation action",
             )),
+            Self::ExportSmiles { .. } => Err(Error::InvalidUiFileParameters(
+                "SMILES fragment export is not a native file-presentation action",
+            )),
         }
     }
     pub(super) fn complete(self, cancel: &Cancellation) -> Result<Completed, Error> {
@@ -251,6 +266,33 @@ impl FilePlan {
             use bondline_io::files::{canonical_save_path, read_cdxml_file, save_cdxml_file};
             use std::path::Path;
             Ok(Completed(match self {
+                Self::ExportSmiles {
+                    params,
+                    document,
+                    save_slot,
+                    generation,
+                } => {
+                    cancel.check()?;
+                    let selected = crate::smiles_export::selected_fragment(
+                        &document,
+                        params.page_id,
+                        params.fragment_id,
+                    )?;
+                    let (atom_count, bond_count) = (selected.atoms().len(), selected.bonds().len());
+                    let output = canonical_save_path(Path::new(&params.output_path))?;
+                    if output.to_str().is_none() {
+                        return Err(Error::UnrepresentableFilePath { published: false });
+                    }
+                    let receipt =
+                        bondline_io::files::export_smiles_fragment_file(&output, selected, cancel)?;
+                    Completion::SmilesExport {
+                        receipt: crate::SmilesExportReceipt::from_file(
+                            receipt, &params, generation, atom_count, bond_count,
+                        )?,
+                        document,
+                        save_slot,
+                    }
+                }
                 Self::ConvertSmiles {
                     params,
                     origin,
@@ -429,6 +471,15 @@ impl Engine {
 
     pub fn finish(&mut self, completed: Completed) -> Result<CommandResult, Error> {
         match completed.0 {
+            #[cfg(not(target_arch = "wasm32"))]
+            Completion::SmilesExport {
+                receipt,
+                document: _document,
+                save_slot: _save_slot,
+            } => Ok(CommandResult {
+                smiles_export: Some(receipt),
+                ..self.state()
+            }),
             #[cfg(not(target_arch = "wasm32"))]
             Completion::Conversion {
                 receipt,

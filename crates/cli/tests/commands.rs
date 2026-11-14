@@ -14,6 +14,31 @@ mod mol_support;
 mod sdf_field_support;
 #[path = "../../../xtask/oracles/sdf_record_test_support.rs"]
 mod sdf_record_support;
+#[path = "support/smiles_export.rs"]
+mod smiles_export_support;
+
+#[test]
+fn executable_exports_only_the_selected_native_fragment_without_saving_the_document()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("cli-export-native.cdxml");
+    let output = directory.path("cli-export-λ.sdf");
+    std::fs::write(&input, smiles_export_support::SOURCE)?;
+    let result=Command::new(env!("CARGO_BIN_EXE_bondline-cli")).arg("run")
+        .arg("--cmd").arg(json!({"command":"document.open_cdxml","params":{"path":input}}).to_string())
+        .arg("--cmd").arg(json!({"command":"file.export_smiles_fragment","params":smiles_export_support::params(1,&output)}).to_string()).output()?;
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let value: Value = serde_json::from_slice(&result.stdout)?;
+    smiles_export_support::assert_export(&value, &output)?;
+    assert_eq!(value["file"]["path"], json!(std::fs::canonicalize(&input)?));
+    assert_eq!(std::fs::read(&input)?, smiles_export_support::SOURCE);
+    smiles_export_support::consume(&output)?;
+    Ok(())
+}
 
 #[test]
 fn executable_conversion_then_open_extend_history_save_and_reopen_use_the_same_registry()
@@ -292,6 +317,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "document.save_mol",
             "document.save_sdf",
             "file.convert_smiles_to_cdxml",
+            "file.export_smiles_fragment",
             "history.redo",
             "history.undo",
             "page.set_size",

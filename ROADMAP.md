@@ -91,8 +91,11 @@ SMILES Open/Save, a native conversion control/flow and general cleanup remain mi
 The explicit-H writer now also creates real single-record SMILES files through the shared
 atomic publisher, preserving its isotope/physical-H/branch/ring/disconnected/Single/Double/
 Triple scope. Exact LF framing, actual-file consumers and publication guards pass the local
-704-test gate. Registry/adapters and explicit source/selection/omission receipts are next;
-this library API grants no source-backed Save or active-session association.
+704-test gate. The shared explicit-selection command/adapters now pass the local715 gate,
+including actual nonfirst native-source export, full graph/metadata/order comparisons and
+semantic negative controls. It retains the complete owner/save lease through finish/drop,
+reports omitted geometry/document context and preserves the active session. Native export
+controls, source-backed SMILES Open/Save and broader chemistry remain missing.
 
 
 Standalone CDXML source preservation and checked existing-attribute replacement have

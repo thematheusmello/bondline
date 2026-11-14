@@ -225,3 +225,13 @@ existing deferred worker/close barriers and save reservation through completion 
 Its receipt identifies historical preparation while returning the latest unchanged session;
 it never grants a trusted native Save acknowledgment. Native input workflows remain separate;
 see verification-smiles-layout.md and verification-smiles-conversion-io.md.
+
+`file.export_smiles_fragment` takes an explicit page/fragment and captures the complete
+immutable content owner only after its existing source-completeness guard. The worker
+uses that same owner, existing full-profile writer and create-only publisher. Owner and
+save lease remain in Completion through finish/drop. Finish returns current state plus
+historical `smiles_export` metadata, never a Save baseline or association change. Scope
+is the selected chemical graph; geometry, application IDs/order, unselected content and
+source/document metadata are outside the output. Unsupported chemical data still refuses.
+One LF frames the notation; this is distinct from source-backed SMILES Open/Save or
+native export controls. See verification-smiles-export-command.md.

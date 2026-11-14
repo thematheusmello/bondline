@@ -16,32 +16,43 @@ availability is indicated again. Continue source and headless work.
 
 ## Current revisions and gates
 
-Prior public main a393fb9 has21commands and the locally verified neutral-label foundation.
-Root feat/smiles-export-integration now receives exact create-only export IO5f308ac, preserving
-all existing writer scope and appending one LF per the pinned primary file-record standard.
-Six intentional files/seven logs/five baseline records/132protected identities and the
-complete prior conversion production block are checked. See verification-smiles-export-io.md.
+Recoverable integrated source: exportIO5f308ac received at3901ff4; shared export command
+d8e8bb2 plus Root's independent actual-file graph test are now received. Prior public main
+a393fb9 remains an earlier21-command checkpoint. Read git log for latest receiving commit;
+all intentional source/tests/docs here are committed after passing local gates. Goal stays
+ACTIVE; M0/M1 and broader M2–M5 are incomplete.
 
-Receiving cargo xtask ci46205 exits0:701workspace+3bridge=704,0failed/ignored, including
-fmt/all-target warnings-denied clippy/layers/unchanged licenses/assets/eight-file five-bundle
-corpus. Log85745B/SHA2569c32d945c18fbac69bdfc90bd4039320ce9fb6ef91070129a129cfd681ff4c3b.
-Prior696(label)/686(conversioncommand)/670(conversionIO)/659(layout) gates remain separate.
-No new native/Windows/Linux or general chemistry claim follows. Actions remains disabled.
+Receiving cargo xtask ci82979 exits0:712workspace+3bridge=715,0failed/ignored. Workspace
+fmt/all-target warnings-denied clippy/layers/unchanged declared licenses/assets/eight-file
+five-bundle corpus pass at the printed Root workspace. Log86781B/SHA256
+48cb2d0b8ed6a9c935e213aa97bf90c34df268c1e2681b5ca8abc68c9c39bd04.
+Prior704(IO),696(labels),686(conversioncommand),670(conversionIO) and659(layout) are
+separate evidence. No new native/Windows/Linux, full chemistry or hosted claim follows.
 
-The exact source-only export contract review is target/smiles-fragment-export-contract-review.md,
-18920B/SHAbe751f5eb56d69679e7c1b5f94333b0b540bc39d89ac4695815cdced0e5772b4.
-It establishes complete-source authority, explicit fragment selection and omitted geometry/
-context. OpenSMILES file records require LF/CRLF; the initial no-LF draft was corrected before
-production. Notation cap remains65536; framing may add one byte. Existing raw-input64KiB
-parser/converter caps remain unchanged and may refuse that maximum framed size. No maximum-
-size graph was constructed; the actual4096carbon file is20481B and externally consumed.
+Root checked export command16/log5/protected132/sourcefreeze/draft/backend/contract records;
+all13 source/tests remain exact. The sole received-IO doc difference is Root's prior
+verification appendix, complete producer prefix preserved. Command peer report13750B/SHA
+ca49363d7504924d7a5473faa267d571746a7dcf1d6a32697f8e1e7d6bc84d61 finds no defect.
+Root's17-atom14-bond nonfirst graph gives UnknownCommand RED24728→GREEN5661 with unchanged
+Rust/oracle; actual published file faces every isotope-keyed vertex/endpoint/order check
+and five valid semantic controls. Two controls preserve atom/bond counts/order histograms/
+formula yet alter topology/orders. Physical-H collapse, isotope and wrong selection also
+reject. Actual externalPython debug=True,optimize=0; old consumers are unchanged.
+See verification-smiles-export-command.md and verification-smiles-export-io.md.
+
+File records append one LF to unchanged notation. The notation cap65536 versus framed
+upper bound65537 and legacy raw-input65536 caps stay explicit; maximum-size graph/re-import
+parity is not proven. The actual4096carbon export is20481B and independently consumed.
+No budget, writer, model, renderer, asset, golden or old parameter assertion was weakened.
+Actions remains disabled at both levels, with no development workflow authorized.
 
 ## Delivered receiving scope
 
-21 shared typed commands: document.inspect/close; CDXML/CDX/MOL/SDF Open/Save;
+22 shared typed commands: document.inspect/close; CDXML/CDX/MOL/SDF Open/Save;
 page.set_size; bond.create/extend; history.undo/redo; render.capture; ui.controls/file;
-sdf.record.inspect, sdf.field.set_value and file.convert_smiles_to_cdxml. UI/CLI/stdio/
-authenticated opt-in loopback use the same registry; conversion has no native control. Headless engines do not pretend to open native dialogs.
+sdf.record.inspect, sdf.field.set_value, file.convert_smiles_to_cdxml and
+file.export_smiles_fragment. UI/CLI/stdio/authenticated loopback use one registry; the
+export/conversion commands have no native control. Headless engines do not fake dialogs.
 
 SDF retains complete mixed-version source through current/saved/history/plans; state has
 document:null and every-record metadata. The explicit query pages ordered duplicate/DT/
@@ -64,9 +75,13 @@ writes that drawing as create-only native CDXML under a distinct 64 KiB read bud
 with metadata-only receipts and truthful publication errors. The shared converter now passes actual
 CLI/stdio/authenticated-loopback workflows and real CDXML editing/persistence checks.
 Native conversion controls/acceptance and source-backed SMILES Open/Save remain missing.
-RXN is a container library. The explicit-H Fragment→SMILES writer now has a create-only
-filesystem library with exact LF framing and original graph/metadata/limit refusals. Its
-shared export command/adapters are in progress; no native export control or SMILES backing.
+RXN is a container library. Explicit-H selected-fragment SMILES file export now passes
+engine/CLI/stdio/authenticated-loopback, source/selection/lease/owner/history/close and
+independent actual-file checks. It retains the complete owner through finish/drop and
+returns historical metadata with explicit geometry/document-context exclusions. All
+writer isotope/physical-H/order/branch/ring/component scope remains, without renderer or
+12-carbon limits. Active baselines/association/ACK are untouched. Native export controls,
+source-backed SMILES Open/Save, multi-record file handling and general layout remain missing.
 
 Current aromatic fuzz evidence is linked above. Earlier fixed-H/export sourcee647196
 separately passed ASAN45229 with its five-seed set; do not relabel that run as aromatic
@@ -99,7 +114,7 @@ The subsequent Open-help string fix lists.sdf/.sd and passes fmt/UI clippy; its 
 has not been natively rechecked. See docs/verification-native-sdf-and-extension.md.
 All owned app/controller/helper processes closed; CUA completion was observed exactly once.
 The101-file evidence index was independently rehashed after exact CLI cache recovery.
-Do not confuse its archived18-command CLI with current receiving20-command binaries.
+Do not confuse its archived18-command CLI with current receiving22-command binaries.
 
 Earlier Mac evidence covers pages/history/CDXML/MOLV2000/V3000/guarded CDX and CPU/GPU/PNG.
 CDX always remains incomplete: unchanged Save works, faithful preview/edits/new encoding
@@ -115,32 +130,41 @@ ship. Existing restoration exceptions remain recorded. Only approved golden SHA:
 
 ## Active work and next steps
 
-Root owns Git/integration/publication. Native/interactive work and Actions stay off.
-Check live agents/jobs before resuming; do not duplicate existing work.
+All three workers are terminal; no live own Cargo/fuzz/native/controller/helper job.
+Root owns Git/integration/publication. Check agents and actual handles before resuming.
 
-- native_acceptance: completed exact exportIO5f308ac in bondline-rxn, no livejobs;
-  six-file handoff7c5d400b…e3b754 received and Root704 gate passed.
-- reference_map: active file.export_smiles_fragment in bondline-mol-v3000, branch
-  feat/smiles-export-command. Actual runtime UnknownCommand RED66251 exists. Root
-  fast-forwarded exact5f308ac under13draft files without conflict/stash; all13 hash-exact
-  pre/post port (pre-IO manifest2956B/SHAf7210856…d8e35). Worker has GO for real backend
-  scoped/adapters/lifecycle checks; it owns current Cargo handles and must report them.
-- sdf_setter_review: completed read-only contract/oracle review above; no livejobs.
+- native_acceptance: exact exportIO5f308ac in bondline-rxn, branch feat/smiles-export-io;
+  six-file handoff30144B/SHA7c5d400b…e3b754 received; affected240 and receiving704 pass.
+- reference_map: exact export commandd8e8bb2 in bondline-mol-v3000, branch
+  feat/smiles-export-command;16-file handoff35449B/SHAa7e58f07…3fd268 received. Actual
+  RED66251, affected230/clippy/fmt and receiving715 pass. Pre-IO13files were hash-exact
+  through conflict-free5f308ac port; no backend stub or correction after real compile.
+- sdf_setter_review: source-only contract review18920B/SHAbe751f5e…5772b4 and command
+  peer review above complete. No runtime/source changes were made by that reviewer.
 
-Root gate46205 is terminal. No agent-owned native app/controller/helper remains live.
-All prior feature source commits and approved golden remain untouched. Historical stashes
-4c1e1ffaa55d91738fd6574f71931c0a82f126c0 and dfaf24f884569c8702e7e679493b3619815750ca
-are old recovery evidence, not pending changes: do not reapply. Keep targets separate,
-incremental0, Root default debug/siblings debug0. No cleanup is needed.
+Root graph test files are committed as crates/commands/tests/smiles_export_graph.rs and
+smiles_export_graph_oracle.py; the frozen RED record and exact-source GREEN are in
+target/smiles-export-graph-red.json / -green.log. Root receipts/logs under target/ are
+ignored evidence, never product assets. Prior stashes4c1e1ffaa55d91738fd6574f71931c0a82f126c0
+and dfaf24f884569c8702e7e679493b3619815750ca are historical, not pending: do not reapply.
 
-1. Integrate the real shared export command after its frozen source/scoped gates and
-   source/lease/worker/reply/close review. Add the independent isotope-keyed actual-file
-   graph comparison, including same-count topology/order and physical-H negative controls.
-   Preserve the entire active owner and source authority, all old21 commands and byte caps.
-2. Broaden M1 SMILES/backing/layout, SDF chemical display/editor and RXN/reactions, then
-   M2–M5. Full M0 inventory/dialog addressability and broader platform evidence stay open.
-3. Native conversion/export/new-element workflows wait for explicit user availability;
-   do not infer it from elapsed time or pointer state. Keep Actions disabled through
-   development. Do not pause/block/complete the project at this checkpoint.
+The user remains active on the desktop: no GUI/input/activation until availability changes.
+Keep Actions disabled through development. Targets stay separate, incremental0, Root
+default debug/siblings debug0; no cleanup is needed. Approved golden remains exact.
+
+1. Continue M1 toward full SMILES-file/application handling. Read the pinned SMILES Files
+   section and current single-notation parser/ownership/oracles first. Implement a bounded
+   source-preserving record container for LF/CRLF records, optional trailing application
+   data and ignored blank/leading-whitespace lines; retain every original byte and explicit
+   record spans. Delegate notation validation without weakening existing parser budgets.
+   Verify actual current exports as file inputs and use independent per-record/raw-field
+   consumers. Keep notation versus file framing/limits explicit, not a fake round trip.
+2. Integrate complete SMILES file ownership/Open/Save through shared snapshots/adapters,
+   with no first-record/empty-drawing substitution or false editable/preview authority.
+   Then broaden chemical layout, SDF display/editor, RXN/reactions and M2–M5. Full M0
+   inventory/dialog addressability and broader platform evidence remain open.
+3. Native conversion/export/new-element workflows wait for explicit user availability.
+   Do not infer it from time/pointer state, or enable Actions for a milestone. Keep the
+   full project goal active; this checkpoint does not complete M0/M1 or requested parity.
 
 No new golden approval, PR/release/installer/signing, account/TCC or unrelated messages.
