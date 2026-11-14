@@ -2235,3 +2235,22 @@ link real adapter/oracle work and retain all corrected draft assumptions. No new
 Windows/Linux, hosted or parser fuzz execution follows; Actions remains disabled. The
 [committed next-display gate](research/sdf-preview-plan.md) is research/planned only,
 with unknown-H/label-placement fidelity requirements rather than fixture-only completion.
+
+## Restricted all-record SDF capture, 2026-11-14
+
+[Data](verification-sdf-preview-model.md), [renderer](verification-sdf-display-render.md),
+[shared lifecycle](verification-sdf-capture-command.md) and
+[independent image/adapters](verification-sdf-capture-oracles.md) now compose a restricted
+source-to-image slice. Actual missing-API/old-attachment/capture runtime REDs precede real
+implementation. Ordinary VAL-absent CCO/CN, two source orientations, all records, OH/NH2,
+CPU/GPU pixels, separate FreeType expectations and exact whole-source Save pass. The legacy
+640×480 refusal now specifically expects the existing unsupported_scale; its earlier failed
+assertion is retained and no production quota or edit/source guard was weakened.
+
+Root1091 cargo xtask ci exits0 on79525e0:793workspace+3Mac bridge=796passed,
+0failed/ignored,125 result lines. Fmt/clippy/layers/unchanged runtime licenses/assets/corpus
+pass. Log96965B/SHA18f770abcc5be9c5cffd1823ada8080e1e8a523422d3f8c3fec19d79d793cff1.
+All545 tracked non-Markdown files remain exact after the gate. This is headless/offscreen
+Mac evidence; native SDF remains a table, with no new native/Windows/Linux/hosted/fuzz run,
+new golden approval or M0/M1 completion. Actions remains disabled. The existing display
+plan now records the concrete unimplemented native job/cache/identity/decoder next step.

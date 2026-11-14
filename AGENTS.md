@@ -93,7 +93,8 @@ replacement and a bounded new-syntax writer);
 cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque property
 replacement and new-tree Writer; model mapping and application commands live above this crate);
 render (L1, shared neutral-element/Single GraphScene, bounded hit regions, literal authored-H
-labels, CPU/GPU rectangles/strokes and approved golden); io (L2,
+labels plus a separate resolved-H entry with attachment/paper-ink guards, CPU/GPU
+rectangles/strokes and unchanged approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
 bounded native CDXML/CDX/MOL/SDF/SMILES filesystem libraries and source-preserving
 SDF/RXN/SMILES file records;
@@ -165,7 +166,8 @@ docs/verification-v3000-application.md. No runtime dependency or codec source ch
 SDF is a mixed V2000/V3000 source container and complete application-content variant.
 Shared Open/Save retain every record. sdf.record.inspect exposes bounded ordered fields;
 sdf.field.set_value edits one existing occurrence through immutable deferred candidates.
-Chemical preview, field-edit UI and record operations remain missing. Preserve off-lock
+The restricted render.capture SDF virtual page1 now uses all-record derived display data;
+the native view is still a table. Field-edit UI/record operations remain missing. Preserve off-lock
 work, exact no-op sharing, stale revision/generation/Arc checks, saved/original distinctions
 and the same worker/reply/close barriers. Explicit data results are separate from automatic
 metadata-only state/Debug; see control-protocol.md for input/output budgets.
@@ -433,3 +435,22 @@ Queries reserve no write slot, bind no native file request and acknowledge no Sa
 Keep the independent raw/graph/maximum notation tests and actual adapter/no-repaint checks.
 This is original automation policy, not a native record browser/editor. See
 verification-smiles-record.md and its linked receiving records; Actions stays disabled.
+
+## Derived SDF display continuation
+
+`io::sdf::preview` returns an ephemeral Page, exact preview-to-local ID maps and separate
+display-H/provenance maps. Authored Some/None and all source bytes stay unchanged. Unknown
+H derives only in the documented neutral C/N/O/halogen profile; literal counts are retained.
+The new render entry requires complete counts, validates actual paper ink and chooses
+faithful H placement without moving chemical anchors. The literal entry/golden is unchanged.
+The existing render.capture command uses complete deferred source ownership and virtual
+page1; preview never becomes a drawing, history entry or Save/export authority. All-record
+projection/scene failures refuse the whole capture. See verification-sdf-preview-model.md,
+verification-sdf-display-render.md and verification-sdf-capture-command.md under docs/.
+
+Next native work must reuse this registered command. Reserve work under the engine mutex
+before spawning, keep close draining through decode/result retirement, and reject stale
+source/revision/generation/viewport/DPI results before displaying anything. Do not call
+execute_blocking only after spawning and assume that closes the registration gap. The
+native SDF table has not gained a preview. Actual UI workflow verification waits for explicit
+user availability; synthetic/offscreen checks are separate. Actions stays disabled.

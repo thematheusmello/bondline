@@ -204,16 +204,20 @@ The source-file container/association/compact summary and .smi/.smiles chooser a
 Bondline policies. No reference-product SMILES file chooser, record-browser, preview or
 metadata-retention flow is established by the current evidence. Do not infer one from a
 SMILES supplier or the new headless tests. Actual native Bondline acceptance is also
-unverified while the user is active. Chemical preview/editing and explicit record queries
-remain missing; see verification-smiles-file-app.md and verification-smiles-file-ui.md.
+unverified while the user is active. Chemical preview/editing remains missing; the separate
+headless smiles.record.inspect query is now delivered, without a native record browser; see verification-smiles-file-app.md and verification-smiles-file-ui.md.
 
 ## Faithful ordinary SDF molecular display
 
-The current literal renderer's H omission does not establish faithful VAL-absent OH/NH
-labels. A separate documented derived-H/provenance policy and source-direction label
-placement are required before claiming ordinary all-record SDF preview. The complete
-normal-valence/charge/aromatic/radical/stereo policies and reference packing remain
-unresolved. Opposed C—N—C source geometry exposes a possible H-suffix attachment problem;
-this is source review, not a newly observed native failure. Read
-[the next display gate](../research/sdf-preview-plan.md); do not hide the gaps with
-rotated geometry, dropped records/H, or fixture-only completion claims.
+The restricted derived-H profile, source-direction label placement and all-record headless
+SDF capture now have independent data/image/adapter evidence; see
+[the implementation boundaries](../verification-sdf-capture-command.md). Authored None and
+literal counts remain exact; neutral C/N/O/halogen defaults are an original closed policy,
+not universal CTfile perception. Opposed-neighbour H attachment now has runtime RED/GREEN
+and independent font/CPU/GPU tests, without new native failure or workflow evidence.
+
+General normal-valence/charge/aromatic/radical/stereo policy, other bond orders, congestion,
+reference packing and native molecular display remain unresolved. The old literal entry
+still does not infer H. Native wiring needs registered jobs, stale source/revision/generation/
+viewport/DPI rejection and close draining; actual acceptance waits for user availability.
+Do not hide these gaps with rotated geometry, dropped records/H or fixture-only claims.

@@ -191,7 +191,7 @@ plans. Registry Open validates all records outside the engine lock and applies o
 Save borrows complete current source through the existing bounded atomic publisher. No
 wrapper writer, first-record projection or field-name dictionary reconstructs an import.
 Drawing accessors return typed unsupported_content errors for collections. Static UI
-metadata clears prior gesture/hit/paper state and declares chemical preview unavailable;
+metadata clears prior gesture/hit/paper state and declares native chemical preview unavailable;
 all-record chemical display, a field-edit UI and record operations remain separate work. See
 verification-sdf-session-files.md for exact source/consumer/history/lifecycle evidence.
 
@@ -261,3 +261,20 @@ extra whole-source owner; Debug and automatic state omit notation. Existing hist
 read-only result/close/UI refresh, deferred cancellation and worker/reply barriers apply.
 No save reservation, native file binding/ACK, mutation, selection or repaint is added.
 Independent raw/graph/wire evidence is linked from verification-smiles-record.md.
+
+## Derived all-record SDF capture
+
+The existing read-only capture plan now retains an Arc of the complete SDF content, then
+borrows each indexed actual-version MOL off-lock. A bounded IO producer keeps authored
+None/literal H exact and emits a separate display-count/provenance map with globally unique
+preview IDs and per-record local correspondence. One shared coordinate transform and one
+translation per record preserve molecular directions. All records succeed or the whole
+preview refuses. No derived Page is placed in Engine content or saved baselines.
+
+A separate renderer entry consumes exact resolved counts and chooses label attachment;
+it performs no valence perception. Actual glyph/mask/stroke ink must fit the paper. The
+legacy literal path, font and approved golden stay exact. The same scene feeds CPU/GPU
+and the existing PNG response. Historical/current lifecycle, cancellation and registered
+worker/reply barriers stay shared; capture acquires no Save reservation. Native SDF
+preview/cache wiring remains the next work, with stale source/revision/generation/viewport/
+DPI rejection and registration before spawn. See the scoped SDF capture verification.

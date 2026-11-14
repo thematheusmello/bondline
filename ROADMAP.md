@@ -38,12 +38,21 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
+A restricted all-record SDF capture route now connects source-preserving mixed-version
+projection, separate display-H provenance and faithful resolved-H labels through the
+existing command/CLI/MCP interfaces. Ordinary VAL-absent CCO/CN, both source orientations,
+full CPU/GPU image comparisons and exact Save pass headlessly. The native workspace still
+shows a table. Next is registered asynchronous native preview with stale-cache/close guards,
+then actual native acceptance when the user is available. This is partial M1, with Single/
+neutral chemistry and explicit whole-capture refusals; general layout and reference packing
+remain open. See docs/verification-sdf-capture-command.md and the linked independent evidence.
+
 The complete SDF session/Open/Save slice now retains every mixed-version record and
 ordered data byte through current/saved/history and all shared adapters. Native Mac mixed-
 version Open/Save/Unicode Save As/reopen and failed-import retention now pass onbb6d5b9;
 the690-byte and additional refusal checks are controller-only. Root's590 gate and matching
 three-platform hosted checks pass. Bounded field inspection/existing-value commands now pass engine/CLI/MCP tests.
-Chemical preview/layout, field-edit UI, record operations and
+Native chemical preview/cache, field-edit UI, record operations and
 broader SDF interoperability remain missing; see docs/verification-sdf-session-files.md and
 docs/verification-native-sdf-and-extension.md. SDF uses a static summary, unlike the reference's
 observed all-visible molecular drawings. This is not M1 completion.

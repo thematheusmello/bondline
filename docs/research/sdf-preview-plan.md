@@ -1,7 +1,8 @@
 # Next M1 slice: faithful all-record SDF display
 
-2026-11-14. Research/planned only; no new projection, H perception, scene, UI or native
-workflow has been implemented here. The current source-file/record-query foundations do
+2026-11-14. Original implementation plan. Data, resolved labels and restricted headless
+capture are now delivered; see the linked verification records. Native UI/cache and actual
+workflow acceptance remain pending. The current source-file/record-query foundations do
 not complete chemical display. Full target remains every supported record with retained
 source, useful geometry, correct labels and honest unsupported-data diagnostics.
 
@@ -80,7 +81,8 @@ labels and exact unchanged source. Observe the real missing-API RED for:
 cargo test --locked -p bondline-io --test sdf_preview valence_absent_records_resolve_display_h_without_authoring_it
 ```
 
-This command/API is planned and has not run. Then verify actual source bytes with the
+That planned first gate now has actual RED20654 and scoped GREEN evidence in
+[the data record](../verification-sdf-preview-model.md). Continue verifying actual source bytes with the
 unchanged raw/per-MOL consumers and separate external H expectations. Keep physical H,
 explicit H0, unusual declarations, all-record remapping, unsupported later-record and
 orientation failures. CPU/GPU must agree on actual glyph/stroke regions and both records;
@@ -93,3 +95,38 @@ Existing reference evidence distinguishes the ordinary760-byte CC/CCC input from
 committed690-byte regression; only the mixed777-byte fixture is the observed committed
 mixed input. Neither proves exact grouping, packing, field retention or reference Save
 fidelity. See installed-sdf-import.md. Actions stays disabled throughout development.
+
+## Delivered headless boundary
+
+[Data](../verification-sdf-preview-model.md), [renderer](../verification-sdf-display-render.md)
+and [shared capture](../verification-sdf-capture-command.md) close the restricted source-to-
+image prerequisites. Independent actual PNG acceptance covers ordinary VAL-absent CCO/CN
+in two source orientations, both records, OH/NH2, full CPU/GPU/literal-reference RGBA and
+semantic negative controls; CLI/stdio/authenticated loopback preserve exact whole-source Save.
+The renderer still supports only neutral nonisotopic/nonradical Single depiction, with
+honest complete-capture failure for unsupported records/ink/scale. No native view, new golden
+approval, general cleanup or reference arrangement parity follows. Next is the UI/job/cache
+boundary above, followed by actual native acceptance when the user indicates availability.
+
+## Concrete next native boundary (read-only source review)
+
+The current BondlineApp::update and FileWorkflow::complete_close_if_idle already share an
+Engine lock and registered executor. Add one narrow UiCaptureWork mirroring prepare_ui_file:
+register under that lock before spawning, instead of invoking execute_blocking for the first
+time inside a new thread. Capture an opaque weak-content/revision/generation stamp atomically;
+historical PNG results and refreshed close/UI metadata alone cannot certify current pixels.
+
+Use one desired source/view/DPI key, one outstanding job and one ready texture or keyed
+error. Cancel and clear stale pixels/errors/gestures immediately. Install only while the
+complete key matches and close is Open. Keep the job/pending intent in both close busy gates
+through command completion, decode and publication/retirement, including cancelled work.
+A bounded PngCapture base64-byte helper can reuse commands' dependency; native eframe already
+exposes icon_data::from_png_bytes. Decode and ColorImage construction off-thread; no new
+loader/decoder dependency is needed. Validate dimensions/resource/readability bounds, including
+logical readability at high DPI; do not assume device-pixel font bounds prove that.
+
+First tests must expose pre-spawn close registration and post-completion decode/publication
+gaps, dropped/failed work release, source A→B→A, field edit/Undo/Redo and resize/DPI stale replies,
+busy retry/cancel/error behavior, actual both-record PNG pixels and unchanged authored/saved/
+trusted-file state. These are proposed tests, not executed UI evidence. Actual native workflow
+checks still wait for explicit user availability; Actions remains disabled.

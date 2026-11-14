@@ -330,7 +330,8 @@ placement, unreadable scale or resource limits refuse the entire capture; no fir
 fallback, invented geometry or H suppression is allowed. CPU/GPU use the same scene.
 This is headless source-to-image support, not general chemical clean-up, native preview,
 new format export or full reference parity. See [command evidence](verification-sdf-capture-command.md)
-for scoped verification and remaining limits.
+and [independent image/adapter evidence](verification-sdf-capture-oracles.md) for scoped
+verification and remaining limits.
 
 ### Explicit read-only SDF record inspection
 
