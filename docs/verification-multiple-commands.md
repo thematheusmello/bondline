@@ -219,3 +219,13 @@ A small pure-stdlib generator proposal under ignored
 `target/multiple-fuzz-seeds/readme-recipe-proposal.py` reproduces all twelve sources and
 their twelve writable copies exactly without host paths, product writers or a new framework.
 Root must review it before any committed reproducibility recipe is added.
+
+## Exact seed recipe receiving
+
+Root adopts the original recipe in [fuzz/README.md](../fuzz/README.md). Its code is exactly
+2486bytes/SHA-256`ad3eaeec476395b157cf486696d887e44fc17b9b67b41bf541067b7caf935a9f`.
+Running that actual Markdown code block in a fresh ignored destination recreates all24
+source/writable files; each matches the frozen original12-seed manifest's length/SHA.
+Receipt: `target/multiple-fuzz-recipe-receiving.json`. This verifies reproducible initial
+inputs, not a new fuzz run or identical mutation corpus. No extra script, fixture, target,
+dependency, lock, oracle or workflow is introduced.

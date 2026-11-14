@@ -558,3 +558,74 @@ rendering, whole-chemistry correctness, maximum-input coverage or a security aud
 The unsupported V3000 extension remains a syntax seed, with separately recorded
 strict-projection and external-consumer refusal. No committed fixture, oracle,
 runtime source, root/isolated lock or workflow changes.
+
+
+## Centered multiple-bond MOL seeds
+
+The existing two MOL targets now reach centered Double/Triple scenes without changing
+parser/writer invariants. The following original MIT OR Apache-2.0 recipe reproduces
+the twelve exact initial sources from [the bounded run](../docs/verification-multiple-commands.md):
+four successful identity-frame scenes and two honest scene refusals per version.
+Source copies stay separate from writable mutation corpora. Run once from the repository
+root; the fresh destination deliberately refuses overwrite.
+
+```sh
+"$BONDLINE_PYTHON" -B - <<'PYSEED'
+# SPDX-License-Identifier: MIT OR Apache-2.0
+# Original literal seeds; run from the repository root, never a committed fixture directory.
+from pathlib import Path
+from hashlib import sha256
+
+root = Path('.cache/fuzz/multiple-bond-example')
+root.mkdir(parents=True, exist_ok=False)
+specs = [
+    ('double-horizontal', 'positive', 'CC', [(120,-200,0),(168,-200,0)], [2]),
+    ('triple-horizontal', 'positive', 'CC', [(120,-260,0),(168,-260,0)], [3]),
+    ('mixed-terminal', 'positive', 'CCC', [(120,-320,0),(168,-320,0),(192,-368,0)], [1,2]),
+    ('triple-diagonal-phase', 'positive', 'CC', [(240.25,-400.125,0),(288.25,-464.125,0)], [3]),
+    ('coincident-axis', 'negative', 'CC', [(120,-520,0),(120,-520,0)], [2]),
+    ('unresolved-phosphorus', 'negative', 'CP', [(120,-580,0),(168,-580,0)], [1]),
+]
+for version, target in [(2,'mol_parse'), (3,'mol_v3000_parse')]:
+    for name, group, symbols, positions, weights in specs:
+        lines = ['Bondline original '+name, '  Bondline          2D',
+                 'Original independent multiple-bond fuzz source']
+        n, m = len(positions), len(weights)
+        if version == 2:
+            lines.append(f'{n:3d}{m:3d}  0  0  0  0            999 V2000')
+            for symbol, (x,y,z) in zip(symbols,positions):
+                lines.append(f'{x:10.4f}{y:10.4f}{z:10.4f} {symbol:<3} 0  0  0  0  0  0  0  0  0  0  0  0')
+            for i, weight in enumerate(weights):
+                lines.append(f'{i+1:3d}{i+2:3d}{weight:3d}  0  0  0  0')
+        else:
+            ids = [17,41,73]
+            lines += ['  0  0  0  0  0  0            999 V3000', 'M  V30 BEGIN CTAB',
+                      f'M  V30 COUNTS {n} {m} 0 0 0', 'M  V30 BEGIN ATOM']
+            for i, (symbol,(x,y,z)) in enumerate(zip(symbols,positions)):
+                lines.append(f'M  V30 {ids[i]} {symbol} {x:.15g} {y:.15g} {z:.15g} 0')
+            lines += ['M  V30 END ATOM','M  V30 BEGIN BOND']
+            for i, weight in enumerate(weights):
+                lines.append(f'M  V30 {99+i*32} {weight} {ids[i]} {ids[i+1]}')
+            lines += ['M  V30 END BOND','M  V30 END CTAB']
+        data = ('\n'.join(lines+['M  END'])+'\n').encode('ascii')
+        source = root/target/'source'/group/(name+'.mol')
+        writable = root/target/'corpus'/(name+'.mol')
+        for path in [source,writable]:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+        print(target,group,name,len(data),sha256(data).hexdigest())
+PYSEED
+```
+
+Use the already pinned cargo-fuzz0.13.2/nightly2026-04-01 and an absolute isolated
+target. Existing source/oracle/fixture/golden/locks remain unchanged:
+
+```sh
+CARGO_TARGET_DIR="$PWD/fuzz/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/fuzz/target" --sanitizer address mol_parse .cache/fuzz/multiple-bond-example/mol_parse/corpus -- -runs=10000 -seed=4411 -max_len=65536 -timeout=10 -rss_limit_mb=2048 -max_total_time=600
+CARGO_TARGET_DIR="$PWD/fuzz/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/fuzz/target" --sanitizer address mol_v3000_parse .cache/fuzz/multiple-bond-example/mol_v3000_parse/corpus -- -runs=10000 -seed=4411 -max_len=65536 -timeout=10 -rss_limit_mb=2048 -max_total_time=600
+```
+
+The recorded ASan runs each execute10000 iterations; observed maxima are404/388bytes,
+not the65536 ceiling. Twelve fixed replays and independent source/scene classifications
+are separate checks. This is bounded parser/display smoke, not GPU/native raster, broad
+chemistry, exhaustive coverage or a security audit. Fresh mutation results may differ.
