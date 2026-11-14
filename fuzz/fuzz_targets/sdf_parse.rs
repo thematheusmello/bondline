@@ -113,4 +113,47 @@ fuzz_target!(|data: &[u8]| {
     assert_eq!(previous_end, data.len());
     assert!(field_count <= 65_536);
     assert_eq!(document.as_bytes(), data);
+
+    if let Some((index, record)) = view
+        .records()
+        .iter()
+        .enumerate()
+        .find(|(_, record)| !record.fields().is_empty())
+    {
+        let metadata = owned.records().get(index).unwrap();
+        let field = record.fields().first().unwrap();
+        let no_op = owned
+            .with_field_value(metadata.id(), 0, field.value_lines())
+            .expect("identical logical lines must preserve owned source");
+        assert!(std::ptr::eq(owned.as_bytes(), no_op.as_bytes()));
+        assert!(std::ptr::eq(owned.records(), no_op.records()));
+        let value = ["bondline fuzz value"];
+        let edited = match owned.with_field_value(metadata.id(), 0, &value) {
+            Ok(edited) => edited,
+            Err(error) => {
+                assert_eq!(error.code(), "resource_limit");
+                return;
+            }
+        };
+        if field.value_lines() == value {
+            assert_eq!(edited, owned);
+        } else {
+            let range = field.value_range();
+            let mut expected = data.get(..range.start).unwrap().to_vec();
+            expected.extend_from_slice(b"bondline fuzz value\n");
+            expected.extend_from_slice(data.get(range.end..).unwrap());
+            assert_eq!(edited.as_bytes(), expected);
+        }
+        assert_eq!(owned.as_bytes(), data);
+        assert_eq!(owned.records().len(), edited.records().len());
+        for (before, after) in owned.records().iter().zip(edited.records()) {
+            assert_eq!(before.id(), after.id());
+            assert_eq!(before.mol_version(), after.mol_version());
+            assert_eq!(before.field_count(), after.field_count());
+            assert_eq!(
+                owned.as_bytes().get(before.mol_range()).unwrap(),
+                edited.as_bytes().get(after.mol_range()).unwrap()
+            );
+        }
+    }
 });

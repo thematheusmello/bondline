@@ -281,3 +281,14 @@ RSS91MiB,1second, largest seed/observed length777B. The configured bound is not 
 as exercised coverage; explicit large/boundary cases remain in IO tests. Exact logs/hashes
 are in verification-sdf-owned-source.md. No data edit, file/Engine/native workflow or
 external chemistry comparison for arbitrary mutations is established by this smoke.
+
+
+The owned snapshot also performs an existing-field candidate edit in the same target:
+identical logical values must share old bytes/index; a fixed valid new value must preserve
+exact prefix/suffix, all molecular blocks, versions/IDs/field counts and old snapshots.
+Quota refusal is permitted; malformed value validation has independent static tests.
+Fresh original690/777B-seed ASAN17018 passes10000 runs at seed826403517/max_len65536/
+timeout5: cov1688/features5390,306inputs/reported158KiB/RSS59MiB,5seconds, largest exercised
+777B. Full-graph all-target clippy/fmt pass; see verification-sdf-field-value.md for exact
+logs/hashes and scope. No Engine command, native workflow or arbitrary-mutation external
+chemical equivalence is claimed from these harness assertions.

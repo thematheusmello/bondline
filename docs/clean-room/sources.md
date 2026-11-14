@@ -739,3 +739,26 @@ and full-supplier/duplicate-name limitations remain distinct. The recent exact-b
 reference import above informs later application design only: this slice chooses no
 layout/grouping/browser, data-edit, native file or collection-history contract and claims
 no application SDF support or complete M1.
+
+## Existing SDF field-value replacement, 2026-11-14
+
+[verification-sdf-field-value.md](../verification-sdf-field-value.md) records the next
+library-only format operation. The same pinned CTFILE-2026 chapter10, printed97–99,
+defines ordered field items, up-to200-character data lines, blank terminators and
+column-zero dollar-prefix record termination. Its public-source cache/hash and existing
+original690/777-byte vectors remain unchanged; no vendor example or help prose is copied.
+
+Selecting an existing occurrence by positive record ID/zero-based index, immutable
+candidate snapshots, exact no-op sharing, typed `not_found` targets, preflight global
+quotas and preserving every untouched byte are original Bondline policies. Changed
+authored value lines deliberately use LF, while source header/DT/blank terminator/padding/
+MOL/version/delimiter/EOL data remains authoritative. Reusing the old writer's exact
+value validator changes no existing error or parser/writer rule. No field map, wrapper
+regeneration, model projection or silent record loss is used.
+
+Preimplementation independent stdlib literal splices and actual edited-byte raw scanners/
+per-MOL pinned RDKit consumers support the bounded operation; source-sensitive equality
+and retained-allocation tests reuse the Arc/storage sources above. Existing full-supplier
+DT-only loss and duplicate-name limitations remain separate. This is not evidence of
+reference existing-field editing/retention/export, application SDF commands/native flows,
+or a new layout/browser policy; those remain unimplemented or unknown.

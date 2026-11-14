@@ -586,3 +586,12 @@ See verification-sdf-owned-source.md for literal/raw/RDKit/boundary/fuzz evidenc
 library is not yet part of Engine current/saved/history/file state, and supplies no native
 SDF Open/Save, active record, layout or edit workflow. Never regenerate retained imports
 through the generic wrapper writer or silently select/flatten the first molecule.
+
+
+The immutable SDF owner can now replace one existing ordered field occurrence, returning
+a new validated source. Logical no-op keeps original Arcs/CRLF. Changed lines use LF while
+all headers/textual DT IDs/blank terminators/padding/MOL/other records/delimiters remain
+exact. Missing targets are typed not_found; original syntax/value/quota rules/codes remain.
+This is a library candidate operation, not yet an Engine/native data editor. No record
+add/delete/reorder, chemical edit or source reconstruction is delivered. Independent exact
+704/788/743B outputs, consumers, boundaries and fuzz are in verification-sdf-field-value.md.

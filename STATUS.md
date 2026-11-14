@@ -94,7 +94,8 @@ cc41dee7859ed1ae5c52e40b52f360da1cec1a46115fb0119068517f413c355a. Reviewer did n
 
 ## Current receiving state, active work and exact next steps
 
-Root owns Git/integration. Current checkout feat/sdf-owned-integration merges owned-source
+Root owns Git/integration. Current checkout feat/sdf-field-integration merges immutable field replacementf63f153
+on owned-source integration9436bf4, which merges owned-source
 0ae10e5 onf0910ca. Root receiving94645 exits0:546workspace+3bridge=549, all aggregate gates;
 log target/sdf-owned-integrated-ci.log SHA
  fe1e23fee5df7a1310243fd9e1b034ad6a25a898cf8aad4b073e591c50c987b8.
@@ -142,16 +143,20 @@ original four frames/cursor preserved, all jobs terminal, CUA completed once. Re
  d0c53eb8ea053fe057658c75eedae4b35dfee397560dd8326d360f33ca609ccf,41-file index65ef6864…3a165
 independently rehashed. No Bondline application SDF verification follows.
 
-Parallel field-value feature in bondline-mol-v3000/feat/sdf-field-values based0ae10e5 is
-frozen, not yet committed: exactly5 intentional files in target/sdf-field-edit-handoff.json,
-SHA894a5c6a05df52fcc862944165fc524fc9ad717e1ed7853896f8f7dcce5f37d0. It splices one existing
-field occurrence, preserves all other bytes/IDs/versions, returns shared no-op and typed
-not_found targets. Ten new tests plus own556workspace+3bridge=559 pass,64629 exit0,
-logSHA907741752aac99ed87a9ecc9b626f7361a7d225195303f0360fa8a09a9b13794. IO178/clippy/fmt pass.
-Independent review has no confirmed defect, sibling target/sdf-field-edit-review.md SHA
-f56fb01c2f6d014c0ff48b1d2dc4776b136e94812ecd3b8fcbea25582d1177ae (read-only/no execution).
-No author/reviewer job remains; Root must validate/commit/merge without overwriting the files.
-No Engine/history/filesystem/registry/native edit is delivered by that library operation.
+Field-value featuref63f153 in bondline-mol-v3000/feat/sdf-field-values is committed and
+now receiving here. Ten new cases plus its own556workspace+3bridge=559 pass,64629 exit0,
+logSHA907741752aac99ed87a9ecc9b626f7361a7d225195303f0360fa8a09a9b13794. Root receiving71692
+also exits0:559/all gates, log target/sdf-field-integrated-ci.log SHA
+6adf07911f3563a00c6b2a80763e2b4a6c67ff75b94ce0c50da913352551c267. Full normal SDF fuzz clippy
+and ASAN17018 exit0:10000runs/seed826403517/max_len65536/timeout5, cov1688/features5390,
+306inputs/reported158KiB/RSS59MiB/5seconds/largest777B; logSHA
+0f2e9fe5e4cdd0d701578b9ffe3896fdf2e8860363b782b983c4a14727e85e31. Immutable occurrence edits
+preserve all other bytes/IDs/versions; shared no-op and typed not_found targets pass.
+Independent read-only review has no confirmed defect, sibling target/sdf-field-edit-review.md
+SHAf56fb01c2f6d014c0ff48b1d2dc4776b136e94812ecd3b8fcbea25582d1177ae (no test execution).
+No Engine/history/file/registry/native edit is delivered; new-source hosted evidence follows.
+No active author/reviewer/Cargo/fuzz/native job remains; Git pushes/hosted jobs are tracked
+by their receiving branch. Owned-source9436bf4 has matching run43568995448 in progress.
 
 Read-only plans are ready, not implemented features:
 - target/sdf-collection-next.md SHA4eeb7ebd86a6c9e380ed62fe9666e309ede7b2abdc8aea4274309394050c7192;
@@ -161,10 +166,10 @@ Read-only plans are ready, not implemented features:
   unchanged adoption. Original bounded IR/explicit-H projection needs model decisions for
   implicit-H/aromatic/stereo/isotope0/layout. No dependency/source code copied or installed.
 
-1. Commit/publish owned-SDF receiving549/ASAN integration and observe its matching hosted
-   source. Main remains its last GREEN checkpoint until the new source passes.
-2. Validate and atomically commit/reconcile the frozen field-value feature, run receiving
-   checks/fuzz and its own hosted evidence. Preserve every old case and source guard.
+1. Owned-source9436bf4 is published with its matching run43568995448 in progress; observe
+   that result. Main remains the last matching GREEN checkpoint until new source passes.
+2. Commit/publish this receiving559/ASAN field-value integration and observe its own hosted
+   source. Preserve all old source/oracle/golden tests and qualified native input blocker.
 3. Implement whole-collection current/saved/history/file integration before application
    SDF Open/Save/data-edit commands. Drawing APIs must explicitly handle collection content,
    never manufacture a first/empty drawing. Preserve generic save-slot/receipt/close/stale
@@ -183,7 +188,7 @@ reports/catalogs record14menus/503physical entries and36palette cells; static de
 are not tooltip/action/runtime coverage or a feature-completion percentage. Original
 assets/Rust remain independent; no proprietary code/assets/help text is transplanted.
 
-Disk constrained (~1.7GiB free);3.6GiB of inactive Root package artifacts was reclaimed.
+Disk constrained (~1.5GiB free);3.6GiB of inactive Root package artifacts was reclaimed.
 Never delete active/evidence/source/fixtures/worker targets. Only approved golden:
 1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc. No new approval/release/
 installer/signing or unrelated message/account action. Revalidate agents/jobs on continuation.

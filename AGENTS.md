@@ -297,3 +297,12 @@ other sources/future edits. read() reparses under existing limits; retained_byte
 borrowed views/allocator headers. It is not Engine/native SDF integration. Preserve every
 record/field/MOL/version and never pass a first-record model to a file Save. The normal
 SDF fuzz target now checks owned retention/metadata/sharing/accounting as well as old spans.
+
+
+SdfDocument::with_field_value returns an immutable candidate for an existing ordinal
+record/zero-based field occurrence; never find duplicate fields by a property map/name.
+Logical no-op shares old bytes/index; authored changed lines use LF, preserving original
+terminator/header/DT/padding/other records/MOL bytes. Typed missing targets use not_found;
+existing parser/writer error codes and quotas remain. It is not an Engine command or file
+workflow. Future session integration must retain whole current/saved/history source and
+must not make ordinal IDs promises across record deletion/reorder without an identity design.

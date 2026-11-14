@@ -185,3 +185,10 @@ It retains all records/fields/versions in shared immutable snapshots; Engine/fil
 collection integration remains next. Field edits are being implemented as a separate
 immutable candidate operation, not yet exposed as an application command. Installed SDF
 observation confirms both drawings in one document; an initial record browser is unproven.
+
+
+Existing SDF field-value replacement now has10 independent literal/no-op/invalid/boundary/
+consumer cases, receiving559 aggregate checks and normal10000-run ASAN. It preserves every
+other source byte and leaves original snapshots immutable. Whole-collection Engine/current/
+saved/history/file commands and native data editing remain the next M1 integration; this
+library is not advertised as an application editor or complete format parity.

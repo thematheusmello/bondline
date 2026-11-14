@@ -1,6 +1,6 @@
 //! Immutable ownership of a complete validated SDfile, without a molecular projection.
 
-use super::{SdfError, SdfFile};
+use super::{SdfError, SdfFile, add_bytes, add_lines, validate_value_line};
 use crate::mol::Version;
 use std::{collections::HashSet, num::NonZeroU32, ops::Range, sync::Arc};
 
@@ -127,6 +127,80 @@ impl SdfDocument {
     /// the returned view's temporary allocations are not owned by this snapshot.
     pub fn read(&self) -> Result<SdfFile<'_>, SdfError> {
         SdfFile::parse(&self.source)
+    }
+
+    /// Replace one existing ordered value occurrence, retaining all other source bytes.
+    /// The field index is zero-based; an empty slice authors an empty value.
+    /// Identical logical lines share the original snapshot, including its line endings;
+    /// changed value lines use LF while the original blank terminator stays untouched.
+    pub fn with_field_value(
+        &self,
+        record_id: RecordId,
+        field_index: usize,
+        value_lines: &[&str],
+    ) -> Result<Self, SdfError> {
+        let index = usize::try_from(record_id.get())
+            .ok()
+            .and_then(|number| number.checked_sub(1))
+            .ok_or(SdfError::MissingRecord {
+                record_id: record_id.get(),
+            })?;
+        let metadata = self.records.get(index).ok_or(SdfError::MissingRecord {
+            record_id: record_id.get(),
+        })?;
+        if field_index >= metadata.field_count {
+            return Err(SdfError::MissingField {
+                record_id: record_id.get(),
+                field_index,
+            });
+        }
+        let file = self.read()?;
+        let field = file
+            .records()
+            .get(index)
+            .and_then(|record| record.fields().get(field_index))
+            .ok_or(SdfError::InvalidSpan)?;
+        if field.value_lines() == value_lines {
+            return Ok(self.clone());
+        }
+        let mut line_count = self.source.iter().filter(|byte| **byte == b'\n').count();
+        if !self.source.ends_with(b"\n") {
+            add_lines(&mut line_count, 1)?;
+        }
+        line_count = line_count
+            .checked_sub(field.value_lines().len())
+            .ok_or(SdfError::InvalidSpan)?;
+        add_lines(&mut line_count, value_lines.len())?;
+        let mut value_bytes = 0_usize;
+        for line in value_lines {
+            validate_value_line(line)?;
+            add_bytes(&mut value_bytes, line.len())?;
+            add_bytes(&mut value_bytes, 1)?;
+        }
+        let range = field.value_range();
+        let old_length = range
+            .end
+            .checked_sub(range.start)
+            .ok_or(SdfError::InvalidSpan)?;
+        let mut byte_count = self
+            .source
+            .len()
+            .checked_sub(old_length)
+            .ok_or(SdfError::InvalidSpan)?;
+        add_bytes(&mut byte_count, value_bytes)?;
+        let prefix = self
+            .source
+            .get(..range.start)
+            .ok_or(SdfError::InvalidSpan)?;
+        let suffix = self.source.get(range.end..).ok_or(SdfError::InvalidSpan)?;
+        let mut output = Vec::with_capacity(byte_count);
+        output.extend_from_slice(prefix);
+        for line in value_lines {
+            output.extend_from_slice(line.as_bytes());
+            output.push(b'\n');
+        }
+        output.extend_from_slice(suffix);
+        Self::parse(output.into())
     }
 
     /// Retained inline/source/index bytes, shared allocations counted once.

@@ -1989,3 +1989,14 @@ exact hashes/settings and independent review are in verification-sdf-owned-sourc
 No Engine/native SDF or data-editing claim follows. Attachment sourcef0910ca separately
 passes hosted checks after failed-only Linux infrastructure retry, but native extension
 was not attempted due unowned input; the linked UI verification records that partial pass.
+
+
+## Immutable SDF field replacement receiving integration, 2026-11-14
+
+Exact second-DUP and DT/record2 edits, CRLF/no-op sharing,1m-line EOF-aware quotas and
+malformed/missing target cases preserve every unrelated byte. Actual edited files face
+independent raw scans/splice literals and per-MOL RDKit; old consumers remain unchanged.
+Root71692 passes556workspace+3bridge=559, logSHA
+6adf07911f3563a00c6b2a80763e2b4a6c67ff75b94ce0c50da913352551c267. Normal SDF fuzz clippy/fmt
+and ASAN10000 pass; exact logs/settings and qualified read-only review are in
+verification-sdf-field-value.md. No native/session/command integration is implied.
