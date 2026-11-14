@@ -340,6 +340,10 @@ fn graph_scene(
             }
         }
     }
+    let label_em_px = labels
+        .iter()
+        .map(|(_, _, label)| label.em_px)
+        .reduce(f32::min);
     for (_, _, label) in labels {
         cancel.check()?;
         scene
@@ -356,6 +360,7 @@ fn graph_scene(
         )?;
     }
     Ok(GraphScene {
+        label_em_px,
         scene,
         atoms,
         bonds,

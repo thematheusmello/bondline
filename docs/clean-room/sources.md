@@ -1242,3 +1242,13 @@ comparison uses the protected literal renderer, so it is not an independent new 
 or approved golden. Separate fixed-metric FreeType evidence, analytic bond probes, both-row
 regions and missing-row/H/Y controls qualify that limit. Actual CLI/stdio/authenticated
 loopback replies and exact Save are tested; no native UI or broader chemistry claim follows.
+
+## Actual capture label metrics, 2026-11-14
+
+[Analytic renderer evidence](../verification-preview-metrics.md) exposes the minimum main
+atom-label em from the actual Label objects that make the scene. The existing12pt font
+and8..256 canvas-unit bounds are original Bondline policies. Native logical readability
+must account for actual image scaling/DPI; a device-pixel guard alone cannot prove it.
+No reference sizing behavior is inferred and no glyph, hit, source geometry, old oracle
+or approved golden changes. The numeric analytic tests supplement the existing actual
+CPU/GPU/font evidence; they establish no new native workflow.

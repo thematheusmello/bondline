@@ -3,6 +3,7 @@ use ab_glyph::{Font, FontRef, point};
 use bondline_model::Element;
 
 pub(crate) struct Label {
+    pub em_px: f32,
     pub mask: Rectangle,
     pub pixels: Vec<Rectangle>,
     pub symbol_mask: Rectangle,
@@ -311,6 +312,7 @@ fn text(
         }
     }
     Ok(Label {
+        em_px: em,
         mask: Rectangle {
             x: left - 1,
             y: top - 1,

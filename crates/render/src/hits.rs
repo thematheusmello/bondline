@@ -32,12 +32,18 @@ pub(crate) struct BondHit {
 
 /// Paint and picking share an immutable, bounded projection of the same Page.
 pub struct GraphScene {
+    pub(crate) label_em_px: Option<f32>,
     pub(crate) scene: Scene,
     pub(crate) atoms: Vec<AtomHit>,
     pub(crate) bonds: Vec<BondHit>,
 }
 
 impl GraphScene {
+    /// Smallest main atom-label em in this actual scene, excluding subscript scaling.
+    pub fn label_em_px(&self) -> Option<f32> {
+        self.label_em_px
+    }
+
     pub fn scene(&self) -> &Scene {
         &self.scene
     }
