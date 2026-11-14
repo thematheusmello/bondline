@@ -6,9 +6,16 @@ Read AGENTS.md, ROADMAP.md, architecture, parity and sources before choosing wor
 
 ## Verified source checkpoints
 
-Public main29cac7f is the documentation child of501a315, combining guarded CDX files and
-headless extension. Root now integrates owned SDF source on locally/hosted-verified
-attachment sourcef0910ca; the new owned-SDF source needs its own hosted run. Its own hosted43560603081 is fully GREEN: Mac132343193738:523
+Public main's code checkpoint is15ecbc7, plus this documentation-only evidence update.
+It advances from29cac7f only after the matching all-platform GREEN below. This combines
+guarded CDX files, explicit headless extension, native attachment wiring and the two SDF
+library slices. Owned-SDF receiving9436bf4 passes its own43568995448:
+Mac132369037648:549 (546workspace+3bridge), Linux132369037687:547,
+Windows132369037361:539, all three actual windows and ASAN132369037587:six10000-run
+targets. Field-value receiving15ecbc7 passes its own43570071575: Mac132372310260:559,
+Linux132372310080:557, Windows132372310208:549, all three actual windows and
+ASAN132372310315:six10000-run targets; terminal GREEN07:27:58UTC. Source501a315's own43560603081
+is fully GREEN: Mac132343193738:523
 (520workspace+3bridge), Linux132343193548:521, Windows132343193736:513, every actual
 native window smoke, ASAN132343193667:six10000-run targets. Adapters are Metal/Apple
 Paravirtual device, Vulkan/llvmpipe CPU and Dx12/Microsoft Basic Render Driver CPU.
@@ -109,9 +116,10 @@ immutable library ownership only, not Engine/file/native SDF support. Read-only 
 has no confirmed finding, report in MOL checkout SHA
 97b293d6ecaabc6b087d5488de57020b9f1fed91a9a2526ec88a733bfa6d1ed2.
 
-All Cargo/native/controller/helper jobs currently known to Root are terminal. Targets stay
-separate absolute paths; incremental0, Root default debuginfo, sibling debug0. Never share
-targets or overwrite sibling WIP. Root may now release native-source freeze after cleanup.
+All old Root Cargo/fuzz/native/controller/helper and hosted integration jobs are terminal.
+Current backend author and reviewer tasks are listed below.
+Targets stay separate absolute paths; incremental0, Root default debuginfo, sibling debug0.
+Never share targets or overwrite sibling WIP. The old native-source freeze is released.
 
 Native attachment attempt atf0910ca used binary
 1037d6de9b82ceb98862e3843ef097233b90a4ad25e41fd912c5fabc1826fa9f and384-source manifest
@@ -154,9 +162,25 @@ and ASAN17018 exit0:10000runs/seed826403517/max_len65536/timeout5, cov1688/featu
 preserve all other bytes/IDs/versions; shared no-op and typed not_found targets pass.
 Independent read-only review has no confirmed defect, sibling target/sdf-field-edit-review.md
 SHAf56fb01c2f6d014c0ff48b1d2dc4776b136e94812ecd3b8fcbea25582d1177ae (no test execution).
-No Engine/history/file/registry/native edit is delivered; new-source hosted evidence follows.
-No active author/reviewer/Cargo/fuzz/native job remains; Git pushes/hosted jobs are tracked
-by their receiving branch. Owned-source9436bf4 has matching run43568995448 in progress.
+No Engine/history/file/registry/native edit is delivered yet. The published branch is
+feat/sdf-field-integration at15ecbc7; its own hosted run is tracked above. Root owns Git.
+
+Active work is isolated, not delivered:
+- reference_map owns bondline-rxn/feat/sdf-session-files, based15ecbc7: explicit whole-
+  collection current/saved/history/accounting and paired document.open_sdf/save_sdf,
+  preserving existing drawing JSON and all save/receipt/close/stale barriers. First
+  actual RED73879 exits101: absent Open command and expected18 versus existing16 names.
+  Phase1 includes minimal truthful collection summary/unavailable-preview UI routing,
+  not a record browser, layout, molecular edit or field-edit command. Freeze/review this
+  complete slice before any phase2 record/field query/edit work.
+- file_verification independently reviews the phase1 contract and later frozen diff;
+  ignored report target/sdf-session-review.md. No native work or code ownership.
+- sdf_field_review owns bondline-mol-v3000/feat/smiles-syntax, based15ecbc7: original
+  bounded iterative nonaromatic notation/source codec, no model inference/layout/
+  application commands/canonicalization. Only new module/tests/oracle/provenance and
+  minimal exports/element-catalog visibility changes. No dependency/lock changes.
+No active native/controller/CUA/helper process exists. The input question remains pending.
+Revalidate live agents and current Cargo handles before starting a conflicting build.
 
 Read-only plans are ready, not implemented features:
 - target/sdf-collection-next.md SHA4eeb7ebd86a6c9e380ed62fe9666e309ede7b2abdc8aea4274309394050c7192;
@@ -166,14 +190,17 @@ Read-only plans are ready, not implemented features:
   unchanged adoption. Original bounded IR/explicit-H projection needs model decisions for
   implicit-H/aromatic/stereo/isotope0/layout. No dependency/source code copied or installed.
 
-1. Owned-source9436bf4 is published with its matching run43568995448 in progress; observe
-   that result. Main remains the last matching GREEN checkpoint until new source passes.
-2. Commit/publish this receiving559/ASAN field-value integration and observe its own hosted
-   source. Preserve all old source/oracle/golden tests and qualified native input blocker.
-3. Implement whole-collection current/saved/history/file integration before application
-   SDF Open/Save/data-edit commands. Drawing APIs must explicitly handle collection content,
-   never manufacture a first/empty drawing. Preserve generic save-slot/receipt/close/stale
-   barriers, source authority and accounting. Reference shows both drawings, not a browser.
+1. Keep main at the matching GREEN15ecbc7 code/documentation checkpoint while new backend
+   work is developed separately. Older hosted results and window smoke never substitute
+   for newer code/native workflow acceptance.
+2. Receive, independently review and run the phase1 SDF session/Open/Save slice before
+   committing it. Drawing APIs must explicitly handle collection content, never manufacture
+   a first/empty drawing. Preserve generic save-slot/receipt/close/stale barriers, source
+   authority and accounting. Reference shows both drawings, not a browser. Native runtime
+   acceptance follows when usable input is established; keep it separately unverified.
+3. Receive/review/fuzz the original SMILES notation codec. Ordinary implicit-H model
+   mapping, valid generated export and layout are subsequent explicit decisions, not
+   implied by syntax acceptance. Preserve all old source/oracle/golden assertions/pins.
 4. When input availability is resolved and actual initial-Up/ownership is observable,
    assign one GUI owner a fresh exact-source native acceptance for remaining B–L; never
    reuse closed app/controller/session or promote synthetic tests to native proof.
@@ -188,7 +215,7 @@ reports/catalogs record14menus/503physical entries and36palette cells; static de
 are not tooltip/action/runtime coverage or a feature-completion percentage. Original
 assets/Rust remain independent; no proprietary code/assets/help text is transplanted.
 
-Disk constrained (~1.5GiB free);3.6GiB of inactive Root package artifacts was reclaimed.
+Disk constrained (~1.8GiB free at07:24UTC); inactive Root package artifacts were reclaimed.
 Never delete active/evidence/source/fixtures/worker targets. Only approved golden:
 1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc. No new approval/release/
 installer/signing or unrelated message/account action. Revalidate agents/jobs on continuation.

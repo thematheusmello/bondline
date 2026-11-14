@@ -165,4 +165,8 @@ features5390,306retained inputs/reported158KiB/RSS59MiB,5seconds, largest exerci
 Log target/sdf-field-fuzz-asan.log SHA
 0f2e9fe5e4cdd0d701578b9ffe3896fdf2e8860363b782b983c4a14727e85e31 (55744B). Explicit1m-line/
 large quotas are static cases, not claimed fuzz coverage. Application commands/whole-
-collection history/files/native workflow and new-source hosted evidence remain pending.
+collection history/files/native workflow remain pending. Its own hosted43570071575 at
+receiving15ecbc7 passes Mac559/Linux557/Windows549, all three actual window smokes and
+six10000-run ASan targets; terminal GREEN07:27:58UTC. See ci.md for exact IDs/adapters.
+Window smoke is not native SDF workflow acceptance. Main advances to a documentation
+child only after this matching result; later application code needs its own evidence.

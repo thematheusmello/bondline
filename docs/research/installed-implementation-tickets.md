@@ -8,7 +8,27 @@ control IDs and state-qualified source evidence. These are implementation assign
 not claims that listed commands or screens exist.
 Quoted command names below marked **proposed** are not additions to the delivered registry.
 
-## Starting contract
+## Current execution checkpoint, 2026-11-14
+
+The starting contract below is a frozen research checkpoint, not the current registry.
+At receiving15ecbc7, sixteen shared commands are delivered, including guarded CDX
+Open/Save and the explicit terminal-carbon extension. [STATUS.md](../../STATUS.md) owns
+exact current revisions, hosted outcomes, live workers and next executable steps.
+
+| Ticket | Current supported slice | Still required |
+|---|---|---|
+| `M1-01/02/03` | MOL versions have bounded Mac application evidence; mixed SDF and ordered RXN containers have independent raw/molecular consumers | Broader molecular mappings, SDF application workflows and reaction authoring |
+| `M1-04a/04` | Original framed CDX sources parse/preserve; limited read-only metadata/projection; guarded shared/native Mac Open/Save retains complete bytes | Faithful CDX preview, safe edits/new encoding and general/foreign corpus coverage |
+| `M1-05` | Immutable complete SDF source and exact occurrence-value replacement verified as libraries | Phase1 whole-session Open/Save is in progress in an isolated worktree; no native collection/editor claim |
+| `M1-06` | Public-format/candidate research completed | Original iterative nonaromatic notation codec in progress; model H policy/export/layout and application flows remain separate |
+| `M2-02` | Shared bounded neutral-carbon/Single scene, literal H labels and typed hits; qualified Mac C2/C3 cases | General elements/orders/styles, persistent selection and full native/platform coverage |
+| `M2-03` | Explicit terminal H3→H2 extension verified headlessly; native gesture wired with deterministic tests | Native terminal-attachment acceptance paused on unowned held input; no inferred-H/general-connected-drawing claim |
+
+Runtime investigation is currently idle. Owned native/controller/helper processes are
+closed; an unanswered input-availability check is not permission to alter unknown input.
+Continue the independent engine/format work while that question remains pending.
+
+## Starting contract (historical)
 
 The current registry has thirteen commands: `document.inspect`, `document.close`, `ui.file`,
 `ui.controls`, `document.open_cdxml`, `document.save_cdxml`, `document.open_mol`,

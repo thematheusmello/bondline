@@ -1,5 +1,23 @@
 # CI contract and execution evidence
 
+Owned-SDF integration9436bf4c9ce0bb4a4425112a0bbfb2a1b7f1a484 passes every
+[43568995448](https://github.com/thematheusmello/bondline/actions/runs/43568995448) job:
+Mac132369037648:549 tests (546workspace+3bridge), Linux132369037687:547,
+Windows132369037361:539 and ASAN132369037587:six10000-run targets. Every actual native
+window smoke passes. Adapters remain Metal/Apple Paravirtual device, Vulkan/llvmpipe CPU
+and Dx12/Microsoft Basic Render Driver CPU. This is complete-source library ownership,
+not SDF application Open/Save, data editing, layout or a native collection workflow.
+
+Field-value integration15ecbc7f1ca543f2875e76e6f536fd8051245ad9 has its own
+[43570071575](https://github.com/thematheusmello/bondline/actions/runs/43570071575):
+Mac132372310260 passes559 (556workspace+3bridge), Linux132372310080 passes557,
+Windows132372310208 passes549 and ASAN132372310315 passes all six10000-run targets.
+All three actual window smokes pass with the same adapters. The run finishes GREEN at
+07:27:58UTC; main advances only afterward, to a documentation child of this exact source.
+No old run substitutes for new code, and no completed passing job has been requested again.
+This verifies library field-value editing, not application/native SDF editing. Later
+whole-collection session/Open/Save work must pass its own checks and native acceptance.
+
 Attachment sourcef0910ca09e2cfa12691dd03d965e3053e482928e now passes
 [43563825506](https://github.com/thematheusmello/bondline/actions/runs/43563825506), after
 one failed-job-only retry. Original Mac132353167345 passes540 tests/windows and

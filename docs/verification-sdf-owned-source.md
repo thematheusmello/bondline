@@ -145,4 +145,7 @@ timeout5: cov1633/features5009,294retained inputs/reported154KiB/RSS91MiB,1secon
 seed/observed length777B. target/sdf-owned-fuzz-asan.log SHA
 3daeba5447b8998042ee5387f18d9697ef5265490545e555db1fd6b0d37fb422 (55505B).
 No reduced manifest, new package/dependency, parser relaxation or golden refresh is used.
-This source still needs its own hosted run; oldf0910ca checks are not substituted.
+Its own hosted43568995448 at receiving9436bf4 passes Mac549/Linux547/Windows539,
+all three actual native window smokes and six10000-run ASan targets. Exact job IDs,
+adapters and qualifications are in ci.md; oldf0910ca results are not substituted.
+These library checks do not verify a native SDF collection workflow.
