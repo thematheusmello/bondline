@@ -746,10 +746,9 @@ impl Engine {
                     if id.get() != 1 {
                         return Err(bondline_model::Error::MissingPage(id.get()).into());
                     }
-                    return Prepared::sdf_capture(self.state(), params, Arc::clone(&self.document));
+                    return Prepared::capture(self.state(), params, Arc::clone(&self.document));
                 }
-                let page = self
-                    .document()?
+                self.document()?
                     .pages()
                     .iter()
                     .find(|page| page.id() == id)
@@ -757,7 +756,7 @@ impl Engine {
                 if !self.stored_document()?.is_fully_mapped() {
                     return Err(Error::UnsupportedDocumentPreview);
                 }
-                return Prepared::capture(self.state(), params, page.clone());
+                return Prepared::capture(self.state(), params, Arc::clone(&self.document));
             }
         };
         Ok(Prepared::immediate(CommandResult {

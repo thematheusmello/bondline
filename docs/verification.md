@@ -2278,3 +2278,12 @@ and exact6seed generator/Pillow/replay pass locally; Actions remains disabled. N
 other-platform or hosted run follows. Actual native preview acceptance and full M0/M1
 remain incomplete. The next source-derived, unexecuted MOL depiction gate is preserved in
 research/mol-display-plan.md rather than claiming ordinary absent-H MOL is already fixed.
+
+## Complete deferred Drawing capture ownership, 2026-11-14
+
+[Source-lifetime RED/GREEN](verification-mol-capture-owner.md) retains the whole immutable
+Drawing source through deferred work, matching SDF rather than keeping only a cloned Page.
+Two actual Weak-lifetime assertions failed before the change and pass afterward; completion,
+cancellation/drop and historical no-mutation checks are distinct from future MOL label
+correctness. No source bytes, old fixture/oracle, command schema, runtime dependency or
+native workflow changed. Actions remains disabled and native interaction remains paused.

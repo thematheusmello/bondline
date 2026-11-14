@@ -1,7 +1,6 @@
 use crate::files::{Completed, Completion, FilePlan};
 use crate::{CommandResult, Engine, Error, StoredContent};
 use base64::{Engine as _, engine::general_purpose::STANDARD};
-use bondline_model::Page;
 use bondline_render::{
     Cancellation, MAX_CAPTURE_DIMENSION_PX, cpu_scene_with_cancel, graph_page_scene_with_cancel,
 };
@@ -57,36 +56,36 @@ impl Engine {
     }
 }
 
-#[derive(Debug)]
-enum CaptureInput {
-    Drawing(Page),
-    Sdf(Arc<crate::StoredContent>),
-}
-
-impl CaptureInput {
-    fn scene(
-        &self,
-        params: &RenderCapture,
-        cancel: &Cancellation,
-    ) -> Result<bondline_render::GraphScene, Error> {
-        match self {
-            Self::Drawing(page) => Ok(graph_page_scene_with_cancel(
+fn capture_scene(
+    content: &StoredContent,
+    params: &RenderCapture,
+    cancel: &Cancellation,
+) -> Result<bondline_render::GraphScene, Error> {
+    match content {
+        StoredContent::Sdf { .. } => {
+            let preview = bondline_io::sdf::preview::prepare_sdf_preview(content.sdf()?, cancel)?;
+            Ok(bondline_render::graph_page_scene_with_display_hydrogens(
+                params.width_px,
+                params.height_px,
+                preview.page(),
+                preview.display_hydrogens(),
+                cancel,
+            )?)
+        }
+        _ => {
+            let page = content
+                .drawing()?
+                .model()
+                .pages()
+                .iter()
+                .find(|page| page.id().get() == params.page_id)
+                .ok_or(bondline_model::Error::MissingPage(params.page_id))?;
+            Ok(graph_page_scene_with_cancel(
                 params.width_px,
                 params.height_px,
                 page,
                 cancel,
-            )?),
-            Self::Sdf(content) => {
-                let preview =
-                    bondline_io::sdf::preview::prepare_sdf_preview(content.sdf()?, cancel)?;
-                Ok(bondline_render::graph_page_scene_with_display_hydrogens(
-                    params.width_px,
-                    params.height_px,
-                    preview.page(),
-                    preview.display_hydrogens(),
-                    cancel,
-                )?)
-            }
+            )?)
         }
     }
 }
@@ -279,7 +278,7 @@ impl PngCapture {
 #[derive(Debug)]
 pub struct Prepared {
     result: CommandResult,
-    capture: Option<(RenderCapture, CaptureInput)>,
+    capture: Option<(RenderCapture, Arc<StoredContent>)>,
     file: Option<FilePlan>,
     sdf_record: Option<crate::sdf_query::RecordPlan>,
     sdf_field_set: Option<crate::sdf_edit::FieldPlan>,
@@ -312,23 +311,7 @@ impl Prepared {
     pub(super) fn capture(
         result: CommandResult,
         params: RenderCapture,
-        page: Page,
-    ) -> Result<Self, Error> {
-        Self::capture_input(result, params, CaptureInput::Drawing(page))
-    }
-
-    pub(super) fn sdf_capture(
-        result: CommandResult,
-        params: RenderCapture,
-        content: Arc<crate::StoredContent>,
-    ) -> Result<Self, Error> {
-        Self::capture_input(result, params, CaptureInput::Sdf(content))
-    }
-
-    fn capture_input(
-        result: CommandResult,
-        params: RenderCapture,
-        input: CaptureInput,
+        content: Arc<StoredContent>,
     ) -> Result<Self, Error> {
         if [params.width_px, params.height_px]
             .iter()
@@ -338,7 +321,7 @@ impl Prepared {
         }
         Ok(Self {
             result,
-            capture: Some((params, input)),
+            capture: Some((params, content)),
             file: None,
             sdf_record: None,
             sdf_field_set: None,
@@ -418,9 +401,9 @@ impl Prepared {
         if let Some(plan) = self.smiles_record {
             self.result.smiles_record = Some(plan.complete(cancel)?);
         }
-        if let Some((params, input)) = self.capture {
+        if let Some((params, content)) = self.capture {
             cancel.check()?;
-            let graph = input.scene(&params, cancel)?;
+            let graph = capture_scene(&content, &params, cancel)?;
             let label_em_px = graph.label_em_px();
             let scene = graph.into_scene();
             let (frame, adapter) = match params.backend {

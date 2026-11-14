@@ -1323,3 +1323,13 @@ workflow's original1×1 RGBA seed recipe follows the
 [PNG Third Edition Recommendation2025-06-24](https://www.w3.org/TR/2025/REC-png-3-20250624/)
 IHDR/IDAT/IEND/CRC rules using standard-library code, without copying a sample image.
 Its six seeds have independent local decode/replay evidence; no hosted activation occurred.
+
+## Complete deferred Drawing ownership, 2026-11-14
+
+[Weak-source evidence](../verification-mol-capture-owner.md) extends the existing SDF
+complete-owner lifetime to Drawing capture. This is original lifecycle/authority policy,
+using standard Rust [Arc](https://doc.rust-lang.org/std/sync/struct.Arc.html) and
+[Weak::upgrade](https://doc.rust-lang.org/std/sync/struct.Weak.html#method.upgrade) semantics,
+not a file-format default or reference-product observation. Raw bytes remain private and
+temporary work grants no new edit/Save authority. The source-backed MOL depiction gate
+remains separate; source-free/CDXML literal rendering is unchanged by this prerequisite.
