@@ -1055,3 +1055,24 @@ qualify its grid fitting versus Rust's unhinted outlines. The new independent or
 one4xBOX policy at96em and the unchanged0.90 whole-label threshold, with bounded8x
 consistency and explicit scoped negative controls. Failed96em/exploratory measurements
 remain recorded; no production data or old carbon oracle/golden was changed to fit them.
+
+## Create-only SMILES fragment file export, 2026-11-14
+
+[verification-smiles-export-io.md](../verification-smiles-export-io.md) records the thin
+filesystem composition of the unchanged explicit-H noncanonical writer and existing
+atomic create-only publisher. The pinned
+[OpenSMILES v1.0 SMILES Files section](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc#L1371-L1383)
+was rehashed/read at 86,816 bytes, SHA256
+`00f0423da612de913770133aa13e456d0cebc562dd50166534a8a7f9a834bd21`.
+It provides the file-record line-terminator requirement. This corrected the initial
+no-LF draft **before implementation**, not a failing production behavior.
+
+The output chooses one record, unchanged notation plus exactly one LF, no name/extra data.
+All writer chemistry/traversal/resource scope stays exact; 65,536 notation bytes may become
+65,537 file bytes, while existing parser/converter raw 64 KiB input budgets stay unchanged.
+Create-only output, metadata receipts, coordinate/context exclusion and complete-owner/
+explicit-selection responsibilities are original policies, not source-backed Save authority
+or a reference UI claim. No new upstream code, grammar prose, asset, dependency or runtime
+was copied. Actual saved files face unchanged pinned external writer/RDKit consumers only
+after exact raw framing validation. New native/Windows/Linux and hosted evidence is absent;
+the user-active desktop and disabled-Actions instructions remain in force.

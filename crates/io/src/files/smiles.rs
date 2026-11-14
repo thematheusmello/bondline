@@ -1,13 +1,49 @@
-//! Explicit create-only conversion; it does not associate or mutate an application document.
+//! Explicit create-only SMILES conversion/export without application association or mutation.
 
 use super::{
     Failure, FileError, ReadLimit, SaveReceipt, Stage, check_cancel, read_source_bytes_with_limit,
     save_cdxml_file,
 };
 use crate::{StoredDocument, smiles::SmilesDocument};
-use bondline_model::{PageSize, Point2};
+use bondline_model::{Fragment, PageSize, Point2};
 use bondline_render::Cancellation;
-use std::path::{Path, PathBuf};
+use std::{
+    borrow::Cow,
+    io,
+    path::{Path, PathBuf},
+};
+
+/// Export one explicitly selected structure to a new single-record SMILES file.
+/// The unchanged noncanonical writer supplies the notation; one LF terminates the file
+/// record. Coordinates/document context are excluded, and the fragment stays unchanged.
+/// The writer's 65,536-byte notation cap stays intact; framing can add one more byte.
+/// This pure Fragment API grants no source-backed Save authority or session association.
+pub fn export_smiles_fragment_file(
+    output: &Path,
+    fragment: &Fragment,
+    cancel: &Cancellation,
+) -> Result<SaveReceipt, FileError> {
+    export_smiles_with_hook(output, fragment, cancel, &mut |_| Ok(()))
+}
+
+fn export_smiles_with_hook(
+    output: &Path,
+    fragment: &Fragment,
+    cancel: &Cancellation,
+    hook: &mut impl FnMut(Stage) -> io::Result<()>,
+) -> Result<SaveReceipt, FileError> {
+    super::save_encoded_with_hook(
+        output,
+        false,
+        cancel,
+        || {
+            let mut notation = crate::smiles::write_fragment(fragment)?;
+            notation.push(b'\n');
+            Ok(Cow::Owned(notation))
+        },
+        hook,
+    )
+}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SmilesConversionReceipt {
@@ -105,6 +141,97 @@ mod tests {
             let n = buffer.len().min(1100);
             self.0.read(&mut buffer[..n])
         }
+    }
+
+    #[test]
+    fn smiles_export_retains_real_publication_error_metadata_and_exact_bytes()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let model = SmilesDocument::parse(b"[CH3][CH3]".as_slice().into())?
+            .normalize_explicit_h_fragment()?;
+        let before = model.clone();
+        for failure in [Stage::Write, Stage::Cleanup, Stage::SyncDirectory] {
+            let directory = Directory::new()?;
+            let path = directory.0.join("export.smi");
+            let error =
+                export_smiles_with_hook(&path, &model, &Cancellation::default(), &mut |stage| {
+                    if stage == failure {
+                        Err(io::Error::other("injected export publication error"))
+                    } else {
+                        Ok(())
+                    }
+                })
+                .err()
+                .ok_or("ignored publication failure")?;
+            let published = failure != Stage::Write;
+            assert_eq!(error.code(), "io_error");
+            assert_eq!(error.stage(), failure.name());
+            assert_eq!(error.path(), super::super::canonical_save_path(&path)?);
+            assert_eq!(error.published(), published);
+            assert!(error.recovery_path().is_none());
+            if published {
+                assert_eq!(fs::read(&path)?, b"[CH3][CH3]\n");
+            } else {
+                assert!(!path.exists());
+            }
+            assert_eq!(fs::read_dir(&directory.0)?.count(), usize::from(published));
+            assert_eq!(model, before);
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn smiles_export_racing_creator_and_cancellation_use_the_shared_publisher()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let model = SmilesDocument::parse(b"[CH3][CH3]".as_slice().into())?
+            .normalize_explicit_h_fragment()?;
+        let before = model.clone();
+        for action in ["create", "cancel-before", "cancel-after"] {
+            let directory = Directory::new()?;
+            let path = directory.0.join("export.smi");
+            let cancel = Cancellation::default();
+            let result = export_smiles_with_hook(&path, &model, &cancel, &mut |stage| {
+                if stage == Stage::Publish {
+                    if action == "create" {
+                        fs::write(&path, b"racing creator")?;
+                    } else if action == "cancel-before" {
+                        cancel.cancel();
+                    }
+                }
+                if stage == Stage::Cleanup && action == "cancel-after" {
+                    cancel.cancel();
+                }
+                Ok(())
+            });
+            match action {
+                "create" => {
+                    let error = result.err().ok_or("replaced creator")?;
+                    assert_eq!(error.code(), "already_exists");
+                    assert_eq!(error.stage(), "publish");
+                    assert!(!error.published());
+                    assert_eq!(fs::read(&path)?, b"racing creator");
+                }
+                "cancel-before" => {
+                    let error = result.err().ok_or("ignored cancellation")?;
+                    assert_eq!(error.code(), "cancelled");
+                    assert_eq!(error.stage(), "publish");
+                    assert!(!error.published());
+                    assert!(!path.exists());
+                }
+                _ => {
+                    let receipt = result?;
+                    assert!(cancel.is_cancelled());
+                    assert_eq!(receipt.path, fs::canonicalize(&path)?);
+                    assert_eq!(receipt.byte_length, 11);
+                    assert_eq!(fs::read(&path)?, b"[CH3][CH3]\n");
+                }
+            }
+            assert_eq!(model, before);
+            assert_eq!(
+                fs::read_dir(&directory.0)?.count(),
+                usize::from(action != "cancel-before")
+            );
+        }
+        Ok(())
     }
 
     #[test]

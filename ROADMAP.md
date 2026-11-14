@@ -88,6 +88,12 @@ through explicit CDXML Open/edit/history/Save/reopen, plus the local 686-test ga
 preserves the active session and uses the same save lease through finish/drop. Source-backed
 SMILES Open/Save, a native conversion control/flow and general cleanup remain missing.
 
+The explicit-H writer now also creates real single-record SMILES files through the shared
+atomic publisher, preserving its isotope/physical-H/branch/ring/disconnected/Single/Double/
+Triple scope. Exact LF framing, actual-file consumers and publication guards pass the local
+704-test gate. Registry/adapters and explicit source/selection/omission receipts are next;
+this library API grants no source-backed Save or active-session association.
+
 
 Standalone CDXML source preservation and checked existing-attribute replacement have
 original-fixture/Expat and ASan smoke evidence plus one pinned unchanged RDKit corpus

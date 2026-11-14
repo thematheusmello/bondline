@@ -1,7 +1,9 @@
 # Native structure-file filesystem contract
 
-`bondline_io::files` is a library adapter. It reads/writes complete `StoredDocument` or `SdfDocument` values;
-it never regenerates a foreign elemental projection or exposes an extension without decoding.
+`bondline_io::files` is a library adapter. Drawing/collection Read/Save functions use complete
+`StoredDocument` or `SdfDocument` values, never a foreign elemental projection. The separate
+SMILES structure-export API below accepts a Fragment without granting source authority.
+No filename extension substitutes for decoding.
 Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md.
 
 - `read_cdxml_file(&Path, &Cancellation)` returns a canonical path and owned complete source.
@@ -31,6 +33,17 @@ Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md
   the input. No source-backed SMILES document or current-session association is made.
   [Exact conversion evidence and refusal boundaries](verification-smiles-conversion-io.md)
   separate this library API from the later registry/CLI/MCP/native work.
+- `export_smiles_fragment_file(output, &Fragment, cancel)` is a distinct create-only
+  structure export. It uses the unchanged explicit-H noncanonical writer and adds one LF
+  to form one SMILES file record, with no name or additional record. The existing writer's
+  full supported scope and 65,536-byte notation limit remain; file framing can add one
+  byte. It returns the existing output `SaveReceipt`, preserves the borrowed Fragment
+  and excludes drawing coordinates/context. This pure API cannot determine whole-source
+  authority: callers must retain the complete owner and explicitly select a fragment;
+  it is not source-backed SMILES Save or an active-document baseline/association change.
+  [Exact export evidence](verification-smiles-export-io.md) records real saved-file
+  consumers and shared publication/error behavior. The parser/converter's raw 64 KiB
+  input limit is unchanged and may refuse a maximum-size 65,537-byte framed export.
 
 Native structure-file reads are bounded to 64 MiB; the explicit SMILES converter has the
 smaller 64 KiB budget above. Both include bytes read after metadata inspection. Only ordinary

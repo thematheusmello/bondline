@@ -16,31 +16,25 @@ availability is indicated again. Continue source and headless work.
 
 ## Current revisions and gates
 
-Recoverable integrated source: create-only IO6a73107 received at b7f24da; shared command
-c433540 received at94bcff3; neutral-element labels49b1005 plus Root's exact registered-
-capture test are now received. Read git log for the latest receiving commit; all intended
-source/tests/docs at this checkpoint are committed after local gates. Persistent goal
-stays ACTIVE. M0/M1 and broader M2–M5 remain incomplete.
+Prior public main a393fb9 has21commands and the locally verified neutral-label foundation.
+Root feat/smiles-export-integration now receives exact create-only export IO5f308ac, preserving
+all existing writer scope and appending one LF per the pinned primary file-record standard.
+Six intentional files/seven logs/five baseline records/132protected identities and the
+complete prior conversion production block are checked. See verification-smiles-export-io.md.
 
-Current local cargo xtask ci58039 exits0:693workspace+3bridge=696,0failed/ignored.
-Workspace fmt/all-target warnings-denied clippy/layers/unchanged declared licenses/assets/
-eight-file five-bundle corpus pass at the printed Root workspace. Log85237B/SHA256
-c7969a530bd70f6b33ca3a502d6b37f6b22df3e069601c2c1a933fa8cf0d9034.
-Prior receiving gates670(IO)/686(command)/659(layout) remain separate evidence. See
-verification-neutral-element-labels.md and verification-smiles-conversion-command.md.
-No new native/Windows/Linux, hosted workflow or full chemistry evidence is inferred.
+Receiving cargo xtask ci46205 exits0:701workspace+3bridge=704,0failed/ignored, including
+fmt/all-target warnings-denied clippy/layers/unchanged licenses/assets/eight-file five-bundle
+corpus. Log85745B/SHA2569c32d945c18fbac69bdfc90bd4039320ce9fb6ef91070129a129cfd681ff4c3b.
+Prior696(label)/686(conversioncommand)/670(conversionIO)/659(layout) gates remain separate.
+No new native/Windows/Linux or general chemistry claim follows. Actions remains disabled.
 
-Root checked all frozen label16/protected86/log12/research4/native96artifact9 records;
-all protected files match c2b739a. The three newer receiving IO/command files were retained
-rather than copied from that older branch. Catalog bytes, old carbon tests/raster suffix,
-font/approved golden and source authority remain exact. Root's independent original
-V3000 methanol workflow passed RDKit/H/position checks then gave intended renderer RED55800;
-the exact4588B test gave GREEN52758 after reception, with real CPU/GPU captures, exact
-MOL Save/reopen and independent actual-output checks. No test/source change weakened it.
-
-Actions is disabled at repository and workflow levels. All54 old runs are terminal;
-receiving pushes created no run. Historical7c596d9 run43588963839 remains valid only for
-that earlier source and was not rerun. No new remote job is authorized during development.
+The exact source-only export contract review is target/smiles-fragment-export-contract-review.md,
+18920B/SHAbe751f5eb56d69679e7c1b5f94333b0b540bc39d89ac4695815cdced0e5772b4.
+It establishes complete-source authority, explicit fragment selection and omitted geometry/
+context. OpenSMILES file records require LF/CRLF; the initial no-LF draft was corrected before
+production. Notation cap remains65536; framing may add one byte. Existing raw-input64KiB
+parser/converter caps remain unchanged and may refuse that maximum framed size. No maximum-
+size graph was constructed; the actual4096carbon file is20481B and externally consumed.
 
 ## Delivered receiving scope
 
@@ -70,8 +64,9 @@ writes that drawing as create-only native CDXML under a distinct 64 KiB read bud
 with metadata-only receipts and truthful publication errors. The shared converter now passes actual
 CLI/stdio/authenticated-loopback workflows and real CDXML editing/persistence checks.
 Native conversion controls/acceptance and source-backed SMILES Open/Save remain missing.
-RXN is a container library. The existing explicit-H Fragment→SMILES writer still has no
-application filesystem export command; that is the next bounded M1 slice.
+RXN is a container library. The explicit-H Fragment→SMILES writer now has a create-only
+filesystem library with exact LF framing and original graph/metadata/limit refusals. Its
+shared export command/adapters are in progress; no native export control or SMILES backing.
 
 Current aromatic fuzz evidence is linked above. Earlier fixed-H/export sourcee647196
 separately passed ASAN45229 with its five-seed set; do not relabel that run as aromatic
@@ -120,35 +115,32 @@ ship. Existing restoration exceptions remain recorded. Only approved golden SHA:
 
 ## Active work and next steps
 
-All three workers are terminal; no live own Cargo/fuzz/native/controller/helper job.
-Root owns Git/integration/publication. Check live agents before restarting work.
+Root owns Git/integration/publication. Native/interactive work and Actions stay off.
+Check live agents/jobs before resuming; do not duplicate existing work.
 
-- native_acceptance: exact IO6a73107 and command peer report6309f7ba…e015428 completed.
-- reference_map: command c433540 in bondline-mol-v3000, exact21/log7/protected145 handoff
-  83e1c354…96dbf05 received; affected219 and full receiving686 pass. Pre-IO stash
-  dfaf24f884569c8702e7e679493b3619815750ca is historical only; do not reapply it.
-- sdf_setter_review: labels49b1005 in bondline-render-labels, handoff546f5bbe…2ea82f2
-  received without production edits. Scoped276/clippy/fmt and receiving696 pass.
+- native_acceptance: completed exact exportIO5f308ac in bondline-rxn, no livejobs;
+  six-file handoff7c5d400b…e3b754 received and Root704 gate passed.
+- reference_map: active file.export_smiles_fragment in bondline-mol-v3000, branch
+  feat/smiles-export-command. Actual runtime UnknownCommand RED66251 exists. Root
+  fast-forwarded exact5f308ac under13draft files without conflict/stash; all13 hash-exact
+  pre/post port (pre-IO manifest2956B/SHAf7210856…d8e35). Worker has GO for real backend
+  scoped/adapters/lifecycle checks; it owns current Cargo handles and must report them.
+- sdf_setter_review: completed read-only contract/oracle review above; no livejobs.
 
-Root's neutral-capture RED snapshot remains in historical stash
-4c1e1ffaa55d91738fd6574f71931c0a82f126c0 and target/neutral-element-command-source-before.rs.
-Its exact test is now committed as crates/commands/tests/element_capture.rs; do not reapply
-that stash. Root receipts/logs are under target/ and source/evidence links above are durable.
+Root gate46205 is terminal. No agent-owned native app/controller/helper remains live.
+All prior feature source commits and approved golden remain untouched. Historical stashes
+4c1e1ffaa55d91738fd6574f71931c0a82f126c0 and dfaf24f884569c8702e7e679493b3619815750ca
+are old recovery evidence, not pending changes: do not reapply. Keep targets separate,
+incremental0, Root default debug/siblings debug0. No cleanup is needed.
 
-The user remains active on the desktop: no GUI/input/activation until availability changes.
-Actions stays disabled until full-project completion or a new user instruction. Keep Cargo
-targets separate, incremental0, Root default debug/sibling debug0. No cleanup is needed.
-
-1. Continue M1 with create-only export of an explicitly selected supported Fragment to
-   a real SMILES file using the existing writer/publisher and shared command/adapter path.
-   First establish the source-authority and explicit geometry/metadata-loss contract from
-   existing public sources; preserve the complete active session and original files. Test
-   actual output with an unchanged independent parser and retain publication/close guards.
-   Do not invent SMILES backing/Save association or silently choose a first fragment.
+1. Integrate the real shared export command after its frozen source/scoped gates and
+   source/lease/worker/reply/close review. Add the independent isotope-keyed actual-file
+   graph comparison, including same-count topology/order and physical-H negative controls.
+   Preserve the entire active owner and source authority, all old21 commands and byte caps.
 2. Broaden M1 SMILES/backing/layout, SDF chemical display/editor and RXN/reactions, then
    M2–M5. Full M0 inventory/dialog addressability and broader platform evidence stay open.
-3. Native conversion→Open→edit→Save/reopen and new elemental-label workflows wait for user
-   availability. No old screenshot/window smoke substitutes. Do not pause/block/complete
-   the project goal at this checkpoint, or re-enable Actions for a milestone.
+3. Native conversion/export/new-element workflows wait for explicit user availability;
+   do not infer it from elapsed time or pointer state. Keep Actions disabled through
+   development. Do not pause/block/complete the project at this checkpoint.
 
 No new golden approval, PR/release/installer/signing, account/TCC or unrelated messages.

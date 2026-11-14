@@ -2155,3 +2155,16 @@ captures, complete session/source retention and exact MOL Save/reopen. Full rece
 local696 passes fmt/clippy/layers/unchanged licenses/assets/corpus. Atom-label authoring,
 new native/Windows/Linux workflows, other metadata/orders and chemical inference remain
 missing. Actions stayed off and the user's desktop was untouched.
+
+## Create-only SMILES fragment file export, 2026-11-14
+
+[Exact filesystem-export evidence](verification-smiles-export-io.md) records missing-API/
+hook REDs, the preimplementation primary-source LF correction, literal actual-file bytes,
+unchanged external molecular/notation consumers and eight new tests. All original writer
+features remain, including isotope/physical H, branches/rings/dots and supported orders;
+an actual4,096-carbon file proves the adapter has no drawing/12-carbon restriction.
+Borrowed data and existing files stay intact; real publication/cancellation failures keep
+their truth. Scoped240 and receiving704 gates pass, with fmt/clippy/layers/unchanged
+licenses/assets/corpus. Registry/native controls, source-backed SMILES Open/Save and new
+Windows/Linux execution remain missing. The raw-input64KiB versus framed-output upper
+bound65,537-byte qualification is explicit; no old budget or consumer was relaxed.

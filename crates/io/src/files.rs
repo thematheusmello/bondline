@@ -2,13 +2,15 @@
 
 mod platform;
 mod smiles;
-pub use smiles::{SmilesConversionReceipt, convert_smiles_to_cdxml_file};
+pub use smiles::{
+    SmilesConversionReceipt, convert_smiles_to_cdxml_file, export_smiles_fragment_file,
+};
 #[cfg(test)]
 mod tests;
 
 use crate::mol::{MolTransform, Version};
 use crate::sdf::{SdfDocument, SdfError};
-use crate::smiles::{LayoutError, SmilesError};
+use crate::smiles::{LayoutError, SmilesError, WriteError};
 use crate::{DocumentError, StoredDocument};
 use bondline_model::PageSize;
 use bondline_render::Cancellation;
@@ -86,6 +88,7 @@ impl FileError {
             Failure::Sdf(error) => error.code(),
             Failure::Smiles(error) => error.code(),
             Failure::Layout(error) => error.code(),
+            Failure::SmilesWrite(error) => error.code(),
             Failure::Io(error) => {
                 #[cfg(unix)]
                 if error.raw_os_error() == Some(rustix::io::Errno::ILSEQ.raw_os_error()) {
@@ -160,6 +163,8 @@ enum Failure {
     Smiles(#[from] SmilesError),
     #[error(transparent)]
     Layout(#[from] LayoutError),
+    #[error(transparent)]
+    SmilesWrite(#[from] WriteError),
     #[error(transparent)]
     Io(io::Error),
     #[cfg(any(windows, test))]
