@@ -1293,16 +1293,76 @@ fn framing_is_bounded_and_http_or_truncated_messages_cannot_execute_commands()
 }
 
 #[test]
-fn shutdown_cancels_idle_clients_and_releases_the_listener()
--> Result<(), Box<dyn std::error::Error>> {
+fn shutdown_cancels_an_authenticated_partial_client() -> Result<(), Box<dyn std::error::Error>> {
     let server = LoopbackServer::bind(0, Arc::new(Mutex::new(Engine::default())), || {})?;
-    let address = server.address();
-    let mut idle = connect(address)?;
+    let mut idle = authenticated(&server)?;
     idle.get_mut().write_all(b"{\"command\":")?;
+    idle.get_ref()
+        .set_read_timeout(Some(Duration::from_millis(200)))?;
+
     let start = Instant::now();
     server.shutdown()?;
     assert!(start.elapsed() < Duration::from_secs(2));
-    assert!(TcpStream::connect_timeout(&address, Duration::from_millis(200)).is_err());
+    match idle.read(&mut [0; 1]) {
+        Ok(0) => {}
+        Err(error)
+            if matches!(
+                error.kind(),
+                std::io::ErrorKind::ConnectionReset | std::io::ErrorKind::ConnectionAborted
+            ) => {}
+        other => return Err(format!("idle client was not closed: {other:?}").into()),
+    }
+
+    drop(idle);
+    Ok(())
+}
+
+#[test]
+fn shutdown_without_clients_releases_the_listener_address() -> Result<(), Box<dyn std::error::Error>>
+{
+    let server = LoopbackServer::bind(0, Arc::new(Mutex::new(Engine::default())), || {})?;
+    let address = server.address();
+    assert_eq!(
+        std::net::TcpListener::bind(address)
+            .err()
+            .map(|error| error.kind()),
+        Some(std::io::ErrorKind::AddrInUse),
+        "the live server must exclusively own its listener address"
+    );
+    let start = Instant::now();
+    server.shutdown()?;
+    assert!(start.elapsed() < Duration::from_secs(2));
+
+    // A new exclusive owner proves release without treating provisional connect as a peer.
+    let replacement = std::net::TcpListener::bind(address)?;
+    replacement.set_nonblocking(true)?;
+    let runtime = tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()?;
+    runtime.block_on(async {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        let replacement = tokio::net::TcpListener::from_std(replacement)?;
+        tokio::time::timeout(Duration::from_millis(200), async {
+            let ((mut accepted, peer), mut client) = tokio::try_join!(
+                replacement.accept(),
+                tokio::net::TcpStream::connect(address)
+            )?;
+            assert_eq!(accepted.local_addr()?, address);
+            assert_eq!(client.peer_addr()?, address);
+            assert_eq!(peer, client.local_addr()?);
+            client.write_all(b"replacement-owner").await?;
+            let mut request = [0; b"replacement-owner".len()];
+            accepted.read_exact(&mut request).await?;
+            assert_eq!(&request, b"replacement-owner");
+            accepted.write_all(b"released").await?;
+            let mut response = [0; b"released".len()];
+            client.read_exact(&mut response).await?;
+            assert_eq!(&response, b"released");
+            Ok::<(), std::io::Error>(())
+        })
+        .await
+        .map_err(std::io::Error::other)?
+    })?;
     Ok(())
 }
 
