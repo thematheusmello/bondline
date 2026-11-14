@@ -116,6 +116,19 @@ fn terminal_font_metrics_match_independent_fonttools_4611_vectors()
 }
 
 #[test]
+fn ascii_digit_advances_match_independent_opentype_hmtx_vectors()
+-> Result<(), Box<dyn std::error::Error>> {
+    // Independent stdlib cmap4/hmtx inspection of the pinned TTF, not renderer output.
+    let font = super::label::font()?;
+    for (index, digit) in ('0'..='9').enumerate() {
+        let glyph = font.glyph_id(digit);
+        assert_eq!(glyph.0, 21 + u16::try_from(index)?);
+        assert_eq!(font.h_advance_unscaled(glyph), 1150.0);
+    }
+    Ok(())
+}
+
+#[test]
 fn terminal_labels_keep_the_carbon_at_the_bond_endpoint_and_bound_raster_work()
 -> Result<(), Box<dyn std::error::Error>> {
     let left = super::label::terminal([60.0, 60.0], [100.0, 60.0], 1.0, 120, 120)?;

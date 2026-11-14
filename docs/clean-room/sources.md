@@ -554,3 +554,53 @@ history/local files and bounded1x/2x input cases, exact source/cleanup, OS/CUA/c
 method distinctions and failed-probe exclusions are in verification-carbon-graph.md.
 No reference app was operated in that acceptance; no native timing/golden/full-parity
 claim follows. Public CG/AX helpers are ignored development evidence, never shipped code.
+
+## Explicit terminal-carbon extension — 2026-11-14
+
+[verification-terminal-carbon-extension.md](../verification-terminal-carbon-extension.md)
+records the engine/headless slice and its actual test/consumer evidence. This does not wire
+a native attachment gesture or implement an automatic-hydrogen preference.
+
+| ID | Primary source | Decision / qualification |
+|---|---|---|
+| BOND-EXTEND-GUIDE25 | [Pinned GUIDE-25](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), printed85/88/47/99 | Existing-atom dragging is documented separately from bond conversion/selection movement. Label alignment and hydrogen correction are separate settings; document label appearance is separate again. The existing17,721,447-byte/SHA3f1ebc42…90629bd5b3 PDF was hash-checked and all four pages read/visually reviewed during planning. These are25 facts, not observed26.1 defaults, modifiers or override precedence. No artwork/help prose was copied. |
+| BOND-EXTEND-VALENCE | [IUPAC2008 chemical-diagram recommendations](https://iupac.qmul.ac.uk/drawing/drawing.html), GR-1.4 and GR-2.1.1/2.1.2; [OpenSMILES v1.0 organic subset](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc#L275-L309) | The neutral carbon/four-valence convention justifies the deliberately closed terminal C–C addition: one existing Single plus H3 becomes two Singles plus H2; the added terminal carbon receives H3. This is an explicit original operation, not a periodic-table inference implementation. |
+| BOND-EXTEND-AUTHORED-H | [OpenSMILES explicit H](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc#L190-L210), [hydrogen representations](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc#L670-L700), [SDK NumHydrogens](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm) | Literal counts differ from absent/inferred counts and separately drawn H nodes. Required `hydrogen_policy=rectify_terminal_carbon` authorizes only the matched starting H3→H2 and added H3. Other starting counts/None, nonterminal starts, other elements/metadata/orders refuse. Other atoms' authored counts remain exact; they are not recalculated or certified chemically. |
+
+OpenSMILES publisher master resolved to immutable9240a2887158699503605bc838e1de9a9f7883f4;
+the document identifies v1.0/2016-05-15. Its GFDL prose is reference-only, not copied or
+bundled. The web tool rejected the17.7MiB guide; the already pinned local copy supplied the
+pages. Direct OpenSMILES HTML timed out; its publisher repository supplied the source.
+IUPAC HTML succeeded on retry. No reference-app runtime or entitlement was used by this slice.
+
+Original Bondline safety policies: same-fragment/stable application identities, explicit
+revision and free coordinates, complete native CDXML/source-free authority only, no source
+detachment, exact failure/history retention and checked atom/bond allocation. An imported
+MOL/CDX source stays guarded even when its projection is drawable; associated format is not
+source kind. The byte-proven old native-v0 profile/encoder/golden are unchanged. The independent
+oracle checks actual saved bytes with Expat/Decimal and external RDKit2026.09.2; CCC/C3H8 and
+CCCC/C4H10 are external results, not Bondline analysis/perception. Modern rectification default,
+explicit override precedence and full native interaction remain open questions.
+
+## Portable external font oracle, 2026-11-14
+
+[Pillow12.3.0's exact ImageFont source](https://github.com/python-pillow/Pillow/blob/12.3.0/src/PIL/ImageFont.py#L245-L256)
+selects RAQM when available and BASIC otherwise; its
+[getlength contract](https://github.com/python-pillow/Pillow/blob/12.3.0/src/PIL/ImageFont.py#L298-L314)
+specifies whole-pixel BASIC advances. The fetched63750-byte source matches the installed
+file, SHA24fa5feeb91b4bf63eaad0ebba08a8161e9c889d9fd056a37c928134097b9649.
+An ignored forced-BASIC probe reproduces both actual Mac/Windows hosted ink-IoU failures
+exactly; the hosted wheel's RAQM flags are not independently attested.
+
+Published OpenType [cmap](https://learn.microsoft.com/en-us/typography/opentype/spec/cmap),
+[head](https://learn.microsoft.com/en-us/typography/opentype/spec/head),
+[hhea](https://learn.microsoft.com/en-us/typography/opentype/spec/hhea),
+[hmtx](https://learn.microsoft.com/en-us/typography/opentype/spec/hmtx),
+[loca](https://learn.microsoft.com/en-us/typography/opentype/spec/loca) and
+[glyf](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf) definitions inform
+a bounded, independent stdlib inspection of the existing licensed Roboto TTF. It confirms
+2048units/em, C/H glyph40/45 advances1333/1460, and all ten digit glyphs21..30 advance1150.
+The test oracle explicitly uses BASIC rasterization and those design-unit positions,
+retaining the original0.90 threshold, orientations/counts and false-label negatives.
+No production renderer, font, golden, dependency or runtime behavior changes. Exact RED,
+GREEN, independent-probe identities and limits are in verification-label-oracle-layout.md.

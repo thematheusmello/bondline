@@ -1,9 +1,70 @@
 use serde_json::{Value, json};
 use std::process::Command;
+#[path = "support/chain.rs"]
+mod chain_support;
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
 #[path = "support/mol.rs"]
 mod mol_support;
+
+#[test]
+fn executable_extends_saves_undoes_reopens_and_extends_the_same_native_chain()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let path = directory.path("cli-propane.cdxml");
+    let mut process = Command::new(env!("CARGO_BIN_EXE_bondline-cli"));
+    process.arg("run");
+    for request in [
+        json!({"command":"bond.create","params":chain_support::create()}),
+        json!({"command":"bond.extend","params":chain_support::extend(1,2,180.0,240.0)}),
+        json!({"command":"document.save_cdxml","params":{"path":path}}),
+        json!({"command":"history.undo","params":{}}),
+        json!({"command":"history.redo","params":{}}),
+    ] {
+        process.arg("--cmd").arg(request.to_string());
+    }
+    let output = process.output()?;
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: Value = serde_json::from_slice(&output.stdout)?;
+    assert_eq!(
+        (result["revision"].as_u64(), result["undo_depth"].as_u64()),
+        (Some(4), Some(2))
+    );
+    assert_eq!(result["file"]["dirty"], false);
+    assert_eq!(
+        result["document"]["pages"][0]["fragments"]
+            .as_array()
+            .ok_or("fragments")?
+            .len(),
+        1
+    );
+    chain_support::independently_read(&path, 3)?;
+    let mut process = Command::new(env!("CARGO_BIN_EXE_bondline-cli"));
+    process.arg("run");
+    for request in [
+        json!({"command":"document.open_cdxml","params":{"path":path}}),
+        json!({"command":"bond.extend","params":chain_support::extend(1,3,220.0,280.0)}),
+        json!({"command":"document.save_cdxml","params":{"path":path,"overwrite":true}}),
+    ] {
+        process.arg("--cmd").arg(request.to_string());
+    }
+    let output = process.output()?;
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: Value = serde_json::from_slice(&output.stdout)?;
+    assert_eq!(result["source"]["format"], "cdxml");
+    assert_eq!(result["source"]["modified"], true);
+    assert_eq!(result["file"]["dirty"], false);
+    chain_support::independently_read(&path, 4)?;
+    Ok(())
+}
 
 #[test]
 fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
@@ -22,6 +83,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
         names,
         [
             "bond.create",
+            "bond.extend",
             "document.close",
             "document.inspect",
             "document.open_cdxml",

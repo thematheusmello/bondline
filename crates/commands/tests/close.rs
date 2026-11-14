@@ -280,6 +280,11 @@ fn host_commit_is_idempotent_and_all_later_commands_except_inspect_are_refused()
             "bond.create",
             json!({"page_id":1,"begin_x_pt":0,"begin_y_pt":0,"end_x_pt":30,"end_y_pt":0}),
         ),
+        (
+            "bond.extend",
+            json!({"expected_revision":0,"page_id":1,"fragment_id":1,"begin_atom_id":2,
+                "end_x_pt":180,"end_y_pt":240,"hydrogen_policy":"rectify_terminal_carbon"}),
+        ),
         ("history.undo", json!({})),
         ("history.redo", json!({})),
         (

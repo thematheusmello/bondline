@@ -1,4 +1,6 @@
 use serde_json::{Value, json};
+#[path = "support/chain.rs"]
+mod chain_support;
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
 #[path = "support/mol.rs"]
@@ -92,6 +94,101 @@ impl Drop for Client {
 }
 
 #[test]
+fn stdio_tools_extend_the_native_graph_with_typed_policy_and_saved_consumer_evidence()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let path = directory.path("mcp-chain.cdxml");
+    let mut client = Client::start()?;
+    client.call(
+        1,
+        "initialize",
+        json!({"protocolVersion":"2025-11-25","capabilities":{},
+        "clientInfo":{"name":"bondline-extension-test","version":"1.0"}}),
+    )?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let tools = client.call(2, "tools/list", json!({}))?;
+    let tool = tools["result"]["tools"]
+        .as_array()
+        .ok_or("tools")?
+        .iter()
+        .find(|tool| tool["name"] == "bond.extend")
+        .ok_or("extend tool")?;
+    assert_eq!(tool["annotations"]["readOnlyHint"], false);
+    assert_eq!(tool["inputSchema"]["additionalProperties"], false);
+    let required = tool["inputSchema"]["required"]
+        .as_array()
+        .ok_or("required")?;
+    assert!(
+        required.contains(&json!("hydrogen_policy"))
+            && required.contains(&json!("expected_revision"))
+    );
+    let created = client.call(
+        3,
+        "tools/call",
+        json!({"name":"bond.create","arguments":chain_support::create()}),
+    )?;
+    assert_eq!(created["result"]["isError"], false);
+    let extended = client.call(
+        4,
+        "tools/call",
+        json!({"name":"bond.extend","arguments":chain_support::extend(1,2,180.0,240.0)}),
+    )?;
+    assert_eq!(extended["result"]["isError"], false);
+    let state = extended["result"]["structuredContent"].clone();
+    assert_eq!(state["revision"], 2);
+    assert_eq!(
+        state["document"]["pages"][0]["fragments"][0]["atoms"][1]["explicit_hydrogens"],
+        2
+    );
+    let stale = client.call(
+        5,
+        "tools/call",
+        json!({"name":"bond.extend","arguments":chain_support::extend(1,3,220.0,280.0)}),
+    )?;
+    assert_eq!(stale["result"]["isError"], true);
+    assert_eq!(
+        stale["result"]["structuredContent"]["error"]["code"],
+        "stale_revision"
+    );
+    let inspected = client.call(
+        6,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    assert_eq!(
+        inspected["result"]["structuredContent"]["document"],
+        state["document"]
+    );
+    let saved = client.call(
+        7,
+        "tools/call",
+        json!({"name":"document.save_cdxml","arguments":{"path":path}}),
+    )?;
+    assert_eq!(saved["result"]["isError"], false);
+    chain_support::independently_read(&path, 3)?;
+    let undone = client.call(
+        8,
+        "tools/call",
+        json!({"name":"history.undo","arguments":{}}),
+    )?;
+    assert_eq!(
+        undone["result"]["structuredContent"]["document"],
+        created["result"]["structuredContent"]["document"]
+    );
+    let redone = client.call(
+        9,
+        "tools/call",
+        json!({"name":"history.redo","arguments":{}}),
+    )?;
+    assert_eq!(
+        redone["result"]["structuredContent"]["document"],
+        state["document"]
+    );
+    client.finish()?;
+    Ok(())
+}
+
+#[test]
 fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
 -> Result<(), Box<dyn std::error::Error>> {
     let mut client = Client::start()?;
@@ -118,6 +215,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         names,
         [
             "bond.create",
+            "bond.extend",
             "document.close",
             "document.inspect",
             "document.open_cdxml",

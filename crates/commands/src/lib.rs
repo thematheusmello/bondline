@@ -13,7 +13,7 @@ mod close;
 mod controls;
 mod file_ui;
 mod files;
-pub use bond::BondCreate;
+pub use bond::{BondCreate, BondExtend, ExtendHydrogenPolicy};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
 pub use file_ui::{UiFile, UiFileAction, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState};
@@ -98,6 +98,7 @@ command_registry! {
     SaveMol(SaveMol) => ("document.save_mol", "Atomically save supported MOL data, retaining its associated version by default without silently losing source metadata or layout.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
+    BondExtend(BondExtend) => ("bond.extend", "Extend a terminal neutral carbon with a Single bond, explicitly authoring its H3 to H2 and the new carbon's H3; requires native complete data.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
     Redo(NoParams) => ("history.redo", "Restore the next authored document.", false),
     Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
@@ -127,6 +128,20 @@ pub enum Error {
     CoincidentEndpoints,
     #[error("bond creation in source-backed documents requires an editable format mapping")]
     SourceBackedEdit,
+    #[error(
+        "terminal-carbon extension requires source-free or completely mapped native CDXML data"
+    )]
+    UnsupportedExtensionSource,
+    #[error("fragment and atom IDs must be greater than zero")]
+    InvalidBondTarget,
+    #[error("atom {atom_id} does not exist in fragment {fragment_id}")]
+    MissingAtom { fragment_id: u32, atom_id: u32 },
+    #[error(
+        "extension supports a positioned neutral terminal carbon with one Single carbon bond and literal H3 only"
+    )]
+    UnsupportedBondExtension,
+    #[error("a new atom cannot occupy an existing atom's position")]
+    OccupiedEndpoint,
     #[error(transparent)]
     Render(#[from] bondline_render::Error),
     #[error(transparent)]
@@ -179,7 +194,10 @@ impl Error {
         let code = match self {
             Self::UnknownCommand(_) => "unknown_command",
             Self::NothingToUndo | Self::NothingToRedo => "empty_history",
-            Self::Model(bondline_model::Error::MissingPage(_)) => "not_found",
+            Self::Model(
+                bondline_model::Error::MissingPage(_) | bondline_model::Error::MissingFragment(_),
+            )
+            | Self::MissingAtom { .. } => "not_found",
             Self::RevisionExhausted => "revision_exhausted",
             Self::IdentityExhausted => "identity_exhausted",
             Self::Render(bondline_render::Error::Cancelled) => "cancelled",
@@ -187,7 +205,9 @@ impl Error {
             Self::Render(bondline_render::Error::UnsupportedChemicalContent)
             | Self::Render(bondline_render::Error::LabelPlacement)
             | Self::Render(bondline_render::Error::LabelOverlap)
-            | Self::SourceBackedEdit => "unsupported_content",
+            | Self::SourceBackedEdit
+            | Self::UnsupportedExtensionSource
+            | Self::UnsupportedBondExtension => "unsupported_content",
             Self::Render(bondline_render::Error::LabelScale) => "unsupported_scale",
             Self::Render(_) | Self::Png(_) => "render_failed",
             Self::BackendUnavailable => "backend_unavailable",
@@ -463,6 +483,15 @@ impl Engine {
                 self.identities = identities;
                 changed
             }
+            Command::BondExtend(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let (document, identities) = bond::extend(&self.document, params, self.identities)?;
+                let changed = self.commit(document)?;
+                self.identities = identities;
+                changed
+            }
             Command::Undo(_) => self.undo()?,
             Command::Redo(_) => self.redo()?,
             Command::Capture(params) => {
@@ -617,6 +646,7 @@ mod tests {
             names,
             [
                 "bond.create",
+                "bond.extend",
                 "document.inspect",
                 "document.close",
                 "document.open_cdxml",

@@ -14,10 +14,15 @@ for x, y, width, height in data["boxes"]:
     draw.rectangle((x, y, x + width - 1, y + height - 1), fill=255)
 expected = Image.new("L", actual.size)
 draw = ImageDraw.Draw(expected)
-main = ImageFont.truetype(sys.argv[1], 96)
-sub = ImageFont.truetype(sys.argv[1], 64)
+main = ImageFont.truetype(sys.argv[1], 96, layout_engine=ImageFont.Layout.BASIC)
+sub = ImageFont.truetype(sys.argv[1], 64, layout_engine=ImageFont.Layout.BASIC)
 # Independent fontTools 4.61.1 vectors: units 2048; C ink x=119..1240,
-# y=-20..1476, advance=1333; H advance=1460; 3 advance=1150.
+# y=-20..1476, advance=1333; H advance=1460. Independent TTF cmap/hmtx
+# inspection confirms every ASCII digit's advance=1150 (see verification-label-oracle-layout.md).
+# Place glyphs with unhinted design advances; BASIC getlength rounds to whole pixels.
+c_advance = 1333 * (96 / 2048)
+h_advance = 1460 * (96 / 2048)
+digit_advance = 1150 * (64 / 2048)
 origin = position[0] - (119 + 1240) * (96 / 2048) / 2
 baseline = position[1] + (-20 + 1476) * (96 / 2048) / 2
 hydrogens=data.get('hydrogens',3)
@@ -29,16 +34,16 @@ if hydrogens:
     if data['toward_right']:
         cursor=origin
         for digit in reversed(digits):
-            cursor-=sub.getlength(digit)
+            cursor-=digit_advance
             digit_glyphs.append((digit,cursor,baseline+24,sub))
         digit_glyphs.reverse()
-        h_x=cursor-main.getlength('H')
+        h_x=cursor-h_advance
     else:
-        h_x=origin+main.getlength('C')
-        cursor=h_x+main.getlength('H')
+        h_x=origin+c_advance
+        cursor=h_x+h_advance
         for digit in digits:
             digit_glyphs.append((digit,cursor,baseline+24,sub))
-            cursor+=sub.getlength(digit)
+            cursor+=digit_advance
     glyphs.append(('H',h_x,baseline,main))
     glyphs.extend(digit_glyphs)
 for char, x, y, font in glyphs:

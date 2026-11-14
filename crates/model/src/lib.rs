@@ -96,6 +96,8 @@ pub enum Error {
     InvalidPageSize,
     #[error("page {0} does not exist")]
     MissingPage(u32),
+    #[error("fragment {0} does not exist on the requested page")]
+    MissingFragment(u32),
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize)]
@@ -183,46 +185,49 @@ impl Document {
         if fragments.len() > MAX_GRAPH_ITEMS {
             return Err(GraphError::Limit("fragments").into());
         }
-        let mut fragment_ids = BTreeSet::new();
-        let mut atom_ids = BTreeSet::new();
-        let mut bond_ids = BTreeSet::new();
-        let (mut fragment_count, mut atom_count, mut bond_count) = (0_usize, 0_usize, 0_usize);
         let existing = self
             .pages
             .iter()
             .flat_map(|page| page.fragments.iter().map(Arc::as_ref));
-        for fragment in existing.chain(fragments.iter()) {
-            fragment_count = fragment_count.saturating_add(1);
-            atom_count = atom_count.saturating_add(fragment.atoms().len());
-            bond_count = bond_count.saturating_add(fragment.bonds().len());
-            for (count, kind) in [
-                (fragment_count, "fragments"),
-                (atom_count, "atoms"),
-                (bond_count, "bonds"),
-            ] {
-                if count > MAX_GRAPH_ITEMS {
-                    return Err(GraphError::Limit(kind).into());
-                }
-            }
-            if !fragment_ids.insert(fragment.id()) {
-                return Err(GraphError::DuplicateFragment(fragment.id().get()).into());
-            }
-            for atom in fragment.atoms() {
-                if !atom_ids.insert(atom.id) {
-                    return Err(GraphError::DuplicateAtom(atom.id.get()).into());
-                }
-            }
-            for bond in fragment.bonds() {
-                if !bond_ids.insert(bond.id) {
-                    return Err(GraphError::DuplicateBond(bond.id.get()).into());
-                }
-            }
-        }
+        validate_fragments(existing.chain(fragments.iter()))?;
         self.pages
             .get_mut(index)
             .ok_or(Error::MissingPage(page_id.get()))?
             .fragments
             .extend(fragments.into_iter().map(Arc::new));
+        Ok(())
+    }
+
+    /// Replace one same-ID fragment atomically, retaining every unrelated shared payload.
+    pub fn replace_fragment(&mut self, page_id: PageId, fragment: Fragment) -> Result<(), Error> {
+        let page_index = self
+            .pages
+            .iter()
+            .position(|page| page.id == page_id)
+            .ok_or(Error::MissingPage(page_id.get()))?;
+        let page = self
+            .pages
+            .get(page_index)
+            .ok_or(Error::MissingPage(page_id.get()))?;
+        let index = page
+            .fragments
+            .iter()
+            .position(|current| current.id() == fragment.id())
+            .ok_or(Error::MissingFragment(fragment.id().get()))?;
+        let retained = self
+            .pages
+            .iter()
+            .flat_map(|page| page.fragments.iter().map(Arc::as_ref))
+            .filter(|current| current.id() != fragment.id());
+        validate_fragments(retained.chain(std::iter::once(&fragment)))?;
+        let destination = self
+            .pages
+            .get_mut(page_index)
+            .ok_or(Error::MissingPage(page_id.get()))?
+            .fragments
+            .get_mut(index)
+            .ok_or(Error::MissingFragment(fragment.id().get()))?;
+        *destination = Arc::new(fragment);
         Ok(())
     }
 
@@ -235,6 +240,41 @@ impl Document {
         page.size = size;
         Ok(())
     }
+}
+
+fn validate_fragments<'a>(fragments: impl Iterator<Item = &'a Fragment>) -> Result<(), Error> {
+    let mut fragment_ids = BTreeSet::new();
+    let mut atom_ids = BTreeSet::new();
+    let mut bond_ids = BTreeSet::new();
+    let (mut fragment_count, mut atom_count, mut bond_count) = (0_usize, 0_usize, 0_usize);
+    for fragment in fragments {
+        fragment_count = fragment_count.saturating_add(1);
+        atom_count = atom_count.saturating_add(fragment.atoms().len());
+        bond_count = bond_count.saturating_add(fragment.bonds().len());
+        for (count, kind) in [
+            (fragment_count, "fragments"),
+            (atom_count, "atoms"),
+            (bond_count, "bonds"),
+        ] {
+            if count > MAX_GRAPH_ITEMS {
+                return Err(GraphError::Limit(kind).into());
+            }
+        }
+        if !fragment_ids.insert(fragment.id()) {
+            return Err(GraphError::DuplicateFragment(fragment.id().get()).into());
+        }
+        for atom in fragment.atoms() {
+            if !atom_ids.insert(atom.id) {
+                return Err(GraphError::DuplicateAtom(atom.id.get()).into());
+            }
+        }
+        for bond in fragment.bonds() {
+            if !bond_ids.insert(bond.id) {
+                return Err(GraphError::DuplicateBond(bond.id.get()).into());
+            }
+        }
+    }
+    Ok(())
 }
 
 #[cfg(test)]

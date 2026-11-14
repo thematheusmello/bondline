@@ -153,3 +153,13 @@
   owned snapshots and the atomic filesystem library are separate later source slices;
   native metadata/general mapping and application editing remain absent. Native outputs
   are research only, not openly licensed committed corpus.
+
+- Terminal-carbon extension uses an explicit original closed policy, not an inferred
+  reference default. GUIDE-25 printed99 separates hydrogen rectification from label display;
+  the26.1 enabled default, user override precedence, unusual valences and behavior for
+  unknown/explicit nonstandard H remain unobserved. The first headless operation therefore
+  requires the named policy and a matching neutral terminal C/Single/literal H3 start;
+  it refuses other starting counts/None instead of guessing. Source-backed MOL/CDX
+  extension, branch/ring/merge behavior, snapping/angles/lengths/modifiers, complete label
+  styles and the native attachment gesture remain separate work. See the source registry's
+  BOND-EXTEND entries; no global automatic-H preference or chemical inference is delivered.

@@ -90,4 +90,35 @@ proptest! {
             prop_assert_eq!(engine.stored_document(),expected);
         }
     }
+
+    #[test]
+    fn generated_terminal_extensions_restore_complete_native_source_snapshots(
+        steps in proptest::collection::vec((1u32..200,1u32..200),1..24)
+    ) {
+        let source=include_bytes!("../../io/tests/fixtures/bondline-v0.cdxml");
+        let stored=bondline_io::StoredDocument::from_cdxml(source.as_slice().into(),bondline_model::PageSize::A4)?;
+        let mut engine=Engine::from_document(stored);
+        let original=engine.stored_document().clone();
+        let mut snapshots=Vec::new();
+        let (mut x,mut y)=(140u32,200u32);
+        for (index,(dx,dy)) in steps.into_iter().enumerate() {
+            x+=dx;y+=dy;
+            engine.dispatch("bond.extend",serde_json::json!({"expected_revision":engine.state().revision,
+                "page_id":1,"fragment_id":1,"begin_atom_id":index+2,"end_x_pt":x,"end_y_pt":y,
+                "hydrogen_policy":"rectify_terminal_carbon"}))?;
+            snapshots.push(engine.stored_document().clone());
+        }
+        for expected in snapshots.iter().rev().skip(1) {
+            engine.execute(Command::Undo(NoParams{}))?;
+            prop_assert_eq!(engine.stored_document(),expected);
+        }
+        engine.execute(Command::Undo(NoParams{}))?;
+        prop_assert_eq!(engine.stored_document(),&original);
+        let restored=engine.stored_document().to_cdxml()?;
+        prop_assert_eq!(restored.as_ref(),source.as_slice());
+        for expected in &snapshots {
+            engine.execute(Command::Redo(NoParams{}))?;
+            prop_assert_eq!(engine.stored_document(),expected);
+        }
+    }
 }

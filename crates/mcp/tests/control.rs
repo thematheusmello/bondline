@@ -1,6 +1,8 @@
 use bondline_commands::Engine;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::Value;
+#[path = "../../cli/tests/support/chain.rs"]
+mod chain_support;
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
 #[path = "../../cli/tests/support/mol.rs"]
@@ -51,6 +53,42 @@ fn wait_for_changes(changes: &AtomicUsize, expected: usize) {
         std::thread::sleep(Duration::from_millis(1));
     }
     assert_eq!(changes.load(Ordering::SeqCst), expected);
+}
+
+#[test]
+fn authenticated_loopback_extends_and_saves_the_same_typed_native_graph()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let path = directory.path("loopback-chain.cdxml");
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let executor = bondline_mcp::CommandExecutor::new(Arc::clone(&engine));
+    let server = LoopbackServer::bind_with_executor(0, executor, || {})?;
+    let mut client = authenticated(&server)?;
+    let created = call(
+        &mut client,
+        &serde_json::json!({"command":"bond.create","params":chain_support::create()}).to_string(),
+    )?;
+    let extended=call(&mut client,&serde_json::json!({"command":"bond.extend","params":chain_support::extend(1,2,180.0,240.0)}).to_string())?;
+    assert_eq!(extended["result"]["revision"], 2);
+    let graph = extended["result"]["document"].clone();
+    assert_eq!(
+        graph["pages"][0]["fragments"][0]["atoms"][1]["explicit_hydrogens"],
+        2
+    );
+    let stale=call(&mut client,&serde_json::json!({"command":"bond.extend","params":chain_support::extend(1,3,220.0,280.0)}).to_string())?;
+    assert_eq!(stale["error"]["code"], "stale_revision");
+    let saved = call(
+        &mut client,
+        &serde_json::json!({"command":"document.save_cdxml","params":{"path":path}}).to_string(),
+    )?;
+    assert_eq!(saved["result"]["file"]["dirty"], false);
+    chain_support::independently_read(&path, 3)?;
+    let undone = call(&mut client, r#"{"command":"history.undo","params":{}}"#)?;
+    assert_eq!(undone["result"]["document"], created["result"]["document"]);
+    let redone = call(&mut client, r#"{"command":"history.redo","params":{}}"#)?;
+    assert_eq!(redone["result"]["document"], graph);
+    server.shutdown()?;
+    Ok(())
 }
 
 #[test]
