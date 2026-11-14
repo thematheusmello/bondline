@@ -30,6 +30,236 @@ fn button(pos: Pos2, pressed: bool) -> Event {
     }
 }
 
+fn escape(pressed: bool) -> Event {
+    Event::Key {
+        key: Key::Escape,
+        physical_key: Some(Key::Escape),
+        pressed,
+        repeat: false,
+        modifiers: Modifiers::NONE,
+    }
+}
+
+fn assert_blocked_press_is_not_a_gesture(
+    block: Event,
+    unblock: Event,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let context = egui::Context::default();
+    configure_context(&context);
+    let mut engine = Engine::default();
+    let mut drawing = DrawingState::default();
+    frame(&context, &mut engine, &mut drawing, vec![]);
+    let begin = Pos2::new(420.0, 300.0);
+    let end = Pos2::new(500.0, 350.0);
+    let document = engine.stored_document().clone();
+    let before = serde_json::to_vec(&engine.state())?;
+    frame(
+        &context,
+        &mut engine,
+        &mut drawing,
+        vec![
+            block.clone(),
+            button(begin, true),
+            Event::PointerMoved(end),
+            unblock.clone(),
+            button(end, false),
+        ],
+    );
+    assert_eq!(
+        engine.stored_document(),
+        &document,
+        "a press while blocked cannot start a bond"
+    );
+    assert_eq!(
+        serde_json::to_vec(&engine.state())?,
+        before,
+        "rejected input must preserve revision/history/file state"
+    );
+    frame(
+        &context,
+        &mut engine,
+        &mut drawing,
+        vec![
+            block,
+            unblock,
+            Event::PointerMoved(begin),
+            button(begin, true),
+            Event::PointerMoved(end),
+            button(end, false),
+        ],
+    );
+    assert_eq!(
+        engine.state().revision,
+        1,
+        "a complete drag after unblock in the same frame must work"
+    );
+    assert_eq!(engine.state().undo_depth, 1);
+    assert_eq!(
+        engine
+            .document()
+            .pages()
+            .first()
+            .ok_or("page")?
+            .fragments()
+            .len(),
+        1
+    );
+    Ok(())
+}
+
+#[test]
+fn batched_escape_held_press_does_not_create_a_bond() -> Result<(), Box<dyn std::error::Error>> {
+    assert_blocked_press_is_not_a_gesture(escape(true), escape(false))
+}
+
+#[test]
+fn batched_unfocused_press_does_not_create_a_bond() -> Result<(), Box<dyn std::error::Error>> {
+    assert_blocked_press_is_not_a_gesture(Event::WindowFocused(false), Event::WindowFocused(true))
+}
+
+#[test]
+fn a_held_escape_repeat_does_not_enable_an_earlier_press() -> Result<(), Box<dyn std::error::Error>>
+{
+    let context = egui::Context::default();
+    configure_context(&context);
+    let mut engine = Engine::default();
+    let mut drawing = DrawingState::default();
+    frame(&context, &mut engine, &mut drawing, vec![]);
+    frame(&context, &mut engine, &mut drawing, vec![escape(true)]);
+    let before = serde_json::to_vec(&engine.state())?;
+    let document = engine.stored_document().clone();
+    let begin = Pos2::new(420.0, 300.0);
+    let end = Pos2::new(500.0, 350.0);
+    frame(
+        &context,
+        &mut engine,
+        &mut drawing,
+        vec![
+            button(begin, true),
+            Event::PointerMoved(end),
+            escape(true),
+            escape(false),
+            button(end, false),
+        ],
+    );
+    assert_eq!(engine.stored_document(), &document);
+    assert_eq!(serde_json::to_vec(&engine.state())?, before);
+    frame(
+        &context,
+        &mut engine,
+        &mut drawing,
+        vec![
+            Event::PointerMoved(begin),
+            button(begin, true),
+            Event::PointerMoved(end),
+            button(end, false),
+        ],
+    );
+    assert_eq!(engine.state().revision, 1);
+    assert_eq!(engine.state().undo_depth, 1);
+    Ok(())
+}
+
+#[test]
+fn completed_batched_drag_survives_a_later_move_outside_the_canvas()
+-> Result<(), Box<dyn std::error::Error>> {
+    let context = egui::Context::default();
+    configure_context(&context);
+    let mut engine = Engine::default();
+    let mut drawing = DrawingState::default();
+    frame(&context, &mut engine, &mut drawing, vec![]);
+    let original = engine.stored_document().clone();
+    let begin = Pos2::new(420.0, 300.0);
+    let end = Pos2::new(500.0, 350.0);
+    frame(
+        &context,
+        &mut engine,
+        &mut drawing,
+        vec![
+            Event::PointerMoved(begin),
+            button(begin, true),
+            Event::PointerMoved(end),
+            button(end, false),
+            Event::PointerMoved(Pos2::new(20.0, 10.0)),
+        ],
+    );
+    assert_eq!(
+        engine.state().revision,
+        1,
+        "the valid press and release must not depend on a later pointer position"
+    );
+    assert_eq!(engine.state().undo_depth, 1);
+    assert_eq!(
+        engine
+            .document()
+            .pages()
+            .first()
+            .ok_or("page")?
+            .fragments()
+            .len(),
+        1
+    );
+    let created = engine.stored_document().clone();
+    engine.dispatch("history.undo", serde_json::json!({}))?;
+    assert_eq!(engine.stored_document(), &original);
+    engine.dispatch("history.redo", serde_json::json!({}))?;
+    assert_eq!(engine.stored_document(), &created);
+    Ok(())
+}
+
+#[test]
+fn an_initial_press_covered_by_a_foreground_area_never_starts_a_bond()
+-> Result<(), Box<dyn std::error::Error>> {
+    for end in [Pos2::new(460.0, 320.0), Pos2::new(500.0, 350.0)] {
+        let context = egui::Context::default();
+        configure_context(&context);
+        let mut engine = Engine::default();
+        let mut drawing = DrawingState::default();
+        let before = serde_json::to_vec(&engine.state())?;
+        let original = engine.stored_document().clone();
+        let begin = Pos2::new(420.0, 300.0);
+        let drag = vec![
+            Event::PointerMoved(begin),
+            button(begin, true),
+            Event::PointerMoved(end),
+            button(end, false),
+        ];
+        // Establish the foreground area's size/order before delivering input.
+        for (index, events) in [vec![], vec![], drag].into_iter().enumerate() {
+            context.begin_pass(egui::RawInput {
+                screen_rect: Some(egui::Rect::from_min_size(
+                    Pos2::ZERO,
+                    egui::vec2(1000.0, 700.0),
+                )),
+                events,
+                ..Default::default()
+            });
+            let overlay = egui::Area::new(egui::Id::new("foreground-input-test"))
+                .order(egui::Order::Foreground)
+                .fixed_pos(Pos2::new(400.0, 280.0))
+                .show(&context, |ui| {
+                    ui.set_min_size(egui::vec2(80.0, 80.0));
+                    ui.label("Foreground");
+                });
+            assert!(overlay.response.rect.contains(begin));
+            if index == 2 {
+                assert_eq!(context.layer_id_at(begin), Some(overlay.response.layer_id));
+            }
+            let mut error = None;
+            show_workspace(&context, &mut engine, &mut error, &mut drawing);
+            let _ = context.end_pass();
+            assert!(error.is_none(), "{error:?}");
+        }
+        assert_eq!(
+            engine.stored_document(),
+            &original,
+            "a foreground-covered press must stay rejected even when the release moves outside that area"
+        );
+        assert_eq!(serde_json::to_vec(&engine.state())?, before);
+    }
+    Ok(())
+}
+
 #[test]
 fn reopened_native_profile_is_visible_and_editable_in_the_real_workspace_renderer()
 -> Result<(), Box<dyn std::error::Error>> {

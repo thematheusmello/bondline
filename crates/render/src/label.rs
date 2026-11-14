@@ -1,4 +1,4 @@
-use crate::{Error, Rectangle};
+use crate::{Cancellation, Error, Rectangle};
 use ab_glyph::{Font, FontRef, point};
 
 pub(crate) struct Label {
@@ -11,7 +11,7 @@ pub(crate) fn font() -> Result<FontRef<'static>, Error> {
         .map_err(|_| Error::InvalidFont)
 }
 
-/// Authored terminal CH3 only. No valence inference or general chemical text shaping.
+#[cfg(test)]
 pub(crate) fn terminal(
     position: [f32; 2],
     toward: [f32; 2],
@@ -19,13 +19,38 @@ pub(crate) fn terminal(
     width: u32,
     height: u32,
 ) -> Result<Label, Error> {
+    if toward
+        .iter()
+        .any(|value| !value.is_finite() || value.abs() > 100_000.0)
+    {
+        return Err(Error::LabelPlacement);
+    }
+    carbon(
+        position,
+        toward[0] >= position[0],
+        3,
+        scale,
+        [width, height],
+        &Cancellation::default(),
+    )
+}
+
+/// Literal authored C/H count; no valence inference or general chemical text shaping.
+pub(crate) fn carbon(
+    position: [f32; 2],
+    hydrogen_left: bool,
+    hydrogens: u16,
+    scale: f32,
+    [width, height]: [u32; 2],
+    cancel: &Cancellation,
+) -> Result<Label, Error> {
+    cancel.check()?;
     let em = 12.0 * scale;
     if !em.is_finite() || !(8.0..=256.0).contains(&em) {
         return Err(Error::LabelScale);
     }
     if position
         .iter()
-        .chain(&toward)
         .any(|value| !value.is_finite() || value.abs() > 100_000.0)
     {
         return Err(Error::LabelPlacement);
@@ -35,31 +60,47 @@ pub(crate) fn terminal(
     let factor = em / units;
     let c = font.glyph_id('C');
     let h = font.glyph_id('H');
-    let three = font.glyph_id('3');
     let bounds = font.outline(c).ok_or(Error::InvalidFont)?.bounds;
     let origin = position[0] - (bounds.min.x + bounds.max.x) * factor / 2.0;
     let baseline = position[1] + (bounds.min.y + bounds.max.y) * factor / 2.0;
     let sub_factor = factor * 2.0 / 3.0;
-    let (h_origin, three_origin) = if toward[0] >= position[0] {
-        let three_origin = origin - font.h_advance_unscaled(three) * sub_factor;
-        (
-            three_origin - font.h_advance_unscaled(h) * factor,
-            three_origin,
-        )
-    } else {
-        let h_origin = origin + font.h_advance_unscaled(c) * factor;
-        (h_origin, h_origin + font.h_advance_unscaled(h) * factor)
-    };
+    let mut glyphs = vec![(c, origin, baseline, factor)];
+    if hydrogens != 0 {
+        let digits = if hydrogens == 1 {
+            String::new()
+        } else {
+            hydrogens.to_string()
+        };
+        let mut subs = Vec::new();
+        let h_origin;
+        if hydrogen_left {
+            let mut cursor = origin;
+            for digit in digits.chars().rev() {
+                let glyph = font.glyph_id(digit);
+                cursor -= font.h_advance_unscaled(glyph) * sub_factor;
+                subs.push((glyph, cursor, baseline + em / 4.0, sub_factor));
+            }
+            subs.reverse();
+            h_origin = cursor - font.h_advance_unscaled(h) * factor;
+        } else {
+            h_origin = origin + font.h_advance_unscaled(c) * factor;
+            let mut cursor = h_origin + font.h_advance_unscaled(h) * factor;
+            for digit in digits.chars() {
+                let glyph = font.glyph_id(digit);
+                subs.push((glyph, cursor, baseline + em / 4.0, sub_factor));
+                cursor += font.h_advance_unscaled(glyph) * sub_factor;
+            }
+        }
+        glyphs.push((h, h_origin, baseline, factor));
+        glyphs.extend(subs);
+    }
     let mut pixels = Vec::new();
     let mut left = u32::MAX;
     let mut top = u32::MAX;
     let mut right = 0;
     let mut bottom = 0;
-    for (glyph, x, y, factor) in [
-        (c, origin, baseline, factor),
-        (h, h_origin, baseline, factor),
-        (three, three_origin, baseline + em / 4.0, sub_factor),
-    ] {
+    for (glyph, x, y, factor) in glyphs {
+        cancel.check()?;
         let outlined = font
             .outline_glyph(
                 glyph.with_scale_and_position(factor * font.height_unscaled(), point(x, y)),
@@ -88,6 +129,9 @@ pub(crate) fn terminal(
         let mut bitmap = vec![false; w as usize * h as usize];
         let mut invalid = false;
         outlined.draw(|column, row, coverage| {
+            if cancel.is_cancelled() {
+                return;
+            }
             if column >= w || row >= h || !coverage.is_finite() {
                 invalid = true;
                 return;
@@ -98,11 +142,13 @@ pub(crate) fn terminal(
                 invalid = true;
             }
         });
+        cancel.check()?;
         if invalid {
             return Err(Error::InvalidFont);
         }
         let start = pixels.len();
         for (row, scanline) in bitmap.chunks_exact(w as usize).enumerate() {
+            cancel.check()?;
             let mut column = 0;
             while column < scanline.len() {
                 if scanline.get(column) != Some(&true) {

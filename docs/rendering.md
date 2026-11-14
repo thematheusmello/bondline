@@ -30,11 +30,14 @@ Separate x/y conversion factors follow that rounding, whose aspect error remains
 background, gray 210 shadow, gray 196 border and white interior. This is not a journal preset.
 Existing hand-authored 8×8 page-grid, clipping and odd-pitch tests continue to pass.
 
-The first chemical producer supports independent two-carbon fragments with one single bond,
-positions, no isotope/charge/radical, and three explicitly authored hydrogens per carbon.
-The creation command supplies that closed C2H6 case; the renderer performs no valence inference.
-Other structures fail explicitly. Source-backed documents still cannot be faithfully previewed.
-This limited workflow is not general atom/bond, style, stereo or reaction rendering.
+The chemical producer now builds one GraphScene for arbitrary supported carbon topology:
+positioned neutral carbon and Single bonds, including chains, branches, cycles and disconnected
+components. The creation command still supplies only its independent C–C/three-H fragment.
+The renderer performs no valence inference: authored H0 draws C, H1 draws CH, larger counts
+are literal subscripts. Missing H may be skeletal on connected carbon; isolated unknown-H
+refuses. Other elements/orders/isotope/charge/radical/missing positions fail explicitly.
+Completeness guards still refuse unmodeled source; this is not source-faithful style/stereo/
+text/reaction rendering or connected drawing. See verification-carbon-graph.md.
 
 IUPAC GR-2.1.2 requires terminal labels for an isolated ethane bond. The producer uses H3C/CH3
 with the 3 subscripted, keeping C centered at its authored endpoint and facing the bond.
@@ -57,6 +60,14 @@ decodes it, verifies its hash and compares every RGBA byte with CPU and actual G
 deliberate pixel corruption must fail. This approves only that scene. The older blank-page
 candidate was not approved, and broader images/platforms/publication quality remain open.
 
+GraphScene hit testing shares actual clipped butt-stroke ink and atom/label geometry.
+It validates finite bounded tolerance/query values, excludes zero-area viewport tangencies,
+prioritizes atoms/labels and breaks equal distances by stable application IDs. The initial
+native radius is five logical canvas units, an original qualified policy. Up to4096 atom+
+bond regions are permitted. Labels occluding unrelated bonds fail instead of hiding content.
+Independent literal41-pixel graph and geometric/occlusion/identity/limit tests cover CPU/GPU
+and picking; authored0/1/2/3/12/65535 label counts face the unchanged FreeType IoU rule.
+
 Actual native Mac evidence now covers drawing from empty, Undo/Redo, visible overlap errors
 and Undo recovery. Raw pointer events are consumed in order, including complete/multiple
 drags in a single frame; stale revisions, Escape, focus loss and outside release cancel
@@ -64,6 +75,13 @@ pending edits. Click jitter up to three logical units does not create a bond. Ca
 variants have input-test evidence; native draw/history/error recovery was directly inspected.
 A canvas hit target must not advance layout past its error text: an observed clipped-error
 regression is tested. No native Windows/Linux or universal performance claim.
+
+Hover is a UI-only outline, not selection, an edit, or captured scene content. Native
+baseline remote-reopen/Escape failures led to a sticky freshness guard: after revision,
+Escape, pointer/focus loss or logical/native origin/DPI changes, idle cached positions do
+not restore hover. A fresh ordered positional event rearms it when focused and unblocked.
+The policy and multi-idle-frame RED/GREEN tests are in verification-carbon-graph.md;
+native execution is independently recorded there, with old failed observations retained.
 
 Render workers retain cooperative cancellation, two-worker budgets and immutable input
 revisions. CPU scanlines and GPU readback polling check cancellation; GPU readback has a

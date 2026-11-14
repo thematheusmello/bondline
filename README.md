@@ -46,7 +46,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
 | MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
-| Rendering | Shared CPU/GPU page scenes and PNG captures, with one human-approved regression scene. |
+| Rendering | Shared CPU/GPU neutral-carbon graph scenes, literal authored hydrogen labels, transient atom/bond hover and PNG captures; one human-approved regression scene. |
 | Automation | Thirteen typed commands shared by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. CI runs tests and actual

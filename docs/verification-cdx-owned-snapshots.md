@@ -75,4 +75,7 @@ this strict graph whitelist. The standalone syntax parser preserves it; this mod
 explicitly refuses unsupported content. Native research outputs remain ignored, not corpus.
 MOL/CDXML workflows keep their original guards and bodies. CDX native filesystem/shared
 commands/UI, broader metadata/bond orders, source-faithful rendering/editing and a model
-encoder require further independent features. This new source needs its own hosted checks.
+encoder require further independent features. Integrated00e5b02 now passes hosted43550955963
+on all three platforms and all six bounded sanitizer targets. Earlier5e6b644's Windows
+socket assertion failed; the test-only portability correction and exact counts/adapters
+remain in ci.md. No snapshot/data-preservation guard was weakened to pass that run.

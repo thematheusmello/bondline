@@ -1,170 +1,169 @@
 # Status
 
-2026-11-14: persistent full M0–M5 goal ACTIVE. M0 and M1 remain incomplete.
+2026-11-14: full M0–M5 persistent goal ACTIVE. M0 and M1 remain incomplete.
 Public repository: https://github.com/thematheusmello/bondline . Continue; do not restart.
 Read AGENTS.md, ROADMAP.md, architecture, parity and sources before choosing work.
 
-## Published main and current integration
+## Verified public main
 
-Main0830a2357b1b18c7b934d0bf11a4833fc6ac7b10 contains production6447c6c plus validated
-installed-palette documentation. That production source passes every43542026529 hosted
-job: Mac420 (417workspace+3bridge), Linux418, Windows410, all actual window smokes and
-six bounded ASAN parser targets. Main advanced only after the matching source was GREEN.
-The docs-only child changes no code/fixture/lock. Prior integrated sources and actual
-failed runs retain their exact results in docs/ci.md; no passing job was restarted.
+Main00e5b02fb6cd5b845a6343ee6bcd34b3add95d7e delivers owned CDX elemental/source snapshots
+and the atomic CDX filesystem library, plus the test-only Windows closed-socket correction.
+Its own43550955963 is fully GREEN: Mac132313031167:446 tests (443workspace+3bridge),
+Linux132313031270:444, Windows132313031269:436, all actual native window smokes and
+ASAN132313031015:six bounded10000-run targets. Adapters: Metal/Apple Paravirtual GPU,
+Vulkan/llvmpipe CPU, Dx12/Microsoft Basic Render Driver CPU. Main advanced only after
+matching GREEN. Earlier5e6b644/43549658341 really failed Windows10053/ConnectionAborted
+in the excess-connection assertion; that failure and the narrow test correction remain
+in docs/ci.md. No failed execution was relabeled or completed passing job restarted.
 
-Published feature5e6b644 integrates projector1512532 and owned source snapshots.
-Hosted43549658341 is terminal: Mac132308919149 passes441 tests, Linux132308918944 passes439,
-both actual windows pass, and ASAN132308919199 passes six bounded targets. Windows132308919222
-fails the existing excess-connection test: a closed socket returned10053/ConnectionAborted,
-which its assertion excludes. Its aggregate/window are not a pass. Main stays0830a23.
-The receiving-root aggregate is GREEN:438 workspace plus3 macOS bridge tests, fmt,
-warnings-denied all-target clippy, layers, native licenses and five-file/four-bundle corpus.
-Log target/cdx-owned-document-ci.log, session56791 terminal0. All144 IO tests also pass.
-Only the internal IO→CDX edge changes both locks; no registry version/checksum changes.
-Declared native runtime closures are154Mac/165Windows/220Linux and two bundled assets.
-This source needs a corrected matching hosted GREEN before main advances; an older pass
-is not substituted. No root build, fuzz or native process remains live.
+The snapshot layer retains full source/baseline/opaque identity/shared storage, exact
+unchanged CDX export and explicit stale/source-free/cross-format refusals. Only the internal
+IO→CDX edge changes both locks; no registry package/version/checksum changes. Native
+closures154Mac/165Windows/220Linux/two assets pass the unchanged license policy. Corpus
+remains five licensed pinned files/four bundles. CDX application commands are not on main.
+Public verification-cdx-owned-snapshots.md and verification-cdx-native-io.md distinguish
+actual RED/GREEN, independent struct/RDKit consumers, injected save failures and platform
+scope. Normal full-graph projection/snapshot ASAN10000 passes, log
+ target/cdx-owned-source-fuzz-asan.log SHAe812d3ce32f4fdf5eb7c04bbbaf76f8b2ea8e4a27e8e0865db7dcc4bf107e719.
 
-Feature725e92d on feat/cdx-native-io is based on5e6b644 and adds only format dispatch to the existing
-bounded native read/atomic save library. Actual missing-API/dispatch REDs precede149 IO
-and443workspace+3bridge GREEN. All aggregate gates pass, target/cdx-native-io-ci.log,
-session69486 terminal0. Both original framing vectors' saved files face unchanged strict
-struct/RDKit consumers; no-clobber, stale/source-free refusal, cancellation and seven failure
-stages preserve old data/report publication. See verification-cdx-native-io.md. This slice
-also needs its own hosted run and exposes no application CDX command or native chooser.
-Independent read-only review found no confirmed blocking/should-fix defect, report
- target/cdx-native-io-review.md, SHAdb48f7960000ee550f0b5e8358740a99803e2cb71d40379a2988760afedbf43d.
+Thirteen commands share engine/CLI/stdio/authenticated opt-in loopback/native adapters.
+Mac independent C–C creation, pages/history, CDXML/MOLV2000/V3000 local files, guarded
+version/refusal/retry/close and CPU/GPU/PNG have earlier exact native evidence. The accepted
+file-workflow binary59ca30c81a16b8e5eccb9564ffd338328e70fd50a167cb71d2f3fdddad9ed8b0
+and source1c53312 are in verification-v3000-application.md; its owned app is closed.
+Save-slot/receipt/close barriers, full snapshots, frame/headers and precision guards remain.
+SDF mixed-version ordered records and legacy ordered-role RXN are libraries, not application
+collections/reactions. Foreign/general formats, chemistry, other drawing tools, publishing,
+Office, naming/templates/WASM/signing and interactive Windows/Linux are missing/unverified.
+The native dependency-license blocker is resolved; release notice audit still includes
+windows-permissions0.2.4's missing upstream LICENSE despite its MIT declaration.
 
-The current test-only socket correction adds documented ConnectionAborted to all three
-closed-read assertions. Production networking,16 held-client limit and strict byte/live/
-timeout/would-block failures remain. Local15 control tests and443workspace+3bridge full
-aggregate pass (target/socket-closed-kind-ci.log,98879 terminal0). Publish this corrected
-source next; Windows execution is still pending a matching new run.
+## Frozen carbon renderer and current native acceptance
 
-The actual missing-API RED is target/cdx-owned-document-red.log, session60386 terminal101.
-The first six snapshot tests then pass; a seventh adds typed syntax/content/budget regression
-coverage. Independent source/accounting review found no confirmed findings. Normal full
-fuzz-workspace clippy/fmt and the extended CDX parser/projection/snapshot ASAN target pass:
-10000 iterations, seed721533879/max_len131072/timeout5, cov1019/features2161,81 retained
-inputs/reported394KiB/RSS303MiB. Session70497 terminal0; log
- target/cdx-owned-source-fuzz-asan.log. Four fresh original seeds stay ignored, not committed
-corpus. Exact settings, hashes and limitations are in verification-cdx-owned-snapshots.md.
+ROOT feat/carbon-graph-integration remains at00e5b02 plus the intentional uncommitted
+feature. Final exact-source native acceptance is complete; all runtime files stayed frozen
+through cleanup. Documentation-only evidence updates follow the original15-file handoff. Exact15-file
+handoff target/canvas-press-position-handoff.json SHA
+d2f3b8096361ee9071a8184c41a19240e1e17e5923f37b068e841251bf535a95.
+Six production files concatenate to
+8c2143f18f47ce48bb1beaae86c0194c6169f0695588bff495a53c107fea832b;
+UI lib SHAe80b5faef141a7718a3928e996726a00a150d542e4ec0f86caff1e3f14334f56.
 
-## Delivered behavior and limits
+GraphScene shares CPU/GPU/capture/native neutral-carbon/Single geometry, literal authored
+H and typed bounded hit regions. Chains/branches/cycles/disconnected graphs are supported
+for display; no H inference, other atoms/orders/metadata or persistent selection. Source
+completeness/export guards remain strict. One approved golden stays byte-identical.
+Independent pixel/geometry/FreeType tests, UI70 tests and final full gate476workspace+
+3bridge pass: target/carbon-graph-final-ci.log, session21877 terminal0, SHA
+804b8d7a260bb8366102d4abec9babe7f1ffcad3ed9bf38a3b8e55fa176b2657. Every aggregate gate passes.
+Earlier470 and477 totals are preceding exact-source checks, not substitutes for this one.
 
-Thirteen typed commands share engine, CLI, stdio MCP and authenticated opt-in loopback.
-Actual Mac independent C–C/three-authored-H creation, page controls, exact source/history,
-CDXML/V2000/V3000 local file/version/refusal/retry/close and CPU/GPU/PNG have evidence.
-The accepted native file-workflow binary is
-59ca30c81a16b8e5eccb9564ffd338328e70fd50a167cb71d2f3fdddad9ed8b0,
-source1c53312/manifest3f07aa401d6defa7ea2524d1afb305da6774362b099d5227d64792e9abf5c824.
-Its real2048 CPU/Metal replies drain before close. Native walkthrough and nine independent
-file consumers are in verification-v3000-application.md. That owned app is closed.
-Save reservations, trusted completion acknowledgments, complete source/baseline history,
-frame/header retention and precision/source-loss guards remain unchanged.
+Native baseline4bfc733f…15aa87 found retained hover after reopen/Escape; its evidence stays
+immutable. Next3db23dbe…6c807e passed tested1x/2x hover/reopen/Escape/focus/context cases,
+source/history/save/reopen, but full input policy remained unaccepted and its newly created
+C–C visual painting was inconclusive. All owned processes in those two passes exited0;
+CUA completed exactly once per pass. Frozen reports: target/native-carbon-graph-handoff.md
+SHA1975bf1fa9f240d577c263b0dfe365f522f0626380426355e285b6c0a433f3a8 and
+ target/native-carbon-graph-freshness-handoff.md SHA9f4942bb96bba2ccdd49fb0228d1970e772d735758ebb12cbdf18d871abe77c7.
 
-Mixed V2000/V3000 SDF is an ordered source-preserving library, not application collection
-editing. Legacy RXN preserves ordered reactant/product/reagent wrappers and complete
-V2000/V3000 molecules; no reaction model/application workflow exists. CDX syntax supports
-exact passthrough, bounded property replacement and new-tree writing, including the
-22-byte prefix/encoded Document/separate FileEnd profile. Successful legacy28-byte parsing
-wins; missing-native-end ambiguity remains explicit. Old fixtures/pins/writer are unchanged.
+Independent review then found same-frame final-state Escape/focus misuse. Actual5 REDs
+precede shared ordered eligibility; actual2 more REDs precede per-press clipped-paper/
+foreground-layer authorization. Valid post-unblock/complete drags, held/repeat boundaries,
+covered presses and exact history all pass. No OS polling or dependency changes. Earlier
+finding report SHA c23fbec2c376157a77ad3651bff6a2baa6be49b968fdbcc120bc2ff86489e5c0;
+final read-only review finds it resolved/no confirmed new touched-path defect, report
+ target/carbon-graph-final-input-review.md SHA71fb49f42da98818e676b22611528ac14f5d41c0317467f8a921394cfc2951cc.
+Reviews read source/logs and did not rerun tests.
 
-The new CDX elemental bridge retains full source, fresh scoped-reference-safe model IDs,
-exact signed16.16 points and only Element/default-C plus Single/default-order metadata.
-Absent coordinates/H stay absent. Owned snapshots retain raw Arc plus baseline, always
-is_fully_mapped=false, exact unchanged export and source/accounting identity. Stale model,
-source-free encoding and lossy CDXML/MOL conversion refuse. This is library backing, not
-registered CDX filesystem commands/native UI or an editable source encoder. Direct CDX
-filesystem library functions now reuse the existing atomic/cancellation/security path. The actual
-1196-byte native original still refuses its unsupported Z/BoundingBox/CIP/AtomID/warning
-metadata at model projection; standalone syntax retains it exactly. Research files stay
-ignored, unmodified and outside the licensed corpus.
+Final ROOT native acceptance is complete: binary
+2963b4442dd4ad5f08f61e6c5e0df3a17eda0f307b343fc16487338df2b91629,
+376-source manifest1b64e648d0567138c861d3e9a8263fec7aba5f906af723b22fc65f12c11d4dec.
+Visible empty→C–C/UndoRedo/local Unicode CDXML save/reopen and independent492B output
+consumers pass. Native C3MOL and bounded1x/2x hover, remote reopen, Escape-held movement/
+drag, actual CmdH focus return, display context and foreground chooser refusal pass.
+Failed ROI/focus/guard probes remain excluded; native batching is not claimed. Exact
+report target/native-carbon-graph-final-handoff.md SHA
+b92dee0cafe8ef9fee61718ae457c8c20e2c4d665fa023c600d3dc7c99c6a6d0 and136-file index/flow
+ledger are summarized in verification-carbon-graph.md. Native32764/controller32742/
+session81950 and all hold helpers exited0, EscapeUp verified, cursor and sampled original
+reference windows restored/preserved. CUA completed exactly once after cleanup. No owned
+native/controller/helper/Cargo/fuzz job remains; GUI lease is released.
 
-Corpus: five pinned licensed files/four source bundles, including one original explicit
-CDX scene. Native outputs and the new framed fixture are not fetched corpus entries.
-External formula/SMILES are oracles, not Bondline chemistry. General graph editing,
-query/stereo/3D, connected bonds/rings/selection/labels/styles, chemistry/reactions/text,
-publishing/Office/printing, naming/templates/WASM/signing and interactive Windows/Linux
-remain missing or unverified. Native strict-license blocker is resolved. Browser/notice
-audit still includes windows-permissions0.2.4's missing upstream LICENSE despite MIT metadata.
+## CDX metadata and parallel application work
 
-## Installed UI and resource research
+Source-only metadata featuref67883a is locally committed in bondline-mol-v3000. It retains
+qualified FragmentZ/bounds, node Z/CIP0U-or1N/opaque AtomID and bond Z/unstyled warning/CIP0U-
+or1N. It never computes CIP, reuses AtomID as an endpoint, infers paper or permits stale/
+lossy export; fully_mapped staysfalse. Other stereo/style/chemical fields remain refused.
+Two new original323/319B fixtures face independent struct/RDKit, all159 IO tests/clippy/fmt
+pass, and the unchanged ignored1196B native original parses/exports byte-exactly with2C/
+1Single. Vendor bytes/warning prose/assets are not committed. Only the superseded valid
+NodeZ literal moved unchanged from a negative to a positive; all27 old fixture/corpus/
+golden files remain exact. Source plan and unknown AtomID semantics are explicit.
 
-Latest user instruction authorizes installed runtime/artifact inspection. Implement original
-Rust/assets; no proprietary code/icons/fonts/templates/help prose enter the product.
-Six committed docs/research/installed-* reports/catalogs/tickets record build26.1.0.6801,
-macOS27.2arm64, existing PID50732 and unknown licensed tier. Fourteen top menus yield503
-physical records;28 Save choices,12 local Save roles and9 Settings categories are separate.
-Three panels and bounded new/draw/history/local XML/binary save/close/reopen are observed.
-None proves full parity;576 public-guide anchors retain their own source versions.
+Frozen handoff target/cdx-native-metadata-handoff.json in that sibling SHA
+79b9c7765a21da5546bd7fcf87dd536b606b7e5500be4280bdd93900eda8f036. Independent review:
+ROOT target/cdx-native-metadata-review.md SHAa076717c85e8cde73655613ad910a5c4011b8186e45d42a6c4901f99b775f439,
+no confirmed findings; reviewer did not run tests. This metadata is not in ROOT/main yet.
+After final native cleanup, integrate it and run cached normal-graph ASAN with its original
+positive seeds plus the receiving aggregate/hosted checks. Never fuzz committed fixtures.
 
-The36-cell palette reconciliation has23 declared toggles and13 secondary toolbars, from
-bounded installed XML plus a native layer3 window capture. Runtime tooltip/AX/action/
-enabled/hit-bound fields remain null; static IDs do not prove executed flows or entitlement.
-Exact provenance and limitations are in installed-tool-palette.md and its JSON catalog.
-REA6.9.0/Node26.12.1 were already cached; no install or permission changes were made.
+The same warm sibling is now feat/cdx-file-commands at local merge43ca90d, combiningf67883a
+and00e5b02. Its own base full gate453workspace+3bridge passes, log
+ target/cdx-application-base-ci.log, session89159 terminal0, SHA
+082d58ac77e3cb59f4152f0369be577a1e9ab0d5b33f11c29e38f89ff4cbc73a. Standalone metadata
+still needs its own final receiving/ASAN/hosted evidence; this pass is not a new GUI claim.
+CDX file-command featuree37d129 is locally committed in that isolated branch. Typed
+open_cdx/save_cdx,15-command registry/source association and existing FilePlan/Completed/
+save lease/receipt/native chooser routing now pass188 scoped tests and its own full gate
+465workspace+3bridge=468. Log target/cdx-file-commands-ci.log SHA
+96315fe2786f1f26b05d5b02f67160c18ede6404e1dec26dd7c3e914e9decf7f,80939 terminal0.
+Four original vectors' actual saved bytes face strict independent consumers through
+engine/CLI/stdio/authsocket. UIworker/chooser retry and close/refusal guards pass. Native
+CDX chooser is only WIRED; root/current public main still has13 commands. No codec/model/
+render/UIlib/capture/deps/locks/golden changed. Frozen19-file handoff in sibling SHA
+2938f34a6451c871ab89f590466645d769eaf53fd08aae12c331d4177851ebba; independent read-only
+ROOT target/cdx-file-commands-review.md SHA829bb37260d4c1c11624273bd1ad264284c38d7fa059a0ab5b7a536f51eb992b,
+no confirmed findings/no rerun. Preserve root renderer and apply only CDX documentation
+hunks when merging the older base; never replace whole newer root files. No worker jobs.
 
-Raw Evidence/images/XML and failed/truncated probes remain ignored under target/reference-ui
-and target/reference-tools. REA's layer0 filter omits that palette; OS captures and stdlib
-XML fallback are labeled separately. The first pass's complete-AX coverage check failed
-and remains recorded. An original locked sample window disappeared for unknown cause and
-was restored source-verified/locked at a different ID/position; uninterrupted preservation
-is not claimed. The second pass preserved the three originals/palette IDs/frames exactly.
-Both reference passes closed their owned documents and completed CUA separately.
-Unassociated Save opened Signals before This Computer; no explicit cloud/account action
-occurred, but automatic network loading is untraced. No original source file was edited.
+The read-only next M2 plan is ROOT target/connected-single-bond-next.md SHA
+3a68f184323edbeea3a721855324d8c4823d3c44a1e281dee712ae589470552f. It proposes an explicit
+closed terminal-C/H3 rectification operation, atomic same-ID replacement, revision/ID/
+source guards and fresh per-press hit resolution; automatic H-correction defaults remain
+unestablished. No product change/build/GUI or tests claimed by that plan. Reopen foreign
+files may redensify IDs; compare mapped graph/geometry/H, not promised cross-reopen IDs.
 
-## Active work, ownership and exact next steps
+## Research, preservation and next steps
 
-Only root handles Git. Each checkout has its own absolute Cargo target; incremental0,
-sibling dev/test debug0. Disk is constrained (~1.2GiB free); never delete active artifacts,
-source, fixtures or evidence, and never share build outputs between worktrees.
+Six committed docs/research/installed-* reports/catalogs/tickets record26.1.0.6801,
+macOS27.2arm64, existing referencePID50732 and unknown tier.14menus/503physical records,
+28Save formats/12local roles/9Settings categories are distinct counts; three panels and
+bounded original drawing/history/local XML/binary save/close/reopen were observed.36main
+palette cells reconcile23declared toggles/13flyouts from bounded XML/OS geometry. Runtime
+roles/tooltips/enabled/actions remain null for resource-only cells. No count proves parity.
+Raw REA6.9.0/Node26.12.1 evidence and failed/truncated probes remain ignored. One original
+sample disappeared for unknown cause during the first pass and was restored locked at a
+changed ID/position; uninterrupted preservation is not claimed. Later passes preserve the
+four monitored window/palette IDs/frames. Signals automatic network loading is untraced;
+no explicit cloud/account action or original source save occurred. Never copy proprietary
+code/assets/help prose; new Rust/assets stay original and licensed. Latest user authorizes
+runtime inspection, superseding the earlier ban.
 
-1. Commit/publish the locally GREEN test-only socket correction after725e92d, then observe
-   its new matching hosted run. Keep byte/timeouts/live-connection failures strict.
-   Advance main only after matching GREEN, recording actual counts and adapters.
-2. reference_ui finished baseline native acceptance of the frozen carbon-graph renderer
-   in bondline-rxn, feat/carbon-graph-scene/base0830a23. All owned native processes
-   73626/5240/9186 and controllers73428/5026/9044 exited0; no jobs remain. CUA completion
-   was issued exactly once. Final40-final-cleanup.json retains source manifest
-   f6e2f09ff2712ebffed790a75a0be09eb17fc387d325ac670baa5af011796e62 and binary
-   4bfc733f83a1ab60d286dd8850275082ea6a060d37b7e80f3ea848627615aa87.
-   Actual MOL import/local Unicode Save As/reopen, resize,1x/2x graph hit targets, malformed
-   input preservation, heteroatom render refusal and drag/Undo/Redo/close-Save have partial
-   evidence. Reference windows retained their IDs/frames; cursor was restored to the nearest
-   physical pixel, not its original fractional coordinate. The full renderer is not yet
-   native-accepted because the hover failures remain. Final indexed handoff is root
-   target/native-carbon-graph-handoff.md, SHA1975bf1fa9f240d577c263b0dfe365f522f0626380426355e285b6c0a433f3a8.
-   reference_ui completed the CDX filesystem review and now owns corrected-renderer native
-   reacceptance. Its new source manifest is991821a840a367dcddd0f6056dcda5203ca9a33d35620bbf254f9ffcaedd33b1;
-   exact binary3db23dbe7bdc9219fb8d2fe4e4561f54b200d3c8153bb2a21dca33f48d6c807e. Validate
-   its new handles/cleanup; baseline artifacts stay immutable in their separate directory.
-3. Baseline native checks found a retained hover highlight after remote reopen and
-   Escape Down+Up. The observed reverse display teleport cleared, so do not claim a
-   universal teleport failure. Original policy is clear-until-fresh-positional-input after
-   revision/Escape/focus/context invalidation. After baseline cleanup, file_verification
-   finished sticky freshness/public viewport origin/DPI context with actual7 REDs and61 UI
-   tests/clippy/fmt GREEN. Frozen target/hover-freshness-handoff.json is SHA
-   8d1c3bfecbd9c5213a67ce6ded9ba05447416c0f9e4bc91904c1e974da95261b. Source remains frozen
-   during new native acceptance; no full renderer acceptance is claimed yet.
-4. reference_map implements its reviewed source-cited native CDX metadata plan in
-   bondline-mol-v3000/feat/cdx-native-metadata/base725e92d, not in root. The plan
-   target/cdx-native-metadata-next.md SHA c7611de32cfdcd9b11b079a8e1cf876ec65f29907879c9ae125e0e5c5aeda041
-   distinguishes CIP0U/1N from refused stereo, separate opaque AtomID, qualified FragmentZ,
-   bounds/unstyled warning retention. Only the now-supported literal valid NodeZ negative
-   is authorized to migrate to a positive; all other negatives/fixtures/pins remain.
-   New original independent vectors/RED/GREEN and unchanged native1196 diagnostics follow;
-   no native/vendor fixture, chemistry, model fields/dependencies or command/UI changes.
-5. Continue source-safe CDX filesystem/shared registry/native adapters, application SDF
-   collections, reaction model/RXN and SMILES, then M2–M5 in roadmap/ticket order. The
-   new carbon graph scene/hit tests are not connected bond editing or completed M2.
-   No empty stubs, inferred chemistry or library-as-application parity claims.
+1. Commit/publish the fully reviewed/local479/native-accepted carbon display/input slice;
+   observe its own hosted source run. Advance main only after matching GREEN.
+2. Merge metadata base43ca90d (containsf67883a) onto the graph integration, preserving root
+   source/docs. Run cached normal-graph ASAN with new original seeds, receiving full gate,
+   commit/publish and observe matching hosted evidence.
+3. Merge application commande37d129 with current renderer retained, run receiving checks,
+   then actual native CDX chooser/source/history/refusal/close workflows and independent
+   saved-byte consumers. Keep registry/native status precise and preserve all guards.
+4. Continue SDF collections, reaction model/RXN/SMILES and M2–M5 in roadmap/ticket order.
+   Display/hit testing is not connected bond editing or selection. Do not create stubs.
 
-Projector handoff1512532 is committed in bondline-mol-v3000/feat/cdx-elemental-projection;
-framinge9bffd3 remains clean in bondline-cdx-framing. Neither has live jobs. Renderer
-handoff/source are frozen in bondline-rxn pending the native baseline and hover correction.
-Revalidate live agent/job handles on continuation. The only approved golden is
-1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc; never regenerate without
-new approval. No release, installer, signing or unrelated account/message action occurred.
+Each checkout uses its own absolute Cargo target; incremental0, sibling debug0, root default
+debug. Disk constrained (~2GiB); no deletion of active/evidence/source/fixtures or shared
+build outputs. Only approved golden:
+1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc. Never regenerate without
+approval. Revalidate agents/jobs on continuation. No release/installer/signing or unrelated
+message/account action occurred; native license closure is resolved, full M0/M1 is not.

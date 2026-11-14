@@ -100,6 +100,14 @@ carbon. Native drag creation, exact history, automation and bounded rendering ha
 This is partial solid-bond coverage: click creation, existing-atom attachment, connected
 chains, snapping, order changes and general atom labels remain missing.
 
+The shared carbon GraphScene/hit-testing prerequisite now supports positioned neutral
+carbon/Single topology, literal authored H and bounded atom/bond hover. Independent geometry/
+pixels/fonts, unchanged golden and receiving467+3 aggregate pass. Native baseline revision/
+Escape hover failures prompted sticky freshness/context regressions and a fix; final
+Root476+3 and actual MacC2/C3/input acceptance now pass. Its own hosted checks remain
+pending. This display slice does not add
+connected editing, selection, other atoms/orders, source-faithful styles or finish M2-02.
+
 Bonds, rings, chains, labels/abbreviations, charges, isotopes, radicals, wedge/hash bonds,
 selection, transforms, hotkeys, undo/redo and style sheets from public journal guidelines.
 

@@ -1,5 +1,16 @@
 # CI contract and execution evidence
 
+Corrected CDX snapshot/filesystem source00e5b02fb6cd5b845a6343ee6bcd34b3add95d7e passes all
+[43550955963](https://github.com/thematheusmello/bondline/actions/runs/43550955963) jobs:
+Mac132313031167:446 tests (443workspace+3bridge), Linux132313031270:444,
+Windows132313031269:436 and ASAN132313031015:six10000-run targets. All actual native
+window smokes pass. Windows's previously failing excess-connection test now passes.
+Adapters are Metal/Apple Paravirtual IntegratedGpu, Vulkan/llvmpipe Cpu and Dx12/Microsoft
+Basic Render Driver Cpu. Main advanced to this exact source only after matching GREEN.
+The failed earlier run remains below; no passing job was restarted. This is library
+CDX/source/filesystem evidence, not registered/native application CDX or interactive
+Windows/Linux chemical workflows. Later graph/hover/metadata sources need their own runs.
+
 Owned CDX source5e6b644ba56b43e95f0306f032a8c4a39c46fe0b has a terminal failed
 [43549658341](https://github.com/thematheusmello/bondline/actions/runs/43549658341):
 Mac132308919149 passes441 tests (438workspace+3bridge), Linux132308918944 passes439,

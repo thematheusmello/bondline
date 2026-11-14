@@ -3,7 +3,7 @@ use crate::{CommandResult, Error};
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 use bondline_model::Page;
 use bondline_render::{
-    Cancellation, MAX_CAPTURE_DIMENSION_PX, carbon_page_scene, cpu_scene_with_cancel,
+    Cancellation, MAX_CAPTURE_DIMENSION_PX, cpu_scene_with_cancel, graph_page_scene_with_cancel,
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -108,7 +108,9 @@ impl Prepared {
         let deferred_query = self.capture.is_some();
         if let Some((params, page)) = self.capture {
             cancel.check()?;
-            let scene = carbon_page_scene(params.width_px, params.height_px, &page)?;
+            let scene =
+                graph_page_scene_with_cancel(params.width_px, params.height_px, &page, cancel)?
+                    .into_scene();
             let (frame, adapter) = match params.backend {
                 RenderBackend::Cpu => (cpu_scene_with_cancel(&scene, cancel)?, None),
                 RenderBackend::Gpu => {

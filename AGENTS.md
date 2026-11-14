@@ -71,7 +71,8 @@ cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attrib
 replacement and a bounded new-syntax writer);
 cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque property
 replacement and new-tree Writer; no model mapping or application commands);
-render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
+render (L1, shared neutral-carbon/Single GraphScene, bounded hit regions, literal authored-H
+labels, CPU/GPU rectangles/strokes and approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
 bounded native CDXML/CDX/MOL filesystem libraries and source-preserving SDF/RXN container records;
 see docs/native-file-io.md for publication/access limits);
@@ -265,3 +266,16 @@ read/atomic save path; no CDX registry/native UI exists yet. Never bypass shared
 Completed reservations when delivering those future application adapters.
 Normal CDX fuzzing now exercises projection/snapshot guards; both lock edges add only the
 existing internal CDX crate. New native declared closures154/165/220 include that crate.
+
+## Carbon graph display and transient hover
+
+graph_page_scene and registered captures share a bounded GraphScene. Positioned neutral
+carbon/Single only; missing H is never inferred, connected unknown-H may be skeletal,
+isolated unknown-H/other elements/metadata/orders or unsupported geometry refuse. Authored
+0/1/N H renders literally. Source completeness/export guards remain independent and strict.
+Atom/label priority, visible clipped ink, five logical canvas units and stable-ID ties are
+original policies, not full selection or reference-product default claims. Hover state is
+UI-only and excluded from Scene/history/source: revision/Escape/focus/context invalidation
+stays clear until a fresh ordered positional event. Context includes available origin,
+public native origin and effective DPI. Keep multi-idle-frame regressions and native checks;
+do not rearm from cached hover_pos, key release or focus gain alone. No OS pointer polling.

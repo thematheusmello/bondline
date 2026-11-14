@@ -82,14 +82,13 @@ fn carbon_single_bond_positions_map_from_points_to_exact_cpu_gpu_pixels()
 #[test]
 fn unsupported_atom_metadata_and_bond_kinds_fail_instead_of_being_hidden()
 -> Result<(), Box<dyn std::error::Error>> {
-    for kind in 0..7 {
+    for kind in 0..6 {
         let document = document(|atom, bond| match kind {
             0 => atom.element = Element::new(7).unwrap_or(atom.element),
             1 => atom.position = None,
             2 => atom.charge = 1,
             3 => atom.isotope = std::num::NonZeroU16::new(13),
             4 => atom.radical = Radical::Doublet,
-            5 => atom.explicit_hydrogens = Some(2),
             _ => bond.order = BondOrder::Double,
         })?;
         assert!(matches!(
@@ -97,6 +96,11 @@ fn unsupported_atom_metadata_and_bond_kinds_fail_instead_of_being_hidden()
             Err(Error::UnsupportedChemicalContent)
         ));
     }
+    let authored_h2 = document(|atom, _| atom.explicit_hydrogens = Some(2))?;
+    assert!(
+        carbon_page_scene(80, 80, authored_h2.pages().first().ok_or("page")?).is_ok(),
+        "an authored count is rendered literally rather than repaired to H3"
+    );
     let mut isolated = Document::default();
     let page = PageId::new(1).ok_or("page")?;
     let atom = Atom::new(

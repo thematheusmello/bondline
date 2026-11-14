@@ -492,3 +492,65 @@ now accept it alongside their prior definitive closure results; they still rejec
 reads, bytes, timeouts and would-block. Production socket behavior/authentication/client
 limits are unchanged. This is a test portability correction using an actual hosted RED,
 not permission to ignore arbitrary transport errors. APIs compile on pinned Rust1.94.1.
+
+
+## Neutral-carbon graph scene and hit testing, 2026-11-14
+
+The bounded renderer slice uses GUIDE-25's already pinned vendor-authored public PDF:
+https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf . Printed38
+(PDF index38/page39) documents a five-pixel highlight tolerance; printed41 covers
+stroke/margin settings,42 terminal-carbon label choices,47/99 label orientation and
+separate hydrogen correction, and85/88 connected drawing/atom versus bond targets.
+Cached bytes remain17,721,447, SHA3f1ebc429df07efdd47b6218a148dc346a215043f60bf89ee9a1cb90629bd5b3.
+This is version-qualified25 evidence, not proof of26.1 defaults or device-DPI units.
+
+Public SDK Node.htm, properties/Atom_NumHydrogens.htm and properties/2DPosition.htm
+at https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/ distinguish elemental metadata,
+authored H counts, node anchor positions and contained text appearance. The existing
+NumHydrogens and source-fidelity guards remain authoritative; this renderer performs
+no valence inference or source text/layout reconstruction.
+
+Original Bondline policies: neutral positioned carbon/Single only; connected carbon
+with unknown H may be skeletal; isolated unknown-H carbon refuses; Some(0) draws C
+with no H token; positive authored counts draw literal CH/Hn tokens. H faces away from
+the more occupied horizontal side, with a bonded tie placing H to the left. The exact
+existing CH3 routine's font/placement/raster math is shared, preserving the approved
+specific-scene bytes. Labels with unsupported metadata/collisions or unrelated-bond
+occlusion refuse instead of hiding content. Other elements/orders/stereo/styles remain
+missing rather than substituted.
+
+The five-canvas-unit native tolerance, atom/label-before-bond priority, distance and
+stable-ID tie-breaks are explicit original policies; guide25 does not prove those
+choices or a Retina conversion rule. Picking measures visible clipped butt-stroke
+ink. UI hover is transient and outside the captured Scene, never history/file data.
+Rendering a model cannot grant fully_mapped, editing or export authority. No reference
+font/icon/code/asset or help prose is reused. Scoped test/native status is in
+../verification-carbon-graph.md.
+
+Hover freshness uses the public egui0.29.1 API at its actual registry VCS pin
+[input definitions](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/data/input.rs)
+and [InputState/pointer state](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/input_state/mod.rs).
+Both public files were fetched and cross-checked with the installed pinned package;
+the corresponding versioned docs.rs pages were inaccessible through the web tool.
+Retaining hover_pos is distinct from a new positional event. Clear-until-new-input after
+revision/Escape/focus/viewport invalidation is an original Bondline policy prompted by
+the recorded native failures, not a claim about reference-product behavior. Logical canvas
+origin, supplied inner/outer native origin and effective pixels_per_point are public data;
+no platform polling, dependency or proprietary behavior/code was added.
+
+Per-press authorization uses that same pinned egui public
+[Context layer lookup](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/context.rs)
+and [Response clipped interaction rectangle](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/response.rs),
+both fetched and cross-checked against the installed package. Final pointer feedback is
+not earlier press authorization. Ordered events are copied out of the input callback
+before querying the public layer API, avoiding nested Context locking. Exact per-event
+Escape/focus eligibility and retained completed drags are original Bondline policies,
+supported by actual failing/passing deterministic regressions, not claimed reference defaults.
+
+NATIVE-BONDLINE-CARBON-ROOT: actual own-source macOS27.2/AppleM3Max/Metal acceptance2026-11-14
+uses binary2963b4442dd4ad5f08f61e6c5e0df3a17eda0f307b343fc16487338df2b91629 and376-source
+manifest1b64e648d0567138c861d3e9a8263fec7aba5f906af723b22fc65f12c11d4dec. Visible drawing/
+history/local files and bounded1x/2x input cases, exact source/cleanup, OS/CUA/consumer
+method distinctions and failed-probe exclusions are in verification-carbon-graph.md.
+No reference app was operated in that acceptance; no native timing/golden/full-parity
+claim follows. Public CG/AX helpers are ignored development evidence, never shipped code.

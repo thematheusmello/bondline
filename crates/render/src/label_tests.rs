@@ -4,6 +4,92 @@ use std::{
     process::{Command, Stdio},
 };
 
+fn authored_count_oracle(
+    label: &super::label::Label,
+    left: bool,
+    expected: u16,
+) -> Result<std::process::Output, Box<dyn std::error::Error>> {
+    let interpreter = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
+        if cfg!(windows) {
+            "python".into()
+        } else {
+            "python3".into()
+        }
+    });
+    let mut child = Command::new(interpreter)
+        .arg("-B")
+        .arg(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/tests/label_oracle.py"
+        ))
+        .arg(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../assets/fonts/Roboto-Regular.ttf"
+        ))
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()?;
+    let boxes = label
+        .pixels
+        .iter()
+        .map(|r| [r.x, r.y, r.width, r.height])
+        .collect::<Vec<_>>();
+    serde_json::to_writer(
+        child.stdin.take().ok_or("stdin")?,
+        &serde_json::json!({"boxes":boxes,"toward_right":left,"hydrogens":expected,"position":[400,200],"width":800,"height":400}),
+    )?;
+    Ok(child.wait_with_output()?)
+}
+
+#[test]
+fn literal_authored_hydrogen_counts_use_independent_freetype_without_inference()
+-> Result<(), Box<dyn std::error::Error>> {
+    for left in [false, true] {
+        for hydrogens in [0, 1, 2, 3, 12, u16::MAX] {
+            let label = super::label::carbon(
+                [400.0, 200.0],
+                left,
+                hydrogens,
+                8.0,
+                [800, 400],
+                &crate::Cancellation::default(),
+            )?;
+            let output = authored_count_oracle(&label, left, hydrogens)?;
+            assert!(
+                output.status.success(),
+                "H{hydrogens}/{left}: {}",
+                String::from_utf8_lossy(&output.stderr)
+            );
+        }
+    }
+    let label = super::label::carbon(
+        [400.0, 200.0],
+        false,
+        0,
+        8.0,
+        [800, 400],
+        &crate::Cancellation::default(),
+    )?;
+    assert!(
+        !authored_count_oracle(&label, false, 3)?.status.success(),
+        "oracle accepted an invented CH3 from authored zero"
+    );
+    let label = super::label::carbon(
+        [400.0, 200.0],
+        true,
+        12,
+        8.0,
+        [800, 400],
+        &crate::Cancellation::default(),
+    )?;
+    assert!(
+        !authored_count_oracle(&label, true, 21)?.status.success(),
+        "oracle accepted a reversed decimal count"
+    );
+    Ok(())
+}
+
 #[test]
 fn terminal_font_metrics_match_independent_fonttools_4611_vectors()
 -> Result<(), Box<dyn std::error::Error>> {

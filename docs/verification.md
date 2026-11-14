@@ -1880,3 +1880,24 @@ Local control tests pass15, target/socket-closed-windows-kind-green.log, session
 The new receiving-root full gate passes443workspace+3bridge, target/socket-closed-kind-ci.log,
 session98879 exit0, with the unchanged154/165/220 native closures/corpus/assets. Its Windows
 execution remains pending a new matching source run; this local pass does not prove it.
+
+## Carbon graph receiving integration, 2026-11-14
+
+One bounded producer now serves supported positioned neutral-carbon/Single graphs, literal
+authored H, CPU/GPU capture and typed atom/bond hit regions. Source completeness/export
+guards remain strict. Literal independent geometry/pixel/FreeType cases, graph/error/limit
+tests and the unchanged approved golden pass. Native baseline stale hover observations
+produced7 additional runtime REDs; the sticky freshness fix passes61 UI tests. Receiving
+root aggregate passes467workspace+3bridge with all gates. Exact handoffs/hashes, the earlier
+failed observations and pending corrected native/hosted acceptance are in
+[verification-carbon-graph.md](verification-carbon-graph.md). This is not selection,
+connected drawing, other-atom/stereo/style rendering or completed M2-02.
+
+Final source adds the actual7 ordering/press-position RED regressions and their minimal
+shared eligibility/foreground fix,70 UI tests and476workspace+3bridge full GREEN. Actual
+ROOT binary2963b444…1629 now passes visible C–C/UndoRedo/Unicode save/reopen, independent
+actual-byte consumers and bounded1x/2x hover/reopen/Escape-held/focus/context/chooser cases.
+Every owned app/controller/helper exited; Escape released/CUA completed once after cleanup.
+Exact full hashes,136-file evidence index and rejected probes are in the linked report.
+No new golden, arbitrary chemical rendering, same-frame native timing or Windows/Linux
+interactive claim follows. Its new hosted source run remains pending.

@@ -53,6 +53,9 @@ Independent read-only review found no confirmed blocking/should-fix defect: igno
 target/cdx-native-io-review.md, SHA-256
 db48f7960000ee550f0b5e8358740a99803e2cb71d40379a2988760afedbf43d.
 The reviewer inspected source/logs; no second build execution is claimed.
-This new source needs its own hosted platform run; prior source passes do not substitute.
+The integrated feature plus test-only socket correction00e5b02 passes every hosted
+43550955963 job: Mac446/Linux444/Windows436, all actual native window smokes and six
+bounded10000-run sanitizer targets. Exact jobs/adapters and the earlier5e6b644 Windows
+closed-socket assertion failure remain in ci.md. Main advanced after matching GREEN.
 No GUI launch is claimed for a library-only change. General native metadata and foreign
 CDX files remain outside the strict projection whitelist; an unsupported input is refused.

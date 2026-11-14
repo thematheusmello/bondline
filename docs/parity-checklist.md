@@ -57,9 +57,9 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 |---|---|---|---|
 | New/open/save documents | GUIDE-25 / MAC-FILE-KEYS | partial: Mac CDXML/MOL Open/Save verified | Complete-source registry persistence, explicit format choice, native Save As and dirty-close protection; File New/multi-doc/other formats remain missing. |
 | Undo/redo | GUIDE-25 / MAC-HISTORY | verified for page size and independent C-C creation, Mac only | Exact engine properties; native page and bond Undo/Redo plus error recovery. Other chemical edits and Windows/Linux runtime missing |
-| Selection and transforms | GUIDE-25 | missing | M2 |
+| Selection and transforms | GUIDE-25 | missing | M2; bounded atom/bond hit testing and transient hover exist, not persistent selection or transforms |
 | Bond, ring, chain tools | GUIDE-25 | partial: isolated single-bond drag verified on Mac | bond.create, native history/control capture and approved specific-scene golden. Connected construction, other bond kinds, rings/chains and full tool behavior missing |
-| Atom labels, charges, isotopes, radicals | GUIDE-25 | missing | M2 |
+| Atom labels, charges, isotopes, radicals | GUIDE-25 | partial display; authoring missing | Literal authored C/H labels in supported carbon graphs; element/label/metadata editing tools and other chemical display remain M2 |
 | Stereo bonds and labels | GUIDE-25 | missing | M2/M3 |
 | Text, captions, chemical formatting | GUIDE-25 | missing | M2/M3 |
 | Reaction and curved arrows | GUIDE-25 | missing | M3 |

@@ -63,7 +63,7 @@ pub enum Error {
     )]
     InvalidStroke,
     #[error(
-        "the current preview supports independent C-C fragments with three authored hydrogens on each carbon"
+        "the preview supports positioned neutral carbon and single bonds; hydrogens must be authored for isolated atoms"
     )]
     UnsupportedChemicalContent,
     #[error("the bundled label font could not be decoded")]
@@ -74,8 +74,12 @@ pub enum Error {
     LabelScale,
     #[error("a chemical label would extend beyond the viewport")]
     LabelPlacement,
-    #[error("chemical labels overlap; undo the edit or place the next bond farther away")]
+    #[error(
+        "chemical labels overlap other labels or unrelated bonds; undo the edit or separate them"
+    )]
     LabelOverlap,
+    #[error("hit coordinates must be finite and tolerance finite within 0..100000 canvas units")]
+    InvalidHitTest,
     #[error("scene exceeds the 4096-primitive limit")]
     SceneTooComplex,
     #[error("GPU validation failed: {0}")]
@@ -112,13 +116,15 @@ pub fn cpu_solid(width: u32, height: u32, color: [u8; 4]) -> Result<Frame, Error
     })
 }
 
+mod hits;
 mod label;
 #[cfg(test)]
 mod label_tests;
 mod page;
 mod scene;
 mod stroke;
-pub use page::{PageViewport, carbon_page_scene};
+pub use hits::{GraphScene, HitTarget, MAX_HIT_REGIONS};
+pub use page::{PageViewport, carbon_page_scene, graph_page_scene, graph_page_scene_with_cancel};
 pub use scene::{Primitive, Rectangle, Scene, cpu_scene, cpu_scene_with_cancel, page_scene};
 pub use stroke::Stroke;
 

@@ -138,13 +138,21 @@ listing is a separate bounded worker; transient dialogs/jobs stay outside author
 Capture refuses unmapped or unsupported chemical
 content instead of returning a misleading blank preview; the native C-C creation case works.
 
-The native canvas consumes the render crate's ordered rectangle/stroke scene and limited
-terminal-label producer. PageViewport shares paper layout and authoring-pointer conversion.
+The native canvas and registered capture consume one GraphScene with ordered rectangles/
+strokes and bounded typed atom/bond hit regions. It supports positioned neutral carbon,
+Single bonds and literal authored H; missing H is not inferred. PageViewport shares paper
+layout and authoring-pointer conversion. Unsupported metadata/source remains guarded.
 CPU and GPU paths also face independent pixel/geometry/font oracles and one human-approved
 native-document golden. Native transient gesture state stays outside authored snapshots;
 ordered pointer events preview, commit one registry edit per drag, or cancel. This handles
 an entire drag between frames without losing its released press origin. See rendering.md
 for bounds, native versus headless raster semantics and the substantial remaining work.
+Transient hover never changes the captured Scene, selection, snapshots or file state.
+Its private freshness flag remains clear after revision/Escape/focus/context invalidation
+until a new ordered PointerMoved/PointerButton. Context tracks logical canvas origin/size,
+page/revision, public native viewport origin and effective pixels-per-point; no OS polling.
+Synthetic regressions cover multiple idle frames and ordered input, while actual native
+acceptance is recorded separately in verification-carbon-graph.md.
 
 Layer 0: model, cdxml, cdx. Layer 1: chem, render. Layer 2: io. Layer 3: commands.
 Layer 4: mcp/loopback adapters. Layer 5: cli, ui. Tooling lives in xtask. Core is GUI-free.

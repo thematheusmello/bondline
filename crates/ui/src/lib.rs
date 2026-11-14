@@ -64,6 +64,33 @@ pub fn configure_context(context: &egui::Context) {
 #[derive(Default)]
 pub struct DrawingState {
     gesture: Option<BondGesture>,
+    hover: Option<bondline_render::HitTarget>,
+    hover_context: Option<HoverContext>,
+    hover_fresh: bool,
+}
+
+impl DrawingState {
+    /// Transient result from the current viewport; never part of authored history.
+    pub fn hover_target(&self) -> Option<bondline_render::HitTarget> {
+        self.hover
+    }
+
+    fn invalidate_hover(&mut self) {
+        self.hover = None;
+        self.hover_context = None;
+        self.hover_fresh = false;
+    }
+}
+
+#[derive(Clone, Copy, PartialEq)]
+struct HoverContext {
+    revision: u64,
+    page: PageId,
+    width: u32,
+    height: u32,
+    canvas_origin: egui::Pos2,
+    host_origin: Option<egui::Pos2>,
+    pixels_per_point: f32,
 }
 
 struct BondGesture {
@@ -88,6 +115,66 @@ fn paint_stroke(
         egui::Color32::from_rgba_unmultiplied(r, g, b, a),
         egui::Stroke::NONE,
     ));
+    Ok(())
+}
+
+fn paint_hover(
+    painter: &egui::Painter,
+    origin: egui::Pos2,
+    page: &bondline_model::Page,
+    viewport: &bondline_render::PageViewport,
+    target: bondline_render::HitTarget,
+) -> Result<(), bondline_render::Error> {
+    use bondline_render::{Error, HitTarget};
+    let fragment_id = match target {
+        HitTarget::Atom { fragment_id, .. } | HitTarget::Bond { fragment_id, .. } => fragment_id,
+    };
+    let fragment = page
+        .fragments()
+        .iter()
+        .find(|f| f.id() == fragment_id)
+        .ok_or(Error::UnsupportedChemicalContent)?;
+    let position = |id| {
+        fragment
+            .atoms()
+            .iter()
+            .find(|a| a.id == id)
+            .and_then(|a| a.position)
+            .ok_or(Error::UnsupportedChemicalContent)
+            .and_then(|p| viewport.canvas_position(p))
+    };
+    let color = egui::Color32::from_rgb(40, 120, 180);
+    match target {
+        HitTarget::Atom { atom_id, .. } => {
+            let [x, y] = position(atom_id)?;
+            painter.circle_stroke(
+                origin + egui::vec2(x, y),
+                6.0,
+                egui::Stroke::new(1.0, color),
+            );
+        }
+        HitTarget::Bond { bond_id, .. } => {
+            let bond = fragment
+                .bonds()
+                .iter()
+                .find(|b| b.id == bond_id)
+                .ok_or(Error::UnsupportedChemicalContent)?;
+            let outline = bondline_render::Stroke {
+                begin: position(bond.begin)?,
+                end: position(bond.end)?,
+                width: viewport.stroke_width() + 4.0,
+                color: [0; 4],
+            }
+            .corners()?;
+            painter.add(egui::Shape::closed_line(
+                outline
+                    .into_iter()
+                    .map(|[x, y]| origin + egui::vec2(x, y))
+                    .collect(),
+                egui::Stroke::new(1.0, color),
+            ));
+        }
+    }
     Ok(())
 }
 
@@ -248,8 +335,10 @@ fn show_workspace_with_files(
         )
         .show(context, |ui| {
             let available = ui.available_rect_before_wrap();
+            drawing.hover = None;
             if !engine.stored_document().is_fully_mapped() {
                 drawing.gesture = None;
+                drawing.invalidate_hover();
                 ui.colored_label(
                     egui::Color32::DARK_RED,
                     bondline_commands::Error::UnsupportedDocumentPreview.to_string(),
@@ -257,6 +346,7 @@ fn show_workspace_with_files(
                 return;
             }
             let Some(page) = engine.document().pages().first() else {
+                drawing.invalidate_hover();
                 return;
             };
             let width = available.width().floor().max(1.0) as u32;
@@ -264,6 +354,7 @@ fn show_workspace_with_files(
             let viewport = match bondline_render::PageViewport::new(width, height, page.size()) {
                 Ok(viewport) => viewport,
                 Err(error) => {
+                    drawing.invalidate_hover();
                     ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                     return;
                 }
@@ -278,84 +369,166 @@ fn show_workspace_with_files(
                 [position.x, position.y]
             };
             let mut commits = Vec::new();
-            context.input(|input| {
-                if blocked {
-                    return;
+            let (key, events, mut escape_held, mut focused) = context.input(|input| {
+                let info = input.viewport();
+                let key = HoverContext {
+                    revision: engine.state().revision,
+                    page: page.id(),
+                    width,
+                    height,
+                    canvas_origin: available.min,
+                    host_origin: info.inner_rect.or(info.outer_rect).map(|r| r.min),
+                    pixels_per_point: input.pixels_per_point,
+                };
+                (
+                    key,
+                    input.events.clone(),
+                    input.key_down(egui::Key::Escape),
+                    input.focused,
+                )
+            });
+            if drawing.hover_context != Some(key) {
+                drawing.hover_fresh = false;
+                drawing.hover_context = Some(key);
+            }
+            // InputState is final; recover eligibility before this frame's transitions.
+            for event in events.iter().rev() {
+                match event {
+                    egui::Event::Key {
+                        key: egui::Key::Escape,
+                        pressed,
+                        repeat,
+                        ..
+                    } => escape_held = !pressed || *repeat,
+                    egui::Event::WindowFocused(value) => focused = !value,
+                    _ => {}
                 }
-                // A native frame may contain the entire drag; press_origin is cleared on release.
-                for event in &input.events {
-                    match event {
-                        egui::Event::WindowFocused(false)
-                        | egui::Event::PointerGone
-                        | egui::Event::Key {
-                            key: egui::Key::Escape,
-                            pressed: true,
-                            ..
-                        } => drawing.gesture = None,
-                        egui::Event::PointerButton {
-                            pos,
-                            button: egui::PointerButton::Primary,
-                            pressed: true,
-                            ..
-                        } if response.contains_pointer()
-                            && !input.key_down(egui::Key::Escape)
-                            && viewport.contains(local(*pos)) =>
-                        {
-                            if let Ok(begin) = viewport.document_position(local(*pos)) {
-                                drawing.gesture = Some(BondGesture {
-                                    begin,
-                                    end: begin,
-                                    page: page.id(),
-                                    revision: engine.state().revision,
-                                });
-                            }
+            }
+            // A native frame may contain the entire drag; press_origin is cleared on release.
+            for event in &events {
+                match event {
+                    egui::Event::Key {
+                        key: egui::Key::Escape,
+                        pressed,
+                        ..
+                    } => {
+                        escape_held = *pressed;
+                        if escape_held {
+                            drawing.gesture = None;
+                            drawing.hover_fresh = false;
                         }
-                        egui::Event::PointerMoved(pos) => {
-                            if let Some(gesture) = &mut drawing.gesture
-                                && let Ok(end) = viewport.document_position(local(*pos))
-                            {
-                                gesture.end = end;
-                            }
-                        }
-                        egui::Event::PointerButton {
-                            pos,
-                            button: egui::PointerButton::Primary,
-                            pressed: false,
-                            ..
-                        } => {
-                            if let Some(gesture) = drawing.gesture.take()
-                                && viewport.contains(local(*pos))
-                                && let (Ok(begin_canvas), Ok(end)) = (
-                                    viewport.canvas_position(gesture.begin),
-                                    viewport.document_position(local(*pos)),
-                                )
-                                && (egui::pos2(begin_canvas[0], begin_canvas[1])
-                                    - egui::pos2(local(*pos)[0], local(*pos)[1]))
-                                .length()
-                                    > 3.0
-                            {
-                                commits.push(BondCreate {
-                                    page_id: gesture.page.get(),
-                                    begin_x_pt: gesture.begin.x_pt(),
-                                    begin_y_pt: gesture.begin.y_pt(),
-                                    end_x_pt: end.x_pt(),
-                                    end_y_pt: end.y_pt(),
-                                });
-                            }
-                        }
-                        _ => {}
+                        continue;
                     }
+                    egui::Event::WindowFocused(value) => {
+                        focused = *value;
+                        if !focused {
+                            drawing.gesture = None;
+                            drawing.hover_fresh = false;
+                        }
+                        continue;
+                    }
+                    egui::Event::PointerGone => {
+                        drawing.gesture = None;
+                        drawing.hover_fresh = false;
+                        continue;
+                    }
+                    _ => {}
                 }
+                if blocked || escape_held || !focused {
+                    continue;
+                }
+                if matches!(
+                    event,
+                    egui::Event::PointerMoved(_) | egui::Event::PointerButton { .. }
+                ) {
+                    drawing.hover_fresh = true;
+                }
+                match event {
+                    egui::Event::PointerButton {
+                        pos,
+                        button: egui::PointerButton::Primary,
+                        pressed: true,
+                        ..
+                    } if response.interact_rect.contains(*pos)
+                        && viewport.contains(local(*pos))
+                        && context.layer_id_at(*pos) == Some(response.layer_id) =>
+                    {
+                        if let Ok(begin) = viewport.document_position(local(*pos)) {
+                            drawing.gesture = Some(BondGesture {
+                                begin,
+                                end: begin,
+                                page: page.id(),
+                                revision: engine.state().revision,
+                            });
+                        }
+                    }
+                    egui::Event::PointerMoved(pos) => {
+                        if let Some(gesture) = &mut drawing.gesture
+                            && let Ok(end) = viewport.document_position(local(*pos))
+                        {
+                            gesture.end = end;
+                        }
+                    }
+                    egui::Event::PointerButton {
+                        pos,
+                        button: egui::PointerButton::Primary,
+                        pressed: false,
+                        ..
+                    } => {
+                        if let Some(gesture) = drawing.gesture.take()
+                            && viewport.contains(local(*pos))
+                            && let (Ok(begin_canvas), Ok(end)) = (
+                                viewport.canvas_position(gesture.begin),
+                                viewport.document_position(local(*pos)),
+                            )
+                            && (egui::pos2(begin_canvas[0], begin_canvas[1])
+                                - egui::pos2(local(*pos)[0], local(*pos)[1]))
+                            .length()
+                                > 3.0
+                        {
+                            commits.push(BondCreate {
+                                page_id: gesture.page.get(),
+                                begin_x_pt: gesture.begin.x_pt(),
+                                begin_y_pt: gesture.begin.y_pt(),
+                                end_x_pt: end.x_pt(),
+                                end_y_pt: end.y_pt(),
+                            });
+                        }
+                    }
+                    _ => {}
+                }
+            }
+            let pointer = context.input(|input| {
                 if !input.pointer.primary_down() {
                     drawing.gesture = None;
                 }
+                if blocked || !input.focused || input.key_down(egui::Key::Escape) {
+                    drawing.gesture = None;
+                    drawing.hover_fresh = false;
+                }
+                if drawing.gesture.is_some() || !commits.is_empty() {
+                    drawing.hover_fresh = false;
+                }
+                // Cached hover_pos alone must never revive invalidated hover.
+                if drawing.hover_fresh {
+                    input
+                        .pointer
+                        .hover_pos()
+                        .filter(|p| available.contains(*p) && response.contains_pointer())
+                } else {
+                    None
+                }
             });
-            match bondline_render::carbon_page_scene(
+            match bondline_render::graph_page_scene(
                 available.width().floor().max(1.0) as u32,
                 available.height().floor().max(1.0) as u32,
                 page,
             ) {
-                Ok(scene) => {
+                Ok(graph) => {
+                    if let Some(pointer) = pointer {
+                        drawing.hover = graph.hit_test(local(pointer), 5.0).ok().flatten();
+                    }
+                    let scene = graph.scene();
                     let painter = ui.painter_at(available);
                     let [r, g, b, a] = scene.background;
                     painter.rect_filled(
@@ -363,7 +536,7 @@ fn show_workspace_with_files(
                         0.0,
                         egui::Color32::from_rgba_unmultiplied(r, g, b, a),
                     );
-                    for primitive in scene.primitives {
+                    for primitive in &scene.primitives {
                         match primitive {
                             bondline_render::Primitive::Rectangle(rectangle) => {
                                 let [r, g, b, a] = rectangle.color;
@@ -378,11 +551,18 @@ fn show_workspace_with_files(
                                 );
                             }
                             bondline_render::Primitive::Stroke(stroke) => {
-                                if let Err(error) = paint_stroke(&painter, available.min, &stroke) {
+                                if let Err(error) = paint_stroke(&painter, available.min, stroke) {
                                     ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                                 }
                             }
                         }
+                    }
+                    if let Some(target) = drawing.hover
+                        && let Err(error) =
+                            paint_hover(&painter, available.min, page, &viewport, target)
+                    {
+                        drawing.invalidate_hover();
+                        ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                     }
                     if let Some(gesture) = &drawing.gesture
                         && gesture.begin != gesture.end
@@ -405,10 +585,12 @@ fn show_workspace_with_files(
                     }
                 }
                 Err(error) => {
+                    drawing.invalidate_hover();
                     ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                 }
             }
             for params in commits {
+                drawing.invalidate_hover();
                 *error = engine
                     .execute(Command::BondCreate(params))
                     .err()

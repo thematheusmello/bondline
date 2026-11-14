@@ -122,9 +122,12 @@ Capture dimensions are 1..2048 pixels per axis. A successful result adds `captur
 `png_base64`. GPU output includes the actual adapter name/backend/device type; CPU output
 has `adapter: null`. There is no automatic CPU fallback. This captures the shared page
 scene, not window chrome, operating-system dialogs or print-resolution chemical output.
-Unmapped source-backed documents return unsupported_content before rendering. Native empty pages and
-the supported two-carbon/three-H single-bond fragments can be captured. Other chemistry,
-overlapping/off-viewport labels and excessive scenes fail explicitly; no content is dropped.
+Unmapped source-backed documents return unsupported_content before rendering. Empty pages
+and supported positioned neutral-carbon/Single graphs can be captured, including branches,
+cycles and disconnected components. Authored H counts render literally; missing H stays
+skeletal only for connected carbon. Isolated unknown-H/other chemistry, overlapping/off-
+viewport labels and excessive scenes fail explicitly; no content is dropped. Native hover
+overlays are transient UI feedback and do not enter captured scenes or authored state.
 Labels use the attributed Apache font at the original 12-point style, bounded to 8..256 em
 canvas units. An unreadable/enormous scale returns unsupported_scale; enlarge the capture
 or change the view. Physical publishing, general labels/styles and file export remain missing.

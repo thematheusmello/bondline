@@ -10,7 +10,7 @@
 | RXN V2000 wrapper | Standalone source-preserving reader/new-wrapper writer with ordered roles and raw V2000/V3000 molecular payloads | Published CTfile layout; original field/role/span vectors; external RDKit readers/writers and bounded ASAN | Reaction model, application/native commands, V3000 reaction wrapper, broader registry/extension handling and fetched corpus |
 | SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
-| PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
+| PNG | RGBA8 encoder and registry previews for empty pages and positioned neutral-carbon/Single graphs with literal authored H | External Pillow/FreeType, independent graph/pixel/geometry/font vectors, actual native capture and one human-approved golden | Other elements/orders/metadata, source-faithful/general chemical publishing, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
 
 ## MOL V2000 library
