@@ -144,3 +144,13 @@ above: coverage 1254/features 2799, 169 retained inputs/reported 45 KiB/RSS 74 M
 fuzzing. Its largest exercised input was 492 bytes, so max_len 65536 is a ceiling rather
 than proof of large-input coverage. Explicit resource/large-graph tests and external
 RDKit consumers provide separate evidence. This bounded pass is not a security audit.
+
+The CDX target now additionally constructs new explicit-root syntax through Writer and
+checks every non-root object tag/ID, opaque property payload and nesting event after parsing.
+Canonical rootID0, zero reserved header and length prefixes are deliberately new syntax,
+not imported-source passthrough. The original exact-source/property checks remain intact.
+Near-boundary implicit-root inputs may refuse new explicit framing on byte/record/depth
+budgets. Invalid semantic references/types are not inferred as chemistry. The fresh
+2026-11-14 two-seed pass ran10000 iterations at seed721533879/max_len131072/timeout5:
+coverage305/features878,59 retained inputs/reported150KiB/RSS199MiB; largest65750bytes.
+Use pinned stable cargo fmt/clippy for source checks; the isolated nightly is for ASAN.

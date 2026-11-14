@@ -1525,3 +1525,30 @@ The earlier merged standalone-V3000/corpus checkout separately passed 349+3 test
 target/v3000-corpus-merged-ci.log and all hosted jobs43526538340. Native interaction for the
 corrected save/close feature and its own hosted run remain pending. No parser/IO publication,
 runtime dependency/lock, renderer, font or approved golden changed.
+
+## New standalone CDX tree writer, 2026-11-14
+
+Actual RED target/cdx-writer-red.log fails E0432 for missing Writer. First GREEN creates
+the entire original65750-byte explicit-root scene, including65535-byte opaque property,
+and matches its independently generated committed bytes exactly. Unchanged external
+Python struct/RDKit verify guard confirms the real chemical scene. It is not an own-writer/
+own-reader-only test. Original fixture, oracle and golden remain unchanged.
+
+All20 CDX tests pass, including five new construction tests: literal empty/header/ID0 bytes,
+invalid tags/balance and rollback,65534/65535 prefixes, exact256-depth/100000-record bounds
+including reserved end records, and inclusive64MiB byte budget with rejected one-byte excess.
+Package clippy/fmt pass. The expanded existing CDX fuzz harness checks source/property edits
+first, then constructs a new explicit-root tree and compares non-root tags/IDs/payload/nesting.
+Root/header/length canonicalization is new syntax evidence, never an imported-byte-loss claim.
+
+Fresh two-seed ASAN passes10000 runs, seed721533879/max_len131072/timeout5, coverage305/
+features878,59 retained inputs/reported150KiB/RSS199MiB, largest input65750bytes. Log
+target/cdx-writer-asan.log. Stable pinned clippy/fmt also pass for the isolated fuzz package.
+The fuzz nightly has neither fmt nor clippy installed; those attempted commands failed as
+tooling-only checks, then the already installed pinned stable tools succeeded. No tool
+installation, lock or dependency change was used to hide a product failure.
+
+The combined actual-root working tree, including the following V3000 fetched-corpus slice,
+passes367 workspace plus3 bridge tests and all cargo xtask ci gates. Log
+target/cdx-writer-v3000-corpus-ci.log. Runtime closures153/164/219/two assets are unchanged.
+The writer has no application model/file/UI integration; no native CDX or full M1 claim.

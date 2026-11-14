@@ -1,6 +1,10 @@
-//! Standalone, source-preserving CDX records. No model, native I/O or chemical interpretation.
+//! Standalone CDX source preservation, property edits and bounded new-tree syntax.
+//! No model, native I/O or chemical interpretation.
 
 use std::{fmt, ops::Range};
+
+mod write;
+pub use write::Writer;
 
 pub const MAX_INPUT_BYTES: usize = 64 * 1024 * 1024;
 pub const MAX_RECORDS: usize = 100_000;
@@ -70,6 +74,8 @@ pub enum Error {
     RecordLimit,
     InvalidProperty,
     InvalidPropertyRange,
+    InvalidTag,
+    ObjectBalance,
     Allocation,
 }
 
@@ -91,6 +97,12 @@ impl fmt::Display for Error {
             Self::InvalidPropertyRange => {
                 output.write_str("CDX property ranges are inconsistent with the source")
             }
+            Self::InvalidTag => output.write_str(
+                "CDX object tags need bit15 set; property tags must be nonzero with bit15 clear",
+            ),
+            Self::ObjectBalance => output.write_str(
+                "object begin/end calls must balance inside the automatically written document root",
+            ),
             Self::Allocation => output.write_str("unable to allocate a bounded CDX buffer"),
         }
     }

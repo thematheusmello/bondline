@@ -238,3 +238,11 @@ the token alive through finish. This narrowly justified ownership check is not a
 claim that Arc::strong_count alone provides a synchronization primitive. Single outstanding
 save/busy policy is original Bondline behavior; actual reversed completions independently
 reproduced wrong clean encoding and subsequent coordinate rounding before correction.
+
+The new CDX syntax builder follows CDX-SYNTAX/IntroCDX.htm's public tag bits, little-endian
+UINT32 object IDs, short/extended lengths and object terminators. The canonical explicit
+Document with unassigned ID0 and zero reserved header is an original construction policy,
+verified against the original public30ae30e scene and unchanged independent struct/RDKit
+guard. Builder budgets include pending end records; no chemical/property/reference semantics
+are inferred. It never replaces the imported source-preserving writer. No proprietary code,
+header file, template, artwork, font, sample or help text is copied.

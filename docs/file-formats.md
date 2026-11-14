@@ -3,7 +3,7 @@
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Standalone bounded binary syntax and checked opaque property replacement | Original published-field vectors, one fetched positive chemical scene, independent Python struct spans/bytes, external RDKit connectivity/order consumers | Application import/export, model/reference mapping, new-tree writer, foreign/general corpus and modern extensions |
+| CDX | Standalone bounded binary syntax, checked property edits and new-tree writer | Original field vectors, fetched positive scene, full-byte writer equality, independent Python struct/RDKit and bounded ASAN | Application import/export, model/reference mapping, foreign/general corpus and modern extensions |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000 | Source-preserving library records, ordered data fields and validated wrapper writer | Original source spans; fetched pinned two-record corpus; external raw scanner/per-record RDKit; named-field supplier and external-writer vectors | Application data/multiple-record workflow and broader syntax/encodings |
 | MOL V3000 | Source-preserving library parser, strict elemental projection and full-precision writer | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files,118-symbol writer; bounded ASan | Version-aware application snapshots/I/O/commands/UI/SDF, broader queries/stereo/blocks and corpus |
@@ -356,3 +356,22 @@ C-C/three-H case as ethane, not every file property, appearance or advanced bond
 The corpus gate checks one owned snapshot's projection against independent external Expat/Decimal,
 in addition to its unchanged-byte/XML checks. It explicitly reports chemistry calculations
 as missing rather than treating the projection as formula/stereo/SMILES/InChI verification.
+
+## New CDX tree syntax
+
+The standalone Writer starts the standard header, sixteen zero reserved bytes and explicit
+Document8000/ID0; finish closes that root. start_object/property/end_object build flat
+ordered syntax. Object tags require bit15; properties require a nonzero tag with bit15 clear.
+Lengths below65535 use UINT16;65535 and above use FFFF/UINT32. Raw payloads are unchanged.
+No-op imported property replacement still retains its original length spelling separately.
+
+Open objects must balance inside the automatically managed root. Byte/depth/record checks
+include all pending terminators before append; failures publish no partial record. Limits
+remain64MiB,100000 total records and256 open encoded objects. Allocation failure is typed;
+these are logical format limits, not a hard process-RSS promise. Debug prints only counts.
+
+The builder creates new syntax, not imported-file reconstruction. It does not validate IDs,
+references, property data types, containment or chemistry. Unknown original bytes remain on
+the existing source-preserving path. The original65750-byte chemical scene is reproduced
+byte-for-byte and independently read as ethane by RDKit; literal prefix/boundary tests and
+source/construction ASAN supplement that narrow proof. Application CDX remains missing.

@@ -1,154 +1,106 @@
 # Status
 
-2026-11-13: the persistent M0–M5 goal is active. Full M0 and M1 remain incomplete.
-Public repository: https://github.com/thematheusmello/bondline . Continue this repository.
+2026-11-14: the persistent full M0–M5 goal is active. Full M0 and M1 remain incomplete.
+Public repository: https://github.com/thematheusmello/bondline . Continue, do not restart.
 
-## Integrated and published checkpoints
+## Published verified sources
 
-Main is at c797262: verified MOL application c879f4c plus the SDF codec/fetched corpus and
-byte-preserving metadata checkout. Corrected run43518162847 is terminal GREEN on all jobs:
-Mac334/Linux332/Windows324 tests, actual native windows and four parser ASAN targets.
-Earlier run43515232724 failed Windows manifest checkout identity. The narrow -text fix
-changed no parser, fixture, pin, assertion or license; the failure remains recorded.
+Main remains c797262 while the next combined integration is prepared. Root save/close
+correctiona689b0d passes all hosted43529260274 jobs: Mac359/Linux357/Windows349 tests,
+actual native windows and five parser ASAN targets. It follows226396e's verified standalone
+V3000+CDX/SDF corpus integration; that source passes43526538340 (352/350/342).
+Fetched CDX98bc59a also passes43526004010 (338/336/328). No completed run was restarted.
 
-Original positive CDX fixture30ae30e passes all jobs in43520991476: Mac335/Linux333/
-Windows325, actual windows and four10000-run ASAN targets. The65750-byte original chemical
-scene includes a65535-byte opaque property. Independent struct/RDKit checks and mutation
-rejections are documented. Foreign/general/application CDX compatibility is not inferred.
+Version-aware MOL application source1c533127e57825368e323b438b93e4db022ce0c8 passes every
+hosted43531603511 job: Mac375 (372workspace+3bridge), Linux373, Windows367, actual windows
+and five parser sanitizer targets. Docs-only2a69de2 on feat/mol-v3000-files records actual
+corrected native acceptance. Both are published; no installer/release was published.
 
-Standalone V3000 codec5caf6ce passes all jobs in43519338382: Mac341/Linux339/Windows333,
-actual windows and five10000-run ASAN targets. It remains on its published source branch,
-with application integration in the persistent sibling checkout below. Neither preceding
-run is evidence for the newly fetched CDX corpus or V3000 application changes.
+Actual Mac author/save/reopen/version/refusal/dirty-close workflows and2048 CPU/MetalGPU
+reply draining passed at2026-11-14T00:04:57UTC. Source snapshot
+3f07aa401d6defa7ea2524d1afb305da6774362b099d5227d64792e9abf5c824;
+binary59ca30c81a16b8e5eccb9564ffd338328e70fd50a167cb71d2f3fdddad9ed8b0.
+Nine files face exact-byte/header/Decimal and external RDKit checks; seven untouched native
+captures are recorded. All3apps/controllers exited0, CUA completed, credentials stayed in
+memory. ROOT target/native-v3000-corrected-handoff.md identifies exact evidence and limits.
+Earlier6add… native run stopped after the defect and remains separate partial evidence.
 
-## Root integration: fetched CDX corpus and standalone V3000
+## Current root source
 
-Fetched-CDX source98bc59a follows30ae30e and is published on feat/cdx-corpus-checks.
-Its hosted run43526004010 is terminal GREEN: Mac338/Linux336/Windows328, windows and4ASAN.
-The feature now cold-fetches the
-original CDX from that real public commit, checks its65750 bytes/SHA
-63ef1a74133e45de915d5fd25b2ca3321a95dbe5114873a5a59f2f45217000d2 and retains its original
-MIT OR Apache-2.0 provenance. All29 record spans/parents/length encodings match independent
-Python struct; exact source preservation and the unchanged RDKit ethane guard pass.
-Changed opaque bytes, bond order, spans and a different explicit scene fail. An independent
-changed-bond consumer confirms C=C/C2H4, without weakening the original scene assertion.
+Root branch feat/mol-v3000-corpus followsa689b0d. Two focused slices are frozen, locally
+verified and being committed independently:
 
-Actual-root cargo xtask ci passes335 workspace plus three bridge tests, fmt, warnings-denied
-all-target clippy, layers, licenses/assets and corpus. Log target/cdx-corpus-ci-integrated.log.
-There are now four pinned files from three mandatory source bundles: one CDXML, one MOL,
-one two-record SDF and one original CDX. Normal/offline results agree. All prior pins/notices
-remain byte-identical. Isolated core.autocrlf RED/GREEN proves exact checkout of all three
-manifests. Cargo.lock only adds the existing first-party bondline-cdx xtask edge. Native
-runtime closures153/164/219 and two assets are unchanged. Its own hosted run is43526004010;
-prior local root tests are terminal.
+- CDX Writer creates new bounded explicit-root syntax. It reproduces the original65750-byte
+  chemical scene exactly and passes unchanged independent struct/RDKit checks. Five new
+  tests check literal tags/lengths/balance and inclusive byte/depth/record bounds. All20 CDX
+  tests, package/fuzz clippy/fmt and fresh ASAN10000 pass. Source-preserving imported bytes
+  remain separate; no application CDX/model/chemical semantics are implemented by the builder.
+- Fetched V3000 corpus pins the original344-byte sparse-ID scene to real public5caf6ce,
+  SHA1867a5904e742030431b523a31167951ff998007a89b9c3d94ec88cf7d4c4380. Actual cold fetch,
+  source/literal/Decimal/external RDKit graph checks,34xtask tests, offline and isolated
+  manifest checkout RED/GREEN pass. It adds one mandatory bundle without altering old pins.
 
-The root feat/m1-integration branch now combines that corpus source with standalone
-V3000 codec5caf6ce. Conflict resolution retains both full verification histories, the
-fetched corpus, original positive CDX seed/max_len131072 and the fifth V3000 fuzz target.
-No codec source changed during integration. Combined source226396e passes its own actual-
-root349+3 gate and every hosted43526538340 job: Mac352/Linux350/Windows342, windows and
-five ASAN targets. Older isolated successes are not substituted. Main is still c797262;
-the following safety correction will be verified before the next main update.
+The combined actual-root cargo xtask ci passes367workspace+3bridge, formatting, all-target
+warnings-denied clippy, layers/licenses and five-file/four-bundle corpus. Log
+ target/cdx-writer-v3000-corpus-ci.log, session46846 terminal0. Native closures153/164/219 and
+2assets remain unchanged; no runtime/lock/font/renderer/golden changes. CDX fullsize fresh
+ASAN coverage305/features878,59inputs/reported150KiB/RSS199MiB, largest65750bytes.
+The new source needs its own hosted run after atomic commits. This root still has the
+standalone V3000 codec; accepted version-aware application source is the separate branch
+above until the planned merge. Do not claim its native UI is already in this root tree.
 
-## Current root: save completion safety
+## What is verified, and what remains wired or missing
 
-Branch fix/save-completion-order follows226396e. Independent review reproduced an older
-save relabeling a newer disk format; V3000 Auto could then round to V2000. One Engine save
-reservation now lasts from prepare through finish/drop, including the published-result gap.
-Another Save fails busy before I/O; edits/queries/Open/capture and other Engines remain usable.
-The same review exposed historical close receipts approving after later format/baseline ABA.
-Private current-completion acknowledgment now survives the operation's own update but is
-permanently cleared by later real changes; UI poll requires it before renewing close.
+Thirteen typed commands share one engine/CLI/stdio/authenticated loopback registry. Existing
+native C–C/three-H creation, page controls, exact undo/redo/source backing, CDXML file/native
+profile and CPU/GPU/PNG have independent evidence. SDF V2000 is a source-preserving ordered
+library/corpus, not an application collection workflow. CDX is standalone syntax/edit/build,
+not application import/export. Formula/SMILES in external oracles are consumer results,
+not Bondline chemistry implementations.
 
-Actual REDs and retained old tests are in docs/verification.md. Root cargo xtask ci now
-passes356 workspace plus3 bridge tests and all gates, including the four-file corpus:
-target/save-completion-ci-integrated.log, session96453 terminal0. Six new lifecycle tests,
-one cross-executor proof and the exact post-finish UI regression pass. No IO/parser,
-runtime/lock, renderer, font or approved golden changed. Corrected native interaction and
-this source's own hosted run remain pending. Native processes/CUA are currently stopped.
+The published MOL application supports actual V2000/V3000 decoding, exact unchanged
+source/header/frame retention, explicit/default versions and guarded atomic file workflows.
+OriginalV3→V2 refuses; V2→V3 needs strict raw-coordinate proof. One outstanding Save per
+Engine covers prepare→publication→finish/drop; later invalidation prevents historical UI
+receipts renewing close. Exact regression schedules/retained ABA/history assertions are in
+verification.md and the application report on its branch. General graph/rendering/query/
+stereo/3D, one-page/fragment/layout/source-loss limits and Windows/Linux interaction remain.
 
-## What works within verified scope
+Full M0 inventory/dialog/job discovery is missing;576 qualified controls are not a complete
+26.1 inventory. M2 connected structures/rings/selection/labels/styles, M3 chemistry/CIP/
+cleanup/reactions/text, M4 publishing/Office/printing and M5 naming/templates/WASM/signing
+remain open. Native strict-license blocker is resolved; browser/notice auditing remains,
+including windows-permissions0.2.4's missing upstream LICENSE despite its MIT declaration.
 
-- Thirteen typed commands share one registry across engine, CLI, stdio MCP and authenticated
-  opt-in loopback: inspect/close, CDXML and MOL open/save, page size, independent C–C create,
-  undo/redo, capture, control discovery and file presentation.
-- Source-backed CDXML/profile reopening, standalone bounded CDX/property edits, elemental
-  graphs, exact complete-source history, CPU/GPU rendering and PNG have independent evidence.
-- MOLV2000 retains source bytes, baseline, headers and frame; unchanged saves are exact.
-  Strict elemental fields/writing use published BIOVIA2026, independent raw/Decimal vectors
-  and external RDKit. Atomic I/O and deferred command guards retain state/old destinations
-  on errors. File association is distinct from suffix and original source format.
-- Actual Mac native MOL format choice/Save As, Unicode names, known Save/reopen, retained
-  headers, misleading suffixes, malformed retention, retry/Undo, close and concurrent reply
-  draining pass at c879f4c. Exact binary eeb98144f0fe0b7aaba24479d5950ec7de622efe9da985a02995830d3b387927,
-  macOS27.2 arm64/Apple M3 Max/Metal. All three apps/controllers exited0 and CUA ended.
-- SDFV2000 library retains exact records, ordered duplicate/empty/DT/raw data and embedded
-  MOL. Independent raw-field and per-record consumers are distinct from RDKit full-supplier
-  DT-only data/record loss. The original two-record fixture is fetched from its real pin.
-- README has original banners, actual unedited native images, licenses, contributing,
-  security, support and issue/PR guidance. Public render/images pass; anonymous issue forms
-  redirected to sign-in and remain unverified. Images identify their earlier actual build.
+## Worktrees, jobs and exact next actions
 
-## V3000 application integration and live work
+Only root runs Git. Keep distinct Cargo targets; CARGO_INCREMENTAL=0 avoids repeated
+ENOSPC. Only inactive owned incremental/Linux cross-build caches were removed; source,
+fixtures, evidence and active checkouts stayed intact. Old disk failures remain recorded.
 
-Persistent sibling checkout:
-/Users/sarenaberg/Workspace/doozle/open-source-world/bondline-mol-v3000
-branch feat/mol-v3000-files, local commit3b1fada after5caf6ce; its own target directory.
-NEVER share root build outputs or delete an active checkout. Earlier wrong-checkout reuse
-was fixed by Cargo's runtime workspace locator; evidence must identify the invoked root.
+1. Commit root's CDX writer and fetched V3000 corpus separately with source/tests/provenance.
+   Both are frozen and the combined gate is GREEN. Publish their final source and observe
+   its own hosted checks, without substituting older runs.
+2. Merge published feat/mol-v3000-files (2a69de2, tested source1c53312) into root, preserving
+   all source histories, five-file corpus, positive CDX seed/max_len131072 and V3000 target.
+   Resolve additive docs/code carefully; verify actual combined root once, then integrate
+   main only after matching GREEN. No native process is live and no new UI change is planned.
+3. Review/integrate RXN codec from persistent bondline-rxn, feat/rxn-v2000/base3b1fada.
+   Production is frozen;116 IOtests, IO/fuzz clippy/fmt and ASAN10000 pass. No lock/dependency
+   change. Handoff target/rxn-final-handoff.json; verifier is doing read-only review and
+   writing ROOT target/rxn-integration-review.md. Root must run its aggregate/commit/publish.
+   It has its own absolute target, incremental0/debug0. Never delete/share active targets.
+4. file_io is now preparing a bounded read-only SDF V3000 plan at ROOT
+   target/sdf-v3000-next-handoff.md; no product edits/builds authorized for that next slice.
+   Continue application SDF/broader CDXML/CDX/RXN/SMILES/InChI, then M2→M5 in roadmap order.
 
-Version-aware owned IO, shared commands, exact association/default Save, explicit V2000/
-V3000 Save As and family-based Open are locally committed. IO107 tests, core
-command tests, adapter29 CLI/stdio/loopback tests and43 UI library tests pass, with scoped
-clippy/fmt. V3→V2 refuses before publication; V2→V3 also requires a raw-coordinate precision
-proof. Source.format remains mol; file/receipt format records the actual version. No new
-command name, runtime dependency, codec source or lock change. Its actual-worktree aggregate
-now passes364 workspace plus three bridge tests, fmt, all-target clippy, layers, licenses
-and that checkout's inherited two-file corpus. Native V3000 acceptance and hosted application
-checks remain pending. Its aggregate first stopped during compilation
-because local disk was full (target/mol-versions-ci-disk-full.log). Only the two Bondline
-incremental caches were removed; source, fixtures and evidence were preserved. The rerun
-completed successfully (session42649, sibling target/mol-versions-ci-integrated.log).
-That source predates the confirmed save/close correction. Its new exact V2/V3 concurrency
-regression currently fails in target/v3000-save-order-red.log and is intentionally uncommitted
-until correction integration. No failing code was committed to main or published as verified.
-Partial old-source native Open/copy/format-choice/retention passed, then acceptance stopped.
-Binary6addbfb7…/source manifestf9a42db0… and exact sequence are in root
-target/native-v3000-ui-handoff.md. PID38959/controller38630 exited0; CUA completed.
+Persistent application checkout: bondline-mol-v3000, branch feat/mol-v3000-files at2a69de2,
+separate target; no local jobs. RXN checkout: bondline-rxn as above, no local build jobs.
+Native_file_ui completed cleanup. Root currently has no running Cargo/fuzz/native job.
+Hosted43529260274/43531603511 are terminal GREEN. Future pushes create separate runs.
 
-Root alone stages/commits/pushes. file_verification and native_file_ui froze root correction
-tests/UI; no job remains from them. file_io completed primary RXN research and now owns only
-the new legacy RXN codec in persistent /Users/sarenaberg/Workspace/doozle/open-source-world/bondline-rxn,
-branch feat/rxn-v2000 at3b1fada. It has a separate absolute Cargo target, incremental off and
-dev/test debug0 to bound disk use. Do not clean/delete/share any active checkout/target.
-This new work is a source-preserving role/container library, not application reactions;
-V3000 reaction wrappers remain separate. Primary REAGENT versus RDKit AGENT, default role
-folding, mixed MOL versions and consumer EOF/data loss are recorded in target/rxn-next-handoff.md.
-Ask file_io for current jobs before starting overlapping work. All completed hosted runs
-above are terminal; no completed job was restarted.
-
-## Remaining limits and next exact steps
-
-1. Commit/publish root's locally verified save-order/close-receipt correction and inspect
-   its own hosted run. Fast-forward main only after matching GREEN; do not substitute older runs.
-2. Bring the correction into sibling3b1fada and turn its exact V2/V3 regression GREEN. Run
-   the actual sibling gate; then freeze/rebuild and complete sole-agent native acceptance.
-   Keep partial earlier evidence separate. Publish only corrected accepted application source.
-3. Integrate its application source with newer root corpus changes,
-   preserving both the positive CDX fuzz seed/bound and the fifth V3000 target. Run the actual
-   merged checkout gates. Continue application SDF, broader CDXML/CDX, RXN/SMILES/InChI; then
-   M2 drawing/labels/styles, M3 chemistry/reactions, M4 publishing/Office and M5 depth/release.
-
-MOL application saving still requires one fragment/page and guarded layout/metadata.
-General graph rendering/editing, query/stereo/3D and legacy isotope tables remain incomplete.
-Connected construction/selection, labels/styles, chemistry/CIP/naming, reactions/arrows/text,
-SVG/PDF/publishing/Office/printing, WASM and signed distribution remain open. The576 qualified
-control rows are not a complete26.1 inventory. M0 dialog/job discovery and interactive
-Windows/Linux workflows remain unverified. A window smoke is not interactive parity.
-
-Native license blocker is resolved under the unchanged MIT/Apache/BSD policy. M5 still needs
-full notice auditing, including windows-permissions0.2.4's missing upstream LICENSE despite
-its MIT declaration. Browser Unicode-bearing dependencies remain unapproved. The sole
-approved golden SHA is1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc;
-never regenerate it without new human approval. No proprietary binaries/assets, external
-messages, account actions, installer/release/signing publication or unrelated data changed.
+The only approved golden remains
+1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc; never regenerate without
+new human approval. README banners/photos/community docs are original/actual and source-
+identified. No proprietary binaries/assets, external messages, release, installer, signing
+or unrelated account/data changes occurred. Goal remains active after this checkpoint.

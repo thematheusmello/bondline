@@ -209,3 +209,13 @@ Development bundles
 and REA reports under target/ are disposable build outputs and must not be committed.
 Parser fuzzing is isolated under fuzz/; read its README for pinned toolchain/tool versions,
 seed setup and bounded runs. Do not mutate committed fixture directories as fuzz corpora.
+
+## New CDX syntax
+
+CDX Writer creates only new canonical explicit-root documents with ID0 and zero reserved
+header bytes. Its raw property payloads and object sequence do not validate chemistry,
+property types, references/unique IDs or object containment. Never use it to regenerate an
+imported source projection; Document::to_bytes and checked property replacement retain their
+separate exact-source contract. Include pending terminators in byte/record/depth budgets
+before mutation. Independent original bytes/RDKit, literal boundary tests and fuzz construction
+cover this builder; they do not deliver application CDX files.

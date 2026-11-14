@@ -76,8 +76,9 @@ source, license and SHA-256. Never silently treat unsupported formats as passing
 The first standalone CDX slice now indexes bounded little-endian records, preserves unknown
 source bytes and checks opaque property replacements. Original vectors face independent
 Python struct and external RDKit consumers. Implicit/explicit roots have specific probe
-evidence; no general file compatibility, new-tree writer or application import/export is
-claimed. One original explicit chemical scene is now fetched from its real public commit,
+evidence. A bounded new-tree syntax writer now independently reproduces an original chemical
+scene and passes literal lengths/resource checks and external RDKit. General file compatibility
+and application import/export remain missing. One original explicit chemical scene is fetched from its real public commit,
 SHA-verified and checked against independent struct/RDKit consumers. Foreign/general CDX
 corpus and reference/chemical mapping remain M1 work.
 
