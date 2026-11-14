@@ -339,3 +339,12 @@ refusal → lossless save; and document settings → authored drawing → publis
 needs its own parameter/error/cancellation and persistence record. New/isolated drawing/
 history/local save/clean close/reopen now has bounded reference evidence. Continued editing,
 general molecule workflows and complete parity remain unestablished.
+
+## Separately scoped palette follow-up
+
+The [36-cell palette report](installed-tool-palette.md) and
+[static binding catalog](installed-tool-catalog.json) now supply candidate roles and13
+secondary-toolbar declarations from the installed GUI XML. These are additional static/
+visual evidence, not runtime tooltips, enabled states, hit bounds or executed workflows.
+They do not change this first-pass catalog, its original source hashes or qualified
+logical-feature count. Its separate controlled blank pass preserved all original IDs/frames.

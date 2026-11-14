@@ -47,6 +47,10 @@ flow coverage is incomplete. [Implementation tickets](research/installed-impleme
 keep dependencies and missing/wired/verified scopes explicit. Physical entries do not add
 to576 logical anchors or establish a feature-completion percentage.
 
+The [36-cell main-palette map](research/installed-tool-palette.md) adds static button,
+command and13 flyout declarations matched to a target-window image. Runtime tooltip,
+active tool, enabled state and flyout flows remain unobserved; no shipped glyph is copied.
+
 ## Workflow overview
 
 | Capability | Source | State | Evidence / next work |

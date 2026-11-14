@@ -1,0 +1,1547 @@
+{
+  "schema_version": 1,
+  "purpose": "Palette geometry with bounded static candidate bindings, not implemented or executed feature parity",
+  "reviewed_date": "2026-11-14",
+  "target": {
+    "installed_path": "/Applications/ChemDraw.app",
+    "bundle_identifier": "com.revvity.ChemDraw",
+    "bundle_metadata_version": "26.1.0.6801",
+    "runtime_pid_at_capture": 50732,
+    "separate_REA_UI_executable_sha256": "d2960e9f83de35787190b45acf9ecae5171e7662b7692ea24bea7a716ef14f83",
+    "platform": "macOS 27.2 arm64",
+    "active_licensed_tier": "unknown"
+  },
+  "sources": {
+    "NATIVE-TOOLS-OS": {
+      "kind": "target-window macOS screencapture, not REA",
+      "artifact": "target/reference-tools/04-main-tools-os.png",
+      "sha256": "9c0c6e5fe65342b848ba751bbefb34729291c85a2f6508b9b4e8307ed230005d",
+      "png_dimensions": [
+        109,
+        629
+      ],
+      "CG_window_id": 56125,
+      "CG_window_layer": 3,
+      "CG_frame": {
+        "x": 20,
+        "y": 80,
+        "width": 63,
+        "height": 583
+      },
+      "CG_on_screen_attribute_at_query": null,
+      "visibility_scope": "Window-only pixels do not independently establish foreground/on-screen visibility",
+      "geometry_scope": "CG window coordinates, PNG pixels and declared XML units are distinct; screenshot includes shadow"
+    },
+    "REA-BLANK-CONTEXT": {
+      "kind": "selected-document REA observation, not a palette-role capture",
+      "artifact": "target/reference-tools/03-blank-context-rea.json",
+      "evidence_id": "ev_bcd5889aa796349d807e40821a4fdddf74109c93ec5386e63cecb99440b0f4d1",
+      "selected_window": 56632,
+      "scope": "Empty owned document AX canvas with no tool descendants"
+    },
+    "STATIC-MAIN-TOOLBAR": {
+      "kind": "bounded standard-library XML metadata fallback, not REA",
+      "path": "Contents/Resources/SpecialPurpose/GUI/ChemDraw Professional/Themes/ChemDraw/XML/Toolbars/Main_Toolbar.xml",
+      "sha256": "9c4871459435794747002fde6350c66b00292cf07088ebb2632f980fa527e77a",
+      "bytes": 9197,
+      "path_scope": "Relative to installed /Applications/ChemDraw.app",
+      "profile": "bundled ChemDraw Professional / ChemDraw theme",
+      "active_profile_proven": false,
+      "locator": "MainToolBarID / Button uniqueID = reference_resource_button_id"
+    },
+    "STATIC-COMMAND-METADATA": {
+      "kind": "bounded standard-library XML metadata fallback, not REA",
+      "path": "Contents/Resources/SpecialPurpose/GUI/Common/XML/Commands/CommandDefinitions.xml",
+      "sha256": "f7925116678d9ddc8b16d0b55194a3d736f71b6f8fea21728ff2a7f4b2d580b7",
+      "bytes": 307232,
+      "path_scope": "Relative to installed /Applications/ChemDraw.app",
+      "locator": "CommandDefinition / Command command = reference_command_id; short Tooltip localizationName = declared_tooltip_key",
+      "scope": "Only 36 primary cell references; no long help, implementation data or image payloads copied"
+    },
+    "G25": {
+      "kind": "Publicly hosted older guide, not installed26.1 behavior proof",
+      "url": "https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf",
+      "sha256": "3f1ebc429df07efdd47b6218a148dc346a215043f60bf89ee9a1cb90629bd5b3",
+      "printed_pages_used": [
+        8,
+        12
+      ],
+      "scope": "Tooltip/status-bar role and small-triangle secondary-toolbar convention"
+    }
+  },
+  "layout": {
+    "visible_grid": {
+      "rows": 18,
+      "columns": 2
+    },
+    "declared_canonical_grid": {
+      "rows": 2,
+      "columns": 18,
+      "row_height": 26,
+      "column_width": 26,
+      "default_orientation": "vertical",
+      "toolbar_id": "MainToolBarID",
+      "title": "Tools",
+      "closeable": false,
+      "hide_on_application_switch": true
+    },
+    "correspondence": "Visible row = declared column and visible column = declared row is a static/visual matching inference, not a recovered runtime layout algorithm",
+    "declared_style_counts": {
+      "toggle": 23,
+      "subToolbar": 13
+    }
+  },
+  "limitations": [
+    "CUA App documentation exposes no hover/move method; no click/drag hover surrogate was used.",
+    "REA native scenarios support selected AX click, scroll, value entry and wait, not hover. The known layer-zero guard rejects this layer-three palette; that selector was not repeated.",
+    "No palette cell or hidden flyout was invoked. Actual tooltip, AX role/action, enabled state and native hit bounds remain unknown.",
+    "Button styles and command/handler references are static declarations, not observed dispatch or implemented chemistry.",
+    "Commands ending Current do not establish the currently active child tool or its persistence.",
+    "Bundled Professional profile and visual correspondence do not establish active entitlement.",
+    "Resource-only REA observations have null executable identity; selected resource hashes remain separate from the runtime executable digest.",
+    "Reference glyph/font/help/source assets are not licensed for product reuse by this catalog; implement original Bondline logic and assets.",
+    "Bondline implementation status is maintained elsewhere and is not assessed by this research catalog."
+  ],
+  "cells": [
+    {
+      "id": "IT-001",
+      "visible_row": 1,
+      "visible_column": 1,
+      "role": "Lasso selection",
+      "visible_glyph_description": "loop outline with a short tail",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Lasso_ButtonID",
+      "reference_command_id": "chooseSelectionTool_Lasso",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Lasso",
+      "declared_tooltip_key": "LassoButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 1,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          0,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Lasso",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-002",
+      "visible_row": 1,
+      "visible_column": 2,
+      "role": "Marquee selection",
+      "visible_glyph_description": "rectangular outline with a pointer",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Marquee_ButtonID",
+      "reference_command_id": "chooseSelectionTool_Marquee",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Marquee [Spacebar]",
+      "declared_tooltip_key": "Marquee_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 1,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          0,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Marquee",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-003",
+      "visible_row": 2,
+      "visible_column": 1,
+      "role": "Structure perspective",
+      "visible_glyph_description": "arrow inside a circular outline",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "StructurePerspective_ButtonID",
+      "reference_command_id": "chooseStructurePerspectiveTool",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Structure Perspective",
+      "declared_tooltip_key": "Structure_Perspective_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 2,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          26,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Structure_Perspective",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-004",
+      "visible_row": 2,
+      "visible_column": 2,
+      "role": "Fragmentation tools",
+      "visible_glyph_description": "red angled fragmentation mark",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Fragmentation_ButtonID",
+      "reference_command_id": "chooseFragmentationTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "FragmentationToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Fragmentation Tools",
+      "declared_tooltip_key": "FragmentationTools_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 2,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          26,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-005",
+      "visible_row": 3,
+      "visible_column": 1,
+      "role": "Solid bond",
+      "visible_glyph_description": "thin diagonal segment",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "SolidBond_ButtonID",
+      "reference_command_id": "chooseBondTool_Solid",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Solid Bond [X]: [1] or [0] on atom",
+      "declared_tooltip_key": "Solid_Bond_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 3,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          52,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Solid_Bond",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-006",
+      "visible_row": 3,
+      "visible_column": 2,
+      "role": "Eraser",
+      "visible_glyph_description": "eraser outline",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Eraser_ButtonID",
+      "reference_command_id": "chooseEdittingTool_Eraser",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Eraser",
+      "declared_tooltip_key": "Eraser_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 3,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          52,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Eraser",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-007",
+      "visible_row": 4,
+      "visible_column": 1,
+      "role": "Multiple bond tools",
+      "visible_glyph_description": "parallel diagonal segments",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "MultipBonds_ButtonID",
+      "reference_command_id": "chooseMultipleBondTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "MultipleBondsToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Multiple Bonds: [2] or [3] or [Shift+B] on bond",
+      "declared_tooltip_key": "MultipleBonds_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 4,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          78,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-008",
+      "visible_row": 4,
+      "visible_column": 2,
+      "role": "Text",
+      "visible_glyph_description": "capital A",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Text_ButtonID",
+      "reference_command_id": "chooseEdittingTool_Text",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Text Tool [T]: [Enter] on atom",
+      "declared_tooltip_key": "Text_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 4,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          78,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Text",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-009",
+      "visible_row": 5,
+      "visible_column": 1,
+      "role": "Dotted and dashed bond tools",
+      "visible_glyph_description": "dotted diagonal segment",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "DottedDashed_ButtonID",
+      "reference_command_id": "chooseDottedDashedBondTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "DottedDashedToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Dotted/Dashed Bonds",
+      "declared_tooltip_key": "DottedDashedBond_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 5,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          104,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-010",
+      "visible_row": 5,
+      "visible_column": 2,
+      "role": "Pen and curve tools",
+      "visible_glyph_description": "pen-nib/curve mark",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Pen_ButtonID",
+      "reference_command_id": "choosePenTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "PenToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Pen Tools",
+      "declared_tooltip_key": "PenTools_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 5,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          104,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-011",
+      "visible_row": 6,
+      "visible_column": 1,
+      "role": "Hashed bond",
+      "visible_glyph_description": "short diagonal hash marks",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "HashedBond_ButtonID",
+      "reference_command_id": "chooseBondTool_Hashed",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Hashed Bond: [Shift+H] on bond",
+      "declared_tooltip_key": "HashedBond_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 6,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          130,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Hashed_Bond",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-012",
+      "visible_row": 6,
+      "visible_column": 2,
+      "role": "Arrow tools",
+      "visible_glyph_description": "rightward arrow",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Arrow_ButtonID",
+      "reference_command_id": "chooseArrowTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "ArrowToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Arrows [E]",
+      "declared_tooltip_key": "Arrow_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 6,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          130,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-013",
+      "visible_row": 7,
+      "visible_column": 1,
+      "role": "Hashed wedge bond",
+      "visible_glyph_description": "tapered diagonal hash marks",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "HashedWedgedBond_ButtonID",
+      "reference_command_id": "chooseBondTool_Hashed_Wedged",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Hashed Wedged Bond: [H] or [Shift+W] on bond",
+      "declared_tooltip_key": "HashedWedgedBond_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 7,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          156,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Hashed_Wedged_Bond",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-014",
+      "visible_row": 7,
+      "visible_column": 2,
+      "role": "Orbital tools",
+      "visible_glyph_description": "two-lobe orbital outline",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Orbitals_ButtonID",
+      "reference_command_id": "chooseOrbitalTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "OrbitalsToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Orbitals [Shift+G]",
+      "declared_tooltip_key": "Orbital_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 7,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          156,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-015",
+      "visible_row": 8,
+      "visible_column": 1,
+      "role": "Bold bond",
+      "visible_glyph_description": "thick diagonal segment",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "BoldBond_ButtonID",
+      "reference_command_id": "chooseBondTool_Bold",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Bold Bond: [B] on bond",
+      "declared_tooltip_key": "BoldBond_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 8,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          182,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Bold_Bond",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-016",
+      "visible_row": 8,
+      "visible_column": 2,
+      "role": "Drawing shapes",
+      "visible_glyph_description": "overlapping rectangular outlines",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Drawing_ButtonID",
+      "reference_command_id": "chooseDrawingTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "DrawingToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Drawing Elements",
+      "declared_tooltip_key": "Drawing_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 8,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          182,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-017",
+      "visible_row": 9,
+      "visible_column": 1,
+      "role": "Wedge bond",
+      "visible_glyph_description": "filled triangular wedge",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "WedgedBond_ButtonID",
+      "reference_command_id": "chooseBondTool_Wedged",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Wedged Bond: [W] on bond",
+      "declared_tooltip_key": "WedgedBond_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 9,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          208,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Wedged_Bond",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-018",
+      "visible_row": 9,
+      "visible_column": 2,
+      "role": "Bracket tools",
+      "visible_glyph_description": "paired square brackets",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Bracket_ButtonID",
+      "reference_command_id": "chooseBracketTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "BracketToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Brackets [Shift+T]",
+      "declared_tooltip_key": "Bracket_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 9,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          208,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-019",
+      "visible_row": 10,
+      "visible_column": 1,
+      "role": "Hollow wedge bond",
+      "visible_glyph_description": "hollow triangular wedge",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "HollowWedgedBond_ButtonID",
+      "reference_command_id": "chooseBondTool_Hollow_Wedged",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Hollow Wedged Bond",
+      "declared_tooltip_key": "HollowWedgedBond_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 10,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          234,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Hollow_Wedged_Bond",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-020",
+      "visible_row": 10,
+      "visible_column": 2,
+      "role": "Chemical symbols",
+      "visible_glyph_description": "circled plus",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "ChemicalSymbols_ButtonID",
+      "reference_command_id": "chooseChemicalSymbolTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "ChemicalSymbolsToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Chemical Symbols [Shift+E]",
+      "declared_tooltip_key": "ChemicalSymbols_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 10,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          234,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-021",
+      "visible_row": 11,
+      "visible_column": 1,
+      "role": "Wavy bond",
+      "visible_glyph_description": "wavy segment",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "WavyBond_ButtonID",
+      "reference_command_id": "chooseBondTool_Wavy",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Wavy Bond: [Y] on bond",
+      "declared_tooltip_key": "WavyBond_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 11,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          260,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Wavy_Bond",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-022",
+      "visible_row": 11,
+      "visible_column": 2,
+      "role": "Query tools",
+      "visible_glyph_description": "letter-and-arrow query mark",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Query_ButtonID",
+      "reference_command_id": "chooseQueryTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "QueryToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Query Tools",
+      "declared_tooltip_key": "QueryTools_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 11,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          260,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-023",
+      "visible_row": 12,
+      "visible_column": 1,
+      "role": "Table",
+      "visible_glyph_description": "rectangular grid",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Table_ButtonID",
+      "reference_command_id": "chooseTableTool",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Table Tool",
+      "declared_tooltip_key": "Table_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 12,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          286,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "TableTool",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-024",
+      "visible_row": 12,
+      "visible_column": 2,
+      "role": "Chromatography tools",
+      "visible_glyph_description": "dotted plate outline",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "ChromatographyToolsButtonID",
+      "reference_command_id": "chooseChromatographyTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "ChromatographyToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Chromatography Tools [G]",
+      "declared_tooltip_key": "ChromatographyTools_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 12,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          286,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-025",
+      "visible_row": 13,
+      "visible_column": 1,
+      "role": "Chain tools",
+      "visible_glyph_description": "zigzag chain with a small index",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Chain_ButtonID",
+      "reference_command_id": "chooseChainTool_Current",
+      "reference_handler_id": "chooseSubToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "ChainToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Chain Tools [Shift+X]",
+      "declared_tooltip_key": "ChainTools_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 13,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          312,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": null,
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-026",
+      "visible_row": 13,
+      "visible_column": 2,
+      "role": "Template tools",
+      "visible_glyph_description": "stamp-shaped mark",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Templates_ButtonID",
+      "reference_command_id": "chooseTemplateTool",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "subToolbar",
+      "declared_subtoolbar_id": "TemplatesToolBarID",
+      "visible_lower_right_triangle": true,
+      "declared_short_tooltip": "Templates",
+      "declared_tooltip_key": "Templates_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 13,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          312,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Templates",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-027",
+      "visible_row": 14,
+      "visible_column": 1,
+      "role": "Three-member ring",
+      "visible_glyph_description": "triangular ring",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Cyclopropane_ButtonID",
+      "reference_command_id": "chooseRingTool_Cyclopropane",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Cyclopropane: [V] on atom or bond",
+      "declared_tooltip_key": "Cyclopropane_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 14,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          338,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Cyclopropane",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-028",
+      "visible_row": 14,
+      "visible_column": 2,
+      "role": "Four-member ring",
+      "visible_glyph_description": "square ring",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Cyclobutane_ButtonID",
+      "reference_command_id": "chooseRingTool_Cyclobutane",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Cyclobutane: [U] on atom or [4] on bond",
+      "declared_tooltip_key": "Cyclobutane_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 14,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          338,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Cyclobutane",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-029",
+      "visible_row": 15,
+      "visible_column": 1,
+      "role": "Five-member ring",
+      "visible_glyph_description": "five-sided ring",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Cyclopentane_ButtonID",
+      "reference_command_id": "chooseRingTool_Cyclopentane",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Cyclopentane: [7] on atom or [5] on bond",
+      "declared_tooltip_key": "Cyclopentane_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 15,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          364,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Cyclopentane",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-030",
+      "visible_row": 15,
+      "visible_column": 2,
+      "role": "Six-member ring",
+      "visible_glyph_description": "six-sided ring",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Cyclohexane_ButtonID",
+      "reference_command_id": "chooseRingTool_Cyclohexane",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Cyclohexane: [6] on atom or bond",
+      "declared_tooltip_key": "Cyclohexane_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 15,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          364,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Cyclohexane",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-031",
+      "visible_row": 16,
+      "visible_column": 1,
+      "role": "Seven-member ring",
+      "visible_glyph_description": "seven-sided ring",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Cycloheptane_ButtonID",
+      "reference_command_id": "chooseRingTool_Cycloheptane",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Cycloheptane: [7] on bond",
+      "declared_tooltip_key": "Cycloheptane_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 16,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          390,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Cycloheptane",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-032",
+      "visible_row": 16,
+      "visible_column": 2,
+      "role": "Eight-member ring",
+      "visible_glyph_description": "eight-sided ring",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Cyclooctane_ButtonID",
+      "reference_command_id": "chooseRingTool_Cyclooctane",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Cyclooctane: [8] on bond",
+      "declared_tooltip_key": "Cyclooctane_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 16,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          390,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Cyclooctane",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-033",
+      "visible_row": 17,
+      "visible_column": 1,
+      "role": "Chair cyclohexane orientation 1",
+      "visible_glyph_description": "chair-shaped ring, first orientation",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "ChairCyclohexane1_ButtonID",
+      "reference_command_id": "chooseRingTool_Chair_Cyclohexane1",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Chair Cyclohexane: [9] on bond",
+      "declared_tooltip_key": "ChairCyclohexane1_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 17,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          416,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Chair_Cyclohexane1",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-034",
+      "visible_row": 17,
+      "visible_column": 2,
+      "role": "Chair cyclohexane orientation 2",
+      "visible_glyph_description": "chair-shaped ring, second orientation",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "ChairCyclohexane2_ButtonID",
+      "reference_command_id": "chooseRingTool_Chair_Cyclohexane2",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Chair Cyclohexane: [0] on bond",
+      "declared_tooltip_key": "ChairCyclohexane2_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 17,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          416,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Chair_Cyclohexane2",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-035",
+      "visible_row": 18,
+      "visible_column": 1,
+      "role": "Cyclopentadiene ring",
+      "visible_glyph_description": "five-member ring with internal strokes",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Cyclopentadiene_ButtonID",
+      "reference_command_id": "chooseRingTool_Cyclopentadiene",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Cyclopentadiene [Shift+J]: [Z] on bond",
+      "declared_tooltip_key": "Cyclopentadiene_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 1,
+        "column": 18,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          442,
+          0,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Cyclopentadiene",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    },
+    {
+      "id": "IT-036",
+      "visible_row": 18,
+      "visible_column": 2,
+      "role": "Benzene ring",
+      "visible_glyph_description": "six-member ring with alternating strokes",
+      "binding_status": "static declaration and visual-position correspondence; runtime invocation unverified",
+      "reference_resource_button_id": "Benzene_ButtonID",
+      "reference_command_id": "chooseRingTool_Benzene",
+      "reference_handler_id": "chooseToolHandler",
+      "declared_button_style": "toggle",
+      "declared_subtoolbar_id": null,
+      "visible_lower_right_triangle": false,
+      "declared_short_tooltip": "Benzene [J]: [3] or [A] on atom or [A] on bond",
+      "declared_tooltip_key": "Benzene_ButtonToolTip",
+      "observed_runtime_tooltip": null,
+      "observed_runtime_accessibility_role": null,
+      "observed_runtime_action_name": null,
+      "observed_runtime_enabled_state": null,
+      "runtime_hit_rectangle": null,
+      "declared_resource_geometry": {
+        "row": 2,
+        "column": 18,
+        "row_height": 26,
+        "column_width": 26,
+        "canonical_grid_cell_arithmetic": [
+          442,
+          26,
+          26,
+          26
+        ],
+        "scope": "Arithmetic from declared XML grid, not native hit bounds; origin/padding/scale unknown"
+      },
+      "graphic_reference_id_only": "Main_Benzene",
+      "source_ids": [
+        "NATIVE-TOOLS-OS",
+        "STATIC-MAIN-TOOLBAR",
+        "STATIC-COMMAND-METADATA"
+      ]
+    }
+  ]
+}

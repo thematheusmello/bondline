@@ -1837,3 +1837,13 @@ No native GUI changes or new screenshots/goldens are needed for this syntax-only
 The reviewed native1196B exact-source/property probe uses this same std-only parser source;
 no raw vendor metadata is committed. Application CDX/model/general foreign coverage remain
 missing, and the new integrated source still needs its own hosted platform result.
+
+## Main palette map documentation checks, 2026-11-14
+
+Both frozen report/catalog hashes, UTF-8, relative links and36 unique orderedIT-001–IT-036
+IDs pass. The investigator validates exact button/command/source references,23 toggle/13
+subtoolbar declarations, five successful canonical REA records, one preserved unsupported
+NIB probe, PNG identities and before/after cleanup. XML fallback and inferred orientation
+remain separate from runtime; all tooltip/AX/action/enabled/hit-bound fields are null.
+No Rust/product source or asset changed; this is relevant documentation validation, not
+a fabricated RED or a working36-tool claim.

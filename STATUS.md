@@ -14,12 +14,17 @@ Prior mixed-SDF integration23a43aa passes43538842553 (404/402/394); isolated6aeb
 RXN4cbc89b also have their own terminal GREEN runs. Exact jobs/adapters are in docs/ci.md.
 No completed run was restarted; earlier actual failures remain recorded there.
 
-Current root branch feat/cdx-framing-integration merges framinge9bffd3 into291c3a6. It
+Last committed production6447c6c merges framinge9bffd3 into291c3a6. That source
 passes417 workspace plus3 macOS bridge tests and every cargo xtask ci gate, log
  target/cdx-header-merged-ci.log; session39909 terminal0. Direct source/test/oracle/fuzz
 comparison with the reviewed feature is empty. Runtime closures153/164/219/two assets,
 locks/font/approved golden and old fixtures/corpus pins remain unchanged. This new source
-needs its own hosted run before main advances.
+has active hosted43542026529 before main advances.
+Current root feature branch feat/cdx-owned-document has an uncommitted test-first
+cdx_document.rs: actual60386 exited101 for missing from_cdx/export_cdx/to_cdx/source-error
+APIs, log target/cdx-owned-document-red.log. No production API changed yet; this new working
+tree is intentionally RED until the initial projection and snapshot implementation land.
+Do not substitute the preceding committed-source pass for this pending feature.
 
 Normal full fuzz-workspace clippy/fmt and fresh three-original-seed CDX ASAN10000 also pass:
 seed721533879/max_len131072/timeout5, cov319/features841,53inputs/reported303KiB/RSS283MiB,
@@ -90,8 +95,10 @@ Second hover-only pass completed CUA separately; no hover API exists, no cells c
 Its owned blank closed cleanly; originals56129/56130/56535 and palette56125 kept exact
 before/after IDs/frames. No GUI owner/job remains and PID50732 stays running.
 
-reference_ui now finishes a bounded read-only resource/public-guide tool-role map in new
-installed-tool-palette.md/catalog. Bundled Professional Main_Toolbar.xml declares36 cells;
+The separately reviewed installed-tool-palette.md/catalog now records36 candidate cells,
+23 declared toggles and13 secondary toolbars. All runtime tooltip/AX/action/enabled/hit-bound
+fields remain null. The two factual files and their cross-links/provenance are committed.
+reference_ui completed its bounded read-only resource/public-guide pass. Bundled Professional Main_Toolbar.xml declares36 cells;
 Common command metadata resolves candidates. This does not establish active entitlement,
 hover/flyout execution or reuse rights. Raw XML/nib/strings and REA reports remain ignored
 under target/reference-tools. All resource jobs are terminal; no further broad exploration.
@@ -113,8 +120,12 @@ evidence or share caches across worktrees. No root Cargo/fuzz/Bondline-native jo
 3. file_verification is read-only planning general graph scene/hit testing at root
    target/general-graph-scene-plan.md. Preserve the approved C–C golden and distinguish
    fully-mapped/edit/export guards from a model preview. No source/build/GUI/Git changes.
-4. Review/commit reference_ui's two new palette files once frozen, with static-versus-runtime
-   provenance. Continue contextual/selection/modifier/dialog/error/post-reopen-edit flows.
+4. Palette report/catalog/provenance are reviewed and committed; reference_ui is idle with
+   no GUI/jobs. Continue contextual/selection/modifier/dialog/error/post-reopen-edit flows.
+   Root's next implementation is owned CDX snapshots retaining complete source/baselines,
+   source-only equality/accounting and explicit stale-edit/cross-format refusals; tests RED.
+   Merge the projection first, then implement the immediate private preview helper/caller.
+   Never claim this library work is already application CDX Open/Save.
 5. Continue safe CDX model snapshots/shared file adapters, application SDF collections,
    reaction model/RXN and SMILES, then M2–M5 in roadmap/ticket order. Do not create stubs,
    drop opaque data, infer chemistry from memory or call library wiring a working workflow.

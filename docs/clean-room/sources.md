@@ -427,3 +427,23 @@ its99 events, root end1194 and file end1196 now match independent decoding and e
 passthrough. That research input and its vendor metadata stay ignored, unmodified
 and unredistributed. Neither this native observation nor the original field vector
 implements CDX model mapping, application Open/Save or general format compatibility.
+
+## Main palette resource-role reconciliation (2026-11-14)
+
+The [36-cell report](../research/installed-tool-palette.md) and
+[structured bindings](../research/installed-tool-catalog.json) reconcile an18-row/two-column
+window capture with bounded installed XML declarations. Professional Main_Toolbar.xml is
+9197B/SHA9c4871459435794747002fde6350c66b00292cf07088ebb2632f980fa527e77a; Common
+CommandDefinitions.xml is307232B/SHAf7925116678d9ddc8b16d0b55194a3d736f71b6f8fea21728ff2a7f4b2d580b7.
+Both exact relative bundle paths,36 button/command references,23 toggle/13 secondary-toolbar
+declarations and resource-only REA identities are in those reports. Short functional names
+and original role paraphrases are facts, not reused implementation/assets/help prose.
+
+REA's custom-XML reader is absent; standard-library XML metadata extraction is separately
+labeled filesystem fallback. Capped IB inventories retain omissions; one compiled-NIB probe
+failed and remains recorded. No unsupported hover was simulated. Runtime tooltips, AX roles,
+hit bounds, enabled/selected state and flyout behavior remain null/unknown; vertical-coordinate
+correspondence is an inference, and bundled Professional files do not prove active tier.
+The separately scoped blank-context pass preserved all three originals/palette IDs/frames,
+closed its clean owned document and completed CUA once. All jobs are terminal. Raw XML/
+nibs/images remain ignored; no glyph payload, font, long help prose or vendor code is shipped.
