@@ -631,6 +631,31 @@ retaining the original0.90 threshold, orientations/counts and false-label negati
 No production renderer, font, golden, dependency or runtime behavior changes. Exact RED,
 GREEN, independent-probe identities and limits are in verification-label-oracle-layout.md.
 
+## Terminal-carbon attachment input — 2026-11-14
+
+[verification-bond-attachment-ui.md](../verification-bond-attachment-ui.md) records the
+separate UI wiring slice after the engine/headless operation. The existing pinned
+BOND-EXTEND-GUIDE25/VALENCE/AUTHORED-H sources above justify the bounded operation and
+keep documented25 behavior separate from unobserved26.1 defaults. No reference runtime,
+proprietary asset or help prose was used by this UI worker.
+
+The pinned egui0.29.1 public [Context](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/context.rs)
+and [Response](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/response.rs)
+APIs were rechecked for public layer lookup, clipped interaction geometry and Context
+locking. Ordered input is copied before layer queries; neither a final hover response
+nor a snapped model anchor authorizes an earlier raw press. Per-event foreground/paper
+checks, a three-logical-unit click threshold, exact model anchors, fresh scene/revision
+after each release and context cancellation (including failed viewport construction)
+are original Bondline policies. They are
+not claims about installed-product gesture thresholds, preferences or override rules.
+
+The visible tool guidance states the explicit terminal CH3→CH2 policy before commitment;
+the typed command still requires its named policy. Unknown/other literal H and guarded
+MOL/CDX sources refuse rather than being inferred or detached. Independent literal
+graph/history expectations plus Expat/Decimal and external RDKit consumption of actual
+gesture-authored saved bytes support this UI slice. Synthetic egui tests do not establish
+native platform execution, complete connected drawing, chemistry perception or parity.
+
 ## Guarded CDX application files — 2026-11-14
 
 The new document.open_cdx/document.save_cdx commands reuse the published CDX syntax,

@@ -4,7 +4,8 @@ mod file_workflow;
 pub mod files;
 
 use bondline_commands::{
-    BondCreate, CloseState, Command, ControlInfo, ControlKey, ControlShortcut, Engine,
+    BondCreate, BondExtend, CloseState, Command, ControlInfo, ControlKey, ControlShortcut, Engine,
+    ExtendHydrogenPolicy,
 };
 use bondline_mcp::{CommandExecutor, SharedEngine, control::LoopbackServer};
 use bondline_model::{PageId, Point2};
@@ -96,8 +97,9 @@ struct HoverContext {
 struct BondGesture {
     begin: Point2,
     end: Point2,
-    page: PageId,
-    revision: u64,
+    press: egui::Pos2,
+    context: HoverContext,
+    target: Option<bondline_render::HitTarget>,
 }
 
 fn paint_stroke(
@@ -302,7 +304,7 @@ fn show_workspace_with_files(
     if drawing
         .gesture
         .as_ref()
-        .is_some_and(|gesture| gesture.revision != engine.state().revision)
+        .is_some_and(|gesture| gesture.context.revision != engine.state().revision)
     {
         drawing.gesture = None;
     }
@@ -317,10 +319,9 @@ fn show_workspace_with_files(
                     page.size().height_pt()
                 ));
             }
+            ui.label("Drag empty paper for C-C; extend terminal CH3 to CH2; Esc cancels");
             if let Some(message) = error {
                 ui.colored_label(egui::Color32::DARK_RED, message.as_str());
-            } else {
-                ui.label("New single bond: drag on the page; Esc cancels");
             }
             if let Some(files) = files.as_deref_mut() {
                 files.job_status(ui);
@@ -345,7 +346,9 @@ fn show_workspace_with_files(
                 );
                 return;
             }
-            let Some(page) = engine.document().pages().first() else {
+            let mut document = engine.state().document;
+            let Some(page) = document.pages().first() else {
+                drawing.gesture = None;
                 drawing.invalidate_hover();
                 return;
             };
@@ -354,6 +357,7 @@ fn show_workspace_with_files(
             let viewport = match bondline_render::PageViewport::new(width, height, page.size()) {
                 Ok(viewport) => viewport,
                 Err(error) => {
+                    drawing.gesture = None;
                     drawing.invalidate_hover();
                     ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                     return;
@@ -368,8 +372,12 @@ fn show_workspace_with_files(
                 let position = position - available.min;
                 [position.x, position.y]
             };
-            let mut commits = Vec::new();
-            let (key, events, mut escape_held, mut focused) = context.input(|input| {
+            let mut graph = bondline_render::graph_page_scene(width, height, page);
+            if graph.is_err() {
+                drawing.gesture = None;
+            }
+            let mut interaction_attempted = false;
+            let (mut key, events, mut escape_held, mut focused) = context.input(|input| {
                 let info = input.viewport();
                 let key = HoverContext {
                     revision: engine.state().revision,
@@ -390,6 +398,13 @@ fn show_workspace_with_files(
             if drawing.hover_context != Some(key) {
                 drawing.hover_fresh = false;
                 drawing.hover_context = Some(key);
+            }
+            if drawing
+                .gesture
+                .as_ref()
+                .is_some_and(|gesture| gesture.context != key)
+            {
+                drawing.gesture = None;
             }
             // InputState is final; recover eligibility before this frame's transitions.
             for event in events.iter().rev() {
@@ -449,16 +464,53 @@ fn show_workspace_with_files(
                         button: egui::PointerButton::Primary,
                         pressed: true,
                         ..
-                    } if response.interact_rect.contains(*pos)
-                        && viewport.contains(local(*pos))
-                        && context.layer_id_at(*pos) == Some(response.layer_id) =>
-                    {
+                    } => {
+                        drawing.gesture = None;
+                        if !response.interact_rect.contains(*pos)
+                            || !viewport.contains(local(*pos))
+                            || context.layer_id_at(*pos) != Some(response.layer_id)
+                        {
+                            continue;
+                        }
+                        let Ok(current_graph) = &graph else {
+                            continue;
+                        };
+                        let target = match current_graph.hit_test(local(*pos), 5.0) {
+                            Ok(target) => target,
+                            Err(_) => continue,
+                        };
                         if let Ok(begin) = viewport.document_position(local(*pos)) {
+                            let begin = if let Some(bondline_render::HitTarget::Atom {
+                                fragment_id,
+                                atom_id,
+                            }) = target
+                            {
+                                let Some(anchor) = document
+                                    .pages()
+                                    .iter()
+                                    .find(|page| page.id() == key.page)
+                                    .and_then(|page| {
+                                        page.fragments()
+                                            .iter()
+                                            .find(|fragment| fragment.id() == fragment_id)
+                                    })
+                                    .and_then(|fragment| {
+                                        fragment.atoms().iter().find(|atom| atom.id == atom_id)
+                                    })
+                                    .and_then(|atom| atom.position)
+                                else {
+                                    continue;
+                                };
+                                anchor
+                            } else {
+                                begin
+                            };
                             drawing.gesture = Some(BondGesture {
                                 begin,
                                 end: begin,
-                                page: page.id(),
-                                revision: engine.state().revision,
+                                press: *pos,
+                                context: key,
+                                target,
                             });
                         }
                     }
@@ -475,25 +527,66 @@ fn show_workspace_with_files(
                         pressed: false,
                         ..
                     } => {
-                        if let Some(gesture) = drawing.gesture.take()
-                            && viewport.contains(local(*pos))
-                            && let (Ok(begin_canvas), Ok(end)) = (
-                                viewport.canvas_position(gesture.begin),
-                                viewport.document_position(local(*pos)),
-                            )
-                            && (egui::pos2(begin_canvas[0], begin_canvas[1])
-                                - egui::pos2(local(*pos)[0], local(*pos)[1]))
-                            .length()
-                                > 3.0
+                        let Some(gesture) = drawing.gesture.take() else {
+                            continue;
+                        };
+                        if gesture.context != key
+                            || !response.interact_rect.contains(*pos)
+                            || !viewport.contains(local(*pos))
+                            || context.layer_id_at(*pos) != Some(response.layer_id)
+                            || gesture.press.distance(*pos) <= 3.0
                         {
-                            commits.push(BondCreate {
-                                page_id: gesture.page.get(),
-                                begin_x_pt: gesture.begin.x_pt(),
-                                begin_y_pt: gesture.begin.y_pt(),
-                                end_x_pt: end.x_pt(),
-                                end_y_pt: end.y_pt(),
-                            });
+                            continue;
                         }
+                        let Ok(current_graph) = &graph else {
+                            continue;
+                        };
+                        let Ok(end) = viewport.document_position(local(*pos)) else {
+                            continue;
+                        };
+                        interaction_attempted = true;
+                        let command = match current_graph.hit_test(local(*pos), 5.0) {
+                            Ok(None) => match gesture.target {
+                                None => Ok(Command::BondCreate(BondCreate {
+                                    page_id: gesture.context.page.get(),
+                                    begin_x_pt: gesture.begin.x_pt(),
+                                    begin_y_pt: gesture.begin.y_pt(),
+                                    end_x_pt: end.x_pt(),
+                                    end_y_pt: end.y_pt(),
+                                })),
+                                Some(bondline_render::HitTarget::Atom {
+                                    fragment_id,
+                                    atom_id,
+                                }) => Ok(Command::BondExtend(BondExtend {
+                                    expected_revision: gesture.context.revision,
+                                    page_id: gesture.context.page.get(),
+                                    fragment_id: fragment_id.get(),
+                                    begin_atom_id: atom_id.get(),
+                                    end_x_pt: end.x_pt(),
+                                    end_y_pt: end.y_pt(),
+                                    hydrogen_policy: ExtendHydrogenPolicy::RectifyTerminalCarbon,
+                                })),
+                                Some(bondline_render::HitTarget::Bond { .. }) => {
+                                    Err(bondline_commands::Error::UnsupportedBondExtension)
+                                }
+                            },
+                            Ok(Some(_)) => Err(bondline_commands::Error::OccupiedEndpoint),
+                            Err(error) => Err(error.into()),
+                        };
+                        drawing.invalidate_hover();
+                        *error = command
+                            .and_then(|command| engine.execute(command))
+                            .err()
+                            .map(|error| error.to_string());
+                        // Later same-frame presses pick the graph that actually committed.
+                        document = engine.state().document;
+                        key.revision = engine.state().revision;
+                        drawing.hover_context = Some(key);
+                        graph = match document.pages().iter().find(|page| page.id() == key.page) {
+                            Some(page) => bondline_render::graph_page_scene(width, height, page),
+                            None => Err(bondline_render::Error::UnsupportedChemicalContent),
+                        };
+                        context.request_repaint();
                     }
                     _ => {}
                 }
@@ -506,7 +599,7 @@ fn show_workspace_with_files(
                     drawing.gesture = None;
                     drawing.hover_fresh = false;
                 }
-                if drawing.gesture.is_some() || !commits.is_empty() {
+                if drawing.gesture.is_some() || interaction_attempted {
                     drawing.hover_fresh = false;
                 }
                 // Cached hover_pos alone must never revive invalidated hover.
@@ -519,12 +612,13 @@ fn show_workspace_with_files(
                     None
                 }
             });
-            match bondline_render::graph_page_scene(
-                available.width().floor().max(1.0) as u32,
-                available.height().floor().max(1.0) as u32,
-                page,
-            ) {
+            match graph {
                 Ok(graph) => {
+                    let Some(page) = document.pages().iter().find(|page| page.id() == key.page)
+                    else {
+                        drawing.invalidate_hover();
+                        return;
+                    };
                     if let Some(pointer) = pointer {
                         drawing.hover = graph.hit_test(local(pointer), 5.0).ok().flatten();
                     }
@@ -588,21 +682,6 @@ fn show_workspace_with_files(
                     drawing.invalidate_hover();
                     ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                 }
-            }
-            for params in commits {
-                drawing.invalidate_hover();
-                *error = engine
-                    .execute(Command::BondCreate(params))
-                    .err()
-                    .map(|error| error.to_string());
-                context.request_repaint();
-                if error.is_some() {
-                    drawing.gesture = None;
-                    break;
-                }
-            }
-            if let Some(gesture) = &mut drawing.gesture {
-                gesture.revision = engine.state().revision;
             }
         });
     if let Some(files) = files {
