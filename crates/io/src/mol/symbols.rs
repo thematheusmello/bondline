@@ -19,7 +19,7 @@ pub(crate) fn element(symbol: &str) -> Option<Element> {
         .and_then(|index| u8::try_from(index + 1).ok())
         .and_then(Element::new)
 }
-pub(super) fn symbol(element: Element) -> Option<&'static str> {
+pub(crate) fn symbol(element: Element) -> Option<&'static str> {
     SYMBOLS
         .get(usize::from(element.get()).checked_sub(1)?)
         .copied()

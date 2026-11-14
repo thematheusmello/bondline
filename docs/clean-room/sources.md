@@ -843,3 +843,24 @@ asset copied or new golden approved. Exact excluded probes, cleanup, later CLI-c
 recovery and the observed Open-help omission are recorded. This supplies bounded Mac
 workflow evidence, not missing chemical preview, new point-placement precision, special
 input/DPI cases, interactive Windows/Linux or complete parity.
+
+## Explicit-H SMILES structure writer, 2026-11-14
+
+[verification-smiles-write.md](../verification-smiles-write.md) records the separate
+original library exporter. The same pinned OpenSMILES publisher source and existing
+IUPAC-ELEMENTS catalog supply notation/symbol facts; bracket H cannot be attached to
+a hydrogen atom, and isotope/bond/branch/ring spellings retain their prior source pins.
+Optional normalization guidance does not make an ID-ordered traversal canonical.
+No upstream parser/writer code, GFDL prose/grammar/corpus or assets are adopted.
+
+The neutral closed H/C/N/O/halogen valence identity, required literal H, rejection of
+charge/radical/unknown-H, deterministic iterative ID order, paired/reusable labels and
+output budgets are original restricted policies. Positions are intentionally absent
+from this structure notation; generated text does not authorize lossy whole-document
+conversion, mark source/file baselines saved or add an application/native command.
+
+Original literal outputs and independently mapped external isotope/edge/H checks face
+the existing pinned unsanitized consumer unchanged. A separate sanitized external
+molecule checks simple formula/canonical-meaning/radical expectations, without becoming
+Bondline chemistry or canonicalization. The existing consumer-dialect/default-cleanup
+qualifications remain. No parser behavior, model semantics, dependency or lock changes.

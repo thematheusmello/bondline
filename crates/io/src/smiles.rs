@@ -6,6 +6,9 @@
 use bondline_model::Element;
 use std::{collections::HashSet, ops::Range, sync::Arc};
 
+mod write;
+pub use write::{WriteError, write_fragment};
+
 pub const MAX_SMILES_BYTES: usize = 65_536;
 pub const MAX_SMILES_ATOMS: usize = 4096;
 pub const MAX_SMILES_BONDS: usize = 8192;

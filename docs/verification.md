@@ -2031,3 +2031,14 @@ chemical preview, general chemistry, special input/DPI or Windows/Linux workflow
 The same source passed hosted43575973213: Mac590 (587workspace+3bridge), Linux588,
 Windows580, all three native-window smokes and seven10000-run Linux ASAN targets. Main
 advanced tobb6d5b9 only after those terminal checks; earlier8e0e92b results are separate.
+
+
+## Explicit-H noncanonical SMILES writer receiving integration, 2026-11-14
+
+[Exact writer evidence](verification-smiles-write.md) records literal output/topology/H/
+limit tests, original guards and unchanged independent external consumer. Root received
+exact685a1c8, retaining all newer notation tests and SDF/native records. Read-only peer
+review found no confirmed defect; Root98376 passes595workspace+3bridge=598 and all gates,
+log SHA d1d5a4cd047fb02e9630805f8781e3b0114dd46098cfbf65022e3995b6410a75.
+Normal exporter fuzz/new-source hosted checks remain pending. This is a restricted library
+Fragment exporter, not model import, canonicalization or source-backed/application Save.
