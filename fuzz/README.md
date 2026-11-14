@@ -5,6 +5,62 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Capture PNG envelope
+
+`capture_image` exercises the public `PngCapture::png_bytes` preflight, not a
+general PNG/pixel decoder. The original fuzz framing is one MIME-selector byte
+(even=image/png, odd=image/jpeg), widthLEu32, heightLEu32, then body bytes. Every
+input tests canonical base64 encoding of the binary body. Valid UTF-8 bodies
+also test verbatim raw/noncanonical base64; invalid UTF-8 is not normalized into
+a different String. Missing header words become zero dimensions.
+
+Accepted output must preserve the canonical-path payload exactly, satisfy an
+independent complete chunk walk/IHDR/dimension-specific budget, repeat
+deterministically and leave all capture metadata unchanged. The harness never
+inflates DEFLATE, validates CRC or invokes GPU/GUI. Those remain separate
+decoder/unit-test evidence. The test-only commands/base64 edges add no shipped
+runtime dependency. Existing isolated lock package identities stay pinned.
+
+A small reproducible original starting corpus can be generated with the already
+pinned external interpreter; choose a new ignored directory each time:
+
+```sh
+"$BONDLINE_PYTHON" -B - <<'PY'
+from pathlib import Path
+import base64, io, struct
+from PIL import Image
+root = Path('.cache/fuzz/capture-image-local')
+root.mkdir(parents=True, exist_ok=False)
+image = Image.new('RGBA', (1, 1), (255, 0, 0, 255))
+output = io.BytesIO()
+image.save(output, format='PNG')
+png = output.getvalue()
+prefix = b'\0' + struct.pack('<II', 1, 1)
+(root / 'original-pixel-bytes').write_bytes(prefix + png)
+(root / 'original-pixel-base64').write_bytes(prefix + base64.b64encode(png))
+(root / 'truncated').write_bytes(prefix + png[:7])
+(root / 'noncanonical-pad').write_bytes(prefix + b'AB==')
+(root / 'predecode-budget').write_bytes(prefix + b'!' * 100)
+(root / 'zero').write_bytes(b'')
+PY
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address capture_image .cache/fuzz/capture-image-local -- -runs=10000 -seed=418593271 -max_len=131072 -timeout=5
+```
+
+For a worktree without its own tools binary, select the existing pinned root
+`target/tools/bin` read-only through PATH. Do not install another version or
+share compiled target directories. `-Cdebuginfo=0` is the effective final Rust
+flag despite cargo-fuzz's earlier line-table profile default; sanitizer,
+coverage and debug assertions remain enabled.
+
+The minimal Pillow recipe above is an independent own-profile seed recipe.
+The recorded acceptance run uses a separate fresh 23-file corpus, including
+six actual own CPU/PNG-producer byte/base64 seeds, exact stored-block boundary
+bytes, and explicit hostile header/framing cases; see
+[verification-capture-image-fuzz.md](../docs/verification-capture-image-fuzz.md)
+for its generator/seed identities, actual outcome and limits. A max_len setting
+does not prove the full 16.8MiB image bound was exercised. No hosted workflow,
+native cache/window or security-audit claim follows from this local smoke.
+
 ## SMILES files
 
 The complete-file parser has a separate target from the unchanged single-notation parser.

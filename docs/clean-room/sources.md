@@ -1310,3 +1310,16 @@ same separate display-fact boundary used for SDF. Original raw spans, un-packed 
 and independent next expectations are fixed in the plan. No runtime/native failure or new
 chemical result is claimed; generic native/CDXML inference and complete perception remain
 separate questions. The next implementation must keep source/None/literal H0 exact.
+
+## Bounded capture-envelope parser fuzzing, 2026-11-14
+
+[Isolated fuzz evidence](../verification-capture-image-fuzz.md) exercises both canonical
+binary and raw UTF-8/base64 paths, immutable metadata, independently walked own-PNG framing
+and exact byte/resource bounds. Actual producer seeds have separate pinned Pillow checks;
+the ASan10000-run smoke and fixed23-seed replay are not general PNG/CRC/DEFLATE, maximum-
+image or security-audit proof. The new commands/base64 edges are test-only; old isolated
+locks retain their versions and the shipped runtime graph/lock is unchanged. The disabled
+workflow's original1×1 RGBA seed recipe follows the
+[PNG Third Edition Recommendation2025-06-24](https://www.w3.org/TR/2025/REC-png-3-20250624/)
+IHDR/IDAT/IEND/CRC rules using standard-library code, without copying a sample image.
+Its six seeds have independent local decode/replay evidence; no hosted activation occurred.

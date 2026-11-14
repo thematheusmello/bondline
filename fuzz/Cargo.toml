@@ -10,6 +10,8 @@ cargo-fuzz = true
 
 [dependencies]
 libfuzzer-sys = "=0.4.13"
+base64 = "=0.22.1"
+bondline-commands = { path = "../crates/commands" }
 bondline-cdxml = { path = "../crates/cdxml" }
 bondline-cdx = { path = "../crates/cdx" }
 bondline-io = { path = "../crates/io" }
@@ -70,6 +72,13 @@ bench = false
 [[bin]]
 name = "smiles_file_parse"
 path = "fuzz_targets/smiles_file_parse.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "capture_image"
+path = "fuzz_targets/capture_image.rs"
 test = false
 doc = false
 bench = false
