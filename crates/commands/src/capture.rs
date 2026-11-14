@@ -1,5 +1,5 @@
 use crate::files::{Completed, Completion, FilePlan};
-use crate::{CommandResult, Error};
+use crate::{CommandResult, Engine, Error, StoredContent};
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 use bondline_model::Page;
 use bondline_render::{
@@ -7,7 +7,55 @@ use bondline_render::{
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
+use std::sync::{Arc, Weak};
+
+/// Opaque identity for a captured complete content snapshot; it does not keep source alive.
+/// Close state is an independent host policy, not part of this identity.
+///
+/// ```compile_fail
+/// let stamp = bondline_commands::Engine::default().capture_stamp();
+/// let _ = serde_json::to_value(stamp);
+/// ```
+#[derive(Clone)]
+pub struct CaptureStamp {
+    owner: Weak<StoredContent>,
+    revision: u64,
+    generation: u64,
+}
+
+impl std::fmt::Debug for CaptureStamp {
+    fn fmt(&self, output: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        output
+            .debug_struct("CaptureStamp")
+            .field("revision", &self.revision)
+            .field("generation", &self.generation)
+            .finish_non_exhaustive()
+    }
+}
+
+impl PartialEq for CaptureStamp {
+    fn eq(&self, other: &Self) -> bool {
+        self.revision == other.revision
+            && self.generation == other.generation
+            && Weak::ptr_eq(&self.owner, &other.owner)
+    }
+}
+
+impl Eq for CaptureStamp {}
+
+impl Engine {
+    pub fn capture_stamp(&self) -> CaptureStamp {
+        CaptureStamp {
+            owner: Arc::downgrade(&self.document),
+            revision: self.revision,
+            generation: self.generation,
+        }
+    }
+
+    pub fn capture_stamp_matches(&self, stamp: &CaptureStamp) -> bool {
+        stamp == &self.capture_stamp()
+    }
+}
 
 #[derive(Debug)]
 enum CaptureInput {
@@ -20,14 +68,14 @@ impl CaptureInput {
         &self,
         params: &RenderCapture,
         cancel: &Cancellation,
-    ) -> Result<bondline_render::Scene, Error> {
+    ) -> Result<bondline_render::GraphScene, Error> {
         match self {
-            Self::Drawing(page) => {
-                Ok(
-                    graph_page_scene_with_cancel(params.width_px, params.height_px, page, cancel)?
-                        .into_scene(),
-                )
-            }
+            Self::Drawing(page) => Ok(graph_page_scene_with_cancel(
+                params.width_px,
+                params.height_px,
+                page,
+                cancel,
+            )?),
             Self::Sdf(content) => {
                 let preview =
                     bondline_io::sdf::preview::prepare_sdf_preview(content.sdf()?, cancel)?;
@@ -37,8 +85,7 @@ impl CaptureInput {
                     preview.page(),
                     preview.display_hydrogens(),
                     cancel,
-                )?
-                .into_scene())
+                )?)
             }
         }
     }
@@ -78,6 +125,154 @@ pub struct PngCapture {
     pub backend: RenderBackend,
     pub adapter: Option<CaptureAdapter>,
     pub png_base64: String,
+    /// Actual main-label em from this scene, excluding subscripts; native presentation only.
+    #[serde(skip)]
+    pub label_em_px: Option<f32>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, thiserror::Error)]
+pub enum CaptureImageError {
+    #[error("capture MIME type must be image/png")]
+    InvalidMime,
+    #[error("capture dimensions must be between 1 and 2048 pixels")]
+    InvalidDimensions,
+    #[error("capture image exceeds its dimension-specific byte budget")]
+    SizeLimit,
+    #[error("capture image is not canonical base64")]
+    InvalidBase64,
+    #[error("capture PNG signature or IHDR is invalid or incomplete")]
+    InvalidHeader,
+    #[error("capture PNG dimensions do not match its metadata")]
+    DimensionsMismatch,
+    #[error("capture PNG must use noninterlaced 8-bit RGBA encoding")]
+    UnsupportedEncoding,
+    #[error(
+        "capture PNG must have one complete IDAT and IEND, without other chunks or trailing data"
+    )]
+    InvalidFraming,
+}
+
+impl CaptureImageError {
+    pub fn code(&self) -> &'static str {
+        match self {
+            Self::SizeLimit => "resource_limit",
+            _ => "invalid_capture_image",
+        }
+    }
+}
+
+fn png_budget(width: u32, height: u32) -> Result<(usize, usize), CaptureImageError> {
+    if [width, height]
+        .iter()
+        .any(|axis| !(1..=MAX_CAPTURE_DIMENSION_PX).contains(axis))
+    {
+        return Err(CaptureImageError::InvalidDimensions);
+    }
+    let width = usize::try_from(width).map_err(|_| CaptureImageError::SizeLimit)?;
+    let height = usize::try_from(height).map_err(|_| CaptureImageError::SizeLimit)?;
+    let raw = width
+        .checked_mul(4)
+        .and_then(|row| row.checked_add(1))
+        .and_then(|row| row.checked_mul(height))
+        .ok_or(CaptureImageError::SizeLimit)?;
+    // Pinned Fast encoder falls back to stored blocks: 5 bytes/65535 +6 zlib +57 PNG.
+    let blocks = raw
+        .checked_add(65_534)
+        .ok_or(CaptureImageError::SizeLimit)?
+        / 65_535;
+    let png = blocks
+        .checked_mul(5)
+        .and_then(|headers| raw.checked_add(headers))
+        .and_then(|bytes| bytes.checked_add(63))
+        .ok_or(CaptureImageError::SizeLimit)?;
+    let base64 = png
+        .checked_add(2)
+        .map(|bytes| bytes / 3)
+        .and_then(|groups| groups.checked_mul(4))
+        .ok_or(CaptureImageError::SizeLimit)?;
+    Ok((png, base64))
+}
+
+fn png_u32(bytes: &[u8], range: std::ops::Range<usize>) -> Result<u32, CaptureImageError> {
+    Ok(u32::from_be_bytes(
+        bytes
+            .get(range)
+            .and_then(|field| field.try_into().ok())
+            .ok_or(CaptureImageError::InvalidHeader)?,
+    ))
+}
+
+impl PngCapture {
+    /// Decode only this pinned producer's bounded PNG envelope, not general PNG files.
+    /// Signature/header/framing are preflighted; the real image decoder must still validate
+    /// CRC, DEFLATE and scanline contents before using pixels.
+    pub fn png_bytes(&self) -> Result<Vec<u8>, CaptureImageError> {
+        if self.mime_type != "image/png" {
+            return Err(CaptureImageError::InvalidMime);
+        }
+        let (png_limit, base64_limit) = png_budget(self.width_px, self.height_px)?;
+        let input = self.png_base64.as_bytes();
+        if input.len() > base64_limit {
+            return Err(CaptureImageError::SizeLimit);
+        }
+        if !input.len().is_multiple_of(4) {
+            return Err(CaptureImageError::InvalidBase64);
+        }
+        let padding = input
+            .iter()
+            .rev()
+            .take(3)
+            .take_while(|byte| **byte == b'=')
+            .count();
+        if padding > 2 {
+            return Err(CaptureImageError::InvalidBase64);
+        }
+        let decoded_length = (input.len() / 4)
+            .checked_mul(3)
+            .and_then(|length| length.checked_sub(padding))
+            .ok_or(CaptureImageError::InvalidBase64)?;
+        if decoded_length > png_limit {
+            return Err(CaptureImageError::SizeLimit);
+        }
+        let mut bytes = vec![0; decoded_length];
+        let length = STANDARD
+            .decode_slice(input, &mut bytes)
+            .map_err(|_| CaptureImageError::InvalidBase64)?;
+        if length != decoded_length {
+            return Err(CaptureImageError::InvalidBase64);
+        }
+        if bytes.get(..8) != Some(b"\x89PNG\r\n\x1a\n")
+            || bytes.get(8..16) != Some(b"\0\0\0\rIHDR")
+            || bytes.get(..33).is_none()
+        {
+            return Err(CaptureImageError::InvalidHeader);
+        }
+        if png_u32(&bytes, 16..20)? != self.width_px || png_u32(&bytes, 20..24)? != self.height_px {
+            return Err(CaptureImageError::DimensionsMismatch);
+        }
+        if bytes.get(24..29) != Some([8, 6, 0, 0, 0].as_slice()) {
+            return Err(CaptureImageError::UnsupportedEncoding);
+        }
+        let data_length = usize::try_from(
+            png_u32(&bytes, 33..37).map_err(|_| CaptureImageError::InvalidFraming)?,
+        )
+        .map_err(|_| CaptureImageError::InvalidFraming)?;
+        let end = data_length
+            .checked_add(45)
+            .ok_or(CaptureImageError::InvalidFraming)?;
+        let complete = end
+            .checked_add(12)
+            .ok_or(CaptureImageError::InvalidFraming)?;
+        let end_chunk = bytes.get(end..complete);
+        if data_length == 0
+            || bytes.get(37..41) != Some(b"IDAT")
+            || complete != bytes.len()
+            || end_chunk.and_then(|chunk| chunk.get(..8)) != Some(b"\0\0\0\0IEND")
+        {
+            return Err(CaptureImageError::InvalidFraming);
+        }
+        Ok(bytes)
+    }
 }
 
 /// Immutable deferred work, or the result of an already committed short command.
@@ -225,7 +420,9 @@ impl Prepared {
         }
         if let Some((params, input)) = self.capture {
             cancel.check()?;
-            let scene = input.scene(&params, cancel)?;
+            let graph = input.scene(&params, cancel)?;
+            let label_em_px = graph.label_em_px();
+            let scene = graph.into_scene();
             let (frame, adapter) = match params.backend {
                 RenderBackend::Cpu => (cpu_scene_with_cancel(&scene, cancel)?, None),
                 RenderBackend::Gpu => {
@@ -257,6 +454,7 @@ impl Prepared {
                 backend: params.backend,
                 adapter,
                 png_base64: STANDARD.encode(png),
+                label_em_px,
             });
         }
         Ok(Completed(Completion::Result {

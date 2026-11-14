@@ -1252,3 +1252,15 @@ must account for actual image scaling/DPI; a device-pixel guard alone cannot pro
 No reference sizing behavior is inferred and no glyph, hit, source geometry, old oracle
 or approved golden changes. The numeric analytic tests supplement the existing actual
 CPU/GPU/font evidence; they establish no new native workflow.
+
+## Native capture identity and bounded image bridge, 2026-11-14
+
+[Contract and independent evidence](../verification-preview-capture-contract.md) add an
+opaque Weak-content/revision/generation identity and bounded decoding of Bondline's own
+PNG envelope. Identity is an original host/cache policy, not a format ID, serialized source
+or source lease. Actual label-em facts are Rust-only presentation data omitted from JSON.
+The size bound and one-IDAT/IEND preflight follow the inspected pinned png0.18.1 Fast/
+fdeflate0.3.7 writer sources, with source hashes and independent actual-output consumers
+in the evidence record. The helper is not a general PNG reader or payload/CRC validator;
+the existing native image decoder retains that job. No dependency, font, source codec,
+old oracle or approved golden is changed. Worker/cache/native integration remains separate.

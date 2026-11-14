@@ -49,7 +49,10 @@ mod source_tests;
 #[cfg(test)]
 mod storage_tests;
 pub use bondline_render::Cancellation;
-pub use capture::{CaptureAdapter, PngCapture, Prepared, RenderBackend, RenderCapture};
+pub use capture::{
+    CaptureAdapter, CaptureImageError, CaptureStamp, PngCapture, Prepared, RenderBackend,
+    RenderCapture,
+};
 
 pub const MAX_REQUEST_BYTES: usize = 1024 * 1024;
 const MAX_HISTORY: usize = 128;
