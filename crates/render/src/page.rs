@@ -154,12 +154,24 @@ fn graph_scene(
     let mut scene = page_scene(width, height, page.size())?;
     let mut hit_count = 0_usize;
     let mut count = scene.primitives.len();
+    let mut has_multiple = false;
     for fragment in page.fragments() {
         cancel.check()?;
         hit_count = hit_count
             .saturating_add(fragment.atoms().len())
             .saturating_add(fragment.bonds().len());
-        count = count.saturating_add(fragment.bonds().len());
+        if hit_count > MAX_HIT_REGIONS {
+            return Err(Error::SceneTooComplex);
+        }
+        for bond in fragment.bonds() {
+            cancel.check()?;
+            has_multiple |= matches!(bond.order, BondOrder::Double | BondOrder::Triple);
+            count = count.saturating_add(match bond.order {
+                BondOrder::Double => 2,
+                BondOrder::Triple => 3,
+                _ => 1,
+            });
+        }
         if hit_count > MAX_HIT_REGIONS || count > 4096 {
             return Err(Error::SceneTooComplex);
         }
@@ -182,7 +194,10 @@ fn graph_scene(
         }
         for bond in fragment.bonds() {
             cancel.check()?;
-            if bond.order != BondOrder::Single {
+            if !matches!(
+                bond.order,
+                BondOrder::Single | BondOrder::Double | BondOrder::Triple
+            ) {
                 return Err(Error::UnsupportedChemicalContent);
             }
             let begin = *positions
@@ -198,6 +213,7 @@ fn graph_scene(
                 color: [0, 0, 0, 255],
             };
             stroke.validate()?;
+            let strokes = crate::centered_bond_strokes(&stroke, bond.order)?;
             for (id, dx) in [
                 (bond.begin, f64::from(end[0]) - f64::from(begin[0])),
                 (bond.end, f64::from(begin[0]) - f64::from(end[0])),
@@ -214,7 +230,10 @@ fn graph_scene(
                     0
                 };
             }
-            let polygon = visible_polygon(&stroke, width, height);
+            let polygons = strokes
+                .iter()
+                .map(|stroke| visible_polygon(stroke, width, height))
+                .collect();
             bonds.push(BondHit {
                 target: HitTarget::Bond {
                     fragment_id: fragment.id(),
@@ -222,9 +241,12 @@ fn graph_scene(
                 },
                 endpoints: [bond.begin, bond.end],
                 stroke: stroke.clone(),
-                polygon,
+                strokes: strokes.clone(),
+                polygons,
             });
-            scene.primitives.push(Primitive::Stroke(stroke));
+            scene
+                .primitives
+                .extend(strokes.into_iter().map(Primitive::Stroke));
         }
         for atom in fragment.atoms() {
             cancel.check()?;
@@ -232,10 +254,19 @@ fn graph_scene(
                 .get(&atom.id)
                 .ok_or(Error::UnsupportedChemicalContent)?;
             let neighbours = neighbours.get(&atom.id).copied().unwrap_or_default();
-            let label = if let Some(counts) = counts {
-                let hydrogens = *counts
-                    .get(&atom.id)
-                    .ok_or(Error::UnsupportedChemicalContent)?;
+            let resolved_h = if let Some(counts) = counts {
+                Some(
+                    *counts
+                        .get(&atom.id)
+                        .ok_or(Error::UnsupportedChemicalContent)?,
+                )
+            } else if has_multiple {
+                atom.explicit_hydrogens
+                    .or_else(|| (atom.element.get() != 6).then_some(0))
+            } else {
+                None
+            };
+            let label = if let Some(hydrogens) = resolved_h {
                 let preferred_left = neighbours.0 != 0 && neighbours.1 >= 0;
                 let incident = bonds.iter().filter(|bond| {
                     matches!(bond.target, HitTarget::Bond { fragment_id, .. } if fragment_id == fragment.id())
@@ -249,6 +280,7 @@ fn graph_scene(
                     &incident,
                     &viewport,
                     [width, height],
+                    counts.is_some(),
                     cancel,
                 )?)
             } else if atom.element.get() != 6 {
@@ -308,13 +340,28 @@ fn graph_scene(
     }
     for (index, (fragment, atom, label)) in labels.iter().enumerate() {
         cancel.check()?;
-        if labels.iter().skip(index+1).any(|(_,_,other)| {
+        if has_multiple {
+            let collision = label.masks().any(|mask| {
+                labels.iter().skip(index+1).any(|(_,_,other)| other.masks().any(|other| {
+                    mask.x < other.x + other.width && other.x < mask.x + mask.width
+                        && mask.y < other.y + other.height && other.y < mask.y + mask.height
+                })) || bonds.iter().any(|bond| {
+                    let incident = matches!(bond.target, HitTarget::Bond {fragment_id,..} if fragment_id == *fragment) && bond.endpoints.contains(atom);
+                    !incident && intersects_label(bond,mask)
+                })
+            });
+            if collision {
+                return Err(Error::LabelOverlap);
+            }
+        } else {
+            if labels.iter().skip(index+1).any(|(_,_,other)| {
             label.mask.x<other.mask.x+other.mask.width && other.mask.x<label.mask.x+label.mask.width
             && label.mask.y<other.mask.y+other.mask.height && other.mask.y<label.mask.y+label.mask.height
         }) || bonds.iter().any(|bond| {
             let incident=matches!(bond.target,HitTarget::Bond {fragment_id,..} if fragment_id==*fragment) && bond.endpoints.contains(atom);
             !incident && intersects_label(bond,&label.mask)
         }) { return Err(Error::LabelOverlap); }
+        }
         scene
             .primitives
             .extend(label.masks().cloned().map(Primitive::Rectangle));
@@ -322,6 +369,9 @@ fn graph_scene(
     if counts.is_some() {
         for bond in &bonds {
             cancel.check()?;
+            if bond.strokes.len() != 1 {
+                continue;
+            }
             let mut covered = labels
                 .iter()
                 .flat_map(|(_, _, label)| label.masks())
@@ -337,6 +387,102 @@ fn graph_scene(
             }
             if end >= 1.0 {
                 return Err(Error::LabelOverlap);
+            }
+        }
+    }
+    if has_multiple {
+        let masks = labels
+            .iter()
+            .flat_map(|(_, _, label)| label.masks())
+            .collect::<Vec<_>>();
+        let ink = bonds
+            .iter()
+            .flat_map(|bond| &bond.strokes)
+            .collect::<Vec<_>>();
+        for bond in &bonds {
+            if bond.strokes.len() == 1 {
+                continue;
+            }
+            for other in &bonds {
+                cancel.check()?;
+                if bond.target == other.target {
+                    continue;
+                }
+                let shared = bond
+                    .endpoints
+                    .iter()
+                    .find(|id| other.endpoints.contains(id));
+                if let Some(shared) = shared {
+                    let anchor = if bond.endpoints.first() == Some(shared) {
+                        bond.stroke.begin
+                    } else {
+                        bond.stroke.end
+                    };
+                    let anchor_mask = anchor_pixel_mask(anchor, [width, height]);
+                    let mut junction_masks = masks.clone();
+                    if let Some(mask) = anchor_mask.as_ref() {
+                        junction_masks.push(mask);
+                    }
+                    for first in &bond.strokes {
+                        for second in &other.strokes {
+                            if first.has_visible_pixel(
+                                [width, height],
+                                &junction_masks,
+                                Some(second),
+                                &[],
+                                cancel,
+                            )? {
+                                return Err(Error::LabelOverlap);
+                            }
+                        }
+                    }
+                } else {
+                    // Original centered profile reserves the full inter-line corridor.
+                    let envelope = Stroke {
+                        width: bond.stroke.width * if bond.strokes.len() == 2 { 4.0 } else { 7.0 },
+                        ..bond.stroke.clone()
+                    };
+                    for component in &other.strokes {
+                        if envelope.has_visible_pixel(
+                            [width, height],
+                            &masks,
+                            Some(component),
+                            &[],
+                            cancel,
+                        )? {
+                            return Err(Error::LabelOverlap);
+                        }
+                    }
+                }
+            }
+            for stroke in &bond.strokes {
+                if !stroke.has_visible_pixel([width, height], &[], None, &[], cancel)? {
+                    return Err(Error::BondScale);
+                }
+                if !stroke.has_visible_pixel([width, height], &masks, None, &[], cancel)? {
+                    return Err(Error::LabelOverlap);
+                }
+            }
+            for pair in bond.strokes.windows(2) {
+                let (Some(a), Some(b)) = (pair.first(), pair.get(1)) else {
+                    return Err(Error::InvalidGeometry);
+                };
+                let gap = Stroke {
+                    begin: [
+                        (a.begin[0] + b.begin[0]) / 2.0,
+                        (a.begin[1] + b.begin[1]) / 2.0,
+                    ],
+                    end: [(a.end[0] + b.end[0]) / 2.0, (a.end[1] + b.end[1]) / 2.0],
+                    width: bond.stroke.width * 2.0,
+                    color: [255; 4],
+                };
+                gap.validate()?;
+                if !gap.has_visible_pixel([width, height], &[], None, &ink, cancel)? {
+                    return Err(Error::BondScale);
+                }
+                if !gap.has_visible_pixel([width, height], &masks, None, &ink, cancel)? {
+                    return Err(Error::LabelOverlap);
+                }
             }
         }
     }
@@ -367,6 +513,25 @@ fn graph_scene(
     })
 }
 
+/// Pixel centers in the shared anchor's closed half-pixel square. This is a
+/// congestion exception only; it never paints a mask or changes source geometry.
+fn anchor_pixel_mask([x, y]: [f32; 2], [width, height]: [u32; 2]) -> Option<Rectangle> {
+    let left = (f64::from(x) - 1.0).ceil().max(0.0);
+    let right = f64::from(x).floor().min(f64::from(width.checked_sub(1)?));
+    let top = (f64::from(y) - 1.0).ceil().max(0.0);
+    let bottom = f64::from(y).floor().min(f64::from(height.checked_sub(1)?));
+    if left > right || top > bottom {
+        return None;
+    }
+    Some(Rectangle {
+        x: left as u32,
+        y: top as u32,
+        width: (right - left + 1.0) as u32,
+        height: (bottom - top + 1.0) as u32,
+        color: [255; 4],
+    })
+}
+
 #[allow(clippy::too_many_arguments)]
 fn resolved_label(
     position: [f32; 2],
@@ -376,6 +541,7 @@ fn resolved_label(
     incident: &[&BondHit],
     viewport: &PageViewport,
     dimensions: [u32; 2],
+    require_paper: bool,
     cancel: &Cancellation,
 ) -> Result<crate::label::Label, Error> {
     use crate::label::Layout;
@@ -406,10 +572,11 @@ fn resolved_label(
             }
             Err(error) => return Err(error),
         };
-        if !label
-            .masks()
-            .chain(&label.pixels)
-            .all(|rect| rect_inside_paper(rect, viewport))
+        if require_paper
+            && !label
+                .masks()
+                .chain(&label.pixels)
+                .all(|rect| rect_inside_paper(rect, viewport))
         {
             last_error = Error::LabelPlacement;
             continue;
@@ -503,6 +670,30 @@ fn validate_paper_ink(
 #[cfg(test)]
 mod display_bounds_tests {
     use super::*;
+
+    #[test]
+    fn junction_mask_matches_the_closed_anchor_square_at_pixel_centers() {
+        for anchor in [
+            [20.0, 20.0],
+            [20.125, 20.95],
+            [20.5, 20.5],
+            [-0.5, 1.0],
+            [63.5, 64.0],
+            [80.0, 20.0],
+        ] {
+            let mask = anchor_pixel_mask(anchor, [64, 64]);
+            for y in 0..64 {
+                for x in 0..64 {
+                    let expected = (f64::from(x) + 0.5 - f64::from(anchor[0])).abs() <= 0.5
+                        && (f64::from(y) + 0.5 - f64::from(anchor[1])).abs() <= 0.5;
+                    let actual = mask.as_ref().is_some_and(|r| {
+                        x >= r.x && x < r.x + r.width && y >= r.y && y < r.y + r.height
+                    });
+                    assert_eq!(actual, expected, "anchor{anchor:?} pixel{x},{y}");
+                }
+            }
+        }
+    }
 
     #[test]
     fn paper_check_uses_actual_glyph_rectangles_and_butt_cap_corners() -> Result<(), Error> {

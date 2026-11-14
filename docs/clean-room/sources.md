@@ -1388,9 +1388,9 @@ pass. No consumer, format rule, asset, fixture, old expectation or dependency ch
 Bounded ASan runs and observed303/492B maxima establish neither maximum-input nor security
 coverage. The inspected BIOVIA/IUPAC/OpenSMILES rules above remain the behavior basis.
 
-## Next multiple-bond gate: public research only, 2026-11-14
+## Multiple-bond gate: public research and adopted policy, 2026-11-14
 
-[Unexecuted plan](../research/multiple-bond-plan.md) reviews IUPAC GR1.6/GR1.10 and public
+[The original plan](../research/multiple-bond-plan.md) reviews IUPAC GR1.6/GR1.10 and public
 SDK [BondSpacing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacing.htm),
 [BondSpacingAbs](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacingAbs.htm),
 [BondLength](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondLength.htm) and
@@ -1400,8 +1400,17 @@ The four published files match the immutable repository pin
 paths missing docs/ returned404; corrected artifacts and status/hash receipts are retained.
 
 Relative/absolute spacing, override/inheritance and directional Center/Right/Left are
-format facts; the example18% is not a universal26.1 default. The proposed centered3w
-first geometry gate is original, unadopted policy. Contextual offset/joining, style/default
-and XML manual-flag questions remain explicit; no renderer/test/native behavior has run
-for this plan. Root verifies25 source snapshots,13 research artifacts and its actual native
-caller before receiving. This research does not complete Double/Triple, M1, M2 or parity.
+format facts; the example18% is not a universal26.1 default. Root verified25 source
+snapshots,13 research artifacts and its actual native caller before receiving that plan.
+The current feature work adopts the explicitly original policies below; implementation
+and independent checks are in progress. This does not complete Double/Triple professional
+parity, M1 or M2. No new native-window observation or golden approval is claimed.
+
+| ID | Public evidence / original decision |
+|---|---|
+| MULTIPLE-IUPAC | [IUPAC2008 GR1.6/GR1.10](https://iupac.qmul.ac.uk/drawing/drawing.html#GR16) specifies parallel associated segments and context-dependent sidedness/joins. Its roughly one-third length guidance is not a numeric style default. Original `centered_multiple_v1` uses separation `s=3w`, Double offsets ±s/2, Triple offsets -s/0/+s and a short-axis guard `s<=L/3`. These are independently chosen geometry rules, not observed26.1 settings. |
+| MULTIPLE-SDK | The four pinned SDK properties above define relative/absolute spacing, inheritance and directional positioning. They stay unknown retained source data here; no new mapping, profile authority or implicit Center default follows. Source/model endpoints and bond orders remain exact. |
+| MULTIPLE-VISIBILITY | Original raster policies implement the association/readability purpose of MULTIPLE-IUPAC: each required component and adjacent white gap needs an unmasked CPU pixel center; otherwise the whole scene refuses. Multiple bundles reserve corridors of4w/7w from unrelated ink; shared-bond common ink is allowed only within a closed half-pixel anchor square. These are conservative implementation choices, not reference thresholds. Expanded stroke counts join the existing4096 primitive budget while hits/votes stay logical. Multiple-containing literal scenes reuse component-aware attachment with exact authored H; all-Single behavior and resolved-only paper-ink policy stay unchanged. [Exact geometry/search/CPU/GPU evidence](../verification-multiple-render.md) records these choices and their reproduced counterexamples. |
+
+Renderer geometry/search/CPU/GPU evidence is recorded above. Native-window style and full
+professional parity remain unverified; authoring/tool integration follows separately.

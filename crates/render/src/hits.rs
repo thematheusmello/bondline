@@ -27,7 +27,8 @@ pub(crate) struct BondHit {
     pub target: HitTarget,
     pub endpoints: [AtomId; 2],
     pub stroke: Stroke,
-    pub polygon: Vec<[f64; 2]>,
+    pub strokes: Vec<Stroke>,
+    pub polygons: Vec<Vec<[f64; 2]>>,
 }
 
 /// Paint and picking share an immutable, bounded projection of the same Page.
@@ -39,6 +40,24 @@ pub struct GraphScene {
 }
 
 impl GraphScene {
+    /// Actual rendered components in canvas units, grouped under one authored bond.
+    pub fn bond_strokes(
+        &self,
+        fragment_id: FragmentId,
+        bond_id: BondId,
+    ) -> impl Iterator<Item = &Stroke> {
+        self.bonds
+            .iter()
+            .filter(move |bond| {
+                bond.target
+                    == HitTarget::Bond {
+                        fragment_id,
+                        bond_id,
+                    }
+            })
+            .flat_map(|bond| bond.strokes.iter())
+    }
+
     /// Smallest main atom-label em in this actual scene, excluding subscript scaling.
     pub fn label_em_px(&self) -> Option<f32> {
         self.label_em_px
@@ -87,7 +106,12 @@ impl GraphScene {
             return Ok(Some(target));
         }
         for bond in &self.bonds {
-            if let Some(distance) = polygon_distance2(p, &bond.polygon) {
+            if let Some(distance) = bond
+                .polygons
+                .iter()
+                .filter_map(|polygon| polygon_distance2(p, polygon))
+                .reduce(f64::min)
+            {
                 consider(
                     &mut best,
                     (
@@ -166,15 +190,17 @@ pub(crate) fn visible_polygon(stroke: &Stroke, width: u32, height: u32) -> Vec<[
 }
 
 pub(crate) fn intersects_label(bond: &BondHit, label: &Rectangle) -> bool {
-    area2(&clip_polygon(
-        &bond.polygon,
-        [
-            f64::from(label.x),
-            f64::from(label.y),
-            f64::from(label.x + label.width),
-            f64::from(label.y + label.height),
-        ],
-    )) != 0.0
+    bond.polygons.iter().any(|polygon| {
+        area2(&clip_polygon(
+            polygon,
+            [
+                f64::from(label.x),
+                f64::from(label.y),
+                f64::from(label.x + label.width),
+                f64::from(label.y + label.height),
+            ],
+        )) != 0.0
+    })
 }
 
 // Convex clipping needs at most eight vertices for a rectangle against a viewport.

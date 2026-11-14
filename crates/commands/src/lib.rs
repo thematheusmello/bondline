@@ -274,7 +274,9 @@ impl Error {
             | Self::UnsupportedExtensionSource
             | Self::UnsupportedBondExtension => "unsupported_content",
             Self::IncompleteSmilesExportSource => "unsupported_content",
-            Self::Render(bondline_render::Error::LabelScale) => "unsupported_scale",
+            Self::Render(
+                bondline_render::Error::LabelScale | bondline_render::Error::BondScale,
+            ) => "unsupported_scale",
             Self::Render(_) | Self::Png(_) => "render_failed",
             Self::BackendUnavailable => "backend_unavailable",
             Self::UnsupportedDocumentPreview => "unsupported_content",

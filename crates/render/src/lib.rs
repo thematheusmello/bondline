@@ -63,7 +63,7 @@ pub enum Error {
     )]
     InvalidStroke,
     #[error(
-        "the preview supports positioned neutral elements and single bonds; isolated carbon needs authored H and physical H cannot carry attached H"
+        "the preview requires supported neutral elements, coordinates and Single or centered Double/Triple bonds; literal isolated carbon needs authored H and physical H cannot carry attached H"
     )]
     UnsupportedChemicalContent,
     #[error("the bundled label font could not be decoded")]
@@ -72,6 +72,10 @@ pub enum Error {
         "chemical labels need an em size between 8 and 256 canvas units; enlarge the view or capture"
     )]
     LabelScale,
+    #[error(
+        "multiple bond components and gaps need distinct visible pixels; enlarge the view or separate the endpoints"
+    )]
+    BondScale,
     #[error("a chemical label would extend beyond the viewport")]
     LabelPlacement,
     #[error(
@@ -131,7 +135,7 @@ pub use page::{
     graph_page_scene_with_display_hydrogens,
 };
 pub use scene::{Primitive, Rectangle, Scene, cpu_scene, cpu_scene_with_cancel, page_scene};
-pub use stroke::Stroke;
+pub use stroke::{Stroke, centered_bond_strokes};
 
 #[cfg(not(target_arch = "wasm32"))]
 mod gpu;

@@ -295,7 +295,7 @@ fn deferred_mol_capture_owns_its_historical_source_and_preserves_history_on_canc
 }
 
 #[test]
-fn unsupported_mol_derivation_refuses_the_whole_capture_and_retains_source() -> TestResult {
+fn supported_multiple_and_unresolved_mol_derivation_both_retain_complete_source() -> TestResult {
     let directory = support::FileTestDirectory::new()?;
     let original = std::str::from_utf8(Molecule::Ethanol.raw()?)?;
     for (name, source) in [
@@ -313,19 +313,59 @@ fn unsupported_mol_derivation_refuses_the_whole_capture_and_retains_source() -> 
         assert!(engine.stored_document()?.is_fully_mapped());
         let before = serde_json::to_value(engine.state())?;
         let owner = engine.content().clone();
+        let mut captures = Vec::new();
         for backend in ["cpu", "gpu"] {
-            assert_eq!(
-                engine
-                    .dispatch("render.capture", request(backend))
-                    .err()
-                    .ok_or("partial unsupported MOL capture")?
-                    .info()
-                    .code,
-                "unsupported_content"
-            );
+            if name == "double-bond" {
+                let capture = engine
+                    .dispatch("render.capture", request(backend))?
+                    .capture
+                    .ok_or("multiple capture missing")?;
+                assert_eq!((capture.width_px, capture.height_px), (1024, 1024));
+                assert_eq!(capture.adapter.is_some(), backend == "gpu");
+                captures.push(capture.png_bytes()?);
+            } else {
+                assert_eq!(
+                    engine
+                        .dispatch("render.capture", request(backend))
+                        .err()
+                        .ok_or("partial unsupported MOL capture")?
+                        .info()
+                        .code,
+                    "unsupported_content"
+                );
+            }
             assert_eq!(serde_json::to_value(engine.state())?, before);
             assert_eq!(engine.content(), &owner);
             assert_eq!(engine.stored_document()?.export_mol()?, source.as_bytes());
+        }
+        if name == "double-bond" {
+            assert_eq!(captures.len(), 2);
+            assert_eq!(
+                captures[0], captures[1],
+                "fixed horizontal multiple/vertical Single CPU/GPU PNGs"
+            );
+            let page = &engine.document()?.pages()[0];
+            let fragment = &page.fragments()[0];
+            let graph =
+                engine.drawing_page_scene(1024, 1024, page.id(), &Cancellation::default())?;
+            assert_eq!(
+                graph
+                    .bond_strokes(fragment.id(), fragment.bonds()[0].id)
+                    .count(),
+                2
+            );
+            assert_eq!(
+                graph
+                    .bond_strokes(fragment.id(), fragment.bonds()[1].id)
+                    .count(),
+                1
+            );
+            assert!(
+                fragment
+                    .atoms()
+                    .iter()
+                    .all(|a| a.explicit_hydrogens.is_none())
+            );
         }
         engine.dispatch("document.save_mol", json!({"path":output}))?;
         assert_eq!(fs::read(&input)?, source.as_bytes());

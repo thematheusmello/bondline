@@ -42,7 +42,9 @@ impl DisplayError {
             | Self::Render(bondline_render::Error::LabelOverlap) => "unsupported_content",
             Self::Limit { .. } => "resource_limit",
             Self::Render(bondline_render::Error::InvalidDimensions) => "invalid_params",
-            Self::Render(bondline_render::Error::LabelScale) => "unsupported_scale",
+            Self::Render(
+                bondline_render::Error::LabelScale | bondline_render::Error::BondScale,
+            ) => "unsupported_scale",
             Self::Render(_) => "render_failed",
         }
     }

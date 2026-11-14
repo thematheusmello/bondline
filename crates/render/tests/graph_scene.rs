@@ -223,8 +223,6 @@ fn no_supported_scene_silently_hides_unsupported_atom_metadata_or_bond_orders() 
         ));
     }
     for order in [
-        BondOrder::Double,
-        BondOrder::Triple,
         BondOrder::Quadruple,
         BondOrder::Quintuple,
         BondOrder::Sextuple,
@@ -273,6 +271,70 @@ fn no_supported_scene_silently_hides_unsupported_atom_metadata_or_bond_orders() 
         graph_page_scene(80, 80, &explicit_zero)?.hit_test([40.0, 40.0], 0.0)?,
         Some(atom(1)?)
     );
+    Ok(())
+}
+
+#[test]
+fn original_unknown_h_double_and_triple_cases_keep_none_and_have_exact_bundle_hits() -> TestResult {
+    let original = page(&[[10.5, 20.5], [40.5, 20.5]], &[[1, 2]])?;
+    for (order, ys, ink_rows) in [
+        (BondOrder::Double, vec![29.0, 32.0], vec![28, 29, 31, 32]),
+        (BondOrder::Triple, vec![27.5, 30.5, 33.5], vec![27, 30, 33]),
+    ] {
+        let page = changed(&original, |_, bonds| bonds[0].order = order)?;
+        let before = page.clone();
+        let graph = graph_page_scene(80, 80, &page)?;
+        let actual = graph
+            .bond_strokes(
+                FragmentId::new(1).ok_or("fragment")?,
+                BondId::new(1).ok_or("bond")?,
+            )
+            .cloned()
+            .collect::<Vec<_>>();
+        let expected = ys
+            .iter()
+            .map(|y| bondline_render::Stroke {
+                begin: [20.5, *y],
+                end: [50.5, *y],
+                width: 1.0,
+                color: [0, 0, 0, 255],
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(actual, expected);
+        let cpu = cpu_scene(graph.scene())?;
+        for y in 25..36 {
+            let at = ((y * 80 + 35) * 4) as usize;
+            assert_eq!(
+                &cpu.rgba[at..at + 4],
+                if ink_rows.contains(&y) {
+                    &[0, 0, 0, 255]
+                } else {
+                    &[255; 4]
+                }
+            );
+        }
+        for y in ys {
+            assert_eq!(graph.hit_test([35.0, y], 0.0)?, Some(bond(1)?));
+        }
+        assert_eq!(
+            graph.hit_test(
+                [
+                    35.0,
+                    29.0 + if order == BondOrder::Double { 1.5 } else { 0.0 }
+                ],
+                0.0
+            )?,
+            None
+        );
+        assert!(
+            page.fragments()[0]
+                .atoms()
+                .iter()
+                .all(|a| a.explicit_hydrogens.is_none())
+        );
+        assert_eq!(pollster::block_on(gpu_scene(graph.scene()))?.0, cpu);
+        assert_eq!(page, before);
+    }
     Ok(())
 }
 

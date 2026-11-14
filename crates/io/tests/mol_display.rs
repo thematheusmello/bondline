@@ -493,17 +493,71 @@ fn unknown_or_unsupported_chemistry_refuses_without_mutating_source() -> TestRes
         assert_eq!(stored, before);
         assert_eq!(stored.export_mol()?, source);
     }
+    Ok(())
+}
+
+#[test]
+fn original_multiple_order_vectors_have_separate_components_without_authoring_h() -> TestResult {
     for order in [2, 3] {
         let line = format!("1 {order} 1 2");
-        let stored = from_mol(&v3(&["1 C 0 0 0 0", "2 C 2 0 0 0"], &[&line]))?;
-        let error = display(&stored)
-            .err()
-            .ok_or("renderer must still refuse multiple bonds")?;
-        assert!(matches!(
-            error,
-            DisplayError::Render(bondline_render::Error::UnsupportedChemicalContent)
-        ));
-        assert_eq!(error.code(), "unsupported_content");
+        let source = v3(&["1 C 0 0 0 0", "2 C 2 0 0 0"], &[&line]);
+        let stored = from_mol(&source)?;
+        let before = stored.clone();
+        let molecule = external(&source)?;
+        assert_eq!(molecule["smiles"], if order == 2 { "C=C" } else { "C#C" });
+        assert_eq!(
+            molecule["formula"],
+            if order == 2 { "C2H4" } else { "C2H2" }
+        );
+        for atom in molecule["atoms"].as_array().ok_or("external atoms")? {
+            assert_eq!(atom["hydrogens"], 4 - order);
+        }
+        let page = &stored.model().pages()[0];
+        let fragment = &page.fragments()[0];
+        assert!(
+            fragment
+                .atoms()
+                .iter()
+                .all(|a| a.explicit_hydrogens.is_none())
+        );
+        let graph = display(&stored)?;
+        let strokes = graph
+            .bond_strokes(fragment.id(), fragment.bonds()[0].id)
+            .collect::<Vec<_>>();
+        let offsets: &[f32] = if order == 2 {
+            &[-1.5, 1.5]
+        } else {
+            &[-3.0, 0.0, 3.0]
+        };
+        assert_eq!(strokes.len(), offsets.len());
+        let viewport = PageViewport::new(1024, 1024, page.size())?;
+        let a = viewport.canvas_position(Point2::new(72.0, 72.0)?)?;
+        let b = viewport.canvas_position(Point2::new(120.0, 72.0)?)?;
+        let width = viewport.stroke_width();
+        let frame = cpu_scene(graph.scene())?;
+        let pixel = |y: f32| {
+            let x = ((a[0] + b[0]) / 2.0).floor() as u32;
+            let at = ((y.floor() as u32 * frame.width + x) * 4) as usize;
+            frame
+                .rgba
+                .get(at..at + 4)
+                .ok_or("probe outside actual frame")
+        };
+        for (stroke, offset) in strokes.iter().zip(offsets) {
+            let y = a[1] + offset * width;
+            assert_eq!(stroke.begin[0], a[0]);
+            assert_eq!(stroke.end[0], b[0]);
+            assert!((stroke.begin[1] - y).abs() <= 1e-5);
+            assert!((stroke.end[1] - y).abs() <= 1e-5);
+            assert_eq!(stroke.width, width);
+            assert_eq!(pixel(y)?, &[0, 0, 0, 255]);
+        }
+        assert_eq!(
+            pixel(a[1] + if order == 2 { 0.0 } else { 1.5 * width })?,
+            &[255; 4]
+        );
+        assert_eq!(stored, before);
+        assert_eq!(stored.export_mol()?, source);
     }
     Ok(())
 }

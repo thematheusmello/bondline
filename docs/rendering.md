@@ -30,8 +30,8 @@ Separate x/y conversion factors follow that rounding, whose aspect error remains
 background, gray 210 shadow, gray 196 border and white interior. This is not a journal preset.
 Existing hand-authored 8×8 page-grid, clipping and odd-pitch tests continue to pass.
 
-The literal chemical producer builds one GraphScene for positioned neutral elements and Single
-bonds, including chains, branches, cycles and disconnected components. Noncarbon symbols
+The literal chemical producer builds one GraphScene for positioned neutral elements and
+Single/centered Double/Triple bonds, including safe chains, branches, cycles and disconnected components. Noncarbon symbols
 are explicit; authored H is literal and unknown H is omitted without changing model None.
 Carbon retains H0/C, H1/CH and larger literal subscripts, skeletal connected unknown-H and
 isolated unknown-H refusal. Physical H cannot carry positive inline H. Other orders,
@@ -46,10 +46,27 @@ closed neutral C/N/O/halogen profile; the renderer chooses no valence. Literal c
 authoritative and authored None/source bytes remain exact. MOL keeps its actual Page/IDs/
 frame, while SDF retains its separately documented row packing. Both use the resolved-H
 entry's attachment and paper-ink checks; its masks/strokes must fit the paper interior.
-The source-free/CDXML literal entry above retains its old behavior. See
+All-Single source-free/CDXML scenes retain their old behavior. Multiple-containing literal
+scenes reuse the component-aware attachment choices with exact literal counts, without
+the resolved entry's additional physical-paper restriction. See
 verification-mol-display-tests.md and verification-sdf-display-render.md for independent
 data/geometry/font/pixel evidence and explicit refusal scope. Native MOL/SDF label workflow
 acceptance remains unverified; these display policies do not establish general perception.
+
+Centered multiple bonds use the original `centered_multiple_v1` profile: separation3w,
+Double offsets ±1.5w, Triple offsets -3w/0/+3w and a minimum axis length9w. Each required
+component and adjacent gap must retain a visible pixel center after masks/clipping.
+Expanded stroke counts join the4096 primitive bound; hits and neighbour votes stay
+logical. The explicit corridor/junction rules refuse unsafe overlaps for the whole scene.
+Exact bounded lattice searches retain the existing stroke coverage arithmetic. See
+[multiple-bond evidence](verification-multiple-render.md) for analytic/CPU/GPU/search
+oracles, retained failures and the exact original policy. No imported style/sidedness,
+general layout/join solver, new human-approved golden or vendor default is inferred.
+
+Held previews call the same `centered_bond_strokes` constructor; hover outlines actual
+`GraphScene::bond_strokes` components. Tool order/epoch and event ordering remain UI-only,
+outside captured pixels/model/history. Six actual-frame workflows pass; new native-window
+acceptance remains unverified. See [UI evidence](verification-multiple-ui.md).
 
 IUPAC GR-2.1.2 requires terminal labels for an isolated ethane bond. The producer uses H3C/CH3
 with the 3 subscripted, keeping C centered at its authored endpoint and facing the bond.
