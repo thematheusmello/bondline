@@ -721,6 +721,98 @@ mod tests {
     }
 
     #[tokio::test(flavor = "current_thread")]
+    async fn sdf_queries_share_workers_without_prepare_side_effects_or_save_reservations()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let mut session = Engine::default();
+        session.dispatch("document.open_sdf",json!({"path":concat!(env!("CARGO_MANIFEST_DIR"),"/../io/tests/fixtures/sdf/ordered-fields-v2000.sdf")}))?;
+        session.dispatch(
+            "document.close",
+            json!({"expected_revision":1,"action":"request"}),
+        )?;
+        let engine = Arc::new(Mutex::new(session));
+        let workers = Workers::default();
+        let executor = CommandExecutor {
+            engine: Arc::clone(&engine),
+            workers: workers.clone(),
+        };
+        let query = |record_id| {
+            Command::parse(
+                "sdf.record.inspect",
+                json!({"expected_revision":1,"record_id":record_id}),
+            )
+        };
+        let before = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+        let held1 = workers.permit().map_err(|e| e.message)?;
+        let held2 = workers.permit().map_err(|e| e.message)?;
+        assert_eq!(
+            executor
+                .prepare_command(query(1)?)
+                .err()
+                .ok_or("busy query")?
+                .code,
+            "busy"
+        );
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        drop((held1, held2));
+        let first = executor.prepare_command(query(1)?).map_err(|e| e.message)?;
+        let second = executor.prepare_command(query(2)?).map_err(|e| e.message)?;
+        assert_eq!(workers.slots.available_permits(), 0);
+        assert_eq!(
+            executor
+                .prepare_command(query(1)?)
+                .err()
+                .ok_or("third query")?
+                .code,
+            "busy"
+        );
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        // Queries reserve only workers, never the Engine's independent one-save lease.
+        drop(
+            engine
+                .lock()
+                .map_err(|_| "engine")?
+                .prepare(Command::parse(
+                    "document.save_sdf",
+                    json!({"path":"not-published-by-this-query.sdf"}),
+                )?)?,
+        );
+        assert!(executor.has_active_work());
+        let result = executor
+            .complete(second, std::future::pending())
+            .await
+            .map_err(|e| e.message)?;
+        assert_eq!(serde_json::to_value(result)?["sdf_record"]["record_id"], 2);
+        assert!(executor.has_active_work());
+        let result = executor
+            .complete(first, std::future::pending())
+            .await
+            .map_err(|e| e.message)?;
+        assert_eq!(serde_json::to_value(result)?["sdf_record"]["record_id"], 1);
+        assert!(!executor.has_active_work());
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        assert!(engine.lock().map_err(|_| "engine")?.complete_close());
+        assert_eq!(
+            executor
+                .prepare_command(query(1)?)
+                .err()
+                .ok_or("committed close")?
+                .code,
+            "close_committed"
+        );
+        assert!(!executor.has_active_work());
+        Ok(())
+    }
+
+    #[tokio::test(flavor = "current_thread")]
     async fn explicit_cancel_and_dropped_future_cancel_workers_without_releasing_their_budget_early()
     -> Result<(), Box<dyn std::error::Error>> {
         for abort in [false, true] {

@@ -14,6 +14,7 @@ mod content;
 mod controls;
 mod file_ui;
 mod files;
+mod sdf_query;
 pub use bond::{BondCreate, BondExtend, ExtendHydrogenPolicy};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, StoredContent};
@@ -22,6 +23,10 @@ pub use file_ui::{UiFile, UiFileAction, UiFilePhase, UiFilePlan, UiFileRequest, 
 pub use files::{
     Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol,
     OpenSdf, SaveCdx, SaveCdxml, SaveMol, SaveSdf,
+};
+pub use sdf_query::{
+    MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
+    SdfRecordInspection, SdfValueOmission,
 };
 #[cfg(test)]
 mod close_tests;
@@ -104,6 +109,7 @@ command_registry! {
     SaveMol(SaveMol) => ("document.save_mol", "Atomically save supported MOL data, retaining its associated version by default without silently losing source metadata or layout.", false),
     OpenSdf(OpenSdf) => ("document.open_sdf", "Open every validated SDF record with complete source and ordered data; chemical preview is unavailable.", false),
     SaveSdf(SaveSdf) => ("document.save_sdf", "Atomically save the complete SDF collection without changing molecular versions or ordered data.", false),
+    SdfRecordInspect(SdfRecordInspect) => ("sdf.record.inspect", "Read a bounded ordered field page from an explicitly identified captured SDF record; oversized values are omitted explicitly.", true),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
     BondExtend(BondExtend) => ("bond.extend", "Extend a terminal neutral carbon with a Single bond, explicitly authoring its H3 to H2 and the new carbon's H3; requires native complete data.", false),
@@ -163,6 +169,12 @@ pub enum Error {
         required: &'static str,
         actual: &'static str,
     },
+    #[error("invalid SDF record query: {0}")]
+    InvalidSdfQuery(&'static str),
+    #[error("a single SDF field exceeds the 1 MiB serialized query page budget")]
+    SdfQueryPageLimit,
+    #[error(transparent)]
+    Sdf(#[from] bondline_io::sdf::SdfError),
     #[error("opening a new document requires explicit permission to discard unsaved changes")]
     UnsavedChanges,
     #[error("document revision no longer matches the operation; no change was applied")]
@@ -237,6 +249,8 @@ impl Error {
             Self::UiEpochExhausted => "ui_epoch_exhausted",
             Self::FileBackendUnavailable => "backend_unavailable",
             Self::Mol(error) => error.code(),
+            Self::Sdf(error) => error.code(),
+            Self::SdfQueryPageLimit => "resource_limit",
             Self::EngineUnavailable => "engine_unavailable",
             Self::UnrepresentableFilePath { published: true } => "save_published",
             Self::UnrepresentableFilePath { published: false } => "invalid_path",
@@ -284,6 +298,8 @@ pub struct CommandResult {
     pub document: Option<Arc<Document>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub collection: Option<CollectionSummary>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sdf_record: Option<SdfRecordInspection>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<SourceInfo>,
     pub undo_depth: usize,
@@ -386,6 +402,7 @@ impl Engine {
                 StoredContent::Sdf { .. } => None,
             },
             collection: self.document.collection(),
+            sdf_record: None,
             source: self.document.source_info(),
             undo_depth: self.undo.len(),
             redo_depth: self.redo.len(),
@@ -441,6 +458,10 @@ impl Engine {
                     controls: Some(self.controls()),
                     ..self.state()
                 }));
+            }
+            Command::SdfRecordInspect(params) => {
+                let plan = self.sdf_record_plan(params)?;
+                return Ok(Prepared::sdf_record(self.state(), plan));
             }
             Command::OpenCdxml(params) => {
                 if self.document != self.saved && !params.discard_unsaved {
@@ -779,6 +800,7 @@ mod tests {
                 "history.undo",
                 "page.set_size",
                 "render.capture",
+                "sdf.record.inspect",
                 "ui.controls",
                 "ui.file"
             ]

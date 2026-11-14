@@ -35,7 +35,8 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "bond.extend",
             "history.undo",
             "history.redo",
-            "render.capture"
+            "render.capture",
+            "sdf.record.inspect"
         ]
         .into_iter()
         .collect()

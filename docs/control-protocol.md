@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has eighteen commands; the complete list is below.
+The delivered registry has nineteen commands; the complete list is below.
 
 An engine JSON request is exactly:
 
@@ -52,6 +52,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.save_mol` | `path`, optional `overwrite=false`, `version="auto"` (`auto`, `v2000`, `v3000`) | Atomic MOL save with captured output version; refuses unsupported conversion/metadata/layout loss; imported source retains its frame |
 | `document.open_sdf` | `path`, optional `discard_unsaved=false` | Validate every mixed V2000/V3000 record and retain complete ordered source; clean collection session and cleared history, without a drawing projection |
 | `document.save_sdf` | `path`, optional `overwrite=false` | Atomic whole-source collection save; retains every record, MOL version, ordered field and byte; no molecular regeneration |
+| `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request Open/Save/Save As presentation or cancel the matching picker; a native host is required |
@@ -66,7 +67,7 @@ The delivered CLI exposes `commands` and `run --cmd '<request>'`. Repeat `--cmd`
 sequential operations in one in-memory engine; stdout is one final JSON snapshot. Failure
 prints a structured error to stderr and exits 2 (I/O/serialization failures exit 1). It does
 not make a multi-command transaction. Explicit open/save commands persist the supported
-CDXML/CDX/MOL subsets; otherwise invocations remain independent. `--help` lists actual operations.
+CDXML/CDX/MOL subsets and whole SDF collections; otherwise invocations remain independent. `--help` lists actual operations.
 
 Native Page presets/rotation, Edit Undo/Redo and history shortcuts call these same commands.
 The canvas reads the authored dimensions; no native control edits the model directly.
@@ -297,9 +298,74 @@ The Rust API now exposes `Engine::content()` for all content, while `document()`
 The native chooser/known Save/retry routes are wired to the same commands. SDF uses one
 Open/Save family with `.sdf`/`.sd` hints. The workspace clears old drawing interactions and
 shows a static count/record summary with chemical preview explicitly unavailable. This is
-an original partial presentation, not the observed26.1 all-record drawing layout. Record
-inspection/editing, molecular layout, field UI and actual native SDF acceptance remain
-missing or unverified. See [SDF session evidence](verification-sdf-session-files.md).
+an original partial presentation, not the observed26.1 all-record drawing layout. Explicit
+field inspection is available through the query below. Editing, molecular layout, field UI
+and actual native SDF acceptance remain missing or unverified in this checkpoint.
+See [SDF session evidence](verification-sdf-session-files.md).
+
+### Explicit read-only SDF record inspection
+
+```json
+{"command":"sdf.record.inspect","params":{"expected_revision":1,"record_id":1,"field_offset":4,"field_limit":2}}
+```
+
+Parameters are typed/closed. Revision must match during preparation; record_id is a positive
+local ordinal in that captured collection. A missing record returns not_found. field_offset
+may equal the record's field count, returning an empty terminal page, but may not exceed it.
+field_limit must be1..64 at runtime as well as in discovery schema. Wrong content returns
+unsupported_content; stale revision returns stale_revision; invalid IDs/limits/offsets or
+unknown/preview parameters return invalid_params. Committed close rejects new queries.
+
+Only this explicit command adds sdf_record to the normal result. That object contains
+input_revision, session_generation, record_id, actual mol_version, complete record/MOL
+byte lengths, total field_count, requested field_offset/field_limit, ordered fields,
+next_field_offset and page_limited. Each field has its zero-based occurrence index, exact
+header text excluding its line ending, optional name/textual dt_number, value_byte_length,
+value_line_count, value_lines and omitted_reason. DT leading zeros, duplicate order, spaces
+and tabs remain literal. value_byte_length includes retained value line endings but excludes
+the blank item terminator. Empty data is value_lines:[] with no omission; omitted values
+are value_lines:null with an explicit reason and exact raw byte/line counts. No raw MOL or
+whole-source bytes are returned. Debug remains metadata-only, even for explicit results.
+
+Two independent bounds apply to an individual disclosed value: retained raw bytes and its
+compact UTF-8 JSON line-vector must each be at most65,536 bytes. If raw bytes exceed that
+limit, omitted_reason is value_byte_limit; otherwise an oversized serialized vector uses
+value_json_limit. Quote/backslash/tab escaping and vector punctuation count toward the JSON
+limit. No value is truncated; a field summary still occupies its ordered occurrence and
+pagination can advance past it. Physical source lines retain the codec's separate200-byte
+limit; these query bounds do not change format validation or authorize edits.
+
+The compact serialized **sdf_record object alone** is at most1,048,576 bytes, including
+headers, field/value arrays, metadata, escaping and continuation fields. A counting writer
+checks actual serialization before accepting each field. It returns the largest fitting
+prefix up to field_limit; page_limited:true marks byte-budget truncation and the next offset
+is the first undisclosed occurrence. Otherwise a next offset can still indicate the request
+limit. Nonterminal pages always advance; zero-field/end-offset pages end with next:null.
+An impossible single-field page returns resource_limit rather than looping.
+
+This is a page budget, not a complete response-envelope limit. Normal result/state metadata,
+collection summaries, paths, wrapper keys and LF/protocol framing are outside it. MCP3.9.0's
+structured result also includes a serialized text copy; that duplication/escaping is outside
+the page budget. Clients must not treat the1MiB input-frame or page bounds as an overall MCP
+reply limit. The existing codec, record-count, path, worker and output-deadline bounds still
+apply; no listener or unbounded collection-disclosure API is added.
+
+Preparation validates only cheap kind/revision/record/index metadata and captures immutable
+source/result identity. Source reparse, field cloning and JSON budget work happen outside
+the engine lock using the same two-worker budget and reply/close activity guards as captures
+and file jobs. A busy worker refusal changes no selection, close intent, snapshot or history.
+Cancellation is checked before/after the bounded existing parser call and between field
+operations; that parser call and one bounded serialization step are not preemptible.
+
+Queries leave current/saved/original bytes, dirty state, revision/history, file association
+and close policy unchanged. A completion may return the captured revision/generation after
+a later edit/Open; it never installs its page as current state. Lifecycle metadata refresh
+follows the existing capture contract. Automatic document.inspect still omits all queried
+headers/values, and read-only queries request no repaint. Worker/reply activity nevertheless
+blocks trusted native close acknowledgement through output flush. No selection, preview,
+setter, delete operation or UI editor is delivered here. This is an original inspection API,
+not evidence of a reference-product screen. See
+[query verification](verification-sdf-record-inspect.md).
 
 ## Close requests and host shutdown
 

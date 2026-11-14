@@ -8,8 +8,66 @@ mod chain_support;
 mod file_support;
 #[path = "support/mol.rs"]
 mod mol_support;
+#[path = "../../../xtask/oracles/sdf_record_test_support.rs"]
+mod sdf_record_support;
 #[path = "../../../xtask/oracles/sdf_test_support.rs"]
 mod sdf_support;
+
+#[test]
+fn executable_explicit_sdf_record_queries_keep_duplicates_dt_text_and_automatic_state_private()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = sdf_support::SdfTestDirectory::new()?;
+    for (source, mixed) in [
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/ordered-fields-v2000.sdf").as_slice(),
+            false,
+        ),
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf").as_slice(),
+            true,
+        ),
+    ] {
+        let path = directory.path(if mixed {
+            "query-mixed.sdf"
+        } else {
+            "query-ordered.sdf"
+        });
+        std::fs::write(&path, source)?;
+        for record_id in [1, 2] {
+            let output=Command::new(env!("CARGO_BIN_EXE_bondline-cli")).arg("run")
+                .arg("--cmd").arg(json!({"command":"document.open_sdf","params":{"path":path}}).to_string())
+                .arg("--cmd").arg(json!({"command":"sdf.record.inspect","params":{"expected_revision":1,"record_id":record_id}}).to_string()).output()?;
+            assert!(
+                output.status.success(),
+                "{}",
+                String::from_utf8_lossy(&output.stderr)
+            );
+            let response: Value = serde_json::from_slice(&output.stdout)?;
+            assert_eq!(
+                response["sdf_record"]["fields"],
+                sdf_record_support::expected_fields(mixed, record_id)
+            );
+            assert_eq!(response["sdf_record"]["input_revision"], 1);
+            assert_eq!(response["sdf_record"]["session_generation"], 1);
+            assert_eq!(response["revision"], 1);
+            assert_eq!(response["changed"], false);
+            assert_eq!(response["file"]["dirty"], false);
+            assert_eq!(response["undo_depth"], 0);
+            assert_eq!(response["redo_depth"], 0);
+            sdf_record_support::assert_json_budget(&response["sdf_record"], None)?;
+        }
+        let output=Command::new(env!("CARGO_BIN_EXE_bondline-cli")).arg("run")
+            .arg("--cmd").arg(json!({"command":"document.open_sdf","params":{"path":path}}).to_string())
+            .arg("--cmd").arg(json!({"command":"sdf.record.inspect","params":{"expected_revision":1,"record_id":1}}).to_string())
+            .arg("--cmd").arg(json!({"command":"document.inspect","params":{}}).to_string()).output()?;
+        assert!(output.status.success());
+        let response: Value = serde_json::from_slice(&output.stdout)?;
+        assert!(response.get("sdf_record").is_none());
+        assert_eq!(response["collection"], sdf_support::expected_summary(mixed));
+        sdf_support::independently_read_sdf(&path, source, mixed)?;
+    }
+    Ok(())
+}
 
 #[test]
 fn executable_extends_saves_undoes_reopens_and_extends_the_same_native_chain()
@@ -102,6 +160,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "history.undo",
             "page.set_size",
             "render.capture",
+            "sdf.record.inspect",
             "ui.controls",
             "ui.file"
         ]

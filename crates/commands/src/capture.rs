@@ -50,6 +50,7 @@ pub struct Prepared {
     result: CommandResult,
     capture: Option<(RenderCapture, Page)>,
     file: Option<FilePlan>,
+    sdf_record: Option<crate::sdf_query::RecordPlan>,
 }
 
 impl Prepared {
@@ -58,6 +59,7 @@ impl Prepared {
             result,
             capture: None,
             file: None,
+            sdf_record: None,
         }
     }
 
@@ -66,6 +68,7 @@ impl Prepared {
             result,
             capture: None,
             file: Some(file),
+            sdf_record: None,
         }
     }
 
@@ -84,7 +87,17 @@ impl Prepared {
             result,
             capture: Some((params, page)),
             file: None,
+            sdf_record: None,
         })
+    }
+
+    pub(super) fn sdf_record(result: CommandResult, plan: crate::sdf_query::RecordPlan) -> Self {
+        Self {
+            result,
+            capture: None,
+            file: None,
+            sdf_record: Some(plan),
+        }
     }
 
     pub(super) fn bind_ui_request(&mut self, id: u64) {
@@ -94,7 +107,7 @@ impl Prepared {
     }
 
     pub fn is_deferred(&self) -> bool {
-        self.capture.is_some() || self.file.is_some()
+        self.capture.is_some() || self.file.is_some() || self.sdf_record.is_some()
     }
 
     pub fn complete(self) -> Result<Completed, Error> {
@@ -105,7 +118,10 @@ impl Prepared {
         if let Some(file) = self.file {
             return file.complete(cancel);
         }
-        let deferred_query = self.capture.is_some();
+        let deferred_query = self.capture.is_some() || self.sdf_record.is_some();
+        if let Some(plan) = self.sdf_record {
+            self.result.sdf_record = Some(plan.complete(cancel)?);
+        }
         if let Some((params, page)) = self.capture {
             cancel.check()?;
             let scene =
