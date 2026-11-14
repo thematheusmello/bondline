@@ -122,7 +122,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | CDX | Guarded shared/native Mac Open/Save, exact source retention, limited elemental metadata view and standalone syntax/property/new-tree APIs, checked independently | Faithful preview, broader metadata/chemistry, safe edits/new encoding and foreign/general corpus |
 | MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, with independent byte/record/data checks; SDF summary has no chemical preview | Chemical preview/data-edit UI, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
-| SMILES | Bounded nonaromatic notation/source library, opt-in fixed-H normalization and noncanonical explicit-H Fragment export, checked with external consumers and sanitizer | Application import/backing/layout, broader H/valence policies, aromaticity/stereo and canonicalization |
+| SMILES | Bounded notation/source library with literal aromatic markers; restricted nonaromatic fixed-H normalization and noncanonical Fragment export, checked independently | Application import/backing/layout, broader H/valence policies, aromaticity/stereo and canonicalization |
 | InChI | Planned | Reference-tool comparison and import/export |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |

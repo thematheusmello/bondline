@@ -203,7 +203,9 @@ No-op retains source/index identity, redo and transient close state. Input/outpu
 explicit versus automatic data disclosure, source/current/saved meanings and existing
 worker/reply/save barriers are defined in control-protocol.md. No extra pool or registry.
 
-SMILES retains a distinct complete notation/source IR. Named opt-in normalization returns
+SMILES retains a distinct complete notation/source IR, including literal aromatic atom/bond
+markers. These are not perceived aromaticity; every aromatic marker/bond refuses fixed-H
+model mapping. Named opt-in normalization returns
 a new local-ID Fragment with fixed neutral-profile H and absent positions; it changes no
 source token or model None semantics. The separate restricted explicit-H writer emits
 noncanonical notation from a Fragment. Neither gives a projected graph source-backed Save

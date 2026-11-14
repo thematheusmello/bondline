@@ -8,7 +8,7 @@
 | SDF V2000/V3000 | Complete mixed-version session Open/Save, native Mac files, bounded shared ordered-field inspection/existing-value edits; preserving library codecs | Exact raw spans/order/versions, fetched V2000 corpus, unchanged raw/per-MOL consumers, actual Mac777-byte files, command/CLI/stdio/socket history and stale/close guards; bounded ASAN | Chemical preview/layout, field-edit UI, record operations, fetched mixed-version corpus, broader syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
 | RXN V2000 wrapper | Standalone source-preserving reader/new-wrapper writer with ordered roles and raw V2000/V3000 molecular payloads | Published CTfile layout; original field/role/span vectors; external RDKit readers/writers and bounded ASAN | Reaction model, application/native commands, V3000 reaction wrapper, broader registry/extension handling and fetched corpus |
-| SMILES | Bounded nonaromatic graph/source passthrough, named opt-in fixed-H neutral Fragment normalization and explicit-H export, library only; generated output is noncanonical | Original literal spans/counts/adjacency/output/limits; qualified pinned unsanitized graph and separate sanitized meaning consumers | Application import/backing/live implicit-H policy, source-backed edited regeneration, clipboard/layout, aromatic/stereo/query/perception and canonicalization |
+| SMILES | Bounded graph/source passthrough with literal aromatic markers/bonds, named opt-in fixed-H neutral nonaromatic Fragment normalization and explicit-H export, library only; generated output is noncanonical | Original literal spans/counts/adjacency/output/limits; qualified pinned unsanitized graph and separate sanitized meaning consumers | Application import/backing/live implicit-H policy, source-backed edited regeneration, clipboard/layout, aromatic model mapping, stereo/query/perception and canonicalization |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and positioned neutral-carbon/Single graphs with literal authored H | External Pillow/FreeType, independent graph/pixel/geometry/font vectors, actual native capture and one human-approved golden | Other elements/orders/metadata, source-faithful/general chemical publishing, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
@@ -596,3 +596,22 @@ exact. Missing targets are typed not_found; original syntax/value/quota rules/co
 This is a library candidate operation, not yet an Engine/native data editor. No record
 add/delete/reorder, chemical edit or source reconstruction is delivered. Independent exact
 704/788/743B outputs, consumers, boundaries and fuzz are in verification-sdf-field-value.md.
+
+## Literal aromatic SMILES notation
+
+The source owner now retains `Atom.aromatic`, meaning an authored lowercase symbol,
+and notation `BondOrder::Aromatic`. Bare b/c/n/o/p/s and bracketed forms including
+as/se are supported; uppercase As/Se remain distinct nonaromatic markers. An omitted
+bond is aromatic only between two lowercase-marked endpoints, otherwise Single.
+Explicit `-`, `=`, `#` and `:` retain their declared order, including ring closures;
+one explicit closure declaration wins over omission, and two must agree.
+
+This is syntax/connectivity support. Literal `C:C` retains two uppercase markers and
+one aromatic bond; ringless lowercase chains can be indexed without certifying an
+aromatic molecule. No electron assignment, Kekulization, valence, implicit-H count,
+radical state or chemical validity is computed. Bracket H/isotope/charge tokens,
+whole-source Arcs, offsets, strict EOF and existing budgets remain authoritative.
+Out-of-profile lowercase symbols, stereo/maps/queries and other unsupported features
+still refuse. Both aromatic atom markers and aromatic bonds explicitly refuse opt-in
+fixed-H normalization before integer bond sums/count mapping; the model writer is
+unchanged. See [verification-smiles-aromatic.md](verification-smiles-aromatic.md).

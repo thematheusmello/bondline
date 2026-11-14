@@ -14,6 +14,7 @@ fn order(data: &[u8]) -> BondOrder {
         b"-" => BondOrder::Single,
         b"=" => BondOrder::Double,
         b"#" => BondOrder::Triple,
+        b":" => BondOrder::Aromatic,
         _ => panic!("accepted explicit bond must retain one supported token"),
     }
 }
@@ -59,6 +60,7 @@ fn normalized_export(document: &SmilesDocument) {
             BondOrder::Single => (bondline_model::BondOrder::Single, 1),
             BondOrder::Double => (bondline_model::BondOrder::Double, 2),
             BondOrder::Triple => (bondline_model::BondOrder::Triple, 3),
+            BondOrder::Aromatic => panic!("aromatic bonds must refuse fixed-H normalization"),
         };
         assert_eq!(actual.order, expected_order);
         for endpoint in raw.atoms {
@@ -72,6 +74,10 @@ fn normalized_export(document: &SmilesDocument) {
             u32::try_from(index + 1).expect("dense source ID")
         );
         assert_eq!(actual.element, raw.element);
+        assert!(
+            !raw.aromatic,
+            "aromatic atoms must refuse fixed-H normalization"
+        );
         assert_eq!(raw.charge, 0);
         assert_ne!(raw.isotope, Some(0));
         assert_eq!(actual.isotope.map(NonZeroU16::get), raw.isotope);
@@ -124,6 +130,7 @@ fn normalized_export(document: &SmilesDocument) {
     assert_eq!(parsed.bonds().len(), marked.bonds().len());
     let mut seen = BTreeSet::new();
     for atom in parsed.atoms() {
+        assert!(!atom.aromatic);
         let tag = atom
             .isotope
             .expect("every authored isotope marker retained");
@@ -161,6 +168,7 @@ fn normalized_export(document: &SmilesDocument) {
                 BondOrder::Single => 1,
                 BondOrder::Double => 2,
                 BondOrder::Triple => 3,
+                BondOrder::Aromatic => panic!("exporter must not invent aromatic bonds"),
             };
             (left.min(right), left.max(right), order)
         })
@@ -224,7 +232,11 @@ fuzz_target!(|data: &[u8]| {
     for atom in document.atoms() {
         assert!(previous_end <= atom.range.start);
         let raw = span(data, &atom.range, &outer);
-        let _ = span(data, &atom.symbol_range, &atom.range);
+        let symbol = span(data, &atom.symbol_range, &atom.range);
+        assert_eq!(
+            atom.aromatic,
+            symbol.first().is_some_and(u8::is_ascii_lowercase)
+        );
         previous_end = atom.range.end;
         if raw.starts_with(b"[") {
             assert!(raw.ends_with(b"]"));
@@ -288,6 +300,26 @@ fuzz_target!(|data: &[u8]| {
         assert!(edges.insert((begin.min(end), begin.max(end))));
         if let Some(range) = &bond.bond_range {
             assert_eq!(order(span(data, range, &outer)), bond.order);
+        } else if bond
+            .ring
+            .as_ref()
+            .is_none_or(|ring| ring.open_bond_range.is_none() && ring.close_bond_range.is_none())
+        {
+            let aromatic = bond.atoms.iter().all(|at| {
+                document
+                    .atoms()
+                    .get(*at)
+                    .expect("accepted endpoint")
+                    .aromatic
+            });
+            assert_eq!(
+                bond.order,
+                if aromatic {
+                    BondOrder::Aromatic
+                } else {
+                    BondOrder::Single
+                }
+            );
         }
         if let Some(ring) = &bond.ring {
             assert!(ring.label < 100);

@@ -960,3 +960,24 @@ literal corpus accounting are developer-tool policy. Existing license/notice/has
 case-alias/count/cache-ancestry safeguards retain all old negatives and gain explicit
 fifth-bundle/cache/SMILES-only cases. The original Git unset-text contract now also protects
 the new JSON manifest. Dependency/toolchain/lock/fixture/oracle contents are unchanged.
+## Literal aromatic SMILES syntax, 2026-11-14
+
+[verification-smiles-aromatic.md](../verification-smiles-aromatic.md) records the
+original notation-only extension. The existing exact86816-byte OpenSMILES v1.0
+publisher pin9240a2887158699503605bc838e1de9a9f7883f4/SHA256
+`00f0423da612de913770133aa13e456d0cebc562dd50166534a8a7f9a834bd21`
+was rehashed and read, including its [formal grammar](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc#L100-L172)
+and [aromaticity boundary](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc#L478-L660).
+Lowercase element spellings, bracket-only as/se, omitted versus explicit bond tokens
+and matching ring declarations inform original Rust/tests. Catalog lookup only changes
+case and reuses existing IUPAC facts; no symbol table, parser, GFDL prose/grammar/example
+collection or dependency is adopted.
+
+The IR records source markers/connectivity without aromaticity/electron/valence/H or
+radical perception. Syntax-only `C:C` does not promote uppercase atom markers. Original
+literal graph/range/H/charge/isotope/limit expectations remain primary; the unchanged
+external-only pinned unsanitized RDKit2026.09.2 consumer checks actual whole source.
+Its accepted te/si extensions and contradictory colon/single closure declarations do
+not broaden the profile; numeric-ring-alias refusals remain a consumer difference.
+Every aromatic marker/bond refuses fixed-H model normalization before count mapping.
+No model, exporter guard, native/application import, layout or canonicalization changes.

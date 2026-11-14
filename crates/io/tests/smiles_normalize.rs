@@ -178,7 +178,12 @@ fn unsupported_and_radical_ambiguous_contexts_refuse_without_changing_the_owner(
         parse("[NH4+]")?.normalize_explicit_h_fragment(),
         Err(NormalizeError::Unsupported { offset: 4, .. })
     ));
-    for source in ["c1ccccc1", "[C:4]", "[C@H](F)(Cl)Br", "*", "C~C"] {
+    // Aromatic syntax is retained, while its model normalization still refuses.
+    assert!(matches!(
+        parse("c1ccccc1")?.normalize_explicit_h_fragment(),
+        Err(NormalizeError::Unsupported { offset: 0, .. })
+    ));
+    for source in ["[C:4]", "[C@H](F)(Cl)Br", "*", "C~C"] {
         assert!(
             matches!(
                 SmilesDocument::parse(Arc::from(source.as_bytes())),

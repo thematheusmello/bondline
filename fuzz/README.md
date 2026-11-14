@@ -13,8 +13,8 @@ cp crates/io/tests/fixtures/smiles/*.smi .cache/fuzz/smiles/
 PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --sanitizer address smiles_parse .cache/fuzz/smiles -- -runs=10000 -seed=703592681 -max_len=65536 -timeout=5
 ```
 
-The three original17/21/21-byte seeds retain their independent topology/metadata and
-SHA identities in their fixture README. Copy them into a fresh ignored writable corpus;
+The three original17/21/21-byte and three aromatic9/4/18-byte seeds retain their
+independent topology/metadata and SHA identities in their fixture README. Copy them into a fresh ignored writable corpus;
 never point libFuzzer at committed fixtures. The normal full IO dependency graph is used,
 without a reduced parser manifest, new dependency/tool pin or GPU initialization.
 
@@ -25,9 +25,10 @@ both original numeric ring declarations and dot-chain resource counts. Rejected
 input has a typed error and in-bounds byte offset. Fixed-size/depth limits also have
 explicit unit cases; a max_len ceiling alone does not establish large-input coverage.
 
-This is nonaromatic notation/source fuzzing, not chemical validity, inferred H, radicals,
-stereo/aromaticity, canonicalization, model conversion, generated export, application
-Open/Save or native UI evidence. Independent published-rule/literal/external RDKit tests
+The initial checkpoint below was nonaromatic/source-only. Current checks also cover
+literal aromatic markers and the named normalization/export invariants below, not general
+chemical validity, live inferred H, radicals, stereo/aromaticity perception, canonicalization,
+application Open/Save or native UI evidence. Independent published-rule/literal/external RDKit tests
 remain separate; not every accepted mutation is sent to a chemistry consumer.
 
 First normal-graph local ASan smoke exits0:10000 runs with the settings above,
@@ -352,3 +353,24 @@ nightly-2026-04-01, own absolute fuzz/target, incremental0/release-debug0. Full-
 all-target clippy-Dwarnings and both rustfmt checks pass. CI keeps its three original seeds;
 that hosted corpus is distinct from this five-seed local run. Exact logs/review are in
 verification-smiles-export-fuzz.md. No new target/runtime dependency/model or app behavior.
+
+
+### Aromatic notation and explicit ring tokens
+
+Current source preserves lowercase atom markers and Aromatic orders. Omitted bonds default
+to Aromatic only when both source markers are aromatic. An explicit ordinary or ring token
+wins; Bond.bond_range=None alone does not prove omission because ring declarations retain
+their own ranges. An initially incorrect fuzz assertion was independently caught, reproduced
+on C:1CCC1, then fixed and retested. See verification-smiles-aromatic.md for actual RED/GREEN;
+this was a harness false positive, not a parser/memory defect.
+
+All prior source/H/ring/normalization/export assertions remain. Normalization success must
+contain no aromatic marker/bond; generated restricted export must never invent one. CI now
+copies all six committed seeds (original three plus aromatic cycle, uppercase explicit
+colon and mixed explicit-ring roles). Fetched corpus still pins only the original three.
+Local fresh9-seed normal-ASAN64957 includes those six plus original4096-atomC andc chains
+and multiring data:8304B initially, max4097B.10000runs, seed703592681/max_len65536/timeout5,
+exit0, cov1979/features7021,331retained inputs/reported406KiB/RSS422MiB,8seconds. Largest
+exercised input4097B; the64KiB ceiling is not coverage. Same unchanged full fuzz manifest/
+lock, pinned tools/nightly, own absolute fuzz/target/incremental0/release-debug0. Stable
+all-target clippy/fmt pass. This bounded smoke is not exhaustive chemistry or a security audit.

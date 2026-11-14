@@ -79,7 +79,8 @@ render (L1, shared neutral-carbon/Single GraphScene, bounded hit regions, litera
 labels, CPU/GPU rectangles/strokes and approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
 bounded native CDXML/CDX/MOL/SDF filesystem libraries and source-preserving SDF/RXN container records;
-bounded nonaromatic SMILES notation/source ownership, opt-in fixed-H normalization and
+bounded SMILES notation/source ownership including literal aromatic markers/bonds,
+opt-in fixed-H normalization and
 restricted noncanonical Fragment export, not application SMILES or chemistry;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
@@ -318,3 +319,16 @@ terminator/header/DT/padding/other records/MOL bytes. Typed missing targets use 
 existing parser/writer error codes and quotas remain. It is not an Engine edit command;
 Open/Save already retain whole current/saved/history source. Future record operations
 must not make ordinal IDs promises across record deletion/reorder without an identity design.
+
+
+## SMILES source markers
+
+Aromatic atom/bond markers are notation, not aromaticity or valence perception. The named
+fixed-H normalizer must reject any aromatic atom OR bond before integer counts; uppercase
+C:C has false atom markers and an explicit Aromatic bond. Keep the writer/model guard intact.
+Match the notation BondOrder exhaustively in corpus/fuzz. Ring explicit tokens live in
+RingClosure.open_bond_range/close_bond_range even when Bond.bond_range is None; endpoint
+aromatic defaults apply only when every applicable explicit token is absent. Original
+explicit-ring regression seeds protect this distinction. Fetched corpus remains three
+original nonaromatic vectors; six committed fuzz seeds are a different dataset. Never
+repin old manifests or drop Root's additive seed/consumer tests when receiving codec work.

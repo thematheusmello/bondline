@@ -178,11 +178,11 @@
   ../research/installed-sdf-import.md; any interim Bondline record/data panel is original
   policy until separately evidenced, not a26.1 workflow claim.
 
-- The bounded SMILES notation library deliberately resolves no model hydrogen/radical
-  policy. Bare organic implicit H, bracket omission/H0 and separately bonded H retain
-  distinct source/IR facts; converting them into model None/Some(n) needs a separately
-  approved/tested design. Aromaticity/stereo/maps, general charge/radical/valence
-  semantics, deterministic generated output versus canonicalization, layout and native
-  copy/paste remain unimplemented. Pinned unsanitized RDKit has documented dialect and
-  token-normalization differences; its default zero radical getters and unavailable
-  Python cleanup control cannot decide those semantics. See verification-smiles.md.
+- Named opt-in normalization now materializes a restricted neutral fixed-H profile, and a
+  separate Fragment writer emits noncanonical notation. Source/IR distinctions remain;
+  live implicit-H editing, general radical/charge/polyvalent behavior, source-backed
+  application SMILES and layout remain unresolved. Literal aromatic syntax now exists,
+  but aromatic model mapping/perception, stereo/maps and canonicalization do not. Pinned
+  unsanitized RDKit has documented dialect/token-normalization differences; zero radical
+  getters and unavailable Python cleanup control cannot decide these semantics. See
+  verification-smiles.md, verification-smiles-normalize.md and verification-smiles-aromatic.md.

@@ -5,21 +5,21 @@ use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::{error::Error, sync::Arc};
 
-fn atom(element: u8, isotope: Option<u16>, charge: i8, hydrogens: Value) -> Value {
-    json!({"element":element,"isotope":isotope,"charge":charge,"hydrogens":hydrogens})
+fn atom(element: u8, aromatic: bool, isotope: Option<u16>, charge: i8, hydrogens: Value) -> Value {
+    json!({"element":element,"aromatic":aromatic,"isotope":isotope,"charge":charge,"hydrogens":hydrogens})
 }
 
 fn literal(bytes: &[u8]) -> Result<Value, Box<dyn Error>> {
     Ok(match bytes {
         b"[13CH3][CH2][OH]\n" => json!({"notation_end":16,"chain_starts":1,
-            "atoms":[atom(6,Some(13),0,json!(3)),atom(6,None,0,json!(2)),atom(8,None,0,json!(1))],
+            "atoms":[atom(6,false,Some(13),0,json!(3)),atom(6,false,None,0,json!(2)),atom(8,false,None,0,json!(1))],
             "bonds":[[0,1,"single",null],[1,2,"single",null]],"rings":[]}),
         b"C%73CC%73.C%74CCC%74\n" => json!({"notation_end":20,"chain_starts":2,
-            "atoms":vec![atom(6,None,0,json!("implicit"));7],
+            "atoms":vec![atom(6,false,None,0,json!("implicit"));7],
             "bonds":[[0,1,"single",null],[0,2,"single",73],[1,2,"single",null],[3,4,"single",null],[3,6,"single",74],[4,5,"single",null],[5,6,"single",null]],
             "rings":[{"label":73,"open_range":[1,4],"close_range":[6,9]},{"label":74,"open_range":[11,14],"close_range":[17,20]}]}),
         b"[Na+].[O-][CH2]C(C)C\n" => json!({"notation_end":20,"chain_starts":2,
-            "atoms":[atom(11,None,1,json!(0)),atom(8,None,-1,json!(0)),atom(6,None,0,json!(2)),atom(6,None,0,json!("implicit")),atom(6,None,0,json!("implicit")),atom(6,None,0,json!("implicit"))],
+            "atoms":[atom(11,false,None,1,json!(0)),atom(8,false,None,-1,json!(0)),atom(6,false,None,0,json!(2)),atom(6,false,None,0,json!("implicit")),atom(6,false,None,0,json!("implicit")),atom(6,false,None,0,json!("implicit"))],
             "bonds":[[1,2,"single",null],[2,3,"single",null],[3,4,"single",null],[3,5,"single",null]],"rings":[]}),
         _ => return Err("SMILES corpus vector has no reviewed literal expectations".into()),
     })
@@ -32,6 +32,7 @@ fn notation(document: &SmilesDocument) -> Value {
         .map(|a| {
             atom(
                 a.element.get(),
+                a.aromatic,
                 a.isotope,
                 a.charge,
                 match a.hydrogens {
@@ -52,6 +53,7 @@ fn notation(document: &SmilesDocument) -> Value {
                     BondOrder::Single => "single",
                     BondOrder::Double => "double",
                     BondOrder::Triple => "triple",
+                    BondOrder::Aromatic => "aromatic",
                 },
                 b.ring.as_ref().map(|r| r.label),
             )
@@ -158,6 +160,24 @@ mod tests {
     }
 
     #[test]
+    fn corpus_observes_literal_aromatic_markers_without_promoting_element_case()
+    -> Result<(), Box<dyn Error>> {
+        for (source, expected) in [
+            (CHAIN, false),
+            (b"[13cH3][CH2][OH]\n".as_slice(), true),
+            (b"C:C\n".as_slice(), false),
+        ] {
+            let document = SmilesDocument::parse(Arc::from(source))?;
+            assert_eq!(notation(&document)["atoms"][0]["aromatic"], expected);
+        }
+        let document = SmilesDocument::parse(Arc::from(CHAIN))?;
+        let mut wrong = notation(&document);
+        wrong["atoms"][0]["aromatic"] = json!(true);
+        assert!(compare(CHAIN, &wrong).is_err());
+        Ok(())
+    }
+
+    #[test]
     fn corpus_rejects_changed_raw_source_graph_h_charge_isotope_and_ring_identity()
     -> Result<(), Box<dyn Error>> {
         for (bytes, changes) in [
@@ -167,6 +187,7 @@ mod tests {
                     ("/notation_end", json!(17)),
                     ("/chain_starts", json!(2)),
                     ("/atoms/0/element", json!(7)),
+                    ("/atoms/0/aromatic", json!(true)),
                     ("/atoms/0/isotope", json!(12)),
                     ("/atoms/0/charge", json!(1)),
                     ("/atoms/1/hydrogens", json!(0)),

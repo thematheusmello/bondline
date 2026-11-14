@@ -28,3 +28,23 @@ radicals, chemical validity, layout or general parser conformance.
 Fuzzing must COPY these seeds into an ignored mutation directory, never mutate this
 committed directory. A bounded sanitizer run is not exhaustive coverage or an independent
 chemical oracle for every accepted mutation.
+
+
+## Aromatic notation seeds
+
+The three additional original dual-licensed files below exercise source markers, not
+chemical perception. CI copies all six committed.smi files into ignored mutation storage;
+the fetched corpus remains the original three vectors at its unchangedeabe02f pin.
+
+| File | Bytes | SHA-256 | Literal graph expectation |
+|---|---:|---|---|
+| aromatic-cycle.smi |9|3f1fc605b1087f50395dac8ce2981a09d3019a2f37ec61cdc0df692230570636|6lowercase carbon markers/6Aromatic edges/1component; bare H stays implicit, not inferred|
+| explicit-aromatic-bond.smi |4|c96c5a85ca193233591215c2f253c1cee190a97413cba3cc8c70a093b81eee07|2uppercase carbon markers remain nonaromatic;1explicit Aromatic bond; normalization refuses this syntax-only graph|
+| explicit-ring-orders.smi |18|3675e07cb329fc0ac1428f8d2f40856280f9a8287d770356e3508a2387717386|Two components: uppercase4-carbon ring with explicit Aromatic closure; lowercase6-carbon ring with explicit Single closure, all other orders literal |
+
+Actual fixture bytes face literal marker/edge/EOF checks and the unchanged pinned
+unsanitized RDKit consumer. A colon does not promote uppercase atom markers in the IR.
+No canonical chemistry, valence-validity, aromaticity calculation or model conversion is
+claimed; every aromatic marker/bond refuses the fixed-H normalizer. Original three source
+files/metadata/hashes and all source pins remain unchanged. These new files are authored
+regression data, not a copied vendor/sample library or a prospective fetched-source pin.

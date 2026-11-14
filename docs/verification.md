@@ -2089,3 +2089,19 @@ offline corpus67296 pass8files/5bundles/3SMILES checks. All old fixtures/pins/or
 newer source/native records remain intact; new-source hosted checks are pending.
 The user now explicitly uses the computer; continue headless work and defer local interactive
 desktop tests until availability is indicated. No goal pause, new GUI action or M1 completion.
+
+
+## Aromatic notation receiving integration, 2026-11-14
+
+[Exact aromatic evidence](verification-smiles-aromatic.md) records public-grammar/source
+markers, untouched production writer/model/consumer and deliberate positive migration of
+old aromatic refusals. Root receives178aee9, preserving its extra seed test/consumer entries.
+Actual exhaustive-match and missing-literal-flag REDs precede explicit corpus/fuzz handling.
+A peer-found ring-token assertion false positive was reproduced and fixed; exact explicit
+ring regression seeds now protect it, without changing the parser or weakening old checks.
+
+Final Root99138 passes648workspace+3bridge=651 and all gates; normal full-graph fuzz
+clippy/fmt and ASAN64957:10000 pass. Actual fetched corpus remains8files/5bundles/3SMILES;
+six committed fuzz seeds and nine local starting seeds are separate datasets. Full hashes/
+reports/scopes are linked above. Hosted checks for the receiving source are pending. The
+user continues using the desktop; no local GUI/input/activation or new native claim.

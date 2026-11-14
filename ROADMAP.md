@@ -71,7 +71,8 @@ container and reviewed legacy RXN container are integrated.
 These libraries retain complete raw molecular/data/role payloads; SDF whole-session files
 are now wired, while reaction models/commands/native workflows remain separate missing work.
 The original bounded SMILES notation/source library now has literal graph/token/limit
-tests and qualified pinned external-parser evidence. Bare implicit H, bracket H0 and
+tests and qualified pinned external-parser evidence. Literal aromatic atom/bond markers
+are preserved without perception. Bare implicit H, bracket H0 and
 physical H remain distinct. Named opt-in normalization materializes only a closed neutral
 fixed-H subset; a separate Fragment exporter generates noncanonical notation. Both have
 literal/external-consumer/boundary tests and combined ASAN evidence. Application source
