@@ -812,3 +812,21 @@ the existing pinned unsanitized consumer unchanged. A separate sanitized externa
 molecule checks simple formula/canonical-meaning/radical expectations, without becoming
 Bondline chemistry or canonicalization. The existing consumer-dialect/default-cleanup
 qualifications remain. No parser behavior, model semantics, dependency or lock changes.
+
+## Opt-in fixed-H SMILES normalization, 2026-11-14
+
+[verification-smiles-normalize.md](../verification-smiles-normalize.md) records the
+named library operation that materializes the accepted neutral subset's source H
+rules as fixed model counts. The same pinned OpenSMILES v1.0 and existing CTfile VAL
+and CDXML NumHydrogens/display sources distinguish bare/bracket counts, physical H,
+source constraints and depiction. No model None meaning, literal-label rule or global
+valence policy changes; the finite C4/N3/O2/halogen1/physical-H1 target table is shared
+with the existing writer, without changing its guards/messages.
+
+Original count/bond/source-retention vectors and unchanged pinned external consumers
+check actual normalized generated output; separate sanitized chemical expectations
+do not become a Bondline chemistry or radical-perception claim. Undercoordinated
+brackets, isotope0, charge and broader valences refuse while source/IR remain exact.
+The normalization choice is explicit, not a live implicit-H/native import, layout,
+source-backed Save or canonicalization feature. No upstream implementation/prose/
+assets, new dependency/lock or model-origin field is adopted.

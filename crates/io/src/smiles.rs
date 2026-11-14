@@ -1,12 +1,14 @@
 //! A bounded, source-preserving nonaromatic SMILES notation graph.
 //!
-//! This is syntax and connectivity, not chemical validation, hydrogen perception,
+//! Parsing is syntax and connectivity, not chemical validation, hydrogen perception,
 //! model projection, layout or canonicalization. Source spellings stay authoritative.
 
 use bondline_model::Element;
 use std::{collections::HashSet, ops::Range, sync::Arc};
 
+mod normalize;
 mod write;
+pub use normalize::NormalizeError;
 pub use write::{WriteError, write_fragment};
 
 pub const MAX_SMILES_BYTES: usize = 65_536;
