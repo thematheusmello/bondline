@@ -2,7 +2,7 @@
 
 use bondline_io::smiles::{BondOrder, Hydrogens, SmilesDocument};
 use libfuzzer_sys::fuzz_target;
-use std::{collections::BTreeSet, ops::Range, sync::Arc};
+use std::{collections::BTreeSet, num::NonZeroU16, ops::Range, sync::Arc};
 
 fn span<'a>(data: &'a [u8], range: &Range<usize>, outer: &Range<usize>) -> &'a [u8] {
     assert!(outer.start <= range.start && range.start < range.end && range.end <= outer.end);
@@ -26,6 +26,161 @@ fn label(data: &[u8]) -> u8 {
         .expect("ASCII ring label")
         .parse()
         .expect("ring label is in 0..99")
+}
+
+// Unique authored isotope markers recover every output endpoint independently of DFS order.
+fn normalized_export(document: &SmilesDocument) {
+    let fragment = match document.normalize_explicit_h_fragment() {
+        Ok(fragment) => fragment,
+        Err(error) => {
+            assert!(matches!(
+                error.code(),
+                "unsupported_content" | "resource_limit"
+            ));
+            match error {
+                bondline_io::smiles::NormalizeError::Unsupported { offset, .. }
+                | bondline_io::smiles::NormalizeError::Valence { offset, .. } => {
+                    assert!(offset < document.notation_range().end);
+                }
+                _ => {}
+            }
+            return;
+        }
+    };
+    assert_eq!(fragment.atoms().len(), document.atoms().len());
+    assert_eq!(fragment.bonds().len(), document.bonds().len());
+    let mut sums = vec![0_u16; document.atoms().len()];
+    for (actual, raw) in fragment.bonds().iter().zip(document.bonds()) {
+        let [left, right] = raw
+            .atoms
+            .map(|at| u32::try_from(at + 1).expect("dense source ID"));
+        assert_eq!([actual.begin.get(), actual.end.get()], [left, right]);
+        let (expected_order, weight) = match raw.order {
+            BondOrder::Single => (bondline_model::BondOrder::Single, 1),
+            BondOrder::Double => (bondline_model::BondOrder::Double, 2),
+            BondOrder::Triple => (bondline_model::BondOrder::Triple, 3),
+        };
+        assert_eq!(actual.order, expected_order);
+        for endpoint in raw.atoms {
+            let sum = sums.get_mut(endpoint).expect("source endpoint");
+            *sum = sum.checked_add(weight).expect("bounded bond sum");
+        }
+    }
+    for (index, (actual, raw)) in fragment.atoms().iter().zip(document.atoms()).enumerate() {
+        assert_eq!(
+            actual.id.get(),
+            u32::try_from(index + 1).expect("dense source ID")
+        );
+        assert_eq!(actual.element, raw.element);
+        assert_eq!(raw.charge, 0);
+        assert_ne!(raw.isotope, Some(0));
+        assert_eq!(actual.isotope.map(NonZeroU16::get), raw.isotope);
+        let hydrogens = match raw.hydrogens {
+            Hydrogens::Bracket(count) => u16::from(count),
+            Hydrogens::Implicit => {
+                let target: u16 = match raw.element.get() {
+                    6 => 4,
+                    7 => 3,
+                    8 => 2,
+                    9 | 17 | 35 | 53 => 1,
+                    _ => panic!("unsupported implicit element cannot normalize"),
+                };
+                target
+                    .checked_sub(*sums.get(index).expect("source sum"))
+                    .expect("closed valence")
+            }
+        };
+        assert_eq!(actual.explicit_hydrogens, Some(hydrogens));
+    }
+    let atoms = fragment
+        .atoms()
+        .iter()
+        .map(|atom| {
+            assert_eq!(atom.position, None);
+            assert_eq!(atom.charge, 0);
+            assert_eq!(atom.radical, bondline_model::Radical::None);
+            assert!(atom.explicit_hydrogens.is_some());
+            let mut marked = atom.clone();
+            marked.isotope =
+                NonZeroU16::new(u16::try_from(atom.id.get()).expect("bounded dense ID"));
+            marked
+        })
+        .collect();
+    let marked = bondline_model::Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec())
+        .expect("only isotope metadata changed");
+    let output = match bondline_io::smiles::write_fragment(&marked) {
+        Ok(output) => output,
+        Err(error) => {
+            assert_eq!(error.code(), "resource_limit");
+            return;
+        }
+    };
+    assert_eq!(
+        output,
+        bondline_io::smiles::write_fragment(&marked).expect("deterministic export")
+    );
+    let parsed = SmilesDocument::parse(Arc::from(output)).expect("generated notation must parse");
+    assert_eq!(parsed.atoms().len(), marked.atoms().len());
+    assert_eq!(parsed.bonds().len(), marked.bonds().len());
+    let mut seen = BTreeSet::new();
+    for atom in parsed.atoms() {
+        let tag = atom
+            .isotope
+            .expect("every authored isotope marker retained");
+        assert!(tag > 0 && seen.insert(tag));
+        let original = marked
+            .atoms()
+            .get(usize::from(tag - 1))
+            .expect("known marker");
+        assert_eq!(u32::from(tag), original.id.get());
+        assert_eq!(atom.element, original.element);
+        assert_eq!(atom.charge, original.charge);
+        assert_eq!(
+            atom.hydrogens,
+            Hydrogens::Bracket(
+                u8::try_from(original.explicit_hydrogens.expect("literal H"))
+                    .expect("closed profile H fits token")
+            )
+        );
+    }
+    let actual = parsed
+        .bonds()
+        .iter()
+        .map(|bond| {
+            let [left, right] = bond.atoms.map(|at| {
+                u32::from(
+                    parsed
+                        .atoms()
+                        .get(at)
+                        .expect("parsed endpoint")
+                        .isotope
+                        .expect("marker"),
+                )
+            });
+            let order = match bond.order {
+                BondOrder::Single => 1,
+                BondOrder::Double => 2,
+                BondOrder::Triple => 3,
+            };
+            (left.min(right), left.max(right), order)
+        })
+        .collect::<BTreeSet<_>>();
+    let expected = marked
+        .bonds()
+        .iter()
+        .map(|bond| {
+            let left = bond.begin.get();
+            let right = bond.end.get();
+            let order = match bond.order {
+                bondline_model::BondOrder::Single => 1,
+                bondline_model::BondOrder::Double => 2,
+                bondline_model::BondOrder::Triple => 3,
+                _ => panic!("normalization cannot invent other bond orders"),
+            };
+            (left.min(right), left.max(right), order)
+        })
+        .collect::<BTreeSet<_>>();
+    assert_eq!(actual, expected);
 }
 
 fuzz_target!(|data: &[u8]| {
@@ -147,5 +302,6 @@ fuzz_target!(|data: &[u8]| {
             }
         }
     }
+    normalized_export(&document);
     assert_eq!(source.as_ref(), data);
 });

@@ -325,3 +325,30 @@ timeout5: cov1688/features5390,306inputs/reported158KiB/RSS59MiB,5seconds, large
 777B. Full-graph all-target clippy/fmt pass; see verification-sdf-field-value.md for exact
 logs/hashes and scope. No Engine command, native workflow or arbitrary-mutation external
 chemical equivalence is claimed from these harness assertions.
+
+
+### Fixed-H normalization and explicit-H export
+
+The existing SMILES target now also checks successful normalization directly against
+accepted source IR: every dense ID, element, original positive isotope, neutral charge,
+literal bracket H or independently counted implicit H, and each endpoint/order. Source
+bytes/IR remain unchanged. Typed unsupported normalization is allowed; it is not a general
+chemical-validity oracle. Successful export may refuse only a documented resource budget.
+
+A separate cloned test graph assigns unique positive isotope markers from dense atom IDs.
+Generated notation must parse, preserve every marked atom/literal H and every undirected
+edge/order, and repeat deterministically. Markers are original test metadata, not claims
+that those nuclides physically exist. They permit complete endpoint comparison without
+assuming the writer preserves source traversal order. External original-vector consumers
+remain separate; this internal invariant is not independent chemical interoperability.
+All prior parser/source/token assertions stay byte-for-byte recoverable.
+
+Final local normal-graph ASAN45229 passes10000 at seed703592681/max_len65536/timeout5.
+Fresh ignored corpus: three unchanged licensed seeds, original4096-carbon chain and small
+multiring notation; five files/4176B, largest4097B. Finalcov1867/features6734,246retained
+inputs/reported309KiB/RSS474MiB,6seconds. Configured65536 is a ceiling, not exercised
+large-input proof. Standard manifest/unchanged fuzz lock, cargo-fuzz0.13.2/libFuzzer0.4.13/
+nightly-2026-04-01, own absolute fuzz/target, incremental0/release-debug0. Full-graph stable
+all-target clippy-Dwarnings and both rustfmt checks pass. CI keeps its three original seeds;
+that hosted corpus is distinct from this five-seed local run. Exact logs/review are in
+verification-smiles-export-fuzz.md. No new target/runtime dependency/model or app behavior.

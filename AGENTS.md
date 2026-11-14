@@ -79,7 +79,8 @@ render (L1, shared neutral-carbon/Single GraphScene, bounded hit regions, litera
 labels, CPU/GPU rectangles/strokes and approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
 bounded native CDXML/CDX/MOL/SDF filesystem libraries and source-preserving SDF/RXN container records;
-bounded nonaromatic SMILES notation/source ownership, not application SMILES or chemistry;
+bounded nonaromatic SMILES notation/source ownership, opt-in fixed-H normalization and
+restricted noncanonical Fragment export, not application SMILES or chemistry;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
@@ -142,7 +143,12 @@ Native/hosted evidence must be separate from engine/egui tests; see
 docs/verification-v3000-application.md. No runtime dependency or codec source changed here.
 
 SDF is a mixed V2000/V3000 source container and complete application-content variant.
-Shared Open/Save retain every record; chemical preview and record-edit commands remain missing.
+Shared Open/Save retain every record. sdf.record.inspect exposes bounded ordered fields;
+sdf.field.set_value edits one existing occurrence through immutable deferred candidates.
+Chemical preview, field-edit UI and record operations remain missing. Preserve off-lock
+work, exact no-op sharing, stale revision/generation/Arc checks, saved/original distinctions
+and the same worker/reply/close barriers. Explicit data results are separate from automatic
+metadata-only state/Debug; see control-protocol.md for input/output budgets.
 Its generic writer preserves actual molecular versions; write_v2000 must refuse V3000. Preserve exact
 record/MOL/item spans, duplicate order, raw headers/DT digits, empty/multiline values and
 opaque embedded MOL bytes. Never rebuild these from RDKit's last-value property map: its
@@ -161,7 +167,7 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current eighteen-command registry includes complete SDF Open/Save and bond.create for independent C-C fragments with
+The current twenty-command registry includes complete SDF Open/Save and bond.create for independent C-C fragments with
 three explicitly authored H per carbon, plus CDXML/CDX/MOL open/save. bond.extend is a
 headless terminal-carbon operation with required explicit H3-to-H2 policy and expected
 revision; only source-free or byte-proven native CDXML is allowed. Actual MOL/CDX backing

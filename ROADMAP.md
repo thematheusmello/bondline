@@ -41,7 +41,8 @@ The complete SDF session/Open/Save slice now retains every mixed-version record 
 ordered data byte through current/saved/history and all shared adapters. Native Mac mixed-
 version Open/Save/Unicode Save As/reopen and failed-import retention now pass onbb6d5b9;
 the690-byte and additional refusal checks are controller-only. Root's590 gate and matching
-three-platform hosted checks pass. Chemical preview/layout, record/field edit commands and
+three-platform hosted checks pass. Bounded field inspection/existing-value commands now pass engine/CLI/MCP tests.
+Chemical preview/layout, field-edit UI, record operations and
 broader SDF interoperability remain missing; see docs/verification-sdf-session-files.md and
 docs/verification-native-sdf-and-extension.md. SDF uses a static summary, unlike the reference's
 observed all-visible molecular drawings. This is not M1 completion.
@@ -70,8 +71,10 @@ These libraries retain complete raw molecular/data/role payloads; SDF whole-sess
 are now wired, while reaction models/commands/native workflows remain separate missing work.
 The original bounded SMILES notation/source library now has literal graph/token/limit
 tests and qualified pinned external-parser evidence. Bare implicit H, bracket H0 and
-physical H remain distinct; no model projection, generated export, chemical perception,
-layout or application SMILES command is delivered. See docs/verification-smiles.md.
+physical H remain distinct. Named opt-in normalization materializes only a closed neutral
+fixed-H subset; a separate Fragment exporter generates noncanonical notation. Both have
+literal/external-consumer/boundary tests and combined ASAN evidence. Application source
+backing/import/layout, aromaticity/stereo/perception and canonicalization remain missing. See docs/verification-smiles.md.
 Full M0
 inventory/dialog/addressability gaps remain tracked while this format work proceeds.
 

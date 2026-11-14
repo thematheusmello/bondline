@@ -2042,3 +2042,23 @@ review found no confirmed defect; Root98376 passes595workspace+3bridge=598 and a
 log SHA d1d5a4cd047fb02e9630805f8781e3b0114dd46098cfbf65022e3995b6410a75.
 Normal exporter fuzz/new-source hosted checks remain pending. This is a restricted library
 Fragment exporter, not model import, canonicalization or source-backed/application Save.
+
+
+## Fixed-H normalization, SDF field commands and combined fuzz, 2026-11-14
+
+Root receives the separate normalization3295e8e, record query9cc40d0 and setter6cc6bf8
+without changing their frozen implementation/test hashes or older Root assertions.
+[Normalization](verification-smiles-normalize.md), [query](verification-sdf-record-inspect.md)
+and [setter](verification-sdf-field-command.md) have independent read-only reviews and
+actual receiving gates604,618 and634 respectively (all include3Mac bridge checks).
+Final634 gate73303 logSHA a8ce07f845ed489e6c182d1bfcab36d2d97f81dfade3bd75e718599f54f37ba2
+passes fmt/all-target clippy/layers/unchanged licenses and corpus with0failed/ignored.
+Twenty registry names are available through the delivered adapters; field UI is missing.
+
+[Combined fuzz](verification-smiles-export-fuzz.md) resolves a peer-found source-to-normalized
+comparison gap before final ASAN45229:10000, seed703592681, max_len65536/timeout5,
+five original starting seeds including4096atoms, exit0. Final normal harness/new assertions
+preserve all original source checks. Source/external fixed vectors remain independent;
+these generated invariants do not establish arbitrary chemistry. No new native workflow,
+golden/dependency/lock/model semantic or complete M0/M1 claim. Hosted checks are pending
+for the receiving revision; previousbb6d5b9 evidence cannot be substituted.
