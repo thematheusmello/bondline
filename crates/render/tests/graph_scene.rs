@@ -206,7 +206,10 @@ fn no_supported_scene_silently_hides_unsupported_atom_metadata_or_bond_orders() 
         let page = changed(&base, |atoms, _| {
             if let Some(atom) = atoms.first_mut() {
                 match kind {
-                    0 => atom.element = Element::try_from(8).unwrap_or(atom.element),
+                    0 => {
+                        atom.element = Element::try_from(1).unwrap_or(atom.element);
+                        atom.explicit_hydrogens = Some(1);
+                    }
                     1 => atom.charge = 1,
                     2 => atom.isotope = std::num::NonZeroU16::new(13),
                     3 => atom.radical = bondline_model::Radical::Doublet,

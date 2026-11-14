@@ -30,14 +30,16 @@ Separate x/y conversion factors follow that rounding, whose aspect error remains
 background, gray 210 shadow, gray 196 border and white interior. This is not a journal preset.
 Existing hand-authored 8×8 page-grid, clipping and odd-pitch tests continue to pass.
 
-The chemical producer now builds one GraphScene for arbitrary supported carbon topology:
-positioned neutral carbon and Single bonds, including chains, branches, cycles and disconnected
-components. The creation command still supplies only its independent C–C/three-H fragment.
-The renderer performs no valence inference: authored H0 draws C, H1 draws CH, larger counts
-are literal subscripts. Missing H may be skeletal on connected carbon; isolated unknown-H
-refuses. Other elements/orders/isotope/charge/radical/missing positions fail explicitly.
+The chemical producer builds one GraphScene for positioned neutral elements and Single
+bonds, including chains, branches, cycles and disconnected components. Noncarbon symbols
+are explicit; authored H is literal and unknown H is omitted without changing model None.
+Carbon retains H0/C, H1/CH and larger literal subscripts, skeletal connected unknown-H and
+isolated unknown-H refusal. Physical H cannot carry positive inline H. Other orders,
+isotopes, charges, radicals and missing positions fail explicitly. The original catalog
+is shared from pure model; no valence inference or authoring tool was added.
 Completeness guards still refuse unmodeled source; this is not source-faithful style/stereo/
-text/reaction rendering or connected drawing. See verification-carbon-graph.md.
+text/reaction rendering or connected drawing. Neutral-label evidence is headless only;
+see verification-neutral-element-labels.md and the earlier verification-carbon-graph.md.
 
 IUPAC GR-2.1.2 requires terminal labels for an isolated ethane bond. The producer uses H3C/CH3
 with the 3 subscripted, keeping C centered at its authored endpoint and facing the bond.

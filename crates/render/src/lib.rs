@@ -63,7 +63,7 @@ pub enum Error {
     )]
     InvalidStroke,
     #[error(
-        "the preview supports positioned neutral carbon and single bonds; hydrogens must be authored for isolated atoms"
+        "the preview supports positioned neutral elements and single bonds; isolated carbon needs authored H and physical H cannot carry attached H"
     )]
     UnsupportedChemicalContent,
     #[error("the bundled label font could not be decoded")]

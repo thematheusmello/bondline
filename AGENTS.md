@@ -90,7 +90,7 @@ cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attrib
 replacement and a bounded new-syntax writer);
 cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque property
 replacement and new-tree Writer; model mapping and application commands live above this crate);
-render (L1, shared neutral-carbon/Single GraphScene, bounded hit regions, literal authored-H
+render (L1, shared neutral-element/Single GraphScene, bounded hit regions, literal authored-H
 labels, CPU/GPU rectangles/strokes and approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
 bounded native CDXML/CDX/MOL/SDF filesystem libraries and source-preserving SDF/RXN container records;
@@ -303,18 +303,27 @@ native evidence. Never bypass shared FilePlan/Completed reservations in those ad
 Normal CDX fuzzing now exercises projection/snapshot guards; both lock edges add only the
 existing internal CDX crate. New native declared closures154/165/220 include that crate.
 
-## Carbon graph display and transient hover
+## Neutral graph display and transient hover
 
-graph_page_scene and registered captures share a bounded GraphScene. Positioned neutral
-carbon/Single only; missing H is never inferred, connected unknown-H may be skeletal,
-isolated unknown-H/other elements/metadata/orders or unsupported geometry refuse. Authored
-0/1/N H renders literally. Source completeness/export guards remain independent and strict.
+graph_page_scene and registered captures share a bounded GraphScene. Positioned neutral,
+nonisotopic/RadicalNone elements and Single bonds only. Missing H is never inferred:
+connected unknown-H carbon may be skeletal, isolated unknown-H carbon refuses, and other
+elements retain literal symbols without inventing H. Authored0/1/N H renders literally;
+physical H cannot carry positive attached H. Unsupported metadata/orders/geometry refuse.
+Element::from_symbol/symbol owns the verbatim IUPAC catalog; IO delegates without new
+heap fields. Source completeness/export guards remain independent and strict.
 Atom/label priority, visible clipped ink, five logical canvas units and stable-ID ties are
 original policies, not full selection or reference-product default claims. Hover state is
 UI-only and excluded from Scene/history/source: revision/Escape/focus/context invalidation
 stays clear until a fresh ordered positional event. Context includes available origin,
 public native origin and effective DPI. Keep multi-idle-frame regressions and native checks;
 do not rearm from cached hover_pos, key release or focus gain alone. No OS pointer polling.
+
+Neutral-label verification includes independent metric vectors and one uniform4xBOX
+FreeType reference at the same96em/0.90 threshold. Keep all80 positives/controls, failed
+native96 measurements and bounded8x consistency qualifications. Do not adjust production,
+font or the old carbon oracle/golden to fit a new test. See verification-neutral-element-labels.md;
+native/newWindows/Linux label workflows remain unverified.
 
 
 ## Owned whole-SDF prerequisite

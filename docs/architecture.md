@@ -153,8 +153,9 @@ Capture refuses unmapped or unsupported chemical
 content instead of returning a misleading blank preview; the native C-C creation case works.
 
 The native canvas and registered capture consume one GraphScene with ordered rectangles/
-strokes and bounded typed atom/bond hit regions. It supports positioned neutral carbon,
-Single bonds and literal authored H; missing H is not inferred. PageViewport shares paper
+strokes and bounded typed atom/bond hit regions. It supports positioned neutral elements
+with a shared pure-model symbol catalog, Single bonds and literal authored H; missing H
+is not inferred. PageViewport shares paper
 layout and authoring-pointer conversion. Unsupported metadata/source remains guarded.
 CPU and GPU paths also face independent pixel/geometry/font oracles and one human-approved
 native-document golden. Native transient gesture state stays outside authored snapshots;

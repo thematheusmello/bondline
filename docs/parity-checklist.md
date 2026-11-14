@@ -59,7 +59,7 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 | Undo/redo | GUIDE-25 / MAC-HISTORY | verified for pages and supported C2/C3/C4 edits, Mac only | Exact engine properties; native page and bond Undo/Redo plus saved-C3/dirty-C4 recovery. Other chemical edits and Windows/Linux runtime missing |
 | Selection and transforms | GUIDE-25 | missing | M2; bounded atom/bond hit testing and transient hover exist, not persistent selection or transforms |
 | Bond, ring, chain tools | GUIDE-25 | partial: single-bond C2/C3/C4 native authoring verified on Mac | bond.create and explicit-policy terminal bond.extend, native history/CDXML reopen and independent actual-file consumers. Other bond kinds, general connected editing, rings/chain tools and full behavior missing; see verification-native-sdf-and-extension.md |
-| Atom labels, charges, isotopes, radicals | GUIDE-25 | partial display; authoring missing | Literal authored C/H labels in supported carbon graphs; element/label/metadata editing tools and other chemical display remain M2 |
+| Atom labels, charges, isotopes, radicals | GUIDE-25 | partial display; authoring missing | Neutral elemental symbols and literal authored H pass headless CPU/GPU/font/actual CDXML/MOL and registered-capture checks. Native element-label workflows, authoring tools and charged/isotope/radical display remain missing; see verification-neutral-element-labels.md |
 | Stereo bonds and labels | GUIDE-25 | missing | M2/M3 |
 | Text, captions, chemical formatting | GUIDE-25 | missing | M2/M3 |
 | Reaction and curved arrows | GUIDE-25 | missing | M3 |

@@ -2141,3 +2141,17 @@ pass, including fmt/clippy/layers/unchanged licenses/assets/corpus. Tests' initi
 mismatch and three exact registry-fixture migrations remain recorded. Native conversion
 UI, source-backed SMILES Open/Save and new Windows/Linux execution remain unverified;
 Actions and interactive desktop access stayed off.
+
+## Neutral-element label reception, 2026-11-14
+
+[Exact neutral-label evidence](verification-neutral-element-labels.md) records the
+verbatim model symbol catalog, independent metrics/80 FreeType masks, all118 label ink,
+actual saved-file consumers, CPU/GPU checks and unchanged approved carbon golden. Failed
+native96/exploratory measurements remain qualified; one uniform4xBOX reference retains
+all cases and the0.90 whole-label threshold, with bounded8x consistency evidence.
+Root's independent literal V3000 methanol registry workflow first failed on the old
+renderer, then passed unchanged after reception: actual RDKit input/output, CPU/GPU PNG
+captures, complete session/source retention and exact MOL Save/reopen. Full receiving
+local696 passes fmt/clippy/layers/unchanged licenses/assets/corpus. Atom-label authoring,
+new native/Windows/Linux workflows, other metadata/orders and chemical inference remain
+missing. Actions stayed off and the user's desktop was untouched.

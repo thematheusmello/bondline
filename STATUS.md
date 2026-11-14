@@ -16,26 +16,31 @@ availability is indicated again. Continue source and headless work.
 
 ## Current revisions and gates
 
-Published main before this receiving commit is b7f24da: the 20-command aromatic/corpus
-foundation, carbon-path layout, create-only conversion IO and durable Actions-off policy.
-Historical 7c596d9 run 43588963839 completed before disablement and was not rerun. The
-corpus has eight fetched files/five bundles/three original SMILES vectors. All 54 existing
-runs are terminal; a receiving push created no new run. Repository Actions remains off
-and workflow417397204 disabled_manually. No remote jobs are authorized.
+Recoverable integrated source: create-only IO6a73107 received at b7f24da; shared command
+c433540 received at94bcff3; neutral-element labels49b1005 plus Root's exact registered-
+capture test are now received. Read git log for the latest receiving commit; all intended
+source/tests/docs at this checkpoint are committed after local gates. Persistent goal
+stays ACTIVE. M0/M1 and broader M2–M5 remain incomplete.
 
-Root now receives exact 21-command source c433540 on b7f24da. The typed converter is
-verified through engine/CLI/stdio/authenticated loopback and real editable native CDXML
-files, preserving the entire active session and publication truth. Root checked21 author
-files/seven logs/source freeze/draft/peer/145protected identities;144 match receiving,
-with only Root's prior IO-verification appendix different and its complete prefix exact.
-The peer's102-file digest/42listed hashes are also exact. See
-verification-smiles-conversion-command.md and verification-smiles-conversion-io.md.
+Current local cargo xtask ci58039 exits0:693workspace+3bridge=696,0failed/ignored.
+Workspace fmt/all-target warnings-denied clippy/layers/unchanged declared licenses/assets/
+eight-file five-bundle corpus pass at the printed Root workspace. Log85237B/SHA256
+c7969a530bd70f6b33ca3a502d6b37f6b22df3e069601c2c1a933fa8cf0d9034.
+Prior receiving gates670(IO)/686(command)/659(layout) remain separate evidence. See
+verification-neutral-element-labels.md and verification-smiles-conversion-command.md.
+No new native/Windows/Linux, hosted workflow or full chemistry evidence is inferred.
 
-Local cargo xtask ci77560 exits0:683workspace+3bridge=686,0failed/ignored. Workspace
-fmt/all-target warnings-denied clippy/layers/unchanged licenses/assets/corpus pass. Log
-82742B/SHA25666a6a343ae85acff5ef8f9e966636b4a61b335acab9a82100709b589436dda4a.
-Prior IO670 and layout659 gates remain separate evidence. Raw XML/model assertions and
-old consumers/golden remain exact. No new native/Windows/Linux or hosted claim follows.
+Root checked all frozen label16/protected86/log12/research4/native96artifact9 records;
+all protected files match c2b739a. The three newer receiving IO/command files were retained
+rather than copied from that older branch. Catalog bytes, old carbon tests/raster suffix,
+font/approved golden and source authority remain exact. Root's independent original
+V3000 methanol workflow passed RDKit/H/position checks then gave intended renderer RED55800;
+the exact4588B test gave GREEN52758 after reception, with real CPU/GPU captures, exact
+MOL Save/reopen and independent actual-output checks. No test/source change weakened it.
+
+Actions is disabled at repository and workflow levels. All54 old runs are terminal;
+receiving pushes created no run. Historical7c596d9 run43588963839 remains valid only for
+that earlier source and was not rerun. No new remote job is authorized during development.
 
 ## Delivered receiving scope
 
@@ -65,7 +70,8 @@ writes that drawing as create-only native CDXML under a distinct 64 KiB read bud
 with metadata-only receipts and truthful publication errors. The shared converter now passes actual
 CLI/stdio/authenticated-loopback workflows and real CDXML editing/persistence checks.
 Native conversion controls/acceptance and source-backed SMILES Open/Save remain missing.
-RXN is a container library.
+RXN is a container library. The existing explicit-H Fragment→SMILES writer still has no
+application filesystem export command; that is the next bounded M1 slice.
 
 Current aromatic fuzz evidence is linked above. Earlier fixed-H/export sourcee647196
 separately passed ASAN45229 with its five-seed set; do not relabel that run as aromatic
@@ -78,6 +84,13 @@ CDX, aromatic/general SMILES, InChI and chemistry remain missing. Runtime licens
 154Mac/165Windows/220Linux runtime packages and2assets pass declared-license/hash/notice
 checks. windows-permissions0.2.4 lacks an upstream LICENSE despite its MIT declaration;
 this remains a release notice-audit question. No dependency/lock/version/asset change.
+
+Neutral-element rendering now covers all118 symbol ink with literal H and unchanged
+carbon behavior, under positioned/neutral/nonisotopic/RadicalNone/Single guards. One
+uniform4xBOX external FreeType comparison retains80 cases and0.90 whole-label threshold;
+original96em failures, exploratory per-glyph limits, scoped controls and bounded8x
+consistency are recorded, not hidden. Native elemental-label authoring, new native label
+workflows, charges/isotopes/radicals/orders, general layout and style fidelity remain missing.
 
 ## Native and reference evidence
 
@@ -107,35 +120,35 @@ ship. Existing restoration exceptions remain recorded. Only approved golden SHA:
 
 ## Active work and next steps
 
-Root owns Git/integration/publication. All workers are now terminal with frozen handoffs;
-check live agents/jobs before resuming, and do not duplicate existing work.
+All three workers are terminal; no live own Cargo/fuzz/native/controller/helper job.
+Root owns Git/integration/publication. Check live agents before restarting work.
 
-- native_acceptance completed exact IO6a73107 and independent command source review
-  6309f7ba…e015428; no runtime jobs. IO is received at b7f24da.
-- reference_map completed command source c433540 in bondline-mol-v3000, no live jobs.
-  Source21/log7/protected145 handoff83e1c354…96dbf05 is checked; local receiving686 passes.
-  Recoverable pre-IO stash dfaf24f884569c8702e7e679493b3619815750ca remains; do not reapply.
-- sdf_setter_review completed neutral-element labels in bondline-render-labels on c2b739a.
-  Handoff target/neutral-element-handoff.json26897B/SHA546f5bbe…2ea82f2 is awaiting Root
-  review/reception. Scoped276, clippy/fmt pass; native/newWindows/Linux remain unverified.
+- native_acceptance: exact IO6a73107 and command peer report6309f7ba…e015428 completed.
+- reference_map: command c433540 in bondline-mol-v3000, exact21/log7/protected145 handoff
+  83e1c354…96dbf05 received; affected219 and full receiving686 pass. Pre-IO stash
+  dfaf24f884569c8702e7e679493b3619815750ca is historical only; do not reapply it.
+- sdf_setter_review: labels49b1005 in bondline-render-labels, handoff546f5bbe…2ea82f2
+  received without production edits. Scoped276/clippy/fmt and receiving696 pass.
 
-Root gate77560 is terminal. A new independent registered-capture test first opened a
-literal V3000 methanol file, passed external RDKit/H/position assertions, then failed as
-intended on old renderer UnsupportedChemicalContent (55800). Its exact4588B source/SHA
-39617344…0248e7a is safely retained in stash4c1e1ffaa55d91738fd6574f71931c0a82f126c0
-and target/neutral-element-command-source-before.rs; record target/neutral-element-command-red.json.
-It is excluded from the conversion-command gate, awaiting restore with the label feature.
+Root's neutral-capture RED snapshot remains in historical stash
+4c1e1ffaa55d91738fd6574f71931c0a82f126c0 and target/neutral-element-command-source-before.rs.
+Its exact test is now committed as crates/commands/tests/element_capture.rs; do not reapply
+that stash. Root receipts/logs are under target/ and source/evidence links above are durable.
 
-No native app/controller/helper is live. The user remains active on the desktop; no
-GUI/input/activation until availability changes. Actions stays disabled. Keep targets
-separate, incremental0, Root default debug/sibling debug0. No cleanup is needed.
+The user remains active on the desktop: no GUI/input/activation until availability changes.
+Actions stays disabled until full-project completion or a new user instruction. Keep Cargo
+targets separate, incremental0, Root default debug/sibling debug0. No cleanup is needed.
 
-1. Commit this local-gated shared conversion slice. Review/integrate the frozen neutral
-   labels, restore the exact Root capture test, observe GREEN and run the receiving full
-   local gate. Preserve old carbon pixels/font/golden, source authority and literal H.
-2. Continue M1 then M2–M5: broader SMILES/backing/layout, SDF chemical display/editor and
-   RXN/reactions. Full M0 inventory/dialog addressability and broader platform evidence
-   remain open. Native conversion→Open→edit→Save/reopen waits for user availability.
-   Do not pause/block/complete the project at this checkpoint or enable Actions.
+1. Continue M1 with create-only export of an explicitly selected supported Fragment to
+   a real SMILES file using the existing writer/publisher and shared command/adapter path.
+   First establish the source-authority and explicit geometry/metadata-loss contract from
+   existing public sources; preserve the complete active session and original files. Test
+   actual output with an unchanged independent parser and retain publication/close guards.
+   Do not invent SMILES backing/Save association or silently choose a first fragment.
+2. Broaden M1 SMILES/backing/layout, SDF chemical display/editor and RXN/reactions, then
+   M2–M5. Full M0 inventory/dialog addressability and broader platform evidence stay open.
+3. Native conversion→Open→edit→Save/reopen and new elemental-label workflows wait for user
+   availability. No old screenshot/window smoke substitutes. Do not pause/block/complete
+   the project goal at this checkpoint, or re-enable Actions for a milestone.
 
 No new golden approval, PR/release/installer/signing, account/TCC or unrelated messages.

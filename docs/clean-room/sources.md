@@ -1033,3 +1033,25 @@ SMILES authority. Actual generated CDXML and later native extension/save bytes f
 format consumers plus an original Expat/Decimal/RDKit workflow oracle. The original source,
 native-v0 fixture, dependency/lock pins and approved golden remain untouched. See
 [verification-smiles-conversion-command.md](../verification-smiles-conversion-command.md).
+
+## Neutral elemental label preview, 2026-11-14
+
+[verification-neutral-element-labels.md](../verification-neutral-element-labels.md) records
+the bounded headless slice. The same primary IUPAC2008 HTML above was reread/hash-checked,
+especially GR2.1/2.1.1/2.1.5/2.1.6: proper symbol case, explicit H/subscripts, facing
+character anchors and separation from bonds. Symmetric whole-symbol/multiline positioning
+remains deferred. Existing IUPAC4May2022 symbol facts move verbatim to model; IO delegates
+without changing syntax/errors. No image, font, help prose or new third-party code is copied.
+
+Literal counts, omitted unknown H, neutral-only guards, physical-H inline refusal, retained
+carbon behavior, horizontal occupancy, bounds and source-authority separation are original
+policies. Existing Apache Roboto and all notices/approved bytes remain exact. Independent
+OpenType vectors, original graphs, actual saved-file consumers and CPU/GPU/golden checks
+support only the recorded local scope, not chemical perception or native parity.
+
+The inspected [Pillow12.3.0 driver](https://github.com/python-pillow/Pillow/blob/12.3.0/src/_imagingft.c)
+uses FT_LOAD_DEFAULT; [FreeType2.14.3's load flags](https://freetype.org/freetype2/docs/reference/ft2-glyph_retrieval.html#ft_load_xxx)
+qualify its grid fitting versus Rust's unhinted outlines. The new independent oracle uses
+one4xBOX policy at96em and the unchanged0.90 whole-label threshold, with bounded8x
+consistency and explicit scoped negative controls. Failed96em/exploratory measurements
+remain recorded; no production data or old carbon oracle/golden was changed to fit them.

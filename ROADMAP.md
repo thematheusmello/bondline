@@ -124,6 +124,13 @@ corpus and reference/chemical mapping remain M1 work.
 
 ## M2: drawing — in progress
 
+Positioned neutral elemental symbols and literal authored H now have independent font,
+CPU/GPU, actual CDXML/MOL and registered-capture evidence under the local696 gate. The
+118-symbol catalog is shared from pure model. Source authority and old carbon pixels/golden
+remain exact. This is headless display only: atom-label tools, native element workflows,
+other chemical metadata/orders and general layout remain missing. See
+docs/verification-neutral-element-labels.md.
+
 The first command creates an independent single C-C fragment with three authored H per
 carbon. Native drag creation, exact history, automation and bounded rendering have evidence.
 This is partial solid-bond coverage. A separate headless bond.extend command now extends
