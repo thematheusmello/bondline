@@ -117,7 +117,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | Area | Current state | Next work |
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
-| CDX | Standalone syntax/property edits/new-tree writer; limited elemental view, owned exact-source snapshots and atomic filesystem library, checked independently | Registry/native workflow, broader metadata/chemistry, editing/encoder and foreign/general corpus |
+| CDX | Standalone syntax/property edits/new-tree writer; limited elemental view with selected source-only metadata, owned exact-source snapshots and atomic filesystem library, checked independently | Registry/native workflow, broader metadata/chemistry, editing/encoder and foreign/general corpus |
 | MOL / SDF | MOL V2000/V3000 native file workflows; source retention and independent consumer checks; mixed V2000/V3000 SDF ordered-record/data library and pinned V2000 corpus | Application SDF workflows, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
 | SMILES / InChI | Planned | Format support and independently verified chemistry |

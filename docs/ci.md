@@ -1,5 +1,16 @@
 # CI contract and execution evidence
 
+Carbon source983ffee6951e0b3d8c17e5135645cb2cbd3830a3 has a real failed
+[43557351022](https://github.com/thematheusmello/bondline/actions/runs/43557351022).
+Linux132333092682 passes477 tests and its actual Vulkan/llvmpipe window;
+ASAN132333092803 passes all six10000-run targets. Mac132333092799 and Windows132333092520
+fail both FreeType label comparisons at the unchanged0.90 ink-IoU threshold: right-facing
+CH3 is0.8668951728 and authoredH1 is0.8883125864. Their aggregates stop in render unit
+tests before the window smoke; neither is a platform pass. Local479/native Mac acceptance
+remain separate exact evidence. The generalized Python oracle's layout-dependent advances
+are being reproduced; no renderer/font/golden/threshold change or failed-run relabeling.
+Main remains00e5b02 pending corrected matching source. No passing job was restarted.
+
 Corrected CDX snapshot/filesystem source00e5b02fb6cd5b845a6343ee6bcd34b3add95d7e passes all
 [43550955963](https://github.com/thematheusmello/bondline/actions/runs/43550955963) jobs:
 Mac132313031167:446 tests (443workspace+3bridge), Linux132313031270:444,

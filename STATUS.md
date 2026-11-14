@@ -40,9 +40,14 @@ windows-permissions0.2.4's missing upstream LICENSE despite its MIT declaration.
 
 ## Frozen carbon renderer and current native acceptance
 
-ROOT feat/carbon-graph-integration remains at00e5b02 plus the intentional uncommitted
-feature. Final exact-source native acceptance is complete; all runtime files stayed frozen
-through cleanup. Documentation-only evidence updates follow the original15-file handoff. Exact15-file
+Published carbon source983ffee on feat/carbon-graph-integration has final local/native
+acceptance, but hosted43557351022 fails Mac132333092799/Windows132333092520 in the two
+independent FreeType comparisons (0.866895/0.888313 versus unchanged0.90). Neither failed
+job reaches window smoke. Linux132333092682 passes477/window; ASAN132333092803 passes6.
+Main stays00e5b02. The layout-dependent Python advance oracle is being reproduced by
+file_verification in Root using BASIC versus local RAQM, with no tracked edit until root
+finishes the metadata commit. Production/font/threshold/golden must not be changed to pass.
+Final source983ffee was frozen throughout successful native cleanup; later docs are additive. Exact15-file
 handoff target/canvas-press-position-handoff.json SHA
 d2f3b8096361ee9071a8184c41a19240e1e17e5923f37b068e841251bf535a95.
 Six production files concatenate to
@@ -105,8 +110,15 @@ Frozen handoff target/cdx-native-metadata-handoff.json in that sibling SHA
 79b9c7765a21da5546bd7fcf87dd536b606b7e5500be4280bdd93900eda8f036. Independent review:
 ROOT target/cdx-native-metadata-review.md SHAa076717c85e8cde73655613ad910a5c4011b8186e45d42a6c4901f99b775f439,
 no confirmed findings; reviewer did not run tests. This metadata is not in ROOT/main yet.
-After final native cleanup, integrate it and run cached normal-graph ASAN with its original
-positive seeds plus the receiving aggregate/hosted checks. Never fuzz committed fixtures.
+Current ROOT feat/cdx-metadata-integration has an uncommitted merge43ca90d onto983ffee.
+Actual receiving486workspace+3bridge=489 passes all gates (15985 terminal0), log
+ target/cdx-metadata-integrated-ci.log SHAac2304d83535f33db8cceb0a748ab1ff776f4b8aee49320767ce2f4ded7fc27e.
+Normal full-graph clippy69358 and ASAN46377 exit0: six fresh original seeds,10000 runs,
+seed721533879/max_len131072/timeout5, cov1131/features2728,97inputs/reported273KiB/RSS255MiB,
+3seconds, largest65750B. Log target/cdx-metadata-normal-fuzz-asan.log SHA
+497f2369441263a997a6320a0914b7fb199475852a338c175234e136051a24fc. Fixture dirs untouched.
+Commit this reviewed local metadata feature, then correct the separate test-only font oracle
+and run new matching checks; parent hosted failure must not be substituted or hidden.
 
 The same warm sibling is now feat/cdx-file-commands at local merge43ca90d, combiningf67883a
 and00e5b02. Its own base full gate453workspace+3bridge passes, log
@@ -150,11 +162,10 @@ no explicit cloud/account action or original source save occurred. Never copy pr
 code/assets/help prose; new Rust/assets stay original and licensed. Latest user authorizes
 runtime inspection, superseding the earlier ban.
 
-1. Commit/publish the fully reviewed/local479/native-accepted carbon display/input slice;
-   observe its own hosted source run. Advance main only after matching GREEN.
-2. Merge metadata base43ca90d (containsf67883a) onto the graph integration, preserving root
-   source/docs. Run cached normal-graph ASAN with new original seeds, receiving full gate,
-   commit/publish and observe matching hosted evidence.
+1. Commit the reviewed/local489/ASAN metadata merge, preserving root renderer/docs.
+2. Reproduce and fix the layout-dependent FreeType oracle in a separate test-only commit,
+   retaining0.90 threshold, original metric vectors, negative cases, production/golden bytes
+   and recorded failed source983ffee. Run new full/hosted gates before main advances.
 3. Merge application commande37d129 with current renderer retained, run receiving checks,
    then actual native CDX chooser/source/history/refusal/close workflows and independent
    saved-byte consumers. Keep registry/native status precise and preserve all guards.

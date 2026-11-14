@@ -1901,3 +1901,13 @@ Every owned app/controller/helper exited; Escape released/CUA completed once aft
 Exact full hashes,136-file evidence index and rejected probes are in the linked report.
 No new golden, arbitrary chemical rendering, same-frame native timing or Windows/Linux
 interactive claim follows. Its new hosted source run remains pending.
+
+## Source-only CDX metadata receiving integration, 2026-11-14
+
+Selected Z/bounds/U0-N1 CIP/opaque AtomID/unstyled-warning fields now face strict source-
+only type/owner tests and original323/319B stdlib/RDKit vectors. Existing snapshot/export/
+source/identity guards remain. Receiving486workspace+3bridge passes all gates; normal full
+fuzz-graph clippy and six-original-seed ASAN10000 pass, cov1131/features2728/RSS255MiB.
+Exact independent review, logs/hashes/settings and the unchanged ignored1196B native
+diagnostic are in [verification-cdx-native-metadata.md](verification-cdx-native-metadata.md).
+The native file/prose is not committed; chemistry/encoder/app coverage is not inferred.

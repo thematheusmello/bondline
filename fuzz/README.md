@@ -253,5 +253,13 @@ cross-format output and restoring its snapshot restores all original bytes. Sour
 remain separate from new-tree canonical construction. No new target or external dependency.
 The normal full-graph four-seed2026-11-14 run passes10000 iterations at seed721533879,
 max_len131072/timeout5: cov1019/features2161,81inputs/reported394KiB/RSS303MiB, largest65750B.
+
+The source-only metadata extension reuses that target unchanged. A fresh normal full-graph
+2026-11-14 run adds the original323/319B metadata vectors to the four original seeds:
+10000 iterations, same seed721533879/max_len131072/timeout5, cov1131/features2728,
+97inputs/reported273KiB/RSS255MiB,3seconds, largest65750B. Normal-graph clippy passes.
+Exact hashes/settings are in verification-cdx-native-metadata.md. This exercises accepted
+metadata/source/snapshot guards without introducing H inference, stereo computation,
+styled-warning support or new targets. Copy seeds to ignored cache before mutation.
 The extra92B independently authored default-C/single/no-position vector is ignored, not a
 new fetched corpus entry. See verification-cdx-owned-snapshots.md for exact logs and limits.

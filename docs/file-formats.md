@@ -542,3 +542,19 @@ Both existing framing vectors save byte-exactly and face their independent struc
 consumers. Invalid input, no-clobber, stale/source-free export, cancellation and seven
 publication failure stages have filesystem tests. See verification-cdx-native-io.md.
 These library functions do not expose a CDX command, file association or native chooser.
+
+## Source-only CDX metadata
+
+The strict view now admits Fragment Z/BoundingBox, node Z/CIP/AtomID and bond Z/unstyled
+ChemicalWarning/CIP with published exact widths/owners. CIP0/U and1/N remain distinct
+raw annotations, not calculated labels; other states refuse. AtomID is opaque and cannot
+resolve bond endpoints or replace stable model IDs. Bounds/Z do not infer paper, move
+atoms or establish source-faithful style rendering. Warnings require a zero-style prefix;
+malformed run lengths fail and fully framed styled warnings remain unsupported.
+
+The SDK FragmentZ owner omission and unknown AtomID normative lifecycle/uniqueness remain
+qualified source questions. Full raw bytes/baseline/false completeness and export guards
+stay authoritative. New original323/319B vectors have independent struct/RDKit checks;
+one ignored native1196B original now projects2C/1Single and exports every byte unchanged.
+This is not broad native compatibility, chemistry, a CDX model encoder or an app workflow.
+See verification-cdx-native-metadata.md for actual RED/GREEN/ASAN scope.

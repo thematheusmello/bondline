@@ -255,8 +255,10 @@ FileEnd intentionally to build new canonical syntax, never to reserialize an imp
 
 IO's ElementalGraph retains complete borrowed source while mapping only its closed initial
 Element/default-C, Single/default-order, fixed16.16-point subset. Its fresh IDs are not
-container-scoped source IDs. All standard node/fragment/bond metadata outside the whitelist
-refuses; do not claim native metadata, stereo/H/charge or general compatibility.
+container-scoped source IDs. Selected Z/bounds/CIP0U-or1N/opaque AtomID/unstyled bond-warning
+fields now remain source-only with strict widths/owners. FragmentZ is a qualified public
+compatibility case. AtomID is never a reference/app-ID alias; its normative uniqueness is
+unknown. Other standard metadata refuses; no stereo/H/charge perception or general compatibility.
 StoredDocument::from_cdx owns raw Arc plus baseline; is_fully_mapped is always false here.
 Export only exact unchanged backing. Changed models, source-free CDX encoding and cross-
 format metadata loss must fail; do not regenerate a projection with syntax Writer.
