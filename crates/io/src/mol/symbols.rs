@@ -12,7 +12,7 @@ const SYMBOLS: [&str; 118] = [
     "Cf", "Es", "Fm", "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", "Cn", "Nh",
     "Fl", "Mc", "Lv", "Ts", "Og",
 ];
-pub(super) fn element(symbol: &str) -> Option<Element> {
+pub(crate) fn element(symbol: &str) -> Option<Element> {
     SYMBOLS
         .iter()
         .position(|candidate| *candidate == symbol)

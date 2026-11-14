@@ -2,7 +2,7 @@
 //! Numeric fields follow BIOVIA Chemistry 2026 CTfile Formats, printed pages 62–70/90.
 
 mod parse;
-mod symbols;
+pub(crate) mod symbols;
 pub mod v3000;
 mod write;
 pub use write::{write_v2000, write_v2000_with_header};

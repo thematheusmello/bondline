@@ -177,3 +177,12 @@
   table and blank new-attachment dialog do not establish lost fields. See
   ../research/installed-sdf-import.md; any interim Bondline record/data panel is original
   policy until separately evidenced, not a26.1 workflow claim.
+
+- The bounded SMILES notation library deliberately resolves no model hydrogen/radical
+  policy. Bare organic implicit H, bracket omission/H0 and separately bonded H retain
+  distinct source/IR facts; converting them into model None/Some(n) needs a separately
+  approved/tested design. Aromaticity/stereo/maps, general charge/radical/valence
+  semantics, deterministic generated output versus canonicalization, layout and native
+  copy/paste remain unimplemented. Pinned unsanitized RDKit has documented dialect and
+  token-normalization differences; its default zero radical getters and unavailable
+  Python cleanup control cannot decide those semantics. See verification-smiles.md.

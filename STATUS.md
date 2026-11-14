@@ -192,3 +192,21 @@ Disk constrained (~1.5GiB free);3.6GiB of inactive Root package artifacts was re
 Never delete active/evidence/source/fixtures/worker targets. Only approved golden:
 1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc. No new approval/release/
 installer/signing or unrelated message/account action. Revalidate agents/jobs on continuation.
+
+## Isolated SMILES syntax slice, 2026-11-14
+
+On supplied `feat/smiles-syntax` base15ecbc7 in `bondline-mol-v3000`, original immutable
+ASCII source/notation ownership and iterative nonaromatic graph parsing are implemented.
+Exact tokens distinguish bare implicit H, bracket omission/H0, physical H and isotope0;
+branches/dots/numeric rings preserve adjacency and checked limits. This is library syntax,
+not chemical validation, model projection, generated export, layout or an application flow.
+See docs/verification-smiles.md for exact primary pins, RED/GREEN, hashes and dialect limits.
+
+Own absolute-target IO test session46150 exits0:186 tests/0 failed or ignored; all-target
+warnings-denied IO clippy session27896 exits0 and workspace fmt check passes. Earlier
+missing-API/topology/query REDs, unavailable RDKit Python skipCleanup and numeric-ring/
+dot-branch consumer failures remain recorded. The parser was not weakened to match those
+consumer differences. No dependency/lock/old fixture/golden or model/Engine/FS/UI changed;
+existing symbol data is reused through two approved visibility-only changes. All own jobs
+are terminal. Independent peer source review and Root integration/fuzz/full aggregate/
+hosted checks remain next; Root owns Git and no Git/GUI/install ran in this slice.

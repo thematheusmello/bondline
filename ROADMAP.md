@@ -58,6 +58,10 @@ writing and the version-aware MOL application slice are now integrated; mixed-ve
 container is integrated; the reviewed legacy RXN container is now being integrated.
 These libraries retain complete raw molecular/data/role payloads; application collections
 and reaction models/commands/native workflows remain separate missing work.
+The original bounded SMILES notation/source library now has literal graph/token/limit
+tests and qualified pinned external-parser evidence. Bare implicit H, bracket H0 and
+physical H remain distinct; no model projection, generated export, chemical perception,
+layout or application SMILES command is delivered. See docs/verification-smiles.md.
 Full M0
 inventory/dialog/addressability gaps remain tracked while this format work proceeds.
 
