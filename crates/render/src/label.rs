@@ -5,6 +5,27 @@ use bondline_model::Element;
 pub(crate) struct Label {
     pub mask: Rectangle,
     pub pixels: Vec<Rectangle>,
+    pub symbol_mask: Rectangle,
+    pub hydrogen_mask: Option<Rectangle>,
+    stacked: bool,
+}
+
+impl Label {
+    pub fn masks(&self) -> impl Iterator<Item = &Rectangle> {
+        std::iter::once(if self.stacked {
+            &self.symbol_mask
+        } else {
+            &self.mask
+        })
+        .chain(self.hydrogen_mask.as_ref().filter(|_| self.stacked))
+    }
+}
+
+#[derive(Clone, Copy)]
+pub(crate) enum Layout {
+    Horizontal(bool),
+    Above,
+    Below,
 }
 
 pub(crate) fn font() -> Result<FontRef<'static>, Error> {
@@ -48,7 +69,7 @@ pub(crate) fn carbon(
     text(
         position,
         "C",
-        hydrogen_left,
+        Layout::Horizontal(hydrogen_left),
         hydrogens,
         scale,
         [width, height],
@@ -71,7 +92,30 @@ pub(crate) fn element(
     text(
         position,
         element.symbol().ok_or(Error::UnsupportedChemicalContent)?,
-        hydrogen_left,
+        Layout::Horizontal(hydrogen_left),
+        hydrogens,
+        scale,
+        viewport,
+        cancel,
+    )
+}
+
+pub(crate) fn resolved_element(
+    position: [f32; 2],
+    element: Element,
+    layout: Layout,
+    hydrogens: u16,
+    scale: f32,
+    viewport: [u32; 2],
+    cancel: &Cancellation,
+) -> Result<Label, Error> {
+    if element.get() == 1 && hydrogens != 0 {
+        return Err(Error::UnsupportedChemicalContent);
+    }
+    text(
+        position,
+        element.symbol().ok_or(Error::UnsupportedChemicalContent)?,
+        layout,
         hydrogens,
         scale,
         viewport,
@@ -82,13 +126,15 @@ pub(crate) fn element(
 fn text(
     position: [f32; 2],
     symbol: &str,
-    hydrogen_left: bool,
+    layout: Layout,
     hydrogens: u16,
     scale: f32,
     [width, height]: [u32; 2],
     cancel: &Cancellation,
 ) -> Result<Label, Error> {
     cancel.check()?;
+    let hydrogen_left = matches!(layout, Layout::Horizontal(true));
+    let stacked = !matches!(layout, Layout::Horizontal(_));
     let em = 12.0 * scale;
     if !em.is_finite() || !(8.0..=256.0).contains(&em) {
         return Err(Error::LabelScale);
@@ -119,6 +165,7 @@ fn text(
     let origin = position[0] - prefix * factor - (bounds.min.x + bounds.max.x) * factor / 2.0;
     let baseline = position[1] + (bounds.min.y + bounds.max.y) * factor / 2.0;
     let sub_factor = factor * 2.0 / 3.0;
+    let symbol_count = letters.len();
     let mut glyphs = letters
         .into_iter()
         .map(|(glyph, offset)| (glyph, origin + offset * factor, baseline, factor))
@@ -131,7 +178,25 @@ fn text(
         };
         let mut subs = Vec::new();
         let h_origin;
-        if hydrogen_left {
+        let h_baseline;
+        if stacked {
+            let bounds = font.outline(h).ok_or(Error::InvalidFont)?.bounds;
+            h_origin = position[0] - (bounds.min.x + bounds.max.x) * factor / 2.0;
+            h_baseline = position[1]
+                + if matches!(layout, Layout::Above) {
+                    -em
+                } else {
+                    em
+                }
+                + (bounds.min.y + bounds.max.y) * factor / 2.0;
+            let mut cursor = h_origin + font.h_advance_unscaled(h) * factor;
+            for digit in digits.chars() {
+                let glyph = font.glyph_id(digit);
+                subs.push((glyph, cursor, h_baseline + em / 4.0, sub_factor));
+                cursor += font.h_advance_unscaled(glyph) * sub_factor;
+            }
+        } else if hydrogen_left {
+            h_baseline = baseline;
             let mut cursor = origin;
             for digit in digits.chars().rev() {
                 let glyph = font.glyph_id(digit);
@@ -141,6 +206,7 @@ fn text(
             subs.reverse();
             h_origin = cursor - font.h_advance_unscaled(h) * factor;
         } else {
+            h_baseline = baseline;
             h_origin = origin + advance * factor;
             let mut cursor = h_origin + font.h_advance_unscaled(h) * factor;
             for digit in digits.chars() {
@@ -149,7 +215,7 @@ fn text(
                 cursor += font.h_advance_unscaled(glyph) * sub_factor;
             }
         }
-        glyphs.push((h, h_origin, baseline, factor));
+        glyphs.push((h, h_origin, h_baseline, factor));
         glyphs.extend(subs);
     }
     let mut pixels = Vec::new();
@@ -157,7 +223,9 @@ fn text(
     let mut top = u32::MAX;
     let mut right = 0;
     let mut bottom = 0;
-    for (glyph, x, y, factor) in glyphs {
+    let mut symbol_bounds = [u32::MAX, u32::MAX, 0, 0];
+    let mut hydrogen_bounds = [u32::MAX, u32::MAX, 0, 0];
+    for (index, (glyph, x, y, factor)) in glyphs.into_iter().enumerate() {
         cancel.check()?;
         let outlined = font
             .outline_glyph(
@@ -183,6 +251,15 @@ fn text(
         top = top.min(y);
         right = right.max(x + w);
         bottom = bottom.max(y + h);
+        let group = if index < symbol_count {
+            &mut symbol_bounds
+        } else {
+            &mut hydrogen_bounds
+        };
+        group[0] = group[0].min(x);
+        group[1] = group[1].min(y);
+        group[2] = group[2].max(x + w);
+        group[3] = group[3].max(y + h);
         // shortcut: thresholded spans reuse rectangles; smooth text needs a dedicated primitive.
         let mut bitmap = vec![false; w as usize * h as usize];
         let mut invalid = false;
@@ -242,5 +319,18 @@ fn text(
             color: [255; 4],
         },
         pixels,
+        symbol_mask: mask(symbol_bounds),
+        hydrogen_mask: (hydrogens != 0).then(|| mask(hydrogen_bounds)),
+        stacked,
     })
+}
+
+fn mask([left, top, right, bottom]: [u32; 4]) -> Rectangle {
+    Rectangle {
+        x: left - 1,
+        y: top - 1,
+        width: right - left + 2,
+        height: bottom - top + 2,
+        color: [255; 4],
+    }
 }

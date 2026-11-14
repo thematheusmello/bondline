@@ -116,6 +116,8 @@ pub fn cpu_solid(width: u32, height: u32, color: [u8; 4]) -> Result<Frame, Error
     })
 }
 
+#[cfg(test)]
+mod display_label_tests;
 mod hits;
 mod label;
 #[cfg(test)]
@@ -124,7 +126,10 @@ mod page;
 mod scene;
 mod stroke;
 pub use hits::{GraphScene, HitTarget, MAX_HIT_REGIONS};
-pub use page::{PageViewport, carbon_page_scene, graph_page_scene, graph_page_scene_with_cancel};
+pub use page::{
+    PageViewport, carbon_page_scene, graph_page_scene, graph_page_scene_with_cancel,
+    graph_page_scene_with_display_hydrogens,
+};
 pub use scene::{Primitive, Rectangle, Scene, cpu_scene, cpu_scene_with_cancel, page_scene};
 pub use stroke::Stroke;
 

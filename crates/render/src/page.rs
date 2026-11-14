@@ -3,7 +3,7 @@ use crate::{
     Cancellation, Error, GraphScene, HitTarget, MAX_HIT_REGIONS, Primitive, Rectangle, Scene,
     Stroke, page_scene,
 };
-use bondline_model::{BondOrder, Page, PageSize, Point2, Radical};
+use bondline_model::{AtomId, BondOrder, Page, PageSize, Point2, Radical};
 use std::collections::BTreeMap;
 
 /// The same rounded fit used for the paper and authoring pointer conversion.
@@ -104,6 +104,51 @@ pub fn graph_page_scene_with_cancel(
     page: &Page,
     cancel: &Cancellation,
 ) -> Result<GraphScene, Error> {
+    graph_scene(width, height, page, None, cancel)
+}
+
+/// Display-only resolved counts: exact atom coverage, with authored values authoritative.
+/// No valence is chosen here, and the Page (including unknown authored H) stays untouched.
+/// Unlike the literal compatibility entry, all ink must fit the physical paper interior.
+pub fn graph_page_scene_with_display_hydrogens(
+    width: u32,
+    height: u32,
+    page: &Page,
+    counts: &BTreeMap<AtomId, u16>,
+    cancel: &Cancellation,
+) -> Result<GraphScene, Error> {
+    cancel.check()?;
+    let mut count = 0_usize;
+    for atom in page
+        .fragments()
+        .iter()
+        .flat_map(|fragment| fragment.atoms())
+    {
+        cancel.check()?;
+        count = count.saturating_add(1);
+        let value = counts
+            .get(&atom.id)
+            .ok_or(Error::UnsupportedChemicalContent)?;
+        if atom
+            .explicit_hydrogens
+            .is_some_and(|authored| authored != *value)
+        {
+            return Err(Error::UnsupportedChemicalContent);
+        }
+    }
+    if counts.len() != count {
+        return Err(Error::UnsupportedChemicalContent);
+    }
+    graph_scene(width, height, page, Some(counts), cancel)
+}
+
+fn graph_scene(
+    width: u32,
+    height: u32,
+    page: &Page,
+    counts: Option<&BTreeMap<AtomId, u16>>,
+    cancel: &Cancellation,
+) -> Result<GraphScene, Error> {
     cancel.check()?;
     let viewport = PageViewport::new(width, height, page.size())?;
     let mut scene = page_scene(width, height, page.size())?;
@@ -187,7 +232,26 @@ pub fn graph_page_scene_with_cancel(
                 .get(&atom.id)
                 .ok_or(Error::UnsupportedChemicalContent)?;
             let neighbours = neighbours.get(&atom.id).copied().unwrap_or_default();
-            let label = if atom.element.get() != 6 {
+            let label = if let Some(counts) = counts {
+                let hydrogens = *counts
+                    .get(&atom.id)
+                    .ok_or(Error::UnsupportedChemicalContent)?;
+                let preferred_left = neighbours.0 != 0 && neighbours.1 >= 0;
+                let incident = bonds.iter().filter(|bond| {
+                    matches!(bond.target, HitTarget::Bond { fragment_id, .. } if fragment_id == fragment.id())
+                        && bond.endpoints.contains(&atom.id)
+                }).collect::<Vec<_>>();
+                Some(resolved_label(
+                    position,
+                    atom.element,
+                    preferred_left,
+                    hydrogens,
+                    &incident,
+                    &viewport,
+                    [width, height],
+                    cancel,
+                )?)
+            } else if atom.element.get() != 6 {
                 Some(crate::label::element(
                     position,
                     atom.element,
@@ -211,12 +275,21 @@ pub fn graph_page_scene_with_cancel(
                     None => return Err(Error::UnsupportedChemicalContent),
                 }
             };
+            let mut supplement = None;
             let mask = if let Some(label) = label {
-                count = count.saturating_add(1).saturating_add(label.pixels.len());
+                let masks = label.masks().collect::<Vec<_>>();
+                count = count
+                    .saturating_add(masks.len())
+                    .saturating_add(label.pixels.len());
                 if count > 4096 {
                     return Err(Error::SceneTooComplex);
                 }
-                let mask = label.mask.clone();
+                let mask = masks
+                    .first()
+                    .ok_or(Error::InvalidGeometry)?
+                    .to_owned()
+                    .clone();
+                supplement = masks.get(1).map(|mask| (*mask).clone());
                 labels.push((fragment.id(), atom.id, label));
                 Some(mask)
             } else {
@@ -229,6 +302,7 @@ pub fn graph_page_scene_with_cancel(
                 },
                 position,
                 label: mask,
+                supplement,
             });
         }
     }
@@ -243,7 +317,28 @@ pub fn graph_page_scene_with_cancel(
         }) { return Err(Error::LabelOverlap); }
         scene
             .primitives
-            .push(Primitive::Rectangle(label.mask.clone()));
+            .extend(label.masks().cloned().map(Primitive::Rectangle));
+    }
+    if counts.is_some() {
+        for bond in &bonds {
+            cancel.check()?;
+            let mut covered = labels
+                .iter()
+                .flat_map(|(_, _, label)| label.masks())
+                .filter_map(|mask| segment_interval(&bond.stroke, mask))
+                .collect::<Vec<_>>();
+            covered.sort_by(|a, b| a.0.total_cmp(&b.0));
+            let mut end = 0.0_f64;
+            for (start, stop) in covered {
+                if start > end {
+                    break;
+                }
+                end = end.max(stop);
+            }
+            if end >= 1.0 {
+                return Err(Error::LabelOverlap);
+            }
+        }
     }
     for (_, _, label) in labels {
         cancel.check()?;
@@ -252,9 +347,213 @@ pub fn graph_page_scene_with_cancel(
             .extend(label.pixels.into_iter().map(Primitive::Rectangle));
     }
     cancel.check()?;
+    if counts.is_some() {
+        validate_paper_ink(
+            &scene,
+            &viewport,
+            page_scene(width, height, page.size())?.primitives.len(),
+            cancel,
+        )?;
+    }
     Ok(GraphScene {
         scene,
         atoms,
         bonds,
     })
+}
+
+#[allow(clippy::too_many_arguments)]
+fn resolved_label(
+    position: [f32; 2],
+    element: bondline_model::Element,
+    preferred_left: bool,
+    hydrogens: u16,
+    incident: &[&BondHit],
+    viewport: &PageViewport,
+    dimensions: [u32; 2],
+    cancel: &Cancellation,
+) -> Result<crate::label::Label, Error> {
+    use crate::label::Layout;
+    if element.get() == 1 && hydrogens != 0 {
+        return Err(Error::UnsupportedChemicalContent);
+    }
+    let mut last_error = Error::LabelOverlap;
+    for layout in [
+        Layout::Horizontal(preferred_left),
+        Layout::Horizontal(!preferred_left),
+        Layout::Above,
+        Layout::Below,
+    ] {
+        cancel.check()?;
+        let label = match crate::label::resolved_element(
+            position,
+            element,
+            layout,
+            hydrogens,
+            viewport.stroke_width(),
+            dimensions,
+            cancel,
+        ) {
+            Ok(label) => label,
+            Err(Error::LabelPlacement) => {
+                last_error = Error::LabelPlacement;
+                continue;
+            }
+            Err(error) => return Err(error),
+        };
+        if !label
+            .masks()
+            .chain(&label.pixels)
+            .all(|rect| rect_inside_paper(rect, viewport))
+        {
+            last_error = Error::LabelPlacement;
+            continue;
+        }
+        let clear = incident.iter().all(|bond| {
+            // Keep the literal entry's horizontal padding when its H is clear.
+            // Stacked masks are separate, so the gap between lines cannot hide ink.
+            !label
+                .hydrogen_mask
+                .as_ref()
+                .is_some_and(|mask| intersects_label(bond, mask))
+        });
+        if clear {
+            return Ok(label);
+        }
+    }
+    Err(last_error)
+}
+
+/// Center-line clipping against a label's closed padding rectangle.
+fn segment_interval(stroke: &Stroke, mask: &Rectangle) -> Option<(f64, f64)> {
+    let mut entry = 0.0_f64;
+    let mut exit = 1.0_f64;
+    for (a, b, lower, upper) in [
+        (stroke.begin[0], stroke.end[0], mask.x, mask.x + mask.width),
+        (stroke.begin[1], stroke.end[1], mask.y, mask.y + mask.height),
+    ] {
+        let (a, delta, lower, upper) = (
+            f64::from(a),
+            f64::from(b) - f64::from(a),
+            f64::from(lower),
+            f64::from(upper),
+        );
+        if delta == 0.0 {
+            if a < lower || a > upper {
+                return None;
+            }
+        } else {
+            let (first, last) = ((lower - a) / delta, (upper - a) / delta);
+            entry = entry.max(first.min(last));
+            exit = exit.min(first.max(last));
+            if entry > exit {
+                return None;
+            }
+        }
+    }
+    Some((entry, exit))
+}
+
+fn rect_inside_paper(rect: &Rectangle, viewport: &PageViewport) -> bool {
+    point_inside_paper([f64::from(rect.x), f64::from(rect.y)], viewport)
+        && point_inside_paper(
+            [
+                f64::from(rect.x) + f64::from(rect.width),
+                f64::from(rect.y) + f64::from(rect.height),
+            ],
+            viewport,
+        )
+}
+
+fn point_inside_paper([x, y]: [f64; 2], viewport: &PageViewport) -> bool {
+    let paper = viewport.paper();
+    x >= f64::from(paper.x) + 1.0
+        && x <= f64::from(paper.x) + f64::from(paper.width) - 1.0
+        && y >= f64::from(paper.y) + 1.0
+        && y <= f64::from(paper.y) + f64::from(paper.height) - 1.0
+}
+
+fn validate_paper_ink(
+    scene: &Scene,
+    viewport: &PageViewport,
+    prefix: usize,
+    cancel: &Cancellation,
+) -> Result<(), Error> {
+    for primitive in scene.primitives.iter().skip(prefix) {
+        cancel.check()?;
+        let contained = match primitive {
+            Primitive::Rectangle(rect) => rect_inside_paper(rect, viewport),
+            Primitive::Stroke(stroke) => stroke
+                .corners()?
+                .iter()
+                .all(|point| point_inside_paper(point.map(f64::from), viewport)),
+        };
+        if !contained {
+            return Err(Error::LabelPlacement);
+        }
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod display_bounds_tests {
+    use super::*;
+
+    #[test]
+    fn paper_check_uses_actual_glyph_rectangles_and_butt_cap_corners() -> Result<(), Error> {
+        let viewport = PageViewport::new(
+            576,
+            576,
+            PageSize::new(256.0, 256.0).map_err(|_| Error::InvalidGeometry)?,
+        )?;
+        let mut scene = page_scene(576, 576, viewport.page)?;
+        let prefix = scene.primitives.len();
+        let cancel = Cancellation::default();
+        // Both centers lie inside the paper; the upper corners of this width2
+        // stroke extend past its interior y=33 boundary.
+        scene.primitives.push(Primitive::Stroke(Stroke {
+            begin: [64.0, 33.5],
+            end: [128.0, 33.5],
+            width: 2.0,
+            color: [0, 0, 0, 255],
+        }));
+        assert!(matches!(
+            validate_paper_ink(&scene, &viewport, prefix, &cancel),
+            Err(Error::LabelPlacement)
+        ));
+        scene.primitives.pop();
+        scene.primitives.push(Primitive::Stroke(Stroke {
+            begin: [33.0, 34.0],
+            end: [128.0, 34.0],
+            width: 2.0,
+            color: [0, 0, 0, 255],
+        }));
+        validate_paper_ink(&scene, &viewport, prefix, &cancel)?;
+        scene.primitives.push(Primitive::Rectangle(Rectangle {
+            x: 32,
+            y: 128,
+            width: 1,
+            height: 1,
+            color: [0, 0, 0, 255],
+        }));
+        assert!(matches!(
+            validate_paper_ink(&scene, &viewport, prefix, &cancel),
+            Err(Error::LabelPlacement)
+        ));
+        scene.primitives.pop();
+        scene.primitives.push(Primitive::Rectangle(Rectangle {
+            x: 33,
+            y: 128,
+            width: 1,
+            height: 1,
+            color: [0, 0, 0, 255],
+        }));
+        validate_paper_ink(&scene, &viewport, prefix, &cancel)?;
+        cancel.cancel();
+        assert!(matches!(
+            validate_paper_ink(&scene, &viewport, prefix, &cancel),
+            Err(Error::Cancelled)
+        ));
+        Ok(())
+    }
 }

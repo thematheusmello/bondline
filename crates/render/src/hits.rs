@@ -20,6 +20,7 @@ pub(crate) struct AtomHit {
     pub target: HitTarget,
     pub position: [f32; 2],
     pub label: Option<Rectangle>,
+    pub supplement: Option<Rectangle>,
 }
 
 pub(crate) struct BondHit {
@@ -66,13 +67,14 @@ impl GraphScene {
                 && atom.position[1] >= 0.0
                 && atom.position[0] < self.scene.width as f32
                 && atom.position[1] < self.scene.height as f32;
-            if !visible && atom.label.is_none() {
+            if !visible && atom.label.is_none() && atom.supplement.is_none() {
                 continue;
             }
             let distance = atom
                 .label
-                .as_ref()
-                .map_or(anchor, |r| anchor.min(rect_distance2(p, r)));
+                .iter()
+                .chain(&atom.supplement)
+                .fold(anchor, |distance, r| distance.min(rect_distance2(p, r)));
             consider(&mut best, (distance, anchor, atom.target), radius2);
         }
         if let Some((_, _, target)) = best {

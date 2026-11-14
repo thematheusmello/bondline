@@ -1207,3 +1207,17 @@ per record and72pt row margins are original packing choices, not reference defau
 Later unsupported records refuse the whole derived view. The new original MIT OR Apache-2.0
 mixed ordinary fixture has independent raw spans and unchanged external molecular consumers.
 This data API alone certifies no scene, label attachment, native workflow or reference parity.
+
+## Resolved-H attachment and paper ink, 2026-11-14
+
+[Renderer evidence](../verification-sdf-display-render.md) implements a separate entry
+consuming exact resolved display counts while preserving the old literal entry. IUPAC2008
+GR2.1.5–2.1.7 supports directing bonds at the element, reversed labels and a second line
+when both sides have bonds. Candidate order, one-em spacing and finite paper clearance are
+original Bondline policies. Real incident H-component intersection determines placement;
+separate stacked masks/hits keep intervening whitespace from obscuring bond attachment.
+The renderer selects no valence and keeps source/model coordinates and Some/None exact.
+Actual glyph rectangles, masks and stroked butt-cap corners must fit the paper interior.
+Original fixed-metric/FreeType comparisons and CPU/GPU scenes independently exercise these
+rules. No font, old oracle, threshold or approved golden was changed; this establishes no
+native workflow, general congestion solver or full reference rendering parity.
