@@ -115,10 +115,13 @@ impl Prepared {
         }
     }
 
-    pub(super) fn bind_ui_request(&mut self, id: u64) {
-        if let Some(file) = &mut self.file {
-            file.bind_ui_request(id);
-        }
+    pub(super) fn bind_ui_request(&mut self, id: u64) -> Result<(), Error> {
+        self.file
+            .as_mut()
+            .ok_or(Error::InvalidUiFileParameters(
+                "only file work can bind a native file request",
+            ))?
+            .bind_ui_request(id)
     }
 
     pub fn is_deferred(&self) -> bool {

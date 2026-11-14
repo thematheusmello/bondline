@@ -16,6 +16,7 @@ mod file_ui;
 mod files;
 mod sdf_edit;
 mod sdf_query;
+mod smiles_conversion;
 pub use bond::{BondCreate, BondExtend, ExtendHydrogenPolicy};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, StoredContent};
@@ -30,6 +31,7 @@ pub use sdf_query::{
     MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
     SdfRecordInspection, SdfValueOmission,
 };
+pub use smiles_conversion::{ConversionOutput, ConversionReceipt, ConvertSmilesToCdxml};
 #[cfg(test)]
 mod close_tests;
 #[cfg(test)]
@@ -111,6 +113,7 @@ command_registry! {
     SaveMol(SaveMol) => ("document.save_mol", "Atomically save supported MOL data, retaining its associated version by default without silently losing source metadata or layout.", false),
     OpenSdf(OpenSdf) => ("document.open_sdf", "Open every validated SDF record with complete source and ordered data; chemical preview is unavailable.", false),
     SaveSdf(SaveSdf) => ("document.save_sdf", "Atomically save the complete SDF collection without changing molecular versions or ordered data.", false),
+    ConvertSmilesToCdxml(ConvertSmilesToCdxml) => ("file.convert_smiles_to_cdxml", "Create new native CDXML from a 1–12 neutral carbon/Single path using explicit fixed H and supplied geometry; the current session stays unchanged.", false),
     SdfRecordInspect(SdfRecordInspect) => ("sdf.record.inspect", "Read a bounded ordered field page from an explicitly identified captured SDF record; oversized values are omitted explicitly.", true),
     SdfFieldSet(SdfFieldSet) => ("sdf.field.set_value", "Replace one existing ordered SDF field value through a bounded immutable candidate, preserving every other source byte.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
@@ -176,6 +179,8 @@ pub enum Error {
     InvalidSdfQuery(&'static str),
     #[error("invalid SDF field edit: {0}")]
     InvalidSdfField(&'static str),
+    #[error("invalid SMILES conversion parameters: {0}")]
+    InvalidSmilesConversion(&'static str),
     #[error("SDF field input exceeds the 64 KiB authored-LF or serialized-value budget")]
     SdfFieldInputLimit,
     #[error("a single SDF field exceeds the 1 MiB serialized query page budget")]
@@ -317,6 +322,8 @@ pub struct CommandResult {
     pub file: FileState,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_operation: Option<FileOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversion: Option<ConversionReceipt>,
     pub close: CloseState,
     pub close_epoch: u64,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -421,6 +428,7 @@ impl Engine {
                 dirty: self.document != self.saved,
             },
             file_operation: None,
+            conversion: None,
             close: self.close_state(),
             close_epoch: self.close_policy.epoch,
             close_operation: None,
@@ -474,6 +482,10 @@ impl Engine {
             Command::SdfFieldSet(params) => {
                 let plan = self.sdf_field_plan(params)?;
                 return Ok(Prepared::sdf_field_set(self.state(), plan));
+            }
+            Command::ConvertSmilesToCdxml(params) => {
+                let plan = self.smiles_conversion_plan(params)?;
+                return Ok(Prepared::file(self.state(), plan));
             }
             Command::OpenCdxml(params) => {
                 if self.document != self.saved && !params.discard_unsaved {
@@ -808,6 +820,7 @@ mod tests {
                 "document.save_mol",
                 "document.open_sdf",
                 "document.save_sdf",
+                "file.convert_smiles_to_cdxml",
                 "history.redo",
                 "history.undo",
                 "page.set_size",

@@ -294,6 +294,110 @@ mod tests {
         time::timeout,
     };
 
+    #[tokio::test(flavor = "current_thread")]
+    async fn conversion_worker_refusal_and_cancellation_release_the_shared_save_lease_without_effects()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = crate::file_test_support::FileTestDirectory::new()?;
+        let input = directory.path("worker-conversion.smi");
+        let output = directory.path("worker-conversion.cdxml");
+        std::fs::write(&input, b"CC\n")?;
+        let mut session = Engine::default();
+        session.dispatch(
+            "document.close",
+            json!({"expected_revision":0,"action":"request"}),
+        )?;
+        let engine = Arc::new(Mutex::new(session));
+        let executor = CommandExecutor::new(Arc::clone(&engine));
+        let independent = CommandExecutor::new(Arc::clone(&engine));
+        let before = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+        let convert = || {
+            Command::parse(
+                "file.convert_smiles_to_cdxml",
+                json!({
+            "expected_revision":0,"input_path":input,"output_path":output,
+            "bond_length_pt":48.0,"origin_x_pt":72.0,"origin_y_pt":72.0,
+            "page_width_pt":595.0,"page_height_pt":842.0}),
+            )
+        };
+        let capture = || {
+            Command::parse(
+                "render.capture",
+                json!({"page_id":1,"width_px":8,"height_px":8,"backend":"cpu"}),
+            )
+        };
+        let first = executor
+            .prepare_command(capture()?)
+            .map_err(|e| e.message)?;
+        let second = executor
+            .prepare_command(capture()?)
+            .map_err(|e| e.message)?;
+        assert_eq!(
+            executor
+                .prepare_command(convert()?)
+                .err()
+                .ok_or("unbounded conversion worker")?
+                .code,
+            "busy"
+        );
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        assert!(!output.try_exists()?);
+        // The rejected plan must release its save lease even while other workers remain full.
+        let reserved = independent
+            .prepare_command(convert()?)
+            .map_err(|e| e.message)?;
+        assert_eq!(
+            engine
+                .lock()
+                .map_err(|_| "engine")?
+                .prepare(Command::parse(
+                    "document.save_cdxml",
+                    json!({"path":directory.path("must-not-save.cdxml")})
+                )?)
+                .err()
+                .ok_or("independent executor escaped lease")?
+                .info()
+                .code,
+            "busy"
+        );
+        drop(reserved);
+        drop(first);
+        drop(second);
+        assert!(!executor.has_active_work());
+        assert!(!independent.has_active_work());
+        let prepared = executor
+            .prepare_command(convert()?)
+            .map_err(|e| e.message)?;
+        assert!(executor.has_active_work());
+        assert_eq!(
+            executor
+                .complete(prepared, std::future::ready(()))
+                .await
+                .err()
+                .ok_or("pre-cancel accepted")?
+                .code,
+            "cancelled"
+        );
+        assert!(!executor.has_active_work());
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        assert!(!output.try_exists()?);
+        drop(
+            independent
+                .prepare_command(Command::parse(
+                    "document.save_cdxml",
+                    json!({"path":directory.path("released-save.cdxml")}),
+                )?)
+                .map_err(|e| e.message)?,
+        );
+        assert!(!independent.has_active_work());
+        Ok(())
+    }
+
     #[test]
     fn separate_executor_budgets_cannot_bypass_the_engines_outstanding_save()
     -> Result<(), Box<dyn std::error::Error>> {

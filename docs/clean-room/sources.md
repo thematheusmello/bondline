@@ -1016,3 +1016,20 @@ metadata remain intact. Real output faces the unchanged Expat/Decimal/RDKit cons
 and native-profile reopen/editability checks; synthetic recovery metadata is qualified
 separately from observed filesystem stages. New native/Windows/Linux evidence remains
 unverified, and GitHub Actions stays disabled under the current user instruction.
+
+## Shared restricted SMILES conversion command, 2026-11-14
+
+The named `file.convert_smiles_to_cdxml` operation composes the existing public-source-backed
+notation, fixed-H normalization, IUPAC-informed carbon-path layout and native CDXML encoder
+with the existing bounded file reader/atomic publisher. Its notation/layout/CDXML sources
+and immutable pins above still apply; no new chemistry rule, periodic-table inference,
+reference-product behavior or redistributable vendor asset is inferred here.
+
+Required geometry/revision/paths, create-only publication, `neutral_carbon_path_v1` receipt,
+current-session preservation and historical receipt identity are original explicit policies.
+The established per-Engine save lease, two-worker/reply/close barriers and typed closed JSON
+registry are reused; there is no alternate dispatcher, pool, implicit Open or source-backed
+SMILES authority. Actual generated CDXML and later native extension/save bytes face unchanged
+format consumers plus an original Expat/Decimal/RDKit workflow oracle. The original source,
+native-v0 fixture, dependency/lock pins and approved golden remain untouched. See
+[verification-smiles-conversion-command.md](../verification-smiles-conversion-command.md).

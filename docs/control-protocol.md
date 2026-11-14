@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has twenty commands; the complete list is below.
+The delivered registry has twenty-one commands; the complete list is below.
 
 An engine JSON request is exactly:
 
@@ -52,6 +52,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.save_mol` | `path`, optional `overwrite=false`, `version="auto"` (`auto`, `v2000`, `v3000`) | Atomic MOL save with captured output version; refuses unsupported conversion/metadata/layout loss; imported source retains its frame |
 | `document.open_sdf` | `path`, optional `discard_unsaved=false` | Validate every mixed V2000/V3000 record and retain complete ordered source; clean collection session and cleared history, without a drawing projection |
 | `document.save_sdf` | `path`, optional `overwrite=false` | Atomic whole-source collection save; retains every record, MOL version, ordered field and byte; no molecular regeneration |
+| `file.convert_smiles_to_cdxml` | Required `expected_revision`, `input_path`, `output_path`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt` | Deferred create-only conversion of one bounded neutral carbon/Single path into new native CDXML; current session and all its baselines remain unchanged |
 | `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
 | `sdf.field.set_value` | Required `expected_revision`, positive `record_id`, zero-based existing `field_index`, `value_lines` | Deferred immutable existing-field edit, one whole-content history commit; byte-preserving no-op and strict stale/input guards |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
@@ -219,7 +220,7 @@ outcome, even if an OS syscall exceeds the request deadline. Dropping the awaiti
 cancellation but retains the worker permit until it exits.
 
 Stable file errors include `invalid_path`, `file_too_large`, `not_regular_file`, `symlink_target`,
-`file_changed`, `unsupported_content`, `invalid_document`, `invalid_sdf`, `resource_limit`, `not_found`, `already_exists`,
+`file_changed`, `unsupported_content`, `invalid_document`, `invalid_sdf`, `invalid_smiles`, `resource_limit`, `not_found`, `already_exists`,
 `permission_denied`, `unsupported_filesystem`, `io_error`, `recovery_required`. Post-publication
 error is `save_published`; its message states that new bytes exist and no rollback occurred.
 Recovery messages identify a retained original path. Directory-sync false is a capability
@@ -589,3 +590,56 @@ release commits immediately, then later same-frame presses use the resulting gra
 and revision. Captured held gestures are never relabeled. Complete-source, stale and
 history guards remain in Engine. Native runtime remains pending; exact deterministic
 RED/GREEN and source/limit evidence is in verification-bond-attachment-ui.md.
+
+## Restricted create-only SMILES conversion
+
+`file.convert_smiles_to_cdxml` explicitly selects the `neutral_carbon_path_v1` conversion
+policy. Every parameter is required; there is no implicit geometry, overwrite switch,
+discard flag, selection, native request ID or alternative H policy. Length must be finite
+and positive; origin is finite within ±100000pt and page dimensions are positive and at
+most100000pt. Runtime validation also covers direct typed Rust callers. A stale expected
+revision fails `stale_revision` before file work. The command is **not read-only** in
+registry/MCP metadata: it publishes a file, although authored state is unchanged.
+
+The native IO operation reads the explicitly chosen complete source under its64KiB cap,
+retains the notation owner while validating/layout/encoding, and creates a new CDXML file
+through the existing atomic publisher. Only actual connected1–12 neutral nonisotopic
+carbon/Single paths that satisfy fixed-H normalization, geometry and the1024reference
+ink/page checks convert. Aromatic markers or bonds, including uppercase `C:C`, and other
+unsupported content refuse. Input/filename suffix never selects a decoder or changes the
+fixed CDXML output format. Output must not exist; input bytes and permissions are not edited.
+This is conversion to a new drawing, not source-backed SMILES Open/Save or general cleanup.
+
+Success adds optional `conversion` to the latest Engine state:
+
+```json
+{"conversion":{"profile":"neutral_carbon_path_v1","input_revision":0,"session_generation":0,"input_path":"/chosen/input.smi","input_byte_length":3,"atom_count":2,"bond_count":1,"output":{"path":"/chosen/new.cdxml","byte_length":408,"directory_synced":true}}}
+```
+
+Paths/byte lengths in that example are illustrative, not reference bytes. Counts and output
+receipt describe actual work. `input_revision`/`session_generation` are captured at preparation;
+the input file is actually bounded/read by its worker. `revision`, `document`/`collection`,
+source, saved/file association, dirty/history, close epoch/approval and native file intent
+remain the current session's state at finish. Conversion neither opens the generated drawing
+nor marks anything saved. No `file_operation` or native completion acknowledgment is fabricated.
+Automatic inspect/state omits `conversion`; it is a returned receipt, not persistent content.
+
+The existing per-Engine save reservation covers native saves and conversion together, from
+prepare through publication and finish/drop. A second save/conversion fails `busy` before IO.
+Existing two-worker, cancellation, reply-publication and close-drain barriers remain shared.
+A worker-budget refusal drops the unexecuted plan/lease without changing session state.
+Canonical output must be representable as Unicode before writing. An unrepresentable actual
+receipt path discovered after publication remains a truthful `save_published` error.
+
+Finishing an old published conversion returns its captured receipt with the **latest** Engine
+state even after edits, a new Open generation or committed close. It does not revive an old
+session/close approval or claim rollback. Cancellation before publication creates no output;
+after publication the real outcome remains reportable. Dropping an unexecuted plan or a
+published completion releases its reservation without updating the active session.
+
+Native file presentation cannot bind this command. `prepare_ui_file` rejects it before
+reservation; the generic plan binder explicitly refuses it rather than silently treating it
+as Open/Save or ignoring an ID. A conversion cannot complete, clear or renew a trusted native
+Save acknowledgment. CLI, stdio MCP and authenticated loopback use the same registry/worker
+operation; native conversion controls and interactive acceptance remain missing. See
+[verification-smiles-conversion-command.md](verification-smiles-conversion-command.md).

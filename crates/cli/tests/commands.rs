@@ -4,6 +4,8 @@ use std::process::Command;
 mod cdx_support;
 #[path = "support/chain.rs"]
 mod chain_support;
+#[path = "support/conversion.rs"]
+mod conversion_support;
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
 #[path = "support/mol.rs"]
@@ -12,6 +14,59 @@ mod mol_support;
 mod sdf_field_support;
 #[path = "../../../xtask/oracles/sdf_record_test_support.rs"]
 mod sdf_record_support;
+
+#[test]
+fn executable_conversion_then_open_extend_history_save_and_reopen_use_the_same_registry()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("cli-conversion.smi");
+    std::fs::write(&input, b"CC\n")?;
+    for workflow in [false, true] {
+        let output = directory.path(if workflow {
+            "cli-conversion-workflow-λ.cdxml"
+        } else {
+            "cli-conversion-only-λ.cdxml"
+        });
+        let mut process = Command::new(env!("CARGO_BIN_EXE_bondline-cli"));
+        process.arg("run");
+        let mut requests = vec![
+            json!({"command":"file.convert_smiles_to_cdxml","params":conversion_support::params(0,&input,&output)}),
+        ];
+        if workflow {
+            requests.extend([
+                json!({"command":"document.open_cdxml","params":{"path":output}}),
+                json!({"command":"bond.extend","params":conversion_support::extend(1)}),
+                json!({"command":"history.undo","params":{}}),
+                json!({"command":"history.redo","params":{}}),
+                json!({"command":"document.save_cdxml","params":{"path":output,"overwrite":true}}),
+                json!({"command":"document.open_cdxml","params":{"path":output}}),
+            ]);
+        }
+        for request in requests {
+            process.arg("--cmd").arg(request.to_string());
+        }
+        let result = process.output()?;
+        assert!(
+            result.status.success(),
+            "{}",
+            String::from_utf8_lossy(&result.stderr)
+        );
+        let value: Value = serde_json::from_slice(&result.stdout)?;
+        if workflow {
+            conversion_support::assert_chain(&value, 3)?;
+            assert_eq!(value["revision"], 5);
+            assert_eq!(value["undo_depth"], 0);
+            assert_eq!(value["redo_depth"], 0);
+            assert_eq!(value["file"]["dirty"], false);
+            assert_eq!(value["source"]["modified"], false);
+            assert!(value.get("conversion").is_none());
+        } else {
+            conversion_support::assert_conversion(&value, &input, &output)?;
+        }
+        conversion_support::independent(&output, if workflow { 3 } else { 2 })?;
+    }
+    Ok(())
+}
 
 #[test]
 fn executable_field_edit_save_undo_and_redo_preserve_complete_sdf_source_and_baselines()
@@ -236,6 +291,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "document.save_cdxml",
             "document.save_mol",
             "document.save_sdf",
+            "file.convert_smiles_to_cdxml",
             "history.redo",
             "history.undo",
             "page.set_size",

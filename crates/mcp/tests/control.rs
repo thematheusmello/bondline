@@ -5,6 +5,8 @@ use serde_json::Value;
 mod cdx_support;
 #[path = "../../cli/tests/support/chain.rs"]
 mod chain_support;
+#[path = "../../cli/tests/support/conversion.rs"]
+mod conversion_support;
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
 #[path = "../../cli/tests/support/mol.rs"]
@@ -53,6 +55,87 @@ fn authenticated(
     )?;
     assert_eq!(response, serde_json::json!({"authenticated":true}));
     Ok(client)
+}
+
+#[test]
+fn authenticated_conversion_keeps_the_session_then_native_open_and_edit_notify_actual_changes()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("socket-conversion.smi");
+    let output = directory.path("socket-conversion-λ.cdxml");
+    std::fs::write(&input, b"CC\n")?;
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, Arc::clone(&engine), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    let before = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+    let converted=call(&mut client,&serde_json::json!({"command":"file.convert_smiles_to_cdxml","params":conversion_support::params(0,&input,&output)}).to_string())?;
+    conversion_support::assert_conversion(&converted["result"], &input, &output)?;
+    assert_eq!(
+        serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+        before
+    );
+    assert_eq!(changes.load(Ordering::SeqCst), 0);
+    conversion_support::independent(&output, 2)?;
+    let mut stale = conversion_support::params(1, &input, &directory.path("not-created.cdxml"));
+    let refused = call(
+        &mut client,
+        &serde_json::json!({"command":"file.convert_smiles_to_cdxml","params":stale}).to_string(),
+    )?;
+    assert_eq!(refused["error"]["code"], "stale_revision");
+    stale = conversion_support::params(0, &input, &output);
+    stale["overwrite"] = serde_json::json!(true);
+    let refused = call(
+        &mut client,
+        &serde_json::json!({"command":"file.convert_smiles_to_cdxml","params":stale}).to_string(),
+    )?;
+    assert_eq!(refused["error"]["code"], "invalid_params");
+    // Invalid JSON parameters close this connection; reauthenticate the same session.
+    let mut client = authenticated(&server)?;
+    for (at, (name, params, count, revision, dirty)) in [
+        (
+            "document.open_cdxml",
+            serde_json::json!({"path":output}),
+            2,
+            1,
+            false,
+        ),
+        ("bond.extend", conversion_support::extend(1), 3, 2, true),
+        ("history.undo", serde_json::json!({}), 2, 3, false),
+        ("history.redo", serde_json::json!({}), 3, 4, true),
+        (
+            "document.save_cdxml",
+            serde_json::json!({"path":output,"overwrite":true}),
+            3,
+            4,
+            false,
+        ),
+        (
+            "document.open_cdxml",
+            serde_json::json!({"path":output}),
+            3,
+            5,
+            false,
+        ),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let response = call(
+            &mut client,
+            &serde_json::json!({"command":name,"params":params}).to_string(),
+        )?;
+        conversion_support::assert_chain(&response["result"], count)?;
+        assert_eq!(response["result"]["revision"], revision);
+        assert_eq!(response["result"]["file"]["dirty"], dirty);
+        wait_for_changes(&changes, at + 1);
+    }
+    conversion_support::independent(&output, 3)?;
+    server.shutdown()?;
+    Ok(())
 }
 
 #[test]

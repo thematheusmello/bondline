@@ -489,6 +489,78 @@ mod tests {
     }
 
     #[tokio::test(flavor = "current_thread")]
+    async fn conversion_receipt_reply_holds_close_until_flush_without_repaint_or_session_changes()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = crate::file_test_support::FileTestDirectory::new()?;
+        let input = directory.path("reply-conversion.smi");
+        let output = directory.path("reply-conversion.cdxml");
+        std::fs::write(&input, b"CC\n")?;
+        let mut session = Engine::default();
+        session.dispatch(
+            "document.close",
+            json!({"expected_revision":0,"action":"request"}),
+        )?;
+        let engine = Arc::new(Mutex::new(session));
+        let executor = CommandExecutor::new(Arc::clone(&engine));
+        let before = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+        let request = serde_json::to_vec(
+            &json!({"command":"file.convert_smiles_to_cdxml","params":{
+            "expected_revision":0,"input_path":input,"output_path":output,"bond_length_pt":40.0,
+            "origin_x_pt":100.0,"origin_y_pt":200.0,"page_width_pt":612.0,"page_height_pt":792.0}}),
+        )?;
+        let (registered, publication) = executor
+            .prepare_json(&request)
+            .map_err(|e| e.info.message)?;
+        assert!(!acknowledge_if_idle(&executor)?);
+        let result = executor.complete(registered, std::future::pending()).await;
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        let bytes = Arc::new(Mutex::new(Vec::new()));
+        let copy = Arc::clone(&bytes);
+        let (flushing, started) = oneshot::channel();
+        let (release, released) = oneshot::channel();
+        let notified = Arc::new(AtomicBool::new(false));
+        let flag = Arc::clone(&notified);
+        let task = tokio::spawn(async move {
+            let mut writer = FlushGate {
+                bytes: copy,
+                flushing: Some(flushing),
+                release: released,
+            };
+            publish_result(&mut writer, result, publication, &move || {
+                flag.store(true, Ordering::SeqCst);
+            })
+            .await
+        });
+        timeout(Duration::from_secs(2), started).await??;
+        assert!(!acknowledge_if_idle(&executor)?);
+        assert!(!notified.load(Ordering::SeqCst));
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        release.send(()).map_err(|_| "release conversion flush")?;
+        timeout(Duration::from_secs(2), task).await???;
+        assert!(!notified.load(Ordering::SeqCst));
+        assert!(!executor.has_active_work());
+        let mut response: Value = serde_json::from_slice(&bytes.lock().map_err(|_| "output")?)?;
+        let receipt = response["result"]
+            .as_object_mut()
+            .ok_or("result")?
+            .remove("conversion")
+            .ok_or("receipt")?;
+        assert_eq!(response["result"], before);
+        assert_eq!(receipt["input_revision"], 0);
+        assert_eq!(receipt["session_generation"], 0);
+        assert_eq!(receipt["profile"], "neutral_carbon_path_v1");
+        crate::file_test_support::independently_read_file(&output, 1)?;
+        assert!(acknowledge_if_idle(&executor)?);
+        Ok(())
+    }
+
+    #[tokio::test(flavor = "current_thread")]
     async fn deferred_sdf_edit_reply_keeps_close_blocked_and_repaints_only_after_flush()
     -> Result<(), Box<dyn std::error::Error>> {
         let mut session = Engine::default();
