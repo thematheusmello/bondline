@@ -1,4 +1,4 @@
-//! Source-preserving SDF V2000 records and ordered data items.
+//! Source-preserving SDF V2000/V3000 records and ordered data items.
 //!
 //! BIOVIA Chemistry 2026 CTfile Formats, printed pages 97–99, defines the framing.
 //! ASCII/size budgets, unambiguous header identities, balanced registry parentheses
@@ -7,7 +7,7 @@
 //! a completed data item, accommodating external empty-value writers without trimming
 //! spaces-only data. Original bytes are never normalized or reconstructed from a map.
 
-use crate::mol::{MolError, MolFile};
+use crate::mol::{MolError, MolFile, Version, source_version, v3000};
 use std::ops::Range;
 
 pub const MAX_SDF_BYTES: usize = 64 * 1024 * 1024;
@@ -65,6 +65,14 @@ pub enum SdfError {
         #[source]
         source: MolError,
     },
+    #[error("V3000 MOL syntax in SDF record {record}: {source}")]
+    MolV3000 {
+        record: usize,
+        #[source]
+        source: v3000::Error,
+    },
+    #[error("SDF record {record} uses {version:?}; this writer accepts V2000 only")]
+    MolVersion { record: usize, version: Version },
 }
 
 impl SdfError {
@@ -75,10 +83,15 @@ impl SdfError {
             | Self::FieldLimit
             | Self::LineLimit
             | Self::LineTooLong { .. } => "resource_limit",
-            Self::UnsupportedEncoding { .. } | Self::UnsupportedHeader { .. } | Self::DataOnly => {
-                "unsupported_content"
-            }
+            Self::UnsupportedEncoding { .. }
+            | Self::UnsupportedHeader { .. }
+            | Self::DataOnly
+            | Self::MolVersion { .. } => "unsupported_content",
             Self::Mol { source, .. } => match source.code() {
+                "invalid_mol" => "invalid_sdf",
+                other => other,
+            },
+            Self::MolV3000 { source, .. } => match source.code() {
                 "invalid_mol" => "invalid_sdf",
                 other => other,
             },
@@ -97,6 +110,7 @@ pub struct SdfRecord<'a> {
     mol_range: Range<usize>,
     delimiter_range: Range<usize>,
     mol_bytes: &'a [u8],
+    mol_version: Version,
     fields: Vec<DataField<'a>>,
 }
 
@@ -125,6 +139,7 @@ impl std::fmt::Debug for SdfRecord<'_> {
         output
             .debug_struct("SdfRecord")
             .field("range", &self.range)
+            .field("mol_version", &self.mol_version)
             .field("field_count", &self.fields.len())
             .finish()
     }
@@ -151,6 +166,10 @@ impl<'a> SdfRecord<'a> {
     }
     pub fn mol_bytes(&self) -> &'a [u8] {
         self.mol_bytes
+    }
+    /// Actual embedded MOL encoding; an SDfile can contain both versions.
+    pub fn mol_version(&self) -> Version {
+        self.mol_version
     }
     pub fn fields(&self) -> &[DataField<'a>] {
         &self.fields
@@ -448,10 +467,7 @@ impl<'a> SdfFile<'a> {
             };
             let mol_range = first.start..mol_end;
             let mol_bytes = source.get(mol_range.clone()).ok_or(SdfError::InvalidSpan)?;
-            MolFile::parse(mol_bytes).map_err(|source| SdfError::Mol {
-                record: record_number,
-                source,
-            })?;
+            let mol_version = validate_mol(mol_bytes, record_number, false)?;
             let mut fields = Vec::new();
             let delimiter = loop {
                 let line = cursor.next()?.ok_or(SdfError::MissingDelimiter {
@@ -509,6 +525,7 @@ impl<'a> SdfFile<'a> {
                 mol_range,
                 delimiter_range: delimiter.range(),
                 mol_bytes,
+                mol_version,
                 fields,
             });
         }
@@ -547,11 +564,38 @@ fn add_lines(total: &mut usize, count: usize) -> Result<(), SdfError> {
     Ok(())
 }
 
+fn validate_mol(bytes: &[u8], record: usize, v2000_only: bool) -> Result<Version, SdfError> {
+    let version = source_version(bytes).map_err(|source| SdfError::Mol { record, source })?;
+    if v2000_only && version != Version::V2000 {
+        return Err(SdfError::MolVersion { record, version });
+    }
+    match version {
+        Version::V2000 => {
+            MolFile::parse(bytes).map_err(|source| SdfError::Mol { record, source })?;
+        }
+        Version::V3000 => {
+            v3000::MolFile::parse(bytes).map_err(|source| SdfError::MolV3000 { record, source })?;
+        }
+    }
+    Ok(version)
+}
+
+/// Construct new SDF framing while preserving each complete MOL payload and its
+/// actual V2000/V3000 encoding. This does not convert or project molecules. Supplied
+/// bytes retain their EOLs; only a missing final LF is appended. New SDF lines use LF.
+pub fn write(records: &[SdfRecordInput<'_>]) -> Result<Vec<u8>, SdfError> {
+    write_records(records, false)
+}
+
 /// Construct canonical SDF framing with one blank per item and exact $$$$ delimiters.
 /// Supplied V2000 MOL bytes are validated and retained, including CRLF and unknown
 /// properties; only a missing final LF is appended. New wrapper lines use LF, so mixed
 /// line endings are deliberate. This is separate from exact source passthrough.
 pub fn write_v2000(records: &[SdfRecordInput<'_>]) -> Result<Vec<u8>, SdfError> {
+    write_records(records, true)
+}
+
+fn write_records(records: &[SdfRecordInput<'_>], v2000_only: bool) -> Result<Vec<u8>, SdfError> {
     if records.is_empty() {
         return Err(SdfError::Empty);
     }
@@ -566,10 +610,7 @@ pub fn write_v2000(records: &[SdfRecordInput<'_>]) -> Result<Vec<u8>, SdfError> 
             return Err(SdfError::ByteLimit);
         }
         ascii(record.mol_bytes)?;
-        MolFile::parse(record.mol_bytes).map_err(|source| SdfError::Mol {
-            record: index + 1,
-            source,
-        })?;
+        validate_mol(record.mol_bytes, index + 1, v2000_only)?;
         let text = std::str::from_utf8(record.mol_bytes)
             .map_err(|_| SdfError::UnsupportedEncoding { offset: 0 })?;
         let mut cursor = Cursor::new(text);

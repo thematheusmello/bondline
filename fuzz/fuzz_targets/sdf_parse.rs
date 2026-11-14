@@ -1,6 +1,9 @@
 #![no_main]
 
-use bondline_io::sdf::{DataItemInput, SdfFile, SdfRecordInput, write_v2000};
+use bondline_io::{
+    mol::Version,
+    sdf::{DataItemInput, SdfFile, SdfRecordInput, write, write_v2000},
+};
 use libfuzzer_sys::fuzz_target;
 
 fuzz_target!(|data: &[u8]| {
@@ -50,24 +53,34 @@ fuzz_target!(|data: &[u8]| {
                 value_lines: field.value_lines(),
             })
             .collect::<Vec<_>>();
-        let output = match write_v2000(&[SdfRecordInput {
+        let inputs = [SdfRecordInput {
             mol_bytes: record.mol_bytes(),
             items: &items,
-        }]) {
+        }];
+        let legacy = write_v2000(&inputs);
+        if record.mol_version() == Version::V3000 {
+            assert_eq!(legacy.as_ref().unwrap_err().code(), "unsupported_content");
+        }
+        let output = match write(&inputs) {
             Ok(bytes) => bytes,
             Err(error) => {
                 assert_eq!(error.code(), "resource_limit");
                 continue;
             }
         };
+        if record.mol_version() == Version::V2000 {
+            assert_eq!(legacy.unwrap(), output);
+        }
         let canonical = SdfFile::parse(&output).expect("successful SDF output must parse");
         assert_eq!(canonical.records().len(), 1);
         let recovered = canonical.records().first().unwrap();
         assert_eq!(recovered.mol_bytes(), record.mol_bytes());
+        assert_eq!(recovered.mol_version(), record.mol_version());
         assert_eq!(recovered.fields().len(), record.fields().len());
         for (before, after) in record.fields().iter().zip(recovered.fields()) {
             assert_eq!(before.header(), after.header());
             assert_eq!(before.name(), after.name());
+            assert_eq!(before.dt_number(), after.dt_number());
             assert_eq!(before.value_lines(), after.value_lines());
         }
     }

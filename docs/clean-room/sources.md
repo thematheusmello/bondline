@@ -218,3 +218,33 @@ the token alive through finish. This narrowly justified ownership check is not a
 claim that Arc::strong_count alone provides a synchronization primitive. Single outstanding
 save/busy policy is original Bondline behavior; actual reversed completions independently
 reproduced wrong clean encoding and subsequent coordinate rounding before correction.
+
+
+## Mixed SDfile molecular versions (2026-11-14)
+
+CTFILE2026, [official BIOVIA Chemistry 2026 CTfile Formats](https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf),
+129 pages / 1,580,820 bytes, SHA-256
+959f2bbf5487e00fa7535ea7ee36f7ce04f39ea72920844641952276de146c94.
+Chapter 10 printed 97–99 = PDF zero-based 100–102 = one-based 101–103. Printed97 explicitly
+permits V3000/V2000 or a combination; printed 98/99 retain the same data/item/delimiter
+and blank-line rules. The already visually inspected cached pages were reread; no
+vendor sample/code/diagram was copied. This normative mixed-SDF statement is distinct
+from the consumer-only legacy mixed-RXN observation.
+
+The per-record version/generic-preserving writer and continued V2000-only writer are
+original architecture choices. Full corresponding molecular syntax is validated without
+model projection. The private stamp helper was moved unchanged from owned MOL detection;
+unknown properties never override the declared encoding or authorize discarding bytes.
+All earlier SDF source/bounds/header/padding decisions and unresolved gaps remain.
+
+Actual independently executed pinned RDKit 2026.09.2 [SDWriter/ForwardSDMolSupplier APIs](https://www.rdkit.org/docs/source/rdkit.Chem.rdmolfiles.html)
+provide new ordinary-property compatibility evidence. Toggling SetForceV3000 around two
+writes emits a 667-byte V3000/V2000 SDfile, SHA-256
+88516961b6a197950ac83e09c441387bd2e9ed1c2da2d94accdffd1b9c359ca6.
+Its whole supplier reads both molecules and EMPTY/MULTI/ORDINARY properties. The existing
+V3000 molecular oracle independently provides314-byte 8 dp and 49,058-byte1,000-atom payloads;
+new SDF framing preserves those complete bytes. Existing sdf_oracle.py and
+v3000_oracle.py remain unchanged; supplemental sdf_mixed_oracle.py is an original,
+external-only ordinary consumer/writer, not a raw or duplicate-field oracle. The original
+777-byte mixed fixture's hash/provenance/literal spans are in its README/tests. No new
+runtime dependency, proprietary artifact or asset was used.
