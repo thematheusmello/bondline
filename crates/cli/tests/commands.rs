@@ -19,6 +19,124 @@ mod smiles_export_support;
 #[path = "support/smiles_file.rs"]
 mod smiles_file_support;
 
+#[path = "support/smiles_record.rs"]
+mod smiles_record_support;
+
+#[test]
+fn executable_explicit_smiles_record_query_selects_nonfirst_notation_and_keeps_metadata_private()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("cli-record-化学.smi");
+    std::fs::write(&input, smiles_record_support::SOURCE)?;
+    for stage in 0..3 {
+        let output = directory.path(&format!("cli-record-copy-{stage}.data"));
+        let mut process = Command::new(env!("CARGO_BIN_EXE_bondline-cli"));
+        process.arg("run");
+        let mut requests = vec![
+            json!({"command":"document.open_smiles","params":{"path":input}}),
+            json!({"command":"smiles.record.inspect","params":smiles_record_support::params(1,2)}),
+        ];
+        if stage > 0 {
+            requests.push(json!({"command":"document.save_smiles","params":{"path":output}}));
+        }
+        if stage == 2 {
+            requests.push(json!({"command":"document.open_smiles","params":{"path":output}}));
+        }
+        let revision = if stage == 2 { 2 } else { 1 };
+        requests.push(json!({"command":"smiles.record.inspect","params":smiles_record_support::params(revision,2)}));
+        for request in requests {
+            process.arg("--cmd").arg(request.to_string());
+        }
+        let result = process.output()?;
+        assert!(
+            result.status.success(),
+            "{}",
+            String::from_utf8_lossy(&result.stderr)
+        );
+        let value: Value = serde_json::from_slice(&result.stdout)?;
+        smiles_record_support::assert_query(&value, revision, revision, 2)?;
+        smiles_record_support::consume_notation(&value)?;
+        if stage > 0 {
+            assert_eq!(std::fs::read(&output)?, smiles_record_support::SOURCE);
+        }
+    }
+    let result = Command::new(env!("CARGO_BIN_EXE_bondline-cli"))
+        .arg("run")
+        .arg("--cmd")
+        .arg(json!({"command":"document.open_smiles","params":{"path":input}}).to_string())
+        .arg("--cmd")
+        .arg(
+            json!({"command":"smiles.record.inspect","params":smiles_record_support::params(1,2)})
+                .to_string(),
+        )
+        .arg("--cmd")
+        .arg(json!({"command":"document.inspect","params":{}}).to_string())
+        .output()?;
+    assert!(result.status.success());
+    let value: Value = serde_json::from_slice(&result.stdout)?;
+    smiles_record_support::assert_summary(&value, 1);
+    assert!(value.get("smiles_record").is_none());
+    assert!(!value.to_string().contains("[13CH2]"));
+    assert_eq!(std::fs::read(&input)?, smiles_record_support::SOURCE);
+    Ok(())
+}
+
+#[test]
+fn executable_smiles_record_invalid_requests_refuse_without_changing_saved_source()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("cli-record-guards.smi");
+    std::fs::write(&input, smiles_record_support::SOURCE)?;
+    for (case, (params, code)) in [
+        (
+            json!({"expected_revision":0,"record_id":2}),
+            "stale_revision",
+        ),
+        (json!({"expected_revision":1,"record_id":4}), "not_found"),
+        (
+            json!({"expected_revision":1,"record_id":0}),
+            "invalid_params",
+        ),
+        (
+            json!({"expected_revision":1,"record_id":2,"field_offset":0}),
+            "invalid_params",
+        ),
+        (json!({"expected_revision":1}), "invalid_params"),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let output = directory.path(&format!("cli-record-guard-{case}.data"));
+        let result = Command::new(env!("CARGO_BIN_EXE_bondline-cli"))
+            .arg("run")
+            .arg("--cmd")
+            .arg(json!({"command":"document.open_smiles","params":{"path":input}}).to_string())
+            .arg("--cmd")
+            .arg(json!({"command":"document.save_smiles","params":{"path":output}}).to_string())
+            .arg("--cmd")
+            .arg(json!({"command":"smiles.record.inspect","params":params}).to_string())
+            .output()?;
+        assert!(!result.status.success());
+        let value: Value = serde_json::from_slice(&result.stderr)?;
+        assert_eq!(value["error"]["code"], code);
+        smiles_record_support::assert_private(&value);
+        assert_eq!(std::fs::read(&output)?, smiles_record_support::SOURCE);
+        assert_eq!(std::fs::read(&input)?, smiles_record_support::SOURCE);
+    }
+    let result = Command::new(env!("CARGO_BIN_EXE_bondline-cli"))
+        .arg("run")
+        .arg("--cmd")
+        .arg(
+            json!({"command":"smiles.record.inspect","params":smiles_record_support::params(0,2)})
+                .to_string(),
+        )
+        .output()?;
+    assert!(!result.status.success());
+    let value: Value = serde_json::from_slice(&result.stderr)?;
+    assert_eq!(value["error"]["code"], "unsupported_content");
+    Ok(())
+}
+
 #[test]
 fn executable_smiles_file_open_save_reopen_retains_all_records_and_opaque_data()
 -> Result<(), Box<dyn std::error::Error>> {
@@ -361,10 +479,32 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "render.capture",
             "sdf.field.set_value",
             "sdf.record.inspect",
+            "smiles.record.inspect",
             "ui.controls",
             "ui.file"
         ]
     );
+    let query = commands
+        .iter()
+        .find(|info| info["name"] == "smiles.record.inspect")
+        .ok_or("SMILES record query")?;
+    assert_eq!(query["read_only"], true);
+    assert_eq!(query["input_schema"]["additionalProperties"], false);
+    assert_eq!(
+        query["input_schema"]["required"],
+        json!(["expected_revision", "record_id"])
+    );
+    let properties = query["input_schema"]["properties"]
+        .as_object()
+        .ok_or("query properties")?;
+    assert_eq!(
+        properties
+            .keys()
+            .map(String::as_str)
+            .collect::<std::collections::BTreeSet<_>>(),
+        std::collections::BTreeSet::from(["expected_revision", "record_id"])
+    );
+    assert_eq!(properties["record_id"]["minimum"], 1);
     for (name, permission) in [
         ("document.open_cdx", "discard_unsaved"),
         ("document.save_cdx", "overwrite"),

@@ -19,6 +19,8 @@ mod sdf_support;
 mod smiles_export_support;
 #[path = "support/smiles_file.rs"]
 mod smiles_file_support;
+#[path = "support/smiles_record.rs"]
+mod smiles_record_support;
 use std::{
     io::{BufRead, BufReader, Write},
     process::{Child, ChildStdin, Command, Stdio},
@@ -108,6 +110,219 @@ impl Drop for Client {
 }
 
 #[test]
+fn stdio_smiles_record_query_is_bounded_exact_private_and_not_cached()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("stdio-record-化学.smi");
+    let output = directory.path("stdio-record-copy.data");
+    std::fs::write(&input, smiles_record_support::SOURCE)?;
+    let mut client = Client::start()?;
+    client.call(1,"initialize",json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"smiles-record-test","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let listed = client.call(2, "tools/list", json!({}))?;
+    let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
+    assert_eq!(tools.len(), 25);
+    let tool = tools
+        .iter()
+        .find(|tool| tool["name"] == "smiles.record.inspect")
+        .ok_or("SMILES query tool")?;
+    assert_eq!(tool["annotations"]["readOnlyHint"], true);
+    assert_eq!(tool["inputSchema"]["additionalProperties"], false);
+    assert_eq!(
+        tool["inputSchema"]["required"],
+        json!(["expected_revision", "record_id"])
+    );
+    let properties = tool["inputSchema"]["properties"]
+        .as_object()
+        .ok_or("query properties")?;
+    assert_eq!(
+        properties
+            .keys()
+            .map(String::as_str)
+            .collect::<std::collections::BTreeSet<_>>(),
+        std::collections::BTreeSet::from(["expected_revision", "record_id"])
+    );
+    assert_eq!(properties["record_id"]["minimum"], 1);
+    let wrong = client.call(
+        3,
+        "tools/call",
+        json!({"name":"smiles.record.inspect","arguments":smiles_record_support::params(0,2)}),
+    )?;
+    assert_eq!(wrong["result"]["isError"], true);
+    assert_eq!(
+        wrong["result"]["structuredContent"]["error"]["code"],
+        "unsupported_content"
+    );
+    let opened = client.call(
+        4,
+        "tools/call",
+        json!({"name":"document.open_smiles","arguments":{"path":input}}),
+    )?;
+    assert_eq!(opened["result"]["isError"], false);
+    let before = client.call(
+        5,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    let before = &before["result"]["structuredContent"];
+    smiles_record_support::assert_summary(before, 1);
+    assert!(before.get("smiles_record").is_none());
+    let mut id = 6;
+    for record in [2, 3] {
+        let result=client.call(id,"tools/call",json!({"name":"smiles.record.inspect","arguments":smiles_record_support::params(1,record)}))?;
+        id += 1;
+        assert_eq!(result["result"]["isError"], false, "{result}");
+        let value = &result["result"]["structuredContent"];
+        smiles_record_support::assert_query(value, 1, 1, record)?;
+        let text: Value = serde_json::from_str(
+            result["result"]["content"][0]["text"]
+                .as_str()
+                .ok_or("MCP text")?,
+        )?;
+        assert_eq!(&text, value);
+        let mut state = value.clone();
+        state
+            .as_object_mut()
+            .ok_or("result object")?
+            .remove("smiles_record");
+        assert_eq!(&state, before);
+        if record == 2 {
+            smiles_record_support::consume_notation(value)?;
+        }
+    }
+    for (params, code) in [
+        (
+            json!({"expected_revision":0,"record_id":2}),
+            "stale_revision",
+        ),
+        (json!({"expected_revision":1,"record_id":4}), "not_found"),
+        (
+            json!({"expected_revision":1,"record_id":0}),
+            "invalid_params",
+        ),
+        (
+            json!({"expected_revision":1,"record_id":2,"graph":true}),
+            "invalid_params",
+        ),
+        (json!({"record_id":2}), "invalid_params"),
+    ] {
+        let result = client.call(
+            id,
+            "tools/call",
+            json!({"name":"smiles.record.inspect","arguments":params}),
+        )?;
+        id += 1;
+        assert_eq!(result["result"]["isError"], true);
+        assert_eq!(result["result"]["structuredContent"]["error"]["code"], code);
+        let after = client.call(
+            id,
+            "tools/call",
+            json!({"name":"document.inspect","arguments":{}}),
+        )?;
+        id += 1;
+        assert_eq!(&after["result"]["structuredContent"], before);
+    }
+    let saved = client.call(
+        id,
+        "tools/call",
+        json!({"name":"document.save_smiles","arguments":{"path":output}}),
+    )?;
+    id += 1;
+    assert_eq!(saved["result"]["isError"], false);
+    assert_eq!(
+        saved["result"]["structuredContent"]["file_operation"]["byte_length"],
+        82
+    );
+    assert!(
+        saved["result"]["structuredContent"]
+            .get("smiles_record")
+            .is_none()
+    );
+    let reopened = client.call(
+        id,
+        "tools/call",
+        json!({"name":"document.open_smiles","arguments":{"path":output}}),
+    )?;
+    id += 1;
+    assert_eq!(reopened["result"]["isError"], false);
+    let result = client.call(
+        id,
+        "tools/call",
+        json!({"name":"smiles.record.inspect","arguments":smiles_record_support::params(2,2)}),
+    )?;
+    id += 1;
+    smiles_record_support::assert_query(&result["result"]["structuredContent"], 2, 2, 2)?;
+    let after = client.call(
+        id,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    id += 1;
+    smiles_record_support::assert_summary(&after["result"]["structuredContent"], 2);
+    assert!(
+        after["result"]["structuredContent"]
+            .get("smiles_record")
+            .is_none()
+    );
+    assert!(
+        !after["result"]["structuredContent"]
+            .to_string()
+            .contains("[13CH2]")
+    );
+    assert_eq!(std::fs::read(&input)?, smiles_record_support::SOURCE);
+    assert_eq!(std::fs::read(&output)?, smiles_record_support::SOURCE);
+
+    // An existing valid lexical boundary is disclosed verbatim, not normalized.
+    // The128KiB contract bounds smiles_record only; MCP's text copy is separate.
+    let long_notation = format!("[{}C]", "0".repeat(65533));
+    assert_eq!(long_notation.len(), 65536);
+    let mut long_source = b"C PRIVATE_FIRST\n".to_vec();
+    assert_eq!(long_source.len(), 16);
+    long_source.extend_from_slice(long_notation.as_bytes());
+    long_source.extend_from_slice(b"\tPRIVATE_SECOND");
+    assert_eq!(long_source.len(), 65567);
+    let long_input = directory.path("stdio-record-long.smi");
+    std::fs::write(&long_input, &long_source)?;
+    let opened = client.call(
+        id,
+        "tools/call",
+        json!({"name":"document.open_smiles","arguments":{"path":long_input}}),
+    )?;
+    id += 1;
+    assert_eq!(opened["result"]["isError"], false);
+    let result = client.call(
+        id,
+        "tools/call",
+        json!({"name":"smiles.record.inspect","arguments":smiles_record_support::params(3,2)}),
+    )?;
+    id += 1;
+    assert_eq!(result["result"]["isError"], false);
+    let record = &result["result"]["structuredContent"]["smiles_record"];
+    assert_eq!(
+        record,
+        &json!({"input_revision":3,"session_generation":3,"record_id":2,"line_number":2,
+        "full_range":{"start":16,"end":65567},"notation_range":{"start":16,"end":65552},
+        "separator_range":{"start":65552,"end":65553},"application_data_range":{"start":65553,"end":65567},
+        "line_ending_range":{"start":65567,"end":65567},"atom_count":1,"bond_count":0,"notation":long_notation})
+    );
+    assert!(serde_json::to_vec(record)?.len() <= 128 * 1024);
+    smiles_record_support::assert_private(&result["result"]["structuredContent"]);
+    let after = client.call(
+        id,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    assert!(
+        after["result"]["structuredContent"]
+            .get("smiles_record")
+            .is_none()
+    );
+    assert_eq!(std::fs::read(&long_input)?, long_source);
+    client.finish()?;
+    Ok(())
+}
+
+#[test]
 fn stdio_smiles_file_commands_keep_every_record_and_opaque_byte()
 -> Result<(), Box<dyn std::error::Error>> {
     let directory = file_support::FileTestDirectory::new()?;
@@ -148,7 +363,7 @@ fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 24);
+    assert_eq!(tools.len(), 25);
     let tool = tools
         .iter()
         .find(|t| t["name"] == "file.export_smiles_fragment")
@@ -205,7 +420,7 @@ fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real(
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 24);
+    assert_eq!(tools.len(), 25);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
@@ -871,6 +1086,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "render.capture",
             "sdf.field.set_value",
             "sdf.record.inspect",
+            "smiles.record.inspect",
             "ui.controls",
             "ui.file"
         ]

@@ -21,6 +21,8 @@ mod sdf_support;
 mod smiles_export_support;
 #[path = "../../cli/tests/support/smiles_file.rs"]
 mod smiles_file_support;
+#[path = "../../cli/tests/support/smiles_record.rs"]
+mod smiles_record_support;
 use std::{
     io::{BufRead, BufReader, Read, Write},
     net::{Ipv4Addr, Shutdown, SocketAddr, TcpStream},
@@ -59,6 +61,125 @@ fn authenticated(
     )?;
     assert_eq!(response, serde_json::json!({"authenticated":true}));
     Ok(client)
+}
+
+#[test]
+fn authenticated_smiles_record_query_keeps_source_state_private_and_does_not_repaint()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("socket-record-化学.smi");
+    let output = directory.path("socket-record-copy.data");
+    std::fs::write(&input, smiles_record_support::SOURCE)?;
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, engine, move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    let wrong=call(&mut client,&serde_json::json!({"command":"smiles.record.inspect","params":smiles_record_support::params(0,2)}).to_string())?;
+    assert_eq!(wrong["error"]["code"], "unsupported_content");
+    let opened = call(
+        &mut client,
+        &serde_json::json!({"command":"document.open_smiles","params":{"path":input}}).to_string(),
+    )?;
+    assert!(opened.get("error").is_none());
+    wait_for_changes(&changes, 1);
+    let before = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+    smiles_record_support::assert_summary(&before["result"], 1);
+    assert!(before["result"].get("smiles_record").is_none());
+    let mut captured = None;
+    for record in [2, 3] {
+        let result=call(&mut client,&serde_json::json!({"command":"smiles.record.inspect","params":smiles_record_support::params(1,record)}).to_string())?;
+        assert!(result.get("error").is_none(), "{result}");
+        smiles_record_support::assert_query(&result["result"], 1, 1, record)?;
+        let mut state = result["result"].clone();
+        state
+            .as_object_mut()
+            .ok_or("state object")?
+            .remove("smiles_record");
+        assert_eq!(state, before["result"]);
+        if record == 2 {
+            smiles_record_support::consume_notation(&result["result"])?;
+            captured = Some(result["result"].clone());
+        }
+        assert_eq!(
+            call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+            before
+        );
+        assert_eq!(changes.load(Ordering::SeqCst), 1);
+    }
+    for (params, code, disconnect) in [
+        (
+            serde_json::json!({"expected_revision":0,"record_id":2}),
+            "stale_revision",
+            false,
+        ),
+        (
+            serde_json::json!({"expected_revision":1,"record_id":4}),
+            "not_found",
+            false,
+        ),
+        (
+            serde_json::json!({"expected_revision":1,"record_id":0}),
+            "invalid_params",
+            false,
+        ),
+        (
+            serde_json::json!({"expected_revision":1,"record_id":2,"preview":true}),
+            "invalid_params",
+            true,
+        ),
+        (
+            serde_json::json!({"expected_revision":1}),
+            "invalid_params",
+            true,
+        ),
+    ] {
+        let result = call(
+            &mut client,
+            &serde_json::json!({"command":"smiles.record.inspect","params":params}).to_string(),
+        )?;
+        assert_eq!(result["error"]["code"], code);
+        if disconnect {
+            // Malformed closed parameters intentionally terminate the control connection.
+            let mut closed = String::new();
+            assert_eq!(client.read_line(&mut closed)?, 0);
+            client = authenticated(&server)?;
+        }
+        assert_eq!(
+            call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+            before
+        );
+        assert_eq!(changes.load(Ordering::SeqCst), 1);
+    }
+    let saved = call(
+        &mut client,
+        &serde_json::json!({"command":"document.save_smiles","params":{"path":output}}).to_string(),
+    )?;
+    assert!(saved.get("error").is_none());
+    assert!(saved["result"].get("smiles_record").is_none());
+    assert_eq!(saved["result"]["file_operation"]["byte_length"], 82);
+    wait_for_changes(&changes, 2);
+    let reopened = call(
+        &mut client,
+        &serde_json::json!({"command":"document.open_smiles","params":{"path":output}}).to_string(),
+    )?;
+    assert!(reopened.get("error").is_none());
+    wait_for_changes(&changes, 3);
+    let result=call(&mut client,&serde_json::json!({"command":"smiles.record.inspect","params":smiles_record_support::params(2,2)}).to_string())?;
+    smiles_record_support::assert_query(&result["result"], 2, 2, 2)?;
+    // This checks an already returned historical wire value, not an injected concurrent schedule.
+    smiles_record_support::assert_query(&captured.ok_or("captured response")?, 1, 1, 2)?;
+    let after = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+    smiles_record_support::assert_summary(&after["result"], 2);
+    assert!(after["result"].get("smiles_record").is_none());
+    assert!(!after["result"].to_string().contains("[13CH2]"));
+    assert_eq!(changes.load(Ordering::SeqCst), 3);
+    assert_eq!(std::fs::read(&input)?, smiles_record_support::SOURCE);
+    assert_eq!(std::fs::read(&output)?, smiles_record_support::SOURCE);
+    server.shutdown()?;
+    Ok(())
 }
 
 #[test]
