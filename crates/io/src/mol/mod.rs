@@ -17,6 +17,13 @@ pub const MAX_MOL_ITEMS: usize = 999;
 pub const MAX_MOL_LINE_BYTES: usize = 4096;
 pub const MAX_MOL_LINES: usize = 100_000;
 
+/// The decoded/selected MOL encoding, independent of a filename extension.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Version {
+    V2000,
+    V3000,
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum MolError {
     #[error("MOL input or output exceeds 64 MiB")]

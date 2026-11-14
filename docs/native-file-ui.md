@@ -186,3 +186,12 @@ prompt, but pre-Q minimized state was not independently exposed. Do not generali
 Dock, logout/shutdown, atomic multi-document approval or Touch Bar hardware validation.
 Force Quit/process kill cannot preserve unsaved edits. Interactive Windows/Linux workflows
 remain unverified even when hosted window and filesystem tests pass.
+
+## MOL V3000 corrected acceptance
+
+Source1c53312's actual Mac author/save/reopen/refusal/close and concurrent2048 CPU/GPU
+reply drain passed at2026-11-14T00:04:57UTC. The [application report](verification-v3000-application.md#corrected-native-acceptance-2026-11-14)
+records exact binary/source identities, file hashes, original headers, Decimal/RDKit
+checks, rejected harness parameters and complete cleanup. This covers supported elemental
+C–C/empty-to-first-fragment workflows; general graph editing and Windows/Linux interaction
+remain unverified. No new golden or reference-app asset was created.

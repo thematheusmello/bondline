@@ -11,6 +11,32 @@ pub enum FileFormat {
     #[default]
     Cdxml,
     MolV2000,
+    MolV3000,
+}
+
+impl FileFormat {
+    pub(super) fn from_mol(version: bondline_io::mol::Version) -> Self {
+        match version {
+            bondline_io::mol::Version::V2000 => Self::MolV2000,
+            bondline_io::mol::Version::V3000 => Self::MolV3000,
+        }
+    }
+    pub(super) fn mol_version(self) -> Option<bondline_io::mol::Version> {
+        match self {
+            Self::Cdxml => None,
+            Self::MolV2000 => Some(bondline_io::mol::Version::V2000),
+            Self::MolV3000 => Some(bondline_io::mol::Version::V3000),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum MolVersionChoice {
+    #[default]
+    Auto,
+    V2000,
+    V3000,
 }
 
 fn default_mol_scale() -> f64 {
@@ -59,12 +85,14 @@ pub struct SaveMol {
     pub path: String,
     #[serde(default)]
     pub overwrite: bool,
+    #[serde(default)]
+    pub version: MolVersionChoice,
 }
 
 #[derive(Clone, Copy, Debug)]
 pub(super) enum OpenEncoding {
     Cdxml,
-    MolV2000(bondline_io::mol::MolTransform),
+    Mol(bondline_io::mol::MolTransform),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -177,25 +205,36 @@ impl FilePlan {
                     ui_request_id,
                     revision,
                     generation,
-                } => Completion::Open {
-                    loaded: match encoding {
+                } => {
+                    let loaded = match encoding {
                         OpenEncoding::Cdxml => read_cdxml_file(Path::new(&params.path), cancel)?,
-                        OpenEncoding::MolV2000(frame) => bondline_io::files::read_mol_file(
+                        OpenEncoding::Mol(frame) => bondline_io::files::read_mol_file(
                             Path::new(&params.path),
                             frame,
                             cancel,
                         )?,
-                    },
-                    format: match encoding {
+                    };
+                    let format = match encoding {
                         OpenEncoding::Cdxml => FileFormat::Cdxml,
-                        OpenEncoding::MolV2000(_) => FileFormat::MolV2000,
-                    },
-                    ui_request_id,
-                    revision,
-                    generation,
-                    cancel: cancel.clone(),
-                    discard_unsaved: params.discard_unsaved,
-                },
+                        OpenEncoding::Mol(_) => {
+                            FileFormat::from_mol(loaded.document.mol_version().ok_or(
+                                bondline_io::mol::MolError::InvalidField {
+                                    line: 4,
+                                    field: "MOL version",
+                                },
+                            )?)
+                        }
+                    };
+                    Completion::Open {
+                        loaded,
+                        format,
+                        ui_request_id,
+                        revision,
+                        generation,
+                        cancel: cancel.clone(),
+                        discard_unsaved: params.discard_unsaved,
+                    }
+                }
                 Self::Save {
                     params,
                     format,
@@ -215,13 +254,21 @@ impl FilePlan {
                             FileFormat::Cdxml => {
                                 save_cdxml_file(&path, &document, params.overwrite, cancel)?
                             }
-                            FileFormat::MolV2000 => bondline_io::files::save_mol_file(
-                                &path,
-                                &document,
-                                params.overwrite,
-                                native_mol_transform()?,
-                                cancel,
-                            )?,
+                            FileFormat::MolV2000 | FileFormat::MolV3000 => {
+                                bondline_io::files::save_mol_file_as(
+                                    &path,
+                                    &document,
+                                    params.overwrite,
+                                    format.mol_version().ok_or(
+                                        bondline_io::mol::MolError::InvalidField {
+                                            line: 4,
+                                            field: "MOL output version",
+                                        },
+                                    )?,
+                                    native_mol_transform()?,
+                                    cancel,
+                                )?
+                            }
                         },
                         format,
                         ui_request_id,
@@ -242,6 +289,19 @@ impl FilePlan {
 }
 
 impl Engine {
+    pub(super) fn mol_save_format(&self, choice: MolVersionChoice) -> FileFormat {
+        let version = match choice {
+            MolVersionChoice::V2000 => bondline_io::mol::Version::V2000,
+            MolVersionChoice::V3000 => bondline_io::mol::Version::V3000,
+            MolVersionChoice::Auto => self
+                .file_format
+                .mol_version()
+                .or_else(|| self.document.mol_version())
+                .unwrap_or(bondline_io::mol::Version::V2000),
+        };
+        FileFormat::from_mol(version)
+    }
+
     pub(super) fn reserve_save(&self) -> Result<Arc<()>, Error> {
         if Arc::strong_count(&self.save_slot) != 1 {
             return Err(Error::SaveBusy);

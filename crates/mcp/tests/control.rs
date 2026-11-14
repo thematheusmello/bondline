@@ -100,6 +100,140 @@ fn authenticated_file_commands_share_native_file_state_and_notify_after_saving()
 }
 
 #[test]
+fn authenticated_v3000_exports_preserves_sources_and_repaints_receipt_only_saves()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let native = directory.path("loopback-native-v3.v2000");
+    let source = directory.path("loopback-original-v3.v2000");
+    let copy = directory.path("loopback-v3-copy.mol");
+    let malformed = directory.path("loopback-v3-truncated.mol");
+    let unknown = directory.path("loopback-unknown-version.mol");
+    std::fs::write(&source, mol_support::V3000_SOURCE)?;
+    let original = std::str::from_utf8(mol_support::V3000_SOURCE)?;
+    std::fs::write(&malformed, original.replace("M  V30 END CTAB\n", ""))?;
+    std::fs::write(&unknown, original.replace(" V3000", " V4000"))?;
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, Arc::clone(&engine), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    let drawn = call(
+        &mut client,
+        r#"{"command":"bond.create","params":{"page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200}}"#,
+    )?;
+    assert_eq!(drawn["result"]["revision"], 1);
+    wait_for_changes(&changes, 1);
+    let exported = call(&mut client,&serde_json::json!({"command":"document.save_mol","params":{"path":native,"version":"v3000"}}).to_string())?;
+    assert!(exported.get("error").is_none(), "{exported}");
+    assert_eq!(exported["result"]["changed"], false);
+    assert_eq!(exported["result"]["revision"], 1);
+    assert_eq!(exported["result"]["file"]["format"], "mol_v3000");
+    assert_eq!(exported["result"]["file_operation"]["format"], "mol_v3000");
+    assert_eq!(exported["result"]["file_operation"]["input_revision"], 1);
+    wait_for_changes(&changes, 2);
+    let external = mol_support::independently_read_v3000(&native)?;
+    assert_eq!(external["rdkit"], "2026.09.2");
+    assert_eq!(external["atoms"].as_array().ok_or("atoms")?.len(), 2);
+    assert_eq!(
+        external["bonds"],
+        serde_json::json!([{"begin":0,"end":1,"order":1.0,"direction":"NONE","stereo":"STEREONONE"}])
+    );
+    for (index, x) in [28.0 / 24.0, 68.0 / 24.0].into_iter().enumerate() {
+        let atom = &external["atoms"][index];
+        assert_eq!(atom["element"], 6);
+        assert_eq!(atom["explicit_h"], 3);
+        assert!((atom["position"][0].as_f64().ok_or("x")? - x).abs() < 1e-14);
+        assert!((atom["position"][1].as_f64().ok_or("y")? + 128.0 / 24.0).abs() < 1e-14);
+        assert_eq!(atom["position"][2], 0.0);
+    }
+    let opened = call(
+        &mut client,
+        &serde_json::json!({"command":"document.open_mol","params":{"path":source}}).to_string(),
+    )?;
+    assert!(opened.get("error").is_none(), "{opened}");
+    mol_support::assert_v3000_state(&opened["result"])?;
+    assert_eq!(opened["result"]["revision"], 2);
+    assert_eq!(opened["result"]["undo_depth"], 0);
+    assert_eq!(opened["result"]["file_operation"]["format"], "mol_v3000");
+    wait_for_changes(&changes, 3);
+    let saved = call(
+        &mut client,
+        &serde_json::json!({"command":"document.save_mol","params":{"path":copy}}).to_string(),
+    )?;
+    assert!(saved.get("error").is_none(), "{saved}");
+    mol_support::assert_v3000_state(&saved["result"])?;
+    assert_eq!(saved["result"]["changed"], false);
+    assert_eq!(saved["result"]["revision"], 2);
+    assert_eq!(saved["result"]["file_operation"]["format"], "mol_v3000");
+    assert_eq!(saved["result"]["file_operation"]["byte_length"], 344);
+    wait_for_changes(&changes, 4);
+    assert_eq!(std::fs::read(&copy)?, mol_support::V3000_SOURCE);
+    assert_eq!(
+        mol_support::independently_read_v3000(&copy)?["source_sha256"],
+        "1867a5904e742030431b523a31167951ff998007a89b9c3d94ec88cf7d4c4380"
+    );
+    let edited = call(
+        &mut client,
+        r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}"#,
+    )?;
+    assert_eq!(edited["result"]["revision"], 3);
+    wait_for_changes(&changes, 5);
+    let undone = call(&mut client, r#"{"command":"history.undo","params":{}}"#)?;
+    assert_eq!(undone["result"]["revision"], 4);
+    wait_for_changes(&changes, 6);
+    let baseline = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+    assert_eq!(baseline["result"]["redo_depth"], 1);
+    mol_support::assert_v3000_state(&baseline["result"])?;
+    for (name, params, code) in [
+        (
+            "document.save_mol",
+            serde_json::json!({"path":copy,"overwrite":true,"version":"v2000"}),
+            "unsupported_content",
+        ),
+        (
+            "document.open_mol",
+            serde_json::json!({"path":malformed}),
+            "invalid_mol",
+        ),
+        (
+            "document.open_mol",
+            serde_json::json!({"path":unknown}),
+            "invalid_mol",
+        ),
+    ] {
+        let rejected = call(
+            &mut client,
+            &serde_json::json!({"command":name,"params":params}).to_string(),
+        )?;
+        assert_eq!(rejected["error"]["code"], code, "{rejected}");
+        assert_eq!(
+            call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+            baseline
+        );
+        assert_eq!(std::fs::read(&copy)?, mol_support::V3000_SOURCE);
+    }
+    assert_eq!(changes.load(Ordering::SeqCst), 6);
+    let saved = call(
+        &mut client,
+        &serde_json::json!({"command":"document.save_mol","params":{"path":copy,"overwrite":true}})
+            .to_string(),
+    )?;
+    assert!(saved.get("error").is_none(), "{saved}");
+    mol_support::assert_v3000_state(&saved["result"])?;
+    assert_eq!(saved["result"]["changed"], false);
+    assert_eq!(saved["result"]["revision"], 4);
+    assert_eq!(saved["result"]["redo_depth"], 1);
+    assert_eq!(saved["result"]["file_operation"]["input_revision"], 4);
+    assert_eq!(saved["result"]["file_operation"]["format"], "mol_v3000");
+    wait_for_changes(&changes, 7);
+    assert_eq!(std::fs::read(&copy)?, mol_support::V3000_SOURCE);
+    server.shutdown()?;
+    Ok(())
+}
+
+#[test]
 fn authenticated_mol_io_preserves_bytes_errors_history_and_receipt_repaints()
 -> Result<(), Box<dyn std::error::Error>> {
     let directory = file_support::FileTestDirectory::new()?;

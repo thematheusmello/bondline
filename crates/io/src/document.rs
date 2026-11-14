@@ -1,5 +1,7 @@
 use crate::cdxml::{ElementalGraph, MappingError};
-use crate::mol::{MolError, MolFile, MolTransform, write_v2000, write_v2000_with_header};
+use crate::mol::{
+    MolError, MolFile, MolTransform, Version, v3000, write_v2000, write_v2000_with_header,
+};
 use bondline_model::{Document, Fragment, FragmentId, PageId, PageSize};
 use serde::Serialize;
 use std::{borrow::Cow, collections::HashSet, mem::size_of, sync::Arc};
@@ -10,6 +12,8 @@ pub enum DocumentError {
     Mapping(#[from] MappingError),
     #[error(transparent)]
     Mol(#[from] MolError),
+    #[error(transparent)]
+    V3000(#[from] v3000::Error),
     #[error("this document has no original CDXML source")]
     NoCdxmlSource,
     #[error("this document has no original MOL source")]
@@ -27,6 +31,29 @@ pub enum DocumentError {
     UnsupportedMolLayout(&'static str),
 }
 
+impl DocumentError {
+    pub fn code(&self) -> &'static str {
+        match self {
+            Self::Mol(error) => error.code(),
+            Self::V3000(error) => error.code(),
+            Self::Mapping(error) => match error {
+                MappingError::UnsupportedNodeType
+                | MappingError::UnsupportedLabelOnlyAtom
+                | MappingError::UnsupportedBondOrder
+                | MappingError::UnsupportedLayout
+                | MappingError::UnsupportedPageLayout => "unsupported_content",
+                _ => "invalid_document",
+            },
+            Self::NoCdxmlSource
+            | Self::NoMolSource
+            | Self::UnsupportedEdit
+            | Self::UnsupportedMolEdit
+            | Self::CrossFormatSource { .. }
+            | Self::UnsupportedMolLayout(_) => "unsupported_content",
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct SourceInfo {
     pub format: &'static str,
@@ -42,9 +69,11 @@ enum OriginalSource {
         fully_mapped: bool,
     },
     Mol {
+        version: Version,
         bytes: Arc<[u8]>,
         baseline: Arc<Document>,
         fully_mapped: bool,
+        v3000_mapped: bool,
         transform: MolTransform,
         headers: Arc<[String; 3]>,
     },
@@ -111,7 +140,7 @@ impl StoredDocument {
         })
     }
 
-    /// Own a complete V2000 source and its strict elemental projection. The caller
+    /// Validate a complete V2000/V3000 source and own its strict elemental projection. The caller
     /// supplies drawing scale/origin; neither physical units nor a paper size are inferred.
     /// Unknown or unsupported MOL features fail before the caller can replace its session.
     pub fn from_mol(
@@ -119,10 +148,34 @@ impl StoredDocument {
         preview_size: PageSize,
         transform: MolTransform,
     ) -> Result<Self, DocumentError> {
-        let parsed = MolFile::parse(&bytes)?;
-        let fragment = parsed.to_fragment(transform)?;
-        let fully_mapped = mol_regenerable(&parsed, &fragment, transform);
-        let headers = Arc::new(parsed.header().map(str::to_owned));
+        let version = source_mol_version(&bytes)?;
+        let (fragment, fully_mapped, v3000_mapped, headers) = match version {
+            Version::V2000 => {
+                let parsed = MolFile::parse(&bytes)?;
+                let fragment = parsed.to_fragment(transform)?;
+                let mapped = mol_regenerable(&parsed, &fragment, transform);
+                let v3000_mapped = mol_v3000_regenerable(
+                    parsed.atoms().iter().map(|atom| (atom.x, atom.y, atom.z)),
+                    parsed.header(),
+                    &fragment,
+                    transform,
+                );
+                let headers = Arc::new(parsed.header().map(str::to_owned));
+                (fragment, mapped, v3000_mapped, headers)
+            }
+            Version::V3000 => {
+                let parsed = v3000::MolFile::parse(&bytes)?;
+                let fragment = parsed.to_fragment(transform)?;
+                let mapped = mol_v3000_regenerable(
+                    parsed.atoms().iter().map(|atom| (atom.x, atom.y, atom.z)),
+                    parsed.header(),
+                    &fragment,
+                    transform,
+                );
+                let headers = Arc::new(parsed.header().map(str::to_owned));
+                (fragment, mapped, mapped, headers)
+            }
+        };
         let mut model = Document::default();
         let page = PageId::new(1).ok_or(MolError::CountLimit)?;
         model
@@ -133,14 +186,15 @@ impl StoredDocument {
                 .append_fragments(page, vec![fragment])
                 .map_err(MolError::Model)?;
         }
-        drop(parsed);
         let model = Arc::new(model);
         Ok(Self {
             model: Arc::clone(&model),
             original: Some(OriginalSource::Mol {
+                version,
                 bytes,
                 baseline: model,
                 fully_mapped,
+                v3000_mapped,
                 transform,
                 headers,
             }),
@@ -167,6 +221,13 @@ impl StoredDocument {
     pub fn mol_transform(&self) -> Option<MolTransform> {
         match self.original.as_ref() {
             Some(OriginalSource::Mol { transform, .. }) => Some(*transform),
+            _ => None,
+        }
+    }
+
+    pub fn mol_version(&self) -> Option<Version> {
+        match self.original.as_ref() {
+            Some(OriginalSource::Mol { version, .. }) => Some(*version),
             _ => None,
         }
     }
@@ -269,8 +330,46 @@ impl StoredDocument {
     /// with its retained headers/frame. `native_frame` applies only to source-free or
     /// proven native-profile CDXML output. Layout/partition loss is explicitly refused.
     pub fn to_mol(&self, native_frame: MolTransform) -> Result<Cow<'_, [u8]>, DocumentError> {
-        if let Ok(bytes) = self.export_mol() {
+        self.to_mol_as(self.mol_version().unwrap_or(Version::V2000), native_frame)
+    }
+
+    /// Explicit encoding choice. Existing MOL keeps its captured headers/frame;
+    /// unsupported version conversion must never publish a partial projection.
+    pub fn to_mol_as(
+        &self,
+        version: Version,
+        native_frame: MolTransform,
+    ) -> Result<Cow<'_, [u8]>, DocumentError> {
+        if self.mol_version() == Some(Version::V3000) && version == Version::V2000 {
+            return Err(DocumentError::CrossFormatSource {
+                from: "mol_v3000",
+                to: "mol_v2000",
+            });
+        }
+        if self.mol_version() == Some(version)
+            && let Ok(bytes) = self.export_mol()
+        {
             return Ok(Cow::Borrowed(bytes));
+        }
+        if version == Version::V3000 {
+            match self.original.as_ref() {
+                Some(OriginalSource::Mol {
+                    version: Version::V2000,
+                    fully_mapped,
+                    v3000_mapped,
+                    ..
+                }) if !(*fully_mapped && *v3000_mapped) => {
+                    return Err(DocumentError::CrossFormatSource {
+                        from: "mol_v2000",
+                        to: "mol_v3000",
+                    });
+                }
+                Some(OriginalSource::Mol {
+                    v3000_mapped: false,
+                    ..
+                }) => return Err(DocumentError::UnsupportedMolEdit),
+                _ => {}
+            }
         }
         let (frame, headers, expected_page) = match self.original.as_ref() {
             Some(OriginalSource::Mol {
@@ -332,13 +431,89 @@ impl StoredDocument {
         )
         .map_err(MolError::Graph)?;
         let fragment = page.fragments().first().map_or(&empty, Arc::as_ref);
-        Ok(Cow::Owned(match headers {
-            Some(headers) => {
+        Ok(Cow::Owned(match (version, headers) {
+            (Version::V2000, Some(headers)) => {
                 write_v2000_with_header(fragment, headers.each_ref().map(String::as_str), frame)?
             }
-            None => write_v2000(fragment, "", frame)?,
+            (Version::V2000, None) => write_v2000(fragment, "", frame)?,
+            (Version::V3000, Some(headers)) => v3000::write_v3000_with_header(
+                fragment,
+                headers.each_ref().map(String::as_str),
+                frame,
+            )?,
+            (Version::V3000, None) => v3000::write_v3000(fragment, "", frame)?,
         }))
     }
+}
+
+fn source_mol_version(bytes: &[u8]) -> Result<Version, MolError> {
+    if bytes.len() > crate::mol::MAX_MOL_BYTES {
+        return Err(MolError::InputTooLarge);
+    }
+    let line = bytes
+        .split(|byte| *byte == b'\n')
+        .nth(3)
+        .ok_or(MolError::Truncated {
+            line: 4,
+            field: "MOL version",
+        })?;
+    match line.get(33..39) {
+        Some(b" V2000") => Ok(Version::V2000),
+        Some(b" V3000") => Ok(Version::V3000),
+        _ => Err(MolError::InvalidField {
+            line: 4,
+            field: "V2000/V3000 version stamp",
+        }),
+    }
+}
+
+fn mol_v3000_regenerable(
+    coordinates: impl ExactSizeIterator<Item = (f64, f64, f64)>,
+    headers: [&str; 3],
+    fragment: &Fragment,
+    frame: MolTransform,
+) -> bool {
+    let Ok(bytes) = v3000::write_v3000_with_header(fragment, headers, frame) else {
+        return false;
+    };
+    let Ok(regenerated) = v3000::MolFile::parse(&bytes) else {
+        return false;
+    };
+    let Ok(mapped) = regenerated.to_fragment(frame) else {
+        return false;
+    };
+    if coordinates.len() != regenerated.atoms().len()
+        || !same_mol_authored_fields(fragment, &mapped)
+    {
+        return false;
+    }
+    coordinates
+        .zip(regenerated.atoms())
+        .all(|((x, y, z), after)| {
+            [(x, after.x), (y, after.y), (z, after.z)]
+                .into_iter()
+                .all(|(first, second)| {
+                    (first - second).abs()
+                        <= 16.0 * f64::EPSILON * first.abs().max(second.abs()).max(1.0)
+                })
+        })
+}
+
+fn same_mol_authored_fields(fragment: &Fragment, mapped: &Fragment) -> bool {
+    fragment.bonds() == mapped.bonds()
+        && fragment.atoms().len() == mapped.atoms().len()
+        && fragment
+            .atoms()
+            .iter()
+            .zip(mapped.atoms())
+            .all(|(before, after)| {
+                before.id == after.id
+                    && before.element == after.element
+                    && before.isotope == after.isotope
+                    && before.charge == after.charge
+                    && before.radical == after.radical
+                    && before.explicit_hydrogens == after.explicit_hydrogens
+            })
 }
 
 fn mol_regenerable(raw: &MolFile<'_>, fragment: &Fragment, frame: MolTransform) -> bool {
@@ -370,16 +545,5 @@ fn mol_regenerable(raw: &MolFile<'_>, fragment: &Fragment, frame: MolTransform) 
             }
         }
     }
-    fragment
-        .atoms()
-        .iter()
-        .zip(mapped.atoms())
-        .all(|(before, after)| {
-            before.id == after.id
-                && before.element == after.element
-                && before.isotope == after.isotope
-                && before.charge == after.charge
-                && before.radical == after.radical
-                && before.explicit_hydrogens == after.explicit_hydrogens
-        })
+    same_mol_authored_fields(fragment, &mapped)
 }

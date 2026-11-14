@@ -44,6 +44,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files; unknown imported content remains backed by its original bytes. |
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
+| MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
 | Rendering | Shared CPU/GPU page scenes and PNG captures, with one human-approved regression scene. |
 | Automation | Thirteen typed commands shared by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
@@ -73,7 +74,7 @@ remain unverified. [Verification evidence](docs/verification.md) distinguishes t
 <p align="center">
   <img src="docs/media/save-as.jpg" alt="The actual Bondline Save CDXML As chooser with editable folder and filename, explicit Save and Cancel buttons, over the drawing" width="100%">
   <br>
-  <sub>The original CDXML chooser, captured from the running app. This is the current development UI.</sub>
+  <sub>The original CDXML chooser, captured from an earlier running build. The current chooser also offers explicit MOL versions.</sub>
 </p>
 
 ## Get started
@@ -117,7 +118,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
 | CDX | Standalone bounded parser, property edits and new-tree writer; original chemical bytes checked by independent struct/RDKit consumers | Application model mapping, import/export and foreign/general-file coverage |
-| MOL / SDF | MOL V2000 native workflow; SDF V2000 library preserves ordered records/data; pinned independent corpus checks for both | Application SDF workflows, V3000 and broader metadata/layout support |
+| MOL / SDF | MOL V2000/V3000 native file workflows; source retention and independent consumer checks; SDF V2000 ordered-record/data library and pinned corpus | Application SDF workflows, broader metadata/layout support and interactive Windows/Linux |
 | RXN / SMILES / InChI | Planned | Format support and independently verified chemistry |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |

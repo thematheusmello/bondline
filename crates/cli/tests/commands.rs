@@ -76,9 +76,14 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
         } else {
             assert_eq!(
                 keys,
-                std::collections::BTreeSet::from(["path", "overwrite"])
+                std::collections::BTreeSet::from(["path", "overwrite", "version"])
             );
             assert_eq!(properties["overwrite"]["default"], false);
+            assert_eq!(properties["version"]["default"], "auto");
+            assert_eq!(
+                schema["$defs"]["MolVersionChoice"]["enum"],
+                json!(["auto", "v2000", "v3000"])
+            );
         }
     }
     let result = Command::new(binary)
@@ -184,6 +189,22 @@ fn executable_reports_consistent_errors_without_a_success_payload()
                 "run",
                 "--cmd",
                 r#"{"command":"document.open_mol","params":{"path":"unused.mol","points_per_unit":0}}"#,
+            ],
+            "invalid_params",
+        ),
+        (
+            vec![
+                "run",
+                "--cmd",
+                r#"{"command":"document.save_mol","params":{"path":"unused.mol","version":"v4000"}}"#,
+            ],
+            "invalid_params",
+        ),
+        (
+            vec![
+                "run",
+                "--cmd",
+                r#"{"command":"document.save_mol","params":{"path":"unused.mol","version":null}}"#,
             ],
             "invalid_params",
         ),
@@ -391,5 +412,122 @@ fn executable_exports_native_cc_to_mol_and_preserves_association_through_history
     assert_eq!(reopened["document"], result["document"]);
     assert_eq!(reopened["file"], result["file"]);
     assert_eq!(reopened["undo_depth"], 0);
+    Ok(())
+}
+
+#[test]
+fn executable_exports_explicit_v3000_at_full_precision_and_auto_keeps_its_version()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let path = directory.path("explicit-v3.v2000");
+    let copy = directory.path("auto-v3.copy");
+    let output = Command::new(env!("CARGO_BIN_EXE_bondline-cli")).args([
+        "run", "--cmd", r#"{"command":"bond.create","params":{"page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200}}"#,
+        "--cmd", &json!({"command":"document.save_mol","params":{"path":path,"version":"v3000"}}).to_string(),
+        "--cmd", &json!({"command":"document.save_mol","params":{"path":copy}}).to_string(),
+    ]).output()?;
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: Value = serde_json::from_slice(&output.stdout)?;
+    assert_eq!(result["revision"], 1);
+    assert_eq!(result["undo_depth"], 1);
+    assert_eq!(result["changed"], false);
+    assert_eq!(
+        result["file"],
+        json!({"path":std::fs::canonicalize(&copy)?,"dirty":false,"format":"mol_v3000"})
+    );
+    assert_eq!(result["file_operation"]["format"], "mol_v3000");
+    assert_eq!(result["file_operation"]["input_revision"], 1);
+    assert!(result.get("source").is_none());
+    assert_eq!(std::fs::read(&path)?, std::fs::read(&copy)?);
+    let external = mol_support::independently_read_v3000(&copy)?;
+    assert_eq!(external["rdkit"], "2026.09.2");
+    assert_eq!(external["atoms"].as_array().ok_or("atoms")?.len(), 2);
+    assert_eq!(
+        external["bonds"],
+        json!([{"begin":0,"end":1,"order":1.0,"direction":"NONE","stereo":"STEREONONE"}])
+    );
+    for (index, x) in [28.0 / 24.0, 68.0 / 24.0].into_iter().enumerate() {
+        let atom = &external["atoms"][index];
+        assert_eq!(atom["element"], 6);
+        assert_eq!(atom["explicit_h"], 3);
+        assert_eq!(atom["radical_electrons"], 0);
+        assert!((atom["position"][0].as_f64().ok_or("x")? - x).abs() < 1e-14);
+        assert!((atom["position"][1].as_f64().ok_or("y")? + 128.0 / 24.0).abs() < 1e-14);
+        assert_eq!(atom["position"][2], 0.0);
+    }
+    let reopened = Command::new(env!("CARGO_BIN_EXE_bondline-cli"))
+        .args([
+            "run",
+            "--cmd",
+            &json!({"command":"document.open_mol","params":{"path":copy}}).to_string(),
+        ])
+        .output()?;
+    assert!(
+        reopened.status.success(),
+        "{}",
+        String::from_utf8_lossy(&reopened.stderr)
+    );
+    let reopened: Value = serde_json::from_slice(&reopened.stdout)?;
+    assert_eq!(reopened["file"], result["file"]);
+    assert_eq!(reopened["undo_depth"], 0);
+    for (atom, x) in reopened["document"]["pages"][0]["fragments"][0]["atoms"]
+        .as_array()
+        .ok_or("atoms")?
+        .iter()
+        .zip([100.0, 140.0])
+    {
+        assert!((atom["position"]["x_pt"].as_f64().ok_or("x")? - x).abs() < 1e-10);
+        assert!((atom["position"]["y_pt"].as_f64().ok_or("y")? - 200.0).abs() < 1e-10);
+        assert_eq!(atom["explicit_hydrogens"], 3);
+    }
+    Ok(())
+}
+
+#[test]
+fn executable_opens_actual_v3000_and_default_save_preserves_all_original_source_bytes()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let source = directory.path("original-v3.v2000");
+    let copy = directory.path("original-v3-copy.mol");
+    std::fs::write(&source, mol_support::V3000_SOURCE)?;
+    let output = Command::new(env!("CARGO_BIN_EXE_bondline-cli"))
+        .args([
+            "run",
+            "--cmd",
+            &json!({"command":"document.open_mol","params":{"path":source}}).to_string(),
+            "--cmd",
+            &json!({"command":"document.save_mol","params":{"path":copy}}).to_string(),
+        ])
+        .output()?;
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: Value = serde_json::from_slice(&output.stdout)?;
+    mol_support::assert_v3000_state(&result)?;
+    assert_eq!(result["revision"], 1);
+    assert_eq!(result["undo_depth"], 0);
+    assert_eq!(result["redo_depth"], 0);
+    assert_eq!(result["changed"], false);
+    assert_eq!(result["file"]["path"], json!(std::fs::canonicalize(&copy)?));
+    assert_eq!(result["file_operation"]["format"], "mol_v3000");
+    assert_eq!(result["file_operation"]["input_revision"], 1);
+    assert_eq!(result["file_operation"]["byte_length"], 344);
+    assert_eq!(std::fs::read(&copy)?, mol_support::V3000_SOURCE);
+    let external = mol_support::independently_read_v3000(&copy)?;
+    assert_eq!(
+        external["source_sha256"],
+        "1867a5904e742030431b523a31167951ff998007a89b9c3d94ec88cf7d4c4380"
+    );
+    assert_eq!(external["atoms"][0]["position"], json!([-1.25, 0.5, 0.0]));
+    assert_eq!(external["atoms"][1]["position"], json!([0.25, 0.5, 0.0]));
+    assert_eq!(external["atoms"][0]["explicit_h"], 3);
+    assert_eq!(external["atoms"][1]["explicit_h"], 3);
+    assert_eq!(external["bonds"][0]["order"], 1.0);
     Ok(())
 }

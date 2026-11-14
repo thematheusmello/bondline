@@ -1573,3 +1573,25 @@ core.autocrlf checkout first changed885bytes to902; its own narrow -text line re
 identity and all four manifests. No hash normalization, assertion/guard weakening, dependency,
 lock, parser, fixture, oracle, runtime or golden change. Foreign/general/application coverage
 and chemistry remain separate missing work. This source needs its own hosted run after commit.
+
+## Version-aware MOL application slice
+
+The V2000/V3000 shared-file integration is recorded in
+[the application report](verification-v3000-application.md). The earlier364+3 gate and
+partial native acceptance there are historical stages. The subsequent save reservation and
+trusted current-completion acknowledgment correct the independently reproduced races;
+source1c53312 passes corrected372+3 local, hosted43531603511 on all three platforms and
+actual Mac author/save/reopen/refusal/dirty-close workflows. Independent raw-coordinate,
+source/header retention, atomic-stage and CLI/stdio/loopback/UI evidence remain separate.
+
+## Combined M1 application integration, 2026-11-14
+
+The merge of accepted application source1c53312/docs2a69de2 into7596c77 retains the bounded
+CDX writer and five-file/four-bundle corpus. A direct diff of engine/UI/MCP/CLI and application
+IO source against feat/mol-v3000-files is empty. No runtime source, lock, font or golden
+changes were needed during conflict resolution. The actual root aggregate passes394 workspace
+plus3 macOS bridge tests, rustfmt, all-target clippy, layers, native declared licenses/assets
+and every delivered corpus check. Log target/m1-application-merged-ci.log ends with
+local CI checks passed. Session7483 is terminal. This is combined local evidence; the new
+merge still needs its own hosted run. Accepted native application observations are tied to
+source1c53312, not a claim of a second native run or interactive Windows/Linux acceptance.

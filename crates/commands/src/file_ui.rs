@@ -263,7 +263,7 @@ impl Engine {
             }
             (UiFileAction::Save, Command::SaveMol(params)) => {
                 active.view.input_path.as_ref().is_none_or(|path| {
-                    self.file_format == FileFormat::MolV2000
+                    self.file_format == self.mol_save_format(params.version)
                         && path == &params.path
                         && params.overwrite
                 })

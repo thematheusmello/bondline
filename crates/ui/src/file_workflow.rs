@@ -6,12 +6,14 @@ mod close_tests;
 mod mol_tests;
 #[cfg(test)]
 mod request_tests;
+#[cfg(test)]
+mod v3000_tests;
 
 use crate::files::{FileAction, FileChooser, FileChooserEvent, FileMode, format_extension};
 use bondline_commands::{
     Cancellation, CloseAction, CloseDocument, CloseState, Command, CommandResult, Engine,
-    ErrorInfo, FileFormat, OpenCdxml, OpenMol, SaveCdxml, SaveMol, UiFile, UiFileAction,
-    UiFilePhase, UiFilePlan,
+    ErrorInfo, FileFormat, MolVersionChoice, OpenCdxml, OpenMol, SaveCdxml, SaveMol, UiFile,
+    UiFileAction, UiFilePhase, UiFilePlan,
 };
 use bondline_mcp::CommandExecutor;
 use eframe::egui;
@@ -236,12 +238,13 @@ impl FileWorkflow {
             } else if matches!(job.action, FileAction::Open { .. }) {
                 match job.format {
                     FileFormat::Cdxml => "Opening CDXML…",
-                    FileFormat::MolV2000 => "Opening MOL V2000…",
+                    FileFormat::MolV2000 | FileFormat::MolV3000 => "Opening MOL…",
                 }
             } else {
                 match job.format {
                     FileFormat::Cdxml => "Saving CDXML…",
                     FileFormat::MolV2000 => "Saving MOL V2000…",
+                    FileFormat::MolV3000 => "Saving MOL V3000…",
                 }
             });
             if ui
@@ -413,7 +416,7 @@ impl FileWorkflow {
                 discard_unsaved: *discard_unsaved,
             }),
             (
-                FileFormat::MolV2000,
+                FileFormat::MolV2000 | FileFormat::MolV3000,
                 FileAction::Open {
                     path,
                     discard_unsaved,
@@ -435,6 +438,14 @@ impl FileWorkflow {
                 Command::SaveMol(SaveMol {
                     path: path.clone(),
                     overwrite: *overwrite,
+                    version: MolVersionChoice::V2000,
+                })
+            }
+            (FileFormat::MolV3000, FileAction::Save { path, overwrite }) => {
+                Command::SaveMol(SaveMol {
+                    path: path.clone(),
+                    overwrite: *overwrite,
+                    version: MolVersionChoice::V3000,
                 })
             }
         };

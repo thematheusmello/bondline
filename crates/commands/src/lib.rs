@@ -18,7 +18,8 @@ pub use close::{CloseAction, CloseDocument, CloseState};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
 pub use file_ui::{UiFile, UiFileAction, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState};
 pub use files::{
-    Completed, FileFormat, FileOperation, FileState, OpenCdxml, OpenMol, SaveCdxml, SaveMol,
+    Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdxml, OpenMol,
+    SaveCdxml, SaveMol,
 };
 #[cfg(test)]
 mod close_tests;
@@ -93,8 +94,8 @@ command_registry! {
     UiControls(NoParams) => ("ui.controls", "Discover delivered native controls, shortcuts, typed bindings and contextual availability.", true),
     OpenCdxml(OpenCdxml) => ("document.open_cdxml", "Open an explicitly selected CDXML file without discarding unsaved edits by default.", false),
     SaveCdxml(SaveCdxml) => ("document.save_cdxml", "Atomically save complete CDXML data to an explicitly selected path; overwrite requires opt-in.", false),
-    OpenMol(OpenMol) => ("document.open_mol", "Open a supported MOL V2000 file with an explicit coordinate frame and retained source.", false),
-    SaveMol(SaveMol) => ("document.save_mol", "Atomically save supported MOL V2000 data without silently losing source metadata or layout.", false),
+    OpenMol(OpenMol) => ("document.open_mol", "Open supported MOL V2000 or V3000 data with an explicit coordinate frame and retained source.", false),
+    SaveMol(SaveMol) => ("document.save_mol", "Atomically save supported MOL data, retaining its associated version by default without silently losing source metadata or layout.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
@@ -292,11 +293,9 @@ impl Default for Engine {
 impl Engine {
     /// Initialize a clean unnamed session, sharing its complete current and saved snapshot.
     pub fn from_document(document: StoredDocument) -> Self {
-        let file_format = if document.mol_transform().is_some() {
-            FileFormat::MolV2000
-        } else {
-            FileFormat::Cdxml
-        };
+        let file_format = document
+            .mol_version()
+            .map_or(FileFormat::Cdxml, FileFormat::from_mol);
         let document = Arc::new(document);
         Self {
             saved: Arc::clone(&document),
@@ -425,7 +424,7 @@ impl Engine {
                             path: params.path,
                             discard_unsaved: params.discard_unsaved,
                         },
-                        encoding: files::OpenEncoding::MolV2000(transform),
+                        encoding: files::OpenEncoding::Mol(transform),
                         ui_request_id: None,
                         revision: self.revision,
                         generation: self.generation,
@@ -434,6 +433,7 @@ impl Engine {
             }
             Command::SaveMol(params) => {
                 let save_slot = self.reserve_save()?;
+                let format = self.mol_save_format(params.version);
                 return Ok(Prepared::file(
                     self.state(),
                     files::FilePlan::Save {
@@ -441,7 +441,7 @@ impl Engine {
                             path: params.path,
                             overwrite: params.overwrite,
                         },
-                        format: FileFormat::MolV2000,
+                        format,
                         ui_request_id: None,
                         document: Arc::clone(&self.document),
                         save_slot,

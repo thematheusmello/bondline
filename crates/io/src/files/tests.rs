@@ -47,6 +47,53 @@ fn mol_uses_the_same_prepublication_and_postpublication_failure_contracts()
     Ok(())
 }
 
+#[test]
+fn v3000_uses_the_existing_atomic_stages_and_reports_postpublication_failures_truthfully()
+-> Result<(), Box<dyn std::error::Error>> {
+    const SOURCE: &[u8] = include_bytes!("../../tests/fixtures/v3000/noncontiguous-cc.mol");
+    let frame = MolTransform::new(24.0, bondline_model::Point2::new(72.0, 72.0)?)?;
+    let document = StoredDocument::from_mol(SOURCE.into(), PageSize::A4, frame)?;
+    for stage in [
+        Stage::CreateTemporary,
+        Stage::Write,
+        Stage::Metadata,
+        Stage::SyncFile,
+        Stage::Publish,
+        Stage::Cleanup,
+        Stage::SyncDirectory,
+    ] {
+        let directory = Directory::new()?;
+        let path = directory.0.join("v3000.mol");
+        fs::write(&path, b"old document")?;
+        let error = save_format_with_hook(
+            &path,
+            &document,
+            true,
+            &Cancellation::default(),
+            Encoding::MolAs(Version::V3000, frame),
+            &mut |current| {
+                if current == stage {
+                    Err(io::Error::other("injected V3000 stage failure"))
+                } else {
+                    Ok(())
+                }
+            },
+        )
+        .err()
+        .ok_or("injected stage ignored")?;
+        let published = matches!(stage, Stage::Cleanup | Stage::SyncDirectory);
+        assert_eq!(error.published(), published);
+        assert_eq!(error.stage(), stage.name());
+        assert_eq!(
+            fs::read(&path)?.as_slice(),
+            if published { SOURCE } else { b"old document" }
+        );
+        assert_eq!(document.export_mol()?, SOURCE);
+        assert_eq!(fs::read_dir(&directory.0)?.count(), 1);
+    }
+    Ok(())
+}
+
 struct Directory(PathBuf);
 impl Directory {
     fn new() -> io::Result<Self> {

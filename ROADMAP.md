@@ -36,6 +36,15 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
+The V3000 application slice now retains versioned source/header/frame/history and exposes
+both versions through the existing two shared MOL commands. Auto Save keeps its associated
+version; Save As chooses V2000/V3000 explicitly; Open validates the actual family member.
+Independent IO/engine/CLI/stdio/loopback and UI tests plus the corrected local372+3 gate pass.
+Actual Mac author/save/reopen/refusal/close and CPU/GPU reply draining now pass at1c53312.
+This feature's own hosted checks pass in43531603511 on all three platforms; see
+docs/verification-v3000-application.md. Conservative conversion/layout/source-loss refusals
+remain. Application SDF workflows and broader mappings still follow; this is not M1 completion.
+
 Current user-directed priority: finish M1, then continue M2–M5. MOLV2000 now has a source-
 preserving codec, owned backing/history, atomic filesystem I/O and two shared commands;
 engine/CLI/MCP tests use published BIOVIA2026 fields and external RDKit consumers. The native
@@ -44,9 +53,9 @@ native window smokes pass at c879f4c. One CTAB/fragment and layout/metadata guar
 are partial interoperability, not completed M1. SDF V2000 now has a source-preserving
 container library, ordered duplicate/empty/DT data, a wrapper writer and independent
 raw-field/molecular consumers. A fetched original SDF corpus now checks two records and
-every ordered field without a lossy property map. Application SDF workflows remain next
-work, followed by V3000 and wider mappings. V3000 codec work is isolated in its own checkout;
-an in-progress parser is not delivered application support.
+every ordered field without a lossy property map. Application SDF workflows and wider mappings remain next work. Standalone V3000 parsing,
+writing and the version-aware MOL application slice are now integrated; mixed-version SDF
+container and legacy RXN slices are being reviewed separately.
 Full M0
 inventory/dialog/addressability gaps remain tracked while this format work proceeds.
 

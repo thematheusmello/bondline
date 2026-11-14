@@ -223,8 +223,34 @@ https://github.com/rust-lang/rust/blob/1.94.1/library/core/src/fmt/float.rs . Th
 float_to_decimal_display path chooses shortest formatting when no precision is supplied;
 independent consumer/raw-float tests verify that spelling rather than V2000 quantization.
 
+V3000 codec decisions use CTFILE-2026 printed 7–10/12–13/32 (PDF zero-based10–13/15–16/35),
+reviewed 2026-11-13 from the same pinned PDF; pages 7/10 were also independently rendered
+and inspected for this slice. They define exact prefixes, 80-character physical lines,
+dash concatenation without inserted whitespace, doubled-quote strings, counted lists,
+CTAB ordering/count precedence, positive source indexes, charge/RAD/VAL/HCOUNT, query
+bond types and the 3D/header meanings. Original fixtures and literal token/spin vectors
+are independently checked with external RDKit 2026.09.2; its lossy unknown/spin/MASS 13.5
+behavior and legacy-count disagreement do not override the source. The integer-MASS,
+ASCII, resource, flat-list and strict-EOF subsets are explicit Bondline policies in
+file-formats.md. No vendor examples, runtime binaries, code or assets are transplanted.
+The writer's original precision policy uses Rust 1.94.1's no-precision f64 Display path:
+https://github.com/rust-lang/rust/blob/1.94.1/library/core/src/fmt/float.rs . The inspected
+float_to_decimal_display path chooses shortest formatting when no precision is supplied;
+independent consumer/raw-float tests verify that spelling rather than V2000 quantization.
+
 Engineering documents and third-party MIT/Apache/BSD libraries may be inspected or reused
 with their notices. This does not relax the prohibition on proprietary product code/assets.
+
+
+The V3000 application slice uses the same CTFILE-2026 header/version/coordinate fields and
+the unchanged public codec/fixtures. Open reads line4 columns34–39 and fully validates the
+chosen codec; file extensions are hints only. Auto Save captures associated MOL version,
+then original source version, then V2000. Conservative V3000-source downgrade refusal,
+strict V2000→V3000 raw-coordinate proof, unchanged-source passthrough, source/association
+separation and UI/close invalidation are original data-preservation policies, not reference
+product defaults. The chooser uses one Open family and concrete Save versions because both
+encodings use .mol. No new proprietary evidence or runtime library is used. Independent
+RDKit precision/source/wire results and native status are in verification-v3000-application.md.
 
 The save-order correction follows Rust's public
 https://doc.rust-lang.org/std/sync/struct.Arc.html#method.strong_count and
