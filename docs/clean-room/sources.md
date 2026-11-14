@@ -1299,3 +1299,14 @@ The six fixed tests pass unchanged, with107 UI package tests/clippy/fmt. This es
 headless egui instructions and ownership behavior, not operating-system compositor pixels,
 a human-approved golden or an executed native-window workflow. No source, fixture, font,
 old test or oracle was adjusted to fit these independent expectations.
+
+## Next ordinary MOL depiction gate, source review2026-11-14
+
+[Unexecuted MOL display gate](../research/mol-display-plan.md) records that strict mapping
+coverage and source-preserving regeneration do not establish faithful implicit-H depiction.
+Actual current Drawing capture/native graph paths still call the literal renderer, whose
+unknown noncarbon H becomes zero. BIOVIA unmarked valence and IUPAC GR2.1.1 motivate the
+same separate display-fact boundary used for SDF. Original raw spans, un-packed coordinates
+and independent next expectations are fixed in the plan. No runtime/native failure or new
+chemical result is claimed; generic native/CDXML inference and complete perception remain
+separate questions. The next implementation must keep source/None/literal H0 exact.
