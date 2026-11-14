@@ -1,6 +1,6 @@
 # Documentation media
 
-Original project banners and actual native app screenshots, recorded2026-11-13.
+Original project banners and actual native app screenshots, recorded2026-11-13/14.
 No reference product screenshot, logo, icon, font, template or sample library was copied.
 
 | File | Origin | SHA-256 |
@@ -31,3 +31,40 @@ The two banners are original Bondline artwork under MIT OR Apache-2.0. Screensho
 is original Bondline UI/authored structures with the retained font notice. Documentation
 media are not bundled into the runtime asset graph. The approved render-test golden has
 its own separate provenance and must not be regenerated as part of README work.
+
+
+## Native progress captures, 2026-11-14
+
+| File | Origin | SHA-256 |
+|---|---|---|
+| [connected-chain.png](connected-chain.png) | Unedited own-window PNG,1160×832,44179B | `c9699c6ba6a8bdcb7f2b6b8517bc56455672f4d530dfc59508fa03c97bfed195` |
+| [sdf-summary.png](sdf-summary.png) | Unedited own-window PNG,1160×832,47790B | `4fa13fd7f3fba6504a9f317b4a1dcca1f6c00c92467484675b98af3351a7d366` |
+
+These later images are actual macOS27.2 arm64/AppleM3Max/Metal window captures on source
+bb6d5b9d2e6dd0d34e9b326dc9bf8061ffaff5a2, binary18235928B/SHA
+316a719f1063ba880384b7a626cb4904e9783d26c0fe29d177873ce13c31a511.
+They show the18-command build at capture, not a later20-command executable. Original
+Roboto/Apache-2.0 notices remain. Method: `screencapture -x -o -l60006` targeting the sole
+owned Bondline window/PID78764. No other application/reference window, credential or
+proprietary artwork is included. Temporary localhost address alone is not a credential;
+its app/listener are now closed.
+
+C4 capture follows actual terminal-anchor drag(650,390)→(720,460): revision3/Undo3,
+four neutral carbons/three Single bonds, literal H3/2/2/3. The title retains the earlier
+savedC3 basename with dirty marker. Subsequent actual saved C4 faces independent Expat/
+Decimal/RDKit checks; new-point screen-placement precision was not independently predicted.
+The SDF capture follows actual native Open of the original777B mixed fixture: revision8,
+two V3000/V2000 records, fields6/1, document:null. Static summary/no chemical preview is
+visible; this is not reference visual parity or a field editor.
+
+Original ignored files09-C4-painted.png and16-SDF-mixed-summary.png remain under
+ target/native-sdf-session-ui. Root verified exact bytes/hashes against the101-artifact
+index and visually inspected both before copying without cropping/conversion/retouching.
+See [native verification](../verification-native-sdf-and-extension.md) for exact source/
+index/report/cleanup. Images are original Bondline UI/authored data under MIT OR Apache-2.0;
+they are documentation media, not runtime assets, generated mockups or approved goldens.
+Earlier JPEG records above continue to identify their earlier source and limited scope.
+
+Pillow12.3.0 independently verifies both published PNG format/dimensions and exact hashes.
+Retained EXIF/XMP contain only1160×832 dimensions and the generic Screenshot comment;
+no GPS, author identity or credential was found. Embedded color metadata remains unchanged.

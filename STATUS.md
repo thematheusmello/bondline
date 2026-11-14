@@ -6,23 +6,28 @@ Root owns Git, integration/publication and assignment of the sole native GUI own
 
 ## Current revisions and gates
 
-Public main: bb6d5b9d2e6dd0d34e9b326dc9bf8061ffaff5a2, whole-SDF session/files.
-Matching hosted run43575973213 is GREEN: Mac132390182235:590 (587workspace+3bridge),
-Linux132390182293:588, Windows132390182069:580; three actual native-window smokes;
-ASAN132390182305:seven10000-run targets. Main advanced only after matching GREEN.
+Public main: e6471961bc88eeb97a0bb7a8fe115c1bed2392e7, complete SDF field commands and
+restricted SMILES normalization/export on the previous drawing/file foundation.
+Matching hosted run43583494325 is fully GREEN: Mac132413004015:634 (631workspace+3bridge),
+Linux132413003718:632, Windows132413003985:624; three actual native-window smokes;
+ASAN132413003970:seven10000-run targets including the revised SMILES harness.
+Terminal run success10:15:28UTC. Main advanced only after observing matching GREEN.
 Adapters: Metal/Apple Paravirtual device, Vulkan/llvmpipe CPU, Dx12/Microsoft Basic
 Render Driver CPU. Window smoke is not interactive chemical-workflow acceptance.
 
-Root receiving branch: feat/m1-smiles-sdf-integration, core HEAD eaac053.
-Atomic history includes46c6f3c (observed Open-help omission/native record),5f92404
-(explicit-H writer),e0ca5b5 (fixed-H normalization),d570aeb (bounded SDF query),eaac053
-(existing SDF value setter). The next commit records combined fuzz and current scope.
-Root receiving gates: writer598, normalization604, query618, setter634, all GREEN;
-counts include3Mac bridge tests. Final session73303:631workspace+3bridge,0failed/ignored,
-fmt/all-target clippy/layers/unchanged licenses/assets/corpus. Log
- target/sdf-field-set-integrated-ci.log77103B/SHA
+Root is on docs/native-progress-media, based on that tested source. This checkpoint adds
+unedited exact bb6 native C4/SDF screenshots with provenance, updates README/status and
+records the new hosted result. It changes no runtime/format/model code. Photos identify
+their actual18-command source, not the newer20-command executable. New wording from the
+Open-help correction remains natively unverified. The docs checkpoint needs its own hosted
+run before main can advance again.
+
+Atomic source history:46c6f3c (Open-help/native record),5f92404 (explicit-H writer),
+e0ca5b5 (fixed-H normalization),d570aeb (bounded SDF query),eaac053 (existing SDF setter),
+e647196 (combined fuzz/continuation). Root gates598/604/618/634 all pass; final73303
+has631workspace+3bridge,0failed/ignored, fmt/all-target clippy/layers/unchanged licenses/
+assets/corpus. Logtarget/sdf-field-set-integrated-ci.log77103B/SHA
  a8ce07f845ed489e6c182d1bfcab36d2d97f81dfade3bd75e718599f54f37ba2.
-New source's hosted checks are pending. Keep main atbb6 until this source passes.
 
 ## Delivered receiving scope
 
@@ -107,8 +112,8 @@ incremental0; Root default debug, sibling debug0. Disk is constrained (~1.9GiB, 
 Reclaim only inactive owned compiled artifacts, never sources/evidence/fixtures/other projects.
 Root fuzz cache is now warm; exact native CLI is additionally archived outside debug outputs.
 
-1. Commit/publish receiving branch and observe its own three-platform/ASAN hosted checks;
-   advance main only after terminal matching GREEN. Never substitute previousbb6 results.
+1. Commit/publish the scoped media/hosted checkpoint; observe its own configured checks
+   before advancing main. Sourcee647196 is already verified/published; do not redo its work.
 2. Review frozen corpus/aromatic slices independently, receive atomically, update all callers/
    fuzz for intentional notation changes and run new receiving/hosted gates.
 3. Continue M1 then M2–M5: application SMILES/backing/layout, SDF chemical display/editor,

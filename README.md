@@ -31,9 +31,9 @@ M1 file interoperability is the active implementation milestone; the complete M1
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
 <p align="center">
-  <img src="docs/media/workspace.jpg" alt="The actual Bondline macOS app displaying three separate C–C fragments with terminal hydrogen labels, File/Edit/Page menus and a physical page" width="100%">
+  <img src="docs/media/connected-chain.png" alt="The actual Bondline macOS app displaying a four-carbon single-bond chain with explicitly authored hydrogen labels on a physical page" width="100%">
   <br>
-  <sub>Actual development app on macOS / Metal. Three original, independently authored fragments.<br>Unedited capture; <a href="docs/media/SOURCES.md">build identity, scene and image provenance</a>.</sub>
+  <sub>Actual native terminal-carbon extension on macOS / Metal, build bb6d5b9.<br>Unedited capture; <a href="docs/media/SOURCES.md">build identity, scene and image provenance</a>.</sub>
 </p>
 
 ## What works today

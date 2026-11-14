@@ -39,6 +39,11 @@ Fixed raw literals verify every ordered field/header/DT/empty value and molecula
 unchanged external V3000/MOL consumers read both actual saved payloads. The V2000-only
 raw scanner was not changed or applied to mixed input. No lossy property map proves fidelity.
 
+The published [C4 own-window capture](media/connected-chain.png) and
+[mixed-SDF summary](media/sdf-summary.png) are exact unedited copies of these native
+artifacts. [Media provenance](media/SOURCES.md) records their distinct build/state/hash;
+neither is a later20-command build or a newly approved regression golden.
+
 ## Controller-only finish and limitations
 
 At09:09:14.502779UTC another application took foreground. Input stopped before the

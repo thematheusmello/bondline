@@ -57,3 +57,19 @@ coverage. Large/deep/dense/boundary unit tests remain separate. Logtarget/smiles
 This bounded smoke is not exhaustive conformance, chemistry verification or a security audit.
 No application import, backing/Save authority, canonicalization, layout/native flow or M1
 completion follows. Exact-source hosted execution remains separate and initially pending.
+
+
+## Hosted receiving-source acceptance, 2026-11-14
+
+Exact sourcee6471961bc88eeb97a0bb7a8fe115c1bed2392e7 passes
+[run43583494325](https://github.com/thematheusmello/bondline/actions/runs/43583494325),
+terminal success10:15:28UTC. Root inspected all four latest-attempt job outcomes and
+successful logs: Mac132413004015:634 (631workspace+3bridge), Linux132413003718:632,
+Windows132413003985:624, plus ASAN132413003970:seven10000-run parser targets. The normal
+hosted SMILES target includes the final source-to-normalized/unique-marker export checks;
+its three starting seeds are distinct from the five-seed local run. Both locks remain exact.
+All three actual window launches report Metal/Apple Paravirtual device, Vulkan/llvmpipe
+(LLVM20.1.2) CPU and Dx12/Microsoft Basic Render Driver CPU. These are real window/API
+smokes, not interactive Windows/Linux chemistry or hardware-performance measurements.
+Main advanced to this exact source only after terminal GREEN. No new native20-command
+field editor, application SMILES flow, golden approval or complete M0/M1 claim follows.
