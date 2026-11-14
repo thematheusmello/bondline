@@ -2115,3 +2115,15 @@ focused6 acceptance and all-target IO clippy pass; exact final logs/source are i
 ignored handoff. This is one explicit pure-document library operation, not an application
 SMILES import/Save/cleanup command or native workflow. The user remains active on input;
 no GUI/input/activation/native test ran and no prior golden was regenerated.
+
+## Create-only SMILES conversion IO, 2026-11-14
+
+[Exact converter evidence](verification-smiles-conversion-io.md) records missing-API and
+runtime 64 KiB limit REDs, six real-file acceptance tests plus five reader/publication-boundary
+tests, independent input snapshots and unchanged Expat/Decimal/RDKit actual-output
+consumers. Scoped IO 230, all-target warnings-denied IO clippy and workspace fmt pass.
+The new native CDXML artifacts reopen fully mapped and remain editable; existing/racing
+outputs and the input stay preserved, with truthful after-publication errors/cancellation.
+This is one create-only library conversion, not an active-document Save or application
+SMILES Open/Save workflow. No UI/input/native/Windows/Linux or hosted check was run;
+the user's active-desktop and disabled-Actions instructions remain in force.

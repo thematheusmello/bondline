@@ -999,3 +999,20 @@ native CDXML reopens remain distinct from a qualified JSON transport1ULP observa
 No source/model H semantics, source authority, old oracle, dependency, asset or native UI
 changes. Layout for aromatic/ring/branched/heteroatom structures, general cleanup and
 application SMILES remain missing.
+
+## Create-only SMILES conversion IO, 2026-11-14
+
+[verification-smiles-conversion-io.md](../verification-smiles-conversion-io.md) records
+one explicit ordinary-file conversion into new native editable CDXML. Existing pinned
+OpenSMILES/fixed-H/IUPAC geometry sources above remain unchanged; no new parser, layout,
+third-party code, assets or reference defaults were copied. Complete ASCII one-notation
+input, 64 KiB preallocation/read-growth limits, canonical metadata-only receipts and an
+unconditional create-only output are original Bondline choices. They are not a claim
+of source-backed SMILES application Open/Save or general structure cleanup.
+
+The existing PHOTO-ATOMIC/PHOTO-METADATA-derived independent native publisher is reused
+without platform changes. FileError decoder/layout causes and actual publication/recovery
+metadata remain intact. Real output faces the unchanged Expat/Decimal/RDKit consumers
+and native-profile reopen/editability checks; synthetic recovery metadata is qualified
+separately from observed filesystem stages. New native/Windows/Linux evidence remains
+unverified, and GitHub Actions stays disabled under the current user instruction.

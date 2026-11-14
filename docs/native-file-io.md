@@ -21,8 +21,19 @@ Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md
   drawing callers while returning complete SDF ownership. The registry and native worker
   use the same reservation/publication path; actual native SDF acceptance is still pending.
 - `FileError` exposes stable `code`, `path`, `stage`, `published` and optional `recovery_path`.
+- `convert_smiles_to_cdxml_file(input, output, bond_length_pt, origin, page, cancel)`
+  is an explicit create-only conversion, not application SMILES Open/Save. It reads one
+  complete ASCII notation with a **64 KiB** limit, applies the existing restricted
+  1–12 carbon/Single path layout, and calls `save_cdxml_file` with overwrite=false.
+  `SmilesConversionReceipt` has the actual canonical input path/byte length/atom and
+  bond counts plus the complete output `SaveReceipt`; Debug contains metadata only.
+  Original source/IR stays owned through publication, then is dropped without changing
+  the input. No source-backed SMILES document or current-session association is made.
+  [Exact conversion evidence and refusal boundaries](verification-smiles-conversion-io.md)
+  separate this library API from the later registry/CLI/MCP/native work.
 
-Read input is bounded to 64 MiB, including bytes read after metadata inspection. Only ordinary
+Native structure-file reads are bounded to 64 MiB; the explicit SMILES converter has the
+smaller 64 KiB budget above. Both include bytes read after metadata inspection. Only ordinary
 files are accepted. Selected read symlinks resolve explicitly; Unix opens use nonblocking,
 no-follow flags and post-open validation, preventing FIFOs from blocking the worker. Invalid
 XML/CDX/MOL/SDF/model input returns an error without an application-state change. Cancellation is checked

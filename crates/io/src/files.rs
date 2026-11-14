@@ -1,11 +1,14 @@
 //! Explicitly selected native files. Parsing and source preservation stay in `StoredDocument`.
 
 mod platform;
+mod smiles;
+pub use smiles::{SmilesConversionReceipt, convert_smiles_to_cdxml_file};
 #[cfg(test)]
 mod tests;
 
 use crate::mol::{MolTransform, Version};
 use crate::sdf::{SdfDocument, SdfError};
+use crate::smiles::{LayoutError, SmilesError};
 use crate::{DocumentError, StoredDocument};
 use bondline_model::PageSize;
 use bondline_render::Cancellation;
@@ -20,6 +23,27 @@ use std::{
 const MAX_BYTES: usize = bondline_cdxml::MAX_INPUT_BYTES;
 const CHUNK: usize = 64 * 1024;
 const MAX_PATH_BYTES: usize = 64 * 1024;
+#[derive(Debug, Clone, Copy)]
+enum ReadLimit {
+    Native,
+    Smiles,
+}
+impl ReadLimit {
+    fn bytes(self) -> usize {
+        match self {
+            Self::Native => MAX_BYTES,
+            Self::Smiles => crate::smiles::MAX_SMILES_BYTES,
+        }
+    }
+}
+impl std::fmt::Display for ReadLimit {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(match self {
+            Self::Native => "64 MiB",
+            Self::Smiles => "64 KiB SMILES",
+        })
+    }
+}
 static NEXT_TEMPORARY: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Debug)]
@@ -53,13 +77,15 @@ impl FileError {
     pub fn code(&self) -> &'static str {
         match self.failure.as_ref() {
             Failure::InvalidPath => "invalid_path",
-            Failure::TooLarge => "file_too_large",
+            Failure::TooLarge(_) => "file_too_large",
             Failure::NotRegular => "not_regular_file",
             Failure::Symlink => "symlink_target",
             Failure::Cancelled => "cancelled",
             Failure::Changed => "file_changed",
             Failure::Document(error) => error.code(),
             Failure::Sdf(error) => error.code(),
+            Failure::Smiles(error) => error.code(),
+            Failure::Layout(error) => error.code(),
             Failure::Io(error) => {
                 #[cfg(unix)]
                 if error.raw_os_error() == Some(rustix::io::Errno::ILSEQ.raw_os_error()) {
@@ -116,8 +142,8 @@ impl FileError {
 enum Failure {
     #[error("invalid or overlong file path")]
     InvalidPath,
-    #[error("file exceeds the 64 MiB input limit")]
-    TooLarge,
+    #[error("file exceeds the {0} input limit")]
+    TooLarge(ReadLimit),
     #[error("only ordinary files are supported")]
     NotRegular,
     #[error("saving through a symbolic link is not supported; choose its target explicitly")]
@@ -130,6 +156,10 @@ enum Failure {
     Document(#[from] DocumentError),
     #[error(transparent)]
     Sdf(#[from] SdfError),
+    #[error(transparent)]
+    Smiles(#[from] SmilesError),
+    #[error(transparent)]
+    Layout(#[from] LayoutError),
     #[error(transparent)]
     Io(io::Error),
     #[cfg(any(windows, test))]
@@ -243,14 +273,22 @@ pub fn read_sdf_file(
 }
 
 fn read_source_bytes(path: &Path, cancel: &Cancellation) -> Result<(PathBuf, Vec<u8>), FileError> {
+    read_source_bytes_with_limit(path, cancel, ReadLimit::Native)
+}
+
+fn read_source_bytes_with_limit(
+    path: &Path,
+    cancel: &Cancellation,
+    limit: ReadLimit,
+) -> Result<(PathBuf, Vec<u8>), FileError> {
     check_cancel(path, Stage::Validate, cancel)?;
     validate_path(path)?;
     let path = fs::canonicalize(path).map_err(|error| FileError::io(path, Stage::Read, error))?;
     let metadata =
         fs::symlink_metadata(&path).map_err(|error| FileError::io(&path, Stage::Read, error))?;
     validate_regular(&path, &metadata)?;
-    if metadata.len() > MAX_BYTES as u64 {
-        return Err(FileError::new(&path, Stage::Read, Failure::TooLarge));
+    if metadata.len() > limit.bytes() as u64 {
+        return Err(FileError::new(&path, Stage::Read, Failure::TooLarge(limit)));
     }
     let mut file =
         platform::open_regular(&path).map_err(|error| FileError::io(&path, Stage::Read, error))?;
@@ -258,28 +296,51 @@ fn read_source_bytes(path: &Path, cancel: &Cancellation) -> Result<(PathBuf, Vec
         .metadata()
         .map_err(|error| FileError::io(&path, Stage::Read, error))?;
     validate_regular(&path, &metadata)?;
+    if metadata.len() > limit.bytes() as u64 {
+        return Err(FileError::new(&path, Stage::Read, Failure::TooLarge(limit)));
+    }
+    let bytes = read_bounded_bytes(&path, &mut file, cancel, limit)?;
+    check_cancel(&path, Stage::Decode, cancel)?;
+    Ok((path, bytes))
+}
+
+fn read_bounded_bytes(
+    path: &Path,
+    reader: &mut impl Read,
+    cancel: &Cancellation,
+    limit: ReadLimit,
+) -> Result<Vec<u8>, FileError> {
     let mut bytes = Vec::new();
     let mut chunk = [0_u8; CHUNK];
     loop {
-        check_cancel(&path, Stage::Read, cancel)?;
-        let count = file
+        check_cancel(path, Stage::Read, cancel)?;
+        let count = reader
             .read(&mut chunk)
-            .map_err(|error| FileError::io(&path, Stage::Read, error))?;
+            .map_err(|error| FileError::io(path, Stage::Read, error))?;
         if count == 0 {
             break;
         }
-        if bytes.len().saturating_add(count) > MAX_BYTES {
-            return Err(FileError::new(&path, Stage::Read, Failure::TooLarge));
+        let needed = bytes
+            .len()
+            .checked_add(count)
+            .filter(|needed| *needed <= limit.bytes())
+            .ok_or_else(|| FileError::new(path, Stage::Read, Failure::TooLarge(limit)))?;
+        if needed > bytes.capacity() {
+            // Retain amortized growth without requesting capacity beyond the active source budget.
+            let capacity = bytes
+                .capacity()
+                .saturating_mul(2)
+                .max(needed)
+                .min(limit.bytes());
+            bytes
+                .try_reserve_exact(capacity.saturating_sub(bytes.len()))
+                .map_err(|error| FileError::io(path, Stage::Read, io::Error::other(error)))?;
         }
-        bytes
-            .try_reserve(count)
-            .map_err(|error| FileError::io(&path, Stage::Read, io::Error::other(error)))?;
         bytes.extend_from_slice(chunk.get(..count).ok_or_else(|| {
-            FileError::io(&path, Stage::Read, io::Error::other("invalid read length"))
+            FileError::io(path, Stage::Read, io::Error::other("invalid read length"))
         })?);
     }
-    check_cancel(&path, Stage::Decode, cancel)?;
-    Ok((path, bytes))
+    Ok(bytes)
 }
 
 fn validate_regular(path: &Path, metadata: &Metadata) -> Result<(), FileError> {
@@ -454,7 +515,11 @@ fn save_encoded_with_hook<'a>(
         .map_err(|error| FileError::io(&path, Stage::Validate, error))?;
     let bytes = encode().map_err(|error| FileError::new(&path, Stage::Encode, error))?;
     if bytes.len() > MAX_BYTES {
-        return Err(FileError::new(&path, Stage::Encode, Failure::TooLarge));
+        return Err(FileError::new(
+            &path,
+            Stage::Encode,
+            Failure::TooLarge(ReadLimit::Native),
+        ));
     }
     check_cancel(&path, Stage::CreateTemporary, cancel)?;
     hook(Stage::CreateTemporary)
