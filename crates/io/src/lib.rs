@@ -1,5 +1,6 @@
 //! Interchange adapters; model and standalone format parsers remain free of native I/O.
 
+pub mod cdx;
 pub mod cdxml;
 mod document;
 pub mod mol;
