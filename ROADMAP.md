@@ -25,9 +25,10 @@ guides are versioned evidence, not proof of complete modern parity.
       remain unverified.
 - [x] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
       Corrected hosted run 43451706668 passes aggregate checks and actual window launches
-      on all three platforms plus Linux ASan. Corpus now checks five pinned files from
-      four bundles: CDXML, MOLV2000/V3000, ordered SDF and one original CDX scene.
-      Foreign/general CDX, SMILES/InChI and chemistry corpus coverage remain missing.
+      on all three platforms plus Linux ASan. Corpus now checks eight pinned files from
+      five bundles: CDXML, MOLV2000/V3000, ordered SDF, one original CDX scene and three
+      original SMILES notations. Foreign/general CDX, broader SMILES/InChI and chemistry
+      corpus coverage remain missing.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.
       576 stable-ID source-cited control rows now exist, including three provisional
       unversioned Help roles; modern menus, unnamed glyphs and remaining

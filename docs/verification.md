@@ -2078,3 +2078,14 @@ All three actual window launches report Metal/Apple Paravirtual device, Vulkan/l
 smokes, not interactive Windows/Linux chemistry or hardware-performance measurements.
 Main advanced to this exact source only after terminal GREEN. No new native20-command
 field editor, application SMILES flow, golden approval or complete M0/M1 claim follows.
+
+
+## Fifth fetched SMILES corpus receiving integration, 2026-11-14
+
+[Exact corpus evidence](verification-smiles-corpus.md) records runtime missing-format/
+mandatory-bundle REDs, original literal/external/source checks and unchanged global safety
+negatives. Root received exact2d8a671 after independent review; its full641 gate22945 and
+offline corpus67296 pass8files/5bundles/3SMILES checks. All old fixtures/pins/oracles and
+newer source/native records remain intact; new-source hosted checks are pending.
+The user now explicitly uses the computer; continue headless work and defer local interactive
+desktop tests until availability is indicated. No goal pause, new GUI action or M1 completion.

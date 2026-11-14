@@ -1,6 +1,6 @@
 # Pinned public corpus
 
-`cargo xtask corpus` fetches five reviewed files from four mandatory version1 source bundles:
+`cargo xtask corpus` checks eight reviewed files from five mandatory version1 source bundles:
 
 - [manifest.json](manifest.json) retains the two RDKit documents and their original pinned
   revision unchanged. Its checked-in BSD-3-Clause notice applies to those files.
@@ -15,7 +15,12 @@
   V3000 vector from published Bondline commit `5caf6ce0ecf40badf2666e36dcb73dc8c4337b51`.
   Its explicit `mol_v3000` format tag selects the standalone V3000 codec; existing `mol`
   entries continue to select V2000. The original MIT OR Apache-2.0 declaration and MIT
-  notice remain. Four source bundles do not mean four distinct repositories.
+  notice remain. Multiple bundles may come from the same repository.
+- [bondline-smiles-manifest.json](bondline-smiles-manifest.json) pins three original
+  MIT OR Apache-2.0 notation seeds from published Bondline commit
+  `eabe02f267985b2788496b58f96415d7fa4d1a4d`. Exact17/21/21-byte ASCII/LF data was fetched
+  and verified; the retained MIT notice matches its previously fetched public blob. Explicit `smiles`
+  format tags select the bounded notation/source checker; all four older pins remain exact.
 
 Each entry records source path, exact byte length, SHA-256 and provenance. Proprietary
 sample/template libraries, application binaries, fonts and icons are excluded.
@@ -52,9 +57,13 @@ Current coverage is deliberately separate:
 | bondline-ordered-fields-v2000.sdf | Exact 690 bytes and SHA-256 | Exact source; two separate MOL records; every ordered field/raw span agrees with an independent scanner; each elemental projection agrees with a direct external RDKit read | Calculations missing |
 | bondline-original-ethane-explicit.cdx | Exact 65,750 bytes and SHA-256 | Original explicit scene; byte-exact parser passthrough and all29 events match independent struct; external RDKit verifies ethane | Bondline calculations missing |
 | bondline-original-noncontiguous-v3000.mol | Exact344 bytes and SHA-256 | Original V3000 vector; byte-exact source, raw sparse IDs/fields and dense elemental projection agree with independent literal/Decimal expectations and external RDKit | Bondline calculations missing |
+| bondline-original-isotopic-chain.smi | Exact17 bytes and SHA-256 | Source passthrough; literal C/C/O adjacency, isotope13 and bracket H3/H2/H1 agree with qualified external RDKit | Calculations/canonicalization missing |
+| bondline-original-two-ring-labels.smi | Exact21 bytes and SHA-256 | Source passthrough; two separate carbon rings, distinct73/74 declarations/ranges and unresolved bare-H tokens agree with literal graph and external reader | Calculations/canonicalization missing |
+| bondline-original-salt-branch.smi | Exact21 bytes and SHA-256 | Source passthrough; Na+1/O-1/bracket CH2/bare-C branch and both chains agree with literal graph and external reader | Calculations/canonicalization missing |
 
 The command succeeds for the implemented CDXML, single-input MOL/SDF V2000, original
-MOL V3000 and CDX field-vector subsets. It explicitly prints missing foreign/general/application CDX
+MOL V3000/CDX field-vector subsets and the three original nonaromatic SMILES notations.
+It explicitly prints missing foreign/general/application CDX
 compatibility and Bondline chemistry checks; it does not certify M1, general MOL
 compatibility or all-format round trips. A manifest without any implemented
 parser coverage is an error. Extending the corpus requires source/license review, pinned bytes and the matching parser/oracle
@@ -136,3 +145,27 @@ units, Bondline chemistry algorithm, application CDX Open/Save or general CDX co
 is established. See [fixture provenance](../../crates/cdx/tests/fixtures/README.md) and
 [external-reader provenance/limits](../../xtask/oracles/cdx-README.md). The original70-byte
 empty syntax fixture and generated-scene edits remain separate standalone regressions.
+
+The fifth bundle supplies source-retention and notation evidence. Its checker compares
+every atom's element/isotope/charge and bracket-versus-implicit H, sorted edges/orders,
+numeric ring identities/ranges, notation end and chain starts against independent literal
+expectations for the exact three original inputs. Bare H stays unresolved; notation-chain
+starts are not substituted for a general connected-component algorithm. Changed valid
+vectors, LF/CRLF substitutions, wrong metadata/edges and oversized/unsupported input refuse.
+Adding a different SMILES source requires its own independent expectations.
+
+The unchanged [external SMILES consumer](../../crates/io/tests/smiles_oracle.py) receives
+the complete accepted bytes and independently returns source text/length/SHA-256 plus
+atom/bond data. RDKit2026.09.2 explicitly has sanitize/removeHs/parseName/allowCXSMILES
+false. Its Python binding exposes no skipCleanup switch, and numeric getters collapse
+some source distinctions; literal source/H metadata remains the raw oracle. No implicit
+H, radicals, chemical validity, canonical output or coordinates are inferred. The printed
+missing chemistry/SMILES line concerns calculations and generated/canonical chemistry,
+separate from this source/notation count. See
+[fifth-bundle verification](../verification-smiles-corpus.md).
+
+All helpers supply five mandatory bundles. The default fetched/offline gate reports8 files
+and5 bundles. A deliberately CDXML-free offline unit retains its narrower scope and reports7
+files/5 bundles; a separate all-SMILES synthetic manifest case proves that real SMILES
+parsing counts toward implemented coverage even when other formats have zero checks. Every
+existing manifest/license/notice/name/count/confinement/hash negative remains in force.

@@ -75,7 +75,7 @@ Actual native acceptance remains separate from deterministic input tests.
 
 The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while
 holding it. Stdio is a separate process-local session. Only server/stdio SDK features are
-enabled. `Engine::prepare` completes short edits or returns an immutable capture/file plan;
+enabled. `Engine::prepare` completes short edits or returns an immutable capture/file/query/field-edit plan;
 adapters release the lock before long work. Completed work applies through Engine::finish;
 open rejects stale revisions/generations, and old saves cannot relabel a later document.
 A cloneable CommandExecutor shares UI/loopback workers; stdio has its own session. Each bounds workers
@@ -83,7 +83,7 @@ to two, reserves deferred permits under the engine mutex before releasing a plan
 permits with the actual worker lifetime and cancels cooperatively when an
 awaiting task is dropped. Captures report their input revision and never apply results to
 authored state. File saves publish immutable input and report its revision, keeping later
-edits dirty. This is a bounded capture/file executor, not a general background-job scheduler.
+edits dirty. This is a bounded executor for delivered deferred operations, not a general background-job scheduler.
 
 Close intent is transient engine state, outside StoredContent/history. The typed
 document.close command handles Request/Discard/Cancel with an authored-revision guard;
@@ -191,5 +191,21 @@ Save borrows complete current source through the existing bounded atomic publish
 wrapper writer, first-record projection or field-name dictionary reconstructs an import.
 Drawing accessors return typed unsupported_content errors for collections. Static UI
 metadata clears prior gesture/hit/paper state and declares chemical preview unavailable;
-all-record chemical display and field-edit commands remain separate work. See
+all-record chemical display, a field-edit UI and record operations remain separate work. See
 verification-sdf-session-files.md for exact source/consumer/history/lifecycle evidence.
+
+
+SDF explicit field inspection captures immutable source/revision/generation, measures bounded
+ordered JSON off-lock and returns a historical result without applying authored state.
+Existing-field value edits similarly prepare an immutable complete-content candidate,
+then recheck cancellation, close, revision/generation and current Arc before one commit.
+No-op retains source/index identity, redo and transient close state. Input/output budgets,
+explicit versus automatic data disclosure, source/current/saved meanings and existing
+worker/reply/save barriers are defined in control-protocol.md. No extra pool or registry.
+
+SMILES retains a distinct complete notation/source IR. Named opt-in normalization returns
+a new local-ID Fragment with fixed neutral-profile H and absent positions; it changes no
+source token or model None semantics. The separate restricted explicit-H writer emits
+noncanonical notation from a Fragment. Neither gives a projected graph source-backed Save
+authority, native layout or document-global IDs. Future import must preserve source,
+remap local identities and define layout/conversion/unsupported policies explicitly.
