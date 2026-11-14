@@ -506,3 +506,15 @@ runtime save and all of its vendor metadata remain ignored and unredistributed. 
 primitive integers and zero style count were inspected for this metadata decision; its
 warning prose was not copied or interpreted. That single-file compatibility diagnostic
 does not establish broader native CDX, application UI, editing or chemistry support.
+
+## Terminated loopback socket assertions, 2026-11-14
+
+[Microsoft Winsock errors](https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2)
+defines WSAECONNABORTED10053 as termination of an established connection. The actual Windows
+hosted read reports10053/ErrorKind::ConnectionAborted. Rust's
+[std::io::ErrorKind](https://doc.rust-lang.org/std/io/enum.ErrorKind.html#variant.ConnectionAborted)
+documents that variant as a terminated connection. The three test-side closed-read checks
+now accept it alongside their prior definitive closure results; they still reject live
+reads, bytes, timeouts and would-block. Production socket behavior/authentication/client
+limits are unchanged. This is a test portability correction using an actual hosted RED,
+not permission to ignore arbitrary transport errors. APIs compile on pinned Rust1.94.1.
