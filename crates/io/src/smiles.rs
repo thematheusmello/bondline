@@ -6,8 +6,10 @@
 use bondline_model::Element;
 use std::{collections::HashSet, ops::Range, sync::Arc};
 
+mod layout;
 mod normalize;
 mod write;
+pub use layout::LayoutError;
 pub use normalize::NormalizeError;
 pub use write::{WriteError, write_fragment};
 

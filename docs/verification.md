@@ -2105,3 +2105,13 @@ clippy/fmt and ASAN64957:10000 pass. Actual fetched corpus remains8files/5bundle
 six committed fuzz seeds and nine local starting seeds are separate datasets. Full hashes/
 reports/scopes are linked above. Hosted checks for the receiving source are pending. The
 user continues using the desktop; no local GUI/input/activation or new native claim.
+
+## Restricted SMILES path geometry, 2026-11-14
+
+See [verification-smiles-layout.md](verification-smiles-layout.md) for missing-API and
+runtime REDs, original analytic/topology/ink expectations, all1–12 actual reference scenes,
+unchanged Expat/Decimal/RDKit consumers and strict native CDXML reopens. Scoped IO209,
+focused6 acceptance and all-target IO clippy pass; exact final logs/source are in the
+ignored handoff. This is one explicit pure-document library operation, not an application
+SMILES import/Save/cleanup command or native workflow. The user remains active on input;
+no GUI/input/activation/native test ran and no prior golden was regenerated.

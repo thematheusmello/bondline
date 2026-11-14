@@ -981,3 +981,21 @@ Its accepted te/si extensions and contradictory colon/single closure declaration
 not broaden the profile; numeric-ring-alias refusals remain a consumer difference.
 Every aromatic marker/bond refuses fixed-H model normalization before count mapping.
 No model, exporter guard, native/application import, layout or canonicalization changes.
+
+## Restricted carbon-path layout, 2026-11-14
+
+[verification-smiles-layout.md](../verification-smiles-layout.md) records the original
+library-only positioned1–12carbon/Single path operation. Actual
+[IUPAC2008 representation recommendations](https://iupac.qmul.ac.uk/drawing/drawing.html)
+(Brecher, DOI10.1351/pac200880020277), GR1.1/3.2/4.1.1/4.3, support consistent lengths,
+horizontal chains, the relevant120degree angles and overlap avoidance. The read HTML pin
+is347564B/SHA25632d2c2d694059e78b6b6a3ed8c274770377e73058d11c174951e7b4e1ce4f71e.
+
+The analytic zigzag/whole-chord rotation, lowest-source-index endpoint,12atom gate and
+explicit48pt/origin72/A4 tested starting policy are original choices, not imported defaults.
+Actual glyph/mask/stroke ink and topology are checked at1024square using the unchanged
+reference renderer. Independent analytic/Decimal/Expat/external RDKit checks and exact
+native CDXML reopens remain distinct from a qualified JSON transport1ULP observation.
+No source/model H semantics, source authority, old oracle, dependency, asset or native UI
+changes. Layout for aromatic/ring/branched/heteroatom structures, general cleanup and
+application SMILES remain missing.
