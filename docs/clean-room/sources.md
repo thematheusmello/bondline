@@ -580,3 +580,26 @@ history/local files and bounded1x/2x input cases, exact source/cleanup, OS/CUA/c
 method distinctions and failed-probe exclusions are in verification-carbon-graph.md.
 No reference app was operated in that acceptance; no native timing/golden/full-parity
 claim follows. Public CG/AX helpers are ignored development evidence, never shipped code.
+
+## Portable external font oracle, 2026-11-14
+
+[Pillow12.3.0's exact ImageFont source](https://github.com/python-pillow/Pillow/blob/12.3.0/src/PIL/ImageFont.py#L245-L256)
+selects RAQM when available and BASIC otherwise; its
+[getlength contract](https://github.com/python-pillow/Pillow/blob/12.3.0/src/PIL/ImageFont.py#L298-L314)
+specifies whole-pixel BASIC advances. The fetched63750-byte source matches the installed
+file, SHA24fa5feeb91b4bf63eaad0ebba08a8161e9c889d9fd056a37c928134097b9649.
+An ignored forced-BASIC probe reproduces both actual Mac/Windows hosted ink-IoU failures
+exactly; the hosted wheel's RAQM flags are not independently attested.
+
+Published OpenType [cmap](https://learn.microsoft.com/en-us/typography/opentype/spec/cmap),
+[head](https://learn.microsoft.com/en-us/typography/opentype/spec/head),
+[hhea](https://learn.microsoft.com/en-us/typography/opentype/spec/hhea),
+[hmtx](https://learn.microsoft.com/en-us/typography/opentype/spec/hmtx),
+[loca](https://learn.microsoft.com/en-us/typography/opentype/spec/loca) and
+[glyf](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf) definitions inform
+a bounded, independent stdlib inspection of the existing licensed Roboto TTF. It confirms
+2048units/em, C/H glyph40/45 advances1333/1460, and all ten digit glyphs21..30 advance1150.
+The test oracle explicitly uses BASIC rasterization and those design-unit positions,
+retaining the original0.90 threshold, orientations/counts and false-label negatives.
+No production renderer, font, golden, dependency or runtime behavior changes. Exact RED,
+GREEN, independent-probe identities and limits are in verification-label-oracle-layout.md.

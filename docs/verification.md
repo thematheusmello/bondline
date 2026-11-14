@@ -1911,3 +1911,13 @@ fuzz-graph clippy and six-original-seed ASAN10000 pass, cov1131/features2728/RSS
 Exact independent review, logs/hashes/settings and the unchanged ignored1196B native
 diagnostic are in [verification-cdx-native-metadata.md](verification-cdx-native-metadata.md).
 The native file/prose is not committed; chemistry/encoder/app coverage is not inferred.
+
+## External font-oracle portability, 2026-11-14
+
+Actual Mac/Windows hosted failures at983ffee reproduce locally with BASIC whole-pixel
+advances. Independent OpenType design metrics restore layout without changing production,
+font/golden bytes, the0.90 threshold or negative cases. Five focused label tests and31
+whole-render tests pass. Receiving-root `cargo xtask ci` passes487workspace+3bridge,
+session31715 exit0, log SHA1b2d0e0e1af11134bd977bf71cddd3184c57ba4f32690d7f0780f4949260d0ee.
+[The exact source/probe record](verification-label-oracle-layout.md) distinguishes the
+reproduced mechanism from unattested hosted build flags. New hosted verification is pending.
