@@ -1192,3 +1192,18 @@ No reference arrangement/perception default is inferred and no proprietary diagr
 is reused. Source review also flags opposed-neighbour H-label attachment as unresolved;
 no new native/chemistry/render result is claimed. The planned mixed ethanol/methylamine
 acceptance must cover actual source directions and every record, not only known-H ethane.
+
+## Derived SDF geometry and display H, 2026-11-14
+
+[Data implementation and independent evidence](../verification-sdf-preview-model.md) now
+deliver the data prerequisite above. BIOVIA2026 supplies actual version/coordinate and
+declared-valence semantics; the pinned OpenSMILES organic subset and RDKit primary valence
+table support a deliberately closed, original neutral C4/N3/O2/halogen1 display policy.
+This is not universal CTfile perception. Literal counts, including zero/unusual values,
+and authored None/source bytes remain exact. Physical H remains a node with separately
+identified display provenance. All records use the existing strict mapper; fresh preview
+IDs retain per-record local correspondence. Shared24pt/unit, y inversion, one translation
+per record and72pt row margins are original packing choices, not reference defaults.
+Later unsupported records refuse the whole derived view. The new original MIT OR Apache-2.0
+mixed ordinary fixture has independent raw spans and unchanged external molecular consumers.
+This data API alone certifies no scene, label attachment, native workflow or reference parity.

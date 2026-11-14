@@ -11,7 +11,9 @@ use crate::mol::{MolError, MolFile, Version, source_version, v3000};
 use std::ops::Range;
 
 mod document;
+pub mod preview;
 pub use document::{RecordId, RecordInfo, SdfDocument};
+pub use preview::{HydrogenOrigin, PreviewError, PreviewRecord, SdfPreview, prepare_sdf_preview};
 
 pub const MAX_SDF_BYTES: usize = 64 * 1024 * 1024;
 pub const MAX_SDF_RECORDS: usize = 1024;
