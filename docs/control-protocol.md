@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has twenty-two commands; the complete list is below.
+The delivered registry has 26 commands; the complete list is below.
 
 An engine JSON request is exactly:
 
@@ -62,10 +62,11 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `sdf.field.set_value` | Required `expected_revision`, positive `record_id`, zero-based existing `field_index`, `value_lines` | Deferred immutable existing-field edit, one whole-content history commit; byte-preserving no-op and strict stale/input guards |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
+| `ui.bond_tool` | Required `order` (`single`, `double`, `triple`) | Select a transient drawing tool; explicit operation receipt/epoch, no authored edit or history entry |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request Open/Save/Save As presentation or cancel the matching picker; a native host is required |
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
-| `bond.create` | `page_id`, `begin_x_pt`, `begin_y_pt`, `end_x_pt`, `end_y_pt` | One independent C-C fragment; two C atoms with three explicitly authored H each, one single bond |
-| `bond.extend` | Required `expected_revision`, `page_id`, `fragment_id`, `begin_atom_id`, `end_x_pt`, `end_y_pt`, `hydrogen_policy="rectify_terminal_carbon"` | Add one Single bond/new C-H3 to a positioned neutral terminal C-H3, deliberately changing that target to H2; native complete CDXML/source-free data only |
+| `bond.create` | `page_id`, `begin_x_pt`, `begin_y_pt`, `end_x_pt`, `end_y_pt`; optional `order="single"` | One independent neutral-carbon fragment with the requested Single/Double/Triple bond; each endpoint receives literal H=`4-order_weight` |
+| `bond.extend` | Required `expected_revision`, `page_id`, `fragment_id`, `begin_atom_id`, `end_x_pt`, `end_y_pt`, `hydrogen_policy="rectify_terminal_carbon"`; optional `order="single"` | Add the requested bond/new carbon to a consistent supported terminal carbon, subtracting the bond weight from its literal H; native complete CDXML/source-free data only |
 | `history.undo` | `{}` | Previous authored snapshot |
 | `history.redo` | `{}` | Next authored snapshot |
 | `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only drawing page or restricted all-record SDF virtual page1 PNG; explicit `cpu` or `gpu` |
@@ -82,6 +83,17 @@ Native drag creation calls bond.create once at release. Temporary preview does n
 history. Complete/multiple drags can arrive between frames; ordered raw events preserve each
 transaction. Escape, focus loss, stale revisions and outside release cancel a pending drag.
 Three logical units of click jitter are ignored. These are independent initial policies.
+The selected tool's order/epoch is captured at press; changing mode invalidates old
+gestures/hover even if the mode later returns to the same order. The UI passes that order
+explicitly. Direct commands with an absent order always retain Single behavior.
+
+`ui.bond_tool` returns `ui_bond_tool_operation:{order,epoch,changed}` and outer
+`changed:false`. Real selection changes advance the checked transient epoch; repeated
+selection is a no-op. Selection persists across Undo/Redo/Open, outside document/source,
+dirty state and close intent. `ui.controls` adds the three `tool.bond.*` bindings with
+`selected` booleans, closed typed invocations, no assigned shortcuts and contextual
+enablement; existing non-tool bindings omit `selected`. Pending picker/close or incomplete
+drawing-source guards apply. Loopback notifies after publishing a real mode change.
 
 Bond coordinates use finite ±100000 physical points; endpoints must differ. Page/graph
 validation precedes commit. IDs are fresh document-wide per kind and never reused across
@@ -138,7 +150,7 @@ Capture dimensions are 1..2048 pixels per axis. A successful result adds `captur
 has `adapter: null`. There is no automatic CPU fallback. This captures the shared page
 scene, not window chrome, operating-system dialogs or print-resolution chemical output.
 Unmapped source-backed documents return unsupported_content before rendering. Empty pages
-and supported positioned neutral-element/Single graphs can be captured, including branches,
+and supported positioned neutral-element Single/centered Double/Triple graphs can be captured, including safe branches,
 cycles and disconnected components. Source-free/CDXML use literal H, including connected
 skeletal unknown-H carbon. Actual MOL backing instead supplies closed neutral C/N/O/halogen
 display counts for missing H, without changing authored None or literal counts. It retains
@@ -331,7 +343,7 @@ Successful replies keep document:null, complete collection metadata and unchange
 Old captures report their historical revision/source/file with current close/UI metadata.
 Early/late cancellation can prevent reply publication without applying a partial view.
 
-The current profile uses strict neutral nonisotopic/nonradical Single geometry and a
+The current profile uses strict neutral nonisotopic/nonradical Single/centered Double/Triple geometry and a
 closed neutral C/N/O/halogen derivation for absent H; literal resolved counts remain exact.
 Shared24pt/unit and translation-only72pt rows are original packing. Actual label/stroke ink
 must fit the physical paper and readable font bounds. Later unsupported records, unsafe
@@ -598,9 +610,12 @@ See native-file-ui.md and verification.md for actual execution scope.
 ## Explicit terminal-carbon extension
 
 The closed bond.extend operation requires the named H policy; missing/unknown policies
-refuse. Its selected fragment must contain only positioned neutral carbon/Single data,
-and its starting atom must have exactly one Single bond and literal H3. Other H counts,
-unknown H, nonterminal starts and other metadata/elements/orders refuse. The free endpoint
+refuse. Its selected fragment must contain only positioned neutral carbon with
+Single/Double/Triple bonds. Its starting atom must have exactly one incident bond with
+literal H=`4-existing_bond_weight`, and sufficient H for the requested order (weights1/2/3).
+That count is reduced by the new weight, and the added carbon receives literal H=`4-new_weight`.
+Unknown/inconsistent/insufficient H, nonterminal starts and other metadata/elements/orders
+refuse. This explicit policy is not general valence perception. The free endpoint
 cannot exactly occupy an existing atom. The command checks expected_revision before
 lookup/allocation and commits one complete snapshot, preserving fragment/old IDs and
 allocating only a new AtomId/BondId above all pages/session floors. Undo branches never
@@ -734,7 +749,7 @@ See [verification-smiles-export-command.md](verification-smiles-export-command.m
 
 ## Complete SMILES source-file sessions
 
-The registry now has25 typed commands. document.open_smiles requires only path and accepts
+document.open_smiles requires only path and accepts
 optional discard_unsaved=false; document.save_smiles requires only path and accepts
 optional overwrite=false. Both closed schemas reject record/layout/conversion options.
 Open validates every meaningful notation and starts a clean whole-file generation. Any

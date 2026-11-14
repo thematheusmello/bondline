@@ -7,8 +7,8 @@ mod mol_display_tests;
 mod preview;
 
 use bondline_commands::{
-    BondCreate, BondExtend, CloseState, Command, ControlInfo, ControlKey, ControlShortcut, Engine,
-    ExtendHydrogenPolicy,
+    BondCreate, BondDrawOrder, BondExtend, CloseState, Command, ControlInfo, ControlKey,
+    ControlShortcut, Engine, ExtendHydrogenPolicy,
 };
 use bondline_mcp::{CommandExecutor, SharedEngine, control::LoopbackServer};
 use bondline_model::{PageId, Point2};
@@ -643,6 +643,7 @@ fn show_workspace_with_preview(
                         let command = match current_graph.hit_test(local(*pos), 5.0) {
                             Ok(None) => match gesture.target {
                                 None => Ok(Command::BondCreate(BondCreate {
+                                    order: BondDrawOrder::Single,
                                     page_id: gesture.context.page.get(),
                                     begin_x_pt: gesture.begin.x_pt(),
                                     begin_y_pt: gesture.begin.y_pt(),
@@ -653,6 +654,7 @@ fn show_workspace_with_preview(
                                     fragment_id,
                                     atom_id,
                                 }) => Ok(Command::BondExtend(BondExtend {
+                                    order: BondDrawOrder::Single,
                                     expected_revision: gesture.context.revision,
                                     page_id: gesture.context.page.get(),
                                     fragment_id: fragment_id.get(),

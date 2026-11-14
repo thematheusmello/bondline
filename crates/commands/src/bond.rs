@@ -6,9 +6,43 @@ use bondline_model::{
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+/// Closed authoring choices; absent order retains the original Single command behavior.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "lowercase")]
+pub enum BondDrawOrder {
+    #[default]
+    Single,
+    Double,
+    Triple,
+}
+
+impl BondDrawOrder {
+    fn is_single(&self) -> bool {
+        *self == Self::Single
+    }
+
+    fn weight(self) -> u16 {
+        match self {
+            Self::Single => 1,
+            Self::Double => 2,
+            Self::Triple => 3,
+        }
+    }
+
+    fn model_order(self) -> BondOrder {
+        match self {
+            Self::Single => BondOrder::Single,
+            Self::Double => BondOrder::Double,
+            Self::Triple => BondOrder::Triple,
+        }
+    }
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct BondCreate {
+    #[serde(default, skip_serializing_if = "BondDrawOrder::is_single")]
+    pub order: BondDrawOrder,
     #[schemars(range(min = 1))]
     pub page_id: u32,
     #[schemars(range(min = -100000, max = 100000))]
@@ -30,6 +64,8 @@ pub enum ExtendHydrogenPolicy {
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct BondExtend {
+    #[serde(default, skip_serializing_if = "BondDrawOrder::is_single")]
+    pub order: BondDrawOrder,
     pub expected_revision: u64,
     #[schemars(range(min = 1))]
     pub page_id: u32,
@@ -41,7 +77,7 @@ pub struct BondExtend {
     pub end_x_pt: f64,
     #[schemars(range(min = -100000, max = 100000))]
     pub end_y_pt: f64,
-    /// Required opt-in to author H3 -> H2 on the supported terminal carbon.
+    /// Required opt-in to replace available literal terminal-carbon H with a new bond.
     pub hydrogen_policy: ExtendHydrogenPolicy,
 }
 
@@ -86,8 +122,8 @@ pub(super) fn create(
     let carbon = Element::try_from(6).map_err(bondline_model::Error::from)?;
     let mut first = Atom::new(a, carbon, Some(begin));
     let mut second = Atom::new(b, carbon, Some(end));
-    first.explicit_hydrogens = Some(3);
-    second.explicit_hydrogens = Some(3);
+    first.explicit_hydrogens = Some(4 - params.order.weight());
+    second.explicit_hydrogens = Some(4 - params.order.weight());
     let fragment = Fragment::new(
         id,
         vec![first, second],
@@ -95,7 +131,7 @@ pub(super) fn create(
             id: bond,
             begin: a,
             end: b,
-            order: BondOrder::Single,
+            order: params.order.model_order(),
         }],
     )
     .map_err(bondline_model::Error::from)?;
@@ -173,17 +209,28 @@ pub(super) fn extend(
             || atom.charge != 0
             || atom.isotope.is_some()
             || atom.radical != Radical::None
-    }) || fragment
+    }) || fragment.bonds().iter().any(|bond| {
+        !matches!(
+            bond.order,
+            BondOrder::Single | BondOrder::Double | BondOrder::Triple
+        )
+    }) {
+        return Err(Error::UnsupportedBondExtension);
+    }
+    let mut incident = fragment
         .bonds()
         .iter()
-        .any(|bond| bond.order != BondOrder::Single)
-        || fragment
-            .bonds()
-            .iter()
-            .filter(|bond| bond.begin == begin || bond.end == begin)
-            .count()
-            != 1
-        || atom.explicit_hydrogens != Some(3)
+        .filter(|bond| bond.begin == begin || bond.end == begin);
+    let existing_weight = match incident.next().map(|bond| bond.order) {
+        Some(BondOrder::Single) => 1,
+        Some(BondOrder::Double) => 2,
+        Some(BondOrder::Triple) => 3,
+        _ => return Err(Error::UnsupportedBondExtension),
+    };
+    let available_hydrogens = 4 - existing_weight;
+    if incident.next().is_some()
+        || atom.explicit_hydrogens != Some(available_hydrogens)
+        || params.order.weight() > available_hydrogens
     {
         return Err(Error::UnsupportedBondExtension);
     }
@@ -216,16 +263,16 @@ pub(super) fn extend(
         .iter_mut()
         .find(|atom| atom.id == begin)
         .ok_or_else(missing)?
-        .explicit_hydrogens = Some(2);
+        .explicit_hydrogens = Some(available_hydrogens - params.order.weight());
     let mut added = Atom::new(id, carbon, Some(end));
-    added.explicit_hydrogens = Some(3);
+    added.explicit_hydrogens = Some(4 - params.order.weight());
     atoms.push(added);
     let mut bonds = fragment.bonds().to_vec();
     bonds.push(Bond {
         id: bond_id,
         begin,
         end: id,
-        order: BondOrder::Single,
+        order: params.order.model_order(),
     });
     let fragment = Fragment::new(fragment_id, atoms, bonds).map_err(bondline_model::Error::from)?;
     let mut candidate = document.clone();
@@ -235,11 +282,12 @@ pub(super) fn extend(
 
 #[cfg(test)]
 mod tests {
-    use super::{BondExtend, ExtendHydrogenPolicy};
+    use super::{BondDrawOrder, BondExtend, ExtendHydrogenPolicy};
     use crate::{Command, Engine, Error};
 
     fn parameters(revision: u64, end_x: f64) -> BondExtend {
         BondExtend {
+            order: BondDrawOrder::Single,
             expected_revision: revision,
             page_id: 1,
             fragment_id: 1,

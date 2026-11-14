@@ -186,6 +186,9 @@ async fn publish_result(
             || result.file_operation.is_some()
             || result.close_operation.is_some()
             || result.ui_file_operation.is_some()
+            || result
+                .ui_bond_tool_operation
+                .is_some_and(|operation| operation.changed)
     });
     let value = match result {
         Ok(result) => json!({"result":result}),

@@ -51,7 +51,10 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "edit.redo",
             "page.a4",
             "page.letter",
-            "page.rotate"
+            "page.rotate",
+            "tool.bond.single",
+            "tool.bond.double",
+            "tool.bond.triple"
         ])
     );
     assert_eq!(

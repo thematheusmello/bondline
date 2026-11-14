@@ -1,8 +1,8 @@
 //! Typed native bindings. Metadata and actual command invocation share one registry.
 
 use crate::{
-    CloseAction, CloseDocument, CloseState, Command, Engine, NoParams, PageSetSize, UiFile,
-    UiFileAction, UiFilePhase,
+    BondDrawOrder, CloseAction, CloseDocument, CloseState, Command, Engine, NoParams, PageSetSize,
+    SelectBondTool, UiFile, UiFileAction, UiFilePhase,
 };
 use serde::Serialize;
 
@@ -32,6 +32,8 @@ pub struct ControlInfo {
     pub command: Command,
     pub enabled: bool,
     pub disabled_reason: Option<&'static str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selected: Option<bool>,
 }
 
 impl Engine {
@@ -64,7 +66,7 @@ impl Engine {
                 shift,
             })
         };
-        let mut controls = Vec::with_capacity(10);
+        let mut controls = Vec::with_capacity(13);
         for (id, label, key, shift, action) in [
             (
                 "file.open",
@@ -101,6 +103,7 @@ impl Engine {
                 }),
                 enabled: file_reason.is_none(),
                 disabled_reason: file_reason,
+                selected: None,
             });
         }
         let close_reason = if state.ui_file.available {
@@ -119,6 +122,7 @@ impl Engine {
             }),
             enabled: close_reason.is_none(),
             disabled_reason: close_reason,
+            selected: None,
         });
         for (id, label, command, depth, shift) in [
             (
@@ -145,6 +149,7 @@ impl Engine {
                 command,
                 enabled: reason.is_none(),
                 disabled_reason: reason,
+                selected: None,
             });
         }
         if let Ok(document) = self.document()
@@ -178,6 +183,27 @@ impl Engine {
                     }),
                     enabled: authoring_reason.is_none(),
                     disabled_reason: authoring_reason,
+                    selected: None,
+                });
+            }
+        }
+        if let Ok(stored) = self.stored_document() {
+            let reason =
+                authoring_reason.or((!stored.is_fully_mapped()).then_some("unsupported_content"));
+            for (id, label, order) in [
+                ("tool.bond.single", "Single bond", BondDrawOrder::Single),
+                ("tool.bond.double", "Double bond", BondDrawOrder::Double),
+                ("tool.bond.triple", "Triple bond", BondDrawOrder::Triple),
+            ] {
+                controls.push(ControlInfo {
+                    id,
+                    label,
+                    menu: "Tools",
+                    shortcut: None,
+                    command: Command::UiBondToolSelect(SelectBondTool { order }),
+                    enabled: reason.is_none(),
+                    disabled_reason: reason,
+                    selected: Some(self.bond_tool.order == order),
                 });
             }
         }
@@ -196,6 +222,7 @@ impl Engine {
                 }),
                 enabled: reason.is_none(),
                 disabled_reason: reason,
+                selected: None,
             });
         }
         controls

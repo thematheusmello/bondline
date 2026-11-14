@@ -480,6 +480,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "sdf.field.set_value",
             "sdf.record.inspect",
             "smiles.record.inspect",
+            "ui.bond_tool",
             "ui.controls",
             "ui.file"
         ]

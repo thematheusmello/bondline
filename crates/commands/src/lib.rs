@@ -8,6 +8,7 @@ use serde_json::Value;
 use std::{collections::VecDeque, sync::Arc};
 
 mod bond;
+mod bond_tool;
 mod capture;
 mod close;
 mod content;
@@ -19,7 +20,8 @@ mod sdf_query;
 mod smiles_conversion;
 mod smiles_export;
 mod smiles_query;
-pub use bond::{BondCreate, BondExtend, ExtendHydrogenPolicy};
+pub use bond::{BondCreate, BondDrawOrder, BondExtend, ExtendHydrogenPolicy};
+pub use bond_tool::{BondToolOperation, BondToolState, SelectBondTool};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
@@ -114,6 +116,7 @@ command_registry! {
     Close(CloseDocument) => ("document.close", "Request, explicitly discard, or cancel closing the current document revision.", false),
     UiFile(UiFile) => ("ui.file", "Request or cancel native file presentation; requires an attached native host.", false),
     UiControls(NoParams) => ("ui.controls", "Discover delivered native controls, shortcuts, typed bindings and contextual availability.", true),
+    UiBondToolSelect(SelectBondTool) => ("ui.bond_tool", "Select a drawing bond order without editing the document or its history; gestures pass this order explicitly.", false),
     OpenCdxml(OpenCdxml) => ("document.open_cdxml", "Open an explicitly selected CDXML file without discarding unsaved edits by default.", false),
     SaveCdxml(SaveCdxml) => ("document.save_cdxml", "Atomically save complete CDXML data to an explicitly selected path; overwrite requires opt-in.", false),
     OpenCdx(OpenCdx) => ("document.open_cdx", "Open the supported read-only CDX projection while retaining complete source bytes; unsaved changes require explicit discard.", false),
@@ -130,8 +133,8 @@ command_registry! {
     SmilesRecordInspect(SmilesRecordInspect) => ("smiles.record.inspect", "Read the exact notation and file-relative metadata of one explicit captured SMILES record; opaque application data is not disclosed or decoded.", true),
     SdfFieldSet(SdfFieldSet) => ("sdf.field.set_value", "Replace one existing ordered SDF field value through a bounded immutable candidate, preserving every other source byte.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
-    BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
-    BondExtend(BondExtend) => ("bond.extend", "Extend a terminal neutral carbon with a Single bond, explicitly authoring its H3 to H2 and the new carbon's H3; requires native complete data.", false),
+    BondCreate(BondCreate) => ("bond.create", "Create an independent carbon bond of the requested Single/Double/Triple order, authoring fixed neutral-carbon H counts; omitted order is Single.", false),
+    BondExtend(BondExtend) => ("bond.extend", "Extend a neutral terminal carbon with consistent literal H and one Single/Double/Triple carbon bond using an explicit requested order/H policy; omitted order is Single and native complete data is required.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
     Redo(NoParams) => ("history.redo", "Restore the next authored document.", false),
     Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
@@ -174,7 +177,7 @@ pub enum Error {
     #[error("atom {atom_id} does not exist in fragment {fragment_id}")]
     MissingAtom { fragment_id: u32, atom_id: u32 },
     #[error(
-        "extension supports a positioned neutral terminal carbon with one Single carbon bond and literal H3 only"
+        "extension requires a positioned neutral terminal carbon with one Single/Double/Triple carbon bond and consistent sufficient literal hydrogen count"
     )]
     UnsupportedBondExtension,
     #[error("a new atom cannot occupy an existing atom's position")]
@@ -232,6 +235,8 @@ pub enum Error {
     UiStaleRequest,
     #[error("native file request identity counter exhausted")]
     UiEpochExhausted,
+    #[error("drawing tool epoch space exhausted")]
+    UiBondToolEpochExhausted,
     #[error("invalid native file request parameters: {0}")]
     InvalidUiFileParameters(&'static str),
     #[error(transparent)]
@@ -289,6 +294,7 @@ impl Error {
             Self::SaveBusy => "busy",
             Self::UiStaleRequest => "ui_stale_request",
             Self::UiEpochExhausted => "ui_epoch_exhausted",
+            Self::UiBondToolEpochExhausted => "ui_epoch_exhausted",
             Self::FileBackendUnavailable => "backend_unavailable",
             Self::Mol(error) => error.code(),
             Self::Sdf(error) => error.code(),
@@ -372,6 +378,8 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_file_operation: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_bond_tool_operation: Option<BondToolOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub controls: Option<Vec<ControlInfo>>,
 }
 
@@ -389,6 +397,7 @@ pub struct Engine {
     redo: VecDeque<Arc<StoredContent>>,
     close_policy: close::ClosePolicy,
     file_ui: file_ui::FileUiPolicy,
+    bond_tool: BondToolState,
 }
 
 impl Default for Engine {
@@ -434,6 +443,7 @@ impl Engine {
             redo: VecDeque::new(),
             close_policy: close::ClosePolicy::default(),
             file_ui: file_ui::FileUiPolicy::default(),
+            bond_tool: BondToolState::default(),
         }
     }
 
@@ -478,6 +488,7 @@ impl Engine {
             close_operation: None,
             ui_file: self.file_ui_state(),
             ui_file_operation: None,
+            ui_bond_tool_operation: None,
             controls: None,
         }
     }
@@ -513,6 +524,9 @@ impl Engine {
             Command::Inspect(_) => false,
             Command::Close(params) => return Ok(Prepared::immediate(self.close(params)?)),
             Command::UiFile(params) => return Ok(Prepared::immediate(self.ui_file(params)?)),
+            Command::UiBondToolSelect(params) => {
+                return Ok(Prepared::immediate(self.select_bond_tool(params)?));
+            }
             Command::UiControls(_) => {
                 return Ok(Prepared::immediate(CommandResult {
                     controls: Some(self.controls()),
@@ -926,6 +940,7 @@ mod tests {
                 "sdf.record.inspect",
                 "smiles.record.inspect",
                 "ui.controls",
+                "ui.bond_tool",
                 "ui.file"
             ]
             .into_iter()

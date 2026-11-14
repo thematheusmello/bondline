@@ -24,6 +24,7 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "document.close",
             "ui.file",
             "ui.controls",
+            "ui.bond_tool",
             "document.open_cdxml",
             "document.save_cdxml",
             "document.open_cdx",
