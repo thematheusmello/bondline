@@ -204,3 +204,193 @@ fn terminal_raster_labels_agree_with_independent_external_freetype()
     }
     Ok(())
 }
+
+fn element_oracle(
+    label: &super::label::Label,
+    symbol: &str,
+    left: bool,
+    hydrogens: u16,
+) -> Result<std::process::Output, Box<dyn std::error::Error>> {
+    let interpreter = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
+        if cfg!(windows) {
+            "python".into()
+        } else {
+            "python3".into()
+        }
+    });
+    let mut child = Command::new(interpreter)
+        .arg("-B")
+        .arg(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/tests/element_label_oracle.py"
+        ))
+        .arg(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../assets/fonts/Roboto-Regular.ttf"
+        ))
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()?;
+    let boxes = label
+        .pixels
+        .iter()
+        .map(|r| [r.x, r.y, r.width, r.height])
+        .collect::<Vec<_>>();
+    serde_json::to_writer(
+        child.stdin.take().ok_or("stdin")?,
+        &serde_json::json!({
+            "boxes":boxes,"symbol":symbol,"hydrogen_left":left,"hydrogens":hydrogens
+        }),
+    )?;
+    Ok(child.wait_with_output()?)
+}
+
+#[test]
+fn neutral_element_glyphs_and_authored_h_face_independent_freetype_masks()
+-> Result<(), Box<dyn std::error::Error>> {
+    let mut failures = Vec::new();
+    let mut minimum = 1.0_f64;
+    let mut minimum_glyph = 1.0_f64;
+    for (number, symbol) in [
+        (7, "N"),
+        (8, "O"),
+        (9, "F"),
+        (17, "Cl"),
+        (35, "Br"),
+        (14, "Si"),
+        (2, "He"),
+        (118, "Og"),
+    ] {
+        for left in [false, true] {
+            for hydrogens in [0, 1, 2, 12, u16::MAX] {
+                let label = super::label::element(
+                    [400.0, 200.0],
+                    bondline_model::Element::try_from(number)?,
+                    left,
+                    hydrogens,
+                    8.0,
+                    [800, 400],
+                    &crate::Cancellation::default(),
+                )?;
+                let output = element_oracle(&label, symbol, left, hydrogens)?;
+                if !output.status.success() {
+                    failures.push(format!(
+                        "{symbol}/{left}/H{hydrogens}: {}",
+                        String::from_utf8_lossy(&output.stderr)
+                    ));
+                } else {
+                    let data: serde_json::Value = serde_json::from_slice(&output.stdout)?;
+                    minimum = minimum.min(
+                        data["freetype_ink_iou"]
+                            .as_f64()
+                            .ok_or("whole-label score")?,
+                    );
+                    minimum_glyph =
+                        minimum_glyph.min(data["minimum_glyph_iou"].as_f64().ok_or("glyph score")?);
+                }
+            }
+        }
+    }
+    assert!(failures.is_empty(), "{}", failures.join("\n"));
+    println!(
+        "80 whole-label comparisons: minimumIoU={minimum}; exploratory minimumglyphIoU={minimum_glyph}"
+    );
+    let label = super::label::element(
+        [400.0, 200.0],
+        bondline_model::Element::try_from(7)?,
+        false,
+        2,
+        8.0,
+        [800, 400],
+        &crate::Cancellation::default(),
+    )?;
+    assert!(
+        !element_oracle(&label, "O", false, 2)?.status.success(),
+        "wrong element accepted"
+    );
+    assert!(
+        !element_oracle(&label, "N", true, 2)?.status.success(),
+        "wrong H placement accepted"
+    );
+    let positive = element_oracle(&label, "N", false, 2)?;
+    assert!(positive.status.success());
+    let positive: serde_json::Value = serde_json::from_slice(&positive.stdout)?;
+    assert!(
+        positive["minimum_glyph_iou"]
+            .as_f64()
+            .ok_or("positive glyph ROI")?
+            >= 0.90
+    );
+    let wrong = element_oracle(&label, "N", false, 3)?;
+    if wrong.status.success() {
+        let wrong: serde_json::Value = serde_json::from_slice(&wrong.stdout)?;
+        assert!(
+            wrong["minimum_glyph_iou"]
+                .as_f64()
+                .ok_or("wrong subscript ROI")?
+                < 0.90,
+            "invented H accepted"
+        );
+        println!(
+            "N/H2 correctROI={}, H3 counterfactualROI={}",
+            positive["minimum_glyph_iou"], wrong["minimum_glyph_iou"]
+        );
+    }
+    let label = super::label::element(
+        [400.0, 200.0],
+        bondline_model::Element::try_from(17)?,
+        false,
+        0,
+        8.0,
+        [800, 400],
+        &crate::Cancellation::default(),
+    )?;
+    assert!(
+        !element_oracle(&label, "CL", false, 0)?.status.success(),
+        "wrong symbol case accepted"
+    );
+    let label = super::label::element(
+        [400.0, 200.0],
+        bondline_model::Element::try_from(35)?,
+        true,
+        0,
+        8.0,
+        [800, 400],
+        &crate::Cancellation::default(),
+    )?;
+    assert!(
+        !element_oracle(&label, "Br", false, 0)?.status.success(),
+        "wrong chemical anchor accepted"
+    );
+    Ok(())
+}
+
+#[test]
+fn neutral_label_metrics_match_independent_opentype_vectors()
+-> Result<(), Box<dyn std::error::Error>> {
+    let font = super::label::font()?;
+    for (character, id, advance, [xmin, ymin, xmax, ymax]) in [
+        ('N', 51, 1460, [169, 0, 1288, 1456]),
+        ('O', 52, 1408, [118, -20, 1289, 1476]),
+        ('F', 43, 1132, [169, 0, 1071, 1456]),
+        ('l', 81, 497, [156, 0, 341, 1536]),
+        ('B', 39, 1275, [169, 0, 1160, 1456]),
+        ('r', 87, 693, [140, 0, 663, 1102]),
+        ('S', 56, 1215, [80, -20, 1138, 1476]),
+        ('i', 78, 497, [141, 0, 360, 1476]),
+        ('e', 74, 1085, [93, -20, 1011, 1102]),
+        ('g', 76, 1149, [96, -426, 1010, 1102]),
+        ('L', 49, 1102, [169, 0, 1052, 1456]),
+    ] {
+        let glyph = font.glyph_id(character);
+        assert_eq!(glyph.0, id);
+        assert_eq!(font.h_advance_unscaled(glyph), advance as f32);
+        let bounds = font.outline(glyph).ok_or("outline")?.bounds;
+        assert_eq!(
+            [bounds.min.x, bounds.max.y, bounds.max.x, bounds.min.y],
+            [xmin, ymin, xmax, ymax].map(|v| v as f32)
+        );
+    }
+    Ok(())
+}

@@ -93,7 +93,7 @@ pub fn carbon_page_scene(width: u32, height: u32, page: &Page) -> Result<Scene, 
     Ok(graph_page_scene(width, height, page)?.into_scene())
 }
 
-/// Neutral, positioned carbon and Single bonds. Unknown hydrogens are never inferred.
+/// Neutral, positioned elements and Single bonds. Unknown hydrogens are never inferred.
 pub fn graph_page_scene(width: u32, height: u32, page: &Page) -> Result<GraphScene, Error> {
     graph_page_scene_with_cancel(width, height, page, &Cancellation::default())
 }
@@ -128,11 +128,7 @@ pub fn graph_page_scene_with_cancel(
         let mut neighbours = BTreeMap::<_, (usize, i32)>::new();
         for atom in fragment.atoms() {
             cancel.check()?;
-            if atom.element.get() != 6
-                || atom.charge != 0
-                || atom.isotope.is_some()
-                || atom.radical != Radical::None
-            {
+            if atom.charge != 0 || atom.isotope.is_some() || atom.radical != Radical::None {
                 return Err(Error::UnsupportedChemicalContent);
             }
             let position = viewport
@@ -191,17 +187,29 @@ pub fn graph_page_scene_with_cancel(
                 .get(&atom.id)
                 .ok_or(Error::UnsupportedChemicalContent)?;
             let neighbours = neighbours.get(&atom.id).copied().unwrap_or_default();
-            let label = match atom.explicit_hydrogens {
-                Some(hydrogens) => Some(crate::label::carbon(
+            let label = if atom.element.get() != 6 {
+                Some(crate::label::element(
                     position,
+                    atom.element,
                     neighbours.0 != 0 && neighbours.1 >= 0,
-                    hydrogens,
+                    atom.explicit_hydrogens.unwrap_or(0),
                     viewport.stroke_width(),
                     [width, height],
                     cancel,
-                )?),
-                None if neighbours.0 != 0 => None,
-                None => return Err(Error::UnsupportedChemicalContent),
+                )?)
+            } else {
+                match atom.explicit_hydrogens {
+                    Some(hydrogens) => Some(crate::label::carbon(
+                        position,
+                        neighbours.0 != 0 && neighbours.1 >= 0,
+                        hydrogens,
+                        viewport.stroke_width(),
+                        [width, height],
+                        cancel,
+                    )?),
+                    None if neighbours.0 != 0 => None,
+                    None => return Err(Error::UnsupportedChemicalContent),
+                }
             };
             let mask = if let Some(label) = label {
                 count = count.saturating_add(1).saturating_add(label.pixels.len());

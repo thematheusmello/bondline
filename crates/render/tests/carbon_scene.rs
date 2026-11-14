@@ -84,7 +84,7 @@ fn unsupported_atom_metadata_and_bond_kinds_fail_instead_of_being_hidden()
 -> Result<(), Box<dyn std::error::Error>> {
     for kind in 0..6 {
         let document = document(|atom, bond| match kind {
-            0 => atom.element = Element::new(7).unwrap_or(atom.element),
+            0 => atom.element = Element::new(1).unwrap_or(atom.element),
             1 => atom.position = None,
             2 => atom.charge = 1,
             3 => atom.isotope = std::num::NonZeroU16::new(13),

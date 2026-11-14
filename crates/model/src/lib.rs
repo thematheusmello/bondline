@@ -1,5 +1,6 @@
 //! GUI-free authored document data. Coordinates are points, increasing right and down.
 
+mod element;
 mod graph;
 mod point;
 pub use graph::{

@@ -1,5 +1,6 @@
 use crate::{Cancellation, Error, Rectangle};
 use ab_glyph::{Font, FontRef, point};
+use bondline_model::Element;
 
 pub(crate) struct Label {
     pub mask: Rectangle,
@@ -44,6 +45,49 @@ pub(crate) fn carbon(
     [width, height]: [u32; 2],
     cancel: &Cancellation,
 ) -> Result<Label, Error> {
+    text(
+        position,
+        "C",
+        hydrogen_left,
+        hydrogens,
+        scale,
+        [width, height],
+        cancel,
+    )
+}
+
+pub(crate) fn element(
+    position: [f32; 2],
+    element: Element,
+    hydrogen_left: bool,
+    hydrogens: u16,
+    scale: f32,
+    viewport: [u32; 2],
+    cancel: &Cancellation,
+) -> Result<Label, Error> {
+    if element.get() == 1 && hydrogens != 0 {
+        return Err(Error::UnsupportedChemicalContent);
+    }
+    text(
+        position,
+        element.symbol().ok_or(Error::UnsupportedChemicalContent)?,
+        hydrogen_left,
+        hydrogens,
+        scale,
+        viewport,
+        cancel,
+    )
+}
+
+fn text(
+    position: [f32; 2],
+    symbol: &str,
+    hydrogen_left: bool,
+    hydrogens: u16,
+    scale: f32,
+    [width, height]: [u32; 2],
+    cancel: &Cancellation,
+) -> Result<Label, Error> {
     cancel.check()?;
     let em = 12.0 * scale;
     if !em.is_finite() || !(8.0..=256.0).contains(&em) {
@@ -58,13 +102,27 @@ pub(crate) fn carbon(
     let font = font()?;
     let units = font.units_per_em().ok_or(Error::InvalidFont)?;
     let factor = em / units;
-    let c = font.glyph_id('C');
     let h = font.glyph_id('H');
-    let bounds = font.outline(c).ok_or(Error::InvalidFont)?.bounds;
-    let origin = position[0] - (bounds.min.x + bounds.max.x) * factor / 2.0;
+    let mut letters = Vec::new();
+    let mut advance = 0.0;
+    let mut anchor = None;
+    for character in symbol.chars() {
+        let glyph = font.glyph_id(character);
+        if anchor.is_none() || hydrogen_left {
+            anchor = Some((glyph, advance));
+        }
+        letters.push((glyph, advance));
+        advance += font.h_advance_unscaled(glyph);
+    }
+    let (glyph, prefix) = anchor.ok_or(Error::InvalidFont)?;
+    let bounds = font.outline(glyph).ok_or(Error::InvalidFont)?.bounds;
+    let origin = position[0] - prefix * factor - (bounds.min.x + bounds.max.x) * factor / 2.0;
     let baseline = position[1] + (bounds.min.y + bounds.max.y) * factor / 2.0;
     let sub_factor = factor * 2.0 / 3.0;
-    let mut glyphs = vec![(c, origin, baseline, factor)];
+    let mut glyphs = letters
+        .into_iter()
+        .map(|(glyph, offset)| (glyph, origin + offset * factor, baseline, factor))
+        .collect::<Vec<_>>();
     if hydrogens != 0 {
         let digits = if hydrogens == 1 {
             String::new()
@@ -83,7 +141,7 @@ pub(crate) fn carbon(
             subs.reverse();
             h_origin = cursor - font.h_advance_unscaled(h) * factor;
         } else {
-            h_origin = origin + font.h_advance_unscaled(c) * factor;
+            h_origin = origin + advance * factor;
             let mut cursor = h_origin + font.h_advance_unscaled(h) * factor;
             for digit in digits.chars() {
                 let glyph = font.glyph_id(digit);
