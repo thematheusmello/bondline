@@ -1349,3 +1349,16 @@ and SDF physical-H topology remain strict. A cheap preflight reuses the renderer
 MAX_HIT_REGIONS before derived topology allocation; no new quota or latency guarantee is
 inferred. Source-free/CDXML keep literal behavior. No parser, font, old oracle/fixture,
 approved golden, dependency or runtime asset changes; callers/native evidence are separate.
+
+## Source-aware registered MOL capture, 2026-11-14
+
+[Independent original-MOL evidence](../verification-mol-display-tests.md) connects complete
+captured Drawing ownership to the shared IO policy above, preserving actual individual-MOL
+coordinates instead of SDF packing. Both ordinary CCO/CN inputs use unchanged external
+consumers and explicitly authored expected H/geometry; no reference diagram is copied.
+Source backing, not associated filename/encoding, selects display policy. Counts remain
+ephemeral and grant no new edit/Save authority. The current Engine scene delegate exposes
+that same source-aware producer to the native vector caller without an IO dependency in
+the UI. Existing public JSON command/PNG shapes, source-free/CDXML literal behavior and
+all source/persistence guards remain separate from depiction. Native execution follows
+its own acceptance gate; no new glyph oracle or approved golden is claimed.

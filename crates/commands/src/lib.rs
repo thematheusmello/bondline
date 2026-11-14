@@ -211,6 +211,8 @@ pub enum Error {
     #[error(transparent)]
     SdfPreview(#[from] bondline_io::sdf::preview::PreviewError),
     #[error(transparent)]
+    Display(#[from] bondline_io::display::DisplayError),
+    #[error(transparent)]
     SmilesFile(#[from] bondline_io::smiles::SmilesFileError),
     #[error("opening a new document requires explicit permission to discard unsaved changes")]
     UnsavedChanges,
@@ -289,6 +291,7 @@ impl Error {
             Self::Mol(error) => error.code(),
             Self::Sdf(error) => error.code(),
             Self::SdfPreview(error) => error.code(),
+            Self::Display(error) => error.code(),
             Self::SmilesFile(error) => error.code(),
             Self::SdfQueryPageLimit => "resource_limit",
             Self::SmilesQueryLimit => "resource_limit",

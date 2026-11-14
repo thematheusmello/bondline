@@ -1,9 +1,8 @@
 use crate::files::{Completed, Completion, FilePlan};
 use crate::{CommandResult, Engine, Error, StoredContent};
 use base64::{Engine as _, engine::general_purpose::STANDARD};
-use bondline_render::{
-    Cancellation, MAX_CAPTURE_DIMENSION_PX, cpu_scene_with_cancel, graph_page_scene_with_cancel,
-};
+use bondline_model::PageId;
+use bondline_render::{Cancellation, MAX_CAPTURE_DIMENSION_PX, cpu_scene_with_cancel};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Weak};
@@ -54,6 +53,23 @@ impl Engine {
     pub fn capture_stamp_matches(&self, stamp: &CaptureStamp) -> bool {
         stamp == &self.capture_stamp()
     }
+
+    /// Shared current Drawing scene for native vector painting; it grants no edit authority.
+    pub fn drawing_page_scene(
+        &self,
+        width: u32,
+        height: u32,
+        page_id: PageId,
+        cancel: &Cancellation,
+    ) -> Result<bondline_render::GraphScene, Error> {
+        Ok(bondline_io::display::drawing_page_scene(
+            width,
+            height,
+            self.stored_document()?,
+            page_id,
+            cancel,
+        )?)
+    }
 }
 
 fn capture_scene(
@@ -72,21 +88,13 @@ fn capture_scene(
                 cancel,
             )?)
         }
-        _ => {
-            let page = content
-                .drawing()?
-                .model()
-                .pages()
-                .iter()
-                .find(|page| page.id().get() == params.page_id)
-                .ok_or(bondline_model::Error::MissingPage(params.page_id))?;
-            Ok(graph_page_scene_with_cancel(
-                params.width_px,
-                params.height_px,
-                page,
-                cancel,
-            )?)
-        }
+        _ => Ok(bondline_io::display::drawing_page_scene(
+            params.width_px,
+            params.height_px,
+            content.drawing()?,
+            PageId::new(params.page_id).ok_or(Error::InvalidPageId)?,
+            cancel,
+        )?),
     }
 }
 

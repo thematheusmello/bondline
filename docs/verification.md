@@ -2301,3 +2301,20 @@ overlong V3000 header and extracted-static-error lint failures are retained expl
 Root independently verified all5 frozen files,16 logs,296 protected files and two exact SDF
 source regions before receiving. This library gate establishes no command, GPU or native
 window workflow by itself; command/UI callers and independent acceptance follow separately.
+
+## Ordinary MOL registered capture, 2026-11-14
+
+[Four fixed independent cases](verification-mol-display-tests.md) observe actual ethanol
+CPU missing-OH RED36380, then4-case GREEN12551 unchanged. Both exact raw MOL versions now
+match literal-H expectations over every1024² CPU/GPU RGBA byte, preserve source directions,
+authored None, literal zero/unusual counts, exact Save/reopen, history and cancellation.
+Bare-H, removed-bond and mirrored-geometry controls distinguish the expected scene. The
+unchanged external molecular consumer checks source graph/H/coordinates independently;
+the protected literal renderer is not a second glyph rasterizer or approved golden.
+
+Full command package79556 passes205 tests on v1. An additive Engine scene delegate fixes
+Root's direct-IO UI dependency mistake without a manifest/lock change; final v2 focused
+84172, all-target clippy35137 and rustfmt pass. Root verified270 protected files,7 received
+backend inputs,8 logs, original RED reconstruction and pinned font/golden before copying
+the two acceptance files. The existing render.capture schema and25-command registry stay
+unchanged. Actual native window/UI workflows and full receiving gates remain separate.
