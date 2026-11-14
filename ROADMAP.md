@@ -80,6 +80,12 @@ backing/import/layout, aromaticity/stereo/perception and canonicalization remain
 Full M0
 inventory/dialog/addressability gaps remain tracked while this format work proceeds.
 
+The restricted carbon-path layout now also has a create-only filesystem converter into
+new editable native CDXML. Its 64 KiB input, source preservation, publication failure/race
+guards and independently consumed actual output pass the local 670-test aggregate.
+The shared conversion command/adapters are the next slice; this library API does not
+provide source-backed SMILES Open/Save, a native conversion flow or general cleanup.
+
 
 Standalone CDXML source preservation and checked existing-attribute replacement have
 original-fixture/Expat and ASan smoke evidence plus one pinned unchanged RDKit corpus

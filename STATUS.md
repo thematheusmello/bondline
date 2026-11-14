@@ -16,26 +16,28 @@ availability is indicated again. Continue source and headless work.
 
 ## Current revisions and gates
 
-Public main is2ea6f827447fe7cda24c5d283c54f795f5df3f60: the20-command aromatic/corpus
-foundation plus durable disabled-Actions policy/badge. Source7c596d9's hosted43588963839
-completed successfully before disablement; those historical runs were not rerun. Main
-contains8fetched files/5bundles/3original SMILES checks; code is not source-backed SMILES
-application import. The exact last source-specific evidence is in verification-smiles-aromatic.md.
-No new remote jobs are authorized during development.
+Published main before this receiving commit is c2b739a: the 20-command aromatic/corpus
+foundation, validated carbon-path layout and durable disabled-Actions policy. Historical
+7c596d9 run 43588963839 completed successfully before disablement; it was not rerun.
+The corpus has eight fetched files/five bundles/three original SMILES checks. No new
+remote jobs are authorized. A fresh paginated readback covers all 54 existing runs and
+finds no nonterminal job; repository enabled=false and workflow disabled_manually.
 
-Root branch feat/smiles-layout-integration now receives e5fe306's seven-file geometry slice,
-on7c596d9, and merges the separate Actions policy. Root strictly checked all7intentional/
-15logs/28protected records plus retained v1 handoff; independent review8279bd3a…f244b2
-resolved the one literal invalid_params spelling issue. No geometry/oracle/model/lock/
-asset changes were needed for that correction. Production layout d740cff2…5e193 is exact.
-Root adds an explicit parsed-aromatic refusal/source-sharing integration test.
+Root branch feat/smiles-conversion-integration now receives exact IO source 6a73107 on
+c2b739a. Its create-only SMILES→new native CDXML API reuses bounded native reads and the
+existing publisher, retains original notation through publication and never overwrites
+input or an existing output. Root checked seven intentional files, nine logs, two
+baseline records and 139 protected-file hashes. See verification-smiles-conversion-io.md.
+No parser/layout/publisher/model/render/oracle/lock/asset change was required.
 
-Local cargo xtask ci64532 exits0:656workspace+3bridge=659,0failed/ignored; fmt/all-target
-clippy/layers/unchanged native licenses/assets/8file5bundle corpus all pass. Log80241B/SHA
-57cb322896d2f7bf6fc4f9be261df5f4dd856ffce2e7888093ace1cb02c247e3.
-All1–12 paths at48pt/origin72/A4 have actual CPU/reference-Scene ink checks, analytic and
-40-digit Decimal/Expat/RDKit actual-CDXML evidence and strict native-profile reopen equality.
-A qualified JSON transport1ULP observation did not weaken raw XML/model assertions.
+Local cargo xtask ci session 44921 exits 0: 667 workspace + 3 bridge = 670 passed,
+0 failed/ignored; fmt/all-target clippy/layers/unchanged native licenses/assets/eight-file
+five-bundle corpus all pass. Log 81,417 B, SHA256
+5e5ace7b06d76566f67b8a949e0fcf028d476e590342605f6a13afc14c9bc1e3.
+Actual output for all 1–12 supported paths faces unchanged Expat/Decimal/RDKit consumers
+and strict fully-mapped reopen/edit checks; original input bytes/hash/mode/mtime remain.
+Geometry's prior 659-test gate and qualified JSON transport 1 ULP observation are recorded
+in verification-smiles-layout.md; raw XML/model assertions remain exact.
 New-source Windows/Linux and native UI are unverified; no hosted run will be started.
 
 ## Delivered receiving scope
@@ -60,9 +62,12 @@ explicit-H Fragment writer, named opt-in neutral fixed-H normalization. H/C/N/O/
 profile only; source IR and model None semantics stay unchanged. Literal/graph/limits and
 unchanged pinned external unsanitized/separate sanitized consumers pass. No application
 source backing/import/layout/clipboard, live inference, aromatic model mapping/perception, stereo or
-canonicalization follows. The separate carbon-path geometry library returns a new pure
-Document for1–12 neutral nonisotopic C/Single paths after topology/ink/page checks; it is
-not general cleanup, application import or a file conversion. RXN is a container library.
+canonicalization follows. Carbon-path geometry returns a new pure Document for 1–12
+neutral nonisotopic C/Single paths after topology/ink/page checks. The new IO converter
+writes that drawing as create-only native CDXML under a distinct 64 KiB read budget,
+with metadata-only receipts and truthful publication errors. Registry/CLI/MCP conversion
+and native flow remain pending; source-backed SMILES Open/Save is separate missing work.
+RXN is a container library.
 
 Current aromatic fuzz evidence is linked above. Earlier fixed-H/export sourcee647196
 separately passed ASAN45229 with its five-seed set; do not relabel that run as aromatic
@@ -104,25 +109,38 @@ ship. Existing restoration exceptions remain recorded. Only approved golden SHA:
 
 ## Active work and next steps
 
-Geometry producer/reviewers are terminal; no live worker jobs. Their versioned handoffs
-and exact reports are in docs/verification-smiles-layout.md. Root owns Git, integration
-and next assignments. Check live agents before resuming; do not duplicate existing work.
+Root owns Git/integration/publication. Check live agents and their worktrees before
+resuming; do not duplicate work. All keep GUI/input/activation and Actions off.
 
-Root Cargo/fuzz jobs are terminal (latest659 gate64532). No native app/controller/helper
-is live. The user is actively using the desktop; an Up state or elapsed time does not revoke
-that instruction. Keep Cargo targets separate per worktree; incremental0, Root default
-debug and sibling debug0. Disk has ample room after an external change; no cleanup needed.
-The approved render golden and archived exact native CLI remain untouched.
+- native_acceptance: completed frozen converter in bondline-rxn, now committed 6a73107;
+  no live jobs. Handoff SHA256 996fdbad…bc5545055 is documented above.
+- reference_map: shared conversion command/CLI/stdio/authenticated loopback in
+  bondline-mol-v3000, branch feat/smiles-conversion-command. Root ported exact 6a73107
+  under the 18-file draft, preserving 17 files byte-for-byte and combining only the two
+  provenance appendices. Recoverable stash dfaf24f884569c8702e7e679493b3619815750ca is
+  retained; do not reapply. Actual missing-command runtime RED exists; GREEN is pending.
+  Worker owns all subsequent scoped Cargo jobs and must report handles/failures.
+- sdf_setter_review: neutral elemental/literal-H label rendering in
+  bondline-render-labels, branch feat/neutral-element-labels. Old carbon oracle/golden
+  remain exact. Uniform independent FreeType 4× BOX calibration and bounded 8× convergence
+  evidence are being completed; do not claim this WIP delivered or natively verified.
 
-1. Commit/publish this local-gated geometry/policy integration and fast-forward main after
-   checking ancestry. Do not trigger/enable Actions. Verify the disabled state after push.
-2. Implement named create-only SMILES→new native CDXML conversion using bounded native
-   input and existing atomic publication. Preserve input bytes/mode and refuse overwrite,
-   unsupported/oversized data or cancelled work; source-backed SMILES Open/Save stays separate.
-   Wire the same operation through shared lease/plans, registry, CLI/MCP/loopback and later UI.
-   New native flow acceptance waits for user availability.
-3. Continue full M1 then M2–M5: general SMILES/backing/layout, SDF chemical display/editor,
-   RXN/reactions and visible roadmap. Full M0 inventory/dialog addressability, broader
-   rendering/platform evidence remain open. Do not pause/block/complete at this checkpoint.
+Root's latest Cargo gate 44921 is terminal. No native app/controller/helper is live.
+The user remains active on the desktop. Keep Cargo targets separate, incremental=0,
+Root default debug and sibling debug=0. No cleanup is needed. Preserve the approved
+golden and archived exact native CLI/evidence.
+
+1. Commit this local-gated IO receiving state, then integrate the real shared conversion
+   command after its scoped tests, independent consumers and lease/close/worker checks.
+   Reuse the existing save reservation through finish/drop, never relabel the active
+   document saved or auto-open a newly converted artifact. Keep source-backed Open/Save
+   missing. Publish only locally passing commits; do not trigger/enable Actions.
+2. Review/integrate the neutral-element rendering slice only after its frozen evidence.
+   No inference, unsupported chemical display, authority bypass or asset replacement.
+3. When user availability permits, verify the actual native conversion→Open→edit→Save→
+   reopen flow. Until then continue headless M1 then M2–M5 work: general SMILES/backing/
+   layout, SDF chemical display/editor, RXN/reactions and the visible roadmap. Full M0
+   inventory/dialog addressability and broader rendering/platform evidence remain open.
+   Do not pause/block/complete the goal at this checkpoint.
 
 No new golden approval, PR/release/installer/signing, account/TCC or unrelated messages.

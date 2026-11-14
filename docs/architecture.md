@@ -217,4 +217,7 @@ The separate named carbon-path layout creates a new pure drawing from a narrow n
 profile, checking actual topology, analytic geometry and reference-scene ink/page bounds.
 It preserves the original source/IR, adds positions without changing normalized metadata,
 and grants no application SMILES association or source-backed Save authority. Explicit file
-conversion and native input workflows are separate operations; see verification-smiles-layout.md.
+conversion now has a create-only IO API using the shared bounded reader and native publisher;
+it retains the complete input owner through publication, returns metadata, and makes no
+session association. Registry and native input workflows remain separate operations;
+see verification-smiles-layout.md and verification-smiles-conversion-io.md.
