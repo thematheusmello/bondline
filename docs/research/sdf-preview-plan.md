@@ -1,8 +1,8 @@
 # Next M1 slice: faithful all-record SDF display
 
 2026-11-14. Original implementation plan. Data, resolved labels and restricted headless
-capture are now delivered; see the linked verification records. Native UI/cache and actual
-workflow acceptance remain pending. The current source-file/record-query foundations do
+capture and native UI/cache wiring are now delivered; see the linked verification records.
+Independent actual-frame tests pass; actual native-window workflow acceptance remains pending. The current source-file/record-query foundations do
 not complete chemical display. Full target remains every supported record with retained
 source, useful geometry, correct labels and honest unsupported-data diagnostics.
 
@@ -104,11 +104,12 @@ image prerequisites. Independent actual PNG acceptance covers ordinary VAL-absen
 in two source orientations, both records, OH/NH2, full CPU/GPU/literal-reference RGBA and
 semantic negative controls; CLI/stdio/authenticated loopback preserve exact whole-source Save.
 The renderer still supports only neutral nonisotopic/nonradical Single depiction, with
-honest complete-capture failure for unsupported records/ink/scale. No native view, new golden
-approval, general cleanup or reference arrangement parity follows. Next is the UI/job/cache
-boundary above, followed by actual native acceptance when the user indicates availability.
+honest complete-capture failure for unsupported records/ink/scale. Native UI/cache wiring and
+independent texture/paint/retirement checks now pass below;
+no native-window workflow, new golden approval, general cleanup or reference arrangement
+parity follows. Actual native acceptance waits for explicit user availability.
 
-## Concrete next native boundary (read-only source review)
+## Native boundary implementation (original source review and delivered wiring)
 
 The current BondlineApp::update and FileWorkflow::complete_close_if_idle already share an
 Engine lock and registered executor. Add one narrow UiCaptureWork mirroring prepare_ui_file:
@@ -128,5 +129,8 @@ logical readability at high DPI; do not assume device-pixel font bounds prove th
 First tests must expose pre-spawn close registration and post-completion decode/publication
 gaps, dropped/failed work release, source A→B→A, field edit/Undo/Redo and resize/DPI stale replies,
 busy retry/cancel/error behavior, actual both-record PNG pixels and unchanged authored/saved/
-trusted-file state. These are proposed tests, not executed UI evidence. Actual native workflow
-checks still wait for explicit user availability; Actions remains disabled.
+trusted-file state. The six independent tests now pass unchanged through the actual app-frame
+and real image
+path; see ../verification-sdf-native-preview-tests.md. This is headless egui evidence, not
+native-window/compositor evidence. Actual native workflow checks still wait for explicit
+user availability; Actions remains disabled.

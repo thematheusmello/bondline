@@ -217,7 +217,27 @@ not universal CTfile perception. Opposed-neighbour H attachment now has runtime 
 and independent font/CPU/GPU tests, without new native failure or workflow evidence.
 
 General normal-valence/charge/aromatic/radical/stereo policy, other bond orders, congestion,
-reference packing and native molecular display remain unresolved. The old literal entry
-still does not infer H. Native wiring needs registered jobs, stale source/revision/generation/
-viewport/DPI rejection and close draining; actual acceptance waits for user availability.
+reference packing and actual native molecular display acceptance remain unresolved. The old
+literal entry still does not infer H. Native SDF wiring now has registered jobs, full stale
+keys/logical DPI checks and close draining, with independent real-frame evidence; actual
+window/input acceptance still waits for user availability.
 Do not hide these gaps with rotated geometry, dropped records/H or fixture-only claims.
+
+## Native preview controls and listener-test uncertainty
+
+The preview's transient Cancel/Retry/Records controls are original host presentation and
+currently have no new named MCP action. Full UI control addressability remains an M0 gap.
+One repeated parallel MCP gate failed the unchanged listener-shutdown assertion; isolated,
+serialized and Root's full default825 gate pass without listener/assertion changes. Port
+reuse is only a hypothesis; its cause is unestablished. Preserve the failed log and revisit
+with decisive evidence if it repeats; a later pass does not establish a fix.
+
+## Ordinary MOL absent-H depiction
+
+Source inspection shows fully mapped source-backed MOL can retain authored None and still
+reach the literal renderer's bare O/N labels. This is not a newly observed runtime failure.
+The next independent gate and exact un-packed CCO/CN coordinates are in
+[the MOL display plan](../research/mol-display-plan.md). Share the existing closed display
+facts rather than infer in the renderer, preserve source/None/literal H0, and keep generic
+native/CDXML semantics separate. No general normal-valence or CDXML absent-H solution is
+claimed by the SDF work.

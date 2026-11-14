@@ -305,12 +305,13 @@ The Rust API now exposes `Engine::content()` for all content, while `document()`
 
 The native chooser/known Save/retry routes are wired to the same commands. SDF uses one
 Open/Save family with `.sdf`/`.sd` hints. The workspace clears old drawing interactions and
-shows a static count/record summary with chemical preview explicitly unavailable. This is
-an original partial presentation, not the observed26.1 all-record drawing layout. Explicit
-field inspection and existing-value editing are available through the shared commands below.
-The explicit capture route below is separate from this native table. A native molecular
-view and field UI/editor remain missing; native file acceptance is separate from this
-command slice, which performs no native field edit.
+now schedules an asynchronous read-only chemical preview with a collapsed metadata detail.
+It uses the same render.capture route and complete source, not an authored drawing. Actual
+app-frame/uploaded-image/paint/cache/close behavior passes headless tests; the new operating-
+system window workflow remains unverified. The no-executor compatibility helper still shows
+only its static metadata table. Original packing/control choices do not establish reference
+visual parity. Shared field inspection/existing-value editing remain separate from the
+missing native field editor; earlier actual native file acceptance has its own source scope.
 See [SDF session evidence](verification-sdf-session-files.md).
 
 `render.capture` accepts only virtual `page_id:1` for SDF; another positive ID returns
@@ -328,8 +329,8 @@ Shared24pt/unit and translation-only72pt rows are original packing. Actual label
 must fit the physical paper and readable font bounds. Later unsupported records, unsafe
 placement, unreadable scale or resource limits refuse the entire capture; no first-record
 fallback, invented geometry or H suppression is allowed. CPU/GPU use the same scene.
-This is headless source-to-image support, not general chemical clean-up, native preview,
-new format export or full reference parity. See [command evidence](verification-sdf-capture-command.md)
+The same producer is now wired to read-only native preview; its actual window workflow is
+unverified. No general chemical clean-up, new export format or full reference parity follows. See [command evidence](verification-sdf-capture-command.md)
 and [independent image/adapter evidence](verification-sdf-capture-oracles.md) for scoped
 verification and remaining limits.
 
@@ -765,3 +766,19 @@ captured historical source/file/revision like sdf.record.inspect, with current c
 fields refreshed; input/gen stamps identify the source. A newer Open is not overwritten.
 No save lease, mutation, native file binding/ACK, selection, preview or repaint follows.
 See verification-smiles-record.md for core scope and separate receiving evidence.
+
+## Native preview host contract (Rust adapter)
+
+CaptureStamp is opaque Weak-content/revision/generation identity, not serialized input or a
+source lease. CommandExecutor::prepare_ui_capture validates it and close context under the
+same Engine mutex before reserving its worker; the host releases its frame lock before that
+call and keeps pending intent in close busy state. UiCaptureWork still calls the existing
+registry. No new wire command or native file binding/ACK/Save lease is introduced.
+
+PngCapture::png_bytes preflights the pinned own PNG/base64 envelope under dimension-specific
+bounds; the native decoder still validates payload/CRC. Actual main-label em is Rust-only
+presentation data and is omitted from JSON, which retains its six PNG fields. The UI tracks
+its job through decode/publication/retirement after command completion, rejects full source/
+view/DPI/close-epoch stale results and checks logical readability before painting. Current
+Cancel/Retry/Records controls are local transient presentation, not newly addressable MCP
+tools; complete control inventory/addressability remains incomplete M0 work.

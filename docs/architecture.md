@@ -191,7 +191,7 @@ plans. Registry Open validates all records outside the engine lock and applies o
 Save borrows complete current source through the existing bounded atomic publisher. No
 wrapper writer, first-record projection or field-name dictionary reconstructs an import.
 Drawing accessors return typed unsupported_content errors for collections. Static UI
-metadata clears prior gesture/hit/paper state and declares native chemical preview unavailable;
+metadata clears prior gesture/hit/paper state; the no-executor compatibility helper has no preview;
 all-record chemical display, a field-edit UI and record operations remain separate work. See
 verification-sdf-session-files.md for exact source/consumer/history/lifecycle evidence.
 
@@ -275,6 +275,20 @@ A separate renderer entry consumes exact resolved counts and chooses label attac
 it performs no valence perception. Actual glyph/mask/stroke ink must fit the paper. The
 legacy literal path, font and approved golden stay exact. The same scene feeds CPU/GPU
 and the existing PNG response. Historical/current lifecycle, cancellation and registered
-worker/reply barriers stay shared; capture acquires no Save reservation. Native SDF
-preview/cache wiring remains the next work, with stale source/revision/generation/viewport/
-DPI rejection and registration before spawn. See the scoped SDF capture verification.
+worker/reply barriers stay shared; capture acquires no Save reservation.
+
+The native SDF adapter now uses a narrow UiCaptureWork reserved before spawning, plus one
+UI job retained through PNG/decode/publication/thread retirement. Its key includes opaque
+Weak content/revision/generation, close epoch, logical rectangle, actual physical dimensions
+and DPI. Texture/error/hit state is cleared on invalidation; only matching Open-context
+results install. The PNG bridge validates the pinned own-output envelope before the existing
+native decoder; actual main-label em is Rust-only and omitted from wire JSON. UI display
+checks logical readability with actual image ratios. Registry execution still shares its
+existing two-worker budget; the single bounded UI decode/publication stage stays tracked
+separately for close after command completion. There is no new general job pool.
+
+Actual app-frame/texture/paint instructions are headlessly tested; operating-system window/
+compositor behavior is unverified. Cancel/Retry/Records are transient controls whose full
+public addressability remains part of M0. See verification-sdf-native-preview.md and its
+independent acceptance record. Ordinary source-backed MOL still needs its separate absent-H
+display gate; mapping coverage alone cannot certify faithful depiction.

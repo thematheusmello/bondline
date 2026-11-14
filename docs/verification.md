@@ -2254,3 +2254,27 @@ All545 tracked non-Markdown files remain exact after the gate. This is headless/
 Mac evidence; native SDF remains a table, with no new native/Windows/Linux/hosted/fuzz run,
 new golden approval or M0/M1 completion. Actions remains disabled. The existing display
 plan now records the concrete unimplemented native job/cache/identity/decoder next step.
+
+## Registered native SDF preview wiring, 2026-11-14
+
+[Actual metrics](verification-preview-metrics.md), [capture identity/PNG bridge](verification-preview-capture-contract.md),
+[registered native work](verification-preview-registered-work.md), [UI](verification-sdf-native-preview.md)
+and [independent actual-frame acceptance](verification-sdf-native-preview-tests.md) now connect
+source-to-image to a cancellable read-only workspace. Initial compiler REDs are retained;
+actual first UI six cases pass unchanged. They establish real egui texture/mesh and worker
+ownership behavior, not an executed operating-system window or new approved golden.
+
+Root default66690 cargo xtask ci passes source62e9160:822workspace+3Mac bridge=825,
+0failed/ignored,129 result lines, fmt/clippy/layers/unchanged runtime-license/asset/corpus
+gates. Log99164B/SHAa077c4974b180f1be9eea0d246a2e591857472e788ad2ef7731f8f82b5aced92.
+The premature8628 receiving attempt stopped130 and is not a pass. A prior repeated MCP
+parallel gate failed one unchanged listener-shutdown assertion; exact/serial and Root's
+fresh default gate pass, without establishing a cause/fix or changing that assertion.
+
+[Capture-envelope ASan](verification-capture-image-fuzz.md) separately passes10000 runs,
+23-seed replay and isolated all-nine check/clippy/fmt, preserving old lock versions. Maximum
+exercised input87481B is not full-image/ceiling/security proof. Future ninth workflow YAML
+and exact6seed generator/Pillow/replay pass locally; Actions remains disabled. No native,
+other-platform or hosted run follows. Actual native preview acceptance and full M0/M1
+remain incomplete. The next source-derived, unexecuted MOL depiction gate is preserved in
+research/mol-display-plan.md rather than claiming ordinary absent-H MOL is already fixed.

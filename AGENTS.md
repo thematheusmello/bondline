@@ -167,7 +167,8 @@ SDF is a mixed V2000/V3000 source container and complete application-content var
 Shared Open/Save retain every record. sdf.record.inspect exposes bounded ordered fields;
 sdf.field.set_value edits one existing occurrence through immutable deferred candidates.
 The restricted render.capture SDF virtual page1 now uses all-record derived display data;
-the native view is still a table. Field-edit UI/record operations remain missing. Preserve off-lock
+the native read-only preview is wired and headlessly tested; actual native acceptance,
+field-edit UI and record operations remain missing. Preserve off-lock
 work, exact no-op sharing, stale revision/generation/Arc checks, saved/original distinctions
 and the same worker/reply/close barriers. Explicit data results are separate from automatic
 metadata-only state/Debug; see control-protocol.md for input/output budgets.
@@ -448,9 +449,27 @@ page1; preview never becomes a drawing, history entry or Save/export authority. 
 projection/scene failures refuse the whole capture. See verification-sdf-preview-model.md,
 verification-sdf-display-render.md and verification-sdf-capture-command.md under docs/.
 
-Next native work must reuse this registered command. Reserve work under the engine mutex
-before spawning, keep close draining through decode/result retirement, and reject stale
-source/revision/generation/viewport/DPI results before displaying anything. Do not call
-execute_blocking only after spawning and assume that closes the registration gap. The
-native SDF table has not gained a preview. Actual UI workflow verification waits for explicit
-user availability; synthetic/offscreen checks are separate. Actions stays disabled.
+Native preview now reuses the registered capture through UiCaptureWork, reserved under the
+Engine mutex before spawning. The UI retains a single job through off-thread bounded PNG/
+ColorImage decode, channel publication and actual thread retirement. CaptureStamp has opaque
+Weak-content/revision/generation identity, never Serialize or a source lease. UI keys also
+include close_epoch, actual logical rectangle, physical dimensions and effective DPI; changed
+keys clear old textures/errors/hits immediately. The renderer supplies main-label em from
+actual labels; it is Rust-only metadata omitted from PngCapture JSON. Logical readability
+must use actual destination/capture ratios, including a uniform2048 cap, not DPI alone.
+
+Keep pending intent in close busy checks before registration, and keep the real job after
+command completion through decode/publication/retirement. Do not replace this with an
+execute_blocking call first invoked inside a new thread. Join only after is_finished; normal
+close drains, while forced host Drop cancels cooperatively. The legacy public no-executor
+workspace helper still displays metadata; independent UI tests use the actual app frame.
+Native SDF preview is wired/headlessly tested, not natively verified. Cancel/Retry/Records
+are transient presentation controls; complete public control-addressability remains M0 work.
+Actual windows/input/activation still wait for explicit user availability. Actions stays off.
+
+Next source-derived M1 fidelity gap: ordinary VAL-absent source-backed MOL can pass mapping
+coverage yet reach the literal renderer as bare O/N. Read docs/research/mol-display-plan.md;
+its raw-MOL coordinates differ from SDF packing. Observe the independent runtime RED before
+changing behavior. Share display facts below UI, preserve authored None/literal zero and
+source bytes, retain the complete drawing owner for deferred classification and route both
+native graph construction sites. Do not infer general CDXML/native H semantics from MOL.

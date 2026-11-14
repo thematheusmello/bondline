@@ -41,9 +41,12 @@ guides are versioned evidence, not proof of complete modern parity.
 A restricted all-record SDF capture route now connects source-preserving mixed-version
 projection, separate display-H provenance and faithful resolved-H labels through the
 existing command/CLI/MCP interfaces. Ordinary VAL-absent CCO/CN, both source orientations,
-full CPU/GPU image comparisons and exact Save pass headlessly. The native workspace still
-shows a table. Next is registered asynchronous native preview with stale-cache/close guards,
-then actual native acceptance when the user is available. This is partial M1, with Single/
+full CPU/GPU image comparisons and exact Save pass headlessly. The native read-only workspace
+preview now has registered background work, source/view/DPI/
+close-epoch invalidation and independent actual-frame texture/paint/retirement tests. Actual
+native-window acceptance still waits for user availability. The next unblocked source-level
+M1 fidelity check is ordinary MOL absent-H depiction; see docs/research/mol-display-plan.md.
+This is partial M1, with Single/
 neutral chemistry and explicit whole-capture refusals; general layout and reference packing
 remain open. See docs/verification-sdf-capture-command.md and the linked independent evidence.
 
@@ -52,10 +55,11 @@ ordered data byte through current/saved/history and all shared adapters. Native 
 version Open/Save/Unicode Save As/reopen and failed-import retention now pass onbb6d5b9;
 the690-byte and additional refusal checks are controller-only. Root's590 gate and matching
 three-platform hosted checks pass. Bounded field inspection/existing-value commands now pass engine/CLI/MCP tests.
-Native chemical preview/cache, field-edit UI, record operations and
+Actual native chemical preview acceptance, field-edit UI, record operations and
 broader SDF interoperability remain missing; see docs/verification-sdf-session-files.md and
-docs/verification-native-sdf-and-extension.md. SDF uses a static summary, unlike the reference's
-observed all-visible molecular drawings. This is not M1 completion.
+docs/verification-native-sdf-and-extension.md. That earlier native build used a static summary;
+the new read-only preview is wired/headlessly tested, with its native workflow unverified.
+This is not M1 completion.
 
 The V3000 application slice now retains versioned source/header/frame/history and exposes
 both versions through the existing two shared MOL commands. Auto Save keeps its associated

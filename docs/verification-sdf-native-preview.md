@@ -1,8 +1,8 @@
 # Registered SDF preview UI wiring
 
 2026-11-14. The actual native application now schedules read-only SDF capture through
-the existing registry. This record initially covers compilation and component tests;
-independent real texture/paint acceptance and the aggregate gate are pending. No native
+the existing registry. This record includes component, independent texture/paint acceptance and the full local
+receiving gate below. No native
 window or input was used because the user remains active. Actions stays off.
 
 ## Implementation boundary
@@ -76,3 +76,32 @@ font, old oracle or approved golden changed in this wiring slice.
 
 No native, Windows/Linux, hosted workflow or new golden approval follows. Full M0/M1 and
 M2–M5 remain incomplete; current CI/fuzz/interop evidence retains its prior exact scopes.
+
+## Receiving frame and aggregate evidence
+
+[Independent acceptance](verification-sdf-native-preview-tests.md) passes all six fixed
+cases unchanged at20466, with107 UI tests/clippy/fmt at37563. Actual registered source
+pixels are independently decoded and compared to the uploaded opaque ColorImage; that
+same texture must occur in the actual native-frame mesh/UV/clip instructions. Real staged
+success/decode-error/close-epoch jobs retain lifetime gates through thread retirement.
+No expectation, probe, threshold or production correction was needed after first compile.
+
+Root source62e9160 passes default cargo xtask ci66690:822workspace+3Mac bridge=825,
+0failed/ignored,129 result lines. Fmt/clippy/layers/unchanged runtime closures+two assets/
+eight-file corpus pass. Log99164B/SHA
+`a077c4974b180f1be9eea0d246a2e591857472e788ad2ef7731f8f82b5aced92`.
+All541 frozen non-Markdown workspace/source/test/config/assets remain exact; isolated
+fuzz/future disabled-workflow tooling has separate gates afterward. This preserves the
+standard default parallel test settings. The earlier unexplained repeated MCP shutdown
+failure remains documented; a later pass establishes no cause or fix.
+
+Root verified core5files/151protected/5logs/4render inputs, work4files/664protected/
+11inputs+11logs, acceptance2files/536exact+8received+6newbackend/4logs and module bridge.
+A receiving script initially misclassified that bridge; premature CI8628 was stopped130,
+its27782B/SHA312ac7d76ea87078ec7fd566e03087a2a6bc2c0b4263bb309c52ec224f9da97b log
+retained, and the corrected real receive preceded fresh825 gate. It is not a passing run.
+
+The new capture-envelope fuzz target additionally passes a bounded10000-run ASan smoke;
+see verification-capture-image-fuzz.md for its distinct corpus/tool/decoder limits. No new
+native-window/input/Windows/Linux/hosted execution or golden approval occurred. Native
+preview is wired/headlessly tested, with actual OS workflow acceptance still unverified.

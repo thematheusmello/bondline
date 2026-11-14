@@ -46,7 +46,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
 | MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |
 | CDX files | Guarded native Open/Save/Save As verified on macOS, retaining exact accepted source. Limited projection; editing and faithful preview remain unavailable. |
-| SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. CLI/MCP inspect ordered fields and edit existing values with Undo/Redo. Restricted all-record neutral/Single PNG capture works headlessly; the native view is still a summary table and field-edit UI remains missing. |
+| SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. CLI/MCP inspect ordered fields and edit existing values with Undo/Redo. Restricted all-record neutral/Single capture and asynchronous read-only preview pass headless image/lifecycle tests. Actual native preview acceptance and field-edit UI remain pending. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
 | Rendering | Shared CPU/GPU neutral-element graph scenes, literal authored H, hover and PNG captures; independent font checks and one approved carbon regression scene. New element-label native workflows remain unverified. |
 | Automation | 25 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
@@ -126,7 +126,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
 | CDX | Guarded shared/native Mac Open/Save, exact source retention, limited elemental metadata view and standalone syntax/property/new-tree APIs, checked independently | Faithful preview, broader metadata/chemistry, safe edits/new encoding and foreign/general corpus |
-| MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, with independent byte/record/data checks and restricted all-record headless SDF capture | Native chemical preview/data-edit UI, broader metadata/layout support and interactive Windows/Linux |
+| MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, with independent byte/record/data checks and restricted all-record headless SDF capture | Actual native preview acceptance, data-edit UI, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
 | SMILES | Complete accepted multi-record source Open/Save and explicit bounded record inspection through shared commands/CLI/MCP/loopback; exact opaque data/endings, explicit-H fragment export and restricted carbon-path→CDXML conversion | Chemical preview/editing of opened files, native acceptance of the wired file chooser, native export/conversion controls, general layout/valence, aromaticity/stereo and canonicalization |
 | InChI | Planned | Reference-tool comparison and import/export |
