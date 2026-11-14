@@ -11,6 +11,10 @@ ErrorKind::ConnectionAborted, excluded by the assertion. Its15-test binary has14
 one failure; the aggregate stops before native window launch. This is not Windows GREEN.
 Main remains0830a23. The test-only platform correction and later CDX filesystem source
 need a new matching run; no passing job is rerun or the observed failure erased.
+The follow-up test-only correction accepts the documented definitive ConnectionAborted
+outcome in all three closed-read assertions. Positive bytes, live/time-out/would-block reads
+still fail; production networking is unchanged. Local15 control tests and443workspace+
+3bridge aggregate pass. Corrected source requires its own actual hosted Windows result.
 
 CDX header-document framing integration6447c6ca2d83405503417a6d0e141fa6387f3538 passes every
 [43542026529](https://github.com/thematheusmello/bondline/actions/runs/43542026529) job:

@@ -1867,3 +1867,16 @@ struct/RDKit consumers. Four filesystem cases and seven injected stages verify r
 old-data retention, cleanup and truthful postpublication errors. All aggregate gates pass;
 see [verification-cdx-native-io.md](verification-cdx-native-io.md). No command/native chooser,
 new encoder, license/runtime dependency, fixture/pin or approved golden is added.
+
+## Windows terminated-socket assertion, 2026-11-14
+
+Actual hosted43549658341/Windows132308919222 fails only excess_connections in its15-case
+control binary: a terminated read returns10053/ConnectionAborted, excluded by the test.
+The observed failure remains in ci.md; no failed run is relabeled GREEN. Published Microsoft/
+Rust semantics justify admitting that closed outcome in all three closed-read assertions.
+The same16 authenticated held clients, positive-byte/live-read/timeouts rejection and
+state/authentication checks remain. No production networking or timeout code changes.
+Local control tests pass15, target/socket-closed-windows-kind-green.log, session61439 exit0.
+The new receiving-root full gate passes443workspace+3bridge, target/socket-closed-kind-ci.log,
+session98879 exit0, with the unchanged154/165/220 native closures/corpus/assets. Its Windows
+execution remains pending a new matching source run; this local pass does not prove it.

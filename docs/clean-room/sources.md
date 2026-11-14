@@ -480,3 +480,15 @@ policy, not decoded paper. Both original framed vectors are independently consum
 actual file publication using the unchanged strict cdx_oracle.py/cdx_header_oracle.py.
 Cancellation, no-clobber and publication-aware errors retain native-file-io.md's original
 contracts. No runtime dependency, asset, format permission or license policy changes.
+
+## Terminated loopback socket assertions, 2026-11-14
+
+[Microsoft Winsock errors](https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2)
+defines WSAECONNABORTED10053 as termination of an established connection. The actual Windows
+hosted read reports10053/ErrorKind::ConnectionAborted. Rust's
+[std::io::ErrorKind](https://doc.rust-lang.org/std/io/enum.ErrorKind.html#variant.ConnectionAborted)
+documents that variant as a terminated connection. The three test-side closed-read checks
+now accept it alongside their prior definitive closure results; they still reject live
+reads, bytes, timeouts and would-block. Production socket behavior/authentication/client
+limits are unchanged. This is a test portability correction using an actual hosted RED,
+not permission to ignore arbitrary transport errors. APIs compile on pinned Rust1.94.1.

@@ -349,7 +349,11 @@ fn unauthenticated_clients_cannot_inspect_or_edit_the_document()
         );
         match client.read(&mut [0; 1]) {
             Ok(0) => {}
-            Err(error) if error.kind() == std::io::ErrorKind::ConnectionReset => {}
+            Err(error)
+                if matches!(
+                    error.kind(),
+                    std::io::ErrorKind::ConnectionReset | std::io::ErrorKind::ConnectionAborted
+                ) => {}
             other => return Err(format!("rejected client stayed connected: {other:?}").into()),
         }
     }
@@ -550,6 +554,7 @@ fn framing_is_bounded_and_http_or_truncated_messages_cannot_execute_commands()
             if matches!(
                 error.kind(),
                 std::io::ErrorKind::ConnectionReset
+                    | std::io::ErrorKind::ConnectionAborted
                     | std::io::ErrorKind::BrokenPipe
                     | std::io::ErrorKind::UnexpectedEof
             ) => {}
@@ -604,6 +609,7 @@ fn excess_connections_are_closed_instead_of_spawning_unbounded_tasks()
             if matches!(
                 error.kind(),
                 std::io::ErrorKind::ConnectionReset
+                    | std::io::ErrorKind::ConnectionAborted
                     | std::io::ErrorKind::BrokenPipe
                     | std::io::ErrorKind::NotConnected
             ) => {}
