@@ -424,6 +424,71 @@ mod tests {
     }
 
     #[tokio::test(flavor = "current_thread")]
+    async fn readonly_sdf_query_reply_keeps_approved_close_blocked_until_flush_without_repaint()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let mut session = Engine::default();
+        session.dispatch("document.open_sdf",json!({"path":concat!(env!("CARGO_MANIFEST_DIR"),"/../io/tests/fixtures/sdf/ordered-fields-v2000.sdf")}))?;
+        session.dispatch(
+            "document.close",
+            json!({"expected_revision":1,"action":"request"}),
+        )?;
+        let engine = Arc::new(Mutex::new(session));
+        let executor = CommandExecutor::new(Arc::clone(&engine));
+        let before = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+        let request = serde_json::to_vec(
+            &json!({"command":"sdf.record.inspect","params":{"expected_revision":1,"record_id":1,"field_offset":3,"field_limit":1}}),
+        )?;
+        let (registered, publication) = executor
+            .prepare_json(&request)
+            .map_err(|e| e.info.message)?;
+        assert!(executor.has_active_work());
+        assert!(!acknowledge_if_idle(&executor)?);
+        let result = executor.complete(registered, std::future::pending()).await;
+        let bytes = Arc::new(Mutex::new(Vec::new()));
+        let (flushing, flush_started) = oneshot::channel();
+        let (release, released) = oneshot::channel();
+        let notified = Arc::new(AtomicBool::new(false));
+        let flag = Arc::clone(&notified);
+        let output = Arc::clone(&bytes);
+        let task = tokio::spawn(async move {
+            let mut writer = FlushGate {
+                bytes: output,
+                flushing: Some(flushing),
+                release: released,
+            };
+            publish_result(&mut writer, result, publication, &move || {
+                flag.store(true, Ordering::SeqCst);
+            })
+            .await
+        });
+        timeout(Duration::from_secs(2), flush_started).await??;
+        assert!(executor.has_active_work());
+        assert!(!acknowledge_if_idle(&executor)?);
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        release.send(()).map_err(|_| "release query flush")?;
+        timeout(Duration::from_secs(2), task).await???;
+        assert!(!notified.load(Ordering::SeqCst));
+        assert!(!executor.has_active_work());
+        let response: Value = serde_json::from_slice(&bytes.lock().map_err(|_| "output")?)?;
+        assert_eq!(
+            response["result"]["sdf_record"]["fields"][0]["dt_number"],
+            "0009"
+        );
+        assert_eq!(response["result"]["sdf_record"]["input_revision"], 1);
+        assert_eq!(response["result"]["sdf_record"]["session_generation"], 1);
+        assert!(response["result"].get("close_operation").is_none());
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        assert!(acknowledge_if_idle(&executor)?);
+        Ok(())
+    }
+
+    #[tokio::test(flavor = "current_thread")]
     async fn failed_writes_and_flushes_still_notify_committed_authored_changes()
     -> Result<(), Box<dyn std::error::Error>> {
         for fail_flush in [false, true] {

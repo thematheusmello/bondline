@@ -9,6 +9,8 @@ mod chain_support;
 mod file_support;
 #[path = "../../cli/tests/support/mol.rs"]
 mod mol_support;
+#[path = "../../../xtask/oracles/sdf_record_test_support.rs"]
+mod sdf_record_support;
 #[path = "../../../xtask/oracles/sdf_test_support.rs"]
 mod sdf_support;
 use std::{
@@ -49,6 +51,90 @@ fn authenticated(
     )?;
     assert_eq!(response, serde_json::json!({"authenticated":true}));
     Ok(client)
+}
+
+#[test]
+fn authenticated_sdf_record_queries_are_explicit_historical_readonly_without_repaint()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = sdf_support::SdfTestDirectory::new()?;
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, engine, move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    for (case, (source, mixed)) in [
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/ordered-fields-v2000.sdf").as_slice(),
+            false,
+        ),
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf").as_slice(),
+            true,
+        ),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let path = directory.path(if mixed {
+            "socket-query-mixed.sdf"
+        } else {
+            "socket-query-ordered.sdf"
+        });
+        std::fs::write(&path, source)?;
+        call(
+            &mut client,
+            &serde_json::json!({"command":"document.open_sdf","params":{"path":path}}).to_string(),
+        )?;
+        wait_for_changes(&changes, case + 1);
+        let before = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+        assert!(before["result"].get("sdf_record").is_none());
+        for record_id in [1, 2] {
+            let response=call(&mut client,&serde_json::json!({"command":"sdf.record.inspect","params":{"expected_revision":case+1,"record_id":record_id}}).to_string())?;
+            let mut result = response["result"].clone();
+            assert_eq!(
+                result["sdf_record"]["fields"],
+                sdf_record_support::expected_fields(mixed, record_id)
+            );
+            assert_eq!(result["sdf_record"]["input_revision"], case + 1);
+            assert_eq!(result["sdf_record"]["session_generation"], case + 1);
+            sdf_record_support::assert_json_budget(&result["sdf_record"], None)?;
+            result
+                .as_object_mut()
+                .ok_or("query result")?
+                .remove("sdf_record");
+            assert_eq!(result, before["result"]);
+        }
+        for (params, code) in [
+            (
+                serde_json::json!({"expected_revision":0,"record_id":1}),
+                "stale_revision",
+            ),
+            (
+                serde_json::json!({"expected_revision":case+1,"record_id":3}),
+                "not_found",
+            ),
+            (
+                serde_json::json!({"expected_revision":case+1,"record_id":1,"field_limit":65}),
+                "invalid_params",
+            ),
+        ] {
+            let response = call(
+                &mut client,
+                &serde_json::json!({"command":"sdf.record.inspect","params":params}).to_string(),
+            )?;
+            assert_eq!(response["error"]["code"], code);
+            assert_eq!(
+                call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+                before
+            );
+        }
+        assert_eq!(changes.load(Ordering::SeqCst), case + 1);
+        sdf_support::independently_read_sdf(&path, source, mixed)?;
+    }
+    server.shutdown()?;
+    Ok(())
 }
 
 fn wait_for_changes(changes: &AtomicUsize, expected: usize) {

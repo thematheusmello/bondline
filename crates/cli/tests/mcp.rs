@@ -7,6 +7,8 @@ mod chain_support;
 mod file_support;
 #[path = "support/mol.rs"]
 mod mol_support;
+#[path = "../../../xtask/oracles/sdf_record_test_support.rs"]
+mod sdf_record_support;
 #[path = "../../../xtask/oracles/sdf_test_support.rs"]
 mod sdf_support;
 use std::{
@@ -95,6 +97,100 @@ impl Drop for Client {
             let _ = reader.join();
         }
     }
+}
+
+#[test]
+fn stdio_explicit_sdf_record_queries_disclose_fields_without_mutation_or_automatic_replay()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = sdf_support::SdfTestDirectory::new()?;
+    let mut client = Client::start()?;
+    client.call(1,"initialize",json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"sdf-query-test","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let tools = client.call(2, "tools/list", json!({}))?;
+    let tool = tools["result"]["tools"]
+        .as_array()
+        .ok_or("tools")?
+        .iter()
+        .find(|tool| tool["name"] == "sdf.record.inspect")
+        .ok_or("SDF query")?;
+    assert_eq!(tool["annotations"]["readOnlyHint"], true);
+    assert_eq!(tool["inputSchema"]["additionalProperties"], false);
+    let mut id = 3;
+    for (case, (source, mixed)) in [
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/ordered-fields-v2000.sdf").as_slice(),
+            false,
+        ),
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf").as_slice(),
+            true,
+        ),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let path = directory.path(if mixed {
+            "stdio-query-mixed.sdf"
+        } else {
+            "stdio-query-ordered.sdf"
+        });
+        std::fs::write(&path, source)?;
+        client.call(
+            id,
+            "tools/call",
+            json!({"name":"document.open_sdf","arguments":{"path":path}}),
+        )?;
+        id += 1;
+        let before = client.call(
+            id,
+            "tools/call",
+            json!({"name":"document.inspect","arguments":{}}),
+        )?;
+        id += 1;
+        assert!(
+            before["result"]["structuredContent"]
+                .get("sdf_record")
+                .is_none()
+        );
+        for record_id in [1, 2] {
+            let response=client.call(id,"tools/call",json!({"name":"sdf.record.inspect","arguments":{"expected_revision":case+1,"record_id":record_id}}))?;
+            id += 1;
+            assert_eq!(response["result"]["isError"], false, "{response}");
+            let mut result = response["result"]["structuredContent"].clone();
+            assert_eq!(
+                result["sdf_record"]["fields"],
+                sdf_record_support::expected_fields(mixed, record_id)
+            );
+            assert_eq!(result["sdf_record"]["input_revision"], case + 1);
+            assert_eq!(result["sdf_record"]["session_generation"], case + 1);
+            sdf_record_support::assert_json_budget(&result["sdf_record"], None)?;
+            result
+                .as_object_mut()
+                .ok_or("query result")?
+                .remove("sdf_record");
+            assert_eq!(result, before["result"]["structuredContent"]);
+        }
+        let invalid=client.call(id,"tools/call",json!({"name":"sdf.record.inspect","arguments":{"expected_revision":case+1,"record_id":3}}))?;
+        id += 1;
+        assert_eq!(invalid["result"]["isError"], true);
+        assert_eq!(
+            invalid["result"]["structuredContent"]["error"]["code"],
+            "not_found"
+        );
+        let after = client.call(
+            id,
+            "tools/call",
+            json!({"name":"document.inspect","arguments":{}}),
+        )?;
+        id += 1;
+        assert_eq!(
+            after["result"]["structuredContent"],
+            before["result"]["structuredContent"]
+        );
+        sdf_support::independently_read_sdf(&path, source, mixed)?;
+    }
+    client.finish()?;
+    Ok(())
 }
 
 #[test]
@@ -440,6 +536,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "history.undo",
             "page.set_size",
             "render.capture",
+            "sdf.record.inspect",
             "ui.controls",
             "ui.file"
         ]

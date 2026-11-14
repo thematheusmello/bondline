@@ -788,3 +788,30 @@ partial original presentation, not verified reference visual parity. Actual nati
 acceptance, all-record chemical display, field inspection/edit commands and record operations
 remain missing or unverified. CLI/stdio/authenticated loopback and deterministic native-worker/
 egui tests are separate evidence; none claims an actual mouse/keyboard GUI workflow.
+
+## Explicit bounded SDF field inspection, 2026-11-14
+
+[verification-sdf-record-inspect.md](../verification-sdf-record-inspect.md) records the
+read-only shared query. CTFILE-2026 chapter10 printed97–99 remains the source for ordered
+field occurrences, named/textual DT identifiers, blank termination and molecular/data
+separation. The exact public PDF and original690/777-byte vectors above remain unchanged.
+Existing raw scanner/per-MOL consumers check those vectors; independent literals cover
+CRLF, spaces/tabs, opaque MOL and source-preserving DT leading zeros. No field map or
+reference-derived sample/help prose is used.
+
+The query/pagination/omission/identity budgets are original Bondline policies, not claimed
+Professional26.1 controls. RUST-ARC supports captured immutable source sharing. The pinned
+[serde_json1.0.154 to_writer](https://docs.rs/serde_json/1.0.154/serde_json/fn.to_writer.html)
+API, inspected in its existing local published source, permits exact compact-JSON byte
+counting without an oversized output allocation. A separate Python stdlib JSON process
+checks actual serialized pages, escaping, per-value bounds and maximal-prefix pagination.
+The pinned [rmcp3.9.0 structured result](https://docs.rs/rmcp/3.9.0/rmcp/model/struct.CallToolResult.html#method.structured)
+source was inspected: structured data is also returned as a text copy, so the documented
+1MiB page budget is explicitly distinct from the complete MCP envelope. Existing locks
+and SDK/serde versions remain exact; no dependency or codec change occurs.
+
+Explicit results expose ordered headers/name/DT/value lines only within those bounds;
+automatic state and all relevant Debug output remain metadata-only. Historical query
+revision/generation, off-lock work, unchanged state/history/source and the existing shared
+worker/reply/close barriers are original safety policies verified separately from any
+UI/native/reference behavior. Setter/navigation/delete/preview/editor work remains missing.
