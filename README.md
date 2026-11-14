@@ -25,8 +25,8 @@ Bondline is a native Rust desktop application with an offline command engine, ed
 chemical documents and a thin egui/wgpu interface. No account or hosted service is needed
 for ordinary drawing and saving.
 
-**Early development:** the current drawing workflow creates isolated C–C fragments.
-Connected structures, rings, general labels and chemistry analysis are still being built.
+**Early development:** draw C–C fragments and extend supported terminal carbons into
+short single-bond chains. Rings, general labels and chemistry analysis are still being built.
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
@@ -40,12 +40,13 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
 | Capability | Delivered scope |
 |---|---|
-| Drawing and history | Drag an isolated C–C bond with explicit hydrogen labels; Undo/Redo restores complete snapshots. CLI/MCP can extend a supported terminal carbon with an explicit H policy; native attachment is wired and awaits native verification. |
+| Drawing and history | Drag a C–C bond and extend a supported terminal carbon with an explicit H policy. Native C3/C4 authoring, Undo/Redo and editable CDXML reopening are verified on macOS; general chemistry remains missing. |
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files; unknown imported content remains backed by its original bytes. |
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
 | MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |
 | CDX files | Guarded native Open/Save/Save As verified on macOS, retaining exact accepted source. Limited projection; editing and faithful preview remain unavailable. |
+| SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS, retaining all records and fields. Static summary only; chemical preview and field-edit UI remain missing. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
 | Rendering | Shared CPU/GPU neutral-carbon graph scenes, literal authored hydrogen labels, transient atom/bond hover and PNG captures; one human-approved regression scene. |
 | Automation | Eighteen typed commands shared by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
@@ -93,7 +94,7 @@ Rust **1.94.1** is pinned by the repository. Linux prerequisites and the indepen
 environment are documented in [development.md](docs/development.md). Python is used for
 independent developer test oracles, not as an application runtime.
 
-Use File → Open/Save/Save As for supported CDXML, CDX or MOL documents. Cmd/Ctrl+O, S, Shift+S and W are wired;
+Use File → Open/Save/Save As for supported CDXML, CDX, MOL or SDF documents. Cmd/Ctrl+O, S, Shift+S and W are wired;
 actual Mac shortcut and accessibility-field evidence is in [native-file-ui.md](docs/native-file-ui.md).
 
 ```sh
@@ -119,7 +120,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
 | CDX | Guarded shared/native Mac Open/Save, exact source retention, limited elemental metadata view and standalone syntax/property/new-tree APIs, checked independently | Faithful preview, broader metadata/chemistry, safe edits/new encoding and foreign/general corpus |
-| MOL / SDF | MOL V2000/V3000 native files; complete mixed-version SDF Open/Save through shared adapters and wired chooser/summary, with byte/record/data retention checked independently | Actual native SDF acceptance, chemical preview/data-edit UI, broader metadata/layout support and interactive Windows/Linux |
+| MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, with independent byte/record/data checks; SDF summary has no chemical preview | Chemical preview/data-edit UI, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
 | SMILES | Bounded nonaromatic notation/source library with literal graph/token tests, qualified external consumers and sanitizer checks | Generated export, model/H policy, application import/layout, aromaticity/stereo and canonicalization |
 | InChI | Planned | Reference-tool comparison and import/export |

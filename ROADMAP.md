@@ -38,10 +38,13 @@ guides are versioned evidence, not proof of complete modern parity.
 ## M1: files — in progress
 
 The complete SDF session/Open/Save slice now retains every mixed-version record and
-ordered data byte through current/saved/history and all shared adapters. Its wired chooser
-and static summary have deterministic tests; actual native acceptance remains pending.
-Root's combined590 gate passes. Chemical preview/layout, record/field edit commands and
-broader SDF interoperability remain missing; see docs/verification-sdf-session-files.md.
+ordered data byte through current/saved/history and all shared adapters. Native Mac mixed-
+version Open/Save/Unicode Save As/reopen and failed-import retention now pass onbb6d5b9;
+the690-byte and additional refusal checks are controller-only. Root's590 gate and matching
+three-platform hosted checks pass. Chemical preview/layout, record/field edit commands and
+broader SDF interoperability remain missing; see docs/verification-sdf-session-files.md and
+docs/verification-native-sdf-and-extension.md. SDF uses a static summary, unlike the reference's
+observed all-visible molecular drawings. This is not M1 completion.
 
 The V3000 application slice now retains versioned source/header/frame/history and exposes
 both versions through the existing two shared MOL commands. Auto Save keeps its associated

@@ -830,3 +830,16 @@ partial original presentation, not verified reference visual parity. Actual nati
 acceptance, all-record chemical display, field inspection/edit commands and record operations
 remain missing or unverified. CLI/stdio/authenticated loopback and deterministic native-worker/
 egui tests are separate evidence; none claims an actual mouse/keyboard GUI workflow.
+
+## Native SDF and terminal-carbon evidence, 2026-11-14
+
+NATIVE-BONDLINE-SDF-ROOT identifies actual sourcebb6d5b9, macOS27.2 arm64/AppleM3Max/Metal,
+binary316a719f…a511 and396-file source manifest3ddce1bc…c5935. Native C3/C4 authoring/
+history/Unicode CDXML files and mixed SDF Open/Save/refusals are scoped in
+[verification-native-sdf-and-extension.md](../verification-native-sdf-and-extension.md).
+Independent consumers inspect actual saved bytes; controller-only690/refusal checks are
+separate after foreign input ownership changes. No reference application was operated,
+asset copied or new golden approved. Exact excluded probes, cleanup, later CLI-cache
+recovery and the observed Open-help omission are recorded. This supplies bounded Mac
+workflow evidence, not missing chemical preview, new point-placement precision, special
+input/DPI cases, interactive Windows/Linux or complete parity.

@@ -366,7 +366,7 @@ impl FileChooser {
                     self.set_format(selected_format);
                 }
                 ui.label(if mode==FileMode::Open {
-                    "Structure files (*.cdxml, *.cdx, *.mol). Enter a complete path to open a file outside this list."
+                    "Structure files (*.cdxml, *.cdx, *.mol, *.sdf, *.sd). Enter a complete path to open a file outside this list."
                 } else {
                     match self.format {
                         FileFormat::Cdxml=>"CDXML files (*.cdxml).",

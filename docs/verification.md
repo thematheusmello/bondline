@@ -2013,3 +2013,21 @@ and dialect failures remain recorded, including unavailable skipCleanup and nume
 ring/dot-branch/HH/closure differences. No old consumer or assertion was weakened.
 Peer review, Root full aggregation/fuzz/hosted gates and model/application work remain
 separate. No native, generated writer or chemical-perception success is implied.
+
+
+## Native whole-SDF files and short-chain drawing, 2026-11-14
+
+[Exact native evidence](verification-native-sdf-and-extension.md) identifies sourcebb6d5b9,
+396 input files, the actual18235928-byte executable and all101 rehashed artifacts. Native
+C3/C4 literal-H authoring/history/Unicode CDXML reopen and mixed777-byte SDF Open/Save/
+Unicode.sd Save As/refusals retain independent actual-byte graph/raw/per-MOL evidence.
+Input stopped on observed foreign foreground ownership;690-byte/additional refusal checks
+are controller-only. All owned native/controller/helpers closed before CUA completion.
+Root later restored the exact CLI test-profile cache and verified the original index again.
+The observed Open-help omission is fixed by one string change; fmt and warnings-denied
+all-target UI clippy pass (56549), but new wording is not natively rechecked. No new golden,
+chemical preview, general chemistry, special input/DPI or Windows/Linux workflow claim.
+
+The same source passed hosted43575973213: Mac590 (587workspace+3bridge), Linux588,
+Windows580, all three native-window smokes and seven10000-run Linux ASAN targets. Main
+advanced tobb6d5b9 only after those terminal checks; earlier8e0e92b results are separate.

@@ -55,10 +55,10 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 
 | Capability | Source | State | Evidence / next work |
 |---|---|---|---|
-| New/open/save documents | GUIDE-25 / MAC-FILE-KEYS | partial: Mac CDXML/CDX/MOL Open/Save verified | Complete-source registry persistence, explicit format choice, native Save As and dirty-close protection; File New/multi-doc/other formats remain missing. |
-| Undo/redo | GUIDE-25 / MAC-HISTORY | verified for page size and independent C-C creation, Mac only | Exact engine properties; native page and bond Undo/Redo plus error recovery. Other chemical edits and Windows/Linux runtime missing |
+| New/open/save documents | GUIDE-25 / MAC-FILE-KEYS | partial: Mac CDXML/CDX/MOL/SDF Open/Save verified | Complete-source registry persistence, explicit format choice, native Save As and dirty-close protection; File New/multi-doc/other formats remain missing. |
+| Undo/redo | GUIDE-25 / MAC-HISTORY | verified for pages and supported C2/C3/C4 edits, Mac only | Exact engine properties; native page and bond Undo/Redo plus saved-C3/dirty-C4 recovery. Other chemical edits and Windows/Linux runtime missing |
 | Selection and transforms | GUIDE-25 | missing | M2; bounded atom/bond hit testing and transient hover exist, not persistent selection or transforms |
-| Bond, ring, chain tools | GUIDE-25 | partial: isolated single-bond drag verified on Mac | bond.create, native history/control capture and approved specific-scene golden. Connected construction, other bond kinds, rings/chains and full tool behavior missing |
+| Bond, ring, chain tools | GUIDE-25 | partial: single-bond C2/C3/C4 native authoring verified on Mac | bond.create and explicit-policy terminal bond.extend, native history/CDXML reopen and independent actual-file consumers. Other bond kinds, general connected editing, rings/chain tools and full behavior missing; see verification-native-sdf-and-extension.md |
 | Atom labels, charges, isotopes, radicals | GUIDE-25 | partial display; authoring missing | Literal authored C/H labels in supported carbon graphs; element/label/metadata editing tools and other chemical display remain M2 |
 | Stereo bonds and labels | GUIDE-25 | missing | M2/M3 |
 | Text, captions, chemical formatting | GUIDE-25 | missing | M2/M3 |
@@ -71,20 +71,27 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 | Associated-data label selection | PROFESSIONAL-26.1 | missing | Documented 26.1 behavior |
 | Separate CDXML/MDL paste entries | PROFESSIONAL-26.1 | missing | M4; platform clipboard evidence |
 | CDXML/CDX interchange | CDXML-INTRO / CDX-INTRO / CDX-SYNTAX | partial: Mac CDXML and guarded unchanged CDX files verified | CDXML native files retain their existing evidence. CDX now uses complete source-backed open/save through engine/CLI/stdio/socket, independently checked saved bytes/struct/RDKit and lifecycle/refusal tests. Actual Mac CDX choice/Known Save/Unicode Save As/reopen/retry/dirty-close refusal and Undo recovery pass on exact450962c. Faithful CDX preview, imported structural editing, labels/queries/styles, foreign/general corpus and full format parity remain missing; see verification-cdx-application.md |
-| MOL/SDF/RXN/SMILES/InChI | GUIDE-25 / CTFILE-2026 | partial: V2000/V3000 limited Mac file workflows verified | Both codecs/owned backing/atomic I/O/shared commands and external consumers; actual Mac version/default/author/Open/Save/Save As/reopen/close/refusal/retry. V3000 application372+3 local gate passes; own hosted43531603511 GREEN. Mixed V2000/V3000 SDF library has independent/raw/consumer evidence; fetched V2000 corpus remains distinct. A legacy RXN container also has independent roles/raw/consumer evidence; it is not an application reaction workflow. Bounded nonaromatic SMILES syntax/source ownership has literal token/graph/bounds and qualified external-parser checks only; no model/generated export/application/native SMILES workflow. Application SDF/RXN, broader fields/layout/export, interactive Windows/Linux and SMILES/InChI remain incomplete. M1/M3 |
+| MOL/SDF/RXN/SMILES/InChI | GUIDE-25 / CTFILE-2026 | partial: V2000/V3000 limited Mac file workflows verified | Both codecs/owned backing/atomic I/O/shared commands and external consumers; actual Mac version/default/author/Open/Save/Save As/reopen/close/refusal/retry. V3000 application372+3 local gate passes; own hosted43531603511 GREEN. Mixed V2000/V3000 SDF library has independent/raw/consumer evidence; fetched V2000 corpus remains distinct. A legacy RXN container also has independent roles/raw/consumer evidence; it is not an application reaction workflow. Bounded nonaromatic SMILES syntax/source ownership has literal token/graph/bounds and qualified external-parser checks only; no model/generated export/application/native SMILES workflow. Native mixed-version SDF Open/Save/reopen and failed-import retention now pass onbb6d5b9; static summary only. All-record chemical display, SDF field editing, application RXN, broader layout/export, interactive Windows/Linux and SMILES/InChI remain incomplete. M1/M3 |
 | SVG/PDF/PNG, print and Office clipboard | GUIDE-25 | missing | M4 |
 | Templates and biopolymers/HELM | GUIDE-25 / release notes | missing | Original assets only; M5 |
 | Prediction and advanced reference workflows | GUIDE-25 | missing | Full source audit required |
+
+The bounded native SDF additions to MF-002/004/005 are exact mixed777-byte Open,
+known Save, Unicode.sd Save As/reopen, explicit misleading-suffix decoder choice,
+wrong-suffix/conversion refusals and malformed-second-record retention. Separate690-byte
+and extra refusal checks are controller-only. See
+[exact native evidence](verification-native-sdf-and-extension.md); these rows do not
+establish chemical preview, data-edit UI or other platforms.
 
 ## File and application controls
 
 | ID | Reference control/action | G25 p. | State | Notes |
 |---|---|---|---|---|
 | MF-001 | File > New Document | 13, 39 | missing | Style-dependent New label; project creation/persistence missing. |
-| MF-002 | File > Open | 14 | partial verified, Mac CDXML/CDX/MOL | Shared presentation request/Cancel, decoder choice/hints and failed-open retention. CDX native picker/explicit format/malformed-import retention and guarded no-preview state pass on exact450962c; source is retained. Other formats/platform workflows missing. |
+| MF-002 | File > Open | 14 | partial verified, Mac CDXML/CDX/MOL/SDF | Shared presentation request/Cancel, decoder choice/hints and failed-open retention. CDX native picker/explicit format/malformed-import retention and guarded no-preview state pass on exact450962c; source is retained. Other formats/platform workflows missing. |
 | MF-003 | File > Recent-document list | 14 | missing | Dynamic list; no sample files copied. |
-| MF-004 | File > Save | 14 | partial verified, Mac CDXML/CDX/MOL | Shared known-path/encoding intent and guarded preparation. CDX exact source/receipt/refusal and native known-path misleading-suffix Save/retry/dirty-close refusal/Undo recovery pass. Existing Mac XML/MOL CmdS/QuitSave evidence remains; history-across-save differs G25 and general formats/styles are missing. |
-| MF-005 | File > Save As | 39, 59, 356 | partial verified, Mac CDXML/CDX/MOL | Shared binding and addressable picker; actual CDX choice/Unicode Save As/reopen preserve all four original vectors and one ignored native source, with independent actual-byte consumers. Existing XML/MOL native evidence remains. Unsupported metadata/layout loss refuses; other formats and reference multi-format parity remain missing. |
+| MF-004 | File > Save | 14 | partial verified, Mac CDXML/CDX/MOL/SDF | Shared known-path/encoding intent and guarded preparation. CDX exact source/receipt/refusal and native known-path misleading-suffix Save/retry/dirty-close refusal/Undo recovery pass. Existing Mac XML/MOL CmdS/QuitSave evidence remains; history-across-save differs G25 and general formats/styles are missing. |
+| MF-005 | File > Save As | 39, 59, 356 | partial verified, Mac CDXML/CDX/MOL/SDF | Shared binding and addressable picker; actual CDX choice/Unicode Save As/reopen preserve all four original vectors and one ignored native source, with independent actual-byte consumers. Existing XML/MOL native evidence remains. Unsupported metadata/layout loss refuses; other formats and reference multi-format parity remain missing. |
 | MF-006 | File > Revert | 14 | missing | Recover last saved document. |
 | MF-007 | File > Close | 78, 259 | partial verified, single-window Mac | Shared document.close through UI/CLI/MCP/socket; File Close/red close/CmdW and Save/Discard/Cancel, epoch/receipt guards and shared-work drain have exact native evidence. Multi-document/platform/reference-dialog parity missing. |
 | MF-008 | File > Exit | 78, 290 | partial verified, Mac Quit | Native Quit/CmdQ uses shared close policy; committed edits survive Cancel, Save/Discard exit, remote approval waits for replies/work. Windows/Linux exit gestures, Dock/session logout and immediate unobserved gesture/Q ordering remain unverified. |
