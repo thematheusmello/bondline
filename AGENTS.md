@@ -1,5 +1,20 @@
 # Bondline agent instructions
 
+## Development Actions policy — user instruction, 2026-11-14
+
+GitHub Actions is disabled during development to avoid hosted-run charges. Repository
+Actions is off and the Rust foundation workflow is disabled manually. Do not enable,
+dispatch or rerun workflows, including for a passing feature, milestone, branch or docs
+checkpoint. Re-enable only when the full project is complete or the user explicitly
+changes this instruction. Preserve the workflow definitions for that later verification.
+
+Continue local rustfmt, warnings-denied clippy, workspace tests, xtask gates and bounded
+fuzzing. Local passing gates govern development integration; do not wait for or manufacture
+hosted evidence while Actions is disabled. Mark new Windows/Linux execution unverified
+when it has not actually run. This policy supersedes older hosted-before-main instructions
+and historical pending-hosted notes in project records. Do not restore automatic runs to
+make an old CI badge green.
+
 ## Goal and orientation
 
 Implement an independent offline Rust chemical structure and reaction editor, native on
@@ -81,7 +96,8 @@ source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned s
 bounded native CDXML/CDX/MOL/SDF filesystem libraries and source-preserving SDF/RXN container records;
 bounded SMILES notation/source ownership including literal aromatic markers/bonds,
 opt-in fixed-H normalization and
-restricted noncanonical Fragment export, not application SMILES or chemistry;
+restricted noncanonical Fragment export and validated1–12carbon/Single path layout into
+a new pure Document, not source-backed application SMILES or general chemistry;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
@@ -332,3 +348,11 @@ aromatic defaults apply only when every applicable explicit token is absent. Ori
 explicit-ring regression seeds protect this distinction. Fetched corpus remains three
 original nonaromatic vectors; six committed fuzz seeds are a different dataset. Never
 repin old manifests or drop Root's additive seed/consumer tests when receiving codec work.
+
+
+The named carbon-path layout takes explicit bond length/origin/page, preserves the input
+notation/IR and local normalized identities/H, and returns a new pure drawing. Its1024square
+reference-scene ink/geometry checks do not prove every viewport or native UI. Keep source-
+backed SMILES Open/Save separate from explicit conversion into a new native CDXML file.
+Do not attach an original SMILES path to a CDXML association, overwrite the input or grant
+StoredDocument source authority to a raw projection. See verification-smiles-layout.md.

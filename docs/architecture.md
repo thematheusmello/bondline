@@ -211,3 +211,10 @@ source token or model None semantics. The separate restricted explicit-H writer 
 noncanonical notation from a Fragment. Neither gives a projected graph source-backed Save
 authority, native layout or document-global IDs. Future import must preserve source,
 remap local identities and define layout/conversion/unsupported policies explicitly.
+
+
+The separate named carbon-path layout creates a new pure drawing from a narrow normalized
+profile, checking actual topology, analytic geometry and reference-scene ink/page bounds.
+It preserves the original source/IR, adds positions without changing normalized metadata,
+and grants no application SMILES association or source-backed Save authority. Explicit file
+conversion and native input workflows are separate operations; see verification-smiles-layout.md.

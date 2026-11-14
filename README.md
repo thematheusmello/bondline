@@ -6,7 +6,7 @@
 <p align="center">Free, open-source tools for drawing chemical structures and reactions.</p>
 
 <p align="center">
-  <a href="https://github.com/thematheusmello/bondline/actions/workflows/ci.yml"><img src="https://github.com/thematheusmello/bondline/actions/workflows/ci.yml/badge.svg?branch=main" alt="Rust foundation CI"></a>
+  <a href="docs/ci.md"><img src="https://img.shields.io/badge/Actions-disabled%20during%20development-6b7280" alt="GitHub Actions disabled during development"></a>
   <a href="LICENSE-MIT"><img src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-167b72" alt="License: MIT OR Apache-2.0"></a>
   <a href="rust-toolchain.toml"><img src="https://img.shields.io/badge/Rust-1.94.1-b35936" alt="Rust 1.94.1"></a>
   <a href="STATUS.md"><img src="https://img.shields.io/badge/status-early%20development-d89b32" alt="Early development"></a>
@@ -122,7 +122,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | CDX | Guarded shared/native Mac Open/Save, exact source retention, limited elemental metadata view and standalone syntax/property/new-tree APIs, checked independently | Faithful preview, broader metadata/chemistry, safe edits/new encoding and foreign/general corpus |
 | MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, with independent byte/record/data checks; SDF summary has no chemical preview | Chemical preview/data-edit UI, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
-| SMILES | Bounded notation/source library with literal aromatic markers; restricted nonaromatic fixed-H normalization and noncanonical Fragment export, checked independently | Application import/backing/layout, broader H/valence policies, aromaticity/stereo and canonicalization |
+| SMILES | Bounded notation/source library with literal aromatic markers; restricted nonaromatic fixed-H normalization/export and validated carbon-path layout, checked independently | Application import/backing/layout, broader H/valence policies, aromaticity/stereo and canonicalization |
 | InChI | Planned | Reference-tool comparison and import/export |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |
@@ -146,6 +146,9 @@ cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo test --workspace --locked
 cargo xtask ci
 ```
+
+GitHub Actions is disabled during development to control costs. Run the local checks
+above; hosted checks will be restored when the project is complete. See [CI policy](docs/ci.md).
 
 The aggregate also checks layers, declared native dependency licenses, bundled assets and
 the pinned corpus. Current corpus coverage is limited: a passing gate is not full format or

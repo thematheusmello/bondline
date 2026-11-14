@@ -1,5 +1,25 @@
 # CI contract and execution evidence
 
+## Current policy: Actions disabled during development
+
+On2026-11-14 the user requested that hosted GitHub Actions stop during development because
+of its cost, and resume only when the project is complete. Repository Actions was disabled
+through GitHub's permissions API, and Rust foundation workflow417397204 was disabled
+manually. Readback at11:26:45UTC confirms enabled=false and disabled_manually; a paginated
+check found zero running or queued runs, so no cancellation request was necessary.
+No other repository, billing setting or completed evidence was changed.
+
+Do not dispatch, rerun or re-enable Actions for development commits or milestone checkpoints.
+Keep the workflow YAML for final verification. Continue local cargo fmt/clippy/test,
+cargo xtask ci and relevant bounded fuzzing. Passing local gates permit integration during
+this policy; older hosted-before-main rules below are historical and superseded. Missing
+new-source Windows/Linux/hosted execution remains explicitly unverified, never inferred
+from previous successful runs. Only full-project completion or a new user instruction can
+change this policy. The README badge reflects the disabled state.
+
+The records below remain evidence of runs that actually happened before disablement.
+They are not instructions to start another run or a promise of coverage for later source.
+
 SMILES notation/fuzz integration8e0e92b7437e5123e5a5ebd4a7fb981968194d69 passes every
 [43573987299](https://github.com/thematheusmello/bondline/actions/runs/43573987299) job:
 Mac132384119167:568 (565workspace+3bridge), Linux132384119069:566,
