@@ -762,3 +762,16 @@ and retained-allocation tests reuse the Arc/storage sources above. Existing full
 DT-only loss and duplicate-name limitations remain separate. This is not evidence of
 reference existing-field editing/retention/export, application SDF commands/native flows,
 or a new layout/browser policy; those remain unimplemented or unknown.
+
+## Original SMILES seed vectors, 2026-11-14
+
+[verification-smiles-seeds.md](../verification-smiles-seeds.md) and the fixture README
+record three independently authored dual-licensed notations, exact bytes/hashes and
+literal atom/topology metadata. The same immutable OpenSMILES v1.0 publisher source
+registered above defines the notation; no example corpus, specification prose or parser
+implementation is copied. Existing external-only RDKit2026.09.2 consumes the actual
+files with explicit non-sanitizing/no-H-removal/no-name/no-CX flags. Consumer normalization
+and the unexposed Python skipCleanup field do not establish exact raw-token perception.
+The already registered Git text-attribute contract supports the narrow -text safeguard;
+real isolated autocrlf checkout RED/GREEN preserves all originals without normalization.
+These seed checks are not application SMILES, canonical output, layout or full conformance.
