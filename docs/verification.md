@@ -1847,3 +1847,13 @@ NIB probe, PNG identities and before/after cleanup. XML fallback and inferred or
 remain separate from runtime; all tooltip/AX/action/enabled/hit-bound fields are null.
 No Rust/product source or asset changed; this is relevant documentation validation, not
 a fabricated RED or a working36-tool claim.
+
+## Owned CDX integration, 2026-11-14
+
+The source-backed elemental adapter and owned snapshot/export/refusal/accounting slice
+passes438workspace+3macOSbridge and the actual full aggregate. Its first RED,7 snapshot
+tests/144IO tests, independent reviews, internal-only lock edge/154-165-220 license closure
+and normal full-graph ASAN10000 are recorded in
+[verification-cdx-owned-snapshots.md](verification-cdx-owned-snapshots.md). No registry/UI/
+file-worker behavior, old fixture/pin/font/golden or source-export proof was weakened.
+The new source still needs matching hosted execution; no native CDX app workflow is claimed.

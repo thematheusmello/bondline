@@ -3,7 +3,7 @@
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Standalone bounded binary syntax, checked property edits and new-tree writer | Original field vectors, fetched positive scene, full-byte writer equality, independent Python struct/RDKit and bounded ASAN | Application import/export, model/reference mapping, foreign/general corpus and modern extensions |
+| CDX | Standalone syntax/property edits/new-tree writer; limited source-backed elemental view and owned unchanged-export snapshots | Original field vectors, fetched positive scene, full-byte writer equality, independent Python struct/RDKit and bounded ASAN | Application/native I/O, broader metadata/references/chemical mapping, editing/encoder and foreign/general corpus |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000/V3000 | Source-preserving mixed library records, per-record MOL version, ordered data fields, generic preserving writer and strict V2000 writer | Original spans/order; fetched V2000 two-record corpus; external raw scanner/per-record RDKit; version-switched SDWriter/ordinary full supplier; 8dp/1000-atom inputs; bounded Asan | Application data/multiple-record workflow, fetched mixed-version corpus and broader syntax/encodings |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
@@ -523,3 +523,14 @@ and actual external RDKit graph checks; the unmodified ignored1196-byte local
 native observation also passes syntax/passthrough and one opaque splice. This is
 bounded framing evidence, not general property interpretation, foreign-file corpus
 coverage, chemical model mapping or an application CDX Open/Save workflow.
+
+## Owned limited CDX model snapshots
+
+StoredDocument::from_cdx now owns the complete source, initial elemental view and model
+baseline. The private preview helper uses one caller-sized page; print/style data remain
+opaque. Original framing/metadata/unknown bytes stay authoritative. All CDX imports remain
+is_fully_mapped=false. export_cdx/to_cdx borrow exact unchanged bytes and refuse changed
+models; source-free CDX encoding and cross-format metadata loss remain unsupported.
+Full snapshot equality/storage accounting includes raw source and baseline, including
+opaque-only differences and shared Arc clones. See verification-cdx-owned-snapshots.md.
+This is not application Open/Save, source-faithful rendering, editing, chemistry or full M1.

@@ -72,7 +72,7 @@ replacement and a bounded new-syntax writer);
 cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque property
 replacement and new-tree Writer; no model mapping or application commands);
 render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
-source-backed CDXML/MOL projections, elemental encoding, owned snapshots, PNG encoding,
+source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
 bounded native CDXML/MOL filesystem I/O and source-preserving SDF/RXN container records;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
@@ -249,3 +249,17 @@ retention/property edits and original independent/native probes are separate fro
 compatibility. A complete legacy tree is inherently indistinguishable from a native file
 missing only its file end; keep this ambiguity explicit. Fuzz construction omits root and
 FileEnd intentionally to build new canonical syntax, never to reserialize an import.
+
+## Limited CDX model backing
+
+IO's ElementalGraph retains complete borrowed source while mapping only its closed initial
+Element/default-C, Single/default-order, fixed16.16-point subset. Its fresh IDs are not
+container-scoped source IDs. All standard node/fragment/bond metadata outside the whitelist
+refuses; do not claim native metadata, stereo/H/charge or general compatibility.
+StoredDocument::from_cdx owns raw Arc plus baseline; is_fully_mapped is always false here.
+Export only exact unchanged backing. Changed models, source-free CDX encoding and cross-
+format metadata loss must fail; do not regenerate a projection with syntax Writer.
+Snapshot equality/accounting includes opaque bytes and baseline. Preview paper is caller
+policy, not inferred from BoundingBox. No CDX filesystem/registry/native UI exists yet.
+Normal CDX fuzzing now exercises projection/snapshot guards; both lock edges add only the
+existing internal CDX crate. New native declared closures154/165/220 include that crate.

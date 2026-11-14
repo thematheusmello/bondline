@@ -243,3 +243,15 @@ versions/checksums copied from the unchanged fuzz lock. It did not rebuild the f
 IO/GPU fuzz dependency graph. Stable clippy passed for that same scoped harness and
 the normal fuzz workspace's rustfmt check passed. The normal full-graph/hosted checks
 remain separate integration evidence; this bounded run is not a security audit.
+
+### CDX elemental and owned-source guards
+
+The existing CDX target also invokes the limited IO projection. Successful views retain
+exact source, fresh dense IDs and fragment-local endpoints with no inferred H. The same
+input creates an owned snapshot; unchanged export is exact, a page edit refuses stale/
+cross-format output and restoring its snapshot restores all original bytes. Source guards
+remain separate from new-tree canonical construction. No new target or external dependency.
+The normal full-graph four-seed2026-11-14 run passes10000 iterations at seed721533879,
+max_len131072/timeout5: cov1019/features2161,81inputs/reported394KiB/RSS303MiB, largest65750B.
+The extra92B independently authored default-C/single/no-position vector is ignored, not a
+new fetched corpus entry. See verification-cdx-owned-snapshots.md for exact logs and limits.

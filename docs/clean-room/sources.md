@@ -447,3 +447,28 @@ correspondence is an inference, and bundled Professional files do not prove acti
 The separately scoped blank-context pass preserved all three originals/palette IDs/frames,
 closed its clean owned document and completed CUA once. All jobs are terminal. Raw XML/
 nibs/images remain ignored; no glyph payload, font, long help prose or vendor code is shipped.
+
+## Read-only CDX elemental projection — 2026-11-14
+
+The original, bounded IO adapter and independent evidence are recorded in
+[verification-cdx-elemental-projection.md](../verification-cdx-elemental-projection.md).
+It borrows the complete standalone source and exposes only a supported elemental view;
+it is not native CDX editing, model regeneration, or an application Open/Save command.
+
+| ID | Public source | Decision / qualification |
+|---|---|---|
+| CDX-PROJECTION-SCOPES | [Page](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Page.htm), [Group](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Group.htm), [Fragment](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Fragment.htm), [Node](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) | Object tags and containment inform the adapter. Its one-direct-page, page/group fragment, direct fragment-node/bond subset and rejection of other standard objects are explicit Bondline restrictions, not complete format validation. Custom objects remain opaque; known chemical objects under unsupported parents refuse rather than disappear. |
+| CDX-PROJECTION-IDENTITY | [Binary object identifiers](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm), [CDXObjectID](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXObjectID.htm) | UINT32 source IDs are distinct from fresh dense application identities. Assigned IDs must be unique in their containing object; zero is unassigned and cannot be an endpoint. Only same-fragment atom references resolve; broader nearest-container lookup is not implemented. |
+| CDX-PROJECTION-POSITION | [2DPosition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/2DPosition.htm), [coordinate data types](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm) | Property 0200 contains two signed INT32 values, vertical then horizontal, at 65536 units per point. The adapter requires exactly 8 bytes and preserves absent geometry as `None`; it does not run cleanup. The direct CDXPoint2D.htm link was inaccessible, while the complete definition is available on CDXCoordinates.htm. |
+| CDX-PROJECTION-ELEMENT | [NodeType](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Node_Type.htm), [Element](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Node_Element.htm) | Missing type means Element; missing Element means carbon. Explicit type must be 1, and explicit signed INT16 element must fit the existing 1..118 catalog. Labels, other node types and unsupported standard atom metadata refuse. |
+| CDX-PROJECTION-BONDS | [Bond order](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Bond_Order.htm), [begin](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Bond_Begin.htm), [end](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Bond_End.htm) | Absent order means single; only explicit bitmask 0001 is mapped in this slice. Begin/end are required exact UINT32 references; authored direction is retained. Other orders/query masks remain unsupported, not reinterpreted as XML ordinals. |
+| CDX-PROJECTION-ATOM-DEFAULTS | [Hydrogen count](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm), [charge](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_Charge.htm), [isotope](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_Isotope.htm), [radical](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_Radical.htm) | Missing explicit H stays `None` instead of authoring an inferred count. Missing charge/radical/natural-isotope defaults match the model. Presence of these properties, including explicit zero, is refused until a separately tested decoder lands; the historical four-byte charge exception is not guessed. |
+| CDX-PROJECTION-ORACLE | [Original CDX fixture provenance](../../crates/cdx/tests/fixtures/README.md), [independent oracle notes](../../xtask/oracles/cdx-README.md) | The unchanged 65750-byte original vector and canonical absent-default vector face independent stdlib struct decoding and mandatory external RDKit 2026.09.2. Its perceived CC/C2H6 result is external evidence, not Bondline valence or authored-H metadata. No proprietary native metadata fixture is added. |
+
+Owned CDX snapshots use the same CDX-SYNTAX/IDENTITY/COORDS/property defaults as the borrowed
+view. Retaining complete bytes plus baseline and refusing unsynchronized/cross-format
+exports are original Bondline data-preservation policies; a partial graph is not a complete
+source encoder. Caller preview size is explicit, never inferred from BoundingBox. Exact
+Arc/storage/opaque-only identity and typed error tests, independent read-only review and
+normal adapter fuzzing are in verification-cdx-owned-snapshots.md. No source policy or
+license allowlist was broadened; the only runtime edge adds original MIT OR Apache-2.0 CDX.

@@ -133,6 +133,7 @@ dependencies = [
 name = "bondline-io"
 version = "0.1.0"
 dependencies = [
+ "bondline-cdx",
  "bondline-cdxml",
  "bondline-model",
  "bondline-render",

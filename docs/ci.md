@@ -1,5 +1,15 @@
 # CI contract and execution evidence
 
+CDX header-document framing integration6447c6ca2d83405503417a6d0e141fa6387f3538 passes every
+[43542026529](https://github.com/thematheusmello/bondline/actions/runs/43542026529) job:
+Mac132284521204:420 tests (417workspace+3bridge), Linux132284520959:418,
+Windows132284521318:410 and ASAN132284521169:six bounded targets. Every actual native
+window smoke passes. Adapters remain Metal/Apple Paravirtual IntegratedGpu, Vulkan/
+llvmpipe Cpu and Dx12/Microsoft Basic Render Driver Cpu. Main advanced only after GREEN,
+to docs-only child0830a23. This verifies syntax/framing and its regression suite, not CDX
+model/application interoperability or interactive Windows/Linux workflows. Later owned
+source snapshots require their own hosted run; no passing job was restarted.
+
 RXN/mixed-SDF integrationc351bb839ee183f2b8a069642b39de32a8ad52ab passes every
 [43539538831](https://github.com/thematheusmello/bondline/actions/runs/43539538831) job: Mac132276586398:413
 (410workspace+3bridge), Linux132276586426:411, Windows132276586389:403 and ASAN132276586297.

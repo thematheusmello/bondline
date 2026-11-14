@@ -144,3 +144,9 @@ profile while keeping successful legacy parses and all existing strict negative 
 An unchanged original native1196-byte save and original public-field vectors face independent
 record/byte/consumer checks. Receiving root417+3 and normal-graph ASAN pass; the new source
 needs hosted checks. This parser feature precedes model mapping and application CDX files.
+
+The first CDX elemental view and owned complete-source snapshot now have literal/raw/
+consumer/identity/bounds/error/history-storage evidence. Unchanged export is exact; edited/
+cross-format/model-generated export is refused. Native metadata and application CDX I/O
+remain next, alongside source-aware safe rendering. Receiving438+3 and normal adapter
+ASAN pass; this new source requires hosted checks. Do not count it as completed M1.

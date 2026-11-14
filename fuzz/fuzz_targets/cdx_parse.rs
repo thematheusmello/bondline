@@ -41,6 +41,47 @@ fuzz_target!(|data: &[u8]| {
     }
     assert_eq!(offset, data.len());
 
+    if let Ok(graph) = bondline_io::cdx::ElementalGraph::parse(data) {
+        assert_eq!(graph.as_bytes(), data);
+        assert_eq!(graph.to_bytes(), data);
+        assert_eq!(graph.source().as_bytes(), data);
+        let (mut atom_id, mut bond_id) = (0_u32, 0_u32);
+        for (index, fragment) in graph.fragments().iter().enumerate() {
+            assert_eq!(fragment.id().get() as usize, index + 1);
+            let mut local_atoms = std::collections::BTreeSet::new();
+            for atom in fragment.atoms() {
+                atom_id += 1;
+                assert_eq!(atom.id.get(), atom_id);
+                assert_eq!(atom.explicit_hydrogens, None);
+                assert!(local_atoms.insert(atom.id));
+            }
+            for bond in fragment.bonds() {
+                bond_id += 1;
+                assert_eq!(bond.id.get(), bond_id);
+                assert!(local_atoms.contains(&bond.begin));
+                assert!(local_atoms.contains(&bond.end));
+            }
+        }
+        let mut stored = bondline_io::StoredDocument::from_cdx(
+            std::sync::Arc::from(data),
+            bondline_model::PageSize::A4,
+        )
+        .unwrap();
+        assert_eq!(stored.export_cdx().unwrap(), data);
+        assert!(!stored.is_fully_mapped());
+        let original = stored.clone();
+        let page = stored.model().pages().first().unwrap().id();
+        stored
+            .model_mut()
+            .set_page_size(page, bondline_model::PageSize::new(420.0, 594.0).unwrap())
+            .unwrap();
+        assert!(stored.source_info().unwrap().modified);
+        assert!(stored.export_cdx().is_err());
+        assert!(stored.to_cdxml().is_err());
+        stored = original;
+        assert_eq!(stored.to_cdx().unwrap().as_ref(), data);
+    }
+
     if let Some((index, record)) = document
         .records()
         .iter()

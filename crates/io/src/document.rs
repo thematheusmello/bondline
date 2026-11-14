@@ -11,6 +11,8 @@ pub enum DocumentError {
     #[error(transparent)]
     Mapping(#[from] MappingError),
     #[error(transparent)]
+    CdxMapping(#[from] crate::cdx::MappingError),
+    #[error(transparent)]
     Mol(#[from] MolError),
     #[error(transparent)]
     V3000(#[from] v3000::Error),
@@ -18,10 +20,14 @@ pub enum DocumentError {
     NoCdxmlSource,
     #[error("this document has no original MOL source")]
     NoMolSource,
+    #[error("this document has no original CDX source")]
+    NoCdxSource,
     #[error("the model changed; exporting those changes to CDXML is not yet supported")]
     UnsupportedEdit,
     #[error("the model changed; source-preserving MOL regeneration is not supported")]
     UnsupportedMolEdit,
+    #[error("the model changed; source-preserving CDX regeneration is not supported")]
+    UnsupportedCdxEdit,
     #[error("saving {from} source as {to} would discard source metadata")]
     CrossFormatSource {
         from: &'static str,
@@ -36,6 +42,7 @@ impl DocumentError {
         match self {
             Self::Mol(error) => error.code(),
             Self::V3000(error) => error.code(),
+            Self::CdxMapping(error) => error.code(),
             Self::Mapping(error) => match error {
                 MappingError::UnsupportedNodeType
                 | MappingError::UnsupportedLabelOnlyAtom
@@ -46,8 +53,10 @@ impl DocumentError {
             },
             Self::NoCdxmlSource
             | Self::NoMolSource
+            | Self::NoCdxSource
             | Self::UnsupportedEdit
             | Self::UnsupportedMolEdit
+            | Self::UnsupportedCdxEdit
             | Self::CrossFormatSource { .. }
             | Self::UnsupportedMolLayout(_) => "unsupported_content",
         }
@@ -68,6 +77,10 @@ enum OriginalSource {
         baseline: Arc<Document>,
         fully_mapped: bool,
     },
+    Cdx {
+        bytes: Arc<[u8]>,
+        baseline: Arc<Document>,
+    },
     Mol {
         version: Version,
         bytes: Arc<[u8]>,
@@ -82,22 +95,26 @@ enum OriginalSource {
 impl OriginalSource {
     fn bytes(&self) -> &Arc<[u8]> {
         match self {
-            Self::Cdxml { bytes, .. } | Self::Mol { bytes, .. } => bytes,
+            Self::Cdxml { bytes, .. } | Self::Cdx { bytes, .. } | Self::Mol { bytes, .. } => bytes,
         }
     }
     fn baseline(&self) -> &Arc<Document> {
         match self {
-            Self::Cdxml { baseline, .. } | Self::Mol { baseline, .. } => baseline,
+            Self::Cdxml { baseline, .. }
+            | Self::Cdx { baseline, .. }
+            | Self::Mol { baseline, .. } => baseline,
         }
     }
     fn fully_mapped(&self) -> bool {
         match self {
             Self::Cdxml { fully_mapped, .. } | Self::Mol { fully_mapped, .. } => *fully_mapped,
+            Self::Cdx { .. } => false,
         }
     }
     fn format(&self) -> &'static str {
         match self {
             Self::Cdxml { .. } => "cdxml",
+            Self::Cdx { .. } => "cdx",
             Self::Mol { .. } => "mol",
         }
     }
@@ -122,6 +139,21 @@ impl std::fmt::Debug for StoredDocument {
 }
 
 impl StoredDocument {
+    /// Own the limited elemental view and all original binary content. The preview page
+    /// is caller policy; source style, annotations and paper settings remain opaque.
+    pub fn from_cdx(bytes: Arc<[u8]>, preview_size: PageSize) -> Result<Self, DocumentError> {
+        let graph = crate::cdx::ElementalGraph::parse(&bytes)?;
+        let model = Arc::new(graph.preview_document(preview_size)?);
+        drop(graph);
+        Ok(Self {
+            model: Arc::clone(&model),
+            original: Some(OriginalSource::Cdx {
+                bytes,
+                baseline: model,
+            }),
+        })
+    }
+
     pub fn from_cdxml(bytes: Arc<[u8]>, preview_size: PageSize) -> Result<Self, DocumentError> {
         let graph = ElementalGraph::parse(&bytes)?;
         let model = Arc::new(graph.preview_document(preview_size)?);
@@ -278,6 +310,22 @@ impl StoredDocument {
         })
     }
 
+    /// Only complete unchanged backing can be exported; never substitute its projection.
+    pub fn export_cdx(&self) -> Result<&[u8], DocumentError> {
+        let Some(OriginalSource::Cdx { bytes, baseline }) = self.original.as_ref() else {
+            return Err(DocumentError::NoCdxSource);
+        };
+        if !Arc::ptr_eq(&self.model, baseline) && self.model != *baseline {
+            return Err(DocumentError::UnsupportedCdxEdit);
+        }
+        Ok(bytes)
+    }
+
+    /// No model encoder exists yet. Preserve unchanged imports or explicitly refuse.
+    pub fn to_cdx(&self) -> Result<Cow<'_, [u8]>, DocumentError> {
+        self.export_cdx().map(Cow::Borrowed)
+    }
+
     /// Byte-exact passthrough only. Never silently export stale XML after a model edit.
     pub fn export_cdxml(&self) -> Result<&[u8], DocumentError> {
         let Some(OriginalSource::Cdxml {
@@ -295,9 +343,11 @@ impl StoredDocument {
     /// Borrow exact unchanged source, or encode a new native elemental document.
     /// Only a proven complete profile may encode edits; unknown source is never discarded.
     pub fn to_cdxml(&self) -> Result<Cow<'_, [u8]>, DocumentError> {
-        if matches!(self.original, Some(OriginalSource::Mol { .. })) {
+        if let Some(original) = self.original.as_ref()
+            && !matches!(original, OriginalSource::Cdxml { .. })
+        {
             return Err(DocumentError::CrossFormatSource {
-                from: "mol",
+                from: original.format(),
                 to: "cdxml",
             });
         }
@@ -372,6 +422,12 @@ impl StoredDocument {
             }
         }
         let (frame, headers, expected_page) = match self.original.as_ref() {
+            Some(OriginalSource::Cdx { .. }) => {
+                return Err(DocumentError::CrossFormatSource {
+                    from: "cdx",
+                    to: "mol",
+                });
+            }
             Some(OriginalSource::Mol {
                 fully_mapped: false,
                 ..
