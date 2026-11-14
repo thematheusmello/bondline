@@ -261,5 +261,8 @@ The source-only metadata extension reuses that target unchanged. A fresh normal 
 Exact hashes/settings are in verification-cdx-native-metadata.md. This exercises accepted
 metadata/source/snapshot guards without introducing H inference, stereo computation,
 styled-warning support or new targets. Copy seeds to ignored cache before mutation.
+CI now copies both committed original metadata vectors alongside its three existing CDX
+seeds. Its five-file initial CDX corpus is separate from the local six-file run, which
+also includes the independently packed92B default/no-geometry seed in ignored storage.
 The extra92B independently authored default-C/single/no-position vector is ignored, not a
 new fetched corpus entry. See verification-cdx-owned-snapshots.md for exact logs and limits.

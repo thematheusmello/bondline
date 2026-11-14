@@ -147,3 +147,9 @@ chemistry or all metadata combinations.
 Parent983ffee's hosted Mac run exposes a separate test-only label-oracle layout-engine
 discrepancy. That real failure is retained in ci.md; these local passes do not substitute
 for a corrected matching hosted run. Native CDX application verification remains pending.
+
+The hosted sanitizer seed step now copies both original metadata fixtures alongside the
+three earlier CDX seeds; only ignored .cache/fuzz/cdx is writable. Local validation checks
+the exact five source hashes/copy results and unchanged iteration/seed/length/timeout.
+This wiring is not claimed as a completed hosted run; the local six-seed result above
+separately includes its92B original default/no-geometry vector.
