@@ -1264,3 +1264,16 @@ fdeflate0.3.7 writer sources, with source hashes and independent actual-output c
 in the evidence record. The helper is not a general PNG reader or payload/CRC validator;
 the existing native image decoder retains that job. No dependency, font, source codec,
 old oracle or approved golden is changed. Worker/cache/native integration remains separate.
+
+## Registered native capture work, 2026-11-14
+
+[Adapter evidence](../verification-preview-registered-work.md) mirrors the existing native
+file registration boundary: the same Engine lock validates complete weak content identity
+and close context, then reserves the shared worker budget before spawning. Work calls the
+existing typed render.capture registry entry; it creates no Save lease or file ACK. These
+are original lifecycle/authority policies, not inferred reference behavior. The UI must keep
+its own job busy through image decode/publication/retirement after command completion.
+First focused/parallel and later serialized tests pass; one repeated parallel run failed
+an unchanged listener-shutdown assertion. Its cause is unestablished and the failure is
+retained, with the Root default workspace gate still required. No listener/control assertion,
+old source codec/oracle, dependency or golden was changed to obtain a pass.

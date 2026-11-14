@@ -1,5 +1,8 @@
 use crate::SharedEngine;
-use bondline_commands::{Cancellation, Command, CommandResult, Error, ErrorInfo, Prepared};
+use bondline_commands::{
+    Cancellation, CaptureStamp, CloseState, Command, CommandResult, Error, ErrorInfo, Prepared,
+    RenderCapture,
+};
 use std::{
     future::Future,
     sync::{
@@ -71,6 +74,23 @@ impl UiFileWork {
     }
 }
 
+/// One immutable capture, registered before the native host spawns its worker.
+/// It belongs to the originating Engine and shares the existing worker budget.
+#[must_use = "complete or drop capture work to release its worker reservation"]
+pub struct UiCaptureWork {
+    engine: SharedEngine,
+    registered: RegisteredWork,
+}
+
+impl UiCaptureWork {
+    /// Run on a background thread. The host must keep its preview job/pending
+    /// intent busy through later image decode, publication and channel retirement.
+    pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
+        let Self { engine, registered } = self;
+        complete_registered_blocking(&engine, registered, cancel)
+    }
+}
+
 impl CommandExecutor {
     pub fn new(engine: SharedEngine) -> Self {
         Self {
@@ -98,6 +118,38 @@ impl CommandExecutor {
             .prepare_ui_file(id, actual)
             .map_err(|error| error.info())?;
         Ok(UiFileWork {
+            engine: Arc::clone(&self.engine),
+            registered: RegisteredWork {
+                prepared,
+                permit: Some(permit),
+            },
+        })
+    }
+
+    /// Validate and reserve under the originating Engine mutex before spawning.
+    /// Release any frame Engine guard before calling; this method acquires that
+    /// same lock. Keep the host's pending preview intent in its close busy gate.
+    pub fn prepare_ui_capture(
+        &self,
+        stamp: &CaptureStamp,
+        params: RenderCapture,
+    ) -> Result<UiCaptureWork, ErrorInfo> {
+        let mut engine = self.engine.lock().map_err(|_| unavailable())?;
+        match engine.state().close {
+            CloseState::Committed => return Err(Error::CloseCommitted.info()),
+            CloseState::Open => {}
+            CloseState::NeedsDecision | CloseState::Approved => {
+                return Err(Error::UiStaleRequest.info());
+            }
+        }
+        if !engine.capture_stamp_matches(stamp) {
+            return Err(Error::StaleRevision.info());
+        }
+        let permit = self.workers.permit()?;
+        let prepared = engine
+            .prepare(Command::Capture(params))
+            .map_err(|error| error.info())?;
+        Ok(UiCaptureWork {
             engine: Arc::clone(&self.engine),
             registered: RegisteredWork {
                 prepared,
@@ -1056,6 +1108,60 @@ mod tests {
             })
             .await?;
         }
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod ui_capture_completion_tests {
+    use super::*;
+    use bondline_commands::RenderBackend;
+    use std::sync::Mutex;
+
+    #[test]
+    fn real_ui_capture_completed_before_cancel_keeps_the_shared_finish_guard()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let shared = Arc::new(Mutex::new(bondline_commands::Engine::default()));
+        let executor = CommandExecutor::new(Arc::clone(&shared));
+        let stamp = shared.lock().map_err(|_| "engine")?.capture_stamp();
+        let before = serde_json::to_value(shared.lock().map_err(|_| "engine")?.state())?;
+        let work = executor
+            .prepare_ui_capture(
+                &stamp,
+                RenderCapture {
+                    page_id: 1,
+                    width_px: 8,
+                    height_px: 8,
+                    backend: RenderBackend::Cpu,
+                },
+            )
+            .map_err(|error| error.message)?;
+        // Split the actual returned plan only in this private test. This exposes
+        // complete->finish deterministically, without a timing sleep or a hook.
+        let UiCaptureWork { engine, registered } = work;
+        let RegisteredWork { prepared, permit } = registered;
+        let cancel = Cancellation::default();
+        let completed = prepared.complete_with_cancel(&cancel)?;
+        assert!(executor.has_active_work());
+        cancel.cancel();
+        assert_eq!(
+            engine
+                .lock()
+                .map_err(|_| "engine")?
+                .finish(completed)
+                .err()
+                .ok_or("late cancellation published")?
+                .info()
+                .code,
+            "cancelled"
+        );
+        assert!(executor.has_active_work());
+        drop(permit);
+        assert!(!executor.has_active_work());
+        assert_eq!(
+            serde_json::to_value(shared.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
         Ok(())
     }
 }
