@@ -2346,3 +2346,30 @@ changes no production. Ignored receipt SHA256
 `3683c3234113c4b892a8b8b22c4f356809cfbf1b71f989176f98ed1910cfe39a`,
 path `target/mol-display-adapter-probe/receipt.json`. This supplements committed tests;
 it is not counted as additional workspace tests, native execution or hosted CI.
+
+## Integrated MOL display and parser-fuzz receiving gates, 2026-11-14
+
+Root cargo xtask ci33573 exits0 onacdbf1c:842workspace+3Mac bridge=845passed,
+0failed/ignored across132 result lines. Default parallel tests, workspace fmt, all-target
+warnings-denied clippy, layers,154/165/220 native declared-license closures,2assets and
+8file/5bundle corpus pass. Log102775B/SHA256
+`7bd4d05f262b0f83740330fc0888da6ba5176bc5e4e3d194716b1adcdf01b03c`.
+All547 non-Markdown workspace/config/assets are frozen; isolated fuzz is separately gated.
+The unchanged MCP shutdown test passes in this full default run; its earlier unexplained
+failure remains recorded and no cause/fix is inferred from a later pass.
+
+[Normal MOL parser-fuzz extension](verification-mol-display-fuzz.md) adds preservation/
+cancellation checks around actual source-aware scenes to both existing targets. Original
+parser/writer bodies reconstruct byte-exact; old early returns remain. ASan49818 and98341
+each pass10000 runs, with separate4+4 seed replay61149. Largest exercised inputs303/492B
+do not establish the configured65536 ceiling or security. Actual identity-frame inspection
+proves2scene successes,5honest scene refusals and1strict-owner refusal. Seven external
+consumer positives are distinct from the unchanged unsupported492B extension's retained
+RDKit diagnostic; no source/oracle is changed to force compatibility.
+
+Root verifies4files/301protected/12logs/3binaries/8seeds/385mutated-corpus identities,
+old targets and README prefix, pinned tools and exact runtime/isolated locks. Receiving
+46420 passes locked/offline metadata, all9 isolated bins check/clippy and fmt against the
+receiving code. No manifest, dependency, runtime, old fixture/oracle/golden or workflow
+change. Only continuation Markdown and these separately checked fuzz additions follow
+the845 source gate. Actions stays disabled; no new native window or hosted platform runs.

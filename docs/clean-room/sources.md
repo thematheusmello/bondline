@@ -1375,3 +1375,15 @@ vectors, hits and source/history preservation are headlessly verified; the opera
 window workflow remains unverified while the user is active. Separate actual CLI/stdio/
 authenticated-loopback image checks reuse original explicit-H native-CDXML expectations,
 with a qualified shared rasterizer and no new approved golden or asset.
+
+## Ordinary MOL display in normal parser fuzzing, 2026-11-14
+
+[Isolated coverage evidence](../verification-mol-display-fuzz.md) extends the two existing
+MOL targets without changing prior parser/writer invariants. Source/model retention and
+pre-cancellation are original application contracts, not mutation chemistry oracles.
+Original interior CN/CCO seeds separately establish successful identity-frame display;
+unchanged raw/legacy seeds retain honest scene/projection refusals. External RDKit's
+rejection of the old unsupported492B extension stays a diagnostic, not an interoperability
+pass. No consumer, format rule, asset, fixture, old expectation or dependency changes.
+Bounded ASan runs and observed303/492B maxima establish neither maximum-input nor security
+coverage. The inspected BIOVIA/IUPAC/OpenSMILES rules above remain the behavior basis.

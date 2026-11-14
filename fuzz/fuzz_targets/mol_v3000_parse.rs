@@ -1,11 +1,13 @@
 #![no_main]
+use bondline_commands::Cancellation;
 use bondline_io::mol::{
     MolTransform,
     v3000::{MAX_BYTES, MAX_DEPTH, MAX_ITEMS, MolFile, write_v3000},
 };
-use bondline_model::Point2;
+use bondline_io::{StoredDocument, display::drawing_page_scene};
+use bondline_model::{PageSize, Point2};
 use libfuzzer_sys::fuzz_target;
-use std::collections::BTreeSet;
+use std::{collections::BTreeSet, sync::Arc};
 
 fuzz_target!(|data: &[u8]| {
     if let Ok(raw) = MolFile::parse(data) {
@@ -43,6 +45,29 @@ fuzz_target!(|data: &[u8]| {
             assert!(graph.is_err());
         }
         if let Ok(graph) = graph {
+            if let Ok(stored) = StoredDocument::from_mol(Arc::from(data), PageSize::A4, frame) {
+                let before = stored.clone();
+                let page = stored
+                    .model()
+                    .pages()
+                    .first()
+                    .expect("owned MOL has a page");
+                let _scene =
+                    drawing_page_scene(1024, 1024, &stored, page.id(), &Cancellation::default());
+                assert_eq!(
+                    stored, before,
+                    "scene success or refusal must not author data"
+                );
+                assert_eq!(stored.export_mol().unwrap(), data);
+                let cancel = Cancellation::default();
+                cancel.cancel();
+                let error = drawing_page_scene(1024, 1024, &stored, page.id(), &cancel)
+                    .err()
+                    .expect("pre-cancelled drawing must refuse");
+                assert_eq!(error.code(), "cancelled");
+                assert_eq!(stored, before);
+                assert_eq!(stored.export_mol().unwrap(), data);
+            }
             match write_v3000(&graph, "Original V3000 fuzz graph", frame) {
                 Ok(encoded) => {
                     assert!(encoded.len() <= MAX_BYTES);

@@ -462,3 +462,72 @@ exit0, cov1979/features7021,331retained inputs/reported406KiB/RSS422MiB,8seconds
 exercised input4097B; the64KiB ceiling is not coverage. Same unchanged full fuzz manifest/
 lock, pinned tools/nightly, own absolute fuzz/target/incremental0/release-debug0. Stable
 all-target clippy/fmt pass. This bounded smoke is not exhaustive chemistry or a security audit.
+
+
+## Source-aware MOL display coverage
+
+The existing mol_parse and mol_v3000_parse targets also exercise the real
+`bondline_io::display::drawing_page_scene` after their existing strict-projection
+gate. A successful StoredDocument construction supplies its actual A4 Page/IDs
+and the unchanged identity frame (1pt/unit, origin0,0). A 1024² scene may succeed
+or honestly refuse; both outcomes must preserve the full owner, authored model
+and exact original MOL bytes. Pre-cancellation must return cancelled and leave
+the same data intact. Every prior parser/span/resource/projection/writer check
+and early writer refusal remains in place. This adds no target or dependency.
+
+Fresh ignored source seeds must be separate from mutation corpora. For example,
+copy the existing fixture seeds as above, and extract the original ordinary MOL
+spans without regenerating a model or changing their coordinates:
+
+```sh
+"$BONDLINE_PYTHON" -B - <<'PYSEED'
+from pathlib import Path
+from hashlib import sha256
+import shutil
+base=Path('.cache/fuzz/mol-display-example')
+source=Path('crates/io/tests/fixtures/sdf-preview/valence-absent-mixed.sdf').read_bytes()
+assert sha256(source).hexdigest()=='e5cbdc14329c59bad55148c5de37058de90f651af10966c30cf8b89b3b5efd39'
+inputs={
+    'mol_parse': [
+        ('rdkit-CH3.mol',Path('crates/io/tests/fixtures/mol/rdkit-CH3.mol').read_bytes()),
+        ('ethane-v2000.mol',Path('crates/io/tests/fixtures/mol/ethane-v2000.mol').read_bytes()),
+        ('ordinary-CN-v2000.mol',source[410:713]),
+    ],
+    'mol_v3000_parse': [
+        ('noncontiguous-cc.mol',Path('crates/io/tests/fixtures/v3000/noncontiguous-cc.mol').read_bytes()),
+        ('continuations-and-extensions.mol',Path('crates/io/tests/fixtures/v3000/continuations-and-extensions.mol').read_bytes()),
+        ('ordinary-CCO-v3000.mol',source[0:371]),
+    ],
+}
+for target,files in inputs.items():
+    seeds=base/target/'seeds';corpus=base/target/'corpus'
+    seeds.mkdir(parents=True,exist_ok=False);corpus.mkdir()
+    for name,data in files:
+        (seeds/name).write_bytes(data)
+        shutil.copyfile(seeds/name,corpus/name)
+PYSEED
+```
+
+These exact raw origins mostly reach paper/metadata refusal under the fixed
+identity frame. Do not transform them and call them the unchanged source.
+The recorded run additionally uses separately authored interior CN/CCO seeds,
+with literal coordinates and unchanged external consumer checks. Its original
+seed generator, source hashes, scene classifications and mutating corpus are
+separate ignored evidence; see
+[verification-mol-display-fuzz.md](../docs/verification-mol-display-fuzz.md).
+The smaller recipe above is not claimed to reproduce that exact four-seed corpus.
+
+Use the existing installed pinned cargo-fuzz path read-only if this checkout has
+no target/tools/bin, and this worktree's own absolute target directory:
+
+```sh
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address mol_parse .cache/fuzz/mol-display-example/mol_parse/corpus -- -runs=10000 -seed=619734821 -max_len=65536 -timeout=5
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address mol_v3000_parse .cache/fuzz/mol-display-example/mol_v3000_parse/corpus -- -runs=10000 -seed=937155923 -max_len=65536 -timeout=5
+```
+
+The final rustc debug0 flag retains sanitizer/coverage/debug assertions. This is
+bounded scene-construction and source-preservation smoke, not GPU/PNG/native
+rendering, whole-chemistry correctness, maximum-input coverage or a security audit.
+The unsupported V3000 extension remains a syntax seed, with separately recorded
+strict-projection and external-consumer refusal. No committed fixture, oracle,
+runtime source, root/isolated lock or workflow changes.
