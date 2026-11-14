@@ -1234,3 +1234,11 @@ Actual ordinary VAL-absent fixtures, unchanged external consumers, explicit full
 expectations and source/history/cancellation tests are the relevant acceptance boundaries.
 The metadata-only native view and full reference arrangement remain incomplete; no reference
 runtime, screenshots, assets, new human-approved golden or native parity is inferred here.
+
+[Independent capture and adapter evidence](../verification-sdf-capture-oracles.md) now
+passes unchanged original784-byte N-left/N-right ordinary inputs and the separate pinned
+777-byte adapter input. Expected geometry/H is literal and externally consumed; full PNG
+comparison uses the protected literal renderer, so it is not an independent new rasterizer
+or approved golden. Separate fixed-metric FreeType evidence, analytic bond probes, both-row
+regions and missing-row/H/Y controls qualify that limit. Actual CLI/stdio/authenticated
+loopback replies and exact Save are tested; no native UI or broader chemistry claim follows.
