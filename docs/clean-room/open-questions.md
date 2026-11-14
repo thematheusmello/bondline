@@ -168,3 +168,12 @@
   never use it as a bond reference or fresh application identity. FragmentZ is supported
   as a qualified public-base/native compatibility case; the older SDK owner list omits it.
   CIP0U/1N source retention is not stereo perception or proof of a chemical advisory.
+
+
+- Installed26.1 SDF Open now shows both records as separate drawings in one document for
+  two original ordinary/mixed inputs, with no observed initial browser/import choice.
+  Per-record duplicate/empty/DT field retention, internal grouping, selection correspondence,
+  layout rules and export versions/fidelity remain unobserved. The empty document-properties
+  table and blank new-attachment dialog do not establish lost fields. See
+  ../research/installed-sdf-import.md; any interim Bondline record/data panel is original
+  policy until separately evidenced, not a26.1 workflow claim.

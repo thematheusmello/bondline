@@ -407,3 +407,15 @@ Update the existing logical parity row with its exact variant, command/model/UI 
 limitations and evidence. A ticket is `wired` while any promised behavior lacks decisive
 evidence; a native/platform claim stays unverified when that platform did not run. Keep the
 remaining full target visible and leave exact next work/owned job handles in STATUS.
+
+
+## M1-05 source update, 2026-11-14
+
+The [bounded installed SDF observation](installed-sdf-import.md) now supplies an actual
+Open result for both ordinary and mixed two-record inputs: one document, both molecular
+drawings visible, no observed initial browser/additional record choice. Internal grouping,
+field attachment/retention, layout and export remain unknown. Do not infer a first-record
+import or an established active-record browser. Preserve explicit collection ownership
+and every raw record/ordered field; any interim record/data editor is original Bondline
+policy. This resolves only the observed Open question, not the entire M1-05 acceptance
+contract or application support. The original borrowed SDF library remains unchanged.

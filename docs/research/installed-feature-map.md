@@ -348,3 +348,13 @@ secondary-toolbar declarations from the installed GUI XML. These are additional 
 visual evidence, not runtime tooltips, enabled states, hit bounds or executed workflows.
 They do not change this first-pass catalog, its original source hashes or qualified
 logical-feature count. Its separate controlled blank pass preserved all original IDs/frames.
+
+
+## Bounded SDF Open follow-up
+
+[Installed SDF import](installed-sdf-import.md) records a separate05:29–05:38UTC pass:
+original two-record ordinary/mixed SDF files each open as one document with two separate
+visible drawings. No additional import choice/browser appears in those routes. Field
+retention, internal grouping and export remain unknown; document-properties/new-attachment
+absence is not loss evidence. This adds a flow observation, not menus, palette cells,
+Bondline support or a feature-completion percentage. Exact evidence and cleanup are linked.

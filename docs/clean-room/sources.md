@@ -668,3 +668,19 @@ operated in this acceptance; vendor bytes/prose/fonts/icons remain unredistribut
 The full report/index/cleanup and excluded probes are separately hashed. This supplies
 bounded Mac application evidence, not a specification for general CDX editing, faithful
 preview, chemistry or platform parity. The published format/source policies above remain.
+
+
+## Installed26.1 SDF Open flow, 2026-11-14
+
+NATIVE-REFERENCE-SDF is the authorized bounded runtime observation of existing installed
+26.1.0.6801, macOS27.2arm64/tierunknown. Two original licensed two-record files, ordinary
+V2000 and mixedV3000/V2000, each open as one document with both separate molecular drawings
+visible. No extra import/record choices or initial browser are observed in those routes.
+Functional filter/dialog roles and current-session values are in
+[installed-sdf-import.md](../research/installed-sdf-import.md), with exact input, REA,
+flow/index/cleanup hashes. Root rehashed all41 evidence files. Empty document-properties
+and new-attachment dialogs do not prove loss or retention of per-record data; internal
+grouping/layout/export behavior remains unknown. CUA actions, passive REA after-states and
+OS sheet captures remain distinct. Only owned imports were closed; four original sampled
+windows/cursor are preserved. Raw screenshots/resources remain ignored, not shipped assets.
+No Bondline implementation or complete26.1 collection/browser claim follows.
