@@ -86,3 +86,43 @@ The195 lower-layer/oracle/asset/dependency identities frozen before implementati
 protected. This core checkpoint does not yet claim aggregate receiving, independent new
 oracle tests, actual CLI/MCP wire acceptance, native/Windows/Linux or hosted execution.
 Their separate receiving evidence follows. M0/M1 and the full goal remain active.
+
+## Receiving oracle, adapter and workspace evidence
+
+Root received six adapter files from e10affb as fa1d9b2 after rehashing10 logs,9 baseline/
+diff artifacts,2 preservation proofs,13 received-core files,213 unchanged protected files
+and4 individual records. All4 old adapter files reconstruct exactly. The retained
+failed CLI/socket runs come from3 new unsourced wrong-kind strings and reuse after2
+intentionally disconnecting malformed parameter shapes; only those new tests changed.
+Transport/error behavior and every prior assertion remain. Full CLI/MCP79/clippy/fmt pass;
+see [actual adapter evidence](verification-smiles-record-adapters.md).
+
+The separate two-file oracle source388a664 is received32385d5, with6 logs,13 protected
+and9 exact received Rust identities plus2 individual records checked. Runtime60790→
+GREEN63343 preserves every test byte. Actual output is checked against literal global
+spans, unchanged raw/Python/RDKit consumers, every graph endpoint/order and isotope/H,
+three graph-negative controls and a graph-equivalent changed ring label. Both65536-byte
+notation cases (without/with1MiB opaque data) check all4096 atoms and3072 bonds. This is
+syntax/extreme-literal evidence, not realistic chemistry or maximum-writer coverage.
+See [independent oracle record](verification-smiles-record-oracles.md).
+
+Root79442 cargo xtask ci exits0 at32385d5:762workspace+3Mac bridge=765passed,0failed/
+ignored across119 result lines. Fmt/all-target warnings-denied clippy/layers/unchanged
+runtime-license+two-asset/eight-file five-bundle corpus gates pass. Log92604B/SHA256
+4bb8be0e444d4ce2d3e134052e10aef33cd88c2a1e2a893da2aff2cf0697ad5e.
+No production correction or parser/writer/normalizer/layout/old consumer change occurred.
+Receiving edits are docs/continuation only; relevant link/diff checks replace unnecessary
+runtime repeats. Root default debug/incremental0/own target and existing pinned Python
+were used. No new native, Windows/Linux, hosted or fuzz run is claimed; Actions stays off.
+
+The source contract/production review is15856B/SHA256
+cf82b9394a6799ba20eb1a0936736eeb683fbd053cb4b80ac870811843f74b69. Its independent conservative
+legal-note/meta JSON size is65975B, not a whole-envelope budget. Original runtime/producer/
+receiving scopes remain separate. Full M0/M1 and the persistent M0–M5 goal remain open.
+
+Post-gate receiving check confirms265 committed source/compat/fuzz/asset/manifest files
+still match32385d5, all195 lower-layer baseline identities are exact and approved golden
+SHA1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc is unchanged.
+Only Markdown changed after runtime gates; new local documentation links and diff checks
+pass. Existing Python3.13.0/RDKit2026.09.2 reports debug=True,optimize=0; assertions remain
+enabled. No parser was added/changed, so this record does not relabel old ASan as new fuzz.

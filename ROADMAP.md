@@ -250,3 +250,13 @@ consumer cases, receiving559 aggregate checks and normal10000-run ASAN. It prese
 other source byte and leaves original snapshots immutable. Whole-collection Engine/current/
 saved/history/file commands and native data editing remain the next M1 integration; this
 library is not advertised as an application editor or complete format parity.
+
+## Explicit SMILES record addressability
+
+The source-file slice now has smiles.record.inspect: one explicit revision/ordinal, exact
+notation and global ranges/counts, with opaque data retained privately. It uses the same
+historical deferred-result/cancellation/close machinery, no write lease or mutation, and
+a128KiB serialized-object budget. Core and independent raw/graph/wire evidence are linked
+from docs/verification-smiles-record.md; native selection/preview/editing remain missing.
+Next M1 work should move all-record chemical display/import toward real drawing workflows,
+not treat these source/automation foundations as completed format or editor parity.

@@ -252,3 +252,12 @@ shows only count/size plus unavailable-preview status. Its existing file worker 
 SMILES Open/Save/Save As and clean-close draining; native execution remains unverified.
 Explicit conversion/export remain distinct commands with their old limits and association
 rules. See verification-smiles-file-app.md and verification-smiles-file-ui.md.
+
+`smiles.record.inspect` captures a whole immutable StoredContent owner, then reparses only
+one explicit source-local record off-lock. Exact notation and compact file-relative
+ranges/counts are returned under a128KiB serialized-object cap using the existing bounded
+JSON helper. Application data stays opaque in source. The completed reply contains no
+extra whole-source owner; Debug and automatic state omit notation. Existing historical
+read-only result/close/UI refresh, deferred cancellation and worker/reply barriers apply.
+No save reservation, native file binding/ACK, mutation, selection or repaint is added.
+Independent raw/graph/wire evidence is linked from verification-smiles-record.md.

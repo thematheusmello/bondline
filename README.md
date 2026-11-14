@@ -49,7 +49,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. CLI/MCP inspect ordered fields and edit existing values with Undo/Redo. Static summary only; chemical preview and field-edit UI remain missing. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
 | Rendering | Shared CPU/GPU neutral-element graph scenes, literal authored H, hover and PNG captures; independent font checks and one approved carbon regression scene. New element-label native workflows remain unverified. |
-| Automation | 24 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Automation | 25 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. CI runs tests and actual
 window smoke checks on macOS, Windows and Linux; interactive Windows/Linux workflows
@@ -128,7 +128,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | CDX | Guarded shared/native Mac Open/Save, exact source retention, limited elemental metadata view and standalone syntax/property/new-tree APIs, checked independently | Faithful preview, broader metadata/chemistry, safe edits/new encoding and foreign/general corpus |
 | MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, with independent byte/record/data checks; SDF summary has no chemical preview | Chemical preview/data-edit UI, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
-| SMILES | Complete accepted multi-record source Open/Save through shared commands/CLI/MCP/loopback; exact opaque data/endings, explicit-H fragment export and restricted carbon-path→CDXML conversion | Chemical preview/editing of opened files, native acceptance of the wired file chooser, native export/conversion controls, general layout/valence, aromaticity/stereo and canonicalization |
+| SMILES | Complete accepted multi-record source Open/Save and explicit bounded record inspection through shared commands/CLI/MCP/loopback; exact opaque data/endings, explicit-H fragment export and restricted carbon-path→CDXML conversion | Chemical preview/editing of opened files, native acceptance of the wired file chooser, native export/conversion controls, general layout/valence, aromaticity/stereo and canonicalization |
 | InChI | Planned | Reference-tool comparison and import/export |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |

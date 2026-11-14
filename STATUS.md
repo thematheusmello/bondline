@@ -16,52 +16,55 @@ availability is indicated again. Continue source and headless work.
 
 ## Current revisions and gates
 
-Recoverable integrated source: codec ca11b2f (source3745908), container-fuzz bbf0a61,
-filesystem ea6b0f2 (sourcea42e8c9), and shared commands/UI d100d63 (sourcea7c638f).
-The final receiving/status commit follows those source checkpoints; read git log for
-its exact revision. Prior public df34c66/715 remains earlier evidence. Goal stays ACTIVE;
-M0/M1 and M2–M5 are incomplete. All intentional files are committed after local gates.
+Recoverable query source: core0b29ffd; adapter acceptance fa1d9b2 (sourcee10affb);
+independent oracles32385d5 (source388a664). The receiving/status commit follows those
+checkpoints; read git log for its exact revision. Prior public17e2a4a/750 remains earlier
+SMILES-file evidence. Full M0/M1 and M2–M5 remain incomplete; goal stays ACTIVE.
 
-Receiving cargo xtask ci82639 exits0:747workspace+3bridge=750,0failed/ignored across117
-result lines. Fmt/all-target warnings-denied clippy/layers/unchanged declared runtime
-licenses and two assets/eight-file five-bundle corpus pass at the printed Root workspace.
-Log91137B/SHA256 71f13d4b2eb183ca426ad2bb258fe3fb927a706c9d95ce0a7070a3d4a65f6984.
-Prior715/704/696/686 gates remain separate; none establishes new native/Windows/Linux
-or hosted behavior. The user-active desktop and disabled-Actions instructions remain.
+Root cargo xtask ci79442 exits0:762workspace+3Mac bridge=765passed,0failed/ignored across
+119 result lines. Fmt/all-target warnings-denied clippy/layers/unchanged declared runtime
+licenses+two assets/eight-file five-bundle corpus pass. Log92604B/SHA256
+4bb8be0e444d4ce2d3e134052e10aef33cd88c2a1e2a893da2aff2cf0697ad5e.
+No native, Windows/Linux or hosted workflow ran. Runtime deps/locks/fonts/golden and all
+parser/writer/normalizer/layout/old oracle fixtures remain unchanged; no new parser/fuzz
+behavior is claimed by this query-only slice. The earlier file-parser ASan is separate.
 
-Root rehashed codec7/log9/baseline3/protected133/research2; nativeIO6/log6/baseline7/
-draft2/receivedcodec6/protected207 plus4 individual records; UI6/log5/protected19 and
-its original five source identities. All34 received app/UI/docs matched source freeze
-before these receiving appendices.
-The sole cherry-pick conflict was blank EOF context in open-questions.md; it resolved
-exactly to the supplied app bytes. Old notation reconstructs exactly by removing only
-two module/export lines; old converter/export/writer/layout/oracles/deps/golden stay exact.
-See docs/verification-smiles-file-app.md and the linked codec/I/O/UI records; Root review
-receipts remain ignored.
+Observed runtimeRED53339 and expanded56458 precede the new command; focusedGREEN71291
+passes5 with no correction after implementation. Final command package174, adapter79
+and independent oracle4 pass their scoped tests/clippy/fmt. Counts overlap765; do not
+pool them. Core's discovery-list update first stopped at a comma-less final entry; only
+additive25th-name/count fixtures were completed. Adapter draft corrections were3 invented
+wrong-kind code strings and connection reuse after2 intentionally disconnecting malformed
+parameter shapes. Existing production/error/transport/old assertions were not changed.
+All failed logs remain qualified in verification-smiles-record*.md.
 
-First app Open/Save runtimeRED37457 proves the absent command. The broader Root94529
-baseline reproduction executes7 failing tests against unchanged df34c66, followed by
-actual backend focusedGREEN37014 with no correction. Affected command/CLI/MCP242 and
-UI98 pass, including real files/worker/retry/close-drain and headless privacy/AccessKit/
-stale-canvas tests. Counts overlap the full workspace; do not add them as distinct totals.
-UI dependency compileRED is separately qualified. No actual native execution is claimed.
+Root checked core13/log7/protected195, a15856B contract/production review (SHAcf82b939…f74b69),
+adapter6/log10/baseline9/preservation2/receivedcore13/protected213 plus4 individual records,
+and oracle2/log6/protected13/receivedRust9 plus2 individual records. All4 oracle tests
+remain exact from runtimeRED through firstGREEN. Actual returned notation faces unchanged
+raw/per-notation external consumers: nonfirst branches/rings/physicalH/isotopes/orders,
+three graph-negative controls, graph-equivalent ring spelling, and all4096 atoms/3072
+edges in a65536-byte vector, both without/with1MiB opaque data. Syntax/extreme literal
+data is not general chemical validity or a maximum writer graph claim.
 
-Root container ASan35818 exits0:10000runs/8initialseeds, seed143812957, max_len65536,
-largest exercised52B, cov671/features1977,231entries/4481B/RSS87MiB. Separate clippy/fmt
-pass; no pin/old-harness change. This is a smoke check, not large-bound coverage/security
-or chemistry proof. Unit boundaries separately exercise64MiB/1m-lines/65536records and
-65536-byte notation with LF/CRLF framing beyond the old raw-notation cap. A maximum writer
-graph is still not constructed/proven. Actions readback confirms repository disabled,
-workflow417397204 disabled_manually and all54 returned runs completed; no new run exists.
-The disabled future workflow now includes the separate eighth fileparser target. YAML
-parse and actual isolated seed-block execution pass; eight seeds exactly match the local
-ASan start. This configuration has no hosted execution or permission/enable change.
+The128KiB cap applies to smiles_record JSON only, not parent/wire envelopes. Independent
+conservative legal-note/meta measurement is65975B. A whole source Arc survives deferred
+work and releases from the self-contained completed reply. Cancellation survives finish;
+late source changes return historical data without applying it. Ordinary Inspect/Debug
+and appdata privacy, close/UI guards, no Save reservation and no repaint are checked.
+Actions remains disabled at repository/workflow levels; never enable it for this milestone.
+
+Read-only next-display research found real fidelity dependencies: unknown-H omission alone
+cannot certify OH/NH display, and opposed-neighbour H suffixes may attach incorrectly.
+No new native failure is claimed. The committed docs/research/sdf-preview-plan.md preserves
+the sources, ordinary VAL-absent CCO/CN acceptance, typed sidecar/geometry/ID/job boundaries
+and exact next unexecuted test. This is planned work, not an implemented molecular preview.
 
 ## Delivered receiving scope
 
-24 shared typed commands: document.inspect/close; CDXML/CDX/MOL/SDF/SMILES-file Open/Save;
+25 shared typed commands: document.inspect/close; CDXML/CDX/MOL/SDF/SMILES-file Open/Save;
 page.set_size; bond.create/extend; history.undo/redo; render.capture; ui.controls/file;
-sdf.record.inspect, sdf.field.set_value, file.convert_smiles_to_cdxml and
+sdf.record.inspect, sdf.field.set_value, smiles.record.inspect, file.convert_smiles_to_cdxml and
 file.export_smiles_fragment. UI/CLI/stdio/authenticated loopback use one registry; the
 export/conversion commands have no native control. Headless engines do not fake dialogs.
 
@@ -104,7 +107,10 @@ smiles_file metadata, never a recordsVec or notation/data. Later malformed/unsup
 notations reject the whole Open and preserve prior state. Drawing/SDF/cross-format saves
 refuse. The old single-notation parser/converter budgets remain unchanged. .smi/.smiles
 chooser/static summary/real background worker are wired/headlessly tested, including clean
-close draining; no file editor, record-query command or molecular preview exists yet.
+close draining; no file editor, UI record-selection state or molecular preview exists yet.
+The explicit smiles.record.inspect query returns one literal notation/global ranges/counts
+with revision/generation stamps, retaining complete source during work. Its opaque data
+stays private; no model conversion or file mutation is granted.
 
 Current aromatic fuzz evidence is linked above. Earlier fixed-H/export sourcee647196
 separately passed ASAN45229 with its five-seed set; do not relabel that run as aromatic
@@ -137,7 +143,7 @@ The subsequent Open-help string fix lists.sdf/.sd and passes fmt/UI clippy; its 
 has not been natively rechecked. See docs/verification-native-sdf-and-extension.md.
 All owned app/controller/helper processes closed; CUA completion was observed exactly once.
 The101-file evidence index was independently rehashed after exact CLI cache recovery.
-Do not confuse its archived18-command CLI with current receiving24-command binaries.
+Do not confuse its archived18-command CLI with current receiving25-command binaries.
 
 Earlier Mac evidence covers pages/history/CDXML/MOLV2000/V3000/guarded CDX and CPU/GPU/PNG.
 CDX always remains incomplete: unchanged Save works, faithful preview/edits/new encoding
@@ -156,17 +162,18 @@ ship. Existing restoration exceptions remain recorded. Only approved golden SHA:
 All three workers are terminal; no live own Cargo/fuzz/native/controller/helper job.
 Root owns Git/integration/publication. Check agents and actual handles before resuming.
 
-- native_acceptance: complete filecodec3745908 in bondline-rxn/feat/smiles-file-codec;
-  seven-file handoff32850B/SHA71168d59…c8a697; fullIO249/clippy/fmt. Receivedca11b2f.
-- reference_map: native fileIOa42e8c9 in bondline-mol-v3000/feat/smiles-file-io;
-  six-file handoff48367B/SHA60216d3c…08b188; fullIO259/clippy/fmt. Receivedea6b0f2.
-- sdf_setter_review: five UI files plus evidence doc in bondline-render-labels/
-  feat/smiles-file-app, included in a7c638f/receivedd100d63. Handoff8237B/
-  SHA2036f73e…753c02; UI98/clippy/fmt. Five held source identities exact throughGREEN;
-  separate Root command peer review6738B/SHAe858a5a4…fc173 found no confirmed defect.
-- Root: commands/CLI/MCP in the same app branch pass242/clippy/fmt, all34 app/UI/docs
-  source-freeze7112B/SHA089bb491…8abc4e. Source app/current Root work is committed;
-  Root receiving750 gate and ASan10000 are separate records, not pooled producer counts.
+- native_acceptance: read-only query contract/production review15856B/SHAcf82b939…f74b69,
+  then next-display research23085B/SHAfb57b3ac…e1ee0909. No product edits or runtime gate;
+  source facts/proposed decisions are distinguished in the committed preview plan.
+- reference_map: adapters e10affb in bondline-mol-v3000/feat/smiles-record-adapters;
+  received fa1d9b2. Handoff53719B/SHA61d5808c…1b7174f; fullCLI/MCP79/clippy/fmt.
+  RuntimeRED91631, corrected draft assumptions and all10 logs retained. Old4 adapter
+  files reconstruct exactly; all13 receivedcore identities match.
+- sdf_setter_review: independent oracles388a664 in bondline-render-labels/
+  feat/smiles-record-oracles; received32385d5. Handoff9284B/SHAe8cf1707…2e72bb2;
+  runtimeRED60790→GREEN63343 all4 unchanged, clippy/fmt. No new consumer or parser edit.
+- Root: core0b29ffd, command174/clippy/fmt; receiving765 gate above. Its13-file source
+  freezeSHA292867e3…76634fd remains separate from aggregate evidence. Root owns Git.
 
 Root graph test files are committed as crates/commands/tests/smiles_export_graph.rs and
 smiles_export_graph_oracle.py; the frozen RED record and exact-source GREEN are in
@@ -178,18 +185,21 @@ The user remains active on the desktop: no GUI/input/activation until availabili
 Keep Actions disabled through development. Targets stay separate, incremental0, Root
 default debug/siblings debug0; no cleanup is needed. Approved golden remains exact.
 
-1. Continue M1 with bounded explicit SMILES record inspection through the shared registry.
-   Read the new file/IR APIs, complete-content/SDF query patterns and pinned primary spec;
-   start with independent literal/raw/per-record expectations and a runtime missing-command
-   RED. Require expected revision and explicit source-local ordinal, retain the whole owner
-   during deferred work, bound JSON/disclosure, preserve opaque bytes and refuse stale/absent
-   records. This is original automation policy, not evidence of a reference record browser.
-2. Then broaden public-spec syntax and chemical layout/import beyond the current1–12carbon
-   conversion, keeping exact source backing separate from new drawings. SDF display/editor,
-   RXN/reactions and M2–M5 remain. Full M0 inventory/dialog addressability and platform
-   evidence remain open; the resolved license blocker alone does not complete M0.
-3. Native SMILES-file/conversion/export/new-element workflows wait for explicit user
-   availability. Do not infer it from time/pointer state, or enable Actions for a milestone.
-   Keep the full project goal active; this checkpoint does not complete requested parity.
+1. Continue M1 toward faithful all-record SDF molecular display; read the committed
+   docs/research/sdf-preview-plan.md and its primary sources before editing. First TDD:
+   original mixed-version VAL-absent ethanol/methylamine, H [3,2,1]/[3,2], authored None
+   and raw bytes exact, against a real new preparation/sidecar API. Observe missing-API
+   RED for cargo test -p bondline-io --test sdf_preview
+   valence_absent_records_resolve_display_h_without_authoring_it. This has not run.
+2. Keep display H/provenance separate from authored atoms/Save authority. Then close
+   source-direction label placement (including opposed C—N—C), checked all-record ID
+   mapping/translation/ink bounds, and registered cancellation/stale UI cache/close work.
+   Extend existing capture/UI through the same producer; preserve every record/data byte.
+   Do not complete the task around known-H ethane fixtures, omitted records/H, rotated
+   source geometry or source-only screenshots. General syntax/layout, RXN and M2–M5 remain.
+3. Native SDF molecular/SMILES-file/conversion/export/new-element workflows wait for explicit
+   user availability. Do not infer it from time/pointer state or enable Actions for a
+   milestone. Full M0 inventory/dialog/platform evidence also remains open. Keep full goal
+   active; this checkpoint does not complete requested parity.
 
 No new golden approval, PR/release/installer/signing, account/TCC or unrelated messages.

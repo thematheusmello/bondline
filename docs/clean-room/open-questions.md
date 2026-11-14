@@ -206,3 +206,14 @@ metadata-retention flow is established by the current evidence. Do not infer one
 SMILES supplier or the new headless tests. Actual native Bondline acceptance is also
 unverified while the user is active. Chemical preview/editing and explicit record queries
 remain missing; see verification-smiles-file-app.md and verification-smiles-file-ui.md.
+
+## Faithful ordinary SDF molecular display
+
+The current literal renderer's H omission does not establish faithful VAL-absent OH/NH
+labels. A separate documented derived-H/provenance policy and source-direction label
+placement are required before claiming ordinary all-record SDF preview. The complete
+normal-valence/charge/aromatic/radical/stereo policies and reference packing remain
+unresolved. Opposed C—N—C source geometry exposes a possible H-suffix attachment problem;
+this is source review, not a newly observed native failure. Read
+[the next display gate](../research/sdf-preview-plan.md); do not hide the gaps with
+rotated geometry, dropped records/H, or fixture-only completion claims.

@@ -59,9 +59,11 @@ The intended crate graph is model/cdxml/cdx -> chem/render -> io -> commands -> 
 Packages use bondline- prefixes. cdxml and cdx have no workspace dependencies; formats
 preserve unknown data and must never silently drop it. Native I/O stays out of model/parsers.
 The UI, CLI, loopback channel and MCP call one typed JSON command registry.
-StoredContent now distinguishes Drawing(StoredDocument) from complete Sdf{original,current};
+StoredContent distinguishes Drawing(StoredDocument), complete Sdf{original,current},
+and immutable complete SmilesFile(SmilesFileDocument);
 Engine current/saved/history/file plans retain that whole variant. Drawing JSON is unchanged;
-SDF has document:null plus collection metadata, never a first/empty drawing. document() and
+SDF has document:null plus collection metadata; SMILES files have a compact count/size
+summary. Neither substitutes a first/empty drawing. document() and
 stored_document() return typed Results; preserve wrong-kind refusals and clear stale UI data.
 StoredDocument owns drawing source/model/baseline. Keep that backing
 when wiring import; a cloned elemental projection alone loses unknown data. Require failed-
@@ -93,11 +95,12 @@ replacement and new-tree Writer; model mapping and application commands live abo
 render (L1, shared neutral-element/Single GraphScene, bounded hit regions, literal authored-H
 labels, CPU/GPU rectangles/strokes and approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
-bounded native CDXML/CDX/MOL/SDF filesystem libraries and source-preserving SDF/RXN container records;
+bounded native CDXML/CDX/MOL/SDF/SMILES filesystem libraries and source-preserving
+SDF/RXN/SMILES file records;
 bounded SMILES notation/source ownership including literal aromatic markers/bonds,
 opt-in fixed-H normalization and
 restricted noncanonical Fragment export and validated1–12carbon/Single path layout into
-a new pure Document, not source-backed application SMILES or general chemistry;
+a new pure Document, separate from complete SMILES source-file sessions or general chemistry;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
@@ -184,7 +187,7 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current 24-command registry includes complete SDF/SMILES-file Open/Save and bond.create for independent C-C fragments with
+The current 25-command registry includes complete SDF/SMILES-file Open/Save and bond.create for independent C-C fragments with
 three explicitly authored H per carbon, plus CDXML/CDX/MOL open/save. bond.extend is a
 headless terminal-carbon operation with required explicit H3-to-H2 policy and expected
 revision; only source-free or byte-proven native CDXML is allowed. Actual MOL/CDX backing
@@ -408,6 +411,25 @@ state has document:null and compact smiles_file {format,byte_length,record_count
 notations/data or a recordsVec. All drawing/SDF/cross-format operations refuse this kind.
 The .smi/.smiles chooser/static summary is wired and headlessly exercised; actual native
 acceptance remains unverified while the user is active. No chemical preview/editing,
-record selection, metadata editor or source-to-drawing authority follows. See
+UI record selection, metadata editor or source-to-drawing authority follows. See
 verification-smiles-file-app.md and verification-smiles-file-ui.md. Run the separate
 smiles_file_parse fuzz target locally as in fuzz/README.md; Actions stays disabled.
+
+## Explicit SMILES record inspection
+
+`smiles.record.inspect` requires current expected_revision and an explicit positive
+source-local record_id. It captures the complete immutable StoredContent Arc; selected-only
+parsing/JSON measurement runs off-lock. The12-field smiles_record object returns exact
+notation plus file-relative ranges/counts, with null distinct from existing empty data.
+Opaque application bytes are never copied/decoded/disclosed. Automatic state omits the
+result, and Debug omits notation. The128KiB cap applies to the serialized object, not
+parent/wire envelopes; keep the real bounded serializer guard and old notation limits.
+
+Use existing SDF historical snapshot/close/UI refresh semantics. Both Prepared deferred
+flags must include this plan so cancellation survives finish. A newer Open is not applied
+backwards; input_revision/session_generation identify the source. Retain the whole owner
+through work, then release the extra source from the self-contained completed reply.
+Queries reserve no write slot, bind no native file request and acknowledge no Save/close.
+Keep the independent raw/graph/maximum notation tests and actual adapter/no-repaint checks.
+This is original automation policy, not a native record browser/editor. See
+verification-smiles-record.md and its linked receiving records; Actions stays disabled.

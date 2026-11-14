@@ -653,7 +653,15 @@ complete bytes without regenerating notation or appending LF. The shared closed
 through current/saved/plans and common generation/lease/publication/close checks. State
 has document:null and only a compact smiles_file count/size summary. Drawing, SDF and
 cross-format Save operations refuse this content; there is no molecular preview/editor or
-record-selection command. The .smi/.smiles chooser/static summary is wired and tested with
+UI record-selection state. The explicit read-only record query below is separate.
+The .smi/.smiles chooser/static summary is wired and tested with
 synthetic egui input and real background file work; actual native acceptance is unverified.
 See [I/O](verification-smiles-file-io.md), [commands/adapters](verification-smiles-file-app.md)
 and [UI scope](verification-smiles-file-ui.md). M1 and full syntax/chemistry parity remain open.
+
+The explicit smiles.record.inspect command discloses only a chosen record's literal
+notation and global metadata ranges/counts, never its opaque application bytes. It retains
+the complete source during deferred work without creating a drawing or changing the file.
+Null versus empty data spans, old-source historical replies and a128KiB object budget are
+defined in verification-smiles-record.md. This adds automation addressability; chemical
+preview/editing and native record selection remain missing.

@@ -58,6 +58,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `file.convert_smiles_to_cdxml` | Required `expected_revision`, `input_path`, `output_path`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt` | Deferred create-only conversion of one bounded neutral carbon/Single path into new native CDXML; current session and all its baselines remain unchanged |
 | `file.export_smiles_fragment` | Required `expected_revision`, positive `page_id`, positive `fragment_id`, `output_path` | Create-only noncanonical explicit-H SMILES file for exactly one complete-source selected fragment; geometry/document context are explicitly not encoded and the current session is unchanged |
 | `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
+| `smiles.record.inspect` | Required `expected_revision`, positive `record_id` | Deferred exact selected notation and global byte ranges/counts; opaque application data is not disclosed;128KiB object budget |
 | `sdf.field.set_value` | Required `expected_revision`, positive `record_id`, zero-based existing `field_index`, `value_lines` | Deferred immutable existing-field edit, one whole-content history commit; byte-preserving no-op and strict stale/input guards |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
@@ -703,7 +704,7 @@ See [verification-smiles-export-command.md](verification-smiles-export-command.m
 
 ## Complete SMILES source-file sessions
 
-The registry now has24 typed commands. document.open_smiles requires only path and accepts
+The registry now has25 typed commands. document.open_smiles requires only path and accepts
 optional discard_unsaved=false; document.save_smiles requires only path and accepts
 optional overwrite=false. Both closed schemas reject record/layout/conversion options.
 Open validates every meaningful notation and starts a clean whole-file generation. Any

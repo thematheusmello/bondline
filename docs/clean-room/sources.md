@@ -1178,3 +1178,17 @@ introduced. Core literal/state/cancellation/lifetime tests have observed RED/GRE
 independent raw/graph, real adapter and aggregate evidence remain distinct receiving gates.
 No proprietary code/help/assets, parser/consumer change, new dependency or hosted/native
 execution is involved. The reference SMILES browser/preview remains an open question.
+
+## Next SDF display dependency, source review2026-11-14
+
+[Research and executable next gate](../research/sdf-preview-plan.md) records planned
+all-record display, not a delivered preview. Primary BIOVIA2026 valence/query fields,
+IUPAC2008 element/H and bond-attachment rules, pinned OpenSMILES organic-subset rules and
+RDKit primary valence documentation identify a separate derived-H/label-placement
+requirement. Ordinary VAL-absent records cannot be declared faithfully depicted from
+unknown-H omission alone. Preserve authored None, literal declarations and source bytes;
+a proposed display sidecar/packing policy is original, versioned and independently tested.
+No reference arrangement/perception default is inferred and no proprietary diagram/asset
+is reused. Source review also flags opposed-neighbour H-label attachment as unresolved;
+no new native/chemistry/render result is claimed. The planned mixed ethanol/methylamine
+acceptance must cover actual source directions and every record, not only known-H ethane.

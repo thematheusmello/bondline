@@ -2226,3 +2226,12 @@ The command discloses one explicit literal notation and file-relative metadata w
 retaining complete source during work, never application bytes or a first-record drawing.
 Actual external record-oracle and CLI/MCP wire acceptance plus the aggregate receiving
 gate remain separate; no native, other-platform or hosted claim follows. Actions stays off.
+
+Receiving query source32385d5 passes Root79442 cargo xtask ci:762workspace+3Mac bridge=
+765,0failed/ignored,119 result lines. Fmt/clippy/layers/unchanged runtime licenses/assets/
+corpus pass. Log92604B/SHA4bb8be0e444d4ce2d3e134052e10aef33cd88c2a1e2a893da2aff2cf0697ad5e.
+[Receiving details](verification-smiles-record.md#receiving-oracle-adapter-and-workspace-evidence)
+link real adapter/oracle work and retain all corrected draft assumptions. No new native,
+Windows/Linux, hosted or parser fuzz execution follows; Actions remains disabled. The
+[committed next-display gate](research/sdf-preview-plan.md) is research/planned only,
+with unknown-H/label-placement fidelity requirements rather than fixture-only completion.
