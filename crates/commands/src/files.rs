@@ -170,6 +170,13 @@ pub struct FileOperation {
 
 #[derive(Debug)]
 pub(super) enum FilePlan {
+    ConvertSmiles {
+        params: crate::ConvertSmilesToCdxml,
+        origin: bondline_model::Point2,
+        page: bondline_model::PageSize,
+        save_slot: Arc<()>,
+        generation: u64,
+    },
     Open {
         params: OpenCdxml,
         encoding: OpenEncoding,
@@ -194,6 +201,11 @@ pub struct Completed(pub(super) Completion);
 
 #[derive(Debug)]
 pub(super) enum Completion {
+    #[cfg(not(target_arch = "wasm32"))]
+    Conversion {
+        receipt: crate::ConversionReceipt,
+        save_slot: Arc<()>,
+    },
     SdfFieldSet(crate::sdf_edit::FieldCandidate),
     Result {
         result: Box<CommandResult>,
@@ -222,11 +234,15 @@ pub(super) enum Completion {
 }
 
 impl FilePlan {
-    pub(super) fn bind_ui_request(&mut self, id: u64) {
+    pub(super) fn bind_ui_request(&mut self, id: u64) -> Result<(), Error> {
         match self {
             Self::Open { ui_request_id, .. } | Self::Save { ui_request_id, .. } => {
-                *ui_request_id = Some(id)
+                *ui_request_id = Some(id);
+                Ok(())
             }
+            Self::ConvertSmiles { .. } => Err(Error::InvalidUiFileParameters(
+                "SMILES conversion is not a native file-presentation action",
+            )),
         }
     }
     pub(super) fn complete(self, cancel: &Cancellation) -> Result<Completed, Error> {
@@ -235,6 +251,35 @@ impl FilePlan {
             use bondline_io::files::{canonical_save_path, read_cdxml_file, save_cdxml_file};
             use std::path::Path;
             Ok(Completed(match self {
+                Self::ConvertSmiles {
+                    params,
+                    origin,
+                    page,
+                    save_slot,
+                    generation,
+                } => {
+                    cancel.check()?;
+                    let output = canonical_save_path(Path::new(&params.output_path))?;
+                    if output.to_str().is_none() {
+                        return Err(Error::UnrepresentableFilePath { published: false });
+                    }
+                    let receipt = bondline_io::files::convert_smiles_to_cdxml_file(
+                        Path::new(&params.input_path),
+                        &output,
+                        params.bond_length_pt,
+                        origin,
+                        page,
+                        cancel,
+                    )?;
+                    Completion::Conversion {
+                        receipt: crate::ConversionReceipt::from_file(
+                            receipt,
+                            params.expected_revision,
+                            generation,
+                        )?,
+                        save_slot,
+                    }
+                }
                 Self::Open {
                     params,
                     encoding,
@@ -384,6 +429,14 @@ impl Engine {
 
     pub fn finish(&mut self, completed: Completed) -> Result<CommandResult, Error> {
         match completed.0 {
+            #[cfg(not(target_arch = "wasm32"))]
+            Completion::Conversion {
+                receipt,
+                save_slot: _save_slot,
+            } => Ok(CommandResult {
+                conversion: Some(receipt),
+                ..self.state()
+            }),
             Completion::SdfFieldSet(candidate) => self.finish_sdf_field(candidate),
             Completion::Result { mut result, cancel } => {
                 if let Some(cancel) = cancel {

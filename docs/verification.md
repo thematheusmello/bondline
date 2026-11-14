@@ -2127,3 +2127,17 @@ outputs and the input stay preserved, with truthful after-publication errors/can
 This is one create-only library conversion, not an active-document Save or application
 SMILES Open/Save workflow. No UI/input/native/Windows/Linux or hosted check was run;
 the user's active-desktop and disabled-Actions instructions remain in force.
+
+## Shared create-only SMILES conversion command, 2026-11-14
+
+[Exact command evidence](verification-smiles-conversion-command.md) records the actual
+missing-command runtime RED, complete closed parameters, shared reservation/worker/reply/
+close guards and 16 new tests. Actual engine/CLI/stdio/authenticated-loopback workflows
+convert, explicitly Open, extend, Undo/Redo, Save and reopen; independent literal/raw
+Expat/Decimal/RDKit consumers and mutated-output controls check the real files. Conversion
+leaves the complete active Drawing/SDF, baselines, history, file and native intent untouched.
+Source review finds no confirmed defect; scoped 219 and Root's complete local 686 gate
+pass, including fmt/clippy/layers/unchanged licenses/assets/corpus. Tests' initial consumer
+mismatch and three exact registry-fixture migrations remain recorded. Native conversion
+UI, source-backed SMILES Open/Save and new Windows/Linux execution remain unverified;
+Actions and interactive desktop access stayed off.

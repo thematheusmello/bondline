@@ -297,7 +297,7 @@ impl Engine {
             ));
         }
         let mut prepared = self.prepare(actual)?;
-        prepared.bind_ui_request(id);
+        prepared.bind_ui_request(id)?;
         if let Some(active) = &mut self.file_ui.active {
             active.view.phase = UiFilePhase::Running;
         }

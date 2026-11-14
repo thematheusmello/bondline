@@ -83,8 +83,10 @@ inventory/dialog/addressability gaps remain tracked while this format work proce
 The restricted carbon-path layout now also has a create-only filesystem converter into
 new editable native CDXML. Its 64 KiB input, source preservation, publication failure/race
 guards and independently consumed actual output pass the local 670-test aggregate.
-The shared conversion command/adapters are the next slice; this library API does not
-provide source-backed SMILES Open/Save, a native conversion flow or general cleanup.
+The shared conversion command now passes engine/CLI/stdio/authenticated-loopback workflows
+through explicit CDXML Open/edit/history/Save/reopen, plus the local 686-test gate. It
+preserves the active session and uses the same save lease through finish/drop. Source-backed
+SMILES Open/Save, a native conversion control/flow and general cleanup remain missing.
 
 
 Standalone CDXML source preservation and checked existing-attribute replacement have

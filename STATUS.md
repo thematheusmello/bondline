@@ -16,36 +16,33 @@ availability is indicated again. Continue source and headless work.
 
 ## Current revisions and gates
 
-Published main before this receiving commit is c2b739a: the 20-command aromatic/corpus
-foundation, validated carbon-path layout and durable disabled-Actions policy. Historical
-7c596d9 run 43588963839 completed successfully before disablement; it was not rerun.
-The corpus has eight fetched files/five bundles/three original SMILES checks. No new
-remote jobs are authorized. A fresh paginated readback covers all 54 existing runs and
-finds no nonterminal job; repository enabled=false and workflow disabled_manually.
+Published main before this receiving commit is b7f24da: the 20-command aromatic/corpus
+foundation, carbon-path layout, create-only conversion IO and durable Actions-off policy.
+Historical 7c596d9 run 43588963839 completed before disablement and was not rerun. The
+corpus has eight fetched files/five bundles/three original SMILES vectors. All 54 existing
+runs are terminal; a receiving push created no new run. Repository Actions remains off
+and workflow417397204 disabled_manually. No remote jobs are authorized.
 
-Root branch feat/smiles-conversion-integration now receives exact IO source 6a73107 on
-c2b739a. Its create-only SMILES→new native CDXML API reuses bounded native reads and the
-existing publisher, retains original notation through publication and never overwrites
-input or an existing output. Root checked seven intentional files, nine logs, two
-baseline records and 139 protected-file hashes. See verification-smiles-conversion-io.md.
-No parser/layout/publisher/model/render/oracle/lock/asset change was required.
+Root now receives exact 21-command source c433540 on b7f24da. The typed converter is
+verified through engine/CLI/stdio/authenticated loopback and real editable native CDXML
+files, preserving the entire active session and publication truth. Root checked21 author
+files/seven logs/source freeze/draft/peer/145protected identities;144 match receiving,
+with only Root's prior IO-verification appendix different and its complete prefix exact.
+The peer's102-file digest/42listed hashes are also exact. See
+verification-smiles-conversion-command.md and verification-smiles-conversion-io.md.
 
-Local cargo xtask ci session 44921 exits 0: 667 workspace + 3 bridge = 670 passed,
-0 failed/ignored; fmt/all-target clippy/layers/unchanged native licenses/assets/eight-file
-five-bundle corpus all pass. Log 81,417 B, SHA256
-5e5ace7b06d76566f67b8a949e0fcf028d476e590342605f6a13afc14c9bc1e3.
-Actual output for all 1–12 supported paths faces unchanged Expat/Decimal/RDKit consumers
-and strict fully-mapped reopen/edit checks; original input bytes/hash/mode/mtime remain.
-Geometry's prior 659-test gate and qualified JSON transport 1 ULP observation are recorded
-in verification-smiles-layout.md; raw XML/model assertions remain exact.
-New-source Windows/Linux and native UI are unverified; no hosted run will be started.
+Local cargo xtask ci77560 exits0:683workspace+3bridge=686,0failed/ignored. Workspace
+fmt/all-target warnings-denied clippy/layers/unchanged licenses/assets/corpus pass. Log
+82742B/SHA25666a6a343ae85acff5ef8f9e966636b4a61b335acab9a82100709b589436dda4a.
+Prior IO670 and layout659 gates remain separate evidence. Raw XML/model assertions and
+old consumers/golden remain exact. No new native/Windows/Linux or hosted claim follows.
 
 ## Delivered receiving scope
 
-Twenty shared typed commands: document.inspect/close; CDXML/CDX/MOL/SDF Open/Save;
+21 shared typed commands: document.inspect/close; CDXML/CDX/MOL/SDF Open/Save;
 page.set_size; bond.create/extend; history.undo/redo; render.capture; ui.controls/file;
-sdf.record.inspect and sdf.field.set_value. UI/CLI/stdio/authenticated opt-in loopback
-use the same registry. Headless engines do not pretend to open native dialogs.
+sdf.record.inspect, sdf.field.set_value and file.convert_smiles_to_cdxml. UI/CLI/stdio/
+authenticated opt-in loopback use the same registry; conversion has no native control. Headless engines do not pretend to open native dialogs.
 
 SDF retains complete mixed-version source through current/saved/history/plans; state has
 document:null and every-record metadata. The explicit query pages ordered duplicate/DT/
@@ -65,8 +62,9 @@ source backing/import/layout/clipboard, live inference, aromatic model mapping/p
 canonicalization follows. Carbon-path geometry returns a new pure Document for 1–12
 neutral nonisotopic C/Single paths after topology/ink/page checks. The new IO converter
 writes that drawing as create-only native CDXML under a distinct 64 KiB read budget,
-with metadata-only receipts and truthful publication errors. Registry/CLI/MCP conversion
-and native flow remain pending; source-backed SMILES Open/Save is separate missing work.
+with metadata-only receipts and truthful publication errors. The shared converter now passes actual
+CLI/stdio/authenticated-loopback workflows and real CDXML editing/persistence checks.
+Native conversion controls/acceptance and source-backed SMILES Open/Save remain missing.
 RXN is a container library.
 
 Current aromatic fuzz evidence is linked above. Earlier fixed-H/export sourcee647196
@@ -109,38 +107,35 @@ ship. Existing restoration exceptions remain recorded. Only approved golden SHA:
 
 ## Active work and next steps
 
-Root owns Git/integration/publication. Check live agents and their worktrees before
-resuming; do not duplicate work. All keep GUI/input/activation and Actions off.
+Root owns Git/integration/publication. All workers are now terminal with frozen handoffs;
+check live agents/jobs before resuming, and do not duplicate existing work.
 
-- native_acceptance: completed frozen converter in bondline-rxn, now committed 6a73107;
-  no live jobs. Handoff SHA256 996fdbad…bc5545055 is documented above.
-- reference_map: shared conversion command/CLI/stdio/authenticated loopback in
-  bondline-mol-v3000, branch feat/smiles-conversion-command. Root ported exact 6a73107
-  under the 18-file draft, preserving 17 files byte-for-byte and combining only the two
-  provenance appendices. Recoverable stash dfaf24f884569c8702e7e679493b3619815750ca is
-  retained; do not reapply. Actual missing-command runtime RED exists; GREEN is pending.
-  Worker owns all subsequent scoped Cargo jobs and must report handles/failures.
-- sdf_setter_review: neutral elemental/literal-H label rendering in
-  bondline-render-labels, branch feat/neutral-element-labels. Old carbon oracle/golden
-  remain exact. Uniform independent FreeType 4× BOX calibration and bounded 8× convergence
-  evidence are being completed; do not claim this WIP delivered or natively verified.
+- native_acceptance completed exact IO6a73107 and independent command source review
+  6309f7ba…e015428; no runtime jobs. IO is received at b7f24da.
+- reference_map completed command source c433540 in bondline-mol-v3000, no live jobs.
+  Source21/log7/protected145 handoff83e1c354…96dbf05 is checked; local receiving686 passes.
+  Recoverable pre-IO stash dfaf24f884569c8702e7e679493b3619815750ca remains; do not reapply.
+- sdf_setter_review completed neutral-element labels in bondline-render-labels on c2b739a.
+  Handoff target/neutral-element-handoff.json26897B/SHA546f5bbe…2ea82f2 is awaiting Root
+  review/reception. Scoped276, clippy/fmt pass; native/newWindows/Linux remain unverified.
 
-Root's latest Cargo gate 44921 is terminal. No native app/controller/helper is live.
-The user remains active on the desktop. Keep Cargo targets separate, incremental=0,
-Root default debug and sibling debug=0. No cleanup is needed. Preserve the approved
-golden and archived exact native CLI/evidence.
+Root gate77560 is terminal. A new independent registered-capture test first opened a
+literal V3000 methanol file, passed external RDKit/H/position assertions, then failed as
+intended on old renderer UnsupportedChemicalContent (55800). Its exact4588B source/SHA
+39617344…0248e7a is safely retained in stash4c1e1ffaa55d91738fd6574f71931c0a82f126c0
+and target/neutral-element-command-source-before.rs; record target/neutral-element-command-red.json.
+It is excluded from the conversion-command gate, awaiting restore with the label feature.
 
-1. Commit this local-gated IO receiving state, then integrate the real shared conversion
-   command after its scoped tests, independent consumers and lease/close/worker checks.
-   Reuse the existing save reservation through finish/drop, never relabel the active
-   document saved or auto-open a newly converted artifact. Keep source-backed Open/Save
-   missing. Publish only locally passing commits; do not trigger/enable Actions.
-2. Review/integrate the neutral-element rendering slice only after its frozen evidence.
-   No inference, unsupported chemical display, authority bypass or asset replacement.
-3. When user availability permits, verify the actual native conversion→Open→edit→Save→
-   reopen flow. Until then continue headless M1 then M2–M5 work: general SMILES/backing/
-   layout, SDF chemical display/editor, RXN/reactions and the visible roadmap. Full M0
-   inventory/dialog addressability and broader rendering/platform evidence remain open.
-   Do not pause/block/complete the goal at this checkpoint.
+No native app/controller/helper is live. The user remains active on the desktop; no
+GUI/input/activation until availability changes. Actions stays disabled. Keep targets
+separate, incremental0, Root default debug/sibling debug0. No cleanup is needed.
+
+1. Commit this local-gated shared conversion slice. Review/integrate the frozen neutral
+   labels, restore the exact Root capture test, observe GREEN and run the receiving full
+   local gate. Preserve old carbon pixels/font/golden, source authority and literal H.
+2. Continue M1 then M2–M5: broader SMILES/backing/layout, SDF chemical display/editor and
+   RXN/reactions. Full M0 inventory/dialog addressability and broader platform evidence
+   remain open. Native conversion→Open→edit→Save/reopen waits for user availability.
+   Do not pause/block/complete the project at this checkpoint or enable Actions.
 
 No new golden approval, PR/release/installer/signing, account/TCC or unrelated messages.

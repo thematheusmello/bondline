@@ -30,6 +30,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "document.save_mol",
             "document.open_sdf",
             "document.save_sdf",
+            "file.convert_smiles_to_cdxml",
             "page.set_size",
             "bond.create",
             "bond.extend",

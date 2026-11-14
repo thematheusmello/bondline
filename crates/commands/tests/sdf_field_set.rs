@@ -45,6 +45,7 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
             "document.save_mol",
             "document.open_sdf",
             "document.save_sdf",
+            "file.convert_smiles_to_cdxml",
             "sdf.record.inspect",
             "sdf.field.set_value",
             "page.set_size",

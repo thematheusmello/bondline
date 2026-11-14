@@ -184,7 +184,7 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current twenty-command registry includes complete SDF Open/Save and bond.create for independent C-C fragments with
+The current 21-command registry includes complete SDF Open/Save and bond.create for independent C-C fragments with
 three explicitly authored H per carbon, plus CDXML/CDX/MOL open/save. bond.extend is a
 headless terminal-carbon operation with required explicit H3-to-H2 policy and expected
 revision; only source-free or byte-proven native CDXML is allowed. Actual MOL/CDX backing
@@ -356,3 +356,12 @@ reference-scene ink/geometry checks do not prove every viewport or native UI. Ke
 backed SMILES Open/Save separate from explicit conversion into a new native CDXML file.
 Do not attach an original SMILES path to a CDXML association, overwrite the input or grant
 StoredDocument source authority to a raw projection. See verification-smiles-layout.md.
+
+file.convert_smiles_to_cdxml is create-only, not an active-session Save. Its eight required
+closed parameters select the neutral_carbon_path_v1 fixed-H profile and explicit geometry.
+Keep the same save reservation through prepare/publication/finish/drop and the existing
+worker/reply/close barriers. Finish returns current state plus historical conversion metadata;
+do not alter current/saved/original/history/association/close/native intent or acknowledgments.
+MCP read_only is false because it writes disk. Conversion/nonfile work cannot bind native
+Open/Save requests. Actual source-backed SMILES Open/Save and native conversion UI remain missing.
+See verification-smiles-conversion-command.md for scope, RED/GREEN and independent consumers.

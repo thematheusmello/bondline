@@ -32,6 +32,7 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "document.save_mol",
             "document.open_sdf",
             "document.save_sdf",
+            "file.convert_smiles_to_cdxml",
             "sdf.record.inspect",
             "sdf.field.set_value",
             "page.set_size",

@@ -3,6 +3,8 @@ use serde_json::{Value, json};
 mod cdx_support;
 #[path = "support/chain.rs"]
 mod chain_support;
+#[path = "support/conversion.rs"]
+mod conversion_support;
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
 #[path = "support/mol.rs"]
@@ -99,6 +101,80 @@ impl Drop for Client {
             let _ = reader.join();
         }
     }
+}
+
+#[test]
+fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("stdio-conversion.smi");
+    let output = directory.path("stdio-conversion-λ.cdxml");
+    std::fs::write(&input, b"CC\n")?;
+    let mut client = Client::start()?;
+    client.call(1,"initialize",json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"conversion-test","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let list = client.call(2, "tools/list", json!({}))?;
+    let tools = list["result"]["tools"].as_array().ok_or("tools")?;
+    assert_eq!(tools.len(), 21);
+    let tool = tools
+        .iter()
+        .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
+        .ok_or("conversion tool")?;
+    assert_eq!(tool["annotations"]["readOnlyHint"], false);
+    assert_eq!(tool["inputSchema"]["additionalProperties"], false);
+    assert_eq!(
+        tool["inputSchema"]["required"]
+            .as_array()
+            .ok_or("required")?
+            .len(),
+        8
+    );
+    let converted=client.call(3,"tools/call",json!({"name":"file.convert_smiles_to_cdxml","arguments":conversion_support::params(0,&input,&output)}))?;
+    assert_eq!(converted["result"]["isError"], false);
+    conversion_support::assert_conversion(
+        &converted["result"]["structuredContent"],
+        &input,
+        &output,
+    )?;
+    conversion_support::independent(&output, 2)?;
+    let conflict=client.call(4,"tools/call",json!({"name":"file.convert_smiles_to_cdxml","arguments":conversion_support::params(0,&input,&output)}))?;
+    assert_eq!(conflict["result"]["isError"], true);
+    assert_eq!(
+        conflict["result"]["structuredContent"]["error"]["code"],
+        "already_exists"
+    );
+    for (at, (name, arguments, count, revision, dirty)) in [
+        ("document.open_cdxml", json!({"path":output}), 2, 1, false),
+        ("bond.extend", conversion_support::extend(1), 3, 2, true),
+        ("history.undo", json!({}), 2, 3, false),
+        ("history.redo", json!({}), 3, 4, true),
+        (
+            "document.save_cdxml",
+            json!({"path":output,"overwrite":true}),
+            3,
+            4,
+            false,
+        ),
+        ("document.open_cdxml", json!({"path":output}), 3, 5, false),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let response = client.call(
+            5 + at as u64,
+            "tools/call",
+            json!({"name":name,"arguments":arguments}),
+        )?;
+        assert_eq!(response["result"]["isError"], false, "{response}");
+        let state = &response["result"]["structuredContent"];
+        conversion_support::assert_chain(state, count)?;
+        assert_eq!(state["revision"], revision);
+        assert_eq!(state["file"]["dirty"], dirty);
+        assert!(state.get("conversion").is_none());
+    }
+    conversion_support::independent(&output, 3)?;
+    client.finish()?;
+    Ok(())
 }
 
 #[test]
@@ -695,6 +771,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "document.save_cdxml",
             "document.save_mol",
             "document.save_sdf",
+            "file.convert_smiles_to_cdxml",
             "history.redo",
             "history.undo",
             "page.set_size",

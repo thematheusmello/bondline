@@ -219,5 +219,8 @@ It preserves the original source/IR, adds positions without changing normalized 
 and grants no application SMILES association or source-backed Save authority. Explicit file
 conversion now has a create-only IO API using the shared bounded reader and native publisher;
 it retains the complete input owner through publication, returns metadata, and makes no
-session association. Registry and native input workflows remain separate operations;
+session association. `file.convert_smiles_to_cdxml` exposes it through the single registry,
+existing deferred worker/close barriers and save reservation through completion finish/drop.
+Its receipt identifies historical preparation while returning the latest unchanged session;
+it never grants a trusted native Save acknowledgment. Native input workflows remain separate;
 see verification-smiles-layout.md and verification-smiles-conversion-io.md.

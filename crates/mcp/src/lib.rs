@@ -43,6 +43,10 @@ pub struct CommandServer {
     executor: CommandExecutor,
 }
 
+#[cfg(test)]
+#[path = "../../../xtask/oracles/files_test_support.rs"]
+mod file_test_support;
+
 impl CommandServer {
     pub fn new(engine: SharedEngine) -> Result<Self, Error> {
         let tools = bondline_commands::registry()
