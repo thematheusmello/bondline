@@ -44,7 +44,11 @@ The intended crate graph is model/cdxml/cdx -> chem/render -> io -> commands -> 
 Packages use bondline- prefixes. cdxml and cdx have no workspace dependencies; formats
 preserve unknown data and must never silently drop it. Native I/O stays out of model/parsers.
 The UI, CLI, loopback channel and MCP call one typed JSON command registry.
-StoredDocument now owns source/model/baseline and Engine history retains it. Keep that backing
+StoredContent now distinguishes Drawing(StoredDocument) from complete Sdf{original,current};
+Engine current/saved/history/file plans retain that whole variant. Drawing JSON is unchanged;
+SDF has document:null plus collection metadata, never a first/empty drawing. document() and
+stored_document() return typed Results; preserve wrong-kind refusals and clear stale UI data.
+StoredDocument owns drawing source/model/baseline. Keep that backing
 when wiring import; a cloned elemental projection alone loses unknown data. Require failed-
 import/source-retention tests before exposing imports. Retained payload/container accounting
 now enforces 128 prior snapshots and a 128 MiB threshold, deduplicating shared source/model/
@@ -70,11 +74,11 @@ Current map: model (L0, pages, Point2 and validated elemental atom/bond/fragment
 cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attribute
 replacement and a bounded new-syntax writer);
 cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque property
-replacement and new-tree Writer; no model mapping or application commands);
+replacement and new-tree Writer; model mapping and application commands live above this crate);
 render (L1, shared neutral-carbon/Single GraphScene, bounded hit regions, literal authored-H
 labels, CPU/GPU rectangles/strokes and approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
-bounded native CDXML/CDX/MOL filesystem libraries and source-preserving SDF/RXN container records;
+bounded native CDXML/CDX/MOL/SDF filesystem libraries and source-preserving SDF/RXN container records;
 bounded nonaromatic SMILES notation/source ownership, not application SMILES or chemistry;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
@@ -137,7 +141,8 @@ same-path version-change invalidation, exact failed retry and trusted close-Save
 Native/hosted evidence must be separate from engine/egui tests; see
 docs/verification-v3000-application.md. No runtime dependency or codec source changed here.
 
-SDF is currently a mixed V2000/V3000 library container, not an application document command.
+SDF is a mixed V2000/V3000 source container and complete application-content variant.
+Shared Open/Save retain every record; chemical preview and record-edit commands remain missing.
 Its generic writer preserves actual molecular versions; write_v2000 must refuse V3000. Preserve exact
 record/MOL/item spans, duplicate order, raw headers/DT digits, empty/multiline values and
 opaque embedded MOL bytes. Never rebuild these from RDKit's last-value property map: its
@@ -156,7 +161,7 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current sixteen-command registry includes bond.create for independent C-C fragments with
+The current eighteen-command registry includes complete SDF Open/Save and bond.create for independent C-C fragments with
 three explicitly authored H per carbon, plus CDXML/CDX/MOL open/save. bond.extend is a
 headless terminal-carbon operation with required explicit H3-to-H2 policy and expected
 revision; only source-free or byte-proven native CDXML is allowed. Actual MOL/CDX backing
@@ -295,7 +300,7 @@ io::sdf::SdfDocument owns validated complete source and compact immutable record
 Clone shares bytes/index, equality includes every byte and Debug omits content. IDs are
 local positive ordinals, not persisted/source chemical IDs or guaranteed identities across
 other sources/future edits. read() reparses under existing limits; retained_bytes excludes
-borrowed views/allocator headers. It is not Engine/native SDF integration. Preserve every
+borrowed views/allocator headers. StoredContent supplies the separate Engine integration. Preserve every
 record/field/MOL/version and never pass a first-record model to a file Save. The normal
 SDF fuzz target now checks owned retention/metadata/sharing/accounting as well as old spans.
 
@@ -304,6 +309,6 @@ SdfDocument::with_field_value returns an immutable candidate for an existing ord
 record/zero-based field occurrence; never find duplicate fields by a property map/name.
 Logical no-op shares old bytes/index; authored changed lines use LF, preserving original
 terminator/header/DT/padding/other records/MOL bytes. Typed missing targets use not_found;
-existing parser/writer error codes and quotas remain. It is not an Engine command or file
-workflow. Future session integration must retain whole current/saved/history source and
+existing parser/writer error codes and quotas remain. It is not an Engine edit command;
+Open/Save already retain whole current/saved/history source. Future record operations
 must not make ordinal IDs promises across record deletion/reorder without an identity design.

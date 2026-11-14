@@ -254,11 +254,17 @@ impl Engine {
         let matches = match (&active.view.action, &actual) {
             (
                 UiFileAction::Open,
-                Command::OpenCdxml(_) | Command::OpenCdx(_) | Command::OpenMol(_),
+                Command::OpenCdxml(_)
+                | Command::OpenCdx(_)
+                | Command::OpenMol(_)
+                | Command::OpenSdf(_),
             ) => true,
             (
                 UiFileAction::SaveAs,
-                Command::SaveCdxml(_) | Command::SaveCdx(_) | Command::SaveMol(_),
+                Command::SaveCdxml(_)
+                | Command::SaveCdx(_)
+                | Command::SaveMol(_)
+                | Command::SaveSdf(_),
             ) => true,
             (UiFileAction::Save, Command::SaveCdxml(params)) => {
                 active.view.input_path.as_ref().is_none_or(|path| {
@@ -268,15 +274,19 @@ impl Engine {
                 })
             }
             (UiFileAction::Save, Command::SaveMol(params)) => {
+                let format = self.mol_save_format(params.version)?;
                 active.view.input_path.as_ref().is_none_or(|path| {
-                    self.file_format == self.mol_save_format(params.version)
-                        && path == &params.path
-                        && params.overwrite
+                    self.file_format == format && path == &params.path && params.overwrite
                 })
             }
             (UiFileAction::Save, Command::SaveCdx(params)) => {
                 active.view.input_path.as_ref().is_none_or(|path| {
                     self.file_format == FileFormat::Cdx && path == &params.path && params.overwrite
+                })
+            }
+            (UiFileAction::Save, Command::SaveSdf(params)) => {
+                active.view.input_path.as_ref().is_none_or(|path| {
+                    self.file_format == FileFormat::Sdf && path == &params.path && params.overwrite
                 })
             }
             _ => false,

@@ -582,9 +582,10 @@ metadata; every mixed-version molecule and ordered field/header/value/delimiter 
 exact. Positive IDs are local ordinals inside immutable snapshots/clones, not chemical
 IDs or promises across a different source. Read reparses the bounded source; Debug prints
 counts only. Shared-allocation accounting is explicit and excludes temporary reads/headers.
-See verification-sdf-owned-source.md for literal/raw/RDKit/boundary/fuzz evidence. This
-library is not yet part of Engine current/saved/history/file state, and supplies no native
-SDF Open/Save, active record, layout or edit workflow. Never regenerate retained imports
+See verification-sdf-owned-source.md for literal/raw/RDKit/boundary/fuzz evidence. Complete
+SDF ownership now also backs Engine current/saved/history and registered Open/Save; see
+verification-sdf-session-files.md. It supplies no active record, chemical layout or data-edit
+workflow. Never regenerate retained imports
 through the generic wrapper writer or silently select/flatten the first molecule.
 
 

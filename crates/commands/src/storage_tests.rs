@@ -39,11 +39,11 @@ fn oldest_distinct_sources_are_evicted_before_128_snapshots()
         released.upgrade().is_none(),
         "evicted source is still retained"
     );
-    let current = engine.stored_document().clone();
+    let current = engine.stored_document()?.clone();
     engine.execute(Command::Undo(NoParams {}))?;
     assert!(
         engine
-            .stored_document()
+            .stored_document()?
             .export_cdxml()?
             .starts_with(b"<CDXML><!--B")
     );
@@ -52,7 +52,7 @@ fn oldest_distinct_sources_are_evicted_before_128_snapshots()
         Err(super::Error::NothingToUndo)
     ));
     engine.execute(Command::Redo(NoParams {}))?;
-    assert_eq!(engine.stored_document(), &current);
+    assert_eq!(engine.stored_document()?, &current);
     drop(current);
     engine.execute(Command::Undo(NoParams {}))?;
     let (branch, _) = padded_source(b'D', length)?;
@@ -85,7 +85,7 @@ fn shared_source_keeps_128_page_edits_without_counting_the_xml_129_times()
     }
     assert!(
         engine
-            .stored_document()
+            .stored_document()?
             .export_cdxml()?
             .starts_with(b"<CDXML><!--S")
     );
@@ -106,17 +106,17 @@ fn trimming_keeps_a_recent_suffix_and_always_preserves_the_current_document()
         for (tag, length) in [(b'B', 4096), (b'C', 65536), (b'D', 128), (b'E', 2048)] {
             engine.commit(padded_source(tag, length)?.0)?;
         }
-        let current = engine.stored_document().clone();
+        let current = engine.stored_document()?.clone();
         let revision = engine.state().revision;
         engine.trim_history(budget);
         assert_eq!(engine.state().undo_depth, expected_undo, "budget {budget}");
         assert_eq!(engine.state().revision, revision);
-        assert_eq!(engine.stored_document(), &current);
+        assert_eq!(engine.stored_document()?, &current);
         if expected_undo == 1 {
             engine.execute(Command::Undo(NoParams {}))?;
             assert!(
                 engine
-                    .stored_document()
+                    .stored_document()?
                     .export_cdxml()?
                     .starts_with(b"<CDXML><!--D")
             );

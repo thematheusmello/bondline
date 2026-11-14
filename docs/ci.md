@@ -1,12 +1,21 @@
 # CI contract and execution evidence
 
+SMILES notation/fuzz integration8e0e92b7437e5123e5a5ebd4a7fb981968194d69 passes every
+[43573987299](https://github.com/thematheusmello/bondline/actions/runs/43573987299) job:
+Mac132384119167:568 (565workspace+3bridge), Linux132384119069:566,
+Windows132384118953:558 and ASAN132384119211:all seven10000-run targets. Every actual
+window smoke passes with the same qualified Metal/Vulkan/Dx12 adapters below. Main
+advances only after matching GREEN. This is notation/source evidence, not application
+SMILES. Subsequent SDF session sourceb842e36 has local receiving590 but still needs its
+own hosted/native evidence;8e0e92b's results are not substituted.
+
 Documentation checkpoint3ec8b4cb372e3a3c297829c382bb2ff2b687cc5b passes its automatic
 [43571525559](https://github.com/thematheusmello/bondline/actions/runs/43571525559):
 Mac132376759120:559, Linux132376759149:557, Windows132376758857:549, all three actual
 windows and ASAN132376759095:six10000-run targets. Its runtime code matches15ecbc7.
 The subsequently received SMILES codec/fuzz/fixture source has local568/ASAN10000
-evidence in verification-smiles.md and requires its own hosted run. Seven parser
-targets are now configured; a configured new target is not a hosted pass.
+evidence in verification-smiles.md and its own hosted run above. Seven parser targets
+are configured and actually pass there; later sources still need their own execution.
 
 Owned-SDF integration9436bf4c9ce0bb4a4425112a0bbfb2a1b7f1a484 passes every
 [43568995448](https://github.com/thematheusmello/bondline/actions/runs/43568995448) job:

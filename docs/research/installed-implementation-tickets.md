@@ -19,7 +19,7 @@ exact current revisions, hosted outcomes, live workers and next executable steps
 |---|---|---|
 | `M1-01/02/03` | MOL versions have bounded Mac application evidence; mixed SDF and ordered RXN containers have independent raw/molecular consumers | Broader molecular mappings, SDF application workflows and reaction authoring |
 | `M1-04a/04` | Original framed CDX sources parse/preserve; limited read-only metadata/projection; guarded shared/native Mac Open/Save retains complete bytes | Faithful CDX preview, safe edits/new encoding and general/foreign corpus coverage |
-| `M1-05` | Immutable complete SDF source and exact occurrence-value replacement verified as libraries | Phase1 whole-session Open/Save is in progress in an isolated worktree; no native collection/editor claim |
+| `M1-05` | Complete SDF session/Open/Save received with whole-source history/accounting, all shared adapters and wired summary; Root590 passes | Actual native acceptance, all-visible chemical layout and record/field-edit commands remain pending |
 | `M1-06` | Original nonaromatic notation/source codec has independent tests/review, local568 and bounded ASan; new-source hosted evidence pending | Explicit-H generated writer in progress; ordinary implicit-H model policy/import/layout, chemistry and native flows remain separate |
 | `M2-02` | Shared bounded neutral-carbon/Single scene, literal H labels and typed hits; qualified Mac C2/C3 cases | General elements/orders/styles, persistent selection and full native/platform coverage |
 | `M2-03` | Explicit terminal H3→H2 extension verified headlessly; native gesture wired with deterministic tests | Native terminal-attachment acceptance paused on unowned held input; no inferred-H/general-connected-drawing claim |

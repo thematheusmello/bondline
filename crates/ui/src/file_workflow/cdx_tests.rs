@@ -36,8 +36,8 @@ fn cdx_open_known_save_and_save_as_keep_complete_source_and_associated_format() 
     {
         let mut engine = executor.engine().lock().map_err(|_| "engine")?;
         assert_eq!(engine.state().file.format, FileFormat::Cdx);
-        assert!(!engine.stored_document().is_fully_mapped());
-        assert_eq!(engine.stored_document().export_cdx()?, SOURCE);
+        assert!(!engine.stored_document()?.is_fully_mapped());
+        assert_eq!(engine.stored_document()?.export_cdx()?, SOURCE);
         workflow.request_file(&mut engine, UiFileAction::Save, None, &mut None);
         let intent = workflow
             .adopt_request(&mut engine, &mut None)
@@ -88,7 +88,7 @@ fn changed_cdx_close_save_refuses_and_retains_the_exact_known_path_retry() -> Te
         "page.set_size",
         serde_json::json!({"page_id":1,"width_pt":612,"height_pt":792}),
     )?;
-    let snapshot = engine.stored_document().clone();
+    let snapshot = engine.stored_document()?.clone();
     let mut workflow = FileWorkflow::new(directory.0.clone());
     workflow.request_close(&mut engine, &mut None);
     workflow.choose_close(CloseChoice::Save, &mut engine, &mut None);
@@ -110,7 +110,7 @@ fn changed_cdx_close_save_refuses_and_retains_the_exact_known_path_retry() -> Te
     assert!(workflow.chooser.is_open());
     assert_eq!(workflow.chooser.format(), FileFormat::Cdx);
     let mut engine = executor.engine().lock().map_err(|_| "engine")?;
-    assert_eq!(engine.stored_document(), &snapshot);
+    assert_eq!(engine.stored_document()?, &snapshot);
     assert_eq!(engine.state().close, CloseState::NeedsDecision);
     assert!(!workflow.complete_close_if_idle(&mut engine, false, false));
     workflow.cancel_picker(&mut engine, &mut None);

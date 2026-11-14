@@ -134,7 +134,7 @@ fn registered_cdx_open_save_retains_four_original_vectors_and_independent_consum
         );
         assert_eq!(wire["file_operation"]["format"], "cdx");
         assert!(!serde_json::to_string(&wire)?.contains("Original metadata advisory"));
-        let page = engine.document().pages().first().ok_or("page")?;
+        let page = engine.document()?.pages().first().ok_or("page")?;
         assert_eq!(page.size(), bondline_model::PageSize::A4);
         let fragment = page.fragments().first().ok_or("fragment")?;
         assert_eq!((fragment.atoms().len(), fragment.bonds().len()), (2, 1));
@@ -144,8 +144,8 @@ fn registered_cdx_open_save_retains_four_original_vectors_and_independent_consum
                 .iter()
                 .all(|atom| atom.explicit_hydrogens.is_none())
         );
-        assert!(!engine.stored_document().is_fully_mapped());
-        assert_eq!(engine.stored_document().export_cdx()?, bytes);
+        assert!(!engine.stored_document()?.is_fully_mapped());
+        assert_eq!(engine.stored_document()?.export_cdx()?, bytes);
         let saved = engine.dispatch("document.save_cdx", json!({"path":copy}))?;
         assert_eq!(saved.revision, 1);
         assert!(!saved.file.dirty);
@@ -158,7 +158,7 @@ fn registered_cdx_open_save_retains_four_original_vectors_and_independent_consum
         assert_eq!(fs::read(input)?, bytes);
         let mut reopened = Engine::default();
         reopened.dispatch("document.open_cdx", json!({"path":copy}))?;
-        assert_eq!(reopened.stored_document(), engine.stored_document());
+        assert_eq!(reopened.stored_document()?, engine.stored_document()?);
     }
     Ok(())
 }
@@ -241,7 +241,7 @@ fn cdx_failures_preserve_snapshot_history_destination_and_release_save_slot() ->
     );
     engine.dispatch("history.undo", json!({}))?;
     assert!(!engine.state().file.dirty);
-    assert_eq!(engine.stored_document().export_cdx()?, METADATA);
+    assert_eq!(engine.stored_document()?.export_cdx()?, METADATA);
     engine.dispatch(
         "document.save_cdx",
         json!({"path":destination,"overwrite":true}),
@@ -291,7 +291,7 @@ fn source_family_initialization_and_failed_open_preserve_complete_context() -> T
         "invalid_document"
     );
     assert_eq!(state(&engine)?, before);
-    assert_eq!(engine.stored_document().export_cdx()?, METADATA);
+    assert_eq!(engine.stored_document()?.export_cdx()?, METADATA);
     Ok(())
 }
 

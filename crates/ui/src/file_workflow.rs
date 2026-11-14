@@ -9,13 +9,15 @@ mod mol_tests;
 #[cfg(test)]
 mod request_tests;
 #[cfg(test)]
+mod sdf_tests;
+#[cfg(test)]
 mod v3000_tests;
 
 use crate::files::{FileAction, FileChooser, FileChooserEvent, FileMode, format_extension};
 use bondline_commands::{
     Cancellation, CloseAction, CloseDocument, CloseState, Command, CommandResult, Engine,
-    ErrorInfo, FileFormat, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol, SaveCdx, SaveCdxml,
-    SaveMol, UiFile, UiFileAction, UiFilePhase, UiFilePlan,
+    ErrorInfo, FileFormat, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol, OpenSdf, SaveCdx,
+    SaveCdxml, SaveMol, SaveSdf, UiFile, UiFileAction, UiFilePhase, UiFilePlan,
 };
 use bondline_mcp::CommandExecutor;
 use eframe::egui;
@@ -242,6 +244,7 @@ impl FileWorkflow {
                     FileFormat::Cdxml => "Opening CDXML…",
                     FileFormat::Cdx => "Opening CDX…",
                     FileFormat::MolV2000 | FileFormat::MolV3000 => "Opening MOL…",
+                    FileFormat::Sdf => "Opening SDF…",
                 }
             } else {
                 match job.format {
@@ -249,6 +252,7 @@ impl FileWorkflow {
                     FileFormat::Cdx => "Saving CDX…",
                     FileFormat::MolV2000 => "Saving MOL V2000…",
                     FileFormat::MolV3000 => "Saving MOL V3000…",
+                    FileFormat::Sdf => "Saving SDF…",
                 }
             });
             if ui
@@ -409,6 +413,20 @@ impl FileWorkflow {
             action,
         } = intent;
         let command = match (format, &action) {
+            (
+                FileFormat::Sdf,
+                FileAction::Open {
+                    path,
+                    discard_unsaved,
+                },
+            ) => Command::OpenSdf(OpenSdf {
+                path: path.clone(),
+                discard_unsaved: *discard_unsaved,
+            }),
+            (FileFormat::Sdf, FileAction::Save { path, overwrite }) => Command::SaveSdf(SaveSdf {
+                path: path.clone(),
+                overwrite: *overwrite,
+            }),
             (
                 FileFormat::Cdxml,
                 FileAction::Open {
@@ -708,7 +726,7 @@ mod tests {
         assert_eq!(engine.state().revision, revision);
         assert!(
             engine
-                .document()
+                .document()?
                 .pages()
                 .first()
                 .ok_or("page")?
@@ -746,7 +764,7 @@ mod tests {
         let mut engine = Engine::default();
         engine.set_ui_file_host(true);
         edit(&mut engine)?;
-        let original = engine.stored_document().clone();
+        let original = engine.stored_document()?.clone();
         let revision = engine.state().revision;
         let mut workflow = FileWorkflow::new(std::env::temp_dir());
         let mut drawing = crate::DrawingState::default();
@@ -780,7 +798,7 @@ mod tests {
             assert_eq!(workflow.blocks_authoring(&engine.state()), blocked);
             assert!(!workflow.complete_close_if_idle(&mut engine, false, false));
             assert_eq!(engine.state().revision, revision);
-            assert_eq!(engine.stored_document(), &original);
+            assert_eq!(engine.stored_document()?, &original);
         }
         Ok(())
     }

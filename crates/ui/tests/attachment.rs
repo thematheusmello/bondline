@@ -75,7 +75,13 @@ impl Workspace {
         let output = self.frame(vec![], None);
         assert!(self.error.is_none(), "{:?}", self.error);
         let paper = paper(&output)?;
-        let size = self.engine.document().pages().first().ok_or("page")?.size();
+        let size = self
+            .engine
+            .document()?
+            .pages()
+            .first()
+            .ok_or("page")?
+            .size();
         Ok([
             (100.0, 200.0),
             (140.0, 200.0),
@@ -162,12 +168,12 @@ fn label_point(output: &egui::FullOutput, anchor: Pos2) -> TestResult<Pos2> {
 fn atom_drag_extends_same_fragment_with_exact_history_and_literal_hydrogens() -> TestResult {
     let mut workspace = Workspace::new(true)?;
     let [_, begin, end, _] = workspace.points()?;
-    let before = workspace.engine.stored_document().clone();
+    let before = workspace.engine.stored_document()?.clone();
     workspace.frame(drag(begin, end), None);
     assert!(workspace.error.is_none(), "{:?}", workspace.error);
     let fragments = workspace
         .engine
-        .document()
+        .document()?
         .pages()
         .first()
         .ok_or("page")?
@@ -219,11 +225,11 @@ fn atom_drag_extends_same_fragment_with_exact_history_and_literal_hydrogens() ->
         ),
         (2, 2)
     );
-    let after = workspace.engine.stored_document().clone();
+    let after = workspace.engine.stored_document()?.clone();
     workspace.engine.dispatch("history.undo", json!({}))?;
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     workspace.engine.dispatch("history.redo", json!({}))?;
-    assert_eq!(workspace.engine.stored_document(), &after);
+    assert_eq!(workspace.engine.stored_document()?, &after);
     Ok(())
 }
 
@@ -231,7 +237,7 @@ fn atom_drag_extends_same_fragment_with_exact_history_and_literal_hydrogens() ->
 fn two_batched_attachments_pick_the_atom_created_by_the_prior_release() -> TestResult {
     let mut workspace = Workspace::new(true)?;
     let [_, begin, middle, end] = workspace.points()?;
-    let before = workspace.engine.stored_document().clone();
+    let before = workspace.engine.stored_document()?.clone();
     let events = drag(begin, middle)
         .into_iter()
         .chain(drag(middle, end))
@@ -240,7 +246,7 @@ fn two_batched_attachments_pick_the_atom_created_by_the_prior_release() -> TestR
     assert!(workspace.error.is_none(), "{:?}", workspace.error);
     let fragments = workspace
         .engine
-        .document()
+        .document()?
         .pages()
         .first()
         .ok_or("page")?
@@ -270,13 +276,13 @@ fn two_batched_attachments_pick_the_atom_created_by_the_prior_release() -> TestR
         ),
         (3, 3)
     );
-    let after = workspace.engine.stored_document().clone();
+    let after = workspace.engine.stored_document()?.clone();
     workspace.engine.dispatch("history.undo", json!({}))?;
     workspace.engine.dispatch("history.undo", json!({}))?;
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     workspace.engine.dispatch("history.redo", json!({}))?;
     workspace.engine.dispatch("history.redo", json!({}))?;
-    assert_eq!(workspace.engine.stored_document(), &after);
+    assert_eq!(workspace.engine.stored_document()?, &after);
     Ok(())
 }
 
@@ -287,14 +293,14 @@ fn label_drag_preview_uses_the_atom_anchor_but_click_jitter_uses_raw_press_posit
     let [_, anchor, end, _] = workspace.points()?;
     let initial = workspace.frame(vec![], None);
     let press = label_point(&initial, anchor)?;
-    let before = workspace.engine.stored_document().clone();
+    let before = workspace.engine.stored_document()?.clone();
     workspace.frame(vec![button(press, true), button(press, false)], None);
     assert!(
         workspace.error.is_none(),
         "a plain label click is not an attachment: {:?}",
         workspace.error
     );
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     let jitter = press + egui::vec2(1.0, 1.0);
     workspace.frame(
         vec![
@@ -309,7 +315,7 @@ fn label_drag_preview_uses_the_atom_anchor_but_click_jitter_uses_raw_press_posit
         "label jitter is not an occupied-endpoint error: {:?}",
         workspace.error
     );
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     let output = workspace.frame(vec![button(press, true), Event::PointerMoved(end)], None);
     let preview = output
         .shapes
@@ -329,15 +335,15 @@ fn label_drag_preview_uses_the_atom_anchor_but_click_jitter_uses_raw_press_posit
         "preview must start at model anchor, not the raw label press"
     );
     assert_eq!(
-        workspace.engine.stored_document(),
+        workspace.engine.stored_document()?,
         &before,
         "preview is transient"
     );
     workspace.frame(vec![button(end, false)], None);
     assert!(workspace.error.is_none(), "{:?}", workspace.error);
-    assert_eq!(workspace.engine.document().pages()[0].fragments().len(), 1);
+    assert_eq!(workspace.engine.document()?.pages()[0].fragments().len(), 1);
     assert_eq!(
-        workspace.engine.document().pages()[0].fragments()[0]
+        workspace.engine.document()?.pages()[0].fragments()[0]
             .atoms()
             .len(),
         3
@@ -349,7 +355,7 @@ fn label_drag_preview_uses_the_atom_anchor_but_click_jitter_uses_raw_press_posit
 fn a_new_ineligible_primary_press_cancels_the_old_gesture() -> TestResult {
     let mut workspace = Workspace::new(true)?;
     let [_, begin, end, _] = workspace.points()?;
-    let before = workspace.engine.stored_document().clone();
+    let before = workspace.engine.stored_document()?.clone();
     let state = serde_json::to_value(workspace.engine.state())?;
     workspace.frame(vec![button(begin, true)], None);
     workspace.frame(
@@ -360,7 +366,7 @@ fn a_new_ineligible_primary_press_cancels_the_old_gesture() -> TestResult {
         ],
         None,
     );
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     assert_eq!(serde_json::to_value(workspace.engine.state())?, state);
     Ok(())
 }
@@ -372,10 +378,10 @@ fn a_foreground_covered_release_cannot_commit_an_attachment() -> TestResult {
     let cover = egui::Rect::from_min_size(end - egui::vec2(5.0, 5.0), egui::vec2(30.0, 30.0));
     workspace.frame(vec![], Some(cover));
     workspace.frame(vec![], Some(cover));
-    let before = workspace.engine.stored_document().clone();
+    let before = workspace.engine.stored_document()?.clone();
     let state = serde_json::to_value(workspace.engine.state())?;
     workspace.frame(drag(begin, end), Some(cover));
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     assert_eq!(serde_json::to_value(workspace.engine.state())?, state);
     Ok(())
 }
@@ -410,7 +416,7 @@ fn a_fresh_button_position_overrides_a_different_cached_hover_target() -> TestRe
         None,
     );
     assert!(workspace.error.is_none(), "{:?}", workspace.error);
-    let atoms = workspace.engine.document().pages()[0].fragments()[0].atoms();
+    let atoms = workspace.engine.document()?.pages()[0].fragments()[0].atoms();
     assert_eq!(
         atoms
             .iter()
@@ -441,9 +447,9 @@ fn a_same_frame_new_bond_can_be_extended_and_a_later_press_can_finish_next_frame
         ),
         (2, 2)
     );
-    assert_eq!(workspace.engine.document().pages()[0].fragments().len(), 1);
+    assert_eq!(workspace.engine.document()?.pages()[0].fragments().len(), 1);
     assert_eq!(
-        workspace.engine.document().pages()[0].fragments()[0]
+        workspace.engine.document()?.pages()[0].fragments()[0]
             .atoms()
             .len(),
         3
@@ -457,9 +463,9 @@ fn a_same_frame_new_bond_can_be_extended_and_a_later_press_can_finish_next_frame
         ),
         (3, 3)
     );
-    assert_eq!(workspace.engine.document().pages()[0].fragments().len(), 1);
+    assert_eq!(workspace.engine.document()?.pages()[0].fragments().len(), 1);
     assert_eq!(
-        workspace.engine.document().pages()[0].fragments()[0]
+        workspace.engine.document()?.pages()[0].fragments()[0]
             .atoms()
             .len(),
         4
@@ -473,7 +479,7 @@ fn unsupported_starts_and_existing_release_targets_never_fall_back_to_independen
     for mode in 0..5 {
         let mut workspace = Workspace::new(true)?;
         if mode == 0 {
-            let stored = workspace.engine.stored_document();
+            let stored = workspace.engine.stored_document()?;
             let source = stored.model().pages()[0].fragments()[0].as_ref();
             let mut atoms = source.atoms().to_vec();
             atoms.get_mut(1).ok_or("atom")?.explicit_hydrogens = None;
@@ -490,7 +496,7 @@ fn unsupported_starts_and_existing_release_targets_never_fall_back_to_independen
             workspace.frame(drag(begin, end), None);
             assert!(workspace.error.is_none());
         }
-        let before = workspace.engine.stored_document().clone();
+        let before = workspace.engine.stored_document()?.clone();
         let state = serde_json::to_value(workspace.engine.state())?;
         let middle = Pos2::new((first.x + begin.x) * 0.5, (first.y + begin.y) * 0.5);
         let (press, release) = match mode {
@@ -504,7 +510,7 @@ fn unsupported_starts_and_existing_release_targets_never_fall_back_to_independen
             workspace.error.is_some(),
             "an intentional unsupported drag needs a diagnostic, mode {mode}"
         );
-        assert_eq!(workspace.engine.stored_document(), &before, "mode {mode}");
+        assert_eq!(workspace.engine.stored_document()?, &before, "mode {mode}");
         assert_eq!(
             serde_json::to_value(workspace.engine.state())?,
             state,
@@ -520,7 +526,7 @@ fn source_backed_mol_remains_guarded_after_a_real_attachment_drag() -> TestResul
     workspace.engine.dispatch("document.open_mol",json!({"path":concat!(env!("CARGO_MANIFEST_DIR"),"/../io/tests/fixtures/mol/ethane-v2000.mol")}))?;
     let output = workspace.frame(vec![], None);
     let paper = paper(&output)?;
-    let page = workspace.engine.document().pages().first().ok_or("page")?;
+    let page = workspace.engine.document()?.pages().first().ok_or("page")?;
     let position = page.fragments()[0].atoms()[1]
         .position
         .ok_or("atom position")?;
@@ -535,7 +541,7 @@ fn source_backed_mol_remains_guarded_after_a_real_attachment_drag() -> TestResul
         point(position.x_pt(), position.y_pt()),
         point(position.x_pt() + 40.0, position.y_pt() + 40.0),
     );
-    let before = workspace.engine.stored_document().clone();
+    let before = workspace.engine.stored_document()?.clone();
     let state = serde_json::to_value(workspace.engine.state())?;
     workspace.frame(drag(begin, end), None);
     assert!(
@@ -544,7 +550,7 @@ fn source_backed_mol_remains_guarded_after_a_real_attachment_drag() -> TestResul
             .as_deref()
             .is_some_and(|error| error.contains("native CDXML"))
     );
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     assert_eq!(serde_json::to_value(workspace.engine.state())?, state);
     Ok(())
 }
@@ -568,14 +574,14 @@ fn revision_dpi_viewport_and_origin_changes_cancel_a_held_attachment_through_idl
             3 => workspace.screen = workspace.screen.translate(egui::vec2(0.25, 0.25)),
             _ => workspace.screen.max.x += 100.0,
         }
-        let before = workspace.engine.stored_document().clone();
+        let before = workspace.engine.stored_document()?.clone();
         let state = serde_json::to_value(workspace.engine.state())?;
         for _ in 0..3 {
             workspace.frame(vec![], None);
         }
         workspace.frame(vec![Event::PointerMoved(end), button(end, false)], None);
         assert_eq!(
-            workspace.engine.stored_document(),
+            workspace.engine.stored_document()?,
             &before,
             "context mode {mode}"
         );
@@ -592,7 +598,7 @@ fn assert_invalid_viewport_cancels_attachment(events: Vec<Event>) -> TestResult 
     let mut workspace = Workspace::new(true)?;
     let [_, begin, end, _] = workspace.points()?;
     workspace.frame(vec![button(begin, true)], None);
-    let before = workspace.engine.stored_document().clone();
+    let before = workspace.engine.stored_document()?.clone();
     let state = serde_json::to_value(workspace.engine.state())?;
     let original_screen = workspace.screen;
     workspace.screen.max.x = 100_001.0;
@@ -600,14 +606,14 @@ fn assert_invalid_viewport_cancels_attachment(events: Vec<Event>) -> TestResult 
     assert!(invalid.shapes.iter().any(|shape| {
         matches!(&shape.shape, egui::Shape::Text(text) if text.galley.text().contains("viewport dimensions must be between 1 and 100000 pixels"))
     }));
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     assert_eq!(serde_json::to_value(workspace.engine.state())?, state);
     workspace.screen = original_screen;
     for _ in 0..3 {
         workspace.frame(vec![], None);
     }
     workspace.frame(vec![Event::PointerMoved(end), button(end, false)], None);
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     assert_eq!(serde_json::to_value(workspace.engine.state())?, state);
     Ok(())
 }
@@ -654,14 +660,14 @@ fn escape_focus_pointer_loss_and_close_cancel_attachment_without_rearming() -> T
                 vec![button(end, false)]
             }
         };
-        let before = workspace.engine.stored_document().clone();
+        let before = workspace.engine.stored_document()?.clone();
         let state = serde_json::to_value(workspace.engine.state())?;
         workspace.frame(events, None);
         for _ in 0..3 {
             workspace.frame(vec![], None);
         }
         assert_eq!(
-            workspace.engine.stored_document(),
+            workspace.engine.stored_document()?,
             &before,
             "cancel mode {mode}"
         );
@@ -681,7 +687,7 @@ fn two_device_pixels_per_logical_point_still_attach_at_document_coordinates() ->
     let [_, begin, end, _] = workspace.points()?;
     workspace.frame(drag(begin, end), None);
     assert!(workspace.error.is_none(), "{:?}", workspace.error);
-    let fragment = &workspace.engine.document().pages()[0].fragments()[0];
+    let fragment = &workspace.engine.document()?.pages()[0].fragments()[0];
     assert_eq!(fragment.atoms().len(), 3);
     assert_eq!(
         fragment.atoms()[1].position,
@@ -700,7 +706,7 @@ fn a_new_foreground_covered_press_cannot_reuse_an_earlier_attachment() -> TestRe
     let cover = egui::Rect::from_min_size(covered - egui::vec2(5.0, 5.0), egui::vec2(30.0, 30.0));
     workspace.frame(vec![], Some(cover));
     workspace.frame(vec![], Some(cover));
-    let before = workspace.engine.stored_document().clone();
+    let before = workspace.engine.stored_document()?.clone();
     let state = serde_json::to_value(workspace.engine.state())?;
     workspace.frame(
         vec![
@@ -710,7 +716,7 @@ fn a_new_foreground_covered_press_cannot_reuse_an_earlier_attachment() -> TestRe
         ],
         Some(cover),
     );
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     assert_eq!(serde_json::to_value(workspace.engine.state())?, state);
     Ok(())
 }
@@ -726,10 +732,10 @@ fn a_saved_ui_attachment_survives_undo_redo_and_reopen_with_an_independent_file_
         .dispatch("document.save_cdxml", json!({"path":path}))?;
     file_support::independently_read_file(&path, 1)?;
     let [_, begin, end, _] = workspace.points()?;
-    let before = workspace.engine.stored_document().clone();
+    let before = workspace.engine.stored_document()?.clone();
     workspace.frame(drag(begin, end), None);
     assert!(workspace.error.is_none(), "{:?}", workspace.error);
-    let after = workspace.engine.stored_document().clone();
+    let after = workspace.engine.stored_document()?.clone();
     workspace
         .engine
         .dispatch("document.save_cdxml", json!({"path":path,"overwrite":true}))?;
@@ -783,17 +789,17 @@ assert Chem.MolToSmiles(m)=='CCC' and rdMolDescriptors.CalcMolFormula(m)=='C3H8'
         String::from_utf8_lossy(&output.stderr)
     );
     workspace.engine.dispatch("history.undo", json!({}))?;
-    assert_eq!(workspace.engine.stored_document(), &before);
+    assert_eq!(workspace.engine.stored_document()?, &before);
     assert!(workspace.engine.state().file.dirty);
     workspace.engine.dispatch("history.redo", json!({}))?;
-    assert_eq!(workspace.engine.stored_document(), &after);
+    assert_eq!(workspace.engine.stored_document()?, &after);
     assert!(!workspace.engine.state().file.dirty);
     workspace
         .engine
         .dispatch("document.open_cdxml", json!({"path":path}))?;
-    assert_eq!(workspace.engine.document(), after.model());
+    assert_eq!(workspace.engine.document()?, after.model());
     assert_eq!(
-        workspace.engine.stored_document().to_cdxml()?.as_ref(),
+        workspace.engine.stored_document()?.to_cdxml()?.as_ref(),
         saved
     );
     let output = workspace.frame(vec![], None);

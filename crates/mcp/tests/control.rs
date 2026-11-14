@@ -9,6 +9,8 @@ mod chain_support;
 mod file_support;
 #[path = "../../cli/tests/support/mol.rs"]
 mod mol_support;
+#[path = "../../../xtask/oracles/sdf_test_support.rs"]
+mod sdf_support;
 use std::{
     io::{BufRead, BufReader, Read, Write},
     net::{Ipv4Addr, Shutdown, SocketAddr, TcpStream},
@@ -55,6 +57,112 @@ fn wait_for_changes(changes: &AtomicUsize, expected: usize) {
         std::thread::sleep(Duration::from_millis(1));
     }
     assert_eq!(changes.load(Ordering::SeqCst), expected);
+}
+
+#[test]
+fn authenticated_loopback_sdf_open_save_reopen_and_failure_retention_use_one_session()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = sdf_support::SdfTestDirectory::new()?;
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, Arc::clone(&engine), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    let mut notifications = 0;
+    for (source, mixed) in [
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/ordered-fields-v2000.sdf").as_slice(),
+            false,
+        ),
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf").as_slice(),
+            true,
+        ),
+    ] {
+        let input = directory.path(if mixed {
+            "socket-mixed.sdf"
+        } else {
+            "socket-ordered.sd"
+        });
+        let output = directory.path(if mixed {
+            "socket-mixed-λ.data"
+        } else {
+            "socket-ordered-λ.data"
+        });
+        let bad = directory.path("bad-later.sdf");
+        std::fs::write(&input, source)?;
+        std::fs::write(
+            &bad,
+            [
+                &source[..if mixed { 462 } else { 424 }],
+                b"bad second record\n",
+            ]
+            .concat(),
+        )?;
+        for (command, params, notify) in [
+            ("document.open_sdf", serde_json::json!({"path":input}), true),
+            ("document.inspect", serde_json::json!({}), false),
+            (
+                "document.save_sdf",
+                serde_json::json!({"path":output}),
+                true,
+            ),
+            (
+                "document.open_sdf",
+                serde_json::json!({"path":output}),
+                true,
+            ),
+        ] {
+            let response = call(
+                &mut client,
+                &serde_json::json!({"command":command,"params":params}).to_string(),
+            )?;
+            let result = &response["result"];
+            assert_eq!(result["document"], serde_json::json!(null), "{response}");
+            assert_eq!(result["collection"], sdf_support::expected_summary(mixed));
+            assert_eq!(result["file"]["format"], "sdf");
+            if notify {
+                notifications += 1;
+                wait_for_changes(&changes, notifications);
+            }
+        }
+        sdf_support::independently_read_sdf(&output, source, mixed)?;
+        let baseline = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+        for (command, params, code) in [
+            (
+                "document.open_sdf",
+                serde_json::json!({"path":bad}),
+                "invalid_sdf",
+            ),
+            (
+                "document.save_sdf",
+                serde_json::json!({"path":output}),
+                "already_exists",
+            ),
+            (
+                "document.save_cdxml",
+                serde_json::json!({"path":directory.path("must-not-save.cdxml")}),
+                "unsupported_content",
+            ),
+        ] {
+            let response = call(
+                &mut client,
+                &serde_json::json!({"command":command,"params":params}).to_string(),
+            )?;
+            assert_eq!(response["error"]["code"], code);
+            assert_eq!(
+                call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+                baseline
+            );
+        }
+        assert!(!directory.path("must-not-save.cdxml").exists());
+        assert_eq!(std::fs::read(&output)?, source);
+    }
+    assert_eq!(changes.load(Ordering::SeqCst), notifications);
+    server.shutdown()?;
+    Ok(())
 }
 
 #[test]

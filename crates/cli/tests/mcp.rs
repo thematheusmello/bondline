@@ -7,6 +7,8 @@ mod chain_support;
 mod file_support;
 #[path = "support/mol.rs"]
 mod mol_support;
+#[path = "../../../xtask/oracles/sdf_test_support.rs"]
+mod sdf_support;
 use std::{
     io::{BufRead, BufReader, Write},
     process::{Child, ChildStdin, Command, Stdio},
@@ -93,6 +95,106 @@ impl Drop for Client {
             let _ = reader.join();
         }
     }
+}
+
+#[test]
+fn stdio_sdf_files_preserve_the_complete_collection_and_recover_from_file_refusals()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = sdf_support::SdfTestDirectory::new()?;
+    let mut client = Client::start()?;
+    client.call(1,"initialize",json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"sdf-file-test","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let mut id = 2;
+    for (source, mixed) in [
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/ordered-fields-v2000.sdf").as_slice(),
+            false,
+        ),
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf").as_slice(),
+            true,
+        ),
+    ] {
+        let input = directory.path(if mixed {
+            "stdio-mixed.sdf"
+        } else {
+            "stdio-ordered.sd"
+        });
+        let output = directory.path(if mixed {
+            "stdio-mixed-λ.data"
+        } else {
+            "stdio-ordered-λ.data"
+        });
+        let bad = directory.path("bad-later.sdf");
+        std::fs::write(&input, source)?;
+        std::fs::write(
+            &bad,
+            [
+                &source[..if mixed { 462 } else { 424 }],
+                b"bad second record\n",
+            ]
+            .concat(),
+        )?;
+        for (name, arguments) in [
+            ("document.open_sdf", json!({"path":input})),
+            ("document.inspect", json!({})),
+            ("document.save_sdf", json!({"path":output})),
+            ("document.open_sdf", json!({"path":output})),
+        ] {
+            let response =
+                client.call(id, "tools/call", json!({"name":name,"arguments":arguments}))?;
+            id += 1;
+            assert_eq!(response["result"]["isError"], false, "{response}");
+            let result = &response["result"]["structuredContent"];
+            assert_eq!(result["document"], json!(null));
+            assert_eq!(result["collection"], sdf_support::expected_summary(mixed));
+            assert_eq!(result["file"]["format"], "sdf");
+            assert_eq!(result["file"]["dirty"], false);
+        }
+        sdf_support::independently_read_sdf(&output, source, mixed)?;
+        let baseline = client.call(
+            id,
+            "tools/call",
+            json!({"name":"document.inspect","arguments":{}}),
+        )?;
+        id += 1;
+        for (name, arguments, code) in [
+            ("document.open_sdf", json!({"path":bad}), "invalid_sdf"),
+            (
+                "document.save_sdf",
+                json!({"path":output}),
+                "already_exists",
+            ),
+            (
+                "document.save_mol",
+                json!({"path":directory.path("must-not-save.mol")}),
+                "unsupported_content",
+            ),
+        ] {
+            let response =
+                client.call(id, "tools/call", json!({"name":name,"arguments":arguments}))?;
+            id += 1;
+            assert_eq!(response["result"]["isError"], true, "{response}");
+            assert_eq!(
+                response["result"]["structuredContent"]["error"]["code"],
+                code
+            );
+            let inspect = client.call(
+                id,
+                "tools/call",
+                json!({"name":"document.inspect","arguments":{}}),
+            )?;
+            id += 1;
+            assert_eq!(
+                inspect["result"]["structuredContent"],
+                baseline["result"]["structuredContent"]
+            );
+        }
+        assert!(!directory.path("must-not-save.mol").exists());
+        assert_eq!(std::fs::read(&output)?, source);
+    }
+    client.finish()?;
+    Ok(())
 }
 
 #[test]
@@ -329,9 +431,11 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "document.open_cdx",
             "document.open_cdxml",
             "document.open_mol",
+            "document.open_sdf",
             "document.save_cdx",
             "document.save_cdxml",
             "document.save_mol",
+            "document.save_sdf",
             "history.redo",
             "history.undo",
             "page.set_size",
@@ -343,6 +447,8 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
     for (name, permission) in [
         ("document.open_cdx", "discard_unsaved"),
         ("document.save_cdx", "overwrite"),
+        ("document.open_sdf", "discard_unsaved"),
+        ("document.save_sdf", "overwrite"),
     ] {
         let tool = tools
             .iter()

@@ -1,261 +1,160 @@
 # Status
 
-2026-11-14: full M0–M5 persistent goal ACTIVE. M0 and M1 remain incomplete.
-Public repository: https://github.com/thematheusmello/bondline . Continue; do not restart.
-Read AGENTS.md, ROADMAP.md, architecture, parity and sources before choosing work.
+2026-11-14. The persistent M0–M5 goal is ACTIVE. M0 and M1 remain incomplete.
+Repository: https://github.com/thematheusmello/bondline . Continue existing work.
+Root owns Git, integration, publication and assignment of the sole native GUI owner.
 
-## Verified source checkpoints
+## Current checkpoints
 
-Public main3ec8b4c's code checkpoint is15ecbc7, plus documentation-only evidence updates.
-It advances from29cac7f only after the matching all-platform GREEN below. This combines
-guarded CDX files, explicit headless extension, native attachment wiring and the two SDF
-library slices. Owned-SDF receiving9436bf4 passes its own43568995448:
-Mac132369037648:549 (546workspace+3bridge), Linux132369037687:547,
-Windows132369037361:539, all three actual windows and ASAN132369037587:six10000-run
-targets. Field-value receiving15ecbc7 passes its own43570071575: Mac132372310260:559,
-Linux132372310080:557, Windows132372310208:549, all three actual windows and
-ASAN132372310315:six10000-run targets; terminal GREEN07:27:58UTC. Source501a315's own43560603081
-is fully GREEN: Mac132343193738:523
-(520workspace+3bridge), Linux132343193548:521, Windows132343193736:513, every actual
-native window smoke, ASAN132343193667:six10000-run targets. Adapters are Metal/Apple
-Paravirtual device, Vulkan/llvmpipe CPU and Dx12/Microsoft Basic Render Driver CPU.
-Main3ec8b4c's automatic43571525559 also passes: Mac132376759120:559,
-Linux132376759149:557, Windows132376758857:549, all actual windows and
-ASAN132376759095:six10000-run targets. These code-identical results do not verify later work.
-The receiving isolated bondline-rxn full gate54630 exits0:520+3, log
- target/connected-bond-integrated-ci.log SHAdfb35244cdbdf58d69d40a9fa98d89d278054930292a2f2e561290d00b274e8d.
-No native terminal-attachment claim follows from those engine/window tests.
-Sourcef0910ca run43563825506 passes Mac540/Windows530/six ASAN targets initially; Linux
-fails before tests on preinstalled rustup cargo-clippy conflict. Failed-only retry Linux
-132358002259 then passes538/window unchanged; retained successes keep original timestamps.
-See ci.md for original/retained job IDs. No product-code/toolchain-pin fix or passing-job
-re-execution was used. Actual new native pass verifies only C2, as scoped below.
+Public main is8e0e92b7437e5123e5a5ebd4a7fb981968194d69: original bounded nonaromatic
+SMILES notation/source ownership, original seeds and a seventh sanitizer target, on the
+previous drawing/file foundation. Its own hosted43573987299 is fully GREEN:
+Mac132384119167:568 (565workspace+3bridge), Linux132384119069:566,
+Windows132384118953:558, all three actual native window smokes and
+ASAN132384119211:seven10000-run targets. Main advanced only after matching GREEN.
+Adapters: Metal/Apple Paravirtual device, Vulkan/llvmpipe CPU, Dx12/Microsoft Basic
+Render Driver CPU. Window smoke is not interactive chemical-workflow acceptance.
 
-Parent450962c separately passes hosted43559974203: Mac502/Linux500/Windows492, all
-windows and six ASAN targets. Main advanced00e5b02→450962c only after matching GREEN.
-Its Root receiving gate95800 passes499workspace+3bridge, log
- target/cdx-application-integrated-ci.log SHA7c5a36e4b5dcaa5ec9db510056876f9e5e92581aaf9a611d24522aa6e264c99e.
-Earlier983ffee actually failed two Mac/Windows FreeType comparisons at unchanged0.90.
-Test-onlya3613c0 reproduces BASIC layout dependence, restores independent OpenType design
-advances and passes its own43559699996:490/488/480/windows/six ASAN. The production/font/
-golden and original negative assertions remain unchanged. ci.md retains the real failures;
-no completed passing job was manually rerun or an old result substituted for new source.
+Root currently receives SDF session sourceb842e36 on feat/sdf-session-integration,
+based on8e0e92b. This receiving source has its own terminal cargo xtask ci79477:
+587workspace+3bridge=590, no failed/ignored tests, all gates GREEN. Correct Root path,
+absolute target/default dev/test debuginfo/incremental0/pinned Python were used.
+Log target/sdf-session-integrated-ci.log:72645B/SHA
+f78935e91fe4023f93a79fdf4dc2e2824c1bc200737d6b0187a1da17dce9ea1f.
+Source is ready for atomic receiving commit/publication and exact-source native acceptance;
+new-source hosted/native SDF results are still pending. Do not substitute8e0e92b's results.
 
-Sixteen typed commands share engine/CLI/stdio/authenticated opt-in loopback/native adapters.
-The dependency-license blocker is resolved: declared native closures154Mac/165Windows/
-220Linux and two bundled assets pass the unchanged MIT/Apache-2.0/BSD policy. No registry
-package versions/checksums were changed by these slices. windows-permissions0.2.4's missing
-upstream LICENSE despite its MIT declaration remains a release notice-audit question.
+## Delivered scope and limitations
 
-## Actual application and format scope
+The receiving registry has18 typed commands: inspect/close, CDXML/CDX/MOL/SDF Open/Save,
+page size, independent C-C creation, explicit terminal-carbon extension, Undo/Redo,
+PNG capture, controls and file-presentation intent. UI/CLI/stdio/authenticated opt-in
+loopback use the same registry. Main8e0e92b still has16; the two SDF commands are new.
+No account/network service is required for ordinary creation, files or rendering.
 
-Mac independent C–C drawing, pages/history, source-retaining CDXML/MOLV2000/V3000 local
-files, guarded version/refusal/retry/close and CPU/GPU/PNG retain their exact prior evidence.
-Source-backed partial imports never authorize lossy regeneration. Save-slot ownership lives
-through prepare/publication/finish; trusted UI receipt currentness and shutdown/reply/worker
-barriers remain. Unchanged complete source/baseline/history/opaque data is retained.
+StoredContent distinguishes Drawing(StoredDocument) from Sdf{original,current}.
+Current/saved/history/file plans retain complete immutable content. Drawing JSON keeps
+its old document object and omits collection. SDF has document:null and bounded metadata
+for every record; it never substitutes a first/empty drawing. Source.modified compares
+original/current, while file.dirty compares current/saved. The source length remains690
+when a private704-byte field candidate is saved; current summary/receipt length is704.
+There is no registered SDF data edit, record navigation/delete or chemical-preview command.
 
-GraphScene shares CPU/GPU/capture/native positioned neutral-carbon/Single geometry,
-literal authored H and bounded typed atom/bond hits; no chemical H inference. The final
-carbon native binary2963b444…1629 and376-source manifest1b64e648…d4dec pass visible
-C–C/UndoRedo/Unicode CDXML save/reopen, actual-byte consumers and bounded1x/2x hover,
-Escape/focus/origin/DPI/chooser guards. Earlier stale-hover and input-order failures and
-excluded probes remain in verification-carbon-graph.md. Full graph topology has independent
-headless geometry/font/pixel tests; actual native coverage is only its documented C2/C3 cases.
+Complete SDF Open/Save works through engine/CLI/stdio/authenticated socket and deterministic
+UI file workers. Both original690/777-byte files preserve every record/version/field/byte;
+malformed later records retain the previous session. The chooser supports sdf/sd; Save As
+still validates suffixes, while explicit association is separate from a preexisting suffix.
+The wired workspace clears prior drawing/hover/gesture and shows a static record summary
+with chemical preview explicitly unavailable. Actual native interaction is UNVERIFIED.
+This differs from the observed reference all-visible molecular drawings; no browser/layout
+parity is claimed. See docs/verification-sdf-session-files.md and docs/control-protocol.md.
 
-Guarded CDX application acceptance is complete on frozen source450962c, macOS27.2 arm64 /
-AppleM3Max/Metal, pinned Rust1.94.1 and Root default dev debuginfo. Executed binary
- e9491a720572889372264ebea3cf111d147f3beeae67e0c4367e6fe1d66e5749;
-379-source manifest8137960861d59212592ae77a3f1fd605b0fa9084fc2bd08267e19fa506aee0d0.
-Actual chooser/Open/Known Save with misleading suffix/Unicode Save As/reopen/retry/
-dirty-close refusal/Cancel/Undo and malformed/unsupported retention pass. All four original
-319/323/65750/65746B vectors and one ignored1196B authorized own-drawing source retain every
-byte and face independent actual-output struct/RDKit consumers. CDX preview/editing/new
-encoding remains unavailable; all imported CDX stays incompletely mapped. Native CDXML/
-MOL cross-format loss and source-free CDX saving refuse. See verification-cdx-application.md.
+Existing native Mac evidence covers independent C-C creation, pages/history, source-retaining
+CDXML/MOLV2000/V3000 file workflows, guarded CDX Open/Save and CPU/GPU/PNG. CDX remains
+incompletely mapped: exact unchanged Save works, faithful preview/edits/new encoding refuse.
+Unknown/partial imports never authorize lossy regeneration. Save ownership lasts through
+prepare/publication/Completed/finish or drop; old receipts cannot revive close approval after
+ABA. Preserve generation/revision, request/epoch, worker/reply publication and shutdown guards.
+Interactive Windows/Linux chemical workflows remain unverified despite hosted window passes.
 
-Frozen Root target/native-cdx-application-handoff.md SHA
-2a38d2af6b1dd43aa04ccc5b5ad0f3dc853c2245f967d79238c289833eca21ab;
-83-file index SHA f8a85505001816c3fe5e43d3aba0f24ab552a1bbbe238072df4e8b9d93bff2d6;
-cleanup SHA06d786457e161ca0dc50d76744207e38757ac111ace445417488a840241b0c23.
-Root rechecked all379 source hashes,83 evidence files and exact binary before checkout
-change. Native24284/controller24261/session54751 and all own helpers/builds exited0.
-The four sampled reference windows retained IDs/frames/layers, with no reference operation
-in that acceptance. Cursor nearest-integer restore has(+0.305,-0.213) logical subpixel
-delta; exact restoration is not claimed. CUA completed once after cleanup. All old owned
-Bondline native/controller/hold jobs are terminal; the historical restoration incident is
-not rewritten. Three excluded evidence probes remain in the report, not passing evidence.
+GraphScene supports positioned neutral carbon/Single topology, literal authored H, bounded
+hits and shared CPU/GPU/capture/native geometry. bond.extend requires explicit revision and
+terminal H3→H2 policy; source-free/byte-proven native CDXML only, actual MOL/CDX backing refuses.
+Headless C3/C4/history/identity/source/file evidence passes. Native attachment had only C2
+painting verified atf0910ca before unowned held input stopped further cases. No inferred H,
+general connected editing, selection/transforms/rings/styles or chemistry perception exists.
 
-Source-only CDX metadata retains qualified Z/bounds/CIP0U-or1N/opaque AtomID/unstyled
-warning fields, with exact widths/owner checks and two original vectors. No CIP calculation,
-style fidelity or AtomID reference alias is added. Root local489 plus normal-graph ASAN
-10000/six fresh seeds pass, logSHA497f2369441263a997a6320a0914b7fb199475852a338c175234e136051a24fc.
-Snapshot equality/storage/source export guards stay authoritative; native vendor bytes and
-warning prose remain ignored. General/foreign/application corpus coverage remains limited.
+SMILES parsing is a bounded original iterative nonaromatic notation library, preserving
+complete bytes/tokens and implicit versus bracket/physical H. No model import, generated
+output in main, canonicalization, aromaticity/stereo, layout or native clipboard/file workflow.
+Root568/normal ASAN10000 and independent reviews are in docs/verification-smiles.md.
+ASAN's largest local input was21B; fixed large/deep/dense unit cases are separate evidence.
+Fetched corpus remains5 pinned files/4 bundles; broader CDX, SMILES/InChI and chemistry
+coverage is missing. RXN remains a standalone source-preserving container, not a reaction editor.
 
-bond.extend is verified headlessly: required expected revision and explicit H policy,
-terminal neutral C/Single/literal H3→H2 plus a new C/H3, one snapshot/history step, stable
-old/fragment IDs, global atom/bond floors and atomic failure. Only source-free or byte-proven
-native CDXML is allowed; actual MOL/CDX backing refuses. Actual saved propane/butane faces
-Expat/Decimal/RDKit through engine/CLI/stdio/authsocket; undo/redo, stale open, captured save,
-slot ownership, dirty/source baselines and close guards pass. Independent read-only review
-has no confirmed defect, report in bondline-rxn/target SHA
-cc41dee7859ed1ae5c52e40b52f360da1cec1a46115fb0119068517f413c355a. Reviewer did not rerun tests.
+## Exact evidence and active ownership
 
-## Current receiving state, active work and exact next steps
+- SDF authorb842e36 in bondline-rxn/feat/sdf-session-files: own581 (578+3) GREEN,
+  target/sdf-session-ci.log71140B/SHA
+  b372caca79de403cba4abb8358b66215dd0b8d79c0f53a6adfe7dd42a917787e.
+  Handoff target/sdf-session-handoff.json14725B/SHA
+  48ab07a7fba965a54751f1edb339f49dfd69be1f89d0d0d1720f02320a9e6c31.
+  Root verified49 intentional files,13 logs,8 protected identities and exact file set.
+  Independent review target/sdf-session-source-review.md9847B/SHA
+  87f31040766629f905c9b56d14aa2cd71cdf31abd1b97500a0196d9abad02582 has no confirmed defect;
+  no reviewer execution. Three unchanged older IO routing files were excluded, preserving
+  newer Root SMILES exports/catalog visibility. Source author and all own jobs are terminal.
+- SMILES explicit-H writer is frozen separately in bondline-mol-v3000/
+  feat/smiles-explicit-writer, based5df1b28. Original standalone valid NONCANONICAL
+  Fragment export, neutral closed-shell supported atoms/orders/literal H, bounded
+  iterative traversal and typed refusals. Own194 IO checks/clippy/fmt pass; Root receive,
+  fuzz/full/hosted gates pending. Handoff target/smiles-write-handoff.json4988B/SHA
+  df6289f7996004f1dde5d490510c43cd72d21784872e468f9fc997dc8b9adc1e.
+  Peer target/smiles-write-review.md7019B/SHA
+  b20c9e3947d8f34e69710aeea01c394e201a25c4f57cb01876bb5ba4fac7d1e9: no confirmed issue,
+  no reviewer execution. Producer/reviewer are terminal. Never advertise source-backed
+  Save, inferred H, import or a canonicalizer from this library writer.
+- native_acceptance prepared target/native-sdf-combined-acceptance-plan.md7341B/SHA
+  2ee4940fb6a92733b21ce963e9a5e0c6d78895431102a597bec0087850892e58.
+  It waits for Root's exact committed source/gate and GO, then becomes sole GUI owner.
+  Plan covers ordinary terminal C3/C4/CDXML and SDF file/retention/refusal/clear-view flows.
+  No build/launch/CUA/REA/input or native process has started. Do not edit Root source
+  during its acceptance freeze or duplicate its controller/session/build.
 
-Root owns Git/integration. Current checkout feat/smiles-integration receives original
-notation codec5df1b28 plus original-seed commiteabe02f, normal-graph fuzz and a ninth
-seed/checkout test. Root cargo xtask ci84447 exits0:565workspace+3bridge=568, log
-target/smiles-integrated-ci.log SHA
-914fd978ca95370c05ddfe8030143fb7426d461c6f22300d3c4a615a988c93fc.
-Normal fuzz clippy passes on pinned1.94.1; its first incorrect nightly invocation fails
-before compilation because that test toolchain has no clippy component (retained log).
-Normal full-graph ASAN40137 exits0 at10000 runs/seed703592681/max_len65536/timeout5:
-cov534/features1205,148inputs/1602B/RSS67MiB/1second/largest21B. Exact3original copied
-seeds total59B. Source/token/graph/sharing invariants pass; fixed large cases remain unit
-tests. ASANlogSHA0f3c6fe7d6bb6a7e23602a576dd0092f85ba5faeb0f7192bc7e8e91f994a2ab0.
-Independent frozen-source review has no finding, target/smiles-source-review.md SHA
-f06ac2062e650383d91e2be1e1b081cd9b398349c46e7215ecbbd431bffbab88; no reviewer execution.
-Receiving fuzz/fixture review has no confirmed finding, target/smiles-fuzz-review.md SHA
-63509a5b8b30b3660878f76250642164db3f25fcadfea85108c2ba32ae0ce8ac; no reviewer execution.
-Own hosted result remains pending. No model/command/native SMILES workflow is delivered.
+All Root Cargo/fuzz jobs are terminal, including receiving79477. No native app/controller/
+held helper is live. Query agents and current jobs before resuming; these facts can change.
+Targets are separate absolute paths, incremental0; Root default debug, siblings debug0.
+Disk is constrained:990MiB free at08:21UTC. Reclaim only inactive owned build artifacts,
+never source/evidence/fixtures/active or other-worker targets. Do not share Cargo targets.
 
-Earlier immutable field replacementf63f153 is integrated on9436bf4, which merges owned-source
-0ae10e5 onf0910ca. Root receiving94645 exits0:546workspace+3bridge=549, all aggregate gates;
-log target/sdf-owned-integrated-ci.log SHA
- fe1e23fee5df7a1310243fd9e1b034ad6a25a898cf8aad4b073e591c50c987b8.
-Normal full-graph fuzz clippy79909 and ASAN24955 exit0 with exact original copied690/777B
-seeds. New owned retention/sharing/range/ID/accounting assertions preserve every old parser
-assertion:10000 runs, seed826403517/max_len65536/timeout5, cov1633/features5009,294inputs/
-reported154KiB/RSS91MiB/1second, largest exercised777B. ASAN log SHA
-3daeba5447b8998042ee5387f18d9697ef5265490545e555db1fd6b0d37fb422.
-Both locks, old tests/fixtures/oracles, native-v0 and approved golden stay exact. This is
-immutable library ownership only, not Engine/file/native SDF support. Read-only peer review
-has no confirmed finding, report in MOL checkout SHA
-97b293d6ecaabc6b087d5488de57020b9f1fed91a9a2526ec88a733bfa6d1ed2.
+## Native input and reference evidence
 
-All old Root Cargo/fuzz/native/controller/helper and hosted integration jobs are terminal.
-Current backend author and reviewer tasks are listed below.
-Targets stay separate absolute paths; incremental0, Root default debuginfo, sibling debug0.
-Never share targets or overwrite sibling WIP. The old native-source freeze is released.
+The old f0910ca native pass stopped because HID+combined LeftDown was unowned. No helper
+Down ever ran and no unknown input was released. Old native18047/controller18011/session82296
+and all other previous own app/controller/helpers are CLOSED; reports/cleanup remain in
+verification-bond-attachment-ui.md and target/native-attachment-handoff.md SHA1a085c5e…fbf09.
 
-Native attachment attempt atf0910ca used binary
-1037d6de9b82ceb98862e3843ef097233b90a4ad25e41fd912c5fabc1826fa9f and384-source manifest
-6536efde950047442ba7859bb57a4dbf4414ccd99b82db2e0cf9c64ee9bba9b6. Actual empty→C2 painting,
-H3/3, revision1/history1 and predeclared coordinate comparison pass. B–L terminal extension/
-save/reopen/history/guards/minimum-width/actual2x/held-context workflows remain UNVERIFIED:
-public HID+combined event tables report LeftDown, with unestablished ownership and another
-foreground app. No helperDown ever ran; no unknown input was released/normalized. Root's
-asynchronous input-availability question remains pending. Do not treat elapsed time as an
-answer or resume GUI until actual usable input is established.
+A fresh STATE-ONLY query at08:12:24UTC reports both left tables false, Escape false,
+foreground PID734, cursor(1320.02734375,810.21337890625), no event injection/release attempt.
+Record:target/native-input-availability-20261114T0812.json. The old optional input question
+is unanswered; elapsed time did not clear the blocker, this actual state change did.
+The GUI owner must recheck initial Up/ownership before every action and stop if input is
+held/unowned or the user reports using it. Never normalize unknown input. Special held
+watchdog release/2x/modal cases remain unverified; reviewed ignored v5 helper has only
+bounded no-input checks and requires actual pipe stdout plus fresh review before Down.
 
-Fresh exact owned C2/r1/pathnull inspect gated protocol Request→Discard cleanup, without
-mouse/key/activation/warp. Native18047/controller18011/session82296 exited0, windows absent.
-Original four reference IDs/frames/layers and pause cursor preserved; active restoration
-deferred while input unowned. CUA completed once after cleanup. Frozen partial report
- target/native-attachment-handoff.md SHA
-1a085c5ee5a9cdaf7eab45c4ac8cf96157731fc0e6e714d0c7b717786d3fbf09;
-54+5 index SHA1c1c418db9a607ab5e4dc13b09643c09f33ffc2fa09165c350461d23a9d897a9, all59 rehashed
-by Root; cleanupSHAc8721c0363381ff299d4930235ad930829d47292dc4b6dc684ece28b23ab81e7.
-Old ignored helper review found output/occlusion/release issues; v5 nonblocking pipe/
-deadline/topmost/bounded-release corrections have no-input checks only, no actual hold/
-release proof. Final rereview is required before future Down. No GUI owner/process remains.
+Installed reference26.1.0.6801/macOSarm64/tierunknown: six reports/catalogs record14 menus,
+503 physical menu records and36 palette cells, not completed flows or a parity percentage.
+The bounded SDF observation opens both original records as visible drawings in one document,
+without initial browser/import choice. Data retention/layout/export remain unknown. See
+installed-feature-map.md, installed-tool-palette.md, installed-sdf-import.md under docs/research.
+Only original Rust/assets ship; raw reference captures/resources stay ignored. Earlier original
+window-restoration exception remains recorded, never rewritten as uninterrupted preservation.
 
-Native SDF observation is committed81858a1, docs/research/installed-sdf-import.md: both
-records visible in one document for ordinary/mixed original inputs, no initial browser/
-extra import choice; grouping/field retention/layout/export remain unknown. Four passive
-REA after-states differ from CUA actions/OSsheet captures. Both owned imports closedclean;
-original four frames/cursor preserved, all jobs terminal, CUA completed once. ReportSHA
- d0c53eb8ea053fe057658c75eedae4b35dfee397560dd8326d360f33ca609ccf,41-file index65ef6864…3a165
-independently rehashed. No Bondline application SDF verification follows.
+## Next executable work
 
-Field-value featuref63f153 in bondline-mol-v3000/feat/sdf-field-values is committed and
-now receiving here. Ten new cases plus its own556workspace+3bridge=559 pass,64629 exit0,
-logSHA907741752aac99ed87a9ecc9b626f7361a7d225195303f0360fa8a09a9b13794. Root receiving71692
-also exits0:559/all gates, log target/sdf-field-integrated-ci.log SHA
-6adf07911f3563a00c6b2a80763e2b4a6c67ff75b94ce0c50da913352551c267. Full normal SDF fuzz clippy
-and ASAN17018 exit0:10000runs/seed826403517/max_len65536/timeout5, cov1688/features5390,
-306inputs/reported158KiB/RSS59MiB/5seconds/largest777B; logSHA
-0f2e9fe5e4cdd0d701578b9ffe3896fdf2e8860363b782b983c4a14727e85e31. Immutable occurrence edits
-preserve all other bytes/IDs/versions; shared no-op and typed not_found targets pass.
-Independent read-only review has no confirmed defect, sibling target/sdf-field-edit-review.md
-SHAf56fb01c2f6d014c0ff48b1d2dc4776b136e94812ecd3b8fcbea25582d1177ae (no test execution).
-No Engine/history/file/registry/native edit is delivered yet. The published branch is
-feat/sdf-field-integration at15ecbc7; its own hosted run is tracked above. Root owns Git.
+1. Finish this SDF receiving documentation/commit/publication; observe its own hosted run.
+   Keep main at matching GREEN8e0e92b until the new source passes. Native owner gets exact
+   source manifest/binary build/gate and GO only after Root jobs are terminal, then freeze
+   Root source until observed cleanup/CUA completion. Label native successes separately.
+2. Receive/review/fuzz/full-gate the separate explicit-H writer AFTER native source freeze
+   is released. Preserve parser/old tests/locks/golden. Library export is not whole-document
+   Save; unknown backing cannot be dropped to call it compatible.
+3. Add bounded deferred sdf.record.inspect, then sdf.field.set_value as separate tested
+   commands; expected revision/kind, complete snapshots, explicit occurrence, bounded JSON,
+   stale candidate/reply/close barriers and saved-versus-original semantics remain required.
+   Do not stack them before phase1's receipt/retention contract is integrated.
+4. Fetched SMILES source is now a real public pin. target/smiles-corpus-next.md2992B/SHA
+   9004af4f6ef8ab7847ccd85fa45072051e9086d5af6c749e87933b636f5cc1db records exact published
+   eabe02f267985b2788496b58f96415d7fa4d1a4d inputs/notice and fifth-bundle RED/GREEN plan.
+   It is not an implemented corpus gate. Preserve all global validation/confinement checks.
+5. Continue ordinary implicit-H model/SMILES import/layout, RXN/reaction and M2–M5 in
+   ROADMAP/ticket order. Full M0 inventory/dialog/addressability and broader native/platform
+   evidence remain incomplete. Do not pause/block/complete the persistent goal at a checkpoint.
 
-Active work is isolated, not delivered:
-- reference_map owns bondline-rxn/feat/sdf-session-files, based15ecbc7: explicit whole-
-  collection current/saved/history/accounting and paired document.open_sdf/save_sdf,
-  preserving existing drawing JSON and all save/receipt/close/stale barriers. First
-  actual RED73879 exits101: absent Open command and expected18 versus existing16 names.
-  Phase1 includes minimal truthful collection summary/unavailable-preview UI routing,
-  not a record browser, layout, molecular edit or field-edit command. Freeze/review this
-  complete slice before any phase2 record/field query/edit work.
-- file_verification independently reviews the phase1 contract and later frozen diff;
-  ignored report target/sdf-session-review.md. Its frozen parser review is complete;
-  Root receiving fuzz/fixture review is now active. No native work or code ownership.
-- sdf_field_review owns bondline-mol-v3000/feat/smiles-explicit-writer, based5df1b28:
-  original valid NONCANONICAL generated SMILES from explicit-H neutral closed-shell
-  supported model fragments. Bounded iterative traversal, typed refusal and independent
-  actual-output consumers are required. No parser/model/backing/Engine/FS/UI changes,
-  implicit-H inference, whole-document Save or successful placeholder APIs. Still WIP.
-No active native/controller/CUA/helper process exists. The input question remains pending.
-Revalidate live agents and current Cargo handles before starting a conflicting build.
-
-Read-only plans are ready, not implemented features:
-- target/sdf-collection-next.md SHA4eeb7ebd86a6c9e380ed62fe9666e309ede7b2abdc8aea4274309394050c7192;
-  original prefix5bc7cc68… is intact, addendum disqualifies a browser as established26.1 parity.
-- target/smiles-next.md SHA26b733e4494dbdb76f0ac1ec35a8e54c50f1f00471519fa7942567dde1c0010d;
-  exact purr0.9.0 MIT/zero-dependency source has recursion/panic/ring-alias issues, so no
-  unchanged adoption. Original bounded IR/explicit-H projection needs model decisions for
-  implicit-H/aromatic/stereo/isotope0/layout. No dependency/source code copied or installed.
-
-1. Keep main at the matching GREEN15ecbc7 code/documentation checkpoint while new backend
-   work is developed separately. Older hosted results and window smoke never substitute
-   for newer code/native workflow acceptance.
-2. Receive, independently review and run the phase1 SDF session/Open/Save slice before
-   committing it. Drawing APIs must explicitly handle collection content, never manufacture
-   a first/empty drawing. Preserve generic save-slot/receipt/close/stale barriers, source
-   authority and accounting. Reference shows both drawings, not a browser. Native runtime
-   acceptance follows when usable input is established; keep it separately unverified.
-3. Finish receiving-review/commit/publication of the568/ASAN notation slice; observe its
-   own hosted source before advancing main. Then receive/test/review the separate
-   explicit-H generated writer. Ordinary implicit-H model mapping and layout need their
-   own decisions and evidence. Preserve all old source/oracle/golden assertions/pins.
-4. When input availability is resolved and actual initial-Up/ownership is observable,
-   assign one GUI owner a fresh exact-source native acceptance for remaining B–L; never
-   reuse closed app/controller/session or promote synthetic tests to native proof.
-5. Continue M1 RXN/reaction/SMILES and M2–M5 in roadmap/ticket order. The persistent goal
-   remains active; no milestone is complete and no goal pause/block was requested.
-
-SDF mixed-version ordered data and legacy ordered-role RXN are library-only. Broader formats,
-chemistry/formula/mass/stereo/SMILES/InChI, other drawing/selection/styles, publishing/Office,
-naming/templates/WASM/signing and interactive Windows/Linux workflows remain missing or
-unverified. Full M0 inventory/dialog/addressability gaps remain. Six installed26.1 research
-reports/catalogs record14menus/503physical entries and36palette cells; static declarations
-are not tooltip/action/runtime coverage or a feature-completion percentage. Original
-assets/Rust remain independent; no proprietary code/assets/help text is transplanted.
-
-Disk constrained (~1.2GiB free at07:54UTC); inactive Root package artifacts were reclaimed.
-Never delete active/evidence/source/fixtures/worker targets. Only approved golden:
-1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc. No new approval/release/
-installer/signing or unrelated message/account action. Revalidate agents/jobs on continuation.
-
-## Isolated SMILES syntax slice, 2026-11-14
-
-On supplied `feat/smiles-syntax` base15ecbc7 in `bondline-mol-v3000`, original immutable
-ASCII source/notation ownership and iterative nonaromatic graph parsing are implemented.
-Exact tokens distinguish bare implicit H, bracket omission/H0, physical H and isotope0;
-branches/dots/numeric rings preserve adjacency and checked limits. This is library syntax,
-not chemical validation, model projection, generated export, layout or an application flow.
-See docs/verification-smiles.md for exact primary pins, RED/GREEN, hashes and dialect limits.
-
-Own absolute-target IO test session46150 exits0:186 tests/0 failed or ignored; all-target
-warnings-denied IO clippy session27896 exits0 and workspace fmt check passes. Earlier
-missing-API/topology/query REDs, unavailable RDKit Python skipCleanup and numeric-ring/
-dot-branch consumer failures remain recorded. The parser was not weakened to match those
-consumer differences. No dependency/lock/old fixture/golden or model/Engine/FS/UI changed;
-existing symbol data is reused through two approved visibility-only changes. All own jobs
-are terminal. Independent peer source review and Root integration/fuzz/full aggregate/
-hosted checks remain next; Root owns Git and no Git/GUI/install ran in this slice.
+License blocker is resolved without weakening MIT/Apache-2.0/BSD:154Mac/165Windows/220Linux
+runtime packages and2assets pass declared-license/hash/notice checks. windows-permissions0.2.4
+missing upstream LICENSE despite MIT declaration remains a release notice-audit question.
+No dependency/lock/version/asset policy changed. Only approved golden SHA:
+1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc.
+No new golden approval, release, installer/signing or unrelated account/message action.

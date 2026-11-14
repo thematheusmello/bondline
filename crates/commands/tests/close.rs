@@ -55,6 +55,8 @@ fn refreshing_runtime_close_metadata_keeps_the_original_authored_result() -> Tes
     assert_eq!(
         result
             .document
+            .as_ref()
+            .ok_or("drawing result")?
             .pages()
             .first()
             .ok_or("result page")?
@@ -65,7 +67,7 @@ fn refreshing_runtime_close_metadata_keeps_the_original_authored_result() -> Tes
     assert_eq!(engine.state().revision, 2);
     assert_eq!(
         engine
-            .document()
+            .document()?
             .pages()
             .first()
             .ok_or("current page")?
@@ -175,7 +177,7 @@ fn lifecycle_preserves_complete_source_history_and_saved_baseline() -> TestResul
         bondline_model::PageSize::A4,
     )?;
     let mut engine = Engine::from_document(stored);
-    let clean = engine.stored_document().clone();
+    let clean = engine.stored_document()?.clone();
     let initial = authored_state(&engine)?;
     assert!(!engine.complete_close());
     assert_eq!(
@@ -187,10 +189,10 @@ fn lifecycle_preserves_complete_source_history_and_saved_baseline() -> TestResul
         CloseState::Open
     );
     assert_eq!(authored_state(&engine)?, initial);
-    assert_eq!(engine.stored_document(), &clean);
-    assert_eq!(engine.stored_document().to_cdxml()?.as_ref(), source);
+    assert_eq!(engine.stored_document()?, &clean);
+    assert_eq!(engine.stored_document()?.to_cdxml()?.as_ref(), source);
     edit(&mut engine, 400.0)?;
-    let dirty = engine.stored_document().clone();
+    let dirty = engine.stored_document()?.clone();
     let before = authored_state(&engine)?;
     assert_eq!(
         close(&mut engine, CloseAction::Request)?.close,
@@ -202,16 +204,16 @@ fn lifecycle_preserves_complete_source_history_and_saved_baseline() -> TestResul
         CloseState::Approved
     );
     assert_eq!(authored_state(&engine)?, before);
-    assert_eq!(engine.stored_document(), &dirty);
+    assert_eq!(engine.stored_document()?, &dirty);
     close(&mut engine, CloseAction::Cancel)?;
     engine.execute(Command::Undo(NoParams {}))?;
     assert!(
         !engine.state().file.dirty,
         "close actions must retain the exact clean baseline"
     );
-    assert_eq!(engine.stored_document(), &clean);
+    assert_eq!(engine.stored_document()?, &clean);
     engine.execute(Command::Redo(NoParams {}))?;
-    assert_eq!(engine.stored_document(), &dirty);
+    assert_eq!(engine.stored_document()?, &dirty);
     assert!(engine.state().file.dirty);
     Ok(())
 }
@@ -443,7 +445,7 @@ fn old_open_cannot_resurrect_committed_session_and_published_save_is_truthful() 
     let bytes = fs::read(&output)?;
     close(&mut engine, CloseAction::Discard)?;
     let before = authored_state(&engine)?;
-    let stored = engine.stored_document().clone();
+    let stored = engine.stored_document()?.clone();
     assert!(engine.complete_close());
     assert_eq!(
         engine
@@ -463,7 +465,7 @@ fn old_open_cannot_resurrect_committed_session_and_published_save_is_truthful() 
     assert_eq!(operation.byte_length, bytes.len());
     assert_eq!(fs::read(output)?, bytes);
     assert_eq!(authored_state(&engine)?, before);
-    assert_eq!(engine.stored_document(), &stored);
+    assert_eq!(engine.stored_document()?, &stored);
     assert!(engine.state().file.dirty);
     assert!(engine.state().file.path.is_none());
     Ok(())

@@ -119,7 +119,7 @@ fn native_v3000_save_reopens_with_full_precision_and_auto_keeps_association() ->
     let copy = directory.path("copy.mol");
     let mut engine = Engine::default();
     bond(&mut engine)?;
-    let model = engine.document().clone();
+    let model = engine.document()?.clone();
     let saved = serde_json::to_value(
         engine.dispatch("document.save_mol", json!({"path":path,"version":"v3000"}))?,
     )?;
@@ -150,7 +150,7 @@ fn native_v3000_save_reopens_with_full_precision_and_auto_keeps_association() ->
         .first()
         .ok_or("before fragment")?;
     let after = reopened
-        .document()
+        .document()?
         .pages()
         .first()
         .ok_or("after page")?

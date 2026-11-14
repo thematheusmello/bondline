@@ -37,6 +37,12 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
+The complete SDF session/Open/Save slice now retains every mixed-version record and
+ordered data byte through current/saved/history and all shared adapters. Its wired chooser
+and static summary have deterministic tests; actual native acceptance remains pending.
+Root's combined590 gate passes. Chemical preview/layout, record/field edit commands and
+broader SDF interoperability remain missing; see docs/verification-sdf-session-files.md.
+
 The V3000 application slice now retains versioned source/header/frame/history and exposes
 both versions through the existing two shared MOL commands. Auto Save keeps its associated
 version; Save As chooses V2000/V3000 explicitly; Open validates the actual family member.
@@ -44,7 +50,7 @@ Independent IO/engine/CLI/stdio/loopback and UI tests plus the corrected local37
 Actual Mac author/save/reopen/refusal/close and CPU/GPU reply draining now pass at1c53312.
 This feature's own hosted checks pass in43531603511 on all three platforms; see
 docs/verification-v3000-application.md. Conservative conversion/layout/source-loss refusals
-remain. Application SDF workflows and broader mappings still follow; this is not M1 completion.
+remain. Broader SDF/native editing workflows and mappings still follow; this is not M1 completion.
 
 Current user-directed priority: finish M1, then continue M2–M5. MOLV2000 now has a source-
 preserving codec, owned backing/history, atomic filesystem I/O and two shared commands;
@@ -54,11 +60,11 @@ native window smokes pass at c879f4c. One CTAB/fragment and layout/metadata guar
 are partial interoperability, not completed M1. SDF V2000 now has a source-preserving
 container library, ordered duplicate/empty/DT data, a wrapper writer and independent
 raw-field/molecular consumers. A fetched original SDF corpus now checks two records and
-every ordered field without a lossy property map. Application SDF workflows and wider mappings remain next work. Standalone V3000 parsing,
+every ordered field without a lossy property map. Broader SDF editing/display and wider mappings remain next work. Standalone V3000 parsing,
 writing and the version-aware MOL application slice are now integrated; mixed-version SDF
 container and reviewed legacy RXN container are integrated.
-These libraries retain complete raw molecular/data/role payloads; application collections
-and reaction models/commands/native workflows remain separate missing work.
+These libraries retain complete raw molecular/data/role payloads; SDF whole-session files
+are now wired, while reaction models/commands/native workflows remain separate missing work.
 The original bounded SMILES notation/source library now has literal graph/token/limit
 tests and qualified pinned external-parser evidence. Bare implicit H, bracket H0 and
 physical H remain distinct; no model projection, generated export, chemical perception,

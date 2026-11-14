@@ -48,7 +48,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | CDX files | Guarded native Open/Save/Save As verified on macOS, retaining exact accepted source. Limited projection; editing and faithful preview remain unavailable. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
 | Rendering | Shared CPU/GPU neutral-carbon graph scenes, literal authored hydrogen labels, transient atom/bond hover and PNG captures; one human-approved regression scene. |
-| Automation | Sixteen typed commands shared by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Automation | Eighteen typed commands shared by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. CI runs tests and actual
 window smoke checks on macOS, Windows and Linux; interactive Windows/Linux workflows
@@ -119,7 +119,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
 | CDX | Guarded shared/native Mac Open/Save, exact source retention, limited elemental metadata view and standalone syntax/property/new-tree APIs, checked independently | Faithful preview, broader metadata/chemistry, safe edits/new encoding and foreign/general corpus |
-| MOL / SDF | MOL V2000/V3000 native file workflows; source retention and independent consumer checks; mixed-version SDF library with immutable whole-source ownership, exact field-occurrence value edits and pinned V2000 corpus | Application SDF workflows, broader metadata/layout support and interactive Windows/Linux |
+| MOL / SDF | MOL V2000/V3000 native files; complete mixed-version SDF Open/Save through shared adapters and wired chooser/summary, with byte/record/data retention checked independently | Actual native SDF acceptance, chemical preview/data-edit UI, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
 | SMILES | Bounded nonaromatic notation/source library with literal graph/token tests, qualified external consumers and sanitizer checks | Generated export, model/H policy, application import/layout, aromaticity/stereo and canonicalization |
 | InChI | Planned | Reference-tool comparison and import/export |

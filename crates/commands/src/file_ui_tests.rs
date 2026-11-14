@@ -102,7 +102,7 @@ fn stale_selection_cannot_discard_a_newer_edit_and_noop_edits_keep_the_picker() 
     engine.set_ui_file_host(true);
     let first = request(&mut engine, UiFileAction::Open)?;
     engine.claim_ui_file(first)?;
-    let size = engine.document().pages().first().ok_or("page")?.size();
+    let size = engine.document()?.pages().first().ok_or("page")?.size();
     engine.dispatch(
         "page.set_size",
         json!({"page_id":1,"width_pt":size.width_pt(),"height_pt":size.height_pt()}),
@@ -461,7 +461,7 @@ fn opaque_source_and_history_survive_presentation_and_host_detachment() -> TestR
             .zip(&engine.redo)
             .all(|(a, b)| Arc::ptr_eq(a, b))
     );
-    assert_eq!(engine.stored_document().to_cdxml()?.as_ref(), SOURCE);
+    assert_eq!(engine.stored_document()?.to_cdxml()?.as_ref(), SOURCE);
     Ok(())
 }
 

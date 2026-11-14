@@ -255,7 +255,7 @@ mod tests {
     -> Result<(), Box<dyn std::error::Error>> {
         let mut engine = Engine::default();
         engine.dispatch("bond.create",serde_json::json!({"page_id":1,"begin_x_pt":100.0,"begin_y_pt":200.0,"end_x_pt":140.0,"end_y_pt":200.0}))?;
-        let before = engine.stored_document().clone();
+        let before = engine.stored_document()?.clone();
         let floor = (
             engine.identities.atom,
             engine.identities.bond,
@@ -271,7 +271,7 @@ mod tests {
                     .code,
                 "invalid_params"
             );
-            assert_eq!(engine.stored_document(), &before);
+            assert_eq!(engine.stored_document()?, &before);
             assert_eq!(engine.state().revision, 1);
             assert_eq!(
                 (
@@ -289,7 +289,7 @@ mod tests {
             Err(Error::RevisionExhausted)
         ));
         assert_eq!(serde_json::to_value(engine.state())?, state);
-        assert_eq!(engine.stored_document(), &before);
+        assert_eq!(engine.stored_document()?, &before);
         assert_eq!(
             (
                 engine.identities.atom,

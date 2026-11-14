@@ -8,6 +8,8 @@ mod chain_support;
 mod file_support;
 #[path = "support/mol.rs"]
 mod mol_support;
+#[path = "../../../xtask/oracles/sdf_test_support.rs"]
+mod sdf_support;
 
 #[test]
 fn executable_extends_saves_undoes_reopens_and_extends_the_same_native_chain()
@@ -91,9 +93,11 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "document.open_cdx",
             "document.open_cdxml",
             "document.open_mol",
+            "document.open_sdf",
             "document.save_cdx",
             "document.save_cdxml",
             "document.save_mol",
+            "document.save_sdf",
             "history.redo",
             "history.undo",
             "page.set_size",
@@ -105,6 +109,8 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
     for (name, permission) in [
         ("document.open_cdx", "discard_unsaved"),
         ("document.save_cdx", "overwrite"),
+        ("document.open_sdf", "discard_unsaved"),
+        ("document.save_sdf", "overwrite"),
     ] {
         let info = commands
             .iter()
@@ -201,6 +207,72 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
         state["document"]["pages"][0],
         json!({"id":1,"size":{"width_pt":612.0,"height_pt":792.0},"fragments":[]})
     );
+    Ok(())
+}
+
+#[test]
+fn executable_opens_inspects_saves_and_reopens_both_complete_sdf_encodings()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = sdf_support::SdfTestDirectory::new()?;
+    for (source, mixed) in [
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/ordered-fields-v2000.sdf").as_slice(),
+            false,
+        ),
+        (
+            include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf").as_slice(),
+            true,
+        ),
+    ] {
+        let input = directory.path(if mixed {
+            "cli-mixed.sdf"
+        } else {
+            "cli-ordered.sd"
+        });
+        let output = directory.path(if mixed {
+            "cli-mixed-λ.data"
+        } else {
+            "cli-ordered-λ.data"
+        });
+        std::fs::write(&input, source)?;
+        let mut process = Command::new(env!("CARGO_BIN_EXE_bondline-cli"));
+        process.arg("run");
+        for request in [
+            json!({"command":"document.open_sdf","params":{"path":input}}),
+            json!({"command":"document.inspect","params":{}}),
+            json!({"command":"document.save_sdf","params":{"path":output}}),
+            json!({"command":"document.open_sdf","params":{"path":output}}),
+        ] {
+            process.arg("--cmd").arg(request.to_string());
+        }
+        let result = process.output()?;
+        assert!(
+            result.status.success(),
+            "{}",
+            String::from_utf8_lossy(&result.stderr)
+        );
+        let result: Value = serde_json::from_slice(&result.stdout)?;
+        assert_eq!(result["document"], json!(null));
+        assert_eq!(result["collection"], sdf_support::expected_summary(mixed));
+        assert_eq!(
+            result["source"],
+            json!({"format":"sdf","byte_length":source.len(),"modified":false})
+        );
+        assert_eq!(result["file"]["dirty"], false);
+        assert_eq!(result["file"]["format"], "sdf");
+        assert_eq!(result["revision"], 2);
+        assert_eq!(result["undo_depth"], 0);
+        sdf_support::independently_read_sdf(&output, source, mixed)?;
+        let bad=Command::new(env!("CARGO_BIN_EXE_bondline-cli")).arg("run")
+            .arg("--cmd").arg(json!({"command":"document.open_sdf","params":{"path":input}}).to_string())
+            .arg("--cmd").arg(json!({"command":"document.save_cdxml","params":{"path":directory.path("must-not-publish.cdxml")}}).to_string()).output()?;
+        assert_eq!(bad.status.code(), Some(2));
+        assert_eq!(
+            serde_json::from_slice::<Value>(&bad.stderr)?["error"]["code"],
+            "unsupported_content"
+        );
+        assert!(!directory.path("must-not-publish.cdxml").exists());
+    }
     Ok(())
 }
 
