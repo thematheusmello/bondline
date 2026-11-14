@@ -68,7 +68,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `bond.extend` | Required `expected_revision`, `page_id`, `fragment_id`, `begin_atom_id`, `end_x_pt`, `end_y_pt`, `hydrogen_policy="rectify_terminal_carbon"` | Add one Single bond/new C-H3 to a positioned neutral terminal C-H3, deliberately changing that target to H2; native complete CDXML/source-free data only |
 | `history.undo` | `{}` | Previous authored snapshot |
 | `history.redo` | `{}` | Next authored snapshot |
-| `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only page preview PNG; explicit `cpu` or `gpu` |
+| `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only drawing page or restricted all-record SDF virtual page1 PNG; explicit `cpu` or `gpu` |
 
 The delivered CLI exposes `commands` and `run --cmd '<request>'`. Repeat `--cmd` to execute
 sequential operations in one in-memory engine; stdout is one final JSON snapshot. Failure
@@ -299,7 +299,7 @@ model projection is not a reason to drop valid opaque MOL data. Save borrows all
 bytes directly and uses the same FilePlan/Completed reservation, atomic publisher,
 stale-generation, trusted UI request and close barriers as drawing formats. Drawing-to-SDF
 and SDF-to-CDXML/CDX/MOL saves return `unsupported_content` before temporary creation.
-All drawing-only authoring/capture commands return the same typed wrong-kind error on SDF.
+Drawing-only authoring commands retain the typed wrong-kind error on SDF.
 The Rust API now exposes `Engine::content()` for all content, while `document()` and
 `stored_document()` return Result; callers must handle a collection explicitly.
 
@@ -308,9 +308,29 @@ Open/Save family with `.sdf`/`.sd` hints. The workspace clears old drawing inter
 shows a static count/record summary with chemical preview explicitly unavailable. This is
 an original partial presentation, not the observed26.1 all-record drawing layout. Explicit
 field inspection and existing-value editing are available through the shared commands below.
-Molecular layout and a field UI/editor remain missing; native file acceptance is separate
-from this command slice, which performs no native field edit.
+The explicit capture route below is separate from this native table. A native molecular
+view and field UI/editor remain missing; native file acceptance is separate from this
+command slice, which performs no native field edit.
 See [SDF session evidence](verification-sdf-session-files.md).
+
+`render.capture` accepts only virtual `page_id:1` for SDF; another positive ID returns
+`not_found`. Existing dimensions/backend validation is unchanged. Preparation retains the
+whole source and historical state, and the same registered deferred work builds every
+record off-lock. No Save reservation is acquired. A separate display-H sidecar preserves
+authored None/literal counts; the source never becomes drawing/edit/export authority.
+Successful replies keep document:null, complete collection metadata and unchanged state.
+Old captures report their historical revision/source/file with current close/UI metadata.
+Early/late cancellation can prevent reply publication without applying a partial view.
+
+The current profile uses strict neutral nonisotopic/nonradical Single geometry and a
+closed neutral C/N/O/halogen derivation for absent H; literal resolved counts remain exact.
+Shared24pt/unit and translation-only72pt rows are original packing. Actual label/stroke ink
+must fit the physical paper and readable font bounds. Later unsupported records, unsafe
+placement, unreadable scale or resource limits refuse the entire capture; no first-record
+fallback, invented geometry or H suppression is allowed. CPU/GPU use the same scene.
+This is headless source-to-image support, not general chemical clean-up, native preview,
+new format export or full reference parity. See [command evidence](verification-sdf-capture-command.md)
+for scoped verification and remaining limits.
 
 ### Explicit read-only SDF record inspection
 

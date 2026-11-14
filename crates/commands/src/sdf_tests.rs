@@ -125,8 +125,8 @@ fn captured_whole_sdf_save_holds_the_single_slot_through_publication_and_finishe
 }
 
 #[test]
-fn drawing_only_commands_and_cross_format_saves_refuse_before_io_without_changing_sdf() -> TestResult
-{
+fn drawing_edits_cross_format_saves_and_unreadable_captures_refuse_without_changing_sdf()
+-> TestResult {
     let directory = support::SdfTestDirectory::new()?;
     let (original, _) = contents()?;
     let mut engine = Engine::from_content(original.clone());
@@ -160,7 +160,11 @@ fn drawing_only_commands_and_cross_format_saves_refuse_before_io_without_changin
                 .ok_or("wrong kind")?
                 .info()
                 .code,
-            "unsupported_content",
+            if name == "render.capture" {
+                "unsupported_scale"
+            } else {
+                "unsupported_content"
+            },
             "{name}"
         );
         assert_eq!(engine.content(), &original);

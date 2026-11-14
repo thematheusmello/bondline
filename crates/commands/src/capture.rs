@@ -7,6 +7,42 @@ use bondline_render::{
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug)]
+enum CaptureInput {
+    Drawing(Page),
+    Sdf(Arc<crate::StoredContent>),
+}
+
+impl CaptureInput {
+    fn scene(
+        &self,
+        params: &RenderCapture,
+        cancel: &Cancellation,
+    ) -> Result<bondline_render::Scene, Error> {
+        match self {
+            Self::Drawing(page) => {
+                Ok(
+                    graph_page_scene_with_cancel(params.width_px, params.height_px, page, cancel)?
+                        .into_scene(),
+                )
+            }
+            Self::Sdf(content) => {
+                let preview =
+                    bondline_io::sdf::preview::prepare_sdf_preview(content.sdf()?, cancel)?;
+                Ok(bondline_render::graph_page_scene_with_display_hydrogens(
+                    params.width_px,
+                    params.height_px,
+                    preview.page(),
+                    preview.display_hydrogens(),
+                    cancel,
+                )?
+                .into_scene())
+            }
+        }
+    }
+}
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
@@ -48,7 +84,7 @@ pub struct PngCapture {
 #[derive(Debug)]
 pub struct Prepared {
     result: CommandResult,
-    capture: Option<(RenderCapture, Page)>,
+    capture: Option<(RenderCapture, CaptureInput)>,
     file: Option<FilePlan>,
     sdf_record: Option<crate::sdf_query::RecordPlan>,
     sdf_field_set: Option<crate::sdf_edit::FieldPlan>,
@@ -83,6 +119,22 @@ impl Prepared {
         params: RenderCapture,
         page: Page,
     ) -> Result<Self, Error> {
+        Self::capture_input(result, params, CaptureInput::Drawing(page))
+    }
+
+    pub(super) fn sdf_capture(
+        result: CommandResult,
+        params: RenderCapture,
+        content: Arc<crate::StoredContent>,
+    ) -> Result<Self, Error> {
+        Self::capture_input(result, params, CaptureInput::Sdf(content))
+    }
+
+    fn capture_input(
+        result: CommandResult,
+        params: RenderCapture,
+        input: CaptureInput,
+    ) -> Result<Self, Error> {
         if [params.width_px, params.height_px]
             .iter()
             .any(|axis| !(1..=MAX_CAPTURE_DIMENSION_PX).contains(axis))
@@ -91,7 +143,7 @@ impl Prepared {
         }
         Ok(Self {
             result,
-            capture: Some((params, page)),
+            capture: Some((params, input)),
             file: None,
             sdf_record: None,
             sdf_field_set: None,
@@ -171,11 +223,9 @@ impl Prepared {
         if let Some(plan) = self.smiles_record {
             self.result.smiles_record = Some(plan.complete(cancel)?);
         }
-        if let Some((params, page)) = self.capture {
+        if let Some((params, input)) = self.capture {
             cancel.check()?;
-            let scene =
-                graph_page_scene_with_cancel(params.width_px, params.height_px, &page, cancel)?
-                    .into_scene();
+            let scene = input.scene(&params, cancel)?;
             let (frame, adapter) = match params.backend {
                 RenderBackend::Cpu => (cpu_scene_with_cancel(&scene, cancel)?, None),
                 RenderBackend::Gpu => {

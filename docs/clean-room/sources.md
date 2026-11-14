@@ -1221,3 +1221,16 @@ Actual glyph rectangles, masks and stroked butt-cap corners must fit the paper i
 Original fixed-metric/FreeType comparisons and CPU/GPU scenes independently exercise these
 rules. No font, old oracle, threshold or approved golden was changed; this establishes no
 native workflow, general congestion solver or full reference rendering parity.
+
+## Explicit all-record SDF capture, 2026-11-14
+
+[Shared command contract and evidence](../verification-sdf-capture-command.md) connects the
+two prerequisites through the existing render.capture entry. Virtual page1, read-only
+historical replies, complete source ownership and translation-only row packing are original
+Bondline policies. BIOVIA framing/coordinate/declared-valence rules and IUPAC attachment
+recommendations remain distinct from the closed display-H policy cited above. Projection
+and rendering run in registered deferred work; neither creates a drawing or Save authority.
+Actual ordinary VAL-absent fixtures, unchanged external consumers, explicit full-sheet image
+expectations and source/history/cancellation tests are the relevant acceptance boundaries.
+The metadata-only native view and full reference arrangement remain incomplete; no reference
+runtime, screenshots, assets, new human-approved golden or native parity is inferred here.

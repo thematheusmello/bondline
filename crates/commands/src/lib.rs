@@ -206,6 +206,8 @@ pub enum Error {
     #[error(transparent)]
     Sdf(#[from] bondline_io::sdf::SdfError),
     #[error(transparent)]
+    SdfPreview(#[from] bondline_io::sdf::preview::PreviewError),
+    #[error(transparent)]
     SmilesFile(#[from] bondline_io::smiles::SmilesFileError),
     #[error("opening a new document requires explicit permission to discard unsaved changes")]
     UnsavedChanges,
@@ -283,6 +285,7 @@ impl Error {
             Self::FileBackendUnavailable => "backend_unavailable",
             Self::Mol(error) => error.code(),
             Self::Sdf(error) => error.code(),
+            Self::SdfPreview(error) => error.code(),
             Self::SmilesFile(error) => error.code(),
             Self::SdfQueryPageLimit => "resource_limit",
             Self::SmilesQueryLimit => "resource_limit",
@@ -736,6 +739,12 @@ impl Engine {
             Command::Redo(_) => self.redo()?,
             Command::Capture(params) => {
                 let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
+                if matches!(self.document.as_ref(), StoredContent::Sdf { .. }) {
+                    if id.get() != 1 {
+                        return Err(bondline_model::Error::MissingPage(id.get()).into());
+                    }
+                    return Prepared::sdf_capture(self.state(), params, Arc::clone(&self.document));
+                }
                 let page = self
                     .document()?
                     .pages()
