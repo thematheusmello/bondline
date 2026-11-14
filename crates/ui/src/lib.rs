@@ -2,6 +2,7 @@
 
 mod file_workflow;
 pub mod files;
+mod preview;
 
 use bondline_commands::{
     BondCreate, BondExtend, CloseState, Command, ControlInfo, ControlKey, ControlShortcut, Engine,
@@ -11,6 +12,7 @@ use bondline_mcp::{CommandExecutor, SharedEngine, control::LoopbackServer};
 use bondline_model::{PageId, Point2};
 use eframe::egui;
 use file_workflow::{FileIntentAction, FileWorkflow};
+use preview::PreviewWorkflow;
 use std::{
     io::Write,
     sync::{Arc, Mutex},
@@ -250,8 +252,20 @@ fn show_workspace_with_files(
     engine: &mut Engine,
     error: &mut Option<String>,
     drawing: &mut DrawingState,
+    files: Option<&mut FileWorkflow>,
+    active_work: bool,
+) -> Option<FileIntentAction> {
+    show_workspace_with_preview(context, engine, error, drawing, files, active_work, None)
+}
+
+fn show_workspace_with_preview(
+    context: &egui::Context,
+    engine: &mut Engine,
+    error: &mut Option<String>,
+    drawing: &mut DrawingState,
     mut files: Option<&mut FileWorkflow>,
     active_work: bool,
+    mut preview: Option<&mut PreviewWorkflow>,
 ) -> Option<FileIntentAction> {
     let state = engine.state();
     let mut selected = None;
@@ -358,6 +372,27 @@ fn show_workspace_with_files(
                     "SDF collection: {} records, {} bytes",
                     collection.record_count, collection.byte_length
                 ));
+                if let Some(preview) = preview.as_deref_mut() {
+                    ui.label("Read-only chemical preview");
+                    egui::CollapsingHeader::new("Records").show(ui, |ui| {
+                        egui::ScrollArea::vertical()
+                            .max_height(160.0)
+                            .show(ui, |ui| {
+                                egui::Grid::new("sdf-record-summary").show(ui, |ui| {
+                                    for record in &collection.records {
+                                        ui.label(format!("Record {}", record.id));
+                                        ui.label(record.mol_version);
+                                        ui.label(format!("{} fields", record.field_count));
+                                        ui.label(format!("{} bytes", record.byte_length));
+                                        ui.end_row();
+                                    }
+                                });
+                            });
+                    });
+                    let rect = ui.available_rect_before_wrap();
+                    preview.show(ui, engine, rect);
+                    return;
+                }
                 ui.label("Chemical preview is unavailable for SDF collections.");
                 egui::ScrollArea::vertical().show(ui, |ui| {
                     egui::Grid::new("sdf-record-summary").show(ui, |ui| {
@@ -744,7 +779,12 @@ fn show_workspace_with_files(
         });
     if let Some(files) = files {
         file_action = files
-            .dialogs(context, engine, error, active_work)
+            .dialogs(
+                context,
+                engine,
+                error,
+                active_work || preview.as_ref().is_some_and(|preview| preview.is_busy()),
+            )
             .or(file_action);
     }
     file_action
@@ -759,6 +799,7 @@ pub struct BondlineApp {
     error: Option<String>,
     drawing: DrawingState,
     files: FileWorkflow,
+    preview: PreviewWorkflow,
 }
 
 impl BondlineApp {
@@ -802,12 +843,13 @@ impl BondlineApp {
             error: None,
             drawing: DrawingState::default(),
             files: FileWorkflow::new(std::env::home_dir().map_or_else(std::env::current_dir, Ok)?),
+            preview: PreviewWorkflow::default(),
         })
     }
 }
 
-impl eframe::App for BondlineApp {
-    fn update(&mut self, context: &egui::Context, _frame: &mut eframe::Frame) {
+impl BondlineApp {
+    fn update_workspace(&mut self, context: &egui::Context) {
         if let Some(control) = &self.control {
             egui::TopBottomPanel::bottom("local-control").show(context, |ui| {
                 if control.is_running() {
@@ -831,6 +873,7 @@ impl eframe::App for BondlineApp {
         match self.engine.lock() {
             Ok(mut engine) => {
                 self.files.poll(&mut engine, &mut self.error);
+                self.preview.sync(&engine, context);
                 if native_close && engine.state().close != CloseState::Committed {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
                     self.files.request_close(&mut engine, &mut self.error);
@@ -838,23 +881,26 @@ impl eframe::App for BondlineApp {
                 if smoke_close {
                     self.files.request_close(&mut engine, &mut self.error);
                 }
-                action = show_workspace_with_files(
+                action = show_workspace_with_preview(
                     context,
                     &mut engine,
                     &mut self.error,
                     &mut self.drawing,
                     Some(&mut self.files),
-                    self.executor.has_active_work(),
+                    self.executor.has_active_work() || self.preview.is_busy(),
+                    Some(&mut self.preview),
                 );
+                self.preview.sync(&engine, context);
                 if self.files.complete_close_if_idle(
                     &mut engine,
-                    self.executor.has_active_work(),
+                    self.executor.has_active_work() || self.preview.is_busy(),
                     action.is_some(),
                 ) {
                     context.send_viewport_cmd(egui::ViewportCommand::Close);
                 }
             }
             Err(_) => {
+                self.preview.deactivate(context);
                 if native_close {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
                 }
@@ -872,6 +918,13 @@ impl eframe::App for BondlineApp {
                     .keep_open_after_file_failure(&mut engine, &mut self.error);
             }
         }
+        self.preview.start_pending(&self.executor, context);
+    }
+}
+
+impl eframe::App for BondlineApp {
+    fn update(&mut self, context: &egui::Context, _frame: &mut eframe::Frame) {
+        self.update_workspace(context);
     }
 }
 

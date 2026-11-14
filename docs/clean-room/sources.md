@@ -1277,3 +1277,16 @@ First focused/parallel and later serialized tests pass; one repeated parallel ru
 an unchanged listener-shutdown assertion. Its cause is unestablished and the failure is
 retained, with the Root default workspace gate still required. No listener/control assertion,
 old source codec/oracle, dependency or golden was changed to obtain a pass.
+
+## Asynchronous native SDF preview wiring, 2026-11-14
+
+[UI implementation/evidence](../verification-sdf-native-preview.md) reuses the pinned
+eframe0.29.1 native PNG helper and Context texture API, inspected from public and actual
+locked sources. Rust JoinHandle completion checks support retaining jobs through decode/
+publication/retirement. Actual1.94.1 compilation is distinguished from the current1.100.0
+online standard-library documentation. Weak source/view/DPI/close-epoch keys, uniform
+capture caps, logical main-label bounds and transient Cancel/Retry/Records controls are
+original Bondline policies, not reference defaults. Actual chemistry/source projection
+still uses the existing registered capture; no alternate renderer or data authority is
+created. Initial compiler RED/component/package evidence is not native texture/flow proof;
+independent real-frame acceptance remains separate and full M0 addressability is incomplete.
