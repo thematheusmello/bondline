@@ -2287,3 +2287,17 @@ Two actual Weak-lifetime assertions failed before the change and pass afterward;
 cancellation/drop and historical no-mutation checks are distinct from future MOL label
 correctness. No source bytes, old fixture/oracle, command schema, runtime dependency or
 native workflow changed. Actions remains disabled and native interaction remains paused.
+
+## Shared ordinary MOL display producer, 2026-11-14
+
+[Direct IO evidence](verification-mol-display-model.md) adds a source-aware scene entry
+over the actual current Page/IDs/frame. Its missing-API RED precedes11 new literal/raw/
+consumer/preservation/error tests. Two further runtime REDs preserve isolated literal
+drawing H0 and the existing4096 hit preflight before H allocation; SDF keeps its strict
+physical-H policy and exact errors/packing. Final60534 passes282 IO tests, including all
+12 unchanged SDF preview tests; final16510 clippy and rustfmt pass. The new test's rejected
+overlong V3000 header and extracted-static-error lint failures are retained explicitly.
+
+Root independently verified all5 frozen files,16 logs,296 protected files and two exact SDF
+source regions before receiving. This library gate establishes no command, GPU or native
+window workflow by itself; command/UI callers and independent acceptance follow separately.

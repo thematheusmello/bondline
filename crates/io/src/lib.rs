@@ -2,6 +2,7 @@
 
 pub mod cdx;
 pub mod cdxml;
+pub mod display;
 mod document;
 pub mod mol;
 pub mod rxn;

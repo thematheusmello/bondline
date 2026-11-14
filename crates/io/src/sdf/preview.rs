@@ -3,19 +3,13 @@
 use super::{RecordId, SdfDocument};
 use crate::mol::{MolError, MolFile, MolTransform, Version, v3000};
 use bondline_model::{
-    AtomId, BondId, BondOrder, Document, Fragment, FragmentId, MAX_GRAPH_ITEMS,
-    MAX_PAGE_DIMENSION_PT, Page, PageId, PageSize, Point2, Radical,
+    AtomId, BondId, Document, Fragment, FragmentId, MAX_GRAPH_ITEMS, MAX_PAGE_DIMENSION_PT, Page,
+    PageId, PageSize, Point2,
 };
 use bondline_render::Cancellation;
 use std::collections::BTreeMap;
 
-/// The origin of a count supplied to a display, without rewriting the source atom.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum HydrogenOrigin {
-    Literal,
-    NeutralDefaultV1,
-    PhysicalHydrogenV1,
-}
+pub use crate::display::HydrogenOrigin;
 
 /// Local IDs are the existing MOL mapper's dense IDs, not V3000 source indexes.
 /// Map keys are preview IDs; values map back to the original per-record local IDs.
@@ -167,131 +161,21 @@ fn total(
         .ok_or(PreviewError::Limit { record_id, kind })
 }
 
-struct Bonding {
-    sum: u32,
-    degree: usize,
-    non_single: bool,
-    position: Point2,
-}
-
 fn hydrogens(
     fragment: &Fragment,
     record_id: u32,
     cancel: &Cancellation,
 ) -> Result<BTreeMap<AtomId, (u16, HydrogenOrigin)>, PreviewError> {
-    let mut neighbours = BTreeMap::new();
-    for atom in fragment.atoms() {
-        check_cancel(cancel)?;
-        if atom.charge != 0 || atom.isotope.is_some() || atom.radical != Radical::None {
-            return Err(unsupported(
-                record_id,
-                "charge, isotope or radical annotations",
-            ));
-        }
-        neighbours.insert(
-            atom.id,
-            Bonding {
-                sum: 0,
-                degree: 0,
-                non_single: false,
-                position: atom
-                    .position
-                    .ok_or_else(|| unsupported(record_id, "missing atom coordinates"))?,
-            },
-        );
-    }
-    for bond in fragment.bonds() {
-        check_cancel(cancel)?;
-        let weight = match bond.order {
-            BondOrder::Single => 1,
-            BondOrder::Double => 2,
-            BondOrder::Triple => 3,
-            _ => {
-                return Err(unsupported(
-                    record_id,
-                    "bond order outside Single/Double/Triple",
-                ));
-            }
-        };
-        let begin = neighbours
-            .get(&bond.begin)
-            .ok_or_else(|| unsupported(record_id, "missing bond endpoint"))?;
-        let end = neighbours
-            .get(&bond.end)
-            .ok_or_else(|| unsupported(record_id, "missing bond endpoint"))?;
-        if begin.position == end.position {
-            return Err(unsupported(record_id, "coincident bond endpoints"));
-        }
-        for id in [bond.begin, bond.end] {
-            let bonding = neighbours
-                .get_mut(&id)
-                .ok_or_else(|| unsupported(record_id, "missing bond endpoint"))?;
-            bonding.sum = bonding.sum.checked_add(weight).ok_or(PreviewError::Limit {
-                record_id,
-                kind: "bond-order sum",
-            })?;
-            bonding.degree = bonding.degree.checked_add(1).ok_or(PreviewError::Limit {
-                record_id,
-                kind: "atom degree",
-            })?;
-            bonding.non_single |= bond.order != BondOrder::Single;
-        }
-    }
-    let mut output = BTreeMap::new();
-    for atom in fragment.atoms() {
-        check_cancel(cancel)?;
-        let bonding = neighbours
-            .get(&atom.id)
-            .ok_or_else(|| unsupported(record_id, "missing atom topology"))?;
-        let resolved = if atom.element.get() == 1 {
-            if bonding.degree != 1
-                || bonding.sum != 1
-                || bonding.non_single
-                || atom.explicit_hydrogens.is_some_and(|h| h != 0)
-            {
-                return Err(unsupported(
-                    record_id,
-                    "physical H requires one Single bond and no attached H",
-                ));
-            }
-            (
-                0,
-                if atom.explicit_hydrogens.is_some() {
-                    HydrogenOrigin::Literal
-                } else {
-                    HydrogenOrigin::PhysicalHydrogenV1
-                },
-            )
-        } else if let Some(count) = atom.explicit_hydrogens {
-            (count, HydrogenOrigin::Literal)
-        } else {
-            // Original closed display policy, not general periodic-table/CTfile valence.
-            let target: u32 = match atom.element.get() {
-                6 => 4,
-                7 => 3,
-                8 => 2,
-                9 | 17 | 35 | 53 => 1,
-                _ => {
-                    return Err(unsupported(
-                        record_id,
-                        "unresolved H outside neutral C/N/O/halogen profile",
-                    ));
-                }
-            };
-            let count = target.checked_sub(bonding.sum).ok_or_else(|| {
-                unsupported(record_id, "bond sum exceeds neutral default valence")
-            })?;
-            (
-                u16::try_from(count).map_err(|_| PreviewError::Limit {
-                    record_id,
-                    kind: "display H count",
-                })?,
-                HydrogenOrigin::NeutralDefaultV1,
-            )
-        };
-        output.insert(atom.id, resolved);
-    }
-    Ok(output)
+    crate::display::hydrogens(
+        fragment,
+        crate::display::PhysicalHydrogenPolicy::SingleBond,
+        cancel,
+    )
+    .map_err(|error| match error {
+        crate::display::HydrogenError::Cancelled => PreviewError::Cancelled,
+        crate::display::HydrogenError::Unsupported(feature) => unsupported(record_id, feature),
+        crate::display::HydrogenError::Limit(kind) => PreviewError::Limit { record_id, kind },
+    })
 }
 
 /// Validate and arrange every strictly projectable record, or fail without a partial view.

@@ -1333,3 +1333,19 @@ using standard Rust [Arc](https://doc.rust-lang.org/std/sync/struct.Arc.html) an
 not a file-format default or reference-product observation. Raw bytes remain private and
 temporary work grants no new edit/Save authority. The source-backed MOL depiction gate
 remains separate; source-free/CDXML literal rendering is unchanged by this prerequisite.
+
+## Shared source-aware MOL display facts, 2026-11-14
+
+[IO implementation/evidence](../verification-mol-display-model.md) reuses the existing
+closed neutral C4/N3/O2/halogen1 display policy from the pinned OpenSMILES organic subset,
+the BIOVIA2026 absent/declared-valence distinction and IUPAC GR2.1.1/GR2.1.5–2.1.7 depiction
+rules cited above. Applying it only to actual original MOL backing is original Bondline
+policy, not universal CTfile valence or a reference-product default. Authored None/literal
+zero/unusual counts, source bytes, actual Page/IDs/frame and all encoding guards remain.
+
+The shared private resolver preserves SDF's exact typed errors/context/packing, while its
+physical-H selector retains drawing compatibility for explicitly authored H0. Unknown-H
+and SDF physical-H topology remain strict. A cheap preflight reuses the renderer's existing
+MAX_HIT_REGIONS before derived topology allocation; no new quota or latency guarantee is
+inferred. Source-free/CDXML keep literal behavior. No parser, font, old oracle/fixture,
+approved golden, dependency or runtime asset changes; callers/native evidence are separate.
