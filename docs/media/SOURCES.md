@@ -68,3 +68,27 @@ Earlier JPEG records above continue to identify their earlier source and limited
 Pillow12.3.0 independently verifies both published PNG format/dimensions and exact hashes.
 Retained EXIF/XMP contain only1160×832 dimensions and the generic Screenshot comment;
 no GPS, author identity or credential was found. Embedded color metadata remains unchanged.
+
+## Refreshed workspace, 2026-11-14
+
+| File | Origin | SHA-256 |
+|---|---|---|
+| [workspace-current.jpg](workspace-current.jpg) | Unedited native window,1160×832,73618B | `2806ed6f64f99ddf9db828c19534c1ff5b67a4f15032dc2c83fb41c321a33576` |
+| [format-chooser.jpg](format-chooser.jpg) | Unedited native format chooser,1160×832,99667B | `b04f9acb23bff133dff5ed5e5c158b1d73915909f5aa2d622290e9924f55abc4` |
+
+[Capture provenance](workspace-current-provenance.json) records the exact final binary/UI
+source and original420×280pt scene. These are actual macOS/Metal window buffers, with
+existing original glyphs and the attributed font. Native accessibility selection and
+File→Open→format-list→Cancel were inspected. The three structures were registry-authored,
+saved and reopened as native CDXML; they are not presented as successful native drags.
+Unchanged Expat/Decimal plus pinned RDKit independently confirm their coordinates,
+orders, H3/H2/H1 pairs and CC/C2H6, C=C/C2H4, C#C/C2H2 identities.
+
+Pillow independently confirms JPEG dimensions/hashes. The initial metadata check wrongly
+assumed no EXIF; inspection finds only an EXIF offset and image width/height. No GPS or
+author tags are present; Photoshop metadata contains empty IPTC data and its empty-data
+digest. Buffers remain untouched.
+The temporary localhost address is not a credential. This final app/listener is intentionally
+left open for the user, unlike the closed historical sessions above. No token is published.
+Original UI/scene images are MIT OR Apache-2.0 documentation media, separate from runtime
+assets and the unchanged approved chemical golden. See [finite native/frame evidence](../verification-workspace-presentation.md).

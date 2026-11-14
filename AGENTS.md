@@ -30,13 +30,14 @@ docs/verification.md for exact RED/GREEN and platform evidence.
 
 - Target one-to-one Professional desktop screens, control roles, icon roles, workflows and
   functionality, with Bondline branding and the existing offline/open-source commitments.
-  Use public documentation, screenshots, videos and authorized artifact/runtime inspection.
-  The user's 2026-11-13 clarification supersedes the earlier program-binary inspection ban.
-- Use REA for artifact/runtime questions and ordinary source tools for open-source repositories.
+  Use public documentation, screenshots, videos, open standards and licensed source references.
+  The latest supplied agent instructions require the clean-room boundary below.
+- Never download, execute, inspect, decompile or disassemble ChemDraw program binaries.
+  Never copy proprietary templates, sample libraries, icons, fonts or help text.
+- Use ordinary source tools for open-source repositories.
   Record exact source/build/version/platform, URLs or artifact hashes, video timestamps,
   observations, inferences and unknowns. A screenshot or static string alone proves no flow.
-- Obtain research artifacts from official/public or otherwise authorized sources. Use existing
-  entitlements for licensed runtime access; do not bypass activation/access controls. Record
+- Obtain documentation and open-source research artifacts from public sources. Record
   actual access blockers and continue independent public research. Keep reference downloads,
   screenshots, installers and REA reports in ignored .cache/ or target/, never shipped by default.
 - Implement original Rust logic and original redistributable assets matching documented roles
@@ -51,7 +52,7 @@ docs/verification.md for exact RED/GREEN and platform evidence.
   may be run only as external test programs, never linked or copied into the shipped application.
 - Record sources and behavior decisions in docs/clean-room/sources.md (historical path).
   Unresolved behavior goes in docs/clean-room/open-questions.md; do not guess from memory.
-  The updated method does not claim strict isolation from runtime/artifact observations.
+  Keep historical evidence attributed to its actual method; new work follows this boundary.
 
 ## Architecture
 
@@ -92,7 +93,7 @@ cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attrib
 replacement and a bounded new-syntax writer);
 cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque property
 replacement and new-tree Writer; model mapping and application commands live above this crate);
-render (L1, shared neutral-element/Single GraphScene, bounded hit regions, literal authored-H
+render (L1, shared neutral-element Single/centered Double/Triple GraphScene, bounded hit regions, literal authored-H
 labels plus a separate resolved-H entry with attachment/paper-ink guards, CPU/GPU
 rectangles/strokes and unchanged approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
@@ -190,10 +191,12 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current 25-command registry includes complete SDF/SMILES-file Open/Save and bond.create for independent C-C fragments with
-three explicitly authored H per carbon, plus CDXML/CDX/MOL open/save. bond.extend is a
-headless terminal-carbon operation with required explicit H3-to-H2 policy and expected
-revision; only source-free or byte-proven native CDXML is allowed. Actual MOL/CDX backing
+The current26-command registry includes complete SDF/SMILES-file Open/Save and bond.create
+for independent neutral-carbon fragments with optional Single(default)/Double/Triple order
+and literal H=`4-order_weight`, plus CDXML/CDX/MOL open/save. bond.extend requires the
+explicit H policy/revision and one incident supported bond with consistent literal
+H=`4-existing_weight`; the requested weight must fit that budget. Only source-free or
+byte-proven native CDXML is allowed. Actual MOL/CDX backing
 refuses. Native attachment is wired with ordered fresh hit/anchor/release/context tests;
 actual native verification is separate. Document::replace_fragment atomically retains
 fragment/old IDs and unrelated Arcs; global validation excludes only the old fragment. Save complete StoredDocument data; file.dirty uses the saved snapshot, while
@@ -246,7 +249,7 @@ When the workspace exists: cargo fmt --all -- --check;
 cargo clippy --workspace --all-targets --locked -- -D warnings;
 cargo test --workspace --locked; cargo xtask layers; cargo xtask licenses;
 cargo xtask corpus; cargo xtask ci. Until implemented, a documented future command is not a pass.
-Keep Cargo target directories separate for each worktree. Shared artifacts caused a real
+Keep Cargo target directories separate for each worktree and staged-tree export. Shared artifacts caused a real
 wrong-checkout CI run and stale metadata; runtime workspace discovery does not make shared
 binary outputs safe. xtask locates the invoked workspace through Cargo, and ci prints its
 root. Verify that root before counting results. Use local Git commits. Small conventional
@@ -312,7 +315,8 @@ existing internal CDX crate. New native declared closures154/165/220 include tha
 ## Neutral graph display and transient hover
 
 The literal graph_page_scene entry and source-aware captures share a bounded GraphScene.
-Positioned neutral, nonisotopic/RadicalNone elements and Single bonds only. In the literal
+Positioned neutral, nonisotopic/RadicalNone elements and Single/centered Double/Triple
+bonds are supported under the original3w profile. Other orders remain refused. In the literal
 entry, missing H is never inferred:
 connected unknown-H carbon may be skeletal, isolated unknown-H carbon refuses, and other
 elements retain literal symbols without inventing H. Authored0/1/N H renders literally;
@@ -325,6 +329,27 @@ UI-only and excluded from Scene/history/source: revision/Escape/focus/context in
 stays clear until a fresh ordered positional event. Context includes available origin,
 public native origin and effective DPI. Keep multi-idle-frame regressions and native checks;
 do not rearm from cached hover_pos, key release or focus gain alone. No OS pointer polling.
+
+For multiples, preserve one logical bond ID/hit/neighbour vote while checking all actual
+components and gaps. `centered_bond_strokes` is the sole geometry constructor for graphs
+and held previews; `GraphScene::bond_strokes` supplies hover components. Keep exact all-
+Single pixels, fundamental stroke coverage arithmetic, approved golden and independent
+visibility/exclusion/cap/attachment/budget checks. The original short/corridor/junction
+policies are not a vendor default. Literal multiple scenes use exact authored counts via
+component-aware attachment; resolved-only paper-ink policy remains distinct. Unknown file
+styles stay preserved and do not gain edit or faithful-render authority.
+
+`ui.bond_tool` owns a transient checked order/epoch outside document/source/history/dirty
+state. Direct bond commands do not inherit it. Gestures/hover include both order and epoch;
+A→B→A cannot revive an earlier gesture. Preserve raw event indices before shortcut
+consumption, order tool activations and replay their state at the correct event boundary.
+Never relabel a press retroactively or choose activation order by palette iteration.
+Keep H-adjustment guidance visible before commitment, including error frames. Loopback
+must notify real transient changes despite outer changed=false; no-op selection does not
+notify. See verification-multiple-authoring.md, verification-multiple-ui.md and the shared
+control contract. New multiple native drawing acceptance remains unverified. The refreshed
+workspace's native visual review/Double selection is separate evidence; see STATUS.md and
+docs/verification-workspace-presentation.md before any further desktop interaction.
 
 Neutral-label verification includes independent metric vectors and one uniform4xBOX
 FreeType reference at the same96em/0.90 threshold. Keep all80 positives/controls, failed
@@ -483,5 +508,8 @@ docs/verification-mol-display-model.md, verification-mol-display-tests.md and
 verification-mol-display-ui.md. Root's initial direct-IO UI port failed to compile; the
 thin Engine delegate fixes it without a dependency/lock change. Do not repeat that edge.
 Source-free/CDXML remain literal; no general H/stereo/aromaticity/edit authority follows.
-Next graph prerequisite: independently sourced Double/Triple geometry/hits/attachment,
-currently honest whole-scene refusals. Read ROADMAP.md before choosing the next task.
+Centered Double/Triple geometry/hits/attachment and closed authoring now have independent
+headless evidence; see the multiple-bond verification records and STATUS.md for exact gates.
+Next authoring flow: source the guide's existing-bond conversion rules, then add the typed
+order-edit command and UI/adapter/history/H-budget tests. Styles, sidedness, general
+construction, inventory/platform/native evidence and full M0–M5 remain unfinished.

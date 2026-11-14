@@ -1,6 +1,6 @@
 # Ordered bond authoring and transient tools
 
-2026-11-14. Work in progress on `feat/multiple-bonds`, base
+2026-11-14. Implemented command slice on `feat/multiple-bonds`, base
 `a279bced1fee31eebc163b5d1e02e3ade0fd05ff`. This record covers command/notification
 checks, not native-window or complete professional tool parity. Actions remains disabled.
 
@@ -53,9 +53,9 @@ Root/sibling targets and the unchanged external oracle environment documented in
   are pending integration, not implied by this command gate.
 
 The epoch-exhaustion unit check is an added boundary regression after implementation;
-no separate RED is claimed. Final package/lint/frame/adapter evidence will be recorded
-after receiving the frozen independent workers. Native interaction remains paused by user
-instruction. Context-sensitive sidedness, ring placement, conversion hotkeys, persistent
+no separate RED is claimed. Receiving evidence below follows the frozen independent workers.
+The separately authorized native visual review does not establish new native drawing
+acceptance. Context-sensitive sidedness, ring placement, conversion hotkeys, persistent
 style/inheritance and broader connected editing remain visible in the parity backlog.
 
 ## Receiving results
@@ -75,8 +75,13 @@ listener assertion; [direct shutdown evidence](verification-listener-shutdown.md
 [portability follow-up](verification-listener-shutdown-portability.md) replace provisional
 connect success as the ownership oracle without changing production shutdown behavior.
 
-The renderer-only staged tree separately passes866 tests/zero failed/ignored under
-CI76060 before commit57bedb5. Final frontend receiving is recorded with its UI integration.
+After the new visual layout's separate [regressions and fixes](verification-workspace-presentation.md),
+Root52371 passes full local `cargo xtask ci`:891 tests, zero failures and one ignored
+explicit dev capture utility. Workspace rustfmt, all-target clippy with warnings denied,
+layers/licenses/corpus pass. The exact intermediate renderer-only staged tree also passes
+866 tests/zero failed/ignored under CI76060 before commit57bedb5. Backend and final UI
+commits are kept separately buildable; a full frontend pass does not stand in for an
+intermediate-tree check. No broad native drawing, Windows/Linux or hosted pass is inferred.
 
 The exact backend-only staged tree passes local CI58584: 883 tests, zero failures/ignored,
 with its own absolute target and debug0. Log `target/multiple-commands-index-ci-isolated.log`:

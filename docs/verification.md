@@ -1,5 +1,17 @@
 # Verification log
 
+Latest2026-11-14 receiving: ordered Single/Double/Triple [authoring and adapters](verification-multiple-authoring.md),
+[geometry/CPU/GPU](verification-multiple-render.md), [independent files/images/fuzz](verification-multiple-commands.md)
+and [actual egui workflows](verification-multiple-ui.md). The refreshed
+[workspace evidence](verification-workspace-presentation.md) records the actual macOS
+visual review, finite native interactions, preserved failed checks and local aggregate:
+891 passed, zero failed, one intentionally ignored explicit capture utility. That utility
+also passes when explicitly run. Native new drag workflows and full parity remain pending.
+GitHub Actions stays disabled; these are local checks, not new Windows/Linux execution.
+After intermediate-tree checking exposed shared cached metadata, final clean Root1724
+rebuilds the normal target and passes the same891/0/1 aggregate. Failed logs and the prior
+debug cache are retained; details are in the workspace evidence above.
+
 2026-11-13, bootstrap documentation: no application checks yet. Starting workspace was empty.
 Rust 1.94.1 is installed. Public specifications and reference license practices were inspected.
 Future behavioral entries must identify the RED command/failure, GREEN command/result,

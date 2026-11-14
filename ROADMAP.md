@@ -49,12 +49,13 @@ absent-H depiction now uses the same closed display facts in its actual Page/IDs
 with complete deferred ownership, independent CPU/GPU/source checks and headless canvas
 acceptance. Authored None and source bytes remain exact; source-free/CDXML stay literal.
 See docs/verification-mol-display-tests.md and docs/verification-mol-display-ui.md.
-The next graph prerequisite is Double/Triple depiction, which currently refuses honestly;
-research IUPAC multiple-bond spacing/attachment and define independent geometry/pixel
-expectations before changing the shared renderer and associated capture tests. Broader
-formats, source metadata, SDF field UI and full M1 interoperability remain unfinished.
-This is partial M1, with Single/
-neutral chemistry and explicit whole-capture refusals; general layout and reference packing
+Centered Double/Triple depiction now passes independent analytic pixel/geometry, actual
+CPU/GPU and source-preserving MOL/SDF checks. It uses an original3w profile, without
+mapping inherited styles or context-sensitive sidedness. See
+docs/verification-multiple-render.md and docs/verification-multiple-commands.md.
+Broader formats, source metadata, SDF field UI and full M1 interoperability remain unfinished.
+This is partial M1, with neutral Single/Double/Triple geometry and explicit whole-capture
+refusals; general layout and reference packing
 remain open. See docs/verification-sdf-capture-command.md and the linked independent evidence.
 
 The complete SDF session/Open/Save slice now retains every mixed-version record and
@@ -166,29 +167,36 @@ corpus and reference/chemical mapping remain M1 work.
 
 ## M2: drawing — in progress
 
-Positioned neutral elemental symbols and literal authored H now have independent font,
-CPU/GPU, actual CDXML/MOL and registered-capture evidence under the local696 gate. The
-118-symbol catalog is shared from pure model. Source authority and old carbon pixels/golden
-remain exact. This is headless display only: atom-label tools, native element workflows,
-other chemical metadata/orders and general layout remain missing. See
-docs/verification-neutral-element-labels.md.
+The shared118-symbol catalog, positioned neutral-element labels and literal H have
+independent font/CPU/GPU/file evidence. MOL/SDF display H stays separate from authored
+None. Centered Single/Double/Triple scenes use logical bond IDs, actual component hits,
+attachment/mask/visibility guards and the unchanged approved Single golden. Other metadata,
+context-sensitive multiple placement and source-faithful styles remain missing.
 
-The first command creates an independent single C-C fragment with three authored H per
-carbon. Native drag creation, exact history, automation and bounded rendering have evidence.
-This is partial solid-bond coverage. A separate headless bond.extend command now extends
-a supported terminal carbon with required explicit H3→H2 policy, one snapshot/ID/source
-guards and independently consumed saved propane/butane. Closed terminal attachment is
-now wired through that registry with17 new input/history/consumer regressions; actual
-native acceptance remains pending. Broader connected construction, click creation,
-snapping, order changes and general atom labels remain missing.
+`bond.create` accepts an explicit Single/Double/Triple order (defaultSingle) and authors
+literal H=`4-order_weight`. `bond.extend` preserves identities/source/history while
+extending a consistent neutral-carbon terminal within its explicit H budget; source-free
+or byte-proven native CDXML only. Native Single C3/C4 authoring/history/CDXML reopening
+has Mac evidence. The new multiple workflows are wired and pass independent actual-frame,
+file/chemistry/image tests; actual native multiple acceptance remains unverified.
 
-The shared carbon GraphScene/hit-testing prerequisite now supports positioned neutral
-carbon/Single topology, literal authored H and bounded atom/bond hover. Independent geometry/
-pixels/fonts, unchanged golden and receiving467+3 aggregate pass. Native baseline revision/
-Escape hover failures prompted sticky freshness/context regressions and a fix; final
-Root476+3 and actual MacC2/C3/input acceptance now pass. Its own hosted checks remain
-pending. This display slice does not add
-connected editing, selection, other atoms/orders, source-faithful styles or finish M2-02.
+`ui.bond_tool` supplies three procedural accessible palette controls and a checked
+transient epoch, outside authored history/dirty/source state. Ordered activations cancel
+older gestures; held previews and hover use the same actual component geometry. Existing
+Single/attachment regressions remain. See docs/verification-multiple-ui.md and
+docs/verification-multiple-authoring.md. This does not finish M2 or establish26.1 styles.
+
+The original refreshed workspace now has a compact rail and contextual document inspector,
+with source/count/file state and stable paper geometry. Native macOS visual review, Double
+accessibility selection and File/format-picker/Cancel are observed; the showcased structures
+were registry-authored and reopened. Two native drag attempts made no edit, so new native
+multiple drawing/attachment/history/save remains unverified. See
+docs/verification-workspace-presentation.md and the new actual README captures.
+
+Next authoring flow: research the guide's existing-bond conversion/click/hotkey rules,
+then implement a shared typed order-edit command with explicit H policy, exact history,
+source/valence guards and UI tests before claiming those flows. Ring/chain construction,
+snapping, persistent selection/transforms and general atom editing remain required.
 
 Bonds, rings, chains, labels/abbreviations, charges, isotopes, radicals, wedge/hash bonds,
 selection, transforms, hotkeys, undo/redo and style sheets from public journal guidelines.

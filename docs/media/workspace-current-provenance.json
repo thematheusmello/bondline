@@ -1,0 +1,95 @@
+{
+  "scene_bytes": 919,
+  "scene_sha256": "56553eab23fde2ebf7e76094c41b410fb4f95445034e8da49b642d528395ac2b",
+  "external": "RDKit2026.09.2 and unchanged Expat/Decimal oracle",
+  "facts": [
+    {
+      "smiles": "CC",
+      "formula": "C2H6",
+      "h": [
+        3,
+        3
+      ]
+    },
+    {
+      "smiles": "C=C",
+      "formula": "C2H4",
+      "h": [
+        2,
+        2
+      ]
+    },
+    {
+      "smiles": "C#C",
+      "formula": "C2H2",
+      "h": [
+        1,
+        1
+      ]
+    }
+  ],
+  "images": [
+    {
+      "path": "docs/media/workspace-current.jpg",
+      "bytes": 73618,
+      "sha256": "2806ed6f64f99ddf9db828c19534c1ff5b67a4f15032dc2c83fb41c321a33576",
+      "size": [
+        1160,
+        832
+      ],
+      "format": "JPEG",
+      "exif": "dimensions only; no GPS or author",
+      "photoshop": "empty IPTC and empty-data digest"
+    },
+    {
+      "path": "docs/media/format-chooser.jpg",
+      "bytes": 99667,
+      "sha256": "b04f9acb23bff133dff5ed5e5c158b1d73915909f5aa2d622290e9924f55abc4",
+      "size": [
+        1160,
+        832
+      ],
+      "format": "JPEG",
+      "exif": "dimensions only; no GPS or author",
+      "photoshop": "empty IPTC and empty-data digest"
+    }
+  ],
+  "native_drag_verified": false,
+  "golden_approved": false,
+  "binary_sha256": "bbf429b73856327394478913723230b4b5b1d2690188b38edfffe86cb5f8827f",
+  "ui_source_sha256": "98d0dd17b413a34b248a501f347372260634e8a94a333eb7d61ff8752965bca2",
+  "date": "2026-11-14",
+  "method": "unedited CUA native-window buffers",
+  "platform": "macOS27.2 arm64; Apple M3 Max; Metal",
+  "seed": {
+    "page_pt": [
+      420,
+      280
+    ],
+    "x_pt": [
+      95,
+      225
+    ],
+    "y_pt": [
+      65,
+      140,
+      215
+    ],
+    "orders": [
+      "single",
+      "double",
+      "triple"
+    ],
+    "tool": "double"
+  },
+  "native_verified": [
+    "actual rendering",
+    "Double accessibility activation",
+    "File/Open/format choices/Cancel"
+  ],
+  "native_pending": [
+    "Double/Triple drag authoring and attachment",
+    "new workflow undo/save acceptance"
+  ],
+  "listener": "intentionally left running for user visual review; startup credentials excluded"
+}

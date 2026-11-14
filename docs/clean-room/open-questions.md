@@ -248,11 +248,13 @@ the implemented slice does not establish universal CTfile perception or referenc
 
 ## Multiple-bond styles and placement
 
-[The unexecuted next gate](../research/multiple-bond-plan.md) distinguishes centered
+[The original plan](../research/multiple-bond-plan.md) distinguishes centered
 segments from context-sensitive offset/joined Double bonds. Public SDK relative spacing,
 absolute override and inherited/last-used style semantics do not establish a universal26.1
 numeric default;18% is an example. Its absolute-spacing owner table/prose and automatic/
 manual flags sharing XML names need explicit interpretation before mapping. Relative
-spacing's reference length, actual tier/style defaults, low-resolution separation, ring/
-substituent placement and persistent style schema remain open. The proposed original3w
-centered test policy is not adopted reference behavior or an implemented feature.
+spacing's reference length, actual tier/style defaults, ring/substituent placement and
+persistent style schema remain open. The current implementation work adopts original3w
+centered geometry with bounded visible-ink/gap checks and a one-third short-axis guard;
+none is established reference behavior. Dedicated tool/drag flows do not establish
+conversion clicks, hotkeys, alignment cycling or actual native drawing acceptance.

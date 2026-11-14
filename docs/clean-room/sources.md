@@ -1402,9 +1402,9 @@ paths missing docs/ returned404; corrected artifacts and status/hash receipts ar
 Relative/absolute spacing, override/inheritance and directional Center/Right/Left are
 format facts; the example18% is not a universal26.1 default. Root verified25 source
 snapshots,13 research artifacts and its actual native caller before receiving that plan.
-The current feature work adopts the explicitly original policies below; implementation
-and independent checks are in progress. This does not complete Double/Triple professional
-parity, M1 or M2. No new native-window observation or golden approval is claimed.
+The current feature adopts the explicitly original policies below; implementation and
+independent evidence retain their qualified scopes. This does not complete Double/Triple
+professional parity, M1 or M2. No new reference-product runtime or golden approval is claimed.
 
 | ID | Public evidence / original decision |
 |---|---|
@@ -1419,3 +1419,21 @@ Current command RED/GREEN is recorded in
 [verification-multiple-authoring.md](../verification-multiple-authoring.md). Renderer,
 independent chemistry/image/file and actual-frame receiving records retain their own
 scope; completed local tests must not become claims of native-window, style or full parity.
+
+## Original workspace presentation, 2026-11-14
+
+[Pinned visual research](../research/visual-direction.md) reviews three PhotoCraft and two
+VoiceStudio public screenshots, their README/capture provenance and separate asset licenses.
+PhotoCraft's document-first light canvas/rail/inspector hierarchy and VoiceStudio's grouped
+information inform the direction. These are visual observations, not execution of either
+reference. No reference source, icon, logo, font or image is shipped; VoiceStudio's AGPL
+code and the references' excluded asset licenses remain outside the runtime allowlist.
+
+The48-unit header,64-unit two-column tool rail,248-unit document inspector,24-unit status,
+original teal/neutral palette,28-unit procedural buttons and existing Apache Roboto are
+Bondline choices. Counts and source/file state come from the current Engine; unsupported
+tools are not invented. Guidance/error placement preserves paper geometry and the unchanged
+label-readability guard. The pinned egui0.29.1 Grid/painter sources explain first-pass
+discard, so explicit button rows avoid hiding later guidance. [Actual checks and native
+capture](../verification-workspace-presentation.md) distinguish real pixels/selection/menu
+inspection from still-unverified native Double/Triple drawing and full reference parity.

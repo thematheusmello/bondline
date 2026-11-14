@@ -59,18 +59,30 @@ registry commands with independent file-consumer and failed-import-retention evi
 Every snapshot retains its saved baseline; essential current+saved data may exceed the
 history threshold. Source.modified and file.dirty describe separate original/saved baselines.
 See control-protocol.md for the actual registered operations and explicit limits.
-The first bond.create operation appends an independently authored C-C fragment with three
-explicit hydrogens per carbon. Engine identity floors never move backward on Undo/Redo;
+The default bond.create operation appends an independently authored C-C fragment with three
+explicit hydrogens per carbon. Optional Double/Triple order instead authors literal
+H=`4-order_weight` at both ends. Engine identity floors never move backward on Undo/Redo;
 a new branch cannot reuse deleted session IDs. Floors update only after a successful commit.
 This is a closed creation case, not a general valence or connected-bond editing engine.
-A separate closed bond.extend command now replaces one same-ID fragment atomically,
-authors terminal H3→H2 plus a new C/H3 and Single bond, and preserves all old identities.
+A separate closed bond.extend command replaces one same-ID fragment atomically. A neutral
+carbon terminal with one Single/Double/Triple bond must have the consistent literal
+H=`4-existing_weight`; the requested weight must fit that budget. It subtracts that weight
+and adds a new C/H=`4-requested_weight`, preserving all old identities.
 Required expected revision/policy, complete-source authority and global atom/bond floors
 are checked before one history commit. Only source-free/byte-proven native CDXML is
 allowed; imported MOL/CDX refuses. Native attachment is now wired through that same
 registry, with fresh per-press graph hits, raw click threshold versus exact atom anchor,
 per-event foreground/paper release guards and ordered graph/revision reacquisition.
 Actual native acceptance remains separate from deterministic input tests.
+
+`ui.bond_tool` owns a checked transient order/epoch, outside StoredContent/history/dirty
+state. Real changes advance that epoch; no-op selection does not. Normal command snapshots
+omit it; explicit operation replies and three central bindings expose it. Selection
+persists across history/Open, and direct authoring defaults remain Single. Actual UI
+activations are ordered by their input-event indices; each tool state is replayed at its
+event boundary so later activation cannot relabel an earlier press. The gesture stores
+that order/epoch and explicitly passes its order into the existing authoring commands.
+Loopback publication notifies real tool changes even though authored changed=false.
 
 
 The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while
@@ -154,7 +166,7 @@ content instead of returning a misleading blank preview; the native C-C creation
 
 The native canvas and registered capture consume one GraphScene with ordered rectangles/
 strokes and bounded typed atom/bond hit regions. It supports positioned neutral elements
-with a shared pure-model symbol catalog, Single bonds and literal authored H; the literal
+with a shared pure-model symbol catalog, Single/centered Double/Triple bonds and literal authored H; the literal
 renderer does not infer missing H. A source-aware IO scene entry supplies separate closed-
 profile display counts only for actual MOL backing, preserving current Page/IDs/frame and
 authored None. Source-free/CDXML keep the literal path. PageViewport shares paper
@@ -164,10 +176,19 @@ native-document golden. Native transient gesture state stays outside authored sn
 ordered pointer events preview, commit one registry edit per drag, or cancel. This handles
 an entire drag between frames without losing its released press origin. See rendering.md
 for bounds, native versus headless raster semantics and the substantial remaining work.
+`centered_bond_strokes` is the shared geometry constructor for graph production and held
+preview; `GraphScene::bond_strokes` supplies the actual components for hover. Masks,
+clipping, pixel/gap visibility and congestion stay scene-level checks. The original3w
+profile does not model imported spacing/position/style inheritance or general joins.
 Transient hover never changes the captured Scene, selection, snapshots or file state.
+The thin workspace uses a48-unit header,64-unit procedural tool rail,248-unit read-only
+document inspector and fixed24-unit page/job footer. Tool policy and errors live in the
+inspector, keeping paper placement stable while retaining label-readability guards.
+Explicit two-button rows avoid egui Grid's first-pass discard. These are original
+presentation choices; the shell does not add authoring or file authority.
 Its private freshness flag remains clear after revision/Escape/focus/context invalidation
 until a new ordered PointerMoved/PointerButton. Context tracks logical canvas origin/size,
-page/revision, public native viewport origin and effective pixels-per-point; no OS polling.
+page/revision, tool epoch/order, public native viewport origin and effective pixels-per-point; no OS polling.
 Synthetic regressions cover multiple idle frames and ordered input, while actual native
 acceptance is recorded separately in verification-carbon-graph.md.
 

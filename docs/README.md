@@ -12,6 +12,11 @@ The app is in early development; documented plans are not implemented features.
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
 | Inspect rendering limits | [Rendering](rendering.md) |
+| Check centered Double/Triple geometry | [Renderer evidence](verification-multiple-render.md) |
+| Check ordered bond commands and transient tools | [Authoring contract](verification-multiple-authoring.md) |
+| Check multiple-bond file/image/fuzz acceptance | [Independent checks](verification-multiple-commands.md) |
+| Check actual application-frame tool workflows | [UI evidence](verification-multiple-ui.md) |
+| Inspect the refreshed visual direction | [Pinned references](research/visual-direction.md), [actual workspace checks](verification-workspace-presentation.md), [offscreen capture utility](verification-visual-capture.md) |
 | Find the next feature | [Roadmap](../ROADMAP.md), [parity checklist](parity-checklist.md) |
 | Check evidence | [Verification](verification.md), [CI scope](ci.md), [corpus](corpus/README.md) |
 | Review provenance and licenses | [Source register](clean-room/sources.md), [open questions](clean-room/open-questions.md), [dependency policy](dependency-policy.md), [attribution](../ATTRIBUTION.md) |

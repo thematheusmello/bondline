@@ -4,11 +4,17 @@ mod file_workflow;
 pub mod files;
 #[cfg(test)]
 mod mol_display_tests;
+#[cfg(test)]
+mod multiple_bond_tests;
 mod preview;
+#[cfg(test)]
+mod visual_capture_tests;
+#[cfg(test)]
+mod workspace_presentation_tests;
 
 use bondline_commands::{
-    BondCreate, BondDrawOrder, BondExtend, CloseState, Command, ControlInfo, ControlKey,
-    ControlShortcut, Engine, ExtendHydrogenPolicy,
+    BondCreate, BondDrawOrder, BondExtend, BondToolState, CloseState, Command, ControlInfo,
+    ControlKey, ControlShortcut, Engine, ExtendHydrogenPolicy,
 };
 use bondline_mcp::{CommandExecutor, SharedEngine, control::LoopbackServer};
 use bondline_model::{PageId, Point2};
@@ -19,6 +25,8 @@ use std::{
     io::Write,
     sync::{Arc, Mutex},
 };
+
+const ACCENT: egui::Color32 = egui::Color32::from_rgb(21, 117, 118);
 
 /// Native startup configuration: use the audited wgpu backend on every desktop platform.
 pub fn native_options() -> Result<eframe::NativeOptions, bondline_render::Error> {
@@ -63,7 +71,24 @@ pub fn configure_context(context: &egui::Context) {
             .insert(family, vec!["bondline-ui".to_owned()]);
     }
     context.set_fonts(fonts);
-    context.set_visuals(egui::Visuals::light());
+    let mut visuals = egui::Visuals::light();
+    visuals.panel_fill = egui::Color32::from_rgb(246, 248, 250);
+    visuals.window_fill = egui::Color32::from_rgb(252, 253, 254);
+    visuals.override_text_color = Some(egui::Color32::from_rgb(37, 48, 61));
+    visuals.selection.bg_fill = egui::Color32::from_rgb(222, 241, 240);
+    visuals.selection.stroke = egui::Stroke::new(1.5, ACCENT);
+    visuals.widgets.noninteractive.bg_stroke =
+        egui::Stroke::new(1.0, egui::Color32::from_rgb(216, 223, 230));
+    context.set_visuals(visuals);
+    context.style_mut(|style| {
+        style.spacing.item_spacing = egui::vec2(8.0, 6.0);
+        style.spacing.button_padding = egui::vec2(8.0, 4.0);
+        for text_style in [egui::TextStyle::Body, egui::TextStyle::Button] {
+            style
+                .text_styles
+                .insert(text_style, egui::FontId::proportional(13.0));
+        }
+    });
 }
 
 #[derive(Default)]
@@ -90,6 +115,7 @@ impl DrawingState {
 #[derive(Clone, Copy, PartialEq)]
 struct HoverContext {
     revision: u64,
+    tool: BondToolState,
     page: PageId,
     width: u32,
     height: u32,
@@ -124,11 +150,193 @@ fn paint_stroke(
     Ok(())
 }
 
+fn bond_tool_buttons(
+    ui: &mut egui::Ui,
+    controls: &[ControlInfo],
+    events: &[egui::Event],
+) -> Vec<(usize, Command)> {
+    let mut commands = Vec::new();
+    let tools: Vec<_> = controls
+        .iter()
+        .filter(|control| control.menu == "Tools")
+        .collect();
+    for row in tools.chunks(2) {
+        ui.horizontal(|ui| {
+            ui.spacing_mut().item_spacing = egui::vec2(2.0, 6.0);
+            for control in row {
+                let Command::UiBondToolSelect(params) = &control.command else {
+                    continue;
+                };
+                ui.push_id(control.id, |ui| {
+                    let selected = control.selected.unwrap_or(false);
+                    let response = ui
+                        .add_enabled(
+                            control.enabled,
+                            egui::Button::new("")
+                                .min_size(egui::vec2(28.0, 28.0))
+                                .selected(selected),
+                        )
+                        .on_hover_text(control.label);
+                    response.widget_info(|| {
+                        egui::WidgetInfo::selected(
+                            egui::WidgetType::Button,
+                            response.enabled(),
+                            selected,
+                            control.label,
+                        )
+                    });
+                    let offsets: &[f32] = match params.order {
+                        BondDrawOrder::Single => &[0.0],
+                        BondDrawOrder::Double => &[-2.0, 2.0],
+                        BondDrawOrder::Triple => &[-4.0, 0.0, 4.0],
+                    };
+                    let color = ui.style().interact(&response).fg_stroke.color;
+                    for offset in offsets {
+                        let y = response.rect.center().y + offset;
+                        ui.painter().line_segment(
+                            [
+                                egui::pos2(response.rect.left() + 6.0, y),
+                                egui::pos2(response.rect.right() - 6.0, y),
+                            ],
+                            egui::Stroke::new(1.5, color),
+                        );
+                    }
+                    if response.enabled() {
+                        for (index, event) in events.iter().enumerate() {
+                            let activate = match event {
+                                egui::Event::AccessKitActionRequest(request) => {
+                                    request.action == egui::accesskit::Action::Default
+                                        && request.target.0 == response.id.value()
+                                }
+                                egui::Event::PointerButton {
+                                    pos,
+                                    button: egui::PointerButton::Primary,
+                                    pressed: false,
+                                    ..
+                                } => {
+                                    response.clicked_by(egui::PointerButton::Primary)
+                                        && response.interact_rect.contains(*pos)
+                                }
+                                egui::Event::Key {
+                                    key: egui::Key::Space | egui::Key::Enter,
+                                    pressed: true,
+                                    ..
+                                } => response.has_focus() && response.clicked(),
+                                _ => false,
+                            };
+                            if activate {
+                                commands.push((index, control.command.clone()));
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+    commands.sort_by_key(|(index, _)| *index);
+    commands
+}
+
+fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
+    let state = engine.state();
+    ui.heading("Document");
+    if let Some(message) = error {
+        ui.colored_label(egui::Color32::DARK_RED, message);
+    }
+    ui.add_space(8.0);
+    ui.weak("FILE");
+    let name = state
+        .file
+        .path
+        .as_deref()
+        .and_then(|path| std::path::Path::new(path).file_name())
+        .and_then(|name| name.to_str())
+        .unwrap_or("Untitled");
+    ui.label(egui::RichText::new(name).strong());
+    ui.weak(if state.file.dirty {
+        "Unsaved changes"
+    } else if state.file.path.is_some() {
+        "Saved"
+    } else {
+        "New document"
+    });
+    if let Some(source) = &state.source {
+        ui.label(source.format.to_uppercase());
+    }
+    ui.add_space(8.0);
+    ui.separator();
+    if let Ok(document) = engine.document() {
+        if let Some(page) = document.pages().first() {
+            ui.weak("PAGE");
+            ui.label(format!(
+                "{:.1} × {:.1} pt",
+                page.size().width_pt(),
+                page.size().height_pt()
+            ));
+            ui.add_space(8.0);
+        }
+        if engine
+            .stored_document()
+            .is_ok_and(|stored| stored.is_fully_mapped())
+        {
+            let (atoms, bonds, fragments) = document
+                .pages()
+                .iter()
+                .flat_map(|page| page.fragments())
+                .fold(
+                    (0_usize, 0_usize, 0_usize),
+                    |(atoms, bonds, fragments), fragment| {
+                        (
+                            atoms.saturating_add(fragment.atoms().len()),
+                            bonds.saturating_add(fragment.bonds().len()),
+                            fragments.saturating_add(1),
+                        )
+                    },
+                );
+            ui.weak("DRAWN CONTENT");
+            ui.label(format!("{atoms} atoms"));
+            ui.label(format!("{bonds} bonds"));
+            ui.label(format!("{fragments} fragments"));
+        } else {
+            ui.label("Original source preserved");
+        }
+        ui.add_space(8.0);
+        ui.separator();
+        ui.weak("ACTIVE TOOL");
+        let tool = match engine.bond_tool().order {
+            BondDrawOrder::Single => "Single bond",
+            BondDrawOrder::Double => "Double bond",
+            BondDrawOrder::Triple => "Triple bond",
+        };
+        ui.label(
+            egui::RichText::new(format!("{tool} selected"))
+                .color(ACCENT)
+                .strong(),
+        );
+        ui.label(match engine.bond_tool().order {
+            BondDrawOrder::Single => {
+                "Drag paper for C-C; extend terminal CH3 to CH2 / CH2 to CH / CH to C; Esc cancels"
+            }
+            BondDrawOrder::Double => {
+                "Drag paper for C=C; extend terminal CH3 to CH / CH2 to C; Esc cancels"
+            }
+            BondDrawOrder::Triple => "Drag paper for C≡C; extend terminal CH3 to C; Esc cancels",
+        });
+    } else if let Some(collection) = engine.content().collection() {
+        ui.label(format!("{} records", collection.record_count));
+        ui.weak("Read-only chemical preview");
+    } else if let Some(summary) = engine.content().smiles_summary() {
+        ui.label(format!("{} records", summary.record_count));
+        ui.weak("Source file preserved");
+    }
+}
+
 fn paint_hover(
     painter: &egui::Painter,
     origin: egui::Pos2,
     page: &bondline_model::Page,
     viewport: &bondline_render::PageViewport,
+    graph: &bondline_render::GraphScene,
     target: bondline_render::HitTarget,
 ) -> Result<(), bondline_render::Error> {
     use bondline_render::{Error, HitTarget};
@@ -160,25 +368,22 @@ fn paint_hover(
             );
         }
         HitTarget::Bond { bond_id, .. } => {
-            let bond = fragment
-                .bonds()
-                .iter()
-                .find(|b| b.id == bond_id)
-                .ok_or(Error::UnsupportedChemicalContent)?;
-            let outline = bondline_render::Stroke {
-                begin: position(bond.begin)?,
-                end: position(bond.end)?,
-                width: viewport.stroke_width() + 4.0,
-                color: [0; 4],
+            let mut components = graph.bond_strokes(fragment_id, bond_id);
+            let first = components.next().ok_or(Error::UnsupportedChemicalContent)?;
+            for stroke in std::iter::once(first).chain(components) {
+                let outline = bondline_render::Stroke {
+                    width: stroke.width + 4.0,
+                    ..stroke.clone()
+                }
+                .corners()?;
+                painter.add(egui::Shape::closed_line(
+                    outline
+                        .into_iter()
+                        .map(|[x, y]| origin + egui::vec2(x, y))
+                        .collect(),
+                    egui::Stroke::new(1.0, color),
+                ));
             }
-            .corners()?;
-            painter.add(egui::Shape::closed_line(
-                outline
-                    .into_iter()
-                    .map(|[x, y]| origin + egui::vec2(x, y))
-                    .collect(),
-                egui::Stroke::new(1.0, color),
-            ));
         }
     }
     Ok(())
@@ -269,46 +474,90 @@ fn show_workspace_with_preview(
     active_work: bool,
     mut preview: Option<&mut PreviewWorkflow>,
 ) -> Option<FileIntentAction> {
+    if [
+        context.screen_rect().width(),
+        context.screen_rect().height(),
+    ]
+    .iter()
+    .any(|dimension| !dimension.is_finite() || !(1.0..=100_000.0).contains(dimension))
+    {
+        drawing.gesture = None;
+        drawing.invalidate_hover();
+        egui::CentralPanel::default().show(context, |ui| {
+            ui.colored_label(
+                egui::Color32::DARK_RED,
+                bondline_render::Error::InvalidViewport.to_string(),
+            );
+        });
+        return None;
+    }
     let state = engine.state();
+    let initial_tool = engine.bond_tool();
+    let events = context.input(|input| input.events.clone());
+    let mut tool_actions = Vec::new();
     let mut selected = None;
     let mut file_action = None;
-    egui::TopBottomPanel::top("title").show(context, |ui| {
-        ui.horizontal(|ui| {
-            ui.label(egui::RichText::new("bondline").strong().size(22.0));
-            ui.separator();
-            if let Some(files) = files.as_deref_mut() {
-                file_action = files.menu(ui, engine, error);
-            }
-            let current = engine.state();
-            let blocked = current.close != CloseState::Open
-                || files
-                    .as_ref()
-                    .is_some_and(|files| files.blocks_authoring(&current));
-            ui.add_enabled_ui(!blocked, |ui| {
-                let controls = engine.controls();
-                let edit = control_menu(ui, &controls, "Edit");
-                let page = control_menu(ui, &controls, "Page");
-                selected = edit.or(page);
+    egui::TopBottomPanel::top("title")
+        .exact_height(48.0)
+        .frame(egui::Frame::side_top_panel(&context.style()).inner_margin(8.0))
+        .show(context, |ui| {
+            ui.horizontal(|ui| {
+                ui.label(
+                    egui::RichText::new("bondline")
+                        .strong()
+                        .size(20.0)
+                        .color(ACCENT),
+                );
+                ui.separator();
+                if let Some(files) = files.as_deref_mut() {
+                    file_action = files.menu(ui, engine, error);
+                }
+                let current = engine.state();
+                let blocked = current.close != CloseState::Open
+                    || files
+                        .as_ref()
+                        .is_some_and(|files| files.blocks_authoring(&current));
+                ui.add_enabled_ui(!blocked, |ui| {
+                    let controls = engine.controls();
+                    let edit = control_menu(ui, &controls, "Edit");
+                    let page = control_menu(ui, &controls, "Page");
+                    selected = edit.or(page);
+                });
+                ui.separator();
+                let name = state
+                    .file
+                    .path
+                    .as_deref()
+                    .and_then(|path| std::path::Path::new(path).file_name())
+                    .and_then(|name| name.to_str())
+                    .unwrap_or("Untitled");
+                ui.add(
+                    egui::Label::new(format!(
+                        "{name}{}",
+                        if state.file.dirty { " *" } else { "" }
+                    ))
+                    .truncate(),
+                )
+                .on_hover_text(name);
             });
-            ui.separator();
-            let name = state
-                .file
-                .path
-                .as_deref()
-                .and_then(|path| std::path::Path::new(path).file_name())
-                .and_then(|name| name.to_str())
-                .unwrap_or("Untitled");
-            ui.label(format!(
-                "{name}{}",
-                if state.file.dirty { " *" } else { "" }
-            ));
         });
-    });
     let current = engine.state();
     let blocked = current.close != CloseState::Open
         || files
             .as_ref()
             .is_some_and(|files| files.blocks_authoring(&current));
+    egui::SidePanel::left("drawing-tools")
+        .exact_width(64.0)
+        .resizable(false)
+        .frame(egui::Frame::side_top_panel(&context.style()).inner_margin(3.0))
+        .show(context, |ui| {
+            ui.add_space(6.0);
+            ui.label(egui::RichText::new("Tools").small().strong());
+            ui.separator();
+            ui.add_enabled_ui(!blocked, |ui| {
+                tool_actions = bond_tool_buttons(ui, &engine.controls(), &events);
+            });
+        });
     if blocked {
         drawing.gesture = None;
     } else {
@@ -316,38 +565,53 @@ fn show_workspace_with_preview(
     }
     if let Some(command) = selected {
         *error = engine.execute(command).err().map(|error| error.to_string());
+        context.request_repaint();
     }
-    if drawing
-        .gesture
-        .as_ref()
-        .is_some_and(|gesture| gesture.context.revision != engine.state().revision)
-    {
+    // Replay each transient state at its event; a later activation cannot relabel a press.
+    let mut tool_states = Vec::with_capacity(tool_actions.len());
+    for (index, command) in tool_actions {
+        match engine.execute(command) {
+            Ok(_) => {
+                tool_states.push((index, engine.bond_tool()));
+                context.request_repaint();
+            }
+            Err(failure) => *error = Some(failure.to_string()),
+        }
+    }
+    if drawing.gesture.as_ref().is_some_and(|gesture| {
+        gesture.context.revision != engine.state().revision || gesture.context.tool != initial_tool
+    }) {
         drawing.gesture = None;
     }
-    egui::TopBottomPanel::bottom("status").show(context, |ui| {
-        ui.horizontal(|ui| {
-            if let Ok(document) = engine.document()
-                && let Some(page) = document.pages().first()
-            {
-                ui.label(format!("Page {}", page.id().get()));
-                ui.separator();
-                ui.label(format!(
-                    "{:.1} x {:.1} pt",
-                    page.size().width_pt(),
-                    page.size().height_pt()
-                ));
-            }
-            if engine.document().is_ok() {
-                ui.label("Drag empty paper for C-C; extend terminal CH3 to CH2; Esc cancels");
-            }
-            if let Some(message) = error {
-                ui.colored_label(egui::Color32::DARK_RED, message.as_str());
-            }
-            if let Some(files) = files.as_deref_mut() {
-                files.job_status(ui);
-            }
+    // Tool guidance and diagnostics stay in the inspector so the paper never shifts.
+    egui::TopBottomPanel::bottom("status")
+        .exact_height(24.0)
+        .show(context, |ui| {
+            ui.horizontal(|ui| {
+                if let Ok(document) = engine.document()
+                    && let Some(page) = document.pages().first()
+                {
+                    ui.label(format!("Page {}", page.id().get()));
+                    ui.separator();
+                    ui.label(format!(
+                        "{:.1} x {:.1} pt",
+                        page.size().width_pt(),
+                        page.size().height_pt()
+                    ));
+                }
+                if let Some(files) = files.as_deref_mut() {
+                    files.job_status(ui);
+                }
+            });
         });
-    });
+    egui::SidePanel::right("document-properties")
+        .exact_width(248.0)
+        .resizable(false)
+        .frame(egui::Frame::side_top_panel(&context.style()).inner_margin(14.0))
+        .show(context, |ui| {
+            egui::ScrollArea::vertical()
+                .show(ui, |ui| document_inspector(ui, engine, error.as_deref()));
+        });
     egui::CentralPanel::default()
         .frame(
             egui::Frame::default()
@@ -472,10 +736,11 @@ fn show_workspace_with_preview(
                 drawing.gesture = None;
             }
             let mut interaction_attempted = false;
-            let (mut key, events, mut escape_held, mut focused) = context.input(|input| {
+            let (mut key, mut escape_held, mut focused) = context.input(|input| {
                 let info = input.viewport();
                 let key = HoverContext {
                     revision: engine.state().revision,
+                    tool: initial_tool,
                     page: page.id(),
                     width,
                     height,
@@ -483,12 +748,7 @@ fn show_workspace_with_preview(
                     host_origin: info.inner_rect.or(info.outer_rect).map(|r| r.min),
                     pixels_per_point: input.pixels_per_point,
                 };
-                (
-                    key,
-                    input.events.clone(),
-                    input.key_down(egui::Key::Escape),
-                    input.focused,
-                )
+                (key, input.key_down(egui::Key::Escape), input.focused)
             });
             if drawing.hover_context != Some(key) {
                 drawing.hover_fresh = false;
@@ -515,7 +775,18 @@ fn show_workspace_with_preview(
                 }
             }
             // A native frame may contain the entire drag; press_origin is cleared on release.
-            for event in &events {
+            let mut tool_states = tool_states.into_iter().peekable();
+            for (index, event) in events.iter().enumerate() {
+                while tool_states.peek().is_some_and(|(at, _)| *at == index) {
+                    if let Some((_, tool)) = tool_states.next()
+                        && key.tool != tool
+                    {
+                        key.tool = tool;
+                        drawing.gesture = None;
+                        drawing.invalidate_hover();
+                        drawing.hover_context = Some(key);
+                    }
+                }
                 match event {
                     egui::Event::Key {
                         key: egui::Key::Escape,
@@ -643,7 +914,7 @@ fn show_workspace_with_preview(
                         let command = match current_graph.hit_test(local(*pos), 5.0) {
                             Ok(None) => match gesture.target {
                                 None => Ok(Command::BondCreate(BondCreate {
-                                    order: BondDrawOrder::Single,
+                                    order: gesture.context.tool.order,
                                     page_id: gesture.context.page.get(),
                                     begin_x_pt: gesture.begin.x_pt(),
                                     begin_y_pt: gesture.begin.y_pt(),
@@ -654,7 +925,7 @@ fn show_workspace_with_preview(
                                     fragment_id,
                                     atom_id,
                                 }) => Ok(Command::BondExtend(BondExtend {
-                                    order: BondDrawOrder::Single,
+                                    order: gesture.context.tool.order,
                                     expected_revision: gesture.context.revision,
                                     page_id: gesture.context.page.get(),
                                     fragment_id: fragment_id.get(),
@@ -757,7 +1028,7 @@ fn show_workspace_with_preview(
                     }
                     if let Some(target) = drawing.hover
                         && let Err(error) =
-                            paint_hover(&painter, available.min, page, &viewport, target)
+                            paint_hover(&painter, available.min, page, &viewport, &graph, target)
                     {
                         drawing.invalidate_hover();
                         ui.colored_label(egui::Color32::DARK_RED, error.to_string());
@@ -768,18 +1039,30 @@ fn show_workspace_with_preview(
                             viewport.canvas_position(gesture.begin),
                             viewport.canvas_position(gesture.end),
                         )
-                        && let Err(error) = paint_stroke(
-                            &painter,
-                            available.min,
+                    {
+                        let order = match gesture.context.tool.order {
+                            BondDrawOrder::Single => bondline_model::BondOrder::Single,
+                            BondDrawOrder::Double => bondline_model::BondOrder::Double,
+                            BondDrawOrder::Triple => bondline_model::BondOrder::Triple,
+                        };
+                        let result = bondline_render::centered_bond_strokes(
                             &bondline_render::Stroke {
                                 begin,
                                 end,
                                 width: viewport.stroke_width(),
                                 color: [70, 105, 155, 255],
                             },
+                            order,
                         )
-                    {
-                        ui.colored_label(egui::Color32::DARK_RED, error.to_string());
+                        .and_then(|strokes| {
+                            for stroke in &strokes {
+                                paint_stroke(&painter, available.min, stroke)?;
+                            }
+                            Ok(())
+                        });
+                        if let Err(error) = result {
+                            ui.colored_label(egui::Color32::DARK_RED, error.to_string());
+                        }
                     }
                 }
                 Err(error) => {
