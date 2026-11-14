@@ -1095,3 +1095,24 @@ or a reference UI claim. No new upstream code, grammar prose, asset, dependency 
 was copied. Actual saved files face unchanged pinned external writer/RDKit consumers only
 after exact raw framing validation. New native/Windows/Linux and hosted evidence is absent;
 the user-active desktop and disabled-Actions instructions remain in force.
+
+## Owned source-preserving SMILES file container, 2026-11-14
+
+[verification-smiles-file.md](../verification-smiles-file.md) records an original complete
+byte owner and compact per-record index, independent of native I/O or application models.
+The pinned [OpenSMILES v1.0 publisher source](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc)
+was rehashed/read at 86,816 bytes, SHA256
+`00f0423da612de913770133aa13e456d0cebc562dd50166534a8a7f9a834bd21`.
+Grammar154, string termination1144–1152 and file records1372–1383 support the distinct
+notation/separator/application-data and LF/CRLF decisions. No prose/implementation is copied.
+
+Ignored first-byte SP/TAB/CR, opaque binary application bytes, whole-file rejection,
+64 MiB/1m-line/65,536-record quotas, immutable ordinals and metadata-only Debug/accounting
+are explicit original policies. The generic file-whitespace wording is not a complete
+enumerated conformance claim; VT/FF/BOM/Unicode/# are not silently treated as ignored
+headers. Final EOF is a separately qualified compatibility extension, corroborated by
+the pinned external supplier peer probe, not a formal replacement for LF/CRLF records.
+Its normalization/partial-record behavior is not a raw-file oracle. The existing partial
+notation parser/caps remain byte-exact and validate every meaningful record. New original
+literal spans, a separate raw-byte scanner and unchanged per-record external consumers
+verify complete source retention; no Drawing/source-backed Save authority follows.

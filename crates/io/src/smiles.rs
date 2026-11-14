@@ -6,9 +6,11 @@
 use bondline_model::Element;
 use std::{collections::HashSet, ops::Range, sync::Arc};
 
+pub mod file;
 mod layout;
 mod normalize;
 mod write;
+pub use file::{SmilesFileDocument, SmilesFileError};
 pub use layout::LayoutError;
 pub use normalize::NormalizeError;
 pub use write::{WriteError, write_fragment};

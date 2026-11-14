@@ -186,3 +186,15 @@
   unsanitized RDKit has documented dialect/token-normalization differences; zero radical
   getters and unavailable Python cleanup control cannot decide these semantics. See
   verification-smiles.md, verification-smiles-normalize.md and verification-smiles-aromatic.md.
+
+
+## SMILES file ignored-whitespace interpretation
+
+OpenSMILES v1.0's file section uses generic leading-whitespace wording; its grammar names
+SP/TAB/LF/CR without enumerating VT/FF in that file rule. The owned file codec explicitly
+ignores empty bodies or first-byte SP/TAB/CR after LF framing and paired-CR stripping;
+VT/FF/Unicode/BOM/# remain meaningful notation and may refuse. This is an original bounded
+interpretation, not full generic-whitespace conformance. Final EOF is a separately named
+compatibility extension. Broader file-profile conformance remains unresolved; see
+[exact sources and evidence](../verification-smiles-file.md).
+
