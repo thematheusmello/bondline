@@ -40,14 +40,15 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
 | Capability | Delivered scope |
 |---|---|
-| Drawing and history | Drag an isolated C–C bond with explicit hydrogen labels; Undo/Redo restores complete authored snapshots. |
+| Drawing and history | Drag an isolated C–C bond with explicit hydrogen labels; Undo/Redo restores complete snapshots. CLI/MCP can extend a supported terminal carbon with an explicit H policy; native attachment remains pending. |
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files; unknown imported content remains backed by its original bytes. |
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
 | MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |
+| CDX files | Guarded open/save commands retain exact accepted source; limited projection, no editable or faithful preview. Native format selection is wired, awaiting a separate GUI check. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
 | Rendering | Shared CPU/GPU neutral-carbon graph scenes, literal authored hydrogen labels, transient atom/bond hover and PNG captures; one human-approved regression scene. |
-| Automation | Thirteen typed commands shared by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Automation | Sixteen typed commands shared by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. CI runs tests and actual
 window smoke checks on macOS, Windows and Linux; interactive Windows/Linux workflows
@@ -117,7 +118,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | Area | Current state | Next work |
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
-| CDX | Standalone syntax/property edits/new-tree writer; limited elemental view, owned exact-source snapshots and atomic filesystem library, checked independently | Registry/native workflow, broader metadata/chemistry, editing/encoder and foreign/general corpus |
+| CDX | Standalone syntax/property edits/new-tree writer; limited elemental view with selected source-only metadata, owned exact-source snapshots and atomic filesystem library, checked independently | Registry/native workflow, broader metadata/chemistry, editing/encoder and foreign/general corpus |
 | MOL / SDF | MOL V2000/V3000 native file workflows; source retention and independent consumer checks; mixed V2000/V3000 SDF ordered-record/data library and pinned V2000 corpus | Application SDF workflows, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
 | SMILES / InChI | Planned | Format support and independently verified chemistry |

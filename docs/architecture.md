@@ -39,8 +39,9 @@ includes opaque source content, so equal projections cannot erase source-only ch
 Returned model snapshots remain immutable across later edits. Authored state excludes
 revision/history. Exact undo assertions compare the whole stored document and original bytes.
 CDX backing is always incomplete: its elemental preview never authorizes regeneration or
-lossy conversion. Native filesystem library calls reuse the shared atomic adapter; command
-and UI delivery remain separate work. See verification-cdx-native-io.md.
+lossy conversion. Registered CDX Open/Save and the native chooser reuse the same atomic
+adapter, source authority and save/receipt/close barriers. Native acceptance is separate
+from headless/worker evidence; see verification-cdx-application.md.
 History is limited to 128 prior snapshots and a 128 MiB accounted-storage threshold for
 the current document plus history. Accounting deduplicates source allocations, models and
 immutable fragments, includes source baselines and reserved vector capacity, and saturates
@@ -58,6 +59,12 @@ The first bond.create operation appends an independently authored C-C fragment w
 explicit hydrogens per carbon. Engine identity floors never move backward on Undo/Redo;
 a new branch cannot reuse deleted session IDs. Floors update only after a successful commit.
 This is a closed creation case, not a general valence or connected-bond editing engine.
+A separate closed bond.extend command now replaces one same-ID fragment atomically,
+authors terminal H3→H2 plus a new C/H3 and Single bond, and preserves all old identities.
+Required expected revision/policy, complete-source authority and global atom/bond floors
+are checked before one history commit. Only source-free/byte-proven native CDXML is
+allowed; imported MOL/CDX refuses. Native attachment remains a separate UI feature.
+
 
 The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while
 holding it. Stdio is a separate process-local session. Only server/stdio SDK features are

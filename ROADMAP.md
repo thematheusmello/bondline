@@ -97,8 +97,10 @@ corpus and reference/chemical mapping remain M1 work.
 
 The first command creates an independent single C-C fragment with three authored H per
 carbon. Native drag creation, exact history, automation and bounded rendering have evidence.
-This is partial solid-bond coverage: click creation, existing-atom attachment, connected
-chains, snapping, order changes and general atom labels remain missing.
+This is partial solid-bond coverage. A separate headless bond.extend command now extends
+a supported terminal carbon with required explicit H3→H2 policy, one snapshot/ID/source
+guards and independently consumed saved propane/butane. Native attachment/connected
+construction, click creation, snapping, order changes and general atom labels remain missing.
 
 The shared carbon GraphScene/hit-testing prerequisite now supports positioned neutral
 carbon/Single topology, literal authored H and bounded atom/bond hover. Independent geometry/

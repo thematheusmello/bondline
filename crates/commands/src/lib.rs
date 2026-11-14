@@ -18,8 +18,8 @@ pub use close::{CloseAction, CloseDocument, CloseState};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
 pub use file_ui::{UiFile, UiFileAction, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState};
 pub use files::{
-    Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdxml, OpenMol,
-    SaveCdxml, SaveMol,
+    Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol,
+    SaveCdx, SaveCdxml, SaveMol,
 };
 #[cfg(test)]
 mod close_tests;
@@ -94,6 +94,8 @@ command_registry! {
     UiControls(NoParams) => ("ui.controls", "Discover delivered native controls, shortcuts, typed bindings and contextual availability.", true),
     OpenCdxml(OpenCdxml) => ("document.open_cdxml", "Open an explicitly selected CDXML file without discarding unsaved edits by default.", false),
     SaveCdxml(SaveCdxml) => ("document.save_cdxml", "Atomically save complete CDXML data to an explicitly selected path; overwrite requires opt-in.", false),
+    OpenCdx(OpenCdx) => ("document.open_cdx", "Open the supported read-only CDX projection while retaining complete source bytes; unsaved changes require explicit discard.", false),
+    SaveCdx(SaveCdx) => ("document.save_cdx", "Atomically save exact unchanged CDX backing; changed or source-free documents are refused.", false),
     OpenMol(OpenMol) => ("document.open_mol", "Open supported MOL V2000 or V3000 data with an explicit coordinate frame and retained source.", false),
     SaveMol(SaveMol) => ("document.save_mol", "Atomically save supported MOL data, retaining its associated version by default without silently losing source metadata or layout.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
@@ -313,9 +315,16 @@ impl Default for Engine {
 impl Engine {
     /// Initialize a clean unnamed session, sharing its complete current and saved snapshot.
     pub fn from_document(document: StoredDocument) -> Self {
-        let file_format = document
-            .mol_version()
-            .map_or(FileFormat::Cdxml, FileFormat::from_mol);
+        let file_format = if document
+            .source_info()
+            .is_some_and(|source| source.format == "cdx")
+        {
+            FileFormat::Cdx
+        } else {
+            document
+                .mol_version()
+                .map_or(FileFormat::Cdxml, FileFormat::from_mol)
+        };
         let document = Arc::new(document);
         Self {
             saved: Arc::clone(&document),
@@ -424,6 +433,42 @@ impl Engine {
                     files::FilePlan::Save {
                         params,
                         format: FileFormat::Cdxml,
+                        ui_request_id: None,
+                        document: Arc::clone(&self.document),
+                        save_slot,
+                        revision: self.revision,
+                        generation: self.generation,
+                    },
+                ));
+            }
+            Command::OpenCdx(params) => {
+                if self.document != self.saved && !params.discard_unsaved {
+                    return Err(Error::UnsavedChanges);
+                }
+                return Ok(Prepared::file(
+                    self.state(),
+                    files::FilePlan::Open {
+                        params: OpenCdxml {
+                            path: params.path,
+                            discard_unsaved: params.discard_unsaved,
+                        },
+                        encoding: files::OpenEncoding::Cdx,
+                        ui_request_id: None,
+                        revision: self.revision,
+                        generation: self.generation,
+                    },
+                ));
+            }
+            Command::SaveCdx(params) => {
+                let save_slot = self.reserve_save()?;
+                return Ok(Prepared::file(
+                    self.state(),
+                    files::FilePlan::Save {
+                        params: SaveCdxml {
+                            path: params.path,
+                            overwrite: params.overwrite,
+                        },
+                        format: FileFormat::Cdx,
                         ui_request_id: None,
                         document: Arc::clone(&self.document),
                         save_slot,
@@ -651,6 +696,8 @@ mod tests {
                 "document.close",
                 "document.open_cdxml",
                 "document.save_cdxml",
+                "document.open_cdx",
+                "document.save_cdx",
                 "document.open_mol",
                 "document.save_mol",
                 "history.redo",

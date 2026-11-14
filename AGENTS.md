@@ -155,9 +155,12 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current thirteen-command registry includes bond.create for independent C-C fragments with
-three explicitly authored H per carbon, plus native CDXML/MOL open/save. It does not attach to
-existing atoms. Save complete StoredDocument data; file.dirty uses the saved snapshot, while
+The current sixteen-command registry includes bond.create for independent C-C fragments with
+three explicitly authored H per carbon, plus CDXML/CDX/MOL open/save. bond.extend is a
+headless terminal-carbon operation with required explicit H3-to-H2 policy and expected
+revision; only source-free or byte-proven native CDXML is allowed. Actual MOL/CDX backing
+refuses. Native attachment remains pending. Document::replace_fragment atomically retains
+fragment/old IDs and unrelated Arcs; global validation excludes only the old fragment. Save complete StoredDocument data; file.dirty uses the saved snapshot, while
 source.modified describes original backing. Prepare/complete/finish separates I/O from
 revision-checked apply. Count current+saved snapshots and never call a publication error rollback.
 Identity floors must survive Undo branches and advance only after successful commits.
@@ -255,15 +258,18 @@ FileEnd intentionally to build new canonical syntax, never to reserialize an imp
 
 IO's ElementalGraph retains complete borrowed source while mapping only its closed initial
 Element/default-C, Single/default-order, fixed16.16-point subset. Its fresh IDs are not
-container-scoped source IDs. All standard node/fragment/bond metadata outside the whitelist
-refuses; do not claim native metadata, stereo/H/charge or general compatibility.
+container-scoped source IDs. Selected Z/bounds/CIP0U-or1N/opaque AtomID/unstyled bond-warning
+fields now remain source-only with strict widths/owners. FragmentZ is a qualified public
+compatibility case. AtomID is never a reference/app-ID alias; its normative uniqueness is
+unknown. Other standard metadata refuses; no stereo/H/charge perception or general compatibility.
 StoredDocument::from_cdx owns raw Arc plus baseline; is_fully_mapped is always false here.
 Export only exact unchanged backing. Changed models, source-free CDX encoding and cross-
 format metadata loss must fail; do not regenerate a projection with syntax Writer.
 Snapshot equality/accounting includes opaque bytes and baseline. Preview paper is caller
 policy, not inferred from BoundingBox. CDX filesystem functions reuse the existing bounded
-read/atomic save path; no CDX registry/native UI exists yet. Never bypass shared FilePlan/
-Completed reservations when delivering those future application adapters.
+read/atomic save path. document.open_cdx/save_cdx and the native chooser are now wired
+through the shared registry; see verification-cdx-application.md for exact local versus
+native evidence. Never bypass shared FilePlan/Completed reservations in those adapters.
 Normal CDX fuzzing now exercises projection/snapshot guards; both lock edges add only the
 existing internal CDX crate. New native declared closures154/165/220 include that crate.
 

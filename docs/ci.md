@@ -1,5 +1,32 @@
 # CI contract and execution evidence
 
+Corrected carbon/metadata sourcea3613c0968dbce126ba0e1632d36db3d034be14f passes every
+[43559699996](https://github.com/thematheusmello/bondline/actions/runs/43559699996) job:
+Mac132340407449:490 tests (487workspace+3bridge), Linux132340407514:488,
+Windows132340407526:480 and ASAN132340407087:six10000-run parser targets. Every actual
+native window smoke passes. Adapters: Metal/Apple Paravirtual device, Vulkan/llvmpipe CPU,
+Dx12/Microsoft Basic Render Driver CPU. The original0.90 font threshold/negative cases,
+production/font and approved golden remain unchanged; BASIC with independent design-unit
+positions fixes the reproduced test-only layout dependence. Both previously failing
+label tests pass in Mac and Windows aggregates. Failed983ffee remains below.
+
+This verifies the source-only metadata and carbon renderer/input integration; it does
+not verify subsequent CDX application source450962c or the terminal-carbon command/UI.
+That application has matching run43559974203 still pending and separate actual native
+acceptance. No completed passing job was restarted. Public main remains00e5b02 until a
+reviewed matching-source integration is advanced; new feature results stay distinct.
+
+Carbon source983ffee6951e0b3d8c17e5135645cb2cbd3830a3 has a real failed
+[43557351022](https://github.com/thematheusmello/bondline/actions/runs/43557351022).
+Linux132333092682 passes477 tests and its actual Vulkan/llvmpipe window;
+ASAN132333092803 passes all six10000-run targets. Mac132333092799 and Windows132333092520
+fail both FreeType label comparisons at the unchanged0.90 ink-IoU threshold: right-facing
+CH3 is0.8668951728 and authoredH1 is0.8883125864. Their aggregates stop in render unit
+tests before the window smoke; neither is a platform pass. Local479/native Mac acceptance
+remain separate exact evidence. The generalized Python oracle's layout-dependent advances
+were reproduced and corrected test-only at a3613c0 as recorded above; no renderer/font/
+golden/threshold change or failed-run relabeling. No passing job was restarted.
+
 Corrected CDX snapshot/filesystem source00e5b02fb6cd5b845a6343ee6bcd34b3add95d7e passes all
 [43550955963](https://github.com/thematheusmello/bondline/actions/runs/43550955963) jobs:
 Mac132313031167:446 tests (443workspace+3bridge), Linux132313031270:444,

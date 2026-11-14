@@ -163,3 +163,8 @@
   extension, branch/ring/merge behavior, snapping/angles/lengths/modifiers, complete label
   styles and the native attachment gesture remain separate work. See the source registry's
   BOND-EXTEND entries; no global automatic-H preference or chemical inference is delivered.
+- Node AtomID044D has a public UINT32 implementation definition, but normative scope,
+  uniqueness, zero meaning and lifecycle remain unestablished. Preserve it opaquely;
+  never use it as a bond reference or fresh application identity. FragmentZ is supported
+  as a qualified public-base/native compatibility case; the older SDK owner list omits it.
+  CIP0U/1N source retention is not stereo perception or proof of a chemical advisory.

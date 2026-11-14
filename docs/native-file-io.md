@@ -7,7 +7,8 @@ Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md
 - `read_cdxml_file(&Path, &Cancellation)` returns a canonical path and owned complete source.
 - `read_cdx_file(&Path, &Cancellation)` retains the complete accepted CDX source and its
   limited elemental view. `save_cdx_file` publishes only unchanged complete backing;
-  there is no source-free encoder or registered/native CDX application command yet.
+  there is no source-free encoder. The shared registry now exposes guarded CDX open/save;
+  native chooser routing is wired but needs separate actual-GUI acceptance.
 - `canonical_save_path(&Path)` resolves the parent without following/replacing the final leaf.
 - `save_cdxml_file(&Path, &StoredDocument, overwrite, &Cancellation)` returns the canonical
   destination, encoded byte length and whether the parent directory was synced.

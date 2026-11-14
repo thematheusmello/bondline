@@ -481,6 +481,32 @@ actual file publication using the unchanged strict cdx_oracle.py/cdx_header_orac
 Cancellation, no-clobber and publication-aware errors retain native-file-io.md's original
 contracts. No runtime dependency, asset, format permission or license policy changes.
 
+## CDX metadata retained by the read-only elemental view — 2026-11-14
+
+The narrow implementation, original vectors, actual RED/GREEN and exact-source native
+diagnostic are recorded in [verification-cdx-native-metadata.md](../verification-cdx-native-metadata.md).
+These fields remain authoritative source bytes; accepting them does not make CDX fully
+mapped, authorize regeneration, implement visual styles or calculate stereochemistry.
+
+| ID | Primary evidence | Decision / qualification |
+|---|---|---|
+| CDX-METADATA-Z | [SDK ZOrder](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ZOrder.htm) | 000A is signed INT16 graphical stacking with absent default0. Exact2-byte fields are retained on supported nodes/bonds; no atom/bond sorting or rendering is inferred. |
+| CDX-METADATA-FRAGMENT-Z | Public BSD source at immutable `5dd743230d75ecacacdf8dcd0b0e022f13173b9c`: [graphic base](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXStdObjects.h#L639-L709), [base delegation](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXGroupOrFragment.cpp#L130-L132), [fragment delegation](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXFragment.cpp#L122), [graphic writer](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXGraphicObject.cpp#L823-L826) | The older SDK Z owner list omits Fragment. Public graphic-base implementation plus the independently recorded native file establish this qualified compatibility case. Fragment Z is retained; this is not a claim that the SDK owner list includes it. |
+| CDX-METADATA-BOUNDS | [SDK BoundingBox](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BoundingBox.htm), [coordinate types](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm) | Fragment0204 is exactly16 bytes: signed INT32 top,left,bottom,right in65536 units/point. Retain unchanged without enclosure guesses, paper-size inference or coordinate changes. Node/bond bounds remain unsupported. Existing raw document/page/group metadata stays opaque, not newly validated. |
+| CDX-METADATA-WARNING | [SDK ChemicalWarning](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ChemicalWarning.htm), [CDXString](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXString.htm) | Bond0010 is retained only for the unformatted form: at least2 bytes and UINT16 style count0, followed by opaque bytes. The documented10-byte runs bound checked `2+10*count` before nonzero styles refuse. No warning text is interpreted, generated, rendered or treated as chemical structure. Supporting other SDK-listed warning owners is outside this profile. |
+| CDX-METADATA-CIP | [SDK atom CIP](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_CIPStereochemistry.htm), [bond CIP](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Bond_CIPStereochemistry.htm), [modern public enum](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXConstants.h#L1181-L1217) | Exact INT8 node0437/bond060A accept U0 (undetermined) and N1 (symmetric) distinctly in retained source. Missing remains absent. Values2+ and negative bytes refuse, including modern axial/allene states. No CIP perception, normalization or accuracy guarantee is added. |
+| CDX-METADATA-ATOM-ID | [Pinned public UINT32 constant](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXConstants.h#L177-L178), [node reader](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXNode.cpp#L574-L576), [separate member](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXStdObjects.h#L802-L803) | Node044D is retained as exactly4 opaque bytes. It is distinct from outer object IDs, bond references and fresh application AtomId. Zero/MAX/equal annotations are preserved without merging nodes. No normative scope/uniqueness/lifecycle prose was located; the guessed SDK Atom_AtomID.htm URL was inaccessible. Do not invent reference/default rules from the public implementation. |
+
+The original323/319-byte fixtures are MIT OR Apache-2.0 and generated independently with
+Python struct from original analytic values and newly authored advisory text. Their exact
+hashes, primitive field oracles and pinned external RDKit consumer are in
+[the fixture README](../../crates/io/tests/fixtures/cdx/README.md). Public code was consulted
+only for format facts; no implementation was transplanted. The unchanged local1196-byte
+runtime save and all of its vendor metadata remain ignored and unredistributed. Only its
+primitive integers and zero style count were inspected for this metadata decision; its
+warning prose was not copied or interpreted. That single-file compatibility diagnostic
+does not establish broader native CDX, application UI, editing or chemistry support.
+
 ## Terminated loopback socket assertions, 2026-11-14
 
 [Microsoft Winsock errors](https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2)
@@ -604,3 +630,26 @@ The test oracle explicitly uses BASIC rasterization and those design-unit positi
 retaining the original0.90 threshold, orientations/counts and false-label negatives.
 No production renderer, font, golden, dependency or runtime behavior changes. Exact RED,
 GREEN, independent-probe identities and limits are in verification-label-oracle-layout.md.
+
+## Guarded CDX application files — 2026-11-14
+
+The new document.open_cdx/document.save_cdx commands reuse the published CDX syntax,
+coordinate/default/identity and qualified metadata sources already registered above.
+No parser, metadata whitelist, model field or new-source Writer behavior changed.
+The original fixtures and their independent primitive/RDKit consumers retain the exact
+provenance in the CDX fixture READMEs and verification-cdx-native-metadata.md.
+
+GUIDE-25 printed14 documents the desktop Open/Save functional roles. Bondline's typed
+closed path/discard/overwrite commands, complete-source authority, one-save reservation,
+revision/generation checks, guarded close and refusal of lossy conversion are independently
+authored application policies. Atomic I/O still uses the already registered PHOTO-ATOMIC/
+PHOTO-METADATA-informed implementation; no reference code or native metadata was copied.
+
+Open applies the existing filesystem library's original A4 preview policy, never derives
+paper from BoundingBox and never invents missing H. Every CDX backing stays incompletely
+mapped, so default preview/capture and bond authoring still refuse. Unchanged Save borrows
+the complete original bytes; exact Undo can restore exportability after a page edit.
+There is no changed/source-free CDX encoder or implicit CDX-to-CDXML/MOL export. Format
+association is independent of suffix; native CDX selection/retry calls the same registry.
+Those UI paths are wired, not native-runtime verified in this implementation session.
+See verification-cdx-application.md for exact RED/GREEN, consumers and remaining scope.

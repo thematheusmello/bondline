@@ -142,3 +142,23 @@ ring/merge, other bond tools or full reference parity is claimed. Use the approv
 next-step plan for fresh per-press selection, raw press versus snapped anchor,
 ordered hit-scene reacquisition and native acceptance after this engine slice is
 integrated. No owned jobs remain running at this handoff.
+
+
+## Receiving CDX/connected-command integration
+
+In the isolated bondline-rxn checkout, feat/connected-bond-integration merges9162a1e
+with450962c, retaining both CDX commands and bond.extend (16 total). Six merge conflicts
+are limited to both test-helper imports, two adjacent whole new tests, discovery's
+14/15→16 count, and additive source/open-question records. Both complete tests and all
+exact command names are retained. Formatting orders the two helper modules; production
+model/extension source matches the frozen feature handoff. No UI/render/capture/codec,
+asset, dependency/lock, native-v0 or approved golden is changed by this engine feature.
+
+The receiving cargo xtask ci passes520 workspace plus3 native bridge tests,523 total,
+session54630 exit0. target/connected-bond-integrated-ci.log SHA
+ dfb35244cdbdf58d69d40a9fa98d89d278054930292a2f2e561290d00b274e8d
+prints the correct absolute bondline-rxn workspace and includes fmt/all-target clippy,
+strict layers, unchanged license closures/assets and independent corpus consumers.
+The concurrent actual CDX native acceptance runs the separate frozen Root450962c binary;
+it does not test this engine extension or native attachment. Own hosted evidence remains
+pending, and the next native gesture must use the same required-policy registry command.

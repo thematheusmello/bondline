@@ -13,12 +13,18 @@ const GROUP: u16 = 0x8002;
 const FRAGMENT: u16 = 0x8003;
 const NODE: u16 = 0x8004;
 const BOND: u16 = 0x8005;
+const Z_ORDER: u16 = 0x000a;
+const WARNING: u16 = 0x0010;
 const POSITION: u16 = 0x0200;
+const BOUNDING_BOX: u16 = 0x0204;
 const NODE_TYPE: u16 = 0x0400;
 const ELEMENT: u16 = 0x0402;
+const ATOM_CIP: u16 = 0x0437;
+const ATOM_ID: u16 = 0x044d;
 const ORDER: u16 = 0x0600;
 const BEGIN: u16 = 0x0604;
 const END: u16 = 0x0605;
+const BOND_CIP: u16 = 0x060a;
 
 #[derive(Debug, thiserror::Error)]
 pub enum MappingError {
@@ -98,7 +104,9 @@ impl<'input> ElementalGraph<'input> {
                 .children
                 .get(index)
                 .ok_or(MappingError::UnsupportedLayout { record: index })?;
-            properties(&source, children, &[])?;
+            // Fragment Z is a qualified public graphic-base compatibility case.
+            let fields = properties(&source, children, &[Z_ORDER, BOUNDING_BOX])?;
+            validate_metadata(&source, &fields)?;
             let mut atoms = Vec::new();
             let mut references = BTreeMap::new();
             for child in children.iter().copied() {
@@ -120,8 +128,9 @@ impl<'input> ElementalGraph<'input> {
                             .children
                             .get(child)
                             .ok_or(MappingError::UnsupportedLayout { record: child })?,
-                        &[ORDER, BEGIN, END],
+                        &[ORDER, BEGIN, END, Z_ORDER, WARNING, BOND_CIP],
                     )?;
+                    validate_metadata(&source, &fields)?;
                     if let Some(record) = fields.get(&ORDER)
                         && u16::from_le_bytes(payload(&source, *record, ORDER)?) != 1
                     {
@@ -206,8 +215,8 @@ impl Layout {
         for (index, record) in source.records().iter().enumerate() {
             if let RecordKind::Property { tag, .. } = record.kind() {
                 let owner = match *tag {
-                    POSITION | NODE_TYPE | ELEMENT => Some(NODE),
-                    ORDER | BEGIN | END => Some(BOND),
+                    POSITION | NODE_TYPE | ELEMENT | ATOM_CIP | ATOM_ID => Some(NODE),
+                    ORDER | BEGIN | END | BOND_CIP | WARNING => Some(BOND),
                     _ => None,
                 };
                 if let Some(owner) = owner
@@ -306,9 +315,66 @@ fn payload<const N: usize>(
     index: usize,
     tag: u16,
 ) -> Result<[u8; N], MappingError> {
+    property_bytes(source, index, tag)?
+        .try_into()
+        .map_err(|_| MappingError::InvalidProperty { tag, record: index })
+}
+
+fn property_bytes<'input>(
+    source: &Document<'input>,
+    index: usize,
+    tag: u16,
+) -> Result<&'input [u8], MappingError> {
     let invalid = || MappingError::InvalidProperty { tag, record: index };
     let record = source.records().get(index).ok_or_else(invalid)?;
-    source.payload(record)?.try_into().map_err(|_| invalid())
+    Ok(source.payload(record)?)
+}
+
+fn validate_metadata(
+    source: &Document<'_>,
+    fields: &BTreeMap<u16, usize>,
+) -> Result<(), MappingError> {
+    for (&tag, &record) in fields {
+        match tag {
+            Z_ORDER => {
+                payload::<2>(source, record, tag)?;
+            }
+            BOUNDING_BOX => {
+                payload::<16>(source, record, tag)?;
+            }
+            ATOM_ID => {
+                payload::<4>(source, record, tag)?;
+            }
+            ATOM_CIP | BOND_CIP => {
+                let [state] = payload(source, record, tag)?;
+                // U (undetermined) and N (symmetric) remain distinct in retained source.
+                if state > 1 {
+                    return Err(MappingError::UnsupportedProperty { tag, record });
+                }
+            }
+            WARNING => {
+                let invalid = || MappingError::InvalidProperty { tag, record };
+                let bytes = property_bytes(source, record, tag)?;
+                let count = u16::from_le_bytes(
+                    bytes
+                        .get(..2)
+                        .ok_or_else(invalid)?
+                        .try_into()
+                        .map_err(|_| invalid())?,
+                );
+                let prefix = usize::from(count)
+                    .checked_mul(10)
+                    .and_then(|size| size.checked_add(2))
+                    .filter(|size| *size <= bytes.len())
+                    .ok_or_else(invalid)?;
+                if prefix != 2 {
+                    return Err(MappingError::UnsupportedProperty { tag, record });
+                }
+            }
+            _ => {}
+        }
+    }
+    Ok(())
 }
 
 fn read_atom(
@@ -323,8 +389,9 @@ fn read_atom(
             .children
             .get(index)
             .ok_or(MappingError::UnsupportedLayout { record: index })?,
-        &[POSITION, NODE_TYPE, ELEMENT],
+        &[POSITION, NODE_TYPE, ELEMENT, Z_ORDER, ATOM_CIP, ATOM_ID],
     )?;
+    validate_metadata(source, &fields)?;
     if let Some(record) = fields.get(&NODE_TYPE)
         && i16::from_le_bytes(payload(source, *record, NODE_TYPE)?) != 1
     {

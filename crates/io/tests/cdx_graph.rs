@@ -343,7 +343,6 @@ fn unsupported_labels_queries_and_chemical_metadata_are_explicit_errors() {
         property(0x0421, &[0xff]),
         property(0x0422, &[2]),
         property(0x042B, &0_u16.to_le_bytes()),
-        property(0x000A, &1_i16.to_le_bytes()),
     ] {
         let source = document(&[object(0x8003, 100, &[object(0x8004, 101, &[field])])]);
         assert!(matches!(
@@ -384,6 +383,26 @@ fn unsupported_labels_queries_and_chemical_metadata_are_explicit_errors() {
             Err(MappingError::UnsupportedBondOrder { .. })
         ));
     }
+}
+
+#[test]
+fn node_z_order_is_retained_as_source_only_graphical_metadata() -> TestResult {
+    let field = property(0x000A, &1_i16.to_le_bytes());
+    let source = document(&[object(0x8003, 100, &[object(0x8004, 101, &[field])])]);
+    let graph = ElementalGraph::parse(&source)?;
+    assert_eq!(graph.to_bytes(), source);
+    let atom = graph
+        .fragments()
+        .first()
+        .ok_or("fragment")?
+        .atoms()
+        .first()
+        .ok_or("atom")?;
+    assert_eq!(
+        (atom.id.get(), atom.element.get(), atom.position),
+        (1, 6, None)
+    );
+    Ok(())
 }
 
 #[test]

@@ -29,6 +29,14 @@ fragments or within the batch. The same explicit budget caps atoms, bonds and fr
 at 100000 each per document; an individual fragment also checks atom/bond caps before
 identity/topology work. Batch validation uses ordered sets, avoiding quadratic pair scans.
 
+Document::replace_fragment uses that same global validator, excluding the existing
+same-ID fragment and including its candidate before mutation. Missing page/fragment,
+identity collisions and limits fail atomically. It preserves fragment order/IDs and
+unrelated Arc payloads; no unvalidated mutable atom/bond slices are exposed. The first
+bond.extend operation deliberately replaces target H3 with H2 and adds a new C/H3 and
+Single bond under a required closed policy. This is no general hydrogen inference.
+
+
 Fragments expose immutable slices and cannot be deserialized without their validation
 constructor. Atoms and scalar identities have closed validated deserialization. Atom and
 Bond values may be assembled before Fragment construction; public values cannot mutate
@@ -42,14 +50,16 @@ documented ethane case. It does not run general valence inference or attach to e
 atoms. Native drag creation, history and limited labeled rendering use those same values.
 Identity floors remain in the engine session across Undo branches, updating only on success.
 This model is not a native project format or complete CDXML mapping. General chemical
-editing, connected construction and persistence remain missing.
+editing, connected native construction and a native project format remain missing;
+the closed headless extension and supported interchange persistence are documented separately.
 
 Io's ElementalGraph projects supported CDXML properties into these types and retains the
 source separately. StoredDocument now owns both the model and original CDXML allocation;
 Engine history retains the whole snapshot, including opaque data and the export baseline.
 Copying fragments into a bare model Document still does not copy that backing. Source-backed
-undo/redo has unit and generated-sequence evidence; imported chemical editing, an editable
-writer and native open/save remain missing. The model itself stays format independent.
+undo/redo has unit and generated-sequence evidence. The elemental writer and guarded native
+file adapters now exist; broader imported chemical editing remains missing. The model
+itself stays format independent.
 
 `Document::retained_bytes` accounts for inline models/pages, reserved page/fragment-handle
 vectors and each shared fragment's reserved atom/bond vectors once. Io's corresponding

@@ -1901,3 +1901,47 @@ Every owned app/controller/helper exited; Escape released/CUA completed once aft
 Exact full hashes,136-file evidence index and rejected probes are in the linked report.
 No new golden, arbitrary chemical rendering, same-frame native timing or Windows/Linux
 interactive claim follows. Its new hosted source run remains pending.
+
+## Source-only CDX metadata receiving integration, 2026-11-14
+
+Selected Z/bounds/U0-N1 CIP/opaque AtomID/unstyled-warning fields now face strict source-
+only type/owner tests and original323/319B stdlib/RDKit vectors. Existing snapshot/export/
+source/identity guards remain. Receiving486workspace+3bridge passes all gates; normal full
+fuzz-graph clippy and six-original-seed ASAN10000 pass, cov1131/features2728/RSS255MiB.
+Exact independent review, logs/hashes/settings and the unchanged ignored1196B native
+diagnostic are in [verification-cdx-native-metadata.md](verification-cdx-native-metadata.md).
+The native file/prose is not committed; chemistry/encoder/app coverage is not inferred.
+
+## External font-oracle portability, 2026-11-14
+
+Actual Mac/Windows hosted failures at983ffee reproduce locally with BASIC whole-pixel
+advances. Independent OpenType design metrics restore layout without changing production,
+font/golden bytes, the0.90 threshold or negative cases. Five focused label tests and31
+whole-render tests pass. Receiving-root `cargo xtask ci` passes487workspace+3bridge,
+session31715 exit0, log SHA1b2d0e0e1af11134bd977bf71cddd3184c57ba4f32690d7f0780f4949260d0ee.
+[The exact source/probe record](verification-label-oracle-layout.md) distinguishes the
+reproduced mechanism from unattested hosted build flags. New hosted verification is pending.
+
+## Guarded CDX application integration, 2026-11-14
+
+The15-command registry now carries supported CDX Open/unchanged Save through CLI/stdio/
+authenticated loopback and native file workers. Four original fixture variants' actual saved
+bytes face independent raw/RDKit consumers. Source/dirty/history/reservation/receipt/close
+guards and exact-format retries remain. Receiving Root passes499workspace+3bridge,502 total,
+session95800 exit0, target/cdx-application-integrated-ci.log SHA
+7c5a36e4b5dcaa5ec9db510056876f9e5e92581aaf9a611d24522aa6e264c99e. Runtime graph/input/
+capture/golden are unchanged. [Application evidence](verification-cdx-application.md)
+keeps actual native chooser acceptance and hosted execution explicitly pending.
+
+
+## Terminal-carbon engine integration, 2026-11-14
+
+Required-policy bond.extend, atomic validated fragment replacement and global revision/
+ID/source/history/close guards pass21 new independent/property/headless tests. Actual
+published propane/butane CDXML faces mandatory Expat/Decimal/RDKit consumers, not only
+our own round trip. In isolated bondline-rxn, the16-command merge with CDX application
+source passes520workspace+3bridge,523 total,54630 exit0; log SHA
+ dfb35244cdbdf58d69d40a9fa98d89d278054930292a2f2e561290d00b274e8d.
+[Exact evidence](verification-terminal-carbon-extension.md) records the original REDs,
+source/ID limits and paper-expectation test correction. Native attachment and this source's
+hosted run remain pending; no chemistry or complete connected-drawing claim follows.
