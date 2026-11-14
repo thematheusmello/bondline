@@ -2213,3 +2213,16 @@ Log91137B/SHA256 71f13d4b2eb183ca426ad2bb258fe3fb927a706c9d95ce0a7070a3d4a65f698
 [Receiving details](verification-smiles-file-app.md#root-receiving-gate) retain source/
 producer scopes and the original whitespace-only merge resolution. No new native, hosted
 or other-platform workflow was executed; Actions is still disabled at both levels.
+
+## Explicit SMILES record query core, 2026-11-14
+
+[Core contract and TDD record](verification-smiles-record.md): runtime53339 and expanded
+56458 fail on the absent command/schema before implementation; focused71291 passes5.
+Final command package59687 passes174, including6 public cases/one private owner regression;
+all-target workspace clippy70224 and fmt pass. A first full-package discovery-fixture
+failure is retained/qualified; only the additive25th name/count was corrected.
+
+The command discloses one explicit literal notation and file-relative metadata while
+retaining complete source during work, never application bytes or a first-record drawing.
+Actual external record-oracle and CLI/MCP wire acceptance plus the aggregate receiving
+gate remain separate; no native, other-platform or hosted claim follows. Actions stays off.

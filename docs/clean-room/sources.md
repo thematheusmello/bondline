@@ -1160,3 +1160,21 @@ are [headless UI evidence](../verification-smiles-file-ui.md), not native observ
 No proprietary binary/artwork/help/source, new dependency or copied implementation is
 used. Reference record-browser/preview/extension behavior remains an open question;
 actual native acceptance waits for user availability, and Actions remains disabled.
+
+## Explicit SMILES record query, 2026-11-14
+
+[verification-smiles-record.md](../verification-smiles-record.md) records an original
+read-only command over the unchanged source-preserving file/notation APIs. The pinned
+[OpenSMILES v1.0 source](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc)
+(86816B/SHA00f0423da612de913770133aa13e456d0cebc562dd50166534a8a7f9a834bd21)
+provides the existing notation/application-data/file boundary. It does not specify this
+application API. Exact selected notation, file-relative ranges, original source-local
+ordinals, revision/generation stamping, historical snapshots, a128KiB serialized-object
+budget, omission from automatic state/Debug and opaque-data non-disclosure are original
+Bondline policy, following the existing SDF query/worker/close patterns.
+
+No graph conversion/perception, mutation, native selection/preview flow or writer is
+introduced. Core literal/state/cancellation/lifetime tests have observed RED/GREEN;
+independent raw/graph, real adapter and aggregate evidence remain distinct receiving gates.
+No proprietary code/help/assets, parser/consumer change, new dependency or hosted/native
+execution is involved. The reference SMILES browser/preview remains an open question.

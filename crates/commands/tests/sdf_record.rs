@@ -37,6 +37,7 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "file.convert_smiles_to_cdxml",
             "file.export_smiles_fragment",
             "sdf.record.inspect",
+            "smiles.record.inspect",
             "sdf.field.set_value",
             "page.set_size",
             "bond.create",

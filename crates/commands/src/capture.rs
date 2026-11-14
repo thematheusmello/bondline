@@ -52,6 +52,7 @@ pub struct Prepared {
     file: Option<FilePlan>,
     sdf_record: Option<crate::sdf_query::RecordPlan>,
     sdf_field_set: Option<crate::sdf_edit::FieldPlan>,
+    smiles_record: Option<crate::smiles_query::RecordPlan>,
 }
 
 impl Prepared {
@@ -62,6 +63,7 @@ impl Prepared {
             file: None,
             sdf_record: None,
             sdf_field_set: None,
+            smiles_record: None,
         }
     }
 
@@ -72,6 +74,7 @@ impl Prepared {
             file: Some(file),
             sdf_record: None,
             sdf_field_set: None,
+            smiles_record: None,
         }
     }
 
@@ -92,6 +95,7 @@ impl Prepared {
             file: None,
             sdf_record: None,
             sdf_field_set: None,
+            smiles_record: None,
         })
     }
 
@@ -102,6 +106,7 @@ impl Prepared {
             file: None,
             sdf_record: Some(plan),
             sdf_field_set: None,
+            smiles_record: None,
         }
     }
 
@@ -112,6 +117,21 @@ impl Prepared {
             file: None,
             sdf_record: None,
             sdf_field_set: Some(plan),
+            smiles_record: None,
+        }
+    }
+
+    pub(super) fn smiles_record(
+        result: CommandResult,
+        plan: crate::smiles_query::RecordPlan,
+    ) -> Self {
+        Self {
+            result,
+            capture: None,
+            file: None,
+            sdf_record: None,
+            sdf_field_set: None,
+            smiles_record: Some(plan),
         }
     }
 
@@ -129,6 +149,7 @@ impl Prepared {
             || self.file.is_some()
             || self.sdf_record.is_some()
             || self.sdf_field_set.is_some()
+            || self.smiles_record.is_some()
     }
 
     pub fn complete(self) -> Result<Completed, Error> {
@@ -142,9 +163,13 @@ impl Prepared {
         if let Some(plan) = self.sdf_field_set {
             return Ok(Completed(Completion::SdfFieldSet(plan.complete(cancel)?)));
         }
-        let deferred_query = self.capture.is_some() || self.sdf_record.is_some();
+        let deferred_query =
+            self.capture.is_some() || self.sdf_record.is_some() || self.smiles_record.is_some();
         if let Some(plan) = self.sdf_record {
             self.result.sdf_record = Some(plan.complete(cancel)?);
+        }
+        if let Some(plan) = self.smiles_record {
+            self.result.smiles_record = Some(plan.complete(cancel)?);
         }
         if let Some((params, page)) = self.capture {
             cancel.check()?;

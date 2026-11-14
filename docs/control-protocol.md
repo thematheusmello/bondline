@@ -725,3 +725,21 @@ A metadata-only view clears stale drawing gestures/hover and exposes accessible 
 and unavailable-preview status. No chemical preview/editing or actual native execution is
 claimed. CLI, stdio MCP and authenticated loopback use the same commands and real files.
 See verification-smiles-file-app.md and verification-smiles-file-ui.md for exact evidence.
+
+## Explicit SMILES record inspection
+
+`smiles.record.inspect` has only required expected_revision and positive record_id,
+read_only:true and a closed schema. It validates the current source/revision/ordinal,
+captures the whole immutable owner, then reads only the selected notation off-lock.
+The optional smiles_record object returns input_revision, session_generation, record_id,
+line_number, full_range, notation_range, separator_range, application_data_range,
+line_ending_range, atom_count, bond_count and exact notation. Ranges are file-relative
+{start,end}; null differs from an empty existing data span. Application bytes are not
+returned or decoded. No automatic state/Debug notation disclosure or result cache occurs.
+
+The object's real serialized JSON is capped128KiB independently of parent/wire envelopes;
+notation remains capped65536. Cancellation survives complete→finish. The response uses
+captured historical source/file/revision like sdf.record.inspect, with current close/UI
+fields refreshed; input/gen stamps identify the source. A newer Open is not overwritten.
+No save lease, mutation, native file binding/ACK, selection, preview or repaint follows.
+See verification-smiles-record.md for core scope and separate receiving evidence.

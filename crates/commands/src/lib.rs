@@ -18,6 +18,7 @@ mod sdf_edit;
 mod sdf_query;
 mod smiles_conversion;
 mod smiles_export;
+mod smiles_query;
 pub use bond::{BondCreate, BondExtend, ExtendHydrogenPolicy};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
@@ -34,6 +35,9 @@ pub use sdf_query::{
 };
 pub use smiles_conversion::{ConversionOutput, ConversionReceipt, ConvertSmilesToCdxml};
 pub use smiles_export::{ExportSmilesFragment, SmilesExportReceipt};
+pub use smiles_query::{
+    MAX_SMILES_RECORD_INSPECT_BYTES, SmilesRecordInspect, SmilesRecordInspection,
+};
 #[cfg(test)]
 mod close_tests;
 #[cfg(test)]
@@ -120,6 +124,7 @@ command_registry! {
     ConvertSmilesToCdxml(ConvertSmilesToCdxml) => ("file.convert_smiles_to_cdxml", "Create new native CDXML from a 1–12 neutral carbon/Single path using explicit fixed H and supplied geometry; the current session stays unchanged.", false),
     ExportSmilesFragment(ExportSmilesFragment) => ("file.export_smiles_fragment", "Create a noncanonical SMILES file from one explicitly selected, complete-source fragment's supported literal-H chemical graph; geometry and document context are not encoded and the session stays unchanged.", false),
     SdfRecordInspect(SdfRecordInspect) => ("sdf.record.inspect", "Read a bounded ordered field page from an explicitly identified captured SDF record; oversized values are omitted explicitly.", true),
+    SmilesRecordInspect(SmilesRecordInspect) => ("smiles.record.inspect", "Read the exact notation and file-relative metadata of one explicit captured SMILES record; opaque application data is not disclosed or decoded.", true),
     SdfFieldSet(SdfFieldSet) => ("sdf.field.set_value", "Replace one existing ordered SDF field value through a bounded immutable candidate, preserving every other source byte.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
@@ -186,6 +191,8 @@ pub enum Error {
     },
     #[error("invalid SDF record query: {0}")]
     InvalidSdfQuery(&'static str),
+    #[error("invalid SMILES record query: {0}")]
+    InvalidSmilesQuery(&'static str),
     #[error("invalid SDF field edit: {0}")]
     InvalidSdfField(&'static str),
     #[error("invalid SMILES conversion parameters: {0}")]
@@ -194,8 +201,12 @@ pub enum Error {
     SdfFieldInputLimit,
     #[error("a single SDF field exceeds the 1 MiB serialized query page budget")]
     SdfQueryPageLimit,
+    #[error("SMILES record inspection exceeds the 128 KiB serialized object budget")]
+    SmilesQueryLimit,
     #[error(transparent)]
     Sdf(#[from] bondline_io::sdf::SdfError),
+    #[error(transparent)]
+    SmilesFile(#[from] bondline_io::smiles::SmilesFileError),
     #[error("opening a new document requires explicit permission to discard unsaved changes")]
     UnsavedChanges,
     #[error("document revision no longer matches the operation; no change was applied")]
@@ -272,7 +283,9 @@ impl Error {
             Self::FileBackendUnavailable => "backend_unavailable",
             Self::Mol(error) => error.code(),
             Self::Sdf(error) => error.code(),
+            Self::SmilesFile(error) => error.code(),
             Self::SdfQueryPageLimit => "resource_limit",
+            Self::SmilesQueryLimit => "resource_limit",
             Self::SdfFieldInputLimit => "resource_limit",
             Self::EngineUnavailable => "engine_unavailable",
             Self::UnrepresentableFilePath { published: true } => "save_published",
@@ -325,6 +338,8 @@ pub struct CommandResult {
     pub smiles_file: Option<SmilesFileSummary>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sdf_record: Option<SdfRecordInspection>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub smiles_record: Option<SmilesRecordInspection>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<SourceInfo>,
     pub undo_depth: usize,
@@ -434,6 +449,7 @@ impl Engine {
             collection: self.document.collection(),
             smiles_file: self.document.smiles_summary(),
             sdf_record: None,
+            smiles_record: None,
             source: self.document.source_info(),
             undo_depth: self.undo.len(),
             redo_depth: self.redo.len(),
@@ -495,6 +511,10 @@ impl Engine {
             Command::SdfRecordInspect(params) => {
                 let plan = self.sdf_record_plan(params)?;
                 return Ok(Prepared::sdf_record(self.state(), plan));
+            }
+            Command::SmilesRecordInspect(params) => {
+                let plan = self.smiles_record_plan(params)?;
+                return Ok(Prepared::smiles_record(self.state(), plan));
             }
             Command::SdfFieldSet(params) => {
                 let plan = self.sdf_field_plan(params)?;
@@ -888,6 +908,7 @@ mod tests {
                 "render.capture",
                 "sdf.field.set_value",
                 "sdf.record.inspect",
+                "smiles.record.inspect",
                 "ui.controls",
                 "ui.file"
             ]
