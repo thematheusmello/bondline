@@ -5,19 +5,20 @@ Public repository: https://github.com/thematheusmello/bondline . Continue, do no
 
 ## Current integrated source
 
-Root branch feat/m1-container-integration adds reviewed mixed-SDF source6aeb9f2 to accepted
-MOL/CDX/corpus integration85bf5eb. The mixed container and moved version-stamp helper match
-its accepted source exactly; no adapter or UI behavior changes during this merge.
-The actual combined cargo xtask ci passes401 workspace plus3 macOS bridge tests, rustfmt,
+Root branch feat/m1-rxn-integration adds reviewed legacy-RXN source4cbc89b to mixed-SDF
+integration23a43aa. Direct comparison of the RXN codec/tests/oracle/fixtures/fuzz target to
+accepted4cbc89b is empty. No adapter or UI behavior changes during either container merge.
+The actual combined cargo xtask ci passes410 workspace plus3 macOS bridge tests, rustfmt,
 all-target warnings-denied clippy, layers, native declared licenses/assets and five-file/
-four-bundle corpus. Log target/sdf-mixed-merged-ci.log ends with local CI checks passed;
-session24244 is terminal. Native closures153/164/219 and two assets are unchanged.
-No lock/font/golden changes. This merge needs its own hosted run; main remains c797262.
+four-bundle corpus. Log target/rxn-sdf-merged-ci.log ends with local CI checks passed;
+session11864 is terminal. Native closures153/164/219, two assets/locks/font/golden unchanged.
+This new merge needs its own hosted run. Prior23a43aa passes401+3 locally;43538842553 runs.
 
-Previous85bf5eb merges accepted MOL application1c53312/docs2a69de2 with CDX Writer9306816
-and fetched V3000 corpus7596c77. Its actual local gate passes394+3, and hosted43537753933
-has Mac/Linux/ASAN GREEN with Windows pending. Engine/UI/CLI/MCP source matched1c53312;
-its accepted native observations are not a fabricated second native run.
+Main is now85bf5ebfd53580b66cde9726a374658fc9befcee, fast-forwarded only after every hosted
+43537753933 job passed: Mac397/Linux395/Windows387, actual windows and five ASAN targets.
+It integrates accepted MOL application1c53312/docs2a69de2, CDX Writer9306816 and fetched
+V3000 corpus7596c77. Engine/UI/CLI/MCP matched1c53312; its accepted native observations
+are not a fabricated second native run. New container work remains separately qualified.
 
 Standalone CDX Writer creates bounded explicit-root syntax and independently reproduces
 an original65750-byte chemical scene exactly. Literal balance/length/resource tests and
@@ -55,7 +56,9 @@ historical close receipts becoming valid after later context changes. Source.mod
 file.dirty remain distinct. General connected graph drawing/rendering, query/stereo/3D,
 SDF collections, CDX application workflows and interactive Windows/Linux remain missing.
 SDF is a source-preserving mixed V2000/V3000 library with a V2000 corpus, not an application
-collection workflow. Its generic writer retains actual versions; write_v2000 remains strict. External chemistry results
+collection workflow. Its generic writer retains actual versions; write_v2000 remains strict.
+RXN is now a legacy container library preserving ordered roles and complete molecular
+payloads, not a reaction model or application import/export workflow. External chemistry results
 are oracles, not Bondline chemistry implementations.
 
 ## Installed reference research in progress
@@ -86,8 +89,18 @@ The original CDX refuses TrailingData; public BSD Glysade source explains22-byte
 six encoded Document bytes inside the historical28-byte header and a separate file end.
 file_verification now owns a narrow TDD framing fix in bondline-cdx-framing, from85bf5eb.
 No bytes are trimmed/normalized or committed as a corpus. Probe evidence is ignored
- target/reference-ui/parser-probe-evidence.json. Reopen/toolbar restoration/owned-document
-cleanup and final observation docs are still pending.
+ target/reference-ui/parser-probe-evidence.json. Both originals reopened in fresh native
+windows21/22 and were cleanly closed. External RDKit2026.09.2 separately reads each as two
+carbons/one single bond (externalCC/C2H6), recorded in ignored
+ target/reference-ui/local-original-external-consumer.json. No Bondline chemistry claim follows.
+
+First UI pass completed CUA exactly once and released GUI ownership. All owned windows and
+jobs ended, original test-file hashes are unchanged and PID50732 remains running. One original
+locked installed sample window disappeared during the04→10 interval for an unknown reason;
+it was restored via its existing Recent entry, locked and source-verified, with a changed
+window ID/position. Other original windows retain their frames. Do not claim uninterrupted
+or identical visual-state preservation. Final target/reference-ui/24-final-cleanup-receipt.json
+records this exception; toolbar checkmark state remains unexposed. Final factual docs follow.
 Raw vendor screenshots and REA evidence stay ignored. Public factual maps use original prose.
 
 ## Worktrees, jobs and next executable work
@@ -95,7 +108,7 @@ Raw vendor screenshots and REA evidence stay ignored. Public factual maps use or
 Only root runs Git. Keep distinct absolute Cargo targets, CARGO_INCREMENTAL=0 and sibling
 DEV/TEST_DEBUG=0; disk is constrained. Never delete active targets, source, fixtures or evidence.
 
-1. Commit/publish this GREEN mixed-SDF integration; observe its own hosted run. Fast-forward
+1. Commit/publish this GREEN RXN/mixed-SDF integration; observe its own hosted run. Fast-forward
    main only to a matching GREEN source. Do not substitute older platform evidence.
 2. Finish installed observation/map/ticket docs with exact build, state, Evidence and unknowns.
    Independently check ignored original local CDXML/CDX against existing bounded parsers.
@@ -103,20 +116,21 @@ DEV/TEST_DEBUG=0; disk is constrained. Never delete active targets, source, fixt
    scoped checks/ASAN10000, independent review and own379+3 aggregate. Source is published;
    hosted43538499719 is running. Reviewed handoff target/sdf-v3000-reviewed-ci-handoff.json.
    Production concat eded429d55b8dd4ab0b520f6e432b859a33269aceaf6ce4aa40595f8dce9f75d.
-   This root's receiving gate now passes401+3, with newer corpus/positive CDX rules retained.
+   Receiving integration23a43aa passes401+3; its hosted43538842553 is running. Newer corpus,
+   positive CDX seed/max_len131072 and all four manifest attributes remain retained.
 4. Sibling bondline-rxn, feat/rxn-v2000 at4cbc89b: bounded ordered legacy wrapper with raw
    V2000/V3000 payloads passes116 IO tests/scoped checks/ASAN10000, independent review and
    own373+3 aggregate. Source is published; hosted43538648520 is running. Corrected summary
-   separates missing application reactions/SMILES. Integrate next, preserving newer root
-   corpus/positive CDX rules. Handoff target/rxn-final-handoff.json and root review apply.
+   separates missing application reactions/SMILES. This root's receiving gate now passes410+3,
+   with all newer corpus/CDX/SDF rules retained. Handoff target/rxn-final-handoff.json and root review apply.
    No local RXN job remains; target/rxn-full-ci.log records the actual invoked checkout.
 5. Continue application SDF/CDX/RXN, broader mappings and SMILES/InChI, then M2–M5 in roadmap
    order. The installed inventory refines workflow tickets; it does not complete any milestone.
 
-Root has no running Cargo/fuzz/Bondline-native job. reference_ui owns live UI research;
-reference_map owns new map/catalog/ticket docs; file_verification owns the isolated CDX
-framing implementation. Hosted43537753933 Windows,43538499719 and43538648520 remain active.
-Revalidate handles instead of duplicating jobs.
+Root has no running Cargo/fuzz/Bondline-native job. reference_ui is finishing its first-pass
+docs after GUI cleanup; reference_map owns map/catalog/ticket docs; file_verification owns
+the isolated CDX framing implementation. Hosted43538499719,43538648520 and43538842553 remain
+active. Revalidate handles instead of duplicating jobs. Main's matching43537753933 is GREEN.
 
 M0 full inventory/dialog/job discovery, broader rendering and platform interactions remain.
 M2 connected bonds/rings/selection/labels/styles, M3 chemistry/reactions/text, M4 publishing/

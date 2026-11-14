@@ -122,3 +122,15 @@
   data-only datfiles and broader encoding/header profiles remain absent. The old
   DT-only full-supplier loss and duplicate last-value behavior remain explicit; newly
   passed ordinary full-file reads do not resolve or waive those discrepancies.
+
+- RXN now has a standalone legacy container codec, not application reaction support.
+  The primary V3000 reaction diagram spells the third role REAGENT; actual RDKit
+  2026.09.2 output spells AGENT and rejects the published spelling. Preserve this
+  conflict for the future V3000 wrapper design instead of selecting compatibility by
+  deleting reagents, changing the primary source or calling consumer output normative.
+- Legacy mixed MOL versions and a six-character zero-reagent count are observed
+  external extensions. Broader registry/M REG placement, expanded legacy counts,
+  non-ASCII metadata and trailing/padded forms need separately sourced decisions;
+  the first profile refuses them. Unknown retained molecular data has no blanket
+  semantic validation claim. RDfiles and reaction roles/maps/centers in the editable
+  model, commands, UI and persistence remain required M1/M3 work.

@@ -73,7 +73,7 @@ cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque
 replacement; no model mapping or application commands);
 render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
 source-backed CDXML/MOL projections, elemental encoding, owned snapshots, PNG encoding,
-bounded native CDXML/MOL filesystem I/O and source-preserving SDF container records;
+bounded native CDXML/MOL filesystem I/O and source-preserving SDF/RXN container records;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
@@ -147,6 +147,12 @@ must stay explicit. See file-formats.md. Corpus now has four mandatory pinned so
 validate all licenses/notices/global cache names before cache/network I/O. The original
 SDF fixture is fetched from its actual public source commit; never invent a future pin or
 rewrite existing RDKit metadata. Cache ancestry must be confined before directory creation.
+
+RXN is a standalone legacy container. Keep wrapper/MOL versions distinct, ordered
+reactant/product/reagent counts, complete molecular payloads/maps/unknown data and full EOF.
+Do not flatten it into an elemental fragment or call the library a reaction editor.
+Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
+V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
 The current thirteen-command registry includes bond.create for independent C-C fragments with
 three explicitly authored H per carbon, plus native CDXML/MOL open/save. It does not attach to

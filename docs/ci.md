@@ -1,5 +1,13 @@
 # CI contract and execution evidence
 
+Accepted application/CDX/corpus integration85bf5ebfd53580b66cde9726a374658fc9befcee passes every
+[43537753933](https://github.com/thematheusmello/bondline/actions/runs/43537753933) job: Mac132270775971:397
+tests (394workspace+3bridge), Linux132270775923:395, Windows132270776068:387 and ASAN132270775722.
+All actual windows and five bounded parser targets pass; adapters remain Metal/Apple
+Paravirtual IntegratedGpu, Vulkan/llvmpipe Cpu and Dx12/Microsoft Basic Render Driver Cpu.
+Main was fast-forwarded fromc797262 only after those results. Later SDF/RXN integrations
+require their own source runs; native interactive Windows/Linux and full M0/M1 remain open.
+
 CDX writer plus fetched original V3000 corpus source7596c777e2a3453dadeefc2b9c82144d7b8850a3
 is terminal GREEN in [43536671159](https://github.com/thematheusmello/bondline/actions/runs/43536671159):
 Mac132267252777:370 tests (367workspace+3bridge), Linux132267252875:368, Windows132267252821:360

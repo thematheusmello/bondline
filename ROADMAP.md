@@ -55,7 +55,9 @@ container library, ordered duplicate/empty/DT data, a wrapper writer and indepen
 raw-field/molecular consumers. A fetched original SDF corpus now checks two records and
 every ordered field without a lossy property map. Application SDF workflows and wider mappings remain next work. Standalone V3000 parsing,
 writing and the version-aware MOL application slice are now integrated; mixed-version SDF
-container is reviewed and being integrated; the legacy RXN slice is reviewed separately.
+container is integrated; the reviewed legacy RXN container is now being integrated.
+These libraries retain complete raw molecular/data/role payloads; application collections
+and reaction models/commands/native workflows remain separate missing work.
 Full M0
 inventory/dialog/addressability gaps remain tracked while this format work proceeds.
 

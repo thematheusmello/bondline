@@ -312,3 +312,40 @@ v3000_oracle.py remain unchanged; supplemental sdf_mixed_oracle.py is an origina
 external-only ordinary consumer/writer, not a raw or duplicate-field oracle. The original
 777-byte mixed fixture's hash/provenance/literal spans are in its README/tests. No new
 runtime dependency, proprietary artifact or asset was used.
+
+## RXN container syntax and role preservation (2026-11-14)
+
+**CTFILE2026-RXN.** Official BIOVIA [Chemistry 2026 CTfile Formats](https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf),
+129 pages / 1,580,820 bytes, SHA-256
+`959f2bbf5487e00fa7535ea7ee36f7ce04f39ea72920844641952276de146c94`.
+Legacy RXN printed 91–92 = PDF zero-based indexes 94–95 = Poppler pages 95–96.
+The published wrapper has `$RXN`, three metadata lines, three adjacent I3 counts
+in reactant/product/reagent order, and `$MOL` before each complete molecule in that
+order. New reaction syntax printed 59–61 = PDF indexes 62–64 is reviewed but deferred;
+its illustrated REAGENT spelling is not silently replaced by another consumer's AGENT.
+Source text was extracted and the relevant framing diagrams visually inspected during
+the preceding research. No vendor sample file, diagram, code or artwork was reused.
+
+**RDKIT-RXN-2026.09.2.** [Official reaction API](https://www.rdkit.org/docs/source/rdkit.Chem.rdChemReactions.html)
+and the independently executed pinned external RDKit 2026.09.2 consumer/writer.
+The installed rdChemReactions.so SHA-256 is
+`92053419811c781ec83e51b5f9cc6f96773026966ccf1e2e731fdc9d24d0d09c`;
+this is exact local runtime evidence, not a claim that a matching tagged source was
+retrieved. `ReactionToRxnBlock(..., separateAgents=True)` retains reagent roles.
+Its actual 700-byte 2-reactant/1-product/1-reagent output has SHA-256
+`8c373afa75fb12fed0a76906d5316794e1453cce6193ed75eb225a4fa25ff8a3`.
+Its 44,023-byte legacy wrapper with a 1,000-atom V3000 reactant MOL and V2000 product
+MOL has SHA-256 `86720c4025a8f66acbcb4fdbf592d6ba37a453fa78d1df86ec6e99920f0394b7`.
+Mixed molecule versions and omitted zero-reagent counts are explicitly observed
+consumer extensions, not attributed to the primary legacy chapter. Default writer
+folding of reagents and consumer tolerance for trailing garbage are diagnostic only.
+The consumer also updates reaction stereochemistry, so it is not a raw stereo oracle.
+
+The original MIT OR Apache-2.0 RXN vectors, hashes and construction method are in
+`crates/io/tests/fixtures/rxn/README.md`. The independent Python scanner checks exact
+fields, ranges and payload hashes; separate RDKit molecule/reaction calls check maps,
+graphs and roles. Test tools are external and never linked or copied into product code.
+The codec reuses the existing molecular syntax validators without projecting or
+flattening reactions. Full EOF, numeric present counts, no trailing MOL padding,
+ASCII and the documented budgets are original safety/profile decisions. No proprietary
+runtime/artifact or asset was required for this slice.

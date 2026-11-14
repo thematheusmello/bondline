@@ -1673,3 +1673,80 @@ corpus, all old pins/oracles, CDX writer/positive seed/max_len131072, save/close
 V3000 target. New mixed fixture whitespace attributes preserve spaces-only values. Runtime
 closures153/164/219, assets/locks/font/golden are unchanged. The new combined source still
 needs its own hosted result; no native application SDF workflow is implied.
+
+## Standalone legacy RXN codec (2026-11-14)
+
+Executed in the isolated `bondline-rxn` worktree from checkpoint 3b1fada, Rust 1.94.1,
+macOS arm64. Every Cargo invocation used this checkout's absolute `CARGO_TARGET_DIR`,
+`CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0`; independent
+consumers used `BONDLINE_PYTHON` pointing to the existing isolated RDKit 2026.09.2
+interpreter. No native application, GPU, hosted job or root aggregate claim is made.
+
+The actual missing-API RED is `target/rxn-red.log` (unresolved `bondline_io::rxn`).
+An earlier ENOSPC during dependency compilation is retained in `target/rxn-disk-full.log`
+and is not TDD evidence. `target/rxn-byte-limit-red.log` caught an actual three-byte
+fixed-wrapper overhead undercount that allowed a 64 MiB + 1 output. Numeric-present
+count assertions also failed before the unsupported inferred blank-zero behavior was
+removed (`target/rxn-blank-count-red.log`). The published RXN count table and actual
+consumer rejection support numeric present fields; the exact six-byte omitted-third
+consumer extension remains explicit.
+
+`cargo test --locked -p bondline-io --test rxn` passed all nine tests
+(`target/rxn-bounds-green.log`). Independent literal/raw checks cover header/counts,
+full/constituent spans, role order, maps, unknown properties, LF/CRLF, marker-like
+metadata, exact source retention, mixed actual MOL versions, empty reactions, strict
+EOF, malformed/truncated/control/non-ASCII input and each declared resource budget.
+Separately run RDKit consumes the original reaction and molecular vectors and generates
+both the standard separate-agents document and a legacy wrapper with a 1,000-atom V3000
+molecule. Default agent folding, permissive trailing input and V3000 role spelling
+remain diagnostics rather than fidelity expectations. No reaction chemistry execution
+or application-model projection was tested.
+
+`cargo clippy --locked -p bondline-io --all-targets -- -D warnings` passed
+(`target/rxn-clippy.log`). The final source hash, concatenating rxn/mod.rs, parse.rs,
+write.rs in that order, is
+`5144c6dabd97d048307cc954ad0459e958ba87aafb977119be3072b430477a5e`.
+Original fixture hashes are pinned in their README and tests; exact-byte attributes
+protect checkout line endings. Root and isolated fuzz lockfiles remain unchanged.
+
+The sixth parser harness completed an actual AddressSanitizer run using cargo-fuzz
+0.13.2, libFuzzer 0.4.13 and nightly-2026-04-01: `rxn_parse`, 10,000 runs,
+seed 224867531, max_len 65536, timeout 5; exit 0 in `target/rxn-asan.log`.
+Seeds were ignored copies of both original fixtures and separately generated 44,023-byte
+mixed-MOL output. Final coverage 1305/features 4915, 290 retained inputs/reported
+3549 KiB corpus, largest exercised input 44,023 bytes, reported RSS 464 MiB; execution
+3 seconds after compilation. This bounded run checks exact bytes, spans, role/payload
+versions and canonical wrapper invariants. It is not exhaustive conformance, a hard
+memory-cap proof, independent chemistry for every mutation or a security audit.
+
+The final scoped `cargo test --locked -p bondline-io` regression passed 116 tests,
+zero failures, plus zero doctests (`target/rxn-io-regression.log`), including the nine
+new RXN tests and existing CDXML/MOL/SDF/source/atomic-file tests. Workspace and isolated
+fuzz rustfmt checks passed (`target/rxn-fmt.log`, `target/rxn-fuzz-fmt.log`).
+`cargo clippy --manifest-path fuzz/Cargo.toml --locked --bin rxn_parse -- -D warnings`
+also passed (`target/rxn-fuzz-clippy.log`). Ruby/Psych parsed the configured six parser
+sanitizer steps and verified each has an executable run/uses entry; no hosted execution
+of the new RXN step is claimed. All local handles were terminal before handoff.
+
+## Reviewed RXN aggregate, 2026-11-14
+
+The actual feat/rxn-v2000 checkout passes373 workspace plus3 macOS bridge tests and every
+cargo xtask ci gate. Its printed invoked root is bondline-rxn. Log target/rxn-full-ci.log
+SHA1b79e3116cc8e49f625e46d8b4cab6564cde40f5d3ee6a1f925f917b14bf72b4; session56720 terminal0.
+The inherited two-entry corpus is narrower than root's later five-file/four-bundle gate.
+Read-only independent review found no confirmed declared-profile codec defect; the summary
+now names standalone RXN separately from missing SMILES/application reactions. No production,
+old oracle/fixture, lock/dependency or golden changes were needed for finalization. Hosted
+and receiving-root aggregate checks remain separate. No native reaction workflow is claimed.
+
+## Receiving-root RXN and SDF integration, 2026-11-14
+
+The actual receiving merge of4cbc89b into23a43aa passes410 workspace plus3 macOS bridge
+tests and every cargo xtask ci gate. Log target/rxn-sdf-merged-ci.log ends with local CI
+checks passed; session11864 terminal0. RXN source, tests/oracle/fixtures and fuzz harness
+match the independently reviewed source exactly. Root retains all newer SDF/V3000/CDX
+implementation, five-file/four-bundle pins, meaningful-whitespace attributes and positive
+CDX seed/max_len131072. The workflow now has six bounded parser targets; the new target's
+local ASAN evidence is separate from future hosted execution. Runtime closures153/164/219,
+assets/locks/font/approved golden stay unchanged. No application reaction or SDF workflow
+is inferred. This combined source still needs its own hosted platform result.
