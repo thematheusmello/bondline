@@ -177,3 +177,11 @@ Source450962c passes its own three-platform aggregates/window smokes and six ASA
 The16-command terminal-extension integration501a315 separately passes523/521/513 hosted
 tests/windows and six ASAN targets. Actual native attachment acceptance remains next; SDF
 collections remain M1 library-to-application work. No milestone is completed by these slices.
+
+
+The SDF whole-source ownership prerequisite now passes9 new literal/consumer/identity/
+resource/accounting cases, receiving549 aggregate checks and a normal10000-run ASAN smoke.
+It retains all records/fields/versions in shared immutable snapshots; Engine/file/native
+collection integration remains next. Field edits are being implemented as a separate
+immutable candidate operation, not yet exposed as an application command. Installed SDF
+observation confirms both drawings in one document; an initial record browser is unproven.

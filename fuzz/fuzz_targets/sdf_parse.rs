@@ -2,9 +2,10 @@
 
 use bondline_io::{
     mol::Version,
-    sdf::{DataItemInput, SdfFile, SdfRecordInput, write, write_v2000},
+    sdf::{DataItemInput, SdfDocument, SdfFile, SdfRecordInput, write, write_v2000},
 };
 use libfuzzer_sys::fuzz_target;
+use std::sync::Arc;
 
 fuzz_target!(|data: &[u8]| {
     let Ok(document) = SdfFile::parse(data) else {
@@ -15,6 +16,31 @@ fuzz_target!(|data: &[u8]| {
     assert!(data.len() <= 64 * 1024 * 1024);
     assert!(!document.records().is_empty());
     assert!(document.records().len() <= 1024);
+    let owned =
+        SdfDocument::parse(Arc::from(data)).expect("accepted SDF must retain complete source");
+    let cloned = owned.clone();
+    assert_eq!(owned.as_bytes(), data);
+    assert_eq!(owned, cloned);
+    assert!(std::ptr::eq(owned.as_bytes(), cloned.as_bytes()));
+    assert!(std::ptr::eq(owned.records(), cloned.records()));
+    assert_eq!(owned.records().len(), document.records().len());
+    assert_eq!(
+        SdfDocument::retained_bytes([&owned, &owned]),
+        SdfDocument::retained_bytes([&owned])
+    );
+    let view = owned
+        .read()
+        .expect("immutable owned source must remain valid");
+    assert_eq!(view.as_bytes(), data);
+    for (index, (source, retained)) in document.records().iter().zip(owned.records()).enumerate() {
+        assert_eq!(retained.id().get() as usize, index + 1);
+        assert_eq!(owned.record(retained.id()), Some(retained));
+        assert_eq!(retained.range(), source.range());
+        assert_eq!(retained.mol_range(), source.mol_range());
+        assert_eq!(retained.delimiter_range(), source.delimiter_range());
+        assert_eq!(retained.mol_version(), source.mol_version());
+        assert_eq!(retained.field_count(), source.fields().len());
+    }
     let mut previous_end = 0;
     let mut field_count = 0;
     for record in document.records() {

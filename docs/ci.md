@@ -1,5 +1,23 @@
 # CI contract and execution evidence
 
+Attachment sourcef0910ca09e2cfa12691dd03d965e3053e482928e now passes
+[43563825506](https://github.com/thematheusmello/bondline/actions/runs/43563825506), after
+one failed-job-only retry. Original Mac132353167345 passes540 tests/windows and
+Windows132353167364 passes530/windows; ASAN132353167332 passes all six10000-run targets.
+Original Linux132353167418 fails before any application test/window: rustup reports a
+preinstalled bin/cargo-clippy conflict while installing the pinned1.94.1 components.
+That is infrastructure failure, not Linux feature verification. The failed result remains.
+
+Only failed jobs were requested again with gh run rerun --failed. Attempt2 Linux
+132358002259 passes538 tests and the actual Vulkan/llvmpipe window on a fresh runner,
+without source/toolchain-pin changes. GitHub's latest-attempt listing assigns retained
+successful jobs IDs132358003812/132358039105/132358027355; their original execution
+timestamps/output are unchanged. No completed passing execution was manually repeated.
+Adapters remain Metal/Apple Paravirtual device and Dx12/Microsoft Basic Render Driver CPU
+for the other platforms. Sourcef0910ca's actual Mac pass verifies only new empty→C2
+painting; terminal attachment native cases were safely stopped on unowned input and
+remain unverified. See verification-bond-attachment-ui.md; no window smoke substitutes.
+
 Terminal-extension/CDX source501a315f2fd92a05702cc4518b5d33c8f72abb7c passes every
 [43560603081](https://github.com/thematheusmello/bondline/actions/runs/43560603081) job:
 Mac132343193738:523 tests (520workspace+3bridge), Linux132343193548:521,

@@ -286,3 +286,14 @@ UI-only and excluded from Scene/history/source: revision/Escape/focus/context in
 stays clear until a fresh ordered positional event. Context includes available origin,
 public native origin and effective DPI. Keep multi-idle-frame regressions and native checks;
 do not rearm from cached hover_pos, key release or focus gain alone. No OS pointer polling.
+
+
+## Owned whole-SDF prerequisite
+
+io::sdf::SdfDocument owns validated complete source and compact immutable record metadata.
+Clone shares bytes/index, equality includes every byte and Debug omits content. IDs are
+local positive ordinals, not persisted/source chemical IDs or guaranteed identities across
+other sources/future edits. read() reparses under existing limits; retained_bytes excludes
+borrowed views/allocator headers. It is not Engine/native SDF integration. Preserve every
+record/field/MOL/version and never pass a first-record model to a file Save. The normal
+SDF fuzz target now checks owned retention/metadata/sharing/accounting as well as old spans.

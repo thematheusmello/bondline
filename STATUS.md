@@ -6,15 +6,20 @@ Read AGENTS.md, ROADMAP.md, architecture, parity and sources before choosing wor
 
 ## Verified source checkpoints
 
-The code checkpoint is501a315f2fd92a05702cc4518b5d33c8f72abb7c, combining guarded CDX
-application files and the headless terminal-carbon extension. This acceptance update only
-changes documentation. Its own hosted43560603081 is fully GREEN: Mac132343193738:523
+Public main29cac7f is the documentation child of501a315, combining guarded CDX files and
+headless extension. Root now integrates owned SDF source on locally/hosted-verified
+attachment sourcef0910ca; the new owned-SDF source needs its own hosted run. Its own hosted43560603081 is fully GREEN: Mac132343193738:523
 (520workspace+3bridge), Linux132343193548:521, Windows132343193736:513, every actual
 native window smoke, ASAN132343193667:six10000-run targets. Adapters are Metal/Apple
 Paravirtual device, Vulkan/llvmpipe CPU and Dx12/Microsoft Basic Render Driver CPU.
 The receiving isolated bondline-rxn full gate54630 exits0:520+3, log
  target/connected-bond-integrated-ci.log SHAdfb35244cdbdf58d69d40a9fa98d89d278054930292a2f2e561290d00b274e8d.
-No latest-source native attachment claim follows from those engine/window tests.
+No native terminal-attachment claim follows from those engine/window tests.
+Sourcef0910ca run43563825506 passes Mac540/Windows530/six ASAN targets initially; Linux
+fails before tests on preinstalled rustup cargo-clippy conflict. Failed-only retry Linux
+132358002259 then passes538/window unchanged; retained successes keep original timestamps.
+See ci.md for original/retained job IDs. No product-code/toolchain-pin fix or passing-job
+re-execution was used. Actual new native pass verifies only C2, as scoped below.
 
 Parent450962c separately passes hosted43559974203: Mac502/Linux500/Windows492, all
 windows and six ASAN targets. Main advanced00e5b02→450962c only after matching GREEN.
@@ -87,48 +92,88 @@ slot ownership, dirty/source baselines and close guards pass. Independent read-o
 has no confirmed defect, report in bondline-rxn/target SHA
 cc41dee7859ed1ae5c52e40b52f360da1cec1a46115fb0119068517f413c355a. Reviewer did not rerun tests.
 
-## Active parallel work and next steps
+## Current receiving state, active work and exact next steps
 
-Root owns Git/integration. Root checkout feat/native-carbon-attachment integrates the new UI on81858a1/501a315;
-no Root Cargo/native job is live after receiving gate57320. Worktrees keep distinct absolute targets,
-CARGO_INCREMENTAL=0; siblings use debug0 while Root retains default debuginfo.
+Root owns Git/integration. Current checkout feat/sdf-owned-integration merges owned-source
+0ae10e5 onf0910ca. Root receiving94645 exits0:546workspace+3bridge=549, all aggregate gates;
+log target/sdf-owned-integrated-ci.log SHA
+ fe1e23fee5df7a1310243fd9e1b034ad6a25a898cf8aad4b073e591c50c987b8.
+Normal full-graph fuzz clippy79909 and ASAN24955 exit0 with exact original copied690/777B
+seeds. New owned retention/sharing/range/ID/accounting assertions preserve every old parser
+assertion:10000 runs, seed826403517/max_len65536/timeout5, cov1633/features5009,294inputs/
+reported154KiB/RSS91MiB/1second, largest exercised777B. ASAN log SHA
+3daeba5447b8998042ee5387f18d9697ef5265490545e555db1fd6b0d37fb422.
+Both locks, old tests/fixtures/oracles, native-v0 and approved golden stay exact. This is
+immutable library ownership only, not Engine/file/native SDF support. Read-only peer review
+has no confirmed finding, report in MOL checkout SHA
+97b293d6ecaabc6b087d5488de57020b9f1fed91a9a2526ec88a733bfa6d1ed2.
 
-- Corrected attachment UI is committed69a27bc in bondline-rxn and merged here onto81858a1.
-  Five initial REDs and two peer-found inherited InvalidViewport cancellation REDs precede
-  fixes. All73 oldUI+17new=90 pass; own540 gate4960 exits0, Root receiving540 gate57320
-  exits0. Root log target/attachment-ui-integrated-ci.log SHA
-   e140e7f400d948944f7157db40c3cea44993a7341d5df6573fd6a5df95b67e0e.
-  UIlib23410115d78a0673f2b10a0ee37bbf90d6f802451b11d47bf49e0af849af198e,
-  newtestsd20c147b8c28670f9b2c4d435dd76675ca22ddb88e76713637c2b3bd31599170.
-  Final handoff SHAffb3a884f796e673fd6040ef56de1a04d280d8321b8119698fb5ecf67c096e30;
-  original handoff689f1379… retained. Read-only review finding resolved separately,
-  reportSHA87e26a9c284eb9f5a2b066ae7c4bc80902ff063b6b049ee4838f6b056f3c8a14. No author/reviewer
-  jobs live. Actual native attachment and its new hosted source remain pending.
-- reference_ui completed bounded installed26.1 SDF observation and cleanup: one document
-  with both drawings for two ordinary/mixed inputs; field/group/export remains unknown.
-  Research is committed81858a1, docs/research/installed-sdf-import.md. HandoffSHAd0c53eb8…9ccf,
- 41-file index65ef6864…3a165 independently rehashed. All owned documents/helpers closed,
-  originals/cursor preserved, CUA completed once. The agent now prepares the next native
-  attachment acceptance plan; no GUI action until exact-source Root GO. A tiny guarded
-  ignored public-CG held-pointer test helper is authorized, with watchdog/EOF release;
-  no injection before GO. No Bondline native process is running; GUI lease remains exclusive.
-- file_verification completed read-only Root target/sdf-collection-next.md, SHA
-   5bc7cc681f68d89cbf987cc772b0befac3d0cc004fc9ab2012dd1ec966e91673. This is not implementation:
-  whole-collection source/history/baseline, record-view identity, duplicate fields/DT digits,
-  preserved unsupported MOL/version payloads and decisive independent TDD acceptance.
-  Guide25 Excel/enumeration evidence is not proof of26.1 desktop collection navigation.
-  The reviewer is available for the forthcoming frozen UI source; no reviewer job is live.
+All Cargo/native/controller/helper jobs currently known to Root are terminal. Targets stay
+separate absolute paths; incremental0, Root default debuginfo, sibling debug0. Never share
+targets or overwrite sibling WIP. Root may now release native-source freeze after cleanup.
 
-1. Main29cac7f contains the accepted documentation on matching GREEN501a315 source.
-   Commit/publish this locally540-green attachment integration; obtain its own hosted result.
-2. Receive/freeze/review the UI attachment handoff, merge this native CDX evidence without
-   dropping newer16-command/model/source guards, run receiving checks and actual frozen-
-   source native attachment workflow, then its own hosted checks. Preserve every old input/
-   golden test; ordinary label clicks must not rectify H or create a bond.
-3. Reconcile the observed reference SDF flow with the collection plan, then implement M1
-   whole-collection ownership/commands/native Open/save/editing with test-first raw and
-   per-record independent consumers. Never flatten/drop other molecules or ordered data.
-4. Continue remaining M1 RXN/reaction/SMILES work and M2–M5 in roadmap/ticket order.
+Native attachment attempt atf0910ca used binary
+1037d6de9b82ceb98862e3843ef097233b90a4ad25e41fd912c5fabc1826fa9f and384-source manifest
+6536efde950047442ba7859bb57a4dbf4414ccd99b82db2e0cf9c64ee9bba9b6. Actual empty→C2 painting,
+H3/3, revision1/history1 and predeclared coordinate comparison pass. B–L terminal extension/
+save/reopen/history/guards/minimum-width/actual2x/held-context workflows remain UNVERIFIED:
+public HID+combined event tables report LeftDown, with unestablished ownership and another
+foreground app. No helperDown ever ran; no unknown input was released/normalized. Root's
+asynchronous input-availability question remains pending. Do not treat elapsed time as an
+answer or resume GUI until actual usable input is established.
+
+Fresh exact owned C2/r1/pathnull inspect gated protocol Request→Discard cleanup, without
+mouse/key/activation/warp. Native18047/controller18011/session82296 exited0, windows absent.
+Original four reference IDs/frames/layers and pause cursor preserved; active restoration
+deferred while input unowned. CUA completed once after cleanup. Frozen partial report
+ target/native-attachment-handoff.md SHA
+1a085c5ee5a9cdaf7eab45c4ac8cf96157731fc0e6e714d0c7b717786d3fbf09;
+54+5 index SHA1c1c418db9a607ab5e4dc13b09643c09f33ffc2fa09165c350461d23a9d897a9, all59 rehashed
+by Root; cleanupSHAc8721c0363381ff299d4930235ad930829d47292dc4b6dc684ece28b23ab81e7.
+Old ignored helper review found output/occlusion/release issues; v5 nonblocking pipe/
+deadline/topmost/bounded-release corrections have no-input checks only, no actual hold/
+release proof. Final rereview is required before future Down. No GUI owner/process remains.
+
+Native SDF observation is committed81858a1, docs/research/installed-sdf-import.md: both
+records visible in one document for ordinary/mixed original inputs, no initial browser/
+extra import choice; grouping/field retention/layout/export remain unknown. Four passive
+REA after-states differ from CUA actions/OSsheet captures. Both owned imports closedclean;
+original four frames/cursor preserved, all jobs terminal, CUA completed once. ReportSHA
+ d0c53eb8ea053fe057658c75eedae4b35dfee397560dd8326d360f33ca609ccf,41-file index65ef6864…3a165
+independently rehashed. No Bondline application SDF verification follows.
+
+Parallel field-value feature in bondline-mol-v3000/feat/sdf-field-values based0ae10e5 is
+frozen, not yet committed: exactly5 intentional files in target/sdf-field-edit-handoff.json,
+SHA894a5c6a05df52fcc862944165fc524fc9ad717e1ed7853896f8f7dcce5f37d0. It splices one existing
+field occurrence, preserves all other bytes/IDs/versions, returns shared no-op and typed
+not_found targets. Ten new tests plus own556workspace+3bridge=559 pass,64629 exit0,
+logSHA907741752aac99ed87a9ecc9b626f7361a7d225195303f0360fa8a09a9b13794. IO178/clippy/fmt pass.
+Independent review has no confirmed defect, sibling target/sdf-field-edit-review.md SHA
+f56fb01c2f6d014c0ff48b1d2dc4776b136e94812ecd3b8fcbea25582d1177ae (read-only/no execution).
+No author/reviewer job remains; Root must validate/commit/merge without overwriting the files.
+No Engine/history/filesystem/registry/native edit is delivered by that library operation.
+
+Read-only plans are ready, not implemented features:
+- target/sdf-collection-next.md SHA4eeb7ebd86a6c9e380ed62fe9666e309ede7b2abdc8aea4274309394050c7192;
+  original prefix5bc7cc68… is intact, addendum disqualifies a browser as established26.1 parity.
+- target/smiles-next.md SHA26b733e4494dbdb76f0ac1ec35a8e54c50f1f00471519fa7942567dde1c0010d;
+  exact purr0.9.0 MIT/zero-dependency source has recursion/panic/ring-alias issues, so no
+  unchanged adoption. Original bounded IR/explicit-H projection needs model decisions for
+  implicit-H/aromatic/stereo/isotope0/layout. No dependency/source code copied or installed.
+
+1. Commit/publish owned-SDF receiving549/ASAN integration and observe its matching hosted
+   source. Main remains its last GREEN checkpoint until the new source passes.
+2. Validate and atomically commit/reconcile the frozen field-value feature, run receiving
+   checks/fuzz and its own hosted evidence. Preserve every old case and source guard.
+3. Implement whole-collection current/saved/history/file integration before application
+   SDF Open/Save/data-edit commands. Drawing APIs must explicitly handle collection content,
+   never manufacture a first/empty drawing. Preserve generic save-slot/receipt/close/stale
+   barriers, source authority and accounting. Reference shows both drawings, not a browser.
+4. When input availability is resolved and actual initial-Up/ownership is observable,
+   assign one GUI owner a fresh exact-source native acceptance for remaining B–L; never
+   reuse closed app/controller/session or promote synthetic tests to native proof.
+5. Continue M1 RXN/reaction/SMILES and M2–M5 in roadmap/ticket order. The persistent goal
+   remains active; no milestone is complete and no goal pause/block was requested.
 
 SDF mixed-version ordered data and legacy ordered-role RXN are library-only. Broader formats,
 chemistry/formula/mass/stereo/SMILES/InChI, other drawing/selection/styles, publishing/Office,
@@ -138,7 +183,7 @@ reports/catalogs record14menus/503physical entries and36palette cells; static de
 are not tooltip/action/runtime coverage or a feature-completion percentage. Original
 assets/Rust remain independent; no proprietary code/assets/help text is transplanted.
 
-Disk constrained (~2.5GiB free);3.6GiB of inactive Root package artifacts was reclaimed.
+Disk constrained (~1.7GiB free);3.6GiB of inactive Root package artifacts was reclaimed.
 Never delete active/evidence/source/fixtures/worker targets. Only approved golden:
 1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc. No new approval/release/
 installer/signing or unrelated message/account action. Revalidate agents/jobs on continuation.

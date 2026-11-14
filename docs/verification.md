@@ -1976,3 +1976,16 @@ Receiving Root537workspace+3bridge=540 passes all gates,57320 exit0, log SHA
  e140e7f400d948944f7157db40c3cea44993a7341d5df6573fd6a5df95b67e0e.
 [Exact source/review/limits](verification-bond-attachment-ui.md) retain both failure
 checkpoints. New-source native acceptance and hosted checks remain pending.
+
+
+## Immutable whole-SDF source receiving integration, 2026-11-14
+
+Nine new independent literal/consumer/boundary/identity/accounting tests preserve both
+original690/777B vectors, every record/field/version and source-only differences. Existing
+parser/writer bodies/fixtures/oracles/pins are unchanged. Root94645 passes546workspace+
+3bridge=549; log SHAfe1e23fee5df7a1310243fd9e1b034ad6a25a898cf8aad4b073e591c50c987b8.
+Normal full-graph fuzz clippy and10000-run ASAN24955 pass with original copied seeds;
+exact hashes/settings and independent review are in verification-sdf-owned-source.md.
+No Engine/native SDF or data-editing claim follows. Attachment sourcef0910ca separately
+passes hosted checks after failed-only Linux infrastructure retry, but native extension
+was not attempted due unowned input; the linked UI verification records that partial pass.

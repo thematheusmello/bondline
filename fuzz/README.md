@@ -266,3 +266,18 @@ seeds. Its five-file initial CDX corpus is separate from the local six-file run,
 also includes the independently packed92B default/no-geometry seed in ignored storage.
 The extra92B independently authored default-C/single/no-position vector is ignored, not a
 new fetched corpus entry. See verification-cdx-owned-snapshots.md for exact logs and limits.
+
+
+### Owned whole-SDF snapshots
+
+The same SDF target now retains each accepted complete file in SdfDocument, checks exact
+source, positive ordinal record IDs/ranges/versions/field counts and borrowed reread,
+shared source/index pointers after Clone, full equality and deduplicated snapshot bytes.
+All existing span/wrapper/molecular assertions remain. This adds no target/dependency.
+Fresh ignored seeds are unchanged original690/777B vectors, not committed mutation output.
+Normal full-graph all-target clippy passes; AddressSanitizer10000 runs at seed826403517,
+max_len65536/timeout5 exits0: cov1633/features5009,294retained inputs/reported154KiB,
+RSS91MiB,1second, largest seed/observed length777B. The configured bound is not claimed
+as exercised coverage; explicit large/boundary cases remain in IO tests. Exact logs/hashes
+are in verification-sdf-owned-source.md. No data edit, file/Engine/native workflow or
+external chemistry comparison for arbitrary mutations is established by this smoke.

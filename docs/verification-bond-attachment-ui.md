@@ -186,3 +186,47 @@ Python. target/attachment-ui-integrated-ci.log is67537B, SHA
  e140e7f400d948944f7157db40c3cea44993a7341d5df6573fd6a5df95b67e0e.
 The correct Root workspace is printed. A new matching hosted run and actual frozen-source
 native acceptance are required; older native450962c and hosted501a315 are separate evidence.
+
+
+## Actual native pass: only initial drawing verified
+
+Frozenf0910ca built/runs on macOS27.2arm64/AppleM3Max/Metal with384-source manifest
+6536efde950047442ba7859bb57a4dbf4414ccd99b82db2e0cf9c64ee9bba9b6 and binary
+1037d6de9b82ceb98862e3843ef097233b90a4ad25e41fd912c5fabc1826fa9f. Source/binary stay exact
+through cleanup. Actual native empty→C2 paints in three settled captures and creates one
+fragment, H3/3, Single, revision1/history1, with points independently predeclared from
+paper geometry. CLI16/seven-required-field discovery passes. Native Save was not reached;
+no actual saved-file consumer or terminal-attachment success is claimed in this pass.
+
+A pure pointer-move guard then refuses input because public event-state reads report
+LeftDown in both HID and combined tables, with a different foreground application.
+Ownership/cause remains unknown. No held-helper Down had ever run; no unknown input was
+released/normalized and elapsed waiting was not treated as user permission. Native plan
+B–L remains UNVERIFIED: C3/C4/label jitter/anchored preview/history/save/reopen, source/
+occupied/internal guards, minimum-width diagnostics, actual2x and held-context cases.
+Component tests and hosted windows cannot replace those observations.
+
+The ignored original test helper had independently reviewed output/occlusion/release
+issues; corrected v5 has nonblocking pipe output, per-command deadline/point ownership,
+bounded own-Up attempts and no-input refusal/backpressure selfchecks. It was never used
+for a held gesture or actual release. It is not product code; future use needs final
+rereview/available input, and no safety guarantee beyond the observed scope is claimed.
+Apple documents the distinct [HID](https://developer.apple.com/documentation/coregraphics/cgeventsourcestateid/hidsystemstate)
+and [combined](https://developer.apple.com/documentation/coregraphics/cgeventsourcestateid/combinedsessionstate)
+state tables; a value alone does not identify the input owner.
+
+Fresh authenticated inspect still matches the exact owned C2/r1/pathnull snapshot.
+Revision-bound Request→Discard closes only that temporary app with reply/work barriers;
+native18047/controller18011/session82296 exit0 without any mouse/key/activation/warp.
+The four sampled reference window IDs/frames/layers and pause cursor stay unchanged;
+active cursor restoration remains deferred. Unowned LeftDown is untouched. CUA completes
+once after cleanup; no owned app/controller/helper/job remains. User input-availability
+clarification stays pending; new native acceptance must use a fresh frozen bundle.
+
+Ignored report target/native-attachment-handoff.md SHA
+1a085c5ee5a9cdaf7eab45c4ac8cf96157731fc0e6e714d0c7b717786d3fbf09;
+index54evidence+5external records SHA
+1c1c418db9a607ab5e4dc13b09643c09f33ffc2fa09165c350461d23a9d897a9, all59 rehashed by Root;
+cleanup SHA c8721c0363381ff299d4930235ad930829d47292dc4b6dc684ece28b23ab81e7.
+The exact source's hosted540/538/530/windows/six-ASAN result and original Linux setup
+failure/failed-only retry are in ci.md. Native extension remains wired, not verified.

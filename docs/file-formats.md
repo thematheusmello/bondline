@@ -573,3 +573,16 @@ loss refuse before any temporary is created. Accepted source, metadata and unkno
 are saved byte-for-byte. See [application verification](verification-cdx-application.md).
 Bounded Mac native CDX acceptance now passes on source450962c; see the linked exact-build
 report. Broader compatibility, edited-source encoding and faithful preview remain missing.
+
+
+## Immutable whole-SDF ownership
+
+io::sdf::SdfDocument now retains complete validated Arc bytes and compact shared record
+metadata; every mixed-version molecule and ordered field/header/value/delimiter stays
+exact. Positive IDs are local ordinals inside immutable snapshots/clones, not chemical
+IDs or promises across a different source. Read reparses the bounded source; Debug prints
+counts only. Shared-allocation accounting is explicit and excludes temporary reads/headers.
+See verification-sdf-owned-source.md for literal/raw/RDKit/boundary/fuzz evidence. This
+library is not yet part of Engine current/saved/history/file state, and supplies no native
+SDF Open/Save, active record, layout or edit workflow. Never regenerate retained imports
+through the generic wrapper writer or silently select/flatten the first molecule.

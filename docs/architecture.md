@@ -178,3 +178,10 @@ the product-layer map; this is not permission to add GUI dependencies to core cr
 
 The graphics foundation adopted PhotoCraft's reviewed, pinned fork approach. Do not
 copy unrelated product features or claim that PhotoCraft meets Bondline's license policy.
+
+
+The independent whole-SDF owner validates/retains all bytes plus shared compact ordinal
+record metadata. It supplies exact-source equality, count-only Debug, borrowed reread and
+explicit deduplicated retained bytes for later session integration. It is not yet an
+Engine content variant; current/saved/history must own the whole collection before SDF
+commands are exposed. Do not use an active-record drawing as the file's source of truth.
