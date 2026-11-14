@@ -200,15 +200,18 @@ independently consumed molecular projections. See [corpus scope](corpus/README.m
 `bondline-cdx` is a standalone syntax utility, with no model, filesystem, GUI or third-party
 dependency. Its flat borrowed index retains the original header, unknown object/property
 tags, payloads, ordering and length prefixes; passthrough returns exactly the input. It
-accepts a header-implied root and a leading explicit8000 Document closed by one end record.
-The known twelve header bytes are validated; the final sixteen reserved bytes stay opaque.
-The archived specification/examples disagree about root framing; external consumer probes
-establish only those original vectors, not every historical or modern file variant.
+keeps both28-byte legacy profiles: header-implied root or explicit8000 Document with one
+root end. A distinct header-embedded Document profile also retains its22-byte prefix,
+encoded root and separate file end; see the detailed profile below. The known twelve header
+bytes are validated and other prefix bytes stay opaque. A successful legacy interpretation
+wins when reserved bytes are ambiguous. Independent vectors/native observations establish
+these bounded profiles, not every historical or modern file variant.
 
 Binary records are decoded little-endian with checked offsets. Limits are independent
 Bondline policies:64 MiB input/output,100000 records and256 simultaneously open encoded
 objects. Parsing and destruction are iterative. Missing fields/terminators, excessive
-budgets and bytes after the matched root end fail without returning a partial document.
+budgets and bytes after the selected profile's complete terminator fail without returning
+a partial document.
 Standalone syntax does not validate Page requirements, ID uniqueness/references, payload
 types, chemistry or object containment semantics.
 
@@ -486,3 +489,37 @@ semantics, RDfiles, expanded registry records and application/native reaction wo
 remain missing. Constituent raw preservation does not verify every unknown property's
 meaning. Independent raw ranges/maps and separately executed RDKit consumers verify the
 original vectors; a round trip solely through Bondline is not the compatibility evidence.
+
+## Header-embedded CDX Document profile
+
+The standalone CDX reader additionally accepts the public22-byte-prefix layout in
+which an encoded Document8000 occupies bytes22..28 of the historical header. It
+returns Framing::HeaderDocument, header().len()==22 and contiguous records from
+that root through a distinct RecordKind::FileEnd. The matched root ObjectEnd and
+the separate two-byte FileEnd must both be present in this profile, followed by
+exact EOF. All unknown prefix bytes, tags, payloads and length spellings remain
+borrowed unchanged; checked opaque property edits preserve both terminators.
+HEADER_BYTES stays28 for existing profiles and new Writer output;
+HEADER_DOCUMENT_BYTES names the22-byte prefix. Writer's canonical new-tree output
+is unchanged and is not a source-backed reconstruction path.
+
+Compatibility dispatch deliberately favors existing behavior. The historical28-byte
+profile runs first. Only its TrailingData error, a supported12-byte magic/marker and
+Document tag8000 at22 enable one second parse; there is no scan, ignored padding or
+retry after other failures. Successful legacy parses remain legacy even if their
+opaque reserved bytes resemble an encoded root. In particular, removing the separate
+file end can leave a complete legacy tree; bytes alone do not establish intent.
+This ambiguity is documented rather than treated as universal native validation.
+
+Both bounded profiles retain the64MiB input/output,100000-record and256-open-encoded-
+object limits. HeaderDocument's encoded root counts toward depth/records and FileEnd
+counts toward records. Two profile attempts are possible; these logical caps are
+not a process-memory guarantee. Extra file ends, nonzero final tags and trailing
+garbage are refused. Existing implicit/explicit fixtures and exact-EOF assertions
+remain unchanged.
+
+The new original65,746-byte field vector has independent stdlib event/byte checks
+and actual external RDKit graph checks; the unmodified ignored1196-byte local
+native observation also passes syntax/passthrough and one opaque splice. This is
+bounded framing evidence, not general property interpretation, foreign-file corpus
+coverage, chemical model mapping or an application CDX Open/Save workflow.

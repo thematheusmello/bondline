@@ -147,6 +147,7 @@
   window's disappearance cause remains unknown; source was restored with a changed frame.
 - Actual native1196-byte CDX saving/reopening is observed, but current85bf5eb syntax refuses
   its framing. Public BSD source explains a22-byte prefix/document/separate-file-end form.
-  A narrowly bounded original-vector TDD fix is in progress; legacy reserved-header ambiguity
-  and complete EOF/resource guards must remain explicit. Native outputs are research only,
+  The narrow original-vector TDD fix now passes syntax/property checks and the receiving
+  root aggregate. Legacy reserved-header ambiguity and complete EOF/resource guards remain
+  explicit; its own hosted checks are next. Native outputs are research only,
   not openly licensed committed corpus. General CDX mapping/application editing is absent.

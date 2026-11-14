@@ -1,5 +1,23 @@
 # CI contract and execution evidence
 
+RXN/mixed-SDF integrationc351bb839ee183f2b8a069642b39de32a8ad52ab passes every
+[43539538831](https://github.com/thematheusmello/bondline/actions/runs/43539538831) job: Mac132276586398:413
+(410workspace+3bridge), Linux132276586426:411, Windows132276586389:403 and ASAN132276586297.
+All actual windows and six bounded parser targets pass, including RXN and mixed-SDF seeds.
+Main advanced to validated docs-only child291c3a6 after this source passed. CDX framing
+research/fixes and future model mapping are separate; no native SDF/reaction editor claim.
+
+Earlier mixed-SDF integration23a43aa passes [43538842553](https://github.com/thematheusmello/bondline/actions/runs/43538842553):
+Mac132274352536:404 (401workspace+3bridge), Linux132274352484:402, Windows132274352683:394,
+ASAN132274352264, all actual windows/five targets. Isolated source6aeb9f2 also passes
+[43538499719](https://github.com/thematheusmello/bondline/actions/runs/43538499719): Mac132273225712:382,
+Linux132273225750:380, Windows132273225700:374 and ASAN132273225445/five targets.
+Isolated RXN4cbc89b passes [43538648520](https://github.com/thematheusmello/bondline/actions/runs/43538648520):
+Mac132273712642:376, Linux132273712487:374, Windows132273712656:368 and ASAN132273712226/
+six targets, all actual windows. These source checks are not substituted for the receiving
+integration above. Adapters remain Metal/Apple Paravirtual IntegratedGpu, Vulkan/llvmpipe
+Cpu and Dx12/Microsoft Basic Render Driver Cpu. No passing job was restarted.
+
 Accepted application/CDX/corpus integration85bf5ebfd53580b66cde9726a374658fc9befcee passes every
 [43537753933](https://github.com/thematheusmello/bondline/actions/runs/43537753933) job: Mac132270775971:397
 tests (394workspace+3bridge), Linux132270775923:395, Windows132270776068:387 and ASAN132270775722.

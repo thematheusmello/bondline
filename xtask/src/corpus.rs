@@ -442,6 +442,7 @@ fn cdx_table(document: &bondline_cdx::Document<'_>) -> String {
             bondline_cdx::RecordKind::ObjectEnd { start } => {
                 format!("end {} {suffix}", index(*start))
             }
+            bondline_cdx::RecordKind::FileEnd => format!("file_end {suffix}"),
         });
     }
     lines.join("\n") + "\n"

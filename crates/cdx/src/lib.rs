@@ -11,12 +11,16 @@ pub const MAX_RECORDS: usize = 100_000;
 /// Maximum simultaneously open encoded object records; the implied root is not encoded.
 pub const MAX_DEPTH: usize = 256;
 pub const HEADER_BYTES: usize = 28;
+/// Prefix before the encoded Document occupying the historical header's final six bytes.
+pub const HEADER_DOCUMENT_BYTES: usize = 22;
 const PREFIX: &[u8] = b"VjCD0100\x04\x03\x02\x01";
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Framing {
     ImplicitDocument,
     ExplicitDocument,
+    /// 22-byte prefix, encoded Document, its object end, and one separate file end.
+    HeaderDocument,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -39,6 +43,8 @@ pub enum RecordKind {
     ObjectEnd {
         start: Option<usize>,
     },
+    /// Distinct file terminator after the encoded root in `HeaderDocument` framing.
+    FileEnd,
 }
 
 /// A handle owned by one parsed document. Its fields cannot be forged or mutated.
@@ -57,8 +63,9 @@ impl Record {
     pub fn range(&self) -> Range<usize> {
         self.range.clone()
     }
-    /// Opening-record index of the containing object. For an end, this is the matched
-    /// opening's parent; `ObjectEnd::start` identifies the object being closed.
+    /// Opening-record index of the containing object. For an object end, this is the
+    /// matched opening's parent; `ObjectEnd::start` identifies the object being closed.
+    /// A separate file end has no parent.
     pub fn parent(&self) -> Option<usize> {
         self.parent
     }
@@ -84,7 +91,7 @@ impl fmt::Display for Error {
         match self {
             Self::InputTooLarge => output.write_str("CDX input or output exceeds 64 MiB"),
             Self::InvalidHeader => output.write_str(
-                "CDX requires the current 28-byte VjCD0100 header and little-endian marker",
+                "CDX requires the VjCD0100 header and little-endian marker",
             ),
             Self::Truncated { offset } => write!(output, "truncated CDX record at byte {offset}"),
             Self::TrailingData => output.write_str("CDX has bytes after its root terminator"),
@@ -129,11 +136,14 @@ impl fmt::Debug for Document<'_> {
 }
 
 impl<'input> Document<'input> {
+    /// Try the historical 28-byte profile first. Only its trailing-data failure with
+    /// a Document tag at byte22 enables the 22-byte prefix/separate-file-end profile.
+    /// A successful legacy parse wins when opaque header bytes are ambiguous.
     pub fn parse(input: &'input [u8]) -> Result<Self, Error> {
         if input.len() > MAX_INPUT_BYTES {
             return Err(Error::InputTooLarge);
         }
-        let header = input
+        input
             .get(..HEADER_BYTES)
             .filter(|_| input.starts_with(PREFIX))
             .ok_or(Error::InvalidHeader)?;
@@ -142,9 +152,28 @@ impl<'input> Document<'input> {
         } else {
             Framing::ImplicitDocument
         };
+        match Self::parse_records(input, HEADER_BYTES, framing) {
+            // Preserve successful legacy interpretations of opaque reserved bytes. Only
+            // this exact alternate envelope may explain an otherwise trailing file end.
+            Err(Error::TrailingData)
+                if input.get(HEADER_DOCUMENT_BYTES..HEADER_DOCUMENT_BYTES + 2)
+                    == Some(&[0, 0x80]) =>
+            {
+                Self::parse_records(input, HEADER_DOCUMENT_BYTES, Framing::HeaderDocument)
+            }
+            result => result,
+        }
+    }
+
+    fn parse_records(
+        input: &'input [u8],
+        header_bytes: usize,
+        framing: Framing,
+    ) -> Result<Self, Error> {
+        let header = input.get(..header_bytes).ok_or(Error::InvalidHeader)?;
         let mut cursor = Cursor {
             source: input,
-            offset: HEADER_BYTES,
+            offset: header_bytes,
         };
         let mut records = Vec::new();
         let mut stack = Vec::new();
@@ -158,7 +187,19 @@ impl<'input> Document<'input> {
                 parent = stack.last().copied();
                 kind = RecordKind::ObjectEnd { start: opening };
                 push_record(&mut records, parent, start..cursor.offset, kind)?;
-                if opening.is_none() || (framing == Framing::ExplicitDocument && stack.is_empty()) {
+                if opening.is_none() || (framing != Framing::ImplicitDocument && stack.is_empty()) {
+                    if framing == Framing::HeaderDocument {
+                        let file_end = cursor.offset;
+                        if cursor.u16()? != 0 {
+                            return Err(Error::TrailingData);
+                        }
+                        push_record(
+                            &mut records,
+                            None,
+                            file_end..cursor.offset,
+                            RecordKind::FileEnd,
+                        )?;
+                    }
                     if cursor.offset != input.len() {
                         return Err(Error::TrailingData);
                     }
@@ -235,7 +276,7 @@ impl<'input> Document<'input> {
             LengthEncoding::Short => 4,
             LengthEncoding::Extended => 8,
         };
-        if owned.range.start < HEADER_BYTES
+        if owned.range.start < self.header.len()
             || owned.range.start.checked_add(prefix) != Some(payload.start)
             || payload.start > payload.end
             || payload.end != owned.range.end

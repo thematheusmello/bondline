@@ -1763,3 +1763,77 @@ that failed check remains explicit; canonical image/source/integrity checks are 
 No product source changed for these documentation checks; no artificial Rust RED is claimed.
 The original local XML syntax pass, current CDX TrailingData, external RDKit results and
 original-window restoration exception are distinguished in the source register/reports.
+
+## Header-embedded CDX Document framing, 2026-11-14
+
+Work began in the separate bondline-cdx-framing checkout from85bf5eb. The first
+original65,746-byte fixture passed its independent generator and actual pinned
+RDKit2026.09.2 checks, then Document::parse returned TrailingData. Actual intended
+RED: target/cdx-header-red.log, one failed test. No parser code was changed before
+that failure. Public BSD source and SDK facts are cited as
+CDX-HEADER-DOCUMENT-IO/END in clean-room/sources.md; the native input was not copied
+into the original fixture.
+
+The reader now has a bounded HeaderDocument profile:22-byte prefix, encoded root,
+root ObjectEnd and separate FileEnd. Successful legacy28-byte parses retain their
+interpretation. Only TrailingData with the exact supported prefix/8000-at22 marker
+enables the alternate profile. This does not trim arbitrary padding. Ambiguous
+missing-file-end input can still be complete legacy syntax; the tests state that
+limit explicitly. Writer output and both old fixture/oracle identities are unchanged.
+
+All27 package tests pass, including seven new framing cases: exact30-event table,
+external CC/C2H6→C=C/C2H4 property edit, all-property no-ops/foreign handles,
+opaque short/extended replacements with reserved bytes and unrelated records exact,
+legacy reserved-header ambiguity, all source prefixes and strict trailing-data
+refusal, and100000-record/256-open-object boundaries counting root/FileEnd. The
+same package's all-target clippy with -D warnings and workspace rustfmt check pass.
+Commands used a distinct absolute CARGO_TARGET_DIR, CARGO_INCREMENTAL=0 and
+DEV/TEST_DEBUG=0; BONDLINE_PYTHON selected the existing pinned external interpreter.
+Logs: target/cdx-header-{first-green,tests,clippy,fmt}.log.
+
+The unmodified ignored local native1196-byte research file, SHA
+7b2b71338595ad12bc34f46459f8389ec6a63cb453b1cf29b51543717139a73c,
+now parses as HeaderDocument. All99 events match independent stdlib decoding,
+including root22..28, root end1194 and file end1196. The record-table SHA is
+203749413c964b233172bf290ab7364ced97113008b12317d075fabae4b5bdc7.
+Exact source passthrough/no-op and one independently constructed opaque-property
+splice pass; that changed property is syntax-only, not semantic editing evidence.
+Direct pinned RDKit reads the unchanged file as two carbons/one single bond,
+CC/C2H6. The vendor metadata and changed research output remain ignored, and the
+source hash is unchanged. Evidence: target/cdx-native-passthrough-evidence.json.
+
+Fresh ASAN passes10000 runs with three original seeds, seed721533879,
+max_len131072/timeout5, coverage319/features841,53 retained inputs/reported303KiB,
+RSS283MiB. The executable links the nightly AddressSanitizer runtime. Disk-constrained
+local execution used the approved ignored minimal manifest and exact pinned lock
+subset, compiling the unchanged committed cdx_parse harness without the unrelated
+IO/GPU graph. Log target/cdx-header-asan.log. Scoped stable fuzz-harness clippy and
+normal fuzz-workspace rustfmt checks pass in cdx-header-fuzz-{clippy,fmt}.log.
+This is not a normal full-graph fuzz build, aggregate gate, hosted platform result
+or exhaustive safety proof. No GUI was launched for this standalone parser change.
+CDX model mapping/application Open/Save and broader foreign/general coverage remain
+missing; the fetched original corpus pins/counts are unchanged by this new fixture.
+The CI seed step now includes that third original vector; the existing two seeds,
+sanitizer command and max_len131072 remain unchanged. This configuration change
+has not yet run on hosted CI.
+
+## Receiving-root header-embedded CDX gate, 2026-11-14
+
+The actual merge ofe9bffd3 into291c3a6/c351bb8 passes417 workspace plus3 macOS bridge tests
+and every cargo xtask ci gate. Log target/cdx-header-merged-ci.log ends with local CI checks
+passed; session39909 terminal0. Source/tests/oracle/corpus formatter/fuzz target match the
+reviewed feature exactly. Later mixed SDF/RXN, six sanitizer targets, all four manifest
+attributes/pins and approved golden remain. Native closures153/164/219/two assets unchanged.
+
+Normal full fuzz-workspace clippy passes for cdx_parse with warnings denied, and all-target
+fuzz rustfmt passes. A fresh three-original-seed corpus (70/65750/65746bytes) runs the exact
+normal manifest/harness on pinnednightly2026-04-01/cargo-fuzz0.13.2/libfuzzer0.4.13, ASAN10000,
+seed721533879/max_len131072/timeout5. Session6194 terminal0, coverage319/features841,53inputs/
+reported303KiB/RSS283MiB, maximum exercised65750bytes, zero seconds after compilation. Log
+ target/cdx-header-normal-fuzz-asan.log SHA6cdcc0e47428f465e0c44e871a1da6814a32bee9207b7947c9da5010a22ae9f8;
+clippy target/cdx-header-normal-fuzz-clippy.log. Root/fuzz locks remain byte-identical. This
+is additional normal-graph evidence, separate from the worker's minimal-manifest run.
+No native GUI changes or new screenshots/goldens are needed for this syntax-only slice.
+The reviewed native1196B exact-source/property probe uses this same std-only parser source;
+no raw vendor metadata is committed. Application CDX/model/general foreign coverage remain
+missing, and the new integrated source still needs its own hosted platform result.

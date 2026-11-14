@@ -70,7 +70,7 @@ Current map: model (L0, pages, Point2 and validated elemental atom/bond/fragment
 cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attribute
 replacement and a bounded new-syntax writer);
 cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque property
-replacement; no model mapping or application commands);
+replacement and new-tree Writer; no model mapping or application commands);
 render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
 source-backed CDXML/MOL projections, elemental encoding, owned snapshots, PNG encoding,
 bounded native CDXML/MOL filesystem I/O and source-preserving SDF/RXN container records;
@@ -236,3 +236,16 @@ imported source projection; Document::to_bytes and checked property replacement 
 separate exact-source contract. Include pending terminators in byte/record/depth budgets
 before mutation. Independent original bytes/RDKit, literal boundary tests and fuzz construction
 cover this builder; they do not deliver application CDX files.
+
+## CDX header-embedded framing
+
+Default parsing preserves successful28-byte legacy interpretations. Only legacy TrailingData
+and an8000 tag at byte22 may select HeaderDocument's22-byte prefix, encoded root and exactly
+one distinct FileEnd. Do not turn this into arbitrary trailing-zero acceptance, scanning or
+normalization. FileEnd counts toward the record budget and the encoded root toward depth.
+header() is22 bytes for that profile; property offsets/ownership use its actual length.
+Writer's canonical28-byte profile and all old fixtures/pins stay unchanged. Full-byte source
+retention/property edits and original independent/native probes are separate from model/UI
+compatibility. A complete legacy tree is inherently indistinguishable from a native file
+missing only its file end; keep this ambiguity explicit. Fuzz construction omits root and
+FileEnd intentionally to build new canonical syntax, never to reserialize an import.

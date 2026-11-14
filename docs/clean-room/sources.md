@@ -397,3 +397,33 @@ The public writer uses22 prefix bytes, six encoded Document bytes inside the his
 28-byte header, and distinct object/file ends. This explains the independently decoded
 original22/root1194/file1196 spans without trimming data or treating arbitrary padding as
 valid. Only original Rust/tests/assets are implemented; no upstream parser code is copied.
+
+## Header-embedded CDX Document framing, 2026-11-14
+
+| ID | Public source | Decision and limits |
+|---|---|---|
+| CDX-HEADER-DOCUMENT-IO | https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXIO.cpp#L696-L706 | Public BSD-3-Clause source writes8-byte magic,4-byte marker,4-byte TOC,4+2 reserved bytes:22 total. Its comment explains the encoded six-byte top-level Document occupying the historical28-byte header's tail. The original Rust parser preserves that22-byte prefix and indexes the encoded root separately. |
+| CDX-HEADER-DOCUMENT-END | https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXDocument.cpp#L1682-L1700 | Public writer emits header, document and a separate final zero tag. CDX-INTRO independently distinguishes object ends from file end. HeaderDocument therefore requires one matched root end, one separately indexed FileEnd and exact EOF. No extra-zero trimming or scan is used. |
+
+The raw public files are respectively25,597/53,887 bytes with SHA-256
+71a2942f44dd6b875aee72d97c1101b874dc743d5f8f121f61f9877f3000a30b and
+dceab68450961a57f6099ba3f981dc4ce18390211ea23930754f550a2f1ec004.
+Only format facts were used; no upstream implementation or native metadata was copied.
+
+The prior CDX-FRAMING entry describes the earlier two-profile implementation. It is
+extended conservatively: the28-byte parser runs first and every successful legacy
+interpretation wins. Only TrailingData plus the known12-byte prefix and8000 tag at
+offset22 enables the second bounded parse. Both profiles apply the same64MiB,
+100000-record and256-open-object limits. The new profile counts its encoded root
+and separate FileEnd. Ambiguous missing-native-end data may be complete legacy
+syntax; this policy preserves that interpretation rather than claiming universal
+native validation. Unknown reserved bytes, records and payloads remain exact.
+
+The original65,746-byte scene and independent struct/RDKit checks are documented in
+crates/cdx/tests/fixtures/README.md and xtask/oracles/cdx-README.md. A separately owned
+local original from the licensed macOS26.1.0.6801 runtime is1196 bytes,
+SHA7b2b71338595ad12bc34f46459f8389ec6a63cb453b1cf29b51543717139a73c:
+its99 events, root end1194 and file end1196 now match independent decoding and exact
+passthrough. That research input and its vendor metadata stay ignored, unmodified
+and unredistributed. Neither this native observation nor the original field vector
+implements CDX model mapping, application Open/Save or general format compatibility.

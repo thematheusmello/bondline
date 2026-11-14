@@ -218,3 +218,28 @@ fuzzing after compilation. The original 696/739-byte seeds plus a separately gen
 bounded smoke evidence, not universal format compatibility, complete resource-bound
 coverage, chemistry verification or a security audit. The IO tests independently
 exercise explicit limits and raw/RDKit expectations.
+
+### Header-embedded CDX root
+
+Add the new original framing seed to the ignored mutation corpus; keep all committed
+fixtures and old seed identities unchanged:
+
+```sh
+cp crates/cdx/tests/fixtures/original-ethane-header-document.cdx .cache/fuzz/cdx/
+```
+
+The same CDX harness now treats HeaderDocument's encoded root as structural framing
+and excludes its separate FileEnd only when constructing a new canonical Writer tree.
+Source passthrough and property edits still preserve every original framing byte and
+record event, including FileEnd. New Writer output retains its earlier28-byte header
+and explicit root; it never reconstructs source-backed input implicitly.
+
+The fresh2026-11-14 three-original-seed ASAN pass completed10000 runs at
+seed721533879/max_len131072/timeout5: coverage319/features841,53 retained inputs,
+reported303KiB/RSS283MiB, largest65750bytes. Because disk was constrained, this local
+run used an ignored minimal manifest containing only path bondline-cdx and pinned
+libfuzzer-sys0.4.13, with the exact committed cdx_parse source and all transitive
+versions/checksums copied from the unchanged fuzz lock. It did not rebuild the full
+IO/GPU fuzz dependency graph. Stable clippy passed for that same scoped harness and
+the normal fuzz workspace's rustfmt check passed. The normal full-graph/hosted checks
+remain separate integration evidence; this bounded run is not a security audit.

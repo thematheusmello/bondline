@@ -70,7 +70,7 @@ jobs:
           mkdir -p .cache/fuzz/cdxml
           cp crates/cdxml/tests/fixtures/unknown.cdxml .cache/fuzz/cdxml/
           mkdir -p .cache/fuzz/cdx
-          cp crates/cdx/tests/fixtures/unknown-implicit.cdx crates/cdx/tests/fixtures/original-ethane-explicit.cdx .cache/fuzz/cdx/
+          cp crates/cdx/tests/fixtures/unknown-implicit.cdx crates/cdx/tests/fixtures/original-ethane-explicit.cdx crates/cdx/tests/fixtures/original-ethane-header-document.cdx .cache/fuzz/cdx/
           mkdir -p .cache/fuzz/mol
           cp crates/io/tests/fixtures/mol/rdkit-CH3.mol crates/io/tests/fixtures/mol/ethane-v2000.mol .cache/fuzz/mol/
           mkdir -p .cache/fuzz/sdf

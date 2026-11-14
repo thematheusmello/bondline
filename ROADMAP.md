@@ -138,3 +138,9 @@ entries and a successful original local-file flow do not complete inventory or p
 Native CDX framing precedes safe CDX projection/application I/O; collection ownership and
 record editing precede application SDF; general graph scenes/hit testing precede connected
 gestures. Account/cloud routes stay optional to the offline authoring product.
+
+The header-embedded CDX framing slice now preserves the22-byte prefix/root/separate-file-end
+profile while keeping successful legacy parses and all existing strict negative tests.
+An unchanged original native1196-byte save and original public-field vectors face independent
+record/byte/consumer checks. Receiving root417+3 and normal-graph ASAN pass; the new source
+needs hosted checks. This parser feature precedes model mapping and application CDX files.

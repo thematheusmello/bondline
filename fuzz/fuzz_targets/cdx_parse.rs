@@ -4,10 +4,11 @@ use bondline_cdx::{Document, Error, Framing, Record, RecordKind, Writer};
 use libfuzzer_sys::fuzz_target;
 
 fn body<'a>(document: &'a Document<'_>) -> Vec<&'a Record> {
-    let explicit = document.framing() == Framing::ExplicitDocument;
+    let explicit = document.framing() != Framing::ImplicitDocument;
     document.records().iter().enumerate().filter_map(|(index, record)| {
         let root = explicit && index == 0
-            || matches!(record.kind(), RecordKind::ObjectEnd { start } if start.is_none() || explicit && *start == Some(0));
+            || matches!(record.kind(), RecordKind::ObjectEnd { start } if start.is_none() || explicit && *start == Some(0))
+            || matches!(record.kind(), RecordKind::FileEnd);
         (!root).then_some(record)
     }).collect()
 }
@@ -19,6 +20,7 @@ fn construct(document: &Document<'_>) -> Result<Vec<u8>, Error> {
             RecordKind::ObjectStart { tag, id } => writer.start_object(*tag, *id)?,
             RecordKind::Property { tag, .. } => writer.property(*tag, document.payload(record)?)?,
             RecordKind::ObjectEnd { .. } => writer.end_object()?,
+            RecordKind::FileEnd => {}
         }
     }
     writer.finish()
