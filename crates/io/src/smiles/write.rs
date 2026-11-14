@@ -4,7 +4,7 @@ use super::{
     Limit, MAX_SMILES_ATOMS, MAX_SMILES_BONDS, MAX_SMILES_BRANCHES, MAX_SMILES_BYTES,
     MAX_SMILES_CHAINS, MAX_SMILES_RINGS,
 };
-use bondline_model::{Atom, BondOrder, Fragment, Radical};
+use bondline_model::{Atom, BondOrder, Element, Fragment, Radical};
 use std::collections::BTreeMap;
 
 #[derive(Debug, thiserror::Error, PartialEq, Eq)]
@@ -57,6 +57,17 @@ fn structure(reason: &'static str) -> WriteError {
     WriteError::Structure { reason }
 }
 
+// Closed normalization/export profile, not periodic-table valence perception.
+pub(super) fn target_valence(element: Element) -> Option<u8> {
+    match element.get() {
+        1 | 9 | 17 | 35 | 53 => Some(1),
+        6 => Some(4),
+        7 => Some(3),
+        8 => Some(2),
+        _ => None,
+    }
+}
+
 fn valence(atom: &Atom) -> Result<u8, WriteError> {
     let unsupported = |feature| WriteError::UnsupportedAtom {
         atom_id: atom.id.get(),
@@ -71,15 +82,8 @@ fn valence(atom: &Atom) -> Result<u8, WriteError> {
     if atom.explicit_hydrogens.is_none() {
         return Err(unsupported("unspecified literal H count"));
     }
-    match atom.element.get() {
-        1 | 9 | 17 | 35 | 53 => Ok(1),
-        6 => Ok(4),
-        7 => Ok(3),
-        8 => Ok(2),
-        _ => Err(unsupported(
-            "element outside the closed neutral H/C/N/O/halogen profile",
-        )),
-    }
+    target_valence(atom.element)
+        .ok_or_else(|| unsupported("element outside the closed neutral H/C/N/O/halogen profile"))
 }
 
 fn prepare(fragment: &Fragment) -> Result<Plan<'_>, WriteError> {
