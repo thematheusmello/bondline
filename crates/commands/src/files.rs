@@ -194,6 +194,7 @@ pub struct Completed(pub(super) Completion);
 
 #[derive(Debug)]
 pub(super) enum Completion {
+    SdfFieldSet(crate::sdf_edit::FieldCandidate),
     Result {
         result: Box<CommandResult>,
         cancel: Option<Cancellation>,
@@ -383,6 +384,7 @@ impl Engine {
 
     pub fn finish(&mut self, completed: Completed) -> Result<CommandResult, Error> {
         match completed.0 {
+            Completion::SdfFieldSet(candidate) => self.finish_sdf_field(candidate),
             Completion::Result { mut result, cancel } => {
                 if let Some(cancel) = cancel {
                     cancel.check()?;

@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has nineteen commands; the complete list is below.
+The delivered registry has twenty commands; the complete list is below.
 
 An engine JSON request is exactly:
 
@@ -53,6 +53,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.open_sdf` | `path`, optional `discard_unsaved=false` | Validate every mixed V2000/V3000 record and retain complete ordered source; clean collection session and cleared history, without a drawing projection |
 | `document.save_sdf` | `path`, optional `overwrite=false` | Atomic whole-source collection save; retains every record, MOL version, ordered field and byte; no molecular regeneration |
 | `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
+| `sdf.field.set_value` | Required `expected_revision`, positive `record_id`, zero-based existing `field_index`, `value_lines` | Deferred immutable existing-field edit, one whole-content history commit; byte-preserving no-op and strict stale/input guards |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request Open/Save/Save As presentation or cancel the matching picker; a native host is required |
@@ -284,7 +285,8 @@ version; `sdf` identifies a container family, never a fake whole-file V2000/V300
 continues to describe the original source, and `source.modified` compares original/current.
 `file.dirty` compares complete current/saved content, including both original identity and
 opaque bytes. A private library field candidate exercises a704-byte current save from a690-byte
-original: Save clears dirty while source remains690/modified. No SDF edit command is exposed yet.
+original: Save clears dirty while source remains690/modified. The shared setter below now
+creates such candidates through the same registry.
 
 Open validates the whole input before applying it, including later records; unsupported
 model projection is not a reason to drop valid opaque MOL data. Save borrows all current
@@ -299,8 +301,9 @@ The native chooser/known Save/retry routes are wired to the same commands. SDF u
 Open/Save family with `.sdf`/`.sd` hints. The workspace clears old drawing interactions and
 shows a static count/record summary with chemical preview explicitly unavailable. This is
 an original partial presentation, not the observed26.1 all-record drawing layout. Explicit
-field inspection is available through the query below. Editing, molecular layout, field UI
-and actual native SDF acceptance remain missing or unverified in this checkpoint.
+field inspection and existing-value editing are available through the shared commands below.
+Molecular layout and a field UI/editor remain missing; native file acceptance is separate
+from this command slice, which performs no native field edit.
 See [SDF session evidence](verification-sdf-session-files.md).
 
 ### Explicit read-only SDF record inspection
@@ -363,9 +366,61 @@ a later edit/Open; it never installs its page as current state. Lifecycle metada
 follows the existing capture contract. Automatic document.inspect still omits all queried
 headers/values, and read-only queries request no repaint. Worker/reply activity nevertheless
 blocks trusted native close acknowledgement through output flush. No selection, preview,
-setter, delete operation or UI editor is delivered here. This is an original inspection API,
+delete operation or UI editor is delivered by this query. This is an original inspection API,
 not evidence of a reference-product screen. See
 [query verification](verification-sdf-record-inspect.md).
+
+### Existing SDF field-value editing
+
+```json
+{"command":"sdf.field.set_value","params":{"expected_revision":1,"record_id":1,"field_index":5,"value_lines":["revised","multiline"]}}
+```
+
+All four parameters are required and the object is closed. The target is an existing ordered
+occurrence, never a name/property-map lookup. Positive record IDs are the same local ordinals
+used by inspection; field_index is zero-based. Record/field order, IDs, count, headers, names,
+textual DT identifiers, molecular versions and all untouched source bytes stay exact. []
+authors an empty value; spaces/tabs are nonempty data. Field/header creation, renaming,
+removal, record navigation/deletion, molecular editing and conversion are outside this command.
+
+Inputs must satisfy two65,536-byte limits: the sum of UTF-8 line bytes plus one authored LF
+per line, and the compact UTF-8 JSON value_lines array including escaping/punctuation. These
+are linked to inspection's raw/vector limits, so accepted changed LF data can be disclosed
+without omission. Empty arrays have zero authored bytes but a two-byte JSON representation.
+The existing request1MiB bound is separate. ASCII/tab/control, nonempty physical line,
+200-byte line and column-zero dollar-prefix constraints remain the unchanged codec rules.
+Each changed line uses LF; the original blank terminator, padding and every other byte keep
+their source spelling. A logical no-op preserves original CRLF and shares the old source/index.
+
+Preparation validates cheap kind/revision/record/index metadata and captures the complete
+original/current Arc plus revision/generation, without authoring or transient mutation.
+Input budgets, format validation, splice and full-source reparse run off-lock through the
+same two workers. Completion checks cancellation, committed close, revision/generation and
+the exact current input Arc before one existing Engine commit. Reverse, old-generation,
+cancelled or invalid candidates leave all state/history/source/saved data intact. Parsing
+and one bounded serialization stage are not preemptible; cancellation is checked between
+stages. There is no extra pool, save lease, listener or filesystem write in the setter.
+
+A real change advances revision once, clears redo, retains complete source in Undo and
+updates dirty/source metadata; normal history accounting/close/picker invalidation applies.
+A no-op leaves revision, history/redo, current outer/source/index identities, dirty state,
+saved association and close/trusted receipt approval unchanged. Save still captures whole
+content: an older pending Save publishes its captured bytes and keeps a newer field edit
+dirty, with its reservation held through finish/drop. Editing then undoing to saved data
+cannot revive an invalidated trusted close-Save acknowledgement. Source.modified always
+describes original bytes, independently of file.dirty's saved baseline.
+
+Stale revision/current input returns stale_revision, wrong kind unsupported_content, and
+missing record/occurrence not_found. Invalid positive-ID/JSON shape returns invalid_params.
+The command's aggregate input budgets return resource_limit; existing codec errors retain
+their codes (invalid_sdf for malformed lines/control/prefixes, unsupported_content for
+non-ASCII, resource_limit for line/global quotas). No parser/writer code is relabeled.
+Successful setter results are normal metadata-only state; use explicit inspection to read
+values. Debug omits input/candidate field text. Changed edits notify after response flush;
+no-op/refused edits do not repaint. Worker/reply activity retains the existing close drain.
+
+This is a shared headless command, without a new native UI/editor or claimed reference
+field workflow. See [setter verification](verification-sdf-field-command.md).
 
 ## Close requests and host shutdown
 

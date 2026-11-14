@@ -212,7 +212,10 @@ fn inspect_field(index: usize, field: &DataField<'_>) -> Result<SdfFieldInspecti
 }
 
 /// Count real compact JSON without allocating an over-budget output buffer.
-fn serialized_fits(value: &(impl Serialize + ?Sized), limit: usize) -> Result<bool, Error> {
+pub(super) fn serialized_fits(
+    value: &(impl Serialize + ?Sized),
+    limit: usize,
+) -> Result<bool, Error> {
     struct Budget {
         bytes: usize,
         limit: usize,

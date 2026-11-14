@@ -813,6 +813,83 @@ mod tests {
     }
 
     #[tokio::test(flavor = "current_thread")]
+    async fn sdf_field_candidates_are_deferred_and_busy_or_reverse_completion_never_mutates_early()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let mut session = Engine::default();
+        session.dispatch("document.open_sdf",json!({"path":concat!(env!("CARGO_MANIFEST_DIR"),"/../io/tests/fixtures/sdf/ordered-fields-v2000.sdf")}))?;
+        let engine = Arc::new(Mutex::new(session));
+        let workers = Workers::default();
+        let executor = CommandExecutor {
+            engine: Arc::clone(&engine),
+            workers: workers.clone(),
+        };
+        let setter = |text: &str| {
+            Command::parse(
+                "sdf.field.set_value",
+                json!({"expected_revision":1,"record_id":1,"field_index":5,"value_lines":[text]}),
+            )
+        };
+        let before = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+        let held1 = workers.permit().map_err(|e| e.message)?;
+        let held2 = workers.permit().map_err(|e| e.message)?;
+        assert_eq!(
+            executor
+                .prepare_command(setter("busy")?)
+                .err()
+                .ok_or("busy candidate")?
+                .code,
+            "busy"
+        );
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        drop((held1, held2));
+        let first = executor
+            .prepare_command(setter("first")?)
+            .map_err(|e| e.message)?;
+        let second = executor
+            .prepare_command(setter("second")?)
+            .map_err(|e| e.message)?;
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        assert_eq!(
+            executor
+                .prepare_command(setter("third")?)
+                .err()
+                .ok_or("third candidate")?
+                .code,
+            "busy"
+        );
+        let result = executor
+            .complete(second, std::future::pending())
+            .await
+            .map_err(|e| e.message)?;
+        assert!(result.changed);
+        assert_eq!(result.revision, 2);
+        assert_eq!(result.undo_depth, 1);
+        let before = serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?;
+        assert_eq!(
+            executor
+                .complete(first, std::future::pending())
+                .await
+                .err()
+                .ok_or("reverse candidate")?
+                .code,
+            "stale_revision"
+        );
+        assert_eq!(
+            serde_json::to_value(engine.lock().map_err(|_| "engine")?.state())?,
+            before
+        );
+        assert!(!executor.has_active_work());
+        assert_eq!(workers.slots.available_permits(), 2);
+        Ok(())
+    }
+
+    #[tokio::test(flavor = "current_thread")]
     async fn explicit_cancel_and_dropped_future_cancel_workers_without_releasing_their_budget_early()
     -> Result<(), Box<dyn std::error::Error>> {
         for abort in [false, true] {

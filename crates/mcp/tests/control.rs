@@ -9,6 +9,8 @@ mod chain_support;
 mod file_support;
 #[path = "../../cli/tests/support/mol.rs"]
 mod mol_support;
+#[path = "../../../xtask/oracles/sdf_field_test_support.rs"]
+mod sdf_field_support;
 #[path = "../../../xtask/oracles/sdf_record_test_support.rs"]
 mod sdf_record_support;
 #[path = "../../../xtask/oracles/sdf_test_support.rs"]
@@ -132,6 +134,121 @@ fn authenticated_sdf_record_queries_are_explicit_historical_readonly_without_rep
         }
         assert_eq!(changes.load(Ordering::SeqCst), case + 1);
         sdf_support::independently_read_sdf(&path, source, mixed)?;
+    }
+    server.shutdown()?;
+    Ok(())
+}
+
+#[test]
+fn authenticated_field_edit_save_undo_redo_preserves_raw_records_and_notifies_only_effects()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = sdf_support::SdfTestDirectory::new()?;
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, engine, move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    let mut notifications = 0;
+    for (case, mixed) in [false, true].into_iter().enumerate() {
+        let input = directory.path(if mixed {
+            "socket-set-mixed.sdf"
+        } else {
+            "socket-set-ordered.sdf"
+        });
+        let output = directory.path(if mixed {
+            "socket-set-mixed-λ.data"
+        } else {
+            "socket-set-ordered-λ.data"
+        });
+        std::fs::write(&input, sdf_field_support::source(mixed))?;
+        let revision = case * 4 + 1;
+        let index = sdf_field_support::field_index(mixed);
+        call(
+            &mut client,
+            &serde_json::json!({"command":"document.open_sdf","params":{"path":input}}).to_string(),
+        )?;
+        notifications += 1;
+        wait_for_changes(&changes, notifications);
+        let query=call(&mut client,&serde_json::json!({"command":"sdf.record.inspect","params":{"expected_revision":revision,"record_id":1}}).to_string())?;
+        assert_eq!(
+            query["result"]["sdf_record"]["fields"],
+            sdf_record_support::expected_fields(mixed, 1)
+        );
+        let changed=call(&mut client,&serde_json::json!({"command":"sdf.field.set_value","params":{"expected_revision":revision,"record_id":1,"field_index":index,"value_lines":["revised","multiline"]}}).to_string())?;
+        assert_eq!(changed["result"]["changed"], true);
+        assert_eq!(changed["result"]["revision"], revision + 1);
+        assert_eq!(changed["result"]["file"]["dirty"], true);
+        assert_eq!(changed["result"]["source"]["modified"], true);
+        assert!(changed["result"].get("sdf_record").is_none());
+        notifications += 1;
+        wait_for_changes(&changes, notifications);
+        let query=call(&mut client,&serde_json::json!({"command":"sdf.record.inspect","params":{"expected_revision":revision+1,"record_id":1}}).to_string())?;
+        assert_eq!(
+            query["result"]["sdf_record"]["fields"][index]["value_lines"],
+            serde_json::json!(["revised", "multiline"])
+        );
+        let saved = call(
+            &mut client,
+            &serde_json::json!({"command":"document.save_sdf","params":{"path":output}})
+                .to_string(),
+        )?;
+        assert_eq!(
+            saved["result"]["file_operation"]["byte_length"],
+            if mixed { 788 } else { 704 }
+        );
+        assert_eq!(saved["result"]["file"]["dirty"], false);
+        assert_eq!(saved["result"]["source"]["modified"], true);
+        notifications += 1;
+        wait_for_changes(&changes, notifications);
+        sdf_field_support::assert_edited_file(&output, mixed)?;
+        let undo = call(&mut client, r#"{"command":"history.undo","params":{}}"#)?;
+        assert_eq!(undo["result"]["revision"], revision + 2);
+        assert_eq!(undo["result"]["file"]["dirty"], true);
+        assert_eq!(undo["result"]["source"]["modified"], false);
+        notifications += 1;
+        wait_for_changes(&changes, notifications);
+        let redo = call(&mut client, r#"{"command":"history.redo","params":{}}"#)?;
+        assert_eq!(redo["result"]["revision"], revision + 3);
+        assert_eq!(redo["result"]["file"]["dirty"], false);
+        assert_eq!(redo["result"]["source"]["modified"], true);
+        notifications += 1;
+        wait_for_changes(&changes, notifications);
+        let query=call(&mut client,&serde_json::json!({"command":"sdf.record.inspect","params":{"expected_revision":revision+3,"record_id":1}}).to_string())?;
+        assert_eq!(
+            query["result"]["sdf_record"]["fields"][index]["value_lines"],
+            serde_json::json!(["revised", "multiline"])
+        );
+        let before = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+        let noop=call(&mut client,&serde_json::json!({"command":"sdf.field.set_value","params":{"expected_revision":revision+3,"record_id":1,"field_index":index,"value_lines":["revised","multiline"]}}).to_string())?;
+        assert_eq!(noop, before);
+        for (params, code) in [
+            (
+                serde_json::json!({"expected_revision":revision,"record_id":1,"field_index":index,"value_lines":[]}),
+                "stale_revision",
+            ),
+            (
+                serde_json::json!({"expected_revision":revision+3,"record_id":1,"field_index":999,"value_lines":[]}),
+                "not_found",
+            ),
+            (
+                serde_json::json!({"expected_revision":revision+3,"record_id":1,"field_index":index,"value_lines":[""]}),
+                "invalid_sdf",
+            ),
+        ] {
+            let failed = call(
+                &mut client,
+                &serde_json::json!({"command":"sdf.field.set_value","params":params}).to_string(),
+            )?;
+            assert_eq!(failed["error"]["code"], code);
+            assert_eq!(
+                call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+                before
+            );
+        }
+        assert_eq!(changes.load(Ordering::SeqCst), notifications);
+        assert_eq!(std::fs::read(input)?, sdf_field_support::source(mixed));
     }
     server.shutdown()?;
     Ok(())
