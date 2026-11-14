@@ -26,7 +26,7 @@ fn frame(workflow: &mut FileWorkflow, engine: &mut Engine, context: &egui::Conte
 fn remote_open_and_cancel_drive_the_real_picker_without_document_io() -> TestResult {
     let mut engine = Engine::default();
     engine.set_ui_file_host(true);
-    let original = engine.stored_document().clone();
+    let original = engine.stored_document()?.clone();
     let mut workflow = FileWorkflow::new(std::env::temp_dir());
     let context = egui::Context::default();
     crate::configure_context(&context);
@@ -56,7 +56,7 @@ fn remote_open_and_cancel_drive_the_real_picker_without_document_io() -> TestRes
         "remote Cancel must dismiss the same picker"
     );
     assert!(engine.state().ui_file.request.is_none());
-    assert_eq!(engine.stored_document(), &original);
+    assert_eq!(engine.stored_document()?, &original);
     assert_eq!(engine.state().revision, 0);
     Ok(())
 }

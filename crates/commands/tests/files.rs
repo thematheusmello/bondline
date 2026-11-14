@@ -181,7 +181,7 @@ fn draw_save_open_edit_save_and_reopen_is_independently_readable() -> TestResult
         opening_receipt["file_operation"]["byte_length"],
         first_bytes.len()
     );
-    assert_eq!(reopened.document(), engine.document());
+    assert_eq!(reopened.document()?, engine.document()?);
     file_state(&reopened, Some(&path), false)?;
     bond(&mut reopened, 300.0)?;
     file_state(&reopened, Some(&path), true)?;
@@ -200,7 +200,7 @@ fn draw_save_open_edit_save_and_reopen_is_independently_readable() -> TestResult
     file_state(&reopened, Some(&path), false)?;
     let second_bytes = fs::read(&path)?;
     independently_read(&second_bytes, 2)?;
-    let edited = reopened.document().clone();
+    let edited = reopened.document()?.clone();
     reopened.dispatch("history.undo", json!({}))?;
     file_state(&reopened, Some(&path), true)?;
     assert_eq!(
@@ -210,10 +210,10 @@ fn draw_save_open_edit_save_and_reopen_is_independently_readable() -> TestResult
     );
     reopened.dispatch("history.redo", json!({}))?;
     file_state(&reopened, Some(&path), false)?;
-    assert_eq!(reopened.document(), &edited);
+    assert_eq!(reopened.document()?, &edited);
     let mut again = Engine::default();
     again.dispatch("document.open_cdxml", json!({"path":path}))?;
-    assert_eq!(again.document(), &edited);
+    assert_eq!(again.document()?, &edited);
     Ok(())
 }
 
@@ -225,7 +225,7 @@ fn opaque_source_saves_exactly_and_refuses_lossy_edits() -> TestResult {
     fs::write(&original, OPAQUE)?;
     let mut engine = Engine::default();
     engine.dispatch("document.open_cdxml", json!({"path":original}))?;
-    assert!(!engine.stored_document().is_fully_mapped());
+    assert!(!engine.stored_document()?.is_fully_mapped());
     engine.dispatch("document.save_cdxml", json!({"path":copy}))?;
     assert_eq!(fs::read(&copy)?, OPAQUE);
     file_state(&engine, Some(&copy), false)?;
@@ -249,7 +249,7 @@ fn opaque_source_saves_exactly_and_refuses_lossy_edits() -> TestResult {
     assert_eq!(fs::read(&original)?, OPAQUE);
     engine.dispatch("history.undo", json!({}))?;
     file_state(&engine, Some(&copy), false)?;
-    assert_eq!(engine.stored_document().to_cdxml()?.as_ref(), OPAQUE);
+    assert_eq!(engine.stored_document()?.to_cdxml()?.as_ref(), OPAQUE);
     Ok(())
 }
 
@@ -263,7 +263,7 @@ fn failed_opens_retain_complete_document_source_history_and_file_state() -> Test
     bond(&mut engine, 300.0)?;
     bond(&mut engine, 400.0)?;
     engine.dispatch("history.undo", json!({}))?;
-    let stored = engine.stored_document().clone();
+    let stored = engine.stored_document()?.clone();
     let before = snapshot(&engine)?;
     let malformed = directory.path("malformed.cdxml");
     fs::write(&malformed, b"<CDXML><page></CDXML>")?;
@@ -290,7 +290,7 @@ fn failed_opens_retain_complete_document_source_history_and_file_state() -> Test
             "invalid open must fail: {}",
             path.display()
         );
-        assert_eq!(engine.stored_document(), &stored);
+        assert_eq!(engine.stored_document()?, &stored);
         assert_eq!(
             snapshot(&engine)?,
             before,
@@ -301,7 +301,7 @@ fn failed_opens_retain_complete_document_source_history_and_file_state() -> Test
     }
     engine.dispatch("history.redo", json!({}))?;
     assert_eq!(
-        engine.document().pages()[0].fragments().len(),
+        engine.document()?.pages()[0].fragments().len(),
         3,
         "failed open must retain usable redo"
     );
@@ -340,7 +340,7 @@ fn dirty_open_requires_explicit_discard_and_success_resets_history() -> TestResu
         (2, 0, 0)
     );
     file_state(&engine, Some(&path), false)?;
-    assert_eq!(engine.stored_document().to_cdxml()?.as_ref(), NATIVE);
+    assert_eq!(engine.stored_document()?.to_cdxml()?.as_ref(), NATIVE);
     assert_eq!(
         engine
             .dispatch("history.undo", json!({}))
@@ -367,7 +367,7 @@ fn save_failure_and_noop_preserve_path_dirty_state_history_and_existing_bytes() 
     engine.dispatch("history.undo", json!({}))?;
     file_state(&engine, Some(&original), false)?;
     let before = snapshot(&engine)?;
-    let page = engine.document().pages().first().ok_or("page")?;
+    let page = engine.document()?.pages().first().ok_or("page")?;
     let no_op = engine.dispatch(
         "page.set_size",
         json!({"page_id":1,"width_pt":page.size().width_pt(),"height_pt":page.size().height_pt()}),
@@ -392,7 +392,7 @@ fn save_failure_and_noop_preserve_path_dirty_state_history_and_existing_bytes() 
     }
     engine.dispatch("history.redo", json!({}))?;
     file_state(&engine, Some(&original), true)?;
-    assert_eq!(engine.document().pages()[0].fragments().len(), 2);
+    assert_eq!(engine.document()?.pages()[0].fragments().len(), 2);
     Ok(())
 }
 
@@ -500,7 +500,7 @@ fn open_rechecks_unsaved_policy_when_an_older_save_changes_the_baseline() -> Tes
     assert!(engine.state().file.dirty);
     assert_eq!(engine.state().undo_depth, 2);
     assert_eq!(engine.state().redo_depth, 0);
-    assert_eq!(engine.document().pages()[0].fragments().len(), 2);
+    assert_eq!(engine.document()?.pages()[0].fragments().len(), 2);
     let before = snapshot(&engine)?;
     let error = engine
         .finish(opening.complete()?)
@@ -568,14 +568,14 @@ fn registry_save_rejects_non_utf8_canonical_parent_before_publication() -> TestR
     // Native PathBuf callers retain their wider path contract.
     let receipt = bondline_io::files::save_cdxml_file(
         &native_parent.join("native.cdxml"),
-        engine.stored_document(),
+        engine.stored_document()?,
         false,
         &Cancellation::default(),
     )?;
     assert!(receipt.path.to_str().is_none());
     assert_eq!(
         fs::read(&receipt.path)?,
-        engine.stored_document().to_cdxml()?.as_ref()
+        engine.stored_document()?.to_cdxml()?.as_ref()
     );
     Ok(())
 }

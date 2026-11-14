@@ -83,6 +83,8 @@ fn real_mol_open_and_exact_save_keep_complete_headers_source_and_format() -> Tes
     );
     let atom = opened
         .document
+        .as_ref()
+        .ok_or("drawing result")?
         .pages()
         .first()
         .ok_or("page")?
@@ -120,9 +122,12 @@ fn native_bond_mol_save_and_reopen_use_the_declared_frame_and_real_external_cons
     let path = directory.path("native.mol");
     let mut engine = Engine::default();
     bond(&mut engine, 200.0)?;
-    let document = engine.document().clone();
+    let document = engine.document()?.clone();
     let saved = engine.dispatch("document.save_mol", json!({"path":path}))?;
-    assert_eq!(*saved.document, document);
+    assert_eq!(
+        saved.document.as_deref().ok_or("drawing result")?,
+        &document
+    );
     assert_eq!(saved.revision, 1);
     assert_eq!(saved.undo_depth, 1);
     assert!(!saved.file.dirty);
@@ -142,6 +147,8 @@ fn native_bond_mol_save_and_reopen_use_the_declared_frame_and_real_external_cons
     let result = reopened.dispatch("document.open_mol", json!({"path":path}))?;
     let atoms = result
         .document
+        .as_ref()
+        .ok_or("drawing result")?
         .pages()
         .first()
         .ok_or("page")?

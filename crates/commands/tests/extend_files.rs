@@ -45,25 +45,25 @@ fn saved_native_propane_reopens_extends_to_butane_and_retains_source_and_saved_b
     fs::write(&path, NATIVE)?;
     let mut engine = Engine::default();
     engine.dispatch("document.open_cdxml", json!({"path":path}))?;
-    let before = engine.stored_document().clone();
+    let before = engine.stored_document()?.clone();
     engine.dispatch("bond.extend", extend(1, 2, 180.0, 240.0))?;
-    let propane = engine.stored_document().clone();
+    let propane = engine.stored_document()?.clone();
     let saved = engine.dispatch("document.save_cdxml", json!({"path":path,"overwrite":true}))?;
     assert!(!saved.file.dirty);
     assert!(saved.source.ok_or("source")?.modified);
     let bytes = fs::read(&path)?;
     independent(&path, 3, "letter")?;
     engine.dispatch("history.undo", json!({}))?;
-    assert_eq!(engine.stored_document(), &before);
-    assert_eq!(engine.stored_document().to_cdxml()?.as_ref(), NATIVE);
+    assert_eq!(engine.stored_document()?, &before);
+    assert_eq!(engine.stored_document()?.to_cdxml()?.as_ref(), NATIVE);
     assert!(engine.state().file.dirty);
     engine.dispatch("history.redo", json!({}))?;
-    assert_eq!(engine.stored_document(), &propane);
+    assert_eq!(engine.stored_document()?, &propane);
     assert!(!engine.state().file.dirty);
-    assert_eq!(engine.stored_document().to_cdxml()?.as_ref(), bytes);
+    assert_eq!(engine.stored_document()?.to_cdxml()?.as_ref(), bytes);
     let mut reopened = Engine::default();
     reopened.dispatch("document.open_cdxml", json!({"path":path}))?;
-    assert_eq!(reopened.document(), engine.document());
+    assert_eq!(reopened.document()?, engine.document()?);
     assert!(!reopened.state().source.ok_or("reopened source")?.modified);
     reopened.dispatch("bond.extend", extend(1, 3, 220.0, 280.0))?;
     reopened.dispatch("document.save_cdxml", json!({"path":path,"overwrite":true}))?;
@@ -106,7 +106,7 @@ fn in_flight_saves_keep_their_immutable_input_and_stale_open_cannot_replace_an_e
         json!({"path":path,"discard_unsaved":true}),
     )?)?;
     engine.dispatch("bond.extend", extend(2, 3, 220.0, 280.0))?;
-    let before = engine.stored_document().clone();
+    let before = engine.stored_document()?.clone();
     let state = serde_json::to_value(engine.state())?;
     assert_eq!(
         engine
@@ -117,7 +117,7 @@ fn in_flight_saves_keep_their_immutable_input_and_stale_open_cannot_replace_an_e
             .code,
         "stale_revision"
     );
-    assert_eq!(engine.stored_document(), &before);
+    assert_eq!(engine.stored_document()?, &before);
     assert_eq!(serde_json::to_value(engine.state())?, state);
     Ok(())
 }
@@ -139,7 +139,7 @@ fn source_free_mol_association_does_not_turn_into_mol_source_authority() -> Test
     let mut reopened = Engine::default();
     reopened.dispatch("document.open_mol", json!({"path":path}))?;
     assert_eq!(reopened.state().source.ok_or("MOL backing")?.format, "mol");
-    let before = reopened.stored_document().clone();
+    let before = reopened.stored_document()?.clone();
     assert_eq!(
         reopened
             .dispatch("bond.extend", extend(1, 3, 220.0, 280.0))
@@ -149,6 +149,6 @@ fn source_free_mol_association_does_not_turn_into_mol_source_authority() -> Test
             .code,
         "unsupported_content"
     );
-    assert_eq!(reopened.stored_document(), &before);
+    assert_eq!(reopened.stored_document()?, &before);
     Ok(())
 }

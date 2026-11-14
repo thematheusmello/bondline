@@ -74,11 +74,11 @@ fn selected_mol_decoder_refuses_xml_and_explicit_cdxml_retry_can_open_the_same_n
     let directory = Directory::new()?;
     let path = directory.0.join("misnamed.mol");
     let document = Engine::default();
-    std::fs::write(&path, document.stored_document().to_cdxml()?.as_ref())?;
+    std::fs::write(&path, document.stored_document()?.to_cdxml()?.as_ref())?;
     let mut engine = Engine::default();
     engine.set_ui_file_host(true);
     add_bond(&mut engine, 72.0)?;
-    let original = engine.stored_document().clone();
+    let original = engine.stored_document()?.clone();
     let revision = engine.state().revision;
     let mut workflow = FileWorkflow::new(directory.0.clone());
     workflow.request_file(&mut engine, UiFileAction::Open, None, &mut None);
@@ -102,7 +102,7 @@ fn selected_mol_decoder_refuses_xml_and_explicit_cdxml_retry_can_open_the_same_n
     assert!(wait_for_file(&mut workflow, &executor)?.is_some());
     {
         let engine = executor.engine().lock().map_err(|_| "engine lock")?;
-        assert_eq!(engine.stored_document(), &original);
+        assert_eq!(engine.stored_document()?, &original);
         assert_eq!(engine.state().revision, revision);
         assert_eq!(engine.state().file.format, FileFormat::Cdxml);
     }
@@ -123,7 +123,7 @@ fn selected_mol_decoder_refuses_xml_and_explicit_cdxml_retry_can_open_the_same_n
     assert_eq!(engine.state().file.format, FileFormat::Cdxml);
     assert!(
         engine
-            .document()
+            .document()?
             .pages()
             .first()
             .ok_or("page")?
@@ -142,7 +142,7 @@ fn mol_save_as_rejects_multiple_fragments_without_publication_and_retains_format
     engine.set_ui_file_host(true);
     add_bond(&mut engine, 72.0)?;
     add_bond(&mut engine, 144.0)?;
-    let original = engine.stored_document().clone();
+    let original = engine.stored_document()?.clone();
     let revision = engine.state().revision;
     let mut workflow = FileWorkflow::new(directory.0.clone());
     workflow.request_file(&mut engine, UiFileAction::SaveAs, None, &mut None);
@@ -168,7 +168,7 @@ fn mol_save_as_rejects_multiple_fragments_without_publication_and_retains_format
     assert!(error.is_some());
     assert!(!path.exists());
     let engine = executor.engine().lock().map_err(|_| "engine lock")?;
-    assert_eq!(engine.stored_document(), &original);
+    assert_eq!(engine.stored_document()?, &original);
     assert_eq!(engine.state().revision, revision);
     assert!(engine.state().file.dirty);
     assert_eq!(workflow.chooser.format(), FileFormat::MolV2000);

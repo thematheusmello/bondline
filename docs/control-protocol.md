@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has sixteen commands; the complete list is below.
+The delivered registry has eighteen commands; the complete list is below.
 
 An engine JSON request is exactly:
 
@@ -26,9 +26,10 @@ caches and client-held snapshots are excluded; this is not a process-memory ceil
 These are explicit Bondline policies, not claims about another application's history limits.
 Revision overflow rejects the operation before history eviction or mutation.
 
-Page snapshots include a fragments array, empty in the default application. Engine history
-now retains an owned StoredDocument, including original CDXML data. An engine initialized
-with that API returns an additional source object: {format: "cdxml"|"cdx"|"mol", byte_length, modified}.
+Drawing snapshots include a fragments array, empty in the default application. Engine
+history retains complete StoredContent: either a source-backed StoredDocument drawing
+or original/current whole-SDF snapshots. A backed session returns an additional source
+object: {format: "cdxml"|"cdx"|"mol"|"sdf", byte_length, modified}.
 The field is omitted for native in-memory documents. Raw source bytes are not serialized.
 The open/save commands below use that complete backing. bond.create authors a limited native
 chemical fragment; source-backed creation is refused unless a complete profile is proven.
@@ -49,6 +50,8 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.save_cdx` | `path`, optional `overwrite=false` | Atomic exact unchanged CDX backing only; changed models, source-free encoding and lossy cross-format export refuse |
 | `document.open_mol` | `path`, optional `discard_unsaved=false`, `points_per_unit=24`, `origin_x_pt=72`, `origin_y_pt=72` | Validate and decode the actual V2000/V3000 version; retain complete source/frame; same guarded new-session behavior as CDXML |
 | `document.save_mol` | `path`, optional `overwrite=false`, `version="auto"` (`auto`, `v2000`, `v3000`) | Atomic MOL save with captured output version; refuses unsupported conversion/metadata/layout loss; imported source retains its frame |
+| `document.open_sdf` | `path`, optional `discard_unsaved=false` | Validate every mixed V2000/V3000 record and retain complete ordered source; clean collection session and cleared history, without a drawing projection |
+| `document.save_sdf` | `path`, optional `overwrite=false` | Atomic whole-source collection save; retains every record, MOL version, ordered field and byte; no molecular regeneration |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request Open/Save/Save As presentation or cancel the matching picker; a native host is required |
@@ -162,7 +165,7 @@ Cancellation/error codes include `cancelled`, `render_failed`, `backend_unavaila
 
 ## File operations and saved state
 
-Every result includes `file: {path: string|null, dirty: boolean, format: "cdxml"|"cdx"|"mol_v2000"|"mol_v3000"}`. Dirty compares the complete
+Every result includes `file: {path: string|null, dirty: boolean, format: "cdxml"|"cdx"|"mol_v2000"|"mol_v3000"|"sdf"}`. Dirty compares the complete
 current snapshot with the last successful save/open baseline, including unknown source data.
 Undo back to that baseline is clean; exact no-ops do not dirty it. `source.modified` instead
 describes the retained original backing's baseline. A changed native-profile file may be
@@ -214,7 +217,7 @@ outcome, even if an OS syscall exceeds the request deadline. Dropping the awaiti
 cancellation but retains the worker permit until it exits.
 
 Stable file errors include `invalid_path`, `file_too_large`, `not_regular_file`, `symlink_target`,
-`file_changed`, `unsupported_content`, `invalid_document`, `not_found`, `already_exists`,
+`file_changed`, `unsupported_content`, `invalid_document`, `invalid_sdf`, `resource_limit`, `not_found`, `already_exists`,
 `permission_denied`, `unsupported_filesystem`, `io_error`, `recovery_required`. Post-publication
 error is `save_published`; its message states that new bytes exist and no rollback occurred.
 Recovery messages identify a retained original path. Directory-sync false is a capability
@@ -260,6 +263,43 @@ receipt/current acknowledgment and close barriers apply to both new commands. No
 worker or dispatcher exists. See [CDX application evidence](verification-cdx-application.md)
 for engine/wire scope and exact450962c Mac chooser/Known Save/retry/close acceptance.
 Interactive Windows/Linux, broad CDX files, editing and faithful preview remain unverified.
+
+### Complete SDF sessions
+
+Drawing responses retain their existing `document` object and omit `collection`. An SDF
+response explicitly has `document:null` and metadata for every ordered record:
+
+```json
+{"document":null,"collection":{"format":"sdf","byte_length":777,"record_count":2,"records":[{"id":1,"mol_version":"v3000","byte_length":462,"mol_byte_length":344,"field_count":6},{"id":2,"mol_version":"v2000","byte_length":315,"mol_byte_length":282,"field_count":1}]}}
+```
+
+This example shows only the content-specific fields; revision/history/file/source/close
+metadata remains present. Record IDs are positive local ordinals, preserved by an immutable
+field-value replacement but not promised across another source. Automatic results and Debug
+contain no raw molecular bytes, headers or field values. Each record reports its actual MOL
+version; `sdf` identifies a container family, never a fake whole-file V2000/V3000 encoding.
+
+`collection.byte_length` and Save receipt length describe current bytes. `source.byte_length`
+continues to describe the original source, and `source.modified` compares original/current.
+`file.dirty` compares complete current/saved content, including both original identity and
+opaque bytes. A private library field candidate exercises a704-byte current save from a690-byte
+original: Save clears dirty while source remains690/modified. No SDF edit command is exposed yet.
+
+Open validates the whole input before applying it, including later records; unsupported
+model projection is not a reason to drop valid opaque MOL data. Save borrows all current
+bytes directly and uses the same FilePlan/Completed reservation, atomic publisher,
+stale-generation, trusted UI request and close barriers as drawing formats. Drawing-to-SDF
+and SDF-to-CDXML/CDX/MOL saves return `unsupported_content` before temporary creation.
+All drawing-only authoring/capture commands return the same typed wrong-kind error on SDF.
+The Rust API now exposes `Engine::content()` for all content, while `document()` and
+`stored_document()` return Result; callers must handle a collection explicitly.
+
+The native chooser/known Save/retry routes are wired to the same commands. SDF uses one
+Open/Save family with `.sdf`/`.sd` hints. The workspace clears old drawing interactions and
+shows a static count/record summary with chemical preview explicitly unavailable. This is
+an original partial presentation, not the observed26.1 all-record drawing layout. Record
+inspection/editing, molecular layout, field UI and actual native SDF acceptance remain
+missing or unverified. See [SDF session evidence](verification-sdf-session-files.md).
 
 ## Close requests and host shutdown
 

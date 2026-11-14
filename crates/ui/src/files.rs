@@ -373,6 +373,7 @@ impl FileChooser {
                         FileFormat::Cdx=>"CDX files (*.cdx); only unchanged imported data can be saved.",
                         FileFormat::MolV2000=>"MOL V2000 files (*.mol); unsupported content cannot be saved in this format.",
                         FileFormat::MolV3000=>"MOL V3000 files (*.mol); unsupported content cannot be saved in this format.",
+                        FileFormat::Sdf=>"SDF collections (*.sdf, *.sd); all records and their molecular versions are retained.",
                     }
                 });
                 if self.loading {
@@ -503,17 +504,24 @@ pub(crate) fn format_extension(format: FileFormat) -> &'static str {
         FileFormat::Cdxml => "cdxml",
         FileFormat::Cdx => "cdx",
         FileFormat::MolV2000 | FileFormat::MolV3000 => "mol",
+        FileFormat::Sdf => "sdf",
     }
 }
 
 fn formats_for_mode(mode: FileMode) -> &'static [FileFormat] {
     match mode {
-        FileMode::Open => &[FileFormat::Cdxml, FileFormat::Cdx, FileFormat::MolV2000],
+        FileMode::Open => &[
+            FileFormat::Cdxml,
+            FileFormat::Cdx,
+            FileFormat::MolV2000,
+            FileFormat::Sdf,
+        ],
         FileMode::Save => &[
             FileFormat::Cdxml,
             FileFormat::Cdx,
             FileFormat::MolV2000,
             FileFormat::MolV3000,
+            FileFormat::Sdf,
         ],
     }
 }
@@ -527,6 +535,7 @@ fn format_label(format: FileFormat, mode: FileMode) -> &'static str {
         }
         (FileFormat::MolV2000, FileMode::Save) => "MOL V2000 (*.mol)",
         (FileFormat::MolV3000, FileMode::Save) => "MOL V3000 (*.mol)",
+        (FileFormat::Sdf, _) => "SDF collection (*.sdf, *.sd)",
     }
 }
 
@@ -534,7 +543,10 @@ fn name_matches_format(name: &str, format: FileFormat) -> bool {
     Path::new(name)
         .extension()
         .and_then(|extension| extension.to_str())
-        .is_some_and(|extension| extension.eq_ignore_ascii_case(format_extension(format)))
+        .is_some_and(|extension| {
+            extension.eq_ignore_ascii_case(format_extension(format))
+                || format == FileFormat::Sdf && extension.eq_ignore_ascii_case("sd")
+        })
 }
 
 fn format_hint(name: &str) -> Option<FileFormat> {
@@ -545,6 +557,8 @@ fn format_hint(name: &str) -> Option<FileFormat> {
         Some(FileFormat::Cdx)
     } else if extension.eq_ignore_ascii_case("mol") {
         Some(FileFormat::MolV2000)
+    } else if extension.eq_ignore_ascii_case("sdf") || extension.eq_ignore_ascii_case("sd") {
+        Some(FileFormat::Sdf)
     } else {
         None
     }
@@ -570,18 +584,19 @@ fn resolve_path_as(
     match path.extension().and_then(|extension| extension.to_str()) {
         Some(extension)
             if mode == FileMode::Open
-                && ["cdxml", "cdx", "mol"]
+                && ["cdxml", "cdx", "mol", "sdf", "sd"]
                     .iter()
                     .any(|supported| extension.eq_ignore_ascii_case(supported)) => {}
         Some(extension)
             if mode == FileMode::Save
-                && extension.eq_ignore_ascii_case(format_extension(format)) => {}
+                && (extension.eq_ignore_ascii_case(format_extension(format))
+                    || format == FileFormat::Sdf && extension.eq_ignore_ascii_case("sd")) => {}
         None if mode == FileMode::Save => {
             path.set_extension(format_extension(format));
         }
         _ => {
             return Err(if mode == FileMode::Open {
-                "Choose a .cdxml, .cdx or .mol structure file.".to_owned()
+                "Choose a .cdxml, .cdx, .mol, .sdf or .sd file.".to_owned()
             } else {
                 format!(
                     "Use the .{} extension for the selected format.",
@@ -754,7 +769,10 @@ mod tests {
             directory.0.join("binary.CDX"),
             b"opaque listing; never decoded",
         )?;
-        fs::write(directory.0.join("ignored.sdf"), b"not supported")?;
+        fs::write(
+            directory.0.join("collection.sdf"),
+            b"listing does not decode SDF",
+        )?;
         let latest = AtomicU64::new(1);
         let result = scan_directory(
             ScanRequest {
@@ -775,6 +793,7 @@ mod tests {
                 ("A.CDXML", false),
                 ("b.cdxml", false),
                 ("binary.CDX", false),
+                ("collection.sdf", false),
                 ("other.mol", false)
             ]
         );
@@ -893,7 +912,7 @@ mod tests {
             resolve_path(&directory.0, "fresh", FileMode::Save)?,
             directory.0.join("fresh.cdxml").to_str().ok_or("unicode")?
         );
-        for bad in ["", "   ", "bad\0.cdxml", "sample.rxn", "sample.sdf"] {
+        for bad in ["", "   ", "bad\0.cdxml", "sample.rxn"] {
             assert!(
                 resolve_path(&directory.0, bad, FileMode::Open).is_err(),
                 "{bad:?}"
@@ -907,6 +926,72 @@ mod tests {
             )
             .is_err()
         );
+        Ok(())
+    }
+
+    #[test]
+    fn sdf_uses_one_complete_collection_family_for_both_extensions_and_retry()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = Directory::new()?;
+        for name in ["sample.sdf", "sample.SD"] {
+            assert_eq!(format_hint(name), Some(FileFormat::Sdf));
+            assert!(name_matches_format(name, FileFormat::Sdf));
+            assert_eq!(
+                resolve_path_as(&directory.0, name, FileMode::Open, FileFormat::Sdf)?,
+                directory.0.join(name).to_str().ok_or("path")?
+            );
+            assert_eq!(
+                resolve_path_as(&directory.0, name, FileMode::Save, FileFormat::Sdf)?,
+                directory.0.join(name).to_str().ok_or("path")?
+            );
+        }
+        assert_eq!(
+            formats_for_mode(FileMode::Open)
+                .iter()
+                .filter(|format| **format == FileFormat::Sdf)
+                .count(),
+            1
+        );
+        assert_eq!(
+            formats_for_mode(FileMode::Save)
+                .iter()
+                .filter(|format| **format == FileFormat::Sdf)
+                .count(),
+            1
+        );
+        assert_eq!(
+            format_label(FileFormat::Sdf, FileMode::Open),
+            "SDF collection (*.sdf, *.sd)"
+        );
+        let mut chooser = FileChooser::default();
+        chooser.begin_with_format(
+            FileMode::Save,
+            directory.0.clone(),
+            "pair".to_owned(),
+            FileFormat::Sdf,
+        );
+        assert_eq!(chooser.format(), FileFormat::Sdf);
+        assert!(
+            resolve_path_as(&directory.0, "pair.mol", FileMode::Save, FileFormat::Sdf).is_err()
+        );
+        let path = directory
+            .0
+            .join("known.mol")
+            .to_str()
+            .ok_or("path")?
+            .to_owned();
+        let action = FileAction::Save {
+            path: path.clone(),
+            overwrite: true,
+        };
+        chooser.failed_with_format(
+            action.clone(),
+            FileFormat::Sdf,
+            "permission_denied",
+            "denied".to_owned(),
+        );
+        assert_eq!(chooser.format(), FileFormat::Sdf);
+        assert_eq!(chooser.confirm(), Some(action));
         Ok(())
     }
 
@@ -1253,7 +1338,12 @@ mod tests {
     -> Result<(), Box<dyn std::error::Error>> {
         assert_eq!(
             formats_for_mode(FileMode::Open),
-            &[FileFormat::Cdxml, FileFormat::Cdx, FileFormat::MolV2000]
+            &[
+                FileFormat::Cdxml,
+                FileFormat::Cdx,
+                FileFormat::MolV2000,
+                FileFormat::Sdf
+            ]
         );
         assert_eq!(
             format_label(FileFormat::MolV2000, FileMode::Open),
@@ -1265,7 +1355,8 @@ mod tests {
                 FileFormat::Cdxml,
                 FileFormat::Cdx,
                 FileFormat::MolV2000,
-                FileFormat::MolV3000
+                FileFormat::MolV3000,
+                FileFormat::Sdf
             ]
         );
         assert_eq!(

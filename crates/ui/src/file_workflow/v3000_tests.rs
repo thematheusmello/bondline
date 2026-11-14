@@ -109,7 +109,7 @@ fn mol_family_open_decodes_actual_v3000_bytes_even_with_a_cdxml_suffix() -> Test
         let engine = executor.engine().lock().map_err(|_| "engine lock")?;
         assert_eq!(engine.state().file.format, FileFormat::MolV3000);
         assert!(!engine.state().file.dirty);
-        assert_eq!(engine.stored_document().export_mol()?, ORIGINAL_CC);
+        assert_eq!(engine.stored_document()?.export_mol()?, ORIGINAL_CC);
     }
     Ok(())
 }
@@ -124,7 +124,7 @@ fn v3000_downgrade_refusal_keeps_source_state_and_the_guarded_picker_retry() -> 
     let mut engine = Engine::default();
     engine.set_ui_file_host(true);
     engine.dispatch("document.open_mol", serde_json::json!({"path":path}))?;
-    let original = engine.stored_document().clone();
+    let original = engine.stored_document()?.clone();
     let state = engine.state();
     let mut workflow = FileWorkflow::new(directory.0.clone());
     workflow.request_file(&mut engine, UiFileAction::SaveAs, None, &mut None);
@@ -147,7 +147,7 @@ fn v3000_downgrade_refusal_keeps_source_state_and_the_guarded_picker_retry() -> 
     )?;
     assert!(wait_for_file(&mut workflow, &executor)?.is_some());
     let mut engine = executor.engine().lock().map_err(|_| "engine lock")?;
-    assert_eq!(engine.stored_document(), &original);
+    assert_eq!(engine.stored_document()?, &original);
     assert_eq!(engine.state().revision, state.revision);
     assert_eq!(engine.state().file.format, FileFormat::MolV3000);
     assert_eq!(engine.state().file.path, state.file.path);

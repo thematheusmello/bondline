@@ -88,7 +88,7 @@ fn has_text(output: &egui::FullOutput, needle: &str) -> bool {
 fn remote_close_state_is_adopted_and_ui_decisions_use_the_registry() -> TestResult {
     let mut engine = native_engine();
     edit(&mut engine, 640)?;
-    let original = engine.stored_document().clone();
+    let original = engine.stored_document()?.clone();
     let revision = engine.state().revision;
     let mut workflow = FileWorkflow::new(std::env::temp_dir());
     let context = egui::Context::default();
@@ -119,7 +119,7 @@ fn remote_close_state_is_adopted_and_ui_decisions_use_the_registry() -> TestResu
     assert_eq!(engine.state().close, CloseState::Approved);
     assert_eq!(engine.state().close_epoch, epoch + 1);
     assert_eq!(engine.state().revision, revision);
-    assert_eq!(engine.stored_document(), &original);
+    assert_eq!(engine.stored_document()?, &original);
     assert!(workflow.complete_close_if_idle(&mut engine, false, false));
     assert_eq!(engine.state().close, CloseState::Committed);
     Ok(())

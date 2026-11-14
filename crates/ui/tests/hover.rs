@@ -8,7 +8,7 @@ use eframe::egui::{self, Event};
 type TestResult<T = ()> = Result<T, Box<dyn std::error::Error>>;
 
 fn engine() -> TestResult<Engine> {
-    let mut stored = Engine::default().stored_document().clone();
+    let mut stored = Engine::default().stored_document()?.clone();
     let id = PageId::new(1).ok_or("page")?;
     stored
         .model_mut()

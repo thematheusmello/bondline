@@ -147,7 +147,9 @@ impl Engine {
                 disabled_reason: reason,
             });
         }
-        if let Some(page) = self.document().pages().first() {
+        if let Ok(document) = self.document()
+            && let Some(page) = document.pages().first()
+        {
             let size = page.size();
             for (id, label, width_pt, height_pt) in [
                 (

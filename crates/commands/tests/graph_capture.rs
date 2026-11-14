@@ -57,8 +57,8 @@ fn registered_capture_opens_renders_and_saves_a_literal_imported_propane_without
     independent_propane(&fs::read(&input)?)?;
     let mut engine = Engine::default();
     engine.dispatch("document.open_mol", json!({"path":input}))?;
-    assert!(engine.stored_document().is_fully_mapped());
-    let page = engine.document().pages().first().ok_or("page")?;
+    assert!(engine.stored_document()?.is_fully_mapped());
+    let page = engine.document()?.pages().first().ok_or("page")?;
     let atoms = page.fragments().first().ok_or("fragment")?.atoms();
     assert_eq!(
         atoms
@@ -108,7 +108,7 @@ fn registered_capture_opens_renders_and_saves_a_literal_imported_propane_without
     engine.dispatch("document.save_mol", json!({"path":copy}))?;
     assert_eq!(fs::read(&copy)?, PROPANE);
     independent_propane(&fs::read(&copy)?)?;
-    assert_eq!(engine.stored_document().export_mol()?, PROPANE);
+    assert_eq!(engine.stored_document()?.export_mol()?, PROPANE);
     assert_eq!(
         (
             engine.state().revision,
@@ -120,8 +120,8 @@ fn registered_capture_opens_renders_and_saves_a_literal_imported_propane_without
     assert!(!engine.state().file.dirty);
     let mut reopened = Engine::default();
     reopened.dispatch("document.open_mol", json!({"path":copy}))?;
-    assert_eq!(reopened.document(), engine.document());
-    assert_eq!(reopened.stored_document().export_mol()?, PROPANE);
+    assert_eq!(reopened.document()?, engine.document()?);
+    assert_eq!(reopened.stored_document()?.export_mol()?, PROPANE);
     Ok(())
 }
 
@@ -150,7 +150,7 @@ fn a_drawable_projection_never_unlocks_unmapped_source_display_or_export() -> Te
         "unsupported_content"
     );
     assert_eq!(serde_json::to_vec(&engine.state())?, before);
-    assert_eq!(engine.stored_document().to_cdxml()?.as_ref(), extended);
-    assert!(!engine.stored_document().is_fully_mapped());
+    assert_eq!(engine.stored_document()?.to_cdxml()?.as_ref(), extended);
+    assert!(!engine.stored_document()?.is_fully_mapped());
     Ok(())
 }

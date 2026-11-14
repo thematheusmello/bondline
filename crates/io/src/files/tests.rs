@@ -1,6 +1,92 @@
 use super::*;
 
 #[test]
+fn sdf_bounded_files_preserve_every_record_and_report_exact_publication_failures()
+-> Result<(), Box<dyn std::error::Error>> {
+    let source = include_bytes!("../../tests/fixtures/sdf/mixed-v2000-v3000.sdf");
+    let document = crate::sdf::SdfDocument::parse(source.as_slice().into())?;
+    let directory = Directory::new()?;
+    let input = directory.0.join("two records.input");
+    fs::write(&input, source)?;
+    let loaded = read_sdf_file(&input, &Cancellation::default())?;
+    assert_eq!(loaded.path, fs::canonicalize(&input)?);
+    assert_eq!(loaded.document, document);
+    assert_eq!(loaded.document.as_bytes(), source);
+    assert_eq!(loaded.document.records().len(), 2);
+    assert_eq!(loaded.document.records()[0].mol_version(), Version::V3000);
+    assert_eq!(loaded.document.records()[1].mol_version(), Version::V2000);
+    let output = directory.0.join("two records.output");
+    let receipt = save_sdf_file(&output, &document, false, &Cancellation::default())?;
+    assert_eq!(receipt.byte_length, 777);
+    assert_eq!(fs::read(&output)?, source);
+    assert_eq!(
+        save_sdf_file(&output, &document, false, &Cancellation::default())
+            .err()
+            .ok_or("no clobber")?
+            .code(),
+        "already_exists"
+    );
+    for stage in [Stage::Write, Stage::SyncDirectory] {
+        fs::write(&output, b"old full file")?;
+        let error = save_encoded_with_hook(
+            &output,
+            true,
+            &Cancellation::default(),
+            || Ok(std::borrow::Cow::Borrowed(document.as_bytes())),
+            &mut |current| {
+                if current == stage {
+                    Err(io::Error::other("injected SDF failure"))
+                } else {
+                    Ok(())
+                }
+            },
+        )
+        .err()
+        .ok_or("publication failure")?;
+        assert_eq!(error.stage(), stage.name());
+        assert_eq!(error.published(), stage == Stage::SyncDirectory);
+        assert_eq!(
+            fs::read(&output)?.as_slice(),
+            if error.published() {
+                source.as_slice()
+            } else {
+                b"old full file"
+            }
+        );
+        assert_eq!(document.as_bytes(), source);
+        assert_eq!(fs::read_dir(&directory.0)?.count(), 2);
+    }
+    let cancel = Cancellation::default();
+    cancel.cancel();
+    assert_eq!(
+        read_sdf_file(&input, &cancel)
+            .err()
+            .ok_or("read cancellation")?
+            .code(),
+        "cancelled"
+    );
+    assert_eq!(
+        save_sdf_file(&output, &document, true, &cancel)
+            .err()
+            .ok_or("save cancellation")?
+            .code(),
+        "cancelled"
+    );
+    fs::write(
+        &input,
+        [source.as_slice(), b"broken later record\n"].concat(),
+    )?;
+    assert_eq!(
+        read_sdf_file(&input, &Cancellation::default())
+            .err()
+            .ok_or("malformed later record")?
+            .code(),
+        "invalid_sdf"
+    );
+    Ok(())
+}
+
+#[test]
 fn cdx_preserves_bytes_until_publication_and_reports_later_failures_truthfully()
 -> Result<(), Box<dyn std::error::Error>> {
     const SOURCE: &[u8] =

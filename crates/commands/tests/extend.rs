@@ -50,14 +50,14 @@ fn seeded(fragments: Vec<Fragment>) -> TestResult<Engine> {
 }
 
 fn assert_failure(engine: &mut Engine, params: Value, code: &str) -> TestResult {
-    let document = engine.stored_document().clone();
+    let document = engine.stored_document()?.clone();
     let before = serde_json::to_value(engine.state())?;
     let error = engine
         .dispatch("bond.extend", params)
         .err()
         .ok_or("request unexpectedly succeeded")?;
     assert_eq!(error.info().code, code, "{error}");
-    assert_eq!(engine.stored_document(), &document);
+    assert_eq!(engine.stored_document()?, &document);
     assert_eq!(serde_json::to_value(engine.state())?, before);
     Ok(())
 }
@@ -66,7 +66,7 @@ fn assert_failure(engine: &mut Engine, params: Value, code: &str) -> TestResult 
 fn explicit_terminal_rectification_is_one_exact_propane_history_step() -> TestResult {
     let mut engine = Engine::default();
     engine.dispatch("bond.create", create())?;
-    let ethane = engine.stored_document().clone();
+    let ethane = engine.stored_document()?.clone();
     let result = engine.dispatch("bond.extend", extend(1))?;
     assert!(result.changed);
     assert_eq!(
@@ -83,11 +83,11 @@ fn explicit_terminal_rectification_is_one_exact_propane_history_step() -> TestRe
              "bonds":[{"id":1,"begin":1,"end":2,"order":"single"},{"id":2,"begin":2,"end":3,"order":"single"}]}
         ])
     );
-    let propane = engine.stored_document().clone();
+    let propane = engine.stored_document()?.clone();
     engine.dispatch("history.undo", json!({}))?;
-    assert_eq!(engine.stored_document(), &ethane);
+    assert_eq!(engine.stored_document()?, &ethane);
     engine.dispatch("history.redo", json!({}))?;
-    assert_eq!(engine.stored_document(), &propane);
+    assert_eq!(engine.stored_document()?, &propane);
     assert_eq!(
         serde_json::to_value(result.document)?["pages"][0]["fragments"][0]["atoms"][1]["explicit_hydrogens"],
         2
@@ -226,10 +226,10 @@ fn document_wide_maxima_and_history_floors_do_not_reuse_removed_ids() -> TestRes
     occupied["end_x_pt"] = json!(340.0);
     occupied["end_y_pt"] = json!(400.0);
     assert_failure(&mut engine, occupied, "invalid_params")?;
-    let before = engine.stored_document().clone();
+    let before = engine.stored_document()?.clone();
     engine.dispatch("bond.extend", extend(0))?;
-    let after = engine.stored_document().clone();
-    let model = serde_json::to_value(engine.document())?;
+    let after = engine.stored_document()?.clone();
+    let model = serde_json::to_value(engine.document()?)?;
     assert_eq!(model["pages"][0]["fragments"][0]["atoms"][2]["id"], 901);
     assert_eq!(model["pages"][0]["fragments"][0]["bonds"][1]["id"], 801);
     assert!(Arc::ptr_eq(
@@ -243,14 +243,14 @@ fn document_wide_maxima_and_history_floors_do_not_reuse_removed_ids() -> TestRes
             .ok_or("after unrelated")?
     ));
     engine.dispatch("history.undo", json!({}))?;
-    assert_eq!(engine.stored_document(), &before);
+    assert_eq!(engine.stored_document()?, &before);
     let branch = engine.dispatch("bond.extend", extend(2))?;
     assert_eq!(
         serde_json::to_value(branch.document)?["pages"][0]["fragments"][0]["atoms"][2]["id"],
         902
     );
     assert_eq!(
-        serde_json::to_value(engine.document())?["pages"][0]["fragments"][0]["bonds"][1]["id"],
+        serde_json::to_value(engine.document()?)?["pages"][0]["fragments"][0]["bonds"][1]["id"],
         802
     );
     assert_eq!(engine.state().redo_depth, 0);
@@ -267,24 +267,24 @@ fn native_profile_authority_is_not_granted_by_drawability_or_creator_name() -> T
     const NATIVE: &[u8] = include_bytes!("../../io/tests/fixtures/bondline-v0.cdxml");
     let mut engine =
         Engine::from_document(StoredDocument::from_cdxml(NATIVE.into(), PageSize::A4)?);
-    assert!(engine.stored_document().is_fully_mapped());
-    let before = engine.stored_document().clone();
+    assert!(engine.stored_document()?.is_fully_mapped());
+    let before = engine.stored_document()?.clone();
     engine.dispatch("bond.extend", extend(0))?;
     assert!(engine.state().source.ok_or("source")?.modified);
-    let saved = engine.stored_document().to_cdxml()?.into_owned();
+    let saved = engine.stored_document()?.to_cdxml()?.into_owned();
     assert_eq!(
         StoredDocument::from_cdxml(saved.into(), PageSize::A4)?.model(),
-        engine.document()
+        engine.document()?
     );
     engine.dispatch("history.undo", json!({}))?;
-    assert_eq!(engine.stored_document(), &before);
-    assert_eq!(engine.stored_document().to_cdxml()?.as_ref(), NATIVE);
+    assert_eq!(engine.stored_document()?, &before);
+    assert_eq!(engine.stored_document()?.to_cdxml()?.as_ref(), NATIVE);
     let source = std::str::from_utf8(NATIVE)?.replace("<CDXML ", "<CDXML Future=\"opaque\" ");
     let stored = StoredDocument::from_cdxml(source.as_bytes().into(), PageSize::A4)?;
     let mut engine = Engine::from_document(stored);
     assert_failure(&mut engine, extend(0), "unsupported_content")?;
     assert_eq!(
-        engine.stored_document().to_cdxml()?.as_ref(),
+        engine.stored_document()?.to_cdxml()?.as_ref(),
         source.as_bytes()
     );
     for source in [
@@ -298,7 +298,7 @@ fn native_profile_authority_is_not_granted_by_drawability_or_creator_name() -> T
             frame,
         )?);
         assert_failure(&mut engine, extend(0), "unsupported_content")?;
-        assert_eq!(engine.stored_document().to_mol(frame)?.as_ref(), source);
+        assert_eq!(engine.stored_document()?.to_mol(frame)?.as_ref(), source);
     }
     let source = include_bytes!("../../cdx/tests/fixtures/original-ethane-header-document.cdx");
     let mut engine = Engine::from_document(StoredDocument::from_cdx(
@@ -306,7 +306,7 @@ fn native_profile_authority_is_not_granted_by_drawability_or_creator_name() -> T
         PageSize::A4,
     )?);
     assert_failure(&mut engine, extend(0), "unsupported_content")?;
-    assert_eq!(engine.stored_document().to_cdx()?.as_ref(), source);
+    assert_eq!(engine.stored_document()?.to_cdx()?.as_ref(), source);
     Ok(())
 }
 
@@ -348,7 +348,7 @@ fn unrelated_authored_hydrogens_are_not_recalculated() -> TestResult {
 fn extension_invalidates_close_approval_and_undo_cannot_resurrect_it() -> TestResult {
     let mut engine = Engine::default();
     engine.dispatch("bond.create", create())?;
-    let before = engine.stored_document().clone();
+    let before = engine.stored_document()?.clone();
     let approved = engine.dispatch(
         "document.close",
         json!({"expected_revision":1,"action":"discard"}),
@@ -361,7 +361,7 @@ fn extension_invalidates_close_approval_and_undo_cannot_resurrect_it() -> TestRe
     );
     assert!(!engine.complete_close());
     engine.dispatch("history.undo", json!({}))?;
-    assert_eq!(engine.stored_document(), &before);
+    assert_eq!(engine.stored_document()?, &before);
     assert!(!engine.complete_close());
     assert_eq!(
         engine

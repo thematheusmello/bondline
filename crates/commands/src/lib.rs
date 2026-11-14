@@ -10,21 +10,25 @@ use std::{collections::VecDeque, sync::Arc};
 mod bond;
 mod capture;
 mod close;
+mod content;
 mod controls;
 mod file_ui;
 mod files;
 pub use bond::{BondCreate, BondExtend, ExtendHydrogenPolicy};
 pub use close::{CloseAction, CloseDocument, CloseState};
+pub use content::{CollectionSummary, RecordSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
 pub use file_ui::{UiFile, UiFileAction, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState};
 pub use files::{
     Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol,
-    SaveCdx, SaveCdxml, SaveMol,
+    OpenSdf, SaveCdx, SaveCdxml, SaveMol, SaveSdf,
 };
 #[cfg(test)]
 mod close_tests;
 #[cfg(test)]
 mod file_ui_tests;
+#[cfg(test)]
+mod sdf_tests;
 #[cfg(test)]
 mod source_tests;
 #[cfg(test)]
@@ -98,6 +102,8 @@ command_registry! {
     SaveCdx(SaveCdx) => ("document.save_cdx", "Atomically save exact unchanged CDX backing; changed or source-free documents are refused.", false),
     OpenMol(OpenMol) => ("document.open_mol", "Open supported MOL V2000 or V3000 data with an explicit coordinate frame and retained source.", false),
     SaveMol(SaveMol) => ("document.save_mol", "Atomically save supported MOL data, retaining its associated version by default without silently losing source metadata or layout.", false),
+    OpenSdf(OpenSdf) => ("document.open_sdf", "Open every validated SDF record with complete source and ordered data; chemical preview is unavailable.", false),
+    SaveSdf(SaveSdf) => ("document.save_sdf", "Atomically save the complete SDF collection without changing molecular versions or ordered data.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
     BondExtend(BondExtend) => ("bond.extend", "Extend a terminal neutral carbon with a Single bond, explicitly authoring its H3 to H2 and the new carbon's H3; requires native complete data.", false),
@@ -152,6 +158,11 @@ pub enum Error {
     BackendUnavailable,
     #[error("source contains unmapped content and cannot be faithfully previewed yet")]
     UnsupportedDocumentPreview,
+    #[error("this operation requires {required} content; the session contains {actual} content")]
+    WrongContent {
+        required: &'static str,
+        actual: &'static str,
+    },
     #[error("opening a new document requires explicit permission to discard unsaved changes")]
     UnsavedChanges,
     #[error("document revision no longer matches the operation; no change was applied")]
@@ -208,6 +219,7 @@ impl Error {
             | Self::Render(bondline_render::Error::LabelPlacement)
             | Self::Render(bondline_render::Error::LabelOverlap)
             | Self::SourceBackedEdit
+            | Self::WrongContent { .. }
             | Self::UnsupportedExtensionSource
             | Self::UnsupportedBondExtension => "unsupported_content",
             Self::Render(bondline_render::Error::LabelScale) => "unsupported_scale",
@@ -269,7 +281,9 @@ struct Request {
 pub struct CommandResult {
     pub changed: bool,
     pub revision: u64,
-    pub document: Arc<Document>,
+    pub document: Option<Arc<Document>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub collection: Option<CollectionSummary>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<SourceInfo>,
     pub undo_depth: usize,
@@ -292,16 +306,16 @@ pub struct CommandResult {
 
 #[derive(Debug)]
 pub struct Engine {
-    document: Arc<StoredDocument>,
-    saved: Arc<StoredDocument>,
+    document: Arc<StoredContent>,
+    saved: Arc<StoredContent>,
     file_path: Option<String>,
     file_format: FileFormat,
     save_slot: Arc<()>,
     generation: u64,
     identities: bond::Ids,
     revision: u64,
-    undo: VecDeque<Arc<StoredDocument>>,
-    redo: VecDeque<Arc<StoredDocument>>,
+    undo: VecDeque<Arc<StoredContent>>,
+    redo: VecDeque<Arc<StoredContent>>,
     close_policy: close::ClosePolicy,
     file_ui: file_ui::FileUiPolicy,
 }
@@ -315,15 +329,24 @@ impl Default for Engine {
 impl Engine {
     /// Initialize a clean unnamed session, sharing its complete current and saved snapshot.
     pub fn from_document(document: StoredDocument) -> Self {
-        let file_format = if document
-            .source_info()
-            .is_some_and(|source| source.format == "cdx")
-        {
-            FileFormat::Cdx
-        } else {
-            document
-                .mol_version()
-                .map_or(FileFormat::Cdxml, FileFormat::from_mol)
+        Self::from_content(document.into())
+    }
+
+    fn from_content(document: StoredContent) -> Self {
+        let file_format = match &document {
+            StoredContent::Sdf { .. } => FileFormat::Sdf,
+            StoredContent::Drawing(document) => {
+                if document
+                    .source_info()
+                    .is_some_and(|source| source.format == "cdx")
+                {
+                    FileFormat::Cdx
+                } else {
+                    document
+                        .mol_version()
+                        .map_or(FileFormat::Cdxml, FileFormat::from_mol)
+                }
+            }
         };
         let document = Arc::new(document);
         Self {
@@ -342,19 +365,27 @@ impl Engine {
         }
     }
 
-    pub fn stored_document(&self) -> &StoredDocument {
+    pub fn content(&self) -> &StoredContent {
         &self.document
     }
 
-    pub fn document(&self) -> &Document {
-        self.document.model()
+    pub fn stored_document(&self) -> Result<&StoredDocument, Error> {
+        self.document.drawing()
+    }
+
+    pub fn document(&self) -> Result<&Document, Error> {
+        Ok(self.stored_document()?.model())
     }
 
     pub fn state(&self) -> CommandResult {
         CommandResult {
             changed: false,
             revision: self.revision,
-            document: self.document.model_snapshot(),
+            document: match self.document.as_ref() {
+                StoredContent::Drawing(document) => Some(document.model_snapshot()),
+                StoredContent::Sdf { .. } => None,
+            },
+            collection: self.document.collection(),
             source: self.document.source_info(),
             undo_depth: self.undo.len(),
             redo_depth: self.redo.len(),
@@ -428,6 +459,7 @@ impl Engine {
             }
             Command::SaveCdxml(params) => {
                 let save_slot = self.reserve_save()?;
+                self.stored_document()?;
                 return Ok(Prepared::file(
                     self.state(),
                     files::FilePlan::Save {
@@ -461,6 +493,7 @@ impl Engine {
             }
             Command::SaveCdx(params) => {
                 let save_slot = self.reserve_save()?;
+                self.stored_document()?;
                 return Ok(Prepared::file(
                     self.state(),
                     files::FilePlan::Save {
@@ -498,7 +531,7 @@ impl Engine {
             }
             Command::SaveMol(params) => {
                 let save_slot = self.reserve_save()?;
-                let format = self.mol_save_format(params.version);
+                let format = self.mol_save_format(params.version)?;
                 return Ok(Prepared::file(
                     self.state(),
                     files::FilePlan::Save {
@@ -515,15 +548,53 @@ impl Engine {
                     },
                 ));
             }
+            Command::OpenSdf(params) => {
+                if self.document != self.saved && !params.discard_unsaved {
+                    return Err(Error::UnsavedChanges);
+                }
+                return Ok(Prepared::file(
+                    self.state(),
+                    files::FilePlan::Open {
+                        params: OpenCdxml {
+                            path: params.path,
+                            discard_unsaved: params.discard_unsaved,
+                        },
+                        encoding: files::OpenEncoding::Sdf,
+                        ui_request_id: None,
+                        revision: self.revision,
+                        generation: self.generation,
+                    },
+                ));
+            }
+            Command::SaveSdf(params) => {
+                let save_slot = self.reserve_save()?;
+                self.document.sdf()?;
+                return Ok(Prepared::file(
+                    self.state(),
+                    files::FilePlan::Save {
+                        params: SaveCdxml {
+                            path: params.path,
+                            overwrite: params.overwrite,
+                        },
+                        format: FileFormat::Sdf,
+                        ui_request_id: None,
+                        document: Arc::clone(&self.document),
+                        save_slot,
+                        revision: self.revision,
+                        generation: self.generation,
+                    },
+                ));
+            }
             Command::PageSetSize(params) => {
                 let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
                 let size = PageSize::new(params.width_pt, params.height_pt)?;
-                let mut document = (*self.document).clone();
+                let mut document = self.stored_document()?.clone();
                 document.model_mut().set_page_size(id, size)?;
                 self.commit(document)?
             }
             Command::BondCreate(params) => {
-                let (document, identities) = bond::create(&self.document, params, self.identities)?;
+                let (document, identities) =
+                    bond::create(self.stored_document()?, params, self.identities)?;
                 let changed = self.commit(document)?;
                 self.identities = identities;
                 changed
@@ -532,7 +603,8 @@ impl Engine {
                 if params.expected_revision != self.revision {
                     return Err(Error::StaleRevision);
                 }
-                let (document, identities) = bond::extend(&self.document, params, self.identities)?;
+                let (document, identities) =
+                    bond::extend(self.stored_document()?, params, self.identities)?;
                 let changed = self.commit(document)?;
                 self.identities = identities;
                 changed
@@ -542,12 +614,12 @@ impl Engine {
             Command::Capture(params) => {
                 let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
                 let page = self
-                    .document()
+                    .document()?
                     .pages()
                     .iter()
                     .find(|page| page.id() == id)
                     .ok_or(bondline_model::Error::MissingPage(id.get()))?;
-                if !self.document.is_fully_mapped() {
+                if !self.stored_document()?.is_fully_mapped() {
                     return Err(Error::UnsupportedDocumentPreview);
                 }
                 return Prepared::capture(self.state(), params, page.clone());
@@ -563,7 +635,8 @@ impl Engine {
         self.revision.checked_add(1).ok_or(Error::RevisionExhausted)
     }
 
-    fn commit(&mut self, document: StoredDocument) -> Result<bool, Error> {
+    fn commit(&mut self, document: impl Into<StoredContent>) -> Result<bool, Error> {
+        let document = document.into();
         if *self.document == document {
             return Ok(false);
         }
@@ -582,7 +655,7 @@ impl Engine {
 
     fn trim_history(&mut self, budget: usize) {
         let retained = |skip| {
-            StoredDocument::retained_bytes(
+            StoredContent::retained_bytes(
                 std::iter::once(self.document.as_ref())
                     .chain(std::iter::once(self.saved.as_ref()))
                     .chain(self.undo.iter().skip(skip).map(Arc::as_ref))
@@ -604,7 +677,7 @@ impl Engine {
         }
         self.undo.drain(..low);
         while !self.redo.is_empty()
-            && StoredDocument::retained_bytes(
+            && StoredContent::retained_bytes(
                 std::iter::once(self.document.as_ref())
                     .chain(std::iter::once(self.saved.as_ref()))
                     .chain(self.undo.iter().map(Arc::as_ref))
@@ -659,7 +732,7 @@ mod tests {
         assert!(engine.dispatch("history.undo", json!({})).is_err());
         assert_eq!(
             engine
-                .document()
+                .document()?
                 .pages()
                 .first()
                 .ok_or("missing page")?
@@ -700,6 +773,8 @@ mod tests {
                 "document.save_cdx",
                 "document.open_mol",
                 "document.save_mol",
+                "document.open_sdf",
+                "document.save_sdf",
                 "history.redo",
                 "history.undo",
                 "page.set_size",
@@ -730,7 +805,13 @@ mod tests {
         assert!(result.changed);
         assert_eq!(result.revision, 1);
         assert_eq!(result.undo_depth, 1);
-        let page = result.document.pages().first().ok_or("missing page")?;
+        let page = result
+            .document
+            .as_ref()
+            .ok_or("drawing result")?
+            .pages()
+            .first()
+            .ok_or("missing page")?;
         assert_eq!(page.size().width_pt(), 612.0);
         assert_eq!(page.size().height_pt(), 792.0);
         let inspect = engine.dispatch("document.inspect", json!({}))?;
@@ -780,13 +861,13 @@ mod tests {
     fn no_ops_preserve_redo_and_new_edits_discard_the_old_branch()
     -> Result<(), Box<dyn std::error::Error>> {
         let mut engine = super::Engine::default();
-        let original = engine.document().clone();
+        let original = engine.document()?.clone();
         engine.dispatch(
             "page.set_size",
             json!({"page_id":1,"width_pt":612,"height_pt":792}),
         )?;
         engine.dispatch("history.undo", json!({}))?;
-        assert_eq!(engine.document(), &original);
+        assert_eq!(engine.document()?, &original);
         let size = original.pages().first().ok_or("missing page")?.size();
         let no_op = engine.dispatch(
             "page.set_size",

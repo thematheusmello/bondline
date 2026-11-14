@@ -310,7 +310,9 @@ fn show_workspace_with_files(
     }
     egui::TopBottomPanel::bottom("status").show(context, |ui| {
         ui.horizontal(|ui| {
-            if let Some(page) = engine.document().pages().first() {
+            if let Ok(document) = engine.document()
+                && let Some(page) = document.pages().first()
+            {
                 ui.label(format!("Page {}", page.id().get()));
                 ui.separator();
                 ui.label(format!(
@@ -319,7 +321,9 @@ fn show_workspace_with_files(
                     page.size().height_pt()
                 ));
             }
-            ui.label("Drag empty paper for C-C; extend terminal CH3 to CH2; Esc cancels");
+            if engine.document().is_ok() {
+                ui.label("Drag empty paper for C-C; extend terminal CH3 to CH2; Esc cancels");
+            }
             if let Some(message) = error {
                 ui.colored_label(egui::Color32::DARK_RED, message.as_str());
             }
@@ -337,7 +341,42 @@ fn show_workspace_with_files(
         .show(context, |ui| {
             let available = ui.available_rect_before_wrap();
             drawing.hover = None;
-            if !engine.stored_document().is_fully_mapped() {
+            if let Some(collection) = engine.content().collection() {
+                drawing.gesture = None;
+                drawing.invalidate_hover();
+                ui.label(format!(
+                    "SDF collection: {} records, {} bytes",
+                    collection.record_count, collection.byte_length
+                ));
+                ui.label("Chemical preview is unavailable for SDF collections.");
+                egui::ScrollArea::vertical().show(ui, |ui| {
+                    egui::Grid::new("sdf-record-summary").show(ui, |ui| {
+                        ui.label("Record");
+                        ui.label("MOL version");
+                        ui.label("Fields");
+                        ui.label("Bytes");
+                        ui.end_row();
+                        for record in collection.records {
+                            ui.label(record.id.to_string());
+                            ui.label(record.mol_version);
+                            ui.label(record.field_count.to_string());
+                            ui.label(record.byte_length.to_string());
+                            ui.end_row();
+                        }
+                    });
+                });
+                return;
+            }
+            let stored = match engine.stored_document() {
+                Ok(stored) => stored,
+                Err(error) => {
+                    drawing.gesture = None;
+                    drawing.invalidate_hover();
+                    ui.colored_label(egui::Color32::DARK_RED, error.to_string());
+                    return;
+                }
+            };
+            if !stored.is_fully_mapped() {
                 drawing.gesture = None;
                 drawing.invalidate_hover();
                 ui.colored_label(
@@ -346,7 +385,11 @@ fn show_workspace_with_files(
                 );
                 return;
             }
-            let mut document = engine.state().document;
+            let Some(mut document) = engine.state().document else {
+                drawing.gesture = None;
+                drawing.invalidate_hover();
+                return;
+            };
             let Some(page) = document.pages().first() else {
                 drawing.gesture = None;
                 drawing.invalidate_hover();
@@ -579,7 +622,12 @@ fn show_workspace_with_files(
                             .err()
                             .map(|error| error.to_string());
                         // Later same-frame presses pick the graph that actually committed.
-                        document = engine.state().document;
+                        let Some(current_document) = engine.state().document else {
+                            drawing.gesture = None;
+                            drawing.invalidate_hover();
+                            return;
+                        };
+                        document = current_document;
                         key.revision = engine.state().revision;
                         drawing.hover_context = Some(key);
                         graph = match document.pages().iter().find(|page| page.id() == key.page) {
@@ -866,7 +914,7 @@ mod tests {
             assert_eq!(engine.state().revision, expected_revision);
             assert_eq!(
                 engine
-                    .document()
+                    .document()?
                     .pages()
                     .first()
                     .ok_or("page")?
@@ -894,7 +942,7 @@ mod tests {
                 .ok_or("page control")?;
             assert!(control.enabled);
             engine.execute(control.command)?;
-            let page = engine.document().pages().first().ok_or("page")?;
+            let page = engine.document()?.pages().first().ok_or("page")?;
             assert!((page.size().width_pt() - width).abs() < 1e-10);
             assert!((page.size().height_pt() - height).abs() < 1e-10);
         }
@@ -979,7 +1027,7 @@ mod tests {
                 &mut super::DrawingState::default(),
             );
             let frame = context.end_pass();
-            let page = engine.document().pages().first().ok_or("missing page")?;
+            let page = engine.document()?.pages().first().ok_or("missing page")?;
             if redo {
                 assert_eq!(page.size().width_pt(), 612.0);
             } else {

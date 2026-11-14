@@ -1,5 +1,4 @@
-use crate::{CommandResult, Engine, Error};
-use bondline_io::StoredDocument;
+use crate::{CommandResult, Engine, Error, StoredContent};
 use bondline_render::Cancellation;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -13,6 +12,7 @@ pub enum FileFormat {
     Cdx,
     MolV2000,
     MolV3000,
+    Sdf,
 }
 
 impl FileFormat {
@@ -24,7 +24,7 @@ impl FileFormat {
     }
     pub(super) fn mol_version(self) -> Option<bondline_io::mol::Version> {
         match self {
-            Self::Cdxml | Self::Cdx => None,
+            Self::Cdxml | Self::Cdx | Self::Sdf => None,
             Self::MolV2000 => Some(bondline_io::mol::Version::V2000),
             Self::MolV3000 => Some(bondline_io::mol::Version::V3000),
         }
@@ -95,6 +95,7 @@ pub(super) enum OpenEncoding {
     Cdxml,
     Cdx,
     Mol(bondline_io::mol::MolTransform),
+    Sdf,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -124,6 +125,22 @@ pub struct OpenCdx {
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct SaveCdx {
+    pub path: String,
+    #[serde(default)]
+    pub overwrite: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct OpenSdf {
+    pub path: String,
+    #[serde(default)]
+    pub discard_unsaved: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct SaveSdf {
     pub path: String,
     #[serde(default)]
     pub overwrite: bool,
@@ -164,7 +181,7 @@ pub(super) enum FilePlan {
         params: SaveCdxml,
         format: FileFormat,
         ui_request_id: Option<u64>,
-        document: Arc<StoredDocument>,
+        document: Arc<StoredContent>,
         save_slot: Arc<()>,
         revision: u64,
         generation: u64,
@@ -183,7 +200,7 @@ pub(super) enum Completion {
     },
     #[cfg(not(target_arch = "wasm32"))]
     Open {
-        loaded: bondline_io::files::LoadedFile,
+        loaded: bondline_io::files::LoadedFile<StoredContent>,
         format: FileFormat,
         ui_request_id: Option<u64>,
         revision: u64,
@@ -196,7 +213,7 @@ pub(super) enum Completion {
         receipt: bondline_io::files::SaveReceipt,
         format: FileFormat,
         ui_request_id: Option<u64>,
-        document: Arc<StoredDocument>,
+        document: Arc<StoredContent>,
         save_slot: Arc<()>,
         revision: u64,
         generation: u64,
@@ -224,28 +241,45 @@ impl FilePlan {
                     revision,
                     generation,
                 } => {
+                    let drawing =
+                        |loaded: bondline_io::files::LoadedFile| bondline_io::files::LoadedFile {
+                            path: loaded.path,
+                            document: StoredContent::from(loaded.document),
+                        };
                     let loaded = match encoding {
-                        OpenEncoding::Cdxml => read_cdxml_file(Path::new(&params.path), cancel)?,
-                        OpenEncoding::Cdx => {
-                            bondline_io::files::read_cdx_file(Path::new(&params.path), cancel)?
+                        OpenEncoding::Cdxml => {
+                            drawing(read_cdxml_file(Path::new(&params.path), cancel)?)
                         }
-                        OpenEncoding::Mol(frame) => bondline_io::files::read_mol_file(
+                        OpenEncoding::Cdx => drawing(bondline_io::files::read_cdx_file(
+                            Path::new(&params.path),
+                            cancel,
+                        )?),
+                        OpenEncoding::Mol(frame) => drawing(bondline_io::files::read_mol_file(
                             Path::new(&params.path),
                             frame,
                             cancel,
-                        )?,
+                        )?),
+                        OpenEncoding::Sdf => {
+                            let loaded =
+                                bondline_io::files::read_sdf_file(Path::new(&params.path), cancel)?;
+                            bondline_io::files::LoadedFile {
+                                path: loaded.path,
+                                document: StoredContent::from_sdf(loaded.document),
+                            }
+                        }
                     };
                     let format = match encoding {
                         OpenEncoding::Cdxml => FileFormat::Cdxml,
                         OpenEncoding::Cdx => FileFormat::Cdx,
                         OpenEncoding::Mol(_) => {
-                            FileFormat::from_mol(loaded.document.mol_version().ok_or(
+                            FileFormat::from_mol(loaded.document.drawing()?.mol_version().ok_or(
                                 bondline_io::mol::MolError::InvalidField {
                                     line: 4,
                                     field: "MOL version",
                                 },
                             )?)
                         }
+                        OpenEncoding::Sdf => FileFormat::Sdf,
                     };
                     Completion::Open {
                         loaded,
@@ -273,19 +307,22 @@ impl FilePlan {
                     }
                     Completion::Save {
                         receipt: match format {
-                            FileFormat::Cdxml => {
-                                save_cdxml_file(&path, &document, params.overwrite, cancel)?
-                            }
+                            FileFormat::Cdxml => save_cdxml_file(
+                                &path,
+                                document.drawing()?,
+                                params.overwrite,
+                                cancel,
+                            )?,
                             FileFormat::Cdx => bondline_io::files::save_cdx_file(
                                 &path,
-                                &document,
+                                document.drawing()?,
                                 params.overwrite,
                                 cancel,
                             )?,
                             FileFormat::MolV2000 | FileFormat::MolV3000 => {
                                 bondline_io::files::save_mol_file_as(
                                     &path,
-                                    &document,
+                                    document.drawing()?,
                                     params.overwrite,
                                     format.mol_version().ok_or(
                                         bondline_io::mol::MolError::InvalidField {
@@ -297,6 +334,12 @@ impl FilePlan {
                                     cancel,
                                 )?
                             }
+                            FileFormat::Sdf => bondline_io::files::save_sdf_file(
+                                &path,
+                                document.sdf()?,
+                                params.overwrite,
+                                cancel,
+                            )?,
                         },
                         format,
                         ui_request_id,
@@ -317,17 +360,18 @@ impl FilePlan {
 }
 
 impl Engine {
-    pub(super) fn mol_save_format(&self, choice: MolVersionChoice) -> FileFormat {
+    pub(super) fn mol_save_format(&self, choice: MolVersionChoice) -> Result<FileFormat, Error> {
+        let document = self.stored_document()?;
         let version = match choice {
             MolVersionChoice::V2000 => bondline_io::mol::Version::V2000,
             MolVersionChoice::V3000 => bondline_io::mol::Version::V3000,
             MolVersionChoice::Auto => self
                 .file_format
                 .mol_version()
-                .or_else(|| self.document.mol_version())
+                .or_else(|| document.mol_version())
                 .unwrap_or(bondline_io::mol::Version::V2000),
         };
-        FileFormat::from_mol(version)
+        Ok(FileFormat::from_mol(version))
     }
 
     pub(super) fn reserve_save(&self) -> Result<Arc<()>, Error> {

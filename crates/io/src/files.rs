@@ -5,10 +5,12 @@ mod platform;
 mod tests;
 
 use crate::mol::{MolTransform, Version};
+use crate::sdf::{SdfDocument, SdfError};
 use crate::{DocumentError, StoredDocument};
 use bondline_model::PageSize;
 use bondline_render::Cancellation;
 use std::{
+    borrow::Cow,
     fs::{self, File, Metadata, OpenOptions},
     io::{self, Read, Write},
     path::{Path, PathBuf},
@@ -21,9 +23,9 @@ const MAX_PATH_BYTES: usize = 64 * 1024;
 static NEXT_TEMPORARY: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Debug)]
-pub struct LoadedFile {
+pub struct LoadedFile<T = StoredDocument> {
     pub path: PathBuf,
-    pub document: StoredDocument,
+    pub document: T,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -57,6 +59,7 @@ impl FileError {
             Failure::Cancelled => "cancelled",
             Failure::Changed => "file_changed",
             Failure::Document(error) => error.code(),
+            Failure::Sdf(error) => error.code(),
             Failure::Io(error) => {
                 #[cfg(unix)]
                 if error.raw_os_error() == Some(rustix::io::Errno::ILSEQ.raw_os_error()) {
@@ -125,6 +128,8 @@ enum Failure {
     Changed,
     #[error(transparent)]
     Document(#[from] DocumentError),
+    #[error(transparent)]
+    Sdf(#[from] SdfError),
     #[error(transparent)]
     Io(io::Error),
     #[cfg(any(windows, test))]
@@ -225,6 +230,18 @@ pub fn read_mol_file(
     Ok(LoadedFile { path, document })
 }
 
+/// Validate the complete mixed-version SDfile without requiring molecular projection.
+pub fn read_sdf_file(
+    path: &Path,
+    cancel: &Cancellation,
+) -> Result<LoadedFile<SdfDocument>, FileError> {
+    let (path, bytes) = read_source_bytes(path, cancel)?;
+    let document = SdfDocument::parse(bytes.into())
+        .map_err(|error| FileError::new(&path, Stage::Decode, error.into()))?;
+    check_cancel(&path, Stage::Decode, cancel)?;
+    Ok(LoadedFile { path, document })
+}
+
 fn read_source_bytes(path: &Path, cancel: &Cancellation) -> Result<(PathBuf, Vec<u8>), FileError> {
     check_cancel(path, Stage::Validate, cancel)?;
     validate_path(path)?;
@@ -298,6 +315,22 @@ pub fn save_cdx_file(
         overwrite,
         cancel,
         Encoding::Cdx,
+        &mut |_| Ok(()),
+    )
+}
+
+/// Publish every current record and data byte through the shared atomic save path.
+pub fn save_sdf_file(
+    path: &Path,
+    document: &SdfDocument,
+    overwrite: bool,
+    cancel: &Cancellation,
+) -> Result<SaveReceipt, FileError> {
+    save_encoded_with_hook(
+        path,
+        overwrite,
+        cancel,
+        || Ok(Cow::Borrowed(document.as_bytes())),
         &mut |_| Ok(()),
     )
 }
@@ -384,6 +417,30 @@ fn save_format_with_hook(
     encoding: Encoding,
     hook: &mut impl FnMut(Stage) -> io::Result<()>,
 ) -> Result<SaveReceipt, FileError> {
+    save_encoded_with_hook(
+        chosen,
+        overwrite,
+        cancel,
+        || {
+            match encoding {
+                Encoding::Cdxml => document.to_cdxml(),
+                Encoding::Cdx => document.to_cdx(),
+                Encoding::Mol(frame) => document.to_mol(frame),
+                Encoding::MolAs(version, frame) => document.to_mol_as(version, frame),
+            }
+            .map_err(Failure::from)
+        },
+        hook,
+    )
+}
+
+fn save_encoded_with_hook<'a>(
+    chosen: &Path,
+    overwrite: bool,
+    cancel: &Cancellation,
+    encode: impl FnOnce() -> Result<Cow<'a, [u8]>, Failure>,
+    hook: &mut impl FnMut(Stage) -> io::Result<()>,
+) -> Result<SaveReceipt, FileError> {
     check_cancel(chosen, Stage::Validate, cancel)?;
     let path = canonical_save_path(chosen)?;
     let parent = path
@@ -395,13 +452,7 @@ fn save_format_with_hook(
         .map(|_| platform::identity(&path))
         .transpose()
         .map_err(|error| FileError::io(&path, Stage::Validate, error))?;
-    let bytes = match encoding {
-        Encoding::Cdxml => document.to_cdxml(),
-        Encoding::Cdx => document.to_cdx(),
-        Encoding::Mol(frame) => document.to_mol(frame),
-        Encoding::MolAs(version, frame) => document.to_mol_as(version, frame),
-    }
-    .map_err(|error| FileError::new(&path, Stage::Encode, error.into()))?;
+    let bytes = encode().map_err(|error| FileError::new(&path, Stage::Encode, error))?;
     if bytes.len() > MAX_BYTES {
         return Err(FileError::new(&path, Stage::Encode, Failure::TooLarge));
     }

@@ -9,7 +9,7 @@ fn params() -> serde_json::Value {
 fn a_single_carbon_bond_is_one_exact_history_step_with_fresh_stable_ids()
 -> Result<(), Box<dyn std::error::Error>> {
     let mut engine = Engine::default();
-    let before = engine.stored_document().clone();
+    let before = engine.stored_document()?.clone();
     let result = engine.dispatch("bond.create", params())?;
     assert!(result.changed);
     assert_eq!(result.revision, 1);
@@ -23,11 +23,11 @@ fn a_single_carbon_bond_is_one_exact_history_step_with_fresh_stable_ids()
             ],"bonds":[{"id":1,"begin":1,"end":2,"order":"single"}]}
         ])
     );
-    let after = engine.stored_document().clone();
+    let after = engine.stored_document()?.clone();
     engine.execute(Command::Undo(NoParams {}))?;
-    assert_eq!(engine.stored_document(), &before);
+    assert_eq!(engine.stored_document()?, &before);
     engine.execute(Command::Redo(NoParams {}))?;
-    assert_eq!(engine.stored_document(), &after);
+    assert_eq!(engine.stored_document()?, &after);
     let second = engine.dispatch("bond.create", params())?;
     let fragments = &serde_json::to_value(&second.document)?["pages"][0]["fragments"];
     assert_eq!(fragments[1]["id"], 2);
@@ -50,7 +50,7 @@ fn invalid_bond_requests_leave_document_revision_and_redo_untouched()
     let mut engine = Engine::default();
     engine.dispatch("bond.create", params())?;
     engine.execute(Command::Undo(NoParams {}))?;
-    let original = engine.stored_document().clone();
+    let original = engine.stored_document()?.clone();
     for (field, value) in [
         ("page_id", json!(0)),
         ("page_id", json!(2)),
@@ -61,7 +61,7 @@ fn invalid_bond_requests_leave_document_revision_and_redo_untouched()
         let mut invalid = params();
         invalid[field] = value;
         assert!(engine.dispatch("bond.create", invalid).is_err());
-        assert_eq!(engine.stored_document(), &original);
+        assert_eq!(engine.stored_document()?, &original);
         assert_eq!(engine.state().revision, 2);
         assert_eq!(engine.state().redo_depth, 1);
     }
@@ -159,7 +159,7 @@ fn exhausted_id_domains_and_source_backing_reject_creation_atomically()
                 .code,
             "identity_exhausted"
         );
-        assert_eq!(engine.stored_document(), &before);
+        assert_eq!(engine.stored_document()?, &before);
         assert_eq!(engine.state().revision, 0);
         assert_eq!(engine.state().undo_depth, 0);
     }
@@ -177,7 +177,7 @@ fn exhausted_id_domains_and_source_backing_reject_creation_atomically()
             .code,
         "unsupported_content"
     );
-    assert_eq!(engine.stored_document(), &before);
-    assert_eq!(engine.stored_document().export_cdxml()?, source);
+    assert_eq!(engine.stored_document()?, &before);
+    assert_eq!(engine.stored_document()?.export_cdxml()?, source);
     Ok(())
 }

@@ -762,3 +762,29 @@ and retained-allocation tests reuse the Arc/storage sources above. Existing full
 DT-only loss and duplicate-name limitations remain separate. This is not evidence of
 reference existing-field editing/retention/export, application SDF commands/native flows,
 or a new layout/browser policy; those remain unimplemented or unknown.
+
+## Complete SDF session/file ownership, 2026-11-14
+
+[verification-sdf-session-files.md](../verification-sdf-session-files.md) records the
+first application-content slice. CTFILE-2026 chapter10, printed97–99/PDF indexes100–102,
+was reread from the existing public-source PDF; its SHA-256 remains
+959f2bbf5487e00fa7535ea7ee36f7ce04f39ea72920844641952276de146c94.
+Mixed molecular versions and all ordered data remain complete source semantics, not a
+first-record graph. The original690/777-byte licensed fixtures, unchanged external raw
+scanner/per-MOL pinned RDKit consumers and known DT-only full-supplier limitation remain
+the independent oracles; no proprietary sample or reference metadata is bundled.
+
+The RUST-ARC/RUST-STORAGE sources above support complete immutable sharing and retained
+allocation accounting. Drawing/SDF content variants, original/current/saved distinctions,
+metadata-only JSON, typed wrong-kind access, existing single-save reservation and shared
+atomic publication are original Bondline policies. The outer enum's inline storage is
+counted once, with drawing/source/index allocations deduplicated across current/saved/history.
+No parser/writer/dependency/version rule changed and no wrapper writer rebuilds retained data.
+
+NATIVE-REFERENCE-SDF above establishes that the bounded installed26.1 imports display both
+molecules without an initial browser; it does not establish field retention/export or layout
+rules. Bondline's wired static record summary and explicit unavailable chemical preview are
+partial original presentation, not verified reference visual parity. Actual native SDF
+acceptance, all-record chemical display, field inspection/edit commands and record operations
+remain missing or unverified. CLI/stdio/authenticated loopback and deterministic native-worker/
+egui tests are separate evidence; none claims an actual mouse/keyboard GUI workflow.

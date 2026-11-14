@@ -11,7 +11,7 @@ fn registered_bond_creation_exports_as_ethane_in_external_rdkit()
     let mut engine = Engine::default();
     engine.dispatch("bond.create",json!({"page_id":1,"begin_x_pt":100.0,"begin_y_pt":200.0,"end_x_pt":140.0,"end_y_pt":200.0}))?;
     let before = serde_json::to_vec(&engine.state())?;
-    let bytes = engine.stored_document().to_cdxml()?;
+    let bytes = engine.stored_document()?.to_cdxml()?;
     let python = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
         if cfg!(windows) {
             "python".into()

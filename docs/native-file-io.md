@@ -1,6 +1,6 @@
 # Native structure-file filesystem contract
 
-`bondline_io::files` is a library adapter. It reads/writes complete `StoredDocument` values;
+`bondline_io::files` is a library adapter. It reads/writes complete `StoredDocument` or `SdfDocument` values;
 it never regenerates a foreign elemental projection or exposes an extension without decoding.
 Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md.
 
@@ -15,17 +15,24 @@ Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md
 - `read_mol_file(&Path, MolTransform, &Cancellation)` retains complete MOL source and the
   explicitly supplied drawing frame. `save_mol_file` takes the native fallback frame; source-
   backed MOL always keeps its original frame. Both reuse the same native read/publication path.
+- `read_sdf_file(&Path, &Cancellation)` validates and owns every ordered record without a
+  model projection. `save_sdf_file(&Path, &SdfDocument, overwrite, &Cancellation)` borrows
+  the whole current source directly. Generic `LoadedFile<T=StoredDocument>` retains existing
+  drawing callers while returning complete SDF ownership. The registry and native worker
+  use the same reservation/publication path; actual native SDF acceptance is still pending.
 - `FileError` exposes stable `code`, `path`, `stage`, `published` and optional `recovery_path`.
 
 Read input is bounded to 64 MiB, including bytes read after metadata inspection. Only ordinary
 files are accepted. Selected read symlinks resolve explicitly; Unix opens use nonblocking,
 no-follow flags and post-open validation, preventing FIFOs from blocking the worker. Invalid
-XML/CDX/MOL/model input returns an error without an application-state change. Cancellation is checked
+XML/CDX/MOL/SDF/model input returns an error without an application-state change. Cancellation is checked
 between 64 KiB chunks and around decoding; it cannot interrupt an OS syscall or parser call.
 
 Save encodes through `StoredDocument::to_cdxml`, `to_cdx` or `to_mol`: unchanged accepted source passes
 through exactly, supported native/profile edits encode completely, and unsupported source,
 cross-format metadata or layout loss fails explicitly. See file-formats.md for each guard.
+SDF bypasses drawing encoders and retains all mixed-version MOL/data bytes; wrong-content
+cross-format saves are refused at shared command preparation before any temporary file.
 It prepares a same-directory temporary, writes in chunks, preserves supported security/metadata,
 syncs the file, then publishes. Default no-clobber uses an atomic hard-link create, so a racing
 creator wins without being overwritten. Filesystems lacking hard links fail explicitly.

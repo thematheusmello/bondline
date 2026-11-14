@@ -30,21 +30,25 @@ unique document-wide within each kind. They do not reuse container-scoped source
 See model.md for structural validation, atom metadata, bond direction and resource limits.
 Text, query nodes, reaction models and chemical perception remain missing.
 
-`bondline-commands` owns the registry and history. It validates a candidate document before
-replacing an Arc<io::StoredDocument> snapshot. That owned snapshot holds the model and, for
+`bondline-commands` owns the registry and history. It validates candidates before replacing
+an Arc<StoredContent> snapshot. Its Drawing variant contains io::StoredDocument with the model and, for
 CDXML/CDX/MOL, the original Arc<[u8]> plus its baseline model. MOL also shares three headers
 and its captured coordinate frame. Undo/redo move whole Arc references
 in O(1); copy-on-write authoring edits share immutable fragments and source bytes. Equality
 includes opaque source content, so equal projections cannot erase source-only changes.
-Returned model snapshots remain immutable across later edits. Authored state excludes
-revision/history. Exact undo assertions compare the whole stored document and original bytes.
+The Sdf variant instead contains complete immutable original/current SdfDocument values,
+including every ordered record/field and mixed molecular version. It never substitutes an
+active-record graph or empty drawing. Returned model snapshots remain immutable across
+later edits; SDF results have document:null plus count/record metadata. Authored state
+excludes revision/history. Exact undo assertions compare complete content and original bytes.
 CDX backing is always incomplete: its elemental preview never authorizes regeneration or
 lossy conversion. Registered CDX Open/Save and the native chooser reuse the same atomic
 adapter, source authority and save/receipt/close barriers. Native acceptance is separate
 from headless/worker evidence; see verification-cdx-application.md.
 History is limited to 128 prior snapshots and a 128 MiB accounted-storage threshold for
-the current document plus history. Accounting deduplicates source allocations, models and
-immutable fragments, includes source baselines and reserved vector capacity, and saturates
+current/saved content plus history. Accounting counts each outer StoredContent inline once,
+deduplicates drawing source/model/fragment and SDF source/index allocations independently,
+includes original/current/saved baselines and reserved vector capacity, and saturates
 on overflow. A changed commit clears redo first and drops the oldest Undo prefix needed
 to retain a recent suffix. Undo/Redo move that existing pool without new payload allocations.
 The current document is always retained, even if it alone exceeds the threshold. This is
@@ -81,7 +85,7 @@ awaiting task is dropped. Captures report their input revision and never apply r
 authored state. File saves publish immutable input and report its revision, keeping later
 edits dirty. This is a bounded capture/file executor, not a general background-job scheduler.
 
-Close intent is transient engine state, outside StoredDocument/history. The typed
+Close intent is transient engine state, outside StoredContent/history. The typed
 document.close command handles Request/Discard/Cancel with an authored-revision guard;
 its monotonic epoch identifies continuations across Cancel/new Request at the same revision.
 Actual authored/baseline/path/format changes permanently invalidate approval. A close-specific Save
@@ -180,8 +184,12 @@ The graphics foundation adopted PhotoCraft's reviewed, pinned fork approach. Do 
 copy unrelated product features or claim that PhotoCraft meets Bondline's license policy.
 
 
-The independent whole-SDF owner validates/retains all bytes plus shared compact ordinal
-record metadata. It supplies exact-source equality, count-only Debug, borrowed reread and
-explicit deduplicated retained bytes for later session integration. It is not yet an
-Engine content variant; current/saved/history must own the whole collection before SDF
-commands are exposed. Do not use an active-record drawing as the file's source of truth.
+The whole-SDF owner validates/retains all bytes plus shared compact ordinal record metadata.
+StoredContent now retains that owner throughout current/saved/history and immutable file
+plans. Registry Open validates all records outside the engine lock and applies once;
+Save borrows complete current source through the existing bounded atomic publisher. No
+wrapper writer, first-record projection or field-name dictionary reconstructs an import.
+Drawing accessors return typed unsupported_content errors for collections. Static UI
+metadata clears prior gesture/hit/paper state and declares chemical preview unavailable;
+all-record chemical display and field-edit commands remain separate work. See
+verification-sdf-session-files.md for exact source/consumer/history/lifecycle evidence.

@@ -51,7 +51,7 @@ fn assert_blocked_press_is_not_a_gesture(
     frame(&context, &mut engine, &mut drawing, vec![]);
     let begin = Pos2::new(420.0, 300.0);
     let end = Pos2::new(500.0, 350.0);
-    let document = engine.stored_document().clone();
+    let document = engine.stored_document()?.clone();
     let before = serde_json::to_vec(&engine.state())?;
     frame(
         &context,
@@ -66,7 +66,7 @@ fn assert_blocked_press_is_not_a_gesture(
         ],
     );
     assert_eq!(
-        engine.stored_document(),
+        engine.stored_document()?,
         &document,
         "a press while blocked cannot start a bond"
     );
@@ -96,7 +96,7 @@ fn assert_blocked_press_is_not_a_gesture(
     assert_eq!(engine.state().undo_depth, 1);
     assert_eq!(
         engine
-            .document()
+            .document()?
             .pages()
             .first()
             .ok_or("page")?
@@ -127,7 +127,7 @@ fn a_held_escape_repeat_does_not_enable_an_earlier_press() -> Result<(), Box<dyn
     frame(&context, &mut engine, &mut drawing, vec![]);
     frame(&context, &mut engine, &mut drawing, vec![escape(true)]);
     let before = serde_json::to_vec(&engine.state())?;
-    let document = engine.stored_document().clone();
+    let document = engine.stored_document()?.clone();
     let begin = Pos2::new(420.0, 300.0);
     let end = Pos2::new(500.0, 350.0);
     frame(
@@ -142,7 +142,7 @@ fn a_held_escape_repeat_does_not_enable_an_earlier_press() -> Result<(), Box<dyn
             button(end, false),
         ],
     );
-    assert_eq!(engine.stored_document(), &document);
+    assert_eq!(engine.stored_document()?, &document);
     assert_eq!(serde_json::to_vec(&engine.state())?, before);
     frame(
         &context,
@@ -168,7 +168,7 @@ fn completed_batched_drag_survives_a_later_move_outside_the_canvas()
     let mut engine = Engine::default();
     let mut drawing = DrawingState::default();
     frame(&context, &mut engine, &mut drawing, vec![]);
-    let original = engine.stored_document().clone();
+    let original = engine.stored_document()?.clone();
     let begin = Pos2::new(420.0, 300.0);
     let end = Pos2::new(500.0, 350.0);
     frame(
@@ -191,7 +191,7 @@ fn completed_batched_drag_survives_a_later_move_outside_the_canvas()
     assert_eq!(engine.state().undo_depth, 1);
     assert_eq!(
         engine
-            .document()
+            .document()?
             .pages()
             .first()
             .ok_or("page")?
@@ -199,11 +199,11 @@ fn completed_batched_drag_survives_a_later_move_outside_the_canvas()
             .len(),
         1
     );
-    let created = engine.stored_document().clone();
+    let created = engine.stored_document()?.clone();
     engine.dispatch("history.undo", serde_json::json!({}))?;
-    assert_eq!(engine.stored_document(), &original);
+    assert_eq!(engine.stored_document()?, &original);
     engine.dispatch("history.redo", serde_json::json!({}))?;
-    assert_eq!(engine.stored_document(), &created);
+    assert_eq!(engine.stored_document()?, &created);
     Ok(())
 }
 
@@ -216,7 +216,7 @@ fn an_initial_press_covered_by_a_foreground_area_never_starts_a_bond()
         let mut engine = Engine::default();
         let mut drawing = DrawingState::default();
         let before = serde_json::to_vec(&engine.state())?;
-        let original = engine.stored_document().clone();
+        let original = engine.stored_document()?.clone();
         let begin = Pos2::new(420.0, 300.0);
         let drag = vec![
             Event::PointerMoved(begin),
@@ -251,7 +251,7 @@ fn an_initial_press_covered_by_a_foreground_area_never_starts_a_bond()
             assert!(error.is_none(), "{error:?}");
         }
         assert_eq!(
-            engine.stored_document(),
+            engine.stored_document()?,
             &original,
             "a foreground-covered press must stay rejected even when the release moves outside that area"
         );
@@ -268,7 +268,7 @@ fn reopened_native_profile_is_visible_and_editable_in_the_real_workspace_rendere
     let mut engine = Engine::default();
     engine.dispatch("document.open_cdxml",serde_json::json!({"path":concat!(env!("CARGO_MANIFEST_DIR"),"/../io/tests/fixtures/bondline-v0.cdxml")}))?;
     assert!(
-        engine.stored_document().is_fully_mapped(),
+        engine.stored_document()?.is_fully_mapped(),
         "pinned native profile must remain fully mapped on file import"
     );
     let mut drawing = DrawingState::default();
@@ -292,7 +292,7 @@ fn reopened_native_profile_is_visible_and_editable_in_the_real_workspace_rendere
         .collect::<Vec<_>>();
     assert!(output.shapes.iter().any(|shape| matches!(&shape.shape,egui::Shape::Rect(rect) if rect.fill == egui::Color32::WHITE)),"a complete native source profile must paint its editable page: {messages:?}");
     let before = engine
-        .document()
+        .document()?
         .pages()
         .first()
         .ok_or("page")?
@@ -317,7 +317,7 @@ fn reopened_native_profile_is_visible_and_editable_in_the_real_workspace_rendere
     let _ = context.end_pass();
     assert_eq!(
         engine
-            .document()
+            .document()?
             .pages()
             .first()
             .ok_or("page")?
@@ -355,7 +355,7 @@ fn a_drag_commits_one_bond_but_escape_and_stale_revision_cancel_without_edits()
     assert_eq!(engine.state().undo_depth, 1);
     assert_eq!(
         engine
-            .document()
+            .document()?
             .pages()
             .first()
             .ok_or("page")?
@@ -363,7 +363,7 @@ fn a_drag_commits_one_bond_but_escape_and_stale_revision_cancel_without_edits()
             .len(),
         1
     );
-    let original = engine.stored_document().clone();
+    let original = engine.stored_document()?.clone();
     frame(
         &context,
         &mut engine,
@@ -394,7 +394,7 @@ fn a_drag_commits_one_bond_but_escape_and_stale_revision_cancel_without_edits()
         &mut drawing,
         vec![button(end, false)],
     );
-    assert_eq!(engine.stored_document(), &original);
+    assert_eq!(engine.stored_document()?, &original);
     assert_eq!(engine.state().revision, 1);
     frame(
         &context,
@@ -433,7 +433,7 @@ fn a_drag_commits_one_bond_but_escape_and_stale_revision_cancel_without_edits()
     assert_eq!(engine.state().revision, 2);
     assert_eq!(
         engine
-            .document()
+            .document()?
             .pages()
             .first()
             .ok_or("page")?
@@ -524,7 +524,7 @@ fn multiple_batched_drags_keep_separate_history_steps() -> Result<(), Box<dyn st
     assert_eq!(engine.state().undo_depth, 2);
     assert_eq!(
         engine
-            .document()
+            .document()?
             .pages()
             .first()
             .ok_or("page")?
