@@ -709,3 +709,33 @@ grouping/layout/export behavior remains unknown. CUA actions, passive REA after-
 OS sheet captures remain distinct. Only owned imports were closed; four original sampled
 windows/cursor are preserved. Raw screenshots/resources remain ignored, not shipped assets.
 No Bondline implementation or complete26.1 collection/browser claim follows.
+
+## Immutable owned SDF source, 2026-11-14
+
+[verification-sdf-owned-source.md](../verification-sdf-owned-source.md) records the
+library-only whole-source prerequisite. The same pinned CTFILE-2026 chapter10,
+printed97–99/PDF indexes100–102, was reread from the hash-checked public-source cache:
+complete ordered molecular/data blocks, mixed V2000/V3000, named/textual-DT headers,
+blank item termination and dollar-prefix record termination. No parser rule or limit
+changes. The two existing original690/777-byte vectors and their provenance remain exact.
+
+The official Rust [Arc](https://doc.rust-lang.org/std/sync/struct.Arc.html),
+[NonZero](https://doc.rust-lang.org/std/num/struct.NonZero.html) and existing RUST-STORAGE
+APIs support shared immutable ownership, positive record identity and retained-allocation
+accounting. Online std documentation currently identifies1.100.0; the selected stable APIs
+are compiled/tested on the project's pinned1.94.1 toolchain, without dependency changes.
+
+Complete-source-sensitive equality, count-only Debug, ordinal IDs1..record_count,
+checked missing-ID lookup, on-demand bounded borrowed reads and deduplicated source/index
+storage are original Bondline policies. IDs are local immutable-record identities, not
+reference-product IDs or invented SDF fields; no cross-source/edit identity is promised.
+The parser validates every record before construction; unsupported model projection
+never authorizes dropping valid opaque MOL data. Exact unchanged bytes are borrowed
+directly instead of passing an import through the wrapper writer or a property map.
+
+Actual retained bytes face the unchanged external raw scanner and per-MOL pinned RDKit
+consumers, while original literal spans/fields cover both molecular versions. Raw fidelity
+and full-supplier/duplicate-name limitations remain distinct. The recent exact-build
+reference import above informs later application design only: this slice chooses no
+layout/grouping/browser, data-edit, native file or collection-history contract and claims
+no application SDF support or complete M1.

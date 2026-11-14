@@ -10,6 +10,9 @@
 use crate::mol::{MolError, MolFile, Version, source_version, v3000};
 use std::ops::Range;
 
+mod document;
+pub use document::{RecordId, RecordInfo, SdfDocument};
+
 pub const MAX_SDF_BYTES: usize = 64 * 1024 * 1024;
 pub const MAX_SDF_RECORDS: usize = 1024;
 pub const MAX_SDF_FIELDS: usize = 65_536;
