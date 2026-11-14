@@ -475,9 +475,9 @@ and exact original MOL bytes. Pre-cancellation must return cancelled and leave
 the same data intact. Every prior parser/span/resource/projection/writer check
 and early writer refusal remains in place. This adds no target or dependency.
 
-Fresh ignored source seeds must be separate from mutation corpora. For example,
-copy the existing fixture seeds as above, and extract the original ordinary MOL
-spans without regenerating a model or changing their coordinates:
+Fresh ignored source seeds must be separate from mutation corpora. This recipe
+recreates all eight recorded initial seeds, including two original MIT OR
+Apache-2.0 interior vectors. It keeps the ordinary raw MOL spans unchanged:
 
 ```sh
 "$BONDLINE_PYTHON" -B - <<'PYSEED'
@@ -492,11 +492,38 @@ inputs={
         ('rdkit-CH3.mol',Path('crates/io/tests/fixtures/mol/rdkit-CH3.mol').read_bytes()),
         ('ethane-v2000.mol',Path('crates/io/tests/fixtures/mol/ethane-v2000.mol').read_bytes()),
         ('ordinary-CN-v2000.mol',source[410:713]),
+        ('interior-CN-original-v2000.mol',b'''Original interior CN fuzz seed
+  Bondline original
+Independent identity-frame coordinates
+  2  1  0  0  0  0            999 V2000
+  100.0000 -200.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+  136.0000 -200.0000    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+M  END
+'''),
     ],
     'mol_v3000_parse': [
         ('noncontiguous-cc.mol',Path('crates/io/tests/fixtures/v3000/noncontiguous-cc.mol').read_bytes()),
         ('continuations-and-extensions.mol',Path('crates/io/tests/fixtures/v3000/continuations-and-extensions.mol').read_bytes()),
         ('ordinary-CCO-v3000.mol',source[0:371]),
+        ('interior-CCO-original-v3000.mol',b'''Original interior CCO fuzz seed
+  Bondline original
+Independent identity-frame coordinates
+  0  0  0  0  0  0            999 V3000
+M  V30 BEGIN CTAB
+M  V30 COUNTS 3 2 0 0 0
+M  V30 BEGIN ATOM
+M  V30 10 C 100 -200 0 0
+M  V30 40 C 136 -200 0 0
+M  V30 90 O 136 -164 0 0
+M  V30 END ATOM
+M  V30 BEGIN BOND
+M  V30 7 1 10 40
+M  V30 15 1 40 90
+M  V30 END BOND
+M  V30 END CTAB
+M  END
+'''),
     ],
 }
 for target,files in inputs.items():
@@ -510,12 +537,12 @@ PYSEED
 
 These exact raw origins mostly reach paper/metadata refusal under the fixed
 identity frame. Do not transform them and call them the unchanged source.
-The recorded run additionally uses separately authored interior CN/CCO seeds,
-with literal coordinates and unchanged external consumer checks. Its original
-seed generator, source hashes, scene classifications and mutating corpus are
-separate ignored evidence; see
+The separately authored interior CN/CCO seeds above reach successful scenes,
+with literal coordinates and unchanged external consumer checks. Initial source
+hashes match the recorded run; final mutation corpora are not promised identical.
+The original generator, scene classifications and mutation corpus remain ignored
+evidence; see
 [verification-mol-display-fuzz.md](../docs/verification-mol-display-fuzz.md).
-The smaller recipe above is not claimed to reproduce that exact four-seed corpus.
 
 Use the existing installed pinned cargo-fuzz path read-only if this checkout has
 no target/tools/bin, and this worktree's own absolute target directory:

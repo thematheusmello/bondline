@@ -109,8 +109,14 @@ Separate fixed-input ASan replays execute all four original seeds per target.
 Their logs explicitly state that mutation fuzzing was not performed during
 replay. These eight fixed executions are not added to either 10000-run count.
 Source-seed hashes remain exact after fuzzing/replay; committed inputs are never
-used as writable corpora. A smaller reproducible original/raw seed recipe is
-appended to fuzz/README.md and is distinguished from this exact eight-file set.
+used as writable corpora. The worker initially appended a smaller original/raw
+recipe to fuzz/README.md. Root's receiving update includes both complete original
+interior literals, so the documented recipe now recreates all eight initial files.
+Executing that exact block verifies all16 immutable-source/mutation-copy identities
+against the recorded inputs. Recipe SHA256
+`6657f10ace75b068c5294f2de69748ef3f272d6e8b8f43a4f413b57174818f50`;
+receipt `target/mol-display-readme-seed-recipe-receipt.json`. Final mutated corpora
+are not promised identical; no new mutation runs are counted for this doc check.
 
 ## Scoped final gates and preservation
 
