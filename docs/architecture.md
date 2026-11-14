@@ -63,7 +63,10 @@ A separate closed bond.extend command now replaces one same-ID fragment atomical
 authors terminal H3→H2 plus a new C/H3 and Single bond, and preserves all old identities.
 Required expected revision/policy, complete-source authority and global atom/bond floors
 are checked before one history commit. Only source-free/byte-proven native CDXML is
-allowed; imported MOL/CDX refuses. Native attachment remains a separate UI feature.
+allowed; imported MOL/CDX refuses. Native attachment is now wired through that same
+registry, with fresh per-press graph hits, raw click threshold versus exact atom anchor,
+per-event foreground/paper release guards and ordered graph/revision reacquisition.
+Actual native acceptance remains separate from deterministic input tests.
 
 
 The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while

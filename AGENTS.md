@@ -159,7 +159,8 @@ The current sixteen-command registry includes bond.create for independent C-C fr
 three explicitly authored H per carbon, plus CDXML/CDX/MOL open/save. bond.extend is a
 headless terminal-carbon operation with required explicit H3-to-H2 policy and expected
 revision; only source-free or byte-proven native CDXML is allowed. Actual MOL/CDX backing
-refuses. Native attachment remains pending. Document::replace_fragment atomically retains
+refuses. Native attachment is wired with ordered fresh hit/anchor/release/context tests;
+actual native verification is separate. Document::replace_fragment atomically retains
 fragment/old IDs and unrelated Arcs; global validation excludes only the old fragment. Save complete StoredDocument data; file.dirty uses the saved snapshot, while
 source.modified describes original backing. Prepare/complete/finish separates I/O from
 revision-checked apply. Count current+saved snapshots and never call a publication error rollback.

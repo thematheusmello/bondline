@@ -1963,3 +1963,16 @@ The separate16-command terminal engine source501a315 passes hosted43560603081:
 no confirmed defect; its scope/report hash are in verification-terminal-carbon-extension.md.
 Native attachment is being implemented separately; neither result verifies that gesture.
 The documentation-only acceptance update changes no production, fixture or configuration.
+
+
+## Terminal-carbon attachment receiving integration, 2026-11-14
+
+Fresh per-event target/anchor/release/context routing uses the same required-policy
+bond.extend registry. Actual5 initial REDs and2 inherited InvalidViewport cancellation
+REDs precede minimal fixes. All73 prior UI cases and17 new cases pass; actual workspace
+edit/save output faces independent Expat/Decimal/RDKit. One reviewed error branch now
+clears held gesture state. No golden, model, encoder, command or dependency change.
+Receiving Root537workspace+3bridge=540 passes all gates,57320 exit0, log SHA
+ e140e7f400d948944f7157db40c3cea44993a7341d5df6573fd6a5df95b67e0e.
+[Exact source/review/limits](verification-bond-attachment-ui.md) retain both failure
+checkpoints. New-source native acceptance and hosted checks remain pending.

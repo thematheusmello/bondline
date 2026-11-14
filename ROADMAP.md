@@ -99,8 +99,10 @@ The first command creates an independent single C-C fragment with three authored
 carbon. Native drag creation, exact history, automation and bounded rendering have evidence.
 This is partial solid-bond coverage. A separate headless bond.extend command now extends
 a supported terminal carbon with required explicit H3→H2 policy, one snapshot/ID/source
-guards and independently consumed saved propane/butane. Native attachment/connected
-construction, click creation, snapping, order changes and general atom labels remain missing.
+guards and independently consumed saved propane/butane. Closed terminal attachment is
+now wired through that registry with17 new input/history/consumer regressions; actual
+native acceptance remains pending. Broader connected construction, click creation,
+snapping, order changes and general atom labels remain missing.
 
 The shared carbon GraphScene/hit-testing prerequisite now supports positioned neutral
 carbon/Single topology, literal authored H and bounded atom/bond hover. Independent geometry/
@@ -173,5 +175,5 @@ Save As/reopen/retry/dirty-close refusal and Undo recovery, plus independent act
 consumers. Four original variants and one ignored own-drawing source retain every byte.
 Source450962c passes its own three-platform aggregates/window smokes and six ASAN targets.
 The16-command terminal-extension integration501a315 separately passes523/521/513 hosted
-tests/windows and six ASAN targets. Native attachment remains the next M2 slice; SDF
+tests/windows and six ASAN targets. Actual native attachment acceptance remains next; SDF
 collections remain M1 library-to-application work. No milestone is completed by these slices.

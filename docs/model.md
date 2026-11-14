@@ -50,7 +50,8 @@ documented ethane case. It does not run general valence inference or attach to e
 atoms. Native drag creation, history and limited labeled rendering use those same values.
 Identity floors remain in the engine session across Undo branches, updating only on success.
 This model is not a native project format or complete CDXML mapping. General chemical
-editing, connected native construction and a native project format remain missing;
+editing and a native project format remain missing; closed native attachment is wired
+and awaits actual native verification;
 the closed headless extension and supported interchange persistence are documented separately.
 
 Io's ElementalGraph projects supported CDXML properties into these types and retains the

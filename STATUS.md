@@ -89,22 +89,29 @@ cc41dee7859ed1ae5c52e40b52f360da1cec1a46115fb0119068517f413c355a. Reviewer did n
 
 ## Active parallel work and next steps
 
-Root owns Git/integration. Root checkout feat/native-cdx-accepted contains this doc update
-on501a315; no Root Cargo/native job is live. Worktrees keep distinct absolute targets,
+Root owns Git/integration. Root checkout feat/native-carbon-attachment integrates the new UI on81858a1/501a315;
+no Root Cargo/native job is live after receiving gate57320. Worktrees keep distinct absolute targets,
 CARGO_INCREMENTAL=0; siblings use debug0 while Root retains default debuginfo.
 
-- reference_map owns native attachment UI in bondline-rxn, feat/connected-bond-integration
-  at501a315 plus intentional WIP in UI/lib.rs, attachment tests and additive provenance.
-  Five intended initial REDs exposed independent-fragment attachment, stale scene batching,
-  raw-label anchoring, a retained invalid press and foreground-covered release. Fifteen
-  new tests now pass with all old70 UI checks unchanged, including actual UI→shared save→
-  independent propane consumer→UndoRedo→reopen. UI clippy/full gate and frozen handoff follow;
-  actual native attachment and its new hosted run remain pending. Do not overwrite its WIP.
-- reference_ui is sole GUI owner for a separately authorized bounded installed26.1 SDF
-  import/record-flow observation. Only own licensed ignored inputs/documents may be opened;
-  preserve all reference originals/prefs, record REA versus CUA/OS evidence and close only
-  owned data. No Bondline executable is running. Await its exact cleanup/handoff before
-  assigning the next native attachment acceptance; never share GUI ownership.
+- Corrected attachment UI is committed69a27bc in bondline-rxn and merged here onto81858a1.
+  Five initial REDs and two peer-found inherited InvalidViewport cancellation REDs precede
+  fixes. All73 oldUI+17new=90 pass; own540 gate4960 exits0, Root receiving540 gate57320
+  exits0. Root log target/attachment-ui-integrated-ci.log SHA
+   e140e7f400d948944f7157db40c3cea44993a7341d5df6573fd6a5df95b67e0e.
+  UIlib23410115d78a0673f2b10a0ee37bbf90d6f802451b11d47bf49e0af849af198e,
+  newtestsd20c147b8c28670f9b2c4d435dd76675ca22ddb88e76713637c2b3bd31599170.
+  Final handoff SHAffb3a884f796e673fd6040ef56de1a04d280d8321b8119698fb5ecf67c096e30;
+  original handoff689f1379… retained. Read-only review finding resolved separately,
+  reportSHA87e26a9c284eb9f5a2b066ae7c4bc80902ff063b6b049ee4838f6b056f3c8a14. No author/reviewer
+  jobs live. Actual native attachment and its new hosted source remain pending.
+- reference_ui completed bounded installed26.1 SDF observation and cleanup: one document
+  with both drawings for two ordinary/mixed inputs; field/group/export remains unknown.
+  Research is committed81858a1, docs/research/installed-sdf-import.md. HandoffSHAd0c53eb8…9ccf,
+ 41-file index65ef6864…3a165 independently rehashed. All owned documents/helpers closed,
+  originals/cursor preserved, CUA completed once. The agent now prepares the next native
+  attachment acceptance plan; no GUI action until exact-source Root GO. A tiny guarded
+  ignored public-CG held-pointer test helper is authorized, with watchdog/EOF release;
+  no injection before GO. No Bondline native process is running; GUI lease remains exclusive.
 - file_verification completed read-only Root target/sdf-collection-next.md, SHA
    5bc7cc681f68d89cbf987cc772b0befac3d0cc004fc9ab2012dd1ec966e91673. This is not implementation:
   whole-collection source/history/baseline, record-view identity, duplicate fields/DT digits,
@@ -112,7 +119,8 @@ CARGO_INCREMENTAL=0; siblings use debug0 while Root retains default debuginfo.
   Guide25 Excel/enumeration evidence is not proof of26.1 desktop collection navigation.
   The reviewer is available for the forthcoming frozen UI source; no reviewer job is live.
 
-1. Publish this documentation-only accepted checkpoint on the matching GREEN501a315 source.
+1. Main29cac7f contains the accepted documentation on matching GREEN501a315 source.
+   Commit/publish this locally540-green attachment integration; obtain its own hosted result.
 2. Receive/freeze/review the UI attachment handoff, merge this native CDX evidence without
    dropping newer16-command/model/source guards, run receiving checks and actual frozen-
    source native attachment workflow, then its own hosted checks. Preserve every old input/

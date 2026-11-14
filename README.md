@@ -40,7 +40,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
 | Capability | Delivered scope |
 |---|---|
-| Drawing and history | Drag an isolated C–C bond with explicit hydrogen labels; Undo/Redo restores complete snapshots. CLI/MCP can extend a supported terminal carbon with an explicit H policy; native attachment remains pending. |
+| Drawing and history | Drag an isolated C–C bond with explicit hydrogen labels; Undo/Redo restores complete snapshots. CLI/MCP can extend a supported terminal carbon with an explicit H policy; native attachment is wired and awaits native verification. |
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files; unknown imported content remains backed by its original bytes. |
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |

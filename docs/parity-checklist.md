@@ -310,7 +310,7 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 | TD-003 | Structure Perspective | 192, 242-243 | missing | Structure rotation/projection handling. |
 | TD-004 | Eraser | 86, 91, 121 | missing | Deletion and bond-order reduction have distinct contexts. |
 | TD-005 | Text | 91-94 | missing | KB-LABEL-25.5 changes existing-label entry to Alt-click; separate KB-REPEAT-25.5 gives Windows Alt/Mac Option-click repetition. Tool context/version/source-target semantics require tests; no26.1 inference. |
-| TD-006 | Solid/single bond | 85 | verified (partial: isolated drag, Mac only) | bond.create through native/CLI/MCP/control; one history edit per drag and approved specific-scene capture. Headless bond.extend has explicit terminal-H policy/history and saved propane/butane consumers; native attachment, click creation, modifiers/snapping, order changes and full tool parity remain missing. |
+| TD-006 | Solid/single bond | 85 | verified (partial: isolated drag, Mac only) | bond.create through native/CLI/MCP/control; one history edit per drag and approved specific-scene capture. Headless bond.extend has explicit terminal-H policy/history and saved propane/butane consumers; native terminal attachment is wired with17 new deterministic regressions and awaits actual native verification. Click creation, modifiers/snapping, order changes and full tool parity remain missing. |
 | TD-007 | Double bond | 85 | missing | - |
 | TD-008 | Double either/crossed double bond | 86 | missing | - |
 | TD-009 | Triple bond | 86 | missing | - |

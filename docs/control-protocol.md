@@ -413,6 +413,18 @@ Byte-proven native CDXML or source-free authority is mandatory; actual imported 
 backing refuses even when drawable. A source-free document associated with a MOL file
 remains source-free; reopening creates MOL backing. No encoder or native-v0 profile is
 changed. Published saved propane/butane files face independent Expat/Decimal/RDKit
-consumers through engine/CLI/stdio/authenticated loopback. Native attachment is still
-missing; this does not implement general valence, branches/rings/merging or other tools.
+consumers through engine/CLI/stdio/authenticated loopback. Native attachment is wired,
+with actual native verification pending; this does not implement general valence,
+branches/rings/merging or other tools.
 See verification-terminal-carbon-extension.md for exact test-first evidence and limits.
+
+
+The canvas now picks a fresh GraphScene at each eligible press: empty paper routes to
+bond.create, a supported terminal atom/label routes to required-policy bond.extend.
+Raw press distance controls the3-logical-unit threshold independently of the snapped
+model anchor. Ordinary label/unknown-H clicks do not edit; intentional unsupported
+starts or occupied releases diagnose without independent-bond fallback. Each qualified
+release commits immediately, then later same-frame presses use the resulting graph
+and revision. Captured held gestures are never relabeled. Complete-source, stale and
+history guards remain in Engine. Native runtime remains pending; exact deterministic
+RED/GREEN and source/limit evidence is in verification-bond-attachment-ui.md.
