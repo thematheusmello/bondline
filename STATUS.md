@@ -5,14 +5,16 @@ Public repository: https://github.com/thematheusmello/bondline . Continue, do no
 
 ## Current integrated source
 
-Root branch feat/m1-rxn-integration adds reviewed legacy-RXN source4cbc89b to mixed-SDF
+Current docs/installed-ui-research contains production sourcec351bb8, the merge of reviewed
+legacy-RXN source4cbc89b into mixed-SDF
 integration23a43aa. Direct comparison of the RXN codec/tests/oracle/fixtures/fuzz target to
 accepted4cbc89b is empty. No adapter or UI behavior changes during either container merge.
 The actual combined cargo xtask ci passes410 workspace plus3 macOS bridge tests, rustfmt,
 all-target warnings-denied clippy, layers, native declared licenses/assets and five-file/
 four-bundle corpus. Log target/rxn-sdf-merged-ci.log ends with local CI checks passed;
 session11864 is terminal. Native closures153/164/219, two assets/locks/font/golden unchanged.
-This new merge needs its own hosted run. Prior23a43aa passes401+3 locally;43538842553 runs.
+This source's hosted43539538831 is active. Prior23a43aa passes401+3 locally and every
+43538842553 job is now GREEN; exact hosted log totals are being recorded separately.
 
 Main is now85bf5ebfd53580b66cde9726a374658fc9befcee, fast-forwarded only after every hosted
 43537753933 job passed: Mac397/Linux395/Windows387, actual windows and five ASAN targets.
@@ -100,7 +102,13 @@ locked installed sample window disappeared during the04→10 interval for an unk
 it was restored via its existing Recent entry, locked and source-verified, with a changed
 window ID/position. Other original windows retain their frames. Do not claim uninterrupted
 or identical visual-state preservation. Final target/reference-ui/24-final-cleanup-receipt.json
-records this exception; toolbar checkmark state remains unexposed. Final factual docs follow.
+records this exception; toolbar checkmark state remains unexposed. The first four factual
+research docs are frozen, hash/link/ID/count checked and included in this checkpoint.
+A second hover-only palette pass also ended cleanly: no hover API exists in installed
+REA/CUA, no tool cells were clicked, and all three originals/palette retain before/after
+IDs/frames. Its new original blank was cleanly closed and CUA completed separately.
+The same investigator is now doing bounded read-only resource/public-guide role research;
+no GUI owner or native control action is currently live.
 Raw vendor screenshots and REA evidence stay ignored. Public factual maps use original prose.
 
 ## Worktrees, jobs and next executable work
@@ -108,15 +116,18 @@ Raw vendor screenshots and REA evidence stay ignored. Public factual maps use or
 Only root runs Git. Keep distinct absolute Cargo targets, CARGO_INCREMENTAL=0 and sibling
 DEV/TEST_DEBUG=0; disk is constrained. Never delete active targets, source, fixtures or evidence.
 
-1. Commit/publish this GREEN RXN/mixed-SDF integration; observe its own hosted run. Fast-forward
-   main only to a matching GREEN source. Do not substitute older platform evidence.
-2. Finish installed observation/map/ticket docs with exact build, state, Evidence and unknowns.
-   Independently check ignored original local CDXML/CDX against existing bounded parsers.
-3. Sibling bondline-mol-v3000, feat/sdf-v3000 at6aeb9f2: mixed SDF passes114 IO tests,
+1. RXN/mixed-SDF productionc351bb8 is published; observe43539538831 without repeating jobs.
+   Record the already GREEN43538842553 totals; fast-forward main only to matching GREEN
+   source. This docs-only checkpoint changes no production code or fixture.
+2. First installed observation/map/ticket/catalog docs are complete for their bounded scope.
+   Continue tool-role/public-resource and deeper selection/context/parameter/error flows;
+   complete AX/shortcut/tooltips and end-to-end parity remain unknown, not absent.
+   Original XML passes existing syntax/byte checks; CDX needs the isolated framing fix.
+3. Mixed-SDF source6aeb9f2 passes114 IO tests,
    scoped checks/ASAN10000, independent review and own379+3 aggregate. Source is published;
    hosted43538499719 is running. Reviewed handoff target/sdf-v3000-reviewed-ci-handoff.json.
    Production concat eded429d55b8dd4ab0b520f6e432b859a33269aceaf6ce4aa40595f8dce9f75d.
-   Receiving integration23a43aa passes401+3; its hosted43538842553 is running. Newer corpus,
+   Receiving integration23a43aa passes401+3; its hosted43538842553 is GREEN. Newer corpus,
    positive CDX seed/max_len131072 and all four manifest attributes remain retained.
 4. Sibling bondline-rxn, feat/rxn-v2000 at4cbc89b: bounded ordered legacy wrapper with raw
    V2000/V3000 payloads passes116 IO tests/scoped checks/ASAN10000, independent review and
@@ -124,13 +135,26 @@ DEV/TEST_DEBUG=0; disk is constrained. Never delete active targets, source, fixt
    separates missing application reactions/SMILES. This root's receiving gate now passes410+3,
    with all newer corpus/CDX/SDF rules retained. Handoff target/rxn-final-handoff.json and root review apply.
    No local RXN job remains; target/rxn-full-ci.log records the actual invoked checkout.
-5. Continue application SDF/CDX/RXN, broader mappings and SMILES/InChI, then M2–M5 in roadmap
+5. file_verification owns bondline-cdx-framing, feat/cdx-header-document/base85bf5eb:
+   native prefix/root/file-end profile passes seven new tests, all CDX tests/clippy and
+   fresh scoped ASAN10000. Exact unmodified1196B native passthrough/property edit also passes
+   independent struct/RDKit checks. No root integration yet. Review final handoff/limits,
+   then run receiving aggregate; Writer and all old fixtures/pins remain unchanged.
+6. reference_map now owns initial CDX read-only elemental projection in reused inactive
+   bondline-mol-v3000, feat/cdx-elemental-projection/basec351bb8, own warm target. It may
+   add only the internal CDX dependency edge/module/tests/provenance, not commands/UI/FS/
+   StoredDocument. Preserve frozen first-pass research docs. No new external dependency.
+7. Continue application SDF/CDX/RXN, broader mappings and SMILES/InChI, then M2–M5 in roadmap
    order. The installed inventory refines workflow tickets; it does not complete any milestone.
 
-Root has no running Cargo/fuzz/Bondline-native job. reference_ui is finishing its first-pass
-docs after GUI cleanup; reference_map owns map/catalog/ticket docs; file_verification owns
-the isolated CDX framing implementation. Hosted43538499719,43538648520 and43538842553 remain
-active. Revalidate handles instead of duplicating jobs. Main's matching43537753933 is GREEN.
+Root has no running Cargo/fuzz/Bondline-native job. reference_ui owns read-only palette
+resource research after two completed/cleaned GUI passes; reference_map owns the initial
+CDX projection; file_verification is freezing CDX framing. Their new work has its own
+evidence/targets; do not confuse it with this root. Hosted43538499719/43538648520 Windows
+and new43539538831 remain active at this snapshot;43538842553/43537753933 are GREEN.
+Revalidate handles/status instead of duplicating jobs. Disk is constrained (~1.5GiB);
+no new heavyweight dependency builds or active-cache deletion. Minimal ignored CDX-only
+ASAN manifest avoids rebuilding IO/GPU; full fuzz graph/receiving checks remain separate.
 
 M0 full inventory/dialog/job discovery, broader rendering and platform interactions remain.
 M2 connected bonds/rings/selection/labels/styles, M3 chemistry/reactions/text, M4 publishing/

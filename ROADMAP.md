@@ -130,3 +130,11 @@ format directions and monomer cases. All remain missing with source/platform qua
 Optional scientific-service connectors must not become offline creation dependencies.
 The [CDX candidate review](docs/research/cdx-corpus-candidate.md) adds a concrete unsupported
 framing/provenance question; it does not add a passing corpus file or justify relaxed parsing.
+
+The [installed desktop map](docs/research/installed-feature-map.md) and
+[implementation tickets](docs/research/installed-implementation-tickets.md) add exact-build
+control/state/flow evidence without replacing the complete M0–M5 target. First-pass503 menu
+entries and a successful original local-file flow do not complete inventory or parity.
+Native CDX framing precedes safe CDX projection/application I/O; collection ownership and
+record editing precede application SDF; general graph scenes/hit testing precede connected
+gestures. Account/cloud routes stay optional to the offline authoring product.

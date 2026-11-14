@@ -1,8 +1,9 @@
 # Open questions
 
-- Registry Save currently retains authoring Undo/Redo and records a separate saved baseline.
-  G25 printed14 describes only actions since the last save. Exact26.1 history-across-save
-  behavior needs evidence; keep this explicit gap rather than claiming full File parity.
+- Registry Save retains authoring Undo/Redo and a separate saved baseline. G25 printed14
+  describes only actions since the last save. The installed26.1.0.6801 Mac local CDXML
+  Save As route retains enabled Undo Drawing; this resolves that specific observation,
+  not every Save/platform/history variant. See research/installed-ui-observations.md.
 
 - Public 26.1 release notes are available, but no full public 26.1 menu/palette reference
   was located. The 576-row cited baseline in parity-checklist.md covers explicit guide
@@ -30,12 +31,15 @@
 - Several attachment-point and BioDraw glyphs share labels in the public guide. Their
   exact palette variants remain unresolved. Authorized toolbar/hotkey resources and runtime
   observation may now help under the updated AGENTS policy; record version/hash/evidence
-  instead of guessing from memory. No such desktop artifact evidence is established yet.
+  instead of guessing from memory. The installed26.1.0.6801 first pass captures palette
+  geometry but does not establish all individual tool/flyout roles.
 - The official download center now has controlled-browser evidence of an authentication
-  screen, not a public installer link. No reference desktop artifact was acquired or run.
+  screen, not a public installer link. That bounded public-download investigation acquired
+  no desktop artifact; the later user-authorized installed-app pass is separate evidence.
   The public Walnut playlist's entry and first promotional slide were observed; it is a
   Signals web demo with no desktop build identity. Neither observation establishes 26.1
-  desktop design or chemical editing behavior. See [the evidence record](../research/official-ui-evidence.md).
+  desktop design or chemical editing behavior. See [the evidence record](../research/official-ui-evidence.md)
+  and the separately qualified [installed observations](../research/installed-ui-observations.md).
 - The archived CDX SDK does not establish every modern extension. Preserve unknown data.
 - CDX Intro prose begins with a Document object, while its simple example starts with a
   Page after the header. The original implicit-root and explicit8000/id0 vectors both work
@@ -134,3 +138,15 @@
   the first profile refuses them. Unknown retained molecular data has no blanket
   semantic validation claim. RDfiles and reaction roles/maps/centers in the editable
   model, commands, UI and persistence remain required M1/M3 work.
+
+- The installed26.1.0.6801 Mac pass has503 physical menu records,28 Save formats and three
+  inspected Settings panels. Tier, tooltips, most shortcuts, selection/context transitions,
+  post-reopen editing and deeper feature flows remain unverified. Search and Signals both
+  appear in this profile; prior video evidence does not establish their cross-build absence.
+  Some AX snapshots are explicitly truncated/gapped. The restored original locked sample
+  window's disappearance cause remains unknown; source was restored with a changed frame.
+- Actual native1196-byte CDX saving/reopening is observed, but current85bf5eb syntax refuses
+  its framing. Public BSD source explains a22-byte prefix/document/separate-file-end form.
+  A narrowly bounded original-vector TDD fix is in progress; legacy reserved-header ambiguity
+  and complete EOF/resource guards must remain explicit. Native outputs are research only,
+  not openly licensed committed corpus. General CDX mapping/application editing is absent.

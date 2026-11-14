@@ -1,6 +1,7 @@
 # Parity checklist
 
-Target: publicly documented Professional 26.1 desktop behavior. Reviewed 2026-11-13.
+Target: qualified public and authorized installed Professional-family26.1 desktop behavior.
+Reviewed through2026-11-14; the installed license tier remains unknown.
 This is a source-cited implementation backlog, not a claim of feature parity.
 
 States: **missing** = no delivered reference workflow; **wired** = code calls an operation
@@ -37,6 +38,14 @@ The [modern audit](research/modern-inventory-audit.md) adds25.5 gesture/selectio
 workspace qualifications plus bounded desktop-video evidence. Its observed Signals menu
 differs from older Search labels; exact build/menu contents remain unresolved. It does not
 identify a full26.1 desktop screen specification or increase the count by duplicating rows.
+
+The [installed26.1.0.6801 Mac map](research/installed-feature-map.md) now supplements this
+backlog with14 menus/503 physical entries,28 Save choices and three inspected Settings
+panels. Search and Signals coexist in that exact profile. Bounded original drawing/history/
+local save/close/reopen routes have observation evidence; tooltip/shortcut/context/deeper
+flow coverage is incomplete. [Implementation tickets](research/installed-implementation-tickets.md)
+keep dependencies and missing/wired/verified scopes explicit. Physical entries do not add
+to576 logical anchors or establish a feature-completion percentage.
 
 ## Workflow overview
 

@@ -1,0 +1,1493 @@
+{
+  "schema": "bondline.reference-menu-catalog.v1",
+  "review_date": "2026-11-14",
+  "profile": "CD261-MAC-ARM64-6801",
+  "source": {
+    "path": "target/reference-map/menu-ledger-3e87de45b7d24d9087709bef2831a5ad069bbf7daa4a1b887a338d6fb2959c09.json",
+    "original_path": "target/reference-ui/cua-menu-ledger.json",
+    "sha256": "3e87de45b7d24d9087709bef2831a5ad069bbf7daa4a1b887a338d6fb2959c09",
+    "kind": "manual structured extraction of CUA AX observations, not raw REA",
+    "observed_interval_utc": [
+      "2026-11-14T00:33:42Z",
+      "2026-11-14T00:39:21Z"
+    ],
+    "interval_approximate": true
+  },
+  "context": "Owned new blank document, no authored objects/selection. Enabled reflects only this context. Menu actions other than New were not exercised by this sweep.",
+  "defaults": {
+    "reference_evidence": "visible",
+    "shortcut_displayed": null,
+    "shortcut_executed": false,
+    "checkmark": null,
+    "icon_role": null,
+    "flow_result": null,
+    "parameters": null,
+    "validation": null,
+    "mapping_scope": "Same control role matches identify logical inventory anchors only, not unchanged 25-to-26.1 behavior, enabled rules, hotkeys or file semantics.",
+    "child_order": "Observed ordinal within the direct menu/submenu; separator positions not preserved. Cross-referenced Object stylesheet names have null order.",
+    "accessibility_coverage": "Observed controls/field groups only. Complete AX coverage failed for some sheets with retained gaps; integrity/scenario completion does not establish complete AX trees.",
+    "unobserved_fields": "null means unknown, not absent"
+  },
+  "implementation_locations": {
+    "file": [
+      "crates/commands/src/files.rs",
+      "crates/commands/src/file_ui.rs",
+      "crates/commands/src/controls.rs",
+      "crates/io/src/document.rs",
+      "crates/ui/src/file_workflow.rs"
+    ],
+    "close": [
+      "crates/commands/src/close.rs",
+      "crates/commands/src/controls.rs",
+      "crates/ui/src/file_workflow.rs"
+    ],
+    "history": [
+      "crates/commands/src/lib.rs",
+      "crates/commands/src/controls.rs",
+      "crates/ui/src/lib.rs"
+    ],
+    "workspace": [
+      "crates/commands/src/controls.rs",
+      "crates/ui/src/lib.rs"
+    ],
+    "graph": [
+      "crates/model/src/graph.rs",
+      "crates/render/src/page.rs",
+      "crates/ui/src/lib.rs"
+    ],
+    "format": [
+      "crates/io/src/document.rs",
+      "crates/commands/src/lib.rs",
+      "crates/ui/src/file_workflow.rs"
+    ]
+  },
+  "surfaces": [
+    {
+      "id": "IM-MENU-01",
+      "label": "ChemDraw",
+      "order": 1
+    },
+    {
+      "id": "IM-MENU-02",
+      "label": "File",
+      "order": 2
+    },
+    {
+      "id": "IM-MENU-03",
+      "label": "Edit",
+      "order": 3
+    },
+    {
+      "id": "IM-MENU-04",
+      "label": "View",
+      "order": 4
+    },
+    {
+      "id": "IM-MENU-05",
+      "label": "Object",
+      "order": 5
+    },
+    {
+      "id": "IM-MENU-06",
+      "label": "Structure",
+      "order": 6
+    },
+    {
+      "id": "IM-MENU-07",
+      "label": "Text",
+      "order": 7
+    },
+    {
+      "id": "IM-MENU-08",
+      "label": "Curves",
+      "order": 8
+    },
+    {
+      "id": "IM-MENU-09",
+      "label": "Colors",
+      "order": 9
+    },
+    {
+      "id": "IM-MENU-10",
+      "label": "Search",
+      "order": 10
+    },
+    {
+      "id": "IM-MENU-11",
+      "label": "Signals",
+      "order": 11
+    },
+    {
+      "id": "IM-MENU-12",
+      "label": "Add-ins",
+      "order": 12
+    },
+    {
+      "id": "IM-MENU-13",
+      "label": "Window",
+      "order": 13
+    },
+    {
+      "id": "IM-MENU-14",
+      "label": "Help",
+      "order": 14
+    }
+  ],
+  "coverage_gaps": [
+    "Only the blank-state first pass; selection/history/focus/context variations not enumerated.",
+    "Dynamic Recent/open-document personal entries intentionally omitted. Named stationery/templates/samples identify control roles, not permission to copy their assets or parameters.",
+    "Font submenu exposed no AX children; fonts remain unknown.",
+    "Host OS Services leaves were not transcribed or invoked.",
+    "Host display names are represented by dynamic-family roles, not private labels.",
+    "No shortcut glyphs or checkmarks exposed in CUA AX text.",
+    "Palette, toolbar, dialog, hotspot/context-menu and hidden controls require separate inventories.",
+    "Product tier unknown; disabled does not establish a licensing condition."
+  ],
+  "save_format_popup": {
+    "surface_id": "ID-SAVE-01",
+    "parent": "Native local Save sheet after configured cloud-save prompt's This Computer bridge",
+    "context": "Owned original drawing, format popup expanded; no export success inferred",
+    "source": {
+      "path": "target/reference-ui/12-save-format-scenario-rea.json",
+      "sha256": "9fbbaab4ee9c9623a9c216d7c1ae6784c3d1d495c86e8b1628f44cf2d4ec45c0",
+      "evidence_id": "ev_45c48aa6cb4d82a646ed5c43038c3d38adfb085f80da970a6097f29a5fe3c236",
+      "step": 0,
+      "operation": "AX click completed",
+      "tree_truncated": true,
+      "retained_gap_count": 2
+    },
+    "enabled_source": "UI investigator's CUA AX confirmation; REA schema does not expose enabled flags",
+    "limits": [
+      "29 AX rows contain one separator; only 28 named choices counted.",
+      "Names do not establish extensions, encoded versions, fidelity, defaults or successful export.",
+      "Cloud prompt is configured-reference behavior, not an account dependency to add to Bondline."
+    ],
+    "choices": [
+      {
+        "id": "ID-SAVE-FORMAT-001",
+        "label": "ChemDraw XML",
+        "order": 0,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          0
+        ],
+        "enabled": true,
+        "bondline_status": "wired",
+        "commands": [
+          "ui.file",
+          "document.save_cdxml"
+        ],
+        "scope": "Bounded Bondline CDXML/MOL variants have separate verification; reference format/default-version parity not established."
+      },
+      {
+        "id": "ID-SAVE-FORMAT-002",
+        "label": "ChemDraw",
+        "order": 1,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          1
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-003",
+        "label": "ChemDraw Stationery",
+        "order": 3,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          3
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-004",
+        "label": "ChemDraw 3.x",
+        "order": 4,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          4
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-005",
+        "label": "PDF",
+        "order": 5,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          5
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-006",
+        "label": "GIF",
+        "order": 6,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          6
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-007",
+        "label": "BMP",
+        "order": 7,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          7
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-008",
+        "label": "JPEG",
+        "order": 8,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          8
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-009",
+        "label": "PNG",
+        "order": 9,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          9
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-010",
+        "label": "TIFF",
+        "order": 10,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          10
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-011",
+        "label": "Encapsulated PostScript",
+        "order": 11,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          11
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-012",
+        "label": "Transportable Graphics (TGF)",
+        "order": 12,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          12
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-013",
+        "label": "ISIS/Sketch (SKC)",
+        "order": 13,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          13
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-014",
+        "label": "Reaction Molfile (RXN)",
+        "order": 14,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          14
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-015",
+        "label": "Reaction Molfile V2000 (RXN)",
+        "order": 15,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          15
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-016",
+        "label": "Chemical Markup Language (CML)",
+        "order": 16,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          16
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-017",
+        "label": "Connection Table",
+        "order": 17,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          17
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-018",
+        "label": "MDL Molfile",
+        "order": 18,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          18
+        ],
+        "enabled": true,
+        "bondline_status": "wired",
+        "commands": [
+          "ui.file",
+          "document.save_mol"
+        ],
+        "scope": "Bounded Bondline CDXML/MOL variants have separate verification; reference format/default-version parity not established."
+      },
+      {
+        "id": "ID-SAVE-FORMAT-019",
+        "label": "MDL Molfile V2000",
+        "order": 19,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          19
+        ],
+        "enabled": true,
+        "bondline_status": "wired",
+        "commands": [
+          "ui.file",
+          "document.save_mol"
+        ],
+        "scope": "Bounded Bondline CDXML/MOL variants have separate verification; reference format/default-version parity not established."
+      },
+      {
+        "id": "ID-SAVE-FORMAT-020",
+        "label": "MDL SDfile",
+        "order": 20,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          20
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-021",
+        "label": "MDL SDfile V2000",
+        "order": 21,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          21
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-022",
+        "label": "MDL RDfile",
+        "order": 22,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          22
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-023",
+        "label": "MDL RDfile V2000",
+        "order": 23,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          23
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-024",
+        "label": "MSI ChemNote",
+        "order": 24,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          24
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-025",
+        "label": "SMD 4.2 File",
+        "order": 25,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          25
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-026",
+        "label": "Scalable Vector Graphics (SVG)",
+        "order": 26,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          26
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-027",
+        "label": "3D Manufacturing Format for Display (3MF)",
+        "order": 27,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          27
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      },
+      {
+        "id": "ID-SAVE-FORMAT-028",
+        "label": "3D Manufacturing Format for Printing (3MF)",
+        "order": 28,
+        "ax_path": [
+          5,
+          0,
+          10,
+          0,
+          28
+        ],
+        "enabled": true,
+        "bondline_status": "missing"
+      }
+    ]
+  },
+  "local_save_fields": {
+    "surface_id": "ID-SAVE-01",
+    "source": {
+      "path": "target/reference-ui/13-save-prepared-rea.json",
+      "sha256": "b34ce7e0ee556db3e7d5b5aec23ffe16e593ef7d310da4ac720e94d21d16d724",
+      "evidence_id": "ev_6b3fd5e8cc7c75554958b1560593b4b173df846c4dd202ab364666caae23f764",
+      "tree_truncated": true,
+      "retained_gap_count": 2
+    },
+    "context": "Prepared XML local Save sheet; this is a bounded field inventory, not every native filesystem browser state.",
+    "label_scope": "Technical role paraphrases; unlabeled disclosure stays unknown. Adjacent static labels connect filename/tags/format fields. No user path/tag values retained.",
+    "limits": [
+      "Enabled metadata is not emitted by REA; only Save was explicitly confirmed enabled by the CUA preparation receipt.",
+      "RadioGroup AXValue has unsupported CFType; individually exposed LF radio selected-state is separately observed.",
+      "Settled CDX format removed EOL radios and reported no format options; not a universal format-option inventory."
+    ],
+    "controls": [
+      {
+        "id": "ID-SAVE-FIELD-001",
+        "role": "location_popup",
+        "label": "Where",
+        "ax_role": "AXPopUpButton",
+        "ax_path": [
+          5,
+          0,
+          2
+        ],
+        "enabled": null,
+        "selected": null,
+        "bondline": {
+          "status": "missing",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-002",
+        "role": "disclosure",
+        "label": null,
+        "ax_role": "AXDisclosureTriangle",
+        "ax_path": [
+          5,
+          0,
+          3
+        ],
+        "enabled": null,
+        "selected": null,
+        "bondline": {
+          "status": "missing",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-003",
+        "role": "filename",
+        "label": "Save As",
+        "ax_role": "AXTextField",
+        "ax_path": [
+          5,
+          0,
+          5
+        ],
+        "enabled": null,
+        "selected": null,
+        "bondline": {
+          "status": "wired",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-004",
+        "role": "tags",
+        "label": "Tags",
+        "ax_role": "AXTextField",
+        "ax_path": [
+          5,
+          0,
+          7
+        ],
+        "enabled": null,
+        "selected": null,
+        "bondline": {
+          "status": "missing",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-005",
+        "role": "optional_integration_button",
+        "label": "Signals",
+        "ax_role": "AXButton",
+        "ax_path": [
+          5,
+          0,
+          8
+        ],
+        "enabled": null,
+        "selected": null,
+        "bondline": {
+          "status": "missing",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-006",
+        "role": "format_popup",
+        "label": "Format",
+        "ax_role": "AXPopUpButton",
+        "ax_path": [
+          5,
+          0,
+          10
+        ],
+        "enabled": null,
+        "selected": null,
+        "bondline": {
+          "status": "wired",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-007",
+        "role": "stationery_location_button",
+        "label": "Go To Stationery Folder",
+        "ax_role": "AXButton",
+        "ax_path": [
+          5,
+          0,
+          11
+        ],
+        "enabled": null,
+        "selected": null,
+        "bondline": {
+          "status": "missing",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-008",
+        "role": "line_ending_choice",
+        "label": "CR",
+        "ax_role": "AXRadioButton",
+        "ax_path": [
+          5,
+          0,
+          12,
+          0,
+          0
+        ],
+        "enabled": null,
+        "selected": false,
+        "bondline": {
+          "status": "missing",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-009",
+        "role": "line_ending_choice",
+        "label": "LF",
+        "ax_role": "AXRadioButton",
+        "ax_path": [
+          5,
+          0,
+          12,
+          0,
+          1
+        ],
+        "enabled": null,
+        "selected": true,
+        "bondline": {
+          "status": "missing",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-010",
+        "role": "line_ending_choice",
+        "label": "CRLF",
+        "ax_role": "AXRadioButton",
+        "ax_path": [
+          5,
+          0,
+          12,
+          0,
+          2
+        ],
+        "enabled": null,
+        "selected": false,
+        "bondline": {
+          "status": "missing",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-011",
+        "role": "cancel_button",
+        "label": "Cancel",
+        "ax_role": "AXButton",
+        "ax_path": [
+          5,
+          0,
+          13
+        ],
+        "enabled": null,
+        "selected": null,
+        "bondline": {
+          "status": "wired",
+          "ticket": "M0-02"
+        }
+      },
+      {
+        "id": "ID-SAVE-FIELD-012",
+        "role": "save_button",
+        "label": "Save",
+        "ax_role": "AXButton",
+        "ax_path": [
+          5,
+          0,
+          14
+        ],
+        "enabled": true,
+        "selected": null,
+        "bondline": {
+          "status": "wired",
+          "ticket": "M0-02"
+        }
+      }
+    ]
+  },
+  "document_settings": {
+    "surface_id": "ID-SETTINGS-01",
+    "sources": [
+      {
+        "path": "target/reference-ui/17-settings-layout-rea.json",
+        "sha256": "a125e29882beb37a75a26f564beeece73b8d0a4fff5062b6c7ec4297b55b7520",
+        "evidence_id": "ev_973c2079245ea02508eba9506259c1b826c809c77d4a4107b4f1a799b7fb2714",
+        "tree_truncated": true,
+        "retained_gap_count": 1
+      },
+      {
+        "path": "target/reference-ui/18-settings-drawing-rea.json",
+        "sha256": "c6c84d1ed1f6bc0788fc7861be4beae24702ab32ea51f969d7a7f877d8a7422f",
+        "evidence_id": "ev_7e6ce7d170f00a19b99f3dffd5c9b0865e3f48de7cabe6db5c28f16b10056c92",
+        "tree_truncated": true,
+        "retained_gap_count": 1
+      },
+      {
+        "path": "target/reference-ui/19-settings-atom-labels-rea.json",
+        "sha256": "d456d7ef48a19a9e1b5f3183ee280221ee7328362e6390e0d83c61f103ce99bf",
+        "evidence_id": "ev_ef12ae833a292c66e0001a49bae4297932ecc705aa11c925ce7f97894bcf8183",
+        "tree_truncated": true,
+        "retained_gap_count": 2
+      }
+    ],
+    "context": "Owned original ACS1996-profile document; inspected only, no values edited/applied",
+    "controls": [
+      {
+        "id": "ID-SETTINGS-CATEGORY-001",
+        "label": "Layout",
+        "order": 1,
+        "legacy_ids": [
+          "DP-009"
+        ],
+        "mapping": "same_control_role",
+        "reference_evidence": "state-observed",
+        "field_groups": [
+          "Pages/Poster",
+          "page rows/columns",
+          "document dimensions",
+          "margins",
+          "overlap",
+          "registration marks",
+          "Page Setup",
+          "display units"
+        ],
+        "enabled": null,
+        "bondline_status": "missing",
+        "ticket": "M2-05"
+      },
+      {
+        "id": "ID-SETTINGS-CATEGORY-002",
+        "label": "Header/Footer",
+        "order": 2,
+        "legacy_ids": [
+          "DP-010"
+        ],
+        "mapping": "same_control_role",
+        "reference_evidence": "visible",
+        "field_groups": null,
+        "enabled": null,
+        "bondline_status": "missing",
+        "ticket": "M2-05"
+      },
+      {
+        "id": "ID-SETTINGS-CATEGORY-003",
+        "label": "Drawing",
+        "order": 3,
+        "legacy_ids": [
+          "DP-011"
+        ],
+        "mapping": "same_control_role",
+        "reference_evidence": "state-observed",
+        "field_groups": [
+          "chain angle",
+          "bond spacing relative/absolute",
+          "fixed length",
+          "bold/line widths",
+          "margin/hash spacing",
+          "atom/bond indicators"
+        ],
+        "enabled": null,
+        "bondline_status": "missing",
+        "ticket": "M2-05"
+      },
+      {
+        "id": "ID-SETTINGS-CATEGORY-004",
+        "label": "Text Captions",
+        "order": 4,
+        "legacy_ids": [
+          "DP-013"
+        ],
+        "mapping": "same_control_role",
+        "reference_evidence": "visible",
+        "field_groups": null,
+        "enabled": null,
+        "bondline_status": "missing",
+        "ticket": "M2-05"
+      },
+      {
+        "id": "ID-SETTINGS-CATEGORY-005",
+        "label": "Atom Labels",
+        "order": 5,
+        "legacy_ids": [
+          "DP-012"
+        ],
+        "mapping": "same_control_role",
+        "reference_evidence": "state-observed",
+        "field_groups": [
+          "font family/size",
+          "spacing",
+          "font style",
+          "formula baseline",
+          "terminal-carbon labels",
+          "implicit-H flags"
+        ],
+        "enabled": null,
+        "bondline_status": "missing",
+        "ticket": "M2-05"
+      },
+      {
+        "id": "ID-SETTINGS-CATEGORY-006",
+        "label": "Property Labels",
+        "order": 6,
+        "legacy_ids": [
+          "DP-014"
+        ],
+        "mapping": "candidate",
+        "reference_evidence": "visible",
+        "field_groups": null,
+        "enabled": null,
+        "bondline_status": "missing",
+        "ticket": "M2-05"
+      },
+      {
+        "id": "ID-SETTINGS-CATEGORY-007",
+        "label": "Biopolymer Display",
+        "order": 7,
+        "legacy_ids": [
+          "DP-017"
+        ],
+        "mapping": "same_control_role",
+        "reference_evidence": "visible",
+        "field_groups": null,
+        "enabled": null,
+        "bondline_status": "missing",
+        "ticket": "M2-05"
+      },
+      {
+        "id": "ID-SETTINGS-CATEGORY-008",
+        "label": "Reaction Display",
+        "order": 8,
+        "legacy_ids": [
+          "DP-016"
+        ],
+        "mapping": "same_control_role",
+        "reference_evidence": "visible",
+        "field_groups": null,
+        "enabled": null,
+        "bondline_status": "missing",
+        "ticket": "M2-05"
+      },
+      {
+        "id": "ID-SETTINGS-CATEGORY-009",
+        "label": "Colors",
+        "order": 9,
+        "legacy_ids": [
+          "DP-015"
+        ],
+        "mapping": "same_control_role",
+        "reference_evidence": "visible",
+        "field_groups": null,
+        "enabled": null,
+        "bondline_status": "missing",
+        "ticket": "M2-05"
+      }
+    ],
+    "limits": [
+      "Nine category names, not all fields/panel workflows. Only Layout, Drawing and Atom Labels field groups inspected.",
+      "REA selected the document parent: attached-sheet AX subtree is present, but screenshot pixels show the parent. Drawing/Atom Labels sheet-only OS captures have separate provenance.",
+      "Observed values belong to this stationery/profile; no journal presets/defaults or font assets copied.",
+      "Field parameter validation, OK/Apply effects and persistence remain unknown; Property Labels is only a candidate for guide Analysis settings."
+    ]
+  },
+  "controls": [
+    {"id":"IM-APP-001","path":["ChemDraw","About ChemDraw"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-MENU-01","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-APP-002","path":["ChemDraw","Licensing…"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-MENU-01","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-APP-003","path":["ChemDraw","Check for Updates..."],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-MENU-01","legacy_ids":["MX-023"],"mapping":"candidate","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-APP-004","path":["ChemDraw","Settings…"],"role":"menu_item","enabled":true,"order":4,"parent_id":"IM-MENU-01","legacy_ids":["MF-015"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-APP-005","path":["ChemDraw","Services"],"role":"dynamic_family","enabled":true,"order":5,"parent_id":"IM-MENU-01","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-APP-006","path":["ChemDraw","Hide ChemDraw"],"role":"menu_item","enabled":true,"order":6,"parent_id":"IM-MENU-01","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-APP-007","path":["ChemDraw","Hide Others"],"role":"menu_item","enabled":true,"order":7,"parent_id":"IM-MENU-01","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-APP-008","path":["ChemDraw","Show All"],"role":"menu_item","enabled":true,"order":8,"parent_id":"IM-MENU-01","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-APP-009","path":["ChemDraw","Quit ChemDraw"],"role":"menu_item","enabled":true,"order":9,"parent_id":"IM-MENU-01","legacy_ids":["MF-008"],"mapping":"same_control_role","bondline":{"status":"wired","commands":["document.close"],"locations":"close","verified_scope":"Existing bounded Mac/page/isolated-bond variants only; see verification.md. The reference flow in this catalog was not replayed."}},
+    {"id":"IM-APP-010","path":["ChemDraw","Quit and Keep Windows"],"role":"menu_item","enabled":true,"order":10,"parent_id":"IM-MENU-01","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-FILE-001","path":["File","New ACS Document 1996"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-MENU-02","legacy_ids":["MF-001"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-002","path":["File","New from Stationery"],"role":"submenu","enabled":true,"order":2,"parent_id":"IM-MENU-02","legacy_ids":["MF-018","MF-019"],"mapping":"candidate","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-003","path":["File","Open…"],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-MENU-02","legacy_ids":["MF-002"],"mapping":"same_control_role","bondline":{"status":"wired","commands":["ui.file","document.open_cdxml","document.open_mol"],"locations":"file","verified_scope":"Existing bounded Mac/page/isolated-bond variants only; see verification.md. The reference flow in this catalog was not replayed."}},
+    {"id":"IM-FILE-004","path":["File","Open Templates"],"role":"submenu","enabled":true,"order":4,"parent_id":"IM-MENU-02","legacy_ids":["MF-020"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-005","path":["File","Open Samples"],"role":"submenu","enabled":true,"order":5,"parent_id":"IM-MENU-02","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-006","path":["File","Open in ChemDraw+"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-MENU-02","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-007","path":["File","Open Recent"],"role":"submenu","enabled":true,"order":7,"parent_id":"IM-MENU-02","legacy_ids":["MF-003"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-008","path":["File","Close"],"role":"menu_item","enabled":true,"order":8,"parent_id":"IM-MENU-02","legacy_ids":["MF-007"],"mapping":"same_control_role","bondline":{"status":"wired","commands":["document.close"],"locations":"close","verified_scope":"Existing bounded Mac/page/isolated-bond variants only; see verification.md. The reference flow in this catalog was not replayed."}},
+    {"id":"IM-FILE-009","path":["File","Close All"],"role":"menu_item","enabled":true,"order":9,"parent_id":"IM-MENU-02","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-010","path":["File","Save…"],"role":"menu_item","enabled":true,"order":10,"parent_id":"IM-MENU-02","legacy_ids":["MF-004"],"mapping":"same_control_role","bondline":{"status":"wired","commands":["ui.file","document.save_cdxml","document.save_mol"],"locations":"file","verified_scope":"Existing bounded Mac/page/isolated-bond variants only; see verification.md. The reference flow in this catalog was not replayed."}},
+    {"id":"IM-FILE-011","path":["File","Save As Stationery…"],"role":"menu_item","enabled":true,"order":11,"parent_id":"IM-MENU-02","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-012","path":["File","Save As…"],"role":"menu_item","enabled":true,"order":12,"parent_id":"IM-MENU-02","legacy_ids":["MF-005"],"mapping":"same_control_role","bondline":{"status":"wired","commands":["ui.file","document.save_cdxml","document.save_mol"],"locations":"file","verified_scope":"Existing bounded Mac/page/isolated-bond variants only; see verification.md. The reference flow in this catalog was not replayed."}},
+    {"id":"IM-FILE-013","path":["File","Duplicate"],"role":"menu_item","enabled":true,"order":13,"parent_id":"IM-MENU-02","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-014","path":["File","Rename…"],"role":"menu_item","enabled":true,"order":14,"parent_id":"IM-MENU-02","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-015","path":["File","Move To…"],"role":"menu_item","enabled":true,"order":15,"parent_id":"IM-MENU-02","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-016","path":["File","Revert To"],"role":"submenu","enabled":true,"order":16,"parent_id":"IM-MENU-02","legacy_ids":["MF-006"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-017","path":["File","Share"],"role":"submenu","enabled":true,"order":17,"parent_id":"IM-MENU-02","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-FILE-018","path":["File","Export…"],"role":"menu_item","enabled":true,"order":18,"parent_id":"IM-MENU-02","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-FILE-019","path":["File","Page Setup…"],"role":"menu_item","enabled":true,"order":19,"parent_id":"IM-MENU-02","legacy_ids":["MF-009"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-FILE-020","path":["File","Print…"],"role":"menu_item","enabled":true,"order":20,"parent_id":"IM-MENU-02","legacy_ids":["MF-010"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-FILE-021","path":["File","Document Settings…"],"role":"menu_item","enabled":true,"order":21,"parent_id":"IM-MENU-02","legacy_ids":["MF-013"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-022","path":["File","Document Annotations…"],"role":"menu_item","enabled":true,"order":22,"parent_id":"IM-MENU-02","legacy_ids":["MF-011"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-023","path":["File","Document Properties…"],"role":"menu_item","enabled":true,"order":23,"parent_id":"IM-MENU-02","legacy_ids":["MF-012"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-024","path":["File","Apply Document Settings from"],"role":"submenu","enabled":true,"order":24,"parent_id":"IM-MENU-02","legacy_ids":["MF-016"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-025","path":["File","List Nicknames…"],"role":"menu_item","enabled":true,"order":25,"parent_id":"IM-MENU-02","legacy_ids":["MF-024"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-026","path":["File","Share","AirDrop"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-FILE-017","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-FILE-027","path":["File","Share","Messages"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-FILE-017","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-FILE-028","path":["File","Share","Notes"],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-FILE-017","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-FILE-029","path":["File","Share","Freeform"],"role":"menu_item","enabled":true,"order":4,"parent_id":"IM-FILE-017","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-FILE-030","path":["File","Share","More…"],"role":"menu_item","enabled":true,"order":5,"parent_id":"IM-FILE-017","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-FILE-031","path":["File","Apply Document Settings from","Other…"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-FILE-024","legacy_ids":["MF-017"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-032","path":["File","Apply Document Settings from","ACS Document 1996"],"role":"catalog_entry","enabled":true,"order":2,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-033","path":["File","Apply Document Settings from","Adv. Synth. Catal. Document"],"role":"catalog_entry","enabled":true,"order":3,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-034","path":["File","Apply Document Settings from","Dark Mode"],"role":"catalog_entry","enabled":true,"order":4,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-035","path":["File","Apply Document Settings from","I Draw Styles"],"role":"catalog_entry","enabled":true,"order":5,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-036","path":["File","Apply Document Settings from","J. Chin. Chem. Soc. Doc"],"role":"catalog_entry","enabled":true,"order":6,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-037","path":["File","Apply Document Settings from","J. Het. Chem"],"role":"catalog_entry","enabled":true,"order":7,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-038","path":["File","Apply Document Settings from","J. Mol. Mod. (1 Column)"],"role":"catalog_entry","enabled":true,"order":8,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-039","path":["File","Apply Document Settings from","J. Mol. Mod. (2 Column)"],"role":"catalog_entry","enabled":true,"order":9,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-040","path":["File","Apply Document Settings from","Labeled Monomers"],"role":"catalog_entry","enabled":true,"order":10,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-041","path":["File","Apply Document Settings from","Nature Research Document"],"role":"catalog_entry","enabled":true,"order":11,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-042","path":["File","Apply Document Settings from","New A4 Document"],"role":"catalog_entry","enabled":true,"order":12,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-043","path":["File","Apply Document Settings from","New Document"],"role":"catalog_entry","enabled":true,"order":13,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-044","path":["File","Apply Document Settings from","New Slide"],"role":"catalog_entry","enabled":true,"order":14,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-045","path":["File","Apply Document Settings from","Phytomedicine Document"],"role":"catalog_entry","enabled":true,"order":15,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-046","path":["File","Apply Document Settings from","RSC (1 Column) Document"],"role":"catalog_entry","enabled":true,"order":16,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-047","path":["File","Apply Document Settings from","RSC (2 Column) Document"],"role":"catalog_entry","enabled":true,"order":17,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-048","path":["File","Apply Document Settings from","Science of Synthesis"],"role":"catalog_entry","enabled":true,"order":18,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-049","path":["File","Apply Document Settings from","Show Terminal Carbon Labels"],"role":"catalog_entry","enabled":true,"order":19,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-050","path":["File","Apply Document Settings from","SYNTHESIS, SYNLETT Document"],"role":"catalog_entry","enabled":true,"order":20,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-051","path":["File","Apply Document Settings from","Verlag Helv. Chim. Acta Doc"],"role":"catalog_entry","enabled":true,"order":21,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-052","path":["File","Apply Document Settings from","Wiley Document"],"role":"catalog_entry","enabled":true,"order":22,"parent_id":"IM-FILE-024","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-053","path":["File","New from Stationery","ACS Document 1996"],"role":"catalog_entry","enabled":true,"order":1,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-054","path":["File","New from Stationery","Adv. Synth. Catal. Document"],"role":"catalog_entry","enabled":true,"order":2,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-055","path":["File","New from Stationery","Dark Mode"],"role":"catalog_entry","enabled":true,"order":3,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-056","path":["File","New from Stationery","I Draw Styles"],"role":"catalog_entry","enabled":true,"order":4,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-057","path":["File","New from Stationery","J. Chin. Chem. Soc. Doc"],"role":"catalog_entry","enabled":true,"order":5,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-058","path":["File","New from Stationery","J. Het. Chem"],"role":"catalog_entry","enabled":true,"order":6,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-059","path":["File","New from Stationery","J. Mol. Mod. (1 Column)"],"role":"catalog_entry","enabled":true,"order":7,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-060","path":["File","New from Stationery","J. Mol. Mod. (2 Column)"],"role":"catalog_entry","enabled":true,"order":8,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-061","path":["File","New from Stationery","Labeled Monomers"],"role":"catalog_entry","enabled":true,"order":9,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-062","path":["File","New from Stationery","Nature Research Document"],"role":"catalog_entry","enabled":true,"order":10,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-063","path":["File","New from Stationery","New A4 Document"],"role":"catalog_entry","enabled":true,"order":11,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-064","path":["File","New from Stationery","New Document"],"role":"catalog_entry","enabled":true,"order":12,"parent_id":"IM-FILE-002","legacy_ids":["MF-019"],"mapping":"candidate","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-065","path":["File","New from Stationery","New Slide"],"role":"catalog_entry","enabled":true,"order":13,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-FILE-066","path":["File","New from Stationery","Phytomedicine Document"],"role":"catalog_entry","enabled":true,"order":14,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-067","path":["File","New from Stationery","RSC (1 Column) Document"],"role":"catalog_entry","enabled":true,"order":15,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-068","path":["File","New from Stationery","RSC (2 Column) Document"],"role":"catalog_entry","enabled":true,"order":16,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-069","path":["File","New from Stationery","Science of Synthesis"],"role":"catalog_entry","enabled":true,"order":17,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-070","path":["File","New from Stationery","Show Terminal Carbon Labels"],"role":"catalog_entry","enabled":true,"order":18,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-071","path":["File","New from Stationery","SYNTHESIS, SYNLETT Document"],"role":"catalog_entry","enabled":true,"order":19,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-072","path":["File","New from Stationery","Verlag Helv. Chim. Acta Doc"],"role":"catalog_entry","enabled":true,"order":20,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-073","path":["File","New from Stationery","Wiley Document"],"role":"catalog_entry","enabled":true,"order":21,"parent_id":"IM-FILE-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-FILE-074","path":["File","Open Templates","Advanced BioDraw"],"role":"catalog_entry","enabled":true,"order":1,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-075","path":["File","Open Templates","Amino Acid Side Chains"],"role":"catalog_entry","enabled":true,"order":2,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-076","path":["File","Open Templates","Amino Acids"],"role":"catalog_entry","enabled":true,"order":3,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-077","path":["File","Open Templates","Anatomy"],"role":"catalog_entry","enabled":true,"order":4,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-078","path":["File","Open Templates","Animals"],"role":"catalog_entry","enabled":true,"order":5,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-079","path":["File","Open Templates","Aromatics"],"role":"catalog_entry","enabled":true,"order":6,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-080","path":["File","Open Templates","Bicyclics"],"role":"catalog_entry","enabled":true,"order":7,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-081","path":["File","Open Templates","Bio Instruments"],"role":"catalog_entry","enabled":true,"order":8,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-082","path":["File","Open Templates","BioArt"],"role":"catalog_entry","enabled":true,"order":9,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-083","path":["File","Open Templates","Bugs"],"role":"catalog_entry","enabled":true,"order":10,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-084","path":["File","Open Templates","Clipware, part 1"],"role":"catalog_entry","enabled":true,"order":11,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-085","path":["File","Open Templates","Clipware, part 2"],"role":"catalog_entry","enabled":true,"order":12,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-086","path":["File","Open Templates","Conformers"],"role":"catalog_entry","enabled":true,"order":13,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-087","path":["File","Open Templates","Cp Rings"],"role":"catalog_entry","enabled":true,"order":14,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-088","path":["File","Open Templates","Cycloalkanes"],"role":"catalog_entry","enabled":true,"order":15,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-089","path":["File","Open Templates","DNA Templates"],"role":"catalog_entry","enabled":true,"order":16,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-090","path":["File","Open Templates","Functional Groups"],"role":"catalog_entry","enabled":true,"order":17,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-091","path":["File","Open Templates","Hexoses"],"role":"catalog_entry","enabled":true,"order":18,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-092","path":["File","Open Templates","Metallocenes"],"role":"catalog_entry","enabled":true,"order":19,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-093","path":["File","Open Templates","Microorganisms"],"role":"catalog_entry","enabled":true,"order":20,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-094","path":["File","Open Templates","Nanotubes"],"role":"catalog_entry","enabled":true,"order":21,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-095","path":["File","Open Templates","Organelles"],"role":"catalog_entry","enabled":true,"order":22,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-096","path":["File","Open Templates","Ph Rings"],"role":"catalog_entry","enabled":true,"order":23,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-097","path":["File","Open Templates","Polyhedra"],"role":"catalog_entry","enabled":true,"order":24,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-098","path":["File","Open Templates","Polypeptides"],"role":"catalog_entry","enabled":true,"order":25,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-099","path":["File","Open Templates","RNA Templates"],"role":"catalog_entry","enabled":true,"order":26,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-100","path":["File","Open Templates","Shapes"],"role":"catalog_entry","enabled":true,"order":27,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-101","path":["File","Open Templates","Stereocenters"],"role":"catalog_entry","enabled":true,"order":28,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-102","path":["File","Open Templates","Supramolecules"],"role":"catalog_entry","enabled":true,"order":29,"parent_id":"IM-FILE-004","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-103","path":["File","Open Templates","New Templates"],"role":"catalog_entry","enabled":true,"order":30,"parent_id":"IM-FILE-004","legacy_ids":["MF-021"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-104","path":["File","Open Samples","Alcohol Metabolism"],"role":"catalog_entry","enabled":true,"order":1,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-105","path":["File","Open Samples","Alkenes"],"role":"catalog_entry","enabled":true,"order":2,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-106","path":["File","Open Samples","Alkynes Internal"],"role":"catalog_entry","enabled":true,"order":3,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-107","path":["File","Open Samples","Alkynes Terminal"],"role":"catalog_entry","enabled":true,"order":4,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-108","path":["File","Open Samples","Antigen Pathway"],"role":"catalog_entry","enabled":true,"order":5,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-109","path":["File","Open Samples","b-Cypermethrin (stereochemistry)"],"role":"catalog_entry","enabled":true,"order":6,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-110","path":["File","Open Samples","Carbon Hybridization"],"role":"catalog_entry","enabled":true,"order":7,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-111","path":["File","Open Samples","Catecholamines"],"role":"catalog_entry","enabled":true,"order":8,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-112","path":["File","Open Samples","Cell Structure"],"role":"catalog_entry","enabled":true,"order":9,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-113","path":["File","Open Samples","Citric Acid Cycle"],"role":"catalog_entry","enabled":true,"order":10,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-114","path":["File","Open Samples","Codon Triplets"],"role":"catalog_entry","enabled":true,"order":11,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-115","path":["File","Open Samples","Condensation"],"role":"catalog_entry","enabled":true,"order":12,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-116","path":["File","Open Samples","Constitutional Isomerism"],"role":"catalog_entry","enabled":true,"order":13,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-117","path":["File","Open Samples","Creatine Synthesis"],"role":"catalog_entry","enabled":true,"order":14,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-118","path":["File","Open Samples","Cyclic Peptide"],"role":"catalog_entry","enabled":true,"order":15,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-119","path":["File","Open Samples","Endocrine System"],"role":"catalog_entry","enabled":true,"order":16,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-120","path":["File","Open Samples","GPCR Pathway"],"role":"catalog_entry","enabled":true,"order":17,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-121","path":["File","Open Samples","Grignard C-C"],"role":"catalog_entry","enabled":true,"order":18,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-122","path":["File","Open Samples","Grignard C-X"],"role":"catalog_entry","enabled":true,"order":19,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-123","path":["File","Open Samples","HIV Infections"],"role":"catalog_entry","enabled":true,"order":20,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-124","path":["File","Open Samples","Hotkeys Cheat Sheet for macOS"],"role":"catalog_entry","enabled":true,"order":21,"parent_id":"IM-FILE-005","legacy_ids":["MF-022"],"mapping":"candidate","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-125","path":["File","Open Samples","Hotkeys Cheat Sheet"],"role":"catalog_entry","enabled":true,"order":22,"parent_id":"IM-FILE-005","legacy_ids":["MF-022"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-126","path":["File","Open Samples","Human Insulin"],"role":"catalog_entry","enabled":true,"order":23,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-127","path":["File","Open Samples","JAK STAT Pathway"],"role":"catalog_entry","enabled":true,"order":24,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-128","path":["File","Open Samples","mTor Signalling"],"role":"catalog_entry","enabled":true,"order":25,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-129","path":["File","Open Samples","Nucleophilic Substitution Sn2"],"role":"catalog_entry","enabled":true,"order":26,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-130","path":["File","Open Samples","p53 Pathway"],"role":"catalog_entry","enabled":true,"order":27,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-131","path":["File","Open Samples","pBI Plasmid"],"role":"catalog_entry","enabled":true,"order":28,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-132","path":["File","Open Samples","Pituitary Hormones"],"role":"catalog_entry","enabled":true,"order":29,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-133","path":["File","Open Samples","PTEN Pathway"],"role":"catalog_entry","enabled":true,"order":30,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-134","path":["File","Open Samples","RTKRAS Pathway"],"role":"catalog_entry","enabled":true,"order":31,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-135","path":["File","Open Samples","Shortcuts Cheat Sheet for macOS"],"role":"catalog_entry","enabled":true,"order":32,"parent_id":"IM-FILE-005","legacy_ids":["MF-023"],"mapping":"candidate","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-136","path":["File","Open Samples","Shortcuts Cheat Sheet"],"role":"catalog_entry","enabled":true,"order":33,"parent_id":"IM-FILE-005","legacy_ids":["MF-023"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-137","path":["File","Open Samples","Solid-phase Peptide Synthesis"],"role":"catalog_entry","enabled":true,"order":34,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-138","path":["File","Open Samples","Stereoisomerism"],"role":"catalog_entry","enabled":true,"order":35,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-139","path":["File","Open Samples","Vasopressin Peptides"],"role":"catalog_entry","enabled":true,"order":36,"parent_id":"IM-FILE-005","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-FILE-140","path":["File","Revert To","Browse All Versions…"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-FILE-016","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-01"}},
+    {"id":"IM-EDIT-001","path":["Edit","Undo not available"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-MENU-03","legacy_ids":["ME-001"],"mapping":"same_control_role","bondline":{"status":"wired","commands":["history.undo"],"locations":"history","verified_scope":"Existing bounded Mac/page/isolated-bond variants only; see verification.md. The reference flow in this catalog was not replayed."}},
+    {"id":"IM-EDIT-002","path":["Edit","Redo not available"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-MENU-03","legacy_ids":["ME-002"],"mapping":"same_control_role","bondline":{"status":"wired","commands":["history.redo"],"locations":"history","verified_scope":"Existing bounded Mac/page/isolated-bond variants only; see verification.md. The reference flow in this catalog was not replayed."}},
+    {"id":"IM-EDIT-003","path":["Edit","Cut"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-MENU-03","legacy_ids":["ME-007"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-EDIT-004","path":["Edit","Copy"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-MENU-03","legacy_ids":["ME-008"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-EDIT-005","path":["Edit","Paste"],"role":"menu_item","enabled":true,"order":5,"parent_id":"IM-MENU-03","legacy_ids":["ME-009"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-006","path":["Edit","Delete"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-MENU-03","legacy_ids":["ME-010"],"mapping":"candidate","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-EDIT-007","path":["Edit","Select All"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-MENU-03","legacy_ids":["ME-011"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-EDIT-008","path":["Edit","Invert Selection"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-EDIT-009","path":["Edit","Repeat not available"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-MENU-03","legacy_ids":["ME-005"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-010","path":["Edit","Copy As"],"role":"submenu","enabled":true,"order":10,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-011","path":["Edit","Paste Special"],"role":"submenu","enabled":true,"order":11,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-012","path":["Edit","Insert File…"],"role":"menu_item","enabled":true,"order":12,"parent_id":"IM-MENU-03","legacy_ids":["ME-032"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-013","path":["Edit","Show Clipboard"],"role":"menu_item","enabled":true,"order":13,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-014","path":["Edit","Spelling and Grammar"],"role":"submenu","enabled":true,"order":14,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-015","path":["Edit","Substitutions"],"role":"submenu","enabled":true,"order":15,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-016","path":["Edit","Transformations"],"role":"submenu","enabled":true,"order":16,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-017","path":["Edit","Speech"],"role":"submenu","enabled":true,"order":17,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-018","path":["Edit","AutoFill"],"role":"submenu","enabled":true,"order":18,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-019","path":["Edit","Start Dictation…"],"role":"menu_item","enabled":true,"order":19,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-020","path":["Edit","Emoji & Symbols"],"role":"menu_item","enabled":true,"order":20,"parent_id":"IM-MENU-03","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-021","path":["Edit","Copy As","SMILES"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-EDIT-010","legacy_ids":["ME-015"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-022","path":["Edit","Copy As","SLN"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-EDIT-010","legacy_ids":["ME-016"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-023","path":["Edit","Copy As","InChI"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-EDIT-010","legacy_ids":["ME-017"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-024","path":["Edit","Copy As","InChI Key"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-EDIT-010","legacy_ids":["ME-018"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-025","path":["Edit","Copy As","CDXML Text"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-EDIT-010","legacy_ids":["ME-012"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-026","path":["Edit","Copy As","MOL Text"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-EDIT-010","legacy_ids":["ME-013"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-027","path":["Edit","Copy As","MOL V2000 Text"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-EDIT-010","legacy_ids":["ME-014"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-028","path":["Edit","Copy As","HELM"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-EDIT-010","legacy_ids":["ME-019"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-029","path":["Edit","Copy As","FASTA"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-EDIT-010","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-030","path":["Edit","Copy As","3MF (Ball and Stick)"],"role":"menu_item","enabled":false,"order":10,"parent_id":"IM-EDIT-010","legacy_ids":["ME-021"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-031","path":["Edit","Copy As","3MF (Stick)"],"role":"menu_item","enabled":false,"order":11,"parent_id":"IM-EDIT-010","legacy_ids":["ME-022"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-032","path":["Edit","Copy As","PNG"],"role":"menu_item","enabled":false,"order":12,"parent_id":"IM-EDIT-010","legacy_ids":["ME-023"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-033","path":["Edit","Paste Special","SMILES"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-EDIT-011","legacy_ids":["ME-025"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-034","path":["Edit","Paste Special","Name as Structure"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-EDIT-011","legacy_ids":["ME-028"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-035","path":["Edit","Paste Special","InChI"],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-EDIT-011","legacy_ids":["ME-026"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-036","path":["Edit","Paste Special","CDXML Text"],"role":"menu_item","enabled":true,"order":4,"parent_id":"IM-EDIT-011","legacy_ids":["R26-003"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-037","path":["Edit","Paste Special","MDL Text"],"role":"menu_item","enabled":true,"order":5,"parent_id":"IM-EDIT-011","legacy_ids":["R26-004"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-038","path":["Edit","Paste Special","Biopolymer"],"role":"menu_item","enabled":true,"order":6,"parent_id":"IM-EDIT-011","legacy_ids":["ME-029"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-039","path":["Edit","Paste Special","FASTA Peptide"],"role":"menu_item","enabled":true,"order":7,"parent_id":"IM-EDIT-011","legacy_ids":["ME-030"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-040","path":["Edit","Paste Special","FASTA DNA"],"role":"menu_item","enabled":true,"order":8,"parent_id":"IM-EDIT-011","legacy_ids":["ME-031"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-041","path":["Edit","Paste Special","FASTA RNA"],"role":"menu_item","enabled":true,"order":9,"parent_id":"IM-EDIT-011","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-042","path":["Edit","Paste Special","HELM"],"role":"menu_item","enabled":true,"order":10,"parent_id":"IM-EDIT-011","legacy_ids":["ME-027"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M4-01"}},
+    {"id":"IM-EDIT-043","path":["Edit","Spelling and Grammar","Show Spelling and Grammar"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-EDIT-014","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-044","path":["Edit","Spelling and Grammar","Check Document Now"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-EDIT-014","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-045","path":["Edit","Spelling and Grammar","Check Spelling While Typing"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-EDIT-014","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-046","path":["Edit","Spelling and Grammar","Check Grammar With Spelling"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-EDIT-014","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-047","path":["Edit","Spelling and Grammar","Correct Spelling Automatically"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-EDIT-014","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-048","path":["Edit","Substitutions","Show Substitutions"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-EDIT-015","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-049","path":["Edit","Substitutions","Smart Copy/Paste"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-EDIT-015","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-050","path":["Edit","Substitutions","Smart Quotes"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-EDIT-015","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-051","path":["Edit","Substitutions","Smart Dashes"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-EDIT-015","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-052","path":["Edit","Substitutions","Smart Links"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-EDIT-015","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-053","path":["Edit","Substitutions","Data Detectors"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-EDIT-015","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-054","path":["Edit","Substitutions","Text Replacement"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-EDIT-015","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-055","path":["Edit","Transformations","Make Upper Case"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-EDIT-016","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-056","path":["Edit","Transformations","Make Lower Case"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-EDIT-016","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-057","path":["Edit","Transformations","Capitalize"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-EDIT-016","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-058","path":["Edit","Speech","Start Speaking"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-EDIT-017","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-059","path":["Edit","Speech","Stop Speaking"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-EDIT-017","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-060","path":["Edit","AutoFill","Contact…"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-EDIT-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-061","path":["Edit","AutoFill","Passwords…"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-EDIT-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-EDIT-062","path":["Edit","AutoFill","Credit Card…"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-EDIT-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-VIEW-001","path":["View","Show Crosshair"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-MENU-04","legacy_ids":["MV-020"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-002","path":["View","Show Rulers"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-MENU-04","legacy_ids":["MV-019"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-003","path":["View","Show Main Toolbar"],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-MENU-04","legacy_ids":["MV-001"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-004","path":["View","Show HELM Monomer Toolbar"],"role":"menu_item","enabled":true,"order":4,"parent_id":"IM-MENU-04","legacy_ids":["MV-005"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-005","path":["View","Show BioDraw Toolbar"],"role":"menu_item","enabled":true,"order":5,"parent_id":"IM-MENU-04","legacy_ids":["MV-004"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-006","path":["View","Show General Toolbar"],"role":"menu_item","enabled":true,"order":6,"parent_id":"IM-MENU-04","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-007","path":["View","Show Style Toolbar"],"role":"menu_item","enabled":true,"order":7,"parent_id":"IM-MENU-04","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-008","path":["View","Show Object Toolbar"],"role":"menu_item","enabled":true,"order":8,"parent_id":"IM-MENU-04","legacy_ids":["MV-002"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-009","path":["View","Show Structure Toolbar"],"role":"menu_item","enabled":true,"order":9,"parent_id":"IM-MENU-04","legacy_ids":["MV-003"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-010","path":["View","Show Highlight Colors Toolbar"],"role":"menu_item","enabled":true,"order":10,"parent_id":"IM-MENU-04","legacy_ids":["MV-012"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-011","path":["View","Show Ring Fill Colors Toolbar"],"role":"menu_item","enabled":true,"order":11,"parent_id":"IM-MENU-04","legacy_ids":["MV-011"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-012","path":["View","Show Add-ins Toolbar"],"role":"menu_item","enabled":true,"order":12,"parent_id":"IM-MENU-04","legacy_ids":["MV-006"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-013","path":["View","Show Analysis Window"],"role":"menu_item","enabled":true,"order":13,"parent_id":"IM-MENU-04","legacy_ids":["MV-024"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-014","path":["View","Show Chemical Properties Window"],"role":"menu_item","enabled":true,"order":14,"parent_id":"IM-MENU-04","legacy_ids":["MV-025"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-015","path":["View","Show Info Window"],"role":"menu_item","enabled":true,"order":15,"parent_id":"IM-MENU-04","legacy_ids":["MV-021"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-016","path":["View","Show Periodic Table Window"],"role":"menu_item","enabled":true,"order":16,"parent_id":"IM-MENU-04","legacy_ids":["MV-026"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-017","path":["View","Show Character Map Window"],"role":"menu_item","enabled":true,"order":17,"parent_id":"IM-MENU-04","legacy_ids":["MV-027"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-018","path":["View","Other Toolbars"],"role":"submenu","enabled":true,"order":18,"parent_id":"IM-MENU-04","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-019","path":["View","Templates"],"role":"submenu","enabled":true,"order":19,"parent_id":"IM-MENU-04","legacy_ids":["MV-013"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-020","path":["View","Show Chemical Warnings"],"role":"menu_item","enabled":true,"order":20,"parent_id":"IM-MENU-04","legacy_ids":["MV-022"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-021","path":["View","Show Reaction Interpretation"],"role":"menu_item","enabled":true,"order":21,"parent_id":"IM-MENU-04","legacy_ids":["MV-023"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-022","path":["View","Actual Size"],"role":"menu_item","enabled":false,"order":22,"parent_id":"IM-MENU-04","legacy_ids":["MV-017"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-023","path":["View","Show Document"],"role":"menu_item","enabled":true,"order":23,"parent_id":"IM-MENU-04","legacy_ids":["MV-018"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-024","path":["View","Magnify"],"role":"menu_item","enabled":true,"order":24,"parent_id":"IM-MENU-04","legacy_ids":["MV-015"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-025","path":["View","Reduce"],"role":"menu_item","enabled":true,"order":25,"parent_id":"IM-MENU-04","legacy_ids":["MV-016"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-026","path":["View","Other Toolbars","Accessories"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-027","path":["View","Other Toolbars","Arrows"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-028","path":["View","Other Toolbars","Brackets"],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-VIEW-018","legacy_ids":["MV-009"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-029","path":["View","Other Toolbars","Chains"],"role":"menu_item","enabled":true,"order":4,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-030","path":["View","Other Toolbars","Chemical Symbols"],"role":"menu_item","enabled":true,"order":5,"parent_id":"IM-VIEW-018","legacy_ids":["MV-010"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-031","path":["View","Other Toolbars","Chromatography Tools"],"role":"menu_item","enabled":true,"order":6,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-032","path":["View","Other Toolbars","Colors"],"role":"menu_item","enabled":true,"order":7,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-033","path":["View","Other Toolbars","Curves"],"role":"menu_item","enabled":true,"order":8,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-034","path":["View","Other Toolbars","Dotted/Dashed Bond Tools"],"role":"menu_item","enabled":true,"order":9,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-035","path":["View","Other Toolbars","Drawing Elements"],"role":"menu_item","enabled":true,"order":10,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-036","path":["View","Other Toolbars","Fragmentation Tools"],"role":"menu_item","enabled":true,"order":11,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-037","path":["View","Other Toolbars","Multiple Bonds"],"role":"menu_item","enabled":true,"order":12,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-038","path":["View","Other Toolbars","Orbitals"],"role":"menu_item","enabled":true,"order":13,"parent_id":"IM-VIEW-018","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-039","path":["View","Other Toolbars","Pen Tools"],"role":"menu_item","enabled":true,"order":14,"parent_id":"IM-VIEW-018","legacy_ids":["MV-007"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-040","path":["View","Other Toolbars","Query Tools"],"role":"menu_item","enabled":true,"order":15,"parent_id":"IM-VIEW-018","legacy_ids":["MV-008"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-VIEW-041","path":["View","Templates","Advanced BioDraw"],"role":"catalog_entry","enabled":true,"order":1,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-042","path":["View","Templates","Amino Acid Side Chains"],"role":"catalog_entry","enabled":true,"order":2,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-043","path":["View","Templates","Amino Acids"],"role":"catalog_entry","enabled":true,"order":3,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-044","path":["View","Templates","Anatomy"],"role":"catalog_entry","enabled":true,"order":4,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-045","path":["View","Templates","Animals"],"role":"catalog_entry","enabled":true,"order":5,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-046","path":["View","Templates","Aromatics"],"role":"catalog_entry","enabled":true,"order":6,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-047","path":["View","Templates","Bicyclics"],"role":"catalog_entry","enabled":true,"order":7,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-048","path":["View","Templates","Bio Instruments"],"role":"catalog_entry","enabled":true,"order":8,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-049","path":["View","Templates","BioArt"],"role":"catalog_entry","enabled":true,"order":9,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-050","path":["View","Templates","Bugs"],"role":"catalog_entry","enabled":true,"order":10,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-051","path":["View","Templates","Clipware, part 1"],"role":"catalog_entry","enabled":true,"order":11,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-052","path":["View","Templates","Clipware, part 2"],"role":"catalog_entry","enabled":true,"order":12,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-053","path":["View","Templates","Conformers"],"role":"catalog_entry","enabled":true,"order":13,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-054","path":["View","Templates","Cp Rings"],"role":"catalog_entry","enabled":true,"order":14,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-055","path":["View","Templates","Cycloalkanes"],"role":"catalog_entry","enabled":true,"order":15,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-056","path":["View","Templates","DNA Templates"],"role":"catalog_entry","enabled":true,"order":16,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-057","path":["View","Templates","Functional Groups"],"role":"catalog_entry","enabled":true,"order":17,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-058","path":["View","Templates","Hexoses"],"role":"catalog_entry","enabled":true,"order":18,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-059","path":["View","Templates","Metallocenes"],"role":"catalog_entry","enabled":true,"order":19,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-060","path":["View","Templates","Microorganisms"],"role":"catalog_entry","enabled":true,"order":20,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-061","path":["View","Templates","Nanotubes"],"role":"catalog_entry","enabled":true,"order":21,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-062","path":["View","Templates","Organelles"],"role":"catalog_entry","enabled":true,"order":22,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-063","path":["View","Templates","Ph Rings"],"role":"catalog_entry","enabled":true,"order":23,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-064","path":["View","Templates","Polyhedra"],"role":"catalog_entry","enabled":true,"order":24,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-065","path":["View","Templates","Polypeptides"],"role":"catalog_entry","enabled":true,"order":25,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-066","path":["View","Templates","RNA Templates"],"role":"catalog_entry","enabled":true,"order":26,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-067","path":["View","Templates","Shapes"],"role":"catalog_entry","enabled":true,"order":27,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-068","path":["View","Templates","Stereocenters"],"role":"catalog_entry","enabled":true,"order":28,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-VIEW-069","path":["View","Templates","Supramolecules"],"role":"catalog_entry","enabled":true,"order":29,"parent_id":"IM-VIEW-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-OBJECT-001","path":["Object","Object Settings…"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-MENU-05","legacy_ids":["MO-001"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-OBJECT-002","path":["Object","Apply Object Settings from"],"role":"submenu","enabled":true,"order":2,"parent_id":"IM-MENU-05","legacy_ids":["MO-002"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-OBJECT-003","path":["Object","Fixed Lengths"],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-MENU-05","legacy_ids":["MO-005"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-OBJECT-004","path":["Object","Fixed Angles"],"role":"menu_item","enabled":true,"order":4,"parent_id":"IM-MENU-05","legacy_ids":["MO-006"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-OBJECT-005","path":["Object","Show Stereochemistry"],"role":"menu_item","enabled":true,"order":5,"parent_id":"IM-MENU-05","legacy_ids":["MO-032"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-006","path":["Object","Attach Data…"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-MENU-05","legacy_ids":["MO-004"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-007","path":["Object","Annotate…"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-MENU-05","legacy_ids":["MO-003"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-008","path":["Object","Center on Page"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-MENU-05","legacy_ids":["MO-016"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-009","path":["Object","Align"],"role":"submenu","enabled":true,"order":9,"parent_id":"IM-MENU-05","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-010","path":["Object","Distribute"],"role":"submenu","enabled":true,"order":10,"parent_id":"IM-MENU-05","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-011","path":["Object","Add Frame"],"role":"submenu","enabled":true,"order":11,"parent_id":"IM-MENU-05","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-012","path":["Object","Group"],"role":"menu_item","enabled":false,"order":12,"parent_id":"IM-MENU-05","legacy_ids":["MO-017"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-013","path":["Object","Ungroup"],"role":"menu_item","enabled":false,"order":13,"parent_id":"IM-MENU-05","legacy_ids":["MO-018"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-014","path":["Object","Join"],"role":"menu_item","enabled":false,"order":14,"parent_id":"IM-MENU-05","legacy_ids":["MO-019"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-015","path":["Object","Bring to Front"],"role":"menu_item","enabled":false,"order":15,"parent_id":"IM-MENU-05","legacy_ids":["MO-007"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-016","path":["Object","Send to Back"],"role":"menu_item","enabled":false,"order":16,"parent_id":"IM-MENU-05","legacy_ids":["MO-008"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-017","path":["Object","Flatten"],"role":"menu_item","enabled":false,"order":17,"parent_id":"IM-MENU-05","legacy_ids":["MO-014"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-018","path":["Object","Flip Horizontal"],"role":"menu_item","enabled":false,"order":18,"parent_id":"IM-MENU-05","legacy_ids":["MO-012"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-019","path":["Object","Flip Vertical"],"role":"menu_item","enabled":false,"order":19,"parent_id":"IM-MENU-05","legacy_ids":["MO-013"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-020","path":["Object","Rotate 180° Horizontal"],"role":"menu_item","enabled":false,"order":20,"parent_id":"IM-MENU-05","legacy_ids":["MO-010"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-021","path":["Object","Rotate 180° Vertical"],"role":"menu_item","enabled":false,"order":21,"parent_id":"IM-MENU-05","legacy_ids":["MO-011"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-022","path":["Object","Rotate…"],"role":"menu_item","enabled":false,"order":22,"parent_id":"IM-MENU-05","legacy_ids":["MO-009"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-023","path":["Object","Scale…"],"role":"menu_item","enabled":false,"order":23,"parent_id":"IM-MENU-05","legacy_ids":["MO-015"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-024","path":["Object","Apply Object Settings from","Other…"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-OBJECT-025","path":["Object","Apply Object Settings from","Current Document"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-OBJECT-026","path":["Object","Apply Object Settings from","ACS Document 1996"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-027","path":["Object","Apply Object Settings from","Adv. Synth. Catal. Document"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-028","path":["Object","Apply Object Settings from","Dark Mode"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-029","path":["Object","Apply Object Settings from","I Draw Styles"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-030","path":["Object","Apply Object Settings from","J. Chin. Chem. Soc. Doc"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-031","path":["Object","Apply Object Settings from","J. Het. Chem"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-032","path":["Object","Apply Object Settings from","J. Mol. Mod. (1 Column)"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-033","path":["Object","Apply Object Settings from","J. Mol. Mod. (2 Column)"],"role":"menu_item","enabled":false,"order":10,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-034","path":["Object","Apply Object Settings from","Labeled Monomers"],"role":"menu_item","enabled":false,"order":11,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-035","path":["Object","Apply Object Settings from","Nature Research Document"],"role":"menu_item","enabled":false,"order":12,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-036","path":["Object","Apply Object Settings from","New A4 Document"],"role":"menu_item","enabled":false,"order":13,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-037","path":["Object","Apply Object Settings from","New Document"],"role":"menu_item","enabled":false,"order":14,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-038","path":["Object","Apply Object Settings from","New Slide"],"role":"menu_item","enabled":false,"order":15,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-039","path":["Object","Apply Object Settings from","Phytomedicine Document"],"role":"menu_item","enabled":false,"order":16,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-040","path":["Object","Apply Object Settings from","RSC (1 Column) Document"],"role":"menu_item","enabled":false,"order":17,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-041","path":["Object","Apply Object Settings from","RSC (2 Column) Document"],"role":"menu_item","enabled":false,"order":18,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-042","path":["Object","Apply Object Settings from","Science of Synthesis"],"role":"menu_item","enabled":false,"order":19,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-043","path":["Object","Apply Object Settings from","Show Terminal Carbon Labels"],"role":"menu_item","enabled":false,"order":20,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-044","path":["Object","Apply Object Settings from","SYNTHESIS, SYNLETT Document"],"role":"menu_item","enabled":false,"order":21,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-045","path":["Object","Apply Object Settings from","Verlag Helv. Chim. Acta Doc"],"role":"menu_item","enabled":false,"order":22,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-046","path":["Object","Apply Object Settings from","Wiley Document"],"role":"menu_item","enabled":false,"order":23,"parent_id":"IM-OBJECT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-047","path":["Object","Align","Left edges"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-OBJECT-009","legacy_ids":["MO-024"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-048","path":["Object","Align","L/R centers"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-OBJECT-009","legacy_ids":["MO-025"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-049","path":["Object","Align","Right edges"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-OBJECT-009","legacy_ids":["MO-026"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-050","path":["Object","Align","Top edges"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-OBJECT-009","legacy_ids":["MO-027"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-051","path":["Object","Align","T/B centers"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-OBJECT-009","legacy_ids":["MO-028"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-052","path":["Object","Align","Bottom edges"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-OBJECT-009","legacy_ids":["MO-029"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-053","path":["Object","Distribute","Horizontally"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-OBJECT-010","legacy_ids":["MO-030"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-054","path":["Object","Distribute","Vertically"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-OBJECT-010","legacy_ids":["MO-031"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-055","path":["Object","Add Frame","Brackets"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-OBJECT-011","legacy_ids":["MO-021"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-056","path":["Object","Add Frame","Parentheses"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-OBJECT-011","legacy_ids":["MO-022"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-057","path":["Object","Add Frame","Braces"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-OBJECT-011","legacy_ids":["MO-023"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-058","path":["Object","Add Frame","Rectangle"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-OBJECT-011","legacy_ids":["MO-020"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-059","path":["Object","Add Frame","Rounded Rectangle"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-OBJECT-011","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-060","path":["Object","Add Frame","Rectangle with Shadow"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-OBJECT-011","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-OBJECT-061","path":["Object","Add Frame","Rounded Rectangle with Shadow"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-OBJECT-011","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-04"}},
+    {"id":"IM-STRUCTURE-001","path":["Structure","Atom Properties…"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-MENU-06","legacy_ids":["MS-022"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-002","path":["Structure","Bond Properties…"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-MENU-06","legacy_ids":["MS-023"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-003","path":["Structure","Bracket Properties…"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-MENU-06","legacy_ids":["MS-025"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-004","path":["Structure","Check Structure"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-MENU-06","legacy_ids":["MS-002"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-005","path":["Structure","Clean Up Structure"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-MENU-06","legacy_ids":["MS-001"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-006","path":["Structure","Clean Up Reaction"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-MENU-06","legacy_ids":["MS-003"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-007","path":["Structure","Clean Up Biopolymer"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-MENU-06","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-008","path":["Structure","3D Clean Up"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-MENU-06","legacy_ids":["MS-004"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-009","path":["Structure","Expand Label"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-MENU-06","legacy_ids":["MS-008"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-010","path":["Structure","Contract Label"],"role":"menu_item","enabled":false,"order":10,"parent_id":"IM-MENU-06","legacy_ids":["MS-009"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-011","path":["Structure","Expand Generic Structure"],"role":"menu_item","enabled":false,"order":11,"parent_id":"IM-MENU-06","legacy_ids":["MS-026"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-012","path":["Structure","Expand Generic Structure to SDF…"],"role":"menu_item","enabled":false,"order":12,"parent_id":"IM-MENU-06","legacy_ids":["MS-027"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-013","path":["Structure","Toggle Aromatic Display"],"role":"menu_item","enabled":false,"order":13,"parent_id":"IM-MENU-06","legacy_ids":["MS-006"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-014","path":["Structure","Toggle Hydrogen Display"],"role":"menu_item","enabled":false,"order":14,"parent_id":"IM-MENU-06","legacy_ids":["MS-007"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-015","path":["Structure","Structure Perspective"],"role":"menu_item","enabled":false,"order":15,"parent_id":"IM-MENU-06","legacy_ids":["MS-005"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-016","path":["Structure","Add Multi-Center Attachment"],"role":"menu_item","enabled":false,"order":16,"parent_id":"IM-MENU-06","legacy_ids":["MS-011"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-017","path":["Structure","Add Variable Attachment"],"role":"menu_item","enabled":false,"order":17,"parent_id":"IM-MENU-06","legacy_ids":["MS-012"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-018","path":["Structure","R-Logic Query…"],"role":"menu_item","enabled":false,"order":18,"parent_id":"IM-MENU-06","legacy_ids":["MS-028"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-019","path":["Structure","Add 3D Property"],"role":"submenu","enabled":true,"order":19,"parent_id":"IM-MENU-06","legacy_ids":["MS-031"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-020","path":["Structure","Enhanced Stereochemistry"],"role":"submenu","enabled":true,"order":20,"parent_id":"IM-MENU-06","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-021","path":["Structure","Map Reaction Atoms"],"role":"menu_item","enabled":false,"order":21,"parent_id":"IM-MENU-06","legacy_ids":["MS-029"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-022","path":["Structure","Clear Reaction Map"],"role":"menu_item","enabled":false,"order":22,"parent_id":"IM-MENU-06","legacy_ids":["MS-030"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-023","path":["Structure","Analyze Stoichiometry"],"role":"menu_item","enabled":false,"order":23,"parent_id":"IM-MENU-06","legacy_ids":["MS-015"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-024","path":["Structure","Autonumber Reaction"],"role":"menu_item","enabled":false,"order":24,"parent_id":"IM-MENU-06","legacy_ids":["MS-013"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-025","path":["Structure","Clear Reaction Numbers"],"role":"menu_item","enabled":false,"order":25,"parent_id":"IM-MENU-06","legacy_ids":["MS-014"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-026","path":["Structure","Predict ¹H-NMR Shifts"],"role":"menu_item","enabled":false,"order":26,"parent_id":"IM-MENU-06","legacy_ids":["MS-032"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-027","path":["Structure","Predict ¹³C-NMR Shifts"],"role":"menu_item","enabled":false,"order":27,"parent_id":"IM-MENU-06","legacy_ids":["MS-033"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-028","path":["Structure","Make Spectrum-Structure Assignment"],"role":"menu_item","enabled":false,"order":28,"parent_id":"IM-MENU-06","legacy_ids":["MS-034"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-029","path":["Structure","Add Structure to Dictionary…"],"role":"menu_item","enabled":false,"order":29,"parent_id":"IM-MENU-06","legacy_ids":["MS-018"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-STRUCTURE-030","path":["Structure","Define Nickname…"],"role":"menu_item","enabled":false,"order":30,"parent_id":"IM-MENU-06","legacy_ids":["MS-010"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-031","path":["Structure","Convert Name to Structure"],"role":"menu_item","enabled":true,"order":31,"parent_id":"IM-MENU-06","legacy_ids":["MS-017"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-STRUCTURE-032","path":["Structure","Convert Structure to Name"],"role":"menu_item","enabled":false,"order":32,"parent_id":"IM-MENU-06","legacy_ids":["MS-016"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M5-01"}},
+    {"id":"IM-STRUCTURE-033","path":["Structure","Add 3D Property","Angle"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-STRUCTURE-019","legacy_ids":["TQ-024"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-034","path":["Structure","Add 3D Property","Dihedral"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-STRUCTURE-019","legacy_ids":["TQ-026"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-035","path":["Structure","Add 3D Property","Distance"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-STRUCTURE-019","legacy_ids":["TQ-025"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-036","path":["Structure","Add 3D Property","Line"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-STRUCTURE-019","legacy_ids":["TQ-027"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-037","path":["Structure","Add 3D Property","Plane"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-STRUCTURE-019","legacy_ids":["TQ-028"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-038","path":["Structure","Add 3D Property","Exclusion Sphere"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-STRUCTURE-019","legacy_ids":["TQ-029"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-039","path":["Structure","Add 3D Property","Normal"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-STRUCTURE-019","legacy_ids":["TQ-030"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-040","path":["Structure","Add 3D Property","Point"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-STRUCTURE-019","legacy_ids":["TQ-031"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-041","path":["Structure","Add 3D Property","Centroid"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-STRUCTURE-019","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-042","path":["Structure","Enhanced Stereochemistry","Clear All"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-STRUCTURE-020","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-043","path":["Structure","Enhanced Stereochemistry","Mark as Absolute"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-STRUCTURE-020","legacy_ids":["MS-019"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-044","path":["Structure","Enhanced Stereochemistry","Create Or Group"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-STRUCTURE-020","legacy_ids":["MS-021"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-STRUCTURE-045","path":["Structure","Enhanced Stereochemistry","Create And Group"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-STRUCTURE-020","legacy_ids":["MS-020"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-001","path":["Text","Font"],"role":"submenu","enabled":true,"order":1,"parent_id":"IM-MENU-07","legacy_ids":["MX-001"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-002","path":["Text","Style"],"role":"submenu","enabled":true,"order":2,"parent_id":"IM-MENU-07","legacy_ids":["MX-003"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-003","path":["Text","Size"],"role":"submenu","enabled":true,"order":3,"parent_id":"IM-MENU-07","legacy_ids":["MX-002"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-004","path":["Text","Flush Left"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-MENU-07","legacy_ids":["MX-004"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-005","path":["Text","Centered"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-MENU-07","legacy_ids":["MX-005"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-006","path":["Text","Flush Right"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-MENU-07","legacy_ids":["MX-006"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-007","path":["Text","Justified"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-MENU-07","legacy_ids":["MX-007"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-008","path":["Text","Stacked Above"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-MENU-07","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-009","path":["Text","Automatic"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-MENU-07","legacy_ids":["MX-008"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-010","path":["Text","Line Spacing…"],"role":"menu_item","enabled":false,"order":10,"parent_id":"IM-MENU-07","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-011","path":["Text","Style","Plain"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-TEXT-002","legacy_ids":["MX-009"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-012","path":["Text","Style","Bold"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-TEXT-002","legacy_ids":["MX-010"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-013","path":["Text","Style","Italic"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-TEXT-002","legacy_ids":["MX-011"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-014","path":["Text","Style","Underline"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-TEXT-002","legacy_ids":["MX-012"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-015","path":["Text","Style","Outline"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-TEXT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-016","path":["Text","Style","Shadow"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-TEXT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-017","path":["Text","Style","Subscript"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-TEXT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-018","path":["Text","Style","Superscript"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-TEXT-002","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-019","path":["Text","Style","Formula"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-TEXT-002","legacy_ids":["MX-013"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-020","path":["Text","Size","5"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-021","path":["Text","Size","6"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-022","path":["Text","Size","7"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-023","path":["Text","Size","8"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-024","path":["Text","Size","9"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-025","path":["Text","Size","10"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-026","path":["Text","Size","12"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-027","path":["Text","Size","14"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-028","path":["Text","Size","16"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-029","path":["Text","Size","18"],"role":"menu_item","enabled":false,"order":10,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-030","path":["Text","Size","24"],"role":"menu_item","enabled":false,"order":11,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-TEXT-031","path":["Text","Size","Other…"],"role":"menu_item","enabled":false,"order":12,"parent_id":"IM-TEXT-003","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-001","path":["Curves","Plain"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-MENU-08","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-002","path":["Curves","Dashed"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-MENU-08","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-003","path":["Curves","Bold"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-MENU-08","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-004","path":["Curves","Doubled"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-MENU-08","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-005","path":["Curves","Full Arrow at Start"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-MENU-08","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-006","path":["Curves","Full Arrow at End"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-MENU-08","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-007","path":["Curves","Half Arrow at Start Left"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-MENU-08","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-008","path":["Curves","Half Arrow at Start Right"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-MENU-08","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-009","path":["Curves","Half Arrow at End Left"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-MENU-08","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-010","path":["Curves","Half Arrow at End Right"],"role":"menu_item","enabled":false,"order":10,"parent_id":"IM-MENU-08","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-011","path":["Curves","Closed"],"role":"menu_item","enabled":false,"order":11,"parent_id":"IM-MENU-08","legacy_ids":["MX-014"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-012","path":["Curves","Filled"],"role":"menu_item","enabled":false,"order":12,"parent_id":"IM-MENU-08","legacy_ids":["MX-015"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-013","path":["Curves","Shaded"],"role":"menu_item","enabled":false,"order":13,"parent_id":"IM-MENU-08","legacy_ids":["MX-017"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-CURVES-014","path":["Curves","Faded"],"role":"menu_item","enabled":false,"order":14,"parent_id":"IM-MENU-08","legacy_ids":["MX-016"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M3-01"}},
+    {"id":"IM-COLORS-001","path":["Colors","Foreground"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-MENU-09","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-COLORS-002","path":["Colors","Other # 1"],"role":"menu_item","enabled":false,"order":2,"parent_id":"IM-MENU-09","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-COLORS-003","path":["Colors","Other # 2"],"role":"menu_item","enabled":false,"order":3,"parent_id":"IM-MENU-09","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-COLORS-004","path":["Colors","Other # 3"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-MENU-09","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-COLORS-005","path":["Colors","Other # 4"],"role":"menu_item","enabled":false,"order":5,"parent_id":"IM-MENU-09","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-COLORS-006","path":["Colors","Other # 5"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-MENU-09","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-COLORS-007","path":["Colors","Other # 6"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-MENU-09","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-COLORS-008","path":["Colors","Other…"],"role":"menu_item","enabled":false,"order":8,"parent_id":"IM-MENU-09","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-COLORS-009","path":["Colors","By Element"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-MENU-09","legacy_ids":["MX-018"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-COLORS-010","path":["Colors","Show Highlight Colors Toolbar"],"role":"menu_item","enabled":true,"order":10,"parent_id":"IM-MENU-09","legacy_ids":["MX-019"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-COLORS-011","path":["Colors","Show Ring Fill Colors Toolbar"],"role":"menu_item","enabled":true,"order":11,"parent_id":"IM-MENU-09","legacy_ids":["MV-011"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M2-05"}},
+    {"id":"IM-SEARCH-001","path":["Search","Search Reaxys…"],"role":"menu_item","enabled":false,"order":1,"parent_id":"IM-MENU-10","legacy_ids":["MX-030"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M5-02"}},
+    {"id":"IM-SEARCH-002","path":["Search","Browse RevvitySignals.com"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-MENU-10","legacy_ids":["MX-027","MX-028","MX-029"],"mapping":"candidate","bondline":{"status":"missing","ticket":"M5-02"}},
+    {"id":"IM-SIGNALS-001","path":["Signals","Home"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-MENU-11","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-02"}},
+    {"id":"IM-SIGNALS-002","path":["Signals","ChemDraw+"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-MENU-11","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-02"}},
+    {"id":"IM-ADDINS-001","path":["Add-ins","Add-in Manager..."],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-MENU-12","legacy_ids":["DP-031"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M5-02"}},
+    {"id":"IM-ADDINS-002","path":["Add-ins","ChemACX.com Structure from CAS Registry Number"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-MENU-12","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-02"}},
+    {"id":"IM-ADDINS-003","path":["Add-ins","ChemACX Explorer"],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-MENU-12","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-02"}},
+    {"id":"IM-ADDINS-004","path":["Add-ins","Search SciFinderⁿ"],"role":"menu_item","enabled":false,"order":4,"parent_id":"IM-MENU-12","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-02"}},
+    {"id":"IM-ADDINS-005","path":["Add-ins","Search Google Scholar / Patents"],"role":"menu_item","enabled":true,"order":5,"parent_id":"IM-MENU-12","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-02"}},
+    {"id":"IM-ADDINS-006","path":["Add-ins","PubChem GHS LCSS"],"role":"menu_item","enabled":false,"order":6,"parent_id":"IM-MENU-12","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M5-02"}},
+    {"id":"IM-WINDOW-001","path":["Window","Minimize"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-002","path":["Window","Minimize All"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-003","path":["Window","Zoom"],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-004","path":["Window","Zoom All"],"role":"menu_item","enabled":true,"order":4,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-005","path":["Window","Fill"],"role":"menu_item","enabled":true,"order":5,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-006","path":["Window","Center"],"role":"menu_item","enabled":true,"order":6,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-007","path":["Window","Enter Full Screen"],"role":"menu_item","enabled":false,"order":7,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-008","path":["Window","Move & Resize"],"role":"submenu","enabled":true,"order":8,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-009","path":["Window","Full Screen Tile"],"role":"menu_item","enabled":false,"order":9,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-010","path":["Window","Move to display"],"role":"dynamic_family","enabled":true,"order":10,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-011","path":["Window","Move All to display"],"role":"dynamic_family","enabled":true,"order":11,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-012","path":["Window","Show Previous Tab"],"role":"menu_item","enabled":false,"order":12,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-013","path":["Window","Show Next Tab"],"role":"menu_item","enabled":false,"order":13,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-014","path":["Window","Move Tab to New Window"],"role":"menu_item","enabled":false,"order":14,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-015","path":["Window","Merge All Windows"],"role":"menu_item","enabled":true,"order":15,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-016","path":["Window","Show Tab Bar"],"role":"menu_item","enabled":true,"order":16,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-017","path":["Window","Show All Tabs"],"role":"menu_item","enabled":true,"order":17,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-018","path":["Window","Bring All to Front"],"role":"menu_item","enabled":true,"order":18,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-019","path":["Window","Arrange in Front"],"role":"menu_item","enabled":true,"order":19,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-020","path":["Window","Remove Window from Set"],"role":"menu_item","enabled":false,"order":20,"parent_id":"IM-MENU-13","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-021","path":["Window","Open-document entries"],"role":"dynamic_family","enabled":true,"order":21,"parent_id":"IM-MENU-13","legacy_ids":["MV-029"],"mapping":"same_control_role","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."},"note":"Generalized control family; private document labels intentionally omitted."},
+    {"id":"IM-WINDOW-022","path":["Window","Move & Resize","Halves"],"role":"heading","enabled":false,"order":1,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_applicable","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-023","path":["Window","Move & Resize","Left"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-024","path":["Window","Move & Resize","Right"],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-025","path":["Window","Move & Resize","Top"],"role":"menu_item","enabled":true,"order":4,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-026","path":["Window","Move & Resize","Bottom"],"role":"menu_item","enabled":true,"order":5,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-027","path":["Window","Move & Resize","Quarters"],"role":"heading","enabled":false,"order":6,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_applicable","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-028","path":["Window","Move & Resize","Top Left"],"role":"menu_item","enabled":true,"order":7,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-029","path":["Window","Move & Resize","Top Right"],"role":"menu_item","enabled":true,"order":8,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-030","path":["Window","Move & Resize","Bottom Left"],"role":"menu_item","enabled":true,"order":9,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-031","path":["Window","Move & Resize","Bottom Right"],"role":"menu_item","enabled":true,"order":10,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-032","path":["Window","Move & Resize","Arrange"],"role":"heading","enabled":false,"order":11,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_applicable","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-033","path":["Window","Move & Resize","Left & Right"],"role":"menu_item","enabled":true,"order":12,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-034","path":["Window","Move & Resize","Left & Quarters"],"role":"menu_item","enabled":true,"order":13,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-035","path":["Window","Move & Resize","Right & Left"],"role":"menu_item","enabled":true,"order":14,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-036","path":["Window","Move & Resize","Right & Quarters"],"role":"menu_item","enabled":true,"order":15,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-037","path":["Window","Move & Resize","Top & Bottom"],"role":"menu_item","enabled":true,"order":16,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-038","path":["Window","Move & Resize","Top & Quarters"],"role":"menu_item","enabled":true,"order":17,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-039","path":["Window","Move & Resize","Bottom & Top"],"role":"menu_item","enabled":true,"order":18,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-040","path":["Window","Move & Resize","Bottom & Quarters"],"role":"menu_item","enabled":true,"order":19,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-041","path":["Window","Move & Resize","Quarters"],"role":"menu_item","enabled":true,"order":20,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-WINDOW-042","path":["Window","Move & Resize","Return to Previous Size"],"role":"menu_item","enabled":false,"order":21,"parent_id":"IM-WINDOW-008","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"unknown","ticket":"M0-03","note":"Audit the native host behavior separately; no shared registry counterpart traced by this inventory."}},
+    {"id":"IM-HELP-001","path":["Help","Contents"],"role":"menu_item","enabled":true,"order":1,"parent_id":"IM-MENU-14","legacy_ids":["MX-021"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-HELP-002","path":["Help","Getting Started"],"role":"menu_item","enabled":true,"order":2,"parent_id":"IM-MENU-14","legacy_ids":["MX-031"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-HELP-003","path":["Help","Tutorials"],"role":"menu_item","enabled":true,"order":3,"parent_id":"IM-MENU-14","legacy_ids":["MX-032"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-HELP-004","path":["Help","ChemDraw Basics"],"role":"menu_item","enabled":true,"order":4,"parent_id":"IM-MENU-14","legacy_ids":["MX-033"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-HELP-005","path":["Help","Recent Additions"],"role":"menu_item","enabled":true,"order":5,"parent_id":"IM-MENU-14","legacy_ids":[],"mapping":"not_matched","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-HELP-006","path":["Help","Hotkeys Cheat Sheet"],"role":"menu_item","enabled":true,"order":6,"parent_id":"IM-MENU-14","legacy_ids":["MX-024"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-HELP-007","path":["Help","Shortcuts Cheat Sheet"],"role":"menu_item","enabled":true,"order":7,"parent_id":"IM-MENU-14","legacy_ids":["MX-025"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}},
+    {"id":"IM-HELP-008","path":["Help","Contact Support"],"role":"menu_item","enabled":true,"order":8,"parent_id":"IM-MENU-14","legacy_ids":["MX-022"],"mapping":"same_control_role","bondline":{"status":"missing","ticket":"M0-03"}}
+  ]
+}

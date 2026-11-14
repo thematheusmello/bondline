@@ -1750,3 +1750,16 @@ CDX seed/max_len131072. The workflow now has six bounded parser targets; the new
 local ASAN evidence is separate from future hosted execution. Runtime closures153/164/219,
 assets/locks/font/approved golden stay unchanged. No application reaction or SDF workflow
 is inferred. This combined source still needs its own hosted platform result.
+
+## Installed-reference map integrity, 2026-11-14
+
+The first native observation/map/ticket/catalog docs were reviewed with their exact frozen
+SHA identities, UTF-8 and relative links. The503 physical menu IDs are unique, every parent
+exists and blank-state flags count301 enabled/202 disabled.28 formats/12 local fields/9
+Settings categories are separate;178 same-role/seven candidate mappings are not passes.
+All recorded artifact hashes were validated by the investigator/mapper;17 REA Evidence and
+three failed probes remain ignored. Complete AX coverage failed on retained sheet gaps and
+that failed check remains explicit; canonical image/source/integrity checks are separate.
+No product source changed for these documentation checks; no artificial Rust RED is claimed.
+The original local XML syntax pass, current CDX TrailingData, external RDKit results and
+original-window restoration exception are distinguished in the source register/reports.

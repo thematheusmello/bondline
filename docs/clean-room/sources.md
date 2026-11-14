@@ -1,6 +1,6 @@
 # Clean-room source register
 
-Reviewed 2026-11-13. A source is permission to learn documented behavior, not to copy
+Reviewed through 2026-11-14. A source is permission to learn documented behavior, not to copy
 proprietary implementation, help text or assets. Record more specific sections as features land.
 The folder name is historical. The user's clarification and policy checkpoint 72fafb3
 authorize artifact/runtime research as well as public media. Record exact identities and
@@ -349,3 +349,51 @@ The codec reuses the existing molecular syntax validators without projecting or
 flattening reactions. Full EOF, numeric present counts, no trailing MOL padding,
 ASCII and the documented budgets are original safety/profile decisions. No proprietary
 runtime/artifact or asset was required for this slice.
+
+## Authorized installed desktop observations (2026-11-14)
+
+INSTALLED-261-MAC: the latest user instruction authorizes UI/runtime inspection of the
+existing /Applications/ChemDraw.app, com.revvity.ChemDraw,26.1.0.6801/macOS27.2arm64,
+executable SHA256d2960e9f83de35787190b45acf9ecae5171e7662b7692ea24bea7a716ef14f83.
+Tier is unknown. [Observed method and cleanup](../research/installed-ui-observations.md),
+[qualified feature map](../research/installed-feature-map.md) and
+[physical catalog](../research/installed-menu-catalog.json) retain exact Evidence IDs,
+source hashes and limitations. Fourteen top menus yield503 physical records, not503
+completed features;28 Save choices,12 local Save field roles and9 Settings categories
+are separate surfaces. Three panels were inspected, not applied. Existing576 public-guide
+anchors keep their own source versions;178 role matches/seven candidates prove no parity.
+
+Existing cached REA6.9.0 and Node26.12.1 were used without install/registration changes.
+[REA native investigation](https://github.com/morluto/rea/blob/main/docs/guides/native/native-investigation.md)
+explains the selected-window method. Complete local17 Evidence records, three failed probes,
+CUA extracts and target-only OS captures remain ignored under target/reference-ui. REA's
+layer0 filter excludes the layer3 palette; an identified OS-window capture supplies only
+visual evidence. Some sheet captures retain truncated=true/AX gaps; the failed full-AX
+coverage check remains preserved. Successful actions/integrity checks do not waive it.
+
+An original owned blank drawing has observed draw→Undo→Redo and local XML/binary Save As→
+clean close→reopen routes. Save As retained enabled Undo in this profile; do not extrapolate
+all Save/platform variants. A new unassociated Save first opened a Signals page, then
+This Computer led to a native sheet. No explicit cloud save/account action was performed;
+no network trace proves automatic loading sent zero data. Associated local Save As used
+the native route. Settings defaults are the observed ACS1996 document profile, not current
+journal requirements. Tooltips/shortcut glyphs/checkmarks and complete contextual flows
+remain unknown. The final cleanup receipt records an unexplained original sample-window
+disappearance and locked-source restoration at a different position; no uninterrupted
+visual preservation is claimed. No original source file was edited/saved.
+
+Ignored native-original outputs remain2866B XML/SHA73de4b424e27a01e98be6830d726025fc5f36f8786d02bab594993bac12ed4b5
+and1196B CDX/SHA7b2b71338595ad12bc34f46459f8389ec6a63cb453b1cf29b51543717139a73c.
+Existing Rust XML syntax returns exact bytes/two nodes/one bond; current85bf5eb CDX syntax
+refuses TrailingData. The separate local external RDKit2026.09.2 consumer reads each as
+two carbons/one single bond/externalCC/C2H6. These checks are neither Bondline chemistry
+nor permission to ship vendor metadata/styles/embedded assets or admit the files to corpus.
+The narrow CDX framing fix and initial source-backed mapping are separate in-progress work.
+
+Public BSD parser-source framing evidence is
+[CDXIO.cpp696–706](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXIO.cpp#L696)
+and [CDXDocument.cpp1682–1700](https://github.com/Glysade/chemdraw/blob/5dd743230d75ecacacdf8dcd0b0e022f13173b9c/chemdraw/CDXDocument.cpp#L1682).
+The public writer uses22 prefix bytes, six encoded Document bytes inside the historical
+28-byte header, and distinct object/file ends. This explains the independently decoded
+original22/root1194/file1196 spans without trimming data or treating arbitrary padding as
+valid. Only original Rust/tests/assets are implemented; no upstream parser code is copied.
