@@ -197,4 +197,3 @@ VT/FF/Unicode/BOM/# remain meaningful notation and may refuse. This is an origin
 interpretation, not full generic-whitespace conformance. Final EOF is a separately named
 compatibility extension. Broader file-profile conformance remains unresolved; see
 [exact sources and evidence](../verification-smiles-file.md).
-

@@ -67,6 +67,13 @@ test = false
 doc = false
 bench = false
 
+[[bin]]
+name = "smiles_file_parse"
+path = "fuzz_targets/smiles_file_parse.rs"
+test = false
+doc = false
+bench = false
+
 [patch.crates-io]
 hexf-parse = { path = "../compat/hexf-parse" }
 libloading = { path = "../compat/libloading" }

@@ -151,3 +151,31 @@ No Git, native filesystem implementation, command, GUI/input/
 activation, native application, new Windows/Linux execution, hosted workflow, full-workspace
 gate or container fuzzing ran here. Root owns integration and remaining verification.
 M0/M1 and complete SMILES/OpenSMILES/chemistry/source-backed application parity remain incomplete.
+
+## Root receiving and bounded container fuzzing
+
+Root received the exact seven-file codec source3745908 as ca11b2f after independently
+rehashing7 intentional files,9 logs,3 baseline/diff records,133 protected files and2
+research records. Removing only the new module/re-export lines reconstructs the entire
+old notation source exactly. Root's review found no blocking issue; its ignored receipt
+is target/smiles-file-codec-root-review.json. A trailing blank EOF line in the new
+open-question note was removed during receiving; no codec/expectation bytes changed.
+
+The new isolated smiles_file_parse target uses the existing cargo-fuzz0.13.2,
+libFuzzer0.4.13 and nightly-2026-04-01 pins with AddressSanitizer. Root35818 exits0:
+10,000 runs, fixed seed143812957, max_len65536, timeout5. Eight initial seeds are the
+six unchanged original notation files plus two original inline whole-file vectors.
+Runtime mutations stay in a fresh ignored corpus; committed fixtures remain immutable.
+Actual largest input52B, final231entries/4481B, cov671/features1977/RSS87MiB,1second.
+The ceiling does not establish large-limit coverage; the independent unit boundaries
+remain separate. Accepted mutations check complete source/index sharing, alias accounting,
+every meaningful physical line and all spans/ordinals, record rereads/counts and absent
+ordinal refusal. No external chemistry consumer runs on every mutation.
+
+The final isolated target clippy and whole-fuzz rustfmt checks both exit0 after formatting.
+No dependency/lock/parser/normalizer/writer/layout/old oracle/golden change or native/hosted
+execution was involved. Reproduction is in fuzz/README.md; receipt and seed/log hashes
+are under target/smiles-file-fuzz-receipt.json. ASan log is 49782B/SHA256
+5bacacf536c4d0f2236a7191469132b66c4f1ba09876af8d0f41cd299a7af971. This is a bounded smoke check, not a security audit.
+The full receiving workspace gate and application/file adapters are separately recorded
+when integrated; neither is established by this parser run. Actions stays disabled.

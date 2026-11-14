@@ -5,6 +5,38 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## SMILES files
+
+The complete-file parser has a separate target from the unchanged single-notation parser.
+Start with a fresh ignored writable directory, keeping committed fixtures immutable:
+
+```sh
+mkdir -p .cache/fuzz/smiles-file
+cp crates/io/tests/fixtures/smiles/*.smi .cache/fuzz/smiles-file/
+python3 - <<'PY'
+from pathlib import Path
+root = Path('.cache/fuzz/smiles-file')
+(root / 'multi.smi').write_bytes(b'\n \xffignored\r\nCC\t \xff\0name\t42\r\n\tCO ignored\nC#N id\nO last')
+(root / 'later-error.smi').write_bytes(b'CC first\nC1 invalid\nCO last\n')
+PY
+PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --sanitizer address smiles_file_parse .cache/fuzz/smiles-file -- -runs=10000 -seed=143812957 -max_len=65536 -timeout=5
+```
+
+These two additional seeds are original inline vectors, not proprietary sample files.
+Accepted inputs must preserve every byte and share source/index allocations on Clone.
+The harness walks physical byte boundaries independently of the parser's iterator,
+requires every meaningful line to be indexed, checks record ordinals/physical lines,
+notation/separator/opaque-data/end spans, and reparses each bounded notation to compare
+literal atom/bond counts. Missing ordinals cannot return a fallback record. Rejections
+must give in-bounds absolute offsets. Retained-byte accounting must deduplicate aliases.
+
+This checks internal invariants under mutation. Independent raw framing and external
+per-record chemistry expectations live in the IO tests. Large file/line/record quotas
+and the 65,536-byte notation versus larger framed input boundary have separate unit
+tests; a 65,536-byte fuzz ceiling does not exercise those larger bounds. It is a smoke
+check, not a security audit, chemical validity proof or native application workflow.
+Actions remains disabled during development; this command runs locally.
+
 ## SMILES notation
 
 ```sh
