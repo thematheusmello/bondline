@@ -60,6 +60,10 @@ pub enum SdfError {
     DelimiterInMol { record: usize, line: usize },
     #[error("writer data lines must be nonempty single lines and cannot begin with $$$$")]
     InvalidValue,
+    #[error("SDF record {record_id} was not found")]
+    MissingRecord { record_id: u32 },
+    #[error("SDF field occurrence {field_index} was not found in record {record_id}")]
+    MissingField { record_id: u32, field_index: usize },
     #[error("invalid source span")]
     InvalidSpan,
     #[error("MOL syntax in SDF record {record}: {source}")]
@@ -81,6 +85,7 @@ pub enum SdfError {
 impl SdfError {
     pub fn code(&self) -> &'static str {
         match self {
+            Self::MissingRecord { .. } | Self::MissingField { .. } => "not_found",
             Self::ByteLimit
             | Self::RecordLimit
             | Self::FieldLimit
@@ -567,6 +572,20 @@ fn add_lines(total: &mut usize, count: usize) -> Result<(), SdfError> {
     Ok(())
 }
 
+fn validate_value_line(value: &str) -> Result<(), SdfError> {
+    ascii(value.as_bytes())?;
+    if value.is_empty() || value.contains(['\r', '\n']) || value.starts_with("$$$$") {
+        return Err(SdfError::InvalidValue);
+    }
+    if value.len() > MAX_SDF_VALUE_BYTES {
+        return Err(SdfError::LineTooLong {
+            line: 0,
+            limit: MAX_SDF_VALUE_BYTES,
+        });
+    }
+    Ok(())
+}
+
 fn validate_mol(bytes: &[u8], record: usize, v2000_only: bool) -> Result<Version, SdfError> {
     let version = source_version(bytes).map_err(|source| SdfError::Mol { record, source })?;
     if v2000_only && version != Version::V2000 {
@@ -649,16 +668,7 @@ fn write_records(records: &[SdfRecordInput<'_>], v2000_only: bool) -> Result<Vec
             add_bytes(&mut byte_count, 2)?;
             add_lines(&mut line_count, 2)?;
             for value in item.value_lines {
-                ascii(value.as_bytes())?;
-                if value.is_empty() || value.contains(['\r', '\n']) || value.starts_with("$$$$") {
-                    return Err(SdfError::InvalidValue);
-                }
-                if value.len() > MAX_SDF_VALUE_BYTES {
-                    return Err(SdfError::LineTooLong {
-                        line: 0,
-                        limit: MAX_SDF_VALUE_BYTES,
-                    });
-                }
+                validate_value_line(value)?;
                 add_bytes(&mut byte_count, value.len())?;
                 add_bytes(&mut byte_count, 1)?;
                 add_lines(&mut line_count, 1)?;
