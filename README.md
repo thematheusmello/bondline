@@ -6,7 +6,7 @@
 <p align="center">Free, open-source tools for drawing chemical structures and reactions.</p>
 
 <p align="center">
-  <a href="https://github.com/thematheusmello/bondline/actions/workflows/ci.yml"><img src="https://github.com/thematheusmello/bondline/actions/workflows/ci.yml/badge.svg?branch=main" alt="Rust foundation CI"></a>
+  <a href="docs/ci.md"><img src="https://img.shields.io/badge/Actions-disabled%20during%20development-6b7280" alt="GitHub Actions disabled during development"></a>
   <a href="LICENSE-MIT"><img src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-167b72" alt="License: MIT OR Apache-2.0"></a>
   <a href="rust-toolchain.toml"><img src="https://img.shields.io/badge/Rust-1.94.1-b35936" alt="Rust 1.94.1"></a>
   <a href="STATUS.md"><img src="https://img.shields.io/badge/status-early%20development-d89b32" alt="Early development"></a>
@@ -146,6 +146,9 @@ cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo test --workspace --locked
 cargo xtask ci
 ```
+
+GitHub Actions is disabled during development to control costs. Run the local checks
+above; hosted checks will be restored when the project is complete. See [CI policy](docs/ci.md).
 
 The aggregate also checks layers, declared native dependency licenses, bundled assets and
 the pinned corpus. Current corpus coverage is limited: a passing gate is not full format or

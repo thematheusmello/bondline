@@ -10,6 +10,9 @@ wired and verified capabilities. Small fixes can go straight to a pull request.
 For a larger change, an issue describing the workflow and intended scope helps
 avoid duplicate work. See [SUPPORT.md](SUPPORT.md) for questions and bug reports.
 
+GitHub Actions is intentionally disabled during development to control hosted costs.
+Run the local checks below; do not enable or rerun hosted workflows. See [CI policy](docs/ci.md).
+
 ## Set up and run
 
 Follow the [development guide](docs/development.md) for the pinned Rust toolchain,

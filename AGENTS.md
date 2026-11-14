@@ -1,5 +1,20 @@
 # Bondline agent instructions
 
+## Development Actions policy — user instruction, 2026-11-14
+
+GitHub Actions is disabled during development to avoid hosted-run charges. Repository
+Actions is off and the Rust foundation workflow is disabled manually. Do not enable,
+dispatch or rerun workflows, including for a passing feature, milestone, branch or docs
+checkpoint. Re-enable only when the full project is complete or the user explicitly
+changes this instruction. Preserve the workflow definitions for that later verification.
+
+Continue local rustfmt, warnings-denied clippy, workspace tests, xtask gates and bounded
+fuzzing. Local passing gates govern development integration; do not wait for or manufacture
+hosted evidence while Actions is disabled. Mark new Windows/Linux execution unverified
+when it has not actually run. This policy supersedes older hosted-before-main instructions
+and historical pending-hosted notes in project records. Do not restore automatic runs to
+make an old CI badge green.
+
 ## Goal and orientation
 
 Implement an independent offline Rust chemical structure and reaction editor, native on

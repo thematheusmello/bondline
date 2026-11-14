@@ -4,6 +4,22 @@
 Repository: https://github.com/thematheusmello/bondline . Continue existing work.
 Root owns Git, integration/publication and assignment of the sole native GUI owner.
 
+## Current user instructions
+
+GitHub Actions is disabled during development, at both repository and workflow levels.
+Do not enable/dispatch/rerun it until full-project completion or a new user instruction.
+A paginated readback found0 running/queued jobs; none needed cancellation. Local quality
+gates and atomic commits continue; hosted checks no longer block development integration.
+This overrides all older pending-hosted/main-gate directions below. See docs/ci.md.
+The user is also actively using the computer: no local interactive GUI/input/activation
+until they indicate availability again. Continue source and headless work.
+
+This policy checkpoint contains the already tested7c596d9 source (20commands, aromatic
+notation and eight-file/five-bundle corpus) plus documentation-only policy/badge changes.
+The primary Root worktree separately has e5fe306 geometry receiving work in progress on
+feat/smiles-layout-integration; preserve its merge/working changes and finish local receiving
+checks before integration. It has not acquired new hosted/native evidence.
+
 ## Current revisions and gates
 
 Public main:5c14f406e37e1d7836649e41bc48d72d2ea4d993, the verified20-command source
