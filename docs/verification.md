@@ -2373,3 +2373,13 @@ old targets and README prefix, pinned tools and exact runtime/isolated locks. Re
 receiving code. No manifest, dependency, runtime, old fixture/oracle/golden or workflow
 change. Only continuation Markdown and these separately checked fuzz additions follow
 the845 source gate. Actions stays disabled; no new native window or hosted platform runs.
+
+## Next graph gate research, 2026-11-14
+
+[Multiple-bond plan](research/multiple-bond-plan.md) has verified public-source identities
+and current source/caller boundaries, not an implemented feature. Root rehashes25 source
+snapshots,13 artifacts and its current native scene caller. Four pinned SDK documents
+match published bytes; incorrect initial paths and style/default/flag ambiguities are
+retained. Centered C2H4/C2H2 analytic geometry, masks/hits, CPU/GPU and source-persistence
+REDs are concrete next actions but remain unexecuted. No universal default, native pixels,
+new golden or completed M1/M2 follows from this plan.

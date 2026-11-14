@@ -311,8 +311,9 @@ existing internal CDX crate. New native declared closures154/165/220 include tha
 
 ## Neutral graph display and transient hover
 
-graph_page_scene and registered captures share a bounded GraphScene. Positioned neutral,
-nonisotopic/RadicalNone elements and Single bonds only. Missing H is never inferred:
+The literal graph_page_scene entry and source-aware captures share a bounded GraphScene.
+Positioned neutral, nonisotopic/RadicalNone elements and Single bonds only. In the literal
+entry, missing H is never inferred:
 connected unknown-H carbon may be skeletal, isolated unknown-H carbon refuses, and other
 elements retain literal symbols without inventing H. Authored0/1/N H renders literally;
 physical H cannot carry positive attached H. Unsupported metadata/orders/geometry refuse.
@@ -467,9 +468,20 @@ Native SDF preview is wired/headlessly tested, not natively verified. Cancel/Ret
 are transient presentation controls; complete public control-addressability remains M0 work.
 Actual windows/input/activation still wait for explicit user availability. Actions stays off.
 
-Next source-derived M1 fidelity gap: ordinary VAL-absent source-backed MOL can pass mapping
-coverage yet reach the literal renderer as bare O/N. Read docs/research/mol-display-plan.md;
-its raw-MOL coordinates differ from SDF packing. Observe the independent runtime RED before
-changing behavior. Share display facts below UI, preserve authored None/literal zero and
-source bytes, retain the complete drawing owner for deferred classification and route both
-native graph construction sites. Do not infer general CDXML/native H semantics from MOL.
+Ordinary VAL-absent source-backed MOL now uses io::display::drawing_page_scene through
+registered capture and Engine::drawing_page_scene for both native vector acquisitions.
+Deferred capture retains complete Arc<StoredContent>, not only Page. Original MOL backing
+selects closed display facts; associated filename/encoding never does. Preserve actual
+current Page/IDs/frame, authored None/literal zero/unusual counts and source bytes; never
+reuse SDF packing here. Common topology/H lives below UI, with the existing4096 hit
+preflight before derived allocation. Drawing literal physicalH0 remains supported; SDF's
+stricter physicalH/error/packing policy stays exact. The renderer chooses no valence.
+
+Independent actual MOL CPU/GPU/consumer/Save/history/cancel and real-frame vector/hit tests
+pass; native-window acceptance remains unverified while the user is active. Read
+docs/verification-mol-display-model.md, verification-mol-display-tests.md and
+verification-mol-display-ui.md. Root's initial direct-IO UI port failed to compile; the
+thin Engine delegate fixes it without a dependency/lock change. Do not repeat that edge.
+Source-free/CDXML remain literal; no general H/stereo/aromaticity/edit authority follows.
+Next graph prerequisite: independently sourced Double/Triple geometry/hits/attachment,
+currently honest whole-scene refusals. Read ROADMAP.md before choosing the next task.

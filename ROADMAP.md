@@ -44,8 +44,15 @@ existing command/CLI/MCP interfaces. Ordinary VAL-absent CCO/CN, both source ori
 full CPU/GPU image comparisons and exact Save pass headlessly. The native read-only workspace
 preview now has registered background work, source/view/DPI/
 close-epoch invalidation and independent actual-frame texture/paint/retirement tests. Actual
-native-window acceptance still waits for user availability. The next unblocked source-level
-M1 fidelity check is ordinary MOL absent-H depiction; see docs/research/mol-display-plan.md.
+native-window acceptance still waits for user availability. Ordinary source-backed MOL
+absent-H depiction now uses the same closed display facts in its actual Page/IDs/frame,
+with complete deferred ownership, independent CPU/GPU/source checks and headless canvas
+acceptance. Authored None and source bytes remain exact; source-free/CDXML stay literal.
+See docs/verification-mol-display-tests.md and docs/verification-mol-display-ui.md.
+The next graph prerequisite is Double/Triple depiction, which currently refuses honestly;
+research IUPAC multiple-bond spacing/attachment and define independent geometry/pixel
+expectations before changing the shared renderer and associated capture tests. Broader
+formats, source metadata, SDF field UI and full M1 interoperability remain unfinished.
 This is partial M1, with Single/
 neutral chemistry and explicit whole-capture refusals; general layout and reference packing
 remain open. See docs/verification-sdf-capture-command.md and the linked independent evidence.

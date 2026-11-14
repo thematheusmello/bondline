@@ -138,9 +138,12 @@ Capture dimensions are 1..2048 pixels per axis. A successful result adds `captur
 has `adapter: null`. There is no automatic CPU fallback. This captures the shared page
 scene, not window chrome, operating-system dialogs or print-resolution chemical output.
 Unmapped source-backed documents return unsupported_content before rendering. Empty pages
-and supported positioned neutral-carbon/Single graphs can be captured, including branches,
-cycles and disconnected components. Authored H counts render literally; missing H stays
-skeletal only for connected carbon. Isolated unknown-H/other chemistry, overlapping/off-
+and supported positioned neutral-element/Single graphs can be captured, including branches,
+cycles and disconnected components. Source-free/CDXML use literal H, including connected
+skeletal unknown-H carbon. Actual MOL backing instead supplies closed neutral C/N/O/halogen
+display counts for missing H, without changing authored None or literal counts. It retains
+the actual current Page/IDs/frame, with no SDF repacking or policy inferred from filename.
+Unresolved/unsupported chemistry, overlapping/off-
 viewport labels and excessive scenes fail explicitly; no content is dropped. Native hover
 overlays are transient UI feedback and do not enter captured scenes or authored state.
 Labels use the attributed Apache font at the original 12-point style, bounded to 8..256 em
@@ -152,9 +155,14 @@ The same rules apply to both backends and leave authored state unchanged.
 {"command":"render.capture","params":{"page_id":1,"width_px":512,"height_px":512,"backend":"gpu"}}
 ```
 
-Preparation snapshots the document/revision under the engine lock. Rendering and PNG
+Preparation retains the complete immutable Drawing/SDF owner and revision under the engine
+lock, including source needed for display classification. Rendering and PNG
 encoding run outside that lock; later edits cannot alter the captured revision. The result
 never installs state or overwrites newer edits. Queries leave revision/history unchanged.
+Work completion/cancellation/drop releases the extra source ownership; a self-contained
+PNG reply does not retain it. MOL display grants no new edit/Save authority. Native vector
+painting uses the same IO producer through Engine::drawing_page_scene without a direct
+UI-to-IO dependency. The new MOL canvas workflow is headlessly tested, not natively verified.
 CLI calls finish synchronously. A cloneable CommandExecutor shares two workers across the
 delivered native UI and loopback adapter; stdio has its own process-local executor. Rendering
 and file work share that budget; excess work returns `busy`. Each deferred plan reserves

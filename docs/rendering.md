@@ -30,7 +30,7 @@ Separate x/y conversion factors follow that rounding, whose aspect error remains
 background, gray 210 shadow, gray 196 border and white interior. This is not a journal preset.
 Existing hand-authored 8×8 page-grid, clipping and odd-pitch tests continue to pass.
 
-The chemical producer builds one GraphScene for positioned neutral elements and Single
+The literal chemical producer builds one GraphScene for positioned neutral elements and Single
 bonds, including chains, branches, cycles and disconnected components. Noncarbon symbols
 are explicit; authored H is literal and unknown H is omitted without changing model None.
 Carbon retains H0/C, H1/CH and larger literal subscripts, skeletal connected unknown-H and
@@ -40,6 +40,16 @@ is shared from pure model; no valence inference or authoring tool was added.
 Completeness guards still refuse unmodeled source; this is not source-faithful style/stereo/
 text/reaction rendering or connected drawing. Neutral-label evidence is headless only;
 see verification-neutral-element-labels.md and the earlier verification-carbon-graph.md.
+
+Source-aware MOL and all-record SDF display separately reuse IO-derived H facts under the
+closed neutral C/N/O/halogen profile; the renderer chooses no valence. Literal counts remain
+authoritative and authored None/source bytes remain exact. MOL keeps its actual Page/IDs/
+frame, while SDF retains its separately documented row packing. Both use the resolved-H
+entry's attachment and paper-ink checks; its masks/strokes must fit the paper interior.
+The source-free/CDXML literal entry above retains its old behavior. See
+verification-mol-display-tests.md and verification-sdf-display-render.md for independent
+data/geometry/font/pixel evidence and explicit refusal scope. Native MOL/SDF label workflow
+acceptance remains unverified; these display policies do not establish general perception.
 
 IUPAC GR-2.1.2 requires terminal labels for an isolated ethane bond. The producer uses H3C/CH3
 with the 3 subscripted, keeping C centered at its authored endpoint and facing the bond.
@@ -51,8 +61,9 @@ same spans. General shaping, styled captions and smooth text rasterization remai
 
 Label em is bounded to 8..256 canvas units, with each glyph bitmap at most 512×512. Unreadable
 scales, off-viewport labels, overlap and excessive primitives return errors; content is never
-dropped. Masks may extend beyond the paper into the canvas; physical-page clipping/export
-is not implemented. FontTools 4.61.1 independently supplied glyph IDs/metrics. External Pillow
+dropped. Literal-entry masks may extend beyond the paper into the canvas; the resolved-H
+entry requires paper-interior ink. Physical publishing is not implemented. FontTools 4.61.1
+independently supplied glyph IDs/metrics. External Pillow
 12.3.0/FreeType tests require ink intersection-over-union >=0.90 at 96 em, chosen before
 comparison; observed values are 0.9660 and 0.9669. This is separate from golden approval.
 

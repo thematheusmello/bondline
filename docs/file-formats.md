@@ -10,7 +10,7 @@
 | RXN V2000 wrapper | Standalone source-preserving reader/new-wrapper writer with ordered roles and raw V2000/V3000 molecular payloads | Published CTfile layout; original field/role/span vectors; external RDKit readers/writers and bounded ASAN | Reaction model, application/native commands, V3000 reaction wrapper, broader registry/extension handling and fetched corpus |
 | SMILES | Complete accepted multi-record source Open/Save through shared registry/CLI/MCP/loopback; explicit-H fragment export and restricted carbon-path→CDXML conversion; noncanonical output | Independent raw spans/opaque bytes and unchanged per-record consumers, framing/quotas, shared snapshots/guards and actual file/adaptor workflows | Chemical preview/editing of opened files, actual native acceptance of the wired chooser, native export/conversion controls, general layout/H policy, stereo/query/perception and canonicalization |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
-| PNG | RGBA8 encoder and registry previews for empty pages and positioned neutral-carbon/Single graphs with literal authored H | External Pillow/FreeType, independent graph/pixel/geometry/font vectors, actual native capture and one human-approved golden | Other elements/orders/metadata, source-faithful/general chemical publishing, physical resolution and native save workflow |
+| PNG | RGBA8 encoder and registry previews for empty pages and positioned neutral-element/Single graphs; source-aware MOL/SDF display H remains separate from authored data | External Pillow/FreeType, independent graph/pixel/geometry/font vectors, ordinary MOL CPU/GPU/adapter checks, actual earlier native capture and one approved golden | Other orders/metadata, new native MOL/SDF label acceptance, general chemical publishing, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
 
 ## MOL V2000 library
@@ -146,6 +146,16 @@ A4/page1. Multiple fragments/pages, changed page layout, MOL-to-CDXML source met
 and unknown-CDXML-to-MOL refuse explicitly. A deliberately lossy/export-only workflow remains
 missing. Appending another isolated fragment is a valid edit but cannot currently save as
 MOL; Undo restores the savable snapshot. This is partial M1 interoperability, not completion.
+
+Actual original MOL backing now selects separate closed-profile display H for neutral
+C/N/O/halogens. The current Page/IDs/coordinates and authored None/literal H stay exact;
+associated filename/encoding does not select that policy. Capture retains the complete
+immutable owner through work, and native initial/post-command vectors use the same IO
+producer through Engine. Source-free/CDXML remain literal. Independent raw consumers,
+CPU/GPU images, exact Save/reopen and headless canvas/hits pass; actual native label
+acceptance and general valence/orders are separate. See verification-mol-display-model.md,
+verification-mol-display-tests.md and verification-mol-display-ui.md. Display never grants
+permission to regenerate incomplete source or otherwise relax the Save guards above.
 
 Native reads reuse bounded ordinary-file validation; both encodings use the same reviewed
 atomic/no-clobber/overwrite/cancellation/security publication path. File state/receipts carry

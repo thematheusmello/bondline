@@ -154,8 +154,10 @@ content instead of returning a misleading blank preview; the native C-C creation
 
 The native canvas and registered capture consume one GraphScene with ordered rectangles/
 strokes and bounded typed atom/bond hit regions. It supports positioned neutral elements
-with a shared pure-model symbol catalog, Single bonds and literal authored H; missing H
-is not inferred. PageViewport shares paper
+with a shared pure-model symbol catalog, Single bonds and literal authored H; the literal
+renderer does not infer missing H. A source-aware IO scene entry supplies separate closed-
+profile display counts only for actual MOL backing, preserving current Page/IDs/frame and
+authored None. Source-free/CDXML keep the literal path. PageViewport shares paper
 layout and authoring-pointer conversion. Unsupported metadata/source remains guarded.
 CPU and GPU paths also face independent pixel/geometry/font oracles and one human-approved
 native-document golden. Native transient gesture state stays outside authored snapshots;
@@ -290,5 +292,22 @@ separately for close after command completion. There is no new general job pool.
 Actual app-frame/texture/paint instructions are headlessly tested; operating-system window/
 compositor behavior is unverified. Cancel/Retry/Records are transient controls whose full
 public addressability remains part of M0. See verification-sdf-native-preview.md and its
-independent acceptance record. Ordinary source-backed MOL still needs its separate absent-H
-display gate; mapping coverage alone cannot certify faithful depiction.
+independent acceptance record.
+
+## Source-aware Drawing display
+
+Every deferred Drawing capture now retains the complete Arc<StoredContent>, including
+source/baseline, until work completes or drops. Current native vector painting calls
+Engine::drawing_page_scene at initial acquisition and after an attempted edit; the UI has
+no direct IO dependency. Both paths use io::display::drawing_page_scene, which validates
+source coverage and chooses policy from original MOL backing rather than file association.
+It uses the actual current Page, identity and retained coordinate frame without SDF packing.
+An existing4096 hit preflight bounds work before derived topology allocation.
+
+The common private resolver retains source/model None and all literal counts. Drawing
+literal physical H0 remains compatible; SDF keeps its separate stricter physical-H rule,
+record errors and exact packing. Resolved labels still require readable, safe paper ink.
+Unknown chemistry refuses as a whole. Display facts create no edit/Save authority or
+history step. Independent command/CPU/GPU/adapter and real-frame checks are recorded in
+verification-mol-display-tests.md and verification-mol-display-ui.md; actual native window
+acceptance and broader chemistry/orders remain unverified/missing.

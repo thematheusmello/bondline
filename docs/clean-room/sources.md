@@ -1387,3 +1387,21 @@ rejection of the old unsupported492B extension stays a diagnostic, not an intero
 pass. No consumer, format rule, asset, fixture, old expectation or dependency changes.
 Bounded ASan runs and observed303/492B maxima establish neither maximum-input nor security
 coverage. The inspected BIOVIA/IUPAC/OpenSMILES rules above remain the behavior basis.
+
+## Next multiple-bond gate: public research only, 2026-11-14
+
+[Unexecuted plan](../research/multiple-bond-plan.md) reviews IUPAC GR1.6/GR1.10 and public
+SDK [BondSpacing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacing.htm),
+[BondSpacingAbs](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacingAbs.htm),
+[BondLength](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondLength.htm) and
+[DoublePosition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Bond_DoublePosition.htm).
+The four published files match the immutable repository pin
+`d1e4e6ca7d847578d2b032143d686aa8641664e3` under docs/cdx_sdk/properties. Initial raw
+paths missing docs/ returned404; corrected artifacts and status/hash receipts are retained.
+
+Relative/absolute spacing, override/inheritance and directional Center/Right/Left are
+format facts; the example18% is not a universal26.1 default. The proposed centered3w
+first geometry gate is original, unadopted policy. Contextual offset/joining, style/default
+and XML manual-flag questions remain explicit; no renderer/test/native behavior has run
+for this plan. Root verifies25 source snapshots,13 research artifacts and its actual native
+caller before receiving. This research does not complete Double/Triple, M1, M2 or parity.

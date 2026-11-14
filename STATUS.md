@@ -16,56 +16,63 @@ availability is indicated again. Continue source and headless work.
 
 ## Current revisions and gates
 
-Recoverable native-preview commits: metricsf91aa94, capture contract803c83e, registered
-work03e6dc4, UIe76ed3a, independent frame acceptance62e9160. Next-MOL source gateca73df1
-is research/unexecuted only. Capture-envelope fuzz146bf95 is separate test tooling.
-Root owns receiving/integration/publication; the final documentation commit follows these.
+Recoverable MOL delivery commits: complete capture ownershipc788787, shared display
+producerfd51ca1, registered command/independent acceptance1e25603, native canvas wiring/
+headless acceptanceacdbf1c, existing-parser fuzz0c847eb and exact eight-seed recipeff3af6d. Final documentation
+follows those commits; inspect Git HEAD/origin and the ignored final receipt for publication.
+Full M0–M5 remains the active goal, with M0 and M1 incomplete.
 
-Root cargo xtask ci66690 exits0 on62e9160:822workspace+3Mac bridge=825passed,
-0failed/ignored across129 result lines. Default parallel test settings are unchanged.
-Fmt/all-target warnings-denied clippy/layers/154Mac/165Windows/220Linux runtime-license
-closures/two assets/eight-file five-bundle corpus pass. Log99164B/SHA-256
-`a077c4974b180f1be9eea0d246a2e591857472e788ad2ef7731f8f82b5aced92`.
-All541 tracked non-Markdown workspace/source/test/config/asset identities are frozen.
-Only continuation Markdown and separately checked isolated fuzz/future-workflow tooling
-changed afterward. Runtime/root lock, old parsers/oracles/fixtures/font/golden stay exact.
+Root cargo xtask ci33573 exits0 onacdbf1c:842workspace+3Mac bridge=845passed,
+0failed/ignored across132 result lines, default parallel settings unchanged. Workspace
+fmt/all-target warnings-denied clippy/layers,154Mac/165Windows/220Linux declared runtime
+licenses,2assets and8pinned files/5bundles pass. Log102775B/SHA256
+`7bd4d05f262b0f83740330fc0888da6ba5176bc5e4e3d194716b1adcdf01b03c`.
+All547 non-Markdown workspace/config/asset identities remain exact; only continuation
+Markdown and separately checked isolated fuzz additions follow this source gate. Root
+and isolated locks, old parsers/writers/oracles/fixtures/font/approved golden stay exact.
 
-Renderer RED76724→46/clippy/fmt GREEN15005 establishes actual main-label metrics without
-pixel changes. Contract RED86267→first12GREEN38787, fullcommands91031=199 including the
-no-Serialize compile-fail; clippy88234/fmt pass. Native-work API RED7478 precedes5+1
-firstGREEN43743/25216. MCP firstdefault36869=48pass; one newtest-only boolean lint failed
-2283 then was rewritten equivalently, preserving short-circuit close intent. Repeated
-default66585 then failed the UNCHANGED listener-shutdown assertion; exactisolated1 and
-serial12913=48/clippy60627/fmt pass. Cause is unestablished. Root's fresh default825 gate
-passes all48 as well; neither this pass nor a port-reuse hypothesis is called a fix.
+TDD and receiving evidence:
+- Complete source lifetime: new Weak assertions77980/replay fail101, then14581 pass2.
+  Package201 and final clippy/fmt pass; new test type/format lint corrections change no
+  assertions. See docs/verification-mol-capture-owner.md.
+- Shared IO: missing-API11132; ordinary raw-source GREEN6447. PhysicalH0 compatibility
+  RED36778→20573 and complexity-priority RED45353→35521 preserve prior literal behavior
+  and cheap4096 preflight. Final60534=282 IO tests incl11 new and12 unchanged SDF preview
+  cases; clippy16510/fmt pass. New overlong-header setup and static-error lints remain
+  recorded, not production bugs or weakened old tests. See verification-mol-display-model.md.
+- Independent command/image: actual missing-OH RED36380;4 fixed cases GREEN12551 unchanged,
+  full v1 package79556=205; final v2 focused84172/clippy35137/fmt pass. Whole source/None/
+  actual coordinates, CPU/GPU pixels, source-free/CDXML policy, exact Save/reopen, historical
+  work and cancellation/refusals verified. See verification-mol-display-tests.md.
+- Real app frames: intended baseline vector REDs48765/76764; Root port6051 compiler failure
+  used IO without a direct UI dependency. Thin Engine delegate fixes it without manifest/
+  lock change. First runtime23205 passes3 frozen tests; final7745=110 UI/clippy79149/fmt.
+  New-test-only lint corrections preserve expectations. This is vector/hit/state evidence,
+  not native window/compositor execution. See verification-mol-display-ui.md.
+- Manual68790 adapter probe:2 raw MOLs ×CLI/stdio/authenticated loopback=6 exact1024 captures,
+  matching independently authored explicit-H native-CDXML reference data; all4194304 RGBA
+  bytes agree and missing-H controls differ. Stdio/socket also preserve Inspect and4 exact
+  source saves. Initial60840 used an Open receipt as baseline and failed; corrected explicit
+  Inspect comparison changes no production. Credentials stay in pipes; all children/listeners
+  reaped. Receipt target/mol-display-adapter-probe/receipt.json, SHA3683c323…cfe39a.
+- Normal-parser fuzz49818/98341:10000 ASan runs each; fixed4+4 replay61149 separate. Maxima
+  303/492B do not prove configured65536 ceilings/security. Inspector30629 observes2scene
+  successes/5honest scene refusals/1strict-owner refusal;7external consumer positives plus
+  one unchanged unsupported492B extension diagnostic. All old invariants reconstruct exactly.
+  Root receives4files/301protected/12logs/3binaries/8seeds/385mutations. Receiving46420 passes
+  locked/offline metadata, all9 isolated bins check/clippy and fmt. No new target/dependency/
+  lock/workflow. See verification-mol-display-fuzz.md.
 
-UI compilerRED15891 is a missing-key API failure, not a native/image failure. First3 key/
-DPI/epoch tests90506 and fullUI29922=101/clippy/fmt pass. Independent6 actual-frame tests
-20466 pass unchanged; fullUI37563=107/clippy/fmt pass. They use the real app frame and
-registered PNG, exact opaqueRGBA upload, painted mesh/UV/clip, literal two-record probes,
-source/history/identicalOpen/resize/origin/DPI and real queued decode/close-epoch retirement.
-This proves headless egui instructions/lifetimes, not native OS/compositor execution.
+Root separately verifies IO296protected/16logs, commands270protected+7received/8logs,
+UI680protected+3production+9received/11logs and unchanged old UI unit body. Detailed hashes,
+lineage and qualifications remain in the linked records and ignored receiving receipts.
 
-Root verified core5files/151protected/5logs/4renderer+dependency inputs; work4files/
-664workerprotected/11inputs+11logs; UI2files/536exact+8received+6newbackend/4logs and exact
-Root-owned child-module bridge. Initial receiving misclassification started a premature
-aggregate8628; it was stopped130 and its27782B log retained (SHA312ac7d7…f9da97b).
-Corrected receive preceded fresh825 gate; the interrupted run is never a pass. Independent
-source review found no confirmed lifecycle defect; source review stays separate evidence.
-
-Additional parser ASan12179:10000 runs, seed418593271, max_len131072, timeout5, cov488/
-features1538, corpus88/reported715KiB, RSS452MiB,2s. Largest exercised input87481B;
-23original seeds/155800B have independent Pillow facts/hashes and separate replay67216.
-All-nine isolated check28723/clippy/fmt pass.165old lock identities retained,164 whole
-records exact; fuzz self gains2edges and12test-only records are added, with no version move.
-Root verified5files/292protected/10logs, seed/corpus/binary/generator/lock receipts. Future
-ninth workflow definition/YAML and exact6-seed recipe/Pillow/ASan replay pass locally;
-Actions remains off and hosted execution is unverified. This is bounded envelope-parser
-smoke, not CRC/DEFLATE/general PNG/max-image/security proof.
-
-Earlier publica5993e0/796 source-to-capture and3438b04/765 SMILES records retain their own
-scopes. No new native window/input, Windows/Linux or hosted workflow ran. Full M0/M1 and
-M2–M5 remain incomplete; the persistent goal stays ACTIVE.
+Historical825 SDF preview evidence retains its original scope. Its premature receiving8628
+was stopped130, never a pass. Earlier repeated MCP66585 failed an unchanged listener-
+shutdown assertion; isolated/serialized and both default825/845 gates pass, but cause is
+unestablished and no fix is claimed. Preserve that failure; see verification-preview-registered-work.md.
+No new native window/input, Windows/Linux or hosted workflow ran. All milestones remain
+incomplete as documented; displays are not a general chemistry engine.
 
 ## Delivered receiving scope
 
@@ -74,6 +81,14 @@ page.set_size; bond.create/extend; history.undo/redo; render.capture; ui.control
 sdf.record.inspect, sdf.field.set_value, smiles.record.inspect, file.convert_smiles_to_cdxml and
 file.export_smiles_fragment. UI/CLI/stdio/authenticated loopback use one registry; the
 export/conversion commands have no native control. Headless engines do not fake dialogs.
+
+Drawing capture now keeps complete immutable source through work. Actual MOL backing uses
+shared closed neutral C/N/O/halogen display H at actual Page/IDs/frame; source/model None
+and literal zero/unusual counts stay exact. Native initial/post-command vectors use the
+same producer through Engine. Headless CPU/GPU/adapter and real-frame paint/hit/source
+checks pass; actual native MOL label acceptance remains unverified. Source-free/CDXML
+keep literal behavior. Other bond orders/charge/isotope/radical/stereo/general valence and
+source-faithful style mappings remain missing; no new authoring/Save permission follows.
 
 SDF retains complete mixed-version source through current/saved/history/plans; state has
 document:null and every-record metadata. The explicit query pages ordered duplicate/DT/
@@ -175,38 +190,34 @@ ship. Existing restoration exceptions remain recorded. Only approved golden SHA:
 ## Active work and next steps
 
 All owned Cargo/fuzz/native/controller/helper jobs, test subprocesses and listeners are
-terminal. No live handle remains. Root integration825 and isolated fuzz gates passed.
-Workers are frozen/already received; their worktree copies are not unreceived feature work.
-- native_acceptance: bondline-preview-core/feat/preview-capture-contract (core + source-only
-  UI review), then bondline-preview-fuzz/test/capture-envelope-fuzz (received146bf95).
-- sdf_setter_review: bondline-preview-work/feat/preview-registered-work (received03e6dc4).
-- reference_map: bondline-preview-tests/test/preview-acceptance (received62e9160), then
-  read-only MOL display investigation retained in docs/research/mol-display-plan.md.
-Root alone owns Git. Check actual branches/handles before starting more work.
+terminal. Root33573 and receiving46420 passed. Completed worker copies are already received,
+not pending feature work. Root owns all Git:
+- native_acceptance: bondline-mol-display-io (receivedfd51ca1), then
+  bondline-mol-display-fuzz (received0c847eb).
+- reference_map: bondline-mol-display-tests (received1e25603), then bounded public
+  multiple-bond research for the next gate.
+- sdf_setter_review: bondline-mol-display-ui (receivedacdbf1c).
 
-Target handoffs/logs/Root receipts and SDK/reference captures remain ignored build evidence.
-All intentional product/test/docs files are committed; never commit these disposable tools,
-mutated corpora or binaries. Previous source worktrees/stashes are historical mirrors, not
-pending patches: do not reapply4c1e1ffaa55d91738fd6574f71931c0a82f126c0 or
-dfaf24f884569c8702e7e679493b3619815750ca. No cleanup is needed. Targets stay isolated,
-incremental0, Root defaultdebug/siblingsdebug0. Root final remote/readback receipt follows
-integration; inspect git log/origin before assuming publication.
+Target/.cache handoffs, raw probes, binaries, original seed snapshots and mutated corpora
+are ignored disposable evidence; no cleanup is needed. Do not reapply historical worktree/
+stash mirrors4c1e1ffaa55d91738fd6574f71931c0a82f126c0 or
+dfaf24f884569c8702e7e679493b3619815750ca. Targets remain separate and incremental0;
+Root default debug and sibling debug0 are intentional. Inspect Git/live handles before resuming.
 
-1. Continue unblocked M1 at docs/research/mol-display-plan.md. Add the exact raw-MOL CCO/CN
-   runtime RED against actual1024 CPU/GPU captures and independent literal/external facts.
-   Source inspection found ordinary VAL-absent MOL can pass source coverage yet lose OH/NH2
-   display through the literal renderer. This is not a newly executed runtime failure.
-   Factor common display-H facts below UI, retain actual Page/IDs/default transform and
-   complete immutable drawing owner, route capture plus both native graph acquisitions,
-   preserve None/literalH0/source bytes and all edit/Save guards. No SDF packing or generic
-   CDXML/native inference may be substituted. Keep all existing SDF/native-preview tests.
-2. Actual native SDF preview/SMILES-file/conversion/export/new-element acceptance waits for
-   explicit user availability. Do not infer it from time/pointer state. Preserve the exact
-   approved golden. Native control-addressability, inventory/dialog/platform evidence and
-   broader syntax/chemistry/layout remain M0/M1 gaps; keep M2–M5 in scope.
-3. Leave Actions disabled through development. New future definitions have local syntax/
-   seed evidence only; do not enable/dispatch/rerun for a milestone or to clear a badge.
-   Retain the unexplained old MCP shutdown-test failure if it recurs and investigate its
-   actual cause without weakening assertions. Full goal remains active.
+1. Next unblocked graph gate: read docs/research/multiple-bond-plan.md and its primary
+   sources. Add independent centered Double/Triple analytic geometry/pixel/hit REDs before
+   implementation, retaining one logical stable bond identity and all masking/attachment/
+   paper/readability/resource guards. Source/model/MOL/CDXML already store those orders;
+   rendering currently refuses. The new plan is unexecuted, not a feature or passing test.
+   Keep asymmetric/ring placement, style inheritance, authoring/UI and full M0–M5 scope
+   visible; do not invent a universal reference spacing default.
+2. Actual native MOL/SDF preview, SMILES-file/conversion/export/new-element acceptance
+   waits for explicit user availability. Never infer it from time/pointer state. Preserve
+   the exact approved golden. Inventory/dialog/control/platform evidence, broader source
+   mappings/chemistry/layout and M2–M5 remain open; M0/M1 are not completed.
+3. Leave Actions disabled until full-project completion or explicit new user instruction.
+   Local gates govern integration. New Windows/Linux/native/hosted checks stay unverified.
+   Retain the unexplained MCP shutdown failure if it recurs; investigate decisive cause
+   without weakening assertions. The persistent goal remains ACTIVE.
 
 No new golden approval, PR/release/installer/signing, account/TCC or unrelated messages.

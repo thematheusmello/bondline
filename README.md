@@ -48,12 +48,14 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | CDX files | Guarded native Open/Save/Save As verified on macOS, retaining exact accepted source. Limited projection; editing and faithful preview remain unavailable. |
 | SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. CLI/MCP inspect ordered fields and edit existing values with Undo/Redo. Restricted all-record neutral/Single capture and asynchronous read-only preview pass headless image/lifecycle tests. Actual native preview acceptance and field-edit UI remain pending. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
-| Rendering | Shared CPU/GPU neutral-element graph scenes, literal authored H, hover and PNG captures; independent font checks and one approved carbon regression scene. New element-label native workflows remain unverified. |
+| Rendering | Shared CPU/GPU neutral-element scenes, literal H and source-preserving derived MOL/SDF display H, hover and PNG captures. Ordinary OH/NH₂ and exact source retention pass headless checks; new native label workflows remain unverified. |
 | Automation | 25 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
-Native drawing/file workflows have been inspected on macOS. CI runs tests and actual
-window smoke checks on macOS, Windows and Linux; interactive Windows/Linux workflows
-remain unverified. [Verification evidence](docs/verification.md) distinguishes those scopes.
+Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all
+three platforms and window launches. GitHub Actions is disabled during development to
+avoid hosted-run costs; local checks continue. New hosted checks and interactive
+Windows/Linux workflows remain unverified. [Verification evidence](docs/verification.md)
+distinguishes those scopes.
 
 <table>
   <tr>

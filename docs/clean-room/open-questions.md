@@ -234,10 +234,25 @@ with decisive evidence if it repeats; a later pass does not establish a fix.
 
 ## Ordinary MOL absent-H depiction
 
-Source inspection shows fully mapped source-backed MOL can retain authored None and still
-reach the literal renderer's bare O/N labels. This is not a newly observed runtime failure.
-The next independent gate and exact un-packed CCO/CN coordinates are in
-[the MOL display plan](../research/mol-display-plan.md). Share the existing closed display
-facts rather than infer in the renderer, preserve source/None/literal H0, and keep generic
-native/CDXML semantics separate. No general normal-valence or CDXML absent-H solution is
-claimed by the SDF work.
+The ordinary neutral CCO/CN gap now has independent runtime RED/GREEN, exact individual-MOL
+geometry/None/source preservation, actual CPU/GPU captures, adapter checks and headless
+canvas/hit evidence; see [capture](../verification-mol-display-tests.md) and
+[UI](../verification-mol-display-ui.md). Source completeness alone was insufficient for
+faithful labels. Only actual MOL backing selects the existing closed display profile;
+literal H0/unusual values and source-free/CDXML behavior remain exact.
+
+General normal-valence/charge/aromatic/radical/stereo rules, other bond orders, generic
+CDXML absent-H semantics and actual native MOL label acceptance remain unresolved.
+The [original plan](../research/mol-display-plan.md) retains fixed raw spans/coordinates;
+the implemented slice does not establish universal CTfile perception or reference parity.
+
+## Multiple-bond styles and placement
+
+[The unexecuted next gate](../research/multiple-bond-plan.md) distinguishes centered
+segments from context-sensitive offset/joined Double bonds. Public SDK relative spacing,
+absolute override and inherited/last-used style semantics do not establish a universal26.1
+numeric default;18% is an example. Its absolute-spacing owner table/prose and automatic/
+manual flags sharing XML names need explicit interpretation before mapping. Relative
+spacing's reference length, actual tier/style defaults, low-resolution separation, ring/
+substituent placement and persistent style schema remain open. The proposed original3w
+centered test policy is not adopted reference behavior or an implemented feature.

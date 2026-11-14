@@ -4,6 +4,14 @@
 failure was executed. The proposed test/API below has not run. The complete goal remains
 M0–M5; actual native SDF acceptance still waits for explicit user availability.
 
+Implementation update: the planned runtime RED was subsequently observed and the closed
+MOL slice is now implemented. See [shared facts](../verification-mol-display-model.md),
+[complete ownership](../verification-mol-capture-owner.md),
+[independent captures](../verification-mol-display-tests.md) and
+[headless native-canvas wiring](../verification-mol-display-ui.md). The historical plan
+below retains its exact original expectations and unexecuted-at-authoring qualifiers.
+Actual native-window acceptance, broader orders/perception and M1 remain incomplete.
+
 ## Evidence and requirement
 
 MOL V2000/V3000 strict mapping correctly retains absent valence as authored H=None.
