@@ -1,6 +1,6 @@
 # Pinned public corpus
 
-`cargo xtask corpus` fetches only reviewed files from three mandatory version1 source bundles:
+`cargo xtask corpus` fetches five reviewed files from four mandatory version1 source bundles:
 
 - [manifest.json](manifest.json) retains the two RDKit documents and their original pinned
   revision unchanged. Its checked-in BSD-3-Clause notice applies to those files.
@@ -11,6 +11,11 @@
   chemical CDX vector from published Bondline commit `30ae30e73a4ee3b68d41069376fc5690faa99bc4`.
   It retains the original MIT OR Apache-2.0 declaration and the applicable MIT notice.
   A separate revision bundle leaves both earlier source pins unchanged.
+- [bondline-v3000-manifest.json](bondline-v3000-manifest.json) pins the original344-byte
+  V3000 vector from published Bondline commit `5caf6ce0ecf40badf2666e36dcb73dc8c4337b51`.
+  Its explicit `mol_v3000` format tag selects the standalone V3000 codec; existing `mol`
+  entries continue to select V2000. The original MIT OR Apache-2.0 declaration and MIT
+  notice remain. Four source bundles do not mean four distinct repositories.
 
 Each entry records source path, exact byte length, SHA-256 and provenance. Proprietary
 sample/template libraries, application binaries, fonts and icons are excluded.
@@ -46,9 +51,10 @@ Current coverage is deliberately separate:
 | rdkit-methyl-radical.mol | Exact 170 bytes and SHA-256 | V2000 parse and exact source passthrough; strict elemental projection agrees with external RDKit/Decimal for one methyl radical | Calculations missing |
 | bondline-ordered-fields-v2000.sdf | Exact 690 bytes and SHA-256 | Exact source; two separate MOL records; every ordered field/raw span agrees with an independent scanner; each elemental projection agrees with a direct external RDKit read | Calculations missing |
 | bondline-original-ethane-explicit.cdx | Exact 65,750 bytes and SHA-256 | Original explicit scene; byte-exact parser passthrough and all29 events match independent struct; external RDKit verifies ethane | Bondline calculations missing |
+| bondline-original-noncontiguous-v3000.mol | Exact344 bytes and SHA-256 | Original V3000 vector; byte-exact source, raw sparse IDs/fields and dense elemental projection agree with independent literal/Decimal expectations and external RDKit | Bondline calculations missing |
 
-The command succeeds for the implemented CDXML, single-input MOL/SDF V2000 and original
-CDX field-vector subsets. It explicitly prints missing foreign/general/application CDX
+The command succeeds for the implemented CDXML, single-input MOL/SDF V2000, original
+MOL V3000 and CDX field-vector subsets. It explicitly prints missing foreign/general/application CDX
 compatibility and Bondline chemistry checks; it does not certify M1, general MOL
 compatibility or all-format round trips. A manifest without any implemented
 parser coverage is an error. Extending the corpus requires source/license review, pinned bytes and the matching parser/oracle
@@ -74,9 +80,28 @@ are rejected by verifier tests. Input is parsed, bounded and projected before th
 process; the helper also caps its read and accepts only the current one-atom/no-bond corpus
 shape. Adding a different MOL entry requires extending its independent evidence.
 
-MOL checks cover original-byte passthrough and read-only model projection. They do not test
-the writer, edited-source export, application import/export, V3000, SDF or chemistry
-calculations. The RDKit manifest remains the same two reviewed files.
+The V2000 MOL check covers original-byte passthrough and read-only model projection.
+It does not test the writer, edited-source export, application import/export or chemistry
+calculations. SDF and V3000 coverage have their separate rows and limits. The RDKit manifest
+remains the same two reviewed files.
+
+The fetched V3000 input is the original two-carbon vector with source atom IDs10/40 and
+bond ID7. Its source remains byte-exact; an independent bounded Python literal/Decimal
+reader checks the header, coordinates, VAL=4, source IDs/endpoints, and dense model
+IDs1/2/bond1. A separately invoked, unchanged [external V3000 oracle](../../crates/io/tests/v3000_oracle.py)
+requires RDKit2026.09.2 and checks the raw two-carbon/single-bond graph, explicit H3,
+charges, isotopes, query/stereo absence and coordinates. Neither comparison uses our writer.
+The authored H value is the published declared-valence arithmetic4-1, not perceived normal valence.
+
+The explicit corpus transform is24points/unit, origin(0,0), inverted Y; positions are
+(-30,-12) and(6,-12) points. These vector values are exactly representable in binary64;
+literal/model comparison is exact. No physical file unit or application default is inferred.
+Negative checks reject changed raw source IDs/endpoints/VAL/coordinates and model
+IDs/element/H/radical/bond/coordinates, malformed/extended input, a different valid bond graph,
+and the wrong declared source version. A V3000-only test must also count as real parser
+coverage; missing or corrupt offline V3000 bytes fail. This is one original vector, not
+general V3000, edited-file/writer or application compatibility, chemistry calculations,
+or M1 completion. Additional V3000 entries require their own independent expectations.
 
 The original SDF vector has two ethane records with an empty second title and seven ordered
 items: empty/multiline values, combined and DT-only identities, duplicate names and literal

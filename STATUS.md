@@ -27,8 +27,8 @@ Earlier6add… native run stopped after the defect and remains separate partial 
 
 ## Current root source
 
-Root branch feat/mol-v3000-corpus followsa689b0d. Two focused slices are frozen, locally
-verified and being committed independently:
+Root branch feat/mol-v3000-corpus followsa689b0d. CDX writer9306816 is committed; the
+following V3000 corpus slice is frozen and being committed independently:
 
 - CDX Writer creates new bounded explicit-root syntax. It reproduces the original65750-byte
   chemical scene exactly and passes unchanged independent struct/RDKit checks. Five new

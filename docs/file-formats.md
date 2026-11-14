@@ -6,7 +6,7 @@
 | CDX | Standalone bounded binary syntax, checked property edits and new-tree writer | Original field vectors, fetched positive scene, full-byte writer equality, independent Python struct/RDKit and bounded ASAN | Application import/export, model/reference mapping, foreign/general corpus and modern extensions |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000 | Source-preserving library records, ordered data fields and validated wrapper writer | Original source spans; fetched pinned two-record corpus; external raw scanner/per-record RDKit; named-field supplier and external-writer vectors | Application data/multiple-record workflow and broader syntax/encodings |
-| MOL V3000 | Source-preserving library parser, strict elemental projection and full-precision writer | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files,118-symbol writer; bounded ASan | Version-aware application snapshots/I/O/commands/UI/SDF, broader queries/stereo/blocks and corpus |
+| MOL V3000 | Source-preserving library parser, strict elemental projection and full-precision writer | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files,118-symbol writer; bounded ASan; fetched original sparse-ID corpus | Version-aware application snapshots/I/O/commands/UI/SDF, broader queries/stereo/blocks |
 | RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
@@ -375,3 +375,13 @@ references, property data types, containment or chemistry. Unknown original byte
 the existing source-preserving path. The original65750-byte chemical scene is reproduced
 byte-for-byte and independently read as ethane by RDKit; literal prefix/boundary tests and
 source/construction ASAN supplement that narrow proof. Application CDX remains missing.
+
+## Fetched original V3000 corpus
+
+The fourth mandatory source bundle pins public5caf6ce0ecf40badf2666e36dcb73dc8c4337b51's
+original344-byte sparse-ID vector, SHA1867a5904e742030431b523a31167951ff998007a89b9c3d94ec88cf7d4c4380.
+An actual cold HTTPS download, exact original bytes, raw source IDs10/40/bond7, dense model
+IDs1/2/bond1 and authored H3/single graph agree with separate literal/Decimal/RDKit checks.
+The corpus frame24pt/unit, origin(0,0), invertedY is an explicit test policy, not physical
+chemical units or the application's separate default origin(72,72). One original vector
+is checked, not general V3000 interoperability or Bondline chemistry calculations.

@@ -11,6 +11,8 @@ use std::{
     process::{Command, Stdio},
 };
 
+mod v3000;
+
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Manifest {
@@ -39,6 +41,8 @@ enum Format {
     Cdxml,
     Cdx,
     Mol,
+    #[serde(rename = "mol_v3000")]
+    MolV3000,
     Sdf,
 }
 
@@ -46,6 +50,7 @@ const MANIFESTS: &[&str] = &[
     "docs/corpus/manifest.json",
     "docs/corpus/bondline-manifest.json",
     "docs/corpus/bondline-cdx-manifest.json",
+    "docs/corpus/bondline-v3000-manifest.json",
 ];
 const MAX_MANIFEST_BYTES: usize = 1024 * 1024;
 const MAX_FIXTURES: usize = 1024;
@@ -75,7 +80,7 @@ fn validate(manifest: &Manifest) -> Result<(), Box<dyn Error>> {
         let extension = match file.format {
             Format::Cdxml => ".cdxml",
             Format::Cdx => ".cdx",
-            Format::Mol => ".mol",
+            Format::Mol | Format::MolV3000 => ".mol",
             Format::Sdf => ".sdf",
         };
         if !normal_component(&file.name)
@@ -492,6 +497,7 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
     }
     let mut round_trips = 0;
     let mut mol_checks = 0;
+    let mut v3000_checks = 0;
     let mut cdx_checks = 0;
     let mut sdf_checks = 0;
     let mut sdf_records = 0;
@@ -552,6 +558,10 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
                     check_mol(&bytes)?;
                     mol_checks += 1;
                 }
+                Format::MolV3000 => {
+                    v3000::check(&bytes)?;
+                    v3000_checks += 1;
+                }
                 Format::Cdx => {
                     check_cdx(&bytes)?;
                     cdx_checks += 1;
@@ -576,6 +586,10 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
     )?;
     writeln!(
         output,
+        "MOL V3000 original-vector byte/source/literal/Decimal/RDKit checks: {v3000_checks} (standalone subset)"
+    )?;
+    writeln!(
+        output,
         "SDF V2000 byte/ordered-field/per-record RDKit checks: {sdf_checks}; records: {sdf_records}"
     )?;
     writeln!(
@@ -594,7 +608,12 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
         output,
         "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
     )?;
-    if round_trips == 0 && mol_checks == 0 && sdf_checks == 0 && cdx_checks == 0 {
+    if round_trips == 0
+        && mol_checks == 0
+        && v3000_checks == 0
+        && sdf_checks == 0
+        && cdx_checks == 0
+    {
         return Err("corpus has no implemented parser coverage".into());
     }
     Ok(())
@@ -635,6 +654,10 @@ mod tests {
                 include_bytes!("../../docs/corpus/bondline-cdx-manifest.json"),
             )?;
             fs::write(
+                directory.0.join(super::MANIFESTS[3]),
+                include_bytes!("../../docs/corpus/bondline-v3000-manifest.json"),
+            )?;
+            fs::write(
                 directory.0.join("docs/corpus/rdkit-license.txt"),
                 include_bytes!("../../docs/corpus/rdkit-license.txt"),
             )?;
@@ -661,6 +684,165 @@ mod tests {
         fn drop(&mut self) {
             let _ = fs::remove_dir_all(&self.0);
         }
+    }
+
+    #[test]
+    fn v3000_is_an_explicit_reviewed_corpus_format() -> Result<(), Box<dyn std::error::Error>> {
+        let file: super::Fixture = serde_json::from_value(serde_json::json!({
+            "name":"bondline-original-noncontiguous-v3000.mol",
+            "path":"crates/io/tests/fixtures/v3000/noncontiguous-cc.mol",
+            "format":"mol_v3000",
+            "size":344,
+            "sha256":"1867a5904e742030431b523a31167951ff998007a89b9c3d94ec88cf7d4c4380",
+            "license":"MIT OR Apache-2.0",
+            "provenance":"Original Bondline specification-derived two-carbon V3000 field vector."
+        }))?;
+        assert_eq!(file.size, 344);
+        assert_eq!(file.license, "MIT OR Apache-2.0");
+        assert!(matches!(file.format, super::Format::MolV3000));
+        let manifest: Manifest = serde_json::from_slice(include_bytes!(
+            "../../docs/corpus/bondline-v3000-manifest.json"
+        ))?;
+        validate(&manifest)?;
+        assert_eq!(manifest.repository, "thematheusmello/bondline");
+        assert_eq!(
+            manifest.revision,
+            "5caf6ce0ecf40badf2666e36dcb73dc8c4337b51"
+        );
+        assert_eq!(manifest.notice, "LICENSE-MIT");
+        assert_eq!(manifest.files.len(), 1);
+        let pinned = manifest.files.first().ok_or("V3000 fixture")?;
+        assert_eq!(pinned.name, file.name);
+        assert_eq!(pinned.path, file.path);
+        assert_eq!(pinned.sha256, file.sha256);
+        assert_eq!(pinned.size, file.size);
+        assert_eq!(pinned.license, file.license);
+        assert!(matches!(pinned.format, super::Format::MolV3000));
+        verify(
+            pinned,
+            include_bytes!("../../crates/io/tests/fixtures/v3000/noncontiguous-cc.mol"),
+        )?;
+        for spelling in ["molv3000", "MOL_V3000", "v3000"] {
+            let mut invalid = serde_json::json!({
+                "name":file.name,"path":file.path,"format":spelling,"size":file.size,
+                "sha256":file.sha256,"license":file.license,"provenance":file.provenance
+            });
+            assert!(serde_json::from_value::<super::Fixture>(invalid.clone()).is_err());
+            invalid["format"] = serde_json::json!("mol_v3000");
+            invalid["extra"] = serde_json::json!(true);
+            assert!(serde_json::from_value::<super::Fixture>(invalid).is_err());
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn fourth_bundle_is_validated_globally_before_any_cache_io()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let original: serde_json::Value = serde_json::from_slice(include_bytes!(
+            "../../docs/corpus/bondline-v3000-manifest.json"
+        ))?;
+        let mut alias = original.clone();
+        alias["files"][0]["name"] = serde_json::json!("BONDLINE-ORIGINAL-NONCONTIGUOUS-V3000.mol");
+        directory.write_manifest(0, &original)?;
+        directory.write_manifest(3, &alias)?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("fourth bundle bypassed global names")?
+                .to_string()
+                .contains("duplicate corpus cache name")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        fs::write(
+            directory.0.join(super::MANIFESTS[0]),
+            include_bytes!("../../docs/corpus/manifest.json"),
+        )?;
+        for (pointer, value) in [
+            ("/notice", serde_json::json!("../LICENSE-MIT")),
+            ("/files/0/license", serde_json::json!("ISC")),
+            ("/files/0/size", serde_json::json!(0)),
+            (
+                "/files/0/path",
+                serde_json::json!("../noncontiguous-cc.mol"),
+            ),
+            ("/files/0/name", serde_json::json!("wrong.sdf")),
+            ("/files/0/format", serde_json::json!("molv3000")),
+        ] {
+            let mut invalid = original.clone();
+            *invalid.pointer_mut(pointer).ok_or("invalid field")? = value;
+            directory.write_manifest(3, &invalid)?;
+            assert!(
+                super::check_at(&directory.0, true, &mut Vec::new()).is_err(),
+                "{pointer}"
+            );
+            assert!(!directory.0.join(".cache").exists());
+        }
+        let mut many = original.clone();
+        many["files"] = serde_json::json!(
+            (0..1021)
+                .map(|index| {
+                    let mut item = original["files"][0].clone();
+                    item["name"] = serde_json::json!(format!("v3000-{index}.mol"));
+                    item
+                })
+                .collect::<Vec<_>>()
+        );
+        directory.write_manifest(3, &many)?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("fourth bundle bypassed total bounds")?
+                .to_string()
+                .contains("1024 total fixtures")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        fs::write(
+            directory.0.join(super::MANIFESTS[3]),
+            vec![b' '; super::MAX_MANIFEST_BYTES + 1],
+        )?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("unbounded fourth manifest")?
+                .to_string()
+                .contains("exceeds 1 MiB")
+        );
+        assert!(!directory.0.join(".cache").exists());
+        Ok(())
+    }
+
+    #[test]
+    fn explicit_v3000_only_inputs_count_as_implemented_parser_coverage()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = CorpusDirectory::new()?;
+        let original: serde_json::Value = serde_json::from_slice(include_bytes!(
+            "../../docs/corpus/bondline-v3000-manifest.json"
+        ))?;
+        let cache = directory.0.join(".cache/corpus");
+        fs::create_dir_all(&cache)?;
+        for index in 0..super::MANIFESTS.len() {
+            let mut bundle = original.clone();
+            let name = format!("only-v3000-{index}.mol");
+            bundle["files"][0]["name"] = serde_json::json!(name);
+            directory.write_manifest(index, &bundle)?;
+            fs::write(
+                cache.join(name),
+                include_bytes!("../../crates/io/tests/fixtures/v3000/noncontiguous-cc.mol"),
+            )?;
+        }
+        let mut output = Vec::new();
+        super::check_at(&directory.0, true, &mut output)?;
+        let output = String::from_utf8(output)?;
+        assert!(
+            output
+                .contains("MOL V3000 original-vector byte/source/literal/Decimal/RDKit checks: 4")
+        );
+        assert!(output.contains("MOL V2000 byte/source/RDKit/Decimal checks: 0"));
+        assert!(output.contains(
+            "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
+        ));
+        Ok(())
     }
 
     #[test]
@@ -713,13 +895,13 @@ mod tests {
     -> Result<(), Box<dyn std::error::Error>> {
         let directory = CorpusDirectory::new()?;
         let manifests = super::load_manifests(&directory.0)?;
-        assert_eq!(manifests.len(), 3);
+        assert_eq!(manifests.len(), 4);
         assert_eq!(
             manifests
                 .iter()
                 .map(|bundle| bundle.files.len())
                 .sum::<usize>(),
-            4
+            5
         );
         assert_eq!(
             format!(
@@ -734,6 +916,15 @@ mod tests {
                 sha2::Sha256::digest(include_bytes!("../../docs/corpus/bondline-manifest.json"))
             ),
             "2a81637144941b3a64e407b07f6caf5c93bd02718059ac5548b96f11de9d77b9"
+        );
+        assert_eq!(
+            format!(
+                "{:x}",
+                sha2::Sha256::digest(include_bytes!(
+                    "../../docs/corpus/bondline-cdx-manifest.json"
+                ))
+            ),
+            "6f8105c4c6cfc3d45e0ccaa406ba0d779240dd9ae8a66464a88b0512f08f2713"
         );
         let original: serde_json::Value =
             serde_json::from_slice(include_bytes!("../../docs/corpus/bondline-manifest.json"))?;
@@ -783,6 +974,16 @@ mod tests {
         assert!(
             super::check_at(&directory.0, true, &mut Vec::new()).is_err(),
             "missing CDX bundle cannot silently fall back"
+        );
+        assert!(!directory.0.join(".cache").exists());
+        fs::write(
+            directory.0.join(super::MANIFESTS[2]),
+            include_bytes!("../../docs/corpus/bondline-cdx-manifest.json"),
+        )?;
+        fs::remove_file(directory.0.join(super::MANIFESTS[3]))?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new()).is_err(),
+            "missing V3000 bundle cannot silently fall back"
         );
         assert!(!directory.0.join(".cache").exists());
         Ok(())
@@ -962,10 +1163,35 @@ mod tests {
             &cdx_path,
             include_bytes!("../../crates/cdx/tests/fixtures/original-ethane-explicit.cdx"),
         )?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("missing V3000 ignored")?
+                .to_string()
+                .contains("offline corpus entry is missing")
+        );
+        let v3000_path = cache.join("bondline-original-noncontiguous-v3000.mol");
+        fs::write(&v3000_path, b"corrupt")?;
+        assert!(
+            super::check_at(&directory.0, true, &mut Vec::new())
+                .err()
+                .ok_or("corrupt V3000 accepted")?
+                .to_string()
+                .contains("length/SHA-256 mismatch")
+        );
+        fs::write(
+            &v3000_path,
+            include_bytes!("../../crates/io/tests/fixtures/v3000/noncontiguous-cc.mol"),
+        )?;
         let mut output = Vec::new();
         super::check_at(&directory.0, true, &mut output)?;
         let output = String::from_utf8(output)?;
-        assert!(output.contains("corpus integrity: 3 pinned licensed files from 3 source bundles"));
+        assert!(output.contains("corpus integrity: 4 pinned licensed files from 4 source bundles"));
+        assert!(output.contains("MOL V2000 byte/source/RDKit/Decimal checks: 1"));
+        assert!(
+            output
+                .contains("MOL V3000 original-vector byte/source/literal/Decimal/RDKit checks: 1")
+        );
         assert!(
             output.contains("SDF V2000 byte/ordered-field/per-record RDKit checks: 1; records: 2")
         );

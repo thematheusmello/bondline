@@ -246,3 +246,14 @@ verified against the original public30ae30e scene and unchanged independent stru
 guard. Builder budgets include pending end records; no chemical/property/reference semantics
 are inferred. It never replaces the imported source-preserving writer. No proprietary code,
 header file, template, artwork, font, sample or help text is copied.
+
+The fetched V3000 corpus source is the real published original fixture at
+https://github.com/thematheusmello/bondline/blob/5caf6ce0ecf40badf2666e36dcb73dc8c4337b51/crates/io/tests/fixtures/v3000/noncontiguous-cc.mol .
+Its original MIT OR Apache-2.0 declaration/root MIT notice and344-byte SHA
+1867a5904e742030431b523a31167951ff998007a89b9c3d94ec88cf7d4c4380 are pinned. All three
+prior manifests/notices stay byte-identical. The fourth mandatory bundle follows the same
+bounded HTTPS/cache/notice/name/checkout rules. Literal published fields and independent
+Decimal24/(0,0)/invertedY projection are compared separately from the unchanged external
+RDKit consumer; source IDs never become application IDs. Narrow -text keeps this source
+manifest exact under core.autocrlf. This attests the one authored vector, not general
+chemistry, foreign V3000 or application compatibility.

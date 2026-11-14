@@ -132,7 +132,7 @@ full supplier loses records/data at the original valid DT-only vector. Independe
 checks and per-record molecular consumers have different jobs. The writer must refuse
 reserved delimiter prefixes in embedded MOL blocks before output, not normalize the source.
 Strict EOF/header/ASCII bounds and the documented post-item empty-padding accommodation
-must stay explicit. See file-formats.md. Corpus now has three mandatory pinned source bundles;
+must stay explicit. See file-formats.md. Corpus now has four mandatory pinned source bundles;
 validate all licenses/notices/global cache names before cache/network I/O. The original
 SDF fixture is fetched from its actual public source commit; never invent a future pin or
 rewrite existing RDKit metadata. Cache ancestry must be confined before directory creation.

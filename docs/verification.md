@@ -1552,3 +1552,24 @@ The combined actual-root working tree, including the following V3000 fetched-cor
 passes367 workspace plus3 bridge tests and all cargo xtask ci gates. Log
 target/cdx-writer-v3000-corpus-ci.log. Runtime closures153/164/219/two assets are unchanged.
 The writer has no application model/file/UI integration; no native CDX or full M1 claim.
+
+## Fetched original V3000 source, 2026-11-14
+
+Actual RED target/v3000-corpus-format-red.log rejects the new mol_v3000 discriminator.
+The new mandatory manifest pins actual public5caf6ce/344bytes, not a future source or
+local substitution. Cold bounded HTTPS fetch passes and normal/offline reports are
+byte-identical: five files/four source bundles, V2000count1/V3000-originalcount1. Source
+and external-oracle SHA1867a590…4c4380 agree; original source IDs10/40/bond7 and dense model
+IDs1/2/bond1, H3, charge/isotope/radical/raw attributes and coordinates match separate
+literal/Decimal/RDKit checks. Changed raw/model fields, coordinates, version, truncation,
+query extension, different valid vector, cache corruption/missing data and manifest/global
+bounds all refuse. Existing three manifests/notices/fixtures/oracles stay byte-identical.
+
+All34 xtask tests, all-target clippy/fmt, actual cold/offline checks and the actual-root
+combined367workspace+3bridge cargo xtask ci pass. Logs target/v3000-corpus-handoff.md,
+target/v3000-corpus-{format-red,cold-fetch,tests-final,offline}.log and
+ target/cdx-writer-v3000-corpus-ci.log identify the scoped/combined results. An isolated
+core.autocrlf checkout first changed885bytes to902; its own narrow -text line restored exact
+identity and all four manifests. No hash normalization, assertion/guard weakening, dependency,
+lock, parser, fixture, oracle, runtime or golden change. Foreign/general/application coverage
+and chemistry remain separate missing work. This source needs its own hosted run after commit.

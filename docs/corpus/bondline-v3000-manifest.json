@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "repository": "thematheusmello/bondline",
+  "revision": "5caf6ce0ecf40badf2666e36dcb73dc8c4337b51",
+  "notice": "LICENSE-MIT",
+  "files": [
+    {
+      "name": "bondline-original-noncontiguous-v3000.mol",
+      "path": "crates/io/tests/fixtures/v3000/noncontiguous-cc.mol",
+      "format": "mol_v3000",
+      "size": 344,
+      "sha256": "1867a5904e742030431b523a31167951ff998007a89b9c3d94ec88cf7d4c4380",
+      "license": "MIT OR Apache-2.0",
+      "provenance": "Original Bondline specification-derived V3000 two-carbon field vector with source atom IDs 10/40, bond ID 7, explicit VAL=4 and declared coordinates. Original authorship, public CTfile sources and exact limits are recorded in crates/io/tests/fixtures/v3000/README.md. This is standalone source/projection evidence, not general V3000, chemistry calculations or application compatibility."
+    }
+  ]
+}
