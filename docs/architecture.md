@@ -32,12 +32,15 @@ Text, query nodes, reaction models and chemical perception remain missing.
 
 `bondline-commands` owns the registry and history. It validates a candidate document before
 replacing an Arc<io::StoredDocument> snapshot. That owned snapshot holds the model and, for
-CDXML/MOL, the original Arc<[u8]> plus its baseline model. MOL also shares three headers
+CDXML/CDX/MOL, the original Arc<[u8]> plus its baseline model. MOL also shares three headers
 and its captured coordinate frame. Undo/redo move whole Arc references
 in O(1); copy-on-write authoring edits share immutable fragments and source bytes. Equality
 includes opaque source content, so equal projections cannot erase source-only changes.
 Returned model snapshots remain immutable across later edits. Authored state excludes
 revision/history. Exact undo assertions compare the whole stored document and original bytes.
+CDX backing is always incomplete: its elemental preview never authorizes regeneration or
+lossy conversion. Native filesystem library calls reuse the shared atomic adapter; command
+and UI delivery remain separate work. See verification-cdx-native-io.md.
 History is limited to 128 prior snapshots and a 128 MiB accounted-storage threshold for
 the current document plus history. Accounting deduplicates source allocations, models and
 immutable fragments, includes source baselines and reserved vector capacity, and saturates

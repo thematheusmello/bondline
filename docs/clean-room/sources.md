@@ -472,3 +472,11 @@ source encoder. Caller preview size is explicit, never inferred from BoundingBox
 Arc/storage/opaque-only identity and typed error tests, independent read-only review and
 normal adapter fuzzing are in verification-cdx-owned-snapshots.md. No source policy or
 license allowlist was broadened; the only runtime edge adds original MIT OR Apache-2.0 CDX.
+
+CDX filesystem calls reuse the existing PHOTO-ATOMIC/PHOTO-METADATA-informed Bondline
+adapter unchanged below its format dispatch. The accepted input and unchanged-export rules
+remain the limited CDX projection/snapshot policy above; A4 is explicit original preview
+policy, not decoded paper. Both original framed vectors are independently consumed after
+actual file publication using the unchanged strict cdx_oracle.py/cdx_header_oracle.py.
+Cancellation, no-clobber and publication-aware errors retain native-file-io.md's original
+contracts. No runtime dependency, asset, format permission or license policy changes.

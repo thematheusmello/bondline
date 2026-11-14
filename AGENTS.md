@@ -73,7 +73,7 @@ cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque
 replacement and new-tree Writer; no model mapping or application commands);
 render (L1, ordered CPU/GPU rectangles/strokes, limited authored C-C labels and approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
-bounded native CDXML/MOL filesystem I/O and source-preserving SDF/RXN container records;
+bounded native CDXML/CDX/MOL filesystem libraries and source-preserving SDF/RXN container records;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
@@ -260,6 +260,8 @@ StoredDocument::from_cdx owns raw Arc plus baseline; is_fully_mapped is always f
 Export only exact unchanged backing. Changed models, source-free CDX encoding and cross-
 format metadata loss must fail; do not regenerate a projection with syntax Writer.
 Snapshot equality/accounting includes opaque bytes and baseline. Preview paper is caller
-policy, not inferred from BoundingBox. No CDX filesystem/registry/native UI exists yet.
+policy, not inferred from BoundingBox. CDX filesystem functions reuse the existing bounded
+read/atomic save path; no CDX registry/native UI exists yet. Never bypass shared FilePlan/
+Completed reservations when delivering those future application adapters.
 Normal CDX fuzzing now exercises projection/snapshot guards; both lock edges add only the
 existing internal CDX crate. New native declared closures154/165/220 include that crate.

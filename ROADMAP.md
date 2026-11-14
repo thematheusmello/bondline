@@ -150,3 +150,9 @@ consumer/identity/bounds/error/history-storage evidence. Unchanged export is exa
 cross-format/model-generated export is refused. Native metadata and application CDX I/O
 remain next, alongside source-aware safe rendering. Receiving438+3 and normal adapter
 ASAN pass; this new source requires hosted checks. Do not count it as completed M1.
+
+The CDX filesystem library now reuses bounded reads and security-preserving atomic saves
+for unchanged complete snapshots. Both original framing variants' actual output has strict
+independent consumer checks; receiving443+3 and all aggregate gates pass. Registry/CLI/MCP/
+native chooser, broader native metadata and editing remain separate next features. This
+library-only slice needs its own hosted checks and does not complete application CDX or M1.

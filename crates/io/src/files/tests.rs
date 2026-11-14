@@ -1,6 +1,57 @@
 use super::*;
 
 #[test]
+fn cdx_preserves_bytes_until_publication_and_reports_later_failures_truthfully()
+-> Result<(), Box<dyn std::error::Error>> {
+    const SOURCE: &[u8] =
+        include_bytes!("../../../cdx/tests/fixtures/original-ethane-header-document.cdx");
+    let document = StoredDocument::from_cdx(SOURCE.into(), PageSize::A4)?;
+    for stage in [
+        Stage::CreateTemporary,
+        Stage::Write,
+        Stage::Metadata,
+        Stage::SyncFile,
+        Stage::Publish,
+        Stage::Cleanup,
+        Stage::SyncDirectory,
+    ] {
+        let directory = Directory::new()?;
+        let path = directory.0.join("document.cdx");
+        fs::write(&path, b"old binary data")?;
+        let error = save_format_with_hook(
+            &path,
+            &document,
+            true,
+            &Cancellation::default(),
+            Encoding::Cdx,
+            &mut |current| {
+                if current == stage {
+                    Err(io::Error::other("injected CDX stage failure"))
+                } else {
+                    Ok(())
+                }
+            },
+        )
+        .err()
+        .ok_or("ignored injected failure")?;
+        let published = matches!(stage, Stage::Cleanup | Stage::SyncDirectory);
+        assert_eq!(error.published(), published);
+        assert_eq!(error.stage(), stage.name());
+        assert_eq!(
+            fs::read(&path)?.as_slice(),
+            if published {
+                SOURCE
+            } else {
+                b"old binary data"
+            }
+        );
+        assert_eq!(document.export_cdx()?, SOURCE);
+        assert_eq!(fs::read_dir(&directory.0)?.count(), 1);
+    }
+    Ok(())
+}
+
+#[test]
 fn mol_uses_the_same_prepublication_and_postpublication_failure_contracts()
 -> Result<(), Box<dyn std::error::Error>> {
     const SOURCE: &[u8] = include_bytes!("../../tests/fixtures/mol/rdkit-CH3.mol");

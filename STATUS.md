@@ -13,14 +13,28 @@ six bounded ASAN parser targets. Main advanced only after the matching source wa
 The docs-only child changes no code/fixture/lock. Prior integrated sources and actual
 failed runs retain their exact results in docs/ci.md; no passing job was restarted.
 
-Current feat/cdx-owned-document integrates projector1512532 and owned source snapshots.
-Its receiving-root aggregate is GREEN:438 workspace plus3 macOS bridge tests, fmt,
+Published feature5e6b644 integrates projector1512532 and owned source snapshots.
+Hosted43549658341 is terminal: Mac132308919149 passes441 tests, Linux132308918944 passes439,
+both actual windows pass, and ASAN132308919199 passes six bounded targets. Windows132308919222
+fails the existing excess-connection test: a closed socket returned10053/ConnectionAborted,
+which its assertion excludes. Its aggregate/window are not a pass. Main stays0830a23.
+The receiving-root aggregate is GREEN:438 workspace plus3 macOS bridge tests, fmt,
 warnings-denied all-target clippy, layers, native licenses and five-file/four-bundle corpus.
 Log target/cdx-owned-document-ci.log, session56791 terminal0. All144 IO tests also pass.
 Only the internal IO→CDX edge changes both locks; no registry version/checksum changes.
 Declared native runtime closures are154Mac/165Windows/220Linux and two bundled assets.
-This source still needs its own hosted run before main advances; an older pass is not
-substituted. No root build, fuzz or native process remains live.
+This source needs a corrected matching hosted GREEN before main advances; an older pass
+is not substituted. No root build, fuzz or native process remains live.
+
+Current feat/cdx-native-io is based on5e6b644 and adds only format dispatch to the existing
+bounded native read/atomic save library. Actual missing-API/dispatch REDs precede149 IO
+and443workspace+3bridge GREEN. All aggregate gates pass, target/cdx-native-io-ci.log,
+session69486 terminal0. Both original framing vectors' saved files face unchanged strict
+struct/RDKit consumers; no-clobber, stale/source-free refusal, cancellation and seven failure
+stages preserve old data/report publication. See verification-cdx-native-io.md. This slice
+also needs its own hosted run and exposes no application CDX command or native chooser.
+Independent read-only review found no confirmed blocking/should-fix defect, report
+ target/cdx-native-io-review.md, SHAdb48f7960000ee550f0b5e8358740a99803e2cb71d40379a2988760afedbf43d.
 
 The actual missing-API RED is target/cdx-owned-document-red.log, session60386 terminal101.
 The first six snapshot tests then pass; a seventh adds typed syntax/content/budget regression
@@ -56,7 +70,8 @@ exact signed16.16 points and only Element/default-C plus Single/default-order me
 Absent coordinates/H stay absent. Owned snapshots retain raw Arc plus baseline, always
 is_fully_mapped=false, exact unchanged export and source/accounting identity. Stale model,
 source-free encoding and lossy CDXML/MOL conversion refuse. This is library backing, not
-registered CDX filesystem commands/native UI or an editable source encoder. The actual
+registered CDX filesystem commands/native UI or an editable source encoder. Direct CDX
+filesystem library functions now reuse the existing atomic/cancellation/security path. The actual
 1196-byte native original still refuses its unsupported Z/BoundingBox/CIP/AtomID/warning
 metadata at model projection; standalone syntax retains it exactly. Research files stay
 ignored, unmodified and outside the licensed corpus.
@@ -101,8 +116,10 @@ Only root handles Git. Each checkout has its own absolute Cargo target; incremen
 sibling dev/test debug0. Disk is constrained (~1.2GiB free); never delete active artifacts,
 source, fixtures or evidence, and never share build outputs between worktrees.
 
-1. Commit/publish this GREEN CDX source-backing integration and observe its own hosted
-   jobs. Advance main only after matching GREEN, recording actual counts and adapters.
+1. Commit the locally GREEN/reviewed CDX native-IO slice. Correct the socket-closure test
+   against published Windows/Rust error semantics in a separate test-only commit, keeping
+   byte/timeouts/live-connection failures strict, then publish and observe the new run.
+   Advance main only after matching GREEN, recording actual counts and adapters.
 2. reference_ui finished baseline native acceptance of the frozen carbon-graph renderer
    in bondline-rxn, feat/carbon-graph-scene/base0830a23. All owned native processes
    73626/5240/9186 and controllers73428/5026/9044 exited0; no jobs remain. CUA completion
@@ -113,7 +130,9 @@ source, fixtures or evidence, and never share build outputs between worktrees.
    input preservation, heteroatom render refusal and drag/Undo/Redo/close-Save have partial
    evidence. Reference windows retained their IDs/frames; cursor was restored to the nearest
    physical pixel, not its original fractional coordinate. The full renderer is not yet
-   native-accepted because the hover failures remain. Final artifact indexing is in progress.
+   native-accepted because the hover failures remain. Final indexed handoff is root
+   target/native-carbon-graph-handoff.md, SHA1975bf1fa9f240d577c263b0dfe365f522f0626380426355e285b6c0a433f3a8.
+   reference_ui now reviews the CDX filesystem library read-only; no GUI is live.
 3. Baseline native checks found a retained hover highlight after remote reopen and
    Escape Down+Up. The observed reverse display teleport cleared, so do not claim a
    universal teleport failure. Original policy is clear-until-fresh-positional-input after

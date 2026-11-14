@@ -5,6 +5,9 @@ it never regenerates a foreign elemental projection or exposes an extension with
 Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md.
 
 - `read_cdxml_file(&Path, &Cancellation)` returns a canonical path and owned complete source.
+- `read_cdx_file(&Path, &Cancellation)` retains the complete accepted CDX source and its
+  limited elemental view. `save_cdx_file` publishes only unchanged complete backing;
+  there is no source-free encoder or registered/native CDX application command yet.
 - `canonical_save_path(&Path)` resolves the parent without following/replacing the final leaf.
 - `save_cdxml_file(&Path, &StoredDocument, overwrite, &Cancellation)` returns the canonical
   destination, encoded byte length and whether the parent directory was synced.
@@ -16,10 +19,10 @@ Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md
 Read input is bounded to 64 MiB, including bytes read after metadata inspection. Only ordinary
 files are accepted. Selected read symlinks resolve explicitly; Unix opens use nonblocking,
 no-follow flags and post-open validation, preventing FIFOs from blocking the worker. Invalid
-XML/MOL/model input returns an error without an application-state change. Cancellation is checked
+XML/CDX/MOL/model input returns an error without an application-state change. Cancellation is checked
 between 64 KiB chunks and around decoding; it cannot interrupt an OS syscall or parser call.
 
-Save encodes through `StoredDocument::to_cdxml` or `to_mol`: unchanged accepted source passes
+Save encodes through `StoredDocument::to_cdxml`, `to_cdx` or `to_mol`: unchanged accepted source passes
 through exactly, supported native/profile edits encode completely, and unsupported source,
 cross-format metadata or layout loss fails explicitly. See file-formats.md for each guard.
 It prepares a same-directory temporary, writes in chunks, preserves supported security/metadata,
@@ -68,6 +71,8 @@ Windows tests above and all three hosted aggregate/window checks pass; see verif
 PhotoCraft's pinned atomic-save and metadata adapters informed the design; see source IDs
 PHOTO-ATOMIC and PHOTO-METADATA. Bondline uses independently written smaller code and explicit
 failure semantics; upstream best-effort security downgrades are not adopted.
+CDX reuses that exact read/publication implementation; its independent saved-file consumer,
+original framing vectors and seven injected stage checks are in verification-cdx-native-io.md.
 
 The dependency pins below add only target-specific OS adapters. Existing rustix 1.1.6 is reused.
 All archives were compared with their published crate-index checksums:

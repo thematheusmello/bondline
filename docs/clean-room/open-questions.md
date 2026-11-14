@@ -149,5 +149,7 @@
   its framing. Public BSD source explains a22-byte prefix/document/separate-file-end form.
   The narrow original-vector TDD fix now passes syntax/property checks and the receiving
   root aggregate. Legacy reserved-header ambiguity and complete EOF/resource guards remain
-  explicit; its own hosted checks are next. Native outputs are research only,
-  not openly licensed committed corpus. General CDX mapping/application editing is absent.
+  explicit; framing6447c6c now passes all hosted43542026529 jobs. Limited elemental mapping,
+  owned snapshots and the atomic filesystem library are separate later source slices;
+  native metadata/general mapping and application editing remain absent. Native outputs
+  are research only, not openly licensed committed corpus.

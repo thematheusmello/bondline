@@ -201,6 +201,16 @@ pub fn read_cdxml_file(path: &Path, cancel: &Cancellation) -> Result<LoadedFile,
     Ok(LoadedFile { path, document })
 }
 
+/// Read the supported elemental CDX view while retaining the complete original binary.
+/// Unsupported projections fail before a host can replace its current document.
+pub fn read_cdx_file(path: &Path, cancel: &Cancellation) -> Result<LoadedFile, FileError> {
+    let (path, bytes) = read_source_bytes(path, cancel)?;
+    let document = StoredDocument::from_cdx(bytes.into(), PageSize::A4)
+        .map_err(|error| FileError::new(&path, Stage::Decode, error.into()))?;
+    check_cancel(&path, Stage::Decode, cancel)?;
+    Ok(LoadedFile { path, document })
+}
+
 /// Read a validated V2000/V3000 molecule through the same bounded native path.
 /// The drawing frame is supplied by the host, never inferred from chemical coordinates.
 pub fn read_mol_file(
@@ -275,6 +285,23 @@ pub fn save_cdxml_file(
     save_with_hook(path, document, overwrite, cancel, &mut |_| Ok(()))
 }
 
+/// Publish only exact unchanged CDX backing through the shared atomic save path.
+pub fn save_cdx_file(
+    path: &Path,
+    document: &StoredDocument,
+    overwrite: bool,
+    cancel: &Cancellation,
+) -> Result<SaveReceipt, FileError> {
+    save_format_with_hook(
+        path,
+        document,
+        overwrite,
+        cancel,
+        Encoding::Cdx,
+        &mut |_| Ok(()),
+    )
+}
+
 /// Save complete MOL backing or a guarded supported graph using the established
 /// atomic/security-preserving publication path. Imported MOL keeps its captured frame.
 pub fn save_mol_file(
@@ -316,6 +343,7 @@ pub fn save_mol_file_as(
 #[derive(Clone, Copy)]
 enum Encoding {
     Cdxml,
+    Cdx,
     Mol(MolTransform),
     MolAs(Version, MolTransform),
 }
@@ -369,6 +397,7 @@ fn save_format_with_hook(
         .map_err(|error| FileError::io(&path, Stage::Validate, error))?;
     let bytes = match encoding {
         Encoding::Cdxml => document.to_cdxml(),
+        Encoding::Cdx => document.to_cdx(),
         Encoding::Mol(frame) => document.to_mol(frame),
         Encoding::MolAs(version, frame) => document.to_mol_as(version, frame),
     }

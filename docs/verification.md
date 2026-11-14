@@ -1857,3 +1857,13 @@ and normal full-graph ASAN10000 are recorded in
 [verification-cdx-owned-snapshots.md](verification-cdx-owned-snapshots.md). No registry/UI/
 file-worker behavior, old fixture/pin/font/golden or source-export proof was weakened.
 The new source still needs matching hosted execution; no native CDX app workflow is claimed.
+
+## CDX filesystem library, 2026-11-14
+
+The shared native adapter now reads accepted CDX snapshots and atomically saves unchanged
+complete backing. Actual missing-API/dispatch REDs precede149 IO and443workspace+3bridge
+GREEN. Both original framing variants' actual saved bytes face their unchanged independent
+struct/RDKit consumers. Four filesystem cases and seven injected stages verify refusal,
+old-data retention, cleanup and truthful postpublication errors. All aggregate gates pass;
+see [verification-cdx-native-io.md](verification-cdx-native-io.md). No command/native chooser,
+new encoder, license/runtime dependency, fixture/pin or approved golden is added.

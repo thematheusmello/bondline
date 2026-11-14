@@ -1,5 +1,17 @@
 # CI contract and execution evidence
 
+Owned CDX source5e6b644ba56b43e95f0306f032a8c4a39c46fe0b has a terminal failed
+[43549658341](https://github.com/thematheusmello/bondline/actions/runs/43549658341):
+Mac132308919149 passes441 tests (438workspace+3bridge), Linux132308918944 passes439,
+both actual windows pass, and ASAN132308919199 passes all six10000-run targets.
+Mac uses Metal/Apple Paravirtual IntegratedGpu; Linux uses Vulkan/llvmpipe Cpu.
+Windows132308919222 fails the existing control test
+excess_connections_are_closed_instead_of_spawning_unbounded_tasks: read returns OS10053,
+ErrorKind::ConnectionAborted, excluded by the assertion. Its15-test binary has14 passes/
+one failure; the aggregate stops before native window launch. This is not Windows GREEN.
+Main remains0830a23. The test-only platform correction and later CDX filesystem source
+need a new matching run; no passing job is rerun or the observed failure erased.
+
 CDX header-document framing integration6447c6ca2d83405503417a6d0e141fa6387f3538 passes every
 [43542026529](https://github.com/thematheusmello/bondline/actions/runs/43542026529) job:
 Mac132284521204:420 tests (417workspace+3bridge), Linux132284520959:418,
