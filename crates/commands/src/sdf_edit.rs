@@ -130,6 +130,12 @@ impl FieldPlan {
                     actual: "drawing",
                 });
             }
+            StoredContent::SmilesFile(_) => {
+                return Err(Error::WrongContent {
+                    required: "sdf",
+                    actual: "smiles",
+                });
+            }
         };
         cancel.check()?;
         Ok(FieldCandidate {

@@ -17,6 +17,8 @@ mod sdf_record_support;
 mod sdf_support;
 #[path = "support/smiles_export.rs"]
 mod smiles_export_support;
+#[path = "support/smiles_file.rs"]
+mod smiles_file_support;
 use std::{
     io::{BufRead, BufReader, Write},
     process::{Child, ChildStdin, Command, Stdio},
@@ -106,6 +108,35 @@ impl Drop for Client {
 }
 
 #[test]
+fn stdio_smiles_file_commands_keep_every_record_and_opaque_byte()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("stdio-smiles-λ.smi");
+    let output = directory.path("stdio-smiles-copy.data");
+    std::fs::write(&input, smiles_file_support::SOURCE)?;
+    let mut client = Client::start()?;
+    client.call(1,"initialize",json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"smiles-file-test","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    for (id, name, path, revision) in [
+        (2, "document.open_smiles", &input, 1),
+        (3, "document.save_smiles", &output, 1),
+        (4, "document.open_smiles", &output, 2),
+    ] {
+        let result = client.call(
+            id,
+            "tools/call",
+            json!({"name":name,"arguments":{"path":path}}),
+        )?;
+        assert_eq!(result["result"]["isError"], false, "{result}");
+        smiles_file_support::assert_file(&result["result"]["structuredContent"], revision);
+    }
+    assert_eq!(std::fs::read(&output)?, smiles_file_support::SOURCE);
+    assert_eq!(std::fs::read(&input)?, smiles_file_support::SOURCE);
+    client.finish()?;
+    Ok(())
+}
+
+#[test]
 fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_the_session()
 -> Result<(), Box<dyn std::error::Error>> {
     let directory = file_support::FileTestDirectory::new()?;
@@ -117,7 +148,7 @@ fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 22);
+    assert_eq!(tools.len(), 24);
     let tool = tools
         .iter()
         .find(|t| t["name"] == "file.export_smiles_fragment")
@@ -174,7 +205,7 @@ fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real(
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 22);
+    assert_eq!(tools.len(), 24);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
@@ -826,10 +857,12 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "document.open_cdxml",
             "document.open_mol",
             "document.open_sdf",
+            "document.open_smiles",
             "document.save_cdx",
             "document.save_cdxml",
             "document.save_mol",
             "document.save_sdf",
+            "document.save_smiles",
             "file.convert_smiles_to_cdxml",
             "file.export_smiles_fragment",
             "history.redo",
@@ -847,6 +880,8 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         ("document.save_cdx", "overwrite"),
         ("document.open_sdf", "discard_unsaved"),
         ("document.save_sdf", "overwrite"),
+        ("document.open_smiles", "discard_unsaved"),
+        ("document.save_smiles", "overwrite"),
     ] {
         let tool = tools
             .iter()

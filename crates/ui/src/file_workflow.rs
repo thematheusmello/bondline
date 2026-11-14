@@ -11,13 +11,16 @@ mod request_tests;
 #[cfg(test)]
 mod sdf_tests;
 #[cfg(test)]
+mod smiles_tests;
+#[cfg(test)]
 mod v3000_tests;
 
 use crate::files::{FileAction, FileChooser, FileChooserEvent, FileMode, format_extension};
 use bondline_commands::{
     Cancellation, CloseAction, CloseDocument, CloseState, Command, CommandResult, Engine,
-    ErrorInfo, FileFormat, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol, OpenSdf, SaveCdx,
-    SaveCdxml, SaveMol, SaveSdf, UiFile, UiFileAction, UiFilePhase, UiFilePlan,
+    ErrorInfo, FileFormat, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol, OpenSdf, OpenSmiles,
+    SaveCdx, SaveCdxml, SaveMol, SaveSdf, SaveSmiles, UiFile, UiFileAction, UiFilePhase,
+    UiFilePlan,
 };
 use bondline_mcp::CommandExecutor;
 use eframe::egui;
@@ -245,6 +248,7 @@ impl FileWorkflow {
                     FileFormat::Cdx => "Opening CDX…",
                     FileFormat::MolV2000 | FileFormat::MolV3000 => "Opening MOL…",
                     FileFormat::Sdf => "Opening SDF…",
+                    FileFormat::Smiles => "Opening SMILES…",
                 }
             } else {
                 match job.format {
@@ -253,6 +257,7 @@ impl FileWorkflow {
                     FileFormat::MolV2000 => "Saving MOL V2000…",
                     FileFormat::MolV3000 => "Saving MOL V3000…",
                     FileFormat::Sdf => "Saving SDF…",
+                    FileFormat::Smiles => "Saving SMILES…",
                 }
             });
             if ui
@@ -413,6 +418,22 @@ impl FileWorkflow {
             action,
         } = intent;
         let command = match (format, &action) {
+            (
+                FileFormat::Smiles,
+                FileAction::Open {
+                    path,
+                    discard_unsaved,
+                },
+            ) => Command::OpenSmiles(OpenSmiles {
+                path: path.clone(),
+                discard_unsaved: *discard_unsaved,
+            }),
+            (FileFormat::Smiles, FileAction::Save { path, overwrite }) => {
+                Command::SaveSmiles(SaveSmiles {
+                    path: path.clone(),
+                    overwrite: *overwrite,
+                })
+            }
             (
                 FileFormat::Sdf,
                 FileAction::Open {

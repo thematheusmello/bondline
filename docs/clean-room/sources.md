@@ -1141,3 +1141,22 @@ missing-API RED, local wrapper/IO checks and exact limitations. No parser, write
 command/registry, dependency, asset, fixture or prior oracle was changed by this slice.
 Application snapshots/commands/chooser and new Windows/Linux/native UI execution remain
 separate work; Actions is disabled by user instruction.
+
+## Complete SMILES source-file application path, 2026-11-14
+
+[Application evidence](../verification-smiles-file-app.md) composes the existing
+[source-preserving codec](../verification-smiles-file.md) and
+[atomic I/O](../verification-smiles-file-io.md). The same pinned OpenSMILES file/string
+sections establish record/framing context; the current bounded notation language remains
+partial and unchanged. All meaningful records validate before Open, while every ignored
+line/separator/opaque data/ending remains in the original complete source.
+
+One immutable StoredContent owner, closed whole-file Open/Save commands, compact automatic
+metadata, no drawing authority, common lease/generation/close/request behavior and .smi/
+.smiles UI aliases are original Bondline integration policies. They are not claimed
+reference-product flows. Separate raw/per-record consumers and actual files establish
+headless behavior. The metadata-only view's privacy/AccessKit/gesture and real worker tests
+are [headless UI evidence](../verification-smiles-file-ui.md), not native observation.
+No proprietary binary/artwork/help/source, new dependency or copied implementation is
+used. Reference record-browser/preview/extension behavior remains an open question;
+actual native acceptance waits for user availability, and Actions remains disabled.

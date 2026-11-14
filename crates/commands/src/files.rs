@@ -13,6 +13,7 @@ pub enum FileFormat {
     MolV2000,
     MolV3000,
     Sdf,
+    Smiles,
 }
 
 impl FileFormat {
@@ -24,7 +25,7 @@ impl FileFormat {
     }
     pub(super) fn mol_version(self) -> Option<bondline_io::mol::Version> {
         match self {
-            Self::Cdxml | Self::Cdx | Self::Sdf => None,
+            Self::Cdxml | Self::Cdx | Self::Sdf | Self::Smiles => None,
             Self::MolV2000 => Some(bondline_io::mol::Version::V2000),
             Self::MolV3000 => Some(bondline_io::mol::Version::V3000),
         }
@@ -96,6 +97,7 @@ pub(super) enum OpenEncoding {
     Cdx,
     Mol(bondline_io::mol::MolTransform),
     Sdf,
+    Smiles,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -141,6 +143,22 @@ pub struct OpenSdf {
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct SaveSdf {
+    pub path: String,
+    #[serde(default)]
+    pub overwrite: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct OpenSmiles {
+    pub path: String,
+    #[serde(default)]
+    pub discard_unsaved: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct SaveSmiles {
     pub path: String,
     #[serde(default)]
     pub overwrite: bool,
@@ -355,6 +373,16 @@ impl FilePlan {
                                 document: StoredContent::from_sdf(loaded.document),
                             }
                         }
+                        OpenEncoding::Smiles => {
+                            let loaded = bondline_io::files::read_smiles_file(
+                                Path::new(&params.path),
+                                cancel,
+                            )?;
+                            bondline_io::files::LoadedFile {
+                                path: loaded.path,
+                                document: StoredContent::from_smiles_file(loaded.document),
+                            }
+                        }
                     };
                     let format = match encoding {
                         OpenEncoding::Cdxml => FileFormat::Cdxml,
@@ -368,6 +396,7 @@ impl FilePlan {
                             )?)
                         }
                         OpenEncoding::Sdf => FileFormat::Sdf,
+                        OpenEncoding::Smiles => FileFormat::Smiles,
                     };
                     Completion::Open {
                         loaded,
@@ -425,6 +454,12 @@ impl FilePlan {
                             FileFormat::Sdf => bondline_io::files::save_sdf_file(
                                 &path,
                                 document.sdf()?,
+                                params.overwrite,
+                                cancel,
+                            )?,
+                            FileFormat::Smiles => bondline_io::files::save_smiles_file(
+                                &path,
+                                document.smiles_file()?,
                                 params.overwrite,
                                 cancel,
                             )?,

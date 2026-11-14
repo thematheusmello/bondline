@@ -1,5 +1,5 @@
 use crate::Error;
-use bondline_io::{SourceInfo, StoredDocument, sdf::SdfDocument};
+use bondline_io::{SourceInfo, StoredDocument, sdf::SdfDocument, smiles::SmilesFileDocument};
 use serde::Serialize;
 use std::collections::HashSet;
 
@@ -11,6 +11,7 @@ pub enum StoredContent {
         original: SdfDocument,
         current: SdfDocument,
     },
+    SmilesFile(SmilesFileDocument),
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
@@ -30,6 +31,13 @@ pub struct CollectionSummary {
     pub records: Vec<RecordSummary>,
 }
 
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+pub struct SmilesFileSummary {
+    pub format: &'static str,
+    pub byte_length: usize,
+    pub record_count: usize,
+}
+
 impl From<StoredDocument> for StoredContent {
     fn from(document: StoredDocument) -> Self {
         Self::Drawing(document)
@@ -37,6 +45,10 @@ impl From<StoredDocument> for StoredContent {
 }
 
 impl StoredContent {
+    pub fn from_smiles_file(document: SmilesFileDocument) -> Self {
+        Self::SmilesFile(document)
+    }
+
     pub fn from_sdf(document: SdfDocument) -> Self {
         Self::Sdf {
             original: document.clone(),
@@ -51,6 +63,10 @@ impl StoredContent {
                 required: "drawing",
                 actual: "sdf",
             }),
+            Self::SmilesFile(_) => Err(Error::WrongContent {
+                required: "drawing",
+                actual: "smiles",
+            }),
         }
     }
 
@@ -61,7 +77,36 @@ impl StoredContent {
                 required: "sdf",
                 actual: "drawing",
             }),
+            Self::SmilesFile(_) => Err(Error::WrongContent {
+                required: "sdf",
+                actual: "smiles",
+            }),
         }
+    }
+
+    pub fn smiles_file(&self) -> Result<&SmilesFileDocument, Error> {
+        match self {
+            Self::SmilesFile(document) => Ok(document),
+            Self::Drawing(_) => Err(Error::WrongContent {
+                required: "smiles",
+                actual: "drawing",
+            }),
+            Self::Sdf { .. } => Err(Error::WrongContent {
+                required: "smiles",
+                actual: "sdf",
+            }),
+        }
+    }
+
+    pub fn smiles_summary(&self) -> Option<SmilesFileSummary> {
+        let Self::SmilesFile(document) = self else {
+            return None;
+        };
+        Some(SmilesFileSummary {
+            format: "smiles",
+            byte_length: document.as_bytes().len(),
+            record_count: document.records().len(),
+        })
     }
 
     pub fn source_info(&self) -> Option<SourceInfo> {
@@ -71,6 +116,11 @@ impl StoredContent {
                 format: "sdf",
                 byte_length: original.as_bytes().len(),
                 modified: current != original,
+            }),
+            Self::SmilesFile(document) => Some(SourceInfo {
+                format: "smiles",
+                byte_length: document.as_bytes().len(),
+                modified: false,
             }),
         }
     }
@@ -106,6 +156,7 @@ impl StoredContent {
         let mut snapshots = HashSet::new();
         let mut drawings = Vec::new();
         let mut collections = Vec::new();
+        let mut smiles_files = Vec::new();
         let mut bytes = 0_usize;
         for content in contents {
             if !snapshots.insert(std::ptr::from_ref(content)) {
@@ -118,13 +169,20 @@ impl StoredContent {
                     collections.push(original);
                     collections.push(current);
                 }
+                Self::SmilesFile(document) => smiles_files.push(document),
             }
         }
         let drawing_inline = drawings.len().saturating_mul(size_of::<StoredDocument>());
         let sdf_inline = collections.len().saturating_mul(size_of::<SdfDocument>());
+        let smiles_inline = smiles_files
+            .len()
+            .saturating_mul(size_of::<SmilesFileDocument>());
         bytes
             .saturating_add(StoredDocument::retained_bytes(drawings).saturating_sub(drawing_inline))
             .saturating_add(SdfDocument::retained_bytes(collections).saturating_sub(sdf_inline))
+            .saturating_add(
+                SmilesFileDocument::retained_bytes(smiles_files).saturating_sub(smiles_inline),
+            )
     }
 }
 
@@ -138,6 +196,44 @@ mod tests {
 
     type TestResult = Result<(), Box<dyn std::error::Error>>;
     const SOURCE: &[u8] = include_bytes!("../../io/tests/fixtures/sdf/ordered-fields-v2000.sdf");
+
+    #[test]
+    fn immutable_smiles_files_share_source_and_index_without_undercharging_history() -> TestResult {
+        use bondline_io::smiles::file::RecordInfo as SmilesRecordInfo;
+        let source: &[u8] = b"CC PRIVATE\r\nO second";
+        let first = StoredContent::from_smiles_file(SmilesFileDocument::parse(source.into())?);
+        let expected =
+            size_of::<StoredContent>() + source.len() + 2 * size_of::<SmilesRecordInfo>();
+        assert_eq!(StoredContent::retained_bytes([&first, &first]), expected);
+        let shared = first.clone();
+        assert_eq!(
+            StoredContent::retained_bytes([&first, &shared]),
+            expected + size_of::<StoredContent>()
+        );
+        let separate = StoredContent::from_smiles_file(SmilesFileDocument::parse(source.into())?);
+        assert_eq!(first, separate);
+        assert_eq!(
+            StoredContent::retained_bytes([&first, &separate]),
+            2 * expected
+        );
+        let other = StoredContent::from_smiles_file(SmilesFileDocument::parse(
+            b"CC DIFFERENT\r\nO second".as_slice().into(),
+        )?);
+        assert_ne!(first, other, "metadata remains part of whole-file identity");
+        assert_eq!(first.smiles_file()?.as_bytes(), source);
+        assert_eq!(
+            first.drawing().err().ok_or("not drawing")?.info().code,
+            "unsupported_content"
+        );
+        assert_eq!(
+            first.sdf().err().ok_or("not SDF")?.info().code,
+            "unsupported_content"
+        );
+        assert!(first.collection().is_none());
+        assert!(!format!("{first:?}").contains("PRIVATE"));
+        assert_eq!(first.smiles_summary().ok_or("summary")?.record_count, 2);
+        Ok(())
+    }
 
     #[test]
     fn collection_ownership_has_no_dummy_drawing_and_accounts_inline_storage_once() -> TestResult {

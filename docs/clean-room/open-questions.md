@@ -197,3 +197,12 @@ VT/FF/Unicode/BOM/# remain meaningful notation and may refuse. This is an origin
 interpretation, not full generic-whitespace conformance. Final EOF is a separately named
 compatibility extension. Broader file-profile conformance remains unresolved; see
 [exact sources and evidence](../verification-smiles-file.md).
+
+## Native SMILES file workflow
+
+The source-file container/association/compact summary and .smi/.smiles chooser are original
+Bondline policies. No reference-product SMILES file chooser, record-browser, preview or
+metadata-retention flow is established by the current evidence. Do not infer one from a
+SMILES supplier or the new headless tests. Actual native Bondline acceptance is also
+unverified while the user is active. Chemical preview/editing and explicit record queries
+remain missing; see verification-smiles-file-app.md and verification-smiles-file-ui.md.

@@ -366,7 +366,7 @@ impl FileChooser {
                     self.set_format(selected_format);
                 }
                 ui.label(if mode==FileMode::Open {
-                    "Structure files (*.cdxml, *.cdx, *.mol, *.sdf, *.sd). Enter a complete path to open a file outside this list."
+                    "Structure files (*.cdxml, *.cdx, *.mol, *.sdf, *.sd, *.smi, *.smiles). Enter a complete path to open a file outside this list."
                 } else {
                     match self.format {
                         FileFormat::Cdxml=>"CDXML files (*.cdxml).",
@@ -374,6 +374,7 @@ impl FileChooser {
                         FileFormat::MolV2000=>"MOL V2000 files (*.mol); unsupported content cannot be saved in this format.",
                         FileFormat::MolV3000=>"MOL V3000 files (*.mol); unsupported content cannot be saved in this format.",
                         FileFormat::Sdf=>"SDF collections (*.sdf, *.sd); all records and their molecular versions are retained.",
+                        FileFormat::Smiles=>"SMILES files (*.smi, *.smiles); all records and original bytes are retained. Chemical preview is unavailable.",
                     }
                 });
                 if self.loading {
@@ -505,6 +506,7 @@ pub(crate) fn format_extension(format: FileFormat) -> &'static str {
         FileFormat::Cdx => "cdx",
         FileFormat::MolV2000 | FileFormat::MolV3000 => "mol",
         FileFormat::Sdf => "sdf",
+        FileFormat::Smiles => "smi",
     }
 }
 
@@ -515,6 +517,7 @@ fn formats_for_mode(mode: FileMode) -> &'static [FileFormat] {
             FileFormat::Cdx,
             FileFormat::MolV2000,
             FileFormat::Sdf,
+            FileFormat::Smiles,
         ],
         FileMode::Save => &[
             FileFormat::Cdxml,
@@ -522,6 +525,7 @@ fn formats_for_mode(mode: FileMode) -> &'static [FileFormat] {
             FileFormat::MolV2000,
             FileFormat::MolV3000,
             FileFormat::Sdf,
+            FileFormat::Smiles,
         ],
     }
 }
@@ -536,6 +540,7 @@ fn format_label(format: FileFormat, mode: FileMode) -> &'static str {
         (FileFormat::MolV2000, FileMode::Save) => "MOL V2000 (*.mol)",
         (FileFormat::MolV3000, FileMode::Save) => "MOL V3000 (*.mol)",
         (FileFormat::Sdf, _) => "SDF collection (*.sdf, *.sd)",
+        (FileFormat::Smiles, _) => "SMILES files (*.smi, *.smiles)",
     }
 }
 
@@ -546,6 +551,7 @@ fn name_matches_format(name: &str, format: FileFormat) -> bool {
         .is_some_and(|extension| {
             extension.eq_ignore_ascii_case(format_extension(format))
                 || format == FileFormat::Sdf && extension.eq_ignore_ascii_case("sd")
+                || format == FileFormat::Smiles && extension.eq_ignore_ascii_case("smiles")
         })
 }
 
@@ -559,6 +565,8 @@ fn format_hint(name: &str) -> Option<FileFormat> {
         Some(FileFormat::MolV2000)
     } else if extension.eq_ignore_ascii_case("sdf") || extension.eq_ignore_ascii_case("sd") {
         Some(FileFormat::Sdf)
+    } else if extension.eq_ignore_ascii_case("smi") || extension.eq_ignore_ascii_case("smiles") {
+        Some(FileFormat::Smiles)
     } else {
         None
     }
@@ -584,19 +592,21 @@ fn resolve_path_as(
     match path.extension().and_then(|extension| extension.to_str()) {
         Some(extension)
             if mode == FileMode::Open
-                && ["cdxml", "cdx", "mol", "sdf", "sd"]
+                && ["cdxml", "cdx", "mol", "sdf", "sd", "smi", "smiles"]
                     .iter()
                     .any(|supported| extension.eq_ignore_ascii_case(supported)) => {}
         Some(extension)
             if mode == FileMode::Save
                 && (extension.eq_ignore_ascii_case(format_extension(format))
-                    || format == FileFormat::Sdf && extension.eq_ignore_ascii_case("sd")) => {}
+                    || format == FileFormat::Sdf && extension.eq_ignore_ascii_case("sd")
+                    || format == FileFormat::Smiles
+                        && extension.eq_ignore_ascii_case("smiles")) => {}
         None if mode == FileMode::Save => {
             path.set_extension(format_extension(format));
         }
         _ => {
             return Err(if mode == FileMode::Open {
-                "Choose a .cdxml, .cdx, .mol, .sdf or .sd file.".to_owned()
+                "Choose a .cdxml, .cdx, .mol, .sdf, .sd, .smi or .smiles file.".to_owned()
             } else {
                 format!(
                     "Use the .{} extension for the selected format.",
@@ -926,6 +936,72 @@ mod tests {
             )
             .is_err()
         );
+        Ok(())
+    }
+
+    #[test]
+    fn smiles_chooser_has_one_source_family_aliases_and_exact_failed_save_retry()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = Directory::new()?;
+        for name in ["sample.smi", "sample.SMILES"] {
+            assert_eq!(format_hint(name), Some(FileFormat::Smiles));
+            assert!(name_matches_format(name, FileFormat::Smiles));
+            for mode in [FileMode::Open, FileMode::Save] {
+                assert_eq!(
+                    resolve_path_as(&directory.0, name, mode, FileFormat::Smiles)?,
+                    directory.0.join(name).to_str().ok_or("path")?
+                );
+                assert_eq!(
+                    formats_for_mode(mode)
+                        .iter()
+                        .filter(|f| **f == FileFormat::Smiles)
+                        .count(),
+                    1
+                );
+                assert_eq!(
+                    format_label(FileFormat::Smiles, mode),
+                    "SMILES files (*.smi, *.smiles)"
+                );
+            }
+        }
+        assert!(
+            resolve_path_as(
+                &directory.0,
+                "wrong.mol",
+                FileMode::Save,
+                FileFormat::Smiles
+            )
+            .is_err()
+        );
+        let mut chooser = FileChooser::default();
+        chooser.begin_with_format(
+            FileMode::Save,
+            directory.0.clone(),
+            "Untitled".to_owned(),
+            FileFormat::Smiles,
+        );
+        assert_eq!(chooser.name, "Untitled.smi");
+        chooser.set_name("retained.SMILES".to_owned());
+        chooser.set_format(FileFormat::Smiles);
+        assert_eq!(chooser.name, "retained.SMILES");
+        let action = FileAction::Save {
+            path: directory
+                .0
+                .join("associated.mol")
+                .to_str()
+                .ok_or("path")?
+                .to_owned(),
+            overwrite: true,
+        };
+        chooser.failed_with_format(
+            action.clone(),
+            FileFormat::Smiles,
+            "permission_denied",
+            "denied".to_owned(),
+        );
+        assert_eq!(chooser.name, "associated.mol");
+        assert_eq!(chooser.format(), FileFormat::Smiles);
+        assert_eq!(chooser.confirm(), Some(action));
         Ok(())
     }
 
@@ -1342,7 +1418,8 @@ mod tests {
                 FileFormat::Cdxml,
                 FileFormat::Cdx,
                 FileFormat::MolV2000,
-                FileFormat::Sdf
+                FileFormat::Sdf,
+                FileFormat::Smiles
             ]
         );
         assert_eq!(
@@ -1356,7 +1433,8 @@ mod tests {
                 FileFormat::Cdx,
                 FileFormat::MolV2000,
                 FileFormat::MolV3000,
-                FileFormat::Sdf
+                FileFormat::Sdf,
+                FileFormat::Smiles
             ]
         );
         assert_eq!(

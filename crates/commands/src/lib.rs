@@ -20,12 +20,12 @@ mod smiles_conversion;
 mod smiles_export;
 pub use bond::{BondCreate, BondExtend, ExtendHydrogenPolicy};
 pub use close::{CloseAction, CloseDocument, CloseState};
-pub use content::{CollectionSummary, RecordSummary, StoredContent};
+pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
 pub use file_ui::{UiFile, UiFileAction, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState};
 pub use files::{
     Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol,
-    OpenSdf, SaveCdx, SaveCdxml, SaveMol, SaveSdf,
+    OpenSdf, OpenSmiles, SaveCdx, SaveCdxml, SaveMol, SaveSdf, SaveSmiles,
 };
 pub use sdf_edit::SdfFieldSet;
 pub use sdf_query::{
@@ -115,6 +115,8 @@ command_registry! {
     SaveMol(SaveMol) => ("document.save_mol", "Atomically save supported MOL data, retaining its associated version by default without silently losing source metadata or layout.", false),
     OpenSdf(OpenSdf) => ("document.open_sdf", "Open every validated SDF record with complete source and ordered data; chemical preview is unavailable.", false),
     SaveSdf(SaveSdf) => ("document.save_sdf", "Atomically save the complete SDF collection without changing molecular versions or ordered data.", false),
+    OpenSmiles(OpenSmiles) => ("document.open_smiles", "Open every supported SMILES record while retaining the exact complete file and opaque application data; chemical preview is unavailable.", false),
+    SaveSmiles(SaveSmiles) => ("document.save_smiles", "Atomically save the exact complete SMILES file without selecting or regenerating a molecular record.", false),
     ConvertSmilesToCdxml(ConvertSmilesToCdxml) => ("file.convert_smiles_to_cdxml", "Create new native CDXML from a 1–12 neutral carbon/Single path using explicit fixed H and supplied geometry; the current session stays unchanged.", false),
     ExportSmilesFragment(ExportSmilesFragment) => ("file.export_smiles_fragment", "Create a noncanonical SMILES file from one explicitly selected, complete-source fragment's supported literal-H chemical graph; geometry and document context are not encoded and the session stays unchanged.", false),
     SdfRecordInspect(SdfRecordInspect) => ("sdf.record.inspect", "Read a bounded ordered field page from an explicitly identified captured SDF record; oversized values are omitted explicitly.", true),
@@ -320,6 +322,8 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub collection: Option<CollectionSummary>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub smiles_file: Option<SmilesFileSummary>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sdf_record: Option<SdfRecordInspection>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<SourceInfo>,
@@ -376,6 +380,7 @@ impl Engine {
     fn from_content(document: StoredContent) -> Self {
         let file_format = match &document {
             StoredContent::Sdf { .. } => FileFormat::Sdf,
+            StoredContent::SmilesFile(_) => FileFormat::Smiles,
             StoredContent::Drawing(document) => {
                 if document
                     .source_info()
@@ -424,9 +429,10 @@ impl Engine {
             revision: self.revision,
             document: match self.document.as_ref() {
                 StoredContent::Drawing(document) => Some(document.model_snapshot()),
-                StoredContent::Sdf { .. } => None,
+                StoredContent::Sdf { .. } | StoredContent::SmilesFile(_) => None,
             },
             collection: self.document.collection(),
+            smiles_file: self.document.smiles_summary(),
             sdf_record: None,
             source: self.document.source_info(),
             undo_depth: self.undo.len(),
@@ -645,6 +651,43 @@ impl Engine {
                     },
                 ));
             }
+            Command::OpenSmiles(params) => {
+                if self.document != self.saved && !params.discard_unsaved {
+                    return Err(Error::UnsavedChanges);
+                }
+                return Ok(Prepared::file(
+                    self.state(),
+                    files::FilePlan::Open {
+                        params: OpenCdxml {
+                            path: params.path,
+                            discard_unsaved: params.discard_unsaved,
+                        },
+                        encoding: files::OpenEncoding::Smiles,
+                        ui_request_id: None,
+                        revision: self.revision,
+                        generation: self.generation,
+                    },
+                ));
+            }
+            Command::SaveSmiles(params) => {
+                let save_slot = self.reserve_save()?;
+                self.document.smiles_file()?;
+                return Ok(Prepared::file(
+                    self.state(),
+                    files::FilePlan::Save {
+                        params: SaveCdxml {
+                            path: params.path,
+                            overwrite: params.overwrite,
+                        },
+                        format: FileFormat::Smiles,
+                        ui_request_id: None,
+                        document: Arc::clone(&self.document),
+                        save_slot,
+                        revision: self.revision,
+                        generation: self.generation,
+                    },
+                ));
+            }
             Command::PageSetSize(params) => {
                 let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
                 let size = PageSize::new(params.width_pt, params.height_pt)?;
@@ -834,7 +877,9 @@ mod tests {
                 "document.open_mol",
                 "document.save_mol",
                 "document.open_sdf",
+                "document.open_smiles",
                 "document.save_sdf",
+                "document.save_smiles",
                 "file.convert_smiles_to_cdxml",
                 "file.export_smiles_fragment",
                 "history.redo",

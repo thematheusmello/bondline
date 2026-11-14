@@ -184,7 +184,7 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current 22-command registry includes complete SDF Open/Save and bond.create for independent C-C fragments with
+The current 24-command registry includes complete SDF/SMILES-file Open/Save and bond.create for independent C-C fragments with
 three explicitly authored H per carbon, plus CDXML/CDX/MOL open/save. bond.extend is a
 headless terminal-carbon operation with required explicit H3-to-H2 policy and expected
 revision; only source-free or byte-proven native CDXML is allowed. Actual MOL/CDX backing
@@ -372,7 +372,8 @@ Keep the same save reservation through prepare/publication/finish/drop and the e
 worker/reply/close barriers. Finish returns current state plus historical conversion metadata;
 do not alter current/saved/original/history/association/close/native intent or acknowledgments.
 MCP read_only is false because it writes disk. Conversion/nonfile work cannot bind native
-Open/Save requests. Actual source-backed SMILES Open/Save and native conversion UI remain missing.
+Open/Save requests. Complete-file SMILES Open/Save is a separate immutable content path;
+native conversion UI remains missing.
 See verification-smiles-conversion-command.md for scope, RED/GREEN and independent consumers.
 
 file.export_smiles_fragment requires expected_revision/page_id/fragment_id/output_path.
@@ -389,3 +390,24 @@ Current/saved/source/history/association/close/nativeACK stay unchanged, with re
 and existing worker/reply barriers. No native control or SMILES backing follows. See
 verification-smiles-export-command.md; Root's isotope-keyed actual-file test must retain
 all five semantic controls, including equal-count/formula endpoint/order decoys.
+
+## Complete SMILES files
+
+`smiles::SmilesFileDocument` owns complete source plus a compact shared record index; every
+meaningful notation is validated before success. Its separate file budgets and exact
+LF/CRLF/opaque-data/prefix/final-EOF policies are in verification-smiles-file.md. Do not
+weaken the unchanged single-notation parser/converter limits, normalize names, discard
+ignored lines or substitute the first/empty graph. Ordinals are source-local, not stable
+chemical identities. Keep the independent raw-byte and unchanged per-record consumers.
+
+`StoredContent::SmilesFile` stores one immutable owner because no file edit API exists.
+Current/saved/plans retain the complete variant; retained accounting deduplicates source
+and index. `document.open_smiles` and `document.save_smiles` reuse the common guarded
+Open/Save path, lease, generation, publication and native request/close rules. Automatic
+state has document:null and compact smiles_file {format,byte_length,record_count}, without
+notations/data or a recordsVec. All drawing/SDF/cross-format operations refuse this kind.
+The .smi/.smiles chooser/static summary is wired and headlessly exercised; actual native
+acceptance remains unverified while the user is active. No chemical preview/editing,
+record selection, metadata editor or source-to-drawing authority follows. See
+verification-smiles-file-app.md and verification-smiles-file-ui.md. Run the separate
+smiles_file_parse fuzz target locally as in fuzz/README.md; Actions stays disabled.

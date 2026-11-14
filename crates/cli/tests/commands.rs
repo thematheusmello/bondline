@@ -16,6 +16,41 @@ mod sdf_field_support;
 mod sdf_record_support;
 #[path = "support/smiles_export.rs"]
 mod smiles_export_support;
+#[path = "support/smiles_file.rs"]
+mod smiles_file_support;
+
+#[test]
+fn executable_smiles_file_open_save_reopen_retains_all_records_and_opaque_data()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("cli-smiles-λ.smi");
+    let output = directory.path("cli-smiles-copy.data");
+    std::fs::write(&input, smiles_file_support::SOURCE)?;
+    let mut process = Command::new(env!("CARGO_BIN_EXE_bondline-cli"));
+    process.arg("run");
+    for request in [
+        json!({"command":"document.open_smiles","params":{"path":input}}),
+        json!({"command":"document.save_smiles","params":{"path":output}}),
+        json!({"command":"document.open_smiles","params":{"path":output}}),
+    ] {
+        process.arg("--cmd").arg(request.to_string());
+    }
+    let result = process.output()?;
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let value: Value = serde_json::from_slice(&result.stdout)?;
+    smiles_file_support::assert_file(&value, 2);
+    assert_eq!(std::fs::read(&output)?, smiles_file_support::SOURCE);
+    assert_eq!(std::fs::read(&input)?, smiles_file_support::SOURCE);
+    assert_eq!(
+        value["file"]["path"],
+        json!(std::fs::canonicalize(&output)?)
+    );
+    Ok(())
+}
 
 #[test]
 fn executable_exports_only_the_selected_native_fragment_without_saving_the_document()
@@ -312,10 +347,12 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "document.open_cdxml",
             "document.open_mol",
             "document.open_sdf",
+            "document.open_smiles",
             "document.save_cdx",
             "document.save_cdxml",
             "document.save_mol",
             "document.save_sdf",
+            "document.save_smiles",
             "file.convert_smiles_to_cdxml",
             "file.export_smiles_fragment",
             "history.redo",
@@ -333,6 +370,8 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
         ("document.save_cdx", "overwrite"),
         ("document.open_sdf", "discard_unsaved"),
         ("document.save_sdf", "overwrite"),
+        ("document.open_smiles", "discard_unsaved"),
+        ("document.save_smiles", "overwrite"),
     ] {
         let info = commands
             .iter()

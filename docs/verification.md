@@ -2181,3 +2181,28 @@ source review finds no defect; affected230 and complete Root715 gates pass, incl
 fmt/clippy/layers/unchanged licenses/assets/corpus. This remains explicit chemical export,
 with geometry/document context excluded, no Save/association/ACK change and no native
 control. M0/M1 remain incomplete; new native/Windows/Linux/fuzz/hosted execution is absent.
+
+## Complete SMILES source-file foundation, 2026-11-14
+
+The source-only [file codec](verification-smiles-file.md),
+[atomic file I/O](verification-smiles-file-io.md),
+[shared commands/adapters](verification-smiles-file-app.md) and
+[headless UI wiring](verification-smiles-file-ui.md) keep separate evidence scopes.
+Codec fullIO249; wrapper fullIO259; commands/mcp/cli242; UI98 all pass their own scoped
+runs, warnings-denied clippy and relevant formatting. Counts overlap; do not add them as
+one distinct workspace total. Root's seven-command-test runtimeRED94529 against unchanged
+df34c66 precedes receiving real backends; actual focusedGREEN37014 requires no correction.
+The UI dependency compileRED is separately qualified, not a runtime UI failure.
+
+Whole accepted source/record/opaque-byte retention, independent raw spans and unchanged
+per-notation external consumers are verified. Empty files have no fake graph. Later bad
+notations reject the entire file. Shared Open/Save uses whole snapshots and existing
+leases/generation/publication/close guards. Summary state contains no source data and no
+recordsVec. .smi/.smiles chooser/worker/retry/known-Save/clean-close and synthetic
+AccessKit/gesture cases pass headlessly; actual native use remains unverified.
+
+Root fileparser ASan35818:10,000 fixed-seed mutations, eight seeds, largest52B. It is
+separate from unchanged old notation fuzz evidence and large-limit unit checks. Actions
+stays disabled; no new native/Windows/Linux/hosted check, dependency/lock/font/golden
+change or full M0/M1 completion is claimed. The receiving combined workspace gate is
+recorded separately after integration, rather than inferred from overlapping scoped runs.

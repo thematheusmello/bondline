@@ -27,9 +27,10 @@ These are explicit Bondline policies, not claims about another application's his
 Revision overflow rejects the operation before history eviction or mutation.
 
 Drawing snapshots include a fragments array, empty in the default application. Engine
-history retains complete StoredContent: either a source-backed StoredDocument drawing
-or original/current whole-SDF snapshots. A backed session returns an additional source
-object: {format: "cdxml"|"cdx"|"mol"|"sdf", byte_length, modified}.
+history retains complete StoredContent: a source-backed StoredDocument drawing,
+original/current whole-SDF snapshots, or an immutable complete SmilesFileDocument.
+A backed session returns an additional source
+object: {format: "cdxml"|"cdx"|"mol"|"sdf"|"smiles", byte_length, modified}.
 The field is omitted for native in-memory documents. Raw source bytes are not serialized.
 The open/save commands below use that complete backing. bond.create authors a limited native
 chemical fragment; source-backed creation is refused unless a complete profile is proven.
@@ -52,6 +53,8 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.save_mol` | `path`, optional `overwrite=false`, `version="auto"` (`auto`, `v2000`, `v3000`) | Atomic MOL save with captured output version; refuses unsupported conversion/metadata/layout loss; imported source retains its frame |
 | `document.open_sdf` | `path`, optional `discard_unsaved=false` | Validate every mixed V2000/V3000 record and retain complete ordered source; clean collection session and cleared history, without a drawing projection |
 | `document.save_sdf` | `path`, optional `overwrite=false` | Atomic whole-source collection save; retains every record, MOL version, ordered field and byte; no molecular regeneration |
+| `document.open_smiles` | `path`, optional `discard_unsaved=false` | Validate all supported notation records and retain the entire source; clean source-file session without a drawing projection |
+| `document.save_smiles` | `path`, optional `overwrite=false` | Atomic exact whole-file save, including ignored lines, opaque application bytes and original endings; no notation regeneration |
 | `file.convert_smiles_to_cdxml` | Required `expected_revision`, `input_path`, `output_path`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt` | Deferred create-only conversion of one bounded neutral carbon/Single path into new native CDXML; current session and all its baselines remain unchanged |
 | `file.export_smiles_fragment` | Required `expected_revision`, positive `page_id`, positive `fragment_id`, `output_path` | Create-only noncanonical explicit-H SMILES file for exactly one complete-source selected fragment; geometry/document context are explicitly not encoded and the current session is unchanged |
 | `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
@@ -697,3 +700,28 @@ committed close, without installing an old session or inventing rollback after p
 The generic native-file binder explicitly refuses export; it cannot complete or renew a
 native Save acknowledgment. Native export controls/clipboard workflows remain missing.
 See [verification-smiles-export-command.md](verification-smiles-export-command.md).
+
+## Complete SMILES source-file sessions
+
+The registry now has24 typed commands. document.open_smiles requires only path and accepts
+optional discard_unsaved=false; document.save_smiles requires only path and accepts
+optional overwrite=false. Both closed schemas reject record/layout/conversion options.
+Open validates every meaningful notation and starts a clean whole-file generation. Any
+later failed record leaves the prior entire session untouched. Save uses captured complete
+content and the same shared write reservation through finish/drop; an old-generation
+receipt cannot associate or mark a newly opened file saved. There is no implicit conversion.
+
+Automatic state has document:null, no SDF collection, and optional
+`smiles_file:{format:"smiles",byte_length,record_count}`. It contains neither notation nor
+opaque application data and has constant-size metadata regardless of record count. Source
+is {format:"smiles",byte_length,modified:false}: there is no source-file edit command yet.
+Current/saved file association is independent of its suffix. Zero-record sources are valid.
+Drawing/SDF operations and cross-format Save refuse unsupported_content, without temporary
+output. Existing explicit SMILES conversion/export retain their separate scope and limits.
+
+Native requests bind only actual Open/Save selections; existing .smi/.smiles picker,
+known Save, Save As retry and clean-close worker draining are wired/headlessly tested.
+A metadata-only view clears stale drawing gestures/hover and exposes accessible count/size
+and unavailable-preview status. No chemical preview/editing or actual native execution is
+claimed. CLI, stdio MCP and authenticated loopback use the same commands and real files.
+See verification-smiles-file-app.md and verification-smiles-file-ui.md for exact evidence.

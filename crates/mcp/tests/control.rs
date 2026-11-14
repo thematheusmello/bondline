@@ -19,6 +19,8 @@ mod sdf_record_support;
 mod sdf_support;
 #[path = "../../cli/tests/support/smiles_export.rs"]
 mod smiles_export_support;
+#[path = "../../cli/tests/support/smiles_file.rs"]
+mod smiles_file_support;
 use std::{
     io::{BufRead, BufReader, Read, Write},
     net::{Ipv4Addr, Shutdown, SocketAddr, TcpStream},
@@ -57,6 +59,52 @@ fn authenticated(
     )?;
     assert_eq!(response, serde_json::json!({"authenticated":true}));
     Ok(client)
+}
+
+#[test]
+fn authenticated_smiles_file_keeps_all_records_and_a_bad_later_record_cannot_replace_it()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("socket-smiles-λ.smi");
+    let output = directory.path("socket-smiles-copy.data");
+    let bad = directory.path("socket-bad.smi");
+    std::fs::write(&input, smiles_file_support::SOURCE)?;
+    std::fs::write(&bad, b"CC first\nC1 bad\n")?;
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let server = LoopbackServer::bind(0, Arc::clone(&engine), || {})?;
+    let mut client = authenticated(&server)?;
+    for (request, revision) in [
+        (
+            serde_json::json!({"command":"document.open_smiles","params":{"path":input}}),
+            1,
+        ),
+        (
+            serde_json::json!({"command":"document.save_smiles","params":{"path":output}}),
+            1,
+        ),
+        (
+            serde_json::json!({"command":"document.open_smiles","params":{"path":output}}),
+            2,
+        ),
+    ] {
+        let result = call(&mut client, &request.to_string())?;
+        assert!(result.get("error").is_none(), "{result}");
+        smiles_file_support::assert_file(&result["result"], revision);
+    }
+    let before = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+    let result = call(
+        &mut client,
+        &serde_json::json!({"command":"document.open_smiles","params":{"path":bad}}).to_string(),
+    )?;
+    assert_eq!(result["error"]["code"], "invalid_smiles");
+    assert_eq!(
+        call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+        before
+    );
+    assert_eq!(std::fs::read(&output)?, smiles_file_support::SOURCE);
+    assert_eq!(std::fs::read(&input)?, smiles_file_support::SOURCE);
+    server.shutdown()?;
+    Ok(())
 }
 
 #[test]

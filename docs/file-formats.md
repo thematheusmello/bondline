@@ -8,7 +8,7 @@
 | SDF V2000/V3000 | Complete mixed-version session Open/Save, native Mac files, bounded shared ordered-field inspection/existing-value edits; preserving library codecs | Exact raw spans/order/versions, fetched V2000 corpus, unchanged raw/per-MOL consumers, actual Mac777-byte files, command/CLI/stdio/socket history and stale/close guards; bounded ASAN | Chemical preview/layout, field-edit UI, record operations, fetched mixed-version corpus, broader syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
 | RXN V2000 wrapper | Standalone source-preserving reader/new-wrapper writer with ordered roles and raw V2000/V3000 molecular payloads | Published CTfile layout; original field/role/span vectors; external RDKit readers/writers and bounded ASAN | Reaction model, application/native commands, V3000 reaction wrapper, broader registry/extension handling and fetched corpus |
-| SMILES | Bounded notation/source library; selected-fragment explicit-H file export and restricted carbon-path→CDXML conversion through registry/CLI/MCP/loopback; noncanonical output | Literal source/graph/limits, real LF-framed files and complete-source guards; unchanged external unsanitized graph/separate sanitized consumers; receiving715 and semantic controls | Native export/conversion controls, source-backed Open/Save, general layout/implicit-H policy, aromatic model mapping, stereo/query/perception and canonicalization |
+| SMILES | Complete accepted multi-record source Open/Save through shared registry/CLI/MCP/loopback; explicit-H fragment export and restricted carbon-path→CDXML conversion; noncanonical output | Independent raw spans/opaque bytes and unchanged per-record consumers, framing/quotas, shared snapshots/guards and actual file/adaptor workflows | Chemical preview/editing of opened files, actual native acceptance of the wired chooser, native export/conversion controls, general layout/H policy, stereo/query/perception and canonicalization |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and positioned neutral-carbon/Single graphs with literal authored H | External Pillow/FreeType, independent graph/pixel/geometry/font vectors, actual native capture and one human-approved golden | Other elements/orders/metadata, source-faithful/general chemical publishing, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
@@ -161,8 +161,8 @@ header, optional name and textual DT number, value lines and exact raw value/EOL
 Duplicates, empty/multiline/spaces-only values and combined registry headers remain distinct;
 they are never reconstructed from a property dictionary. Each record reports its actual
 MOL version and uses the corresponding existing syntax codec; callers explicitly choose
-any later model transform. There is no application SDF
-open/save command or implicit multi-record document conversion yet.
+any later model transform. This borrowed codec performs no implicit document conversion;
+the separately owned complete-source application Open/Save path is described below.
 
 BIOVIA2026 printed pages 97–99 define named/DT headers, line-prefix record delimiters,
 200-character data lines and empty item terminators. This slice supports ASCII, so those
@@ -422,7 +422,8 @@ conversion. BIOVIA Chemistry 2026 printed 97 explicitly permits either encoding 
 mixture. The container still borrows exact source and exposes ordered raw fields,
 DT digits, duplicate/empty/multiline values and complete absolute spans. Parsed molecular
 syntax is transient: only the version/raw payload and existing field views are retained.
-No elemental projection or application multi-record document is constructed.
+This borrowed parser constructs no elemental projection; application ownership uses the
+separate complete-source SdfDocument path described below.
 
 `sdf::write(&[SdfRecordInput])` constructs new SDF framing while preserving each accepted
 MOL payload and its actual version. `write_v2000` remains strictly V2000-only and returns
@@ -628,3 +629,31 @@ One LF follows the unchanged notation. The logical upper bound is65537file bytes
 65536notation bytes; current parser/converter raw65536 input caps are unchanged and can
 refuse that boundary. No maximum-size graph/re-import parity or native control is claimed.
 See [exact command/file evidence](verification-smiles-export-command.md).
+
+## Complete accepted SMILES source files
+
+`smiles::SmilesFileDocument` owns the exact complete byte source and compact immutable
+record index. It validates every meaningful notation with the unchanged bounded parser;
+unsupported or malformed later records reject the whole file. It preserves ignored lines,
+SP/TAB separators, opaque application data (including non-UTF-8/NUL), LF/CRLF endings and
+the explicitly qualified final-EOF accommodation. No name/property map, first molecule or
+source-to-drawing conversion is substituted. Private record spans are file-relative;
+explicit read_record returns an independent notation-local IR. Ordinals are source-local.
+
+The source limit is64MiB, physical-line limit1m including ignored lines, and meaningful
+record limit65,536. These are original policies; each notation retains the existing
+65,536-byte guard before copying. A valid65,536-byte notation plus framing is a distinct
+larger file; the old raw-notation parser/converter caps are unchanged. The exact ignored
+prefix interpretation and generic-whitespace open question remain in the codec record.
+See [codec and independent/fuzz evidence](verification-smiles-file.md).
+
+Native read/save uses the shared bounded reader and atomic publisher. Save borrows exact
+complete bytes without regenerating notation or appending LF. The shared closed
+`document.open_smiles`/`document.save_smiles` commands retain the whole immutable content
+through current/saved/plans and common generation/lease/publication/close checks. State
+has document:null and only a compact smiles_file count/size summary. Drawing, SDF and
+cross-format Save operations refuse this content; there is no molecular preview/editor or
+record-selection command. The .smi/.smiles chooser/static summary is wired and tested with
+synthetic egui input and real background file work; actual native acceptance is unverified.
+See [I/O](verification-smiles-file-io.md), [commands/adapters](verification-smiles-file-app.md)
+and [UI scope](verification-smiles-file-ui.md). M1 and full syntax/chemistry parity remain open.

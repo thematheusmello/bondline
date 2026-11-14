@@ -22,7 +22,8 @@ Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md
   model projection. `save_sdf_file(&Path, &SdfDocument, overwrite, &Cancellation)` borrows
   the whole current source directly. Generic `LoadedFile<T=StoredDocument>` retains existing
   drawing callers while returning complete SDF ownership. The registry and native worker
-  use the same reservation/publication path; actual native SDF acceptance is still pending.
+  use the same reservation/publication path. Earlier native SDF acceptance is recorded in
+  verification-native-sdf-and-extension.md; the new SMILES native workflow remains unverified.
 - `FileError` exposes stable `code`, `path`, `stage`, `published` and optional `recovery_path`.
 - `read_smiles_file(&Path, &Cancellation)` returns a canonical path and complete immutable
   `SmilesFileDocument`, validating every meaningful notation before success. It uses the
@@ -32,8 +33,9 @@ Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md
   overwrite, &Cancellation)` borrows those exact bytes through the existing publisher:
   no notation regeneration, appended LF, name decoding or first-record projection. Codec
   failures retain their original codes at the canonical input path with stage `decode`;
-  filesystem/publication failures retain their actual metadata. These library operations
-  do not create a drawing, session backing/association, registry command or native chooser.
+  filesystem/publication failures retain their actual metadata. By themselves these library operations
+  do not create a drawing, session backing/association, registry command or native chooser;
+  the separate shared application path is recorded in verification-smiles-file-app.md.
   [Exact whole-file evidence](verification-smiles-file-io.md) distinguishes them from the
   separate notation converter and explicit chemical-graph exporter below.
 - `convert_smiles_to_cdxml_file(input, output, bond_length_pt, origin, page, cancel)`

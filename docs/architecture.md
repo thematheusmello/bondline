@@ -235,3 +235,20 @@ is the selected chemical graph; geometry, application IDs/order, unselected cont
 source/document metadata are outside the output. Unsupported chemical data still refuses.
 One LF frames the notation; this is distinct from source-backed SMILES Open/Save or
 native export controls. See verification-smiles-export-command.md.
+
+The separate complete-file `SmilesFileDocument` retains an Arc byte source and compact
+Arc record index, never every parsed IR or a first-record drawing. Each meaningful
+notation is validated transiently through the unchanged bounded parser. `StoredContent`
+adds one immutable SmilesFile owner; no redundant original/current pair is needed without
+a file edit operation. Current/saved/captured plans retain the whole variant, with shared
+source/index accounting. A new Open replaces the complete session only after common
+revision/generation/dirty/close checks. Save borrows exact whole bytes through the same
+publisher and reservation through finish/drop. No drawing encoder is used.
+
+Automatic state uses an O(1) smiles_file summary (format/byte length/record count) and
+document:null. It never materializes a recordsVec or discloses notation/application data.
+Drawing/SDF operations refuse the content kind. The UI clears stale gestures/hover and
+shows only count/size plus unavailable-preview status. Its existing file worker routes
+SMILES Open/Save/Save As and clean-close draining; native execution remains unverified.
+Explicit conversion/export remain distinct commands with their old limits and association
+rules. See verification-smiles-file-app.md and verification-smiles-file-ui.md.

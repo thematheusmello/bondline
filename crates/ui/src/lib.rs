@@ -341,6 +341,16 @@ fn show_workspace_with_files(
         .show(context, |ui| {
             let available = ui.available_rect_before_wrap();
             drawing.hover = None;
+            if let Some(summary) = engine.content().smiles_summary() {
+                drawing.gesture = None;
+                drawing.invalidate_hover();
+                ui.label(format!(
+                    "SMILES file: {} records, {} bytes",
+                    summary.record_count, summary.byte_length
+                ));
+                ui.label("Chemical preview is unavailable for SMILES files.");
+                return;
+            }
             if let Some(collection) = engine.content().collection() {
                 drawing.gesture = None;
                 drawing.invalidate_hover();

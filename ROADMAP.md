@@ -75,8 +75,9 @@ tests and qualified pinned external-parser evidence. Literal aromatic atom/bond 
 are preserved without perception. Bare implicit H, bracket H0 and
 physical H remain distinct. Named opt-in normalization materializes only a closed neutral
 fixed-H subset; a separate Fragment exporter generates noncanonical notation. Both have
-literal/external-consumer/boundary tests and combined ASAN evidence. Application source
-backing/import/layout, aromaticity/stereo/perception and canonicalization remain missing. See docs/verification-smiles.md.
+literal/external-consumer/boundary tests and combined ASAN evidence. General drawing
+import/layout, aromaticity/stereo/perception and canonicalization remain missing. Complete
+source-file ownership is a distinct path below. See docs/verification-smiles.md.
 Full M0
 inventory/dialog/addressability gaps remain tracked while this format work proceeds.
 
@@ -85,8 +86,8 @@ new editable native CDXML. Its 64 KiB input, source preservation, publication fa
 guards and independently consumed actual output pass the local 670-test aggregate.
 The shared conversion command now passes engine/CLI/stdio/authenticated-loopback workflows
 through explicit CDXML Open/edit/history/Save/reopen, plus the local 686-test gate. It
-preserves the active session and uses the same save lease through finish/drop. Source-backed
-SMILES Open/Save, a native conversion control/flow and general cleanup remain missing.
+preserves the active session and uses the same save lease through finish/drop. Native
+conversion controls/flows and general cleanup remain missing.
 
 The explicit-H writer now also creates real single-record SMILES files through the shared
 atomic publisher, preserving its isotope/physical-H/branch/ring/disconnected/Single/Double/
@@ -95,7 +96,19 @@ Triple scope. Exact LF framing, actual-file consumers and publication guards pas
 including actual nonfirst native-source export, full graph/metadata/order comparisons and
 semantic negative controls. It retains the complete owner/save lease through finish/drop,
 reports omitted geometry/document context and preserves the active session. Native export
-controls, source-backed SMILES Open/Save and broader chemistry remain missing.
+controls and broader chemistry remain missing.
+
+Complete accepted SMILES files now retain all records, ignored lines, opaque data and
+LF/CRLF/final-EOF bytes through source ownership, bounded native I/O and the shared
+document.open_smiles/save_smiles commands. Any unsupported/malformed later notation
+rejects the whole Open. Independent raw and unchanged per-record consumers verify the
+codec/file adapters. Commands/CLI/stdio/authenticated-loopback retain complete snapshots,
+save leases and generation/close rules; summary state has no dummy drawing or automatic
+record data. A separate ASan target passes a bounded10,000-run smoke check. Native chooser
+and static summary are wired/headlessly tested, with actual native acceptance pending
+user availability. All-record chemical preview/editing, record operations, broader syntax
+and native conversion/export remain missing. See [file/application evidence](docs/verification-smiles-file-app.md)
+and [UI evidence](docs/verification-smiles-file-ui.md). M0/M1 remain incomplete and Actions remains disabled.
 
 
 Standalone CDXML source preservation and checked existing-attribute replacement have
