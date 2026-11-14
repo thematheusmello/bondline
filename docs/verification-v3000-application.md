@@ -112,3 +112,37 @@ and this checkout's inherited two-file corpus. CARGO_INCREMENTAL=0 was explicit 
 recreating disposable caches; target/v3000-completion-ci-integrated.log identifies the
 invoked sibling root. Session3849 is terminal0. Newer root corpus coverage is not inferred.
 The exact corrected binary's native walkthrough and its own hosted run remain next.
+
+## Corrected native acceptance, 2026-11-14
+
+Completed00:04:57UTC on macOS27.2 arm64/Apple M3 Max/Metal, source
+1c533127e57825368e323b438b93e4db022ce0c8, complete Rust/Cargo manifest digest
+3f07aa401d6defa7ea2524d1afb305da6774362b099d5227d64792e9abf5c824,
+binary59ca30c81a16b8e5eccb9564ffd338328e70fd50a167cb71d2f3fdddad9ed8b0.
+The earlier6add… partial run remains separate and was not substituted.
+
+Actual native actions passed isolated C–C authoring→explicitV3/full-precision save→reopen;
+the two-choice Open family and three Save As encodings/defaultV3; original344-byte Unicode
+copy/known Save/headers; misleading.cdxml decoder refusal then explicit family override;
+malformed retention/Cancel; V3→V2 Replace/refusal/retry preserving source and destination;
+V2000 known Save/default and explicit V3 promotion; empty V3→first fragment with all three
+headers; dirty CmdQ Cancel then Save/exit and fresh reopen. The successful native close
+uses the new current-completion acknowledgment. Nine actual files face unchanged external
+RDKit and separate exact-byte/header/Decimal checks; authored raw coordinates agree within
+1e-12 MOL units and reopened model positions agree exactly in this scene.
+
+Saved native330-byte file SHA168a36fa864a496ad575e227b830b6e18b72a4daa91f2fbc0e54b81273b3b255;
+promoted313-byte file SHA2636354e0e85e7347b8e4d3839185560e9ac887bbf0de37b835c64cb80fe8eac;
+edited empty381-byte file SHAc49b978911ceb9a332cd3b06d9e9b8a7d159965925132cd0cb8c190a2a96a335.
+Fresh actual concurrent2048 CPU/Metal GPU captures remained pending while Close wasApproved;
+both complete PNG replies then arrived (SHA516e56cc92ee13849eaaa19fb72ed3e95c22867063925327554b34d95309a3f4)
+before exit0. A prior4096 probe was correctly invalid_params and is excluded from evidence.
+The deterministic save/close ABA races remain core/UI test evidence, not native timing claims.
+
+All three native processes91954/3402/8626 and controllers34220/1456/92948 exited0; CUA completed
+exactly once. Credentials remained memory-only. Root target/native-v3000-corrected-handoff.md
+and sibling target/native-v3000-corrected-ui/verification.json record all hashes, seven
+untouched window captures and cleanup. No Rust/fixture/oracle/lock/font/golden changed.
+Hosted application run43531603511 at1c53312 is running; interactive Windows/Linux and general
+MOL graph editing/rendering, queries/stereo/chemistry, arbitrary lossy export and full M1–M5
+remain missing or unverified. This is native verification of the stated supported subset.

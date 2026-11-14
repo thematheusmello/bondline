@@ -1,83 +1,76 @@
 # Status
 
-2026-11-13. The persistent full M0–M5 goal remains active. M0 and M1 are incomplete.
+2026-11-14. The persistent M0–M5 goal is active; full M0 and M1 remain incomplete.
 Public repository: https://github.com/thematheusmello/bondline .
 
-## This isolated checkpoint
+## Current verified application checkpoint
 
-Branch feat/mol-v3000-files follows standalone codec5caf6ce. The V3000 application slice
-now retains decoded version, source/header/frame/history, uses the existing13-command
-registry and preserves its associated MOL version by default. Open validates the actual
-V2000/V3000 family member. Save As offers both concrete versions. Exact same-version source
-passthrough, full-precision supported writing and conservative conversion refusal have
-independent IO/engine/CLI/stdio/loopback/UI evidence. New source.format remains mol;
-file/receipt format distinguishes mol_v2000/mol_v3000. No runtime/lock/codec changes.
+This branch feat/mol-v3000-files has source1c533127e57825368e323b438b93e4db022ce0c8,
+following3b1fada and standalone5caf6ce. Source1c53312 is published. Actual sibling cargo
+xtask ci passes372workspace+3bridge tests, fmt/clippy/layers/licenses and this checkout's
+inherited two-file corpus: target/v3000-completion-ci-integrated.log. Runtime closures
+153/164/219 and two assets remain unchanged. Incremental0 controls disposable build growth.
 
-The actual sibling cargo xtask ci passes364 workspace plus3 bridge tests, fmt/clippy,
-layers/licenses/assets and this branch's inherited two-file CDXML/MOL corpus. Log:
-target/mol-versions-ci-integrated.log. A prior compile attempt stopped on disk-full;
-target/mol-versions-ci-disk-full.log is preserved. Only disposable build caches were removed.
-All107 IO and43 UI library tests pass;29 adapter tests use the pinned external RDKit.
-See docs/verification-v3000-application.md for actual RED/GREEN and precision bounds.
+The existing13 shared commands now open actual V2000/V3000, retain source/header/frame/
+baseline/history, choose concrete Save versions and retain associated version under Auto.
+V3 source→V2 refuses before publication; V2→V3 needs strict raw-coordinate proof. One
+outstanding Save per Engine prevents reverse completion relabeling; current private native
+acknowledgment prevents historical receipts renewing close after context ABA. The actual
+RED/GREEN, seven lifecycle/executor tests and version-specific independent regression are
+in docs/verification-v3000-application.md and docs/verification.md.
 
-Standalone codec5caf6ce's hosted43519338382 is terminal GREEN: Mac341/Linux339/Windows333,
-three actual windows and five10000-run ASAN targets. This is not application evidence.
-Newer fetched SDF/CDX corpus features are separate root source; no merged corpus pass is
-claimed here. Root integration226396e passed349workspace+3bridge with the four-file corpus;
-its own hosted43526538340 is still running at the last check. Fetched CDX98bc59a passes
-all jobs in43526004010. Main remains the prior c797262 checkpoint until matching integration.
+Corrected actual native acceptance completed2026-11-14T00:04:57UTC on macOS27.2 arm64,
+Apple M3 Max/Metal. Binary59ca30c81a16b8e5eccb9564ffd338328e70fd50a167cb71d2f3fdddad9ed8b0;
+Rust/Cargo snapshot3f07aa401d6defa7ea2524d1afb305da6774362b099d5227d64792e9abf5c824.
+Actual author→explicitV3→fullprecision external read→reopen; family Open/three Savechoices/
+default/exactcopies/Unicode/misleading suffix/malformed retention; downgrade refusal/retry;
+V2 promotion; empty→firstfragment/threeheaders; dirtyCancel/Save/exit/freshreopen all pass.
+Both2048 CPU and Metal GPU PNG replies arrive before approved native shutdown. Nine files
+and seven untouched window captures are independently checked, without changing the golden.
+All3apps91954/3402/8626 and controllers34220/1456/92948 exited0; CUA completed once.
+ROOT target/native-v3000-corrected-handoff.md identifies every artifact and exact limitation.
+Earlier6add… native run remains explicitly partial and separate. The rejected4096 harness
+probe is excluded; no false timing-hook/native race proof. All owned processes/jobs are gone.
 
-## Save-order correction and partial earlier native acceptance
+Hosted application43531603511 at1c53312 is in progress (Mac/Linux/ASAN pass; Windows active
+at last check). Observe exact jobs before main integration; do not replace it with older
+standalone results. Root correctiona689b0d now passes all jobs43529260274. Older standalone
+codec5caf6ce and merged226396e are GREEN in43519338382/43526538340. No completed run was
+restarted. Main remains c797262 pending combined integration at this checkpoint.
 
-Independent read-only review reproduced an existing save-order defect: older Save.complete
-publishesV2; a newer same-pathV3 save publishes/applies; older Engine.finish then falsely
-relabels the clean associationV2 while disk remainsV3. Next Auto rounds full-precision data.
-The target-only probe/report is ROOT target/v3000-integration-review.md. Source is local,
-not published as an accepted V3000 application feature. Root correctiona689b0d now adds a
-per-Engine reservation through finish/drop and private current-completion acknowledgment
-before UI close renewal. A second outstanding Save fails busy before writing; other
-commands remain available. This checkout incorporates the correction and its regressions.
-Actual V2/V3 RED target/v3000-save-order-red.log turns GREEN in v3000-save-order-green.log:
-no overlapping publication, then full-precision V3 and unchanged Auto encoding. Corrected
-sibling aggregate passed372 workspace plus3 bridge tests and every gate, including this
-checkout's inherited two-file corpus. Session3849 is terminal0; log
-target/v3000-completion-ci-integrated.log. CARGO_INCREMENTAL=0 avoids recreating inactive
-caches after the disk filled again. Source is frozen for corrected native acceptance.
+## Parallel work and next exact steps
 
-Native walkthrough deliberately stopped after this finding. Exact earlier binary
-6addbfb7603e4e40b174a80d672279a1352d99a7989d0a0411fa11c051376a79;
-source manifestf9a42db06b4543314d83a85d9e7c67269a1864085ba848c67247e1c64f4407ab.
-Actual Mac Open family, three Save As formats/defaultV3, Unicode exact copy/known Save,
-misleading suffix decoding, malformed retention/Cancel and clean Quit passed. These are
-partial observations. Full-precision authored/reopen, downgrade refusal, empty→first-fragment,
-V2 regression and dirty-close Save/Cancel remain unrun. The native PID38959/controller38630
-exited0; CUA completed. No native/controller/listener or Cargo job is live in this checkout.
-ROOT target/native-v3000-ui-handoff.md records exact artifacts and the23:24:48UTC stop.
+Root alone owns Git. Root checkout branch feat/mol-v3000-corpus currently combines a new
+standalone CDX Writer and fetched V3000 corpus; both are frozen. Its aggregate passes367
+workspace+3bridge in target/cdx-writer-v3000-corpus-ci.log. That includes five pinned files/
+four source bundles, unlike this checkout's inherited two-file corpus. No source/evidence
+or active checkout may be erased/shared to reuse build outputs.
 
-## Continue exactly
+file_io froze the legacy RXN codec only in persistent bondline-rxn, feat/rxn-v2000 from3b1fada.
+116 IO tests, targeted IO/fuzz clippy/fmt and ASAN10000 pass; all jobs ended. Root must review,
+run its own integration gate, update matrix/status, commit/publish and merge. Handoff is
+that checkout's target/rxn-final-handoff.json. It has its own target/incremental0/debug0.
+No application reaction model or V3000 reaction-wrapper support is claimed. Primary role
+spelling/consumer folding/mixed-MOL/EOF discrepancies remain explicit research evidence.
 
-1. Preserve all checkouts and their separate Cargo targets. Root alone runs Git. The root
-   correction passed356workspace+3bridge; hosted43529260274 is queued at the last check.
-   This feature's own hosted execution still follows corrected native acceptance/publication.
-2. Corrected-source sibling aggregate3849 passed; do not rerun unchanged source. Have the sole native agent
-   rebuild and complete actual V3000 acceptance. Earlier screenshots are partial old-source
-   evidence, not final proof. Publish only the corrected verified source and inspect its
-   own hosted run before integrating main.
-3. Merge with newer root corpus features, retaining the positive CDX seed/max_len131072 and
-   fifth V3000 target. Continue application SDF, wider CDXML/CDX, RXN/SMILES/InChI; then
-   M2 drawing/labels/styles, M3 chemistry/reactions, M4 publishing and M5 depth/distribution.
+1. Finish hosted43531603511, preserving exact IDs/results. Commit current native acceptance
+   docs as docs-only, with no source/test/fixture/oracle/lock changes.
+2. Complete root CDX-writer/V3000-corpus atomic commits, then merge this accepted application
+   branch into that root source. Preserve both source histories, all original vectors, positive
+   CDX seed/max_len131072 and fifth V3000 target. Test the actual combined checkout once.
+3. Review/integrate the RXN library and its sixth fuzz target. Continue application SDF,
+   broad CDXML/CDX, RXN/SMILES/InChI, then M2 drawing/labels/styles, M3 chemistry/reactions,
+   M4 publishing/Office and M5 depth/WASM/distribution. Keep M0 discovery/inventory gaps visible.
 
-The new legacy RXN library is being implemented by file_io only in persistent sibling
-/Users/sarenaberg/Workspace/doozle/open-source-world/bondline-rxn, feat/rxn-v2000 from3b1fada,
-using its own target, incremental0/dev-test debug0. No reaction-model/UI or V3000 reaction
-wrapper claim. Preserve primary REAGENT/AGENT, role folding and reader EOF diagnostics in
-ROOT target/rxn-next-handoff.md. Ask the owner for live handles before touching its paths.
+## Remaining limits
 
-Full graph editing/rendering, query/stereo/3D, SDF application/version dispatch, RXN/SMILES/
-InChI, connected drawing, general labels/styles, chemistry, reactions, publishing/Office,
-WASM and signed distribution remain open. One-fragment/page/layout/source-loss guards
-apply. M0 dialog/job/complete26.1 inventory and interactive Windows/Linux remain incomplete.
-Native strict-license blocker is resolved; runtime closures153/164/219 and2assets are
-unchanged. Later notice/browser audits remain M5 work. The approved golden remains
-1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc.
-No proprietary binaries/assets, external messages, release, installer or signing action.
+One-fragment/page/layout/source-loss guards apply. General imported graph editing/rendering,
+query/stereo/3D, SDF application/version dispatch, reaction-model editing, SMILES/InChI,
+connected drawing/rings/selection/labels/styles, chemistry/CIP/cleanup, publishing/Office,
+WASM and signed distribution remain open. M0 complete26.1 inventory/dialog/job discovery
+and interactive Windows/Linux remain unverified; native window smoke is not those workflows.
+
+Native strict-license blocker is resolved. Later notice/browser audits remain M5 work,
+including windows-permissions0.2.4's missing upstream LICENSE despite its MIT declaration.
+The only approved golden remains1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc.
+No proprietary binaries/assets, external messages, release, installer or signing actions.

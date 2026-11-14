@@ -39,8 +39,9 @@ guides are versioned evidence, not proof of complete modern parity.
 The V3000 application slice now retains versioned source/header/frame/history and exposes
 both versions through the existing two shared MOL commands. Auto Save keeps its associated
 version; Save As chooses V2000/V3000 explicitly; Open validates the actual family member.
-Independent IO/engine/CLI/stdio/loopback and UI tests plus the full local364+3 gate pass.
-Native acceptance and this feature's own hosted checks remain pending; see
+Independent IO/engine/CLI/stdio/loopback and UI tests plus the corrected local372+3 gate pass.
+Actual Mac author/save/reopen/refusal/close and CPU/GPU reply draining now pass at1c53312.
+This feature's own hosted checks are running in43531603511; see
 docs/verification-v3000-application.md. Conservative conversion/layout/source-loss refusals
 remain. Application SDF/version dispatch and broader mappings still follow; this is not M1 completion.
 

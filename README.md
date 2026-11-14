@@ -44,7 +44,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files; unknown imported content remains backed by its original bytes. |
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
-| MOL V3000 files | Version-aware shared commands, exact source retention and full-precision export. Native chooser/Open/copy inspected; final acceptance awaits the concurrent-save correction. |
+| MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
 | Rendering | Shared CPU/GPU page scenes and PNG captures, with one human-approved regression scene. |
 | Automation | Thirteen typed commands shared by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
@@ -118,7 +118,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
 | CDX | Standalone bounded parser and opaque property editing, with independent consumer tests | Application model mapping and import/export |
-| MOL / SDF | MOL V2000 native workflow; V3000 shared files/chooser pending final acceptance; SDF V2000 library preserves ordered records/data | Concurrent-save correction, full native V3000 acceptance, application SDF workflows/corpus and broader metadata/layout support |
+| MOL / SDF | MOL V2000/V3000 native file workflows; source retention and independent consumer checks; SDF V2000 ordered-record/data library | Application SDF workflows/corpus, broader metadata/layout support and interactive Windows/Linux |
 | RXN / SMILES / InChI | Planned | Format support and independently verified chemistry |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |
