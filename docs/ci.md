@@ -417,3 +417,14 @@ All three actual window launches report Metal/Apple Paravirtual device, Vulkan/l
 smokes, not interactive Windows/Linux chemistry or hardware-performance measurements.
 Main advanced to this exact source only after terminal GREEN. No new native20-command
 field editor, application SMILES flow, golden approval or complete M0/M1 claim follows.
+
+## Complete SMILES file parser configuration
+
+The separate eighth parser target, smiles_file_parse, now has a future workflow step
+with the same pinned tools/seed143812957/runs10000/max_len65536/timeout5 as its local
+ASan evidence. Its dedicated ignored corpus uses six unchanged notation files plus two
+original whole-file vectors; it never reuses the earlier target's mutated runtime corpus.
+The exact seeding block was locally executed in an isolated temporary directory and all
+eight initial files match the actual local ASan start byte-for-byte. Existing PyYAML
+parses the workflow. These are static/local checks; no hosted job ran. Repository and
+workflow Actions remain disabled until full-project completion or a new user instruction.

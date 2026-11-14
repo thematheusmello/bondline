@@ -2206,3 +2206,10 @@ separate from unchanged old notation fuzz evidence and large-limit unit checks. 
 stays disabled; no new native/Windows/Linux/hosted check, dependency/lock/font/golden
 change or full M0/M1 completion is claimed. The receiving combined workspace gate is
 recorded separately after integration, rather than inferred from overlapping scoped runs.
+
+Receiving source d100d63 passes Root82639 cargo xtask ci:747workspace+3Mac bridge=750,
+0failed/ignored. Fmt/clippy/layers/unchanged runtime-license/asset/corpus gates pass.
+Log91137B/SHA256 71f13d4b2eb183ca426ad2bb258fe3fb927a706c9d95ce0a7070a3d4a65f6984.
+[Receiving details](verification-smiles-file-app.md#root-receiving-gate) retain source/
+producer scopes and the original whitespace-only merge resolution. No new native, hosted
+or other-platform workflow was executed; Actions is still disabled at both levels.

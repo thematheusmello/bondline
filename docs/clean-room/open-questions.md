@@ -181,7 +181,7 @@
 - Named opt-in normalization now materializes a restricted neutral fixed-H profile, and a
   separate Fragment writer emits noncanonical notation. Source/IR distinctions remain;
   live implicit-H editing, general radical/charge/polyvalent behavior, source-backed
-  application SMILES and layout remain unresolved. Literal aromatic syntax now exists,
+  general SMILES drawing import and layout remain unresolved. Literal aromatic syntax exists,
   but aromatic model mapping/perception, stereo/maps and canonicalization do not. Pinned
   unsanitized RDKit has documented dialect/token-normalization differences; zero radical
   getters and unavailable Python cleanup control cannot decide these semantics. See

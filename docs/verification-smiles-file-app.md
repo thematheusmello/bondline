@@ -90,3 +90,32 @@ missing-backend compilation failure; no UI assertion ran then. Actual native exe
 is unverified while the user is using the computer. Windows/Linux and hosted execution
 are unverified; Actions stays disabled. No chemical preview/editing, record selection,
 metadata editor, broader notation/chemistry or completed M0/M1 claim follows.
+
+## Root receiving gate
+
+Root received exact sourcea7c638f as d100d63 after independently rehashing all34 frozen
+app/UI/docs files, the six-file UI handoff/five logs/nineteen protected files, and its
+original five UI source identities. The sole cherry-pick conflict was blank EOF context
+in open-questions.md; the resolved file is byte-exact to the supplied app source.
+Codec/I/O/fuzz receiving commits remain separate. Root82639 cargo xtask ci exits0:
+747workspace+3Mac bridge=750passed,0failed/ignored across117 result lines. Formatting,
+workspace all-target warnings-denied clippy, layers, unchanged declared runtime licenses/
+two assets and eight-file five-bundle corpus pass. Root default debug/incremental0/own
+absolute target and existing pinned Python were used. Log91137B/SHA256
+71f13d4b2eb183ca426ad2bb258fe3fb927a706c9d95ce0a7070a3d4a65f6984.
+No source/expectation correction was required at this gate. Receiving edits after it are
+continuation/evidence documentation and the disabled future workflow's eighth parser
+configuration. The exact seed block was executed locally in an isolated temporary directory;
+all eight SMILES-file seed bytes match the actual ASan start. Existing PyYAML parses the
+workflow successfully. No hosted run or enable/dispatch was used, and no runtime source
+changed, so the passing runtime suite was not repeated for these static edits.
+
+Actions readback remains enabled=false, workflow417397204 disabled_manually, with all54
+returned historical runs completed. No enable/dispatch/rerun occurred. No new native GUI,
+Windows/Linux or hosted acceptance follows; M0/M1 and the persistent full goal remain open.
+Root receipts and raw API readbacks stay ignored under target/, not product assets.
+
+Root also checked261 committed source/compat/fuzz/asset/manifest files against d100d63;
+all remain exact after the gate. Approved golden SHA1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc
+is unchanged. The existing external Python reports debug=True,optimize=0,Python3.13.0/
+RDKit2026.09.2; assertions remain enabled. Static workflow and post-gate receipts are ignored.
