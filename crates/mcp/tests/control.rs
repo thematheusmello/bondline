@@ -17,6 +17,8 @@ mod sdf_field_support;
 mod sdf_record_support;
 #[path = "../../../xtask/oracles/sdf_test_support.rs"]
 mod sdf_support;
+#[path = "../../cli/tests/support/smiles_export.rs"]
+mod smiles_export_support;
 use std::{
     io::{BufRead, BufReader, Read, Write},
     net::{Ipv4Addr, Shutdown, SocketAddr, TcpStream},
@@ -55,6 +57,52 @@ fn authenticated(
     )?;
     assert_eq!(response, serde_json::json!({"authenticated":true}));
     Ok(client)
+}
+
+#[test]
+fn authenticated_export_is_exact_nonfirst_fragment_data_and_does_not_repaint_or_reassociate()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("socket-export-native.cdxml");
+    let output = directory.path("socket-export-λ.data");
+    std::fs::write(&input, smiles_export_support::SOURCE)?;
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, Arc::clone(&engine), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    call(
+        &mut client,
+        &serde_json::json!({"command":"document.open_cdxml","params":{"path":input}}).to_string(),
+    )?;
+    wait_for_changes(&changes, 1);
+    let before = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+    let result=call(&mut client,&serde_json::json!({"command":"file.export_smiles_fragment","params":smiles_export_support::params(1,&output)}).to_string())?;
+    smiles_export_support::assert_export(&result["result"], &output)?;
+    assert_eq!(
+        call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+        before
+    );
+    assert_eq!(changes.load(Ordering::SeqCst), 1);
+    let mut wrong = smiles_export_support::params(1, &directory.path("missing.smi"));
+    wrong["fragment_id"] = serde_json::json!(99);
+    let refused = call(
+        &mut client,
+        &serde_json::json!({"command":"file.export_smiles_fragment","params":wrong}).to_string(),
+    )?;
+    assert_eq!(refused["error"]["code"], "not_found");
+    assert!(!directory.path("missing.smi").try_exists()?);
+    assert_eq!(
+        call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+        before
+    );
+    assert_eq!(changes.load(Ordering::SeqCst), 1);
+    smiles_export_support::consume(&output)?;
+    assert_eq!(std::fs::read(&input)?, smiles_export_support::SOURCE);
+    server.shutdown()?;
+    Ok(())
 }
 
 #[test]

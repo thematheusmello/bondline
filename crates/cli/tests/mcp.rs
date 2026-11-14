@@ -15,6 +15,8 @@ mod sdf_field_support;
 mod sdf_record_support;
 #[path = "../../../xtask/oracles/sdf_test_support.rs"]
 mod sdf_support;
+#[path = "support/smiles_export.rs"]
+mod smiles_export_support;
 use std::{
     io::{BufRead, BufReader, Write},
     process::{Child, ChildStdin, Command, Stdio},
@@ -104,6 +106,63 @@ impl Drop for Client {
 }
 
 #[test]
+fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_the_session()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("stdio-export-native.cdxml");
+    let output = directory.path("stdio-export-λ.data");
+    std::fs::write(&input, smiles_export_support::SOURCE)?;
+    let mut client = Client::start()?;
+    client.call(1,"initialize",json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"export-test","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let listed = client.call(2, "tools/list", json!({}))?;
+    let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
+    assert_eq!(tools.len(), 22);
+    let tool = tools
+        .iter()
+        .find(|t| t["name"] == "file.export_smiles_fragment")
+        .ok_or("export tool")?;
+    assert_eq!(tool["annotations"]["readOnlyHint"], false);
+    assert_eq!(tool["inputSchema"]["additionalProperties"], false);
+    assert_eq!(
+        tool["inputSchema"]["required"]
+            .as_array()
+            .ok_or("required")?
+            .len(),
+        4
+    );
+    let opened = client.call(
+        3,
+        "tools/call",
+        json!({"name":"document.open_cdxml","arguments":{"path":input}}),
+    )?;
+    let mut before = opened["result"]["structuredContent"].clone();
+    before
+        .as_object_mut()
+        .ok_or("state")?
+        .remove("file_operation");
+    before["changed"] = json!(false);
+    let result=client.call(4,"tools/call",json!({"name":"file.export_smiles_fragment","arguments":smiles_export_support::params(1,&output)}))?;
+    assert_eq!(result["result"]["isError"], false);
+    smiles_export_support::assert_export(&result["result"]["structuredContent"], &output)?;
+    let inspected = client.call(
+        5,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    assert_eq!(inspected["result"]["structuredContent"], before);
+    let refused=client.call(6,"tools/call",json!({"name":"file.export_smiles_fragment","arguments":smiles_export_support::params(1,&output)}))?;
+    assert_eq!(
+        refused["result"]["structuredContent"]["error"]["code"],
+        "already_exists"
+    );
+    smiles_export_support::consume(&output)?;
+    assert_eq!(std::fs::read(&input)?, smiles_export_support::SOURCE);
+    client.finish()?;
+    Ok(())
+}
+
+#[test]
 fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real()
 -> Result<(), Box<dyn std::error::Error>> {
     let directory = file_support::FileTestDirectory::new()?;
@@ -115,7 +174,7 @@ fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real(
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 21);
+    assert_eq!(tools.len(), 22);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
@@ -772,6 +831,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "document.save_mol",
             "document.save_sdf",
             "file.convert_smiles_to_cdxml",
+            "file.export_smiles_fragment",
             "history.redo",
             "history.undo",
             "page.set_size",

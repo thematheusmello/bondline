@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has twenty-one commands; the complete list is below.
+The delivered registry has twenty-two commands; the complete list is below.
 
 An engine JSON request is exactly:
 
@@ -53,6 +53,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.open_sdf` | `path`, optional `discard_unsaved=false` | Validate every mixed V2000/V3000 record and retain complete ordered source; clean collection session and cleared history, without a drawing projection |
 | `document.save_sdf` | `path`, optional `overwrite=false` | Atomic whole-source collection save; retains every record, MOL version, ordered field and byte; no molecular regeneration |
 | `file.convert_smiles_to_cdxml` | Required `expected_revision`, `input_path`, `output_path`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt` | Deferred create-only conversion of one bounded neutral carbon/Single path into new native CDXML; current session and all its baselines remain unchanged |
+| `file.export_smiles_fragment` | Required `expected_revision`, positive `page_id`, positive `fragment_id`, `output_path` | Create-only noncanonical explicit-H SMILES file for exactly one complete-source selected fragment; geometry/document context are explicitly not encoded and the current session is unchanged |
 | `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
 | `sdf.field.set_value` | Required `expected_revision`, positive `record_id`, zero-based existing `field_index`, `value_lines` | Deferred immutable existing-field edit, one whole-content history commit; byte-preserving no-op and strict stale/input guards |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
@@ -220,7 +221,7 @@ outcome, even if an OS syscall exceeds the request deadline. Dropping the awaiti
 cancellation but retains the worker permit until it exits.
 
 Stable file errors include `invalid_path`, `file_too_large`, `not_regular_file`, `symlink_target`,
-`file_changed`, `unsupported_content`, `invalid_document`, `invalid_sdf`, `invalid_smiles`, `resource_limit`, `not_found`, `already_exists`,
+`file_changed`, `unsupported_content`, `invalid_document`, `invalid_sdf`, `invalid_smiles`, `invalid_smiles_export`, `resource_limit`, `not_found`, `already_exists`,
 `permission_denied`, `unsupported_filesystem`, `io_error`, `recovery_required`. Post-publication
 error is `save_published`; its message states that new bytes exist and no rollback occurred.
 Recovery messages identify a retained original path. Directory-sync false is a capability
@@ -643,3 +644,56 @@ as Open/Save or ignoring an ID. A conversion cannot complete, clear or renew a t
 Save acknowledgment. CLI, stdio MCP and authenticated loopback use the same registry/worker
 operation; native conversion controls and interactive acceptance remain missing. See
 [verification-smiles-conversion-command.md](verification-smiles-conversion-command.md).
+
+## Selected-fragment SMILES export
+
+`file.export_smiles_fragment` exports the complete supported chemical graph of the exact
+application page/fragment IDs supplied. Its four parameters are required and closed. Positive
+missing IDs return `not_found`; zero IDs or unknown/wrong-shaped parameters fail
+`invalid_params`; mismatched revision fails `stale_revision` before IO. No first fragment,
+UI selection or implicit H is substituted. The registry/MCP flag is `read_only:false`
+because the command writes a new file.
+
+The current content must be Drawing with `StoredDocument::is_fully_mapped()` true. SDF,
+always-incomplete CDX and unknown/extended/noncanonical CDXML refuse. A false MOL complete
+classification also refuses conservatively, including coordinate-preservation limitations;
+this does not independently prove its chemical projection incomplete. The entire immutable
+StoredContent owner stays captured, not only a projection or authority boolean. Selection
+and source eligibility are checked before IO and from that same owner on the worker.
+
+The unchanged writer requires supported neutral H/C/N/O/F/Cl/Br/I, RadicalNone and exact
+authored H counts, with its finite valence guards. It preserves positive model isotopes,
+physical H nodes, Single/Double/Triple, branches, cycles and all components of the chosen
+fragment. None H and unsupported chemistry refuse; no normalizer, renderer or carbon-path
+layout restriction is applied. Authored IDs choose deterministic traversal, not canonical
+chemical order, and are not encoded as atom-map/class fields.
+
+The new file is the unchanged writer notation plus exactly one LF: no name, BOM, header,
+trailing spaces or additional record. The writer's65,536-byte notation cap remains, so the
+file may be65,537 bytes. Existing parser/converter raw-input caps remain65,536; a maximum
+export therefore exceeds their current whole-file input cap by one byte. No round-trip
+SMILES project/import compatibility is claimed and no limit is silently changed.
+
+Success adds `smiles_export` to the latest current Engine state:
+
+```json
+{"smiles_export":{"profile":"neutral_explicit_h_fragment_v1","scope":"selected_fragment_chemical_graph","not_encoded":["geometry","document_context"],"input_revision":1,"session_generation":1,"page_id":1,"fragment_id":2,"atom_count":2,"bond_count":1,"output":{"path":"/chosen/new.smi","byte_length":13,"directory_synced":true}}}
+```
+
+Those example counts/bytes describe `[13CH3][OH1]` followed by LF. `geometry` excludes
+coordinates/depiction; `document_context` excludes application identities, page/layout/style,
+unselected content and original container/source bytes. These are declared export categories,
+not permission to discard unmodeled chemical data. The output is not an editable drawing
+or a whole-document Save. The complete active current/saved/original/source, history,
+identity floors, association/format/dirty, close and native intent/ack remain unchanged.
+Ordinary state/inspect omits `smiles_export`; it is only a publication receipt.
+
+Preparation uses the same save reservation as native saves and conversion. The whole owner
+and lease survive worker publication in Completed until finish/drop. A second publication
+fails `busy` before IO; cancelled/refused/dropped work releases its reservation. Existing
+two-worker, reply-flush and close barriers apply without a new pool/dispatcher. Finish
+returns the latest state and the captured revision/generation/IDs even after edits/Open or
+committed close, without installing an old session or inventing rollback after publication.
+The generic native-file binder explicitly refuses export; it cannot complete or renew a
+native Save acknowledgment. Native export controls/clipboard workflows remain missing.
+See [verification-smiles-export-command.md](verification-smiles-export-command.md).
