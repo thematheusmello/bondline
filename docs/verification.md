@@ -2062,3 +2062,13 @@ preserve all original source checks. Source/external fixed vectors remain indepe
 these generated invariants do not establish arbitrary chemistry. No new native workflow,
 golden/dependency/lock/model semantic or complete M0/M1 claim. Hosted checks are pending
 for the receiving revision; previousbb6d5b9 evidence cannot be substituted.
+
+## Restricted SMILES path geometry, 2026-11-14
+
+See [verification-smiles-layout.md](verification-smiles-layout.md) for missing-API and
+runtime REDs, original analytic/topology/ink expectations, all1–12 actual reference scenes,
+unchanged Expat/Decimal/RDKit consumers and strict native CDXML reopens. Scoped IO209,
+focused6 acceptance and all-target IO clippy pass; exact final logs/source are in the
+ignored handoff. This is one explicit pure-document library operation, not an application
+SMILES import/Save/cleanup command or native workflow. The user remains active on input;
+no GUI/input/activation/native test ran and no prior golden was regenerated.
