@@ -11,10 +11,69 @@ Do not enable/dispatch/rerun it until full-project completion or a new user inst
 Readback confirms enabled=false, workflow417397204 disabled_manually and0 running/queued
 runs. Local quality gates and atomic commits continue; hosted checks do not block development
 integration. This overrides every older pending-hosted/main-gate direction. See docs/ci.md.
-The user is actively using the computer: no local interactive GUI/input/activation until
-availability is indicated again. Continue source and headless work.
+The user authorized opening Bondline for the current visual review. Root's final app is
+intentionally open; CUA review is complete. Future sessions should check user availability
+before further native input; continue headlessly meanwhile. No reference binaries were
+inspected in this delivery. The latest supplied agent instructions restore the mandatory
+public-source clean-room boundary.
 
 ## Current revisions and gates
+
+Feature branch `feat/multiple-bonds` starts at
+`a279bced1fee31eebc163b5d1e02e3ade0fd05ff`. Recoverable implementation revision is
+`485cb84` (followed by this documentation checkpoint). Atomic commits:
+`2e2ced3` shutdown test robustness; `57bedb5` centered renderer/MOL/SDF display;
+`0ddaa61` ordered-carbon/tool commands and adapters; `dd57d2d` exact fuzz seed recipe;
+`485cb84` native workspace/tools, independent tests and actual README captures.
+All intentional project files are included; caches/build outputs stay ignored. New work
+is committed locally on this feature branch, with no push/publication during this review.
+
+- Shared registry now has26 commands. `bond.create`/`bond.extend` accept explicit Single/
+  Double/Triple with literal neutral-carbon H budgets and exact history/source guards.
+  `ui.bond_tool` has typed order, checked transient epoch and three bindings; direct
+  commands still default Single. Real loopback mode changes request repaint.
+- Renderer uses original centered3w components, one logical bond identity, component-aware
+  attachment/hits/hover, exact pixel/gap witnesses and conservative congestion/resource
+  checks. Single golden, old Stroke methods and source/None data remain exact.
+- Six frozen command/image, three CLI/stdio and six actual-frame workflows pass. Existing
+  supported multiple refusals become stronger positives on the same inputs; other negative
+  guards remain. Two normal-parser ASan runs10000 each and twelve fixed replays pass, with
+  observed404/388B maxima, not configured64KiB coverage. README regenerates all24 exact
+  seed/source copies; no parser/dependency/lock/old fixture/oracle changed.
+- The real light48-header/64-tool-rail/248-inspector/24-footer workspace now preserves
+  first-frame guidance, paper placement and the unchanged8-unit label guard. Root94657
+  passes118 UI tests; two independent presentation cases pass on the same final source.
+- Root aggregate52371 passes `cargo xtask ci`:891 tests, zero failures, one ignored explicit
+  dev capture utility; fmt/clippy/layers/licenses/corpus and3Mac bridge tests pass. Log
+  SHA`b501300c736fc66eab376f6cefd7620340c376899fe748858939ffe25c7d5403`.
+  The same ignored helper is explicitly run and passes, producing the final1600×1000
+  offscreen image. Exact renderer-only staged-tree CI76060 passes866/0/0; isolated backend
+  CI58584 passes883/0/0. After preserving the mixed snapshot cache, final clean Root1724
+  rebuilds the normal default target and passes891/0/1 again, log119044B/SHA
+  `f8f05260270fba0f3ce65ab80c49c194070c0318fc940c934e6acea846afd192`.
+  Concrete local documentation links and public-safe JPEG/scene provenance also pass.
+- The final native Mac executable is SHA
+  `bbf429b73856327394478913723230b4b5b1d2690188b38edfffe86cb5f8827f`, UI source
+  `98d0dd17b413a34b248a501f347372260634e8a94a333eb7d61ff8752965bca2`. Actual visual
+  review verifies the original six-atom/three-bond scene, inspector, Double accessibility
+  activation and File/Open/format-list/Cancel. Registry-seeded CDXML is independently read
+  by Expat/Decimal/RDKit. Two early native drags made no change; do not claim native drawing
+  acceptance. New Double/Triple native authoring/attachment/history/save remains unverified.
+
+Historical failed checks are retained: stale CLI discovery sets; original listener connect
+assertion; footer clipping/host bounds; auto-height coordinate drift; first-pass Grid
+discard;94-unit wrapped rail; and84-footer label-scale regression. Test selectors were
+corrected narrowly, while production layout fixes preserve old assertions/guards. Shutdown
+tests now separately prove partial-client closure and no-client listener ownership; Windows
+TIME_WAIT is not worked around. Shared-target staged backend checking also emitted old-API
+errors despite correct exported source, followed by Root87867 old-API diagnostics.
+Prior-export dep-info is present; the exact Cargo freshness mechanism remains unproven.
+The isolated backend and final clean Root gates pass unchanged. The complete old debug
+cache is archived in `target/debug-pre-index-recovery`; relocation receipt preserves prior
+artifact paths. Future exports must use their own absolute targets.
+See verification-multiple-{authoring,render,commands,ui}.md, verification-workspace-presentation.md
+and verification-listener-shutdown-portability.md under docs/. This is no full M0/M1/M2 or
+reference-style claim, and no new Windows/Linux/hosted/golden approval.
 
 Recoverable MOL delivery commits: complete capture ownershipc788787, shared display
 producerfd51ca1, registered command/independent acceptance1e25603, native canvas wiring/
@@ -76,8 +135,8 @@ incomplete as documented; displays are not a general chemistry engine.
 
 ## Delivered receiving scope
 
-25 shared typed commands: document.inspect/close; CDXML/CDX/MOL/SDF/SMILES-file Open/Save;
-page.set_size; bond.create/extend; history.undo/redo; render.capture; ui.controls/file;
+26 shared typed commands: document.inspect/close; CDXML/CDX/MOL/SDF/SMILES-file Open/Save;
+page.set_size; bond.create/extend; history.undo/redo; render.capture; ui.controls/file/bond_tool;
 sdf.record.inspect, sdf.field.set_value, smiles.record.inspect, file.convert_smiles_to_cdxml and
 file.export_smiles_fragment. UI/CLI/stdio/authenticated loopback use one registry; the
 export/conversion commands have no native control. Headless engines do not fake dialogs.
@@ -87,7 +146,7 @@ shared closed neutral C/N/O/halogen display H at actual Page/IDs/frame; source/m
 and literal zero/unusual counts stay exact. Native initial/post-command vectors use the
 same producer through Engine. Headless CPU/GPU/adapter and real-frame paint/hit/source
 checks pass; actual native MOL label acceptance remains unverified. Source-free/CDXML
-keep literal behavior. Other bond orders/charge/isotope/radical/stereo/general valence and
+keep literal behavior. Other orders beyond centered Single/Double/Triple, charge/isotope/radical/stereo/general valence and
 source-faithful style mappings remain missing; no new authoring/Save permission follows.
 
 SDF retains complete mixed-version source through current/saved/history/plans; state has
@@ -98,7 +157,7 @@ preserves untouched bytes. No-op shares source/index and keeps history/close sta
 versus original baselines and the full prepare-to-finish save lease remain distinct.
 Actual edited files face unchanged raw/per-MOL consumers. Restricted all-record headless
 capture now uses derived geometry/ID maps and separate display-H provenance while preserving
-authored None/literal counts. Neutral nonisotopic/nonradical Single depiction, actual paper
+authored None/literal counts. Neutral nonisotopic/nonradical Single/Double/Triple depiction, actual paper
 ink/attachment/readability/resource checks and honest whole-capture refusals apply. Virtual
 page1 never becomes a drawing/history/Save authority. Native SDF now has an asynchronous
 read-only preview with weak source identity, full view/DPI/close-epoch invalidation,
@@ -155,7 +214,7 @@ checks. windows-permissions0.2.4 lacks an upstream LICENSE despite its MIT decla
 this remains a release notice-audit question. No dependency/lock/version/asset change.
 
 Neutral-element rendering now covers all118 symbol ink with literal H and unchanged
-carbon behavior, under positioned/neutral/nonisotopic/RadicalNone/Single guards. One
+carbon behavior, under positioned/neutral/nonisotopic/RadicalNone guards and supported bond orders. One
 uniform4xBOX external FreeType comparison retains80 cases and0.90 whole-label threshold;
 original96em failures, exploratory per-glyph limits, scoped controls and bounded8x
 consistency are recorded, not hidden. Native elemental-label authoring, new native label
@@ -189,35 +248,33 @@ ship. Existing restoration exceptions remain recorded. Only approved golden SHA:
 
 ## Active work and next steps
 
-All owned Cargo/fuzz/native/controller/helper jobs, test subprocesses and listeners are
-terminal. Root33573 and receiving46420 passed. Completed worker copies are already received,
-not pending feature work. Root owns all Git:
-- native_acceptance: bondline-mol-display-io (receivedfd51ca1), then
-  bondline-mol-display-fuzz (received0c847eb).
-- reference_map: bondline-mol-display-tests (received1e25603), then bounded public
-  multiple-bond research for the next gate.
-- sdf_setter_review: bondline-mol-display-ui (receivedacdbf1c).
+Root owns Git/integration. All renderer/command/frame/research agents have delivered
+frozen handoffs; no worker Cargo/native jobs remain. Root's final native app/launch waiter
+89286 / owned PID24761 remains intentionally live for the user at ignored
+`target/workspace-review-native/Bondline.app`. Startup credentials remain only in ignored
+`final-stdout.jsonl`; never print or publish them. Source/build/frame/consumer receipts
+and failed logs are under target/. Check actual process/handle state before acting.
 
-Target/.cache handoffs, raw probes, binaries, original seed snapshots and mutated corpora
-are ignored disposable evidence; no cleanup is needed. Do not reapply historical worktree/
-stash mirrors4c1e1ffaa55d91738fd6574f71931c0a82f126c0 or
-dfaf24f884569c8702e7e679493b3619815750ca. Targets remain separate and incremental0;
-Root default debug and sibling debug0 are intentional. Inspect Git/live handles before resuming.
+Target/.cache reports, binaries, corpus mutations and reference screenshots are disposable
+build evidence. No cleanup is needed. Do not reapply historical stash/worktree mirrors. Use
+separate absolute targets for every worktree/index export and incremental0. One attempted
+shared-target index build exposed old-export metadata; keep its failure, not its cache.
 
-1. Next unblocked graph gate: read docs/research/multiple-bond-plan.md and its primary
-   sources. Add independent centered Double/Triple analytic geometry/pixel/hit REDs before
-   implementation, retaining one logical stable bond identity and all masking/attachment/
-   paper/readability/resource guards. Source/model/MOL/CDXML already store those orders;
-   rendering currently refuses. The new plan is unexecuted, not a feature or passing test.
-   Keep asymmetric/ring placement, style inheritance, authoring/UI and full M0–M5 scope
-   visible; do not invent a universal reference spacing default.
-2. Actual native MOL/SDF preview, SMILES-file/conversion/export/new-element acceptance
-   waits for explicit user availability. Never infer it from time/pointer state. Preserve
-   the exact approved golden. Inventory/dialog/control/platform evidence, broader source
-   mappings/chemistry/layout and M2–M5 remain open; M0/M1 are not completed.
-3. Leave Actions disabled until full-project completion or explicit new user instruction.
-   Local gates govern integration. New Windows/Linux/native/hosted checks stay unverified.
-   Retain the unexplained MCP shutdown failure if it recurs; investigate decisive cause
-   without weakening assertions. The persistent goal remains ACTIVE.
+1. This visual/ordered-bond checkpoint is complete locally. Verify Git HEAD/branch and the
+   intentionally open app before continuing. Full clean891 gate applies to the exact final
+   source above; earlier845/866 gates retain their own scope. Keep Actions off and require
+   an explicit request before pushing/publishing this local feature branch.
+2. Next authoring slice: cite the guide's existing-bond conversion/click/hotkey rules, add
+   independent order-edit/H-policy/history/source-error tests, then one shared typed command
+   and actual UI wiring. Current tools create/extend; they do not convert existing bonds,
+   cycle sidedness or supply missing hotkeys. Rings/chains/snapping/general selection/labels
+   and reference styles remain missing.
+3. Native Double/Triple authoring and MOL/SDF/SMILES/new-element acceptance needs a bounded
+   actual-window session with user availability. The present open app is for visual review.
+   Preserve the approved Single golden and record failed event/focus delivery honestly.
+4. Continue M1 broader mappings/retention and M0 inventory/dialog/control/platform evidence,
+   then M2–M5. Local gates govern development while Actions is disabled. Windows/Linux
+   interaction, chemical analysis, publishing/Web/installers remain unfinished. The
+   persistent goal is ACTIVE, and no milestone is completed by this preview.
 
 No new golden approval, PR/release/installer/signing, account/TCC or unrelated messages.
