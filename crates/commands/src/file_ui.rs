@@ -252,8 +252,14 @@ impl Engine {
             return Err(Error::UiBusy);
         }
         let matches = match (&active.view.action, &actual) {
-            (UiFileAction::Open, Command::OpenCdxml(_) | Command::OpenMol(_)) => true,
-            (UiFileAction::SaveAs, Command::SaveCdxml(_) | Command::SaveMol(_)) => true,
+            (
+                UiFileAction::Open,
+                Command::OpenCdxml(_) | Command::OpenCdx(_) | Command::OpenMol(_),
+            ) => true,
+            (
+                UiFileAction::SaveAs,
+                Command::SaveCdxml(_) | Command::SaveCdx(_) | Command::SaveMol(_),
+            ) => true,
             (UiFileAction::Save, Command::SaveCdxml(params)) => {
                 active.view.input_path.as_ref().is_none_or(|path| {
                     self.file_format == FileFormat::Cdxml
@@ -266,6 +272,11 @@ impl Engine {
                     self.file_format == self.mol_save_format(params.version)
                         && path == &params.path
                         && params.overwrite
+                })
+            }
+            (UiFileAction::Save, Command::SaveCdx(params)) => {
+                active.view.input_path.as_ref().is_none_or(|path| {
+                    self.file_format == FileFormat::Cdx && path == &params.path && params.overwrite
                 })
             }
             _ => false,

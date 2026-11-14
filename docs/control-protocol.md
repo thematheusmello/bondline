@@ -3,6 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
+The delivered registry has fifteen commands; the complete list is below.
 
 An engine JSON request is exactly:
 
@@ -27,7 +28,7 @@ Revision overflow rejects the operation before history eviction or mutation.
 
 Page snapshots include a fragments array, empty in the default application. Engine history
 now retains an owned StoredDocument, including original CDXML data. An engine initialized
-with that API returns an additional source object: {format: "cdxml"|"mol", byte_length, modified}.
+with that API returns an additional source object: {format: "cdxml"|"cdx"|"mol", byte_length, modified}.
 The field is omitted for native in-memory documents. Raw source bytes are not serialized.
 The open/save commands below use that complete backing. bond.create authors a limited native
 chemical fragment; source-backed creation is refused unless a complete profile is proven.
@@ -35,7 +36,7 @@ Exact current native encoding byte equality now permits headless edits/captures 
 reopening. Other modified source-backed models cannot export stale XML; exact undo restores
 original bytes/exportability.
 Failed imports retain the prior complete state/history/path. Registry saves encode through
-StoredDocument::to_cdxml; no command result includes raw XML bytes. Native file-menu delivery
+StoredDocument's format-specific export guards; no command result includes raw source bytes. Native file-menu delivery
 is a separate UI integration; general imported structural editing remains missing.
 See model.md for the data boundary; serialized graphs are not a project-save workflow.
 
@@ -44,6 +45,8 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.inspect` | `{}` | Read-only snapshot |
 | `document.open_cdxml` | `path`, optional `discard_unsaved=false` | Bounded native CDXML read; successful application starts a clean document session and clears history |
 | `document.save_cdxml` | `path`, optional `overwrite=false` | Atomic complete-source save; default no-clobber; authoring revision/history retained |
+| `document.open_cdx` | `path`, optional `discard_unsaved=false` | Bounded read of the supported CDX projection with complete source; new clean session and cleared history; A4 preview policy, faithful preview/editing unavailable |
+| `document.save_cdx` | `path`, optional `overwrite=false` | Atomic exact unchanged CDX backing only; changed models, source-free encoding and lossy cross-format export refuse |
 | `document.open_mol` | `path`, optional `discard_unsaved=false`, `points_per_unit=24`, `origin_x_pt=72`, `origin_y_pt=72` | Validate and decode the actual V2000/V3000 version; retain complete source/frame; same guarded new-session behavior as CDXML |
 | `document.save_mol` | `path`, optional `overwrite=false`, `version="auto"` (`auto`, `v2000`, `v3000`) | Atomic MOL save with captured output version; refuses unsupported conversion/metadata/layout loss; imported source retains its frame |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
@@ -59,7 +62,7 @@ The delivered CLI exposes `commands` and `run --cmd '<request>'`. Repeat `--cmd`
 sequential operations in one in-memory engine; stdout is one final JSON snapshot. Failure
 prints a structured error to stderr and exits 2 (I/O/serialization failures exit 1). It does
 not make a multi-command transaction. Explicit open/save commands persist the supported
-CDXML/MOL subsets; otherwise invocations remain independent. `--help` lists actual operations.
+CDXML/CDX/MOL subsets; otherwise invocations remain independent. `--help` lists actual operations.
 
 Native Page presets/rotation, Edit Undo/Redo and history shortcuts call these same commands.
 The canvas reads the authored dimensions; no native control edits the model directly.
@@ -155,7 +158,7 @@ Cancellation/error codes include `cancelled`, `render_failed`, `backend_unavaila
 
 ## File operations and saved state
 
-Every result includes `file: {path: string|null, dirty: boolean, format: "cdxml"|"mol_v2000"|"mol_v3000"}`. Dirty compares the complete
+Every result includes `file: {path: string|null, dirty: boolean, format: "cdxml"|"cdx"|"mol_v2000"|"mol_v3000"}`. Dirty compares the complete
 current snapshot with the last successful save/open baseline, including unknown source data.
 Undo back to that baseline is clean; exact no-ops do not dirty it. `source.modified` instead
 describes the retained original backing's baseline. A changed native-profile file may be
@@ -239,6 +242,19 @@ Malformed MOL reports `invalid_mol`; valid but unsupported content reports `unsu
 See file-formats.md for exact supported fields and remaining M1 scope.
 See [V3000 application evidence](verification-v3000-application.md) for the independent
 RED/GREEN tests, native acceptance status and remaining platform limits.
+
+CDX opens use the existing limited decoder and complete StoredDocument backing, not syntax
+Writer regeneration. They use the filesystem library's explicit A4 preview policy, not
+inferred BoundingBox/paper settings. Source H remains absent when not authored. Every CDX
+import remains is_fully_mapped=false, so default capture/preview and bond creation refuse.
+An exact unchanged save preserves all known and opaque source bytes; a model/page change
+refuses until exact Undo restores its original baseline. CDX-to-CDXML/MOL and source-free
+CDX saves refuse before temporary publication. Native Known Save uses associated `cdx`,
+even with a misleading suffix; Save As has an explicit CDX choice and guarded retries.
+The same FilePlan/Completed save reservation, revision/generation checks, trusted request
+receipt/current acknowledgment and close barriers apply to both new commands. No new file
+worker or dispatcher exists. See [CDX application evidence](verification-cdx-application.md)
+for the verified engine/wire scope; actual CDX native chooser flows remain unverified.
 
 ## Close requests and host shutdown
 

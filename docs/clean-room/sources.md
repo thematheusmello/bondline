@@ -518,3 +518,26 @@ now accept it alongside their prior definitive closure results; they still rejec
 reads, bytes, timeouts and would-block. Production socket behavior/authentication/client
 limits are unchanged. This is a test portability correction using an actual hosted RED,
 not permission to ignore arbitrary transport errors. APIs compile on pinned Rust1.94.1.
+
+## Guarded CDX application files — 2026-11-14
+
+The new document.open_cdx/document.save_cdx commands reuse the published CDX syntax,
+coordinate/default/identity and qualified metadata sources already registered above.
+No parser, metadata whitelist, model field or new-source Writer behavior changed.
+The original fixtures and their independent primitive/RDKit consumers retain the exact
+provenance in the CDX fixture READMEs and verification-cdx-native-metadata.md.
+
+GUIDE-25 printed14 documents the desktop Open/Save functional roles. Bondline's typed
+closed path/discard/overwrite commands, complete-source authority, one-save reservation,
+revision/generation checks, guarded close and refusal of lossy conversion are independently
+authored application policies. Atomic I/O still uses the already registered PHOTO-ATOMIC/
+PHOTO-METADATA-informed implementation; no reference code or native metadata was copied.
+
+Open applies the existing filesystem library's original A4 preview policy, never derives
+paper from BoundingBox and never invents missing H. Every CDX backing stays incompletely
+mapped, so default preview/capture and bond authoring still refuse. Unchanged Save borrows
+the complete original bytes; exact Undo can restore exportability after a page edit.
+There is no changed/source-free CDX encoder or implicit CDX-to-CDXML/MOL export. Format
+association is independent of suffix; native CDX selection/retry calls the same registry.
+Those UI paths are wired, not native-runtime verified in this implementation session.
+See verification-cdx-application.md for exact RED/GREEN, consumers and remaining scope.

@@ -1,6 +1,8 @@
 use bondline_commands::Engine;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::Value;
+#[path = "../../cli/tests/support/cdx.rs"]
+mod cdx_support;
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
 #[path = "../../cli/tests/support/mol.rs"]
@@ -51,6 +53,74 @@ fn wait_for_changes(changes: &AtomicUsize, expected: usize) {
         std::thread::sleep(Duration::from_millis(1));
     }
     assert_eq!(changes.load(Ordering::SeqCst), expected);
+}
+
+#[test]
+fn authenticated_cdx_open_and_receipt_only_save_keep_binary_source_and_notify()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("original.mol");
+    let copy = directory.path("copy-λ.cdx");
+    std::fs::write(&input, cdx_support::SOURCE)?;
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, Arc::clone(&engine), move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = authenticated(&server)?;
+    let opened = call(
+        &mut client,
+        &serde_json::json!({"command":"document.open_cdx","params":{"path":input}}).to_string(),
+    )?;
+    cdx_support::assert_state(&opened["result"])?;
+    wait_for_changes(&changes, 1);
+    let saved = call(
+        &mut client,
+        &serde_json::json!({"command":"document.save_cdx","params":{"path":copy}}).to_string(),
+    )?;
+    cdx_support::assert_state(&saved["result"])?;
+    assert_eq!(saved["result"]["changed"], false);
+    assert_eq!(saved["result"]["revision"], 1);
+    assert_eq!(saved["result"]["file_operation"]["operation"], "save");
+    assert_eq!(saved["result"]["file_operation"]["format"], "cdx");
+    wait_for_changes(&changes, 2);
+    cdx_support::independently_read_saved(&copy)?;
+    let before = call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?;
+    for (command, params, code) in [
+        (
+            "document.save_cdx",
+            serde_json::json!({"path":copy}),
+            "already_exists",
+        ),
+        (
+            "document.save_cdxml",
+            serde_json::json!({"path":copy,"overwrite":true}),
+            "unsupported_content",
+        ),
+    ] {
+        let failed = call(
+            &mut client,
+            &serde_json::json!({"command":command,"params":params}).to_string(),
+        )?;
+        assert_eq!(failed["error"]["code"], code);
+        assert_eq!(
+            call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+            before
+        );
+    }
+    // Invalid parameter shapes close that connection; another authenticated client retains the session.
+    let mut malformed_client = authenticated(&server)?;
+    let rejected=call(&mut malformed_client,&serde_json::json!({"command":"document.open_cdx","params":{"path":input,"unexpected":true}}).to_string())?;
+    assert_eq!(rejected["error"]["code"], "invalid_params");
+    assert_eq!(
+        call(&mut client, r#"{"command":"document.inspect","params":{}}"#)?,
+        before
+    );
+    assert_eq!(changes.load(Ordering::SeqCst), 2);
+    assert_eq!(std::fs::read(copy)?, cdx_support::SOURCE);
+    server.shutdown()?;
+    Ok(())
 }
 
 #[test]
@@ -331,6 +401,7 @@ fn unauthenticated_clients_cannot_inspect_or_edit_the_document()
     for request in [
         r#"{"command":"document.inspect","params":{}}"#,
         r#"{"command":"document.open_mol","params":{"path":"must-not-read.mol"}}"#,
+        r#"{"command":"document.open_cdx","params":{"path":"must-not-read.cdx"}}"#,
         r#"{"command":"document.close","params":{"expected_revision":0}}"#,
         r#"{"command":"page.set_size","params":{"page_id":1,"width_pt":612,"height_pt":792}}"#,
         r#"{"token":"wrong"}"#,

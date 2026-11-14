@@ -1,4 +1,6 @@
 use serde_json::{Value, json};
+#[path = "support/cdx.rs"]
+mod cdx_support;
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
 #[path = "support/mol.rs"]
@@ -92,6 +94,112 @@ impl Drop for Client {
 }
 
 #[test]
+fn stdio_cdx_retains_binary_source_and_state_across_file_and_schema_refusals()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let source = directory.path("original-λ.mol");
+    let copy = directory.path("copy.cdx");
+    let malformed = directory.path("malformed.cdx");
+    std::fs::write(&source, cdx_support::SOURCE)?;
+    std::fs::write(&malformed, b"not CDX")?;
+    let mut client = Client::start()?;
+    client.call(1,"initialize",json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"cdx-wire-test","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let opened = client.call(
+        2,
+        "tools/call",
+        json!({"name":"document.open_cdx","arguments":{"path":source}}),
+    )?;
+    assert_eq!(opened["result"]["isError"], false, "{opened}");
+    cdx_support::assert_state(&opened["result"]["structuredContent"])?;
+    let saved = client.call(
+        3,
+        "tools/call",
+        json!({"name":"document.save_cdx","arguments":{"path":copy}}),
+    )?;
+    assert_eq!(saved["result"]["isError"], false, "{saved}");
+    let saved = &saved["result"]["structuredContent"];
+    cdx_support::assert_state(saved)?;
+    assert_eq!(saved["file_operation"]["format"], "cdx");
+    cdx_support::independently_read_saved(&copy)?;
+    let baseline = client.call(
+        4,
+        "tools/call",
+        json!({"name":"document.inspect","arguments":{}}),
+    )?;
+    let mut id = 5;
+    for (name, arguments, code) in [
+        (
+            "document.open_cdx",
+            json!({"path":source,"unknown":true}),
+            "invalid_params",
+        ),
+        ("document.save_cdx", json!({"path":copy}), "already_exists"),
+        (
+            "document.save_mol",
+            json!({"path":copy,"overwrite":true}),
+            "unsupported_content",
+        ),
+        (
+            "document.open_cdx",
+            json!({"path":malformed}),
+            "invalid_document",
+        ),
+        (
+            "render.capture",
+            json!({"page_id":1,"backend":"cpu","width_px":80,"height_px":80}),
+            "unsupported_content",
+        ),
+    ] {
+        let failure = client.call(id, "tools/call", json!({"name":name,"arguments":arguments}))?;
+        assert_eq!(failure["result"]["isError"], true, "{failure}");
+        assert_eq!(
+            failure["result"]["structuredContent"]["error"]["code"],
+            code
+        );
+        let current = client.call(
+            id + 1,
+            "tools/call",
+            json!({"name":"document.inspect","arguments":{}}),
+        )?;
+        assert_eq!(
+            current["result"]["structuredContent"],
+            baseline["result"]["structuredContent"]
+        );
+        id += 2;
+    }
+    client.call(
+        id,
+        "tools/call",
+        json!({"name":"page.set_size","arguments":{"page_id":1,"width_pt":612,"height_pt":792}}),
+    )?;
+    let failed = client.call(
+        id + 1,
+        "tools/call",
+        json!({"name":"document.open_cdx","arguments":{"path":source}}),
+    )?;
+    assert_eq!(
+        failed["result"]["structuredContent"]["error"]["code"],
+        "unsaved_changes"
+    );
+    let restored = client.call(
+        id + 2,
+        "tools/call",
+        json!({"name":"history.undo","arguments":{}}),
+    )?;
+    cdx_support::assert_state(&restored["result"]["structuredContent"])?;
+    let saved = client.call(
+        id + 3,
+        "tools/call",
+        json!({"name":"document.save_cdx","arguments":{"path":copy,"overwrite":true}}),
+    )?;
+    assert_eq!(saved["result"]["isError"], false, "{saved}");
+    cdx_support::independently_read_saved(&copy)?;
+    client.finish()?;
+    Ok(())
+}
+
+#[test]
 fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
 -> Result<(), Box<dyn std::error::Error>> {
     let mut client = Client::start()?;
@@ -120,8 +228,10 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "bond.create",
             "document.close",
             "document.inspect",
+            "document.open_cdx",
             "document.open_cdxml",
             "document.open_mol",
+            "document.save_cdx",
             "document.save_cdxml",
             "document.save_mol",
             "history.redo",
@@ -132,6 +242,29 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "ui.file"
         ]
     );
+    for (name, permission) in [
+        ("document.open_cdx", "discard_unsaved"),
+        ("document.save_cdx", "overwrite"),
+    ] {
+        let tool = tools
+            .iter()
+            .find(|tool| tool["name"] == name)
+            .ok_or("CDX tool")?;
+        assert_eq!(tool["annotations"]["readOnlyHint"], false);
+        let schema = &tool["inputSchema"];
+        assert_eq!(schema["additionalProperties"], false);
+        assert_eq!(schema["required"], json!(["path"]));
+        let properties = schema["properties"].as_object().ok_or("CDX properties")?;
+        assert_eq!(
+            properties
+                .keys()
+                .map(String::as_str)
+                .collect::<std::collections::BTreeSet<_>>(),
+            std::collections::BTreeSet::from(["path", permission])
+        );
+        assert_eq!(properties[permission]["type"], "boolean");
+        assert_eq!(properties[permission]["default"], false);
+    }
     assert!(tools.iter().any(|tool| tool["name"] == "document.close"
         && tool["inputSchema"]["additionalProperties"] == false
         && tool["inputSchema"]["required"] == json!(["expected_revision"])

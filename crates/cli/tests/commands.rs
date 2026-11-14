@@ -1,5 +1,7 @@
 use serde_json::{Value, json};
 use std::process::Command;
+#[path = "support/cdx.rs"]
+mod cdx_support;
 #[path = "../../../xtask/oracles/files_test_support.rs"]
 mod file_support;
 #[path = "support/mol.rs"]
@@ -24,8 +26,10 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "bond.create",
             "document.close",
             "document.inspect",
+            "document.open_cdx",
             "document.open_cdxml",
             "document.open_mol",
+            "document.save_cdx",
             "document.save_cdxml",
             "document.save_mol",
             "history.redo",
@@ -36,6 +40,29 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "ui.file"
         ]
     );
+    for (name, permission) in [
+        ("document.open_cdx", "discard_unsaved"),
+        ("document.save_cdx", "overwrite"),
+    ] {
+        let info = commands
+            .iter()
+            .find(|info| info["name"] == name)
+            .ok_or("CDX command")?;
+        assert_eq!(info["read_only"], false);
+        let schema = &info["input_schema"];
+        assert_eq!(schema["additionalProperties"], false);
+        assert_eq!(schema["required"], json!(["path"]));
+        let properties = schema["properties"].as_object().ok_or("CDX properties")?;
+        assert_eq!(
+            properties
+                .keys()
+                .map(String::as_str)
+                .collect::<std::collections::BTreeSet<_>>(),
+            std::collections::BTreeSet::from(["path", permission])
+        );
+        assert_eq!(properties[permission]["type"], "boolean");
+        assert_eq!(properties[permission]["default"], false);
+    }
     assert!(
         commands
             .iter()
@@ -112,6 +139,59 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
         state["document"]["pages"][0],
         json!({"id":1,"size":{"width_pt":612.0,"height_pt":792.0},"fragments":[]})
     );
+    Ok(())
+}
+
+#[test]
+fn executable_cdx_open_save_uses_complete_source_and_refuses_lossy_exports()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let input = directory.path("input-λ.mol");
+    let copy = directory.path("copy.cdx");
+    std::fs::write(&input, cdx_support::SOURCE)?;
+    let open = json!({"command":"document.open_cdx","params":{"path":input}}).to_string();
+    let save = json!({"command":"document.save_cdx","params":{"path":copy}}).to_string();
+    let output = Command::new(env!("CARGO_BIN_EXE_bondline-cli"))
+        .args(["run", "--cmd", &open, "--cmd", &save])
+        .output()?;
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: Value = serde_json::from_slice(&output.stdout)?;
+    cdx_support::assert_state(&result)?;
+    assert_eq!(result["revision"], 1);
+    assert_eq!(result["file_operation"]["format"], "cdx");
+    assert_eq!(result["file_operation"]["operation"], "save");
+    cdx_support::independently_read_saved(&copy)?;
+    for (command, params, code) in [
+        ("document.save_cdx", json!({"path":copy}), "already_exists"),
+        (
+            "document.save_cdxml",
+            json!({"path":copy,"overwrite":true}),
+            "unsupported_content",
+        ),
+        (
+            "document.save_mol",
+            json!({"path":copy,"overwrite":true}),
+            "unsupported_content",
+        ),
+        (
+            "document.open_cdx",
+            json!({"path":input,"version":"auto"}),
+            "invalid_params",
+        ),
+    ] {
+        let request = json!({"command":command,"params":params}).to_string();
+        let output = Command::new(env!("CARGO_BIN_EXE_bondline-cli"))
+            .args(["run", "--cmd", &open, "--cmd", &request])
+            .output()?;
+        assert!(!output.status.success());
+        let error: Value = serde_json::from_slice(&output.stderr)?;
+        assert_eq!(error["error"]["code"], code);
+        assert_eq!(std::fs::read(&copy)?, cdx_support::SOURCE);
+    }
     Ok(())
 }
 
