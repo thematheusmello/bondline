@@ -1,10 +1,13 @@
-//! Explicit create-only SMILES conversion/export without application association or mutation.
+//! Whole SMILES file Read/Save and explicit conversion/export without session association.
 
 use super::{
-    Failure, FileError, ReadLimit, SaveReceipt, Stage, check_cancel, read_source_bytes_with_limit,
-    save_cdxml_file,
+    Failure, FileError, LoadedFile, ReadLimit, SaveReceipt, Stage, check_cancel, read_source_bytes,
+    read_source_bytes_with_limit, save_cdxml_file,
 };
-use crate::{StoredDocument, smiles::SmilesDocument};
+use crate::{
+    StoredDocument,
+    smiles::{SmilesDocument, SmilesFileDocument},
+};
 use bondline_model::{Fragment, PageSize, Point2};
 use bondline_render::Cancellation;
 use std::{
@@ -12,6 +15,47 @@ use std::{
     io,
     path::{Path, PathBuf},
 };
+
+/// Read and validate every meaningful notation while retaining the complete 64 MiB-bounded
+/// file, including ignored lines, opaque application data and original record endings.
+/// This library ownership operation creates no drawing or application association.
+pub fn read_smiles_file(
+    path: &Path,
+    cancel: &Cancellation,
+) -> Result<LoadedFile<SmilesFileDocument>, FileError> {
+    let (path, bytes) = read_source_bytes(path, cancel)?;
+    let document = SmilesFileDocument::parse_with_cancel(bytes.into(), cancel)
+        .map_err(|error| FileError::new(&path, Stage::Decode, Failure::SmilesFile(error)))?;
+    check_cancel(&path, Stage::Decode, cancel)?;
+    Ok(LoadedFile { path, document })
+}
+
+/// Publish the exact complete owned source; never regenerate notation, metadata or endings.
+/// Overwrite and publication-aware failures use the existing native atomic save contract.
+pub fn save_smiles_file(
+    path: &Path,
+    document: &SmilesFileDocument,
+    overwrite: bool,
+    cancel: &Cancellation,
+) -> Result<SaveReceipt, FileError> {
+    save_smiles_file_with_hook(path, document, overwrite, cancel, &mut |_| Ok(()))
+}
+
+fn save_smiles_file_with_hook(
+    path: &Path,
+    document: &SmilesFileDocument,
+    overwrite: bool,
+    cancel: &Cancellation,
+    hook: &mut impl FnMut(Stage) -> io::Result<()>,
+) -> Result<SaveReceipt, FileError> {
+    super::save_encoded_with_hook(
+        path,
+        overwrite,
+        cancel,
+        || Ok(Cow::Borrowed(document.as_bytes())),
+        hook,
+    )
+}
 
 /// Export one explicitly selected structure to a new single-record SMILES file.
 /// The unchanged noncanonical writer supplies the notation; one LF terminates the file
@@ -132,6 +176,58 @@ mod tests {
             let _ = fs::remove_dir_all(&self.0);
         }
     }
+
+    #[test]
+    fn whole_file_save_keeps_exact_bytes_and_original_publication_errors()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let source = b"CC\topaque\xff\0\r\nO final EOF";
+        let document = SmilesFileDocument::parse(source.as_slice().into())?;
+        let before = document.clone();
+        for overwrite in [false, true] {
+            for failure in [Stage::Write, Stage::Cleanup, Stage::SyncDirectory] {
+                let directory = Directory::new()?;
+                let path = directory.0.join("whole-file.smi");
+                if overwrite {
+                    fs::write(&path, b"old destination")?;
+                }
+                let error = save_smiles_file_with_hook(
+                    &path,
+                    &document,
+                    overwrite,
+                    &Cancellation::default(),
+                    &mut |stage| {
+                        if stage == failure {
+                            Err(io::Error::other("injected whole-file publication error"))
+                        } else {
+                            Ok(())
+                        }
+                    },
+                )
+                .err()
+                .ok_or("discarded publication failure")?;
+                let published = failure != Stage::Write;
+                assert_eq!(error.code(), "io_error");
+                assert_eq!(error.stage(), failure.name());
+                assert_eq!(error.path(), super::super::canonical_save_path(&path)?);
+                assert_eq!(error.published(), published);
+                assert!(error.recovery_path().is_none());
+                if published {
+                    assert_eq!(fs::read(&path)?, source);
+                } else if overwrite {
+                    assert_eq!(fs::read(&path)?, b"old destination");
+                } else {
+                    assert!(!path.exists());
+                }
+                assert_eq!(document, before);
+                assert_eq!(
+                    fs::read_dir(&directory.0)?.count(),
+                    usize::from(published || overwrite)
+                );
+            }
+        }
+        Ok(())
+    }
+
     fn origin() -> Result<Point2, bondline_model::Error> {
         Point2::new(72.0, 72.0)
     }

@@ -1,8 +1,9 @@
 # Native structure-file filesystem contract
 
 `bondline_io::files` is a library adapter. Drawing/collection Read/Save functions use complete
-`StoredDocument` or `SdfDocument` values, never a foreign elemental projection. The separate
-SMILES structure-export API below accepts a Fragment without granting source authority.
+`StoredDocument`, `SdfDocument` or `SmilesFileDocument` values, never a foreign elemental
+projection. The separate SMILES structure-export API below accepts a Fragment without
+granting source authority.
 No filename extension substitutes for decoding.
 Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md.
 
@@ -23,6 +24,18 @@ Registry/UI delivery is recorded separately in control-protocol.md and STATUS.md
   drawing callers while returning complete SDF ownership. The registry and native worker
   use the same reservation/publication path; actual native SDF acceptance is still pending.
 - `FileError` exposes stable `code`, `path`, `stage`, `published` and optional `recovery_path`.
+- `read_smiles_file(&Path, &Cancellation)` returns a canonical path and complete immutable
+  `SmilesFileDocument`, validating every meaningful notation before success. It uses the
+  native **64 MiB** whole-source reader, separately from the unchanged 65,536-byte
+  per-notation limit. Ignored lines, ordered records, opaque application bytes and original
+  LF/CRLF/final-EOF endings remain in source. `save_smiles_file(&Path, &SmilesFileDocument,
+  overwrite, &Cancellation)` borrows those exact bytes through the existing publisher:
+  no notation regeneration, appended LF, name decoding or first-record projection. Codec
+  failures retain their original codes at the canonical input path with stage `decode`;
+  filesystem/publication failures retain their actual metadata. These library operations
+  do not create a drawing, session backing/association, registry command or native chooser.
+  [Exact whole-file evidence](verification-smiles-file-io.md) distinguishes them from the
+  separate notation converter and explicit chemical-graph exporter below.
 - `convert_smiles_to_cdxml_file(input, output, bond_length_pt, origin, page, cancel)`
   is an explicit create-only conversion, not application SMILES Open/Save. It reads one
   complete ASCII notation with a **64 KiB** limit, applies the existing restricted
@@ -49,15 +62,22 @@ Native structure-file reads are bounded to 64 MiB; the explicit SMILES converter
 smaller 64 KiB budget above. Both include bytes read after metadata inspection. Only ordinary
 files are accepted. Selected read symlinks resolve explicitly; Unix opens use nonblocking,
 no-follow flags and post-open validation, preventing FIFOs from blocking the worker. Invalid
-XML/CDX/MOL/SDF/model input returns an error without an application-state change. Cancellation is checked
-between 64 KiB chunks and around decoding; it cannot interrupt an OS syscall or parser call.
+XML/CDX/MOL/SDF/SMILES-file/model input returns an error without an application-state change. Cancellation is checked
+between 64 KiB chunks and around decoding. SMILES file validation also checks between
+physical lines and around each bounded notation parse; it cannot interrupt an OS syscall
+or a single parser call.
 
 Save encodes through `StoredDocument::to_cdxml`, `to_cdx` or `to_mol`: unchanged accepted source passes
 through exactly, supported native/profile edits encode completely, and unsupported source,
 cross-format metadata or layout loss fails explicitly. See file-formats.md for each guard.
 SDF bypasses drawing encoders and retains all mixed-version MOL/data bytes; wrong-content
 cross-format saves are refused at shared command preparation before any temporary file.
-It prepares a same-directory temporary, writes in chunks, preserves supported security/metadata,
+Whole SMILES file Save also bypasses drawing/notation writers, preserving every original
+record and byte, including zero-record sources and non-UTF-8/NUL application data. Its
+library API has no session or cross-format command policy; application integration remains
+separate. In contrast, the structure exporter above creates new notation plus one LF.
+The shared publisher prepares a same-directory temporary, writes in chunks, preserves
+supported security/metadata,
 syncs the file, then publishes. Default no-clobber uses an atomic hard-link create, so a racing
 creator wins without being overwritten. Filesystems lacking hard links fail explicitly.
 Overwrite is opt-in and refuses symlink/reparse, read-only and special leaves. File identity

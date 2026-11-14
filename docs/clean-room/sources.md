@@ -1116,3 +1116,28 @@ Its normalization/partial-record behavior is not a raw-file oracle. The existing
 notation parser/caps remain byte-exact and validate every meaningful record. New original
 literal spans, a separate raw-byte scanner and unchanged per-record external consumers
 verify complete source retention; no Drawing/source-backed Save authority follows.
+
+## Whole SMILES file filesystem I/O, 2026-11-14
+
+The separately sourced whole-file codec above is composed with the unchanged bounded
+native reader and atomic publisher. `read_smiles_file` retains every source byte and
+validates all meaningful records before returning; `save_smiles_file` borrows that exact
+owned source, with no notation/metadata regeneration or new line ending. The existing
+[OpenSMILES Files source](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc#L1371-L1383)
+remains the public record/data/ending basis. Leading-prefix and final-EOF qualifications
+stay explicit in the codec record; no broader syntax or reference UI behavior follows.
+
+Whole-file 64 MiB and per-notation 65,536-byte budgets are distinct. Canonical native
+paths, exact no-clobber/overwrite publication and truthful before/after-publication errors
+reuse original Bondline policies, not a new file or session framework. Codec errors retain
+their existing codes and context at stage `decode`; publisher errors are not reconstructed.
+Original literal mixed-record spans and complete saved bytes are checked independently
+from unchanged pinned per-notation external consumers. Opaque NUL/non-UTF-8/bare-CR data
+stays byte-oriented. The actual current exporter also feeds Read/Save with an original
+21-atom full-profile output, without model projection, hydrogen inference or layout.
+
+See [verification-smiles-file-io.md](../verification-smiles-file-io.md) for actual
+missing-API RED, local wrapper/IO checks and exact limitations. No parser, writer, model,
+command/registry, dependency, asset, fixture or prior oracle was changed by this slice.
+Application snapshots/commands/chooser and new Windows/Linux/native UI execution remain
+separate work; Actions is disabled by user instruction.

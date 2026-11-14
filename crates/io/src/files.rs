@@ -4,13 +4,14 @@ mod platform;
 mod smiles;
 pub use smiles::{
     SmilesConversionReceipt, convert_smiles_to_cdxml_file, export_smiles_fragment_file,
+    read_smiles_file, save_smiles_file,
 };
 #[cfg(test)]
 mod tests;
 
 use crate::mol::{MolTransform, Version};
 use crate::sdf::{SdfDocument, SdfError};
-use crate::smiles::{LayoutError, SmilesError, WriteError};
+use crate::smiles::{LayoutError, SmilesError, SmilesFileError, WriteError};
 use crate::{DocumentError, StoredDocument};
 use bondline_model::PageSize;
 use bondline_render::Cancellation;
@@ -87,6 +88,7 @@ impl FileError {
             Failure::Document(error) => error.code(),
             Failure::Sdf(error) => error.code(),
             Failure::Smiles(error) => error.code(),
+            Failure::SmilesFile(error) => error.code(),
             Failure::Layout(error) => error.code(),
             Failure::SmilesWrite(error) => error.code(),
             Failure::Io(error) => {
@@ -161,6 +163,8 @@ enum Failure {
     Sdf(#[from] SdfError),
     #[error(transparent)]
     Smiles(#[from] SmilesError),
+    #[error(transparent)]
+    SmilesFile(#[from] SmilesFileError),
     #[error(transparent)]
     Layout(#[from] LayoutError),
     #[error(transparent)]
