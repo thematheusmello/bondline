@@ -258,7 +258,8 @@ even with a misleading suffix; Save As has an explicit CDX choice and guarded re
 The same FilePlan/Completed save reservation, revision/generation checks, trusted request
 receipt/current acknowledgment and close barriers apply to both new commands. No new file
 worker or dispatcher exists. See [CDX application evidence](verification-cdx-application.md)
-for the verified engine/wire scope; actual CDX native chooser flows remain unverified.
+for engine/wire scope and exact450962c Mac chooser/Known Save/retry/close acceptance.
+Interactive Windows/Linux, broad CDX files, editing and faithful preview remain unverified.
 
 ## Close requests and host shutdown
 

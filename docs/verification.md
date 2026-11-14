@@ -1945,3 +1945,21 @@ source passes520workspace+3bridge,523 total,54630 exit0; log SHA
 [Exact evidence](verification-terminal-carbon-extension.md) records the original REDs,
 source/ID limits and paper-expectation test correction. Native attachment and this source's
 hosted run remain pending; no chemistry or complete connected-drawing claim follows.
+
+
+## Accepted native CDX and hosted engine checkpoints, 2026-11-14
+
+Frozen source450962c/binarye9491a72…5749 passes actual bounded Mac chooser/Open/Known Save/
+Unicode Save As/reopen/retry/dirty-close refusal/Cancel/Undo and exact saved-byte consumers.
+Four original vectors and one ignored1196B native own-drawing input retain every byte.
+Root independently rechecked379 source hashes and83 finalized evidence files plus binary/
+cleanup before changing checkout. [The exact report](verification-cdx-application.md)
+qualifies unavailable preview/editing, excluded probes and nearest-integer cursor restore.
+All owned app/controller/helper handles are terminal; CUA completed once after cleanup.
+Its own hosted43559974203 passes502/500/492 tests/windows and six ASAN targets.
+
+The separate16-command terminal engine source501a315 passes hosted43560603081:
+523/521/513 tests, all three actual windows, six ASAN targets. Read-only peer review finds
+no confirmed defect; its scope/report hash are in verification-terminal-carbon-extension.md.
+Native attachment is being implemented separately; neither result verifies that gesture.
+The documentation-only acceptance update changes no production, fixture or configuration.

@@ -166,3 +166,12 @@ for unchanged complete snapshots. Both original framing variants' actual output 
 independent consumer checks; receiving443+3 and all aggregate gates pass. Registry/CLI/MCP/
 native chooser, broader native metadata and editing remain separate next features. This
 library-only slice needs its own hosted checks and does not complete application CDX or M1.
+
+
+Guarded CDX application files now have exact-build Mac native chooser/Known Save/Unicode
+Save As/reopen/retry/dirty-close refusal and Undo recovery, plus independent actual-output
+consumers. Four original variants and one ignored own-drawing source retain every byte.
+Source450962c passes its own three-platform aggregates/window smokes and six ASAN targets.
+The16-command terminal-extension integration501a315 separately passes523/521/513 hosted
+tests/windows and six ASAN targets. Native attachment remains the next M2 slice; SDF
+collections remain M1 library-to-application work. No milestone is completed by these slices.

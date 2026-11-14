@@ -571,4 +571,5 @@ is authorized. Page edits can make the model dirty, but CDX Save refuses until e
 restores the original source baseline. Source-free CDX encoding and CDX/CDXML/MOL metadata
 loss refuse before any temporary is created. Accepted source, metadata and unknown records
 are saved byte-for-byte. See [application verification](verification-cdx-application.md).
-Actual native CDX acceptance and broader compatibility remain separate pending work.
+Bounded Mac native CDX acceptance now passes on source450962c; see the linked exact-build
+report. Broader compatibility, edited-source encoding and faithful preview remain missing.

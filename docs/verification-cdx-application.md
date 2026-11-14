@@ -111,3 +111,67 @@ The exact receiving `cargo xtask ci` passes499 workspace plus3 native bridge tes
 workspace, formatting, all-target clippy, layers, unchanged license closures/assets and
 independent corpus. Native CDX acceptance remains pending on this frozen integration;
 earlier renderer/file/worker tests are not a substitute for the actual chooser workflow.
+
+
+## Actual native macOS acceptance
+
+Frozen source450962c was built and run on macOS27.2 arm64 / Apple M3 Max / Metal,
+using pinned Rust1.94.1, Root's absolute target, incremental0 and default dev debuginfo.
+The379-file Rust/Cargo/WGSL manifest is
+8137960861d59212592ae77a3f1fd605b0fa9084fc2bd08267e19fa506aee0d0;
+the executed17,799,320-byte binary hashes to
+e9491a720572889372264ebea3cf111d147f3beeae67e0c4367e6fe1d66e5749.
+All379 source hashes and that binary were checked again after cleanup and independently
+by Root before changing its checkout. This is the exact15-command native build; the later
+16-command terminal-extension source has separate headless/hosted evidence.
+
+Actual native chooser/keyboard routes pass:
+
+- Open the319B input under a misleading .mol suffix by explicitly choosing CDX after
+  the filename hint; CmdS retains its associated cdx encoding and every original byte.
+- Display the explicit unavailable-preview state; three settled frames remove prior MOL
+  paper/graph/hover. A drag cannot edit the incomplete backing. No faithful preview is claimed.
+- Page>Letter makes it dirty; Known Save, one Replace File retry and dirty-close Save
+  refuse regeneration without changing the old bytes/inode/mtime. Cancel and CmdZ restore
+  the exact clean source baseline; a subsequent Known Save succeeds.
+- Malformed and unsupported double-bond imports retain complete current source/model/path,
+  authored revision and history/redo. UI request/epoch changes are tracked separately.
+- Unicode Save As and output Open preserve all bytes for each original319/323/65750/65746B
+  fixture. Those actual outputs pass their unchanged independent struct/RDKit consumers.
+- The previously authorized ignored1196B native own-drawing file also goes through actual
+  native Open/Unicode Save As/reopen, byte-exact. A separate strict header decoder checks
+  all99 records, the distinct FileEnd and exact EOF; external RDKit reads CC/C2H6. Its
+  SHA remains7b2b71338595ad12bc34f46459f8389ec6a63cb453b1cf29b51543717139a73c.
+  Those native bytes/prose/assets remain ignored and unredistributed.
+- Native Save As CDXML and MOLV3000 refuse metadata loss before destination creation;
+  source-free CDX Save As also refuses. MOLV2000 is independently refused through the
+  live controller, rather than claimed as a chooser observation. Live open_cdx/save_cdx
+  also exercise the native engine directly with a truthful unchanged-save receipt.
+
+Matching CLI commands discovers15 closed registry tools; live ui.controls proves only its
+nine File/Edit/Page bindings. No loopback registry-list operation was invented. CUA,
+public CG/AX, authenticated control and external consumers are separately labeled in the
+ledger. No native same-frame timing, broad renderer retest or new golden is implied.
+
+Exact ignored report: target/native-cdx-application-handoff.md, SHA
+2a38d2af6b1dd43aa04ccc5b5ad0f3dc853c2245f967d79238c289833eca21ab.
+Its15-group ledger30-native-flow-ledger.json hashes to
+cabb297e3209571241e571c9491fa4a1ae541d15e39f0c8f03cdf59b7c86c5f0;
+31-evidence-index.json to
+f8a85505001816c3fe5e43d3aba0f24ab552a1bbbe238072df4e8b9d93bff2d6 (83 finalized files,
+all rehashed by Root). Cleanup28-final-cleanup.json SHA
+06d786457e161ca0dc50d76744207e38757ac111ace445417488a840241b0c23 records native24284 /
+controller24261/session54751 exited0 and no held input/owned live handle. The four sampled
+reference windows retain IDs/frames/layers; no reference operation occurred in this pass.
+Cursor was restored to the nearest integer with subpixel delta(+0.305,-0.213); exact
+subpixel restoration is not claimed. CUA completion occurred once after cleanup.
+
+Three excluded evidence probes stay recorded: an initial own offscreen-window selector,
+a mistakenly resolved venv executable corrected without dependencies, and fractional
+cursor-warp truncation. They are not product failures or passing workflow evidence.
+The earlier historical reference-window restoration incident is not rewritten.
+
+Own source450962c hosted43559974203 passes Mac502/Linux500/Windows492, all actual windows,
+and six10000-run ASAN targets; ci.md records the job identities/adapters. Native chooser
+acceptance above is Mac-only. CDX imported editing/new encoding/faithful styles and preview,
+foreign/general corpus, interactive Windows/Linux and full M0/M1 remain incomplete.

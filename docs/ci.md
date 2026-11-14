@@ -1,5 +1,26 @@
 # CI contract and execution evidence
 
+Terminal-extension/CDX source501a315f2fd92a05702cc4518b5d33c8f72abb7c passes every
+[43560603081](https://github.com/thematheusmello/bondline/actions/runs/43560603081) job:
+Mac132343193738:523 tests (520workspace+3bridge), Linux132343193548:521,
+Windows132343193736:513 and ASAN132343193667:six10000-run targets. All actual native
+window smokes pass. Adapters remain Metal/Apple Paravirtual device, Vulkan/llvmpipe CPU
+and Dx12/Microsoft Basic Render Driver CPU. This verifies the16-command headless engine
+and existing native window, not the subsequently developed attachment gesture.
+
+Guarded CDX application source450962cdcbad2abd5aa74b514ef77d58923d3d8f separately passes
+every [43559974203](https://github.com/thematheusmello/bondline/actions/runs/43559974203)
+job: Mac132341249329:502 tests (499workspace+3bridge), Linux132341249192:500,
+Windows132341249443:492 and ASAN132341249397:six10000-run targets. Every actual window
+smoke passes with the same adapters. Main advanced from00e5b02 to this exact source only
+after matching GREEN. Actual bounded Mac CDX workflow acceptance uses its frozen binary
+e9491a72…5749 and379-source manifest, separately recorded in
+[verification-cdx-application.md](verification-cdx-application.md).
+
+Documentation-only acceptance updates after501a315 change no tested runtime, dependency,
+fixture or configuration. Earlier failures remain below; no completed job was manually
+rerun. Interactive Windows/Linux chemistry/file workflows remain unverified.
+
 Corrected carbon/metadata sourcea3613c0968dbce126ba0e1632d36db3d034be14f passes every
 [43559699996](https://github.com/thematheusmello/bondline/actions/runs/43559699996) job:
 Mac132340407449:490 tests (487workspace+3bridge), Linux132340407514:488,
@@ -12,9 +33,8 @@ label tests pass in Mac and Windows aggregates. Failed983ffee remains below.
 
 This verifies the source-only metadata and carbon renderer/input integration; it does
 not verify subsequent CDX application source450962c or the terminal-carbon command/UI.
-That application has matching run43559974203 still pending and separate actual native
-acceptance. No completed passing job was restarted. Public main remains00e5b02 until a
-reviewed matching-source integration is advanced; new feature results stay distinct.
+Those newer sources and their separate actual native scope are recorded above. No
+completed passing job was restarted; new feature results stay distinct.
 
 Carbon source983ffee6951e0b3d8c17e5135645cb2cbd3830a3 has a real failed
 [43557351022](https://github.com/thematheusmello/bondline/actions/runs/43557351022).

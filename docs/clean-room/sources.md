@@ -653,3 +653,18 @@ There is no changed/source-free CDX encoder or implicit CDX-to-CDXML/MOL export.
 association is independent of suffix; native CDX selection/retry calls the same registry.
 Those UI paths are wired, not native-runtime verified in this implementation session.
 See verification-cdx-application.md for exact RED/GREEN, consumers and remaining scope.
+
+
+## Native guarded CDX application evidence, 2026-11-14
+
+NATIVE-BONDLINE-CDX-ROOT is original application execution at source450962c, macOS27.2arm64,
+AppleM3Max/Metal. Binarye9491a720572889372264ebea3cf111d147f3beeae67e0c4367e6fe1d66e5749
+and379-source manifest8137960861d59212592ae77a3f1fd605b0fa9084fc2bd08267e19fa506aee0d0
+identify the exact accepted build. Actual native choices/keyboard/save/reopen/guarded
+retry/dirty-close/Cancel/Undo and independent actual-byte consumers are recorded in
+verification-cdx-application.md. All four original licensed fixture variants and the
+prior ignored1196B authorized own-drawing source save unchanged. No reference app was
+operated in this acceptance; vendor bytes/prose/fonts/icons remain unredistributed.
+The full report/index/cleanup and excluded probes are separately hashed. This supplies
+bounded Mac application evidence, not a specification for general CDX editing, faithful
+preview, chemistry or platform parity. The published format/source policies above remain.

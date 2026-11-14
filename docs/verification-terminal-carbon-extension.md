@@ -162,3 +162,12 @@ strict layers, unchanged license closures/assets and independent corpus consumer
 The concurrent actual CDX native acceptance runs the separate frozen Root450962c binary;
 it does not test this engine extension or native attachment. Own hosted evidence remains
 pending, and the next native gesture must use the same required-policy registry command.
+
+
+Independent read-only integration review found no confirmed actionable defect. Its report
+in bondline-rxn/target/terminal-extension-integration-review.md hashes to
+cc41dee7859ed1ae5c52e40b52f360da1cec1a46115fb0119068517f413c355a (7375B); the reviewer
+traced production/callers/tests without rerunning Cargo or native UI. Exact source501a315
+now also passes hosted43560603081: Mac523/Linux521/Windows513, all actual window smokes,
+and six10000-run parser ASAN targets. ci.md records job IDs/adapters. This is engine/headless
+extension evidence; native attachment is separate work, not established by a window smoke.
