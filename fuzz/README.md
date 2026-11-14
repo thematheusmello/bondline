@@ -64,7 +64,7 @@ reparse, preserve record count/framing and retain all bytes outside the changed 
 replacing a payload with itself must be byte-exact. The original document stays unchanged.
 The harness does not map CDX chemistry, resolve references, write new object trees or access
 files. Independent Python struct/RDKit expectations live in the crate's integration tests.
-The CI sanitizer job runs all five parser targets; these bounded runs are not exhaustive input
+The CI sanitizer job runs all six parser targets; these bounded runs are not exhaustive input
 coverage or proof of application CDX support.
 
 ## MOL V2000 syntax and elemental graph
@@ -139,3 +139,38 @@ above: coverage 1254/features 2799, 169 retained inputs/reported 45 KiB/RSS 74 M
 fuzzing. Its largest exercised input was 492 bytes, so max_len 65536 is a ceiling rather
 than proof of large-input coverage. Explicit resource/large-graph tests and external
 RDKit consumers provide separate evidence. This bounded pass is not a security audit.
+
+
+## Legacy RXN containers and molecule payloads
+
+```sh
+mkdir -p .cache/fuzz/rxn
+cp crates/io/tests/fixtures/rxn/*.rxn .cache/fuzz/rxn/
+# Optional independent large seed, using the pinned external test interpreter:
+"$BONDLINE_PYTHON" -B crates/io/tests/rxn_oracle.py emit_mixed > .cache/fuzz/rxn/rdkit-mixed-1000.rxn
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address rxn_parse .cache/fuzz/rxn -- -runs=10000 -seed=224867531 -max_len=65536 -timeout=5
+```
+
+Use the worktree's own absolute target path for every Cargo call. The local RXN run
+used the existing pinned cargo-fuzz executable from the main checkout read-only via
+PATH; it did not install another copy or share build output. Keep mutation inputs in
+ignored cache and never clean another active worktree's target. Root/fuzz lockfiles
+and dependency pins did not change. CI seeds both original RXN vectors and runs this
+sixth target with the exact seed/iteration/length/timeout bounds above.
+
+Accepted source must remain byte-exact with contiguous component/whole-MOL spans,
+correct role counts/order, bounded payloads and distinct wrapper/MOL versions. New
+wrapper output must reparse and preserve each complete MOL payload, except a missing
+final LF may be appended for framing. Headers and roles must survive. Near-budget
+canonical writing may refuse resource_limit; it may not reorder roles or regenerate
+unknown molecular content. The harness does not project a reaction, execute chemistry,
+exercise application/native files or run external consumers for arbitrary mutations.
+
+The actual local final ASan pass completed 10,000 runs, seed 224867531, max_len 65536,
+timeout 5, exit 0: coverage 1305/features 4915, 290 retained corpus entries/reported
+3549 KiB, maximum exercised input 44,023 bytes, reported RSS 464 MiB, 3 seconds of
+fuzzing after compilation. The original 696/739-byte seeds plus a separately generated
+44,023-byte mixed-version/1,000-atom RXN were copied only into ignored cache. This is
+bounded smoke evidence, not universal format compatibility, complete resource-bound
+coverage, chemistry verification or a security audit. The IO tests independently
+exercise explicit limits and raw/RDKit expectations.

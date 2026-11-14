@@ -7,7 +7,8 @@
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000 | Source-preserving library records, ordered data fields and validated wrapper writer | Original source spans; external raw scanner and per-record RDKit; named-field full-supplier and external-writer vectors | Application data/multiple-record workflow, fetched SDF corpus and broader syntax/encodings |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and full-precision writing; chooser wired | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI tests; bounded ASan | Native acceptance/hosted application evidence pending; SDF version dispatch, broader queries/stereo/blocks and fetched corpus |
-| RXN, SMILES | None | Roadmap only | Import/export and independent chemistry verification |
+| RXN V2000 wrapper | Standalone source-preserving reader/new-wrapper writer with ordered roles and raw V2000/V3000 molecular payloads | Published CTfile layout; original field/role/span vectors; external RDKit readers/writers and bounded ASAN | Reaction model, application/native commands, V3000 reaction wrapper, broader registry/extension handling and fetched corpus |
+| SMILES | None | Roadmap only | Import/export and independent chemistry verification |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and registry previews for empty pages and independent C-C/three-H fragments | External Pillow/FreeType, independent pixel/geometry/font vectors, actual native capture and one human-approved golden | General chemical/publishing output, physical resolution and native save workflow |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
@@ -367,3 +368,46 @@ C-C/three-H case as ethane, not every file property, appearance or advanced bond
 The corpus gate checks one owned snapshot's projection against independent external Expat/Decimal,
 in addition to its unchanged-byte/XML checks. It explicitly reports chemistry calculations
 as missing rather than treating the projection as formula/stereo/SMILES/InChI verification.
+
+
+## Standalone legacy RXN container codec
+
+`io::rxn::RxnFile` parses the legacy `$RXN` wrapper and borrows its entire source.
+It exposes the three metadata lines, three role counts and ordered components with
+absolute whole/payload ranges. Ranges include line endings; component whole ranges
+include their `$MOL` marker, while `mol_bytes()` starts at the molecule title.
+The wrapper version is V2000. Each component reports its actual V2000 or V3000 MOL
+version independently, and the existing complete MOL syntax parser validates that
+payload without calling its strict elemental projection. Atom maps, unknown supported
+MOL properties and molecule headers therefore stay in the exact original bytes.
+`as_bytes()` is unchanged-source passthrough, not a reconstructed reaction.
+
+`write_v2000([title, program, comment], &[ComponentInput { role, mol_bytes }])`
+constructs a new wrapper from complete validated molecules. It derives all three I3
+numeric counts, requires reactant/product/reagent order, and refuses to sort roles,
+convert molecules, strip metadata or trim payload padding. It preserves every
+accepted payload byte. Only a missing final LF is appended for framing; new wrapper
+lines use LF, so an imported CRLF payload can intentionally produce mixed line endings.
+There is no lossy projection-to-reaction writer or application import/save command.
+
+The primary source is BIOVIA Chemistry 2026 CTfile Formats, printed 91–92 (PDF indexes
+94–95). Actual external RDKit 2026.09.2 output independently establishes two supported
+extensions: a legacy wrapper with V3000/V2000 MOL components, and an exact six-character
+counts line omitting zero reagents. A present count must be numeric; blank/partial
+fields are refused. The writer always emits the full nine-character counts line.
+Consumer tolerance for trailing or uncounted molecules is deliberately not adopted.
+
+The first profile requires full EOF, one complete MOL per declared component, exact
+`$MOL` marker records, printable ASCII plus tabs/line endings, LF or CRLF without bare
+CR, and no payload padding after M END. Bounds are 64 MiB source/output, 1,024 total
+components, 999 components per legacy role, 100,000 aggregate atoms and 100,000 aggregate
+bonds independently, 1,000,000 lines and 4,096 bytes per physical line. Existing molecular
+limits also apply. These are Bondline resource/subset policies, not universal CTfile
+limits or a hard process-memory cap. Invalid framing returns `invalid_rxn`, unsupported
+wrapper/content returns `unsupported_content`, and resource limits return `resource_limit`.
+
+V3000 reaction wrappers, reaction-model projection, atom-map authoring, reaction-center
+semantics, RDfiles, expanded registry records and application/native reaction workflows
+remain missing. Constituent raw preservation does not verify every unknown property's
+meaning. Independent raw ranges/maps and separately executed RDKit consumers verify the
+original vectors; a round trip solely through Bondline is not the compatibility evidence.

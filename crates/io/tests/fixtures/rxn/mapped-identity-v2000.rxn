@@ -1,0 +1,27 @@
+$RXN
+Original mapped identity reaction
+  Bondline RXN research
+Original MIT OR Apache-2.0 vector
+  1  1  1
+$MOL
+Original reactant
+  Bondline          2D
+Original molecular metadata
+  1  0  0  0  0  0            999 V2000
+    0.0000    0.0000    0.0000 C   0  0  0  0  0  4  0  0  0  1  0  0
+M  END
+$MOL
+Original product
+  Bondline          2D
+Original molecular metadata
+  1  0  0  0  0  0            999 V2000
+    1.5000    0.0000    0.0000 C   0  0  0  0  0  4  0  0  0  1  0  0
+M  END
+$MOL
+Original reagent
+  Bondline          2D
+Original molecular metadata
+  1  0  0  0  0  0            999 V2000
+    3.0000    0.0000    0.0000 N   0  0  0  0  0  3  0  0  0  0  0  0
+M  XYZ  1   1   7
+M  END
