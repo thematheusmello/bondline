@@ -3,7 +3,7 @@
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Standalone syntax/property edits/new-tree writer; limited source-backed elemental view, owned unchanged-export snapshots and atomic filesystem library | Original field vectors, fetched positive scene, full-byte writer equality, independent Python struct/RDKit, atomic failure checks and bounded ASAN | Registry/native application workflow, broader metadata/references/chemical mapping, editing/encoder and foreign/general corpus |
+| CDX | Standalone syntax/property edits/new-tree writer; limited source-backed snapshots, atomic I/O and guarded shared open/save commands; chooser wired | Original field vectors, fetched scene, independent struct/RDKit, atomic failure/ASAN and actual engine/CLI/stdio/socket saved-file checks | Actual native CDX workflow, faithful preview, broader metadata/references/chemical mapping, editing/encoder and foreign/general corpus |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000/V3000 | Source-preserving mixed library records, per-record MOL version, ordered data fields, generic preserving writer and strict V2000 writer | Original spans/order; fetched V2000 two-record corpus; external raw scanner/per-record RDKit; version-switched SDWriter/ordinary full supplier; 8dp/1000-atom inputs; bounded Asan | Application data/multiple-record workflow, fetched mixed-version corpus and broader syntax/encodings |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
@@ -229,8 +229,8 @@ The fetched corpus pins the original65750-byte explicit-root chemical vector at 
 every opaque source byte are checked; the exact-scene external consumer checks ethane.
 Changed opaque bytes, bond order, spans or a different explicit scene fail this original-
 vector gate. It deliberately does not claim to validate arbitrary CDX chemistry or foreign
-files. Four pinned files now span three mandatory source bundles; chemistry calculations
-and application CDX remain separate missing coverage.
+files. Five pinned files now span four mandatory source bundles; chemistry calculations
+and foreign/general CDX remain separate missing coverage.
 
 ## CDXML syntax and mapping
 
@@ -533,7 +533,9 @@ is_fully_mapped=false. export_cdx/to_cdx borrow exact unchanged bytes and refuse
 models; source-free CDX encoding and cross-format metadata loss remain unsupported.
 Full snapshot equality/storage accounting includes raw source and baseline, including
 opaque-only differences and shared Arc clones. See verification-cdx-owned-snapshots.md.
-This is not application Open/Save, source-faithful rendering, editing, chemistry or full M1.
+The snapshot layer alone does not provide a file workflow; the guarded commands below
+now carry it through the application. Source-faithful rendering, editing, chemistry and
+full M1 remain missing.
 
 `files::read_cdx_file` and `save_cdx_file` now reuse bounded ordinary-file reads and the
 shared atomic publication/security/cancellation implementation. Read retains a complete
@@ -541,7 +543,6 @@ snapshot with an explicit A4 preview policy; Save only borrows unchanged importe
 Both existing framing vectors save byte-exactly and face their independent struct/RDKit
 consumers. Invalid input, no-clobber, stale/source-free export, cancellation and seven
 publication failure stages have filesystem tests. See verification-cdx-native-io.md.
-These library functions do not expose a CDX command, file association or native chooser.
 
 ## Source-only CDX metadata
 
@@ -556,5 +557,18 @@ The SDK FragmentZ owner omission and unknown AtomID normative lifecycle/uniquene
 qualified source questions. Full raw bytes/baseline/false completeness and export guards
 stay authoritative. New original323/319B vectors have independent struct/RDKit checks;
 one ignored native1196B original now projects2C/1Single and exports every byte unchanged.
-This is not broad native compatibility, chemistry, a CDX model encoder or an app workflow.
+This metadata acceptance alone does not establish broad native compatibility, chemistry,
+a CDX model encoder or an application workflow.
 See verification-cdx-native-metadata.md for actual RED/GREEN/ASAN scope.
+
+The application now uses those same functions through document.open_cdx/document.save_cdx,
+complete FilePlan/Completed snapshots and the shared per-Engine save reservation. File state
+and receipts report `cdx`, independent of extension. UI format selection, known Save,
+Save As and retry are wired through the same registry, not a separate encoder.
+
+All CDX imports remain incomplete: no default capture/preview or source-backed bond creation
+is authorized. Page edits can make the model dirty, but CDX Save refuses until exact Undo
+restores the original source baseline. Source-free CDX encoding and CDX/CDXML/MOL metadata
+loss refuse before any temporary is created. Accepted source, metadata and unknown records
+are saved byte-for-byte. See [application verification](verification-cdx-application.md).
+Actual native CDX acceptance and broader compatibility remain separate pending work.

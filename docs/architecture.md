@@ -39,8 +39,9 @@ includes opaque source content, so equal projections cannot erase source-only ch
 Returned model snapshots remain immutable across later edits. Authored state excludes
 revision/history. Exact undo assertions compare the whole stored document and original bytes.
 CDX backing is always incomplete: its elemental preview never authorizes regeneration or
-lossy conversion. Native filesystem library calls reuse the shared atomic adapter; command
-and UI delivery remain separate work. See verification-cdx-native-io.md.
+lossy conversion. Registered CDX Open/Save and the native chooser reuse the same atomic
+adapter, source authority and save/receipt/close barriers. Native acceptance is separate
+from headless/worker evidence; see verification-cdx-application.md.
 History is limited to 128 prior snapshots and a 128 MiB accounted-storage threshold for
 the current document plus history. Accounting deduplicates source allocations, models and
 immutable fragments, includes source baselines and reserved vector capacity, and saturates

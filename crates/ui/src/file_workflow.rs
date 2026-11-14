@@ -1,6 +1,8 @@
 //! Native file-menu, background execution and unsaved-close lifecycle.
 
 #[cfg(test)]
+mod cdx_tests;
+#[cfg(test)]
 mod close_tests;
 #[cfg(test)]
 mod mol_tests;
@@ -12,8 +14,8 @@ mod v3000_tests;
 use crate::files::{FileAction, FileChooser, FileChooserEvent, FileMode, format_extension};
 use bondline_commands::{
     Cancellation, CloseAction, CloseDocument, CloseState, Command, CommandResult, Engine,
-    ErrorInfo, FileFormat, MolVersionChoice, OpenCdxml, OpenMol, SaveCdxml, SaveMol, UiFile,
-    UiFileAction, UiFilePhase, UiFilePlan,
+    ErrorInfo, FileFormat, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol, SaveCdx, SaveCdxml,
+    SaveMol, UiFile, UiFileAction, UiFilePhase, UiFilePlan,
 };
 use bondline_mcp::CommandExecutor;
 use eframe::egui;
@@ -238,11 +240,13 @@ impl FileWorkflow {
             } else if matches!(job.action, FileAction::Open { .. }) {
                 match job.format {
                     FileFormat::Cdxml => "Opening CDXML…",
+                    FileFormat::Cdx => "Opening CDX…",
                     FileFormat::MolV2000 | FileFormat::MolV3000 => "Opening MOL…",
                 }
             } else {
                 match job.format {
                     FileFormat::Cdxml => "Saving CDXML…",
+                    FileFormat::Cdx => "Saving CDX…",
                     FileFormat::MolV2000 => "Saving MOL V2000…",
                     FileFormat::MolV3000 => "Saving MOL V3000…",
                 }
@@ -416,6 +420,16 @@ impl FileWorkflow {
                 discard_unsaved: *discard_unsaved,
             }),
             (
+                FileFormat::Cdx,
+                FileAction::Open {
+                    path,
+                    discard_unsaved,
+                },
+            ) => Command::OpenCdx(OpenCdx {
+                path: path.clone(),
+                discard_unsaved: *discard_unsaved,
+            }),
+            (
                 FileFormat::MolV2000 | FileFormat::MolV3000,
                 FileAction::Open {
                     path,
@@ -434,6 +448,10 @@ impl FileWorkflow {
                     overwrite: *overwrite,
                 })
             }
+            (FileFormat::Cdx, FileAction::Save { path, overwrite }) => Command::SaveCdx(SaveCdx {
+                path: path.clone(),
+                overwrite: *overwrite,
+            }),
             (FileFormat::MolV2000, FileAction::Save { path, overwrite }) => {
                 Command::SaveMol(SaveMol {
                     path: path.clone(),

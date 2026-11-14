@@ -1921,3 +1921,14 @@ whole-render tests pass. Receiving-root `cargo xtask ci` passes487workspace+3bri
 session31715 exit0, log SHA1b2d0e0e1af11134bd977bf71cddd3184c57ba4f32690d7f0780f4949260d0ee.
 [The exact source/probe record](verification-label-oracle-layout.md) distinguishes the
 reproduced mechanism from unattested hosted build flags. New hosted verification is pending.
+
+## Guarded CDX application integration, 2026-11-14
+
+The15-command registry now carries supported CDX Open/unchanged Save through CLI/stdio/
+authenticated loopback and native file workers. Four original fixture variants' actual saved
+bytes face independent raw/RDKit consumers. Source/dirty/history/reservation/receipt/close
+guards and exact-format retries remain. Receiving Root passes499workspace+3bridge,502 total,
+session95800 exit0, target/cdx-application-integrated-ci.log SHA
+7c5a36e4b5dcaa5ec9db510056876f9e5e92581aaf9a611d24522aa6e264c99e. Runtime graph/input/
+capture/golden are unchanged. [Application evidence](verification-cdx-application.md)
+keeps actual native chooser acceptance and hosted execution explicitly pending.

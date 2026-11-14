@@ -10,6 +10,7 @@ use std::sync::Arc;
 pub enum FileFormat {
     #[default]
     Cdxml,
+    Cdx,
     MolV2000,
     MolV3000,
 }
@@ -23,7 +24,7 @@ impl FileFormat {
     }
     pub(super) fn mol_version(self) -> Option<bondline_io::mol::Version> {
         match self {
-            Self::Cdxml => None,
+            Self::Cdxml | Self::Cdx => None,
             Self::MolV2000 => Some(bondline_io::mol::Version::V2000),
             Self::MolV3000 => Some(bondline_io::mol::Version::V3000),
         }
@@ -92,6 +93,7 @@ pub struct SaveMol {
 #[derive(Clone, Copy, Debug)]
 pub(super) enum OpenEncoding {
     Cdxml,
+    Cdx,
     Mol(bondline_io::mol::MolTransform),
 }
 
@@ -106,6 +108,22 @@ pub struct OpenCdxml {
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct SaveCdxml {
+    pub path: String,
+    #[serde(default)]
+    pub overwrite: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct OpenCdx {
+    pub path: String,
+    #[serde(default)]
+    pub discard_unsaved: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct SaveCdx {
     pub path: String,
     #[serde(default)]
     pub overwrite: bool,
@@ -208,6 +226,9 @@ impl FilePlan {
                 } => {
                     let loaded = match encoding {
                         OpenEncoding::Cdxml => read_cdxml_file(Path::new(&params.path), cancel)?,
+                        OpenEncoding::Cdx => {
+                            bondline_io::files::read_cdx_file(Path::new(&params.path), cancel)?
+                        }
                         OpenEncoding::Mol(frame) => bondline_io::files::read_mol_file(
                             Path::new(&params.path),
                             frame,
@@ -216,6 +237,7 @@ impl FilePlan {
                     };
                     let format = match encoding {
                         OpenEncoding::Cdxml => FileFormat::Cdxml,
+                        OpenEncoding::Cdx => FileFormat::Cdx,
                         OpenEncoding::Mol(_) => {
                             FileFormat::from_mol(loaded.document.mol_version().ok_or(
                                 bondline_io::mol::MolError::InvalidField {
@@ -254,6 +276,12 @@ impl FilePlan {
                             FileFormat::Cdxml => {
                                 save_cdxml_file(&path, &document, params.overwrite, cancel)?
                             }
+                            FileFormat::Cdx => bondline_io::files::save_cdx_file(
+                                &path,
+                                &document,
+                                params.overwrite,
+                                cancel,
+                            )?,
                             FileFormat::MolV2000 | FileFormat::MolV3000 => {
                                 bondline_io::files::save_mol_file_as(
                                     &path,

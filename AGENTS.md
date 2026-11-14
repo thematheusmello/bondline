@@ -155,8 +155,8 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current thirteen-command registry includes bond.create for independent C-C fragments with
-three explicitly authored H per carbon, plus native CDXML/MOL open/save. It does not attach to
+The current fifteen-command registry includes bond.create for independent C-C fragments with
+three explicitly authored H per carbon, plus CDXML/CDX/MOL open/save. It does not attach to
 existing atoms. Save complete StoredDocument data; file.dirty uses the saved snapshot, while
 source.modified describes original backing. Prepare/complete/finish separates I/O from
 revision-checked apply. Count current+saved snapshots and never call a publication error rollback.
@@ -264,8 +264,9 @@ Export only exact unchanged backing. Changed models, source-free CDX encoding an
 format metadata loss must fail; do not regenerate a projection with syntax Writer.
 Snapshot equality/accounting includes opaque bytes and baseline. Preview paper is caller
 policy, not inferred from BoundingBox. CDX filesystem functions reuse the existing bounded
-read/atomic save path; no CDX registry/native UI exists yet. Never bypass shared FilePlan/
-Completed reservations when delivering those future application adapters.
+read/atomic save path. document.open_cdx/save_cdx and the native chooser are now wired
+through the shared registry; see verification-cdx-application.md for exact local versus
+native evidence. Never bypass shared FilePlan/Completed reservations in those adapters.
 Normal CDX fuzzing now exercises projection/snapshot guards; both lock edges add only the
 existing internal CDX crate. New native declared closures154/165/220 include that crate.
 

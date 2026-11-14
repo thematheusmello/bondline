@@ -44,9 +44,13 @@ Published carbon source983ffee on feat/carbon-graph-integration has final local/
 acceptance, but hosted43557351022 fails Mac132333092799/Windows132333092520 in the two
 independent FreeType comparisons (0.866895/0.888313 versus unchanged0.90). Neither failed
 job reaches window smoke. Linux132333092682 passes477/window; ASAN132333092803 passes6.
-Main stays00e5b02. The layout-dependent Python advance oracle is being reproduced by
-file_verification in Root using BASIC versus local RAQM, with no tracked edit until root
-finishes the metadata commit. Production/font/threshold/golden must not be changed to pass.
+Main stays00e5b02. Test-only correctiona3613c0 explicitly uses BASIC rasterization and independently verified
+OpenType design-unit advances; the forced-BASIC probe reproduces both prior failures exactly.
+All original thresholds/negatives, production renderer, font and golden are unchanged.
+Receiving full gate487workspace+3bridge=490 passes,31715 terminal0; log
+ target/font-layout-corrected-ci.log SHA1b2d0e0e1af11134bd977bf71cddd3184c57ba4f32690d7f0780f4949260d0ee.
+New matching hosted43559699996 at a3613c0968dbce126ba0e1632d36db3d034be14f is in progress.
+See verification-label-oracle-layout.md; no cross-platform pass is inferred yet.
 Final source983ffee was frozen throughout successful native cleanup; later docs are additive. Exact15-file
 handoff target/canvas-press-position-handoff.json SHA
 d2f3b8096361ee9071a8184c41a19240e1e17e5923f37b068e841251bf535a95.
@@ -109,18 +113,18 @@ golden files remain exact. Source plan and unknown AtomID semantics are explicit
 Frozen handoff target/cdx-native-metadata-handoff.json in that sibling SHA
 79b9c7765a21da5546bd7fcf87dd536b606b7e5500be4280bdd93900eda8f036. Independent review:
 ROOT target/cdx-native-metadata-review.md SHAa076717c85e8cde73655613ad910a5c4011b8186e45d42a6c4901f99b775f439,
-no confirmed findings; reviewer did not run tests. This metadata is not in ROOT/main yet.
-Current ROOT feat/cdx-metadata-integration has an uncommitted merge43ca90d onto983ffee.
+no confirmed findings; reviewer did not run tests. Metadata is integrated locally in ROOT
+4fcea85, with five original hosted CDX sanitizer seeds added by5d9725c; public main stays00e5b02.
 Actual receiving486workspace+3bridge=489 passes all gates (15985 terminal0), log
  target/cdx-metadata-integrated-ci.log SHAac2304d83535f33db8cceb0a748ab1ff776f4b8aee49320767ce2f4ded7fc27e.
 Normal full-graph clippy69358 and ASAN46377 exit0: six fresh original seeds,10000 runs,
 seed721533879/max_len131072/timeout5, cov1131/features2728,97inputs/reported273KiB/RSS255MiB,
 3seconds, largest65750B. Log target/cdx-metadata-normal-fuzz-asan.log SHA
 497f2369441263a997a6320a0914b7fb199475852a338c175234e136051a24fc. Fixture dirs untouched.
-Commit this reviewed local metadata feature, then correct the separate test-only font oracle
-and run new matching checks; parent hosted failure must not be substituted or hidden.
+Metadata/font source is published on feat/cdx-metadata-integration at a3613c0; its matching
+hosted run is pending. Parent hosted failure must not be substituted or hidden.
 
-The same warm sibling is now feat/cdx-file-commands at local merge43ca90d, combiningf67883a
+The warm sibling feat/cdx-file-commands includes local merge43ca90d, combiningf67883a
 and00e5b02. Its own base full gate453workspace+3bridge passes, log
  target/cdx-application-base-ci.log, session89159 terminal0, SHA
 082d58ac77e3cb59f4152f0369be577a1e9ab0d5b33f11c29e38f89ff4cbc73a. Standalone metadata
@@ -132,19 +136,33 @@ save lease/receipt/native chooser routing now pass188 scoped tests and its own f
 96315fe2786f1f26b05d5b02f67160c18ede6404e1dec26dd7c3e914e9decf7f,80939 terminal0.
 Four original vectors' actual saved bytes face strict independent consumers through
 engine/CLI/stdio/authsocket. UIworker/chooser retry and close/refusal guards pass. Native
-CDX chooser is only WIRED; root/current public main still has13 commands. No codec/model/
+CDX chooser is only WIRED. ROOT is integrating e37d129 into
+feat/cdx-application-integration on a3613c0: its15 commands and five production hashes match
+the handoff; root graph/input/capture/golden are retained. Public main still has13 commands.
+Receiving full gate95800 exits0:499workspace+3bridge=502, all aggregate gates pass; log
+ target/cdx-application-integrated-ci.log SHA7c5a36e4b5dcaa5ec9db510056876f9e5e92581aaf9a611d24522aa6e264c99e.
+Native GO follows the exact frozen integrated source/review; no owned native app is running. No codec/model/
 render/UIlib/capture/deps/locks/golden changed. Frozen19-file handoff in sibling SHA
 2938f34a6451c871ab89f590466645d769eaf53fd08aae12c331d4177851ebba; independent read-only
 ROOT target/cdx-file-commands-review.md SHA829bb37260d4c1c11624273bd1ad264284c38d7fa059a0ab5b7a536f51eb992b,
-no confirmed findings/no rerun. Preserve root renderer and apply only CDX documentation
-hunks when merging the older base; never replace whole newer root files. No worker jobs.
+no confirmed findings/no rerun. Three documentation conflicts were resolved additively;
+newer graph/font/metadata records are preserved. file_verification is reviewing merged
+interfaces read-only, no Cargo/GUI. Native acceptance plan is target/native-cdx-acceptance-plan.md
+SHAc2a86734b56379f5edd1da6920e8d2ef4a39bb2ac2b6bedfb6a000311653a355; reference_ui awaits GO.
 
 The read-only next M2 plan is ROOT target/connected-single-bond-next.md SHA
 3a68f184323edbeea3a721855324d8c4823d3c44a1e281dee712ae589470552f. It proposes an explicit
 closed terminal-C/H3 rectification operation, atomic same-ID replacement, revision/ID/
 source guards and fresh per-press hit resolution; automatic H-correction defaults remain
-unestablished. No product change/build/GUI or tests claimed by that plan. Reopen foreign
-files may redensify IDs; compare mapped graph/geometry/H, not promised cross-reopen IDs.
+unestablished. The plan itself proves no implementation. reference_map is implementing its headless
+model/command slice in bondline-rxn, branch feat/terminal-carbon-extension based983ffee,
+with required hydrogen_policy, stale/source/ID/history/refusal guards. Scoped161 tests
+and actual Expat/Decimal/RDKit propane/butane output pass. Its own full gate82702 exits0:
+498workspace+3bridge=501, target/terminal-extension-ci.log SHA
+79d47a5cc3a5f5b17a6ae0a2b73a1fdbc462c868d197ee58e82a7324fac31eef, including the exact
+font-test correction safely applied without replacing its WIP. Root owns Git.
+Native extension gestures are not implemented. Reopen foreign files may redensify IDs;
+compare mapped graph/geometry/H, not promised cross-reopen IDs.
 
 ## Research, preservation and next steps
 
@@ -162,19 +180,20 @@ no explicit cloud/account action or original source save occurred. Never copy pr
 code/assets/help prose; new Rust/assets stay original and licensed. Latest user authorizes
 runtime inspection, superseding the earlier ban.
 
-1. Commit the reviewed/local489/ASAN metadata merge, preserving root renderer/docs.
-2. Reproduce and fix the layout-dependent FreeType oracle in a separate test-only commit,
-   retaining0.90 threshold, original metric vectors, negative cases, production/golden bytes
-   and recorded failed source983ffee. Run new full/hosted gates before main advances.
-3. Merge application commande37d129 with current renderer retained, run receiving checks,
-   then actual native CDX chooser/source/history/refusal/close workflows and independent
-   saved-byte consumers. Keep registry/native status precise and preserve all guards.
-4. Continue SDF collections, reaction model/RXN/SMILES and M2–M5 in roadmap/ticket order.
-   Display/hit testing is not connected bond editing or selection. Do not create stubs.
+1. Observe matching metadata/font hosted43559699996. Main remains00e5b02 until GREEN;
+   preserve the earlier actual983ffee failure. No passing job reruns.
+2. Finish read-only CDX application integration review; commit the locally502-green merge,
+   then run the exact frozen-source native chooser/source/refusal/close plan and saved-byte
+   consumers. Publish/observe that source before advancing main. Native is only wired now.
+3. Receive and review reference_map's terminal-carbon core handoff/full gate; integrate
+   without dropping either CDX command (combined count16). Implement fresh per-press native
+   attachment and its independent TDD/native checks next. Do not relabel source-backed editing.
+4. Continue M1 SDF collections, reaction model/RXN/SMILES and M2–M5 in roadmap/ticket order.
+   Rendering/hit testing and one closed extension operation do not complete drawing/selection.
 
 Each checkout uses its own absolute Cargo target; incremental0, sibling debug0, root default
-debug. Disk constrained (~2GiB); no deletion of active/evidence/source/fixtures or shared
-build outputs. Only approved golden:
+debug. Disk constrained (~3GiB after reclaiming3.6GiB of inactive Root package artifacts); no
+deletion of active/evidence/source/fixtures or worker build outputs. Only approved golden:
 1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc. Never regenerate without
 approval. Revalidate agents/jobs on continuation. No release/installer/signing or unrelated
 message/account action occurred; native license closure is resolved, full M0/M1 is not.

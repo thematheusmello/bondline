@@ -366,10 +366,11 @@ impl FileChooser {
                     self.set_format(selected_format);
                 }
                 ui.label(if mode==FileMode::Open {
-                    "Structure files (*.cdxml, *.mol). Enter a complete path to open a file outside this list."
+                    "Structure files (*.cdxml, *.cdx, *.mol). Enter a complete path to open a file outside this list."
                 } else {
                     match self.format {
                         FileFormat::Cdxml=>"CDXML files (*.cdxml).",
+                        FileFormat::Cdx=>"CDX files (*.cdx); only unchanged imported data can be saved.",
                         FileFormat::MolV2000=>"MOL V2000 files (*.mol); unsupported content cannot be saved in this format.",
                         FileFormat::MolV3000=>"MOL V3000 files (*.mol); unsupported content cannot be saved in this format.",
                     }
@@ -500,15 +501,17 @@ fn accessible_text_value(
 pub(crate) fn format_extension(format: FileFormat) -> &'static str {
     match format {
         FileFormat::Cdxml => "cdxml",
+        FileFormat::Cdx => "cdx",
         FileFormat::MolV2000 | FileFormat::MolV3000 => "mol",
     }
 }
 
 fn formats_for_mode(mode: FileMode) -> &'static [FileFormat] {
     match mode {
-        FileMode::Open => &[FileFormat::Cdxml, FileFormat::MolV2000],
+        FileMode::Open => &[FileFormat::Cdxml, FileFormat::Cdx, FileFormat::MolV2000],
         FileMode::Save => &[
             FileFormat::Cdxml,
+            FileFormat::Cdx,
             FileFormat::MolV2000,
             FileFormat::MolV3000,
         ],
@@ -518,6 +521,7 @@ fn formats_for_mode(mode: FileMode) -> &'static [FileFormat] {
 fn format_label(format: FileFormat, mode: FileMode) -> &'static str {
     match (format, mode) {
         (FileFormat::Cdxml, _) => "CDXML (*.cdxml)",
+        (FileFormat::Cdx, _) => "CDX (*.cdx)",
         (FileFormat::MolV2000 | FileFormat::MolV3000, FileMode::Open) => {
             "MOL V2000 / V3000 (*.mol)"
         }
@@ -537,6 +541,8 @@ fn format_hint(name: &str) -> Option<FileFormat> {
     let extension = Path::new(name).extension()?.to_str()?;
     if extension.eq_ignore_ascii_case("cdxml") {
         Some(FileFormat::Cdxml)
+    } else if extension.eq_ignore_ascii_case("cdx") {
+        Some(FileFormat::Cdx)
     } else if extension.eq_ignore_ascii_case("mol") {
         Some(FileFormat::MolV2000)
     } else {
@@ -564,7 +570,7 @@ fn resolve_path_as(
     match path.extension().and_then(|extension| extension.to_str()) {
         Some(extension)
             if mode == FileMode::Open
-                && ["cdxml", "mol"]
+                && ["cdxml", "cdx", "mol"]
                     .iter()
                     .any(|supported| extension.eq_ignore_ascii_case(supported)) => {}
         Some(extension)
@@ -575,7 +581,7 @@ fn resolve_path_as(
         }
         _ => {
             return Err(if mode == FileMode::Open {
-                "Choose a .cdxml or .mol structure file.".to_owned()
+                "Choose a .cdxml, .cdx or .mol structure file.".to_owned()
             } else {
                 format!(
                     "Use the .{} extension for the selected format.",
@@ -744,7 +750,11 @@ mod tests {
             directory.0.join("other.mol"),
             b"not a valid MOL; listing never reads it",
         )?;
-        fs::write(directory.0.join("ignored.cdx"), b"not supported")?;
+        fs::write(
+            directory.0.join("binary.CDX"),
+            b"opaque listing; never decoded",
+        )?;
+        fs::write(directory.0.join("ignored.sdf"), b"not supported")?;
         let latest = AtomicU64::new(1);
         let result = scan_directory(
             ScanRequest {
@@ -764,6 +774,7 @@ mod tests {
                 ("Z folder", true),
                 ("A.CDXML", false),
                 ("b.cdxml", false),
+                ("binary.CDX", false),
                 ("other.mol", false)
             ]
         );
@@ -882,7 +893,7 @@ mod tests {
             resolve_path(&directory.0, "fresh", FileMode::Save)?,
             directory.0.join("fresh.cdxml").to_str().ok_or("unicode")?
         );
-        for bad in ["", "   ", "bad\0.cdxml", "sample.cdx", "sample.sdf"] {
+        for bad in ["", "   ", "bad\0.cdxml", "sample.rxn", "sample.sdf"] {
             assert!(
                 resolve_path(&directory.0, bad, FileMode::Open).is_err(),
                 "{bad:?}"
@@ -1242,7 +1253,7 @@ mod tests {
     -> Result<(), Box<dyn std::error::Error>> {
         assert_eq!(
             formats_for_mode(FileMode::Open),
-            &[FileFormat::Cdxml, FileFormat::MolV2000]
+            &[FileFormat::Cdxml, FileFormat::Cdx, FileFormat::MolV2000]
         );
         assert_eq!(
             format_label(FileFormat::MolV2000, FileMode::Open),
@@ -1252,6 +1263,7 @@ mod tests {
             formats_for_mode(FileMode::Save),
             &[
                 FileFormat::Cdxml,
+                FileFormat::Cdx,
                 FileFormat::MolV2000,
                 FileFormat::MolV3000
             ]
@@ -1273,6 +1285,46 @@ mod tests {
             FileFormat::MolV2000,
             "Open presents a family decoder, not an inferred MOL version"
         );
+        Ok(())
+    }
+
+    #[test]
+    fn cdx_hint_extension_and_failed_known_save_retain_the_chosen_encoding()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let directory = Directory::new()?;
+        let mut chooser = FileChooser::default();
+        chooser.begin(FileMode::Open, directory.0.clone(), String::new());
+        chooser.set_name("original.CDX".to_owned());
+        assert_eq!(chooser.format(), FileFormat::Cdx);
+        assert!(
+            matches!(chooser.submit(false),Some(FileAction::Open {path,..}) if path.ends_with("original.CDX"))
+        );
+        chooser.begin_with_format(
+            FileMode::Save,
+            directory.0.clone(),
+            "copy".to_owned(),
+            FileFormat::Cdx,
+        );
+        assert_eq!(chooser.name, "copy.cdx");
+        assert_eq!(format_label(FileFormat::Cdx, FileMode::Save), "CDX (*.cdx)");
+        let action = FileAction::Save {
+            path: directory
+                .0
+                .join("known.mol")
+                .to_str()
+                .ok_or("path")?
+                .to_owned(),
+            overwrite: true,
+        };
+        chooser.failed_with_format(
+            action.clone(),
+            FileFormat::Cdx,
+            "permission_denied",
+            "Save failed".to_owned(),
+        );
+        assert_eq!(chooser.name, "known.mol");
+        assert_eq!(chooser.format(), FileFormat::Cdx);
+        assert_eq!(chooser.confirm(), Some(action));
         Ok(())
     }
 
