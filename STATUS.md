@@ -6,7 +6,7 @@ Read AGENTS.md, ROADMAP.md, architecture, parity and sources before choosing wor
 
 ## Verified source checkpoints
 
-Public main's code checkpoint is15ecbc7, plus this documentation-only evidence update.
+Public main3ec8b4c's code checkpoint is15ecbc7, plus documentation-only evidence updates.
 It advances from29cac7f only after the matching all-platform GREEN below. This combines
 guarded CDX files, explicit headless extension, native attachment wiring and the two SDF
 library slices. Owned-SDF receiving9436bf4 passes its own43568995448:
@@ -19,6 +19,9 @@ is fully GREEN: Mac132343193738:523
 (520workspace+3bridge), Linux132343193548:521, Windows132343193736:513, every actual
 native window smoke, ASAN132343193667:six10000-run targets. Adapters are Metal/Apple
 Paravirtual device, Vulkan/llvmpipe CPU and Dx12/Microsoft Basic Render Driver CPU.
+Main3ec8b4c's automatic43571525559 also passes: Mac132376759120:559,
+Linux132376759149:557, Windows132376758857:549, all actual windows and
+ASAN132376759095:six10000-run targets. These code-identical results do not verify later work.
 The receiving isolated bondline-rxn full gate54630 exits0:520+3, log
  target/connected-bond-integrated-ci.log SHAdfb35244cdbdf58d69d40a9fa98d89d278054930292a2f2e561290d00b274e8d.
 No native terminal-attachment claim follows from those engine/window tests.
@@ -101,8 +104,24 @@ cc41dee7859ed1ae5c52e40b52f360da1cec1a46115fb0119068517f413c355a. Reviewer did n
 
 ## Current receiving state, active work and exact next steps
 
-Root owns Git/integration. Current checkout feat/sdf-field-integration merges immutable field replacementf63f153
-on owned-source integration9436bf4, which merges owned-source
+Root owns Git/integration. Current checkout feat/smiles-integration receives original
+notation codec5df1b28 plus original-seed commiteabe02f, normal-graph fuzz and a ninth
+seed/checkout test. Root cargo xtask ci84447 exits0:565workspace+3bridge=568, log
+target/smiles-integrated-ci.log SHA
+914fd978ca95370c05ddfe8030143fb7426d461c6f22300d3c4a615a988c93fc.
+Normal fuzz clippy passes on pinned1.94.1; its first incorrect nightly invocation fails
+before compilation because that test toolchain has no clippy component (retained log).
+Normal full-graph ASAN40137 exits0 at10000 runs/seed703592681/max_len65536/timeout5:
+cov534/features1205,148inputs/1602B/RSS67MiB/1second/largest21B. Exact3original copied
+seeds total59B. Source/token/graph/sharing invariants pass; fixed large cases remain unit
+tests. ASANlogSHA0f3c6fe7d6bb6a7e23602a576dd0092f85ba5faeb0f7192bc7e8e91f994a2ab0.
+Independent frozen-source review has no finding, target/smiles-source-review.md SHA
+f06ac2062e650383d91e2be1e1b081cd9b398349c46e7215ecbbd431bffbab88; no reviewer execution.
+Receiving fuzz/fixture review has no confirmed finding, target/smiles-fuzz-review.md SHA
+63509a5b8b30b3660878f76250642164db3f25fcadfea85108c2ba32ae0ce8ac; no reviewer execution.
+Own hosted result remains pending. No model/command/native SMILES workflow is delivered.
+
+Earlier immutable field replacementf63f153 is integrated on9436bf4, which merges owned-source
 0ae10e5 onf0910ca. Root receiving94645 exits0:546workspace+3bridge=549, all aggregate gates;
 log target/sdf-owned-integrated-ci.log SHA
  fe1e23fee5df7a1310243fd9e1b034ad6a25a898cf8aad4b073e591c50c987b8.
@@ -174,11 +193,13 @@ Active work is isolated, not delivered:
   not a record browser, layout, molecular edit or field-edit command. Freeze/review this
   complete slice before any phase2 record/field query/edit work.
 - file_verification independently reviews the phase1 contract and later frozen diff;
-  ignored report target/sdf-session-review.md. No native work or code ownership.
-- sdf_field_review owns bondline-mol-v3000/feat/smiles-syntax, based15ecbc7: original
-  bounded iterative nonaromatic notation/source codec, no model inference/layout/
-  application commands/canonicalization. Only new module/tests/oracle/provenance and
-  minimal exports/element-catalog visibility changes. No dependency/lock changes.
+  ignored report target/sdf-session-review.md. Its frozen parser review is complete;
+  Root receiving fuzz/fixture review is now active. No native work or code ownership.
+- sdf_field_review owns bondline-mol-v3000/feat/smiles-explicit-writer, based5df1b28:
+  original valid NONCANONICAL generated SMILES from explicit-H neutral closed-shell
+  supported model fragments. Bounded iterative traversal, typed refusal and independent
+  actual-output consumers are required. No parser/model/backing/Engine/FS/UI changes,
+  implicit-H inference, whole-document Save or successful placeholder APIs. Still WIP.
 No active native/controller/CUA/helper process exists. The input question remains pending.
 Revalidate live agents and current Cargo handles before starting a conflicting build.
 
@@ -198,9 +219,10 @@ Read-only plans are ready, not implemented features:
    a first/empty drawing. Preserve generic save-slot/receipt/close/stale barriers, source
    authority and accounting. Reference shows both drawings, not a browser. Native runtime
    acceptance follows when usable input is established; keep it separately unverified.
-3. Receive/review/fuzz the original SMILES notation codec. Ordinary implicit-H model
-   mapping, valid generated export and layout are subsequent explicit decisions, not
-   implied by syntax acceptance. Preserve all old source/oracle/golden assertions/pins.
+3. Finish receiving-review/commit/publication of the568/ASAN notation slice; observe its
+   own hosted source before advancing main. Then receive/test/review the separate
+   explicit-H generated writer. Ordinary implicit-H model mapping and layout need their
+   own decisions and evidence. Preserve all old source/oracle/golden assertions/pins.
 4. When input availability is resolved and actual initial-Up/ownership is observable,
    assign one GUI owner a fresh exact-source native acceptance for remaining B–L; never
    reuse closed app/controller/session or promote synthetic tests to native proof.
@@ -215,7 +237,25 @@ reports/catalogs record14menus/503physical entries and36palette cells; static de
 are not tooltip/action/runtime coverage or a feature-completion percentage. Original
 assets/Rust remain independent; no proprietary code/assets/help text is transplanted.
 
-Disk constrained (~1.8GiB free at07:24UTC); inactive Root package artifacts were reclaimed.
+Disk constrained (~1.2GiB free at07:54UTC); inactive Root package artifacts were reclaimed.
 Never delete active/evidence/source/fixtures/worker targets. Only approved golden:
 1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc. No new approval/release/
 installer/signing or unrelated message/account action. Revalidate agents/jobs on continuation.
+
+## Isolated SMILES syntax slice, 2026-11-14
+
+On supplied `feat/smiles-syntax` base15ecbc7 in `bondline-mol-v3000`, original immutable
+ASCII source/notation ownership and iterative nonaromatic graph parsing are implemented.
+Exact tokens distinguish bare implicit H, bracket omission/H0, physical H and isotope0;
+branches/dots/numeric rings preserve adjacency and checked limits. This is library syntax,
+not chemical validation, model projection, generated export, layout or an application flow.
+See docs/verification-smiles.md for exact primary pins, RED/GREEN, hashes and dialect limits.
+
+Own absolute-target IO test session46150 exits0:186 tests/0 failed or ignored; all-target
+warnings-denied IO clippy session27896 exits0 and workspace fmt check passes. Earlier
+missing-API/topology/query REDs, unavailable RDKit Python skipCleanup and numeric-ring/
+dot-branch consumer failures remain recorded. The parser was not weakened to match those
+consumer differences. No dependency/lock/old fixture/golden or model/Engine/FS/UI changed;
+existing symbol data is reused through two approved visibility-only changes. All own jobs
+are terminal. Independent peer source review and Root integration/fuzz/full aggregate/
+hosted checks remain next; Root owns Git and no Git/GUI/install ran in this slice.

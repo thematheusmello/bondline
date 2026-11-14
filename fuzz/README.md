@@ -5,6 +5,39 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## SMILES notation
+
+```sh
+mkdir -p .cache/fuzz/smiles
+cp crates/io/tests/fixtures/smiles/*.smi .cache/fuzz/smiles/
+PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --sanitizer address smiles_parse .cache/fuzz/smiles -- -runs=10000 -seed=703592681 -max_len=65536 -timeout=5
+```
+
+The three original17/21/21-byte seeds retain their independent topology/metadata and
+SHA identities in their fixture README. Copy them into a fresh ignored writable corpus;
+never point libFuzzer at committed fixtures. The normal full IO dependency graph is used,
+without a reduced parser manifest, new dependency/tool pin or GPU initialization.
+
+Accepted input must retain all source bytes and share source/atom/bond allocations on
+Clone. The harness independently checks source/token bounds, implicit versus bracket H,
+literal isotope/H ranges, supported bond tokens, distinct valid endpoints/unique edges,
+both original numeric ring declarations and dot-chain resource counts. Rejected
+input has a typed error and in-bounds byte offset. Fixed-size/depth limits also have
+explicit unit cases; a max_len ceiling alone does not establish large-input coverage.
+
+This is nonaromatic notation/source fuzzing, not chemical validity, inferred H, radicals,
+stereo/aromaticity, canonicalization, model conversion, generated export, application
+Open/Save or native UI evidence. Independent published-rule/literal/external RDKit tests
+remain separate; not every accepted mutation is sent to a chemistry consumer.
+
+First normal-graph local ASan smoke exits0:10000 runs with the settings above,
+cov534/features1205,148inputs/1602B/RSS67MiB,1second. Largest exercised input21B;
+large/deep/dense unit boundaries are separate evidence. Exact logs/settings/hashes and
+the corrected pre-build clippy command are recorded in docs/verification-smiles.md.
+Hosted execution of the new seventh target is still pending at this checkpoint.
+
+## CDXML syntax
+
 ```sh
 rustup toolchain install nightly-2026-04-01 --profile minimal
 cargo install --locked cargo-fuzz --version 0.13.2 --root target/tools
@@ -69,7 +102,7 @@ property. The former 65536-byte run limit could not represent that complete scen
 current 131072-byte bound deliberately includes it. Both original fixture identities and
 their generator/source provenance are recorded in the fixture README. An accepted binary
 mutation is syntax/source evidence, not independent chemical interoperability for that mutation.
-The CI sanitizer job runs all six parser targets; these bounded runs are not exhaustive input
+The CI sanitizer job runs all seven parser targets; these bounded runs are not exhaustive input
 coverage or proof of application CDX support.
 
 ## MOL V2000 syntax and elemental graph

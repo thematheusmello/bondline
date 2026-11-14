@@ -2000,3 +2000,16 @@ Root71692 passes556workspace+3bridge=559, logSHA
 6adf07911f3563a00c6b2a80763e2b4a6c67ff75b94ce0c50da913352551c267. Normal SDF fuzz clippy/fmt
 and ASAN10000 pass; exact logs/settings and qualified read-only review are in
 verification-sdf-field-value.md. No native/session/command integration is implied.
+
+## SMILES notation syntax/source ownership, 2026-11-14
+
+[verification-smiles.md](verification-smiles.md) records the bounded iterative
+nonaromatic library parser, immutable full source/token ranges and original graph
+expectations. Missing-API, topology and query-category REDs precede their fixes;
+the exact final IO gate passes186 tests, warnings-denied all-target IO clippy and
+workspace formatting. Whole accepted LF/CRLF source faces the pinned external parser
+with chemical inference/H removal/name/CX parsing disabled. Actual consumer binding
+and dialect failures remain recorded, including unavailable skipCleanup and numeric
+ring/dot-branch/HH/closure differences. No old consumer or assertion was weakened.
+Peer review, Root full aggregation/fuzz/hosted gates and model/application work remain
+separate. No native, generated writer or chemical-perception success is implied.

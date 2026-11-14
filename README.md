@@ -93,7 +93,7 @@ Rust **1.94.1** is pinned by the repository. Linux prerequisites and the indepen
 environment are documented in [development.md](docs/development.md). Python is used for
 independent developer test oracles, not as an application runtime.
 
-Use File → Open/Save/Save As for supported CDXML. Cmd/Ctrl+O, S, Shift+S and W are wired;
+Use File → Open/Save/Save As for supported CDXML, CDX or MOL documents. Cmd/Ctrl+O, S, Shift+S and W are wired;
 actual Mac shortcut and accessibility-field evidence is in [native-file-ui.md](docs/native-file-ui.md).
 
 ```sh
@@ -118,10 +118,11 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | Area | Current state | Next work |
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
-| CDX | Standalone syntax/property edits/new-tree writer; limited elemental view with selected source-only metadata, owned exact-source snapshots and atomic filesystem library, checked independently | Registry/native workflow, broader metadata/chemistry, editing/encoder and foreign/general corpus |
+| CDX | Guarded shared/native Mac Open/Save, exact source retention, limited elemental metadata view and standalone syntax/property/new-tree APIs, checked independently | Faithful preview, broader metadata/chemistry, safe edits/new encoding and foreign/general corpus |
 | MOL / SDF | MOL V2000/V3000 native file workflows; source retention and independent consumer checks; mixed-version SDF library with immutable whole-source ownership, exact field-occurrence value edits and pinned V2000 corpus | Application SDF workflows, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
-| SMILES / InChI | Planned | Format support and independently verified chemistry |
+| SMILES | Bounded nonaromatic notation/source library with literal graph/token tests, qualified external consumers and sanitizer checks | Generated export, model/H policy, application import/layout, aromaticity/stereo and canonicalization |
+| InChI | Planned | Reference-tool comparison and import/export |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |
 

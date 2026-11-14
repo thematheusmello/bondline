@@ -75,6 +75,7 @@ render (L1, shared neutral-carbon/Single GraphScene, bounded hit regions, litera
 labels, CPU/GPU rectangles/strokes and approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
 bounded native CDXML/CDX/MOL filesystem libraries and source-preserving SDF/RXN container records;
+bounded nonaromatic SMILES notation/source ownership, not application SMILES or chemistry;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`

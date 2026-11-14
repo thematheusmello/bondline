@@ -25,8 +25,9 @@ guides are versioned evidence, not proof of complete modern parity.
       remain unverified.
 - [x] macOS/Windows/Linux CI, licensed corpus tooling, parser fuzz infrastructure.
       Corrected hosted run 43451706668 passes aggregate checks and actual window launches
-      on all three platforms plus Linux ASan. Corpus remains its documented CDXML subset;
-      passing infrastructure does not establish missing MOL/CDX/chemistry coverage.
+      on all three platforms plus Linux ASan. Corpus now checks five pinned files from
+      four bundles: CDXML, MOLV2000/V3000, ordered SDF and one original CDX scene.
+      Foreign/general CDX, SMILES/InChI and chemistry corpus coverage remain missing.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.
       576 stable-ID source-cited control rows now exist, including three provisional
       unversioned Help roles; modern menus, unnamed glyphs and remaining
@@ -55,9 +56,13 @@ container library, ordered duplicate/empty/DT data, a wrapper writer and indepen
 raw-field/molecular consumers. A fetched original SDF corpus now checks two records and
 every ordered field without a lossy property map. Application SDF workflows and wider mappings remain next work. Standalone V3000 parsing,
 writing and the version-aware MOL application slice are now integrated; mixed-version SDF
-container is integrated; the reviewed legacy RXN container is now being integrated.
+container and reviewed legacy RXN container are integrated.
 These libraries retain complete raw molecular/data/role payloads; application collections
 and reaction models/commands/native workflows remain separate missing work.
+The original bounded SMILES notation/source library now has literal graph/token/limit
+tests and qualified pinned external-parser evidence. Bare implicit H, bracket H0 and
+physical H remain distinct; no model projection, generated export, chemical perception,
+layout or application SMILES command is delivered. See docs/verification-smiles.md.
 Full M0
 inventory/dialog/addressability gaps remain tracked while this format work proceeds.
 
@@ -89,7 +94,9 @@ source bytes and checks opaque property replacements. Original vectors face inde
 Python struct and external RDKit consumers. Implicit/explicit roots have specific probe
 evidence. A bounded new-tree syntax writer now independently reproduces an original chemical
 scene and passes literal lengths/resource checks and external RDKit. General file compatibility
-and application import/export remain missing. One original explicit chemical scene is fetched from its real public commit,
+and editable encoding/faithful preview remain missing. Guarded shared/native Mac CDX
+Open/Save preserves accepted source exactly; it does not regenerate changed projections.
+One original explicit chemical scene is fetched from its real public commit,
 SHA-verified and checked against independent struct/RDKit consumers. Foreign/general CDX
 corpus and reference/chemical mapping remain M1 work.
 

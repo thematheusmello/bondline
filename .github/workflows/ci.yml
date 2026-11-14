@@ -81,6 +81,8 @@ jobs:
           cp crates/io/tests/fixtures/v3000/*.mol .cache/fuzz/mol-v3000/
           mkdir -p .cache/fuzz/rxn
           cp crates/io/tests/fixtures/rxn/*.rxn .cache/fuzz/rxn/
+          mkdir -p .cache/fuzz/smiles
+          cp crates/io/tests/fixtures/smiles/*.smi .cache/fuzz/smiles/
       - name: Run the bounded sanitizer check
         run: PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run cdxml_parse .cache/fuzz/cdxml -- -runs=10000 -seed=3641879538 -max_len=65536 -timeout=5
       - name: Run the bounded binary parser sanitizer check
@@ -93,5 +95,7 @@ jobs:
         run: PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --sanitizer address mol_v3000_parse .cache/fuzz/mol-v3000 -- -runs=10000 -seed=937155923 -max_len=65536 -timeout=5
       - name: Run the bounded RXN parser sanitizer check
         run: PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --sanitizer address rxn_parse .cache/fuzz/rxn -- -runs=10000 -seed=224867531 -max_len=65536 -timeout=5
+      - name: Run the bounded SMILES notation sanitizer check
+        run: PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --sanitizer address smiles_parse .cache/fuzz/smiles -- -runs=10000 -seed=703592681 -max_len=65536 -timeout=5
       - name: Check dependency pins were retained
         run: git diff --exit-code -- Cargo.lock fuzz/Cargo.lock

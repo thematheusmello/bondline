@@ -775,3 +775,32 @@ and the unexposed Python skipCleanup field do not establish exact raw-token perc
 The already registered Git text-attribute contract supports the narrow -text safeguard;
 real isolated autocrlf checkout RED/GREEN preserves all originals without normalization.
 These seed checks are not application SMILES, canonical output, layout or full conformance.
+
+## Bounded SMILES notation graph, 2026-11-14
+
+[verification-smiles.md](../verification-smiles.md) records original iterative Rust
+syntax/source ownership only. Primary OpenSMILES v1.0 publisher source is pinned to
+[9240a2887158699503605bc838e1de9a9f7883f4](https://github.com/opensmiles/OpenSMILES/blob/9240a2887158699503605bc838e1de9a9f7883f4/opensmiles.asciidoc),
+86816 bytes/SHA256`00f0423da612de913770133aa13e456d0cebc562dd50166534a8a7f9a834bd21`.
+The exact public source was fetched/read into ignored target/, never shipped. Bracket
+H/isotope/charge, branch/ring/dot and token-order facts inform original implementation
+and literal expectations. No GFDL grammar/help prose, parser code, example collection
+or asset is transplanted. Existing IUPAC-ELEMENTS facts supply all118 current symbols;
+Nh/Mc/Ts/Og are a qualified current-catalog extension beyond the2016 listing.
+
+Whole-source immutable Arcs, exact terminal-EOL retention, nonempty single-notation
+EOF, typed unsupported boundaries, u16 isotopes/charge±15 profile, independent caps
+and dot-chain counting are Bondline policies. A notation graph does not infer chemical
+H/valence/radical state or model geometry. Numeric ring aliasing, matching closure bond
+declarations, self/duplicate refusal, bracket H omission/H0 and isotope0 distinctions
+have literal source/adjacency evidence independent of a chemical consumer.
+
+The external-only pinned RDKit2026.09.2 consumer follows its
+[release parser API](https://github.com/rdkit/rdkit/blob/f86b7dc9b31e2531200bbd1f54589bcbd968bb05/Code/GraphMol/SmilesParse/SmilesParse.h):
+sanitize/removeHs/parseName/allowCXSMILES are explicitly false. Actual Python
+skipCleanup is unavailable; source/token fidelity never relies on its normalized
+getters or default radical zeros. Accepted HH/contradictory closures and rejected
+numeric zero-prefixed ring aliases/dot branches are documented consumer disagreements,
+not normative rules. Exact source, graph, limits and unsupported tests are separate
+from external meaning. No purr/other parser/dependency adoption, model projection,
+generated/canonical output, application/native SMILES flow or complete M1 is claimed.
