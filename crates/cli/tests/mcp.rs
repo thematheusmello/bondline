@@ -7,6 +7,8 @@ mod chain_support;
 mod file_support;
 #[path = "support/mol.rs"]
 mod mol_support;
+#[path = "../../../xtask/oracles/sdf_field_test_support.rs"]
+mod sdf_field_support;
 #[path = "../../../xtask/oracles/sdf_record_test_support.rs"]
 mod sdf_record_support;
 #[path = "../../../xtask/oracles/sdf_test_support.rs"]
@@ -97,6 +99,167 @@ impl Drop for Client {
             let _ = reader.join();
         }
     }
+}
+
+#[test]
+fn stdio_field_edit_save_undo_redo_uses_the_same_complete_source_and_error_contract()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = sdf_support::SdfTestDirectory::new()?;
+    let mut client = Client::start()?;
+    client.call(1,"initialize",json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"sdf-set-test","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let tools = client.call(2, "tools/list", json!({}))?;
+    let tool = tools["result"]["tools"]
+        .as_array()
+        .ok_or("tools")?
+        .iter()
+        .find(|tool| tool["name"] == "sdf.field.set_value")
+        .ok_or("setter")?;
+    assert_eq!(tool["annotations"]["readOnlyHint"], false);
+    assert_eq!(tool["inputSchema"]["additionalProperties"], false);
+    let mut id = 3;
+    for (case, mixed) in [false, true].into_iter().enumerate() {
+        let input = directory.path(if mixed {
+            "stdio-set-mixed.sdf"
+        } else {
+            "stdio-set-ordered.sdf"
+        });
+        let output = directory.path(if mixed {
+            "stdio-set-mixed-λ.data"
+        } else {
+            "stdio-set-ordered-λ.data"
+        });
+        std::fs::write(&input, sdf_field_support::source(mixed))?;
+        let revision = case * 4 + 1;
+        let index = sdf_field_support::field_index(mixed);
+        client.call(
+            id,
+            "tools/call",
+            json!({"name":"document.open_sdf","arguments":{"path":input}}),
+        )?;
+        id += 1;
+        let query=client.call(id,"tools/call",json!({"name":"sdf.record.inspect","arguments":{"expected_revision":revision,"record_id":1}}))?;
+        id += 1;
+        assert_eq!(
+            query["result"]["structuredContent"]["sdf_record"]["fields"],
+            sdf_record_support::expected_fields(mixed, 1)
+        );
+        let changed=client.call(id,"tools/call",json!({"name":"sdf.field.set_value","arguments":{"expected_revision":revision,"record_id":1,"field_index":index,"value_lines":["revised","multiline"]}}))?;
+        id += 1;
+        assert_eq!(changed["result"]["isError"], false, "{changed}");
+        let changed = &changed["result"]["structuredContent"];
+        assert_eq!(changed["changed"], true);
+        assert_eq!(changed["revision"], revision + 1);
+        assert_eq!(changed["file"]["dirty"], true);
+        assert_eq!(changed["source"]["modified"], true);
+        assert!(changed.get("sdf_record").is_none());
+        let query=client.call(id,"tools/call",json!({"name":"sdf.record.inspect","arguments":{"expected_revision":revision+1,"record_id":1}}))?;
+        id += 1;
+        assert_eq!(
+            query["result"]["structuredContent"]["sdf_record"]["fields"][index]["value_lines"],
+            json!(["revised", "multiline"])
+        );
+        let saved = client.call(
+            id,
+            "tools/call",
+            json!({"name":"document.save_sdf","arguments":{"path":output}}),
+        )?;
+        id += 1;
+        assert_eq!(saved["result"]["isError"], false, "{saved}");
+        assert_eq!(
+            saved["result"]["structuredContent"]["file_operation"]["byte_length"],
+            if mixed { 788 } else { 704 }
+        );
+        assert_eq!(saved["result"]["structuredContent"]["file"]["dirty"], false);
+        sdf_field_support::assert_edited_file(&output, mixed)?;
+        let undo = client.call(
+            id,
+            "tools/call",
+            json!({"name":"history.undo","arguments":{}}),
+        )?;
+        id += 1;
+        assert_eq!(
+            undo["result"]["structuredContent"]["revision"],
+            revision + 2
+        );
+        assert_eq!(undo["result"]["structuredContent"]["file"]["dirty"], true);
+        assert_eq!(
+            undo["result"]["structuredContent"]["source"]["modified"],
+            false
+        );
+        let redo = client.call(
+            id,
+            "tools/call",
+            json!({"name":"history.redo","arguments":{}}),
+        )?;
+        id += 1;
+        assert_eq!(
+            redo["result"]["structuredContent"]["revision"],
+            revision + 3
+        );
+        assert_eq!(redo["result"]["structuredContent"]["file"]["dirty"], false);
+        assert_eq!(
+            redo["result"]["structuredContent"]["source"]["modified"],
+            true
+        );
+        let query=client.call(id,"tools/call",json!({"name":"sdf.record.inspect","arguments":{"expected_revision":revision+3,"record_id":1}}))?;
+        id += 1;
+        assert_eq!(
+            query["result"]["structuredContent"]["sdf_record"]["fields"][index]["value_lines"],
+            json!(["revised", "multiline"])
+        );
+        let before = client.call(
+            id,
+            "tools/call",
+            json!({"name":"document.inspect","arguments":{}}),
+        )?;
+        id += 1;
+        for (params, code) in [
+            (
+                json!({"expected_revision":revision,"record_id":1,"field_index":index,"value_lines":[]}),
+                "stale_revision",
+            ),
+            (
+                json!({"expected_revision":revision+3,"record_id":3,"field_index":0,"value_lines":[]}),
+                "not_found",
+            ),
+            (
+                json!({"expected_revision":revision+3,"record_id":1,"field_index":index,"value_lines":[""]}),
+                "invalid_sdf",
+            ),
+        ] {
+            let failure = client.call(
+                id,
+                "tools/call",
+                json!({"name":"sdf.field.set_value","arguments":params}),
+            )?;
+            id += 1;
+            assert_eq!(failure["result"]["isError"], true);
+            assert_eq!(
+                failure["result"]["structuredContent"]["error"]["code"],
+                code
+            );
+            let after = client.call(
+                id,
+                "tools/call",
+                json!({"name":"document.inspect","arguments":{}}),
+            )?;
+            id += 1;
+            assert_eq!(
+                after["result"]["structuredContent"],
+                before["result"]["structuredContent"]
+            );
+        }
+        let noop=client.call(id,"tools/call",json!({"name":"sdf.field.set_value","arguments":{"expected_revision":revision+3,"record_id":1,"field_index":index,"value_lines":["revised","multiline"]}}))?;
+        id += 1;
+        assert_eq!(
+            noop["result"]["structuredContent"],
+            before["result"]["structuredContent"]
+        );
+        assert_eq!(std::fs::read(input)?, sdf_field_support::source(mixed));
+    }
+    client.finish()?;
+    Ok(())
 }
 
 #[test]
@@ -536,6 +699,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "history.undo",
             "page.set_size",
             "render.capture",
+            "sdf.field.set_value",
             "sdf.record.inspect",
             "ui.controls",
             "ui.file"

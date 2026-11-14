@@ -14,6 +14,7 @@ mod content;
 mod controls;
 mod file_ui;
 mod files;
+mod sdf_edit;
 mod sdf_query;
 pub use bond::{BondCreate, BondExtend, ExtendHydrogenPolicy};
 pub use close::{CloseAction, CloseDocument, CloseState};
@@ -24,6 +25,7 @@ pub use files::{
     Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol,
     OpenSdf, SaveCdx, SaveCdxml, SaveMol, SaveSdf,
 };
+pub use sdf_edit::SdfFieldSet;
 pub use sdf_query::{
     MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
     SdfRecordInspection, SdfValueOmission,
@@ -110,6 +112,7 @@ command_registry! {
     OpenSdf(OpenSdf) => ("document.open_sdf", "Open every validated SDF record with complete source and ordered data; chemical preview is unavailable.", false),
     SaveSdf(SaveSdf) => ("document.save_sdf", "Atomically save the complete SDF collection without changing molecular versions or ordered data.", false),
     SdfRecordInspect(SdfRecordInspect) => ("sdf.record.inspect", "Read a bounded ordered field page from an explicitly identified captured SDF record; oversized values are omitted explicitly.", true),
+    SdfFieldSet(SdfFieldSet) => ("sdf.field.set_value", "Replace one existing ordered SDF field value through a bounded immutable candidate, preserving every other source byte.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
     BondExtend(BondExtend) => ("bond.extend", "Extend a terminal neutral carbon with a Single bond, explicitly authoring its H3 to H2 and the new carbon's H3; requires native complete data.", false),
@@ -171,6 +174,10 @@ pub enum Error {
     },
     #[error("invalid SDF record query: {0}")]
     InvalidSdfQuery(&'static str),
+    #[error("invalid SDF field edit: {0}")]
+    InvalidSdfField(&'static str),
+    #[error("SDF field input exceeds the 64 KiB authored-LF or serialized-value budget")]
+    SdfFieldInputLimit,
     #[error("a single SDF field exceeds the 1 MiB serialized query page budget")]
     SdfQueryPageLimit,
     #[error(transparent)]
@@ -251,6 +258,7 @@ impl Error {
             Self::Mol(error) => error.code(),
             Self::Sdf(error) => error.code(),
             Self::SdfQueryPageLimit => "resource_limit",
+            Self::SdfFieldInputLimit => "resource_limit",
             Self::EngineUnavailable => "engine_unavailable",
             Self::UnrepresentableFilePath { published: true } => "save_published",
             Self::UnrepresentableFilePath { published: false } => "invalid_path",
@@ -462,6 +470,10 @@ impl Engine {
             Command::SdfRecordInspect(params) => {
                 let plan = self.sdf_record_plan(params)?;
                 return Ok(Prepared::sdf_record(self.state(), plan));
+            }
+            Command::SdfFieldSet(params) => {
+                let plan = self.sdf_field_plan(params)?;
+                return Ok(Prepared::sdf_field_set(self.state(), plan));
             }
             Command::OpenCdxml(params) => {
                 if self.document != self.saved && !params.discard_unsaved {
@@ -800,6 +812,7 @@ mod tests {
                 "history.undo",
                 "page.set_size",
                 "render.capture",
+                "sdf.field.set_value",
                 "sdf.record.inspect",
                 "ui.controls",
                 "ui.file"

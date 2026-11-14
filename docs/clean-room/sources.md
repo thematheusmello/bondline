@@ -909,3 +909,29 @@ automatic state and all relevant Debug output remain metadata-only. Historical q
 revision/generation, off-lock work, unchanged state/history/source and the existing shared
 worker/reply/close barriers are original safety policies verified separately from any
 UI/native/reference behavior. Setter/navigation/delete/preview/editor work remains missing.
+
+## Shared existing-field SDF authoring command, 2026-11-14
+
+[verification-sdf-field-command.md](../verification-sdf-field-command.md) records the
+next bounded operation. CTFILE-2026 chapter10 printed97–99 remains normative for ordered
+data items, header/DT spelling, blank termination and200-character physical data lines.
+No codec rule changes: the command reuses the already sourced immutable with_field_value
+operation and its exact no-op sharing/LF-only changed-value splice. The original690/777
+vectors, pinned source/license notices, external raw/per-MOL consumers and DT-only
+full-supplier limitation stay exact. Actual704/788-byte command outputs face those consumers
+and literal complete-byte splices, never a property dictionary.
+
+Targeting by positive local ordinal/zero-based occurrence, both64KiB input budgets,
+captured complete original/current source and revision/generation/current-Arc guards are
+original Bondline policies. The same serde_json/Rust-Arc sources above support budget
+measurement and immutable sharing. No-op identity/history/close preservation and atomic
+whole-content commit use the existing engine; generic history accounting and the continuous
+save reservation/reply/close barriers retain their established meanings. No new dependency,
+pool, source writer, model projection or raw-source reconstruction is introduced.
+
+Current/saved/original source-sensitive tests include explicit other-record/first-duplicate/
+DT-only edits, opaque molecular metadata, CRLF no-op, bounds, cancellation/staleness,
+revision exhaustion, captured Save and trusted close-receipt ABA. Actual CLI/stdio/authenticated
+loopback flows and saved-file consumers are separate from UI/native/reference behavior.
+There is no field UI/editor, navigation/delete/molecular editing or new native execution in
+this slice, and no observed proprietary field-retention/export claim follows.

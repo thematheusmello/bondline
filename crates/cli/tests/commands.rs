@@ -8,8 +8,88 @@ mod chain_support;
 mod file_support;
 #[path = "support/mol.rs"]
 mod mol_support;
+#[path = "../../../xtask/oracles/sdf_field_test_support.rs"]
+mod sdf_field_support;
 #[path = "../../../xtask/oracles/sdf_record_test_support.rs"]
 mod sdf_record_support;
+
+#[test]
+fn executable_field_edit_save_undo_and_redo_preserve_complete_sdf_source_and_baselines()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = sdf_support::SdfTestDirectory::new()?;
+    for mixed in [false, true] {
+        let input = directory.path(if mixed {
+            "cli-set-mixed.sdf"
+        } else {
+            "cli-set-ordered.sdf"
+        });
+        std::fs::write(&input, sdf_field_support::source(mixed))?;
+        for stage in 0..3 {
+            let output = directory.path(&format!("cli-set-{mixed}-{stage}-λ.data"));
+            let mut process = Command::new(env!("CARGO_BIN_EXE_bondline-cli"));
+            process.arg("run");
+            let mut requests = vec![
+                json!({"command":"document.open_sdf","params":{"path":input}}),
+                json!({"command":"sdf.record.inspect","params":{"expected_revision":1,"record_id":1}}),
+                json!({"command":"sdf.field.set_value","params":{"expected_revision":1,"record_id":1,"field_index":sdf_field_support::field_index(mixed),"value_lines":["revised","multiline"]}}),
+                json!({"command":"sdf.record.inspect","params":{"expected_revision":2,"record_id":1}}),
+                json!({"command":"document.save_sdf","params":{"path":output}}),
+            ];
+            if stage >= 1 {
+                requests.push(json!({"command":"history.undo","params":{}}));
+            }
+            if stage >= 2 {
+                requests.push(json!({"command":"history.redo","params":{}}));
+            }
+            requests.push(json!({"command":"sdf.record.inspect","params":{"expected_revision":2+stage,"record_id":1}}));
+            for request in requests {
+                process.arg("--cmd").arg(request.to_string());
+            }
+            let result = process.output()?;
+            assert!(
+                result.status.success(),
+                "{}",
+                String::from_utf8_lossy(&result.stderr)
+            );
+            let result: Value = serde_json::from_slice(&result.stdout)?;
+            assert_eq!(result["revision"], 2 + stage);
+            assert_eq!(result["file"]["dirty"], stage == 1);
+            assert_eq!(
+                result["source"]["byte_length"],
+                sdf_field_support::source(mixed).len()
+            );
+            assert_eq!(result["source"]["modified"], stage != 1);
+            assert_eq!(
+                result["collection"]["byte_length"],
+                if stage == 1 {
+                    sdf_field_support::source(mixed).len()
+                } else {
+                    sdf_field_support::edited_bytes(mixed).len()
+                }
+            );
+            let index = sdf_field_support::field_index(mixed);
+            assert_eq!(
+                result["sdf_record"]["fields"][index]["value_lines"],
+                if stage == 1 {
+                    if mixed {
+                        json!(["second"])
+                    } else {
+                        json!(["two"])
+                    }
+                } else {
+                    json!(["revised", "multiline"])
+                }
+            );
+            assert_eq!(
+                result["sdf_record"]["fields"][index]["omitted_reason"],
+                Value::Null
+            );
+            sdf_field_support::assert_edited_file(&output, mixed)?;
+        }
+        assert_eq!(std::fs::read(&input)?, sdf_field_support::source(mixed));
+    }
+    Ok(())
+}
 #[path = "../../../xtask/oracles/sdf_test_support.rs"]
 mod sdf_support;
 
@@ -160,6 +240,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "history.undo",
             "page.set_size",
             "render.capture",
+            "sdf.field.set_value",
             "sdf.record.inspect",
             "ui.controls",
             "ui.file"
