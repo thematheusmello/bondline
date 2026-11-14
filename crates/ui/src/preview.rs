@@ -14,6 +14,8 @@ use std::{
 
 #[cfg(test)]
 mod scheduling_tests;
+#[cfg(test)]
+mod tests;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct PreviewKey {

@@ -1290,3 +1290,12 @@ original Bondline policies, not reference defaults. Actual chemistry/source proj
 still uses the existing registered capture; no alternate renderer or data authority is
 created. Initial compiler RED/component/package evidence is not native texture/flow proof;
 independent real-frame acceptance remains separate and full M0 addressability is incomplete.
+
+[Independent real-frame tests](../verification-sdf-native-preview-tests.md) now exercise
+the actual application frame, registered PNG/decode path, exact uploaded opaque RGBA,
+painted texture mesh/UV/clip, literal record regions/chords and source/history/DPI/close
+staleness. Controlled real-worker gates cover decoded publication before thread retirement.
+The six fixed tests pass unchanged, with107 UI package tests/clippy/fmt. This establishes
+headless egui instructions and ownership behavior, not operating-system compositor pixels,
+a human-approved golden or an executed native-window workflow. No source, fixture, font,
+old test or oracle was adjusted to fit these independent expectations.
