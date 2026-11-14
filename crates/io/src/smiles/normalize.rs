@@ -43,15 +43,53 @@ fn identity(index: usize, kind: Limit) -> Result<u32, NormalizeError> {
         .ok_or(NormalizeError::Limit { kind })
 }
 
+fn bond_offset(document: &SmilesDocument, bond: &super::Bond) -> Result<usize, NormalizeError> {
+    if let Some(range) = &bond.bond_range {
+        return Ok(range.start);
+    }
+    if let Some(ring) = &bond.ring {
+        return Ok(ring
+            .open_bond_range
+            .as_ref()
+            .or(ring.close_bond_range.as_ref())
+            .unwrap_or(&ring.close_range)
+            .start);
+    }
+    let endpoint = bond.atoms[1];
+    Ok(document
+        .atoms()
+        .get(endpoint)
+        .ok_or(GraphError::MissingAtom(identity(endpoint, Limit::Atoms)?))?
+        .range
+        .start)
+}
+
 impl SmilesDocument {
     /// Materialize this closed neutral subset's H counts as fixed model values.
     /// Bare C/N/O/halogens resolve only within C4/N3/O2/halogen1; bracket H stays exact.
     /// Physical H remains a node with H0 and one Single bond. Other/radical-ambiguous
-    /// contexts refuse. This is not live inference or a chemical-validity certificate.
+    /// contexts, including every aromatic atom/bond marker, refuse. This is not live
+    /// inference or a chemical-validity certificate.
     /// Source/IR stay untouched. Output IDs are dense and local to the new Fragment;
     /// positions are None. This supplies no layout, application import or Save authority.
     pub fn normalize_explicit_h_fragment(&self) -> Result<Fragment, NormalizeError> {
         // The immutable owner already enforces the complete source/graph budgets.
+        if let Some(atom) = self.atoms().iter().find(|atom| atom.aromatic) {
+            return Err(NormalizeError::Unsupported {
+                offset: atom.symbol_range.start,
+                feature: "aromatic atom notation requires a separate mapping policy",
+            });
+        }
+        // With no lowercase atoms, every aromatic bond has an explicit ':' token.
+        // Check it before integer bond sums or fixed-H materialization.
+        for bond in self.bonds() {
+            if bond.order == BondOrder::Aromatic {
+                return Err(NormalizeError::Unsupported {
+                    offset: bond_offset(self, bond)?,
+                    feature: "aromatic bond notation requires a separate mapping policy",
+                });
+            }
+        }
         let mut totals = vec![(0_u16, 0_u16); self.atoms().len()];
         let mut bonds = Vec::with_capacity(self.bonds().len());
         for (index, raw) in self.bonds().iter().enumerate() {
@@ -59,6 +97,12 @@ impl SmilesDocument {
                 BondOrder::Single => (1, bondline_model::BondOrder::Single),
                 BondOrder::Double => (2, bondline_model::BondOrder::Double),
                 BondOrder::Triple => (3, bondline_model::BondOrder::Triple),
+                BondOrder::Aromatic => {
+                    return Err(NormalizeError::Unsupported {
+                        offset: bond_offset(self, raw)?,
+                        feature: "aromatic bond notation requires a separate mapping policy",
+                    });
+                }
             };
             let [begin, end] = raw.atoms;
             for endpoint in raw.atoms {

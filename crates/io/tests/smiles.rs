@@ -21,6 +21,7 @@ fn source_ownership_and_literal_atoms_distinguish_implicit_and_bracket_hydrogen(
     assert_eq!(document.atoms()[1].range, 1..2);
     for atom in document.atoms() {
         assert_eq!(atom.element.get(), 6);
+        assert!(!atom.aromatic);
         assert_eq!(atom.isotope, None);
         assert_eq!(atom.hydrogens, Hydrogens::Implicit);
         assert_eq!(atom.charge, 0);
@@ -115,6 +116,10 @@ fn actual_whole_source_and_notation_graph_face_the_pinned_unsanitized_external_p
         "C%73C%74CC%73C%74",
         "C%123CCC%12CC3",
         "[Nh].[Mc].[Ts].[Og]",
+        // Former aromatic refusals now have affirmative source/graph coverage.
+        "c1ccccc1",
+        "[nH]",
+        "C:C",
     ] {
         let document = parse(text)?;
         let external = oracle(document.as_bytes())?;
@@ -157,6 +162,7 @@ fn actual_whole_source_and_notation_graph_face_the_pinned_unsanitized_external_p
                         BondOrder::Single => "SINGLE",
                         BondOrder::Double => "DOUBLE",
                         BondOrder::Triple => "TRIPLE",
+                        BondOrder::Aromatic => "AROMATIC",
                     }
                     .to_owned(),
                 )
@@ -167,7 +173,7 @@ fn actual_whole_source_and_notation_graph_face_the_pinned_unsanitized_external_p
             serde_json::from_value(external["bonds"].clone())?;
         assert_eq!(actual, expected, "{text}");
     }
-    for text in ["c1ccccc1", "[C:17]", "*", "[C@H](F)(Cl)Br"] {
+    for text in ["[C:17]", "*", "[C@H](F)(Cl)Br"] {
         assert_eq!(oracle(text.as_bytes())?["accepted"], true, "{text}");
         assert!(matches!(parse(text), Err(SmilesError::Unsupported { .. })));
     }
@@ -428,12 +434,9 @@ fn malformed_topology_properties_and_complete_eof_refuse_with_offsets() -> TestR
 #[test]
 fn unsupported_features_are_typed_and_never_stripped() -> TestResult {
     for text in [
-        "c1ccccc1",
-        "[nH]",
         "[C@H](F)(Cl)Br",
         "[C@AL1](F)Cl",
         "C/C=C\\C",
-        "C:C",
         "[C:7]",
         "*",
         "[*]",
@@ -523,30 +526,42 @@ fn all_resource_caps_are_enforced_before_graph_insertion_without_recursion() -> 
             ..
         })
     ));
-    let dense = parse(&dense_notation(3))?;
-    assert_eq!(dense.atoms().len(), 4096);
-    assert_eq!(dense.bonds().len(), 8192);
-    assert!(matches!(
-        parse(&dense_notation(4)),
-        Err(SmilesError::Limit {
-            kind: Limit::Bonds,
-            ..
-        })
-    ));
+    for aromatic in [false, true] {
+        let source = |extra| {
+            let source = dense_notation(extra);
+            if aromatic {
+                source.to_ascii_lowercase()
+            } else {
+                source
+            }
+        };
+        let dense = parse(&source(3))?;
+        assert_eq!(dense.atoms().len(), 4096);
+        assert_eq!(dense.bonds().len(), 8192);
+        assert!(matches!(
+            parse(&source(4)),
+            Err(SmilesError::Limit {
+                kind: Limit::Bonds,
+                ..
+            })
+        ));
+    }
     let labels = (0..100).map(ring_label).collect::<String>();
     let mut hundred = format!("C{labels}C");
     for label in 0..100 {
         hundred.push_str(&format!("C{}", ring_label(label)));
     }
-    let document = parse(&hundred)?;
-    assert_eq!(
-        document
-            .bonds()
-            .iter()
-            .filter(|bond| bond.ring.is_some())
-            .count(),
-        100
-    );
+    for source in [&hundred, &hundred.to_ascii_lowercase()] {
+        let document = parse(source)?;
+        assert_eq!(
+            document
+                .bonds()
+                .iter()
+                .filter(|bond| bond.ring.is_some())
+                .count(),
+            100
+        );
+    }
     // The closed label domain has only 100 values; a 101st distinct open label has no spelling.
     assert!(parse("C%(100)CC").is_err());
     Ok(())

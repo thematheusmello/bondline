@@ -1,7 +1,7 @@
-//! A bounded, source-preserving nonaromatic SMILES notation graph.
+//! A bounded, source-preserving SMILES notation graph.
 //!
 //! Parsing is syntax and connectivity, not chemical validation, hydrogen perception,
-//! model projection, layout or canonicalization. Source spellings stay authoritative.
+//! aromaticity perception, layout or canonicalization. Source spellings stay authoritative.
 
 use bondline_model::Element;
 use std::{collections::HashSet, ops::Range, sync::Arc};
@@ -73,6 +73,8 @@ pub struct Atom {
     pub range: Range<usize>,
     pub symbol_range: Range<usize>,
     pub element: Element,
+    /// Literal lowercase aromatic symbol, not computed aromaticity or hybridization.
+    pub aromatic: bool,
     pub isotope: Option<u16>,
     pub isotope_range: Option<Range<usize>>,
     pub hydrogens: Hydrogens,
@@ -86,6 +88,8 @@ pub enum BondOrder {
     Single,
     Double,
     Triple,
+    /// Explicit `:` or an omitted bond between two lowercase-marked atoms.
+    Aromatic,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -252,7 +256,7 @@ impl<'a> Parser<'a> {
     fn parse(mut self) -> Result<(Vec<Atom>, Vec<Bond>, usize), SmilesError> {
         while let Some(byte) = self.byte() {
             match byte {
-                b'-' | b'=' | b'#' => {
+                b'-' | b'=' | b'#' | b':' => {
                     if self.current.is_none()
                         || self.pending.is_some()
                         || self.expect_atom && !self.branch_start
@@ -265,6 +269,7 @@ impl<'a> Parser<'a> {
                         match byte {
                             b'=' => BondOrder::Double,
                             b'#' => BondOrder::Triple,
+                            b':' => BondOrder::Aromatic,
                             _ => BondOrder::Single,
                         },
                         start..self.offset,
@@ -335,7 +340,7 @@ impl<'a> Parser<'a> {
                     if let Some(previous) = self.current {
                         let (order, range) = match self.pending.take() {
                             Some((order, range)) => (order, Some(range)),
-                            None => (BondOrder::Single, None),
+                            None => (self.implicit_order(previous, atom.aromatic)?, None),
                         };
                         self.add_bond(
                             Bond {
@@ -404,6 +409,18 @@ impl<'a> Parser<'a> {
         Ok(())
     }
 
+    fn implicit_order(&self, left: usize, right_aromatic: bool) -> Result<BondOrder, SmilesError> {
+        let left = self
+            .atoms
+            .get(left)
+            .ok_or_else(|| self.syntax("missing preceding atom"))?;
+        Ok(if left.aromatic && right_aromatic {
+            BondOrder::Aromatic
+        } else {
+            BondOrder::Single
+        })
+    }
+
     fn ring(&mut self) -> Result<(), SmilesError> {
         if self.expect_atom || self.after_branches {
             return Err(self.syntax("ring labels must follow an atom and precede its branches"));
@@ -455,7 +472,13 @@ impl<'a> Parser<'a> {
                     });
                 }
                 (Some((order, _)), _) | (_, Some((order, _))) => *order,
-                _ => BondOrder::Single,
+                _ => {
+                    let closing = self
+                        .atoms
+                        .get(atom)
+                        .ok_or_else(|| self.syntax("missing ring atom"))?;
+                    self.implicit_order(open.atom, closing.aromatic)?
+                }
             };
             let closure = RingClosure {
                 label,
@@ -526,13 +549,38 @@ impl<'a> Parser<'a> {
         }
         let isotope_range = isotope.map(|_| isotope_start..self.offset);
         let symbol_start = self.offset;
+        let aromatic = self.byte().is_some_and(|byte| byte.is_ascii_lowercase());
+        let aromatic_pair = bracketed
+            && self
+                .bytes
+                .get(symbol_start..)
+                .is_some_and(|tail| tail.starts_with(b"as") || tail.starts_with(b"se"));
+        if aromatic
+            && bracketed
+            && !aromatic_pair
+            && self
+                .bytes
+                .get(symbol_start..)
+                .and_then(|tail| tail.get(1))
+                .is_some_and(|byte| byte.is_ascii_lowercase())
+        {
+            return Err(self.unsupported("aromatic symbol outside b/c/n/o/p/s or bracket as/se"));
+        }
         match self.byte() {
             Some(b'*') => return Err(self.unsupported("wildcard atom")),
-            Some(b'a'..=b'z') => return Err(self.unsupported("aromatic atom")),
+            Some(b'a') if aromatic_pair => self.advance(2)?,
+            Some(b'b' | b'c' | b'n' | b'o' | b'p' | b's') => {
+                self.advance(if aromatic_pair { 2 } else { 1 })?;
+            }
+            Some(b'a'..=b'z') => {
+                return Err(
+                    self.unsupported("aromatic symbol outside b/c/n/o/p/s or bracket as/se")
+                );
+            }
             Some(b'A'..=b'Z') => self.advance(1)?,
             Some(b'@' | b'/' | b'\\') => return Err(self.unsupported("stereochemistry")),
-            Some(b':' | b'$' | b'~' | b'?' | b'!' | b'&' | b'|' | b'>' | b';' | b',' | b'#') => {
-                return Err(self.unsupported("query, extended, aromatic or reaction notation"));
+            Some(b'$' | b'~' | b'?' | b'!' | b'&' | b'|' | b'>' | b';' | b',' | b'#') => {
+                return Err(self.unsupported("query, extended or reaction notation"));
             }
             _ => return Err(self.syntax("expected atom")),
         }
@@ -540,21 +588,37 @@ impl<'a> Parser<'a> {
             (self.bytes.get(symbol_start).copied(), self.byte()),
             (Some(b'C'), Some(b'l')) | (Some(b'B'), Some(b'r'))
         );
-        if bracketed && self.byte().is_some_and(|byte| byte.is_ascii_lowercase())
-            || !bracketed && organic_pair
+        if !aromatic
+            && (bracketed && self.byte().is_some_and(|byte| byte.is_ascii_lowercase())
+                || !bracketed && organic_pair)
         {
             self.advance(1)?;
         }
         let symbol_range = symbol_start..self.offset;
-        let symbol = std::str::from_utf8(
-            self.bytes
-                .get(symbol_range.clone())
-                .ok_or_else(|| self.syntax("invalid symbol span"))?,
-        )
+        let raw_symbol = self
+            .bytes
+            .get(symbol_range.clone())
+            .ok_or_else(|| self.syntax("invalid symbol span"))?;
+        // Only casing changes for catalog lookup; retained ranges still name raw bytes.
+        let mut upper_symbol = [0_u8; 2];
+        for (upper, raw) in upper_symbol.iter_mut().zip(raw_symbol) {
+            *upper = *raw;
+        }
+        if let Some(first) = upper_symbol.first_mut() {
+            first.make_ascii_uppercase();
+        }
+        let symbol = std::str::from_utf8(if aromatic {
+            upper_symbol
+                .get(..raw_symbol.len())
+                .ok_or_else(|| self.syntax("invalid aromatic symbol span"))?
+        } else {
+            raw_symbol
+        })
         .map_err(|_| self.unsupported("non-ASCII symbol"))?;
         let element = crate::mol::symbols::element(symbol)
             .ok_or_else(|| self.syntax("unknown element symbol"))?;
         if !bracketed
+            && !aromatic
             && !matches!(
                 symbol,
                 "B" | "C" | "N" | "O" | "P" | "S" | "F" | "Cl" | "Br" | "I"
@@ -566,6 +630,7 @@ impl<'a> Parser<'a> {
             range: start..self.offset,
             symbol_range,
             element,
+            aromatic,
             isotope,
             isotope_range,
             hydrogens: if bracketed {
