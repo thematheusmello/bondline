@@ -2,6 +2,8 @@
 
 mod file_workflow;
 pub mod files;
+#[cfg(test)]
+mod mol_display_tests;
 mod preview;
 
 use bondline_commands::{
@@ -460,7 +462,12 @@ fn show_workspace_with_preview(
                 let position = position - available.min;
                 [position.x, position.y]
             };
-            let mut graph = bondline_render::graph_page_scene(width, height, page);
+            let mut graph = engine.drawing_page_scene(
+                width,
+                height,
+                page.id(),
+                &bondline_render::Cancellation::default(),
+            );
             if graph.is_err() {
                 drawing.gesture = None;
             }
@@ -667,18 +674,20 @@ fn show_workspace_with_preview(
                             .err()
                             .map(|error| error.to_string());
                         // Later same-frame presses pick the graph that actually committed.
-                        let Some(current_document) = engine.state().document else {
+                        let Ok(stored) = engine.stored_document() else {
                             drawing.gesture = None;
                             drawing.invalidate_hover();
                             return;
                         };
-                        document = current_document;
+                        document = stored.model_snapshot();
                         key.revision = engine.state().revision;
                         drawing.hover_context = Some(key);
-                        graph = match document.pages().iter().find(|page| page.id() == key.page) {
-                            Some(page) => bondline_render::graph_page_scene(width, height, page),
-                            None => Err(bondline_render::Error::UnsupportedChemicalContent),
-                        };
+                        graph = engine.drawing_page_scene(
+                            width,
+                            height,
+                            key.page,
+                            &bondline_render::Cancellation::default(),
+                        );
                         context.request_repaint();
                     }
                     _ => {}

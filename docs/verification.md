@@ -2318,3 +2318,31 @@ Root's direct-IO UI dependency mistake without a manifest/lock change; final v2 
 backend inputs,8 logs, original RED reconstruction and pinned font/golden before copying
 the two acceptance files. The existing render.capture schema and25-command registry stay
 unchanged. Actual native window/UI workflows and full receiving gates remain separate.
+
+## Source-aware native Drawing canvas wiring, 2026-11-14
+
+[Actual-frame acceptance](verification-mol-display-ui.md) covers initial OH/NH2 vectors,
+fresh H-ink hits, same-frame graph reacquisition after a refused MOL extension, exact source
+Save/reopen and unchanged source-free/CDXML literal policies. Baseline48765/76764 show the
+intended two vector failures, with the legacy control passing. Root's first port6051 fails
+compilation because UI has no direct IO dependency; a thin Engine delegate corrects it
+without a manifest/lock change. First runtime23205 passes all3 frozen tests unchanged.
+
+Final7745 UI tests pass110,0failed/ignored; clippy79149 and fmt pass. New-test-only tuple/
+loop/include lint corrections preserve all assertions/data. Root verifies680 protected
+files,3 production inputs,9 received inputs,11 logs, pre-lint lineage and the byte-exact
+old UI unit body before receiving. These are real egui paint/hit instructions, not native
+window/compositor evidence or a new approved golden. Actual native acceptance stays pending.
+
+Root's separate68790 headless probe verifies both exact raw MOLs through CLI, stdio MCP
+and authenticated loopback:6 actual captures match explicit-H canonical native-CDXML
+references over4194304 RGBA bytes each. Missing-H controls differ; raw source/model None/
+geometry stay exact. Stdio/socket additionally preserve Inspect state and4 actual saved
+files. Reference XML is independently authored from the literal table; the protected literal
+renderer supplies pixels, not a second rasterizer. All children/listeners are reaped and
+credentials stay in trusted pipes only. Initial60840 probe compares against an Open receipt
+instead of Inspect and fails; corrected baseline keeps the full no-mutation assertion and
+changes no production. Ignored receipt SHA256
+`3683c3234113c4b892a8b8b22c4f356809cfbf1b71f989176f98ed1910cfe39a`,
+path `target/mol-display-adapter-probe/receipt.json`. This supplements committed tests;
+it is not counted as additional workspace tests, native execution or hosted CI.

@@ -1362,3 +1362,16 @@ that same source-aware producer to the native vector caller without an IO depend
 the UI. Existing public JSON command/PNG shapes, source-free/CDXML literal behavior and
 all source/persistence guards remain separate from depiction. Native execution follows
 its own acceptance gate; no new glyph oracle or approved golden is claimed.
+
+## Source-aware native Drawing canvas, 2026-11-14
+
+[Real-frame evidence](../verification-mol-display-ui.md) routes both initial and post-command
+native vector scene acquisition through the same Engine/IO source-aware producer. Actual
+raw CCO/CN coordinates, explicit expected H and unchanged external consumers remain the
+independent data basis. IUPAC label attachment guidance cited above motivates faithful H
+ink; no reference screenshot/icon/template or proprietary behavior is transplanted. The
+UI gains no direct IO dependency, new authoring/Save authority or named command. Its
+vectors, hits and source/history preservation are headlessly verified; the operating-system
+window workflow remains unverified while the user is active. Separate actual CLI/stdio/
+authenticated-loopback image checks reuse original explicit-H native-CDXML expectations,
+with a qualified shared rasterizer and no new approved golden or asset.
