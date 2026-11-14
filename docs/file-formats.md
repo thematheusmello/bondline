@@ -406,3 +406,37 @@ IDs1/2/bond1 and authored H3/single graph agree with separate literal/Decimal/RD
 The corpus frame24pt/unit, origin(0,0), invertedY is an explicit test policy, not physical
 chemical units or the application's separate default origin(72,72). One original vector
 is checked, not general V3000 interoperability or Bondline chemistry calculations.
+
+## Header-embedded CDX Document profile
+
+The standalone CDX reader additionally accepts the public22-byte-prefix layout in
+which an encoded Document8000 occupies bytes22..28 of the historical header. It
+returns Framing::HeaderDocument, header().len()==22 and contiguous records from
+that root through a distinct RecordKind::FileEnd. The matched root ObjectEnd and
+the separate two-byte FileEnd must both be present in this profile, followed by
+exact EOF. All unknown prefix bytes, tags, payloads and length spellings remain
+borrowed unchanged; checked opaque property edits preserve both terminators.
+HEADER_BYTES stays28 for existing profiles and new Writer output;
+HEADER_DOCUMENT_BYTES names the22-byte prefix. Writer's canonical new-tree output
+is unchanged and is not a source-backed reconstruction path.
+
+Compatibility dispatch deliberately favors existing behavior. The historical28-byte
+profile runs first. Only its TrailingData error, a supported12-byte magic/marker and
+Document tag8000 at22 enable one second parse; there is no scan, ignored padding or
+retry after other failures. Successful legacy parses remain legacy even if their
+opaque reserved bytes resemble an encoded root. In particular, removing the separate
+file end can leave a complete legacy tree; bytes alone do not establish intent.
+This ambiguity is documented rather than treated as universal native validation.
+
+Both bounded profiles retain the64MiB input/output,100000-record and256-open-encoded-
+object limits. HeaderDocument's encoded root counts toward depth/records and FileEnd
+counts toward records. Two profile attempts are possible; these logical caps are
+not a process-memory guarantee. Extra file ends, nonzero final tags and trailing
+garbage are refused. Existing implicit/explicit fixtures and exact-EOF assertions
+remain unchanged.
+
+The new original65,746-byte field vector has independent stdlib event/byte checks
+and actual external RDKit graph checks; the unmodified ignored1196-byte local
+native observation also passes syntax/passthrough and one opaque splice. This is
+bounded framing evidence, not general property interpretation, foreign-file corpus
+coverage, chemical model mapping or an application CDX Open/Save workflow.

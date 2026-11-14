@@ -108,6 +108,7 @@ fn record_table(document: &Document<'_>) -> String {
                 )
             }
             RecordKind::ObjectEnd { start } => format!("end {} {suffix}", index_text(*start)),
+            RecordKind::FileEnd => format!("file_end {suffix}"),
         });
     }
     lines.join("\n") + "\n"

@@ -138,3 +138,36 @@ that fixture bytes are unchanged and compares the entire canonical LF record tab
 failed before the fix (target/cdx-stdout-red.log) and now passes with all14 CDX tests
 (cdx-stdout-green.log); package clippy also passes (cdx-stdout-clippy.log). This correction
 does not establish the new Windows hosted result; that rerun must be observed separately.
+
+## Header-embedded Document framing, 2026-11-14
+
+`cdx_header_oracle.py` reuses only Bondline's existing original scene generator and
+field constants. The old oracle, hashes and strict scene guards are unchanged. The
+new helper creates a 22-byte prefix followed by Document8000/ID0, its object end and
+one separate file end. Its independent bounded `struct` decoder starts at22 and
+distinguishes that final file event; binary stdout retains the exact LF protocol.
+The source facts and fixture identities are in the
+[fixture provenance](../../crates/cdx/tests/fixtures/README.md).
+
+Pinned public `CDXIO.cpp` is25,597 bytes, SHA-256
+`71a2942f44dd6b875aee72d97c1101b874dc743d5f8f121f61f9877f3000a30b`;
+`CDXDocument.cpp` is53,887 bytes, SHA-256
+`dceab68450961a57f6099ba3f981dc4ce18390211ea23930754f550a2f1ec004`.
+Both are at the Glysade commit already qualified above and carry BSD-3-Clause
+notices. Downloads are ignored research evidence; no upstream implementation is
+shipped, linked, translated or copied into Bondline's original Rust parser.
+
+The helper pins the65,746-byte single and double vectors by SHA, checks every event
+and tests strict missing/extra-end refusal independently of Rust. Direct pinned
+RDKit reads verify the same specific graph/formula/order/raw-coordinate expectations
+as the earlier scenes. That external consumer's tolerant EOF does not establish
+Bondline's stricter framing policy. A successful legacy28-byte interpretation takes
+precedence in Rust: an otherwise complete legacy tree whose reserved bytes happen
+to contain Document8000 remains legacy, even when it could also be a truncated
+native envelope. No universal identification of such ambiguous files is claimed.
+
+The first Rust test reached `TrailingData` only after actual independent fixture and
+RDKit checks passed (`target/cdx-header-red.log`). Seven framing tests then passed;
+the package and bounded sanitizer results are recorded in docs/verification.md.
+The local native1196-byte observation stays ignored and distinct from this original
+redistributable vector. Its successful syntax passthrough is not application CDX I/O.
