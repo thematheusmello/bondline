@@ -1,20 +1,101 @@
 # Status — 2026-11-15
 
-The complete M0–M5 goal remains **active**. Branch feat/multiple-bonds; feature checkpoint
-4d1736f delivers verified bounded simple-ring conversion. Renderer prerequisite9050ab1
-and diagnostic-only listener testdf749fe are separate atomic commits.81705ba records the
-renewed installed settings review; d76a0ab declares the ring contract and0edd803 records
-the independent external CDX writer counterexample.
-Prior77d05a8/17f8798 deliver neutral-acyclic conversion and its renderer prerequisite.
-The simple-ring increment, its independent tests/provenance and native receiving check
-are committed. This file and the verification log record the final continuation checkpoint.
-Continue existing work; do not restart. No push, merge or publication occurred.
+The complete M0–M5 goal remains **active**. Branch feat/multiple-bonds; feature11101ce
+delivers canonical CDX FileEnd parsing, independent tests/provenance, conserving fuzz
+harness and receiving documentation.9d8ad75 separately preserves the bounded MCP
+shutdown observations; a33dc30 records the source-backed framing contract. Earlier
+4d1736f/9050ab1 deliver bounded simple-ring conversion and its renderer prerequisite;
+29be796 records that checkpoint. Continue existing work; do not restart.
+No push, merge or publication occurred.
 
 M0's desktop/GPU license blocker is resolved; **full M0/M1 and M2–M5 remain incomplete**.
 Actions stays disabled: repository Actions off and workflow417397204 manually disabled.
 Do not enable, dispatch or rerun hosted work. New Windows/Linux interaction is unverified.
 
-## Current simple-ring increment
+## In progress: canonical CDX file terminators
+
+The preceding cleanup turn made verified progress: all obsolete Bondline previews were
+closed, without touching unrelated tabs. This receiving turn resumes the actual CDX
+slice from [the public framing review](docs/research/cdx-file-end-plan.md).
+Every legacy success retains priority; only TrailingData plus a canonical28-byte zero-
+reserved header may select implicit/explicit DocumentEnd + exactly one FileEnd + EOF.
+The old22-byte HeaderDocument rule remains. Canonical legacy+one end deliberately evolves
+acceptance, and removing that final word can still be a valid legacy document. This is
+not padding tolerance, producer/property heuristics or a proof that all truncations fail.
+
+The only production file changed is crates/cdx/src/lib.rs,15134B/SHA256
+c3f27f4645372fc70e75f93fa9168f4f6d4bf74c1bcdf1e631500213e79f81cd.
+The shared exhaustive root classifier also prevents fuzz reconstruction from dropping
+the first0805 property. The original258-byte external Indigo source, generators, licenses
+and qualified new raw/RDKit oracle are retained. Writer, old fixtures/oracles, locks,
+dependencies, corpus pins and the approved golden remain unchanged.
+
+Independent runtime RED48668/Root59054 reproduces TrailingData. Expanded syntax first
+fails compilation for missing variants; a separate new-test-only Arc::ptr_eq setup error
+is preserved and corrected with content equality plus existing capture stamps. Root69681
+passes8 syntax cases;76198 passes IO1/Engine3/actual-wire2, including CLI, stdio MCP and
+authenticated loopback. Eighteen independent oracle controls pass. Ten distinct original
+external files now parse and pass through exactly; this is syntax evidence, not general
+application mapping. See [integration](docs/verification-cdx-file-end-integration.md).
+
+The exact fixed seed first fails fuzz property conservation11vs12; this is a harness
+classification defect, not an ASan memory error. Corrected fixed-input86996 and actual
+10000-mutation ASan45946 pass. The ten declared seeds/old fixtures stay immutable;
+mutations live under .cache/fuzz/cdx-file-end-20261115. Largest seed65750B, not64MiB.
+
+Earlier full local gate97729 **fails754/1** at the unchanged old MCP shutdown case:
+replacement_bind127.0.0.1:51670, AddrInUse/Os48. Formatting and warnings-denied workspace
+clippy pass before that test failure; later aggregate stages did not execute. Preserve
+target/cdx-file-end/root-final-ci.log,91080B/SHA256
+78153a7443ff803009751be506278666a9b200a823b07f755cf8d40edc1e4a88.
+The fixed20 default-control contexts64662 pass500/0; their bound is exhausted. The
+single98404 controlled probe contradicts the proposed held-outbound collision: replacement
+std listener binding also succeeds. Neither identifies the historical owner/cause.
+No retry, deadline, reuse option, assertion or default parallelism has changed.
+
+Exactly one final declared Root receiving gate81324 **passes1172/0/1**,169 result lines.
+Formatting, warnings-denied all-target workspace/vendor clippy/tests, layers, licenses and
+corpus pass; original MCP source and all three declared source pins remain exact.
+Log target/cdx-file-end/root-receiving-ci.log is141627B/SHA256
+a59098b56b4293de7e7da3f81b26ff1f2e61c6137d6ceea256cc6509b2e8ded6.
+This is receiving evidence, not a causal fix for97729. Keep that failure explicit. Runtime
+closures remain154/165/220 packages with2 assets; corpus8 files/5 bundles. See
+[bounded diagnostic evidence](docs/verification-loopback-shutdown-observations.md).
+
+Native Mac receiving passes actual Open, Unicode Save As and explicit reopen. The
+actual roundtrip-λ.cdx is258B/source-exact SHA256
+856482269dbd85640b87c11f608104dba72ebd308a686f1333a893965ed560ba and passes the independent
+raw/RDKit consumer. The UI shows Saved/CDX, Original source preserved and faithful-preview
+refusal; its2/1 counts are IO/consumer evidence only. Chemical edits/cross-format/native
+races and other platforms were not exercised. Receipt target/cdx-file-end/native/
+receiving-receipt.json is2737B/SHA256
+2718e89bfb8a6ea3d7ebad2dce2539dce38c691d214d95d06b9f2f79bced5c8b.
+
+One current bundle remains: target/smiles-ring-native/Bondline.app,
+org.bondline.neutral-simple-ring-review, exact-path PID69285, no socket. Refreshed binary
+22936488B/SHA256c052d758e209e1c0e53d016b6c02d93da427bc2b077b7272de04803a87285ad9.
+Previous Saved edited-ring-λ.cdxml7/7 is restored at Fit78.79%, complete ring visible;
+the1254-byte file remains exact8c95f0a244ee817d2e9be0ead26aa6be2c71b4dcd28c24a3b0189d6d5a175056.
+Old preview apps remain closed. Do not revisit their stopped bindings to verify closure:
+getApp/getAXState can relaunch them. ChemDraw/unrelated apps and tabs remain untouched.
+
+Final protection/link checks pass:21 old syntax inputs and940 unchanged baseline files
+remain exact, with only16 expected existing-file differences. CLI parent has only65
+appended bytes; first1667-byte syntax/1685-byte Engine declarations remain exact prefixes.
+All582 parity IDs/order and missing ME-015/025 rows remain;378 local links across16
+documents pass. Source-only fuzz rustfmt and Git diff checks pass. Only docs changed
+after81324. No SDK, shipped dependency, old fixture/oracle/font/asset/corpus/golden change.
+
+All compiler/fuzz/test/investigation jobs are terminal, including native build79022,
+receiving81324 and diagnostic64662/98404. All CDX/documentation handoffs are received.
+Root retains50 sealed diagnostic source/log/receipt files under ignored
+target/cdx-file-end/independent-listener-investigation; executables are excluded.
+The only active agent is reference_map, now owning only the new research/design file
+docs/research/smiles-components-plan.md. No product/test edits or execution are assigned.
+Consult its handoff before overlapping that file. Root owns STATUS/Git and other edits.
+No hosted work or publication is live.
+
+## Previously verified simple-ring increment
 
 The existing create-only converter offers Carbon chains, Acyclic neutral structures and
 additive Neutral ring structures / neutral_simple_ring_v1. The third profile accepts one
@@ -44,7 +125,7 @@ cases pass; producer default IO308/0. A ninth IO case was appended after impleme
 to exercise cycle-boundary tree keys and is honestly passing-first coverage.
 Independent connected43-file review finds no material finding; it is source review only.
 
-## Current gate and corrected failures
+## Previously verified simple-ring gate and corrected failures
 
 Root38859 full gate passed fmt/clippy then failed an old listener test with Os48/AddrInUse
 after740 passes. Its original phase/port/owner/cause remain unknown. Declared unchanged
@@ -79,7 +160,7 @@ committed product-source pins pass. Only documentation changed after the final g
 No dependency/lock, font/asset, corpus, old external consumer or approved golden change.
 The sole approved golden remains1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc.
 
-## Native application and reference evidence
+## Previously verified simple-ring native and reference evidence
 
 The first ring bundle native build46792 passes. Actual Mac workflow passes: retained
 unsaved C–C; two legacy topology refusals; ring existing-output refusal; Unicode retry
@@ -99,11 +180,12 @@ inactive-window menu attempts produce no form; native title click/F5 and subsequ
 ordinary menu interaction work. This receiving pass does not repeat every prior history/
 refusal check or establish native first-pass timing.
 
-Current bundle target/smiles-ring-native/Bondline.app, identifier
-org.bondline.neutral-simple-ring-review, last exact-path observed PID10202, no socket.
-Final binary22,936,248 bytes/SHA2c2ea9fb5a2a64bbbc4b0c96a0aab29f378a6e9f6f0be7e22d41b9c2f35ad427.
+At that checkpoint, bundle target/smiles-ring-native/Bondline.app, identifier
+org.bondline.neutral-simple-ring-review, had exact-path PID10202, no socket, and
+binary22,936,248 bytes/SHA2c2ea9fb5a2a64bbbc4b0c96a0aab29f378a6e9f6f0be7e22d41b9c2f35ad427.
 The earlier native-tested binary is retained under ignored target, not misattributed.
-It remains Saved at edited-ring-λ.cdxml,7/7,100%, vertical center300. On the user's cleanup instruction, CUA closes
+It was Saved at edited-ring-λ.cdxml,7/7,100%, vertical center300. The current CDX receiving
+bundle/process/view above supersedes that historical state. On the user's cleanup instruction, CUA closes
 the three older Carbon/New/Acyclic review apps after checking saved state; final inventory
 confirms all three not running, current Ring and ChemDraw running. Do not reopen obsolete
 bundles to check their state: getAXState on a stopped app can relaunch it.
@@ -119,12 +201,12 @@ actual producer. No static binary/resource inspection or vendor asset copying.
 
 ## Remaining scope and next exact work
 
-1. Read docs/research/cdx-external-writer-probe.md. Apache-2.0 external Indigo1.47.0 writes
-   ten distinct original-graph CDX outputs that independent RDKit accepts; unchanged
-   Bondline and stdlib syntax readers all refuse TrailingData at the extra final zero.
-   Freeze exact original files and old negative cases; resolve implicit-document/file-end
-   framing from public specifications before TDD implementation. No trim or arbitrary
-   padding acceptance, old-oracle weakening or corpus admission has occurred.
+1. Receive/review the component-packing source plan from reference_map. Freeze independent
+   source/graph/geometry and refusal/history/wire expectations before implementation.
+   Reuse the existing eight-scalar create-only converter/profile/worker lifecycle, preserve
+   every component/input ID/direction/H and exact bond length, and validate the full scene.
+   Original packing policy must be distinguished from documented reference behavior.
+   General source-qualified import and full parity remain the target, not just utilities.
 2. Continue components and general source-qualified SMILES drawing import, preserving
    full-source authority. SDF creation/reordering/headers and wider CDXML/MOL/CDX editing
    remain. Ring authoring/selection/labels/styles, chemistry/stereo/reactions/text,
@@ -133,9 +215,10 @@ actual producer. No static binary/resource inspection or vendor asset copying.
    interactive Windows/Linux. Reference palette/tool/flyout/clipboard flows and styled
    multi-window New remain gaps. Geometry typing/browsing/races, large/bulky native,
    hardware DPI, other platforms and further fuzzing are not newly verified.
-4. The final gate and native receiving pass are complete; do not repeat them without a
-   new source change or concrete concern. Keep only the current Bondline preview open;
-   no live job needs resuming. Use the literal pinned Python without resolving its symlink.
-   TDD and source
+4. Native CDX receiving and bounded ASan are complete; do not repeat them without a new
+   source change or concrete concern. The earlier intermittent failure's cause remains
+   unresolved despite the passing final aggregate. Keep only the current Bondline preview
+   open. Inspect the agent/live handles above.
+   Use the literal pinned Python without resolving its symlink. TDD and source
    decisions accompany each feature. Local atomic commits only; no push/publication or
    Actions enablement. Inspect live handles and frozen worker handoffs before resuming.
