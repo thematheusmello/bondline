@@ -1,7 +1,9 @@
 use crate::hits::{AtomHit, BondHit, intersects_label, visible_polygon};
+#[cfg(test)]
+use crate::page_scene;
 use crate::{
     Cancellation, Error, GraphScene, HitTarget, MAX_HIT_REGIONS, Primitive, Rectangle, Scene,
-    Stroke, page_scene,
+    Stroke,
 };
 use bondline_model::{AtomId, BondOrder, Page, PageSize, Point2, Radical};
 use std::collections::BTreeMap;
@@ -10,6 +12,7 @@ use std::collections::BTreeMap;
 pub struct PageViewport {
     paper: Rectangle,
     page: PageSize,
+    exact_scale: Option<f64>,
 }
 
 impl PageViewport {
@@ -41,7 +44,41 @@ impl PageViewport {
                 color: [196, 196, 196, 255],
             },
             page,
+            exact_scale: None,
         })
+    }
+
+    pub(crate) fn for_zoom(page: PageSize, scale: f64) -> Result<(Self, [u32; 2]), Error> {
+        let extents = [page.width_pt() * scale, page.height_pt() * scale];
+        if !scale.is_finite()
+            || scale <= 0.0
+            || extents
+                .iter()
+                .any(|value| !value.is_finite() || *value <= 0.0 || value.ceil() > 100_000.0)
+        {
+            return Err(Error::InvalidViewport);
+        }
+        let [width, height] = extents.map(|value| value.ceil() as u32);
+        // This solves the legacy margin=min(32,source_width/8,source_height/8).
+        let margin = 32.min(width / 6).min(height / 6);
+        let source = [width + margin * 2, height + margin * 2];
+        if source.iter().any(|value| !(1..=100_000).contains(value)) {
+            return Err(Error::InvalidViewport);
+        }
+        Ok((
+            Self {
+                paper: Rectangle {
+                    x: margin,
+                    y: margin,
+                    width,
+                    height,
+                    color: [196, 196, 196, 255],
+                },
+                page,
+                exact_scale: Some(scale),
+            },
+            source,
+        ))
     }
 
     pub fn paper(&self) -> &Rectangle {
@@ -49,6 +86,13 @@ impl PageViewport {
     }
 
     pub fn contains(&self, [x, y]: [f32; 2]) -> bool {
+        if self.exact_scale.is_some() {
+            let [left, top, right, bottom] = self.paper_bounds();
+            return f64::from(x) > left
+                && f64::from(x) < right
+                && f64::from(y) > top
+                && f64::from(y) < bottom;
+        }
         x > self.paper.x as f32
             && x < (self.paper.x + self.paper.width) as f32
             && y > self.paper.y as f32
@@ -56,13 +100,7 @@ impl PageViewport {
     }
 
     pub fn canvas_position(&self, point: Point2) -> Result<[f32; 2], Error> {
-        let position = [
-            f64::from(self.paper.x)
-                + point.x_pt() / self.page.width_pt() * f64::from(self.paper.width),
-            f64::from(self.paper.y)
-                + point.y_pt() / self.page.height_pt() * f64::from(self.paper.height),
-        ]
-        .map(|value| value as f32);
+        let position = self.position_f64(point).map(|value| value as f32);
         if position
             .iter()
             .any(|value| !value.is_finite() || value.abs() > 100_000.0)
@@ -72,19 +110,61 @@ impl PageViewport {
         Ok(position)
     }
 
+    pub(crate) fn position_f64(&self, point: Point2) -> [f64; 2] {
+        if let Some(scale) = self.exact_scale {
+            return [
+                f64::from(self.paper.x) + point.x_pt() * scale,
+                f64::from(self.paper.y) + point.y_pt() * scale,
+            ];
+        }
+        [
+            f64::from(self.paper.x)
+                + point.x_pt() / self.page.width_pt() * f64::from(self.paper.width),
+            f64::from(self.paper.y)
+                + point.y_pt() / self.page.height_pt() * f64::from(self.paper.height),
+        ]
+    }
+
     pub fn document_position(&self, [x, y]: [f32; 2]) -> Result<Point2, bondline_model::Error> {
+        self.document_position_f64([f64::from(x), f64::from(y)])
+    }
+
+    pub(crate) fn document_position_f64(
+        &self,
+        [x, y]: [f64; 2],
+    ) -> Result<Point2, bondline_model::Error> {
+        if let Some(scale) = self.exact_scale {
+            return Point2::new(
+                (x - f64::from(self.paper.x)) / scale,
+                (y - f64::from(self.paper.y)) / scale,
+            );
+        }
         Point2::new(
-            (f64::from(x) - f64::from(self.paper.x)) / f64::from(self.paper.width)
-                * self.page.width_pt(),
-            (f64::from(y) - f64::from(self.paper.y)) / f64::from(self.paper.height)
-                * self.page.height_pt(),
+            (x - f64::from(self.paper.x)) / f64::from(self.paper.width) * self.page.width_pt(),
+            (y - f64::from(self.paper.y)) / f64::from(self.paper.height) * self.page.height_pt(),
         )
     }
 
     pub fn stroke_width(&self) -> f32 {
+        self.scale() as f32
+    }
+
+    pub(crate) fn scale(&self) -> f64 {
         // One authored point is an original initial style, not an imported journal preset.
+        if let Some(scale) = self.exact_scale {
+            return scale;
+        }
         (f64::from(self.paper.width) / self.page.width_pt())
-            .min(f64::from(self.paper.height) / self.page.height_pt()) as f32
+            .min(f64::from(self.paper.height) / self.page.height_pt())
+    }
+
+    fn paper_bounds(&self) -> [f64; 4] {
+        let [left, top] = [f64::from(self.paper.x), f64::from(self.paper.y)];
+        let [width, height] = self.exact_scale.map_or(
+            [f64::from(self.paper.width), f64::from(self.paper.height)],
+            |scale| [self.page.width_pt() * scale, self.page.height_pt() * scale],
+        );
+        [left, top, left + width, top + height]
     }
 }
 
@@ -117,6 +197,15 @@ pub fn graph_page_scene_with_display_hydrogens(
     counts: &BTreeMap<AtomId, u16>,
     cancel: &Cancellation,
 ) -> Result<GraphScene, Error> {
+    validate_display_hydrogens(page, counts, cancel)?;
+    graph_scene(width, height, page, Some(counts), cancel)
+}
+
+pub(crate) fn validate_display_hydrogens(
+    page: &Page,
+    counts: &BTreeMap<AtomId, u16>,
+    cancel: &Cancellation,
+) -> Result<(), Error> {
     cancel.check()?;
     let mut count = 0_usize;
     for atom in page
@@ -139,7 +228,7 @@ pub fn graph_page_scene_with_display_hydrogens(
     if counts.len() != count {
         return Err(Error::UnsupportedChemicalContent);
     }
-    graph_scene(width, height, page, Some(counts), cancel)
+    Ok(())
 }
 
 fn graph_scene(
@@ -151,7 +240,19 @@ fn graph_scene(
 ) -> Result<GraphScene, Error> {
     cancel.check()?;
     let viewport = PageViewport::new(width, height, page.size())?;
-    let mut scene = page_scene(width, height, page.size())?;
+    graph_scene_in_viewport(width, height, page, counts, cancel, &viewport)
+}
+
+pub(crate) fn graph_scene_in_viewport(
+    width: u32,
+    height: u32,
+    page: &Page,
+    counts: Option<&BTreeMap<AtomId, u16>>,
+    cancel: &Cancellation,
+    viewport: &PageViewport,
+) -> Result<GraphScene, Error> {
+    cancel.check()?;
+    let mut scene = crate::scene::page_scene_in_viewport(width, height, viewport);
     let mut hit_count = 0_usize;
     let mut count = scene.primitives.len();
     let mut has_multiple = false;
@@ -278,7 +379,7 @@ fn graph_scene(
                     preferred_left,
                     hydrogens,
                     &incident,
-                    &viewport,
+                    viewport,
                     [width, height],
                     counts.is_some(),
                     cancel,
@@ -500,8 +601,10 @@ fn graph_scene(
     if counts.is_some() {
         validate_paper_ink(
             &scene,
-            &viewport,
-            page_scene(width, height, page.size())?.primitives.len(),
+            viewport,
+            crate::scene::page_scene_in_viewport(width, height, viewport)
+                .primitives
+                .len(),
             cancel,
         )?;
     }
@@ -638,11 +741,8 @@ fn rect_inside_paper(rect: &Rectangle, viewport: &PageViewport) -> bool {
 }
 
 fn point_inside_paper([x, y]: [f64; 2], viewport: &PageViewport) -> bool {
-    let paper = viewport.paper();
-    x >= f64::from(paper.x) + 1.0
-        && x <= f64::from(paper.x) + f64::from(paper.width) - 1.0
-        && y >= f64::from(paper.y) + 1.0
-        && y <= f64::from(paper.y) + f64::from(paper.height) - 1.0
+    let [left, top, right, bottom] = viewport.paper_bounds();
+    x >= left + 1.0 && x <= right - 1.0 && y >= top + 1.0 && y <= bottom - 1.0
 }
 
 fn validate_paper_ink(

@@ -112,6 +112,10 @@ pub fn cpu_scene_with_cancel(scene: &Scene, cancel: &Cancellation) -> Result<Fra
 /// Geometry can serve larger native viewports; pixel readbacks remain limited to 2048 per axis.
 pub fn page_scene(width: u32, height: u32, page: PageSize) -> Result<Scene, Error> {
     let viewport = PageViewport::new(width, height, page)?;
+    Ok(page_scene_in_viewport(width, height, &viewport))
+}
+
+pub(crate) fn page_scene_in_viewport(width: u32, height: u32, viewport: &PageViewport) -> Scene {
     let Rectangle {
         x,
         y,
@@ -150,10 +154,10 @@ pub fn page_scene(width: u32, height: u32, page: PageSize) -> Result<Scene, Erro
             color: [255; 4],
         });
     }
-    Ok(Scene {
+    Scene {
         width,
         height,
         background: [232, 232, 232, 255],
         primitives: rectangles.into_iter().map(Primitive::Rectangle).collect(),
-    })
+    }
 }

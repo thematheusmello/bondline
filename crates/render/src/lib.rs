@@ -56,6 +56,10 @@ pub enum Error {
     InvalidDimensions,
     #[error("viewport dimensions must be between 1 and 100000 pixels")]
     InvalidViewport,
+    #[error(
+        "view needs finite zoom within 1..999 percent, a center inside the page, and matching page/source geometry"
+    )]
+    InvalidView,
     #[error("rectangle dimensions must be nonzero and their edges must not overflow")]
     InvalidGeometry,
     #[error(
@@ -129,6 +133,7 @@ mod label_tests;
 mod page;
 mod scene;
 mod stroke;
+mod view;
 pub use hits::{GraphScene, HitTarget, MAX_HIT_REGIONS};
 pub use page::{
     PageViewport, carbon_page_scene, graph_page_scene, graph_page_scene_with_cancel,
@@ -136,6 +141,7 @@ pub use page::{
 };
 pub use scene::{Primitive, Rectangle, Scene, cpu_scene, cpu_scene_with_cancel, page_scene};
 pub use stroke::{Stroke, centered_bond_strokes};
+pub use view::PageView;
 
 #[cfg(not(target_arch = "wasm32"))]
 mod gpu;

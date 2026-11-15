@@ -2429,3 +2429,15 @@ No new dependencies/locks, parser/renderer behavior, old fixtures/oracles/font o
 golden changed. No new parser-fuzz, Windows/Linux runtime or hosted run is implied.
 Actions stays disabled. Full M0–M5 remains active; default-fit zoom/readability, complete
 control/inventory/platform coverage, broader formats/chemistry and full tool parity remain.
+
+
+## Logical page camera, 2026-11-15
+
+[Renderer evidence](verification-view-render.md) records exact legacy Fit, explicit
+uniform zoom/pan, shared forward/inverse picking and clipped geometry with preserved
+whole-source chemistry/label/component guards. Independent literal coordinate/pixel/GPU
+tests and a large-coordinate zero-tolerance anchor regression pass: Root receiving
+`target/view-render-receiving-green.log` (session22937) has76 passed,0 failed.
+The renderer handoff has separate all-target warnings-denied clippy/rustfmt evidence.
+This lower-layer API does not establish native controls, complete zoom-range rendering,
+physical monitor calibration or full M0/M2 parity. No new golden or dependency changes.
