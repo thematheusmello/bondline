@@ -250,13 +250,23 @@ No-op retains source/index identity, redo and transient close state. Input/outpu
 explicit versus automatic data disclosure, source/current/saved meanings and existing
 worker/reply/save barriers are defined in control-protocol.md. No extra pool or registry.
 
-The native field adapter now registers those two existing operations through
+The native field adapter registers those two existing operations through
 `CommandExecutor::prepare_ui_sdf` before spawning. It binds an opaque work value to the
 originating Engine, complete CaptureStamp, Open close epoch and existing shared worker
 reservation. Core completion/finish and accepted-earlier close semantics stay unchanged.
-The future UI must retain its own pending/delivery/retirement barrier and reject historical
-query installation; this adapter does not implement field presentation or draft policy.
 See [the adapter checks](verification-ui-sdf-work.md).
+
+`SdfFieldsWorkflow` now adds explicit read-only native occurrence inspection. One pending
+intent, one bounded channel/job and one field page sit beside the existing preview.
+Source/close/record/offset/request keys reject stale installation; native close includes
+pending work through actual thread retirement. Query/formatting runs off-lock, then the
+inspector displays ordered occurrences and follows returned pagination offsets. It never
+parses SDF in the frame, installs historical Engine state or grants drawing/Save authority.
+Immutable text buffers retain selection/copy; explicit AccessKit ReadOnly and cleared text
+undo storage prevent edit claims and retained payload history. Finished cancelled work
+can retire without an Engine guard. This is original presentation, not reference-field
+UI parity or a mutating editor. Draft/Apply/Save/close policy remains separate next work;
+see [the independent UI and native evidence](verification-sdf-inspector.md).
 
 SMILES retains a distinct complete notation/source IR, including literal aromatic atom/bond
 markers. These are not perceived aromaticity; every aromatic marker/bond refuses fixed-H

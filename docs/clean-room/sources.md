@@ -1539,3 +1539,23 @@ pool. The BIOVIA field rules and public-source qualifications in the workspace p
 remain its format basis. [Seven independently frozen adapter checks](../verification-ui-sdf-work.md)
 use the original777-byte vector and predeclared788-byte literal splice; no reference
 field UI, new format rule or native-window observation is inferred from their success.
+
+## Original read-only SDF occurrence inspector, 2026-11-15
+
+The SDF workspace plan's pinned BIOVIA field rules remain the format basis. Record/field
+occurrences, exact headers, empty/spaces values and explicit omissions are displayed from
+the existing bounded query, never reconstructed by name. The inspector's layout,80-character
+caption excerpts, pagination, source/close/request freshness and cancellation/retirement
+are original Bondline choices. Exact headers remain inside expanded rows. GUIDE25's Excel
+workflow and the May2026 tier chart still do not establish Professional desktop field UI.
+
+Public egui0.29.1 [builder](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/widgets/text_edit/builder.rs)
+and [TextEditState](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/widgets/text_edit/state.rs)
+were rechecked at the exact pinned revision. Focused immutable buffers still enter text
+undo storage; the public clear/store API removes those copies while preserving cursor
+selection. The original caller also marks the native value ReadOnly. No new SDK patch,
+asset, dependency, format rule or reference-product observation follows.
+
+[Independent real-App RED/GREEN, review fixes and bounded native file/field evidence](../verification-sdf-inspector.md)
+retain separate scopes. Native chemical preview still refuses at the current default
+view; no readability guard or golden was changed to claim success.

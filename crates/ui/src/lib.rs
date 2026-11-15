@@ -11,6 +11,7 @@ mod mol_display_tests;
 #[cfg(test)]
 mod multiple_bond_tests;
 mod preview;
+mod sdf_fields;
 mod view_controls;
 #[cfg(test)]
 mod view_tests;
@@ -28,6 +29,7 @@ use bondline_model::{PageId, Point2};
 use eframe::egui;
 use file_workflow::{FileIntentAction, FileWorkflow};
 use preview::PreviewWorkflow;
+use sdf_fields::SdfFieldsWorkflow;
 use std::{
     io::Write,
     sync::{Arc, Mutex},
@@ -592,8 +594,11 @@ fn show_workspace_with_preview(
     drawing: &mut DrawingState,
     mut files: Option<&mut FileWorkflow>,
     active_work: bool,
-    mut preview: Option<&mut PreviewWorkflow>,
+    workflows: Option<(&mut PreviewWorkflow, &mut SdfFieldsWorkflow)>,
 ) -> Option<FileIntentAction> {
+    let (mut preview, mut sdf_fields) = workflows.map_or((None, None), |(preview, fields)| {
+        (Some(preview), Some(fields))
+    });
     let events = context.input(|input| input.events.clone());
     if [
         context.screen_rect().width(),
@@ -734,8 +739,12 @@ fn show_workspace_with_preview(
         .resizable(false)
         .frame(egui::Frame::side_top_panel(&context.style()).inner_margin(14.0))
         .show(context, |ui| {
-            egui::ScrollArea::vertical()
-                .show(ui, |ui| document_inspector(ui, engine, error.as_deref()));
+            egui::ScrollArea::vertical().show(ui, |ui| {
+                document_inspector(ui, engine, error.as_deref());
+                if let Some(fields) = sdf_fields.as_deref_mut() {
+                    fields.show(ui, engine);
+                }
+            });
         });
     let mut history_handled = false;
     egui::CentralPanel::default()
@@ -776,6 +785,21 @@ fn show_workspace_with_preview(
                                         ui.label(record.mol_version);
                                         ui.label(format!("{} fields", record.field_count));
                                         ui.label(format!("{} bytes", record.byte_length));
+                                        if let Some(fields) = sdf_fields.as_deref_mut()
+                                            && ui
+                                                .add_enabled(
+                                                    state.close == CloseState::Open,
+                                                    egui::Button::new(format!(
+                                                        "Inspect record {} fields",
+                                                        record.id
+                                                    ))
+                                                    .small(),
+                                                )
+                                                .clicked()
+                                        {
+                                            fields.inspect(engine, record.id);
+                                            context.request_repaint();
+                                        }
                                         ui.end_row();
                                     }
                                 });
@@ -1527,7 +1551,9 @@ fn show_workspace_with_preview(
                 context,
                 engine,
                 error,
-                active_work || preview.as_ref().is_some_and(|preview| preview.is_busy()),
+                active_work
+                    || preview.as_ref().is_some_and(|preview| preview.is_busy())
+                    || sdf_fields.as_ref().is_some_and(|fields| fields.is_busy()),
             )
             .or(file_action);
     }
@@ -1544,6 +1570,7 @@ pub struct BondlineApp {
     drawing: DrawingState,
     files: FileWorkflow,
     preview: PreviewWorkflow,
+    sdf_fields: SdfFieldsWorkflow,
 }
 
 impl BondlineApp {
@@ -1588,6 +1615,7 @@ impl BondlineApp {
             drawing: DrawingState::default(),
             files: FileWorkflow::new(std::env::home_dir().map_or_else(std::env::current_dir, Ok)?),
             preview: PreviewWorkflow::default(),
+            sdf_fields: SdfFieldsWorkflow::default(),
         })
     }
 }
@@ -1618,6 +1646,7 @@ impl BondlineApp {
             Ok(mut engine) => {
                 self.files.poll(&mut engine, &mut self.error);
                 self.preview.sync(&engine, context);
+                self.sdf_fields.sync(&engine, context);
                 if native_close && engine.state().close != CloseState::Committed {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
                     self.files.request_close(&mut engine, &mut self.error);
@@ -1631,13 +1660,18 @@ impl BondlineApp {
                     &mut self.error,
                     &mut self.drawing,
                     Some(&mut self.files),
-                    self.executor.has_active_work() || self.preview.is_busy(),
-                    Some(&mut self.preview),
+                    self.executor.has_active_work()
+                        || self.preview.is_busy()
+                        || self.sdf_fields.is_busy(),
+                    Some((&mut self.preview, &mut self.sdf_fields)),
                 );
                 self.preview.sync(&engine, context);
+                self.sdf_fields.sync(&engine, context);
                 if self.files.complete_close_if_idle(
                     &mut engine,
-                    self.executor.has_active_work() || self.preview.is_busy(),
+                    self.executor.has_active_work()
+                        || self.preview.is_busy()
+                        || self.sdf_fields.is_busy(),
                     action.is_some(),
                 ) {
                     context.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -1645,6 +1679,7 @@ impl BondlineApp {
             }
             Err(_) => {
                 self.preview.deactivate(context);
+                self.sdf_fields.deactivate(context);
                 if native_close {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
                 }
@@ -1663,6 +1698,7 @@ impl BondlineApp {
             }
         }
         self.preview.start_pending(&self.executor, context);
+        self.sdf_fields.start_pending(&self.executor, context);
     }
 }
 

@@ -2508,3 +2508,15 @@ chemical preview under the existing em guard; effective DPI/enlargement were not
 Successful native preview, field presentation and scheduling races remain unverified.
 The prior saved150% drawing is restored on the desktop. No guard, golden, fixture or
 consumer changed, and no milestone is complete.
+
+## Read-only native SDF occurrence inspector, 2026-11-15
+
+[Independent real-App and bounded Mac evidence](verification-sdf-inspector.md) verifies
+explicit ordered/duplicate/empty/spaces inspection, immutable selection/copy, source
+refresh, true JSON-budget page offsets and explicit omission. Missing-button, ReadOnly
+flag and retained-text runtime REDs precede their fixes; a separate queued/finished-job
+gate protects host retirement. No assertions, original fixtures, SDK, fonts or approved
+golden changed. Root68521 full gate passes975/0/1, including all local quality gates.
+Actual native Unicode Save As/reopen retains every777 source byte and both external
+MOL consumers pass. Default native chemical preview still refuses the em guard; mutating
+drafts/editor/Apply/Save ordering and complete M0–M5 remain required. Actions stays off.

@@ -147,6 +147,7 @@ impl Fixture {
             drawing: DrawingState::default(),
             files: FileWorkflow::new(directory.path(".")),
             preview: PreviewWorkflow::default(),
+            sdf_fields: crate::sdf_fields::SdfFieldsWorkflow::default(),
         };
         let context = egui::Context::default();
         configure_context(&context);

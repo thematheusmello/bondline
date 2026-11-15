@@ -211,6 +211,7 @@ fn actual_application_frame_to_png() -> CaptureResult {
         drawing: DrawingState::default(),
         files: FileWorkflow::new(directory.clone()),
         preview: PreviewWorkflow::default(),
+        sdf_fields: crate::sdf_fields::SdfFieldsWorkflow::default(),
     };
     let context = egui::Context::default();
     configure_context(&context);

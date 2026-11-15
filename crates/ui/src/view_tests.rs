@@ -41,6 +41,7 @@ impl Fixture {
             drawing: DrawingState::default(),
             files: FileWorkflow::new(directory.path(".")),
             preview: PreviewWorkflow::default(),
+            sdf_fields: crate::sdf_fields::SdfFieldsWorkflow::default(),
         };
         let context = egui::Context::default();
         configure_context(&context);
@@ -1363,3 +1364,6 @@ fn actual_frame_undo_then_save_in_one_packet_saves_the_undone_source_and_history
     }
     Ok(())
 }
+
+#[path = "sdf_inspector_tests.rs"]
+mod sdf_inspector;

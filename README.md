@@ -53,7 +53,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
 | MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |
 | CDX files | Guarded native Open/Save/Save As verified on macOS, retaining exact accepted source. Limited projection; editing and faithful preview remain unavailable. |
-| SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. CLI/MCP inspect ordered fields and edit existing values with Undo/Redo. Restricted neutral Single/Double/Triple capture and asynchronous read-only preview pass headless checks. Actual native preview acceptance and field-edit UI remain pending. |
+| SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. A read-only record inspector preserves duplicate occurrences, empty and space-only values; bounded Mac checks pass. Pagination, omission, copy and stale-source checks pass in actual App frames. CLI/MCP edit existing values with Undo/Redo. Chemical preview passes headless checks; the default native window can refuse its readability guard. Mutating field UI remains pending. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. Rapid Undo→Save preserves the undone source; independently checked in the actual Mac app and saved file. |
 | Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. The centered style is original; broader native label workflows and reference style parity remain unverified. |
 | Automation | 28 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
@@ -105,6 +105,11 @@ independent developer test oracles, not as an application runtime.
 
 Use File → Open/Save/Save As for supported CDXML, CDX, MOL or SDF documents. Cmd/Ctrl+O, S, Shift+S and W are wired;
 actual Mac shortcut and accessibility-field evidence is in [native-file-ui.md](docs/native-file-ui.md).
+
+For an SDF collection, expand **Records**, choose **Inspect record … fields**, then expand
+an occurrence in the right inspector. Values are read-only and selectable; duplicate
+names remain separate. [Exact checks and limits](docs/verification-sdf-inspector.md)
+distinguish native observations from headless pagination/copy evidence.
 
 Select a bond tool and drag the paper. Over a supported carbon bond, press **1**, **2** or
 **3** to set its order. Some clicks request alignment behavior that is still unavailable;

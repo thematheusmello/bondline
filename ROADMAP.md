@@ -38,13 +38,22 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
+The original read-only SDF occurrence inspector is now delivered. Five independent
+actual-App cases verify ordered duplicates, empty/spaces, selection/copy, source refresh,
+budget-driven pagination and explicit omission; two Root lifecycle cases protect queued
+retirement and unavailable-Engine cleanup. Bounded native Mac inspection/readonly typing/
+Unicode Save As/reopen preserve every777-byte source byte. The975-test local gate passes.
+See docs/verification-sdf-inspector.md. Mutating field drafts/Apply/Save ordering, successful
+native chemical preview at an eligible view and full M1 remain required next work.
+
 A restricted all-record SDF capture route now connects source-preserving mixed-version
 projection, separate display-H provenance and faithful resolved-H labels through the
 existing command/CLI/MCP interfaces. Ordinary VAL-absent CCO/CN, both source orientations,
 full CPU/GPU image comparisons and exact Save pass headlessly. The native read-only workspace
 preview now has registered background work, source/view/DPI/
 close-epoch invalidation and independent actual-frame texture/paint/retirement tests. Actual
-native-window acceptance still waits for user availability. Ordinary source-backed MOL
+successful native-window preview acceptance remains open: the default window honestly
+refuses its em guard. Ordinary source-backed MOL
 absent-H depiction now uses the same closed display facts in its actual Page/IDs/frame,
 with complete deferred ownership, independent CPU/GPU/source checks and headless canvas
 acceptance. Authored None and source bytes remain exact; source-free/CDXML stay literal.
@@ -53,7 +62,7 @@ Centered Double/Triple depiction now passes independent analytic pixel/geometry,
 CPU/GPU and source-preserving MOL/SDF checks. It uses an original3w profile, without
 mapping inherited styles or context-sensitive sidedness. See
 docs/verification-multiple-render.md and docs/verification-multiple-commands.md.
-Broader formats, source metadata, SDF field UI and full M1 interoperability remain unfinished.
+Broader formats, source metadata, mutating SDF field UI and full M1 interoperability remain unfinished.
 This is partial M1, with neutral Single/Double/Triple geometry and explicit whole-capture
 refusals; general layout and reference packing
 remain open. See docs/verification-sdf-capture-command.md and the linked independent evidence.

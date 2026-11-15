@@ -525,8 +525,8 @@ thin Engine delegate fixes it without a dependency/lock change. Do not repeat th
 Source-free/CDXML remain literal; no general H/stereo/aromaticity/edit authority follows.
 Centered Double/Triple geometry/hits/attachment and closed authoring now have independent
 headless evidence; see the multiple-bond verification records and STATUS.md for exact gates.
-Next authoring flow: source the guide's existing-bond conversion rules, then add the typed
-order-edit command and UI/adapter/history/H-budget tests. Styles, sidedness, general
+The existing-bond order-edit command and UI/adapter/history/H-budget checks are delivered
+below. Styles, sidedness, general
 construction, inventory/platform/native evidence and full M0–M5 remain unfinished.
 
 `bond.set_order` requires an explicit order, current revision/target IDs and
@@ -548,3 +548,28 @@ backing, page dimensions, viewport and graph after history, including the non-dr
 fallback. Unsupported Double alignment remains a visible capability gap. The final tests
 and finite Mac evidence are in docs/verification-bond-order-{ui,native}.md and
 docs/verification-bond-history-order.md; no wider26.1 matrix is established.
+
+## Read-only native SDF fields
+
+`SdfFieldsWorkflow` uses the existing `sdf.record.inspect` through registered `UiSdfWork`,
+never a frame parser or another executor. One source/close/record/offset/request-qualified
+pending intent, bounded channel/job and field page stay outside authored state. Keep
+pending/publication/actual thread retirement in native close busy checks; join only after
+is_finished, including engine-free cancelled cleanup on a poisoned lock. Stale queries
+never replace Engine state. Use actual next_field_offset and occurrence indices, not
+name maps or a fixed64-page increment; omitted null differs from an existing empty value.
+
+Readonly values use immutable TextEdit buffers, AccessKit ReadOnly and cleared/stored
+TextEdit undoers while preserving current selection/copy. The pinned SDK otherwise stores
+full readonly values when focused. Preserve the five independent real-App tests and two
+Root lifecycle regressions; six older App fixture changes are default initialization only.
+Native Mac finite inspection/typing/Unicode Save As/reopen passes; successful native
+chemical preview remains unverified after the default-window em refusal. Native tool
+“settable” annotations and a failed Zoom SetValue attempt prove no permission or cause.
+
+Read docs/verification-sdf-inspector.md and the source-backed workspace plan before the
+mutating editor. Unapplied drafts need Apply/Discard/Cancel across navigation/Open/close;
+Apply→Save must serialize after the edit outcome. Do not expose a setter as a finished
+UI before those obligations and the predeclared788-byte second-DUP workflow pass. The
+registry remains28; full UI addressability and Professional field-screen evidence are
+still incomplete. GitHub Actions remains disabled. See STATUS.md for current artifacts.

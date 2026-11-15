@@ -810,7 +810,7 @@ tools; complete control inventory/addressability remains incomplete M0 work.
 ## Native SDF field work (Rust adapter)
 
 `CommandExecutor::prepare_ui_sdf(&CaptureStamp, close_epoch, Command)` accepts only
-the existing `sdf.record.inspect` and `sdf.field.set` operations. Under the originating
+the existing `sdf.record.inspect` and `sdf.field.set_value` operations. Under the originating
 Engine mutex it checks the complete source stamp, Open close state and exact captured
 close epoch, then reserves the same two-worker budget before preparing the command.
 Release the UI frame's Engine guard first. The opaque `UiSdfWork` completes through the
@@ -822,7 +822,17 @@ by current source/selection/close context and retain pending/job/publication/thr
 barriers. A previously accepted edit can still commit before host close acknowledgement
 and invalidate approval, as the core already permits. Refresh inspection after a successful
 edit rather than replaying it. [Independent adapter evidence](verification-ui-sdf-work.md)
-does not establish a native field inspector/editor or draft workflow.
+retains the exact core/adapter scope.
+
+The native read-only occurrence inspector now uses this bridge for explicit record pages,
+with one source/close/record/offset/request-qualified pending job. It follows the actual
+`next_field_offset`, retains no other page and distinguishes omitted null values from
+existing empty values. Selectable immutable text advertises ReadOnly; text undo storage
+is cleared without losing the current selection. Pending/delivery/actual thread retirement
+participate in the host close barrier. [Five independent actual-App tests and bounded
+Mac observations](verification-sdf-inspector.md) do not establish a mutating editor,
+draft/Apply workflow, native pagination race or complete control addressability. These
+local presentation controls add no named command or schema; the registry stays at28.
 
 ## Existing-bond absolute order setter
 
