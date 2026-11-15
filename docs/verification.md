@@ -2541,3 +2541,16 @@ expectation and both independent molecular consumers. Native race/accessibility,
 values, Windows/Linux and successful default native chemical preview remain unverified.
 No Actions run, new dependency, source-paper change, glyph guard relaxation or milestone
 completion is claimed. The full M0–M5 goal remains active.
+
+## Physical raster density for logical cameras, 2026-11-15
+
+[Renderer evidence](verification-view-raster.md) adds an immutable pixel-space view while
+retaining the logical percentage and exact1x output. Fresh glyphs incorporate fractional
+camera phase; old masks are not resampled. Eight tests cover declared affine positions,
+rounded nonsquare Fit, fractional/capped/subunit density, independent font coverage,
+CPU/GPU agreement, whole-source refusal and bounds/cancellation/noncomposition. Seven
+tests were frozen before the missing-API compiler RED; the eighth is explicitly additive
+postimplementation coverage. All original renderer tests/fixtures/font/oracles/goldens
+remain exact. Independent96521 runs84/0/0,40201 all-target renderer clippy exits0 and
+rustfmt passes. This foundation alone does not wire native SDF navigation or establish
+new native/Windows/Linux behavior; application integration has its own gate.

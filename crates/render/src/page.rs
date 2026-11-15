@@ -9,10 +9,18 @@ use bondline_model::{AtomId, BondOrder, Page, PageSize, Point2, Radical};
 use std::collections::BTreeMap;
 
 /// The same rounded fit used for the paper and authoring pointer conversion.
+#[derive(Clone)]
 pub struct PageViewport {
     paper: Rectangle,
     page: PageSize,
     exact_scale: Option<f64>,
+    raster: Option<RasterTransform>,
+}
+
+#[derive(Clone)]
+struct RasterTransform {
+    origin: [f64; 2],
+    axes: [f64; 2],
 }
 
 impl PageViewport {
@@ -45,6 +53,7 @@ impl PageViewport {
             },
             page,
             exact_scale: None,
+            raster: None,
         })
     }
 
@@ -76,9 +85,47 @@ impl PageViewport {
                 },
                 page,
                 exact_scale: Some(scale),
+                raster: None,
             },
             source,
         ))
+    }
+
+    /// Fresh physical geometry, preserving the logical Fit's rounded axes or exact Zoom.
+    /// Fractional camera phase enters glyph generation; later projection stays integral.
+    pub(crate) fn at_density(&self, density: f64, phase: [f64; 2]) -> Result<Self, Error> {
+        let [left, top, right, bottom] = self.paper_bounds();
+        let origin = [left * density + phase[0], top * density + phase[1]];
+        let size = [(right - left) * density, (bottom - top) * density];
+        let ends = [origin[0] + size[0], origin[1] + size[1]];
+        if !density.is_finite()
+            || density <= 0.0
+            || origin.iter().any(|v| !v.is_finite() || *v < 0.0)
+            || size.iter().any(|v| !v.is_finite() || *v <= 0.0)
+            || ends.iter().any(|v| !v.is_finite() || v.ceil() > 100_000.0)
+        {
+            return Err(Error::InvalidViewport);
+        }
+        let [x, y] = origin.map(|value| value.floor() as u32);
+        let [right, bottom] = ends.map(|value| value.ceil() as u32);
+        Ok(Self {
+            paper: Rectangle {
+                x,
+                y,
+                width: right.checked_sub(x).ok_or(Error::InvalidGeometry)?,
+                height: bottom.checked_sub(y).ok_or(Error::InvalidGeometry)?,
+                color: self.paper.color,
+            },
+            page: self.page,
+            exact_scale: None,
+            raster: Some(RasterTransform {
+                origin,
+                axes: [
+                    size[0] / self.page.width_pt(),
+                    size[1] / self.page.height_pt(),
+                ],
+            }),
+        })
     }
 
     pub fn paper(&self) -> &Rectangle {
@@ -86,7 +133,7 @@ impl PageViewport {
     }
 
     pub fn contains(&self, [x, y]: [f32; 2]) -> bool {
-        if self.exact_scale.is_some() {
+        if self.exact_scale.is_some() || self.raster.is_some() {
             let [left, top, right, bottom] = self.paper_bounds();
             return f64::from(x) > left
                 && f64::from(x) < right
@@ -111,6 +158,12 @@ impl PageViewport {
     }
 
     pub(crate) fn position_f64(&self, point: Point2) -> [f64; 2] {
+        if let Some(raster) = &self.raster {
+            return [
+                raster.origin[0] + point.x_pt() * raster.axes[0],
+                raster.origin[1] + point.y_pt() * raster.axes[1],
+            ];
+        }
         if let Some(scale) = self.exact_scale {
             return [
                 f64::from(self.paper.x) + point.x_pt() * scale,
@@ -133,6 +186,12 @@ impl PageViewport {
         &self,
         [x, y]: [f64; 2],
     ) -> Result<Point2, bondline_model::Error> {
+        if let Some(raster) = &self.raster {
+            return Point2::new(
+                (x - raster.origin[0]) / raster.axes[0],
+                (y - raster.origin[1]) / raster.axes[1],
+            );
+        }
         if let Some(scale) = self.exact_scale {
             return Point2::new(
                 (x - f64::from(self.paper.x)) / scale,
@@ -151,6 +210,9 @@ impl PageViewport {
 
     pub(crate) fn scale(&self) -> f64 {
         // One authored point is an original initial style, not an imported journal preset.
+        if let Some(raster) = &self.raster {
+            return raster.axes[0].min(raster.axes[1]);
+        }
         if let Some(scale) = self.exact_scale {
             return scale;
         }
@@ -159,6 +221,14 @@ impl PageViewport {
     }
 
     fn paper_bounds(&self) -> [f64; 4] {
+        if let Some(raster) = &self.raster {
+            return [
+                raster.origin[0],
+                raster.origin[1],
+                raster.origin[0] + self.page.width_pt() * raster.axes[0],
+                raster.origin[1] + self.page.height_pt() * raster.axes[1],
+            ];
+        }
         let [left, top] = [f64::from(self.paper.x), f64::from(self.paper.y)];
         let [width, height] = self.exact_scale.map_or(
             [f64::from(self.paper.width), f64::from(self.paper.height)],

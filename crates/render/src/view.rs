@@ -16,6 +16,7 @@ pub struct PageView {
     offset: [i64; 2],
     percent: f64,
     fit: bool,
+    density: Option<f64>,
 }
 
 impl PageView {
@@ -30,6 +31,7 @@ impl PageView {
             offset: [0, 0],
             percent,
             fit: true,
+            density: None,
         })
     }
 
@@ -67,7 +69,71 @@ impl PageView {
             offset,
             percent,
             fit: false,
+            density: None,
         })
+    }
+
+    /// Fresh pixel-space geometry for this logical view, without scaling glyph bitmaps.
+    /// The returned view retains the logical percentage; use [`Self::pixel_density`]
+    /// separately. A pixel view cannot be converted again: rebuild from the logical view.
+    pub fn at_pixel_size(&self, width_px: u32, height_px: u32) -> Result<Self, Error> {
+        if self.density.is_some() {
+            return Err(Error::InvalidView);
+        }
+        crate::byte_count(width_px, height_px)?;
+        if [width_px, height_px] == self.destination {
+            return Ok(Self {
+                page: self.page,
+                viewport: self.viewport.clone(),
+                source: self.source,
+                destination: self.destination,
+                offset: self.offset,
+                percent: self.percent,
+                fit: self.fit,
+                density: Some(1.0),
+            });
+        }
+        let density = (f64::from(width_px) / f64::from(self.destination[0]))
+            .min(f64::from(height_px) / f64::from(self.destination[1]));
+        let padding = [
+            (f64::from(width_px) - f64::from(self.destination[0]) * density) / 2.0,
+            (f64::from(height_px) - f64::from(self.destination[1]) * density) / 2.0,
+        ];
+        let translation = [
+            self.offset[0] as f64 * density + padding[0],
+            self.offset[1] as f64 * density + padding[1],
+        ];
+        let offset = translation.map(|value| value.floor() as i64);
+        let phase = [
+            translation[0] - offset[0] as f64,
+            translation[1] - offset[1] as f64,
+        ];
+        let extents = [
+            f64::from(self.source[0]) * density + phase[0],
+            f64::from(self.source[1]) * density + phase[1],
+        ];
+        if extents
+            .iter()
+            .any(|value| !value.is_finite() || *value <= 0.0 || value.ceil() > 100_000.0)
+        {
+            return Err(Error::InvalidViewport);
+        }
+        Ok(Self {
+            page: self.page,
+            viewport: self.viewport.at_density(density, phase)?,
+            source: extents.map(|value| value.ceil() as u32),
+            destination: [width_px, height_px],
+            offset,
+            percent: self.percent,
+            // Even fitted geometry now needs physical padding/projection and clipping.
+            fit: false,
+            density: Some(density),
+        })
+    }
+
+    /// Physical pixels per original logical unit; a normal logical view returns one.
+    pub fn pixel_density(&self) -> f64 {
+        self.density.unwrap_or(1.0)
     }
 
     pub fn source_size(&self) -> [u32; 2] {

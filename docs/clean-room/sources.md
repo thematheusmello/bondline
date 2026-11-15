@@ -1599,3 +1599,25 @@ original Bondline design alternatives, not approved APIs, runtime evidence or re
 parity. Existing whole-page captures, source/glyph guards and goldens remain unchanged.
 The plan records the required independent1x/DPI/tall-record/error/stale tests; none was run
 or added in this documentation-only step. No new dependency or proprietary artifact used.
+
+## Logical view to physical raster, 2026-11-15
+
+The existing pinned GUIDE25/PHOTO-ARCH view references establish zoom roles and a logical/
+physical transform boundary, not Bondline's numeric camera policy. The original additive
+`PageView::at_pixel_size` implements `d=min(physical/logical)` with centered padding,
+preserving the logical percentage and camera offset. Fresh glyphs use a fractional-phase
+viewport; bitmap masks are never enlarged. Exact1x identity retains the existing producer.
+Second conversion of a pixel view refuses instead of silently compounding density.
+
+Existing WGSL-COVERAGE, SVG-STROKES, AB-GLYPH and FONTTOOLS-ORACLE remain the geometry,
+pixel-center and glyph basis. Rounded logical Fit axes and new physical raster density
+are separate from the legacy physical-margin whole-page Fit. They are not asserted equal
+at2x. Physical8..256 glyph/ink/coordinate/resource/cancellation and whole-source checks
+remain. Caller-side logical readability is still required.
+
+[Independent renderer evidence](../verification-view-raster.md) records missing-API
+compiler RED, eight fixed geometry/identity/coverage/error cases, unchanged external
+font/Pillow consumers and actual CPU/GPU comparisons. The full renderer gate passes84
+tests with warnings-denied clippy and rustfmt. Its f32 tolerance is qualified rather than
+a universal cross-hardware bit-identity promise. No format/parser, dependency, font, oracle,
+approved golden or proprietary artifact changed. Native application adoption is separate.
