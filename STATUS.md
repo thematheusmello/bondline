@@ -1,5 +1,58 @@
 # Status — 2026-11-15
 
+## Current editable SMILES engine checkpoint
+
+The complete M0–M5 goal remains **active**. Branch feat/multiple-bonds. Recoverable
+feature12c07c7 delivers the actual one-step Drawing paste command, supported layout and
+CLI/stdio/authenticated-loopback workflows. Chemistry2d12d71 and renderer controlf65a333
+are separate atomic commits. No push/publication/hosted run occurred; Actions stays off.
+M0/M1 and M2–M5 remain incomplete.
+
+Read [engine evidence](docs/verification-smiles-paste-engine.md),
+[chemistry evidence](docs/verification-smiles-authoring-chem.md) and the
+[source contract](docs/research/aromatic-authoring-contract.md). Actual neutral fixed-H/
+Kekulé matching supports the declared C/N/O aromatic subset without inventing perception
+or a4n+2 gate. The new layout accepts supported integer S/D small rings and all supported
+components; old normalizer and four converter outputs/refusals stay separate and exact.
+
+`structure.paste_smiles` is the31st command, with six closed required fields. Off-lock
+work retains the complete native/source-free Drawing owner, checks all page geometry/
+literal ink, remaps fresh global IDs and commits once. Strict cancel/source/revision/
+generation/close guards and branch identity floors prevent stale or partial edits.
+It publishes no file and has no Save lease/acknowledgment authority. Unknown/opaque or
+SDF/SMILES-source sessions refuse rather than replacing their complete source.
+
+Independent evidence: core9+IO6 and323 IO regression passes; layout6+command6+actualwire3
+pass first. Real CLI/initialized stdio/authenticated socket append into nonempty Drawing,
+Undo/Redo, edit and Unicode Save/reopen pass. Independent Expat/RDKit checks actual files
+and complete graph/H/directions/IDs, including C6H6→C6H8. Source-only reviews report no
+material finding, separately from execution. New test setup corrections remain recorded.
+
+**Full local receiving71552 passes1229/0/1**,179 result lines, with rustfmt, warnings-
+denied workspace/vendor clippy/tests, layers, licenses and corpus. Log149898B SHA256
+`6181effc288002b4eadced066f640932053b01fdba50de23332ec5e77aab54cb`.
+Earlier62848(83/1) and62137(182/1) expose omitted new-name expectations in old catalogue
+tests; all eight exact lists now add only the new name and retain every old assertion.
+Runtime closures155/166/221 plus2 assets pass; corpus remains8 files/5 bundles with its
+broader chemistry/CDX omissions. No external version/font/fixture/oracle/SDK/golden change.
+
+The old MCP AddrInUse failures remain unexplained; this passing unchanged test does not
+establish a causal repair. Native Fit/readability, effective-DPI/2×, Windows/Linux
+interaction and broader chemical/model features remain open. The existing saved native
+preview is still the only Bondline window; it has not been refreshed to this command yet.
+
+Next executable integration is the actual native Paste Special form and ordinary OS
+TextEdit paste, using the existing typed host presentation and registered two-worker
+budget. The independent five-App-test source is declared, uncommitted as the next feature;
+its bridge is added and missing-control run28908 is live at this checkpoint. No UI product
+implementation is claimed yet. The native-worker tests are being declared under ignored
+target/aromatic-authoring/ui-work-tests/; do not copy them into the crate until receiving.
+All engine/IO/CLI/CI jobs above are terminal; do not poll71552/62848/62137/94719/45008.
+Root owns compilation; agents have no Cargo/build permission. After actual missing-control
+RED, implement the scoped dialog/worker guards, run native acceptance and update this record.
+
+## Previous native density checkpoint
+
 The complete M0–M5 goal remains **active**. Branch feat/multiple-bonds; feature7da33ee
 commits the native-density implementation and qualified receiving evidence.5bc8deb records
 its contract;02e81f0 records the next SMILES authoring/source-import study. The current
