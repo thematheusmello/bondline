@@ -2395,3 +2395,37 @@ match published bytes; incorrect initial paths and style/default/flag ambiguitie
 retained. Centered C2H4/C2H2 analytic geometry, masks/hits, CPU/GPU and source-persistence
 REDs are concrete next actions but remain unexecuted. No universal default, native pixels,
 new golden or completed M1/M2 follows from this plan.
+
+
+## Existing-bond order and ordered native editing, 2026-11-15
+
+`bond.set_order` is one27th typed registry operation with a required explicit neutral-
+carbon H policy, whole-source authority, all-incident valence accounting, exact no-op,
+revision/identity exhaustion guards and complete-history preservation. Independent command,
+real CLI/stdio/authenticated-loopback, Expat/Decimal/RDKit saved-file and fixed-seed
+property evidence is in [command verification](verification-bond-order-command.md).
+Its isolated backend tree passes912 tests; full original authoring integration passes924.
+
+[Six application-frame workflows](verification-bond-order-ui.md) and
+[six ordered history regressions](verification-bond-history-order.md) cover palette clicks,
+absolute keys, logical stationary targets, safety contexts, source refusal, endpoint
+conversion, keyboard/menu sequencing, page-size restoration and whole-SDF fallback. RED
+failures are retained. Corrected new-harness setup covers actual egui repeat normalization,
+required close revision and a proven stale tooltipLabel locator; all behavior assertions
+remain. The old attachment negative becomes a stronger same-input Single→Double positive,
+with its other four occupied-endpoint negatives retained.
+
+Final Root `cargo xtask ci`3957 exits0:925passed/0failed/1ignored explicit development
+capture utility across140 result lines, including3Mac bridge tests. Fmt, warnings-denied
+all-target clippy, layers, two assets/notices, three-platform declared runtime license
+closures and eight pinned corpus files pass. Log110951B/SHA
+`b7f4db314e1d490f59357731bfebf82660cc216cc5051f5d69634306a8826ad3`.
+[Finite actual Mac evidence](verification-bond-order-native.md) separately verifies native
+multiple creation, supported click/key/endpoint conversion, keyboard/menu history,
+Unicode Save As, exact editable reopening/known Save and independent consumers. The final
+native executable/UI source match the frozen identities in that record.
+
+No new dependencies/locks, parser/renderer behavior, old fixtures/oracles/font or approved
+golden changed. No new parser-fuzz, Windows/Linux runtime or hosted run is implied.
+Actions stays disabled. Full M0–M5 remains active; default-fit zoom/readability, complete
+control/inventory/platform coverage, broader formats/chemistry and full tool parity remain.

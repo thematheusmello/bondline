@@ -1,7 +1,9 @@
 # Parity checklist
 
-Target: qualified public and authorized installed Professional-family26.1 desktop behavior.
-Reviewed through2026-11-14; the installed license tier remains unknown.
+Target: publicly documented Professional-family26.1 desktop behavior.
+Reviewed through2026-11-15. Historical authorized installed-profile records below retain
+their original method; current research follows the public-source-only boundary in AGENTS.md.
+The historical installed license tier remains unknown.
 This is a source-cited implementation backlog, not a claim of feature parity.
 
 States: **missing** = no delivered reference workflow; **wired** = code calls an operation
@@ -58,7 +60,7 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 | New/open/save documents | GUIDE-25 / MAC-FILE-KEYS | partial: Mac CDXML/CDX/MOL/SDF Open/Save verified | Complete-source registry persistence, explicit format choice, native Save As and dirty-close protection; File New/multi-doc/other formats remain missing. |
 | Undo/redo | GUIDE-25 / MAC-HISTORY | verified for pages and supported C2/C3/C4 edits, Mac only | Exact engine properties; native page and bond Undo/Redo plus saved-C3/dirty-C4 recovery. Other chemical edits and Windows/Linux runtime missing |
 | Selection and transforms | GUIDE-25 | missing | M2; bounded atom/bond hit testing and transient hover exist, not persistent selection or transforms |
-| Bond, ring, chain tools | GUIDE-25 | partial: Single native Mac verified; Double/Triple wired and headlessly verified | Shared order-aware create/extend, typed tool selection, held preview, actual component hover, exact history/CDXML/MOL consumers and six real app-frame workflows. Native display/Double AX selection observed; new native drawing acceptance, sidedness/styles, order conversion, general connected editing and rings/chain tools remain missing/unverified; see verification-multiple-ui.md and verification-native-sdf-and-extension.md |
+| Bond, ring, chain tools | GUIDE-25 | partial: bounded Single/Double/Triple Mac authoring verified | Shared create/extend/set_order, explicit H policies, transient tool state, component geometry and exact complete-source/history/consumer checks. Actual Mac multiple creation, existing-bond click/1/2/3 keys/endpoint Double→Triple and Unicode Save As pass at readable420pt-square scale; native multiple extension and broader keys/styles/selection/rings/chains remain incomplete. See verification-bond-order-{command,ui,native}.md and verification-native-sdf-and-extension.md. |
 | Atom labels, charges, isotopes, radicals | GUIDE-25 | partial display; authoring missing | Neutral elemental symbols/literal H and source-aware ordinary MOL OH/NH2 pass headless CPU/GPU/consumer/capture and actual-frame vector/hit checks, preserving source/model None. Native element-label workflows, authoring tools and charged/isotope/radical display remain missing; see verification-neutral-element-labels.md |
 | Stereo bonds and labels | GUIDE-25 | missing | M2/M3 |
 | Text, captions, chemical formatting | GUIDE-25 | missing | M2/M3 |
@@ -317,10 +319,10 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-003 | Structure Perspective | 192, 242-243 | missing | Structure rotation/projection handling. |
 | TD-004 | Eraser | 86, 91, 121 | missing | Deletion and bond-order reduction have distinct contexts. |
 | TD-005 | Text | 91-94 | missing | KB-LABEL-25.5 changes existing-label entry to Alt-click; separate KB-REPEAT-25.5 gives Windows Alt/Mac Option-click repetition. Tool context/version/source-target semantics require tests; no26.1 inference. |
-| TD-006 | Solid/single bond | 85 | verified (partial: create/terminal extension, Mac only) | Native C3/C4/history/CDXML reopening evidence is in verification-native-sdf-and-extension.md. Explicit tool selection now shares the registry and default Single output/golden remain exact. New tool control native acceptance, click creation, modifiers/snapping, order conversion and full parity remain missing/unverified. |
-| TD-007 | Double bond | 85 | wired (partial; headless workflows verified) | ui.bond_tool, explicit order-aware create/terminal extend, original centered3w preview/render/hits/hover, exact history/Save/reopen and actual app-frame/file/image checks. Native Mac display/Double AX selection observed; native drawing/attachment acceptance, reference styles/sidedness, conversion clicks/hotkeys and full tool parity remain missing/unverified. |
+| TD-006 | Solid/single bond | 85–86 | verified (partial, Mac) | Existing native C3/C4 plus new Single creation, click Single→Double and endpoint Double→Triple, exact H/IDs/history/CDXML Save As at readable scale. Also headless ordered/frame tests; modifiers/snapping/general imported editing/alignment/full tool parity remain missing. See verification-bond-order-native.md. |
+| TD-007 | Double bond | 85,88 | verified (partial, Mac) | Actual native tool selection/Double creation/Undo/Unicode CDXML Save As, shared typed order-aware create/extend/set_order and independent consumer/frame/image tests. Multiple terminal extension remains headless-only; reference sidedness/alignment/styles and complete tool flows remain missing. See verification-bond-order-ui.md and verification-bond-order-native.md. |
 | TD-008 | Double either/crossed double bond | 86 | missing | - |
-| TD-009 | Triple bond | 86 | wired (partial; headless workflows verified) | Same shared tool/authoring/preview/capture/history/file path as TD-007, with three actual components and per-gap visibility checks. Native Mac Triple display observed; native drawing/attachment acceptance, inherited styles, conversion clicks/hotkeys and full tool parity remain missing/unverified. |
+| TD-009 | Triple bond | 86,88 | verified (partial, Mac) | Native tool selection/Triple creation, hotspot3 and endpoint Double→Triple, exact source-free history/Save As and independent graph/file evidence at readable scale. Multiple terminal extension, context-sensitive styles and complete old-order×tool behavior remain missing/unverified. |
 | TD-010 | Quadruple bond | 86 | missing | Guide's legacy 4-key example conflicts with newer bond-hotkey table. |
 | TD-011 | Bold bond | 86, 73 | missing | - |
 | TD-012 | Dashed bond | 86-88, 72 | missing | - |
@@ -548,13 +550,13 @@ establish chemical preview, data-edit UI or other platforms.
 
 | ID | Contextual action / key(s) | G25 p. | State | Scope / evidence |
 |---|---|---|---|---|
-| KB-001 | Single bond: 1 | 72 | missing | - |
+| KB-001 | Single bond: 1 | 72 | verified (partial carbon hotspot, Mac) | Absolute existing-edge setter, required bounded H policy and fresh per-event target. Actual native stationary3→1 and Undo/Redo/stale-target checks; broader atom/source/tool contexts remain missing. See verification-bond-order-{ui,native}.md. |
 | KB-002 | Dashed bond: d | 72 | missing | - |
-| KB-003 | Double bond: 2 | 73 | missing | - |
+| KB-003 | Double bond: 2 | 73 | verified (partial carbon hotspot, Mac) | Absolute existing-edge setter passes full graph/history/guards and ordered app frames. Positive native2 changes a reopened native-CDXML Single toDouble with exact H2, IDs/positions, known Save and menu Undo/Redo; stale-key refusal also observed. See verification-bond-order-native.md. |
 | KB-004 | Dashed double bond: Shift+d | 73 | missing | - |
 | KB-005 | Bold double bond: Shift+b | 73 | missing | - |
 | KB-006 | Wavy bond: y | 73 | missing | - |
-| KB-007 | Triple bond: 3 | 73 | missing | - |
+| KB-007 | Triple bond: 3 | 73 | verified (partial carbon hotspot, Mac) | Absolute existing-edge setter; native3 edit and1 restore at readable scale, existing edge/H preserved. Pixel-readability guard remains, not universal tool/style behavior. See verification-bond-order-native.md. |
 | KB-008 | Double bond left: l | 73 | missing | - |
 | KB-009 | Double bond centered: c | 73 | missing | - |
 | KB-010 | Bold bond: b | 73 | missing | - |

@@ -178,7 +178,8 @@ literal H=`4-order_weight`. `bond.extend` preserves identities/source/history wh
 extending a consistent neutral-carbon terminal within its explicit H budget; source-free
 or byte-proven native CDXML only. Native Single C3/C4 authoring/history/CDXML reopening
 has Mac evidence. The new multiple workflows are wired and pass independent actual-frame,
-file/chemistry/image tests; actual native multiple acceptance remains unverified.
+file/chemistry/image tests. Bounded native multiple creation now has Mac evidence at the
+recorded readable scale; native multiple terminal extension remains unverified.
 
 `ui.bond_tool` supplies three procedural accessible palette controls and a checked
 transient epoch, outside authored history/dirty/source state. Ordered activations cancel
@@ -186,17 +187,30 @@ older gestures; held previews and hover use the same actual component geometry. 
 Single/attachment regressions remain. See docs/verification-multiple-ui.md and
 docs/verification-multiple-authoring.md. This does not finish M2 or establish26.1 styles.
 
-The original refreshed workspace now has a compact rail and contextual document inspector,
-with source/count/file state and stable paper geometry. Native macOS visual review, Double
-accessibility selection and File/format-picker/Cancel are observed; the showcased structures
-were registry-authored and reopened. Two native drag attempts made no edit, so new native
-multiple drawing/attachment/history/save remains unverified. See
-docs/verification-workspace-presentation.md and the new actual README captures.
+The original refreshed workspace has a compact rail and contextual document inspector,
+with source/count/file state and stable paper geometry. Native macOS visual review,
+Single/Double/Triple selection, pointer authoring, existing-edge edits, history and Unicode
+CDXML Save As now have finite actual-window evidence. The later scene is native-authored;
+its420pt-square page was explicitly registry-prepared. Broader native attachment, source,
+platform and view workflows remain unverified. See docs/verification-bond-order-native.md;
+the earlier registry-authored captures retain their original scope.
 
-Next authoring flow: research the guide's existing-bond conversion/click/hotkey rules,
-then implement a shared typed order-edit command with explicit H policy, exact history,
-source/valence guards and UI tests before claiming those flows. Ring/chain construction,
-snapping, persistent selection/transforms and general atom editing remain required.
+Existing-bond editing now has a sourced public-guide contract and one typed
+`bond.set_order` command with explicit order/revision/IDs and a required literal neutral-
+carbon C4 H policy. Exact no-op/history/source/overflow/error guards, real CLI/stdio/socket,
+independent Expat/Decimal/RDKit saved files and fixed-seed edit properties pass. The UI
+wires absolute1/2/3, source-supported Single conversion clicks and Single-tool endpoint
+Single→Double / Double→Triple; unsupported alignment/click cases report their gap.
+Ordered commands reacquire full backing, graph and page geometry. See
+verification-bond-order-{command,ui,native}.md under docs/ for exact evidence and limits.
+Actual native Mac drawing/conversion/hotkeys/history/Unicode Save As pass for the recorded
+readable-scale scene; no universal26.1 click matrix or native multiple extension is claimed.
+
+Next authoring slice: source and implement usable view zoom/navigation, preserving existing
+pixel/label guards; the default A4 fit can reject multiple components at the recorded
+native window size. Then ring/chain construction, snapping, persistent selection/transforms,
+atom labels and document styles remain required. Keep the M1 imported-source/mapping and
+M0 inventory/addressability/platform work visible rather than declaring those complete.
 
 Bonds, rings, chains, labels/abbreviations, charges, isotopes, radicals, wedge/hash bonds,
 selection, transforms, hotkeys, undo/redo and style sheets from public journal guidelines.

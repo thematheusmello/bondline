@@ -829,3 +829,25 @@ The usual complete deferred save/capture source and stale-publication barriers r
 CLI, stdio MCP and authenticated loopback use this one registry entry. [Source policy and
 independent evidence](verification-bond-order-command.md) distinguish actual saved-file
 compatibility from future native click/alignment/keyboard workflows.
+
+
+For the supported native carbon drawing, plain nonrepeat hotspot1/2/3 calls this setter
+with absolute Single/Double/Triple order; it does not select a global tool. The initial
+hit must come from a fresh visible foreground-valid canvas position. Its logical bond
+identity may survive our own order edit while the pointer stays stationary, since ink
+can move. New positional input re-hits the scene; history, tool epochs, foreign revisions,
+focus/Escape/pointer loss, DPI/origin changes, text editing and blocked dialogs retire the
+old target. A held gesture cannot redirect a numeric edit.
+
+Single/Double tools click an existing Single to set Double; Triple sets Triple. Single-tool
+endpoint drawing across an existing Single/Double sets Double/Triple. Unsupported click
+combinations, including Double alignment requests, produce visible errors and preserve
+content. These are the bounded [public-guide routes](research/bond-order-edit-plan.md),
+not a universal26.1 tool matrix or an invented order/alignment cycle.
+
+Edit shortcuts and Edit/Page menu activations execute at their raw event positions;
+availability and typed invocations are resolved from current central controls at each
+step. History invalidates gestures/hotspots and refreshes the whole stored document,
+page dimensions, viewport and graph before later pointer input. The no-drawing fallback
+retains ordered whole-SDF history. File presentation still has its separate existing
+host lifecycle; this does not claim arbitrary cross-dialog input ordering.

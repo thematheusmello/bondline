@@ -476,7 +476,7 @@ fn a_same_frame_new_bond_can_be_extended_and_a_later_press_can_finish_next_frame
 #[test]
 fn unsupported_starts_and_existing_release_targets_never_fall_back_to_independent_bonds()
 -> TestResult {
-    for mode in 0..5 {
+    for mode in [0, 1, 3, 4] {
         let mut workspace = Workspace::new(true)?;
         if mode == 0 {
             let stored = workspace.engine.stored_document()?;
@@ -501,7 +501,6 @@ fn unsupported_starts_and_existing_release_targets_never_fall_back_to_independen
         let middle = Pos2::new((first.x + begin.x) * 0.5, (first.y + begin.y) * 0.5);
         let (press, release) = match mode {
             1 => (middle, end),
-            2 => (begin, first),
             3 => (begin, middle),
             _ => (begin, end + egui::vec2(30.0, 0.0)),
         };
@@ -805,5 +804,86 @@ assert Chem.MolToSmiles(m)=='CCC' and rdMolDescriptors.CalcMolFormula(m)=='C3H8'
     let output = workspace.frame(vec![], None);
     assert!(workspace.error.is_none(), "{:?}", workspace.error);
     assert!(paper(&output)?.is_positive());
+    Ok(())
+}
+
+#[test]
+fn dragging_over_an_existing_single_changes_only_its_order_and_explicit_hydrogens() -> TestResult {
+    let mut workspace = Workspace::new(true)?;
+    let [first, begin, _, _] = workspace.points()?;
+    let before = workspace.engine.stored_document()?.clone();
+    let mut expected = serde_json::to_value(workspace.engine.document()?)?;
+    expected["pages"][0]["fragments"][0]["bonds"][0]["order"] = json!("double");
+    for atom in expected["pages"][0]["fragments"][0]["atoms"]
+        .as_array_mut()
+        .ok_or("atoms")?
+    {
+        atom["explicit_hydrogens"] = json!(2);
+    }
+    let output = workspace.frame(drag(begin, first), None);
+    assert!(
+        workspace.error.is_none(),
+        "documented existing Single drag must convert, not refuse: {:?}",
+        workspace.error
+    );
+    assert_eq!(
+        serde_json::to_value(workspace.engine.document()?)?,
+        expected
+    );
+    assert_eq!(
+        (
+            workspace.engine.state().revision,
+            workspace.engine.state().undo_depth
+        ),
+        (2, 2)
+    );
+    assert_eq!(output.shapes.iter().filter(|shape| matches!(&shape.shape,egui::Shape::Path(path) if path.closed && path.points.len()==4 && path.fill==egui::Color32::BLACK)).count(),2,"actual existing edge needs two painted components");
+    let after = workspace.engine.stored_document()?.clone();
+    workspace.engine.dispatch("history.undo", json!({}))?;
+    assert_eq!(workspace.engine.stored_document()?, &before);
+    workspace.engine.dispatch("history.redo", json!({}))?;
+    assert_eq!(workspace.engine.stored_document()?, &after);
+    let directory = file_support::FileTestDirectory::new()?;
+    let path = directory.path("existing-single-λ.cdxml");
+    workspace
+        .engine
+        .dispatch("document.save_cdxml", json!({"path":path}))?;
+    let python = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
+        if cfg!(windows) {
+            "python".into()
+        } else {
+            "python3".into()
+        }
+    });
+    let observed=Process::new(python).args(["-B","-c",r#"
+import sys,xml.parsers.expat as expat
+from decimal import Decimal
+from rdkit import Chem,rdBase
+from rdkit.Chem import rdMolDescriptors
+assert rdBase.rdkitVersion=='2026.09.2'
+raw=sys.stdin.buffer.read(); nodes=[]; bonds=[]
+p=expat.ParserCreate();p.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_NEVER)
+p.StartElementHandler=lambda name,attrs: nodes.append(attrs) if name=='n' else bonds.append(attrs) if name=='b' else None
+p.Parse(raw,True)
+assert len(nodes)==2 and len(bonds)==1
+assert [tuple(map(Decimal,n['p'].split())) for n in nodes]==[(100,200),(140,200)]
+assert [n['NumHydrogens'] for n in nodes]==['2','2']
+assert (bonds[0]['B'],bonds[0]['E'],bonds[0]['Order'])==(nodes[0]['id'],nodes[1]['id'],'2')
+mols=Chem.MolsFromCDXML(raw.decode());assert len(mols)==1
+m=mols[0];assert Chem.MolToSmiles(m)=='C=C' and rdMolDescriptors.CalcMolFormula(m)=='C2H4'
+assert [a.GetTotalNumHs() for a in m.GetAtoms()]==[2,2]
+"#]).stdin(fs::File::open(&path)?).output()?;
+    assert!(
+        observed.status.success(),
+        "{}",
+        String::from_utf8_lossy(&observed.stderr)
+    );
+    workspace
+        .engine
+        .dispatch("document.open_cdxml", json!({"path":path}))?;
+    assert_eq!(
+        serde_json::to_value(workspace.engine.document()?)?,
+        expected
+    );
     Ok(())
 }

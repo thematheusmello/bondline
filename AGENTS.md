@@ -522,3 +522,14 @@ direction and fragments. Source-free/byte-proven native CDXML authority is manda
 filenames do not confer authority. No IDs are consumed. Reuse complete-snapshot commit and
 preserve same-order Arc/history/redo/dirty/close state. Read
 docs/verification-bond-order-command.md and docs/research/bond-order-edit-plan.md.
+
+
+Existing-bond canvas routes use `bond.set_order`; numeric1/2/3 are absolute and do not
+change the selected tool. Preserve a stationary logical hotspot only across our own
+setter. Fresh positions re-hit; history/context/source/epoch/focus invalidation must not
+revive a cached target. Keep Edit shortcuts and Edit/Page menu commands ordered with raw
+canvas events and resolve current control availability at dispatch. Reacquire complete
+backing, page dimensions, viewport and graph after history, including the non-drawing SDF
+fallback. Unsupported Double alignment remains a visible capability gap. The final tests
+and finite Mac evidence are in docs/verification-bond-order-{ui,native}.md and
+docs/verification-bond-history-order.md; no wider26.1 matrix is established.

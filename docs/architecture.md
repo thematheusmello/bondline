@@ -75,6 +75,13 @@ registry, with fresh per-press graph hits, raw click threshold versus exact atom
 per-event foreground/paper release guards and ordered graph/revision reacquisition.
 Actual native acceptance remains separate from deterministic input tests.
 
+`bond.set_order` replaces one existing edge in a same-ID fragment and corrects only its
+supported neutral-carbon endpoints under the required explicit C4 H policy. Every incident
+Single/Double/Triple contributes to the literal budget; absent/inconsistent H and invalid
+source authority refuse before mutation. Positionless graph edits and unrelated hetero data
+are retained exactly. Validated equal order is a true complete-state/Arc/history no-op; no
+identity floors are consumed. See [the closed contract](control-protocol.md#existing-bond-absolute-order-setter).
+
 `ui.bond_tool` owns a checked transient order/epoch, outside StoredContent/history/dirty
 state. Real changes advance that epoch; no-op selection does not. Normal command snapshots
 omit it; explicit operation replies and three central bindings expose it. Selection

@@ -92,3 +92,27 @@ The temporary localhost address is not a credential. This final app/listener is 
 left open for the user, unlike the closed historical sessions above. No token is published.
 Original UI/scene images are MIT OR Apache-2.0 documentation media, separate from runtime
 assets and the unchanged approved chemical golden. See [finite native/frame evidence](../verification-workspace-presentation.md).
+
+
+## Native-authored bond edits, 2026-11-15
+
+[workspace-native-bonds.jpg](workspace-native-bonds.jpg) is the exact unedited final
+CUA own-window JPEG buffer:1160×832, 68558bytes, SHA-256
+`445ce19fa126451613b2530cabd980a17588027d63a0af95ce9befbd15ec1ac9`. [The public-safe provenance](workspace-native-bonds-provenance.json) records
+actual native binary/UI identities, page setup, saved-file bytes and consumer evidence.
+Pillow independently verifies format/dimensions. EXIF contains only a nested offset and
+image dimensions; no GPS/author tags are present. The initial ignored capture filename and
+format assertion assumed PNG; actual JPEG bytes are preserved with the correct public
+extension, without transcoding. Existing color metadata and empty IPTC resources stay exact.
+
+All three Single/Double/Triple structures were authored using native pointer input,
+with the custom420pt-square page prepared explicitly through the registry. The final
+build reopens their1093-byte CDXML, edits the first bond with1/2, performs known Save and
+native menu Undo/Redo, then restores and saves the exact original bytes. It remains open
+for the user. See [finite native evidence](../verification-bond-order-native.md).
+The screenshot records that final saved scene and original procedural glyphs/Roboto font;
+it is not a generated mockup, a new human-approved golden or evidence of full parity.
+No reference-product assets or credentials are included. The visible temporary localhost
+address is not a credential. This original Bondline UI/authored-data image is MIT OR
+Apache-2.0 documentation media, separate from runtime assets. The preceding26-command
+preview process and listener are now closed; their earlier captures retain their scope.

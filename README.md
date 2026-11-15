@@ -25,16 +25,17 @@ Bondline is a native Rust desktop application with an offline command engine, ed
 chemical documents and a thin egui/wgpu interface. No account or hosted service is needed
 for ordinary drawing and saving.
 
-**Early development:** Single-bond carbon chains have native macOS verification.
-The new Double/Triple tools pass headless drawing, preview, history and file checks;
-their native-window drawing acceptance is pending. Rings, general labels and chemical analysis are still being built.
+**Early development:** Single/Double/Triple carbon drawing, existing-bond conversions,
+1/2/3 order keys, Undo/Redo and editable CDXML saves have bounded native macOS checks.
+Multiple bonds require a readable view scale. Rings, general labels and chemical analysis
+are still being built.
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
 <p align="center">
-  <img src="docs/media/workspace-current.jpg" alt="The actual refreshed Bondline macOS window with a left bond-tool rail, Single/Double/Triple structures on white paper, and a right document inspector" width="100%">
+  <img src="docs/media/workspace-native-bonds.jpg" alt="The actual refreshed Bondline macOS window with a left bond-tool rail, Single/Double/Triple structures on white paper, and a right document inspector" width="100%">
   <br>
-  <sub>Actual macOS / Metal window: original light workspace, three bond tools and a live document inspector.<br>The structures were authored through the shared registry and reopened as CDXML; <a href="docs/media/SOURCES.md">capture identity and limits</a>.</sub>
+  <sub>Actual macOS / Metal window: original light workspace, three bond tools and a live document inspector.<br>All three bonds were drawn in the native app, saved and reopened as editable CDXML; <a href="docs/media/SOURCES.md">capture identity and limits</a>.</sub>
 </p>
 
 ## What works today
@@ -42,8 +43,9 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | Capability | Delivered scope |
 |---|---|
 | Drawing and history | Drag a C–C bond and extend a supported terminal carbon with an explicit H policy. Native C3/C4 authoring, Undo/Redo and editable CDXML reopening are verified on macOS; general chemistry remains missing. |
-| Double and Triple bonds | Select a tool, preview/draw a centered bond, extend a supported carbon terminal, Undo/Redo and save/reopen. Actual application-frame and independent file/image tests pass; new native drawing acceptance and context-sensitive styles remain unverified/missing. |
-| Workspace | Light header, compact two-column bond rail, white paper, document/source/count inspector and contextual guidance. Real macOS rendering, Double selection and file-picker inspection pass; complete native drawing acceptance remains pending. |
+| Double and Triple bonds | Native macOS tool selection, centered drawing, history and CDXML Save As pass at a readable scale. Carbon terminal extension also passes independent headless checks; its native multiple-bond workflow and context-sensitive styles remain unverified/missing. |
+| Existing-bond editing | Set Single/Double/Triple with hotspot1/2/3; convert an existing Single by clicking, or draw across Single/Double endpoints with Single selected. Same edge and geometry, corrected literal carbon H, one history step. Bounded native Mac and independent graph/file checks; alignment and general imported edits remain unavailable. |
+| Workspace | Light header, compact two-column bond rail, white paper, document/source/count inspector and contextual guidance. Actual macOS authoring and file-picker checks pass for the documented subset. |
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files; unknown imported content remains backed by its original bytes. |
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
@@ -51,7 +53,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | CDX files | Guarded native Open/Save/Save As verified on macOS, retaining exact accepted source. Limited projection; editing and faithful preview remain unavailable. |
 | SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. CLI/MCP inspect ordered fields and edit existing values with Undo/Redo. Restricted neutral Single/Double/Triple capture and asynchronous read-only preview pass headless checks. Actual native preview acceptance and field-edit UI remain pending. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
-| Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. The centered style is original; new native label/bond workflows and reference style parity remain unverified. |
+| Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. The centered style is original; broader native label workflows and reference style parity remain unverified. |
 | Automation | 27 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all
@@ -101,6 +103,11 @@ independent developer test oracles, not as an application runtime.
 
 Use File → Open/Save/Save As for supported CDXML, CDX, MOL or SDF documents. Cmd/Ctrl+O, S, Shift+S and W are wired;
 actual Mac shortcut and accessibility-field evidence is in [native-file-ui.md](docs/native-file-ui.md).
+
+Select a bond tool and drag the paper. Over a supported carbon bond, press **1**, **2** or
+**3** to set its order. Some clicks request alignment behavior that is still unavailable;
+the app reports that gap. See the [exact native check](docs/verification-bond-order-native.md)
+for the tested view scale, operations and limits.
 
 ```sh
 # Discover the engine and the current control bindings.

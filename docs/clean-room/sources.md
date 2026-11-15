@@ -123,7 +123,7 @@ observed/inferred limits; no strict program-inspection isolation is now claimed.
 | PROPTEST | https://docs.rs/proptest/1.12.0/proptest/ | Fixed-seed generated edit sequences independently assert exact undo/redo invariants and expected page dimensions. Build/test dependency only. |
 | RUST-ARC | https://doc.rust-lang.org/std/sync/struct.Arc.html#method.make_mut | Shared ownership and copy-on-write preserve immutable model/source snapshots; APIs compiled on pinned Rust 1.94.1. Engine history retains the owned source and baseline, not just the projection. Equality includes opaque bytes; exact model restoration restores passthrough eligibility. These are independent data-preservation policies, not reference behavior claims. |
 | RUST-STORAGE | https://doc.rust-lang.org/std/vec/struct.Vec.html#method.capacity | Reserved vector capacity differs from length; std::mem::size_of gives inline layout, while Arc allocation identity establishes sharing. APIs compiled on pinned Rust 1.94.1. Approximate retained bytes, deduplication, saturating sums, 128 MiB eviction and always retaining current data are independent Bondline policies, not reference behavior or a hard process-memory claim. |
-| REA-AUDIT | https://github.com/morluto/rea/blob/bbe2bcc979be747698d9ad9ce87af017b92e0f10/docs/release-exposure.md | Earlier external inspection covered a specific Bondline artifact only; not proof of security or feature parity. The current research policy also permits authorized reference-artifact/runtime inspection. |
+| REA-AUDIT | https://github.com/morluto/rea/blob/bbe2bcc979be747698d9ad9ce87af017b92e0f10/docs/release-exposure.md | Earlier external inspection covered a specific Bondline artifact only; not proof of security or feature parity. Reference-artifact/runtime records are historical; current AGENTS.md requires public-source-only research and forbids proprietary binary inspection. |
 | WGSL-LITERALS | https://www.w3.org/TR/2026/CRD-WGSL-20261106/ | Exact binary floating point literals; independently implemented conversion tested with IEEE-754 bit vectors. |
 | WGSL-LAYOUT | https://www.w3.org/TR/2026/CRD-WGSL-20261106/#memory-layouts | Storage buffer alignment/stride and unpack4x8unorm. The current original shader uses an 8-byte viewport header and 48-byte primitive records, replacing the earlier rectangle-only 20-byte records. No external shader copied. |
 | WGSL-COVERAGE | https://www.w3.org/TR/2026/CRD-WGSL-20261106/#position-builtin-value | Fragment positions have half-integer pixel centers. The current original shader uses 48-byte ordered primitive records, clipped bounds and analytic f32 stroke coverage. CPU f64 and an independent integer oracle check it; the 1/32-pixel boundary allowance was chosen before comparison. Source replacement/no antialiasing and finite/resource bounds are Bondline policies. |
@@ -1460,3 +1460,15 @@ MOL/CDX/opaque CDXML and collection/notation content remain guarded. [Independen
 file and adapter evidence](../verification-bond-order-command.md) uses fixed published-C4
 expectations, unchanged Expat/Decimal/RDKit consumers and original data; it establishes
 no native interaction, broader source mapping, alignment or complete M2 parity.
+
+
+Existing-bond UI input ordering is an original Bondline transaction policy, not claimed
+reference behavior. The pinned [egui0.29.1 input source](https://docs.rs/egui/0.29.1/src/egui/input_state/mod.rs.html)
+normalizes Key.repeat from keys_down; egui-winit submits initial repeat=false. An actual
+held-key negative fixture must first hold that key, rather than assert an impossible
+first-press repeat flag. Pinned TextEdit state distinguishes text input from palette focus.
+AccessKit roles/actions distinguish the focusable tool Button from a same-named tooltip
+Label; a frozen isolated runtime probe verifies the exact stale/current IDs before the
+new locator correction. No SDK/source/dependency patch is made. See
+[UI evidence](../verification-bond-order-ui.md) and
+[ordered history](../verification-bond-history-order.md).

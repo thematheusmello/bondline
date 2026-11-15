@@ -258,3 +258,20 @@ persistent style schema remain open. The current implementation work adopts orig
 centered geometry with bounded visible-ink/gap checks and a one-third short-axis guard;
 none is established reference behavior. Dedicated tool/drag flows do not establish
 conversion clicks, hotkeys, alignment cycling or actual native drawing acceptance.
+
+
+## Existing-bond order edits — 2026-11-15
+
+[The reviewed public-guide plan](../research/bond-order-edit-plan.md) now separates
+absolute1/2/3 keys, Single-on-Single conversion and endpoint drawing from Double alignment.
+The complete26.1 old-order/tool/modifier matrix, placement traversal and the automatic-H
+preference's defaults/precedence remain unknown. The explicit neutral-carbon C4 policy is
+original and required by the shared setter; it does not infer absent H or import editing
+authority. Double/Triple-on-Single follows the guide's general conversion procedure, not a
+separately observed26.1 example. Unsupported clicks retain state with visible diagnostics.
+
+A native Mac check of the current authoring build observes the existing multiple-component
+visibility guard at default A4 fit in1160×800 content. A registry-prepared420pt square
+permits native multiple authoring/conversion at a readable scale. Zoom/navigation and a
+usable default multiple-bond drawing view remain a concrete UI gap; retain the pixel/label
+readability guards rather than hiding it. This does not establish screen/style parity.

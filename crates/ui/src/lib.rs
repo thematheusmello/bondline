@@ -1,5 +1,9 @@
 //! Native GPU workspace. Authoring controls dispatch through the shared command registry.
 
+#[cfg(test)]
+mod bond_history_tests;
+#[cfg(test)]
+mod bond_order_tests;
 mod file_workflow;
 pub mod files;
 #[cfg(test)]
@@ -13,8 +17,8 @@ mod visual_capture_tests;
 mod workspace_presentation_tests;
 
 use bondline_commands::{
-    BondCreate, BondDrawOrder, BondExtend, BondToolState, CloseState, Command, ControlInfo,
-    ControlKey, ControlShortcut, Engine, ExtendHydrogenPolicy,
+    BondCreate, BondDrawOrder, BondExtend, BondSetOrder, BondToolState, CloseState, Command,
+    ControlInfo, ControlKey, ControlShortcut, Engine, ExtendHydrogenPolicy, OrderHydrogenPolicy,
 };
 use bondline_mcp::{CommandExecutor, SharedEngine, control::LoopbackServer};
 use bondline_model::{PageId, Point2};
@@ -97,6 +101,7 @@ pub struct DrawingState {
     hover: Option<bondline_render::HitTarget>,
     hover_context: Option<HoverContext>,
     hover_fresh: bool,
+    key_hotspot: Option<BondHotspot>,
 }
 
 impl DrawingState {
@@ -109,7 +114,14 @@ impl DrawingState {
         self.hover = None;
         self.hover_context = None;
         self.hover_fresh = false;
+        self.key_hotspot = None;
     }
+}
+
+#[derive(Clone, Copy)]
+struct BondHotspot {
+    position: egui::Pos2,
+    target: Option<bondline_render::HitTarget>,
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -128,8 +140,28 @@ struct BondGesture {
     begin: Point2,
     end: Point2,
     press: egui::Pos2,
+    modifiers: egui::Modifiers,
     context: HoverContext,
     target: Option<bondline_render::HitTarget>,
+}
+
+fn clicked_bond_order(
+    existing: bondline_model::BondOrder,
+    tool: BondDrawOrder,
+) -> Result<BondDrawOrder, bondline_commands::Error> {
+    use bondline_model::BondOrder;
+    match (existing, tool) {
+        (BondOrder::Single, BondDrawOrder::Triple) => Ok(BondDrawOrder::Triple),
+        (BondOrder::Single, _) => Ok(BondDrawOrder::Double),
+        (BondOrder::Double, BondDrawOrder::Single | BondDrawOrder::Double) => {
+            Err(bondline_commands::Error::UnsupportedBondConversion(
+                "Double-bond alignment is unavailable. Hover over the bond and press 1, 2 or 3 to set its order.",
+            ))
+        }
+        _ => Err(bondline_commands::Error::UnsupportedBondConversion(
+            "Use 1, 2 or 3 over this bond to change its order.",
+        )),
+    }
 }
 
 fn paint_stroke(
@@ -203,28 +235,7 @@ fn bond_tool_buttons(
                     }
                     if response.enabled() {
                         for (index, event) in events.iter().enumerate() {
-                            let activate = match event {
-                                egui::Event::AccessKitActionRequest(request) => {
-                                    request.action == egui::accesskit::Action::Default
-                                        && request.target.0 == response.id.value()
-                                }
-                                egui::Event::PointerButton {
-                                    pos,
-                                    button: egui::PointerButton::Primary,
-                                    pressed: false,
-                                    ..
-                                } => {
-                                    response.clicked_by(egui::PointerButton::Primary)
-                                        && response.interact_rect.contains(*pos)
-                                }
-                                egui::Event::Key {
-                                    key: egui::Key::Space | egui::Key::Enter,
-                                    pressed: true,
-                                    ..
-                                } => response.has_focus() && response.clicked(),
-                                _ => false,
-                            };
-                            if activate {
+                            if activation_event(&response, event) {
                                 commands.push((index, control.command.clone()));
                             }
                         }
@@ -235,6 +246,30 @@ fn bond_tool_buttons(
     }
     commands.sort_by_key(|(index, _)| *index);
     commands
+}
+
+fn activation_event(response: &egui::Response, event: &egui::Event) -> bool {
+    match event {
+        egui::Event::AccessKitActionRequest(request) => {
+            request.action == egui::accesskit::Action::Default
+                && request.target.0 == response.id.value()
+        }
+        egui::Event::PointerButton {
+            pos,
+            button: egui::PointerButton::Primary,
+            pressed: false,
+            ..
+        } => {
+            response.clicked_by(egui::PointerButton::Primary)
+                && response.interact_rect.contains(*pos)
+        }
+        egui::Event::Key {
+            key: egui::Key::Space | egui::Key::Enter,
+            pressed: true,
+            ..
+        } => response.has_focus() && response.clicked(),
+        _ => false,
+    }
 }
 
 fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
@@ -436,7 +471,81 @@ fn control_shortcut(
     None
 }
 
-fn control_menu(ui: &mut egui::Ui, controls: &[ControlInfo], menu: &str) -> Option<Command> {
+fn text_edit_focused(context: &egui::Context) -> bool {
+    context
+        .memory(|memory| memory.focused())
+        .is_some_and(|id| egui::TextEdit::load_state(context, id).is_some())
+}
+
+fn edit_shortcut(engine: &Engine, event: &egui::Event) -> Option<Command> {
+    let egui::Event::Key {
+        key,
+        pressed: true,
+        modifiers,
+        ..
+    } = event
+    else {
+        return None;
+    };
+    engine.controls().into_iter().find_map(|control| {
+        let shortcut = control.shortcut.map(control_shortcut_key)?;
+        (control.menu == "Edit"
+            && control.enabled
+            && shortcut.logical_key == *key
+            && modifiers.matches_exact(shortcut.modifiers))
+        .then_some(control.command)
+    })
+}
+
+fn replay_edit_shortcuts(
+    context: &egui::Context,
+    engine: &mut Engine,
+    error: &mut Option<String>,
+    drawing: &mut DrawingState,
+    events: &[egui::Event],
+    blocked: bool,
+    menu_action: Option<(usize, &'static str)>,
+) {
+    if blocked || text_edit_focused(context) {
+        return;
+    }
+    let mut focused = context.input(|input| input.focused);
+    for event in events.iter().rev() {
+        if let egui::Event::WindowFocused(value) = event {
+            focused = !value;
+        }
+    }
+    for (index, event) in events.iter().enumerate() {
+        if let egui::Event::WindowFocused(value) = event {
+            focused = *value;
+        }
+        let command = menu_action
+            .filter(|(at, _)| *at == index)
+            .and_then(|(_, id)| control_command(engine, id))
+            .or_else(|| edit_shortcut(engine, event));
+        if focused && let Some(command) = command {
+            drawing.gesture = None;
+            drawing.invalidate_hover();
+            *error = engine.execute(command).err().map(|error| error.to_string());
+            context.request_repaint();
+        }
+    }
+}
+
+fn control_command(engine: &Engine, id: &str) -> Option<Command> {
+    engine
+        .controls()
+        .into_iter()
+        .find(|control| control.id == id && control.enabled)
+        .map(|control| control.command)
+}
+
+fn control_menu_action(
+    ui: &mut egui::Ui,
+    controls: &[ControlInfo],
+    menu: &str,
+    events: &[egui::Event],
+) -> Option<(usize, &'static str)> {
     let mut selected = None;
     ui.menu_button(menu, |ui| {
         for control in controls.iter().filter(|control| control.menu == menu) {
@@ -445,13 +554,26 @@ fn control_menu(ui: &mut egui::Ui, controls: &[ControlInfo], menu: &str) -> Opti
                 button =
                     button.shortcut_text(ui.ctx().format_shortcut(&control_shortcut_key(shortcut)));
             }
-            if ui.add_enabled(control.enabled, button).clicked() {
-                selected = Some(control.command.clone());
+            let response = ui.add_enabled(control.enabled, button);
+            if response.clicked() {
+                selected = events
+                    .iter()
+                    .position(|event| activation_event(&response, event))
+                    .map(|index| (index, control.id));
                 ui.close_menu();
             }
         }
     });
     selected
+}
+
+fn control_menu(ui: &mut egui::Ui, controls: &[ControlInfo], menu: &str) -> Option<Command> {
+    let events = ui.input(|input| input.events.clone());
+    let (_, id) = control_menu_action(ui, controls, menu, &events)?;
+    controls
+        .iter()
+        .find(|control| control.id == id)
+        .map(|control| control.command.clone())
 }
 
 fn show_workspace_with_files(
@@ -474,6 +596,7 @@ fn show_workspace_with_preview(
     active_work: bool,
     mut preview: Option<&mut PreviewWorkflow>,
 ) -> Option<FileIntentAction> {
+    let events = context.input(|input| input.events.clone());
     if [
         context.screen_rect().width(),
         context.screen_rect().height(),
@@ -483,6 +606,12 @@ fn show_workspace_with_preview(
     {
         drawing.gesture = None;
         drawing.invalidate_hover();
+        let current = engine.state();
+        let blocked = current.close != CloseState::Open
+            || files
+                .as_ref()
+                .is_some_and(|files| files.blocks_authoring(&current));
+        replay_edit_shortcuts(context, engine, error, drawing, &events, blocked, None);
         egui::CentralPanel::default().show(context, |ui| {
             ui.colored_label(
                 egui::Color32::DARK_RED,
@@ -493,7 +622,6 @@ fn show_workspace_with_preview(
     }
     let state = engine.state();
     let initial_tool = engine.bond_tool();
-    let events = context.input(|input| input.events.clone());
     let mut tool_actions = Vec::new();
     let mut selected = None;
     let mut file_action = None;
@@ -519,8 +647,8 @@ fn show_workspace_with_preview(
                         .is_some_and(|files| files.blocks_authoring(&current));
                 ui.add_enabled_ui(!blocked, |ui| {
                     let controls = engine.controls();
-                    let edit = control_menu(ui, &controls, "Edit");
-                    let page = control_menu(ui, &controls, "Page");
+                    let edit = control_menu_action(ui, &controls, "Edit", &events);
+                    let page = control_menu_action(ui, &controls, "Page", &events);
                     selected = edit.or(page);
                 });
                 ui.separator();
@@ -560,12 +688,6 @@ fn show_workspace_with_preview(
         });
     if blocked {
         drawing.gesture = None;
-    } else {
-        selected = selected.or_else(|| control_shortcut(context, &engine.controls(), "Edit"));
-    }
-    if let Some(command) = selected {
-        *error = engine.execute(command).err().map(|error| error.to_string());
-        context.request_repaint();
     }
     // Replay each transient state at its event; a later activation cannot relabel a press.
     let mut tool_states = Vec::with_capacity(tool_actions.len());
@@ -612,6 +734,7 @@ fn show_workspace_with_preview(
             egui::ScrollArea::vertical()
                 .show(ui, |ui| document_inspector(ui, engine, error.as_deref()));
         });
+    let mut history_handled = false;
     egui::CentralPanel::default()
         .frame(
             egui::Frame::default()
@@ -708,7 +831,8 @@ fn show_workspace_with_preview(
             };
             let width = available.width().floor().max(1.0) as u32;
             let height = available.height().floor().max(1.0) as u32;
-            let viewport = match bondline_render::PageViewport::new(width, height, page.size()) {
+            let mut viewport = match bondline_render::PageViewport::new(width, height, page.size())
+            {
                 Ok(viewport) => viewport,
                 Err(error) => {
                     drawing.gesture = None;
@@ -752,6 +876,7 @@ fn show_workspace_with_preview(
             });
             if drawing.hover_context != Some(key) {
                 drawing.hover_fresh = false;
+                drawing.key_hotspot = None;
                 drawing.hover_context = Some(key);
             }
             if drawing
@@ -774,8 +899,23 @@ fn show_workspace_with_preview(
                     _ => {}
                 }
             }
+            let text_focused = text_edit_focused(context);
+            if blocked || escape_held || !focused || text_focused {
+                drawing.key_hotspot = None;
+            }
+            let order_change = |page_id, fragment_id, bond_id, order, expected_revision| {
+                Command::BondSetOrder(BondSetOrder {
+                    expected_revision,
+                    page_id,
+                    fragment_id,
+                    bond_id,
+                    order,
+                    hydrogen_policy: OrderHydrogenPolicy::RectifyNeutralCarbon,
+                })
+            };
             // A native frame may contain the entire drag; press_origin is cleared on release.
             let mut tool_states = tool_states.into_iter().peekable();
+            history_handled = true;
             for (index, event) in events.iter().enumerate() {
                 while tool_states.peek().is_some_and(|(at, _)| *at == index) {
                     if let Some((_, tool)) = tool_states.next()
@@ -797,6 +937,7 @@ fn show_workspace_with_preview(
                         if escape_held {
                             drawing.gesture = None;
                             drawing.hover_fresh = false;
+                            drawing.key_hotspot = None;
                         }
                         continue;
                     }
@@ -805,53 +946,204 @@ fn show_workspace_with_preview(
                         if !focused {
                             drawing.gesture = None;
                             drawing.hover_fresh = false;
+                            drawing.key_hotspot = None;
                         }
                         continue;
                     }
                     egui::Event::PointerGone => {
                         drawing.gesture = None;
                         drawing.hover_fresh = false;
+                        drawing.key_hotspot = None;
                         continue;
                     }
                     _ => {}
                 }
-                if blocked || escape_held || !focused {
+                // Resolve availability now: an earlier event may have populated Undo or Redo.
+                let history_command = if !blocked && focused && !text_focused {
+                    selected
+                        .filter(|(at, _)| *at == index)
+                        .and_then(|(_, id)| control_command(engine, id))
+                        .or_else(|| edit_shortcut(engine, event))
+                } else {
+                    None
+                };
+                if (blocked || escape_held || !focused) && history_command.is_none() {
                     continue;
                 }
-                if matches!(
-                    event,
-                    egui::Event::PointerMoved(_) | egui::Event::PointerButton { .. }
-                ) {
-                    drawing.hover_fresh = true;
-                }
-                match event {
-                    egui::Event::PointerButton {
-                        pos,
-                        button: egui::PointerButton::Primary,
-                        pressed: true,
-                        ..
-                    } => {
-                        drawing.gesture = None;
-                        if !response.interact_rect.contains(*pos)
-                            || !viewport.contains(local(*pos))
-                            || context.layer_id_at(*pos) != Some(response.layer_id)
+                let mut command = history_command.map(Ok);
+                if command.is_some() {
+                    drawing.gesture = None;
+                } else {
+                    if let egui::Event::PointerMoved(pos) | egui::Event::PointerButton { pos, .. } =
+                        event
+                    {
+                        drawing.hover_fresh = true;
+                        drawing.key_hotspot = (!text_focused).then_some(BondHotspot {
+                            position: *pos,
+                            target: None,
+                        });
+                    }
+                    match event {
+                        egui::Event::Key {
+                            key: pressed_key,
+                            pressed: true,
+                            repeat: false,
+                            modifiers,
+                            ..
+                        } if modifiers.is_none()
+                            && matches!(
+                                pressed_key,
+                                egui::Key::Num1 | egui::Key::Num2 | egui::Key::Num3
+                            ) =>
                         {
-                            continue;
-                        }
-                        let Ok(current_graph) = &graph else {
-                            continue;
-                        };
-                        let target = match current_graph.hit_test(local(*pos), 5.0) {
-                            Ok(target) => target,
-                            Err(_) => continue,
-                        };
-                        if let Ok(begin) = viewport.document_position(local(*pos)) {
-                            let begin = if let Some(bondline_render::HitTarget::Atom {
-                                fragment_id,
-                                atom_id,
-                            }) = target
+                            let Some(mut hotspot) = drawing.key_hotspot else {
+                                continue;
+                            };
+                            let pos = hotspot.position;
+                            if text_focused
+                                || drawing.gesture.is_some()
+                                || !response.interact_rect.contains(pos)
+                                || !viewport.contains(local(pos))
+                                || context.layer_id_at(pos) != Some(response.layer_id)
                             {
-                                let Some(anchor) = document
+                                drawing.key_hotspot = None;
+                                continue;
+                            }
+                            let Ok(current_graph) = &graph else {
+                                drawing.key_hotspot = None;
+                                continue;
+                            };
+                            let target = hotspot
+                                .target
+                                .or_else(|| current_graph.hit_test(local(pos), 5.0).ok().flatten());
+                            let Some(bondline_render::HitTarget::Bond {
+                                fragment_id,
+                                bond_id,
+                            }) = target
+                            else {
+                                drawing.key_hotspot = None;
+                                continue;
+                            };
+                            // Our order edit can move ink away from a stationary logical hotspot.
+                            hotspot.target = target;
+                            drawing.key_hotspot = Some(hotspot);
+                            let order = match pressed_key {
+                                egui::Key::Num1 => BondDrawOrder::Single,
+                                egui::Key::Num2 => BondDrawOrder::Double,
+                                _ => BondDrawOrder::Triple,
+                            };
+                            command = Some(Ok(order_change(
+                                key.page.get(),
+                                fragment_id.get(),
+                                bond_id.get(),
+                                order,
+                                key.revision,
+                            )));
+                        }
+                        egui::Event::PointerButton {
+                            pos,
+                            button: egui::PointerButton::Primary,
+                            pressed: true,
+                            modifiers,
+                            ..
+                        } => {
+                            drawing.gesture = None;
+                            if !response.interact_rect.contains(*pos)
+                                || !viewport.contains(local(*pos))
+                                || context.layer_id_at(*pos) != Some(response.layer_id)
+                            {
+                                continue;
+                            }
+                            let Ok(current_graph) = &graph else {
+                                continue;
+                            };
+                            let target = match current_graph.hit_test(local(*pos), 5.0) {
+                                Ok(target) => target,
+                                Err(_) => continue,
+                            };
+                            if let Ok(begin) = viewport.document_position(local(*pos)) {
+                                let begin = if let Some(bondline_render::HitTarget::Atom {
+                                    fragment_id,
+                                    atom_id,
+                                }) = target
+                                {
+                                    let Some(anchor) = document
+                                        .pages()
+                                        .iter()
+                                        .find(|page| page.id() == key.page)
+                                        .and_then(|page| {
+                                            page.fragments()
+                                                .iter()
+                                                .find(|fragment| fragment.id() == fragment_id)
+                                        })
+                                        .and_then(|fragment| {
+                                            fragment.atoms().iter().find(|atom| atom.id == atom_id)
+                                        })
+                                        .and_then(|atom| atom.position)
+                                    else {
+                                        continue;
+                                    };
+                                    anchor
+                                } else {
+                                    begin
+                                };
+                                drawing.gesture = Some(BondGesture {
+                                    begin,
+                                    end: begin,
+                                    press: *pos,
+                                    modifiers: *modifiers,
+                                    context: key,
+                                    target,
+                                });
+                            }
+                        }
+                        egui::Event::PointerMoved(pos) => {
+                            if let Some(gesture) = &mut drawing.gesture
+                                && let Ok(end) = viewport.document_position(local(*pos))
+                            {
+                                gesture.end = end;
+                            }
+                        }
+                        egui::Event::PointerButton {
+                            pos,
+                            button: egui::PointerButton::Primary,
+                            pressed: false,
+                            modifiers,
+                            ..
+                        } => {
+                            let Some(gesture) = drawing.gesture.take() else {
+                                continue;
+                            };
+                            if gesture.context != key
+                                || !response.interact_rect.contains(*pos)
+                                || !viewport.contains(local(*pos))
+                                || context.layer_id_at(*pos) != Some(response.layer_id)
+                            {
+                                continue;
+                            }
+                            let Ok(current_graph) = &graph else {
+                                continue;
+                            };
+                            let Ok(end) = viewport.document_position(local(*pos)) else {
+                                continue;
+                            };
+                            let release_target = current_graph.hit_test(local(*pos), 5.0);
+                            if gesture.press.distance(*pos) <= 3.0 {
+                                if !gesture.modifiers.is_none() || !modifiers.is_none() {
+                                    continue;
+                                }
+                                let Some(bondline_render::HitTarget::Bond {
+                                    fragment_id,
+                                    bond_id,
+                                }) = gesture.target
+                                else {
+                                    continue;
+                                };
+                                if !matches!(release_target, Ok(target) if target == gesture.target)
+                                {
+                                    continue;
+                                }
+                                let Some(existing) = document
                                     .pages()
                                     .iter()
                                     .find(|page| page.id() == key.page)
@@ -861,109 +1153,161 @@ fn show_workspace_with_preview(
                                             .find(|fragment| fragment.id() == fragment_id)
                                     })
                                     .and_then(|fragment| {
-                                        fragment.atoms().iter().find(|atom| atom.id == atom_id)
+                                        fragment.bonds().iter().find(|bond| bond.id == bond_id)
                                     })
-                                    .and_then(|atom| atom.position)
+                                    .map(|bond| bond.order)
                                 else {
                                     continue;
                                 };
-                                anchor
+                                command = Some(
+                                    clicked_bond_order(existing, gesture.context.tool.order).map(
+                                        |order| {
+                                            order_change(
+                                                key.page.get(),
+                                                fragment_id.get(),
+                                                bond_id.get(),
+                                                order,
+                                                key.revision,
+                                            )
+                                        },
+                                    ),
+                                );
                             } else {
-                                begin
-                            };
-                            drawing.gesture = Some(BondGesture {
-                                begin,
-                                end: begin,
-                                press: *pos,
-                                context: key,
-                                target,
-                            });
+                                command = Some(match release_target {
+                                    Ok(None) => match gesture.target {
+                                        None => Ok(Command::BondCreate(BondCreate {
+                                            order: gesture.context.tool.order,
+                                            page_id: gesture.context.page.get(),
+                                            begin_x_pt: gesture.begin.x_pt(),
+                                            begin_y_pt: gesture.begin.y_pt(),
+                                            end_x_pt: end.x_pt(),
+                                            end_y_pt: end.y_pt(),
+                                        })),
+                                        Some(bondline_render::HitTarget::Atom {
+                                            fragment_id,
+                                            atom_id,
+                                        }) => Ok(Command::BondExtend(BondExtend {
+                                            order: gesture.context.tool.order,
+                                            expected_revision: gesture.context.revision,
+                                            page_id: gesture.context.page.get(),
+                                            fragment_id: fragment_id.get(),
+                                            begin_atom_id: atom_id.get(),
+                                            end_x_pt: end.x_pt(),
+                                            end_y_pt: end.y_pt(),
+                                            hydrogen_policy:
+                                                ExtendHydrogenPolicy::RectifyTerminalCarbon,
+                                        })),
+                                        Some(bondline_render::HitTarget::Bond { .. }) => {
+                                            Err(bondline_commands::Error::UnsupportedBondExtension)
+                                        }
+                                    },
+                                    Ok(Some(bondline_render::HitTarget::Atom {
+                                        fragment_id,
+                                        atom_id: end_id,
+                                    })) if gesture.context.tool.order == BondDrawOrder::Single
+                                        && gesture.modifiers.is_none()
+                                        && modifiers.is_none() =>
+                                    {
+                                        let existing = match gesture.target {
+                                            Some(bondline_render::HitTarget::Atom {
+                                                fragment_id: start_fragment,
+                                                atom_id: begin_id,
+                                            }) if start_fragment == fragment_id => document
+                                                .pages()
+                                                .iter()
+                                                .find(|page| page.id() == key.page)
+                                                .and_then(|page| {
+                                                    page.fragments().iter().find(|fragment| {
+                                                        fragment.id() == fragment_id
+                                                    })
+                                                })
+                                                .and_then(|fragment| {
+                                                    fragment.bonds().iter().find_map(|bond| {
+                                                        if !((bond.begin == begin_id
+                                                            && bond.end == end_id)
+                                                            || (bond.begin == end_id
+                                                                && bond.end == begin_id))
+                                                        {
+                                                            return None;
+                                                        }
+                                                        let order = match bond.order {
+                                                            bondline_model::BondOrder::Single => {
+                                                                BondDrawOrder::Double
+                                                            }
+                                                            bondline_model::BondOrder::Double => {
+                                                                BondDrawOrder::Triple
+                                                            }
+                                                            _ => return None,
+                                                        };
+                                                        Some((bond.id, order))
+                                                    })
+                                                }),
+                                            _ => None,
+                                        };
+                                        match existing {
+                                            Some((bond_id, order)) => Ok(order_change(
+                                                key.page.get(),
+                                                fragment_id.get(),
+                                                bond_id.get(),
+                                                order,
+                                                key.revision,
+                                            )),
+                                            None => Err(bondline_commands::Error::OccupiedEndpoint),
+                                        }
+                                    }
+                                    Ok(Some(_)) => Err(bondline_commands::Error::OccupiedEndpoint),
+                                    Err(error) => Err(error.into()),
+                                });
+                            }
                         }
+                        _ => {}
                     }
-                    egui::Event::PointerMoved(pos) => {
-                        if let Some(gesture) = &mut drawing.gesture
-                            && let Ok(end) = viewport.document_position(local(*pos))
-                        {
-                            gesture.end = end;
-                        }
-                    }
-                    egui::Event::PointerButton {
-                        pos,
-                        button: egui::PointerButton::Primary,
-                        pressed: false,
-                        ..
-                    } => {
-                        let Some(gesture) = drawing.gesture.take() else {
-                            continue;
-                        };
-                        if gesture.context != key
-                            || !response.interact_rect.contains(*pos)
-                            || !viewport.contains(local(*pos))
-                            || context.layer_id_at(*pos) != Some(response.layer_id)
-                            || gesture.press.distance(*pos) <= 3.0
-                        {
-                            continue;
-                        }
-                        let Ok(current_graph) = &graph else {
-                            continue;
-                        };
-                        let Ok(end) = viewport.document_position(local(*pos)) else {
-                            continue;
-                        };
-                        interaction_attempted = true;
-                        let command = match current_graph.hit_test(local(*pos), 5.0) {
-                            Ok(None) => match gesture.target {
-                                None => Ok(Command::BondCreate(BondCreate {
-                                    order: gesture.context.tool.order,
-                                    page_id: gesture.context.page.get(),
-                                    begin_x_pt: gesture.begin.x_pt(),
-                                    begin_y_pt: gesture.begin.y_pt(),
-                                    end_x_pt: end.x_pt(),
-                                    end_y_pt: end.y_pt(),
-                                })),
-                                Some(bondline_render::HitTarget::Atom {
-                                    fragment_id,
-                                    atom_id,
-                                }) => Ok(Command::BondExtend(BondExtend {
-                                    order: gesture.context.tool.order,
-                                    expected_revision: gesture.context.revision,
-                                    page_id: gesture.context.page.get(),
-                                    fragment_id: fragment_id.get(),
-                                    begin_atom_id: atom_id.get(),
-                                    end_x_pt: end.x_pt(),
-                                    end_y_pt: end.y_pt(),
-                                    hydrogen_policy: ExtendHydrogenPolicy::RectifyTerminalCarbon,
-                                })),
-                                Some(bondline_render::HitTarget::Bond { .. }) => {
-                                    Err(bondline_commands::Error::UnsupportedBondExtension)
-                                }
-                            },
-                            Ok(Some(_)) => Err(bondline_commands::Error::OccupiedEndpoint),
-                            Err(error) => Err(error.into()),
-                        };
+                }
+                if let Some(command) = command {
+                    interaction_attempted = true;
+                    let key_hotspot = command
+                        .as_ref()
+                        .ok()
+                        .filter(|command| matches!(command, Command::BondSetOrder(_)))
+                        .and(drawing.key_hotspot);
+                    drawing.invalidate_hover();
+                    *error = command
+                        .and_then(|command| engine.execute(command))
+                        .err()
+                        .map(|error| error.to_string());
+                    // Later same-frame presses pick the graph that actually committed.
+                    let Ok(stored) = engine.stored_document() else {
+                        drawing.gesture = None;
                         drawing.invalidate_hover();
-                        *error = command
-                            .and_then(|command| engine.execute(command))
-                            .err()
-                            .map(|error| error.to_string());
-                        // Later same-frame presses pick the graph that actually committed.
-                        let Ok(stored) = engine.stored_document() else {
+                        return;
+                    };
+                    document = stored.model_snapshot();
+                    let Some(page) = document.pages().first() else {
+                        drawing.gesture = None;
+                        return;
+                    };
+                    viewport = match bondline_render::PageViewport::new(width, height, page.size())
+                    {
+                        Ok(viewport) => viewport,
+                        Err(failure) => {
                             drawing.gesture = None;
-                            drawing.invalidate_hover();
+                            *error = Some(failure.to_string());
                             return;
-                        };
-                        document = stored.model_snapshot();
-                        key.revision = engine.state().revision;
-                        drawing.hover_context = Some(key);
-                        graph = engine.drawing_page_scene(
-                            width,
-                            height,
-                            key.page,
-                            &bondline_render::Cancellation::default(),
-                        );
-                        context.request_repaint();
+                        }
+                    };
+                    key.page = page.id();
+                    key.revision = engine.state().revision;
+                    drawing.hover_context = Some(key);
+                    graph = engine.drawing_page_scene(
+                        width,
+                        height,
+                        key.page,
+                        &bondline_render::Cancellation::default(),
+                    );
+                    if graph.is_ok() {
+                        drawing.key_hotspot = key_hotspot;
                     }
-                    _ => {}
+                    context.request_repaint();
                 }
             }
             let pointer = context.input(|input| {
@@ -973,6 +1317,7 @@ fn show_workspace_with_preview(
                 if blocked || !input.focused || input.key_down(egui::Key::Escape) {
                     drawing.gesture = None;
                     drawing.hover_fresh = false;
+                    drawing.key_hotspot = None;
                 }
                 if drawing.gesture.is_some() || interaction_attempted {
                     drawing.hover_fresh = false;
@@ -1070,7 +1415,14 @@ fn show_workspace_with_preview(
                     ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                 }
             }
+            // The inspector was painted before input; show this frame's diagnostic now.
+            if interaction_attempted && let Some(message) = error {
+                ui.colored_label(egui::Color32::DARK_RED, message.as_str());
+            }
         });
+    if !history_handled {
+        replay_edit_shortcuts(context, engine, error, drawing, &events, blocked, selected);
+    }
     if let Some(files) = files {
         file_action = files
             .dialogs(
