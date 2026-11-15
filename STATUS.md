@@ -1,8 +1,11 @@
 # Status — 2026-11-15
 
-The complete M0–M5 goal remains **active**. Branch feat/multiple-bonds; feature6e6110b
-delivers complete bounded neutral-component conversion, tests and receiving records.
-6ac876d records its source contract. This checkpoint retains the exact verification scope.
+The complete M0–M5 goal remains **active**. Branch feat/multiple-bonds; feature7da33ee
+commits the native-density implementation and qualified receiving evidence.5bc8deb records
+its contract;02e81f0 records the next SMILES authoring/source-import study. The current
+full aggregate is NOT green. Feature6e6110b and checkpoint6ecc4b1 deliver bounded neutral-
+component conversion and its earlier1188/0/1 gate;6ac876d records that source contract.
+Preserve the distinct current/historical scopes. All intentional project work is committed.
 Feature11101ce delivers canonical CDX FileEnd;691af6f records that checkpoint.9d8ad75
 preserves bounded MCP shutdown observations. Earlier4d1736f/9050ab1 deliver simple-ring
 conversion and its renderer prerequisite. Continue existing work; do not restart.
@@ -12,7 +15,83 @@ M0's desktop/GPU license blocker is resolved; **full M0/M1 and M2–M5 remain in
 Actions stays disabled: repository Actions off and workflow417397204 manually disabled.
 Do not enable, dispatch or rerun hosted work. New Windows/Linux interaction is unverified.
 
-## Verified bounded neutral SMILES components
+## Current native Drawing density increment
+
+Read [the receiving record](docs/verification-native-drawing-density.md) and
+[contract](docs/research/native-drawing-density-plan.md). The separate exact-DPI/fractional-
+origin display API shares existing capture geometry; native physical painting, source-
+qualified scenes, input/hover/drag mapping and logical text bounds are wired. Existing1×
+pixels/refusals and2048 readback limits remain; vector geometry retains100000 bounds.
+No new registry command, source/edit/Save authority, font or asset is introduced.
+
+Independent existing-API Metal control90091 passes1/0 first. Actual-App37559 gives1/1,
+expanded20715 gives2/2, and fractional44447 gives0/1 after valid phase[.25,.75] setup.
+Missing API gives one then ten E0599 only. Before production, all original declarations/
+prefixes and298 protected inputs remain exact except the approved73-byte test bridge.
+Root93429's first
+candidate passes5 renderer+5 App cases unchanged. Source-only Engine/UI review finds no
+material finding; this is separate from execution. Three product pins are in ignored
+target/drawing-density/root-first-product.json.
+
+**Full local gate78964 FAILED767/1**,115 result lines, at old unchanged MCP control
+shutdown_without_clients_releases_the_listener_address: replacement_bind127.0.0.1:54691,
+AddrInUse/Os48. Log94,414B SHA256
+58502c60022de553eecda0fea87f21c44d47034ea80a5249fb5a5316f2a68615. Fmt and warnings-denied
+workspace clippy pass before that failure. One delayed lsof/netstat snapshot is empty;
+there is no failure-time owner/cause evidence. Do not rerun the exhausted old diagnostics,
+failed test or aggregate simply to make it green; do not change retries/assertions/reuse/
+deadlines/concurrency. This is the same previously documented unexplained failure class.
+
+Root21912 is terminal0 and runs ONLY stages the failed gate did not reach: remaining MCP
+23/0; model/render/UI/compat/xtask403/0/1; remaining docs1/0; native vendor3/0. These430/0/1
+and vendor clippy/layers/licenses/corpus pass; they are not an aggregate CI pass. Runtime
+closures154/165/220 with2 assets and corpus8 files/5 bundles remain. Native build passes.
+Rust1.94.1, CARGO_INCREMENTAL0, BUILD_JOBS2, DEV/TEST_DEBUG0 and literal pinned Python used.
+
+Actual new Mac binary20,531,936B SHA256
+`a290421488b83805d48194acff6ef9c0d7fc626ad6c5eb1fd5dcbca672949f9f` reuses only the existing
+review bundle, exact-path PID39216/no socket. Original component file opens Saved9/7 at
+Fit78.79. Two coordinate clicks with Double selected do not mutate; cause is unknown.
+Key2 at the first bond commits Double/H2 and Fit still refuses/clears the canvas. CmdZ
+restores SavedSingle; ShiftCmdZ restores dirtyDouble; F5Actual100renders. Unicode Save As
+and explicit reopen leave Saved density-edited-λ.cdxml,9/7/1,100%, Double selected.
+
+The actual1,407-byte output equals the earlier edited file exactly, SHA256
+`d7c9074698b737d37ff15addf8858232992468a5536739bcfe5959c324af3cb2`; unchanged raw/Decimal/
+Expat/RDKit verifies9 atoms/7 bonds/3 components and C8H18O. All original inputs/sentinel
+stay exact. Native receipt5,409B SHA256
+`917f151a7d66c22269f4b04dbabb891b46047003bb822070b4b1994d47fd5dcf` is under ignored
+`target/drawing-density/native/receiving-receipt.json`. No native Fit fix, first-click,
+measured effective-DPI/canvas, actual2×, full overview/pan or other-platform claim follows.
+The5+5 App/reference evidence remains distinct. Legacy fractional-origin1× is unchanged;
+proper antialiased native readability and measured-DPI acceptance require further work.
+No new golden/fuzz/dependency/SDK/parser/old-fixture/oracle/lock/asset change.
+
+Final protection passes: six product/test pins exact,294/298 old inputs unchanged; only
+three intended product files and the73-byte test bridge differ. All582 parity IDs/order/
+missing clipboard rows, the original MCP control source and349 local links pass. Final
+rustfmt/Git whitespace checks pass. Protection receipt763B SHA256
+`1bb74548dc5bbfc59f2d2b0b3ef2919e92c0e74b40878b475144110969bb1a8f` remains under ignored
+target/drawing-density/. Only orientation prose changed afterward, correcting Double-
+selected click provenance and the current renderer call map; product/tests stay exact.
+
+All compiler/test/oracle/build jobs are terminal;78964/21912/93429 are not live handles.
+All handoffs are returned and agents stopped; Root owns continuation. The current saved
+preview is the only Bondline process. Old previews remain closed; unrelated apps/tabs
+are untouched. Feature7da33ee preserves the coherent increment with its known failure/
+limits. No push/publication/hosted action occurred. Disk was1.6GiB free during the gate;
+avoid duplicate targets/heavy builds without checking current space.
+Next executable authoring gate is the source-backed [SMILES plan](docs/research/smiles-source-import-plan.md):
+real benzene/aromatic representation and independent graph/H/depiction expectations,
+then one undoable selected-string Paste Special append and registered Save/reopen.
+It is research only; no new paste/aromatic command exists. Full file record rewriting,
+broader chemistry, complete reference flows and M0–M5 remain required. Investigate current
+native Fit/coordinate-click evidence from actual input/render facts; do not infer a cause
+or silently substitute a different camera/density to hide a refusal.
+
+## Previously verified bounded neutral SMILES components
+
+The current native-density section supersedes this historical process/view/task state.
 
 Read [the contract](docs/research/smiles-components-plan.md) and
 [receiving evidence](docs/verification-smiles-components-integration.md).
