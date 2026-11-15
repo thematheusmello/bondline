@@ -431,7 +431,7 @@ pub(crate) fn graph_scene_in_viewport(
                         .get(&atom.id)
                         .ok_or(Error::UnsupportedChemicalContent)?,
                 )
-            } else if has_multiple {
+            } else if has_multiple || (neighbours.0 >= 3 && atom.explicit_hydrogens.is_some()) {
                 atom.explicit_hydrogens
                     .or_else(|| (atom.element.get() != 6).then_some(0))
             } else {
