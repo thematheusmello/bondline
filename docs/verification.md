@@ -2498,3 +2498,13 @@ Root's private-method compile correction changed production only. Independent re
 execution passes all seven unchanged. Root98860 aggregate passes968/0/1 plus every local
 gate. The original commands and wire schema are unchanged. Native field presentation,
 draft transactions and actual-window acceptance remain separate work; no milestone ends.
+
+## Native ordinary SDF files and truthful preview refusal, 2026-11-15
+
+[Actual-window evidence](verification-sdf-native-current.md) verifies Unicode chooser
+Open, both mixed-version record summaries, Unicode Save As/reopen, full740-byte equality
+and unchanged external CCO/CN consumers. The current default window honestly refuses
+chemical preview under the existing em guard; effective DPI/enlargement were not measured.
+Successful native preview, field presentation and scheduling races remain unverified.
+The prior saved150% drawing is restored on the desktop. No guard, golden, fixture or
+consumer changed, and no milestone is complete.

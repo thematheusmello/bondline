@@ -18,6 +18,14 @@ next, with a separate independent actual-App test owner in`bondline-sdf-inspecto
 No Root Cargo job remains live. User requested the desktop preview; PID41233 was raised
 and its saved150% Single/Double/Triple workspace visibly confirmed. No authored data changed.
 
+New finite native check: the740-byte ordinary mixed SDF opens through its Unicode chooser
+row; both record/version/size summaries are visible; Unicode Save As/reopen retains exact
+whole bytes and both unchanged external MOL consumers pass. The default window refuses
+chemical preview under the existing em guard. Effective DPI and successful enlargement
+were not established; successful native chemical-preview acceptance remains open.
+The saved drawing is restored at revision6/clean/150%. See
+docs/verification-sdf-native-current.md for actual observations and setup corrections.
+
 GitHub Actions remains disabled by user instruction: repository Actions off and workflow
 417397204 disabled manually. Do not enable/dispatch/rerun or push to manufacture hosted
 evidence. Run local gates. Hosted restoration requires the completed full project or an
