@@ -380,3 +380,13 @@ completion, without weakening full revision/source identity checks on jobs. Its 
 is local to the same Engine; it is not a globally unique document ID or file authority.
 Broader UI addressability, platform event ordering and native concurrency scenarios remain
 part of the full M0 audit rather than being implied by a passing headless App suite.
+
+## Renewed installed settings observation, 2026-11-15
+
+The [LIVE-012–018 pass](../research/live-ui-review-2026-11-15.md#document-settings-observation-on-renewed-instruction)
+observes four settings field groups and cancels. Numeric bounds, unit conversion,
+application to existing/new objects, undo/persistence and the other five pages remain
+unobserved. Selected-document values are not factory/journal defaults. Signals26.1.0.6801
+does not establish Professional entitlement. The selected-document capture still does not
+expose the separate toolbar; an invocation is not proof of its visibility or icon roles.
+Do not infer a settings implementation or full screen/functional parity from this pass.

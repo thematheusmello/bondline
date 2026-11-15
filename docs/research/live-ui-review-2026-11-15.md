@@ -79,3 +79,31 @@ inspection is claimed. The optional CUA launch helper is unavailable on this hos
 selection/Raise and menu actions provide the observed results. Keyboard Escape did not
 produce an observed menu dismissal in this pass; advertised AX Cancel did. Its cause is
 unknown, so no keyboard shortcut or ordinary native input flow is claimed from that attempt.
+
+## Document-settings observation on renewed instruction
+
+The user again explicitly requested opening the installed application. CUA selected
+`com.revvity.ChemDraw`, raised the existing blank `…-2` document and used ordinary native
+menu actions. About again visibly reports **26.1.0.6801 / Signals ChemDraw**; no entitlement,
+executable/resource hash or Professional-tier equivalence is inferred. Licensed-person
+information and Recent-document names are omitted from this record. REA MCP runtime tools
+remain absent; these are inline CUA AX/pixel observations, not REA Evidence or exported
+screenshot artifacts. No static binary/resource inspection or proprietary asset acquisition.
+
+| ID | Observed screen/control or action | Mapping and evidence limit |
+|---|---|---|
+| LIVE-012 | File and View again expose the previously recorded file, settings, panel and toolbar families. In blank Structure, the cleanup, stereo, hydrogen/aromatic display, reaction mapping/analysis and structure-to-name leaves are disabled; name-to-structure is enabled. | Reconfirms only those visible menu roles and that context. No chemistry action, selection-dependent cause or successful naming flow was executed. |
+| LIVE-013 | File → Document Settings opens a sheet with a left category list and persistent bottom display-unit selector, Cancel and OK. Nine categories are Layout, Header/Footer, Drawing, Text Captions, Atom Labels, Property Labels, Biopolymer Display, Reaction Display and Colors. | DP-009–017 / UI-003. Four categories below were actually opened; the other five have only visible category evidence. Bondline does not yet implement this settings workflow. |
+| LIVE-014 | Layout shows Pages selected, Poster available, row/column steppers, document size, four margins, overlap/registration controls and Page Setup. Display units show Inches. The selected document shows1×1 pages,7.5×10in drawing size and0.5in margins; overlap/size/registration controls are disabled in this context. | DP-009. These are this document's visible values, not factory or journal defaults. Poster switching, numeric validation, page setup, printing and application of changes were not tested. |
+| LIVE-015 | Drawing shows chain angle120°, fixed length0.2in, percentage bond spacing18, absolute spacing disabled at0.05in, bold width0.028in, line width0.0083in, margin0.022in and hash spacing0.0346in. Separate atom and bond indicator groups expose query/stereo choices; enhanced-stereo and atom-number choices belong to atoms, reaction indicators to bonds. | DP-011. Distinct controls and their selected-document values are observed. No setting was edited or adopted as a Bondline preset. Bondline's explicit conversion geometry and original centered multiple-bond profile do not complete this style system. |
+| LIVE-016 | Atom Labels has a font-family table, typed size and size-list selection, line-spacing modes, font styles and Normal/Subscript/Superscript/Formula baseline roles. The current state shows Arial10, Variable spacing and Formula, with terminal-carbon labels and hide-implicit-H unchecked. | DP-012. Typography, visibility and authored-H semantics remain distinct. No font file was obtained, no font/default policy adopted and no changed label was rendered or saved. |
+| LIVE-017 | Reaction Display shows a numbering start field/stepper at1, numeric-style popup showing Roman, format field `(#)` and an unchecked option for including structures above/below arrows. | DP-016. This is new field-group evidence, not a reaction editor, numbering result, range-validation rule or default-policy proof. Bondline's reaction/numbering workflow remains missing. |
+| LIVE-018 | Cancel closes the settings sheet. Window still lists both numbered documents; Bring All to Front returns the same blank `…-2` selected-document capture. Menus and About are dismissed; ChemDraw remains running. | No document edit, rename, Save, Close, replacement or settings acceptance. Show Main Toolbar was invoked once in this pass, but a floating palette was not exposed by the selected-document capture; its visibility/change remains unresolved. |
+
+The selected sheet captures establish a category sidebar, grouped controls and bottom
+commit/cancel roles. They do not establish the entire app/palette geometry, icon roles,
+screen scaling, keyboard bindings, settings validation, persistence, undo behavior or
+Professional parity. The observed font and stylesheet values are not redistribution rights
+for vendor fonts, stationery or assets. Implement original controls/assets only after a
+source-qualified command/model contract and independent behavior tests; keep these DP rows
+missing until their Bondline workflows actually work.

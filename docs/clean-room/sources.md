@@ -1716,3 +1716,20 @@ and two reviewed new-test expectations: async Replace File readiness and full ca
 Unicode paths. Product code did not change for those oracle corrections. Exact source/
 fixture reconstructions, unchanged raw/notation consumers and native AX/painting are
 separate evidence; full native input/clipboard/dialog execution remains unverified.
+
+## Renewed installed document-settings evidence, 2026-11-15
+
+The user's explicit request authorized CUA observation of installed visible UI. The
+[LIVE-012–018 record](../research/live-ui-review-2026-11-15.md#document-settings-observation-on-renewed-instruction)
+rechecks About as Signals26.1.0.6801, selected File/View/Structure roles and four actual
+Document Settings pages: Layout, Drawing, Atom Labels and Reaction Display. The sheet was
+cancelled without editing values. Observed values belong to the selected styled document;
+they are not factory/journal defaults or a Bondline preset decision. Five other settings
+categories have label-only evidence. Professional entitlement, numeric validation,
+application/persistence, toolbar visibility and full tool/icon roles remain unknown.
+
+These are inline CUA AX/pixel observations, not an exported REA capture or public guide.
+No static binary/resource inspection, proprietary asset/font acquisition, user-document
+edit or shipped implementation followed from the observation. Historical artifact hashes
+and complete installed-menu coverage were not revalidated. The existing public guide and
+format specifications retain their original, separate scope.
