@@ -1,11 +1,11 @@
-//! One unapplied field draft and its registered authoring transaction.
+//! One SDF draft or record removal and its registered authoring transaction.
 
 use crate::sdf_draft_text::SdfDraftText;
 use bondline_commands::{
     Cancellation, CaptureStamp, CloseAction, CloseDocument, CloseState, Command, CommandResult,
-    Engine, ErrorInfo, FileFormat, SdfFieldSet, UiFileAction, UiFilePhase,
+    Engine, ErrorInfo, FileFormat, SdfFieldSet, SdfRecordRemove, UiFileAction, UiFilePhase,
 };
-use bondline_mcp::CommandExecutor;
+use bondline_mcp::{CommandExecutor, UiSdfRemoveContext};
 use eframe::egui;
 use std::{
     sync::mpsc::{self, Receiver},
@@ -18,6 +18,7 @@ pub(super) enum Target {
     Next,
     Previous(usize),
     CloseFields,
+    RemoveRecord(u32),
     Control(&'static str),
     ExternalFile { action: UiFileAction, id: u64 },
 }
@@ -76,12 +77,44 @@ struct ApplyInput {
     params: SdfFieldSet,
 }
 
+struct RemovalConfirmation {
+    held: Held,
+    record: u32,
+    sequence: u64,
+}
+
+struct RemoveInput {
+    context: UiSdfRemoveContext,
+    params: SdfRecordRemove,
+}
+
+enum MutationInput {
+    Field(ApplyInput),
+    Remove(RemoveInput),
+}
+
+#[derive(Clone, Copy)]
+enum MutationKind {
+    Field,
+    Remove,
+}
+
+impl MutationInput {
+    fn kind(&self) -> MutationKind {
+        match self {
+            Self::Field(_) => MutationKind::Field,
+            Self::Remove(_) => MutationKind::Remove,
+        }
+    }
+}
+
 struct Applied {
     result: CommandResult,
     stamp: Option<CaptureStamp>,
 }
 
 struct ApplyJob {
+    kind: MutationKind,
     cancel: Cancellation,
     result: Receiver<Result<Applied, ErrorInfo>>,
     worker: JoinHandle<()>,
@@ -89,6 +122,7 @@ struct ApplyJob {
 
 pub(super) struct Effect {
     pub refresh: Option<(u32, usize, usize)>,
+    pub records_invalidated: bool,
     pub target: Option<Target>,
     pub warning: Option<String>,
 }
@@ -101,18 +135,22 @@ enum Action {
     DecideApply,
     DecideDiscard,
     DecideCancel,
+    ConfirmRemove(u64),
+    KeepRecord(u64),
 }
 
 #[derive(Default)]
 pub(super) struct SdfEditor {
     draft: Option<Draft>,
-    pending: Option<ApplyInput>,
+    pending: Option<MutationInput>,
     job: Option<ApplyJob>,
     decision: Option<Held>,
     after_apply: Option<Held>,
     effect: Option<Effect>,
     error: Option<String>,
     actions: Vec<(usize, Action)>,
+    removal: Option<RemovalConfirmation>,
+    removal_sequence: u64,
 }
 
 pub(super) fn widget_id() -> egui::Id {
@@ -140,6 +178,7 @@ impl SdfEditor {
     }
     pub fn blocks_close(&self) -> bool {
         self.is_busy()
+            || self.removal.is_some()
             || self.decision.is_some()
             || self.after_apply.is_some()
             || self.draft.as_ref().is_some_and(Draft::changed)
@@ -166,6 +205,7 @@ impl SdfEditor {
         let state = engine.state();
         if self.active()
             || self.is_busy()
+            || self.removal.is_some()
             || state.close != CloseState::Open
             || state.ui_file.request.is_some()
         {
@@ -200,8 +240,88 @@ impl SdfEditor {
         reset_widget(context);
     }
 
+    pub fn confirm_remove(
+        &mut self,
+        engine: &Engine,
+        context: &egui::Context,
+        record: u32,
+    ) -> bool {
+        let state = engine.state();
+        let valid = state.close == CloseState::Open
+            && state.ui_file.request.is_none()
+            && state.collection.as_ref().is_some_and(|collection| {
+                collection.record_count > 1
+                    && collection.records.iter().any(|item| item.id == record)
+            });
+        if self.active() || self.is_busy() || !valid {
+            return false;
+        }
+        let Some(sequence) = self.removal_sequence.checked_add(1) else {
+            self.error =
+                Some("The removal request limit was reached. Reopen Bondline to continue.".into());
+            return false;
+        };
+        self.removal_sequence = sequence;
+        self.removal = Some(RemovalConfirmation {
+            held: Held::new(Target::RemoveRecord(record), engine),
+            record,
+            sequence,
+        });
+        self.error = None;
+        context.request_repaint();
+        true
+    }
+
+    fn removal_current(removal: &RemovalConfirmation, engine: &Engine) -> bool {
+        let state = engine.state();
+        engine.capture_stamp_matches(&removal.held.stamp)
+            && removal.held.destination_current(engine)
+            && state.close == CloseState::Open
+            && state.ui_file.request.is_none()
+            && state.collection.as_ref().is_some_and(|collection| {
+                collection.record_count > 1
+                    && collection
+                        .records
+                        .iter()
+                        .any(|item| item.id == removal.record)
+            })
+    }
+
+    fn queue_remove(&mut self, sequence: u64, engine: &Engine) {
+        let Some(removal) = self.removal.as_ref() else {
+            return;
+        };
+        if removal.sequence != sequence || self.is_busy() {
+            return;
+        }
+        if !Self::removal_current(removal, engine) {
+            self.removal = None;
+            self.error = Some(
+                "The removal context changed. Choose the record again; nothing was removed.".into(),
+            );
+            return;
+        }
+        self.pending = Some(MutationInput::Remove(RemoveInput {
+            context: UiSdfRemoveContext::capture(engine),
+            params: SdfRecordRemove {
+                expected_revision: engine.state().revision,
+                record_id: removal.record,
+            },
+        }));
+        self.removal = None;
+        self.error = None;
+        // Ordinals and query text cannot remain authoritative while a removal is pending.
+        self.effect = Some(Effect {
+            refresh: None,
+            records_invalidated: true,
+            target: None,
+            warning: None,
+        });
+    }
+
     /// A held intent contains no old command parameters or file publication authority.
     pub fn intercept(&mut self, target: Target, engine: &Engine, context: &egui::Context) -> bool {
+        self.removal = None;
         if self.is_busy() {
             if self.after_apply.is_none() {
                 self.after_apply = Some(Held::new(target, engine));
@@ -232,6 +352,11 @@ impl SdfEditor {
         engine: &Engine,
         context: &egui::Context,
     ) -> bool {
+        if self.removal.is_some()
+            && !matches!(command, Command::UiView(_) | Command::UiBondToolSelect(_))
+        {
+            self.removal = None;
+        }
         if !self.active() && !self.is_busy() {
             return false;
         }
@@ -257,7 +382,7 @@ impl SdfEditor {
     }
 
     pub fn guard_external(&mut self, engine: &mut Engine, context: &egui::Context) {
-        if !self.active() && !self.is_busy() {
+        if !self.active() && !self.is_busy() && self.removal.is_none() {
             return;
         }
         let state = engine.state();
@@ -312,7 +437,7 @@ impl SdfEditor {
         } else {
             value.split('\n').map(str::to_owned).collect()
         };
-        self.pending = Some(ApplyInput {
+        self.pending = Some(MutationInput::Field(ApplyInput {
             stamp: draft.stamp.clone(),
             close_epoch: engine.state().close_epoch,
             params: SdfFieldSet {
@@ -321,7 +446,7 @@ impl SdfEditor {
                 field_index: draft.field,
                 value_lines,
             },
-        });
+        }));
         self.error = None;
         true
     }
@@ -343,11 +468,27 @@ impl SdfEditor {
                     self.decision = None;
                 }
                 Action::CancelWork => {
+                    let removal = self
+                        .pending
+                        .as_ref()
+                        .is_some_and(|input| matches!(input.kind(), MutationKind::Remove))
+                        || self
+                            .job
+                            .as_ref()
+                            .is_some_and(|job| matches!(job.kind, MutationKind::Remove));
                     self.pending = None;
                     self.after_apply = None;
                     self.error = Some(if let Some(job) = &self.job {
                         job.cancel.cancel();
-                        "Apply cancellation requested; its actual result is still required.".into()
+                        if removal {
+                            "Removal cancellation requested; its actual result is still required."
+                                .into()
+                        } else {
+                            "Apply cancellation requested; its actual result is still required."
+                                .into()
+                        }
+                    } else if removal {
+                        "Removal was cancelled before work started; nothing was removed.".into()
                     } else {
                         "Apply was cancelled before work started; the draft was kept.".into()
                     });
@@ -365,6 +506,7 @@ impl SdfEditor {
                             self.end(context);
                             self.effect = Some(Effect {
                                 refresh: None,
+                                records_invalidated: false,
                                 target: Some(held.target),
                                 warning: None,
                             });
@@ -389,11 +531,23 @@ impl SdfEditor {
                         // File cancellation is issued by the parent with fresh current parameters.
                         self.effect = Some(Effect {
                             refresh: None,
+                            records_invalidated: false,
                             target: Some(Target::Control("file.cancel")),
                             warning: None,
                         });
                     }
                     self.decision = None;
+                }
+                Action::ConfirmRemove(sequence) => self.queue_remove(sequence, engine),
+                Action::KeepRecord(sequence) => {
+                    if self
+                        .removal
+                        .as_ref()
+                        .is_some_and(|removal| removal.sequence == sequence)
+                    {
+                        self.removal = None;
+                        context.request_discard("SDF record confirmation was dismissed");
+                    }
                 }
                 _ => {}
             }
@@ -503,6 +657,84 @@ impl SdfEditor {
                 actions.push((index, Action::DecideCancel));
             }
         }
+        if let Some(removal) = &self.removal {
+            let sequence = removal.sequence;
+            let current = engine.is_some_and(|engine| Self::removal_current(removal, engine));
+            egui::Window::new("Remove SDF record")
+                .id(egui::Id::new(("bondline-sdf-remove", sequence)))
+                .anchor(egui::Align2::CENTER_CENTER, egui::Vec2::ZERO)
+                .order(egui::Order::Foreground)
+                .collapsible(false)
+                .resizable(false)
+                .show(context, |ui| {
+                    ui.label(format!(
+                        "Remove record {} and all of its structure and data fields?",
+                        removal.record
+                    ));
+                    ui.label("This changes the collection in memory. Save is a separate action.");
+                    ui.horizontal(|ui| {
+                        for (caption, enabled, action) in [
+                            (
+                                "Confirm record removal",
+                                current && !busy,
+                                Action::ConfirmRemove(sequence),
+                            ),
+                            ("Keep record", !busy, Action::KeepRecord(sequence)),
+                        ] {
+                            let response = ui.add_enabled(enabled, egui::Button::new(caption));
+                            if response.clicked()
+                                && let Some(index) = events
+                                    .iter()
+                                    .position(|event| crate::activation_event(&response, event))
+                            {
+                                actions.push((index, action));
+                            }
+                        }
+                    });
+                });
+            if let Some(index) = events.iter().position(|event| {
+                matches!(
+                    event,
+                    egui::Event::Key {
+                        key: egui::Key::Escape,
+                        pressed: true,
+                        repeat: false,
+                        ..
+                    }
+                )
+            }) {
+                actions.push((index, Action::KeepRecord(sequence)));
+            }
+        }
+        if self.draft.is_none() && (busy || self.error.is_some()) {
+            egui::Window::new("SDF record removal")
+                .id(egui::Id::new("bondline-sdf-removal-status"))
+                .anchor(egui::Align2::CENTER_CENTER, egui::Vec2::ZERO)
+                .collapsible(false)
+                .resizable(false)
+                .show(context, |ui| {
+                    if busy {
+                        ui.spinner();
+                        ui.label("Removing record…");
+                    }
+                    if let Some(error) = &self.error {
+                        ui.label(error);
+                    }
+                    let (caption, action) = if busy {
+                        ("Cancel removal", Action::CancelWork)
+                    } else {
+                        ("Close removal message", Action::End)
+                    };
+                    let response = ui.button(caption);
+                    if response.clicked()
+                        && let Some(index) = events
+                            .iter()
+                            .position(|event| crate::activation_event(&response, event))
+                    {
+                        actions.push((index, action));
+                    }
+                });
+        }
         self.actions.extend(actions);
         if busy {
             context.request_repaint_after(Duration::from_millis(40));
@@ -510,6 +742,14 @@ impl SdfEditor {
     }
 
     pub fn sync(&mut self, engine: Option<&Engine>, context: &egui::Context) {
+        if self.removal.as_ref().is_some_and(|removal| {
+            !engine.is_some_and(|engine| Self::removal_current(removal, engine))
+        }) {
+            self.removal = None;
+            self.error = Some(
+                "The removal context changed. Choose the record again; nothing was removed.".into(),
+            );
+        }
         if self
             .job
             .as_ref()
@@ -521,18 +761,20 @@ impl SdfEditor {
         let Some(job) = self.job.take() else {
             return;
         };
+        let removal = matches!(job.kind, MutationKind::Remove);
         let cancellation_requested = job.cancel.is_cancelled();
         let result = match job.worker.join() {
             Ok(()) => job.result.try_recv().unwrap_or_else(|_| {
                 Err(ErrorInfo {
                     code: "worker_failed",
-                    message: "The Apply worker stopped without a result; the draft was kept."
-                        .into(),
+                    message: if removal { "The removal worker stopped without a result. Its outcome could not be verified; inspect the current collection before trying again.".into() }
+                        else { "The Apply worker stopped without a result; the draft was kept.".into() },
                 })
             }),
             Err(_) => Err(ErrorInfo {
                 code: "worker_failed",
-                message: "The Apply worker did not complete; the draft was kept.".into(),
+                message: if removal { "The removal worker did not complete. Its outcome could not be verified; inspect the current collection before trying again.".into() }
+                    else { "The Apply worker did not complete; the draft was kept.".into() },
             }),
         };
         // Unlike queries, a successfully committed edit is never discarded as cancellation.
@@ -545,13 +787,19 @@ impl SdfEditor {
                         .is_some_and(|stamp| engine.capture_stamp_matches(stamp))
                 });
                 if !current {
-                    self.error = Some("The value was applied to an earlier document. Its text was kept for recovery; no waiting action ran.".into());
+                    self.error = Some(if removal {
+                        "The record was removed from an earlier document. The current document was not replaced; no waiting action ran.".into()
+                    } else {
+                        "The value was applied to an earlier document. Its text was kept for recovery; no waiting action ran.".into()
+                    });
                     self.after_apply = None;
                     return;
                 }
                 let held = self.after_apply.take();
                 let mut warning = cancellation_requested.then(|| {
-                    if applied.result.changed {
+                    if removal {
+                        "The record was removed before cancellation completed.".to_owned()
+                    } else if applied.result.changed {
                         "The value was applied before cancellation completed.".to_owned()
                     } else {
                         "Apply completed without changes before cancellation completed.".to_owned()
@@ -559,11 +807,20 @@ impl SdfEditor {
                 });
                 let target = held.and_then(|held| {
                     if engine.is_some_and(|engine| held.destination_current(engine)) { Some(held.target) }
-                    else { warning = Some("The waiting action's file or close context changed. The field was applied; the waiting action did not run.".into()); None }
+                    else { warning = Some(if removal { "The waiting action's file or close context changed. The record was removed; the waiting action did not run.".into() }
+                        else { "The waiting action's file or close context changed. The field was applied; the waiting action did not run.".into() }); None }
                 });
-                if let Some(draft) = &self.draft {
+                if removal {
+                    self.effect = Some(Effect {
+                        refresh: None,
+                        records_invalidated: true,
+                        target,
+                        warning,
+                    });
+                } else if let Some(draft) = &self.draft {
                     self.effect = Some(Effect {
                         refresh: Some((draft.record, draft.offset, draft.field)),
+                        records_invalidated: false,
                         target,
                         warning,
                     });
@@ -572,10 +829,17 @@ impl SdfEditor {
             }
             Err(error) => {
                 self.after_apply = None;
-                self.error = Some(format!(
-                    "{} No waiting Save/Open/close action was started; the draft was kept.",
-                    error.message
-                ));
+                self.error = Some(if removal {
+                    format!(
+                        "{} No waiting Save/Open/close action was started.",
+                        error.message
+                    )
+                } else {
+                    format!(
+                        "{} No waiting Save/Open/close action was started; the draft was kept.",
+                        error.message
+                    )
+                });
             }
         }
     }
@@ -587,11 +851,19 @@ impl SdfEditor {
         let Some(input) = self.pending.take() else {
             return;
         };
-        let work = match executor.prepare_ui_sdf(
-            &input.stamp,
-            input.close_epoch,
-            Command::SdfFieldSet(input.params.clone()),
-        ) {
+        let kind = input.kind();
+        let removal = matches!(kind, MutationKind::Remove);
+        let prepared = match &input {
+            MutationInput::Field(input) => executor.prepare_ui_sdf(
+                &input.stamp,
+                input.close_epoch,
+                Command::SdfFieldSet(input.params.clone()),
+            ),
+            MutationInput::Remove(input) => {
+                executor.prepare_ui_sdf_remove(&input.context, input.params.clone())
+            }
+        };
+        let work = match prepared {
             Ok(work) => work,
             Err(error) if error.code == "busy" => {
                 self.pending = Some(input);
@@ -600,10 +872,17 @@ impl SdfEditor {
             }
             Err(error) => {
                 self.after_apply = None;
-                self.error = Some(format!(
-                    "{} No waiting action was started; the draft was kept.",
-                    error.message
-                ));
+                self.error = Some(if removal {
+                    format!(
+                        "{} No removal or waiting action was started.",
+                        error.message
+                    )
+                } else {
+                    format!(
+                        "{} No waiting action was started; the draft was kept.",
+                        error.message
+                    )
+                });
                 context.request_repaint();
                 return;
             }
@@ -627,6 +906,7 @@ impl SdfEditor {
             }) {
             Ok(worker) => {
                 self.job = Some(ApplyJob {
+                    kind,
                     cancel,
                     result,
                     worker,
@@ -634,7 +914,11 @@ impl SdfEditor {
             }
             Err(_) => {
                 self.after_apply = None;
-                self.error = Some("The Apply worker could not start; the draft was kept.".into());
+                self.error = Some(if removal {
+                    "The removal worker could not start; nothing was removed.".into()
+                } else {
+                    "The Apply worker could not start; the draft was kept.".into()
+                });
             }
         }
     }
@@ -675,3 +959,11 @@ pub(super) fn resume_command(target: Target, engine: &Engine) -> Result<Option<C
 #[cfg(test)]
 #[path = "sdf_editor_lifecycle_tests.rs"]
 mod lifecycle_tests;
+
+#[cfg(test)]
+#[path = "sdf_record_removal_lifecycle_tests.rs"]
+mod record_removal_tests;
+
+#[cfg(test)]
+#[path = "sdf_record_removal_prepare_tests.rs"]
+mod removal_prepare_tests;

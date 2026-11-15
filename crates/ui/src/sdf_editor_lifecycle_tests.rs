@@ -60,7 +60,11 @@ impl ApplyGate {
             assert!(editor.intercept(Target::Control("file.save"), &guard, &context));
             assert!(editor.after_apply.is_some());
         }
-        let input_work = editor.pending.take().ok_or("pending real Apply input")?;
+        let MutationInput::Field(input_work) =
+            editor.pending.take().ok_or("pending real Apply input")?
+        else {
+            return Err("pending real Apply input was not a field edit".into());
+        };
         let work = executor
             .prepare_ui_sdf(
                 &input_work.stamp,
@@ -87,6 +91,7 @@ impl ApplyGate {
             let _ = wait.recv_timeout(WAIT);
         });
         editor.job = Some(ApplyJob {
+            kind: MutationKind::Field,
             cancel,
             result,
             worker,

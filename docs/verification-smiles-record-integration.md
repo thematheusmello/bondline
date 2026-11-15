@@ -96,3 +96,21 @@ Unicode dialog Save/reopen, cancellation/close races and hardware DPI remain unv
 The SDF preview app PID16278 remains available separately. Native controls visible and
 native registry-query success are narrower evidence than a completed native user journey.
 Full M0/M1 and M2–M5 remain incomplete; continue from STATUS.md.
+
+## Follow-up desktop preview, 2026-11-15
+
+The user answered **Open Bondline on the desktop**. CUA raises the same final native
+PID53821, activates **Next record**, then **Inspect record**. Actual AX and the settled
+painted window show record2/line4, exact `[13CH3][OH]`,2atoms/1bond, notation21..32,
+record21..43 and application-data byte count9. No opaque application value appears.
+The first screenshot preceded settled pixels; a subsequent real Inspect activation
+and screenshot display the completed record. No native loading/refresh cause is inferred.
+
+A separate read-only authenticated inspection confirms revision1/clean/Undo0Redo0 and
+no automatic smiles_record disclosure. The complete49-byte input remains SHA256
+fe62db368bfb982d6a0d4309337207a419fc088b9c8e20ae9a0a32ccd61e70b7.
+Ignored native-next-receipt.json records this bounded extension. No token is exposed.
+This proves actual native Next/Inspect activation beyond the earlier controls-only
+observation. Numeric typing, Previous, selected-text/OS copy, Unicode Save/reopen and
+native cancel/close race acceptance remain unverified; the full native journey is not
+claimed. The new SDF removal preview is a separate process documented in STATUS.md.

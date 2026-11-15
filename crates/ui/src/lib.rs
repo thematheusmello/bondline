@@ -909,6 +909,23 @@ fn show_workspace_with_preview(
                                             fields.inspect(engine, context, record.id);
                                             context.request_repaint();
                                         }
+                                        if let Some(fields) = sdf_fields.as_deref_mut()
+                                            && ui
+                                                .add_enabled(
+                                                    state.close == CloseState::Open
+                                                        && state.ui_file.request.is_none()
+                                                        && collection.record_count > 1
+                                                        && !fields.is_busy(),
+                                                    egui::Button::new(format!(
+                                                        "Remove record {}",
+                                                        record.id
+                                                    ))
+                                                    .small(),
+                                                )
+                                                .clicked()
+                                        {
+                                            fields.request_remove(engine, context, record.id);
+                                        }
                                         ui.end_row();
                                     }
                                 });

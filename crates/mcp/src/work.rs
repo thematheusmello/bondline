@@ -1,7 +1,7 @@
 use crate::SharedEngine;
 use bondline_commands::{
-    Cancellation, CaptureStamp, CloseState, Command, CommandResult, Error, ErrorInfo, Prepared,
-    RenderCapture, SmilesRecordInspect,
+    Cancellation, CaptureStamp, CloseState, Command, CommandResult, Engine, Error, ErrorInfo,
+    FileFormat, Prepared, RenderCapture, SdfRecordRemove, SmilesRecordInspect,
 };
 use std::{
     future::Future,
@@ -91,7 +91,7 @@ impl UiCaptureWork {
     }
 }
 
-/// One explicit field query or existing-value edit, registered before native spawn.
+/// One explicit SDF query, field edit or record removal, registered before native spawn.
 /// It retains its originating Engine and shares the existing two-worker budget.
 #[must_use = "complete or drop SDF work to release its worker reservation"]
 pub struct UiSdfWork {
@@ -106,6 +106,29 @@ impl UiSdfWork {
     pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
         let Self { engine, registered } = self;
         complete_registered_blocking(&engine, registered, cancel)
+    }
+}
+
+/// The source and file destination explicitly confirmed for native record removal.
+/// Capture while holding the frame Engine guard; preparation rechecks it atomically.
+pub struct UiSdfRemoveContext {
+    stamp: CaptureStamp,
+    close_epoch: u64,
+    path: Option<String>,
+    format: FileFormat,
+    file_epoch: u64,
+}
+
+impl UiSdfRemoveContext {
+    pub fn capture(engine: &Engine) -> Self {
+        let state = engine.state();
+        Self {
+            stamp: engine.capture_stamp(),
+            close_epoch: state.close_epoch,
+            path: state.file.path,
+            format: state.file.format,
+            file_epoch: state.ui_file.epoch,
+        }
     }
 }
 
@@ -230,9 +253,33 @@ impl CommandExecutor {
         ) {
             return Err(ErrorInfo {
                 code: "invalid_params",
-                message: "native SDF work requires a field query or existing-value edit".to_owned(),
+                message: "native SDF work requires a field query or field edit".to_owned(),
             });
         }
+        self.prepare_ui_sdf_context(stamp, close_epoch, command, None)
+    }
+
+    /// Revalidate the confirmed file context under the same lock as preparation.
+    pub fn prepare_ui_sdf_remove(
+        &self,
+        context: &UiSdfRemoveContext,
+        params: SdfRecordRemove,
+    ) -> Result<UiSdfWork, ErrorInfo> {
+        self.prepare_ui_sdf_context(
+            &context.stamp,
+            context.close_epoch,
+            Command::SdfRecordRemove(params),
+            Some(context),
+        )
+    }
+
+    fn prepare_ui_sdf_context(
+        &self,
+        stamp: &CaptureStamp,
+        close_epoch: u64,
+        command: Command,
+        removal: Option<&UiSdfRemoveContext>,
+    ) -> Result<UiSdfWork, ErrorInfo> {
         let mut engine = self.engine.lock().map_err(|_| unavailable())?;
         let state = engine.state();
         match state.close {
@@ -247,6 +294,14 @@ impl CommandExecutor {
         }
         if !engine.capture_stamp_matches(stamp) {
             return Err(Error::StaleRevision.info());
+        }
+        if removal.is_some_and(|context| {
+            state.file.path != context.path
+                || state.file.format != context.format
+                || state.ui_file.epoch != context.file_epoch
+                || state.ui_file.request.is_some()
+        }) {
+            return Err(Error::UiStaleRequest.info());
         }
         let permit = self.workers.permit()?;
         let prepared = engine.prepare(command).map_err(|error| error.info())?;

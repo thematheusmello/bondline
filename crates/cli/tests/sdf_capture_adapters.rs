@@ -1,4 +1,6 @@
 use bondline_commands::Engine;
+#[path = "support/sdf_remove_adapters.rs"]
+mod record_remove;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::{Value, json};
 use std::{

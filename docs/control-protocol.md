@@ -58,6 +58,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `file.convert_smiles_to_cdxml` | Required `expected_revision`, `input_path`, `output_path`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt` | Deferred create-only conversion of one bounded neutral carbon/Single path into new native CDXML; current session and all its baselines remain unchanged |
 | `file.export_smiles_fragment` | Required `expected_revision`, positive `page_id`, positive `fragment_id`, `output_path` | Create-only noncanonical explicit-H SMILES file for exactly one complete-source selected fragment; geometry/document context are explicitly not encoded and the current session is unchanged |
 | `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
+| `sdf.record.remove` | Required `expected_revision`, positive `record_id` | Deferred whole-record removal; exact surviving bytes, reindexed ordinals, one history edit; refuses the sole record |
 | `smiles.record.inspect` | Required `expected_revision`, positive `record_id` | Deferred exact selected notation and global byte ranges/counts; opaque application data is not disclosed;128KiB object budget |
 | `sdf.field.set_value` | Required `expected_revision`, positive `record_id`, zero-based existing `field_index`, `value_lines` | Deferred immutable existing-field edit, one whole-content history commit; byte-preserving no-op and strict stale/input guards |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
@@ -852,7 +853,8 @@ is cleared without losing the current selection. Pending/delivery/actual thread 
 participate in the host close barrier. [Five independent actual-App tests and bounded
 Mac observations](verification-sdf-inspector.md) do not establish a mutating editor,
 draft/Apply workflow, native pagination race or complete control addressability. These
-local presentation controls add no named command or schema; the registry stays at28.
+local presentation controls add no named command or schema. The registry now has29 commands
+after the separate record-removal addition below.
 
 ## Existing-bond absolute order setter
 
@@ -902,7 +904,7 @@ host lifecycle; this does not claim arbitrary cross-dialog input ordering.
 
 ## Transient drawing view
 
-`ui.view` is one tagged, closed parameter object. The28-command registry exposes its
+`ui.view` is one tagged, closed parameter object. The29-command registry exposes its
 seven object branches through the same CLI, stdio MCP and authenticated loopback routes.
 Examples:
 
@@ -1051,3 +1053,43 @@ See [independent commands](verification-sdf-view-command.md),
 [native scope and Root gates](verification-sdf-view-integration.md). Current-view output
 is a page viewport, not operating-system window chrome, dialogs, print calibration or
 complete publishing/clipboard support.
+
+## Whole SDF record removal
+
+```json
+{"command":"sdf.record.remove","params":{"expected_revision":1,"record_id":1}}
+```
+
+The closed mutating command removes exactly one whole source-local ordinal from a
+multi-record collection, including its delimiter and original ending. Surviving bytes
+are untouched; reparsing assigns new ordinal IDs/ranges. Old ordinals must be discarded.
+The format requires at least one compound: removing the sole record returns invalid_sdf;
+a missing target returns not_found first. Wrong kind, stale input, cancelled/foreign
+completion and committed close retain the common guards. No file write or new result
+field is introduced. One successful edit advances revision/history; Undo/Redo restore
+complete original/current snapshots. document stays null, collection stays SDF and normal
+Save writes the full current collection. source.modified and file.dirty remain distinct.
+
+CLI, stdio MCP and authenticated loopback expose the same typed command and29-name
+catalogue. The edit shares the existing deferred field-candidate route and worker budget;
+it has no save lease or native file/close acknowledgment authority.
+
+The native Records list uses original Bondline confirmation controls, not a claimed
+reference desktop screen. Changed field drafts resolve through Apply/Discard/Cancel
+before a fresh confirmation. Keep record has no edit; Confirm record removal invalidates
+old field/ordinal presentation. A same-packet Save waits for commit and actual worker
+retirement. A committed result remains truthful after late cancellation.
+
+Capture Rust-only UiSdfRemoveContext under the frame Engine guard, then release it before
+prepare_ui_sdf_remove(&context, SdfRecordRemove). Under the origin mutex, this method
+checks source/Open/close epoch, exact file path/format/file-request epoch and absence of
+a request before reserving/preparing. Generic prepare_ui_sdf still accepts queries and
+field edits only. Interposed requested/cancelled Save and direct SaveAs association
+changes cannot reuse the confirmation. The independent regression reproduced a real
+preparation gap before this guard; its RED is preserved separately from the unchanged
+GREEN. This is preparation protection, not a global lock on subsequent explicit commands.
+
+See [codec](verification-sdf-record-codec.md), [command](verification-sdf-record-command.md),
+[App lifecycle](verification-sdf-record-removal-workspace.md),
+[independent review](research/sdf-record-removal-review.md) and
+[integration/native scope](verification-sdf-record-removal.md).

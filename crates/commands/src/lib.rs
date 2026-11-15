@@ -33,7 +33,7 @@ pub use files::{
     Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol,
     OpenSdf, OpenSmiles, SaveCdx, SaveCdxml, SaveMol, SaveSdf, SaveSmiles,
 };
-pub use sdf_edit::SdfFieldSet;
+pub use sdf_edit::{SdfFieldSet, SdfRecordRemove};
 pub use sdf_query::{
     MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
     SdfRecordInspection, SdfValueOmission,
@@ -137,6 +137,7 @@ command_registry! {
     SdfRecordInspect(SdfRecordInspect) => ("sdf.record.inspect", "Read a bounded ordered field page from an explicitly identified captured SDF record; oversized values are omitted explicitly.", true),
     SmilesRecordInspect(SmilesRecordInspect) => ("smiles.record.inspect", "Read the exact notation and file-relative metadata of one explicit captured SMILES record; opaque application data is not disclosed or decoded.", true),
     SdfFieldSet(SdfFieldSet) => ("sdf.field.set_value", "Replace one existing ordered SDF field value through a bounded immutable candidate, preserving every other source byte.", false),
+    SdfRecordRemove(SdfRecordRemove) => ("sdf.record.remove", "Remove one explicit SDF record while preserving every remaining source byte and retaining at least one complete record.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent carbon bond of the requested Single/Double/Triple order, authoring fixed neutral-carbon H counts; omitted order is Single.", false),
     BondExtend(BondExtend) => ("bond.extend", "Extend a neutral terminal carbon with consistent literal H and one Single/Double/Triple carbon bond using an explicit requested order/H policy; omitted order is Single and native complete data is required.", false),
@@ -217,6 +218,8 @@ pub enum Error {
     InvalidSmilesQuery(&'static str),
     #[error("invalid SDF field edit: {0}")]
     InvalidSdfField(&'static str),
+    #[error("invalid SDF record operation: {0}")]
+    InvalidSdfRecord(&'static str),
     #[error("invalid SMILES conversion parameters: {0}")]
     InvalidSmilesConversion(&'static str),
     #[error("SDF field input exceeds the 64 KiB authored-LF or serialized-value budget")]
@@ -595,7 +598,11 @@ impl Engine {
             }
             Command::SdfFieldSet(params) => {
                 let plan = self.sdf_field_plan(params)?;
-                return Ok(Prepared::sdf_field_set(self.state(), plan));
+                return Ok(Prepared::sdf_edit(self.state(), plan));
+            }
+            Command::SdfRecordRemove(params) => {
+                let plan = self.sdf_record_remove_plan(params)?;
+                return Ok(Prepared::sdf_edit(self.state(), plan));
             }
             Command::ConvertSmilesToCdxml(params) => {
                 let plan = self.smiles_conversion_plan(params)?;
@@ -1051,6 +1058,7 @@ mod tests {
                 "render.capture",
                 "sdf.field.set_value",
                 "sdf.record.inspect",
+                "sdf.record.remove",
                 "smiles.record.inspect",
                 "ui.controls",
                 "ui.bond_tool",

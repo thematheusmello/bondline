@@ -100,6 +100,20 @@ impl SdfFieldsWorkflow {
         self.request(engine, record_id, 0);
     }
 
+    pub(crate) fn request_remove(
+        &mut self,
+        engine: &Engine,
+        context: &egui::Context,
+        record_id: u32,
+    ) {
+        if !self
+            .editor
+            .intercept(Target::RemoveRecord(record_id), engine, context)
+        {
+            self.editor.confirm_remove(engine, context, record_id);
+        }
+    }
+
     fn request(&mut self, engine: &Engine, record_id: u32, offset: usize) -> bool {
         let state = engine.state();
         if !matches!(engine.content(), StoredContent::Sdf { .. }) || state.close != CloseState::Open
@@ -196,6 +210,10 @@ impl SdfFieldsWorkflow {
     pub(crate) fn settle_editor(&mut self, engine: &mut Engine, context: &egui::Context) {
         self.editor.guard_external(engine, context);
         if let Some(effect) = self.editor.take_effect() {
+            if effect.records_invalidated {
+                self.clear();
+                self.previous_offsets.clear();
+            }
             if let Some((record, offset, field)) = effect.refresh {
                 self.request(engine, record, offset);
                 self.reveal = Some(field);
@@ -255,6 +273,9 @@ impl SdfFieldsWorkflow {
                 }
             }
             Target::CloseFields => self.deactivate(context),
+            Target::RemoveRecord(record) => {
+                self.editor.confirm_remove(engine, context, record);
+            }
             target => match crate::sdf_editor::resume_command(target, engine) {
                 Ok(Some(command)) => {
                     self.error = engine.execute(command).err().map(|error| error.to_string())
@@ -344,8 +365,10 @@ impl SdfFieldsWorkflow {
             }
             return;
         }
-        let can_edit =
-            !self.editor.active() && !self.is_busy() && engine.state().ui_file.request.is_none();
+        let can_edit = !self.editor.active()
+            && !self.is_busy()
+            && !self.editor.holds_files()
+            && engine.state().ui_file.request.is_none();
         let Some(page) = &self.page else {
             ui.spinner();
             ui.label("Reading fields…");

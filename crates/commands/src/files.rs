@@ -236,7 +236,7 @@ pub(super) enum Completion {
         receipt: crate::ConversionReceipt,
         save_slot: Arc<()>,
     },
-    SdfFieldSet(crate::sdf_edit::FieldCandidate),
+    SdfEdit(crate::sdf_edit::EditCandidate),
     ViewCapture {
         result: Box<CommandResult>,
         context: crate::capture::ViewCaptureContext,
@@ -529,7 +529,7 @@ impl Engine {
                 conversion: Some(receipt),
                 ..self.state()
             }),
-            Completion::SdfFieldSet(candidate) => self.finish_sdf_field(candidate),
+            Completion::SdfEdit(candidate) => self.finish_sdf_edit(candidate),
             Completion::ViewCapture {
                 mut result,
                 context,

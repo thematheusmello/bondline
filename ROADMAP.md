@@ -38,6 +38,15 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
+Whole-record SDF removal now has a source-preserving codec, the shared typed command,
+CLI/stdio/authenticated-loopback routes and original Records confirmation UI. Independent
+literal raw/per-MOL consumers and actual-App checks cover exact surviving bytes,
+Undo/Redo, draft decisions and Unicode Save/reopen. A real pre-spawn file-context race
+was reproduced, fixed and retested without changing its regression. Root's final local
+gate passes1060/0/1; native evidence is scoped in
+docs/verification-sdf-record-removal.md. Record creation/reordering, broader format
+editing and complete M1 remain required. This does not complete M0 or any later milestone.
+
 The original SDF occurrence inspector and existing-value editor are delivered. Nine
 independent actual-App editor cases cover exact duplicate-field edits, history, real Save,
 Apply→Save input ordering, navigation decisions, external requests/source replacement,

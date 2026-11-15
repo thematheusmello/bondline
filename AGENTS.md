@@ -186,7 +186,8 @@ Shared Open/Save retain every record. sdf.record.inspect exposes bounded ordered
 sdf.field.set_value edits one existing occurrence through immutable deferred candidates.
 The restricted render.capture SDF virtual page1 now uses all-record derived display data;
 the native read-only preview has bounded Mac Actual/pan acceptance; native wheel/DPI/
-edit-preview workflows and record operations remain missing. The existing-value editor uses the same
+edit-preview workflows and record insertion/reordering remain missing. Whole-record removal
+has the later bounded native evidence below. The existing-value editor uses the same
 registered setter: temporary drafts never change source/dirty/history before Apply. Retain
 Apply/Discard/Cancel, event-indexed Apply→Save ordering, stale-source recovery, guarded
 semantic continuations and actual worker retirement. A committed edit is never discarded
@@ -216,7 +217,7 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current28-command registry includes complete SDF/SMILES-file Open/Save and bond.create
+The current29-command registry includes complete SDF/SMILES-file Open/Save and bond.create
 for independent neutral-carbon fragments with optional Single(default)/Double/Triple order
 and literal H=`4-order_weight`, plus CDXML/CDX/MOL open/save. bond.extend requires the
 explicit H policy/revision and one incident supported bond with consistent literal
@@ -601,7 +602,7 @@ the preview after default-window em refusal. Native tool
 Read docs/verification-sdf-inspector.md, verification-sdf-editor-integration.md and the
 source-backed workspace plan for the delivered editor. Retain Apply/Discard/Cancel across
 navigation/Open/close, ordered Apply→Save and the predeclared788-byte second-DUP workflow. The
-registry remains28; full UI addressability and Professional field-screen evidence are
+registry now has29 commands after whole-record removal; full UI addressability and Professional field-screen evidence are
 still incomplete. GitHub Actions remains disabled. See STATUS.md for current artifacts.
 
 ## Source-qualified SDF camera
@@ -627,3 +628,31 @@ current extent is newly installed; it never enters JSON. Keep actual job/decode/
 and reply barriers. Both collection and drawing input paths resolve current camera actions
 at their raw events. Repeated wheel uses shared math and respects foreground/paper/text/
 modal/DPI/source guards. See docs/verification-sdf-view-integration.md; no full M0/M1 claim.
+
+## Whole SDF record removal
+
+The29th command is `sdf.record.remove {expected_revision,record_id}`. Keep the exact whole
+source through the shared deferred candidate/commit and Arc history. The codec removes
+only the validated complete record range, reparses/reindexes local ordinals and refuses
+the last compound per CTFILE-2026 printed97. Validate missing target before Empty. A
+survivor stays SDF/document:null; Save remains the same complete-source operation.
+
+Native removal uses the existing SdfEditor Field/Remove pending/job owner, not a second
+pool. Resolve changed drafts before fresh nonce-qualified confirmation. Clear old record/
+field/query ordinals, preserve truthful committed success after late cancellation, and
+hold File/close through actual worker retirement, including poisoned-lock draining.
+Same-packet Confirm→Save must wait for the mutation result and retirement.
+
+Retain opaque UiSdfRemoveContext from replay through pending. Release the frame Engine
+mutex before prepare_ui_sdf_remove; that method atomically checks source/Open/close,
+path/format/file-request epoch and absence of a request before permit/preparation.
+Generic prepare_ui_sdf is query/field only. The initial implementation lost file context
+after frame unlock; an independent actual-worker test reproduced it. Never remove this
+regression or replace the locked check with another pre-call UI check.
+
+Read verification-sdf-record-removal.md, the independent command/codec/App records and
+research/sdf-record-removal-review.md. Root's final local gate passes1060/0/1, all other
+xtask gates included. Native Mac Keep/Confirm/Undo/Redo/Unicode Save/reopen/retained NOTE
+passes on ordinary740→330 bytes; native draft/race/close and Windows/Linux remain
+unverified. The current native bundle/process and next work are in STATUS.md. Actions
+stays disabled; no broader reference-screen/chemical parity follows from this command.

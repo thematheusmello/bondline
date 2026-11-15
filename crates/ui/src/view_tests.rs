@@ -1380,3 +1380,6 @@ mod fit_zoom;
 
 #[path = "smiles_record_tests.rs"]
 mod smiles_record;
+
+#[path = "sdf_record_remove_tests.rs"]
+mod sdf_record_remove_tests;

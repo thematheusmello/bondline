@@ -53,11 +53,11 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
 | MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |
 | CDX files | Guarded native Open/Save/Save As verified on macOS, retaining exact accepted source. Limited projection; editing and faithful preview remain unavailable. |
-| SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. Inspect duplicate, empty and space-only fields; edit an existing occurrence with explicit Apply and Undo/Redo. Native Mac multiline editing and Unicode Save As/reopen pass. Native Actual size and pan now display both ordinary chemical records. Actual App tests cover wheel/DPI/source freshness, drafts and Apply→fresh preview→Save/reopen. Default Fit can still refuse its readability guard. |
-| SMILES records | Whole accepted `.smi`/`.smiles` source files and an original read-only ordinal inspector. Select/copy exact notation; inspect counts/ranges without disclosing opaque data. App-level Unicode Save/reopen, navigation/privacy and worker retirement pass. Native controls are observed; the complete native input/clipboard/dialog journey remains unverified. Chemical preview/editing is unavailable. |
+| SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. Inspect duplicate, empty and space-only fields; edit an existing occurrence with explicit Apply and Undo/Redo. Record removal has confirmation, draft decisions, complete history and exact Save/reopen tests; at least one record must remain. A bounded native Mac Keep/Confirm→Undo/Redo→Unicode Save/reopen workflow passes. Default Fit can still refuse its readability guard. |
+| SMILES records | Whole accepted `.smi`/`.smiles` source files and an original read-only ordinal inspector. Select/copy exact notation; inspect counts/ranges without disclosing opaque data. App-level Unicode Save/reopen, navigation/privacy and worker retirement pass. Native Next/Inspect now display a nonfirst record; the complete typing/clipboard/dialog journey remains unverified. Chemical preview/editing is unavailable. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. Rapid Undo→Save preserves the undone source; independently checked in the actual Mac app and saved file. |
 | Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. The centered style is original; broader native label workflows and reference style parity remain unverified. |
-| Automation | 28 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Automation | 29 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all
 three platforms and window launches. GitHub Actions is disabled during development to
@@ -114,6 +114,12 @@ Navigation with an unapplied change offers Apply, Discard or Cancel. Existing va
 selectable and read-only until explicitly edited. [Inspector evidence](docs/verification-sdf-inspector.md)
 and [editor checks and limits](docs/verification-sdf-editor-integration.md) distinguish native
 observations from headless pagination and lifecycle checks.
+
+To remove a whole SDF record, choose **Remove record …** in Records, resolve any changed
+field draft, then confirm. **Keep record** cancels; **Undo** restores every original byte.
+The remaining records receive new ordinal numbers. Removing the last record is refused.
+[Removal verification](docs/verification-sdf-record-removal.md) separates App, worker and
+actual desktop evidence; record creation/reordering and molecular editing remain missing.
 
 If a fitted SDF preview reports that labels are too small, choose **View → Actual size**
 or press **F5**, then use the two position controls. All records stay intact; the field

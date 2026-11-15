@@ -328,3 +328,14 @@ a numeric AX seed, including after preparation. Known Drawing Fit retains its nu
 explicit100 remains enterable. Actual-App input plus native read-only AX/painting evidence
 is scoped in verification-fit-readout.md. This does not resolve the relative-step policy,
 hardware DPI, numeric native input, font coverage or the earlier aborted wheel check.
+
+## SDF record-removal presentation, 2026-11-15
+
+CTFILE-2026 defines the one-or-more-compounds container rule, not a Professional26.1
+record-browser deletion flow. No verified public source establishes that exact desktop
+screen/confirmation/shortcut. Bondline's Records action, explicit confirmation, draft
+resolution and source-local ordinal invalidation are original policies, recorded in
+research/sdf-record-removal-ui-plan.md and verification-sdf-record-removal.md. Do not mark
+reference-screen parity from their existence or copy proprietary reference assets.
+Record creation/reordering, field-header editing and broader native/platform acceptance
+remain separate work. The latest AGENTS.md public-source boundary applies to new research.

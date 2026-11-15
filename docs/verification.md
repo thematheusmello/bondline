@@ -2619,3 +2619,22 @@ the ordinal/Inspect/navigation controls without automatic notation. An authentic
 native-process record2 query preserves clean state/source; no OS input/clipboard/dialog
 journey is claimed. No parser/dependency/oracle/golden/hosted/fuzz change. Actions stays
 disabled; M0/M1 and M2–M5 remain incomplete.
+
+## Whole SDF record removal, 2026-11-15
+
+[Integrated evidence](verification-sdf-record-removal.md) records the complete-record
+codec,29th shared command, CLI/stdio/authenticated-loopback and original confirmation UI.
+Seven codec, six command, three wire, three native-adapter, four independent App, five
+finite lifecycle and one reproduced preparation-race cases are additive to1031 checks.
+Root96793 final local gate passes **1060/0/1**,153 result lines, formatting, all-target
+warnings-denied clippy, layers, licenses and corpus. The original ignored capture remains.
+Exact source/log pins, test setup corrections and first catalogue failures are separate
+from intended REDs; no original fixture/oracle/dependency/golden changed.
+
+Native PID58926 now passes a bounded actual Mac Open→Keep/Confirm→Undo/Redo→Unicode
+Save As→reopen→Actual/pan→retained NOTE workflow. Actual330 bytes equal the literal
+740-byte input suffix; unchanged external raw/MOL consumers verify fields and CN/CH5N.
+A real pre-spawn file-context race was independently reproduced before the atomic native
+preparation guard; its unchanged regression passes. Native race/draft/close paths, other
+platform input, hardware DPI and complete reference parity remain unverified. No new
+fuzz or hosted execution; Actions remains disabled and the full goal remains active.

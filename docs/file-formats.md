@@ -680,7 +680,8 @@ preview/editing and native record selection remain missing.
 
 The original native occurrence editor now uses the existing immutable value replacement.
 It can change one existing record/field occurrence, including an empty or multiline value;
-it does not add/delete/reorder fields or records, rename headers or edit molecular payloads.
+it does not add/delete/reorder fields, rename headers or edit molecular payloads.
+Whole-record removal is a separate operation below; record creation/reordering remain missing.
 All existing format limits/refusals remain. Temporary text is distinct from Apply and
 Save; invalid or stale drafts cannot silently publish the old source. Undo/Redo retains
 the complete collection and exact original/saved distinctions.
@@ -701,3 +702,24 @@ record subset, source-paper resize, source reconstruction or permission for cros
 Whole-page captures retain their old default behavior. Read-only viewport capture is not
 print-scale publication or native project compatibility beyond the format scopes above.
 See [exact camera and native evidence](verification-sdf-view-integration.md).
+
+## Whole SDF record removal
+
+`SdfDocument::without_record(RecordId)` removes the complete validated raw record range
+and reparses the exact surviving bytes. It never re-encodes a MOL block or property map.
+Record IDs are positive source-local ordinals: deletion regenerates them and their spans;
+external callers must not retain an old ordinal as a stable molecular identity.
+
+CTFILE-2026 printed97 specifies one or more compounds. The existing Empty/invalid_sdf
+refusal therefore protects the sole record; MissingRecord/not_found takes precedence for
+an absent target. Existing ASCII/framing/EOF and resource limits remain unchanged.
+The registered `sdf.record.remove` retains original/current/saved whole sources and the
+same snapshot history, deferred cancellation/ownership checks and atomic SDF Save path.
+A one-record survivor stays SDF, with document:null and collection metadata. This is not
+record-to-Drawing conversion, chemical perception or editing the retained molecule.
+
+[Codec tests](verification-sdf-record-codec.md) cover first/middle/final, mixed versions,
+CRLF, suffixed/EOF delimiters, data duplicates and bounds with unchanged independent
+consumers. [Command](verification-sdf-record-command.md) and
+[integration](verification-sdf-record-removal.md) records scope transport/native evidence.
+No record insertion/reordering or field-header editing is delivered by this operation.

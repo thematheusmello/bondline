@@ -388,7 +388,7 @@ pub struct Prepared {
     )>,
     file: Option<FilePlan>,
     sdf_record: Option<crate::sdf_query::RecordPlan>,
-    sdf_field_set: Option<crate::sdf_edit::FieldPlan>,
+    sdf_edit: Option<crate::sdf_edit::EditPlan>,
     smiles_record: Option<crate::smiles_query::RecordPlan>,
 }
 
@@ -399,7 +399,7 @@ impl Prepared {
             capture: None,
             file: None,
             sdf_record: None,
-            sdf_field_set: None,
+            sdf_edit: None,
             smiles_record: None,
         }
     }
@@ -410,7 +410,7 @@ impl Prepared {
             capture: None,
             file: Some(file),
             sdf_record: None,
-            sdf_field_set: None,
+            sdf_edit: None,
             smiles_record: None,
         }
     }
@@ -432,7 +432,7 @@ impl Prepared {
             capture: Some((params, content, context)),
             file: None,
             sdf_record: None,
-            sdf_field_set: None,
+            sdf_edit: None,
             smiles_record: None,
         })
     }
@@ -443,18 +443,18 @@ impl Prepared {
             capture: None,
             file: None,
             sdf_record: Some(plan),
-            sdf_field_set: None,
+            sdf_edit: None,
             smiles_record: None,
         }
     }
 
-    pub(super) fn sdf_field_set(result: CommandResult, plan: crate::sdf_edit::FieldPlan) -> Self {
+    pub(super) fn sdf_edit(result: CommandResult, plan: crate::sdf_edit::EditPlan) -> Self {
         Self {
             result,
             capture: None,
             file: None,
             sdf_record: None,
-            sdf_field_set: Some(plan),
+            sdf_edit: Some(plan),
             smiles_record: None,
         }
     }
@@ -468,7 +468,7 @@ impl Prepared {
             capture: None,
             file: None,
             sdf_record: None,
-            sdf_field_set: None,
+            sdf_edit: None,
             smiles_record: Some(plan),
         }
     }
@@ -486,7 +486,7 @@ impl Prepared {
         self.capture.is_some()
             || self.file.is_some()
             || self.sdf_record.is_some()
-            || self.sdf_field_set.is_some()
+            || self.sdf_edit.is_some()
             || self.smiles_record.is_some()
     }
 
@@ -498,8 +498,8 @@ impl Prepared {
         if let Some(file) = self.file {
             return file.complete(cancel);
         }
-        if let Some(plan) = self.sdf_field_set {
-            return Ok(Completed(Completion::SdfFieldSet(plan.complete(cancel)?)));
+        if let Some(plan) = self.sdf_edit {
+            return Ok(Completed(Completion::SdfEdit(plan.complete(cancel)?)));
         }
         let deferred_query =
             self.capture.is_some() || self.sdf_record.is_some() || self.smiles_record.is_some();
