@@ -2638,3 +2638,26 @@ A real pre-spawn file-context race was independently reproduced before the atomi
 preparation guard; its unchanged regression passes. Native race/draft/close paths, other
 platform input, hardware DPI and complete reference parity remain unverified. No new
 fuzz or hosted execution; Actions remains disabled and the full goal remains active.
+
+## Fresh document sessions, 2026-11-15
+
+[Integrated New evidence](verification-new-document.md) records the30th command, File New/
+primaryN, source-qualified Save/Discard/Cancel and unchanged actual worker-retirement
+authority. Six independent command, three counter, three presentation, three actual-wire,
+one namespace, six actual-App and eight finite worker cases are additive. Minimal
+UnknownCommand/missing-control runtime REDs, compiler stages and reviewed new-test setup
+corrections are separate. Two further independent runtime REDs reproduce old-surface
+pointer drags becoming unintended bonds; the final persistent presented-namespace guard
+passes both unchanged regressions, replacing the insufficient poll-only intermediate fix.
+
+Root7556 full local gate passes **1090/0/1**,156 result lines; formatting, warnings-denied
+all-target clippy, layers, licenses and corpus pass. Earlier clippy signature/catalogue
+failures and two unexplained old UI timeouts remain recorded. No timeout/assertion,
+fixture, external oracle, dependency, font, SDK or approved golden was weakened/changed.
+
+Actual native PID52347, final binarye38d0e91…d2105, passes SDF→New, dirty Cancel/Discard/
+Save, Unicode Save-before-New, editable reopen, hotspot order edit and Undo to Saved.
+Actual436-byte old drawing is accepted by unchanged external RDKit plus separate Expat
+checks. This bounded Mac journey does not prove native races, styles/templates/multiple
+windows or Windows/Linux input. No new fuzz/hosted check; Actions remains disabled.
+The full M0–M5 goal remains active. Continue from STATUS.md, without redoing delivered New.

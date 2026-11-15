@@ -96,7 +96,7 @@ establish chemical preview, data-edit UI or other platforms.
 
 | ID | Reference control/action | G25 p. | State | Notes |
 |---|---|---|---|---|
-| MF-001 | File > New Document | 13, 39 | missing | Style-dependent New label; project creation/persistence missing. |
+| MF-001 | File > New Document | 13, 39 | partial verified, single-window Mac | Shared document.new and File intent reset to a source-free A4 drawing with guarded Save/Discard/Cancel. Native SDF→New, dirty decisions, Unicode Save-before-New, editable reopen and Undo pass; command/App/worker tests cover stale input and retirement. A4 and same-window policy are original. Style-dependent New, templates, multiple windows, other platforms and complete26.1 parity remain missing. See verification-new-document.md. |
 | MF-002 | File > Open | 14 | partial verified, Mac CDXML/CDX/MOL/SDF | Shared presentation request/Cancel, decoder choice/hints and failed-open retention. CDX native picker/explicit format/malformed-import retention and guarded no-preview state pass on exact450962c; source is retained. Other formats/platform workflows missing. |
 | MF-003 | File > Recent-document list | 14 | missing | Dynamic list; no sample files copied. |
 | MF-004 | File > Save | 14 | partial verified, Mac CDXML/CDX/MOL/SDF | Shared known-path/encoding intent and guarded preparation. CDX exact source/receipt/refusal and native known-path misleading-suffix Save/retry/dirty-close refusal/Undo recovery pass. Existing Mac XML/MOL CmdS/QuitSave evidence remains; history-across-save differs G25 and general formats/styles are missing. |
@@ -605,7 +605,7 @@ establish chemical preview, data-edit UI or other platforms.
 
 | ID | Contextual action / key(s) | G25 p. | State | Scope / evidence |
 |---|---|---|---|---|
-| KM-001 | New document: Ctrl+n | 77 | missing | - |
+| KM-001 | New document: Ctrl+n | 77 | partial verified, Mac Cmd+n | Central file.new binding uses primaryN; actual Mac dirty Cancel/Discard/Save and fresh drawing pass. Windows/Linux input unverified; no modern full shortcut-matrix claim. See MF-001. |
 | KM-002 | Open document: Ctrl+o | 78 | wired | Mac CmdO verified for CDXML; this Ctrl binding needs native Windows/Linux evidence. |
 | KM-003 | Save: Ctrl+s | 78 | wired | Mac CmdS verified; Windows/Linux Ctrl workflow remains unverified. |
 | KM-004 | Save As: Shift+Ctrl+s | 78 | wired | Typed UI shortcut and native menu flow; exact shortcut needs native evidence. |

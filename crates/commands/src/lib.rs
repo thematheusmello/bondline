@@ -15,6 +15,7 @@ mod content;
 mod controls;
 mod file_ui;
 mod files;
+mod new_document;
 mod sdf_edit;
 mod sdf_query;
 mod smiles_conversion;
@@ -33,6 +34,7 @@ pub use files::{
     Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol,
     OpenSdf, OpenSmiles, SaveCdx, SaveCdxml, SaveMol, SaveSdf, SaveSmiles,
 };
+pub use new_document::NewDocument;
 pub use sdf_edit::{SdfFieldSet, SdfRecordRemove};
 pub use sdf_query::{
     MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
@@ -48,6 +50,8 @@ pub use view::{UiView, ViewOperation, ViewState};
 mod close_tests;
 #[cfg(test)]
 mod file_ui_tests;
+#[cfg(test)]
+mod new_document_tests;
 #[cfg(test)]
 mod sdf_tests;
 #[cfg(test)]
@@ -117,6 +121,7 @@ macro_rules! command_registry {
 
 command_registry! {
     Inspect(NoParams) => ("document.inspect", "Inspect the authored document and history state.", true),
+    NewDocument(NewDocument) => ("document.new", "Start a fresh source-free drawing session; unsaved data requires explicit discard and existing saved files remain untouched.", false),
     Close(CloseDocument) => ("document.close", "Request, explicitly discard, or cancel closing the current document revision.", false),
     UiFile(UiFile) => ("ui.file", "Request or cancel native file presentation; requires an attached native host.", false),
     UiControls(NoParams) => ("ui.controls", "Discover delivered native controls, shortcuts, typed bindings and contextual availability.", true),
@@ -576,6 +581,9 @@ impl Engine {
         let mut drawing_focus = None;
         let changed = match command {
             Command::Inspect(_) => false,
+            Command::NewDocument(params) => {
+                return Ok(Prepared::immediate(self.new_document(params)?));
+            }
             Command::UiView(params) => return Ok(Prepared::immediate(self.navigate_view(params)?)),
             Command::Close(params) => return Ok(Prepared::immediate(self.close(params)?)),
             Command::UiFile(params) => return Ok(Prepared::immediate(self.ui_file(params)?)),
@@ -1039,6 +1047,7 @@ mod tests {
                 "bond.extend",
                 "bond.set_order",
                 "document.inspect",
+                "document.new",
                 "document.close",
                 "document.open_cdxml",
                 "document.save_cdxml",

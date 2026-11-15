@@ -112,6 +112,7 @@ pub struct DrawingState {
     hover_fresh: bool,
     key_hotspot: Option<BondHotspot>,
     navigation_position: Option<egui::Pos2>,
+    presented_generation: Option<u64>,
 }
 
 impl DrawingState {
@@ -453,6 +454,7 @@ fn control_shortcut_key(shortcut: ControlShortcut) -> egui::KeyboardShortcut {
         ..egui::Modifiers::NONE
     };
     let key = match shortcut.key {
+        ControlKey::N => egui::Key::N,
         ControlKey::O => egui::Key::O,
         ControlKey::S => egui::Key::S,
         ControlKey::W => egui::Key::W,
@@ -504,6 +506,7 @@ fn pending_ui_blocks_authoring(state: &bondline_commands::CommandResult) -> bool
 struct ShortcutRouting<'a> {
     actions: &'a [(usize, view_controls::Action)],
     fields: Option<&'a mut SdfFieldsWorkflow>,
+    files: Option<&'a mut FileWorkflow>,
     canvas: Option<(egui::Rect, egui::LayerId)>,
 }
 
@@ -519,8 +522,14 @@ fn replay_edit_shortcuts(
     let ShortcutRouting {
         actions,
         mut fields,
+        mut files,
         canvas,
     } = routing;
+    let from_drawing = engine.content().drawing().is_ok();
+    let blocked = blocked
+        && !files
+            .as_ref()
+            .is_some_and(|files| files.new_decision_open());
     if blocked && fields.is_none() {
         return;
     }
@@ -538,7 +547,22 @@ fn replay_edit_shortcuts(
         if let Some(fields) = fields.as_deref_mut() {
             fields.replay_editor(index, engine, context);
         }
-        if blocked || pending_ui_blocks_authoring(&engine.state()) {
+        if let Some(files) = files.as_deref_mut() {
+            files.replay_new(index, event, engine, error, context);
+            files.adopt_new(engine, error);
+        }
+        if !from_drawing && engine.content().drawing().is_ok() {
+            drawing.gesture = None;
+            drawing.invalidate_hover();
+            context.request_discard("New document replaced the collection surface");
+            return;
+        }
+        if blocked
+            || pending_ui_blocks_authoring(&engine.state())
+            || files
+                .as_ref()
+                .is_some_and(|files| files.blocks_authoring(&engine.state()))
+        {
             continue;
         }
         if let egui::Event::WindowFocused(value) = event {
@@ -602,6 +626,9 @@ fn replay_edit_shortcuts(
             let view_command = matches!(&command, Command::UiView(_));
             let previous_view = engine.view();
             *error = engine.execute(command).err().map(|error| error.to_string());
+            if let Some(files) = files.as_deref_mut() {
+                files.adopt_new(engine, error);
+            }
             if view_command && engine.view() == previous_view {
                 continue;
             }
@@ -612,6 +639,10 @@ fn replay_edit_shortcuts(
             drawing.invalidate_hover();
             drawing.navigation_position = position;
             context.request_repaint();
+            if !from_drawing && engine.content().drawing().is_ok() {
+                context.request_discard("New document replaced the collection surface");
+                return;
+            }
         }
     }
 }
@@ -685,10 +716,25 @@ fn show_workspace_with_preview(
         ),
         None => (None, None, None),
     };
+    let discard_stale_canvas_input = engine.content().drawing().is_ok()
+        && drawing
+            .presented_generation
+            .is_some_and(|generation| generation != engine.session_generation());
+    if discard_stale_canvas_input {
+        drawing.gesture = None;
+        drawing.invalidate_hover();
+        drawing.navigation_position = None;
+    }
     if let Some(fields) = sdf_fields.as_deref_mut() {
         fields.begin_ui();
     }
     let events = context.input(|input| input.events.clone());
+    let new_decision_at_start = files
+        .as_ref()
+        .is_some_and(|files| files.new_decision_open());
+    if let Some(files) = files.as_deref_mut() {
+        files.begin_new_ui(context, &events);
+    }
     if [
         context.screen_rect().width(),
         context.screen_rect().height(),
@@ -713,6 +759,7 @@ fn show_workspace_with_preview(
             ShortcutRouting {
                 actions: &[],
                 fields: sdf_fields.as_deref_mut(),
+                files: files.as_deref_mut(),
                 canvas: None,
             },
         );
@@ -871,6 +918,7 @@ fn show_workspace_with_preview(
                 if let Some(records) = smiles_records.as_deref_mut() {
                     records.show(ui, engine);
                 }
+                drawing.presented_generation = Some(engine.session_generation());
                 return;
             }
             if let Some(collection) = engine.content().collection() {
@@ -882,6 +930,7 @@ fn show_workspace_with_preview(
                     "SDF collection: {} records, {} bytes",
                     collection.record_count, collection.byte_length
                 ));
+                drawing.presented_generation = Some(engine.session_generation());
                 if let Some(preview) = preview.as_deref_mut() {
                     ui.label("Read-only chemical preview");
                     egui::CollapsingHeader::new("Records").show(ui, |ui| {
@@ -982,12 +1031,13 @@ fn show_workspace_with_preview(
                         ShortcutRouting {
                             actions: &view_actions,
                             fields: sdf_fields.as_deref_mut(),
+                            files: files.as_deref_mut(),
                             canvas: Some((rect, response.layer_id)),
                         },
                     );
                     history_handled = true;
                     if engine.content().collection().is_none() {
-                        context.request_repaint();
+                        context.request_discard("New document replaced the SDF surface");
                         return;
                     }
                     key.revision = engine.state().revision;
@@ -1156,7 +1206,43 @@ fn show_workspace_with_preview(
                 if let Some(fields) = sdf_fields.as_deref_mut() {
                     fields.replay_editor(index, engine, context);
                 }
-                let blocked = blocked || pending_ui_blocks_authoring(&engine.state());
+                if let Some(files) = files.as_deref_mut() {
+                    files.replay_new(index, event, engine, error, context);
+                    files.adopt_new(engine, error);
+                }
+                if key.revision != engine.state().revision {
+                    drawing.gesture = None;
+                    drawing.invalidate_hover();
+                    let Ok(stored) = engine.stored_document() else {
+                        return;
+                    };
+                    document = stored.model_snapshot();
+                    let Some(page) = document.pages().first() else {
+                        return;
+                    };
+                    viewport = match engine.page_view(width, height, page.id()) {
+                        Ok(viewport) => viewport,
+                        Err(failure) => {
+                            *error = Some(failure.to_string());
+                            return;
+                        }
+                    };
+                    key.page = page.id();
+                    key.revision = engine.state().revision;
+                    key.view_epoch = engine.view().epoch;
+                    drawing.hover_context = Some(key);
+                    graph = engine.drawing_view_scene(
+                        width,
+                        height,
+                        key.page,
+                        &bondline_render::Cancellation::default(),
+                    );
+                }
+                let blocked = (blocked && !new_decision_at_start)
+                    || pending_ui_blocks_authoring(&engine.state())
+                    || files
+                        .as_ref()
+                        .is_some_and(|files| files.blocks_authoring(&engine.state()));
                 while tool_states.peek().is_some_and(|(at, _)| *at == index) {
                     if let Some((_, tool)) = tool_states.next()
                         && key.tool != tool
@@ -1227,6 +1313,18 @@ fn show_workspace_with_preview(
                     drawing.gesture = None;
                 }
                 if command.is_none() {
+                    if discard_stale_canvas_input
+                        && matches!(
+                            event,
+                            egui::Event::PointerMoved(_)
+                                | egui::Event::PointerButton { .. }
+                                | egui::Event::Touch { .. }
+                        )
+                    {
+                        drawing.gesture = None;
+                        drawing.invalidate_hover();
+                        continue;
+                    }
                     if let egui::Event::PointerMoved(pos) | egui::Event::PointerButton { pos, .. } =
                         event
                     {
@@ -1571,6 +1669,9 @@ fn show_workspace_with_preview(
                         .and_then(|command| engine.execute(command))
                         .err()
                         .map(|failure| failure.to_string());
+                    if let Some(files) = files.as_deref_mut() {
+                        files.adopt_new(engine, error);
+                    }
                     if view_command && engine.view() == previous_view {
                         continue;
                     }
@@ -1718,6 +1819,7 @@ fn show_workspace_with_preview(
                             ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                         }
                     }
+                    drawing.presented_generation = Some(engine.session_generation());
                 }
                 Err(error) => {
                     drawing.invalidate_hover();
@@ -1743,6 +1845,7 @@ fn show_workspace_with_preview(
             ShortcutRouting {
                 actions: &view_actions,
                 fields: sdf_fields.as_deref_mut(),
+                files: files.as_deref_mut(),
                 canvas: None,
             },
         );
@@ -1903,6 +2006,7 @@ impl BondlineApp {
                 }
             }
             Err(_) => {
+                self.files.deactivate_new(context, &mut self.error);
                 self.preview.deactivate(context);
                 self.sdf_fields.deactivate(context);
                 self.smiles_records.deactivate(context);

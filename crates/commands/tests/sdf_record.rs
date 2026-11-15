@@ -21,6 +21,7 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
         names,
         [
             "document.inspect",
+            "document.new",
             "document.close",
             "ui.file",
             "ui.controls",

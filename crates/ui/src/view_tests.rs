@@ -1383,3 +1383,6 @@ mod smiles_record;
 
 #[path = "sdf_record_remove_tests.rs"]
 mod sdf_record_remove_tests;
+
+#[path = "new_document_tests.rs"]
+mod new_document;

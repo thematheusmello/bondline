@@ -11,6 +11,9 @@ The app is in early development; documented plans are not implemented features.
 | Automate the app | [Command and control protocol](control-protocol.md) |
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
+| Start a fresh drawing safely | [New document, native Save/Discard/Cancel and race evidence](verification-new-document.md) |
+| Inspect SMILES notation records | [Original inspector and bounded native file workflow](verification-smiles-record-integration.md) |
+| Remove a complete SDF record | [Source preservation, confirmation and native evidence](verification-sdf-record-removal.md) |
 | Inspect ordered SDF field occurrences | [Read-only inspector, TDD and bounded native checks](verification-sdf-inspector.md) |
 | Edit an existing SDF field value | [Transactional editor and native evidence](verification-sdf-editor-integration.md), [App cases](verification-sdf-editor.md), [worker gates](verification-sdf-editor-lifecycle.md) |
 | Navigate a read-only SDF chemical preview | [Integrated native scope](verification-sdf-view-integration.md), [command checks](verification-sdf-view-command.md), [App checks](verification-sdf-view-ui.md), [physical raster](verification-view-raster.md) |

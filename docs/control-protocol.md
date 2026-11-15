@@ -45,6 +45,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | Name | Parameters | Effect |
 |---|---|---|
 | `document.inspect` | `{}` | Read-only snapshot |
+| `document.new` | Required `expected_revision`; optional `discard_unsaved=false` | Fresh source-free A4 Drawing session; clears file association/history and advances namespace/revision; retains saved files and outstanding work ownership |
 | `document.open_cdxml` | `path`, optional `discard_unsaved=false` | Bounded native CDXML read; successful application starts a clean document session and clears history |
 | `document.save_cdxml` | `path`, optional `overwrite=false` | Atomic complete-source save; default no-clobber; authoring revision/history retained |
 | `document.open_cdx` | `path`, optional `discard_unsaved=false` | Bounded read of the supported CDX projection with complete source; new clean session and cleared history; A4 preview policy, faithful preview/editing unavailable |
@@ -771,8 +772,9 @@ output. Existing explicit SMILES conversion/export retain their separate scope a
 Native requests bind only actual Open/Save selections; existing .smi/.smiles picker,
 known Save, Save As retry and clean-close worker draining are wired/headlessly tested.
 A metadata-only view clears stale drawing gestures/hover and exposes accessible count/size
-and unavailable-preview status. No chemical preview/editing or actual native execution is
-claimed. CLI, stdio MCP and authenticated loopback use the same commands and real files.
+and unavailable-preview status. The later original inspector and bounded native Unicode
+Save/reopen are recorded in verification-smiles-record-integration.md. Chemical preview/
+editing remains unavailable. CLI, stdio MCP and authenticated loopback use the same commands and real files.
 See verification-smiles-file-app.md and verification-smiles-file-ui.md for exact evidence.
 
 ## Explicit SMILES record inspection
@@ -809,8 +811,9 @@ Ordinal/Inspect/Previous/Next use the same existing query; cancel/retry/hide are
 presentation, with full source/close/request stale checks and actual-worker close gates.
 Automatic metadata and external query success do not disclose notation in that UI.
 No new command or wire-side selection is introduced. GUI lifecycle/input/file tests and
-limited native controls are scoped in verification-smiles-record-integration.md; native
-activation/clipboard/dialog acceptance and broader control addressability remain open.
+bounded native ordinal/Inspect/Previous and Unicode Save/reopen are scoped in
+verification-smiles-record-integration.md. OS clipboard, native lifecycle races and
+broader control addressability remain open.
 
 ## Native preview host contract (Rust adapter)
 
@@ -853,8 +856,8 @@ is cleared without losing the current selection. Pending/delivery/actual thread 
 participate in the host close barrier. [Five independent actual-App tests and bounded
 Mac observations](verification-sdf-inspector.md) do not establish a mutating editor,
 draft/Apply workflow, native pagination race or complete control addressability. These
-local presentation controls add no named command or schema. The registry now has29 commands
-after the separate record-removal addition below.
+local presentation controls add no named command or schema. Record removal brought the
+registry to29 commands; the separate document.new addition brings the current count to30.
 
 ## Existing-bond absolute order setter
 
@@ -904,7 +907,7 @@ host lifecycle; this does not claim arbitrary cross-dialog input ordering.
 
 ## Transient drawing view
 
-`ui.view` is one tagged, closed parameter object. The29-command registry exposes its
+`ui.view` is one tagged, closed parameter object. The30-command registry exposes its
 seven object branches through the same CLI, stdio MCP and authenticated loopback routes.
 Examples:
 
@@ -1070,7 +1073,7 @@ field is introduced. One successful edit advances revision/history; Undo/Redo re
 complete original/current snapshots. document stays null, collection stays SDF and normal
 Save writes the full current collection. source.modified and file.dirty remain distinct.
 
-CLI, stdio MCP and authenticated loopback expose the same typed command and29-name
+CLI, stdio MCP and authenticated loopback expose the same typed command and30-name
 catalogue. The edit shares the existing deferred field-candidate route and worker budget;
 it has no save lease or native file/close acknowledgment authority.
 
@@ -1093,3 +1096,49 @@ See [codec](verification-sdf-record-codec.md), [command](verification-sdf-record
 [App lifecycle](verification-sdf-record-removal-workspace.md),
 [independent review](research/sdf-record-removal-review.md) and
 [integration/native scope](verification-sdf-record-removal.md).
+
+## Fresh document sessions
+
+```json
+{"command":"document.new","params":{"expected_revision":2,"discard_unsaved":false}}
+```
+
+The parameter object is closed; expected_revision is required. A stale revision refuses;
+unsaved authored data refuses unless discard_unsaved=true. Pending close refuses ui_busy,
+and committed close retains close_committed. New always starts a distinct session, even
+when the prior document is already empty. It is not an Undo edit or a file publication.
+
+Success installs a fresh source-free default A4 Drawing, clean current/saved baseline,
+CDXML output format, no file association/source/collection/SMILES summary and empty history.
+Revision, session generation and view epoch advance with checked arithmetic before any
+mutation. IDs, prior SDF extent/focus and camera reset; Fit/centered presentation returns.
+The same Engine, native host, selected tool, actual canvas dimensions and save reservation
+remain. Old captured Save work can publish its own bytes truthfully; its older generation
+cannot associate or clean this new session and its lease still lasts through finish/drop.
+Existing source/revision/generation/foreign completion checks remain unchanged.
+
+The central file.new control invokes ui.file actionnew, with primaryN. A native host is
+required for presentation; the logical document.new command works headlessly. claim_ui_file
+returns NewDocument. Rust-only create_ui_document validates the exact current Accepted New
+intent under the origin mutex and calls the same registry command. New never produces a
+trusted Save receipt, native close acknowledgment or background worker.
+
+Native dirty replacement uses original Save/Discard Changes/Cancel decisions. Changed
+SDF drafts resolve before a fresh New intent. Save retires that New intent and creates an
+ordinary qualified Save. Only its exact current trusted receipt, unchanged full source/
+revision/close context, clean baseline and actual worker retirement can resume New with
+discard_unsaved=false. Failure/cancellation/replacement disarms New; an ordinary Save retry
+cannot silently resume it. Close/poison cleanup retains the actual Save/result until drain.
+
+The UI records the namespace of its last actually presented surface. Rust-only
+Engine::session_generation is monotonic within that same Engine and unchanged by ordinary
+edits/history/view changes; it is a cache key, not global identity or command authority.
+A different New/Open namespace cancels old canvas gesture/hover/hotspot and fences raw
+canvas authoring until the new surface is presented. Typed menu/key event ordering stays
+intact. Full CaptureStamp qualification on asynchronous work is not replaced by this counter.
+
+See [integrated evidence and native limits](verification-new-document.md),
+[command](verification-new-document-command.md), [App](verification-new-document-ui.md),
+[worker lifecycle](verification-new-document-workspace.md) and
+[independent review](research/new-document-review.md). This single-window A4 workflow does
+not establish style-sheet templates, multi-document windows or full26.1 parity.

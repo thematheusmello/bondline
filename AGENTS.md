@@ -217,7 +217,7 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current29-command registry includes complete SDF/SMILES-file Open/Save and bond.create
+The current30-command registry includes document.new, complete SDF/SMILES-file Open/Save and bond.create
 for independent neutral-carbon fragments with optional Single(default)/Double/Triple order
 and literal H=`4-order_weight`, plus CDXML/CDX/MOL open/save. bond.extend requires the
 explicit H policy/revision and one incident supported bond with consistent literal
@@ -467,10 +467,10 @@ Current/saved/plans retain the complete variant; retained accounting deduplicate
 and index. `document.open_smiles` and `document.save_smiles` reuse the common guarded
 Open/Save path, lease, generation, publication and native request/close rules. Automatic
 state has document:null and compact smiles_file {format,byte_length,record_count}, without
-notations/data or a recordsVec. All drawing/SDF/cross-format operations refuse this kind.
-The .smi/.smiles chooser/static summary is wired and headlessly exercised; actual native
-acceptance remains unverified while the user is active. No chemical preview/editing,
-UI record selection, metadata editor or source-to-drawing authority follows. See
+notations/data or a recordsVec. Graph/SDF edits and cross-format Save refuse this kind;
+document.new explicitly starts a distinct source-free session. The .smi/.smiles chooser,
+original inspector and Unicode Save/reopen have bounded native evidence. No chemical
+preview/editing, metadata editor or source-to-drawing authority follows. See
 verification-smiles-file-app.md and verification-smiles-file-ui.md. Run the separate
 smiles_file_parse fuzz target locally as in fuzz/README.md; Actions stays disabled.
 
@@ -505,8 +505,9 @@ reply; clear text/focus on source/close/hide and never install stale/historical 
 Parsing stays off-frame; file/close gates include publication through real retirement,
 including poisoned-engine cleanup. Immutable notation stays selectable/copyable with
 ReadOnly AX and cleared local undo. No opaque appdata or inferred chemistry is displayed.
-Five independent App cases and two finite lifecycle gates pass; native controls/registry
-query are observed, but native input/clipboard/dialog acceptance remains unverified.
+Five independent App cases and two finite lifecycle gates pass. Bounded native ordinal
+typing/Inspect/Previous, readonly typing refusal and Unicode Save/reopen now preserve all49
+bytes; native OS clipboard, lifecycle races and other platforms remain unverified.
 See docs/verification-smiles-record-integration.md; do not duplicate completed work.
 
 ## Derived SDF display continuation
@@ -602,7 +603,7 @@ the preview after default-window em refusal. Native tool
 Read docs/verification-sdf-inspector.md, verification-sdf-editor-integration.md and the
 source-backed workspace plan for the delivered editor. Retain Apply/Discard/Cancel across
 navigation/Open/close, ordered Apply→Save and the predeclared788-byte second-DUP workflow. The
-registry now has29 commands after whole-record removal; full UI addressability and Professional field-screen evidence are
+registry now has30 commands including document.new; full UI addressability and Professional field-screen evidence are
 still incomplete. GitHub Actions remains disabled. See STATUS.md for current artifacts.
 
 ## Source-qualified SDF camera
@@ -656,3 +657,34 @@ xtask gates included. Native Mac Keep/Confirm/Undo/Redo/Unicode Save/reopen/reta
 passes on ordinary740→330 bytes; native draft/race/close and Windows/Linux remain
 unverified. The current native bundle/process and next work are in STATUS.md. Actions
 stays disabled; no broader reference-screen/chemical parity follows from this command.
+
+## Fresh sessions and native New
+
+The30th command is `document.new {expected_revision, discard_unsaved:false}`. It creates
+a distinct source-free A4 session even from empty, advances checked revision/generation/
+view epoch before mutation and clears association/history/IDs/extent/focus. Retain the
+existing Engine, save lease, host, selected tool and canvas dimensions. Do not replace the
+Engine with default: old saves still own their lease and may publish truthfully, while an
+old generation cannot associate or clean the new session. Dirty, stale and close guards
+must preserve state; document.new cannot acknowledge a Save or close.
+
+`file.new` uses `ui.file` actionnew and Accepted-New authority through create_ui_document.
+Resolve changed SDF drafts first. New Save resumes only after the current trusted actual
+Save receipt and JoinHandle retirement; cancellation/failure/staleness/close/poison disarm
+continuation. An ordinary retry must never silently restart New. Reuse FileWorkflow and
+the existing worker budget. No new pool, save lease or receipt authority is needed.
+
+Existing DrawingState tracks the last actually presented namespace. New/Open between
+frames must clear stale gestures/hotspot and reject old-surface raw canvas input until
+the new canvas is painted. Readonly surfaces tag their layout; invalid/unsupported Drawing
+returns do not tag an unseen surface. The Rust-only session_generation getter is local
+to the same Engine, not globally unique or command authority. Do not replace full
+CaptureStamp job guards or this persistent fence with a poll-only flag: two independent
+actual-App regressions reproduced unintended C–C bonds on the old surface.
+
+Read verification-new-document.md and linked command/App/worker/review records. The
+final local gate passes1090/0/1. Native Mac SDF→New, dirty Cancel/Discard/Save, Unicode
+Save-before-New, editable reopen and Undo pass; native races and other platforms remain
+unverified. Next is the existing restricted SMILES converter's honest native workflow,
+then broader drawing import/layout. SDF reordering is deferred, not delivered. Full M0/M1
+and M2–M5 remain incomplete; Actions stays disabled.

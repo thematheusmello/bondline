@@ -462,6 +462,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "bond.set_order",
             "document.close",
             "document.inspect",
+            "document.new",
             "document.open_cdx",
             "document.open_cdxml",
             "document.open_mol",

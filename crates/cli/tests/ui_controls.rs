@@ -43,6 +43,7 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
     assert_eq!(
         ids,
         BTreeSet::from([
+            "file.new",
             "file.open",
             "file.save",
             "file.save_as",
@@ -74,6 +75,7 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
         )?;
     }
     for (id, label, key, shift, action) in [
+        ("file.new", "New Document", "n", false, "new"),
         ("file.open", "Open…", "o", false, "open"),
         ("file.save", "Save", "s", false, "save"),
         ("file.save_as", "Save As…", "s", true, "save_as"),

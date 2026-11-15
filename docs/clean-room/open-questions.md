@@ -339,3 +339,19 @@ research/sdf-record-removal-ui-plan.md and verification-sdf-record-removal.md. D
 reference-screen parity from their existence or copy proprietary reference assets.
 Record creation/reordering, field-header editing and broader native/platform acceptance
 remain separate work. The latest AGENTS.md public-source boundary applies to new research.
+
+## New document reference scope, 2026-11-15
+
+GUIDE-25 printed13/39/77 establishes New, untitled documents, default/style-sheet roles
+and Ctrl+N. No verified26.1 evidence establishes Bondline's current single-window
+replacement/default A4, camera reset or retained tool policy; those are original choices.
+Style-sheet defaults, style-dependent New labels and multi-document windows remain missing.
+Apple's indexed Command-N table is a platform convention; its body returned429 and does
+not establish reference-product Mac parity. Native Bondline and other-platform execution
+must be recorded at their actual scope. Do not copy reference stationery, templates or icons.
+
+The New namespace guard addresses source replacement between UI frames and during Save
+completion, without weakening full revision/source identity checks on jobs. Its cache key
+is local to the same Engine; it is not a globally unique document ID or file authority.
+Broader UI addressability, platform event ordering and native concurrency scenarios remain
+part of the full M0 audit rather than being implied by a passing headless App suite.

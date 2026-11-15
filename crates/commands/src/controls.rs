@@ -9,6 +9,7 @@ use serde::Serialize;
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum ControlKey {
+    N,
     O,
     S,
     W,
@@ -72,6 +73,13 @@ impl Engine {
         };
         let mut controls = Vec::with_capacity(17);
         for (id, label, key, shift, action) in [
+            (
+                "file.new",
+                "New Document",
+                ControlKey::N,
+                false,
+                UiFileAction::New,
+            ),
             (
                 "file.open",
                 "Open…",

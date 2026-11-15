@@ -1,4 +1,6 @@
 use bondline_commands::Engine;
+#[path = "support/new_document_adapters.rs"]
+mod new_document;
 #[path = "support/sdf_remove_adapters.rs"]
 mod record_remove;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};

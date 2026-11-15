@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum UiFileAction {
+    New,
     Open,
     Save,
     SaveAs,
@@ -55,6 +56,7 @@ pub struct UiFileState {
 /// Acceptance by a native host is not a claim that pixels have been displayed.
 #[derive(Clone, Debug)]
 pub enum UiFilePlan {
+    NewDocument,
     OpenPicker,
     SavePicker,
     SaveExisting {
@@ -220,6 +222,7 @@ impl Engine {
             return Err(Error::UiBusy);
         }
         let plan = match active.view.action {
+            UiFileAction::New => UiFilePlan::NewDocument,
             UiFileAction::Open => UiFilePlan::OpenPicker,
             UiFileAction::Save => {
                 active
@@ -241,6 +244,27 @@ impl Engine {
             active.view.phase = UiFilePhase::Accepted;
         }
         Ok(plan)
+    }
+
+    /// A New intent changes the session immediately; it never publishes a file receipt.
+    pub fn create_ui_document(
+        &mut self,
+        id: u64,
+        discard_unsaved: bool,
+    ) -> Result<CommandResult, Error> {
+        let active = self.current_ui_file(id)?;
+        if active.view.phase != UiFilePhase::Accepted {
+            return Err(Error::UiBusy);
+        }
+        if active.view.action != UiFileAction::New {
+            return Err(Error::InvalidUiFileParameters(
+                "New document requires the matching accepted New request",
+            ));
+        }
+        self.execute(Command::NewDocument(crate::NewDocument {
+            expected_revision: active.view.input_revision,
+            discard_unsaved,
+        }))
     }
 
     /// Validate a host selection and prepare its actual file command under the same

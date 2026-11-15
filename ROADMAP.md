@@ -38,6 +38,20 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
+Fresh document sessions now have `document.new`, File → New Document and primaryN,
+guarded dirty/draft decisions and Save-before-New through actual worker retirement.
+Independent tests reproduce and close both old-surface pointer races. The local aggregate
+passes1090/0/1; actual Mac SDF→New, Cancel/Discard/Save, Unicode output, editable reopening
+and Undo pass. See docs/verification-new-document.md. Styles/templates and multiple
+windows remain missing. This closes the source-file→fresh-drawing dead end, not M0/M1.
+
+Next M1 priority is an honest native workflow for the existing restricted create-only
+SMILES→CDXML converter, then broader SMILES drawing import/layout. Reread its current
+contract and independent consumers before adding controls; preserve active source,
+create-only output and explicit profile limitations. SDF creation/reordering and wider
+format editing stay in the backlog. The earlier proposed SDF reordering priority is
+deferred after the sourced File New audit; it was not an implemented feature.
+
 Whole-record SDF removal now has a source-preserving codec, the shared typed command,
 CLI/stdio/authenticated-loopback routes and original Records confirmation UI. Independent
 literal raw/per-MOL consumers and actual-App checks cover exact surviving bytes,

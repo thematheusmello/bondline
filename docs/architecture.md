@@ -448,3 +448,29 @@ A→B→A texture reuse. Collection input is replayed before painting/scheduling
 uses the same math as Drawing and preserves focus/modal/foreground/paper/context guards.
 The existing job/decode/retirement and reply barriers remain. Exact evidence and limitations
 are in [the view integration record](verification-sdf-view-integration.md).
+
+## Fresh sessions and presented input namespaces
+
+`document.new` replaces content within the existing Engine. It advances checked revision/
+generation/view counters, installs clean source-free A4 current/saved snapshots, clears
+association/history/IDs/derived extent/focus and resets Fit. It preserves the live host,
+executor, selected tool, physical canvas context and outstanding save_slot. Replacing the
+Engine with Default would break old-save isolation and is forbidden. Old Save receipts
+remain truthful historical publication reports, with generation preventing reassociation.
+
+The native ui.file New intent reuses existing request qualification. FileWorkflow owns
+one decision/saving phase; ordinary Save work and its exact JoinHandle/receipt remain
+owned until actual retirement. Cancel/stale/close/poison disarm the continuation without
+abandoning truthful publication. No second pool or false Save/close acknowledgment exists.
+
+DrawingState retains one last-presented session generation, local to its same Engine.
+Readonly surfaces tag their laid-out namespace; Drawing tags only a successfully painted
+scene. A newly published namespace fences old raw canvas input and clears old targets,
+including New applied before a frame by the shared registry. Ordinary edits/history do
+not change this namespace. Current typed event ordering and full source/close/job stamps
+remain independent. Real App regressions first reproduced ghost bonds both during Save
+completion and after between-frame New; the unchanged tests pass after this guard.
+
+The reset, Source/Save ownership and native/remaining scope are documented in
+verification-new-document.md. The current implementation is one window with original A4
+policy; full default styles, multiple documents and broader input/platform parity remain.

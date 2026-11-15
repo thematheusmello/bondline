@@ -47,6 +47,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | Double and Triple bonds | Native macOS tool selection, centered drawing, history and CDXML Save As pass at a readable scale. Carbon terminal extension also passes independent headless checks; its native multiple-bond workflow and context-sensitive styles remain unverified/missing. |
 | Existing-bond editing | Set Single/Double/Triple with hotspot1/2/3; convert an existing Single by clicking, or draw across Single/Double endpoints with Single selected. Same edge and geometry, corrected literal carbon H, one history step. Bounded native Mac and independent graph/file checks; alignment and general imported edits remain unavailable. |
 | Workspace | Light header, compact two-column bond rail, white paper, document/source/count inspector and contextual guidance. Actual macOS authoring and file-picker checks pass for the documented subset. |
+| New document | File → New Document and Cmd/Ctrl+N start a fresh A4 drawing in the same window. Save, Discard and Cancel protect unsaved content. Mac SDF→New, dirty decisions, Unicode Save-before-New, editable reopening and Undo pass; styles/templates and multiple windows remain missing. |
 | View navigation | Numeric zoom, Actual/Fit/Magnify/Reduce, two-axis position controls and ordinary wheel navigation without resizing paper or changing history. Mac A4 drawing/editing at100%/150% and read-only SDF Actual/pan pass. SDF Fit reports `Fit`, without an invented numeric percentage. SDF wheel and DPI/source invalidation pass actual-App tests; native wheel remains unverified. Rendering/readability guards apply. |
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files; unknown imported content remains backed by its original bytes. |
@@ -57,7 +58,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | SMILES records | Whole accepted `.smi`/`.smiles` source files and an original read-only ordinal inspector. Inspect exact notation/counts/ranges without disclosing opaque data. Bounded Mac ordinal typing, Inspect/Previous, read-only typing refusal and Unicode Save As/reopen preserve all source bytes. App tests also cover selection/copy and worker retirement; native OS clipboard copy remains unverified. Chemical preview/editing is unavailable. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. Rapid Undo→Save preserves the undone source; independently checked in the actual Mac app and saved file. |
 | Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. The centered style is original; broader native label workflows and reference style parity remain unverified. |
-| Automation | 29 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Automation | 30 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all
 three platforms and window launches. GitHub Actions is disabled during development to
@@ -106,6 +107,11 @@ independent developer test oracles, not as an application runtime.
 
 Use File → Open/Save/Save As for supported CDXML, CDX, MOL, SDF or SMILES documents. Cmd/Ctrl+O, S, Shift+S and W are wired;
 actual Mac shortcut and accessibility-field evidence is in [native-file-ui.md](docs/native-file-ui.md).
+
+Choose **File → New Document** or press **Cmd/Ctrl+N** to return to a fresh drawing.
+For unsaved changes, choose **Save**, **Discard Changes** or **Cancel**. Save writes the
+current document before creating the new one. [New document evidence](docs/verification-new-document.md)
+separates the actual Mac workflow from headless race and lifecycle checks.
 
 For an SDF collection, expand **Records**, choose **Inspect record … fields**, then expand
 an occurrence in the right inspector. Duplicate names remain separate. Select **Edit record
@@ -171,9 +177,9 @@ Its startup token is a credential; keep it out of reports and screenshots.
 |---|---|---|
 | CDXML | Source preservation, checked attribute changes, native elemental encoding and the supported app workflow | Broader source-preserving edits and mappings |
 | CDX | Guarded shared/native Mac Open/Save, exact source retention, limited elemental metadata view and standalone syntax/property/new-tree APIs, checked independently | Faithful preview, broader metadata/chemistry, safe edits/new encoding and foreign/general corpus |
-| MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, existing-field editing/Undo/Redo and bounded native SDF Actual/pan; independent byte/record/data and current-view image checks | Native wheel/DPI/edit-preview acceptance, record/field creation and removal, broader metadata/layout support and interactive Windows/Linux |
+| MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, existing-field editing, whole-record removal/Undo/Redo and bounded native SDF Actual/pan; independent byte/record/data and current-view image checks | Native wheel/DPI/edit-preview acceptance, record creation/reordering, field-header editing, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
-| SMILES | Complete accepted multi-record source Open/Save and explicit bounded record inspection through shared commands/CLI/MCP/loopback; exact opaque data/endings, explicit-H fragment export and restricted carbon-path→CDXML conversion | Chemical preview/editing of opened files, native acceptance of the wired file chooser, native export/conversion controls, general layout/valence, aromaticity/stereo and canonicalization |
+| SMILES | Complete accepted multi-record source Open/Save, original inspector and bounded Mac Unicode Save/reopen; exact opaque data/endings, explicit-H fragment export and restricted carbon-path→CDXML conversion | Native conversion/export controls, chemical preview/editing of opened files, general layout/valence, aromaticity/stereo and canonicalization |
 | InChI | Planned | Reference-tool comparison and import/export |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |
