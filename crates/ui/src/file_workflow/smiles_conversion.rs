@@ -12,10 +12,11 @@ use std::thread::JoinHandle;
 mod worker_tests;
 
 const MAX_TEXT_BYTES: usize = 32_768;
-const PROFILES: [SmilesConversionProfile; 3] = [
+const PROFILES: [SmilesConversionProfile; 4] = [
     SmilesConversionProfile::NeutralCarbonPathV1,
     SmilesConversionProfile::NeutralAcyclicV1,
     SmilesConversionProfile::NeutralSimpleRingV1,
+    SmilesConversionProfile::NeutralComponentsV1,
 ];
 
 #[derive(Clone)]
@@ -321,7 +322,7 @@ impl FileWorkflow {
         let shown = egui::Window::new("Convert SMILES file").id(window_id)
             .anchor(egui::Align2::CENTER_CENTER,egui::Vec2::ZERO).order(egui::Order::Foreground)
             .default_width(620.0).collapsible(false).resizable(false).open(&mut open).show(context, |ui| {
-                ui.horizontal(|ui| {
+                ui.horizontal_wrapped(|ui| {
                     for profile in PROFILES {
                         let response=ui.add_enabled(enabled && !matches!(form.outcome,Some(Outcome::Success {..})),egui::RadioButton::new(form.values.profile==profile,profile.label()));
                         if response.clicked() && let Some(index)=events.iter().position(|event| crate::activation_event(&response,event)) {
@@ -332,7 +333,8 @@ impl FileWorkflow {
                 ui.label("Carbon chains: Supports one connected chain of 1–12 neutral carbon atoms with single bonds.");
                 ui.label("Acyclic neutral structures: up to 64 H/C/N/O/F/Cl/Br/I atoms, branches and Single/Double/Triple bonds. Rings, isotopes, charges and some unspecified internal double bonds are unsupported.");
                 ui.label("Neutral ring structures: one 3–8 atom ring with single ring bonds and supported attached branches; up to 64 neutral H/C/N/O/F/Cl/Br/I atoms in total. Larger or multiple rings, isotopes, charges and unsupported double-bond configurations refuse.");
-                ui.label("Origin: a chain endpoint for carbon chains; upper-left atom-center bounds for acyclic and ring structures.");
+                ui.label("Neutral components: up to 64 neutral atoms across supported chains, branches and small Single rings. All components must fit the page.");
+                ui.label("Origin: a chain endpoint for carbon chains; upper-left atom-center bounds for acyclic, ring and component structures.");
                 ui.label("The current document stays open. The output must be a new CDXML file; existing files are never overwritten.");
                 let mut field_error = None;
                 egui::Grid::new(("conversion-parameters",key)).num_columns(2).show(ui, |ui| {

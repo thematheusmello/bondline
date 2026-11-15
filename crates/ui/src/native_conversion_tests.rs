@@ -812,3 +812,6 @@ mod acyclic_profile;
 
 #[path = "native_ring_conversion_tests.rs"]
 mod ring_profile;
+
+#[path = "native_components_conversion_tests.rs"]
+mod components_profile;

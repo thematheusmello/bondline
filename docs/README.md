@@ -12,7 +12,7 @@ The app is in early development; documented plans are not implemented features.
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
 | Start a fresh drawing safely | [New document, native Save/Discard/Cancel and race evidence](verification-new-document.md) |
-| Convert a supported SMILES file | [Simple-ring profile, aggregate and bounded Mac evidence](verification-smiles-ring-integration.md), [earlier acyclic/native evidence](verification-smiles-acyclic-integration.md), [original converter lifecycle](verification-native-smiles-conversion.md) |
+| Convert a supported SMILES file | [Fourth profile: focused/App,1188/0/1 and bounded Mac100% workflow; Fit/pan limits](verification-smiles-components-integration.md), [independent layout](verification-smiles-components-layout.md), [earlier ring aggregate and Mac evidence](verification-smiles-ring-integration.md), [acyclic/native evidence](verification-smiles-acyclic-integration.md), [original lifecycle](verification-native-smiles-conversion.md) |
 | Check asynchronous file browsing | [Stable controls and visible errors](verification-file-picker-stability.md) |
 | Inspect SMILES notation records | [Original inspector and bounded native file workflow](verification-smiles-record-integration.md) |
 | Remove a complete SDF record | [Source preservation, confirmation and native evidence](verification-sdf-record-removal.md) |

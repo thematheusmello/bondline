@@ -7,7 +7,7 @@ use super::{
         graph_adjacency, linear_centers, local_alternatives, root_tree, size,
     },
 };
-use bondline_model::{BondOrder, Document, PageSize, Point2};
+use bondline_model::{BondOrder, Document, Fragment, PageSize, Point2};
 use bondline_render::Cancellation;
 use std::{
     collections::VecDeque,
@@ -34,164 +34,184 @@ impl SmilesDocument {
             return Err(LayoutError::SimpleRingAtomLimit);
         }
         let fragment = self.normalize_explicit_h_fragment()?;
-        if fragment.atoms().iter().any(|atom| atom.isotope.is_some()) {
-            return Err(LayoutError::Unsupported("isotopic drawing labels"));
-        }
-        if origin.x_pt() < 0.0
-            || origin.y_pt() < 0.0
-            || origin.x_pt() > page.width_pt()
-            || origin.y_pt() > page.height_pt()
-        {
-            return Err(LayoutError::Geometry("atom-center origin outside paper"));
-        }
-        if length > page.width_pt().hypot(page.height_pt()) {
-            return Err(LayoutError::Geometry("bond length exceeds paper"));
-        }
-        if fragment.bonds().len() != fragment.atoms().len() {
-            return Err(LayoutError::Unsupported("not a single-cycle graph"));
-        }
-        let adjacency = graph_adjacency(&fragment)?;
-        let cycle = cycle(&adjacency, cancel)?;
-        let mut ring = vec![false; adjacency.len()];
-        for &at in &cycle {
-            *ring
-                .get_mut(at)
-                .ok_or(LayoutError::Geometry("missing ring atom"))? = true;
-        }
-        for &at in &cycle {
-            if adjacency.get(at).into_iter().flatten().any(|link| {
-                ring.get(link.atom).copied() == Some(true) && link.order != BondOrder::Single
-            }) {
-                return Err(LayoutError::Unsupported(
-                    "cycle bond order other than Single",
-                ));
-            }
-        }
-        let linear = linear_centers(&fragment, &adjacency)?;
-        let mut parent = vec![None; adjacency.len()];
-        let mut children = vec![Vec::new(); adjacency.len()];
-        let mut order = cycle.clone();
-        for &at in &cycle {
-            check(cancel)?;
-            let mut branches = adjacency
-                .get(at)
-                .ok_or(LayoutError::Geometry("missing ring adjacency"))?
-                .iter()
-                .filter(|link| ring.get(link.atom).copied() == Some(false))
-                .map(|link| link.atom)
-                .collect::<Vec<_>>();
-            // E=V and connectivity prove these components are trees, each with one ring root.
-            branches.sort_by_key(|child| {
-                (
-                    std::cmp::Reverse(size(*child, Some(at), &adjacency)),
-                    *child,
-                )
-            });
-            *children
-                .get_mut(at)
-                .ok_or(LayoutError::Geometry("missing ring branches"))? = branches.clone();
-            for child in branches {
-                root_tree(
-                    child,
-                    Some(at),
-                    &adjacency,
-                    &mut parent,
-                    &mut children,
-                    &mut order,
-                    cancel,
-                )?;
-            }
-        }
-        if order.len() != adjacency.len() {
-            return Err(LayoutError::Geometry("incomplete attached forest"));
-        }
-        let mut alternatives = vec![Vec::new(); adjacency.len()];
-        for &at in order
-            .iter()
-            .filter(|at| ring.get(**at).copied() == Some(false))
-        {
-            let branches = children
-                .get(at)
-                .ok_or(LayoutError::Geometry("missing tree branches"))?;
-            *alternatives
-                .get_mut(at)
-                .ok_or(LayoutError::Geometry("missing tree alternatives"))? = local_alternatives(
-                at,
-                branches,
-                &adjacency,
-                &fragment,
-                *linear
-                    .get(at)
-                    .ok_or(LayoutError::Geometry("missing linear policy"))?,
-                Some(&ring),
-                cancel,
-            )?;
-        }
-        let mut solver = Solver {
-            fragment: &fragment,
-            parent,
-            children,
-            order,
-            alternatives,
-            positions: vec![None; adjacency.len()],
+        layout_fragment(
+            &fragment,
             length,
             origin,
             page,
             cancel,
-            work: 0,
-            scenes: 0,
-            last: LayoutError::Geometry("no permitted bounded ring placement fits"),
-        };
-        let n = cycle.len();
-        let step = TAU / n as f64;
-        let radius = length / (2.0 * (PI / n as f64).sin());
-        let phase = if n == 6 {
-            PI - PI / n as f64
-        } else {
-            PI / 2.0 - PI / n as f64
-        };
-        // Only symmetry-equivalent phases retain the sourced polygon orientation.
-        for shift in 0..n {
-            for direction in [1.0, -1.0] {
-                check(cancel)?;
-                solver.positions.fill(None);
-                for (index, &at) in cycle.iter().enumerate() {
-                    let theta = phase + step * (shift as f64 + direction * index as f64);
-                    let (sin, cos) = theta.sin_cos();
-                    *solver
-                        .positions
-                        .get_mut(at)
-                        .ok_or(LayoutError::Geometry("missing cycle position"))? =
-                        Some([radius * cos, radius * sin]);
-                    let branches = solver
-                        .children
-                        .get(at)
-                        .ok_or(LayoutError::Geometry("missing branches"))?;
-                    *solver
-                        .alternatives
-                        .get_mut(at)
-                        .ok_or(LayoutError::Geometry("missing ring alternatives"))? =
-                        ring_alternatives(at, branches, &adjacency, theta, n)?;
-                }
-                solver.work = WORK_PER_ROTATION;
-                solver.scenes = SCENES_PER_ROTATION;
-                if geometry(
-                    &fragment,
-                    &solver.positions,
-                    length,
-                    origin,
-                    page,
-                    &mut solver.work,
-                    cancel,
-                )? && let Some(document) = solver.visit(0)?
-                {
-                    return Ok(document);
-                }
+            WORK_PER_ROTATION,
+            SCENES_PER_ROTATION,
+        )
+    }
+}
+
+pub(super) fn layout_fragment(
+    fragment: &Fragment,
+    length: f64,
+    origin: Point2,
+    page: PageSize,
+    cancel: &Cancellation,
+    work_per_rotation: usize,
+    scenes_per_rotation: usize,
+) -> Result<Document, LayoutError> {
+    if fragment.atoms().iter().any(|atom| atom.isotope.is_some()) {
+        return Err(LayoutError::Unsupported("isotopic drawing labels"));
+    }
+    if origin.x_pt() < 0.0
+        || origin.y_pt() < 0.0
+        || origin.x_pt() > page.width_pt()
+        || origin.y_pt() > page.height_pt()
+    {
+        return Err(LayoutError::Geometry("atom-center origin outside paper"));
+    }
+    if length > page.width_pt().hypot(page.height_pt()) {
+        return Err(LayoutError::Geometry("bond length exceeds paper"));
+    }
+    if fragment.bonds().len() != fragment.atoms().len() {
+        return Err(LayoutError::Unsupported("not a single-cycle graph"));
+    }
+    let adjacency = graph_adjacency(fragment)?;
+    let cycle = cycle(&adjacency, cancel)?;
+    let mut ring = vec![false; adjacency.len()];
+    for &at in &cycle {
+        *ring
+            .get_mut(at)
+            .ok_or(LayoutError::Geometry("missing ring atom"))? = true;
+    }
+    for &at in &cycle {
+        if adjacency.get(at).into_iter().flatten().any(|link| {
+            ring.get(link.atom).copied() == Some(true) && link.order != BondOrder::Single
+        }) {
+            return Err(LayoutError::Unsupported(
+                "cycle bond order other than Single",
+            ));
+        }
+    }
+    let linear = linear_centers(fragment, &adjacency)?;
+    let mut parent = vec![None; adjacency.len()];
+    let mut children = vec![Vec::new(); adjacency.len()];
+    let mut order = cycle.clone();
+    for &at in &cycle {
+        check(cancel)?;
+        let mut branches = adjacency
+            .get(at)
+            .ok_or(LayoutError::Geometry("missing ring adjacency"))?
+            .iter()
+            .filter(|link| ring.get(link.atom).copied() == Some(false))
+            .map(|link| link.atom)
+            .collect::<Vec<_>>();
+        // E=V and connectivity prove these components are trees, each with one ring root.
+        branches.sort_by_key(|child| {
+            (
+                std::cmp::Reverse(size(*child, Some(at), &adjacency)),
+                *child,
+            )
+        });
+        *children
+            .get_mut(at)
+            .ok_or(LayoutError::Geometry("missing ring branches"))? = branches.clone();
+        for child in branches {
+            root_tree(
+                child,
+                Some(at),
+                &adjacency,
+                &mut parent,
+                &mut children,
+                &mut order,
+                cancel,
+            )?;
+        }
+    }
+    if order.len() != adjacency.len() {
+        return Err(LayoutError::Geometry("incomplete attached forest"));
+    }
+    let mut alternatives = vec![Vec::new(); adjacency.len()];
+    for &at in order
+        .iter()
+        .filter(|at| ring.get(**at).copied() == Some(false))
+    {
+        let branches = children
+            .get(at)
+            .ok_or(LayoutError::Geometry("missing tree branches"))?;
+        *alternatives
+            .get_mut(at)
+            .ok_or(LayoutError::Geometry("missing tree alternatives"))? = local_alternatives(
+            at,
+            branches,
+            &adjacency,
+            fragment,
+            *linear
+                .get(at)
+                .ok_or(LayoutError::Geometry("missing linear policy"))?,
+            Some(&ring),
+            cancel,
+        )?;
+    }
+    let mut solver = Solver {
+        fragment,
+        parent,
+        children,
+        order,
+        alternatives,
+        positions: vec![None; adjacency.len()],
+        length,
+        origin,
+        page,
+        cancel,
+        work: 0,
+        scenes: 0,
+        last: LayoutError::Geometry("no permitted bounded ring placement fits"),
+    };
+    let n = cycle.len();
+    let step = TAU / n as f64;
+    let radius = length / (2.0 * (PI / n as f64).sin());
+    let phase = if n == 6 {
+        PI - PI / n as f64
+    } else {
+        PI / 2.0 - PI / n as f64
+    };
+    // Only symmetry-equivalent phases retain the sourced polygon orientation.
+    for shift in 0..n {
+        for direction in [1.0, -1.0] {
+            check(cancel)?;
+            solver.positions.fill(None);
+            for (index, &at) in cycle.iter().enumerate() {
+                let theta = phase + step * (shift as f64 + direction * index as f64);
+                let (sin, cos) = theta.sin_cos();
+                *solver
+                    .positions
+                    .get_mut(at)
+                    .ok_or(LayoutError::Geometry("missing cycle position"))? =
+                    Some([radius * cos, radius * sin]);
+                let branches = solver
+                    .children
+                    .get(at)
+                    .ok_or(LayoutError::Geometry("missing branches"))?;
+                *solver
+                    .alternatives
+                    .get_mut(at)
+                    .ok_or(LayoutError::Geometry("missing ring alternatives"))? =
+                    ring_alternatives(at, branches, &adjacency, theta, n)?;
+            }
+            solver.work = work_per_rotation;
+            solver.scenes = scenes_per_rotation;
+            if geometry(
+                fragment,
+                &solver.positions,
+                length,
+                origin,
+                page,
+                &mut solver.work,
+                cancel,
+            )? && let Some(document) = solver.visit(0)?
+            {
+                return Ok(document);
             }
         }
-        check(cancel)?;
-        Err(solver.last)
     }
+    check(cancel)?;
+    Err(solver.last)
 }
 
 fn cycle(adjacency: &[Vec<Link>], cancel: &Cancellation) -> Result<Vec<usize>, LayoutError> {

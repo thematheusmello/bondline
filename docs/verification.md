@@ -2788,3 +2788,45 @@ Native numeric geometry typing, clipboard, race/cancel/close timing, hardware DP
 platform interaction remain unverified. Rings/general import and complete M0–M5 remain
 incomplete. ChemDraw is raised afterward with the existing blank reference window unchanged.
 Actions remains disabled and the persistent goal remains active.
+
+## Neutral disconnected SMILES conversion, 2026-11-15
+
+[Integrated evidence](verification-smiles-components-integration.md) and the
+[independent layout record](verification-smiles-components-layout.md) separate the
+missing-profile/radio runtime REDs, missing-method compiler REDs and corrected new-test
+setup errors. Eight IO, three command, one closed-schema, two actual-wire and three App
+cases add16 passes. The new external consumer was first qualified against seven original
+manual-XML positives and20 negatives, including same-formula changed connectivity and
+assigned stereo. Its exact source, existing oracles and approved golden remain unchanged.
+
+The fourth optional profile normalizes once and keeps one complete Fragment, global IDs,
+directed arrays and fixed H. Actual-edge components use existing bounded tree/simple-ring
+poses, divided search quotas and original source-order center-box shelves with gap L.
+One-component output retains earlier exact bytes; the assembled whole graph must pass
+geometry, finite-width strokes, literal/resolved-H agreement and paper-ink certification.
+The same30-command registry, create-only publisher, worker/lease, source/history/close
+barriers and explicit output Open remain. This grants no molecular edit/Save authority
+to an opened complete SMILES source-file session and does not implement general import.
+
+Root5986 targeted command3/schema1/wire2/App3 and Root90518 independent IO8 pass. Root59627
+full local `cargo xtask ci` passes **1188/0/1**,171 result lines: rustfmt, warnings-denied
+all-target workspace/vendor clippy/tests, layers, licenses and corpus. Log144,934B SHA256
+`fc0778bdce5498e14f113c6f8ca31a7f4ea8cd8544bb7e4794b71929f0b2e7d3`.
+The subsequent native build passes; all11 declared product identities remain exact.
+The previously recorded listener AddrInUse failure remains unexplained; this passing gate
+is not evidence of a causal fix. Runtime closures154/165/220 and corpus8 files/5 bundles
+remain unchanged. No new parser-fuzz, dependency, SDK, font or asset change.
+
+Actual Mac PID21951, refreshed sole existing review bundle, passes legacy-profile refusal,
+occupied-destination refusal, Unicode retry while retaining the known unsaved7/7 drawing,
+explicit Open Cancel then Discard/Open, first-edge Double edit at100%, CmdZ/ShiftCmdZ and
+Unicode Save As/reopen. Both actual1,407-byte files pass the unchanged Expat/Decimal/RDKit
+consumer and literal whole-graph expectations:9 atoms/7 bonds/3 components, C8H20O→C8H18O.
+Input, destination sentinel and previous saved ring stay exact; there is no automatic Open.
+
+The edited drawing's Fit78.79% refuses rendering because multiple strokes/gaps need distinct
+pixels;100% is restored and renders. A top ring H label is partly clipped at100%, and AX
+SetValue/coordinate slider drag produce no change. Full overview/pan success is not claimed.
+Native races/cancellation/close, hardware DPI, Windows/Linux and general chemistry/import
+remain unverified or missing. No new human-approved golden; Actions stays disabled and
+the full M0–M5 goal remains active.

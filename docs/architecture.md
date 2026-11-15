@@ -530,6 +530,33 @@ coverage remains unverified. Successful measured-height growth requests one qual
 UI re-layout to prevent cached-window receipt clipping, without replaying raw events. See [the integration record](verification-smiles-ring-integration.md)
 and [independent layout](verification-smiles-ring-layout.md).
 
+## Bounded neutral-component drawing conversion
+
+`neutral_components_v1` reuses the same optional profile, command, file owner, worker,
+lease and publisher. Whole-notation normalization runs once after the 64-total-atom check.
+Actual-edge BFS orders components by minimum original ID. Dense local Fragment views use
+the unchanged tree/simple-ring solvers; only positions return to the complete normalized
+arrays with global IDs, directed bonds and fixed H. There is no partial SmilesDocument,
+per-member normalization, first-record projection or source-session mutation.
+
+The extracted seven-argument helpers preserve old preflights and 100000-work/64-scene
+per-rotation defaults. For K components they receive integer-divided quotas. Rigid poses
+are shelved in source order with gap L between atom-center boxes, height-aware width wrap
+and no rotation/rescale. One final 100000-work whole geometry pass plus the shared literal/
+same-count resolved-H, actual-stroke and physical-paper certificate includes all component
+pairs. One actual component returns the old helper result directly, preserving exact bytes.
+
+Focused eight IO/three command/one schema/two wire/three App checks pass, including CPU/GPU capture equality and
+complete mixed 9-atom/7-bond/3-component conversion→explicit Open→Double edit→Undo/Redo→Unicode persistence.
+The full local gate passes1188/0/1. Bounded Mac conversion/refusal/retry, retained dirty
+source, explicit Open Cancel/Discard, Double edit/history and Unicode Save/reopen pass;
+independent consumers verify both actual 1407-byte 9/7/3 outputs. Native authoring works
+at100%; edited Fit78.79% refuses the existing distinct-pixel bond guard. An initial top
+label was clipped and attempted native pan produced no change, so full overview/pan
+remain unverified. No new parser-fuzz run or dependency change is claimed. [Integration](verification-smiles-components-integration.md)
+separates those scopes. General source-qualified drawing import still needs complete
+opaque backing/record selection, baseline/ID, history/stale-job and Save/loss policies.
+
 The [external CDX counterexample](research/cdx-external-writer-probe.md) now has a narrow
 canonical 28-byte FileEnd fallback after legacy TrailingData only. Legacy successes and the
 22-byte HeaderDocument path remain; zero reserved bytes select the new implicit/explicit
@@ -541,5 +568,5 @@ rendering or cross-format authority follows. The N−2 legacy-prefix ambiguity r
 The incomplete-source UI keeps its preview refusal and exposes no chemical counts. The
 final receiving aggregate passes1172/0/1. Earlier MCP replacement-bind AddrInUse remains
 unexplained; bounded diagnostics and a contradicted hypothesis establish no causal fix.
-No corpus admission occurred. Component packing/general source-qualified SMILES import
-and broader CDX metadata/Text/Double/style mapping remain M1 work.
+No corpus admission occurred. General source-qualified SMILES import, broader packing/
+chemistry and CDX metadata/Text/Double/style mapping remain M1 work.

@@ -56,7 +56,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | CDX files | Guarded native Open/Save/Save As verified on macOS. Canonical 28-byte implicit/explicit Document plus FileEnd passes independent tests and ASan; an original implicit-envelope file also passes bounded Mac Open/Unicode Save As/reopen with exact source retention. The full local gate passes1172/0/1. Limited projection; editing and faithful preview remain unavailable. |
 | SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. Inspect duplicate, empty and space-only fields; edit an existing occurrence with explicit Apply and Undo/Redo. Record removal has confirmation, draft decisions, complete history and exact Save/reopen tests; at least one record must remain. A bounded native Mac Keep/Confirm→Undo/Redo→Unicode Save/reopen workflow passes. Default Fit can still refuse its readability guard. |
 | SMILES records | Whole accepted `.smi`/`.smiles` source files and an original read-only ordinal inspector. Inspect exact notation/counts/ranges without disclosing opaque data. Bounded Mac ordinal typing, Inspect/Previous, read-only typing refusal and Unicode Save As/reopen preserve all source bytes. App tests also cover selection/copy and worker retirement; native OS clipboard copy remains unverified. Chemical preview/editing is unavailable. |
-| SMILES file conversion | File → Convert SMILES file… offers Carbon chains, Acyclic neutral structures and Neutral ring structures. The new profile supports one3–8-member Single cycle with supported attached trees, up to64 neutral H/C/N/O/F/Cl/Br/I atoms, subject to geometry/ink limits. Focused independent checks and bounded Mac profile/refusal/Unicode conversion, guarded Open, external-bond edit/history and Save/reopen pass. The full local gate passes1158/0/1. General import and clipboard conversion remain unavailable. |
+| SMILES file conversion | File → Convert SMILES file… offers Carbon chains, Acyclic neutral structures, Neutral ring structures and Neutral components. The fourth profile lays out supported trees/rings together, up to 64 total neutral H/C/N/O/F/Cl/Br/I atoms. Independent checks, the full local1188/0/1 gate and bounded Mac conversion/refusal/retry, explicit Open/edit/history/Unicode Save/reopen pass. Native authoring worked at100%; the edited scene refuses Fit78.79%, and full overview/native pan remain unverified. Earlier profiles retain their own Mac evidence. General source-qualified import and clipboard conversion remain unavailable. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. Rapid Undo→Save preserves the undone source; independently checked in the actual Mac app and saved file. |
 | Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. The centered style is original; broader native label workflows and reference style parity remain unverified. |
 | Automation | 30 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
@@ -143,19 +143,27 @@ To convert a supported structure, choose **File → Convert SMILES file…**. **
 retains the original1–12 neutral-carbon Single-path policy. **Acyclic neutral structures**
 also supports branches, neutral H/C/N/O/halogens and Single/Double/Triple edges, up to64
 atoms. **Neutral ring structures** supports one connected3–8-member Single cycle plus
-supported attached trees, with the same64-atom neutral-element ceiling. Larger/multiple
-rings, aromaticity, charges, isotopes and unsupported Double configurations refuse.
+supported attached trees, with the same64-atom neutral-element ceiling. **Neutral components**
+adds one or more supported trees/rings, with 64 atoms in total. Actual edges determine
+components, not dots; source identities and every atom/bond/H count stay intact. Fixed
+poses use source-order shelves with a bond-length gap between atom-center boxes, without
+rotation or scaling. Larger/polycyclic rings within a component, aromaticity, charges,
+isotopes and unsupported Double configurations refuse the whole input.
 Select an input and a **new** CDXML output path, review the point-based geometry, then
-choose **Convert**. Acyclic and ring origins anchor the upper-left atom-center bounds; the
-carbon-chain origin anchors an endpoint. Existing outputs are refused. Close the form and explicitly use
+choose **Convert**. Acyclic, ring and component origins anchor the upper-left atom-center
+bounds; the carbon-chain origin anchors an endpoint. Existing outputs are refused. Close the form and explicitly use
 **File → Open** to edit the result; unsaved work is protected by the ordinary Open decision.
 This is a restricted file utility, separate from clipboard paste and general SMILES import.
 [Conversion evidence and limits](docs/verification-smiles-acyclic-integration.md) distinguish
 the earlier Mac acceptance, independent readers and worker/race checks. The new
 [single-ring integration record](docs/verification-smiles-ring-integration.md) separates
 focused checks, its passing aggregate gate and bounded Mac acceptance from untested
-native geometry entry, races and other platforms. The atom ceiling does
-not guarantee that every structure fits the selected paper and label-readability limits.
+native geometry entry, races and other platforms. The [component integration record](docs/verification-smiles-components-integration.md)
+records focused/App checks, the full local1188/0/1 gate and bounded Mac refusal/retry,
+guarded Open, Double edit/history and Unicode Save/reopen. Independent consumers verify
+both actual native outputs. Authoring worked at100%, but the edited scene refuses Fit78.79%
+under the existing distinct-pixel bond guard; an initial top label was clipped. Native pan
+and a complete overview remain unverified. The atom ceiling does not guarantee paper/readability fit.
 
 Select a bond tool and drag the paper. Over a supported carbon bond, press **1**, **2** or
 **3** to set its order. Some clicks request alignment behavior that is still unavailable;
@@ -198,7 +206,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | CDX | Guarded shared/native Mac Open/Save and exact source retention. Additive canonical FileEnd envelopes pass independent syntax/IO/engine/CLI/MCP/socket and ASan checks; the original external implicit source passes bounded Mac Open/Unicode Save As/reopen. The [full local gate passes1172/0/1](docs/verification-cdx-file-end-integration.md); an earlier intermittent MCP failure remains unexplained. | Broader typed metadata/Text/Double/style mapping, faithful preview, editing/encoder and foreign/general corpus; all imports remain incomplete |
 | MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, existing-field editing, whole-record removal/Undo/Redo and bounded native SDF Actual/pan; independent byte/record/data and current-view image checks | Native wheel/DPI/edit-preview acceptance, record creation/reordering, field-header editing, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
-| SMILES | Complete accepted multi-record source Open/Save, original inspector, exact opaque data/endings and explicit-H fragment export. Carbon-path/acyclic/simple-ring conversion has bounded Mac evidence and independent actual-file checks; the full local gate passes1158/0/1 | Component packing, larger/polycyclic/multiple-bond ring layout, general source-qualified import, native fragment export, clipboard workflows, source-file chemical editing and broader perception/canonicalization |
+| SMILES | Complete accepted source-file Open/Save, readonly inspector and explicit-H fragment export. Carbon-path/acyclic/simple-ring conversion retains its bounded Mac evidence. The component profile passes independent IO/command/wire/App checks, full local1188/0/1 and bounded Mac conversion/Open/edit/history/Unicode persistence at100%; edited Fit78.79% refuses, full overview/native pan remain unverified | General source-qualified drawing import with record/opaque-source/history/Save authority, broader packing and ring/chemistry support, native fragment export and clipboard workflows |
 | InChI | Planned | Reference-tool comparison and import/export |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |

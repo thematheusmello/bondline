@@ -10,7 +10,7 @@ shipping assets. Preserve each observation's actual method, identity and limits.
 
 | ID | Public source | Decision / limitations |
 |---|---|---|
-| SMILES-COMPONENTS-PLAN | ../research/smiles-components-plan.md | Pinned OpenSMILES actual connectivity, IUPAC2008 GR7.2–7.3 and the archived public Fragment allowance support complete disconnected graph preservation. Source-ordered center-box shelves, exact gap L, local dense views, 64 total atoms, divided search quotas and the full assembled certificate are original bounded policies, not vendor defaults, salt association or general import. The plan distinguishes missing-profile runtime RED from a missing layout API; implementation/receiving remain separate. |
+| SMILES-COMPONENTS-PLAN | ../research/smiles-components-plan.md | Pinned OpenSMILES actual connectivity, IUPAC2008 GR7.2–7.3 and the archived public Fragment allowance support complete disconnected graph preservation. Source-ordered center-box shelves, exact gap L, local dense views, 64 total atoms, divided search quotas and the full assembled certificate are original bounded policies, not vendor defaults, salt association or general import. The plan distinguishes missing-profile runtime RED from a missing layout API; verification-smiles-components-integration.md records independent layout, adapter, full local gate and bounded native receiving evidence. |
 | CDX-EXTERNAL-WRITER-PROBE | ../research/cdx-external-writer-probe.md; https://github.com/epam/Indigo/blob/cc2ea85187433c253c0233a13f1859a6a5298d97/core/indigo-core/molecule/src/molecule_cdxml_saver.cpp#L2015 | Actual Apache-2.0 Indigo1.47.0 external-only generation from five original declared graphs, two preserved variants/repeats; independent pinned RDKit accepts all10 distinct outputs while unchanged Bondline/stdlib syntax checks refuse TrailingData. Public writer source explains the extra final zero word, without establishing normative trailing-padding permission. No file trimming, parser/old-oracle/fixture change, shipped dependency, corpus admission or broad compatibility claim. |
 | CDX-CANONICAL-FILE-END-PLAN | ../research/cdx-file-end-plan.md; https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm and IntroExampleSimple.htm | The first source separately defines object/file ends and a28-byte zero-reserved header; the simple example instead shows an implicit EOF-only Document. Exact public pins, released Indigo's original258-byte evidence and existing Glysade22-byte distinction are recorded in the plan. Original policy: preserve every successful legacy parse; only TrailingData plus canonical zero-reserved header enables exactly one separate FileEnd/EOF, with implicit/explicit framing retained. This deliberately accepts canonical legacy+one end, not arbitrary padding, and cannot disambiguate a valid legacy prefix from a truncated new file. Tests/implementation/native scope remain separate. |
 | SMILES-SIMPLE-RING-PLAN | ../research/smiles-ring-layout-sources.md and ../research/smiles-ring-layout-plan.md | Pinned OpenSMILES actual graph semantics and IUPAC GR3.3/3.4/4.2 ring/substituent conventions; exact public-byte and permissive Rust reference review, with no dependency/code/asset adoption. Original3..8 Single-cycle/attached-tree profile, deterministic phase and bounded whole-scene policies are declared before implementation. Tests/implementation/native evidence remain separate; general ring/import parity is not claimed. |
@@ -1798,3 +1798,22 @@ rule. Actual native Open/Unicode Save As/reopen retains exact source and the fai
 preview refusal. Writer defaults, old fixtures/oracles, runtime dependencies, corpus pins
 and the human-approved golden remain unchanged. Broader CDX mapping/editing and the
 inherently ambiguous complete legacy prefix remain explicit open work.
+
+## Integrated neutral SMILES components, 2026-11-15
+
+SMILES-COMPONENTS-PLAN retains pinned OpenSMILES connectivity, IUPAC2008 GR7.2–7.3 and
+public Fragment semantics. The [preimplementation contract](../research/smiles-components-plan.md)
+distinguishes those standards from original source-ID shelf order, atom-center gap L,
+rigid poses, total64-atom bounds, divided search quotas and full-scene refusal policy.
+Those are bounded Bondline choices, not inferred Professional defaults or salt association.
+No new notation, chemistry, proprietary runtime observation or asset reuse is introduced.
+
+[Receiving evidence](../verification-smiles-components-integration.md) records missing-API/
+profile/radio REDs separately from new-test setup corrections, frozen independent graph/
+geometry consumers, actual adapter history/source retention and the1188/0/1 local gate.
+The same create-only converter adds a fourth choice; it does not replace or acknowledge
+the current document. Bounded native Mac conversion, guarded Open,100% Double editing,
+Undo/Redo and Unicode Save/reopen produce actual externally consumed9/7/3 files.
+Edited-scene Fit78.79% refusal and initial100% top-label clipping remain explicit display
+limits, not waived checks. Broader source-qualified import, chemistry, clipboard, native
+races/DPI and other platforms remain open. No dependency/font/golden or parser policy changes.

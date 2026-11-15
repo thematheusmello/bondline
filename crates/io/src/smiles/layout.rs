@@ -16,6 +16,8 @@ pub enum LayoutError {
     AcyclicAtomLimit,
     #[error("neutral simple-ring SMILES layout supports at most 64 atoms")]
     SimpleRingAtomLimit,
+    #[error("neutral component SMILES layout supports at most 64 atoms")]
+    ComponentsAtomLimit,
     #[error("SMILES layout cancelled")]
     Cancelled,
     #[error("SMILES path layout refuses {0}")]
@@ -38,6 +40,7 @@ impl LayoutError {
             Self::AtomLimit
             | Self::AcyclicAtomLimit
             | Self::SimpleRingAtomLimit
+            | Self::ComponentsAtomLimit
             | Self::Model(bondline_model::Error::Graph(bondline_model::GraphError::Limit(_)))
             | Self::Render(bondline_render::Error::SceneTooComplex) => "resource_limit",
             Self::Normalize(error) => error.code(),

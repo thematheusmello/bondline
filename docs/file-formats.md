@@ -8,7 +8,7 @@
 | SDF V2000/V3000 | Complete mixed-version session/native Mac files, occurrence inspector and existing-value editor, source-preserving capture and read-only Actual/Zoom/pan preview | Exact raw spans/order/versions, pinned corpus and unchanged raw/per-MOL consumers; bounded Mac files/field edits/Actual/pan; actual-App wheel/DPI/source freshness and edit→preview→Save/reopen; command/adapter guards and earlier bounded ASAN | Native wheel/physical-DPI/new combined edit-preview acceptance, record creation/reordering and field-header editing, broader layout/chemistry, fetched mixed-version corpus, syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
 | RXN V2000 wrapper | Standalone source-preserving reader/new-wrapper writer with ordered roles and raw V2000/V3000 molecular payloads | Published CTfile layout; original field/role/span vectors; external RDKit readers/writers and bounded ASAN | Reaction model, application/native commands, V3000 reaction wrapper, broader registry/extension handling and fetched corpus |
-| SMILES | Complete accepted multi-record source Open/Save and readonly ordinal inspection; explicit-H fragment export and native carbon-path/neutral-acyclic/simple-ring→new CDXML form; noncanonical output | Independent raw/per-record/output consumers and App/lifecycle checks; bounded Mac inspector and conversion/refusal/retry/Open/edit/history/Unicode Save/reopen. Actual433-byte legacy,766-byte acyclic and1254-byte C7 ring/exocyclic-Double outputs have independent checks; full local gate1158/0/1 | Chemical preview/editing of opened source files, native clipboard/fragment export, geometry entry/browsing/races and other platforms, components/larger/polycyclic/multiple-bond ring/general layout, stereo/query/perception and canonicalization |
+| SMILES | Complete accepted source-file Open/Save and readonly inspector; explicit-H fragment export and carbon-path/neutral-acyclic/simple-ring/components→new CDXML form; noncanonical output | Earlier profiles retain bounded Mac and historical gate evidence. New components IO8/command3/schema1/wire2/App3 pass with independent consumers and CPU/GPU equality; full local gate1188/0/1 and bounded Mac conversion/Open/edit/history/Unicode persistence pass with independent actual-file checks; edited Fit78.79% refuses, native overview/pan unverified | General source-qualified drawing import/backing/history/Save policy, native clipboard/fragment export, broader packing/chemistry/ring layout and other platforms |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and whole-page/opt-in current-view captures for supported neutral-element scenes; source-aware display H stays separate from authored data | External Pillow/FreeType, independent geometry/font vectors, actual CPU/GPU comparisons, bounded native SDF Actual/pan, source-aware MOL current captures at1x/2x and unchanged approved golden | Reference styles/general chemistry, broader native label/DPI workflows, physical publishing resolution and native PNG save/clipboard |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
@@ -729,6 +729,43 @@ geometry entry/browsing/races, large/bulky cases and other platforms are unverif
 [integrated ring scope](verification-smiles-ring-integration.md), [independent layout/oracle](verification-smiles-ring-layout.md),
 [ring attachment](verification-literal-ring-attachment.md) and [compact-H evidence](verification-literal-compact-star-attachment.md).
 No general source-backed molecular edit, ring drawing tool or SMILES clipboard parity follows.
+
+## Explicit neutral-component drawing conversion
+
+The fourth optional `neutral_components_v1` profile uses the same complete ≤64 KiB notation
+reader and create-only converter, accepting ≤64 total neutral nonisotopic H/C/N/O/F/Cl/Br/I
+atoms. Actual graph components, not dot count, must each be an existing supported tree or
+3–8-member Single cycle with supported attached trees. All current physical-H, fixed-H,
+Single/Double/Triple and qualified unassigned-Double rules remain; any unsupported member
+refuses the whole input without publication.
+
+Normalization runs once. Dense local views restore only positions into one complete
+Fragment with original global arrays/IDs/directed bonds/H and unchanged source/IR. Solved
+poses use source-order atom-center shelves, gap L and a supplied minimum-center origin;
+width wrapping accounts for row height. No rotation/rescale, omitted duplicate, alternative
+packing or paper enlargement is used. Per-rotation budgets divide 100000 work/64 scenes by
+K; one final 100000-work geometry pass and full literal/resolved-H/actual-stroke/paper
+certificate cover all components together. Single-component Document/CDXML stays exact.
+
+Eight independent IO cases and three command/one schema/two actual-wire/three App cases
+pass unchanged. Actual mixed 9 atoms/7 bonds/3 components give C8H20O, CPU/GPU captures match,
+and explicit Open→first-edge Double edit→Undo/Redo→Unicode Save/reopen retains every
+component with independent C8H18O edited-output checks. The full local gate passes1188/0/1;
+bounded Mac fourth-profile legacy/existing-output refusal, Unicode retry retaining dirty
+work, guarded explicit Open Cancel/Discard, Double edit/history and Unicode Save As/reopen
+pass. Independent raw/Decimal/RDKit consumers verify the actual 1407-byte original/edited
+9/7/3 graphs as C8H20O/C8H18O, with only the intended first-edge order/H change. Input,
+existing-output sentinel and prior ring stay exact. Native authoring worked at100%; edited
+Fit78.79% refuses the distinct-pixel multiple-bond guard. An initial top label was clipped;
+AX/drag pan produced no visible change. Full native overview/pan, races and other platforms
+remain unverified. Earlier ring1158/0/1 and CDX1172/0/1 gates remain historical checkpoints. No parser-fuzz/old oracle/fixture/font/golden/corpus/
+dependency change. See [integration](verification-smiles-components-integration.md) and
+[independent layout](verification-smiles-components-layout.md).
+
+General drawing import still needs selected/all-record behavior, complete original opaque
+source/baseline and ID mapping, stale jobs/history/unsaved decisions and explicit Save/loss
+authority. The complete SMILES source-file session never becomes an editable first-record
+Drawing through this utility. Broader packing/chemistry/rings and clipboard parity remain.
 
 ## Complete accepted SMILES source files
 

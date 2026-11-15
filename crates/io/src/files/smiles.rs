@@ -181,6 +181,27 @@ pub fn convert_smiles_simple_ring_to_cdxml_file(
     )
 }
 
+/// Derive all bounded neutral tree/simple-ring components into one new native drawing.
+/// Retains the whole notation and existing create-only publication/error semantics.
+pub fn convert_smiles_components_to_cdxml_file(
+    input: &Path,
+    output: &Path,
+    bond_length_pt: f64,
+    origin: Point2,
+    page: PageSize,
+    cancel: &Cancellation,
+) -> Result<SmilesConversionReceipt, FileError> {
+    convert_with_layout(
+        input,
+        bond_length_pt,
+        origin,
+        page,
+        cancel,
+        SmilesDocument::layout_neutral_components,
+        |document| save_cdxml_file(output, document, false, cancel),
+    )
+}
+
 fn convert_with_layout(
     input: &Path,
     bond_length_pt: f64,

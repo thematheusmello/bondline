@@ -56,7 +56,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.save_sdf` | `path`, optional `overwrite=false` | Atomic whole-source collection save; retains every record, MOL version, ordered field and byte; no molecular regeneration |
 | `document.open_smiles` | `path`, optional `discard_unsaved=false` | Validate all supported notation records and retain the entire source; clean source-file session without a drawing projection |
 | `document.save_smiles` | `path`, optional `overwrite=false` | Atomic exact whole-file save, including ignored lines, opaque application bytes and original endings; no notation regeneration |
-| `file.convert_smiles_to_cdxml` | Required `expected_revision`, `input_path`, `output_path`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt`; optional `profile="neutral_carbon_path_v1"`, `"neutral_acyclic_v1"` or `"neutral_simple_ring_v1"` | Deferred create-only conversion into new native CDXML; bounded carbon path, neutral tree or one3–8 Single cycle with attached trees. Current session and all its baselines remain unchanged |
+| `file.convert_smiles_to_cdxml` | Required `expected_revision`, `input_path`, `output_path`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt`; optional `profile="neutral_carbon_path_v1"`, `"neutral_acyclic_v1"`, `"neutral_simple_ring_v1"` or `"neutral_components_v1"` | Deferred create-only conversion into new native CDXML; bounded carbon path, neutral tree, one3–8 Single cycle with attached trees, or all supported tree/ring components (64 total atoms). Current session and all its baselines remain unchanged |
 | `file.export_smiles_fragment` | Required `expected_revision`, positive `page_id`, positive `fragment_id`, `output_path` | Create-only noncanonical explicit-H SMILES file for exactly one complete-source selected fragment; geometry/document context are explicitly not encoded and the current session is unchanged |
 | `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
 | `sdf.record.remove` | Required `expected_revision`, positive `record_id` | Deferred whole-record removal; exact surviving bytes, reindexed ordinals, one history edit; refuses the sole record |
@@ -661,7 +661,8 @@ RED/GREEN and source/limit evidence is in verification-bond-attachment-ui.md.
 
 `file.convert_smiles_to_cdxml` accepts an optional closed `profile`:
 `neutral_carbon_path_v1` is the compatible default; `neutral_acyclic_v1` selects the
-neutral-tree layout and `neutral_simple_ring_v1` selects the bounded single-ring layout.
+neutral-tree layout, `neutral_simple_ring_v1` the bounded single-ring layout, and
+`neutral_components_v1` all supported tree/simple-ring components (64 atoms in total).
 All eight existing scalar parameters remain required;
 omitting/defaulting the profile retains the old serialized command and receipt policy.
 There is no implicit geometry, overwrite switch,
@@ -707,6 +708,30 @@ Cycle Double/Triple, larger/polycyclic/disconnected/acyclic graphs, aromaticity,
 isotope and unsupported configurations refuse this profile. No partial first-ring result
 or source-file editing authority follows. See [ring evidence and remaining limits](verification-smiles-ring-integration.md).
 
+The component profile discovers actual-edge BFS components, not textual dots. It normalizes
+once and keeps one complete Fragment with original global arrays/IDs/directed edges/fixed
+H, changing only positions. Every component must satisfy the existing tree or 3–8 Single-
+cycle/attached-tree rules; any unsupported member refuses the whole input. Solved poses
+use original source-order shelves with gap L between atom-center boxes, supplied minimum
+origin, height-aware width wrap and no rotation/rescale. K members divide the existing
+100000/64 work/scene quotas per rotation; one final 100000-work whole geometry pass and
+literal/resolved-H/stroke/paper certificate cover cross-component pairs. A single component
+returns the corresponding old result byte-exactly. These are original layout/resource
+policies, not general packing or reference clipboard parity.
+
+Eight IO/three command/one schema/two actual-wire/three App focused cases pass unchanged, including complete
+9-atom/7-bond/3-component C8H20O output, CPU/GPU equality and explicit Open/edit/history/
+Unicode Save/reopen with independent C8H18O edited output. The full local gate passes1188/0/1;
+bounded Mac fourth-profile conversion/refusal/Unicode retry, retained dirty source and
+explicit Open Cancel/Discard, Double edit/history and Unicode Save/reopen also pass.
+The two actual 1407-byte native outputs independently retain all 9 atoms/7 bonds/3 components
+as C8H20O/C8H18O; only the intended first-edge order/H changes. Native authoring worked
+at100%, while edited Fit78.79% refuses the distinct-pixel multiple-bond guard; initial top
+label clipping and unsuccessful pan attempts leave full native overview/pan unverified.
+[Integration](verification-smiles-components-integration.md) keeps these bounded checks
+and earlier-profile/native-race/platform scopes separate. No registry count, required parameter,
+receipt, default omission, source/close/lease/worker or Save-ACK authority changes.
+
 Success adds optional `conversion` to the latest Engine state:
 
 ```json
@@ -749,8 +774,8 @@ The central `file.convert_smiles` File control has no shortcut and dispatches
 `ui.file {expected_revision, action:"convert_smiles"}`. It adds a control, not a second
 conversion command: the registry remains30. Drawing exposes18 controls; readonly SDF12.
 The native plan is `UiFilePlan::SmilesConversion`. Its form offers Carbon chains,
-Acyclic neutral structures and Neutral ring structures in that order, explicit geometry
-and separate input/new-output selection.
+Acyclic neutral structures, Neutral ring structures and Neutral components in that order,
+explicit geometry and separate input/new-output selection.
 Profile actions replay in raw input order: a later choice cannot relabel an earlier Convert.
 Pending/busy/browsing/stale/success states reject profile changes. Existing output refuses;
 conversion browsing does not discard the current drawing. Default48pt bond/origin72pt/A4

@@ -339,6 +339,9 @@ impl FilePlan {
                         crate::SmilesConversionProfile::NeutralSimpleRingV1 => {
                             bondline_io::files::convert_smiles_simple_ring_to_cdxml_file
                         }
+                        crate::SmilesConversionProfile::NeutralComponentsV1 => {
+                            bondline_io::files::convert_smiles_components_to_cdxml_file
+                        }
                     };
                     let receipt = convert(
                         Path::new(&params.input_path),

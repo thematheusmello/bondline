@@ -44,103 +44,123 @@ impl SmilesDocument {
             return Err(LayoutError::AcyclicAtomLimit);
         }
         let fragment = self.normalize_explicit_h_fragment()?;
-        if fragment.atoms().iter().any(|atom| atom.isotope.is_some()) {
-            return Err(LayoutError::Unsupported("isotopic drawing labels"));
-        }
-        if origin.x_pt() < 0.0
-            || origin.y_pt() < 0.0
-            || origin.x_pt() > page.width_pt()
-            || origin.y_pt() > page.height_pt()
-        {
-            return Err(LayoutError::Geometry("atom-center origin outside paper"));
-        }
-        if fragment.atoms().len() > 1 && length > page.width_pt().hypot(page.height_pt()) {
-            return Err(LayoutError::Geometry("bond length exceeds paper"));
-        }
-        let adjacency = adjacency(&fragment)?;
-        let root = longest_endpoint(&adjacency, cancel)?;
-        let linear = linear_centers(&fragment, &adjacency)?;
-        let mut parent = vec![None; adjacency.len()];
-        let mut children = vec![Vec::new(); adjacency.len()];
-        let mut order = Vec::with_capacity(adjacency.len());
-        root_tree(
-            root,
-            None,
-            &adjacency,
-            &mut parent,
-            &mut children,
-            &mut order,
-            cancel,
-        )?;
-        let mut alternatives = vec![Vec::new(); adjacency.len()];
-        for &at in &order {
-            let branches = children
-                .get(at)
-                .ok_or(LayoutError::Geometry("missing branches"))?;
-            let values = if at == root {
-                vec![vec![0.0; branches.len()]]
-            } else {
-                local_alternatives(
-                    at,
-                    branches,
-                    &adjacency,
-                    &fragment,
-                    *linear
-                        .get(at)
-                        .ok_or(LayoutError::Geometry("missing angle policy"))?,
-                    None,
-                    cancel,
-                )?
-            };
-            *alternatives
-                .get_mut(at)
-                .ok_or(LayoutError::Geometry("missing alternatives"))? = values;
-        }
-        let mut solver = Solver {
-            fragment: &fragment,
-            parent,
-            children,
-            order,
-            alternatives,
-            positions: vec![None; adjacency.len()],
+        layout_fragment(
+            &fragment,
             length,
             origin,
             page,
             cancel,
-            work: 0,
-            scenes: 0,
-            last: LayoutError::Geometry("no permitted bounded tree placement fits"),
-        };
-        let rotations = if adjacency.len() == 1 { 1 } else { 24 };
-        for rotation in 0..rotations {
-            check(cancel)?;
-            solver.positions.fill(None);
-            *solver
-                .positions
-                .get_mut(root)
-                .ok_or(LayoutError::Geometry("missing root"))? = Some([0.0, 0.0]);
-            let degrees = if rotation < 12 {
-                f64::from(rotation) * 30.0
-            } else {
-                15.0 + f64::from(rotation - 12) * 30.0
-            };
-            let initial = solver
-                .alternatives
-                .get_mut(root)
-                .ok_or(LayoutError::Geometry("missing root angles"))?;
-            *initial = vec![vec![
-                degrees.to_radians();
-                solver.children.get(root).map_or(0, Vec::len)
-            ]];
-            solver.work = WORK_PER_ROTATION;
-            solver.scenes = SCENES_PER_ROTATION;
-            if let Some(document) = solver.visit(0)? {
-                return Ok(document);
-            }
-        }
-        check(cancel)?;
-        Err(solver.last)
+            WORK_PER_ROTATION,
+            SCENES_PER_ROTATION,
+        )
     }
+}
+
+pub(super) fn layout_fragment(
+    fragment: &Fragment,
+    length: f64,
+    origin: Point2,
+    page: PageSize,
+    cancel: &Cancellation,
+    work_per_rotation: usize,
+    scenes_per_rotation: usize,
+) -> Result<Document, LayoutError> {
+    if fragment.atoms().iter().any(|atom| atom.isotope.is_some()) {
+        return Err(LayoutError::Unsupported("isotopic drawing labels"));
+    }
+    if origin.x_pt() < 0.0
+        || origin.y_pt() < 0.0
+        || origin.x_pt() > page.width_pt()
+        || origin.y_pt() > page.height_pt()
+    {
+        return Err(LayoutError::Geometry("atom-center origin outside paper"));
+    }
+    if fragment.atoms().len() > 1 && length > page.width_pt().hypot(page.height_pt()) {
+        return Err(LayoutError::Geometry("bond length exceeds paper"));
+    }
+    let adjacency = adjacency(fragment)?;
+    let root = longest_endpoint(&adjacency, cancel)?;
+    let linear = linear_centers(fragment, &adjacency)?;
+    let mut parent = vec![None; adjacency.len()];
+    let mut children = vec![Vec::new(); adjacency.len()];
+    let mut order = Vec::with_capacity(adjacency.len());
+    root_tree(
+        root,
+        None,
+        &adjacency,
+        &mut parent,
+        &mut children,
+        &mut order,
+        cancel,
+    )?;
+    let mut alternatives = vec![Vec::new(); adjacency.len()];
+    for &at in &order {
+        let branches = children
+            .get(at)
+            .ok_or(LayoutError::Geometry("missing branches"))?;
+        let values = if at == root {
+            vec![vec![0.0; branches.len()]]
+        } else {
+            local_alternatives(
+                at,
+                branches,
+                &adjacency,
+                fragment,
+                *linear
+                    .get(at)
+                    .ok_or(LayoutError::Geometry("missing angle policy"))?,
+                None,
+                cancel,
+            )?
+        };
+        *alternatives
+            .get_mut(at)
+            .ok_or(LayoutError::Geometry("missing alternatives"))? = values;
+    }
+    let mut solver = Solver {
+        fragment,
+        parent,
+        children,
+        order,
+        alternatives,
+        positions: vec![None; adjacency.len()],
+        length,
+        origin,
+        page,
+        cancel,
+        work: 0,
+        scenes: 0,
+        last: LayoutError::Geometry("no permitted bounded tree placement fits"),
+    };
+    let rotations = if adjacency.len() == 1 { 1 } else { 24 };
+    for rotation in 0..rotations {
+        check(cancel)?;
+        solver.positions.fill(None);
+        *solver
+            .positions
+            .get_mut(root)
+            .ok_or(LayoutError::Geometry("missing root"))? = Some([0.0, 0.0]);
+        let degrees = if rotation < 12 {
+            f64::from(rotation) * 30.0
+        } else {
+            15.0 + f64::from(rotation - 12) * 30.0
+        };
+        let initial = solver
+            .alternatives
+            .get_mut(root)
+            .ok_or(LayoutError::Geometry("missing root angles"))?;
+        *initial = vec![vec![
+            degrees.to_radians();
+            solver.children.get(root).map_or(0, Vec::len)
+        ]];
+        solver.work = work_per_rotation;
+        solver.scenes = scenes_per_rotation;
+        if let Some(document) = solver.visit(0)? {
+            return Ok(document);
+        }
+    }
+    check(cancel)?;
+    Err(solver.last)
 }
 
 pub(super) fn linear_centers(
@@ -556,67 +576,80 @@ impl Solver<'_> {
     }
 
     fn document(&self) -> Result<Document, LayoutError> {
-        let min_x = self
-            .positions
-            .iter()
-            .flatten()
-            .map(|p| p[0])
-            .fold(f64::INFINITY, f64::min);
-        let min_y = self
-            .positions
-            .iter()
-            .flatten()
-            .map(|p| p[1])
-            .fold(f64::INFINITY, f64::min);
-        let mut atoms = self.fragment.atoms().to_vec();
-        for (atom, position) in atoms.iter_mut().zip(&self.positions) {
-            let point = position.ok_or(LayoutError::Geometry("incomplete candidate"))?;
-            atom.position = Some(Point2::new(
-                point[0] - min_x + self.origin.x_pt(),
-                point[1] - min_y + self.origin.y_pt(),
-            )?);
-        }
-        let mut document = Document::default();
-        let id = PageId::new(1).ok_or(LayoutError::Geometry("invalid page identity"))?;
-        document.set_page_size(id, self.page)?;
-        document.append_fragments(
-            id,
-            vec![
-                Fragment::new(self.fragment.id(), atoms, self.fragment.bonds().to_vec())
-                    .map_err(bondline_model::Error::from)?,
-            ],
-        )?;
-        let page = document
-            .pages()
-            .first()
-            .ok_or(LayoutError::Geometry("missing candidate page"))?;
-        let literal = validate_ink_with_cancel(page, self.cancel)?;
-        let counts = self
-            .fragment
-            .atoms()
-            .iter()
-            .map(|atom| {
-                atom.explicit_hydrogens
-                    .map(|h| (atom.id, h))
-                    .ok_or(LayoutError::Geometry("missing normalized H"))
-            })
-            .collect::<Result<BTreeMap<_, _>, _>>()?;
-        let resolved = bondline_render::graph_page_scene_with_display_hydrogens(
-            REFERENCE_SIZE,
-            REFERENCE_SIZE,
-            page,
-            &counts,
+        positioned_document(
+            self.fragment,
+            &self.positions,
+            self.origin,
+            self.page,
             self.cancel,
-        )?;
-        check(self.cancel)?;
-        if literal.scene().primitives != resolved.scene().primitives {
-            return Err(LayoutError::Geometry(
-                "literal H attachment differs from validated attachment",
-            ));
-        }
-        stroke_clearance(self.fragment, &literal, self.cancel)?;
-        Ok(document)
+        )
     }
+}
+
+pub(super) fn positioned_document(
+    fragment: &Fragment,
+    positions: &[Option<[f64; 2]>],
+    origin: Point2,
+    page_size: PageSize,
+    cancel: &Cancellation,
+) -> Result<Document, LayoutError> {
+    let min_x = positions
+        .iter()
+        .flatten()
+        .map(|p| p[0])
+        .fold(f64::INFINITY, f64::min);
+    let min_y = positions
+        .iter()
+        .flatten()
+        .map(|p| p[1])
+        .fold(f64::INFINITY, f64::min);
+    let mut atoms = fragment.atoms().to_vec();
+    for (atom, position) in atoms.iter_mut().zip(positions) {
+        let point = position.ok_or(LayoutError::Geometry("incomplete candidate"))?;
+        atom.position = Some(Point2::new(
+            point[0] - min_x + origin.x_pt(),
+            point[1] - min_y + origin.y_pt(),
+        )?);
+    }
+    let mut document = Document::default();
+    let id = PageId::new(1).ok_or(LayoutError::Geometry("invalid page identity"))?;
+    document.set_page_size(id, page_size)?;
+    document.append_fragments(
+        id,
+        vec![
+            Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec())
+                .map_err(bondline_model::Error::from)?,
+        ],
+    )?;
+    let page = document
+        .pages()
+        .first()
+        .ok_or(LayoutError::Geometry("missing candidate page"))?;
+    let literal = validate_ink_with_cancel(page, cancel)?;
+    let counts = fragment
+        .atoms()
+        .iter()
+        .map(|atom| {
+            atom.explicit_hydrogens
+                .map(|h| (atom.id, h))
+                .ok_or(LayoutError::Geometry("missing normalized H"))
+        })
+        .collect::<Result<BTreeMap<_, _>, _>>()?;
+    let resolved = bondline_render::graph_page_scene_with_display_hydrogens(
+        REFERENCE_SIZE,
+        REFERENCE_SIZE,
+        page,
+        &counts,
+        cancel,
+    )?;
+    check(cancel)?;
+    if literal.scene().primitives != resolved.scene().primitives {
+        return Err(LayoutError::Geometry(
+            "literal H attachment differs from validated attachment",
+        ));
+    }
+    stroke_clearance(fragment, &literal, cancel)?;
+    Ok(document)
 }
 
 fn spend(work: &mut usize, cancel: &Cancellation) -> Result<bool, LayoutError> {

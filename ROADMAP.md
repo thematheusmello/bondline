@@ -82,6 +82,29 @@ after the shared dialog sizing fix. See [the integration record](docs/verificati
 [ring attachment](docs/verification-literal-ring-attachment.md) and
 [compact-H extension](docs/verification-literal-compact-star-attachment.md) evidence.
 
+The additive `neutral_components_v1` / **Neutral components** fourth choice now derives
+all supported actual components into one complete Fragment, up to 64 total atoms. It
+normalizes once, retains global arrays/IDs/directed edges/fixed H and changes positions
+only. Existing tree or 3–8 Single-cycle poses use source-order center-box shelves with
+gap L, no rotation/rescaling, divided search quotas and one whole geometry/ink certificate.
+One-component output remains byte-exact with the corresponding earlier profile.
+
+Root90518 passes eight independent IO cases. Root5986 passes three command, one schema,
+two actual-wire and three App cases, including the complete 9-atom/7-bond/3-component
+C8H20O drawing, identical CPU/GPU capture, explicit Open, first-edge Double edit to C8H18O,
+Undo/Redo and Unicode Save/reopen through independent consumers. The fourth profile's
+full local gate now passes1188/0/1, including fmt, workspace/vendor warnings-denied clippy,
+tests, layers, licenses and corpus. Bounded Mac legacy/existing-output refusals, Unicode
+retry with dirty work retained, explicit Open Cancel/Discard, Double edit/Undo/Redo and
+Unicode Save As/reopen now pass. Independent consumers verify both actual 1407-byte
+9/7/3 outputs as C8H20O/C8H18O, with only the intended first-edge order/H change; input,
+sentinel and prior ring remain exact. Authoring worked at100%; edited Fit78.79% refuses
+the distinct-pixel bond guard and an initial top label was clipped. Full native overview/
+pan and other platforms remain unverified. Earlier counts stay historical checkpoints;
+no new parser-fuzz or dependency change.
+See [component integration](docs/verification-smiles-components-integration.md) and
+[independent layout evidence](docs/verification-smiles-components-layout.md).
+
 The external CDX framing counterexample now has an additive canonical 28-byte implicit/
 explicit Document + FileEnd path: eight syntax and six IO/engine/wire cases pass, retaining
 all legacy successes, source bytes and limited application authority. The new oracle's
@@ -92,10 +115,11 @@ Earlier97729's754/1 replacement-bind AddrInUse remains unexplained; twenty passi
 diagnostic contexts and a contradicted outbound-owner hypothesis establish no causal fix.
 See [integration](docs/verification-cdx-file-end-integration.md) and
 [independent declarations](docs/verification-cdx-file-end-tests.md). No corpus admission
-or broad CDX compatibility follows. Next advance component packing and general source-qualified
-SMILES drawing import, including larger, polycyclic and multiple-bond rings. Define graph/geometry/stereo and editing authority
-against published notation and independent consumers; retain unsupported source rather
-than silently projecting it. The new utility still does not grant an opened SMILES source
+or broad CDX compatibility follows. Next define general source-qualified SMILES drawing
+import: selected/all-record behavior, complete opaque source/baseline and ID mapping,
+stale-job/history/unsaved decisions and explicit Save/loss authority. Broader packing,
+larger/polycyclic/multiple-bond rings and chemistry remain; retain unsupported source
+rather than silently projecting it. The new utility still does not grant an opened SMILES source
 session molecular editing authority or complete clipboard parity.
 SDF creation/reordering and wider format editing stay in the backlog. The earlier proposed
 SDF reordering priority was deferred after the sourced File New audit, not implemented.
@@ -414,7 +438,7 @@ notation and global ranges/counts, with opaque data retained privately. It uses 
 historical deferred-result/cancellation/close machinery, no write lease or mutation, and
 a128KiB serialized-object budget. Core and independent raw/graph/wire evidence are linked
 from docs/verification-smiles-record.md; native selection/preview/editing remain missing.
-After the bounded CDX framing checks above, continue component packing and general
-source-qualified drawing import. Wider CDX typed metadata/Text/Double/style mapping,
+After the bounded component profile, prioritize the general source-qualified drawing
+import contract above, not an editable first-record substitute. Wider CDX typed metadata/Text/Double/style mapping,
 faithful rendering and source-backed editing remain required; these source/automation
 foundations do not complete format or editor parity.

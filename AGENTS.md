@@ -106,7 +106,7 @@ SDF/RXN/SMILES file records;
 bounded SMILES notation/source ownership including literal aromatic markers/bonds,
 opt-in fixed-H normalization and
 restricted noncanonical Fragment export, validated1–12carbon/Single path layout and
-bounded neutral acyclic/simple-ring layouts into a new pure Document, separate from complete SMILES
+bounded neutral acyclic/simple-ring/component layouts into a new pure Document, separate from complete SMILES
 source-file sessions or general chemistry;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
@@ -802,8 +802,45 @@ cases and other platforms remain unverified. The final integrated local gate pas
 A measured-success-height re-layout preserves unchanged legacy receipt tests; do not
 substitute extra waits or weaken assertions. Later passes receive no raw activation events. Consult STATUS.md before counting later evidence.
 
-Next M1 task: advance component packing/general
-source-qualified SMILES import and broader rings. Wider CDX typed metadata/Text/Double/
+## Neutral-component conversion continuation
+
+Read docs/research/smiles-components-plan.md and
+docs/verification-smiles-components-integration.md. `neutral_components_v1` / Neutral
+components adds a fourth choice to the same 30-command/eight-scalar operation. Discover
+actual components by source-ID BFS, not dots/chain starts. Normalize once after the total
+64-atom precheck; use bounded dense local Fragment views, then restore only positions to
+one complete original array/ID/directed-edge/H graph. Never forge partial source IR.
+Each member must satisfy the existing tree or 3–8 Single-cycle/attached-tree rules; any
+unsupported member refuses the whole input. Source-file molecular editing remains absent.
+
+Preserve old public preflight/error order and single-component Document/CDXML bytes.
+Seven-argument Fragment helpers take per-rotation work/scenes; old profiles keep 100000/64,
+while K components receive floor(100000/K), floor(64/K). Do not multiply those quotas.
+Pack solved poses rigidly in source order, center-box gap L and height-aware width wrap;
+no rotation/rescale/deduplication or alternate packing. One final 100000-work geometry pass
+and the unchanged whole literal/resolved-H/stroke/paper certificate include cross-component
+pairs. Keep the complete input owner through create-only publication, the existing lease,
+worker/close/history barriers and truthful historical receipt; no Save ACK or auto Open.
+
+Eight IO, three command, one schema, two actual-wire and three App cases pass unchanged,
+including mixed 9-atom/7-bond/3-component graph/formula, CPU/GPU equality and explicit Open/edit/history/Unicode
+persistence. Root59627 full local gate passes1188/0/1: fmt, workspace/vendor warnings-denied
+clippy/tests, layers, licenses and corpus. Bounded Mac legacy/existing-output refusals,
+Unicode retry retaining dirty work/no auto Open, explicit Open Cancel/Discard, first-edge
+Double edit/CmdZ/CmdShiftZ and Unicode Save As/reopen pass on the actual fourth profile.
+Independent consumers verify the actual 1407-byte original/edited 9/7/3 graphs and C8H20O/
+C8H18O with only the intended order/H change; input/sentinel/prior ring remain exact.
+At100% authoring works, but an initial top label was clipped; edited Fit78.79% refuses
+under the existing distinct-pixel multiple-bond guard. AX/drag pan produced no visible
+change: do not claim native pan or complete overview. Earlier profiles retain their own
+evidence; native races/other platforms remain unverified. Corpus8 files/5 bundles, runtime closures
+154/165/220 and2 assets remain. Parser/normalizer/renderer bodies, old consumers/fixtures/
+fonts/golden/corpus pins, locks and dependencies are unchanged; no new parser-fuzz run.
+
+Next M1 task: define general source-qualified SMILES drawing import: selected/all records,
+complete opaque source/baseline and ID mapping, stale jobs/history/unsaved decisions and
+explicit Save/loss authority. Broader packing/rings/chemistry/clipboard and SDF creation/
+reordering remain required. Wider CDX typed metadata/Text/Double/
 style mapping and source-faithful editing remain backlog. No corpus admission occurred.
 Canonical CDX receiving, bounded fuzz and the1172/0/1 full gate pass; preserve the earlier
 unexplained intermittent MCP failure without weakening its assertions or socket policy.

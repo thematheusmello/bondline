@@ -120,6 +120,7 @@ fn the_optional_closed_profile_preserves_the_old_parameter_and_file_contract() -
         vec![
             json!(PROFILE),
             json!("neutral_carbon_path_v1"),
+            json!("neutral_components_v1"),
             json!("neutral_simple_ring_v1")
         ]
     );
