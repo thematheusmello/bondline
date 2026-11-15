@@ -17,6 +17,23 @@ Public format semantics, original Rust code/artwork and MIT/Apache-2.0/BSD shipp
 policy remain. No static proprietary binary/resource inspection or asset transplantation
 was performed. Keep local runtime and public-source evidence distinct.
 
+## In progress: broader neutral acyclic SMILES drawing
+
+The previous turn is progress: converterc71d5fc, reference0ce80a0 and checkpoint97fd2ac
+are committed. The new slice follows docs/research/smiles-acyclic-layout-plan.md and its
+received primary-source review. Root73477 has observed the intended existing-JSON runtime
+RED: unknown profile, with no product edit. Independent layout76197 fails for the missing
+additive API. Expanded independent geometry/consumer and adapter declarations are pending.
+No new layout/profile/native behavior is implemented or claimed yet. The last passing
+full aggregate below belongs to the committed converter baseline.
+
+Fresh isolated worktrees: bondline-smiles-layout-tests owns graph/oracle declarations;
+bondline-smiles-acyclic-conversion-tests owns command/wire declarations;
+bondline-smiles-acyclic-layout is reserved for geometry implementation after test freeze.
+Research bondline-smiles-layout-research is complete; its unchanged note/receipt received.
+Root owns integration/IO/commands/UI/Git/native. Root73477 is terminal; consult agent status
+for new live builds before restarting. Original conversion worktrees remain frozen.
+
 ## Newly delivered and verified
 
 **Native restricted SMILES conversion:** File → Convert SMILES file… uses the existing
