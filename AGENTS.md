@@ -215,7 +215,11 @@ source.modified describes original backing. Prepare/complete/finish separates I/
 revision-checked apply. Count current+saved snapshots and never call a publication error rollback.
 Identity floors must survive Undo branches and advance only after successful commits.
 Native gestures consume ordered events; press_origin alone loses a drag completed between
-frames. Canvas interaction must not advance layout beyond visible error text.
+frames. File menu/shortcuts also dispatch at their raw event, resolving the current central
+binding after preceding edits/history. Never restore an eager File shortcut prepass: it
+saved an un-undone Double after rapid Undo→Save. Preserve same-packet actual-file and
+separated-input controls; pending intents must block later authoring while existing
+Running/worker/receipt policies remain exact. Canvas interaction must not advance layout beyond visible error text.
 Use Engine::controls() / ui.controls as the authoritative delivered File/Edit/Page bindings;
 do not duplicate labels, shortcut tables, preset parameters or enabled rules in the UI.
 ui.file is presentation intent, distinct from actual document.open_cdxml/save_cdxml or MOL I/O.

@@ -27,15 +27,16 @@ for ordinary drawing and saving.
 
 **Early development:** Single/Double/Triple carbon drawing, existing-bond conversions,
 1/2/3 order keys, Undo/Redo and editable CDXML saves have bounded native macOS checks.
-Multiple bonds require a readable view scale. Rings, general labels and chemical analysis
+Numeric zoom, Actual/Fit, pan and wheel navigation now make unchanged A4 paper usable
+for the checked multiple-bond workflow. Rings, general labels and chemical analysis
 are still being built.
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
 <p align="center">
-  <img src="docs/media/workspace-native-bonds.jpg" alt="The actual refreshed Bondline macOS window with a left bond-tool rail, Single/Double/Triple structures on white paper, and a right document inspector" width="100%">
+  <img src="docs/media/workspace-native-view.jpg" alt="The actual Bondline macOS window at150% with numeric zoom, page-position controls, three bond tools and the live document inspector" width="100%">
   <br>
-  <sub>Actual macOS / Metal window: original light workspace, three bond tools and a live document inspector.<br>All three bonds were drawn in the native app, saved and reopened as editable CDXML; <a href="docs/media/SOURCES.md">capture identity and limits</a>.</sub>
+  <sub>Actual macOS / Metal window at150%: original light workspace, unchanged A4 paper and a live document inspector.<br>The native-authored scene reopens for editing; rapid Undo→Save now preserves the expected drawing; <a href="docs/media/SOURCES.md">capture identity and limits</a>.</sub>
 </p>
 
 ## What works today
@@ -46,15 +47,16 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | Double and Triple bonds | Native macOS tool selection, centered drawing, history and CDXML Save As pass at a readable scale. Carbon terminal extension also passes independent headless checks; its native multiple-bond workflow and context-sensitive styles remain unverified/missing. |
 | Existing-bond editing | Set Single/Double/Triple with hotspot1/2/3; convert an existing Single by clicking, or draw across Single/Double endpoints with Single selected. Same edge and geometry, corrected literal carbon H, one history step. Bounded native Mac and independent graph/file checks; alignment and general imported edits remain unavailable. |
 | Workspace | Light header, compact two-column bond rail, white paper, document/source/count inspector and contextual guidance. Actual macOS authoring and file-picker checks pass for the documented subset. |
+| View navigation | Numeric zoom, Actual/Fit/Magnify/Reduce, two-axis position controls and ordinary wheel navigation without resizing the paper or changing history. Mac A4 drawing/editing at100%/150% passes; rendering bounds and readability guards still apply. |
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files; unknown imported content remains backed by its original bytes. |
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
 | MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |
 | CDX files | Guarded native Open/Save/Save As verified on macOS, retaining exact accepted source. Limited projection; editing and faithful preview remain unavailable. |
 | SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. CLI/MCP inspect ordered fields and edit existing values with Undo/Redo. Restricted neutral Single/Double/Triple capture and asynchronous read-only preview pass headless checks. Actual native preview acceptance and field-edit UI remain pending. |
-| File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
+| File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. Rapid Undo→Save preserves the undone source; independently checked in the actual Mac app and saved file. |
 | Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. The centered style is original; broader native label workflows and reference style parity remain unverified. |
-| Automation | 27 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Automation | 28 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all
 three platforms and window launches. GitHub Actions is disabled during development to
@@ -106,13 +108,18 @@ actual Mac shortcut and accessibility-field evidence is in [native-file-ui.md](d
 
 Select a bond tool and drag the paper. Over a supported carbon bond, press **1**, **2** or
 **3** to set its order. Some clicks request alignment behavior that is still unavailable;
-the app reports that gap. See the [exact native check](docs/verification-bond-order-native.md)
-for the tested view scale, operations and limits.
+the app reports that gap. Choose **View → Actual size** or enter a readable **Zoom**
+percentage. **F5/F6/F7/F8** select Actual/Fit/Magnify/Reduce. The view changes presentation
+without changing paper dimensions. See [native view checks](docs/verification-view-native.md)
+and [ordered saving](docs/verification-ordered-file-actions.md) for the exact workflows and limits.
 
 ```sh
 # Discover the engine and the current control bindings.
 cargo run --locked -p bondline-cli -- commands
 cargo run --locked -p bondline-cli -- run --cmd '{"command":"ui.controls","params":{}}'
+
+# Set presentation zoom through the same command as the native UI.
+cargo run --locked -p bondline-cli -- run --cmd '{"command":"ui.view","params":{"action":"set_zoom","percent":150}}'
 
 # Create a Double bond through the shared command; omitted order defaults to Single.
 cargo run --locked -p bondline-cli -- run --cmd '{"command":"bond.create","params":{"page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":140,"end_y_pt":200,"order":"double"}}'

@@ -83,7 +83,7 @@ no unsafe is added to io and Linux does not link libacl. Exact archive/VCS pins,
 the missing windows-permissions notice are recorded in native-file-io.md. Its published
 MIT declaration passes the existing declaration gate; the missing LICENSE is a release
 notice-audit gap, not a fabricated notice or completed source audit.
-Latest runtime closures are 153/164/219 packages for macOS/Windows/Linux,
+Latest runtime closures are 154/165/220 packages for macOS/Windows/Linux,
 plus the same two checked assets. This retains the original allowlist.
 Hosted aggregate/window checks pass on all three targets at product checkpoint ccf8c50.
 File I/O has native Mac/Windows and Linux Docker/hosted execution; interactive Windows/Linux

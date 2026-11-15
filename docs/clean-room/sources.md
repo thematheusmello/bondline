@@ -1502,3 +1502,12 @@ records the exact archive/VCS, unchanged source scope and retained MIT/Apache no
 This repairs a published SDK behavior, without changing reference-product claims or the
 runtime license allowlist. The initial docs.rs source fetch was inaccessible; the exact
 public GitHub revision and cached SHA-verified crate were actually read.
+
+
+The ordered native File-action correction is an original Bondline transaction policy:
+menu/keys resolve central bindings at their raw event, after preceding edit/history
+commands; pending intents block later authoring. It follows the existing published egui
+raw-event input contract cited above, without making a reference-product timing claim.
+[Independent saved-output RED/GREEN and actual native evidence](../verification-ordered-file-actions.md)
+retain the initial counterexample and unchanged expectations. No new format, chemistry
+rule, dependency or proprietary observation was introduced by that correction.

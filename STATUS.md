@@ -1,149 +1,157 @@
-# Status
+# Status — 2026-11-15
 
-2026-11-15. Persistent M0–M5 goal **ACTIVE**; M0, M1 and M2 remain incomplete.
-Repository: https://github.com/thematheusmello/bondline . Continue existing work.
+The persistent full M0–M5 goal remains **active**. Current branch is
+`feat/multiple-bonds`; product/tests are committed through `c2addff` and this documentation
+refresh is the recoverable follow-up. No new push, merge or external publication.
+M0's desktop/GPU license blocker is resolved; full M0 is still incomplete.
 
-## Instructions and recoverable state
+GitHub Actions remains disabled by user instruction: repository Actions off and workflow
+417397204 disabled manually. Do not enable/dispatch/rerun or push to manufacture hosted
+evidence. Run local gates. Hosted restoration requires the completed full project or an
+explicit changed instruction. The old successful hosted smoke is historical, not current
+interactive Windows/Linux evidence.
 
-GitHub Actions remains disabled during development at repository and workflow levels.
-Do not enable, dispatch, rerun or push to manufacture hosted evidence. Re-enable only at
-full-project completion or a new explicit user instruction; see [CI policy](docs/ci.md).
-Local quality gates govern development integration. No push/publication occurred here.
+## Current delivered state
 
-Current branch: `feat/multiple-bonds`. Recoverable implementation commits:
+One registry now has28 typed commands across UI, CLI, stdio MCP and authenticated
+loopback. Complete source-backed snapshots/history, guarded native CDXML/CDX/MOL/SDF/
+SMILES file routes and strict source authority remain intact. Detailed format/chemistry
+limits are in README, file-formats.md and the parity checklist. No general chemistry
+engine or full commercial parity is implied.
 
-- `2b0f906`: shared `bond.set_order`, independent command/file/property/CLI/MCP tests.
-- `55fa80f`: existing-bond UI conversions, ordered keyboard/menu history, independent
-  frame regressions, finite actual Mac checks and the new README capture.
-- This continuation record follows those commits; inspect Git HEAD for its identity.
+The new `ui.view` family keeps camera state outside authored snapshots: inspect, Fit,
+Actual, finite numeric1..999%, Magnify/Reduce and bounded pan. Legacy Fit pixels stay
+exact. Explicit100% means one logical unit per authored point, an original Bondline
+convention independent of physical monitor DPI. Steps use1.25; Magnify can focus only
+own latest successful segment, page/generation-qualified. Open/history retain camera;
+projection and subsequent navigation use a bounded displayed center. Camera never
+changes paper, source, revision, dirty state, history, identity floors or CaptureStamp.
 
-Earlier `1322290` records the891-test workspace-preview delivery. Its five implementation
-commits remain in Git and their evidence remains in docs/verification-multiple-*.md,
-verification-workspace-presentation.md and verification-listener-shutdown-portability.md.
-No restart, stash restoration, fixture regeneration or cache cleanup is needed.
+PageView generates full virtual geometry at a uniform scale, then clips using signed
+integer translation. Existing whole-source label/component/paper/budget/cancel guards
+remain. Source-aware MOL display-H still comes from the complete owner, without
+rewriting authored None. Valid percentage acceptance is not universal renderability.
 
-Current research uses public specifications/guides/standards and appropriately licensed
-open-source references. Never launch/inspect/download/decompile proprietary reference
-binaries or copy their assets. Historical authorized installed reports keep their original
-attribution; they are not permission for new binary research. Runtime/asset MIT/Apache/BSD
-allowlists remain unchanged. The native license blocker is resolved; full M0 is not.
+The actual light native workspace now has numeric Zoom, View controls/F5–F8, horizontal/
+vertical position controls and plain wheel navigation. Ordered current-camera picking
+handles zoomed bond editing; real view changes retire gestures/hotspots and genuine no-ops
+preserve them. Reverse-axis actions, A→B→A, fractional wheel math, smaller-page Open,
+error recovery, y-down controls, accessibility values/actions and focused arrows have
+independent real-App checks. The licensed egui0.29.1 current-focus guard fix retains its
+version/features/notices, rather than hiding the first-arrow defect with an idle frame.
 
-## What is verified now
+A native rapid Undo→Save counterexample exposed an older eager File shortcut prepass.
+File menu/keys now join the ordered loop, resolving current central bindings after
+earlier edits/history. Pending intent blocks later authoring; existing Running, Save
+reservation, worker/reply and close-receipt policies stay exact. Frozen actual-file
+regression and actual fixed native repetition both pass.
 
-The27-command registry is shared by UI, CLI, stdio MCP and authenticated loopback. The new
-`bond.set_order` requires explicit order/revision/IDs and `rectify_neutral_carbon` policy.
-It edits one existing Single/Double/Triple edge, validates all incident weights and
-literal carbon H, preserves IDs/direction/geometry/unrelated metadata/source, consumes no
-identity floors and makes one history entry. Positionless graph edits are supported.
-Only source-free/byte-proven native CDXML is eligible; imported MOL/CDX/opaque XML refuses,
-including no-ops. Validated same order preserves the exact Arc/history/redo/dirty state.
+## Verified evidence
 
-Independent evidence:13 command/file tests with all nine order pairs, source/error/no-op/
-retained-work guards and a fixed-seed128-step edit property; private revision/floor-max
-checks;4 real CLI and2 real stdio child cases; authenticated loopback notifications and
-unchanged mode/history. Actual CDXML and both MOL encodings face unchanged Expat/Decimal/
-RDKit consumers. See [command evidence](docs/verification-bond-order-command.md).
+- Root full `cargo xtask ci`52827: **961 passed,0 failed,1 ignored**,146 result lines
+  including3 native AccessKit bridge tests. Formatting, all-target warnings-denied clippy,
+  layers, licenses and corpus all pass. Final log `target/view-ordered-file-final-ci.log`,
+  115304B/SHA`6a680a8baeeb4266fe46b6b1b1658238d98c07b43d556e67e98995b37fb8249e`.
+- Runtime declaration closures remain154/165/220 for Mac/Windows/Linux;2 runtime assets
+  verified. egui's existing0.29.1 lock entry routes to the exact reviewed source fork;
+  no version/feature/allowlist widening. Notices are adjacent; see dependency-policy.md.
+- Corpus remains8 pinned files/5 licensed bundles. CDXML/MOLV2000/V3000/SDF/originalCDX/
+  three SMILES checks pass. Broader foreign CDX/chemistry corpus coverage is missing.
+- Renderer76 tests include11 new independent analytic/pixel/CPU–GPU view cases. A real
+  zero-tolerance large-coordinate anchor RED led to matching source-f32 forward mapping,
+  without loosening hit tolerances. Root receiving22937 passes.
+- Independent worker frozen final navigation port:6 public command +2 private guards +
+  2 CLI/stdio +1 socket +10 actual-App +2 SDK cases pass, fmt/clippy0. The private guards
+  are additional coverage; no original RED is claimed. The separate eleventh File case
+  preserves the prior ten exact prefix; independent whole UI144/0/1, fmt/clippy0.
+- Public guide/PhotoCraft research is pinned in docs/research/view-navigation-plan.md.
+  Decisions distinguish documented roles from original units/factors/anchoring/persistence.
+  Pure SDK probe reproduces lost immediate focus independently before the one-guard fix.
 
-The actual UI wires source-supported Single conversion clicks, absolute1/2/3 and Single-
-tool endpoint Single→Double / Double→Triple. Unsupported Double alignment and unproven
-click combinations preserve state with visible diagnostics. Its logical hotspot survives
-only our own order edit while stationary; fresh input re-hits, and context/history clears
-it. Edit shortcuts and Edit/Page activations execute in event order with late availability,
-whole backing/page/viewport/graph refresh and no-drawing SDF fallback. Six independent app
-workflows and six history regressions pass; the old occupied-edge negative becomes a
-stronger same-input Single→Double positive, retaining the other four negatives.
-See [UI evidence](docs/verification-bond-order-ui.md) and
-[history evidence](docs/verification-bond-history-order.md).
+[Renderer](docs/verification-view-render.md), [commands/adapters](docs/verification-view-commands.md),
+[actual-App inputs](docs/verification-view-ui.md), [native view](docs/verification-view-native.md)
+and [ordered-file evidence](docs/verification-ordered-file-actions.md) retain exact
+RED/GREEN, source hashes, setup corrections, reviewed inputs and limits. Wrong filter
+runs that selected zero tests and Option/schema/lint setup corrections are not behavior
+REDs. Existing expectations/oracles/fixtures/fonts and approved golden were not relaxed.
 
-Native Mac checks on Apple M3 Max/Metal verify actual Single/Double/Triple pointer
-creation, supported click/1/2/3/endpoint conversions, keyboard/menu Undo/Redo, Unicode Save
-As and exact editable CDXML reopen/known Save. The420pt-square page setup alone uses the
-registry. All three bonds are native-authored. Actual saved bytes are independently read
-by unchanged Expat/Decimal and RDKit2026.09.2. Final scene1093B/SHA
-`3940bfd4e27d5f8379f55e6c6270a85187a39614552202a35c1b11d588b5f0d8`.
-See [finite native scope](docs/verification-bond-order-native.md) and
-[actual README capture](docs/media/workspace-native-bonds.jpg).
+First full navigation gate67554 failed the existing listener-rebind test with AddrInUse.
+The exact competing owner/cause was not established. Its unchanged isolated12582 and
+full68260 pass; final52827 also passes. No production assertion, thread setting or port
+policy was changed to obtain GREEN. Preserve that failed log; do not claim no flakiness.
 
-## Gates and preserved failures
+## Actual native preview
 
-Final Root `cargo xtask ci`3957 exits0: **925 passed, zero failed, one ignored explicit
-capture utility**,140 result lines including3Mac accessibility-bridge tests. Rustfmt,
-all-target warnings-denied clippy, layers, both bundled assets/notices, declared runtime
-license closures154Mac/165Windows/220Linux and8pinned files/5bundles pass. Log
-`target/bond-order-final-menu-ci.log`:110951B/SHA
-`b7f4db314e1d490f59357731bfebf82660cc216cc5051f5d69634306a8826ad3`.
-Earlier isolated backend CI passes912; first full authoring gate passes924 before the
-additional menu regression. Only documentation/media follows the final source gate.
-Changed Markdown local links and actual JPEG identities/metadata are checked separately.
+Fixed macOS/Apple M3 Max/Metal executable21,188,872B/SHA
+`af8a72ed079d15c32b4c1d68c2f7cf891ba5ab56f34029ae8505dbb903259d93`
+is open for the user. UI source SHA
+`cf0bbee73e810a7f7fb0c06ffab0c08b575ce890be9a10c4cd761a3fb361e82e`;
+FileWorkflow SHA`582a6a783223bcca43b5bc9186e20a2beeaccfd6d2bf7c06b27a5ec7365be396`.
+The original scene was natively mouse-authored on unchanged A4 at100%, using all three
+tools, then numeric150%, pan/wheel, F7/F8 and actual View/Fit were observed. Native zoomed
+clicking, Unicode Save As, editable reopen and separate Undo/Save pass. The first rapid
+Undo/Save output failed the external literal Single expectation and was retained as RED.
 
-Real REDs are retained: absent command; initial click/keys; endpoint conversion; stationary
-ink relocation; keyboard Undo prepass; whole-SDF sequencing; and later menu Undo prepass.
-New-harness corrections are separated: SDK normalizes repeat from actually held keys;
-close setup needs expected_revision; name-only cached AccessKit lookup selected an exact
-unreachable tooltipLabel. Independent probe identifies the real focusable Button; only
-that locator predicate changes, with all six bodies/inputs/expectations exact. Root's
-initial menu filter matches zero tests and is explicitly not RED; its corrected filter
-fails before the fix. A manual native control-envelope comparison was too broad because
-file bindings contain the new revision; graph/H/history assertions already passed.
-The earlier short A4 click made no edit, with cause unestablished. Do not invent a fix.
+The fixed build opens that original scene, edits the first edge at150%, and passes
+the same rapid native CmdZ→CmdS: revision2→3, Undo0/Redo1, clean, unchanged view epoch1.
+The saved952B file is exactly original SHA
+`295e90470595acba479b95cf3be45d701e900a463fddeeafeb3e47e483b925f4`.
+Unchanged Expat/Decimal and RDKit2026.09.2 confirm literal points, Single/Double/Triple,
+H3/H2/H1 pairs and CC/C2H6, C=C/C2H4, C#C/C2H2. This external consumer is not an app
+chemistry engine. Exact one-packet ordering is proven by the independent headless case;
+native batching is not inferred from timing alone.
 
-No dependencies/locks, parser/renderer production behavior, old fixtures/oracles/font or
-approved golden changed. No new parser fuzz run, Windows/Linux execution or hosted run
-is implied. Previous normal-parser ASan10000-run evidence remains in its own records.
-The only approved golden remains SHA
-`1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc`.
+[Current unedited JPEG](docs/media/workspace-native-view.jpg):1160×832,68854B/SHA
+`e9555f9df3cc65a26f45057e01379c78cef98ffb90675c505c6caa35102c2708`.
+The public-safe provenance binds actual binary/source/file, preceding checkpoint and
+metadata limits. No retouching, generated UI or new approved golden. Only approved golden
+remains SHA`1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc`.
 
-Final source identities:
+## Missing and only wired
 
-- UI: `fd39fe34002841c7e1835b3521b6fb97640b4e2170f82c83cbeb59dc6cb502d0`.
-- Order UI tests: `81d986b87a2423d0ef23f3119adc1d51c51d9604efd5ebb1cc2cad020e044272`.
-- History tests: `79f8e629f8a224bdc90d0ee9e26d95f00d407431eba87c4ab8d1850b80d66a7f`.
-- Native binary20626504B: `aa38e594f35d6fb6ff23e4eb6cad63aa6ec20a78bc35fcad0dfb1e011e53292c`.
+Full M0 addressability/dialog discovery, modern576-anchor inventory completeness and
+interactive Windows/Linux evidence remain open. Native Mac evidence is finite, not
+full26.1 screen/control/workflow parity. Newly changed product has no hosted run, by policy.
 
-## Missing, wired and unverified
+M1 remains partial: foreign/general CDX and broader CDXML mappings/editing; wider MOL
+metadata/layout; actual native asynchronous SDF chemical-preview acceptance, field UI
+and record operations; native SMILES/conversion/export acceptance and general chemistry
+layout. Container codecs do not constitute reaction/notation editing.
 
-Default A4 fit at the recorded1160×800 content size can reject multiple-stroke visibility.
-The guard remains. View zoom/navigation is missing; using a registry-prepared smaller
-page verifies the finite workflow, not an acceptable complete default-view experience.
-Native multiple terminal extension/reversed endpoint variants and broader labels/imports
-remain unverified. Supported click routes follow public GUIDE25; a complete26.1 old-order/
-tool/modifier matrix, alignment traversal, style defaults and automatic-H preference
-semantics remain unknown. General valence/aromaticity/stereo/chemistry is not implemented.
+M2 still needs rings/chains, snapping, persistent selection/transforms, general atom
+labels/abbreviations/charges/isotopes/radicals/stereo and styles. Native multiple terminal
+extension and broader source/tool cases remain separate missing evidence. Full M3
+chemistry/reactions/text, M4 publishing/clipboard and M5 names/templates/biopolymers/
+WebAssembly/installers remain. Current-view capture, SDF navigation, saved view preferences
+and physical DPI calibration are not delivered. Preserve honest render refusals.
 
-Full UI addressability (including contextual shortcut discovery/dialog/preview controls),
-exact inventory and interactive Windows/Linux evidence remain M0 gaps. CDXML/CDX foreign/
-general mappings, broader MOL/SDF/SMILES workflows and corpus coverage remain M1 gaps.
-Rings/chains/snapping/selection/transforms/atom editing/styles, chemistry, publishing,
-clipboard, WebAssembly and signed installers remain M2–M5 work. See the sourced
-[parity checklist](docs/parity-checklist.md), [roadmap](ROADMAP.md) and
-[open questions](docs/clean-room/open-questions.md); wired is not verified full parity.
+No new parser fuzz or Windows/Linux interactive run occurred in this slice. Earlier
+parser ASan evidence remains in its own records. Do not copy reference binaries/assets;
+new work follows the latest public-source-only AGENTS boundary.
 
-## Live processes and next executable work
+## Live handles and next exact work
 
-All three workers have delivered frozen handoffs; no worker/Root Cargo jobs remain.
-Root alone owns Git and native input. The final saved preview stays intentionally open:
-owned PID83437, no launch waiter, bundle `target/bond-order-menu-native/Bondline.app`.
-Private startup token is only in that ignored directory's `stdout.jsonl`; never print,
-commit or publish it. Old preview PIDs24761/67404 and listeners are closed. Confirm actual
-process state before acting. The user authorized this review; check availability before
-new native input and continue headlessly meanwhile.
+All Root Cargo/build checks and workers are terminal; no launch waiter or fuzz job.
+Last confirmed native processes: fixed PID41233, bundle `target/ordered-file-native/`
+(review file952B above); previous navigation PID30298 under `target/view-navigation-native/`;
+older order-edit PID83437 under `target/bond-order-menu-native/`. Earlier previews were
+left untouched. Check actual current processes and user availability before new input.
+Tokens are only in each ignored startup stdout.jsonl; never print/commit/publish them.
 
-Run the local gate with pinned Rust1.94.1 and `BONDLINE_PYTHON` set to the absolute
-`.cache/oracles/format-python/bin/python` path: `CARGO_INCREMENTAL=0 cargo xtask ci`.
-The existing external environment uses RDKit2026.09.2, NumPy2.5.4 and Pillow12.3;
-[development.md](docs/development.md) records setup. It is not an app runtime dependency.
+Workers used isolated worktrees `bondline-view-research`, `bondline-view-render` and
+`bondline-view-acceptance`, with their own absolute Cargo targets/incremental0. Root owns
+Git/native input. Do not start duplicate work or reuse Root artifacts for staged exports;
+older mixed-target cache corruption is still recorded and its cache preserved. Ignored
+reports/builds/caches are disposable, not intentional committed project files.
 
-Use independent absolute Cargo targets for worktrees/index exports and incremental0.
-Do not reuse Root's target for exported trees. The earlier mixed-target old-API diagnostics
-and full `target/debug-pre-index-recovery` cache remain preserved, with no new recurrence.
-Ignored target/.cache artifacts and reference reports stay out of Git.
-
-1. Read current roadmap/parity/public sources. Research the documented zoom/view controls
-   and pinned PageViewport callers; record defaults/unknowns before implementing.
-2. Write independent analytic viewport/coordinate/hit/label-readability and real-frame
-   REDs. Add the smallest shared transient view command and actual UI wiring, keeping view
-   state outside authored history and preserving pixel/label/source guards. Do not change
-   chemical page size merely to hide the default-view gap. Verify native input separately.
-3. Continue the M0 addressability/inventory/platform and M1 format work alongside bounded
-   M2 authoring. Keep the complete M3–M5 target visible. Run meaningful local gates and
-   create small commits with tests/provenance; no push/Actions activation without request.
+1. Read this state, ROADMAP/parity/source records and current native evidence. Resume M1's
+   outstanding actual SDF-preview acceptance using original pinned data after confirming
+   user availability; compare actual scene/persistence/retirement and distinguish failures
+   from headless evidence. Continue independent format/addressability work meanwhile.
+2. Select the next highest unblocked M1 or M0 task, cite its public source, freeze an
+   independent expectation and observe intended RED. Keep complete source/worker/close
+   barriers. Then continue the complete M2–M5 roadmap, without declaring parity early.
+3. Use Rust1.94.1 and existing `BONDLINE_PYTHON` absolute
+   `.cache/oracles/format-python/bin/python` (RDKit2026.09.2/NumPy2.5.4/Pillow12.3). Run
+   meaningful local checks and `CARGO_INCREMENTAL=0 cargo xtask ci`, make atomic commits,
+   update status. Do not push/publish or enable Actions without explicit new authorization.

@@ -272,6 +272,19 @@ separately observed26.1 example. Unsupported clicks retain state with visible di
 
 A native Mac check of the current authoring build observes the existing multiple-component
 visibility guard at default A4 fit in1160×800 content. A registry-prepared420pt square
-permits native multiple authoring/conversion at a readable scale. Zoom/navigation and a
-usable default multiple-bond drawing view remain a concrete UI gap; retain the pixel/label
-readability guards rather than hiding it. This does not establish screen/style parity.
+permits native multiple authoring/conversion at a readable scale. The later shared
+zoom/navigation slice now enables actual100%/150% authoring on unchanged A4; it retains
+all pixel/label guards and does not establish universal Fit or screen/style parity.
+See verification-view-native.md and verification-ordered-file-actions.md.
+
+
+## View conventions and remaining scope, 2026-11-15
+
+Public GUIDE25 establishes roles, percentage range and F5–F8, but no verified26.1
+100%-screen-unit/DPI calibration, step factor, initial scale, fit margin or2D hand/wheel
+modifier. Bondline's explicit units,1.25 steps, clamped pan and input factors are original
+choices recorded in the pinned view plan. SDF view navigation, current-window capture,
+saved view preferences and broader gestures remain missing. Valid percentage acceptance
+does not imply every source/page/scale passes rendering bounds and readability guards.
+The rapid Undo/Save prepass counterexample is now fixed and independently/natively tested;
+its failed first output stays recorded rather than changing the expected file.

@@ -206,11 +206,20 @@ verification-bond-order-{command,ui,native}.md under docs/ for exact evidence an
 Actual native Mac drawing/conversion/hotkeys/history/Unicode Save As pass for the recorded
 readable-scale scene; no universal26.1 click matrix or native multiple extension is claimed.
 
-Next authoring slice: source and implement usable view zoom/navigation, preserving existing
-pixel/label guards; the default A4 fit can reject multiple components at the recorded
-native window size. Then ring/chain construction, snapping, persistent selection/transforms,
-atom labels and document styles remain required. Keep the M1 imported-source/mapping and
-M0 inventory/addressability/platform work visible rather than declaring those complete.
+Usable transient view navigation now has one typed command, exact legacy Fit, uniform
+logical zoom, numeric entry, Actual/Fit/Magnify/Reduce, two-axis controls and wheel pan.
+Independent renderer/command/adapters/actual-App tests and native Mac unchanged-A4
+Single/Double/Triple creation and150% editing/persistence pass. The fresh-focus SDK
+filter and rapid Undo→Save prepass bugs were independently reproduced and corrected.
+The aggregate961-test gate passes; source/scale/label guards remain strict. No physical
+DPI calibration, SDF navigation, saved view preferences or complete reference parity.
+See docs/verification-view-{render,commands,ui,native}.md and
+docs/verification-ordered-file-actions.md.
+
+Next: complete the outstanding M1 native SDF preview/format and M0 addressability/inventory/
+platform evidence, then ring/chain construction, snapping, persistent selection/transforms,
+atom labels and document styles. Keep imported-source/mapping gaps visible; this bounded
+view workflow does not complete any milestone.
 
 Bonds, rings, chains, labels/abbreviations, charges, isotopes, radicals, wedge/hash bonds,
 selection, transforms, hotkeys, undo/redo and style sheets from public journal guidelines.

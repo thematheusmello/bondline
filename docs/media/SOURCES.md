@@ -116,3 +116,27 @@ No reference-product assets or credentials are included. The visible temporary l
 address is not a credential. This original Bondline UI/authored-data image is MIT OR
 Apache-2.0 documentation media, separate from runtime assets. The preceding26-command
 preview process and listener are now closed; their earlier captures retain their scope.
+
+
+## Logical view and ordered-save preview, 2026-11-15
+
+[workspace-native-view.jpg](workspace-native-view.jpg) is the exact final own-window
+CUA JPEG buffer,1160×832,68854B, SHA
+`e9555f9df3cc65a26f45057e01379c78cef98ffb90675c505c6caa35102c2708`.
+[Provenance](workspace-native-view-provenance.json) records the actual fixed binary,
+UI/SDK/command sources and native952B CDXML. Original A4 was never resized. The three
+pairs were mouse-authored in the navigation build, then the fixed build reopens, edits
+at150% and passes the native rapid Undo→Save check against exact original bytes and
+independent Expat/Decimal/RDKit consumers. See
+[ordered-file verification](../verification-ordered-file-actions.md).
+
+The earlier corrected navigation capture was69026B/SHA
+`47e6ee6136c4ced7f195b9a3179961fac68fbfb1ee6dfccb8a4282c4b4b77622`;
+its record remains in the provenance/history. The separate premature failed Undo/Save
+capture was never published. No cropping, conversion, retouching or model-generated UI
+was used. Pillow independently verifies JPEG/dimensions; EXIF contains only the nested
+image width/height, without author/GPS. Existing ICC/empty IPTC metadata is untouched.
+No credential or reference-product artwork is present; localhost address is not a token.
+The new original documentation image is MIT OR Apache-2.0, separate from runtime assets
+and the unchanged approved chemical golden. Full parity/Windows/Linux interaction is
+not established by the photo. The fixed preview remains open for the user.

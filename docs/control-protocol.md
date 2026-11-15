@@ -914,3 +914,12 @@ capture, independent of the window camera. SDF preview navigation, saved view pr
 hand gestures and physical screen calibration remain unsupported. Source/evidence are in
 [the view research](research/view-navigation-plan.md) and
 [renderer verification](verification-view-render.md); native execution is separate.
+
+
+Native File menu/shortcut intents now use the same ordered event dispatch as editing
+and View controls. Each resolves its current central binding at the event boundary, so
+Undo followed by Save captures the undone revision. An accepted pending intent prevents
+later authored input from passing behind it; the established Running/workers/Save lease
+and completion/close receipt contracts remain. This original input-order policy is
+independently checked against actual saved bytes and natively repeated; see
+[ordered-file verification](verification-ordered-file-actions.md).

@@ -72,6 +72,7 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 | Naming and mixtures | PROFESSIONAL-26.1 | missing | M5; public standards/oracles |
 | Associated-data label selection | PROFESSIONAL-26.1 | missing | Documented 26.1 behavior |
 | Separate CDXML/MDL paste entries | PROFESSIONAL-26.1 | missing | M4; platform clipboard evidence |
+| View navigation | GUIDE-25 printed26/74/79 | verified (bounded Mac) | Numeric zoom, Actual/Fit/Magnify/Reduce, pan controls/wheel, unchanged A4 authoring and150% editable persistence. Original scale/step/anchor policies; guards and current-view capture/SDF/physical-DPI limits remain. See verification-view-{render,commands,ui,native}.md. |
 | CDXML/CDX interchange | CDXML-INTRO / CDX-INTRO / CDX-SYNTAX | partial: Mac CDXML and guarded unchanged CDX files verified | CDXML native files retain their existing evidence. CDX now uses complete source-backed open/save through engine/CLI/stdio/socket, independently checked saved bytes/struct/RDKit and lifecycle/refusal tests. Actual Mac CDX choice/Known Save/Unicode Save As/reopen/retry/dirty-close refusal and Undo recovery pass on exact450962c. Faithful CDX preview, imported structural editing, labels/queries/styles, foreign/general corpus and full format parity remain missing; see verification-cdx-application.md |
 | MOL/SDF/RXN/SMILES/InChI | GUIDE-25 / CTFILE-2026 | partial: V2000/V3000 limited Mac file workflows verified | Both codecs/owned backing/atomic I/O/shared commands and external consumers; actual Mac version/default/author/Open/Save/Save As/reopen/close/refusal/retry. Ordinary MOL absent-H depiction now has independent raw/CPU/GPU/adapter/Save/history checks and headless initial/post-command canvas/hit acceptance; its native-window workflow remains unverified. V3000 application372+3 local gate passes; own hosted43531603511 GREEN. Mixed V2000/V3000 SDF library has independent/raw/consumer evidence; fetched V2000 corpus remains distinct. A legacy RXN container also has independent roles/raw/consumer evidence; it is not an application reaction workflow. Bounded aliphatic/aromatic SMILES notation/source ownership and explicit-H neutral Fragment export have literal token/graph/output/bounds and qualified external-consumer checks; generated output is noncanonical, with named opt-in fixed-H normalization only, no general inference/perception. Complete accepted SMILES-file source Open/Save now retains every record/opaque byte through commands/CLI/stdio/socket, with independent raw/per-record consumers and bounded container ASan evidence. Explicit record inspection now returns exact selected notation/ranges/counts under a128KiB object budget without disclosing application data or mutating state. Its .smi/.smiles chooser and metadata-only view are wired/headlessly tested; actual native acceptance and chemical preview/editing remain unverified/missing. The restricted create-only conversion command now passes engine/CLI/stdio/authenticated-loopback convert→explicit CDXML Open/edit/history/Save/reopen under the local686 gate. Explicit selected-fragment SMILES file export now has actual engine/CLI/stdio/authenticated-loopback, full-graph/order/metadata and semantic-negative evidence under the local715 gate, with complete-source guards and unchanged active state. Native export/conversion controls and Copy As clipboard behavior remain missing. Native mixed-version SDF Open/Save/reopen and failed-import retention now pass onbb6d5b9; static summary only. Shared bounded SDF field inspection/existing-value edits now pass command/CLI/MCP tests. Restricted all-record neutral/Single SDF capture now passes independent headless image/CLI/MCP tests; the asynchronous native preview is wired/headlessly tested through actual frame/texture instructions; native-window acceptance is unverified. Native chemical display acceptance, field-edit UI, record operations, application RXN, broader layout/export, interactive Windows/Linux and SMILES/InChI remain incomplete. M1/M3 |
 | SVG/PDF/PNG, print and Office clipboard | GUIDE-25 | missing | M4 |
@@ -174,10 +175,10 @@ establish chemical preview, data-edit UI or other platforms.
 | MV-012 | View > Show Highlight Colors Toolbar | 56-57 | missing | Wrapped path; named toolbar also appears under Colors. |
 | MV-013 | View > Templates | 129, 203 | missing | Original catalog assets only. |
 | MV-014 | View > Show Preview | 18 | missing | Preview during document opening. |
-| MV-015 | View > Magnify | 26, 79 | missing | - |
-| MV-016 | View > Reduce | 26, 79 | missing | - |
-| MV-017 | View > Actual | 26 | missing | Shortcut table calls it Actual size. |
-| MV-018 | View > Show Document | 26 | missing | Shortcut table calls it Fit to window; label correspondence needs modern confirmation. |
+| MV-015 | View > Magnify | 26, 79 | verified (bounded Mac) | Shared ui.view/F7, actual150→187.5% and own recent drawing focus. Original factor/units; modern defaults remain unknown. |
+| MV-016 | View > Reduce | 26, 79 | verified (bounded Mac) | Shared ui.view/F8; actual187.5→150%, transient history/source invariants. |
+| MV-017 | View > Actual | 26 | verified (bounded Mac) | Actual/F5 and editable percentage on unchanged A4.100% is original one-logical-unit/point, not physical monitor calibration. |
+| MV-018 | View > Show Document | 26 | verified (bounded Mac) | Fit to window/F6 preserves exact legacy geometry; actual menu and76.44% scene pass. Modern label correspondence remains unconfirmed. |
 | MV-019 | View > Show Rulers | 26, 79 | missing | - |
 | MV-020 | View > Show Crosshair | 27, 79 | missing | - |
 | MV-021 | View > Show Info Window | 111-112, 120 | missing | - |
@@ -620,10 +621,10 @@ establish chemical preview, data-edit UI or other platforms.
 | KM-020 | Copy MOL text: Alt+Ctrl+o | 78 | missing | - |
 | KM-021 | Paste SMILES: Alt+Ctrl+p | 78 | missing | - |
 | KM-022 | Paste MOL/CDXML (legacy): Alt+Shift+Ctrl+p | 78 | missing | R26.1 retains the existing shortcut for CDXML; modern platform-specific binding needs confirmation. |
-| KM-023 | Actual size: F5 | 79 | missing | - |
-| KM-024 | Reduce: F8 | 79 | missing | - |
-| KM-025 | Magnify: F7 | 79 | missing | - |
-| KM-026 | Fit to window: F6 | 79 | missing | - |
+| KM-023 | Actual size: F5 | 79 | verified (bounded Mac) | Real native event and A4 authoring; text-entry suppression and ordered view/gesture checks. |
+| KM-024 | Reduce: F8 | 79 | verified (bounded Mac) | Native187.5→150%; original factor. |
+| KM-025 | Magnify: F7 | 79 | verified (bounded Mac) | Native187.5% and last drawn midpoint; generation/page-qualified focus. |
+| KM-026 | Fit to window: F6 | 79 | verified (bounded Mac) | Central binding plus native menu/keys; legacy exact Fit and recovery tests. |
 | KM-027 | Toggle ruler: F11 | 79 | missing | - |
 | KM-028 | Crosshair: Ctrl | 79 | missing | Temporary/toggle details need the cited workflow. |
 | KM-029 | Fixed lengths: Ctrl+l | 79 | missing | - |
