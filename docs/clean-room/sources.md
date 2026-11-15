@@ -1,6 +1,6 @@
 # Clean-room source register
 
-Reviewed through 2026-11-14. A source is permission to learn documented behavior, not to copy
+Reviewed through 2026-11-15. A source is permission to learn documented behavior, not to copy
 proprietary implementation, help text or assets. Record more specific sections as features land.
 The folder name is historical. The user's clarification and policy checkpoint 72fafb3
 authorize artifact/runtime research as well as public media. Record exact identities and
@@ -1472,3 +1472,23 @@ Label; a frozen isolated runtime probe verifies the exact stale/current IDs befo
 new locator correction. No SDK/source/dependency patch is made. See
 [UI evidence](../verification-bond-order-ui.md) and
 [ordered history](../verification-bond-history-order.md).
+
+
+## View navigation research, 2026-11-15
+
+The [pinned public-guide/PhotoCraft comparison](../research/view-navigation-plan.md)
+visually reviews GUIDE25 printed26/74/79 and verifies five pinned public PhotoCraft view
+sources. GUIDE25 supplies appearance-only magnification,1..999% and F5/F6/F7/F8 roles;
+it supplies no verified100%-screen-unit, factor, initial scale or Hand/pan modifier.
+Spacebar's Marquee role prevents treating a Space-held Hand as sourced behavior. PhotoCraft
+separates camera transforms/DPI and keeps view transient, but its raster-unit100% and
+UI-only view dispatch are not adopted. Original Bondline units, steps, anchoring, bounds,
+clipping and persistence decisions are separated from documented facts in the plan.
+No implementation or native-parity claim follows from research alone.
+
+Tagged command schemas follow the [MCP tool-input contract](https://modelcontextprotocol.io/specification/2025-11-25/server/tools)
+and [JSON Schema combination rules](https://json-schema.org/understanding-json-schema/reference/combining).
+The root remains an object; oneOf selects exactly one closed action object. Unknown/unused
+fields are rejected by serde and branch schemas. Per-branch closure and root unevaluated-
+property closure replace no old single-object schema assertion or runtime validator.
+These primary sources were read2026-11-15; no new schema/SDK dependency is introduced.
