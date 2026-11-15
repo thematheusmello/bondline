@@ -10,6 +10,7 @@ layer = 2
 
 [dependencies]
 bondline-model = { path = "../model" }
+bondline-chem = { path = "../chem" }
 bondline-cdxml = { path = "../cdxml" }
 bondline-cdx = { path = "../cdx" }
 roxmltree = "=0.21.2"

@@ -501,6 +501,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "bondline-chem"
+version = "0.1.0"
+dependencies = [
+ "bondline-model",
+ "thiserror 2.0.21",
+]
+
+[[package]]
 name = "bondline-cli"
 version = "0.1.0"
 dependencies = [
@@ -532,6 +540,7 @@ version = "0.1.0"
 dependencies = [
  "bondline-cdx",
  "bondline-cdxml",
+ "bondline-chem",
  "bondline-model",
  "bondline-render",
  "exacl",

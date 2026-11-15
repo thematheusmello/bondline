@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/model", "crates/cdxml", "crates/cdx", "crates/commands", "crates/mcp", "crates/cli", "crates/ui", "crates/render", "crates/io", "compat/hexf-parse", "compat/libloading", "compat/clipboard-win", "xtask"]
+members = ["crates/model", "crates/cdxml", "crates/cdx", "crates/chem", "crates/commands", "crates/mcp", "crates/cli", "crates/ui", "crates/render", "crates/io", "compat/hexf-parse", "compat/libloading", "compat/clipboard-win", "xtask"]
 resolver = "3"
 exclude = ["vendor/eframe", "vendor/egui", "vendor/winit", "vendor/accesskit_macos", "fuzz"]
 

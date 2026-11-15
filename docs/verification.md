@@ -1,5 +1,11 @@
 # Verification log
 
+## Neutral authoring chemistry, 2026-11-15
+
+[Independent core and actual-Fragment evidence](verification-smiles-authoring-chem.md)
+records the missing-API REDs, qualified external consumer, first9+6 GREEN and323 IO
+regressions with clippy. Editable paste/layout/native execution remain separate gates.
+
 ## Integer-bond ring control, 2026-11-15
 
 The [analytic existing-renderer control](verification-kekule-render-control.md) passes

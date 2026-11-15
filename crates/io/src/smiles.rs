@@ -7,12 +7,14 @@ use bondline_model::Element;
 use std::{collections::HashSet, ops::Range, sync::Arc};
 
 mod acyclic;
+mod authoring;
 mod components;
 pub mod file;
 mod layout;
 mod normalize;
 mod ring;
 mod write;
+pub use authoring::AuthoringError;
 pub use file::{SmilesFileDocument, SmilesFileError};
 pub use layout::LayoutError;
 pub use normalize::NormalizeError;

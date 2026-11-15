@@ -1,0 +1,16 @@
+[package]
+name = "bondline-chem"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[package.metadata.bondline]
+layer = 1
+
+[dependencies]
+bondline-model = { path = "../model" }
+thiserror = "2"
+
+[lints]
+workspace = true

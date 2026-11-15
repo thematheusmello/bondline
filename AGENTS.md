@@ -103,6 +103,9 @@ cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attrib
 replacement and a bounded new-syntax writer);
 cdx (L0, bounded flat binary syntax, exact source passthrough and checked opaque property
 replacement and new-tree Writer; model mapping and application commands live above this crate);
+chem (L1, model-only bounded neutral fixed-H/Kekulé authoring projection with immutable
+array-aligned source semantics, sp²-cycle validation and deterministic matching;
+not general aromaticity perception; see docs/verification-smiles-authoring-chem.md);
 render (L1, shared neutral-element Single/centered Double/Triple GraphScene, bounded hit regions, literal authored-H
 labels plus a separate resolved-H entry with attachment/paper-ink guards, CPU/GPU
 rectangles/strokes and unchanged approved golden); io (L2,

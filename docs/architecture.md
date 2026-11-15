@@ -1,5 +1,10 @@
 # Architecture
 
+The model-only `bondline-chem` L1 now implements the bounded neutral authoring policy:
+array-aligned source semantics, exact fixed H, sp²-cycle validation and deterministic
+Kekulé matching. The additive IO adapter retains original SMILES source/IR; legacy
+normalization/converters remain separate. See [verification](verification-smiles-authoring-chem.md).
+
 All formats share a per-Engine save reservation acquired by command preparation. The
 owned Arc token moves from FilePlan into Completed and lives through Engine::finish.
 A second outstanding Save fails busy before I/O, including the publication-to-application
