@@ -2,9 +2,10 @@
 
 Reviewed through 2026-11-15. A source is permission to learn documented behavior, not to copy
 proprietary implementation, help text or assets. Record more specific sections as features land.
-The folder name is historical. The user's clarification and policy checkpoint 72fafb3
-authorize artifact/runtime research as well as public media. Record exact identities and
-observed/inferred limits; no strict program-inspection isolation is now claimed.
+The folder name and policy checkpoint72fafb3 are historical. New work follows the latest
+AGENTS.md boundary: public specifications/media and licensed source references only;
+never inspect or execute the proprietary reference program. Preserve historical evidence
+with its actual method, exact identities and observed/inferred limits.
 
 | ID | Public source | Decision / limitations |
 |---|---|---|
@@ -83,6 +84,7 @@ observed/inferred limits; no strict program-inspection isolation is now claimed.
 | CDXML-RADICAL | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_Radical.htm | None/singlet/doublet/triplet states and absence default. Model stores authored state without electronic-structure inference. |
 | CDXML-HYDROGENS | https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm | UINT16 explicit hydrogen count is distinct from separately drawn H nodes; missing count requests valence inference. Model retains None versus explicit zero; inference remains missing. |
 | CTFILE-2026 | https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf | Official129-page BIOVIA Chemistry2026 CTfile Formats,1580820bytes, SHA256959f2bbf5487e00fa7535ea7ee36f7ce04f39ea72920844641952276de146c94. Printed62/64–70/90 define blanks, counts, coordinates/symbols, declared valence, bonds, property precedence and headers. MOLV2000 source retention/model conversion/canonical writer follow these fields; original tests and limits in file-formats.md. Raw PDF/tables stay ignored. Normative M ISO global reset differs from the pinned RDKit legacy-delta input; separate tests record both instead of claiming agreement. |
+| CTFILE-SDF-REMOVE | https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf | Same pinned CTFILE-2026 PDF, printed97–99/PDF indexes100–102. SDfiles contain one or more compounds; therefore removing the sole record refuses. Complete-record source-span deletion, untouched-byte preservation and source-local ordinal reindexing are original Bondline policy, not a documented reference desktop flow. Independent raw/per-MOL consumer evidence is in verification-sdf-record-codec.md; no reference asset is bundled. |
 | IUPAC-ELEMENTS | https://iupac.org/what-we-do/periodic-table-of-elements/ | Reviewed catalog through element118; model supports atomic numbers1..118. MOL symbol facts use the4May2022 IUPAC PDF at https://iupac.org/wp-content/uploads/2022/05/IUPAC_Periodic_Table_A3-04May22.pdf and external RDKit checks all118 symbols. No table artwork, weights or fonts bundled. New catalog entries require new evidence. |
 | DAYLIGHT-SMILES | https://www.daylight.com/dayhtml/doc/theory/theory.smiles.html | Public atom/bond, ring, disconnected and isotope examples provide independent graph expectations, including C-C-O/[CH3][CH2][OH]. Functional chemistry facts only; no artwork/help text copied. |
 | IUPAC-DIAGRAM | https://iupac.qmul.ac.uk/drawing/drawing.html | Public IUPAC Recommendations 2008 HTML edition, matching Pure Appl. Chem. 80, 277–410. GR-1 and GR-2.1.2 distinguish single bonds, implicit carbon/hydrogen and explicit terminal labels for isolated ethane. The first command authors two C/three-H atoms and one single bond; it does not implement general valence inference. One-point lines, 12-point font/subscript metrics and current rendering limits are independent Bondline policies. No reference diagrams or prose copied. |
