@@ -1,7 +1,7 @@
 //! Window view state is separate from authored content, saved baselines and history.
 
-use crate::{CloseState, CommandResult, Engine, Error, UiFilePhase};
-use bondline_model::Point2;
+use crate::{CloseState, CommandResult, Engine, Error, StoredContent, UiFilePhase};
+use bondline_model::{PageSize, Point2};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -50,6 +50,8 @@ pub struct ViewOperation {
     pub center_y_pt: Option<f64>,
     pub epoch: u64,
     pub changed: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prepared_sdf_extent: Option<PageSize>,
 }
 
 impl Engine {
@@ -57,12 +59,50 @@ impl Engine {
         self.view
     }
 
+    /// Display bounds only; a prepared collection never becomes an authored Drawing.
+    pub fn view_page_size(&self) -> Result<PageSize, Error> {
+        match self.content() {
+            StoredContent::Sdf { .. } => self
+                .sdf_view_extent
+                .as_ref()
+                .filter(|(stamp, _)| self.capture_stamp_matches(stamp))
+                .map(|(_, size)| *size)
+                .ok_or(Error::ViewTargetUnavailable),
+            _ => self
+                .document()?
+                .pages()
+                .first()
+                .map(|page| page.size())
+                .ok_or(Error::InvalidPageId),
+        }
+    }
+
+    pub(super) fn install_sdf_view_extent(
+        &mut self,
+        context: &crate::capture::ViewCaptureContext,
+        size: PageSize,
+    ) -> bool {
+        if !matches!(self.content(), StoredContent::Sdf { .. })
+            || self.close_state() != CloseState::Open
+            || self.close_policy.epoch != context.close_epoch
+            || self.view().epoch != context.state.epoch
+            || !self.capture_stamp_matches(&context.stamp)
+            || self
+                .sdf_view_extent
+                .as_ref()
+                .is_some_and(|(stamp, prior)| stamp == &context.stamp && *prior == size)
+        {
+            return false;
+        }
+        self.sdf_view_extent = Some((context.stamp.clone(), size));
+        true
+    }
+
     /// Current displayed percentage when native layout or an explicit zoom is known.
     pub fn view_percent(&self) -> Option<f64> {
         self.view.zoom_percent.or_else(|| {
             let [width, height] = self.view_canvas_size?;
-            let page = self.document().ok()?.pages().first()?;
-            fit_percent(width, height, page.size()).ok()
+            fit_percent(width, height, self.view_page_size().ok()?).ok()
         })
     }
 
@@ -73,26 +113,19 @@ impl Engine {
         height: u32,
         page_id: bondline_model::PageId,
     ) -> Result<bondline_render::PageView, Error> {
+        if matches!(self.content(), StoredContent::Sdf { .. }) {
+            if page_id.get() != 1 {
+                return Err(bondline_model::Error::MissingPage(page_id.get()).into());
+            }
+            return page_view_for(self.view, width, height, self.view_page_size()?);
+        }
         let page = self
             .document()?
             .pages()
             .iter()
             .find(|page| page.id() == page_id)
             .ok_or(bondline_model::Error::MissingPage(page_id.get()))?;
-        Ok(match self.view.zoom_percent {
-            None => bondline_render::PageView::fit(width, height, page.size())?,
-            Some(percent) => {
-                let center = self.view.center.unwrap_or(Point2::new(
-                    page.size().width_pt() / 2.0,
-                    page.size().height_pt() / 2.0,
-                )?);
-                let center = Point2::new(
-                    center.x_pt().clamp(0.0, page.size().width_pt()),
-                    center.y_pt().clamp(0.0, page.size().height_pt()),
-                )?;
-                bondline_render::PageView::zoom(width, height, page.size(), percent, center)?
-            }
-        })
+        page_view_for(self.view, width, height, page.size())
     }
 
     pub fn drawing_view_scene(
@@ -129,11 +162,15 @@ impl Engine {
             {
                 return Err(Error::UiBusy);
             }
-            let stored = self.stored_document()?;
-            if !stored.is_fully_mapped() {
-                return Err(Error::UnsupportedDocumentPreview);
-            }
-            let page = stored.model().pages().first().ok_or(Error::InvalidPageId)?;
+            let drawing_page = if matches!(self.content(), StoredContent::Sdf { .. }) {
+                None
+            } else {
+                let stored = self.stored_document()?;
+                if !stored.is_fully_mapped() {
+                    return Err(Error::UnsupportedDocumentPreview);
+                }
+                Some(stored.model().pages().first().ok_or(Error::InvalidPageId)?)
+            };
             match params {
                 UiView::Inspect {} => {}
                 UiView::Fit {} => {
@@ -160,7 +197,7 @@ impl Engine {
                     validate_canvas(width_px, height_px)?;
                     let current = match self.view.zoom_percent {
                         Some(percent) => percent,
-                        None => fit_percent(width_px, height_px, page.size())?,
+                        None => fit_percent(width_px, height_px, self.view_page_size()?)?,
                     };
                     let magnify = matches!(params, UiView::Magnify { .. });
                     if (magnify && current < 999.0) || (!magnify && current > 1.0) {
@@ -173,6 +210,7 @@ impl Engine {
                             .clamp(1.0, 999.0),
                         );
                         if magnify
+                            && let Some(page) = drawing_page
                             && let Some((generation, page_id, focus)) = self.view_focus
                             && generation == self.generation
                             && page_id == page.id()
@@ -191,10 +229,11 @@ impl Engine {
                     if self.view.zoom_percent.is_none() {
                         return Err(Error::UnsupportedView("select a zoom before panning"));
                     }
+                    let size = self.view_page_size()?;
                     if !center_x_pt.is_finite()
                         || !center_y_pt.is_finite()
-                        || !(0.0..=page.size().width_pt()).contains(&center_x_pt)
-                        || !(0.0..=page.size().height_pt()).contains(&center_y_pt)
+                        || !(0.0..=size.width_pt()).contains(&center_x_pt)
+                        || !(0.0..=size.height_pt()).contains(&center_y_pt)
                     {
                         return Err(Error::InvalidView(
                             "center must be finite and inside the page",
@@ -220,10 +259,34 @@ impl Engine {
                 center_y_pt: self.view.center.map(Point2::y_pt),
                 epoch: self.view.epoch,
                 changed,
+                prepared_sdf_extent: matches!(self.content(), StoredContent::Sdf { .. })
+                    .then(|| self.view_page_size().ok())
+                    .flatten(),
             }),
             ..self.state()
         })
     }
+}
+
+pub(super) fn page_view_for(
+    state: ViewState,
+    width: u32,
+    height: u32,
+    size: PageSize,
+) -> Result<bondline_render::PageView, Error> {
+    Ok(match state.zoom_percent {
+        None => bondline_render::PageView::fit(width, height, size)?,
+        Some(percent) => {
+            let center = state
+                .center
+                .unwrap_or(Point2::new(size.width_pt() / 2.0, size.height_pt() / 2.0)?);
+            let center = Point2::new(
+                center.x_pt().clamp(0.0, size.width_pt()),
+                center.y_pt().clamp(0.0, size.height_pt()),
+            )?;
+            bondline_render::PageView::zoom(width, height, size, percent, center)?
+        }
+    })
 }
 
 fn validate_canvas(width: u32, height: u32) -> Result<(), Error> {

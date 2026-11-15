@@ -191,16 +191,15 @@ impl Engine {
                 });
             }
         }
-        if let Ok(stored) = self.stored_document()
-            && let Some(page) = stored.model().pages().first()
+        let stored = self.stored_document().ok();
+        if matches!(self.content(), crate::StoredContent::Sdf { .. })
+            || stored.is_some_and(|stored| !stored.model().pages().is_empty())
         {
             let [width_px, height_px] = self.view_canvas_size.unwrap_or([1, 1]);
-            let percent = self.view.zoom_percent.or_else(|| {
-                self.view_canvas_size
-                    .and_then(|[w, h]| crate::view::fit_percent(w, h, page.size()).ok())
-            });
-            let source_reason =
-                authoring_reason.or((!stored.is_fully_mapped()).then_some("unsupported_content"));
+            let percent = self.view_percent();
+            let source_reason = authoring_reason.or(stored
+                .is_some_and(|stored| !stored.is_fully_mapped())
+                .then_some("unsupported_content"));
             for (id, label, key, action, selected, limit) in [
                 (
                     "view.actual",
@@ -243,8 +242,10 @@ impl Engine {
             ] {
                 let relative = matches!(action, UiView::Magnify { .. } | UiView::Reduce { .. });
                 let reason = source_reason
-                    .or((relative && self.view_canvas_size.is_none())
-                        .then_some("viewport_unavailable"))
+                    .or(
+                        (relative && (self.view_canvas_size.is_none() || percent.is_none()))
+                            .then_some("viewport_unavailable"),
+                    )
                     .or(limit.then_some("zoom_limit"));
                 controls.push(ControlInfo {
                     id,

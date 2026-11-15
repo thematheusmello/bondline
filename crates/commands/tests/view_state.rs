@@ -419,11 +419,24 @@ fn source_guards_and_whole_page_capture_remain_independent_of_window_view() -> T
         include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf"),
     )?;
     engine.dispatch("document.open_sdf", json!({"path":sdf}))?;
+    let state = serde_json::to_value(engine.state())?;
+    let content = engine.content().clone();
+    let stamp = engine.capture_stamp();
+    // SDF now permits camera-only Actual without becoming an editable Drawing.
+    let actual = view(&mut engine, json!({"action":"actual"}))?;
+    assert_eq!(actual["zoom_percent"], 100.0);
+    assert_eq!(serde_json::to_value(engine.state())?, state);
+    assert_eq!(engine.content(), &content);
+    assert_eq!(engine.capture_stamp(), stamp);
+    assert!(engine.document().is_err());
     refusal(
         &mut engine,
-        json!({"action":"actual"}),
-        "unsupported_content",
+        json!({"action":"pan","center_x_pt":100,"center_y_pt":144}),
+        "viewport_unavailable",
     )?;
+    let copy = directory.path("sdf-copy.sdf");
+    engine.dispatch("document.save_sdf", json!({"path":copy}))?;
+    assert_eq!(std::fs::read(copy)?, content.sdf()?.as_bytes());
     let extended = directory.path("opaque.cdxml");
     let text = String::from_utf8(std::fs::read(&original)?)?.replacen(
         "<CDXML",

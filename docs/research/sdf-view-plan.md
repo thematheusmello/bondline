@@ -105,3 +105,31 @@ Then Root runs local gates and separately owns native 1160×800 1x/2x recovery, 
 field edit/Save/reopen and independent whole-file consumers. Windows/Linux and native
 input remain unverified here. Exact source pins and concurrent-source qualification are
 in ignored `target/sdf-view-plan/`; no jobs are running.
+
+## Receiving decision after source review
+
+The proposal above remains an exact research record. The implementation decision is
+smaller: SDF Actual/Fit/SetZoom need no page bounds, so they may be offered before an
+extent is prepared. Relative zoom from an explicit percentage likewise needs no bounds.
+Only pan and relative-from-Fit need the actual source-qualified extent. All are camera
+operations; none grants a chemical projection edit/Save authority. Existing Drawing
+fully-mapped, pending-file and close guards remain.
+
+Adopt the optional closed `render.capture.view` context above. On success only, a private
+completion can install Weak CaptureStamp + PageSize after exact source/view/close/cancel
+checks. Errors install nothing and return the actual error. There is no error-side-effect
+or separate preparation command. The first successful explicit100% capture supplies real
+pan bounds; retained previous centers are clamped by the actual derived extent.
+
+Default UI Fit keeps its exact existing whole-page request (`view` absent), physical
+margin policy, pixels and existing independent tests. Explicit percentages opt into the
+logical camera and actual physical output size. Headless opt-in logical Fit is a distinct
+transform: scaling a32-logical-unit margin at2x cannot match the legacy32-physical-pixel
+margin. Do not silently equate those paths or rewrite old Fit expectations. New logical
+Fit needs an additional affine oracle. The renderer API is additive
+`PageView::at_pixel_size(width_px,height_px)` plus `pixel_density()`; generate fresh glyphs
+at the transformed viewport, preserve the logical percentage and verify exact1x identity.
+
+Independent actual-App, command and renderer tests are being declared before product
+edits in three isolated worktrees at `af7fab0`. This decision section is not a test pass,
+native acceptance, approved golden or completed SDF navigation workflow.

@@ -152,13 +152,36 @@ impl CommandExecutor {
         stamp: &CaptureStamp,
         params: RenderCapture,
     ) -> Result<UiCaptureWork, ErrorInfo> {
+        self.prepare_ui_capture_context(stamp, None, params)
+    }
+
+    /// A native intent also belongs to the close context that produced its view key.
+    pub fn prepare_ui_capture_for_close(
+        &self,
+        stamp: &CaptureStamp,
+        close_epoch: u64,
+        params: RenderCapture,
+    ) -> Result<UiCaptureWork, ErrorInfo> {
+        self.prepare_ui_capture_context(stamp, Some(close_epoch), params)
+    }
+
+    fn prepare_ui_capture_context(
+        &self,
+        stamp: &CaptureStamp,
+        close_epoch: Option<u64>,
+        params: RenderCapture,
+    ) -> Result<UiCaptureWork, ErrorInfo> {
         let mut engine = self.engine.lock().map_err(|_| unavailable())?;
-        match engine.state().close {
+        let state = engine.state();
+        match state.close {
             CloseState::Committed => return Err(Error::CloseCommitted.info()),
             CloseState::Open => {}
             CloseState::NeedsDecision | CloseState::Approved => {
                 return Err(Error::UiStaleRequest.info());
             }
+        }
+        if close_epoch.is_some_and(|epoch| epoch != state.close_epoch) {
+            return Err(Error::UiStaleRequest.info());
         }
         if !engine.capture_stamp_matches(stamp) {
             return Err(Error::StaleRevision.info());
@@ -1194,6 +1217,7 @@ mod ui_capture_completion_tests {
                     width_px: 8,
                     height_px: 8,
                     backend: RenderBackend::Cpu,
+                    view: None,
                 },
             )
             .map_err(|error| error.message)?;

@@ -291,6 +291,7 @@ fn native_sdf_work_shares_capture_slots_and_drop_error_or_cancel_releases_each_r
                 width_px: 1024,
                 height_px: 1024,
                 backend: bondline_commands::RenderBackend::Cpu,
+                view: None,
             },
         )
         .map_err(|e| e.message)?;

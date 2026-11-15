@@ -2554,3 +2554,29 @@ postimplementation coverage. All original renderer tests/fixtures/font/oracles/g
 remain exact. Independent96521 runs84/0/0,40201 all-target renderer clippy exits0 and
 rustfmt passes. This foundation alone does not wire native SDF navigation or establish
 new native/Windows/Linux behavior; application integration has its own gate.
+
+## Source-qualified SDF camera, 2026-11-15
+
+[Integrated evidence](verification-sdf-view-integration.md) now joins the renderer to the
+unchanged28-command registry and native preview. Optional current-view context retains
+exact legacy whole-page defaults; only successful current work prepares Weak-source SDF
+bounds. Seven command cases and two native-adapter cases cover strict context/schema,
+actual image/field/file/source/cancel/close/foreign/worker/notification semantics. Four
+App cases cover real F5/pan/wheel, fresh view/DPI/source ABA uploads and749-byte NOTE
+Apply→fresh equal-chemistry preview→real Save/reopen. An additional ordinary-MOL current-
+view case passes its first run at1x/2x with independent pixel and unchanged file consumers;
+it is postimplementation coverage, not an invented RED.
+
+Intended Actual/menu/capture/wheel/notification REDs and fixes remain separate from new
+H-box/viewport-baseline setup corrections, one explicit old SDF Actual capability upgrade
+and the named-routing clippy correction. Independent inputs, old assertions except that
+identified upgrade, default pixels, SDK/font/oracles/approved golden remain unchanged.
+Root77879 full local gate passes1016/0/1 plus fmt, warnings-denied clippy, layers, licenses
+and corpus. Root91855's earlier1015/0/1 predates the additive Drawing case.
+
+Native Mac F5 and pointer sliders render both ordinary chemical records at100%, preserving
+exact740 bytes/revision1/clean history; read-only inspection confirms center100,143 and
+epoch3. Numeric AX SetValue and CJK glyph coverage have finite limitations. A native scroll
+was aborted before dispatch; wheel, measured hardware DPI, combined edit-preview native
+flow and other platforms remain unverified. No new fuzz/hosted run, source paper change,
+glyph-guard relaxation or milestone completion. GitHub Actions stays disabled.

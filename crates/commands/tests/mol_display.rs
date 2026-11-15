@@ -592,3 +592,6 @@ fn ordinary_valence_absent_mol_displays_oh_and_nh2_without_authoring_h() -> Test
     }
     Ok(())
 }
+
+#[path = "mol_display/current_view.rs"]
+mod current_view;

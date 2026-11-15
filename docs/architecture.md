@@ -97,7 +97,8 @@ Default Fit uses the exact old PageViewport; explicit PageView uses a uniform lo
 scale, generates whole-source geometry and then clips it with signed integer translation.
 IO resolves its existing MOL display-H facts into that same camera without rewriting
 authored None or source bytes. Engine::page_view and drawing_view_scene serve both
-initial layout and later same-frame command reacquisition. DPI only affects composition.
+initial layout and later same-frame command reacquisition. Physical raster density stays
+separate from the logical camera; fresh glyph geometry is described below.
 
 All view controls use the same tagged command. Window actions are resolved at their raw
 event boundary, so the other pan coordinate comes from the camera already in effect.
@@ -106,7 +107,8 @@ value is unchanged. Real camera changes retire gestures/hotspots; no-ops preserv
 Wheel math uses the exact f64 scale and floored logical canvas dimensions. A retained
 center beyond a newly opened page is clamped for projection and new navigation without
 changing stored state during Open. Menu/numeric recovery remains available when a camera
-exceeds renderer bounds. Whole-page captures remain independent of the window camera.
+exceeds renderer bounds. Default whole-page captures remain independent of the window
+camera; the optional current-view capture below opts into it.
 
 The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while
 holding it. Stdio is a separate process-local session. Only server/stdio SDK features are
@@ -238,7 +240,7 @@ Save borrows complete current source through the existing bounded atomic publish
 wrapper writer, first-record projection or field-name dictionary reconstructs an import.
 Drawing accessors return typed unsupported_content errors for collections. Static UI
 metadata clears prior gesture/hit/paper state; the no-executor compatibility helper has no preview;
-all-record chemical display and record operations remain separate work. The existing-value
+all-record chemical display uses the registered path below; record operations remain missing. The existing-value
 editor below now delivers the separate field-editing UI. See
 verification-sdf-session-files.md for exact source/consumer/history/lifecycle evidence.
 
@@ -344,7 +346,7 @@ worker/reply barriers stay shared; capture acquires no Save reservation.
 
 The native SDF adapter now uses a narrow UiCaptureWork reserved before spawning, plus one
 UI job retained through PNG/decode/publication/thread retirement. Its key includes opaque
-Weak content/revision/generation, close epoch, logical rectangle, actual physical dimensions
+Weak content/revision/generation, close/view epochs, logical rectangle, actual physical dimensions
 and DPI. Texture/error/hit state is cleared on invalidation; only matching Open-context
 results install. The PNG bridge validates the pinned own-output envelope before the existing
 native decoder; actual main-label em is Rust-only and omitted from wire JSON. UI display
@@ -352,8 +354,9 @@ checks logical readability with actual image ratios. Registry execution still sh
 existing two-worker budget; the single bounded UI decode/publication stage stays tracked
 separately for close after command completion. There is no new general job pool.
 
-Actual app-frame/texture/paint instructions are headlessly tested; operating-system window/
-compositor behavior is unverified. Cancel/Retry/Records are transient controls whose full
+Actual app-frame/texture/paint instructions are headlessly tested; Mac Actual/pan now has
+finite native acceptance. Wheel/physical-DPI and combined edit-preview native behavior
+remain unverified. Cancel/Retry/Records are transient controls whose full
 public addressability remains part of M0. See verification-sdf-native-preview.md and its
 independent acceptance record.
 
@@ -402,3 +405,33 @@ Native and remote close requests pass through the same draft resolver; changed d
 decisions, continuations and pending/live Apply work join the existing shutdown barriers.
 Native Mac edit/Save As/history/reopen and finite independent App/worker tests have
 separate scopes in [the integration record](verification-sdf-editor-integration.md).
+
+## Current-view capture and SDF pan bounds
+
+`render.capture.view` optionally captures current camera state with closed logical
+dimensions and an expected view epoch. Physical output dimensions are independent. The
+absent/null path retains exact legacy whole-page pixels. Opted-in work owns complete
+source, derives every SDF record/real extent off-lock and rasterizes the shared `PageView`
+at the actual output density. Drawing captures use the existing source-aware IO entry.
+No second chemistry/layout implementation or UI parser is introduced.
+
+Only a fully successful render/encode can prepare SDF bounds. Finish checks cancellation,
+Weak source/revision/generation identity, camera epoch and exact Open/close context before
+installing only PageSize. Errors install nothing. Historical successful images can still
+be returned, but cannot install in a newer source or foreign Engine. The cache is valid by
+source, so ordinary pan/zoom keeps it; history/Open/field edits invalidate it through the
+full stamp. It owns no Page, source lease, edit/Save authority or history snapshot.
+
+Actual/Fit/SetZoom need no bounds and can recover an unreadable SDF overview. Pan and
+relative-from-Fit need the prepared size; explicit relative zoom uses its known percentage.
+The same accessor serves controls, view inspection and pan limits. No recent-drawing focus
+is inferred for SDF. Default native Fit retains the old physical-margin request; explicit
+zoom opts into logical camera capture. Opt-in headless logical Fit is deliberately distinct.
+
+Native capture preparation also checks the pending close epoch before reserving/spawning.
+First current extent installation sets a Rust-only notification flag, absent from JSON;
+repeat captures do not fake a camera change. UI keys include view epochs, preventing
+A→B→A texture reuse. Collection input is replayed before painting/scheduling; its wheel
+uses the same math as Drawing and preserves focus/modal/foreground/paper/context guards.
+The existing job/decode/retirement and reply barriers remain. Exact evidence and limitations
+are in [the view integration record](verification-sdf-view-integration.md).

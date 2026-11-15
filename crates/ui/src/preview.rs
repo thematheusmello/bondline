@@ -1,8 +1,8 @@
 //! Read-only registered SDF preview and bounded transient native state.
 
 use bondline_commands::{
-    Cancellation, CaptureStamp, CloseState, Engine, PngCapture, RenderBackend, RenderCapture,
-    StoredContent,
+    Cancellation, CaptureStamp, CaptureView, CloseState, Engine, PngCapture, RenderBackend,
+    RenderCapture, StoredContent,
 };
 use bondline_mcp::CommandExecutor;
 use eframe::egui;
@@ -24,6 +24,8 @@ struct PreviewKey {
     rect_bits: [u32; 4],
     pixels: [u32; 2],
     dpi_bits: u32,
+    view_epoch: u64,
+    explicit_view: bool,
 }
 
 impl PreviewKey {
@@ -62,6 +64,8 @@ impl PreviewKey {
             ],
             pixels,
             dpi_bits: dpi.to_bits(),
+            view_epoch: engine.view().epoch,
+            explicit_view: engine.view().zoom_percent.is_some(),
         })
     }
 
@@ -83,6 +87,7 @@ impl PreviewKey {
         matches!(engine.content(), StoredContent::Sdf { .. })
             && state.close == CloseState::Open
             && state.close_epoch == self.close_epoch
+            && engine.view().epoch == self.view_epoch
             && engine.capture_stamp_matches(&self.stamp)
     }
 
@@ -98,6 +103,11 @@ impl PreviewKey {
             width_px: self.pixels[0],
             height_px: self.pixels[1],
             backend: RenderBackend::Cpu,
+            view: self.explicit_view.then(|| CaptureView {
+                logical_width: self.rect().width().floor().max(1.0) as u32,
+                logical_height: self.rect().height().floor().max(1.0) as u32,
+                expected_view_epoch: self.view_epoch,
+            }),
         }
     }
 }
@@ -302,23 +312,25 @@ impl PreviewWorkflow {
         if self.job.is_some() || self.desired.as_ref() != Some(&key) {
             return;
         }
-        let work = match executor.prepare_ui_capture(&key.stamp, key.request()) {
-            Ok(work) => work,
-            Err(error) => {
-                if error.code == "busy" {
-                    context.request_repaint_after(Duration::from_millis(40));
+        let work =
+            match executor.prepare_ui_capture_for_close(&key.stamp, key.close_epoch, key.request())
+            {
+                Ok(work) => work,
+                Err(error) => {
+                    if error.code == "busy" {
+                        context.request_repaint_after(Duration::from_millis(40));
+                        return;
+                    }
+                    if !matches!(
+                        error.code,
+                        "stale_revision" | "stale_view" | "ui_stale_request" | "close_committed"
+                    ) {
+                        self.error = Some((key, error.message));
+                    }
+                    context.request_repaint();
                     return;
                 }
-                if !matches!(
-                    error.code,
-                    "stale_revision" | "ui_stale_request" | "close_committed"
-                ) {
-                    self.error = Some((key, error.message));
-                }
-                context.request_repaint();
-                return;
-            }
-        };
+            };
         let cancel = Cancellation::default();
         let worker_cancel = cancel.clone();
         let worker_key = key.clone();

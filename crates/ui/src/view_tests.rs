@@ -1370,3 +1370,6 @@ mod sdf_inspector;
 
 #[path = "sdf_editor_tests.rs"]
 mod sdf_editor;
+
+#[path = "sdf_view_tests.rs"]
+mod sdf_view;

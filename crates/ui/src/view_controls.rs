@@ -17,8 +17,8 @@ impl Action {
                 percent,
             }));
         }
-        let page = engine.document().ok()?.pages().first()?;
-        let [mut x, mut y] = center(engine, page);
+        let size = engine.view_page_size().ok()?;
+        let [mut x, mut y] = center(engine, size);
         let action = match *self {
             Self::Control(_) | Self::Zoom(_) => return None,
             Self::PanX(value) => {
@@ -40,16 +40,39 @@ impl Action {
     }
 }
 
-pub(super) fn center(engine: &Engine, page: &bondline_model::Page) -> [f64; 2] {
+pub(super) fn center(engine: &Engine, size: bondline_model::PageSize) -> [f64; 2] {
     let center = engine.view().center;
     [
         center
-            .map_or(page.size().width_pt() / 2.0, Point2::x_pt)
-            .clamp(0.0, page.size().width_pt()),
+            .map_or(size.width_pt() / 2.0, Point2::x_pt)
+            .clamp(0.0, size.width_pt()),
         center
-            .map_or(page.size().height_pt() / 2.0, Point2::y_pt)
-            .clamp(0.0, page.size().height_pt()),
+            .map_or(size.height_pt() / 2.0, Point2::y_pt)
+            .clamp(0.0, size.height_pt()),
     ]
+}
+
+pub(super) fn wheel(
+    engine: &Engine,
+    size: bondline_model::PageSize,
+    canvas: [u32; 2],
+    unit: egui::MouseWheelUnit,
+    delta: egui::Vec2,
+) -> Option<Command> {
+    if !delta.is_finite() || delta == egui::Vec2::ZERO {
+        return None;
+    }
+    let scale = engine.view().zoom_percent? / 100.0;
+    let [x, y] = center(engine, size);
+    let factor = match unit {
+        egui::MouseWheelUnit::Point => [1.0, 1.0],
+        egui::MouseWheelUnit::Line => [24.0, 24.0],
+        egui::MouseWheelUnit::Page => [f64::from(canvas[0]) * 0.8, f64::from(canvas[1]) * 0.8],
+    };
+    Some(Command::UiView(bondline_commands::UiView::Pan {
+        center_x_pt: (x - f64::from(delta.x) * factor[0] / scale).clamp(0.0, size.width_pt()),
+        center_y_pt: (y - f64::from(delta.y) * factor[1] / scale).clamp(0.0, size.height_pt()),
+    }))
 }
 
 /// Numeric edits commit through the registry at their input event, never during painting.
@@ -166,7 +189,7 @@ pub(super) fn pan(
     ui: &egui::Ui,
     rect: egui::Rect,
     engine: &Engine,
-    page: &bondline_model::Page,
+    size: bondline_model::PageSize,
     events: &[egui::Event],
     blocked: bool,
 ) -> Vec<(usize, Action)> {
@@ -174,7 +197,7 @@ pub(super) fn pan(
     if engine.view().zoom_percent.is_none() || rect.width() < 32.0 || rect.height() < 32.0 {
         return actions;
     }
-    let [mut x, mut y] = center(engine, page);
+    let [mut x, mut y] = center(engine, size);
     for vertical in [false, true] {
         let bounds = if vertical {
             egui::Rect::from_min_max(
@@ -210,11 +233,11 @@ pub(super) fn pan(
                 };
                 ui.add_enabled_ui(!blocked, |ui| {
                     let slider = if vertical {
-                        egui::Slider::new(&mut y, page.size().height_pt()..=0.0)
+                        egui::Slider::new(&mut y, size.height_pt()..=0.0)
                             .vertical()
                             .show_value(false)
                     } else {
-                        egui::Slider::new(&mut x, 0.0..=page.size().width_pt()).show_value(false)
+                        egui::Slider::new(&mut x, 0.0..=size.width_pt()).show_value(false)
                     };
                     let response = ui.add_sized(bounds.size(), slider);
                     response.widget_info(|| {
@@ -223,8 +246,8 @@ pub(super) fn pan(
                     if vertical {
                         ui.ctx().accesskit_node_builder(response.id, |node| {
                             node.set_min_numeric_value(0.0);
-                            node.set_max_numeric_value(page.size().height_pt());
-                            if y < page.size().height_pt() {
+                            node.set_max_numeric_value(size.height_pt());
+                            if y < size.height_pt() {
                                 node.add_action(egui::accesskit::Action::Increment);
                             }
                             if y > 0.0 {
@@ -233,9 +256,9 @@ pub(super) fn pan(
                         });
                     }
                     let maximum = if vertical {
-                        page.size().height_pt()
+                        size.height_pt()
                     } else {
-                        page.size().width_pt()
+                        size.width_pt()
                     };
                     let numeric = if blocked {
                         Vec::new()

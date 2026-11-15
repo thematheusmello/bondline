@@ -19,6 +19,7 @@ fn params() -> RenderCapture {
         width_px: 1024,
         height_px: 1024,
         backend: RenderBackend::Cpu,
+        view: None,
     }
 }
 fn empty() -> (SharedEngine, CommandExecutor) {

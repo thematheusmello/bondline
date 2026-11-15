@@ -119,3 +119,6 @@ fn authenticated_view_is_shared_but_only_real_changes_notify_and_no_authoring_st
     server.shutdown()?;
     Ok(())
 }
+
+#[path = "view_control/sdf.rs"]
+mod sdf;

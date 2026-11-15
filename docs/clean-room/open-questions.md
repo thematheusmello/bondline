@@ -297,3 +297,21 @@ capture is an observable error side effect and requires an explicit tested contr
 an explicit deferred preparation action is the alternative. Neither is implemented.
 Keep current whole-page captures, complete-source checks and physical/logical glyph
 limits intact; current-view cropping is not permission to skip off-camera validation.
+
+The receiving decision in that plan now resolves bootstrap: Actual/Zoom need no bounds,
+and only successful opted-in capture prepares source-qualified extent. Errors have no
+cache side effect. Current-view capture and bounded native SDF Actual/pan are delivered;
+the earlier missing-navigation statement is historical. Default native Fit remains its
+legacy physical-margin path, distinct from opt-in logical Fit at higher density.
+
+Remaining native observations are scoped in verification-sdf-view-integration.md: numeric
+slider SetValue with string100 makes no observed change, while pointer pan works; provider/
+platform cause is unestablished. Monitor DPI was not measured, and wheel dispatch was
+aborted before execution. Wider font coverage is open: CJK filename pixels show question
+marks while AX/path bytes remain correct. Unprepared Fit can show the existing100% fallback
+before any extent is known; that label does not establish explicit Actual state. Improve
+the unknown-Fit readout without fabricating bounds or weakening the legacy image contract.
+Also test relative steps against the visible high-DPI legacy overview: current commands
+use declared logical Fit, whose scale can differ from the physical-margin image above1x.
+Any eventual explicit-fit policy must preserve initial legacy evidence and remain stable
+through nonchemical field edits; cache presence must not silently select a different camera.

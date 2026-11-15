@@ -183,6 +183,7 @@ async fn publish_result(
 ) -> io::Result<()> {
     let notify = result.as_ref().is_ok_and(|result| {
         result.changed
+            || result.view_target_prepared
             || result.file_operation.is_some()
             || result.close_operation.is_some()
             || result.ui_file_operation.is_some()

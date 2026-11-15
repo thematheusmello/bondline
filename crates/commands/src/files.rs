@@ -237,6 +237,12 @@ pub(super) enum Completion {
         save_slot: Arc<()>,
     },
     SdfFieldSet(crate::sdf_edit::FieldCandidate),
+    ViewCapture {
+        result: Box<CommandResult>,
+        context: crate::capture::ViewCaptureContext,
+        extent: Option<bondline_model::PageSize>,
+        cancel: Cancellation,
+    },
     Result {
         result: Box<CommandResult>,
         cancel: Option<Cancellation>,
@@ -524,6 +530,19 @@ impl Engine {
                 ..self.state()
             }),
             Completion::SdfFieldSet(candidate) => self.finish_sdf_field(candidate),
+            Completion::ViewCapture {
+                mut result,
+                context,
+                extent,
+                cancel,
+            } => {
+                cancel.check()?;
+                if let Some(extent) = extent {
+                    result.view_target_prepared = self.install_sdf_view_extent(&context, extent);
+                }
+                self.refresh_close_result(&mut result);
+                Ok(*result)
+            }
             Completion::Result { mut result, cancel } => {
                 if let Some(cancel) = cancel {
                     cancel.check()?;

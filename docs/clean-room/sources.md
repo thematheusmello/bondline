@@ -1621,3 +1621,28 @@ font/Pillow consumers and actual CPU/GPU comparisons. The full renderer gate pas
 tests with warnings-denied clippy and rustfmt. Its f32 tolerance is qualified rather than
 a universal cross-hardware bit-identity promise. No format/parser, dependency, font, oracle,
 approved golden or proprietary artifact changed. Native application adoption is separate.
+
+## Success-qualified SDF view integration, 2026-11-15
+
+The [original proposal and receiving decision](../research/sdf-view-plan.md) distinguish
+GUIDE25 zoom roles, pinned PhotoCraft logical/physical transforms and original Bondline
+policies. No new file-format interpretation is introduced: CTFILE-2026, the retained
+ordinary740-byte source and existing display-H/packing rules remain exact. SDF Actual/
+Fit/SetZoom require no fabricated page; only a successful opted-in render can prepare
+the true full-source pan extent. This eliminates the proposed failed-capture cache side
+effect and any need for a new preparation command.
+
+Optional closed capture context, Weak source/view/close qualification, historical-image
+replies without current installation, shared wheel/event ordering, pre-spawn close guards
+and Rust-only notifications are original adapter safety policies. The native default Fit
+remains legacy; explicit percentages use fresh physical geometry. Neither a screenshot,
+prepared bounds nor an accepted camera grants source edit/Save/ACK authority.
+
+[Root and independent evidence](../verification-sdf-view-integration.md) records compiler/
+runtime REDs, actual App/command/adapter tests, exact1x/2x image/raw/file consumers and a
+read-only core review. New-oracle horizontal-H and viewport-baseline setup errors are
+explicitly corrected from independent facts, without relaxing old assertions/inputs.
+The old SDF Actual-refusal contract is explicitly upgraded to source-preserving support;
+other format/source guards remain. Native Mac F5/Actual and pan visibly work; wheel was
+aborted before dispatch and physical-DPI/new edit-preview native evidence remains open.
+No proprietary binary/assets, new dependency, SDK patch, font or golden was used.

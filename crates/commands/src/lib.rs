@@ -56,8 +56,8 @@ mod source_tests;
 mod storage_tests;
 pub use bondline_render::Cancellation;
 pub use capture::{
-    CaptureAdapter, CaptureImageError, CaptureStamp, PngCapture, Prepared, RenderBackend,
-    RenderCapture,
+    CaptureAdapter, CaptureImageError, CaptureStamp, CaptureView, PngCapture, Prepared,
+    RenderBackend, RenderCapture,
 };
 
 pub const MAX_REQUEST_BYTES: usize = 1024 * 1024;
@@ -259,6 +259,10 @@ pub enum Error {
     InvalidView(&'static str),
     #[error("view navigation unavailable: {0}")]
     UnsupportedView(&'static str),
+    #[error("the current SDF view bounds are not prepared; render an explicit zoom first")]
+    ViewTargetUnavailable,
+    #[error("the requested camera epoch is obsolete")]
+    StaleView,
     #[error("invalid native file request parameters: {0}")]
     InvalidUiFileParameters(&'static str),
     #[error(transparent)]
@@ -325,6 +329,8 @@ impl Error {
             Self::UiBondToolEpochExhausted | Self::UiViewEpochExhausted => "ui_epoch_exhausted",
             Self::InvalidView(_) => "invalid_params",
             Self::UnsupportedView(_) => "unsupported_content",
+            Self::ViewTargetUnavailable => "viewport_unavailable",
+            Self::StaleView => "stale_view",
             Self::FileBackendUnavailable => "backend_unavailable",
             Self::Mol(error) => error.code(),
             Self::Sdf(error) => error.code(),
@@ -376,6 +382,8 @@ struct Request {
 /// A consistent snapshot. Documents are shared; later edits cannot change this result.
 #[derive(Clone, Debug, Serialize)]
 pub struct CommandResult {
+    #[serde(skip)]
+    pub view_target_prepared: bool,
     pub changed: bool,
     pub revision: u64,
     pub document: Option<Arc<Document>>,
@@ -432,6 +440,7 @@ pub struct Engine {
     bond_tool: BondToolState,
     view: ViewState,
     view_canvas_size: Option<[u32; 2]>,
+    sdf_view_extent: Option<(CaptureStamp, bondline_model::PageSize)>,
     view_focus: Option<(u64, PageId, bondline_model::Point2)>,
 }
 
@@ -481,6 +490,7 @@ impl Engine {
             bond_tool: BondToolState::default(),
             view: ViewState::default(),
             view_canvas_size: None,
+            sdf_view_extent: None,
             view_focus: None,
         }
     }
@@ -499,6 +509,7 @@ impl Engine {
 
     pub fn state(&self) -> CommandResult {
         CommandResult {
+            view_target_prepared: false,
             changed: false,
             revision: self.revision,
             document: match self.document.as_ref() {
@@ -863,7 +874,7 @@ impl Engine {
                     if id.get() != 1 {
                         return Err(bondline_model::Error::MissingPage(id.get()).into());
                     }
-                    return Prepared::capture(self.state(), params, Arc::clone(&self.document));
+                    return self.prepare_capture(params);
                 }
                 self.document()?
                     .pages()
@@ -873,7 +884,7 @@ impl Engine {
                 if !self.stored_document()?.is_fully_mapped() {
                     return Err(Error::UnsupportedDocumentPreview);
                 }
-                return Prepared::capture(self.state(), params, Arc::clone(&self.document));
+                return self.prepare_capture(params);
             }
         };
         if changed {

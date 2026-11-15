@@ -124,8 +124,8 @@ physical monitor calibration. Use Engine::page_view/drawing_view_scene for rende
 picking together, retaining source-qualified MOL display-H. Camera never changes paper,
 source, revision/history/dirty or CaptureStamp. Open retains camera; projection and later
 navigation use a bounded displayed center. Whole-source render guards remain mandatory.
-Current-view capture/SDF navigation, saved preferences and complete reference behavior
-are not delivered; see docs/control-protocol.md and view verification records.
+Optional current-view capture and read-only SDF Actual/Zoom/pan are delivered below.
+Saved preferences and complete reference behavior remain missing; see docs/control-protocol.md.
 
 ## Test first, then implement
 
@@ -179,8 +179,8 @@ SDF is a mixed V2000/V3000 source container and complete application-content var
 Shared Open/Save retain every record. sdf.record.inspect exposes bounded ordered fields;
 sdf.field.set_value edits one existing occurrence through immutable deferred candidates.
 The restricted render.capture SDF virtual page1 now uses all-record derived display data;
-the native read-only preview is wired and headlessly tested; successful native preview
-acceptance and record operations remain missing. The existing-value editor uses the same
+the native read-only preview has bounded Mac Actual/pan acceptance; native wheel/DPI/
+edit-preview workflows and record operations remain missing. The existing-value editor uses the same
 registered setter: temporary drafts never change source/dirty/history before Apply. Retain
 Apply/Discard/Cancel, event-indexed Apply→Save ordering, stale-source recovery, guarded
 semantic continuations and actual worker retirement. A committed edit is never discarded
@@ -502,7 +502,7 @@ Native preview now reuses the registered capture through UiCaptureWork, reserved
 Engine mutex before spawning. The UI retains a single job through off-thread bounded PNG/
 ColorImage decode, channel publication and actual thread retirement. CaptureStamp has opaque
 Weak-content/revision/generation identity, never Serialize or a source lease. UI keys also
-include close_epoch, actual logical rectangle, physical dimensions and effective DPI; changed
+include close_epoch, view epoch, actual logical rectangle, physical dimensions and effective DPI; changed
 keys clear old textures/errors/hits immediately. The renderer supplies main-label em from
 actual labels; it is Rust-only metadata omitted from PngCapture JSON. Logical readability
 must use actual destination/capture ratios, including a uniform2048 cap, not DPI alone.
@@ -512,9 +512,10 @@ command completion through decode/publication/retirement. Do not replace this wi
 execute_blocking call first invoked inside a new thread. Join only after is_finished; normal
 close drains, while forced host Drop cancels cooperatively. The legacy public no-executor
 workspace helper still displays metadata; independent UI tests use the actual app frame.
-Native SDF preview is wired/headlessly tested, not natively verified. Cancel/Retry/Records
-are transient presentation controls; complete public control-addressability remains M0 work.
-Actual windows/input/activation still wait for explicit user availability. Actions stays off.
+Native SDF Actual/pan is verified in a finite Mac workflow; wheel/physical-DPI and the new
+combined edit-preview workflow remain unverified. Cancel/Retry/Records are transient
+presentation controls; full addressability remains M0 work. Check current user availability
+before further desktop input. Actions stays off.
 
 Ordinary VAL-absent source-backed MOL now uses io::display::drawing_page_scene through
 registered capture and Engine::drawing_page_scene for both native vector acquisitions.
@@ -571,13 +572,36 @@ Readonly values use immutable TextEdit buffers, AccessKit ReadOnly and cleared/s
 TextEdit undoers while preserving current selection/copy. The pinned SDK otherwise stores
 full readonly values when focused. Preserve the five independent real-App tests and two
 Root lifecycle regressions; six older App fixture changes are default initialization only.
-Native Mac finite inspection/typing/Unicode Save As/reopen passes; successful native
-chemical preview remains unverified after the default-window em refusal. Native tool
+Native Mac finite inspection/typing/Unicode Save As/reopen passes; Actual/pan now recovers
+the preview after default-window em refusal. Native tool
 “settable” annotations and a failed Zoom SetValue attempt prove no permission or cause.
 
-Read docs/verification-sdf-inspector.md and the source-backed workspace plan before the
-mutating editor. Unapplied drafts need Apply/Discard/Cancel across navigation/Open/close;
-Apply→Save must serialize after the edit outcome. Do not expose a setter as a finished
-UI before those obligations and the predeclared788-byte second-DUP workflow pass. The
+Read docs/verification-sdf-inspector.md, verification-sdf-editor-integration.md and the
+source-backed workspace plan for the delivered editor. Retain Apply/Discard/Cancel across
+navigation/Open/close, ordered Apply→Save and the predeclared788-byte second-DUP workflow. The
 registry remains28; full UI addressability and Professional field-screen evidence are
 still incomplete. GitHub Actions remains disabled. See STATUS.md for current artifacts.
+
+## Source-qualified SDF camera
+
+Default `render.capture` stays whole-page and independent of the camera. Its optional
+closed `view` context captures logical dimensions and expected view epoch; physical output
+dimensions remain separate. `PageView::at_pixel_size` generates fresh physical geometry,
+preserves logical percentage/phase and rejects a second conversion. Keep exact1x identity,
+whole-source/ink/resource guards and actual logical readability; never multiply DPI into
+the percentage, upscale masks or skip off-camera invalid records.
+
+SDF Actual/Fit/SetZoom require no fabricated bounds. Successful opted-in capture alone can
+install Weak CaptureStamp + PageSize after source/view/Open-close/cancellation checks.
+Pan and relative-from-Fit require those current bounds; errors install nothing. Historical
+successful replies cannot prepare another source/engine. The cache grants no Drawing,
+authoring/history/Save/export/native-ACK authority. Default native Fit retains the legacy
+whole-page path; explicit zoom opts into the logical camera. Do not equate legacy physical
+Fit and opt-in logical Fit at2x.
+
+Native preparation uses `prepare_ui_capture_for_close` before spawning to bind the pending
+close epoch as well as source/view. A Rust-only result flag wakes the host only when its
+current extent is newly installed; it never enters JSON. Keep actual job/decode/retirement
+and reply barriers. Both collection and drawing input paths resolve current camera actions
+at their raw events. Repeated wheel uses shared math and respects foreground/paper/text/
+modal/DPI/source guards. See docs/verification-sdf-view-integration.md; no full M0/M1 claim.

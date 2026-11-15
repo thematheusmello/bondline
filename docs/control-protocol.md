@@ -899,14 +899,15 @@ Examples:
 
 Unknown/unused fields refuse. Percentage is finite1..999; relative dimensions are integral
 logical canvas units1..100000, despite the historical `_px` field suffix. Pan requires
-explicit zoom and finite coordinates inside the current first page. `inspect` also works
+explicit zoom and finite coordinates inside the first Drawing page or the prepared
+all-record SDF extent below. `inspect` also works
 for guarded/wrong-kind content and while a picker/close decision is pending. Mutating
 actions respect those guards before even a no-op; committed close refuses this command.
 
 Default Fit preserves legacy rounded paper geometry exactly. Explicit100% means one
 authored point per logical canvas unit, independent of monitor DPI; it is not physical
-screen calibration. Magnify multiplies the current effective percentage by1.25; Reduce
-divides by1.25. Steps clamp to1..999 without decreasing an already larger fitted view.
+screen calibration. Magnify multiplies the explicit percentage or declared logical Fit
+percentage by1.25; Reduce divides by1.25. Steps clamp to1..999 without decreasing an already larger fitted view.
 Magnify alone can center the latest successful own Create/Extend segment midpoint, bound
 to its page/generation. History and unrelated geometry invalidate this focus; Set Order
 retains it. No imported atom ordering is interpreted as recent drawing.
@@ -937,9 +938,10 @@ The view builds geometry at the requested uniform scale, then clips it using sig
 integer translation. It does not enlarge an old raster or resize paper. Labels, components,
 physical-paper ink and complete-source guards remain whole-source checks. Some valid zoom
 parameters still refuse rendering bounds/readability; accepted state is not a promise
-that every document renders at every percentage. `render.capture` remains a whole-page
-capture, independent of the window camera. SDF preview navigation, saved view preferences,
-hand gestures and physical screen calibration remain unsupported. Source/evidence are in
+that every document renders at every percentage. Without `view`, `render.capture` remains
+whole-page and independent of the camera. Optional current-view captures and SDF navigation
+are below; saved preferences, hand gestures and physical screen calibration remain missing.
+Source/evidence are in
 [the view research](research/view-navigation-plan.md) and
 [renderer verification](verification-view-render.md); native execution is separate.
 
@@ -980,3 +982,51 @@ an old waiting Save/close. Actual executor/reply/native barriers still govern sh
 Draft widgets, decisions and worker controls are not yet a general addressable dialog API.
 Bounded Mac edit/save/history/reopen is verified; native race/accessibility and Windows/Linux
 execution remain separate gaps. See [exact evidence](verification-sdf-editor-integration.md).
+
+## Opt-in current-view capture
+
+First set/inspect the camera with `ui.view`; use its current epoch in the optional context:
+
+```json
+{"command":"render.capture","params":{"page_id":1,"width_px":1696,"height_px":1302,"backend":"cpu","view":{"logical_width":848,"logical_height":651,"expected_view_epoch":3}}}
+```
+
+`view` is closed; its logical dimensions are integral1..100000 and epoch is u64. Physical
+output remains1..2048 per axis. Unknown/missing/invalid context fields refuse before work;
+obsolete epoch returns `stale_view`. Absent or null `view` preserves the exact old
+whole-page path, regardless of camera state. No second client-supplied camera definition
+or implicit CPU fallback is used. Returned PNG schema is unchanged.
+
+The source-qualified snapshot retains complete Drawing/SDF content and the captured
+camera. Every SDF MOL record and display-H fact is validated before viewport clipping.
+Physical geometry/glyphs are generated at actual density; the logical1..999 percentage
+does not include DPI. Bounds, ink, physical glyph8..256 and cancellation limits remain.
+Native presentation also checks logical glyph readability using actual output ratios.
+An opted-in logical Fit differs from the legacy physical-margin whole-page Fit at2x.
+
+Successful opted-in SDF capture can prepare its exact all-record pan bounds. It installs
+only Weak source identity + PageSize if source/revision/generation, view epoch and Open/
+close context still match at finish. Failed/cancelled work installs nothing; historical
+successful PNG replies remain historical and cannot prepare a newer/foreign Engine.
+Normal document snapshots stay unchanged. Explicit `ui.view` replies omit
+`prepared_sdf_extent` until current bounds exist, then include `{width_pt,height_pt}`.
+There is no public serialized cache setter or source/model/edit/Save/ACK authority.
+
+SDF Actual/Fit/SetZoom work before preparation. Pan, and relative steps from Fit, return
+`viewport_unavailable` until successful current-view preparation. Relative steps from
+an explicit percentage need no invented bounds. Drawing mapped-source and wrong-kind
+guards remain. Native `prepare_ui_capture_for_close` binds the pending close epoch
+before reservation; a Rust-only notification flag wakes the host on first installation,
+without entering JSON or changing authored/camera epochs. Default native Fit still uses
+legacy capture; explicit zoom uses this opt-in route.
+
+The legacy native SDF overview has physical margins, while relative-from-Fit uses the
+declared logical fit formula. Their effective scales can differ above1x; exact native
+relative-step/readout consistency remains open. This does not change explicit percentage
+or pan units. Do not use the unprepared100% fallback label as proof of Actual state.
+
+See [independent commands](verification-sdf-view-command.md),
+[actual-App checks](verification-sdf-view-ui.md) and
+[native scope and Root gates](verification-sdf-view-integration.md). Current-view output
+is a page viewport, not operating-system window chrome, dialogs, print calibration or
+complete publishing/clipboard support.

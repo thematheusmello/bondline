@@ -44,12 +44,17 @@ Apply→Save input ordering, navigation decisions, external requests/source repl
 no-op CRLF retention and refusal without publication. Two finite registered-worker gates
 protect real commit/cancellation/retirement. Native Mac multiline Apply, Unicode Save As,
 Undo/Redo and reopen preserve the predeclared788-byte output and both molecular records.
-The994-test local gate passes. See docs/verification-sdf-editor-integration.md and the
-earlier inspector evidence. Native draft/close races, successful native chemical preview
-at an eligible view, record operations and full M1 remain required next work.
-The next [SDF view proposal](docs/research/sdf-view-plan.md) identifies the shared logical/
-physical projection and exact off-lock extent dependency. Its API and failed-capture
-cache semantics need a decision and independent RED before implementation.
+The editor's994-test local gate passes. See docs/verification-sdf-editor-integration.md and the
+earlier inspector evidence. Native draft/close races, record operations and full M1 remain
+required next work; the later view acceptance is below.
+The subsequent [SDF view integration](docs/verification-sdf-view-integration.md) now delivers
+Actual/Zoom/pan through the shared camera and source-preserving current-view captures.
+Seven command cases, four actual-App cases, two native-adapter gates and eight renderer
+cases pass; the full local gate is1016/0/1. Native Mac F5/Actual and both position controls
+visibly display the ordinary CCO/CN records without changing source/history. Native wheel,
+physical-DPI measurement and the combined edit/preview/Save workflow remain unverified.
+The [original proposal and receiving decision](docs/research/sdf-view-plan.md) retain why
+success-only prepared bounds replaced the proposed error-side-effect bootstrap.
 
 A restricted all-record SDF capture route now connects source-preserving mixed-version
 projection, separate display-H provenance and faithful resolved-H labels through the
@@ -57,8 +62,8 @@ existing command/CLI/MCP interfaces. Ordinary VAL-absent CCO/CN, both source ori
 full CPU/GPU image comparisons and exact Save pass headlessly. The native read-only workspace
 preview now has registered background work, source/view/DPI/
 close-epoch invalidation and independent actual-frame texture/paint/retirement tests. Actual
-successful native-window preview acceptance remains open: the default window honestly
-refuses its em guard. Ordinary source-backed MOL
+default Fit can still refuse its em guard; the bounded native Actual/pan recovery above
+now works. Ordinary source-backed MOL
 absent-H depiction now uses the same closed display facts in its actual Page/IDs/frame,
 with complete deferred ownership, independent CPU/GPU/source checks and headless canvas
 acceptance. Authored None and source bytes remain exact; source-free/CDXML stay literal.
@@ -77,7 +82,7 @@ ordered data byte through current/saved/history and all shared adapters. Native 
 version Open/Save/Unicode Save As/reopen and failed-import retention now pass onbb6d5b9;
 the690-byte and additional refusal checks are controller-only. Root's590 gate and matching
 three-platform hosted checks pass. Bounded field inspection/existing-value commands now pass engine/CLI/MCP tests.
-Actual native chemical preview acceptance, record operations and
+Broader native chemical preview acceptance, record operations and
 broader SDF interoperability remain missing; see docs/verification-sdf-session-files.md and
 docs/verification-native-sdf-and-extension.md. That earlier native build used a static summary;
 the new read-only preview is wired/headlessly tested, with its native workflow unverified.

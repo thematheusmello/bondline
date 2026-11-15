@@ -499,6 +499,12 @@ fn pending_ui_blocks_authoring(state: &bondline_commands::CommandResult) -> bool
             .is_some_and(|request| request.phase != bondline_commands::UiFilePhase::Running)
 }
 
+struct ShortcutRouting<'a> {
+    actions: &'a [(usize, view_controls::Action)],
+    fields: Option<&'a mut SdfFieldsWorkflow>,
+    canvas: Option<(egui::Rect, egui::LayerId)>,
+}
+
 fn replay_edit_shortcuts(
     context: &egui::Context,
     engine: &mut Engine,
@@ -506,16 +512,20 @@ fn replay_edit_shortcuts(
     drawing: &mut DrawingState,
     events: &[egui::Event],
     blocked: bool,
-    routing: (
-        &[(usize, view_controls::Action)],
-        Option<&mut SdfFieldsWorkflow>,
-    ),
+    routing: ShortcutRouting<'_>,
 ) {
-    let (actions, mut fields) = routing;
+    let ShortcutRouting {
+        actions,
+        mut fields,
+        canvas,
+    } = routing;
     if blocked && fields.is_none() {
         return;
     }
     let text_focused = text_edit_focused(context);
+    if blocked || text_focused || !context.input(|input| input.focused) {
+        drawing.navigation_position = None;
+    }
     let mut focused = context.input(|input| input.focused);
     for event in events.iter().rev() {
         if let egui::Event::WindowFocused(value) = event {
@@ -531,6 +541,16 @@ fn replay_edit_shortcuts(
         }
         if let egui::Event::WindowFocused(value) = event {
             focused = *value;
+            if !focused {
+                drawing.navigation_position = None;
+            }
+        }
+        if canvas.is_some()
+            && focused
+            && !text_focused
+            && let egui::Event::PointerMoved(pos) | egui::Event::PointerButton { pos, .. } = event
+        {
+            drawing.navigation_position = Some(*pos);
         }
         let command = actions
             .iter()
@@ -540,7 +560,28 @@ fn replay_edit_shortcuts(
                     || matches!(action, view_controls::Action::Control(id) if id.starts_with("file.")))
             })
             .and_then(|(_, action)| action.command(engine))
-            .or_else(|| workspace_shortcut(engine, event, text_focused));
+            .or_else(|| workspace_shortcut(engine, event, text_focused))
+            .or_else(|| {
+                let (rect, layer) = canvas?;
+                if text_focused || !matches!(engine.content(), bondline_commands::StoredContent::Sdf { .. })
+                    || context.input(|input| input.key_down(egui::Key::Escape)) {
+                    return None;
+                }
+                let egui::Event::MouseWheel { unit, delta, modifiers } = event else { return None; };
+                if !modifiers.is_none() { return None; }
+                let pos = drawing.navigation_position?;
+                let size = engine.view_page_size().ok()?;
+                let width = rect.width().floor().max(1.0) as u32;
+                let height = rect.height().floor().max(1.0) as u32;
+                let viewport = engine.page_view(width, height, PageId::new(1)?).ok()?;
+                let local = pos - rect.min;
+                if !rect.contains(pos) || context.layer_id_at(pos) != Some(layer)
+                    || !viewport.contains([local.x, local.y]) {
+                    drawing.navigation_position = None;
+                    return None;
+                }
+                view_controls::wheel(engine, size, [width, height], *unit, *delta)
+            });
         if focused && let Some(command) = command {
             let explicit = actions.iter().find_map(|(at, action)| {
                 if *at == index
@@ -556,9 +597,18 @@ fn replay_edit_shortcuts(
             }) {
                 continue;
             }
+            let view_command = matches!(&command, Command::UiView(_));
+            let previous_view = engine.view();
+            *error = engine.execute(command).err().map(|error| error.to_string());
+            if view_command && engine.view() == previous_view {
+                continue;
+            }
+            let position = view_command
+                .then_some(drawing.navigation_position)
+                .flatten();
             drawing.gesture = None;
             drawing.invalidate_hover();
-            *error = engine.execute(command).err().map(|error| error.to_string());
+            drawing.navigation_position = position;
             context.request_repaint();
         }
     }
@@ -647,7 +697,11 @@ fn show_workspace_with_preview(
             drawing,
             &events,
             blocked,
-            (&[], sdf_fields.as_deref_mut()),
+            ShortcutRouting {
+                actions: &[],
+                fields: sdf_fields.as_deref_mut(),
+                canvas: None,
+            },
         );
         egui::CentralPanel::default().show(context, |ui| {
             ui.colored_label(
@@ -805,7 +859,9 @@ fn show_workspace_with_preview(
             }
             if let Some(collection) = engine.content().collection() {
                 drawing.gesture = None;
-                drawing.invalidate_hover();
+                drawing.hover = None;
+                drawing.hover_fresh = false;
+                drawing.key_hotspot = None;
                 ui.label(format!(
                     "SDF collection: {} records, {} bytes",
                     collection.record_count, collection.byte_length
@@ -843,9 +899,72 @@ fn show_workspace_with_preview(
                             });
                     });
                     let rect = ui.available_rect_before_wrap();
+                    let [width, height] =
+                        [rect.width(), rect.height()].map(|axis| axis.floor().max(1.0) as u32);
+                    let response = ui.interact(
+                        rect,
+                        ui.make_persistent_id("sdf-navigation"),
+                        egui::Sense::hover(),
+                    );
+                    let Some(page_id) = PageId::new(1) else {
+                        return;
+                    };
+                    let mut key = context.input(|input| HoverContext {
+                        revision: engine.state().revision,
+                        tool: engine.bond_tool(),
+                        page: page_id,
+                        width,
+                        height,
+                        canvas_origin: rect.min,
+                        host_origin: input
+                            .viewport()
+                            .inner_rect
+                            .or(input.viewport().outer_rect)
+                            .map(|rect| rect.min),
+                        pixels_per_point: input.pixels_per_point,
+                        view_epoch: engine.view().epoch,
+                    });
+                    if drawing.hover_context != Some(key) {
+                        drawing.invalidate_hover();
+                    }
+                    if let Err(failure) = engine.set_view_canvas_size(width, height) {
+                        ui.colored_label(egui::Color32::DARK_RED, failure.to_string());
+                        return;
+                    }
+                    if let Ok(size) = engine.view_page_size() {
+                        view_actions
+                            .extend(view_controls::pan(ui, rect, engine, size, &events, blocked));
+                    }
+                    // Resolve this frame's camera before scheduling or painting its image.
+                    if let Some((index, id)) = selected {
+                        view_actions.push((index, view_controls::Action::Control(id)));
+                    }
+                    replay_edit_shortcuts(
+                        context,
+                        engine,
+                        error,
+                        drawing,
+                        &events,
+                        blocked,
+                        ShortcutRouting {
+                            actions: &view_actions,
+                            fields: sdf_fields.as_deref_mut(),
+                            canvas: Some((rect, response.layer_id)),
+                        },
+                    );
+                    history_handled = true;
+                    if engine.content().collection().is_none() {
+                        context.request_repaint();
+                        return;
+                    }
+                    key.revision = engine.state().revision;
+                    key.view_epoch = engine.view().epoch;
+                    key.tool = engine.bond_tool();
+                    drawing.hover_context = Some(key);
                     preview.show(ui, engine, rect);
                     return;
                 }
+                drawing.invalidate_hover();
                 ui.label("Chemical preview is unavailable for SDF collections.");
                 egui::ScrollArea::vertical().show(ui, |ui| {
                     egui::Grid::new("sdf-record-summary").show(ui, |ui| {
@@ -915,7 +1034,12 @@ fn show_workspace_with_preview(
                 }
             };
             view_actions.extend(view_controls::pan(
-                ui, available, engine, page, &events, blocked,
+                ui,
+                available,
+                engine,
+                page.size(),
+                &events,
+                blocked,
             ));
             let response = ui.interact(
                 available,
@@ -1106,21 +1230,14 @@ fn show_workspace_with_preview(
                             else {
                                 continue;
                             };
-                            let [center_x, center_y] = view_controls::center(engine, page);
-                            let scale = viewport.zoom_percent() / 100.0;
-                            let factor = match unit {
-                                egui::MouseWheelUnit::Point => [1.0, 1.0],
-                                egui::MouseWheelUnit::Line => [24.0, 24.0],
-                                egui::MouseWheelUnit::Page => {
-                                    [f64::from(width) * 0.8, f64::from(height) * 0.8]
-                                }
-                            };
-                            command = Some(Ok(Command::UiView(bondline_commands::UiView::Pan {
-                                center_x_pt: (center_x - f64::from(delta.x) * factor[0] / scale)
-                                    .clamp(0.0, page.size().width_pt()),
-                                center_y_pt: (center_y - f64::from(delta.y) * factor[1] / scale)
-                                    .clamp(0.0, page.size().height_pt()),
-                            })));
+                            command = view_controls::wheel(
+                                engine,
+                                page.size(),
+                                [width, height],
+                                *unit,
+                                *delta,
+                            )
+                            .map(Ok);
                         }
                         egui::Event::Key {
                             key: pressed_key,
@@ -1590,7 +1707,11 @@ fn show_workspace_with_preview(
             drawing,
             &events,
             blocked,
-            (&view_actions, sdf_fields.as_deref_mut()),
+            ShortcutRouting {
+                actions: &view_actions,
+                fields: sdf_fields.as_deref_mut(),
+                canvas: None,
+            },
         );
     }
     if let Some(files) = files {
