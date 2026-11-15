@@ -82,12 +82,18 @@ after the shared dialog sizing fix. See [the integration record](docs/verificati
 [ring attachment](docs/verification-literal-ring-attachment.md) and
 [compact-H extension](docs/verification-literal-compact-star-attachment.md) evidence.
 
-Next M1 priority is the provenance-clear external CDX writer's exact trailing-zero
-counterexample: [research and continuation](docs/research/cdx-external-writer-probe.md).
-Freeze original-byte TDD and resolve the public framing/spec contract before any parser
-change or corpus admission; arbitrary trailing data must remain refused. Then advance
-component packing and general source-qualified SMILES drawing import, including larger,
-polycyclic and multiple-bond rings. Define graph/geometry/stereo and editing authority
+The external CDX framing counterexample now has an additive canonical 28-byte implicit/
+explicit Document + FileEnd path: eight syntax and six IO/engine/wire cases pass, retaining
+all legacy successes, source bytes and limited application authority. The new oracle's
+18 controls and a 10,000-run ASan mutation smoke pass. Bounded Mac Open, Unicode Save As
+and explicit reopen preserve all 258 original bytes, with faithful preview still refused.
+The final local receiving gate81324 passes1172/0/1, including the original MCP test.
+Earlier97729's754/1 replacement-bind AddrInUse remains unexplained; twenty passing
+diagnostic contexts and a contradicted outbound-owner hypothesis establish no causal fix.
+See [integration](docs/verification-cdx-file-end-integration.md) and
+[independent declarations](docs/verification-cdx-file-end-tests.md). No corpus admission
+or broad CDX compatibility follows. Next advance component packing and general source-qualified
+SMILES drawing import, including larger, polycyclic and multiple-bond rings. Define graph/geometry/stereo and editing authority
 against published notation and independent consumers; retain unsupported source rather
 than silently projecting it. The new utility still does not grant an opened SMILES source
 session molecular editing authority or complete clipboard parity.
@@ -408,6 +414,7 @@ notation and global ranges/counts, with opaque data retained privately. It uses 
 historical deferred-result/cancellation/close machinery, no write lease or mutation, and
 a128KiB serialized-object budget. Core and independent raw/graph/wire evidence are linked
 from docs/verification-smiles-record.md; native selection/preview/editing remain missing.
-After the external CDX framing priority above, continue component packing and general
-source-qualified drawing import; these source/automation foundations do not complete
-format or editor parity.
+After the bounded CDX framing checks above, continue component packing and general
+source-qualified drawing import. Wider CDX typed metadata/Text/Double/style mapping,
+faithful rendering and source-backed editing remain required; these source/automation
+foundations do not complete format or editor parity.

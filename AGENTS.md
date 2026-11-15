@@ -317,16 +317,29 @@ cover this builder; they do not deliver application CDX files.
 
 ## CDX header-embedded framing
 
-Default parsing preserves successful28-byte legacy interpretations. Only legacy TrailingData
-and an8000 tag at byte22 may select HeaderDocument's22-byte prefix, encoded root and exactly
-one distinct FileEnd. Do not turn this into arbitrary trailing-zero acceptance, scanning or
-normalization. FileEnd counts toward the record budget and the encoded root toward depth.
-header() is22 bytes for that profile; property offsets/ownership use its actual length.
-Writer's canonical28-byte profile and all old fixtures/pins stay unchanged. Full-byte source
-retention/property edits and original independent/native probes are separate from model/UI
-compatibility. A complete legacy tree is inherently indistinguishable from a native file
-missing only its file end; keep this ambiguity explicit. Fuzz construction omits root and
-FileEnd intentionally to build new canonical syntax, never to reserialize an import.
+Default parsing preserves every successful 28-byte legacy interpretation first. Only legacy
+TrailingData may select a fallback: 8000 at byte22 keeps HeaderDocument's 22-byte prefix;
+otherwise all 16 reserved bytes 12..28 must be zero for `ImplicitDocumentFileEnd` or
+`ExplicitDocumentFileEnd` with a 28-byte header. Each separate-file-end profile requires its
+Document end, exactly one distinct FileEnd and exact EOF. Never trim/scan/accept arbitrary
+padding or retry other errors. FileEnd counts toward the record budget; only encoded objects
+count toward depth. Use `Framing::has_encoded_document()`, including in fuzz reconstruction,
+so implicit FileEnd sources keep their first property. The fuzz conservation assertion counts
+all original properties before reconstruction. Fuzz construction deliberately omits genuine
+root markers/ends and FileEnd to create new canonical syntax, never to reserialize imports.
+Writer output, old fixtures/oracles/locks/pins remain exact. The N−2 prefix of a new file may
+be a complete valid legacy tree; default parsing cannot infer a missing intended FileEnd.
+The original 258-byte Indigo ethane has full provenance and a new independently qualified
+raw/RDKit oracle; it grants no extra model/edit/render authority. Eight syntax and six
+IO/engine/wire cases, 18 new oracle controls and 10,000 ASan mutation runs pass. An exact-seed
+conservation RED exposed 11 reconstructed properties versus 12 source properties before the
+semantic classifier fix; fixed-seed GREEN is separate from the mutation run. Bounded Mac
+Open/Unicode Save As/explicit reopen preserves every byte; the incomplete-source UI shows
+no chemical counts and still refuses faithful preview. Final Root81324 passes1172/0/1,
+including the unchanged MCP test. Earlier97729's754/1 replacement_bind AddrInUse remains
+unexplained; twenty passing contexts and a contradicted outbound-owner hypothesis are
+diagnostic evidence, not a causal fix. See
+docs/verification-cdx-file-end-integration.md and docs/verification-cdx-file-end-tests.md.
 
 ## Limited CDX model backing
 
@@ -789,11 +802,10 @@ cases and other platforms remain unverified. The final integrated local gate pas
 A measured-success-height re-layout preserves unchanged legacy receipt tests; do not
 substitute extra waits or weaken assertions. Later passes receive no raw activation events. Consult STATUS.md before counting later evidence.
 
-Next M1 task: read docs/research/cdx-external-writer-probe.md and freeze an exact-original
-external CDX trailing-zero RED plus a public framing/spec decision before any parser fix.
-The external original graphs pass RDKit, while current syntax refuses TrailingData after
-the implicit document's end. The extra word is producer evidence, not arbitrary padding
-permission: never trim/scan/relax EOF globally or alter old fixtures/oracles/pins. Corpus
-admission is separate and has not occurred. Then advance component packing/general
-source-qualified SMILES import and broader rings. Preserve every legacy profile, file
-owner and negative control; do not repeat the completed bounded conversion work.
+Next M1 task: advance component packing/general
+source-qualified SMILES import and broader rings. Wider CDX typed metadata/Text/Double/
+style mapping and source-faithful editing remain backlog. No corpus admission occurred.
+Canonical CDX receiving, bounded fuzz and the1172/0/1 full gate pass; preserve the earlier
+unexplained intermittent MCP failure without weakening its assertions or socket policy.
+Preserve legacy profiles, complete owners and negative controls; never trim/scan/relax EOF
+or repeat the completed bounded conversion work. Consult STATUS.md for actual live gates.

@@ -12,7 +12,7 @@ The app is in early development; documented plans are not implemented features.
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
 | Start a fresh drawing safely | [New document, native Save/Discard/Cancel and race evidence](verification-new-document.md) |
-| Convert a supported SMILES file | [Simple-ring profile, focused and bounded Mac evidence; aggregate pending](verification-smiles-ring-integration.md), [earlier acyclic/native evidence](verification-smiles-acyclic-integration.md), [original converter lifecycle](verification-native-smiles-conversion.md) |
+| Convert a supported SMILES file | [Simple-ring profile, aggregate and bounded Mac evidence](verification-smiles-ring-integration.md), [earlier acyclic/native evidence](verification-smiles-acyclic-integration.md), [original converter lifecycle](verification-native-smiles-conversion.md) |
 | Check asynchronous file browsing | [Stable controls and visible errors](verification-file-picker-stability.md) |
 | Inspect SMILES notation records | [Original inspector and bounded native file workflow](verification-smiles-record-integration.md) |
 | Remove a complete SDF record | [Source preservation, confirmation and native evidence](verification-sdf-record-removal.md) |
@@ -27,7 +27,7 @@ The app is in early development; documented plans are not implemented features.
 | Check actual application-frame tool workflows | [UI evidence](verification-multiple-ui.md) |
 | Inspect the refreshed visual direction | [Pinned references](research/visual-direction.md), [actual workspace checks](verification-workspace-presentation.md), [offscreen capture utility](verification-visual-capture.md) |
 | Find the next feature | [Roadmap](../ROADMAP.md), [parity checklist](parity-checklist.md) |
-| Investigate the next CDX framing case | [External writer counterexample and TDD/spec decision](research/cdx-external-writer-probe.md); no parser/corpus admission yet |
+| Check canonical CDX FileEnd support | [Independent/ASan, bounded Mac and full1172/0/1 gate evidence](verification-cdx-file-end-integration.md), [independent declarations](verification-cdx-file-end-tests.md), [public framing decision](research/cdx-file-end-plan.md). Earlier intermittent MCP failure remains unexplained; no general compatibility or corpus admission |
 | Review the latest installed reference UI | [User-authorized live File/Edit/View/New observations and gaps](research/live-ui-review-2026-11-15.md) |
 | Check evidence | [Verification](verification.md), [CI scope](ci.md), [corpus](corpus/README.md) |
 | Review provenance and licenses | [Source register](clean-room/sources.md), [open questions](clean-room/open-questions.md), [dependency policy](dependency-policy.md), [attribution](../ATTRIBUTION.md) |

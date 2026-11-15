@@ -3,7 +3,7 @@
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Standalone syntax/property/new-tree writer; limited source snapshots, atomic I/O and guarded shared/native Mac Open/Save | Original vectors, fetched scene, independent struct/RDKit, bounded ASAN and actual native Mac unchanged files/refusals | Faithful preview, broader metadata/references/chemical mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
+| CDX | Standalone syntax/property/new-tree writer, additive canonical FileEnd envelopes; limited source snapshots, atomic I/O and guarded shared/native Mac Open/Save | Original vectors/fetched scene and earlier native checks; new 258-byte source, eight syntax/six IO/engine/wire cases, 18 oracle controls, 10,000 ASan runs and bounded Mac Open/Unicode Save As/reopen pass. Final full gate1172/0/1 passes; earlier intermittent MCP failure remains unexplained | Faithful preview, broader typed metadata/Text/Double/style mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000/V3000 | Complete mixed-version session/native Mac files, occurrence inspector and existing-value editor, source-preserving capture and read-only Actual/Zoom/pan preview | Exact raw spans/order/versions, pinned corpus and unchanged raw/per-MOL consumers; bounded Mac files/field edits/Actual/pan; actual-App wheel/DPI/source freshness and edit→preview→Save/reopen; command/adapter guards and earlier bounded ASAN | Native wheel/physical-DPI/new combined edit-preview acceptance, record creation/reordering and field-header editing, broader layout/chemistry, fetched mixed-version corpus, syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
@@ -542,6 +542,38 @@ and actual external RDKit graph checks; the unmodified ignored1196-byte local
 native observation also passes syntax/passthrough and one opaque splice. This is
 bounded framing evidence, not general property interpretation, foreign-file corpus
 coverage, chemical model mapping or an application CDX Open/Save workflow.
+
+## Canonical 28-byte CDX file-end envelopes
+
+The default reader now additionally returns `Framing::ImplicitDocumentFileEnd` or
+`Framing::ExplicitDocumentFileEnd`. Every successful legacy parse wins first. Only legacy
+TrailingData plus the supported 12-byte prefix and all 16 reserved bytes 12..28 zero enables
+this fallback; the 22-byte HeaderDocument marker path stays unchanged. Header remains 28
+bytes. One Document end, one distinct counted FileEnd and exact EOF are required, without
+trimming, scanning, arbitrary padding or retries after other errors. Existing 64 MiB/100000-record/256-encoded-depth limits remain; the implicit root consumes no encoded depth.
+`Framing::has_encoded_document()` centralizes root classification. Fuzz reconstruction checks
+that every original property survives before writing a new tree, excluding only genuine
+root markers/ends and FileEnd. Imported Save never uses that Writer path.
+
+Removing the final two bytes may leave a complete legacy document accepted by default;
+the N−2 prefix cannot prove whether a required FileEnd was lost. All old Writer bytes,
+fixtures, oracles, locks and pins remain unchanged. The new original Indigo 1.47.0 ethane
+is 258 bytes (SHA256 `856482269dbd85640b87c11f608104dba72ebd308a686f1333a893965ed560ba`),
+with full provenance and eighteen qualified new raw/RDKit oracle controls. Eight syntax
+and six IO/engine/transport cases pass on exact bytes, raw 0/45 pt and authored H=None. This
+extends accepted envelopes, not chemistry/style interpretation: `is_fully_mapped` remains
+false, chemical authoring/rendering/cross-format export refuse, and changed page/model
+Save refuses until exact Undo. An exact-seed RED caught 11 reconstructed properties versus
+12 source properties before the classifier correction; fixed-seed GREEN and a 10,000-run
+ASan mutation smoke pass. Bounded Mac Open, Unicode Save As and explicit reopen preserve
+the same 258-byte hash with Saved/CDX state and faithful-preview refusal. The UI exposes
+no 2/1 chemical counts: these come from IO and the independent raw/RDKit consumer.
+The final receiving gate passes1172/0/1 with the original MCP assertions unchanged.
+Earlier97729's754/1 replacement-bind AddrInUse remains unexplained; twenty passing
+diagnostic contexts and a contradicted outbound-owner hypothesis establish no causal fix. See
+[integration](verification-cdx-file-end-integration.md) and
+[independent test declarations](verification-cdx-file-end-tests.md). Corpus admission and
+general CDX compatibility are separate unfinished work.
 
 ## Owned limited CDX model snapshots
 

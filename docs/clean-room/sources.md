@@ -1771,3 +1771,29 @@ App tests. Inspected pinned public egui0.29.1 `containers/resize.rs`, `container
 size is stored; public area_rect/request_discard permits one growth-qualified sizing pass.
 RawInput::take removes later-pass activation events. This is original adapter presentation
 policy, not observed reference timing. No SDK source/version or old test was changed.
+
+## Canonical CDX file-end implementation, 2026-11-15
+
+The [preimplementation plan](../research/cdx-file-end-plan.md) pins the public SDK's
+28-byte zero-reserved header and separate object/file ends, its conflicting EOF-only
+simple example, and released Apache-2.0 Indigo's implicit-root writer. The delivered
+fallback retains every successful legacy interpretation; only TrailingData plus the
+canonical zero-reserved header enables one separate FileEnd and exact EOF. Existing
+22-byte HeaderDocument framing retains priority. This is a source-qualified envelope
+policy, not permission for arbitrary padding or a producer/property heuristic.
+
+The [new fixture provenance](../../crates/cdx/tests/fixtures/external-ethane-provenance/README.md)
+retains the original graph, two generation recipes, package/source pins, raw scan and
+notices. Its original external258 bytes are preserved; no proprietary drawing, font,
+template or sample file is bundled. Font-table names in opaque format metadata are not
+font binaries. The external producer and pinned RDKit remain test tools only.
+
+[Independent declarations](../verification-cdx-file-end-tests.md) and
+[receiving evidence](../verification-cdx-file-end-integration.md) separate exact source,
+raw-record ownership and chemical-consumer expectations. The shared exhaustive encoded-
+root classifier also repairs a fuzz reconstruction blind spot exposed by independent
+property conservation. That is test-harness correctness, not a newly inferred chemical
+rule. Actual native Open/Unicode Save As/reopen retains exact source and the faithful-
+preview refusal. Writer defaults, old fixtures/oracles, runtime dependencies, corpus pins
+and the human-approved golden remain unchanged. Broader CDX mapping/editing and the
+inherently ambiguous complete legacy prefix remain explicit open work.

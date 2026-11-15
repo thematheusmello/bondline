@@ -1,0 +1,12 @@
+{
+  "license": "MIT OR Apache-2.0",
+  "provenance": "Original literal chemical graphs and coordinate vectors declared for this Bondline external-writer investigation. No external drawing, template or sample input.",
+  "coordinate_units": "Input Indigo molecule coordinates; no claim that these are output CDX document points.",
+  "graphs": [
+    {"name":"ethane","symbols":["C","C"],"positions":[[0,0,0],[1.5,0,0]],"bonds":[[0,1,1]],"expected_elements":[6,6],"expected_hydrogens":[3,3],"expected_formula":"C2H6","expected_smiles":"CC"},
+    {"name":"ethanol","symbols":["C","C","O"],"positions":[[0,0,0],[1.5,0,0],[2.25,1.299038105676658,0]],"bonds":[[0,1,1],[1,2,1]],"expected_elements":[6,6,8],"expected_hydrogens":[3,2,1],"expected_formula":"C2H6O","expected_smiles":"CCO"},
+    {"name":"ethene","symbols":["C","C"],"positions":[[0,0,0],[1.5,0,0]],"bonds":[[0,1,2]],"expected_elements":[6,6],"expected_hydrogens":[2,2],"expected_formula":"C2H4","expected_smiles":"C=C"},
+    {"name":"methylamine","symbols":["C","N"],"positions":[[-0.75,-0.5,0],[0.75,-0.5,0]],"bonds":[[0,1,1]],"expected_elements":[6,7],"expected_hydrogens":[3,2],"expected_formula":"CH5N","expected_smiles":"CN"},
+    {"name":"cyclohexane","symbols":["C","C","C","C","C","C"],"positions":[[-1.299038105676658,0.75,0],[-1.299038105676658,-0.75,0],[0,-1.5,0],[1.299038105676658,-0.75,0],[1.299038105676658,0.75,0],[0,1.5,0]],"bonds":[[0,1,1],[1,2,1],[2,3,1],[3,4,1],[4,5,1],[0,5,1]],"expected_elements":[6,6,6,6,6,6],"expected_hydrogens":[2,2,2,2,2,2],"expected_formula":"C6H12","expected_smiles":"C1CCCCC1"}
+  ]
+}

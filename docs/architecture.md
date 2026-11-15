@@ -530,8 +530,16 @@ coverage remains unverified. Successful measured-height growth requests one qual
 UI re-layout to prevent cached-window receipt clipping, without replaying raw events. See [the integration record](verification-smiles-ring-integration.md)
 and [independent layout](verification-smiles-ring-layout.md).
 
-The next format boundary is [the external CDX writer counterexample](research/cdx-external-writer-probe.md).
-Original source bytes and independent consumers, followed by a public framing decision,
-must precede a parser change. Nothing here admits trailing-zero normalization or adds
-those artifacts to the corpus. Component packing and general source-qualified SMILES
-import remain later M1 work; no new model/source authority is inferred from these utilities.
+The [external CDX counterexample](research/cdx-external-writer-probe.md) now has a narrow
+canonical 28-byte FileEnd fallback after legacy TrailingData only. Legacy successes and the
+22-byte HeaderDocument path remain; zero reserved bytes select the new implicit/explicit
+variants with a separate counted FileEnd and exact EOF. `Framing::has_encoded_document()`
+is shared by parser/fuzz logic, preserving every original property during new-tree checks.
+Writer output and complete-source application guards are unchanged: no CDX authoring,
+rendering or cross-format authority follows. The N−2 legacy-prefix ambiguity remains.
+[Targeted checks, 10,000-run ASan and bounded Mac Open/Unicode Save As/reopen pass](verification-cdx-file-end-integration.md).
+The incomplete-source UI keeps its preview refusal and exposes no chemical counts. The
+final receiving aggregate passes1172/0/1. Earlier MCP replacement-bind AddrInUse remains
+unexplained; bounded diagnostics and a contradicted hypothesis establish no causal fix.
+No corpus admission occurred. Component packing/general source-qualified SMILES import
+and broader CDX metadata/Text/Double/style mapping remain M1 work.

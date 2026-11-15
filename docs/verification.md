@@ -1,5 +1,41 @@
 # Verification log
 
+## Canonical CDX separate file ends, 2026-11-15
+
+[Integrated evidence](verification-cdx-file-end-integration.md) records original external
+258-byte input/provenance, runtime syntax/Open RED, eight syntax and six IO/engine/actual-
+wire GREEN cases and eighteen new independent raw/RDKit oracle controls. The two new
+framing variants retain legacy-first interpretation, bounded exact EOF and separate
+Document/FileEnd ownership. Writer and all old fixtures/oracles remain unchanged.
+
+The original first0805 property independently exposes11versus12 fuzz reconstruction
+properties with the old classifier. The shared exhaustive root classification fixes that
+harness defect. Fixed-input and actual10000-mutation ASan runs pass; this is not a memory-
+error discovery or exhaustive/security claim. Ten original distinct external files now
+parse/pass through exactly; only the existing closed application mapping is authorized.
+
+Native Mac Open/Unicode Save As/explicit reopen passes on binaryc052d758…: actual258-byte
+output remains source-exact85648226… and passes the new raw/RDKit consumer. The UI retains
+Saved/CDX, Original source preserved and faithful-preview refusal; chemical counts are
+IO/consumer evidence, not native display. Saved editable ring is restored in the one
+current preview. The earlier binary's native TrailingData refusal remains recorded.
+
+Earlier complete-gate attempt97729 **fails754/1** at the older MCP shutdown test's
+replacement_bind127.0.0.1:51670, AddrInUse/Os48, after fmt/workspace clippy pass. Its
+91080-byte log remains SHA25678153a7443ff803009751be506278666a9b200a823b07f755cf8d40edc1e4a88.
+Twenty fixed default control contexts64662 pass500 tests; no failure-only socket snapshot
+ran, and these diagnostics do not establish cause or make that aggregate green. A separate
+held-outbound-socket hypothesis is contradicted by actual execution: std's replacement
+listener also binds successfully. Preserve that counterevidence; do not infer the cause.
+Exactly one final declared receiving aggregate81324 then passes **1172/0/1**,169 result
+lines, including fmt, warnings-denied workspace/vendor clippy/tests, layers, licenses and
+corpus. Its141627-byte log is SHA256
+a59098b56b4293de7e7da3f81b26ff1f2e61c6137d6ceea256cc6509b2e8ded6.
+Original MCP assertions/deadlines/default concurrency and all declared source pins stay
+exact. This pass does not explain the earlier failure; see the
+[separate diagnostic evidence](verification-loopback-shutdown-observations.md).
+Actions stays disabled; no new Windows/Linux receiving, push or publication.
+
 ## Simple-ring conversion and renewed UI review, 2026-11-15
 
 [Integrated evidence](verification-smiles-ring-integration.md) records the frozen IO/

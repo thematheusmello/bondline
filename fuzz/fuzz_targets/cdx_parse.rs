@@ -4,7 +4,7 @@ use bondline_cdx::{Document, Error, Framing, Record, RecordKind, Writer};
 use libfuzzer_sys::fuzz_target;
 
 fn body<'a>(document: &'a Document<'_>) -> Vec<&'a Record> {
-    let explicit = document.framing() != Framing::ImplicitDocument;
+    let explicit = document.framing().has_encoded_document();
     document.records().iter().enumerate().filter_map(|(index, record)| {
         let root = explicit && index == 0
             || matches!(record.kind(), RecordKind::ObjectEnd { start } if start.is_none() || explicit && *start == Some(0))
@@ -14,8 +14,20 @@ fn body<'a>(document: &'a Document<'_>) -> Vec<&'a Record> {
 }
 
 fn construct(document: &Document<'_>) -> Result<Vec<u8>, Error> {
+    let body = body(document);
+    assert_eq!(
+        body.iter()
+            .filter(|record| matches!(record.kind(), RecordKind::Property { .. }))
+            .count(),
+        document
+            .records()
+            .iter()
+            .filter(|record| matches!(record.kind(), RecordKind::Property { .. }))
+            .count(),
+        "new-tree reconstruction must retain every source property"
+    );
     let mut writer = Writer::new()?;
-    for record in body(document) {
+    for record in body {
         match record.kind() {
             RecordKind::ObjectStart { tag, id } => writer.start_object(*tag, *id)?,
             RecordKind::Property { tag, .. } => writer.property(*tag, document.payload(record)?)?,

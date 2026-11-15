@@ -293,6 +293,18 @@ The same FilePlan/Completed save reservation, revision/generation checks, truste
 receipt/current acknowledgment and close barriers apply to both new commands. No new file
 worker or dispatcher exists. See [CDX application evidence](verification-cdx-application.md)
 for engine/wire scope and exact450962c Mac chooser/Known Save/retry/close acceptance.
+The same commands additionally accept the strict canonical 28-byte implicit/explicit
+Document + FileEnd envelopes after legacy TrailingData only, with all 16 reserved bytes
+zero. Legacy successes win first; no new parameters, command, worker or encoding exists.
+The original 258-byte external ethane opens at raw 0/45 pt with authored H absent, remains
+`is_fully_mapped=false` and saves byte-exactly. Page edits can dirty it but Save refuses
+until exact Undo. Six IO/engine/CLI/stdio/authenticated-loopback cases pass, with eight
+syntax cases, 18 oracle controls and 10,000 ASan mutation runs. Bounded Mac Open, Unicode
+Save As and explicit reopen retain all 258 bytes and Saved/CDX state. The native UI shows
+Original source preserved plus faithful-preview refusal; 2 atoms/1 bond are IO/independent
+consumer evidence, not displayed native counts. The final full gate passes1172/0/1 with
+the original MCP assertions unchanged; its earlier intermittent replacement-bind failure
+remains unexplained. See [the integration record](verification-cdx-file-end-integration.md).
 Interactive Windows/Linux, broad CDX files, editing and faithful preview remain unverified.
 
 ### Complete SDF sessions

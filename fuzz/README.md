@@ -184,8 +184,9 @@ This separate target exercises bounded binary framing, exact original-byte prese
 contiguous record spans and checked opaque property replacement. Accepted edits must
 reparse, preserve record count/framing and retain all bytes outside the changed property;
 replacing a payload with itself must be byte-exact. The original document stays unchanged.
-The harness does not map CDX chemistry, resolve references, write new object trees or access
-files. Independent Python struct/RDKit expectations live in the crate's integration tests.
+The standalone syntax checks do not infer chemistry or resolve references. The current
+target also exercises limited IO snapshots and new-tree construction as described below;
+it performs no filesystem IO. Independent raw/RDKit expectations remain separate tests.
 The original explicit ethane seed is 65750 bytes, including a 65535-byte opaque extended
 property. The former 65536-byte run limit could not represent that complete scene; the
 current 131072-byte bound deliberately includes it. Both original fixture identities and
@@ -193,6 +194,56 @@ their generator/source provenance are recorded in the fixture README. An accepte
 mutation is syntax/source evidence, not independent chemical interoperability for that mutation.
 The CI sanitizer job runs all seven parser targets; these bounded runs are not exhaustive input
 coverage or proof of application CDX support.
+
+### Canonical separate file ends
+
+The current target classifies encoded roots with `Framing::has_encoded_document()`.
+Before reconstruction it counts every source property independently of the body filter;
+only genuine root openings/ends and the separate FileEnd may be omitted. This protects
+the implicit envelope's first0805 property. New Writer output is canonical explicit-root
+syntax, never an imported-file Save. Limited IO projection retains complete source and
+authored unknown H; changed snapshots and lossy export remain refused.
+
+Reproduce the ten original/source-derived seed declarations in a fresh ignored directory:
+
+```sh
+"$BONDLINE_PYTHON" -B - <<'PY'
+from pathlib import Path
+root = Path('.cache/fuzz/cdx-file-end-local')
+root.mkdir(parents=True, exist_ok=False)
+fixtures = Path('crates/cdx/tests/fixtures')
+for name in ('unknown-implicit.cdx', 'original-ethane-explicit.cdx', 'original-ethane-header-document.cdx'):
+    (root / name).write_bytes((fixtures / name).read_bytes())
+external = (fixtures / 'external-ethane-indigo-1.47.0.cdx').read_bytes()
+unknown = (fixtures / 'unknown-implicit.cdx').read_bytes()
+canonical = unknown[:12] + bytes(16) + unknown[28:] + bytes(2)
+seeds = {
+    'external-original.cdx': external,
+    'canonical-unknown-file-end.cdx': canonical,
+    'canonical-explicit-file-end.cdx': canonical[:28] + bytes.fromhex('008000000000') + canonical[28:],
+    'extra-file-end.cdx': external + bytes(2),
+    'missing-file-end-legacy.cdx': external[:-2],
+    'partial-file-end.cdx': external[:-1],
+    'nonzero-file-end.cdx': external[:-2] + bytes((1, 0)),
+}
+for name, data in seeds.items():
+    (root / name).write_bytes(data)
+PY
+CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target/cdx-file-end/fuzz-target" --sanitizer address cdx_parse .cache/fuzz/cdx-file-end-local -- -runs=10000 -seed=721533879 -max_len=131072 -timeout=5
+```
+
+The missing-final-word seed is deliberately valid legacy syntax. Canonical FileEnd
+acceptance does not make every legacy prefix a truncation error. Original UNKNOWN's
+nonzero reserved bytes and appended-end negatives stay unchanged.
+
+The exact external seed first reproduces11versus12 properties in the old harness
+classifier; this is an assertion defect, not an ASan memory error or mutation discovery.
+After the semantic fix, fixed-input execution and a separate actual10000-mutation ASan
+run pass: ten initial files/133005B, coverage1054/features2322,95 retained inputs/reported
+209KiB/RSS221MiB,1second. Largest exercised input65750B;64MiB/record/depth boundaries
+have separate unit evidence. [Integration evidence](../docs/verification-cdx-file-end-integration.md)
+pins the sources, logs, oracle qualifications and native scope. No lock, old fixture,
+runtime dependency or fetched corpus change; no security-audit claim.
 
 ## MOL V2000 syntax and elemental graph
 
