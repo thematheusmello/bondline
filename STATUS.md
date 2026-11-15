@@ -1,9 +1,10 @@
 # Status — 2026-11-15
 
-The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; plan checkpoint
-`ad68dc9` follows native converter `c71d5fc`, reference observations `0ce80a0` and status
-`97fd2ac`. The current integrated neutral-acyclic increment is verified and ready for its
-local feature commit. Its recoverable ten-file product snapshot is1815 bytes/SHA256
+The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; latest feature
+checkpoint **`77d05a8`** delivers verified neutral-acyclic conversion, with independent
+renderer prerequisite **`17f8798`**. Plan `ad68dc9` follows native converter `c71d5fc`,
+reference observations `0ce80a0` and status `97fd2ac`. All intentional product/test/source
+records are locally committed. The recoverable ten-file product snapshot is1815 bytes/SHA256
 `ea701d056ba66fd2372c42b863816fb71549031fbce47f59c303d46700262d40`, under ignored
 `target/smiles-acyclic/root-product-snapshot.json`. Continue existing work; do not restart.
 No push, merge or publication occurred.
@@ -82,7 +83,8 @@ exit0. Rustfmt, warnings-denied all-target workspace/vendor clippy/tests, layers
 and corpus pass. Full log `target/smiles-acyclic/root-final-ci.log`:138074 bytes/SHA256
 `a20d8e4ce5de417283b4dc5c421ae4510614d10ba56a0648531e7e955009fc33`.
 The existing explicit visual-capture utility remains ignored. Native build87151 exits0.
-No product source changed after this gate; only docs/evidence completion follows.
+No product source changed after this gate. Final formatting/diff checks and344 existing
+local changed-document link targets pass; commits contain the same verified source bytes.
 
 The20 added passes comprise8 IO,2 renderer,5 command,2 actual-wire and3 actual-App cases.
 Independent producer15170 full default IO299/0, backend88997/81769=5+2, renderer38605=2;
