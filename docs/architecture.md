@@ -264,7 +264,13 @@ returns origin-bound UiSmilesWork. It reuses the same two slots, pre-spawn conte
 and Core completion without broadening the SDF whitelist or refactoring old APIs.
 Historical results require source/close/request qualification in the caller; completion
 is not native thread retirement, Save authority or a displayed inspector. See
-verification-smiles-ui-work.md; actual UI adoption is the next separate slice.
+verification-smiles-ui-work.md. The actual App now adopts it through
+`SmilesRecordsWorkflow`: one weak-stamped request/pending/job/reply outside authored
+history, cleared source/close/hide text and focus, immutable notation selection/copy,
+and host file/close busy state through real thread retirement. No parsing happens in
+painting or under the frame guard. Engine-free cleanup drains cancelled work after a
+poisoned lock. See verification-smiles-record-integration.md for independent App,
+worker and narrowly observed native evidence; full native input remains unverified.
 
 `SdfFieldsWorkflow` now adds explicit read-only native occurrence inspection. One pending
 intent, one bounded channel/job and one field page sit beside the existing preview.

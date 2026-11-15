@@ -1684,3 +1684,20 @@ authority reuse Bondline's delivered SDF/capture boundaries; no new file interpr
 wire command or proprietary evidence is introduced. [Independent and receiving tests](../verification-smiles-ui-work.md)
 separate missing-API compile RED from two reviewed new-test setup corrections and actual
 background/guard/authority behavior. Native inspector execution remains separate.
+
+## Original SMILES record workspace, 2026-11-15
+
+The bounded ordinal/Inspect/Previous/Next/Close presentation adopts the original plan
+above; it does not claim a publicly established26.1 record-browser screen. Existing
+OpenSMILES file semantics, exact source-local ranges and the delivered query stay intact.
+The actual App reuses pinned egui immutable TextBuffer/ReadOnly/clear-undo APIs already
+documented for the SDF inspector, and Bondline's origin-bound registered-worker lifecycle.
+No new chemical inference, copied UI/asset/code, font or runtime dependency is introduced.
+
+[Independent App evidence](../verification-smiles-record-ui.md), [actual-worker gates](../verification-smiles-record-workspace.md)
+and [Root integration/native scope](../verification-smiles-record-integration.md) distinguish
+missing-controls runtime RED from missing-private-type compile RED, helper-path setup,
+and two reviewed new-test expectations: async Replace File readiness and full canonical
+Unicode paths. Product code did not change for those oracle corrections. Exact source/
+fixture reconstructions, unchanged raw/notation consumers and native AX/painting are
+separate evidence; full native input/clipboard/dialog execution remains unverified.

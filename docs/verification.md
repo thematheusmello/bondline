@@ -2602,3 +2602,20 @@ API compile RED is distinct from the two documented new-test setup corrections.
 Root69771 local gate passes1024/0/1, formatting, warnings-denied clippy, layers, licenses
 and corpus. No new wire tool or dependency. Actual inspector UI/input/thread-retirement
 and native SMILES workflow acceptance remain separate work; no milestone is completed.
+
+## Original SMILES record workspace, 2026-11-15
+
+[The integrated App inspector](verification-smiles-record-integration.md) now passes
+five independently authored input/copy/privacy/navigation/Unicode Save/reopen cases and
+two finite actual-worker/close gates. Root33868's missing-control runtime RED remains
+distinct from helper-path/private-type compilation and reviewed async/canonical-path
+test setup corrections. Six old fixtures gain only a default field; old assertions and
+Root's later Fit cases are retained exactly. Receiving Root54986 passes8/0 (seven new
+cases plus one matched old case), and independent97627 passes5/0 with clippy/fmt.
+
+Root29041 full local gate passes1031/0/1, formatting, all-target warnings-denied clippy,
+layers, licenses and corpus. Actual final native UI shows three records/49 bytes and
+the ordinal/Inspect/navigation controls without automatic notation. An authenticated
+native-process record2 query preserves clean state/source; no OS input/clipboard/dialog
+journey is claimed. No parser/dependency/oracle/golden/hosted/fuzz change. Actions stays
+disabled; M0/M1 and M2–M5 remain incomplete.

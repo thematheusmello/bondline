@@ -148,6 +148,7 @@ impl Fixture {
             files: FileWorkflow::new(directory.path(".")),
             preview: PreviewWorkflow::default(),
             sdf_fields: crate::sdf_fields::SdfFieldsWorkflow::default(),
+            smiles_records: crate::smiles_records::SmilesRecordsWorkflow::default(),
         };
         let context = egui::Context::default();
         configure_context(&context);

@@ -14,6 +14,7 @@ mod preview;
 mod sdf_draft_text;
 mod sdf_editor;
 mod sdf_fields;
+mod smiles_records;
 mod view_controls;
 #[cfg(test)]
 mod view_tests;
@@ -32,6 +33,7 @@ use eframe::egui;
 use file_workflow::{FileIntentAction, FileWorkflow};
 use preview::PreviewWorkflow;
 use sdf_fields::SdfFieldsWorkflow;
+use smiles_records::SmilesRecordsWorkflow;
 use std::{
     io::Write,
     sync::{Arc, Mutex},
@@ -660,6 +662,12 @@ fn show_workspace_with_files(
     show_workspace_with_preview(context, engine, error, drawing, files, active_work, None)
 }
 
+struct WorkspaceWorkflows<'a> {
+    preview: &'a mut PreviewWorkflow,
+    fields: &'a mut SdfFieldsWorkflow,
+    smiles: &'a mut SmilesRecordsWorkflow,
+}
+
 fn show_workspace_with_preview(
     context: &egui::Context,
     engine: &mut Engine,
@@ -667,11 +675,16 @@ fn show_workspace_with_preview(
     drawing: &mut DrawingState,
     mut files: Option<&mut FileWorkflow>,
     active_work: bool,
-    workflows: Option<(&mut PreviewWorkflow, &mut SdfFieldsWorkflow)>,
+    workflows: Option<WorkspaceWorkflows<'_>>,
 ) -> Option<FileIntentAction> {
-    let (mut preview, mut sdf_fields) = workflows.map_or((None, None), |(preview, fields)| {
-        (Some(preview), Some(fields))
-    });
+    let (mut preview, mut sdf_fields, mut smiles_records) = match workflows {
+        Some(workflows) => (
+            Some(workflows.preview),
+            Some(workflows.fields),
+            Some(workflows.smiles),
+        ),
+        None => (None, None, None),
+    };
     if let Some(fields) = sdf_fields.as_deref_mut() {
         fields.begin_ui();
     }
@@ -855,6 +868,9 @@ fn show_workspace_with_preview(
                     summary.record_count, summary.byte_length
                 ));
                 ui.label("Chemical preview is unavailable for SMILES files.");
+                if let Some(records) = smiles_records.as_deref_mut() {
+                    records.show(ui, engine);
+                }
                 return;
             }
             if let Some(collection) = engine.content().collection() {
@@ -1728,7 +1744,10 @@ fn show_workspace_with_preview(
                 error,
                 active_work
                     || preview.as_ref().is_some_and(|preview| preview.is_busy())
-                    || sdf_fields.as_ref().is_some_and(|fields| fields.is_busy()),
+                    || sdf_fields.as_ref().is_some_and(|fields| fields.is_busy())
+                    || smiles_records
+                        .as_ref()
+                        .is_some_and(|records| records.is_busy()),
             )
             .or(file_action);
     }
@@ -1746,6 +1765,7 @@ pub struct BondlineApp {
     files: FileWorkflow,
     preview: PreviewWorkflow,
     sdf_fields: SdfFieldsWorkflow,
+    smiles_records: SmilesRecordsWorkflow,
 }
 
 impl BondlineApp {
@@ -1791,6 +1811,7 @@ impl BondlineApp {
             files: FileWorkflow::new(std::env::home_dir().map_or_else(std::env::current_dir, Ok)?),
             preview: PreviewWorkflow::default(),
             sdf_fields: SdfFieldsWorkflow::default(),
+            smiles_records: SmilesRecordsWorkflow::default(),
         })
     }
 }
@@ -1822,6 +1843,7 @@ impl BondlineApp {
                 self.files.poll(&mut engine, &mut self.error);
                 self.preview.sync(&engine, context);
                 self.sdf_fields.sync(&engine, context);
+                self.smiles_records.sync(&engine, context);
                 self.sdf_fields.settle_editor(&mut engine, context);
                 if native_close && engine.state().close != CloseState::Committed {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
@@ -1840,17 +1862,24 @@ impl BondlineApp {
                     Some(&mut self.files),
                     self.executor.has_active_work()
                         || self.preview.is_busy()
-                        || self.sdf_fields.is_busy(),
-                    Some((&mut self.preview, &mut self.sdf_fields)),
+                        || self.sdf_fields.is_busy()
+                        || self.smiles_records.is_busy(),
+                    Some(WorkspaceWorkflows {
+                        preview: &mut self.preview,
+                        fields: &mut self.sdf_fields,
+                        smiles: &mut self.smiles_records,
+                    }),
                 );
                 self.preview.sync(&engine, context);
                 self.sdf_fields.sync(&engine, context);
+                self.smiles_records.sync(&engine, context);
                 self.sdf_fields.settle_editor(&mut engine, context);
                 if self.files.complete_close_if_idle(
                     &mut engine,
                     self.executor.has_active_work()
                         || self.preview.is_busy()
-                        || self.sdf_fields.blocks_close(),
+                        || self.sdf_fields.blocks_close()
+                        || self.smiles_records.is_busy(),
                     action.is_some(),
                 ) {
                     context.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -1859,6 +1888,7 @@ impl BondlineApp {
             Err(_) => {
                 self.preview.deactivate(context);
                 self.sdf_fields.deactivate(context);
+                self.smiles_records.deactivate(context);
                 self.sdf_fields.show_editor(
                     context,
                     None,
@@ -1883,6 +1913,7 @@ impl BondlineApp {
         }
         self.preview.start_pending(&self.executor, context);
         self.sdf_fields.start_pending(&self.executor, context);
+        self.smiles_records.start_pending(&self.executor, context);
     }
 }
 

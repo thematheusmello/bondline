@@ -799,9 +799,17 @@ existing shared two-worker slot before spawning, and returns noncloneable `UiSmi
 Its blocking completion uses the same registered Core query/finish; no new wire tool,
 Save lease or native file acknowledgement is created. Queries can be historical: a host
 must retain pending/job state through actual thread retirement and reject stale display.
-The library bridge has independent background/guard/budget/authority tests; the native
-inspector is separate work. See verification-smiles-ui-work.md and the original
+The library bridge has independent background/guard/budget/authority tests; App behavior
+has separate evidence. See verification-smiles-ui-work.md and the original
 research/smiles-native-workflow-plan.md.
+
+The actual App now consumes that bridge in an original readonly record inspector.
+Ordinal/Inspect/Previous/Next use the same existing query; cancel/retry/hide are local
+presentation, with full source/close/request stale checks and actual-worker close gates.
+Automatic metadata and external query success do not disclose notation in that UI.
+No new command or wire-side selection is introduced. GUI lifecycle/input/file tests and
+limited native controls are scoped in verification-smiles-record-integration.md; native
+activation/clipboard/dialog acceptance and broader control addressability remain open.
 
 ## Native preview host contract (Rust adapter)
 

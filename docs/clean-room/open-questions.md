@@ -207,6 +207,13 @@ SMILES supplier or the new headless tests. Actual native Bondline acceptance is 
 unverified while the user is active. Chemical preview/editing remains missing; the separate
 headless smiles.record.inspect query is now delivered, without a native record browser; see verification-smiles-file-app.md and verification-smiles-file-ui.md.
 
+The original readonly ordinal inspector is now implemented and verified through actual
+App frames, independent raw/notation consumers and real-worker close gates. Actual Mac
+AX/painting shows its controls and no automatic notation disclosure after an external
+query. Full native typing/activation/copy/dialog acceptance remains pending availability;
+no Professional26.1 record-browser parity or chemical preview/editing follows. See
+verification-smiles-record-integration.md. The earlier missing-browser statement is historical.
+
 ## Faithful ordinary SDF molecular display
 
 The restricted derived-H profile, source-direction label placement and all-record headless

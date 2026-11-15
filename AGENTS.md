@@ -498,6 +498,16 @@ shared two-worker reservation before spawn. Do not bypass it by parsing in-frame
 spawning before validation. Completion can be historical; the host still owns stale
 display rejection and actual worker retirement. See docs/verification-smiles-ui-work.md.
 
+`SmilesRecordsWorkflow` now uses that bridge in the actual App. Preserve its one weak
+source/close/revision/ordinal/sequence request, pending intent, actual thread and bounded
+reply; clear text/focus on source/close/hide and never install stale/historical results.
+Parsing stays off-frame; file/close gates include publication through real retirement,
+including poisoned-engine cleanup. Immutable notation stays selectable/copyable with
+ReadOnly AX and cleared local undo. No opaque appdata or inferred chemistry is displayed.
+Five independent App cases and two finite lifecycle gates pass; native controls/registry
+query are observed, but native input/clipboard/dialog acceptance remains unverified.
+See docs/verification-smiles-record-integration.md; do not duplicate completed work.
+
 ## Derived SDF display continuation
 
 `io::sdf::preview` returns an ephemeral Page, exact preview-to-local ID maps and separate

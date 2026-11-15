@@ -1,8 +1,8 @@
 # Status — 2026-11-15
 
 The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`, source checkpoint
-`324473d`. This atomic slice delivers typed native SMILES query preparation and its
-background/guard/authority tests. The actual inspector UI is separate ongoing work.
+`d99e719`. This atomic slice delivers the original readonly SMILES record inspector,
+independent App/file/worker checks and limited actual native controls/query observation.
 Fit`324473d`, renderer`06ab5a9`, field editor`7b64604` and plan
 `af7fab0` remain checkpoints. No push/merge/publication. M0's desktop/GPU
 license blocker is resolved; full M0 and M1 remain incomplete.
@@ -29,9 +29,18 @@ Typed `prepare_ui_smiles`/UiSmilesWork now prepares the existing selected-record
 under the origin lock with full source/Open/close guards and the same pre-spawn two-slot
 reservation. Real background completion, exact49-byte source/history, close/source ABA,
 shared capacity/cancellation and no Save/native-ACK authority pass three receiving cases.
-This is a verified library bridge, not an executed native SMILES inspector. Its original
+This is a verified library bridge. Its original
 plan and scoped evidence are now in docs/research/smiles-native-workflow-plan.md and
 docs/verification-smiles-ui-work.md. No new wire command or parser/dependency changes.
+
+The actual App now consumes it: ordinal/Inspect/Previous/Next, exact readonly notation
+selection/copy, counts/ranges, cancel/retry/hide, source/close/request invalidation and
+real-worker retirement in file/close gates. Five independent App cases preserve complete
+49-byte files through Unicode overwrite/known Save/reopen; two finite lifecycle tests
+prove publication is not retirement and poisoned-engine cleanup drains safely. Native
+controls/automatic privacy are observed; native activation/copy/dialog acceptance remains
+unverified while desktop availability is pending. Chemical preview/editing stays missing.
+See docs/verification-smiles-record-integration.md for exact sources and scoped evidence.
 
 New source-qualified SDF Actual/Fit/Zoom and pan use that same camera. Actual/explicit
 percentage needs no fabricated bounds; successful current-view capture derives every
@@ -61,7 +70,16 @@ general labels/selection/transforms, styles, chemistry and full reference screen
 
 ## Verification
 
-- Latest Root69771 full pinned-Python local gate passes **1024/0/1**,150 result lines:
+- Latest Root29041 full pinned-Python local gate passes **1031/0/1**,150 result lines;
+  fmt, all-target warnings-denied clippy, layers, licenses and corpus pass. Log
+  `target/smiles-record-ui/root-ci.log`,123441B/SHA
+  `75bb6a65b24224cbc0e3729a8712991a21c3d9923ea0b327950633312f17330c`.
+  Root33868 missing-control runtime RED,54986 receiving8/0 (seven new+one old), producer
+  UI181/0/1 and independent receiving5/0/clippy/fmt are recorded separately. Six old
+  test files add only a default initializer; all old assertions and later Fit tests
+  remain exact. Two new-test async/canonical-path setup corrections did not change the
+  product; helper-path/private-type compile stages remain separate from behavioral RED.
+- Prior Root69771 full pinned-Python local gate passes **1024/0/1**,150 result lines:
   rustfmt, all-target warnings-denied clippy, layers, licenses and corpus all pass.
   Log`target/smiles-ui-work/root-ci.log`,123009B/SHA
   `9c54faf30b72d42d4d7503391792594f29ebd829274f8cb0b080ea7dfde14bc7`.
@@ -119,6 +137,18 @@ records retain their own scopes; no milestone ends.
 
 ## Latest actual native build
 
+Latest ignored bundle`target/smiles-record-native/Bondline.app`, identifier
+`org.bondline.smiles-record-review`, PID53821. Root7641 builds exact final UI/MCP/Fit;
+executable21932120B/SHA`f4d8627a75310282ca0b7eadeddd1d031a999f4d7ff8d80a923ac79684e443a7`.
+Startup readiness is observed. Authenticated native loopback opens the exact49-byte
+three-record copy (SHA`fe62db368bfb982d6a0d4309337207a419fc088b9c8e20ae9a0a32ccd61e70b7`).
+Native AX/screenshot shows ordinal1/Inspect/Previous/Next, Previous visibly disabled,
+and no automatic notation/appdata. A separate native-process query returns exact record2;
+automatic state still omits it and the UI stays at1. Revision1/clean/Undo0Redo0 remain.
+No OS input or clipboard action was injected. The full native journey is not verified.
+
+The preceding Fit build remains open separately with both SDF structures visible:
+
 Final ignored bundle`target/fit-readout-native/Bondline.app`, identifier
 `org.bondline.fit-readout-review`, PID16278. Executable21773960B/SHA
 `21efac416ddd1d2933da1d6bdb61b8b0d33aa495e15726acaec78a9a66b1445a`.
@@ -167,20 +197,27 @@ operations, native SMILES/conversion/export and general layout/chemistry. M2 gen
 drawing/selection/labels/styles, M3 chemistry/reactions/text, M4 publishing/clipboard and
 M5 naming/templates/biopolymers/WebAssembly/installers remain required. No full26.1 parity.
 
-1. If the availability reply permits desktop work, resume on latest PID16278 with fresh AX state:
-   real wheel movement/restoration; NOTE edit at100%/pan; Unicode Save As/reopen and raw
+1. If the availability reply permits desktop work, resume on PID53821 with fresh AX state:
+   type ordinal2, Inspect, select/copy exact `[13CH3][OH]`, Previous/Next, Unicode Save As,
+   reopen and compare all49 bytes with the existing raw/per-record consumers. This is
+   native acceptance work, not a missing implementation or permission to infer success.
+   On the separate SDF PID16278, check real wheel movement/restoration; NOTE edit at100%/
+   pan; Unicode Save As/reopen and raw
   749-byte comparison plus unchanged per-MOL consumers. Literal expectation is
    `source[..380]+b"reviewed ethanol\n"+source[388..]`, preserving the second NOTE line.
    Otherwise continue independent M1 work offscreen; this does not block the goal.
 2. Fit presentation is corrected. Relative steps against the visible high-DPI legacy
    overview remain separate: physical margins differ from logical fit math. Preserve
    default pixels/readability and do not choose camera policy from cache presence.
-3. Continue the original readonly native SMILES record inspector and remaining M1/M0,
-   then M2–M5. The typed registered bridge and three tests are integrated; five independent
-   App cases are frozen and UI implementation is active in isolated worktrees, not
-   delivered in this commit. Read docs/research/smiles-native-workflow-plan.md and
-   the UI owner's frozen handoff before receiving. Existing source query/file commands remain
-   authoritative; no new wire command, chemical depiction or converter shortcut. Keep
+3. The readonly SMILES inspector is implemented and integrated; do not restart it. With
+   native availability still pending, continue the next unblocked M1 SDF record operation:
+   reread CTFILE-2026 chapter10 and current SdfDocument spans/setter/tests, then predeclare
+   literal raw/per-MOL expectations for removing one explicit record from a multi-record
+   source. Establish empty-file/last-record policy from evidence before coding; log unknowns.
+   Start codec RED/GREEN before a typed registry operation and UI; preserve every unrelated
+   byte, full snapshot Undo/Redo, revision/source/close/save guards and draft recovery.
+   This is next work, not an implemented capability. Broader CDX/CDXML/MOL/SMILES files,
+   M2–M5 and M0 inventory/addressability/platform gaps remain. Keep
    reference roles separate from original policy and missing/wired/verified evidence.
    Numeric AX cause needs a bounded actual-type/action investigation before a patch.
 4. Rust1.94.1; select `.cache/oracles/format-python/bin/python`
@@ -190,7 +227,7 @@ M5 naming/templates/biopolymers/WebAssembly/installers remain required. No full2
 ## Live handles
 
 All Root Cargo/build checks and Fit tasks/review are terminal; no fuzz or launch waiter.
-Native16278 and earlier51412 above; earlier19318(editor),26649(inspector),41233(ordered file),
+Native53821,16278 and earlier51412 above; earlier19318(editor),26649(inspector),41233(ordered file),
 30298(view navigation),83437(bond menu) were left untouched. Check actual processes and
 availability before future native input. Tokens stay only in private ignored startup
 stdout; never print/commit/publish. Build/receipt artifacts under target/ are disposable.
@@ -200,11 +237,10 @@ Workers used isolated `bondline-view-raster`, `bondline-sdf-view-command-tests` 
 Root owns integration, Git and native input. Do not share Root artifacts with staged
 source exports; historical mixed-cache corruption stays quarantined/documented.
 
-Next M1 tasks: `/root/native_acceptance` implements UI in isolated
-`bondline-smiles-record-workspace` at976ef42, with only its frozen new MCP bridge backing.
-`/root/sdf_setter_review` has frozen five independent App tests in
-`bondline-smiles-record-ui-tests`, waiting for real source port; no live tests there.
-Its first four cases are intended missing-controls RED, fifth is baseline-positive privacy.
-The earlier `bondline-smiles-native-plan` bridge handoff0399f8c8…6f523 is received with
-three focused cases and full MCP64/0/0/clippy/fmt passing plus the Root1024/0/1 gate.
-Those do not establish native SMILES acceptance. Do not restart/duplicate live UI work.
+All three agents and all Root Cargo/build checks are terminal. Isolated UI
+`bondline-smiles-record-workspace` handoff41a03334…7ad60 and independent acceptance
+`bondline-smiles-record-ui-tests` handoff22ede832…751d3 are received/frozen; no live jobs.
+The earlier `bondline-smiles-native-plan` bridge handoff0399f8c8…6f523 is received too.
+Own absolute targets/inc0/debug0 stayed separate; Root's port retains later Fit changes.
+Do not alter old receipts/tests or duplicate completed code. Only future native input
+awaits the availability answer; the overall goal is not blocked.

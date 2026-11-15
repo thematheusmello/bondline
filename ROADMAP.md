@@ -159,8 +159,11 @@ and [UI evidence](docs/verification-smiles-file-ui.md). M0/M1 remain incomplete 
 The next [original record-inspector plan](docs/research/smiles-native-workflow-plan.md)
 now has a delivered typed native query bridge: three literal/background/guard/authority
 tests and the full Root1024/0/1 local gate pass. See docs/verification-smiles-ui-work.md.
-The actual UI component and five independent App cases are in progress; no native
-record-inspection, chemistry preview or complete M1 claim follows from the library bridge.
+The actual UI component is now delivered with five independent App cases and two finite
+worker/close gates. Root's full local gate passes1031/0/1. Native Mac AX/painting shows
+ordinal/Inspect/navigation and no automatic notation disclosure, with an exact native-
+process query/source check. Native input/clipboard/dialog acceptance, chemical preview
+and complete M1 remain unverified/missing. See docs/verification-smiles-record-integration.md.
 
 
 Standalone CDXML source preservation and checked existing-attribute replacement have
