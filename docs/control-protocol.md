@@ -851,3 +851,66 @@ step. History invalidates gestures/hotspots and refreshes the whole stored docum
 page dimensions, viewport and graph before later pointer input. The no-drawing fallback
 retains ordered whole-SDF history. File presentation still has its separate existing
 host lifecycle; this does not claim arbitrary cross-dialog input ordering.
+
+
+## Transient drawing view
+
+`ui.view` is one tagged, closed parameter object. The28-command registry exposes its
+seven object branches through the same CLI, stdio MCP and authenticated loopback routes.
+Examples:
+
+```json
+{"action":"inspect"}
+{"action":"actual"}
+{"action":"fit"}
+{"action":"set_zoom","percent":175.5}
+{"action":"magnify","width_px":820,"height_px":680}
+{"action":"reduce","width_px":820,"height_px":680}
+{"action":"pan","center_x_pt":240,"center_y_pt":400}
+```
+
+Unknown/unused fields refuse. Percentage is finite1..999; relative dimensions are integral
+logical canvas units1..100000, despite the historical `_px` field suffix. Pan requires
+explicit zoom and finite coordinates inside the current first page. `inspect` also works
+for guarded/wrong-kind content and while a picker/close decision is pending. Mutating
+actions respect those guards before even a no-op; committed close refuses this command.
+
+Default Fit preserves legacy rounded paper geometry exactly. Explicit100% means one
+authored point per logical canvas unit, independent of monitor DPI; it is not physical
+screen calibration. Magnify multiplies the current effective percentage by1.25; Reduce
+divides by1.25. Steps clamp to1..999 without decreasing an already larger fitted view.
+Magnify alone can center the latest successful own Create/Extend segment midpoint, bound
+to its page/generation. History and unrelated geometry invalidate this focus; Set Order
+retains it. No imported atom ordering is interpreted as recent drawing.
+
+`actual` and `set_zoom` retain center; `fit` clears it. Camera state persists across
+Open/Undo/Redo as an original Bondline window policy. A center outside a newly opened
+page is clamped during projection, without silently editing its stored state. Later
+user navigation starts from that bounded displayed center.
+
+Normal document snapshots omit camera state. Explicit replies add:
+
+```json
+{"ui_view_operation":{"zoom_percent":175.5,"center_x_pt":240.0,"center_y_pt":400.0,"epoch":2,"changed":true}}
+```
+
+Fit reports null zoom/center. Every real view change advances the checked transient epoch;
+equal actions preserve it. Outermost authored `changed` stays false, and document/source
+bytes, revision, dirty flag, history, identity floors, close epoch and CaptureStamp remain
+unchanged. Loopback publication requests repaint only for actual view changes.
+
+Central `ui.controls` adds View Actual/Fit/Magnify/Reduce with F5/F6/F7/F8. Relative bindings
+are disabled until the host supplies current canvas dimensions with `set_view_canvas_size`;
+this layout context is not an authored command. Direct relative calls carry their own
+dimensions. Host text entry suppresses canvas shortcuts. Header Zoom and position controls
+submit the same registry operations at their input-event boundaries.
+
+The view builds geometry at the requested uniform scale, then clips it using signed
+integer translation. It does not enlarge an old raster or resize paper. Labels, components,
+physical-paper ink and complete-source guards remain whole-source checks. Some valid zoom
+parameters still refuse rendering bounds/readability; accepted state is not a promise
+that every document renders at every percentage. `render.capture` remains a whole-page
+capture, independent of the window camera. SDF preview navigation, saved view preferences,
+hand gestures and physical screen calibration remain unsupported. Source/evidence are in
+[the view research](research/view-navigation-plan.md) and
+[renderer verification](verification-view-render.md); native execution is separate.

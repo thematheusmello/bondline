@@ -2454,3 +2454,22 @@ frame workaround or new font. Root's actual-frame pan regression also fails befo
 the patch and passes after it. [Exact source/notices](../vendor/egui/BONDLINE-PATCH.md)
 retain the published version/features and MIT/Apache licenses. Root58403 license gate
 passes154/165/220 native runtime packages and the same two assets.
+
+
+## Shared transient view integration, 2026-11-15
+
+The28th command `ui.view`, source-qualified IO camera, actual numeric/position controls
+and ordered picking/gesture invalidation pass [independent command/adapter checks](verification-view-commands.md)
+and [ten frozen real-App frame checks](verification-view-ui.md). Root's initial compile,
+schema, extra-field, reverse-axis, fractional-wheel, smaller-page, direction, focus and
+recovery REDs are distinguished from harness-only corrections. Original fixtures, font,
+parser oracles and the approved golden remain unchanged. Two private guards are
+additional coverage, not claimed original REDs.
+
+[Native Mac evidence](verification-view-native.md) verifies bounded original-A4 creation,
+zoom/pan/menu/keys, transformed existing-edge picking and separated persistence flows.
+The rapid Undo/Save counterexample is explicitly pending a separate ordering correction.
+The corrected saved scene faces independent Expat/Decimal/RDKit and the public screenshot
+is a genuine unedited window buffer. Full local gate68260:960passed/0failed/1ignored;
+clippy/fmt/layers/licenses/corpus pass. First parallel listener-rebind failure remains
+recorded separately, followed by unchanged isolated and full successful runs.

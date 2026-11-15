@@ -20,6 +20,7 @@ mod sdf_query;
 mod smiles_conversion;
 mod smiles_export;
 mod smiles_query;
+mod view;
 pub use bond::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
 };
@@ -42,6 +43,7 @@ pub use smiles_export::{ExportSmilesFragment, SmilesExportReceipt};
 pub use smiles_query::{
     MAX_SMILES_RECORD_INSPECT_BYTES, SmilesRecordInspect, SmilesRecordInspection,
 };
+pub use view::{UiView, ViewOperation, ViewState};
 #[cfg(test)]
 mod close_tests;
 #[cfg(test)]
@@ -118,6 +120,7 @@ command_registry! {
     Close(CloseDocument) => ("document.close", "Request, explicitly discard, or cancel closing the current document revision.", false),
     UiFile(UiFile) => ("ui.file", "Request or cancel native file presentation; requires an attached native host.", false),
     UiControls(NoParams) => ("ui.controls", "Discover delivered native controls, shortcuts, typed bindings and contextual availability.", true),
+    UiView(UiView) => ("ui.view", "Inspect or navigate the transient drawing view without editing content or history.", false),
     UiBondToolSelect(SelectBondTool) => ("ui.bond_tool", "Select a drawing bond order without editing the document or its history; gestures pass this order explicitly.", false),
     OpenCdxml(OpenCdxml) => ("document.open_cdxml", "Open an explicitly selected CDXML file without discarding unsaved edits by default.", false),
     SaveCdxml(SaveCdxml) => ("document.save_cdxml", "Atomically save complete CDXML data to an explicitly selected path; overwrite requires opt-in.", false),
@@ -250,6 +253,12 @@ pub enum Error {
     UiEpochExhausted,
     #[error("drawing tool epoch space exhausted")]
     UiBondToolEpochExhausted,
+    #[error("view epoch space exhausted")]
+    UiViewEpochExhausted,
+    #[error("invalid view parameters: {0}")]
+    InvalidView(&'static str),
+    #[error("view navigation unavailable: {0}")]
+    UnsupportedView(&'static str),
     #[error("invalid native file request parameters: {0}")]
     InvalidUiFileParameters(&'static str),
     #[error(transparent)]
@@ -284,7 +293,9 @@ impl Error {
             Self::RevisionExhausted => "revision_exhausted",
             Self::IdentityExhausted => "identity_exhausted",
             Self::Render(bondline_render::Error::Cancelled) => "cancelled",
-            Self::Render(bondline_render::Error::InvalidDimensions) => "invalid_params",
+            Self::Render(
+                bondline_render::Error::InvalidDimensions | bondline_render::Error::InvalidView,
+            ) => "invalid_params",
             Self::Render(bondline_render::Error::UnsupportedChemicalContent)
             | Self::Render(bondline_render::Error::LabelPlacement)
             | Self::Render(bondline_render::Error::LabelOverlap)
@@ -311,7 +322,9 @@ impl Error {
             Self::SaveBusy => "busy",
             Self::UiStaleRequest => "ui_stale_request",
             Self::UiEpochExhausted => "ui_epoch_exhausted",
-            Self::UiBondToolEpochExhausted => "ui_epoch_exhausted",
+            Self::UiBondToolEpochExhausted | Self::UiViewEpochExhausted => "ui_epoch_exhausted",
+            Self::InvalidView(_) => "invalid_params",
+            Self::UnsupportedView(_) => "unsupported_content",
             Self::FileBackendUnavailable => "backend_unavailable",
             Self::Mol(error) => error.code(),
             Self::Sdf(error) => error.code(),
@@ -397,6 +410,8 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_bond_tool_operation: Option<BondToolOperation>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_view_operation: Option<ViewOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub controls: Option<Vec<ControlInfo>>,
 }
 
@@ -415,6 +430,9 @@ pub struct Engine {
     close_policy: close::ClosePolicy,
     file_ui: file_ui::FileUiPolicy,
     bond_tool: BondToolState,
+    view: ViewState,
+    view_canvas_size: Option<[u32; 2]>,
+    view_focus: Option<(u64, PageId, bondline_model::Point2)>,
 }
 
 impl Default for Engine {
@@ -461,6 +479,9 @@ impl Engine {
             close_policy: close::ClosePolicy::default(),
             file_ui: file_ui::FileUiPolicy::default(),
             bond_tool: BondToolState::default(),
+            view: ViewState::default(),
+            view_canvas_size: None,
+            view_focus: None,
         }
     }
 
@@ -506,6 +527,7 @@ impl Engine {
             ui_file: self.file_ui_state(),
             ui_file_operation: None,
             ui_bond_tool_operation: None,
+            ui_view_operation: None,
             controls: None,
         }
     }
@@ -537,8 +559,10 @@ impl Engine {
         if self.close_state() == CloseState::Committed && !matches!(command, Command::Inspect(_)) {
             return Err(Error::CloseCommitted);
         }
+        let mut drawing_focus = None;
         let changed = match command {
             Command::Inspect(_) => false,
+            Command::UiView(params) => return Ok(Prepared::immediate(self.navigate_view(params)?)),
             Command::Close(params) => return Ok(Prepared::immediate(self.close(params)?)),
             Command::UiFile(params) => return Ok(Prepared::immediate(self.ui_file(params)?)),
             Command::UiBondToolSelect(params) => {
@@ -758,20 +782,69 @@ impl Engine {
                 self.commit(document)?
             }
             Command::BondCreate(params) => {
+                let focus = (
+                    params.page_id,
+                    params.begin_x_pt,
+                    params.begin_y_pt,
+                    params.end_x_pt,
+                    params.end_y_pt,
+                );
                 let (document, identities) =
                     bond::create(self.stored_document()?, params, self.identities)?;
                 let changed = self.commit(document)?;
                 self.identities = identities;
+                drawing_focus = PageId::new(focus.0)
+                    .zip(
+                        bondline_model::Point2::new(
+                            focus.1 / 2.0 + focus.3 / 2.0,
+                            focus.2 / 2.0 + focus.4 / 2.0,
+                        )
+                        .ok(),
+                    )
+                    .map(|(page, point)| (self.generation, page, point));
                 changed
             }
             Command::BondExtend(params) => {
                 if params.expected_revision != self.revision {
                     return Err(Error::StaleRevision);
                 }
+                let focus = (
+                    params.page_id,
+                    params.fragment_id,
+                    params.begin_atom_id,
+                    params.end_x_pt,
+                    params.end_y_pt,
+                );
                 let (document, identities) =
                     bond::extend(self.stored_document()?, params, self.identities)?;
                 let changed = self.commit(document)?;
                 self.identities = identities;
+                drawing_focus = self.document().ok().and_then(|document| {
+                    document
+                        .pages()
+                        .iter()
+                        .find(|page| page.id().get() == focus.0)
+                        .and_then(|page| {
+                            page.fragments()
+                                .iter()
+                                .find(|fragment| fragment.id().get() == focus.1)
+                                .and_then(|fragment| {
+                                    fragment
+                                        .atoms()
+                                        .iter()
+                                        .find(|atom| atom.id.get() == focus.2)
+                                })
+                                .and_then(|atom| atom.position)
+                                .and_then(|begin| {
+                                    bondline_model::Point2::new(
+                                        begin.x_pt() / 2.0 + focus.3 / 2.0,
+                                        begin.y_pt() / 2.0 + focus.4 / 2.0,
+                                    )
+                                    .ok()
+                                })
+                                .map(|point| (self.generation, page.id(), point))
+                        })
+                });
                 changed
             }
             Command::BondSetOrder(params) => {
@@ -779,6 +852,7 @@ impl Engine {
                     return Err(Error::StaleRevision);
                 }
                 let document = bond::set_order(self.stored_document()?, params)?;
+                drawing_focus = self.view_focus;
                 self.commit(document)?
             }
             Command::Undo(_) => self.undo()?,
@@ -802,6 +876,9 @@ impl Engine {
                 return Prepared::capture(self.state(), params, Arc::clone(&self.document));
             }
         };
+        if changed {
+            self.view_focus = drawing_focus;
+        }
         Ok(Prepared::immediate(CommandResult {
             changed,
             ..self.state()
@@ -966,6 +1043,7 @@ mod tests {
                 "smiles.record.inspect",
                 "ui.controls",
                 "ui.bond_tool",
+                "ui.view",
                 "ui.file"
             ]
             .into_iter()
@@ -974,10 +1052,17 @@ mod tests {
         assert_eq!(names.len(), commands.len());
         for command in commands {
             assert_eq!(command.input_schema.as_value()["type"], "object");
-            assert_eq!(
-                command.input_schema.as_value()["additionalProperties"],
-                false
-            );
+            let schema = command.input_schema.as_value();
+            if let Some(variants) = schema["oneOf"].as_array() {
+                assert_eq!(schema["unevaluatedProperties"], false);
+                assert!(!variants.is_empty());
+                for variant in variants {
+                    assert_eq!(variant["type"], "object");
+                    assert_eq!(variant["additionalProperties"], false);
+                }
+            } else {
+                assert_eq!(schema["additionalProperties"], false);
+            }
         }
     }
 

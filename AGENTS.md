@@ -108,13 +108,24 @@ commands (L3, registry, complete stored-snapshot Arc history and transient close
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
 and `compat/clipboard-win` opt into reviewed OS unsafe; `compat/hexf-parse` forbids
 unsafe. These three original compatibility packages retain upstream package names solely
-for Cargo patch routing. The eframe/winit source forks and Apache font retain upstream notices.
+for Cargo patch routing. The eframe/egui/winit source forks and Apache font retain upstream notices.
+The pinned egui0.29.1 current-focus filter guard fix retains its exact published version
+and MIT/Apache notices; see vendor/egui/BONDLINE-PATCH.md and SDK/UI regressions.
 The pinned winit macOS application-quit callback is the other reviewed OS-boundary exception:
 two standard main-thread AppKit visibility actions, with exact source/pin/native evidence in
 vendor/winit/BONDLINE-PATCH.md. No unsafe enters Bondline's UI/model/command/format crates.
 The pinned accesskit_macos string-value bridge is another reviewed native boundary; its
 exact source/notices, nullable NSString checks, bounds and tests are in that vendor's
 BONDLINE-PATCH.md. cargo xtask ci includes its native tests/clippy on macOS from the root lock.
+
+`ui.view` is transient camera state with a checked epoch, shared by the delivered adapters.
+Default Fit retains legacy pixels; explicit100% is one logical unit/authored point, not
+physical monitor calibration. Use Engine::page_view/drawing_view_scene for rendering and
+picking together, retaining source-qualified MOL display-H. Camera never changes paper,
+source, revision/history/dirty or CaptureStamp. Open retains camera; projection and later
+navigation use a bounded displayed center. Whole-source render guards remain mandatory.
+Current-view capture/SDF navigation, saved preferences and complete reference behavior
+are not delivered; see docs/control-protocol.md and view verification records.
 
 ## Test first, then implement
 
@@ -191,7 +202,7 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current27-command registry includes complete SDF/SMILES-file Open/Save and bond.create
+The current28-command registry includes complete SDF/SMILES-file Open/Save and bond.create
 for independent neutral-carbon fragments with optional Single(default)/Double/Triple order
 and literal H=`4-order_weight`, plus CDXML/CDX/MOL open/save. bond.extend requires the
 explicit H policy/revision and one incident supported bond with consistent literal

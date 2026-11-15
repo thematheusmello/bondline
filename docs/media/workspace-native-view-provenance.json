@@ -1,0 +1,100 @@
+{
+  "capture": {
+    "path": "workspace-native-view.jpg",
+    "format": "JPEG",
+    "width": 1160,
+    "height": 832,
+    "bytes": 69026,
+    "sha256": "47e6ee6136c4ced7f195b9a3179961fac68fbfb1ee6dfccb8a4282c4b4b77622",
+    "method": "Unedited own-window CUA buffer; no cropping, resampling, retouching or conversion; corrected after independent file check."
+  },
+  "binary": {
+    "bytes": 21195256,
+    "sha256": "fa584de0ea74d9fe2998ee2e3cd44d2e930e446e563819b0f3d6453e90e3033e"
+  },
+  "sources": {
+    "crates/ui/src/lib.rs": {
+      "bytes": 79373,
+      "sha256": "fe1df2ec8712bf3ba562402015aa5bce544460323e4115b1daabaa167435dfab"
+    },
+    "crates/ui/src/view_controls.rs": {
+      "bytes": 9745,
+      "sha256": "3659ef60f345d5e456fd593ccbfd6bc2d7544292ba954439213a5b4d27bda05f"
+    },
+    "crates/commands/src/view.rs": {
+      "bytes": 11252,
+      "sha256": "a12501fb7697b1212fbf34a769b2d11048703e23203d89767017afed5391150b"
+    },
+    "vendor/egui/src/memory/mod.rs": {
+      "bytes": 43482,
+      "sha256": "62899ec4b99713a47341ea680fd458c703e41934bc300fc49e82a02fe6e22d46"
+    }
+  },
+  "source_port_receipt_sha256": "d1d8b7916e41209c634e57827fe9ce4423f41aedf84e6b4644eb338c6ac81260",
+  "native_file": {
+    "file_bytes": 952,
+    "file_sha256": "295e90470595acba479b95cf3be45d701e900a463fddeeafeb3e47e483b925f4",
+    "formulas": [
+      "C2H6",
+      "C2H4",
+      "C2H2"
+    ],
+    "smiles": [
+      "CC",
+      "C=C",
+      "C#C"
+    ]
+  },
+  "scene": {
+    "page": "Original A4 210x297mm; no page.set_size issued",
+    "zoom_percent": 150,
+    "native_pointer_authored": true,
+    "literal_points": [
+      [
+        160,
+        267
+      ],
+      [
+        280,
+        267
+      ],
+      [
+        160,
+        397
+      ],
+      [
+        280,
+        397
+      ],
+      [
+        160,
+        527
+      ],
+      [
+        280,
+        527
+      ]
+    ],
+    "orders": [
+      "single",
+      "double",
+      "triple"
+    ],
+    "H": [
+      [
+        3,
+        3
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        1,
+        1
+      ]
+    ]
+  },
+  "verification": "View controls and separated native edit/Undo/UnicodeSaveAs/reopen/edit/menuUndo/KnownSave. Rapid Undo/Save ordering counterexample remains separate pending work; see verification-view-native.md. No new human-approved golden or full-parity claim.",
+  "license": "MIT OR Apache-2.0 original Bondline documentation media; existing Apache Roboto retained."
+}

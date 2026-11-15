@@ -52,6 +52,10 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "page.a4",
             "page.letter",
             "page.rotate",
+            "view.actual",
+            "view.fit",
+            "view.magnify",
+            "view.reduce",
             "tool.bond.single",
             "tool.bond.double",
             "tool.bond.triple"

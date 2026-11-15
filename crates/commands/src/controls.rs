@@ -2,7 +2,7 @@
 
 use crate::{
     BondDrawOrder, CloseAction, CloseDocument, CloseState, Command, Engine, NoParams, PageSetSize,
-    SelectBondTool, UiFile, UiFileAction, UiFilePhase,
+    SelectBondTool, UiFile, UiFileAction, UiFilePhase, UiView,
 };
 use serde::Serialize;
 
@@ -14,6 +14,10 @@ pub enum ControlKey {
     W,
     Z,
     Y,
+    F5,
+    F6,
+    F7,
+    F8,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
@@ -66,7 +70,7 @@ impl Engine {
                 shift,
             })
         };
-        let mut controls = Vec::with_capacity(13);
+        let mut controls = Vec::with_capacity(17);
         for (id, label, key, shift, action) in [
             (
                 "file.open",
@@ -184,6 +188,77 @@ impl Engine {
                     enabled: authoring_reason.is_none(),
                     disabled_reason: authoring_reason,
                     selected: None,
+                });
+            }
+        }
+        if let Ok(stored) = self.stored_document()
+            && let Some(page) = stored.model().pages().first()
+        {
+            let [width_px, height_px] = self.view_canvas_size.unwrap_or([1, 1]);
+            let percent = self.view.zoom_percent.or_else(|| {
+                self.view_canvas_size
+                    .and_then(|[w, h]| crate::view::fit_percent(w, h, page.size()).ok())
+            });
+            let source_reason =
+                authoring_reason.or((!stored.is_fully_mapped()).then_some("unsupported_content"));
+            for (id, label, key, action, selected, limit) in [
+                (
+                    "view.actual",
+                    "Actual size",
+                    ControlKey::F5,
+                    UiView::Actual {},
+                    Some(self.view.zoom_percent == Some(100.0)),
+                    false,
+                ),
+                (
+                    "view.fit",
+                    "Fit to window",
+                    ControlKey::F6,
+                    UiView::Fit {},
+                    Some(self.view.zoom_percent.is_none()),
+                    false,
+                ),
+                (
+                    "view.magnify",
+                    "Magnify",
+                    ControlKey::F7,
+                    UiView::Magnify {
+                        width_px,
+                        height_px,
+                    },
+                    None,
+                    percent.is_some_and(|p| p >= 999.0),
+                ),
+                (
+                    "view.reduce",
+                    "Reduce",
+                    ControlKey::F8,
+                    UiView::Reduce {
+                        width_px,
+                        height_px,
+                    },
+                    None,
+                    percent.is_some_and(|p| p <= 1.0),
+                ),
+            ] {
+                let relative = matches!(action, UiView::Magnify { .. } | UiView::Reduce { .. });
+                let reason = source_reason
+                    .or((relative && self.view_canvas_size.is_none())
+                        .then_some("viewport_unavailable"))
+                    .or(limit.then_some("zoom_limit"));
+                controls.push(ControlInfo {
+                    id,
+                    label,
+                    menu: "View",
+                    command: Command::UiView(action),
+                    shortcut: Some(ControlShortcut {
+                        key,
+                        primary: false,
+                        shift: false,
+                    }),
+                    enabled: reason.is_none(),
+                    disabled_reason: reason,
+                    selected,
                 });
             }
         }

@@ -11,6 +11,9 @@ mod mol_display_tests;
 #[cfg(test)]
 mod multiple_bond_tests;
 mod preview;
+mod view_controls;
+#[cfg(test)]
+mod view_tests;
 #[cfg(test)]
 mod visual_capture_tests;
 #[cfg(test)]
@@ -102,6 +105,7 @@ pub struct DrawingState {
     hover_context: Option<HoverContext>,
     hover_fresh: bool,
     key_hotspot: Option<BondHotspot>,
+    navigation_position: Option<egui::Pos2>,
 }
 
 impl DrawingState {
@@ -115,6 +119,7 @@ impl DrawingState {
         self.hover_context = None;
         self.hover_fresh = false;
         self.key_hotspot = None;
+        self.navigation_position = None;
     }
 }
 
@@ -134,6 +139,7 @@ struct HoverContext {
     canvas_origin: egui::Pos2,
     host_origin: Option<egui::Pos2>,
     pixels_per_point: f32,
+    view_epoch: u64,
 }
 
 struct BondGesture {
@@ -370,7 +376,7 @@ fn paint_hover(
     painter: &egui::Painter,
     origin: egui::Pos2,
     page: &bondline_model::Page,
-    viewport: &bondline_render::PageViewport,
+    viewport: &bondline_render::PageView,
     graph: &bondline_render::GraphScene,
     target: bondline_render::HitTarget,
 ) -> Result<(), bondline_render::Error> {
@@ -446,6 +452,10 @@ fn control_shortcut_key(shortcut: ControlShortcut) -> egui::KeyboardShortcut {
         ControlKey::W => egui::Key::W,
         ControlKey::Z => egui::Key::Z,
         ControlKey::Y => egui::Key::Y,
+        ControlKey::F5 => egui::Key::F5,
+        ControlKey::F6 => egui::Key::F6,
+        ControlKey::F7 => egui::Key::F7,
+        ControlKey::F8 => egui::Key::F8,
     };
     egui::KeyboardShortcut::new(modifiers, key)
 }
@@ -477,7 +487,7 @@ fn text_edit_focused(context: &egui::Context) -> bool {
         .is_some_and(|id| egui::TextEdit::load_state(context, id).is_some())
 }
 
-fn edit_shortcut(engine: &Engine, event: &egui::Event) -> Option<Command> {
+fn workspace_shortcut(engine: &Engine, event: &egui::Event) -> Option<Command> {
     let egui::Event::Key {
         key,
         pressed: true,
@@ -489,7 +499,7 @@ fn edit_shortcut(engine: &Engine, event: &egui::Event) -> Option<Command> {
     };
     engine.controls().into_iter().find_map(|control| {
         let shortcut = control.shortcut.map(control_shortcut_key)?;
-        (control.menu == "Edit"
+        (matches!(control.menu, "Edit" | "View")
             && control.enabled
             && shortcut.logical_key == *key
             && modifiers.matches_exact(shortcut.modifiers))
@@ -504,11 +514,12 @@ fn replay_edit_shortcuts(
     drawing: &mut DrawingState,
     events: &[egui::Event],
     blocked: bool,
-    menu_action: Option<(usize, &'static str)>,
+    actions: &[(usize, view_controls::Action)],
 ) {
-    if blocked || text_edit_focused(context) {
+    if blocked {
         return;
     }
+    let text_focused = text_edit_focused(context);
     let mut focused = context.input(|input| input.focused);
     for event in events.iter().rev() {
         if let egui::Event::WindowFocused(value) = event {
@@ -519,10 +530,17 @@ fn replay_edit_shortcuts(
         if let egui::Event::WindowFocused(value) = event {
             focused = *value;
         }
-        let command = menu_action
-            .filter(|(at, _)| *at == index)
-            .and_then(|(_, id)| control_command(engine, id))
-            .or_else(|| edit_shortcut(engine, event));
+        let command = actions
+            .iter()
+            .find(|(at, action)| {
+                *at == index && (!text_focused || matches!(action, view_controls::Action::Zoom(_)))
+            })
+            .and_then(|(_, action)| action.command(engine))
+            .or_else(|| {
+                (!text_focused)
+                    .then(|| workspace_shortcut(engine, event))
+                    .flatten()
+            });
         if focused && let Some(command) = command {
             drawing.gesture = None;
             drawing.invalidate_hover();
@@ -611,7 +629,7 @@ fn show_workspace_with_preview(
             || files
                 .as_ref()
                 .is_some_and(|files| files.blocks_authoring(&current));
-        replay_edit_shortcuts(context, engine, error, drawing, &events, blocked, None);
+        replay_edit_shortcuts(context, engine, error, drawing, &events, blocked, &[]);
         egui::CentralPanel::default().show(context, |ui| {
             ui.colored_label(
                 egui::Color32::DARK_RED,
@@ -623,6 +641,7 @@ fn show_workspace_with_preview(
     let state = engine.state();
     let initial_tool = engine.bond_tool();
     let mut tool_actions = Vec::new();
+    let mut view_actions = Vec::new();
     let mut selected = None;
     let mut file_action = None;
     egui::TopBottomPanel::top("title")
@@ -649,7 +668,8 @@ fn show_workspace_with_preview(
                     let controls = engine.controls();
                     let edit = control_menu_action(ui, &controls, "Edit", &events);
                     let page = control_menu_action(ui, &controls, "Page", &events);
-                    selected = edit.or(page);
+                    let view = control_menu_action(ui, &controls, "View", &events);
+                    selected = edit.or(page).or(view);
                 });
                 ui.separator();
                 let name = state
@@ -659,7 +679,9 @@ fn show_workspace_with_preview(
                     .and_then(|path| std::path::Path::new(path).file_name())
                     .and_then(|name| name.to_str())
                     .unwrap_or("Untitled");
-                ui.add(
+                let name_width = (ui.available_width() - 150.0).clamp(24.0, 360.0);
+                ui.add_sized(
+                    [name_width, 24.0],
                     egui::Label::new(format!(
                         "{name}{}",
                         if state.file.dirty { " *" } else { "" }
@@ -667,6 +689,7 @@ fn show_workspace_with_preview(
                     .truncate(),
                 )
                 .on_hover_text(name);
+                view_actions.extend(view_controls::zoom(ui, engine, &events));
             });
         });
     let current = engine.state();
@@ -831,8 +854,17 @@ fn show_workspace_with_preview(
             };
             let width = available.width().floor().max(1.0) as u32;
             let height = available.height().floor().max(1.0) as u32;
-            let mut viewport = match bondline_render::PageViewport::new(width, height, page.size())
-            {
+            let previous_percent = engine.view_percent();
+            if let Err(failure) = engine.set_view_canvas_size(width, height) {
+                drawing.gesture = None;
+                drawing.invalidate_hover();
+                ui.colored_label(egui::Color32::DARK_RED, failure.to_string());
+                return;
+            }
+            if engine.view_percent() != previous_percent {
+                context.request_repaint();
+            }
+            let mut viewport = match engine.page_view(width, height, page.id()) {
                 Ok(viewport) => viewport,
                 Err(error) => {
                     drawing.gesture = None;
@@ -841,6 +873,9 @@ fn show_workspace_with_preview(
                     return;
                 }
             };
+            view_actions.extend(view_controls::pan(
+                ui, available, engine, page, &events, blocked,
+            ));
             let response = ui.interact(
                 available,
                 ui.make_persistent_id("drawing-canvas"),
@@ -850,7 +885,7 @@ fn show_workspace_with_preview(
                 let position = position - available.min;
                 [position.x, position.y]
             };
-            let mut graph = engine.drawing_page_scene(
+            let mut graph = engine.drawing_view_scene(
                 width,
                 height,
                 page.id(),
@@ -871,12 +906,14 @@ fn show_workspace_with_preview(
                     canvas_origin: available.min,
                     host_origin: info.inner_rect.or(info.outer_rect).map(|r| r.min),
                     pixels_per_point: input.pixels_per_point,
+                    view_epoch: engine.view().epoch,
                 };
                 (key, input.key_down(egui::Key::Escape), input.focused)
             });
             if drawing.hover_context != Some(key) {
                 drawing.hover_fresh = false;
                 drawing.key_hotspot = None;
+                drawing.navigation_position = None;
                 drawing.hover_context = Some(key);
             }
             if drawing
@@ -902,6 +939,7 @@ fn show_workspace_with_preview(
             let text_focused = text_edit_focused(context);
             if blocked || escape_held || !focused || text_focused {
                 drawing.key_hotspot = None;
+                drawing.navigation_position = None;
             }
             let order_change = |page_id, fragment_id, bond_id, order, expected_revision| {
                 Command::BondSetOrder(BondSetOrder {
@@ -938,6 +976,7 @@ fn show_workspace_with_preview(
                             drawing.gesture = None;
                             drawing.hover_fresh = false;
                             drawing.key_hotspot = None;
+                            drawing.navigation_position = None;
                         }
                         continue;
                     }
@@ -947,6 +986,7 @@ fn show_workspace_with_preview(
                             drawing.gesture = None;
                             drawing.hover_fresh = false;
                             drawing.key_hotspot = None;
+                            drawing.navigation_position = None;
                         }
                         continue;
                     }
@@ -954,16 +994,27 @@ fn show_workspace_with_preview(
                         drawing.gesture = None;
                         drawing.hover_fresh = false;
                         drawing.key_hotspot = None;
+                        drawing.navigation_position = None;
                         continue;
                     }
                     _ => {}
                 }
                 // Resolve availability now: an earlier event may have populated Undo or Redo.
-                let history_command = if !blocked && focused && !text_focused {
-                    selected
-                        .filter(|(at, _)| *at == index)
-                        .and_then(|(_, id)| control_command(engine, id))
-                        .or_else(|| edit_shortcut(engine, event))
+                let history_command = if !blocked && focused {
+                    view_actions
+                        .iter()
+                        .find(|(at, _)| *at == index)
+                        .and_then(|(_, action)| action.command(engine))
+                        .or_else(|| {
+                            selected
+                                .filter(|(at, _)| *at == index)
+                                .and_then(|(_, id)| control_command(engine, id))
+                        })
+                        .or_else(|| {
+                            (!text_focused)
+                                .then(|| workspace_shortcut(engine, event))
+                                .flatten()
+                        })
                 } else {
                     None
                 };
@@ -971,9 +1022,13 @@ fn show_workspace_with_preview(
                     continue;
                 }
                 let mut command = history_command.map(Ok);
-                if command.is_some() {
+                if command
+                    .as_ref()
+                    .is_some_and(|command| !matches!(command, Ok(Command::UiView(_))))
+                {
                     drawing.gesture = None;
-                } else {
+                }
+                if command.is_none() {
                     if let egui::Event::PointerMoved(pos) | egui::Event::PointerButton { pos, .. } =
                         event
                     {
@@ -982,8 +1037,50 @@ fn show_workspace_with_preview(
                             position: *pos,
                             target: None,
                         });
+                        drawing.navigation_position = (!text_focused).then_some(*pos);
                     }
                     match event {
+                        egui::Event::MouseWheel {
+                            unit,
+                            delta,
+                            modifiers,
+                        } if modifiers.is_none()
+                            && !text_focused
+                            && delta.is_finite()
+                            && *delta != egui::Vec2::ZERO
+                            && engine.view().zoom_percent.is_some() =>
+                        {
+                            let Some(pos) = drawing.navigation_position else {
+                                continue;
+                            };
+                            if !response.interact_rect.contains(pos)
+                                || !viewport.contains(local(pos))
+                                || context.layer_id_at(pos) != Some(response.layer_id)
+                            {
+                                drawing.navigation_position = None;
+                                continue;
+                            }
+                            let Some(page) =
+                                document.pages().iter().find(|page| page.id() == key.page)
+                            else {
+                                continue;
+                            };
+                            let [center_x, center_y] = view_controls::center(engine, page);
+                            let scale = viewport.zoom_percent() / 100.0;
+                            let factor = match unit {
+                                egui::MouseWheelUnit::Point => [1.0, 1.0],
+                                egui::MouseWheelUnit::Line => [24.0, 24.0],
+                                egui::MouseWheelUnit::Page => {
+                                    [f64::from(width) * 0.8, f64::from(height) * 0.8]
+                                }
+                            };
+                            command = Some(Ok(Command::UiView(bondline_commands::UiView::Pan {
+                                center_x_pt: (center_x - f64::from(delta.x) * factor[0] / scale)
+                                    .clamp(0.0, page.size().width_pt()),
+                                center_y_pt: (center_y - f64::from(delta.y) * factor[1] / scale)
+                                    .clamp(0.0, page.size().height_pt()),
+                            })));
+                        }
                         egui::Event::Key {
                             key: pressed_key,
                             pressed: true,
@@ -1264,17 +1361,29 @@ fn show_workspace_with_preview(
                     }
                 }
                 if let Some(command) = command {
-                    interaction_attempted = true;
+                    let view_command = matches!(&command, Ok(Command::UiView(_)));
+                    let previous_view = engine.view();
                     let key_hotspot = command
                         .as_ref()
                         .ok()
                         .filter(|command| matches!(command, Command::BondSetOrder(_)))
                         .and(drawing.key_hotspot);
-                    drawing.invalidate_hover();
                     *error = command
                         .and_then(|command| engine.execute(command))
                         .err()
-                        .map(|error| error.to_string());
+                        .map(|failure| failure.to_string());
+                    if view_command && engine.view() == previous_view {
+                        continue;
+                    }
+                    interaction_attempted = true;
+                    let navigation_position = view_command
+                        .then_some(drawing.navigation_position)
+                        .flatten();
+                    if view_command {
+                        drawing.gesture = None;
+                    }
+                    drawing.invalidate_hover();
+                    drawing.navigation_position = navigation_position;
                     // Later same-frame presses pick the graph that actually committed.
                     let Ok(stored) = engine.stored_document() else {
                         drawing.gesture = None;
@@ -1286,8 +1395,7 @@ fn show_workspace_with_preview(
                         drawing.gesture = None;
                         return;
                     };
-                    viewport = match bondline_render::PageViewport::new(width, height, page.size())
-                    {
+                    viewport = match engine.page_view(width, height, page.id()) {
                         Ok(viewport) => viewport,
                         Err(failure) => {
                             drawing.gesture = None;
@@ -1297,8 +1405,9 @@ fn show_workspace_with_preview(
                     };
                     key.page = page.id();
                     key.revision = engine.state().revision;
+                    key.view_epoch = engine.view().epoch;
                     drawing.hover_context = Some(key);
-                    graph = engine.drawing_page_scene(
+                    graph = engine.drawing_view_scene(
                         width,
                         height,
                         key.page,
@@ -1318,6 +1427,7 @@ fn show_workspace_with_preview(
                     drawing.gesture = None;
                     drawing.hover_fresh = false;
                     drawing.key_hotspot = None;
+                    drawing.navigation_position = None;
                 }
                 if drawing.gesture.is_some() || interaction_attempted {
                     drawing.hover_fresh = false;
@@ -1421,7 +1531,18 @@ fn show_workspace_with_preview(
             }
         });
     if !history_handled {
-        replay_edit_shortcuts(context, engine, error, drawing, &events, blocked, selected);
+        if let Some((index, id)) = selected {
+            view_actions.push((index, view_controls::Action::Control(id)));
+        }
+        replay_edit_shortcuts(
+            context,
+            engine,
+            error,
+            drawing,
+            &events,
+            blocked,
+            &view_actions,
+        );
     }
     if let Some(files) = files {
         file_action = files

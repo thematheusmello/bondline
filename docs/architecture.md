@@ -92,6 +92,22 @@ that order/epoch and explicitly passes its order into the existing authoring com
 Loopback publication notifies real tool changes even though authored changed=false.
 
 
+`ui.view` keeps zoom, optional point center and checked epoch outside stored content.
+Default Fit uses the exact old PageViewport; explicit PageView uses a uniform logical
+scale, generates whole-source geometry and then clips it with signed integer translation.
+IO resolves its existing MOL display-H facts into that same camera without rewriting
+authored None or source bytes. Engine::page_view and drawing_view_scene serve both
+initial layout and later same-frame command reacquisition. DPI only affects composition.
+
+All view controls use the same tagged command. Window actions are resolved at their raw
+event boundary, so the other pan coordinate comes from the camera already in effect.
+Explicit numeric accessibility requests retain A→B→A epochs even when the final widget
+value is unchanged. Real camera changes retire gestures/hotspots; no-ops preserve them.
+Wheel math uses the exact f64 scale and floored logical canvas dimensions. A retained
+center beyond a newly opened page is clamped for projection and new navigation without
+changing stored state during Open. Menu/numeric recovery remains available when a camera
+exceeds renderer bounds. Whole-page captures remain independent of the window camera.
+
 The MCP adapter owns a shared `Arc<Mutex<Engine>>`; command handlers do not await while
 holding it. Stdio is a separate process-local session. Only server/stdio SDK features are
 enabled. `Engine::prepare` completes short edits or returns an immutable capture/file/query/field-edit plan;
