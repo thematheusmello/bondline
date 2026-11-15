@@ -213,9 +213,9 @@ pub(super) fn set_order(
 #[derive(Clone, Copy, Debug, Default)]
 // Session floors outlive history so new branches cannot reuse removed identities.
 pub(super) struct Ids {
-    atom: u32,
-    bond: u32,
-    fragment: u32,
+    pub(super) atom: u32,
+    pub(super) bond: u32,
+    pub(super) fragment: u32,
 }
 
 pub(super) fn create(

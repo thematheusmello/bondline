@@ -1,5 +1,12 @@
 # Verification log
 
+## Editable SMILES engine, 2026-11-15
+
+[Engine/layout/actual-transport evidence](verification-smiles-paste-engine.md) records
+the missing behavior REDs, first6+6+3 GREEN and independently read saved files. After
+explicit31-name catalogue updates, receiving71552 passes1229/0/1 with all xtask gates.
+Native clipboard/dialog and broader chemistry/import remain separate, unverified work.
+
 ## Neutral authoring chemistry, 2026-11-15
 
 [Independent core and actual-Fragment evidence](verification-smiles-authoring-chem.md)

@@ -27,11 +27,11 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
-Current density source has five renderer/five actual-App passes, but full pipeline78964
-stopped767/1 at the unchanged MCP shutdown replacement-bind `AddrInUse`. Separate430/0/1
-remaining checks are not an aggregate pass. Native2×/DPI remains unverified. Read
-docs/verification-native-drawing-density.md before extending that path; prior1188/0/1
-component and1172/0/1 CDX results are historical checkpoints.
+Current editable SMILES engine/layout/transport source passes full local1229/0/1. Read
+docs/verification-smiles-paste-engine.md before extending it; native clipboard/dialog is
+not delivered by that checkpoint. Earlier density pipeline78964's MCP replacement-bind
+`AddrInUse` remains unexplained, not causally fixed by a later pass. Native2×/DPI remains
+unverified; preserve docs/verification-native-drawing-density.md evidence and guards.
 
 ## Research, provenance and implementation
 

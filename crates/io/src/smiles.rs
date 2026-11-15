@@ -8,6 +8,7 @@ use std::{collections::HashSet, ops::Range, sync::Arc};
 
 mod acyclic;
 mod authoring;
+mod authoring_layout;
 mod components;
 pub mod file;
 mod layout;
@@ -15,6 +16,7 @@ mod normalize;
 mod ring;
 mod write;
 pub use authoring::AuthoringError;
+pub use authoring_layout::validate_authoring_page;
 pub use file::{SmilesFileDocument, SmilesFileError};
 pub use layout::LayoutError;
 pub use normalize::NormalizeError;

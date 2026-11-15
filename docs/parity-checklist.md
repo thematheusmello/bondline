@@ -162,7 +162,7 @@ establish chemical preview, data-edit UI or other platforms.
 | ME-022 | Edit > Copy As > 3MF (Stick) | 352 | missing | - |
 | ME-023 | Edit > Copy As > PNG | 354 | missing | PNG scene capture exists; selection clipboard workflow missing. |
 | ME-024 | Edit > Paste Special > MOL/CDXML Text (legacy) | 353, 78 | missing | Combined guide entry superseded by R26.1 split entries; do not implement it as current parity. |
-| ME-025 | Edit > Paste Special > SMILES | 351 | missing | - |
+| ME-025 | Edit > Paste Special > SMILES | 351 | missing native control | Bounded neutral Drawing append is verified through the shared command/CLI/stdio/socket and independent saved-file checks; native menu/clipboard/dialog remains missing. See verification-smiles-paste-engine.md. |
 | ME-026 | Edit > Paste Special > InChI | 351 | missing | - |
 | ME-027 | Edit > Paste Special > HELM | 150, 155 | missing | Guide also spells the path Paste/Paste Special. |
 | ME-028 | Edit > Paste Special > Name as Structure | 218 | missing | - |

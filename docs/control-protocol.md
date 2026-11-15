@@ -3,7 +3,8 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has 27 commands; the complete list is below.
+The delivered registry has31 commands. `bondline-cli commands` provides the authoritative
+schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
 
@@ -61,10 +62,12 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
 | `sdf.record.remove` | Required `expected_revision`, positive `record_id` | Deferred whole-record removal; exact surviving bytes, reindexed ordinals, one history edit; refuses the sole record |
 | `smiles.record.inspect` | Required `expected_revision`, positive `record_id` | Deferred exact selected notation and global byte ranges/counts; opaque application data is not disclosed;128KiB object budget |
+| `structure.paste_smiles` | Required `expected_revision`, positive `page_id`, `notation`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt` | Deferred whole neutral graph append into a complete native Drawing; checked global IDs/page geometry, one history step, no file publication or Save acknowledgment |
 | `sdf.field.set_value` | Required `expected_revision`, positive `record_id`, zero-based existing `field_index`, `value_lines` | Deferred immutable existing-field edit, one whole-content history commit; byte-preserving no-op and strict stale/input guards |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
 | `ui.bond_tool` | Required `order` (`single`, `double`, `triple`) | Select a transient drawing tool; explicit operation receipt/epoch, no authored edit or history entry |
+| `ui.view` | Tagged `action`: `inspect`, `fit`, `actual`, `set_zoom`, `magnify`, `reduce`, `pan`; action-specific geometry/percentage | Inspect or change the transient camera without editing content/history; source-qualified display/readability guards remain |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request Open/Save/Save As presentation or cancel the matching picker; a native host is required |
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
 | `bond.create` | `page_id`, `begin_x_pt`, `begin_y_pt`, `end_x_pt`, `end_y_pt`; optional `order="single"` | One independent neutral-carbon fragment with the requested Single/Double/Triple bond; each endpoint receives literal H=`4-order_weight` |
@@ -772,7 +775,8 @@ operation. The later specialized native conversion presentation is described bel
 
 The central `file.convert_smiles` File control has no shortcut and dispatches
 `ui.file {expected_revision, action:"convert_smiles"}`. It adds a control, not a second
-conversion command: the registry remains30. Drawing exposes18 controls; readonly SDF12.
+conversion command: that checkpoint retained30 commands. The later editable paste brings
+the registry to31. Drawing exposes18 controls; readonly SDF12 at that checkpoint.
 The native plan is `UiFilePlan::SmilesConversion`. Its form offers Carbon chains,
 Acyclic neutral structures, Neutral ring structures and Neutral components in that order,
 explicit geometry and separate input/new-output selection.
@@ -962,7 +966,7 @@ participate in the host close barrier. [Five independent actual-App tests and bo
 Mac observations](verification-sdf-inspector.md) do not establish a mutating editor,
 draft/Apply workflow, native pagination race or complete control addressability. These
 local presentation controls add no named command or schema. Record removal brought the
-registry to29 commands; the separate document.new addition brings the current count to30.
+registry to29 commands; document.new brought it to30 and structure.paste_smiles to31.
 
 ## Existing-bond absolute order setter
 
@@ -1012,7 +1016,7 @@ host lifecycle; this does not claim arbitrary cross-dialog input ordering.
 
 ## Transient drawing view
 
-`ui.view` is one tagged, closed parameter object. The30-command registry exposes its
+`ui.view` is one tagged, closed parameter object. The shared registry exposes its
 seven object branches through the same CLI, stdio MCP and authenticated loopback routes.
 Examples:
 
@@ -1178,7 +1182,7 @@ field is introduced. One successful edit advances revision/history; Undo/Redo re
 complete original/current snapshots. document stays null, collection stays SDF and normal
 Save writes the full current collection. source.modified and file.dirty remain distinct.
 
-CLI, stdio MCP and authenticated loopback expose the same typed command and30-name
+CLI, stdio MCP and authenticated loopback expose the same typed command and31-name
 catalogue. The edit shares the existing deferred field-candidate route and worker budget;
 it has no save lease or native file/close acknowledgment authority.
 
@@ -1247,3 +1251,28 @@ See [integrated evidence and native limits](verification-new-document.md),
 [worker lifecycle](verification-new-document-workspace.md) and
 [independent review](research/new-document-review.md). This single-window A4 workflow does
 not establish style-sheet templates, multi-document windows or full26.1 parity.
+
+## Editable SMILES append
+
+`structure.paste_smiles` requires exactly six fields:
+
+```json
+{"expected_revision":0,"page_id":1,"notation":"c1ccccc1","bond_length_pt":64.0,"origin_x_pt":96.0,"origin_y_pt":96.0}
+```
+
+It parses one complete notation (at most64KiB), derives the bounded neutral fixed-H/
+Kekulé graph and lays out all supported components in the supplied point units/current
+paper. The source must be a complete native Drawing, rather than an opaque imported
+projection or SMILES/SDF source session. Unsupported chemistry/layout, occupied or
+unreadable whole-page geometry, cancellation and stale context refuse the whole edit.
+No first-component or first-record fallback is permitted.
+
+Preparation retains complete source identity without editing; work runs off-lock;
+finish checks cancellation, revision/generation/owner and exact Open close epoch.
+Success appends one complete Fragment with checked globally fresh IDs, creates one
+history step, retains association/baseline and marks dirty. It publishes no file and
+returns no file operation, conversion receipt or trusted Save/close acknowledgment.
+Notation is omitted from Debug and automatic state. Save/reopen are separate commands.
+
+See [source-qualified limits and independent evidence](verification-smiles-paste-engine.md).
+Native Paste Special input/clipboard is not claimed by this engine checkpoint.

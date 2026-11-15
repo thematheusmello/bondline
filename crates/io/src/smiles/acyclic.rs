@@ -167,6 +167,14 @@ pub(super) fn linear_centers(
     fragment: &Fragment,
     adjacency: &[Vec<Link>],
 ) -> Result<Vec<bool>, LayoutError> {
+    linear_centers_with_cycle(fragment, adjacency, &[])
+}
+
+pub(super) fn linear_centers_with_cycle(
+    fragment: &Fragment,
+    adjacency: &[Vec<Link>],
+    cycle: &[bool],
+) -> Result<Vec<bool>, LayoutError> {
     let mut linear = vec![false; adjacency.len()];
     for (at, links) in adjacency.iter().enumerate() {
         if links.len() == 2
@@ -181,6 +189,9 @@ pub(super) fn linear_centers(
             *value = true;
         }
         for link in links.iter().filter(|link| link.order == BondOrder::Double) {
+            if cycle.get(at) == Some(&true) && cycle.get(link.atom) == Some(&true) {
+                continue;
+            }
             let other = adjacency
                 .get(link.atom)
                 .ok_or(LayoutError::Geometry("missing neighbor"))?;
@@ -781,7 +792,7 @@ fn stroke_clearance(
     Ok(())
 }
 
-fn polygons_overlap(a: &[[f32; 2]; 4], b: &[[f32; 2]; 4]) -> bool {
+pub(super) fn polygons_overlap(a: &[[f32; 2]; 4], b: &[[f32; 2]; 4]) -> bool {
     for polygon in [a, b] {
         for (index, p) in polygon.iter().enumerate() {
             let Some(q) = polygon.get((index + 1) % 4) else {

@@ -4,7 +4,8 @@ use super::{
     LayoutError, SmilesDocument,
     acyclic::{
         Link, MAX_ATOMS, SCENES_PER_ROTATION, Solver, WORK_PER_ROTATION, check, geometry,
-        graph_adjacency, linear_centers, local_alternatives, root_tree, size,
+        graph_adjacency, linear_centers, linear_centers_with_cycle, local_alternatives, root_tree,
+        size,
     },
 };
 use bondline_model::{BondOrder, Document, Fragment, PageSize, Point2};
@@ -55,6 +56,46 @@ pub(super) fn layout_fragment(
     work_per_rotation: usize,
     scenes_per_rotation: usize,
 ) -> Result<Document, LayoutError> {
+    layout_with_cycle_orders(
+        fragment,
+        length,
+        origin,
+        page,
+        cancel,
+        [work_per_rotation, scenes_per_rotation],
+        false,
+    )
+}
+
+pub(super) fn layout_authoring_fragment(
+    fragment: &Fragment,
+    length: f64,
+    origin: Point2,
+    page: PageSize,
+    cancel: &Cancellation,
+    work_per_rotation: usize,
+    scenes_per_rotation: usize,
+) -> Result<Document, LayoutError> {
+    layout_with_cycle_orders(
+        fragment,
+        length,
+        origin,
+        page,
+        cancel,
+        [work_per_rotation, scenes_per_rotation],
+        true,
+    )
+}
+
+fn layout_with_cycle_orders(
+    fragment: &Fragment,
+    length: f64,
+    origin: Point2,
+    page: PageSize,
+    cancel: &Cancellation,
+    limits: [usize; 2],
+    allow_multiple: bool,
+) -> Result<Document, LayoutError> {
     if fragment.atoms().iter().any(|atom| atom.isotope.is_some()) {
         return Err(LayoutError::Unsupported("isotopic drawing labels"));
     }
@@ -80,15 +121,40 @@ pub(super) fn layout_fragment(
             .ok_or(LayoutError::Geometry("missing ring atom"))? = true;
     }
     for &at in &cycle {
-        if adjacency.get(at).into_iter().flatten().any(|link| {
-            ring.get(link.atom).copied() == Some(true) && link.order != BondOrder::Single
+        let links = adjacency
+            .get(at)
+            .ok_or(LayoutError::Geometry("missing ring adjacency"))?;
+        if links.iter().any(|link| {
+            ring.get(link.atom).copied() == Some(true)
+                && link.order != BondOrder::Single
+                && !(allow_multiple && link.order == BondOrder::Double)
         }) {
-            return Err(LayoutError::Unsupported(
-                "cycle bond order other than Single",
-            ));
+            return Err(LayoutError::Unsupported(if allow_multiple {
+                "cycle bond order other than permitted Single/Double"
+            } else {
+                "cycle bond order other than Single"
+            }));
+        }
+        if allow_multiple
+            && fragment
+                .atoms()
+                .get(at)
+                .is_some_and(|a| a.element.get() == 6)
+            && (links.iter().any(|link| link.order == BondOrder::Triple)
+                || links
+                    .iter()
+                    .filter(|link| link.order == BondOrder::Double)
+                    .count()
+                    > 1)
+        {
+            return Err(LayoutError::Unsupported("linear carbon in regular polygon"));
         }
     }
-    let linear = linear_centers(fragment, &adjacency)?;
+    let linear = if allow_multiple {
+        linear_centers_with_cycle(fragment, &adjacency, &ring)?
+    } else {
+        linear_centers(fragment, &adjacency)?
+    };
     let mut parent = vec![None; adjacency.len()];
     let mut children = vec![Vec::new(); adjacency.len()];
     let mut order = cycle.clone();
@@ -194,8 +260,8 @@ pub(super) fn layout_fragment(
                     .ok_or(LayoutError::Geometry("missing ring alternatives"))? =
                     ring_alternatives(at, branches, &adjacency, theta, n)?;
             }
-            solver.work = work_per_rotation;
-            solver.scenes = scenes_per_rotation;
+            solver.work = limits[0];
+            solver.scenes = limits[1];
             if geometry(
                 fragment,
                 &solver.positions,

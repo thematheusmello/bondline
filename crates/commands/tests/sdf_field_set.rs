@@ -55,6 +55,7 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
             "sdf.record.inspect",
             "sdf.record.remove",
             "smiles.record.inspect",
+            "structure.paste_smiles",
             "sdf.field.set_value",
             "page.set_size",
             "bond.create",

@@ -32,104 +32,123 @@ impl SmilesDocument {
             return Err(LayoutError::ComponentsAtomLimit);
         }
         let fragment = self.normalize_explicit_h_fragment()?;
-        check(cancel)?;
-        if fragment.atoms().iter().any(|atom| atom.isotope.is_some()) {
-            return Err(LayoutError::Unsupported("isotopic drawing labels"));
-        }
-        if origin.x_pt() < 0.0
-            || origin.y_pt() < 0.0
-            || origin.x_pt() > page.width_pt()
-            || origin.y_pt() > page.height_pt()
-        {
-            return Err(LayoutError::Geometry("atom-center origin outside paper"));
-        }
-        if fragment.atoms().len() > 1 && length > page.width_pt().hypot(page.height_pt()) {
-            return Err(LayoutError::Geometry("bond length exceeds paper"));
-        }
-        let components = component_indices(&fragment, cancel)?;
-        let count = components.len();
-        if count == 1 {
-            // No packing arithmetic may perturb an existing one-component result.
-            return solve_component(
-                &fragment,
-                length,
-                origin,
-                page,
-                cancel,
-                WORK_PER_ROTATION,
-                SCENES_PER_ROTATION,
-            );
-        }
-        let work = WORK_PER_ROTATION
-            .checked_div(count)
-            .filter(|limit| *limit > 0)
-            .ok_or(LayoutError::ComponentsAtomLimit)?;
-        let scenes = SCENES_PER_ROTATION
-            .checked_div(count)
-            .filter(|limit| *limit > 0)
-            .ok_or(LayoutError::ComponentsAtomLimit)?;
-        let mut positions = vec![None; fragment.atoms().len()];
-        let mut cursor = [origin.x_pt(), origin.y_pt()];
-        let mut row_height = 0.0_f64;
-        let mut row_nonempty = false;
-        for indices in components {
-            check(cancel)?;
-            let local = local_fragment(&fragment, &indices, cancel)?;
-            let solved = solve_component(&local, length, origin, page, cancel, work, scenes)?;
-            let pose = solved
-                .pages()
-                .first()
-                .and_then(|page| page.fragments().first())
-                .ok_or(LayoutError::Geometry("missing component pose"))?;
-            if pose.atoms().len() != indices.len() {
-                return Err(LayoutError::Geometry("incomplete component pose"));
-            }
-            let bounds = center_bounds(pose, cancel)?;
-            let width = bounds[2] - bounds[0];
-            let height = bounds[3] - bounds[1];
-            if row_nonempty && cursor[0] + width > page.width_pt() {
-                cursor[0] = origin.x_pt();
-                cursor[1] += row_height + length;
-                row_height = 0.0;
-            }
-            let right = cursor[0] + width;
-            let bottom = cursor[1] + height;
-            if !right.is_finite()
-                || !bottom.is_finite()
-                || right > page.width_pt()
-                || bottom > page.height_pt()
-            {
-                return Err(LayoutError::Geometry("component shelves exceed paper"));
-            }
-            for atom in pose.atoms() {
-                check(cancel)?;
-                let local = usize::try_from(atom.id.get() - 1)
-                    .map_err(|_| LayoutError::ComponentsAtomLimit)?;
-                let original = *indices
-                    .get(local)
-                    .ok_or(LayoutError::Geometry("missing original component mapping"))?;
-                let point = atom
-                    .position
-                    .ok_or(LayoutError::Geometry("missing component position"))?;
-                *positions
-                    .get_mut(original)
-                    .ok_or(LayoutError::Geometry("missing original component atom"))? = Some([
-                    point.x_pt() - bounds[0] + cursor[0],
-                    point.y_pt() - bounds[1] + cursor[1],
-                ]);
-            }
-            cursor[0] += width + length;
-            row_height = row_height.max(height);
-            row_nonempty = true;
-        }
-        let mut work = WORK_PER_ROTATION;
-        if !geometry(
-            &fragment, &positions, length, origin, page, &mut work, cancel,
-        )? {
-            return Err(LayoutError::Geometry("assembled component geometry"));
-        }
-        positioned_document(&fragment, &positions, origin, page, cancel)
+        layout_fragment(&fragment, length, origin, page, cancel, false)
     }
+}
+
+pub(super) fn layout_fragment(
+    fragment: &Fragment,
+    length: f64,
+    origin: Point2,
+    page: PageSize,
+    cancel: &Cancellation,
+    authoring: bool,
+) -> Result<Document, LayoutError> {
+    check(cancel)?;
+    if fragment.atoms().iter().any(|atom| atom.isotope.is_some()) {
+        return Err(LayoutError::Unsupported("isotopic drawing labels"));
+    }
+    if origin.x_pt() < 0.0
+        || origin.y_pt() < 0.0
+        || origin.x_pt() > page.width_pt()
+        || origin.y_pt() > page.height_pt()
+    {
+        return Err(LayoutError::Geometry("atom-center origin outside paper"));
+    }
+    if fragment.atoms().len() > 1 && length > page.width_pt().hypot(page.height_pt()) {
+        return Err(LayoutError::Geometry("bond length exceeds paper"));
+    }
+    let components = component_indices(fragment, cancel)?;
+    let count = components.len();
+    if count == 1 {
+        // No packing arithmetic may perturb an existing one-component result.
+        return solve_component(
+            fragment,
+            length,
+            origin,
+            page,
+            cancel,
+            [WORK_PER_ROTATION, SCENES_PER_ROTATION],
+            authoring,
+        );
+    }
+    let work = WORK_PER_ROTATION
+        .checked_div(count)
+        .filter(|limit| *limit > 0)
+        .ok_or(LayoutError::ComponentsAtomLimit)?;
+    let scenes = SCENES_PER_ROTATION
+        .checked_div(count)
+        .filter(|limit| *limit > 0)
+        .ok_or(LayoutError::ComponentsAtomLimit)?;
+    let mut positions = vec![None; fragment.atoms().len()];
+    let mut cursor = [origin.x_pt(), origin.y_pt()];
+    let mut row_height = 0.0_f64;
+    let mut row_nonempty = false;
+    for indices in components {
+        check(cancel)?;
+        let local = local_fragment(fragment, &indices, cancel)?;
+        let solved = solve_component(
+            &local,
+            length,
+            origin,
+            page,
+            cancel,
+            [work, scenes],
+            authoring,
+        )?;
+        let pose = solved
+            .pages()
+            .first()
+            .and_then(|page| page.fragments().first())
+            .ok_or(LayoutError::Geometry("missing component pose"))?;
+        if pose.atoms().len() != indices.len() {
+            return Err(LayoutError::Geometry("incomplete component pose"));
+        }
+        let bounds = center_bounds(pose, cancel)?;
+        let width = bounds[2] - bounds[0];
+        let height = bounds[3] - bounds[1];
+        if row_nonempty && cursor[0] + width > page.width_pt() {
+            cursor[0] = origin.x_pt();
+            cursor[1] += row_height + length;
+            row_height = 0.0;
+        }
+        let right = cursor[0] + width;
+        let bottom = cursor[1] + height;
+        if !right.is_finite()
+            || !bottom.is_finite()
+            || right > page.width_pt()
+            || bottom > page.height_pt()
+        {
+            return Err(LayoutError::Geometry("component shelves exceed paper"));
+        }
+        for atom in pose.atoms() {
+            check(cancel)?;
+            let local =
+                usize::try_from(atom.id.get() - 1).map_err(|_| LayoutError::ComponentsAtomLimit)?;
+            let original = *indices
+                .get(local)
+                .ok_or(LayoutError::Geometry("missing original component mapping"))?;
+            let point = atom
+                .position
+                .ok_or(LayoutError::Geometry("missing component position"))?;
+            *positions
+                .get_mut(original)
+                .ok_or(LayoutError::Geometry("missing original component atom"))? = Some([
+                point.x_pt() - bounds[0] + cursor[0],
+                point.y_pt() - bounds[1] + cursor[1],
+            ]);
+        }
+        cursor[0] += width + length;
+        row_height = row_height.max(height);
+        row_nonempty = true;
+    }
+    let mut work = WORK_PER_ROTATION;
+    if !geometry(
+        fragment, &positions, length, origin, page, &mut work, cancel,
+    )? {
+        return Err(LayoutError::Geometry("assembled component geometry"));
+    }
+    positioned_document(fragment, &positions, origin, page, cancel)
 }
 
 fn solve_component(
@@ -138,13 +157,19 @@ fn solve_component(
     origin: Point2,
     page: PageSize,
     cancel: &Cancellation,
-    work: usize,
-    scenes: usize,
+    limits: [usize; 2],
+    authoring: bool,
 ) -> Result<Document, LayoutError> {
     if fragment.bonds().len().checked_add(1) == Some(fragment.atoms().len()) {
-        acyclic::layout_fragment(fragment, length, origin, page, cancel, work, scenes)
+        acyclic::layout_fragment(fragment, length, origin, page, cancel, limits[0], limits[1])
     } else if fragment.bonds().len() == fragment.atoms().len() {
-        ring::layout_fragment(fragment, length, origin, page, cancel, work, scenes)
+        if authoring {
+            ring::layout_authoring_fragment(
+                fragment, length, origin, page, cancel, limits[0], limits[1],
+            )
+        } else {
+            ring::layout_fragment(fragment, length, origin, page, cancel, limits[0], limits[1])
+        }
     } else {
         Err(LayoutError::Unsupported(
             "component other than a tree or single-cycle graph",

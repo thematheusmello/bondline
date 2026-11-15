@@ -237,6 +237,7 @@ pub(super) enum Completion {
         save_slot: Arc<()>,
     },
     SdfEdit(crate::sdf_edit::EditCandidate),
+    SmilesPaste(crate::smiles_paste::PasteCandidate),
     ViewCapture {
         result: Box<CommandResult>,
         context: crate::capture::ViewCaptureContext,
@@ -545,6 +546,7 @@ impl Engine {
                 ..self.state()
             }),
             Completion::SdfEdit(candidate) => self.finish_sdf_edit(candidate),
+            Completion::SmilesPaste(candidate) => self.finish_smiles_paste(candidate),
             Completion::ViewCapture {
                 mut result,
                 context,

@@ -4,11 +4,11 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
-Current density-rendering work has five renderer and five actual-App passes. Full local
-pipeline78964 stopped767/1 at the unchanged MCP shutdown replacement-bind `AddrInUse`;
-the separate remaining430/0/1 checks do not establish an aggregate pass. Earlier1188/0/1
-component and1172/0/1 CDX checkpoints remain historical evidence. Native2×/DPI is unverified.
-See [density receiving](docs/verification-native-drawing-density.md).
+The editable SMILES engine/layout/transport checkpoint passes the full local gate1229/0/1.
+The earlier density pipeline78964's MCP `AddrInUse` failure remains unexplained; this pass
+is not a causal fix. Desktop paste/clipboard and native2×/DPI remain unverified. See
+[paste evidence](docs/verification-smiles-paste-engine.md) and
+[density evidence](docs/verification-native-drawing-density.md).
 
 ## M0: foundation — in progress
 
@@ -142,7 +142,10 @@ SDF creation/reordering and wider format editing stay in the backlog. The earlie
 SDF reordering priority was deferred after the sourced File New audit, not implemented.
 The [SMILES authoring/import study](docs/research/smiles-source-import-plan.md) recommends
 editable Paste Special with real benzene support, then source-preserving record editing
-and whole-file Save. It is a plan; clipboard/aromatic authoring is not implemented.
+and whole-file Save. Neutral fixed-H/Kekulé chemistry, bounded layout and the one-step
+Drawing append now pass independent engine/CLI/stdio/socket and actual saved-file checks;
+the full gate passes1229/0/1. Native Paste Special/clipboard is the next integration gate.
+Source-file record rewriting, broader chemistry and whole-file editable import remain.
 
 Whole-record SDF removal now has a source-preserving codec, the shared typed command,
 CLI/stdio/authenticated-loopback routes and original Records confirmation UI. Independent

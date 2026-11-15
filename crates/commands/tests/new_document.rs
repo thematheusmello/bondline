@@ -133,6 +133,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "file.export_smiles_fragment",
             "sdf.record.inspect",
             "smiles.record.inspect",
+            "structure.paste_smiles",
             "sdf.field.set_value",
             "sdf.record.remove",
             "page.set_size",

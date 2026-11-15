@@ -314,3 +314,6 @@ mod cdx_file_end_wire;
 
 #[path = "support/components_conversion_wire.rs"]
 mod components_conversion_wire;
+
+#[path = "support/smiles_paste_wire.rs"]
+mod smiles_paste_wire;

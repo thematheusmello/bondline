@@ -47,6 +47,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "sdf.field.set_value",
             "sdf.record.remove",
             "smiles.record.inspect",
+            "structure.paste_smiles",
             "sdf.record.inspect"
         ]
         .into_iter()

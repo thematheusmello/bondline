@@ -42,6 +42,7 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "sdf.record.inspect",
             "sdf.record.remove",
             "smiles.record.inspect",
+            "structure.paste_smiles",
             "sdf.field.set_value",
             "page.set_size",
             "bond.create",

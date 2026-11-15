@@ -483,6 +483,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "sdf.record.inspect",
             "sdf.record.remove",
             "smiles.record.inspect",
+            "structure.paste_smiles",
             "ui.bond_tool",
             "ui.controls",
             "ui.file",

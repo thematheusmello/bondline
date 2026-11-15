@@ -20,6 +20,7 @@ mod sdf_edit;
 mod sdf_query;
 mod smiles_conversion;
 mod smiles_export;
+mod smiles_paste;
 mod smiles_query;
 mod view;
 pub use bond::{
@@ -44,6 +45,7 @@ pub use smiles_conversion::{
     ConversionOutput, ConversionReceipt, ConvertSmilesToCdxml, SmilesConversionProfile,
 };
 pub use smiles_export::{ExportSmilesFragment, SmilesExportReceipt};
+pub use smiles_paste::PasteSmiles;
 pub use smiles_query::{
     MAX_SMILES_RECORD_INSPECT_BYTES, SmilesRecordInspect, SmilesRecordInspection,
 };
@@ -143,6 +145,7 @@ command_registry! {
     ExportSmilesFragment(ExportSmilesFragment) => ("file.export_smiles_fragment", "Create a noncanonical SMILES file from one explicitly selected, complete-source fragment's supported literal-H chemical graph; geometry and document context are not encoded and the session stays unchanged.", false),
     SdfRecordInspect(SdfRecordInspect) => ("sdf.record.inspect", "Read a bounded ordered field page from an explicitly identified captured SDF record; oversized values are omitted explicitly.", true),
     SmilesRecordInspect(SmilesRecordInspect) => ("smiles.record.inspect", "Read the exact notation and file-relative metadata of one explicit captured SMILES record; opaque application data is not disclosed or decoded.", true),
+    PasteSmiles(PasteSmiles) => ("structure.paste_smiles", "Append one complete supported neutral SMILES structure as a single undoable native drawing edit, preserving existing content; supplied aromatic markers resolve to a bounded deterministic integer-bond graph.", false),
     SdfFieldSet(SdfFieldSet) => ("sdf.field.set_value", "Replace one existing ordered SDF field value through a bounded immutable candidate, preserving every other source byte.", false),
     SdfRecordRemove(SdfRecordRemove) => ("sdf.record.remove", "Remove one explicit SDF record while preserving every remaining source byte and retaining at least one complete record.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
@@ -229,6 +232,16 @@ pub enum Error {
     InvalidSdfRecord(&'static str),
     #[error("invalid SMILES conversion parameters: {0}")]
     InvalidSmilesConversion(&'static str),
+    #[error("invalid SMILES paste parameters: {0}")]
+    InvalidSmilesPaste(&'static str),
+    #[error("SMILES paste requires source-free or completely mapped native CDXML data")]
+    UnsupportedSmilesPasteSource,
+    #[error("SMILES paste resource limit: {0}")]
+    SmilesPasteLimit(&'static str),
+    #[error(transparent)]
+    SmilesNotation(#[from] bondline_io::smiles::SmilesError),
+    #[error(transparent)]
+    SmilesLayout(#[from] bondline_io::smiles::LayoutError),
     #[error("SDF field input exceeds the 64 KiB authored-LF or serialized-value budget")]
     SdfFieldInputLimit,
     #[error("a single SDF field exceeds the 1 MiB serialized query page budget")]
@@ -319,6 +332,7 @@ impl Error {
             | Self::UnsupportedBondExtension
             | Self::UnsupportedBondOrderSource
             | Self::UnsupportedBondOrder
+            | Self::UnsupportedSmilesPasteSource
             | Self::UnsupportedBondConversion(_) => "unsupported_content",
             Self::IncompleteSmilesExportSource => "unsupported_content",
             Self::Render(
@@ -347,6 +361,9 @@ impl Error {
             Self::SdfPreview(error) => error.code(),
             Self::Display(error) => error.code(),
             Self::SmilesFile(error) => error.code(),
+            Self::SmilesNotation(error) => error.code(),
+            Self::SmilesLayout(error) => error.code(),
+            Self::SmilesPasteLimit(_) => "resource_limit",
             Self::SdfQueryPageLimit => "resource_limit",
             Self::SmilesQueryLimit => "resource_limit",
             Self::SdfFieldInputLimit => "resource_limit",
@@ -605,6 +622,10 @@ impl Engine {
             Command::SmilesRecordInspect(params) => {
                 let plan = self.smiles_record_plan(params)?;
                 return Ok(Prepared::smiles_record(self.state(), plan));
+            }
+            Command::PasteSmiles(params) => {
+                let plan = self.smiles_paste_plan(params)?;
+                return Ok(Prepared::smiles_paste(self.state(), plan));
             }
             Command::SdfFieldSet(params) => {
                 let plan = self.sdf_field_plan(params)?;
@@ -1071,6 +1092,7 @@ mod tests {
                 "sdf.record.inspect",
                 "sdf.record.remove",
                 "smiles.record.inspect",
+                "structure.paste_smiles",
                 "ui.controls",
                 "ui.bond_tool",
                 "ui.view",

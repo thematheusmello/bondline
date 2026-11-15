@@ -1,6 +1,6 @@
 //! Original bounded carbon-path geometry; no source-backed import or cleanup claim.
 
-use super::{NormalizeError, SmilesDocument};
+use super::{AuthoringError, NormalizeError, SmilesDocument};
 use bondline_model::{BondOrder, Document, Fragment, PageId, PageSize, Point2, Radical};
 
 const MAX_PATH_ATOMS: usize = 12;
@@ -20,6 +20,10 @@ pub enum LayoutError {
     ComponentsAtomLimit,
     #[error("SMILES layout cancelled")]
     Cancelled,
+    #[error("whole-page authoring certificate exceeds its comparison budget")]
+    ComparisonLimit,
+    #[error(transparent)]
+    Authoring(#[from] AuthoringError),
     #[error("SMILES path layout refuses {0}")]
     Unsupported(&'static str),
     #[error("SMILES path geometry is unsupported: {0}")]
@@ -41,9 +45,11 @@ impl LayoutError {
             | Self::AcyclicAtomLimit
             | Self::SimpleRingAtomLimit
             | Self::ComponentsAtomLimit
+            | Self::ComparisonLimit
             | Self::Model(bondline_model::Error::Graph(bondline_model::GraphError::Limit(_)))
             | Self::Render(bondline_render::Error::SceneTooComplex) => "resource_limit",
             Self::Normalize(error) => error.code(),
+            Self::Authoring(error) => error.code(),
             Self::Model(_) => "invalid_document",
             Self::Unsupported(_) | Self::Geometry(_) | Self::Render(_) => "unsupported_content",
         }
