@@ -40,7 +40,9 @@ pub use sdf_query::{
     MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
     SdfRecordInspection, SdfValueOmission,
 };
-pub use smiles_conversion::{ConversionOutput, ConversionReceipt, ConvertSmilesToCdxml};
+pub use smiles_conversion::{
+    ConversionOutput, ConversionReceipt, ConvertSmilesToCdxml, SmilesConversionProfile,
+};
 pub use smiles_export::{ExportSmilesFragment, SmilesExportReceipt};
 pub use smiles_query::{
     MAX_SMILES_RECORD_INSPECT_BYTES, SmilesRecordInspect, SmilesRecordInspection,
@@ -137,7 +139,7 @@ command_registry! {
     SaveSdf(SaveSdf) => ("document.save_sdf", "Atomically save the complete SDF collection without changing molecular versions or ordered data.", false),
     OpenSmiles(OpenSmiles) => ("document.open_smiles", "Open every supported SMILES record while retaining the exact complete file and opaque application data; chemical preview is unavailable.", false),
     SaveSmiles(SaveSmiles) => ("document.save_smiles", "Atomically save the exact complete SMILES file without selecting or regenerating a molecular record.", false),
-    ConvertSmilesToCdxml(ConvertSmilesToCdxml) => ("file.convert_smiles_to_cdxml", "Create new native CDXML from a 1–12 neutral carbon/Single path using explicit fixed H and supplied geometry; the current session stays unchanged.", false),
+    ConvertSmilesToCdxml(ConvertSmilesToCdxml) => ("file.convert_smiles_to_cdxml", "Create new native CDXML with a chosen fixed-H layout: the default 1–12 neutral carbon/Single path, or a bounded connected neutral acyclic structure with branches and Single/Double/Triple bonds. Supplied geometry and the current session stay unchanged.", false),
     ExportSmilesFragment(ExportSmilesFragment) => ("file.export_smiles_fragment", "Create a noncanonical SMILES file from one explicitly selected, complete-source fragment's supported literal-H chemical graph; geometry and document context are not encoded and the session stays unchanged.", false),
     SdfRecordInspect(SdfRecordInspect) => ("sdf.record.inspect", "Read a bounded ordered field page from an explicitly identified captured SDF record; oversized values are omitted explicitly.", true),
     SmilesRecordInspect(SmilesRecordInspect) => ("smiles.record.inspect", "Read the exact notation and file-relative metadata of one explicit captured SMILES record; opaque application data is not disclosed or decoded.", true),

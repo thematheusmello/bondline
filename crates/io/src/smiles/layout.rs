@@ -12,6 +12,10 @@ pub enum LayoutError {
     InvalidBondLength,
     #[error("SMILES path layout supports at most 12 atoms")]
     AtomLimit,
+    #[error("neutral acyclic SMILES layout supports at most 64 atoms")]
+    AcyclicAtomLimit,
+    #[error("SMILES layout cancelled")]
+    Cancelled,
     #[error("SMILES path layout refuses {0}")]
     Unsupported(&'static str),
     #[error("SMILES path geometry is unsupported: {0}")]
@@ -28,7 +32,9 @@ impl LayoutError {
     pub fn code(&self) -> &'static str {
         match self {
             Self::InvalidBondLength => "invalid_params",
+            Self::Cancelled | Self::Render(bondline_render::Error::Cancelled) => "cancelled",
             Self::AtomLimit
+            | Self::AcyclicAtomLimit
             | Self::Model(bondline_model::Error::Graph(bondline_model::GraphError::Limit(_)))
             | Self::Render(bondline_render::Error::SceneTooComplex) => "resource_limit",
             Self::Normalize(error) => error.code(),
@@ -231,9 +237,26 @@ fn validate_geometry(points: &[Point2], length: f64, page: PageSize) -> Result<(
 }
 
 fn validate_ink(page: &bondline_model::Page) -> Result<(), LayoutError> {
-    use bondline_render::{PageViewport, Primitive, graph_page_scene, page_scene};
+    validate_ink_with_cancel(page, &bondline_render::Cancellation::default()).map(|_| ())
+}
+
+pub(super) fn validate_ink_with_cancel(
+    page: &bondline_model::Page,
+    cancel: &bondline_render::Cancellation,
+) -> Result<bondline_render::GraphScene, LayoutError> {
+    use bondline_render::{PageViewport, Primitive, graph_page_scene_with_cancel, page_scene};
+    if cancel.is_cancelled() {
+        return Err(LayoutError::Cancelled);
+    }
     let background = page_scene(REFERENCE_SIZE, REFERENCE_SIZE, page.size())?;
-    let graph = graph_page_scene(REFERENCE_SIZE, REFERENCE_SIZE, page)?;
+    let graph = graph_page_scene_with_cancel(REFERENCE_SIZE, REFERENCE_SIZE, page, cancel)
+        .map_err(|error| {
+            if matches!(error, bondline_render::Error::Cancelled) {
+                LayoutError::Cancelled
+            } else {
+                LayoutError::Render(error)
+            }
+        })?;
     let scene = graph.scene();
     // graph_page_scene's page prefix is checked, never assumed to contain three items.
     if !scene.primitives.starts_with(&background.primitives) {
@@ -250,6 +273,9 @@ fn validate_ink(page: &bondline_model::Page) -> Result<(), LayoutError> {
     let bottom = f64::from(paper.y) + f64::from(paper.height) - 1.0;
     let inside = |x: f64, y: f64| x >= left && x <= right && y >= top && y <= bottom;
     for primitive in scene.primitives.iter().skip(background.primitives.len()) {
+        if cancel.is_cancelled() {
+            return Err(LayoutError::Cancelled);
+        }
         let contained = match primitive {
             Primitive::Rectangle(rect) => {
                 inside(f64::from(rect.x), f64::from(rect.y))
@@ -268,7 +294,7 @@ fn validate_ink(page: &bondline_model::Page) -> Result<(), LayoutError> {
             return Err(LayoutError::Geometry("ink outside the page interior"));
         }
     }
-    Ok(())
+    Ok(graph)
 }
 
 #[cfg(test)]

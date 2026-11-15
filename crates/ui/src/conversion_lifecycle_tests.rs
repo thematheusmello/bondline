@@ -12,6 +12,7 @@ fn params(
     output: &std::path::Path,
 ) -> ConvertSmilesToCdxml {
     ConvertSmilesToCdxml {
+        profile: Default::default(),
         expected_revision: revision,
         input_path: input.to_string_lossy().into_owned(),
         output_path: output.to_string_lossy().into_owned(),

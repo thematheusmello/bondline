@@ -105,8 +105,9 @@ bounded native CDXML/CDX/MOL/SDF/SMILES filesystem libraries and source-preservi
 SDF/RXN/SMILES file records;
 bounded SMILES notation/source ownership including literal aromatic markers/bonds,
 opt-in fixed-H normalization and
-restricted noncanonical Fragment export and validated1–12carbon/Single path layout into
-a new pure Document, separate from complete SMILES source-file sessions or general chemistry;
+restricted noncanonical Fragment export, validated1–12carbon/Single path layout and
+bounded neutral acyclic layout into a new pure Document, separate from complete SMILES
+source-file sessions or general chemistry;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
 headless and native adapters). Other planned crates do not exist yet. `compat/libloading`
@@ -433,7 +434,9 @@ Do not attach an original SMILES path to a CDXML association, overwrite the inpu
 StoredDocument source authority to a raw projection. See verification-smiles-layout.md.
 
 file.convert_smiles_to_cdxml is create-only, not an active-session Save. Its eight required
-closed parameters select the neutral_carbon_path_v1 fixed-H profile and explicit geometry.
+scalars retain explicit geometry; optional profile defaults to neutral_carbon_path_v1,
+with neutral_acyclic_v1 as the closed additive choice. Preserve old omission/serialization,
+default geometry/refusals and captured receipt identity.
 Keep the same save reservation through prepare/publication/finish/drop and the existing
 worker/reply/close barriers. Finish returns current state plus historical conversion metadata;
 do not alter current/saved/original/history/association/close/native intent or acknowledgments.
@@ -690,8 +693,8 @@ actual-App regressions reproduced unintended C–C bonds on the old surface.
 Read verification-new-document.md and linked command/App/worker/review records. The
 final local gate passes1090/0/1. Native Mac SDF→New, dirty Cancel/Discard/Save, Unicode
 Save-before-New, editable reopen and Undo pass; native races and other platforms remain
-unverified. Next is the existing restricted SMILES converter's honest native workflow,
-then broader drawing import/layout. SDF reordering is deferred, not delivered. Full M0/M1
+unverified. The native restricted converter and later neutral-acyclic increment below are
+now delivered. Cyclic/general drawing import and SDF reordering remain required. Full M0/M1
 and M2–M5 remain incomplete; Actions stays disabled.
 
 ## Native file conversion and stable picker controls
@@ -721,4 +724,37 @@ regressions and all old chooser assertions. Actual prior timeout causality remai
 Read verification-native-smiles-conversion.md, its command/App/worker/review links and
 verification-file-picker-stability.md. Native and final aggregate scope live in STATUS.md;
 do not infer either from headless App tests. Actions stays disabled, no new dependency,
-parser/corpus/oracle/font/golden change. Next M1 work is broader SMILES drawing import/layout.
+parser/corpus/oracle/font/golden change in that earlier increment.
+
+## Neutral acyclic conversion continuation
+
+Read docs/verification-smiles-acyclic-integration.md and its independent layout, command/
+wire and renderer records. layout_neutral_acyclic uses existing fixed-H normalization for
+one actual connected tree of at most64 H/C/N/O/F/Cl/Br/I atoms, Single/Double/Triple. Keep
+physical-H nodes, local identities and complete source intact; no implicit record selection
+or source-session editing authority. Min atom-center bounds anchor the new origin; the
+old endpoint profile is exact. Never shrink bond length/paper or relax full-ink limits.
+
+The shared renderer uses existing attachment-safe labels for authored-H degree>=3, as
+well as multiple bonds. An independent hit/pixel/CPU/GPU regression reproduces why. The
+literal/resolved-scene equality certificate must remain exact; do not substitute another
+H policy to validate output. The proposed stacked-H collision bug was disproved by the
+existing union-mask guard and is not a delivered fix.
+
+Preserve unspecified stereo: the qualified new external consumer permits actual unknown
+STEREOANY only for raw antiparallel substituents at both ends of the supported degree-two
+internal Double. It rejects assigned states and wrong geometry/context, including near-
+linear cases. The initial blanket NONE assertion was a documented new-oracle error, not
+a product stereo defect. Potential degree-three internal Double remains unsupported.
+
+Native profile choices are ordered actions; never mutate a choice while building widgets
+or after pending/busy/browsing/stale/success. The same worker, lease, retirement and no-ACK/
+no-auto-Open boundaries remain. Actual Mac branch conversion→guarded Open→Double edit→
+Undo/Redo→Unicode Save As/reopen and both independently consumed766-byte files pass.
+The Root local gate passes1136/0/1. No new dependency/SDK/font/golden/old-oracle change;
+Actions remains disabled. Native geometry typing/races and other platforms are unverified.
+
+Next M1 task: specify/test one simple ring with substituents, then component packing and
+general source-qualified import. Read public notation/depiction sources and freeze literal
+graph/geometry/stereo/refusal tests before implementation. Preserve every legacy profile,
+file owner and negative control. Do not repeat the completed acyclic conversion.

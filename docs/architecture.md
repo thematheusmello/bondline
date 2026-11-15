@@ -483,3 +483,20 @@ completion and after between-frame New; the unchanged tests pass after this guar
 The reset, Source/Save ownership and native/remaining scope are documented in
 verification-new-document.md. The current implementation is one window with original A4
 policy; full default styles, multiple documents and broader input/platform parity remain.
+
+## Bounded acyclic drawing conversion
+
+The existing create-only converter captures a typed optional profile in the same FilePlan;
+UI, CLI, stdio and loopback keep one command/lease/worker path. The old carbon-path API and
+default wire/geometry behavior are retained. The additive acyclic IO API consumes borrowed
+notation and the existing fixed-H projection, returning a separate positioned Document.
+It verifies actual connected-tree edges, deterministic bounded angle/rotation alternatives,
+minimum-center origin, nonincident geometry and unchanged full ink at1024². A strict literal
+versus resolved-H Scene equality certificate prevents validating another rendering policy.
+
+The shared renderer's existing attachment-safe labels also serve authored-H degree>=3.
+This fixes independently reproduced H/bond occlusion and picking; unrelated mask collision
+policy stays exact. Native radio actions replay in raw event order and conversion completion
+reports its captured profile. Successful output is explicitly opened as a new native CDXML
+session; a derived projection never replaces the original SMILES source/owner or grants it
+editing authority. See [integration and independent evidence](verification-smiles-acyclic-integration.md).

@@ -56,7 +56,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | CDX files | Guarded native Open/Save/Save As verified on macOS, retaining exact accepted source. Limited projection; editing and faithful preview remain unavailable. |
 | SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. Inspect duplicate, empty and space-only fields; edit an existing occurrence with explicit Apply and Undo/Redo. Record removal has confirmation, draft decisions, complete history and exact Save/reopen tests; at least one record must remain. A bounded native Mac Keep/Confirm→Undo/Redo→Unicode Save/reopen workflow passes. Default Fit can still refuse its readability guard. |
 | SMILES records | Whole accepted `.smi`/`.smiles` source files and an original read-only ordinal inspector. Inspect exact notation/counts/ranges without disclosing opaque data. Bounded Mac ordinal typing, Inspect/Previous, read-only typing refusal and Unicode Save As/reopen preserve all source bytes. App tests also cover selection/copy and worker retirement; native OS clipboard copy remains unverified. Chemical preview/editing is unavailable. |
-| SMILES file conversion | File → Convert SMILES file… creates a new editable CDXML file for one connected chain of 1–12 neutral carbon atoms with single bonds. Input/output browsing, explicit geometry, existing-file refusal, Unicode retry, guarded Open, edit/Undo and Save As/reopen pass on macOS. The current document stays open; general structures and clipboard conversion remain unavailable. |
+| SMILES file conversion | File → Convert SMILES file… offers the original carbon-chain profile and a neutral acyclic profile: up to64 H/C/N/O/F/Cl/Br/I atoms, branches and Single/Double/Triple bonds, subject to geometry limits. Mac profile selection, protected output, Unicode conversion, guarded Open, branch edit/Undo/Redo and Save As/reopen pass. Rings, general import and clipboard conversion remain unavailable. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. Rapid Undo→Save preserves the undone source; independently checked in the actual Mac app and saved file. |
 | Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. The centered style is original; broader native label workflows and reference style parity remain unverified. |
 | Automation | 30 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
@@ -139,13 +139,18 @@ and copy it normally; **Close record** hides it. Saving preserves the complete s
 including other records and opaque application data. [Verification and native limits](docs/verification-smiles-record-integration.md)
 separate App tests from the observed native controls; no chemical preview is implied.
 
-To convert the supported carbon-chain subset, choose **File → Convert SMILES file…**,
-select an input and a **new** CDXML output path, review the point-based geometry, then
-choose **Convert**. Existing outputs are refused. Close the form and explicitly use
+To convert a supported structure, choose **File → Convert SMILES file…**. **Carbon chains**
+retains the original1–12 neutral-carbon Single-path policy. **Acyclic neutral structures**
+also supports branches, neutral H/C/N/O/halogens and Single/Double/Triple edges, up to64
+atoms. Rings, charges, isotopes and some unspecified internal Double contexts refuse.
+Select an input and a **new** CDXML output path, review the point-based geometry, then
+choose **Convert**. The acyclic origin anchors the upper-left atom-center bounds; the
+carbon-chain origin anchors an endpoint. Existing outputs are refused. Close the form and explicitly use
 **File → Open** to edit the result; unsaved work is protected by the ordinary Open decision.
 This is a restricted file utility, separate from clipboard paste and general SMILES import.
-[Conversion evidence and limits](docs/verification-native-smiles-conversion.md) distinguish
-native Mac acceptance from worker/race checks.
+[Conversion evidence and limits](docs/verification-smiles-acyclic-integration.md) distinguish
+actual Mac acceptance, independent readers and worker/race checks. The atom ceiling does
+not guarantee that every structure fits the selected paper and label-readability limits.
 
 Select a bond tool and drag the paper. Over a supported carbon bond, press **1**, **2** or
 **3** to set its order. Some clicks request alignment behavior that is still unavailable;
@@ -188,7 +193,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | CDX | Guarded shared/native Mac Open/Save, exact source retention, limited elemental metadata view and standalone syntax/property/new-tree APIs, checked independently | Faithful preview, broader metadata/chemistry, safe edits/new encoding and foreign/general corpus |
 | MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, existing-field editing, whole-record removal/Undo/Redo and bounded native SDF Actual/pan; independent byte/record/data and current-view image checks | Native wheel/DPI/edit-preview acceptance, record creation/reordering, field-header editing, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
-| SMILES | Complete accepted multi-record source Open/Save, original inspector and bounded Mac Unicode Save/reopen; exact opaque data/endings, explicit-H fragment export and native restricted carbon-path→CDXML conversion | Native fragment-export controls, clipboard workflows, chemical preview/editing of opened files, general layout/valence, aromaticity/stereo and canonicalization |
+| SMILES | Complete accepted multi-record source Open/Save, original inspector and bounded Mac Unicode Save/reopen; exact opaque data/endings, explicit-H fragment export and native carbon-path/neutral-acyclic→CDXML conversion | Native fragment-export controls, clipboard workflows, chemical preview/editing of opened source files, cyclic/general layout/valence, aromaticity/stereo perception and canonicalization |
 | InChI | Planned | Reference-tool comparison and import/export |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |

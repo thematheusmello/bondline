@@ -46,6 +46,7 @@ impl ConversionGate {
         assert_eq!(source.len(), 788);
         assert_eq!(engine.content().sdf()?.as_bytes(), source);
         let params = ConvertSmilesToCdxml {
+            profile: Default::default(),
             expected_revision: 2,
             input_path: input.to_string_lossy().into_owned(),
             output_path: output.to_string_lossy().into_owned(),

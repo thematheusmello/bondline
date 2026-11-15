@@ -6,6 +6,7 @@
 use bondline_model::Element;
 use std::{collections::HashSet, ops::Range, sync::Arc};
 
+mod acyclic;
 pub mod file;
 mod layout;
 mod normalize;

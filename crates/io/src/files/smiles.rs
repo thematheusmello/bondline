@@ -126,12 +126,60 @@ fn convert_with_publisher(
     cancel: &Cancellation,
     publish: impl FnOnce(&StoredDocument) -> Result<SaveReceipt, FileError>,
 ) -> Result<SmilesConversionReceipt, FileError> {
+    convert_with_layout(
+        input,
+        bond_length_pt,
+        origin,
+        page,
+        cancel,
+        |source, length, origin, page, _| source.layout_carbon_path(length, origin, page),
+        publish,
+    )
+}
+
+/// Derive a new native drawing from one bounded connected neutral acyclic notation.
+/// Retains the complete input through the same create-only publisher as the legacy path.
+/// The atom-center bounds start at origin; rendered ink must independently fit the page.
+/// Unsupported chemistry/topology or an unsolved layout refuses without publishing.
+pub fn convert_smiles_acyclic_to_cdxml_file(
+    input: &Path,
+    output: &Path,
+    bond_length_pt: f64,
+    origin: Point2,
+    page: PageSize,
+    cancel: &Cancellation,
+) -> Result<SmilesConversionReceipt, FileError> {
+    convert_with_layout(
+        input,
+        bond_length_pt,
+        origin,
+        page,
+        cancel,
+        SmilesDocument::layout_neutral_acyclic,
+        |document| save_cdxml_file(output, document, false, cancel),
+    )
+}
+
+fn convert_with_layout(
+    input: &Path,
+    bond_length_pt: f64,
+    origin: Point2,
+    page: PageSize,
+    cancel: &Cancellation,
+    layout: impl FnOnce(
+        &SmilesDocument,
+        f64,
+        Point2,
+        PageSize,
+        &Cancellation,
+    ) -> Result<bondline_model::Document, crate::smiles::LayoutError>,
+    publish: impl FnOnce(&StoredDocument) -> Result<SaveReceipt, FileError>,
+) -> Result<SmilesConversionReceipt, FileError> {
     let (input_path, bytes) = read_source_bytes_with_limit(input, cancel, ReadLimit::Smiles)?;
     let original = SmilesDocument::parse(bytes.into())
         .map_err(|error| FileError::new(&input_path, Stage::Decode, Failure::Smiles(error)))?;
     check_cancel(&input_path, Stage::Decode, cancel)?;
-    let model = original
-        .layout_carbon_path(bond_length_pt, origin, page)
+    let model = layout(&original, bond_length_pt, origin, page, cancel)
         .map_err(|error| FileError::new(&input_path, Stage::Decode, Failure::Layout(error)))?;
     check_cancel(&input_path, Stage::Decode, cancel)?;
     let mut drawing = StoredDocument::default();

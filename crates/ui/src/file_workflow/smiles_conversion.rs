@@ -2,7 +2,9 @@
 
 use super::*;
 use crate::sdf_draft_text::SdfDraftText;
-use bondline_commands::{CaptureStamp, ConversionReceipt, ConvertSmilesToCdxml};
+use bondline_commands::{
+    CaptureStamp, ConversionReceipt, ConvertSmilesToCdxml, SmilesConversionProfile,
+};
 use std::thread::JoinHandle;
 
 #[cfg(test)]
@@ -46,6 +48,7 @@ impl Context {
 }
 
 struct Values {
+    profile: SmilesConversionProfile,
     input: SdfDraftText,
     output: SdfDraftText,
     length: SdfDraftText,
@@ -59,6 +62,7 @@ impl Values {
     fn new() -> Result<Self, String> {
         let text = |value: &str| SdfDraftText::new(value).map_err(|error| error.to_string());
         Ok(Self {
+            profile: SmilesConversionProfile::default(),
             input: text("")?,
             output: text("")?,
             length: text("48")?,
@@ -88,6 +92,7 @@ impl Values {
                 .ok_or_else(|| format!("{name} must be a finite number."))
         };
         Ok(ConvertSmilesToCdxml {
+            profile: self.profile,
             expected_revision: revision,
             input_path: path(&self.input, "Input file")?,
             output_path: path(&self.output, "Output file")?,
@@ -138,6 +143,7 @@ struct Job {
 
 #[derive(Clone, Copy)]
 enum Action {
+    Profile(SmilesConversionProfile),
     Convert,
     BrowseInput,
     BrowseOutput,
@@ -307,7 +313,17 @@ impl FileWorkflow {
         egui::Window::new("Convert SMILES file").id(egui::Id::new(("bondline-conversion",key)))
             .anchor(egui::Align2::CENTER_CENTER,egui::Vec2::ZERO).order(egui::Order::Foreground)
             .default_width(620.0).collapsible(false).resizable(false).open(&mut open).show(context, |ui| {
-                ui.label("Supports one connected chain of 1–12 neutral carbon atoms with single bonds.");
+                ui.horizontal(|ui| {
+                    for profile in [SmilesConversionProfile::NeutralCarbonPathV1,SmilesConversionProfile::NeutralAcyclicV1] {
+                        let response=ui.add_enabled(enabled && !matches!(form.outcome,Some(Outcome::Success {..})),egui::RadioButton::new(form.values.profile==profile,profile.label()));
+                        if response.clicked() && let Some(index)=events.iter().position(|event| crate::activation_event(&response,event)) {
+                            actions.push((index,key,Action::Profile(profile)));
+                        }
+                    }
+                });
+                ui.label("Carbon chains: Supports one connected chain of 1–12 neutral carbon atoms with single bonds.");
+                ui.label("Acyclic neutral structures: up to 64 H/C/N/O/F/Cl/Br/I atoms, branches and Single/Double/Triple bonds. Rings, isotopes, charges and some unspecified internal double bonds are unsupported.");
+                ui.label("Origin: a chain endpoint for carbon chains; upper-left atom-center bounds for acyclic structures.");
                 ui.label("The current document stays open. The output must be a new CDXML file; existing files are never overwritten.");
                 let mut field_error = None;
                 egui::Grid::new(("conversion-parameters",key)).num_columns(2).show(ui, |ui| {
@@ -324,6 +340,9 @@ impl FileWorkflow {
                         Outcome::Failure(message) => { ui.heading("Conversion failed"); ui.colored_label(egui::Color32::DARK_RED,message); }
                         Outcome::Success {receipt,historical,cancelled} => {
                             ui.heading("Conversion complete"); ui.label(&receipt.output.path);
+                            let profile=[SmilesConversionProfile::NeutralCarbonPathV1,SmilesConversionProfile::NeutralAcyclicV1]
+                                .into_iter().find(|profile| profile.name()==receipt.profile);
+                            ui.label(format!("Layout: {}",profile.map(SmilesConversionProfile::label).unwrap_or(receipt.profile)));
                             ui.label(format!("{} {}, {} {}",receipt.atom_count,if receipt.atom_count==1 {"atom"} else {"atoms"},receipt.bond_count,if receipt.bond_count==1 {"bond"} else {"bonds"}));
                             ui.label("Close this form, then use File → Open to edit the created CDXML file.");
                             if *historical { ui.label("The document context changed while converting. The new file was created; the current document was not replaced."); }
@@ -382,6 +401,17 @@ impl FileWorkflow {
         }
         for action in actions {
             match action {
+                Action::Profile(profile) => {
+                    if !self.conversion.busy()
+                        && self.conversion.browsing.is_none()
+                        && let Some(form) = &mut self.conversion.form
+                        && !form.stale
+                        && form.context.current(engine)
+                        && !matches!(form.outcome, Some(Outcome::Success { .. }))
+                    {
+                        form.values.profile = profile;
+                    }
+                }
                 Action::Convert => {
                     self.rearm_conversion(engine);
                     let parameters = self

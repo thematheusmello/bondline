@@ -806,3 +806,6 @@ fn external_cancel_keeps_old_modal_input_from_authoring_or_publishing_on_the_fir
 
 #[path = "native_conversion_recovery_tests.rs"]
 mod recovery;
+
+#[path = "native_acyclic_conversion_tests.rs"]
+mod acyclic_profile;

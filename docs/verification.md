@@ -2688,3 +2688,27 @@ No auto Open/current Save, native race/close/cancellation, numeric geometry typi
 hardware-DPI, general SMILES or clipboard parity is inferred. Other platforms remain
 unverified; no new parser/fuzz/dependency/SDK/oracle/font/golden or hosted execution.
 Actions stays disabled and the full M0–M5 goal remains active.
+
+## Neutral acyclic SMILES conversion, 2026-11-15
+
+[Integrated evidence](verification-smiles-acyclic-integration.md) records the additive
+optional profile, unchanged30-command registry/eight required scalars, deterministic
+connected-tree layout, original ordered native choices and shared create-only lifecycle.
+Eight IO, two renderer, five command, two actual-wire and three App cases add20 passes.
+Actual runtime REDs, missing-API compilers and reviewed new-test setup errors stay distinct.
+The shared branch-label prerequisite is independently reproduced; a suggested collision
+defect was disproved. The new consumer's blanket-NONE error is explicitly corrected from
+primary RDKit source: exact qualified ANY is unknown, assigned stereo remains rejected.
+
+Root40759 full local gate passes **1136/0/1**,161 result lines, exit0: rustfmt, warnings-
+denied all-target workspace/vendor clippy/tests, layers, licenses and corpus. Root87151
+builds the matching native binary. Actual Mac PID70457 passes profile selection/refusal,
+create-only protection/Unicode retry with original retained, guarded Open/Cancel/Discard,
+branch Double edit, Undo/Redo and Unicode Save As/reopen. Independent Expat/Decimal/RDKit
+checks accept both actual766-byte outputs and verify source/sentinel/original output retention.
+
+No new dependency/lock/SDK/font/old-oracle/fixture/golden change, hosted or fuzz execution.
+Native numeric geometry typing, clipboard, race/cancel/close timing, hardware DPI and other
+platform interaction remain unverified. Rings/general import and complete M0–M5 remain
+incomplete. ChemDraw is raised afterward with the existing blank reference window unchanged.
+Actions remains disabled and the persistent goal remains active.

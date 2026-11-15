@@ -329,7 +329,15 @@ impl FilePlan {
                     if output.to_str().is_none() {
                         return Err(Error::UnrepresentableFilePath { published: false });
                     }
-                    let receipt = bondline_io::files::convert_smiles_to_cdxml_file(
+                    let convert = match params.profile {
+                        crate::SmilesConversionProfile::NeutralCarbonPathV1 => {
+                            bondline_io::files::convert_smiles_to_cdxml_file
+                        }
+                        crate::SmilesConversionProfile::NeutralAcyclicV1 => {
+                            bondline_io::files::convert_smiles_acyclic_to_cdxml_file
+                        }
+                    };
+                    let receipt = convert(
                         Path::new(&params.input_path),
                         &output,
                         params.bond_length_pt,
@@ -342,6 +350,7 @@ impl FilePlan {
                             receipt,
                             params.expected_revision,
                             generation,
+                            params.profile,
                         )?,
                         save_slot,
                     }

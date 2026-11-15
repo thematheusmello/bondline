@@ -37,6 +37,7 @@ fn dropping_conversion_owner_cancels_real_gated_work_before_it_can_publish()
     let context = egui::Context::default();
     workflow.queue_conversion(
         ConvertSmilesToCdxml {
+            profile: Default::default(),
             expected_revision: 0,
             input_path: input.to_string_lossy().into_owned(),
             output_path: output.to_string_lossy().into_owned(),

@@ -24,8 +24,12 @@ policy. Existing layout and its default conversion profile deliberately accept o
   and two-Double carbon centers use180°. Degree-four templates depend on terminal versus
   extended neighbors. Keep literal H0 central-carbon labels visible in actual rendering.
 - Preserve unspecified stereo. For the specific disubstituted internal-Double case with
-  two neighbors at each end, use the published collinear substituent treatment and require
-  actual CDXML consumer StereoNone. Potential degree-three internal-Double cases refuse
+  two neighbors at each end, use the published collinear substituent treatment and reject
+  assigned configuration in the actual CDXML consumer. Pinned RDKit marks this treatment
+  STEREOANY/unknown; the qualified external guard checks source context and actual raw
+  antiparallel geometry, reports NONE versus ANY truthfully, and rejects E/Z/other assigned
+  states. The initial blanket StereoNone expectation was a new-oracle contract error,
+  independently corrected with retained declarations/probes. Potential degree-three internal-Double cases refuse
   until explicit unknown-configuration depiction exists. Do not choose an apparent E/Z
   configuration or introduce wedges/Fischer implications from SMILES traversal order.
 - Translate the completed atom-center bounds so their minimum x/y equals the supplied

@@ -56,7 +56,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.save_sdf` | `path`, optional `overwrite=false` | Atomic whole-source collection save; retains every record, MOL version, ordered field and byte; no molecular regeneration |
 | `document.open_smiles` | `path`, optional `discard_unsaved=false` | Validate all supported notation records and retain the entire source; clean source-file session without a drawing projection |
 | `document.save_smiles` | `path`, optional `overwrite=false` | Atomic exact whole-file save, including ignored lines, opaque application bytes and original endings; no notation regeneration |
-| `file.convert_smiles_to_cdxml` | Required `expected_revision`, `input_path`, `output_path`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt` | Deferred create-only conversion of one bounded neutral carbon/Single path into new native CDXML; current session and all its baselines remain unchanged |
+| `file.convert_smiles_to_cdxml` | Required `expected_revision`, `input_path`, `output_path`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt`; optional `profile="neutral_carbon_path_v1"` or `"neutral_acyclic_v1"` | Deferred create-only conversion into new native CDXML; profile selects bounded carbon/Single path or neutral acyclic graph. Current session and all its baselines remain unchanged |
 | `file.export_smiles_fragment` | Required `expected_revision`, positive `page_id`, positive `fragment_id`, `output_path` | Create-only noncanonical explicit-H SMILES file for exactly one complete-source selected fragment; geometry/document context are explicitly not encoded and the current session is unchanged |
 | `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
 | `sdf.record.remove` | Required `expected_revision`, positive `record_id` | Deferred whole-record removal; exact surviving bytes, reindexed ordinals, one history edit; refuses the sole record |
@@ -647,8 +647,11 @@ RED/GREEN and source/limit evidence is in verification-bond-attachment-ui.md.
 
 ## Restricted create-only SMILES conversion
 
-`file.convert_smiles_to_cdxml` explicitly selects the `neutral_carbon_path_v1` conversion
-policy. Every parameter is required; there is no implicit geometry, overwrite switch,
+`file.convert_smiles_to_cdxml` accepts an optional closed `profile`:
+`neutral_carbon_path_v1` is the compatible default, and `neutral_acyclic_v1` selects the
+broader neutral-tree layout. All eight existing scalar parameters remain required;
+omitting/defaulting the profile retains the old serialized command and receipt policy.
+There is no implicit geometry, overwrite switch,
 discard flag, selection, native request ID or alternative H policy. Length must be finite
 and positive; origin is finite within ±100000pt and page dimensions are positive and at
 most100000pt. Runtime validation also covers direct typed Rust callers. A stale expected
@@ -664,6 +667,21 @@ unsupported content refuse. Input/filename suffix never selects a decoder or cha
 fixed CDXML output format. Output must not exist; input bytes and permissions are not edited.
 This is conversion to a new drawing, not source-backed SMILES Open/Save or general cleanup.
 
+The acyclic profile instead accepts an actual connected tree of at most64 atoms from the
+existing neutral nonisotopic H/C/N/O/F/Cl/Br/I normalization, including physical H, branches
+and Single/Double/Triple edges. Source graph/IDs/H remain intact. Origin means the minimum
+atom-center x/y after rigid translation; the old profile keeps its endpoint anchor.
+Bond length and paper are never silently scaled. Deterministic bounded alternatives must
+pass real-edge/intersection, full stroke/glyph/paper and literal/resolved-scene checks.
+Cancellation and exhausted budgets refuse.64 is a ceiling, not a fit guarantee.
+
+Unassigned stereo stays unassigned. The supported degree-two internal-Double context has
+collinear substituents at both ends; a qualified external consumer may report unknown
+`STEREOANY`, never an assigned E/Z configuration. Potential degree-three internal-Double,
+actual cycles/components, aromaticity, charges, isotopes and other unsupported chemistry
+refuse. This adds no stereo perception or general source-file edit authority. See
+[layout and integration evidence](verification-smiles-acyclic-integration.md).
+
 Success adds optional `conversion` to the latest Engine state:
 
 ```json
@@ -671,7 +689,8 @@ Success adds optional `conversion` to the latest Engine state:
 ```
 
 Paths/byte lengths in that example are illustrative, not reference bytes. Counts and output
-receipt describe actual work. `input_revision`/`session_generation` are captured at preparation;
+receipt describe actual work; `profile` reports the profile captured at preparation.
+`input_revision`/`session_generation` are captured at preparation;
 the input file is actually bounded/read by its worker. `revision`, `document`/`collection`,
 source, saved/file association, dirty/history, close epoch/approval and native file intent
 remain the current session's state at finish. Conversion neither opens the generated drawing
@@ -704,13 +723,15 @@ operation. The later specialized native conversion presentation is described bel
 The central `file.convert_smiles` File control has no shortcut and dispatches
 `ui.file {expected_revision, action:"convert_smiles"}`. It adds a control, not a second
 conversion command: the registry remains30. Drawing exposes18 controls; readonly SDF12.
-The native plan is `UiFilePlan::SmilesConversion`. Its original form shows the restricted
-profile, explicit geometry and separate input/new-output selection. Existing output refuses;
+The native plan is `UiFilePlan::SmilesConversion`. Its original form offers Carbon chains
+and Acyclic neutral structures, explicit geometry and separate input/new-output selection.
+Profile actions replay in raw input order: a later choice cannot relabel an earlier Convert.
+Pending/busy/browsing/stale/success states reject profile changes. Existing output refuses;
 conversion browsing does not discard the current drawing. Default48pt bond/origin72pt/A4
 are original UI choices, not claimed reference style defaults.
 
 `Engine::prepare_ui_smiles_conversion(id,params)` requires the exact current Accepted
-conversion request and prepares the existing typed eight-parameter operation. Success
+conversion request and prepares the existing eight-scalar operation with its captured profile. Success
 consumes presentation before I/O, without binding a native Save request. Preparation failure
 leaves the accepted intent available. `CommandExecutor` validates and reserves the existing
 worker under its origin mutex. Generic bind/refusal and trusted Save/close guards remain.
@@ -724,7 +745,7 @@ and focus are dismissed; running/published outcomes remain reportable. Dropping 
 requests cancellation. Explicit valid retry clears the previous error, while later unrelated
 errors are not erased at finish. Native results direct ordinary File → Open; no automatic
 Open/New or false Save acknowledgment. Native OS and remaining platform scope are stated
-in verification-native-smiles-conversion.md.
+in verification-native-smiles-conversion.md and verification-smiles-acyclic-integration.md.
 
 ## Selected-fragment SMILES export
 

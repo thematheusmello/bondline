@@ -57,9 +57,20 @@ passes1116/0/1; native race/close/cancellation and other platforms remain unveri
 See docs/verification-native-smiles-conversion.md. This is a1–12 neutral-carbon Single
 path utility, not general SMILES import or Copy As/Paste Special parity.
 
-Next M1 priority is broader source-preserving SMILES drawing import/layout. First define
-the supported graph/geometry and editing-authority contract against published notation
-and independent consumers; retain unsupported source rather than silently projecting it.
+The additive neutral-acyclic conversion profile now delivers connected trees up to64
+H/C/N/O/F/Cl/Br/I atoms, branches and Single/Double/Triple edges under the existing fixed-H
+policy and bounded geometry. Original default/profile/receipt contracts remain exact.
+Eight IO, two renderer, five command, two actual-wire and three App checks add20 passes;
+the full local gate passes1136/0/1. Actual Mac profile/refusal/Unicode retry, retained unsaved
+work, guarded Open, branch Double edit/Undo/Redo and Unicode Save As/reopen pass. Both actual
+766-byte files agree with independent raw/RDKit expectations. Source/H, stereo, geometry
+and platform limits are in docs/verification-smiles-acyclic-integration.md.
+
+Next M1 priority is simple-ring layout with substituents, then component packing and
+general source-qualified SMILES drawing import. Define supported graph/geometry/stereo and
+editing authority against published notation and independent consumers; retain unsupported
+source rather than silently projecting it. The new utility still does not grant an opened
+SMILES source-file session molecular editing authority or complete clipboard parity.
 SDF creation/reordering and wider format editing stay in the backlog. The earlier proposed
 SDF reordering priority was deferred after the sourced File New audit, not implemented.
 

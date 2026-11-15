@@ -8,7 +8,7 @@
 | SDF V2000/V3000 | Complete mixed-version session/native Mac files, occurrence inspector and existing-value editor, source-preserving capture and read-only Actual/Zoom/pan preview | Exact raw spans/order/versions, pinned corpus and unchanged raw/per-MOL consumers; bounded Mac files/field edits/Actual/pan; actual-App wheel/DPI/source freshness and edit→preview→Save/reopen; command/adapter guards and earlier bounded ASAN | Native wheel/physical-DPI/new combined edit-preview acceptance, record creation/reordering and field-header editing, broader layout/chemistry, fetched mixed-version corpus, syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
 | RXN V2000 wrapper | Standalone source-preserving reader/new-wrapper writer with ordered roles and raw V2000/V3000 molecular payloads | Published CTfile layout; original field/role/span vectors; external RDKit readers/writers and bounded ASAN | Reaction model, application/native commands, V3000 reaction wrapper, broader registry/extension handling and fetched corpus |
-| SMILES | Complete accepted multi-record source Open/Save and readonly ordinal inspection; explicit-H fragment export and original native restricted carbon-path→new CDXML form; noncanonical output | Independent raw/per-record/output consumers; App/lifecycle gates; bounded Mac inspector typing/Inspect/Previous and exact Unicode Save/reopen; native conversion browsing/refusal/retry, guarded Open/edit/Undo/Save As/reopen and independent433-byte outputs | Chemical preview/editing of opened files, native clipboard/fragment export, conversion race/close timing and other platforms, general layout/H policy, stereo/query/perception and canonicalization |
+| SMILES | Complete accepted multi-record source Open/Save and readonly ordinal inspection; explicit-H fragment export and original native carbon-path/neutral-acyclic→new CDXML form; noncanonical output | Independent raw/per-record/output consumers; App/lifecycle gates; bounded Mac inspector and Unicode Save/reopen; native conversion/profile/refusal/retry, guarded Open/branch edit/Undo/Redo/Save As/reopen; independent actual433-byte legacy and766-byte acyclic outputs | Chemical preview/editing of opened source files, native clipboard/fragment export, conversion race/close timing and other platforms, cyclic/general layout/H policy, stereo/query/perception and canonicalization |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and whole-page/opt-in current-view captures for supported neutral-element scenes; source-aware display H stays separate from authored data | External Pillow/FreeType, independent geometry/font vectors, actual CPU/GPU comparisons, bounded native SDF Actual/pan, source-aware MOL current captures at1x/2x and unchanged approved golden | Reference styles/general chemistry, broader native label/DPI workflows, physical publishing resolution and native PNG save/clipboard |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
@@ -639,6 +639,29 @@ One LF follows the unchanged notation. The logical upper bound is65537file bytes
 65536notation bytes; current parser/converter raw65536 input caps are unchanged and can
 refuse that boundary. No maximum-size graph/re-import parity or native control is claimed.
 See [exact command/file evidence](verification-smiles-export-command.md).
+
+## Explicit neutral acyclic drawing conversion
+
+`file.convert_smiles_to_cdxml` keeps its default `neutral_carbon_path_v1` output and adds
+optional `neutral_acyclic_v1`. Both read one complete bounded notation and publish a new
+native CDXML file create-only; neither chooses a record from an opened source collection.
+The acyclic profile supports one actual tree, up to64 neutral nonisotopic H/C/N/O/F/Cl/Br/I
+atoms, physical-H nodes, branches and Single/Double/Triple. It reuses the existing closed
+fixed-H normalization, preserves graph/source identity and assigns no chemical stereo.
+
+Origin anchors minimum atom-center x/y; exact bond length, contextual published angles,
+real-edge separation and full glyph/multiple-stroke paper clearance must fit bounded
+deterministic search. Rings/components, aromaticity, charge, isotope and potentially
+stereogenic degree-three internal-Double contexts refuse. A supported degree-two internal
+Double uses collinear substituents; a qualified external reader reports unknown ANY rather
+than assigned E/Z. This is no general layout, perception, canonicalization or cleanup claim.
+
+The current source session/history/association stays intact. Only explicitly opening the
+newly authored CDXML grants its existing proven native editing authority. Actual branch
+conversion and subsequent C–C→C=C edit, Undo/Redo, Unicode Save As and reopening pass on Mac;
+independent raw/Decimal/RDKit readers accept both766-byte outputs. Geometry typing, native
+race/close/cancellation and other platforms remain unverified. [Exact integrated evidence](verification-smiles-acyclic-integration.md)
+retains first REDs, the renderer prerequisite and the qualified new-oracle correction.
 
 ## Complete accepted SMILES source files
 

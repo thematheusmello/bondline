@@ -1,5 +1,13 @@
 # Open questions
 
+- Neutral acyclic file conversion is delivered for its documented≤64-atom fixed-H scope;
+  it does not resolve rings/components, general source-qualified drawing import, aromatic/
+  charged/isotopic depiction or complete unspecified-stereo treatment. Degree-three internal
+  Double cases refuse. Qualified unknown ANY from the supported collinear degree-two case
+  is distinct from assigned E/Z; see verification-smiles-acyclic-integration.md. Exact26.1
+  clipboard conversion/depiction remains unverified. No reference default coordinates,
+  bond-length style, icon or artwork are inferred from Bondline's original choices.
+
 - The2026-11-15 user-authorized CUA pass observes About26.1.0.6801/Product Signals ChemDraw,
   but does not establish Professional entitlement. File New creates a second styled window
   and retains the first, unlike Bondline's current same-window fresh session. Styles and
