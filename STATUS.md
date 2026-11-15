@@ -3,8 +3,9 @@
 The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; latest feature
 checkpoint **`77d05a8`** delivers verified neutral-acyclic conversion, with independent
 renderer prerequisite **`17f8798`**. Plan `ad68dc9` follows native converter `c71d5fc`,
-reference observations `0ce80a0` and status `97fd2ac`. All intentional product/test/source
-records are locally committed. The recoverable ten-file product snapshot is1815 bytes/SHA256
+reference observations `0ce80a0` and status `97fd2ac`. These are green local checkpoints;
+the next ring increment is in progress below, with uncommitted test-first declarations.
+The delivered acyclic ten-file product snapshot is1815 bytes/SHA256
 `ea701d056ba66fd2372c42b863816fb71549031fbce47f59c303d46700262d40`, under ignored
 `target/smiles-acyclic/root-product-snapshot.json`. Continue existing work; do not restart.
 No push, merge or publication occurred.
@@ -14,7 +15,32 @@ Actions stays disabled by user instruction: repository Actions off and workflow4
 manually disabled. Do not enable, dispatch or rerun it. Local gates verify this integration;
 historical hosted results do not verify new Windows/Linux interaction.
 
-## Newly delivered and verified
+## In progress: single-ring SMILES layout
+
+The preceding goal turn is verified progress:77d05a8/17f8798 and status492905a are committed.
+Current public-source/contract work is in docs/research/smiles-ring-layout-plan.md and
+smiles-ring-layout-sources.md. Proposed addition is neutral_simple_ring_v1, one actual
+connected3..8 Single cycle plus supported attached trees,≤64 atoms; existing profiles remain
+exact. No product code has changed yet, and no ring feature GREEN/native result is claimed.
+
+Independent first3231-byte cyclohexane declaration122bdee9 fails14483 only for missingAPI
+E0599. Root840-byte JSON declarationf0369992 observes actual unknown-profile runtime RED;
+first511-byte Appb3e17130/33979 and expanded53156 observe missing controls. Expanded core
+5677 has four missing-profile runtime failures. CLI/authenticated34574 and actual stdio/
+authenticated52468 likewise reject the absent profile. A new-test ordering adjustment
+retains all CLI checks while reaching stdio first. Existing exact closed-schema assertion
+is deliberately extended2→3 before product code, fails51434, and its exact inverse to the
+old20723-byte source is proven; no legacy behavior assertion/fixture/oracle was relaxed.
+
+Root declarations/core/wire/App bytes and first logs are frozen under ignored
+target/smiles-ring/. A proof script first assumed nonexistent comma/indent formatting,
+failed without writing, then exact actual block inversion succeeded. Fresh ring-tests,
+ring-layout and ring-research worktrees preserve492905a and separate targets. Research
+handoff is received; independent expanded cases/oracle are being frozen before production
+GO. Root owns adapter/UI integration and Git/native input. Root33979/5677/34574/53156/
+52468/51434 are terminal. Consult workers before restarting any work.
+
+## Previously delivered and verified
 
 **Neutral acyclic SMILES conversion:** File → Convert SMILES file… offers the original
 Carbon chains profile and additive Acyclic neutral structures. The new profile handles
