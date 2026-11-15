@@ -1492,3 +1492,13 @@ The root remains an object; oneOf selects exactly one closed action object. Unkn
 fields are rejected by serde and branch schemas. Per-branch closure and root unevaluated-
 property closure replace no old single-object schema assertion or runtime validator.
 These primary sources were read2026-11-15; no new schema/SDK dependency is introduced.
+
+
+The [pinned egui focus source](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/memory/mod.rs)
+was reviewed2026-11-15 alongside the independently reproduced immediate-focus failure.
+Bondline's reviewed0.29.1 source patch lets the current focus owner install its arrow
+filter during its first pass. [Patch provenance](../../vendor/egui/BONDLINE-PATCH.md)
+records the exact archive/VCS, unchanged source scope and retained MIT/Apache notices.
+This repairs a published SDK behavior, without changing reference-product claims or the
+runtime license allowlist. The initial docs.rs source fetch was inaccessible; the exact
+public GitHub revision and cached SHA-verified crate were actually read.

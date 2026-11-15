@@ -2441,3 +2441,16 @@ tests and a large-coordinate zero-tolerance anchor regression pass: Root receivi
 The renderer handoff has separate all-target warnings-denied clippy/rustfmt evidence.
 This lower-layer API does not establish native controls, complete zoom-range rendering,
 physical monitor calibration or full M0/M2 parity. No new golden or dependency changes.
+
+
+## Pinned SDK focus correction, 2026-11-15
+
+The public egui0.29.1 source incorrectly deferred the first focus-lock filter. A bare
+Slider/neighbor probe reproduces lost immediate Right→Left input without a Bondline
+engine: original assertions70877 yield1passed/1failed; the one-guard candidate25670
+yields2passed with the identical desired test source. The independent eframe::egui
+[regressions](../crates/ui/tests/slider_focus.rs) pass2/0 in Root6076, without an idle
+frame workaround or new font. Root's actual-frame pan regression also fails before
+the patch and passes after it. [Exact source/notices](../vendor/egui/BONDLINE-PATCH.md)
+retain the published version/features and MIT/Apache licenses. Root58403 license gate
+passes154/165/220 native runtime packages and the same two assets.

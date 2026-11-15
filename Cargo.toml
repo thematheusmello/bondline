@@ -1,7 +1,7 @@
 [workspace]
 members = ["crates/model", "crates/cdxml", "crates/cdx", "crates/commands", "crates/mcp", "crates/cli", "crates/ui", "crates/render", "crates/io", "compat/hexf-parse", "compat/libloading", "compat/clipboard-win", "xtask"]
 resolver = "3"
-exclude = ["vendor/eframe", "vendor/winit", "vendor/accesskit_macos", "fuzz"]
+exclude = ["vendor/eframe", "vendor/egui", "vendor/winit", "vendor/accesskit_macos", "fuzz"]
 
 [workspace.package]
 version = "0.1.0"
@@ -34,6 +34,7 @@ debug = false
 
 [patch.crates-io]
 eframe = { path = "vendor/eframe" }
+egui = { path = "vendor/egui" }
 winit = { path = "vendor/winit" }
 accesskit_macos = { path = "vendor/accesskit_macos" }
 hexf-parse = { path = "compat/hexf-parse" }
