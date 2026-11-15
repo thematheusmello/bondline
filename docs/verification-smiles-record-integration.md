@@ -114,3 +114,27 @@ This proves actual native Next/Inspect activation beyond the earlier controls-on
 observation. Numeric typing, Previous, selected-text/OS copy, Unicode Save/reopen and
 native cancel/close race acceptance remain unverified; the full native journey is not
 claimed. The new SDF removal preview is a separate process documented in STATUS.md.
+
+## Further bounded native acceptance, 2026-11-15
+
+On the unchanged inspector bundle/PID53821 identified above, native double-click, numeric
+entry3 and Return change the ordinal and immediately clear the previous disclosure.
+Inspect shows record3/line5, exact O,1atom/0bonds, notation43..44/full43..49 and data count4.
+Clicking that readonly notation, Select All and typing X leaves the observed notation and
+complete source unchanged. This is the observed typing attempt, not an OS-copy/cut proof.
+Previous explicitly restores record2 and its exact notation/ranges.
+
+Native Shift+Cmd+S, real filename entry `records-λ.smiles`, Save, Cmd+O and selecting that
+file reopen all49 bytes. The inspector resets to ordinal1 with no automatic notation.
+Read-only authenticated inspection confirms revision2/clean/Undo0Redo0, actual associated
+Unicode path and no automatic smiles_record object. Actual saved bytes and original input
+both retain SHA256 fe62db368bfb982d6a0d4309337207a419fc088b9c8e20ae9a0a32ccd61e70b7.
+The unchanged raw scanner verifies all five physical lines, three notation ranges and
+opaque bytes; unchanged per-record external consumers accept CC, [13CH3][OH] and O with
+literal expected elements/bonds. No parser/oracle/environment/package change occurred.
+
+Ignored native-save-reopen-receipt.json and native-reopen-consumers-receipt.json pin the
+observations. This is additional acceptance on that exact older inspector binary; later
+New-workspace wrappers have separate tests/build evidence. OS clipboard copy, native
+cancel/close races, hardware DPI, other platforms and complete reference parity remain
+unverified. No new code or claim of chemical preview follows from this acceptance.
