@@ -136,8 +136,19 @@ impl Engine {
         cancel: &bondline_render::Cancellation,
     ) -> Result<bondline_render::GraphScene, Error> {
         let view = self.page_view(width, height, page_id)?;
+        self.drawing_scene_with_view(&view, page_id, cancel)
+    }
+
+    /// Render the complete current source in an already selected logical or physical view.
+    /// This grants no source-edit or Save authority.
+    pub fn drawing_scene_with_view(
+        &self,
+        view: &bondline_render::PageView,
+        page_id: bondline_model::PageId,
+        cancel: &bondline_render::Cancellation,
+    ) -> Result<bondline_render::GraphScene, Error> {
         Ok(bondline_io::display::drawing_page_scene_with_view(
-            &view,
+            view,
             self.stored_document()?,
             page_id,
             cancel,

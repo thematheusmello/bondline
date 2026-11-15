@@ -4,6 +4,12 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+Current density-rendering work has five renderer and five actual-App passes. Full local
+pipeline78964 stopped767/1 at the unchanged MCP shutdown replacement-bind `AddrInUse`;
+the separate remaining430/0/1 checks do not establish an aggregate pass. Earlier1188/0/1
+component and1172/0/1 CDX checkpoints remain historical evidence. Native2×/DPI is unverified.
+See [density receiving](docs/verification-native-drawing-density.md).
+
 ## M0: foundation — in progress
 
 - [x] Resolve declared runtime/asset license closure for native egui/wgpu on all three platforms.
@@ -93,7 +99,7 @@ Root90518 passes eight independent IO cases. Root5986 passes three command, one 
 two actual-wire and three App cases, including the complete 9-atom/7-bond/3-component
 C8H20O drawing, identical CPU/GPU capture, explicit Open, first-edge Double edit to C8H18O,
 Undo/Redo and Unicode Save/reopen through independent consumers. The fourth profile's
-full local gate now passes1188/0/1, including fmt, workspace/vendor warnings-denied clippy,
+component checkpoint's full local gate passed1188/0/1, including fmt, workspace/vendor warnings-denied clippy,
 tests, layers, licenses and corpus. Bounded Mac legacy/existing-output refusals, Unicode
 retry with dirty work retained, explicit Open Cancel/Discard, Double edit/Undo/Redo and
 Unicode Save As/reopen now pass. Independent consumers verify both actual 1407-byte
@@ -104,6 +110,17 @@ pan and other platforms remain unverified. Earlier counts stay historical checkp
 no new parser-fuzz or dependency change.
 See [component integration](docs/verification-smiles-components-integration.md) and
 [independent layout evidence](docs/verification-smiles-components-layout.md).
+
+Drawing's additive physical-display path now shares the existing pixel transform with
+exact effective DPI/fractional device origin, fresh glyph generation and inverse paint/hit
+mapping. Logical zoom, source authority and the old1×/capture routes remain unchanged.
+Five renderer and five actual-App cases pass, including honest1× refusal,2× Metal strip/
+gap checks, fractional phase and logical-readability limits. This is headless verification,
+not a native2× measurement or a Fit fix. The latest Mac build still refuses the edited
+component scene at Fit78.79%; hotspot2/Undo/Redo/Actual100% and exact Unicode Save/reopen
+pass, while two clicks with Double selected produced no mutation of unknown cause. Full overview/
+pan remains unverified. [Receiving evidence](docs/verification-native-drawing-density.md)
+records the failed aggregate and separately passing remaining checks.
 
 The external CDX framing counterexample now has an additive canonical 28-byte implicit/
 explicit Document + FileEnd path: eight syntax and six IO/engine/wire cases pass, retaining
@@ -123,6 +140,9 @@ rather than silently projecting it. The new utility still does not grant an open
 session molecular editing authority or complete clipboard parity.
 SDF creation/reordering and wider format editing stay in the backlog. The earlier proposed
 SDF reordering priority was deferred after the sourced File New audit, not implemented.
+The [SMILES authoring/import study](docs/research/smiles-source-import-plan.md) recommends
+editable Paste Special with real benzene support, then source-preserving record editing
+and whole-file Save. It is a plan; clipboard/aromatic authoring is not implemented.
 
 Whole-record SDF removal now has a source-preserving codec, the shared typed command,
 CLI/stdio/authenticated-loopback routes and original Records confirmation UI. Independent

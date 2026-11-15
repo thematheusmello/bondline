@@ -180,6 +180,7 @@ fn clicked_bond_order(
 fn paint_stroke(
     painter: &egui::Painter,
     origin: egui::Pos2,
+    density: f32,
     stroke: &bondline_render::Stroke,
 ) -> Result<(), bondline_render::Error> {
     let [r, g, b, a] = stroke.color;
@@ -187,7 +188,7 @@ fn paint_stroke(
         stroke
             .corners()?
             .into_iter()
-            .map(|[x, y]| origin + egui::vec2(x, y))
+            .map(|[x, y]| origin + egui::vec2(x, y) / density)
             .collect(),
         egui::Color32::from_rgba_unmultiplied(r, g, b, a),
         egui::Stroke::NONE,
@@ -382,6 +383,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
 fn paint_hover(
     painter: &egui::Painter,
     origin: egui::Pos2,
+    density: f32,
     page: &bondline_model::Page,
     viewport: &bondline_render::PageView,
     graph: &bondline_render::GraphScene,
@@ -410,7 +412,7 @@ fn paint_hover(
         HitTarget::Atom { atom_id, .. } => {
             let [x, y] = position(atom_id)?;
             painter.circle_stroke(
-                origin + egui::vec2(x, y),
+                origin + egui::vec2(x, y) / density,
                 6.0,
                 egui::Stroke::new(1.0, color),
             );
@@ -420,14 +422,14 @@ fn paint_hover(
             let first = components.next().ok_or(Error::UnsupportedChemicalContent)?;
             for stroke in std::iter::once(first).chain(components) {
                 let outline = bondline_render::Stroke {
-                    width: stroke.width + 4.0,
+                    width: stroke.width + 4.0 * density,
                     ..stroke.clone()
                 }
                 .corners()?;
                 painter.add(egui::Shape::closed_line(
                     outline
                         .into_iter()
-                        .map(|[x, y]| origin + egui::vec2(x, y))
+                        .map(|[x, y]| origin + egui::vec2(x, y) / density)
                         .collect(),
                     egui::Stroke::new(1.0, color),
                 ));
@@ -1099,6 +1101,55 @@ fn show_workspace_with_preview(
             };
             let width = available.width().floor().max(1.0) as u32;
             let height = available.height().floor().max(1.0) as u32;
+            let density = context.pixels_per_point();
+            if !density.is_finite() || density <= 0.0 {
+                drawing.gesture = None;
+                drawing.invalidate_hover();
+                ui.colored_label(
+                    egui::Color32::DARK_RED,
+                    bondline_render::Error::InvalidView.to_string(),
+                );
+                return;
+            }
+            // Keep the legacy 1x path; physical glyphs use an integer device origin
+            // plus the original fractional phase, so the camera never snaps.
+            let (paint_origin, phase) = if density == 1.0 {
+                (available.min, [0.0, 0.0])
+            } else {
+                let device = [available.min.x, available.min.y]
+                    .map(|value| f64::from(value) * f64::from(density));
+                (
+                    egui::pos2(
+                        (device[0].floor() / f64::from(density)) as f32,
+                        (device[1].floor() / f64::from(density)) as f32,
+                    ),
+                    device.map(|value| value - value.floor()),
+                )
+            };
+            let view_for = |engine: &Engine, page_id| {
+                let view = engine.page_view(width, height, page_id)?;
+                if density == 1.0 {
+                    Ok::<_, bondline_commands::Error>(view)
+                } else {
+                    Ok(view.at_display_scale(f64::from(density), phase)?)
+                }
+            };
+            let scene_for = |engine: &Engine, view: &bondline_render::PageView, page_id| {
+                let graph = engine.drawing_scene_with_view(
+                    view,
+                    page_id,
+                    &bondline_render::Cancellation::default(),
+                )?;
+                if graph
+                    .label_em_px()
+                    .is_some_and(|em| !(8.0..=256.0).contains(&(em / density)))
+                {
+                    return Err(bondline_commands::Error::from(
+                        bondline_render::Error::LabelScale,
+                    ));
+                }
+                Ok(graph)
+            };
             let previous_percent = engine.view_percent();
             if let Err(failure) = engine.set_view_canvas_size(width, height) {
                 drawing.gesture = None;
@@ -1109,7 +1160,7 @@ fn show_workspace_with_preview(
             if engine.view_percent() != previous_percent {
                 context.request_repaint();
             }
-            let mut viewport = match engine.page_view(width, height, page.id()) {
+            let mut viewport = match view_for(engine, page.id()) {
                 Ok(viewport) => viewport,
                 Err(error) => {
                     drawing.gesture = None;
@@ -1132,15 +1183,10 @@ fn show_workspace_with_preview(
                 egui::Sense::drag(),
             );
             let local = |position: egui::Pos2| {
-                let position = position - available.min;
+                let position = (position - paint_origin) * density;
                 [position.x, position.y]
             };
-            let mut graph = engine.drawing_view_scene(
-                width,
-                height,
-                page.id(),
-                &bondline_render::Cancellation::default(),
-            );
+            let mut graph = scene_for(engine, &viewport, page.id());
             if graph.is_err() {
                 drawing.gesture = None;
             }
@@ -1223,7 +1269,7 @@ fn show_workspace_with_preview(
                     let Some(page) = document.pages().first() else {
                         return;
                     };
-                    viewport = match engine.page_view(width, height, page.id()) {
+                    viewport = match view_for(engine, page.id()) {
                         Ok(viewport) => viewport,
                         Err(failure) => {
                             *error = Some(failure.to_string());
@@ -1234,12 +1280,7 @@ fn show_workspace_with_preview(
                     key.revision = engine.state().revision;
                     key.view_epoch = engine.view().epoch;
                     drawing.hover_context = Some(key);
-                    graph = engine.drawing_view_scene(
-                        width,
-                        height,
-                        key.page,
-                        &bondline_render::Cancellation::default(),
-                    );
+                    graph = scene_for(engine, &viewport, key.page);
                 }
                 let blocked = (blocked && !new_decision_at_start)
                     || pending_ui_blocks_authoring(&engine.state())
@@ -1402,9 +1443,12 @@ fn show_workspace_with_preview(
                                 drawing.key_hotspot = None;
                                 continue;
                             };
-                            let target = hotspot
-                                .target
-                                .or_else(|| current_graph.hit_test(local(pos), 5.0).ok().flatten());
+                            let target = hotspot.target.or_else(|| {
+                                current_graph
+                                    .hit_test(local(pos), 5.0 * density)
+                                    .ok()
+                                    .flatten()
+                            });
                             let Some(bondline_render::HitTarget::Bond {
                                 fragment_id,
                                 bond_id,
@@ -1446,7 +1490,7 @@ fn show_workspace_with_preview(
                             let Ok(current_graph) = &graph else {
                                 continue;
                             };
-                            let target = match current_graph.hit_test(local(*pos), 5.0) {
+                            let target = match current_graph.hit_test(local(*pos), 5.0 * density) {
                                 Ok(target) => target,
                                 Err(_) => continue,
                             };
@@ -1516,7 +1560,7 @@ fn show_workspace_with_preview(
                             let Ok(end) = viewport.document_position(local(*pos)) else {
                                 continue;
                             };
-                            let release_target = current_graph.hit_test(local(*pos), 5.0);
+                            let release_target = current_graph.hit_test(local(*pos), 5.0 * density);
                             if gesture.press.distance(*pos) <= 3.0 {
                                 if !gesture.modifiers.is_none() || !modifiers.is_none() {
                                     continue;
@@ -1698,7 +1742,7 @@ fn show_workspace_with_preview(
                         drawing.gesture = None;
                         return;
                     };
-                    viewport = match engine.page_view(width, height, page.id()) {
+                    viewport = match view_for(engine, page.id()) {
                         Ok(viewport) => viewport,
                         Err(failure) => {
                             drawing.gesture = None;
@@ -1710,12 +1754,7 @@ fn show_workspace_with_preview(
                     key.revision = engine.state().revision;
                     key.view_epoch = engine.view().epoch;
                     drawing.hover_context = Some(key);
-                    graph = engine.drawing_view_scene(
-                        width,
-                        height,
-                        key.page,
-                        &bondline_render::Cancellation::default(),
-                    );
+                    graph = scene_for(engine, &viewport, key.page);
                     if graph.is_ok() {
                         drawing.key_hotspot = key_hotspot;
                     }
@@ -1753,7 +1792,8 @@ fn show_workspace_with_preview(
                         return;
                     };
                     if let Some(pointer) = pointer {
-                        drawing.hover = graph.hit_test(local(pointer), 5.0).ok().flatten();
+                        drawing.hover =
+                            graph.hit_test(local(pointer), 5.0 * density).ok().flatten();
                     }
                     let scene = graph.scene();
                     let painter = ui.painter_at(available);
@@ -1769,24 +1809,35 @@ fn show_workspace_with_preview(
                                 let [r, g, b, a] = rectangle.color;
                                 painter.rect_filled(
                                     egui::Rect::from_min_size(
-                                        available.min
-                                            + egui::vec2(rectangle.x as f32, rectangle.y as f32),
-                                        egui::vec2(rectangle.width as f32, rectangle.height as f32),
+                                        paint_origin
+                                            + egui::vec2(rectangle.x as f32, rectangle.y as f32)
+                                                / density,
+                                        egui::vec2(rectangle.width as f32, rectangle.height as f32)
+                                            / density,
                                     ),
                                     0.0,
                                     egui::Color32::from_rgba_unmultiplied(r, g, b, a),
                                 );
                             }
                             bondline_render::Primitive::Stroke(stroke) => {
-                                if let Err(error) = paint_stroke(&painter, available.min, stroke) {
+                                if let Err(error) =
+                                    paint_stroke(&painter, paint_origin, density, stroke)
+                                {
                                     ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                                 }
                             }
                         }
                     }
                     if let Some(target) = drawing.hover
-                        && let Err(error) =
-                            paint_hover(&painter, available.min, page, &viewport, &graph, target)
+                        && let Err(error) = paint_hover(
+                            &painter,
+                            paint_origin,
+                            density,
+                            page,
+                            &viewport,
+                            &graph,
+                            target,
+                        )
                     {
                         drawing.invalidate_hover();
                         ui.colored_label(egui::Color32::DARK_RED, error.to_string());
@@ -1814,7 +1865,7 @@ fn show_workspace_with_preview(
                         )
                         .and_then(|strokes| {
                             for stroke in &strokes {
-                                paint_stroke(&painter, available.min, stroke)?;
+                                paint_stroke(&painter, paint_origin, density, stroke)?;
                             }
                             Ok(())
                         });

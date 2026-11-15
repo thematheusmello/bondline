@@ -1389,3 +1389,6 @@ mod new_document;
 
 #[path = "native_conversion_tests.rs"]
 mod native_conversion;
+
+#[path = "native_drawing_density_tests.rs"]
+mod native_drawing_density;

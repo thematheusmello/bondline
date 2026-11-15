@@ -451,3 +451,25 @@ tested; never leave an implicit intent able to consume a later unrelated paste. 
 records remain a different source boundary: retain every opaque/unselected byte, map
 original/current/saved chemical graphs and refuse unsupported or geometry-losing saves.
 No general-edit authority follows from selecting or displaying a partial projection.
+
+## Native density, Fit and input evidence, 2026-11-15
+
+[The density record](../verification-native-drawing-density.md) verifies the shared physical
+transform with fixed CPU/GPU and actual-App cases. The actual current desktop still
+refuses the same edited Double at Fit78.79%, while100% renders; effective native DPI,
+canvas and device-origin phase were not measured. Do not equate those native facts with
+the synthetic2× case or infer a renderer/provider cause. Determine the actual density/
+input and antialiased native coverage contract before changing pixel-visibility rules;
+never silently alter paper, geometry, camera or density to hide a failed certificate.
+Legacy1× fractional-origin behavior also remains outside this change.
+
+Two native coordinate clicks at the first Single bond leave Saved content unchanged;
+hotspot key2 commits the independently verified intended Double. Neither event trace nor
+first-click success was established. Source review/App tests do not resolve that actual
+input question. Preserve the known successful100% keyboard/history/Unicode Save/reopen
+scope, old native evidence and file bytes when investigating it.
+
+The fresh natural full-gate replacement_bind54691 AddrInUse failure has no failure-time
+owner capture. A delayed empty snapshot and separately passing remaining stages are not
+a causal explanation or a green aggregate. Existing bounded diagnostic limits and socket
+assertions remain unchanged; do not restart exhausted probes or add retries to hide it.

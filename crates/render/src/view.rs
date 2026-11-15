@@ -81,7 +81,53 @@ impl PageView {
             return Err(Error::InvalidView);
         }
         crate::byte_count(width_px, height_px)?;
-        if [width_px, height_px] == self.destination {
+        let density = (f64::from(width_px) / f64::from(self.destination[0]))
+            .min(f64::from(height_px) / f64::from(self.destination[1]));
+        let padding = [
+            (f64::from(width_px) - f64::from(self.destination[0]) * density) / 2.0,
+            (f64::from(height_px) - f64::from(self.destination[1]) * density) / 2.0,
+        ];
+        self.physical_view([width_px, height_px], density, padding)
+    }
+
+    /// Fresh native geometry at the exact physical pixels per logical unit.
+    /// The fractional canvas origin aligns coverage with the global device lattice;
+    /// neither the logical camera nor glyph bitmaps are scaled after generation.
+    /// Vector extents retain the 100000-unit bound; frame readback stays separately bounded.
+    pub fn at_display_scale(&self, density: f64, origin_phase: [f64; 2]) -> Result<Self, Error> {
+        if self.density.is_some()
+            || !density.is_finite()
+            || density <= 0.0
+            || origin_phase
+                .iter()
+                .any(|value| !value.is_finite() || !(0.0..1.0).contains(value))
+        {
+            return Err(Error::InvalidView);
+        }
+        let destination = [
+            f64::from(self.destination[0]) * density + origin_phase[0],
+            f64::from(self.destination[1]) * density + origin_phase[1],
+        ];
+        if destination
+            .iter()
+            .any(|value| !value.is_finite() || *value <= 0.0 || value.ceil() > 100_000.0)
+        {
+            return Err(Error::InvalidViewport);
+        }
+        self.physical_view(
+            destination.map(|value| value.ceil() as u32),
+            density,
+            origin_phase,
+        )
+    }
+
+    fn physical_view(
+        &self,
+        destination: [u32; 2],
+        density: f64,
+        padding: [f64; 2],
+    ) -> Result<Self, Error> {
+        if destination == self.destination && density == 1.0 && padding == [0.0, 0.0] {
             return Ok(Self {
                 page: self.page,
                 viewport: self.viewport.clone(),
@@ -93,17 +139,17 @@ impl PageView {
                 density: Some(1.0),
             });
         }
-        let density = (f64::from(width_px) / f64::from(self.destination[0]))
-            .min(f64::from(height_px) / f64::from(self.destination[1]));
-        let padding = [
-            (f64::from(width_px) - f64::from(self.destination[0]) * density) / 2.0,
-            (f64::from(height_px) - f64::from(self.destination[1]) * density) / 2.0,
-        ];
         let translation = [
             self.offset[0] as f64 * density + padding[0],
             self.offset[1] as f64 * density + padding[1],
         ];
-        let offset = translation.map(|value| value.floor() as i64);
+        let offset = translation.map(f64::floor);
+        if offset.iter().any(|value| {
+            !value.is_finite() || !((i64::MIN as f64)..-(i64::MIN as f64)).contains(value)
+        }) {
+            return Err(Error::InvalidViewport);
+        }
+        let offset = offset.map(|value| value as i64);
         let phase = [
             translation[0] - offset[0] as f64,
             translation[1] - offset[1] as f64,
@@ -122,7 +168,7 @@ impl PageView {
             page: self.page,
             viewport: self.viewport.at_density(density, phase)?,
             source: extents.map(|value| value.ceil() as u32),
-            destination: [width_px, height_px],
+            destination,
             offset,
             percent: self.percent,
             // Even fitted geometry now needs physical padding/projection and clipping.

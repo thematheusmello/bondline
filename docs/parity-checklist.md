@@ -11,6 +11,13 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
+Current Drawing-density source passes five renderer/five actual-App tests; native2×/DPI
+remains unverified. Full local pipeline78964 failed767/1 in the unchanged MCP shutdown
+replacement-bind test. Separate remaining430/0/1 checks do not establish an aggregate
+pass; earlier component1188/0/1 and CDX1172/0/1 gates are historical checkpoints. See
+[density receiving](verification-native-drawing-density.md). No inventory status follows
+from those targeted results.
+
 The detailed inventory below records functional control names and our concise action
 summaries. Explicit paths use >; a menu-action label or parenthesized choice records a
 functional capability without asserting undocumented submenu nesting. No proprietary help paragraphs, screenshots, icons, templates, sample libraries
@@ -73,7 +80,7 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 | Naming and mixtures | PROFESSIONAL-26.1 | missing | M5; public standards/oracles |
 | Associated-data label selection | PROFESSIONAL-26.1 | missing | Documented 26.1 behavior |
 | Separate CDXML/MDL paste entries | PROFESSIONAL-26.1 | missing | M4; platform clipboard evidence |
-| View navigation | GUIDE-25 printed26/74/79 | verified (bounded Mac) | Numeric zoom, Actual/Fit/Magnify/Reduce, pan controls/wheel, unchanged A4 authoring and150% editable persistence. Original scale/step/anchor policies; source-qualified current-view capture and SDF navigation are below. Physical-DPI/native wheel scope remains qualified. See verification-view-{render,commands,ui,native}.md. |
+| View navigation | GUIDE-25 printed26/74/79 | verified (bounded Mac) | Numeric zoom, Actual/Fit/Magnify/Reduce, pan controls/wheel, unchanged A4 authoring and150% editable persistence. Original scale/step/anchor policies; source-qualified current-view capture and SDF navigation are below. Exact Drawing DPI/device-phase geometry now passes five renderer/five App cases, including2×/fractional hits and fresh glyphs; native2×/DPI remains unverified. Latest Mac component Fit78.79% still refuses, hotspot2/history/Actual100% and independently checked Unicode Save/reopen pass; two clicks with Double selected produced no mutation of unresolved cause. No native Fit fix/full overview/pan claim. See verification-native-drawing-density.md and verification-view-{render,commands,ui,native}.md. |
 | Original SDF field inspector | CTFILE-2026 / original Bondline workflow | verified (bounded Mac/read-only) | Ordered duplicate/empty/spaces/record replacement and exact Unicode Save As/reopen pass natively. Actual-App tests add copy, JSON-budget pagination, omission, source freshness, readonly accessibility/text storage and retirement. Read-only inspection scope; the separate editor is below. No Professional field-screen parity, native large-value/race or full control-addressability claim. See verification-sdf-inspector.md. |
 | Original SDF existing-value editor | CTFILE-2026 / original Bondline workflow | verified (bounded Mac); native lifecycle races unverified | Explicit occurrence draft→multiline Apply→Unicode Save As→Undo/Redo→reopen yields exact788 bytes; both molecular records pass unchanged independent consumers. Nine actual-App cases and two real-worker gates cover ordered Save/navigation/close requests, stale recovery, no-op and invalid-input refusal. No new/delete/reorder, Professional field-screen parity, native race, Windows/Linux or full addressability claim. See verification-sdf-editor-integration.md. |
 | Original SDF view/capture | GUIDE-25 / CTFILE-2026 / original Bondline policies | verified (bounded Mac Actual/pan); remaining native scope unverified | Native F5/Actual and both position controls visibly render ordinary CCO/CN at100% without source/history changes. Seven command, four App and two native-adapter cases plus renderer/consumer checks cover whole-source/current-view/1x/2x/ABA/close/cancel/field-save semantics. Native wheel was aborted before dispatch; native physical DPI, new edit-preview flow, full accessibility and other platforms remain unverified. See verification-sdf-view-integration.md. |

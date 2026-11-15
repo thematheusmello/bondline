@@ -27,6 +27,12 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
+Current density source has five renderer/five actual-App passes, but full pipeline78964
+stopped767/1 at the unchanged MCP shutdown replacement-bind `AddrInUse`. Separate430/0/1
+remaining checks are not an aggregate pass. Native2×/DPI remains unverified. Read
+docs/verification-native-drawing-density.md before extending that path; prior1188/0/1
+component and1172/0/1 CDX results are historical checkpoints.
+
 ## Research, provenance and implementation
 
 - Target one-to-one Professional desktop screens, control roles, icon roles, workflows and
@@ -824,7 +830,7 @@ worker/close/history barriers and truthful historical receipt; no Save ACK or au
 
 Eight IO, three command, one schema, two actual-wire and three App cases pass unchanged,
 including mixed 9-atom/7-bond/3-component graph/formula, CPU/GPU equality and explicit Open/edit/history/Unicode
-persistence. Root59627 full local gate passes1188/0/1: fmt, workspace/vendor warnings-denied
+persistence. Root59627's component checkpoint passed1188/0/1: fmt, workspace/vendor warnings-denied
 clippy/tests, layers, licenses and corpus. Bounded Mac legacy/existing-output refusals,
 Unicode retry retaining dirty work/no auto Open, explicit Open Cancel/Discard, first-edge
 Double edit/CmdZ/CmdShiftZ and Unicode Save As/reopen pass on the actual fourth profile.
@@ -846,3 +852,28 @@ Canonical CDX receiving, bounded fuzz and the1172/0/1 full gate pass; preserve t
 unexplained intermittent MCP failure without weakening its assertions or socket policy.
 Preserve legacy profiles, complete owners and negative controls; never trim/scan/relax EOF
 or repeat the completed bounded conversion work. Consult STATUS.md for actual live gates.
+
+## Native Drawing density continuation
+
+Read docs/verification-native-drawing-density.md. `PageView::at_display_scale` shares
+the existing physical transform but accepts exact effective DPI and fractional device
+origin. Generate fresh glyphs; do not enlarge a logical bitmap. Native vector surfaces
+may exceed2048 pixels within the existing100000 extent bound; captures retain their2048
+readback limit and legacy1× stays exact. All three graph acquisition sites, four hit sites,
+inverse painting and five-logical-unit tolerance must use that same physical view.
+Keep actual logical label em8..256 as well as physical glyph caps, complete-source/ink/
+visibility/cancellation guards, model/history/source and Save authority unchanged.
+
+Five frozen renderer and five actual-App tests pass, including1× refusal,2× Metal CPU/GPU
+strips/gaps, fresh glyphs on a large surface, fractional phase[.25,.75] and logically tiny
+label refusal. Actual-App input is not native hardware-DPI evidence. The latest Mac build
+still refuses the edited component scene at Fit78.79%; hotspot2/Undo/Redo/Actual100% and
+Unicode Save/reopen retain the independently checked1407-byte9/7/3 C8H18O output. Two
+clicks with Double selected produced no mutation of unknown cause. Do not claim a native Fit fix,
+click success,2×/DPI measurement or complete overview/pan. Full pipeline78964 failed767/1
+in the unchanged MCP replacement-bind test; separate remaining430/0/1, vendor clippy,
+layers/licenses/corpus and native build passes are not a complete aggregate.
+
+Next authoring work is proposed in docs/research/smiles-source-import-plan.md: documented
+Paste Special with real aromatic chemistry, then genuine source-file record rewrite/Save.
+This is not implemented. Preserve missing ME-015/ME-025 and all milestone qualifications.

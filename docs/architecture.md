@@ -96,9 +96,27 @@ Loopback publication notifies real tool changes even though authored changed=fal
 Default Fit uses the exact old PageViewport; explicit PageView uses a uniform logical
 scale, generates whole-source geometry and then clips it with signed integer translation.
 IO resolves its existing MOL display-H facts into that same camera without rewriting
-authored None or source bytes. Engine::page_view and drawing_view_scene serve both
-initial layout and later same-frame command reacquisition. Physical raster density stays
-separate from the logical camera; fresh glyph geometry is described below.
+authored None or source bytes. Engine::page_view provides the logical camera and
+drawing_view_scene retains its logical-scene contract. Native initial layout and later
+same-frame reacquisition use drawing_scene_with_view with the physical view below.
+Physical raster density stays separate from the logical camera.
+
+Native Drawing now uses `PageView::at_display_scale` with exact effective DPI and the
+fractional device origin. It shares the physical transform with `at_pixel_size`, generates
+fresh glyphs and maps physical scene/hit geometry back to logical UI coordinates. All
+three graph acquisitions and four hit sites use the same transform and five-logical-unit
+tolerance. Vector surfaces above2048 pixels retain the existing100000 extent bound;
+readback captures keep their2048 limit. Legacy1×, logical zoom, complete-source policy
+and actual logical8..256-em readability remain guarded independently of physical caps.
+
+Five renderer/five actual-App cases pass, including Metal CPU/GPU strips/gaps at2×,
+fractional phase[.25,.75], fresh large-surface glyphs and honest small-label refusal.
+This does not establish actual native2×/DPI or a Fit fix. The latest Mac component scene
+still refuses Fit78.79%; hotspot2/history/Actual100% and Unicode Save/reopen retain the
+independently checked9/7/3 C8H18O output. Two clicks with Double selected produced no mutation of
+unresolved cause. Current full pipeline78964 failed767/1 at the unchanged MCP shutdown
+replacement bind; separate remaining430/0/1 checks are not an aggregate pass.
+[Density receiving](verification-native-drawing-density.md) records exact evidence.
 
 All view controls use the same tagged command. Window actions are resolved at their raw
 event boundary, so the other pan coordinate comes from the camera already in effect.
@@ -548,7 +566,7 @@ pairs. One actual component returns the old helper result directly, preserving e
 
 Focused eight IO/three command/one schema/two wire/three App checks pass, including CPU/GPU capture equality and
 complete mixed 9-atom/7-bond/3-component conversion→explicit Open→Double edit→Undo/Redo→Unicode persistence.
-The full local gate passes1188/0/1. Bounded Mac conversion/refusal/retry, retained dirty
+That component checkpoint's full local gate passed1188/0/1. Bounded Mac conversion/refusal/retry, retained dirty
 source, explicit Open Cancel/Discard, Double edit/history and Unicode Save/reopen pass;
 independent consumers verify both actual 1407-byte 9/7/3 outputs. Native authoring works
 at100%; edited Fit78.79% refuses the existing distinct-pixel bond guard. An initial top
@@ -566,7 +584,10 @@ Writer output and complete-source application guards are unchanged: no CDX autho
 rendering or cross-format authority follows. The N−2 legacy-prefix ambiguity remains.
 [Targeted checks, 10,000-run ASan and bounded Mac Open/Unicode Save As/reopen pass](verification-cdx-file-end-integration.md).
 The incomplete-source UI keeps its preview refusal and exposes no chemical counts. The
-final receiving aggregate passes1172/0/1. Earlier MCP replacement-bind AddrInUse remains
+historical CDX receiving aggregate passed1172/0/1. Earlier MCP replacement-bind AddrInUse remains
 unexplained; bounded diagnostics and a contradicted hypothesis establish no causal fix.
 No corpus admission occurred. General source-qualified SMILES import, broader packing/
 chemistry and CDX metadata/Text/Double/style mapping remain M1 work.
+The [authoring/import study](research/smiles-source-import-plan.md) proposes editable
+Paste Special including benzene and real record rewrite/Save; no implementation follows
+from that design note.

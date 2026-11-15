@@ -2830,3 +2830,47 @@ SetValue/coordinate slider drag produce no change. Full overview/pan success is 
 Native races/cancellation/close, hardware DPI, Windows/Linux and general chemistry/import
 remain unverified or missing. No new human-approved golden; Actions stays disabled and
 the full M0–M5 goal remains active.
+
+## Native Drawing physical density, 2026-11-15
+
+[Receiving evidence](verification-native-drawing-density.md) records the exact-DPI and
+fractional device-origin transform, shared source-qualified renderer, fresh glyphs and
+logical input/hover/gesture mapping. The new geometry-only display view retains existing
+100000-unit vector bounds; capture/readback stays2048. Old1× pixels, visibility negatives,
+logical8..256/physical font limits, sources and the approved golden remain unchanged.
+
+The existing-API Metal control passes first; new API absence gives exactly one E0599,
+then ten E0599 in the final expanded declaration. Actual-App1× passes while2× fails;
+expanded cases give2/2, and an additive fractional case fails only after its actual
+phase[.25,.75] setup succeeds. No test/input/tolerance changes obtain GREEN. Root93429
+passes all five renderer and five App cases against the first three-file product.
+Independent source review of the Engine/UI paths reports no material finding; it is
+source review, separate from execution.
+
+**The full local gate is not green.** Root78964 fails after767 passes at unchanged MCP
+shutdown replacement_bind127.0.0.1:54691, AddrInUse/Os48. Formatting and warnings-denied
+workspace clippy pass first; later stages did not run. Log94,414B/SHA256
+58502c60022de553eecda0fea87f21c44d47034ea80a5249fb5a5316f2a68615. A single delayed
+lsof/netstat owner snapshot is empty; it establishes no failure-time owner or cause.
+The prior bounded diagnostics are not restarted; neither the failed test nor aggregate
+is retried, and no assertion/socket policy/deadline is weakened.
+
+Root21912 executes only the remaining stages: MCP23/0, model/render/UI/compat/xtask403/0/1,
+remaining docs1/0 and native vendor3/0, totaling430/0/1; vendor clippy, layers, licenses,
+corpus and the native build pass. These separate results preserve the original failure.
+All source/test pins remain exact. Environment: Rust1.94.1, DEV/TEST_DEBUG0,
+CARGO_INCREMENTAL0, CARGO_BUILD_JOBS2 and the literal pinned external Python path.
+
+Actual Mac PID39216 reuses the sole review bundle, binary20,531,936B/SHA256
+`a290421488b83805d48194acff6ef9c0d7fc626ad6c5eb1fd5dcbca672949f9f`.
+Two coordinate clicks leave the original drawing Saved; their cause is unknown. Key2 at
+the first bond commits Double/H2, CmdZ/ShiftCmdZ restore saved/dirty states, and100% renders.
+Unicode Save As and explicit reopen preserve actual1,407B SHA256
+`d7c9074698b737d37ff15addf8858232992468a5536739bcfe5959c324af3cb2`, byte-identical to the
+prior edited file. The unchanged raw/Decimal/Expat/RDKit consumer verifies9/7/3 and C8H18O;
+original files and sentinel remain exact.
+
+Native Fit78.79% still refuses the distinct-pixel guard. Effective native DPI/canvas are
+not measured; native2×, full overview, first-click success and other platforms are not
+claimed. No new golden/fuzz/dependency/font/asset/hosted execution. Actions stays disabled,
+the full M0–M5 goal remains active, and STATUS.md records the next exact work.
