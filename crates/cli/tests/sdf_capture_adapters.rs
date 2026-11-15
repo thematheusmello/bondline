@@ -1,4 +1,6 @@
 use bondline_commands::Engine;
+#[path = "support/native_conversion_wire.rs"]
+mod native_conversion_wire;
 #[path = "support/new_document_adapters.rs"]
 mod new_document;
 #[path = "support/sdf_remove_adapters.rs"]

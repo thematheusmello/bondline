@@ -56,6 +56,8 @@ pub struct FileChooser {
     error: Option<String>,
     confirmation: Option<Confirmation>,
     focus_name: bool,
+    selection_title: Option<&'static str>,
+    restricted_format: bool,
 }
 
 impl FileChooser {
@@ -70,6 +72,8 @@ impl FileChooser {
         initial_name: String,
         format: FileFormat,
     ) {
+        self.selection_title = None;
+        self.restricted_format = false;
         self.mode = Some(mode);
         self.name = initial_name;
         self.set_format(format);
@@ -78,13 +82,27 @@ impl FileChooser {
         self.navigate(directory);
     }
 
+    pub(crate) fn begin_selection(
+        &mut self,
+        mode: FileMode,
+        directory: PathBuf,
+        initial_name: String,
+        format: FileFormat,
+        title: &'static str,
+    ) {
+        self.begin_with_format(mode, directory, initial_name, format);
+        self.selection_title = Some(title);
+        self.restricted_format = true;
+    }
+
     pub fn format(&self) -> FileFormat {
         self.format
     }
 
     fn set_name(&mut self, name: String) {
         self.name = name;
-        if self.mode == Some(FileMode::Open)
+        if !self.restricted_format
+            && self.mode == Some(FileMode::Open)
             && let Some(format) = format_hint(&self.name)
         {
             self.format = format;
@@ -302,11 +320,11 @@ impl FileChooser {
         }
         let mut action = None;
         let mut open = true;
-        let title = if mode == FileMode::Open {
+        let title = self.selection_title.unwrap_or(if mode == FileMode::Open {
             "Open structure"
         } else {
             "Save structure as"
-        };
+        });
         egui::Window::new(title)
             .id(egui::Id::new("bondline-file-chooser"))
             .order(egui::Order::Foreground)
@@ -356,12 +374,12 @@ impl FileChooser {
                     }
                 });
                 let mut selected_format=self.format;
-                egui::ComboBox::from_label("Format").selected_text(format_label(self.format,mode))
+                ui.add_enabled_ui(!self.restricted_format, |ui| egui::ComboBox::from_label("Format").selected_text(format_label(self.format,mode))
                     .show_ui(ui,|ui| {
                         for &format in formats_for_mode(mode) {
                             ui.selectable_value(&mut selected_format,format,format_label(format,mode));
                         }
-                    });
+                    }));
                 if selected_format!=self.format {
                     self.set_format(selected_format);
                 }
@@ -377,18 +395,26 @@ impl FileChooser {
                         FileFormat::Smiles=>"SMILES files (*.smi, *.smiles); all records and original bytes are retained. Chemical preview is unavailable.",
                     }
                 });
-                if self.loading {
-                    ui.horizontal(|ui| {ui.spinner(); ui.label("Reading folder…");});
-                }
                 let mut navigate = None;
                 let mut select_name=None;
                 let mut submit = false;
+                // Scan content must not move or renumber the filename and action controls.
                 egui::ScrollArea::vertical().id_salt("bondline-file-list")
                     .max_height((context.screen_rect().height() - 290.0).clamp(80.0, 280.0))
                     .min_scrolled_height(80.0)
+                    .auto_shrink([false,false])
                     .show(ui, |ui| {
                         ui.set_min_width(ui.available_width());
-                        let visible=|entry:&DirectoryEntry| entry.directory || mode==FileMode::Open || name_matches_format(&entry.name,self.format);
+                        if self.loading {
+                            ui.horizontal(|ui| {ui.spinner(); ui.label("Reading folder…");});
+                        }
+                        if self.truncated {
+                            ui.label("Folder list limited to the first 2048 entries. Enter a known file path or choose a smaller folder.");
+                        }
+                        if self.omitted > 0 {
+                            ui.label(format!("{} entries could not be listed (unsupported names or unreadable metadata).",self.omitted));
+                        }
+                        let visible=|entry:&DirectoryEntry| entry.directory || (mode==FileMode::Open && !self.restricted_format) || name_matches_format(&entry.name,self.format);
                         if !self.entries.iter().any(visible) && !self.loading {
                             ui.label("No matching structure files or folders listed.");
                         }
@@ -413,12 +439,6 @@ impl FileChooser {
                 if let Some(name)=select_name {
                     self.set_name(name);
                 }
-                if self.truncated {
-                    ui.label("Folder list limited to the first 2048 entries. Enter a known file path or choose a smaller folder.");
-                }
-                if self.omitted > 0 {
-                    ui.label(format!("{} entries could not be listed (unsupported names or unreadable metadata).", self.omitted));
-                }
                 let previous_name=self.name.clone();
                 ui.horizontal(|ui| {
                     let label = ui.label("File name");
@@ -437,9 +457,23 @@ impl FileChooser {
                 if self.name!=previous_name {
                     self.set_name(self.name.clone());
                 }
-                if let Some(error) = &self.error {
-                    ui.colored_label(egui::Color32::DARK_RED, error);
-                }
+                let status_key=ui.make_persistent_id("bondline-file-error-status");
+                let message_key=egui::Id::new((self.generation,self.error.as_deref()));
+                let reset_error=ui.ctx().data_mut(|data| {
+                    let changed=data.get_temp::<egui::Id>(status_key)!=Some(message_key);
+                    data.insert_temp(status_key,message_key);
+                    changed
+                });
+                let error_height=2.0*ui.spacing().interact_size.y;
+                let mut errors=egui::ScrollArea::vertical().id_salt("bondline-file-error")
+                    .max_height(error_height).min_scrolled_height(error_height).auto_shrink([false,false]);
+                if reset_error { errors=errors.vertical_scroll_offset(0.0); }
+                errors.show(ui,|ui| {
+                    ui.set_min_width(ui.available_width());
+                    if let Some(error)=&self.error {
+                        ui.colored_label(egui::Color32::DARK_RED,error);
+                    }
+                });
                 ui.horizontal(|ui| {
                     if ui.button("Cancel").clicked() {
                         self.cancel();
@@ -1641,3 +1675,11 @@ mod tests {
         Ok(())
     }
 }
+
+#[cfg(test)]
+#[path = "file_picker_layout_tests.rs"]
+mod picker_layout_tests;
+
+#[cfg(test)]
+#[path = "file_picker_error_tests.rs"]
+mod picker_error_tests;

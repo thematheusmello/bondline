@@ -363,6 +363,7 @@ impl SdfEditor {
         let target = match command {
             Command::UiFile(params) => match params.action {
                 UiFileAction::New => Some(Target::Control("file.new")),
+                UiFileAction::ConvertSmiles => Some(Target::Control("file.convert_smiles")),
                 UiFileAction::Open => Some(Target::Control("file.open")),
                 UiFileAction::Save => Some(Target::Control("file.save")),
                 UiFileAction::SaveAs => Some(Target::Control("file.save_as")),
@@ -946,6 +947,7 @@ pub(super) fn resume_command(target: Target, engine: &Engine) -> Result<Option<C
                 }
                 match action {
                     UiFileAction::New => "file.new",
+                    UiFileAction::ConvertSmiles => "file.convert_smiles",
                     UiFileAction::Open => "file.open",
                     UiFileAction::Save => "file.save",
                     UiFileAction::SaveAs => "file.save_as",

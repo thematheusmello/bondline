@@ -530,7 +530,7 @@ fn replay_edit_shortcuts(
         && !files
             .as_ref()
             .is_some_and(|files| files.new_decision_open());
-    if blocked && fields.is_none() {
+    if blocked && fields.is_none() && files.is_none() {
         return;
     }
     let text_focused = text_edit_focused(context);
@@ -548,6 +548,7 @@ fn replay_edit_shortcuts(
             fields.replay_editor(index, engine, context);
         }
         if let Some(files) = files.as_deref_mut() {
+            files.replay_conversion(index, event, engine, error, context);
             files.replay_new(index, event, engine, error, context);
             files.adopt_new(engine, error);
         }
@@ -734,6 +735,7 @@ fn show_workspace_with_preview(
         .is_some_and(|files| files.new_decision_open());
     if let Some(files) = files.as_deref_mut() {
         files.begin_new_ui(context, &events);
+        files.begin_conversion_ui(context, Some(engine), &events);
     }
     if [
         context.screen_rect().width(),
@@ -1207,6 +1209,7 @@ fn show_workspace_with_preview(
                     fields.replay_editor(index, engine, context);
                 }
                 if let Some(files) = files.as_deref_mut() {
+                    files.replay_conversion(index, event, engine, error, context);
                     files.replay_new(index, event, engine, error, context);
                     files.adopt_new(engine, error);
                 }
@@ -2006,6 +2009,12 @@ impl BondlineApp {
                 }
             }
             Err(_) => {
+                self.files.deactivate_conversion(context, &mut self.error);
+                self.files.begin_conversion_ui(
+                    context,
+                    None,
+                    &context.input(|input| input.events.clone()),
+                );
                 self.files.deactivate_new(context, &mut self.error);
                 self.preview.deactivate(context);
                 self.sdf_fields.deactivate(context);
@@ -2033,6 +2042,7 @@ impl BondlineApp {
             }
         }
         self.preview.start_pending(&self.executor, context);
+        self.files.start_pending_conversion(&self.executor, context);
         self.sdf_fields.start_pending(&self.executor, context);
         self.smiles_records.start_pending(&self.executor, context);
     }

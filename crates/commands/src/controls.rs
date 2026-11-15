@@ -71,7 +71,7 @@ impl Engine {
                 shift,
             })
         };
-        let mut controls = Vec::with_capacity(17);
+        let mut controls = Vec::with_capacity(18);
         for (id, label, key, shift, action) in [
             (
                 "file.new",
@@ -118,6 +118,21 @@ impl Engine {
                 selected: None,
             });
         }
+        controls.push(ControlInfo {
+            id: "file.convert_smiles",
+            label: "Convert SMILES file…",
+            menu: "File",
+            shortcut: None,
+            command: Command::UiFile(UiFile {
+                expected_revision: state.revision,
+                action: UiFileAction::ConvertSmiles,
+                request_id: None,
+                close_epoch: None,
+            }),
+            enabled: file_reason.is_none(),
+            disabled_reason: file_reason,
+            selected: None,
+        });
         let close_reason = if state.ui_file.available {
             authoring_reason
         } else {

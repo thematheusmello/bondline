@@ -438,8 +438,9 @@ Keep the same save reservation through prepare/publication/finish/drop and the e
 worker/reply/close barriers. Finish returns current state plus historical conversion metadata;
 do not alter current/saved/original/history/association/close/native intent or acknowledgments.
 MCP read_only is false because it writes disk. Conversion/nonfile work cannot bind native
-Open/Save requests. Complete-file SMILES Open/Save is a separate immutable content path;
-native conversion UI remains missing.
+Open/Save requests. Complete-file SMILES Open/Save is a separate immutable content path.
+The later specialized native form does not change those generic binder refusals; see
+the native conversion continuation below and verification-native-smiles-conversion.md.
 See verification-smiles-conversion-command.md for scope, RED/GREEN and independent consumers.
 
 file.export_smiles_fragment requires expected_revision/page_id/fragment_id/output_path.
@@ -692,3 +693,32 @@ Save-before-New, editable reopen and Undo pass; native races and other platforms
 unverified. Next is the existing restricted SMILES converter's honest native workflow,
 then broader drawing import/layout. SDF reordering is deferred, not delivered. Full M0/M1
 and M2–M5 remain incomplete; Actions stays disabled.
+
+## Native file conversion and stable picker controls
+
+`file.convert_smiles` binds existing ui.file actionconvert_smiles; no shortcut or new
+registry command. Specialized prepare_ui_smiles_conversion requires exact Accepted intent,
+reserves under origin mutex and consumes presentation only on successful existing command
+prepare. It cannot bind/finish a trusted Open/Save or close ACK. Keep the existing save lease,
+worker budget and actual handle through retirement. Conversion never opens its output or
+marks the active document saved. Source defaults/profile and all eight actual parameters
+remain explicit. Broader import and reference clipboard roles remain separate missing work.
+
+Unstarted obsolete forms/focus dismiss on source/close transition. Running/publication
+outcomes remain owned/reportable. FileWorkflow Drop cancels conversion work too: an
+independent gated test reproduced output after owner destruction. Explicit valid retry
+clears its prior global error; never clear later unrelated errors indiscriminately at finish.
+
+Asynchronous chooser rows must not change the filename/footer's parent allocation or
+geometry. Pinned egui child automatic IDs depend on that allocation; a reproduced click
+loss occurred even with the old point inside both rectangles. Keep the fixed browser
+region and separately always-allocated two-row error region. Errors must stay visible
+after the main list scrolls; reset their scroll only for new message/navigation via one
+fixed temporary key. No per-message cache or forced continuous scroll. Normal browser
+correction does not establish confirmation-path stability. Keep both frozen component
+regressions and all old chooser assertions. Actual prior timeout causality remains unknown.
+
+Read verification-native-smiles-conversion.md, its command/App/worker/review links and
+verification-file-picker-stability.md. Native and final aggregate scope live in STATUS.md;
+do not infer either from headless App tests. Actions stays disabled, no new dependency,
+parser/corpus/oracle/font/golden change. Next M1 work is broader SMILES drawing import/layout.

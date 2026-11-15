@@ -48,12 +48,20 @@ The later user-authorized live26.1.0.6801 pass actually observes New creating a 
 styled window while retaining the first; see docs/research/live-ui-review-2026-11-15.md.
 That independent-window/style workflow remains required for parity.
 
-Next M1 priority is an honest native workflow for the existing restricted create-only
-SMILES→CDXML converter, then broader SMILES drawing import/layout. Reread its current
-contract and independent consumers before adding controls; preserve active source,
-create-only output and explicit profile limitations. SDF creation/reordering and wider
-format editing stay in the backlog. The earlier proposed SDF reordering priority is
-deferred after the sourced File New audit; it was not an implemented feature.
+The original native restricted SMILES→CDXML workflow is now delivered through the same
+registry and registered-worker lifecycle. Input/output browsing, explicit geometry,
+existing-destination refusal, successful Unicode retry without replacing unsaved work,
+guarded explicit Open, Double edit/Undo and separate Save As/reopen pass on macOS.
+Independent consumers accept both actual433-byte outputs. The final local aggregate
+passes1116/0/1; native race/close/cancellation and other platforms remain unverified.
+See docs/verification-native-smiles-conversion.md. This is a1–12 neutral-carbon Single
+path utility, not general SMILES import or Copy As/Paste Special parity.
+
+Next M1 priority is broader source-preserving SMILES drawing import/layout. First define
+the supported graph/geometry and editing-authority contract against published notation
+and independent consumers; retain unsupported source rather than silently projecting it.
+SDF creation/reordering and wider format editing stay in the backlog. The earlier proposed
+SDF reordering priority was deferred after the sourced File New audit, not implemented.
 
 Whole-record SDF removal now has a source-preserving codec, the shared typed command,
 CLI/stdio/authenticated-loopback routes and original Records confirmation UI. Independent

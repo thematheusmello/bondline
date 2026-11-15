@@ -691,12 +691,40 @@ session/close approval or claim rollback. Cancellation before publication create
 after publication the real outcome remains reportable. Dropping an unexecuted plan or a
 published completion releases its reservation without updating the active session.
 
-Native file presentation cannot bind this command. `prepare_ui_file` rejects it before
+Generic native Open/Save presentation cannot bind this command. `prepare_ui_file` rejects it before
 reservation; the generic plan binder explicitly refuses it rather than silently treating it
 as Open/Save or ignoring an ID. A conversion cannot complete, clear or renew a trusted native
 Save acknowledgment. CLI, stdio MCP and authenticated loopback use the same registry/worker
-operation; native conversion controls and interactive acceptance remain missing. See
-[verification-smiles-conversion-command.md](verification-smiles-conversion-command.md).
+operation. The later specialized native conversion presentation is described below and in
+[integrated evidence](verification-native-smiles-conversion.md). The original
+[command evidence](verification-smiles-conversion-command.md) retains its headless scope.
+
+### Native conversion presentation
+
+The central `file.convert_smiles` File control has no shortcut and dispatches
+`ui.file {expected_revision, action:"convert_smiles"}`. It adds a control, not a second
+conversion command: the registry remains30. Drawing exposes18 controls; readonly SDF12.
+The native plan is `UiFilePlan::SmilesConversion`. Its original form shows the restricted
+profile, explicit geometry and separate input/new-output selection. Existing output refuses;
+conversion browsing does not discard the current drawing. Default48pt bond/origin72pt/A4
+are original UI choices, not claimed reference style defaults.
+
+`Engine::prepare_ui_smiles_conversion(id,params)` requires the exact current Accepted
+conversion request and prepares the existing typed eight-parameter operation. Success
+consumes presentation before I/O, without binding a native Save request. Preparation failure
+leaves the accepted intent available. `CommandExecutor` validates and reserves the existing
+worker under its origin mutex. Generic bind/refusal and trusted Save/close guards remain.
+The issued `ui_file_operation` integer is a presentation epoch, not a publication receipt.
+Its disappearance does not establish that the background conversion has finished.
+
+The host retains its actual job and thread through retirement, cancellation, close and
+poison. Results use the real `conversion` receipt; current document/history/baselines stay
+unchanged, including historical publication after replacement. Unstarted obsolete forms
+and focus are dismissed; running/published outcomes remain reportable. Dropping the owner
+requests cancellation. Explicit valid retry clears the previous error, while later unrelated
+errors are not erased at finish. Native results direct ordinary File → Open; no automatic
+Open/New or false Save acknowledgment. Native OS and remaining platform scope are stated
+in verification-native-smiles-conversion.md.
 
 ## Selected-fragment SMILES export
 

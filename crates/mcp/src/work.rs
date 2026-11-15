@@ -1,7 +1,7 @@
 use crate::SharedEngine;
 use bondline_commands::{
-    Cancellation, CaptureStamp, CloseState, Command, CommandResult, Engine, Error, ErrorInfo,
-    FileFormat, Prepared, RenderCapture, SdfRecordRemove, SmilesRecordInspect,
+    Cancellation, CaptureStamp, CloseState, Command, CommandResult, ConvertSmilesToCdxml, Engine,
+    Error, ErrorInfo, FileFormat, Prepared, RenderCapture, SdfRecordRemove, SmilesRecordInspect,
 };
 use std::{
     future::Future,
@@ -68,6 +68,20 @@ pub struct UiFileWork {
 impl UiFileWork {
     /// Complete the real file command, not presentation acknowledgement. The native
     /// host consumes the result with finish_ui_file; a retry must retain the same ID.
+    pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
+        let Self { engine, registered } = self;
+        complete_registered_blocking(&engine, registered, cancel)
+    }
+}
+
+/// One create-only conversion, with no native Save/close acknowledgment authority.
+#[must_use = "complete or drop conversion work to release its reservations"]
+pub struct UiSmilesConversionWork {
+    engine: SharedEngine,
+    registered: RegisteredWork,
+}
+
+impl UiSmilesConversionWork {
     pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
         let Self { engine, registered } = self;
         complete_registered_blocking(&engine, registered, cancel)
@@ -176,6 +190,26 @@ impl CommandExecutor {
             .prepare_ui_file(id, actual)
             .map_err(|error| error.info())?;
         Ok(UiFileWork {
+            engine: Arc::clone(&self.engine),
+            registered: RegisteredWork {
+                prepared,
+                permit: Some(permit),
+            },
+        })
+    }
+
+    /// Reserve and validate under the originating lock, after releasing the frame guard.
+    pub fn prepare_ui_smiles_conversion(
+        &self,
+        id: u64,
+        params: ConvertSmilesToCdxml,
+    ) -> Result<UiSmilesConversionWork, ErrorInfo> {
+        let mut engine = self.engine.lock().map_err(|_| unavailable())?;
+        let permit = self.workers.permit()?;
+        let prepared = engine
+            .prepare_ui_smiles_conversion(id, params)
+            .map_err(|error| error.info())?;
+        Ok(UiSmilesConversionWork {
             engine: Arc::clone(&self.engine),
             registered: RegisteredWork {
                 prepared,

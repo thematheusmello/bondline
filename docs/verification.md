@@ -2661,3 +2661,30 @@ Actual436-byte old drawing is accepted by unchanged external RDKit plus separate
 checks. This bounded Mac journey does not prove native races, styles/templates/multiple
 windows or Windows/Linux input. No new fuzz/hosted check; Actions remains disabled.
 The full M0–M5 goal remains active. Continue from STATUS.md, without redoing delivered New.
+
+## Original native restricted SMILES file conversion, 2026-11-15
+
+[Integration evidence](verification-native-smiles-conversion.md) records File → Convert
+SMILES file… over the unchanged restricted create-only command, explicit geometry, shared
+worker/lease and separate guarded output Open. Registry30 remains; Drawing controls18 and
+readonly SDF12. Six core, two public adapter, three transport and15 UI/lifecycle/picker
+checks add26 passing cases. Minimal runtime REDs, missing-API compilers, reviewed new-test
+setup corrections and passing-first-run additional cases are recorded separately.
+
+Unstarted stale forms, actual publication after FileWorkflow Drop and a stale global error
+after successful retry were independently reproduced and fixed. Separate deterministic
+pointer evidence proves directory-scan completion changes a footer control's identity.
+A candidate correction's hidden-error regression is also reproduced; stable browser and
+separate bounded error regions pass both frozen tests. Earlier aggregate UI timeouts remain
+recorded without claiming that this proved identity defect caused them.
+
+Root84363 final local `cargo xtask ci` passes **1116/0/1**,158 result lines, formatting,
+warnings-denied all-target clippy, workspace/vendor tests, layers, unchanged licenses and
+corpus. Root97224 builds the matching native binary. Actual Mac PID52075 passes browse,
+existing-destination refusal, successful Unicode retry while retaining Untitled*, explicit
+Open/Cancel/Discard, Double edit/Undo and separate Unicode Save As/reopen. Both433-byte
+outputs remain exact and pass unchanged external RDKit plus independent Expat/Decimal.
+No auto Open/current Save, native race/close/cancellation, numeric geometry typing,
+hardware-DPI, general SMILES or clipboard parity is inferred. Other platforms remain
+unverified; no new parser/fuzz/dependency/SDK/oracle/font/golden or hosted execution.
+Actions stays disabled and the full M0–M5 goal remains active.

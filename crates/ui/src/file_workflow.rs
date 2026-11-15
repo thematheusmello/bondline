@@ -1,14 +1,19 @@
 //! Native file-menu, background execution and unsaved-close lifecycle.
 
 mod new_document;
+mod smiles_conversion;
 #[cfg(test)]
 use new_document::NewChoice;
 use new_document::NewWorkflow;
+use smiles_conversion::ConversionWorkflow;
 
 #[cfg(test)]
 mod cdx_tests;
 #[cfg(test)]
 mod close_tests;
+#[cfg(test)]
+#[path = "conversion_lifecycle_tests.rs"]
+mod conversion_tests;
 #[cfg(test)]
 mod mol_tests;
 #[cfg(test)]
@@ -73,6 +78,7 @@ pub(crate) struct FileWorkflow {
     save_for_close: Option<CloseSave>,
     request_id: Option<u64>,
     new_document: NewWorkflow,
+    conversion: ConversionWorkflow,
 }
 
 impl FileWorkflow {
@@ -84,17 +90,19 @@ impl FileWorkflow {
             save_for_close: None,
             request_id: None,
             new_document: NewWorkflow::default(),
+            conversion: ConversionWorkflow::default(),
         }
     }
 
     pub(crate) fn blocks_authoring(&self, state: &CommandResult) -> bool {
-        self.new_document.pending()
+        self.conversion.present()
+            || self.new_document.pending()
             || self.chooser.is_open()
             || crate::pending_ui_blocks_authoring(state)
     }
 
     pub(crate) fn is_busy(&self) -> bool {
-        self.job.is_some()
+        self.job.is_some() || self.conversion.busy()
     }
 
     fn sync_close(&mut self, state: &CommandResult) {
@@ -199,6 +207,7 @@ impl FileWorkflow {
         });
         match plan {
             UiFilePlan::NewDocument => self.accepted_new(request.id, engine, error),
+            UiFilePlan::SmilesConversion => self.open_conversion(request.id, engine, error),
             UiFilePlan::OpenPicker => self.begin(FileMode::Open, &state),
             UiFilePlan::SavePicker => self.begin(FileMode::Save, &state),
             UiFilePlan::SaveExisting { format, params } => {
@@ -274,6 +283,7 @@ impl FileWorkflow {
     }
 
     pub(crate) fn request_close(&mut self, engine: &mut Engine, error: &mut Option<String>) {
+        self.conversion_close(engine, error);
         self.cancel_new_for_close(engine, error);
         self.close_command(engine, CloseAction::Request, error);
     }
@@ -357,12 +367,20 @@ impl FileWorkflow {
         active_work: bool,
     ) -> Option<FileIntentAction> {
         self.sync_new(engine);
+        if self.conversion.present() && engine.state().close == CloseState::Open {
+            self.conversion_picker(context);
+            return None;
+        }
         let revision = engine.state().revision;
         if let Some(action) = self.adopt_request(engine, error) {
             return Some(action);
         }
         if engine.state().revision != revision {
             context.request_discard("New document was created");
+        }
+        if self.conversion.present() && engine.state().close == CloseState::Open {
+            self.conversion_picker(context);
+            return None;
         }
         let state = engine.state();
         if self.chooser.is_open() {
@@ -598,6 +616,7 @@ impl FileWorkflow {
     }
 
     pub(crate) fn poll(&mut self, engine: &mut Engine, error: &mut Option<String>) {
+        self.sync_conversion(Some(engine), error);
         self.sync_new(engine);
         let current = engine.state();
         self.sync_close(&current);
@@ -674,6 +693,7 @@ impl Drop for FileWorkflow {
         if let Some(job) = &self.job {
             job.cancel.cancel();
         }
+        self.conversion.cancel();
     }
 }
 

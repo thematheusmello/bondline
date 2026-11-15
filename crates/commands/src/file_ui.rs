@@ -11,6 +11,7 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "snake_case")]
 pub enum UiFileAction {
     New,
+    ConvertSmiles,
     Open,
     Save,
     SaveAs,
@@ -57,6 +58,7 @@ pub struct UiFileState {
 #[derive(Clone, Debug)]
 pub enum UiFilePlan {
     NewDocument,
+    SmilesConversion,
     OpenPicker,
     SavePicker,
     SaveExisting {
@@ -223,6 +225,7 @@ impl Engine {
         }
         let plan = match active.view.action {
             UiFileAction::New => UiFilePlan::NewDocument,
+            UiFileAction::ConvertSmiles => UiFilePlan::SmilesConversion,
             UiFileAction::Open => UiFilePlan::OpenPicker,
             UiFileAction::Save => {
                 active
@@ -265,6 +268,27 @@ impl Engine {
             expected_revision: active.view.input_revision,
             discard_unsaved,
         }))
+    }
+
+    /// Convert into a new file without binding a Save or creating completion authority.
+    /// Consume the presentation only after the existing conversion plan is prepared.
+    pub fn prepare_ui_smiles_conversion(
+        &mut self,
+        id: u64,
+        params: crate::ConvertSmilesToCdxml,
+    ) -> Result<Prepared, Error> {
+        let active = self.current_ui_file(id)?;
+        if active.view.phase != UiFilePhase::Accepted {
+            return Err(Error::UiBusy);
+        }
+        if active.view.action != UiFileAction::ConvertSmiles {
+            return Err(Error::InvalidUiFileParameters(
+                "SMILES conversion requires the matching accepted conversion request",
+            ));
+        }
+        let prepared = self.prepare(Command::ConvertSmilesToCdxml(params))?;
+        self.file_ui.active = None;
+        Ok(prepared)
     }
 
     /// Validate a host selection and prepare its actual file command under the same

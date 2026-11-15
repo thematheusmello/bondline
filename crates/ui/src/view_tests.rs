@@ -1386,3 +1386,6 @@ mod sdf_record_remove_tests;
 
 #[path = "new_document_tests.rs"]
 mod new_document;
+
+#[path = "native_conversion_tests.rs"]
+mod native_conversion;

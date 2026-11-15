@@ -1,4 +1,6 @@
 use serde_json::{Value, json};
+#[path = "support/native_conversion_intent.rs"]
+mod native_conversion_intent;
 use std::{
     collections::BTreeSet,
     process::{Command, Output},
@@ -47,6 +49,7 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "file.open",
             "file.save",
             "file.save_as",
+            "file.convert_smiles",
             "file.close",
             "edit.undo",
             "edit.redo",

@@ -149,6 +149,15 @@ under the same engine lock, then sends an opaque engine-bound plan to a worker. 
 acknowledgement is distinct from visible pixels or a successful file receipt. See the
 control contract for phases, retries, cancellation and still-private dialog fields.
 
+The original restricted SMILES conversion form is one child of that FileWorkflow. It
+reuses the chooser and existing converter, with a specialized typed preparation bridge
+that consumes only the matching Accepted presentation after successful preparation.
+Conversion cannot become a Save/close acknowledgment or automatically replace the
+document. Its real thread handle remains owned through cancellation and retirement;
+FileWorkflow destruction also signals cancellation. The shared chooser isolates changing
+directory results from stable filename/action controls and keeps errors separately
+visible. See verification-native-smiles-conversion.md and verification-file-picker-stability.md.
+
 The native app and opt-in loopback server now share this engine. A dedicated adapter thread
 owns the Tokio listener/tasks. Input is bounded before JSON decoding; no engine guard crosses
 an await. The server notifies the UI after committed changes and cancels all connection tasks
