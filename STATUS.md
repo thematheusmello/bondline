@@ -1,8 +1,9 @@
 # Status — 2026-11-15
 
 The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`, source checkpoint
-`976ef42`. This atomic slice corrects SDF Fit's visible/accessibility readout without
-changing images or camera policy. Renderer`06ab5a9`, field editor`7b64604` and plan
+`324473d`. This atomic slice delivers typed native SMILES query preparation and its
+background/guard/authority tests. The actual inspector UI is separate ongoing work.
+Fit`324473d`, renderer`06ab5a9`, field editor`7b64604` and plan
 `af7fab0` remain checkpoints. No push/merge/publication. M0's desktop/GPU
 license blocker is resolved; full M0 and M1 remain incomplete.
 
@@ -23,6 +24,14 @@ Legacy physical-margin Fit and logical relative-step math remain distinct above1
 The registry remains28 typed commands shared by UI, CLI, stdio MCP and authenticated
 loopback. Complete source-backed snapshots/history, guarded CDXML/CDX/MOL/SDF/SMILES
 files, saved/original distinctions and strict source authority stay intact.
+
+Typed `prepare_ui_smiles`/UiSmilesWork now prepares the existing selected-record query
+under the origin lock with full source/Open/close guards and the same pre-spawn two-slot
+reservation. Real background completion, exact49-byte source/history, close/source ABA,
+shared capacity/cancellation and no Save/native-ACK authority pass three receiving cases.
+This is a verified library bridge, not an executed native SMILES inspector. Its original
+plan and scoped evidence are now in docs/research/smiles-native-workflow-plan.md and
+docs/verification-smiles-ui-work.md. No new wire command or parser/dependency changes.
 
 New source-qualified SDF Actual/Fit/Zoom and pan use that same camera. Actual/explicit
 percentage needs no fabricated bounds; successful current-view capture derives every
@@ -52,7 +61,15 @@ general labels/selection/transforms, styles, chemistry and full reference screen
 
 ## Verification
 
-- Latest Root77768 pinned-Python `CARGO_INCREMENTAL=0 cargo xtask ci`: **1021 passed,
+- Latest Root69771 full pinned-Python local gate passes **1024/0/1**,150 result lines:
+  rustfmt, all-target warnings-denied clippy, layers, licenses and corpus all pass.
+  Log`target/smiles-ui-work/root-ci.log`,123009B/SHA
+  `9c54faf30b72d42d4d7503391792594f29ebd829274f8cb0b080ea7dfde14bc7`.
+  Root46504 receiving missing-API compile RED and61613 three-case GREEN preserve exact
+  worker production/test pins. Independent full MCP64/0/0/clippy/fmt pass. Two reviewed
+  new-test setup corrections are distinct from the compile RED and product behavior;
+  no old API/test/oracle or unrelated state assertion was weakened.
+- Prior Root77768 pinned-Python `CARGO_INCREMENTAL=0 cargo xtask ci`: **1021 passed,
   0 failed,1 ignored**,149 result lines. Fmt, all-target warnings-denied clippy, layers,
   licenses and corpus pass. Log`target/fit-readout/root-ci-final.log`,122094B/SHA
   `fe1bf7c0a94e167d6c57f4da55b221fdfcb24db8fd24c77b7869c49c8976b0ee`.
@@ -159,10 +176,10 @@ M5 naming/templates/biopolymers/WebAssembly/installers remain required. No full2
    overview remain separate: physical margins differ from logical fit math. Preserve
    default pixels/readability and do not choose camera policy from cache presence.
 3. Continue the original readonly native SMILES record inspector and remaining M1/M0,
-   then M2–M5. A typed registered MCP bridge and independent tests are ready in isolated
-   worktrees; UI implementation is active, not delivered in this commit. Read
-   `bondline-smiles-native-plan/docs/research/smiles-native-workflow-plan.md` and its
-   frozen final handoff before receiving. Existing source query/file commands remain
+   then M2–M5. The typed registered bridge and three tests are integrated; five independent
+   App cases are frozen and UI implementation is active in isolated worktrees, not
+   delivered in this commit. Read docs/research/smiles-native-workflow-plan.md and
+   the UI owner's frozen handoff before receiving. Existing source query/file commands remain
    authoritative; no new wire command, chemical depiction or converter shortcut. Keep
    reference roles separate from original policy and missing/wired/verified evidence.
    Numeric AX cause needs a bounded actual-type/action investigation before a patch.
@@ -188,6 +205,6 @@ Next M1 tasks: `/root/native_acceptance` implements UI in isolated
 `/root/sdf_setter_review` has frozen five independent App tests in
 `bondline-smiles-record-ui-tests`, waiting for real source port; no live tests there.
 Its first four cases are intended missing-controls RED, fifth is baseline-positive privacy.
-The earlier `bondline-smiles-native-plan` bridge handoff0399f8c8…6f523 is frozen with
-three focused cases and full MCP64/0/0/clippy/fmt passing. Those are isolated evidence,
-not yet Root integration or native SMILES acceptance. Do not restart/duplicate live UI work.
+The earlier `bondline-smiles-native-plan` bridge handoff0399f8c8…6f523 is received with
+three focused cases and full MCP64/0/0/clippy/fmt passing plus the Root1024/0/1 gate.
+Those do not establish native SMILES acceptance. Do not restart/duplicate live UI work.

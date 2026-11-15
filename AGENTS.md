@@ -492,6 +492,12 @@ Keep the independent raw/graph/maximum notation tests and actual adapter/no-repa
 This is original automation policy, not a native record browser/editor. See
 verification-smiles-record.md and its linked receiving records; Actions stays disabled.
 
+Native SMILES queries now prepare through typed `CommandExecutor::prepare_ui_smiles`
+and opaque `UiSmilesWork`, with Open/full-stamp/exact-close guards and the existing
+shared two-worker reservation before spawn. Do not bypass it by parsing in-frame or
+spawning before validation. Completion can be historical; the host still owns stale
+display rejection and actual worker retirement. See docs/verification-smiles-ui-work.md.
+
 ## Derived SDF display continuation
 
 `io::sdf::preview` returns an ephemeral Page, exact preview-to-local ID maps and separate

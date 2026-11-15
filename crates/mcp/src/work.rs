@@ -1,7 +1,7 @@
 use crate::SharedEngine;
 use bondline_commands::{
     Cancellation, CaptureStamp, CloseState, Command, CommandResult, Error, ErrorInfo, Prepared,
-    RenderCapture,
+    RenderCapture, SmilesRecordInspect,
 };
 use std::{
     future::Future,
@@ -103,6 +103,23 @@ impl UiSdfWork {
     /// Run off the UI thread. Keep the host job busy through delivery and retirement.
     /// Queries may be historical: guard display by the captured source/close context.
     /// Successful edits change that source; refresh inspection rather than replaying them.
+    pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
+        let Self { engine, registered } = self;
+        complete_registered_blocking(&engine, registered, cancel)
+    }
+}
+
+/// One explicit SMILES record query, registered before the native host spawns work.
+/// It retains its originating Engine and shares the existing two-worker budget.
+#[must_use = "complete or drop SMILES work to release its worker reservation"]
+pub struct UiSmilesWork {
+    engine: SharedEngine,
+    registered: RegisteredWork,
+}
+
+impl UiSmilesWork {
+    /// Run off the UI thread. The host must retain its job through publication and
+    /// retirement, and reject historical display using its captured source/close context.
     pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
         let Self { engine, registered } = self;
         complete_registered_blocking(&engine, registered, cancel)
@@ -234,6 +251,42 @@ impl CommandExecutor {
         let permit = self.workers.permit()?;
         let prepared = engine.prepare(command).map_err(|error| error.info())?;
         Ok(UiSdfWork {
+            engine: Arc::clone(&self.engine),
+            registered: RegisteredWork {
+                prepared,
+                permit: Some(permit),
+            },
+        })
+    }
+
+    /// Validate source and close context, reserve and prepare under the origin mutex.
+    /// Release the frame's Engine guard first; pending intent must already block host close.
+    pub fn prepare_ui_smiles(
+        &self,
+        stamp: &CaptureStamp,
+        close_epoch: u64,
+        params: SmilesRecordInspect,
+    ) -> Result<UiSmilesWork, ErrorInfo> {
+        let mut engine = self.engine.lock().map_err(|_| unavailable())?;
+        let state = engine.state();
+        match state.close {
+            CloseState::Committed => return Err(Error::CloseCommitted.info()),
+            CloseState::Open => {}
+            CloseState::NeedsDecision | CloseState::Approved => {
+                return Err(Error::UiStaleRequest.info());
+            }
+        }
+        if state.close_epoch != close_epoch {
+            return Err(Error::UiStaleRequest.info());
+        }
+        if !engine.capture_stamp_matches(stamp) {
+            return Err(Error::StaleRevision.info());
+        }
+        let permit = self.workers.permit()?;
+        let prepared = engine
+            .prepare(Command::SmilesRecordInspect(params))
+            .map_err(|error| error.info())?;
+        Ok(UiSmilesWork {
             engine: Arc::clone(&self.engine),
             registered: RegisteredWork {
                 prepared,

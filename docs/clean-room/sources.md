@@ -1667,3 +1667,20 @@ explicit percentage entry are original Bondline presentation decisions. No refer
 product text/artwork or new camera formula is adopted. The [design review](../research/fit-density-review.md)
 and [actual-App/native evidence](../verification-fit-readout.md) distinguish this fix
 from the unresolved high-DPI relative-step policy. No dependency, SDK, font or golden changes.
+
+## Native SMILES query preparation, 2026-11-15
+
+The [original readonly inspector plan](../research/smiles-native-workflow-plan.md)
+records37 exact local/public/cache source identities: pinned OpenSMILES notation/file
+framing, GUIDE25 printed350–351 clipboard roles and PhotoCraft's app-owned job lifecycle.
+Those guide pages do not establish a Professional26.1 file-record browser. VoiceStudio's
+AGPL-only source is conceptual reference only; none of its code/assets/runtime is copied
+or linked. The bounded ordinal inspector and privacy/retirement choices are original
+Bondline policy, with chemical preview and conversion/export explicitly separate.
+
+This commit implements only typed native preparation over the existing query. Original
+source/close checks, two-worker registration, origin-bound completion and no Save/ACK
+authority reuse Bondline's delivered SDF/capture boundaries; no new file interpretation,
+wire command or proprietary evidence is introduced. [Independent and receiving tests](../verification-smiles-ui-work.md)
+separate missing-API compile RED from two reviewed new-test setup corrections and actual
+background/guard/authority behavior. Native inspector execution remains separate.

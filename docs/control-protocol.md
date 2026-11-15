@@ -792,6 +792,17 @@ fields refreshed; input/gen stamps identify the source. A newer Open is not over
 No save lease, mutation, native file binding/ACK, selection, preview or repaint follows.
 See verification-smiles-record.md for core scope and separate receiving evidence.
 
+Native Rust callers now have
+`CommandExecutor::prepare_ui_smiles(&CaptureStamp, close_epoch, SmilesRecordInspect)`.
+It checks current Open/source/close context under the originating mutex, reserves the
+existing shared two-worker slot before spawning, and returns noncloneable `UiSmilesWork`.
+Its blocking completion uses the same registered Core query/finish; no new wire tool,
+Save lease or native file acknowledgement is created. Queries can be historical: a host
+must retain pending/job state through actual thread retirement and reject stale display.
+The library bridge has independent background/guard/budget/authority tests; the native
+inspector is separate work. See verification-smiles-ui-work.md and the original
+research/smiles-native-workflow-plan.md.
+
 ## Native preview host contract (Rust adapter)
 
 CaptureStamp is opaque Weak-content/revision/generation identity, not serialized input or a

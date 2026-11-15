@@ -259,6 +259,13 @@ originating Engine, complete CaptureStamp, Open close epoch and existing shared 
 reservation. Core completion/finish and accepted-earlier close semantics stay unchanged.
 See [the adapter checks](verification-ui-sdf-work.md).
 
+The narrow SMILES analogue `prepare_ui_smiles` takes typed SmilesRecordInspect and
+returns origin-bound UiSmilesWork. It reuses the same two slots, pre-spawn context checks
+and Core completion without broadening the SDF whitelist or refactoring old APIs.
+Historical results require source/close/request qualification in the caller; completion
+is not native thread retirement, Save authority or a displayed inspector. See
+verification-smiles-ui-work.md; actual UI adoption is the next separate slice.
+
 `SdfFieldsWorkflow` now adds explicit read-only native occurrence inspection. One pending
 intent, one bounded channel/job and one field page sit beside the existing preview.
 Source/close/record/offset/request keys reject stale installation; native close includes

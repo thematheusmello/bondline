@@ -2591,3 +2591,14 @@ separate. Root77768 full local gate passes1021/0/1, rustfmt, warnings-denied cli
 layers, licenses and corpus. No image/SDK/asset/oracle/dependency change. High-DPI relative
 steps, native typing/wheel/hardware measurement and broader platform workflows remain
 unverified. The full goal remains active and Actions stays disabled.
+
+## Typed native SMILES query work, 2026-11-15
+
+[The registered Rust bridge](verification-smiles-ui-work.md) now prepares only the
+existing selected-record query before native spawn. Independent and receiving tests
+verify exact49-byte source/history, historical reply routing, source/close refusal,
+shared worker capacity/cancellation and absence of Save/native-ACK authority. Missing-
+API compile RED is distinct from the two documented new-test setup corrections.
+Root69771 local gate passes1024/0/1, formatting, warnings-denied clippy, layers, licenses
+and corpus. No new wire tool or dependency. Actual inspector UI/input/thread-retirement
+and native SMILES workflow acceptance remain separate work; no milestone is completed.

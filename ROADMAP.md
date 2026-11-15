@@ -156,6 +156,12 @@ user availability. All-record chemical preview/editing, record operations, broad
 and native conversion/export remain missing. See [file/application evidence](docs/verification-smiles-file-app.md)
 and [UI evidence](docs/verification-smiles-file-ui.md). M0/M1 remain incomplete and Actions remains disabled.
 
+The next [original record-inspector plan](docs/research/smiles-native-workflow-plan.md)
+now has a delivered typed native query bridge: three literal/background/guard/authority
+tests and the full Root1024/0/1 local gate pass. See docs/verification-smiles-ui-work.md.
+The actual UI component and five independent App cases are in progress; no native
+record-inspection, chemistry preview or complete M1 claim follows from the library bridge.
+
 
 Standalone CDXML source preservation and checked existing-attribute replacement have
 original-fixture/Expat and ASan smoke evidence plus one pinned unchanged RDKit corpus
