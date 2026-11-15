@@ -1,9 +1,10 @@
 # Status — 2026-11-15
 
-The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`. Codec checkpoint
-`e5c11bb`; the current feature commit adds the shared SDF removal command, native UI,
-independent tests and evidence. Previous integrated checkpoint`379fed0` contains the
-SMILES inspector. Do not restart these features. No push, merge or publication.
+The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`. Integrated feature
+checkpoint`f44bfa9` adds the shared SDF removal command, native UI, independent tests and
+evidence; codec checkpoint`e5c11bb` precedes it. Previous checkpoint`379fed0` contains the
+SMILES inspector. The tree was clean after feature integration. Do not restart these
+features. No push, merge or publication.
 
 M0's native/GPU license blocker is resolved; full M0 and M1 remain incomplete.
 GitHub Actions is disabled by user instruction (repository Actions off; workflow417397204
