@@ -12,7 +12,7 @@ The app is in early development; documented plans are not implemented features.
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
 | Start a fresh drawing safely | [New document, native Save/Discard/Cancel and race evidence](verification-new-document.md) |
-| Convert a supported SMILES file | [Acyclic profiles, native workflow and independent verification](verification-smiles-acyclic-integration.md), [original converter lifecycle](verification-native-smiles-conversion.md) |
+| Convert a supported SMILES file | [Simple-ring profile, focused and bounded Mac evidence; aggregate pending](verification-smiles-ring-integration.md), [earlier acyclic/native evidence](verification-smiles-acyclic-integration.md), [original converter lifecycle](verification-native-smiles-conversion.md) |
 | Check asynchronous file browsing | [Stable controls and visible errors](verification-file-picker-stability.md) |
 | Inspect SMILES notation records | [Original inspector and bounded native file workflow](verification-smiles-record-integration.md) |
 | Remove a complete SDF record | [Source preservation, confirmation and native evidence](verification-sdf-record-removal.md) |
@@ -21,11 +21,13 @@ The app is in early development; documented plans are not implemented features.
 | Navigate a read-only SDF chemical preview | [Integrated native scope](verification-sdf-view-integration.md), [command checks](verification-sdf-view-command.md), [App checks](verification-sdf-view-ui.md), [physical raster](verification-view-raster.md) |
 | Inspect rendering limits | [Rendering](rendering.md) |
 | Check centered Double/Triple geometry | [Renderer evidence](verification-multiple-render.md) |
+| Check ring/literal-H attachment | [Fixed ring pixels/hits](verification-literal-ring-attachment.md), [compact fallback and source compatibility](verification-literal-compact-star-attachment.md), [passing rotated-star control](verification-literal-rotated-star-attachment.md) |
 | Check ordered bond commands and transient tools | [Authoring contract](verification-multiple-authoring.md) |
 | Check multiple-bond file/image/fuzz acceptance | [Independent checks](verification-multiple-commands.md) |
 | Check actual application-frame tool workflows | [UI evidence](verification-multiple-ui.md) |
 | Inspect the refreshed visual direction | [Pinned references](research/visual-direction.md), [actual workspace checks](verification-workspace-presentation.md), [offscreen capture utility](verification-visual-capture.md) |
 | Find the next feature | [Roadmap](../ROADMAP.md), [parity checklist](parity-checklist.md) |
+| Investigate the next CDX framing case | [External writer counterexample and TDD/spec decision](research/cdx-external-writer-probe.md); no parser/corpus admission yet |
 | Review the latest installed reference UI | [User-authorized live File/Edit/View/New observations and gaps](research/live-ui-review-2026-11-15.md) |
 | Check evidence | [Verification](verification.md), [CI scope](ci.md), [corpus](corpus/README.md) |
 | Review provenance and licenses | [Source register](clean-room/sources.md), [open questions](clean-room/open-questions.md), [dependency policy](dependency-policy.md), [attribution](../ATTRIBUTION.md) |

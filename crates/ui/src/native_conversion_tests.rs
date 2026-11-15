@@ -809,3 +809,6 @@ mod recovery;
 
 #[path = "native_acyclic_conversion_tests.rs"]
 mod acyclic_profile;
+
+#[path = "native_ring_conversion_tests.rs"]
+mod ring_profile;

@@ -390,3 +390,19 @@ unobserved. Selected-document values are not factory/journal defaults. Signals26
 does not establish Professional entitlement. The selected-document capture still does not
 expose the separate toolbar; an invocation is not proof of its visibility or icon roles.
 Do not infer a settings implementation or full screen/functional parity from this pass.
+
+## Bounded simple-ring conversion, 2026-11-15
+
+The [delivered bounded profile](../verification-smiles-ring-integration.md) handles one
+small Single cycle plus supported trees. Components,≥9-member rings, fused/spiro/bridged
+graphs, ring multiple bonds, general neutral/charged/aromatic/stereo chemistry and source-
+qualified drawing import remain required. A graph fitting the64-atom budget can still
+refuse its full geometry/ink certificate. Native bulky/large/race/geometry-typing and
+other-platform flows remain unverified; conversion is neither a ring authoring tool nor
+ME-015/ME-025 clipboard parity.
+
+The legacy first-success receipt clipping is fixed through a measured-size re-layout,
+not new test waits. Extra sizing is subject to the pinned SDK pass budget; one-pass or
+intrinsically over-tall windows need separate acceptance/scrolling work. The older
+listener AddrInUse failure still has no proven cause: diagnostic-only labels preserve
+the failure and may identify a future phase; negative bounded runs are not a causal fix.

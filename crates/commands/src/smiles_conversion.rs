@@ -9,6 +9,7 @@ pub enum SmilesConversionProfile {
     #[default]
     NeutralCarbonPathV1,
     NeutralAcyclicV1,
+    NeutralSimpleRingV1,
 }
 
 impl SmilesConversionProfile {
@@ -16,6 +17,7 @@ impl SmilesConversionProfile {
         match self {
             Self::NeutralCarbonPathV1 => "neutral_carbon_path_v1",
             Self::NeutralAcyclicV1 => "neutral_acyclic_v1",
+            Self::NeutralSimpleRingV1 => "neutral_simple_ring_v1",
         }
     }
 
@@ -23,6 +25,7 @@ impl SmilesConversionProfile {
         match self {
             Self::NeutralCarbonPathV1 => "Carbon chains",
             Self::NeutralAcyclicV1 => "Acyclic neutral structures",
+            Self::NeutralSimpleRingV1 => "Neutral ring structures",
         }
     }
 

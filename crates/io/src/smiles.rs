@@ -10,6 +10,7 @@ mod acyclic;
 pub mod file;
 mod layout;
 mod normalize;
+mod ring;
 mod write;
 pub use file::{SmilesFileDocument, SmilesFileError};
 pub use layout::LayoutError;

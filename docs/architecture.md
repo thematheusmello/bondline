@@ -494,9 +494,44 @@ It verifies actual connected-tree edges, deterministic bounded angle/rotation al
 minimum-center origin, nonincident geometry and unchanged full ink at1024². A strict literal
 versus resolved-H Scene equality certificate prevents validating another rendering policy.
 
-The shared renderer's existing attachment-safe labels also serve authored-H degree>=3.
-This fixes independently reproduced H/bond occlusion and picking; unrelated mask collision
+The first acyclic prerequisite reused attachment-safe labels for authored-H degree>=3;
+the later ring prerequisite below extends that to degree>=2. Independently reproduced
+H/bond occlusion and picking justify these changes; unrelated mask collision
 policy stays exact. Native radio actions replay in raw event order and conversion completion
 reports its captured profile. Successful output is explicitly opened as a new native CDXML
 session; a derived projection never replaces the original SMILES source/owner or grants it
 editing authority. See [integration and independent evidence](verification-smiles-acyclic-integration.md).
+
+## Bounded simple-ring drawing conversion
+
+The same optional profile/command/lease/worker path now includes `neutral_simple_ring_v1`.
+Its separate IO layout accepts one connected unicyclic graph with a3–8-member Single
+cycle and supported attached trees,≤64 neutral fixed-H H/C/N/O/F/Cl/Br/I atoms. It checks
+actual topology before layout, preserves graph/local IDs/direction/source, and uses a
+ring-bounded attached forest rather than passing cyclic adjacency to parent-only tree
+recursion. Regular-polygon orientation, contextual branch angles and deterministic bounded
+alternatives are depiction policies, not chemical conformation or assigned stereo.
+Exact length/minimum-all-atom-center origin and full geometry/ink limits remain mandatory.
+
+The shared literal entry now uses attachment-safe labels for authored-H degree≥2, keeping
+unknown H unknown. It tries the exact four old choices first, then four compact stacked-H
+offsets±em/3 with the same font/em/count/masks and finite-width/global/paper/resource guards.
+Old private Above/Below constructors remain; distinct Shifted variants avoid changing
+existing unit callers. Independent fixed-ring and compact-star pixels/hits/source/CPU/GPU
+checks justify these changes; a passing rotated-star control remains separate evidence.
+The actual literal/same-authored-H scene certificate is never bypassed by another H policy.
+
+The third native radio replays at its raw event boundary. Neither its derived Document
+nor a successful output replaces the active source session, changes its saved/history
+state or grants it source-file editing/Save authority. An explicit ordinary Open of the
+new native CDXML remains required. Focused checks and bounded Mac C7 conversion/edit/
+history/Unicode persistence and the full local1158/0/1 gate pass; broader native/platform
+coverage remains unverified. Successful measured-height growth requests one qualified
+UI re-layout to prevent cached-window receipt clipping, without replaying raw events. See [the integration record](verification-smiles-ring-integration.md)
+and [independent layout](verification-smiles-ring-layout.md).
+
+The next format boundary is [the external CDX writer counterexample](research/cdx-external-writer-probe.md).
+Original source bytes and independent consumers, followed by a public framing decision,
+must precede a parser change. Nothing here admits trailing-zero normalization or adds
+those artifacts to the corpus. Component packing and general source-qualified SMILES
+import remain later M1 work; no new model/source authority is inferred from these utilities.

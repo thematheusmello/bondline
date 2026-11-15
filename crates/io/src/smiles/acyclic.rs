@@ -5,18 +5,18 @@ use bondline_model::{BondOrder, Document, Fragment, PageId, PageSize, Point2};
 use bondline_render::{Cancellation, GraphScene};
 use std::collections::BTreeMap;
 
-const MAX_ATOMS: usize = 64;
+pub(super) const MAX_ATOMS: usize = 64;
 const REFERENCE_SIZE: u32 = 1024;
-const WORK_PER_ROTATION: usize = 100_000;
-const SCENES_PER_ROTATION: usize = 64;
+pub(super) const WORK_PER_ROTATION: usize = 100_000;
+pub(super) const SCENES_PER_ROTATION: usize = 64;
 
 #[derive(Clone, Copy)]
-struct Link {
-    atom: usize,
-    order: BondOrder,
+pub(super) struct Link {
+    pub(super) atom: usize,
+    pub(super) order: BondOrder,
 }
 
-fn check(cancel: &Cancellation) -> Result<(), LayoutError> {
+pub(super) fn check(cancel: &Cancellation) -> Result<(), LayoutError> {
     if cancel.is_cancelled() {
         Err(LayoutError::Cancelled)
     } else {
@@ -59,35 +59,7 @@ impl SmilesDocument {
         }
         let adjacency = adjacency(&fragment)?;
         let root = longest_endpoint(&adjacency, cancel)?;
-        let mut linear = vec![false; adjacency.len()];
-        for (at, links) in adjacency.iter().enumerate() {
-            if links.len() == 2
-                && fragment
-                    .atoms()
-                    .get(at)
-                    .is_some_and(|a| a.element.get() == 6)
-                && (links.iter().any(|l| l.order == BondOrder::Triple)
-                    || links.iter().all(|l| l.order == BondOrder::Double))
-                && let Some(value) = linear.get_mut(at)
-            {
-                *value = true;
-            }
-            for link in links.iter().filter(|link| link.order == BondOrder::Double) {
-                let other = adjacency
-                    .get(link.atom)
-                    .ok_or(LayoutError::Geometry("missing neighbor"))?;
-                if links.len() > 1 && other.len() > 1 {
-                    if links.len() != 2 || other.len() != 2 {
-                        return Err(LayoutError::Unsupported(
-                            "internal Double configuration has no unknown depiction",
-                        ));
-                    }
-                    if let Some(value) = linear.get_mut(at) {
-                        *value = true;
-                    }
-                }
-            }
-        }
+        let linear = linear_centers(&fragment, &adjacency)?;
         let mut parent = vec![None; adjacency.len()];
         let mut children = vec![Vec::new(); adjacency.len()];
         let mut order = Vec::with_capacity(adjacency.len());
@@ -116,6 +88,7 @@ impl SmilesDocument {
                     *linear
                         .get(at)
                         .ok_or(LayoutError::Geometry("missing angle policy"))?,
+                    None,
                     cancel,
                 )?
             };
@@ -170,10 +143,54 @@ impl SmilesDocument {
     }
 }
 
+pub(super) fn linear_centers(
+    fragment: &Fragment,
+    adjacency: &[Vec<Link>],
+) -> Result<Vec<bool>, LayoutError> {
+    let mut linear = vec![false; adjacency.len()];
+    for (at, links) in adjacency.iter().enumerate() {
+        if links.len() == 2
+            && fragment
+                .atoms()
+                .get(at)
+                .is_some_and(|a| a.element.get() == 6)
+            && (links.iter().any(|l| l.order == BondOrder::Triple)
+                || links.iter().all(|l| l.order == BondOrder::Double))
+            && let Some(value) = linear.get_mut(at)
+        {
+            *value = true;
+        }
+        for link in links.iter().filter(|link| link.order == BondOrder::Double) {
+            let other = adjacency
+                .get(link.atom)
+                .ok_or(LayoutError::Geometry("missing neighbor"))?;
+            if links.len() > 1 && other.len() > 1 {
+                if links.len() != 2 || other.len() != 2 {
+                    return Err(LayoutError::Unsupported(
+                        "internal Double configuration has no unknown depiction",
+                    ));
+                }
+                if let Some(value) = linear.get_mut(at) {
+                    *value = true;
+                }
+            }
+        }
+    }
+    Ok(linear)
+}
+
 fn adjacency(fragment: &Fragment) -> Result<Vec<Vec<Link>>, LayoutError> {
     let count = fragment.atoms().len();
     if count == 0 || fragment.bonds().len().checked_add(1) != Some(count) {
         return Err(LayoutError::Unsupported("not a connected tree"));
+    }
+    graph_adjacency(fragment)
+}
+
+pub(super) fn graph_adjacency(fragment: &Fragment) -> Result<Vec<Vec<Link>>, LayoutError> {
+    let count = fragment.atoms().len();
+    if count == 0 {
+        return Err(LayoutError::Unsupported("empty graph"));
     }
     let mut result = vec![Vec::new(); count];
     for bond in fragment.bonds() {
@@ -234,7 +251,7 @@ fn longest_endpoint(adjacency: &[Vec<Link>], cancel: &Cancellation) -> Result<us
     Ok(best.1)
 }
 
-fn size(at: usize, parent: Option<usize>, adjacency: &[Vec<Link>]) -> usize {
+pub(super) fn size(at: usize, parent: Option<usize>, adjacency: &[Vec<Link>]) -> usize {
     1 + adjacency
         .get(at)
         .into_iter()
@@ -244,7 +261,7 @@ fn size(at: usize, parent: Option<usize>, adjacency: &[Vec<Link>]) -> usize {
         .sum::<usize>()
 }
 
-fn root_tree(
+pub(super) fn root_tree(
     at: usize,
     from: Option<usize>,
     adjacency: &[Vec<Link>],
@@ -280,11 +297,20 @@ fn key(
     parent: usize,
     adjacency: &[Vec<Link>],
     fragment: &Fragment,
+    ring_boundary: Option<&[bool]>,
 ) -> Result<String, LayoutError> {
     let atom = fragment
         .atoms()
         .get(at)
         .ok_or(LayoutError::Geometry("missing signature atom"))?;
+    // A ring-containing ligand is distinct from every attached acyclic ligand.
+    if ring_boundary.and_then(|boundary| boundary.get(at)).copied() == Some(true) {
+        return Ok(format!(
+            "{}:{:?}(ring)",
+            atom.element.get(),
+            atom.explicit_hydrogens
+        ));
+    }
     let mut branches = Vec::new();
     for link in adjacency
         .get(at)
@@ -294,7 +320,7 @@ fn key(
             branches.push(format!(
                 "{:?}:{}",
                 link.order,
-                key(link.atom, at, adjacency, fragment)?
+                key(link.atom, at, adjacency, fragment, ring_boundary)?
             ));
         }
     }
@@ -307,12 +333,13 @@ fn key(
     ))
 }
 
-fn local_alternatives(
+pub(super) fn local_alternatives(
     at: usize,
     children: &[usize],
     adjacency: &[Vec<Link>],
     fragment: &Fragment,
     linear: bool,
+    ring_boundary: Option<&[bool]>,
     cancel: &Cancellation,
 ) -> Result<Vec<Vec<f64>>, LayoutError> {
     check(cancel)?;
@@ -330,7 +357,7 @@ fn local_alternatives(
                 .collect::<Vec<_>>();
             let mut identities = links
                 .iter()
-                .map(|l| key(l.atom, at, adjacency, fragment))
+                .map(|l| key(l.atom, at, adjacency, fragment, ring_boundary))
                 .collect::<Result<Vec<_>, _>>()?;
             identities.sort();
             identities.dedup();
@@ -352,7 +379,7 @@ fn local_alternatives(
                         .get(link.atom)
                         .is_some_and(|atom| !matches!(atom.element.get(), 1 | 6))
                 })
-                .map(|link| key(link.atom, at, adjacency, fragment))
+                .map(|link| key(link.atom, at, adjacency, fragment, ring_boundary))
                 .collect::<Result<Vec<_>, _>>()?;
             let repeated_hetero = hetero_terminals.iter().enumerate().any(|(index, key)| {
                 hetero_terminals
@@ -375,7 +402,7 @@ fn local_alternatives(
             } else if terminal.len() == 3
                 && terminal
                     .iter()
-                    .map(|l| key(l.atom, at, adjacency, fragment))
+                    .map(|l| key(l.atom, at, adjacency, fragment, ring_boundary))
                     .collect::<Result<std::collections::BTreeSet<_>, _>>()?
                     .len()
                     == 1
@@ -425,24 +452,24 @@ fn permutations(values: &mut [f64], at: usize, result: &mut Vec<Vec<f64>>) {
     }
 }
 
-struct Solver<'a> {
-    fragment: &'a Fragment,
-    parent: Vec<Option<usize>>,
-    children: Vec<Vec<usize>>,
-    order: Vec<usize>,
-    alternatives: Vec<Vec<Vec<f64>>>,
-    positions: Vec<Option<[f64; 2]>>,
-    length: f64,
-    origin: Point2,
-    page: PageSize,
-    cancel: &'a Cancellation,
-    work: usize,
-    scenes: usize,
-    last: LayoutError,
+pub(super) struct Solver<'a> {
+    pub(super) fragment: &'a Fragment,
+    pub(super) parent: Vec<Option<usize>>,
+    pub(super) children: Vec<Vec<usize>>,
+    pub(super) order: Vec<usize>,
+    pub(super) alternatives: Vec<Vec<Vec<f64>>>,
+    pub(super) positions: Vec<Option<[f64; 2]>>,
+    pub(super) length: f64,
+    pub(super) origin: Point2,
+    pub(super) page: PageSize,
+    pub(super) cancel: &'a Cancellation,
+    pub(super) work: usize,
+    pub(super) scenes: usize,
+    pub(super) last: LayoutError,
 }
 
 impl Solver<'_> {
-    fn visit(&mut self, index: usize) -> Result<Option<Document>, LayoutError> {
+    pub(super) fn visit(&mut self, index: usize) -> Result<Option<Document>, LayoutError> {
         check(self.cancel)?;
         if self.work == 0 || self.scenes == 0 {
             return Ok(None);
@@ -601,7 +628,7 @@ fn spend(work: &mut usize, cancel: &Cancellation) -> Result<bool, LayoutError> {
     Ok(true)
 }
 
-fn geometry(
+pub(super) fn geometry(
     fragment: &Fragment,
     positions: &[Option<[f64; 2]>],
     length: f64,

@@ -66,11 +66,31 @@ work, guarded Open, branch Double edit/Undo/Redo and Unicode Save As/reopen pass
 766-byte files agree with independent raw/RDKit expectations. Source/H, stereo, geometry
 and platform limits are in docs/verification-smiles-acyclic-integration.md.
 
-Next M1 priority is simple-ring layout with substituents, then component packing and
-general source-qualified SMILES drawing import. Define supported graph/geometry/stereo and
-editing authority against published notation and independent consumers; retain unsupported
-source rather than silently projecting it. The new utility still does not grant an opened
-SMILES source-file session molecular editing authority or complete clipboard parity.
+The additive `neutral_simple_ring_v1` profile now implements one actual connected3–8
+Single cycle plus supported attached trees, at most64 neutral H/C/N/O/F/Cl/Br/I atoms.
+It retains fixed H/source/IDs, exact supplied length, minimum atom-center origin and full
+geometry/ink guards without scaling. The ordered third native choice uses the same
+create-only command/worker/lease and grants no active-session Save or source-file editing
+authority. Focused9 IO/4 command/2 wire/3 App/4 renderer checks pass, as do the producer's
+308 default IO tests. Bounded native Mac profile/refusal/Unicode retry, retained unsaved
+work, explicit Open Cancel/Discard, external methyl-bond Double edit/Undo/Redo and separate
+Unicode Save As/reopen pass. Independent readers accept both actual1254-byte outputs,
+C7H14→C7H12; source and existing-output sentinel remain exact. Geometry entry/browsing,
+native races, large/bulky cases and other platforms remain unverified. The final local aggregate passes1158/0/1, including unchanged legacy receipt checks
+after the shared dialog sizing fix. See [the integration record](docs/verification-smiles-ring-integration.md),
+[independent layout checks](docs/verification-smiles-ring-layout.md), and the separate
+[ring attachment](docs/verification-literal-ring-attachment.md) and
+[compact-H extension](docs/verification-literal-compact-star-attachment.md) evidence.
+
+Next M1 priority is the provenance-clear external CDX writer's exact trailing-zero
+counterexample: [research and continuation](docs/research/cdx-external-writer-probe.md).
+Freeze original-byte TDD and resolve the public framing/spec contract before any parser
+change or corpus admission; arbitrary trailing data must remain refused. Then advance
+component packing and general source-qualified SMILES drawing import, including larger,
+polycyclic and multiple-bond rings. Define graph/geometry/stereo and editing authority
+against published notation and independent consumers; retain unsupported source rather
+than silently projecting it. The new utility still does not grant an opened SMILES source
+session molecular editing authority or complete clipboard parity.
 SDF creation/reordering and wider format editing stay in the backlog. The earlier proposed
 SDF reordering priority was deferred after the sourced File New audit, not implemented.
 
@@ -388,5 +408,6 @@ notation and global ranges/counts, with opaque data retained privately. It uses 
 historical deferred-result/cancellation/close machinery, no write lease or mutation, and
 a128KiB serialized-object budget. Core and independent raw/graph/wire evidence are linked
 from docs/verification-smiles-record.md; native selection/preview/editing remain missing.
-Next M1 work should move all-record chemical display/import toward real drawing workflows,
-not treat these source/automation foundations as completed format or editor parity.
+After the external CDX framing priority above, continue component packing and general
+source-qualified drawing import; these source/automation foundations do not complete
+format or editor parity.

@@ -8,7 +8,7 @@
 | SDF V2000/V3000 | Complete mixed-version session/native Mac files, occurrence inspector and existing-value editor, source-preserving capture and read-only Actual/Zoom/pan preview | Exact raw spans/order/versions, pinned corpus and unchanged raw/per-MOL consumers; bounded Mac files/field edits/Actual/pan; actual-App wheel/DPI/source freshness and edit→preview→Save/reopen; command/adapter guards and earlier bounded ASAN | Native wheel/physical-DPI/new combined edit-preview acceptance, record creation/reordering and field-header editing, broader layout/chemistry, fetched mixed-version corpus, syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
 | RXN V2000 wrapper | Standalone source-preserving reader/new-wrapper writer with ordered roles and raw V2000/V3000 molecular payloads | Published CTfile layout; original field/role/span vectors; external RDKit readers/writers and bounded ASAN | Reaction model, application/native commands, V3000 reaction wrapper, broader registry/extension handling and fetched corpus |
-| SMILES | Complete accepted multi-record source Open/Save and readonly ordinal inspection; explicit-H fragment export and original native carbon-path/neutral-acyclic→new CDXML form; noncanonical output | Independent raw/per-record/output consumers; App/lifecycle gates; bounded Mac inspector and Unicode Save/reopen; native conversion/profile/refusal/retry, guarded Open/branch edit/Undo/Redo/Save As/reopen; independent actual433-byte legacy and766-byte acyclic outputs | Chemical preview/editing of opened source files, native clipboard/fragment export, conversion race/close timing and other platforms, cyclic/general layout/H policy, stereo/query/perception and canonicalization |
+| SMILES | Complete accepted multi-record source Open/Save and readonly ordinal inspection; explicit-H fragment export and native carbon-path/neutral-acyclic/simple-ring→new CDXML form; noncanonical output | Independent raw/per-record/output consumers and App/lifecycle checks; bounded Mac inspector and conversion/refusal/retry/Open/edit/history/Unicode Save/reopen. Actual433-byte legacy,766-byte acyclic and1254-byte C7 ring/exocyclic-Double outputs have independent checks; full local gate1158/0/1 | Chemical preview/editing of opened source files, native clipboard/fragment export, geometry entry/browsing/races and other platforms, components/larger/polycyclic/multiple-bond ring/general layout, stereo/query/perception and canonicalization |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
 | PNG | RGBA8 encoder and whole-page/opt-in current-view captures for supported neutral-element scenes; source-aware display H stays separate from authored data | External Pillow/FreeType, independent geometry/font vectors, actual CPU/GPU comparisons, bounded native SDF Actual/pan, source-aware MOL current captures at1x/2x and unchanged approved golden | Reference styles/general chemistry, broader native label/DPI workflows, physical publishing resolution and native PNG save/clipboard |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
@@ -216,6 +216,14 @@ encoded root and separate file end; see the detailed profile below. The known tw
 bytes are validated and other prefix bytes stay opaque. A successful legacy interpretation
 wins when reserved bytes are ambiguous. Independent vectors/native observations establish
 these bounded profiles, not every historical or modern file variant.
+
+The [external writer investigation](research/cdx-external-writer-probe.md) now supplies a
+provenance-clear counterexample: original Indigo1.47.0 outputs pass the pinned independent
+RDKit chemical checks but current syntax refuses `TrailingData`. Their28-byte legacy
+implicit-document framing has one extra final zero word. No parser fix or corpus admission
+has occurred. Next work is exact-original TDD plus a public framing/spec decision, keeping
+arbitrary trailing-data, malformed-end and resource guards; producer behavior alone does
+not authorize trimming or general zero padding.
 
 Binary records are decoded little-endian with checked offsets. Limits are independent
 Bondline policies:64 MiB input/output,100000 records and256 simultaneously open encoded
@@ -662,6 +670,33 @@ conversion and subsequent C–C→C=C edit, Undo/Redo, Unicode Save As and reope
 independent raw/Decimal/RDKit readers accept both766-byte outputs. Geometry typing, native
 race/close/cancellation and other platforms remain unverified. [Exact integrated evidence](verification-smiles-acyclic-integration.md)
 retains first REDs, the renderer prerequisite and the qualified new-oracle correction.
+
+## Explicit neutral simple-ring drawing conversion
+
+The additive `neutral_simple_ring_v1` uses the same create-only whole-notation operation,
+without changing either earlier profile or complete SMILES-file Open/Save. It requires one
+actual connected unicyclic graph, one3–8-member Single cycle with supported attached trees,
+and at most64 neutral nonisotopic H/C/N/O/F/Cl/Br/I atoms. Existing fixed-H normalization,
+physical-H nodes, graph/local identities/direction and original source stay intact.
+Regular-ring orientation and contextual substituents follow the documented depiction
+contract. Attached Single/Double/Triple edges retain the existing bounded stereo rules;
+cycle multiple bonds, larger/polycyclic/disconnected graphs and unsupported metadata refuse.
+
+Origin is the minimum x/y of all atom centers; exact length is never rescaled. Every
+candidate must pass actual graph/intersection, full label/stroke/paper/resource guards and
+literal-versus-same-count scene equality. The64-atom ceiling does not promise fit. The
+shared degree-two authored-H attachment correction and compact stacked-H fallback preserve
+literal counts, font/em and all masks/guards; they do not infer chemistry.
+
+Focused independent IO/command/wire/App/renderer checks pass. Bounded Mac C7 conversion,
+profile/existing-output refusals, Unicode retry without replacing unsaved work, explicit
+guarded Open, external Single→Double edit/Undo/Redo and separate Unicode Save As/reopen
+pass. Independent raw/Decimal/RDKit consumers accept the actual1254-byte C7H14 and C7H12
+files, with a Single ring in both. The final local aggregate passes1158/0/1; native
+geometry entry/browsing/races, large/bulky cases and other platforms are unverified. See
+[integrated ring scope](verification-smiles-ring-integration.md), [independent layout/oracle](verification-smiles-ring-layout.md),
+[ring attachment](verification-literal-ring-attachment.md) and [compact-H evidence](verification-literal-compact-star-attachment.md).
+No general source-backed molecular edit, ring drawing tool or SMILES clipboard parity follows.
 
 ## Complete accepted SMILES source files
 

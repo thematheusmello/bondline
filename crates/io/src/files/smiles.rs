@@ -160,6 +160,27 @@ pub fn convert_smiles_acyclic_to_cdxml_file(
     )
 }
 
+/// Derive one bounded simple neutral ring and its attached trees into new native CDXML.
+/// Uses the same whole-notation owner, cancellation and create-only publisher.
+pub fn convert_smiles_simple_ring_to_cdxml_file(
+    input: &Path,
+    output: &Path,
+    bond_length_pt: f64,
+    origin: Point2,
+    page: PageSize,
+    cancel: &Cancellation,
+) -> Result<SmilesConversionReceipt, FileError> {
+    convert_with_layout(
+        input,
+        bond_length_pt,
+        origin,
+        page,
+        cancel,
+        SmilesDocument::layout_neutral_simple_ring,
+        |document| save_cdxml_file(output, document, false, cancel),
+    )
+}
+
 fn convert_with_layout(
     input: &Path,
     bond_length_pt: f64,

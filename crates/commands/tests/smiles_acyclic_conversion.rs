@@ -117,7 +117,11 @@ fn the_optional_closed_profile_preserves_the_old_parameter_and_file_contract() -
     options.sort_by_key(Value::to_string);
     assert_eq!(
         options,
-        vec![json!(PROFILE), json!("neutral_carbon_path_v1")]
+        vec![
+            json!(PROFILE),
+            json!("neutral_carbon_path_v1"),
+            json!("neutral_simple_ring_v1")
+        ]
     );
     let directory = support::FileTestDirectory::new()?;
     let input = directory.path("old-input.smi");

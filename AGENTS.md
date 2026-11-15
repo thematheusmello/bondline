@@ -106,7 +106,7 @@ SDF/RXN/SMILES file records;
 bounded SMILES notation/source ownership including literal aromatic markers/bonds,
 opt-in fixed-H normalization and
 restricted noncanonical Fragment export, validated1–12carbon/Single path layout and
-bounded neutral acyclic layout into a new pure Document, separate from complete SMILES
+bounded neutral acyclic/simple-ring layouts into a new pure Document, separate from complete SMILES
 source-file sessions or general chemistry;
 see docs/native-file-io.md for publication/access limits);
 commands (L3, registry, complete stored-snapshot Arc history and transient close policy); mcp (L4, stdio/native loopback, registered work and reply publication barriers); cli/ui (L5,
@@ -356,6 +356,11 @@ entry, missing H is never inferred:
 connected unknown-H carbon may be skeletal, isolated unknown-H carbon refuses, and other
 elements retain literal symbols without inventing H. Authored0/1/N H renders literally;
 physical H cannot carry positive attached H. Unsupported metadata/orders/geometry refuse.
+Authored-H degree>=2 now uses the same attachment-safe placement as the resolved entry;
+unknown H remains unknown. Preserve the original four placements/order, then the four
+compact stacked-H offsets±em/3, with the same font/em/count/mask/finite-width/global/paper
+guards. Independent ring and density-matched regressions justify these bounded changes;
+do not weaken masks or substitute H policies to pass a layout certificate.
 Element::from_symbol/symbol owns the verbatim IUPAC catalog; IO delegates without new
 heap fields. Source completeness/export guards remain independent and strict.
 Atom/label priority, visible clipped ink, five logical canvas units and stable-ID ties are
@@ -367,8 +372,8 @@ do not rearm from cached hover_pos, key release or focus gain alone. No OS point
 
 For multiples, preserve one logical bond ID/hit/neighbour vote while checking all actual
 components and gaps. `centered_bond_strokes` is the sole geometry constructor for graphs
-and held previews; `GraphScene::bond_strokes` supplies hover components. Keep exact all-
-Single pixels, fundamental stroke coverage arithmetic, approved golden and independent
+and held previews; `GraphScene::bond_strokes` supplies hover components. Preserve the
+approved Single golden, successful first-choice pixels, fundamental stroke arithmetic and independent
 visibility/exclusion/cap/attachment/budget checks. The original short/corridor/junction
 policies are not a vendor default. Literal multiple scenes use exact authored counts via
 component-aware attachment; resolved-only paper-ink policy remains distinct. Unknown file
@@ -435,7 +440,7 @@ StoredDocument source authority to a raw projection. See verification-smiles-lay
 
 file.convert_smiles_to_cdxml is create-only, not an active-session Save. Its eight required
 scalars retain explicit geometry; optional profile defaults to neutral_carbon_path_v1,
-with neutral_acyclic_v1 as the closed additive choice. Preserve old omission/serialization,
+with closed additive neutral_acyclic_v1 and neutral_simple_ring_v1 choices. Preserve old omission/serialization,
 default geometry/refusals and captured receipt identity.
 Keep the same save reservation through prepare/publication/finish/drop and the existing
 worker/reply/close barriers. Finish returns current state plus historical conversion metadata;
@@ -735,8 +740,9 @@ physical-H nodes, local identities and complete source intact; no implicit recor
 or source-session editing authority. Min atom-center bounds anchor the new origin; the
 old endpoint profile is exact. Never shrink bond length/paper or relax full-ink limits.
 
-The shared renderer uses existing attachment-safe labels for authored-H degree>=3, as
-well as multiple bonds. An independent hit/pixel/CPU/GPU regression reproduces why. The
+The shared renderer first added existing attachment-safe labels for authored-H degree>=3,
+as well as multiple bonds; the later ring prerequisite extends this to degree>=2.
+Independent hit/pixel/CPU/GPU regressions reproduce why. The
 literal/resolved-scene equality certificate must remain exact; do not substitute another
 H policy to validate output. The proposed stacked-H collision bug was disproved by the
 existing union-mask guard and is not a delivered fix.
@@ -751,10 +757,43 @@ Native profile choices are ordered actions; never mutate a choice while building
 or after pending/busy/browsing/stale/success. The same worker, lease, retirement and no-ACK/
 no-auto-Open boundaries remain. Actual Mac branch conversion→guarded Open→Double edit→
 Undo/Redo→Unicode Save As/reopen and both independently consumed766-byte files pass.
-The Root local gate passes1136/0/1. No new dependency/SDK/font/golden/old-oracle change;
+The acyclic checkpoint's Root local gate passed1136/0/1. No new dependency/SDK/font/golden/old-oracle change;
 Actions remains disabled. Native geometry typing/races and other platforms are unverified.
 
-Next M1 task: specify/test one simple ring with substituents, then component packing and
-general source-qualified import. Read public notation/depiction sources and freeze literal
-graph/geometry/stereo/refusal tests before implementation. Preserve every legacy profile,
-file owner and negative control. Do not repeat the completed acyclic conversion.
+## Simple-ring conversion continuation
+
+Read docs/verification-smiles-ring-integration.md, the independent
+docs/verification-smiles-ring-layout.md and ring/compact attachment records.
+layout_neutral_simple_ring supports one actual connected unicyclic graph with a3–8-member
+Single cycle and attached trees, at most64 neutral nonisotopic H/C/N/O/F/Cl/Br/I atoms.
+Retain the existing fixed-H normalization, physical H, local IDs/directed edges/source/IR,
+exact bond length and minimum-all-atom-center origin. Never scale to conceal failure.
+Keep ring-boundary-aware branch signatures; do not pass cyclic adjacency into parent-only
+tree recursion. Single cycle bonds, contextual substituent angles and the inherited
+attached Single/Double/Triple/unknown-stereo rules remain distinct. Larger/multiple rings,
+cycle Double/Triple, components, aromaticity and unsupported metadata refuse as a whole.
+
+The ordinary literal scene must equal the same-authored-H safe scene and pass actual
+stroke/glyph/paper/resource guards. The first compact extension broke old private unit
+constructors and failed all-target compilation; the final production fix retains Above/
+Below and adds separate Shifted variants. Old tests remain exact. No font/em/mask reduction,
+H mutation, old-oracle change or new dependency is allowed. Legacy profiles/default
+omission/receipts, create-only publication/lease/retirement and no active Save/ACK/auto-Open
+authority remain unchanged. The third native radio is an ordered action.
+
+Focused9 IO/4 command/2 wire/3 App/4 renderer checks and default producer IO308 pass.
+Bounded Mac C7 conversion/refusal/Unicode retry, retained unsaved work, guarded Open,
+external-bond Double edit/Undo/Redo and separate Save/reopen pass; independent actual-file
+consumers accept both1254-byte outputs. Native geometry entry/browsing/races, large/bulky
+cases and other platforms remain unverified. The final integrated local gate passes1158/0/1; no milestone is complete.
+A measured-success-height re-layout preserves unchanged legacy receipt tests; do not
+substitute extra waits or weaken assertions. Later passes receive no raw activation events. Consult STATUS.md before counting later evidence.
+
+Next M1 task: read docs/research/cdx-external-writer-probe.md and freeze an exact-original
+external CDX trailing-zero RED plus a public framing/spec decision before any parser fix.
+The external original graphs pass RDKit, while current syntax refuses TrailingData after
+the implicit document's end. The extra word is producer evidence, not arbitrary padding
+permission: never trim/scan/relax EOF globally or alter old fixtures/oracles/pins. Corpus
+admission is separate and has not occurred. Then advance component packing/general
+source-qualified SMILES import and broader rings. Preserve every legacy profile, file
+owner and negative control; do not repeat the completed bounded conversion work.

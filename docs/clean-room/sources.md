@@ -1751,3 +1751,22 @@ clearance alone is not scene acceptance; the unchanged full CPU/GPU tests supply
 scope. Preserve old Above/Below constructors and successful old first-choice pixels.
 No reference-product default, icon/font/asset reuse or new golden approval follows.
 
+## Integrated neutral simple-ring conversion, 2026-11-15
+
+SMILES-SIMPLE-RING-PLAN's pinned OpenSMILES and IUPAC GR3.3/3.4/4.2 sources remain the
+format/depiction basis. Actual unicyclic topology and contextual small-ring geometry,
+the3..8 Single-cycle/attached-tree/64-atom bounds, source-ID ties, min-center origin,
+bounded search and strict full-scene certificates have their qualified decisions in the
+[plan](../research/smiles-ring-layout-plan.md) and
+[integrated independent/native evidence](../verification-smiles-ring-integration.md).
+The optional third profile reuses one registry and create-only publisher; no active-source
+edit/Save/ACK or auto-Open authority. Exact C7 native convert/edit/history/Unicode Save/
+reopen files are independently read. General import, ring authoring, clipboard, chemistry
+and larger/polycyclic/component layouts remain separate requirements.
+
+The same evidence records the success-form re-layout correction against unchanged old
+App tests. Inspected pinned public egui0.29.1 `containers/resize.rs`, `containers/area.rs`,
+`memory/mod.rs` and `context.rs` are the API basis: prior size clips/anchors before measured
+size is stored; public area_rect/request_discard permits one growth-qualified sizing pass.
+RawInput::take removes later-pass activation events. This is original adapter presentation
+policy, not observed reference timing. No SDK source/version or old test was changed.

@@ -305,3 +305,6 @@ fn authenticated_complete_sdf_capture_does_not_repaint_or_change_the_session() -
 
 #[path = "support/acyclic_conversion_wire.rs"]
 mod acyclic_conversion_wire;
+
+#[path = "support/ring_conversion_wire.rs"]
+mod ring_conversion_wire;

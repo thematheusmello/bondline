@@ -47,6 +47,29 @@ whole-notation publisher/lease/worker serve UI, CLI, stdio MCP and authenticated
 The new receipt captures its profile. Native radio choices replay at raw event boundaries.
 No active-document Save/ACK, automatic Open or complete SMILES-source editing authority.
 
+## Reproduced label prerequisites and original placement extension
+
+The first real geometry implementation compiles, then passes1/8; strict scene equality
+exposes literal degree-two CH2 bond occlusion. Independent fixed-hex25524 reproduces an
+erased bond pixel and Atom hit where the analytic reference/same-count safe scene gives
+black/Bond. Extending the existing authored-H attachment predicate from degree≥3 to≥2
+passes the unchanged regression and88 renderer cases; unknown H still stays unknown.
+
+The remaining bulky80° graph is accepted by the unchanged independent raw/chemistry/
+geometry consumer but refuses rendering. A high-density10°/130°/250° star passes first
+run: it does not establish a general rotated-star defect. The exact1000pt/1024px phase
+instead fails all four incident-H-mask choices at em11.52, before global collisions.
+Independent trace/SAT and density-matched runtime48721 identify that bounded search limit.
+
+Add four compact candidates only AFTER the four original choices: above/below with H
+shifted horizontally by−em/3 or+em/3. Keep the font/em, element anchor, authored H and
+subscript rules, masks/padding, finite-width stroke intersections, global overlap/paper/
+ink guards unchanged. This is original Bondline policy, not a reference default. A pinned
+independent font/SAT proof qualifies the above-left mask with0.890626px minimum separation
+from the three incident strokes; it does not by itself prove a full scene. The unchanged
+density-matched test must establish full labels/bonds, source and CPU/GPU acceptance.
+Existing successful four-choice results retain their exact first choice and pixels.
+
 One existing schema assertion intentionally evolves from exactly2 to exactly3 allowed
 names before product code. Its closure, required fields, every legacy serialization/output/
 refusal and unknown-value check remain. This declared schema extension is not permission
