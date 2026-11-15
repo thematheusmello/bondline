@@ -1,191 +1,165 @@
 # Status — 2026-11-15
 
-The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`. Feature
-checkpoint`3b0387c` delivers guarded New with its tests/native evidence;`763180c` records
-bounded native SMILES acceptance. Earlier`f44bfa9`/`69e4b37` deliver SDF removal and its
-preview checkpoint. The following documentation checkpoint records renewed reference UI
-observation. Do not restart delivered work. No push, merge or publication is authorized.
+The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`. Latest feature
+checkpoint **`c71d5fc`** delivers the original native restricted SMILES file converter,
+its tests, source decisions and actual Mac evidence. `0ce80a0` records the renewed visible
+reference-menu pass; `6c14cfa` is the conversion plan. Earlier `3b0387c` delivers guarded
+New, with its independent/native evidence; `763180c` records bounded SMILES inspector
+acceptance. Continue existing work; do not restart. No push, merge or publication occurred.
 
-M0's native/GPU license blocker is resolved; full M0 and M1 remain incomplete.
-GitHub Actions stays disabled by user instruction: repository Actions off and
-workflow417397204 manually disabled. Do not enable/dispatch/rerun or push to manufacture
-hosted evidence. Earlier hosted results do not verify current interactive Windows/Linux
-workflows. The user's latest2026-11-15 instruction explicitly authorizes opening installed
-ChemDraw for visible UI observation, superseding the earlier no-execution boundary for
-that pass. Keep local/runtime and public sources distinct; no static binary/resource
-inspection or proprietary asset transplantation is part of this workflow.
+M0's native/GPU license blocker is resolved; **full M0 and M1 remain incomplete**.
+Actions stays disabled by user instruction: repository Actions off and workflow417397204
+manually disabled. Do not enable, dispatch or rerun it. Local passing gates govern current
+integration; historical hosted results do not verify new Windows/Linux interaction.
 
-## In progress: native SMILES file conversion
-
-The previous goal turn made concrete progress: New and its native evidence are committed,
-and renewed reference UI observation is recorded at`ac11ce6`. The current slice follows
-docs/research/smiles-native-conversion-plan.md. It adds an original native presentation of
-the existing restricted converter, not general import or reference clipboard parity.
-
-Root's CLI3844 and wire71379/10457 runtime REDs are preserved under
-target/native-smiles-conversion/. A new-test readonly-SDF catalogue setup correction18→12
-is separate from the intended missing action/schema/control failures. Root's intentional
-new test files/bridges remain uncommitted and fail until production is received; committed
-application code still has the1090/0/1 gate below. Do not report the working tree as GREEN.
-
-Three workers are actively assigned in separate ac11ce6 worktrees: producer
-bondline-native-smiles-conversion, independent command/MCP acceptance
-bondline-native-conversion-command-tests and independent App acceptance
-bondline-native-conversion-ui-tests. Minimal independent runtime REDs26109/86758 precede
-production; later missing-API compiler failures are separate. The producer's frozen first
-four backend files pass independent six-case core42292; UI source and finite lifecycle
-integration are still in progress. Root has not yet received that production into its
-working tree. Consult live agents before starting/restarting work; no duplicate job.
+The user's latest request authorizes opening installed ChemDraw for visible UI observation.
+Public format semantics, original Rust code/artwork and MIT/Apache-2.0/BSD shipped-license
+policy remain. No static proprietary binary/resource inspection or asset transplantation
+was performed. Keep local runtime and public-source evidence distinct.
 
 ## Newly delivered and verified
 
-**Fresh document sessions:** the30th shared command, `document.new`, plus File → New
-Document and primaryN. Same-window New creates a distinct source-free A4 Drawing and
-clears association/history/IDs/focus/extent, resetting Fit. It preserves the existing
-Engine, selected tool, canvas/host and outstanding Save lease. Checked counters, dirty,
-stale and close guards prevent partial mutation. Old Save publication remains truthful;
-its old generation cannot associate or clean the fresh session.
+**Native restricted SMILES conversion:** File → Convert SMILES file… uses the existing
+shared create-only converter, typed `ui.file` action and registered-worker lifecycle.
+Registry remains30 commands; Drawing controls18, readonly SDF12. The original form has
+input/output browsing and explicit bond length/origin/page dimensions. One complete ASCII
+notation, optional one final LF/CRLF,64KiB maximum, supports only a connected1–12 neutral
+nonisotopic carbon/Single path. General SMILES import, inference and clipboard parity are
+not delivered by this utility.
 
-Changed SDF drafts resolve first. Dirty New offers Save, Discard Changes and Cancel.
-Save resumes New only after the matching current actual receipt and worker retirement.
-Cancellation, failure, stale input, close and poison disarm that continuation; an ordinary
-Save retry cannot silently New. Existing FileWorkflow/worker budget remains authoritative.
-No new executor, save lease or false Save/close ACK is introduced.
+A matching Accepted presentation is consumed only after preparation succeeds under the
+origin lock and worker reservation. Generic file preparation still refuses conversion.
+The real worker, save lease, source/revision/file/close guards and actual retirement remain
+authoritative. No active-document Save/ACK, automatic Open/New or fabricated history.
+Existing destinations refuse; explicit ordinary Open protects unsaved work.
 
-Independent actual-App tests reproduced two real ghost-bond defects: old SDF pointer
-input interpreted after frame-start Save→New and after registry New between frames. The
-final persistent last-presented namespace guard replaces the insufficient poll-only fix.
-It clears old targets and fences raw canvas authoring until the new surface is painted.
-The exact two regressions pass unchanged. Full CaptureStamp job/receipt guards remain.
-The same-Engine getter is a local cache key, not globally unique identity or authority.
+**Reproduced fixes:** obsolete unstarted forms dismiss on source/New/close transitions;
+FileWorkflow Drop signals cancellation instead of allowing queued publication; explicit
+valid retry clears the prior global error. Independent deterministic pointer evidence also
+reproduces scan-completion replacement of the chooser footer's reachable ID. A stable
+browser region fixes click loss. A candidate's hidden filename error was independently
+caught after actual scrolling; a separate bounded error region preserves visibility.
+Both original regression tests pass unchanged. No cause is claimed for earlier aggregate
+UI timeouts from this separate identity evidence.
 
-**Actual native Mac acceptance:** Open740B mixed SDF→File New→fresh drawing; pointer C–C;
-CmdN Cancel retains it; Discard clears it; Save writes Unicode CDXML before New resets.
-Reopen the436B output, edit its order via hotspot2, then Undo to the saved Single. The
-unchanged external RDKit oracle and separate Expat checks accept the actual saved file.
-This is one bounded ordinary native workflow, not native race/close timing proof.
+**Actual native Mac:** independent unsaved C–C → conversion input/output browsing →
+existing-destination refusal → Unicode retry, retaining Untitled* and original position.
+Close form → explicit Open → Cancel retains original → repeated Discard and Open loads
+converted Single/H3–H3 at(72,72)→(120,72). Double-tool click edits it; Undo restores Saved
+Single. Separate Unicode Save As/reopen preserves exact433 bytes. Both actual outputs pass
+the unchanged RDKit consumer plus independent Expat/Decimal A4/coordinate/reference checks.
+Native paths used AX setters and pointer actions; no numeric-geometry typing, hotkey,
+OS clipboard, race/cancellation/close timing or physical-DPI claim follows.
 
-[Integration](docs/verification-new-document.md),
-[independent command](docs/verification-new-document-command.md),
-[independent App](docs/verification-new-document-ui.md),
-[finite worker gates](docs/verification-new-document-workspace.md) and
-[independent review](docs/research/new-document-review.md) retain exact scope and pins.
-
-**Further SMILES native acceptance:** unchanged older PID53821 now also passes ordinal3
-numeric typing/Inspect, readonly typing refusal, Previous→2 and Unicode Save/reopen.
-All49 source bytes remain exact through independent raw/per-record consumers. Reopen
-resets ordinal1 with no automatic notation. OS clipboard copy and native races remain
-unverified; see docs/verification-smiles-record-integration.md.
+[Integrated evidence](docs/verification-native-smiles-conversion.md),
+[independent core/adapter checks](docs/verification-native-smiles-conversion-commands.md),
+[independent App cases](docs/verification-native-smiles-conversion-ui.md),
+[worker gates](docs/verification-native-smiles-conversion-workspace.md),
+[independent Drop review](docs/research/native-smiles-conversion-review.md) and
+[picker stability](docs/verification-file-picker-stability.md) preserve separate methods,
+original declarations, REDs, reviewed new-test setup corrections and exact source/log pins.
 
 ## Current application scope
 
-- 30 typed commands across the same UI/CLI/stdio/authenticated-loopback registry. Complete
- source snapshots/history, guarded CDXML/CDX/MOL/SDF/SMILES Open/Save, content-based source
- authority and distinct fresh sessions. File association is not inferred from suffix.
-- Bounded neutral-carbon Single/centered Double/Triple create/extend/order,1/2/3, exact
- Undo/Redo and editable native CDXML. Original light workspace, paper, inspector and
- Actual/Fit/zoom/pan/wheel. General selection/labels/rings/styles remain missing.
-- SDF complete collections, explicit occurrence inspection, existing-value draft editing,
- complete-record removal with confirmation/history and read-only chemical preview.
- Ordinary native field/removal/Save and Actual/pan have bounded evidence. Default Fit can
- refuse readability limits. Legacy physical-margin Fit and logical relative-step math
- differ above1x; do not introduce a cache-dependent policy switch.
-- SMILES complete accepted source files and original readonly ordinal inspector, without
- opaque-data disclosure or chemical preview/editing. Restricted create-only carbon-path
- conversion and explicit-fragment export work through shared headless adapters; native
- conversion/export controls are missing. These are not general SMILES import or chemistry.
-- Shared CPU/GPU scenes, PNG capture and limited ordinary MOL/SDF display-H. No general
- chemistry perception/canonicalization, reaction editor or full publishing is delivered.
+- Complete stored-source snapshots/history; guarded CDXML/CDX/MOL/SDF/SMILES Open/Save;
+  same-window New and dirty Save/Discard/Cancel. Styled New/multiple documents remain missing.
+- Neutral-carbon Single/centered Double/Triple create/extend/order,1/2/3, Undo/Redo and
+  editable native CDXML. Original light workspace, Actual/Fit/zoom/pan/wheel. General
+  selection/rings/chains/labels/styles remain missing.
+- SDF complete collections, occurrence inspection, existing-value drafts, confirmed
+  whole-record removal/history and readonly chemical preview. Bounded Mac field/removal/
+  Save and Actual/pan evidence; default Fit may refuse readability limits. Above1x, legacy
+  physical-margin Fit differs from logical relative-step math; no cache-dependent switch.
+- Complete SMILES source sessions and original readonly ordinal inspector, bounded Mac
+  typing/Inspect/Previous/Unicode Save/reopen. Native restricted conversion is above;
+  explicit-fragment export remains headless. No general source-file chemical preview/editing.
+- Shared CPU/GPU neutral-element scenes, PNG capture and bounded ordinary MOL/SDF display-H.
+  Chemistry perception, canonicalization, reactions and complete publishing remain missing.
 
 ## Verification and known failures
 
-Root7556, Rust1.94.1, literal pinned venv interpreter and `CARGO_INCREMENTAL=0 cargo xtask
-ci`: **1090 passed/0 failed/1 ignored**,156 result lines, exit0. Rustfmt, all-target
-warnings-denied clippy, workspace/vendor tests, layers, unchanged licenses and corpus
-pass. Log`target/new-document/root-final-ci-2.log`,131044B/SHA256
-475cc13c71d1d9a4b9527c16e9f04fbf2efccef051fa625da1a045f3a587723b.
-The existing ignored visual capture remains ignored. Root9268 native build succeeds.
+Root84363, Rust1.94.1, literal pinned venv and `CARGO_INCREMENTAL=0 cargo xtask ci`:
+**1116 passed/0 failed/1 ignored**,158 result lines, exit0. Rustfmt, warnings-denied
+all-target clippy, workspace/vendor tests, layers, licenses and corpus pass. Log:
+`target/native-smiles-conversion/root-final-ci-2.log`,134205bytes, SHA256
+`9ec6b893885d7f9812d052a80699d3febe015571f66c14698afa33638d949a04`.
+The existing explicit visual-capture utility remains ignored. Native build97224 exits0.
+Final source/bundle pins still match; only documentation changed after that aggregate.
+Final rustfmt/diff checks and328 existing local documentation-link targets also pass.
 
-Additive evidence: six independent command, three counter, three presentation, three wire,
-one namespace, six actual-App and eight finite worker cases. Original runtime REDs,
-missing-API compiler stages and reviewed new-test setup corrections are separate. Existing
-catalogue assertions advance only for document.new/file.new (30commands/17controls).
-Original assertions, fixtures, consumers, byte/history checks and input regressions remain.
+The26 added passes comprise six core, two public adapter, three transport and15 UI/
+lifecycle/picker cases. The producer's final full default UI51281 passes225/0/1; independent
+App29790 passes six and reviewer98647 passes both picker cases. Relevant independent
+clippy/fmt pass. All handoffs are received; declarations, original assertions, source bytes,
+consumer scripts, semantic negatives and timeouts remain intact.
 
-The first Root aggregate stopped at an8-argument UI helper; passing existing FileJob
-reduced the signature without a waiver. The next stopped at an old16-control MCP count;
-that and its core counterpart advance to17. The final aggregate above passes. A producer
-full UI run had two old workflow timeouts, both then passing unchanged individually and
-in one unchanged default210/0/1 package run. Their cause remains unestablished; no timeout
-or assertion was relaxed. Historical listener-rebind flakiness remains unexplained too.
+Retain earlier failures: producer90164 had one old SMILES wait; Root62187 had one new
+Unicode browse/reopen wait. Each passed unchanged in isolation; the final aggregate passes.
+Causes remain unestablished. New-oracle AX painted-value and action-locator setup corrections
+are documented separately from real product failures. Historical listener-rebind flakiness
+also remains unexplained. Never weaken a timeout/assertion or relabel these as solved causes.
 
-No dependency/lock/SDK/font/asset/fixture/oracle/approved-golden change. Runtime license
-closures remain154/165/220 and2 assets. Corpus remains8 files/5 bundles; foreign/general
-CDX and chemistry coverage remain missing. No new fuzz, hosted or interactive Windows/
-Linux execution. The sole approved golden remains SHA256
-1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc.
-App input tests do not replace actual native execution.
+No parser/layout, dependency/lock, SDK, fixture, external oracle, font or approved-golden
+change. Runtime closures remain154/165/220 and2 assets. Corpus remains8files/5bundles;
+foreign/general CDX and chemistry comparisons are missing. No new fuzz/hosted or interactive
+Windows/Linux execution. Sole approved golden remains SHA256
+`1b650231527f47db5dc7c368644939907d2b038d32f25e77578318f483521bbc`.
 
-## Native preview and live handles
+## Native apps and live work
 
-Latest Bondline bundle`target/new-document-native/Bondline.app`, identifier
-`org.bondline.new-document-review`, observed PID**52347**. CUA launched it; no control
-channel enabled. Binary22,095,864B/SHA256
-e38d0e91e7be6f0bba142bd5498d7d614eeb713fb9f3e03cc892c5f6038d2105.
-It displays saved`before-new-λ.cdxml`,100%, a Single C–C on A4,2atoms/1bond/1fragment.
-Actual436B output SHA256
-d08f2cd85e293f52d19093ab7330e01eac7e4e9da80d1f768518023f5626ef81.
-Native input740B remains exact SHA256
-e5cbdc14329c59bad55148c5de37058de90f651af10966c30cf8b89b3b5efd39.
-Build/native receipts are ignored under target/new-document-native/.
+Latest Bondline bundle `target/native-smiles-conversion-native/Bondline.app`, identifier
+`org.bondline.native-smiles-conversion-review`, observed running PID**52075**, no control
+channel. Binary22247320bytes/SHA256
+`823a0aa7eb52d74d49e22cbe84d0e75e37838e028b9b0a6f5628b57f787809b1`.
+It remains open at100%, A4, saved `chain-λ.cdxml`,2atoms/1bond/1fragment; Double tool
+remains selected while the actual drawing is Single. Actual `retry-λ.cdxml` and
+`chain-λ.cdxml` are each433bytes/SHA256
+`8303fa5371ba8ae7644bfcbf763e5e553e6c3205a90668a1b2b4100c76b1865b`.
+The3-byte input and40-byte sentinel remain exact. The5-byte unsupported input was selected
+into the completed form but never submitted; its absent output is not native refusal proof.
+Ignored build/native receipts are under `target/native-smiles-conversion-native/`.
 
-ChemDraw is now frontmost by the user's latest explicit request. CUA About reports
-26.1.0.6801/Product Signals ChemDraw; Professional entitlement remains unknown. File New
-opens`Untitled ACS Document 1996-2` while retaining`…-1`, confirmed by Window menu. The new
-blank reference window is left open; no existing document edit/save/close. Selected
-File/Edit/View controls are recorded in docs/research/live-ui-review-2026-11-15.md. Show
-Main Toolbar was invoked but its floating palette was not exposed by the selected-window
-capture; visibility/geometry remain unresolved. REA MCP tools are not connected; CUA
-observations are not REA-engine captures. No debugger/native-analysis session is open.
+The earlier New bundle PID**52347** is also still running by exact-path process observation.
+Do not treat older SDF/SMILES/Fit PID notes as live without checking again. Never print or
+commit credentials from any earlier opt-in control-channel stdout.
 
-Older SDF removal PID58926, SMILES inspector PID53821 and Fit PID16278 remain separate.
-The inspector's49B Unicode Save output remains SHA256
-fe62db368bfb982d6a0d4309337207a419fc088b9c8e20ae9a0a32ccd61e70b7.
-Earlier51412/19318/26649/41233/30298/83437 were left untouched, not freshly verified.
-Never print/commit private tokens from earlier opt-in startup stdout.
+After Bondline acceptance, CUA selected/Raised ChemDraw again and observed unchanged blank
+`Untitled ACS Document 1996-2`. The reference app remains open; its Window menu also listed
+`…-1`. Earlier About26.1.0.6801/Product Signals ChemDraw was not rechecked; Professional
+entitlement remains unknown. The renewed Object/Structure blank-context enabled states,
+palette visibility limitation and unsupported keyboard-dismissal observation are in
+[the local UI report](docs/research/live-ui-review-2026-11-15.md). No existing reference
+file was edited/saved/closed. REA MCP tools remain absent; CUA is the actual evidence
+producer, not a REA-engine capture. No debugger/native-analysis session is open.
 
-The previous New-session Root Cargo/build and worker jobs are terminal; no fuzz/launch
-waiter from that feature. Those workers used isolated worktrees bondline-new-document-command-tests,
-bondline-new-document-ui-tests and bondline-new-document-workspace with own absolute
-Cargo targets/inc0/debug0. Their final handoffs are received and frozen. Root owns Git,
-integration and native input. Do not reset worktrees, reuse Root artifacts or duplicate
-completed work. Disposable receipts live under target/new-document/ and worker targets.
+Root Cargo/build/fuzz jobs are terminal. Live agent listing confirms native_acceptance,
+reference_map and sdf_setter_review are completed, with no live jobs. Isolated worktrees
+`bondline-native-conversion-ui-tests`, `bondline-native-conversion-command-tests` and
+`bondline-native-smiles-conversion` retain their own absolute Cargo targets and frozen
+handoffs. Do not reset/reuse them or duplicate finished work. Root owns integration, Git
+and native input. Disposable raw receipts remain ignored under Root/worker target folders.
 
 ## Next exact work
 
-1. New is complete for its documented scope; do not redo it or infer native timing proof.
-   Next M1 slice: honest native controls for the existing restricted create-only SMILES
-   converter. Read AGENTS.md, the current conversion command/IO/layout/callers/tests,
-   docs/control-protocol.md, verification-smiles-conversion-{io,command}.md and the public
-   source register. First declare an independent actual-App conversion workflow plus
-   refusal/active-source preservation/worker-retirement cases, observe the intended RED,
-   then reuse the shared command and actual chooser/receipt. Show the limited profile
-   and result truthfully; reopening the output must be explicit and guarded. Verify the
-   actual file with unchanged consumers and the actual desktop workflow, then commit.
-   Reference UI research can proceed from the open blank ChemDraw window under the latest
-   authorization. First resolve actual palette capture/visibility, then bounded original
-   drawing/selection/SMILES/history/persistence; keep observed and inferred results distinct.
-   The now-observed styled second-window New remains a required parity gap, not delivered
-   by Bondline's same-window reset. Do not restart or silently relabel that increment.
-2. Broader SMILES drawing import/layout follows. SDF creation/reordering, field-header
-   editing, foreign/general CDX and wider CDXML/MOL metadata/layout remain required.
-   The earlier SDF reordering priority is deferred after the sourced File New audit;
-   it was never delivered. Do not silently fuse EOF-delimited records when revisiting it.
-3. Full M0 needs complete inventory beyond576 anchors, broader control/dialog/numeric
-   accessibility and interactive Windows/Linux. M2 selection/rings/chains/labels/styles,
-   M3 chemistry/reactions/text, M4 publishing/clipboard and M5 naming/templates/biopolymers/
-   WebAssembly/installers all remain required. No milestone is declared complete.
-4. Use Rust1.94.1 and the literal `.cache/oracles/format-python/bin/python` path. Never
-   resolve that interpreter symlink. TDD small source-cited slices, preserve data/guards,
-   run meaningful local gates and commit. No push/publication or Actions enablement.
-   High-DPI relative Fit, native wheel, physical DPI and wider CJK coverage remain open.
+1. Conversion and New are complete for their documented bounded scopes; do not redo them.
+   Next M1 slice is broader source-preserving SMILES drawing import/layout. Read existing
+   notation/source/layout/mapping APIs, complete SmilesFile ownership, conversion command,
+   callers/tests/consumers, control contract and source register. Define one bounded graph/
+   geometry/editing-authority contract from published OpenSMILES and independent vectors.
+   Preserve complete unsupported/opaque source and wrong-kind/source guards; a projection
+   never grants authority to discard it. Freeze independent behavior/refusal/history tests,
+   observe intended RED, then implement a small complete shared-command/adapter/UI slice.
+2. Reference work can continue from the blank open ChemDraw window under user authorization.
+   Resolve actual floating-palette visibility/capture and selected-tool/flyout states before
+   claiming geometry. Then exercise agent-authored drawing/selection/SMILES/history/files;
+   menu availability alone verifies none of those flows. Styled second-window New remains
+   a parity gap. Use original artwork, no copied proprietary assets or static inspection.
+3. SDF creation/reordering/field-header editing, foreign/general CDX and wider CDXML/MOL
+   metadata/layout remain required. Do not fuse EOF-delimited records when revisiting SDF.
+   Full M0 still needs modern inventory beyond576 anchors, broader dialog/accessibility
+   and interactive Windows/Linux. M2 selection/rings/labels/styles, M3 chemistry/reactions/
+   text, M4 publishing/clipboard and M5 naming/templates/biopolymers/WASM/installers remain.
+4. Use Rust1.94.1 and the literal `.cache/oracles/format-python/bin/python`, never its
+   resolved symlink. TDD, cited decisions, meaningful local gates and small local commits.
+   No push/publication/Actions enablement. Hardware DPI, SDF native wheel/edit-preview,
+   high-DPI relative Fit and wider CJK coverage remain explicit open work.
