@@ -27,6 +27,8 @@ pub(crate) enum Layout {
     Horizontal(bool),
     Above,
     Below,
+    ShiftedAbove(i8),
+    ShiftedBelow(i8),
 }
 
 pub(crate) fn font() -> Result<FontRef<'static>, Error> {
@@ -182,9 +184,15 @@ fn text(
         let h_baseline;
         if stacked {
             let bounds = font.outline(h).ok_or(Error::InvalidFont)?.bounds;
-            h_origin = position[0] - (bounds.min.x + bounds.max.x) * factor / 2.0;
+            let shift = match layout {
+                Layout::ShiftedAbove(shift) | Layout::ShiftedBelow(shift) => {
+                    f32::from(shift) * em / 3.0
+                }
+                Layout::Horizontal(_) | Layout::Above | Layout::Below => 0.0,
+            };
+            h_origin = position[0] + shift - (bounds.min.x + bounds.max.x) * factor / 2.0;
             h_baseline = position[1]
-                + if matches!(layout, Layout::Above) {
+                + if matches!(layout, Layout::Above | Layout::ShiftedAbove(_)) {
                     -em
                 } else {
                     em

@@ -431,7 +431,7 @@ pub(crate) fn graph_scene_in_viewport(
                         .get(&atom.id)
                         .ok_or(Error::UnsupportedChemicalContent)?,
                 )
-            } else if has_multiple || (neighbours.0 >= 3 && atom.explicit_hydrogens.is_some()) {
+            } else if has_multiple || (neighbours.0 >= 2 && atom.explicit_hydrogens.is_some()) {
                 atom.explicit_hydrogens
                     .or_else(|| (atom.element.get() != 6).then_some(0))
             } else {
@@ -727,6 +727,10 @@ fn resolved_label(
         Layout::Horizontal(!preferred_left),
         Layout::Above,
         Layout::Below,
+        Layout::ShiftedAbove(-1),
+        Layout::ShiftedAbove(1),
+        Layout::ShiftedBelow(-1),
+        Layout::ShiftedBelow(1),
     ] {
         cancel.check()?;
         let label = match crate::label::resolved_element(

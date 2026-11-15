@@ -1733,3 +1733,21 @@ No static binary/resource inspection, proprietary asset/font acquisition, user-d
 edit or shipped implementation followed from the observation. Historical artifact hashes
 and complete installed-menu coverage were not revalidated. The existing public guide and
 format specifications retain their original, separate scope.
+
+## Literal-H attachment and compact candidates, 2026-11-15
+
+Existing IUPAC2008 label/attachment clarity and the pinned independent font/finite-width
+geometry basis remain. [Fixed degree-two ring evidence](../verification-literal-ring-attachment.md)
+reproduces an erased incident bond pixel and wrong Atom hit; extending the existing safe
+literal authored-H path from degree≥3 to≥2 repairs that case without inferring unknown H.
+The [high-density rotated-star control](../verification-literal-rotated-star-attachment.md)
+passes first and does not establish a general rotation bug.
+
+The [density-matched compact case](../verification-literal-compact-star-attachment.md)
+separately proves all four old incident masks fail. Appending above/below H candidates
+shifted±em/3 is original Bondline placement policy. Font, em, element anchor, literal H/
+subscript, mask padding, finite-width/global/paper checks remain. Independent font/SAT
+clearance alone is not scene acceptance; the unchanged full CPU/GPU tests supply that
+scope. Preserve old Above/Below constructors and successful old first-choice pixels.
+No reference-product default, icon/font/asset reuse or new golden approval follows.
+
