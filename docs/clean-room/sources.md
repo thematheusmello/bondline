@@ -1559,3 +1559,31 @@ asset, dependency, format rule or reference-product observation follows.
 [Independent real-App RED/GREEN, review fixes and bounded native file/field evidence](../verification-sdf-inspector.md)
 retain separate scopes. Native chemical preview still refuses at the current default
 view; no readability guard or golden was changed to claim success.
+
+## Original SDF occurrence-value editor, 2026-11-15
+
+CTFILE-2026 chapter10 printed97–99 remains the published basis for ordered data fields,
+blank termination, named/DT identifiers and molecular/data separation. The existing
+source-preserving setter retains its strict ASCII/line/header/budget decisions and exact
+unrelated spans. The [workspace plan](../research/sdf-workspace-plan.md) still does not
+establish a Professional desktop property-editor screen. This editor's occurrence rows,
+Apply/Discard/Cancel, temporary drafts and recovery wording are original Bondline policy.
+No proprietary binary, icon, template, font, sample library or help text was used.
+
+The exact pinned public egui0.29.1 [TextBuffer](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/widgets/text_edit/text_buffer.rs),
+[TextEdit handling](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/widgets/text_edit/builder.rs),
+[TextEditState](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/widgets/text_edit/state.rs)
+and [Undoer](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/util/undoer.rs)
+were inspected locally. Character indices, deletion-before-paste and stored undo explain
+the bounded transaction buffer, cursor rollback and draft-only eight-snapshot/reset policy.
+No SDK file or shipped dependency changed. Source hashes and independent expectations
+are retained in [buffer evidence](../verification-sdf-draft-text.md).
+
+Existing PHOTO-PRESENTATION, FILE-COMMANDS and BONDLINE-CLOSE support shared commands,
+separate native presentation and guarded continuation roles. The [lifecycle review](../research/sdf-edit-lifecycle.md)
+ties those boundaries to actual current callers; it does not copy upstream implementation
+or infer reference-product internals. Fresh bindings after Apply, exact post-commit stamps,
+historical recovery, mutating-result consumption and worker retirement are original safety
+policies over the delivered registry. [Nine App cases, two finite real-worker gates and
+bounded native Mac evidence](../verification-sdf-editor-integration.md) verify their stated
+scopes. Full native lifecycle/accessibility, other platforms and full M1 remain open.

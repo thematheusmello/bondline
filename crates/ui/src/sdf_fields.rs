@@ -1,5 +1,6 @@
 //! Explicit, read-only SDF field pages using the shared registered executor.
 
+use crate::sdf_editor::{SdfEditor, Target};
 use bondline_commands::{
     Cancellation, CaptureStamp, CloseState, Command, Engine, SdfRecordInspect, SdfRecordInspection,
     StoredContent,
@@ -63,12 +64,16 @@ pub(crate) struct SdfFieldsWorkflow {
     job: Option<FieldsJob>,
     page: Option<FieldsPage>,
     error: Option<String>,
+    notice: Option<String>,
     previous_offsets: Vec<usize>,
+    editor: SdfEditor,
+    after_query: Option<Target>,
+    reveal: Option<usize>,
 }
 
 impl SdfFieldsWorkflow {
     pub(crate) fn is_busy(&self) -> bool {
-        self.pending.is_some() || self.job.is_some()
+        self.pending.is_some() || self.job.is_some() || self.editor.is_busy()
     }
 
     fn clear(&mut self) {
@@ -79,9 +84,18 @@ impl SdfFieldsWorkflow {
         self.pending = None;
         self.page = None;
         self.error = None;
+        self.notice = None;
+        self.after_query = None;
+        self.reveal = None;
     }
 
-    pub(crate) fn inspect(&mut self, engine: &Engine, record_id: u32) {
+    pub(crate) fn inspect(&mut self, engine: &Engine, context: &egui::Context, record_id: u32) {
+        if self
+            .editor
+            .intercept(Target::Record(record_id), engine, context)
+        {
+            return;
+        }
         self.previous_offsets.clear();
         self.request(engine, record_id, 0);
     }
@@ -113,6 +127,7 @@ impl SdfFieldsWorkflow {
     }
 
     pub(crate) fn sync(&mut self, engine: &Engine, context: &egui::Context) {
+        self.editor.sync(Some(engine), context);
         if !matches!(engine.content(), StoredContent::Sdf { .. })
             || engine.state().close != CloseState::Open
             || self
@@ -126,10 +141,136 @@ impl SdfFieldsWorkflow {
         self.retire(Some(engine), context);
     }
 
+    pub(crate) fn begin_ui(&mut self) {
+        self.editor.begin_frame();
+    }
+
+    pub(crate) fn show_editor(
+        &mut self,
+        context: &egui::Context,
+        engine: Option<&Engine>,
+        events: &[egui::Event],
+    ) {
+        self.editor.show(context, engine, events);
+    }
+
+    pub(crate) fn blocks_close(&self) -> bool {
+        self.is_busy() || self.editor.blocks_close()
+    }
+
+    pub(crate) fn holds_files(&self) -> bool {
+        self.editor.holds_files()
+    }
+
+    pub(crate) fn native_close(&mut self, engine: &Engine, context: &egui::Context) -> bool {
+        self.editor
+            .intercept(Target::Control("file.close"), engine, context)
+    }
+
+    pub(crate) fn intercept_editor_command(
+        &mut self,
+        command: &Command,
+        engine: &Engine,
+        context: &egui::Context,
+        explicit_control: Option<&'static str>,
+    ) -> bool {
+        if let Some(id) = explicit_control
+            && id.starts_with("edit.")
+            && self.editor.active()
+        {
+            return self.editor.intercept(Target::Control(id), engine, context);
+        }
+        self.editor.intercept_command(command, engine, context)
+    }
+
+    pub(crate) fn replay_editor(
+        &mut self,
+        index: usize,
+        engine: &mut Engine,
+        context: &egui::Context,
+    ) {
+        self.editor.replay(index, engine, context);
+        self.settle_editor(engine, context);
+    }
+
+    pub(crate) fn settle_editor(&mut self, engine: &mut Engine, context: &egui::Context) {
+        self.editor.guard_external(engine, context);
+        if let Some(effect) = self.editor.take_effect() {
+            if let Some((record, offset, field)) = effect.refresh {
+                self.request(engine, record, offset);
+                self.reveal = Some(field);
+                if matches!(&effect.target, Some(Target::Next | Target::Previous(_))) {
+                    self.after_query = effect.target;
+                } else if let Some(target) = effect.target {
+                    self.resume_target(target, engine, context);
+                }
+            } else if let Some(target) = effect.target {
+                self.resume_target(target, engine, context);
+            }
+            if let Some(warning) = effect.warning {
+                self.notice = Some(warning);
+            }
+        }
+        if let Some(page) = &self.page {
+            if let Some(field) = self.reveal
+                && !page.record.fields.iter().any(|value| value.index == field)
+                && field < page.record.field_count
+            {
+                let record = page.record.record_id;
+                let after = self.after_query.take();
+                self.request(engine, record, field);
+                self.reveal = Some(field);
+                self.after_query = after;
+                return;
+            }
+            if let Some(target) = self.after_query.take() {
+                self.resume_target(target, engine, context);
+            }
+        }
+    }
+
+    fn resume_target(&mut self, target: Target, engine: &mut Engine, context: &egui::Context) {
+        match target {
+            Target::Record(record) => {
+                self.previous_offsets.clear();
+                self.request(engine, record, 0);
+            }
+            Target::Next => {
+                if let Some(page) = &self.page
+                    && let Some(offset) = page.record.next_field_offset
+                {
+                    let record = page.record.record_id;
+                    let previous = page.record.field_offset;
+                    if self.request(engine, record, offset) {
+                        self.previous_offsets.push(previous);
+                    }
+                }
+            }
+            Target::Previous(offset) => {
+                if let Some(page) = &self.page {
+                    let record = page.record.record_id;
+                    if self.request(engine, record, offset) {
+                        self.previous_offsets.pop();
+                    }
+                }
+            }
+            Target::CloseFields => self.deactivate(context),
+            target => match crate::sdf_editor::resume_command(target, engine) {
+                Ok(Some(command)) => {
+                    self.error = engine.execute(command).err().map(|error| error.to_string())
+                }
+                Ok(None) => {}
+                Err(error) => self.error = Some(error),
+            },
+        }
+        context.request_repaint();
+    }
+
     pub(crate) fn deactivate(&mut self, context: &egui::Context) {
         self.clear();
         self.previous_offsets.clear();
         self.retire(None, context);
+        self.editor.sync(None, context);
     }
 
     fn retire(&mut self, engine: Option<&Engine>, context: &egui::Context) {
@@ -169,6 +310,9 @@ impl SdfFieldsWorkflow {
     }
 
     pub(crate) fn show(&mut self, ui: &mut egui::Ui, engine: &Engine) {
+        if let Some(notice) = &self.notice {
+            ui.label(notice);
+        }
         let Some(key) = self.desired.clone() else {
             if let Some(error) = &self.error {
                 ui.colored_label(egui::Color32::DARK_RED, error);
@@ -182,7 +326,9 @@ impl SdfFieldsWorkflow {
         ui.heading(format!("Record {} fields", key.record_id));
         ui.weak("Read-only field values");
         if ui.small_button("Close fields").clicked() {
-            self.deactivate(ui.ctx());
+            if !self.editor.intercept(Target::CloseFields, engine, ui.ctx()) {
+                self.deactivate(ui.ctx());
+            }
             return;
         }
         if let Some(message) = &self.error {
@@ -198,6 +344,8 @@ impl SdfFieldsWorkflow {
             }
             return;
         }
+        let can_edit =
+            !self.editor.active() && !self.is_busy() && engine.state().ui_file.request.is_none();
         let Some(page) = &self.page else {
             ui.spinner();
             ui.label("Reading fields…");
@@ -242,6 +390,7 @@ impl SdfFieldsWorkflow {
             let number = field.index.saturating_add(1);
             egui::CollapsingHeader::new(format!("Field {number}: {caption}"))
                 .id_salt((key.sequence, field.index))
+                .default_open(self.reveal == Some(field.index))
                 .show(ui, |ui| {
                     ui.label(&field.header);
                     let unit = if field.value_line_count == 1 {
@@ -274,6 +423,25 @@ impl SdfFieldsWorkflow {
                                     builder.set_read_only();
                                 });
                             });
+                        if ui
+                            .add_enabled(
+                                can_edit,
+                                egui::Button::new(format!(
+                                    "Edit record {} field {number}",
+                                    key.record_id
+                                )),
+                            )
+                            .clicked()
+                        {
+                            self.editor.begin(
+                                engine,
+                                ui.ctx(),
+                                key.record_id,
+                                field.index,
+                                key.offset,
+                                value,
+                            );
+                        }
                     } else {
                         ui.label(
                             "Value omitted by the inspection limit; it is not an empty value.",
@@ -282,6 +450,14 @@ impl SdfFieldsWorkflow {
                 });
         }
         if let Some((offset, forward)) = navigation {
+            let target = if forward {
+                Target::Next
+            } else {
+                Target::Previous(offset)
+            };
+            if self.editor.intercept(target, engine, ui.ctx()) {
+                return;
+            }
             let previous = record.field_offset;
             if self.request(engine, key.record_id, offset) {
                 if forward {
@@ -295,6 +471,7 @@ impl SdfFieldsWorkflow {
 
     /// Pending intent is already busy; acquire the shared registration after frame unlock.
     pub(crate) fn start_pending(&mut self, executor: &CommandExecutor, context: &egui::Context) {
+        self.editor.start_pending(executor, context);
         if self.job.is_some() {
             return;
         }

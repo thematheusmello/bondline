@@ -12,6 +12,7 @@ The app is in early development; documented plans are not implemented features.
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
 | Inspect ordered SDF field occurrences | [Read-only inspector, TDD and bounded native checks](verification-sdf-inspector.md) |
+| Edit an existing SDF field value | [Transactional editor and native evidence](verification-sdf-editor-integration.md), [App cases](verification-sdf-editor.md), [worker gates](verification-sdf-editor-lifecycle.md) |
 | Inspect rendering limits | [Rendering](rendering.md) |
 | Check centered Double/Triple geometry | [Renderer evidence](verification-multiple-render.md) |
 | Check ordered bond commands and transient tools | [Authoring contract](verification-multiple-authoring.md) |

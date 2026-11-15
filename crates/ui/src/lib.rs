@@ -11,6 +11,8 @@ mod mol_display_tests;
 #[cfg(test)]
 mod multiple_bond_tests;
 mod preview;
+mod sdf_draft_text;
+mod sdf_editor;
 mod sdf_fields;
 mod view_controls;
 #[cfg(test)]
@@ -504,9 +506,13 @@ fn replay_edit_shortcuts(
     drawing: &mut DrawingState,
     events: &[egui::Event],
     blocked: bool,
-    actions: &[(usize, view_controls::Action)],
+    routing: (
+        &[(usize, view_controls::Action)],
+        Option<&mut SdfFieldsWorkflow>,
+    ),
 ) {
-    if blocked {
+    let (actions, mut fields) = routing;
+    if blocked && fields.is_none() {
         return;
     }
     let text_focused = text_edit_focused(context);
@@ -517,7 +523,10 @@ fn replay_edit_shortcuts(
         }
     }
     for (index, event) in events.iter().enumerate() {
-        if pending_ui_blocks_authoring(&engine.state()) {
+        if let Some(fields) = fields.as_deref_mut() {
+            fields.replay_editor(index, engine, context);
+        }
+        if blocked || pending_ui_blocks_authoring(&engine.state()) {
             continue;
         }
         if let egui::Event::WindowFocused(value) = event {
@@ -533,6 +542,20 @@ fn replay_edit_shortcuts(
             .and_then(|(_, action)| action.command(engine))
             .or_else(|| workspace_shortcut(engine, event, text_focused));
         if focused && let Some(command) = command {
+            let explicit = actions.iter().find_map(|(at, action)| {
+                if *at == index
+                    && let view_controls::Action::Control(id) = action
+                {
+                    Some(*id)
+                } else {
+                    None
+                }
+            });
+            if fields.as_deref_mut().is_some_and(|fields| {
+                fields.intercept_editor_command(&command, engine, context, explicit)
+            }) {
+                continue;
+            }
             drawing.gesture = None;
             drawing.invalidate_hover();
             *error = engine.execute(command).err().map(|error| error.to_string());
@@ -599,6 +622,9 @@ fn show_workspace_with_preview(
     let (mut preview, mut sdf_fields) = workflows.map_or((None, None), |(preview, fields)| {
         (Some(preview), Some(fields))
     });
+    if let Some(fields) = sdf_fields.as_deref_mut() {
+        fields.begin_ui();
+    }
     let events = context.input(|input| input.events.clone());
     if [
         context.screen_rect().width(),
@@ -614,7 +640,15 @@ fn show_workspace_with_preview(
             || files
                 .as_ref()
                 .is_some_and(|files| files.blocks_authoring(&current));
-        replay_edit_shortcuts(context, engine, error, drawing, &events, blocked, &[]);
+        replay_edit_shortcuts(
+            context,
+            engine,
+            error,
+            drawing,
+            &events,
+            blocked,
+            (&[], sdf_fields.as_deref_mut()),
+        );
         egui::CentralPanel::default().show(context, |ui| {
             ui.colored_label(
                 egui::Color32::DARK_RED,
@@ -746,6 +780,9 @@ fn show_workspace_with_preview(
                 }
             });
         });
+    if let Some(fields) = sdf_fields.as_deref_mut() {
+        fields.show_editor(context, Some(engine), &events);
+    }
     let mut history_handled = false;
     egui::CentralPanel::default()
         .frame(
@@ -797,7 +834,7 @@ fn show_workspace_with_preview(
                                                 )
                                                 .clicked()
                                         {
-                                            fields.inspect(engine, record.id);
+                                            fields.inspect(engine, context, record.id);
                                             context.request_repaint();
                                         }
                                         ui.end_row();
@@ -959,6 +996,9 @@ fn show_workspace_with_preview(
             let mut tool_states = tool_states.into_iter().peekable();
             history_handled = true;
             for (index, event) in events.iter().enumerate() {
+                if let Some(fields) = sdf_fields.as_deref_mut() {
+                    fields.replay_editor(index, engine, context);
+                }
                 let blocked = blocked || pending_ui_blocks_authoring(&engine.state());
                 while tool_states.peek().is_some_and(|(at, _)| *at == index) {
                     if let Some((_, tool)) = tool_states.next()
@@ -1362,6 +1402,14 @@ fn show_workspace_with_preview(
                     }
                 }
                 if let Some(command) = command {
+                    let explicit = selected.filter(|(at, _)| *at == index).map(|(_, id)| id);
+                    if let Ok(command) = &command
+                        && sdf_fields.as_deref_mut().is_some_and(|fields| {
+                            fields.intercept_editor_command(command, engine, context, explicit)
+                        })
+                    {
+                        continue;
+                    }
                     let view_command = matches!(&command, Ok(Command::UiView(_)));
                     let previous_view = engine.view();
                     let key_hotspot = command
@@ -1542,10 +1590,16 @@ fn show_workspace_with_preview(
             drawing,
             &events,
             blocked,
-            &view_actions,
+            (&view_actions, sdf_fields.as_deref_mut()),
         );
     }
     if let Some(files) = files {
+        if let Some(fields) = sdf_fields.as_deref_mut() {
+            fields.settle_editor(engine, context);
+            if fields.holds_files() {
+                return None;
+            }
+        }
         file_action = files
             .dialogs(
                 context,
@@ -1647,11 +1701,14 @@ impl BondlineApp {
                 self.files.poll(&mut engine, &mut self.error);
                 self.preview.sync(&engine, context);
                 self.sdf_fields.sync(&engine, context);
+                self.sdf_fields.settle_editor(&mut engine, context);
                 if native_close && engine.state().close != CloseState::Committed {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
-                    self.files.request_close(&mut engine, &mut self.error);
+                    if !self.sdf_fields.native_close(&engine, context) {
+                        self.files.request_close(&mut engine, &mut self.error);
+                    }
                 }
-                if smoke_close {
+                if smoke_close && !self.sdf_fields.native_close(&engine, context) {
                     self.files.request_close(&mut engine, &mut self.error);
                 }
                 action = show_workspace_with_preview(
@@ -1667,11 +1724,12 @@ impl BondlineApp {
                 );
                 self.preview.sync(&engine, context);
                 self.sdf_fields.sync(&engine, context);
+                self.sdf_fields.settle_editor(&mut engine, context);
                 if self.files.complete_close_if_idle(
                     &mut engine,
                     self.executor.has_active_work()
                         || self.preview.is_busy()
-                        || self.sdf_fields.is_busy(),
+                        || self.sdf_fields.blocks_close(),
                     action.is_some(),
                 ) {
                     context.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -1680,6 +1738,11 @@ impl BondlineApp {
             Err(_) => {
                 self.preview.deactivate(context);
                 self.sdf_fields.deactivate(context);
+                self.sdf_fields.show_editor(
+                    context,
+                    None,
+                    &context.input(|input| input.events.clone()),
+                );
                 if native_close {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
                 }

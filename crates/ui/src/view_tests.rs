@@ -1367,3 +1367,6 @@ fn actual_frame_undo_then_save_in_one_packet_saves_the_undone_source_and_history
 
 #[path = "sdf_inspector_tests.rs"]
 mod sdf_inspector;
+
+#[path = "sdf_editor_tests.rs"]
+mod sdf_editor;

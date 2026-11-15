@@ -675,3 +675,18 @@ the complete source during deferred work without creating a drawing or changing 
 Null versus empty data spans, old-source historical replies and a128KiB object budget are
 defined in verification-smiles-record.md. This adds automation addressability; chemical
 preview/editing and native record selection remain missing.
+
+## Native existing-field SDF edits
+
+The original native occurrence editor now uses the existing immutable value replacement.
+It can change one existing record/field occurrence, including an empty or multiline value;
+it does not add/delete/reorder fields or records, rename headers or edit molecular payloads.
+All existing format limits/refusals remain. Temporary text is distinct from Apply and
+Save; invalid or stale drafts cannot silently publish the old source. Undo/Redo retains
+the complete collection and exact original/saved distinctions.
+
+Actual Mac multiline Apply, Unicode Save As, Undo/Redo and reopen match a predeclared
+literal788-byte source. Both actual saved MOL spans pass unchanged independent consumers;
+the complete byte comparison verifies opaque data retention. Draft/navigation/request/
+retirement cases have additional actual-App/worker evidence, rather than native race proof.
+See [integrated evidence and limits](verification-sdf-editor-integration.md).

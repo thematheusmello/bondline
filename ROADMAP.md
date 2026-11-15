@@ -38,13 +38,15 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
-The original read-only SDF occurrence inspector is now delivered. Five independent
-actual-App cases verify ordered duplicates, empty/spaces, selection/copy, source refresh,
-budget-driven pagination and explicit omission; two Root lifecycle cases protect queued
-retirement and unavailable-Engine cleanup. Bounded native Mac inspection/readonly typing/
-Unicode Save As/reopen preserve every777-byte source byte. The975-test local gate passes.
-See docs/verification-sdf-inspector.md. Mutating field drafts/Apply/Save ordering, successful
-native chemical preview at an eligible view and full M1 remain required next work.
+The original SDF occurrence inspector and existing-value editor are delivered. Nine
+independent actual-App editor cases cover exact duplicate-field edits, history, real Save,
+Apply→Save input ordering, navigation decisions, external requests/source replacement,
+no-op CRLF retention and refusal without publication. Two finite registered-worker gates
+protect real commit/cancellation/retirement. Native Mac multiline Apply, Unicode Save As,
+Undo/Redo and reopen preserve the predeclared788-byte output and both molecular records.
+The994-test local gate passes. See docs/verification-sdf-editor-integration.md and the
+earlier inspector evidence. Native draft/close races, successful native chemical preview
+at an eligible view, record operations and full M1 remain required next work.
 
 A restricted all-record SDF capture route now connects source-preserving mixed-version
 projection, separate display-H provenance and faithful resolved-H labels through the
@@ -62,7 +64,7 @@ Centered Double/Triple depiction now passes independent analytic pixel/geometry,
 CPU/GPU and source-preserving MOL/SDF checks. It uses an original3w profile, without
 mapping inherited styles or context-sensitive sidedness. See
 docs/verification-multiple-render.md and docs/verification-multiple-commands.md.
-Broader formats, source metadata, mutating SDF field UI and full M1 interoperability remain unfinished.
+Broader formats, source metadata, SDF record operations and full M1 interoperability remain unfinished.
 This is partial M1, with neutral Single/Double/Triple geometry and explicit whole-capture
 refusals; general layout and reference packing
 remain open. See docs/verification-sdf-capture-command.md and the linked independent evidence.
@@ -72,7 +74,7 @@ ordered data byte through current/saved/history and all shared adapters. Native 
 version Open/Save/Unicode Save As/reopen and failed-import retention now pass onbb6d5b9;
 the690-byte and additional refusal checks are controller-only. Root's590 gate and matching
 three-platform hosted checks pass. Bounded field inspection/existing-value commands now pass engine/CLI/MCP tests.
-Actual native chemical preview acceptance, field-edit UI, record operations and
+Actual native chemical preview acceptance, record operations and
 broader SDF interoperability remain missing; see docs/verification-sdf-session-files.md and
 docs/verification-native-sdf-and-extension.md. That earlier native build used a static summary;
 the new read-only preview is wired/headlessly tested, with its native workflow unverified.

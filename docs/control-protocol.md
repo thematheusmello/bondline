@@ -332,7 +332,8 @@ app-frame/uploaded-image/paint/cache/close behavior passes headless tests; the n
 system window workflow remains unverified. The no-executor compatibility helper still shows
 only its static metadata table. Original packing/control choices do not establish reference
 visual parity. Shared field inspection/existing-value editing remain separate from the
-missing native field editor; earlier actual native file acceptance has its own source scope.
+then-missing native field editor; the original existing-value editor below now has bounded
+Mac evidence. Earlier actual native file acceptance retains its own source scope.
 See [SDF session evidence](verification-sdf-session-files.md).
 
 `render.capture` accepts only virtual `page_id:1` for SDF; another positive ID returns
@@ -950,3 +951,32 @@ later authored input from passing behind it; the established Running/workers/Sav
 and completion/close receipt contracts remain. This original input-order policy is
 independently checked against actual saved bytes and natively repeated; see
 [ordered-file verification](verification-ordered-file-actions.md).
+
+## Native SDF existing-value drafts
+
+The original occurrence inspector now calls the already registered `sdf.field.set_value`
+through `UiSdfWork`. No command, parameter schema or automation protocol was added.
+The UI uses the query's explicit source-local record/occurrence; duplicate names never
+identify the edit. An explicitly omitted query value cannot become an empty draft.
+
+Draft text is temporary, capped at65536 UTF-8 bytes with eight local text-undo snapshots.
+Rejected widget mutations roll back atomically. Apply splits LF-delimited text literally;
+empty text gives zero value lines. Existing setter ASCII/200-byte-line/value/JSON limits
+remain authoritative. Invalid input stays available for correction and starts no Save.
+One changed Apply is one existing complete-source history edit; a validated no-op retains
+the complete state/source/index sharing. Save remains explicit.
+
+Navigation, File and close resolve Apply/Discard/Cancel before a changed draft can be
+abandoned. A same-input-packet Apply→Save waits for actual commit and worker retirement;
+fresh source/file/close context is checked before any waiting action. A still-current
+external `ui.file` request survives Discard/no-op; changed Apply uses a fresh binding.
+Cancel uses `file.cancel` rather than acknowledging an unperformed request.
+
+An external Open, even of identical bytes, detaches the draft and disables Apply while
+keeping its text recoverable. A successful command before late cancellation stays applied;
+the UI reports that outcome. Historical success cannot replace a newer document or run
+an old waiting Save/close. Actual executor/reply/native barriers still govern shutdown.
+
+Draft widgets, decisions and worker controls are not yet a general addressable dialog API.
+Bounded Mac edit/save/history/reopen is verified; native race/accessibility and Windows/Linux
+execution remain separate gaps. See [exact evidence](verification-sdf-editor-integration.md).

@@ -179,8 +179,16 @@ SDF is a mixed V2000/V3000 source container and complete application-content var
 Shared Open/Save retain every record. sdf.record.inspect exposes bounded ordered fields;
 sdf.field.set_value edits one existing occurrence through immutable deferred candidates.
 The restricted render.capture SDF virtual page1 now uses all-record derived display data;
-the native read-only preview is wired and headlessly tested; actual native acceptance,
-field-edit UI and record operations remain missing. Preserve off-lock
+the native read-only preview is wired and headlessly tested; successful native preview
+acceptance and record operations remain missing. The existing-value editor uses the same
+registered setter: temporary drafts never change source/dirty/history before Apply. Retain
+Apply/Discard/Cancel, event-indexed Apply→Save ordering, stale-source recovery, guarded
+semantic continuations and actual worker retirement. A committed edit is never discarded
+as a cancelled query; report its true outcome and retain detached recovery text. The
+bounded TextBuffer rolls back rejected widget transactions and resets only its own bounded
+text undo state. Native Mac edit/save/history/reopen has finite evidence; OS draft/close
+races and interactive Windows/Linux remain unverified. See
+docs/verification-sdf-editor-integration.md. Preserve off-lock
 work, exact no-op sharing, stale revision/generation/Arc checks, saved/original distinctions
 and the same worker/reply/close barriers. Explicit data results are separate from automatic
 metadata-only state/Debug; see control-protocol.md for input/output budgets.

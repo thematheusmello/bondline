@@ -238,7 +238,8 @@ Save borrows complete current source through the existing bounded atomic publish
 wrapper writer, first-record projection or field-name dictionary reconstructs an import.
 Drawing accessors return typed unsupported_content errors for collections. Static UI
 metadata clears prior gesture/hit/paper state; the no-executor compatibility helper has no preview;
-all-record chemical display, a field-edit UI and record operations remain separate work. See
+all-record chemical display and record operations remain separate work. The existing-value
+editor below now delivers the separate field-editing UI. See
 verification-sdf-session-files.md for exact source/consumer/history/lifecycle evidence.
 
 
@@ -373,3 +374,31 @@ Unknown chemistry refuses as a whole. Display facts create no edit/Save authorit
 history step. Independent command/CPU/GPU/adapter and real-frame checks are recorded in
 verification-mol-display-tests.md and verification-mol-display-ui.md; actual native window
 acceptance and broader chemistry/orders remain unverified/missing.
+
+## Transactional SDF field drafts
+
+The occurrence inspector owns one `SdfEditor`, separate from its read-only query page.
+A draft retains the complete source stamp, revision, record/field ordinal, original text
+and one byte-bounded temporary buffer. It creates no authored snapshot or saved baseline.
+The buffer bounds UTF-8 bytes before copying, checks character indices and rolls back an
+entire rejected widget transaction; only that draft's cursor/limited undo state is reset.
+Existing immutable inspector values retain their read-only/text-storage protections.
+
+Apply prepares the existing registered setter through `UiSdfWork` before spawning and
+shares its two-worker budget. The job remains owned through publication and actual thread
+retirement. The worker obtains a post-result stamp only when the originating Engine still
+has the result revision; the UI checks that full stamp before refresh or continuation.
+A later source change keeps recovery text and the historical success, with no replay.
+Successful mutation is never dropped as if it were a cancelled read-only response.
+
+Both the drawing input loop and collection fallback replay editor activations at their
+raw event indices. A later File intent waits for the actual Apply result/retirement.
+The resolver retains a semantic target plus source/path/format/file/close context, then
+resolves fresh bindings after Apply. Discard can adopt a still-current external request;
+changed Apply invalidates it and uses a fresh request. Cancel issues real cancellation.
+Field-page navigation waits for the refreshed query instead of using a cleared old page.
+
+Native and remote close requests pass through the same draft resolver; changed drafts,
+decisions, continuations and pending/live Apply work join the existing shutdown barriers.
+Native Mac edit/Save As/history/reopen and finite independent App/worker tests have
+separate scopes in [the integration record](verification-sdf-editor-integration.md).

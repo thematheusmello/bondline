@@ -2520,3 +2520,24 @@ golden changed. Root68521 full gate passes975/0/1, including all local quality g
 Actual native Unicode Save As/reopen retains every777 source byte and both external
 MOL consumers pass. Default native chemical preview still refuses the em guard; mutating
 drafts/editor/Apply/Save ordering and complete M0–M5 remain required. Actions stays off.
+
+## Transactional SDF occurrence editor, 2026-11-15
+
+[Integrated Root and native evidence](verification-sdf-editor-integration.md) records the
+original temporary value editor over the unchanged shared setter. Nine independent App
+cases cover literal second-DUP788-byte Apply/Save/history, same-packet ordering, guarded
+navigation/close/external requests, source replacement, CRLF no-op and invalid-input
+nonpublication. Eight bounded-buffer tests and two finite real-worker publication/
+retirement gates add independent boundary evidence. Intended missing-control, lost-
+Previous and late-cancellation-notice REDs remain distinct from setup/lint corrections.
+Earlier test/input prefixes, fixtures, consumers, SDK, font and approved golden stay exact.
+
+Root44537 full local gate passes994/0/1, including rustfmt, all-target warnings-denied
+clippy, layer/license/corpus checks and three native AccessKit bridge tests. A preceding
+invocation omitted the pinned Python environment and failed unchanged RDKit imports;
+correcting only the environment yielded the recorded pass. The original native Mac
+input→multiline draft→Apply→Unicode Save As→Undo/Redo→reopen preserves the exact788-byte
+expectation and both independent molecular consumers. Native race/accessibility, huge
+values, Windows/Linux and successful default native chemical preview remain unverified.
+No Actions run, new dependency, source-paper change, glyph guard relaxation or milestone
+completion is claimed. The full M0–M5 goal remains active.
