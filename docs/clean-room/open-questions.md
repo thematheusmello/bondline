@@ -288,3 +288,12 @@ saved view preferences and broader gestures remain missing. Valid percentage acc
 does not imply every source/page/scale passes rendering bounds and readability guards.
 The rapid Undo/Save prepass counterexample is now fixed and independently/natively tested;
 its failed first output stays recorded rather than changing the expected file.
+
+[The next bounded SDF view proposal](../research/sdf-view-plan.md) identifies an exact
+off-lock extent dependency: the complete virtual page can exceed A4. Decide how a
+source-qualified transient extent becomes available to the existing camera without
+turning preview into edit/Save authority. Installing only extent after a failed opted-in
+capture is an observable error side effect and requires an explicit tested contract;
+an explicit deferred preparation action is the alternative. Neither is implemented.
+Keep current whole-page captures, complete-source checks and physical/logical glyph
+limits intact; current-view cropping is not permission to skip off-camera validation.

@@ -47,6 +47,9 @@ Undo/Redo and reopen preserve the predeclared788-byte output and both molecular 
 The994-test local gate passes. See docs/verification-sdf-editor-integration.md and the
 earlier inspector evidence. Native draft/close races, successful native chemical preview
 at an eligible view, record operations and full M1 remain required next work.
+The next [SDF view proposal](docs/research/sdf-view-plan.md) identifies the shared logical/
+physical projection and exact off-lock extent dependency. Its API and failed-capture
+cache semantics need a decision and independent RED before implementation.
 
 A restricted all-record SDF capture route now connects source-preserving mixed-version
 projection, separate display-H provenance and faithful resolved-H labels through the

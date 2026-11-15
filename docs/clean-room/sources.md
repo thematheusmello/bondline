@@ -1587,3 +1587,15 @@ historical recovery, mutating-result consumption and worker retirement are origi
 policies over the delivered registry. [Nine App cases, two finite real-worker gates and
 bounded native Mac evidence](../verification-sdf-editor-integration.md) verify their stated
 scopes. Full native lifecycle/accessibility, other platforms and full M1 remain open.
+
+## Next SDF view research, 2026-11-15
+
+[The bounded proposal](../research/sdf-view-plan.md) reuses pinned GUIDE25 printed26/79
+and PHOTO-ARCH's exact view/transform source paths. Logical zoom, monitor DPI and retained
+source paper stay distinct. Current all-record preview derives its actual extent off-lock;
+assuming A4 for tall data or parsing while painting would violate the delivered boundary.
+The proposed optional current-view capture and qualified extent-cache/error behavior are
+original Bondline design alternatives, not approved APIs, runtime evidence or reference
+parity. Existing whole-page captures, source/glyph guards and goldens remain unchanged.
+The plan records the required independent1x/DPI/tall-record/error/stale tests; none was run
+or added in this documentation-only step. No new dependency or proprietary artifact used.

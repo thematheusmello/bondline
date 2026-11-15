@@ -1,9 +1,10 @@
 # Status — 2026-11-15
 
-The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; parent checkpoint
-`778ea4755fc99a92dbfce6f9ed7e9ab4ca3fe0c8` (`feat(ui): inspect ordered SDF field occurrences`).
-This atomic slice adds transactional editing of an existing SDF field occurrence, its
-independent tests, source decisions and finite native evidence. No push/merge/publication.
+The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; product checkpoint
+`7b64604` (`feat(ui): edit SDF field values transactionally`), following inspector
+`778ea47`. The product commit includes the independent tests, source decisions and finite
+native evidence below. This continuation commit records the next bounded view proposal;
+that API is not yet approved or implemented. No push/merge/publication.
 M0's native dependency-license blocker is resolved; full M0 remains incomplete.
 
 GitHub Actions remains disabled by user instruction: repository Actions off and workflow
@@ -107,7 +108,8 @@ No milestone or full26.1 screen/flow parity is complete.
    never invent A4 for taller data, parse during painting or convert source into a Drawing.
    Preserve default whole-page captures/golden, full-source guards and em limits. Add an
    independent1x Actual/Zoom recovery test before code; cache/source/error semantics need
-   an explicit decision. A bounded research proposal is prepared in the buffer worker.
+   an explicit decision. Read [the bounded proposal](docs/research/sdf-view-plan.md) first;
+   its error-side-effect/extent bootstrap is a proposal, not an implemented contract.
 2. Add separate native draft/navigation/cancel/close acceptance when desktop availability
    permits, including actual recovery/focus behavior. Do not call synthetic App input a
    native OS race check. Keep current field-edit evidence finite and unchanged.
