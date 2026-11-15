@@ -473,3 +473,19 @@ The fresh natural full-gate replacement_bind54691 AddrInUse failure has no failu
 owner capture. A delayed empty snapshot and separately passing remaining stages are not
 a causal explanation or a green aggregate. Existing bounded diagnostic limits and socket
 assertions remain unchanged; do not restart exhausted probes or add retries to hide it.
+
+## Aromatic authoring representation, 2026-11-15
+
+[The chemistry contract](../research/aromatic-authoring-contract.md) chooses an original
+bounded neutral Kekulé projection, not a complete aromaticity-perception algorithm.
+OpenSMILES explicitly includes antiaromatic integer forms and qualifies its proposed
+Hückel table as discussion; do not guess a universal4n+2 gate from toolkit flags.
+The initial C/N/O, fixed-H/donor/exocyclic/sp2-cycle policy must be independently tested
+before authoring. B/P/S/As/Se, charged/radical/stereo/higher-valence cases and full chemical
+perception remain required, rather than being relabeled as supported input.
+
+Exact26.1 Paste Special geometry, styles, focus and empty/unavailable clipboard behavior
+remain unestablished. Chemistry projection alone grants no source-file rewrite, native
+paste, aromatic output or Save acknowledgment. Fused/large/disconnected graph chemistry
+and available layout are separate gates; unavailable topology must refuse whole paste
+without losing source, unselected records or pre-existing authored objects.
