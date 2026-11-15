@@ -435,3 +435,19 @@ general source-qualified import: selected/all-record semantics, original opaque 
 baseline and ID mapping, editable/save authority and stale/unsaved/history decisions
 still need their own contract. Aromatic/charged/isotopic/stereo and larger/polycyclic
 structures, general packing and clipboard workflows remain required later work.
+
+## Editable SMILES paste and file authoring, 2026-11-15
+
+[The source-backed study](../research/smiles-source-import-plan.md) establishes public25
+selected-string paste/copy roles, not an exact26.1 dialog, insertion/selection/style or
+selected/all-file-record workflow. Keep those gaps explicit rather than treating the
+original converters or readonly inspector as complete parity. The next proposed gate
+requires actual benzene/aromatic representation, valid chemistry/depiction and one
+undoable native append that survives registered Save/reopen. No such command exists yet.
+
+Pinned eframe RequestPaste normalizes CRLF and emits no event for empty/unavailable text.
+A safe explicit clipboard-completion seam or separately justified dialog policy must be
+tested; never leave an implicit intent able to consume a later unrelated paste. File
+records remain a different source boundary: retain every opaque/unselected byte, map
+original/current/saved chemical graphs and refuse unsupported or geometry-losing saves.
+No general-edit authority follows from selecting or displaying a partial projection.
