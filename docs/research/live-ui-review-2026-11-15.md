@@ -59,3 +59,23 @@ This pass answers launch/build identity, selected menu inventory and styled seco
 New. Complete tool/icon geometry, shortcuts, dirty reference decisions, chemistry
 clipboard flows, Save/reopen semantics, other platforms and one-to-one screen/functional
 coverage remain unresolved. App launch and visible menus are not complete parity.
+
+## Renewed visible-menu pass
+
+On the user's renewed request to open ChemDraw, CUA selected the same running
+`com.revvity.ChemDraw` and raised `Untitled ACS Document 1996-2`. No build identity or
+entitlement was rechecked. The blank document and both numbered Window entries remain.
+
+| ID | Actual observation | Implementation consequence |
+|---|---|---|
+| LIVE-008 | View again exposes the main/general/style/object/structure palette roles. Invoking Show Main Toolbar and Window → Bring All to Front does not expose a palette in the selected document capture. | Palette visibility and geometry remain unresolved. Do not repeat the action or infer a successful show/hide transition from its label. |
+| LIVE-009 | On the blank document, Structure exposes separate structure/reaction/biopolymer/3D cleanup, aromatic/hydrogen display, enhanced stereo groups, reaction mapping/stoichiometry and naming roles. All observed leaf actions are disabled except Convert Name to Structure. | These are control availability observations, not chemistry results. The existing structure/stereo/reaction/naming anchors remain missing; enablement with actual selections still needs a separate flow. |
+| LIVE-010 | Object exposes fixed-length/fixed-angle/stereochemistry roles; its object settings, annotations, data attachment, alignment/distribution, frames, grouping/joining, stacking, flip/rotate and scale leaf actions are disabled in the blank context. | Keep geometric transforms, chemical transforms, grouping and topological Join distinct. No default toggle value, object-setting preset or selection rule is inferred. |
+| LIVE-011 | Document-title controls were opened and dismissed without typing. Menus were then dismissed through their advertised Cancel action; final AX/pixels again show the unchanged blank document. | No document was renamed, edited, saved, replaced or closed. ChemDraw remains open. |
+
+REA native UI tools are still absent from this tool session. CUA is the actual evidence
+producer; no REA capture, exported screenshot, binary hash, debugger or static resource
+inspection is claimed. The optional CUA launch helper is unavailable on this host; app
+selection/Raise and menu actions provide the observed results. Keyboard Escape did not
+produce an observed menu dismissal in this pass; advertised AX Cancel did. Its cause is
+unknown, so no keyboard shortcut or ordinary native input flow is claimed from that attempt.
