@@ -15,6 +15,28 @@ ChemDraw for visible UI observation, superseding the earlier no-execution bounda
 that pass. Keep local/runtime and public sources distinct; no static binary/resource
 inspection or proprietary asset transplantation is part of this workflow.
 
+## In progress: native SMILES file conversion
+
+The previous goal turn made concrete progress: New and its native evidence are committed,
+and renewed reference UI observation is recorded at`ac11ce6`. The current slice follows
+docs/research/smiles-native-conversion-plan.md. It adds an original native presentation of
+the existing restricted converter, not general import or reference clipboard parity.
+
+Root's CLI3844 and wire71379/10457 runtime REDs are preserved under
+target/native-smiles-conversion/. A new-test readonly-SDF catalogue setup correction18→12
+is separate from the intended missing action/schema/control failures. Root's intentional
+new test files/bridges remain uncommitted and fail until production is received; committed
+application code still has the1090/0/1 gate below. Do not report the working tree as GREEN.
+
+Three workers are actively assigned in separate ac11ce6 worktrees: producer
+bondline-native-smiles-conversion, independent command/MCP acceptance
+bondline-native-conversion-command-tests and independent App acceptance
+bondline-native-conversion-ui-tests. Minimal independent runtime REDs26109/86758 precede
+production; later missing-API compiler failures are separate. The producer's frozen first
+four backend files pass independent six-case core42292; UI source and finite lifecycle
+integration are still in progress. Root has not yet received that production into its
+working tree. Consult live agents before starting/restarting work; no duplicate job.
+
 ## Newly delivered and verified
 
 **Fresh document sessions:** the30th shared command, `document.new`, plus File → New
@@ -132,8 +154,8 @@ fe62db368bfb982d6a0d4309337207a419fc088b9c8e20ae9a0a32ccd61e70b7.
 Earlier51412/19318/26649/41233/30298/83437 were left untouched, not freshly verified.
 Never print/commit private tokens from earlier opt-in startup stdout.
 
-All Root Cargo/build and three worker jobs are terminal; no active fuzz/launch waiter.
-Workers used isolated worktrees bondline-new-document-command-tests,
+The previous New-session Root Cargo/build and worker jobs are terminal; no fuzz/launch
+waiter from that feature. Those workers used isolated worktrees bondline-new-document-command-tests,
 bondline-new-document-ui-tests and bondline-new-document-workspace with own absolute
 Cargo targets/inc0/debug0. Their final handoffs are received and frozen. Root owns Git,
 integration and native input. Do not reset worktrees, reuse Root artifacts or duplicate
