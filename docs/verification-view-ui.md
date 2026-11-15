@@ -202,3 +202,8 @@ separate adapter schema-oracle corrections are the complete test-correction reco
 These are headless actual-frame checks. This owner did not launch a window, use OS
 input, touch the user's preview process, run hosted Actions, install tools or perform
 Git actions. Root owns aggregate CI, native interaction, integration and commits.
+
+
+A later eleventh regression covers the existing File shortcut prepass: the ten original
+view cases remain an exact source prefix. [Ordered-file evidence](verification-ordered-file-actions.md)
+records its separate saved-output RED, unchanged GREEN, whole UI check and native follow-up.

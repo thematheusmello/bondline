@@ -78,13 +78,7 @@ impl FileWorkflow {
     }
 
     pub(crate) fn blocks_authoring(&self, state: &CommandResult) -> bool {
-        self.chooser.is_open()
-            || state.close != CloseState::Open
-            || state
-                .ui_file
-                .request
-                .as_ref()
-                .is_some_and(|request| request.phase != UiFilePhase::Running)
+        self.chooser.is_open() || crate::pending_ui_blocks_authoring(state)
     }
 
     pub(crate) fn is_busy(&self) -> bool {
@@ -142,20 +136,11 @@ impl FileWorkflow {
     pub(crate) fn menu(
         &mut self,
         ui: &mut egui::Ui,
-        engine: &mut Engine,
-        error: &mut Option<String>,
-    ) -> Option<FileIntentAction> {
-        let state = engine.state();
-        self.sync_close(&state);
-        let controls = engine.controls();
-        let shortcut = crate::control_shortcut(ui.ctx(), &controls, "File");
-        let menu = crate::control_menu(ui, &controls, "File");
-        let command = shortcut.or(menu);
-        if let Some(command) = command {
-            *error = engine.execute(command).err().map(|error| error.to_string());
-            self.sync_close(&engine.state());
-        }
-        None
+        engine: &Engine,
+        events: &[egui::Event],
+    ) -> Option<(usize, &'static str)> {
+        self.sync_close(&engine.state());
+        crate::control_menu_action(ui, &engine.controls(), "File", events)
     }
 
     fn request_file(

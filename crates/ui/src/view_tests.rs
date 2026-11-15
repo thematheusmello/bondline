@@ -1244,3 +1244,122 @@ fn vertical_accessibility_steps_are_advertised_truthfully_and_change_only_the_ca
     assert!(f.app.error.is_none(), "{:?}", f.app.error);
     Ok(())
 }
+fn independently_read_actual_saved_graph(path: &std::path::Path) -> TestResult<Value> {
+    let python = std::env::var_os("BONDLINE_PYTHON").ok_or("pinned external interpreter")?;
+    let mut child = Process::new(python)
+        .arg(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../xtask/oracles/cdxml_graph.py"
+        ))
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()?;
+    child
+        .stdin
+        .take()
+        .ok_or("actual saved-file oracle input")?
+        .write_all(&fs::read(path)?)?;
+    let output = child.wait_with_output()?;
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    Ok(serde_json::from_slice(&output.stdout)?)
+}
+
+fn finish_actual_file_workflow(f: &mut Fixture) -> TestResult {
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(10);
+    loop {
+        f.frame(vec![]);
+        if !f.app.files.is_busy()
+            && !f.app.executor.has_active_work()
+            && f.state()?["ui_file"]["request"].is_null()
+        {
+            return Ok(());
+        }
+        if std::time::Instant::now() >= deadline {
+            return Err("actual FileWorkflow job did not finish within ten seconds".into());
+        }
+        std::thread::sleep(std::time::Duration::from_millis(5));
+    }
+}
+
+#[test]
+fn actual_frame_undo_then_save_in_one_packet_saves_the_undone_source_and_history() -> TestResult {
+    // The separated sequence is a positive control using exactly the same real UI/IO.
+    for batched in [false, true] {
+        let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+        let path = f.directory.path("ordered-history-save-化学.cdxml");
+        f.command("bond.create",json!({"page_id":1,"begin_x_pt":220,"begin_y_pt":380,"end_x_pt":300,"end_y_pt":380,"order":"single"}))?;
+        f.command("document.save_cdxml", json!({"path":path}))?;
+        f.command("document.open_cdxml", json!({"path":path}))?;
+        f.command("ui.view", json!({"action":"set_zoom","percent":150}))?;
+        f.choose("Single bond")?;
+        let output = f.warm();
+        let original = f.state()?;
+        let raw = fs::read(&path)?;
+        let view = f.view()?;
+        let revision = original["revision"].as_u64().ok_or("source revision")?;
+        assert_eq!(original["undo_depth"], 0);
+        assert_eq!(original["file"]["dirty"], false);
+        let page = [210.0 * 72.0 / 25.4, 297.0 * 72.0 / 25.4];
+        let p = projected(canvas(&output)?, page, 150.0, None, [260.0, 380.0]);
+        f.frame(vec![
+            Event::PointerMoved(p),
+            button(p, true),
+            button(p, false),
+        ]);
+        let edited = f.state()?;
+        assert_eq!(
+            edited["document"]["pages"][0]["fragments"][0]["bonds"][0]["order"],
+            "double"
+        );
+        assert_eq!(edited["revision"], revision + 1);
+        assert_eq!(edited["undo_depth"], 1);
+        assert_eq!(edited["file"]["dirty"], true);
+        let undo = vec![
+            key(Key::Z, true, Modifiers::COMMAND),
+            key(Key::Z, false, Modifiers::COMMAND),
+        ];
+        let save = vec![
+            key(Key::S, true, Modifiers::COMMAND),
+            key(Key::S, false, Modifiers::COMMAND),
+        ];
+        if batched {
+            let mut events = undo;
+            events.extend(save);
+            f.frame(events);
+        } else {
+            f.frame(undo);
+            f.frame(save);
+        }
+        finish_actual_file_workflow(&mut f)?;
+        let actual = f.state()?;
+        let saved_graph = independently_read_actual_saved_graph(&path)?;
+        assert_eq!(
+            saved_graph, original["document"]["pages"][0]["fragments"],
+            "batched={batched}: actual saved file must contain the undone literal Single graph; revision={}, undo={}, redo={}",
+            actual["revision"], actual["undo_depth"], actual["redo_depth"]
+        );
+        assert_eq!(actual["document"], original["document"]);
+        assert_eq!(actual["revision"], revision + 2);
+        assert_eq!(actual["undo_depth"], 0);
+        assert_eq!(actual["redo_depth"], 1);
+        assert_eq!(actual["file"]["dirty"], false);
+        assert_eq!(actual["source"]["modified"], false);
+        assert_eq!(
+            fs::read(&path)?,
+            raw,
+            "Undo+Save retains the exact associated native source bytes"
+        );
+        assert_eq!(f.view()?, view);
+        assert!(
+            f.app.error.is_none(),
+            "batched={batched}: {:?}",
+            f.app.error
+        );
+    }
+    Ok(())
+}

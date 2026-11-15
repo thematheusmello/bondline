@@ -1,5 +1,11 @@
 # Native logical-view acceptance
 
+Current follow-up: the rapid Undo/Save defect recorded below is now independently
+reproduced and fixed. [Ordered-file verification](verification-ordered-file-actions.md)
+records the actual fixed executable,961-test gate and native same-sequence success.
+The current public screenshot has been refreshed to that fixed build; earlier hashes
+and this960-test navigation checkpoint remain historical evidence.
+
 2026-11-15, actual macOS/Apple M3 Max/Metal, root-owned local development bundle.
 The28-command navigation build is21,195,256B, SHA
 `fa584de0ea74d9fe2998ee2e3cd44d2e930e446e563819b0f3d6453e90e3033e`.

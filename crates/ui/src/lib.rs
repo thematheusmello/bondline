@@ -460,34 +460,13 @@ fn control_shortcut_key(shortcut: ControlShortcut) -> egui::KeyboardShortcut {
     egui::KeyboardShortcut::new(modifiers, key)
 }
 
-fn control_shortcut(
-    context: &egui::Context,
-    controls: &[ControlInfo],
-    menu: &str,
-) -> Option<Command> {
-    // Pinned egui ignores extra Shift: consume specific shortcuts even when disabled.
-    for shifted in [true, false] {
-        for control in controls.iter().filter(|control| control.menu == menu) {
-            if let Some(shortcut) = control
-                .shortcut
-                .filter(|shortcut| shortcut.shift == shifted)
-                && context
-                    .input_mut(|input| input.consume_shortcut(&control_shortcut_key(shortcut)))
-            {
-                return control.enabled.then(|| control.command.clone());
-            }
-        }
-    }
-    None
-}
-
 fn text_edit_focused(context: &egui::Context) -> bool {
     context
         .memory(|memory| memory.focused())
         .is_some_and(|id| egui::TextEdit::load_state(context, id).is_some())
 }
 
-fn workspace_shortcut(engine: &Engine, event: &egui::Event) -> Option<Command> {
+fn workspace_shortcut(engine: &Engine, event: &egui::Event, text_focused: bool) -> Option<Command> {
     let egui::Event::Key {
         key,
         pressed: true,
@@ -499,12 +478,21 @@ fn workspace_shortcut(engine: &Engine, event: &egui::Event) -> Option<Command> {
     };
     engine.controls().into_iter().find_map(|control| {
         let shortcut = control.shortcut.map(control_shortcut_key)?;
-        (matches!(control.menu, "Edit" | "View")
+        ((control.menu == "File" || (!text_focused && matches!(control.menu, "Edit" | "View")))
             && control.enabled
             && shortcut.logical_key == *key
             && modifiers.matches_exact(shortcut.modifiers))
         .then_some(control.command)
     })
+}
+
+fn pending_ui_blocks_authoring(state: &bondline_commands::CommandResult) -> bool {
+    state.close != CloseState::Open
+        || state
+            .ui_file
+            .request
+            .as_ref()
+            .is_some_and(|request| request.phase != bondline_commands::UiFilePhase::Running)
 }
 
 fn replay_edit_shortcuts(
@@ -527,20 +515,21 @@ fn replay_edit_shortcuts(
         }
     }
     for (index, event) in events.iter().enumerate() {
+        if pending_ui_blocks_authoring(&engine.state()) {
+            continue;
+        }
         if let egui::Event::WindowFocused(value) = event {
             focused = *value;
         }
         let command = actions
             .iter()
             .find(|(at, action)| {
-                *at == index && (!text_focused || matches!(action, view_controls::Action::Zoom(_)))
+                *at == index && (!text_focused
+                    || matches!(action, view_controls::Action::Zoom(_))
+                    || matches!(action, view_controls::Action::Control(id) if id.starts_with("file.")))
             })
             .and_then(|(_, action)| action.command(engine))
-            .or_else(|| {
-                (!text_focused)
-                    .then(|| workspace_shortcut(engine, event))
-                    .flatten()
-            });
+            .or_else(|| workspace_shortcut(engine, event, text_focused));
         if focused && let Some(command) = command {
             drawing.gesture = None;
             drawing.invalidate_hover();
@@ -583,15 +572,6 @@ fn control_menu_action(
         }
     });
     selected
-}
-
-fn control_menu(ui: &mut egui::Ui, controls: &[ControlInfo], menu: &str) -> Option<Command> {
-    let events = ui.input(|input| input.events.clone());
-    let (_, id) = control_menu_action(ui, controls, menu, &events)?;
-    controls
-        .iter()
-        .find(|control| control.id == id)
-        .map(|control| control.command.clone())
 }
 
 fn show_workspace_with_files(
@@ -656,9 +636,9 @@ fn show_workspace_with_preview(
                         .color(ACCENT),
                 );
                 ui.separator();
-                if let Some(files) = files.as_deref_mut() {
-                    file_action = files.menu(ui, engine, error);
-                }
+                let file = files
+                    .as_deref_mut()
+                    .and_then(|files| files.menu(ui, engine, &events));
                 let current = engine.state();
                 let blocked = current.close != CloseState::Open
                     || files
@@ -669,7 +649,7 @@ fn show_workspace_with_preview(
                     let edit = control_menu_action(ui, &controls, "Edit", &events);
                     let page = control_menu_action(ui, &controls, "Page", &events);
                     let view = control_menu_action(ui, &controls, "View", &events);
-                    selected = edit.or(page).or(view);
+                    selected = file.or(edit).or(page).or(view);
                 });
                 ui.separator();
                 let name = state
@@ -955,6 +935,7 @@ fn show_workspace_with_preview(
             let mut tool_states = tool_states.into_iter().peekable();
             history_handled = true;
             for (index, event) in events.iter().enumerate() {
+                let blocked = blocked || pending_ui_blocks_authoring(&engine.state());
                 while tool_states.peek().is_some_and(|(at, _)| *at == index) {
                     if let Some((_, tool)) = tool_states.next()
                         && key.tool != tool
@@ -1010,11 +991,7 @@ fn show_workspace_with_preview(
                                 .filter(|(at, _)| *at == index)
                                 .and_then(|(_, id)| control_command(engine, id))
                         })
-                        .or_else(|| {
-                            (!text_focused)
-                                .then(|| workspace_shortcut(engine, event))
-                                .flatten()
-                        })
+                        .or_else(|| workspace_shortcut(engine, event, text_focused))
                 } else {
                     None
                 };

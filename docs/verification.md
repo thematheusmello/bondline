@@ -2473,3 +2473,17 @@ The corrected saved scene faces independent Expat/Decimal/RDKit and the public s
 is a genuine unedited window buffer. Full local gate68260:960passed/0failed/1ignored;
 clippy/fmt/layers/licenses/corpus pass. First parallel listener-rebind failure remains
 recorded separately, followed by unchanged isolated and full successful runs.
+
+
+## Ordered File actions, 2026-11-15
+
+A native rapid Undo→Save counterexample exposed an existing eager File shortcut prepass.
+[Independent actual-App/file regression and native follow-up](verification-ordered-file-actions.md)
+prove the cause and correction. File menu/keys now resolve the current central command
+at their raw event, after earlier edits/history; pending intents block later authoring.
+Save leases, worker publication and close receipts are unchanged. The frozen eleventh
+case passes after actual completed-file RED, including a separated-input positive control.
+Whole UI and bounded peer review pass. Root52827 aggregate:961passed/0failed/1ignored,
+rustfmt/clippy/layers/licenses/corpus pass. New native binary/source hashes and literal
+external saved-file checks are in the linked record; earlier failed native output remains
+explicit evidence. Full M0–M5 stays incomplete; hosted Actions remains disabled.
