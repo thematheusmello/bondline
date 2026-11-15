@@ -19,7 +19,8 @@ make an old CI badge green.
 
 Implement an independent offline Rust chemical structure and reaction editor, native on
 macOS, Windows and Linux, eventually also WebAssembly. Original code is MIT OR Apache-2.0.
-The reference is publicly documented Professional 26.1 behavior, not proprietary code.
+The reference is Professional26.1 behavior from public documentation and explicitly
+authorized visible runtime observation, not proprietary code.
 Read STATUS.md, ROADMAP.md, docs/architecture.md, docs/parity-checklist.md and
 docs/clean-room/sources.md before selecting work. Continue existing work; do not restart.
 The persistent project goal is active. M0's native license blocker is resolved; this does
@@ -31,8 +32,11 @@ docs/verification.md for exact RED/GREEN and platform evidence.
 - Target one-to-one Professional desktop screens, control roles, icon roles, workflows and
   functionality, with Bondline branding and the existing offline/open-source commitments.
   Use public documentation, screenshots, videos, open standards and licensed source references.
-  The latest supplied agent instructions require the clean-room boundary below.
-- Never download, execute, inspect, decompile or disassemble ChemDraw program binaries.
+  The user's latest2026-11-15 instruction explicitly authorizes opening installed ChemDraw
+  to inspect its visible screens and workflows; this supersedes the earlier no-execution
+  boundary for that UI observation. Keep public and local runtime provenance distinct.
+- Use CUA for the authorized installed-app UI interaction. Never download or statically
+  inspect, decompile or disassemble ChemDraw program binaries in this workflow.
   Never copy proprietary templates, sample libraries, icons, fonts or help text.
 - Use ordinary source tools for open-source repositories.
   Record exact source/build/version/platform, URLs or artifact hashes, video timestamps,

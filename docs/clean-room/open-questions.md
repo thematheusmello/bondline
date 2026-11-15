@@ -1,5 +1,14 @@
 # Open questions
 
+- The2026-11-15 user-authorized CUA pass observes About26.1.0.6801/Product Signals ChemDraw,
+  but does not establish Professional entitlement. File New creates a second styled window
+  and retains the first, unlike Bondline's current same-window fresh session. Styles and
+  multi-window ownership/history/close/save routing remain required. Show Main Toolbar was
+  activated, but the selected document capture did not expose the floating palette; its
+  actual visibility/geometry and individual tool roles remain unresolved in this pass.
+  Edit Copy As/Paste Special SMILES entries were observed, not executed conversion flows.
+  See research/live-ui-review-2026-11-15.md; do not infer clipboard semantics from labels.
+
 - Registry Save retains authoring Undo/Redo and a separate saved baseline. G25 printed14
   describes only actions since the last save. The installed26.1.0.6801 Mac local CDXML
   Save As route retains enabled Undo Drawing; this resolves that specific observation,

@@ -24,6 +24,7 @@ The app is in early development; documented plans are not implemented features.
 | Check actual application-frame tool workflows | [UI evidence](verification-multiple-ui.md) |
 | Inspect the refreshed visual direction | [Pinned references](research/visual-direction.md), [actual workspace checks](verification-workspace-presentation.md), [offscreen capture utility](verification-visual-capture.md) |
 | Find the next feature | [Roadmap](../ROADMAP.md), [parity checklist](parity-checklist.md) |
+| Review the latest installed reference UI | [User-authorized live File/Edit/View/New observations and gaps](research/live-ui-review-2026-11-15.md) |
 | Check evidence | [Verification](verification.md), [CI scope](ci.md), [corpus](corpus/README.md) |
 | Review provenance and licenses | [Source register](clean-room/sources.md), [open questions](clean-room/open-questions.md), [dependency policy](dependency-policy.md), [attribution](../ATTRIBUTION.md) |
 | Report a problem | [Support](../SUPPORT.md), [security reporting](../SECURITY.md) |

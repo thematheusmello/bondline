@@ -44,6 +44,9 @@ Independent tests reproduce and close both old-surface pointer races. The local 
 passes1090/0/1; actual Mac SDF→New, Cancel/Discard/Save, Unicode output, editable reopening
 and Undo pass. See docs/verification-new-document.md. Styles/templates and multiple
 windows remain missing. This closes the source-file→fresh-drawing dead end, not M0/M1.
+The later user-authorized live26.1.0.6801 pass actually observes New creating a second
+styled window while retaining the first; see docs/research/live-ui-review-2026-11-15.md.
+That independent-window/style workflow remains required for parity.
 
 Next M1 priority is an honest native workflow for the existing restricted create-only
 SMILES→CDXML converter, then broader SMILES drawing import/layout. Reread its current

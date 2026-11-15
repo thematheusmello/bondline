@@ -1,18 +1,19 @@
 # Status — 2026-11-15
 
-The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`. Previous feature
-checkpoint`f44bfa9` delivers SDF removal;`69e4b37` records its integrated preview;
-`763180c` records the later bounded native SMILES acceptance. The new document feature,
-its independent tests and final evidence are integrated in the current recoverable tree;
-commit the intentional files locally, then record the resulting revision here. Do not
-restart these features. No push, merge or publication is authorized for this checkpoint.
+The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`. Feature
+checkpoint`3b0387c` delivers guarded New with its tests/native evidence;`763180c` records
+bounded native SMILES acceptance. Earlier`f44bfa9`/`69e4b37` deliver SDF removal and its
+preview checkpoint. The following documentation checkpoint records renewed reference UI
+observation. Do not restart delivered work. No push, merge or publication is authorized.
 
 M0's native/GPU license blocker is resolved; full M0 and M1 remain incomplete.
 GitHub Actions stays disabled by user instruction: repository Actions off and
 workflow417397204 manually disabled. Do not enable/dispatch/rerun or push to manufacture
 hosted evidence. Earlier hosted results do not verify current interactive Windows/Linux
-workflows. Research follows the supplied public-source AGENTS.md boundary; never inspect
-or execute proprietary reference program binaries/assets.
+workflows. The user's latest2026-11-15 instruction explicitly authorizes opening installed
+ChemDraw for visible UI observation, superseding the earlier no-execution boundary for
+that pass. Keep local/runtime and public sources distinct; no static binary/resource
+inspection or proprietary asset transplantation is part of this workflow.
 
 ## Newly delivered and verified
 
@@ -105,7 +106,7 @@ App input tests do not replace actual native execution.
 
 ## Native preview and live handles
 
-Latest visible bundle`target/new-document-native/Bondline.app`, identifier
+Latest Bondline bundle`target/new-document-native/Bondline.app`, identifier
 `org.bondline.new-document-review`, observed PID**52347**. CUA launched it; no control
 channel enabled. Binary22,095,864B/SHA256
 e38d0e91e7be6f0bba142bd5498d7d614eeb713fb9f3e03cc892c5f6038d2105.
@@ -115,6 +116,15 @@ d08f2cd85e293f52d19093ab7330e01eac7e4e9da80d1f768518023f5626ef81.
 Native input740B remains exact SHA256
 e5cbdc14329c59bad55148c5de37058de90f651af10966c30cf8b89b3b5efd39.
 Build/native receipts are ignored under target/new-document-native/.
+
+ChemDraw is now frontmost by the user's latest explicit request. CUA About reports
+26.1.0.6801/Product Signals ChemDraw; Professional entitlement remains unknown. File New
+opens`Untitled ACS Document 1996-2` while retaining`…-1`, confirmed by Window menu. The new
+blank reference window is left open; no existing document edit/save/close. Selected
+File/Edit/View controls are recorded in docs/research/live-ui-review-2026-11-15.md. Show
+Main Toolbar was invoked but its floating palette was not exposed by the selected-window
+capture; visibility/geometry remain unresolved. REA MCP tools are not connected; CUA
+observations are not REA-engine captures. No debugger/native-analysis session is open.
 
 Older SDF removal PID58926, SMILES inspector PID53821 and Fit PID16278 remain separate.
 The inspector's49B Unicode Save output remains SHA256
@@ -140,6 +150,11 @@ completed work. Disposable receipts live under target/new-document/ and worker t
    then reuse the shared command and actual chooser/receipt. Show the limited profile
    and result truthfully; reopening the output must be explicit and guarded. Verify the
    actual file with unchanged consumers and the actual desktop workflow, then commit.
+   Reference UI research can proceed from the open blank ChemDraw window under the latest
+   authorization. First resolve actual palette capture/visibility, then bounded original
+   drawing/selection/SMILES/history/persistence; keep observed and inferred results distinct.
+   The now-observed styled second-window New remains a required parity gap, not delivered
+   by Bondline's same-window reset. Do not restart or silently relabel that increment.
 2. Broader SMILES drawing import/layout follows. SDF creation/reordering, field-header
    editing, foreign/general CDX and wider CDXML/MOL metadata/layout remain required.
    The earlier SDF reordering priority is deferred after the sourced File New audit;

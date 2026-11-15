@@ -3,9 +3,10 @@
 Reviewed through 2026-11-15. A source is permission to learn documented behavior, not to copy
 proprietary implementation, help text or assets. Record more specific sections as features land.
 The folder name and policy checkpoint72fafb3 are historical. New work follows the latest
-AGENTS.md boundary: public specifications/media and licensed source references only;
-never inspect or execute the proprietary reference program. Preserve historical evidence
-with its actual method, exact identities and observed/inferred limits.
+AGENTS.md boundary: public specifications/media and licensed source references, plus the
+user's later2026-11-15 explicit authorization to open the installed reference and observe
+its visible UI. This exception does not authorize copying proprietary implementation or
+shipping assets. Preserve each observation's actual method, identity and limits.
 
 | ID | Public source | Decision / limitations |
 |---|---|---|
@@ -33,6 +34,7 @@ with its actual method, exact identities and observed/inferred limits.
 | G25-NEW-DOCUMENT | https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf | Same GUIDE-25 pin,17721447B/SHA2563f1ebc429df07efdd47b6218a148dc346a215043f60bf89ee9a1cb90629bd5b3. Printed13/39 establish New and untitled documents using defaults/style sheets; printed77 lists Ctrl+N. Bondline's source-free A4, single-window replacement, clean baseline/history/namespace reset, retained tool/host/save reservation and Save/Discard/Cancel policy are original choices. Style-dependent labels/templates/multiple windows remain missing. No reference help prose/assets copied. |
 | MAC-NEW-CONVENTION | https://support.apple.com/en-euro/guide/mac-help/mchld6b9e240/27/mac/27 | Apple's indexed public shortcut table associates New/Command-N with a new document in apps. Direct body retrieval returned429; the indexed table is narrower evidence, not reference-product Mac26.1 execution. Bondline's primary-key mapping is platform-qualified and requires its own native check. |
 | BONDLINE-NEW-SESSION | ../verification-new-document.md | Original typed document.new/ui.file New contract, guarded whole-session replacement and real Save continuation. Existing complete-snapshot/generation/save-lease policies remain authoritative. Last-presented same-Engine namespace qualifies canvas input; full capture stamps still guard jobs/receipts. Independent literal/consumer/App/runtime-RED evidence and native/platform limits are separate. |
+| LOCAL-UI-20261115 | ../research/live-ui-review-2026-11-15.md | User-authorized local runtime, not a public specification or REA-engine capture. CUA opens com.revvity.ChemDraw; visible About reports26.1.0.6801/Product Signals ChemDraw, with Professional entitlement still unknown. File/Edit/View menus and New→second-window flow observed. Exact controls/limits are in the report; no binary/resource inspection or shipped proprietary asset. |
 | FILE-WINDOWS-DACL-FLAGS | https://learn.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-string-format | P denotes SE_DACL_PROTECTED; AI denotes SE_DACL_AUTO_INHERITED outside the ACE. security-descriptor-control and ace-strings distinguish protection from an inherited ACE's ID flag. Native Windows canonicalizes the exact owner-only DACL to D:PAI(A;;FA;;;OW); test accepts that or D:P(A;;FA;;;OW), with all existing access checks retained. |
 | MAC-APP-QUIT | https://developer.apple.com/documentation/appkit/nsapplicationdelegate/applicationshouldterminate(_:).md | Public termination-reply contract: Quit/terminate invokes delegate; Cancel retains the running app for client close approval. Original winit0.30.13 lacks this callback, so the pinned fork adds it without replacing its delegate or native menu. Native Cmd+Q reproduced loss before this fix; GREEN must be observed separately. |
 | APPKIT-DOCUMENT-CLOSE | https://developer.apple.com/documentation/appkit/nsdocument/canclose(withdelegate:shouldclose:contextinfo:).md | Public clean-versus-dirty close callback and save/don't-save/cancel roles. This supports the native decision pattern, not exact Professional26.1 dialog wording or screen parity. Bondline implements original Rust policy instead of adopting NSDocument or copying help prose. |

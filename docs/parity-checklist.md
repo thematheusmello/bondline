@@ -2,7 +2,8 @@
 
 Target: publicly documented Professional-family26.1 desktop behavior.
 Reviewed through2026-11-15. Historical authorized installed-profile records below retain
-their original method; current research follows the public-source-only boundary in AGENTS.md.
+their original method. The user's latest instruction also authorizes visible installed
+UI observation, separately recorded in research/live-ui-review-2026-11-15.md.
 The historical installed license tier remains unknown.
 This is a source-cited implementation backlog, not a claim of feature parity.
 
@@ -96,7 +97,7 @@ establish chemical preview, data-edit UI or other platforms.
 
 | ID | Reference control/action | G25 p. | State | Notes |
 |---|---|---|---|---|
-| MF-001 | File > New Document | 13, 39 | partial verified, single-window Mac | Shared document.new and File intent reset to a source-free A4 drawing with guarded Save/Discard/Cancel. Native SDF→New, dirty decisions, Unicode Save-before-New, editable reopen and Undo pass; command/App/worker tests cover stale input and retirement. A4 and same-window policy are original. Style-dependent New, templates, multiple windows, other platforms and complete26.1 parity remain missing. See verification-new-document.md. |
+| MF-001 | File > New Document | 13, 39 | partial verified, single-window Mac | Shared document.new and File intent reset to a source-free A4 drawing with guarded Save/Discard/Cancel. Native SDF→New, dirty decisions, Unicode Save-before-New, editable reopen and Undo pass; command/App/worker tests cover stale input and retirement. A4 and same-window policy are original. Local UI26.1.0.6801 now observes New ACS Document1996 retaining the original and opening a second styled window. That multi-window/style flow, templates, other platforms and complete parity remain missing. See verification-new-document.md and research/live-ui-review-2026-11-15.md. |
 | MF-002 | File > Open | 14 | partial verified, Mac CDXML/CDX/MOL/SDF | Shared presentation request/Cancel, decoder choice/hints and failed-open retention. CDX native picker/explicit format/malformed-import retention and guarded no-preview state pass on exact450962c; source is retained. Other formats/platform workflows missing. |
 | MF-003 | File > Recent-document list | 14 | missing | Dynamic list; no sample files copied. |
 | MF-004 | File > Save | 14 | partial verified, Mac CDXML/CDX/MOL/SDF | Shared known-path/encoding intent and guarded preparation. CDX exact source/receipt/refusal and native known-path misleading-suffix Save/retry/dirty-close refusal/Undo recovery pass. Existing Mac XML/MOL CmdS/QuitSave evidence remains; history-across-save differs G25 and general formats/styles are missing. |
