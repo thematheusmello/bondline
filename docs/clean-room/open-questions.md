@@ -419,3 +419,19 @@ relative to a legacy interpretation. An explicit strict-requirement API is futur
 only if a real caller needs that guarantee; no new user option is planned.
 This does not resolve wider CDX metadata/chemistry/scene mapping, corpus admission or
 editable general CDX output; source-preserving syntax and application authority stay separate.
+
+## Neutral component packing and source-qualified import, 2026-11-15
+
+The [component contract](../research/smiles-components-plan.md) uses actual graph edges:
+OpenSMILES ring links can join atoms across a dot. Generic neutral mixtures have no
+established26.1 ordering, spacing or association rule here. IUPAC's contextual salts/
+related-forms guidance does not specify source-order center-box shelves. The declared
+gapL, no-rotation shelf placement and divided work quotas are original Bondline policy;
+visible ink spacing and a universal fit guarantee do not follow from center boxes.
+
+The additive derived-file profile must preserve all source-local identities, direction,
+fixed H and components and refuse the whole unsupported candidate. It does not settle
+general source-qualified import: selected/all-record semantics, original opaque backing,
+baseline and ID mapping, editable/save authority and stale/unsaved/history decisions
+still need their own contract. Aromatic/charged/isotopic/stereo and larger/polycyclic
+structures, general packing and clipboard workflows remain required later work.
