@@ -406,3 +406,16 @@ not new test waits. Extra sizing is subject to the pinned SDK pass budget; one-p
 intrinsically over-tall windows need separate acceptance/scrolling work. The older
 listener AddrInUse failure still has no proven cause: diagnostic-only labels preserve
 the failure and may identify a future phase; negative bounded runs are not a causal fix.
+
+## Canonical28-byte CDX file-end decision, 2026-11-15
+
+The [pinned plan](../research/cdx-file-end-plan.md) records the SDK's separate object/file
+ends versus its implicit EOF-only simple example, and original Indigo output with both
+words. Canonical-zero-header fallback is a supported-envelope policy, not a producer
+signature. Opaque-header legacy successes retain priority. Removing the new file's final
+word can produce a valid old Document; bytes cannot establish truncation intent. Do not
+claim default parsing requires FileEnd in every accepted file or rejects every extra zero
+relative to a legacy interpretation. An explicit strict-requirement API is future work
+only if a real caller needs that guarantee; no new user option is planned.
+This does not resolve wider CDX metadata/chemistry/scene mapping, corpus admission or
+editable general CDX output; source-preserving syntax and application authority stay separate.
