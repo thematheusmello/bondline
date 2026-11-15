@@ -191,7 +191,7 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current26-command registry includes complete SDF/SMILES-file Open/Save and bond.create
+The current27-command registry includes complete SDF/SMILES-file Open/Save and bond.create
 for independent neutral-carbon fragments with optional Single(default)/Double/Triple order
 and literal H=`4-order_weight`, plus CDXML/CDX/MOL open/save. bond.extend requires the
 explicit H policy/revision and one incident supported bond with consistent literal
@@ -513,3 +513,12 @@ headless evidence; see the multiple-bond verification records and STATUS.md for 
 Next authoring flow: source the guide's existing-bond conversion rules, then add the typed
 order-edit command and UI/adapter/history/H-budget tests. Styles, sidedness, general
 construction, inventory/platform/native evidence and full M0–M5 remain unfinished.
+
+`bond.set_order` requires an explicit order, current revision/target IDs and
+`rectify_neutral_carbon` policy. Validate both neutral nonisotopic/nonradical C endpoints'
+literal H plus incident1/2/3 weights equals4 before changing either or returning a no-op.
+The setter does not need positions and preserves unrelated metadata/None/geometry, IDs,
+direction and fragments. Source-free/byte-proven native CDXML authority is mandatory;
+filenames do not confer authority. No IDs are consumed. Reuse complete-snapshot commit and
+preserve same-order Arc/history/redo/dirty/close state. Read
+docs/verification-bond-order-command.md and docs/research/bond-order-edit-plan.md.

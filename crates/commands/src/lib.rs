@@ -20,7 +20,9 @@ mod sdf_query;
 mod smiles_conversion;
 mod smiles_export;
 mod smiles_query;
-pub use bond::{BondCreate, BondDrawOrder, BondExtend, ExtendHydrogenPolicy};
+pub use bond::{
+    BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
+};
 pub use bond_tool::{BondToolOperation, BondToolState, SelectBondTool};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
@@ -135,6 +137,7 @@ command_registry! {
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent carbon bond of the requested Single/Double/Triple order, authoring fixed neutral-carbon H counts; omitted order is Single.", false),
     BondExtend(BondExtend) => ("bond.extend", "Extend a neutral terminal carbon with consistent literal H and one Single/Double/Triple carbon bond using an explicit requested order/H policy; omitted order is Single and native complete data is required.", false),
+    BondSetOrder(BondSetOrder) => ("bond.set_order", "Set an existing bond's Single/Double/Triple order and explicitly rectify both neutral-carbon endpoints' consistent literal hydrogen counts, preserving identities and geometry; requires native complete data.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
     Redo(NoParams) => ("history.redo", "Restore the next authored document.", false),
     Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
@@ -172,8 +175,18 @@ pub enum Error {
         "terminal-carbon extension requires source-free or completely mapped native CDXML data"
     )]
     UnsupportedExtensionSource,
-    #[error("fragment and atom IDs must be greater than zero")]
+    #[error("fragment, atom and bond IDs must be greater than zero")]
     InvalidBondTarget,
+    #[error("bond {bond_id} does not exist in fragment {fragment_id}")]
+    MissingBond { fragment_id: u32, bond_id: u32 },
+    #[error("changing bond order requires source-free or completely mapped native CDXML data")]
+    UnsupportedBondOrderSource,
+    #[error(
+        "changing bond order requires neutral nonisotopic carbon endpoints, Single/Double/Triple incident bonds and consistent sufficient literal hydrogens"
+    )]
+    UnsupportedBondOrder,
+    #[error("{0}")]
+    UnsupportedBondConversion(&'static str),
     #[error("atom {atom_id} does not exist in fragment {fragment_id}")]
     MissingAtom { fragment_id: u32, atom_id: u32 },
     #[error(
@@ -266,7 +279,8 @@ impl Error {
             Self::Model(
                 bondline_model::Error::MissingPage(_) | bondline_model::Error::MissingFragment(_),
             )
-            | Self::MissingAtom { .. } => "not_found",
+            | Self::MissingAtom { .. }
+            | Self::MissingBond { .. } => "not_found",
             Self::RevisionExhausted => "revision_exhausted",
             Self::IdentityExhausted => "identity_exhausted",
             Self::Render(bondline_render::Error::Cancelled) => "cancelled",
@@ -277,7 +291,10 @@ impl Error {
             | Self::SourceBackedEdit
             | Self::WrongContent { .. }
             | Self::UnsupportedExtensionSource
-            | Self::UnsupportedBondExtension => "unsupported_content",
+            | Self::UnsupportedBondExtension
+            | Self::UnsupportedBondOrderSource
+            | Self::UnsupportedBondOrder
+            | Self::UnsupportedBondConversion(_) => "unsupported_content",
             Self::IncompleteSmilesExportSource => "unsupported_content",
             Self::Render(
                 bondline_render::Error::LabelScale | bondline_render::Error::BondScale,
@@ -757,6 +774,13 @@ impl Engine {
                 self.identities = identities;
                 changed
             }
+            Command::BondSetOrder(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let document = bond::set_order(self.stored_document()?, params)?;
+                self.commit(document)?
+            }
             Command::Undo(_) => self.undo()?,
             Command::Redo(_) => self.redo()?,
             Command::Capture(params) => {
@@ -918,6 +942,7 @@ mod tests {
             [
                 "bond.create",
                 "bond.extend",
+                "bond.set_order",
                 "document.inspect",
                 "document.close",
                 "document.open_cdxml",

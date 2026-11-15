@@ -52,7 +52,7 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 | SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. CLI/MCP inspect ordered fields and edit existing values with Undo/Redo. Restricted neutral Single/Double/Triple capture and asynchronous read-only preview pass headless checks. Actual native preview acceptance and field-edit UI remain pending. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. |
 | Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. The centered style is original; new native label/bond workflows and reference style parity remain unverified. |
-| Automation | 26 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Automation | 27 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all
 three platforms and window launches. GitHub Actions is disabled during development to

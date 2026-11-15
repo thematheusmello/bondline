@@ -56,6 +56,7 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
             "page.set_size",
             "bond.create",
             "bond.extend",
+            "bond.set_order",
             "history.undo",
             "history.redo",
             "render.capture"

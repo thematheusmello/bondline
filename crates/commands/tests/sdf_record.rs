@@ -43,6 +43,7 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "page.set_size",
             "bond.create",
             "bond.extend",
+            "bond.set_order",
             "history.undo",
             "history.redo",
             "render.capture"

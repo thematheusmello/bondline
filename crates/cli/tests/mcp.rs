@@ -1,4 +1,6 @@
 use serde_json::{Value, json};
+#[path = "support/bond_order.rs"]
+mod bond_order;
 #[path = "support/cdx.rs"]
 mod cdx_support;
 #[path = "support/chain.rs"]
@@ -123,7 +125,7 @@ fn stdio_smiles_record_query_is_bounded_exact_private_and_not_cached()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 26);
+    assert_eq!(tools.len(), 27);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "smiles.record.inspect")
@@ -365,7 +367,7 @@ fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 26);
+    assert_eq!(tools.len(), 27);
     let tool = tools
         .iter()
         .find(|t| t["name"] == "file.export_smiles_fragment")
@@ -422,7 +424,7 @@ fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real(
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 26);
+    assert_eq!(tools.len(), 27);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
@@ -1068,6 +1070,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         [
             "bond.create",
             "bond.extend",
+            "bond.set_order",
             "document.close",
             "document.inspect",
             "document.open_cdx",

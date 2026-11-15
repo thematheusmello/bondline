@@ -81,6 +81,135 @@ pub struct BondExtend {
     pub hydrogen_policy: ExtendHydrogenPolicy,
 }
 
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum OrderHydrogenPolicy {
+    RectifyNeutralCarbon,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct BondSetOrder {
+    pub expected_revision: u64,
+    #[schemars(range(min = 1))]
+    pub page_id: u32,
+    #[schemars(range(min = 1))]
+    pub fragment_id: u32,
+    #[schemars(range(min = 1))]
+    pub bond_id: u32,
+    pub order: BondDrawOrder,
+    pub hydrogen_policy: OrderHydrogenPolicy,
+}
+
+fn bond_weight(order: BondOrder) -> Option<u16> {
+    match order {
+        BondOrder::Single => Some(1),
+        BondOrder::Double => Some(2),
+        BondOrder::Triple => Some(3),
+        _ => None,
+    }
+}
+
+pub(super) fn set_order(
+    document: &StoredDocument,
+    params: BondSetOrder,
+) -> Result<StoredDocument, Error> {
+    if !document.is_fully_mapped()
+        || document
+            .source_info()
+            .is_some_and(|source| source.format != "cdxml")
+    {
+        return Err(Error::UnsupportedBondOrderSource);
+    }
+    let OrderHydrogenPolicy::RectifyNeutralCarbon = params.hydrogen_policy;
+    let page_id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
+    let fragment_id = FragmentId::new(params.fragment_id).ok_or(Error::InvalidBondTarget)?;
+    let bond_id = BondId::new(params.bond_id).ok_or(Error::InvalidBondTarget)?;
+    let fragment = document
+        .model()
+        .pages()
+        .iter()
+        .find(|page| page.id() == page_id)
+        .ok_or(bondline_model::Error::MissingPage(page_id.get()))?
+        .fragments()
+        .iter()
+        .find(|fragment| fragment.id() == fragment_id)
+        .ok_or(bondline_model::Error::MissingFragment(fragment_id.get()))?;
+    let missing_bond = || Error::MissingBond {
+        fragment_id: fragment_id.get(),
+        bond_id: bond_id.get(),
+    };
+    let target = fragment
+        .bonds()
+        .iter()
+        .find(|bond| bond.id == bond_id)
+        .ok_or_else(missing_bond)?;
+    let old_weight = bond_weight(target.order).ok_or(Error::UnsupportedBondOrder)?;
+    let mut hydrogens = [0; 2];
+    for (result, id) in hydrogens.iter_mut().zip([target.begin, target.end]) {
+        let atom =
+            fragment
+                .atoms()
+                .iter()
+                .find(|atom| atom.id == id)
+                .ok_or(Error::MissingAtom {
+                    fragment_id: fragment_id.get(),
+                    atom_id: id.get(),
+                })?;
+        if atom.element.get() != 6
+            || atom.charge != 0
+            || atom.isotope.is_some()
+            || atom.radical != Radical::None
+        {
+            return Err(Error::UnsupportedBondOrder);
+        }
+        let used = fragment
+            .bonds()
+            .iter()
+            .filter(|bond| bond.begin == id || bond.end == id)
+            .try_fold(0_u16, |sum, bond| {
+                sum.checked_add(bond_weight(bond.order)?)
+                    .filter(|sum| *sum <= 4)
+            })
+            .ok_or(Error::UnsupportedBondOrder)?;
+        if atom.explicit_hydrogens != Some(4 - used) {
+            return Err(Error::UnsupportedBondOrder);
+        }
+        let new_used = used
+            .checked_sub(old_weight)
+            .and_then(|sum| sum.checked_add(params.order.weight()))
+            .filter(|sum| *sum <= 4)
+            .ok_or(Error::UnsupportedBondOrder)?;
+        *result = 4 - new_used;
+    }
+    // Validate both endpoints even for no-ops; keep the original graph allocation.
+    if target.order == params.order.model_order() {
+        return Ok(document.clone());
+    }
+    let mut atoms = fragment.atoms().to_vec();
+    let [begin_hydrogens, end_hydrogens] = hydrogens;
+    for atom in &mut atoms {
+        if atom.id == target.begin {
+            atom.explicit_hydrogens = Some(begin_hydrogens);
+        } else if atom.id == target.end {
+            atom.explicit_hydrogens = Some(end_hydrogens);
+        }
+    }
+    let mut bonds = fragment.bonds().to_vec();
+    bonds
+        .iter_mut()
+        .find(|bond| bond.id == bond_id)
+        .ok_or_else(missing_bond)?
+        .order = params.order.model_order();
+    let replacement =
+        Fragment::new(fragment_id, atoms, bonds).map_err(bondline_model::Error::from)?;
+    let mut candidate = document.clone();
+    candidate
+        .model_mut()
+        .replace_fragment(page_id, replacement)?;
+    Ok(candidate)
+}
+
 #[derive(Clone, Copy, Debug, Default)]
 // Session floors outlive history so new branches cannot reuse removed identities.
 pub(super) struct Ids {
@@ -296,6 +425,42 @@ mod tests {
             end_y_pt: 240.0,
             hydrogen_policy: ExtendHydrogenPolicy::RectifyTerminalCarbon,
         }
+    }
+
+    #[test]
+    fn order_edit_noop_and_revision_exhaustion_do_not_allocate_or_replace_content()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let mut engine = Engine::default();
+        engine.dispatch("bond.create", serde_json::json!({"page_id":1,"begin_x_pt":100,"begin_y_pt":200,"end_x_pt":148,"end_y_pt":200}))?;
+        engine.revision = u64::MAX;
+        engine.identities = super::Ids {
+            atom: u32::MAX,
+            bond: u32::MAX,
+            fragment: u32::MAX,
+        };
+        let content = std::sync::Arc::clone(&engine.document);
+        let before = serde_json::to_value(engine.state())?;
+        let request = |order| serde_json::json!({"expected_revision":u64::MAX,"page_id":1,"fragment_id":1,"bond_id":1,"order":order,"hydrogen_policy":"rectify_neutral_carbon"});
+        assert!(
+            !engine
+                .dispatch("bond.set_order", request("single"))?
+                .changed
+        );
+        assert!(matches!(
+            engine.dispatch("bond.set_order", request("double")),
+            Err(Error::RevisionExhausted)
+        ));
+        assert_eq!(serde_json::to_value(engine.state())?, before);
+        assert!(std::sync::Arc::ptr_eq(&content, &engine.document));
+        assert_eq!(
+            (
+                engine.identities.atom,
+                engine.identities.bond,
+                engine.identities.fragment
+            ),
+            (u32::MAX, u32::MAX, u32::MAX)
+        );
+        Ok(())
     }
 
     #[test]

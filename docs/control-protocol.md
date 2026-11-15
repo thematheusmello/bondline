@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has 26 commands; the complete list is below.
+The delivered registry has 27 commands; the complete list is below.
 
 An engine JSON request is exactly:
 
@@ -67,6 +67,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
 | `bond.create` | `page_id`, `begin_x_pt`, `begin_y_pt`, `end_x_pt`, `end_y_pt`; optional `order="single"` | One independent neutral-carbon fragment with the requested Single/Double/Triple bond; each endpoint receives literal H=`4-order_weight` |
 | `bond.extend` | Required `expected_revision`, `page_id`, `fragment_id`, `begin_atom_id`, `end_x_pt`, `end_y_pt`, `hydrogen_policy="rectify_terminal_carbon"`; optional `order="single"` | Add the requested bond/new carbon to a consistent supported terminal carbon, subtracting the bond weight from its literal H; native complete CDXML/source-free data only |
+| `bond.set_order` | Required `expected_revision`, positive `page_id`, `fragment_id`, `bond_id`, explicit `order` (`single`, `double`, `triple`) and `hydrogen_policy="rectify_neutral_carbon"` | Edit one existing edge and both consistent neutral-carbon literal H counts; preserve geometry/IDs/direction, one history commit, validated no-op; source-free/byte-proven native CDXML only |
 | `history.undo` | `{}` | Previous authored snapshot |
 | `history.redo` | `{}` | Next authored snapshot |
 | `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only drawing page or restricted all-record SDF virtual page1 PNG; explicit `cpu` or `gpu` |
@@ -805,3 +806,26 @@ its job through decode/publication/retirement after command completion, rejects 
 view/DPI/close-epoch stale results and checks logical readability before painting. Current
 Cancel/Retry/Records controls are local transient presentation, not newly addressable MCP
 tools; complete control inventory/addressability remains incomplete M0 work.
+
+## Existing-bond absolute order setter
+
+`bond.set_order` requires all six target/revision/order/policy fields; it never inherits
+the transient tool. The two affected endpoints must be neutral, nonisotopic/nonradical C
+with literal H=`4-sum(incident weights)` and only Single/Double/Triple incident orders.
+Replace the target weight and adjust both H counts by old−new after checking the new
+sums do not exceed4. Unknown/inconsistent endpoint H, unsupported metadata/orders and
+overvalence refuse atomically. No positions are inferred or changed; absent positions
+and every unrelated atom's metadata/None remain exact. This is closed C4 arithmetic, not
+general valence perception.
+
+Zero target IDs/unknown fields/missing policy fail invalid_params; missing page/fragment/
+bond fails not_found; stale revision fails stale_revision; unsupported source/profile/kind
+fails unsupported_content. Source-free or byte-proven native CDXML authority is required
+even for a same-order request. A valid no-op retains current Arc, revision/history/redo,
+saved/source/file/close state; a real edit replaces exactly one same-ID fragment and
+commits once. No identity floor advances. Direct invocation does not change tool mode/epoch.
+
+The usual complete deferred save/capture source and stale-publication barriers remain.
+CLI, stdio MCP and authenticated loopback use this one registry entry. [Source policy and
+independent evidence](verification-bond-order-command.md) distinguish actual saved-file
+compatibility from future native click/alignment/keyboard workflows.

@@ -1437,3 +1437,26 @@ label-readability guard. The pinned egui0.29.1 Grid/painter sources explain firs
 discard, so explicit button rows avoid hiding later guidance. [Actual checks and native
 capture](../verification-workspace-presentation.md) distinguish real pixels/selection/menu
 inspection from still-unverified native Double/Triple drawing and full reference parity.
+
+## Existing-bond order authoring, 2026-11-15
+
+[The pinned public-source plan](../research/bond-order-edit-plan.md) reviews GUIDE-25
+printed67,72–74,82–83,85–86,88,99 and the pinned OpenSMILES organic subset. The guide's
+ethane→ethylene H-rectification example is separate from label appearance and alignment.
+This does not establish a26.1 default/preference state or override precedence.
+
+`bond.set_order` is an original required-order/required-policy command. For both affected
+neutral, nonisotopic/nonradical carbon endpoints it validates literal H plus every
+incident Single/Double/Triple weight equals4, then applies H_new=H_old+old_weight−new_weight
+within0..4. The fixed C4 convention comes from BOND-EXTEND-VALENCE above; literal/absent
+counts remain distinct under BOND-EXTEND-AUTHORED-H. Geometry is untouched and need not
+exist. Unrelated atom metadata/counts/positions, bond direction, IDs and fragments are
+preserved; this is not general valence inference.
+
+Source-free and byte-proven native CDXML authority, expected revision, strict no-op
+validation/Arc retention, no identity allocation and complete-snapshot history are original
+application policies. Associated filenames do not change source authority. Imported
+MOL/CDX/opaque CDXML and collection/notation content remain guarded. [Independent command,
+file and adapter evidence](../verification-bond-order-command.md) uses fixed published-C4
+expectations, unchanged Expat/Decimal/RDKit consumers and original data; it establishes
+no native interaction, broader source mapping, alignment or complete M2 parity.
