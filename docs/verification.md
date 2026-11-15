@@ -2580,3 +2580,14 @@ epoch3. Numeric AX SetValue and CJK glyph coverage have finite limitations. A na
 was aborted before dispatch; wheel, measured hardware DPI, combined edit-preview native
 flow and other platforms remain unverified. No new fuzz/hosted run, source paper change,
 glyph-guard relaxation or milestone completion. GitHub Actions stays disabled.
+
+## Truthful Fit readout, 2026-11-15
+
+[Five independent actual-App cases and native read-only AX/painting](verification-fit-readout.md)
+now distinguish Fit from an explicit percentage, including an accepted picker disabling
+the field and explicit100 Enter/blur. Unknown-Fit and modal runtime REDs, corrected new
+locator/format setup, unchanged prefixes and scoped native source/executable receipts are
+separate. Root77768 full local gate passes1021/0/1, rustfmt, warnings-denied clippy,
+layers, licenses and corpus. No image/SDK/asset/oracle/dependency change. High-DPI relative
+steps, native typing/wheel/hardware measurement and broader platform workflows remain
+unverified. The full goal remains active and Actions stays disabled.

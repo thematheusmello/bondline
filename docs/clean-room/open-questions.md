@@ -315,3 +315,9 @@ Also test relative steps against the visible high-DPI legacy overview: current c
 use declared logical Fit, whose scale can differ from the physical-margin image above1x.
 Any eventual explicit-fit policy must preserve initial legacy evidence and remain stable
 through nonchemical field edits; cache presence must not silently select a different camera.
+
+The label portion is now corrected independently: all SDF Fit states report `Fit` without
+a numeric AX seed, including after preparation. Known Drawing Fit retains its number;
+explicit100 remains enterable. Actual-App input plus native read-only AX/painting evidence
+is scoped in verification-fit-readout.md. This does not resolve the relative-step policy,
+hardware DPI, numeric native input, font coverage or the earlier aborted wheel check.

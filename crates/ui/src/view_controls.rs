@@ -85,22 +85,43 @@ pub(super) fn zoom(
         .controls()
         .iter()
         .any(|row| row.id == "view.actual" && row.enabled);
-    let mut percent = engine.view_percent().unwrap_or(100.0);
+    let known_percent = engine.view_percent();
+    let fit = engine.view().zoom_percent.is_none()
+        && match engine.content() {
+            bondline_commands::StoredContent::Sdf { .. } => true,
+            bondline_commands::StoredContent::Drawing(_) => known_percent.is_none(),
+            bondline_commands::StoredContent::SmilesFile(_) => false,
+        };
+    let mut percent = known_percent.filter(|_| !fit).unwrap_or(100.0);
+    let mut submitted = None;
     let mut actions = Vec::new();
     ui.push_id("view-zoom", |ui| {
         ui.add_enabled_ui(enabled, |ui| {
             let label = ui.label("Zoom");
-            let response = ui
-                .add(
-                    egui::DragValue::new(&mut percent)
-                        .range(1.0..=999.0)
-                        .clamp_existing_to_range(false)
-                        .speed(1.0)
-                        .max_decimals(2)
-                        .suffix("%")
-                        .update_while_editing(false),
-                )
-                .labelled_by(label.id);
+            // Explicit100 must commit from Fit even when it equals the editor's seed.
+            let mut editor = egui::DragValue::from_get_set(|value| {
+                if let Some(value) = value {
+                    percent = value;
+                    submitted = Some(value);
+                }
+                percent
+            })
+            .range(1.0..=999.0)
+            .clamp_existing_to_range(false)
+            .speed(1.0)
+            .max_decimals(2)
+            .suffix(if fit { "" } else { "%" })
+            .update_while_editing(false);
+            if fit {
+                editor = editor.custom_formatter(|_, _| "Fit".to_owned());
+                ui.style_mut().explanation_tooltips = false;
+            }
+            let response = ui.add(editor).labelled_by(label.id);
+            if fit {
+                ui.ctx().accesskit_node_builder(response.id, |node| {
+                    node.clear_numeric_value();
+                });
+            }
             if enabled {
                 actions.extend(
                     numeric_requests(&response, events, 1.0, 999.0)
@@ -108,11 +129,12 @@ pub(super) fn zoom(
                         .map(|(index, value)| (index, Action::Zoom(value))),
                 );
             }
-            if actions.is_empty()
-                && response.changed()
+            if enabled
+                && actions.is_empty()
+                && let Some(value) = submitted
                 && let Some(index) = change_event(&response, events)
             {
-                actions.push((index, Action::Zoom(percent)));
+                actions.push((index, Action::Zoom(value)));
             }
         });
     });

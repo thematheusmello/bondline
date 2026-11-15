@@ -1,9 +1,9 @@
 # Status — 2026-11-15
 
-The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`. Renderer checkpoint
-`06ab5a9` adds fresh physical raster views; this next atomic slice integrates source-qualified
-SDF navigation/capture through commands, native adapters and UI. Previous field editor
-`7b64604` and plan`af7fab0` remain checkpoints. No push/merge/publication. M0's desktop/GPU
+The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`, source checkpoint
+`976ef42`. This atomic slice corrects SDF Fit's visible/accessibility readout without
+changing images or camera policy. Renderer`06ab5a9`, field editor`7b64604` and plan
+`af7fab0` remain checkpoints. No push/merge/publication. M0's desktop/GPU
 license blocker is resolved; full M0 and M1 remain incomplete.
 
 GitHub Actions remains disabled by user instruction: repository Actions off and workflow
@@ -12,6 +12,13 @@ checks. Restore only when the full project is complete or the user changes that 
 Earlier hosted results do not verify current source or interactive Windows/Linux workflows.
 
 ## Current delivered state
+
+SDF Fit now displays `Fit`, with no fabricated numeric AX value, before/after prepared
+bounds and while a picker disables input. Explicit100 Enter/blur still commits Actual;
+numeric accessibility and known Drawing percentages retain their behavior. Five actual-
+App regressions pass; native read-only AX/painting confirms enabled and disabled Fit
+and restored100% structures. Native percentage typing remains unverified in this build.
+Legacy physical-margin Fit and logical relative-step math remain distinct above1x.
 
 The registry remains28 typed commands shared by UI, CLI, stdio MCP and authenticated
 loopback. Complete source-backed snapshots/history, guarded CDXML/CDX/MOL/SDF/SMILES
@@ -45,6 +52,14 @@ general labels/selection/transforms, styles, chemistry and full reference screen
 
 ## Verification
 
+- Latest Root77768 pinned-Python `CARGO_INCREMENTAL=0 cargo xtask ci`: **1021 passed,
+  0 failed,1 ignored**,149 result lines. Fmt, all-target warnings-denied clippy, layers,
+  licenses and corpus pass. Log`target/fit-readout/root-ci-final.log`,122094B/SHA
+  `fe1bf7c0a94e167d6c57f4da55b221fdfcb24db8fd24c77b7869c49c8976b0ee`.
+  Five independent/receiving readout cases preserve earlier prefixes. Unknown-Fit and
+  disabled-picker runtime REDs are distinct from the new menu-locator and formatter
+  setup corrections; no old oracle, fixture, golden, SDK or dependency changes.
+  See docs/verification-fit-readout.md and its independent tests/design review.
 - Root77879 pinned-Python `CARGO_INCREMENTAL=0 cargo xtask ci`: **1016 passed,0 failed,
   1 ignored**,149 result lines including3 macOS AccessKit bridge tests. Rustfmt, all-target
   warnings-denied clippy, layers, licenses and corpus pass. Log`target/sdf-view/root-ci-final.log`,
@@ -87,6 +102,19 @@ records retain their own scopes; no milestone ends.
 
 ## Latest actual native build
 
+Final ignored bundle`target/fit-readout-native/Bondline.app`, identifier
+`org.bondline.fit-readout-review`, PID16278. Executable21773960B/SHA
+`21efac416ddd1d2933da1d6bdb61b8b0d33aa495e15726acaec78a9a66b1445a`.
+Root23857 builds exact final UI4b9342af…7dc72. Native AX and screenshot confirm Fit
+while the real accepted picker disables Zoom. Own authenticated registry Cancel/Actual/
+capture/pan restores both ordinary structures; revision1/clean740 bytes/Undo0Redo0,
+100%/center100143/viewepoch2 remain. No OS mouse/keyboard input was injected while
+availability is pending. Earlier enabled/cached Fit evidence uses initial PID84150,
+closed through its registry. Immediate restart11741 vanished before diagnostics;
+later16278 reaches startup readiness and works. Cause remains unknown.
+
+The following is the earlier native SDF navigation checkpoint, retained separately:
+
 New ignored bundle`target/sdf-view-native/Bondline.app`, identifier
 `org.bondline.sdf-view-review`, PID51412. Executable21770456B/SHA
 `938289e6371421cc61260758d2c7404e5b3d9e14612d359589622c1e0a494adf`.
@@ -122,17 +150,20 @@ operations, native SMILES/conversion/export and general layout/chemistry. M2 gen
 drawing/selection/labels/styles, M3 chemistry/reactions/text, M4 publishing/clipboard and
 M5 naming/templates/biopolymers/WebAssembly/installers remain required. No full26.1 parity.
 
-1. If the availability reply permits desktop work, resume on PID51412 with fresh AX state:
+1. If the availability reply permits desktop work, resume on latest PID16278 with fresh AX state:
    real wheel movement/restoration; NOTE edit at100%/pan; Unicode Save As/reopen and raw
   749-byte comparison plus unchanged per-MOL consumers. Literal expectation is
    `source[..380]+b"reviewed ethanol\n"+source[388..]`, preserving the second NOTE line.
    Otherwise continue independent M1 work offscreen; this does not block the goal.
-2. Correct unknown-Fit presentation through a test-first UI change: current numeric
-   fallback100 is not an actual fitted percentage. Do not invent A4 for tall SDF, parse
-   in-frame or introduce a failed-capture cache side effect to obtain that number. Check
-   relative steps against the visible high-DPI legacy overview, whose physical margins
-   differ from logical fit math. Do not make camera policy depend on cache presence.
-3. Continue native SMILES file/record workflow and remaining M1/M0, then M2–M5. Keep
+2. Fit presentation is corrected. Relative steps against the visible high-DPI legacy
+   overview remain separate: physical margins differ from logical fit math. Preserve
+   default pixels/readability and do not choose camera policy from cache presence.
+3. Continue the original readonly native SMILES record inspector and remaining M1/M0,
+   then M2–M5. A typed registered MCP bridge and independent tests are ready in isolated
+   worktrees; UI implementation is active, not delivered in this commit. Read
+   `bondline-smiles-native-plan/docs/research/smiles-native-workflow-plan.md` and its
+   frozen final handoff before receiving. Existing source query/file commands remain
+   authoritative; no new wire command, chemical depiction or converter shortcut. Keep
    reference roles separate from original policy and missing/wired/verified evidence.
    Numeric AX cause needs a bounded actual-type/action investigation before a patch.
 4. Rust1.94.1; select `.cache/oracles/format-python/bin/python`
@@ -141,8 +172,8 @@ M5 naming/templates/biopolymers/WebAssembly/installers remain required. No full2
 
 ## Live handles
 
-All Root Cargo/build checks and three independent tasks/review are terminal; no fuzz or
-launch waiter. Native51412 above; earlier19318(editor),26649(inspector),41233(ordered file),
+All Root Cargo/build checks and Fit tasks/review are terminal; no fuzz or launch waiter.
+Native16278 and earlier51412 above; earlier19318(editor),26649(inspector),41233(ordered file),
 30298(view navigation),83437(bond menu) were left untouched. Check actual processes and
 availability before future native input. Tokens stay only in private ignored startup
 stdout; never print/commit/publish. Build/receipt artifacts under target/ are disposable.
@@ -151,3 +182,12 @@ Workers used isolated `bondline-view-raster`, `bondline-sdf-view-command-tests` 
 `bondline-sdf-view-acceptance` worktrees ataf7fab0, absolute own targets, incremental0/debug0.
 Root owns integration, Git and native input. Do not share Root artifacts with staged
 source exports; historical mixed-cache corruption stays quarantined/documented.
+
+Next M1 tasks: `/root/native_acceptance` implements UI in isolated
+`bondline-smiles-record-workspace` at976ef42, with only its frozen new MCP bridge backing.
+`/root/sdf_setter_review` has frozen five independent App tests in
+`bondline-smiles-record-ui-tests`, waiting for real source port; no live tests there.
+Its first four cases are intended missing-controls RED, fifth is baseline-positive privacy.
+The earlier `bondline-smiles-native-plan` bridge handoff0399f8c8…6f523 is frozen with
+three focused cases and full MCP64/0/0/clippy/fmt passing. Those are isolated evidence,
+not yet Root integration or native SMILES acceptance. Do not restart/duplicate live UI work.

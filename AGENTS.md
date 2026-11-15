@@ -127,6 +127,12 @@ navigation use a bounded displayed center. Whole-source render guards remain man
 Optional current-view capture and read-only SDF Actual/Zoom/pan are delivered below.
 Saved preferences and complete reference behavior remain missing; see docs/control-protocol.md.
 
+SDF Fit's native readout is textual `Fit`, independent of cached bounds or control
+enablement; it has no fabricated numeric AX value. Preserve explicit100 Enter/blur
+commits even when a numeric widget's internal seed was100. Known Drawing Fit stays
+numeric. This presentation fix does not reconcile legacy physical-margin Fit with the
+declared logical basis of relative steps; see docs/verification-fit-readout.md.
+
 ## Test first, then implement
 
 For each behavior: write one test using independent expectations, observe the intended

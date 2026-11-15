@@ -1022,8 +1022,10 @@ legacy capture; explicit zoom uses this opt-in route.
 
 The legacy native SDF overview has physical margins, while relative-from-Fit uses the
 declared logical fit formula. Their effective scales can differ above1x; exact native
-relative-step/readout consistency remains open. This does not change explicit percentage
-or pan units. Do not use the unprepared100% fallback label as proof of Actual state.
+relative-step consistency remains open. This does not change explicit percentage or pan
+units. The native field now labels all SDF Fit states `Fit` and clears its numeric AX
+value, independently of prepared bounds. Entering100 explicitly still selects Actual;
+known Drawing percentages retain numeric presentation. See verification-fit-readout.md.
 
 See [independent commands](verification-sdf-view-command.md),
 [actual-App checks](verification-sdf-view-ui.md) and

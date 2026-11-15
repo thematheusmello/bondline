@@ -1373,3 +1373,6 @@ mod sdf_editor;
 
 #[path = "sdf_view_tests.rs"]
 mod sdf_view;
+
+#[path = "fit_zoom_tests.rs"]
+mod fit_zoom;

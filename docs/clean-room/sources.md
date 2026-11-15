@@ -1646,3 +1646,24 @@ The old SDF Actual-refusal contract is explicitly upgraded to source-preserving 
 other format/source guards remain. Native Mac F5/Actual and pan visibly work; wheel was
 aborted before dispatch and physical-DPI/new edit-preview native evidence remains open.
 No proprietary binary/assets, new dependency, SDK patch, font or golden was used.
+
+## Truthful Fit presentation, 2026-11-15
+
+Pinned public egui0.29.1 [DragValue](https://raw.githubusercontent.com/emilk/egui/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/widgets/drag_value.rs)
+and the actual vendored file were inspected. The local file is unchanged from its
+registry source, SHA256`f2cb43846b20f3dd431322247a15a8f3a7ccebe121bd0e15d47f06c3f2a24d56`.
+`from_get_set` records explicit text commits even when their numeric value equals the
+editor seed; `custom_formatter` changes text but does not remove WidgetInfo's numeric
+accessibility value. Public AccessKit0.16.3 source commit
+[`02cf1aa5`](https://github.com/AccessKit/accesskit/blob/02cf1aa5dda9cb4d97ef7bbab486c039c35960a8/common/src/lib.rs)
+provides `clear_numeric_value`; the inspected registry file SHA256 is
+`6a4921d259e87286b365842b2ccd41ae6f8cef1e5278a755ec08f16335e4af53`.
+The GitHub egui HTML request returned429; its exact pinned raw source was accessible.
+An attempted unverified AccessKit version-tag URL returned404; the crate's packaged
+VCS metadata supplies the exact commit above.
+
+Displaying `Fit` for all SDF Fit states, suppressing the numeric seed/tooltip and keeping
+explicit percentage entry are original Bondline presentation decisions. No reference
+product text/artwork or new camera formula is adopted. The [design review](../research/fit-density-review.md)
+and [actual-App/native evidence](../verification-fit-readout.md) distinguish this fix
+from the unresolved high-DPI relative-step policy. No dependency, SDK, font or golden changes.

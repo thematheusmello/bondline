@@ -56,6 +56,12 @@ physical-DPI measurement and the combined edit/preview/Save workflow remain unve
 The [original proposal and receiving decision](docs/research/sdf-view-plan.md) retain why
 success-only prepared bounds replaced the proposed error-side-effect bootstrap.
 
+The subsequent Fit readout correction labels SDF Fit textually before/after extent
+preparation and retains explicit percentage entry, without changing legacy images or
+camera routing. Actual-App cases and native read-only AX/painting are recorded in
+docs/verification-fit-readout.md. Native percentage typing remains separate; high-DPI
+relative steps still use the declared logical Fit basis rather than a measured overview.
+
 A restricted all-record SDF capture route now connects source-preserving mixed-version
 projection, separate display-H provenance and faithful resolved-H labels through the
 existing command/CLI/MCP interfaces. Ordinary VAL-absent CCO/CN, both source orientations,
