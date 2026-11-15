@@ -1,5 +1,13 @@
 # Open questions
 
+- The original external-writer CDX probe now reproduces an interoperability difference:
+  Apache-2.0 Indigo1.47.0 emits two terminal zero words; unchanged Bondline/stdlib framing
+  refuses the extra word, while pinned RDKit accepts all ten declared graph variants.
+  Public writer code explains emission, not normative EOF permission. Resolve the published
+  implicit-document/file-end contract before a narrowly bounded parser change; preserve
+  the exact originals, arbitrary-trailing negatives and existing corpus/oracles. See
+  research/cdx-external-writer-probe.md. This is an actionable gap, not corpus admission.
+
 - Neutral acyclic file conversion is delivered for its documented≤64-atom fixed-H scope;
   it does not resolve rings/components, general source-qualified drawing import, aromatic/
   charged/isotopic depiction or complete unspecified-stereo treatment. Degree-three internal
