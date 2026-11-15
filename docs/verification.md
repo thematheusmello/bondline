@@ -1,5 +1,11 @@
 # Verification log
 
+## Integer-bond ring control, 2026-11-15
+
+The [analytic existing-renderer control](verification-kekule-render-control.md) passes
+first with exact CPU/GPU ring ink, literal H and picking. Targeted clippy passes. This
+supports the later aromatic authoring work; no chemistry/paste/native feature is claimed.
+
 ## Canonical CDX separate file ends, 2026-11-15
 
 [Integrated evidence](verification-cdx-file-end-integration.md) records original external
