@@ -1,18 +1,99 @@
 # Status — 2026-11-15
 
-The complete M0–M5 goal remains **active**. Branch feat/multiple-bonds; feature11101ce
-delivers canonical CDX FileEnd parsing, independent tests/provenance, conserving fuzz
-harness and receiving documentation.9d8ad75 separately preserves the bounded MCP
-shutdown observations; a33dc30 records the source-backed framing contract. Earlier
-4d1736f/9050ab1 deliver bounded simple-ring conversion and its renderer prerequisite;
-29be796 records that checkpoint. Continue existing work; do not restart.
+The complete M0–M5 goal remains **active**. Branch feat/multiple-bonds; feature6e6110b
+delivers complete bounded neutral-component conversion, tests and receiving records.
+6ac876d records its source contract. This checkpoint retains the exact verification scope.
+Feature11101ce delivers canonical CDX FileEnd;691af6f records that checkpoint.9d8ad75
+preserves bounded MCP shutdown observations. Earlier4d1736f/9050ab1 deliver simple-ring
+conversion and its renderer prerequisite. Continue existing work; do not restart.
 No push, merge or publication occurred.
 
 M0's desktop/GPU license blocker is resolved; **full M0/M1 and M2–M5 remain incomplete**.
 Actions stays disabled: repository Actions off and workflow417397204 manually disabled.
 Do not enable, dispatch or rerun hosted work. New Windows/Linux interaction is unverified.
 
-## In progress: canonical CDX file terminators
+## Verified bounded neutral SMILES components
+
+Read [the contract](docs/research/smiles-components-plan.md) and
+[receiving evidence](docs/verification-smiles-components-integration.md).
+The additive fourth neutral_components_v1 choice retains one complete
+normalized Fragment, every global ID/directed edge/fixed H and the whole notation.
+Actual-edge BFS components each use the existing supported tree or3–8 Single-cycle pose,
+with64 total atoms. Original source-order center-box shelves use gapL, fixed poses/no
+scaling, divided search quotas and whole-scene certification. One-component output stays
+exact. This is not general source-qualified drawing import or a reference packing claim.
+
+Root64926 first observes missing-profile runtime RED0/1. Final independent eight-case
+21,683B declaration fails exactly8E0599 before product GO; its original1,867-byte prefix
+remains. The unchanged13,909B new Expat/Decimal/RDKit consumer is first qualified on seven
+manual positives/20 negatives. First UI selector runs zero tests, then corrected unique
+filter reaches actual missing-radio RED. New App projected()->Pos2 '?' and unused-import
+setup corrections, and workspace-edition2024 formatting, retain all inputs/assertions and
+first511B UI/760B command prefixes. These are not product defects or successful checks.
+
+Root90518 first IO receiving passes8/0. Root5986 passes command3/schema1/wire2/App3.
+Complete-source preservation, create-only publication, explicit Open/edit/Undo/Redo/
+Unicode Save/reopen and actual CLI/stdio/authenticated loopback pass. Mixed9/7 CPU/GPU
+capture matches exactly. Product11-file pins remain exact; old successful paths/defaults,
+30 commands, eight required scalars, leases/worker/close/history and noautoOpen/SaveACK
+remain. Source-only independent reviews report no material finding; they are not execution.
+
+Root59627 is **terminal0**: full cargo xtask ci **1188/0/1**,171 result lines, then matching
+native binary build. Rustfmt, warnings-denied all-target workspace/vendor clippy/tests,
+layers, licenses and corpus pass. Log target/smiles-components/root-full-ci.log144,934B,
+SHA256fc0778bdce5498e14f113c6f8ca31a7f4ea8cd8544bb7e4794b71929f0b2e7d3.
+Runtime closures154/165/220 packages and2 assets; corpus8 files/5 bundles. No new parser-
+fuzz run, dependency/lock/SDK/font/asset/old-oracle/fixture/corpus/golden change. The earlier
+MCP AddrInUse failure remains unexplained; this passing run is not a causal fix.
+
+Actual Mac native workflow passes legacy-profile refusal, occupied-output refusal, Unicode
+retry retaining the known own dirty7/7 rotated ring, explicit Open Cancel then Discard/Open,
+Double first C-C at100%, CmdZ SavedSingle, ShiftCmdZ UnsavedDouble, Unicode Save As and
+explicit reopen Saved9/7. Both actual1,407B files pass the unchanged independent whole-
+graph consumer:9 atoms/7 bonds/3 components, C8H20O→C8H18O. Original output SHA256
+96b96531004420eafd30ace781a12077b0efe1f8df7e03ec0611d69a3d56e025; edited SHA256
+d7c9074698b737d37ff15addf8858232992468a5536739bcfe5959c324af3cb2. Input15B, sentinel28B
+and prior saved ring1,254B remain exact. Native receipt10,272B SHA256
+019d9b1e80a97bff42d2da3b981478eebe4d26cfb398c9b1bf77d653aabfcf6f.
+
+**Display limit reproduced:** edited-scene Fit78.79% refuses distinct multiple-bond pixels
+and clears the canvas with its error.100% is restored and renders; a top ring H label is
+partly clipped. AX slider SetValue and coordinate drag produced no change; no full overview
+or native pan success is claimed. Investigate the logical/physical render boundary with
+an independent fixed-phase/DPI case before changing the guard. Do not weaken the existing
+CPU/GPU distinct-component/gap negative tests. Native races/cancel/close/DPI and other
+platform input remain unverified. No new golden approval.
+
+Only the existing target/smiles-ring-native/Bondline.app bundle was refreshed, identifier
+org.bondline.neutral-simple-ring-review, exact-path PID21951, no socket. Binary23,010,584B
+SHA256dc19eb622f8ccd9202c66373ad3667c255be994d0ec10a5c2b3f3b100ca7b696. It is Saved at
+edited-components-化学.cdxml,9/7/1,100%, Double selected. All older previews remain closed;
+never query a stopped app binding to verify closure, since getApp/getAXState can relaunch it.
+Chrome has no visible Bondline tab; terminal UI access is restricted. Unrelated apps/tabs
+are untouched. The preceding cleanup turn made verified progress through app/tab inventory.
+
+Final protection passes:11 exact product pins, independent IO/oracle identities and first
+declaration prefixes, append-only old bridges, fourth enum expectation only, all582 parity
+IDs/order/clipboard-missing rows and381 local links.950/975 baseline files remain exact;
+25 expected differences include the already-committed6ac876d question note. The first
+checker omitted that note, then verified its exact committed bytes before correcting only
+the checker. Final rustfmt/Git whitespace checks pass. The receiving note preserves details.
+
+All Cargo/test/oracle/fuzz/build jobs are terminal; do not poll59627 or duplicate a gate.
+All handoffs are returned; Root owns continuation. No external publication or hosted job
+is live. Source-only review finds the distinct-pixel guard correct on its declared logical
+lattice; an unexecuted848×728 A4 candidate analytically matches the78.79% failure. Native
+canvas/DPI were not measured. Next write an independent fixed-phase1x-refusal/2x-visible
+test using the existing physical-raster API, then establish actual-App native DPI routing
+before changing shared rendering. Preserve old negative phases/widths and logical camera/
+hit/source/history semantics. In parallel define source-qualified SMILES import
+(selected/all-record ownership, complete opaque
+backing/baseline/IDs, stale jobs/history/dirty decisions and explicit Save/loss authority).
+Broader chemistry/rings/packing/clipboard, SDF creation/reordering and M0–M5 remain required.
+
+## Previously verified canonical CDX file terminators
+
+The component checkpoint above supersedes this historical process/view/task state.
 
 The preceding cleanup turn made verified progress: all obsolete Bondline previews were
 closed, without touching unrelated tabs. This receiving turn resumes the actual CDX
@@ -90,9 +171,8 @@ All compiler/fuzz/test/investigation jobs are terminal, including native build79
 receiving81324 and diagnostic64662/98404. All CDX/documentation handoffs are received.
 Root retains50 sealed diagnostic source/log/receipt files under ignored
 target/cdx-file-end/independent-listener-investigation; executables are excluded.
-The only active agent is reference_map, now owning only the new research/design file
-docs/research/smiles-components-plan.md. No product/test edits or execution are assigned.
-Consult its handoff before overlapping that file. Root owns STATUS/Git and other edits.
+The later component section above supersedes this checkpoint's agent/task state.
+Root owns STATUS/Git and other edits; consult actual handoffs before overlapping files.
 No hosted work or publication is live.
 
 ## Previously verified simple-ring increment
