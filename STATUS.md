@@ -1,9 +1,22 @@
 # Status — 2026-11-15
 
 The persistent full M0–M5 goal remains **active**. Current branch is
-`feat/multiple-bonds`; product/tests are committed through `c2addff` and this documentation
-refresh is the recoverable follow-up. No new push, merge or external publication.
+`feat/multiple-bonds`; the current atomic slice adds registered native SDF work over the
+existing commands. The prior desktop/view state below remains delivered. No new push,
+merge or external publication.
 M0's desktop/GPU license blocker is resolved; full M0 is still incomplete.
+
+Latest integration: `UiSdfWork` reserves the existing shared workers before native spawn,
+validating complete source identity and Open close epoch. Seven independently frozen
+query/edit/history/actual-file/budget/cancel/stale/close/authority checks pass unchanged.
+Root98860 full local gate passes **968/0/1**, fmt/clippy/layers/licenses/corpus included;
+log `target/ui-sdf-work/root-ci.log`,116607B/SHA
+`daf2650e0e1e5eff916117a5cb8e30517d0133ab9cbb957f6d92f4bab14706f3`.
+See docs/verification-ui-sdf-work.md. This is an adapter, not a field UI. Public-source
+workspace/native plans are committed at`5f8b076`; the read-only occurrence inspector is
+next, with a separate independent actual-App test owner in`bondline-sdf-inspector-acceptance`.
+No Root Cargo job remains live. User requested the desktop preview; PID41233 was raised
+and its saved150% Single/Double/Triple workspace visibly confirmed. No authored data changed.
 
 GitHub Actions remains disabled by user instruction: repository Actions off and workflow
 417397204 disabled manually. Do not enable/dispatch/rerun or push to manufacture hosted

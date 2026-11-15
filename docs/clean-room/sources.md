@@ -1531,3 +1531,11 @@ headless measurements preserve all source/state: default1160×800 is eligible at
 existing glyph-size guard. These are measured frame/capture facts, not native-window
 evidence or grounds to weaken rendering. The earlier coarse dimension concern was
 corrected before measurement. No proprietary executable/asset or new dependency used.
+
+The registered native SDF work bridge is original Bondline adapter policy over the
+existing source-preserving query/edit commands. It reuses complete-source identity,
+close epochs and the shared two-worker lifetime rather than adding another registry or
+pool. The BIOVIA field rules and public-source qualifications in the workspace plan
+remain its format basis. [Seven independently frozen adapter checks](../verification-ui-sdf-work.md)
+use the original777-byte vector and predeclared788-byte literal splice; no reference
+field UI, new format rule or native-window observation is inferred from their success.

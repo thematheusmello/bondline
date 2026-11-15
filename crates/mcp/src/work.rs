@@ -91,6 +91,24 @@ impl UiCaptureWork {
     }
 }
 
+/// One explicit field query or existing-value edit, registered before native spawn.
+/// It retains its originating Engine and shares the existing two-worker budget.
+#[must_use = "complete or drop SDF work to release its worker reservation"]
+pub struct UiSdfWork {
+    engine: SharedEngine,
+    registered: RegisteredWork,
+}
+
+impl UiSdfWork {
+    /// Run off the UI thread. Keep the host job busy through delivery and retirement.
+    /// Queries may be historical: guard display by the captured source/close context.
+    /// Successful edits change that source; refresh inspection rather than replaying them.
+    pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
+        let Self { engine, registered } = self;
+        complete_registered_blocking(&engine, registered, cancel)
+    }
+}
+
 impl CommandExecutor {
     pub fn new(engine: SharedEngine) -> Self {
         Self {
@@ -150,6 +168,49 @@ impl CommandExecutor {
             .prepare(Command::Capture(params))
             .map_err(|error| error.info())?;
         Ok(UiCaptureWork {
+            engine: Arc::clone(&self.engine),
+            registered: RegisteredWork {
+                prepared,
+                permit: Some(permit),
+            },
+        })
+    }
+
+    /// Validate the frame's source and close context before reserving and preparing.
+    /// Release the frame Engine guard first; pending intent must already block host close.
+    pub fn prepare_ui_sdf(
+        &self,
+        stamp: &CaptureStamp,
+        close_epoch: u64,
+        command: Command,
+    ) -> Result<UiSdfWork, ErrorInfo> {
+        if !matches!(
+            &command,
+            Command::SdfRecordInspect(_) | Command::SdfFieldSet(_)
+        ) {
+            return Err(ErrorInfo {
+                code: "invalid_params",
+                message: "native SDF work requires a field query or existing-value edit".to_owned(),
+            });
+        }
+        let mut engine = self.engine.lock().map_err(|_| unavailable())?;
+        let state = engine.state();
+        match state.close {
+            CloseState::Committed => return Err(Error::CloseCommitted.info()),
+            CloseState::Open => {}
+            CloseState::NeedsDecision | CloseState::Approved => {
+                return Err(Error::UiStaleRequest.info());
+            }
+        }
+        if state.close_epoch != close_epoch {
+            return Err(Error::UiStaleRequest.info());
+        }
+        if !engine.capture_stamp_matches(stamp) {
+            return Err(Error::StaleRevision.info());
+        }
+        let permit = self.workers.permit()?;
+        let prepared = engine.prepare(command).map_err(|error| error.info())?;
+        Ok(UiSdfWork {
             engine: Arc::clone(&self.engine),
             registered: RegisteredWork {
                 prepared,

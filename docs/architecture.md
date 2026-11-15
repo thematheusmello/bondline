@@ -250,6 +250,14 @@ No-op retains source/index identity, redo and transient close state. Input/outpu
 explicit versus automatic data disclosure, source/current/saved meanings and existing
 worker/reply/save barriers are defined in control-protocol.md. No extra pool or registry.
 
+The native field adapter now registers those two existing operations through
+`CommandExecutor::prepare_ui_sdf` before spawning. It binds an opaque work value to the
+originating Engine, complete CaptureStamp, Open close epoch and existing shared worker
+reservation. Core completion/finish and accepted-earlier close semantics stay unchanged.
+The future UI must retain its own pending/delivery/retirement barrier and reject historical
+query installation; this adapter does not implement field presentation or draft policy.
+See [the adapter checks](verification-ui-sdf-work.md).
+
 SMILES retains a distinct complete notation/source IR, including literal aromatic atom/bond
 markers. These are not perceived aromaticity; every aromatic marker/bond refuses fixed-H
 model mapping. Named opt-in normalization returns

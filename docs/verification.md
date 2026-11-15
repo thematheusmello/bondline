@@ -2487,3 +2487,14 @@ Whole UI and bounded peer review pass. Root52827 aggregate:961passed/0failed/1ig
 rustfmt/clippy/layers/licenses/corpus pass. New native binary/source hashes and literal
 external saved-file checks are in the linked record; earlier failed native output remains
 explicit evidence. Full M0–M5 stays incomplete; hosted Actions remains disabled.
+
+## Registered native SDF field work, 2026-11-15
+
+[Seven independent adapter tests](verification-ui-sdf-work.md) freeze ordered selected
+fields, the literal second-DUP edit and actual788-byte saved output, history/no-op/source
+identity, shared worker limits, cancellation, stale/foreign/close guards and no Save/ACK
+authority. Missing API compiler RED precedes the minimal two-file implementation;
+Root's private-method compile correction changed production only. Independent receiving
+execution passes all seven unchanged. Root98860 aggregate passes968/0/1 plus every local
+gate. The original commands and wire schema are unchanged. Native field presentation,
+draft transactions and actual-window acceptance remain separate work; no milestone ends.

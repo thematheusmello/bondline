@@ -807,6 +807,23 @@ view/DPI/close-epoch stale results and checks logical readability before paintin
 Cancel/Retry/Records controls are local transient presentation, not newly addressable MCP
 tools; complete control inventory/addressability remains incomplete M0 work.
 
+## Native SDF field work (Rust adapter)
+
+`CommandExecutor::prepare_ui_sdf(&CaptureStamp, close_epoch, Command)` accepts only
+the existing `sdf.record.inspect` and `sdf.field.set` operations. Under the originating
+Engine mutex it checks the complete source stamp, Open close state and exact captured
+close epoch, then reserves the same two-worker budget before preparing the command.
+Release the UI frame's Engine guard first. The opaque `UiSdfWork` completes through the
+existing cancellation/finish path; drop releases unused work. It adds no wire command,
+Save lease, native file binding or acknowledgement.
+
+A query may truthfully return historical captured fields. The host must guard installation
+by current source/selection/close context and retain pending/job/publication/thread-retirement
+barriers. A previously accepted edit can still commit before host close acknowledgement
+and invalidate approval, as the core already permits. Refresh inspection after a successful
+edit rather than replaying it. [Independent adapter evidence](verification-ui-sdf-work.md)
+does not establish a native field inspector/editor or draft workflow.
+
 ## Existing-bond absolute order setter
 
 `bond.set_order` requires all six target/revision/order/policy fields; it never inherits
