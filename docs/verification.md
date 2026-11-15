@@ -1,5 +1,45 @@
 # Verification log
 
+## Simple-ring conversion and renewed UI review, 2026-11-15
+
+[Integrated evidence](verification-smiles-ring-integration.md) records the frozen IO/
+command/wire/App REDs, independent small-ring/branch/stereo/source oracle, two reproduced
+literal-H renderer prerequisites and the passing-first rotated-star/boundary controls.
+No old format consumer, fixture, golden, dependency or shipped asset changes. The old
+closed schema intentionally adds the third name before implementation; other contracts stay.
+
+Root38859's old listener AddrInUse failure remains unexplained; the
+[diagnostic-only test change](verification-loopback-shutdown-diagnostics.md) preserves
+all assertions/deadlines/socket policy. Root95551 then exposes two unchanged old App
+receipt-count failures. The shared measured-height re-layout fixes cached anchored-window
+clipping; Root26008 passes13 conversion App cases without test/SDK changes. Independent
+review confirms later passes have no raw activation events to replay. The earlier new-
+test-only readiness correction was insufficient; both stages remain recorded.
+
+Final Root71585, Rust1.94.1, literal pinned BONDLINE_PYTHON, CARGO_INCREMENTAL=0 and
+CARGO_BUILD_JOBS=2: cargo xtask ci exits0, **1158 passed/0 failed/1 ignored**,166 result
+lines. Formatting, warnings-denied all-target workspace/vendor clippy/tests, layers,
+licenses and corpus pass. The140,000-byte log target/smiles-ring/root-final-ci.log is
+SHA2565a71e81792427bee67bea5793d38ae115d5cde1f7ad394dc3e7af217b8306a57.
+License closures154/165/220 runtime packages and2 assets; eight corpus files/five bundles
+retain explicit foreign/general CDX and chemistry omissions. No later product/test change.
+
+Actual Mac retained-unsaved conversion/refusal/Unicode retry, guarded Open, external-bond
+edit/Undo/Redo and separate Save/reopen pass. Both1254-byte C7H14/C7H12 outputs agree with
+predeclared literal graphs and independent Expat/Decimal/RDKit consumers. The later sizing-
+fixed native receiving pass shows the full receipt, produces byte-identical C7H14 output,
+and reopens the saved edit; it is not misattributed to the earlier binary or claimed as
+native first-pass timing. All source/input/sentinel/output pins and app handles are in the
+integration record. Three obsolete Saved preview apps close under the user's instruction;
+only the current Bondline version and requested reference remain in this task's app scope.
+
+The [renewed installed CUA observation](research/live-ui-review-2026-11-15.md#document-settings-observation-on-renewed-instruction)
+rechecks Signals26.1.0.6801 and four settings pages, then cancels without edits. Selected-
+document values are not defaults or a completed settings workflow. Professional entitlement,
+full palette/icon geometry, native races/large-bulky/geometry typing/browsing, hardware DPI,
+Windows/Linux interaction, broader chemistry and M0–M5 remain unverified/incomplete.
+Actions remains disabled; no new fuzz/hosted execution, push or publication.
+
 Latest2026-11-14 receiving: ordered Single/Double/Triple [authoring and adapters](verification-multiple-authoring.md),
 [geometry/CPU/GPU](verification-multiple-render.md), [independent files/images/fuzz](verification-multiple-commands.md)
 and [actual egui workflows](verification-multiple-ui.md). The refreshed
