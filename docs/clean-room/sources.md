@@ -1511,3 +1511,23 @@ raw-event input contract cited above, without making a reference-product timing 
 [Independent saved-output RED/GREEN and actual native evidence](../verification-ordered-file-actions.md)
 retain the initial counterexample and unchanged expectations. No new format, chemistry
 rule, dependency or proprietary observation was introduced by that correction.
+
+
+## SDF workspace/native gate, 2026-11-15
+
+[The pinned workspace plan](../research/sdf-workspace-plan.md) rechecks official
+BIOVIA2026 printed97–99, GUIDE25 printed256–258 and the May2026 capability chart's
+PDF page10. Its byte/VCS/source evidence is explicit. The guide's record/property table
+import/export belongs to the Excel add-in; the chart advertises SDF read/save for
+Professional but SDF property viewing for Signals. Neither establishes a Professional
+desktop field editor. The proposed occurrence-based Bondline inspector/editor is an
+original offline workflow over the existing source-preserving commands, not an invented
+reference UI observation. Exact26.1 field layout/tier and reorder identity remain open.
+
+[Independent native-acceptance preparation](../research/sdf-native-acceptance.md) binds
+the original740/777/690-byte vectors and literal structures/fields. Four actual-App
+headless measurements preserve all source/state: default1160×800 is eligible atDPI2
+(collapsed8.819445/expanded8.134048 logical main-em), whileDPI1 honestly refuses the
+existing glyph-size guard. These are measured frame/capture facts, not native-window
+evidence or grounds to weaken rendering. The earlier coarse dimension concern was
+corrected before measurement. No proprietary executable/asset or new dependency used.
