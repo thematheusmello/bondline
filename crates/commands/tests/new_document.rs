@@ -123,6 +123,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "ui.selection",
             "selection.translate",
             "ui.bond_tool",
+            "ui.ring_tool",
             "ui.view",
             "document.open_cdxml",
             "document.save_cdxml",

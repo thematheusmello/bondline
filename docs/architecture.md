@@ -73,8 +73,19 @@ maxima/session floors are reused and published only after one successful normal 
 Attachments preserve old atom/bond prefixes, directed edges and shared coordinates,
 and spend no Fragment ID. Complete native-source guards precede mutation; whole-source
 history and selection invalidation reuse the existing path. No new dependency, schema
-field in authored data, converter, worker or GUI coupling is introduced. Native tools
-are the next integration; see [receiving](verification-ring-authoring.md).
+field in authored data, converter, worker or GUI coupling is introduced; see
+[command receiving](verification-ring-authoring.md).
+
+One private effective tool enum owns Bond/Selection/Ring(size). The remembered bond
+order and existing checked epoch remain shared; the borrowed selection active flag is
+only a compatibility projection. ui.ring_tool supplies six typed native bindings.
+RingContext carries weak source and opaque association plus tool/view/close/file proofs;
+preview_ring_create calls the same ring builder without a commit or identity publication.
+The native disposable gesture adds canvas/DPI/layer facts, ordered release and complete
+candidate rendering with physical and logical readability guards. Each release validates
+its own candidate; held-pointer preview is built only once per frame. No temporary file,
+conversion worker, competing active flag or Save authority is added. See
+[native receiving](verification-native-rings.md) for exact App/native verification scope.
 
 `atom.set_label` authors only one existing neutral atom's element/literal-H fields in
 source-free or completely mapped native CDXML. It reuses immutable Fragment replacement

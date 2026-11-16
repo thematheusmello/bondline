@@ -16,6 +16,17 @@ pub struct BondToolState {
     pub epoch: u64,
 }
 
+/// One effective drawing mode; the last bond order is remembered separately.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum EffectiveTool {
+    #[default]
+    Bond,
+    Selection,
+    Ring {
+        size: u8,
+    },
+}
+
 #[derive(Clone, Copy, Debug, Serialize)]
 pub struct BondToolOperation {
     pub order: BondDrawOrder,
@@ -24,6 +35,10 @@ pub struct BondToolOperation {
 }
 
 impl Engine {
+    pub fn effective_tool(&self) -> EffectiveTool {
+        self.effective_tool
+    }
+
     pub fn bond_tool(&self) -> BondToolState {
         self.bond_tool
     }
@@ -45,7 +60,8 @@ impl Engine {
             return Err(Error::UnsupportedDocumentPreview);
         }
         let selection_epoch = self.selection_epoch_for_bond_tool()?;
-        let changed = self.bond_tool.order != params.order || selection_epoch.is_some();
+        let changed =
+            self.effective_tool != EffectiveTool::Bond || self.bond_tool.order != params.order;
         if changed {
             let epoch = self
                 .bond_tool
@@ -57,6 +73,7 @@ impl Engine {
                 epoch,
             };
             self.deactivate_selection(selection_epoch);
+            self.effective_tool = EffectiveTool::Bond;
         }
         Ok(CommandResult {
             ui_bond_tool_operation: Some(BondToolOperation {

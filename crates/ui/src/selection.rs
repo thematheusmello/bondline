@@ -1,8 +1,8 @@
 //! Disposable selection gestures; persistent state and authoring stay in the registry.
 use super::HoverContext;
 use bondline_commands::{
-    CaptureStamp, Command, Engine, Error, SelectionContext, SelectionTranslate, UiAtomLabel,
-    UiSelection,
+    CaptureStamp, Command, EffectiveTool, Engine, Error, SelectionContext, SelectionTranslate,
+    UiAtomLabel, UiSelection,
 };
 use bondline_model::{AtomId, Page, Point2};
 use bondline_render::{GraphScene, HitTarget, PageView};
@@ -19,16 +19,16 @@ pub(super) struct Surface<'a> {
     pub hover: HoverContext,
 }
 impl Surface<'_> {
-    fn local(&self, pos: egui::Pos2) -> [f32; 2] {
+    pub(super) fn local(&self, pos: egui::Pos2) -> [f32; 2] {
         let pos = (pos - self.origin) * self.density;
         [pos.x, pos.y]
     }
-    fn accepts(&self, context: &egui::Context, pos: egui::Pos2) -> bool {
+    pub(super) fn accepts(&self, context: &egui::Context, pos: egui::Pos2) -> bool {
         self.response.interact_rect.contains(pos)
             && self.viewport.contains(self.local(pos))
             && context.layer_id_at(pos) == Some(self.response.layer_id)
     }
-    fn point(&self, pos: egui::Pos2) -> Result<Point2, Error> {
+    pub(super) fn point(&self, pos: egui::Pos2) -> Result<Point2, Error> {
         Ok(self.viewport.document_position(self.local(pos))?)
     }
 }
@@ -334,7 +334,9 @@ impl SelectionWorkflow {
         engine: &Engine,
     ) {
         let color = egui::Color32::from_rgb(40, 120, 180);
-        if engine.selection().active && engine.selection().page_id == Some(page.id().get()) {
+        if engine.effective_tool() == EffectiveTool::Selection
+            && engine.selection().page_id == Some(page.id().get())
+        {
             let mut bounds = egui::Rect::NOTHING;
             for atom in page
                 .fragments()

@@ -1,8 +1,9 @@
 //! Typed native bindings. Metadata and actual command invocation share one registry.
 
 use crate::{
-    BondDrawOrder, CloseAction, CloseDocument, CloseState, Command, Engine, NoParams, PageSetSize,
-    SelectBondTool, UiFile, UiFileAction, UiFilePhase, UiSelection, UiView,
+    BondDrawOrder, CloseAction, CloseDocument, CloseState, Command, EffectiveTool, Engine,
+    NoParams, PageSetSize, SelectBondTool, SelectRingTool, UiFile, UiFileAction, UiFilePhase,
+    UiSelection, UiView,
 };
 use serde::Serialize;
 
@@ -378,7 +379,10 @@ impl Engine {
                     command: Command::UiBondToolSelect(SelectBondTool { order }),
                     enabled: reason.is_none(),
                     disabled_reason: reason,
-                    selected: Some(!self.selection().active && self.bond_tool.order == order),
+                    selected: Some(
+                        self.effective_tool() == EffectiveTool::Bond
+                            && self.bond_tool.order == order,
+                    ),
                 });
             }
         }
@@ -394,7 +398,7 @@ impl Engine {
                 }),
                 enabled: authoring_reason.is_none(),
                 disabled_reason: authoring_reason,
-                selected: Some(self.selection().active),
+                selected: Some(self.effective_tool() == EffectiveTool::Selection),
             });
             if let Some(page) = self
                 .document()
@@ -432,6 +436,28 @@ impl Engine {
                     enabled: reason.is_none(),
                     disabled_reason: reason,
                     selected: None,
+                });
+            }
+        }
+        if self.selection_available() {
+            for (size, id, label) in [
+                (3, "tool.ring.3", "Cyclopropane"),
+                (4, "tool.ring.4", "Cyclobutane"),
+                (5, "tool.ring.5", "Cyclopentane"),
+                (6, "tool.ring.6", "Cyclohexane"),
+                (7, "tool.ring.7", "Cycloheptane"),
+                (8, "tool.ring.8", "Cyclooctane"),
+            ] {
+                controls.push(ControlInfo {
+                    id,
+                    label,
+                    menu: "Tools",
+                    submenu: None,
+                    shortcut: None,
+                    command: Command::UiRingToolSelect(SelectRingTool { size }),
+                    enabled: authoring_reason.is_none(),
+                    disabled_reason: authoring_reason,
+                    selected: Some(self.effective_tool() == (EffectiveTool::Ring { size })),
                 });
             }
         }

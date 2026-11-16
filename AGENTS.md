@@ -54,7 +54,7 @@ remaining64815 passes480/0/1 and vendor/clippy/layers/licenses/corpus separately
 not a green aggregate. Source-free/native CDXML only, existing neutral/nonisotopic/
 nonradical target, explicit literal element/H fields, no general inference or neighbor
 correction. Preserve validated no-op sharing, redo/close and whole-snapshot history.
-Current eligible native Drawing controls are23, retained-SMILES Drawing20, SDF14 and raw
+At that atom checkpoint, eligible native Drawing controls are23, retained-SMILES Drawing20, SDF14 and raw
 SMILES10. Preserve exact-target requests,
 weak/opaque context and epochs, checked2/5-byte field reuse, action-prefix order, bounded
 deferred replacements, local form ownership and frame-start barriers through dismissal.
@@ -79,7 +79,7 @@ Final selection gate77152 passes1361/0/1, including fmt, workspace/vendor clippy
 layers/licenses/corpus. It does not attribute or causally fix the earlier MCP failure.
 The unchanged actual-App capture also passes offscreen on Metal; no native window opens.
 
-Current registry37 adds `ring.create`; read docs/research/ring-authoring-plan.md and
+The ring command checkpoint's registry37 adds `ring.create`; read docs/research/ring-authoring-plan.md and
 docs/verification-ring-authoring.md. Explicit free/shared-atom/shared-Single-edge3–8
 carbon rings preserve complete native/CDXML source, old arrays/IDs/directions/anchors
 and unrelated metadata. Literal neutral-C4 H accounting, exact same-page new-point
@@ -90,12 +90,24 @@ subnormal nonregular polygons refuse atomically. Independent public10/private2/
 precision3/render2/actual-wire4 cases pass, with real Unicode Expat/Decimal/RDKit files.
 The first full ring gate45460 passes1382/0/1 including all local stages. Runtime/asset
 closures, parsers/IO/chem/render, old fixtures/consumers/font/golden remain unchanged.
-No native ring binding is delivered yet: controls stay23/20/14/10. Next is ui.ring_tool,
-one mutually exclusive Selection/Bond/Ring representation, original procedural palette,
-same-candidate preview and actual free/atom/bond gestures through the shared command.
-The next policies are locked in docs/research/ring-native-plan.md before independent App/API REDs;
-do not invent26.1 evidence, competing active booleans or a converter fallback. Native
-selection/next-ring/platform acceptance remains separate while the desktop is in use.
+The native integration's registry38 adds ui.ring_tool and six original procedural3–8
+controls; current counts are29/20/14/10. Read docs/research/ring-native-plan.md and
+docs/verification-native-rings.md. One private EffectiveTool enum owns Bond/Selection/
+Ring(size); the remembered bond order and one checked tool epoch are shared. Borrowed
+Selection.active is only a derived compatibility cache. RingContext is weak, page/source/
+tool/view/close/file/opaque-association qualified; native canvas/DPI/layer/origin stay in UI.
+Preview uses the unchanged real builder without spending IDs, clearing selection,
+authoring or Save authority. Each ordered release validates the complete candidate's
+physical and logical visibility, rechecks context and calls ring.create once. Held
+preview is built only once per frame; multiple completed gestures each retain their own
+release. Default endpoints remain provisional so a genuine drag can replace an invalid
+click pose; every invalid-surface early return must cancel Ring ownership before old
+DPI/canvas values can return. Preserve threshold latching, modified-primary refusal,
+mode/source ABA, modal/text/frame-start and raw tool/history/file fences. Do not invent
+26.1 evidence, competing active booleans, a converter fallback or weaker render guards.
+Exact external numeric file checks run before the approximate default serde_json f64
+test bridge; retain the documented qualification, unchanged consumers and assertions.
+Native selection/ring/platform execution remains unverified while the desktop is in use.
 
 Read docs/research/macos-listener-lifetime.md before touching the MCP failure. Original
 probe is inconclusive; separately qualified v2 passes its one controlled two-arm run.

@@ -40,7 +40,7 @@ fn baseline_stdio_multiple_orders_discovery_selection_history_and_saved_source()
         );
         let list = client.call(6, "tools/list", json!({}))?;
         let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-        assert_eq!(tools.len(), 37);
+        assert_eq!(tools.len(), 38);
         for name in ["bond.create", "bond.extend", "ui.bond_tool"] {
             let entry = tools
                 .iter()

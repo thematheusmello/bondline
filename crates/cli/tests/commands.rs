@@ -492,6 +492,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "ui.bond_tool",
             "ui.controls",
             "ui.file",
+            "ui.ring_tool",
             "ui.selection",
             "ui.view"
         ]

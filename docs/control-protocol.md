@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has37 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has38 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -69,6 +69,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
 | `ui.atom_label` | Tagged `action`: `open` requires `expected_revision`, positive `page_id`, `fragment_id`, `atom_id`; `cancel` requires `expected_revision`, positive `request_id` | Queue or cancel one source-qualified native atom-label presentation; no authored edit/history or empty-target binding |
 | `ui.bond_tool` | Required `order` (`single`, `double`, `triple`) | Select a transient drawing tool; explicit operation receipt/epoch, no authored edit or history entry |
+| `ui.ring_tool` | Required `size` (integer3..8), closed object | Select a transient native carbon Single-ring tool; optional operation receipt, one shared tool epoch, no authored edit or history entry |
 | `ui.view` | Tagged `action`: `inspect`, `fit`, `actual`, `set_zoom`, `magnify`, `reduce`, `pan`; action-specific geometry/percentage | Inspect or change the transient camera without editing content/history; source-qualified display/readability guards remain |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request guarded New/SMILES forms or Open/Save/Save As presentation, or cancel the matching intent; a native host is required |
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
@@ -1325,8 +1326,8 @@ capture, native races/other-platform execution and complete reference parity rem
 `ui.controls` additionally exposes `file.import_smiles_records`, File → Import SMILES
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
-counts are23 native Drawing/14 SDF/10 raw SMILES; retained-SMILES Drawing keeps20.
-The registry has37 commands. Accepting
+counts are29 native Drawing/14 SDF/10 raw SMILES; retained-SMILES Drawing keeps20.
+The registry has38 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag
@@ -1494,8 +1495,43 @@ file publication, Save lease or acknowledgement, and has no separate result rece
 Codes include invalid_params, not_found, unsupported_content, stale_revision and existing
 revision/identity/model/selection-exhaustion errors.
 
-This checkpoint exposes37 commands and adds no native binding: controls remain23 native
+The command-only checkpoint exposes37 commands and adds no native binding: controls remain23 native
 Drawing,20 retained-SMILES Drawing,14 SDF and10 raw SMILES. Ring palette/gesture/preview,
 aromatic/chair/sprout tools, styles and broader chemistry/platform workflows remain
 required. See [independent command/adapter/render evidence](verification-ring-authoring.md)
 and [the locked public-source contract](research/ring-authoring-plan.md).
+
+## Native ring tool, context and preview
+
+`ui.ring_tool` accepts exactly `{"size":6}` (integer3..8). It requires a source-free
+or completely mapped native CDXML Drawing and the existing tool close/file policy;
+no native host is required. Eligible controls are tool.ring.3…8, labelled Cyclopropane
+through Cyclooctane, with no undocumented shortcuts. Native controls total29; retained
+SMILES stays20, SDF14 and raw SMILES10. Every tool's selected state comes from one
+EffectiveTool enum; a ring never leaves a bond button selected.
+
+The explicit result alone includes `ui_ring_tool_operation:{size,epoch,changed}`;
+ordinary snapshots omit it. Outer changed is false. The same validated Ring/size is
+an exact no-op. A mode/size change advances the shared checked tool epoch once;
+leaving Selection preflights and clears its targets. Choosing the remembered bond
+order from Ring is a real mode switch. Authored history/Open/New retain the mode.
+Loopback repaint follows successful changed-only publication and activity release.
+
+Rust-only ring_context(page_id) requires the actual Ring mode, supported page/source,
+Open and no outstanding file intent, including Running. RingContext is weak and has
+no serialized representation or Save authority. Source/namespace/history, tool-size/
+mode, view, close, file intent and association ABA invalidate it permanently. Native
+canvas/DPI/layer/origin qualifiers remain in the thin UI.
+
+preview_ring_create(&RingCreate) is mode/host-independent, refuses committed close
+before stale revision, and reuses the actual ring candidate builder. It spends no ID
+floor, clears no selection and changes no authored/saved/history/file state. Native
+release additionally requires that same complete candidate's ordinary scene and
+logical8..256 label-em guards pass, then revalidates the context and executes ring.create
+once. The headless command retains its explicit point-domain geometry contract.
+
+The locked original48pt poses, unit-neighbor bisectors, local bond-side preference,
+latched drag threshold and unsupported modified primary gestures are in the
+[native contract](research/ring-native-plan.md). They are not observed26.1 defaults.
+[Receiving](verification-native-rings.md) separates actual App inputs and saved-file
+consumers from unexecuted native/platform acceptance.

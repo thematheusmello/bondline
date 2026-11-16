@@ -331,3 +331,6 @@ mod selection_authoring_wire;
 
 #[path = "support/ring_construction_wire.rs"]
 mod ring_construction_wire;
+
+#[path = "support/ring_tool_wire.rs"]
+mod ring_tool_wire;

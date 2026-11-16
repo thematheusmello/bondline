@@ -66,6 +66,12 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "tool.bond.double",
             "tool.bond.triple",
             "tool.selection",
+            "tool.ring.3",
+            "tool.ring.4",
+            "tool.ring.5",
+            "tool.ring.6",
+            "tool.ring.7",
+            "tool.ring.8",
             "edit.select_all",
             "edit.deselect"
         ])

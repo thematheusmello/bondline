@@ -19,6 +19,7 @@ mod file_ui;
 mod files;
 mod new_document;
 mod ring;
+mod ring_tool;
 mod sdf_edit;
 mod sdf_query;
 mod selection;
@@ -33,7 +34,7 @@ pub use atom_ui::{UiAtomLabel, UiAtomLabelRequest};
 pub use bond::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
 };
-pub use bond_tool::{BondToolOperation, BondToolState, SelectBondTool};
+pub use bond_tool::{BondToolOperation, BondToolState, EffectiveTool, SelectBondTool};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
@@ -46,6 +47,7 @@ pub use files::{
 };
 pub use new_document::NewDocument;
 pub use ring::{RingCreate, RingPlacement, RingSide};
+pub use ring_tool::{RingContext, RingToolOperation, SelectRingTool};
 pub use sdf_edit::{SdfFieldSet, SdfRecordRemove};
 pub use sdf_query::{
     MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
@@ -176,6 +178,7 @@ command_registry! {
     UiSelection(UiSelection) => ("ui.selection", "Select native atoms without authoring", false),
     SelectionTranslate(SelectionTranslate) => ("selection.translate", "Translate the current native atom selection atomically", false),
     RingCreate(RingCreate) => ("ring.create", "Construct a native carbon Single ring with explicit standalone or shared-atom/edge placement.", false),
+    UiRingToolSelect(SelectRingTool) => ("ui.ring_tool", "Select a native carbon Single-ring tool without editing the document or its history.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -509,6 +512,8 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_bond_tool_operation: Option<BondToolOperation>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_ring_tool_operation: Option<RingToolOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_view_operation: Option<ViewOperation>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub controls: Option<Vec<ControlInfo>>,
@@ -531,6 +536,7 @@ pub struct Engine {
     atom_ui: atom_ui::AtomLabelUiPolicy,
     selection: selection::SelectionPolicy,
     bond_tool: BondToolState,
+    effective_tool: EffectiveTool,
     view: ViewState,
     view_canvas_size: Option<[u32; 2]>,
     sdf_view_extent: Option<(CaptureStamp, bondline_model::PageSize)>,
@@ -588,6 +594,7 @@ impl Engine {
             atom_ui: atom_ui::AtomLabelUiPolicy::default(),
             selection: selection::SelectionPolicy::default(),
             bond_tool: BondToolState::default(),
+            effective_tool: EffectiveTool::default(),
             view: ViewState::default(),
             view_canvas_size: None,
             sdf_view_extent: None,
@@ -642,6 +649,7 @@ impl Engine {
             ui_selection: (self.selection().epoch != 0).then(|| self.selection().clone()),
             ui_selection_operation: None,
             ui_bond_tool_operation: None,
+            ui_ring_tool_operation: None,
             ui_view_operation: None,
             controls: None,
             ui_file_context_stamp: None,
@@ -695,6 +703,9 @@ impl Engine {
             }
             Command::UiBondToolSelect(params) => {
                 return Ok(Prepared::immediate(self.select_bond_tool(params)?));
+            }
+            Command::UiRingToolSelect(params) => {
+                return Ok(Prepared::immediate(self.select_ring_tool(params)?));
             }
             Command::UiControls(_) => {
                 return Ok(Prepared::immediate(CommandResult {
@@ -1230,6 +1241,7 @@ mod tests {
                 "ui.selection",
                 "selection.translate",
                 "ui.bond_tool",
+                "ui.ring_tool",
                 "ui.view",
                 "ui.file"
             ]

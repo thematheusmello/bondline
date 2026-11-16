@@ -149,6 +149,7 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "ui.selection",
             "selection.translate",
             "ui.bond_tool",
+            "ui.ring_tool",
             "ui.view",
             "document.open_cdxml",
             "document.save_cdxml",

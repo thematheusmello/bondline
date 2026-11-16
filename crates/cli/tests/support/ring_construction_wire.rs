@@ -296,10 +296,13 @@ fn names(entries: &[Value]) -> TestResult {
         .iter()
         .map(|entry| entry["name"].as_str().ok_or("name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(entries.len(), 37);
+    assert_eq!(entries.len(), 38);
     assert_eq!(
         names,
-        OLD_NAMES.into_iter().chain([NAME]).collect::<BTreeSet<_>>()
+        OLD_NAMES
+            .into_iter()
+            .chain([NAME, "ui.ring_tool"])
+            .collect::<BTreeSet<_>>()
     );
     Ok(())
 }

@@ -364,7 +364,7 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-023 | Snaking chain | 104-105 | missing | - |
 | TD-024 | Benzene ring | 74, 101-103 | missing | - |
 | TD-025 | Cyclopentadiene ring | 74 | missing | - |
-| TD-026 | Ring sizes 3-8 | 101-103, 73 | missing | Native ring controls/gestures remain missing. The shared ring.create engine now verifies explicit3–8 carbon Single polygons, shared-atom/shared-edge attachments, literal H, history/source/IDs, actual adapter/files and independent CPU/GPU scenes. See verification-ring-authoring.md; command evidence does not complete the native tool workflow. |
+| TD-026 | Ring sizes 3-8 | 101-103, 73 | wired (partial) | Six original procedural tools share one effective mode and the existing ring.create builder. Independent command/context/adapter and actual-App click/drag/full-preview/free/atom/fused/spiro/Unicode-file checks pass. Native OS interaction is still unverified. Original poses/modifier/side policies do not prove26.1 defaults; aromatic/chair/sprout/general faces remain missing. See verification-native-rings.md and verification-ring-authoring.md. |
 | TD-027 | Cyclohexane chair, both orientations | 102, 73 | missing | - |
 | TD-028 | Arrows palette | 106-109 | missing | Unnamed glyph variants still need independent semantic identification. |
 | TD-029 | Hollow/block arrow | 107, 109-110 | missing | - |

@@ -1,7 +1,7 @@
 //! Transient selection and one atomic source-qualified translation.
 use crate::{
-    BondToolState, CaptureStamp, CloseState, CommandResult, Engine, Error, UiFileContextStamp,
-    UiFilePhase,
+    BondToolState, CaptureStamp, CloseState, CommandResult, EffectiveTool, Engine, Error,
+    UiFileContextStamp, UiFilePhase,
 };
 use bondline_model::{Fragment, MAX_GRAPH_ITEMS, Page, PageId, Point2};
 use schemars::JsonSchema;
@@ -84,7 +84,7 @@ pub struct SelectionContext {
 impl SelectionContext {
     pub fn is_current(&self, engine: &Engine) -> bool {
         engine.capture_stamp_matches(&self.source)
-            && engine.selection().active
+            && engine.effective_tool() == EffectiveTool::Selection
             && engine.selection().epoch == self.selection_epoch
             && engine.bond_tool() == self.tool
             && engine.view().epoch == self.view_epoch
@@ -99,7 +99,7 @@ impl SelectionContext {
 impl Engine {
     pub fn selection_context(&self) -> Result<SelectionContext, Error> {
         self.require_selection_source()?;
-        if !self.selection().active {
+        if self.effective_tool() != EffectiveTool::Selection {
             return Err(Error::StaleSelection);
         }
         if self.close_state() != CloseState::Open || self.file_ui_state().request.is_some() {
@@ -197,7 +197,8 @@ impl Engine {
             .epoch
             .checked_add(1)
             .ok_or(Error::UiSelectionEpochExhausted)?;
-        let tool_epoch = if old.active != active {
+        let mode_changed = active && self.effective_tool != EffectiveTool::Selection;
+        let tool_epoch = if mode_changed {
             self.bond_tool
                 .epoch
                 .checked_add(1)
@@ -213,6 +214,9 @@ impl Engine {
             atom_ids,
         };
         self.bond_tool.epoch = tool_epoch;
+        if active {
+            self.effective_tool = EffectiveTool::Selection;
+        }
         Ok(true)
     }
 
@@ -242,9 +246,11 @@ impl Engine {
         }
         let changed = match params {
             UiSelection::Inspect { .. } => false,
-            UiSelection::Clear { .. } => {
-                self.replace_selection(self.selection.state.active, None, vec![])?
-            }
+            UiSelection::Clear { .. } => self.replace_selection(
+                self.effective_tool() == EffectiveTool::Selection,
+                None,
+                vec![],
+            )?,
             UiSelection::Activate { .. } => {
                 self.require_selection_source()?;
                 self.replace_selection(
@@ -308,7 +314,7 @@ impl Engine {
     }
 
     pub(super) fn selection_epoch_for_bond_tool(&self) -> Result<Option<u64>, Error> {
-        if !self.selection.state.active {
+        if self.effective_tool != EffectiveTool::Selection {
             return Ok(None);
         }
         self.selection
@@ -345,7 +351,7 @@ impl Engine {
         }
         self.require_selection_source()?;
         let selected = &self.selection.state;
-        if !selected.active
+        if self.effective_tool != EffectiveTool::Selection
             || selected.atom_ids.is_empty()
             || selected.epoch != params.expected_selection_epoch
             || self

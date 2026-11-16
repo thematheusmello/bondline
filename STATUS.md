@@ -7,107 +7,87 @@ do not enable, dispatch or rerun it during development.
 
 ## Current recoverable work
 
-Ring command source/tests/provenance is committed as `ac340db`, following contracts
-`9010a14`/`d85c6ef` and source proposal `8de42ad`. The later documentation checkpoint
-locks [native tool integration](docs/research/ring-native-plan.md) before API/App REDs.
-Selection source remains `07aa562`, atomic model batches `77f5ea4`. Earlier native atom
-labels are `b4fefaf`; their actual macOS evidence does not verify the newer workflows.
+This native ring increment implements the contract locked at b6b1775. Ring engine source is ac340db, selection07aa562 and
+atom labels b4fefaf. Read [native receiving](docs/verification-native-rings.md) for
+initial independent REDs, source-review defects, setup qualifications and exact pins.
 
-Registry37 adds **ring.create** with required current revision, page, size3..8, explicit
-neutral-carbon H policy and closed free/atom/bond placement plus side. Free creates one
-new regular carbon Single ring. Shared-atom/Single-edge placement preserves old atoms,
-arrays, directed edges, IDs and coordinates, consuming only the prescribed literal H.
-Attachments spend no Fragment ID. Global/session ID floors publish only after a single
-normal complete-source history commit; selection invalidation/overflow uses the same
-commit path. Source-free/fully mapped native CDXML only; foreign/retained-SMILES geometry
-stays guarded. View/focus and file publication/Save authority are unchanged.
+Registry38 adds ui.ring_tool with six original procedural3–8 controls and one effective
+Bond/Selection/Ring(size) authority. The remembered bond order and checked tool epoch
+are shared; borrowed Selection.active is derived. Native controls29, retained SMILES20,
+SDF14 and raw SMILES10. Eligible native/CDXML source only; foreign/retained geometry
+never gains ring authority. Same-mode/size no-op preserves document/history/source;
+loopback repaint follows only actual mode/size change after reply publication.
 
-**Verified below the native boundary:** public10, private2, precision3, independent
-render2 and actual CLI/initialized-stdio/authenticated-socket4. These cover36 analytic
-size/side/orientation cases, cyclohexane/decalin/spiro/terminal/exocyclic-Double chemistry,
-H/metadata/source/bounds/IDs/history/selection/Save-lease guards and actual Unicode CDXML
-files through unchanged Expat/Decimal and pinned RDKit. Independent literal free/fused/
-spiro renderer controls pass first; generated pages then match actual CPU/GPU/Pillow.
+RingContext is weak and source/page/tool/view/close/file/opaque-association qualified.
+Explicit preview uses the unchanged real ring builder without authoring, spending IDs,
+clearing selection or gaining Save authority. Native plain click/drag handles Free,
+shared atom and shared Single edge; full candidate glyph/stroke/readability guards
+precede each release. All six buttons, detached/fused/spiro previews and Unicode files
+have independent App evidence. Actual native OS ring/selection interaction is unverified.
 
-A real precision defect accepts distinct but nonregular ULP/subnormal triangles. The
-fixed normalized post-rounding length/angle/orientation certificate rejects them
-atomically without imposing a minimum edge length. Accurate origin1e-200 geometry
-passes before and after the fix. No old threshold/assertion/source consumer is weakened.
-Read [receiving](docs/verification-ring-authoring.md),
-[the locked source contract](docs/research/ring-authoring-plan.md) and
-[the protocol](docs/control-protocol.md#explicit-native-ring-construction).
-
-**Native ring tools are missing:** no ring binding/gesture/preview is delivered yet.
-Controls remain23 eligible native Drawing/20 retained-SMILES Drawing/14 SDF/10 raw
-SMILES. Selection/movement has12 App input passes but actual desktop interaction is
-still unverified. Source/source-history/adapter tests never substitute for native flow.
-No aromatic/chair/sprout/chain/style/general ring-system or26.1/platform parity claim.
+Two independently declared product regressions reproduce then pass unchanged: a valid
+leftward drag near100000pt must replace an invalid click default; a physical viewport
+refusal must retire the old gesture before DPI values return. No point/font/render limit
+is weakened. Raw event ordering, threshold latch, no-op tools, two complete one-packet
+gestures, source/mode/association ABA, text/modal/dismissal, modifier and target guards
+remain explicit. Aromatic/chair/sprout/chain/style/full ring-system parity is still missing.
 
 ## Verification and unresolved failure
 
-Full local ring gate45460 passes **1382/0/1**,195 result lines: rustfmt, warnings-denied
-workspace/vendor clippy, workspace/native vendor tests, layers/licenses/corpus.
-169059B log SHA256`a0b4cc1015af11b5a30723e4702391aec91a8fe1206e0ea82acf1d703541ac73`.
-There is one full aggregate invocation for this feature; earlier declaration syntax,
-source-only setup qualifications and metadata-script corrections remain explicit in
-receiving. They are not represented as runtime bugs or green tests.
+Focused receiving includes core JSON4/context3/private2, actual CLI/initialized-stdio/
+authenticated-socket4 and17 independently declared App cases. All pass in the final
+local aggregate. Test bridge/setup corrections and new-test lint qualifications
+remain explicit; never turn them into product REDs.
 
-Native/CLI build29411 passes with --locked; neither opens a window. Native executable
-22589408B SHA256`59332bb9e70fc8d1604cd9985be08b2a9a2d957e995f56a9fcae7644c7b23f59`;
-CLI20644320B SHA256`548e71aad533b7b942a53068ee1a239644af6d23caf01fe4af9775b19f852b7f`.
-Actual CLI discovery retains the old36-name prefix and all37 names match protocol rows.
+The first aggregate80277 stops at two new-test clippy lints. Equivalent boolean
+simplification and a stronger actual-page-width assertion preserve expectations.
+70000 and90680 stop at old discovery metadata;41603 finds old New/SDF command
+catalogues, and26594 finds the old four-tool label catalogue. The old catalogues are
+updated only for the additive38th command/six controls; existing bounds/selection/
+source assertions remain. Final48193 passes **1412/0/1**,197 result lines, including
+fmt, warnings-denied workspace/vendor clippy/tests, layers/licenses/corpus. Its172093B
+log SHA256 is8622085323cbf4f5bf048fa47d05a7ea9fce272493ceb4cc109e39dc53576bbc.
+Native/CLI build76735 and unchanged offscreen App capture1726 also pass.
+No old geometry, chemistry, history, deadline or listener assertion
+is relaxed. The failed intermediate logs remain distinct from that final aggregate.
 
 The old atom aggregate95827 fails848/1 at unchanged MCP replacement bind60475,
-AddrInUse/OS48, without failure-time owner capture. Later selection1361/0/1 and this
-ring1382/0/1 pass without socket-policy changes; neither attributes that old failure.
-[Controlled listener research](docs/research/macos-listener-lifetime.md) proves one
-before-FIOCLEX inheritance mechanism only. Both probes and exhausted20 contexts are
-consumed; do not rerun them or serialize/retry/weaken the old shutdown test for green.
-A new causal repair needs decisive natural failure-time socket/process identity.
+AddrInUse/OS48, without failure-time owner capture. Later1361/0/1 and1382/0/1 gates
+pass without socket-policy changes; neither attributes that old failure. Controlled
+listener research proves one inheritance mechanism only. Both probes and exhausted20
+contexts are consumed; do not rerun them or serialize/retry/weaken the old shutdown test
+for green. New causal repair needs decisive natural failure-time socket/process identity.
 
-Five new live test units reproduce frozen declarations through rustfmt only. The31-file
-catalogue ledger changes only registry counts/new name; its pre-metadata old files match
-Git and the existing adapter bridge is append-only. All582 parity IDs/order, old MCP
-control test and two inverse-checked bond helpers stay exact except reviewed visibility.
-No model/parser/IO/chem/render/MCP/xtask, dependency/lock/vendor/compat/font/golden/old
-fixture/oracle/corpus/fuzz change. Runtime closures stay155/166/221 packages plus two
-assets. Corpus eight files/five bundles still reports foreign/general/application CDX
-and chemistry calculations missing. New hosted/platform evidence is absent by policy.
+Protection checks keep626 tracked runtime/parser/model/IO/chem/render/xtask/vendor/
+compat/asset/fuzz/config files exact, all582 parity IDs/order and old MCP control tests.
+The MCP production inverse is only the added changed Ring receipt predicate. New test
+units reproduce final frozen/explicitly qualified declarations through rustfmt. No
+parser fuzz, hosted, foreign/general CDX or new chemistry-computation claim follows.
 
 ## Desktop and jobs
 
-The cleanup inventory found every Bondline preview closed and no unused project Chrome
-tabs. No new native window is launched in this slice; desktop use and unrelated data/
-tabs are preserved. Old app bundles/PID82171 are historical, not this build. iTerm access
-is restricted, so terminal tabs remain unchecked. No reference program binaries/assets
-are inspected, downloaded or executed.
+Every Bondline preview is closed; no unused project Chrome tab was found. Terminal tabs
+remain unchecked because iTerm computer access is restricted. No native window or
+reference binary/asset is launched, inspected or downloaded in this slice. Preserve the
+user's desktop and keep at most one preview when native acceptance later becomes possible.
 
-Root owns Cargo/Git/CUA/product mutation. All Cargo/test/oracle handles in this slice
-are terminal:53591,1846,16160,35627,18276,98301,80454,24067,82839,63157,43878,45460,
-29411. Public v2's missing bracket is setup only; v3 reaches actual0/10 baseline RED.
-Source reviews/core/adapter declarations and native_acceptance's next-tool proposal
-are terminal. No live job remains. The locked durable contract above contains the
-continuation, independent of ignored target reports. Revalidate any newly reported
-handles; do not restart a process merely because an observation times out.
+Root owns Cargo/Git/CUA/product mutation. Agent declarations and reviews are terminal.
+All Cargo/oracle/build/capture handles are terminal, including final48193, build76735
+and capture1726. No live job remains. Offscreen Metal/Apple M3 Max capture is
+`target/visual-capture/native-ring-tools-20261116.png`,51588B/SHA256
+88f2f16c8a7efc19f06624e9de42d0bceb9c1fd310e303944bac8a0464de25dd.
+Its unchanged three-bond seed shows the ten-tool palette; it is not a native ring-
+gesture capture or approved golden. Binaries and source are pinned in receiving.
 
 ## Next exact work and full remaining scope
 
-1. Read [the locked native tool/state/preview/click/drag contract](docs/research/ring-native-plan.md).
-   Independently declare ui.ring_tool UnknownCommand and actual-App missing Cyclohexane
-   RED before implementation. Preview/context missing-API RED is separate. Keep the
-   existing analytic/precision tests exact; do not duplicate or weaken their coverage.
-2. Implement ui.ring_tool and six original procedural3–8 controls with one mutually
-   exclusive Selection/Bond/Ring representation and checked epoch. Reuse the same
-   candidate builder for preview, fresh graph hits/PageView, weak/opaque context and
-   existing ordered input/file/history/close barriers. Include actual free, atom and
-   bond creation; no synthetic SMILES/temp file/detached fallback or competing flags.
-3. When the desktop is available, run native selection and then native ring palette→
-   draw→fuse/spiro→cancel/history→Unicode Save/reopen with independent actual-file
-   consumers. Until executed, those native workflows stay unverified. Keep at most one
-   preview; leave unused project tabs closed.
-4. Continue benzene/cyclopentadiene/chair/sprout, chains/styles/snapping/transforms/
-   groups and broader labels, full M1 interoperability, M3 chemistry/reactions,
-   M4 publishing/clipboard, M5 naming/biopolymers/WebAssembly/installers. Full modern
-   inventory, safe imported editing, native races/IME/measured DPI/Fit/pan and interactive
-   Windows/Linux remain required. Public documentation is current evidence; historical
-   installed observations never grant current binary access.
+1. When the desktop is available, execute native selection and then ring palette→
+   Free/atom/fused/spiro→cancel/history→Unicode Save/reopen with independent actual-file
+   consumers. App frames and offscreen Metal do not replace native OS or measured DPI.
+2. Continue benzene/cyclopentadiene/chair/sprout, chains/styles/snapping/transforms/
+   groups and broader labels with source-pinned independent REDs. Keep the full M1
+   interoperability, M3 chemistry/reactions, M4 publishing/clipboard and M5 naming/
+   biopolymers/WebAssembly/installers scope. Full modern inventory, imported editing,
+   native races/IME/Fit/pan and interactive Windows/Linux remain required. Current
+   instructions allow public sources only; historical installed observations confer no
+   current permission to access proprietary binaries or assets.

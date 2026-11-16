@@ -29,6 +29,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "ui.selection",
             "selection.translate",
             "ui.bond_tool",
+            "ui.ring_tool",
             "ui.view",
             "document.open_cdxml",
             "document.save_cdxml",

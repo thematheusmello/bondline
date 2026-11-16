@@ -1403,3 +1403,6 @@ mod native_atom_label;
 
 #[path = "selection_translation_tests.rs"]
 mod selection_translation;
+
+#[path = "native_ring_tests.rs"]
+mod native_ring;

@@ -104,10 +104,11 @@ fn names(values: &[Value]) -> TestResult {
             "ui.selection",
             "selection.translate",
             "ring.create",
+            "ui.ring_tool",
         ])
         .collect::<std::collections::BTreeSet<_>>();
-    assert_eq!(values.len(), 37);
-    assert_eq!(unique.len(), 37);
+    assert_eq!(values.len(), 38);
+    assert_eq!(unique.len(), 38);
     assert_eq!(unique, expected);
     Ok(())
 }

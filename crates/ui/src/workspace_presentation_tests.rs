@@ -5,11 +5,17 @@ use serde_json::{Value, json};
 use std::collections::HashMap;
 
 type TestResult<T = ()> = Result<T, Box<dyn std::error::Error>>;
-const TOOL_LABELS: [&str; 4] = [
+const TOOL_LABELS: [&str; 10] = [
     "Single bond",
     "Double bond",
     "Triple bond",
     "Marquee selection",
+    "Cyclopropane",
+    "Cyclobutane",
+    "Cyclopentane",
+    "Cyclohexane",
+    "Cycloheptane",
+    "Cyclooctane",
 ];
 
 struct Workspace {
@@ -199,6 +205,12 @@ fn assert_layout(workspace: &Workspace, output: &egui::FullOutput) -> TestResult
     assert_eq!(
         rail_buttons,
         [
+            "Cyclobutane",
+            "Cycloheptane",
+            "Cyclohexane",
+            "Cyclooctane",
+            "Cyclopentane",
+            "Cyclopropane",
             "Double bond",
             "Marquee selection",
             "Single bond",

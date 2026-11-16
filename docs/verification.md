@@ -2990,3 +2990,12 @@ Native Fit78.79% still refuses the distinct-pixel guard. Effective native DPI/ca
 not measured; native2×, full overview, first-click success and other platforms are not
 claimed. No new golden/fuzz/dependency/font/asset/hosted execution. Actions stays disabled,
 the full M0–M5 goal remains active, and STATUS.md records the next exact work.
+
+## Native Single-ring integration, 2026-11-16
+
+[The receiving record](verification-native-rings.md) holds the separate existing-JSON
+UnknownCommand, missing actionable App control and missing Rust API REDs, independent
+expanded declarations, setup-only qualifications, same-candidate preview/authoring and
+actual file-consumer evidence. It records local quality gates and native/platform limits;
+App input and offscreen GPU execution do not establish native OS interaction. The full
+M0–M5 goal remains active and GitHub Actions stays disabled.

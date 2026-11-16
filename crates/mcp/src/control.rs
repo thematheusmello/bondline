@@ -195,6 +195,9 @@ async fn publish_result(
                 .ui_bond_tool_operation
                 .is_some_and(|operation| operation.changed)
             || result
+                .ui_ring_tool_operation
+                .is_some_and(|operation| operation.changed)
+            || result
                 .ui_view_operation
                 .is_some_and(|operation| operation.changed)
     });

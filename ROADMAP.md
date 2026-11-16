@@ -8,10 +8,13 @@ The shared `ring.create` command now implements explicit3–8 carbon Single poly
 including shared-atom and shared-Single-edge attachments. Independent geometry,
 cyclohexane/decalin/spiro/terminal chemistry, source/history/ID guards, Unicode files,
 CPU/GPU and actual CLI/MCP/socket checks pass. Its rounded-precision counterexamples
-are fixed without a blanket minimum length. Registry37, native controls unchanged;
-see [receiving](docs/verification-ring-authoring.md). Native ring tools/preview/gestures
-are [locked for the next integration](docs/research/ring-native-plan.md), followed by aromatic/chair/sprout/styles and broader
-chemistry. This is a checked engine increment, not delivered native ring parity or M2.
+are fixed without a blanket minimum length. Registry38 now adds ui.ring_tool, one
+effective tool mode, six original procedural controls and same-candidate preview plus
+free/atom/bond gestures. Native Drawing controls29; retained/SDF/raw stay20/14/10.
+Independent App/adapter/file checks are in [native receiving](docs/verification-native-rings.md);
+actual native OS interaction remains unverified while the desktop is in use. Follow
+with native selection/ring acceptance and aromatic/chair/sprout/styles and broader
+chemistry. This is bounded integration, not complete native ring parity or M2.
 
 Bounded native Mac atom labels now support fresh Alt-click target/fields/Apply/Cancel,
 OH/NH2 editing, history, draft-close protection and Unicode editable CDXML Save/reopen.
