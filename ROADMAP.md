@@ -14,6 +14,9 @@ xtask stages pass separately. The [controlled inheritance experiment](docs/resea
 does not attribute that natural failure. Full M0–M5 remains incomplete. Continue source-
 preserving M2 authoring and independent native checks; keep broader format/chemistry,
 publishing and M5 workflows visible rather than treating this slice as completion.
+Next is the [persistent selection/translation proposal](docs/research/selection-translation-plan.md):
+lock exact state/tool/command semantics, then independent registry/App REDs, source-aware
+movement/history/persistence and actual native acceptance. The proposal is not implementation.
 
 Native source-backed SMILES records now have bounded Mac selected/all import, refusal/
 retry, registered click/key order editing, history and Unicode whole-file Save/reopen/

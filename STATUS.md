@@ -7,9 +7,9 @@ OFF** during development; do not enable or dispatch it for these changes.
 
 ## Current recoverable work
 
-Base `d2f8367` has the bounded headless atom-label command. Local `3f61e75` records
-controlled macOS listener inheritance. The native atom-label implementation/tests/docs
-are the current verified worktree, pending the feature commit/checkpoint below.
+Native feature **`b4fefaf`** commits the exact verified source/tests/docs, following
+`d2f8367` (headless atom checkpoint) and `3f61e75` (controlled listener research).
+The later documentation checkpoint records final protection and the next selection plan.
 Earlier detailed status checkpoints remain in Git; their evidence lives in the linked
 verification records. This file now describes the current state rather than repeating
 superseded continuation instructions.
@@ -56,7 +56,8 @@ No native remote-race proof is inferred from App tests.
 - Runtime closures remain155/166/221 packages plus two assets. Corpus eight files/five
   bundles preserves explicit missing foreign/general CDX and chemistry coverage.
   No model/parser/chem/render/IO, dependency/lock/vendor/compat/font/golden/old fixture/
-  consumer/corpus/fuzz changes. No hosted/platform evidence is manufactured.
+  consumer/corpus/fuzz changes. No hosted/platform evidence is manufactured. Final431 changed-document local Markdown
+  links and Git whitespace checks pass.
 
 [Listener investigation](docs/research/macos-listener-lifetime.md): the first standalone
 probe is inconclusive. A separately frozen observer-qualified v2 passes exactly one
@@ -81,16 +82,17 @@ remain unchecked. No ChemDraw binary/app/assets were inspected or executed.
 
 All compiler/test/oracle/diagnostic process handles from this slice are terminal,
 including95827,64815,68587,88229,49437,79825,11344 and78095. Do not poll them. Root owns
-Cargo/Git/CUA/product mutation. The source-only selection-plan followup has returned under ignored
-`target/m2-selection-plan/`; all delegated reviews are terminal. Root reviewed the
-6638-byte recommendation before the next source-contract checkpoint. No live worker remains.
+Cargo/Git/CUA/product mutation. All delegated reviews are terminal. The received6638-byte
+selection recommendation is now [the committed next-task proposal](docs/research/selection-translation-plan.md).
+No selection command/test/tool is implemented by that proposal; no worker remains live.
 
 ## Next executable work and explicit gaps
 
-1. Finish the native feature commit and exact receiving checkpoint; commit intentional
-   project files only, never target/cache/probe bundles. Preserve the failed aggregate.
-2. Receive the public-source M2 selection plan, then independently declare and observe
-   the first registry/App RED before implementing persistent selection and translation.
+1. Read the public-source [selection/translation proposal](docs/research/selection-translation-plan.md),
+   lock the exact typed state/operation and tool lifecycle contract, then independently
+   declare and observe the first existing-JSON UnknownCommand and actual-App missing-tool
+   RED before implementation. Do not guess unrecorded26.1 modifier behavior.
+2. Implement persistent selection and translation through every delivered adapter.
    Reuse graph hits, stable IDs, immutable fragments/history and existing adapters;
    never authorize geometry loss on foreign or retained-SMILES backing. Selection,
    drag transactions, keyboard move, Undo/Redo, Unicode persistence and actual native
