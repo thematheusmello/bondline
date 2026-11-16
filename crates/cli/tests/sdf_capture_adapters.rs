@@ -325,3 +325,6 @@ mod atom_label_wire;
 
 #[path = "support/ui_atom_label_wire.rs"]
 mod ui_atom_label_wire;
+
+#[path = "support/selection_authoring_wire.rs"]
+mod selection_authoring_wire;

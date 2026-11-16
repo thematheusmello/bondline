@@ -189,6 +189,9 @@ async fn publish_result(
             || result.ui_file_operation.is_some()
             || result.ui_atom_label_operation.is_some()
             || result
+                .ui_selection_operation
+                .is_some_and(|operation| operation.changed)
+            || result
                 .ui_bond_tool_operation
                 .is_some_and(|operation| operation.changed)
             || result

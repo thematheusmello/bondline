@@ -2,13 +2,14 @@
 
 use crate::{
     BondDrawOrder, CloseAction, CloseDocument, CloseState, Command, Engine, NoParams, PageSetSize,
-    SelectBondTool, UiFile, UiFileAction, UiFilePhase, UiView,
+    SelectBondTool, UiFile, UiFileAction, UiFilePhase, UiSelection, UiView,
 };
 use serde::Serialize;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum ControlKey {
+    A,
     N,
     O,
     P,
@@ -377,7 +378,60 @@ impl Engine {
                     command: Command::UiBondToolSelect(SelectBondTool { order }),
                     enabled: reason.is_none(),
                     disabled_reason: reason,
-                    selected: Some(self.bond_tool.order == order),
+                    selected: Some(!self.selection().active && self.bond_tool.order == order),
+                });
+            }
+        }
+        if self.selection_available() {
+            controls.push(ControlInfo {
+                id: "tool.selection",
+                label: "Marquee selection",
+                menu: "Tools",
+                submenu: None,
+                shortcut: None,
+                command: Command::UiSelection(UiSelection::Activate {
+                    expected_revision: state.revision,
+                }),
+                enabled: authoring_reason.is_none(),
+                disabled_reason: authoring_reason,
+                selected: Some(self.selection().active),
+            });
+            if let Some(page) = self
+                .document()
+                .ok()
+                .and_then(|document| document.pages().first())
+            {
+                controls.push(ControlInfo {
+                    id: "edit.select_all",
+                    label: "Select All",
+                    menu: "Edit",
+                    submenu: None,
+                    shortcut: shortcut(ControlKey::A, false),
+                    command: Command::UiSelection(UiSelection::All {
+                        expected_revision: state.revision,
+                        page_id: page.id().get(),
+                    }),
+                    enabled: authoring_reason.is_none(),
+                    disabled_reason: authoring_reason,
+                    selected: None,
+                });
+                let reason = authoring_reason.or(self
+                    .selection()
+                    .atom_ids
+                    .is_empty()
+                    .then_some("empty_selection"));
+                controls.push(ControlInfo {
+                    id: "edit.deselect",
+                    label: "Deselect",
+                    menu: "Edit",
+                    submenu: None,
+                    shortcut: None,
+                    command: Command::UiSelection(UiSelection::Clear {
+                        expected_revision: state.revision,
+                    }),
+                    enabled: reason.is_none(),
+                    disabled_reason: reason,
+                    selected: None,
                 });
             }
         }

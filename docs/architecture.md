@@ -51,6 +51,20 @@ Runtime selection, cameras, jobs and revision counters are separate from authore
 Command handlers validate before committing an edit. Snapshot history restores the entire
 document; failed commands do not mutate it. All delivered interfaces use the same registry.
 
+`ui.selection` owns transient one-page sorted atom IDs, a checked epoch and private weak
+whole-source ownership. Selection mode shares the existing bond-tool epoch and remembered
+bond order; it is outside authored snapshots. `selection.translate` builds a complete
+source-qualified candidate, replaces affected same-ID fragments in one global validation
+and commits once. Literal metadata, directed topology and all unselected data remain
+exact. Its own commit retains/requalifies selected IDs; other actual edits/history and
+namespace replacements clear nonempty targets after prechecking overflow. Save/view
+operations preserve targets. Unsupported imported/SMILES backing never gains geometry
+authority. Rust-only context/preview methods reuse weak/opaque file and existing epochs;
+the thin native host adds canvas/DPI qualification and disposable preview gestures.
+No new model fields, worker, runtime dependency or alternate dispatcher is introduced.
+See [the protocol](control-protocol.md#persistent-native-selection-and-translation) and
+[receiving evidence](verification-selection-authoring.md) for exact scope and limits.
+
 `atom.set_label` authors only one existing neutral atom's element/literal-H fields in
 source-free or completely mapped native CDXML. It reuses immutable Fragment replacement
 and the existing whole-content commit/history, preserving geometry, arrays, directed

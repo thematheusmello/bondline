@@ -5,7 +5,12 @@ use serde_json::{Value, json};
 use std::collections::HashMap;
 
 type TestResult<T = ()> = Result<T, Box<dyn std::error::Error>>;
-const TOOL_LABELS: [&str; 3] = ["Single bond", "Double bond", "Triple bond"];
+const TOOL_LABELS: [&str; 4] = [
+    "Single bond",
+    "Double bond",
+    "Triple bond",
+    "Marquee selection",
+];
 
 struct Workspace {
     engine: Engine,
@@ -191,7 +196,15 @@ fn assert_layout(workspace: &Workspace, output: &egui::FullOutput) -> TestResult
         })
         .collect::<Vec<_>>();
     rail_buttons.sort();
-    assert_eq!(rail_buttons, ["Double bond", "Single bond", "Triple bond"]);
+    assert_eq!(
+        rail_buttons,
+        [
+            "Double bond",
+            "Marquee selection",
+            "Single bond",
+            "Triple bond"
+        ]
+    );
 
     let mut inspector_text = Vec::new();
     for paint in &output.shapes {
@@ -295,6 +308,7 @@ fn selecting_actual_left_double_preserves_authored_snapshot_history_and_chemical
             ("tool.bond.single", false),
             ("tool.bond.double", true),
             ("tool.bond.triple", false),
+            ("tool.selection", false),
         ] {
             let control = workspace
                 .engine

@@ -120,6 +120,8 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "ui.file",
             "ui.controls",
             "ui.atom_label",
+            "ui.selection",
+            "selection.translate",
             "ui.bond_tool",
             "ui.view",
             "document.open_cdxml",

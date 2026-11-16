@@ -8,15 +8,22 @@ Bounded native Mac atom labels now support fresh Alt-click target/fields/Apply/C
 OH/NH2 editing, history, draft-close protection and Unicode editable CDXML Save/reopen.
 Independent consumers verify the actual files; see
 [atom-editor evidence](docs/verification-native-atom-labels.md). This original form is not
-full inline Text/alias/charge/isotope/radical parity. Registry34/default controls20/14/10.
-The latest full gate fails848/1 at the old MCP replacement bind; remaining480/0/1 and
-xtask stages pass separately. The [controlled inheritance experiment](docs/research/macos-listener-lifetime.md)
+full inline Text/alias/charge/isotope/radical parity. The current registry36 adds
+persistent selection and literal translation; native Drawing controls23, retained-SMILES
+Drawing20, SDF14 and raw SMILES10. Independent command/context/wire and actual-App input
+checks now exercise selection/movement/history/Unicode persistence. Native selection
+execution remains unverified; see [receiving](docs/verification-selection-authoring.md).
+The atom checkpoint's full gate fails848/1 at the old MCP replacement bind; remaining480/0/1 and
+xtask stages pass separately. The current selection gate passes1361/0/1 with no socket
+policy change; that pass does not explain the historical failure. The [controlled inheritance experiment](docs/research/macos-listener-lifetime.md)
 does not attribute that natural failure. Full M0–M5 remains incomplete. Continue source-
 preserving M2 authoring and independent native checks; keep broader format/chemistry,
 publishing and M5 workflows visible rather than treating this slice as completion.
-Next is the [persistent selection/translation proposal](docs/research/selection-translation-plan.md):
-lock exact state/tool/command semantics, then independent registry/App REDs, source-aware
-movement/history/persistence and actual native acceptance. The proposal is not implementation.
+The [locked selection/translation contract](docs/research/selection-translation-plan.md)
+now has a source-qualified implementation, reviewed local gates and an inspected
+offscreen App frame. Finish actual native acceptance, then continue ring/chain/style
+and broader label workflows. Full
+selection/transform/26.1 parity remains required beyond this bounded atom-set slice.
 
 Native source-backed SMILES records now have bounded Mac selected/all import, refusal/
 retry, registered click/key order editing, history and Unicode whole-file Save/reopen/

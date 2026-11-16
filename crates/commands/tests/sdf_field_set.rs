@@ -41,6 +41,8 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
             "ui.file",
             "ui.controls",
             "ui.atom_label",
+            "ui.selection",
+            "selection.translate",
             "ui.bond_tool",
             "ui.view",
             "document.open_cdxml",

@@ -75,7 +75,7 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 |---|---|---|---|
 | New/open/save documents | GUIDE-25 / MAC-FILE-KEYS | partial: Mac CDXML/CDX/MOL/SDF Open/Save verified | Complete-source registry persistence, explicit format choice, native Save As, dirty-close protection and guarded same-window New pass on Mac. Styled/multiple-document New and other formats remain missing. |
 | Undo/redo | GUIDE-25 / MAC-HISTORY | verified for pages and supported C2/C3/C4 edits, Mac only | Exact engine properties; native page and bond Undo/Redo plus saved-C3/dirty-C4 recovery. Other chemical edits and Windows/Linux runtime missing |
-| Selection and transforms | GUIDE-25 | missing | M2; bounded atom/bond hit testing and transient hover exist, not persistent selection or transforms |
+| Selection and transforms | GUIDE-25 | wired (partial) | Persistent one-page native atom-set selection and atomic literal translation pass independent command/context/wire and actual-App input/file-consumer checks. Native interaction remains unverified; lasso/rotate/resize/groups/snapping and broader sources remain missing. See verification-selection-authoring.md. |
 | Bond, ring, chain tools | GUIDE-25 | partial: bounded Single/Double/Triple Mac authoring verified | Shared create/extend/set_order, explicit H policies, transient tool state, component geometry and exact complete-source/history/consumer checks. Actual Mac multiple creation, existing-bond click/1/2/3 keys/endpoint Double→Triple and Unicode Save As pass at readable420pt-square scale; native multiple extension and broader keys/styles/selection/rings/chains remain incomplete. See verification-bond-order-{command,ui,native}.md and verification-native-sdf-and-extension.md. |
 | Atom labels, charges, isotopes, radicals | GUIDE-25 / ATOM-LABEL-AUTHORING / NATIVE-ATOM-LABELS | partial: bounded elemental authoring verified, Mac | Fresh Alt-click atom/label→explicit Element/H→Apply/Cancel calls the shared setter. Native OH/NH2, history, draft-close protection and Unicode Save/reopen pass with independent actual-file consumers; see verification-native-atom-labels.md. Original incremental form, not exact26.1 inline Text parity. Inline labels/aliases, inference, foreign-source edits and charge/isotope/radical workflows remain missing. Earlier source-aware MOL display preserves None; see verification-neutral-element-labels.md |
 | Stereo bonds and labels | GUIDE-25 | missing | M2/M3 |
@@ -157,7 +157,7 @@ establish chemical preview, data-edit UI or other platforms.
 | ME-008 | Edit > Copy | 78 | missing | - |
 | ME-009 | Edit > Paste | 78 | missing | - |
 | ME-010 | Edit > Clear | 78, 121 | missing | - |
-| ME-011 | Edit > Select All | 19-20, 116 | missing | - |
+| ME-011 | Edit > Select All | 19-20, 116 | wired (partial) | Shared typed all-atoms-on-page command and primary+A binding; source-free/native CDXML only. Independent App/adapter checks pass; native execution and mixed-object scope remain unverified. |
 | ME-012 | Edit > Copy As > CDXML Text | 352 | missing | Syntax parser exists; editable clipboard mapping missing. |
 | ME-013 | Edit > Copy As > MOL Text | 352 | missing | - |
 | ME-014 | Edit > Copy As > MOL V2000 Text | 352 | missing | - |
@@ -340,7 +340,7 @@ establish chemical preview, data-edit UI or other platforms.
 | ID | Reference control/action | G25 p. | State | Notes |
 |---|---|---|---|---|
 | TD-001 | Lasso | 115-116 | missing | Freehand whole-object selection. |
-| TD-002 | Marquee | 115-116 | missing | Rectangular selection. |
+| TD-002 | Marquee | 115-116 | wired (partial) | Original anchor-based rectangle, atom/bond/component click and Shift toggle call the shared registry. Independent App inputs pass; actual native selection and precise26.1 inclusion/tool behavior remain unverified. |
 | TD-003 | Structure Perspective | 192, 242-243 | missing | Structure rotation/projection handling. |
 | TD-004 | Eraser | 86, 91, 121 | missing | Deletion and bond-order reduction have distinct contexts. |
 | TD-005 | Text | 91-94 | missing | KB-LABEL-25.5 changes existing-label entry to Alt-click; separate KB-REPEAT-25.5 gives Windows Alt/Mac Option-click repetition. Tool context/version/source-target semantics require tests; no26.1 inference. |
@@ -635,7 +635,7 @@ establish chemical preview, data-edit UI or other platforms.
 | KM-010 | Copy: Ctrl+c | 78 | missing | - |
 | KM-011 | Copy CDXML: Ctrl+d | 78 | missing | - |
 | KM-012 | Paste: Ctrl+v | 78 | missing | - |
-| KM-013 | Select All: Ctrl+a | 78 | missing | - |
+| KM-013 | Select All: Ctrl+a | 78 | wired (partial) | Shared primary+A binding tested in actual-App input. Native Windows/Linux and broader source/object scope remain unverified. |
 | KM-014 | Undo: Ctrl+z | 78 | wired | Mac Cmd+Z verified for page edits; this CTRL binding still needs native Windows/Linux evidence. |
 | KM-015 | Redo: Shift+Ctrl+z | 78 | wired | Mac Shift+Cmd+Z verified for page edits; native CTRL workflow unverified. |
 | KM-016 | Repeat last command: Ctrl+y | 78 | missing | Not an alias for redo in the guide. |
@@ -704,10 +704,10 @@ establish chemical preview, data-edit UI or other platforms.
 | KP-007 | Rotate +12 degrees on x axis: Shift+Alt+Down | 80 | missing | - |
 | KP-008 | Rotate +12 degrees on y axis: Shift+Alt+Left | 80 | missing | - |
 | KP-009 | Rotate -12 degrees on y axis: Shift+Alt+Right | 80 | missing | - |
-| KP-010 | Move selection up 10 points: Shift+Up | 80 | missing | Selection context; hotspot context has a different action. |
-| KP-011 | Move selection down 10 points: Shift+Down | 80 | missing | - |
-| KP-012 | Move selection right 10 points: Shift+Right | 80 | missing | - |
-| KP-013 | Move selection left 10 points: Shift+Left | 80 | missing | - |
+| KP-010 | Move selection up 10 points: Shift+Up | 80 | wired (partial) | Native adapter calls the shared position-only translation; nonrepeat1/10pt arrows pass independent App checks. Native execution remains unverified. Selection context is distinct from hotspot navigation. |
+| KP-011 | Move selection down 10 points: Shift+Down | 80 | wired (partial) | Same source-qualified1/10pt adapter and independent command/App evidence; native execution unverified. |
+| KP-012 | Move selection right 10 points: Shift+Right | 80 | wired (partial) | Same source-qualified1/10pt adapter and independent command/App evidence; native execution unverified. |
+| KP-013 | Move selection left 10 points: Shift+Left | 80 | wired (partial) | Same source-qualified1/10pt adapter and independent command/App evidence; native execution unverified. |
 | KP-014 | Scale around unchanged center: Ctrl+drag | 81 | missing | Scaling context; copy context uses the same modifier. |
 | KP-015 | Copy selection: Ctrl+drag | 82 | missing | KB-COPY-DRAG says newer Alt without cutoff/platform;26.1 needs tool/selection/modifier/source-retention evidence. |
 | KP-016 | Copy constrained to x/y: Shift+Ctrl+drag | 82 | missing | Constrained behavior cannot be inferred from unversioned copy-drag note; same gap as KP-015. |

@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has34 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has36 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -79,6 +79,8 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `history.undo` | `{}` | Previous authored snapshot |
 | `history.redo` | `{}` | Next authored snapshot |
 | `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only drawing page or restricted all-record SDF virtual page1 PNG; explicit `cpu` or `gpu` |
+| `ui.selection` | Closed tagged `activate`, `set`, `all`, `clear` or `inspect`; required `expected_revision`; `set` also requires `page_id` and `atom_ids`, `all` requires `page_id` | Transient one-page native atom selection; no authored edit or native-host requirement |
+| `selection.translate` | Required `expected_revision`, `expected_selection_epoch`, `delta_x_pt`, `delta_y_pt` | One atomic literal-position edit of the current native selection; complete source, chemistry, IDs and history retained |
 
 SMILES record import requires explicit selection of the already-open raw file. It starts
 a clean Drawing namespace with generated geometry, retains the complete file association,
@@ -107,8 +109,8 @@ gestures/hover even if the mode later returns to the same order. The UI passes t
 explicitly. Direct commands with an absent order always retain Single behavior.
 
 `ui.bond_tool` returns `ui_bond_tool_operation:{order,epoch,changed}` and outer
-`changed:false`. Real selection changes advance the checked transient epoch; repeated
-selection is a no-op. Selection persists across Undo/Redo/Open, outside document/source,
+`changed:false`. Real bond-tool changes advance the checked transient epoch; repeated
+activation is a no-op. The remembered bond order persists across Undo/Redo/Open, outside document/source,
 dirty state and close intent. `ui.controls` adds the three `tool.bond.*` bindings with
 `selected` booleans, closed typed invocations, no assigned shortcuts and contextual
 enablement; existing non-tool bindings omit `selected`. Pending picker/close or incomplete
@@ -1322,7 +1324,8 @@ capture, native races/other-platform execution and complete reference parity rem
 `ui.controls` additionally exposes `file.import_smiles_records`, File → Import SMILES
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
-counts are20 Drawing/14 SDF/10 raw SMILES; the registry now has34 commands. Accepting
+counts are23 native Drawing/14 SDF/10 raw SMILES; retained-SMILES Drawing keeps20.
+The registry has36 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag
@@ -1375,7 +1378,7 @@ commits, without granting an edit, Save or close ACK. Host detach clears present
 The native form's Apply calls `apply_ui_atom_label(id,element,explicit_hydrogens)` under
 the same Engine guard. It revalidates currentness, executes the existing registered
 setter exactly once and retires only on success/validated no-op. A failure retains the
-draft. The cheap operation adds no worker or Save lease. Controls discovery stays20/14/10;
+draft. The cheap operation adds no worker or Save lease. It adds no catalogue binding;
 clients provide a real target rather than invoking an empty-target menu binding.
 
 Existing loopback notification follows response flush and activity release for the
@@ -1383,3 +1386,68 @@ explicit operation marker; failed publication does not pretend a host repaint ha
 Headless CLI/stdio sessions return `ui_unavailable`. [Receiving evidence](verification-native-atom-labels.md)
 records actual adapters and native Mac scope; it does not establish complete Text-tool
 or cross-platform parity.
+
+## Persistent native selection and translation
+
+`ui.selection` is a closed tagged parameter object. Examples at the current revision:
+
+```json
+{"action":"activate","expected_revision":3}
+{"action":"set","expected_revision":3,"page_id":1,"atom_ids":[2,1]}
+{"action":"all","expected_revision":3,"page_id":1}
+{"action":"clear","expected_revision":3}
+{"action":"inspect","expected_revision":3}
+```
+
+Activate/set/all enter selection mode. Set validates the page, accepts unsorted IDs,
+sorts them, and rejects zero, duplicates, missing atoms or more than100000 entries.
+Empty set is allowed after page validation. Clear empties targets and keeps the current
+tool. Inspect changes nothing. Activate/set/all require source-free or completely mapped
+native CDXML Drawing; clear/inspect work across content kinds. No native host is required.
+Transient mutations follow the existing close/file-busy tool policy. Inspect can read a
+pending-close selection; all commands still refuse after committed close.
+
+Replies include `ui_selection:{active,epoch,page_id,atom_ids}` and
+`ui_selection_operation:{epoch,changed}`, with outer `changed:false`. Ordinary state
+omits selection until its first actual change. Empty selection has null page_id and no
+IDs. A real mode/target change advances the checked selection epoch. Mode changes also
+advance the existing bond-tool epoch; only Selection or the remembered bond order is
+effective. Selecting the same remembered bond order exits Selection and clears targets.
+No-op/inspect/error requests do not repaint. Authenticated loopback publishes a real
+selection change before releasing request activity and requesting host repaint.
+
+```json
+{"command":"selection.translate","params":{"expected_revision":3,"expected_selection_epoch":1,"delta_x_pt":24,"delta_y_pt":-12}}
+```
+
+Translation checks revision, finite deltas, complete native source authority, current
+nonempty selection/epoch/private weak owner and every authored position. It replaces
+affected same-ID fragments in one whole-document validation and one history commit.
+Only selected positions change. Atom metadata, literal/absent H, directed bonds,
+topology, arrays, pages and unrelated shared data remain exact. This performs no H or
+stereo inference, snapping, layout, publication or Save/close acknowledgement. MOL,
+CDX, opaque CDXML, SDF and raw/retained SMILES do not gain geometry-edit authority.
+
+Zero or rounded-identical translation still validates everything, then retains source,
+model sharing, selection, redo, close intent and saved baseline exactly. A real move
+keeps the same IDs, requalifies their owner and advances selection epoch once. Other
+real edits, Undo/Redo and namespace replacements clear nonempty targets and advance
+their epoch; no-op/failure/Save/view/pan/DPI does not. Overflow is checked before any
+mutation. Stable errors include `invalid_params`, `not_found`, `unsupported_content`,
+`stale_revision`, `stale_selection` and `ui_selection_epoch_exhausted`.
+
+Rust-only `selection_context()` supplies weak source/revision/generation, selection,
+tool/view/close/file epochs and opaque file-association proof. Canvas/DPI qualifiers
+stay in the UI. `preview_selection_translation` builds the same validated immutable
+candidate without committing, changing Engine state or granting Save authority.
+
+Three shared controls are added only for eligible Drawing sources: `tool.selection`
+(Marquee selection), `edit.select_all` (primary+A) and `edit.deselect` (no shortcut).
+The native adapter supports atom/bond-endpoint click, connected-component double-click,
+Shift toggle, anchor-based rectangular marquee, fresh selected-target drag and
+nonrepeat1pt/Shift10pt arrows. A preview is transient; release is one command. Escape
+cancels a gesture while retaining targets; otherwise it clears targets. Text/modal and
+frame-start barriers win. Tool activations resolve their fresh binding in raw input
+order so later mode changes cannot suppress earlier authoring. Full lasso, transform,
+group, snapping and exact26.1/platform parity remain open. See
+[receiving evidence](verification-selection-authoring.md) for the tested execution scope.

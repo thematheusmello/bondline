@@ -3,7 +3,9 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
-Current physical-density rendering has five renderer/five actual-App passes, but full
+Current selection/translation passes the1361/0/1 local gate and an inspected offscreen
+actual-App frame. Native selection interaction remains unverified; see its receiving row.
+The earlier physical-density checkpoint has five renderer/five actual-App passes, but full
 local pipeline78964 failed767/1 in the unchanged MCP shutdown replacement-bind test.
 Separate remaining430/0/1 checks are not an aggregate pass; native2×/DPI is unverified.
 The earlier component1188/0/1 and CDX1172/0/1 gates remain historical checkpoints.
@@ -18,6 +20,7 @@ The earlier component1188/0/1 and CDX1172/0/1 gates remain historical checkpoint
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
 | Start a fresh drawing safely | [New document, native Save/Discard/Cancel and race evidence](verification-new-document.md) |
 | Edit an elemental atom label | [Native target/fields/Apply/Cancel, history and independent saved-file evidence](verification-native-atom-labels.md), [literal authoring contract](research/atom-label-authoring-contract.md) |
+| Select and move native atoms | [Shared commands, literal geometry/history/file consumers and App input evidence; native interaction pending](verification-selection-authoring.md), [locked public-source contract](research/selection-translation-plan.md) |
 | Convert a supported SMILES file | [Fourth profile: historical1188/0/1 checkpoint and bounded Mac100% workflow; Fit/pan limits](verification-smiles-components-integration.md), [independent layout](verification-smiles-components-layout.md), [earlier ring aggregate and Mac evidence](verification-smiles-ring-integration.md), [acyclic/native evidence](verification-smiles-acyclic-integration.md), [original lifecycle](verification-native-smiles-conversion.md) |
 | Check asynchronous file browsing | [Stable controls and visible errors](verification-file-picker-stability.md) |
 | Inspect SMILES notation records | [Original inspector and bounded native file workflow](verification-smiles-record-integration.md) |

@@ -484,12 +484,14 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "sdf.field.set_value",
             "sdf.record.inspect",
             "sdf.record.remove",
+            "selection.translate",
             "smiles.record.inspect",
             "structure.paste_smiles",
             "ui.atom_label",
             "ui.bond_tool",
             "ui.controls",
             "ui.file",
+            "ui.selection",
             "ui.view"
         ]
     );

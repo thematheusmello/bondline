@@ -15,6 +15,7 @@ mod preview;
 mod sdf_draft_text;
 mod sdf_editor;
 mod sdf_fields;
+mod selection;
 mod smiles_order;
 mod smiles_records;
 mod view_controls;
@@ -117,6 +118,7 @@ pub struct DrawingState {
     presented_generation: Option<u64>,
     order: smiles_order::OrderWorkflow,
     atom_labels: atom_editor::AtomEditor,
+    selection: selection::SelectionWorkflow,
 }
 
 impl DrawingState {
@@ -204,7 +206,7 @@ fn bond_tool_buttons(
     ui: &mut egui::Ui,
     controls: &[ControlInfo],
     events: &[egui::Event],
-) -> Vec<(usize, Command)> {
+) -> Vec<(usize, &'static str)> {
     let mut commands = Vec::new();
     let tools: Vec<_> = controls
         .iter()
@@ -214,8 +216,10 @@ fn bond_tool_buttons(
         ui.horizontal(|ui| {
             ui.spacing_mut().item_spacing = egui::vec2(2.0, 6.0);
             for control in row {
-                let Command::UiBondToolSelect(params) = &control.command else {
-                    continue;
+                let order = match &control.command {
+                    Command::UiBondToolSelect(params) => Some(params.order),
+                    Command::UiSelection(bondline_commands::UiSelection::Activate { .. }) => None,
+                    _ => continue,
                 };
                 ui.push_id(control.id, |ui| {
                     let selected = control.selected.unwrap_or(false);
@@ -235,12 +239,20 @@ fn bond_tool_buttons(
                             control.label,
                         )
                     });
-                    let offsets: &[f32] = match params.order {
-                        BondDrawOrder::Single => &[0.0],
-                        BondDrawOrder::Double => &[-2.0, 2.0],
-                        BondDrawOrder::Triple => &[-4.0, 0.0, 4.0],
+                    let offsets: &[f32] = match order {
+                        Some(BondDrawOrder::Single) => &[0.0],
+                        Some(BondDrawOrder::Double) => &[-2.0, 2.0],
+                        Some(BondDrawOrder::Triple) => &[-4.0, 0.0, 4.0],
+                        None => &[],
                     };
                     let color = ui.style().interact(&response).fg_stroke.color;
+                    if order.is_none() {
+                        ui.painter().rect_stroke(
+                            response.rect.shrink(7.0),
+                            0.0,
+                            egui::Stroke::new(1.5, color),
+                        );
+                    }
                     for offset in offsets {
                         let y = response.rect.center().y + offset;
                         ui.painter().line_segment(
@@ -254,7 +266,7 @@ fn bond_tool_buttons(
                     if response.enabled() {
                         for (index, event) in events.iter().enumerate() {
                             if activation_event(&response, event) {
-                                commands.push((index, control.command.clone()));
+                                commands.push((index, control.id));
                             }
                         }
                     }
@@ -365,17 +377,18 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         ui.add_space(8.0);
         ui.separator();
         ui.weak("ACTIVE TOOL");
-        let tool = match engine.bond_tool().order {
-            BondDrawOrder::Single => "Single bond",
-            BondDrawOrder::Double => "Double bond",
-            BondDrawOrder::Triple => "Triple bond",
+        let tool = match (engine.selection().active, engine.bond_tool().order) {
+            (true, _) => "Marquee selection",
+            (false, BondDrawOrder::Single) => "Single bond selected",
+            (false, BondDrawOrder::Double) => "Double bond selected",
+            (false, BondDrawOrder::Triple) => "Triple bond selected",
         };
-        ui.label(
-            egui::RichText::new(format!("{tool} selected"))
-                .color(ACCENT)
-                .strong(),
-        );
-        if engine
+        ui.label(egui::RichText::new(tool).color(ACCENT).strong());
+        if engine.selection().active {
+            ui.label(if engine.selection_available() {
+                "Click or drag to select. Drag selected atoms to move; arrows nudge 1 pt, Shift 10 pt."
+            } else { "Selection and movement are unavailable for this source." });
+        } else if engine
             .stored_document()
             .is_ok_and(|stored| stored.has_smiles_projection())
         {
@@ -477,6 +490,7 @@ fn control_shortcut_key(shortcut: ControlShortcut) -> egui::KeyboardShortcut {
         ..egui::Modifiers::NONE
     };
     let key = match shortcut.key {
+        ControlKey::A => egui::Key::A,
         ControlKey::N => egui::Key::N,
         ControlKey::O => egui::Key::O,
         ControlKey::P => egui::Key::P,
@@ -806,6 +820,7 @@ fn show_workspace_with_preview(
             .presented_generation
             .is_some_and(|generation| generation != engine.session_generation());
     if discard_stale_canvas_input {
+        drawing.selection.reset();
         drawing.gesture = None;
         drawing.invalidate_hover();
         drawing.navigation_position = None;
@@ -963,18 +978,14 @@ fn show_workspace_with_preview(
         });
     if blocked {
         drawing.gesture = None;
+        drawing.selection.reset();
     }
-    // Replay each transient state at its event; a later activation cannot relabel a press.
-    let mut tool_states = Vec::with_capacity(tool_actions.len());
-    for (index, command) in tool_actions {
-        match engine.execute(command) {
-            Ok(_) => {
-                tool_states.push((index, engine.bond_tool()));
-                context.request_repaint();
-            }
-            Err(failure) => *error = Some(failure.to_string()),
-        }
-    }
+    // Resolve typed tool bindings at their raw boundary, after preceding authoring.
+    view_actions.extend(
+        tool_actions
+            .into_iter()
+            .map(|(index, id)| (index, view_controls::Action::Control(id))),
+    );
     if drawing.gesture.as_ref().is_some_and(|gesture| {
         gesture.context.revision != engine.state().revision || gesture.context.tool != initial_tool
     }) {
@@ -1329,6 +1340,7 @@ fn show_workspace_with_preview(
                 };
                 (key, input.key_down(egui::Key::Escape), input.focused)
             });
+            drawing.selection.sync(engine, key);
             if drawing.hover_context != Some(key) {
                 drawing.hover_fresh = false;
                 drawing.key_hotspot = None;
@@ -1371,7 +1383,6 @@ fn show_workspace_with_preview(
                 })
             };
             // A native frame may contain the entire drag; press_origin is cleared on release.
-            let mut tool_states = tool_states.into_iter().peekable();
             history_handled = true;
             for (index, event) in events.iter().enumerate() {
                 if !atom_modal_at_start {
@@ -1415,16 +1426,6 @@ fn show_workspace_with_preview(
                     || files
                         .as_ref()
                         .is_some_and(|files| files.blocks_authoring(&engine.state()));
-                while tool_states.peek().is_some_and(|(at, _)| *at == index) {
-                    if let Some((_, tool)) = tool_states.next()
-                        && key.tool != tool
-                    {
-                        key.tool = tool;
-                        drawing.gesture = None;
-                        drawing.invalidate_hover();
-                        drawing.hover_context = Some(key);
-                    }
-                }
                 match event {
                     egui::Event::Key {
                         key: egui::Key::Escape,
@@ -1433,6 +1434,11 @@ fn show_workspace_with_preview(
                     } => {
                         escape_held = *pressed;
                         if escape_held {
+                            if engine.selection().active && !blocked && focused && !text_focused {
+                                if let Some(command) = drawing.selection.escape(engine) {
+                                    *error=engine.execute(command).err().map(|error|error.to_string());
+                                }
+                            } else {drawing.selection.cancel();}
                             drawing.gesture = None;
                             drawing.hover_fresh = false;
                             drawing.key_hotspot = None;
@@ -1443,6 +1449,7 @@ fn show_workspace_with_preview(
                     egui::Event::WindowFocused(value) => {
                         focused = *value;
                         if !focused {
+                            drawing.selection.reset();
                             drawing.gesture = None;
                             drawing.hover_fresh = false;
                             drawing.key_hotspot = None;
@@ -1451,6 +1458,7 @@ fn show_workspace_with_preview(
                         continue;
                     }
                     egui::Event::PointerGone => {
+                        drawing.selection.reset();
                         drawing.gesture = None;
                         drawing.hover_fresh = false;
                         drawing.key_hotspot = None;
@@ -1490,7 +1498,7 @@ fn show_workspace_with_preview(
                 }
                 if command
                     .as_ref()
-                    .is_some_and(|command| !matches!(command, Ok(Command::UiView(_))))
+                    .is_some_and(|command| !matches!(command, Ok(Command::UiView(_) | Command::UiBondToolSelect(_) | Command::UiSelection(_))))
                 {
                     drawing.gesture = None;
                 }
@@ -1517,6 +1525,26 @@ fn show_workspace_with_preview(
                         });
                         drawing.navigation_position = (!text_focused).then_some(*pos);
                     }
+                    let selection_input=engine.selection().active && matches!(event,
+                        egui::Event::PointerMoved(_) | egui::Event::PointerButton { .. }
+                        | egui::Event::Key {key:egui::Key::ArrowLeft|egui::Key::ArrowRight|egui::Key::ArrowUp|egui::Key::ArrowDown,..});
+                    if selection_input {
+                        drawing.gesture=None;
+                        if text_focused || discard_stale_canvas_input {
+                            drawing.selection.cancel();
+                            continue;
+                        }
+                        let Ok(current_graph)=&graph else {drawing.selection.cancel();continue;};
+                        let Some(page)=document.pages().iter().find(|page|page.id()==key.page) else {continue;};
+                        let surface=selection::Surface {page,graph:current_graph,viewport:&viewport,response:&response,
+                            origin:paint_origin,density,hover:key};
+                        match drawing.selection.event(engine,context,event,&surface) {
+                            Ok(Some(selected))=>command=Some(Ok(selected)),
+                            Ok(None)=>continue,
+                            Err(failure)=>command=Some(Err(failure)),
+                        }
+                    }
+                    if command.is_none() {
                     match event {
                         egui::Event::MouseWheel {
                             unit,
@@ -1848,6 +1876,7 @@ fn show_workspace_with_preview(
                         }
                         _ => {}
                     }
+                    }
                 }
                 if let Some(command) = command {
                     let explicit = selected.filter(|(at, _)| *at == index).map(|(_, id)| id);
@@ -1917,7 +1946,10 @@ fn show_workspace_with_preview(
                     };
                     key.page = page.id();
                     key.revision = engine.state().revision;
+                    key.tool = engine.bond_tool();
                     key.view_epoch = engine.view().epoch;
+                    if drawing.gesture.as_ref().is_some_and(|gesture| gesture.context != key) {drawing.gesture=None;}
+                    drawing.selection.sync(engine,key);
                     drawing.hover_context = Some(key);
                     graph = scene_for(engine, &viewport, key.page);
                     if graph.is_ok() {
@@ -1929,14 +1961,16 @@ fn show_workspace_with_preview(
             let pointer = context.input(|input| {
                 if !input.pointer.primary_down() {
                     drawing.gesture = None;
+                    drawing.selection.cancel();
                 }
                 if blocked || order_busy_at_start || drawing.order.is_busy() || !input.focused || input.key_down(egui::Key::Escape) {
                     drawing.gesture = None;
+                    drawing.selection.cancel();
                     drawing.hover_fresh = false;
                     drawing.key_hotspot = None;
                     drawing.navigation_position = None;
                 }
-                if drawing.gesture.is_some() || interaction_attempted {
+                if drawing.gesture.is_some() || drawing.selection.is_dragging() || interaction_attempted {
                     drawing.hover_fresh = false;
                 }
                 // Cached hover_pos alone must never revive invalidated hover.
@@ -1949,9 +1983,19 @@ fn show_workspace_with_preview(
                     None
                 }
             });
+            drawing.selection.sync(engine,key);
+            let preview_document=match drawing.selection.preview(engine) {
+                Some(Ok(candidate))=>Some(candidate),
+                Some(Err(failure))=>{*error=Some(failure.to_string());None},
+                None=>None,
+            };
+            if let Some(candidate)=&preview_document
+                && let Some(page)=candidate.pages().iter().find(|page|page.id()==key.page) {
+                graph=viewport.graph_scene(page,&bondline_render::Cancellation::default()).map_err(Into::into);
+            }
             match graph {
                 Ok(graph) => {
-                    let Some(page) = document.pages().iter().find(|page| page.id() == key.page)
+                    let Some(page) = preview_document.as_ref().unwrap_or(&document).pages().iter().find(|page| page.id() == key.page)
                     else {
                         drawing.invalidate_hover();
                         return;
@@ -2038,6 +2082,7 @@ fn show_workspace_with_preview(
                             ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                         }
                     }
+                    drawing.selection.paint(&painter,paint_origin,density,page,&viewport,engine);
                     drawing.presented_generation = Some(engine.session_generation());
                 }
                 Err(error) => {

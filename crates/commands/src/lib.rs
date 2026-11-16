@@ -20,6 +20,7 @@ mod files;
 mod new_document;
 mod sdf_edit;
 mod sdf_query;
+mod selection;
 mod smiles_conversion;
 mod smiles_export;
 mod smiles_paste;
@@ -47,6 +48,9 @@ pub use sdf_edit::{SdfFieldSet, SdfRecordRemove};
 pub use sdf_query::{
     MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
     SdfRecordInspection, SdfValueOmission,
+};
+pub use selection::{
+    SelectionContext, SelectionOperation, SelectionState, SelectionTranslate, UiSelection,
 };
 pub use smiles_conversion::{
     ConversionOutput, ConversionReceipt, ConvertSmilesToCdxml, SmilesConversionProfile,
@@ -167,6 +171,8 @@ command_registry! {
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
     Redo(NoParams) => ("history.redo", "Restore the next authored document.", false),
     Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
+    UiSelection(UiSelection) => ("ui.selection", "Select native atoms without authoring", false),
+    SelectionTranslate(SelectionTranslate) => ("selection.translate", "Translate the current native atom selection atomically", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -298,6 +304,16 @@ pub enum Error {
     UiEpochExhausted,
     #[error("drawing tool epoch space exhausted")]
     UiBondToolEpochExhausted,
+    #[error("selection epoch space exhausted")]
+    UiSelectionEpochExhausted,
+    #[error("the selected atoms or selection epoch are obsolete")]
+    StaleSelection,
+    #[error("invalid selection: {0}")]
+    InvalidSelection(&'static str),
+    #[error("selection operation unavailable: {0}")]
+    UnsupportedSelection(&'static str),
+    #[error("atom {0} does not exist on the selected page")]
+    MissingSelectionAtom(u32),
     #[error("view epoch space exhausted")]
     UiViewEpochExhausted,
     #[error("invalid view parameters: {0}")]
@@ -339,6 +355,10 @@ impl Error {
             )
             | Self::MissingAtom { .. }
             | Self::MissingBond { .. } => "not_found",
+            Self::MissingSelectionAtom(_) => "not_found",
+            Self::StaleSelection => "stale_selection",
+            Self::UiSelectionEpochExhausted => "ui_selection_epoch_exhausted",
+            Self::UnsupportedSelection(_) => "unsupported_content",
             Self::RevisionExhausted => "revision_exhausted",
             Self::IdentityExhausted => "identity_exhausted",
             Self::Render(bondline_render::Error::Cancelled) => "cancelled",
@@ -475,6 +495,10 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_atom_label_operation: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_selection: Option<SelectionState>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_selection_operation: Option<SelectionOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_bond_tool_operation: Option<BondToolOperation>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_view_operation: Option<ViewOperation>,
@@ -497,6 +521,7 @@ pub struct Engine {
     close_policy: close::ClosePolicy,
     file_ui: file_ui::FileUiPolicy,
     atom_ui: atom_ui::AtomLabelUiPolicy,
+    selection: selection::SelectionPolicy,
     bond_tool: BondToolState,
     view: ViewState,
     view_canvas_size: Option<[u32; 2]>,
@@ -553,6 +578,7 @@ impl Engine {
             close_policy: close::ClosePolicy::default(),
             file_ui: file_ui::FileUiPolicy::default(),
             atom_ui: atom_ui::AtomLabelUiPolicy::default(),
+            selection: selection::SelectionPolicy::default(),
             bond_tool: BondToolState::default(),
             view: ViewState::default(),
             view_canvas_size: None,
@@ -605,6 +631,8 @@ impl Engine {
             ui_file_operation: None,
             ui_atom_label: self.ui_atom_label_request(),
             ui_atom_label_operation: None,
+            ui_selection: (self.selection().epoch != 0).then(|| self.selection().clone()),
+            ui_selection_operation: None,
             ui_bond_tool_operation: None,
             ui_view_operation: None,
             controls: None,
@@ -650,6 +678,12 @@ impl Engine {
             Command::UiFile(params) => return Ok(Prepared::immediate(self.ui_file(params)?)),
             Command::UiAtomLabel(params) => {
                 return Ok(Prepared::immediate(self.ui_atom_label(params)?));
+            }
+            Command::UiSelection(params) => {
+                return Ok(Prepared::immediate(self.ui_selection(params)?));
+            }
+            Command::SelectionTranslate(params) => {
+                return Ok(Prepared::immediate(self.translate_selection(params)?));
             }
             Command::UiBondToolSelect(params) => {
                 return Ok(Prepared::immediate(self.select_bond_tool(params)?));
@@ -1014,6 +1048,7 @@ impl Engine {
             return Ok(false);
         }
         let revision = self.next_revision()?;
+        let selection_epoch = self.selection_epoch_after_edit()?;
         self.undo
             .push_back(std::mem::replace(&mut self.document, Arc::new(document)));
         if self.undo.len() > MAX_HISTORY {
@@ -1022,6 +1057,7 @@ impl Engine {
         self.redo.clear();
         self.trim_history(MAX_HISTORY_BYTES);
         self.revision = revision;
+        self.clear_selection_after_edit(selection_epoch);
         self.invalidate_close();
         Ok(true)
     }
@@ -1064,10 +1100,12 @@ impl Engine {
     fn undo(&mut self) -> Result<bool, Error> {
         let previous = self.undo.back().cloned().ok_or(Error::NothingToUndo)?;
         let revision = self.next_revision()?;
+        let selection_epoch = self.selection_epoch_after_edit()?;
         self.undo.pop_back();
         self.redo
             .push_back(std::mem::replace(&mut self.document, previous));
         self.revision = revision;
+        self.clear_selection_after_edit(selection_epoch);
         self.invalidate_close();
         Ok(true)
     }
@@ -1075,10 +1113,12 @@ impl Engine {
     fn redo(&mut self) -> Result<bool, Error> {
         let next = self.redo.back().cloned().ok_or(Error::NothingToRedo)?;
         let revision = self.next_revision()?;
+        let selection_epoch = self.selection_epoch_after_edit()?;
         self.redo.pop_back();
         self.undo
             .push_back(std::mem::replace(&mut self.document, next));
         self.revision = revision;
+        self.clear_selection_after_edit(selection_epoch);
         self.invalidate_close();
         Ok(true)
     }
@@ -1167,6 +1207,8 @@ mod tests {
                 "structure.paste_smiles",
                 "ui.controls",
                 "ui.atom_label",
+                "ui.selection",
+                "selection.translate",
                 "ui.bond_tool",
                 "ui.view",
                 "ui.file"

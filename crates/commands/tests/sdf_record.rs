@@ -28,6 +28,8 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "ui.file",
             "ui.controls",
             "ui.atom_label",
+            "ui.selection",
+            "selection.translate",
             "ui.bond_tool",
             "ui.view",
             "document.open_cdxml",

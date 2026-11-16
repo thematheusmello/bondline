@@ -7,103 +7,105 @@ OFF** during development; do not enable or dispatch it for these changes.
 
 ## Current recoverable work
 
-Native feature **`b4fefaf`** commits the exact verified source/tests/docs, following
-`d2f8367` (headless atom checkpoint) and `3f61e75` (controlled listener research).
-The later documentation checkpoint records final protection and the next selection plan.
-Earlier detailed status checkpoints remain in Git; their evidence lives in the linked
-verification records. This file now describes the current state rather than repeating
-superseded continuation instructions.
+`6677228` locks the public-source selection/translation contract. `77f5ea4` commits
+atomic immutable fragment-batch replacement with independent missing-API RED and19
+model passes. The selection/translation feature checkpoint follows those commits with its source,
+independent tests and records. Its exact revision is available in local Git history. Earlier native atom-label source is `b4fefaf`, with checkpoint
+`8135983`; its actual macOS OH/NH2/history/Unicode evidence remains historical and valid
+for its stated scope, not evidence of the new selection tool.
 
-**Verified on macOS:** fresh Alt-click on an existing atom/label opens exact target,
-Element and Attached hydrogens. O/H1 and N/H2 Apply, Cancel, draft text Undo, authored
-Undo/Redo, Save fencing, native draft-close protection and Unicode CDXML Save/reopen
-work in the real executable. The unchanged external Expat/Decimal and RDKit consumers
-verify actual ethane/methanol/methylamine files. Every byte except the target's two
-literal fields remains exact. This is an original incremental form, not complete26.1
-inline Text-tool/screen parity. Read [native receiving](docs/verification-native-atom-labels.md)
-and [the public-source plan](docs/research/native-atom-label-plan.md).
+The registry now has36 commands: `ui.selection` and `selection.translate` join the
+existing34. Sorted one-page atom IDs/weak owner/checked epoch are transient. Translation
+changes only selected literal positions, preserves complete source/IDs/metadata/directed
+bonds and commits once. Own moves requalify the same targets; other real edits/history/
+namespace changes preflight epoch overflow and clear nonempty targets. Validated zero/
+rounded-identical moves preserve model/source sharing, redo, close and saved baselines.
+Source-free/fully mapped native CDXML only; foreign/retained-SMILES geometry stays guarded.
+Default eligible native Drawing controls23, retained-SMILES Drawing20, SDF14/raw SMILES10.
 
-Registry34 adds `ui.atom_label` presentation to the existing `atom.set_label` authoring
-command. Default native controls stay20 Drawing/14 SDF/10 raw SMILES. Source-free or
-fully mapped native CDXML only; neutral/nonisotopic/nonradical existing targets, exact
-literal element/H, no inference/neighbor correction. Weak/opaque context and epochs
-prevent retargeting. Stale drafts remain recoverable. Shared Apply revalidates under
-one Engine lock; no new worker/Save lease/empty-target binding. File/close/modal barriers
-survive dismissal. All adapters retain the same central command registry.
+**Independently verified below the native boundary:** nine core, two private epoch/
+nonfinite, two weak context/preview and four actual CLI/initialized-stdio/authenticated-
+socket cases. Actual Unicode saves pass unchanged Expat/Decimal and RDKit consumers.
+Publication/repaint tests retain the existing reply-flush/activity-release boundary.
 
-**Independent evidence:** six presentation-command cases,12 actual-App cases, three
-bounded-widget cases, one private retained-payload case, two actual CLI/stdio/socket
-cases and one publication-boundary case. Real REDs precede command/form implementation;
-additional schema, cross-field order, retained local owner, payload-bounds and remote
-collection-modal regressions are fixed without changing their expectations. Exact
-SDK/layout setup qualifications and passing-first controls remain distinguished.
-No native remote-race proof is inferred from App tests.
+**New UI is wired, native interaction unverified:** original Marquee glyph, atom/bond/
+connected-component click, Shift toggle, anchor marquee, Select All/Deselect, preview/
+drag release, nonrepeat1pt/Shift10pt arrows, Escape/focus/modal/context cancellation,
+history and File Save pass12 actual-App input cases. Two real tool-order regressions
+are fixed by replaying fresh typed controls at raw event indices. Two real pointer
+regressions are fixed by latching threshold crossing and cancelling ordinary off-canvas
+movement. Out-and-back translation is an exact no-op; leaving and returning cannot revive
+a cancelled drag. Frozen assertions remain exact through rustfmt. Full native macOS,
+IME/measured DPI, Windows/Linux and exact26.1 screen/modifier parity remain unverified.
+Read [receiving](docs/verification-selection-authoring.md),
+[the locked contract](docs/research/selection-translation-plan.md) and
+[the wire contract](docs/control-protocol.md#persistent-native-selection-and-translation).
 
 ## Checks and known failure
 
-- Full gate95827 **FAILS848/1** at the old unchanged MCP shutdown replacement bind
-  127.0.0.1:60475, AddrInUse/OS48, after fmt/workspace clippy pass. No failure-time
-  owner capture. No assertion/deadline/retry/concurrency/socket-policy change.
-- Separate remaining stages64815 pass480/0/1 plus vendor/clippy/layers/licenses/corpus
-  and build. This is not a green aggregate.
-- Final-source79825 passes workspace rustfmt/warnings-denied clippy, all UI tests,
-  15 focused command tests and native build:283/0/1. A proposed extra help line first
-  clips in two old small-window checks (216/2/1); it is removed, assertions unchanged.
-- Final CLI builds and its34 names match protocol rows. All582 parity IDs/order and
-  the old MCP control test hash stay exact. Six test units reproduce through exact
-  rustfmt after explicit archived setup corrections. Protected619 inputs/276 old tests,
-  eight name sets,24 count updates and additive bridges retain declared scope.
-- Runtime closures remain155/166/221 packages plus two assets. Corpus eight files/five
-  bundles preserves explicit missing foreign/general CDX and chemistry coverage.
-  No model/parser/chem/render/IO, dependency/lock/vendor/compat/font/golden/old fixture/
-  consumer/corpus/fuzz changes. No hosted/platform evidence is manufactured. Final431 changed-document local Markdown
-  links and Git whitespace checks pass.
+The first selection aggregate87658 stops at one clippy collapsible-if; its behavior-
+neutral correction is applied. Aggregate29838 then stops at Root's incorrectly ordered
+new names in an old CLI expected array. Aggregate54205 reaches two missed internal
+catalogue expectations (old name set/control count). Only declared metadata is corrected;
+no behavior, source/geometry oracle, assertion deadline or listener policy is weakened.
+Aggregate98284 reaches only the old exact three-tool UI catalogue (228/2/1). Adding
+Marquee to the same bounds/nonoverlap catalogue retains every old layout/chemical
+assertion; focused52650 passes both sizes/cases. Final aggregate77152 passes1361/0/1
+across192 result lines, including fmt, workspace/vendor clippy/tests, layers/licenses/
+corpus. No source changes follow that passing gate. It does not attribute the older
+MCP failure. The unchanged ignored actual-App capture separately passes offscreen on
+Apple M3 Max/Metal at1600×1000; the four-tool rail/paper/labels/inspector are inspected.
 
-[Listener investigation](docs/research/macos-listener-lifetime.md): the first standalone
-probe is inconclusive. A separately frozen observer-qualified v2 passes exactly one
-fixed two-arm invocation. It proves controlled before-FIOCLEX child inheritance can
-retain a listener after parent join; after-FIOCLEX child has no descriptor. Both owners
-join, both children are reaped and last-close rebinds succeed. This **does not attribute
-60475 or any earlier natural failure**. No production/test-policy repair is adopted.
-Both probes and the exhausted20 contexts are consumed; do not rerun them. A causal
-collector is designed only: known socket/process identity, no observer queries during
-shutdown→bind, inspect only after a natural failure. It has not been implemented/run.
+The old atom aggregate95827 fails848/1 at unchanged MCP shutdown replacement bind
+127.0.0.1:60475, AddrInUse/OS48, without failure-time owner capture. Separate remaining
+checks64815 pass480/0/1 plus vendor/clippy/layers/licenses/corpus. This is not a green
+aggregate. [Controlled listener research](docs/research/macos-listener-lifetime.md)
+qualifies one before-FIOCLEX inheritance mechanism, never that natural failure's owner.
+Both consumed probes and the exhausted20 contexts must not be rerun. No speculative
+production/socket-policy repair, retry, serialization or deadline change is adopted.
 
-## Current desktop and jobs
+All582 parity IDs/order and the old MCP control test remain exact. Six live test units
+reproduce their frozen declarations through rustfmt only. Catalogue metadata changes
+are archived for33 files; old schemas/error/source/geometry assertions remain. No
+parser/IO/chem/render/xtask, dependency/lock/vendor/compat/font/golden/fixture/oracle/
+corpus/fuzz changes occur after the model checkpoint. All36 current CLI names match
+the36 protocol table rows. Both native and CLI builds66970
+pass. Native binary22405312B has SHA256
+`0745919c82768e436ebe4f46f7cb46f6706589281b6d392dfaa541f124632d76`; it has not been
+launched. Local links, protection and build receipts are in the receiving record.
 
-Keep one preview: PID82171, `target/smiles-ring-native/Bondline.app`, bundle ID
-`org.bondline.neutral-simple-ring-review`. Final ad-hoc-verified executable21721312B,
-SHA256 `3126a0f7a7410e9705a8fdbef3caa54f02c42e2e0d66faed498ad8fb266942fb`.
-Actual final Open→Alt-target→O/H1 Apply→Undo leaves Saved `methylamine-λ.cdxml`,2 atoms/
-1 bond/1 fragment,100%, Single, no modal/control port. Old previews were normally quit
-only after Saved was observed; unsaved user data and unrelated apps/tabs were preserved.
-No unused project browser tabs were found; iTerm access is blocked and terminal tabs
-remain unchecked. No ChemDraw binary/app/assets were inspected or executed.
+## Desktop and jobs
 
-All compiler/test/oracle/diagnostic process handles from this slice are terminal,
-including95827,64815,68587,88229,49437,79825,11344 and78095. Do not poll them. Root owns
-Cargo/Git/CUA/product mutation. All delegated reviews are terminal. The received6638-byte
-selection recommendation is now [the committed next-task proposal](docs/research/selection-translation-plan.md).
-No selection command/test/tool is implemented by that proposal; no worker remains live.
+The user's cleanup check found every Bondline preview closed and no leftover Bondline
+tabs in either Chrome window. The former PID82171/bundle executable is historical,
+not a live preview and not this selection build. No new window is launched during this
+slice while the user uses the computer. Unrelated tabs/data are untouched. iTerm access
+is restricted, so terminal tabs remain unchecked. No reference binary/app/assets are
+inspected, downloaded or executed.
+
+Root owns Cargo/Git/CUA/product mutation. No Cargo/test/oracle/review process remains
+live. All selection handles15565,87658,85312,64273,99583,29838,54205,98284,52650,77152
+and66970 are terminal. The initial wrong module filter85312 runs0 tests and is not a
+pass. Source reviews and the ring-authoring research are terminal. The latter proposes
+regular3–8 rings with actual shared-atom/shared-bond construction; its contract must
+be locked before independent RED tests. Revalidate any newly reported handles at
+continuation; do not restart a process on an observation timeout.
 
 ## Next executable work and explicit gaps
 
-1. Read the public-source [selection/translation proposal](docs/research/selection-translation-plan.md),
-   lock the exact typed state/operation and tool lifecycle contract, then independently
-   declare and observe the first existing-JSON UnknownCommand and actual-App missing-tool
-   RED before implementation. Do not guess unrecorded26.1 modifier behavior.
-2. Implement persistent selection and translation through every delivered adapter.
-   Reuse graph hits, stable IDs, immutable fragments/history and existing adapters;
-   never authorize geometry loss on foreign or retained-SMILES backing. Selection,
-   drag transactions, keyboard move, Undo/Redo, Unicode persistence and actual native
-   verification all remain required. Ring/chain tools, styles and broader labels follow.
-3. Continue full M1 interoperability and M3 chemistry/reactions, M4 publishing/clipboard,
-   M5 naming/biopolymers/WebAssembly/installers. Their backlog is not a completed app.
-4. Investigate the natural MCP failure only with new decisive failure-time identity;
-   do not serialize/retry tests or weaken the oracle to obtain green.
-
-Native IME/mixed AX/physical input breadth, word-selection multiclicks, remote races,
-measured2×/DPI, Fit/pan limits, interactive Windows/Linux, full inline Text/aliases,
-charge/isotope/radical authoring, generic imported editing and exact26.1 activation/
-tool/repetition/screen parity remain missing or unverified. Public documentation is
-current evidence; historical installed observations never grant current binary access.
+1. Preserve the local selection feature checkpoint, passing1361/0/1 gate, inspected
+   offscreen App frame and built native executable. No unused preview was opened.
+   Do not enable hosted Actions or treat offscreen input as native acceptance.
+2. When the desktop is available, run the actual selection workflow: open an original
+   CO+CC native CDXML, atom/bond/Shift/marquee/component selection, fresh drag and1/10pt
+   nudges, preview cancellation, Undo/Redo, Unicode Save/reopen/edit, and independent
+   actual-file consumers. Until observed, the native selection workflow stays wired.
+3. Lock the public-source ring-authoring contract, then independently declare/observe
+   RED before implementation through shared commands, native tools, history and files.
+   Continue ring/chain/style and broader labels rather than another layout-only demo.
+4. Continue full M1 interoperability, M3 chemistry/reactions, M4 publishing/clipboard,
+   M5 naming/biopolymers/WebAssembly/installers. Lasso/rotate/resize/snapping/groups,
+   charge/isotope/radical/inline Text, general imported editing, full modern inventory,
+   native races/DPI/Fit/pan and other-platform workflows remain required.
+5. Investigate natural MCP failure only with new decisive failure-time socket/process
+   identity; do not serialize/retry unchanged tests or weaken the oracle for green.

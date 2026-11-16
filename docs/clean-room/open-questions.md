@@ -1,5 +1,13 @@
 # Open questions
 
+- Persistent native atom-set selection and literal translation now have independent
+  command/context/wire/App coverage; see verification-selection-authoring.md. Exact26.1
+  tool/modifier precedence, molecular rectangle inclusion versus anchor inclusion,
+  selection restoration through history, lasso/rotation/resize/groups/snapping and
+  geometry editing on foreign/retained sources remain unresolved or missing. Actual
+  new-tool macOS interaction, IME/measured DPI and Windows/Linux remain unverified.
+  Original Bondline policies must not be promoted to observed reference behavior.
+
 - `atom.set_label` and the original `ui.atom_label` form now have bounded native Mac
   literal element/H, history, Cancel, close and Unicode Save/reopen evidence in
   verification-native-atom-labels.md. They do not supply full inline Text-tool behavior,
@@ -8,7 +16,9 @@
   remains unverified. Native stale races, IME, arbitrary mixed AX/physical input, multiclick
   word selection, measured DPI and Windows/Linux execution remain unverified.
 
-- The latest full gate fails848/1 at the unchanged MCP replacement bind60475. No natural
+- The atom checkpoint's full gate fails848/1 at the unchanged MCP replacement bind60475.
+  The later selection gate1361/0/1 passes without a socket-policy change and does not
+  explain that earlier failure. No natural
   failure-time owner capture exists. The original external inheritance probe was inconclusive;
   separately frozen v2 qualifies the controlled before-FIOCLEX mechanism, not this failure's
   cause. See research/macos-listener-lifetime.md. The actual test, socket policy, timing and

@@ -44,7 +44,8 @@ impl Engine {
         if !stored.is_fully_mapped() && !stored.has_smiles_projection() {
             return Err(Error::UnsupportedDocumentPreview);
         }
-        let changed = self.bond_tool.order != params.order;
+        let selection_epoch = self.selection_epoch_for_bond_tool()?;
+        let changed = self.bond_tool.order != params.order || selection_epoch.is_some();
         if changed {
             let epoch = self
                 .bond_tool
@@ -55,6 +56,7 @@ impl Engine {
                 order: params.order,
                 epoch,
             };
+            self.deactivate_selection(selection_epoch);
         }
         Ok(CommandResult {
             ui_bond_tool_operation: Some(BondToolOperation {

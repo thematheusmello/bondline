@@ -473,7 +473,7 @@ fn controls_use_typed_registry_bindings_and_contextual_enablement_without_a_host
     let result = engine.dispatch("ui.controls", json!({}))?;
     assert!(!result.changed);
     let rows = result.controls.ok_or("controls missing")?;
-    assert_eq!(rows.len(), 20);
+    assert_eq!(rows.len(), 23);
     assert!(
         rows.iter()
             .filter(|control| control.menu == "File")

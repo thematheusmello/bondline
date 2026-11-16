@@ -162,6 +162,7 @@ impl Engine {
             Candidate::Edit(document) => self.commit(document)?,
             Candidate::Import(document) => {
                 let revision = self.next_revision()?;
+                let selection_epoch = self.selection_epoch_after_edit()?;
                 let generation = self
                     .generation
                     .checked_add(1)
@@ -179,6 +180,7 @@ impl Engine {
                 self.redo.clear();
                 self.generation = generation;
                 self.revision = revision;
+                self.clear_selection_after_edit(selection_epoch);
                 self.view = ViewState {
                     epoch: view_epoch,
                     ..ViewState::default()

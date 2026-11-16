@@ -45,20 +45,39 @@ recovers, two pan attempts made no visible change; native races/DPI/other platfo
 unverified. Do not call Engine.execute for expensive SMILES record edits under the UI
 frame mutex, bypass complete-source guards or substitute another converter.
 
-Current registry34 includes bounded `atom.set_label` and native `ui.atom_label`; read
+The atom checkpoint's registry34 includes bounded `atom.set_label` and native `ui.atom_label`; read
 docs/research/atom-label-authoring-contract.md and
 docs/verification-native-atom-labels.md. Native Mac Alt-target→O/H1→history→Unicode
 Save/reopen→N/H2→Save As, Cancel and draft-close protection pass with independent actual-file
-consumers. Latest full gate95827 FAILS848/1 at unchanged MCP replacement bind60475;
+consumers. That checkpoint's full gate95827 FAILS848/1 at unchanged MCP replacement bind60475;
 remaining64815 passes480/0/1 and vendor/clippy/layers/licenses/corpus separately. This is
 not a green aggregate. Source-free/native CDXML only, existing neutral/nonisotopic/
 nonradical target, explicit literal element/H fields, no general inference or neighbor
 correction. Preserve validated no-op sharing, redo/close and whole-snapshot history.
-Default native controls stay20 Drawing/14 SDF/10 raw SMILES. Preserve exact-target requests,
+Current eligible native Drawing controls are23, retained-SMILES Drawing20, SDF14 and raw
+SMILES10. Preserve exact-target requests,
 weak/opaque context and epochs, checked2/5-byte field reuse, action-prefix order, bounded
 deferred replacements, local form ownership and frame-start barriers through dismissal.
 No `ui.file` atom-target hack or empty-target binding. Full inline Text/alias/charge/
 isotope/radical workflows and native IME/DPI/other platforms remain open. Keep one preview.
+
+Current registry36 adds `ui.selection` and `selection.translate`; read the locked
+docs/research/selection-translation-plan.md and docs/verification-selection-authoring.md.
+One-page sorted IDs/weak owner/checked epoch are transient. Source-free/fully mapped
+native CDXML translation changes only literal positions, validates affected fragments
+in one atomic batch and commits once. Own moves requalify targets; other real edits/
+history/namespace changes preflight overflow then clear nonempty targets. True no-ops
+preserve source/model sharing, redo, close and selection exactly. Foreign/retained-SMILES
+geometry stays guarded. Gesture context includes source/selection/tool/view/close/file/
+opaque association plus UI canvas/DPI. Shared tool controls replay fresh typed bindings
+at raw event indices; do not eagerly apply a later mode. Crossing the SDK drag threshold
+is latched until release, and ordinary off-canvas PointerMoved cancels the gesture.
+Independent command/context/private/wire and12 App cases pass; actual native selection
+interaction remains unverified while the desktop is in use. Do not infer26.1/platform
+or full transform parity. Keep the user's unused-tabs cleanup; do not open extra previews.
+Final selection gate77152 passes1361/0/1, including fmt, workspace/vendor clippy/tests,
+layers/licenses/corpus. It does not attribute or causally fix the earlier MCP failure.
+The unchanged actual-App capture also passes offscreen on Metal; no native window opens.
 
 Read docs/research/macos-listener-lifetime.md before touching the MCP failure. Original
 probe is inconclusive; separately qualified v2 passes its one controlled two-arm run.

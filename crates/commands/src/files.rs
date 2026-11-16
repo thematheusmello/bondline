@@ -597,6 +597,7 @@ impl Engine {
                     .into_string()
                     .map_err(|_| Error::UnrepresentableFilePath { published: false })?;
                 let next_revision = self.next_revision()?;
+                let selection_epoch = self.selection_epoch_after_edit()?;
                 let next_generation = self
                     .generation
                     .checked_add(1)
@@ -615,6 +616,7 @@ impl Engine {
                 self.redo.clear();
                 self.generation = next_generation;
                 self.revision = next_revision;
+                self.clear_selection_after_edit(selection_epoch);
                 self.invalidate_close();
                 self.mark_ui_file_completed(ui_request_id, ui_request_current);
                 Ok(CommandResult {

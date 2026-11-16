@@ -125,7 +125,7 @@ fn stdio_smiles_record_query_is_bounded_exact_private_and_not_cached()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 34);
+    assert_eq!(tools.len(), 36);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "smiles.record.inspect")
@@ -367,7 +367,7 @@ fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 34);
+    assert_eq!(tools.len(), 36);
     let tool = tools
         .iter()
         .find(|t| t["name"] == "file.export_smiles_fragment")
@@ -424,7 +424,7 @@ fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real(
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 34);
+    assert_eq!(tools.len(), 36);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
@@ -1095,12 +1095,14 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "sdf.field.set_value",
             "sdf.record.inspect",
             "sdf.record.remove",
+            "selection.translate",
             "smiles.record.inspect",
             "structure.paste_smiles",
             "ui.atom_label",
             "ui.bond_tool",
             "ui.controls",
             "ui.file",
+            "ui.selection",
             "ui.view"
         ]
     );
@@ -1730,7 +1732,7 @@ fn stdio_file_presentation_is_unavailable_without_a_host_and_cannot_forge_acknow
         queried["ui_file"],
         json!({"available":false,"epoch":0,"request":null})
     );
-    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 20);
+    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 23);
     assert!(queried.get("ui_file_operation").is_none());
     for (id, arguments, code) in [
         (

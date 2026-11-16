@@ -1400,3 +1400,6 @@ mod native_drawing_density;
 
 #[path = "native_atom_label_tests.rs"]
 mod native_atom_label;
+
+#[path = "selection_translation_tests.rs"]
+mod selection_translation;

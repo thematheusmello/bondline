@@ -1,5 +1,24 @@
 # Verification log
 
+## Persistent native selection and translation, 2026-11-16
+
+[Receiving evidence](verification-selection-authoring.md) records the independent
+missing-command/model/context/control REDs, nine public/two private/two context cases,
+four actual-wire cases and12 actual-App cases. Literal multi-fragment metadata/geometry,
+source/history/no-op/overflow/ABA, Unicode independent file consumers and publication
+boundaries have scoped checks. Two tool-order and two pointer-lifecycle runtime
+counterexamples are fixed against unchanged frozen assertions. Model batch replacement
+is committed separately; no parser/IO/dependency/font/golden policy changes.
+
+The final local gate77152 passes1361/0/1 across192 result lines, including all fmt,
+workspace/vendor clippy/tests and layer/license/corpus stages. Earlier clippy and
+catalogue receiving failures/corrections remain explicit in the linked record. The
+unchanged actual-App capture passes and is visually inspected offscreen on Metal.
+Native selection
+interaction remains unverified while the desktop is in use; no complete M2/26.1 or
+cross-platform claim follows. Earlier MCP AddrInUse evidence remains unattributed;
+consumed investigations are not repeated. Actions stays off.
+
 ## Native elemental atom presentation, 2026-11-16
 
 [Native/App/wire receiving](verification-native-atom-labels.md) records the shared34th

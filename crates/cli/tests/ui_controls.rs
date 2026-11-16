@@ -64,7 +64,10 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "view.reduce",
             "tool.bond.single",
             "tool.bond.double",
-            "tool.bond.triple"
+            "tool.bond.triple",
+            "tool.selection",
+            "edit.select_all",
+            "edit.deselect"
         ])
     );
     assert_eq!(
