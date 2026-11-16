@@ -2,10 +2,11 @@
 
 ## Current bounded atom-label command
 
-The full M0–M5 goal remains **active** on `feat/multiple-bonds`. Recoverable committed
-base is `02093cb` (source contract), after `853d9aa` (native SMILES picker guidance).
-The current feature adds `atom.set_label` and its tests/records; its exact local commit
-will be recorded in the following checkpoint. No push/publication or hosted run occurred.
+The full M0–M5 goal remains **active** on `feat/multiple-bonds`. Feature `525e117` commits
+`atom.set_label`, its tests and all intentional feature records, following `02093cb`
+(source contract) and `853d9aa` (native SMILES picker guidance). Final rustfmt and Git
+whitespace checks pass;222 protected-input checks and all three frozen declarations
+are recorded in the receiving evidence. No push/publication or hosted run occurred.
 Actions remains disabled. The desktop/GPU license blocker is resolved; full M0, M1 and
 M2–M5 remain incomplete.
 
