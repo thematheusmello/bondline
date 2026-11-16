@@ -169,6 +169,8 @@ whitespace are checked separately; this audit setup is not a product behavioral 
 
 All agents and execution handles are terminal, including fmt99879, aggregates54264/
 49615, fuzz57919 and remaining84887. Actions remains off; nothing is pushed/published.
+The complete data/format source, tests, migration, provenance and lock alignment are
+locally committed as cde514c. The aggregate failure remains explicit in this checkpoint.
 
 Next: shared inset components with real shortened-span corridors/gaps/hits and pixel
 proofs, then a separate skeletal-label policy preserving literal H, then unsaturated

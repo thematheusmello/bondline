@@ -7,7 +7,7 @@ do not enable, dispatch or rerun it during development.
 
 ## Current recoverable work
 
-The pending DoublePosition data/format slice is based on185476d. Model/CDXML retain
+DoublePosition data/format is committed as cde514c, based on185476d. Model/CDXML retain
 directed Unspecified/Center/Right/Left, including dormant metadata. Old omitted-default
 JSON/native-v0 bytes stay exact. Both MOL model writers refuse specified placement;
 retained-SMILES replacement cannot change it. Shared scene construction accepts only
@@ -118,8 +118,7 @@ gesture capture or approved golden. Binaries and source are pinned in receiving.
 1. When the desktop is available, execute native selection and then ring palette→
    Free/atom/fused/spiro→cancel/history→Unicode Save/reopen with independent actual-file
    consumers. App frames and offscreen Metal do not replace native OS or measured DPI.
-2. Commit the verified data prerequisite with the failed aggregate explicitly recorded.
-   Then lock and implement IUPAC-shortened inset components, actual bounds/corridors/gaps/hits and
+2. Lock and implement IUPAC-shortened inset components, actual bounds/corridors/gaps/hits and
    independent pixel tests. Define skeletal carbon display without erasing literal H,
    then weighted benzene/cyclopentadiene candidates, shared-edge phase/order rules and
    real native tool/preview/releases. Shared-edge precedence is not established by the
