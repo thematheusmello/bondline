@@ -203,3 +203,14 @@ observe runtime UnknownCommand before code; closed schemas, all three placements
 chemistry/files/history/identity/error/selection/complete-source checks follow. Typed
 NaN/Inf and private exhausted counters need explicit tests. Do not replace old oracles,
 fixtures, fonts, dependencies, approved goldens or the unresolved MCP shutdown test.
+
+The source review adds an explicit precision certificate before implementation: distinct
+rounded vertices alone do not establish a regular polygon. After Point2 rounding,
+normalize each incident edge by the supplied first-edge length (using hypot before
+products); every edge must agree within1e-10 relative length and each interior angle
+within1e-10 radians of(n−2)π/n. Refuse nonfinite/zero normalization or a failed certificate
+as invalid_params, without moving shared anchors. This is original numerical policy,
+not a reference minimum length. A well-conditioned tiny ring at the origin remains
+valid; a one-ULP edge at(1,1) must not yield a quantized right triangle labelled regular.
+Declare and observe that runtime counterexample before adding the guard. Rendering
+readability remains a separate bound and no new blanket minimum size is introduced.
