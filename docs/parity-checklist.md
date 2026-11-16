@@ -110,7 +110,7 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 | Text, captions, chemical formatting | GUIDE-25 | missing | M2/M3 |
 | Reaction and curved arrows | GUIDE-25 | missing | M3 |
 | Brackets, repeating units and annotations | GUIDE-25 | missing | M3 |
-| Document/object styles, journal settings | GUIDE-25 | missing | Public author-guideline sources required |
+| Document/object styles, journal settings | GUIDE-25 / DRAWING-SETTINGS-DATA-IMPLEMENTATION | partial: root data verified; workflows missing | Optional BondLength/ChainAngle model/CDXML/CDX projection, source preservation and whole-MOL loss guards pass independent data/file checks; see verification-drawing-settings-data.md. No settings command/form, native tool application, inherited/object styles or journal presets. Public author-guideline sources still required. |
 | Structure check and cleanup | GUIDE-25 | missing | M3; independent chemistry oracles |
 | Formula/mass and analysis | GUIDE-25 | missing | M3; pinned conventions |
 | Naming and mixtures | PROFESSIONAL-26.1 | missing | M5; public standards/oracles |
@@ -516,7 +516,7 @@ establish chemical preview, data-edit UI or other platforms.
 | DP-008 | Preferences > Monomer Libraries | 178-182 | missing | User/document/library state and versions. |
 | DP-009 | Document Settings > Layout | 22-23 | missing | Pages, poster dimensions/overlap and page registration marks. |
 | DP-010 | Document Settings > Header/Footer | 23 | missing | Header/footer variables and alignment. |
-| DP-011 | Document Settings > Drawing | 40-43 | missing | Bond geometry/style settings; values need independent sources. |
+| DP-011 | Document Settings > Drawing | 40-43 | missing | Root BondLength/ChainAngle data prerequisite is independently verified; see verification-drawing-settings-data.md. The command/form, effective defaults, tool application and remaining geometry/style settings are missing. |
 | DP-012 | Document Settings > Atom Labels | 44, 99 | missing | - |
 | DP-013 | Document Settings > Captions | 44-48 | missing | - |
 | DP-014 | Document Settings > Analysis | 44 | missing | Analysis field labels and formatting. |

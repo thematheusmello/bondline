@@ -59,6 +59,16 @@ Runtime selection, cameras, jobs and revision counters are separate from authore
 Command handlers validate before committing an edit. Snapshot history restores the entire
 document; failed commands do not mutate it. All delivered interfaces use the same registry.
 
+Document's fixed-size `DrawingSettings` holds independently optional validated root
+bond length/chain angle. Empty omission preserves old snapshots and native CDXML bytes.
+Root-only XML and CDX projections retain supported values without flattening inheritance;
+invalid/ambiguous values stay in authoritative source. Native CDXML writes present values
+without widening exact-byte edit authority. Whole-document MOL guards run before raw/
+fragment reuse, while existing full-model equality guards retained source drift. Settings
+do not alter existing geometry or yet drive native tools. The command/form is subsequent
+work; see [contract](research/drawing-settings-data.md) and
+[receiving](verification-drawing-settings-data.md).
+
 `chain.create` adds an explicit bounded carbon path of Single bonds in the immediate command lane.
 It reuses bond identity floors and a shared target-local neutral-C literal-H proof with
 ring authoring. Two fixed alternating edge vectors are certified against the actual rounded

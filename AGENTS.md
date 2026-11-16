@@ -54,8 +54,16 @@ Preserve the old39 command records/types/schema; new Free.points2..64/Atom.new_p
 uses closed point objects and shared final append/H/IDs. Unequal/180°/crossing/tiny literal
 geometry must not inherit the fixed certificate or native ink thresholds. Borrow and bound
 path vectors before allocation. No preview mutation/ID reservation or native authority.
-Next research normative BondLength/ChainAngle encoding/defaults/inheritance and lock authored
-style/model/IO/loss boundaries before tests; ordered Control events and full native flow follow.
+The authored drawing-settings data prerequisite now follows contract538df6c and
+docs/verification-drawing-settings-data.md. Private optional finite values preserve absence,
+root-only XML points/degrees and CDX signed fixed16.16; unsupported/ambiguous source
+values stay opaque without hard Open failures or broader native authority. Empty omission
+preserves old JSON/native-v0 bytes. Whole-MOL V2000/V3000 refuses nonempty settings before
+raw/fragment reuse/publication; keep existing forbidden-version precedence and whole-model
+source/SMILES drift guards. Explicit fragment export retains its declared context loss.
+Stored settings do not alter existing geometry or yet drive native tools. Registry40 and
+all bindings stay unchanged. Next lock the atomic settings command/history/adapters, then
+ordered Control events and full native settings/chain flow; do not enable grey tools early.
 Current egui-winit loses modifier chronology; never apply final-frame modifiers retroactively.
 The new bounded chain_path_request ASan harness prepares JSON only, never completes file/
 render work; read fuzz/README.md for pinned tools/new ignored seed directory and evidence.
@@ -192,6 +200,9 @@ Both probes and the exhausted20 contexts are consumed; do not repeat them. No pr
 policy, dependency, assertion, deadline, retry or concurrency change was adopted. A new
 causal investigation needs failure-time known socket/process identity, without observer
 queries in the shutdown→bind interval. The collector is designed only, not implemented.
+The drawing-data gate94003 also fails the unchanged replacement bind58634 after998
+passes; only not-started592/0/1 pass separately. No unchanged retry, failure-time owner
+identity or causal repair is established. Preserve both results; this is not a green gate.
 
 ## Research, provenance and implementation
 

@@ -6,10 +6,20 @@ use std::collections::BTreeMap;
 /// New elemental CDXML only. Never regenerate a source-backed projection with this API.
 /// Canvas dimensions are explicit Poster extents, not native printer configuration.
 pub fn write_document(document: &Document) -> Result<Vec<u8>, MappingError> {
-    let mut writer = Writer::new(&[(
+    let settings = document.drawing_settings();
+    let length = settings.bond_length_pt().map(|v| v.to_string());
+    let angle = settings.chain_angle_degrees().map(|v| v.to_string());
+    let mut attributes = vec![(
         "CreationProgram",
         concat!("Bondline ", env!("CARGO_PKG_VERSION")),
-    )])?;
+    )];
+    if let Some(value) = length.as_deref() {
+        attributes.push(("BondLength", value));
+    }
+    if let Some(value) = angle.as_deref() {
+        attributes.push(("ChainAngle", value));
+    }
+    let mut writer = Writer::new(&attributes)?;
     let mut next = 0_u32;
     for page in document.pages() {
         let id = allocate(&mut next)?.to_string();

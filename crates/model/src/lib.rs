@@ -1,8 +1,10 @@
 //! GUI-free authored document data. Coordinates are points, increasing right and down.
 
+mod drawing;
 mod element;
 mod graph;
 mod point;
+pub use drawing::DrawingSettings;
 pub use graph::{
     Atom, AtomId, Bond, BondId, BondOrder, DoublePosition, Element, Fragment, FragmentId,
     GraphError, MAX_GRAPH_ITEMS, Radical,
@@ -95,6 +97,10 @@ pub enum Error {
     InvalidPosition,
     #[error("page dimensions must be finite and greater than zero, up to 100000 points")]
     InvalidPageSize,
+    #[error(
+        "drawing settings need a finite bond length above zero through 100000 pt and a finite chain angle 1..179 degrees"
+    )]
+    InvalidDrawingSettings,
     #[error("page {0} does not exist")]
     MissingPage(u32),
     #[error("fragment {0} does not exist on the requested page")]
@@ -124,6 +130,8 @@ impl Page {
 #[derive(Clone, Debug, PartialEq, Serialize)]
 pub struct Document {
     pages: Vec<Page>,
+    #[serde(skip_serializing_if = "DrawingSettings::is_empty")]
+    drawing_settings: DrawingSettings,
 }
 
 impl Default for Document {
@@ -134,11 +142,21 @@ impl Default for Document {
                 size: PageSize::A4,
                 fragments: Vec::new(),
             }],
+            drawing_settings: DrawingSettings::default(),
         }
     }
 }
 
 impl Document {
+    pub const fn drawing_settings(&self) -> DrawingSettings {
+        self.drawing_settings
+    }
+
+    /// Stores validated authored data without changing existing pages or geometry.
+    pub fn set_drawing_settings(&mut self, settings: DrawingSettings) {
+        self.drawing_settings = settings;
+    }
+
     pub fn pages(&self) -> &[Page] {
         &self.pages
     }

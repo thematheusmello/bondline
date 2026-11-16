@@ -5,6 +5,11 @@
 does not implement a settings command/form, stylesheet resolution or native default
 application. Native chain controls stay disabled; native-chain-plan.md steps2–6 remain.
 
+The data increment is now implemented against contract538df6c; its independent RED/GREEN,
+preservation/loss checks, failed aggregate and separately passing remaining stages are in
+[receiving](../verification-drawing-settings-data.md). The command/form/native boundaries
+below remain unchanged and unfinished.
+
 ## Primary sources
 
 - [BondLength](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondLength.htm):
@@ -82,6 +87,8 @@ document properties and a direct explicit document object. Decode only one unamb
 four-byte signed little-endian payload per property, divided by65536, then use the same
 supported model validation. Duplicate, other-width, unsupported-domain and nonroot values
 stay opaque/unprojected; preserve existing successful binary Open and exact passthrough.
+Existing unsupported child-layout/chemical-property refusals also remain; root metadata
+projection does not widen the elemental reader's other accepted containment/field sets.
 Do not read past fields, infer width, choose a duplicate or normalize a source. Unknown
 properties remain in the standalone parser/backing. CDX stays noneditable/incomplete;
 no framing/EOF, regeneration authority or general CDX writer change is included.

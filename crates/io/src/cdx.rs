@@ -191,6 +191,10 @@ impl<'input> ElementalGraph<'input> {
         size: bondline_model::PageSize,
     ) -> Result<bondline_model::Document, MappingError> {
         let mut model = bondline_model::Document::default();
+        model.set_drawing_settings(crate::drawing_settings::project(
+            root_scalar(&self.source, 0x0805),
+            root_scalar(&self.source, 0x0803),
+        )?);
         let page = model
             .pages()
             .first()
@@ -200,6 +204,20 @@ impl<'input> ElementalGraph<'input> {
         model.append_fragments(page, self.fragments.clone())?;
         Ok(model)
     }
+}
+
+fn root_scalar(source: &Document<'_>, tag: u16) -> Option<f64> {
+    let mut fields = source.records().iter().filter(|record| {
+        matches!(record.kind(), RecordKind::Property { tag: field, .. } if *field == tag)
+            && (record.parent().is_none()
+                || object(source, record.parent()).is_some_and(|(owner, _)| owner == DOCUMENT))
+    });
+    let record = fields.next()?;
+    if fields.next().is_some() {
+        return None;
+    }
+    let bytes: [u8; 4] = source.payload(record).ok()?.try_into().ok()?;
+    Some(f64::from(i32::from_le_bytes(bytes)) / 65_536.0)
 }
 
 struct Layout {

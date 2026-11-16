@@ -15,9 +15,15 @@ After this visual increment, the explicit headless chain candidate follows the
 workflow, then the remaining drawing, chemistry, publishing and distribution scope.
 The [native dependency contract](docs/research/native-chain-plan.md) now has a literal
 turning-path/preview prerequisite with [independent evidence](docs/verification-chain-paths.md).
-Next resolve authored drawing-style encoding/preservation, then ordered modifier input,
+The [drawing-settings data prerequisite](docs/research/drawing-settings-data.md) now has
+[independent persistence/loss evidence](docs/verification-drawing-settings-data.md).
+Root BondLength/ChainAngle preserve explicit supported data and opaque source values;
+native tool application, settings commands/forms and full style inheritance remain missing.
+Next lock the atomic settings command/history/adapters, then ordered modifier input,
 complete native drawing/forms/repeat and actual acceptance. Do not substitute frame-global
 Control state or unsaved UI settings for those requirements; the native tools stay grey.
+The latest full local gate fails the unchanged MCP replacement bind; its remaining stages
+pass separately. Preserve both results and the exhausted diagnostic boundaries.
 
 The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now has a
 [shared skeletal display/explicit-label follow-up](docs/verification-skeletal-carbon.md).
@@ -27,8 +33,8 @@ None/true no-ops. Native OS acceptance/default styles/preferences remain outstan
 The separate terminal-label prerequisite now has
 [independent data/render/editor/file evidence](docs/verification-terminal-carbon-labels.md).
 Actual degree selects the appropriate flag and isolated C/C2 labels remain mandatory.
-The chain engine contract is now locked; next lock its native workflow. Add Chain, repeat, Snaking and
-settings remain required, not covered by this prerequisite.
+The chain engine and native dependency contracts are now locked. Add Chain, repeat,
+Snaking and the full settings workflow remain required beyond these prerequisites.
 Named benzene/cyclopentadiene candidates now share ring.create with the unchanged sized
 requests. Independent phase/H/source/history and actual adapter/file checks pass; see
 [receiving](docs/verification-unsaturated-rings.md). Their two native controls now share

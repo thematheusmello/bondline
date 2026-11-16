@@ -2,7 +2,7 @@
 
 2026-11-16. The unchanged MCP integration test
 `shutdown_without_clients_releases_the_listener_address` intermittently fails its one
-replacement bind after shutdown. The latest full gate95827 reports
+replacement bind after shutdown. The atom checkpoint's full gate95827 reports
 127.0.0.1:60475, `AddrInUse`/OS48, after848 passes. There is **no failure-time socket
 identity or owner capture**. Neither a later passing gate nor the experiment below
 establishes that failure's cause. Assertions, timing, retries, socket policy and test
@@ -14,6 +14,15 @@ No failure-time owner identity is captured, so this supplies no causal attributi
 It is preserved without retry; only not-started stages run separately. See
 [the receiving record](../verification-double-position.md). No controlled probe or
 exhausted diagnostic context is rerun.
+
+The drawing-settings full gate94003 naturally fails the same unchanged replacement bind
+at127.0.0.1:58634, AddrInUse/OS48, after998 passes. Log124425B SHA256
+79d4749e2941a361845c481e3a5a8ff7a64b88a5bff5dadf3974ed53a3f25962.
+Only not-started stages run separately (combined592/0/1); the failed aggregate is not
+retried. One post-terminal `lsof -nP -iTCP:58634` exits1 with empty output. That late
+observation identifies no failure-time socket/process owner and adds no causal evidence.
+No collector, consumed probe, exhausted context or socket/assertion/timing policy changes.
+See [receiving](../verification-drawing-settings-data.md) for the complete stage boundary.
 
 ## Source hypothesis and fixed experiment
 

@@ -1,19 +1,21 @@
 # Open questions
 
-- Drawing settings data is locked in research/drawing-settings-data.md. Primary scalar
+- Drawing settings data is implemented against research/drawing-settings-data.md;
+  verification-drawing-settings-data.md records its bounded evidence. Primary scalar
   comparison resolves XML ChainAngle as degrees versus CDX degrees×65536; BondLength is
   XML points/CDX points×65536. Missing values have no universal numeric default. Root-only
   supported projection is distinct from inherited effective styles; out-of-subset, nested,
   duplicate or other-width binary settings remain opaque/source-backed. Fixed toggles,
   style-sheet resolution, native defaults/forms, journal styles and26.1 behavior remain
   required. A data-only field never proves native tool application of the preference.
+  Next lock and implement the source-qualified command/history/adapters before the form.
 
 - The full native-chain dependency contract is in research/native-chain-plan.md.
   Snaking requires one positioned-path edit rather than repeated fixed-chain commits.
   Pinned egui PointerMoved lacks modifiers, and egui-winit stores only frame-level
   ModifiersChanged; ordered native Control transitions require an input-boundary change
-  and actual execution. Document ChainAngle/BondLength persistence/defaults/inheritance
-  need a model/format contract, not unsaved UI preferences. Count/pose/sampling/turn ties,
+  and actual execution. Document ChainAngle/BondLength data persistence is now delivered;
+  effective defaults/inheritance and tool application remain missing. Count/pose/sampling/turn ties,
   repeat lifecycle, modifiers and modern/platform defaults remain unknown. The literal
   path prerequisite does not resolve or enable the complete native workflows.
 
@@ -50,6 +52,9 @@
   word selection, measured DPI and Windows/Linux execution remain unverified.
 
 - The atom checkpoint's full gate fails848/1 at the unchanged MCP replacement bind60475.
+  The drawing-settings gate94003 also naturally fails998/1 at127.0.0.1:58634. Only
+  not-started checks pass separately592/0/1; the aggregate is failed and is not retried.
+  A single post-terminal lsof finds no owner, not failure-time identity evidence.
   The later selection gate1361/0/1 passes without a socket-policy change and does not
   explain that earlier failure. No natural
   failure-time owner capture exists. The original external inheritance probe was inconclusive;

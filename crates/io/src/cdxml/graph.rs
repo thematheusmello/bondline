@@ -169,6 +169,14 @@ impl<'input> ElementalGraph<'input> {
             size
         };
         let mut model = bondline_model::Document::default();
+        let scalar = |name| {
+            root.attribute(name)
+                .and_then(|value| value.trim().parse::<f64>().ok())
+        };
+        model.set_drawing_settings(crate::drawing_settings::project(
+            scalar("BondLength"),
+            scalar("ChainAngle"),
+        )?);
         let id = model
             .pages()
             .first()

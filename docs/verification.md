@@ -1,5 +1,22 @@
 # Verification log
 
+## Drawing-settings data prerequisite, 2026-11-16
+
+[Receiving](verification-drawing-settings-data.md) records actual XML82691/CDX3733
+missing-model-data runtime REDs before producer98821 GREEN2/0 and17 passing focused
+model/IO/command cases. Original fixed-point vectors, independent Expat/Decimal root
+checks, source/loss/publication/scene guards and unchanged semantic export remain distinct
+from full styles. Full local gate94003 exits1 at unchanged MCP replacement_bind58634,
+AddrInUse/OS48, after998 passes; fmt and warnings-denied workspace clippy pass first.
+No unchanged retry. Only not-started checks pass separately:61803 583/0/1, then22798
+9/0/0 for compatibility targets identified by a coverage audit. Combined592/0/1 is not
+a green aggregate. Vendor lint/tests, layers/licenses/corpus pass separately. No causal
+owner identity or repair is established; post-terminal lsof is empty, not failure-time
+evidence. Both unchanged projection harnesses complete10000 ASan runs with fresh original
+seeds. Native/CLI build88017 and actual Unicode CLI Open/edit/history/Save/reopen pass;
+independent readers check the actual output. Registry40/native bindings stay unchanged.
+No native launch, user-window/draft change, new platform/golden or hosted/publication claim.
+
 ## Literal turning-chain prerequisite, 2026-11-16
 
 [Receiving](verification-chain-paths.md) distinguishes actual first UnknownCommand RED

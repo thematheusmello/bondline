@@ -7,17 +7,49 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-### Authored drawing-settings data contract — no implementation yet
+### Verified drawing-settings data — aggregate gate failed
 
-On clean65af201, previous turn is PROGRESS (paths/previews1574/0/1 plus10kASan).
-Read docs/research/drawing-settings-data.md: primary scalars resolve XML point/degree
-units versus binary signed fixed16.16; no universal absent defaults. Optional root
-model/data, CDXML/CDX supported projection and whole-document loss guards are next.
-Unprojected source values retain old Open/passthrough behavior/incomplete authority.
-The first existing-API XML-model RED precedes new types/producer; no test/code is
-present at this contract checkpoint. Registry40/native bindings unchanged. Complete
-settings commands/forms/defaults/style sheets and native chain flows remain required.
-Protected user windows stay untouched; Actions OFF, no Root execution job.
+This atomic data/format increment follows contract538df6c on65af201. Read
+[the lock](docs/research/drawing-settings-data.md) and
+[receiving evidence](docs/verification-drawing-settings-data.md). Optional document-root
+BondLength/ChainAngle preserve absence and independent presence, XML points/degrees and
+CDX signed fixed16.16. Invalid/unsupported/ambiguous source values remain opaque and
+byte-preserved; exact native re-encoding remains the authority proof. Both whole-MOL
+versions refuse settings loss before raw/fragment reuse or publication. Existing-source
+drift guards and explicitly lossy fragment export stay distinct. Stored preferences do
+not move or rescale existing geometry and are not yet applied by native creation tools.
+
+Actual XML82691 and CDX3733 runtime REDs precede producer98821 GREEN2/0. Seventeen new
+focused cases pass, with independently authored vectors and an Expat/Decimal root reader;
+old chemical readers cannot establish root-setting preservation. Bounded source review
+and post-format qualification find no material issue. No dependency, command registry,
+source-authority, fixture, golden or socket-policy change. Registry40, controls31/20/14/10
+and catalogue12 delivered/128 disabled stay unchanged; full settings workflows stay missing.
+
+Full cargo xtask ci94003 exits1 at the unchanged MCP replacement bind127.0.0.1:58634,
+AddrInUse/OS48: **998 passed/1 failed** across156 result lines. Formatting and
+warnings-denied workspace lint passed before that failure. No unchanged retry is run.
+Only not-started targets/stages pass separately:61803 **583/0/1**, then a target-coverage
+audit identifies three still-unstarted compatibility packages;22798 passes **9/0/0**.
+Combined remaining **592/0/1** is not a green aggregate. Vendor lint/tests, layers,
+strict licenses and pinned corpus pass there. A single post-terminal lsof returns no
+owner; it is not failure-time identity evidence. The natural failure remains unattributed;
+no exhausted probe/context or socket policy is changed.
+
+Unchanged XML/CDX projection harnesses each pass10000 ASan runs with fresh original
+ignored seeds; no new crash is found within those bounds. Actual native/CLI build88017
+passes. CLI Unicode Open→bond edit→Undo/Redo→Save→reopen preserves both root values,
+editable geometry and clean baseline; independent Expat/Decimal plus RDKit verify the
+actual700-byte output. No native launch, copied-bundle refresh, current user drawing
+inspection or new platform/golden claim. Protected apps17806/96449 are observed live and
+both copied binary hashes remain unchanged. All current execution jobs are terminal.
+
+Next executable increment: lock and implement the source-qualified atomic drawing-settings
+command through registry/history/adapters, preserving no-op/invalid/source/close/ID guards.
+Then ordered native modifier transitions, the settings form and full chain modes/count/
+repeat/poses/real-ink flows and actual acceptance per native-chain-plan.md steps2–6.
+Keep both native chain controls grey. Full M0–M5, journal styles and broader format/
+chemistry/publishing/distribution work remain required. Actions OFF; no push/publication.
 
 ### Verified literal path/preview prerequisite
 
@@ -64,7 +96,7 @@ No Root/worker execution job remains live. Actions OFF; no hosted run, push or p
 Historical MCP replacement-bind failures remain unattributed; these passes do not repair
 or explain them, and exhausted diagnostic boundaries remain.
 
-Next executable task: research normative public SDK BondLength/ChainAngle numeric
+Next task at that checkpoint: research normative public SDK BondLength/ChainAngle numeric
 encoding, defaults/inheritance and actual existing model/IO loss boundaries; lock a
 preserving authored drawing-style increment before independent tests/code. Then preserve
 ordered native modifier events and implement complete chain modes/drag counter/Add Chain/
