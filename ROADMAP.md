@@ -11,6 +11,8 @@ this from sided geometry. Next implement shortened inset strokes with actual bou
 gaps/hits, then a source-backed skeletal carbon policy retaining literal H, then weighted
 benzene/cyclopentadiene candidates, attachment/phase rules and native tools. Shared-edge
 phase precedence remains an open public-source question. The full parity scope is intact.
+The [inset rendering contract](docs/research/inset-double-rendering.md) now locks the
+next geometry, component-role joins and independent guard tests before implementation.
 
 The shared `ring.create` command now implements explicit3–8 carbon Single polygons,
 including shared-atom and shared-Single-edge attachments. Independent geometry,
