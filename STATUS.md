@@ -7,10 +7,11 @@ OFF** during development; do not enable or dispatch it for these changes.
 
 ## Current recoverable work
 
-`6677228` locks the public-source selection/translation contract. `77f5ea4` commits
+`07aa562` commits the checked selection/translation source/tests/provenance described
+below. `6677228` locks its public-source contract. `77f5ea4` commits
 atomic immutable fragment-batch replacement with independent missing-API RED and19
-model passes. The selection/translation feature checkpoint follows those commits with its source,
-independent tests and records. Its exact revision is available in local Git history. Earlier native atom-label source is `b4fefaf`, with checkpoint
+model passes. The later documentation checkpoint records the next ring plan.
+Earlier native atom-label source is `b4fefaf`, with checkpoint
 `8135983`; its actual macOS OH/NH2/history/Unicode evidence remains historical and valid
 for its stated scope, not evidence of the new selection tool.
 
@@ -87,7 +88,8 @@ Root owns Cargo/Git/CUA/product mutation. No Cargo/test/oracle/review process re
 live. All selection handles15565,87658,85312,64273,99583,29838,54205,98284,52650,77152
 and66970 are terminal. The initial wrong module filter85312 runs0 tests and is not a
 pass. Source reviews and the ring-authoring research are terminal. The latter proposes
-regular3–8 rings with actual shared-atom/shared-bond construction; its contract must
+regular3–8 rings with actual shared-atom/shared-bond construction in
+[the durable proposal](docs/research/ring-authoring-plan.md); its contract must
 be locked before independent RED tests. Revalidate any newly reported handles at
 continuation; do not restart a process on an observation timeout.
 
@@ -100,7 +102,7 @@ continuation; do not restart a process on an observation timeout.
    CO+CC native CDXML, atom/bond/Shift/marquee/component selection, fresh drag and1/10pt
    nudges, preview cancellation, Undo/Redo, Unicode Save/reopen/edit, and independent
    actual-file consumers. Until observed, the native selection workflow stays wired.
-3. Lock the public-source ring-authoring contract, then independently declare/observe
+3. Lock [the public-source ring-authoring contract](docs/research/ring-authoring-plan.md), then independently declare/observe
    RED before implementation through shared commands, native tools, history and files.
    Continue ring/chain/style and broader labels rather than another layout-only demo.
 4. Continue full M1 interoperability, M3 chemistry/reactions, M4 publishing/clipboard,

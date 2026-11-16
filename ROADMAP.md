@@ -24,6 +24,10 @@ now has a source-qualified implementation, reviewed local gates and an inspected
 offscreen App frame. Finish actual native acceptance, then continue ring/chain/style
 and broader label workflows. Full
 selection/transform/26.1 parity remains required beyond this bounded atom-set slice.
+The next [ring-authoring proposal](docs/research/ring-authoring-plan.md) covers actual
+standalone/shared-atom/shared-bond3–8 Single-ring construction and independent cyclohexane,
+decalin/spiro persistence. Lock its remaining tool/geometry policies before RED tests;
+the plan does not implement rings or resolve aromatic/chair/sprout/style workflows.
 
 Native source-backed SMILES records now have bounded Mac selected/all import, refusal/
 retry, registered click/key order editing, history and Unicode whole-file Save/reopen/
