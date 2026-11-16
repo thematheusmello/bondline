@@ -7,6 +7,16 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Native chain dependency contract — first prerequisite not implemented
+
+On clean a433c3c, previous turn is PROGRESS (fixed chain code/test/docs and1563/0/1).
+Read docs/research/native-chain-plan.md: complete native flow requires literal turning
+paths, authored drawing settings and ordered modifier evidence before native gestures/
+forms/repeat and actual acceptance. New chain.create_path preserves the fixed API and
+commits one positioned path; this contract has no new test/code yet. Next adopt the
+independent UnknownCommand RED before producer. All native chain workflows remain
+required/disabled. Both old desktop windows stay protected; Actions stays OFF.
+
 ### Verified headless chain increment
 
 The chain engine follows locked bf4d937 on branding base f077ed2; its atomic source/

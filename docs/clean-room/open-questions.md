@@ -1,5 +1,14 @@
 # Open questions
 
+- The full native-chain dependency contract is in research/native-chain-plan.md.
+  Snaking requires one positioned-path edit rather than repeated fixed-chain commits.
+  Pinned egui PointerMoved lacks modifiers, and egui-winit stores only frame-level
+  ModifiersChanged; ordered native Control transitions require an input-boundary change
+  and actual execution. Document ChainAngle/BondLength persistence/defaults/inheritance
+  need a model/format contract, not unsaved UI preferences. Count/pose/sampling/turn ties,
+  repeat lifecycle, modifiers and modern/platform defaults remain unknown. The literal
+  path prerequisite does not resolve or enable the complete native workflows.
+
 - Chain engine policy is locked in research/chain-authoring-plan.md. Public25 guide
   documents drag/count, Add Chain, attachment, Alt repeat, Snaking/Control and conditional
   settings; exact26.1/Mac defaults, count inclusion, quantization/ties/hysteresis, repeat
