@@ -29,7 +29,8 @@ for ordinary drawing and saving.
 1/2/3 order keys, Undo/Redo and editable CDXML saves have bounded native macOS checks.
 Numeric zoom, Actual/Fit, pan and wheel navigation now make unchanged A4 paper usable
 for the checked multiple-bond workflow. Small-ring tools and selection/movement have
-shared-engine and actual-App checks; their native desktop interaction is still pending.
+shared-engine and actual-App checks; most native interaction remains pending. A bounded
+macOS Benzene click/Undo check now passes in the updated workspace.
 General labels and chemical analysis are still being built.
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
@@ -39,7 +40,7 @@ Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with indep
 checks of the actual files. See [atom-editor evidence](docs/verification-native-atom-labels.md),
 [native record evidence](docs/verification-native-smiles-records.md) and the separate
 [paste checkpoint](docs/verification-native-smiles-paste.md). The latest completed local
-gate passes **1,540 tests, zero failures and one ignored test**, including formatting,
+gate passes **1,551 tests, zero failures and one ignored test**, including formatting,
 warnings-denied linting, layer/license checks and the pinned corpus. The
 [carbon-label data increment](docs/verification-carbon-label-data.md) preserves standard
 metadata; [skeletal display and label restoration](docs/verification-skeletal-carbon.md)
@@ -49,12 +50,18 @@ failure remains unexplained; a passing gate is not a causal fix. Native2×/DPI, 
 complete pan behavior remain unverified or limited; see [density evidence](docs/verification-native-drawing-density.md).
 
 <p align="center">
-  <img src="docs/media/workspace-native-view.jpg" alt="The actual Bondline macOS window at150% with numeric zoom, page-position controls, three bond tools and the live document inspector" width="100%">
+  <img src="docs/media/workspace-branding-native.jpg" alt="Actual Bondline macOS window with the original B logo, working drawing tools, grey planned tools and two editable ring structures" width="100%">
   <br>
-  <sub>Actual macOS / Metal window at150%: original light workspace, unchanged A4 paper and a live document inspector.<br>The native-authored scene reopens for editing; rapid Undo→Save now preserves the expected drawing; <a href="docs/media/SOURCES.md">capture identity and limits</a>.</sub>
+  <sub>Actual macOS window: original identity, working tools and a visible roadmap.<br>The original command-authored ring scene opens for editing; grey tools remain unimplemented. <a href="docs/media/SOURCES.md">Capture identity and limits</a>.</sub>
 </p>
 
 ## What works today
+
+<details>
+<summary>See the available and planned tool catalogue</summary>
+<p><img src="docs/media/planned-tools-catalogue-native.jpg" alt="Actual native All tools catalogue with working controls and explicitly disabled future tools" width="100%"></p>
+<p>140 entries cover the documented tool inventory. The 128 planned entries remain disabled until their workflows are implemented.</p>
+</details>
 
 | Capability | Delivered scope |
 |---|---|
@@ -62,9 +69,10 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 | Double and Triple bonds | Native macOS tool selection, centered drawing, history and CDXML Save As pass at a readable scale. Carbon terminal extension also passes independent headless checks; its native multiple-bond workflow and context-sensitive styles remain unverified/missing. |
 | Explicit sided doubles | Shortened Left/Right Double geometry, real gaps/hits and CPU/GPU capture pass independent engine/native-profile CDXML history and save/reopen checks. Native interaction, alignment controls and automatic styles remain unverified/missing. See [receiving](docs/verification-inset-doubles.md). |
 | Skeletal carbon labels | Separate terminal/nonterminal node flags preserve literal H and mandatory isolated C/C2 labels. Shared CPU/GPU rendering, explicit-label restoration, history and Unicode save/reopen pass independent tests. Style-setting controls and native OS acceptance remain outstanding. See [evidence](docs/verification-terminal-carbon-labels.md). |
+| Complete tool catalogue | All124 documented drawing/query/biology/HELM roles appear as140 entries. Twelve use existing bindings;128 planned entries stay grey, disabled and explicitly marked Not implemented. Search, scrolling and available-tool selection have bounded native macOS checks. See [catalogue](docs/design/tool-catalogue.md). |
 | Existing-bond editing | Set Single/Double/Triple with hotspot1/2/3; convert an existing Single by clicking, or draw across Single/Double endpoints with Single selected. Same edge and geometry, corrected literal carbon H, one history step. Bounded native Mac and independent graph/file checks; alignment and general imported edits remain unavailable. |
-| Small carbon rings | Six3–8 tools call the shared carbon Single-ring engine, with detached, shared-atom and shared-edge placements, complete previews and one-step history. Independent command/adapter and actual-App free/fused/spiro/Unicode-file checks pass; native OS interaction remains unverified. Aromatic/chair/sprout tools are still missing. See [receiving](docs/verification-native-rings.md). |
-| Workspace | Light header, compact two-column bond/selection/ring rail, white paper, document/source/count inspector and contextual guidance. Actual macOS authoring and file-picker checks pass for the earlier documented subset; new selection/ring interaction still needs native review. |
+| Small carbon rings | Six3–8 Single-ring tools plus Benzene/Cyclopentadiene share the engine and preview/history path. Independent command/adapter/App free/fused/spiro/Unicode-file checks pass. Native macOS Benzene click/Undo is checked; other native gestures, chair/sprout and aromatic perception remain unfinished. See [receiving](docs/verification-branding-and-tools.md). |
+| Workspace | Original logo, light header, compact working-tool rail, scrollable planned tools, white paper, live document inspector and contextual guidance. The searchable All tools catalogue distinguishes working, unavailable and planned entries. Bounded macOS review passes; full platform and reference-layout parity remains open. |
 | New document | File → New Document and Cmd/Ctrl+N start a fresh A4 drawing in the same window. Save, Discard and Cancel protect unsaved content. Mac SDF→New, dirty decisions, Unicode Save-before-New, editable reopening and Undo pass; styles/templates and multiple windows remain missing. |
 | View navigation | Numeric zoom, Actual/Fit/Magnify/Reduce, two-axis position controls and ordinary wheel navigation without resizing paper or changing history. Mac A4 drawing/editing at100%/150% and read-only SDF Actual/pan pass. SDF Fit reports `Fit`, without an invented numeric percentage. SDF wheel and DPI/source invalidation pass actual-App tests; native wheel remains unverified. Rendering/readability guards apply. |
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |

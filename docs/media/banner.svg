@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 420" role="img" aria-labelledby="title desc">
 <title id="title">Bondline — chemical drawing, open to everyone</title>
-<desc id="desc">Original Bondline wordmark on a deep blue background, with a mint geometric bond motif. Brand illustration, not an application screenshot.</desc>
+<desc id="desc">Original bond-loop B and custom Bondline wordmark on a deep blue background. Brand illustration, not an application screenshot.</desc>
 <defs>
  <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#071b2d"/><stop offset="1" stop-color="#124c56"/></linearGradient>
  <radialGradient id="glow"><stop stop-color="#71f2d1" stop-opacity=".16"/><stop offset="1" stop-color="#71f2d1" stop-opacity="0"/></radialGradient>
@@ -15,12 +15,21 @@
  <path d="M1204 208L1304 208L1340 146M1066 128.33L1018 45M1066 287.67L1018 370"/>
 </g><circle cx="1204.00" cy="208.00" r="7" fill="#6ce2c5"/><circle cx="1158.00" cy="287.67" r="7" fill="#6ce2c5"/><circle cx="1066.00" cy="287.67" r="7" fill="#6ce2c5"/><circle cx="1020.00" cy="208.00" r="7" fill="#6ce2c5"/><circle cx="1066.00" cy="128.33" r="7" fill="#6ce2c5"/><circle cx="1158.00" cy="128.33" r="7" fill="#6ce2c5"/>
 <circle cx="1304" cy="208" r="9" fill="#f2c88d"/><circle cx="1340" cy="146" r="6" fill="#6ce2c5"/>
-<g transform="translate(78 78)">
- <rect width="92" height="92" rx="23" fill="#6ce2c5"/>
- <g fill="none" stroke="#08303c" stroke-width="6" stroke-linecap="round"><path d="M24 29H68M24 63H68M24 25V67M68 25V67"/></g>
+<g transform="translate(66 66) scale(1.75)">
+<path d="M16 12V52M16 12H36L48 22L36 32H16M16 32H36L48 42L36 52H16" fill="none" stroke="#7bd7d2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<g fill="none" stroke="#f4f8fa" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M88 12V52M88 38C88 30 93 24 100 24C107 24 112 30 112 38C112 46 107 52 100 52C93 52 88 46 88 38"/>
+<path d="M147 38C147 46 142 52 135 52C128 52 123 46 123 38C123 30 128 24 135 24C142 24 147 30 147 38Z"/>
+<path d="M160 52V24M160 37C160 29 165 24 172 24C179 24 184 29 184 37V52"/>
+<path d="M221 12V52M221 38C221 30 216 24 209 24C202 24 197 30 197 38C197 46 202 52 209 52C216 52 221 46 221 38"/>
+<path d="M236 12V52"/>
+<path d="M251 25V52"/>
+<path d="M266 52V24M266 37C266 29 271 24 278 24C285 24 290 29 290 37V52"/>
+<path d="M328 47C325 51 321 52 316 52C308 52 303 46 303 38C303 30 308 24 316 24C323 24 328 30 328 37H304"/>
+</g>
+<circle cx="251" cy="14" r="2.75" fill="#f4f8fa"/>
 </g>
 <g fill="#f7fcff" font-family="Arial, Helvetica, sans-serif">
- <text x="194" y="151" font-size="88" font-weight="700" letter-spacing="-4">bondline</text>
  <text x="82" y="242" font-size="40" font-weight="400" letter-spacing="-.5">Chemical drawing. Open to everyone.</text>
  <text x="84" y="298" font-size="23" fill="#bdd8df">An offline editor, built in Rust.</text>
 </g>

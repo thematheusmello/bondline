@@ -5,7 +5,7 @@ No reference product screenshot, logo, icon, font, template or sample library wa
 
 | File | Origin | SHA-256 |
 |---|---|---|
-| [banner.svg](banner.svg) | Original SVG illustration | `f3363a2c1931feb95d6ef6b4e829b74460880ef486242f45bfde45d975946081` |
+| [banner.svg](banner.svg) | Original SVG illustration | `a13b41a9f091fc861ee3ad3faa29e0ae74697b3ba2e5c0bbee370a63acdc0c67` |
 | [contribute.svg](contribute.svg) | Original SVG illustration | `a6b6e5327002822d9ae8a83f07e34f8c6a6cccda86646650a154732b5754282b` |
 | [workspace.jpg](workspace.jpg) | Unedited original native JPEG capture,1160×832 | `d629c55f5b827bd5b336971c2753eabe12b7d09ed3a2857f27c327631d94929c` |
 | [save-as.jpg](save-as.jpg) | Unedited original native JPEG capture,1160×832 | `72e96c09e9d3b7ca22d66d5c383bcd11890cc36b3135a433d992ea9dd15d37dc` |
@@ -140,3 +140,36 @@ No credential or reference-product artwork is present; localhost address is not 
 The new original documentation image is MIT OR Apache-2.0, separate from runtime assets
 and the unchanged approved chemical golden. Full parity/Windows/Linux interaction is
 not established by the photo. The fixed preview remains open for the user.
+
+
+## Original identity refresh, 2026-11-16
+
+The banner now uses the original bond-loop B and custom path wordmark from
+[assets/brand](../../assets/brand/NOTICE.md). The SVG geometry and lettering are original
+MIT OR Apache-2.0 contributions, not copied typeface outlines or reference artwork.
+The five master variants and exact hashes are recorded in assets/manifest.json.
+The updated banner hash is `a13b41a9f091fc861ee3ad3faa29e0ae74697b3ba2e5c0bbee370a63acdc0c67`. It remains an illustration; existing native
+photographs and their historical build records are unchanged. External librsvg 2.60.0
+renders disposable preview PNGs for visual review; no generated UI mockup or new
+approved chemistry golden is introduced.
+
+## Native identity and catalogue, 2026-11-16
+
+| File | Exact original capture | SHA-256 |
+| --- | --- | --- |
+| [workspace-branding-native.jpg](workspace-branding-native.jpg) | Unedited CUA own-window JPEG,1160×832,79446B | `f1d139c83aacd2bdea8ebf11dbda76426cd7bebb994e59106a74053788bc07c4` |
+| [planned-tools-catalogue-native.jpg](planned-tools-catalogue-native.jpg) | Unedited CUA own-window JPEG,1160×832,121940B | `c37b5413277f0ac57edd09ec61091abc094e72d3a77e873dcf8c4e40d7679aaa` |
+
+[Provenance](branding-native-provenance.json) identifies the final compiled sources,
+native c1b8c884… binary, original command-authored/independently consumed ring scene,
+bounded native input checks and limitations. Final captures follow the missing-font
+regression and vector fix, not the earlier preliminary binary. Native macOS27.2/AppleM3Max
+is observed; physical monitor DPI and other-platform interaction are not inferred.
+
+These are exact app-window buffers saved without cropping, conversion, retouching or UI
+generation. Pillow verifies JPEG/dimensions; EXIF contains only an offset and nested image
+dimensions. Existing ICC metadata is retained. The scene/UI/art are original MIT OR
+Apache-2.0, with the separate Apache Roboto notice. No user drawing, private file contents,
+reference-product assets, credential or listener token is included. The older user's app
+and unsaved draft stay untouched; a separate final preview remains open. Grey controls
+remain unimplemented. These are documentation photographs, not new approved goldens.

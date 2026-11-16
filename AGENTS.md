@@ -26,6 +26,17 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
+The original logo and planned-tool UI follow docs/design/branding-and-tools.md,
+docs/design/brand.md and docs/verification-branding-and-tools.md. The static UI catalogue
+covers124 public TD/TQ/TB roles as140 entries:12 delivered bindings and128 disabled planned
+entries. It does not add commands or promote missing features. Resolve active bindings
+through current Engine.controls(), retaining every source/modal guard. SDF presentation/
+busy state must gate both catalogue ownership and its rail button, or it steals Escape
+from record/field decisions. Catalogue-owned Escape preserves persistent selection.
+Keep the bundled-font coverage regression: angle and replacement-arrow icons use drawn
+geometry because Roboto lacks those characters. Native photographs are actual own-window
+captures, separate from illustrations/goldens; preserve the user's older unsaved app/draft.
+
 The terminal-label prerequisite is described in docs/research/terminal-carbon-labels.md
 and docs/verification-terminal-carbon-labels.md. Degree zero/one selects terminal; higher
 degree selects nonterminal. Require known H/checked C4 before suppression and keep actual

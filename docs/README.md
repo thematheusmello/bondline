@@ -3,7 +3,13 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
-The latest skeletal display/label-restoration gate passes1494/0/1, following data1470/0/1
+Original branding and the complete planned-tool catalogue have
+[current receiving evidence](verification-branding-and-tools.md) and
+[design/availability rules](design/tool-catalogue.md). All140 entries remain explicit
+about their twelve delivered bindings versus128 disabled future tools. The current local
+gate passes1551/0/1. Native visual checks do not establish full reference/platform parity.
+
+The earlier skeletal display/label-restoration gate passes1494/0/1, following data1470/0/1
 and inset1451/0/1. Known-H/C4 display, mandatory labels, atom hits and the existing editor
 have shared-render/registry/wire/App evidence. Native/default-style/cross-platform parity
 remains unfinished, and no pass attributes the historical MCP bind failure.

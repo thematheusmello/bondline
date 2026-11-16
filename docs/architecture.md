@@ -1,5 +1,13 @@
 # Architecture
 
+The UI's original branding and static roadmap catalogue are presentation only.
+tool_catalogue_data.rs maps124 source roles to140 entries;128 have no binding. The twelve
+delivered entries resolve current Engine.controls() and use the existing ordered action
+path. No planned command, source/edit authority, renderer dependency or history state is
+introduced. The private catalogue owns only open/search state; current File/Atom/SDF
+foreground ownership gates it. See [design](design/tool-catalogue.md) and
+[receiving](verification-branding-and-tools.md).
+
 The retained SMILES record projection is a separate Drawing backing: complete immutable
 original/current files, original/current model baselines and original/live token maps.
 Its global completeness flag remains false. Current projection validation authorizes only

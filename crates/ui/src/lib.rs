@@ -5,6 +5,9 @@ mod atom_editor;
 mod bond_history_tests;
 #[cfg(test)]
 mod bond_order_tests;
+mod branding;
+#[cfg(test)]
+mod branding_tests;
 mod file_workflow;
 pub mod files;
 #[cfg(test)]
@@ -19,6 +22,10 @@ mod sdf_fields;
 mod selection;
 mod smiles_order;
 mod smiles_records;
+mod tool_catalogue;
+#[cfg(test)]
+mod tool_catalogue_tests;
+mod tool_icons;
 mod view_controls;
 #[cfg(test)]
 mod view_tests;
@@ -59,21 +66,7 @@ pub fn native_options() -> Result<eframe::NativeOptions, bondline_render::Error>
 }
 
 fn original_icon() -> Result<egui::IconData, bondline_render::Error> {
-    let mut frame = bondline_render::cpu_solid(32, 32, [23, 81, 115, 255])?;
-    for (index, pixel) in frame.rgba.chunks_exact_mut(4).enumerate() {
-        let x = (index % 32) as i32;
-        let y = (index / 32) as i32;
-        let bond = (6..=25).contains(&x) && ((y - 10).abs() <= 1 || (y - 21).abs() <= 1)
-            || (9..=22).contains(&y) && ((x - 6).abs() <= 1 || (x - 25).abs() <= 1);
-        if bond {
-            pixel.copy_from_slice(&[255, 255, 255, 255]);
-        }
-    }
-    Ok(egui::IconData {
-        rgba: frame.rgba,
-        width: frame.width,
-        height: frame.height,
-    })
+    branding::icon()
 }
 
 /// Install only the independently sourced Apache-2.0 UI font.
@@ -122,6 +115,7 @@ pub struct DrawingState {
     atom_labels: atom_editor::AtomEditor,
     selection: selection::SelectionWorkflow,
     ring: ring::RingWorkflow,
+    tool_catalogue: tool_catalogue::Catalogue,
 }
 
 impl DrawingState {
@@ -224,14 +218,22 @@ fn bond_tool_buttons(
     events: &[egui::Event],
 ) -> Vec<(usize, &'static str)> {
     let mut commands = Vec::new();
-    let tools: Vec<_> = controls
+    let tools: Vec<_> = tool_catalogue::ENTRIES
         .iter()
-        .filter(|control| control.menu == "Tools")
+        .filter_map(|entry| {
+            entry
+                .binding_id
+                .map(|id| (entry, controls.iter().find(|control| control.id == id)))
+        })
         .collect();
     for row in tools.chunks(2) {
         ui.horizontal(|ui| {
             ui.spacing_mut().item_spacing = egui::vec2(2.0, 6.0);
-            for control in row {
+            for (entry, control) in row {
+                let Some(control) = control else {
+                    tool_catalogue::unavailable_button(ui, entry);
+                    continue;
+                };
                 let order = match &control.command {
                     Command::UiBondToolSelect(params) => Some(params.order),
                     Command::UiRingToolSelect(_) => None,
@@ -895,7 +897,7 @@ fn show_workspace_with_preview(
         drawing.invalidate_hover();
         drawing.navigation_position = None;
     }
-    let events = context.input(|input| input.events.clone());
+    let mut events = context.input(|input| input.events.clone());
     if !files
         .as_ref()
         .is_some_and(|files| files.presentation_present() || files.is_busy())
@@ -918,6 +920,18 @@ fn show_workspace_with_preview(
     let new_decision_at_start = files
         .as_ref()
         .is_some_and(|files| files.new_decision_open());
+    let catalogue_allowed = !paste_modal_at_start
+        && !order_busy_at_start
+        && engine.state().close == CloseState::Open
+        && !files
+            .as_ref()
+            .is_some_and(|files| files.blocks_authoring(&engine.state()))
+        && !sdf_fields
+            .as_ref()
+            .is_some_and(|fields| fields.presentation_present() || fields.is_busy());
+    drawing
+        .tool_catalogue
+        .prepare_input(context, &mut events, catalogue_allowed);
     drawing
         .atom_labels
         .show(context, Some(&mut *engine), &events);
@@ -979,6 +993,7 @@ fn show_workspace_with_preview(
         .frame(egui::Frame::side_top_panel(&context.style()).inner_margin(8.0))
         .show(context, |ui| {
             ui.horizontal(|ui| {
+                branding::header(ui);
                 ui.label(
                     egui::RichText::new("bondline")
                         .strong()
@@ -1046,7 +1061,15 @@ fn show_workspace_with_preview(
             ui.add_enabled_ui(!blocked && !order_busy_at_start, |ui| {
                 tool_actions = bond_tool_buttons(ui, &engine.controls(), &events);
             });
+            drawing
+                .tool_catalogue
+                .rail(ui, catalogue_allowed && !blocked && !order_busy_at_start);
         });
+    tool_actions.extend(
+        drawing
+            .tool_catalogue
+            .show(context, &engine.controls(), &events),
+    );
     if blocked {
         drawing.ring.cancel();
         drawing.gesture = None;

@@ -1354,6 +1354,14 @@ current. No file operation/receipt, Save lease or trusted close ACK is added by 
 order. [Receiving evidence](verification-native-smiles-records.md) separates App/worker
 tests from actual platform execution and exact reference-screen parity.
 
+## Native tool catalogue presentation
+
+The native **All tools…** catalogue is roadmap presentation, not additional executable
+registry entries. All124 documented roles/140 expanded entries are visible;128 planned
+entries have no binding and cannot dispatch. Available entries use the same current
+delivered control IDs. `ui.controls` continues to list delivered bindings only, retaining
+registry38 and counts31/20/14/10. See [catalogue](design/tool-catalogue.md).
+
 ## Exact-target atom-label presentation
 
 Explicit atom.set_label independently restores existing terminal and nonterminal carbon

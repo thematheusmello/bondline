@@ -15,6 +15,46 @@
       "sha256": "31bbc7de655ccdf16efb6adb9959b5c6b9318befa0cdae88499b072549a55e3f",
       "license": "MIT OR Apache-2.0",
       "notice": "vendor/eframe/LICENSE-MIT"
+    },
+    {
+      "path": "assets/brand/bondline-mark.svg",
+      "source": "Original Bondline contributors; assets/brand/NOTICE.md",
+      "revision": "bond-loop-v1-2026-11-16",
+      "sha256": "a7b48aadaaf48897f9227c2b451db876932a9bb1d5811e7c728a25713f78b841",
+      "license": "MIT OR Apache-2.0",
+      "notice": "assets/brand/NOTICE.md"
+    },
+    {
+      "path": "assets/brand/bondline-mark-dark.svg",
+      "source": "Original Bondline contributors; assets/brand/NOTICE.md",
+      "revision": "bond-loop-v1-2026-11-16",
+      "sha256": "d1ebeb5129ce6472344596ea7895d9da95f5493df7cea0c57ade432868481c5a",
+      "license": "MIT OR Apache-2.0",
+      "notice": "assets/brand/NOTICE.md"
+    },
+    {
+      "path": "assets/brand/bondline-wordmark.svg",
+      "source": "Original Bondline contributors; assets/brand/NOTICE.md",
+      "revision": "bond-loop-v1-2026-11-16",
+      "sha256": "6bb52ffacbec223013c4ed640295ce6303bd9ce5de5c00d01ce0217c52daaf51",
+      "license": "MIT OR Apache-2.0",
+      "notice": "assets/brand/NOTICE.md"
+    },
+    {
+      "path": "assets/brand/bondline-wordmark-dark.svg",
+      "source": "Original Bondline contributors; assets/brand/NOTICE.md",
+      "revision": "bond-loop-v1-2026-11-16",
+      "sha256": "749394836963e5093267acea8efce4136e3c11dc2fd1c5f13551c7cd8b935b58",
+      "license": "MIT OR Apache-2.0",
+      "notice": "assets/brand/NOTICE.md"
+    },
+    {
+      "path": "assets/brand/bondline-app-icon.svg",
+      "source": "Original Bondline contributors; assets/brand/NOTICE.md",
+      "revision": "bond-loop-v1-2026-11-16",
+      "sha256": "789686f58df248782ad38dcfd1f1608de1402758e82605ce5ee7f5a3b3f42c33",
+      "license": "MIT OR Apache-2.0",
+      "notice": "assets/brand/NOTICE.md"
     }
   ]
 }

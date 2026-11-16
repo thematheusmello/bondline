@@ -4,6 +4,14 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The user-directed identity and planned-tool presentation exposes all124 documented
+TD/TQ/TB roles as140 entries, with twelve real bindings and128 disabled planned entries.
+Original logo assets, native review and independent input/foreground/font regressions are
+recorded in [receiving](docs/verification-branding-and-tools.md). A visible grey icon does
+not implement its tool; the full M0–M5 scope and missing-feature states remain intact.
+After this visual increment, resume chain authoring from the existing source proposal,
+then the remaining drawing, chemistry, publishing and distribution workflows.
+
 The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now has a
 [shared skeletal display/explicit-label follow-up](docs/verification-skeletal-carbon.md).
 Known-H/C4 suppression preserves mandatory labels, hits and real-ink guards; existing

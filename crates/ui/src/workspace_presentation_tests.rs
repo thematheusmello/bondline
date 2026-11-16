@@ -4,6 +4,9 @@ use egui::{Color32, Event, Modifiers, PointerButton, Pos2, Rect, Shape};
 use serde_json::{Value, json};
 use std::collections::HashMap;
 
+#[path = "planned_tools_tests.rs"]
+mod planned_tools;
+
 type TestResult<T = ()> = Result<T, Box<dyn std::error::Error>>;
 const TOOL_LABELS: [&str; 12] = [
     "Single bond",
@@ -19,6 +22,27 @@ const TOOL_LABELS: [&str; 12] = [
     "Benzene",
     "Cyclopentadiene",
 ];
+
+#[test]
+fn original_logo_has_a_named_header_image_without_touching_document_or_tool() -> TestResult {
+    let mut workspace = Workspace::new(1160.0, 800.0)?;
+    let before = workspace.state()?;
+    workspace.warm();
+    let logo = workspace
+        .nodes
+        .values()
+        .find(|node| {
+            node.role() == egui::accesskit::Role::Image && node.name() == Some("Bondline logo")
+        })
+        .ok_or("missing original Bondline logo in the actual header")?;
+    let bounds = logo.bounds().ok_or("logo bounds")?;
+    assert_eq!((bounds.width(), bounds.height()), (28.0, 28.0));
+    let edit = workspace.button("Edit")?;
+    assert!(bounds.x1 < f64::from(edit.left()));
+    assert_eq!(workspace.state()?, before);
+    assert_eq!(workspace.engine.bond_tool().order, BondDrawOrder::Single);
+    Ok(())
+}
 
 struct Workspace {
     engine: Engine,
@@ -192,17 +216,34 @@ fn assert_layout(workspace: &Workspace, output: &egui::FullOutput) -> TestResult
                 .all(|other| !bounds.intersects(*other))
         );
     }
+    let mut planned_count = 0;
+    let mut catalogue_count = 0;
     let mut rail_buttons = workspace
         .nodes
         .values()
         .filter(|node| node.role() == egui::accesskit::Role::Button)
         .filter_map(|node| {
             let b = node.bounds()?;
-            (b.x1 <= f64::from(canvas.left()) && b.y0 >= f64::from(canvas.top()))
-                .then(|| node.name().map(str::to_owned))
-                .flatten()
+            if b.x1 > f64::from(canvas.left()) || b.y0 < f64::from(canvas.top()) {
+                return None;
+            }
+            let name = node.name()?;
+            if name == "All tools…" {
+                assert!(!node.is_disabled());
+                catalogue_count += 1;
+                None
+            } else if node.description() == Some("Not implemented") {
+                assert!(node.is_disabled());
+                assert_eq!(node.toggled(), Some(egui::accesskit::Toggled::False));
+                planned_count += 1;
+                None
+            } else {
+                Some(name.to_owned())
+            }
         })
         .collect::<Vec<_>>();
+    assert_eq!(catalogue_count, 1);
+    assert_eq!(planned_count, 128);
     rail_buttons.sort();
     assert_eq!(
         rail_buttons,

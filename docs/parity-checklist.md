@@ -11,6 +11,12 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
+All124 TD/TQ/TB roles now have visible catalogue entries (140 with explicit variants).
+Twelve reference delivered bindings;128 remain disabled with no command and **retain
+their missing status**. Original branding, grey controls, search and bounded native
+presentation evidence are in [receiving](verification-branding-and-tools.md). This does
+not complete tool functionality, modern inventory research, M0 or M2–M5.
+
 Directed DoublePosition now has [independent data/format evidence](verification-double-position.md):
 native CDXML presence/direction/history and guarded loss boundaries. Center Double retains
 the existing centered scene; explicit Left/Right Double now has

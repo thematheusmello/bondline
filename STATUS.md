@@ -1,13 +1,72 @@
 # Status — 2026-11-16
 
-The full M0–M5 goal is **active** on `feat/multiple-bonds`. The native/GPU license
+The full M0–M5 goal is **active after the user resumed it** on `feat/multiple-bonds`.
+Its scope is unchanged. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publication.
 
 ## Current recoverable work and evidence
 
+### Verified branding/catalogue increment
+
+The original logo and planned-tool request is implemented and verified within the scope
+below, on base `4948cec` after terminal-label `1cd8671`; this receiving record accompanies
+the atomic visual commit. Read docs/verification-branding-and-tools.md and design/brand.md,
+design/tool-catalogue.md. The visual commit includes its code, tests, assets and documentation.
+
+Original MIT OR Apache-2.0 logo masters, header, generated icon and README banner are
+present. All124 documented TD/TQ/TB roles map to140 display entries: twelve delivered
+bindings and128 disabled/unselected entries with no command. Working rail order/geometry
+and its twelve original assertions remain; grey entries have explicit tooltips/AX names.
+Search/scroll and current-control replay use one existing registry (38 commands; delivered
+control counts31/20/14/10). A grey icon never promotes its missing feature to implemented.
+Foreground File/Atom/SDF forms own input; catalogue Escape preserves persistent selection.
+
+Eleven new cases include actual-state/source/history/chemical-paint guards, independent
+source-role/variant inventory, modal priority and actual bundled-font coverage. Real
+runtime REDs precede producer/fixes; separate SDK/File-menu fixture qualifications stay
+explicit. Source review exposes SDF Escape theft; its actual regression fails all three
+priority assertions before the shared eligibility fix. Native review finds two absent
+font characters; the new font regression identifies exactly both, then geometry fixes them.
+
+First full gate39983 passes1550/0/1 before that last glyph finding. Final gate20773 passes
+1551/0/1 across221 result lines: fmt, warnings-denied workspace/vendor clippy/tests,
+layers, seven-asset strict licenses, same155/166/221 runtime closures and pinned corpus.
+Final log191502B/SHA256a63e67348f9c69fd618fb64d4e6cee9fff9f535c0e5a31e3eaf88297d4638bc2.
+Build3564 passes: native c1b8c8849cf44c097ad07e915cfb495ba41c3300e13c5db1537c5f17c53a04bd;
+CLI6bda7cb347e990d6388a15b1cdb65175e7eb67b3fea2c5d874e85be1f49049c3.
+This does not attribute or repair historical MCP replacement-bind failures.
+
+Bounded macOS27.2/M3Max review uses a separate Bondline Preview bundle, preserving the
+old user app/draft. Original2287B command-created seed is independently C6H6+C5H6,
+11 atoms/11 bonds/two fragments, SHA25669ba4b4253032bcce65f30a046f363bb4c855366376481f252837163eb39fe8b.
+Native Cmd+O/path/Open, grey Lasso/DNA, search/real Double selection, scroll to HELM and
+Escape work. Preliminary native Benzene paper click yields17/17/three fragments/dirty;
+Cmd+Z restores Saved11/11/two fragments. The initial File-menu Open click closes without
+a chooser; its cause is unresolved, so that first-click flow is not called verified.
+This is not native authoring of the two-ring seed, full attachment/Shift/ring parity,
+measured monitor DPI or Windows/Linux acceptance. Final glyph-corrected native review
+reopens the seed and visibly verifies the corrected replacement/angle icons. Two exact
+native JPEGs and complete provenance are in docs/media/branding-native-provenance.json.
+They are actual own-window images, not generated mockups or approved chemical goldens.
+
+Final preview process17806 remains open on target/desktop-review-branding-4948cec/Bondline.app
+with the Saved original scene and no listener. Preliminary process3334 is closed cleanly
+before its own disposable bundle refresh. Old user process96449 and copied d0873d6c…5c64
+bundle/draft remain untouched. Revalidate newer handles/state before interacting. No Root
+Cargo job or worker job remains live; workers completed ignored proposals/reviews only.
+No core/format/parser/font/shader/dependency/workflow/approved-golden change. Actions OFF;
+no push or publication. Full M0–M5 remains active and incomplete.
+
+Next: lock the existing chain proposal
+before independent tests/code. Continue complete Add Chain/repeat/Snaking/settings and the
+remaining M1–M5 scope. Preserve native first-click uncertainty and all cross-platform/
+modern-inventory gaps; do not repeat exhausted MCP diagnostic contexts or weaken guards.
+
+### Verified terminal-label checkpoint
+
 The terminal-label prerequisite follows locked contracts `3aa093f`/`662c72c` and is
-ready for its atomic source/test/docs commit. Read docs/verification-terminal-carbon-labels.md.
+committed `1cd8671`. Read docs/verification-terminal-carbon-labels.md.
 Optional node data, strict format-loss refusals, actual-degree display and independent
 two-flag restoration are delivered through the shared renderer/registry/editor. Eighteen
 new independent cases pass. Root observes intended model/IO/render/setter REDs first;
@@ -23,10 +82,8 @@ material issue; the integration review explicitly captures pre-format test decla
 
 The preceding goal turn made visual-review progress: CUA raises the user's existing
 Bondline window and observes the intact unsaved 17-atom/19-bond drawing. It does not
-reload the older copied build or verify the newly built features. The latest user request
-now prioritizes an original Bondline logo and all planned tools visible but disabled
-until properly implemented. Two workers are preparing ignored branding and catalogue
-proposals; Root owns all adoption, tests, Cargo/Git and native interaction.
+reload the older copied build or verify the newly built features. The subsequent user request prioritizes original branding and visible disabled planned
+tools; its current receiving record appears above. Root retains execution/mutation ownership.
 
 ## Previous native named-ring checkpoint
 
@@ -177,21 +234,15 @@ write ignored proposals, not live product code or Git changes.
 
 ## Next exact steps
 
-1. Finish the terminal-label atomic commit, then fulfill the user's logo/planned-tools
-   request. Review ignored target/branding/proposal and target/planned-tools/catalogue-proposal,
-   lock the catalogue and disabled-input contract, observe meaningful RED tests, implement
-   original branding and all planned drawing roles, and verify actual layout/disabled
-   interaction without changing the user's existing drawing. Never bind missing tools
-   to successful-looking commands or promote their parity status.
-2. Review the next ignored source proposal target/chain-authoring/source-proposal/
-   PROPOSAL.md (5049B/SHA256443374b3d722e49d8b822e815df3e0515aa27f58d9b937681fd000345831d999)
-   and pins.json. GUIDE25 printed104–105 supplies Acyclic drag/count, separate Snaking/
-   Control, atom attachment, click Add Chain/count/Add and Alt repeat. Count inclusion,
-   quantization and26.1 defaults remain unknown; lock original policies before tests.
-   The terminal-label prerequisite is delivered with independent evidence; do not
-   silently erase H. No chain contract/test/producer is delivered yet.
-   Continue the complete dialog/repeat/Snaking/chair/sprout/style/chemistry backlog.
-3. After the user's current visual review, when desktop use permits, verify actual
-   native skeletal restoration plus inset/selection/free/fused/spiro rings, Cancel/
-   history and Unicode Save/reopen. Offscreen App tests do not prove native input or
-   physical DPI. New Windows/Linux interaction stays unverified while Actions is off.
+1. After the visual commit, select chain authoring from the existing public-source proposal
+   target/chain-authoring/source-proposal/PROPOSAL.md (5049B/SHA256443374b3d722e49d8b822e815df3e0515aa27f58d9b937681fd000345831d999).
+   GUIDE25 printed104–105 covers drag/count, Snaking/Control, atom attachment, Add Chain
+   and Alt repeat. Lock original count/quantization/geometry/placement policies before
+   tests. The terminal-label prerequisite is delivered; never erase literal H. No chain
+   command/tool is implemented or enabled by the visible catalogue.
+2. Continue full Add Chain/repeat/Snaking/chair/sprout/style/chemistry/publishing/backlog
+   workflows, with independent core/wire/App/native evidence. Preserve unsupported-source
+   authority, preview IDs/history and all physical/density/input guards.
+3. Preserve initial native File-menu first-click uncertainty for a bounded own-app
+   investigation; Cmd+O is verified. Fused/spiro/Shift/density and other-platform native
+   acceptance remain required. GitHub Actions stays disabled; no unrequested publication.

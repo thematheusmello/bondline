@@ -3091,3 +3091,15 @@ loss refusals and explicit restoration retain source/history and strict renderin
 Native OS/default-style/chain parity remains unfinished; the existing desktop draft stays
 untouched. The latest user request prioritizes an original logo and a visible disabled
 catalogue of planned tools next. Actions remains off and the complete goal stays active.
+
+## Original branding and planned tools, 2026-11-16
+
+[Receiving evidence](verification-branding-and-tools.md) records original vector assets,
+all124 source roles/140 UI entries,128 disabled/no-command future tools, independent
+inventory/input/modal/font regressions and actual native captures. Final local gate20773
+passes1551/0/1 and native/CLI build3564 passes. Actual Mac search/disabled/available-tool/
+scroll/Escape and bounded Benzene free-click/Undo have explicit scope; first File-menu
+Open click uncertainty, full named-ring gestures, measured DPI and other platforms remain
+unverified. The old user app/draft stays untouched; a separate final preview remains open.
+No historical MCP bind failure is attributed, no golden is regenerated, and grey features
+remain missing. Full M0–M5 stays active and Actions remains disabled.

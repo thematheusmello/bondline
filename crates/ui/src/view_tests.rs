@@ -1,5 +1,10 @@
 //! Independent original-A4 view and numeric field acceptance through actual App frames.
 use super::*;
+
+#[path = "planned_tools_modal_tests.rs"]
+mod planned_tools_modal;
+#[path = "planned_tools_sdf_modal_tests.rs"]
+mod planned_tools_sdf_modal;
 use egui::{Event, Key, Modifiers, PointerButton, Pos2};
 use serde_json::{Value, json};
 use std::{
