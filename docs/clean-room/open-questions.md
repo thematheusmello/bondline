@@ -335,6 +335,15 @@ unsaturated weighted-valence/phase and shared-edge precedence still need their o
 contracts/tests. GUIDE25 printed101–103/423–424 does not establish which shared aromatic
 edge order/phase wins; do not silently mutate an old edge or infer that from memory.
 
+The [carbon-label data contract](../research/carbon-label-data.md) identifies actual
+standard terminal/non-terminal display flags from the SDK table and official DTD, distinct
+from H counts/query restrictions. The older Node page omits them; individual property
+mirrors are archived error wrappers. Node/root defaults are no, but inheritance precedence,
+interaction with explicit child Text and actual vendor26.1 rendering remain unverified.
+Missing flags keep the legacy Bondline compatibility profile; no claim of a different
+standard absent/no meaning is made. Future skeletal eligibility must preserve mandatory
+isolated-C/C2, collinear/cumulene labels and literal H rather than hiding metadata globally.
+
 
 ## Existing-bond order edits — 2026-11-15
 
