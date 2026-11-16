@@ -203,6 +203,75 @@ impl SmilesFileDocument {
             notation_error(record.line_number, id, record.notation_range.start, error)
         })
     }
+
+    /// Replace only one existing notation token; all other complete-source bytes survive.
+    /// Reindex the bounded candidate before returning, with exact no-ops sharing both Arcs.
+    pub fn with_record_notation(
+        &self,
+        id: RecordId,
+        notation: &[u8],
+        cancel: &Cancellation,
+    ) -> Result<Self, SmilesFileError> {
+        check_cancel(&mut || cancel.is_cancelled(), 1, None, 0)?;
+        let record = self
+            .record(id)
+            .ok_or(SmilesFileError::MissingRecord { record_id: id })?;
+        let range = record.notation_range();
+        let previous = self
+            .source
+            .get(range.clone())
+            .ok_or(SmilesFileError::InvalidSpan { record_id: id })?;
+        if previous == notation {
+            return Ok(self.clone());
+        }
+        let error = |error| notation_error(record.line_number, id, range.start, error);
+        if notation.len() > MAX_SMILES_BYTES {
+            return Err(error(SmilesError::Limit {
+                offset: MAX_SMILES_BYTES,
+                kind: Limit::Bytes,
+            }));
+        }
+        let length = self
+            .source
+            .len()
+            .checked_sub(range.len())
+            .and_then(|length| length.checked_add(notation.len()))
+            .filter(|length| *length <= MAX_FILE_BYTES)
+            .ok_or(SmilesFileError::InputLimit {
+                offset: MAX_FILE_BYTES,
+            })?;
+        SmilesDocument::parse(notation.into()).map_err(error)?;
+        // Standalone notation accepts a terminal EOL; a record splice must never add a line.
+        if let Some(offset) = notation
+            .iter()
+            .position(|byte| byte.is_ascii_whitespace() || byte.is_ascii_control())
+        {
+            return Err(error(SmilesError::Syntax {
+                offset,
+                reason: "record replacement must be exactly one nonempty notation token",
+            }));
+        }
+        check_cancel(
+            &mut || cancel.is_cancelled(),
+            record.line_number,
+            Some(id),
+            range.start,
+        )?;
+        let before = self
+            .source
+            .get(..range.start)
+            .ok_or(SmilesFileError::InvalidSpan { record_id: id })?;
+        let after = self
+            .source
+            .get(range.end..)
+            .ok_or(SmilesFileError::InvalidSpan { record_id: id })?;
+        let mut candidate = Vec::with_capacity(length);
+        candidate.extend_from_slice(before);
+        candidate.extend_from_slice(notation);
+        candidate.extend_from_slice(after);
+        Self::parse_with_cancel(candidate.into(), cancel)
+    }
+
     /// Retained inline/source/index bytes with shared allocations counted once. Excludes
     /// Arc/allocator headers, temporary reads and external copies; arithmetic saturates.
     pub fn retained_bytes<'a>(documents: impl IntoIterator<Item = &'a Self>) -> usize {
