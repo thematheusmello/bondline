@@ -165,6 +165,10 @@ or lose its unsaved draft; revalidate any newer handle before restarting work.
    support a separate preserving terminal-label prerequisite; do not silently erase H
    or call those ends skeletal. No chain contract/test/producer is delivered yet.
    Continue the complete dialog/repeat/Snaking/chair/sprout/style/chemistry backlog.
+   Root now locks docs/research/terminal-carbon-labels.md before new tests/product:
+   optional node data and strict loss guards, actual-degree display, mandatory isolated
+   carbon/C2 labels and existing atom.set_label restoration precede chain authoring.
+   No terminal-label implementation/test or new native execution is delivered yet.
 2. After the user's current visual review, when desktop use permits, verify actual
    native skeletal restoration plus inset/selection/free/fused/spiro rings, Cancel/
    history and Unicode Save/reopen. Offscreen App tests do not prove native input or
