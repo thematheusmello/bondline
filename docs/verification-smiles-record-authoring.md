@@ -4,6 +4,8 @@
 notation-span replacement, retained drawing projection and command/native integration.
 Public OpenSMILES file semantics and pinned PhotoCraft ownership/job distinctions are
 sources; selection, geometry, identity and lifecycle policies are original Bondline work.
+Local feature commits: codec `78f7d8d`, retained projection `162f79d`, shared commands
+`58666e4`. All are part of the verified integrated source described below.
 
 ## Notation-only file transaction
 

@@ -3,8 +3,8 @@
 ## Current source-backed SMILES record checkpoint
 
 The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; notation feature
-`78f7d8d` and retained-projection feature `162f79d` are separate local commits. This
-command feature adds the shared adapter integration. No push/publication or hosted run
+`78f7d8d` and retained-projection feature `162f79d` are separate local commits. Command
+feature `58666e4` adds the shared adapter integration. No push/publication or hosted run
 occurred. Repository/workflow Actions remains disabled. M0's native license blocker is
 resolved; full M0, M1 and M2–M5 remain incomplete.
 
@@ -44,7 +44,9 @@ would reparse a whole file synchronously. The earlier native paste feature `71c3
 the separate actual-window checkpoint. No native bundle was refreshed or launched here.
 Process 39430 was confirmed running at the existing
 `target/smiles-ring-native/Bondline.app` path; last observed UI state was Saved8/7/2 at100%,
-not re-inspected this turn. No unused preview/tab was reopened. All compiler/test/oracle
+not re-inspected this turn. A final process inventory confirms only that preview remains
+under the project target directory, with no CLI/MCP/test process left running.
+No unused preview/tab was reopened. All compiler/test/oracle
 jobs and agent tasks are terminal; do not poll 84163/37337/7908/63504/23679/81285/7866.
 
 **Next exact task:** implement native selected/all import presentation and the registered
