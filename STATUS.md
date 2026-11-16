@@ -7,6 +7,20 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Next atomic drawing-settings command — contract locked
+
+On b6497dd, the previous goal turn is PROGRESS (17 new settings-data cases, two10k ASan
+runs, native/CLI build and independent actual Unicode CLI files). The full aggregate
+remains failed998/1 at unchanged MCP bind58634; separate remaining592/0/1 is not a pass.
+Read docs/research/drawing-settings-command.md. One append-only command will replace
+two explicitly required nullable fields using existing validated data and one normal
+commit, preserving source guards, no-op contexts and view focus. No command/test/type
+is present at this documentation checkpoint. Root owns tracked edits/runtime; workers
+supply ignored source/inventory reviews. Next record the actual existing-JSON runtime
+RED, implement and verify the full command/adapters slice, then native input/forms.
+Registry40 and native tools stay unchanged/grey. No execution job, user-window change,
+new platform/golden, hosted run, push or publication is claimed.
+
 ### Verified drawing-settings data — aggregate gate failed
 
 This atomic data/format increment follows contract538df6c on65af201. Read
