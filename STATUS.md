@@ -7,6 +7,17 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Chain engine contract — no implementation yet
+
+On branding base f077ed2, public-source refresh and seam/oracle reviews produce the
+locked docs/research/chain-authoring-plan.md. The next action is an independent
+existing-JSON UnknownCommand RED, then the bounded headless chain.create implementation
+and real adapter/file checks. Count includes the anchor; explicit angle1..179° and
+placement have no inferred UI defaults. No chain test/code or native binding is present
+at this contract checkpoint. Full native Add Chain/repeat/Snaking/settings remain required.
+Both user desktop processes96449/17806 and copied bundles/drafts remain protected;
+no listener or native interaction. No Root Cargo job. Actions stays OFF.
+
 ### Verified branding/catalogue increment
 
 The original logo and planned-tool request is implemented and verified within the scope

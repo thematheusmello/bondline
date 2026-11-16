@@ -1,5 +1,13 @@
 # Open questions
 
+- Chain engine policy is locked in research/chain-authoring-plan.md. Public25 guide
+  documents drag/count, Add Chain, attachment, Alt repeat, Snaking/Control and conditional
+  settings; exact26.1/Mac defaults, count inclusion, quantization/ties/hysteresis, repeat
+  lifecycle and modifier precedence remain unknown. Explicit headless placement/count
+  is original policy, not an automatic recommended attachment pose. In particular
+  IUPAC180° Single+Triple/two-Double centers need consideration in later native posing.
+  Complete chain UI remains required and disabled until implemented and checked.
+
 - Native ring tools are the next integration after checked command ac340db. The
   original policies in research/ring-native-plan.md lock48pt/pose, unit-neighbor
   bisectors/1e-12 cancellation ties, local-side candidates and a scene-success gate.
