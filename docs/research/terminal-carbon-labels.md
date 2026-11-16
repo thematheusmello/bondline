@@ -10,7 +10,7 @@ before new declarations/product changes. The open user bundle/draft stays untouc
 defines ShowTerminalCarbonLabels0x0442 for carbon with zero/one incident bond, separately
 from0x0443 and literal NumHydrogens. Root verifies the primary table online. The
 [official DTD](https://static.chemistry.revvitycloud.com/cdxml/CDXML.dtd) permits node/root
-yes/no with no defaults. Web access rejects its application/xml-dtd content type; the
+yes/no with default `no`. Web access rejects its application/xml-dtd content type; the
 unchanged28821-byte primary cache SHA2565311978e514ffe154108540c3634c314dc66031a4f3c877a681fc6dca8e128c2
 supplies lines79/249. SDK cache96359B/SHA25695d46f9a2329a145bd9da2057b9ad51c39eede119aa92318b2edaaecfc88538d.
 
