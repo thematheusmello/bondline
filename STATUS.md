@@ -4,6 +4,12 @@
 
 The full M0–M5 goal remains **active** on `feat/multiple-bonds`. Native feature
 `1e78bb4` builds on recoverable base `01e79da`; all intentional feature files are committed.
+The presentation-only followup corrects the SMILES Save As hint: all records/opaque data
+are retained, and generated coordinates are not saved. All20 existing picker checks,
+UI warnings-denied clippy, rustfmt and the native build pass; the actual complete hint is
+visible in the macOS Save As dialog over the retained7/3/3 drawing. Cancel preserves
+Saved state and both actual saved files remain byte-exact. No artificial text-only test
+or repeated full aggregate is added; the last aggregate failure below stays unresolved.
 No push/publication or hosted run occurred. Repository/workflow Actions remains disabled.
 The desktop/GPU license blocker is resolved; full M0, M1 and M2–M5 remain incomplete.
 
@@ -41,22 +47,28 @@ change occurred.
 AX string SetValue and a visible-handle pan drag made no visible change. Existing-Double
 click alignment is unavailable; fresh-position numeric1 works. Geometry/ordinal typing,
 native lifecycle races, measured DPI/2×, wider chemistry/layout, exact reference screens
-and new Windows/Linux interaction remain unverified or missing. The picker still uses
-historical raw-preview wording. Do not count those as completed workflows.
+and new Windows/Linux interaction remain unverified or missing. Do not count those as
+completed workflows.
 
-The only Bondline preview is PID34839 at the existing
+The only Bondline preview is PID57375 at the existing
 `target/smiles-ring-native/Bondline.app`, ID `org.bondline.neutral-simple-ring-review`.
 Executable21605552 bytes, SHA256
-`bd40e72eb760cd61979d289139bdd0d474304c2a7fcdc7efd639a607c8403332`.
+`8a73bf4ac3e1a50f0cf9380852703bbcf0e88471f38bf1414ba410a612f7c762`.
 It is Saved on `all-edited-λ.smiles`,7/3/3 at100%, Single tool; no control port requested.
 Old previews stay closed, unrelated apps/tabs were untouched. The previous saved native
 CDXML was inspected before normal quit; no unsaved work was discarded. All build/test/
 oracle jobs listed above are terminal, including54599/65944/21784; do not poll old handles.
-All agent tasks have returned. Root owns continuation.
+Native-record implementation tasks returned. New independent M2 atom-label core/wire
+declarations and a source-only MCP lifetime review are active; they may write only ignored
+`target/atom-labels/` and `target/native-smiles-records/socket-source-review-v2/` artifacts.
+Root alone receives tests and owns Cargo/Git/CUA/product changes. No new engine API is
+implemented by the picker wording change.
 
-**Next executable work:** correct the raw-only SMILES picker hint in
-`crates/ui/src/files.rs:395` with the existing format/picker UI checks.
-Preserve this scoped native/source safety evidence. Investigate the MCP failure only with
+**Next executable work:** receive independent `atom.set_label` core and actual-wire tests
+from `target/atom-labels/`, observe UnknownCommand RED before implementing the accepted
+literal element/H contract. Native presentation is a later required increment, not a fake
+empty-target binding or another converter. Preserve existing source guards/history and
+the native record evidence. Investigate the MCP failure only with
 a genuinely new source/OS-lifetime hypothesis and bounded decisive evidence; never change
 assertions, add retries/reuse flags or rerun exhausted contexts to hide it. Continue M2
 atom labels, selection, rings/chains and styles from the source-cited parity checklist,

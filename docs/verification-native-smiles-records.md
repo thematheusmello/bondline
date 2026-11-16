@@ -180,5 +180,24 @@ the picker folder does not change focus, and typed CJK in a path is omitted on o
 selecting its exact Unicode file row and ordinary OS paste of the output name work.
 Do not infer a file-codec Unicode defect. CJK filename glyph coverage, geometry/ordinal
 typing, native lifecycle races, measured DPI/2×, wider chemistry/layout, exact reference
-screens and Windows/Linux remain unverified or limited. The SMILES picker hint still
-describes raw-only preview; reconcile that wording with explicit record import separately.
+screens and Windows/Linux remain unverified or limited.
+
+## Save hint followup
+
+The earlier native Save As hint incorrectly said chemical preview was unavailable even
+over the imported drawing. A one-string presentation correction now states whole-record/
+opaque-data retention and that generated coordinates are not saved. No workflow, command,
+file policy or source authority changes. Existing20 picker tests pass (98903); rustfmt,
+UI all-target warnings-denied clippy and native build pass. No artificial text-only test
+or broad aggregate rerun is used for this reversible wording edit.
+
+The old preview is inspected Saved7/3/3, quit normally and refreshed in the same bundle.
+New executable21605552 bytes, SHA256
+`8a73bf4ac3e1a50f0cf9380852703bbcf0e88471f38bf1414ba410a612f7c762`.
+Actual Mac Open of the Unicode62-byte output, explicit All import, F5 and Save As show
+the complete corrected hint with visible filename and Save/Cancel controls. Cancel leaves
+Saved7/3/3 at100%, Single tool, exactly one preview (PID57375), no published file. Both
+actual41/62-byte saved files retain their previous hashes. Original Fit refusal remains;
+no broader navigation/DPI or platform claim follows. The prior full825/1 aggregate and
+separate466/0/1 remaining-stage evidence remain distinct and unresolved.
+Ignored logs and `picker-hint-receiving.json` are under `target/native-smiles-records/`.

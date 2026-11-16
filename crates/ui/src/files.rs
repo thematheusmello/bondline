@@ -392,7 +392,7 @@ impl FileChooser {
                         FileFormat::MolV2000=>"MOL V2000 files (*.mol); unsupported content cannot be saved in this format.",
                         FileFormat::MolV3000=>"MOL V3000 files (*.mol); unsupported content cannot be saved in this format.",
                         FileFormat::Sdf=>"SDF collections (*.sdf, *.sd); all records and their molecular versions are retained.",
-                        FileFormat::Smiles=>"SMILES files (*.smi, *.smiles); all records and original bytes are retained. Chemical preview is unavailable.",
+                        FileFormat::Smiles=>"SMILES files (*.smi, *.smiles); all records and opaque data are retained. Generated coordinates are not saved.",
                     }
                 });
                 let mut navigate = None;

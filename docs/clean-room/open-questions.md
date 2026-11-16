@@ -526,6 +526,6 @@ The edited native record scene still refuses Fit78.79%; Actual100% restores it. 
 SetValue and one visible-handle pan drag make no visible change; their cause is unknown.
 Existing-Double click alignment remains unavailable; fresh native position plus numeric
 order works. Native geometry/ordinal typing, race/cancel/poison, measured DPI/2× and other
-platforms remain unverified. The picker hint's historical raw-preview wording needs to
-describe explicit import correctly. The latest unchanged MCP replacement_bind failure
+platforms remain unverified. The picker hint's historical raw-preview wording is now
+corrected with bounded native Save As evidence. The latest unchanged MCP replacement_bind failure
 has no failure-time owner capture; passing prior/remaining stages does not explain it.
