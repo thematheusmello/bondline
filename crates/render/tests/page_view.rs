@@ -23,6 +23,7 @@ fn pair(order: BondOrder) -> TestResult<Page> {
                 Atom::new(b, Element::try_from(6)?, Some(Point2::new(96.0, 64.0)?)),
             ],
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(23).ok_or("bond")?,
                 begin: a,
                 end: b,
@@ -612,6 +613,7 @@ fn large_authored_positions_map_to_the_exact_projected_atom_anchor_before_bond_p
             }
             atoms.push(Atom::new(third, carbon, Some(last)));
             bonds.push(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: third_bond,
                 begin: middle_id,
                 end: third,

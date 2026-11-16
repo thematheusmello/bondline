@@ -1,8 +1,8 @@
 use super::{is_element, parse_position};
 use bondline_cdxml::{ObjectId, parse_integer};
 use bondline_model::{
-    Atom, AtomId, Bond, BondId, BondOrder, Element, Fragment, FragmentId, GraphError,
-    MAX_GRAPH_ITEMS, Radical,
+    Atom, AtomId, Bond, BondId, BondOrder, DoublePosition, Element, Fragment, FragmentId,
+    GraphError, MAX_GRAPH_ITEMS, Radical,
 };
 use roxmltree::Node;
 use std::{
@@ -109,6 +109,7 @@ impl<'input> ElementalGraph<'input> {
                     begin: endpoint("B")?,
                     end: endpoint("E")?,
                     order: read_order(node.attribute("Order"))?,
+                    double_position: read_double_position(node.attribute("DoublePosition"))?,
                 });
             }
             let id = FragmentId::new(allocate(&mut next_fragment)?)
@@ -286,6 +287,16 @@ fn read_atom(node: Node<'_, '_>, id: AtomId) -> Result<Atom, MappingError> {
         _ => return Err(MappingError::InvalidProperty("Radical")),
     };
     Ok(atom)
+}
+
+fn read_double_position(value: Option<&str>) -> Result<DoublePosition, MappingError> {
+    match value {
+        None => Ok(DoublePosition::Unspecified),
+        Some("Center") => Ok(DoublePosition::Center),
+        Some("Right") => Ok(DoublePosition::Right),
+        Some("Left") => Ok(DoublePosition::Left),
+        Some(_) => Err(MappingError::InvalidProperty("DoublePosition")),
+    }
 }
 
 fn read_order(value: Option<&str>) -> Result<BondOrder, MappingError> {

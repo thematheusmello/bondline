@@ -26,6 +26,17 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
+The DoublePosition data prerequisite follows the native-ring checkpoint. Read
+docs/research/sided-double-prerequisite.md and docs/verification-double-position.md.
+Bond stores directed Unspecified/Center/Right/Left; omitted default preserves old JSON/
+native-v0 bytes. CDXML names are mapped/written exactly; unspecified is not Center.
+Dormant metadata survives order changes. Both MOL model writers refuse any specified
+placement; retained-SMILES replacement cannot change it. Shared scene preflight accepts
+only Unspecified or Center Double; Left/Right is not rendered yet. Never silently center
+it, erase literal H, weaken source authority or infer the CDX manual/automatic bit.
+Next implement inset bounds/gaps/hits, then explicit skeletal policy and weighted
+unsaturated-ring/native tools; the data prerequisite does not complete aromatic parity.
+
 The native editable SMILES checkpoint passes local1245/0/1. Read
 docs/verification-native-smiles-paste.md for the ten worker/six App tests, real ABA
 regressions and bounded Mac clipboard/edit/Save/reopen evidence. Automatic clipboard

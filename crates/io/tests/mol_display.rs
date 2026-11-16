@@ -357,12 +357,14 @@ fn actual_current_page_ids_layout_and_frame_are_used_without_repacking() -> Test
     }
     let bonds = vec![
         Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: BondId::new(70).ok_or("bond")?,
             begin: atoms[0].id,
             end: atoms[1].id,
             order: bondline_model::BondOrder::Single,
         },
         Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: BondId::new(90).ok_or("bond")?,
             begin: atoms[1].id,
             end: atoms[2].id,

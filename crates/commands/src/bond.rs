@@ -271,6 +271,7 @@ pub(super) fn create(
         id,
         vec![first, second],
         vec![Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: bond,
             begin: a,
             end: b,
@@ -412,6 +413,7 @@ pub(super) fn extend(
     atoms.push(added);
     let mut bonds = fragment.bonds().to_vec();
     bonds.push(Bond {
+        double_position: bondline_model::DoublePosition::Unspecified,
         id: bond_id,
         begin,
         end: id,

@@ -80,6 +80,7 @@ fn zoomed_mol_uses_independent_literal_cco_h_counts_without_changing_source_or_n
         .into_iter()
         .map(|(id, a, b)| {
             Ok(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(id).ok_or("bond")?,
                 begin: AtomId::new(a).ok_or("begin")?,
                 end: AtomId::new(b).ok_or("end")?,

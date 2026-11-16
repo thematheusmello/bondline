@@ -120,6 +120,7 @@ impl SmilesDocument {
         for (index, source) in self.bonds().iter().enumerate() {
             check(cancel)?;
             bonds.push(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(identity(index)?).ok_or(AuthoringError::Limit)?,
                 begin: AtomId::new(identity(source.atoms[0])?).ok_or(AuthoringError::Limit)?,
                 end: AtomId::new(identity(source.atoms[1])?).ok_or(AuthoringError::Limit)?,

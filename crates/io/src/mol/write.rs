@@ -63,6 +63,12 @@ pub fn write_v2000_with_header(
     }
     let mut orders = Vec::with_capacity(fragment.bonds().len());
     for bond in fragment.bonds() {
+        if !bond.double_position.is_unspecified() {
+            return Err(MolError::Unsupported {
+                line: 0,
+                feature: "double-bond placement metadata",
+            });
+        }
         let order = match bond.order {
             BondOrder::Single => 1_u8,
             BondOrder::Double => 2,

@@ -13,6 +13,7 @@ fn document(
     let mut first = Atom::new(a, carbon, Some(Point2::new(10.0, 20.5)?));
     let mut second = Atom::new(b, carbon, Some(Point2::new(50.0, 20.5)?));
     let mut bond = Bond {
+        double_position: bondline_model::DoublePosition::Unspecified,
         id: BondId::new(1).ok_or("bond id")?,
         begin: a,
         end: b,

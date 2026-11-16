@@ -5,7 +5,7 @@ use crate::{
     Cancellation, Error, GraphScene, HitTarget, MAX_HIT_REGIONS, Primitive, Rectangle, Scene,
     Stroke,
 };
-use bondline_model::{AtomId, BondOrder, Page, PageSize, Point2, Radical};
+use bondline_model::{AtomId, BondOrder, DoublePosition, Page, PageSize, Point2, Radical};
 use std::collections::BTreeMap;
 
 /// The same rounded fit used for the paper and authoring pointer conversion.
@@ -336,6 +336,10 @@ pub(crate) fn graph_scene_in_viewport(
         }
         for bond in fragment.bonds() {
             cancel.check()?;
+            match (bond.order, bond.double_position) {
+                (_, DoublePosition::Unspecified) | (BondOrder::Double, DoublePosition::Center) => {}
+                _ => return Err(Error::UnsupportedChemicalContent),
+            }
             has_multiple |= matches!(bond.order, BondOrder::Double | BondOrder::Triple);
             count = count.saturating_add(match bond.order {
                 BondOrder::Double => 2,

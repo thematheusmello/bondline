@@ -544,6 +544,7 @@ fn fragment(
             .enumerate()
             .map(|(index, (begin, end, order))| {
                 Ok(Bond {
+                    double_position: bondline_model::DoublePosition::Unspecified,
                     id: BondId::new(u32::try_from(index + 1)?).ok_or("bond ID")?,
                     begin: AtomId::new(*begin).ok_or("begin")?,
                     end: AtomId::new(*end).ok_or("end")?,

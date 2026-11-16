@@ -316,13 +316,22 @@ the implemented slice does not establish universal CTfile perception or referenc
 [The original plan](../research/multiple-bond-plan.md) distinguishes centered
 segments from context-sensitive offset/joined Double bonds. Public SDK relative spacing,
 absolute override and inherited/last-used style semantics do not establish a universal26.1
-numeric default;18% is an example. Its absolute-spacing owner table/prose and automatic/
-manual flags sharing XML names need explicit interpretation before mapping. Relative
+numeric default;18% is an example. Its absolute-spacing owner table/prose needs explicit
+interpretation before style mapping. Relative
 spacing's reference length, actual tier/style defaults, ring/substituent placement and
 persistent style schema remain open. The current implementation work adopts original3w
 centered geometry with bounded visible-ink/gap checks and a one-third short-axis guard;
 none is established reference behavior. Dedicated tool/drag flows do not establish
 conversion clicks, hotkeys, alignment cycling or actual native drawing acceptance.
+
+The [DoublePosition prerequisite](../research/sided-double-prerequisite.md) resolves the
+three XML names, directed side and absent/unspecified data. CDX automatic/manual variants
+remain opaque; they cannot be inferred from XML. Data persistence/loss guards now have
+[independent evidence](../verification-double-position.md), while Left/Right rendering
+deliberately refuses. Shortened inset geometry, skeletal display preserving authored H,
+unsaturated weighted-valence/phase and shared-edge precedence still need their own
+contracts/tests. GUIDE25 printed101–103/423–424 does not establish which shared aromatic
+edge order/phase wins; do not silently mutate an old edge or infer that from memory.
 
 
 ## Existing-bond order edits — 2026-11-15

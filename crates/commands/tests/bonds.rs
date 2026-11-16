@@ -139,6 +139,7 @@ fn exhausted_id_domains_and_source_backing_reject_creation_atomically()
                 Atom::new(second, Element::try_from(6)?, Some(Point2::new(2.0, 2.0)?)),
             ],
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(if domain == 1 { u32::MAX } else { 1 }).ok_or("bond")?,
                 begin: first,
                 end: second,

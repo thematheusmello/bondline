@@ -62,6 +62,7 @@ fn actual_native_cdxml_and_mol_saves_retain_neutral_labels_and_source_authority(
             FragmentId::new(1).ok_or("fragment")?,
             atoms,
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(1).ok_or("bond")?,
                 begin: AtomId::new(1).ok_or("begin")?,
                 end: AtomId::new(2).ok_or("end")?,

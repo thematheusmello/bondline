@@ -1,5 +1,19 @@
 # Verification log
 
+## Persistent directed double-bond data, 2026-11-16
+
+[Receiving evidence](verification-double-position.md) separates initial JSON/XML runtime
+REDs from missing-public-API compile evidence, the compiler-led63-site default migration,
+19 focused passing cases and one new-test lint qualification. Independent Expat/Decimal
+property controls, unchanged external graph/RDKit consumers and actual Unicode Save/
+Open/history files verify scoped persistence and no-loss refusals. Center/legacy scenes
+retain exact analytic/pixel/hit/CPU-GPU behavior; unsupported placement refuses a scene.
+The unchanged CDXML fuzz harness passes10,000 bounded ASan executions with fresh seeds;
+its observed450B limit does not establish full-size coverage. The isolated lock alignment
+adds only an existing local crate, with all external packages exact. No native/window,
+inset/skeletal/aromatic tool, CDX manual/automatic projection or milestone claim follows.
+GitHub Actions stays off; full local aggregate results are recorded in receiving.
+
 ## Native ring command construction, 2026-11-16
 
 [Independent receiving](verification-ring-authoring.md) records the37th command, actual

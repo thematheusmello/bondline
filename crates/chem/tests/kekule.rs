@@ -61,6 +61,7 @@ fn graph(
         .iter()
         .map(|&(id, begin, end, order)| {
             Ok(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(id).ok_or("bond")?,
                 begin: AtomId::new(begin).ok_or("begin")?,
                 end: AtomId::new(end).ok_or("end")?,

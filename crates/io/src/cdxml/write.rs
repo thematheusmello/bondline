@@ -1,6 +1,6 @@
 use super::MappingError;
 use bondline_cdxml::Writer;
-use bondline_model::{Atom, AtomId, BondOrder, Document, Radical};
+use bondline_model::{Atom, AtomId, BondOrder, Document, DoublePosition, Radical};
 use std::collections::BTreeMap;
 
 /// New elemental CDXML only. Never regenerate a source-backed projection with this API.
@@ -41,15 +41,23 @@ pub fn write_document(document: &Document) -> Result<Vec<u8>, MappingError> {
                     .get(&bond.end)
                     .ok_or(MappingError::UnresolvedReference)?
                     .to_string();
-                writer.empty_element(
-                    "b",
-                    &[
-                        ("id", &allocate(&mut next)?.to_string()),
-                        ("B", &begin),
-                        ("E", &end),
-                        ("Order", order(bond.order)),
-                    ],
-                )?;
+                let id = allocate(&mut next)?.to_string();
+                let mut attributes = vec![
+                    ("id", id.as_str()),
+                    ("B", begin.as_str()),
+                    ("E", end.as_str()),
+                    ("Order", order(bond.order)),
+                ];
+                let position = match bond.double_position {
+                    DoublePosition::Unspecified => None,
+                    DoublePosition::Center => Some("Center"),
+                    DoublePosition::Right => Some("Right"),
+                    DoublePosition::Left => Some("Left"),
+                };
+                if let Some(position) = position {
+                    attributes.push(("DoublePosition", position));
+                }
+                writer.empty_element("b", &attributes)?;
             }
             writer.end_element()?;
         }

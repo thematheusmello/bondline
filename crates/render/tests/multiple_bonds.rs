@@ -26,6 +26,7 @@ fn page(order: BondOrder) -> TestResult<Page> {
             FragmentId::new(1).ok_or("fragment")?,
             atoms,
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(1).ok_or("bond")?,
                 begin: first,
                 end: second,
@@ -111,6 +112,7 @@ fn phase_page(order: BondOrder, width: f64, y: f64) -> TestResult<Page> {
             FragmentId::new(1).ok_or("fragment")?,
             atoms,
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(1).ok_or("bond")?,
                 begin: AtomId::new(1).ok_or("a")?,
                 end: AtomId::new(2).ok_or("b")?,
@@ -259,6 +261,7 @@ fn crossing_page(order: BondOrder, corridor: bool) -> TestResult<Page> {
             FragmentId::new(2).ok_or("fragment")?,
             atoms,
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(2).ok_or("bond")?,
                 begin: AtomId::new(3).ok_or("a")?,
                 end: AtomId::new(4).ok_or("b")?,
@@ -345,12 +348,14 @@ fn chain(order: BondOrder, literal: bool) -> TestResult<Page> {
         .collect::<TestResult<Vec<_>>>()?;
     let bonds = vec![
         Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: BondId::new(1).ok_or("bond")?,
             begin: atoms[0].id,
             end: atoms[1].id,
             order,
         },
         Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: BondId::new(2).ok_or("bond")?,
             begin: atoms[1].id,
             end: atoms[2].id,
@@ -619,6 +624,7 @@ fn expanded_budget_is_checked_before_geometry_and_cancellation_precedes_it() -> 
         let bonds = (1..=total)
             .map(|n| {
                 Ok(Bond {
+                    double_position: bondline_model::DoublePosition::Unspecified,
                     id: BondId::new(n).ok_or("bond")?,
                     begin: AtomId::new(n).ok_or("a")?,
                     end: AtomId::new(n + 1).ok_or("b")?,

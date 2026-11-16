@@ -76,6 +76,7 @@ fn seeded(atoms: Vec<Atom>, order: BondOrder) -> TestResult<Engine> {
             FragmentId::new(17).ok_or("fragment")?,
             atoms,
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(41).ok_or("bond")?,
                 begin: AtomId::new(29).ok_or("begin")?,
                 end: AtomId::new(11).ok_or("end")?,

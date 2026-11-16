@@ -121,6 +121,23 @@ pub enum BondOrder {
     ThreeCenter,
 }
 
+/// Side is relative to the authored begin-to-end direction; unspecified stays distinct.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DoublePosition {
+    #[default]
+    Unspecified,
+    Center,
+    Right,
+    Left,
+}
+
+impl DoublePosition {
+    pub const fn is_unspecified(&self) -> bool {
+        matches!(self, Self::Unspecified)
+    }
+}
+
 /// Begin/end ordering is authored data, including direction-dependent bond kinds.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -129,6 +146,8 @@ pub struct Bond {
     pub begin: AtomId,
     pub end: AtomId,
     pub order: BondOrder,
+    #[serde(default, skip_serializing_if = "DoublePosition::is_unspecified")]
+    pub double_position: DoublePosition,
 }
 
 #[derive(Debug, PartialEq, Eq, thiserror::Error)]

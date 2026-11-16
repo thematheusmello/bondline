@@ -32,6 +32,7 @@ fn compact_methine_star_keeps_literal_h_and_all_three_incident_bonds() -> TestRe
     let bonds = (1..=3)
         .map(|id| {
             Ok(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(id).ok_or("bond")?,
                 begin: AtomId::new(1).ok_or("begin")?,
                 end: AtomId::new(id + 1).ok_or("end")?,

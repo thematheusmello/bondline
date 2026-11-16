@@ -4,8 +4,8 @@ mod element;
 mod graph;
 mod point;
 pub use graph::{
-    Atom, AtomId, Bond, BondId, BondOrder, Element, Fragment, FragmentId, GraphError,
-    MAX_GRAPH_ITEMS, Radical,
+    Atom, AtomId, Bond, BondId, BondOrder, DoublePosition, Element, Fragment, FragmentId,
+    GraphError, MAX_GRAPH_ITEMS, Radical,
 };
 pub use point::{MAX_POSITION_PT, Point2};
 

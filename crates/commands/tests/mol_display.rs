@@ -422,6 +422,7 @@ fn literal_page(molecule: Molecule, control: Control) -> Result<Page, Box<dyn st
             && !(matches!(control, Control::MissingBond) && index + 1 == molecule.atoms().len())
         {
             bonds.push(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(u32::try_from(index)?).ok_or("bond ID")?,
                 begin: AtomId::new(u32::try_from(index)?).ok_or("begin ID")?,
                 end: AtomId::new(u32::try_from(index + 1)?).ok_or("end ID")?,

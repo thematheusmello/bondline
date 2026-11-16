@@ -319,6 +319,18 @@ are retained. All sixteen modeled orders have independent Expat/Decimal projecti
 Isotopes above the format's signed INT16 range and syntax-budget excesses fail without output.
 This is elemental interchange, not general text/style/stereo display serialization.
 
+DoublePosition now preserves exact optional Center/Right/Left names, presence and authored
+B→E direction. Absence stays Unspecified; old native-v0 bytes and exact-source completeness
+proof remain unchanged. Invalid names fail typed mapping while standalone syntax preserves
+the source. Native CDXML emits only specified values, including dormant metadata on other
+orders. Both MOL model writers refuse any specified placement before publication; raw
+SDF/RXN containers continue wrapping existing MOL bytes. Retained-SMILES H/order replacement
+cannot change placement; explicit graph-only SMILES export already excludes depiction.
+See [the independent property/file/history checks](verification-double-position.md).
+Left/Right and specified non-Double content currently refuse shared scene construction;
+Center Double uses the existing centered profile. This is persistence and loss prevention,
+not sided rendering, CDX auto/manual projection, an alignment UI or aromatic-tool parity.
+
 Native canvas dimensions are represented as `DrawingSpace="Poster"` plus Width/Height in
 points, as documented by the public SDK. This preserves the explicit drawing extent; it
 does not create Windows/macOS printer records or establish a physical printing workflow.

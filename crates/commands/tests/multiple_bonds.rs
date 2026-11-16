@@ -207,6 +207,7 @@ fn reference_png(weight: u8, drawn: u8, h: u16) -> TestResult<String> {
             FragmentId::new(1).ok_or("fragment")?,
             atoms,
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(1).ok_or("bond")?,
                 begin: AtomId::new(1).ok_or("begin")?,
                 end: AtomId::new(2).ok_or("end")?,

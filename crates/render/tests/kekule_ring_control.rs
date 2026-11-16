@@ -97,6 +97,7 @@ fn fixed_a4_kekule_hexagon_keeps_all_literal_ch_bonds_and_cpu_gpu_ink() -> TestR
         .enumerate()
         .map(|(index, (begin, end, order))| {
             Ok(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(u32::try_from(index + 1)?).ok_or("bond identity")?,
                 begin: AtomId::new(begin).ok_or("begin identity")?,
                 end: AtomId::new(end).ok_or("end identity")?,

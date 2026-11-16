@@ -45,6 +45,7 @@ fn carbon(id: u32, x: f64, y: f64, h: Option<u16>) -> TestResult<Atom> {
 
 fn bond(id: u32, begin: u32, end: u32, order: BondOrder) -> TestResult<Bond> {
     Ok(Bond {
+        double_position: bondline_model::DoublePosition::Unspecified,
         id: BondId::new(id).ok_or("bond")?,
         begin: AtomId::new(begin).ok_or("begin")?,
         end: AtomId::new(end).ok_or("end")?,

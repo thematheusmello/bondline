@@ -64,6 +64,7 @@ fn append_cc(document: &mut Document, base: u32) -> TestResult {
             FragmentId::new(base).ok_or("fragment")?,
             vec![a, b],
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(base).ok_or("bond")?,
                 begin: first,
                 end: second,

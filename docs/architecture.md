@@ -51,6 +51,13 @@ Runtime selection, cameras, jobs and revision counters are separate from authore
 Command handlers validate before committing an edit. Snapshot history restores the entire
 document; failed commands do not mutate it. All delivered interfaces use the same registry.
 
+Bond's optional directed DoublePosition is authored data, copied with the whole bond and
+retained by snapshots even when dormant on another order. CDXML maps/preserves it; model
+MOL export and synchronized SMILES replacement reject unsupported loss. The shared scene
+preflight refuses Left/Right and specified non-Double content until real inset geometry
+exists. No UI-only side cache, automatic placement or completeness override substitutes
+for that data. See [the locked prerequisite](research/sided-double-prerequisite.md).
+
 `ui.selection` owns transient one-page sorted atom IDs, a checked epoch and private weak
 whole-source ownership. Selection mode shares the existing bond-tool epoch and remembered
 bond order; it is outside authored snapshots. `selection.translate` builds a complete

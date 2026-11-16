@@ -23,6 +23,15 @@ and three-center. Begin/end direction is retained, including for dative bonds. Q
 alternatives, non-element nodes, stereo/display styles and reactions remain future work.
 Storing an authored aromatic kind does not establish an aromaticity-perception algorithm.
 
+Bond also retains DoublePosition: Unspecified, Center, Right or Left, with side relative
+to authored begin→end. JSON defaults to Unspecified and omits that default; old JSON
+stays exact. Specified values remain data even on non-Double orders. No automatic side,
+CDX manual/automatic flag or chemical rule is inferred. Whole-bond copies/order edits
+preserve the field; size_of::<Bond>() already covers its fixed-size storage. The
+[data/format prerequisite](research/sided-double-prerequisite.md) and
+[independent evidence](verification-double-position.md) distinguish persistence from
+the still-missing sided rendering, skeletal labels and alignment/tool workflows.
+
 Document::append_fragments validates a whole batch before installing any state. It rejects
 missing pages and duplicate fragment/atom/bond IDs, including collisions with existing
 fragments or within the batch. The same explicit budget caps atoms, bonds and fragments

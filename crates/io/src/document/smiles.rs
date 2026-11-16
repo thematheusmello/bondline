@@ -135,7 +135,12 @@ impl StoredDocument {
                 .bonds()
                 .iter()
                 .zip(replacement.bonds())
-                .any(|(old, new)| old.id != new.id || old.begin != new.begin || old.end != new.end)
+                .any(|(old, new)| {
+                    old.id != new.id
+                        || old.begin != new.begin
+                        || old.end != new.end
+                        || old.double_position != new.double_position
+                })
         {
             return Err(ProjectionError::Unsupported(
                 "fragment membership, order, geometry or metadata changed",

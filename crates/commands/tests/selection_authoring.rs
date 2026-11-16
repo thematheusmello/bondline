@@ -626,6 +626,7 @@ fn sparse_multifragment_motion_changes_only_selected_positions_and_keeps_every_m
                 FragmentId::new(17).ok_or("fragment")?,
                 vec![first, second],
                 vec![Bond {
+                    double_position: bondline_model::DoublePosition::Unspecified,
                     id: BondId::new(41).ok_or("bond")?,
                     begin: AtomId::new(11).ok_or("begin")?,
                     end: AtomId::new(29).ok_or("end")?,
@@ -641,6 +642,7 @@ fn sparse_multifragment_motion_changes_only_selected_positions_and_keeps_every_m
                 FragmentId::new(31).ok_or("fragment")?,
                 vec![atom(401, 220.0, 72.0)?, atom(407, 268.0, 72.0)?],
                 vec![Bond {
+                    double_position: bondline_model::DoublePosition::Unspecified,
                     id: BondId::new(655).ok_or("bond")?,
                     begin: AtomId::new(407).ok_or("begin")?,
                     end: AtomId::new(401).ok_or("end")?,

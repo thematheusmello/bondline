@@ -151,6 +151,7 @@ impl<'input> ElementalGraph<'input> {
                             .ok_or(MappingError::UnresolvedReference { id, record })
                     };
                     bonds.push(Bond {
+                        double_position: bondline_model::DoublePosition::Unspecified,
                         id: BondId::new(allocate(&mut next_bond)?)
                             .ok_or(MappingError::IdentityLimit)?,
                         begin: endpoint(BEGIN)?,

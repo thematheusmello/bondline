@@ -20,6 +20,7 @@ fn drawing() -> TestResult<Page> {
                 Atom::new(b, Element::try_from(6)?, Some(Point2::new(120.0, 72.0)?)),
             ],
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(1).ok_or("bond")?,
                 begin: a,
                 end: b,

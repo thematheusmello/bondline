@@ -67,6 +67,7 @@ fn literal_engine(case: usize, hydrogens: &[Option<u16>]) -> TestResult<Engine> 
         .enumerate()
         .map(|(i, [a, b])| {
             Ok(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(u32::try_from(i + 1)?).ok_or("bond")?,
                 begin: AtomId::new(*a).ok_or("begin")?,
                 end: AtomId::new(*b).ok_or("end")?,

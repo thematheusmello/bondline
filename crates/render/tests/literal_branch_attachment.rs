@@ -28,6 +28,7 @@ fn drawing(specs: &[(u32, u8, [f64; 2], Option<u16>)], edges: &[[u32; 2]]) -> Te
         .enumerate()
         .map(|(index, &[a, b])| {
             Ok(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(u32::try_from(index + 1)?).ok_or("bond")?,
                 begin: AtomId::new(a).ok_or("begin")?,
                 end: AtomId::new(b).ok_or("end")?,

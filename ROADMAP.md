@@ -4,6 +4,14 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The next aromatic-tool prerequisite now persists directed DoublePosition through the
+model and native CDXML, with independent property/file/history tests and explicit loss/
+render refusals. [Receiving evidence](docs/verification-double-position.md) separates
+this from sided geometry. Next implement shortened inset strokes with actual bounds/
+gaps/hits, then a source-backed skeletal carbon policy retaining literal H, then weighted
+benzene/cyclopentadiene candidates, attachment/phase rules and native tools. Shared-edge
+phase precedence remains an open public-source question. The full parity scope is intact.
+
 The shared `ring.create` command now implements explicit3–8 carbon Single polygons,
 including shared-atom and shared-Single-edge attachments. Independent geometry,
 cyclohexane/decalin/spiro/terminal chemistry, source/history/ID guards, Unicode files,

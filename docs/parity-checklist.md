@@ -11,6 +11,12 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
+Directed DoublePosition now has [independent data/format evidence](verification-double-position.md):
+native CDXML presence/direction/history and guarded loss boundaries. Center Double retains
+the existing centered scene; Left/Right deliberately refuse rendering. No alignment command
+or benzene/cyclopentadiene workflow is delivered by this prerequisite. TD-007 remains partial;
+TD-024, its hotkeys and broader unsaturated/skeletal ring workflows remain missing.
+
 Current native source-backed SMILES records have bounded Mac selected/all import,
 refusal/retry, click/key order editing, history and Unicode whole-file Save/reopen/reimport.
 Independent actual-file consumers pass. [Native receiving](verification-native-smiles-records.md)

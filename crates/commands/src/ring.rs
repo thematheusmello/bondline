@@ -335,6 +335,7 @@ pub(super) fn create(
             .checked_add(1)
             .ok_or(Error::IdentityExhausted)?;
         bonds.push(Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: BondId::new(maximum.bond).ok_or(Error::IdentityExhausted)?,
             begin,
             end,

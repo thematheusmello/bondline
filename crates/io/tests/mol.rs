@@ -417,6 +417,7 @@ fn declared_hydrogens_use_integer_bond_order_sum_and_refuse_ambiguous_aromatic_v
         atoms.push(atom);
     }
     let bond = Bond {
+        double_position: bondline_model::DoublePosition::Unspecified,
         id: BondId::new(1).ok_or("bond")?,
         begin: AtomId::new(1).ok_or("begin")?,
         end: AtomId::new(2).ok_or("end")?,

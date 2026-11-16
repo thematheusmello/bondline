@@ -18,6 +18,7 @@ fn bond(
     order: BondOrder,
 ) -> Result<Bond, Box<dyn std::error::Error>> {
     Ok(Bond {
+        double_position: bondline_model::DoublePosition::Unspecified,
         id: BondId::new(id).ok_or("invalid bond id")?,
         begin: AtomId::new(begin).ok_or("invalid begin")?,
         end: AtomId::new(end).ok_or("invalid end")?,

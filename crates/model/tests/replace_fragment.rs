@@ -18,6 +18,7 @@ fn atom(id: u32, x: f64, y: f64, hydrogens: u16) -> TestResult<Atom> {
 
 fn bond(id: u32, begin: u32, end: u32) -> TestResult<Bond> {
     Ok(Bond {
+        double_position: bondline_model::DoublePosition::Unspecified,
         id: BondId::new(id).ok_or("bond")?,
         begin: AtomId::new(begin).ok_or("begin")?,
         end: AtomId::new(end).ok_or("end")?,

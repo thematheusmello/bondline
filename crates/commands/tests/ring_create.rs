@@ -93,6 +93,7 @@ fn original_hexagon() -> TestResult<Engine> {
     let bonds = (1..=6_u32)
         .map(|i| {
             Ok(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(i).ok_or("bond")?,
                 begin: AtomId::new(i).ok_or("begin")?,
                 end: AtomId::new(if i == 6 { 1 } else { i + 1 }).ok_or("end")?,
@@ -788,6 +789,7 @@ fn attachments_preserve_sparse_arrays_directions_metadata_and_unrelated_arc() ->
                 FragmentId::new(17).ok_or("fragment")?,
                 vec![target, neighbor],
                 vec![Bond {
+                    double_position: bondline_model::DoublePosition::Unspecified,
                     id: BondId::new(41).ok_or("bond")?,
                     begin: AtomId::new(11).ok_or("begin")?,
                     end: AtomId::new(29).ok_or("end")?,
@@ -921,6 +923,7 @@ fn custom_pair(change: &str) -> TestResult<Engine> {
         FragmentId::new(1).ok_or("fragment")?,
         vec![a, b],
         vec![Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: BondId::new(1).ok_or("bond")?,
             begin: AtomId::new(1).ok_or("a")?,
             end: AtomId::new(2).ok_or("b")?,

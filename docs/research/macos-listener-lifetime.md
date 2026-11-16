@@ -8,6 +8,13 @@ identity or owner capture**. Neither a later passing gate nor the experiment bel
 establishes that failure's cause. Assertions, timing, retries, socket policy and test
 concurrency remain unchanged.
 
+The later DoublePosition data aggregate49615 naturally reproduces the same unchanged
+test's replacement-bind failure at127.0.0.1:57773, AddrInUse/OS48, after909 passes.
+No failure-time owner identity is captured, so this supplies no causal attribution.
+It is preserved without retry; only not-started stages run separately. See
+[the receiving record](../verification-double-position.md). No controlled probe or
+exhausted diagnostic context is rerun.
+
 ## Source hypothesis and fixed experiment
 
 The pinned Rust1.94.1 Darwin [socket constructor](https://github.com/rust-lang/rust/blob/e408947bfd200af42db322daf0fadfe7e26d3bd1/library/std/src/sys/net/connection/socket/unix.rs#L65)

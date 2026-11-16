@@ -1,15 +1,16 @@
 # Clean-room source register
 
-Reviewed through 2026-11-15. A source is permission to learn documented behavior, not to copy
+Reviewed through 2026-11-16. A source is permission to learn documented behavior, not to copy
 proprietary implementation, help text or assets. Record more specific sections as features land.
 The folder name and policy checkpoint72fafb3 are historical. New work follows the latest
-AGENTS.md boundary: public specifications/media and licensed source references, plus the
-user's later2026-11-15 explicit authorization to open the installed reference and observe
-its visible UI. This exception does not authorize copying proprietary implementation or
-shipping assets. Preserve each observation's actual method, identity and limits.
+AGENTS.md boundary: public specifications/media and licensed source references only.
+Historical2026-11-15 installed-UI records retain their actual authorization, method,
+identity and limits; they grant no current permission to open or inspect proprietary
+programs/assets. Never download, run, inspect, decompile or disassemble reference binaries.
 
 | ID | Public source | Decision / limitations |
 |---|---|---|
+| PERSISTENT-DOUBLE-POSITION | [Public SDK DoublePosition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Bond_DoublePosition.htm); [IUPAC2008 GR1.10/GR3.5](https://iupac.qmul.ac.uk/drawing/drawing.html#GR110) | Optional directed Center/Right/Left; absence remains unspecified. CDX0/1/2 versus256/257/258 share XML names, so XML cannot recover the automatic/manual distinction. The original fixed-size model field preserves presence/direction/dormant data and old omitted-default bytes. CDXML mapping/encoding, guarded MOL/retained-SMILES boundaries and renderer refusal are implemented; inset geometry, skeletal labels and unsaturated tools remain following work. The locked research/sided-double-prerequisite.md and verification-double-position.md record independent RED/GREEN, raw controls, actual Unicode files and bounded fuzz. No proprietary code/assets, new shipped dependency or format-authority override. |
 | SMILES-COMPONENTS-PLAN | ../research/smiles-components-plan.md | Pinned OpenSMILES actual connectivity, IUPAC2008 GR7.2–7.3 and the archived public Fragment allowance support complete disconnected graph preservation. Source-ordered center-box shelves, exact gap L, local dense views, 64 total atoms, divided search quotas and the full assembled certificate are original bounded policies, not vendor defaults, salt association or general import. The plan distinguishes missing-profile runtime RED from a missing layout API; verification-smiles-components-integration.md records independent layout, adapter, full local gate and bounded native receiving evidence. |
 | NATIVE-DRAWING-DENSITY | ../research/native-drawing-density-plan.md | Pinned PhotoCraft0fb40c5 and public egui/eframe0.29.1 source separate logical events/camera from physical render density. Exact DPI plus fractional canvas-origin phase, shared inverse painting/picking, the separate bounded vector entry and unchanged capture limits are original Bondline integration policy. verification-native-drawing-density.md records5 renderer/5 App checks and the qualified native100% Save/reopen workflow; native2× is unmeasured and Fit still refuses. The failed aggregate gate and separately passing remaining checks remain distinct. |
 | CDX-EXTERNAL-WRITER-PROBE | ../research/cdx-external-writer-probe.md; https://github.com/epam/Indigo/blob/cc2ea85187433c253c0233a13f1859a6a5298d97/core/indigo-core/molecule/src/molecule_cdxml_saver.cpp#L2015 | Actual Apache-2.0 Indigo1.47.0 external-only generation from five original declared graphs, two preserved variants/repeats; independent pinned RDKit accepts all10 distinct outputs while unchanged Bondline/stdlib syntax checks refuse TrailingData. Public writer source explains the extra final zero word, without establishing normative trailing-padding permission. No file trimming, parser/old-oracle/fixture change, shipped dependency, corpus admission or broad compatibility claim. |
