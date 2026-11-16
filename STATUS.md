@@ -6,8 +6,8 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current work and evidence
 
-Committed data cde514c and contract3b164a6 follow native rings e869490 and continuation
-edeeddf. The current uncommitted renderer implements explicit Left/Right Double with
+Committed renderer70d38a3 follows data cde514c, contract3b164a6, native rings e869490
+and continuation edeeddf. It implements explicit Left/Right Double with
 an unchanged authored axis and adjoining-angle-bisector shortened secondary. Center/
 Unspecified retain old pixels; dormant non-Double placement still refuses rendering.
 Read [the contract](docs/research/inset-double-rendering.md) and
@@ -81,12 +81,10 @@ is live at this read point. Check any newer recorded handle before restarting wo
 
 ## Next exact steps
 
-1. Commit the renderer with its complete tests/provenance and final review record.
-   Bounds regression/fix, full gate1451/0/1 and native/CLI build are complete.
-2. Define sourced skeletal carbon presentation while retaining literal H, then weighted
+1. Define sourced skeletal carbon presentation while retaining literal H, then weighted
    benzene/cyclopentadiene candidates, attachment/phase rules and real native tools.
    Public GUIDE25 does not establish shared-edge phase/order precedence; preserve that
    question rather than guessing. Continue chair/sprout/chains/styles/transforms/labels.
-3. When the desktop is available, verify native explicit-side files plus selection and
+2. When the desktop is available, verify native explicit-side files plus selection and
    ring Free/atom/fused/spiro→Cancel/history→Unicode Save/reopen using independent files.
    Offscreen App/library checks do not prove native OS interaction or measured DPI.

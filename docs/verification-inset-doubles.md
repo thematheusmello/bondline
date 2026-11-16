@@ -168,3 +168,5 @@ No live job remains. Next define skeletal carbon presentation without erasing li
 then weighted unsaturated candidates/phase and real native tools; retain full M0–M5.
 Both controlled listener probes and the20 exhausted diagnostic contexts remain consumed.
 Actions stays off, all desktop previews stay closed, and nothing is pushed/published.
+Source,20 new tests, the one explicit old-test upgrade, provenance and receiving records
+are locally committed as70d38a3. Full M0–M5 remains active and incomplete.
