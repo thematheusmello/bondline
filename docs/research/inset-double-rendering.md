@@ -55,6 +55,10 @@ misses the offset side and incorrectly reserves the opposite side. Keep that old
 envelope exactly for the centered profile. Search white gap pixels only where both
 components are present; averaging unequal full endpoints overstates that range.
 No new white pixel outside the true shared span may qualify a missing interior gap.
+Use closed longitudinal caps and strict inner ink edges from the actual two butt
+rectangles, including rounded/oblique components. Reuse the existing lattice/mask/ink
+search for this convex validation region; no nominal band or square-root threshold
+may turn a covered boundary pixel into a gap. No new painted primitive is needed.
 
 An actual authored-axis component of a sided Double may join an incident Single axis
 or another sided Double's axis as ordinary Single–Single solid rays already do. This
@@ -63,6 +67,8 @@ blanket shared-bond exemption. Store/derive the explicit style before choosing r
 centered Double index0 is not an axis. Every pair involving an offset still faces the
 existing exact anchor/mask overlap test. Legacy centered/Triple junctions stay unchanged.
 Co-directed/zero-length adjoining geometry still refuses before this exception.
+Both natural arms must also retain unmasked distinct pixels outside the other joined
+axis ink; a nearly coincident arm must not become invisible through this exception.
 
 Source completeness, unknown data, Save/export loss guards, label placement/readability,
 component/gap pixel requirements, CPU/GPU coverage, work budgets and cancellation are

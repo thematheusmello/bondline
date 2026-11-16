@@ -1,5 +1,5 @@
 use crate::{Error, Rectangle, Scene, Stroke};
-use bondline_model::{AtomId, BondId, FragmentId};
+use bondline_model::{AtomId, BondId, DoublePosition, FragmentId};
 
 pub const MAX_HIT_REGIONS: usize = 4096;
 
@@ -26,9 +26,23 @@ pub(crate) struct AtomHit {
 pub(crate) struct BondHit {
     pub target: HitTarget,
     pub endpoints: [AtomId; 2],
+    pub double_position: DoublePosition,
     pub stroke: Stroke,
     pub strokes: Vec<Stroke>,
     pub polygons: Vec<Vec<[f64; 2]>>,
+}
+
+impl BondHit {
+    pub(crate) fn is_sided(&self) -> bool {
+        matches!(
+            self.double_position,
+            DoublePosition::Left | DoublePosition::Right
+        )
+    }
+
+    pub(crate) fn natural_axis(&self, component: usize) -> bool {
+        component == 0 && (self.strokes.len() == 1 || self.is_sided())
+    }
 }
 
 /// Paint and picking share an immutable, bounded projection of the same Page.

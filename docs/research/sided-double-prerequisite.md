@@ -4,6 +4,11 @@
 for aromatic tools, not completed benzene/cyclopentadiene or skeletal display. The full
 parity target remains in ROADMAP.md. No reference binary, preset or artwork is used.
 
+Data/format is delivered at cde514c. The temporary Left/Right render refusal below is
+subsequently upgraded by [the inset contract](inset-double-rendering.md) and
+[independent receiving](../verification-inset-doubles.md). Dormant non-Double, format
+loss and complete-source guards remain; automatic styles and aromatic tools are separate.
+
 ## Public evidence
 
 - [SDK DoublePosition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Bond_DoublePosition.htm):

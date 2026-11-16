@@ -54,9 +54,11 @@ document; failed commands do not mutate it. All delivered interfaces use the sam
 Bond's optional directed DoublePosition is authored data, copied with the whole bond and
 retained by snapshots even when dormant on another order. CDXML maps/preserves it; model
 MOL export and synchronized SMILES replacement reject unsupported loss. The shared scene
-preflight refuses Left/Right and specified non-Double content until real inset geometry
-exists. No UI-only side cache, automatic placement or completeness override substitutes
-for that data. See [the locked prerequisite](research/sided-double-prerequisite.md).
+preflight refuses specified non-Double content. Explicit Left/Right Double uses private
+inset geometry with bounded adjacency, actual finite-cap/strict-edge gap validation,
+component-role joins and distinct joined-arm ink. Existing centered geometry is unchanged.
+No UI-only side cache, automatic placement or completeness override substitutes for that
+data. See [the locked renderer contract](research/inset-double-rendering.md).
 
 `ui.selection` owns transient one-page sorted atom IDs, a checked epoch and private weak
 whole-source ownership. Selection mode shares the existing bond-tool epoch and remembered
@@ -312,7 +314,8 @@ content instead of returning a misleading blank preview; the native C-C creation
 
 The native canvas and registered capture consume one GraphScene with ordered rectangles/
 strokes and bounded typed atom/bond hit regions. It supports positioned neutral elements
-with a shared pure-model symbol catalog, Single/centered Double/Triple bonds and literal authored H; the literal
+with a shared pure-model symbol catalog, Single/centered Double/Triple and explicit sided
+Double bonds and literal authored H; the literal
 renderer does not infer missing H. A source-aware IO scene entry supplies separate closed-
 profile display counts only for actual MOL backing, preserving current Page/IDs/frame and
 authored None. Source-free/CDXML keep the literal path. PageViewport shares paper
@@ -322,10 +325,13 @@ native-document golden. Native transient gesture state stays outside authored sn
 ordered pointer events preview, commit one registry edit per drag, or cancel. This handles
 an entire drag between frames without losing its released press origin. See rendering.md
 for bounds, native versus headless raster semantics and the substantial remaining work.
-`centered_bond_strokes` is the shared geometry constructor for graph production and held
-preview; `GraphScene::bond_strokes` supplies the actual components for hover. Masks,
+`centered_bond_strokes` remains the public centered constructor for graph production and
+held preview; private inset::strokes handles explicit sided graph context.
+`GraphScene::bond_strokes` supplies the actual components for hover. Masks,
 clipping, pixel/gap visibility and congestion stay scene-level checks. The original3w
-profile does not model imported spacing/position/style inheritance or general joins.
+profile does not model imported spacing/style inheritance, automatic side selection or
+general joins. [Inset evidence](verification-inset-doubles.md) scopes its explicit
+shortening, true gaps, natural-axis/offset roles, numeric and actual-file checks.
 Transient hover never changes the captured Scene, selection, snapshots or file state.
 The thin workspace uses a48-unit header,64-unit procedural tool rail,248-unit read-only
 document inspector and fixed24-unit page/job footer. Tool policy and errors live in the

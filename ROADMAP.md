@@ -4,15 +4,17 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
-The next aromatic-tool prerequisite now persists directed DoublePosition through the
+The aromatic-tool prerequisite now persists directed DoublePosition through the
 model and native CDXML, with independent property/file/history tests and explicit loss/
 render refusals. [Receiving evidence](docs/verification-double-position.md) separates
-this from sided geometry. Next implement shortened inset strokes with actual bounds/
-gaps/hits, then a source-backed skeletal carbon policy retaining literal H, then weighted
+this from later depiction. Shortened inset strokes with actual bounds/gaps/hits now
+have independent geometry/pixel/density/CPU-GPU and actual-file/history evidence in
+[renderer receiving](docs/verification-inset-doubles.md). Next define a source-backed
+skeletal carbon policy retaining literal H, then weighted
 benzene/cyclopentadiene candidates, attachment/phase rules and native tools. Shared-edge
 phase precedence remains an open public-source question. The full parity scope is intact.
-The [inset rendering contract](docs/research/inset-double-rendering.md) now locks the
-next geometry, component-role joins and independent guard tests before implementation.
+The [inset rendering contract](docs/research/inset-double-rendering.md) retains the
+preimplementation geometry, component-role joins and independent guard requirements.
 
 The shared `ring.create` command now implements explicit3–8 carbon Single polygons,
 including shared-atom and shared-Single-edge attachments. Independent geometry,
@@ -260,7 +262,8 @@ acceptance. Authored None and source bytes remain exact; source-free/CDXML stay 
 See docs/verification-mol-display-tests.md and docs/verification-mol-display-ui.md.
 Centered Double/Triple depiction now passes independent analytic pixel/geometry, actual
 CPU/GPU and source-preserving MOL/SDF checks. It uses an original3w profile, without
-mapping inherited styles or context-sensitive sidedness. See
+mapping inherited styles or automatic side selection. Explicit positioned doubles now
+have the separate inset evidence above. See
 docs/verification-multiple-render.md and docs/verification-multiple-commands.md.
 Broader formats, source metadata, SDF record operations and full M1 interoperability remain unfinished.
 This is partial M1, with neutral Single/Double/Triple geometry and explicit whole-capture

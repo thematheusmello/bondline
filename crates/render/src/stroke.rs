@@ -21,6 +21,177 @@ pub struct Stroke {
     pub color: [u8; 4],
 }
 
+pub(crate) enum PixelRegion<'a> {
+    Stroke(&'a Stroke),
+    Gap(&'a crate::inset::Gap),
+}
+
+impl PixelRegion<'_> {
+    fn bounds(&self, width: u32, height: u32) -> Option<Rectangle> {
+        match self {
+            Self::Stroke(stroke) => stroke.bounds(width, height),
+            Self::Gap(gap) => gap.bounds(width, height),
+        }
+    }
+    fn horizontal(&self) -> bool {
+        match self {
+            Self::Stroke(stroke) => {
+                (stroke.end[0] - stroke.begin[0]).abs() >= (stroke.end[1] - stroke.begin[1]).abs()
+            }
+            Self::Gap(gap) => gap.horizontal(),
+        }
+    }
+    fn pixel_range(&self, horizontal: bool, major: u32, range: &mut std::ops::Range<u32>) -> bool {
+        match self {
+            Self::Stroke(stroke) => stroke.pixel_range(horizontal, major, range),
+            Self::Gap(gap) => gap.pixel_range(horizontal, major, range),
+        }
+    }
+    fn covers(&self, x: f64, y: f64) -> bool {
+        match self {
+            Self::Stroke(stroke) => stroke.covers(x, y),
+            Self::Gap(gap) => gap.covers(x, y),
+        }
+    }
+}
+
+// Both finite convex regions use the same bounded lattice, mask and excluded-ink search.
+pub(crate) fn visible_pixel(
+    region: PixelRegion<'_>,
+    dimensions: [u32; 2],
+    masks: &[&Rectangle],
+    other: Option<&Stroke>,
+    excluded: &[&Stroke],
+    cancel: &Cancellation,
+) -> Result<bool, Error> {
+    cancel.check()?;
+    let [width, height] = dimensions;
+    let Some(mut bounds) = region.bounds(width, height) else {
+        return Ok(false);
+    };
+    if let Some(other) = other {
+        let Some(second) = other.bounds(width, height) else {
+            return Ok(false);
+        };
+        let right = bounds
+            .x
+            .saturating_add(bounds.width)
+            .min(second.x.saturating_add(second.width));
+        let bottom = bounds
+            .y
+            .saturating_add(bounds.height)
+            .min(second.y.saturating_add(second.height));
+        bounds.x = bounds.x.max(second.x);
+        bounds.y = bounds.y.max(second.y);
+        if bounds.x >= right || bounds.y >= bottom {
+            return Ok(false);
+        }
+        bounds.width = right - bounds.x;
+        bounds.height = bottom - bounds.y;
+    }
+    let horizontal = region.horizontal();
+    let (major_start, major_end, minor_start, minor_end) = if horizontal {
+        (
+            bounds.x,
+            bounds.x + bounds.width,
+            bounds.y,
+            bounds.y + bounds.height,
+        )
+    } else {
+        (
+            bounds.y,
+            bounds.y + bounds.height,
+            bounds.x,
+            bounds.x + bounds.width,
+        )
+    };
+    for major in major_start..major_end {
+        cancel.check()?;
+        let mut range = minor_start..minor_end;
+        if !region.pixel_range(horizontal, major, &mut range)
+            || other.is_some_and(|stroke| !stroke.pixel_range(horizontal, major, &mut range))
+        {
+            continue;
+        }
+        let mut minor = range.start;
+        let end = range.end - 1;
+        for _ in 0..2 {
+            loop {
+                if minor > end || minor >= minor_end {
+                    break;
+                }
+                let next = masks
+                    .iter()
+                    .filter_map(|mask| {
+                        let (a, b, c, d) = if horizontal {
+                            (
+                                mask.x,
+                                mask.x.saturating_add(mask.width),
+                                mask.y,
+                                mask.y.saturating_add(mask.height),
+                            )
+                        } else {
+                            (
+                                mask.y,
+                                mask.y.saturating_add(mask.height),
+                                mask.x,
+                                mask.x.saturating_add(mask.width),
+                            )
+                        };
+                        (major >= a && major < b && minor >= c && minor < d).then_some(d)
+                    })
+                    .max();
+                if let Some(next) = next {
+                    minor = next;
+                    continue;
+                }
+                let point = |minor| {
+                    if horizontal {
+                        (f64::from(major) + 0.5, f64::from(minor) + 0.5)
+                    } else {
+                        (f64::from(minor) + 0.5, f64::from(major) + 0.5)
+                    }
+                };
+                if let Some(blocker) = excluded.iter().find(|stroke| {
+                    let (x, y) = point(minor);
+                    stroke.covers(x, y)
+                }) {
+                    // A validated butt rectangle intersects one row in a contiguous
+                    // interval. Start from known covered ink and jump just past it.
+                    let (mut low, mut high) = (minor, minor_end);
+                    while low + 1 < high {
+                        cancel.check()?;
+                        let mid = low + (high - low) / 2;
+                        let (x, y) = point(mid);
+                        if blocker.covers(x, y) {
+                            low = mid;
+                        } else {
+                            high = mid;
+                        }
+                    }
+                    minor = low + 1;
+                    continue;
+                }
+                break;
+            }
+            if minor > end || minor >= minor_end {
+                break;
+            }
+            let (x, y) = if horizontal {
+                (major, minor)
+            } else {
+                (minor, major)
+            };
+            let (px, py) = (f64::from(x) + 0.5, f64::from(y) + 0.5);
+            if region.covers(px, py) && other.is_none_or(|stroke| stroke.covers(px, py)) {
+                return Ok(true);
+            }
+            minor = minor.saturating_add(1);
+        }
+    }
+    Ok(false)
+}
+
 impl Stroke {
     /// Search actual pixel centers without a frame allocation. Masks use the painter's
     /// integer half-open pixels; a second stroke optionally constrains an intersection.
@@ -32,132 +203,14 @@ impl Stroke {
         excluded: &[&Self],
         cancel: &Cancellation,
     ) -> Result<bool, Error> {
-        cancel.check()?;
-        let [width, height] = dimensions;
-        let Some(mut bounds) = self.bounds(width, height) else {
-            return Ok(false);
-        };
-        if let Some(other) = other {
-            let Some(second) = other.bounds(width, height) else {
-                return Ok(false);
-            };
-            let right = bounds
-                .x
-                .saturating_add(bounds.width)
-                .min(second.x.saturating_add(second.width));
-            let bottom = bounds
-                .y
-                .saturating_add(bounds.height)
-                .min(second.y.saturating_add(second.height));
-            bounds.x = bounds.x.max(second.x);
-            bounds.y = bounds.y.max(second.y);
-            if bounds.x >= right || bounds.y >= bottom {
-                return Ok(false);
-            }
-            bounds.width = right - bounds.x;
-            bounds.height = bottom - bounds.y;
-        }
-        let horizontal = (self.end[0] - self.begin[0]).abs() >= (self.end[1] - self.begin[1]).abs();
-        let (major_start, major_end, minor_start, minor_end) = if horizontal {
-            (
-                bounds.x,
-                bounds.x + bounds.width,
-                bounds.y,
-                bounds.y + bounds.height,
-            )
-        } else {
-            (
-                bounds.y,
-                bounds.y + bounds.height,
-                bounds.x,
-                bounds.x + bounds.width,
-            )
-        };
-        for major in major_start..major_end {
-            cancel.check()?;
-            let mut range = minor_start..minor_end;
-            if !self.pixel_range(horizontal, major, &mut range)
-                || other.is_some_and(|stroke| !stroke.pixel_range(horizontal, major, &mut range))
-            {
-                continue;
-            }
-            let mut minor = range.start;
-            let end = range.end - 1;
-            for _ in 0..2 {
-                loop {
-                    if minor > end || minor >= minor_end {
-                        break;
-                    }
-                    let next = masks
-                        .iter()
-                        .filter_map(|mask| {
-                            let (a, b, c, d) = if horizontal {
-                                (
-                                    mask.x,
-                                    mask.x.saturating_add(mask.width),
-                                    mask.y,
-                                    mask.y.saturating_add(mask.height),
-                                )
-                            } else {
-                                (
-                                    mask.y,
-                                    mask.y.saturating_add(mask.height),
-                                    mask.x,
-                                    mask.x.saturating_add(mask.width),
-                                )
-                            };
-                            (major >= a && major < b && minor >= c && minor < d).then_some(d)
-                        })
-                        .max();
-                    if let Some(next) = next {
-                        minor = next;
-                        continue;
-                    }
-                    let point = |minor| {
-                        if horizontal {
-                            (f64::from(major) + 0.5, f64::from(minor) + 0.5)
-                        } else {
-                            (f64::from(minor) + 0.5, f64::from(major) + 0.5)
-                        }
-                    };
-                    if let Some(blocker) = excluded.iter().find(|stroke| {
-                        let (x, y) = point(minor);
-                        stroke.covers(x, y)
-                    }) {
-                        // A validated butt rectangle intersects one row in a contiguous
-                        // interval. Start from known covered ink and jump just past it.
-                        let (mut low, mut high) = (minor, minor_end);
-                        while low + 1 < high {
-                            cancel.check()?;
-                            let mid = low + (high - low) / 2;
-                            let (x, y) = point(mid);
-                            if blocker.covers(x, y) {
-                                low = mid;
-                            } else {
-                                high = mid;
-                            }
-                        }
-                        minor = low + 1;
-                        continue;
-                    }
-                    break;
-                }
-                if minor > end || minor >= minor_end {
-                    break;
-                }
-                let (x, y) = if horizontal {
-                    (major, minor)
-                } else {
-                    (minor, major)
-                };
-                let (px, py) = (f64::from(x) + 0.5, f64::from(y) + 0.5);
-                if self.covers(px, py) && other.is_none_or(|stroke| stroke.covers(px, py)) {
-                    return Ok(true);
-                }
-                minor = minor.saturating_add(1);
-            }
-        }
-        Ok(false)
+        visible_pixel(
+            PixelRegion::Stroke(self),
+            dimensions,
+            masks,
+            other,
+            excluded,
+            cancel,
+        )
     }
 
     fn pixel_range(&self, horizontal: bool, major: u32, range: &mut std::ops::Range<u32>) -> bool {
@@ -312,7 +365,10 @@ impl Stroke {
     }
 }
 
-fn first_lattice_true(range: std::ops::Range<u32>, mut predicate: impl FnMut(u32) -> bool) -> u32 {
+pub(crate) fn first_lattice_true(
+    range: std::ops::Range<u32>,
+    mut predicate: impl FnMut(u32) -> bool,
+) -> u32 {
     let (mut low, mut high) = (range.start, range.end);
     while low < high {
         let middle = low + (high - low) / 2;

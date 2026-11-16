@@ -173,7 +173,8 @@ Capture dimensions are 1..2048 pixels per axis. A successful result adds `captur
 has `adapter: null`. There is no automatic CPU fallback. This captures the shared page
 scene, not window chrome, operating-system dialogs or print-resolution chemical output.
 Unmapped source-backed documents return unsupported_content before rendering. Empty pages
-and supported positioned neutral-element Single/centered Double/Triple graphs can be captured, including safe branches,
+and supported positioned neutral-element Single/centered Double/Triple plus explicit
+Left/Right Double graphs can be captured, including safe branches,
 cycles and disconnected components. Source-free/CDXML use literal H, including connected
 skeletal unknown-H carbon. Actual MOL backing instead supplies closed neutral C/N/O/halogen
 display counts for missing H, without changing authored None or literal counts. It retains

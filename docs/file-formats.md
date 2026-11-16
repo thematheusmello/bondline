@@ -327,9 +327,11 @@ orders. Both MOL model writers refuse any specified placement before publication
 SDF/RXN containers continue wrapping existing MOL bytes. Retained-SMILES H/order replacement
 cannot change placement; explicit graph-only SMILES export already excludes depiction.
 See [the independent property/file/history checks](verification-double-position.md).
-Left/Right and specified non-Double content currently refuse shared scene construction;
-Center Double uses the existing centered profile. This is persistence and loss prevention,
-not sided rendering, CDX auto/manual projection, an alignment UI or aromatic-tool parity.
+Explicit Left/Right Double now renders shortened bisector components through the shared
+scene; specified non-Double still refuses, and Center keeps the existing centered profile.
+[Renderer/actual-file evidence](verification-inset-doubles.md) verifies the bounded
+geometry, gap/hit/CPU-GPU and history/reopen scope. CDX auto/manual projection, automatic
+styles, alignment UI, skeletal policy and aromatic-tool parity remain missing.
 
 Native canvas dimensions are represented as `DrawingSpace="Poster"` plus Width/Height in
 points, as documented by the public SDK. This preserves the explicit drawing extent; it

@@ -31,7 +31,8 @@ background, gray 210 shadow, gray 196 border and white interior. This is not a j
 Existing hand-authored 8×8 page-grid, clipping and odd-pitch tests continue to pass.
 
 The literal chemical producer builds one GraphScene for positioned neutral elements and
-Single/centered Double/Triple bonds, including safe chains, branches, cycles and disconnected components. Noncarbon symbols
+Single/centered Double/Triple and explicit sided Double bonds, including safe chains,
+branches, cycles and disconnected components. Noncarbon symbols
 are explicit; authored H is literal and unknown H is omitted without changing model None.
 Carbon retains H0/C, H1/CH and larger literal subscripts, skeletal connected unknown-H and
 isolated unknown-H refusal. Physical H cannot carry positive inline H. Other orders,
@@ -60,8 +61,26 @@ Expanded stroke counts join the4096 primitive bound; hits and neighbour votes st
 logical. The explicit corridor/junction rules refuse unsafe overlaps for the whole scene.
 Exact bounded lattice searches retain the existing stroke coverage arithmetic. See
 [multiple-bond evidence](verification-multiple-render.md) for analytic/CPU/GPU/search
-oracles, retained failures and the exact original policy. No imported style/sidedness,
+oracles, retained failures and the exact original policy. No imported style inheritance,
 general layout/join solver, new human-approved golden or vendor default is inferred.
+
+Explicit Left/Right Double uses an unchanged authored-axis stroke and a3w parallel
+secondary, shortened at each end by actual adjoining-angle bisectors. Terminal/trans-only
+ends do not shorten. Its true validation gap has closed actual longitudinal caps and
+strict inner ink edges, using unnormalized dot/cross/squared-width comparisons. The
+existing bounded lattice/mask/excluded-ink search handles that convex validation region
+and ordinary strokes; no new paint primitive or shader is needed. Actual component
+ink plus the finite gap protect the asymmetric corridor and primary tails.
+
+Only qualified authored-axis joins gain the ordinary Single–Single union behavior;
+offset collisions retain the old anchor/mask rule. Each joined arm must retain distinct
+unmasked pixels, without a blanket angle limit. Unspecified/Center keep their exact
+old geometry/pixels. Labels/H, source authority, actual clipped hits, density/camera,
+readability and resource/cancellation guards remain. See
+[the contract](research/inset-double-rendering.md) and
+[independent receiving](verification-inset-doubles.md) for20 new cases, actual Metal
+and Engine PNG/file evidence. Native OS interaction, automatic side/style selection,
+skeletal presentation and aromatic tools remain separate work.
 
 Held previews call the same `centered_bond_strokes` constructor; hover outlines actual
 `GraphScene::bond_strokes` components. Tool order/epoch and event ordering remain UI-only,

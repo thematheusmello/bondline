@@ -327,8 +327,10 @@ conversion clicks, hotkeys, alignment cycling or actual native drawing acceptanc
 The [DoublePosition prerequisite](../research/sided-double-prerequisite.md) resolves the
 three XML names, directed side and absent/unspecified data. CDX automatic/manual variants
 remain opaque; they cannot be inferred from XML. Data persistence/loss guards now have
-[independent evidence](../verification-double-position.md), while Left/Right rendering
-deliberately refuses. Shortened inset geometry, skeletal display preserving authored H,
+[independent evidence](../verification-double-position.md). Explicit Left/Right rendering
+now has the [locked inset contract](../research/inset-double-rendering.md) and
+[independent evidence](../verification-inset-doubles.md); dormant non-Double still refuses.
+Automatic inherited style/side policy, skeletal display preserving authored H,
 unsaturated weighted-valence/phase and shared-edge precedence still need their own
 contracts/tests. GUIDE25 printed101–103/423–424 does not establish which shared aromatic
 edge order/phase wins; do not silently mutate an old edge or infer that from memory.

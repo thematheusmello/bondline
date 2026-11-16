@@ -1,5 +1,19 @@
 # Verification log
 
+## Shortened explicit double bonds, 2026-11-16
+
+[Receiving evidence](verification-inset-doubles.md) records public-API runtime refusal,
+independent analytic/guard/covered-arm REDs, separate private-helper compile qualification,
+20 new tests, a passing-first near-parallel pixel control and an independently reproduced
+source-review bounds counterexample/fix. Actual shared scenes,
+finite strict gaps, real shortened hits, fractional density, CPU/GPU and Unicode
+CDXML capture/history/Save/reopen have independently scoped checks. Only the old blanket
+Left/Right refusal test is upgraded; dormant/Center/cancel and all other old controls stay.
+Final local gate95915 passes1451/0/1 across205 result lines, including fmt, warnings-denied
+workspace/vendor clippy/tests, layers/licenses/corpus. The old MCP listener failure remains
+unattributed, not causally fixed by this pass. No native window, parser-fuzz replay, new
+golden/dependency/asset or hosted execution; full M0–M5 remains open.
+
 ## Persistent directed double-bond data, 2026-11-16
 
 [Receiving evidence](verification-double-position.md) separates initial JSON/XML runtime

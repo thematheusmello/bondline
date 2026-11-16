@@ -13,8 +13,10 @@ scope has independent evidence. A page-only history test does not verify chemica
 
 Directed DoublePosition now has [independent data/format evidence](verification-double-position.md):
 native CDXML presence/direction/history and guarded loss boundaries. Center Double retains
-the existing centered scene; Left/Right deliberately refuse rendering. No alignment command
-or benzene/cyclopentadiene workflow is delivered by this prerequisite. TD-007 remains partial;
+the existing centered scene; explicit Left/Right Double now has
+[shortened shared-renderer evidence](verification-inset-doubles.md). Dormant non-Double
+still refuses. No alignment command or benzene/cyclopentadiene workflow is delivered.
+TD-007 remains partial;
 TD-024, its hotkeys and broader unsaturated/skeletal ring workflows remain missing.
 
 Current native source-backed SMILES records have bounded Mac selected/all import,
@@ -351,7 +353,7 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-004 | Eraser | 86, 91, 121 | missing | Deletion and bond-order reduction have distinct contexts. |
 | TD-005 | Text | 91-94 | missing | KB-LABEL-25.5 changes existing-label entry to Alt-click; separate KB-REPEAT-25.5 gives Windows Alt/Mac Option-click repetition. Tool context/version/source-target semantics require tests; no26.1 inference. |
 | TD-006 | Solid/single bond | 85–86 | verified (partial, Mac) | Existing native C3/C4 plus new Single creation, click Single→Double and endpoint Double→Triple, exact H/IDs/history/CDXML Save As at readable scale. Also headless ordered/frame tests; modifiers/snapping/general imported editing/alignment/full tool parity remain missing. See verification-bond-order-native.md. |
-| TD-007 | Double bond | 85,88 | verified (partial, Mac) | Actual native tool selection/Double creation/Undo/Unicode CDXML Save As, shared typed order-aware create/extend/set_order and independent consumer/frame/image tests. Multiple terminal extension remains headless-only; reference sidedness/alignment/styles and complete tool flows remain missing. See verification-bond-order-ui.md and verification-bond-order-native.md. |
+| TD-007 | Double bond | 85,88 | verified (partial, Mac) | Actual native tool selection/Double creation/Undo/Unicode CDXML Save As, shared typed order-aware create/extend/set_order and independent consumer/frame/image tests. Multiple terminal extension remains headless-only; Explicit-side shortening/gap/hit/CPU-GPU and native-profile file/history checks now pass headlessly (verification-inset-doubles.md); native sided interaction, automatic side/style selection, alignment and complete tool flows remain unverified/missing. See verification-bond-order-ui.md and verification-bond-order-native.md. |
 | TD-008 | Double either/crossed double bond | 86 | missing | - |
 | TD-009 | Triple bond | 86,88 | verified (partial, Mac) | Native tool selection/Triple creation, hotspot3 and endpoint Double→Triple, exact source-free history/Save As and independent graph/file evidence at readable scale. Multiple terminal extension, context-sensitive styles and complete old-order×tool behavior remain missing/unverified. |
 | TD-010 | Quadruple bond | 86 | missing | Guide's legacy 4-key example conflicts with newer bond-hotkey table. |

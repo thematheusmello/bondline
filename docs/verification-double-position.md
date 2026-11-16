@@ -5,6 +5,10 @@
 skeletal labels, an alignment command, benzene/cyclopentadiene tools or aromaticity.
 GitHub Actions remains off; no native window/reference binary is used.
 
+The later [inset renderer](verification-inset-doubles.md) upgrades the temporary
+Left/Right refusal from this data checkpoint. Its separate geometry/guard tests do
+not change the format, dormant-data or source-authority assertions recorded here.
+
 ## Independent declarations and RED/GREEN
 
 Root alone runs Cargo/Git and changes live files. Three workers provide source research,

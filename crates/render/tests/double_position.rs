@@ -63,34 +63,112 @@ fn unsupported(result: Result<GraphScene, Error>) -> TestResult {
     Ok(())
 }
 
+// Replace only the prior blanket Left/Right Double refusal test; keep its page helper.
 #[test]
-fn left_and_right_double_metadata_refuse_all_shared_scene_entries_without_mutation() -> TestResult {
+fn left_and_right_double_metadata_use_the_declared_side_in_every_shared_scene_entry() -> TestResult
+{
     for position in ["left", "right"] {
         for reversed in [false, true] {
             let page = page("double", Some(position), reversed)?;
             let before = page.clone();
             let serialized = serde_json::to_value(&page)?;
-            unsupported(graph_page_scene(576, 576, &page))?;
+            let actual = graph_page_scene(576, 576, &page)?;
             let counts = BTreeMap::from([
                 (AtomId::new(29).ok_or("atom")?, 2),
                 (AtomId::new(11).ok_or("atom")?, 2),
             ]);
-            unsupported(graph_page_scene_with_display_hydrogens(
+            let resolved = graph_page_scene_with_display_hydrogens(
                 576,
                 576,
                 &page,
                 &counts,
                 &Cancellation::default(),
-            ))?;
+            )?;
             let view = PageView::fit(576, 576, page.size())?;
-            unsupported(view.graph_scene(&page, &Cancellation::default()))?;
+            assert_eq!(resolved.scene(), actual.scene());
+            assert_eq!(
+                view.graph_scene(&page, &Cancellation::default())?.scene(),
+                actual.scene()
+            );
+            let side = if (position == "right") != reversed {
+                6.0
+            } else {
+                -6.0
+            };
+            let (a, b) = if reversed {
+                ([224.0, 160.0], [96.0, 160.0])
+            } else {
+                ([96.0, 160.0], [224.0, 160.0])
+            };
+            let expected = vec![
+                Stroke {
+                    begin: a,
+                    end: b,
+                    width: 2.0,
+                    color: [0, 0, 0, 255],
+                },
+                Stroke {
+                    begin: [a[0], 160.0 + side],
+                    end: [b[0], 160.0 + side],
+                    width: 2.0,
+                    color: [0, 0, 0, 255],
+                },
+            ];
+            let fid = FragmentId::new(17).ok_or("fragment")?;
+            let bid = BondId::new(41).ok_or("bond")?;
+            assert_eq!(
+                actual.bond_strokes(fid, bid).cloned().collect::<Vec<_>>(),
+                expected
+            );
+            assert_eq!(
+                actual
+                    .scene()
+                    .primitives
+                    .iter()
+                    .filter(|p| matches!(p, Primitive::Stroke(_)))
+                    .count(),
+                2
+            );
+            for y in [160.0, 160.0 + side] {
+                assert_eq!(
+                    actual.hit_test([160.0, y], 0.0)?,
+                    Some(HitTarget::Bond {
+                        fragment_id: fid,
+                        bond_id: bid
+                    })
+                );
+            }
+            assert_eq!(actual.hit_test([160.0, 160.0 + side / 2.0], 0.0)?, None);
+            let frame = cpu_scene(actual.scene())?;
+            for y in 148_u32..172 {
+                for x in 128_u32..192 {
+                    let offset = usize::try_from((u64::from(y) * 576 + u64::from(x)) * 4)?;
+                    let ink = [160.0, 160.0 + f64::from(side)]
+                        .iter()
+                        .any(|row| (f64::from(y) + 0.5 - row).abs() <= 1.0);
+                    assert_eq!(
+                        frame.rgba.get(offset..offset + 4).ok_or("RGBA")?,
+                        if ink {
+                            &[0, 0, 0, 255]
+                        } else {
+                            &[255, 255, 255, 255]
+                        },
+                        "pixel{x},{y}"
+                    );
+                }
+            }
             assert_eq!(page, before);
             assert_eq!(serde_json::to_value(&page)?, serialized);
+            assert!(
+                page.fragments()[0]
+                    .atoms()
+                    .iter()
+                    .all(|atom| atom.explicit_hydrogens == Some(2))
+            );
         }
     }
     Ok(())
 }
-
 #[test]
 fn every_specified_position_on_single_or_triple_refuses_instead_of_losing_dormant_data()
 -> TestResult {

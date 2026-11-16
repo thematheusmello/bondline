@@ -30,7 +30,8 @@ CDX manual/automatic flag or chemical rule is inferred. Whole-bond copies/order 
 preserve the field; size_of::<Bond>() already covers its fixed-size storage. The
 [data/format prerequisite](research/sided-double-prerequisite.md) and
 [independent evidence](verification-double-position.md) distinguish persistence from
-the still-missing sided rendering, skeletal labels and alignment/tool workflows.
+the [inset renderer](verification-inset-doubles.md) from still-missing automatic styles,
+skeletal labels and alignment/tool workflows.
 
 Document::append_fragments validates a whole batch before installing any state. It rejects
 missing pages and duplicate fragment/atom/bond IDs, including collisions with existing

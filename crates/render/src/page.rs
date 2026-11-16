@@ -337,7 +337,11 @@ pub(crate) fn graph_scene_in_viewport(
         for bond in fragment.bonds() {
             cancel.check()?;
             match (bond.order, bond.double_position) {
-                (_, DoublePosition::Unspecified) | (BondOrder::Double, DoublePosition::Center) => {}
+                (_, DoublePosition::Unspecified)
+                | (
+                    BondOrder::Double,
+                    DoublePosition::Center | DoublePosition::Left | DoublePosition::Right,
+                ) => {}
                 _ => return Err(Error::UnsupportedChemicalContent),
             }
             has_multiple |= matches!(bond.order, BondOrder::Double | BondOrder::Triple);
@@ -367,6 +371,31 @@ pub(crate) fn graph_scene_in_viewport(
                 .canvas_position(atom.position.ok_or(Error::UnsupportedChemicalContent)?)?;
             positions.insert(atom.id, position);
         }
+        let mut adjoining = BTreeMap::<AtomId, Vec<(AtomId, [f32; 2])>>::new();
+        if fragment.bonds().iter().any(|bond| {
+            matches!(
+                bond.double_position,
+                DoublePosition::Left | DoublePosition::Right
+            )
+        }) {
+            for bond in fragment.bonds() {
+                cancel.check()?;
+                let begin = *positions
+                    .get(&bond.begin)
+                    .ok_or(Error::UnsupportedChemicalContent)?;
+                let end = *positions
+                    .get(&bond.end)
+                    .ok_or(Error::UnsupportedChemicalContent)?;
+                adjoining
+                    .entry(bond.begin)
+                    .or_default()
+                    .push((bond.end, end));
+                adjoining
+                    .entry(bond.end)
+                    .or_default()
+                    .push((bond.begin, begin));
+            }
+        }
         for bond in fragment.bonds() {
             cancel.check()?;
             if !matches!(
@@ -388,7 +417,28 @@ pub(crate) fn graph_scene_in_viewport(
                 color: [0, 0, 0, 255],
             };
             stroke.validate()?;
-            let strokes = crate::centered_bond_strokes(&stroke, bond.order)?;
+            let strokes = if matches!(
+                bond.double_position,
+                DoublePosition::Left | DoublePosition::Right
+            ) {
+                let neighbours = |id, other| {
+                    adjoining
+                        .get(&id)
+                        .into_iter()
+                        .flatten()
+                        .filter_map(|(neighbour, point)| (*neighbour != other).then_some(*point))
+                        .collect::<Vec<_>>()
+                };
+                crate::inset::strokes(
+                    &stroke,
+                    bond.double_position,
+                    &neighbours(bond.begin, bond.end),
+                    &neighbours(bond.end, bond.begin),
+                    cancel,
+                )?
+            } else {
+                crate::centered_bond_strokes(&stroke, bond.order)?
+            };
             for (id, dx) in [
                 (bond.begin, f64::from(end[0]) - f64::from(begin[0])),
                 (bond.end, f64::from(begin[0]) - f64::from(end[0])),
@@ -415,6 +465,7 @@ pub(crate) fn graph_scene_in_viewport(
                     bond_id: bond.id,
                 },
                 endpoints: [bond.begin, bond.end],
+                double_position: bond.double_position,
                 stroke: stroke.clone(),
                 strokes: strokes.clone(),
                 polygons,
@@ -574,10 +625,20 @@ pub(crate) fn graph_scene_in_viewport(
             .iter()
             .flat_map(|bond| &bond.strokes)
             .collect::<Vec<_>>();
+        let mut joined_axes = BTreeMap::<HitTarget, Vec<&Stroke>>::new();
         for bond in &bonds {
             if bond.strokes.len() == 1 {
                 continue;
             }
+            let inset_gap = if bond.is_sided() {
+                Some(crate::inset::Gap::new(
+                    &bond.stroke,
+                    bond.strokes.get(1).ok_or(Error::InvalidGeometry)?,
+                    bond.double_position,
+                )?)
+            } else {
+                None
+            };
             for other in &bonds {
                 cancel.check()?;
                 if bond.target == other.target {
@@ -588,6 +649,15 @@ pub(crate) fn graph_scene_in_viewport(
                     .iter()
                     .find(|id| other.endpoints.contains(id));
                 if let Some(shared) = shared {
+                    if bond.is_sided()
+                        && other.natural_axis(0)
+                        && (!other.is_sided() || bond.target < other.target)
+                    {
+                        let first = bond.strokes.first().ok_or(Error::InvalidGeometry)?;
+                        let second = other.strokes.first().ok_or(Error::InvalidGeometry)?;
+                        joined_axes.entry(bond.target).or_default().push(second);
+                        joined_axes.entry(other.target).or_default().push(first);
+                    }
                     let anchor = if bond.endpoints.first() == Some(shared) {
                         bond.stroke.begin
                     } else {
@@ -598,8 +668,14 @@ pub(crate) fn graph_scene_in_viewport(
                     if let Some(mask) = anchor_mask.as_ref() {
                         junction_masks.push(mask);
                     }
-                    for first in &bond.strokes {
-                        for second in &other.strokes {
+                    for (first_index, first) in bond.strokes.iter().enumerate() {
+                        for (second_index, second) in other.strokes.iter().enumerate() {
+                            if bond.is_sided()
+                                && bond.natural_axis(first_index)
+                                && other.natural_axis(second_index)
+                            {
+                                continue;
+                            }
                             if first.has_visible_pixel(
                                 [width, height],
                                 &junction_masks,
@@ -609,6 +685,29 @@ pub(crate) fn graph_scene_in_viewport(
                             )? {
                                 return Err(Error::LabelOverlap);
                             }
+                        }
+                    }
+                } else if let Some(gap) = &inset_gap {
+                    for component in &other.strokes {
+                        for stroke in &bond.strokes {
+                            if stroke.has_visible_pixel(
+                                [width, height],
+                                &masks,
+                                Some(component),
+                                &[],
+                                cancel,
+                            )? {
+                                return Err(Error::LabelOverlap);
+                            }
+                        }
+                        if gap.has_visible_pixel(
+                            [width, height],
+                            &masks,
+                            Some(component),
+                            &[],
+                            cancel,
+                        )? {
+                            return Err(Error::LabelOverlap);
                         }
                     }
                 } else {
@@ -638,26 +737,49 @@ pub(crate) fn graph_scene_in_viewport(
                     return Err(Error::LabelOverlap);
                 }
             }
-            for pair in bond.strokes.windows(2) {
-                let (Some(a), Some(b)) = (pair.first(), pair.get(1)) else {
-                    return Err(Error::InvalidGeometry);
-                };
-                let gap = Stroke {
-                    begin: [
-                        (a.begin[0] + b.begin[0]) / 2.0,
-                        (a.begin[1] + b.begin[1]) / 2.0,
-                    ],
-                    end: [(a.end[0] + b.end[0]) / 2.0, (a.end[1] + b.end[1]) / 2.0],
-                    width: bond.stroke.width * 2.0,
-                    color: [255; 4],
-                };
-                gap.validate()?;
+            if let Some(gap) = &inset_gap {
                 if !gap.has_visible_pixel([width, height], &[], None, &ink, cancel)? {
                     return Err(Error::BondScale);
                 }
                 if !gap.has_visible_pixel([width, height], &masks, None, &ink, cancel)? {
                     return Err(Error::LabelOverlap);
                 }
+            } else {
+                for pair in bond.strokes.windows(2) {
+                    let (Some(a), Some(b)) = (pair.first(), pair.get(1)) else {
+                        return Err(Error::InvalidGeometry);
+                    };
+                    let gap = Stroke {
+                        begin: [
+                            (a.begin[0] + b.begin[0]) / 2.0,
+                            (a.begin[1] + b.begin[1]) / 2.0,
+                        ],
+                        end: [(a.end[0] + b.end[0]) / 2.0, (a.end[1] + b.end[1]) / 2.0],
+                        width: bond.stroke.width * 2.0,
+                        color: [255; 4],
+                    };
+                    gap.validate()?;
+                    if !gap.has_visible_pixel([width, height], &[], None, &ink, cancel)? {
+                        return Err(Error::BondScale);
+                    }
+                    if !gap.has_visible_pixel([width, height], &masks, None, &ink, cancel)? {
+                        return Err(Error::LabelOverlap);
+                    }
+                }
+            }
+        }
+        for bond in &bonds {
+            cancel.check()?;
+            let Some(joined) = joined_axes.get(&bond.target) else {
+                continue;
+            };
+            if !bond
+                .strokes
+                .first()
+                .ok_or(Error::InvalidGeometry)?
+                .has_visible_pixel([width, height], &masks, None, joined, cancel)?
+            {
+                return Err(Error::LabelOverlap);
             }
         }
     }

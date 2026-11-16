@@ -26,16 +26,19 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
-The DoublePosition data prerequisite follows the native-ring checkpoint. Read
-docs/research/sided-double-prerequisite.md and docs/verification-double-position.md.
+The DoublePosition data prerequisite and inset renderer follow the native-ring checkpoint.
+Read docs/research/sided-double-prerequisite.md, docs/research/inset-double-rendering.md,
+docs/verification-double-position.md and docs/verification-inset-doubles.md.
 Bond stores directed Unspecified/Center/Right/Left; omitted default preserves old JSON/
 native-v0 bytes. CDXML names are mapped/written exactly; unspecified is not Center.
 Dormant metadata survives order changes. Both MOL model writers refuse any specified
-placement; retained-SMILES replacement cannot change it. Shared scene preflight accepts
-only Unspecified or Center Double; Left/Right is not rendered yet. Never silently center
-it, erase literal H, weaken source authority or infer the CDX manual/automatic bit.
-Next implement inset bounds/gaps/hits, then explicit skeletal policy and weighted
-unsaturated-ring/native tools; the data prerequisite does not complete aromatic parity.
+placement; retained-SMILES replacement cannot change it. Explicit Left/Right Double now
+uses shortened bisector geometry and actual finite-cap/strict-edge gap validation.
+Unspecified/Center retain old pixels; specified non-Double still refuses. Only qualified
+authored-axis joins may overlap, and both arms need distinct unmasked ink. Keep offsets,
+nonincident ink, source/glyph/scale/bounds/cancellation guards strict. Never erase literal H
+or infer a CDX flag. Next define skeletal policy and weighted unsaturated-ring/native
+tools; this renderer step does not complete aromatic, native or M0–M5 parity.
 
 The native editable SMILES checkpoint passes local1245/0/1. Read
 docs/verification-native-smiles-paste.md for the ten worker/six App tests, real ABA
@@ -229,7 +232,7 @@ replacement and new-tree Writer; model mapping and application commands live abo
 chem (L1, model-only bounded neutral fixed-H/Kekulé authoring projection with immutable
 array-aligned source semantics, sp²-cycle validation and deterministic matching;
 not general aromaticity perception; see docs/verification-smiles-authoring-chem.md);
-render (L1, shared neutral-element Single/centered Double/Triple GraphScene, bounded hit regions, literal authored-H
+render (L1, shared neutral-element Single/centered Double/Triple plus explicit-sided GraphScene, bounded hit regions, literal authored-H
 labels plus a separate resolved-H entry with attachment/paper-ink guards, CPU/GPU
 rectangles/strokes and unchanged approved golden); io (L2,
 source-backed CDXML/MOL and limited CDX projections, elemental encoding, owned snapshots, PNG encoding,
@@ -498,7 +501,8 @@ existing internal CDX crate. New native declared closures154/165/220 include tha
 
 The literal graph_page_scene entry and source-aware captures share a bounded GraphScene.
 Positioned neutral, nonisotopic/RadicalNone elements and Single/centered Double/Triple
-bonds are supported under the original3w profile. Other orders remain refused. In the literal
+plus explicit Left/Right Double bonds are supported under the original3w profile.
+Other orders remain refused. In the literal
 entry, missing H is never inferred:
 connected unknown-H carbon may be skeletal, isolated unknown-H carbon refuses, and other
 elements retain literal symbols without inventing H. Authored0/1/N H renders literally;
@@ -518,8 +522,9 @@ public native origin and effective DPI. Keep multi-idle-frame regressions and na
 do not rearm from cached hover_pos, key release or focus gain alone. No OS pointer polling.
 
 For multiples, preserve one logical bond ID/hit/neighbour vote while checking all actual
-components and gaps. `centered_bond_strokes` is the sole geometry constructor for graphs
-and held previews; `GraphScene::bond_strokes` supplies hover components. Preserve the
+components and gaps. `centered_bond_strokes` remains the unchanged public constructor for
+centered graphs/held previews; explicit sided graphs use private inset::strokes with
+actual adjoining geometry. `GraphScene::bond_strokes` supplies hover components. Preserve the
 approved Single golden, successful first-choice pixels, fundamental stroke arithmetic and independent
 visibility/exclusion/cap/attachment/budget checks. The original short/corridor/junction
 policies are not a vendor default. Literal multiple scenes use exact authored counts via
@@ -722,7 +727,7 @@ Source-free/CDXML remain literal; no general H/stereo/aromaticity/edit authority
 Centered Double/Triple geometry/hits/attachment and closed authoring now have independent
 headless evidence; see the multiple-bond verification records and STATUS.md for exact gates.
 The existing-bond order-edit command and UI/adapter/history/H-budget checks are delivered
-below. Styles, sidedness, general
+below. Inherited styles, automatic sidedness, alignment controls, general
 construction, inventory/platform/native evidence and full M0–M5 remain unfinished.
 
 `bond.set_order` requires an explicit order, current revision/target IDs and
