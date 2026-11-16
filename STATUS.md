@@ -7,8 +7,9 @@ do not enable, dispatch or rerun it during development.
 
 ## Current recoverable work
 
-Ring command source/tests/provenance follows contracts `9010a14` and `d85c6ef` and the
-source proposal `8de42ad`. The feature checkpoint's exact revision is in local Git.
+Ring command source/tests/provenance is committed as `ac340db`, following contracts
+`9010a14`/`d85c6ef` and source proposal `8de42ad`. The later documentation checkpoint
+locks [native tool integration](docs/research/ring-native-plan.md) before API/App REDs.
 Selection source remains `07aa562`, atomic model batches `77f5ea4`. Earlier native atom
 labels are `b4fefaf`; their actual macOS evidence does not verify the newer workflows.
 
@@ -84,15 +85,17 @@ are inspected, downloaded or executed.
 Root owns Cargo/Git/CUA/product mutation. All Cargo/test/oracle handles in this slice
 are terminal:53591,1846,16160,35627,18276,98301,80454,24067,82839,63157,43878,45460,
 29411. Public v2's missing bracket is setup only; v3 reaches actual0/10 baseline RED.
-Source reviews/core/adapter declarations are terminal. native_acceptance is preparing
-only the next native tool/gesture proposal under ignored target/ring-native-plan/;
-its agent status must be revalidated before continuation. Do not restart a process
-merely because an observation times out.
+Source reviews/core/adapter declarations and native_acceptance's next-tool proposal
+are terminal. No live job remains. The locked durable contract above contains the
+continuation, independent of ignored target reports. Revalidate any newly reported
+handles; do not restart a process merely because an observation times out.
 
 ## Next exact work and full remaining scope
 
-1. Preserve this checked ring-command checkpoint. Lock the native tool/state/preview/
-   click/drag contract from the source proposal before independent App/API REDs.
+1. Read [the locked native tool/state/preview/click/drag contract](docs/research/ring-native-plan.md).
+   Independently declare ui.ring_tool UnknownCommand and actual-App missing Cyclohexane
+   RED before implementation. Preview/context missing-API RED is separate. Keep the
+   existing analytic/precision tests exact; do not duplicate or weaken their coverage.
 2. Implement ui.ring_tool and six original procedural3–8 controls with one mutually
    exclusive Selection/Bond/Ring representation and checked epoch. Reuse the same
    candidate builder for preview, fresh graph hits/PageView, weak/opaque context and

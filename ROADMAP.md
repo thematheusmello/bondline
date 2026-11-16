@@ -10,7 +10,7 @@ cyclohexane/decalin/spiro/terminal chemistry, source/history/ID guards, Unicode 
 CPU/GPU and actual CLI/MCP/socket checks pass. Its rounded-precision counterexamples
 are fixed without a blanket minimum length. Registry37, native controls unchanged;
 see [receiving](docs/verification-ring-authoring.md). Native ring tools/preview/gestures
-are the next required integration, followed by aromatic/chair/sprout/styles and broader
+are [locked for the next integration](docs/research/ring-native-plan.md), followed by aromatic/chair/sprout/styles and broader
 chemistry. This is a checked engine increment, not delivered native ring parity or M2.
 
 Bounded native Mac atom labels now support fresh Alt-click target/fields/Apply/Cancel,

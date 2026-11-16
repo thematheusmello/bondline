@@ -1,5 +1,13 @@
 # Open questions
 
+- Native ring tools are the next integration after checked command ac340db. The
+  original policies in research/ring-native-plan.md lock48pt/pose, unit-neighbor
+  bisectors/1e-12 cancellation ties, local-side candidates and a scene-success gate.
+  They are not observed26.1 defaults. In initial Ring mode, modified primary gestures
+  remain unsupported; Alt-sprout versus newer Alt-label precedence is unresolved.
+  Aromatic/chair/sprout/styles/face solving and actual native/platform behavior stay
+  open. Existing non-Ring atom editing retains its separate delivered scope.
+
 - Persistent native atom-set selection and literal translation now have independent
   command/context/wire/App coverage; see verification-selection-authoring.md. Exact26.1
   tool/modifier precedence, molecular rectangle inclusion versus anchor inclusion,

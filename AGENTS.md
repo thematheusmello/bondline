@@ -93,7 +93,7 @@ closures, parsers/IO/chem/render, old fixtures/consumers/font/golden remain unch
 No native ring binding is delivered yet: controls stay23/20/14/10. Next is ui.ring_tool,
 one mutually exclusive Selection/Bond/Ring representation, original procedural palette,
 same-candidate preview and actual free/atom/bond gestures through the shared command.
-Lock original click/default/tie/modifier policies before independent App/API REDs;
+The next policies are locked in docs/research/ring-native-plan.md before independent App/API REDs;
 do not invent26.1 evidence, competing active booleans or a converter fallback. Native
 selection/next-ring/platform acceptance remains separate while the desktop is in use.
 
