@@ -338,6 +338,14 @@ corpus and reference/chemical mapping remain M1 work.
 
 ## M2: drawing — in progress
 
+The next [elemental authoring contract](docs/research/atom-label-authoring-contract.md)
+locks existing-atom element/literal-H editing through one named command, exact identity/
+history/source guards and independent actual-file consumers before native presentation.
+This is authoring, not another converter or general valence inference. Modern label-entry
+and repeat-label evidence stay separate; full inline labels, aliases, charges/isotopes/
+radicals, selection, rings/chains and styles remain required. Implementation evidence is
+not inferred from this contract.
+
 The shared118-symbol catalog, positioned neutral-element labels and literal H have
 independent font/CPU/GPU/file evidence. MOL/SDF display H stays separate from authored
 None. Centered Single/Double/Triple scenes use logical bond IDs, actual component hits,
