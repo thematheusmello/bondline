@@ -281,7 +281,7 @@ impl RingWorkflow {
                 if !gesture.proof.is_current(engine) {
                     return Ok(None);
                 }
-                Ok(Some(Command::RingCreate(candidate.params)))
+                Ok(Some(Command::RingCreate(candidate.params.into())))
             }
             _ => Ok(None),
         }

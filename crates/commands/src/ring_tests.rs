@@ -58,7 +58,7 @@ fn atomic_refusal(engine: &mut Engine, params: RingCreate, code: &str) -> TestRe
     let generation = engine.session_generation();
     let file = engine.ui_file_context_stamp();
     let error = engine
-        .execute(Command::RingCreate(params))
+        .execute(Command::RingCreate(params.into()))
         .err()
         .ok_or("invalid ring accepted")?;
     assert_eq!(error.info().code, code, "{error}");
@@ -207,7 +207,7 @@ fn exhausted_ring_counters_are_atomic_and_attachments_never_spend_a_fragment_id(
             }
         };
         let params = request(&engine, placement);
-        let result = engine.execute(Command::RingCreate(params))?;
+        let result = engine.execute(Command::RingCreate(params.into()))?;
         assert!(result.changed);
         assert_eq!(engine.identities.fragment, u32::MAX);
         let f = &engine.document()?.pages()[0].fragments()[0];

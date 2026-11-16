@@ -8,6 +8,9 @@ use bondline_model::{
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+mod request;
+pub use request::{NamedRingCreate, RingCreateRequest, RingKind, RingPhase};
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum RingSide {
@@ -183,10 +186,129 @@ fn polygon(size: u8, begin: Point2, end: Point2, side: RingSide) -> Result<Vec<P
     Ok(points)
 }
 
+#[derive(Clone, Copy)]
+enum SharedBudget {
+    Free,
+    Atom(u16),
+    Bond { begin: u16, end: u16, weight: u16 },
+}
+
+fn named_weights(
+    kind: RingKind,
+    phase: Option<RingPhase>,
+    budget: SharedBudget,
+) -> Result<Vec<u16>, Error> {
+    let base = kind.base_weights();
+    let size = base.len();
+    let last = size
+        .checked_sub(1)
+        .ok_or(Error::InvalidRing("empty ring pattern"))?;
+    let rotations = match kind {
+        RingKind::Benzene => 2,
+        RingKind::Cyclopentadiene => 5,
+    };
+    for rotation in 0..rotations {
+        let at = |index: usize| -> Result<u16, Error> {
+            base.get((rotation + index) % size)
+                .copied()
+                .ok_or(Error::InvalidRing("incomplete ring pattern"))
+        };
+        let first = at(0)?;
+        if match phase {
+            None => false,
+            Some(RingPhase::DoubleFirst) => first != 2,
+            Some(RingPhase::SingleFirst) => first != 1,
+        } {
+            continue;
+        }
+        let fits = match budget {
+            SharedBudget::Free => true,
+            SharedBudget::Atom(available) => first
+                .checked_add(at(last)?)
+                .is_some_and(|needed| needed <= available),
+            SharedBudget::Bond { begin, end, weight } => {
+                first == weight && at(last)? <= begin && at(1)? <= end
+            }
+        };
+        if fits {
+            return (0..size).map(at).collect();
+        }
+    }
+    Err(Error::UnsupportedRing(
+        "no permitted ring phase matches the shared edge and available literal H",
+    ))
+}
+
+fn weight_at(weights: &[u16], index: usize) -> Result<u16, Error> {
+    weights
+        .get(index)
+        .copied()
+        .ok_or(Error::InvalidRing("incomplete ring pattern"))
+}
+
+fn incident_weight(weights: &[u16], index: usize) -> Result<u16, Error> {
+    let previous = if index == 0 {
+        weights.len().checked_sub(1)
+    } else {
+        index.checked_sub(1)
+    }
+    .ok_or(Error::InvalidRing("empty ring pattern"))?;
+    weight_at(weights, previous)?
+        .checked_add(weight_at(weights, index)?)
+        .ok_or(Error::InvalidRing("ring bond-order sum is too large"))
+}
+
+fn subtract_new_weight(available: u16, needed: u16) -> Result<u16, Error> {
+    available.checked_sub(needed).ok_or(Error::UnsupportedRing(
+        "the selected ring phase exceeds available literal H",
+    ))
+}
+
 pub(super) fn create(
     document: &StoredDocument,
     params: RingCreate,
     floor: bond::Ids,
+) -> Result<(StoredDocument, bond::Ids), Error> {
+    create_inner(document, params, floor, None)
+}
+
+pub(super) fn create_request(
+    document: &StoredDocument,
+    request: RingCreateRequest,
+    floor: bond::Ids,
+) -> Result<(StoredDocument, bond::Ids), Error> {
+    match request {
+        RingCreateRequest::Sized(params) => create(document, params, floor),
+        RingCreateRequest::Named(params) => {
+            let NamedRingCreate {
+                expected_revision,
+                page_id,
+                kind,
+                hydrogen_policy,
+                placement,
+                phase,
+            } = params;
+            create_inner(
+                document,
+                RingCreate {
+                    expected_revision,
+                    page_id,
+                    size: kind.size(),
+                    hydrogen_policy,
+                    placement,
+                },
+                floor,
+                Some((kind, phase)),
+            )
+        }
+    }
+}
+
+fn create_inner(
+    document: &StoredDocument,
+    params: RingCreate,
+    floor: bond::Ids,
+    named: Option<(RingKind, Option<RingPhase>)>,
 ) -> Result<(StoredDocument, bond::Ids), Error> {
     if !document.is_fully_mapped()
         || document
@@ -208,6 +330,7 @@ pub(super) fn create(
         .iter()
         .find(|page| page.id() == page_id)
         .ok_or(bondline_model::Error::MissingPage(params.page_id))?;
+    let mut weights = vec![1_u16; usize::from(params.size)];
     let (target, mut perimeter, hydrogen_updates, begin, end, side) =
         match params.placement {
             RingPlacement::Free {
@@ -216,14 +339,19 @@ pub(super) fn create(
                 end_x_pt,
                 end_y_pt,
                 side,
-            } => (
-                None,
-                Vec::new(),
-                Vec::new(),
-                Point2::new(begin_x_pt, begin_y_pt)?,
-                Point2::new(end_x_pt, end_y_pt)?,
-                side,
-            ),
+            } => {
+                if let Some((kind, phase)) = named {
+                    weights = named_weights(kind, phase, SharedBudget::Free)?;
+                }
+                (
+                    None,
+                    Vec::new(),
+                    Vec::new(),
+                    Point2::new(begin_x_pt, begin_y_pt)?,
+                    Point2::new(end_x_pt, end_y_pt)?,
+                    side,
+                )
+            }
             RingPlacement::Atom {
                 fragment_id,
                 atom_id,
@@ -233,7 +361,14 @@ pub(super) fn create(
             } => {
                 let fragment = fragment(page, fragment_id)?;
                 let atom = atom(fragment, atom_id)?;
-                let h = remaining_hydrogens(fragment, atom, 2)?;
+                let h = if let Some((kind, phase)) = named {
+                    // A zero consumption proves old H once before the bounded phase checks.
+                    let available = remaining_hydrogens(fragment, atom, 0)?;
+                    weights = named_weights(kind, phase, SharedBudget::Atom(available))?;
+                    subtract_new_weight(available, incident_weight(&weights, 0)?)?
+                } else {
+                    remaining_hydrogens(fragment, atom, 2)?
+                };
                 (
                     Some(fragment),
                     vec![atom.id],
@@ -257,13 +392,46 @@ pub(super) fn create(
                         bond_id,
                     },
                 )?;
-                if bond.order != BondOrder::Single {
-                    return Err(Error::UnsupportedRing("a shared ring edge must be Single"));
+                let supported_edge = bond.order == BondOrder::Single
+                    || (named.is_some() && bond.order == BondOrder::Double);
+                if !supported_edge {
+                    return Err(Error::UnsupportedRing(if named.is_some() {
+                        "a named shared ring edge must be Single or Double"
+                    } else {
+                        "a shared ring edge must be Single"
+                    }));
                 }
                 let begin = atom(fragment, bond.begin.get())?;
                 let end = atom(fragment, bond.end.get())?;
-                let begin_h = remaining_hydrogens(fragment, begin, 1)?;
-                let end_h = remaining_hydrogens(fragment, end, 1)?;
+                let (begin_h, end_h) = if let Some((kind, phase)) = named {
+                    let begin_available = remaining_hydrogens(fragment, begin, 0)?;
+                    let end_available = remaining_hydrogens(fragment, end, 0)?;
+                    let weight = bond::bond_weight(bond.order).ok_or(Error::UnsupportedRing(
+                        "a named shared ring edge must have integer order",
+                    ))?;
+                    weights = named_weights(
+                        kind,
+                        phase,
+                        SharedBudget::Bond {
+                            begin: begin_available,
+                            end: end_available,
+                            weight,
+                        },
+                    )?;
+                    let last = weights
+                        .len()
+                        .checked_sub(1)
+                        .ok_or(Error::InvalidRing("empty ring pattern"))?;
+                    (
+                        subtract_new_weight(begin_available, weight_at(&weights, last)?)?,
+                        subtract_new_weight(end_available, weight_at(&weights, 1)?)?,
+                    )
+                } else {
+                    (
+                        remaining_hydrogens(fragment, begin, 1)?,
+                        remaining_hydrogens(fragment, end, 1)?,
+                    )
+                };
                 (
                     Some(fragment),
                     vec![begin.id, end.id],
@@ -309,14 +477,20 @@ pub(super) fn create(
             .explicit_hydrogens = Some(h);
     }
     let carbon = Element::try_from(6).map_err(bondline_model::Error::from)?;
-    for point in points.iter().skip(shared) {
+    for (index, point) in points.iter().enumerate().skip(shared) {
         maximum.atom = maximum
             .atom
             .checked_add(1)
             .ok_or(Error::IdentityExhausted)?;
         let id = AtomId::new(maximum.atom).ok_or(Error::IdentityExhausted)?;
         let mut atom = Atom::new(id, carbon, Some(*point));
-        atom.explicit_hydrogens = Some(2);
+        atom.explicit_hydrogens =
+            Some(4_u16.checked_sub(incident_weight(&weights, index)?).ok_or(
+                Error::UnsupportedRing("ring bond orders exceed neutral carbon valence"),
+            )?);
+        if named.is_some() {
+            atom.show_non_terminal_carbon_labels = Some(false);
+        }
         atoms.push(atom);
         perimeter.push(id);
     }
@@ -334,12 +508,30 @@ pub(super) fn create(
             .bond
             .checked_add(1)
             .ok_or(Error::IdentityExhausted)?;
+        let (order, double_position) = match weight_at(&weights, index)? {
+            1 => (
+                BondOrder::Single,
+                bondline_model::DoublePosition::Unspecified,
+            ),
+            2 => (
+                BondOrder::Double,
+                match side {
+                    RingSide::Positive => bondline_model::DoublePosition::Right,
+                    RingSide::Negative => bondline_model::DoublePosition::Left,
+                },
+            ),
+            _ => {
+                return Err(Error::InvalidRing(
+                    "ring pattern needs Single or Double bonds",
+                ));
+            }
+        };
         bonds.push(Bond {
-            double_position: bondline_model::DoublePosition::Unspecified,
+            double_position,
             id: BondId::new(maximum.bond).ok_or(Error::IdentityExhausted)?,
             begin,
             end,
-            order: BondOrder::Single,
+            order,
         });
     }
     let replacement =

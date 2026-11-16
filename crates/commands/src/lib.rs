@@ -46,7 +46,9 @@ pub use files::{
     OpenSdf, OpenSmiles, SaveCdx, SaveCdxml, SaveMol, SaveSdf, SaveSmiles,
 };
 pub use new_document::NewDocument;
-pub use ring::{RingCreate, RingPlacement, RingSide};
+pub use ring::{
+    NamedRingCreate, RingCreate, RingCreateRequest, RingKind, RingPhase, RingPlacement, RingSide,
+};
 pub use ring_tool::{RingContext, RingToolOperation, SelectRingTool};
 pub use sdf_edit::{SdfFieldSet, SdfRecordRemove};
 pub use sdf_query::{
@@ -127,7 +129,16 @@ macro_rules! command_registry {
 
             pub fn parse(name: &str, params: Value) -> Result<Self, Error> {
                 match name {
-                    $($name => serde_json::from_value(params).map(Self::$variant).map_err(Error::InvalidParams)),+,
+                    $($name => {
+                        if !params.is_object() {
+                            return Err(Error::InvalidParams(
+                                <serde_json::Error as serde::de::Error>::custom(
+                                    "command parameters must be a JSON object"
+                                )
+                            ));
+                        }
+                        serde_json::from_value(params).map(Self::$variant).map_err(Error::InvalidParams)
+                    }),+,
                     _ => Err(Error::UnknownCommand(name.to_owned())),
                 }
             }
@@ -177,7 +188,7 @@ command_registry! {
     Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
     UiSelection(UiSelection) => ("ui.selection", "Select native atoms without authoring", false),
     SelectionTranslate(SelectionTranslate) => ("selection.translate", "Translate the current native atom selection atomically", false),
-    RingCreate(RingCreate) => ("ring.create", "Construct a native carbon Single ring with explicit standalone or shared-atom/edge placement.", false),
+    RingCreate(RingCreateRequest) => ("ring.create", "Construct a native carbon Single ring or named benzene/cyclopentadiene integer-bond ring, preserving shared data with explicit standalone or shared-atom/edge placement.", false),
     UiRingToolSelect(SelectRingTool) => ("ui.ring_tool", "Select a native carbon Single-ring tool without editing the document or its history.", false),
 }
 
@@ -940,11 +951,11 @@ impl Engine {
                 self.commit(document)?
             }
             Command::RingCreate(params) => {
-                if params.expected_revision != self.revision {
+                if params.expected_revision() != self.revision {
                     return Err(Error::StaleRevision);
                 }
                 let (document, identities) =
-                    ring::create(self.stored_document()?, params, self.identities)?;
+                    ring::create_request(self.stored_document()?, params, self.identities)?;
                 let changed = self.commit(document)?;
                 self.identities = identities;
                 drawing_focus = self.view_focus;
@@ -1199,7 +1210,7 @@ mod tests {
     }
 
     #[test]
-    fn registry_exposes_typed_closed_schemas() {
+    fn registry_exposes_typed_closed_schemas() -> Result<(), Box<dyn std::error::Error>> {
         let commands = super::registry();
         let names: std::collections::BTreeSet<_> =
             commands.iter().map(|command| command.name).collect();
@@ -1259,10 +1270,32 @@ mod tests {
                     assert_eq!(variant["type"], "object");
                     assert_eq!(variant["additionalProperties"], false);
                 }
+            } else if let Some(variants) = schema["anyOf"].as_array() {
+                assert!(schema.get("additionalProperties").is_none());
+                assert!(!variants.is_empty());
+                for variant in variants {
+                    let variant = match variant.get("$ref") {
+                        None => variant,
+                        Some(reference) => {
+                            let reference = reference
+                                .as_str()
+                                .ok_or("schema reference must be a string")?;
+                            let pointer = reference
+                                .strip_prefix('#')
+                                .ok_or("schema reference must be local")?;
+                            schema
+                                .pointer(pointer)
+                                .ok_or("missing local schema reference target")?
+                        }
+                    };
+                    assert_eq!(variant["type"], "object");
+                    assert_eq!(variant["additionalProperties"], false);
+                }
             } else {
                 assert_eq!(schema["additionalProperties"], false);
             }
         }
+        Ok(())
     }
 
     #[test]

@@ -15,9 +15,10 @@ Directed DoublePosition now has [independent data/format evidence](verification-
 native CDXML presence/direction/history and guarded loss boundaries. Center Double retains
 the existing centered scene; explicit Left/Right Double now has
 [shortened shared-renderer evidence](verification-inset-doubles.md). Dormant non-Double
-still refuses. No alignment command or benzene/cyclopentadiene workflow is delivered.
-TD-007 remains partial;
-TD-024, its hotkeys and broader unsaturated/skeletal ring workflows remain missing.
+still refuses. No alignment command is delivered. Named benzene/cyclopentadiene now have
+[command/adapter/file evidence](verification-unsaturated-rings.md); native tools and
+their modifier/hotkey flows remain missing. TD-007 remains partial; broader unsaturated
+ring/default-style workflows remain required.
 
 [Standard carbon-label metadata](verification-carbon-label-data.md) now survives exact
 node mapping/native encoding/history, with MOL and retained-SMILES loss guards. Specified
@@ -377,8 +378,8 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-021 | Aromatic/tautomeric double-bond display | 88 | missing | Separate visual/chemical conventions need tests. |
 | TD-022 | Acyclic chain | 104-105 | missing | - |
 | TD-023 | Snaking chain | 104-105 | missing | - |
-| TD-024 | Benzene ring | 74, 101-103 | missing | - |
-| TD-025 | Cyclopentadiene ring | 74 | missing | - |
+| TD-024 | Benzene ring | 74, 101-103 | partial (command verified) | Named ring.create supports free/atom/shared-Single-or-Double placement, bounded phases, literal H, inward new strokes and unchanged old data. Independent analytic/schema/history, actual CLI/MCP/socket and Unicode file consumers pass; named native tool/Shift/hotkey/OS flows remain missing. See verification-unsaturated-rings.md. |
+| TD-025 | Cyclopentadiene ring | 74 | partial (command verified) | Same registry/builder with all five rotations, asymmetric endpoint budgets and the H2 spiro phase; independent command/adapter/files pass. Native tool, ordered Shift flow and OS acceptance remain missing. See verification-unsaturated-rings.md. |
 | TD-026 | Ring sizes 3-8 | 101-103, 73 | wired (partial) | Six original procedural tools share one effective mode and the existing ring.create builder. Independent command/context/adapter and actual-App click/drag/full-preview/free/atom/fused/spiro/Unicode-file checks pass. Native OS interaction is still unverified. Original poses/modifier/side policies do not prove26.1 defaults; aromatic/chair/sprout/general faces remain missing. See verification-native-rings.md and verification-ring-authoring.md. |
 | TD-027 | Cyclohexane chair, both orientations | 102, 73 | missing | - |
 | TD-028 | Arrows palette | 106-109 | missing | Unnamed glyph variants still need independent semantic identification. |

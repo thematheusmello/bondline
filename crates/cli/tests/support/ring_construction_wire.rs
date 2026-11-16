@@ -319,6 +319,40 @@ fn schema_node<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
     }
 }
 fn schema(schema: &Value) -> TestResult {
+    let root = schema;
+    // Root remains an object union; putting additionalProperties:false here would
+    // reject every branch field because this wrapper defines no properties.
+    assert_eq!(root["type"], "object");
+    assert!(root.get("additionalProperties").is_none());
+    let variants = root["anyOf"].as_array().ok_or("ring selector variants")?;
+    assert_eq!(variants.len(), 2);
+    let mut sized = None;
+    let mut named = None;
+    for raw in variants {
+        let branch = schema_node(root, raw)?;
+        assert_eq!(branch["type"], "object");
+        assert_eq!(branch["additionalProperties"], false);
+        let fields = branch["properties"].as_object().ok_or("selector fields")?;
+        let required = branch["required"]
+            .as_array()
+            .ok_or("selector required")?
+            .iter()
+            .map(|field| field.as_str().ok_or("selector field"))
+            .collect::<Result<BTreeSet<_>, _>>()?;
+        if fields.contains_key("size") {
+            assert!(sized.replace(branch).is_none(), "duplicate sized branch");
+            assert!(required.contains("size"));
+            assert!(!fields.contains_key("kind") && !fields.contains_key("phase"));
+            assert!(!required.contains("kind"));
+        } else {
+            assert!(named.replace(branch).is_none(), "duplicate named branch");
+            assert!(fields.contains_key("kind") && required.contains("kind"));
+            assert!(!fields.contains_key("size") && !required.contains("size"));
+        }
+    }
+    // Closedness plus opposite required/absent selectors makes the branches disjoint.
+    named.ok_or("missing named branch")?;
+    let schema = sized.ok_or("missing exact legacy sized branch")?;
     assert_eq!(schema["type"], "object");
     assert_eq!(schema["additionalProperties"], false);
     let fields = schema["properties"].as_object().ok_or("ring properties")?;
@@ -347,10 +381,10 @@ fn schema(schema: &Value) -> TestResult {
     assert_eq!(fields["size"]["minimum"].as_f64(), Some(3.0));
     assert_eq!(fields["size"]["maximum"].as_f64(), Some(8.0));
     assert_eq!(
-        schema_node(schema, &fields["hydrogen_policy"])?["enum"],
+        schema_node(root, &fields["hydrogen_policy"])?["enum"],
         json!(["rectify_neutral_carbon"])
     );
-    let placement = schema_node(schema, &fields["placement"])?;
+    let placement = schema_node(root, &fields["placement"])?;
     let branches = placement["oneOf"].as_array().ok_or("placements")?;
     assert_eq!(branches.len(), 3);
     let mut modes = BTreeSet::new();
@@ -401,7 +435,7 @@ fn schema(schema: &Value) -> TestResult {
                 .collect::<Result<BTreeSet<_>, _>>()?,
             expected
         );
-        let side = schema_node(schema, &p["side"])?["enum"]
+        let side = schema_node(root, &p["side"])?["enum"]
             .as_array()
             .ok_or("sides")?;
         assert_eq!(
@@ -816,3 +850,6 @@ fn authenticated_ring_refusals_keep_whole_owner_selection_and_opaque_source_auth
     server.shutdown()?;
     Ok(())
 }
+
+#[path = "ring_construction/unsaturated_wire.rs"]
+mod unsaturated_wire;

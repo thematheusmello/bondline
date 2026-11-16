@@ -82,7 +82,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only drawing page or restricted all-record SDF virtual page1 PNG; explicit `cpu` or `gpu` |
 | `ui.selection` | Closed tagged `activate`, `set`, `all`, `clear` or `inspect`; required `expected_revision`; `set` also requires `page_id` and `atom_ids`, `all` requires `page_id` | Transient one-page native atom selection; no authored edit or native-host requirement |
 | `selection.translate` | Required `expected_revision`, `expected_selection_epoch`, `delta_x_pt`, `delta_y_pt` | One atomic literal-position edit of the current native selection; complete source, chemistry, IDs and history retained |
-| `ring.create` | Required `expected_revision`, `page_id`, `size:3..8`, `hydrogen_policy:"rectify_neutral_carbon"`, closed tagged `placement` | Construct one native carbon Single ring on paper, sharing a declared atom, or sharing a declared Single edge; one whole-source history commit |
+| `ring.create` | Required `expected_revision`, `page_id`, either `size:3..8` or `kind:"benzene"/"cyclopentadiene"`, `hydrogen_policy:"rectify_neutral_carbon"`, closed tagged `placement`; named requests alone allow optional non-null `phase` | Construct one native carbon ring on paper or sharing a declared atom/edge; one whole-source history commit |
 
 SMILES record import requires explicit selection of the already-open raw file. It starts
 a clean Drawing namespace with generated geometry, retains the complete file association,
@@ -1466,8 +1466,8 @@ group, snapping and exact26.1/platform parity remain open. See
 ## Explicit native ring construction
 
 `ring.create` is an authoring command shared by CLI, stdio MCP and authenticated
-loopback. It requires the current revision, positive page ID, size3..8, explicit
-`hydrogen_policy:"rectify_neutral_carbon"` and a closed `placement`:
+loopback. The legacy sized request requires the current revision, positive page ID,
+size3..8, explicit `hydrogen_policy:"rectify_neutral_carbon"` and a closed `placement`:
 
 ```json
 {"command":"ring.create","params":{"expected_revision":0,"page_id":1,"size":6,"hydrogen_policy":"rectify_neutral_carbon","placement":{"mode":"free","begin_x_pt":120,"begin_y_pt":168,"end_x_pt":120,"end_y_pt":120,"side":"positive"}}}
@@ -1509,6 +1509,41 @@ Drawing,20 retained-SMILES Drawing,14 SDF and10 raw SMILES. Ring palette/gesture
 aromatic/chair/sprout tools, styles and broader chemistry/platform workflows remain
 required. See [independent command/adapter/render evidence](verification-ring-authoring.md)
 and [the locked public-source contract](research/ring-authoring-plan.md).
+
+### Named integer-bond rings
+
+The same command also accepts `kind:"benzene"` or `kind:"cyclopentadiene"` in place
+of `size`. Its optional `phase` is `double_first` or `single_first`; omission is
+contextual. Explicit null, both/neither selectors, phase on a sized request and unknown
+fields are invalid. New kind/phase fields accept strings only. The registry still has38
+commands; its schema is two disjoint closed object alternatives. The public Rust
+`RingCreate` stays unchanged and converts into `RingCreateRequest::Sized`.
+
+```json
+{"command":"ring.create","params":{"expected_revision":0,"page_id":1,"kind":"benzene","hydrogen_policy":"rectify_neutral_carbon","placement":{"mode":"free","begin_x_pt":120,"begin_y_pt":168,"end_x_pt":120,"end_y_pt":120,"side":"positive"}}}
+```
+
+Benzene uses cyclic integer weights2,1,2,1,2,1; cyclopentadiene uses2,1,2,1,1. Rank
+their2/5 unique left rotations by index. Explicit phase filters the first edge; free
+omission chooses rotation0. Attachments choose the first rotation matching the unchanged
+shared Single/Double edge and proven literal target H budgets. Atom attachment spends
+both new incident weights; edge attachment spends only the new closing/next weights at
+its authored B/E endpoints. Old H consistency is proved once per target. No fitting phase
+means unsupported_content, never a changed shared edge or ignored explicit phase.
+
+New carbon H is4 minus its two integer weights; new atoms explicitly suppress eligible
+nonterminal carbon labels. New Doubles face inward: Right on positive side, Left on
+negative. Every old atom flag and shared bond order/direction/DoublePosition remains
+exact, including centered/unspecified/outward shared Doubles. The same geometry/source/
+identity/history guards apply. No aromatic flag, general perception, resonance rephasing,
+automatic fused-face restyling or H repair is inferred.
+
+This is a command extension. The existing native palette/preview still selects only
+sized Single rings; named native tools and modifier flows are the next integration.
+See [the locked policy](research/unsaturated-ring-authoring.md) and
+[receiving evidence](verification-unsaturated-rings.md). All known command names now
+enforce the documented JSON-object parameter boundary before struct deserialization;
+unknown names retain unknown_command priority.
 
 ## Native ring tool, context and preview
 

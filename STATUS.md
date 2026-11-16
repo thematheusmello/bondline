@@ -6,6 +6,35 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+The named benzene/cyclopentadiene command increment follows locked contract105b220.
+Read [the lock](docs/research/unsaturated-ring-authoring.md) and
+[receiving](docs/verification-unsaturated-rings.md). Existing ring.create now accepts
+closed sized/named alternatives, bounded2/5 phase ranking against proven literal H,
+inward new Doubles/false new flags and exact old metadata. One builder/history path
+serves Engine/CLI/initialized stdio/authenticated loopback; registry38 and native
+controls29/20/14/10 stay. Named native tools are not yet implemented.
+
+Actual runtime REDs precede adoption; separate test borrow/API/closure compile
+qualifications and positive legacy-schema upgrades retain old expectations. An exposed
+pre-existing registry array-parameter mismatch is fixed at the shared object boundary.
+The first integrated core18/1 failure is a new consumer setup error: sanitized benzene
+was passed to an unchanged Single-only helper. A new child-only raw-integer/unsanitized/
+sanitized checker passes five manual positives/twelve negatives before generated-file
+use. Corrected66740 passes parameters3/core19/types1; actual wire tests pass3/0. The
+old parent/consumers, locks, workflow, approved golden and MCP control test stay exact.
+fmt76358 passes. Full local gate18337 exits0:1510/0/1 across214 result lines, including
+all workspace/vendor lint/tests and layers/licenses/corpus. Log186029B SHA256
+18c24e4ae36954323417c2a9a7e48abe2dd9c01ab1272dbf7633475ba2c3e339.
+Native/CLI build75233 passes; native e435ed0e…439, CLI cab34aee…6de. Independent bounded
+source review finds no material issue and qualifies final formatting/legacy preservation.
+Actual CLI authoring saves an original2303B two-ring CDXML scene and captures1024×768
+CPU/Metal-GPU frames with exact whole RGBA equality. Independent Expat/RDKit checks
+C6H6/C5H6 and literal H/weights/flags/sides. Actual GPU PNG visually inspected under
+target/unsaturated-rings/visual/:21506B/SHA256d4d1a4ac…46a2. Not native tool evidence or
+an approved golden. No change to the user's old bundle/draft.
+
+## Previous skeletal checkpoint
+
 The skeletal display/explicit-label increment is committed5fa23d1, following locked
 contractfb17db9, data caa8d60 and desktop checkpoint27b87a5. This is the recoverable
 source/test/docs checkpoint. Read
@@ -57,7 +86,7 @@ strokes, finite-cap/strict-edge gaps, role-qualified joins, distinct arm pixels 
 CPU/Metal-GPU frame agreement. Its prior full gate95915 passes1451/0/1. See
 [inset receiving](docs/verification-inset-doubles.md); dormant non-Double still refuses.
 
-Weighted benzene/cyclopentadiene, false-setting/default-style controls, alignment, broader
+Named native benzene/cyclopentadiene tools, false-setting/default-style controls, alignment, broader
 imported editing, chemistry/reactions, publishing/clipboard, naming/biopolymers,
 WebAssembly/installers, modern inventory and cross-platform interaction remain required.
 Do not shrink M0–M5 or equate persisted fields with a finished authoring workflow.
@@ -86,29 +115,23 @@ remains intact; iTerm tabs remain unchecked because access is restricted. No pro
 reference binary/asset is opened or inspected. Native OS/DPI/Windows/Linux workflow
 acceptance for inset/selection/rings remains unverified.
 
-Root owns Cargo/Git/CUA/live mutation. All focused handles, format94410, aggregates
-51082/42092, build63733 and headless visual76145 are terminal; no Root Cargo job is live. Source/numeric
-reviews and next weighted-ring research are terminal; no worker owns execution or live
-product changes. Their ignored proposal is target/unsaturated-rings/source-proposal/
-(proposal9306B/SHA2568d348c974ee0962559ac835bfb8fd69dd88235eb9ba8450cef17c56f3898f56f).
-No unsaturated code/test/contract is delivered yet. The native app deliberately remains
+Root owns Cargo/Git/CUA/live mutation. All focused/full gate18337/build75233/visual
+executions are terminal; no Root Cargo job is live. Worker source-review/native-plan
+handoffs are terminal and ignored only; no worker owns execution or live product edits.
+The current completed full gate is1510/0/1. Revalidate any newer job before restarting.
+The native app deliberately remains
 running for the user, distinct from a Cargo job. Do not replace its copied executable
 or lose its unsaved draft; revalidate any newer handle before restarting work.
 
 ## Next exact steps
 
-1. Lock weighted benzene/cyclopentadiene command/native-tool policy from the sealed
-   proposal, preserving legacy size requests and old fields/source/geometry. GUIDE25
-   printed103 establishes first-edge Double versus Shift Single, but not fused-phase
-   precedence. Consider all2/5 cyclic patterns against preserved-edge order and literal
-   H budgets, not just two cyclopentadiene patterns. New atoms can opt into false;
-   old flags/order/direction/DoublePosition remain authoritative. Resolve the shared
-   centered/unspecified/outward Double style boundary explicitly, retain missing fused
-   restyling/automatic styles in full parity scope, then independent REDs and real code.
-2. Implement/wire named unsaturated rings through the same candidate/preview/history
-   path, with independent analytic/RDKit actual files and native/App workflows. Continue
+1. Lock the minimal native named-tool extension and ordered press-latched Shift policy,
+   then independent JSON/context/actual-App REDs. Preserve public SelectRingTool/legacy
+   EffectiveTool::Ring, add closed named alternative and additive same-builder preview,
+   and keep one tool authority/epoch/context. Implement two original procedural controls
+   with all current input/source/DPI/close guards. Continue
    chair/sprout/chains/styles/transforms/broader labels; do not stop at skeletal data.
-3. After the user's current visual review, when desktop use permits, verify actual
+2. After the user's current visual review, when desktop use permits, verify actual
    native skeletal restoration plus inset/selection/free/fused/spiro rings, Cancel/
    history and Unicode Save/reopen. Offscreen App tests do not prove native input or
    physical DPI. New Windows/Linux interaction stays unverified while Actions is off.

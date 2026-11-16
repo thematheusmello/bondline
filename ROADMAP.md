@@ -9,7 +9,10 @@ The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now
 Known-H/C4 suppression preserves mandatory labels, hits and real-ink guards; existing
 atom.set_label restores visibility through the same registry/form without changing old
 None/true no-ops. Native OS acceptance/default styles/preferences remain outstanding.
-Next implement weighted unsaturated rings and native tools; full scope remains intact.
+Named benzene/cyclopentadiene candidates now share ring.create with the unchanged sized
+requests. Independent phase/H/source/history and actual adapter/file checks pass; see
+[receiving](docs/verification-unsaturated-rings.md). Next integrate their native controls,
+same-builder preview and ordered Shift flow; full scope remains intact.
 
 The aromatic-tool prerequisite now persists directed DoublePosition through the
 model and native CDXML, with independent property/file/history tests and explicit loss/
@@ -17,9 +20,10 @@ render refusals. [Receiving evidence](docs/verification-double-position.md) sepa
 this from later depiction. Shortened inset strokes with actual bounds/gaps/hits now
 have independent geometry/pixel/density/CPU-GPU and actual-file/history evidence in
 [renderer receiving](docs/verification-inset-doubles.md). The explicit nonterminal
-skeletal policy now retains literal H; next implement weighted
-benzene/cyclopentadiene candidates, attachment/phase rules and native tools. Shared-edge
-phase precedence remains an open public-source question. The full parity scope is intact.
+skeletal policy now retains literal H; weighted benzene/cyclopentadiene candidates now
+preserve old shared edges and rank bounded phases against proven H budgets. The ranking
+is original Bondline policy, not established reference precedence. Native tools remain
+the next step. The full parity scope is intact.
 The [inset rendering contract](docs/research/inset-double-rendering.md) retains the
 preimplementation geometry, component-role joins and independent guard requirements.
 

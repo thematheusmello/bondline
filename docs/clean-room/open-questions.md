@@ -331,9 +331,11 @@ remain opaque; they cannot be inferred from XML. Data persistence/loss guards no
 now has the [locked inset contract](../research/inset-double-rendering.md) and
 [independent evidence](../verification-inset-doubles.md); dormant non-Double still refuses.
 Automatic inherited style/side policy, skeletal display preserving authored H,
-unsaturated weighted-valence/phase and shared-edge precedence still need their own
-contracts/tests. GUIDE25 printed101–103/423–424 does not establish which shared aromatic
-edge order/phase wins; do not silently mutate an old edge or infer that from memory.
+unsaturated native tools and exact shared-edge precedence still need evidence.
+The locked unsaturated-ring-authoring.md now implements a bounded original ranking
+against preserved shared edge order and literal H, with verification-unsaturated-rings.md
+command/file evidence. GUIDE25 printed101–103/423–424 does not establish the reference
+tie algorithm; do not silently mutate an old edge or infer that from memory.
 
 The [carbon-label data contract](../research/carbon-label-data.md) identifies actual
 standard terminal/non-terminal display flags from the SDK table and official DTD, distinct

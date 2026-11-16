@@ -50,7 +50,7 @@ fn ring_native_context_and_preview_are_read_only_source_qualified_interfaces() -
         &engine.stored_document()?.model_snapshot()
     ));
     assert!(context.is_current(&engine));
-    engine.execute(Command::RingCreate(params))?;
+    engine.execute(Command::RingCreate(params.into()))?;
     assert_eq!(engine.document()?, preview.model());
     assert!(!context.is_current(&engine));
     Ok(())
@@ -198,7 +198,7 @@ fn ring_context_is_weak_and_each_real_context_aba_permanently_invalidates_it() -
             }
             "history" => {
                 let p = explicit_ring(&engine);
-                engine.execute(Command::RingCreate(p))?;
+                engine.execute(Command::RingCreate(p.into()))?;
                 engine.dispatch("history.undo", json!({}))?;
             }
             "size" => {
@@ -420,7 +420,7 @@ fn explicit_preview_is_host_mode_independent_and_never_clears_selection_or_spend
     ));
     assert_eq!(engine.stored_document()?.export_cdxml()?, NATIVE);
     assert_eq!(engine.stored_document()?.export_cdxml()?.as_ptr(), raw_ptr);
-    engine.execute(Command::RingCreate(params.clone()))?;
+    engine.execute(Command::RingCreate(params.clone().into()))?;
     assert_eq!(
         engine.document()?,
         first.model(),

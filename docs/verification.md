@@ -1,5 +1,18 @@
 # Verification log
 
+## Named benzene/cyclopentadiene command, 2026-11-16
+
+[Receiving](verification-unsaturated-rings.md) records existing-JSON runtime REDs,
+separate Rust API/closure/test-borrow compile qualifications, strict object-parameter
+boundary correction, positive legacy-schema upgrades and independent literal/phase/H/
+source/history/actual-adapter/Unicode-file checks. The old Single-only RDKit consumer
+remains exact; a new raw-integer/unsanitized/sanitized composition is qualified first
+on five manual positives and twelve negatives. Full local gate18337 passes1510/0/1
+across214 result lines and native/CLI build75233 passes. An actual named-ring CLI
+authoring/Save/CPU-Metal-GPU capture has equal whole RGBA and independently consumed
+C6H6/C5H6; the actual PNG is visually inspected, not human-approved. Native named tools
+remain next; no user window, source authority, dependency or golden changes.
+
 ## Skeletal carbon display and explicit-label restoration, 2026-11-16
 
 [Receiving evidence](verification-skeletal-carbon.md) records actual preimplementation

@@ -39,7 +39,7 @@ Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with indep
 checks of the actual files. See [atom-editor evidence](docs/verification-native-atom-labels.md),
 [native record evidence](docs/verification-native-smiles-records.md) and the separate
 [paste checkpoint](docs/verification-native-smiles-paste.md). The latest completed local
-gate passes **1,494 tests, zero failures and one ignored test**, including formatting,
+gate passes **1,510 tests, zero failures and one ignored test**, including formatting,
 warnings-denied linting, layer/license checks and the pinned corpus. The
 [carbon-label data increment](docs/verification-carbon-label-data.md) preserves standard
 metadata; [skeletal display and label restoration](docs/verification-skeletal-carbon.md)
@@ -81,7 +81,7 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 | Elemental atom labels | Alt-click an existing atom/label, enter its element and explicit attached-H count, then Apply or Cancel. The shared `atom.set_label` preserves IDs, geometry and neighbors. Bounded macOS OH/NH2 editing, history, close protection and Unicode Save/reopen pass with independent actual-file checks. Source-free/native CDXML only; inline text, aliases, charges/isotopes/radicals and general H inference remain missing. |
 | Skeletal carbon display | Supported native drawings can omit eligible carbon labels while retaining literal H and atom targets. Required collinear/cumulene labels stay visible; the existing explicit-label editor restores a hidden label. Independent renderer/CLI/MCP/App and saved-file checks pass. Default tools/styles, false-setting controls and native OS acceptance remain unfinished. [Evidence](docs/verification-skeletal-carbon.md). |
 | Selection and movement | Marquee, atom/bond/component click, Shift toggle and Select All call the shared selection registry. Drag selected atoms or nudge1pt/Shift10pt with one undoable literal-position edit. Independent commands, actual-App input, CLI/MCP/socket and Unicode file-consumer checks pass; native desktop interaction remains unverified. Native CDXML/source-free only; lasso, rotation, resizing, snapping and group workflows remain missing. |
-| Ring construction engine | CLI/MCP/loopback `ring.create` authors3–8 carbon Single rings with explicit standalone, shared-atom or shared-edge placement. Fused/spiro geometry, literal H, history, source retention and Unicode files pass independent checks. Native ring tools, aromatic/chair/sprout workflows and general ring-system editing remain unfinished. |
+| Ring construction | CLI/MCP/loopback `ring.create` authors3–8 carbon Single rings and named benzene/cyclopentadiene integer-bond rings, with explicit standalone, shared-atom or shared-edge placement. Phase/H accounting, fused/spiro geometry, history, source retention and Unicode files pass independent checks. Six native Single-ring tools have actual-App checks; native OS interaction and the two named tools remain unfinished. Chair/sprout workflows, automatic styles and general ring-system editing remain missing. [Named-ring evidence](docs/verification-unsaturated-rings.md). |
 | Automation | 38 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all

@@ -525,7 +525,40 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
         .find(|r| r.name == "ring.create")
         .ok_or("ring registry")?;
     assert!(!entry.read_only);
-    let schema = serde_json::to_value(&entry.input_schema)?;
+    let root = serde_json::to_value(&entry.input_schema)?;
+    // Root remains an object union; putting additionalProperties:false here would
+    // reject every branch field because this wrapper defines no properties.
+    assert_eq!(root["type"], "object");
+    assert!(root.get("additionalProperties").is_none());
+    let variants = root["anyOf"].as_array().ok_or("ring selector variants")?;
+    assert_eq!(variants.len(), 2);
+    let mut sized = None;
+    let mut named = None;
+    for raw in variants {
+        let branch = schema_node(&root, raw)?;
+        assert_eq!(branch["type"], "object");
+        assert_eq!(branch["additionalProperties"], false);
+        let fields = branch["properties"].as_object().ok_or("selector fields")?;
+        let required = branch["required"]
+            .as_array()
+            .ok_or("selector required")?
+            .iter()
+            .map(|field| field.as_str().ok_or("selector field"))
+            .collect::<Result<BTreeSet<_>, _>>()?;
+        if fields.contains_key("size") {
+            assert!(sized.replace(branch).is_none(), "duplicate sized branch");
+            assert!(required.contains("size"));
+            assert!(!fields.contains_key("kind") && !fields.contains_key("phase"));
+            assert!(!required.contains("kind"));
+        } else {
+            assert!(named.replace(branch).is_none(), "duplicate named branch");
+            assert!(fields.contains_key("kind") && required.contains("kind"));
+            assert!(!fields.contains_key("size") && !required.contains("size"));
+        }
+    }
+    // Closedness plus opposite required/absent selectors makes the branches disjoint.
+    named.ok_or("missing named branch")?;
+    let schema = sized.ok_or("missing exact legacy sized branch")?;
     assert_eq!(schema["type"], "object");
     assert_eq!(schema["additionalProperties"], false);
     let required = [
@@ -561,7 +594,7 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
         schema["properties"]["page_id"]["minimum"].as_f64(),
         Some(1.0)
     );
-    let placement = schema_node(&schema, &schema["properties"]["placement"])?;
+    let placement = schema_node(&root, &schema["properties"]["placement"])?;
     let variants = placement
         .get("oneOf")
         .or_else(|| placement.get("anyOf"))
@@ -570,7 +603,7 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
     assert_eq!(variants.len(), 3);
     let mut modes = BTreeSet::new();
     for raw in variants {
-        let v = schema_node(&schema, raw)?;
+        let v = schema_node(&root, raw)?;
         let tag = v["properties"]["mode"]
             .get("const")
             .and_then(Value::as_str)
@@ -624,7 +657,7 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
                 .collect::<Result<BTreeSet<_>, _>>()?,
             names
         );
-        let side = schema_node(&schema, &v["properties"]["side"])?;
+        let side = schema_node(&root, &v["properties"]["side"])?;
         assert_eq!(side["enum"], json!(["positive", "negative"]));
     }
     assert_eq!(
@@ -1431,3 +1464,9 @@ fn actual_chemical_files_history_native_source_and_historical_save_lease_are_ind
     assert_eq!(historical.pages()[0].fragments()[0].atoms().len(), 6);
     Ok(())
 }
+
+#[path = "ring_create/unsaturated_rings.rs"]
+mod unsaturated;
+
+#[path = "ring_create/request_json.rs"]
+mod request_json;

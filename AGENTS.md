@@ -33,8 +33,14 @@ and dormant flags retain legacy pixels; active false requires known H/checked C4
 keeps mandatory identical near-collinear/two-Double labels. Hidden glyphs/masks disappear
 together; hits and all real-ink guards remain. Explicit atom.set_label restores existing
 false to true; legacy None/true no-ops stay exact. No new command/form/source authority.
-Actual-App/adapter evidence is not native OS acceptance. Next implement weighted
-unsaturated ring candidates/tools; broader styles/preferences and M0–M5 remain required.
+Actual-App/adapter evidence is not native OS acceptance. Named benzene/cyclopentadiene
+now extend ring.create through the same candidate builder; read
+docs/research/unsaturated-ring-authoring.md and docs/verification-unsaturated-rings.md.
+Sized RingCreate stays unchanged; typed callers convert into the request union. Preserve
+the closed string-only named kind/optional non-null phase, bounded2/5 phase/H ranking,
+all old metadata and exact old consumers. The new consumer distinguishes literal integer
+source/unsanitized RDKit from independently sanitized chemistry. Next integrate named
+native controls/preview/ordered Shift flow; broader styles and M0–M5 remain required.
 
 The DoublePosition data prerequisite and inset renderer follow the native-ring checkpoint.
 Read docs/research/sided-double-prerequisite.md, docs/research/inset-double-rendering.md,
