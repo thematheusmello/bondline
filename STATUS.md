@@ -7,16 +7,53 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-### Chain engine contract — no implementation yet
+### Verified headless chain increment
 
-On branding base f077ed2, public-source refresh and seam/oracle reviews produce the
-locked docs/research/chain-authoring-plan.md. The next action is an independent
-existing-JSON UnknownCommand RED, then the bounded headless chain.create implementation
-and real adapter/file checks. Count includes the anchor; explicit angle1..179° and
-placement have no inferred UI defaults. No chain test/code or native binding is present
-at this contract checkpoint. Full native Add Chain/repeat/Snaking/settings remain required.
-Both user desktop processes96449/17806 and copied bundles/drafts remain protected;
-no listener or native interaction. No Root Cargo job. Actions stays OFF.
+The chain engine follows locked bf4d937 on branding base f077ed2; its atomic source/
+tests/docs commit accompanies this receiving record. Read docs/research/chain-authoring-plan.md
+and docs/verification-chain-authoring.md. One typed chain.create command adds explicit
+count2..64 including anchor, angle1..179° and first-edge/side placement. Free and
+shared-atom candidates preserve old metadata, directed orders/styles, geometry and
+unrelated owners. New C retains literal H with both false label flags. Target-local
+weighted neutral-C4 proof is shared with rings; candidate/IDs/history/source guards use
+the existing immediate lane. Registry39; controls31/20/14/10 and catalogue12/128 stay.
+The native chain tools remain disabled, with no drag/form/repeat/settings implementation.
+
+Twelve new independent cases pass: engine7/API2/actual CLI+stdio+loopback3. First JSON
+44120 fails UnknownCommand before producer; first3299 passes. Later declarations are
+honestly post-producer acceptance. Separate source-ID/application-ID, close-context and
+three-parenthesis new-test setup/syntax corrections preserve all behavioral predicates
+and producer policy. The initial inventory search misses legacy exact sets/counts;
+three full gates stop on those assertions (18165/82455/21143). Complete literal-set
+audit positively adds only chain.create/39, retains old names/RPC IDs/source offsets,
+and affected targets60340 pass35/0. No behavior/source/history guard is weakened.
+
+Final local gate52340 exits0: **1563/0/1 across223 result lines**, fmt, warnings-denied
+workspace/vendor clippy/tests, layers, seven-asset strict licenses, same155/166/221
+runtime closures and pinned corpus. Log193078B SHA256
+1218931ff544d8733e7a98c9ce45c02eac7e49140b0632cd7843809d6fee70a4.
+Actual Unicode saved files pass raw Expat/Decimal both-flags/IDs/directed integer
+orders/styles before unchanged RDKit chemistry: propane/isobutane/propene/toluene,
+C3H8/C4H10/C3H6/C7H8. History, source authority, floors, atomic refusals and immediate
+cancellation/context truth pass. Bounded source reviews find no material issue; their
+pinned scope is distinct from execution and the complete legacy-inventory audit.
+
+Native/CLI build16149 exits0; native SHA256
+1711ed7a965563527accd9cac0f5f5e2b3fc8e4487db3814f39bffc8243a67fd,
+CLI08f1c0df0d3532eff097bab4af063287f25e4fc534139c7b54431e84791cf490.
+No launch, copied-bundle refresh, window/draft modification, native-chain or new golden
+claim. Both protected processes17806/96449 are observed live; current user drawing state
+is not re-inspected. No Root/worker Cargo or execution job remains live. Actions OFF;
+no enable/dispatch/rerun, push or publication. Historical MCP replacement-bind failures
+remain unattributed; this aggregate pass is not a causal repair.
+
+Next: lock the complete native chain workflow and original unknown-default policies
+before independent App tests: Add Chain/drag counter, repeat lifecycle, Snaking/Control,
+fixed lengths/angles and modifier order, recommended automatic poses including linear
+Single+Triple/two-Double centers, shared-anchor count wording, and context/real-ink
+guards. Continue remaining M1–M5; chain UI remains grey until actually implemented and
+checked. Preserve the earlier File-menu first-click uncertainty, incomplete modern
+inventory, platform gaps and exhausted MCP diagnostic boundaries.
 
 ### Verified branding/catalogue increment
 

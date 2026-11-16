@@ -72,7 +72,7 @@ fn cli_and_stdio_ring_conversion_keep_the_complete_source_session() -> TestResul
     client.send(json!({"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}))?;
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 38);
+    assert_eq!(tools.len(), 39);
     let converter = tools
         .iter()
         .find(|tool| tool["name"] == CONVERT)

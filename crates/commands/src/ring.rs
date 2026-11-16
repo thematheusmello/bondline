@@ -3,7 +3,6 @@ use crate::{Error, OrderHydrogenPolicy, bond};
 use bondline_io::StoredDocument;
 use bondline_model::{
     Atom, AtomId, Bond, BondId, BondOrder, Element, Fragment, FragmentId, Page, PageId, Point2,
-    Radical,
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -99,27 +98,7 @@ fn remaining_hydrogens(fragment: &Fragment, atom: &Atom, consumed: u16) -> Resul
             "shared atoms need neutral natural carbon, supported incident orders and consistent sufficient literal H",
         )
     };
-    if atom.element.get() != 6
-        || atom.charge != 0
-        || atom.isotope.is_some()
-        || atom.radical != Radical::None
-    {
-        return Err(unsupported());
-    }
-    let used = fragment
-        .bonds()
-        .iter()
-        .filter(|bond| bond.begin == atom.id || bond.end == atom.id)
-        .try_fold(0_u16, |sum, bond| {
-            sum.checked_add(bond::bond_weight(bond.order)?)
-                .filter(|sum| *sum <= 4)
-        })
-        .ok_or_else(unsupported)?;
-    let available = 4 - used;
-    if atom.explicit_hydrogens != Some(available) {
-        return Err(unsupported());
-    }
-    available.checked_sub(consumed).ok_or_else(unsupported)
+    bond::remaining_carbon_hydrogens(fragment, atom, consumed).ok_or_else(unsupported)
 }
 
 fn polygon(size: u8, begin: Point2, end: Point2, side: RingSide) -> Result<Vec<Point2>, Error> {

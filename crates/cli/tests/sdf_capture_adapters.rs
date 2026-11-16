@@ -1,4 +1,6 @@
 use bondline_commands::Engine;
+#[path = "support/chain_creation_wire.rs"]
+mod chain_creation_wire;
 #[path = "support/native_conversion_wire.rs"]
 mod native_conversion_wire;
 #[path = "support/new_document_adapters.rs"]

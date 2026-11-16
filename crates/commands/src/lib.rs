@@ -12,6 +12,7 @@ mod atom_ui;
 mod bond;
 mod bond_tool;
 mod capture;
+mod chain;
 mod close;
 mod content;
 mod controls;
@@ -35,6 +36,7 @@ pub use bond::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
 };
 pub use bond_tool::{BondToolOperation, BondToolState, EffectiveTool, SelectBondTool};
+pub use chain::{ChainCreate, ChainPlacement, ChainSide};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
@@ -192,6 +194,7 @@ command_registry! {
     SelectionTranslate(SelectionTranslate) => ("selection.translate", "Translate the current native atom selection atomically", false),
     RingCreate(RingCreateRequest) => ("ring.create", "Construct a native carbon Single ring or named benzene/cyclopentadiene integer-bond ring, preserving shared data with explicit standalone or shared-atom/edge placement.", false),
     UiRingToolSelect(SelectRingToolRequest) => ("ui.ring_tool", "Select a native carbon Single-ring or named benzene/cyclopentadiene tool without editing the document or its history.", false),
+    ChainCreate(ChainCreate) => ("chain.create", "Construct an explicit native carbon chain of Single bonds with a required interior angle and literal hydrogen policy, optionally sharing one existing neutral carbon.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -256,6 +259,10 @@ pub enum Error {
     InvalidRing(&'static str),
     #[error("ring construction unavailable: {0}")]
     UnsupportedRing(&'static str),
+    #[error("invalid chain construction: {0}")]
+    InvalidChain(&'static str),
+    #[error("chain construction unavailable: {0}")]
+    UnsupportedChain(&'static str),
     #[error(transparent)]
     Render(#[from] bondline_render::Error),
     #[error(transparent)]
@@ -399,6 +406,7 @@ impl Error {
             | Self::UnsupportedBondOrder
             | Self::UnsupportedAtomLabel(_)
             | Self::UnsupportedRing(_)
+            | Self::UnsupportedChain(_)
             | Self::UnsupportedSmilesPasteSource
             | Self::UnsupportedBondConversion(_) => "unsupported_content",
             Self::IncompleteSmilesExportSource => "unsupported_content",
@@ -952,6 +960,17 @@ impl Engine {
                 document.model_mut().set_page_size(id, size)?;
                 self.commit(document)?
             }
+            Command::ChainCreate(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let (document, identities) =
+                    chain::create(self.stored_document()?, params, self.identities)?;
+                let changed = self.commit(document)?;
+                self.identities = identities;
+                drawing_focus = self.view_focus;
+                changed
+            }
             Command::RingCreate(params) => {
                 if params.expected_revision() != self.revision {
                     return Err(Error::StaleRevision);
@@ -1223,6 +1242,7 @@ mod tests {
                 "bond.create",
                 "bond.extend",
                 "bond.set_order",
+                "chain.create",
                 "document.import_smiles_records",
                 "document.inspect",
                 "document.new",

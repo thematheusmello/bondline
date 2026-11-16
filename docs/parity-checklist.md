@@ -388,7 +388,7 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-019 | Dative bond | 86 | missing | - |
 | TD-020 | Hydrogen bond (dotted) | 87 | missing | Requires explicit donor hydrogen; differs from ordinary dashed/coordination bonds. |
 | TD-021 | Aromatic/tautomeric double-bond display | 88 | missing | Separate visual/chemical conventions need tests. |
-| TD-022 | Acyclic chain | 104-105 | missing | - |
+| TD-022 | Acyclic chain | 104-105 | missing | Explicit headless chain.create has independent geometry/adapter/file evidence; native tool remains disabled. Drag/count, Add Chain, Alt repeat, settings/modifier/default/hotkey workflows and native acceptance remain required. See verification-chain-authoring.md. |
 | TD-023 | Snaking chain | 104-105 | missing | - |
 | TD-024 | Benzene ring | 74, 101-103 | wired (partial) | Native palette/preview/free/atom/fused/shared-Double/Shift/history/Unicode-file paths share ring.create. Original icons, actual-App1×/2×/raw-order/modal/context checks, real adapters and independent file consumers pass. OS/monitor, exact26.1 defaults and hotkeys remain unverified/missing. See verification-native-unsaturated-rings.md and verification-unsaturated-rings.md. |
 | TD-025 | Cyclopentadiene ring | 74 | wired (partial) | Native kind-only tool, original icon, same-builder full preview, press-latched Shift and Cp spiro have actual-App/file evidence. Core all-five-phase/asymmetric H checks remain. Real OS/monitor, exact26.1 and hotkey acceptance remain missing. See verification-native-unsaturated-rings.md. |

@@ -37,6 +37,17 @@ Keep the bundled-font coverage regression: angle and replacement-arrow icons use
 geometry because Roboto lacks those characters. Native photographs are actual own-window
 captures, separate from illustrations/goldens; preserve the user's older unsaved app/draft.
 
+The headless chain.create increment follows docs/research/chain-authoring-plan.md and
+docs/verification-chain-authoring.md. One immediate candidate, explicit count2..64 including
+anchor/angle1..179/first-edge/side, target-local weighted neutral-C literal-H proof shared
+with rings, both false flags only on new atoms, and checked normal commit/floors. Keep
+rounded-point fidelity and exact center occupancy distinct from native real-ink guards.
+Registry39 does not enable a new UI control: catalogue12/128 and controls31/20/14/10 stay.
+Next lock full native drag/count/Add Chain/repeat/Snaking/settings behavior before tests;
+never infer source-default/modifier/stereo/attachment poses from this explicit engine API.
+Preserve the new raw two-flag checker and all unchanged chemistry consumers, and distinguish
+CDXML source IDs from application IDs in fixtures and history/floor assertions.
+
 The terminal-label prerequisite is described in docs/research/terminal-carbon-labels.md
 and docs/verification-terminal-carbon-labels.md. Degree zero/one selects terminal; higher
 degree selects nonterminal. Require known H/checked C4 before suppression and keep actual

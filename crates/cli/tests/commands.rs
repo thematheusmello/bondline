@@ -461,6 +461,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "bond.create",
             "bond.extend",
             "bond.set_order",
+            "chain.create",
             "document.close",
             "document.import_smiles_records",
             "document.inspect",

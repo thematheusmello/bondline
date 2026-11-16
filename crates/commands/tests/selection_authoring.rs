@@ -218,8 +218,8 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
         .iter()
         .map(|entry| entry.name)
         .collect::<BTreeSet<_>>();
-    assert_eq!(registry.len(), 38);
-    assert_eq!(names.len(), 38);
+    assert_eq!(registry.len(), 39);
+    assert_eq!(names.len(), 39);
     assert_eq!(
         names,
         [
@@ -227,6 +227,7 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
             "bond.create",
             "bond.extend",
             "bond.set_order",
+            "chain.create",
             "document.close",
             "document.import_smiles_records",
             "document.inspect",

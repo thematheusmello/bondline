@@ -1,5 +1,16 @@
 # Verification log
 
+## Explicit chain engine, 2026-11-16
+
+[Receiving](verification-chain-authoring.md) records the actual existing-JSON
+UnknownCommand RED before producer, later independent geometry/metadata/source/history/
+API/adapter/file checks, separate new-test setup/syntax qualifications and positive
+legacy-inventory upgrades. Twelve new cases pass. Final local gate52340 exits0:
+1563/0/1 across223 result lines, with fmt, warnings-denied workspace/vendor clippy/tests,
+layers/licenses/corpus. Native/CLI build16149 passes. Registry39; native/control and
+catalogue bindings stay unchanged, and chain tools remain disabled. No native chain,
+new platform/golden, user-window change, hosted run or causal MCP repair is claimed.
+
 ## Native benzene/cyclopentadiene tools, 2026-11-16
 
 [Receiving](verification-native-unsaturated-rings.md) separates initial JSON/App runtime

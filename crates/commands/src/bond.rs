@@ -110,6 +110,33 @@ pub(super) fn bond_weight(order: BondOrder) -> Option<u16> {
     }
 }
 
+pub(super) fn remaining_carbon_hydrogens(
+    fragment: &Fragment,
+    atom: &Atom,
+    consumed: u16,
+) -> Option<u16> {
+    if atom.element.get() != 6
+        || atom.charge != 0
+        || atom.isotope.is_some()
+        || atom.radical != Radical::None
+    {
+        return None;
+    }
+    let used = fragment
+        .bonds()
+        .iter()
+        .filter(|bond| bond.begin == atom.id || bond.end == atom.id)
+        .try_fold(0_u16, |sum, bond| {
+            sum.checked_add(bond_weight(bond.order)?)
+                .filter(|sum| *sum <= 4)
+        })?;
+    let available = 4 - used;
+    if atom.explicit_hydrogens != Some(available) {
+        return None;
+    }
+    available.checked_sub(consumed)
+}
+
 pub(super) fn set_order(
     document: &StoredDocument,
     params: BondSetOrder,

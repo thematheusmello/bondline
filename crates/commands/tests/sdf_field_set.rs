@@ -34,6 +34,7 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
         names,
         [
             "atom.set_label",
+            "chain.create",
             "document.inspect",
             "document.import_smiles_records",
             "document.new",

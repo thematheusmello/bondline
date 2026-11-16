@@ -49,8 +49,9 @@ Placement is a closed mode-tagged `ChainPlacement`:
   the target's authored position. No edge-sharing, merging or implicit snapping.
 
 Coordinates are finite physical points within the existing±100000 model bound.
-`ChainSide` is positive/negative: positive rotates the second edge counterclockwise
-in model coordinates. The explicit first edge defines length and orientation. There
+`ChainSide` is positive/negative: with φ=180°−θ, positive uses
+r=(cosφ e_x−sinφ e_y, sinφ e_x+cosφ e_y), so cross(e,r)>0. This is visually clockwise
+on the y-down page. Negative flips φ. The explicit first edge defines length and orientation. There
 is no inferred48pt default, page containment, automatic scaling or rendering threshold.
 Angle remains explicit even for a two-carbon result. All new edges are directed Single.
 

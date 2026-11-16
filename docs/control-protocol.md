@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has38 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has39 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -1327,8 +1327,8 @@ capture, native races/other-platform execution and complete reference parity rem
 `ui.controls` additionally exposes `file.import_smiles_records`, File → Import SMILES
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
-counts are29 native Drawing/14 SDF/10 raw SMILES; retained-SMILES Drawing keeps20.
-The registry has38 commands. Accepting
+counts are31 native Drawing/14 SDF/10 raw SMILES; retained-SMILES Drawing keeps20.
+The registry now has39 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag
@@ -1360,7 +1360,8 @@ The native **All tools…** catalogue is roadmap presentation, not additional ex
 registry entries. All124 documented roles/140 expanded entries are visible;128 planned
 entries have no binding and cannot dispatch. Available entries use the same current
 delivered control IDs. `ui.controls` continues to list delivered bindings only, retaining
-registry38 and counts31/20/14/10. See [catalogue](design/tool-catalogue.md).
+counts31/20/14/10; the separate headless chain command brings the registry to39.
+See [catalogue](design/tool-catalogue.md).
 
 ## Exact-target atom-label presentation
 
@@ -1605,3 +1606,38 @@ The [named contract](research/native-unsaturated-rings.md) and
 [named receiving](verification-native-unsaturated-rings.md) extend that scope with
 original procedural icons, exact-mode contexts and press-latched Shift. App/DPI tests
 remain distinct from real OS/monitor and full26.1 behavior.
+
+## Explicit headless carbon chains
+
+```json
+{"command":"chain.create","params":{"expected_revision":0,"page_id":1,"count":5,"angle_degrees":120,"hydrogen_policy":"rectify_neutral_carbon","placement":{"mode":"free","begin_x_pt":64,"begin_y_pt":112,"end_x_pt":112,"end_y_pt":112,"side":"positive"}}}
+```
+
+This one closed typed request serves Engine, CLI, initialized stdio MCP and authenticated
+loopback. All fields are required; count2..64 includes a shared anchor. The explicit
+angle1..179° is the chain's interior angle; no default length/angle/orientation is inferred.
+The alternate atom placement supplies mode:"atom", fragment_id, atom_id, end_x_pt,
+end_y_pt and side, omitting begin coordinates. Positive rotates the second edge by
+180°−angle with cross(first,second)>0 (visually clockwise on a y-down page); negative
+reflects it. Subsequent edges alternate those two fixed vectors. See
+[the locked contract](research/chain-authoring-plan.md) for precision and occupancy.
+
+Source-free or completely mapped native CDXML is required. An atom anchor needs known
+consistent literal H on neutral natural nonradical C and enough budget after weighted
+Single/Double/Triple incidence. The edit consumes one anchor H and appends count−1 C;
+it preserves old directed bonds/styles/coordinates/flags and unrelated data. Free
+placement creates count C in one fragment. New termini have H3, internal C H2; both
+new carbon-label flags are false. The existing isolated C2 mandatory labels still apply.
+These authored flags retain literal H and existing explicit format-loss refusals.
+
+One immediate candidate commits one history edit. IDs are checked and their session
+floors publish only after success, remaining monotone across Undo/Redo. Invalid/stale/
+unsupported/occupied/rounded-precision requests leave content, history, source, file and
+selection unchanged. Successful editing uses normal selection and close/file-context
+invalidation. Like ring.create, prepare commits synchronously; later cancellation
+cannot reverse a completed edit. An outstanding captured Save remains historical and
+retains its existing reservation through finish.
+
+This adds one registry command (38→39), with no new native control/binding. Both chain
+entries stay disabled. Drag/count, Add Chain, Alt repeat, Snaking/Control, settings,
+hotkeys, automatic poses and actual native/platform acceptance remain required.

@@ -9,8 +9,10 @@ TD/TQ/TB roles as140 entries, with twelve real bindings and128 disabled planned 
 Original logo assets, native review and independent input/foreground/font regressions are
 recorded in [receiving](docs/verification-branding-and-tools.md). A visible grey icon does
 not implement its tool; the full M0–M5 scope and missing-feature states remain intact.
-After this visual increment, resume chain authoring from the existing source proposal,
-then the remaining drawing, chemistry, publishing and distribution workflows.
+After this visual increment, the explicit headless chain candidate follows the
+[locked contract](docs/research/chain-authoring-plan.md) and
+[receiving evidence](docs/verification-chain-authoring.md). Continue its complete native
+workflow, then the remaining drawing, chemistry, publishing and distribution scope.
 
 The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now has a
 [shared skeletal display/explicit-label follow-up](docs/verification-skeletal-carbon.md).
@@ -20,7 +22,7 @@ None/true no-ops. Native OS acceptance/default styles/preferences remain outstan
 The separate terminal-label prerequisite now has
 [independent data/render/editor/file evidence](docs/verification-terminal-carbon-labels.md).
 Actual degree selects the appropriate flag and isolated C/C2 labels remain mandatory.
-Next lock chain authoring and its native workflow; Add Chain, repeat, Snaking and
+The chain engine contract is now locked; next lock its native workflow. Add Chain, repeat, Snaking and
 settings remain required, not covered by this prerequisite.
 Named benzene/cyclopentadiene candidates now share ring.create with the unchanged sized
 requests. Independent phase/H/source/history and actual adapter/file checks pass; see

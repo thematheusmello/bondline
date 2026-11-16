@@ -59,6 +59,14 @@ Runtime selection, cameras, jobs and revision counters are separate from authore
 Command handlers validate before committing an edit. Snapshot history restores the entire
 document; failed commands do not mutate it. All delivered interfaces use the same registry.
 
+`chain.create` adds an explicit bounded carbon path of Single bonds in the immediate command lane.
+It reuses bond identity floors and a shared target-local neutral-C literal-H proof with
+ring authoring. Two fixed alternating edge vectors are certified against the actual rounded
+points; exact page-center occupancy is separate from later native renderer guards. One
+immutable candidate preserves old metadata and whole-source ownership, then publishes IDs
+after the ordinary commit. No native binding, new worker, authored schema field, source
+authority or dependency is added. Read [the contract](research/chain-authoring-plan.md).
+
 Bond's optional directed DoublePosition is authored data, copied with the whole bond and
 retained by snapshots even when dormant on another order. CDXML maps/preserves it; model
 MOL export and synchronized SMILES replacement reject unsupported loss. The shared scene
