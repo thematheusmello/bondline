@@ -19,8 +19,7 @@ make an old CI badge green.
 
 Implement an independent offline Rust chemical structure and reaction editor, native on
 macOS, Windows and Linux, eventually also WebAssembly. Original code is MIT OR Apache-2.0.
-The reference is Professional26.1 behavior from public documentation and explicitly
-authorized visible runtime observation, not proprietary code.
+The reference is publicly documented Professional26.1 behavior, not proprietary code.
 Read STATUS.md, ROADMAP.md, docs/architecture.md, docs/parity-checklist.md and
 docs/clean-room/sources.md before selecting work. Continue existing work; do not restart.
 The persistent project goal is active. M0's native license blocker is resolved; this does
@@ -34,28 +33,41 @@ capture and exact reference-dialog parity remain open. Earlier density pipeline7
 `AddrInUse` remains unexplained, not causally fixed by a later pass. Native2×/DPI remains
 unverified; preserve docs/verification-native-drawing-density.md evidence and guards.
 
-The newer source-backed record engine has32 commands and independent selected/all,
+The source-backed record engine checkpoint has32 commands and independent selected/all,
 whole-file edit/Save/history, actual CLI/MCP/socket and CPU/GPU evidence in
 docs/verification-smiles-record-authoring.md (its earlier full gate1270/0/1).
 docs/verification-native-smiles-records.md adds bounded Mac import/refusal/retry,
 click/key order/history/Unicode whole-source Save/reopen/reimport and22 control/worker/
-App/real-producer tests. The final full gate currently FAILS825/1 at the unchanged MCP
-replacement bind;466/0/1 remaining checks pass separately. Do not call that aggregate
-green or restart the exhausted diagnostic20 contexts. Fit78.79% refuses, Actual100%
+App/real-producer tests. That checkpoint's final full gate FAILS825/1 at the unchanged
+MCP replacement bind;466/0/1 remaining checks pass separately. Preserve that evidence;
+do not restart the exhausted diagnostic20 contexts. Fit78.79% refuses, Actual100%
 recovers, two pan attempts made no visible change; native races/DPI/other platforms remain
 unverified. Do not call Engine.execute for expensive SMILES record edits under the UI
 frame mutex, bypass complete-source guards or substitute another converter.
+
+Current registry33 adds bounded headless `atom.set_label`; read
+docs/research/atom-label-authoring-contract.md and
+docs/verification-atom-label-authoring.md. Nine core/four actual-wire and one independent
+MOL-reference CPU/GPU case pass; final full local gate1306/0/1 passes. The earlier MCP
+failure remains unexplained. Source-free/native CDXML only, existing neutral/nonisotopic/
+nonradical target, explicit literal element/H fields, no general inference or neighbor
+correction. Preserve validated no-op sharing, redo/close and whole-snapshot history.
+Default native controls stay20 Drawing/14 SDF/10 raw SMILES; native atom presentation is
+next, not delivered. Use fresh target/typed fields/Apply/Cancel and existing ordering/
+stale/context guards, with independent App tests and actual native acceptance. No `ui.file`
+atom-target hack or empty-target binding. Keep one preview; protect user unsaved work.
 
 ## Research, provenance and implementation
 
 - Target one-to-one Professional desktop screens, control roles, icon roles, workflows and
   functionality, with Bondline branding and the existing offline/open-source commitments.
   Use public documentation, screenshots, videos, open standards and licensed source references.
-  The user's latest2026-11-15 instruction explicitly authorizes opening installed ChemDraw
-  to inspect its visible screens and workflows; this supersedes the earlier no-execution
-  boundary for that UI observation. Keep public and local runtime provenance distinct.
-- Use CUA for the authorized installed-app UI interaction. Never download or statically
-  inspect, decompile or disassemble ChemDraw program binaries in this workflow.
+  The current user-provided instructions prohibit downloading, executing, inspecting,
+  decompiling or disassembling ChemDraw program binaries. Do not open the installed app.
+  Earlier runtime records retain their historical method and authorization; they grant
+  no current permission. Keep those observations distinct from public-source evidence.
+- Use CUA for Bondline's native UI checks. Never download, execute, inspect, decompile
+  or disassemble ChemDraw program binaries in this workflow.
   Never copy proprietary templates, sample libraries, icons, fonts or help text.
 - Use ordinary source tools for open-source repositories.
   Record exact source/build/version/platform, URLs or artifact hashes, video timestamps,

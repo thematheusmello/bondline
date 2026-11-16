@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{collections::VecDeque, sync::Arc};
 
+mod atom;
 mod bond;
 mod bond_tool;
 mod capture;
@@ -24,6 +25,7 @@ mod smiles_paste;
 mod smiles_query;
 mod smiles_records;
 mod view;
+pub use atom::AtomSetLabel;
 pub use bond::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
 };
@@ -158,6 +160,7 @@ command_registry! {
     BondCreate(BondCreate) => ("bond.create", "Create an independent carbon bond of the requested Single/Double/Triple order, authoring fixed neutral-carbon H counts; omitted order is Single.", false),
     BondExtend(BondExtend) => ("bond.extend", "Extend a neutral terminal carbon with consistent literal H and one Single/Double/Triple carbon bond using an explicit requested order/H policy; omitted order is Single and native complete data is required.", false),
     BondSetOrder(BondSetOrder) => ("bond.set_order", "Set an existing bond's Single/Double/Triple order and explicitly rectify both neutral-carbon endpoints' consistent literal hydrogen counts, preserving identities and geometry; requires editable native data or a synchronized SMILES record.", false),
+    AtomSetLabel(AtomSetLabel) => ("atom.set_label", "Set one existing neutral atom's explicit element and literal attached-H count, preserving IDs, geometry and neighbors; source-free or completely mapped native CDXML is required and no valence inference is performed.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
     Redo(NoParams) => ("history.redo", "Restore the next authored document.", false),
     Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
@@ -211,6 +214,10 @@ pub enum Error {
     UnsupportedBondConversion(&'static str),
     #[error("atom {atom_id} does not exist in fragment {fragment_id}")]
     MissingAtom { fragment_id: u32, atom_id: u32 },
+    #[error("invalid atom label: {0}")]
+    InvalidAtomLabel(&'static str),
+    #[error("atom label editing unavailable: {0}")]
+    UnsupportedAtomLabel(&'static str),
     #[error(
         "extension requires a positioned neutral terminal carbon with one Single/Double/Triple carbon bond and consistent sufficient literal hydrogen count"
     )]
@@ -344,6 +351,7 @@ impl Error {
             | Self::UnsupportedBondExtension
             | Self::UnsupportedBondOrderSource
             | Self::UnsupportedBondOrder
+            | Self::UnsupportedAtomLabel(_)
             | Self::UnsupportedSmilesPasteSource
             | Self::UnsupportedBondConversion(_) => "unsupported_content",
             Self::IncompleteSmilesExportSource => "unsupported_content",
@@ -942,6 +950,14 @@ impl Engine {
                 drawing_focus = self.view_focus;
                 self.commit(document)?
             }
+            Command::AtomSetLabel(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let document = atom::set_label(self.stored_document()?, params)?;
+                drawing_focus = self.view_focus;
+                self.commit(document)?
+            }
             Command::Undo(_) => self.undo()?,
             Command::Redo(_) => self.redo()?,
             Command::Capture(params) => {
@@ -1106,6 +1122,7 @@ mod tests {
         assert_eq!(
             names,
             [
+                "atom.set_label",
                 "bond.create",
                 "bond.extend",
                 "bond.set_order",

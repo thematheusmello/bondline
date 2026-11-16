@@ -1,5 +1,84 @@
 # Status — 2026-11-16
 
+## Current bounded atom-label command
+
+The full M0–M5 goal remains **active** on `feat/multiple-bonds`. Recoverable committed
+base is `02093cb` (source contract), after `853d9aa` (native SMILES picker guidance).
+The current feature adds `atom.set_label` and its tests/records; its exact local commit
+will be recorded in the following checkpoint. No push/publication or hosted run occurred.
+Actions remains disabled. The desktop/GPU license blocker is resolved; full M0, M1 and
+M2–M5 remain incomplete.
+
+**Verified headlessly:** the33rd registry command takes an exact existing target plus
+explicit element1..118/literal attached-H0..65535. Source-free/fully mapped native CDXML
+and neutral/nonisotopic/nonradical targets only. Physical H with attached H refuses;
+other counts are literal data, not chemical-validity or renderability claims. Stable
+IDs, geometry, arrays, directed bonds and neighbors stay exact. Fully validated no-ops
+share source/model and preserve redo/close; changes create one complete history step.
+Foreign/opaque CDXML, MOL/CDX, SDF and raw/retained SMILES keep their existing guards.
+There is no general inference, neighbor adjustment or new model allocation field.
+
+Read [the contract](docs/research/atom-label-authoring-contract.md) and
+[receiving evidence](docs/verification-atom-label-authoring.md). Initial core64681 and
+actualCLI21623 reach intended UnknownCommand RED before implementation. Nine core,
+four actualCLI/initialized-stdio/authenticated-socket and one independent MOL-reference
+CPU/GPU case pass, including64 fixed-seed complete-snapshot histories, all118 literal
+symbols and actual Unicode CDXML Save/reopen files independently consumed by raw
+Expat/Decimal and RDKit. The external reader qualification has four manual positives
+and four literal-negative controls. The image case is a passing independent reference
+control, not a new renderer RED or a human-approved golden.
+
+**Latest full local gate80684 reaches success:1306 passed / 0 failed / 1 ignored**,
+188 result lines. Rustfmt, warnings-denied workspace/vendor clippy/tests, layers,
+license closure and corpus pass. Log `target/atom-labels/full-ci-final-source.log`,
+158775 bytes, SHA256
+`a6aae9b1b0298d8029e96291b336e1b4661aa92bbe247ede108c0ab752ae13e6`.
+The handle has retired; do not poll it. First86863 passes1305/0/1 before the added
+render control. Eight old exact name sets and22 catalogue counts add only this command;
+the old CLI host adds only its two-line test-module bridge. Default native controls
+stay20 Drawing/14 SDF/10 raw SMILES. No old fixture/oracle/font/golden, model/parser/chem/
+renderer/vendor, dependency/lock, corpus pin or fuzz change. Runtime closures remain
+155/166/221 plus two assets; corpus eight files/five bundles keeps explicit omissions.
+
+**Native is unfinished:** there is no atom editor, inline Text tool, alias/abbreviation,
+charge/isotope/radical authoring or generic foreign-source editing. The only live preview
+is still PID57375 at `target/smiles-ring-native/Bondline.app`, ID
+`org.bondline.neutral-simple-ring-review`, with the earlier picker-hint executable
+21605552 bytes/SHA256
+`8a73bf4ac3e1a50f0cf9380852703bbcf0e88471f38bf1414ba410a612f7c762`.
+It predates this command; no native atom-label acceptance is claimed. CUA confirms Saved
+`all-edited-λ.smiles`,7 atoms/3 bonds/3 fragments,100%, Single selected. Old Bondline
+preview entries are already stopped and no unused project tabs were found in either
+inspected Chrome window. No tabs were closed during that inventory. iTerm2 denied CUA
+access, so terminal tabs were not inspected. Unrelated apps/tabs and saved files remain.
+Fit78.79% refusal, ineffective pan attempts, native races/DPI/2×, wider chemistry and
+new Windows/Linux interaction retain their prior missing/unverified status.
+
+**MCP failure remains unresolved:** the earlier unchanged shutdown replacement-bind
+AddrInUse825/1 has no failure-time owner capture. A later pass does not causally fix it.
+The exhausted20 contexts and falsified outbound hypothesis were not rerun. A new
+pinned Rust/Tokio/Mio/Apple source review identifies a distinct potential unbound-socket/
+FIOCLEX/child-spawn inheritance interleaving. Report under ignored
+`target/native-smiles-records/socket-source-review-v2/REPORT.md` is7736 bytes/SHA256
+`1ec73c6e1277e779f050a084a5a24fa29905ccf10435584b39aa9dcf50afe7b0`.
+Its frozen standalone two-arm external OS probe is source-reviewed but **uncompiled and
+unrun**. It may qualify a mechanism only, never attribute the old failure without actual
+failure-time identity. No unsafe app code, new dependency or socket-policy/test change.
+
+**Next executable task:** deliver real native atom targeting/editor presentation through
+`atom.set_label`: fresh atom/label hits, typed target and literal fields, Apply/Cancel,
+copyable stale drafts, ordered Save/close/modal/namespace guards. Declare independent
+App and registry presentation tests first, observe RED, then wire the existing command
+and run the actual native edit→history→Unicode Save/reopen workflow with independent
+consumers. Do not use `ui.file` for a fake target or restart converters. Exact26.1 Mac
+entry/tool/repetition precedence remains a public-source question. Continue M2 selection,
+rings/chains/styles, wider chemistry, publishing and M5; no milestone is complete.
+All compiler/test/oracle handles and delegated tasks from this slice are terminal;
+there is no live job except the saved preview. Root alone owns continuation/Cargo/Git/CUA.
+
+The sections below retain historical checkpoints; their process and next-task statements
+are superseded by the current state above.
+
 ## Current native source-backed SMILES records
 
 The full M0–M5 goal remains **active** on `feat/multiple-bonds`. Native feature

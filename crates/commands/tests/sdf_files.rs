@@ -18,6 +18,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
     assert_eq!(
         names,
         [
+            "atom.set_label",
             "document.inspect",
             "document.import_smiles_records",
             "document.new",

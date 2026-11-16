@@ -116,7 +116,7 @@ fn stdio_new_schema_and_smiles_to_drawing_workflow_share_the_registry() -> TestR
     client.send(json!({"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}))?;
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 32);
+    assert_eq!(tools.len(), 33);
     let new = tools
         .iter()
         .find(|item| item["name"] == "document.new")

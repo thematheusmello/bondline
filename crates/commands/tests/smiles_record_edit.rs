@@ -475,7 +475,7 @@ fn selected_record_uses_a_new_dense_namespace_and_preserves_unprojected_records(
 #[test]
 fn import_schema_targets_numeric_limits_and_backing_authority_are_closed() -> TestResult {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 32);
+    assert_eq!(registry.len(), 33);
     let entry = registry
         .iter()
         .find(|entry| entry.name == IMPORT)

@@ -1,5 +1,20 @@
 # Open questions
 
+- `atom.set_label` now has bounded headless literal-element/H authoring evidence in
+  verification-atom-label-authoring.md. It supplies no native editor, Text-tool behavior,
+  abbreviation parser or general valence correction. Official25.5 Alt-entry and repeat-label
+  articles describe distinct flows; exact26.1 Mac activation, tool precedence and repetition
+  state remain unverified. Next implement explicit target/fields/Apply/Cancel through the
+  shared command, preserving stale drafts, source guards and Save/close/modal ordering.
+
+- The earlier intermittent MCP shutdown replacement-bind AddrInUse remains unexplained
+  despite the later passing1306/0/1 aggregate. A pinned-source review suggests a distinct
+  unbound-socket/close-on-exec spawn interleaving, not the falsified held-outbound trial.
+  Source review establishes no actual overlap or failure-time owner. The frozen standalone
+  two-arm OS probe under ignored `target/native-smiles-records/socket-source-review-v2/`
+  has not been compiled or run. Do not attribute the historical failure, repeat exhausted
+  contexts, weaken assertions or change production socket flags from this hypothesis.
+
 - The original external-writer CDX probe now reproduces an interoperability difference:
   Apache-2.0 Indigo1.47.0 emits two terminal zero words; unchanged Bondline/stdlib framing
   refuses the extra word, while pinned RDKit accepts all ten declared graph variants.

@@ -37,8 +37,9 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 history and Unicode whole-file Save/reopen pass, with independent checks of the actual files.
 See [native record evidence](docs/verification-native-smiles-records.md) and the separate
 [paste checkpoint](docs/verification-native-smiles-paste.md). The latest full local gate
-stops at the unchanged MCP listener-release `AddrInUse` failure. The new tests and separately
-run remaining stages pass; this is not a passing aggregate. Native2×/DPI, Fit and complete
+passes1,306/0/1, including the bounded headless
+[atom-label command](docs/verification-atom-label-authoring.md). The earlier intermittent
+MCP listener-release `AddrInUse` failure remains unexplained. Native2×/DPI, Fit and complete
 pan behavior remain unverified or limited; see [density evidence](docs/verification-native-drawing-density.md).
 
 <p align="center">
@@ -69,7 +70,8 @@ pan behavior remain unverified or limited; see [density evidence](docs/verificat
 | Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. Drawing now generates fresh physical glyphs at exact DPI/device phase; renderer/App tests cover2× and fractional origins. Actual native2×/DPI remains unverified, and readability guards still apply. The centered style is original; broader native label workflows and reference style parity remain unverified. |
 | Editable SMILES paste | Edit → Paste Special → SMILES… opens a bounded text/geometry form using the OS clipboard. Supported neutral structures, including benzene, append as one undoable edit through `structure.paste_smiles`. Mac refusal/retry/history/bond edit/Unicode Save/reopen and independent saved-file checks pass. Automatic clipboard capture, wider chemistry and exact reference-dialog parity remain unfinished. |
 | Source-backed SMILES editing | File → Import SMILES records… and the CLI/MCP/loopback share explicit selected/all import and supported carbon bond-order edits. Bounded Mac refusal/retry, click/hotkey editing, Undo/Redo, Unicode Save As, raw reopen and explicit reimport pass; actual saved files retain opaque metadata and unselected records. Independent file checks and CPU/GPU captures pass. Selection is bounded to64 atoms/128 bonds. Geometry/record membership stay fixed; wider chemistry, native races and other platforms remain unfinished. |
-| Automation | 32 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Elemental atom labels (headless) | `atom.set_label` changes one existing neutral atom's explicit element and literal attached-H count while preserving IDs, geometry and neighbors. Source-free/native CDXML, exact history/no-op/refusal tests, actual CLI/MCP/socket and independently consumed saved files pass. CPU/GPU output matches an independent methanol MOL reference. No general valence inference or native atom editor is delivered yet. |
+| Automation | 33 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all
 three platforms and window launches. GitHub Actions is disabled during development to

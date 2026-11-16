@@ -20,6 +20,7 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
     assert_eq!(
         names,
         [
+            "atom.set_label",
             "document.inspect",
             "document.import_smiles_records",
             "document.new",

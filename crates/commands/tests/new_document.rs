@@ -112,6 +112,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
     assert_eq!(
         names,
         [
+            "atom.set_label",
             "document.inspect",
             "document.close",
             "document.import_smiles_records",

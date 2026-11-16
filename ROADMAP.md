@@ -8,9 +8,9 @@ Native source-backed SMILES records now have bounded Mac selected/all import, re
 retry, registered click/key order editing, history and Unicode whole-file Save/reopen/
 reimport, with independent actual-file consumers. See
 [native receiving](docs/verification-native-smiles-records.md) and the earlier
-headless1270/0/1 record checkpoint. The latest full gate fails at the unchanged MCP
-listener-release AddrInUse check; separately passing remaining stages do not make it
-green. Fit78.79% still refuses the edited multiple-bond scene, Actual100% recovers, pan
+headless1270/0/1 record checkpoint. The later atom-label command gate passes1306/0/1;
+the earlier intermittent MCP listener-release AddrInUse failure remains unexplained.
+Fit78.79% still refuses the edited multiple-bond scene, Actual100% recovers, pan
 attempts did not change the view, and native races/DPI/other platforms remain unverified.
 Full M0–M5 remains open. Continue M2 atom/selection/ring/style authoring after preserving
 these complete-source/worker boundaries; broader record and chemistry parity remains.
@@ -338,13 +338,16 @@ corpus and reference/chemical mapping remain M1 work.
 
 ## M2: drawing — in progress
 
-The next [elemental authoring contract](docs/research/atom-label-authoring-contract.md)
-locks existing-atom element/literal-H editing through one named command, exact identity/
-history/source guards and independent actual-file consumers before native presentation.
-This is authoring, not another converter or general valence inference. Modern label-entry
-and repeat-label evidence stay separate; full inline labels, aliases, charges/isotopes/
-radicals, selection, rings/chains and styles remain required. Implementation evidence is
-not inferred from this contract.
+The [elemental authoring contract](docs/research/atom-label-authoring-contract.md) now
+has a bounded headless `atom.set_label` implementation. Nine core, four actual-wire and
+one independent MOL-reference CPU/GPU case pass, including complete history and actual
+saved-file consumers; see [receiving evidence](docs/verification-atom-label-authoring.md).
+It changes only explicit element/literal-H fields in existing neutral atoms in source-free/
+native CDXML. No general valence inference or native atom editor is delivered. Next wire
+fresh atom/label targets, typed presentation, Apply/Cancel and stale/modal/Save/close
+guards through that command, with independent App tests and actual native acceptance.
+Modern label-entry and repeat-label evidence stay separate; full inline labels, aliases,
+charges/isotopes/radicals, selection, rings/chains and styles remain required.
 
 The shared118-symbol catalog, positioned neutral-element labels and literal H have
 independent font/CPU/GPU/file evidence. MOL/SDF display H stays separate from authored

@@ -51,6 +51,15 @@ Runtime selection, cameras, jobs and revision counters are separate from authore
 Command handlers validate before committing an edit. Snapshot history restores the entire
 document; failed commands do not mutate it. All delivered interfaces use the same registry.
 
+`atom.set_label` authors only one existing neutral atom's element/literal-H fields in
+source-free or completely mapped native CDXML. It reuses immutable Fragment replacement
+and the existing whole-content commit/history, preserving geometry, arrays, directed
+bonds, unrelated metadata and identity floors. Fully validated no-ops share old storage
+and preserve redo/close. It performs no valence inference or neighbor adjustment and
+does not extend any foreign/opaque/SMILES backing's edit authority. No new model data,
+worker pool or GUI dependency is introduced. A native target/editor presentation is the
+next separate gate; see [receiving evidence](verification-atom-label-authoring.md).
+
 The authored document contains pages and immutable elemental-graph fragments. Page IDs
 are nonzero u32 values; dimensions are finite
 f64 points with validated construction/deserialization and a documented 100,000-point bound.

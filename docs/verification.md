@@ -1,5 +1,18 @@
 # Verification log
 
+## Literal elemental atom authoring, 2026-11-16
+
+[Core/actual-transport/independent-image evidence](verification-atom-label-authoring.md)
+records two real UnknownCommand REDs before implementation, nine core/four actual-wire
+GREEN cases and one passing independent MOL-reference CPU/GPU control. All118 literal
+symbols,64 fixed-seed whole-snapshot histories and actual Unicode CDXML files have scoped
+independent checks. The final full gate80684 log reaches success:1306/0/1,188 result lines,
+including rustfmt, warnings-denied clippy, native vendor tests, layers/licenses/corpus.
+The earlier intermittent MCP replacement-bind failure remains unexplained. Native atom
+presentation and broader chemistry/platform workflows remain missing or unverified.
+Default native controls remain20/14/10; registry33. No old consumer/fixture/font/golden,
+dependency/lock or fuzz change; Actions stays disabled.
+
 ## Native retained SMILES records, 2026-11-16
 
 [Native/control/worker/App evidence](verification-native-smiles-records.md) records22

@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has32 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has33 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -74,6 +74,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `bond.create` | `page_id`, `begin_x_pt`, `begin_y_pt`, `end_x_pt`, `end_y_pt`; optional `order="single"` | One independent neutral-carbon fragment with the requested Single/Double/Triple bond; each endpoint receives literal H=`4-order_weight` |
 | `bond.extend` | Required `expected_revision`, `page_id`, `fragment_id`, `begin_atom_id`, `end_x_pt`, `end_y_pt`, `hydrogen_policy="rectify_terminal_carbon"`; optional `order="single"` | Add the requested bond/new carbon to a consistent supported terminal carbon, subtracting the bond weight from its literal H; native complete CDXML/source-free data only |
 | `bond.set_order` | Required `expected_revision`, positive `page_id`, `fragment_id`, `bond_id`, explicit `order` (`single`, `double`, `triple`) and `hydrogen_policy="rectify_neutral_carbon"` | Edit one existing edge and both consistent neutral-carbon literal H counts; preserve geometry/IDs/direction, one history commit and validated no-op; native/CDXML or deferred synchronized SMILES record transaction |
+| `atom.set_label` | Required `expected_revision`, positive `page_id`, `fragment_id`, `atom_id`, `element` atomic number1..118 and literal `explicit_hydrogens`0..65535 | Edit only one neutral/nonisotopic/nonradical atom's two literal fields in source-free/native CDXML; preserve IDs/geometry/neighbors and complete history, with no general valence inference. Physical H with positive attached H refuses; other backings keep their guards |
 | `history.undo` | `{}` | Previous authored snapshot |
 | `history.redo` | `{}` | Next authored snapshot |
 | `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only drawing page or restricted all-record SDF virtual page1 PNG; explicit `cpu` or `gpu` |
@@ -1320,7 +1321,7 @@ capture, native races/other-platform execution and complete reference parity rem
 `ui.controls` additionally exposes `file.import_smiles_records`, File → Import SMILES
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
-counts are20 Drawing/14 SDF/10 raw SMILES; the registry stays32 commands. Accepting
+counts are20 Drawing/14 SDF/10 raw SMILES; the registry now has33 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag

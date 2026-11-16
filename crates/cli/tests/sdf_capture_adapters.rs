@@ -319,3 +319,6 @@ mod components_conversion_wire;
 mod smiles_paste_wire;
 #[path = "support/smiles_record_authoring_wire.rs"]
 mod smiles_record_authoring_wire;
+
+#[path = "support/atom_label_wire.rs"]
+mod atom_label_wire;
