@@ -130,6 +130,7 @@ impl StoredDocument {
                         || old.isotope != new.isotope
                         || old.charge != new.charge
                         || old.radical != new.radical
+                        || old.show_terminal_carbon_labels != new.show_terminal_carbon_labels
                         || old.show_non_terminal_carbon_labels
                             != new.show_non_terminal_carbon_labels
                 })

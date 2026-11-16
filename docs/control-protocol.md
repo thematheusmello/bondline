@@ -1356,13 +1356,15 @@ tests from actual platform execution and exact reference-screen parity.
 
 ## Exact-target atom-label presentation
 
-Explicit atom.set_label now also restores an existing nonterminal-carbon display flag
-from false to true, including same element/H entry. This is one real authored edit;
+Explicit atom.set_label independently restores existing terminal and nonterminal carbon
+display flags from false to true, including dormant flags and same element/H entry.
+This is one real authored edit;
 Undo restores false. None/true same-count calls keep old validated sharing/no-op behavior.
 It does not require successful rendering or a C4 proof before accepting supplied literal
 element/H, and it preserves all existing source/target/close guards. Parameters, command
 count and native form remain unchanged. The original form's valid unchanged Apply can
-therefore restore a hidden anchor; see [skeletal receiving](verification-skeletal-carbon.md).
+therefore restore a hidden anchor; see [skeletal receiving](verification-skeletal-carbon.md)
+and [terminal-label evidence](verification-terminal-carbon-labels.md).
 
 `ui.atom_label` uses the attached native-host signal already used by `ui.file`.
 The closed variants are:

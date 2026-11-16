@@ -13,11 +13,11 @@ pub(crate) fn labels(
     cancel: &Cancellation,
 ) -> Result<BTreeMap<AtomId, CarbonLabel>, Error> {
     let mut labels = BTreeMap::new();
-    if !fragment
-        .atoms()
-        .iter()
-        .any(|atom| atom.element.get() == 6 && atom.show_non_terminal_carbon_labels.is_some())
-    {
+    if !fragment.atoms().iter().any(|atom| {
+        atom.element.get() == 6
+            && (atom.show_terminal_carbon_labels.is_some()
+                || atom.show_non_terminal_carbon_labels.is_some())
+    }) {
         return Ok(labels);
     }
     let mut atoms = BTreeMap::new();
@@ -39,16 +39,16 @@ pub(crate) fn labels(
     }
     for atom in fragment.atoms() {
         cancel.check()?;
-        let Some(show) = atom.show_non_terminal_carbon_labels else {
-            continue;
-        };
         if atom.element.get() != 6 {
             continue;
         }
-        let Some(neighbours) = adjoining
-            .get(&atom.id)
-            .filter(|neighbours| neighbours.len() >= 2)
-        else {
+        let neighbours = adjoining.get(&atom.id).map_or(&[][..], Vec::as_slice);
+        let flag = if neighbours.len() <= 1 {
+            atom.show_terminal_carbon_labels
+        } else {
+            atom.show_non_terminal_carbon_labels
+        };
+        let Some(show) = flag else {
             continue;
         };
         let hydrogens = atom
@@ -72,7 +72,19 @@ pub(crate) fn labels(
             if weight.checked_add(u32::from(hydrogens)) != Some(4) {
                 return Err(Error::UnsupportedChemicalContent);
             }
-            if mandatory_label(atom, neighbours, &atoms)? {
+            let isolated = match neighbours {
+                [] => true,
+                [(other, _)] => {
+                    atoms
+                        .get(other)
+                        .is_some_and(|other| other.element.get() == 6)
+                        && adjoining
+                            .get(other)
+                            .is_some_and(|neighbours| neighbours.len() == 1)
+                }
+                _ => false,
+            };
+            if isolated || mandatory_label(atom, neighbours, &atoms)? {
                 CarbonLabel::Visible(hydrogens)
             } else {
                 CarbonLabel::Hidden

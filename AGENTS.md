@@ -26,6 +26,13 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
+The terminal-label prerequisite is described in docs/research/terminal-carbon-labels.md
+and docs/verification-terminal-carbon-labels.md. Degree zero/one selects terminal; higher
+degree selects nonterminal. Require known H/checked C4 before suppression and keep actual
+isolated C/C2 labels. atom.set_label restores each false independently, including dormant
+flags. Preserve strict node yes/no, legacy omission and both MOL/retained-source loss
+guards. No chain tool or setting is delivered by this prerequisite.
+
 Atom.show_non_terminal_carbon_labels persists optional node-level no/yes independently
 of literal H. Read docs/research/skeletal-carbon-display.md and
 docs/verification-skeletal-carbon.md, plus the preceding data contract/receiving. None

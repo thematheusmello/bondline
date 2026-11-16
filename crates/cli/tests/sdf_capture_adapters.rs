@@ -337,3 +337,6 @@ mod ring_tool_wire;
 
 #[path = "support/skeletal_label_wire.rs"]
 mod skeletal_label_wire;
+
+#[path = "support/terminal_label_wire.rs"]
+mod terminal_label_wire;

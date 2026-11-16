@@ -9,6 +9,11 @@ The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now
 Known-H/C4 suppression preserves mandatory labels, hits and real-ink guards; existing
 atom.set_label restores visibility through the same registry/form without changing old
 None/true no-ops. Native OS acceptance/default styles/preferences remain outstanding.
+The separate terminal-label prerequisite now has
+[independent data/render/editor/file evidence](docs/verification-terminal-carbon-labels.md).
+Actual degree selects the appropriate flag and isolated C/C2 labels remain mandatory.
+Next lock chain authoring and its native workflow; Add Chain, repeat, Snaking and
+settings remain required, not covered by this prerequisite.
 Named benzene/cyclopentadiene candidates now share ring.create with the unchanged sized
 requests. Independent phase/H/source/history and actual adapter/file checks pass; see
 [receiving](docs/verification-unsaturated-rings.md). Their two native controls now share

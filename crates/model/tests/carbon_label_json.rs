@@ -143,7 +143,18 @@ fn label_flag_accepts_actual_booleans_only_and_does_not_open_atom_json() -> Test
     ] {
         let mut input = literal.clone();
         input[name] = json!(true);
-        assert!(serde_json::from_value::<Atom>(input).is_err());
+        if name == "show_terminal_carbon_labels" {
+            let accepted: Atom = serde_json::from_value(input.clone())?;
+            assert_eq!(accepted.show_terminal_carbon_labels, Some(true));
+            assert_eq!(
+                accepted.show_non_terminal_carbon_labels,
+                atom.show_non_terminal_carbon_labels
+            );
+            assert_eq!(accepted.explicit_hydrogens, atom.explicit_hydrogens);
+            assert_eq!(serde_json::to_value(accepted)?, input);
+        } else {
+            assert!(serde_json::from_value::<Atom>(input).is_err());
+        }
     }
     for name in ["id", "element"] {
         let mut input = literal.clone();

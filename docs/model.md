@@ -17,16 +17,20 @@ from Some(0); valence-derived hydrogen generation is not implemented. Radical st
 none, singlet, doublet and triplet. No isotope-existence, valence or stereo inference occurs.
 The element range is the reviewed IUPAC catalog, not a claim that future elements cannot exist.
 
-Atom also retains optional show_non_terminal_carbon_labels independently of literal H.
+Atom retains optional show_terminal_carbon_labels and show_non_terminal_carbon_labels
+independently of each other and literal H.
 None is omitted for old Bondline JSON/native-v0 compatibility; false and true preserve
 explicit node no/yes. This fixed-size datum survives copies/replacement/history and needs
 no additional heap accounting. It does not infer H, root inheritance or SDK absence
 semantics. Both MOL model writers refuse its loss; retained-SMILES synchronization cannot
 change it. Shared rendering now interprets active flags with known literal/resolved H,
 checked C4 suppression and mandatory-label exceptions; no model H is inferred or erased.
-Explicit atom.set_label restores an existing false to true. See
+Degree zero/one selects terminal; higher degree selects nonterminal. Unbonded carbon
+and actual isolated C2 components retain mandatory labels. Explicit atom.set_label
+independently restores each existing false to true. See
 [data evidence](verification-carbon-label-data.md) and
-[skeletal receiving](verification-skeletal-carbon.md); terminal/default-style parity remains.
+[skeletal receiving](verification-skeletal-carbon.md) and
+[terminal-label evidence](verification-terminal-carbon-labels.md); default-style parity remains.
 
 BondOrder stores the sixteen single-term kinds in the archived file specification: single
 through sextuple, half/aromatic/two-and-half through five-and-half, dative, ionic, hydrogen

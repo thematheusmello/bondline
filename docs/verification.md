@@ -3080,3 +3080,14 @@ expanded declarations, setup-only qualifications, same-candidate preview/authori
 actual file-consumer evidence. It records local quality gates and native/platform limits;
 App input and offscreen GPU execution do not establish native OS interaction. The full
 M0–M5 goal remains active and GitHub Actions stays disabled.
+
+## Terminal carbon-label integration, 2026-11-16
+
+[Receiving evidence](verification-terminal-carbon-labels.md) records independent
+model/API/IO/render/Engine/adapter/App tests, actual RED/GREEN results and two qualified
+new-test setup corrections. Local gate 19445 passes 1,540/0/1 and the native/CLI build
+passes. Missing/null omission, degree-selected flags, mandatory isolated C/C2 labels,
+loss refusals and explicit restoration retain source/history and strict rendering guards.
+Native OS/default-style/chain parity remains unfinished; the existing desktop draft stays
+untouched. The latest user request prioritizes an original logo and a visible disabled
+catalogue of planned tools next. Actions remains off and the complete goal stays active.

@@ -6,6 +6,30 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+The terminal-label prerequisite follows locked contracts `3aa093f`/`662c72c` and is
+ready for its atomic source/test/docs commit. Read docs/verification-terminal-carbon-labels.md.
+Optional node data, strict format-loss refusals, actual-degree display and independent
+two-flag restoration are delivered through the shared renderer/registry/editor. Eighteen
+new independent cases pass. Root observes intended model/IO/render/setter REDs first;
+new-test error-class, type annotation and zero-filter qualifications remain separate.
+
+Full local gate 19445 exits 0: 1,540/0/1 across 221 result lines, including fmt, workspace/
+vendor clippy/tests, layers/licenses/corpus. Log 191894B, SHA256
+477ba18d66a369247fb4149055b5e87b054aae6c01562749a54ab702dd2a1e1e.
+Native/CLI build 47945 passes; native 9a334fa9…e86b1, CLI 6bda7cb3…49c3.
+Registry 38 and control counts 31/20/14/10 stay unchanged. No new style/chain control,
+source authority, dependency, parser, asset or golden. Bounded source reviews find no
+material issue; the integration review explicitly captures pre-format test declarations.
+
+The preceding goal turn made visual-review progress: CUA raises the user's existing
+Bondline window and observes the intact unsaved 17-atom/19-bond drawing. It does not
+reload the older copied build or verify the newly built features. The latest user request
+now prioritizes an original Bondline logo and all planned tools visible but disabled
+until properly implemented. Two workers are preparing ignored branding and catalogue
+proposals; Root owns all adoption, tests, Cargo/Git and native interaction.
+
+## Previous native named-ring checkpoint
+
 Native named-ring integration is the current source/test/docs checkpoint after command89aa03d and
 locked native contracta795b1d. Read docs/verification-native-unsaturated-rings.md.
 Two controls now share ui.ring_tool, exact effective mode/context, original procedural
@@ -144,32 +168,30 @@ remains intact; iTerm tabs remain unchecked because access is restricted. No pro
 reference binary/asset is opened or inspected. Native OS/DPI/Windows/Linux workflow
 acceptance for inset/selection/rings remains unverified.
 
-Root owns Cargo/Git/CUA/live mutation. All focused, failed gates10421/43930, successful
-19064/build85439/visual77304 and earlier executions are terminal; no Root Cargo job is
-live. Workers returned ignored declarations/reviews and the next chain-source proposal;
-no worker owns execution or live product changes. The current full gate is1522/0/1.
-Revalidate any newer job before restarting; do not retry an unchanged failed socket test
-for green. The native app deliberately stays running for the user, separately from Cargo.
-The native app deliberately remains
-running for the user, distinct from a Cargo job. Do not replace its copied executable
-or lose its unsaved draft; revalidate any newer handle before restarting work.
+Root owns Cargo/Git/CUA/live mutation. Full gate 19445, build 47945 and focused terminal-
+label checks are terminal. No Root Cargo job is live. The user's copied Bondline process
+96449 remains running, separate from Cargo; its executable is still d0873d6c…5c64.
+Do not replace it or lose its unsaved draft. Revalidate newer handles before restarting;
+never retry an unchanged failed socket test for green. Branding/catalogue workers only
+write ignored proposals, not live product code or Git changes.
 
 ## Next exact steps
 
-1. Review the next ignored source proposal target/chain-authoring/source-proposal/
+1. Finish the terminal-label atomic commit, then fulfill the user's logo/planned-tools
+   request. Review ignored target/branding/proposal and target/planned-tools/catalogue-proposal,
+   lock the catalogue and disabled-input contract, observe meaningful RED tests, implement
+   original branding and all planned drawing roles, and verify actual layout/disabled
+   interaction without changing the user's existing drawing. Never bind missing tools
+   to successful-looking commands or promote their parity status.
+2. Review the next ignored source proposal target/chain-authoring/source-proposal/
    PROPOSAL.md (5049B/SHA256443374b3d722e49d8b822e815df3e0515aa27f58d9b937681fd000345831d999)
    and pins.json. GUIDE25 printed104–105 supplies Acyclic drag/count, separate Snaking/
    Control, atom attachment, click Add Chain/count/Add and Alt repeat. Count inclusion,
    quantization and26.1 defaults remain unknown; lock original policies before tests.
-   Current nonterminal-only flags still print CH3 ends. Public SDK0x0442/official DTD
-   support a separate preserving terminal-label prerequisite; do not silently erase H
-   or call those ends skeletal. No chain contract/test/producer is delivered yet.
+   The terminal-label prerequisite is delivered with independent evidence; do not
+   silently erase H. No chain contract/test/producer is delivered yet.
    Continue the complete dialog/repeat/Snaking/chair/sprout/style/chemistry backlog.
-   Root now locks docs/research/terminal-carbon-labels.md before new tests/product:
-   optional node data and strict loss guards, actual-degree display, mandatory isolated
-   carbon/C2 labels and existing atom.set_label restoration precede chain authoring.
-   No terminal-label implementation/test or new native execution is delivered yet.
-2. After the user's current visual review, when desktop use permits, verify actual
+3. After the user's current visual review, when desktop use permits, verify actual
    native skeletal restoration plus inset/selection/free/fused/spiro rings, Cancel/
    history and Unicode Save/reopen. Offscreen App tests do not prove native input or
    physical DPI. New Windows/Linux interaction stays unverified while Actions is off.

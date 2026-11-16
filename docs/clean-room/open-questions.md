@@ -347,6 +347,9 @@ standard absent/no meaning is made. Bounded skeletal eligibility/explicit-label 
 now has verification-skeletal-carbon.md evidence, preserving literal H and mandatory
 isolated-C/C2/near-collinear/two-Double labels. Reference defaults, root/Text precedence,
 terminal/H preferences and native OS behavior remain unresolved; no global metadata hiding.
+Separate terminal-node data and degree-selected depiction now have
+[bounded independent evidence](../verification-terminal-carbon-labels.md). This resolves
+the data/display prerequisite, not inheritance, vendor defaults or missing style controls.
 
 
 ## Existing-bond order edits — 2026-11-15

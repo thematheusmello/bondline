@@ -39,7 +39,7 @@ Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with indep
 checks of the actual files. See [atom-editor evidence](docs/verification-native-atom-labels.md),
 [native record evidence](docs/verification-native-smiles-records.md) and the separate
 [paste checkpoint](docs/verification-native-smiles-paste.md). The latest completed local
-gate passes **1,522 tests, zero failures and one ignored test**, including formatting,
+gate passes **1,540 tests, zero failures and one ignored test**, including formatting,
 warnings-denied linting, layer/license checks and the pinned corpus. The
 [carbon-label data increment](docs/verification-carbon-label-data.md) preserves standard
 metadata; [skeletal display and label restoration](docs/verification-skeletal-carbon.md)
@@ -61,6 +61,7 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 | Drawing and history | Drag a C–C bond and extend a supported terminal carbon with an explicit H policy. Native C3/C4 authoring, Undo/Redo and editable CDXML reopening are verified on macOS; general chemistry remains missing. |
 | Double and Triple bonds | Native macOS tool selection, centered drawing, history and CDXML Save As pass at a readable scale. Carbon terminal extension also passes independent headless checks; its native multiple-bond workflow and context-sensitive styles remain unverified/missing. |
 | Explicit sided doubles | Shortened Left/Right Double geometry, real gaps/hits and CPU/GPU capture pass independent engine/native-profile CDXML history and save/reopen checks. Native interaction, alignment controls and automatic styles remain unverified/missing. See [receiving](docs/verification-inset-doubles.md). |
+| Skeletal carbon labels | Separate terminal/nonterminal node flags preserve literal H and mandatory isolated C/C2 labels. Shared CPU/GPU rendering, explicit-label restoration, history and Unicode save/reopen pass independent tests. Style-setting controls and native OS acceptance remain outstanding. See [evidence](docs/verification-terminal-carbon-labels.md). |
 | Existing-bond editing | Set Single/Double/Triple with hotspot1/2/3; convert an existing Single by clicking, or draw across Single/Double endpoints with Single selected. Same edge and geometry, corrected literal carbon H, one history step. Bounded native Mac and independent graph/file checks; alignment and general imported edits remain unavailable. |
 | Small carbon rings | Six3–8 tools call the shared carbon Single-ring engine, with detached, shared-atom and shared-edge placements, complete previews and one-step history. Independent command/adapter and actual-App free/fused/spiro/Unicode-file checks pass; native OS interaction remains unverified. Aromatic/chair/sprout tools are still missing. See [receiving](docs/verification-native-rings.md). |
 | Workspace | Light header, compact two-column bond/selection/ring rail, white paper, document/source/count inspector and contextual guidance. Actual macOS authoring and file-picker checks pass for the earlier documented subset; new selection/ring interaction still needs native review. |

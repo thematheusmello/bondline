@@ -35,10 +35,12 @@ pub(super) fn set_label(
             "a physical hydrogen atom cannot carry inline attached hydrogens",
         ));
     }
-    let restore_label = target.show_non_terminal_carbon_labels == Some(false);
+    let restore_terminal = target.show_terminal_carbon_labels == Some(false);
+    let restore_non_terminal = target.show_non_terminal_carbon_labels == Some(false);
     if target.element == element
         && target.explicit_hydrogens == Some(params.explicit_hydrogens)
-        && !restore_label
+        && !restore_terminal
+        && !restore_non_terminal
     {
         return Ok(document.clone());
     }
@@ -52,7 +54,10 @@ pub(super) fn set_label(
         })?;
     target.element = element;
     target.explicit_hydrogens = Some(params.explicit_hydrogens);
-    if restore_label {
+    if restore_terminal {
+        target.show_terminal_carbon_labels = Some(true);
+    }
+    if restore_non_terminal {
         target.show_non_terminal_carbon_labels = Some(true);
     }
     let replacement = Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec())

@@ -28,6 +28,11 @@ with actual graph/H proof, mandatory labels and retained hits. Registry/wire/App
 do not establish native OS/default-style parity. False-setting/default-style controls
 remain missing; named-tool OS acceptance is unverified. No full inventory status is promoted.
 
+Separate terminal-node flags now have [data, renderer and explicit-editor evidence](verification-terminal-carbon-labels.md).
+Actual degree selects the active flag, mandatory isolated C/C2 labels remain, and both
+flags survive files/history or trigger explicit loss refusals. App/adapter evidence does
+not establish native OS/default-style parity. TD-022/023 chain workflows remain missing.
+
 Current native source-backed SMILES records have bounded Mac selected/all import,
 refusal/retry, click/key order editing, history and Unicode whole-file Save/reopen/reimport.
 Independent actual-file consumers pass. [Native receiving](verification-native-smiles-records.md)
