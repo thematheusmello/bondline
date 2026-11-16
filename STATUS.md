@@ -1,6 +1,72 @@
 # Status — 2026-11-16
 
-## Current source-backed SMILES record checkpoint
+## Current native source-backed SMILES records
+
+The full M0–M5 goal remains **active** on `feat/multiple-bonds`. Recoverable base is
+`01e79da`; the intentional native increment is ready for its local feature commit.
+No push/publication or hosted run occurred. Repository/workflow Actions remains disabled.
+The desktop/GPU license blocker is resolved; full M0, M1 and M2–M5 remain incomplete.
+
+**Verified on macOS:** File → Import SMILES records… supports the bounded One/All flow.
+Unsupported All preserves raw source/form, explicit One/default1 retry succeeds, and
+supported All produces7 atoms/3 bonds/3 fragments from three records. Single→Double
+click and fresh-position numeric order, Undo/Redo, Unicode complete-source Save As,
+raw reopen, explicit reimport and numeric1→Undo pass. Independent unchanged raw/RDKit
+consumers verify the actual41/62-byte outputs, unselected isotope, all opaque metadata,
+duplicate records and unchanged originals. Generated layout is not stored in SMILES.
+See [native receiving](docs/verification-native-smiles-records.md).
+
+**Verified below the native platform:** three central-control,12 registered-worker,
+six actual-App and one real-producer retirement tests pass. True runtime REDs exposed
+pending Save retry and no-op post-finish proof holes plus eager radio/input reordering;
+the fixes preserve the independent behavior assertions. New-test dependency/API/frame
+setup corrections are recorded separately. Default controls are20 Drawing/14 SDF/10 raw
+SMILES; registry remains32. Global completeness stays false. No full-source parse runs
+under the UI frame mutex. Existing two-worker, Save lease, context, close, actual-thread
+and frame-start barriers stay distinct. Generic geometry/create/extend/page/paste/
+cross-format edits remain refused for this backing.
+
+**Latest full gate is NOT green.** Initial26982 passes1291/0/1 before the sixth App
+regression/fix. Final-source65944 fails825/1 after fmt/workspace clippy pass, at the old
+MCP shutdown replacement_bind127.0.0.1:57773 AddrInUse/Os48. The test is byte-exact; no
+assertion/deadline/retry/socket-policy change. No failure-time owner capture exists,
+and exhausted20-context diagnostics were not restarted. Separate21784 passes466/0/1
+and remaining macOS vendor/clippy/layers/licenses/corpus stages. This is not a passing
+aggregate or a causal socket fix. Exact logs/hashes are in the receiving record.
+Runtime closures stay155/166/221 plus two assets; corpus eight files/five bundles keeps
+its explicit omissions. No dependency/lock/SDK/font/old fixture/oracle/golden/parser-fuzz
+change occurred.
+
+**Native limits:** Fit78.79% refuses the edited multiple-bond scene; F5Actual100% recovers.
+AX string SetValue and a visible-handle pan drag made no visible change. Existing-Double
+click alignment is unavailable; fresh-position numeric1 works. Geometry/ordinal typing,
+native lifecycle races, measured DPI/2×, wider chemistry/layout, exact reference screens
+and new Windows/Linux interaction remain unverified or missing. The picker still uses
+historical raw-preview wording. Do not count those as completed workflows.
+
+The only Bondline preview is PID34839 at the existing
+`target/smiles-ring-native/Bondline.app`, ID `org.bondline.neutral-simple-ring-review`.
+Executable21605552 bytes, SHA256
+`bd40e72eb760cd61979d289139bdd0d474304c2a7fcdc7efd639a607c8403332`.
+It is Saved on `all-edited-λ.smiles`,7/3/3 at100%, Single tool; no control port requested.
+Old previews stay closed, unrelated apps/tabs were untouched. The previous saved native
+CDXML was inspected before normal quit; no unsaved work was discarded. All build/test/
+oracle jobs listed above are terminal, including54599/65944/21784; do not poll old handles.
+All agent tasks have returned. Root owns continuation.
+
+**Next executable work:** correct the raw-only picker hint with existing format/UI checks.
+Preserve this scoped native/source safety evidence. Investigate the MCP failure only with
+a genuinely new source/OS-lifetime hypothesis and bounded decisive evidence; never change
+assertions, add retries/reuse flags or rerun exhausted contexts to hide it. Continue M2
+atom labels, selection, rings/chains and styles from the source-cited parity checklist,
+starting with independent behavioral/history/consumer tests before a new named command
+and actual native input. Wider record creation/reordering/metadata, chemistry, publishing
+and M5 remain required; do not restart converters or redefine the full goal.
+
+The sections below retain historical checkpoints; their process and next-task statements
+are superseded by the current state above.
+
+## Previous source-backed SMILES record checkpoint
 
 The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; notation feature
 `78f7d8d` and retained-projection feature `162f79d` are separate local commits. Command

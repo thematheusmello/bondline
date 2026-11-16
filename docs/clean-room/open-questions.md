@@ -516,7 +516,16 @@ for that declared subset, not a complete26.1 native file-browser or record-autho
 Public documentation here does not establish exact record selection, insertion, naming,
 styles or saved-layout behavior. The new policies are original Bondline choices.
 
-Native record controls/navigation and source-bound order workers remain required. The
-existing input path executes under the frame mutex; do not enable it for full-source
-reparsing without registered work/retirement, context and close guards. Wider chemistry,
-stereo/charged/isotopic drawing, larger layouts and cross-format loss policies remain open.
+The later [native record evidence](../verification-native-smiles-records.md) establishes
+bounded Mac selected/all import, registered source-bound order/history and whole-file
+Save/reopen/reimport. It preserves complete source and keeps expensive work off the frame
+mutex. Exact reference screens/defaults, wider chemistry, stereo/charged/isotopic drawing,
+record/metadata editing, larger layouts and cross-format loss policies remain open.
+
+The edited native record scene still refuses Fit78.79%; Actual100% restores it. AX string
+SetValue and one visible-handle pan drag make no visible change; their cause is unknown.
+Existing-Double click alignment remains unavailable; fresh native position plus numeric
+order works. Native geometry/ordinal typing, race/cancel/poison, measured DPI/2× and other
+platforms remain unverified. The picker hint's historical raw-preview wording needs to
+describe explicit import correctly. The latest unchanged MCP replacement_bind failure
+has no failure-time owner capture; passing prior/remaining stages does not explain it.

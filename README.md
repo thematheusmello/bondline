@@ -33,14 +33,13 @@ are still being built.
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
-**Current validation:** the full local pipeline passes 1270 tests, with 0 failures and 1
-ignored. Source-backed SMILES record editing passes actual CLI/MCP/loopback, independent
-file checks and CPU/GPU capture; see the [record evidence](docs/verification-smiles-record-authoring.md).
-The separate native macOS paste/refusal/retry/history/edit/Unicode Save/reopen checkpoint
-is in the [paste receiving record](docs/verification-native-smiles-paste.md).
-The earlier MCP shutdown replacement-bind failure (`AddrInUse`) remains unexplained;
-the later pass does not establish a fix. Native2×/DPI behavior remains unverified; see the
-[density receiving record](docs/verification-native-drawing-density.md).
+**Current validation:** bounded native macOS selected/all-record SMILES import, bond editing,
+history and Unicode whole-file Save/reopen pass, with independent checks of the actual files.
+See [native record evidence](docs/verification-native-smiles-records.md) and the separate
+[paste checkpoint](docs/verification-native-smiles-paste.md). The latest full local gate
+stops at the unchanged MCP listener-release `AddrInUse` failure. The new tests and separately
+run remaining stages pass; this is not a passing aggregate. Native2×/DPI, Fit and complete
+pan behavior remain unverified or limited; see [density evidence](docs/verification-native-drawing-density.md).
 
 <p align="center">
   <img src="docs/media/workspace-native-view.jpg" alt="The actual Bondline macOS window at150% with numeric zoom, page-position controls, three bond tools and the live document inspector" width="100%">
@@ -64,12 +63,12 @@ the later pass does not establish a fix. Native2×/DPI behavior remains unverifi
 | MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |
 | CDX files | Guarded native Open/Save/Save As verified on macOS. Canonical 28-byte implicit/explicit Document plus FileEnd passes independent tests and ASan; an original implicit-envelope file also passes bounded Mac Open/Unicode Save As/reopen with exact source retention. Its historical full local checkpoint passed1172/0/1. Limited projection; editing and faithful preview remain unavailable. |
 | SDF files | Whole mixed-version collection Open/Save/Save As/reopen verified on macOS. Inspect duplicate, empty and space-only fields; edit an existing occurrence with explicit Apply and Undo/Redo. Record removal has confirmation, draft decisions, complete history and exact Save/reopen tests; at least one record must remain. A bounded native Mac Keep/Confirm→Undo/Redo→Unicode Save/reopen workflow passes. Default Fit can still refuse its readability guard. |
-| SMILES records | Whole accepted `.smi`/`.smiles` source files and an original read-only ordinal inspector. Inspect exact notation/counts/ranges without disclosing opaque data. Bounded Mac ordinal typing, Inspect/Previous, read-only typing refusal and Unicode Save As/reopen preserve all source bytes. App tests also cover selection/copy and worker retirement; native OS clipboard copy remains unverified. Native chemical preview/editing is unavailable; the headless record editor below is separate. |
-| SMILES file conversion | File → Convert SMILES file… offers Carbon chains, Acyclic neutral structures, Neutral ring structures and Neutral components. The fourth profile lays out supported trees/rings together, up to 64 total neutral H/C/N/O/F/Cl/Br/I atoms. Independent checks, its historical1188/0/1 checkpoint and bounded Mac conversion/refusal/retry, explicit Open/edit/history/Unicode Save/reopen pass. Native authoring worked at100%; the edited scene refuses Fit78.79%, and full overview/native pan remain unverified. Earlier profiles retain their own Mac evidence. Native source-qualified record import and automatic clipboard conversion remain unavailable; headless record authoring and explicit Drawing paste are separate. |
+| SMILES records | Whole accepted `.smi`/`.smiles` source files and an original read-only ordinal inspector. Inspect exact notation/counts/ranges without disclosing opaque data. File → Import SMILES records… explicitly creates a supported selected/all-record drawing, described below. Raw Open alone does not create a drawing. Native OS clipboard copy from the inspector remains unverified. |
+| SMILES file conversion | File → Convert SMILES file… offers Carbon chains, Acyclic neutral structures, Neutral ring structures and Neutral components. The fourth profile lays out supported trees/rings together, up to 64 total neutral H/C/N/O/F/Cl/Br/I atoms. Independent checks, its historical1188/0/1 checkpoint and bounded Mac conversion/refusal/retry, explicit Open/edit/history/Unicode Save/reopen pass. Native authoring worked at100%; the edited scene refuses Fit78.79%, and full overview/native pan remain unverified. Earlier profiles retain their own Mac evidence. Automatic clipboard conversion remains unavailable; retained-record editing and explicit Drawing paste are separate operations. |
 | File protection | Explicit overwrite, unsaved-change decisions, guarded retries and close-Save receipts. Rapid Undo→Save preserves the undone source; independently checked in the actual Mac app and saved file. |
 | Rendering | Shared CPU/GPU neutral-element scenes, centered multiple bonds, literal H, source-preserving derived MOL/SDF display H, component-aware hover and PNG captures. Drawing now generates fresh physical glyphs at exact DPI/device phase; renderer/App tests cover2× and fractional origins. Actual native2×/DPI remains unverified, and readability guards still apply. The centered style is original; broader native label workflows and reference style parity remain unverified. |
 | Editable SMILES paste | Edit → Paste Special → SMILES… opens a bounded text/geometry form using the OS clipboard. Supported neutral structures, including benzene, append as one undoable edit through `structure.paste_smiles`. Mac refusal/retry/history/bond edit/Unicode Save/reopen and independent saved-file checks pass. Automatic clipboard capture, wider chemistry and exact reference-dialog parity remain unfinished. |
-| Source-backed SMILES editing | CLI/MCP/loopback can import one explicit record or all records, edit supported carbon bond orders, Undo/Redo and save the complete file while preserving opaque metadata and unselected records. Independent file checks and CPU/GPU captures pass. The aggregate selection is bounded to 64 atoms/128 bonds; native record controls and broader chemistry remain unfinished. |
+| Source-backed SMILES editing | File → Import SMILES records… and the CLI/MCP/loopback share explicit selected/all import and supported carbon bond-order edits. Bounded Mac refusal/retry, click/hotkey editing, Undo/Redo, Unicode Save As, raw reopen and explicit reimport pass; actual saved files retain opaque metadata and unselected records. Independent file checks and CPU/GPU captures pass. Selection is bounded to64 atoms/128 bonds. Geometry/record membership stay fixed; wider chemistry, native races and other platforms remain unfinished. |
 | Automation | 32 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all
@@ -153,7 +152,17 @@ For a SMILES file, enter **Record number** and choose **Inspect record**. **Prev
 and **Next record** explicitly inspect a different ordinal. Select the read-only notation
 and copy it normally; **Close record** hides it. Saving preserves the complete source,
 including other records and opaque application data. [Verification and native limits](docs/verification-smiles-record-integration.md)
-separate App tests from the observed native controls; no chemical preview is implied.
+separate App tests from the observed inspector controls; raw Open alone implies no drawing.
+
+To edit supported records, choose **File → Import SMILES records…**, select **One record**
+with its ordinal or **All records**, and confirm the explicit geometry. The complete source
+file stays attached, including unselected records and opaque data. Use **Actual size (F5)**
+if Fit refuses a multiple-bond scene. Existing-bond keys1/2/3 and Single→Double clicks have
+bounded Mac evidence; clicking an existing Double still reports unavailable alignment.
+Undo/Redo and Save As operate on complete source. Reopening returns to raw-file mode;
+explicitly import again to draw it. Generated coordinates are not stored in SMILES.
+The [native record evidence](docs/verification-native-smiles-records.md) records bounds,
+actual files and remaining native pan/DPI/race/reference-screen limitations.
 
 To convert a supported structure, choose **File → Convert SMILES file…**. **Carbon chains**
 retains the original1–12 neutral-carbon Single-path policy. **Acyclic neutral structures**
@@ -222,7 +231,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | CDX | Guarded shared/native Mac Open/Save and exact source retention. Additive canonical FileEnd envelopes pass independent syntax/IO/engine/CLI/MCP/socket and ASan checks; the original external implicit source passes bounded Mac Open/Unicode Save As/reopen. The [full local gate passes1172/0/1](docs/verification-cdx-file-end-integration.md); an earlier intermittent MCP failure remains unexplained. | Broader typed metadata/Text/Double/style mapping, faithful preview, editing/encoder and foreign/general corpus; all imports remain incomplete |
 | MOL / SDF | MOL V2000/V3000 and mixed-version SDF native Mac files, existing-field editing, whole-record removal/Undo/Redo and bounded native SDF Actual/pan; independent byte/record/data and current-view image checks | Native wheel/DPI/edit-preview acceptance, record creation/reordering, field-header editing, broader metadata/layout support and interactive Windows/Linux |
 | RXN | Source-preserving legacy container library with ordered roles and raw V2000/V3000 molecules; independent consumers | Reaction model, application/native files, V3000 reaction wrapper and broader extensions |
-| SMILES | Complete accepted source-file Open/Save, readonly inspector and explicit-H fragment export. Carbon-path/acyclic/simple-ring conversion retains its bounded Mac evidence. The component profile passes independent IO/command/wire/App checks, full local1188/0/1 and bounded Mac conversion/Open/edit/history/Unicode persistence at100%; edited Fit78.79% refuses, full overview/native pan remain unverified | General source-qualified drawing import with record/opaque-source/history/Save authority, broader packing and ring/chemistry support, native fragment export and clipboard workflows |
+| SMILES | Complete accepted source-file Open/Save and readonly inspector; explicit selected/all retained Drawing import, supported carbon order/H edits, whole-source history/Save and bounded native Mac reopen/reimport. Independent actual-file consumers preserve opaque/unselected bytes. Explicit-H fragment export and four create-only layout converters remain separate | Broader chemistry/packing, record insertion/reorder/metadata editing, saved authoring geometry, native fragment export, automatic clipboard workflows and exact reference screens. Native Fit/pan/DPI/races and other platforms remain limited or unverified |
 | InChI | Planned | Reference-tool comparison and import/export |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
 | Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |

@@ -2,11 +2,13 @@
 
 mod new_document;
 mod smiles_conversion;
+mod smiles_import;
 mod smiles_paste;
 #[cfg(test)]
 use new_document::NewChoice;
 use new_document::NewWorkflow;
 use smiles_conversion::ConversionWorkflow;
+use smiles_import::ImportWorkflow;
 use smiles_paste::PasteWorkflow;
 
 #[cfg(test)]
@@ -82,6 +84,7 @@ pub(crate) struct FileWorkflow {
     new_document: NewWorkflow,
     conversion: ConversionWorkflow,
     paste: PasteWorkflow,
+    import: ImportWorkflow,
 }
 
 impl FileWorkflow {
@@ -95,19 +98,21 @@ impl FileWorkflow {
             new_document: NewWorkflow::default(),
             conversion: ConversionWorkflow::default(),
             paste: PasteWorkflow::default(),
+            import: ImportWorkflow::default(),
         }
     }
 
     pub(crate) fn blocks_authoring(&self, state: &CommandResult) -> bool {
         self.conversion.present()
             || self.paste.present()
+            || self.import.present()
             || self.new_document.pending()
             || self.chooser.is_open()
             || crate::pending_ui_blocks_authoring(state)
     }
 
     pub(crate) fn is_busy(&self) -> bool {
-        self.job.is_some() || self.conversion.busy() || self.paste.busy()
+        self.job.is_some() || self.conversion.busy() || self.paste.busy() || self.import.busy()
     }
 
     fn sync_close(&mut self, state: &CommandResult) {
@@ -163,9 +168,19 @@ impl FileWorkflow {
         ui: &mut egui::Ui,
         engine: &Engine,
         events: &[egui::Event],
+        order_busy: bool,
     ) -> Option<(usize, &'static str)> {
         self.sync_close(&engine.state());
-        crate::control_menu_action(ui, &engine.controls(), "File", events)
+        let mut controls = engine.controls();
+        if order_busy {
+            for control in &mut controls {
+                if control.menu == "File" && !matches!(control.id, "file.close" | "file.cancel") {
+                    control.enabled = false;
+                    control.disabled_reason = Some("A bond-order change is still pending.");
+                }
+            }
+        }
+        crate::control_menu_action(ui, &controls, "File", events)
     }
 
     fn request_file(
@@ -214,6 +229,7 @@ impl FileWorkflow {
             UiFilePlan::NewDocument => self.accepted_new(request.id, engine, error),
             UiFilePlan::SmilesConversion => self.open_conversion(request.id, engine, error),
             UiFilePlan::SmilesPaste => self.open_paste(request.id, engine, error),
+            UiFilePlan::SmilesImport => self.open_import(request.id, engine, error),
             UiFilePlan::OpenPicker => self.begin(FileMode::Open, &state),
             UiFilePlan::SavePicker => self.begin(FileMode::Save, &state),
             UiFilePlan::SaveExisting { format, params } => {
@@ -291,6 +307,7 @@ impl FileWorkflow {
     pub(crate) fn request_close(&mut self, engine: &mut Engine, error: &mut Option<String>) {
         self.conversion_close(engine, error);
         self.paste_close();
+        self.import_close();
         self.cancel_new_for_close(engine, error);
         self.close_command(engine, CloseAction::Request, error);
     }
@@ -346,6 +363,7 @@ impl FileWorkflow {
     ) -> bool {
         !pending_file_action
             && !self.paste.present()
+            && !self.import.present()
             && !self.new_document.pending()
             && !self.is_busy()
             && !active_work
@@ -375,7 +393,7 @@ impl FileWorkflow {
         active_work: bool,
     ) -> Option<FileIntentAction> {
         self.sync_new(engine);
-        if self.paste.present() {
+        if self.paste.present() || self.import.present() {
             return None;
         }
         if self.conversion.present() && engine.state().close == CloseState::Open {
@@ -389,7 +407,7 @@ impl FileWorkflow {
         if engine.state().revision != revision {
             context.request_discard("New document was created");
         }
-        if self.paste.present() {
+        if self.paste.present() || self.import.present() {
             context.request_repaint();
             return None;
         }
@@ -710,6 +728,7 @@ impl Drop for FileWorkflow {
         }
         self.conversion.cancel();
         self.paste.cancel();
+        self.import.cancel();
     }
 }
 

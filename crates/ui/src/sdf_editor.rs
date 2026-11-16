@@ -365,6 +365,9 @@ impl SdfEditor {
                 UiFileAction::New => Some(Target::Control("file.new")),
                 UiFileAction::ConvertSmiles => Some(Target::Control("file.convert_smiles")),
                 UiFileAction::PasteSmiles => Some(Target::Control("edit.paste_smiles")),
+                UiFileAction::ImportSmilesRecords => {
+                    Some(Target::Control("file.import_smiles_records"))
+                }
                 UiFileAction::Open => Some(Target::Control("file.open")),
                 UiFileAction::Save => Some(Target::Control("file.save")),
                 UiFileAction::SaveAs => Some(Target::Control("file.save_as")),
@@ -950,6 +953,7 @@ pub(super) fn resume_command(target: Target, engine: &Engine) -> Result<Option<C
                     UiFileAction::New => "file.new",
                     UiFileAction::ConvertSmiles => "file.convert_smiles",
                     UiFileAction::PasteSmiles => "edit.paste_smiles",
+                    UiFileAction::ImportSmilesRecords => "file.import_smiles_records",
                     UiFileAction::Open => "file.open",
                     UiFileAction::Save => "file.save",
                     UiFileAction::SaveAs => "file.save_as",

@@ -1390,6 +1390,8 @@ mod new_document;
 #[path = "native_conversion_tests.rs"]
 mod native_conversion;
 
+#[path = "native_smiles_records_tests.rs"]
+mod native_smiles_records;
 #[path = "smiles_paste_tests.rs"]
 mod smiles_paste;
 

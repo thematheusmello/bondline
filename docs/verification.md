@@ -1,5 +1,21 @@
 # Verification log
 
+## Native retained SMILES records, 2026-11-16
+
+[Native/control/worker/App evidence](verification-native-smiles-records.md) records22
+independent cases, real Accepted-retry and input-order REDs/fixes, and bounded Mac
+selected/all import, refusal/retry, click/key edits, history and Unicode whole-source
+Save/reopen/reimport. Unchanged external consumers verify the actual41/62-byte files,
+unprojected isotope, opaque data and original inputs. Fit78.79% still refuses; Actual100%
+recovers; pan/race/DPI/other-platform limits stay explicit.
+
+Initial gate26982 passes1291/0/1 before the added radio-order regression/fix. Final-source
+gate65944 fails825/1 at unchanged MCP replacement_bind127.0.0.1:57773 AddrInUse after
+fmt/workspace clippy pass. Separate21784 passes466/0/1 plus remaining native/vendor/
+layers/licenses/corpus stages; this is not a passing aggregate or a causal socket fix.
+No assertion/deadline/retry/socket-policy, old consumer/fixture/font/golden/dependency
+or parser-fuzz change. Actions stays disabled; full M0–M5 remains open.
+
 ## Complete-source SMILES record authoring, 2026-11-16
 
 [Format/retained-model/command/transport evidence](verification-smiles-record-authoring.md)

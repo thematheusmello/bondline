@@ -10,6 +10,16 @@ retained-byte accounting deduplicates this backing with raw SMILES owners. See
 [record contract](research/smiles-record-authoring-contract.md) and
 [receiving evidence](verification-smiles-record-authoring.md).
 
+Native record import and existing-order work use the same typed registry, with one
+source-qualified context and the existing two-worker budget. Reserve before consuming
+Accepted import intent; compute off-lock; validate and seal the post-finish proof under
+one Engine lock. The Drawing UI routes only this backing's order edits through its
+pending/real-thread owner. A pending retry form, view/tool/file/close/source changes and
+opaque association ABA invalidate old work. New document mutations wait for retirement;
+View and Close can cancel it. Frame-start fences protect the newly exposed canvas.
+Validated projection display never changes global source completeness. See
+[native record receiving](verification-native-smiles-records.md) for exact execution scope.
+
 The model-only `bondline-chem` L1 now implements the bounded neutral authoring policy:
 array-aligned source semantics, exact fixed H, sp²-cycle validation and deterministic
 Kekulé matching. The additive IO adapter retains original SMILES source/IR; legacy

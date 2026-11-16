@@ -4,10 +4,16 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
-The source-backed SMILES record engine now passes local1270/0/1: explicit selected/all
-import, supported order edits, complete-source Save/history, actual CLI/MCP/socket and
-CPU/GPU evidence. Native record selection, navigation and registered order-edit work are
-the next gate; see docs/verification-smiles-record-authoring.md. Full M0–M5 remains open.
+Native source-backed SMILES records now have bounded Mac selected/all import, refusal/
+retry, registered click/key order editing, history and Unicode whole-file Save/reopen/
+reimport, with independent actual-file consumers. See
+[native receiving](docs/verification-native-smiles-records.md) and the earlier
+headless1270/0/1 record checkpoint. The latest full gate fails at the unchanged MCP
+listener-release AddrInUse check; separately passing remaining stages do not make it
+green. Fit78.79% still refuses the edited multiple-bond scene, Actual100% recovers, pan
+attempts did not change the view, and native races/DPI/other platforms remain unverified.
+Full M0–M5 remains open. Continue M2 atom/selection/ring/style authoring after preserving
+these complete-source/worker boundaries; broader record and chemistry parity remains.
 
 The earlier native editable SMILES checkpoint passes the full local gate1245/0/1, with bounded
 Mac OS clipboard/refusal/retry/history/edit/Unicode Save/reopen and independent file checks.
@@ -155,7 +161,8 @@ the explicit native Paste Special form now adds actual OS clipboard/refusal/retr
 one Undo/Redo, native bond edit and Unicode Save/reopen. The full gate passes1245/0/1;
 see docs/verification-native-smiles-paste.md. The later bounded record engine now adds
 selected/all retained Drawing import, synchronized order edits and whole-file Save through
-all delivered headless adapters. Native record import/navigation/edit workers, automatic
+all delivered headless adapters. The later [native record gate](docs/verification-native-smiles-records.md)
+adds bounded Mac explicit import/order/history/whole-file Save/reopen. Wider navigation, automatic
 clipboard capture and broader chemistry/import remain. Finish native record acceptance
 from the same plan, then the missing M2 atom/selection/ring/style workflows below.
 

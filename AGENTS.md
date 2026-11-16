@@ -34,12 +34,17 @@ capture and exact reference-dialog parity remain open. Earlier density pipeline7
 `AddrInUse` remains unexplained, not causally fixed by a later pass. Native2×/DPI remains
 unverified; preserve docs/verification-native-drawing-density.md evidence and guards.
 
-The newer source-backed record engine has 32 commands and independent selected/all,
+The newer source-backed record engine has32 commands and independent selected/all,
 whole-file edit/Save/history, actual CLI/MCP/socket and CPU/GPU evidence in
-docs/verification-smiles-record-authoring.md. The full local gate passes1270/0/1.
-Native record import, navigation and source-bound order work are the next integration
-gate; existing native input stays blocked. Do not call Engine.execute for the expensive
-SMILES record edit while holding the UI frame mutex, or substitute another converter.
+docs/verification-smiles-record-authoring.md (its earlier full gate1270/0/1).
+docs/verification-native-smiles-records.md adds bounded Mac import/refusal/retry,
+click/key order/history/Unicode whole-source Save/reopen/reimport and22 control/worker/
+App/real-producer tests. The final full gate currently FAILS825/1 at the unchanged MCP
+replacement bind;466/0/1 remaining checks pass separately. Do not call that aggregate
+green or restart the exhausted diagnostic20 contexts. Fit78.79% refuses, Actual100%
+recovers, two pan attempts made no visible change; native races/DPI/other platforms remain
+unverified. Do not call Engine.execute for expensive SMILES record edits under the UI
+frame mutex, bypass complete-source guards or substitute another converter.
 
 ## Research, provenance and implementation
 
@@ -97,7 +102,8 @@ Use its validated projection/record-edit methods; generic model_mut drift must r
 display and source Save. Only H/order replacement is synchronized. Writer DFS token order
 must map through emitted atom IDs, never by reparsed ordinal or graph isomorphism. Call
 the combined drawing/raw-SMILES accountant so shared source/index payloads count once.
-Native record-input/navigation remains a separate worker/UI gate; do not bypass its guard.
+Native record input uses its typed registered workers and operation-specific validated
+projection; never replace this with a global completeness override.
 Unchanged-source export is guarded; never write stale XML after a model edit. StoredDocument::
 to_cdxml borrows unchanged source or encodes new native elemental data. Do not bypass it by
 regenerating stored.model(): that projection omits unknown data. A generated profile is fully
@@ -121,6 +127,16 @@ skipped result stamp captured atomically with commit. Neither grants a Save/clos
 The UI keeps actual thread/form retirement barriers, frame-start modal fencing, copyable
 stale drafts and truthful historical success. Generic file binding must continue to refuse
 paste work; no new pool, Save lease or automatic rebase/retry after consumption errors.
+
+Native retained-record import/order uses `UiSmilesRecordsContext` and the existing
+two-worker executor after releasing the frame lock. Reserve before consuming exact
+Accepted import intent; check source/view/tool/close/file and opaque association identity
+with finish and capture the private result proof under the same mutex. A same-ID/epoch
+Running Save returned to Accepted retry invalidates unstarted/prepared order and completed
+no-op proof. Keep actual JoinHandle retirement and frame-start modal/order-busy fences;
+new File/history/page/tool/canvas mutations wait, View/Close can cancel. Radios replay
+typed selection at their activation index, never eager `radio_value` before Import replay.
+Generic create/extend/page/paste/cross-format operations remain refused for this backing.
 
 Current map: model (L0, pages, Point2 and validated elemental atom/bond/fragment graphs);
 cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attribute
@@ -533,7 +549,8 @@ notations/data or a recordsVec. Graph/SDF edits and cross-format Save refuse thi
 document.new explicitly starts a distinct source-free session. The .smi/.smiles chooser,
 original inspector and Unicode Save/reopen have bounded native evidence. No chemical
 preview/editing follows from raw Open itself. The separate record engine is verified
-headlessly; native import/edit controls and a metadata editor remain missing. See
+headlessly; its later bounded native import/order workflow is recorded separately in
+verification-native-smiles-records.md. Metadata editing remains missing. See
 verification-smiles-file-app.md and verification-smiles-file-ui.md. Run the separate
 smiles_file_parse fuzz target locally as in fuzz/README.md; Actions stays disabled.
 
@@ -874,8 +891,9 @@ evidence; native races/other platforms remain unverified. Corpus8 files/5 bundle
 154/165/220 and2 assets remain. Parser/normalizer/renderer bodies, old consumers/fixtures/
 fonts/golden/corpus pins, locks and dependencies are unchanged; no new parser-fuzz run.
 
-The bounded headless source-qualified record import/edit/Save gate is delivered; follow
-current STATUS.md for native selection/navigation and registered order workers next.
+The bounded headless and later Mac source-qualified record import/edit/Save gates are
+delivered; follow current STATUS.md for remaining native view/race/reference gaps and
+the next M2 atom/selection/ring/style work.
 Keep its complete source, map, history and Save authority guards. Broader packing/rings/chemistry/clipboard and SDF creation/
 reordering remain required. Wider CDX typed metadata/Text/Double/
 style mapping and source-faithful editing remain backlog. No corpus admission occurred.

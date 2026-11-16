@@ -14,6 +14,7 @@ mod preview;
 mod sdf_draft_text;
 mod sdf_editor;
 mod sdf_fields;
+mod smiles_order;
 mod smiles_records;
 mod view_controls;
 #[cfg(test)]
@@ -113,6 +114,7 @@ pub struct DrawingState {
     key_hotspot: Option<BondHotspot>,
     navigation_position: Option<egui::Pos2>,
     presented_generation: Option<u64>,
+    order: smiles_order::OrderWorkflow,
 }
 
 impl DrawingState {
@@ -326,7 +328,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         }
         if engine
             .stored_document()
-            .is_ok_and(|stored| stored.is_fully_mapped())
+            .is_ok_and(|stored| stored.is_fully_mapped() || stored.has_smiles_projection())
         {
             let (atoms, bonds, fragments) = document
                 .pages()
@@ -346,6 +348,15 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             ui.label(format!("{atoms} atoms"));
             ui.label(format!("{bonds} bonds"));
             ui.label(format!("{fragments} fragments"));
+            if let Some(summary) = engine.content().smiles_summary()
+                && let Some(projected) = summary.projected_records
+            {
+                ui.label(format!(
+                    "{} of {} SMILES records",
+                    projected.len(),
+                    summary.record_count
+                ));
+            }
         } else {
             ui.label("Original source preserved");
         }
@@ -362,7 +373,13 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
                 .color(ACCENT)
                 .strong(),
         );
-        ui.label(match engine.bond_tool().order {
+        if engine
+            .stored_document()
+            .is_ok_and(|stored| stored.has_smiles_projection())
+        {
+            ui.label("Hover an existing carbon bond and press 1, 2 or 3 to change its order. Geometry and record membership remain fixed.");
+        } else {
+            ui.label(match engine.bond_tool().order {
             BondDrawOrder::Single => {
                 "Drag paper for C-C; extend terminal CH3 to CH2 / CH2 to CH / CH to C; Esc cancels"
             }
@@ -370,7 +387,8 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
                 "Drag paper for C=C; extend terminal CH3 to CH / CH2 to C; Esc cancels"
             }
             BondDrawOrder::Triple => "Drag paper for C≡C; extend terminal CH3 to C; Esc cancels",
-        });
+            });
+        }
     } else if let Some(collection) = engine.content().collection() {
         ui.label(format!("{} records", collection.record_count));
         ui.weak("Read-only chemical preview");
@@ -507,12 +525,18 @@ fn pending_ui_blocks_authoring(state: &bondline_commands::CommandResult) -> bool
             .is_some_and(|request| request.phase != bondline_commands::UiFilePhase::Running)
 }
 
+fn allowed_during_order(command: &Command) -> bool {
+    matches!(command, Command::UiView(_) | Command::Close(_))
+        || matches!(command, Command::UiFile(params) if params.action == bondline_commands::UiFileAction::Cancel)
+}
+
 struct ShortcutRouting<'a> {
     actions: &'a [(usize, view_controls::Action)],
     fields: Option<&'a mut SdfFieldsWorkflow>,
     files: Option<&'a mut FileWorkflow>,
     canvas: Option<(egui::Rect, egui::LayerId)>,
     modal_at_start: bool,
+    order_busy_at_start: bool,
 }
 
 fn replay_edit_shortcuts(
@@ -530,6 +554,7 @@ fn replay_edit_shortcuts(
         mut files,
         canvas,
         modal_at_start,
+        order_busy_at_start,
     } = routing;
     let from_drawing = engine.content().drawing().is_ok();
     let blocked = modal_at_start
@@ -556,6 +581,7 @@ fn replay_edit_shortcuts(
         }
         if let Some(files) = files.as_deref_mut() {
             files.replay_paste(index, event, engine, error, context);
+            files.replay_import(index, event, engine, error, context);
             files.replay_conversion(index, event, engine, error, context);
             files.replay_new(index, event, engine, error, context);
             files.adopt_new(engine, error);
@@ -618,6 +644,10 @@ fn replay_edit_shortcuts(
                 view_controls::wheel(engine, size, [width, height], *unit, *delta)
             });
         if focused && let Some(command) = command {
+            if (order_busy_at_start || drawing.order.is_busy()) && !allowed_during_order(&command) {
+                *error = Some("A bond-order change is still pending. Wait or Cancel bond order before changing the document.".into());
+                continue;
+            }
             let explicit = actions.iter().find_map(|(at, action)| {
                 if *at == index
                     && let view_controls::Action::Control(id) = action
@@ -634,6 +664,9 @@ fn replay_edit_shortcuts(
             }
             let view_command = matches!(&command, Command::UiView(_));
             let previous_view = engine.view();
+            if matches!(&command, Command::Close(_)) {
+                drawing.order.cancel_for_context();
+            }
             *error = engine.execute(command).err().map(|error| error.to_string());
             if let Some(files) = files.as_deref_mut() {
                 files.adopt_new(engine, error);
@@ -738,6 +771,7 @@ struct WorkspaceWorkflows<'a> {
     fields: &'a mut SdfFieldsWorkflow,
     smiles: &'a mut SmilesRecordsWorkflow,
     modal_at_start: bool,
+    order_busy_at_start: bool,
 }
 
 fn show_workspace_with_preview(
@@ -749,15 +783,17 @@ fn show_workspace_with_preview(
     active_work: bool,
     workflows: Option<WorkspaceWorkflows<'_>>,
 ) -> Option<FileIntentAction> {
-    let (mut preview, mut sdf_fields, mut smiles_records, modal_at_start) = match workflows {
-        Some(workflows) => (
-            Some(workflows.preview),
-            Some(workflows.fields),
-            Some(workflows.smiles),
-            workflows.modal_at_start,
-        ),
-        None => (None, None, None, false),
-    };
+    let (mut preview, mut sdf_fields, mut smiles_records, modal_at_start, order_busy_at_start) =
+        match workflows {
+            Some(workflows) => (
+                Some(workflows.preview),
+                Some(workflows.fields),
+                Some(workflows.smiles),
+                workflows.modal_at_start,
+                workflows.order_busy_at_start,
+            ),
+            None => (None, None, None, false, false),
+        };
     let discard_stale_canvas_input = engine.content().drawing().is_ok()
         && drawing
             .presented_generation
@@ -771,8 +807,11 @@ fn show_workspace_with_preview(
         fields.begin_ui();
     }
     let events = context.input(|input| input.events.clone());
-    let paste_modal_at_start =
-        modal_at_start || files.as_ref().is_some_and(|files| files.paste_present());
+    let paste_modal_at_start = modal_at_start
+        || files
+            .as_ref()
+            .is_some_and(|files| files.paste_present() || files.import_present());
+    let order_busy_at_start = order_busy_at_start || drawing.order.is_busy();
     let new_decision_at_start = files
         .as_ref()
         .is_some_and(|files| files.new_decision_open());
@@ -780,6 +819,7 @@ fn show_workspace_with_preview(
         files.begin_new_ui(context, &events);
         files.begin_conversion_ui(context, Some(engine), &events);
         files.begin_paste_ui(context, Some(engine), &events);
+        files.begin_import_ui(context, Some(engine), &events);
     }
     if [
         context.screen_rect().width(),
@@ -809,6 +849,7 @@ fn show_workspace_with_preview(
                 files: files.as_deref_mut(),
                 canvas: None,
                 modal_at_start: paste_modal_at_start,
+                order_busy_at_start,
             },
         );
         egui::CentralPanel::default().show(context, |ui| {
@@ -839,7 +880,7 @@ fn show_workspace_with_preview(
                 ui.separator();
                 let file = files
                     .as_deref_mut()
-                    .and_then(|files| files.menu(ui, engine, &events));
+                    .and_then(|files| files.menu(ui, engine, &events, order_busy_at_start));
                 let current = engine.state();
                 let blocked = paste_modal_at_start
                     || current.close != CloseState::Open
@@ -848,8 +889,14 @@ fn show_workspace_with_preview(
                         .is_some_and(|files| files.blocks_authoring(&current));
                 ui.add_enabled_ui(!blocked, |ui| {
                     let controls = engine.controls();
-                    let edit = control_menu_action(ui, &controls, "Edit", &events);
-                    let page = control_menu_action(ui, &controls, "Page", &events);
+                    let (edit, page) = ui
+                        .add_enabled_ui(!order_busy_at_start, |ui| {
+                            (
+                                control_menu_action(ui, &controls, "Edit", &events),
+                                control_menu_action(ui, &controls, "Page", &events),
+                            )
+                        })
+                        .inner;
                     let view = control_menu_action(ui, &controls, "View", &events);
                     selected = file.or(edit).or(page).or(view);
                 });
@@ -888,7 +935,7 @@ fn show_workspace_with_preview(
             ui.add_space(6.0);
             ui.label(egui::RichText::new("Tools").small().strong());
             ui.separator();
-            ui.add_enabled_ui(!blocked, |ui| {
+            ui.add_enabled_ui(!blocked && !order_busy_at_start, |ui| {
                 tool_actions = bond_tool_buttons(ui, &engine.controls(), &events);
             });
         });
@@ -930,6 +977,7 @@ fn show_workspace_with_preview(
                 if let Some(files) = files.as_deref_mut() {
                     files.job_status(ui);
                 }
+                drawing.order.show_status(ui);
             });
         });
     egui::SidePanel::right("document-properties")
@@ -957,7 +1005,9 @@ fn show_workspace_with_preview(
         .show(context, |ui| {
             let available = ui.available_rect_before_wrap();
             drawing.hover = None;
-            if let Some(summary) = engine.content().smiles_summary() {
+            if matches!(engine.content(), bondline_commands::StoredContent::SmilesFile(_))
+                && let Some(summary) = engine.content().smiles_summary()
+            {
                 drawing.gesture = None;
                 drawing.invalidate_hover();
                 ui.label(format!(
@@ -1084,6 +1134,7 @@ fn show_workspace_with_preview(
                             files: files.as_deref_mut(),
                             canvas: Some((rect, response.layer_id)),
                             modal_at_start: paste_modal_at_start,
+                            order_busy_at_start,
                         },
                     );
                     history_handled = true;
@@ -1127,7 +1178,7 @@ fn show_workspace_with_preview(
                     return;
                 }
             };
-            if !stored.is_fully_mapped() {
+            if !stored.is_fully_mapped() && !stored.has_smiles_projection() {
                 drawing.gesture = None;
                 drawing.invalidate_hover();
                 ui.colored_label(
@@ -1303,6 +1354,7 @@ fn show_workspace_with_preview(
                 }
                 if let Some(files) = files.as_deref_mut() {
                     files.replay_paste(index, event, engine, error, context);
+                    files.replay_import(index, event, engine, error, context);
                     files.replay_conversion(index, event, engine, error, context);
                     files.replay_new(index, event, engine, error, context);
                     files.adopt_new(engine, error);
@@ -1399,6 +1451,16 @@ fn show_workspace_with_preview(
                     continue;
                 }
                 let mut command = history_command.map(Ok);
+                if order_busy_at_start || drawing.order.is_busy() {
+                    match command.as_ref() {
+                        Some(Ok(command)) if allowed_during_order(command) => {}
+                        Some(_) => {
+                            *error = Some("A bond-order change is still pending. Wait or Cancel bond order before changing the document.".into());
+                            continue;
+                        }
+                        None => continue,
+                    }
+                }
                 if command
                     .as_ref()
                     .is_some_and(|command| !matches!(command, Ok(Command::UiView(_))))
@@ -1543,6 +1605,12 @@ fn show_workspace_with_preview(
                                 Ok(target) => target,
                                 Err(_) => continue,
                             };
+                            if engine.stored_document().is_ok_and(|stored| stored.has_smiles_projection())
+                                && !matches!(target, Some(bondline_render::HitTarget::Bond { .. }))
+                            {
+                                *error = Some("SMILES-backed drawings support existing carbon bond-order edits; creating or extending bonds is unavailable.".into());
+                                continue;
+                            }
                             if let Ok(begin) = viewport.document_position(local(*pos)) {
                                 let begin = if let Some(bondline_render::HitTarget::Atom {
                                     fragment_id,
@@ -1754,6 +1822,15 @@ fn show_workspace_with_preview(
                     {
                         continue;
                     }
+                    if engine.stored_document().is_ok_and(|stored| stored.has_smiles_projection())
+                        && let Ok(Command::BondSetOrder(params)) = &command
+                    {
+                        drawing.order.queue(engine, params.clone(), context, error);
+                        drawing.gesture = None;
+                        drawing.invalidate_hover();
+                        interaction_attempted = true;
+                        continue;
+                    }
                     let view_command = matches!(&command, Ok(Command::UiView(_)));
                     let previous_view = engine.view();
                     let key_hotspot = command
@@ -1761,6 +1838,9 @@ fn show_workspace_with_preview(
                         .ok()
                         .filter(|command| matches!(command, Command::BondSetOrder(_)))
                         .and(drawing.key_hotspot);
+                    if matches!(&command, Ok(Command::Close(_))) {
+                        drawing.order.cancel_for_context();
+                    }
                     *error = command
                         .and_then(|command| engine.execute(command))
                         .err()
@@ -1814,7 +1894,7 @@ fn show_workspace_with_preview(
                 if !input.pointer.primary_down() {
                     drawing.gesture = None;
                 }
-                if blocked || !input.focused || input.key_down(egui::Key::Escape) {
+                if blocked || order_busy_at_start || drawing.order.is_busy() || !input.focused || input.key_down(egui::Key::Escape) {
                     drawing.gesture = None;
                     drawing.hover_fresh = false;
                     drawing.key_hotspot = None;
@@ -1951,6 +2031,7 @@ fn show_workspace_with_preview(
                 files: files.as_deref_mut(),
                 canvas: None,
                 modal_at_start: paste_modal_at_start,
+                order_busy_at_start,
             },
         );
     }
@@ -1967,6 +2048,7 @@ fn show_workspace_with_preview(
                 engine,
                 error,
                 active_work
+                    || drawing.order.is_busy()
                     || preview.as_ref().is_some_and(|preview| preview.is_busy())
                     || sdf_fields.as_ref().is_some_and(|fields| fields.is_busy())
                     || smiles_records
@@ -2062,12 +2144,18 @@ impl BondlineApp {
             false
         };
         let mut action = None;
-        // A same-generation paste can retire and close its modal before raw input replays.
-        let paste_modal_at_start = self.files.paste_present();
+        // Retirement may close a form or finish an edit before this packet replays.
+        let paste_modal_at_start = self.files.paste_present() || self.files.import_present();
+        let order_busy_at_start = self.drawing.order.is_busy();
         match self.engine.lock() {
             Ok(mut engine) => {
                 self.files
                     .poll_paste(Some(&engine), context, &mut self.error);
+                self.files
+                    .poll_import(Some(&engine), context, &mut self.error);
+                self.drawing
+                    .order
+                    .poll(Some(&engine), context, &mut self.error);
                 self.files.poll(&mut engine, &mut self.error);
                 self.preview.sync(&engine, context);
                 self.sdf_fields.sync(&engine, context);
@@ -2077,26 +2165,31 @@ impl BondlineApp {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
                     if !self.sdf_fields.native_close(&engine, context) {
                         self.files.request_close(&mut engine, &mut self.error);
+                        self.drawing.order.cancel_for_context();
                     }
                 }
                 if smoke_close && !self.sdf_fields.native_close(&engine, context) {
                     self.files.request_close(&mut engine, &mut self.error);
+                    self.drawing.order.cancel_for_context();
                 }
+                let active_work = self.executor.has_active_work()
+                    || self.preview.is_busy()
+                    || self.sdf_fields.is_busy()
+                    || self.smiles_records.is_busy()
+                    || self.drawing.order.is_busy();
                 action = show_workspace_with_preview(
                     context,
                     &mut engine,
                     &mut self.error,
                     &mut self.drawing,
                     Some(&mut self.files),
-                    self.executor.has_active_work()
-                        || self.preview.is_busy()
-                        || self.sdf_fields.is_busy()
-                        || self.smiles_records.is_busy(),
+                    active_work,
                     Some(WorkspaceWorkflows {
                         preview: &mut self.preview,
                         fields: &mut self.sdf_fields,
                         smiles: &mut self.smiles_records,
                         modal_at_start: paste_modal_at_start,
+                        order_busy_at_start,
                     }),
                 );
                 self.preview.sync(&engine, context);
@@ -2108,7 +2201,8 @@ impl BondlineApp {
                     self.executor.has_active_work()
                         || self.preview.is_busy()
                         || self.sdf_fields.blocks_close()
-                        || self.smiles_records.is_busy(),
+                        || self.smiles_records.is_busy()
+                        || self.drawing.order.is_busy(),
                     action.is_some(),
                 ) {
                     context.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -2116,7 +2210,14 @@ impl BondlineApp {
             }
             Err(_) => {
                 self.files.deactivate_paste(context, &mut self.error);
+                self.files.deactivate_import(context, &mut self.error);
+                self.drawing.order.deactivate(context, &mut self.error);
                 self.files.begin_paste_ui(
+                    context,
+                    None,
+                    &context.input(|input| input.events.clone()),
+                );
+                self.files.begin_import_ui(
                     context,
                     None,
                     &context.input(|input| input.events.clone()),
@@ -2156,6 +2257,8 @@ impl BondlineApp {
         self.preview.start_pending(&self.executor, context);
         self.files.start_pending_conversion(&self.executor, context);
         self.files.start_pending_paste(&self.executor, context);
+        self.files.start_pending_import(&self.executor, context);
+        self.drawing.order.start_pending(&self.executor, context);
         self.sdf_fields.start_pending(&self.executor, context);
         self.smiles_records.start_pending(&self.executor, context);
     }

@@ -81,7 +81,7 @@ impl Engine {
                 alt: false,
             })
         };
-        let mut controls = Vec::with_capacity(19);
+        let mut controls = Vec::with_capacity(20);
         for (id, label, key, shift, action) in [
             (
                 "file.new",
@@ -143,6 +143,27 @@ impl Engine {
             }),
             enabled: file_reason.is_none(),
             disabled_reason: file_reason,
+            selected: None,
+        });
+        let import_reason = file_reason.or((!matches!(
+            self.content(),
+            crate::StoredContent::SmilesFile(_)
+        ))
+        .then_some("unsupported_content"));
+        controls.push(ControlInfo {
+            id: "file.import_smiles_records",
+            label: "Import SMILES records…",
+            menu: "File",
+            submenu: None,
+            shortcut: None,
+            command: Command::UiFile(UiFile {
+                expected_revision: state.revision,
+                action: UiFileAction::ImportSmilesRecords,
+                request_id: None,
+                close_epoch: None,
+            }),
+            enabled: import_reason.is_none(),
+            disabled_reason: import_reason,
             selected: None,
         });
         let close_reason = if state.ui_file.available {
@@ -220,6 +241,14 @@ impl Engine {
             disabled_reason: paste_reason,
             selected: None,
         });
+        let stored = self.stored_document().ok();
+        let page_reason = authoring_reason.or(stored
+            .is_some_and(|stored| {
+                stored
+                    .source_info()
+                    .is_some_and(|source| source.format == "smiles")
+            })
+            .then_some("unsupported_content"));
         if let Ok(document) = self.document()
             && let Some(page) = document.pages().first()
         {
@@ -250,20 +279,19 @@ impl Engine {
                         width_pt,
                         height_pt,
                     }),
-                    enabled: authoring_reason.is_none(),
-                    disabled_reason: authoring_reason,
+                    enabled: page_reason.is_none(),
+                    disabled_reason: page_reason,
                     selected: None,
                 });
             }
         }
-        let stored = self.stored_document().ok();
         if matches!(self.content(), crate::StoredContent::Sdf { .. })
             || stored.is_some_and(|stored| !stored.model().pages().is_empty())
         {
             let [width_px, height_px] = self.view_canvas_size.unwrap_or([1, 1]);
             let percent = self.view_percent();
             let source_reason = authoring_reason.or(stored
-                .is_some_and(|stored| !stored.is_fully_mapped())
+                .is_some_and(|stored| !stored.is_fully_mapped() && !stored.has_smiles_projection())
                 .then_some("unsupported_content"));
             for (id, label, key, action, selected, limit) in [
                 (
@@ -331,8 +359,9 @@ impl Engine {
             }
         }
         if let Ok(stored) = self.stored_document() {
-            let reason =
-                authoring_reason.or((!stored.is_fully_mapped()).then_some("unsupported_content"));
+            let reason = authoring_reason.or((!stored.is_fully_mapped()
+                && !stored.has_smiles_projection())
+            .then_some("unsupported_content"));
             for (id, label, order) in [
                 ("tool.bond.single", "Single bond", BondDrawOrder::Single),
                 ("tool.bond.double", "Double bond", BondDrawOrder::Double),

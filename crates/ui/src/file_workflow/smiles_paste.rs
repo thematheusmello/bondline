@@ -169,7 +169,7 @@ fn reset_fields(context: &egui::Context, key: u64) {
     }
 }
 
-fn field(
+pub(super) fn field(
     ui: &mut egui::Ui,
     id: egui::Id,
     label: &str,

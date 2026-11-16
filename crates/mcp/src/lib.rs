@@ -4,7 +4,8 @@ pub mod control;
 mod work;
 pub use work::{
     CommandExecutor, UiCaptureWork, UiFileWork, UiSdfRemoveContext, UiSdfWork,
-    UiSmilesConversionWork, UiSmilesPasteContext, UiSmilesPasteWork, UiSmilesWork,
+    UiSmilesConversionWork, UiSmilesPasteContext, UiSmilesPasteWork, UiSmilesRecordsContext,
+    UiSmilesRecordsResult, UiSmilesRecordsWork, UiSmilesWork,
 };
 
 use bondline_commands::{Command, Engine, MAX_REQUEST_BYTES};

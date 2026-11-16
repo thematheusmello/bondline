@@ -13,6 +13,9 @@ use std::{
 };
 use tokio::sync::Semaphore;
 
+mod smiles_records;
+pub use smiles_records::{UiSmilesRecordsContext, UiSmilesRecordsResult, UiSmilesRecordsWork};
+
 #[derive(Clone)]
 pub(crate) struct Workers {
     slots: Arc<Semaphore>,

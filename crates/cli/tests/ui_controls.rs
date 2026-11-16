@@ -50,6 +50,7 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "file.save",
             "file.save_as",
             "file.convert_smiles",
+            "file.import_smiles_records",
             "file.close",
             "edit.undo",
             "edit.redo",

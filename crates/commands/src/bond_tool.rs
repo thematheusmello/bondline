@@ -40,7 +40,8 @@ impl Engine {
         {
             return Err(Error::UiBusy);
         }
-        if !self.stored_document()?.is_fully_mapped() {
+        let stored = self.stored_document()?;
+        if !stored.is_fully_mapped() && !stored.has_smiles_projection() {
             return Err(Error::UnsupportedDocumentPreview);
         }
         let changed = self.bond_tool.order != params.order;

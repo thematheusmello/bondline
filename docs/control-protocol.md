@@ -1314,3 +1314,34 @@ truthful and retains copyable text; stale drafts cannot reapply. Pending/job/for
 and frame-start input fencing prevent early close, Save or replay onto the new drawing.
 An explicit Cancel may discard the draft after worker retirement. Automatic clipboard
 capture, native races/other-platform execution and complete reference parity remain open.
+
+## Native source-backed SMILES records
+
+`ui.controls` additionally exposes `file.import_smiles_records`, File → Import SMILES
+records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
+only for a raw open SMILES file, attached host and idle/Open presentation context. Default
+counts are20 Drawing/14 SDF/10 raw SMILES; the registry stays32 commands. Accepting
+`UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
+geometry parameters. Import calls only `document.import_smiles_records`; it reads the
+already-retained file, not a new path. The backing's generic source-completeness flag
+stays false. View/tool discovery accepts the validated projection, while page/create/
+extend/paste/cross-format operations remain refused.
+
+The host captures `UiSmilesRecordsContext` before releasing the frame mutex. Specialized
+`prepare_ui_smiles_import` reserves shared capacity before consuming Accepted intent;
+`prepare_ui_smiles_order` accepts only the exact captured page/fragment/bond and typed
+`BondSetOrder`. Both run registered work off-lock and validate source/revision/close/view/
+tool/file epochs and opaque association identity atomically with finish. Returned private
+`UiSmilesRecordsResult::is_current` qualifies presentation, not Save acknowledgment. A
+Running Save returned to its same-ID/same-epoch Accepted retry invalidates preparation,
+finish and even a previously successful no-op result proof.
+
+Native click and numeric order gestures queue only one pending/actual thread. New File,
+history, page, tool and canvas mutations wait; View/Close remain available and invalidate
+old context. An already-Running Save retains its existing publication/lease semantics.
+Pending work and the actual JoinHandle participate in close and frame-start input fences;
+an idle executor or ready result channel does not establish thread retirement. Explicit
+retry rearms a consumed failed import only while its original source/context remains
+current. No file operation/receipt, Save lease or trusted close ACK is added by import or
+order. [Receiving evidence](verification-native-smiles-records.md) separates App/worker
+tests from actual platform execution and exact reference-screen parity.

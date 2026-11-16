@@ -24,6 +24,7 @@ pub enum UiFileAction {
     New,
     ConvertSmiles,
     PasteSmiles,
+    ImportSmilesRecords,
     Open,
     Save,
     SaveAs,
@@ -72,6 +73,7 @@ pub enum UiFilePlan {
     NewDocument,
     SmilesConversion,
     SmilesPaste,
+    SmilesImport,
     OpenPicker,
     SavePicker,
     SaveExisting {
@@ -221,6 +223,18 @@ impl Engine {
             if params.action == UiFileAction::PasteSmiles {
                 self.smiles_paste_source()?;
             }
+            if params.action == UiFileAction::ImportSmilesRecords
+                && !matches!(self.content(), crate::StoredContent::SmilesFile(_))
+            {
+                return Err(Error::WrongContent {
+                    required: "unprojected smiles file",
+                    actual: if matches!(self.content(), crate::StoredContent::Sdf { .. }) {
+                        "sdf"
+                    } else {
+                        "drawing"
+                    },
+                });
+            }
             self.file_ui.active = Some(ActiveRequest {
                 view: UiFileRequest {
                     id: next,
@@ -254,6 +268,7 @@ impl Engine {
             UiFileAction::New => UiFilePlan::NewDocument,
             UiFileAction::ConvertSmiles => UiFilePlan::SmilesConversion,
             UiFileAction::PasteSmiles => UiFilePlan::SmilesPaste,
+            UiFileAction::ImportSmilesRecords => UiFilePlan::SmilesImport,
             UiFileAction::Open => UiFilePlan::OpenPicker,
             UiFileAction::Save => {
                 active
@@ -336,6 +351,26 @@ impl Engine {
             ));
         }
         let prepared = self.prepare(Command::PasteSmiles(params))?;
+        self.file_ui.active = None;
+        Ok(prepared)
+    }
+
+    /// Reserve native work before consuming this presentation; import grants no Save ACK.
+    pub fn prepare_ui_smiles_import(
+        &mut self,
+        id: u64,
+        params: crate::ImportSmilesRecords,
+    ) -> Result<Prepared, Error> {
+        let active = self.current_ui_file(id)?;
+        if active.view.phase != UiFilePhase::Accepted {
+            return Err(Error::UiBusy);
+        }
+        if active.view.action != UiFileAction::ImportSmilesRecords {
+            return Err(Error::InvalidUiFileParameters(
+                "SMILES import requires the matching accepted import request",
+            ));
+        }
+        let prepared = self.prepare(Command::ImportSmilesRecords(params))?;
         self.file_ui.active = None;
         Ok(prepared)
     }
