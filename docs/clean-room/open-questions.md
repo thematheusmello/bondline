@@ -489,3 +489,19 @@ remain unestablished. Chemistry projection alone grants no source-file rewrite, 
 paste, aromatic output or Save acknowledgment. Fused/large/disconnected graph chemistry
 and available layout are separate gates; unavailable topology must refuse whole paste
 without losing source, unselected records or pre-existing authored objects.
+
+## Native editable SMILES paste, 2026-11-16
+
+The [native receiving record](../verification-native-smiles-paste.md) now establishes the
+explicit Paste Special form, ordinary OS text paste, bounded neutral benzene authoring,
+retry/history/edit and registered Unicode Save/reopen on macOS. The previous study's
+missing-command and proposed-form statements describe their earlier checkpoints.
+Exact26.1 presentation/defaults, automatic clipboard capture with explicit empty or
+unavailable completion, and a Mac shortcut remain unestablished. The independent form
+does not resolve those parity requirements or authorize source-file record rewriting.
+
+First AX activation of the submenu and focus of its empty multiline field did not work;
+coordinate input succeeded. No event trace establishes their cause. A failed Double
+click clears the numeric hotspot; fresh positional input followed by key1 succeeded.
+Do not infer a generic OS or renderer defect from stationary-key attempts. Native
+race/cancel/poison paths, Windows/Linux interaction and measured DPI/2× remain unverified.

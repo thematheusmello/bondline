@@ -453,11 +453,13 @@ fn control_shortcut_key(shortcut: ControlShortcut) -> egui::KeyboardShortcut {
     let modifiers = egui::Modifiers {
         command: shortcut.primary,
         shift: shortcut.shift,
+        alt: shortcut.alt,
         ..egui::Modifiers::NONE
     };
     let key = match shortcut.key {
         ControlKey::N => egui::Key::N,
         ControlKey::O => egui::Key::O,
+        ControlKey::P => egui::Key::P,
         ControlKey::S => egui::Key::S,
         ControlKey::W => egui::Key::W,
         ControlKey::Z => egui::Key::Z,
@@ -510,6 +512,7 @@ struct ShortcutRouting<'a> {
     fields: Option<&'a mut SdfFieldsWorkflow>,
     files: Option<&'a mut FileWorkflow>,
     canvas: Option<(egui::Rect, egui::LayerId)>,
+    modal_at_start: bool,
 }
 
 fn replay_edit_shortcuts(
@@ -526,12 +529,14 @@ fn replay_edit_shortcuts(
         mut fields,
         mut files,
         canvas,
+        modal_at_start,
     } = routing;
     let from_drawing = engine.content().drawing().is_ok();
-    let blocked = blocked
-        && !files
-            .as_ref()
-            .is_some_and(|files| files.new_decision_open());
+    let blocked = modal_at_start
+        || (blocked
+            && !files
+                .as_ref()
+                .is_some_and(|files| files.new_decision_open()));
     if blocked && fields.is_none() && files.is_none() {
         return;
     }
@@ -550,6 +555,7 @@ fn replay_edit_shortcuts(
             fields.replay_editor(index, engine, context);
         }
         if let Some(files) = files.as_deref_mut() {
+            files.replay_paste(index, event, engine, error, context);
             files.replay_conversion(index, event, engine, error, context);
             files.replay_new(index, event, engine, error, context);
             files.adopt_new(engine, error);
@@ -666,23 +672,54 @@ fn control_menu_action(
 ) -> Option<(usize, &'static str)> {
     let mut selected = None;
     ui.menu_button(menu, |ui| {
+        let mut submenus = Vec::new();
         for control in controls.iter().filter(|control| control.menu == menu) {
-            let mut button = egui::Button::new(control.label);
-            if let Some(shortcut) = control.shortcut {
-                button =
-                    button.shortcut_text(ui.ctx().format_shortcut(&control_shortcut_key(shortcut)));
+            if let Some(submenu) = control.submenu {
+                if submenus.contains(&submenu) {
+                    continue;
+                }
+                submenus.push(submenu);
+                ui.menu_button(submenu, |ui| {
+                    for child in controls
+                        .iter()
+                        .filter(|control| control.menu == menu && control.submenu == Some(submenu))
+                    {
+                        if let Some(action) = control_menu_button(ui, child, events) {
+                            selected = Some(action);
+                            ui.close_menu();
+                        }
+                    }
+                });
+            } else if let Some(action) = control_menu_button(ui, control, events) {
+                selected = Some(action);
             }
-            let response = ui.add_enabled(control.enabled, button);
-            if response.clicked() {
-                selected = events
-                    .iter()
-                    .position(|event| activation_event(&response, event))
-                    .map(|index| (index, control.id));
+            if selected.is_some() {
                 ui.close_menu();
             }
         }
     });
     selected
+}
+
+fn control_menu_button(
+    ui: &mut egui::Ui,
+    control: &ControlInfo,
+    events: &[egui::Event],
+) -> Option<(usize, &'static str)> {
+    let mut button = egui::Button::new(control.label);
+    if let Some(shortcut) = control.shortcut {
+        button = button.shortcut_text(ui.ctx().format_shortcut(&control_shortcut_key(shortcut)));
+    }
+    let response = ui.add_enabled(control.enabled, button);
+    response
+        .clicked()
+        .then(|| {
+            events
+                .iter()
+                .position(|event| activation_event(&response, event))
+        })
+        .flatten()
+        .map(|index| (index, control.id))
 }
 
 fn show_workspace_with_files(
@@ -700,6 +737,7 @@ struct WorkspaceWorkflows<'a> {
     preview: &'a mut PreviewWorkflow,
     fields: &'a mut SdfFieldsWorkflow,
     smiles: &'a mut SmilesRecordsWorkflow,
+    modal_at_start: bool,
 }
 
 fn show_workspace_with_preview(
@@ -711,13 +749,14 @@ fn show_workspace_with_preview(
     active_work: bool,
     workflows: Option<WorkspaceWorkflows<'_>>,
 ) -> Option<FileIntentAction> {
-    let (mut preview, mut sdf_fields, mut smiles_records) = match workflows {
+    let (mut preview, mut sdf_fields, mut smiles_records, modal_at_start) = match workflows {
         Some(workflows) => (
             Some(workflows.preview),
             Some(workflows.fields),
             Some(workflows.smiles),
+            workflows.modal_at_start,
         ),
-        None => (None, None, None),
+        None => (None, None, None, false),
     };
     let discard_stale_canvas_input = engine.content().drawing().is_ok()
         && drawing
@@ -732,12 +771,15 @@ fn show_workspace_with_preview(
         fields.begin_ui();
     }
     let events = context.input(|input| input.events.clone());
+    let paste_modal_at_start =
+        modal_at_start || files.as_ref().is_some_and(|files| files.paste_present());
     let new_decision_at_start = files
         .as_ref()
         .is_some_and(|files| files.new_decision_open());
     if let Some(files) = files.as_deref_mut() {
         files.begin_new_ui(context, &events);
         files.begin_conversion_ui(context, Some(engine), &events);
+        files.begin_paste_ui(context, Some(engine), &events);
     }
     if [
         context.screen_rect().width(),
@@ -749,7 +791,8 @@ fn show_workspace_with_preview(
         drawing.gesture = None;
         drawing.invalidate_hover();
         let current = engine.state();
-        let blocked = current.close != CloseState::Open
+        let blocked = paste_modal_at_start
+            || current.close != CloseState::Open
             || files
                 .as_ref()
                 .is_some_and(|files| files.blocks_authoring(&current));
@@ -765,6 +808,7 @@ fn show_workspace_with_preview(
                 fields: sdf_fields.as_deref_mut(),
                 files: files.as_deref_mut(),
                 canvas: None,
+                modal_at_start: paste_modal_at_start,
             },
         );
         egui::CentralPanel::default().show(context, |ui| {
@@ -797,7 +841,8 @@ fn show_workspace_with_preview(
                     .as_deref_mut()
                     .and_then(|files| files.menu(ui, engine, &events));
                 let current = engine.state();
-                let blocked = current.close != CloseState::Open
+                let blocked = paste_modal_at_start
+                    || current.close != CloseState::Open
                     || files
                         .as_ref()
                         .is_some_and(|files| files.blocks_authoring(&current));
@@ -830,7 +875,8 @@ fn show_workspace_with_preview(
             });
         });
     let current = engine.state();
-    let blocked = current.close != CloseState::Open
+    let blocked = paste_modal_at_start
+        || current.close != CloseState::Open
         || files
             .as_ref()
             .is_some_and(|files| files.blocks_authoring(&current));
@@ -1037,6 +1083,7 @@ fn show_workspace_with_preview(
                             fields: sdf_fields.as_deref_mut(),
                             files: files.as_deref_mut(),
                             canvas: Some((rect, response.layer_id)),
+                            modal_at_start: paste_modal_at_start,
                         },
                     );
                     history_handled = true;
@@ -1255,6 +1302,7 @@ fn show_workspace_with_preview(
                     fields.replay_editor(index, engine, context);
                 }
                 if let Some(files) = files.as_deref_mut() {
+                    files.replay_paste(index, event, engine, error, context);
                     files.replay_conversion(index, event, engine, error, context);
                     files.replay_new(index, event, engine, error, context);
                     files.adopt_new(engine, error);
@@ -1282,7 +1330,8 @@ fn show_workspace_with_preview(
                     drawing.hover_context = Some(key);
                     graph = scene_for(engine, &viewport, key.page);
                 }
-                let blocked = (blocked && !new_decision_at_start)
+                let blocked = paste_modal_at_start
+                    || (blocked && !new_decision_at_start)
                     || pending_ui_blocks_authoring(&engine.state())
                     || files
                         .as_ref()
@@ -1901,6 +1950,7 @@ fn show_workspace_with_preview(
                 fields: sdf_fields.as_deref_mut(),
                 files: files.as_deref_mut(),
                 canvas: None,
+                modal_at_start: paste_modal_at_start,
             },
         );
     }
@@ -2012,8 +2062,12 @@ impl BondlineApp {
             false
         };
         let mut action = None;
+        // A same-generation paste can retire and close its modal before raw input replays.
+        let paste_modal_at_start = self.files.paste_present();
         match self.engine.lock() {
             Ok(mut engine) => {
+                self.files
+                    .poll_paste(Some(&engine), context, &mut self.error);
                 self.files.poll(&mut engine, &mut self.error);
                 self.preview.sync(&engine, context);
                 self.sdf_fields.sync(&engine, context);
@@ -2042,6 +2096,7 @@ impl BondlineApp {
                         preview: &mut self.preview,
                         fields: &mut self.sdf_fields,
                         smiles: &mut self.smiles_records,
+                        modal_at_start: paste_modal_at_start,
                     }),
                 );
                 self.preview.sync(&engine, context);
@@ -2060,6 +2115,12 @@ impl BondlineApp {
                 }
             }
             Err(_) => {
+                self.files.deactivate_paste(context, &mut self.error);
+                self.files.begin_paste_ui(
+                    context,
+                    None,
+                    &context.input(|input| input.events.clone()),
+                );
                 self.files.deactivate_conversion(context, &mut self.error);
                 self.files.begin_conversion_ui(
                     context,
@@ -2094,6 +2155,7 @@ impl BondlineApp {
         }
         self.preview.start_pending(&self.executor, context);
         self.files.start_pending_conversion(&self.executor, context);
+        self.files.start_pending_paste(&self.executor, context);
         self.sdf_fields.start_pending(&self.executor, context);
         self.smiles_records.start_pending(&self.executor, context);
     }

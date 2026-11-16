@@ -53,6 +53,7 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "file.close",
             "edit.undo",
             "edit.redo",
+            "edit.paste_smiles",
             "page.a4",
             "page.letter",
             "page.rotate",

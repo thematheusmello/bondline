@@ -1727,7 +1727,7 @@ fn stdio_file_presentation_is_unavailable_without_a_host_and_cannot_forge_acknow
         queried["ui_file"],
         json!({"available":false,"epoch":0,"request":null})
     );
-    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 18);
+    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 19);
     assert!(queried.get("ui_file_operation").is_none());
     for (id, arguments, code) in [
         (

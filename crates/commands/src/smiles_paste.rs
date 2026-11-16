@@ -56,22 +56,7 @@ pub(super) struct PasteCandidate {
 }
 
 impl Engine {
-    pub(super) fn smiles_paste_plan(&self, params: PasteSmiles) -> Result<PastePlan, Error> {
-        if params.expected_revision != self.revision {
-            return Err(Error::StaleRevision);
-        }
-        if self.close_state() != CloseState::Open {
-            return Err(Error::UiBusy);
-        }
-        if params.notation.len() > bondline_io::smiles::MAX_SMILES_BYTES {
-            return Err(Error::SmilesPasteLimit("notation exceeds 64 KiB"));
-        }
-        if !params.bond_length_pt.is_finite() || params.bond_length_pt <= 0.0 {
-            return Err(Error::InvalidSmilesPaste(
-                "bond length must be finite and positive",
-            ));
-        }
-        Point2::new(params.origin_x_pt, params.origin_y_pt)?;
+    pub(super) fn smiles_paste_source(&self) -> Result<&StoredDocument, Error> {
         let stored = self.stored_document()?;
         if !stored.is_fully_mapped()
             || stored
@@ -80,6 +65,26 @@ impl Engine {
         {
             return Err(Error::UnsupportedSmilesPasteSource);
         }
+        Ok(stored)
+    }
+
+    pub(super) fn smiles_paste_plan(&self, params: PasteSmiles) -> Result<PastePlan, Error> {
+        if params.expected_revision != self.revision {
+            return Err(Error::StaleRevision);
+        }
+        if self.close_state() != CloseState::Open {
+            return Err(Error::UiBusy);
+        }
+        if params.notation.len() > crate::MAX_SMILES_PASTE_BYTES {
+            return Err(Error::SmilesPasteLimit("notation exceeds 64 KiB"));
+        }
+        if !params.bond_length_pt.is_finite() || params.bond_length_pt <= 0.0 {
+            return Err(Error::InvalidSmilesPaste(
+                "bond length must be finite and positive",
+            ));
+        }
+        Point2::new(params.origin_x_pt, params.origin_y_pt)?;
+        let stored = self.smiles_paste_source()?;
         let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
         let page = stored
             .model()

@@ -4,10 +4,12 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
-The editable SMILES engine/layout/transport checkpoint passes the full local gate1229/0/1.
+The native editable SMILES checkpoint passes the full local gate1245/0/1, with bounded
+Mac OS clipboard/refusal/retry/history/edit/Unicode Save/reopen and independent file checks.
 The earlier density pipeline78964's MCP `AddrInUse` failure remains unexplained; this pass
-is not a causal fix. Desktop paste/clipboard and native2×/DPI remain unverified. See
-[paste evidence](docs/verification-smiles-paste-engine.md) and
+is not a causal fix. Automatic clipboard capture, exact reference-dialog behavior and
+native2×/DPI remain unverified. See
+[paste evidence](docs/verification-native-smiles-paste.md) and
 [density evidence](docs/verification-native-drawing-density.md).
 
 ## M0: foundation — in progress
@@ -144,8 +146,12 @@ The [SMILES authoring/import study](docs/research/smiles-source-import-plan.md) 
 editable Paste Special with real benzene support, then source-preserving record editing
 and whole-file Save. Neutral fixed-H/Kekulé chemistry, bounded layout and the one-step
 Drawing append now pass independent engine/CLI/stdio/socket and actual saved-file checks;
-the full gate passes1229/0/1. Native Paste Special/clipboard is the next integration gate.
-Source-file record rewriting, broader chemistry and whole-file editable import remain.
+the explicit native Paste Special form now adds actual OS clipboard/refusal/retry,
+one Undo/Redo, native bond edit and Unicode Save/reopen. The full gate passes1245/0/1;
+see docs/verification-native-smiles-paste.md. Automatic clipboard capture, source-file
+record rewriting, broader chemistry and whole-file editable import remain. Continue the
+source-qualified import/record gate from the same plan, retaining complete opaque data;
+then the missing M2 atom/selection/ring/style authoring workflows below.
 
 Whole-record SDF removal now has a source-preserving codec, the shared typed command,
 CLI/stdio/authenticated-loopback routes and original Records confirmation UI. Independent

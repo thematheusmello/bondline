@@ -68,7 +68,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
 | `ui.bond_tool` | Required `order` (`single`, `double`, `triple`) | Select a transient drawing tool; explicit operation receipt/epoch, no authored edit or history entry |
 | `ui.view` | Tagged `action`: `inspect`, `fit`, `actual`, `set_zoom`, `magnify`, `reduce`, `pan`; action-specific geometry/percentage | Inspect or change the transient camera without editing content/history; source-qualified display/readability guards remain |
-| `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request Open/Save/Save As presentation or cancel the matching picker; a native host is required |
+| `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request guarded New/SMILES forms or Open/Save/Save As presentation, or cancel the matching intent; a native host is required |
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
 | `bond.create` | `page_id`, `begin_x_pt`, `begin_y_pt`, `end_x_pt`, `end_y_pt`; optional `order="single"` | One independent neutral-carbon fragment with the requested Single/Double/Triple bond; each endpoint receives literal H=`4-order_weight` |
 | `bond.extend` | Required `expected_revision`, `page_id`, `fragment_id`, `begin_atom_id`, `end_x_pt`, `end_y_pt`, `hydrogen_policy="rectify_terminal_carbon"`; optional `order="single"` | Add the requested bond/new carbon to a consistent supported terminal carbon, subtracting the bond weight from its literal H; native complete CDXML/source-free data only |
@@ -1275,4 +1275,31 @@ returns no file operation, conversion receipt or trusted Save/close acknowledgme
 Notation is omitted from Debug and automatic state. Save/reopen are separate commands.
 
 See [source-qualified limits and independent evidence](verification-smiles-paste-engine.md).
-Native Paste Special input/clipboard is not claimed by this engine checkpoint.
+Native Paste Special input/clipboard is not claimed by this engine checkpoint; its later
+[native verification](verification-native-smiles-paste.md) establishes the explicit form.
+
+## Native SMILES presentation and registered work
+
+The existing `ui.file` action `paste_smiles` requests the native **Edit → Paste Special →
+SMILES…** form; it requires a complete native Drawing and attached host. No clipboard
+bytes are read by the command itself. Ordinary TextEdit OS paste fills a private bounded
+draft. `ui.controls` exposes `edit.paste_smiles`, optional `submenu:"Paste Special"` and
+the typed presentation binding. Older controls omit the new None submenu/false Alt fields.
+Ctrl+Alt+P is wired off macOS; the Mac shortcut is intentionally unknown/unbound.
+
+After the host accepts `UiFilePlan::SmilesPaste`, it captures opaque
+`UiSmilesPasteContext` for the actual displayed page. Release the frame mutex before
+`CommandExecutor::prepare_ui_smiles_paste(&context, PasteSmiles)`. Under one origin lock
+the adapter revalidates context, reserves the shared two-worker permit and prepares the
+same registry command before consuming the intent. Full capacity preserves the accepted
+intent. Work runs off-lock and rechecks UI context under the same lock as engine finish.
+Drop/failed start releases unused work; no FilePlan, Save lease or finish_ui_file ACK exists.
+
+The opaque file-context identity invalidates even if path/format return to old values.
+Native successful work also carries a Rust-only `ui_file_context_stamp`, captured atomically
+with finish and omitted from every JSON reply. The UI checks it before adopting success
+and at actual thread retirement. It cannot authorize Save/close. Historical success stays
+truthful and retains copyable text; stale drafts cannot reapply. Pending/job/form barriers
+and frame-start input fencing prevent early close, Save or replay onto the new drawing.
+An explicit Cancel may discard the draft after worker retirement. Automatic clipboard
+capture, native races/other-platform execution and complete reference parity remain open.

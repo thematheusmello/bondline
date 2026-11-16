@@ -1,7 +1,8 @@
 use crate::SharedEngine;
 use bondline_commands::{
     Cancellation, CaptureStamp, CloseState, Command, CommandResult, ConvertSmilesToCdxml, Engine,
-    Error, ErrorInfo, FileFormat, Prepared, RenderCapture, SdfRecordRemove, SmilesRecordInspect,
+    Error, ErrorInfo, FileFormat, PasteSmiles, Prepared, RenderCapture, SdfRecordRemove,
+    SmilesRecordInspect, UiFileAction, UiFileContextStamp, UiFilePhase,
 };
 use std::{
     future::Future,
@@ -85,6 +86,112 @@ impl UiSmilesConversionWork {
     pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
         let Self { engine, registered } = self;
         complete_registered_blocking(&engine, registered, cancel)
+    }
+}
+
+/// One opaque native paste presentation, independent of the command's absolute geometry.
+#[derive(Clone)]
+pub struct UiSmilesPasteContext {
+    stamp: CaptureStamp,
+    file_context: UiFileContextStamp,
+    close_epoch: u64,
+    view_epoch: u64,
+    file_epoch: u64,
+    path: Option<String>,
+    format: FileFormat,
+    request_id: u64,
+    page_id: u32,
+}
+
+impl UiSmilesPasteContext {
+    pub fn capture(engine: &Engine, request_id: u64, page_id: u32) -> Result<Self, ErrorInfo> {
+        let state = engine.state();
+        if !state.ui_file.available
+            || state.close != CloseState::Open
+            || !state.ui_file.request.as_ref().is_some_and(|request| {
+                request.id == request_id
+                    && request.action == UiFileAction::PasteSmiles
+                    && request.phase == UiFilePhase::Accepted
+            })
+        {
+            return Err(Error::UiStaleRequest.info());
+        }
+        let document = engine.document().map_err(|error| error.info())?;
+        if !document
+            .pages()
+            .iter()
+            .any(|page| page.id().get() == page_id)
+        {
+            return Err(Error::InvalidUiFileParameters("paste page is unavailable").info());
+        }
+        Ok(Self {
+            stamp: engine.capture_stamp(),
+            file_context: engine.ui_file_context_stamp(),
+            close_epoch: state.close_epoch,
+            view_epoch: engine.view().epoch,
+            file_epoch: state.ui_file.epoch,
+            path: state.file.path,
+            format: state.file.format,
+            request_id,
+            page_id,
+        })
+    }
+
+    /// Intent consumption alone does not obsolete an otherwise unchanged draft.
+    pub fn is_current(&self, engine: &Engine) -> bool {
+        self.validate(engine).is_ok()
+    }
+
+    fn validate(&self, engine: &Engine) -> Result<(), ErrorInfo> {
+        let state = engine.state();
+        if state.close == CloseState::Committed {
+            return Err(Error::CloseCommitted.info());
+        }
+        if !engine.capture_stamp_matches(&self.stamp) {
+            return Err(Error::StaleRevision.info());
+        }
+        if state.close != CloseState::Open
+            || state.close_epoch != self.close_epoch
+            || !state.ui_file.available
+            || !engine.ui_file_context_stamp_matches(&self.file_context)
+            || state.ui_file.epoch != self.file_epoch
+            || state.file.path != self.path
+            || state.file.format != self.format
+            || engine.view().epoch != self.view_epoch
+            || !engine.document().is_ok_and(|document| {
+                document
+                    .pages()
+                    .iter()
+                    .any(|page| page.id().get() == self.page_id)
+            })
+        {
+            return Err(Error::UiStaleRequest.info());
+        }
+        Ok(())
+    }
+}
+
+/// Native paste shares the registered two-worker budget; it has no Save/close authority.
+#[must_use = "complete or drop native paste work to release its worker reservation"]
+pub struct UiSmilesPasteWork {
+    engine: SharedEngine,
+    registered: RegisteredWork,
+    context: UiSmilesPasteContext,
+}
+
+impl UiSmilesPasteWork {
+    pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
+        let Self {
+            engine,
+            registered,
+            context,
+        } = self;
+        let (mut result, stamp) =
+            complete_registered_blocking_guarded(&engine, registered, cancel, |engine| {
+                context.validate(engine)
+            })?;
+        result.ui_file_context_stamp = Some(stamp);
+        Ok(result)
     }
 }
 
@@ -211,6 +318,45 @@ impl CommandExecutor {
             .map_err(|error| error.info())?;
         Ok(UiSmilesConversionWork {
             engine: Arc::clone(&self.engine),
+            registered: RegisteredWork {
+                prepared,
+                permit: Some(permit),
+            },
+        })
+    }
+
+    /// Validate the presentation and reserve before consuming its accepted intent.
+    pub fn prepare_ui_smiles_paste(
+        &self,
+        context: &UiSmilesPasteContext,
+        params: PasteSmiles,
+    ) -> Result<UiSmilesPasteWork, ErrorInfo> {
+        let mut engine = self.engine.lock().map_err(|_| unavailable())?;
+        context.validate(&engine)?;
+        let state = engine.state();
+        if params.expected_revision != state.revision {
+            return Err(Error::StaleRevision.info());
+        }
+        if params.page_id != context.page_id {
+            return Err(Error::InvalidUiFileParameters(
+                "paste page differs from the presented page",
+            )
+            .info());
+        }
+        if !state.ui_file.request.as_ref().is_some_and(|request| {
+            request.id == context.request_id
+                && request.action == UiFileAction::PasteSmiles
+                && request.phase == UiFilePhase::Accepted
+        }) {
+            return Err(Error::UiStaleRequest.info());
+        }
+        let permit = self.workers.permit()?;
+        let prepared = engine
+            .prepare_ui_smiles_paste(context.request_id, params)
+            .map_err(|error| error.info())?;
+        Ok(UiSmilesPasteWork {
+            engine: Arc::clone(&self.engine),
+            context: context.clone(),
             registered: RegisteredWork {
                 prepared,
                 permit: Some(permit),
@@ -468,6 +614,16 @@ fn complete_registered_blocking(
     registered: RegisteredWork,
     cancel: &Cancellation,
 ) -> Result<CommandResult, ErrorInfo> {
+    complete_registered_blocking_guarded(engine, registered, cancel, |_| Ok(()))
+        .map(|(result, _)| result)
+}
+
+fn complete_registered_blocking_guarded(
+    engine: &SharedEngine,
+    registered: RegisteredWork,
+    cancel: &Cancellation,
+    validate: impl FnOnce(&Engine) -> Result<(), ErrorInfo>,
+) -> Result<(CommandResult, UiFileContextStamp), ErrorInfo> {
     let RegisteredWork {
         prepared,
         permit: _permit,
@@ -475,11 +631,11 @@ fn complete_registered_blocking(
     let completed = prepared
         .complete_with_cancel(cancel)
         .map_err(|error| error.info())?;
-    engine
-        .lock()
-        .map_err(|_| unavailable())?
-        .finish(completed)
-        .map_err(|error| error.info())
+    let mut engine = engine.lock().map_err(|_| unavailable())?;
+    validate(&engine)?;
+    let result = engine.finish(completed).map_err(|error| error.info())?;
+    let stamp = engine.ui_file_context_stamp();
+    Ok((result, stamp))
 }
 
 fn unavailable() -> ErrorInfo {

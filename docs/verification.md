@@ -1,5 +1,13 @@
 # Verification log
 
+## Native editable SMILES paste, 2026-11-16
+
+[Native/worker/App evidence](verification-native-smiles-paste.md) records missing-control
+RED, real file-association ABA and postcommit regressions, ten worker/six App GREEN and
+the1245/0/1 full local gate. Actual Mac OS clipboard/refusal/retry/history/edit/Unicode
+Save/reopen passes; independent consumers accept the actual C8H14 output and preserved
+original fragment. Automatic clipboard capture and broader reference parity remain open.
+
 ## Editable SMILES engine, 2026-11-15
 
 [Engine/layout/actual-transport evidence](verification-smiles-paste-engine.md) records

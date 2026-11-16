@@ -1390,5 +1390,8 @@ mod new_document;
 #[path = "native_conversion_tests.rs"]
 mod native_conversion;
 
+#[path = "smiles_paste_tests.rs"]
+mod smiles_paste;
+
 #[path = "native_drawing_density_tests.rs"]
 mod native_drawing_density;

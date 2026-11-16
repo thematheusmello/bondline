@@ -2,10 +2,12 @@
 
 mod new_document;
 mod smiles_conversion;
+mod smiles_paste;
 #[cfg(test)]
 use new_document::NewChoice;
 use new_document::NewWorkflow;
 use smiles_conversion::ConversionWorkflow;
+use smiles_paste::PasteWorkflow;
 
 #[cfg(test)]
 mod cdx_tests;
@@ -79,6 +81,7 @@ pub(crate) struct FileWorkflow {
     request_id: Option<u64>,
     new_document: NewWorkflow,
     conversion: ConversionWorkflow,
+    paste: PasteWorkflow,
 }
 
 impl FileWorkflow {
@@ -91,18 +94,20 @@ impl FileWorkflow {
             request_id: None,
             new_document: NewWorkflow::default(),
             conversion: ConversionWorkflow::default(),
+            paste: PasteWorkflow::default(),
         }
     }
 
     pub(crate) fn blocks_authoring(&self, state: &CommandResult) -> bool {
         self.conversion.present()
+            || self.paste.present()
             || self.new_document.pending()
             || self.chooser.is_open()
             || crate::pending_ui_blocks_authoring(state)
     }
 
     pub(crate) fn is_busy(&self) -> bool {
-        self.job.is_some() || self.conversion.busy()
+        self.job.is_some() || self.conversion.busy() || self.paste.busy()
     }
 
     fn sync_close(&mut self, state: &CommandResult) {
@@ -208,6 +213,7 @@ impl FileWorkflow {
         match plan {
             UiFilePlan::NewDocument => self.accepted_new(request.id, engine, error),
             UiFilePlan::SmilesConversion => self.open_conversion(request.id, engine, error),
+            UiFilePlan::SmilesPaste => self.open_paste(request.id, engine, error),
             UiFilePlan::OpenPicker => self.begin(FileMode::Open, &state),
             UiFilePlan::SavePicker => self.begin(FileMode::Save, &state),
             UiFilePlan::SaveExisting { format, params } => {
@@ -284,6 +290,7 @@ impl FileWorkflow {
 
     pub(crate) fn request_close(&mut self, engine: &mut Engine, error: &mut Option<String>) {
         self.conversion_close(engine, error);
+        self.paste_close();
         self.cancel_new_for_close(engine, error);
         self.close_command(engine, CloseAction::Request, error);
     }
@@ -338,6 +345,7 @@ impl FileWorkflow {
         pending_file_action: bool,
     ) -> bool {
         !pending_file_action
+            && !self.paste.present()
             && !self.new_document.pending()
             && !self.is_busy()
             && !active_work
@@ -367,6 +375,9 @@ impl FileWorkflow {
         active_work: bool,
     ) -> Option<FileIntentAction> {
         self.sync_new(engine);
+        if self.paste.present() {
+            return None;
+        }
         if self.conversion.present() && engine.state().close == CloseState::Open {
             self.conversion_picker(context);
             return None;
@@ -377,6 +388,10 @@ impl FileWorkflow {
         }
         if engine.state().revision != revision {
             context.request_discard("New document was created");
+        }
+        if self.paste.present() {
+            context.request_repaint();
+            return None;
         }
         if self.conversion.present() && engine.state().close == CloseState::Open {
             self.conversion_picker(context);
@@ -694,6 +709,7 @@ impl Drop for FileWorkflow {
             job.cancel.cancel();
         }
         self.conversion.cancel();
+        self.paste.cancel();
     }
 }
 

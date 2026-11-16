@@ -30,7 +30,9 @@ pub use bond_tool::{BondToolOperation, BondToolState, SelectBondTool};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
-pub use file_ui::{UiFile, UiFileAction, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState};
+pub use file_ui::{
+    UiFile, UiFileAction, UiFileContextStamp, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState,
+};
 pub use files::{
     Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol,
     OpenSdf, OpenSmiles, SaveCdx, SaveCdxml, SaveMol, SaveSdf, SaveSmiles,
@@ -69,6 +71,7 @@ pub use capture::{
 };
 
 pub const MAX_REQUEST_BYTES: usize = 1024 * 1024;
+pub const MAX_SMILES_PASTE_BYTES: usize = bondline_io::smiles::MAX_SMILES_BYTES;
 const MAX_HISTORY: usize = 128;
 const MAX_HISTORY_BYTES: usize = 128 * 1024 * 1024;
 
@@ -127,7 +130,7 @@ command_registry! {
     Inspect(NoParams) => ("document.inspect", "Inspect the authored document and history state.", true),
     NewDocument(NewDocument) => ("document.new", "Start a fresh source-free drawing session; unsaved data requires explicit discard and existing saved files remain untouched.", false),
     Close(CloseDocument) => ("document.close", "Request, explicitly discard, or cancel closing the current document revision.", false),
-    UiFile(UiFile) => ("ui.file", "Request or cancel native file presentation; requires an attached native host.", false),
+    UiFile(UiFile) => ("ui.file", "Request or cancel native document/file presentation, including the explicit SMILES paste form; requires an attached native host.", false),
     UiControls(NoParams) => ("ui.controls", "Discover delivered native controls, shortcuts, typed bindings and contextual availability.", true),
     UiView(UiView) => ("ui.view", "Inspect or navigate the transient drawing view without editing content or history.", false),
     UiBondToolSelect(SelectBondTool) => ("ui.bond_tool", "Select a drawing bond order without editing the document or its history; gestures pass this order explicitly.", false),
@@ -411,6 +414,10 @@ struct Request {
 pub struct CommandResult {
     #[serde(skip)]
     pub view_target_prepared: bool,
+    /// Rust-only native result identity, captured atomically with its actual finish.
+    /// It cannot authorize a Save/close acknowledgment and is absent from every wire reply.
+    #[serde(skip)]
+    pub ui_file_context_stamp: Option<UiFileContextStamp>,
     pub changed: bool,
     pub revision: u64,
     pub document: Option<Arc<Document>>,
@@ -567,6 +574,7 @@ impl Engine {
             ui_bond_tool_operation: None,
             ui_view_operation: None,
             controls: None,
+            ui_file_context_stamp: None,
         }
     }
 

@@ -5,6 +5,13 @@ array-aligned source semantics, exact fixed H, sp²-cycle validation and determi
 Kekulé matching. The additive IO adapter retains original SMILES source/IR; legacy
 normalization/converters remain separate. See [verification](verification-smiles-authoring-chem.md).
 
+The native explicit SMILES form reuses typed document presentation and the registered
+two-worker executor. Source/page/view/close/file checks precede consumption and finish;
+opaque file-context identity latches association ABA even with no active request. A
+Rust-only result stamp captured with finish qualifies later UI dismissal; serialization
+omits it and it cannot authorize a Save. Actual thread retirement and frame-start modal
+input fences stay in the thin host. See [native evidence](verification-native-smiles-paste.md).
+
 All formats share a per-Engine save reservation acquired by command preparation. The
 owned Arc token moves from FilePlan into Completed and lives through Engine::finish.
 A second outstanding Save fails busy before I/O, including the publication-to-application

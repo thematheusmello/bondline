@@ -6,12 +6,24 @@ use crate::{
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use std::sync::{Arc, Weak};
+
+/// Opaque native presentation identity; file-association ABA must not revive old work.
+#[derive(Clone)]
+pub struct UiFileContextStamp(Weak<()>);
+
+impl std::fmt::Debug for UiFileContextStamp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("UiFileContextStamp(..)")
+    }
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum UiFileAction {
     New,
     ConvertSmiles,
+    PasteSmiles,
     Open,
     Save,
     SaveAs,
@@ -59,6 +71,7 @@ pub struct UiFileState {
 pub enum UiFilePlan {
     NewDocument,
     SmilesConversion,
+    SmilesPaste,
     OpenPicker,
     SavePicker,
     SaveExisting {
@@ -81,9 +94,18 @@ pub(super) struct FileUiPolicy {
     available: bool,
     pub(super) epoch: u64,
     active: Option<ActiveRequest>,
+    context: Arc<()>,
 }
 
 impl Engine {
+    pub fn ui_file_context_stamp(&self) -> UiFileContextStamp {
+        UiFileContextStamp(Arc::downgrade(&self.file_ui.context))
+    }
+
+    pub fn ui_file_context_stamp_matches(&self, stamp: &UiFileContextStamp) -> bool {
+        Weak::ptr_eq(&stamp.0, &Arc::downgrade(&self.file_ui.context))
+    }
+
     pub(super) fn file_ui_state(&self) -> UiFileState {
         UiFileState {
             available: self.file_ui.available,
@@ -106,6 +128,8 @@ impl Engine {
     }
 
     pub(super) fn invalidate_file_ui(&mut self) {
+        // Keep invalidation latched even after a paste consumed the active request.
+        self.file_ui.context = Arc::new(());
         if let Some(active) = &mut self.file_ui.active {
             if active.view.phase == UiFilePhase::Running {
                 // Published work must still finish truthfully, but cannot reopen an old picker.
@@ -194,6 +218,9 @@ impl Engine {
                 None if self.close_state() == CloseState::Open => {}
                 None => return Err(Error::UiBusy),
             }
+            if params.action == UiFileAction::PasteSmiles {
+                self.smiles_paste_source()?;
+            }
             self.file_ui.active = Some(ActiveRequest {
                 view: UiFileRequest {
                     id: next,
@@ -226,6 +253,7 @@ impl Engine {
         let plan = match active.view.action {
             UiFileAction::New => UiFilePlan::NewDocument,
             UiFileAction::ConvertSmiles => UiFilePlan::SmilesConversion,
+            UiFileAction::PasteSmiles => UiFilePlan::SmilesPaste,
             UiFileAction::Open => UiFilePlan::OpenPicker,
             UiFileAction::Save => {
                 active
@@ -287,6 +315,27 @@ impl Engine {
             ));
         }
         let prepared = self.prepare(Command::ConvertSmilesToCdxml(params))?;
+        self.file_ui.active = None;
+        Ok(prepared)
+    }
+
+    /// Consume the accepted paste presentation only after preparing its real authoring command.
+    /// The caller reserves its registered worker first; this creates no Save acknowledgment.
+    pub fn prepare_ui_smiles_paste(
+        &mut self,
+        id: u64,
+        params: crate::PasteSmiles,
+    ) -> Result<Prepared, Error> {
+        let active = self.current_ui_file(id)?;
+        if active.view.phase != UiFilePhase::Accepted {
+            return Err(Error::UiBusy);
+        }
+        if active.view.action != UiFileAction::PasteSmiles {
+            return Err(Error::InvalidUiFileParameters(
+                "SMILES paste requires the matching accepted paste request",
+            ));
+        }
+        let prepared = self.prepare(Command::PasteSmiles(params))?;
         self.file_ui.active = None;
         Ok(prepared)
     }

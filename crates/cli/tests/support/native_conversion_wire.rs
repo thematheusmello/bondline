@@ -103,7 +103,7 @@ fn authenticated_converter_presentation_and_cancel_preserve_the_complete_source(
     let controls = controls["result"]["controls"]
         .as_array()
         .ok_or("controls")?;
-    assert_eq!(controls.len(), 12);
+    assert_eq!(controls.len(), 13);
     let control = controls
         .iter()
         .find(|control| control["id"] == "file.convert_smiles")

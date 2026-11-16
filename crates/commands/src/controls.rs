@@ -11,6 +11,7 @@ use serde::Serialize;
 pub enum ControlKey {
     N,
     O,
+    P,
     S,
     W,
     Z,
@@ -26,6 +27,12 @@ pub struct ControlShortcut {
     pub key: ControlKey,
     pub primary: bool,
     pub shift: bool,
+    #[serde(skip_serializing_if = "is_false")]
+    pub alt: bool,
+}
+
+fn is_false(value: &bool) -> bool {
+    !*value
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -33,6 +40,8 @@ pub struct ControlInfo {
     pub id: &'static str,
     pub label: &'static str,
     pub menu: &'static str,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submenu: Option<&'static str>,
     pub shortcut: Option<ControlShortcut>,
     pub command: Command,
     pub enabled: bool,
@@ -69,9 +78,10 @@ impl Engine {
                 key,
                 primary: true,
                 shift,
+                alt: false,
             })
         };
-        let mut controls = Vec::with_capacity(18);
+        let mut controls = Vec::with_capacity(19);
         for (id, label, key, shift, action) in [
             (
                 "file.new",
@@ -106,6 +116,7 @@ impl Engine {
                 id,
                 label,
                 menu: "File",
+                submenu: None,
                 shortcut: shortcut(key, shift),
                 command: Command::UiFile(UiFile {
                     expected_revision: state.revision,
@@ -122,6 +133,7 @@ impl Engine {
             id: "file.convert_smiles",
             label: "Convert SMILES file…",
             menu: "File",
+            submenu: None,
             shortcut: None,
             command: Command::UiFile(UiFile {
                 expected_revision: state.revision,
@@ -142,6 +154,7 @@ impl Engine {
             id: "file.close",
             label: "Close Window",
             menu: "File",
+            submenu: None,
             shortcut: shortcut(ControlKey::W, false),
             command: Command::Close(CloseDocument {
                 expected_revision: state.revision,
@@ -172,6 +185,7 @@ impl Engine {
                 id,
                 label,
                 menu: "Edit",
+                submenu: None,
                 shortcut: shortcut(ControlKey::Z, shift),
                 command,
                 enabled: reason.is_none(),
@@ -179,6 +193,33 @@ impl Engine {
                 selected: None,
             });
         }
+        let paste_reason = file_reason.or_else(|| {
+            self.smiles_paste_source()
+                .is_err()
+                .then_some("unsupported_content")
+        });
+        controls.push(ControlInfo {
+            id: "edit.paste_smiles",
+            label: "SMILES…",
+            menu: "Edit",
+            submenu: Some("Paste Special"),
+            // GUIDE25 establishes Ctrl+Alt+P on Windows; the Mac equivalent is unknown.
+            shortcut: (!cfg!(target_os = "macos")).then_some(ControlShortcut {
+                key: ControlKey::P,
+                primary: true,
+                shift: false,
+                alt: true,
+            }),
+            command: Command::UiFile(UiFile {
+                expected_revision: state.revision,
+                action: UiFileAction::PasteSmiles,
+                request_id: None,
+                close_epoch: None,
+            }),
+            enabled: paste_reason.is_none(),
+            disabled_reason: paste_reason,
+            selected: None,
+        });
         if let Ok(document) = self.document()
             && let Some(page) = document.pages().first()
         {
@@ -202,6 +243,7 @@ impl Engine {
                     id,
                     label,
                     menu: "Page",
+                    submenu: None,
                     shortcut: None,
                     command: Command::PageSetSize(PageSetSize {
                         page_id: page.id().get(),
@@ -274,11 +316,13 @@ impl Engine {
                     id,
                     label,
                     menu: "View",
+                    submenu: None,
                     command: Command::UiView(action),
                     shortcut: Some(ControlShortcut {
                         key,
                         primary: false,
                         shift: false,
+                        alt: false,
                     }),
                     enabled: reason.is_none(),
                     disabled_reason: reason,
@@ -298,6 +342,7 @@ impl Engine {
                     id,
                     label,
                     menu: "Tools",
+                    submenu: None,
                     shortcut: None,
                     command: Command::UiBondToolSelect(SelectBondTool { order }),
                     enabled: reason.is_none(),
@@ -312,6 +357,7 @@ impl Engine {
                 id: "file.cancel",
                 label: "Cancel",
                 menu: "File dialog",
+                submenu: None,
                 shortcut: None,
                 command: Command::UiFile(UiFile {
                     expected_revision: state.revision,

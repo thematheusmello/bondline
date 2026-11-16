@@ -1,6 +1,68 @@
-# Status — 2026-11-15
+# Status — 2026-11-16
 
-## Current editable SMILES engine checkpoint
+## Current native editable SMILES checkpoint
+
+The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; this native
+feature builds on recoverable checkpoint `c85beb1`, engine `12c07c7`, chemistry `2d12d71`
+and renderer control `f65a333`. No push or publication occurred. Actions remains disabled
+at both repository and workflow level; do not enable or dispatch hosted work. M0, M1
+and M2–M5 remain incomplete.
+
+**Verified on macOS:** Edit → Paste Special → SMILES opens the real form. Ordinary OS
+clipboard paste, explicit geometry, unsupported-charge refusal with retained draft,
+benzene retry, one-step Undo/Redo, existing-bond editing and Unicode Save As/reopen work
+within the declared neutral chemistry/layout bounds. Independent XML/RDKit consumers
+verify the actual saved 8-atom/7-bond/2-component file, C8H14, unchanged original fragment
+bytes, fixed geometry and unchanged input. This is an explicit form, not automatic
+clipboard capture or complete reference-dialog parity.
+
+Read [native evidence](docs/verification-native-smiles-paste.md),
+[engine evidence](docs/verification-smiles-paste-engine.md) and
+[chemistry evidence](docs/verification-smiles-authoring-chem.md). The central presentation
+uses `ui.file`; Apply uses the existing `structure.paste_smiles`. There are 31 commands
+and 19 default Drawing/13 SDF controls. The native worker retains the two-worker bound,
+accepted intent, complete source owner, cancellation and close barriers. Opaque context
+identity closes real Save A→B→A races both before commit and during result presentation;
+the Rust-only result proof grants no Save acknowledgment or file-publication authority.
+Ten native-worker and six actual-App cases pass without weakening old assertions.
+
+**Full local gate 69758: 1245 passed / 0 failed / 1 ignored**, 180 result lines. Rustfmt,
+warnings-denied workspace/vendor clippy/tests, layers, licenses and corpus pass. Log
+`target/aromatic-authoring/ui-final-ci.log` is 151705 bytes, SHA256
+`ae8fc643726caab92a5fa41f81cf2348809f11162907252bffc41fdb7a51a365`.
+Native build 36938 exits 0. The prior catalogue and ABA RED failures/fixes are recorded
+in the native evidence. Runtime closures remain 155/166/221 packages plus two assets;
+corpus remains eight files/five bundles with broader chemistry/CDX coverage missing.
+The earlier MCP `AddrInUse` failure remains unexplained; this pass is not a causal fix.
+No parser fuzzing, dependency/lock, SDK, font, old fixture/oracle, corpus or golden change.
+
+The only live Bondline preview is PID 39430, bundle
+`target/smiles-ring-native/Bondline.app`, identifier `org.bondline.neutral-simple-ring-review`.
+It is Saved on `native-edited-λ.cdxml`, 8/7/2 at 100%, Single selected; no control port was
+requested. Binary 20988368 bytes, SHA256
+`cdecd57c69b81d91ae63ce70702094478147eb2fc8bb2c764ce2b2a5e1b96c14`.
+Old Bondline previews are closed. No Bondline tabs remain in the inspected Chrome windows;
+unrelated tabs/apps were preserved. Codex/terminal tabs were not inspected. All compiler,
+test, oracle and native build jobs are terminal, including 28908, 69758 and 36938; do not
+poll old handles. All agent handoffs are returned. Root owns continuation.
+
+**Remaining:** exact reference dialog/defaults and automatic clipboard completion;
+native Windows/Linux and race/cancel/poison checks; measured DPI/2×, Fit/readability and
+broader chemistry/layout. The Windows shortcut is wired, not executed here. Neither the
+old approved golden nor synthetic App tests establish those workflows.
+
+**Next executable task:** follow Gate B of the
+[source-qualified SMILES plan](docs/research/smiles-source-import-plan.md). First declare
+independent selected/all-record preservation and writer expectations, then implement the
+complete retained source/current mapping and notation-only record transaction with real
+Undo/Redo and independently checked Save/reopen. Do not grant edit authority to a partial
+projection or silently discard opaque/unselected bytes. Continue the M2 atom, selection,
+ring and style roadmap after that boundary; no new converter-only detour is required.
+
+The sections below preserve historical checkpoints. Their process IDs, live-job statements
+and next-task proposals describe those earlier revisions, not the current state above.
+
+## Previous editable SMILES engine checkpoint
 
 The complete M0–M5 goal remains **active**. Branch feat/multiple-bonds. Recoverable
 feature12c07c7 delivers the actual one-step Drawing paste command, supported layout and

@@ -27,9 +27,10 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
-Current editable SMILES engine/layout/transport source passes full local1229/0/1. Read
-docs/verification-smiles-paste-engine.md before extending it; native clipboard/dialog is
-not delivered by that checkpoint. Earlier density pipeline78964's MCP replacement-bind
+Current native editable SMILES source passes full local1245/0/1. Read
+docs/verification-native-smiles-paste.md for the ten worker/six App tests, real ABA
+regressions and bounded Mac clipboard/edit/Save/reopen evidence. Automatic clipboard
+capture and exact reference-dialog parity remain open. Earlier density pipeline78964's MCP replacement-bind
 `AddrInUse` remains unexplained, not causally fixed by a later pass. Native2×/DPI remains
 unverified; preserve docs/verification-native-drawing-density.md evidence and guards.
 
@@ -97,6 +98,15 @@ not empty successful-looking API stubs. Document any isolated OS FFI exception e
 Loopback connections require the fresh session token emitted only in opt-in startup stdout.
 Never commit or expose actual tokens in logs, screenshots or verification records. Stdio MCP
 is separate and opens no listener. Keep file access bounded and explicitly authorized.
+
+Native SMILES paste is a typed `ui.file` presentation followed by the existing
+`structure.paste_smiles` command, never a fake empty-notation binding. The specialized
+registered worker reserves before consuming intent and validates full UI context again
+with finish. Keep the opaque file-context stamp through association ABA and the serde-
+skipped result stamp captured atomically with commit. Neither grants a Save/close ACK.
+The UI keeps actual thread/form retirement barriers, frame-start modal fencing, copyable
+stale drafts and truthful historical success. Generic file binding must continue to refuse
+paste work; no new pool, Save lease or automatic rebase/retry after consumption errors.
 
 Current map: model (L0, pages, Point2 and validated elemental atom/bond/fragment graphs);
 cdxml (L0, source-preserving syntax, integral/source-ID decoding, checked attribute
@@ -231,7 +241,8 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current30-command registry includes document.new, complete SDF/SMILES-file Open/Save and bond.create
+The current31-command registry includes document.new, complete SDF/SMILES-file Open/Save,
+bounded editable structure.paste_smiles and bond.create
 for independent neutral-carbon fragments with optional Single(default)/Double/Triple order
 and literal H=`4-order_weight`, plus CDXML/CDX/MOL open/save. bond.extend requires the
 explicit H policy/revision and one incident supported bond with consistent literal
