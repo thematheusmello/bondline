@@ -6,7 +6,7 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-The named benzene/cyclopentadiene command increment follows locked contract105b220.
+The named benzene/cyclopentadiene command increment is committed89aa03d after contract105b220.
 Read [the lock](docs/research/unsaturated-ring-authoring.md) and
 [receiving](docs/verification-unsaturated-rings.md). Existing ring.create now accepts
 closed sized/named alternatives, bounded2/5 phase ranking against proven literal H,
@@ -125,8 +125,9 @@ or lose its unsaved draft; revalidate any newer handle before restarting work.
 
 ## Next exact steps
 
-1. Lock the minimal native named-tool extension and ordered press-latched Shift policy,
-   then independent JSON/context/actual-App REDs. Preserve public SelectRingTool/legacy
+1. The minimal native extension is now locked in
+   docs/research/native-unsaturated-rings.md before new tests/product changes. Next
+   observe independent JSON/context/actual-App REDs. Preserve public SelectRingTool/legacy
    EffectiveTool::Ring, add closed named alternative and additive same-builder preview,
    and keep one tool authority/epoch/context. Implement two original procedural controls
    with all current input/source/DPI/close guards. Continue
