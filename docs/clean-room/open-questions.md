@@ -1,5 +1,13 @@
 # Open questions
 
+- Drawing settings data is locked in research/drawing-settings-data.md. Primary scalar
+  comparison resolves XML ChainAngle as degrees versus CDX degrees×65536; BondLength is
+  XML points/CDX points×65536. Missing values have no universal numeric default. Root-only
+  supported projection is distinct from inherited effective styles; out-of-subset, nested,
+  duplicate or other-width binary settings remain opaque/source-backed. Fixed toggles,
+  style-sheet resolution, native defaults/forms, journal styles and26.1 behavior remain
+  required. A data-only field never proves native tool application of the preference.
+
 - The full native-chain dependency contract is in research/native-chain-plan.md.
   Snaking requires one positioned-path edit rather than repeated fixed-chain commits.
   Pinned egui PointerMoved lacks modifiers, and egui-winit stores only frame-level

@@ -7,6 +7,18 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Authored drawing-settings data contract — no implementation yet
+
+On clean65af201, previous turn is PROGRESS (paths/previews1574/0/1 plus10kASan).
+Read docs/research/drawing-settings-data.md: primary scalars resolve XML point/degree
+units versus binary signed fixed16.16; no universal absent defaults. Optional root
+model/data, CDXML/CDX supported projection and whole-document loss guards are next.
+Unprojected source values retain old Open/passthrough behavior/incomplete authority.
+The first existing-API XML-model RED precedes new types/producer; no test/code is
+present at this contract checkpoint. Registry40/native bindings unchanged. Complete
+settings commands/forms/defaults/style sheets and native chain flows remain required.
+Protected user windows stay untouched; Actions OFF, no Root execution job.
+
 ### Verified literal path/preview prerequisite
 
 This increment follows a433c3c and dependency contract b4c6ae1; its atomic source/test/
