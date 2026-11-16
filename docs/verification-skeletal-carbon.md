@@ -86,6 +86,16 @@ It predates later test-only numeric/lint corrections and does not claim their ex
 Ignored target/skeletal-display/root-receiving records exact declarations, formatting-only
 ports, correction proofs, product/log identities and the actual root/toolchain environment.
 
+After commit5fa23d1, headless CLI76145 separately opens an original1,229-byte native
+six-carbon integer-coordinate Kekulé source and captures1024² CPU/GPU PNGs. Actual adapter
+readback is Metal / Apple M3 Max / IntegratedGpu; complete RGBA agrees. Independent
+Expat checks six literal H1/no nodes and pinned RDKit consumes C6H6/c1ccccc1. Source,
+saved baseline and history stay unchanged. The actual GPU image is visually inspected:
+six outer axes, three shortened inner strokes, white gaps and no carbon glyphs/masks.
+This is an original headless-render audit, not a native UI screenshot, named-tool authoring
+workflow or approved regression golden. Source/PNG/receipt stay disposable under
+target/skeletal-display/visual; no new asset is shipped and no user draft is touched.
+
 ## Reproduction and limits
 
 ```sh

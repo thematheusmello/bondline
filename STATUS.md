@@ -6,9 +6,9 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-The skeletal display/explicit-label increment follows locked contractfb17db9, data
-caa8d60 and desktop checkpoint27b87a5. The commit containing this record is its
-recoverable source/test/docs checkpoint. Read
+The skeletal display/explicit-label increment is committed5fa23d1, following locked
+contractfb17db9, data caa8d60 and desktop checkpoint27b87a5. This is the recoverable
+source/test/docs checkpoint. Read
 [the contract](docs/research/skeletal-carbon-display.md) and
 [receiving evidence](docs/verification-skeletal-carbon.md).
 
@@ -37,6 +37,12 @@ Native/CLI build63733 exits0. No native window is opened/replaced for this incre
 Independent bounded source review finds no material product issue; exact identities,
 correction proofs and reproduction commands are in receiving. Root/isolated locks,
 old native-v0/consumers/goldens and unchanged MCP test remain pinned.
+
+Headless CLI76145 additionally produces an original six-carbon skeletal Kekulé preview;
+actual adapter Metal/Apple M3 Max/IntegratedGpu and complete CPU/GPU RGBA agree.
+Independent Expat/RDKit checks C6H6 and exact H1/no source nodes. The actual GPU PNG is
+visually inspected under target/skeletal-display/visual. It is not a native screenshot,
+named-ring-tool workflow or approved golden; no asset is shipped or user draft changed.
 
 ## Existing application and remaining parity
 
@@ -81,7 +87,7 @@ reference binary/asset is opened or inspected. Native OS/DPI/Windows/Linux workf
 acceptance for inset/selection/rings remains unverified.
 
 Root owns Cargo/Git/CUA/live mutation. All focused handles, format94410, aggregates
-51082/42092 and build63733 are terminal; no Root Cargo job is live. Source/numeric
+51082/42092, build63733 and headless visual76145 are terminal; no Root Cargo job is live. Source/numeric
 reviews and next weighted-ring research are terminal; no worker owns execution or live
 product changes. Their ignored proposal is target/unsaturated-rings/source-proposal/
 (proposal9306B/SHA2568d348c974ee0962559ac835bfb8fd69dd88235eb9ba8450cef17c56f3898f56f).
