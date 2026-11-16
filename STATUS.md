@@ -1,6 +1,67 @@
 # Status — 2026-11-16
 
-## Current native editable SMILES checkpoint
+## Current source-backed SMILES record checkpoint
+
+The full M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; notation feature
+`78f7d8d` and retained-projection feature `162f79d` are separate local commits. This
+command feature adds the shared adapter integration. No push/publication or hosted run
+occurred. Repository/workflow Actions remains disabled. M0's native license blocker is
+resolved; full M0, M1 and M2–M5 remain incomplete.
+
+**Verified headlessly:** `document.import_smiles_records` explicitly selects one record or
+all records from the already-open whole file. A clean Drawing namespace retains complete
+original/current source and live global-ID/token maps. Supported carbon bond-order/H edits
+commit once with source; Undo/Redo and whole-source Save/reopen/reimport preserve opaque
+and unselected bytes. Writer DFS token reordering preserves current model IDs/direction.
+Generated geometry stays fixed and is not represented as saved SMILES coordinates.
+
+Read [the contract](docs/research/smiles-record-authoring-contract.md) and
+[receiving evidence](docs/verification-smiles-record-authoring.md). There are 32 commands;
+default native controls stay 19 Drawing/13 SDF. Six codec, seven projection, eight command,
+three actual CLI/initialized-stdio/authenticated-socket and one CPU/GPU/Pillow case pass.
+The command tests include 16 fixed-seed complete-snapshot history sequences. Current model,
+source, saved baseline, maps, worker bounds, close/file context and Save leases stay distinct.
+
+**Final source gate 84163 exits 0: 1270 passed / 0 failed / 1 ignored**, 184 result lines.
+Rustfmt, warnings-denied workspace/vendor clippy/tests, layers, licenses and corpus pass.
+Log `target/smiles-record-authoring/full-ci-final-source.log`: 154932 bytes, SHA256
+`6f5970731317d353cf13b4bbb479feffbeddc8161c6f561b4f6db8f2861ab71e`.
+Before the last metadata clarification, 37337 also passed 1270/0/1. Earlier catalogue
+attempts 46079 (52/1), 63504 (64/1) and 7908 (1164/1/1) exposed only missing-name/count
+expectations. Eight exact name sets and eighteen counts add one command; old assertions,
+deadlines/retries and socket checks remain. Real stdio 7866 (2/1) separately reproduced
+All-selector extra-field acceptance; All{} fixes it and unchanged 81285 passes 3/0.
+
+Runtime closures remain 155/166/221 packages plus two assets; corpus remains eight files
+from five bundles with general CDX/chemistry coverage missing. Five frozen declarations
+reproduce the current tests through rustfmt alone; all seven IO handoff pins and the old
+MCP control source stay exact. No dependency/lock, SDK, font, old fixture/oracle, corpus,
+golden or fuzz change. Historical MCP AddrInUse failures remain unexplained, not fixed.
+
+**Native is unfinished:** record import, projection navigation and source-bound order
+controls remain blocked. The existing hotspot path holds the UI frame mutex; enabling it
+would reparse a whole file synchronously. The earlier native paste feature `71c3a74` remains
+the separate actual-window checkpoint. No native bundle was refreshed or launched here.
+Process 39430 was confirmed running at the existing
+`target/smiles-ring-native/Bondline.app` path; last observed UI state was Saved8/7/2 at100%,
+not re-inspected this turn. No unused preview/tab was reopened. All compiler/test/oracle
+jobs and agent tasks are terminal; do not poll 84163/37337/7908/63504/23679/81285/7866.
+
+**Next exact task:** implement native selected/all import presentation and the registered
+source-bound order worker, using this registry and existing two-worker/retirement/close
+barriers. Add actual-App missing-control and deferred-input/cancel/stale/frame-fence tests
+first; preserve full source and copyable drafts. Wire validated projection display/view
+separately from edit authority. Launch the actual native app, exercise selection→import→
+order edit→Undo/Redo→Unicode whole-file Save→raw reopen→explicit reimport, and independently
+consume the actual files. Keep one current preview and protect any unsaved user work.
+Then continue M2 atom/selection/ring/style authoring and the complete remaining roadmap.
+Broader chemistry/layout, automatic clipboard completion, measured DPI/2× and new
+Windows/Linux interaction remain open; do not relabel the bounded engine as complete M1.
+
+The sections below retain historical checkpoints; their process and next-task statements
+are superseded by the current state above.
+
+## Previous native editable SMILES checkpoint
 
 The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; native feature
 `71c3a74` builds on recoverable checkpoint `c85beb1`, engine `12c07c7`, chemistry `2d12d71`

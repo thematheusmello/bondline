@@ -317,3 +317,5 @@ mod components_conversion_wire;
 
 #[path = "support/smiles_paste_wire.rs"]
 mod smiles_paste_wire;
+#[path = "support/smiles_record_authoring_wire.rs"]
+mod smiles_record_authoring_wire;

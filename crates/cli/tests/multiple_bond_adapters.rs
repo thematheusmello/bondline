@@ -135,7 +135,7 @@ fn baseline_cli_multiple_orders_round_trip_and_list_typed_commands() -> TestResu
         .iter()
         .map(|value| value["name"].as_str().ok_or("name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(commands.len(), 31);
+    assert_eq!(commands.len(), 32);
     assert_eq!(commands.len(), names.len());
     for name in ["bond.create", "bond.extend", "ui.bond_tool"] {
         let command = commands

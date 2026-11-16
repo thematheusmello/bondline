@@ -78,3 +78,97 @@ The seven IO product pins remain exact from the implementation handoff through i
 receiving. Five independent test declarations reproduce their committed form using only
 rustfmt; no expected values or assertions changed. This library slice does not deliver
 native record selection, drawing navigation or editing controls.
+
+## Shared commands, history and actual transports
+
+`document.import_smiles_records` is the 32nd command. Its seven required fields are
+expected_revision, selection, bond_length_pt, origin_x_pt, origin_y_pt, page_width_pt and
+page_height_pt. It captures the already-open raw SMILES owner without rereading a path.
+Success starts a clean Drawing namespace: revision/generation/view epoch advance, history
+clears, current equals saved, and the SMILES association stays. No file is published and
+no Save acknowledgment is granted. The compact whole-file summary adds projected_records
+only for the backed Drawing; the old raw-file summary remains exactly three fields.
+
+Mapped SMILES `bond.set_order` work is deferred through the same worker budget and registry.
+One immutable model/file/map candidate commits one history step. Original, current and
+last-saved state remain distinct. A synchronized whole-file Save uses the existing lease
+and publication path. Raw model drift, unencoded page/layout changes and cross-format
+loss refuse; native/CDXML editing behavior stays separate. Source/owner/revision/generation,
+close epoch, cancellation and opaque file-context identity prevent stale application.
+
+The first 1513-byte command declaration is SHA256
+`3bf6f8a46ac2e37e22ac1dd0e3f26b935b76b394ff1b8562f8336e5e38b2c8e6`.
+Run 32044 reaches runtime UnknownCommand, 0/1; initial 87177 passes 1/0. The frozen eight
+cases are 28260 bytes, SHA256
+`353f13413e81e3555becac1512c6411314b2987eac1d126671e1b0ae812a5601`.
+They pass on 23679, including 16 fixed-seed generated whole-snapshot Undo/Redo cases,
+repeat edits across DFS remapping, raw/RDKit saved-file checks, cancellation/foreign/ABA
+refusals and truthful old Save publication without reassociation after New.
+
+The first actual CLI declaration is 5133 bytes, SHA256
+`faf0473c5e2f4e651358fc618d5fec61a0f90625a6421c9c4b15ccdfa16ac1db`.
+Run 71774 reaches actual executable unknown_command, 0/1. The three frozen transport cases
+are 15639 bytes, SHA256
+`f08f2a219adfd7f86054fb0a747b4b81a4335fc0356394f716709a544f7e9025`.
+First 7866 passes CLI/socket but fails stdio, 2/1: an All selector with record_id is accepted
+by serde's tagged unit variant and reaches wrong-kind unsupported_content instead of the
+required invalid_params. Changing only All to an empty struct variant enforces the closed
+selector with the same wire spelling. Unchanged receiving 81285 passes 3/0.
+
+The single independent render declaration is 5419 bytes, SHA256
+`00b136812eff742da8e4865fd7e2ebcdac050a5e759263856679d9ef6db70773`.
+Run 23679 passes it alongside the eight command cases. Actual 1024-square CPU/GPU PNGs
+match before and after the middle-record edit; a real adapter is reported. Pinned Pillow
+checks valid RGBA PNGs, ink and changed decoded pixels. Captures preserve complete state,
+source, pointers, path, history and original file/mtime. This is headless receiving,
+not a new RED, native-window observation or human-approved golden.
+
+```sh
+cargo test -p bondline-commands --test smiles_record_edit --test smiles_record_render --locked
+cargo test -p bondline-cli --test sdf_capture_adapters smiles_record_authoring_wire:: --locked
+cargo xtask ci
+```
+
+Old catalogue receiving 46079 passes 52/1; aggregate 63504 stops at 64/1 and 7908 at
+1164/1/1. These failures are omitted new-name or 31-versus-32 expectations, including an
+assertion before the old conversion workflow begins. Eight exact name lists add only the
+new command; eighteen old count assertions advance by one. Every old name, behavioral
+assertion, deadline, retry policy and socket check remains. Aggregate 37337 then passes
+1270/0/1, 184 result lines; its log is 154263 bytes, SHA256
+`b730601524007adc074396249310a9618c1367409be3757df69c9e57ee40f1d1`.
+Registry descriptions are subsequently clarified to include the synchronized record path;
+the final source gate is recorded below.
+
+Native record selection, viewport/navigation and source-bound order inputs remain blocked.
+The existing native hotspot path executes while holding the frame mutex, so enabling it
+without a registered worker would reparse potentially 64 MiB on the UI thread. Implement
+that worker and actual desktop acceptance next; do not flip the global completeness flag.
+Reopening a saved SMILES file is raw-file Open followed by explicit reimport into a fresh
+namespace. No saved 2D geometry or cross-session atom-ID preservation is claimed.
+
+## Final integrated checks
+
+After the registry-description clarification, final source gate 84163 exits 0:
+**1270 passed / 0 failed / 1 ignored**, 184 result lines. Rustfmt, warnings-denied
+workspace/vendor clippy, workspace/vendor tests, layers, licenses and corpus pass.
+`target/smiles-record-authoring/full-ci-final-source.log` is 154932 bytes, SHA256
+`6f5970731317d353cf13b4bbb479feffbeddc8161c6f561b4f6db8f2861ab71e`.
+Rust 1.94.1, incremental 0/jobs 2/dev+test debug 0 and the literal pinned Python were used.
+Runtime closures remain 155/166/221 packages plus two assets; corpus remains eight files
+from five bundles with broader chemistry/CDX omissions. No dependency/lock, SDK, font,
+old fixture/oracle, corpus or golden change and no new fuzz run. The old MCP AddrInUse
+failure remains unexplained; these unchanged passing checks establish no causal fix.
+
+The integrated receipt is 5537 bytes, SHA256
+`aa123d24d0ee1ec58a6d5a0147b80ca0c79db290c50d8c5598db1ed1e5ee7100`, under ignored
+`target/smiles-record-authoring/integrated-receiving.json`. All jobs are terminal.
+Final protection checks preserve all 582 unique parity IDs/order, match the 32-row contract
+to the actual CLI catalogue and resolve 409 local documentation links. Twenty-three old
+test files and the registry unit tests are byte-exact after reversing only the allowed
+new-name/count/bridge edits. The 6984-byte source/protection receipt is SHA256
+`bd2f3b32c9bbf9f14f592b21f0eca4d7faf39eafb99bff42db1e182a1520e9bb`, under ignored
+`target/smiles-record-authoring/final-protection.json`.
+No native bundle was refreshed or launched; the existing preview remains a separate
+earlier checkpoint. New Windows/Linux execution, native record workflows, wider chemistry,
+reference behavior and human-approved scene coverage remain unverified/incomplete.
+Actions stays disabled. No push or publication occurred; M0–M5 remains active.

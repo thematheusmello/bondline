@@ -505,3 +505,18 @@ coordinate input succeeded. No event trace establishes their cause. A failed Dou
 click clears the numeric hotspot; fresh positional input followed by key1 succeeded.
 Do not infer a generic OS or renderer defect from stationary-key attempts. Native
 race/cancel/poison paths, Windows/Linux interaction and measured DPI/2× remain unverified.
+
+## Retained SMILES record engine, 2026-11-16
+
+[Receiving evidence](../verification-smiles-record-authoring.md) now establishes bounded
+selected/all import, H/order transactions, whole-source Save/history and actual headless
+CLI/MCP/socket/capture workflows. It preserves opaque/unselected bytes and generated
+geometry separately. This resolves the earlier missing source-backing/record transaction
+for that declared subset, not a complete26.1 native file-browser or record-authoring flow.
+Public documentation here does not establish exact record selection, insertion, naming,
+styles or saved-layout behavior. The new policies are original Bondline choices.
+
+Native record controls/navigation and source-bound order workers remain required. The
+existing input path executes under the frame mutex; do not enable it for full-source
+reparsing without registered work/retirement, context and close guards. Wider chemistry,
+stereo/charged/isotopic drawing, larger layouts and cross-format loss policies remain open.

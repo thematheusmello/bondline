@@ -114,10 +114,21 @@ pub(super) fn set_order(
     document: &StoredDocument,
     params: BondSetOrder,
 ) -> Result<StoredDocument, Error> {
-    if !document.is_fully_mapped()
-        || document
-            .source_info()
-            .is_some_and(|source| source.format != "cdxml")
+    set_order_with_cancel(document, params, &crate::Cancellation::default())
+}
+
+pub(super) fn set_order_with_cancel(
+    document: &StoredDocument,
+    params: BondSetOrder,
+    cancel: &crate::Cancellation,
+) -> Result<StoredDocument, Error> {
+    cancel.check()?;
+    let smiles = document.has_smiles_projection();
+    if !smiles
+        && (!document.is_fully_mapped()
+            || document
+                .source_info()
+                .is_some_and(|source| source.format != "cdxml"))
     {
         return Err(Error::UnsupportedBondOrderSource);
     }
@@ -203,6 +214,9 @@ pub(super) fn set_order(
         .order = params.order.model_order();
     let replacement =
         Fragment::new(fragment_id, atoms, bonds).map_err(bondline_model::Error::from)?;
+    if smiles {
+        return Ok(document.with_smiles_fragment(page_id, replacement, cancel)?);
+    }
     let mut candidate = document.clone();
     candidate
         .model_mut()

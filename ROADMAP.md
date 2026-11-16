@@ -4,7 +4,12 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
-The native editable SMILES checkpoint passes the full local gate1245/0/1, with bounded
+The source-backed SMILES record engine now passes local1270/0/1: explicit selected/all
+import, supported order edits, complete-source Save/history, actual CLI/MCP/socket and
+CPU/GPU evidence. Native record selection, navigation and registered order-edit work are
+the next gate; see docs/verification-smiles-record-authoring.md. Full M0–M5 remains open.
+
+The earlier native editable SMILES checkpoint passes the full local gate1245/0/1, with bounded
 Mac OS clipboard/refusal/retry/history/edit/Unicode Save/reopen and independent file checks.
 The earlier density pipeline78964's MCP `AddrInUse` failure remains unexplained; this pass
 is not a causal fix. Automatic clipboard capture, exact reference-dialog behavior and
@@ -38,7 +43,7 @@ native2×/DPI remain unverified. See
       original SMILES notations. Foreign/general CDX, broader SMILES/InChI and chemistry
       corpus coverage remain missing.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.
-      576 stable-ID source-cited control rows now exist, including three provisional
+      582 stable-ID source-cited control rows now exist, including three provisional
       unversioned Help roles; modern menus, unnamed glyphs and remaining
       context menus still need evidence. Six versioned screen/flow groups and pinned public
       research now guide implementation; the download center requires login and observed
@@ -134,7 +139,7 @@ Earlier97729's754/1 replacement-bind AddrInUse remains unexplained; twenty passi
 diagnostic contexts and a contradicted outbound-owner hypothesis establish no causal fix.
 See [integration](docs/verification-cdx-file-end-integration.md) and
 [independent declarations](docs/verification-cdx-file-end-tests.md). No corpus admission
-or broad CDX compatibility follows. Next define general source-qualified SMILES drawing
+or broad CDX compatibility follows. That checkpoint proposed source-qualified SMILES drawing
 import: selected/all-record behavior, complete opaque source/baseline and ID mapping,
 stale-job/history/unsaved decisions and explicit Save/loss authority. Broader packing,
 larger/polycyclic/multiple-bond rings and chemistry remain; retain unsupported source
@@ -148,10 +153,11 @@ and whole-file Save. Neutral fixed-H/Kekulé chemistry, bounded layout and the o
 Drawing append now pass independent engine/CLI/stdio/socket and actual saved-file checks;
 the explicit native Paste Special form now adds actual OS clipboard/refusal/retry,
 one Undo/Redo, native bond edit and Unicode Save/reopen. The full gate passes1245/0/1;
-see docs/verification-native-smiles-paste.md. Automatic clipboard capture, source-file
-record rewriting, broader chemistry and whole-file editable import remain. Continue the
-source-qualified import/record gate from the same plan, retaining complete opaque data;
-then the missing M2 atom/selection/ring/style authoring workflows below.
+see docs/verification-native-smiles-paste.md. The later bounded record engine now adds
+selected/all retained Drawing import, synchronized order edits and whole-file Save through
+all delivered headless adapters. Native record import/navigation/edit workers, automatic
+clipboard capture and broader chemistry/import remain. Finish native record acceptance
+from the same plan, then the missing M2 atom/selection/ring/style workflows below.
 
 Whole-record SDF removal now has a source-preserving codec, the shared typed command,
 CLI/stdio/authenticated-loopback routes and original Records confirmation UI. Independent
@@ -467,7 +473,8 @@ notation and global ranges/counts, with opaque data retained privately. It uses 
 historical deferred-result/cancellation/close machinery, no write lease or mutation, and
 a128KiB serialized-object budget. Core and independent raw/graph/wire evidence are linked
 from docs/verification-smiles-record.md; native selection/preview/editing remain missing.
-After the bounded component profile, prioritize the general source-qualified drawing
-import contract above, not an editable first-record substitute. Wider CDX typed metadata/Text/Double/style mapping,
+The newer bounded source-backed record engine now delivers selected/all import, supported
+order edits and complete-source Save/history headlessly. Finish its native worker/control
+gate next. Wider CDX typed metadata/Text/Double/style mapping,
 faithful rendering and source-backed editing remain required; these source/automation
 foundations do not complete format or editor parity.

@@ -1,5 +1,14 @@
 # Verification log
 
+## Complete-source SMILES record authoring, 2026-11-16
+
+[Format/retained-model/command/transport evidence](verification-smiles-record-authoring.md)
+records missing-API/unknown-command REDs, a real stdio closed-selector regression, 25 new
+passes including generated whole-snapshot history and actual CPU/GPU PNG checks, and
+the final1270/0/1 full local gate. Actual saved files preserve opaque/unselected bytes.
+Native record selection/navigation/order inputs remain blocked until registered workers
+and actual desktop acceptance are implemented. This does not complete M1 or wider parity.
+
 ## Native editable SMILES paste, 2026-11-16
 
 [Native/worker/App evidence](verification-native-smiles-paste.md) records missing-control

@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has31 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has32 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -56,7 +56,8 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.open_sdf` | `path`, optional `discard_unsaved=false` | Validate every mixed V2000/V3000 record and retain complete ordered source; clean collection session and cleared history, without a drawing projection |
 | `document.save_sdf` | `path`, optional `overwrite=false` | Atomic whole-source collection save; retains every record, MOL version, ordered field and byte; no molecular regeneration |
 | `document.open_smiles` | `path`, optional `discard_unsaved=false` | Validate all supported notation records and retain the entire source; clean source-file session without a drawing projection |
-| `document.save_smiles` | `path`, optional `overwrite=false` | Atomic exact whole-file save, including ignored lines, opaque application bytes and original endings; no notation regeneration |
+| `document.import_smiles_records` | Required `expected_revision`, `selection:{mode:"record",record_id:N}` or `{mode:"all"}`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt` | Deferred clean source-backed Drawing transition over the already-open complete SMILES file; explicit bounded selection, preserved opaque/unselected source, new namespace/history and retained file association |
+| `document.save_smiles` | `path`, optional `overwrite=false` | Atomic exact current whole-file save, including supported synchronized record edits, ignored lines, opaque application bytes and original endings; refuses detached model/layout drift |
 | `file.convert_smiles_to_cdxml` | Required `expected_revision`, `input_path`, `output_path`, `bond_length_pt`, `origin_x_pt`, `origin_y_pt`, `page_width_pt`, `page_height_pt`; optional `profile="neutral_carbon_path_v1"`, `"neutral_acyclic_v1"`, `"neutral_simple_ring_v1"` or `"neutral_components_v1"` | Deferred create-only conversion into new native CDXML; bounded carbon path, neutral tree, one3–8 Single cycle with attached trees, or all supported tree/ring components (64 total atoms). Current session and all its baselines remain unchanged |
 | `file.export_smiles_fragment` | Required `expected_revision`, positive `page_id`, positive `fragment_id`, `output_path` | Create-only noncanonical explicit-H SMILES file for exactly one complete-source selected fragment; geometry/document context are explicitly not encoded and the current session is unchanged |
 | `sdf.record.inspect` | Required `expected_revision`, positive `record_id`; optional `field_offset=0`, `field_limit=64` (1..64) | Deferred read-only ordered field page for one captured record; explicit value omissions and bounded compact JSON |
@@ -72,10 +73,20 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
 | `bond.create` | `page_id`, `begin_x_pt`, `begin_y_pt`, `end_x_pt`, `end_y_pt`; optional `order="single"` | One independent neutral-carbon fragment with the requested Single/Double/Triple bond; each endpoint receives literal H=`4-order_weight` |
 | `bond.extend` | Required `expected_revision`, `page_id`, `fragment_id`, `begin_atom_id`, `end_x_pt`, `end_y_pt`, `hydrogen_policy="rectify_terminal_carbon"`; optional `order="single"` | Add the requested bond/new carbon to a consistent supported terminal carbon, subtracting the bond weight from its literal H; native complete CDXML/source-free data only |
-| `bond.set_order` | Required `expected_revision`, positive `page_id`, `fragment_id`, `bond_id`, explicit `order` (`single`, `double`, `triple`) and `hydrogen_policy="rectify_neutral_carbon"` | Edit one existing edge and both consistent neutral-carbon literal H counts; preserve geometry/IDs/direction, one history commit, validated no-op; source-free/byte-proven native CDXML only |
+| `bond.set_order` | Required `expected_revision`, positive `page_id`, `fragment_id`, `bond_id`, explicit `order` (`single`, `double`, `triple`) and `hydrogen_policy="rectify_neutral_carbon"` | Edit one existing edge and both consistent neutral-carbon literal H counts; preserve geometry/IDs/direction, one history commit and validated no-op; native/CDXML or deferred synchronized SMILES record transaction |
 | `history.undo` | `{}` | Previous authored snapshot |
 | `history.redo` | `{}` | Next authored snapshot |
 | `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only drawing page or restricted all-record SDF virtual page1 PNG; explicit `cpu` or `gpu` |
+
+SMILES record import requires explicit selection of the already-open raw file. It starts
+a clean Drawing namespace with generated geometry, retains the complete file association,
+and publishes no bytes. Whole-file summary counts still describe all records;
+projected_records identifies the visible subset. Model IDs belong to that namespace, not
+record ordinals. Supported bond-order edits update model, current source and mappings in
+one deferred history transaction; current source Save preserves unselected/opaque bytes.
+Raw Open/reimport after saving creates a fresh namespace and does not persist 2D geometry.
+Native import/navigation/input controls remain a separate worker gate. See
+[independent evidence](verification-smiles-record-authoring.md).
 
 The delivered CLI exposes `commands` and `run --cmd '<request>'`. Repeat `--cmd` to execute
 sequential operations in one in-memory engine; stdout is one final JSON snapshot. Failure

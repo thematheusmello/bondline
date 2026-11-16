@@ -19,6 +19,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
         names,
         [
             "document.inspect",
+            "document.import_smiles_records",
             "document.new",
             "document.close",
             "ui.file",

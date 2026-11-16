@@ -27,12 +27,19 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
-Current native editable SMILES source passes full local1245/0/1. Read
+The native editable SMILES checkpoint passes local1245/0/1. Read
 docs/verification-native-smiles-paste.md for the ten worker/six App tests, real ABA
 regressions and bounded Mac clipboard/edit/Save/reopen evidence. Automatic clipboard
 capture and exact reference-dialog parity remain open. Earlier density pipeline78964's MCP replacement-bind
 `AddrInUse` remains unexplained, not causally fixed by a later pass. Native2×/DPI remains
 unverified; preserve docs/verification-native-drawing-density.md evidence and guards.
+
+The newer source-backed record engine has 32 commands and independent selected/all,
+whole-file edit/Save/history, actual CLI/MCP/socket and CPU/GPU evidence in
+docs/verification-smiles-record-authoring.md. The full local gate passes1270/0/1.
+Native record import, navigation and source-bound order work are the next integration
+gate; existing native input stays blocked. Do not call Engine.execute for the expensive
+SMILES record edit while holding the UI frame mutex, or substitute another converter.
 
 ## Research, provenance and implementation
 
@@ -248,7 +255,8 @@ Do not flatten it into an elemental fragment or call the library a reaction edit
 Mixed molecular versions and omitted zero-reagent counts are observed consumer extensions;
 V3000 wrapper AGENT versus published REAGENT remains an explicit unresolved conflict.
 
-The current31-command registry includes document.new, complete SDF/SMILES-file Open/Save,
+The current32-command registry includes document.new, complete SDF/SMILES-file Open/Save,
+explicit document.import_smiles_records over a captured raw file,
 bounded editable structure.paste_smiles and bond.create
 for independent neutral-carbon fragments with optional Single(default)/Double/Triple order
 and literal H=`4-order_weight`, plus CDXML/CDX/MOL open/save. bond.extend requires the
@@ -515,7 +523,8 @@ weaken the unchanged single-notation parser/converter limits, normalize names, d
 ignored lines or substitute the first/empty graph. Ordinals are source-local, not stable
 chemical identities. Keep the independent raw-byte and unchanged per-record consumers.
 
-`StoredContent::SmilesFile` stores one immutable owner because no file edit API exists.
+`StoredContent::SmilesFile` stores one immutable raw file owner. Explicit record import
+creates a separately backed Drawing with synchronized whole-source editing authority.
 Current/saved/plans retain the complete variant; retained accounting deduplicates source
 and index. `document.open_smiles` and `document.save_smiles` reuse the common guarded
 Open/Save path, lease, generation, publication and native request/close rules. Automatic
@@ -523,7 +532,8 @@ state has document:null and compact smiles_file {format,byte_length,record_count
 notations/data or a recordsVec. Graph/SDF edits and cross-format Save refuse this kind;
 document.new explicitly starts a distinct source-free session. The .smi/.smiles chooser,
 original inspector and Unicode Save/reopen have bounded native evidence. No chemical
-preview/editing, metadata editor or source-to-drawing authority follows. See
+preview/editing follows from raw Open itself. The separate record engine is verified
+headlessly; native import/edit controls and a metadata editor remain missing. See
 verification-smiles-file-app.md and verification-smiles-file-ui.md. Run the separate
 smiles_file_parse fuzz target locally as in fuzz/README.md; Actions stays disabled.
 
@@ -864,9 +874,9 @@ evidence; native races/other platforms remain unverified. Corpus8 files/5 bundle
 154/165/220 and2 assets remain. Parser/normalizer/renderer bodies, old consumers/fixtures/
 fonts/golden/corpus pins, locks and dependencies are unchanged; no new parser-fuzz run.
 
-Next M1 task: define general source-qualified SMILES drawing import: selected/all records,
-complete opaque source/baseline and ID mapping, stale jobs/history/unsaved decisions and
-explicit Save/loss authority. Broader packing/rings/chemistry/clipboard and SDF creation/
+The bounded headless source-qualified record import/edit/Save gate is delivered; follow
+current STATUS.md for native selection/navigation and registered order workers next.
+Keep its complete source, map, history and Save authority guards. Broader packing/rings/chemistry/clipboard and SDF creation/
 reordering remain required. Wider CDX typed metadata/Text/Double/
 style mapping and source-faithful editing remain backlog. No corpus admission occurred.
 Canonical CDX receiving, bounded fuzz and the1172/0/1 full gate pass; preserve the earlier

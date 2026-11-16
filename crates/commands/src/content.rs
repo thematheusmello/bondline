@@ -36,6 +36,8 @@ pub struct SmilesFileSummary {
     pub format: &'static str,
     pub byte_length: usize,
     pub record_count: usize,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projected_records: Option<Vec<u32>>,
 }
 
 impl From<StoredDocument> for StoredContent {
@@ -87,6 +89,13 @@ impl StoredContent {
     pub fn smiles_file(&self) -> Result<&SmilesFileDocument, Error> {
         match self {
             Self::SmilesFile(document) => Ok(document),
+            Self::Drawing(document)
+                if document
+                    .source_info()
+                    .is_some_and(|source| source.format == "smiles") =>
+            {
+                Ok(document.smiles_file()?)
+            }
             Self::Drawing(_) => Err(Error::WrongContent {
                 required: "smiles",
                 actual: "drawing",
@@ -99,13 +108,25 @@ impl StoredContent {
     }
 
     pub fn smiles_summary(&self) -> Option<SmilesFileSummary> {
-        let Self::SmilesFile(document) = self else {
-            return None;
+        let (document, projected_records) = match self {
+            Self::SmilesFile(document) => (document, None),
+            Self::Drawing(stored) => (
+                stored.smiles_file().ok()?,
+                Some(
+                    stored
+                        .smiles_records()?
+                        .iter()
+                        .map(|record| record.record_id().get())
+                        .collect(),
+                ),
+            ),
+            Self::Sdf { .. } => return None,
         };
         Some(SmilesFileSummary {
             format: "smiles",
             byte_length: document.as_bytes().len(),
             record_count: document.records().len(),
+            projected_records,
         })
     }
 
@@ -178,11 +199,11 @@ impl StoredContent {
             .len()
             .saturating_mul(size_of::<SmilesFileDocument>());
         bytes
-            .saturating_add(StoredDocument::retained_bytes(drawings).saturating_sub(drawing_inline))
-            .saturating_add(SdfDocument::retained_bytes(collections).saturating_sub(sdf_inline))
             .saturating_add(
-                SmilesFileDocument::retained_bytes(smiles_files).saturating_sub(smiles_inline),
+                StoredDocument::retained_bytes_with_smiles_files(drawings, smiles_files)
+                    .saturating_sub(drawing_inline.saturating_add(smiles_inline)),
             )
+            .saturating_add(SdfDocument::retained_bytes(collections).saturating_sub(sdf_inline))
     }
 }
 

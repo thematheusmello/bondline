@@ -594,8 +594,8 @@ independent consumers verify both actual 1407-byte 9/7/3 outputs. Native authori
 at100%; edited Fit78.79% refuses the existing distinct-pixel bond guard. An initial top
 label was clipped and attempted native pan produced no change, so full overview/pan
 remain unverified. No new parser-fuzz run or dependency change is claimed. [Integration](verification-smiles-components-integration.md)
-separates those scopes. General source-qualified drawing import still needs complete
-opaque backing/record selection, baseline/ID, history/stale-job and Save/loss policies.
+separates those scopes. That checkpoint preceded the bounded retained-record backing
+described above. General native import/editing and broader chemistry still need work.
 
 The [external CDX counterexample](research/cdx-external-writer-probe.md) now has a narrow
 canonical 28-byte FileEnd fallback after legacy TrailingData only. Legacy successes and the
@@ -608,7 +608,7 @@ rendering or cross-format authority follows. The N−2 legacy-prefix ambiguity r
 The incomplete-source UI keeps its preview refusal and exposes no chemical counts. The
 historical CDX receiving aggregate passed1172/0/1. Earlier MCP replacement-bind AddrInUse remains
 unexplained; bounded diagnostics and a contradicted hypothesis establish no causal fix.
-No corpus admission occurred. General source-qualified SMILES import, broader packing/
+No corpus admission occurred. Native source-qualified SMILES import, broader packing/
 chemistry and CDX metadata/Text/Double/style mapping remain M1 work.
 The [authoring/import study](research/smiles-source-import-plan.md) proposes editable
 Paste Special including benzene and real record rewrite/Save; no implementation follows

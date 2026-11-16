@@ -391,6 +391,7 @@ pub struct Prepared {
     sdf_edit: Option<crate::sdf_edit::EditPlan>,
     smiles_record: Option<crate::smiles_query::RecordPlan>,
     smiles_paste: Option<crate::smiles_paste::PastePlan>,
+    smiles_records: Option<crate::smiles_records::RecordsPlan>,
 }
 
 impl Prepared {
@@ -403,6 +404,7 @@ impl Prepared {
             sdf_edit: None,
             smiles_record: None,
             smiles_paste: None,
+            smiles_records: None,
         }
     }
 
@@ -415,6 +417,7 @@ impl Prepared {
             sdf_edit: None,
             smiles_record: None,
             smiles_paste: None,
+            smiles_records: None,
         }
     }
 
@@ -438,6 +441,7 @@ impl Prepared {
             sdf_edit: None,
             smiles_record: None,
             smiles_paste: None,
+            smiles_records: None,
         })
     }
 
@@ -450,6 +454,7 @@ impl Prepared {
             sdf_edit: None,
             smiles_record: None,
             smiles_paste: None,
+            smiles_records: None,
         }
     }
 
@@ -462,6 +467,7 @@ impl Prepared {
             sdf_edit: Some(plan),
             smiles_record: None,
             smiles_paste: None,
+            smiles_records: None,
         }
     }
 
@@ -477,6 +483,7 @@ impl Prepared {
             sdf_edit: None,
             smiles_record: Some(plan),
             smiles_paste: None,
+            smiles_records: None,
         }
     }
 
@@ -486,6 +493,15 @@ impl Prepared {
     ) -> Self {
         let mut prepared = Self::immediate(result);
         prepared.smiles_paste = Some(plan);
+        prepared
+    }
+
+    pub(super) fn smiles_records(
+        result: CommandResult,
+        plan: crate::smiles_records::RecordsPlan,
+    ) -> Self {
+        let mut prepared = Self::immediate(result);
+        prepared.smiles_records = Some(plan);
         prepared
     }
 
@@ -505,6 +521,7 @@ impl Prepared {
             || self.sdf_edit.is_some()
             || self.smiles_record.is_some()
             || self.smiles_paste.is_some()
+            || self.smiles_records.is_some()
     }
 
     pub fn complete(self) -> Result<Completed, Error> {
@@ -520,6 +537,9 @@ impl Prepared {
         }
         if let Some(plan) = self.smiles_paste {
             return Ok(Completed(Completion::SmilesPaste(plan.complete(cancel)?)));
+        }
+        if let Some(plan) = self.smiles_records {
+            return Ok(Completed(Completion::SmilesRecords(plan.complete(cancel)?)));
         }
         let deferred_query =
             self.capture.is_some() || self.sdf_record.is_some() || self.smiles_record.is_some();

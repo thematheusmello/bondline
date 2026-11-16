@@ -22,6 +22,7 @@ mod smiles_conversion;
 mod smiles_export;
 mod smiles_paste;
 mod smiles_query;
+mod smiles_records;
 mod view;
 pub use bond::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
@@ -51,6 +52,7 @@ pub use smiles_paste::PasteSmiles;
 pub use smiles_query::{
     MAX_SMILES_RECORD_INSPECT_BYTES, SmilesRecordInspect, SmilesRecordInspection,
 };
+pub use smiles_records::{ImportSmilesRecords, SmilesRecordSelection};
 pub use view::{UiView, ViewOperation, ViewState};
 #[cfg(test)]
 mod close_tests;
@@ -143,7 +145,8 @@ command_registry! {
     OpenSdf(OpenSdf) => ("document.open_sdf", "Open every validated SDF record with complete source and ordered data; chemical preview is unavailable.", false),
     SaveSdf(SaveSdf) => ("document.save_sdf", "Atomically save the complete SDF collection without changing molecular versions or ordered data.", false),
     OpenSmiles(OpenSmiles) => ("document.open_smiles", "Open every supported SMILES record while retaining the exact complete file and opaque application data; chemical preview is unavailable.", false),
-    SaveSmiles(SaveSmiles) => ("document.save_smiles", "Atomically save the exact complete SMILES file without selecting or regenerating a molecular record.", false),
+    ImportSmilesRecords(ImportSmilesRecords) => ("document.import_smiles_records", "Create a clean source-backed drawing from explicitly selected records of the already-open complete SMILES file; generated layout and partial projection never discard unselected or opaque source bytes.", false),
+    SaveSmiles(SaveSmiles) => ("document.save_smiles", "Atomically save the complete current SMILES file, preserving opaque data and supported record edits.", false),
     ConvertSmilesToCdxml(ConvertSmilesToCdxml) => ("file.convert_smiles_to_cdxml", "Create new native CDXML with a chosen fixed-H layout: the default 1–12 neutral carbon/Single path, a bounded neutral acyclic structure, one 3–8 member Single ring with supported attached trees, or a bounded collection of these components. Supplied geometry and the current session stay unchanged.", false),
     ExportSmilesFragment(ExportSmilesFragment) => ("file.export_smiles_fragment", "Create a noncanonical SMILES file from one explicitly selected, complete-source fragment's supported literal-H chemical graph; geometry and document context are not encoded and the session stays unchanged.", false),
     SdfRecordInspect(SdfRecordInspect) => ("sdf.record.inspect", "Read a bounded ordered field page from an explicitly identified captured SDF record; oversized values are omitted explicitly.", true),
@@ -154,7 +157,7 @@ command_registry! {
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
     BondCreate(BondCreate) => ("bond.create", "Create an independent carbon bond of the requested Single/Double/Triple order, authoring fixed neutral-carbon H counts; omitted order is Single.", false),
     BondExtend(BondExtend) => ("bond.extend", "Extend a neutral terminal carbon with consistent literal H and one Single/Double/Triple carbon bond using an explicit requested order/H policy; omitted order is Single and native complete data is required.", false),
-    BondSetOrder(BondSetOrder) => ("bond.set_order", "Set an existing bond's Single/Double/Triple order and explicitly rectify both neutral-carbon endpoints' consistent literal hydrogen counts, preserving identities and geometry; requires native complete data.", false),
+    BondSetOrder(BondSetOrder) => ("bond.set_order", "Set an existing bond's Single/Double/Triple order and explicitly rectify both neutral-carbon endpoints' consistent literal hydrogen counts, preserving identities and geometry; requires editable native data or a synchronized SMILES record.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
     Redo(NoParams) => ("history.redo", "Restore the next authored document.", false),
     Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
@@ -196,7 +199,9 @@ pub enum Error {
     InvalidBondTarget,
     #[error("bond {bond_id} does not exist in fragment {fragment_id}")]
     MissingBond { fragment_id: u32, bond_id: u32 },
-    #[error("changing bond order requires source-free or completely mapped native CDXML data")]
+    #[error(
+        "changing bond order requires editable native drawing data or a synchronized SMILES record"
+    )]
     UnsupportedBondOrderSource,
     #[error(
         "changing bond order requires neutral nonisotopic carbon endpoints, Single/Double/Triple incident bonds and consistent sufficient literal hydrogens"
@@ -245,6 +250,10 @@ pub enum Error {
     SmilesNotation(#[from] bondline_io::smiles::SmilesError),
     #[error(transparent)]
     SmilesLayout(#[from] bondline_io::smiles::LayoutError),
+    #[error(transparent)]
+    Document(#[from] bondline_io::DocumentError),
+    #[error("invalid SMILES record import: {0}")]
+    InvalidSmilesImport(&'static str),
     #[error("SDF field input exceeds the 64 KiB authored-LF or serialized-value budget")]
     SdfFieldInputLimit,
     #[error("a single SDF field exceeds the 1 MiB serialized query page budget")]
@@ -366,6 +375,7 @@ impl Error {
             Self::SmilesFile(error) => error.code(),
             Self::SmilesNotation(error) => error.code(),
             Self::SmilesLayout(error) => error.code(),
+            Self::Document(error) => error.code(),
             Self::SmilesPasteLimit(_) => "resource_limit",
             Self::SdfQueryPageLimit => "resource_limit",
             Self::SmilesQueryLimit => "resource_limit",
@@ -496,6 +506,11 @@ impl Engine {
             StoredContent::SmilesFile(_) => FileFormat::Smiles,
             StoredContent::Drawing(document) => {
                 if document
+                    .source_info()
+                    .is_some_and(|source| source.format == "smiles")
+                {
+                    FileFormat::Smiles
+                } else if document
                     .source_info()
                     .is_some_and(|source| source.format == "cdx")
                 {
@@ -634,6 +649,10 @@ impl Engine {
             Command::PasteSmiles(params) => {
                 let plan = self.smiles_paste_plan(params)?;
                 return Ok(Prepared::smiles_paste(self.state(), plan));
+            }
+            Command::ImportSmilesRecords(params) => {
+                let plan = self.smiles_import_plan(params)?;
+                return Ok(Prepared::smiles_records(self.state(), plan));
             }
             Command::SdfFieldSet(params) => {
                 let plan = self.sdf_field_plan(params)?;
@@ -832,6 +851,13 @@ impl Engine {
                 ));
             }
             Command::PageSetSize(params) => {
+                if self
+                    .stored_document()?
+                    .source_info()
+                    .is_some_and(|source| source.format == "smiles")
+                {
+                    return Err(Error::SourceBackedEdit);
+                }
                 let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
                 let size = PageSize::new(params.width_pt, params.height_pt)?;
                 let mut document = self.stored_document()?.clone();
@@ -908,6 +934,10 @@ impl Engine {
                 if params.expected_revision != self.revision {
                     return Err(Error::StaleRevision);
                 }
+                if self.stored_document()?.has_smiles_projection() {
+                    let plan = self.smiles_order_plan(params)?;
+                    return Ok(Prepared::smiles_records(self.state(), plan));
+                }
                 let document = bond::set_order(self.stored_document()?, params)?;
                 drawing_focus = self.view_focus;
                 self.commit(document)?
@@ -927,7 +957,9 @@ impl Engine {
                     .iter()
                     .find(|page| page.id() == id)
                     .ok_or(bondline_model::Error::MissingPage(id.get()))?;
-                if !self.stored_document()?.is_fully_mapped() {
+                if !self.stored_document()?.is_fully_mapped()
+                    && !self.stored_document()?.has_smiles_projection()
+                {
                     return Err(Error::UnsupportedDocumentPreview);
                 }
                 return self.prepare_capture(params);
@@ -1077,6 +1109,7 @@ mod tests {
                 "bond.create",
                 "bond.extend",
                 "bond.set_order",
+                "document.import_smiles_records",
                 "document.inspect",
                 "document.new",
                 "document.close",
