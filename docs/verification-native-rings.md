@@ -209,3 +209,8 @@ Actual CLI discovery retains the old37 declaration-order prefix and adds ui.ring
 last; all38 names have protocol rows. No bundle is refreshed or window opened. All
 Cargo, oracle, build and capture handles for this increment are terminal; worker
 reviews/declarations are terminal. Local Git checkpoints carry the continuation.
+
+Source/tests/provenance checkpoint: e869490. The final local link/protection check
+passes360 links and the staged62-file scope excludes target/.cache outputs. GitHub
+Actions remains disabled; no push/publication. STATUS.md records the source revision,
+terminal handles and concrete next native/public-source work without claiming M0–M5.

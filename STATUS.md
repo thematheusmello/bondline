@@ -7,7 +7,8 @@ do not enable, dispatch or rerun it during development.
 
 ## Current recoverable work
 
-This native ring increment implements the contract locked at b6b1775. Ring engine source is ac340db, selection07aa562 and
+Native ring source/tests/provenance is committed as e869490, implementing the contract
+locked at b6b1775. Ring engine source is ac340db, selection07aa562 and
 atom labels b4fefaf. Read [native receiving](docs/verification-native-rings.md) for
 initial independent REDs, source-review defects, setup qualifications and exact pins.
 
@@ -85,7 +86,11 @@ gesture capture or approved golden. Binaries and source are pinned in receiving.
    Free/atom/fused/spiro→cancel/history→Unicode Save/reopen with independent actual-file
    consumers. App frames and offscreen Metal do not replace native OS or measured DPI.
 2. Continue benzene/cyclopentadiene/chair/sprout, chains/styles/snapping/transforms/
-   groups and broader labels with source-pinned independent REDs. Keep the full M1
+   groups and broader labels with source-pinned independent REDs. First read the pinned
+   GUIDE25 printed101–103 and IUPAC ring/double-bond depiction rules, then examine the
+   public CDXML DoublePosition contract and current renderer/model constraints before
+   locking aromatic tool and inset-bond behavior. Preserve the complete parity target.
+   Keep the full M1
    interoperability, M3 chemistry/reactions, M4 publishing/clipboard and M5 naming/
    biopolymers/WebAssembly/installers scope. Full modern inventory, imported editing,
    native races/IME/Fit/pan and interactive Windows/Linux remain required. Current
