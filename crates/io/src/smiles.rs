@@ -13,13 +13,17 @@ mod components;
 pub mod file;
 mod layout;
 mod normalize;
+pub(crate) mod projection;
 mod ring;
-mod write;
+pub(crate) mod write;
 pub use authoring::AuthoringError;
 pub use authoring_layout::validate_authoring_page;
 pub use file::{SmilesFileDocument, SmilesFileError};
 pub use layout::LayoutError;
 pub use normalize::NormalizeError;
+pub use projection::{
+    ProjectionError, RecordSelection, SmilesAtomMapping, SmilesBondMapping, SmilesRecordMapping,
+};
 pub use write::{WriteError, write_fragment};
 
 pub const MAX_SMILES_BYTES: usize = 65_536;

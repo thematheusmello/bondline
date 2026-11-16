@@ -1,5 +1,14 @@
 # File capabilities
 
+The bounded SMILES record library now retains complete original/current source while
+projecting an explicit record or all records into Drawing fragments. Live token/global-ID
+maps survive supported H/order edits and writer DFS reordering. It never claims global
+native completeness: source bytes remain authoritative, detached geometry refuses Save,
+and cross-format export cannot silently replace the file with selected fragments. See
+[the contract](research/smiles-record-authoring-contract.md) and
+[independent receiving](verification-smiles-record-authoring.md). Native record controls
+and broader SMILES support remain separate work.
+
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |

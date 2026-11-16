@@ -1,5 +1,15 @@
 # Architecture
 
+The retained SMILES record projection is a separate Drawing backing: complete immutable
+original/current files, original/current model baselines and original/live token maps.
+Its global completeness flag remains false. Current projection validation authorizes only
+source-aware display, synchronized H/order replacement and whole current-source access;
+raw model drift refuses those capabilities. The mapped writer supplies emitted atom IDs,
+so source token order can change without changing authored IDs or bond direction. Combined
+retained-byte accounting deduplicates this backing with raw SMILES owners. See
+[record contract](research/smiles-record-authoring-contract.md) and
+[receiving evidence](verification-smiles-record-authoring.md).
+
 The model-only `bondline-chem` L1 now implements the bounded neutral authoring policy:
 array-aligned source semantics, exact fixed H, sp²-cycle validation and deterministic
 Kekulé matching. The additive IO adapter retains original SMILES source/IR; legacy

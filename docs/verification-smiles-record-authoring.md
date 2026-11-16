@@ -41,3 +41,40 @@ would exceed the file cap, record ordinal 65536, invalid or missing targets, can
 before no-op and exact source/index identity. Existing parsers, limits and independent
 consumers remain unchanged. This file transaction alone grants no Drawing, model-edit,
 native selection or Save acknowledgment authority.
+
+## Retained drawing projection
+
+`StoredDocument::from_smiles_records` accepts an explicit record or all records and owns
+the complete original/current file, original/current model baselines and source maps.
+One aggregate chemistry pass and component layout precede splitting back into one Fragment
+per record. The shared 64-atom/128-bond and geometry/ink budgets apply to the whole selection.
+Unselected accepted records may be unprojectable; selected failures refuse atomically.
+
+The first 1313-byte constructor declaration, SHA256
+`d37cb1e1da5b811401917665dbe77c1534d272811938991a7fae8acad83531a7`, reaches the intended
+missing selection/constructor errors before implementation. The seven-case expansion is
+14626 bytes, SHA256 `d31f58b4ee9e5b8416b3c4cea37d6013549f549d790e56d5d5a1bec0f7101900`.
+First receiving 80221 passes all seven unchanged plus the six codec cases without warnings.
+
+The literal 53-byte three-record case changes only its middle `C1.N.C1` to
+`[CH2]=[CH2].[NH3]`, producing 63 bytes. Model atom order remains C3/N4/C5 and the bond
+remains directed 3→5, while emitted token order is 3/5/4. Absolute later ranges move by
+ten bytes; original metadata, geometry, identities and unrelated Fragment Arcs survive.
+The unchanged raw scanner and external Fragment consumer verify actual output. Further
+cases cover exact no-op sharing, all/selected/empty/missing cases, 64/65 atoms and 129 bonds,
+entry cancellation, detached geometry and non-H/order replacement refusals.
+
+`is_fully_mapped` stays false. Display and complete-source Save have a separate validated
+current-projection capability; detached `model_mut` changes cannot acquire it. Only H and
+integer order changes can synchronize a record. Cross-format output and unencoded geometry
+remain refused. The old byte-only writer output and normalizer profiles remain exact.
+One accountant deduplicates original/current files, maps, models and raw source owners.
+
+```sh
+cargo test -p bondline-io --test smiles_record_projection --locked
+```
+
+The seven IO product pins remain exact from the implementation handoff through integrated
+receiving. Five independent test declarations reproduce their committed form using only
+rustfmt; no expected values or assertions changed. This library slice does not deliver
+native record selection, drawing navigation or editing controls.

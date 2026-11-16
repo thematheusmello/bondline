@@ -1,3 +1,5 @@
+mod smiles;
+
 use crate::cdxml::{ElementalGraph, MappingError};
 use crate::mol::{
     MolError, MolFile, MolTransform, Version, v3000, write_v2000, write_v2000_with_header,
@@ -16,6 +18,10 @@ pub enum DocumentError {
     Mol(#[from] MolError),
     #[error(transparent)]
     V3000(#[from] v3000::Error),
+    #[error(transparent)]
+    SmilesFile(#[from] crate::smiles::SmilesFileError),
+    #[error(transparent)]
+    SmilesProjection(#[from] crate::smiles::ProjectionError),
     #[error("this document has no original CDXML source")]
     NoCdxmlSource,
     #[error("this document has no original MOL source")]
@@ -41,6 +47,8 @@ impl DocumentError {
     pub fn code(&self) -> &'static str {
         match self {
             Self::Mol(error) => error.code(),
+            Self::SmilesFile(error) => error.code(),
+            Self::SmilesProjection(error) => error.code(),
             Self::V3000(error) => error.code(),
             Self::CdxMapping(error) => error.code(),
             Self::Mapping(error) => match error {
@@ -72,6 +80,7 @@ pub struct SourceInfo {
 
 #[derive(Clone, PartialEq)]
 enum OriginalSource {
+    Smiles(Arc<smiles::SmilesBacking>),
     Cdxml {
         bytes: Arc<[u8]>,
         baseline: Arc<Document>,
@@ -93,9 +102,10 @@ enum OriginalSource {
 }
 
 impl OriginalSource {
-    fn bytes(&self) -> &Arc<[u8]> {
+    fn bytes(&self) -> &[u8] {
         match self {
             Self::Cdxml { bytes, .. } | Self::Cdx { bytes, .. } | Self::Mol { bytes, .. } => bytes,
+            Self::Smiles(backing) => backing.original.as_bytes(),
         }
     }
     fn baseline(&self) -> &Arc<Document> {
@@ -103,12 +113,13 @@ impl OriginalSource {
             Self::Cdxml { baseline, .. }
             | Self::Cdx { baseline, .. }
             | Self::Mol { baseline, .. } => baseline,
+            Self::Smiles(backing) => &backing.baseline,
         }
     }
     fn fully_mapped(&self) -> bool {
         match self {
             Self::Cdxml { fully_mapped, .. } | Self::Mol { fully_mapped, .. } => *fully_mapped,
-            Self::Cdx { .. } => false,
+            Self::Cdx { .. } | Self::Smiles(_) => false,
         }
     }
     fn format(&self) -> &'static str {
@@ -116,6 +127,7 @@ impl OriginalSource {
             Self::Cdxml { .. } => "cdxml",
             Self::Cdx { .. } => "cdx",
             Self::Mol { .. } => "mol",
+            Self::Smiles(_) => "smiles",
         }
     }
 }
@@ -267,9 +279,22 @@ impl StoredDocument {
     /// Approximate retained storage, deduplicating source/model/fragment allocations.
     /// Includes baselines and reserved vectors; excludes Arc/allocator headers and caches.
     pub fn retained_bytes<'a>(documents: impl IntoIterator<Item = &'a Self>) -> usize {
+        Self::retained_bytes_with_smiles_files(documents, std::iter::empty())
+    }
+
+    /// Include raw SMILES owners in the same source/index accountant as mapped drawings.
+    /// External file wrapper sizes are included; nested wrappers already belong to backing.
+    pub fn retained_bytes_with_smiles_files<'a>(
+        documents: impl IntoIterator<Item = &'a Self>,
+        raw_smiles_files: impl IntoIterator<Item = &'a crate::smiles::SmilesFileDocument>,
+    ) -> usize {
         let mut snapshots = HashSet::new();
         let mut sources = HashSet::new();
         let mut header_arrays = HashSet::new();
+        let mut backings = HashSet::new();
+        let mut mapping_arrays = HashSet::new();
+        let mut files = raw_smiles_files.into_iter().collect::<Vec<_>>();
+        let mut nested_inline = 0_usize;
         let mut models = Vec::new();
         let mut bytes = 0_usize;
         for document in documents {
@@ -279,7 +304,27 @@ impl StoredDocument {
             bytes = bytes.saturating_add(size_of::<Self>());
             models.push(document.model.as_ref());
             if let Some(original) = &document.original {
-                if sources.insert(original.bytes().as_ptr()) {
+                if let OriginalSource::Smiles(backing) = original {
+                    if backings.insert(Arc::as_ptr(backing)) {
+                        bytes = bytes.saturating_add(size_of::<smiles::SmilesBacking>());
+                        files.extend([&backing.original, &backing.current]);
+                        nested_inline = nested_inline
+                            .saturating_add(2 * size_of::<crate::smiles::SmilesFileDocument>());
+                        models.push(backing.mapped.as_ref());
+                        for maps in [&backing.original_maps, &backing.maps] {
+                            if mapping_arrays.insert(maps.as_ptr()) {
+                                bytes =
+                                    bytes.saturating_add(maps.len().saturating_mul(size_of::<
+                                        crate::smiles::SmilesRecordMapping,
+                                    >(
+                                    )));
+                                for mapping in maps.iter() {
+                                    bytes = bytes.saturating_add(mapping.reserved_bytes());
+                                }
+                            }
+                        }
+                    }
+                } else if sources.insert(original.bytes().as_ptr()) {
                     bytes = bytes.saturating_add(original.bytes().len());
                 }
                 if let OriginalSource::Mol { headers, .. } = original
@@ -293,7 +338,12 @@ impl StoredDocument {
                 models.push(original.baseline().as_ref());
             }
         }
-        bytes.saturating_add(Document::retained_bytes(models))
+        bytes
+            .saturating_add(Document::retained_bytes(models))
+            .saturating_add(
+                crate::smiles::SmilesFileDocument::retained_bytes(files)
+                    .saturating_sub(nested_inline),
+            )
     }
 
     /// Detached model edits preserve source data, but cannot be exported until synchronized.
@@ -305,8 +355,9 @@ impl StoredDocument {
         self.original.as_ref().map(|original| SourceInfo {
             format: original.format(),
             byte_length: original.bytes().len(),
-            modified: !Arc::ptr_eq(&self.model, original.baseline())
-                && self.model != *original.baseline(),
+            modified: (!Arc::ptr_eq(&self.model, original.baseline())
+                && self.model != *original.baseline())
+                || matches!(original, OriginalSource::Smiles(backing) if backing.current!=backing.original),
         })
     }
 
@@ -323,6 +374,12 @@ impl StoredDocument {
 
     /// No model encoder exists yet. Preserve unchanged imports or explicitly refuse.
     pub fn to_cdx(&self) -> Result<Cow<'_, [u8]>, DocumentError> {
+        if matches!(self.original.as_ref(), Some(OriginalSource::Smiles(_))) {
+            return Err(DocumentError::CrossFormatSource {
+                from: "smiles",
+                to: "cdx",
+            });
+        }
         self.export_cdx().map(Cow::Borrowed)
     }
 
@@ -422,6 +479,12 @@ impl StoredDocument {
             }
         }
         let (frame, headers, expected_page) = match self.original.as_ref() {
+            Some(OriginalSource::Smiles(_)) => {
+                return Err(DocumentError::CrossFormatSource {
+                    from: "smiles",
+                    to: "mol",
+                });
+            }
             Some(OriginalSource::Cdx { .. }) => {
                 return Err(DocumentError::CrossFormatSource {
                     from: "cdx",

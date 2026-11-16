@@ -84,6 +84,13 @@ now enforces 128 prior snapshots and a 128 MiB threshold, deduplicating shared s
 fragment allocations and including baselines/reserved vectors. Keep current data even when
 it alone exceeds the threshold; this excludes allocator headers, caches and external copies.
 Update accounting/tests whenever a new model field owns heap data; do not claim a hard RSS cap.
+Drawing may also hold complete original/current SMILES files, original/current model
+baselines and original/live token maps. Keep is_fully_mapped false for this backing.
+Use its validated projection/record-edit methods; generic model_mut drift must refuse
+display and source Save. Only H/order replacement is synchronized. Writer DFS token order
+must map through emitted atom IDs, never by reparsed ordinal or graph isomorphism. Call
+the combined drawing/raw-SMILES accountant so shared source/index payloads count once.
+Native record-input/navigation remains a separate worker/UI gate; do not bypass its guard.
 Unchanged-source export is guarded; never write stale XML after a model edit. StoredDocument::
 to_cdxml borrows unchanged source or encodes new native elemental data. Do not bypass it by
 regenerating stored.model(): that projection omits unknown data. A generated profile is fully

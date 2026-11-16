@@ -72,6 +72,22 @@ impl SmilesDocument {
             check(cancel)?;
             return Ok(fragment);
         }
+        let (fragment, semantics) = self.authoring_input(cancel)?;
+        Ok(bondline_chem::normalize_neutral_kekule(
+            &fragment,
+            &semantics,
+            || cancel.is_cancelled(),
+        )?)
+    }
+
+    pub(super) fn authoring_input(
+        &self,
+        cancel: &Cancellation,
+    ) -> Result<(Fragment, Vec<AtomSemantics>), AuthoringError> {
+        check(cancel)?;
+        if self.atoms().len() > MAX_AUTHORING_ATOMS || self.bonds().len() > MAX_AUTHORING_BONDS {
+            return Err(AuthoringError::Limit);
+        }
         let mut atoms = Vec::with_capacity(self.atoms().len());
         let mut semantics = Vec::with_capacity(self.atoms().len());
         for (index, source) in self.atoms().iter().enumerate() {
@@ -120,10 +136,6 @@ impl SmilesDocument {
             atoms,
             bonds,
         )?;
-        Ok(bondline_chem::normalize_neutral_kekule(
-            &fragment,
-            &semantics,
-            || cancel.is_cancelled(),
-        )?)
+        Ok((fragment, semantics))
     }
 }

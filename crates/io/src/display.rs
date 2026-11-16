@@ -95,7 +95,7 @@ fn display_facts<'a>(
     if cancel.is_cancelled() {
         return Err(DisplayError::Cancelled);
     }
-    if !stored.is_fully_mapped() {
+    if !stored.is_fully_mapped() && !stored.has_smiles_projection() {
         return Err(DisplayError::IncompleteSource);
     }
     let page = stored
