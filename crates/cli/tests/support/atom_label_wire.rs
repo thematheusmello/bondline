@@ -98,10 +98,10 @@ fn names(values: &[Value]) -> TestResult {
         .collect::<std::collections::BTreeSet<_>>();
     let expected = OLD_NAMES
         .into_iter()
-        .chain([NAME])
+        .chain([NAME, "ui.atom_label"])
         .collect::<std::collections::BTreeSet<_>>();
-    assert_eq!(values.len(), 33);
-    assert_eq!(unique.len(), 33);
+    assert_eq!(values.len(), 34);
+    assert_eq!(unique.len(), 34);
     assert_eq!(unique, expected);
     Ok(())
 }

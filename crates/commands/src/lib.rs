@@ -8,6 +8,7 @@ use serde_json::Value;
 use std::{collections::VecDeque, sync::Arc};
 
 mod atom;
+mod atom_ui;
 mod bond;
 mod bond_tool;
 mod capture;
@@ -26,6 +27,7 @@ mod smiles_query;
 mod smiles_records;
 mod view;
 pub use atom::AtomSetLabel;
+pub use atom_ui::{UiAtomLabel, UiAtomLabelRequest};
 pub use bond::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
 };
@@ -135,6 +137,7 @@ command_registry! {
     NewDocument(NewDocument) => ("document.new", "Start a fresh source-free drawing session; unsaved data requires explicit discard and existing saved files remain untouched.", false),
     Close(CloseDocument) => ("document.close", "Request, explicitly discard, or cancel closing the current document revision.", false),
     UiFile(UiFile) => ("ui.file", "Request or cancel native document/file presentation, including the explicit SMILES paste form; requires an attached native host.", false),
+    UiAtomLabel(UiAtomLabel) => ("ui.atom_label", "Open or cancel an exact existing-atom literal element/H editor; requires an attached native host and grants no authoring or Save authority.", false),
     UiControls(NoParams) => ("ui.controls", "Discover delivered native controls, shortcuts, typed bindings and contextual availability.", true),
     UiView(UiView) => ("ui.view", "Inspect or navigate the transient drawing view without editing content or history.", false),
     UiBondToolSelect(SelectBondTool) => ("ui.bond_tool", "Select a drawing bond order without editing the document or its history; gestures pass this order explicitly.", false),
@@ -468,6 +471,10 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_file_operation: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_atom_label: Option<UiAtomLabelRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_atom_label_operation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_bond_tool_operation: Option<BondToolOperation>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_view_operation: Option<ViewOperation>,
@@ -489,6 +496,7 @@ pub struct Engine {
     redo: VecDeque<Arc<StoredContent>>,
     close_policy: close::ClosePolicy,
     file_ui: file_ui::FileUiPolicy,
+    atom_ui: atom_ui::AtomLabelUiPolicy,
     bond_tool: BondToolState,
     view: ViewState,
     view_canvas_size: Option<[u32; 2]>,
@@ -544,6 +552,7 @@ impl Engine {
             redo: VecDeque::new(),
             close_policy: close::ClosePolicy::default(),
             file_ui: file_ui::FileUiPolicy::default(),
+            atom_ui: atom_ui::AtomLabelUiPolicy::default(),
             bond_tool: BondToolState::default(),
             view: ViewState::default(),
             view_canvas_size: None,
@@ -594,6 +603,8 @@ impl Engine {
             close_operation: None,
             ui_file: self.file_ui_state(),
             ui_file_operation: None,
+            ui_atom_label: self.ui_atom_label_request(),
+            ui_atom_label_operation: None,
             ui_bond_tool_operation: None,
             ui_view_operation: None,
             controls: None,
@@ -637,6 +648,9 @@ impl Engine {
             Command::UiView(params) => return Ok(Prepared::immediate(self.navigate_view(params)?)),
             Command::Close(params) => return Ok(Prepared::immediate(self.close(params)?)),
             Command::UiFile(params) => return Ok(Prepared::immediate(self.ui_file(params)?)),
+            Command::UiAtomLabel(params) => {
+                return Ok(Prepared::immediate(self.ui_atom_label(params)?));
+            }
             Command::UiBondToolSelect(params) => {
                 return Ok(Prepared::immediate(self.select_bond_tool(params)?));
             }
@@ -1152,6 +1166,7 @@ mod tests {
                 "smiles.record.inspect",
                 "structure.paste_smiles",
                 "ui.controls",
+                "ui.atom_label",
                 "ui.bond_tool",
                 "ui.view",
                 "ui.file"

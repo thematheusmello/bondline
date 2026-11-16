@@ -1,19 +1,19 @@
 # Open questions
 
-- `atom.set_label` now has bounded headless literal-element/H authoring evidence in
-  verification-atom-label-authoring.md. It supplies no native editor, Text-tool behavior,
-  abbreviation parser or general valence correction. Official25.5 Alt-entry and repeat-label
-  articles describe distinct flows; exact26.1 Mac activation, tool precedence and repetition
-  state remain unverified. Next implement explicit target/fields/Apply/Cancel through the
-  shared command, preserving stale drafts, source guards and Save/close/modal ordering.
+- `atom.set_label` and the original `ui.atom_label` form now have bounded native Mac
+  literal element/H, history, Cancel, close and Unicode Save/reopen evidence in
+  verification-native-atom-labels.md. They do not supply full inline Text-tool behavior,
+  an abbreviation parser or general valence correction. Official25.5 Alt-entry and
+  repeat-label articles describe distinct flows; exact26.1 Mac/tool/repetition precedence
+  remains unverified. Native stale races, IME, arbitrary mixed AX/physical input, multiclick
+  word selection, measured DPI and Windows/Linux execution remain unverified.
 
-- The earlier intermittent MCP shutdown replacement-bind AddrInUse remains unexplained
-  despite the later passing1306/0/1 aggregate. A pinned-source review suggests a distinct
-  unbound-socket/close-on-exec spawn interleaving, not the falsified held-outbound trial.
-  Source review establishes no actual overlap or failure-time owner. The frozen standalone
-  two-arm OS probe under ignored `target/native-smiles-records/socket-source-review-v2/`
-  has not been compiled or run. Do not attribute the historical failure, repeat exhausted
-  contexts, weaken assertions or change production socket flags from this hypothesis.
+- The latest full gate fails848/1 at the unchanged MCP replacement bind60475. No natural
+  failure-time owner capture exists. The original external inheritance probe was inconclusive;
+  separately frozen v2 qualifies the controlled before-FIOCLEX mechanism, not this failure's
+  cause. See research/macos-listener-lifetime.md. The actual test, socket policy, timing and
+  concurrency stay unchanged. Obtain known socket/process identity at a new natural failure
+  before a causal repair; do not rerun exhausted contexts or consumed experiments.
 
 - The original external-writer CDX probe now reproduces an interoperability difference:
   Apache-2.0 Indigo1.47.0 emits two terminal zero words; unchanged Bondline/stdlib framing

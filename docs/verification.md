@@ -1,5 +1,20 @@
 # Verification log
 
+## Native elemental atom presentation, 2026-11-16
+
+[Native/App/wire receiving](verification-native-atom-labels.md) records the shared34th
+command, missing-command/form REDs, schema/input/owner/bounds counterexamples and their
+unchanged GREEN expectations. Actual macOS Alt-target→O/H1→history→Unicode Save/reopen→
+N/H2→Save As, Cancel, draft Save fencing and native close protection pass. Unchanged
+external Expat/Decimal and RDKit consume all three actual files; only the target's two
+literal fields differ. No general Text-tool/chemistry/reference-screen parity follows.
+
+Aggregate95827 fails848/1 at the old unchanged MCP replacement bind60475 after fmt and
+workspace clippy pass. Separate64815 passes480/0/1 plus remaining vendor/clippy/layers/
+licenses/corpus/build stages. This is not a passing aggregate. The separately controlled
+[listener experiment](research/macos-listener-lifetime.md) qualifies inheritance before
+FIOCLEX; no natural failure owner is attributed or policy changed. Actions stays off.
+
 ## Literal elemental atom authoring, 2026-11-16
 
 [Core/actual-transport/independent-image evidence](verification-atom-label-authoring.md)

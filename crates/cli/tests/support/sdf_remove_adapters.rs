@@ -98,7 +98,7 @@ fn stdio_sdk_discovers_mutating_removal_and_restores_exact_history_before_save()
     client.send(json!({"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}))?;
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 33);
+    assert_eq!(tools.len(), 34);
     let remove = tools
         .iter()
         .find(|tool| tool["name"] == "sdf.record.remove")

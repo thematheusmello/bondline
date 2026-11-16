@@ -169,7 +169,7 @@ fn reset_fields(context: &egui::Context, key: u64) {
     }
 }
 
-pub(super) fn field(
+pub(crate) fn field(
     ui: &mut egui::Ui,
     id: egui::Id,
     label: &str,
@@ -177,6 +177,17 @@ pub(super) fn field(
     multiline: bool,
     enabled: bool,
 ) -> Option<String> {
+    field_output(ui, id, label, text, multiline, enabled).1
+}
+
+pub(crate) fn field_output(
+    ui: &mut egui::Ui,
+    id: egui::Id,
+    label: &str,
+    text: &mut SdfDraftText,
+    multiline: bool,
+    enabled: bool,
+) -> (egui::text_edit::TextEditOutput, Option<String>) {
     let label = ui.label(label);
     let prior = egui::TextEdit::load_state(ui.ctx(), id).unwrap_or_else(|| {
         let mut state = egui::text_edit::TextEditState::default();
@@ -222,7 +233,7 @@ pub(super) fn field(
         })
         .inner
     });
-    output.response.labelled_by(label.id);
+    output.response = output.response.labelled_by(label.id);
     if outcome.rejection.is_some() || error.is_some() {
         output.state.cursor = prior.cursor;
         output.state.set_undoer(undoer());
@@ -230,14 +241,17 @@ pub(super) fn field(
     if outcome.changed || outcome.rejection.is_some() || error.is_some() {
         ui.ctx().request_repaint();
     }
-    output.state.store(ui.ctx(), id);
+    output.state.clone().store(ui.ctx(), id);
     ui.ctx().accesskit_node_builder(id, |node| {
         node.set_value(text.as_str());
         if enabled {
             node.add_action(egui::accesskit::Action::SetValue);
         }
     });
-    error.or_else(|| outcome.rejection.map(|error| error.to_string()))
+    (
+        output,
+        error.or_else(|| outcome.rejection.map(|error| error.to_string())),
+    )
 }
 
 impl FileWorkflow {

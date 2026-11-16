@@ -17,6 +17,7 @@ The earlier component1188/0/1 and CDX1172/0/1 gates remain historical checkpoint
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
 | Start a fresh drawing safely | [New document, native Save/Discard/Cancel and race evidence](verification-new-document.md) |
+| Edit an elemental atom label | [Native target/fields/Apply/Cancel, history and independent saved-file evidence](verification-native-atom-labels.md), [literal authoring contract](research/atom-label-authoring-contract.md) |
 | Convert a supported SMILES file | [Fourth profile: historical1188/0/1 checkpoint and bounded Mac100% workflow; Fit/pan limits](verification-smiles-components-integration.md), [independent layout](verification-smiles-components-layout.md), [earlier ring aggregate and Mac evidence](verification-smiles-ring-integration.md), [acyclic/native evidence](verification-smiles-acyclic-integration.md), [original lifecycle](verification-native-smiles-conversion.md) |
 | Check asynchronous file browsing | [Stable controls and visible errors](verification-file-picker-stability.md) |
 | Inspect SMILES notation records | [Original inspector and bounded native file workflow](verification-smiles-record-integration.md) |
@@ -35,7 +36,7 @@ The earlier component1188/0/1 and CDX1172/0/1 gates remain historical checkpoint
 | Find the next feature | [Roadmap](../ROADMAP.md), [parity checklist](parity-checklist.md) |
 | Review proposed SMILES authoring | [Editable Paste Special/aromatic prerequisites and complete-source record editing plan; unimplemented](research/smiles-source-import-plan.md) |
 | Check canonical CDX FileEnd support | [Independent/ASan, bounded Mac and full1172/0/1 gate evidence](verification-cdx-file-end-integration.md), [independent declarations](verification-cdx-file-end-tests.md), [public framing decision](research/cdx-file-end-plan.md). Earlier intermittent MCP failure remains unexplained; no general compatibility or corpus admission |
-| Review the latest installed reference UI | [User-authorized live File/Edit/View/New observations and gaps](research/live-ui-review-2026-11-15.md) |
+| Review historical installed reference evidence | [Earlier File/Edit/View/New observations and gaps](research/live-ui-review-2026-11-15.md); current work follows the public-source-only boundary in AGENTS.md |
 | Check evidence | [Verification](verification.md), [CI scope](ci.md), [corpus](corpus/README.md) |
 | Review provenance and licenses | [Source register](clean-room/sources.md), [open questions](clean-room/open-questions.md), [dependency policy](dependency-policy.md), [attribution](../ATTRIBUTION.md) |
 | Report a problem | [Support](../SUPPORT.md), [security reporting](../SECURITY.md) |

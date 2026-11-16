@@ -14,7 +14,7 @@ fn stdio_discovers_converter_intent_but_cannot_show_a_headless_dialog() -> TestR
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
     assert_eq!(
         tools.len(),
-        33,
+        34,
         "presentation adds no second converter command"
     );
     let file = tools

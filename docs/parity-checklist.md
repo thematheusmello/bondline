@@ -1,9 +1,9 @@
 # Parity checklist
 
 Target: publicly documented Professional-family26.1 desktop behavior.
-Reviewed through2026-11-15. Historical authorized installed-profile records below retain
-their original method. The user's latest instruction also authorizes visible installed
-UI observation, separately recorded in research/live-ui-review-2026-11-15.md.
+Reviewed through2026-11-16. Historical authorized installed-profile records below retain
+their original method. Current work follows the user's public-source-only instructions;
+the installed reference application is not opened or inspected.
 The historical installed license tier remains unknown.
 This is a source-cited implementation backlog, not a claim of feature parity.
 
@@ -77,7 +77,7 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 | Undo/redo | GUIDE-25 / MAC-HISTORY | verified for pages and supported C2/C3/C4 edits, Mac only | Exact engine properties; native page and bond Undo/Redo plus saved-C3/dirty-C4 recovery. Other chemical edits and Windows/Linux runtime missing |
 | Selection and transforms | GUIDE-25 | missing | M2; bounded atom/bond hit testing and transient hover exist, not persistent selection or transforms |
 | Bond, ring, chain tools | GUIDE-25 | partial: bounded Single/Double/Triple Mac authoring verified | Shared create/extend/set_order, explicit H policies, transient tool state, component geometry and exact complete-source/history/consumer checks. Actual Mac multiple creation, existing-bond click/1/2/3 keys/endpoint Double→Triple and Unicode Save As pass at readable420pt-square scale; native multiple extension and broader keys/styles/selection/rings/chains remain incomplete. See verification-bond-order-{command,ui,native}.md and verification-native-sdf-and-extension.md. |
-| Atom labels, charges, isotopes, radicals | GUIDE-25 / ATOM-LABEL-AUTHORING | partial: bounded headless elemental authoring verified | `atom.set_label` changes one neutral native/CDXML atom's explicit element/literal H, preserving geometry/IDs/neighbors/history. Nine core, four actual-wire and one independent MOL-reference CPU/GPU case pass, including actual saved-file consumers; see verification-atom-label-authoring.md. Native atom editor, inline labels/aliases, inference, foreign-source authoring and charged/isotope/radical workflows remain missing. Earlier source-aware MOL display preserves model/source None; see verification-neutral-element-labels.md |
+| Atom labels, charges, isotopes, radicals | GUIDE-25 / ATOM-LABEL-AUTHORING / NATIVE-ATOM-LABELS | partial: bounded elemental authoring verified, Mac | Fresh Alt-click atom/label→explicit Element/H→Apply/Cancel calls the shared setter. Native OH/NH2, history, draft-close protection and Unicode Save/reopen pass with independent actual-file consumers; see verification-native-atom-labels.md. Original incremental form, not exact26.1 inline Text parity. Inline labels/aliases, inference, foreign-source edits and charge/isotope/radical workflows remain missing. Earlier source-aware MOL display preserves None; see verification-neutral-element-labels.md |
 | Stereo bonds and labels | GUIDE-25 | missing | M2/M3 |
 | Text, captions, chemical formatting | GUIDE-25 | missing | M2/M3 |
 | Reaction and curved arrows | GUIDE-25 | missing | M3 |

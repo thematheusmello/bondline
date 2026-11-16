@@ -322,3 +322,6 @@ mod smiles_record_authoring_wire;
 
 #[path = "support/atom_label_wire.rs"]
 mod atom_label_wire;
+
+#[path = "support/ui_atom_label_wire.rs"]
+mod ui_atom_label_wire;

@@ -45,17 +45,28 @@ recovers, two pan attempts made no visible change; native races/DPI/other platfo
 unverified. Do not call Engine.execute for expensive SMILES record edits under the UI
 frame mutex, bypass complete-source guards or substitute another converter.
 
-Current registry33 adds bounded headless `atom.set_label`; read
+Current registry34 includes bounded `atom.set_label` and native `ui.atom_label`; read
 docs/research/atom-label-authoring-contract.md and
-docs/verification-atom-label-authoring.md. Nine core/four actual-wire and one independent
-MOL-reference CPU/GPU case pass; final full local gate1306/0/1 passes. The earlier MCP
-failure remains unexplained. Source-free/native CDXML only, existing neutral/nonisotopic/
+docs/verification-native-atom-labels.md. Native Mac Alt-target→O/H1→history→Unicode
+Save/reopen→N/H2→Save As, Cancel and draft-close protection pass with independent actual-file
+consumers. Latest full gate95827 FAILS848/1 at unchanged MCP replacement bind60475;
+remaining64815 passes480/0/1 and vendor/clippy/layers/licenses/corpus separately. This is
+not a green aggregate. Source-free/native CDXML only, existing neutral/nonisotopic/
 nonradical target, explicit literal element/H fields, no general inference or neighbor
 correction. Preserve validated no-op sharing, redo/close and whole-snapshot history.
-Default native controls stay20 Drawing/14 SDF/10 raw SMILES; native atom presentation is
-next, not delivered. Use fresh target/typed fields/Apply/Cancel and existing ordering/
-stale/context guards, with independent App tests and actual native acceptance. No `ui.file`
-atom-target hack or empty-target binding. Keep one preview; protect user unsaved work.
+Default native controls stay20 Drawing/14 SDF/10 raw SMILES. Preserve exact-target requests,
+weak/opaque context and epochs, checked2/5-byte field reuse, action-prefix order, bounded
+deferred replacements, local form ownership and frame-start barriers through dismissal.
+No `ui.file` atom-target hack or empty-target binding. Full inline Text/alias/charge/
+isotope/radical workflows and native IME/DPI/other platforms remain open. Keep one preview.
+
+Read docs/research/macos-listener-lifetime.md before touching the MCP failure. Original
+probe is inconclusive; separately qualified v2 passes its one controlled two-arm run.
+This establishes the mechanism only, never the historical/current natural failure's owner.
+Both probes and the exhausted20 contexts are consumed; do not repeat them. No production
+policy, dependency, assertion, deadline, retry or concurrency change was adopted. A new
+causal investigation needs failure-time known socket/process identity, without observer
+queries in the shutdown→bind interval. The collector is designed only, not implemented.
 
 ## Research, provenance and implementation
 

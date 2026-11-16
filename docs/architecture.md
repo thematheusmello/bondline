@@ -57,8 +57,18 @@ and the existing whole-content commit/history, preserving geometry, arrays, dire
 bonds, unrelated metadata and identity floors. Fully validated no-ops share old storage
 and preserve redo/close. It performs no valence inference or neighbor adjustment and
 does not extend any foreign/opaque/SMILES backing's edit authority. No new model data,
-worker pool or GUI dependency is introduced. A native target/editor presentation is the
-next separate gate; see [receiving evidence](verification-atom-label-authoring.md).
+worker pool or GUI dependency is introduced; see [receiving evidence](verification-atom-label-authoring.md).
+
+`ui.atom_label` owns one weak-context-qualified presentation request, separate from file
+intent and authoring history. The native form captures exact target/initial values,
+reuses checked two/five-byte text fields, and revalidates source/revision/generation,
+association, file/close/view epochs and tool under the same lock before invoking the
+existing setter. Stale drafts remain recoverable; exact host retirement after committed
+close grants no Save/close authority. Existing local form owners defer presentation;
+frame-start modal fencing survives dismissal. Action-prefix field input precedes Apply;
+bounded deferred replacements never replay generic commands. No new worker is needed for
+this cheap operation. [Native evidence and limits](verification-native-atom-labels.md)
+separate actual macOS editing from App, wire and source review coverage.
 
 The authored document contains pages and immutable elemental-graph fragments. Page IDs
 are nonzero u32 values; dimensions are finite

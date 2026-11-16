@@ -4,6 +4,17 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+Bounded native Mac atom labels now support fresh Alt-click target/fields/Apply/Cancel,
+OH/NH2 editing, history, draft-close protection and Unicode editable CDXML Save/reopen.
+Independent consumers verify the actual files; see
+[atom-editor evidence](docs/verification-native-atom-labels.md). This original form is not
+full inline Text/alias/charge/isotope/radical parity. Registry34/default controls20/14/10.
+The latest full gate fails848/1 at the old MCP replacement bind; remaining480/0/1 and
+xtask stages pass separately. The [controlled inheritance experiment](docs/research/macos-listener-lifetime.md)
+does not attribute that natural failure. Full M0–M5 remains incomplete. Continue source-
+preserving M2 authoring and independent native checks; keep broader format/chemistry,
+publishing and M5 workflows visible rather than treating this slice as completion.
+
 Native source-backed SMILES records now have bounded Mac selected/all import, refusal/
 retry, registered click/key order editing, history and Unicode whole-file Save/reopen/
 reimport, with independent actual-file consumers. See
@@ -343,9 +354,10 @@ has a bounded headless `atom.set_label` implementation. Nine core, four actual-w
 one independent MOL-reference CPU/GPU case pass, including complete history and actual
 saved-file consumers; see [receiving evidence](docs/verification-atom-label-authoring.md).
 It changes only explicit element/literal-H fields in existing neutral atoms in source-free/
-native CDXML. No general valence inference or native atom editor is delivered. Next wire
-fresh atom/label targets, typed presentation, Apply/Cancel and stale/modal/Save/close
-guards through that command, with independent App tests and actual native acceptance.
+native CDXML. The original `ui.atom_label` presentation now adds fresh atom/label targets,
+explicit fields, Apply/Cancel and stale/modal/Save/close guards. Actual Mac OH/NH2,
+history, close protection and Unicode Save/reopen pass; see
+[native evidence](docs/verification-native-atom-labels.md). No general valence inference.
 Modern label-entry and repeat-label evidence stay separate; full inline labels, aliases,
 charges/isotopes/radicals, selection, rings/chains and styles remain required.
 

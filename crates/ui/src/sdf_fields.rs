@@ -176,6 +176,10 @@ impl SdfFieldsWorkflow {
         self.editor.holds_files()
     }
 
+    pub(crate) fn presentation_present(&self) -> bool {
+        self.editor.active() || self.editor.holds_files()
+    }
+
     pub(crate) fn native_close(&mut self, engine: &Engine, context: &egui::Context) -> bool {
         self.editor
             .intercept(Target::Control("file.close"), engine, context)

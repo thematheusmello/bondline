@@ -125,6 +125,7 @@ impl Engine {
     pub fn set_ui_file_host(&mut self, available: bool) {
         if self.file_ui.available != available {
             self.invalidate_file_ui();
+            self.detach_atom_label();
             self.file_ui.available = available;
         }
     }

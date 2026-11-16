@@ -1,6 +1,6 @@
 use crate::Error;
 use bondline_io::StoredDocument;
-use bondline_model::{AtomId, Element, Fragment, FragmentId, PageId, Radical};
+use bondline_model::{Atom, AtomId, Element, Fragment, FragmentId, PageId, Radical};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -25,6 +25,45 @@ pub(super) fn set_label(
     document: &StoredDocument,
     params: AtomSetLabel,
 ) -> Result<StoredDocument, Error> {
+    let (fragment, target) =
+        editable_atom(document, params.page_id, params.fragment_id, params.atom_id)?;
+    let element = Element::new(params.element).ok_or(Error::InvalidAtomLabel(
+        "element must be in the 1..118 catalog",
+    ))?;
+    if element.get() == 1 && params.explicit_hydrogens != 0 {
+        return Err(Error::InvalidAtomLabel(
+            "a physical hydrogen atom cannot carry inline attached hydrogens",
+        ));
+    }
+    if target.element == element && target.explicit_hydrogens == Some(params.explicit_hydrogens) {
+        return Ok(document.clone());
+    }
+    let mut atoms = fragment.atoms().to_vec();
+    let target = atoms
+        .iter_mut()
+        .find(|atom| atom.id.get() == params.atom_id)
+        .ok_or(Error::MissingAtom {
+            fragment_id: params.fragment_id,
+            atom_id: params.atom_id,
+        })?;
+    target.element = element;
+    target.explicit_hydrogens = Some(params.explicit_hydrogens);
+    let replacement = Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec())
+        .map_err(bondline_model::Error::from)?;
+    let mut candidate = document.clone();
+    candidate.model_mut().replace_fragment(
+        PageId::new(params.page_id).ok_or(Error::InvalidPageId)?,
+        replacement,
+    )?;
+    Ok(candidate)
+}
+
+pub(super) fn editable_atom(
+    document: &StoredDocument,
+    page: u32,
+    fragment: u32,
+    atom: u32,
+) -> Result<(&Fragment, &Atom), Error> {
     if !document.is_fully_mapped()
         || document
             .source_info()
@@ -34,11 +73,10 @@ pub(super) fn set_label(
             "source-free or completely mapped native CDXML data is required",
         ));
     }
-    let page_id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
-    let fragment_id = FragmentId::new(params.fragment_id)
-        .ok_or(Error::InvalidAtomLabel("fragment id must be positive"))?;
-    let atom_id =
-        AtomId::new(params.atom_id).ok_or(Error::InvalidAtomLabel("atom id must be positive"))?;
+    let page_id = PageId::new(page).ok_or(Error::InvalidPageId)?;
+    let fragment_id =
+        FragmentId::new(fragment).ok_or(Error::InvalidAtomLabel("fragment id must be positive"))?;
+    let atom_id = AtomId::new(atom).ok_or(Error::InvalidAtomLabel("atom id must be positive"))?;
     let fragment = document
         .model()
         .pages()
@@ -63,29 +101,5 @@ pub(super) fn set_label(
             "the target must be neutral, nonisotopic and nonradical",
         ));
     }
-    let element = Element::new(params.element).ok_or(Error::InvalidAtomLabel(
-        "element must be in the 1..118 catalog",
-    ))?;
-    if element.get() == 1 && params.explicit_hydrogens != 0 {
-        return Err(Error::InvalidAtomLabel(
-            "a physical hydrogen atom cannot carry inline attached hydrogens",
-        ));
-    }
-    if target.element == element && target.explicit_hydrogens == Some(params.explicit_hydrogens) {
-        return Ok(document.clone());
-    }
-    let mut atoms = fragment.atoms().to_vec();
-    let target = atoms
-        .iter_mut()
-        .find(|atom| atom.id == atom_id)
-        .ok_or_else(missing)?;
-    target.element = element;
-    target.explicit_hydrogens = Some(params.explicit_hydrogens);
-    let replacement = Fragment::new(fragment_id, atoms, fragment.bonds().to_vec())
-        .map_err(bondline_model::Error::from)?;
-    let mut candidate = document.clone();
-    candidate
-        .model_mut()
-        .replace_fragment(page_id, replacement)?;
-    Ok(candidate)
+    Ok((fragment, target))
 }

@@ -187,6 +187,7 @@ async fn publish_result(
             || result.file_operation.is_some()
             || result.close_operation.is_some()
             || result.ui_file_operation.is_some()
+            || result.ui_atom_label_operation.is_some()
             || result
                 .ui_bond_tool_operation
                 .is_some_and(|operation| operation.changed)
@@ -772,4 +773,6 @@ mod tests {
         assert!(!executor.has_active_work());
         Ok(())
     }
+
+    mod atom_label_publication_tests;
 }

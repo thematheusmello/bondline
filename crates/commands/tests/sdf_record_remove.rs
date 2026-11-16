@@ -145,6 +145,7 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "document.close",
             "ui.file",
             "ui.controls",
+            "ui.atom_label",
             "ui.bond_tool",
             "ui.view",
             "document.open_cdxml",

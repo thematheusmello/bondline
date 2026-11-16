@@ -3,7 +3,7 @@
 mod new_document;
 mod smiles_conversion;
 mod smiles_import;
-mod smiles_paste;
+pub(crate) mod smiles_paste;
 #[cfg(test)]
 use new_document::NewChoice;
 use new_document::NewWorkflow;
@@ -103,12 +103,15 @@ impl FileWorkflow {
     }
 
     pub(crate) fn blocks_authoring(&self, state: &CommandResult) -> bool {
+        self.presentation_present() || crate::pending_ui_blocks_authoring(state)
+    }
+
+    pub(crate) fn presentation_present(&self) -> bool {
         self.conversion.present()
             || self.paste.present()
             || self.import.present()
             || self.new_document.pending()
             || self.chooser.is_open()
-            || crate::pending_ui_blocks_authoring(state)
     }
 
     pub(crate) fn is_busy(&self) -> bool {

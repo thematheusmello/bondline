@@ -1397,3 +1397,6 @@ mod smiles_paste;
 
 #[path = "native_drawing_density_tests.rs"]
 mod native_drawing_density;
+
+#[path = "native_atom_label_tests.rs"]
+mod native_atom_label;

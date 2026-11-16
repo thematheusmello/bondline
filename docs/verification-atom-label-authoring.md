@@ -1,5 +1,9 @@
 # Literal elemental atom-label authoring
 
+Historical headless checkpoint `525e117`. The later [native editor record](verification-native-atom-labels.md)
+supersedes the next-task/native-unfinished statements below; the original execution
+results and source boundaries remain attributed to this checkpoint.
+
 2026-11-16. The [source contract](research/atom-label-authoring-contract.md) separates
 published element/attached-H semantics from original authoring policies and modern
 label-entry/repetition evidence. This gate implements the shared command and headless

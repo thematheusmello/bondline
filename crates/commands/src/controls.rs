@@ -58,7 +58,8 @@ impl Engine {
             .ui_file
             .request
             .as_ref()
-            .is_some_and(|request| request.phase != UiFilePhase::Running);
+            .is_some_and(|request| request.phase != UiFilePhase::Running)
+            || state.ui_atom_label.is_some();
         let authoring_reason = if state.close != CloseState::Open {
             Some("close_pending")
         } else if pending {

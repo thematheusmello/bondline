@@ -119,6 +119,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "document.new",
             "ui.file",
             "ui.controls",
+            "ui.atom_label",
             "ui.bond_tool",
             "ui.view",
             "document.open_cdxml",

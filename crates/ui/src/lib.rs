@@ -1,5 +1,6 @@
 //! Native GPU workspace. Authoring controls dispatch through the shared command registry.
 
+mod atom_editor;
 #[cfg(test)]
 mod bond_history_tests;
 #[cfg(test)]
@@ -115,6 +116,7 @@ pub struct DrawingState {
     navigation_position: Option<egui::Pos2>,
     presented_generation: Option<u64>,
     order: smiles_order::OrderWorkflow,
+    atom_labels: atom_editor::AtomEditor,
 }
 
 impl DrawingState {
@@ -518,6 +520,7 @@ fn workspace_shortcut(engine: &Engine, event: &egui::Event, text_focused: bool) 
 
 fn pending_ui_blocks_authoring(state: &bondline_commands::CommandResult) -> bool {
     state.close != CloseState::Open
+        || state.ui_atom_label.is_some()
         || state
             .ui_file
             .request
@@ -536,6 +539,7 @@ struct ShortcutRouting<'a> {
     files: Option<&'a mut FileWorkflow>,
     canvas: Option<(egui::Rect, egui::LayerId)>,
     modal_at_start: bool,
+    atom_modal_at_start: bool,
     order_busy_at_start: bool,
 }
 
@@ -554,6 +558,7 @@ fn replay_edit_shortcuts(
         mut files,
         canvas,
         modal_at_start,
+        atom_modal_at_start,
         order_busy_at_start,
     } = routing;
     let from_drawing = engine.content().drawing().is_ok();
@@ -576,15 +581,17 @@ fn replay_edit_shortcuts(
         }
     }
     for (index, event) in events.iter().enumerate() {
-        if let Some(fields) = fields.as_deref_mut() {
-            fields.replay_editor(index, engine, context);
-        }
-        if let Some(files) = files.as_deref_mut() {
-            files.replay_paste(index, event, engine, error, context);
-            files.replay_import(index, event, engine, error, context);
-            files.replay_conversion(index, event, engine, error, context);
-            files.replay_new(index, event, engine, error, context);
-            files.adopt_new(engine, error);
+        if !atom_modal_at_start {
+            if let Some(fields) = fields.as_deref_mut() {
+                fields.replay_editor(index, engine, context);
+            }
+            if let Some(files) = files.as_deref_mut() {
+                files.replay_paste(index, event, engine, error, context);
+                files.replay_import(index, event, engine, error, context);
+                files.replay_conversion(index, event, engine, error, context);
+                files.replay_new(index, event, engine, error, context);
+                files.adopt_new(engine, error);
+            }
         }
         if !from_drawing && engine.content().drawing().is_ok() {
             drawing.gesture = None;
@@ -803,11 +810,22 @@ fn show_workspace_with_preview(
         drawing.invalidate_hover();
         drawing.navigation_position = None;
     }
-    if let Some(fields) = sdf_fields.as_deref_mut() {
+    let events = context.input(|input| input.events.clone());
+    if !files
+        .as_ref()
+        .is_some_and(|files| files.presentation_present() || files.is_busy())
+        && !sdf_fields
+            .as_ref()
+            .is_some_and(|fields| fields.presentation_present())
+    {
+        drawing.atom_labels.sync(engine, error);
+    }
+    let atom_modal_at_start = drawing.atom_labels.present();
+    if !atom_modal_at_start && let Some(fields) = sdf_fields.as_deref_mut() {
         fields.begin_ui();
     }
-    let events = context.input(|input| input.events.clone());
     let paste_modal_at_start = modal_at_start
+        || atom_modal_at_start
         || files
             .as_ref()
             .is_some_and(|files| files.paste_present() || files.import_present());
@@ -815,7 +833,10 @@ fn show_workspace_with_preview(
     let new_decision_at_start = files
         .as_ref()
         .is_some_and(|files| files.new_decision_open());
-    if let Some(files) = files.as_deref_mut() {
+    drawing
+        .atom_labels
+        .show(context, Some(&mut *engine), &events);
+    if !atom_modal_at_start && let Some(files) = files.as_deref_mut() {
         files.begin_new_ui(context, &events);
         files.begin_conversion_ui(context, Some(engine), &events);
         files.begin_paste_ui(context, Some(engine), &events);
@@ -849,6 +870,7 @@ fn show_workspace_with_preview(
                 files: files.as_deref_mut(),
                 canvas: None,
                 modal_at_start: paste_modal_at_start,
+                atom_modal_at_start,
                 order_busy_at_start,
             },
         );
@@ -992,7 +1014,7 @@ fn show_workspace_with_preview(
                 }
             });
         });
-    if let Some(fields) = sdf_fields.as_deref_mut() {
+    if !atom_modal_at_start && let Some(fields) = sdf_fields.as_deref_mut() {
         fields.show_editor(context, Some(engine), &events);
     }
     let mut history_handled = false;
@@ -1015,7 +1037,7 @@ fn show_workspace_with_preview(
                     summary.record_count, summary.byte_length
                 ));
                 ui.label("Chemical preview is unavailable for SMILES files.");
-                if let Some(records) = smiles_records.as_deref_mut() {
+                if !atom_modal_at_start && let Some(records) = smiles_records.as_deref_mut() {
                     records.show(ui, engine);
                 }
                 drawing.presented_generation = Some(engine.session_generation());
@@ -1046,7 +1068,8 @@ fn show_workspace_with_preview(
                                         if let Some(fields) = sdf_fields.as_deref_mut()
                                             && ui
                                                 .add_enabled(
-                                                    state.close == CloseState::Open,
+                                                    state.close == CloseState::Open
+                                                        && !atom_modal_at_start,
                                                     egui::Button::new(format!(
                                                         "Inspect record {} fields",
                                                         record.id
@@ -1062,6 +1085,7 @@ fn show_workspace_with_preview(
                                             && ui
                                                 .add_enabled(
                                                     state.close == CloseState::Open
+                                                        && !atom_modal_at_start
                                                         && state.ui_file.request.is_none()
                                                         && collection.record_count > 1
                                                         && !fields.is_busy(),
@@ -1134,6 +1158,7 @@ fn show_workspace_with_preview(
                             files: files.as_deref_mut(),
                             canvas: Some((rect, response.layer_id)),
                             modal_at_start: paste_modal_at_start,
+                            atom_modal_at_start,
                             order_busy_at_start,
                         },
                     );
@@ -1349,6 +1374,7 @@ fn show_workspace_with_preview(
             let mut tool_states = tool_states.into_iter().peekable();
             history_handled = true;
             for (index, event) in events.iter().enumerate() {
+                if !atom_modal_at_start {
                 if let Some(fields) = sdf_fields.as_deref_mut() {
                     fields.replay_editor(index, engine, context);
                 }
@@ -1358,6 +1384,7 @@ fn show_workspace_with_preview(
                     files.replay_conversion(index, event, engine, error, context);
                     files.replay_new(index, event, engine, error, context);
                     files.adopt_new(engine, error);
+                }
                 }
                 if key.revision != engine.state().revision {
                     drawing.gesture = None;
@@ -1605,6 +1632,14 @@ fn show_workspace_with_preview(
                                 Ok(target) => target,
                                 Err(_) => continue,
                             };
+                            if modifiers.alt && !modifiers.ctrl && !modifiers.command && !modifiers.shift {
+                                if let Some(bondline_render::HitTarget::Atom { fragment_id, atom_id }) = target {
+                                    command = Some(Ok(Command::UiAtomLabel(bondline_commands::UiAtomLabel::Open {
+                                        expected_revision: key.revision, page_id: key.page.get(),
+                                        fragment_id: fragment_id.get(), atom_id: atom_id.get(),
+                                    })));
+                                }
+                            } else {
                             if engine.stored_document().is_ok_and(|stored| stored.has_smiles_projection())
                                 && !matches!(target, Some(bondline_render::HitTarget::Bond { .. }))
                             {
@@ -1645,6 +1680,7 @@ fn show_workspace_with_preview(
                                     context: key,
                                     target,
                                 });
+                            }
                             }
                         }
                         egui::Event::PointerMoved(pos) => {
@@ -2031,9 +2067,16 @@ fn show_workspace_with_preview(
                 files: files.as_deref_mut(),
                 canvas: None,
                 modal_at_start: paste_modal_at_start,
+                atom_modal_at_start,
                 order_busy_at_start,
             },
         );
+    }
+    if atom_modal_at_start
+        || drawing.atom_labels.present()
+        || engine.state().ui_atom_label.is_some()
+    {
+        return None;
     }
     if let Some(files) = files {
         if let Some(fields) = sdf_fields.as_deref_mut() {
@@ -2145,10 +2188,19 @@ impl BondlineApp {
         };
         let mut action = None;
         // Retirement may close a form or finish an edit before this packet replays.
-        let paste_modal_at_start = self.files.paste_present() || self.files.import_present();
+        let mut paste_modal_at_start = self.files.paste_present()
+            || self.files.import_present()
+            || self.drawing.atom_labels.present();
         let order_busy_at_start = self.drawing.order.is_busy();
         match self.engine.lock() {
             Ok(mut engine) => {
+                if !self.files.presentation_present()
+                    && !self.files.is_busy()
+                    && !self.sdf_fields.presentation_present()
+                {
+                    self.drawing.atom_labels.sync(&engine, &mut self.error);
+                }
+                paste_modal_at_start |= self.drawing.atom_labels.present();
                 self.files
                     .poll_paste(Some(&engine), context, &mut self.error);
                 self.files
@@ -2161,14 +2213,22 @@ impl BondlineApp {
                 self.sdf_fields.sync(&engine, context);
                 self.smiles_records.sync(&engine, context);
                 self.sdf_fields.settle_editor(&mut engine, context);
-                if native_close && engine.state().close != CloseState::Committed {
+                if native_close
+                    && (engine.state().close != CloseState::Committed
+                        || self.drawing.atom_labels.present())
+                {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
-                    if !self.sdf_fields.native_close(&engine, context) {
+                    if self.drawing.atom_labels.present() {
+                        self.error = Some("Apply or Cancel the atom label before closing.".into());
+                    } else if !self.sdf_fields.native_close(&engine, context) {
                         self.files.request_close(&mut engine, &mut self.error);
                         self.drawing.order.cancel_for_context();
                     }
                 }
-                if smoke_close && !self.sdf_fields.native_close(&engine, context) {
+                if smoke_close
+                    && !self.drawing.atom_labels.present()
+                    && !self.sdf_fields.native_close(&engine, context)
+                {
                     self.files.request_close(&mut engine, &mut self.error);
                     self.drawing.order.cancel_for_context();
                 }
@@ -2202,13 +2262,19 @@ impl BondlineApp {
                         || self.preview.is_busy()
                         || self.sdf_fields.blocks_close()
                         || self.smiles_records.is_busy()
-                        || self.drawing.order.is_busy(),
+                        || self.drawing.order.is_busy()
+                        || self.drawing.atom_labels.present(),
                     action.is_some(),
                 ) {
                     context.send_viewport_cmd(egui::ViewportCommand::Close);
                 }
             }
             Err(_) => {
+                self.drawing.atom_labels.show(
+                    context,
+                    None,
+                    &context.input(|input| input.events.clone()),
+                );
                 self.files.deactivate_paste(context, &mut self.error);
                 self.files.deactivate_import(context, &mut self.error);
                 self.drawing.order.deactivate(context, &mut self.error);

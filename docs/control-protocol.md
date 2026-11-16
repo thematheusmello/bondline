@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has33 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has34 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -67,6 +67,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `sdf.field.set_value` | Required `expected_revision`, positive `record_id`, zero-based existing `field_index`, `value_lines` | Deferred immutable existing-field edit, one whole-content history commit; byte-preserving no-op and strict stale/input guards |
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
+| `ui.atom_label` | Tagged `action`: `open` requires `expected_revision`, positive `page_id`, `fragment_id`, `atom_id`; `cancel` requires `expected_revision`, positive `request_id` | Queue or cancel one source-qualified native atom-label presentation; no authored edit/history or empty-target binding |
 | `ui.bond_tool` | Required `order` (`single`, `double`, `triple`) | Select a transient drawing tool; explicit operation receipt/epoch, no authored edit or history entry |
 | `ui.view` | Tagged `action`: `inspect`, `fit`, `actual`, `set_zoom`, `magnify`, `reduce`, `pan`; action-specific geometry/percentage | Inspect or change the transient camera without editing content/history; source-qualified display/readability guards remain |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request guarded New/SMILES forms or Open/Save/Save As presentation, or cancel the matching intent; a native host is required |
@@ -1321,7 +1322,7 @@ capture, native races/other-platform execution and complete reference parity rem
 `ui.controls` additionally exposes `file.import_smiles_records`, File → Import SMILES
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
-counts are20 Drawing/14 SDF/10 raw SMILES; the registry now has33 commands. Accepting
+counts are20 Drawing/14 SDF/10 raw SMILES; the registry now has34 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag
@@ -1346,3 +1347,39 @@ retry rearms a consumed failed import only while its original source/context rem
 current. No file operation/receipt, Save lease or trusted close ACK is added by import or
 order. [Receiving evidence](verification-native-smiles-records.md) separates App/worker
 tests from actual platform execution and exact reference-screen parity.
+
+## Exact-target atom-label presentation
+
+`ui.atom_label` uses the attached native-host signal already used by `ui.file`.
+The closed variants are:
+
+```json
+{"action":"open","expected_revision":1,"page_id":1,"fragment_id":1,"atom_id":2}
+{"action":"cancel","expected_revision":1,"request_id":1}
+```
+
+Open validates revision, host availability, idle file presentation/Open close state and
+the same source/target guards as `atom.set_label`. An existing atom request, even stale,
+refuses with `ui_busy`. The optional `ui_atom_label` snapshot contains `id`,
+`input_revision`, `page_id`, `fragment_id`, `atom_id`, `element`, `explicit_hydrogens` and
+`current`. The initial target/fields never retarget. `current` checks weak source/revision/
+generation, opaque file context, file/close/view epochs, tool and attached host. Open and
+Cancel return `ui_atom_label_operation:ID` with `changed:false`; authored revision/history,
+source, saved baseline, camera and tool remain unchanged. Request IDs increase on Open.
+
+Cancel requires current revision and exact request ID, including a stale request; wrong
+IDs refuse atomically. The global committed-close refusal still applies to commands.
+Rust-only `finish_ui_atom_label(id)` can retire that exact host presentation after close
+commits, without granting an edit, Save or close ACK. Host detach clears presentation.
+
+The native form's Apply calls `apply_ui_atom_label(id,element,explicit_hydrogens)` under
+the same Engine guard. It revalidates currentness, executes the existing registered
+setter exactly once and retires only on success/validated no-op. A failure retains the
+draft. The cheap operation adds no worker or Save lease. Controls discovery stays20/14/10;
+clients provide a real target rather than invoking an empty-target menu binding.
+
+Existing loopback notification follows response flush and activity release for the
+explicit operation marker; failed publication does not pretend a host repaint happened.
+Headless CLI/stdio sessions return `ui_unavailable`. [Receiving evidence](verification-native-atom-labels.md)
+records actual adapters and native Mac scope; it does not establish complete Text-tool
+or cross-platform parity.

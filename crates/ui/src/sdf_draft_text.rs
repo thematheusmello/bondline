@@ -76,6 +76,7 @@ pub(crate) struct DraftEditOutcome {
 /// The caller must also restore its prior cursor and reset its bounded undoer.
 pub(crate) struct SdfDraftText {
     text: String,
+    byte_limit: usize,
     checkpoint: Option<String>,
     in_edit: bool,
     rejection: Option<DraftTextError>,
@@ -92,9 +93,14 @@ impl fmt::Debug for SdfDraftText {
 
 impl SdfDraftText {
     pub(crate) fn new(text: &str) -> Result<Self, DraftTextError> {
-        Self::check_bytes(text.len())?;
+        Self::with_byte_limit(text, MAX_SDF_INSPECT_VALUE_BYTES)
+    }
+
+    pub(crate) fn with_byte_limit(text: &str, byte_limit: usize) -> Result<Self, DraftTextError> {
+        Self::check_bytes(text.len(), byte_limit)?;
         Ok(Self {
             text: text.to_owned(),
+            byte_limit,
             checkpoint: None,
             in_edit: false,
             rejection: None,
@@ -137,11 +143,11 @@ impl SdfDraftText {
         )
     }
 
-    fn check_bytes(attempted_bytes: usize) -> Result<(), DraftTextError> {
-        if attempted_bytes > MAX_SDF_INSPECT_VALUE_BYTES {
+    fn check_bytes(attempted_bytes: usize, byte_limit: usize) -> Result<(), DraftTextError> {
+        if attempted_bytes > byte_limit {
             Err(DraftTextError::ByteLimit {
                 attempted_bytes,
-                limit_bytes: MAX_SDF_INSPECT_VALUE_BYTES,
+                limit_bytes: byte_limit,
             })
         } else {
             Ok(())
@@ -207,7 +213,9 @@ impl TextBuffer for SdfDraftText {
         if !self.checked_cursor(&mut cursor) {
             return 0;
         }
-        if let Err(error) = Self::check_bytes(self.text.len().saturating_add(text.len())) {
+        if let Err(error) =
+            Self::check_bytes(self.text.len().saturating_add(text.len()), self.byte_limit)
+        {
             self.reject(error);
             return 0;
         }
@@ -253,7 +261,7 @@ impl TextBuffer for SdfDraftText {
         if !self.ready() {
             return;
         }
-        if let Err(error) = Self::check_bytes(text.len()) {
+        if let Err(error) = Self::check_bytes(text.len(), self.byte_limit) {
             self.reject(error);
             return;
         }
@@ -616,3 +624,7 @@ mod tests {
         Ok(())
     }
 }
+
+#[cfg(test)]
+#[path = "atom_text_tests.rs"]
+mod atom_text_tests;
