@@ -48,6 +48,18 @@ never infer source-default/modifier/stereo/attachment poses from this explicit e
 Preserve the new raw two-flag checker and all unchanged chemistry consumers, and distinguish
 CDXML source IDs from application IDs in fixtures and history/floor assertions.
 
+The next literal chain.create_path/preview increment follows docs/research/native-chain-plan.md
+and docs/verification-chain-paths.md. Registry40 leaves controls31/20/14/10/catalogue12/128.
+Preserve the old39 command records/types/schema; new Free.points2..64/Atom.new_points1..63
+uses closed point objects and shared final append/H/IDs. Unequal/180°/crossing/tiny literal
+geometry must not inherit the fixed certificate or native ink thresholds. Borrow and bound
+path vectors before allocation. No preview mutation/ID reservation or native authority.
+Next research normative BondLength/ChainAngle encoding/defaults/inheritance and lock authored
+style/model/IO/loss boundaries before tests; ordered Control events and full native flow follow.
+Current egui-winit loses modifier chronology; never apply final-frame modifiers retroactively.
+The new bounded chain_path_request ASan harness prepares JSON only, never completes file/
+render work; read fuzz/README.md for pinned tools/new ignored seed directory and evidence.
+
 The terminal-label prerequisite is described in docs/research/terminal-carbon-labels.md
 and docs/verification-terminal-carbon-labels.md. Degree zero/one selects terminal; higher
 degree selects nonterminal. Require known H/checked C4 before suppression and keep actual

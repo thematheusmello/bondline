@@ -1,5 +1,17 @@
 # Verification log
 
+## Literal turning-chain prerequisite, 2026-11-16
+
+[Receiving](verification-chain-paths.md) distinguishes actual first UnknownCommand RED
+from post-draft engine/API/adapters and the new-test disconnect/re-authentication setup
+correction. Eleven new focused cases pass; all39 old command records/schema/order stay.
+First full gate20061 exits0:1574/0/1 across225 result lines, with fmt/workspace/vendor
+lint/tests/layers/licenses/corpus. Native/CLI build44866 passes. New isolated request
+ASan38563 completes10000 runs/seed274810359, no crash in the bounded run; separate fuzz
+fmt/clippy pass. Registry40 adds no native control. Native chain/settings/modifiers,
+actual platforms/goldens and full M0–M5 remain required. User windows and Actions stay
+untouched; no publication or causal historical MCP-bind repair is claimed.
+
 ## Explicit chain engine, 2026-11-16
 
 [Receiving](verification-chain-authoring.md) records the actual existing-JSON

@@ -147,3 +147,6 @@ expects C5H12/H[3,2,2,2,3], preserved coordinates, directed path edges and one e
 Add source/metadata/history/floors, malformed/bounded/precision/occupancy, preview and
 actual Unicode adapter/file checks. Raw exact flags/orders/styles precede unchanged
 external chemistry. Keep old API/control consumers and all previous geometry assertions.
+
+The first path/preview prerequisite now has [receiving evidence](../verification-chain-paths.md).
+This does not complete steps2–6 or enable either native chain tool.

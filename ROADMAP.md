@@ -13,6 +13,11 @@ After this visual increment, the explicit headless chain candidate follows the
 [locked contract](docs/research/chain-authoring-plan.md) and
 [receiving evidence](docs/verification-chain-authoring.md). Continue its complete native
 workflow, then the remaining drawing, chemistry, publishing and distribution scope.
+The [native dependency contract](docs/research/native-chain-plan.md) now has a literal
+turning-path/preview prerequisite with [independent evidence](docs/verification-chain-paths.md).
+Next resolve authored drawing-style encoding/preservation, then ordered modifier input,
+complete native drawing/forms/repeat and actual acceptance. Do not substitute frame-global
+Control state or unsaved UI settings for those requirements; the native tools stay grey.
 
 The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now has a
 [shared skeletal display/explicit-label follow-up](docs/verification-skeletal-carbon.md).

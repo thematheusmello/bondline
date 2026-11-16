@@ -78,7 +78,7 @@ fn stdio_acyclic_profile_is_discovered_and_never_implicitly_replaces_a_complete_
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     assert_eq!(listed["id"], 2);
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 39);
+    assert_eq!(tools.len(), 40);
     let converters = tools
         .iter()
         .filter(|tool| tool["name"] == ACYCLIC)

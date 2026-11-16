@@ -131,12 +131,12 @@ fn names(entries: &[Value]) -> TestResult {
         .iter()
         .map(|v| v["name"].as_str().ok_or("command name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(entries.len(), 39);
+    assert_eq!(entries.len(), 40);
     assert_eq!(
         actual,
         OLD_NAMES
             .into_iter()
-            .chain([NAME, "chain.create"])
+            .chain([NAME, "chain.create", "chain.create_path"])
             .collect::<BTreeSet<_>>()
     );
     Ok(())

@@ -67,6 +67,15 @@ immutable candidate preserves old metadata and whole-source ownership, then publ
 after the ordinary commit. No native binding, new worker, authored schema field, source
 authority or dependency is added. Read [the contract](research/chain-authoring-plan.md).
 
+`chain.create_path` supplies literal positioned paths for later turning gestures. New
+closed point requests reuse model coordinate validation without adding a model schema
+dependency. Fixed and positioned paths share one target-local attachment proof and final
+immutable append/identity/history builder. Borrowed path parameters are bounded before
+resolved-point allocation; same-builder fixed/path previews never reserve IDs or mutate
+context. No native tool is enabled. [The dependency contract](research/native-chain-plan.md)
+keeps authored style persistence, ordered modifier evidence, full native workflows and
+actual acceptance required; frame-global modifiers are not chronological evidence.
+
 Bond's optional directed DoublePosition is authored data, copied with the whole bond and
 retained by snapshots even when dormant on another order. CDXML maps/preserves it; model
 MOL export and synchronized SMILES replacement reject unsupported loss. The shared scene

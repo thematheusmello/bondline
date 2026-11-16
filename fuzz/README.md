@@ -5,6 +5,45 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Literal chain JSON requests
+
+`chain_path_request` wraps up to16KiB of raw parameter bytes in the real command
+envelope and exercises decoding plus immediate preparation. It never completes file/
+render work or uses GUI/GPU. Errors preserve authored content/stamp/history; accepted
+free paths have the bounded literal C/H/flag graph and exact whole-content Undo/Redo.
+Default source has no attachment targets, so successful attachments and complete
+saved-file/chemical/native behavior remain independent integration tests.
+
+Use a fresh ignored directory; never mutate committed fixtures:
+
+```sh
+python3 - <<'PY'
+import json
+from pathlib import Path
+root = Path('.cache/fuzz/chain-path-b4c6ae1')
+root.mkdir(parents=True, exist_ok=False)
+base = {'expected_revision': 0, 'page_id': 1,
+        'hydrogen_policy': 'rectify_neutral_carbon',
+        'placement': {'mode': 'free', 'points': []}}
+for count in (2, 5, 64, 65):
+    value = json.loads(json.dumps(base))
+    value['placement']['points'] = [{'x_pt': i, 'y_pt': i % 2} for i in range(count)]
+    (root / f'original-{count}').write_text(json.dumps(value), encoding='utf-8')
+wrong = json.loads(json.dumps(base))
+wrong['placement']['points'] = [[0, 0], [48, 0]]
+(root / 'positional-points').write_text(json.dumps(wrong), encoding='utf-8')
+duplicate = json.loads(json.dumps(base))
+duplicate['placement']['points'] = [{'x_pt': 0, 'y_pt': 0}] * 2
+(root / 'duplicate').write_text(json.dumps(duplicate), encoding='utf-8')
+(root / 'truncated').write_bytes(b'{"placement":')
+(root / 'invalid-utf8').write_bytes(b'\xff')
+PY
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address chain_path_request .cache/fuzz/chain-path-b4c6ae1 -- -runs=10000 -seed=274810359 -max_len=16384 -timeout=5
+```
+
+These original vectors are tests of this API, not reference-product samples. The bound
+does not exercise the full1MiB wire budget or establish a general JSON security audit.
+
 ## Capture PNG envelope
 
 `capture_image` exercises the public `PngCapture::png_bytes` preflight, not a

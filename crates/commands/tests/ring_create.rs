@@ -512,11 +512,12 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
         "ui.view",
     ];
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 39);
+    assert_eq!(registry.len(), 40);
     let mut expected = OLD_36.into_iter().collect::<BTreeSet<_>>();
     assert!(expected.insert("ring.create"));
     assert!(expected.insert("ui.ring_tool"));
     assert!(expected.insert("chain.create"));
+    assert!(expected.insert("chain.create_path"));
     assert_eq!(
         registry.iter().map(|r| r.name).collect::<BTreeSet<_>>(),
         expected

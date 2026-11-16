@@ -775,7 +775,7 @@ fn actual_unicode_files_match_independent_expat_decimal_rdkit_and_native_source_
 fn selector_union_schema_and_runtime_reject_every_mixed_null_or_unclosed_named_request_atomically()
 -> TestResult {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 39);
+    assert_eq!(registry.len(), 40);
     let entry = registry
         .iter()
         .find(|c| c.name == "ring.create")

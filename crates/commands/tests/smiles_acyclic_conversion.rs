@@ -89,7 +89,7 @@ fn without_receipt(mut result: Value) -> Result<Value, Box<dyn std::error::Error
 #[test]
 fn the_optional_closed_profile_preserves_the_old_parameter_and_file_contract() -> TestResult {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 39);
+    assert_eq!(registry.len(), 40);
     let entries = registry
         .iter()
         .filter(|entry| entry.name == NAME)

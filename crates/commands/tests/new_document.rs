@@ -114,6 +114,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
         [
             "atom.set_label",
             "chain.create",
+            "chain.create_path",
             "document.inspect",
             "document.close",
             "document.import_smiles_records",

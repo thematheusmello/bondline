@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has39 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has40 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -1328,7 +1328,7 @@ capture, native races/other-platform execution and complete reference parity rem
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
 counts are31 native Drawing/14 SDF/10 raw SMILES; retained-SMILES Drawing keeps20.
-The registry now has39 commands. Accepting
+The registry now has40 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag
@@ -1360,7 +1360,7 @@ The native **All tools…** catalogue is roadmap presentation, not additional ex
 registry entries. All124 documented roles/140 expanded entries are visible;128 planned
 entries have no binding and cannot dispatch. Available entries use the same current
 delivered control IDs. `ui.controls` continues to list delivered bindings only, retaining
-counts31/20/14/10; the separate headless chain command brings the registry to39.
+counts31/20/14/10; the separate headless chain commands bring the registry to40.
 See [catalogue](design/tool-catalogue.md).
 
 ## Exact-target atom-label presentation
@@ -1641,3 +1641,31 @@ retains its existing reservation through finish.
 This adds one registry command (38→39), with no new native control/binding. Both chain
 entries stay disabled. Drag/count, Add Chain, Alt repeat, Snaking/Control, settings,
 hotkeys, automatic poses and actual native/platform acceptance remain required.
+
+## Literal headless chain paths
+
+```json
+{"command":"chain.create_path","params":{"expected_revision":0,"page_id":1,"hydrogen_policy":"rectify_neutral_carbon","placement":{"mode":"free","points":[{"x_pt":144,"y_pt":144},{"x_pt":192,"y_pt":144},{"x_pt":192,"y_pt":192},{"x_pt":240,"y_pt":192},{"x_pt":240,"y_pt":144}]}}}
+```
+
+The new closed request creates one literal ordered carbon path in one edit. Free
+points has2..64 closed{x_pt,y_pt} objects; atom placement instead supplies fragment_id,
+atom_id and1..63 new_points objects. The exact old atom position is prepended; no count,
+angle or side field is accepted. All fields are required. Coordinates are finite within
+the model±100000pt bound; point arrays/extra fields refuse. Typed Rust points validate too.
+
+Unequal edges, mixed turns,180° interiors, represented tiny edges and crossings are
+literal data, with no snapping/rotation/inference. Duplicate vertices, zero/nonfinite
+edges and new centers occupying old same-page centers refuse. The shared target-local
+H/source/ID/history builder preserves old fields/styles/geometry and appends neutral
+Single-bond C with literal H and both false label flags. Existing mandatory labels and
+explicit export-loss refusals remain. Full native ink/paper guards are additional.
+
+Rust-only preview_chain_create/path returns the same fixed/literal candidates without
+editing, reserving IDs, changing context or granting Save/gesture authority. Both require
+current revision and reject committed close. Path vectors are borrowed and checked
+before resolved allocation. Existing fixed ChainCreate types, fields, schema, defaults
+and command variant remain exact. CLI/MCP/authenticated loopback expose both commands;
+registry40 adds no native binding. Native chain entries remain disabled until the full
+[dependency/workflow contract](research/native-chain-plan.md) is implemented and checked.
+See [receiving](verification-chain-paths.md) for exact evidence and limits.

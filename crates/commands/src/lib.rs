@@ -36,7 +36,9 @@ pub use bond::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
 };
 pub use bond_tool::{BondToolOperation, BondToolState, EffectiveTool, SelectBondTool};
-pub use chain::{ChainCreate, ChainPlacement, ChainSide};
+pub use chain::{
+    ChainCreate, ChainCreatePath, ChainPathPlacement, ChainPathPoint, ChainPlacement, ChainSide,
+};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
@@ -195,6 +197,7 @@ command_registry! {
     RingCreate(RingCreateRequest) => ("ring.create", "Construct a native carbon Single ring or named benzene/cyclopentadiene integer-bond ring, preserving shared data with explicit standalone or shared-atom/edge placement.", false),
     UiRingToolSelect(SelectRingToolRequest) => ("ui.ring_tool", "Select a native carbon Single-ring or named benzene/cyclopentadiene tool without editing the document or its history.", false),
     ChainCreate(ChainCreate) => ("chain.create", "Construct an explicit native carbon chain of Single bonds with a required interior angle and literal hydrogen policy, optionally sharing one existing neutral carbon.", false),
+    ChainCreatePath(ChainCreatePath) => ("chain.create_path", "Construct a literal ordered native carbon path in one edit, optionally starting at an existing carbon; no snapping or angle/length inference.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -960,6 +963,17 @@ impl Engine {
                 document.model_mut().set_page_size(id, size)?;
                 self.commit(document)?
             }
+            Command::ChainCreatePath(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let (document, identities) =
+                    chain::create_path(self.stored_document()?, &params, self.identities)?;
+                let changed = self.commit(document)?;
+                self.identities = identities;
+                drawing_focus = self.view_focus;
+                changed
+            }
             Command::ChainCreate(params) => {
                 if params.expected_revision != self.revision {
                     return Err(Error::StaleRevision);
@@ -1243,6 +1257,7 @@ mod tests {
                 "bond.extend",
                 "bond.set_order",
                 "chain.create",
+                "chain.create_path",
                 "document.import_smiles_records",
                 "document.inspect",
                 "document.new",

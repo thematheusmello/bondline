@@ -2,10 +2,14 @@
 use crate::{Error, OrderHydrogenPolicy, bond};
 use bondline_io::StoredDocument;
 use bondline_model::{
-    Atom, AtomId, Bond, BondId, BondOrder, Element, Fragment, FragmentId, PageId, Point2,
+    Atom, AtomId, Bond, BondId, BondOrder, Element, Fragment, FragmentId, Page, PageId, Point2,
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Deserializer, Serialize, de::value::StringDeserializer};
+
+mod path;
+pub(super) use path::create as create_path;
+pub use path::{ChainCreatePath, ChainPathPlacement, ChainPathPoint};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -144,15 +148,7 @@ pub(super) fn create(
     params: ChainCreate,
     floor: bond::Ids,
 ) -> Result<(StoredDocument, bond::Ids), Error> {
-    if !document.is_fully_mapped()
-        || document
-            .source_info()
-            .is_some_and(|source| source.format != "cdxml")
-    {
-        return Err(Error::UnsupportedChain(
-            "source-free or completely mapped native CDXML is required",
-        ));
-    }
+    require_source(document)?;
     if !(2..=64).contains(&params.count) {
         return Err(Error::InvalidChain(
             "carbon count must be 2 through 64, including a shared anchor",
@@ -164,14 +160,8 @@ pub(super) fn create(
         ));
     }
     let OrderHydrogenPolicy::RectifyNeutralCarbon = params.hydrogen_policy;
-    let page_id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
-    let page = document
-        .model()
-        .pages()
-        .iter()
-        .find(|page| page.id() == page_id)
-        .ok_or(bondline_model::Error::MissingPage(params.page_id))?;
-    let (target, anchor, begin, end, side) = match params.placement {
+    let page = page(document, params.page_id)?;
+    let (anchor, begin, end, side) = match params.placement {
         ChainPlacement::Free {
             begin_x_pt,
             begin_y_pt,
@@ -179,7 +169,6 @@ pub(super) fn create(
             end_y_pt,
             side,
         } => (
-            None,
             None,
             Point2::new(begin_x_pt, begin_y_pt)?,
             Point2::new(end_x_pt, end_y_pt)?,
@@ -192,39 +181,103 @@ pub(super) fn create(
             end_y_pt,
             side,
         } => {
-            let id = FragmentId::new(fragment_id).ok_or(Error::InvalidFragmentId)?;
-            let fragment = page
-                .fragments()
-                .iter()
-                .find(|fragment| fragment.id() == id)
-                .ok_or(bondline_model::Error::MissingFragment(fragment_id))?;
-            let id = AtomId::new(atom_id).ok_or(Error::InvalidChain("atom ID must be positive"))?;
-            let atom =
-                fragment
-                    .atoms()
-                    .iter()
-                    .find(|atom| atom.id == id)
-                    .ok_or(Error::MissingAtom {
-                        fragment_id,
-                        atom_id,
-                    })?;
-            let h = bond::remaining_carbon_hydrogens(fragment, atom, 1).ok_or(Error::UnsupportedChain(
-                "shared atoms need neutral natural carbon, supported incident orders and consistent sufficient literal H",
-            ))?;
-            let begin = atom.position.ok_or(Error::UnsupportedChain(
-                "a shared atom has no authored position",
-            ))?;
-            (
-                Some(fragment),
-                Some((id, h)),
-                begin,
-                Point2::new(end_x_pt, end_y_pt)?,
-                side,
-            )
+            let anchor = attachment(page, fragment_id, atom_id)?;
+            let begin = anchor.position;
+            (Some(anchor), begin, Point2::new(end_x_pt, end_y_pt)?, side)
         }
     };
-    let shared = usize::from(anchor.is_some());
     let points = points(params.count, params.angle_degrees, begin, end, side)?;
+    append(document, page, anchor, points, floor)
+}
+
+fn require_source(document: &StoredDocument) -> Result<(), Error> {
+    if !document.is_fully_mapped()
+        || document
+            .source_info()
+            .is_some_and(|source| source.format != "cdxml")
+    {
+        return Err(Error::UnsupportedChain(
+            "source-free or completely mapped native CDXML is required",
+        ));
+    }
+    Ok(())
+}
+
+fn page(document: &StoredDocument, page_id: u32) -> Result<&Page, Error> {
+    let id = PageId::new(page_id).ok_or(Error::InvalidPageId)?;
+    document
+        .model()
+        .pages()
+        .iter()
+        .find(|page| page.id() == id)
+        .ok_or_else(|| bondline_model::Error::MissingPage(page_id).into())
+}
+
+struct Anchor<'a> {
+    fragment: &'a Fragment,
+    id: AtomId,
+    hydrogens: u16,
+    position: Point2,
+}
+
+fn attachment(page: &Page, fragment_id: u32, atom_id: u32) -> Result<Anchor<'_>, Error> {
+    let id = FragmentId::new(fragment_id).ok_or(Error::InvalidFragmentId)?;
+    let fragment = page
+        .fragments()
+        .iter()
+        .find(|fragment| fragment.id() == id)
+        .ok_or(bondline_model::Error::MissingFragment(fragment_id))?;
+    let id = AtomId::new(atom_id).ok_or(Error::InvalidChain("atom ID must be positive"))?;
+    let atom = fragment
+        .atoms()
+        .iter()
+        .find(|atom| atom.id == id)
+        .ok_or(Error::MissingAtom {
+            fragment_id,
+            atom_id,
+        })?;
+    let hydrogens = bond::remaining_carbon_hydrogens(fragment, atom, 1).ok_or(Error::UnsupportedChain(
+        "shared atoms need neutral natural carbon, supported incident orders and consistent sufficient literal H",
+    ))?;
+    let position = atom.position.ok_or(Error::UnsupportedChain(
+        "a shared atom has no authored position",
+    ))?;
+    Ok(Anchor {
+        fragment,
+        id,
+        hydrogens,
+        position,
+    })
+}
+
+fn append(
+    document: &StoredDocument,
+    page: &Page,
+    anchor: Option<Anchor<'_>>,
+    points: Vec<Point2>,
+    floor: bond::Ids,
+) -> Result<(StoredDocument, bond::Ids), Error> {
+    if !(2..=64).contains(&points.len()) {
+        return Err(Error::InvalidChain(
+            "a resolved chain needs 2 through 64 vertices",
+        ));
+    }
+    for (i, point) in points.iter().enumerate() {
+        if points.iter().take(i).any(|previous| previous == point) {
+            return Err(Error::InvalidChain("chain vertices must be distinct"));
+        }
+    }
+    for (a, b) in points.iter().zip(points.iter().skip(1)) {
+        let length = (b.x_pt() - a.x_pt()).hypot(b.y_pt() - a.y_pt());
+        if !length.is_finite() || length == 0.0 {
+            return Err(Error::InvalidChain(
+                "chain edges need finite nonzero length",
+            ));
+        }
+    }
+    let page_id = page.id();
+    let shared = usize::from(anchor.is_some());
+    let target = anchor.as_ref().map(|anchor| anchor.fragment);
     for point in points.iter().skip(shared) {
         if page
             .fragments()
@@ -247,7 +300,8 @@ pub(super) fn create(
     };
     let mut atoms = target.map_or_else(Vec::new, |fragment| fragment.atoms().to_vec());
     let mut bonds = target.map_or_else(Vec::new, |fragment| fragment.bonds().to_vec());
-    let mut previous = if let Some((id, h)) = anchor {
+    let mut previous = if let Some(anchor) = anchor {
+        let id = anchor.id;
         atoms
             .iter_mut()
             .find(|atom| atom.id == id)
@@ -255,7 +309,7 @@ pub(super) fn create(
                 fragment_id: fragment_id.get(),
                 atom_id: id.get(),
             })?
-            .explicit_hydrogens = Some(h);
+            .explicit_hydrogens = Some(anchor.hydrogens);
         Some(id)
     } else {
         None
@@ -304,4 +358,29 @@ pub(super) fn create(
             .append_fragments(page_id, vec![replacement])?;
     }
     Ok((candidate, maximum))
+}
+
+impl crate::Engine {
+    /// Read-only candidate from the same fixed-chain builder used at commit.
+    pub fn preview_chain_create(&self, params: &ChainCreate) -> Result<StoredDocument, Error> {
+        if self.close_state() == crate::CloseState::Committed {
+            return Err(Error::CloseCommitted);
+        }
+        if params.expected_revision != self.revision {
+            return Err(Error::StaleRevision);
+        }
+        create(self.stored_document()?, params.clone(), self.identities)
+            .map(|(document, _)| document)
+    }
+
+    /// Read-only literal path; no identity reservation or native gesture authority.
+    pub fn preview_chain_path(&self, params: &ChainCreatePath) -> Result<StoredDocument, Error> {
+        if self.close_state() == crate::CloseState::Committed {
+            return Err(Error::CloseCommitted);
+        }
+        if params.expected_revision != self.revision {
+            return Err(Error::StaleRevision);
+        }
+        create_path(self.stored_document()?, params, self.identities).map(|(document, _)| document)
+    }
 }

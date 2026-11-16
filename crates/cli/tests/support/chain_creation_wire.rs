@@ -343,13 +343,16 @@ fn resolve<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
     }
 }
 fn discovery(entries: &[Value], schema_key: &str) -> TestResult {
-    assert_eq!(entries.len(), 39);
+    assert_eq!(entries.len(), 40);
     assert_eq!(
         entries
             .iter()
             .map(|e| e["name"].as_str().ok_or("name"))
             .collect::<Result<BTreeSet<_>, _>>()?,
-        OLD_NAMES.into_iter().chain([NAME]).collect::<BTreeSet<_>>()
+        OLD_NAMES
+            .into_iter()
+            .chain([NAME, "chain.create_path"])
+            .collect::<BTreeSet<_>>()
     );
     let entry = entries
         .iter()
@@ -761,3 +764,5 @@ fn authenticated_benzene_attachment_preserves_integer_styles_source_and_publishe
     server.shutdown()?;
     Ok(())
 }
+#[path = "chain_creation/path_wire.rs"]
+mod path_wire;

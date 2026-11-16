@@ -329,10 +329,11 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
         "ui.view",
     ];
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 39);
+    assert_eq!(registry.len(), 40);
     let mut expected = OLD_37.into_iter().collect::<BTreeSet<_>>();
     assert!(expected.insert("ui.ring_tool"));
     assert!(expected.insert("chain.create"));
+    assert!(expected.insert("chain.create_path"));
     assert_eq!(
         registry.iter().map(|r| r.name).collect::<BTreeSet<_>>(),
         expected

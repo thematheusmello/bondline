@@ -7,15 +7,59 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-### Native chain dependency contract — first prerequisite not implemented
+### Verified literal path/preview prerequisite
 
-On clean a433c3c, previous turn is PROGRESS (fixed chain code/test/docs and1563/0/1).
-Read docs/research/native-chain-plan.md: complete native flow requires literal turning
-paths, authored drawing settings and ordered modifier evidence before native gestures/
-forms/repeat and actual acceptance. New chain.create_path preserves the fixed API and
-commits one positioned path; this contract has no new test/code yet. Next adopt the
-independent UnknownCommand RED before producer. All native chain workflows remain
-required/disabled. Both old desktop windows stay protected; Actions stays OFF.
+This increment follows a433c3c and dependency contract b4c6ae1; its atomic source/test/
+docs commit accompanies this record. Previous turn is PROGRESS (fixed chain1563/0/1).
+Read docs/research/native-chain-plan.md and docs/verification-chain-paths.md. New
+chain.create_path commits one literal turning path, with free2..64 or1..63 attached new
+points. Closed point objects reuse model validation without a model schema dependency.
+Fixed and literal paths share final source/H/metadata/ID/history rules. Both new previews
+use the same builders without edits/reservations; path vectors are borrowed/bounded
+before resolved allocation. Old fixed types/semantics and all39 old command records/
+schemas/order remain equal; actual old/current CLI comparison proves that compatibility.
+Registry40 leaves native controls31/20/14/10 and catalogue12/128 unchanged.
+
+First JSON35032 REDUnknownCommand0/1 precedes producer77658 GREEN1/0. Independent
+post-draft expanded29473 passes8/0 (JSON5/API3); actual adapter42759 returns2/1 because
+a new test assumes malformed serde input keeps its socket open. Existing protocol closes
+after replying to Error::InvalidParams. Explicit EOF assertion/fresh authentication
+preserves all old error/state/publication/source checks and five-second settings;
+qualified22336 passes3/0. No production transport change or bind retry. Eleven new
+cases cover literal geometry/180°/tiny/crossings, sparse weighted attachments/metadata,
+source/ID/history/late-cancel and preview purity/exact commit. Actual Unicode files pass
+unchanged raw two-flag/Decimal/directed integer/style checks before RDKit C5H12/C7H16.
+
+First full local gate20061 exits0: **1574/0/1 across225 result lines**, fmt, warnings-denied
+workspace/vendor clippy/tests, layers, seven assets, same155/166/221 runtime license
+closures and pinned corpus. Log195218B SHA256
+67b4b7ac2f2b5c22caf59bb4949a0951a517acb81ee0f861ac0d29ab316f5015.
+Native/CLI build44866 passes; native8cc3bf81829105e3c3d09c55001dbd27622f3b400d0784af32c6de030d8fcba1,
+CLI3b3be33df0c81b831105128aeec1a422918342d04da4bdafa9c0c84529cd871a.
+
+New isolated chain_path_request fuzz uses existing dependencies/unchanged locks. ASan
+38563 passes10000 runs, seed274810359,2s, RSS137MiB, final adaptive length1741;
+eight original4208B seeds become200 retained corpus entries. It prepares wrapped JSON
+and checks error atomicity/accepted graph/UndoRedo, never completes file/render work.
+Empty Engine has no successful attachment targets. This does not cover the full16KiB
+setting/1MiB wire budget or establish a security audit. Fuzz fmt and clippy93727 pass.
+No new crash is found in this bounded run. Bounded producer review finds no material
+issue; review is source evidence, not an independent execution or native acceptance.
+
+No native launch, copied-bundle/window/draft change, golden or new platform claim.
+Protected processes17806/96449 are observed live; current drawings are not re-inspected.
+No Root/worker execution job remains live. Actions OFF; no hosted run, push or publication.
+Historical MCP replacement-bind failures remain unattributed; these passes do not repair
+or explain them, and exhausted diagnostic boundaries remain.
+
+Next executable task: research normative public SDK BondLength/ChainAngle numeric
+encoding, defaults/inheritance and actual existing model/IO loss boundaries; lock a
+preserving authored drawing-style increment before independent tests/code. Then preserve
+ordered native modifier events and implement complete chain modes/drag counter/Add Chain/
+repeat/settings/poses/context/real-ink flows and actual acceptance per dependency steps2–6.
+Both native chain controls stay grey. Full M0–M5 and all broader format/chemistry/render/
+publishing/distribution work remain required; do not replace the intended app with this
+headless prerequisite or infer modern/source/platform defaults.
 
 ### Verified headless chain increment
 
