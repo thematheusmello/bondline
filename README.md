@@ -28,8 +28,9 @@ for ordinary drawing and saving.
 **Early development:** Single/Double/Triple carbon drawing, existing-bond conversions,
 1/2/3 order keys, Undo/Redo and editable CDXML saves have bounded native macOS checks.
 Numeric zoom, Actual/Fit, pan and wheel navigation now make unchanged A4 paper usable
-for the checked multiple-bond workflow. Ring drawing tools, general labels and chemical analysis
-are still being built.
+for the checked multiple-bond workflow. Small-ring tools and selection/movement have
+shared-engine and actual-App checks; their native desktop interaction is still pending.
+General labels and chemical analysis are still being built.
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
@@ -37,10 +38,12 @@ is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with independent
 checks of the actual files. See [atom-editor evidence](docs/verification-native-atom-labels.md),
 [native record evidence](docs/verification-native-smiles-records.md) and the separate
-[paste checkpoint](docs/verification-native-smiles-paste.md). The latest full local gate
-fails at the existing MCP listener-release test:848 passed/1 failed. Remaining stages
-pass separately480/0/1; this is not a green aggregate. The [socket investigation](docs/research/macos-listener-lifetime.md)
-qualifies a controlled mechanism, without attributing that failure. Native2×/DPI, Fit and
+[paste checkpoint](docs/verification-native-smiles-paste.md). The latest completed local
+gate passes **1,470 tests, zero failures and one ignored test**, including formatting,
+warnings-denied linting, layer/license checks and the pinned corpus. The
+[carbon-label data increment](docs/verification-carbon-label-data.md) preserves standard
+metadata; skeletal display remains unfinished. The historical intermittent MCP listener
+failure remains unexplained; a passing gate is not a causal fix. Native2×/DPI, Fit and
 complete pan behavior remain unverified or limited; see [density evidence](docs/verification-native-drawing-density.md).
 
 <p align="center">
@@ -76,7 +79,7 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 | Elemental atom labels | Alt-click an existing atom/label, enter its element and explicit attached-H count, then Apply or Cancel. The shared `atom.set_label` preserves IDs, geometry and neighbors. Bounded macOS OH/NH2 editing, history, close protection and Unicode Save/reopen pass with independent actual-file checks. Source-free/native CDXML only; inline text, aliases, charges/isotopes/radicals and general H inference remain missing. |
 | Selection and movement | Marquee, atom/bond/component click, Shift toggle and Select All call the shared selection registry. Drag selected atoms or nudge1pt/Shift10pt with one undoable literal-position edit. Independent commands, actual-App input, CLI/MCP/socket and Unicode file-consumer checks pass; native desktop interaction remains unverified. Native CDXML/source-free only; lasso, rotation, resizing, snapping and group workflows remain missing. |
 | Ring construction engine | CLI/MCP/loopback `ring.create` authors3–8 carbon Single rings with explicit standalone, shared-atom or shared-edge placement. Fused/spiro geometry, literal H, history, source retention and Unicode files pass independent checks. Native ring tools, aromatic/chair/sprout workflows and general ring-system editing remain unfinished. |
-| Automation | 37 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Automation | 38 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all
 three platforms and window launches. GitHub Actions is disabled during development to

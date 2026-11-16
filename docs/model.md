@@ -17,6 +17,14 @@ from Some(0); valence-derived hydrogen generation is not implemented. Radical st
 none, singlet, doublet and triplet. No isotope-existence, valence or stereo inference occurs.
 The element range is the reviewed IUPAC catalog, not a claim that future elements cannot exist.
 
+Atom also retains optional show_non_terminal_carbon_labels independently of literal H.
+None is omitted for old Bondline JSON/native-v0 compatibility; false and true preserve
+explicit node no/yes. This fixed-size datum survives copies/replacement/history and needs
+no additional heap accounting. It does not infer H, root inheritance or SDK absence
+semantics. Both MOL model writers refuse its loss; retained-SMILES synchronization cannot
+change it. Shared rendering temporarily refuses specified values until the following
+skeletal policy lands; see [data evidence](verification-carbon-label-data.md).
+
 BondOrder stores the sixteen single-term kinds in the archived file specification: single
 through sextuple, half/aromatic/two-and-half through five-and-half, dative, ionic, hydrogen
 and three-center. Begin/end direction is retained, including for dative bonds. Query
@@ -29,7 +37,7 @@ stays exact. Specified values remain data even on non-Double orders. No automati
 CDX manual/automatic flag or chemical rule is inferred. Whole-bond copies/order edits
 preserve the field; size_of::<Bond>() already covers its fixed-size storage. The
 [data/format prerequisite](research/sided-double-prerequisite.md) and
-[independent evidence](verification-double-position.md) distinguish persistence from
+[independent evidence](verification-double-position.md) distinguish persistence and
 the [inset renderer](verification-inset-doubles.md) from still-missing automatic styles,
 skeletal labels and alignment/tool workflows.
 

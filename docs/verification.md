@@ -1,5 +1,18 @@
 # Verification log
 
+## Persistent non-terminal carbon-label data, 2026-11-16
+
+[Receiving evidence](verification-carbon-label-data.md) separates actual runtime REDs
+from public-API compile qualification and later test expansion. Nineteen new focused
+cases cover explicit presence/false, exact node XML/native-v0, independent qualified
+Expat/Decimal and actual-file RDKit, MOL/retained-SMILES loss guards, history and temporary
+shared-render refusal. Six adopted declarations are format-only; old expectations stay.
+The unchanged CDXML harness passes10,000 bounded ASan runs with fresh11-file seeds;
+442B exercised is not64KiB coverage. No native window, UI/command addition, dependency,
+asset or hosted execution is claimed. Full local gate19662 passes1470/0/1 across210 result
+lines, with fmt, workspace/vendor clippy/tests and layer/license/corpus stages. Native/CLI
+build19572 passes. Earlier MCP failures remain unattributed; see receiving for exact limits.
+
 ## Shortened explicit double bonds, 2026-11-16
 
 [Receiving evidence](verification-inset-doubles.md) records public-API runtime refusal,

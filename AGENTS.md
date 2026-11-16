@@ -26,6 +26,14 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
+The next skeletal prerequisite persists Atom.show_non_terminal_carbon_labels as optional
+node-level no/yes without erasing literal H. Read docs/research/carbon-label-data.md and
+docs/verification-carbon-label-data.md. None preserves the old Bondline profile, not an
+SDK absence/no distinction. Both MOL writers/manual comparison and retained-SMILES
+replacement guard loss. Any specified value temporarily refuses rendering. Implement
+the following sourced skeletal eligibility/mandatory-label/explicit-authoring policy;
+do not treat this data refusal as the finished user workflow or widen source authority.
+
 The DoublePosition data prerequisite and inset renderer follow the native-ring checkpoint.
 Read docs/research/sided-double-prerequisite.md, docs/research/inset-double-rendering.md,
 docs/verification-double-position.md and docs/verification-inset-doubles.md.

@@ -58,6 +58,12 @@ pub fn write_v2000_with_header(
     let mut ids = BTreeMap::<AtomId, usize>::new();
     let mut totals = BTreeMap::<AtomId, Option<u16>>::new();
     for (index, atom) in fragment.atoms().iter().enumerate() {
+        if atom.show_non_terminal_carbon_labels.is_some() {
+            return Err(MolError::Unsupported {
+                line: 0,
+                feature: "non-terminal carbon-label display metadata",
+            });
+        }
         ids.insert(atom.id, index + 1);
         totals.insert(atom.id, Some(0));
     }

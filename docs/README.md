@@ -3,6 +3,11 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
+The latest carbon-label data gate passes1470/0/1, following the shortened explicit-side
+renderer1451/0/1. The data receiving below preserves standard display metadata while
+temporarily refusing its rendering. Neither checkpoint attributes the historical MCP
+bind failure or completes skeletal/native/cross-platform parity.
+
 Current selection/translation passes the1361/0/1 local gate and an inspected offscreen
 actual-App frame. Native selection interaction remains unverified; see its receiving row.
 The earlier physical-density checkpoint has five renderer/five actual-App passes, but full
@@ -15,13 +20,14 @@ The earlier component1188/0/1 and CDX1172/0/1 gates remain historical checkpoint
 | Build and run tests | [Development](development.md) |
 | Contribute a change | [Contribution guide](../CONTRIBUTING.md), [agent instructions](../AGENTS.md) |
 | Understand the engine | [Architecture](architecture.md), [model](model.md) |
+| Check carbon-label data preservation | [Independent RED/GREEN, source retention and temporary render boundary](verification-carbon-label-data.md), [locked standard-field contract](research/carbon-label-data.md) |
 | Automate the app | [Command and control protocol](control-protocol.md) |
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
 | Start a fresh drawing safely | [New document, native Save/Discard/Cancel and race evidence](verification-new-document.md) |
 | Edit an elemental atom label | [Native target/fields/Apply/Cancel, history and independent saved-file evidence](verification-native-atom-labels.md), [literal authoring contract](research/atom-label-authoring-contract.md) |
 | Select and move native atoms | [Shared commands, literal geometry/history/file consumers and App input evidence; native interaction pending](verification-selection-authoring.md), [locked public-source contract](research/selection-translation-plan.md) |
-| Construct rings through commands; implement native tools next | [Free/fused/spiro command, independent file/render/adapter evidence](verification-ring-authoring.md), [locked native tool/state/gesture contract; unimplemented](research/ring-native-plan.md) |
+| Construct small carbon rings | [Free/fused/spiro command and independent file/render/adapter evidence](verification-ring-authoring.md), [native controls and actual-App receiving; native OS interaction pending](verification-native-rings.md) |
 | Convert a supported SMILES file | [Fourth profile: historical1188/0/1 checkpoint and bounded Mac100% workflow; Fit/pan limits](verification-smiles-components-integration.md), [independent layout](verification-smiles-components-layout.md), [earlier ring aggregate and Mac evidence](verification-smiles-ring-integration.md), [acyclic/native evidence](verification-smiles-acyclic-integration.md), [original lifecycle](verification-native-smiles-conversion.md) |
 | Check asynchronous file browsing | [Stable controls and visible errors](verification-file-picker-stability.md) |
 | Inspect SMILES notation records | [Original inspector and bounded native file workflow](verification-smiles-record-integration.md) |

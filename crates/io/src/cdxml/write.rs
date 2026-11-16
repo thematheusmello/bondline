@@ -100,6 +100,12 @@ fn write_atom(writer: &mut Writer, atom: &Atom, id: u32) -> Result<(), MappingEr
     if let Some(hydrogens) = atom.explicit_hydrogens {
         attributes.push(("NumHydrogens", hydrogens.to_string()));
     }
+    if let Some(show) = atom.show_non_terminal_carbon_labels {
+        attributes.push((
+            "ShowNonTerminalCarbonLabels",
+            if show { "yes" } else { "no" }.to_owned(),
+        ));
+    }
     let borrowed: Vec<_> = attributes
         .iter()
         .map(|(key, value)| (*key, value.as_str()))

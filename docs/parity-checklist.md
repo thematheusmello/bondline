@@ -19,11 +19,17 @@ still refuses. No alignment command or benzene/cyclopentadiene workflow is deliv
 TD-007 remains partial;
 TD-024, its hotkeys and broader unsaturated/skeletal ring workflows remain missing.
 
+[Standard carbon-label metadata](verification-carbon-label-data.md) now survives exact
+node mapping/native encoding/history, with MOL and retained-SMILES loss guards. Specified
+values temporarily refuse shared rendering; actual skeletal depiction/label authoring
+and unsaturated tools remain missing. No control inventory status is promoted by this
+data prerequisite.
+
 Current native source-backed SMILES records have bounded Mac selected/all import,
 refusal/retry, click/key order editing, history and Unicode whole-file Save/reopen/reimport.
 Independent actual-file consumers pass. [Native receiving](verification-native-smiles-records.md)
-separates that scope from its22 independent tests, remaining native limits and the latest
-full gate's unchanged MCP listener AddrInUse failure. Separately passing remaining stages
+separates that scope from its22 independent tests, remaining native limits and that checkpoint's
+full-gate MCP listener AddrInUse failure. Separately passing remaining stages
 are not a green aggregate. Earlier headless1270/0/1 selected/all, complete-source and
 CLI/MCP/socket/CPU-GPU evidence remains in
 [record receiving](verification-smiles-record-authoring.md). The earlier bounded macOS

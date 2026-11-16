@@ -279,6 +279,12 @@ fn read_atom(node: Node<'_, '_>, id: AtomId) -> Result<Atom, MappingError> {
             u16::try_from(count).map_err(|_| MappingError::InvalidProperty("NumHydrogens"))
         })
         .transpose()?;
+    atom.show_non_terminal_carbon_labels = match node.attribute("ShowNonTerminalCarbonLabels") {
+        None => None,
+        Some("yes") => Some(true),
+        Some("no") => Some(false),
+        Some(_) => return Err(MappingError::InvalidProperty("ShowNonTerminalCarbonLabels")),
+    };
     atom.radical = match node.attribute("Radical") {
         None | Some("None") => Radical::None,
         Some("Singlet") => Radical::Singlet,

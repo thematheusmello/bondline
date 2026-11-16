@@ -84,6 +84,8 @@ pub struct Atom {
     #[serde(default)]
     pub radical: Radical,
     pub explicit_hydrogens: Option<u16>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub show_non_terminal_carbon_labels: Option<bool>,
 }
 
 impl Atom {
@@ -96,6 +98,7 @@ impl Atom {
             charge: 0,
             radical: Radical::None,
             explicit_hydrogens: None,
+            show_non_terminal_carbon_labels: None,
         }
     }
 }

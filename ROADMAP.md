@@ -4,6 +4,12 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now preserves
+standard node-level no/yes independently of literal H, with guarded native CDXML/history
+and explicit loss refusals. Specified values temporarily refuse rendering. Next complete
+the sourced skeletal renderer and authoring policy, then weighted unsaturated rings and
+native tools; this data increment does not close a user-visible skeletal workflow.
+
 The aromatic-tool prerequisite now persists directed DoublePosition through the
 model and native CDXML, with independent property/file/history tests and explicit loss/
 render refusals. [Receiving evidence](docs/verification-double-position.md) separates

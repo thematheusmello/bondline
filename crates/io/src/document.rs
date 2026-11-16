@@ -1,3 +1,5 @@
+#[cfg(test)]
+mod carbon_label_tests;
 mod smiles;
 
 use crate::cdxml::{ElementalGraph, MappingError};
@@ -611,6 +613,8 @@ fn same_mol_authored_fields(fragment: &Fragment, mapped: &Fragment) -> bool {
                     && before.charge == after.charge
                     && before.radical == after.radical
                     && before.explicit_hydrogens == after.explicit_hydrogens
+                    && before.show_non_terminal_carbon_labels
+                        == after.show_non_terminal_carbon_labels
             })
 }
 
