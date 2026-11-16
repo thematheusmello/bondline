@@ -11,7 +11,7 @@ pub use point::{MAX_POSITION_PT, Point2};
 
 use serde::{Deserialize, Serialize};
 use std::{
-    collections::{BTreeSet, HashSet},
+    collections::{BTreeMap, BTreeSet, HashSet},
     mem::size_of,
     num::NonZeroU32,
     sync::Arc,
@@ -201,6 +201,15 @@ impl Document {
 
     /// Replace one same-ID fragment atomically, retaining every unrelated shared payload.
     pub fn replace_fragment(&mut self, page_id: PageId, fragment: Fragment) -> Result<(), Error> {
+        self.replace_fragments(page_id, vec![fragment])
+    }
+
+    /// Replace a batch with one global identity/budget validation; retain page order.
+    pub fn replace_fragments(
+        &mut self,
+        page_id: PageId,
+        fragments: Vec<Fragment>,
+    ) -> Result<(), Error> {
         let page_index = self
             .pages
             .iter()
@@ -210,25 +219,35 @@ impl Document {
             .pages
             .get(page_index)
             .ok_or(Error::MissingPage(page_id.get()))?;
-        let index = page
-            .fragments
-            .iter()
-            .position(|current| current.id() == fragment.id())
-            .ok_or(Error::MissingFragment(fragment.id().get()))?;
-        let retained = self
+        if fragments.len() > MAX_GRAPH_ITEMS {
+            return Err(GraphError::Limit("fragments").into());
+        }
+        let ids: BTreeSet<_> = page.fragments.iter().map(|current| current.id()).collect();
+        let mut replacements = BTreeMap::new();
+        for fragment in fragments {
+            let id = fragment.id();
+            if !ids.contains(&id) {
+                return Err(Error::MissingFragment(id.get()));
+            }
+            if replacements.insert(id, fragment).is_some() {
+                return Err(GraphError::DuplicateFragment(id.get()).into());
+            }
+        }
+        let candidate = self
             .pages
             .iter()
             .flat_map(|page| page.fragments.iter().map(Arc::as_ref))
-            .filter(|current| current.id() != fragment.id());
-        validate_fragments(retained.chain(std::iter::once(&fragment)))?;
-        let destination = self
+            .map(|current| replacements.get(&current.id()).unwrap_or(current));
+        validate_fragments(candidate)?;
+        let page = self
             .pages
             .get_mut(page_index)
-            .ok_or(Error::MissingPage(page_id.get()))?
-            .fragments
-            .get_mut(index)
-            .ok_or(Error::MissingFragment(fragment.id().get()))?;
-        *destination = Arc::new(fragment);
+            .ok_or(Error::MissingPage(page_id.get()))?;
+        for current in &mut page.fragments {
+            if let Some(fragment) = replacements.remove(&current.id()) {
+                *current = Arc::new(fragment);
+            }
+        }
         Ok(())
     }
 
