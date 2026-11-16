@@ -154,3 +154,52 @@ installation or product edit occurred. COSMolKit's inspected polygon function in
 RDKit-derived commentary; no code/template/dependency/asset is adopted or license closure
 claimed. The old source-register rows remain untouched. This proposal does not complete
 ring/chain/style/transform authoring, M1 interoperability, M3 chemistry or any milestone.
+
+## Locked first command contract, 2026-11-16
+
+The first implementation checkpoint registers only `ring.create` (36→37); the native
+tool/palette/gesture is the following required integration, not an omitted final scope.
+No native click/default/modifier policy is inferred by implementing this command first.
+
+The closed root requires `expected_revision:u64`, positive `page_id:u32`, `size:u8`
+in3..8, `hydrogen_policy:"rectify_neutral_carbon"` and `placement`. Placement uses
+the closed `mode` tag and exactly these required fields:
+
+```json
+{"mode":"free","begin_x_pt":120,"begin_y_pt":168,"end_x_pt":120,"end_y_pt":120,"side":"positive"}
+{"mode":"atom","fragment_id":1,"atom_id":1,"end_x_pt":72,"end_y_pt":168,"side":"negative"}
+{"mode":"bond","fragment_id":1,"bond_id":1,"side":"negative"}
+```
+
+`side` has exactly positive/negative. Positive means positive algebraic cross product
+from A→B to the polygon interior in the existing right/down point system; there is no
+implicit clockwise/left/right reinterpretation. The literal first two vertices remain
+exact. Remaining vertices use equal signed exterior turns; closure reuses the original
+first atom ID/position, never a numerically recomputed extra atom.
+
+Exact occupancy means Point2 equality with any existing positioned atom on the same
+page for each newly introduced vertex. Shared declared anchors alone are exempt.
+Other pages/old coincident data are untouched. Every polygon vertex must be distinct;
+all new edges must remain finite/nonzero. This is no general overlap/face solver or
+proximity-based fusion. Positions need not fit the paper, but remain within the existing
+finite±100000pt bound; rendering retains its separate legibility/paper guards.
+
+Global committed-close refusal precedes execution; current authored revision is checked
+before source/target/geometry validation. Missing page/fragment/atom/bond is `not_found`;
+malformed schema/IDs/size/geometry/exact occupied endpoint is `invalid_params`;
+unsupported source, shared bond order, target metadata, absent position or literal H is
+`unsupported_content`. Use existing revision/identity/model-budget/selection-overflow
+codes and atomicity. Shared atoms preserve all metadata except the expressly consumed
+literal H. Old atom/bond array prefixes and directed edges remain exact. Each added atom
+is neutral natural nonradical carbon with literal H2. New IDs follow perimeter order;
+new edges follow that perimeter with closure last. A preserved shared edge is not added
+again. No new Fragment ID is consumed for an attachment.
+
+Independent ordinary-scale analytic geometry uses≤1e-9pt coordinate/length tolerance
+and≤1e-10 radians for interior angles, fixed before implementation; exact IDs/metadata/
+shared coordinates/source bytes receive no tolerance. General cross-hardware bitwise
+floating-point identity is not promised. First existing-JSON and actual CLI tests must
+observe runtime UnknownCommand before code; closed schemas, all three placements,
+chemistry/files/history/identity/error/selection/complete-source checks follow. Typed
+NaN/Inf and private exhausted counters need explicit tests. Do not replace old oracles,
+fixtures, fonts, dependencies, approved goldens or the unresolved MCP shutdown test.
