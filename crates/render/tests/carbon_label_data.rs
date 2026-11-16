@@ -56,55 +56,79 @@ fn centered(flag: Option<Value>) -> TestResult<Page> {
         flag.map(|v| (29, v)),
     )
 }
-fn refused(result: Result<GraphScene, Error>) -> TestResult {
-    let error = result
-        .err()
-        .ok_or("specified carbon flag silently rendered the legacy scene")?;
-    assert!(
-        matches!(error, Error::UnsupportedChemicalContent),
-        "{error}"
-    );
-    Ok(())
-}
-fn all_entries_refuse(page: &Page, counts: &BTreeMap<AtomId, u16>) -> TestResult {
-    let before = (*page).clone();
+fn all_entries_keep_legacy_labels(
+    page: &Page,
+    legacy: &Page,
+    counts: &BTreeMap<AtomId, u16>,
+) -> TestResult {
+    let before = page.clone();
     let json = serde_json::to_value(page)?;
-    refused(graph_page_scene(576, 576, page))?;
-    refused(graph_page_scene_with_display_hydrogens(
+    let expected = graph_page_scene(576, 576, legacy)?;
+    let view = PageView::fit(576, 576, page.size())?;
+    let check = |graph: GraphScene| -> TestResult {
+        assert_eq!(graph.scene(), expected.scene());
+        assert_eq!(graph.label_em_px(), expected.label_em_px());
+        assert!(graph.label_em_px().is_some());
+        assert!(graph.scene().primitives.iter().any(|primitive| {
+            matches!(primitive, Primitive::Rectangle(rect) if rect.color == [0, 0, 0, 255])
+        }));
+        assert_eq!(cpu_scene(graph.scene())?, cpu_scene(expected.scene())?);
+        Ok(())
+    };
+    check(graph_page_scene(576, 576, page)?)?;
+    check(graph_page_scene_with_display_hydrogens(
         576,
         576,
         page,
         counts,
         &Cancellation::default(),
-    ))?;
-    let view = PageView::fit(576, 576, page.size())?;
-    refused(view.graph_scene(page, &Cancellation::default()))?;
-    refused(view.graph_scene_with_display_hydrogens(page, counts, &Cancellation::default()))?;
+    )?)?;
+    check(view.graph_scene(page, &Cancellation::default())?)?;
+    check(view.graph_scene_with_display_hydrogens(page, counts, &Cancellation::default())?)?;
     assert_eq!(page, &before);
     assert_eq!(serde_json::to_value(page)?, json);
     Ok(())
 }
 
 #[test]
-fn any_specified_flag_refuses_even_on_terminal_carbon_and_noncarbon_without_losing_h() -> TestResult
-{
+fn mandatory_collinear_and_dormant_flags_keep_all_legacy_labels_and_literal_h() -> TestResult {
     let baseline = chain(None)?;
-    graph_page_scene(576, 576, &baseline)?;
+    let baseline_double = centered(None)?;
     let counts = BTreeMap::from([
         (AtomId::new(29).ok_or("atom")?, 3),
         (AtomId::new(11).ok_or("atom")?, 2),
         (AtomId::new(7).ok_or("atom")?, 1),
     ]);
     for flag in [false, true] {
-        //29 terminal C,11 nonterminal C,7 terminal O: datum retained regardless of future role.
+        // Exact former-refusal inputs: terminal C29, straight degree-two C11, terminal O7.
+        // False cannot hide the mandatory CH2 in this collinear C-C-O chain.
         for id in [29, 11, 7] {
-            all_entries_refuse(&chain(Some((id, json!(flag))))?, &counts)?;
+            let page = chain(Some((id, json!(flag))))?;
+            all_entries_keep_legacy_labels(&page, &baseline, &counts)?;
+            let graph = graph_page_scene(576, 576, &page)?;
+            assert!(graph.scene().primitives.iter().any(|primitive| {
+                matches!(primitive, Primitive::Rectangle(rect)
+                    if rect.color == [0, 0, 0, 255]
+                        && rect.x < 238 && rect.x + rect.width > 210
+                        && rect.y < 173 && rect.y + rect.height > 148)
+            }));
+            assert_eq!(
+                graph.hit_test([224.0, 160.0], 0.0)?,
+                Some(HitTarget::Atom {
+                    fragment_id: FragmentId::new(17).ok_or("fragment")?,
+                    atom_id: AtomId::new(11).ok_or("atom")?,
+                })
+            );
         }
         let double_counts = BTreeMap::from([
             (AtomId::new(29).ok_or("atom")?, 2),
             (AtomId::new(11).ok_or("atom")?, 2),
         ]);
-        all_entries_refuse(&centered(Some(json!(flag)))?, &double_counts)?;
+        all_entries_keep_legacy_labels(
+            &centered(Some(json!(flag)))?,
+            &baseline_double,
+            &double_counts,
+        )?;
     }
     assert_eq!(
         baseline.fragments()[0]

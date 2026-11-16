@@ -4,19 +4,20 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
-The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now preserves
-standard node-level no/yes independently of literal H, with guarded native CDXML/history
-and explicit loss refusals. Specified values temporarily refuse rendering. Next complete
-the sourced skeletal renderer and authoring policy, then weighted unsaturated rings and
-native tools; this data increment does not close a user-visible skeletal workflow.
+The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now has a
+[shared skeletal display/explicit-label follow-up](docs/verification-skeletal-carbon.md).
+Known-H/C4 suppression preserves mandatory labels, hits and real-ink guards; existing
+atom.set_label restores visibility through the same registry/form without changing old
+None/true no-ops. Native OS acceptance/default styles/preferences remain outstanding.
+Next implement weighted unsaturated rings and native tools; full scope remains intact.
 
 The aromatic-tool prerequisite now persists directed DoublePosition through the
 model and native CDXML, with independent property/file/history tests and explicit loss/
 render refusals. [Receiving evidence](docs/verification-double-position.md) separates
 this from later depiction. Shortened inset strokes with actual bounds/gaps/hits now
 have independent geometry/pixel/density/CPU-GPU and actual-file/history evidence in
-[renderer receiving](docs/verification-inset-doubles.md). Next define a source-backed
-skeletal carbon policy retaining literal H, then weighted
+[renderer receiving](docs/verification-inset-doubles.md). The explicit nonterminal
+skeletal policy now retains literal H; next implement weighted
 benzene/cyclopentadiene candidates, attachment/phase rules and native tools. Shared-edge
 phase precedence remains an open public-source question. The full parity scope is intact.
 The [inset rendering contract](docs/research/inset-double-rendering.md) retains the

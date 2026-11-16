@@ -3,12 +3,12 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
-The latest carbon-label data gate passes1470/0/1, following the shortened explicit-side
-renderer1451/0/1. The data receiving below preserves standard display metadata while
-temporarily refusing its rendering. Neither checkpoint attributes the historical MCP
-bind failure or completes skeletal/native/cross-platform parity.
+The latest skeletal display/label-restoration gate passes1494/0/1, following data1470/0/1
+and inset1451/0/1. Known-H/C4 display, mandatory labels, atom hits and the existing editor
+have shared-render/registry/wire/App evidence. Native/default-style/cross-platform parity
+remains unfinished, and no pass attributes the historical MCP bind failure.
 
-Current selection/translation passes the1361/0/1 local gate and an inspected offscreen
+The earlier selection/translation checkpoint passes the1361/0/1 local gate and an inspected offscreen
 actual-App frame. Native selection interaction remains unverified; see its receiving row.
 The earlier physical-density checkpoint has five renderer/five actual-App passes, but full
 local pipeline78964 failed767/1 in the unchanged MCP shutdown replacement-bind test.
@@ -21,6 +21,7 @@ The earlier component1188/0/1 and CDX1172/0/1 gates remain historical checkpoint
 | Contribute a change | [Contribution guide](../CONTRIBUTING.md), [agent instructions](../AGENTS.md) |
 | Understand the engine | [Architecture](architecture.md), [model](model.md) |
 | Check carbon-label data preservation | [Independent RED/GREEN, source retention and temporary render boundary](verification-carbon-label-data.md), [locked standard-field contract](research/carbon-label-data.md) |
+| Check skeletal carbon display and restore labels | [Shared renderer, command/wire/App evidence and exact numeric-fixture qualification](verification-skeletal-carbon.md), [locked source-backed policy](research/skeletal-carbon-display.md) |
 | Automate the app | [Command and control protocol](control-protocol.md) |
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |

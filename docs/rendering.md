@@ -80,7 +80,17 @@ readability and resource/cancellation guards remain. See
 [the contract](research/inset-double-rendering.md) and
 [independent receiving](verification-inset-doubles.md) for20 new cases, actual Metal
 and Engine PNG/file evidence. Native OS interaction, automatic side/style selection,
-skeletal presentation and aromatic tools remain separate work.
+full style/preferences and aromatic tools remain separate work.
+
+Explicit nonterminal-carbon flags now share one per-fragment label decision. None and
+dormant noncarbon/degree0–1 values use old pixels; active true prints known H, while
+active false requires checked actual bond weight+known H=4. Mandatory identical rays
+within170–190° and every two-Double center keep full labels. Suppression removes glyphs
+and masks together, retaining stable atom hits and every actual-ink guard. Angles use
+authored normalized f64 rays, not camera/DPI-rounded coordinates. No inferred H, nominal
+hidden-font metrics, new source authority or general chemistry. See
+[the locked policy](research/skeletal-carbon-display.md) and
+[independent receiving](verification-skeletal-carbon.md); native OS acceptance is pending.
 
 Held previews call the same `centered_bond_strokes` constructor; hover outlines actual
 `GraphScene::bond_strokes` components. Tool order/epoch and event ordering remain UI-only,

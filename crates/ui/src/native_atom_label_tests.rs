@@ -1457,3 +1457,6 @@ fn stale_atom_modal_blocks_raw_smiles_ordinal_and_inspection_until_explicit_canc
     assert_eq!(fs::read(&input)?, original);
     Ok(())
 }
+
+#[path = "skeletal_display_tests.rs"]
+mod skeletal_display;

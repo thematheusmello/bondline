@@ -12,9 +12,10 @@ and broader SMILES support remain separate work.
 Node-level ShowNonTerminalCarbonLabels now preserves exact yes/no presence in the model
 and native CDXML; old absent-profile bytes stay exact. Unknown root styles/Text still
 prevent complete regeneration. Both MOL model writers reject specified data, and
-retained-SMILES H/order replacement cannot alter it. Rendering temporarily refuses it;
-this is a [tested data prerequisite](verification-carbon-label-data.md), not skeletal
-display, root inheritance or new CDX flag projection.
+retained-SMILES H/order replacement cannot alter it. The
+[data prerequisite](verification-carbon-label-data.md) now has bounded
+[skeletal rendering/explicit-label restoration](verification-skeletal-carbon.md), without
+new source authority, root inheritance, CDX flag projection or default-tool migration.
 
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|

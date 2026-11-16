@@ -334,3 +334,6 @@ mod ring_construction_wire;
 
 #[path = "support/ring_tool_wire.rs"]
 mod ring_tool_wire;
+
+#[path = "support/skeletal_label_wire.rs"]
+mod skeletal_label_wire;

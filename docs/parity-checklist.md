@@ -21,9 +21,10 @@ TD-024, its hotkeys and broader unsaturated/skeletal ring workflows remain missi
 
 [Standard carbon-label metadata](verification-carbon-label-data.md) now survives exact
 node mapping/native encoding/history, with MOL and retained-SMILES loss guards. Specified
-values temporarily refuse shared rendering; actual skeletal depiction/label authoring
-and unsaturated tools remain missing. No control inventory status is promoted by this
-data prerequisite.
+values now have [bounded shared skeletal depiction/explicit-label restoration](verification-skeletal-carbon.md),
+with actual graph/H proof, mandatory labels and retained hits. Registry/wire/App checks
+do not establish native OS/default-style parity. False-setting controls and unsaturated
+tools remain missing; no full control inventory status is promoted.
 
 Current native source-backed SMILES records have bounded Mac selected/all import,
 refusal/retry, click/key order editing, history and Unicode whole-file Save/reopen/reimport.

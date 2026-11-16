@@ -133,6 +133,7 @@ mod label;
 mod label_tests;
 mod page;
 mod scene;
+mod skeletal;
 mod stroke;
 mod view;
 pub use hits::{GraphScene, HitTarget, MAX_HIT_REGIONS};

@@ -341,8 +341,10 @@ from H counts/query restrictions. The older Node page omits them; individual pro
 mirrors are archived error wrappers. Node/root defaults are no, but inheritance precedence,
 interaction with explicit child Text and actual vendor26.1 rendering remain unverified.
 Missing flags keep the legacy Bondline compatibility profile; no claim of a different
-standard absent/no meaning is made. Future skeletal eligibility must preserve mandatory
-isolated-C/C2, collinear/cumulene labels and literal H rather than hiding metadata globally.
+standard absent/no meaning is made. Bounded skeletal eligibility/explicit-label restoration
+now has verification-skeletal-carbon.md evidence, preserving literal H and mandatory
+isolated-C/C2/near-collinear/two-Double labels. Reference defaults, root/Text precedence,
+terminal/H preferences and native OS behavior remain unresolved; no global metadata hiding.
 
 
 ## Existing-bond order edits — 2026-11-15

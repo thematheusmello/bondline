@@ -364,11 +364,7 @@ pub(crate) fn graph_scene_in_viewport(
         let mut neighbours = BTreeMap::<_, (usize, i32)>::new();
         for atom in fragment.atoms() {
             cancel.check()?;
-            if atom.charge != 0
-                || atom.isotope.is_some()
-                || atom.radical != Radical::None
-                || atom.show_non_terminal_carbon_labels.is_some()
-            {
+            if atom.charge != 0 || atom.isotope.is_some() || atom.radical != Radical::None {
                 return Err(Error::UnsupportedChemicalContent);
             }
             let position = viewport
@@ -478,25 +474,32 @@ pub(crate) fn graph_scene_in_viewport(
                 .primitives
                 .extend(strokes.into_iter().map(Primitive::Stroke));
         }
+        let carbon_labels = crate::skeletal::labels(fragment, counts, cancel)?;
         for atom in fragment.atoms() {
             cancel.check()?;
             let position = *positions
                 .get(&atom.id)
                 .ok_or(Error::UnsupportedChemicalContent)?;
             let neighbours = neighbours.get(&atom.id).copied().unwrap_or_default();
-            let resolved_h = if let Some(counts) = counts {
-                Some(
-                    *counts
-                        .get(&atom.id)
-                        .ok_or(Error::UnsupportedChemicalContent)?,
-                )
-            } else if has_multiple || (neighbours.0 >= 2 && atom.explicit_hydrogens.is_some()) {
-                atom.explicit_hydrogens
-                    .or_else(|| (atom.element.get() != 6).then_some(0))
-            } else {
+            let carbon_label = carbon_labels.get(&atom.id);
+            let resolved_h =
+                if let Some(crate::skeletal::CarbonLabel::Visible(hydrogens)) = carbon_label {
+                    Some(*hydrogens)
+                } else if let Some(counts) = counts {
+                    Some(
+                        *counts
+                            .get(&atom.id)
+                            .ok_or(Error::UnsupportedChemicalContent)?,
+                    )
+                } else if has_multiple || (neighbours.0 >= 2 && atom.explicit_hydrogens.is_some()) {
+                    atom.explicit_hydrogens
+                        .or_else(|| (atom.element.get() != 6).then_some(0))
+                } else {
+                    None
+                };
+            let label = if matches!(carbon_label, Some(crate::skeletal::CarbonLabel::Hidden)) {
                 None
-            };
-            let label = if let Some(hydrogens) = resolved_h {
+            } else if let Some(hydrogens) = resolved_h {
                 let preferred_left = neighbours.0 != 0 && neighbours.1 >= 0;
                 let incident = bonds.iter().filter(|bond| {
                     matches!(bond.target, HitTarget::Bond { fragment_id, .. } if fragment_id == fragment.id())

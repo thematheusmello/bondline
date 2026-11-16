@@ -1,5 +1,18 @@
 # Verification log
 
+## Skeletal carbon display and explicit-label restoration, 2026-11-16
+
+[Receiving evidence](verification-skeletal-carbon.md) records actual preimplementation
+renderer/core/transport/App REDs, separate missing-prolog and zero-test-filter setup
+qualifications, first shared-render/command/App GREENs and24 new independent cases.
+Five supplemental renderer cases follow the first draft; one strict exact-dot fixture
+precondition is corrected mathematically without product/predicate/assertion changes.
+The single old DATA blanket refusal is positively upgraded on exact old inputs; legacy/
+cancel cases and other old expectations stay. No new dependency, parser, font/shader,
+golden, native-window or hosted execution. Corrected aggregate42092 passes1494/0/1
+across212 result lines, including fmt, workspace/vendor clippy/tests and layer/license/
+corpus stages; native/CLI build63733 passes. Earlier MCP failures remain unattributed.
+
 ## Persistent non-terminal carbon-label data, 2026-11-16
 
 [Receiving evidence](verification-carbon-label-data.md) separates actual runtime REDs

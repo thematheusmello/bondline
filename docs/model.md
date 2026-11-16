@@ -22,8 +22,11 @@ None is omitted for old Bondline JSON/native-v0 compatibility; false and true pr
 explicit node no/yes. This fixed-size datum survives copies/replacement/history and needs
 no additional heap accounting. It does not infer H, root inheritance or SDK absence
 semantics. Both MOL model writers refuse its loss; retained-SMILES synchronization cannot
-change it. Shared rendering temporarily refuses specified values until the following
-skeletal policy lands; see [data evidence](verification-carbon-label-data.md).
+change it. Shared rendering now interprets active flags with known literal/resolved H,
+checked C4 suppression and mandatory-label exceptions; no model H is inferred or erased.
+Explicit atom.set_label restores an existing false to true. See
+[data evidence](verification-carbon-label-data.md) and
+[skeletal receiving](verification-skeletal-carbon.md); terminal/default-style parity remains.
 
 BondOrder stores the sixteen single-term kinds in the archived file specification: single
 through sextuple, half/aromatic/two-and-half through five-and-half, dative, ionic, hydrogen
@@ -39,7 +42,7 @@ preserve the field; size_of::<Bond>() already covers its fixed-size storage. The
 [data/format prerequisite](research/sided-double-prerequisite.md) and
 [independent evidence](verification-double-position.md) distinguish persistence and
 the [inset renderer](verification-inset-doubles.md) from still-missing automatic styles,
-skeletal labels and alignment/tool workflows.
+full style preferences and alignment/unsaturated-tool workflows.
 
 Document::append_fragments validates a whole batch before installing any state. It rejects
 missing pages and duplicate fragment/atom/bond IDs, including collisions with existing

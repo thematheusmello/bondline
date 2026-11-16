@@ -63,10 +63,13 @@ data. See [the locked renderer contract](research/inset-double-rendering.md).
 Atom's optional non-terminal-carbon display flag is also authored data, separate from
 literal H. Node-level CDXML no/yes survives native encoding/history without widening
 exact-byte regeneration authority. MOL model export and retained-SMILES replacement
-guard its loss; the shared scene temporarily refuses any specified value. No UI-only
-visibility cache or H erasure substitutes for the forthcoming skeletal policy. See
+guard its loss. A private per-fragment shared-render decision now uses actual degree,
+known H/checked C4 and authored-ray mandatory labels. Hidden glyphs/masks are omitted
+together while AtomHit stays. Existing atom.set_label restores false to true through
+normal history; no UI-only visibility cache, H erasure or new parameter. See
 [the data contract](research/carbon-label-data.md) and
-[independent receiving](verification-carbon-label-data.md).
+[data receiving](verification-carbon-label-data.md) and
+[skeletal receiving](verification-skeletal-carbon.md).
 
 `ui.selection` owns transient one-page sorted atom IDs, a checked epoch and private weak
 whole-source ownership. Selection mode shares the existing bond-tool epoch and remembered

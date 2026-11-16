@@ -5,6 +5,10 @@ display and unsaturated-ring tools, not working skeletal display or milestone co
 The [locked contract](research/carbon-label-data.md) and source register distinguish
 standard node data from unknown root inheritance, child Text and reference26.1 behavior.
 
+Follow-up: [skeletal display receiving](verification-skeletal-carbon.md) replaces this
+checkpoint's temporary blanket-render refusal with bounded semantics and explicit-label
+restoration. The RED/GREEN/data-only history below remains the actual caa8d60 checkpoint.
+
 ## Delivered boundary
 
 Atom owns optional show_non_terminal_carbon_labels. None is omitted and retains the old
