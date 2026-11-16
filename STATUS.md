@@ -6,8 +6,8 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-The carbon-label DATA increment follows contract4b139d8 and inset renderer70d38a3.
-The commit containing this record is its recoverable source/test/docs checkpoint.
+The carbon-label DATA increment is committed caa8d60, following contract4b139d8 and
+inset renderer70d38a3. This source/test/docs checkpoint is recoverable locally.
 Atom owns optional show_non_terminal_carbon_labels independently of literal H.
 Exact node no/yes survives CDXML mapping/native writing/history; None preserves old
 Bondline JSON/native-v0 bytes, not a claimed SDK absence/no distinction. Unknown root
@@ -63,16 +63,24 @@ without observer queries in shutdown→bind. No socket policy or test-source cha
 
 ## Desktop, ownership and jobs
 
-All Bondline previews stay closed; prior unused-browser-tab cleanup remains intact.
-iTerm tabs remain unchecked because access is restricted. No proprietary reference
-binary/asset is opened or inspected; historical permission is not current. Native
-OS/DPI/Windows/Linux interaction for inset/selection/rings remains unverified.
+At the user's explicit request, the current Bondline build is now OPEN on the desktop.
+Bundle target/desktop-review-caa8d60/Bondline.app contains the exact verified native
+executable recorded in receiving; no control listener was requested. CUA observed the
+real window with tool rail, page and inspector, then a user-edited unsaved17-atom/19-bond
+drawing. Leave this window and draft intact; do not clear, save, close or relaunch it
+without a relevant user request. This visual observation is not a verified native tool/
+history/persistence workflow or an approved golden. Earlier unused-browser-tab cleanup
+remains intact; iTerm tabs remain unchecked because access is restricted. No proprietary
+reference binary/asset is opened or inspected. Native OS/DPI/Windows/Linux workflow
+acceptance for inset/selection/rings remains unverified.
 
 Root owns Cargo/Git/CUA/live mutation. Model/IO/render/registry focused handles,
 format72930, ASan25188, aggregate19662 and build19572 are terminal. No Root Cargo job is
-live at this read point. Data source review and next-display public research are terminal;
-the display-test impact worker is source-only, with no execution/product ownership.
-Revalidate any newer recorded handle before starting another process.
+live at this read point. Data source review, next-display public research and the display-
+test impact worker are terminal, with no execution/product ownership. Their next-display
+proposal/impact records are ignored under target/skeletal-carbon/; no next-display test
+is frozen and no skeletal product logic is implemented yet. The native app is deliberately
+running for the user, distinct from a Cargo job. Revalidate newer handles before restart.
 
 ## Next exact steps
 
@@ -85,6 +93,7 @@ Revalidate any newer recorded handle before starting another process.
 2. Follow with weighted benzene/cyclopentadiene candidates, attachment/phase rules and
    native tools. GUIDE25 does not establish shared-edge phase/order precedence; retain
    that evidence gap. Continue chair/sprout/chains/styles/transforms/broader labels.
-3. When desktop use permits, verify actual native inset/selection/free/fused/spiro ring,
+3. After the user's current visual review, when desktop use permits, verify actual native
+   inset/selection/free/fused/spiro ring,
    Cancel/history and Unicode Save/reopen. Offscreen App tests do not prove native input
    or physical DPI. New Windows/Linux interaction stays unverified while Actions is off.
