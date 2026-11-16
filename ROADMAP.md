@@ -4,11 +4,20 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The shared `ring.create` command now implements explicit3–8 carbon Single polygons,
+including shared-atom and shared-Single-edge attachments. Independent geometry,
+cyclohexane/decalin/spiro/terminal chemistry, source/history/ID guards, Unicode files,
+CPU/GPU and actual CLI/MCP/socket checks pass. Its rounded-precision counterexamples
+are fixed without a blanket minimum length. Registry37, native controls unchanged;
+see [receiving](docs/verification-ring-authoring.md). Native ring tools/preview/gestures
+are the next required integration, followed by aromatic/chair/sprout/styles and broader
+chemistry. This is a checked engine increment, not delivered native ring parity or M2.
+
 Bounded native Mac atom labels now support fresh Alt-click target/fields/Apply/Cancel,
 OH/NH2 editing, history, draft-close protection and Unicode editable CDXML Save/reopen.
 Independent consumers verify the actual files; see
 [atom-editor evidence](docs/verification-native-atom-labels.md). This original form is not
-full inline Text/alias/charge/isotope/radical parity. The current registry36 adds
+full inline Text/alias/charge/isotope/radical parity. The selection checkpoint's registry36 adds
 persistent selection and literal translation; native Drawing controls23, retained-SMILES
 Drawing20, SDF14 and raw SMILES10. Independent command/context/wire and actual-App input
 checks now exercise selection/movement/history/Unicode persistence. Native selection
@@ -24,10 +33,10 @@ now has a source-qualified implementation, reviewed local gates and an inspected
 offscreen App frame. Finish actual native acceptance, then continue ring/chain/style
 and broader label workflows. Full
 selection/transform/26.1 parity remains required beyond this bounded atom-set slice.
-The next [ring-authoring proposal](docs/research/ring-authoring-plan.md) covers actual
-standalone/shared-atom/shared-bond3–8 Single-ring construction and independent cyclohexane,
-decalin/spiro persistence. Lock its remaining tool/geometry policies before RED tests;
-the plan does not implement rings or resolve aromatic/chair/sprout/style workflows.
+The [ring-authoring contract](docs/research/ring-authoring-plan.md) locks the delivered
+command and independent cyclohexane/decalin/spiro persistence. Lock its remaining native
+tool/gesture/default policies before App REDs; it does not resolve aromatic/chair/sprout
+or style workflows.
 
 Native source-backed SMILES records now have bounded Mac selected/all import, refusal/
 retry, registered click/key order editing, history and Unicode whole-file Save/reopen/
@@ -363,6 +372,12 @@ corpus and reference/chemical mapping remain M1 work.
 
 ## M2: drawing — in progress
 
+Current ring command37 verifies explicit3–8/free/fused/spiro construction through the
+engine/adapters/files/renderers; native ring controls and gestures are next. Selection
+and movement are wired with12 actual-App passes, but native desktop acceptance remains
+pending. See [ring receiving](docs/verification-ring-authoring.md) and
+[selection receiving](docs/verification-selection-authoring.md) for exact scope.
+
 The [elemental authoring contract](docs/research/atom-label-authoring-contract.md) now
 has a bounded headless `atom.set_label` implementation. Nine core, four actual-wire and
 one independent MOL-reference CPU/GPU case pass, including complete history and actual
@@ -373,7 +388,7 @@ explicit fields, Apply/Cancel and stale/modal/Save/close guards. Actual Mac OH/N
 history, close protection and Unicode Save/reopen pass; see
 [native evidence](docs/verification-native-atom-labels.md). No general valence inference.
 Modern label-entry and repeat-label evidence stay separate; full inline labels, aliases,
-charges/isotopes/radicals, selection, rings/chains and styles remain required.
+charges/isotopes/radicals, full native selection/transforms/rings/chains and styles remain required.
 
 The shared118-symbol catalog, positioned neutral-element labels and literal H have
 independent font/CPU/GPU/file evidence. MOL/SDF display H stays separate from authored
@@ -424,10 +439,11 @@ DPI calibration, SDF navigation, saved view preferences or complete reference pa
 See docs/verification-view-{render,commands,ui,native}.md and
 docs/verification-ordered-file-actions.md.
 
-Next: complete the outstanding M1 native SDF preview/format and M0 addressability/inventory/
-platform evidence, then ring/chain construction, snapping, persistent selection/transforms,
-atom labels and document styles. Keep imported-source/mapping gaps visible; this bounded
-view workflow does not complete any milestone.
+Next: native ring tools/gestures and outstanding desktop selection acceptance, then
+aromatic/chair/sprout/chain construction, snapping, transforms, broader labels and styles.
+M1 source-faithful interoperability and M0 addressability/inventory/platform evidence
+remain open. Keep imported-source/mapping gaps visible; these bounded workflows do not
+complete a milestone.
 
 Bonds, rings, chains, labels/abbreviations, charges, isotopes, radicals, wedge/hash bonds,
 selection, transforms, hotkeys, undo/redo and style sheets from public journal guidelines.

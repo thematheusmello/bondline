@@ -173,7 +173,8 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "bond.set_order",
             "history.undo",
             "history.redo",
-            "render.capture"
+            "render.capture",
+            "ring.create",
         ]
         .into_iter()
         .collect()

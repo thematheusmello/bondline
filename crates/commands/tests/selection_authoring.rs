@@ -218,8 +218,8 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
         .iter()
         .map(|entry| entry.name)
         .collect::<BTreeSet<_>>();
-    assert_eq!(registry.len(), 36);
-    assert_eq!(names.len(), 36);
+    assert_eq!(registry.len(), 37);
+    assert_eq!(names.len(), 37);
     assert_eq!(
         names,
         [
@@ -247,6 +247,7 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
             "history.undo",
             "page.set_size",
             "render.capture",
+            "ring.create",
             "sdf.field.set_value",
             "sdf.record.inspect",
             "sdf.record.remove",

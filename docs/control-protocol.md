@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has36 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has37 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -81,6 +81,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only drawing page or restricted all-record SDF virtual page1 PNG; explicit `cpu` or `gpu` |
 | `ui.selection` | Closed tagged `activate`, `set`, `all`, `clear` or `inspect`; required `expected_revision`; `set` also requires `page_id` and `atom_ids`, `all` requires `page_id` | Transient one-page native atom selection; no authored edit or native-host requirement |
 | `selection.translate` | Required `expected_revision`, `expected_selection_epoch`, `delta_x_pt`, `delta_y_pt` | One atomic literal-position edit of the current native selection; complete source, chemistry, IDs and history retained |
+| `ring.create` | Required `expected_revision`, `page_id`, `size:3..8`, `hydrogen_policy:"rectify_neutral_carbon"`, closed tagged `placement` | Construct one native carbon Single ring on paper, sharing a declared atom, or sharing a declared Single edge; one whole-source history commit |
 
 SMILES record import requires explicit selection of the already-open raw file. It starts
 a clean Drawing namespace with generated geometry, retains the complete file association,
@@ -1325,7 +1326,7 @@ capture, native races/other-platform execution and complete reference parity rem
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
 counts are23 native Drawing/14 SDF/10 raw SMILES; retained-SMILES Drawing keeps20.
-The registry has36 commands. Accepting
+The registry has37 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag
@@ -1451,3 +1452,50 @@ frame-start barriers win. Tool activations resolve their fresh binding in raw in
 order so later mode changes cannot suppress earlier authoring. Full lasso, transform,
 group, snapping and exact26.1/platform parity remain open. See
 [receiving evidence](verification-selection-authoring.md) for the tested execution scope.
+
+## Explicit native ring construction
+
+`ring.create` is an authoring command shared by CLI, stdio MCP and authenticated
+loopback. It requires the current revision, positive page ID, size3..8, explicit
+`hydrogen_policy:"rectify_neutral_carbon"` and a closed `placement`:
+
+```json
+{"command":"ring.create","params":{"expected_revision":0,"page_id":1,"size":6,"hydrogen_policy":"rectify_neutral_carbon","placement":{"mode":"free","begin_x_pt":120,"begin_y_pt":168,"end_x_pt":120,"end_y_pt":120,"side":"positive"}}}
+```
+
+Free requires both first-edge endpoints and side. Atom requires `fragment_id`,
+`atom_id`, `end_x_pt`, `end_y_pt`, side; its existing atom is the first endpoint.
+Bond requires `fragment_id`, `bond_id`, side and preserves that Single bond's authored
+begin→end. Side is exactly positive/negative algebraic cross-product half-plane in
+right/down point coordinates. Every variant is closed with all listed fields required.
+No implicit placement, default length, snap, rotation or merge is substituted.
+
+Only source-free/fully mapped native CDXML is editable. Free adds n C/n Single bonds
+with H2 in a new Fragment. Atom adds n−1 C/n bonds and consumes2 literal target H.
+Bond adds n−2 C/n−1 bonds and consumes1 H at each endpoint, retaining the shared edge.
+Shared atoms must be positioned neutral natural nonradical carbon, have only supported
+incident orders and literal H equal to4 minus incident Single/Double/Triple weights.
+Unknown/inconsistent/insufficient H and other source/target kinds refuse explicitly.
+No general valence/stereo inference or neighbor adjustment is performed.
+
+Old arrays, IDs, shared positions, directed edges, unrelated metadata and shared storage
+remain exact. New IDs follow perimeter order with closure last; attachment consumes no
+new Fragment ID. Exact new-vertex occupancy on the same page refuses; no tolerance-based
+fusion occurs. Finite±100000pt positions and a normalized post-rounding regularity
+certificate precede the single complete-source history commit. The certificate has
+1e-10 relative length/angle-in-radians limits and preserves accurately represented tiny
+geometry rather than imposing a minimum length. Paper/readability guards are separate.
+
+Revision precedes source/target validation after the global committed-close guard.
+Failures preserve source/history/selection/saved baseline/file context and spend no
+IDs. Actual creation uses the existing selection invalidation and checked ID floors;
+Undo/Redo restores whole content. The command retains camera/focus, adds no worker,
+file publication, Save lease or acknowledgement, and has no separate result receipt.
+Codes include invalid_params, not_found, unsupported_content, stale_revision and existing
+revision/identity/model/selection-exhaustion errors.
+
+This checkpoint exposes37 commands and adds no native binding: controls remain23 native
+Drawing,20 retained-SMILES Drawing,14 SDF and10 raw SMILES. Ring palette/gesture/preview,
+aromatic/chair/sprout tools, styles and broader chemistry/platform workflows remain
+required. See [independent command/adapter/render evidence](verification-ring-authoring.md)
+and [the locked public-source contract](research/ring-authoring-plan.md).

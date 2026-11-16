@@ -1,5 +1,22 @@
 # Verification log
 
+## Native ring command construction, 2026-11-16
+
+[Independent receiving](verification-ring-authoring.md) records the37th command, actual
+existing-JSON/CLI and four-placement runtime UnknownCommand REDs, the expanded baseline,
+qualified new-test setup corrections and all21 new passing cases. Regular3–8/free/
+fused/spiro/terminal geometry/H, sparse arrays/IDs/source/history/selection/overflow,
+actual Unicode file chemistry and CLI/MCP/socket behavior are independently checked.
+Literal renderer controls pass first; later generated pages match CPU/GPU/Pillow.
+Actual ULP/subnormal nonregular acceptance is fixed against frozen precision expectations
+without a minimum-length shortcut. A separate accurate1e-200 control passes before and after the guard.
+
+Full local gate45460 passes1382/0/1 across195 result lines, with fmt, warnings-denied
+workspace/vendor clippy/tests and layers/licenses/corpus. Native bindings/gestures are
+not delivered by this command checkpoint. No new runtime/dependency/font/golden/parser
+policy or hosted execution; Actions stays off. The earlier intermittent MCP AddrInUse
+failure remains unattributed, not causally fixed by this pass. Full M0–M5 stays open.
+
 ## Persistent native selection and translation, 2026-11-16
 
 [Receiving evidence](verification-selection-authoring.md) records the independent

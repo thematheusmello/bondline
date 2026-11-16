@@ -65,6 +65,17 @@ No new model fields, worker, runtime dependency or alternate dispatcher is intro
 See [the protocol](control-protocol.md#persistent-native-selection-and-translation) and
 [receiving evidence](verification-selection-authoring.md) for exact scope and limits.
 
+`ring.create` builds a bounded regular3–8 carbon Single polygon from an explicit first
+edge and side, optionally sharing a declared atom or Single edge. The command layer
+owns its literal C4 H policy, checked same-page occupancy/precision certificate and
+immutable candidate; model data/layout boundaries are unchanged. Existing global ID
+maxima/session floors are reused and published only after one successful normal commit.
+Attachments preserve old atom/bond prefixes, directed edges and shared coordinates,
+and spend no Fragment ID. Complete native-source guards precede mutation; whole-source
+history and selection invalidation reuse the existing path. No new dependency, schema
+field in authored data, converter, worker or GUI coupling is introduced. Native tools
+are the next integration; see [receiving](verification-ring-authoring.md).
+
 `atom.set_label` authors only one existing neutral atom's element/literal-H fields in
 source-free or completely mapped native CDXML. It reuses immutable Fragment replacement
 and the existing whole-content commit/history, preserving geometry, arrays, directed

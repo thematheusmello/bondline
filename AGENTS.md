@@ -61,7 +61,7 @@ deferred replacements, local form ownership and frame-start barriers through dis
 No `ui.file` atom-target hack or empty-target binding. Full inline Text/alias/charge/
 isotope/radical workflows and native IME/DPI/other platforms remain open. Keep one preview.
 
-Current registry36 adds `ui.selection` and `selection.translate`; read the locked
+The selection checkpoint's registry36 adds `ui.selection` and `selection.translate`; read the locked
 docs/research/selection-translation-plan.md and docs/verification-selection-authoring.md.
 One-page sorted IDs/weak owner/checked epoch are transient. Source-free/fully mapped
 native CDXML translation changes only literal positions, validates affected fragments
@@ -78,6 +78,24 @@ or full transform parity. Keep the user's unused-tabs cleanup; do not open extra
 Final selection gate77152 passes1361/0/1, including fmt, workspace/vendor clippy/tests,
 layers/licenses/corpus. It does not attribute or causally fix the earlier MCP failure.
 The unchanged actual-App capture also passes offscreen on Metal; no native window opens.
+
+Current registry37 adds `ring.create`; read docs/research/ring-authoring-plan.md and
+docs/verification-ring-authoring.md. Explicit free/shared-atom/shared-Single-edge3–8
+carbon rings preserve complete native/CDXML source, old arrays/IDs/directions/anchors
+and unrelated metadata. Literal neutral-C4 H accounting, exact same-page new-point
+occupancy and normalized post-rounding regularity certify a candidate before one normal
+commit; ID floors publish only after success and attachments spend no Fragment ID.
+Precision divides before products: accurate tiny geometry stays valid, rounded ULP/
+subnormal nonregular polygons refuse atomically. Independent public10/private2/
+precision3/render2/actual-wire4 cases pass, with real Unicode Expat/Decimal/RDKit files.
+The first full ring gate45460 passes1382/0/1 including all local stages. Runtime/asset
+closures, parsers/IO/chem/render, old fixtures/consumers/font/golden remain unchanged.
+No native ring binding is delivered yet: controls stay23/20/14/10. Next is ui.ring_tool,
+one mutually exclusive Selection/Bond/Ring representation, original procedural palette,
+same-candidate preview and actual free/atom/bond gestures through the shared command.
+Lock original click/default/tie/modifier policies before independent App/API REDs;
+do not invent26.1 evidence, competing active booleans or a converter fallback. Native
+selection/next-ring/platform acceptance remains separate while the desktop is in use.
 
 Read docs/research/macos-listener-lifetime.md before touching the MCP failure. Original
 probe is inconclusive; separately qualified v2 passes its one controlled two-arm run.

@@ -18,6 +18,7 @@ mod controls;
 mod file_ui;
 mod files;
 mod new_document;
+mod ring;
 mod sdf_edit;
 mod sdf_query;
 mod selection;
@@ -44,6 +45,7 @@ pub use files::{
     OpenSdf, OpenSmiles, SaveCdx, SaveCdxml, SaveMol, SaveSdf, SaveSmiles,
 };
 pub use new_document::NewDocument;
+pub use ring::{RingCreate, RingPlacement, RingSide};
 pub use sdf_edit::{SdfFieldSet, SdfRecordRemove};
 pub use sdf_query::{
     MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
@@ -173,6 +175,7 @@ command_registry! {
     Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
     UiSelection(UiSelection) => ("ui.selection", "Select native atoms without authoring", false),
     SelectionTranslate(SelectionTranslate) => ("selection.translate", "Translate the current native atom selection atomically", false),
+    RingCreate(RingCreate) => ("ring.create", "Construct a native carbon Single ring with explicit standalone or shared-atom/edge placement.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -233,6 +236,10 @@ pub enum Error {
     UnsupportedBondExtension,
     #[error("a new atom cannot occupy an existing atom's position")]
     OccupiedEndpoint,
+    #[error("invalid ring construction: {0}")]
+    InvalidRing(&'static str),
+    #[error("ring construction unavailable: {0}")]
+    UnsupportedRing(&'static str),
     #[error(transparent)]
     Render(#[from] bondline_render::Error),
     #[error(transparent)]
@@ -375,6 +382,7 @@ impl Error {
             | Self::UnsupportedBondOrderSource
             | Self::UnsupportedBondOrder
             | Self::UnsupportedAtomLabel(_)
+            | Self::UnsupportedRing(_)
             | Self::UnsupportedSmilesPasteSource
             | Self::UnsupportedBondConversion(_) => "unsupported_content",
             Self::IncompleteSmilesExportSource => "unsupported_content",
@@ -920,6 +928,17 @@ impl Engine {
                 document.model_mut().set_page_size(id, size)?;
                 self.commit(document)?
             }
+            Command::RingCreate(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let (document, identities) =
+                    ring::create(self.stored_document()?, params, self.identities)?;
+                let changed = self.commit(document)?;
+                self.identities = identities;
+                drawing_focus = self.view_focus;
+                changed
+            }
             Command::BondCreate(params) => {
                 let focus = (
                     params.page_id,
@@ -1200,6 +1219,7 @@ mod tests {
                 "history.undo",
                 "page.set_size",
                 "render.capture",
+                "ring.create",
                 "sdf.field.set_value",
                 "sdf.record.inspect",
                 "sdf.record.remove",

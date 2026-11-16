@@ -147,7 +147,8 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "bond.set_order",
             "history.undo",
             "history.redo",
-            "render.capture"
+            "render.capture",
+            "ring.create",
         ]
         .into_iter()
         .collect()

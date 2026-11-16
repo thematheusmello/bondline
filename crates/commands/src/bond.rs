@@ -101,7 +101,7 @@ pub struct BondSetOrder {
     pub hydrogen_policy: OrderHydrogenPolicy,
 }
 
-fn bond_weight(order: BondOrder) -> Option<u16> {
+pub(super) fn bond_weight(order: BondOrder) -> Option<u16> {
     match order {
         BondOrder::Single => Some(1),
         BondOrder::Double => Some(2),
@@ -292,7 +292,7 @@ pub(super) fn create(
     ))
 }
 
-fn maxima(document: &StoredDocument, mut maximum: Ids) -> Ids {
+pub(super) fn maxima(document: &StoredDocument, mut maximum: Ids) -> Ids {
     for fragment in document
         .model()
         .pages()

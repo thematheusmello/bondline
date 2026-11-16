@@ -328,3 +328,6 @@ mod ui_atom_label_wire;
 
 #[path = "support/selection_authoring_wire.rs"]
 mod selection_authoring_wire;
+
+#[path = "support/ring_construction_wire.rs"]
+mod ring_construction_wire;

@@ -1,5 +1,9 @@
 # Next M2 increment: native neutral Single-ring construction
 
+Current command implementation and independent receiving are recorded in
+[verification-ring-authoring.md](../verification-ring-authoring.md). This document
+retains the planning/locked policy history; native tools and gestures remain next.
+
 2026-11-16. Source/design proposal only, following selection feature07aa562 and its1361/0/1 local gate. Actual native selection acceptance is still pending while the desktop is in use. No extra preview is opened. No new command,
 ring tool, test, native flow or parity result is implemented or executed here. Complete
 M0–M5, aromatic/chair/chain/style and broader-source authoring remain the target.

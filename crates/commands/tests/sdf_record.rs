@@ -55,7 +55,8 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "bond.set_order",
             "history.undo",
             "history.redo",
-            "render.capture"
+            "render.capture",
+            "ring.create",
         ]
         .into_iter()
         .collect()
