@@ -2,8 +2,8 @@
 
 ## Current native source-backed SMILES records
 
-The full M0–M5 goal remains **active** on `feat/multiple-bonds`. Recoverable base is
-`01e79da`; the intentional native increment is ready for its local feature commit.
+The full M0–M5 goal remains **active** on `feat/multiple-bonds`. Native feature
+`1e78bb4` builds on recoverable base `01e79da`; all intentional feature files are committed.
 No push/publication or hosted run occurred. Repository/workflow Actions remains disabled.
 The desktop/GPU license blocker is resolved; full M0, M1 and M2–M5 remain incomplete.
 
@@ -54,7 +54,8 @@ CDXML was inspected before normal quit; no unsaved work was discarded. All build
 oracle jobs listed above are terminal, including54599/65944/21784; do not poll old handles.
 All agent tasks have returned. Root owns continuation.
 
-**Next executable work:** correct the raw-only picker hint with existing format/UI checks.
+**Next executable work:** correct the raw-only SMILES picker hint in
+`crates/ui/src/files.rs:395` with the existing format/picker UI checks.
 Preserve this scoped native/source safety evidence. Investigate the MCP failure only with
 a genuinely new source/OS-lifetime hypothesis and bounded decisive evidence; never change
 assertions, add retries/reuse flags or rerun exhausted contexts to hide it. Continue M2

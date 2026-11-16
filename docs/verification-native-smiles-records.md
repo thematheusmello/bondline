@@ -1,6 +1,6 @@
 # Native source-backed SMILES records
 
-2026-11-16. Extends the [retained-record engine](verification-smiles-record-authoring.md),
+2026-11-16, native feature `1e78bb4`. Extends the [retained-record engine](verification-smiles-record-authoring.md),
 not the four create-only converters or Drawing paste. The complete M0–M5 target remains
 open. This is an original Bondline import presentation; exact Professional26.1 record
 selection screens/defaults are unknown.
