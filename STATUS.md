@@ -2,8 +2,8 @@
 
 ## Current native editable SMILES checkpoint
 
-The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; this native
-feature builds on recoverable checkpoint `c85beb1`, engine `12c07c7`, chemistry `2d12d71`
+The complete M0–M5 goal remains **active**. Branch `feat/multiple-bonds`; native feature
+`71c3a74` builds on recoverable checkpoint `c85beb1`, engine `12c07c7`, chemistry `2d12d71`
 and renderer control `f65a333`. No push or publication occurred. Actions remains disabled
 at both repository and workflow level; do not enable or dispatch hosted work. M0, M1
 and M2–M5 remain incomplete.
@@ -43,8 +43,9 @@ requested. Binary 20988368 bytes, SHA256
 `cdecd57c69b81d91ae63ce70702094478147eb2fc8bb2c764ce2b2a5e1b96c14`.
 Old Bondline previews are closed. No Bondline tabs remain in the inspected Chrome windows;
 unrelated tabs/apps were preserved. Codex/terminal tabs were not inspected. All compiler,
-test, oracle and native build jobs are terminal, including 28908, 69758 and 36938; do not
-poll old handles. All agent handoffs are returned. Root owns continuation.
+test, oracle and native build jobs are terminal, including 28908, 69758, 36938 and the
+final rustfmt check 98517. Do not poll old handles. All agent handoffs are returned.
+Root owns continuation.
 
 **Remaining:** exact reference dialog/defaults and automatic clipboard completion;
 native Windows/Linux and race/cancel/poison checks; measured DPI/2×, Fit/readability and

@@ -1,6 +1,6 @@
 # Native editable SMILES paste
 
-2026-11-16. Extends the [engine checkpoint](verification-smiles-paste-engine.md) with
+2026-11-16, feature `71c3a74`. Extends the [engine checkpoint](verification-smiles-paste-engine.md) with
 the actual **Edit → Paste Special → SMILES…** form. GUIDE25 printed351 establishes the
 menu role and printed78 the Windows Ctrl+Alt+P shortcut. The explicit dialog,48/72/72
 initial numeric values and lifecycle policies are original Bondline choices. Exact26.1
