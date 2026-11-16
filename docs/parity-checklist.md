@@ -16,16 +16,17 @@ native CDXML presence/direction/history and guarded loss boundaries. Center Doub
 the existing centered scene; explicit Left/Right Double now has
 [shortened shared-renderer evidence](verification-inset-doubles.md). Dormant non-Double
 still refuses. No alignment command is delivered. Named benzene/cyclopentadiene now have
-[command/adapter/file evidence](verification-unsaturated-rings.md); native tools and
-their modifier/hotkey flows remain missing. TD-007 remains partial; broader unsaturated
+[command/adapter/file evidence](verification-unsaturated-rings.md) and
+[named native-tool/App evidence](verification-native-unsaturated-rings.md). OS/monitor
+acceptance and hotkeys remain missing. TD-007 remains partial; broader unsaturated
 ring/default-style workflows remain required.
 
 [Standard carbon-label metadata](verification-carbon-label-data.md) now survives exact
 node mapping/native encoding/history, with MOL and retained-SMILES loss guards. Specified
 values now have [bounded shared skeletal depiction/explicit-label restoration](verification-skeletal-carbon.md),
 with actual graph/H proof, mandatory labels and retained hits. Registry/wire/App checks
-do not establish native OS/default-style parity. False-setting controls and unsaturated
-tools remain missing; no full control inventory status is promoted.
+do not establish native OS/default-style parity. False-setting/default-style controls
+remain missing; named-tool OS acceptance is unverified. No full inventory status is promoted.
 
 Current native source-backed SMILES records have bounded Mac selected/all import,
 refusal/retry, click/key order editing, history and Unicode whole-file Save/reopen/reimport.
@@ -378,8 +379,8 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-021 | Aromatic/tautomeric double-bond display | 88 | missing | Separate visual/chemical conventions need tests. |
 | TD-022 | Acyclic chain | 104-105 | missing | - |
 | TD-023 | Snaking chain | 104-105 | missing | - |
-| TD-024 | Benzene ring | 74, 101-103 | partial (command verified) | Named ring.create supports free/atom/shared-Single-or-Double placement, bounded phases, literal H, inward new strokes and unchanged old data. Independent analytic/schema/history, actual CLI/MCP/socket and Unicode file consumers pass; named native tool/Shift/hotkey/OS flows remain missing. See verification-unsaturated-rings.md. |
-| TD-025 | Cyclopentadiene ring | 74 | partial (command verified) | Same registry/builder with all five rotations, asymmetric endpoint budgets and the H2 spiro phase; independent command/adapter/files pass. Native tool, ordered Shift flow and OS acceptance remain missing. See verification-unsaturated-rings.md. |
+| TD-024 | Benzene ring | 74, 101-103 | wired (partial) | Native palette/preview/free/atom/fused/shared-Double/Shift/history/Unicode-file paths share ring.create. Original icons, actual-App1×/2×/raw-order/modal/context checks, real adapters and independent file consumers pass. OS/monitor, exact26.1 defaults and hotkeys remain unverified/missing. See verification-native-unsaturated-rings.md and verification-unsaturated-rings.md. |
+| TD-025 | Cyclopentadiene ring | 74 | wired (partial) | Native kind-only tool, original icon, same-builder full preview, press-latched Shift and Cp spiro have actual-App/file evidence. Core all-five-phase/asymmetric H checks remain. Real OS/monitor, exact26.1 and hotkey acceptance remain missing. See verification-native-unsaturated-rings.md. |
 | TD-026 | Ring sizes 3-8 | 101-103, 73 | wired (partial) | Six original procedural tools share one effective mode and the existing ring.create builder. Independent command/context/adapter and actual-App click/drag/full-preview/free/atom/fused/spiro/Unicode-file checks pass. Native OS interaction is still unverified. Original poses/modifier/side policies do not prove26.1 defaults; aromatic/chair/sprout/general faces remain missing. See verification-native-rings.md and verification-ring-authoring.md. |
 | TD-027 | Cyclohexane chair, both orientations | 102, 73 | missing | - |
 | TD-028 | Arrows palette | 106-109 | missing | Unnamed glyph variants still need independent semantic identification. |

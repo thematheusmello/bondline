@@ -1,8 +1,8 @@
 //! Disposable ring gestures; both preview and release validate the real registry candidate.
 use super::{HoverContext, readable_graph, selection::Surface};
 use bondline_commands::{
-    Command, EffectiveTool, Engine, Error, OrderHydrogenPolicy, RingContext, RingCreate,
-    RingPlacement, RingSide,
+    Command, EffectiveTool, Engine, Error, NamedRingCreate, OrderHydrogenPolicy, RingContext,
+    RingCreate, RingCreateRequest, RingPhase, RingPlacement, RingSide,
 };
 use bondline_model::{AtomId, Document, Fragment, FragmentId, Page, Point2};
 use bondline_render::{GraphScene, HitTarget, PageView};
@@ -10,7 +10,7 @@ use eframe::egui;
 use std::sync::Arc;
 
 struct Candidate {
-    params: RingCreate,
+    params: RingCreateRequest,
     document: Arc<Document>,
     graph: GraphScene,
 }
@@ -19,7 +19,7 @@ struct Gesture {
     proof: RingContext,
     hover: HoverContext,
     layer: egui::LayerId,
-    params: RingCreate,
+    params: RingCreateRequest,
     begin: Point2,
     bond_end: Option<Point2>,
     press: egui::Pos2,
@@ -34,7 +34,7 @@ impl Gesture {
         if !self.dragged {
             return;
         }
-        match &mut self.params.placement {
+        match placement_mut(&mut self.params) {
             RingPlacement::Free {
                 end_x_pt, end_y_pt, ..
             }
@@ -74,7 +74,7 @@ impl Gesture {
         match first {
             Ok(candidate) => Ok(candidate),
             Err(first_error) => {
-                if let RingPlacement::Bond { side, .. } = &mut self.params.placement {
+                if let RingPlacement::Bond { side, .. } = placement_mut(&mut self.params) {
                     *side = match side {
                         RingSide::Positive => RingSide::Negative,
                         RingSide::Negative => RingSide::Positive,
@@ -127,14 +127,16 @@ impl RingWorkflow {
                 if !surface.accepts(context, *pos) {
                     return Ok(None);
                 }
-                if !modifiers.is_none() {
+                let (size, kind) = match engine.effective_tool() {
+                    EffectiveTool::Ring { size } => (size, None),
+                    EffectiveTool::NamedRing { kind } => (kind.size(), Some(kind)),
+                    _ => return Ok(None),
+                };
+                if !supported_modifiers(*modifiers, kind.is_some()) {
                     return Err(Error::UnsupportedRing(
                         "modified ring gestures are unavailable",
                     ));
                 }
-                let EffectiveTool::Ring { size } = engine.effective_tool() else {
-                    return Ok(None);
-                };
                 let point = surface.point(*pos)?;
                 let hit = surface
                     .graph
@@ -222,18 +224,35 @@ impl RingWorkflow {
                         )
                     }
                 };
+                let choose_side = matches!(placement, RingPlacement::Bond { .. });
+                let expected_revision = engine.state().revision;
+                let page_id = surface.page.id().get();
+                let hydrogen_policy = OrderHydrogenPolicy::RectifyNeutralCarbon;
+                let params = match kind {
+                    None => RingCreate {
+                        expected_revision,
+                        page_id,
+                        size,
+                        hydrogen_policy,
+                        placement,
+                    }
+                    .into(),
+                    Some(kind) => NamedRingCreate {
+                        expected_revision,
+                        page_id,
+                        kind,
+                        hydrogen_policy,
+                        placement,
+                        phase: modifiers.shift.then_some(RingPhase::SingleFirst),
+                    }
+                    .into(),
+                };
                 self.gesture = Some(Gesture {
                     proof: engine.ring_context(surface.page.id().get())?,
                     hover: surface.hover,
                     layer: surface.response.layer_id,
-                    choose_side: matches!(placement, RingPlacement::Bond { .. }),
-                    params: RingCreate {
-                        expected_revision: engine.state().revision,
-                        page_id: surface.page.id().get(),
-                        size,
-                        hydrogen_policy: OrderHydrogenPolicy::RectifyNeutralCarbon,
-                        placement,
-                    },
+                    choose_side,
+                    params,
                     begin,
                     bond_end,
                     press: *pos,
@@ -271,7 +290,10 @@ impl RingWorkflow {
                 if !surface.accepts(context, *pos) {
                     return Ok(None);
                 }
-                if !modifiers.is_none() {
+                if !supported_modifiers(
+                    *modifiers,
+                    matches!(&gesture.params, RingCreateRequest::Named(_)),
+                ) {
                     return Err(Error::UnsupportedRing(
                         "modified ring gestures are unavailable",
                     ));
@@ -281,7 +303,7 @@ impl RingWorkflow {
                 if !gesture.proof.is_current(engine) {
                     return Ok(None);
                 }
-                Ok(Some(Command::RingCreate(candidate.params.into())))
+                Ok(Some(Command::RingCreate(candidate.params)))
             }
             _ => Ok(None),
         }
@@ -302,19 +324,34 @@ impl RingWorkflow {
     }
 }
 
+fn placement_mut(params: &mut RingCreateRequest) -> &mut RingPlacement {
+    match params {
+        RingCreateRequest::Sized(params) => &mut params.placement,
+        RingCreateRequest::Named(params) => &mut params.placement,
+    }
+}
+
+fn supported_modifiers(modifiers: egui::Modifiers, named: bool) -> bool {
+    modifiers.is_none() || (named && modifiers == egui::Modifiers::SHIFT)
+}
+
 fn candidate(
     engine: &Engine,
-    params: &RingCreate,
+    params: &RingCreateRequest,
     view: &PageView,
     density: f32,
 ) -> Result<Candidate, Error> {
-    let stored = engine.preview_ring_create(params)?;
+    let stored = engine.preview_ring_request(params)?;
+    let page_id = match params {
+        RingCreateRequest::Sized(params) => params.page_id,
+        RingCreateRequest::Named(params) => params.page_id,
+    };
     let page = stored
         .model()
         .pages()
         .iter()
-        .find(|page| page.id().get() == params.page_id)
-        .ok_or(bondline_model::Error::MissingPage(params.page_id))?;
+        .find(|page| page.id().get() == page_id)
+        .ok_or(bondline_model::Error::MissingPage(page_id))?;
     let graph = readable_graph(
         view.graph_scene(page, &bondline_render::Cancellation::default())?,
         density,

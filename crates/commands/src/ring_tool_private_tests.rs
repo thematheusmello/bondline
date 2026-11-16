@@ -64,13 +64,13 @@ fn refused(engine: &mut Engine, command: Command, code: &str) -> TestResult {
 fn exhausted_single_tool_epoch_preserves_validated_ring_noops_and_every_mode_switch_atomically()
 -> TestResult {
     let mut engine = pair()?;
-    engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+    engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
     engine.bond_tool.epoch = u64::MAX;
     let before = serde_json::to_value(engine.state())?;
     let owner = engine.capture_stamp();
     let mode = engine.effective_tool();
     let context = engine.ring_context(1)?;
-    let result = engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+    let result = engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
     assert_eq!(
         serde_json::to_value(result)?["ui_ring_tool_operation"],
         json!({"size":6,"epoch":u64::MAX,"changed":false})
@@ -81,7 +81,7 @@ fn exhausted_single_tool_epoch_preserves_validated_ring_noops_and_every_mode_swi
     assert!(context.is_current(&engine));
     let revision = engine.state().revision;
     for command in [
-        Command::UiRingToolSelect(SelectRingTool { size: 7 }),
+        Command::UiRingToolSelect(SelectRingTool { size: 7 }.into()),
         Command::parse("ui.bond_tool", json!({"order":"single"}))?,
         Command::parse(
             "ui.selection",
@@ -94,7 +94,7 @@ fn exhausted_single_tool_epoch_preserves_validated_ring_noops_and_every_mode_swi
     for size in [0, 2, 9, 255] {
         refused(
             &mut engine,
-            Command::UiRingToolSelect(SelectRingTool { size }),
+            Command::UiRingToolSelect(SelectRingTool { size }.into()),
             "invalid_params",
         )?;
     }
@@ -116,7 +116,7 @@ fn exhausted_single_tool_epoch_preserves_validated_ring_noops_and_every_mode_swi
 fn leaving_selection_preflights_selection_epoch_and_an_inactive_cache_is_not_authority()
 -> TestResult {
     let mut engine = pair()?;
-    engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+    engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
     engine.dispatch(
         "ui.selection",
         json!({"action":"set","expected_revision":1,"page_id":1,"atom_ids":[1,2]}),
@@ -138,7 +138,7 @@ fn leaving_selection_preflights_selection_epoch_and_an_inactive_cache_is_not_aut
     // A remembered size6 is not a Ring no-op while Selection is the actual mode.
     refused(
         &mut engine,
-        Command::UiRingToolSelect(SelectRingTool { size: 6 }),
+        Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()),
         "ui_selection_epoch_exhausted",
     )?;
     refused(
@@ -150,10 +150,10 @@ fn leaving_selection_preflights_selection_epoch_and_an_inactive_cache_is_not_aut
     assert!(context.is_current(&engine));
     assert_eq!(engine.selection().atom_ids, [1, 2]);
     let mut inactive = pair()?;
-    inactive.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+    inactive.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
     inactive.selection.state.epoch = u64::MAX;
     assert!(!inactive.selection().active);
-    let result = inactive.execute(Command::UiRingToolSelect(SelectRingTool { size: 7 }))?;
+    let result = inactive.execute(Command::UiRingToolSelect(SelectRingTool { size: 7 }.into()))?;
     assert_eq!(
         serde_json::to_value(result)?["ui_ring_tool_operation"],
         json!({"size":7,"epoch":2,"changed":true})

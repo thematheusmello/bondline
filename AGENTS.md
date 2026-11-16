@@ -39,8 +39,13 @@ docs/research/unsaturated-ring-authoring.md and docs/verification-unsaturated-ri
 Sized RingCreate stays unchanged; typed callers convert into the request union. Preserve
 the closed string-only named kind/optional non-null phase, bounded2/5 phase/H ranking,
 all old metadata and exact old consumers. The new consumer distinguishes literal integer
-source/unsanitized RDKit from independently sanitized chemistry. Next integrate named
-native controls/preview/ordered Shift flow; broader styles and M0–M5 remain required.
+source/unsanitized RDKit from independently sanitized chemistry. Native integration now
+adds two controls (31/20/14/10), one NamedRing mode/exact-mode weak context, the unchanged
+derived-size receipt and additive same-builder request preview. Read
+docs/research/native-unsaturated-rings.md and docs/verification-native-unsaturated-rings.md.
+Latch named Shift-only at ordered press; release/side trials never change phase. Preserve
+legacy modified refusals and every source/raw-order/DPI/modal guard. App/adapter evidence
+does not prove native OS acceptance. Broader styles and M0–M5 remain required.
 
 The DoublePosition data prerequisite and inset renderer follow the native-ring checkpoint.
 Read docs/research/sided-double-prerequisite.md, docs/research/inset-double-rendering.md,

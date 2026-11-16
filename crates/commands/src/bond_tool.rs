@@ -1,6 +1,6 @@
 //! Transient drawing order; authored commands always receive an explicit/default order.
 
-use crate::{BondDrawOrder, CloseState, CommandResult, Engine, Error, UiFilePhase};
+use crate::{BondDrawOrder, CloseState, CommandResult, Engine, Error, RingKind, UiFilePhase};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -24,6 +24,9 @@ pub enum EffectiveTool {
     Selection,
     Ring {
         size: u8,
+    },
+    NamedRing {
+        kind: RingKind,
     },
 }
 

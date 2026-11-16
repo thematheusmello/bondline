@@ -49,7 +49,9 @@ pub use new_document::NewDocument;
 pub use ring::{
     NamedRingCreate, RingCreate, RingCreateRequest, RingKind, RingPhase, RingPlacement, RingSide,
 };
-pub use ring_tool::{RingContext, RingToolOperation, SelectRingTool};
+pub use ring_tool::{
+    RingContext, RingToolOperation, SelectNamedRingTool, SelectRingTool, SelectRingToolRequest,
+};
 pub use sdf_edit::{SdfFieldSet, SdfRecordRemove};
 pub use sdf_query::{
     MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
@@ -189,7 +191,7 @@ command_registry! {
     UiSelection(UiSelection) => ("ui.selection", "Select native atoms without authoring", false),
     SelectionTranslate(SelectionTranslate) => ("selection.translate", "Translate the current native atom selection atomically", false),
     RingCreate(RingCreateRequest) => ("ring.create", "Construct a native carbon Single ring or named benzene/cyclopentadiene integer-bond ring, preserving shared data with explicit standalone or shared-atom/edge placement.", false),
-    UiRingToolSelect(SelectRingTool) => ("ui.ring_tool", "Select a native carbon Single-ring tool without editing the document or its history.", false),
+    UiRingToolSelect(SelectRingToolRequest) => ("ui.ring_tool", "Select a native carbon Single-ring or named benzene/cyclopentadiene tool without editing the document or its history.", false),
 }
 
 #[derive(Debug, thiserror::Error)]

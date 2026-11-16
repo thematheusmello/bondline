@@ -1,7 +1,7 @@
 //! Transient native ring mode and weak gesture authority; preview never authors.
 use crate::{
     BondToolState, CaptureStamp, CloseState, CommandResult, EffectiveTool, Engine, Error,
-    RingCreate, UiFileContextStamp, UiFilePhase,
+    RingCreate, RingCreateRequest, RingKind, UiFileContextStamp, UiFilePhase,
 };
 use bondline_model::PageId;
 use schemars::JsonSchema;
@@ -12,6 +12,50 @@ use serde::{Deserialize, Serialize};
 pub struct SelectRingTool {
     #[schemars(range(min = 3, max = 8))]
     pub size: u8,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct SelectNamedRingTool {
+    #[serde(deserialize_with = "crate::ring::present_kind")]
+    #[schemars(with = "RingKind")]
+    pub kind: RingKind,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(untagged)]
+#[schemars(extend("type" = "object"))]
+pub enum SelectRingToolRequest {
+    Sized(SelectRingTool),
+    Named(SelectNamedRingTool),
+}
+
+impl SelectRingToolRequest {
+    pub const fn size(&self) -> u8 {
+        match self {
+            Self::Sized(params) => params.size,
+            Self::Named(params) => params.kind.size(),
+        }
+    }
+
+    pub const fn kind(&self) -> Option<RingKind> {
+        match self {
+            Self::Sized(_) => None,
+            Self::Named(params) => Some(params.kind),
+        }
+    }
+}
+
+impl From<SelectRingTool> for SelectRingToolRequest {
+    fn from(params: SelectRingTool) -> Self {
+        Self::Sized(params)
+    }
+}
+
+impl From<SelectNamedRingTool> for SelectRingToolRequest {
+    fn from(params: SelectNamedRingTool) -> Self {
+        Self::Named(params)
+    }
 }
 
 #[cfg(test)]
@@ -29,7 +73,7 @@ pub struct RingToolOperation {
 #[derive(Clone, Debug)]
 pub struct RingContext {
     source: CaptureStamp,
-    size: u8,
+    mode: EffectiveTool,
     page: PageId,
     tool: BondToolState,
     view_epoch: u64,
@@ -41,7 +85,7 @@ pub struct RingContext {
 impl RingContext {
     pub fn is_current(&self, engine: &Engine) -> bool {
         engine.capture_stamp_matches(&self.source)
-            && engine.effective_tool() == (EffectiveTool::Ring { size: self.size })
+            && engine.effective_tool() == self.mode
             && engine.bond_tool() == self.tool
             && engine.view().epoch == self.view_epoch
             && engine.close_state() == CloseState::Open
@@ -67,7 +111,7 @@ impl Engine {
 
     pub(super) fn select_ring_tool(
         &mut self,
-        params: SelectRingTool,
+        params: SelectRingToolRequest,
     ) -> Result<CommandResult, Error> {
         if self.close_state() != CloseState::Open
             || self
@@ -78,10 +122,14 @@ impl Engine {
             return Err(Error::UiBusy);
         }
         self.require_ring_source()?;
-        if !(3..=8).contains(&params.size) {
+        let size = params.size();
+        if !(3..=8).contains(&size) {
             return Err(Error::InvalidRing("ring size must be 3 through 8"));
         }
-        let mode = EffectiveTool::Ring { size: params.size };
+        let mode = match params {
+            SelectRingToolRequest::Sized(_) => EffectiveTool::Ring { size },
+            SelectRingToolRequest::Named(params) => EffectiveTool::NamedRing { kind: params.kind },
+        };
         let changed = self.effective_tool != mode;
         if changed {
             let selection_epoch = self.selection_epoch_for_bond_tool()?;
@@ -96,7 +144,7 @@ impl Engine {
         }
         Ok(CommandResult {
             ui_ring_tool_operation: Some(RingToolOperation {
-                size: params.size,
+                size,
                 epoch: self.bond_tool.epoch,
                 changed,
             }),
@@ -106,9 +154,13 @@ impl Engine {
 
     pub fn ring_context(&self, page_id: u32) -> Result<RingContext, Error> {
         self.require_ring_source()?;
-        let EffectiveTool::Ring { size } = self.effective_tool else {
+        let mode = self.effective_tool;
+        if !matches!(
+            mode,
+            EffectiveTool::Ring { .. } | EffectiveTool::NamedRing { .. }
+        ) {
             return Err(Error::UnsupportedRing("select a ring tool before drawing"));
-        };
+        }
         if self.close_state() != CloseState::Open || self.file_ui_state().request.is_some() {
             return Err(Error::UiBusy);
         }
@@ -123,7 +175,7 @@ impl Engine {
         }
         Ok(RingContext {
             source: self.capture_stamp(),
-            size,
+            mode,
             page,
             tool: self.bond_tool(),
             view_epoch: self.view().epoch,
@@ -145,6 +197,21 @@ impl Engine {
             return Err(Error::StaleRevision);
         }
         crate::ring::create(self.stored_document()?, params.clone(), self.identities)
+            .map(|(document, _)| document)
+    }
+
+    /// Explicit request preview; named and sized candidates share the real builder.
+    pub fn preview_ring_request(
+        &self,
+        params: &RingCreateRequest,
+    ) -> Result<bondline_io::StoredDocument, Error> {
+        if self.close_state() == CloseState::Committed {
+            return Err(Error::CloseCommitted);
+        }
+        if params.expected_revision() != self.revision {
+            return Err(Error::StaleRevision);
+        }
+        crate::ring::create_request(self.stored_document()?, params.clone(), self.identities)
             .map(|(document, _)| document)
     }
 }

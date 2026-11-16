@@ -139,6 +139,8 @@ fn names(entries: &[Value]) -> TestResult {
     Ok(())
 }
 fn schema(value: &Value) -> TestResult {
+    let legacy = legacy_ui_ring_tool_schema(value)?;
+    let value = &legacy;
     assert_eq!(value["type"], "object");
     assert_eq!(value["additionalProperties"], false);
     assert_eq!(value["required"], json!(["size"]));
@@ -154,7 +156,7 @@ fn schema(value: &Value) -> TestResult {
 }
 fn controls(value: &Value, ring: Option<u8>, bond: Option<&str>, selection: bool) -> TestResult {
     let all = value["controls"].as_array().ok_or("controls")?;
-    assert_eq!(all.len(), 29);
+    assert_eq!(all.len(), 31);
     for (size, label) in [
         (3, "Cyclopropane"),
         (4, "Cyclobutane"),
@@ -595,3 +597,61 @@ fn authenticated_ring_mode_and_size_repaint_only_after_reply_publication_and_rea
     assert!(retired.try_recv().is_err());
     Ok(())
 }
+
+// Test-only positive schema extension: returns only the preserved legacy object.
+// All original size assertions following this call remain unchanged and meaningful.
+fn legacy_ui_ring_tool_schema(
+    root: &serde_json::Value,
+) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
+    use serde_json::{Value, json};
+    assert_eq!(root["type"], "object");
+    let branches = root
+        .get("anyOf")
+        .or_else(|| root.get("oneOf"))
+        .and_then(Value::as_array)
+        .ok_or("two closed ring-tool alternatives")?;
+    assert_eq!(branches.len(), 2);
+    let mut legacy = None;
+    let mut named = false;
+    for branch in branches {
+        let branch = if let Some(reference) = branch.get("$ref").and_then(Value::as_str) {
+            root.pointer(reference.strip_prefix('#').ok_or("nonlocal schema")?)
+                .ok_or("missing branch")?
+        } else {
+            branch
+        };
+        assert_eq!(branch["type"], "object");
+        assert_eq!(branch["additionalProperties"], false);
+        let fields = branch["properties"].as_object().ok_or("fields")?;
+        if fields.contains_key("size") {
+            assert!(legacy.is_none());
+            assert_eq!(
+                fields.keys().map(String::as_str).collect::<Vec<_>>(),
+                vec!["size"]
+            );
+            legacy = Some(branch.clone());
+        } else {
+            assert!(!named);
+            named = true;
+            assert_eq!(
+                fields.keys().map(String::as_str).collect::<Vec<_>>(),
+                vec!["kind"]
+            );
+            assert_eq!(branch["required"], json!(["kind"]));
+            let kind = &fields["kind"];
+            let kind = if let Some(reference) = kind.get("$ref").and_then(Value::as_str) {
+                root.pointer(reference.strip_prefix('#').ok_or("nonlocal kind")?)
+                    .ok_or("missing kind")?
+            } else {
+                kind
+            };
+            assert_eq!(kind["type"], "string");
+            assert_eq!(kind["enum"], json!(["benzene", "cyclopentadiene"]));
+        }
+    }
+    assert!(named);
+    legacy.ok_or_else(|| "missing original size object".into())
+}
+
+#[path = "ring_tool/named_ring_wire.rs"]
+mod named_ring_wire;

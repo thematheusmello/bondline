@@ -56,7 +56,7 @@ pub struct NamedRingCreate {
 }
 
 // Restrict new named fields to their documented string representation only.
-fn present_kind<'de, D>(deserializer: D) -> Result<RingKind, D::Error>
+pub(crate) fn present_kind<'de, D>(deserializer: D) -> Result<RingKind, D::Error>
 where
     D: Deserializer<'de>,
 {

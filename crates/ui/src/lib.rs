@@ -30,7 +30,7 @@ mod workspace_presentation_tests;
 use bondline_commands::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, BondToolState, CloseState, Command,
     ControlInfo, ControlKey, ControlShortcut, EffectiveTool, Engine, ExtendHydrogenPolicy,
-    OrderHydrogenPolicy,
+    OrderHydrogenPolicy, RingKind,
 };
 use bondline_mcp::{CommandExecutor, SharedEngine, control::LoopbackServer};
 use bondline_model::{PageId, Point2};
@@ -264,20 +264,38 @@ fn bond_tool_buttons(
                     };
                     let color = ui.style().interact(&response).fg_stroke.color;
                     if let Command::UiRingToolSelect(params) = &control.command {
-                        let phase = if params.size == 6 {
+                        let size = params.size();
+                        let kind = params.kind();
+                        let phase = if size == 6 {
                             std::f32::consts::FRAC_PI_6
                         } else {
-                            -std::f32::consts::FRAC_PI_2
-                                - std::f32::consts::PI / f32::from(params.size)
+                            -std::f32::consts::FRAC_PI_2 - std::f32::consts::PI / f32::from(size)
                         };
-                        let points = (0..params.size)
+                        let points: Vec<_> = (0..size)
                             .map(|index| {
                                 let angle = phase
-                                    + std::f32::consts::TAU * f32::from(index)
-                                        / f32::from(params.size);
+                                    + std::f32::consts::TAU * f32::from(index) / f32::from(size);
                                 response.rect.center() + egui::vec2(angle.cos(), angle.sin()) * 8.5
                             })
                             .collect();
+                        if let Some(kind) = kind {
+                            for ((begin, end), weight) in points
+                                .iter()
+                                .zip(points.iter().cycle().skip(1))
+                                .take(points.len())
+                                .zip(kind.base_weights())
+                            {
+                                if *weight == 2 {
+                                    ui.painter().line_segment(
+                                        [
+                                            begin.lerp(response.rect.center(), 0.32),
+                                            end.lerp(response.rect.center(), 0.32),
+                                        ],
+                                        egui::Stroke::new(1.3, color),
+                                    );
+                                }
+                            }
+                        }
                         ui.painter().add(egui::Shape::closed_line(
                             points,
                             egui::Stroke::new(1.5, color),
@@ -416,6 +434,11 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         let tool = match engine.effective_tool() {
             EffectiveTool::Selection => "Marquee selection".to_owned(),
             EffectiveTool::Ring { size } => format!("{size}-member Single ring selected"),
+            EffectiveTool::NamedRing { kind } => match kind {
+                RingKind::Benzene => "Benzene selected",
+                RingKind::Cyclopentadiene => "Cyclopentadiene selected",
+            }
+            .to_owned(),
             EffectiveTool::Bond => match engine.bond_tool().order {
                 BondDrawOrder::Single => "Single bond selected",
                 BondDrawOrder::Double => "Double bond selected",
@@ -428,6 +451,8 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             ui.label(if engine.selection_available() {
                 "Click or drag to select. Drag selected atoms to move; arrows nudge 1 pt, Shift 10 pt."
             } else { "Selection and movement are unavailable for this source." });
+        } else if matches!(engine.effective_tool(), EffectiveTool::NamedRing { .. }) {
+            ui.label("Click paper, an atom or a bond to add a ring; drag to set its first edge or side. Hold Shift when starting for a Single first edge. Esc cancels.");
         } else if matches!(engine.effective_tool(), EffectiveTool::Ring { .. }) {
             ui.label("Click paper, an atom or a Single bond for a carbon ring; drag to set its first edge or side. Esc cancels.");
         } else if engine
@@ -1580,7 +1605,7 @@ fn show_workspace_with_preview(
                         });
                         drawing.navigation_position = (!text_focused).then_some(*pos);
                     }
-                    let ring_input = matches!(engine.effective_tool(), EffectiveTool::Ring { .. })
+                    let ring_input = matches!(engine.effective_tool(), EffectiveTool::Ring { .. } | EffectiveTool::NamedRing { .. })
                         && matches!(event, egui::Event::PointerMoved(_) | egui::Event::PointerButton { .. });
                     if ring_input {
                         drawing.gesture = None;

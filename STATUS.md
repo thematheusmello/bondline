@@ -6,6 +6,35 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+Native named-ring integration is the current source/test/docs checkpoint after command89aa03d and
+locked native contracta795b1d. Read docs/verification-native-unsaturated-rings.md.
+Two controls now share ui.ring_tool, exact effective mode/context, original procedural
+icons, the same candidate/preview/release and press-latched Shift. Registry38 stays;
+native controls31, retained20/SDF14/raw10. The old sized APIs/receipt/preview and all
+scene/source/input guards remain. No desktop bundle/draft change or native OS claim.
+
+Actual runtime REDs precede first producer adoption; missing-type compile qualification
+is separate. Core4/API1 and actual adapter2 pass. Initial App3 cases pass; two later
+acceptance families bring5 current passing App cases including files, attachments,
+Shift/raw chronology/modal and physical refusal/recovery. A disabled first-layout Cancel
+and Root’s overstrong Default-bit readiness were test setup errors; current enabled+
+Click-verb readiness preserves the original packet/assertions. CLI operation-vs-snapshot
+changed flag is separately qualified by a one-line inspect setup correction. No producer
+fix or old assertion relaxation for either. Source reviews find no material issue.
+
+Full gate10421 stops at two Copy-test needless borrows. Equivalent by-value correction
+changes no assertions. Gate43930 stops at an old CLI exact inventory missing the two
+new IDs; only those IDs and the old Tools10→12 count are added. Final gate19064 exits0:
+1522/0/1 across216 result lines, all formatting/workspace/vendor lint/tests and layers/
+licenses/corpus. Log187496B/SHA25669e5875ac67f3fe9db8f888e299d8f40a7ec1369109cb8367b2ce84b43e51be1.
+Native/CLI build85439 passes; native843aa979…7064, CLI baf94aab…8a67. Explicit ignored
+actual-App GPU capture77304 passes; the inspected1600×1000 three-bond frame shows the
+new twelve-tool rail. PNG52889B/SHA256807ccc47…151f under target/visual-capture/.
+This is offscreen actual-App evidence, not a native screenshot/named gesture recording
+or approved golden. The user bundle remains exact d0873d6c…5c64 and is not reloaded.
+
+## Previous named-ring command checkpoint
+
 The named benzene/cyclopentadiene command increment is committed89aa03d after contract105b220.
 Read [the lock](docs/research/unsaturated-ring-authoring.md) and
 [receiving](docs/verification-unsaturated-rings.md). Existing ring.create now accepts
@@ -75,7 +104,7 @@ named-ring-tool workflow or approved golden; no asset is shipped or user draft c
 
 ## Existing application and remaining parity
 
-Registry38 serves UI, CLI, stdio MCP and authenticated loopback. Native controls29,
+Registry38 serves UI, CLI, stdio MCP and authenticated loopback. Native controls31,
 retained SMILES20, SDF14 and raw SMILES10. Earlier bounded Mac bonds, atom labels,
 history/source files and SMILES/SDF workflows retain their individually scoped evidence.
 Selection/translation and six3–8 Single-ring tools have independent command/adapter/App
@@ -86,7 +115,7 @@ strokes, finite-cap/strict-edge gaps, role-qualified joins, distinct arm pixels 
 CPU/Metal-GPU frame agreement. Its prior full gate95915 passes1451/0/1. See
 [inset receiving](docs/verification-inset-doubles.md); dormant non-Double still refuses.
 
-Named native benzene/cyclopentadiene tools, false-setting/default-style controls, alignment, broader
+Named-tool native OS acceptance, false-setting/default-style controls, alignment, broader
 imported editing, chemistry/reactions, publishing/clipboard, naming/biopolymers,
 WebAssembly/installers, modern inventory and cross-platform interaction remain required.
 Do not shrink M0–M5 or equate persisted fields with a finished authoring workflow.
@@ -115,23 +144,27 @@ remains intact; iTerm tabs remain unchecked because access is restricted. No pro
 reference binary/asset is opened or inspected. Native OS/DPI/Windows/Linux workflow
 acceptance for inset/selection/rings remains unverified.
 
-Root owns Cargo/Git/CUA/live mutation. All focused/full gate18337/build75233/visual
-executions are terminal; no Root Cargo job is live. Worker source-review/native-plan
-handoffs are terminal and ignored only; no worker owns execution or live product edits.
-The current completed full gate is1510/0/1. Revalidate any newer job before restarting.
+Root owns Cargo/Git/CUA/live mutation. All focused, failed gates10421/43930, successful
+19064/build85439/visual77304 and earlier executions are terminal; no Root Cargo job is
+live. Workers returned ignored declarations/reviews and the next chain-source proposal;
+no worker owns execution or live product changes. The current full gate is1522/0/1.
+Revalidate any newer job before restarting; do not retry an unchanged failed socket test
+for green. The native app deliberately stays running for the user, separately from Cargo.
 The native app deliberately remains
 running for the user, distinct from a Cargo job. Do not replace its copied executable
 or lose its unsaved draft; revalidate any newer handle before restarting work.
 
 ## Next exact steps
 
-1. The minimal native extension is now locked in
-   docs/research/native-unsaturated-rings.md before new tests/product changes. Next
-   observe independent JSON/context/actual-App REDs. Preserve public SelectRingTool/legacy
-   EffectiveTool::Ring, add closed named alternative and additive same-builder preview,
-   and keep one tool authority/epoch/context. Implement two original procedural controls
-   with all current input/source/DPI/close guards. Continue
-   chair/sprout/chains/styles/transforms/broader labels; do not stop at skeletal data.
+1. Review the next ignored source proposal target/chain-authoring/source-proposal/
+   PROPOSAL.md (5049B/SHA256443374b3d722e49d8b822e815df3e0515aa27f58d9b937681fd000345831d999)
+   and pins.json. GUIDE25 printed104–105 supplies Acyclic drag/count, separate Snaking/
+   Control, atom attachment, click Add Chain/count/Add and Alt repeat. Count inclusion,
+   quantization and26.1 defaults remain unknown; lock original policies before tests.
+   Current nonterminal-only flags still print CH3 ends. Public SDK0x0442/official DTD
+   support a separate preserving terminal-label prerequisite; do not silently erase H
+   or call those ends skeletal. No chain contract/test/producer is delivered yet.
+   Continue the complete dialog/repeat/Snaking/chair/sprout/style/chemistry backlog.
 2. After the user's current visual review, when desktop use permits, verify actual
    native skeletal restoration plus inset/selection/free/fused/spiro rings, Cancel/
    history and Unicode Save/reopen. Offscreen App tests do not prove native input or

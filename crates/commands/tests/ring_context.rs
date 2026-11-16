@@ -12,7 +12,7 @@ type TestResult<T = ()> = Result<T, Box<dyn std::error::Error>>;
 fn ring_native_context_and_preview_are_read_only_source_qualified_interfaces() -> TestResult {
     let mut engine = Engine::default();
     assert_eq!(engine.effective_tool(), EffectiveTool::Bond);
-    engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+    engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
     assert_eq!(engine.effective_tool(), EffectiveTool::Ring { size: 6 });
     let context = engine.ring_context(1)?;
     assert!(context.is_current(&engine));
@@ -92,7 +92,7 @@ fn named_source(directory: &support::FileTestDirectory) -> TestResult<(Engine, P
         "ui.view",
         json!({"action":"pan","center_x_pt":100,"center_y_pt":144}),
     )?;
-    engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+    engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
     Ok((engine, path))
 }
 
@@ -110,7 +110,7 @@ fn ring_context_is_weak_and_each_real_context_aba_permanently_invalidates_it() -
     let (old_context, weak_model) = {
         let mut engine =
             Engine::from_document(StoredDocument::from_cdxml(NATIVE.into(), PageSize::A4)?);
-        engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+        engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
         let context = engine.ring_context(1)?;
         let weak = Arc::downgrade(&engine.stored_document()?.model_snapshot());
         (context, weak)
@@ -120,7 +120,7 @@ fn ring_context_is_weak_and_each_real_context_aba_permanently_invalidates_it() -
         "the gesture proof must not retain the model/source owner"
     );
     let mut other = Engine::from_document(StoredDocument::from_cdxml(NATIVE.into(), PageSize::A4)?);
-    other.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+    other.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
     assert!(
         !old_context.is_current(&other),
         "equal values in another Engine do not confer identity"
@@ -163,7 +163,7 @@ fn ring_context_is_weak_and_each_real_context_aba_permanently_invalidates_it() -
         engine.dispatch("document.inspect", json!({}))?;
         engine.dispatch("ui.controls", json!({}))?;
         engine.dispatch("ui.view", json!({"action":"inspect"}))?;
-        engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+        engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
         engine.dispatch(
             "ui.selection",
             json!({"action":"clear","expected_revision":engine.state().revision}),
@@ -202,16 +202,16 @@ fn ring_context_is_weak_and_each_real_context_aba_permanently_invalidates_it() -
                 engine.dispatch("history.undo", json!({}))?;
             }
             "size" => {
-                engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 7 }))?;
-                engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+                engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 7 }.into()))?;
+                engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
             }
             "bond-mode" => {
                 engine.dispatch("ui.bond_tool", json!({"order":"single"}))?;
-                engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+                engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
             }
             "selection-mode" => {
                 engine.dispatch("ui.selection",json!({"action":"set","expected_revision":engine.state().revision,"page_id":1,"atom_ids":[1,2]}))?;
-                engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+                engine.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
             }
             "zoom" => {
                 engine.dispatch("ui.view", json!({"action":"set_zoom","percent":150}))?;
@@ -443,7 +443,7 @@ fn explicit_preview_is_host_mode_independent_and_never_clears_selection_or_spend
     let bytes = include_bytes!("../../io/tests/fixtures/mol/ethane-v2000.mol");
     fs::write(&path, bytes)?;
     let mut foreign = Engine::default();
-    foreign.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }))?;
+    foreign.execute(Command::UiRingToolSelect(SelectRingTool { size: 6 }.into()))?;
     foreign.dispatch("document.open_mol", json!({"path":path}))?;
     let p = explicit_ring(&foreign);
     assert_preview_error(&foreign, &p, "unsupported_content")?;

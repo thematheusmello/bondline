@@ -115,8 +115,10 @@ Disposable script/source/PNGs/receipt are under target/unsaturated-rings/visual/
 This is actual command authoring/rendering, not native gesture evidence or a human-
 approved golden. The existing user executable/draft is never replaced or mutated.
 
-Native benzene/Cp controls, preview, Shift flow, real OS/DPI acceptance and Windows/Linux
-interaction remain unverified or missing. Existing Single-ring tools remain unchanged.
+At this command checkpoint, named native controls/preview/Shift were missing. Their
+later [native integration](verification-native-unsaturated-rings.md) now has actual-App/
+adapter/file checks. Real OS/monitor and Windows/Linux interaction remain unverified.
+Existing Single-ring tool behavior stays unchanged.
 Automatic fused-face restyling, general aromaticity/valence/stereo, chair/sprout/ring
 systems, default styles and broader M0–M5 scope remain required. A passing gate would
 not identify or fix the earlier natural MCP replacement-bind AddrInUse failures.

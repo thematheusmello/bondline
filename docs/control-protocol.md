@@ -69,7 +69,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
 | `ui.atom_label` | Tagged `action`: `open` requires `expected_revision`, positive `page_id`, `fragment_id`, `atom_id`; `cancel` requires `expected_revision`, positive `request_id` | Queue or cancel one source-qualified native atom-label presentation; no authored edit/history or empty-target binding |
 | `ui.bond_tool` | Required `order` (`single`, `double`, `triple`) | Select a transient drawing tool; explicit operation receipt/epoch, no authored edit or history entry |
-| `ui.ring_tool` | Required `size` (integer3..8), closed object | Select a transient native carbon Single-ring tool; optional operation receipt, one shared tool epoch, no authored edit or history entry |
+| `ui.ring_tool` | Either `size` (integer3..8) or `kind:"benzene"/"cyclopentadiene"`, two closed objects | Select a transient native ring tool; unchanged derived-size operation receipt, one shared tool epoch, no authored edit or history entry |
 | `ui.view` | Tagged `action`: `inspect`, `fit`, `actual`, `set_zoom`, `magnify`, `reduce`, `pan`; action-specific geometry/percentage | Inspect or change the transient camera without editing content/history; source-qualified display/readability guards remain |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request guarded New/SMILES forms or Open/Save/Save As presentation, or cancel the matching intent; a native host is required |
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
@@ -1538,8 +1538,8 @@ exact, including centered/unspecified/outward shared Doubles. The same geometry/
 identity/history guards apply. No aromatic flag, general perception, resonance rephasing,
 automatic fused-face restyling or H repair is inferred.
 
-This is a command extension. The existing native palette/preview still selects only
-sized Single rings; named native tools and modifier flows are the next integration.
+The [native integration](verification-native-unsaturated-rings.md) now routes two named
+palette controls, preview and ordered Shift gestures through this same command builder.
 See [the locked policy](research/unsaturated-ring-authoring.md) and
 [receiving evidence](verification-unsaturated-rings.md). All known command names now
 enforce the documented JSON-object parameter boundary before struct deserialization;
@@ -1547,15 +1547,20 @@ unknown names retain unknown_command priority.
 
 ## Native ring tool, context and preview
 
-`ui.ring_tool` accepts exactly `{"size":6}` (integer3..8). It requires a source-free
+`ui.ring_tool` accepts either `{"size":6}` (integer3..8) or a kind-only object such as
+`{"kind":"benzene"}`. Named kinds are exactly benzene/cyclopentadiene strings; null,
+enum-map wrappers, both/neither selectors, extra fields and phase are invalid. It requires a source-free
 or completely mapped native CDXML Drawing and the existing tool close/file policy;
 no native host is required. Eligible controls are tool.ring.3…8, labelled Cyclopropane
-through Cyclooctane, with no undocumented shortcuts. Native controls total29; retained
+through Cyclooctane plus tool.ring.benzene/Benzene and
+tool.ring.cyclopentadiene/Cyclopentadiene, with no undocumented shortcuts. Native controls total31; retained
 SMILES stays20, SDF14 and raw SMILES10. Every tool's selected state comes from one
 EffectiveTool enum; a ring never leaves a bond button selected.
 
 The explicit result alone includes `ui_ring_tool_operation:{size,epoch,changed}`;
-ordinary snapshots omit it. Outer changed is false. The same validated Ring/size is
+ordinary snapshots omit it. Named size is derived6/5; that field alone does not prove
+which tool is selected. Query ui.controls for the exact selected binding. Outer changed
+is false. The same validated exact mode/size/kind is
 an exact no-op. A mode/size change advances the shared checked tool epoch once;
 leaving Selection preflights and clears its targets. Choosing the remembered bond
 order from Ring is a real mode switch. Authored history/Open/New retain the mode.
@@ -1564,18 +1569,29 @@ Loopback repaint follows successful changed-only publication and activity releas
 Rust-only ring_context(page_id) requires the actual Ring mode, supported page/source,
 Open and no outstanding file intent, including Running. RingContext is weak and has
 no serialized representation or Save authority. Source/namespace/history, tool-size/
-mode, view, close, file intent and association ABA invalidate it permanently. Native
+mode/kind, view, close, file intent and association ABA invalidate it permanently. Native
 canvas/DPI/layer/origin qualifiers remain in the thin UI.
 
-preview_ring_create(&RingCreate) is mode/host-independent, refuses committed close
+preview_ring_create(&RingCreate) and additive preview_ring_request(&RingCreateRequest)
+are mode/host-independent, refuse committed close
 before stale revision, and reuses the actual ring candidate builder. It spends no ID
 floor, clears no selection and changes no authored/saved/history/file state. Native
 release additionally requires that same complete candidate's ordinary scene and
 logical8..256 label-em guards pass, then revalidates the context and executes ring.create
 once. The headless command retains its explicit point-domain geometry contract.
 
+Named mode captures phase only at the ordered primary press: no modifiers means
+contextual phase, Shift alone means single_first. Move/release cannot change it; release
+accepts none/Shift, while Ctrl/Alt/Command combinations refuse. Every modified sized
+gesture still refuses. Side trials retain the same phase and cannot detach on error.
+The same full-candidate visibility and context checks precede one release/commit.
+
 The locked original48pt poses, unit-neighbor bisectors, local bond-side preference,
-latched drag threshold and unsupported modified primary gestures are in the
+latched drag threshold and original sized modifier policy are in the
 [native contract](research/ring-native-plan.md). They are not observed26.1 defaults.
 [Receiving](verification-native-rings.md) separates actual App inputs and saved-file
 consumers from unexecuted native/platform acceptance.
+The [named contract](research/native-unsaturated-rings.md) and
+[named receiving](verification-native-unsaturated-rings.md) extend that scope with
+original procedural icons, exact-mode contexts and press-latched Shift. App/DPI tests
+remain distinct from real OS/monitor and full26.1 behavior.

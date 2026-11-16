@@ -1,5 +1,19 @@
 # Verification log
 
+## Native benzene/cyclopentadiene tools, 2026-11-16
+
+[Receiving](verification-native-unsaturated-rings.md) separates initial JSON/App runtime
+REDs and missing-type qualification from post-draft acceptance. Twelve new core/API/
+adapter/App cases pass, including original icons, complete preview/press-latched Shift,
+attachments, source/context/raw chronology, independent Unicode files and physical
+refusal/recovery. Disabled initial Cancel, SDK Click-verb readiness and CLI operation-
+versus-snapshot setup corrections preserve original packet/assertions and product.
+Two Copy-test lint corrections and exact native inventory additions are qualified.
+Final full gate19064 passes1522/0/1 across216 result lines; build85439 and explicit
+actual-App GPU dev capture77304 pass. The inspected1600×1000 frame is offscreen, not
+native OS or a golden. Source review finds no material issue. No dependency, old consumer,
+approved golden, socket policy, user bundle/draft, hosted or publication change.
+
 ## Named benzene/cyclopentadiene command, 2026-11-16
 
 [Receiving](verification-unsaturated-rings.md) records existing-JSON runtime REDs,

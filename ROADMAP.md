@@ -11,8 +11,11 @@ atom.set_label restores visibility through the same registry/form without changi
 None/true no-ops. Native OS acceptance/default styles/preferences remain outstanding.
 Named benzene/cyclopentadiene candidates now share ring.create with the unchanged sized
 requests. Independent phase/H/source/history and actual adapter/file checks pass; see
-[receiving](docs/verification-unsaturated-rings.md). Next integrate their native controls,
-same-builder preview and ordered Shift flow; full scope remains intact.
+[receiving](docs/verification-unsaturated-rings.md). Their two native controls now share
+the same-builder preview and ordered Shift flow with independent actual-App/adapters/
+file checks; [native receiving](docs/verification-native-unsaturated-rings.md) separates
+this from pending OS/monitor/platform acceptance. Continue chair/sprout/chains/styles
+and broader chemistry; full scope remains intact.
 
 The aromatic-tool prerequisite now persists directed DoublePosition through the
 model and native CDXML, with independent property/file/history tests and explicit loss/
@@ -22,8 +25,8 @@ have independent geometry/pixel/density/CPU-GPU and actual-file/history evidence
 [renderer receiving](docs/verification-inset-doubles.md). The explicit nonterminal
 skeletal policy now retains literal H; weighted benzene/cyclopentadiene candidates now
 preserve old shared edges and rank bounded phases against proven H budgets. The ranking
-is original Bondline policy, not established reference precedence. Native tools remain
-the next step. The full parity scope is intact.
+is original Bondline policy, not established reference precedence. Named native tools
+are wired with actual-App evidence; real native acceptance remains. The full parity scope is intact.
 The [inset rendering contract](docs/research/inset-double-rendering.md) retains the
 preimplementation geometry, component-role joins and independent guard requirements.
 

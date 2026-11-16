@@ -341,7 +341,8 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
         .find(|r| r.name == "ui.ring_tool")
         .ok_or("ring tool")?;
     assert!(!row.read_only);
-    let schema = serde_json::to_value(&row.input_schema)?;
+    let union = serde_json::to_value(&row.input_schema)?;
+    let schema = legacy_ui_ring_tool_schema(&union)?;
     assert_eq!(schema["type"], "object");
     assert_eq!(schema["additionalProperties"], false);
     assert_eq!(schema["required"], json!(["size"]));
@@ -357,7 +358,7 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
     assert_eq!(schema["properties"]["size"]["minimum"].as_f64(), Some(3.0));
     assert_eq!(schema["properties"]["size"]["maximum"].as_f64(), Some(8.0));
     let mut engine = Engine::default();
-    assert_eq!(engine.controls().len(), 29);
+    assert_eq!(engine.controls().len(), 31);
     for (size, label) in [
         (3, "Cyclopropane"),
         (4, "Cyclobutane"),
@@ -477,4 +478,57 @@ fn source_eligibility_precedes_same_mode_noop_and_complete_owners_stay_preserved
         }
     }
     Ok(())
+}
+
+// Test-only positive schema extension: returns only the preserved legacy object.
+// All original size assertions following this call remain unchanged and meaningful.
+fn legacy_ui_ring_tool_schema(root: &serde_json::Value) -> TestResult<serde_json::Value> {
+    use serde_json::{Value, json};
+    assert_eq!(root["type"], "object");
+    let branches = root
+        .get("anyOf")
+        .or_else(|| root.get("oneOf"))
+        .and_then(Value::as_array)
+        .ok_or("two closed ring-tool alternatives")?;
+    assert_eq!(branches.len(), 2);
+    let mut legacy = None;
+    let mut named = false;
+    for branch in branches {
+        let branch = if let Some(reference) = branch.get("$ref").and_then(Value::as_str) {
+            root.pointer(reference.strip_prefix('#').ok_or("nonlocal schema")?)
+                .ok_or("missing branch")?
+        } else {
+            branch
+        };
+        assert_eq!(branch["type"], "object");
+        assert_eq!(branch["additionalProperties"], false);
+        let fields = branch["properties"].as_object().ok_or("fields")?;
+        if fields.contains_key("size") {
+            assert!(legacy.is_none());
+            assert_eq!(
+                fields.keys().map(String::as_str).collect::<Vec<_>>(),
+                vec!["size"]
+            );
+            legacy = Some(branch.clone());
+        } else {
+            assert!(!named);
+            named = true;
+            assert_eq!(
+                fields.keys().map(String::as_str).collect::<Vec<_>>(),
+                vec!["kind"]
+            );
+            assert_eq!(branch["required"], json!(["kind"]));
+            let kind = &fields["kind"];
+            let kind = if let Some(reference) = kind.get("$ref").and_then(Value::as_str) {
+                root.pointer(reference.strip_prefix('#').ok_or("nonlocal kind")?)
+                    .ok_or("missing kind")?
+            } else {
+                kind
+            };
+            assert_eq!(kind["type"], "string");
+            assert_eq!(kind["enum"], json!(["benzene", "cyclopentadiene"]));
+        }
+    }
+    assert!(named);
+    legacy.ok_or_else(|| "missing original size object".into())
 }

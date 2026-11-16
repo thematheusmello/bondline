@@ -2,8 +2,8 @@
 
 use crate::{
     BondDrawOrder, CloseAction, CloseDocument, CloseState, Command, EffectiveTool, Engine,
-    NoParams, PageSetSize, SelectBondTool, SelectRingTool, UiFile, UiFileAction, UiFilePhase,
-    UiSelection, UiView,
+    NoParams, PageSetSize, RingKind, SelectBondTool, SelectNamedRingTool, SelectRingTool, UiFile,
+    UiFileAction, UiFilePhase, UiSelection, UiView,
 };
 use serde::Serialize;
 
@@ -454,10 +454,30 @@ impl Engine {
                     menu: "Tools",
                     submenu: None,
                     shortcut: None,
-                    command: Command::UiRingToolSelect(SelectRingTool { size }),
+                    command: Command::UiRingToolSelect(SelectRingTool { size }.into()),
                     enabled: authoring_reason.is_none(),
                     disabled_reason: authoring_reason,
                     selected: Some(self.effective_tool() == (EffectiveTool::Ring { size })),
+                });
+            }
+            for (kind, id, label) in [
+                (RingKind::Benzene, "tool.ring.benzene", "Benzene"),
+                (
+                    RingKind::Cyclopentadiene,
+                    "tool.ring.cyclopentadiene",
+                    "Cyclopentadiene",
+                ),
+            ] {
+                controls.push(ControlInfo {
+                    id,
+                    label,
+                    menu: "Tools",
+                    submenu: None,
+                    shortcut: None,
+                    command: Command::UiRingToolSelect(SelectNamedRingTool { kind }.into()),
+                    enabled: authoring_reason.is_none(),
+                    disabled_reason: authoring_reason,
+                    selected: Some(self.effective_tool() == (EffectiveTool::NamedRing { kind })),
                 });
             }
         }

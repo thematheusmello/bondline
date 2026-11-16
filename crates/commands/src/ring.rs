@@ -9,6 +9,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 mod request;
+pub(crate) use request::present_kind;
 pub use request::{NamedRingCreate, RingCreateRequest, RingKind, RingPhase};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
