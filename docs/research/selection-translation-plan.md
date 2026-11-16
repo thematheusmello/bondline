@@ -23,3 +23,65 @@ Use existing GraphScene logical hits and PageView inverse physical mapping. Plai
 **First proposed runtime RED:** existing Engine JSON only; create pairs(72,72)→(120,72) and(220,72)→(268,72), set atom2 O/H1, freeze complete owner/state, dispatch ui.selection set on page1 IDs[1,2] at actual revision. It must compile and fail UnknownCommand, not a missing future Rust API. No such test is authored/run here. Follow with translate(24,-12): literal(96,60)/(144,60), untouched second pair; one additional history step, same chemistry/IDs/H, Undo/Redo, validated no-op, invalid/stale/ABA/point/whole-source guards. Actual saved XML must pass unchanged independent Expat/Decimal coordinates and literal RDKit CO/CH4O + CC/C2H6. Then actual CLI/stdio/socket, App missing-tool RED and native tool→selection→move/nudge→history→Unicode Save/reopen. No native/render/CI success is claimed by this plan.
 
 Exact current reuse: model/lib.rs123/203, graph.rs9/77/154 and point.rs37; commands/atom.rs17–58, lib.rs967/1011/1064, capture.rs15–54, controls.rs358 and bond_tool.rs31; io/document.rs258/350/402; render/hits.rs9/72; UI DrawingState110+ and its ordered canvas/reacquisition loop. The original detailed rationale and source-pin ledger remain under ignored `target/m2-selection-plan/`; this committed proposal is the durable continuation contract. The received6638-byte recommendation has SHA256 `6a65858028628f704529af67f300f0d67306d8167da7edd4e92b4a574d6cd441`. Open issues: exact26.1 Mac/tool/modifier precedence, groups/salts, molecular rectangle inclusion, shift-drag/repeat policy, partial-graph geometric/stereo interpretation, rotation/resize/pivot and history-selection restoration. Keep all parity rows open beyond the exact delivered subset.
+
+
+## Locked first implementation contract, 2026-11-16
+
+The proposals above are narrowed into the following explicit original policies for the
+first test declarations; complete reference parity stays in the backlog.
+
+- `ui.selection` has exactly activate/set/all/clear/inspect, all with required
+  `expected_revision`; set additionally requires positive `page_id` and `atom_ids:Vec<u32>`;
+  all requires positive `page_id`. Closed tagged variants, no surplus fields. Headless
+  use is supported. Activate/set/all require source-free or completely mapped native
+  CDXML Drawing; clear/inspect work across content kinds. All commands retain global
+  committed-close refusal; transient mutations use the existing tool close/file-busy
+  policy. Existing direct authoring during pending close retains its invalidation rules.
+- Selection is optional `ui_selection:{active,epoch,page_id,atom_ids}` in ordinary state,
+  omitted until its first actual change. `page_id` is null for an empty set; atom IDs are
+  sorted, unique and one-page. Set rejects zero/duplicate/missing IDs and >100000 entries
+  before selection publication, accepts arbitrary input order, and allows an empty set
+  after validating the page. Nonempty selection retains a private weak CaptureStamp.
+- activate/set/all enter the selection tool; clear empties targets without changing tool.
+  The only other effective mode is the remembered bond order. Mode changes increment the
+  existing checked BondToolState epoch; selecting the same remembered bond order while
+  selection is active is a real mode change. No second active-tool flag or new tool epoch.
+  `ui_selection_operation:{epoch,changed}` is an explicit transient receipt, with outer
+  changed:false. Inspect/no-op receipts do not request a repaint; real selection/mode
+  changes do after the existing authenticated publication boundary. No host is required.
+- `selection.translate` has exactly required expected_revision, expected_selection_epoch,
+  delta_x_pt and delta_y_pt. Revision is checked first. Missing/obsolete selection or
+  epoch returns stale_selection; malformed targets/counts/nonfinite deltas return
+  invalid_params, absent IDs/page return not_found, unsupported source/absent authored
+  position returns unsupported_content. Selection epoch exhaustion has stable code
+  ui_selection_epoch_exhausted. Keep existing global close/refusal precedence.
+- Translation validates every selected target and finite bounded Point2 result before
+  committing. Charge/isotope/radical/H/topology/array order/IDs are preserved, not
+  reinterpreted. No chemistry inference, new identity, page resize, source regeneration
+  bypass or explicit publication. Zero/rounded-identical motion is fully validated and
+  preserves Arc/selection/redo/close/baselines. A changed move uses one existing commit,
+  retains the same IDs with fresh source ownership and advances selection epoch once.
+- Other successful authored edits/Undo/Redo/Open/New/import clear a nonempty selection
+  and advance its checked epoch; no-op/failure does not. Selection tool remains active.
+  Precheck overflow before any authored/namespace mutation. Save/view/pan/DPI do not
+  clear targets. Their existing independent file/view proofs still cancel stale drags.
+- Add exactly three native Drawing controls: tool.selection (Marquee selection),
+  edit.select_all (Select All, primary+A), edit.deselect (Deselect, no declared shortcut).
+  Existing bond controls are unselected while selection mode is active. SDF/raw SMILES
+  default controls stay unchanged. Escape and arrow/Shift-arrow handling is native
+  ordered input, respecting text focus, modal, file, close and frame-start fences.
+- Native selection starts with atom click, bond-endpoint selection, connected-component
+  double-click, Shift toggle, original anchor-based marquee, then a fresh selected-target
+  drag or1pt/Shift10pt nudge. Empty click clears. Preview does not author; release commits
+  once. Existing five-logical-unit graph picking and PageView mapping are reused.
+  Native source/race/DPI/other-platform behavior is verified separately, never inferred
+  from headless/App checks. Exact26.1 modifier and whole-word/molecule inclusion remains
+  unresolved. No native screen or one-to-one parity claim follows from this contract.
+
+Atomic multi-fragment replacement must validate the whole candidate once, preserving page
+order and unrelated shared fragments; repeated whole-document validation per selected
+fragment would make large moves quadratic. An additive model batch API gets its own
+independent missing-API and atomic-error test before implementation. Native Escape
+cancels an active preview while retaining prior selection; without a gesture it clears
+targets through the shared command and keeps the selection tool. Text/modal handling
+wins, including the dismissal frame. This is original policy, not exact26.1 precedence.
