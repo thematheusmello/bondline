@@ -1,5 +1,12 @@
 # Clean-room source register
 
+Plain-bond spacing research reviewed2026-11-17 has pinned public Apache-2.0 Octet-Draw
+geometry and an MIT-authored measurement report. [Evidence and limits](../research/bond-spacing-evidence.md)
+corroborate centreline spacing for plain strokes while distinguishing third-party claims,
+unexecuted tests, nominal/actual length, Abs/ancestry and missing defaults. No reference
+exports/assets or implementation are copied, no dependency is added and no compatibility
+or source-authority status is promoted by research alone.
+
 Resolved numeric composition reviewed2026-11-17 follows public OpenSMILES H/isotope
 semantics, the SDK [NumHydrogens](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm)
 distinction between inline H and physical nodes, and primary RDKit formula/formal-charge

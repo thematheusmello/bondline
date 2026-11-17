@@ -7,6 +7,9 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+Implementation checkpoint: c84c2bd. The subsequent spacing-research record changes no Rust
+or test input; the fresh1831/0/1 aggregate below remains its exact code evidence.
+
 ### Resolved numeric composition integrated; fresh full local gate passes
 
 Base6d9ce09; accompanying atomic integration commit is the recoverable state. Worker
@@ -36,7 +39,8 @@ No native app or user drawing is touched. Actions OFF; no push/publication.
 Next return to M1 effective styles/fonts/colour/dependent Text and actual source/model/
 render/history/Save integration. The Text and resource primitives below are delivered,
 not a general foreign profile. Independent public spacing evidence supports centreline
-separation; persist/verify that source contract before implementing relative-spacing
+separation; read the durable [evidence](docs/research/bond-spacing-evidence.md) and verify
+the full source contract before implementing relative-spacing
 data/render/commands, retaining Abs/inheritance/default unknowns. Actual source-aware
 composition/inference/notation/mass/UI, general CDX/interchange, native/other-platform
 acceptance and full M0–M5 remain required. The persistent goal stays active/incomplete.

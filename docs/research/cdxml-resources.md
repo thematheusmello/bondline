@@ -64,3 +64,6 @@ and [absolute spacing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties
 establish units and inheritance, but reviewed material does not decisively settle centreline
 distance versus visible ink gap. The original3pt renderer policy is not a foreign default;
 no guessed mapping is enabled.
+
+Later [public corroboration](bond-spacing-evidence.md) supports a centreline convention
+for plain bonds; its execution, length, Abs and inheritance limitations remain explicit.
