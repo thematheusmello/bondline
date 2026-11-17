@@ -247,7 +247,7 @@ fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_na
         "stale_revision",
     )?;
     let controls = serde_json::to_value(engine.controls())?;
-    assert_eq!(controls.as_array().ok_or("controls")?.len(), 36);
+    assert_eq!(controls.as_array().ok_or("controls")?.len(), 38);
     let control = controls
         .as_array()
         .ok_or("controls")?

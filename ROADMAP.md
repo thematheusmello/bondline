@@ -5,10 +5,20 @@ documented workflows. The initial reference baseline is Professional 26.1; older
 guides are versioned evidence, not proof of complete modern parity.
 
 The user-directed identity and planned-tool presentation exposes all124 documented
-TD/TQ/TB roles as140 entries, with fourteen real bindings and126 disabled planned entries.
+TD/TQ/TB roles as140 entries, with sixteen real bindings and124 disabled planned entries.
 Original logo assets, native review and independent input/foreground/font regressions are
 recorded in [receiving](docs/verification-branding-and-tools.md). A visible grey icon does
 not implement its tool; the full M0–M5 scope and missing-feature states remain intact.
+The current [chair increment](docs/verification-native-chairs.md) adds both original
+constitutional depictions through the two existing ring commands, with full same-builder
+previews and source/H/ID/history/physical guards. Independent core/modal/App/actual-wire/
+Unicode-file checks and bounded native Mac horizontal/vertical, terminal,9/0, refusal,
+history,64pt preference and persistence workflows pass. Full local1681/0/1 and bounded
+ASan pass; four earlier inventory/lint gate stops remain explicit. Registry43 stays;
+controls38/21/15/11, catalogue16/124. Native direct fusion/spiro, hardware/DPI, other
+platforms, stereo/ring flips, Alt-sprout and wider labels/styles remain required.
+This does not complete M0, M1 or M2–M5.
+
 After that visual increment, the explicit headless chain candidate follows the
 [locked contract](docs/research/chain-authoring-plan.md) and
 [receiving evidence](docs/verification-chain-authoring.md). Continue its complete native
@@ -36,7 +46,7 @@ counter/repeat/refusal RED→GREENs remain separate from compile/lint/storage qu
 Native supported Control-drag/reversal/backtracking and measured2×/DPI remain unverified;
 other platforms and exact26.1 defaults/hotkeys stay open. Frame-global Control is never
 substituted for observed ordered events. Next continue missing drawing tools, including
-chair/sprout and broader labels/styles, with source locks and independent workflows before
+sprout and broader labels/styles, with source locks and independent workflows before
 binding grey entries. The earlier native-settings gate passes1629/0/1 after correcting
 one newly added headless-control expectation; that first gate remains recorded as failed.
 Earlier settings-command
@@ -517,8 +527,8 @@ DPI calibration, SDF navigation, saved view preferences or complete reference pa
 See docs/verification-view-{render,commands,ui,native}.md and
 docs/verification-ordered-file-actions.md.
 
-Next: outstanding native modifier/DPI/selection/ring acceptance, missing chair/sprout
-construction, snapping, transforms, broader labels and styles. Do not restart the
+Next: outstanding native modifier/DPI/selection/ring acceptance, missing sprout/preference
+construction, remaining chair stereo/platform workflows, snapping, transforms, broader labels and styles. Do not restart the
 delivered chain prerequisites or treat their bounded Mac checks as full tool/platform parity.
 M1 source-faithful interoperability and M0 addressability/inventory/platform evidence
 remain open. Keep imported-source/mapping gaps visible; these bounded workflows do not

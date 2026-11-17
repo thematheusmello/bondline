@@ -1417,3 +1417,6 @@ mod native_ring;
 
 #[path = "native_chain_tests.rs"]
 mod native_chain;
+
+#[path = "native_chair_tests.rs"]
+mod native_chair;

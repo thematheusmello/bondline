@@ -90,6 +90,13 @@ test = false
 doc = false
 bench = false
 
+[[bin]]
+name = "ring_request"
+path = "fuzz_targets/ring_request.rs"
+test = false
+doc = false
+bench = false
+
 [patch.crates-io]
 hexf-parse = { path = "../compat/hexf-parse" }
 libloading = { path = "../compat/libloading" }

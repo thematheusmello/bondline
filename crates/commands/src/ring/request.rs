@@ -1,5 +1,5 @@
 //! Additive wire request; the existing public sized-ring parameters stay unchanged.
-use super::{RingCreate, RingPlacement};
+use super::{ChairKind, RingCreate, RingPlacement};
 use crate::OrderHydrogenPolicy;
 use schemars::JsonSchema;
 use serde::de::value::StringDeserializer;
@@ -55,6 +55,19 @@ pub struct NamedRingCreate {
     pub phase: Option<RingPhase>,
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ChairRingCreate {
+    pub expected_revision: u64,
+    #[schemars(range(min = 1))]
+    pub page_id: u32,
+    #[serde(deserialize_with = "present_chair_kind")]
+    #[schemars(with = "ChairKind")]
+    pub kind: ChairKind,
+    pub hydrogen_policy: OrderHydrogenPolicy,
+    pub placement: RingPlacement,
+}
+
 // Restrict new named fields to their documented string representation only.
 pub(crate) fn present_kind<'de, D>(deserializer: D) -> Result<RingKind, D::Error>
 where
@@ -62,6 +75,14 @@ where
 {
     let kind = String::deserialize(deserializer)?;
     RingKind::deserialize(StringDeserializer::<D::Error>::new(kind))
+}
+
+pub(crate) fn present_chair_kind<'de, D>(deserializer: D) -> Result<ChairKind, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let kind = String::deserialize(deserializer)?;
+    ChairKind::deserialize(StringDeserializer::<D::Error>::new(kind))
 }
 
 // A missing field defaults to None; a present null must not become contextual phase.
@@ -79,6 +100,7 @@ where
 pub enum RingCreateRequest {
     Sized(RingCreate),
     Named(NamedRingCreate),
+    Chair(ChairRingCreate),
 }
 
 impl RingCreateRequest {
@@ -86,6 +108,7 @@ impl RingCreateRequest {
         match self {
             Self::Sized(params) => params.expected_revision,
             Self::Named(params) => params.expected_revision,
+            Self::Chair(params) => params.expected_revision,
         }
     }
 }
@@ -99,5 +122,11 @@ impl From<RingCreate> for RingCreateRequest {
 impl From<NamedRingCreate> for RingCreateRequest {
     fn from(params: NamedRingCreate) -> Self {
         Self::Named(params)
+    }
+}
+
+impl From<ChairRingCreate> for RingCreateRequest {
+    fn from(params: ChairRingCreate) -> Self {
+        Self::Chair(params)
     }
 }

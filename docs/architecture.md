@@ -1,12 +1,24 @@
 # Architecture
 
 The UI's original branding and static roadmap catalogue are presentation only.
-tool_catalogue_data.rs maps124 source roles to140 entries;126 have no binding. The fourteen
+tool_catalogue_data.rs maps124 source roles to140 entries;124 have no binding. The sixteen
 delivered entries resolve current Engine.controls() and use the existing ordered action
 path. No planned command, source/edit authority, renderer dependency or history state is
 introduced. The private catalogue owns only open/search state; current File/Atom/SDF
 foreground ownership gates it. See [design](design/tool-catalogue.md) and
 [receiving](verification-branding-and-tools.md).
+
+Both cyclohexane-chair tools extend the existing ring request/tool unions with a third
+closed alternative, leaving old sized/named branches and the43-command count intact.
+The same append/source/H/identity/history builder uses an original six-point orthographic
+chair template and separate rounded-similarity certificate; regular geometry validation
+is unchanged. No stereo field or conformer state is inferred. One effective ChairRing mode
+shares checked tool epochs. Click/drag/atom/bond and contextual9/0 reuse the same immutable
+candidate and full actual logical/physical ink/paper guards. Ring weak contexts now include
+Atom/settings/Add monotone open epochs, preventing hidden modal ABA. No worker/FilePlan/
+Save receipt or source authority is added. See [lock](research/native-chair-workflow.md),
+[protocol](control-protocol.md#cyclohexane-chair-requests) and
+[App/native receiving](verification-native-chairs.md).
 
 The retained SMILES record projection is a separate Drawing backing: complete immutable
 original/current files, original/current model baselines and original/live token maps.

@@ -1,5 +1,14 @@
 # Open questions
 
+- Both constitutional chair tools follow [the original contract](../research/native-chair-workflow.md)
+  and [receiving](../verification-native-chairs.md). GUIDE25 establishes two tools,
+  horizontal click/drag and contextual bond-hotspot9/0, not exact26.1/Mac coordinates,
+  defaults or modifier timing. The tetrahedral seed, orthographic view, supporting
+  reference edge and centroid-outward attachment are original choices. Perspective can
+  imply configuration; no stereo assignment, conformer-energy optimization, cis/trans
+  solver or stereo-preserving ring flip is delivered. Alt-sprout/preference, inherited
+  styles, measured native2×/DPI and other-platform workflows remain separate requirements.
+
 - Drawing settings data is implemented against research/drawing-settings-data.md;
   verification-drawing-settings-data.md records its bounded evidence. Primary scalar
   comparison resolves XML ChainAngle as degrees versus CDX degrees×65536; BondLength is

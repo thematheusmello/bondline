@@ -276,42 +276,49 @@ fn bond_tool_buttons(
                     };
                     let color = ui.style().interact(&response).fg_stroke.color;
                     if let Command::UiRingToolSelect(params) = &control.command {
-                        let size = params.size();
-                        let kind = params.kind();
-                        let phase = if size == 6 {
-                            std::f32::consts::FRAC_PI_6
+                        if params.chair_kind().is_some() {
+                            tool_icons::paint(ui.painter(), response.rect, entry, color);
                         } else {
-                            -std::f32::consts::FRAC_PI_2 - std::f32::consts::PI / f32::from(size)
-                        };
-                        let points: Vec<_> = (0..size)
-                            .map(|index| {
-                                let angle = phase
-                                    + std::f32::consts::TAU * f32::from(index) / f32::from(size);
-                                response.rect.center() + egui::vec2(angle.cos(), angle.sin()) * 8.5
-                            })
-                            .collect();
-                        if let Some(kind) = kind {
-                            for ((begin, end), weight) in points
-                                .iter()
-                                .zip(points.iter().cycle().skip(1))
-                                .take(points.len())
-                                .zip(kind.base_weights())
-                            {
-                                if *weight == 2 {
-                                    ui.painter().line_segment(
-                                        [
-                                            begin.lerp(response.rect.center(), 0.32),
-                                            end.lerp(response.rect.center(), 0.32),
-                                        ],
-                                        egui::Stroke::new(1.3, color),
-                                    );
+                            let size = params.size();
+                            let kind = params.kind();
+                            let phase = if size == 6 {
+                                std::f32::consts::FRAC_PI_6
+                            } else {
+                                -std::f32::consts::FRAC_PI_2
+                                    - std::f32::consts::PI / f32::from(size)
+                            };
+                            let points: Vec<_> = (0..size)
+                                .map(|index| {
+                                    let angle = phase
+                                        + std::f32::consts::TAU * f32::from(index)
+                                            / f32::from(size);
+                                    response.rect.center()
+                                        + egui::vec2(angle.cos(), angle.sin()) * 8.5
+                                })
+                                .collect();
+                            if let Some(kind) = kind {
+                                for ((begin, end), weight) in points
+                                    .iter()
+                                    .zip(points.iter().cycle().skip(1))
+                                    .take(points.len())
+                                    .zip(kind.base_weights())
+                                {
+                                    if *weight == 2 {
+                                        ui.painter().line_segment(
+                                            [
+                                                begin.lerp(response.rect.center(), 0.32),
+                                                end.lerp(response.rect.center(), 0.32),
+                                            ],
+                                            egui::Stroke::new(1.3, color),
+                                        );
+                                    }
                                 }
                             }
+                            ui.painter().add(egui::Shape::closed_line(
+                                points,
+                                egui::Stroke::new(1.5, color),
+                            ));
                         }
-                        ui.painter().add(egui::Shape::closed_line(
-                            points,
-                            egui::Stroke::new(1.5, color),
-                        ));
                     } else if matches!(control.command, Command::UiChainTool(_)) {
                         tool_icons::paint(ui.painter(), response.rect.shrink(3.0), entry, color);
                     } else if order.is_none() {
@@ -454,6 +461,13 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             }
             .to_owned(),
             EffectiveTool::Chain { kind } => format!("{kind:?} chain selected"),
+            EffectiveTool::ChairRing { kind } => format!(
+                "Cyclohexane chair {} selected",
+                match kind {
+                    bondline_commands::ChairKind::One => 1,
+                    bondline_commands::ChairKind::Two => 2,
+                }
+            ),
             EffectiveTool::Bond => match engine.bond_tool().order {
                 BondDrawOrder::Single => "Single bond selected",
                 BondDrawOrder::Double => "Double bond selected",
@@ -470,6 +484,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             ui.label("Click paper, an atom or a bond to add a ring; drag to set its first edge or side. Hold Shift when starting for a Single first edge. Esc cancels.");
         } else if matches!(engine.effective_tool(), EffectiveTool::Ring { .. }) {
             ui.label("Click paper, an atom or a Single bond for a carbon ring; drag to set its first edge or side. Esc cancels.");
+        } else if matches!(engine.effective_tool(), EffectiveTool::ChairRing { .. }) {
+            ui.label("Click for a horizontal chair; drag to rotate and scale. Attach to an atom or Single bond. At a bond hotspot, 9 or 0 adds either chair. Esc cancels.");
+            ui.weak("Perspective depiction; stereochemistry remains unspecified.");
         } else if matches!(engine.effective_tool(), EffectiveTool::Chain { .. }) {
             ui.label("Drag to draw a chain; click for Add Chain. Alt-click repeats the last Add count. Control changes direction while dragging; release the mouse first. Esc cancels.");
         } else if engine
@@ -1690,7 +1707,7 @@ fn show_workspace_with_preview(
                             Err(failure)=>command=Some(Err(failure)),
                         }
                     }
-                    let ring_input = matches!(engine.effective_tool(), EffectiveTool::Ring { .. } | EffectiveTool::NamedRing { .. })
+                    let ring_input = matches!(engine.effective_tool(), EffectiveTool::Ring { .. } | EffectiveTool::NamedRing { .. } | EffectiveTool::ChairRing { .. })
                         && matches!(event, egui::Event::PointerMoved(_) | egui::Event::PointerButton { .. });
                     if ring_input {
                         drawing.gesture = None;
@@ -1774,12 +1791,20 @@ fn show_workspace_with_preview(
                         } if modifiers.is_none()
                             && matches!(
                                 pressed_key,
-                                egui::Key::Num1 | egui::Key::Num2 | egui::Key::Num3
+                                egui::Key::Num1 | egui::Key::Num2 | egui::Key::Num3 | egui::Key::Num9 | egui::Key::Num0
                             ) =>
                         {
                             let Some(mut hotspot) = drawing.key_hotspot else {
                                 continue;
                             };
+                            let chair=match pressed_key {
+                                egui::Key::Num9=>Some(bondline_commands::ChairKind::One),
+                                egui::Key::Num0=>Some(bondline_commands::ChairKind::Two),
+                                _=>None,
+                            };
+                            if chair.is_some() && (drawing.ring.is_drawing() || drawing.chain.is_drawing() || drawing.selection.is_dragging()) {
+                                continue;
+                            }
                             let pos = hotspot.position;
                             if text_focused
                                 || drawing.gesture.is_some()
@@ -1811,6 +1836,10 @@ fn show_workspace_with_preview(
                             // Our order edit can move ink away from a stationary logical hotspot.
                             hotspot.target = target;
                             drawing.key_hotspot = Some(hotspot);
+                            if let Some(kind)=chair {
+                                let Some(page)=document.pages().iter().find(|page|page.id()==key.page) else {continue;};
+                                command=Some(ring::chair_bond_command(engine,page,fragment_id,bond_id,kind,&viewport,density));
+                            } else {
                             let order = match pressed_key {
                                 egui::Key::Num1 => BondDrawOrder::Single,
                                 egui::Key::Num2 => BondDrawOrder::Double,
@@ -1823,6 +1852,7 @@ fn show_workspace_with_preview(
                                 order,
                                 key.revision,
                             )));
+                            }
                         }
                         egui::Event::PointerButton {
                             pos,

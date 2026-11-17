@@ -28,6 +28,9 @@ pub enum EffectiveTool {
     NamedRing {
         kind: RingKind,
     },
+    ChairRing {
+        kind: crate::ChairKind,
+    },
     Chain {
         kind: crate::ChainKind,
     },

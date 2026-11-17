@@ -7,6 +7,59 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Cyclohexane-chair tools; full local gate passes
+
+Base59e3403; the accompanying atomic source/test/docs commit is the recoverable state.
+Read [lock](docs/research/native-chair-workflow.md) and
+[receiving](docs/verification-native-chairs.md). Both original constitutional depictions
+now have horizontal/rotated drawing, known BondLength application, terminal/spiro/Single-
+edge attachment, contextual9/0 and one-edit history through the existing registry.
+Source/H/ID/full-ink/paper guards remain. No stereo or conformer solver is inferred.
+
+Registry43 preserves41 unrelated actual CLI records plus both old branches/definitions
+of the two extended schemas. Controls38/21/15/11; catalogue140/124 roles is16 delivered/
+124 planned. Ring weak contexts prevent hidden modal Open/Cancel ABA. Root observes the
+preimplementation JSON/control REDs and ordinary-ring ABA2 RED/GREEN. A supporting-edge
+RED corrects unshipped reference indexing without changing the ideal chair/camera or
+weakening old geometry/targets/tolerances. Twenty-four new cases pass. Future-API,
+vertical-pose, real held-key repeat, required-field and zero-case selector qualifications
+remain distinct from product failures; no production repeat patch is needed.
+
+Initial full37099/23146 stop at new test-helper lints;25793 fails176/1 at the missed
+current control-ID set,54493 fails267/1 at the missed current Tools cardinality. Exact
+new-ID/count corrections preserve old predicates/history arrays. Fresh full1866 exits0:
+**1681 passed/0 failed/1 ignored across247 result lines**, plus formatting, warnings-
+denied workspace/vendor checks, layers, seven assets, unchanged strict155/166/221 runtime
+closures and pinned corpus. Log210478B/SHA256
+9831752c4b58d412f454026c9fee37c4e8c1be0ef396552b0b15fa2eaa3a4ea6.
+ASan2423 passes10,000 bounded ring-JSON inputs; max reached length262B of configured16KiB.
+No MCP socket-policy/test change or attribution follows; exhausted probes are not repeated.
+Bounded producer/fuzz source reviews find no material issue; static inventory omissions
+remain explicitly recorded rather than hidden by the later executing gate.
+
+Native/CLI build26106 and final normal build pass; copied/rebuilt native SHA256
+143337fe49a2ee6df409af5aad781ab08b9b1ba07c0a5999dd3c09a826ca8330.
+The isolated actual Mac app checks both horizontal/near-vertical chairs, default-labelled
+terminal targets,9/0 Single-edge fusion with mode retained, Shift refusal/plain recovery,
+Undo/Redo and Unicode editable Save/reopen. The first numeric entry is not confirmed;
+its actual9508-byte50/50/8 file has absent preferences/48pt fallback, not64pt evidence.
+A fresh coordinate-focused pass confirms64/137.5 before Apply and after reopening:
+2798-byte14/13/3 file has correct root settings,64pt chairs and unchanged old C2 geometry.
+Both actual files pass independent raw Expat/Decimal geometry/flags/orders/directions and
+RDKit formulas. The catalogue shows16 available/124 planned; grey Curved arrow cannot
+activate or change the clean drawing. Both review runs are explicitly Quit and later
+inventory observes only that review stopped. Both older user apps/drawings stay untouched.
+
+Native direct chair-tool bond-click/spiro, race paths, measured2×/DPI, Windows/Linux,
+exact26.1 defaults/coordinates/hotkeys, stereo/ring flips and CJK glyph coverage remain
+unverified or limited. Alt-sprout/preference, wider labels/styles and full M0–M5 stay
+required. No new golden, hosted run, publication, dependency/font/vendor/lock/corpus/
+workflow change. No owned execution jobs remain. Next lock the missing ring sprout/
+preference flow from public sources and implement a complete guarded registry/native
+slice, or take the next unblocked labels/styles item. Preserve the existing user bundles.
+
+## Earlier checkpoints
+
 ### Native carbon chains; full local gate passes
 
 Base `f6f1cac`; the accompanying atomic source/test/docs commit is the recoverable state.
@@ -53,8 +106,6 @@ golden, hosted run, publication, dependency/font/lock/corpus/workflow change. Sc
 cleanup preserves evidence and protected bundles. All owned execution jobs are terminal.
 Next source-lock and independently implement missing drawing tools before binding them;
 chair/sprout, broader labels/styles, native acceptance and full M0–M5 remain required.
-
-## Earlier checkpoints
 
 ### Verified native two-preference form; full local gate passes
 

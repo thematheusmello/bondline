@@ -75,6 +75,8 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "tool.ring.8",
             "tool.ring.benzene",
             "tool.ring.cyclopentadiene",
+            "tool.ring.chair_1",
+            "tool.ring.chair_2",
             "edit.select_all",
             "edit.deselect",
             "chain.acyclic",

@@ -1,10 +1,11 @@
 //! Disposable ring gestures; both preview and release validate the real registry candidate.
 use super::{HoverContext, readable_graph, selection::Surface};
 use bondline_commands::{
-    Command, EffectiveTool, Engine, Error, NamedRingCreate, OrderHydrogenPolicy, RingContext,
-    RingCreate, RingCreateRequest, RingPhase, RingPlacement, RingSide,
+    ChairKind, ChairRingCreate, Command, EffectiveTool, Engine, Error, NamedRingCreate,
+    OrderHydrogenPolicy, RingContext, RingCreate, RingCreateRequest, RingPhase, RingPlacement,
+    RingSide,
 };
-use bondline_model::{AtomId, Document, Fragment, FragmentId, Page, Point2};
+use bondline_model::{AtomId, BondId, Document, Fragment, FragmentId, Page, Point2};
 use bondline_render::{GraphScene, HitTarget, PageView};
 use eframe::egui;
 use std::sync::Arc;
@@ -127,9 +128,10 @@ impl RingWorkflow {
                 if !surface.accepts(context, *pos) {
                     return Ok(None);
                 }
-                let (size, kind) = match engine.effective_tool() {
-                    EffectiveTool::Ring { size } => (size, None),
-                    EffectiveTool::NamedRing { kind } => (kind.size(), Some(kind)),
+                let (size, kind, chair) = match engine.effective_tool() {
+                    EffectiveTool::Ring { size } => (size, None, None),
+                    EffectiveTool::NamedRing { kind } => (kind.size(), Some(kind), None),
+                    EffectiveTool::ChairRing { kind } => (6, None, Some(kind)),
                     _ => return Ok(None),
                 };
                 if !supported_modifiers(*modifiers, kind.is_some()) {
@@ -137,13 +139,17 @@ impl RingWorkflow {
                         "modified ring gestures are unavailable",
                     ));
                 }
+                let proof = engine.ring_context(surface.page.id().get())?;
                 let point = surface.point(*pos)?;
                 let hit = surface
                     .graph
                     .hit_test(surface.local(*pos), 5.0 * surface.density)?;
                 let (placement, begin, bond_end) = match hit {
                     None => {
-                        let end = click_end(point, size);
+                        let end = match chair {
+                            Some(kind) => chair_click_end(engine, kind, point)?,
+                            None => click_end(point, size),
+                        };
                         (
                             RingPlacement::Free {
                                 begin_x_pt: point.x_pt(),
@@ -162,7 +168,12 @@ impl RingWorkflow {
                     }) => {
                         let fragment = fragment(surface.page, fragment_id)?;
                         let begin = position(fragment, atom_id)?;
-                        let end = atom_click_end(fragment, atom_id, begin, size)?;
+                        let end = match chair {
+                            Some(kind) => {
+                                chair_atom_click_end(engine, kind, fragment, atom_id, begin)?
+                            }
+                            None => atom_click_end(fragment, atom_id, begin, size)?,
+                        };
                         (
                             RingPlacement::Atom {
                                 fragment_id: fragment_id.get(),
@@ -179,40 +190,7 @@ impl RingWorkflow {
                         fragment_id,
                         bond_id,
                     }) => {
-                        let fragment = fragment(surface.page, fragment_id)?;
-                        let bond = fragment
-                            .bonds()
-                            .iter()
-                            .find(|bond| bond.id == bond_id)
-                            .ok_or(Error::MissingBond {
-                                fragment_id: fragment_id.get(),
-                                bond_id: bond_id.get(),
-                            })?;
-                        let begin = position(fragment, bond.begin)?;
-                        let end = position(fragment, bond.end)?;
-                        let mut positive = false;
-                        let mut negative = false;
-                        for neighbor in fragment.bonds().iter().filter(|other| other.id != bond_id)
-                        {
-                            let other =
-                                if neighbor.begin == bond.begin || neighbor.begin == bond.end {
-                                    Some(neighbor.end)
-                                } else if neighbor.end == bond.begin || neighbor.end == bond.end {
-                                    Some(neighbor.begin)
-                                } else {
-                                    None
-                                };
-                            if let Some(other) = other {
-                                let distance = cross(begin, end, position(fragment, other)?);
-                                positive |= distance > 0.0;
-                                negative |= distance < 0.0;
-                            }
-                        }
-                        let side = if positive && !negative {
-                            RingSide::Negative
-                        } else {
-                            RingSide::Positive
-                        };
+                        let (begin, end, side) = bond_anchor(surface.page, fragment_id, bond_id)?;
                         (
                             RingPlacement::Bond {
                                 fragment_id: fragment_id.get(),
@@ -228,27 +206,38 @@ impl RingWorkflow {
                 let expected_revision = engine.state().revision;
                 let page_id = surface.page.id().get();
                 let hydrogen_policy = OrderHydrogenPolicy::RectifyNeutralCarbon;
-                let params = match kind {
-                    None => RingCreate {
-                        expected_revision,
-                        page_id,
-                        size,
-                        hydrogen_policy,
-                        placement,
-                    }
-                    .into(),
-                    Some(kind) => NamedRingCreate {
+                let params = if let Some(kind) = chair {
+                    ChairRingCreate {
                         expected_revision,
                         page_id,
                         kind,
                         hydrogen_policy,
                         placement,
-                        phase: modifiers.shift.then_some(RingPhase::SingleFirst),
                     }
-                    .into(),
+                    .into()
+                } else {
+                    match kind {
+                        None => RingCreate {
+                            expected_revision,
+                            page_id,
+                            size,
+                            hydrogen_policy,
+                            placement,
+                        }
+                        .into(),
+                        Some(kind) => NamedRingCreate {
+                            expected_revision,
+                            page_id,
+                            kind,
+                            hydrogen_policy,
+                            placement,
+                            phase: modifiers.shift.then_some(RingPhase::SingleFirst),
+                        }
+                        .into(),
+                    }
                 };
                 self.gesture = Some(Gesture {
-                    proof: engine.ring_context(surface.page.id().get())?,
+                    proof,
                     hover: surface.hover,
                     layer: surface.response.layer_id,
                     choose_side,
@@ -328,6 +317,7 @@ fn placement_mut(params: &mut RingCreateRequest) -> &mut RingPlacement {
     match params {
         RingCreateRequest::Sized(params) => &mut params.placement,
         RingCreateRequest::Named(params) => &mut params.placement,
+        RingCreateRequest::Chair(params) => &mut params.placement,
     }
 }
 
@@ -345,6 +335,7 @@ fn candidate(
     let page_id = match params {
         RingCreateRequest::Sized(params) => params.page_id,
         RingCreateRequest::Named(params) => params.page_id,
+        RingCreateRequest::Chair(params) => params.page_id,
     };
     let page = stored
         .model()
@@ -398,6 +389,18 @@ fn atom_click_end(
     begin: Point2,
     size: u8,
 ) -> Result<(f64, f64), Error> {
+    let Some(outward) = outward(fragment, id, begin)? else {
+        return Ok(click_end(begin, size));
+    };
+    let interior = (f64::from(size) - 2.0) * std::f64::consts::PI / f64::from(size);
+    let angle = outward.1.atan2(outward.0) - interior / 2.0;
+    Ok((
+        begin.x_pt() + 48.0 * angle.cos(),
+        begin.y_pt() + 48.0 * angle.sin(),
+    ))
+}
+
+fn outward(fragment: &Fragment, id: AtomId, begin: Point2) -> Result<Option<(f64, f64)>, Error> {
     let mut sum = (0.0, 0.0);
     let mut smallest = None;
     for bond in fragment.bonds() {
@@ -425,7 +428,7 @@ fn atom_click_end(
         }
     }
     let Some((_, axis)) = smallest else {
-        return Ok(click_end(begin, size));
+        return Ok(None);
     };
     let length = sum.0.hypot(sum.1);
     let outward = if length <= 1e-12 {
@@ -438,12 +441,126 @@ fn atom_click_end(
     } else {
         (-sum.0 / length, -sum.1 / length)
     };
-    let interior = (f64::from(size) - 2.0) * std::f64::consts::PI / f64::from(size);
-    let angle = outward.1.atan2(outward.0) - interior / 2.0;
+    Ok(Some(outward))
+}
+
+fn chair_click_end(engine: &Engine, kind: ChairKind, begin: Point2) -> Result<(f64, f64), Error> {
+    let length = engine
+        .document()?
+        .drawing_settings()
+        .bond_length_pt()
+        .unwrap_or(48.0);
+    let sign = match kind {
+        ChairKind::One => 1.0,
+        ChairKind::Two => -1.0,
+    };
+    let y = sign * (2.0 * std::f64::consts::SQRT_2 + 3.0_f64.sqrt()) / (2.0 * 17.0_f64.sqrt());
+    let scale = length / 0.5_f64.hypot(y);
+    Ok((begin.x_pt() + 0.5 * scale, begin.y_pt() + y * scale))
+}
+
+fn chair_atom_click_end(
+    engine: &Engine,
+    kind: ChairKind,
+    fragment: &Fragment,
+    id: AtomId,
+    begin: Point2,
+) -> Result<(f64, f64), Error> {
+    let Some(outward) = outward(fragment, id, begin)? else {
+        return chair_click_end(engine, kind, begin);
+    };
+    let centroid = kind
+        .reference_vertices()
+        .iter()
+        .fold((0.0, 0.0), |sum, [x, y]| (sum.0 + x, sum.1 + y));
+    let angle = outward.1.atan2(outward.0) - centroid.1.atan2(centroid.0);
+    let length = engine
+        .document()?
+        .drawing_settings()
+        .bond_length_pt()
+        .unwrap_or(48.0);
     Ok((
-        begin.x_pt() + 48.0 * angle.cos(),
-        begin.y_pt() + 48.0 * angle.sin(),
+        begin.x_pt() + length * angle.cos(),
+        begin.y_pt() + length * angle.sin(),
     ))
+}
+
+fn bond_anchor(
+    page: &Page,
+    fragment_id: FragmentId,
+    bond_id: BondId,
+) -> Result<(Point2, Point2, RingSide), Error> {
+    let fragment = fragment(page, fragment_id)?;
+    let bond = fragment
+        .bonds()
+        .iter()
+        .find(|bond| bond.id == bond_id)
+        .ok_or(Error::MissingBond {
+            fragment_id: fragment_id.get(),
+            bond_id: bond_id.get(),
+        })?;
+    let begin = position(fragment, bond.begin)?;
+    let end = position(fragment, bond.end)?;
+    let mut positive = false;
+    let mut negative = false;
+    for neighbor in fragment.bonds().iter().filter(|other| other.id != bond_id) {
+        let other = if neighbor.begin == bond.begin || neighbor.begin == bond.end {
+            Some(neighbor.end)
+        } else if neighbor.end == bond.begin || neighbor.end == bond.end {
+            Some(neighbor.begin)
+        } else {
+            None
+        };
+        if let Some(other) = other {
+            let distance = cross(begin, end, position(fragment, other)?);
+            positive |= distance > 0.0;
+            negative |= distance < 0.0;
+        }
+    }
+    let side = if positive && !negative {
+        RingSide::Negative
+    } else {
+        RingSide::Positive
+    };
+    Ok((begin, end, side))
+}
+
+pub(super) fn chair_bond_command(
+    engine: &Engine,
+    page: &Page,
+    fragment_id: FragmentId,
+    bond_id: BondId,
+    kind: ChairKind,
+    view: &PageView,
+    density: f32,
+) -> Result<Command, Error> {
+    let (_, _, side) = bond_anchor(page, fragment_id, bond_id)?;
+    let mut params: RingCreateRequest = ChairRingCreate {
+        expected_revision: engine.state().revision,
+        page_id: page.id().get(),
+        kind,
+        hydrogen_policy: OrderHydrogenPolicy::RectifyNeutralCarbon,
+        placement: RingPlacement::Bond {
+            fragment_id: fragment_id.get(),
+            bond_id: bond_id.get(),
+            side,
+        },
+    }
+    .into();
+    match candidate(engine, &params, view, density) {
+        Ok(candidate) => Ok(Command::RingCreate(candidate.params)),
+        Err(first_error) => {
+            if let RingPlacement::Bond { side, .. } = placement_mut(&mut params) {
+                *side = match side {
+                    RingSide::Positive => RingSide::Negative,
+                    RingSide::Negative => RingSide::Positive,
+                };
+            }
+            candidate(engine, &params, view, density)
+                .map(|candidate| Command::RingCreate(candidate.params))
+                .map_err(|_| first_error)
+        }
+    }
 }
 
 fn cross(begin: Point2, end: Point2, point: Point2) -> f64 {

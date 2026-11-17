@@ -163,6 +163,12 @@ pub(super) struct ChainUiPolicy {
     active: Option<AddRequest>,
 }
 
+impl ChainUiPolicy {
+    pub(super) fn epoch(&self) -> u64 {
+        self.epoch
+    }
+}
+
 impl Default for ChainUiPolicy {
     fn default() -> Self {
         Self {

@@ -60,10 +60,12 @@ pub use files::{
 };
 pub use new_document::NewDocument;
 pub use ring::{
-    NamedRingCreate, RingCreate, RingCreateRequest, RingKind, RingPhase, RingPlacement, RingSide,
+    ChairKind, ChairRingCreate, NamedRingCreate, RingCreate, RingCreateRequest, RingKind,
+    RingPhase, RingPlacement, RingSide,
 };
 pub use ring_tool::{
-    RingContext, RingToolOperation, SelectNamedRingTool, SelectRingTool, SelectRingToolRequest,
+    RingContext, RingToolOperation, SelectChairRingTool, SelectNamedRingTool, SelectRingTool,
+    SelectRingToolRequest,
 };
 pub use sdf_edit::{SdfFieldSet, SdfRecordRemove};
 pub use sdf_query::{

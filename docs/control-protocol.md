@@ -71,7 +71,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `ui.atom_label` | Tagged `action`: `open` requires `expected_revision`, positive `page_id`, `fragment_id`, `atom_id`; `cancel` requires `expected_revision`, positive `request_id` | Queue or cancel one source-qualified native atom-label presentation; no authored edit/history or empty-target binding |
 | `ui.drawing_settings` | Closed tagged `action`: `open` requires `expected_revision`; `cancel` requires `expected_revision`, positive `request_id` | Open/cancel one source-qualified native two-preference form; no authored edit/history, FilePlan or Save acknowledgment |
 | `ui.bond_tool` | Required `order` (`single`, `double`, `triple`) | Select a transient drawing tool; explicit operation receipt/epoch, no authored edit or history entry |
-| `ui.ring_tool` | Either `size` (integer3..8) or `kind:"benzene"/"cyclopentadiene"`, two closed objects | Select a transient native ring tool; unchanged derived-size operation receipt, one shared tool epoch, no authored edit or history entry |
+| `ui.ring_tool` | Three closed alternatives: `size` (integer3..8), named `kind:"benzene"/"cyclopentadiene"`, or chair `kind:"cyclohexane_chair_1"/"cyclohexane_chair_2"` | Select a transient native ring tool; unchanged derived-size operation receipt, one shared tool epoch, no authored edit or history entry |
 | `ui.chain_tool` | Closed tagged `select`, `constraints`, `open_add` or `cancel_add`; [details](#native-carbon-chain-tools) | Select a transient chain mode, set chain constraints or open/cancel source-qualified native numeric presentation; no authored edit/history |
 | `ui.view` | Tagged `action`: `inspect`, `fit`, `actual`, `set_zoom`, `magnify`, `reduce`, `pan`; action-specific geometry/percentage | Inspect or change the transient camera without editing content/history; source-qualified display/readability guards remain |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request guarded New/SMILES forms or Open/Save/Save As presentation, or cancel the matching intent; a native host is required |
@@ -85,7 +85,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `render.capture` | `page_id`, `width_px`, `height_px`, `backend` | Read-only drawing page or restricted all-record SDF virtual page1 PNG; explicit `cpu` or `gpu` |
 | `ui.selection` | Closed tagged `activate`, `set`, `all`, `clear` or `inspect`; required `expected_revision`; `set` also requires `page_id` and `atom_ids`, `all` requires `page_id` | Transient one-page native atom selection; no authored edit or native-host requirement |
 | `selection.translate` | Required `expected_revision`, `expected_selection_epoch`, `delta_x_pt`, `delta_y_pt` | One atomic literal-position edit of the current native selection; complete source, chemistry, IDs and history retained |
-| `ring.create` | Required `expected_revision`, `page_id`, either `size:3..8` or `kind:"benzene"/"cyclopentadiene"`, `hydrogen_policy:"rectify_neutral_carbon"`, closed tagged `placement`; named requests alone allow optional non-null `phase` | Construct one native carbon ring on paper or sharing a declared atom/edge; one whole-source history commit |
+| `ring.create` | Required `expected_revision`, `page_id`, one of the three size/named/chair alternatives, `hydrogen_policy:"rectify_neutral_carbon"`, closed tagged `placement`; named requests alone allow optional non-null `phase` | Construct one native carbon ring on paper or sharing a declared atom/edge; one whole-source history commit; [chair contract](#cyclohexane-chair-requests) |
 
 SMILES record import requires explicit selection of the already-open raw file. It starts
 a clean Drawing namespace with generated geometry, retains the complete file association,
@@ -1330,7 +1330,7 @@ capture, native races/other-platform execution and complete reference parity rem
 `ui.controls` additionally exposes `file.import_smiles_records`, File → Import SMILES
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
-counts are36 native Drawing/15 SDF/11 raw SMILES; retained-SMILES Drawing keeps21.
+counts are38 native Drawing/15 SDF/11 raw SMILES; retained-SMILES Drawing keeps21.
 The current registry has43 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
@@ -1392,8 +1392,8 @@ Whole-MOL V2000/V3000 Save refuses nonempty preferences before publication. Nati
 persists present values; unchanged source and explicit graph-only export retain their
 existing policies. [The contract](research/drawing-settings-command.md) distinguishes
 this stored-data operation from tool application, inheritance and style sheets. The
-native form below reuses it. Native controls are now36/21/15/11; the catalogue has
-14 delivered/126 disabled, including the later chain controls.
+native form below reuses it. Native controls are now38/21/15/11; the catalogue has
+16 delivered/124 disabled, including the later chain and chair controls.
 
 ## Native drawing-settings presentation
 
@@ -1481,7 +1481,7 @@ native host after reply publication; changed tool operations also wake it. No wo
 FilePlan, Save receipt or close acknowledgment is created.
 
 Native controls chain.acyclic/chain.snaking use these actions. Object > Chain constraints
-contains chain.fixed_lengths/chain.fixed_angles. Delivered controls total36/21/15/11;
+contains chain.fixed_lengths/chain.fixed_angles. Delivered controls total38/21/15/11;
 the additional four appear only for native Drawing and preserve existing source/modal/
 close precedence. [The interaction lock](research/native-chain-interactions.md) defines
 ordered physical modifiers, original count/pose/turn/reversal and repeat policies.
@@ -1491,12 +1491,13 @@ bounded Mac execution and unverified native Control-drag/DPI/other-platform acce
 ## Native tool catalogue presentation
 
 The native **All tools…** catalogue is roadmap presentation, not additional executable
-registry entries. All124 documented roles/140 expanded entries are visible;126 planned
+registry entries. All124 documented roles/140 expanded entries are visible;124 planned
 entries have no binding and cannot dispatch. Available entries use the same current
 delivered control IDs. `ui.controls` lists delivered bindings only, now counting
-36/21/15/11. The headless chain commands brought the registry to40, the stored-preferences
+38/21/15/11. The headless chain commands brought the registry to40, the stored-preferences
 command to41, its native presentation to42 and chain presentation to43. Only the later
-checked chain workflow binds Acyclic/Snaking; both chairs stay disabled.
+checked chain workflow binds Acyclic/Snaking. The later checked chair workflow adds
+both chair bindings without another command:16 available/124 planned entries.
 See [catalogue](design/tool-catalogue.md).
 
 ## Exact-target atom-label presentation
@@ -1692,22 +1693,57 @@ See [the locked policy](research/unsaturated-ring-authoring.md) and
 enforce the documented JSON-object parameter boundary before struct deserialization;
 unknown names retain unknown_command priority.
 
+### Cyclohexane-chair requests
+
+The third closed `ring.create` alternative uses kind exactly
+`cyclohexane_chair_1` or `cyclohexane_chair_2`, with the same required revision/page/H
+policy/placement fields and **no size or phase**. Null, enum-map wrappers, combined
+selectors and unknown fields refuse. `ChairRingCreate` converts to
+`RingCreateRequest::Chair`; public sized/named Rust APIs remain unchanged. Registry
+count stays43. Only ring.create/ui.ring_tool schemas gain an additive branch.
+
+```json
+{"command":"ring.create","params":{"expected_revision":0,"page_id":1,"kind":"cyclohexane_chair_1","hydrogen_policy":"rectify_neutral_carbon","placement":{"mode":"free","begin_x_pt":120,"begin_y_pt":120,"end_x_pt":168,"end_y_pt":120,"side":"positive"}}}
+```
+
+The original six-point orthographic template is transformed by that exact first edge
+and side. Its unequal foreshortened edges use a separate1e-10 normalized rounded-similarity
+certificate; the regular-ring certificate and point-domain/source guards remain intact.
+Six Single edges use the existing free/atom/Single-edge H and identity accounting.
+New atoms have literal H2, nonterminal-label=false and absent terminal flag. All old
+metadata/geometry/directed edges remain, apart from consumed target H. Double/Triple
+shared edges refuse. Constitution is editable; stereo is unspecified.
+
+Native free click uses a horizontal pose and independently stored BondLength, or
+original48pt only for known absence. Drag rotates/scales the whole candidate. Atom
+click aligns its centroid outward using existing deterministic neighbor ties; bond
+fusion tries the existing preferred/opposite complete candidates. Only unmodified
+primary boundaries are accepted. Contextual nonrepeat9/0 needs a fresh actual bond
+hotspot, keeps the active tool and commits through the same full-scene candidate.
+No pointer means no authoring or tool selection; future movement cannot authorize
+an earlier key. Text/modal/busy/active-gesture/source/view/close/physical guards stay.
+Read [original policy](research/native-chair-workflow.md) and
+[scoped independent/native evidence](verification-native-chairs.md); Alt-sprout,
+stereo/ring flips and broader platform/reference parity remain separate work.
+
 ## Native ring tool, context and preview
 
 `ui.ring_tool` accepts either `{"size":6}` (integer3..8) or a kind-only object such as
-`{"kind":"benzene"}`. Named kinds are exactly benzene/cyclopentadiene strings; null,
+`{"kind":"benzene"}`, or the third closed chair-kind alternative above. Named kinds
+are exactly benzene/cyclopentadiene; chair kinds are cyclohexane_chair_1/2 strings. Null,
 enum-map wrappers, both/neither selectors, extra fields and phase are invalid. It requires a source-free
 or completely mapped native CDXML Drawing and the existing tool close/file policy;
 no native host is required. Eligible controls are tool.ring.3…8, labelled Cyclopropane
 through Cyclooctane plus tool.ring.benzene/Benzene and
-tool.ring.cyclopentadiene/Cyclopentadiene, with no undocumented shortcuts. Native controls total31; retained
-SMILES stays20, SDF14 and raw SMILES10. Every tool's selected state comes from one
+tool.ring.cyclopentadiene/Cyclopentadiene and tool.ring.chair_1/2, with no global chair
+shortcut. Current native controls total38; retained-SMILES/SDF/raw stay21/15/11.
+Every tool's selected state comes from one
 EffectiveTool enum; a ring never leaves a bond button selected.
 
 The explicit result alone includes `ui_ring_tool_operation:{size,epoch,changed}`;
 ordinary snapshots omit it. Named size is derived6/5; that field alone does not prove
 which tool is selected. Query ui.controls for the exact selected binding. Outer changed
-is false. The same validated exact mode/size/kind is
+is false; chair size is derived6. The same validated exact mode/size/kind is
 an exact no-op. A mode/size change advances the shared checked tool epoch once;
 leaving Selection preflights and clears its targets. Choosing the remembered bond
 order from Ring is a real mode switch. Authored history/Open/New retain the mode.
@@ -1716,7 +1752,8 @@ Loopback repaint follows successful changed-only publication and activity releas
 Rust-only ring_context(page_id) requires the actual Ring mode, supported page/source,
 Open and no outstanding file intent, including Running. RingContext is weak and has
 no serialized representation or Save authority. Source/namespace/history, tool-size/
-mode/kind, view, close, file intent and association ABA invalidate it permanently. Native
+mode/kind, view, close, file intent, association ABA and Atom/settings/Add open epochs
+invalidate it permanently, including hidden Open→Cancel→None. Native
 canvas/DPI/layer/origin qualifiers remain in the thin UI.
 
 preview_ring_create(&RingCreate) and additive preview_ring_request(&RingCreateRequest)

@@ -28,7 +28,7 @@ docs/verification.md for exact RED/GREEN and platform evidence.
 
 The original logo and planned-tool UI follow docs/design/branding-and-tools.md,
 docs/design/brand.md and docs/verification-branding-and-tools.md. The static UI catalogue
-covers124 public TD/TQ/TB roles as140 entries:14 delivered bindings and126 disabled planned
+covers124 public TD/TQ/TB roles as140 entries:16 delivered bindings and124 disabled planned
 entries. It does not add commands or promote missing features. Resolve active bindings
 through current Engine.controls(), retaining every source/modal guard. SDF presentation/
 busy state must gate both catalogue ownership and its rail button, or it steals Escape
@@ -37,7 +37,29 @@ Keep the bundled-font coverage regression: angle and replacement-arrow icons use
 geometry because Roboto lacks those characters. Native photographs are actual own-window
 captures, separate from illustrations/goldens; preserve the user's older unsaved app/draft.
 
-Current native chains follow docs/research/native-chain-interactions.md and
+Current chairs follow docs/research/native-chair-workflow.md and
+docs/verification-native-chairs.md on base59e3403. Two existing ring commands gain a
+third closed Chair alternative; old branches/definitions and41 unrelated CLI records
+stay exact, registry43. Controls38/21/15/11 and catalogue16/124 bind only TD-027.1/.2.
+Preserve the original tetrahedral/orthographic tuples and supporting reference edge,
+separate rounded-similarity certificate, old regular/Named poses, shared source/literal-H/
+ID/history and full-scene guards. New chair nodes have H2/nonterminal=false/terminal=None.
+Keep source-kind no-op guards, exact unmodified boundaries and fresh ordered nonrepeat
+bond-hotspot9/0 without mode changes. Ring weak contexts include all modal-open epochs;
+hidden Open/Cancel ABA must not revive input. No stereo/worker/Save authority is added.
+Twenty-four new cases, full local1866:1681/0/1 and bounded10,000-run JSON ASan pass.
+Earlier helper lints and two missed current inventory assertions stay in the receiving
+record; historical arrays and protected MCP policy/tests are unchanged. Actual own Mac
+horizontal/rotated/terminal/hotspot/refusal/history/Unicode persistence and qualified64pt
+preferences pass independent Expat/Decimal/RDKit readers. The first unconfirmed native
+preference entry remains a setup miss, not a64pt pass. Native direct bond-click/spiro,
+measured2×/DPI, Windows/Linux, stereo/ring flips and exact26.1 policies stay unverified or
+missing. No new golden/dependency/vendor/lock/corpus/workflow changes. Both older user
+apps/drawings remain protected; only the disposable review is closed. All owned execution
+jobs are terminal. Next source-lock and implement Alt-sprout/preference or remaining
+labels/styles through existing guards/adapters; full M0–M5 remains active.
+
+The earlier native-chain checkpoint follows docs/research/native-chain-interactions.md and
 docs/verification-native-chains.md on base f6f1cac. Registry43 retains old42 actual CLI
 records/schema/order; controls36/21/15/11, catalogue14/126. Acyclic/Snaking alone gain
 bindings; both chairs stay grey. One ui.chain_tool has closed select/constraints/open_add/

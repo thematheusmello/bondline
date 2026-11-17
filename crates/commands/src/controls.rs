@@ -1,9 +1,10 @@
 //! Typed native bindings. Metadata and actual command invocation share one registry.
 
 use crate::{
-    BondDrawOrder, ChainKind, CloseAction, CloseDocument, CloseState, Command, EffectiveTool,
-    Engine, NoParams, PageSetSize, RingKind, SelectBondTool, SelectNamedRingTool, SelectRingTool,
-    UiChainTool, UiDrawingSettings, UiFile, UiFileAction, UiFilePhase, UiSelection, UiView,
+    BondDrawOrder, ChainKind, ChairKind, CloseAction, CloseDocument, CloseState, Command,
+    EffectiveTool, Engine, NoParams, PageSetSize, RingKind, SelectBondTool, SelectChairRingTool,
+    SelectNamedRingTool, SelectRingTool, UiChainTool, UiDrawingSettings, UiFile, UiFileAction,
+    UiFilePhase, UiSelection, UiView,
 };
 use serde::Serialize;
 
@@ -495,6 +496,22 @@ impl Engine {
                     enabled: authoring_reason.is_none(),
                     disabled_reason: authoring_reason,
                     selected: Some(self.effective_tool() == (EffectiveTool::NamedRing { kind })),
+                });
+            }
+            for (kind, id, label) in [
+                (ChairKind::One, "tool.ring.chair_1", "Cyclohexane chair 1"),
+                (ChairKind::Two, "tool.ring.chair_2", "Cyclohexane chair 2"),
+            ] {
+                controls.push(ControlInfo {
+                    id,
+                    label,
+                    menu: "Tools",
+                    submenu: None,
+                    shortcut: None,
+                    command: Command::UiRingToolSelect(SelectChairRingTool { kind }.into()),
+                    enabled: authoring_reason.is_none(),
+                    disabled_reason: authoring_reason,
+                    selected: Some(self.effective_tool() == EffectiveTool::ChairRing { kind }),
                 });
             }
         }

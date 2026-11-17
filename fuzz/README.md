@@ -5,6 +5,57 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Ring JSON requests
+
+`ring_request` wraps up to16KiB of raw parameter bytes separately in the real
+`ring.create` and `ui.ring_tool` envelopes. It prepares only; file/render completion
+never runs. Rejections preserve content/stamp/tool/history. Successful free rings
+have3..8 carbon atoms, one cycle, literal H from independent incident bond weights,
+and exact whole-content Undo/Redo. Tool selection leaves authoring unchanged. Default
+documents have no attachment targets; geometry, positive attachments, independent
+chemical/file consumers and native acceptance remain separate integration tests.
+
+Use fresh ignored seeds, never committed fixture directories:
+
+```sh
+python3 - <<'PY'
+import copy, json
+from pathlib import Path
+root = Path('.cache/fuzz/rings-local')
+root.mkdir(parents=True, exist_ok=False)
+base = {'expected_revision': 0, 'page_id': 1,
+        'hydrogen_policy': 'rectify_neutral_carbon',
+        'placement': {'mode': 'free', 'begin_x_pt': 120, 'begin_y_pt': 120,
+                      'end_x_pt': 168, 'end_y_pt': 120, 'side': 'positive'}}
+for kind in ('cyclohexane_chair_1', 'cyclohexane_chair_2', 'benzene', 'cyclopentadiene'):
+    for side in ('positive', 'negative'):
+        value = copy.deepcopy(base)
+        value['kind'] = kind
+        value['placement']['side'] = side
+        (root / f'{kind}-{side}').write_text(json.dumps(value), encoding='utf-8')
+    (root / f'{kind}-tool').write_text(json.dumps({'kind': kind}), encoding='utf-8')
+for size in (3, 6, 8, 9):
+    (root / f'size-{size}').write_text(json.dumps(dict(base, size=size)), encoding='utf-8')
+    (root / f'tool-{size}').write_text(json.dumps({'size': size}), encoding='utf-8')
+for name, changes in [('phase', {'kind': 'cyclohexane_chair_1', 'phase': 'single_first'}),
+                      ('size-and-kind', {'kind': 'cyclohexane_chair_1', 'size': 6}),
+                      ('null', {'kind': None}),
+                      ('wrapper', {'kind': {'cyclohexane_chair_1': None}}),
+                      ('stale', {'kind': 'cyclohexane_chair_1', 'expected_revision': 1})]:
+    (root / name).write_text(json.dumps(dict(base, **changes)), encoding='utf-8')
+for name, raw in [('truncated', b'{"kind":'), ('invalid-utf8', b'\xff'),
+                  ('duplicate', b'{"kind":"benzene","kind":"cyclohexane_chair_1"}'),
+                  ('injected', b'{} ,"command":"document.open_cdxml","params":{"path":"must-not-open"}')]:
+    (root / name).write_bytes(raw)
+PY
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address ring_request .cache/fuzz/rings-local -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recorded smoke uses these29 original seeds in a separately pinned ignored
+directory; [receiving](../docs/verification-native-chairs.md) states actual reached
+length/coverage and platform limits. This does not exercise the full1MiB wire budget
+or establish a general JSON security audit. No shipped dependency changes.
+
 ## Literal chain JSON requests
 
 `chain_path_request` wraps up to16KiB of raw parameter bytes in the real command

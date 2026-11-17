@@ -363,7 +363,7 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
     assert_eq!(schema["properties"]["size"]["minimum"].as_f64(), Some(3.0));
     assert_eq!(schema["properties"]["size"]["maximum"].as_f64(), Some(8.0));
     let mut engine = Engine::default();
-    assert_eq!(engine.controls().len(), 36);
+    assert_eq!(engine.controls().len(), 38);
     for (size, label) in [
         (3, "Cyclopropane"),
         (4, "Cyclobutane"),
@@ -501,10 +501,11 @@ fn legacy_ui_ring_tool_schema(root: &serde_json::Value) -> TestResult<serde_json
         .get("anyOf")
         .or_else(|| root.get("oneOf"))
         .and_then(Value::as_array)
-        .ok_or("two closed ring-tool alternatives")?;
-    assert_eq!(branches.len(), 2);
+        .ok_or("three closed ring-tool alternatives")?;
+    assert_eq!(branches.len(), 3);
     let mut legacy = None;
     let mut named = false;
+    let mut chair = false;
     for branch in branches {
         let branch = if let Some(reference) = branch.get("$ref").and_then(Value::as_str) {
             root.pointer(reference.strip_prefix('#').ok_or("nonlocal schema")?)
@@ -515,6 +516,19 @@ fn legacy_ui_ring_tool_schema(root: &serde_json::Value) -> TestResult<serde_json
         assert_eq!(branch["type"], "object");
         assert_eq!(branch["additionalProperties"], false);
         let fields = branch["properties"].as_object().ok_or("fields")?;
+        let is_chair = if fields.contains_key("size") {
+            false
+        } else {
+            let kind = fields.get("kind").ok_or("kind selector")?;
+            let kind = if let Some(reference) = kind.get("$ref").and_then(Value::as_str) {
+                root.pointer(reference.strip_prefix('#').ok_or("nonlocal chair kind")?)
+                    .ok_or("missing chair kind")?
+            } else {
+                kind
+            };
+            assert_eq!(kind["type"], "string");
+            kind["enum"] == json!(["cyclohexane_chair_1", "cyclohexane_chair_2"])
+        };
         if fields.contains_key("size") {
             assert!(legacy.is_none());
             assert_eq!(
@@ -522,6 +536,14 @@ fn legacy_ui_ring_tool_schema(root: &serde_json::Value) -> TestResult<serde_json
                 vec!["size"]
             );
             legacy = Some(branch.clone());
+        } else if is_chair {
+            assert!(!chair);
+            chair = true;
+            assert_eq!(
+                fields.keys().map(String::as_str).collect::<Vec<_>>(),
+                vec!["kind"]
+            );
+            assert_eq!(branch["required"], json!(["kind"]));
         } else {
             assert!(!named);
             named = true;
@@ -542,5 +564,6 @@ fn legacy_ui_ring_tool_schema(root: &serde_json::Value) -> TestResult<serde_json
         }
     }
     assert!(named);
+    assert!(chair);
     legacy.ok_or_else(|| "missing original size object".into())
 }

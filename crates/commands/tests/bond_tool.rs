@@ -24,7 +24,7 @@ fn registry_and_bindings_expose_bond_and_selection_tools_without_changing_author
     let mut engine = Engine::default();
     let before = serde_json::to_value(engine.state())?;
     let controls = selected(&mut engine)?;
-    assert_eq!(controls.len(), 14, "missing named drawing tools");
+    assert_eq!(controls.len(), 16, "missing named drawing tools");
     assert_eq!(controls[3]["id"], "tool.selection");
     assert_eq!(controls[3]["selected"], false);
     for (index, (control, order)) in controls

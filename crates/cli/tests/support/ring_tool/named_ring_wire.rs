@@ -17,7 +17,7 @@ use std::{
 
 fn named_controls(value: &Value, selected: &str) -> TestResult {
     let entries = value["controls"].as_array().ok_or("controls")?;
-    assert_eq!(entries.len(), 36);
+    assert_eq!(entries.len(), 38);
     for (kind, label) in [
         ("benzene", "Benzene"),
         ("cyclopentadiene", "Cyclopentadiene"),

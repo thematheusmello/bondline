@@ -536,9 +536,10 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
     assert_eq!(root["type"], "object");
     assert!(root.get("additionalProperties").is_none());
     let variants = root["anyOf"].as_array().ok_or("ring selector variants")?;
-    assert_eq!(variants.len(), 2);
+    assert_eq!(variants.len(), 3);
     let mut sized = None;
     let mut named = None;
+    let mut chair = None;
     for raw in variants {
         let branch = schema_node(&root, raw)?;
         assert_eq!(branch["type"], "object");
@@ -555,6 +556,25 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
             assert!(required.contains("size"));
             assert!(!fields.contains_key("kind") && !fields.contains_key("phase"));
             assert!(!required.contains("kind"));
+        } else if schema_node(&root, fields.get("kind").ok_or("kind selector")?)?["enum"]
+            == json!(["cyclohexane_chair_1", "cyclohexane_chair_2"])
+        {
+            assert!(chair.replace(branch).is_none(), "duplicate chair branch");
+            let expected = [
+                "expected_revision",
+                "page_id",
+                "kind",
+                "hydrogen_policy",
+                "placement",
+            ]
+            .into_iter()
+            .collect::<BTreeSet<_>>();
+            assert_eq!(required, expected);
+            assert_eq!(
+                fields.keys().map(String::as_str).collect::<BTreeSet<_>>(),
+                expected
+            );
+            assert_eq!(schema_node(&root, &fields["kind"])?["type"], "string");
         } else {
             assert!(named.replace(branch).is_none(), "duplicate named branch");
             assert!(fields.contains_key("kind") && required.contains("kind"));
@@ -563,6 +583,7 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
     }
     // Closedness plus opposite required/absent selectors makes the branches disjoint.
     named.ok_or("missing named branch")?;
+    chair.ok_or("missing chair branch")?;
     let schema = sized.ok_or("missing exact legacy sized branch")?;
     assert_eq!(schema["type"], "object");
     assert_eq!(schema["additionalProperties"], false);

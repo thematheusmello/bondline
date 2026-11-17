@@ -134,8 +134,8 @@ fn registry_schema_keeps_the_legacy_object_and_adds_a_closed_nonnullable_named_o
     assert_eq!(schema["type"], "object");
     let alternatives = schema["anyOf"]
         .as_array()
-        .ok_or("two request alternatives")?;
-    assert_eq!(alternatives.len(), 2);
+        .ok_or("three request alternatives")?;
+    assert_eq!(alternatives.len(), 3);
     let mut selectors = BTreeSet::new();
     for alternative in alternatives {
         let branch = node(&schema, alternative)?;
@@ -157,6 +157,14 @@ fn registry_schema_keeps_the_legacy_object_and_adds_a_closed_nonnullable_named_o
             assert_eq!(props["size"]["type"], "integer");
             assert_eq!(props["size"]["minimum"].as_f64(), Some(3.0));
             assert_eq!(props["size"]["maximum"].as_f64(), Some(8.0));
+        } else if node(&schema, props.get("kind").ok_or("kind selector")?)?["enum"]
+            == json!(["cyclohexane_chair_1", "cyclohexane_chair_2"])
+        {
+            assert!(selectors.insert("chair"));
+            required.insert("kind");
+            fields.insert("kind");
+            assert_eq!(node(&schema, &props["kind"])?["type"], "string");
+            assert!(!props.contains_key("size") && !props.contains_key("phase"));
         } else {
             assert!(selectors.insert("kind"));
             required.insert("kind");
@@ -195,6 +203,6 @@ fn registry_schema_keeps_the_legacy_object_and_adds_a_closed_nonnullable_named_o
             assert_eq!(placement["additionalProperties"], false);
         }
     }
-    assert_eq!(selectors, BTreeSet::from(["size", "kind"]));
+    assert_eq!(selectors, BTreeSet::from(["size", "kind", "chair"]));
     Ok(())
 }

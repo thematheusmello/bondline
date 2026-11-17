@@ -7,9 +7,12 @@ use bondline_model::{
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+mod chair;
 mod request;
+pub use chair::ChairKind;
+pub(crate) use request::present_chair_kind;
 pub(crate) use request::present_kind;
-pub use request::{NamedRingCreate, RingCreateRequest, RingKind, RingPhase};
+pub use request::{ChairRingCreate, NamedRingCreate, RingCreateRequest, RingKind, RingPhase};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -249,7 +252,14 @@ pub(super) fn create(
     params: RingCreate,
     floor: bond::Ids,
 ) -> Result<(StoredDocument, bond::Ids), Error> {
-    create_inner(document, params, floor, None)
+    create_inner(document, params, floor, Pattern::Regular)
+}
+
+#[derive(Clone, Copy)]
+enum Pattern {
+    Regular,
+    Named(RingKind, Option<RingPhase>),
+    Chair(ChairKind),
 }
 
 pub(super) fn create_request(
@@ -278,9 +288,21 @@ pub(super) fn create_request(
                     placement,
                 },
                 floor,
-                Some((kind, phase)),
+                Pattern::Named(kind, phase),
             )
         }
+        RingCreateRequest::Chair(params) => create_inner(
+            document,
+            RingCreate {
+                expected_revision: params.expected_revision,
+                page_id: params.page_id,
+                size: 6,
+                hydrogen_policy: params.hydrogen_policy,
+                placement: params.placement,
+            },
+            floor,
+            Pattern::Chair(params.kind),
+        ),
     }
 }
 
@@ -288,7 +310,7 @@ fn create_inner(
     document: &StoredDocument,
     params: RingCreate,
     floor: bond::Ids,
-    named: Option<(RingKind, Option<RingPhase>)>,
+    pattern: Pattern,
 ) -> Result<(StoredDocument, bond::Ids), Error> {
     if !document.is_fully_mapped()
         || document
@@ -302,6 +324,10 @@ fn create_inner(
     if !(3..=8).contains(&params.size) {
         return Err(Error::InvalidRing("ring size must be 3 through 8"));
     }
+    let named = match pattern {
+        Pattern::Named(kind, phase) => Some((kind, phase)),
+        _ => None,
+    };
     let OrderHydrogenPolicy::RectifyNeutralCarbon = params.hydrogen_policy;
     let page_id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
     let page = document
@@ -423,7 +449,10 @@ fn create_inner(
             }
         };
     let shared = perimeter.len();
-    let points = polygon(params.size, begin, end, side)?;
+    let points = match pattern {
+        Pattern::Chair(kind) => chair::points(kind, begin, end, side)?,
+        _ => polygon(params.size, begin, end, side)?,
+    };
     for point in points.iter().skip(shared) {
         if page
             .fragments()
@@ -468,7 +497,7 @@ fn create_inner(
             Some(4_u16.checked_sub(incident_weight(&weights, index)?).ok_or(
                 Error::UnsupportedRing("ring bond orders exceed neutral carbon valence"),
             )?);
-        if named.is_some() {
+        if !matches!(pattern, Pattern::Regular) {
             atom.show_non_terminal_carbon_labels = Some(false);
         }
         atoms.push(atom);

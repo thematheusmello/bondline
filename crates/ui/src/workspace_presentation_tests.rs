@@ -243,7 +243,7 @@ fn assert_layout(workspace: &Workspace, output: &egui::FullOutput) -> TestResult
         })
         .collect::<Vec<_>>();
     assert_eq!(catalogue_count, 1);
-    assert_eq!(planned_count, 126);
+    assert_eq!(planned_count, 124);
     rail_buttons.sort();
     assert_eq!(
         rail_buttons,
@@ -253,6 +253,8 @@ fn assert_layout(workspace: &Workspace, output: &egui::FullOutput) -> TestResult
             "Cyclobutane",
             "Cycloheptane",
             "Cyclohexane",
+            "Cyclohexane chair 1",
+            "Cyclohexane chair 2",
             "Cyclooctane",
             "Cyclopentadiene",
             "Cyclopentane",

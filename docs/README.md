@@ -6,15 +6,23 @@ The app is in early development; documented plans are not implemented features.
 Original branding and the complete planned-tool catalogue have
 [current receiving evidence](verification-branding-and-tools.md) and
 [design/availability rules](design/tool-catalogue.md). All140 entries remain explicit
-about their fourteen delivered bindings versus126 disabled future tools. That branding
+about their sixteen delivered bindings versus124 disabled future tools. That branding
 checkpoint's local gate passes1551/0/1. Native visual checks do not establish full reference/platform parity.
 
-The current [native chain receiving](verification-native-chains.md) records Acyclic/
+The earlier [native chain receiving](verification-native-chains.md) records Acyclic/
 Snaking drawing, Add Chain, repeat, supported attachment and stored preference application.
 Independent App/adapters/files and bounded actual Mac Undo/Redo/Unicode Save/reopen pass.
 First full local gate10212 passes1657/0/1. Supported native Control-drag/reversal/backtrack,
 measured2×/DPI, other platforms and full M0–M5 remain open; historical MCP failures stay
-unattributed. Only the two chain entries gain bindings; both chairs remain disabled.
+unattributed. At that checkpoint only the two chain entries gain bindings; both chairs remain disabled.
+
+The current [chair receiving](verification-native-chairs.md) adds both original chair
+bindings:16 available/124 planned, controls38/21/15/11 and registry43. Twenty-four new
+cases and full local1681/0/1 pass after explicit inventory/lint qualifications. Bounded
+native Mac horizontal/rotated drawing, terminal attachment,9/0 fusion, history, Unicode
+Save/reopen and64pt preference application pass independent actual-file readers. The
+first unconfirmed preference-entry attempt is not called a64pt pass. Stereo/ring flips,
+native direct fusion/spiro, measured DPI and other platforms remain separate requirements.
 
 The earlier [atomic drawing-settings command](verification-drawing-settings-command.md)
 adds15 passing focused cases and actual CLI/MCP/socket/file evidence, with unchanged

@@ -33,7 +33,7 @@ fn native_conversion_intent_and_control_preserve_the_current_session() -> TestRe
         serde_json::to_value(&control.command)?,
         json!({"command":"ui.file","params":{"expected_revision":0,"action":"convert_smiles"}})
     );
-    assert_eq!(controls.len(), 36);
+    assert_eq!(controls.len(), 38);
     Ok(())
 }
 

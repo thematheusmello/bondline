@@ -12,7 +12,7 @@ but the stated platform/workflow lacks execution evidence; **verified** = only t
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
 All124 TD/TQ/TB roles now have visible catalogue entries (140 with explicit variants).
-Fourteen reference delivered bindings;126 remain disabled with no command and **retain
+Sixteen reference delivered bindings;124 remain disabled with no command and **retain
 their missing status**. Original branding, grey controls, search and bounded native
 presentation evidence are in [receiving](verification-branding-and-tools.md). This does
 not complete tool functionality, modern inventory research, M0 or M2–M5.
@@ -402,8 +402,8 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-023 | Snaking chain | 104-105 | verified (partial, Mac) | One native drag creates a literal turning path through chain.create_path with full preview/count, stored preferences and one-edit history. Actual Mac six-carbon path/Save/reopen passes independent48pt/headings/raw-H/flags/RDKit checks. Independent App tests cover ordered Control conversion, mouse-before-Control, early release, sampling/backtrack/limits/physical contexts. Supported Control/reversal/backtracking remains unverified natively; no OS sampling-invariance, measured DPI, other-platform or exact26.1 claim. See research/native-chain-interactions.md and verification-native-chains.md. |
 | TD-024 | Benzene ring | 74, 101-103 | wired (partial) | Native palette/preview/free/atom/fused/shared-Double/Shift/history/Unicode-file paths share ring.create. Original icons, actual-App1×/2×/raw-order/modal/context checks, real adapters and independent file consumers pass. OS/monitor, exact26.1 defaults and hotkeys remain unverified/missing. See verification-native-unsaturated-rings.md and verification-unsaturated-rings.md. |
 | TD-025 | Cyclopentadiene ring | 74 | wired (partial) | Native kind-only tool, original icon, same-builder full preview, press-latched Shift and Cp spiro have actual-App/file evidence. Core all-five-phase/asymmetric H checks remain. Real OS/monitor, exact26.1 and hotkey acceptance remain missing. See verification-native-unsaturated-rings.md. |
-| TD-026 | Ring sizes 3-8 | 101-103, 73 | wired (partial) | Six original procedural tools share one effective mode and the existing ring.create builder. Independent command/context/adapter and actual-App click/drag/full-preview/free/atom/fused/spiro/Unicode-file checks pass. Native OS interaction is still unverified. Original poses/modifier/side policies do not prove26.1 defaults; aromatic/chair/sprout/general faces remain missing. See verification-native-rings.md and verification-ring-authoring.md. |
-| TD-027 | Cyclohexane chair, both orientations | 102, 73 | missing | - |
+| TD-026 | Ring sizes 3-8 | 101-103, 73 | wired (partial) | Six original procedural tools share one effective mode and the existing ring.create builder. Independent command/context/adapter and actual-App click/drag/full-preview/free/atom/fused/spiro/Unicode-file checks pass. Native OS interaction is still unverified. Original poses/modifier/side policies do not prove26.1 defaults; general aromatic perception, sprout and general faces remain missing; the distinct bounded chair slice is TD-027. See verification-native-rings.md and verification-ring-authoring.md. |
+| TD-027 | Cyclohexane chair, both orientations | 102, 73 | verified (partial, Mac) | Both original constitutional depictions have independent core/App/CLI/MCP/socket/file checks: horizontal click, rotated drag, BondLength, terminal/spiro/Single-edge fusion, history and full-scene guards. Native Mac horizontal/near-vertical tools, default-labelled terminal attachment,9/0 fusion, refusal recovery, history,64pt preferences and Unicode Save/reopen pass. Native direct bond-click/spiro, stereo/ring flips, Alt-sprout, exact26.1 defaults and other platforms remain missing or unverified. See verification-native-chairs.md. |
 | TD-028 | Arrows palette | 106-109 | missing | Unnamed glyph variants still need independent semantic identification. |
 | TD-029 | Hollow/block arrow | 107, 109-110 | missing | - |
 | TD-030 | Equilibrium arrow | 109 | missing | - |
@@ -526,7 +526,7 @@ establish chemical preview, data-edit UI or other platforms.
 | DP-008 | Preferences > Monomer Libraries | 178-182 | missing | User/document/library state and versions. |
 | DP-009 | Document Settings > Layout | 22-23 | missing | Pages, poster dimensions/overlap and page registration marks. |
 | DP-010 | Document Settings > Header/Footer | 23 | missing | Header/footer variables and alignment. |
-| DP-011 | Document Settings > Drawing | 40-43 | wired (partial) | Only BondLength/ChainAngle have a bounded native Apply/Cancel form and Mac set/clear/history/Save/reopen checks. Later chains use them with explicit original48pt/120° fallback for known absence; old geometry stays. Inheritance, remaining tools/geometry/style settings and exact26.1 defaults remain missing. See verification-native-drawing-settings.md and verification-native-chains.md. |
+| DP-011 | Document Settings > Drawing | 40-43 | wired (partial) | Only BondLength/ChainAngle have a bounded native Apply/Cancel form and Mac set/clear/history/Save/reopen checks. Later chains use both with explicit original48pt/120° fallback for known absence; chairs use BondLength alone. Old geometry stays. Inheritance, remaining tools/geometry/style settings and exact26.1 defaults remain missing. See verification-native-drawing-settings.md, verification-native-chains.md and verification-native-chairs.md. |
 | DP-012 | Document Settings > Atom Labels | 44, 99 | missing | - |
 | DP-013 | Document Settings > Captions | 44-48 | missing | - |
 | DP-014 | Document Settings > Analysis | 44 | missing | Analysis field labels and formatting. |
@@ -637,7 +637,7 @@ establish chemical preview, data-edit UI or other platforms.
 | KB-022 | Fuse 6-membered ring: 6 | 73 | missing | - |
 | KB-023 | Fuse 7-membered ring: 7 | 73 | missing | - |
 | KB-024 | Fuse 8-membered ring: 8 | 73 | missing | - |
-| KB-025 | Cyclohexane chair orientations: 9 or 0 | 73 | missing | - |
+| KB-025 | Cyclohexane chair orientations: 9 or 0 | 73 | verified (partial, Mac) | Fresh unmodified nonrepeat bond-hotspot9/0 adds either chair through the same guarded candidate without selecting a global tool. Independent ordered App/adapter/file checks and bounded native Mac9/0, retained Single mode, Unicode Save/reopen pass. GUIDE25 bond-hotspot scope, not a universal shortcut; see verification-native-chairs.md. |
 | KB-026 | Example-only bond key: v | 74 | missing | Appears in a figure example but has no row in the bond-key table; behavior unresolved. |
 
 ## Generic and HELM keys

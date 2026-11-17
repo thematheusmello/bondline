@@ -788,7 +788,7 @@ fn selector_union_schema_and_runtime_reject_every_mixed_null_or_unclosed_named_r
         .or_else(|| schema.get("anyOf"))
         .and_then(Value::as_array)
         .ok_or("selector union")?;
-    assert_eq!(variants.len(), 2);
+    assert_eq!(variants.len(), 3);
     let mut seen = BTreeSet::new();
     for v in variants {
         let v = schema_node(&schema, v)?;
@@ -816,6 +816,14 @@ fn selector_union_schema_and_runtime_reject_every_mixed_null_or_unclosed_named_r
             expected.insert("size");
             allowed.insert("size");
             assert!(!p.contains_key("kind") && !p.contains_key("phase"));
+        } else if schema_node(&schema, p.get("kind").ok_or("kind selector")?)?["enum"]
+            == json!(["cyclohexane_chair_1", "cyclohexane_chair_2"])
+        {
+            assert!(seen.insert("chair"));
+            expected.insert("kind");
+            allowed.insert("kind");
+            assert_eq!(schema_node(&schema, &p["kind"])?["type"], "string");
+            assert!(!p.contains_key("size") && !p.contains_key("phase"));
         } else {
             assert!(seen.insert("named"));
             expected.insert("kind");
@@ -833,6 +841,7 @@ fn selector_union_schema_and_runtime_reject_every_mixed_null_or_unclosed_named_r
             allowed
         );
     }
+    assert_eq!(seen, BTreeSet::from(["legacy", "named", "chair"]));
     let mut engine = Engine::default();
     let valid = params(&engine, "benzene", None, free("positive"));
     for (field, value) in [

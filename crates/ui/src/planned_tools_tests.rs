@@ -250,7 +250,7 @@ fn modeless_catalogue_search_exposes_disabled_advanced_tools_and_text_escape_do_
     for name in [
         "Lasso",
         "Wedged bond",
-        "Cyclohexane chair 1",
+        "Curved arrow",
         "DNA",
         "HELM sequence",
     ] {

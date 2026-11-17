@@ -378,7 +378,7 @@ fn named_union_schema_and_native31_foreign20_14_10_controls_preserve_closed_sour
         .or_else(|| schema.get("oneOf"))
         .and_then(Value::as_array)
         .ok_or("selector alternatives")?;
-    assert_eq!(variants.len(), 2);
+    assert_eq!(variants.len(), 3);
     let mut selectors = std::collections::BTreeSet::new();
     for branch in variants {
         let branch = schema_node(&schema, branch)?;
@@ -392,6 +392,12 @@ fn named_union_schema_and_native31_foreign20_14_10_controls_preserve_closed_sour
             assert_eq!(props["size"]["type"], "integer");
             assert_eq!(props["size"]["minimum"].as_f64(), Some(3.0));
             assert_eq!(props["size"]["maximum"].as_f64(), Some(8.0));
+        } else if schema_node(&schema, props.get("kind").ok_or("kind selector")?)?["enum"]
+            == json!(["cyclohexane_chair_1", "cyclohexane_chair_2"])
+        {
+            assert!(selectors.insert("chair"));
+            assert_eq!(branch["required"], json!(["kind"]));
+            assert_eq!(schema_node(&schema, &props["kind"])?["type"], "string");
         } else {
             assert!(selectors.insert("kind"));
             assert_eq!(branch["required"], json!(["kind"]));
@@ -402,10 +408,10 @@ fn named_union_schema_and_native31_foreign20_14_10_controls_preserve_closed_sour
     }
     assert_eq!(
         selectors,
-        std::collections::BTreeSet::from(["size", "kind"])
+        std::collections::BTreeSet::from(["size", "kind", "chair"])
     );
     let mut e = Engine::default();
-    assert_eq!(e.controls().len(), 36);
+    assert_eq!(e.controls().len(), 38);
     for (kind, label, size) in [
         ("benzene", "Benzene", 6),
         ("cyclopentadiene", "Cyclopentadiene", 5),
