@@ -5,6 +5,10 @@ settings, bounded projection fuzz and CLI persistence. Its full gate failed the 
 MCP replacement bind; separately completed stages do not make that aggregate green.
 The full M0–M5 goal remains active, with Actions OFF and user windows untouched.
 
+The command is now implemented against this lock; [receiving](../verification-drawing-settings-command.md)
+records its actual runtime RED/GREEN, independent cases and failed/qualified gate boundaries.
+The full native settings/chain requirements below remain unchanged.
+
 ## Evidence and scope
 
 The [data contract](drawing-settings-data.md) and
@@ -47,6 +51,10 @@ without a default, requires presence while accepting null. In installed schemars
 and explicitly extend the root required list instead. Verify this in the actual schema,
 including ranges, closed object and all three required keys. Actual API source pins are
 in the ignored source review; do not infer missing-versus-null from schema alone.
+
+Typed request serialization must reject nonfinite Some values before JSON could turn
+them into explicit-null clear requests; None still serializes as null. This closes a
+separate caller boundary without changing incoming validation, schema or source authority.
 
 ## Authority, errors and transaction
 

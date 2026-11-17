@@ -16,6 +16,7 @@ mod chain;
 mod close;
 mod content;
 mod controls;
+mod drawing_settings;
 mod file_ui;
 mod files;
 mod new_document;
@@ -42,6 +43,7 @@ pub use chain::{
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
+pub use drawing_settings::DrawingSettingsSet;
 pub use file_ui::{
     UiFile, UiFileAction, UiFileContextStamp, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState,
 };
@@ -76,6 +78,8 @@ pub use smiles_records::{ImportSmilesRecords, SmilesRecordSelection};
 pub use view::{UiView, ViewOperation, ViewState};
 #[cfg(test)]
 mod close_tests;
+#[cfg(test)]
+mod drawing_settings_tests;
 #[cfg(test)]
 mod file_ui_tests;
 #[cfg(test)]
@@ -198,6 +202,7 @@ command_registry! {
     UiRingToolSelect(SelectRingToolRequest) => ("ui.ring_tool", "Select a native carbon Single-ring or named benzene/cyclopentadiene tool without editing the document or its history.", false),
     ChainCreate(ChainCreate) => ("chain.create", "Construct an explicit native carbon chain of Single bonds with a required interior angle and literal hydrogen policy, optionally sharing one existing neutral carbon.", false),
     ChainCreatePath(ChainCreatePath) => ("chain.create_path", "Construct a literal ordered native carbon path in one edit, optionally starting at an existing carbon; no snapping or angle/length inference.", false),
+    DrawingSettingsSet(DrawingSettingsSet) => ("document.set_drawing_settings", "Replace both optional document-root creation preferences in one native drawing edit; explicit null clears a value and existing geometry stays unchanged.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -266,6 +271,8 @@ pub enum Error {
     InvalidChain(&'static str),
     #[error("chain construction unavailable: {0}")]
     UnsupportedChain(&'static str),
+    #[error("drawing settings require source-free or completely mapped native CDXML data")]
+    UnsupportedDrawingSettingsSource,
     #[error(transparent)]
     Render(#[from] bondline_render::Error),
     #[error(transparent)]
@@ -410,6 +417,7 @@ impl Error {
             | Self::UnsupportedAtomLabel(_)
             | Self::UnsupportedRing(_)
             | Self::UnsupportedChain(_)
+            | Self::UnsupportedDrawingSettingsSource
             | Self::UnsupportedSmilesPasteSource
             | Self::UnsupportedBondConversion(_) => "unsupported_content",
             Self::IncompleteSmilesExportSource => "unsupported_content",
@@ -974,6 +982,15 @@ impl Engine {
                 drawing_focus = self.view_focus;
                 changed
             }
+            Command::DrawingSettingsSet(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let candidate = drawing_settings::set(self.stored_document()?, params)?;
+                let changed = self.commit(candidate)?;
+                drawing_focus = self.view_focus;
+                changed
+            }
             Command::ChainCreate(params) => {
                 if params.expected_revision != self.revision {
                     return Err(Error::StaleRevision);
@@ -1272,6 +1289,7 @@ mod tests {
                 "document.open_smiles",
                 "document.save_sdf",
                 "document.save_smiles",
+                "document.set_drawing_settings",
                 "file.convert_smiles_to_cdxml",
                 "file.export_smiles_fragment",
                 "history.redo",

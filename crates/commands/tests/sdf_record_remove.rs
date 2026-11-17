@@ -163,6 +163,7 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "document.save_sdf",
             "document.open_smiles",
             "document.save_smiles",
+            "document.set_drawing_settings",
             "file.convert_smiles_to_cdxml",
             "file.export_smiles_fragment",
             "sdf.record.inspect",

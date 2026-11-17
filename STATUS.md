@@ -7,35 +7,64 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-### Atomic settings command in receiving; UI readiness qualified
+### Verified atomic settings command; full gate remains failed
 
-Previous goal turn is PROGRESS, committed b6497dd. Contract dede5ee now has an
-uncommitted engine/adapter implementation: one appended document.set_drawing_settings,
-all three keys required, explicit-null clearing, source-before-domain/no-op authority,
-one normal history edit and retained view focus. Fourteen new focused cases pass;
-actual CLI/stdio/authenticated socket files and the old40-record/schema prefix compare
-independently. Working registry41 leaves native controls31/20/14/10/catalogue12/128.
+This atomic source/test/docs increment follows b6497dd, contract dede5ee and separate
+test-only readiness correction e516dd9. Previous goal turn is PROGRESS. Read
+[receiving](docs/verification-drawing-settings-command.md). One appended
+document.set_drawing_settings requires all three flat keys and explicit nulls to clear;
+source authority precedes domain/no-op. One normal edit preserves old pages/H/geometry,
+view focus/tool/generation/IDs, with normal history/selection/close/file guards. No-op
+retains model sharing, redo and contexts. No worker, receipt or native binding is added.
+Registry41 retains every old40 record/schema/order in actual CLI comparison; controls
+31/20/14/10 and catalogue12 delivered/128 disabled stay. Native form/tool application,
+effective inheritance/defaults and full styles remain missing; both chain controls stay grey.
 
-First full run79447 stops at a new-test numeric-separator lint; its correction preserves
-the literal value. Corrected aggregate37811 fails1012/1 at unchanged MCP replacement
-bind51300; no unchanged retry or failure-time owner capture. Remaining24093 fails486/1/1
-at the existing SMILES order UI ready wait. [Qualification](docs/verification-smiles-order-readiness.md)
-records its source-demonstrated missing thread-retirement precondition, strengthened
-test-only helper and unchanged assertions/deadline/production fences. It does not prove
-the uncaptured failing schedule or a product/new-command defect. Modified UI library
-passes268/0/1; a subsequent target selection repeats that library and adds50 UI binary/
-integration passes, then stops on the invalid xtask --lib selector. Then-unstarted74317
-passes55/0/0 plus formatting, UI/vendor lint, layers/licenses/corpus. Both failed test
-runs remain failed, not a green aggregate.
+First JSON35719 REDUnknownCommand0/1 precedes producer18321 GREEN1/0. Expanded core79634
+passes9/0, private6151 1/0, captured-Save48981 1/0 and actual adapters1536 3/0. Later
+serialization7219 RED shows typed Some(NaN) becoming null/clear; a finite-value serializer
+gives46704 GREEN1/0, with unchanged incoming/domain/source/schema behavior. Fifteen new
+cases pass, including64 generated history pairs with seed671308429. Existing
+independent root checks precede unchanged graph/chemical consumers. Captured Save truth
+and both registered MOL versions' positive controls/loss refusals are verified. Inventory
+audit positively updates46 cardinalities/16 exact-name comparisons across44 files;
+old predicates/OLD_* constants/request IDs stay. Initial source review/format qualification
+finds no material issue at that read point; the later serialization safety fix has its
+own actual RED/GREEN and separate bounded review.
 
-Native/CLI build89296 passes; actual Unicode CLI settings/bond/history/Save/reopen yields
-independently read C2H4/C=C and exact root angle137.5 with absent length. All40 previous
-command records/schema/order remain equal in actual CLI discovery. No native launch,
-copied-bundle/draft change, current-drawing inspection, new platform/golden or publication.
-At this test-readiness checkpoint, the settings feature remains uncommitted in the working
-tree; this test-only correction has its own atomic commit. All execution jobs are terminal.
-Next finish its receiving records/local commit, then ordered native modifiers and full
-settings/chain forms/gestures/acceptance. Full M0–M5 and the known MCP uncertainty remain.
+First aggregate79447 stops at that new-test lint, before workspace tests. Corrected full
+gate37811 passes fmt/workspace lint then fails **1012/1/0 across161 result lines** at
+unchanged MCP replacement bind51300, AddrInUse/OS48. No unchanged retry/owner identity.
+Remaining24093 fails486/1/1 at the old SMILES order UI ready wait. [e516dd9's qualification](docs/verification-smiles-order-readiness.md)
+strengthens actual-owner retirement and timeout diagnostics, preserving every old
+predicate/assertion/action, two warm frames, ten-second deadline and production fence.
+It does not attribute the uncaptured failure schedule or establish a product defect.
+Modified UI passes268/0/1; the next selector repeats that library and adds50 UI binary/
+integration passes, then stops on invalid xtask --lib selection. Then-unstarted74317
+passes55/0/0 with fmt, UI/vendor lint, layers/licenses/corpus. Duplicate UI passes add no
+unique coverage. Both failed test runs remain failed; **there is no green aggregate**.
+
+The serializer's current fmt/workspace lint passes, then97163 hits StorageFull in six
+file tests after482 passes. Cargo cleanup reclaims4.4GiB only from an old unused dependency
+cache; affected and then-unstarted42816 passes51/0, gates and a fresh native/CLI build.
+All41 schema records still equal the pre-serializer output. No old cache evidence,
+source, current build output or protected app bundle is removed. This is environmental
+recovery with prior failures retained, not a green aggregate or semantic test relaxation.
+
+Initial native/CLI build89296 passes; final42816 native4170ce64…3d08 and CLI0fd9a2cc…e092
+include the serialization guard. Additional actual
+Unicode CLI settings/bond/history/Save/no-op/reopen preserves current/saved/original truth;
+independent Expat/Decimal and RDKit read the actual427-byte C2H4/C=C file with only root
+angle137.5. No native launch, copied-bundle/draft change, current-drawing inspection,
+new platform/golden, hosted run, push or publication. Protected apps17806/96449 are observed
+live and both copied binary hashes match their pins. All managed execution jobs are terminal.
+
+Next executable task: implement ordered native Control transitions at the input boundary,
+then full source/context-qualified settings/chain forms, drag/count/Add Chain/repeat/
+Snaking/poses/real-ink workflows and actual acceptance per native-chain-plan.md steps3–6.
+Keep frame-global modifiers from being applied retroactively and keep grey tools disabled
+until complete workflows are verified. Full M0–M5, journal styles, broader interoperability/
+chemistry/publishing/distribution and proper identity-based MCP diagnosis remain required.
 
 ### Verified drawing-settings data — aggregate gate failed
 
@@ -74,7 +103,7 @@ actual700-byte output. No native launch, copied-bundle refresh, current user dra
 inspection or new platform/golden claim. Protected apps17806/96449 are observed live and
 both copied binary hashes remain unchanged. All current execution jobs are terminal.
 
-Next executable increment: lock and implement the source-qualified atomic drawing-settings
+Next increment at that checkpoint: lock and implement the source-qualified atomic drawing-settings
 command through registry/history/adapters, preserving no-op/invalid/source/close/ID guards.
 Then ordered native modifier transitions, the settings form and full chain modes/count/
 repeat/poses/real-ink flows and actual acceptance per native-chain-plan.md steps2–6.

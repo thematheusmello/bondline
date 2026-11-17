@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has40 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has41 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -47,6 +47,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 |---|---|---|
 | `document.inspect` | `{}` | Read-only snapshot |
 | `document.new` | Required `expected_revision`; optional `discard_unsaved=false` | Fresh source-free A4 Drawing session; clears file association/history and advances namespace/revision; retains saved files and outstanding work ownership |
+| `document.set_drawing_settings` | All required: `expected_revision`, `bond_length_pt:number|null`, `chain_angle_degrees:number|null` | Replace both stored document-root preferences atomically in a complete native drawing; null clears, missing keys refuse; existing geometry/view unchanged |
 | `document.open_cdxml` | `path`, optional `discard_unsaved=false` | Bounded native CDXML read; successful application starts a clean document session and clears history |
 | `document.save_cdxml` | `path`, optional `overwrite=false` | Atomic complete-source save; default no-clobber; authoring revision/history retained |
 | `document.open_cdx` | `path`, optional `discard_unsaved=false` | Bounded read of the supported CDX projection with complete source; new clean session and cleared history; A4 preview policy, faithful preview/editing unavailable |
@@ -1328,7 +1329,7 @@ capture, native races/other-platform execution and complete reference parity rem
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
 counts are31 native Drawing/14 SDF/10 raw SMILES; retained-SMILES Drawing keeps20.
-The registry now has40 commands. Accepting
+The current registry has41 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag
@@ -1354,13 +1355,51 @@ current. No file operation/receipt, Save lease or trusted close ACK is added by 
 order. [Receiving evidence](verification-native-smiles-records.md) separates App/worker
 tests from actual platform execution and exact reference-screen parity.
 
+## Stored document drawing preferences
+
+`document.set_drawing_settings` is one immediate authoring command, exported as
+`DrawingSettingsSet`. Its closed parameter object requires all three keys:
+
+```json
+{"command":"document.set_drawing_settings","params":{"expected_revision":1,"bond_length_pt":24.5,"chain_angle_degrees":120.5}}
+```
+
+Both values accept number or null; explicit null clears the authored property. Omission
+is invalid, never a partial update. Length must be finite >0 through100000pt and angle
+finite1..179°, fractional allowed. Two nulls restore absent model/native-root fields;
+they do not select a numeric or inherited default. Existing pages/chemistry/geometry,
+view focus, camera, tool and ID floors remain unchanged.
+Typed request serialization rejects nonfinite Some values instead of letting JSON encode
+them as null/clear; explicit None retains null. Domain validation still runs in the engine.
+
+After the ordinary committed-close guard, expected revision and Drawing/source authority
+precede domain validation and equality. Only source-free or completely mapped native
+CDXML may edit; foreign/opaque/noncanonical CDXML, CDX/MOL, SDF and raw/retained SMILES
+refuse `unsupported_content`, including equal values. Stale revision is `stale_revision`;
+missing/unknown/type/domain errors are `invalid_params`. All refusals are atomic.
+
+A validated no-op retains model/source sharing, redo and weak/close/file contexts. A real
+change uses one normal history commit, clearing redo/selection and invalidating old close/
+file/content contexts. Immediate preparation already authors the change; later cancellation
+does not roll it back. No worker, Save reservation, receipt or native presentation binding
+is added. Existing Save snapshot semantics stay: same-generation completion may associate
+its path and older captured baseline while the newer styled current document remains dirty.
+Its historical input revision does not acknowledge the newer edit as saved.
+
+Whole-MOL V2000/V3000 Save refuses nonempty preferences before publication. Native CDXML
+persists present values; unchanged source and explicit graph-only export retain their
+existing policies. [The contract](research/drawing-settings-command.md) distinguishes
+this stored-data operation from missing native settings/tool application, inheritance and
+style sheets. Native controls31/20/14/10 and catalogue12 delivered/128 disabled stay.
+
 ## Native tool catalogue presentation
 
 The native **All tools…** catalogue is roadmap presentation, not additional executable
 registry entries. All124 documented roles/140 expanded entries are visible;128 planned
 entries have no binding and cannot dispatch. Available entries use the same current
 delivered control IDs. `ui.controls` continues to list delivered bindings only, retaining
-counts31/20/14/10; the separate headless chain commands bring the registry to40.
+counts31/20/14/10. The headless chain commands previously brought the registry to40;
+the stored-preferences command now brings it to41.
 See [catalogue](design/tool-catalogue.md).
 
 ## Exact-target atom-label presentation

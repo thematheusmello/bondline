@@ -75,7 +75,7 @@ use std::sync::Arc;
 fn each_false_flag_restores_independently_of_degree_and_none_true_noops_preserve_redo_source_and_owner()
 -> TestResult {
     assert_eq!(ALL_HIDDEN, literal::HIDDEN);
-    assert_eq!(bondline_commands::registry().len(), 40);
+    assert_eq!(bondline_commands::registry().len(), 41);
     for target in [0_usize, 1] {
         for t in [None, Some(false), Some(true)] {
             for n in [None, Some(false), Some(true)] {

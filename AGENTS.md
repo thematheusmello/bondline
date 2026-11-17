@@ -61,12 +61,35 @@ values stay opaque without hard Open failures or broader native authority. Empty
 preserves old JSON/native-v0 bytes. Whole-MOL V2000/V3000 refuses nonempty settings before
 raw/fragment reuse/publication; keep existing forbidden-version precedence and whole-model
 source/SMILES drift guards. Explicit fragment export retains its declared context loss.
-Stored settings do not alter existing geometry or yet drive native tools. Registry40 and
-all bindings stay unchanged. Next lock the atomic settings command/history/adapters, then
-ordered Control events and full native settings/chain flow; do not enable grey tools early.
+Stored settings do not alter existing geometry or yet drive native tools. That data-only
+checkpoint keeps registry40; the following command increment is separate.
 Current egui-winit loses modifier chronology; never apply final-frame modifiers retroactively.
 The new bounded chain_path_request ASan harness prepares JSON only, never completes file/
 render work; read fuzz/README.md for pinned tools/new ignored seed directory and evidence.
+
+The atomic document.set_drawing_settings increment follows contract dede5ee and
+docs/verification-drawing-settings-command.md. All three flat keys are required; explicit
+null clears either value, with ordinary nullable schemas and an explicit required list.
+Do not use schemars(required) to strip Option nullability. Close/revision/Drawing/source
+authority precedes domain/no-op; foreign equal values cannot grant authority. One ordinary
+immediate edit preserves existing pages/geometry/view focus/tool/IDs, with normal history/
+selection/close/file invalidation. No-op retains sharing, redo and weak contexts. Existing
+captured Save may associate its same-generation old path/baseline while newer current
+settings stay dirty; do not change that policy or issue a false current Save ACK.
+Typed serialization rejects nonfinite Some before JSON could convert it to null/clear;
+explicit None stays null. Keep this caller boundary as well as engine-domain validation.
+Registry41 retains all old40 records/schema/order; controls31/20/14/10/catalogue12/128 stay.
+Fifteen focused cases and actual adapter/files pass. Full37811 fails1012/1 at protected
+MCP bind51300. Remaining24093 fails the old UI readiness helper; test-only e516dd9 adds
+actual order-owner retirement and timeout diagnostics, preserving every old predicate,
+assertion, two warm frames, ten-second deadline and production fence. Qualified UI and
+then-unstarted stages pass separately; no green aggregate or captured failure cause follows.
+Next ordered Control events and full native settings/chain forms/gestures/acceptance.
+Keep grey tools disabled; no native setting/default application is delivered by this command.
+The later serializer check hit actual StorageFull in six file tests. Scoped Cargo cleanup
+removes only old target/debug-pre-index-recovery/deps artifacts; protected copied apps,
+current target/debug and evidence stay. Only affected/not-started checks rerun successfully.
+Do not mistake those environmental failures/recovery or duplicate UI tests for an aggregate pass.
 
 The terminal-label prerequisite is described in docs/research/terminal-carbon-labels.md
 and docs/verification-terminal-carbon-labels.md. Degree zero/one selects terminal; higher
@@ -203,6 +226,8 @@ queries in the shutdown→bind interval. The collector is designed only, not imp
 The drawing-data gate94003 also fails the unchanged replacement bind58634 after998
 passes; only not-started592/0/1 pass separately. No unchanged retry, failure-time owner
 identity or causal repair is established. Preserve both results; this is not a green gate.
+The settings-command aggregate37811 likewise fails1012/1 at51300, without owner identity
+or unchanged retry. Its separate UI test-helper qualification does not repair/attribute MCP.
 
 ## Research, provenance and implementation
 

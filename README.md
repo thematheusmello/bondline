@@ -40,11 +40,14 @@ Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with indep
 checks of the actual files. See [atom-editor evidence](docs/verification-native-atom-labels.md),
 [native record evidence](docs/verification-native-smiles-records.md) and the separate
 [paste checkpoint](docs/verification-native-smiles-paste.md). The latest full local gate
-**fails the known macOS MCP listener rebind test** after 998 passes. Formatting and
-warnings-denied linting pass; only not-started checks run separately, with another
-592 passes and one ignored test, plus layer/license and corpus checks. This is not a
-passing aggregate. [Drawing-settings evidence](docs/verification-drawing-settings-data.md)
-records 17 passing focused cases, two bounded ASan runs and actual CLI file verification. The
+**fails the known macOS MCP listener rebind test** after 1,012 passes. Formatting and
+warnings-denied workspace linting pass. A separate UI readiness failure has a
+[test-only qualification](docs/verification-smiles-order-readiness.md); the modified UI
+suite and then-unstarted layer/license/corpus checks pass separately. This is not a
+passing aggregate. [Atomic drawing-settings evidence](docs/verification-drawing-settings-command.md)
+records 15 new passing cases and actual CLI/MCP/socket/file checks. Typed non-finite
+values cannot serialize as accidental clear requests. The earlier
+[data prerequisite](docs/verification-drawing-settings-data.md) retains its separate bounded ASan evidence. The
 [carbon-label data increment](docs/verification-carbon-label-data.md) preserves standard
 metadata; [skeletal display and label restoration](docs/verification-skeletal-carbon.md)
 now have shared-renderer, command/adapter and actual-App checks. Native/default-style
@@ -72,7 +75,7 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 | Double and Triple bonds | Native macOS tool selection, centered drawing, history and CDXML Save As pass at a readable scale. Carbon terminal extension also passes independent headless checks; its native multiple-bond workflow and context-sensitive styles remain unverified/missing. |
 | Explicit sided doubles | Shortened Left/Right Double geometry, real gaps/hits and CPU/GPU capture pass independent engine/native-profile CDXML history and save/reopen checks. Native interaction, alignment controls and automatic styles remain unverified/missing. See [receiving](docs/verification-inset-doubles.md). |
 | Skeletal carbon labels | Separate terminal/nonterminal node flags preserve literal H and mandatory isolated C/C2 labels. Shared CPU/GPU rendering, explicit-label restoration, history and Unicode save/reopen pass independent tests. Style-setting controls and native OS acceptance remain outstanding. See [evidence](docs/verification-terminal-carbon-labels.md). |
-| Stored drawing preferences | Supported document-root bond length and chain angle preserve absence, CDXML values and CDX fixed-point data. Unknown values remain source-backed; whole-MOL export refuses settings loss. Independent data/file checks pass. The settings command/form and application to native tools are still missing. See [evidence](docs/verification-drawing-settings-data.md). |
+| Stored drawing preferences | Atomic set/clear through the shared engine, CLI, MCP and loopback preserves optional root bond length/chain angle, history and existing geometry/view. CDXML persistence, CDX projection, protected sources and whole-MOL loss refusals have independent checks. The native form, inheritance and application to drawing tools remain missing. See [evidence](docs/verification-drawing-settings-command.md). |
 | Complete tool catalogue | All124 documented drawing/query/biology/HELM roles appear as140 entries. Twelve use existing bindings;128 planned entries stay grey, disabled and explicitly marked Not implemented. Search, scrolling and available-tool selection have bounded native macOS checks. See [catalogue](docs/design/tool-catalogue.md). |
 | Existing-bond editing | Set Single/Double/Triple with hotspot1/2/3; convert an existing Single by clicking, or draw across Single/Double endpoints with Single selected. Same edge and geometry, corrected literal carbon H, one history step. Bounded native Mac and independent graph/file checks; alignment and general imported edits remain unavailable. |
 | Small carbon rings | Six3–8 Single-ring tools plus Benzene/Cyclopentadiene share the engine and preview/history path. Independent command/adapter/App free/fused/spiro/Unicode-file checks pass. Native macOS Benzene click/Undo is checked; other native gestures, chair/sprout and aromatic perception remain unfinished. See [receiving](docs/verification-branding-and-tools.md). |

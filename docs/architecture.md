@@ -65,8 +65,12 @@ Root-only XML and CDX projections retain supported values without flattening inh
 invalid/ambiguous values stay in authoritative source. Native CDXML writes present values
 without widening exact-byte edit authority. Whole-document MOL guards run before raw/
 fragment reuse, while existing full-model equality guards retained source drift. Settings
-do not alter existing geometry or yet drive native tools. The command/form is subsequent
-work; see [contract](research/drawing-settings-data.md) and
+do not alter existing geometry or yet drive native tools. The immediate
+`document.set_drawing_settings` command now requires both nullable values plus a revision,
+validates source before domain/no-op and uses one normal commit while retaining view focus.
+It adds no worker, ID allocation, Save lease or native binding. The native form remains
+subsequent work; see [command contract](research/drawing-settings-command.md),
+[data contract](research/drawing-settings-data.md) and
 [receiving](verification-drawing-settings-data.md).
 
 `chain.create` adds an explicit bounded carbon path of Single bonds in the immediate command lane.

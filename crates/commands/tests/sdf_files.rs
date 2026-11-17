@@ -43,6 +43,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "document.open_smiles",
             "document.save_sdf",
             "document.save_smiles",
+            "document.set_drawing_settings",
             "file.convert_smiles_to_cdxml",
             "file.export_smiles_fragment",
             "page.set_size",

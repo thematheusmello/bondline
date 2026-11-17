@@ -24,6 +24,14 @@ observation identifies no failure-time socket/process owner and adds no causal e
 No collector, consumed probe, exhausted context or socket/assertion/timing policy changes.
 See [receiving](../verification-drawing-settings-data.md) for the complete stage boundary.
 
+Later evidence,2026-11-17: corrected settings-command full gate37811 fails the unchanged
+replacement bind127.0.0.1:51300 after1012 passes, AddrInUse/OS48. Log125470B SHA256
+336de6dbcb9b5aa05dcc5971bdbb38c02beac29c1a2832ee76a2bfa942910f85.
+No owner identity/unchanged retry/collector/probe/policy change occurs. Its separate UI
+test-readiness qualification does not attribute or repair this socket failure. See
+[command receiving](../verification-drawing-settings-command.md). All consumed diagnostic
+boundaries below remain unchanged.
+
 ## Source hypothesis and fixed experiment
 
 The pinned Rust1.94.1 Darwin [socket constructor](https://github.com/rust-lang/rust/blob/e408947bfd200af42db322daf0fadfe7e26d3bd1/library/std/src/sys/net/connection/socket/unix.rs#L65)

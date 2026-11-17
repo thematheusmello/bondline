@@ -84,14 +84,14 @@ fn cli_same_count_restoration_is_one_edit_with_exact_flags_history_unicode_sourc
     assert!(listed.status.success());
     let registry: Value = serde_json::from_slice(&listed.stdout)?;
     let entries = registry.as_array().ok_or("registry")?;
-    assert_eq!(entries.len(), 40);
+    assert_eq!(entries.len(), 41);
     assert_eq!(
         entries
             .iter()
             .map(|v| v["name"].as_str().ok_or("name"))
             .collect::<Result<std::collections::BTreeSet<_>, _>>()?
             .len(),
-        40
+        41
     );
     let entry = entries
         .iter()
@@ -181,7 +181,7 @@ fn initialized_stdio_restores_then_preserves_validated_noop_stale_history_captur
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     assert_eq!(listed["id"], 2);
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 40);
+    assert_eq!(tools.len(), 41);
     let entry = tools
         .iter()
         .find(|v| v["name"] == "atom.set_label")

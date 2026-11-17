@@ -6,6 +6,20 @@ endpoints and one bond object per unordered pair. Cycles, empty fragments and di
 components are accepted. These are structural checks, not chemical validity/perception.
 The single-bond-object-per-pair restriction is an explicit current model policy.
 
+Document also owns fixed-size Copy `DrawingSettings`, with independently optional private
+bond length in points and chain angle in degrees. Its validated constructor accepts finite
+length>0 through100000pt and angle1..179°, including fractions. Empty settings omit the
+entire JSON container, preserving old snapshots/native XML. Missing data does not resolve
+an inherited numeric default; in a partial source projection it may mean opaque unsupported
+source data. Root-only format projection and authoritative backing stay distinct.
+
+The shared `document.set_drawing_settings` command requires both nullable fields and a
+revision. It replaces the pair in one normal history edit on source-free or fully mapped
+native CDXML; equal validated requests retain sharing/context/redo. It changes no pages,
+chemistry or existing geometry. Whole-MOL export refuses these preferences; source drift
+guards compare the whole model. This is authored data and automation, with native form,
+tool application and inheritance still required. See [contract](research/drawing-settings-command.md).
+
 AtomId, BondId and FragmentId are distinct nonzero-u32 types. IDs are stable and unique
 document-wide within each kind. The three namespaces may overlap numerically. Source file
 IDs have separate scoping/zero rules and must be mapped rather than reused blindly.

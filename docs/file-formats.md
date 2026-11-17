@@ -11,6 +11,12 @@ SMILES export retains its declared document-context loss. This data-only support
 applies settings to drawing tools nor implements the settings form/style sheets. See
 [lock](research/drawing-settings-data.md) and [evidence](verification-drawing-settings-data.md).
 
+The shared atomic settings command now edits that pair with explicit nullable values,
+source authority and normal history. Registered MOL Save has positive unstyled controls,
+settings-loss refusals and clear-to-supported success for both versions. Typed nonfinite
+values cannot serialize as clear requests. Native form/tool application remains missing;
+see [command receiving](verification-drawing-settings-command.md).
+
 The bounded SMILES record library now retains complete original/current source while
 projecting an explicit record or all records into Drawing fragments. Live token/global-ID
 maps survive supported H/order edits and writer DFS reordering. It never claims global

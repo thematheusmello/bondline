@@ -1,5 +1,24 @@
 # Verification log
 
+## Atomic drawing-settings command, 2026-11-16–17
+
+[Receiving](verification-drawing-settings-command.md) records actual JSON35719
+UnknownCommand RED before producer18321 GREEN,15 new independent core/property/counter/
+Save/actual-adapter cases, positive46-count/16-name inventory updates and actual unchanged
+old40 CLI schemas/order. A numeric-separator-only test lint stops79447 before tests;
+corrected full37811 passes fmt/workspace lint then fails1012/1 at unchanged MCP bind51300.
+Remaining24093 fails the old UI ready wait; [test-only e516dd9](verification-smiles-order-readiness.md)
+adds actual worker retirement without weakening deadlines/assertions/product fences or
+claiming the uncaptured failure's cause. Modified UI and then-unstarted checks pass
+separately; duplicate UI-library coverage and invalid xtask --lib setup stay explicit.
+No green aggregate or MCP attribution/repair follows. Native/CLI build89296 and actual
+Unicode set/clear/bond/history/Save/reopen pass, with independent root/graph/RDKit file
+checks. A later serialization RED/GREEN prevents nonfinite typed values becoming null/
+clear requests. Its integration run hits six actual StorageFull errors; scoped Cargo
+cache cleanup and affected/not-started42816 checks recover without weakening tests.
+All41 schema records remain unchanged. Registry41 enables no new native control; settings form/tool application,
+inheritance, actual platforms and full M0–M5 remain required. User apps/Actions stay untouched.
+
 ## Drawing-settings data prerequisite, 2026-11-16
 
 [Receiving](verification-drawing-settings-data.md) records actual XML82691/CDX3733

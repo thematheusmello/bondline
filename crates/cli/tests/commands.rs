@@ -477,6 +477,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "document.save_mol",
             "document.save_sdf",
             "document.save_smiles",
+            "document.set_drawing_settings",
             "file.convert_smiles_to_cdxml",
             "file.export_smiles_fragment",
             "history.redo",

@@ -8,7 +8,9 @@
   duplicate or other-width binary settings remain opaque/source-backed. Fixed toggles,
   style-sheet resolution, native defaults/forms, journal styles and26.1 behavior remain
   required. A data-only field never proves native tool application of the preference.
-  Next lock and implement the source-qualified command/history/adapters before the form.
+  The source-qualified atomic command/history/adapters now have bounded independent
+  evidence in verification-drawing-settings-command.md. Ordered native modifiers, the
+  settings form and actual tool application remain required.
 
 - The full native-chain dependency contract is in research/native-chain-plan.md.
   Snaking requires one positioned-path edit rather than repeated fixed-chain commits.
@@ -55,6 +57,10 @@
   The drawing-settings gate94003 also naturally fails998/1 at127.0.0.1:58634. Only
   not-started checks pass separately592/0/1; the aggregate is failed and is not retried.
   A single post-terminal lsof finds no owner, not failure-time identity evidence.
+  Command aggregate37811 naturally fails1012/1 at51300; no owner identity is captured
+  and no unchanged retry is run. Its separate UI readiness failure receives test-only
+  e516dd9 qualification, not a production fix or causal attribution. Full gate remains
+  failed; see verification-drawing-settings-command.md and verification-smiles-order-readiness.md.
   The later selection gate1361/0/1 passes without a socket-policy change and does not
   explain that earlier failure. No natural
   failure-time owner capture exists. The original external inheritance probe was inconclusive;

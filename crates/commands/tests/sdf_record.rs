@@ -45,6 +45,7 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "document.open_smiles",
             "document.save_sdf",
             "document.save_smiles",
+            "document.set_drawing_settings",
             "file.convert_smiles_to_cdxml",
             "file.export_smiles_fragment",
             "sdf.record.inspect",

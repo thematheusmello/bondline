@@ -218,8 +218,8 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
         .iter()
         .map(|entry| entry.name)
         .collect::<BTreeSet<_>>();
-    assert_eq!(registry.len(), 40);
-    assert_eq!(names.len(), 40);
+    assert_eq!(registry.len(), 41);
+    assert_eq!(names.len(), 41);
     assert_eq!(
         names,
         [
@@ -243,6 +243,7 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
             "document.save_mol",
             "document.save_sdf",
             "document.save_smiles",
+            "document.set_drawing_settings",
             "file.convert_smiles_to_cdxml",
             "file.export_smiles_fragment",
             "history.redo",

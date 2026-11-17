@@ -18,12 +18,15 @@ turning-path/preview prerequisite with [independent evidence](docs/verification-
 The [drawing-settings data prerequisite](docs/research/drawing-settings-data.md) now has
 [independent persistence/loss evidence](docs/verification-drawing-settings-data.md).
 Root BondLength/ChainAngle preserve explicit supported data and opaque source values;
-native tool application, settings commands/forms and full style inheritance remain missing.
-Next lock the atomic settings command/history/adapters, then ordered modifier input,
+native tool application, settings forms and full style inheritance remain missing.
+The [atomic settings command/history/adapters](docs/verification-drawing-settings-command.md)
+now pass independent required/null/source/lease/history and actual file/wire checks.
+Next implement ordered modifier input,
 complete native drawing/forms/repeat and actual acceptance. Do not substitute frame-global
 Control state or unsaved UI settings for those requirements; the native tools stay grey.
-The latest full local gate fails the unchanged MCP replacement bind; its remaining stages
-pass separately. Preserve both results and the exhausted diagnostic boundaries.
+The latest full local gate fails the unchanged MCP replacement bind. A remaining UI wait
+has a [test-only readiness qualification](docs/verification-smiles-order-readiness.md);
+then-unstarted stages pass separately. Preserve all failed results and diagnostic boundaries.
 
 The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now has a
 [shared skeletal display/explicit-label follow-up](docs/verification-skeletal-carbon.md).
