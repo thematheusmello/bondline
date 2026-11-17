@@ -1,5 +1,11 @@
 # Clean-room source register
 
+Caption kerning needs the bundled Roboto's GPOS table, not its absent legacy kern table.
+The existing MIT OR Apache-2.0 ttf-parser0.25.1 is now a direct render dependency;
+this adds no package, font or license exception. Its [published API](https://docs.rs/ttf-parser/0.25.1/ttf_parser/)
+and primary [OpenType GPOS specification](https://learn.microsoft.com/en-us/typography/opentype/spec/gpos)
+guide pair positioning. Exposing this existing parser alone delivers no caption workflow.
+
 Explicit root relative spacing follows the public SDK
 [BondSpacing0x0804/INT16](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacing.htm)
 and [absolute precedence](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacingAbs.htm).
