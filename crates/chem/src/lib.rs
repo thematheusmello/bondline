@@ -2,6 +2,11 @@
 
 #![forbid(unsafe_code)]
 
+mod composition;
+pub use composition::{
+    Composition, CompositionError, ElementCount, IsotopeCount, analyze_fragment,
+};
+
 use bondline_model::{Atom, AtomId, BondId, BondOrder, Fragment, GraphError, Radical};
 
 pub const MAX_AUTHORING_ATOMS: usize = 64;

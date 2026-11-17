@@ -1,5 +1,15 @@
 # Clean-room source register
 
+Resolved numeric composition reviewed2026-11-17 follows public OpenSMILES H/isotope
+semantics, the SDK [NumHydrogens](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm)
+distinction between inline H and physical nodes, and primary RDKit formula/formal-charge
+APIs. Exact links/versions and original conventions are in the
+[contract](../research/formula-composition.md); [receiving](../verification-formula-composition.md)
+records independent literal/full-bound/RDKit evidence. Original Rust counts supplied data
+without inferring H, collapsing isotope bins, checking chemical validity or granting source
+authority. No specification prose, external chemistry implementation or new dependency
+is shipped; notation, masses and Analysis UI remain missing.
+
 Text edits reviewed2026-11-17 use [XML1.0](https://www.w3.org/TR/2008/REC-xml-20081126/)
 character-data rules and CDXML [Style](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Style.htm)/
 [Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm) structure. The original

@@ -1,5 +1,14 @@
 # Verification log
 
+## Checked resolved composition, 2026-11-17
+
+[Receiving](verification-formula-composition.md) records isolated worker commit41ab816,
+independent API RED/literal/full-bound/RDKit tests and review, then main integration on
+6d9ce09. Fresh full6948 passes1831/0/1 across272 result lines and all local gates. CLI46
+bytes remain exact; no dependency, source/registry/UI or listener policy changes. This
+natural pass does not explain the retained Text-stage MCP failure. Full M0–M5 and actual
+source-aware formula/mass/analysis remain incomplete; all jobs terminal, Actions OFF.
+
 ## Source-preserving text-only XML edits, 2026-11-17
 
 [Receiving](verification-source-preserving-xml-text.md) records independent declarations,

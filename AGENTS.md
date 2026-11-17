@@ -1,5 +1,13 @@
 # Bondline agent instructions
 
+Resolved composition from isolated41ab816 is integrated on base6d9ce09; see
+docs/research/formula-composition.md and docs/verification-formula-composition.md.
+Keep node+inline-H accounting, natural/numbered isotope separation, strict None-H refusal,
+full bounds, checked counts/charge and cancellation. It grants no chemistry validity,
+source, registry/UI or mass/notation authority. Full6948 passes1831/0/1 and all local
+gates; the preceding MCP failure remains unexplained, not fixed. All workers/jobs are
+terminal and the separate formula worktree/branch is retained for provenance.
+
 The latest M1 syntax prerequisite is docs/research/source-preserving-xml-text.md and
 docs/verification-source-preserving-xml-text.md. SetText is owned decoded character data,
 text-only before no-op, whole-inner span, raw QName, shared append conflict key and checked
@@ -8,7 +16,7 @@ validation/owner sorting and attribute errors. Standalone58/0 and ASan10000/2s p
 aggregate88496 fails at old MCP AddrInUse; complete workspace21957 passes1818/0/1 and exact
 remaining38504 components pass vendor3/0 plus clippy/layers/licenses/assets/corpus. Do not
 claim a clean aggregate or causal listener fix. Next integrate effective styles/dependent
-labels; check STATUS for the isolated formula worker before duplicating that work.
+labels; see STATUS for the integrated formula prerequisite before duplicating that work.
 
 ## Development Actions policy — user instruction, 2026-11-14
 

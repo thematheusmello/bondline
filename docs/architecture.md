@@ -1,5 +1,12 @@
 # Architecture
 
+Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
+formal charge from fully specified atom H data. It supports full model bounds, checks
+cancellation/arithmetic and refuses unresolved H; bonds/geometry are not chemistry-inferred.
+It owns no cache, source permission, command or UI state. Later analysis adapters must
+prove complete source/selection and resolve H under a declared convention. See
+[contract](research/formula-composition.md) and [receiving](verification-formula-composition.md).
+
 CDXML batch `SetText` changes decoded data in an owned empty/text-only element, preserving
 exact no-op lexemes, raw QNames/attributes and unrelated bytes. Mixed content refuses;
 attribute changes and ancestor appends compose under existing bounds/ownership. Complete

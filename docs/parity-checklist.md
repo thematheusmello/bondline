@@ -138,6 +138,11 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 
 ## Workflow overview
 
+The [numeric composition library](verification-formula-composition.md) independently
+verifies explicitly resolved element/isotope/charge data. It does not implement inferred
+formula/mass or the Analysis window; those reference workflows remain missing. Registry46
+and catalogue16/124 remain unchanged.
+
 [Text-only syntax edits](verification-source-preserving-xml-text.md) are another M1
 prerequisite. Text/font/colour controls and general imported-label edit/render workflows
 retain their missing status pending real source/model/history/Save/native integration;

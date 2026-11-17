@@ -7,6 +7,40 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Resolved numeric composition integrated; fresh full local gate passes
+
+Base6d9ce09; accompanying atomic integration commit is the recoverable state. Worker
+41ab816 from isolated `bondline-formula` supplies the same code/tests, reviewed independently
+before receiving. Read [contract](docs/research/formula-composition.md) and
+[receiving](docs/verification-formula-composition.md). Model-only analyze_fragment returns
+numeric element/isotope totals and formal charge, supports full100000-item bounds,
+refuses unknown H and checks cancellation/arithmetic. Physical H and inline H are distinct;
+natural isotope bins stay separate from numbered nuclides. No formula text, masses,
+valence inference, chemical-validity/source certificate or Analysis command/UI is added.
+
+Ten new tests include literal/full-bound controls and a prequalified independent RDKit
+checker over13 reference molecules. Isolated chem/model57/0 and clippy/fmt pass. Root
+review finds no material issue and confirms old neutral-authoring code byte-exact.
+Fresh full6948 exits0:1831 passed/0 failed/1 ignored across272 result lines, with fmt,
+warnings-denied workspace/vendor checks, layers, strict licenses, seven assets/notices
+and pinned corpus. Log231502B/SHA256
+248396a5c627c94bbb3fe6c74f905dded45715de022c4a5f789b6df3db8c5134.
+CLI46 bytes/hash remain exact; catalogue16/124 and all source/command/native authority stay.
+
+The preceding Text-stage MCP AddrInUse remains recorded/unexplained; this natural pass
+does not fix it. Listener policy/tests/timing, locks/workflow/vendor/fonts/goldens remain
+unchanged. All workers and Root execution jobs are terminal. Isolated formula branch
+and worktree remain as completed provenance; do not restart or duplicate that worker.
+No native app or user drawing is touched. Actions OFF; no push/publication.
+
+Next return to M1 effective styles/fonts/colour/dependent Text and actual source/model/
+render/history/Save integration. The Text and resource primitives below are delivered,
+not a general foreign profile. Independent public spacing evidence supports centreline
+separation; persist/verify that source contract before implementing relative-spacing
+data/render/commands, retaining Abs/inheritance/default unknowns. Actual source-aware
+composition/inference/notation/mass/UI, general CDX/interchange, native/other-platform
+acceptance and full M0–M5 remain required. The persistent goal stays active/incomplete.
+
 ### Source-preserving text edits; components pass, aggregate bind failure retained
 
 Base8e030bf; accompanying atomic format commit is the recoverable state. Read
@@ -32,13 +66,9 @@ The natural later shutdown pass explains no cause; listener policy/tests/timing 
 exhausted prior diagnostics remain untouched. Locks/workflow/vendor/fonts/goldens stay.
 All Root execution jobs are terminal; no native app/user drawing is touched. Actions OFF.
 
-Parallel ownership: `/root/native_acceptance` is implementing checked formula composition
-ONLY in sibling worktree `/Users/sarenaberg/Workspace/doozle/open-source-world/bondline-formula`,
-branch `feat/formula-composition`, based on8e030bf. Agent is confirmed running; its first
-API RED and nine-case GREEN are reported, with targeted qualification/commit in progress.
-Do not duplicate, mutate or integrate partial worker files. Inspect its actual status,
-commit/evidence and source before integration, then run receiving checks in this root.
-No formula capability is integrated or advertised yet.
+At this Text checkpoint, the isolated formula worker was running on8e030bf. The newer
+integration section above supersedes that live-job state; its completed branch/worktree
+are retained for provenance. No Analysis workflow is advertised by this library work.
 
 Next complete effective font/colour/style and synchronized dependent Text through model,
 render, commands/history/Save/reopen before widening foreign authoring. Independent public

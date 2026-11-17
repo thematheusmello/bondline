@@ -613,7 +613,12 @@ complete a milestone.
 Bonds, rings, chains, labels/abbreviations, charges, isotopes, radicals, wedge/hash bonds,
 selection, transforms, hotkeys, undo/redo and style sheets from public journal guidelines.
 
-## M3: chemistry — planned
+## M3: chemistry — in progress
+
+The [resolved numeric composition prerequisite](docs/verification-formula-composition.md)
+now has independent full-bound/literal/RDKit evidence and main full1831/0/1. It refuses
+unknown H and keeps isotope bins/charge exact. Source-aware inference, formula formatting,
+mass and the actual Analysis workflow remain missing; no command/tool is enabled here.
 
 Valence, aromaticity, stereo/CIP, checking, cleanup, formula/mass, analysis, reactions,
 curved arrows, brackets and chemically formatted captions. Compare against independently
