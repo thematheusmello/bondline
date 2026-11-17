@@ -220,7 +220,7 @@ command_registry! {
     UiChainTool(UiChainTool) => ("ui.chain_tool", "Select a chain tool, set its transient constraints, or open/cancel a source-qualified numeric Add Chain draft; authoring uses the existing chain commands.", false),
     RingSprout(RingSprout) => ("ring.sprout", "Attach an independent native carbon ring through one Single connector in one edit, with explicit cycle geometry and literal hydrogen policy.", false),
     UiPreferences(UiPreferences) => ("ui.preferences", "Inspect or set session application preferences, or open/apply/cancel their native draft; never authors document data or acknowledges Save.", false),
-    DocumentSettingsSet(DocumentSettingsSet) => ("document.set_document_settings", "Replace explicit bond length, chain angle and line width atomically; a width change must pass the whole-page ink certificate and leaves geometry and label metrics unchanged.", false),
+    DocumentSettingsSet(DocumentSettingsSet) => ("document.set_document_settings", "Replace explicit bond length, chain angle and line width atomically; optionally set or clear spacing. Appearance or active spacing-reference changes must pass the whole-page ink certificate without moving geometry or changing label metrics.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -293,6 +293,8 @@ pub enum Error {
     UnsupportedDrawingSettingsSource,
     #[error("the requested document style cannot be displayed safely: {0}")]
     UnsupportedDrawingStyle(&'static str),
+    #[error("bond spacing must be a finite percentage from 1 through 100, or explicit null")]
+    InvalidBondSpacing,
     #[error(transparent)]
     Render(#[from] bondline_render::Error),
     #[error(transparent)]

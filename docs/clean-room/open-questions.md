@@ -4,8 +4,11 @@
   absolute spacing and GUIDE25 establish units/precedence. New public
   [implementation/measurement evidence](../research/bond-spacing-evidence.md) supports
   centreline spacing for plain bonds, without independently reproduced26.1 execution.
-  Root ownership of BondSpacingAbs also differs between DTD and SDK owner tables. Keep imported
-  spacing guarded pending property/owner/length qualification. Font/colour resource decoding does
+  [Explicit native root spacing](../research/document-bond-spacing.md) now resolves against
+  preferred length, corroborated by actual external original vectors; this does not resolve
+  general foreign defaults. Root ownership of BondSpacingAbs differs between DTD and SDK
+  owner tables. Absolute spacing, local overrides and unresolved inheritance stay opaque.
+  Font/colour resource decoding does
   not resolve font availability, charset mappings, inherited defaults or dependent Text.
 
 - [Explicit document LineWidth](../research/document-line-width.md) now has a complete
@@ -409,11 +412,13 @@ the implemented slice does not establish universal CTfile perception or referenc
 segments from context-sensitive offset/joined Double bonds. Public SDK relative spacing,
 absolute override and inherited/last-used style semantics do not establish a universal26.1
 numeric default;18% is an example. Its absolute-spacing owner table/prose needs explicit
-interpretation before style mapping. Relative
-spacing's reference length, actual tier/style defaults, ring/substituent placement and
-persistent style schema remain open. The current implementation work adopts original3w
-centered geometry with bounded visible-ink/gap checks and a one-third short-axis guard;
-none is established reference behavior. Dedicated tool/drag flows do not establish
+interpretation before broader style mapping. Explicit root relative spacing now uses
+preferred length in the supported native profile, with public SDK and independently
+executed Octet-Draw evidence; [contract](../research/document-bond-spacing.md) separates
+these from undocumented defaults. Actual tier/style defaults, local overrides and
+automatic ring/substituent placement remain open. Absent spacing retains original3pt
+geometry and the one-third short-axis guard; explicit spacing uses actual ink/gap/paper/
+hit certificates without that arbitrary cap. Dedicated tool/drag flows do not establish
 conversion clicks, hotkeys, alignment cycling or actual native drawing acceptance.
 
 The [DoublePosition prerequisite](../research/sided-double-prerequisite.md) resolves the

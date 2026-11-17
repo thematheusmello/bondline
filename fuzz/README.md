@@ -27,8 +27,12 @@ endpoint drift refusal, source/current purity and explicitly rebound reopening. 
 existing dependencies, at most16KiB input and small fixed native-domain cases, without
 Engine, filesystem/process, GUI or GPU work. No arbitrary error is treated as a success.
 Explicit document LineWidth now participates in source/reopening equality, structured
-set/clear/unchanged-lexeme edits and six additional original positive/opaque seeds. This
-is IO data coverage; independent render/command/native checks remain separate.
+set/clear/unchanged-lexeme edits. Root-relative spacing additionally varies absent/zero/
+fractional/maximum data with independent width/preference state. The37-seed recipe
+includes negative-underflow, Abs and local-owner refusals and preserves immutable source
+copies outside the mutation corpus. This is IO data coverage; independent render/command/
+native checks remain separate. The spacing receiving record reports an actual10000-run,
+65-second ASan pass reaching16384B; it does not establish general foreign-style support.
 Generate fresh original source/corpus copies and a separate manifest:
 
 ```sh

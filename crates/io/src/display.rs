@@ -64,7 +64,8 @@ pub fn drawing_page_scene(
 ) -> Result<GraphScene, DisplayError> {
     let (page, counts) = display_facts(stored, page_id, cancel)?;
     let view = bondline_render::PageView::fit(width, height, page.size())?
-        .with_drawing_style(stored.model().drawing_style());
+        .with_drawing_style(stored.model().drawing_style())
+        .with_drawing_settings(stored.model().drawing_settings());
     Ok(match counts {
         None => view.graph_scene(page, cancel)?,
         Some(counts) => view.graph_scene_with_display_hydrogens(page, &counts, cancel)?,
@@ -81,7 +82,8 @@ pub fn drawing_page_scene_with_view(
     let (page, counts) = display_facts(stored, page_id, cancel)?;
     let view = view
         .clone()
-        .with_drawing_style(stored.model().drawing_style());
+        .with_drawing_style(stored.model().drawing_style())
+        .with_drawing_settings(stored.model().drawing_settings());
     Ok(match counts {
         None => view.graph_scene(page, cancel)?,
         Some(counts) => view.graph_scene_with_display_hydrogens(page, &counts, cancel)?,

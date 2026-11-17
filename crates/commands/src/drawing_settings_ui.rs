@@ -27,6 +27,7 @@ pub struct UiDrawingSettingsRequest {
     pub bond_length_pt: Option<f64>,
     pub chain_angle_degrees: Option<f64>,
     pub line_width_pt: Option<f64>,
+    pub bond_spacing_percent: Option<f64>,
     pub current: bool,
     #[serde(skip)]
     cancelled: crate::Cancellation,
@@ -162,6 +163,7 @@ impl Engine {
                         bond_length_pt: settings.bond_length_pt(),
                         chain_angle_degrees: settings.chain_angle_degrees(),
                         line_width_pt: stored.model().drawing_style().line_width_pt(),
+                        bond_spacing_percent: stored.model().drawing_style().bond_spacing_percent(),
                         current: true,
                         cancelled: crate::Cancellation::default(),
                     },
@@ -234,6 +236,32 @@ impl Engine {
             bond_length_pt,
             chain_angle_degrees,
             line_width_pt,
+            bond_spacing_percent: None,
+        }))?;
+        self.finish_ui_drawing_settings(id);
+        result.ui_drawing_settings = None;
+        result.ui_drawing_settings_operation = Some(id);
+        Ok(result)
+    }
+
+    /// Apply the complete form once, preserving all weak presentation guards.
+    pub fn apply_ui_document_settings_with_spacing(
+        &mut self,
+        id: u64,
+        bond_length_pt: Option<f64>,
+        chain_angle_degrees: Option<f64>,
+        line_width_pt: Option<f64>,
+        bond_spacing_percent: Option<f64>,
+    ) -> Result<CommandResult, Error> {
+        if !self.ui_drawing_settings_request_current(id) {
+            return Err(Error::UiStaleRequest);
+        }
+        let mut result = self.execute(Command::DocumentSettingsSet(DocumentSettingsSet {
+            expected_revision: self.revision,
+            bond_length_pt,
+            chain_angle_degrees,
+            line_width_pt,
+            bond_spacing_percent: Some(bond_spacing_percent),
         }))?;
         self.finish_ui_drawing_settings(id);
         result.ui_drawing_settings = None;

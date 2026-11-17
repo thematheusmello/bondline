@@ -163,9 +163,10 @@ impl PastePlan {
             .iter()
             .find(|page| page.id() == page_id)
             .ok_or(bondline_model::Error::MissingPage(page_id.get()))?;
-        bondline_io::smiles::validate_authoring_page_with_style(
+        bondline_io::smiles::validate_authoring_page_with_settings(
             page,
             candidate.model().drawing_style(),
+            candidate.model().drawing_settings(),
             cancel,
         )?;
         cancel.check()?;

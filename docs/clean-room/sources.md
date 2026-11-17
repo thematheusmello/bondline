@@ -1,5 +1,15 @@
 # Clean-room source register
 
+Explicit root relative spacing follows the public SDK
+[BondSpacing0x0804/INT16](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacing.htm)
+and [absolute precedence](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacingAbs.htm).
+The [locked contract](../research/document-bond-spacing.md) and
+[receiving](../verification-document-bond-spacing.md) record independently authored
+Rust/data/input policies and actual pinned Apache-2.0 Octet-Draw execution on original
+skeletal inputs:28 analytic records/201 comparisons, with14 separate capability observations.
+It corroborates preferred-length centreline separation, not proprietary26.1 behavior,
+Abs/defaults or font rendering. No upstream implementation/assets/fonts ship.
+
 Plain-bond spacing research reviewed2026-11-17 has pinned public Apache-2.0 Octet-Draw
 geometry and an MIT-authored measurement report. [Evidence and limits](../research/bond-spacing-evidence.md)
 corroborate centreline spacing for plain strokes while distinguishing third-party claims,

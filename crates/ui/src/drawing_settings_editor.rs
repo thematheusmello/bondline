@@ -1,20 +1,21 @@
-//! Document creation preferences and ink width; the registry authors one validated edit.
+//! Document creation preferences and appearance; the registry authors one validated edit.
 use crate::{file_workflow::smiles_paste::field_output, sdf_draft_text::SdfDraftText};
 use bondline_commands::{Command, Engine, UiDrawingSettings, UiDrawingSettingsRequest};
 use bondline_model::{DrawingSettings, DrawingStyle};
 use eframe::egui;
 
-type SettingsValues = (Option<f64>, Option<f64>, Option<f64>);
+type SettingsValues = (Option<f64>, Option<f64>, Option<f64>, Option<f64>);
 
 struct Form {
     request: UiDrawingSettingsRequest,
     bond_length: SdfDraftText,
     chain_angle: SdfDraftText,
     line_width: SdfDraftText,
+    bond_spacing: SdfDraftText,
     detached: bool,
     message: Option<String>,
     buttons: [Option<egui::Id>; 2],
-    fields: [Option<egui::text_edit::TextEditOutput>; 3],
+    fields: [Option<egui::text_edit::TextEditOutput>; 4],
     deferred_text: Vec<egui::Event>,
 }
 
@@ -33,9 +34,15 @@ impl Form {
         let length = number(self.bond_length.as_str())?;
         let angle = number(self.chain_angle.as_str())?;
         let width = number(self.line_width.as_str())?;
+        let spacing = number(self.bond_spacing.as_str())?;
+        if spacing.is_some_and(|value| !(1.0..=100.0).contains(&value)) {
+            return Err(bondline_commands::Error::InvalidBondSpacing.to_string());
+        }
         DrawingSettings::new(length, angle).map_err(|error| error.to_string())?;
-        DrawingStyle::new(width).map_err(|error| error.to_string())?;
-        Ok((length, angle, width))
+        DrawingStyle::new(width)
+            .and_then(|style| style.with_bond_spacing_percent(spacing))
+            .map_err(|error| error.to_string())?;
+        Ok((length, angle, width, spacing))
     }
 }
 
@@ -55,10 +62,10 @@ fn route_prefix(
     context: &egui::Context,
     events: &[egui::Event],
     focus: Option<egui::Id>,
-) -> crate::pair_input::Routed<3> {
+) -> crate::pair_input::Routed<4> {
     crate::pair_input::route_prefix(
         &form.fields,
-        [384, 384, 384],
+        [384; 4],
         384,
         |index| field_id(form.request.id, index),
         context,
@@ -93,25 +100,31 @@ impl DrawingSettingsEditor {
             let width = request
                 .line_width_pt
                 .map_or_else(String::new, |value| value.to_string());
+            let spacing = request
+                .bond_spacing_percent
+                .map_or_else(String::new, |value| value.to_string());
             let length =
                 SdfDraftText::with_byte_limit(&length, 384).map_err(|error| error.to_string())?;
             let angle =
                 SdfDraftText::with_byte_limit(&angle, 384).map_err(|error| error.to_string())?;
             let width =
                 SdfDraftText::with_byte_limit(&width, 384).map_err(|error| error.to_string())?;
-            Ok::<_, String>((length, angle, width))
+            let spacing =
+                SdfDraftText::with_byte_limit(&spacing, 384).map_err(|error| error.to_string())?;
+            Ok::<_, String>((length, angle, width, spacing))
         })();
         match values {
-            Ok((bond_length, chain_angle, line_width)) => {
+            Ok((bond_length, chain_angle, line_width, bond_spacing)) => {
                 self.form = Some(Form {
                     detached: !request.current,
                     request,
                     bond_length,
                     chain_angle,
                     line_width,
+                    bond_spacing,
                     message: None,
                     buttons: [None, None],
-                    fields: [None, None, None],
+                    fields: [None, None, None, None],
                     deferred_text: Vec::new(),
                 })
             }
@@ -121,7 +134,7 @@ impl DrawingSettingsEditor {
 
     fn end(&mut self, context: &egui::Context) {
         if let Some(form) = self.form.take() {
-            for index in 0..3 {
+            for index in 0..4 {
                 let id = field_id(form.request.id, index);
                 context.data_mut(|data| data.remove::<egui::text_edit::TextEditState>(id));
                 context.memory_mut(|memory| memory.surrender_focus(id));
@@ -201,9 +214,9 @@ impl DrawingSettingsEditor {
             .order(egui::Order::Foreground).collapsible(false).resizable(false)
             .default_width(370.0).show(context,|ui| {
                 ui.heading("Drawing");
-                ui.label("Bond length and angle affect new structures. Line width updates existing bonds.");
+                ui.label("Bond length and angle affect new structures. Spacing uses the preferred bond length; width and spacing update existing bonds.");
                 ui.weak("Leave a field blank to clear its explicit value.");
-                for (index,(label,text)) in [("Bond length (pt)",&mut form.bond_length),("Chain angle (degrees)",&mut form.chain_angle),("Line width (pt)",&mut form.line_width)].into_iter().enumerate() {
+                for (index,(label,text)) in [("Bond length (pt)",&mut form.bond_length),("Chain angle (degrees)",&mut form.chain_angle),("Line width (pt)",&mut form.line_width),("Bond spacing (%)",&mut form.bond_spacing)].into_iter().enumerate() {
                     if let Some(routed)=&mut routed {
                         let queue=routed.fields.get_mut(index).map(std::mem::take).unwrap_or_default();
                         let focus=!queue.is_empty() || routed.focus==Some(index);
@@ -221,7 +234,7 @@ impl DrawingSettingsEditor {
                 }
                 if let Some(routed)=&routed {
                     context.memory_mut(|memory| {
-                        for index in 0..3 {memory.surrender_focus(field_id(id,index));}
+                        for index in 0..4 {memory.surrender_focus(field_id(id,index));}
                         if let Some(index)=routed.focus {memory.request_focus(field_id(id,index));}
                     });
                 }
@@ -258,14 +271,15 @@ impl DrawingSettingsEditor {
                 if !form.detached
                     && editable
                     && !input_rejected
-                    && let (Some(engine), Ok((bond_length, chain_angle, line_width))) =
+                    && let (Some(engine), Ok((bond_length, chain_angle, line_width, bond_spacing))) =
                         (engine, current_values)
                 {
-                    match engine.apply_ui_document_settings(
+                    match engine.apply_ui_document_settings_with_spacing(
                         id,
                         bond_length,
                         chain_angle,
                         line_width,
+                        bond_spacing,
                     ) {
                         Ok(_) => {
                             self.end(context);
@@ -276,7 +290,7 @@ impl DrawingSettingsEditor {
                 }
                 // Match the field bridge's last replacement, bounded before retaining any payload.
                 let suffix = events.get(at.saturating_add(1)..).unwrap_or_default();
-                for (index, limit) in [(0, 384), (1, 384), (2, 384)] {
+                for (index, limit) in [(0, 384), (1, 384), (2, 384), (3, 384)] {
                     if let Some(event) = suffix.iter().rev().find(|event| {
                         matches!(event,
                         egui::Event::AccessKitActionRequest(request)

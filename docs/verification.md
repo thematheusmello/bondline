@@ -1,5 +1,17 @@
 # Verification log
 
+## Explicit document relative spacing, 2026-11-17
+
+[Receiving](verification-document-bond-spacing.md) records public preferred-length
+evidence, independent data/render/command/App REDs, source-preserving width/spacing deltas,
+atomic final-candidate history, actual CLI/stdio/socket Unicode files and twelve analytic
+CPU/GPU captures. Full12360 passes1861/0/1 across278 result lines and all local gates;
+first14853's old Open-response shape failure is retained and fixed with exact nullable
+expectations. ASan43341 passes10000/65s, actual NEW/REDUCE16384B. The historical MCP bind
+failure stays unexplained. Registry46/old45 metadata and catalogue16/124 remain; native
+interaction is wired/unverified, broader foreign styles and all M0–M5 remain incomplete.
+All jobs/workers are terminal; protected user apps/drawings untouched; Actions OFF.
+
 ## Checked resolved composition, 2026-11-17
 
 [Receiving](verification-formula-composition.md) records isolated worker commit41ab816,

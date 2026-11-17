@@ -1,5 +1,9 @@
 # Public evidence for plain-bond spacing
 
+This is the historical source-review checkpoint. The later
+[contract](document-bond-spacing.md) and [receiving](../verification-document-bond-spacing.md)
+record actual external vectors and the integrated explicit-root workflow.
+
 Reviewed2026-11-17. Research only: no spacing implementation, source-profile widening,
 new dependency, upstream test execution or reference-program access follows.
 

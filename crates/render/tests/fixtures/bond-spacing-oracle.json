@@ -1,0 +1,25 @@
+{
+  "provenance": {
+    "kind": "original numeric results from original manually authored skeletal CDXML",
+    "program": "Octet-Draw 1.1.2",
+    "source": "https://github.com/SamChemMan/Octet-Draw/tree/6395bd582d2c5ba9404e9ddaf175e52e2a9f387c",
+    "license": "Apache-2.0; no upstream source or asset in this fixture",
+    "reviewed": "2026-11-17",
+    "mode": "explicit source-coordinate scale; not default median autoscale",
+    "raw_result_sha256": "d72a89e6823959cce0127cd5edb3fd5464bc78ef1063ac59c8385f5987be15c7",
+    "terminal_receipt_sha256": "119dd1b0c27e10b6d93b315ae8c0d8c27d05c0abb723ff2aa553f91f75b4e5da",
+    "limits": "No Professional26.1/native/raster/Abs/ancestry guarantee; external relative root values only. Positions, widths and distances are points."
+  },
+  "vectors": [
+    {"name":"center-base","order":2,"actual":40,"preferred":40,"percent":18,"width":0.6,"separation":7.2,"gap":6.6},
+    {"name":"center-width12","order":2,"actual":40,"preferred":40,"percent":18,"width":1.2,"separation":7.2,"gap":6.0},
+    {"name":"center-percent12","order":2,"actual":40,"preferred":40,"percent":12,"width":0.6,"separation":4.8,"gap":4.2},
+    {"name":"center-percent30","order":2,"actual":40,"preferred":40,"percent":30,"width":0.6,"separation":12,"gap":11.4},
+    {"name":"center-actual20","order":2,"actual":20,"preferred":40,"percent":18,"width":0.6,"separation":7.2,"gap":6.6},
+    {"name":"center-actual80","order":2,"actual":80,"preferred":40,"percent":18,"width":0.6,"separation":7.2,"gap":6.6},
+    {"name":"center-preferred20","order":2,"actual":40,"preferred":20,"percent":18,"width":0.6,"separation":3.6,"gap":3.0},
+    {"name":"center-preferred80","order":2,"actual":40,"preferred":80,"percent":18,"width":0.6,"separation":14.4,"gap":13.8},
+    {"name":"triple-base","order":3,"actual":40,"preferred":40,"percent":18,"width":0.6,"separation":7.2,"gap":6.6},
+    {"name":"triple-actual80","order":3,"actual":80,"preferred":40,"percent":12,"width":1.2,"separation":4.8,"gap":3.6}
+  ]
+}

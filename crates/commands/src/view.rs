@@ -126,7 +126,8 @@ impl Engine {
             .find(|page| page.id() == page_id)
             .ok_or(bondline_model::Error::MissingPage(page_id.get()))?;
         Ok(page_view_for(self.view, width, height, page.size())?
-            .with_drawing_style(self.document()?.drawing_style()))
+            .with_drawing_style(self.document()?.drawing_style())
+            .with_drawing_settings(self.document()?.drawing_settings()))
     }
 
     pub fn drawing_view_scene(

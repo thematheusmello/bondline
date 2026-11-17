@@ -501,7 +501,12 @@ pub(crate) fn write_preserved(
             ),
             (
                 "LineWidth",
-                baseline.drawing_style() != current.drawing_style(),
+                baseline.drawing_style().line_width_pt() != current.drawing_style().line_width_pt(),
+            ),
+            (
+                "BondSpacing",
+                baseline.drawing_style().bond_spacing_percent()
+                    != current.drawing_style().bond_spacing_percent(),
             ),
         ],
     )?;

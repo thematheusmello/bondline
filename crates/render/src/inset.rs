@@ -9,6 +9,7 @@ pub(crate) fn strokes_with_unit(
     end_neighbours: &[[f32; 2]],
     cancel: &Cancellation,
     unit: f32,
+    explicit_spacing: Option<f64>,
 ) -> Result<Vec<Stroke>, Error> {
     cancel.check()?;
     axis.validate()?;
@@ -24,11 +25,14 @@ pub(crate) fn strokes_with_unit(
     let end = axis.end.map(f64::from);
     let delta = [end[0] - begin[0], end[1] - begin[1]];
     let length = delta[0].hypot(delta[1]);
-    let spacing = 3.0 * f64::from(unit);
-    if f64::from(axis.width) >= spacing {
+    let spacing = explicit_spacing.unwrap_or(3.0 * f64::from(unit));
+    if (explicit_spacing.is_some()
+        && (!spacing.is_finite() || spacing <= 0.0 || spacing > 100_000.0))
+        || f64::from(axis.width) >= spacing
+    {
         return Err(Error::BondScale);
     }
-    if 3.0 * spacing > length {
+    if explicit_spacing.is_none() && 3.0 * spacing > length {
         return Err(Error::UnsupportedChemicalContent);
     }
     let tangent = delta.map(|value| value / length);

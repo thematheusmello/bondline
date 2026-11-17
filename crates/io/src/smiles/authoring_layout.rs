@@ -4,7 +4,7 @@ use super::{
     LayoutError, SmilesDocument,
     acyclic::{WORK_PER_ROTATION, check, geometry, polygons_overlap},
     components,
-    layout::validate_ink_with_style,
+    layout::validate_ink_with_settings,
 };
 use bondline_model::{AtomId, BondId, Document, Fragment, FragmentId, Page, PageSize, Point2};
 use bondline_render::{Cancellation, MAX_HIT_REGIONS};
@@ -43,6 +43,21 @@ pub fn validate_authoring_page(page: &Page, cancel: &Cancellation) -> Result<(),
 pub fn validate_authoring_page_with_style(
     page: &Page,
     style: bondline_model::DrawingStyle,
+    cancel: &Cancellation,
+) -> Result<(), LayoutError> {
+    validate_authoring_page_with_settings(
+        page,
+        style,
+        bondline_model::DrawingSettings::default(),
+        cancel,
+    )
+}
+
+/// Certify the final authored appearance, including the preferred spacing reference.
+pub fn validate_authoring_page_with_settings(
+    page: &Page,
+    style: bondline_model::DrawingStyle,
+    settings: bondline_model::DrawingSettings,
     cancel: &Cancellation,
 ) -> Result<(), LayoutError> {
     check(cancel)?;
@@ -143,7 +158,7 @@ pub fn validate_authoring_page_with_style(
             return Err(LayoutError::Geometry("whole-page authored geometry"));
         }
     }
-    let scene = validate_ink_with_style(page, style, cancel)?;
+    let scene = validate_ink_with_settings(page, style, settings, cancel)?;
     let actual_bonds = page
         .fragments()
         .iter()

@@ -9,21 +9,32 @@ schemas; the current contracts are listed below.
 ## Atomic document appearance and creation settings
 
 `document.set_document_settings` appends record 46, retaining the previous 45 command
-records, schemas and order. Its four required keys form one closed parameter object:
+records, schemas and order. Its four required keys remain required in a closed parameter
+object; an optional nullable `bond_spacing_percent` now extends this same record:
 
 ```json
-{"command":"document.set_document_settings","params":{"expected_revision":1,"bond_length_pt":48,"chain_angle_degrees":120,"line_width_pt":0.5}}
+{"command":"document.set_document_settings","params":{"expected_revision":1,"bond_length_pt":40,"chain_angle_degrees":120,"line_width_pt":0.6,"bond_spacing_percent":18}}
 ```
 
-All three values are nullable; null clears explicit data. Width is finite, above zero
-through 100000 points. A width change must pass the bounded whole-page ink certificate
-before the single history commit. A closed or invisible multiple-bond gap is an
-`unsupported_scale` refusal, not a partial edit. Geometry and font/spacing metrics stay
-unchanged. No-op sharing/redo, source/close/revision guards and Save leases remain.
-The existing pair command remains closed to width and preserves the current style.
-File > Document Settings applies the full triple through this registry entry; the legacy
-Rust pair-Apply method retains its old behavior. Full details and native limits are in
-[receiving](verification-document-line-width.md).
+The three original values are nullable; null clears explicit data. Width is finite,
+above zero through100000 points. Spacing omission preserves its current value, null
+clears it and a number sets a finite percentage from1 through100. Typed nonfinite
+values refuse serialization rather than accidentally clearing a value. Old wire requests
+remain valid; Rust `DocumentSettingsSet` literals add the optional update field.
+
+Explicit separation is percentage × preferred bond length /100. Absent preferred length
+uses Bondline's original48pt convention only in its supported native/source-free profile.
+Missing spacing retains the exact legacy3pt path. Width and label metrics are independent.
+The final settings/style candidate is certified once when appearance or an active spacing
+reference length changes. A closed or invisible gap refuses with `unsupported_scale`
+before the single history commit; no intermediate preference-only candidate is authored.
+Geometry, no-op sharing/redo, source/close/revision guards and Save leases stay intact.
+The old pair command and Rust pair/three-field Apply helpers preserve unaddressed spacing.
+File > Document Settings uses four bounded fields and the same registry entry; new native
+width/spacing interaction remains unverified. See [spacing contract](research/document-bond-spacing.md)
+and [receiving](verification-document-bond-spacing.md).
+The weak Open request includes nullable `bond_spacing_percent` alongside the other
+presented scalars; a blank value grants no authoring or Save authority.
 
 ## Shared request and result rules
 

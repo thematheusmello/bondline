@@ -1,5 +1,7 @@
 //! Child of existing chain_creation/settings_wire.rs; no new transport implementation.
 use super::*;
+#[path = "bond_spacing_wire.rs"]
+mod relative_spacing;
 const COMBINED: &str = "document.set_document_settings";
 const MIXED: &[u8] = include_bytes!("line-width-mixed.cdxml");
 const OLD45: &str = include_str!("document-settings-old45.json");
@@ -55,6 +57,8 @@ fn new_schema(s: &Value) -> TestResult {
         .map(|v| v.as_str().ok_or("required key"))
         .collect::<Result<BTreeSet<_>, _>>()?;
     assert_eq!(required, keys);
+    let mut properties = keys.clone();
+    properties.insert("bond_spacing_percent");
     assert_eq!(
         s["properties"]
             .as_object()
@@ -62,9 +66,14 @@ fn new_schema(s: &Value) -> TestResult {
             .keys()
             .map(String::as_str)
             .collect::<BTreeSet<_>>(),
-        keys
+        properties
     );
-    for name in ["bond_length_pt", "chain_angle_degrees", "line_width_pt"] {
+    for name in [
+        "bond_length_pt",
+        "chain_angle_degrees",
+        "line_width_pt",
+        "bond_spacing_percent",
+    ] {
         let types = s["properties"][name]["type"].as_array().ok_or("nullable")?;
         assert_eq!(types.len(), 2);
         assert!(types.contains(&json!("number")) && types.contains(&json!("null")));
@@ -83,6 +92,14 @@ fn new_schema(s: &Value) -> TestResult {
     assert_eq!(
         s["properties"]["chain_angle_degrees"]["maximum"].as_f64(),
         Some(179.0)
+    );
+    assert_eq!(
+        s["properties"]["bond_spacing_percent"]["minimum"].as_f64(),
+        Some(1.0)
+    );
+    assert_eq!(
+        s["properties"]["bond_spacing_percent"]["maximum"].as_f64(),
+        Some(100.0)
     );
     Ok(())
 }

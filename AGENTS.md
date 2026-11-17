@@ -1,5 +1,16 @@
 # Bondline agent instructions
 
+Explicit root relative spacing is integrated on baseb377456; read
+docs/research/document-bond-spacing.md and docs/verification-document-bond-spacing.md.
+Preserve independent optional width/spacing, exact legacy absence, preferred-length
+resolution, per-property XML splices and one final candidate certificate. Command46 adds
+optional omission/preserve, null/clear, number1..100; its old4 keys stay required and old45
+schemas/order stay exact. Pair/Apply3 preserve spacing; Apply4 uses the bounded ordered
+four-field form. Full12360 passes1861/0/1; ASan43341 passes10000/65s. Native interaction
+remains wired/unverified; Abs/local/inherited foreign styles remain missing. All owned
+jobs/workers are terminal, Actions OFF. Continue the current M1 next steps in STATUS,
+not the superseded historical task lists below. Full M0–M5 remains active/incomplete.
+
 Resolved composition from isolated41ab816 is integrated on base6d9ce09; see
 docs/research/formula-composition.md and docs/verification-formula-composition.md.
 Keep node+inline-H accounting, natural/numbered isotope separation, strict None-H refusal,

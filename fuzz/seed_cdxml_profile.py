@@ -34,6 +34,13 @@ for name, width in [('half', b'.500'), ('two', b'2.0'), ('maximum', b'100000')]:
 for name, width in [('zero', b'0'), ('nonfinite', b'NaN')]:
     seed('style-'+name+'.xml', 'opaque/unsupported-line-width', 'opaque', ORIGINAL.replace(b'<CDXML ', b'<CDXML LineWidth="'+width+b'" ', 1))
 seed('style-object-override.xml', 'opaque/unmodelled-object-line-width', 'opaque', ORIGINAL.replace(b'<n ', b'<n LineWidth="2" ', 1))
+for name, spacing in [('eighteen', b'18.00'), ('zero', b'0'), ('signed-zero', b'-0.000'), ('maximum', b'3276.7')]:
+    seed('spacing-'+name+'.xml', 'positive/explicit-root-relative-spacing', 'complete', ORIGINAL.replace(b'<CDXML ', b'<CDXML BondLength="40.00" BondSpacing="'+spacing+b'" LineWidth=".500" ', 1))
+for name, spacing in [('negative', b'-1'), ('negative-underflow', b'-1e-9999'), ('above-domain', b'3276.8'), ('nonfinite', b'NaN')]:
+    seed('spacing-'+name+'.xml', 'opaque/unsupported-relative-spacing', 'opaque', ORIGINAL.replace(b'<CDXML ', b'<CDXML BondSpacing="'+spacing+b'" ', 1))
+seed('spacing-object-override.xml', 'opaque/unmodelled-bond-relative-spacing', 'opaque', ORIGINAL.replace(b'<b ', b'<b BondSpacing="12" ', 1))
+seed('spacing-absolute.xml', 'opaque/unmodelled-absolute-spacing', 'opaque', ORIGINAL.replace(b'<CDXML ', b'<CDXML BondSpacing="18" BondSpacingAbs="3" ', 1))
+seed('spacing-selectors-max.bin', 'structured-only/spacing-selector-bits', 'structured_only', bytes([255])*9)
 seed('empty-selfclosing-page.xml', 'positive/selfclosing-parent', 'complete', b"<CDXML CreationProgram='Bondline 0.1.0'><page id='91' DrawingSpace='Poster' Width='612.00' Height='792.000' /></CDXML>")
 seed('empty-paired-fragment.xml', 'positive/paired-parent-and-comment', 'complete', b"<CDXML CreationProgram='Bondline 0.1.0'><page id='91' DrawingSpace='Poster' Width='612.00' Height='792.000'><fragment id='7'><!--stay--></fragment></page></CDXML>")
 seed('optional-flags-and-side.xml', 'positive/optional-settings-and-fields', 'complete', ORIGINAL.replace(b'<CDXML ', b'<CDXML BondLength="48.00" ChainAngle="90.0" ', 1).replace(b' Order=\'1\'', b' DoublePosition="Right" Order=\'1\'', 1).replace(b"<n Radical=", b"<n Isotope='13' ShowTerminalCarbonLabels='no' ShowNonTerminalCarbonLabels='yes' Radical=", 1))

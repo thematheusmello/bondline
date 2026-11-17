@@ -6,7 +6,8 @@ use crate::{
     Stroke,
 };
 use bondline_model::{
-    AtomId, BondOrder, DoublePosition, DrawingStyle, Page, PageSize, Point2, Radical,
+    AtomId, BondOrder, DoublePosition, DrawingSettings, DrawingStyle, Page, PageSize, Point2,
+    Radical,
 };
 use std::collections::BTreeMap;
 
@@ -18,6 +19,7 @@ pub struct PageViewport {
     exact_scale: Option<f64>,
     raster: Option<RasterTransform>,
     style: DrawingStyle,
+    settings: DrawingSettings,
 }
 
 #[derive(Clone)]
@@ -58,6 +60,7 @@ impl PageViewport {
             exact_scale: None,
             raster: None,
             style: DrawingStyle::default(),
+            settings: DrawingSettings::default(),
         })
     }
 
@@ -91,6 +94,7 @@ impl PageViewport {
                 exact_scale: Some(scale),
                 raster: None,
                 style: DrawingStyle::default(),
+                settings: DrawingSettings::default(),
             },
             source,
         ))
@@ -131,6 +135,7 @@ impl PageViewport {
                 ],
             }),
             style: self.style,
+            settings: self.settings,
         })
     }
 
@@ -217,6 +222,18 @@ impl PageViewport {
     pub(crate) fn with_drawing_style(mut self, style: DrawingStyle) -> Self {
         self.style = style;
         self
+    }
+
+    pub(crate) fn with_drawing_settings(mut self, settings: DrawingSettings) -> Self {
+        self.settings = settings;
+        self
+    }
+
+    fn bond_spacing(&self) -> Option<f64> {
+        self.style.bond_spacing_percent().map(|percent| {
+            // Original own/native fallback, not a foreign style-sheet default.
+            percent * self.settings.bond_length_pt().unwrap_or(48.0) / 100.0 * self.scale()
+        })
     }
 
     pub(crate) fn ink_width(&self) -> f32 {
@@ -431,7 +448,7 @@ pub(crate) fn graph_scene_in_viewport(
                 width: viewport.ink_width(),
                 color: [0, 0, 0, 255],
             };
-            if viewport.style.line_width_pt().is_some()
+            if !viewport.style.is_empty()
                 && (!stroke.width.is_finite() || stroke.width <= 0.0 || stroke.width > 100_000.0)
             {
                 return Err(Error::BondScale);
@@ -456,6 +473,14 @@ pub(crate) fn graph_scene_in_viewport(
                     &neighbours(bond.end, bond.begin),
                     cancel,
                     viewport.stroke_width(),
+                    viewport.bond_spacing(),
+                )?
+            } else if let Some(spacing) = viewport.bond_spacing() {
+                crate::stroke::centered_bond_strokes_with_spacing(
+                    &stroke,
+                    bond.order,
+                    viewport.stroke_width(),
+                    spacing,
                 )?
             } else {
                 crate::stroke::centered_bond_strokes_with_unit(
@@ -745,7 +770,10 @@ pub(crate) fn graph_scene_in_viewport(
                 } else {
                     // Original centered profile reserves the full inter-line corridor.
                     let envelope = Stroke {
-                        width: if bond.stroke.width == viewport.stroke_width() {
+                        width: if let Some(spacing) = viewport.bond_spacing() {
+                            (spacing * (bond.strokes.len() - 1) as f64
+                                + f64::from(bond.stroke.width)) as f32
+                        } else if bond.stroke.width == viewport.stroke_width() {
                             bond.stroke.width * if bond.strokes.len() == 2 { 4.0 } else { 7.0 }
                         } else {
                             3.0 * viewport.stroke_width() * (bond.strokes.len() - 1) as f32
@@ -792,7 +820,9 @@ pub(crate) fn graph_scene_in_viewport(
                             (a.begin[1] + b.begin[1]) / 2.0,
                         ],
                         end: [(a.end[0] + b.end[0]) / 2.0, (a.end[1] + b.end[1]) / 2.0],
-                        width: if bond.stroke.width == viewport.stroke_width() {
+                        width: if let Some(spacing) = viewport.bond_spacing() {
+                            (spacing - f64::from(bond.stroke.width)) as f32
+                        } else if bond.stroke.width == viewport.stroke_width() {
                             bond.stroke.width * 2.0
                         } else {
                             3.0 * viewport.stroke_width() - bond.stroke.width
@@ -824,7 +854,7 @@ pub(crate) fn graph_scene_in_viewport(
             }
         }
     }
-    if viewport.style.line_width_pt().is_some() {
+    if !viewport.style.is_empty() {
         let masks = labels
             .iter()
             .flat_map(|(_, _, label)| label.masks())
@@ -853,7 +883,7 @@ pub(crate) fn graph_scene_in_viewport(
             .extend(label.pixels.into_iter().map(Primitive::Rectangle));
     }
     cancel.check()?;
-    if counts.is_some() || viewport.style.line_width_pt().is_some() {
+    if counts.is_some() || !viewport.style.is_empty() {
         validate_paper_ink(
             &scene,
             viewport,

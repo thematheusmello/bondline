@@ -21,14 +21,18 @@ unresolved references and unsupported resource content remain explicit. This vie
 no IO profile, model/render authority or UI binding. See [contract](research/cdxml-resources.md)
 and [receiving](verification-cdxml-resources.md); foreign effective styles/Text remain required.
 
-Document has a separate optional `DrawingStyle` for explicit root line width, not a
+Document has a separate optional `DrawingStyle` for explicit root line width and relative
+spacing, not a
 creation preference or resolved foreign default. Empty omission preserves old snapshots
 and native bytes. PageView carries style through logical/physical cameras; complete-owner
 IO overrides stale caller style. Actual ink width is independent of legacy glyph/spacing
-scale, including native previews and whole-page paste/settings certificates. The new
-combined settings command commits the full creation/style triple once; the old pair API
-retains its contract. Read [contract](research/document-line-width.md) and
-[receiving](verification-document-line-width.md). No dependency, shader or planned-tool
+scale, including native previews and whole-page paste/settings certificates. Explicit
+spacing instead uses current preferred length; complete-owner paths override stale
+camera settings and style together. The combined settings command commits the final
+creation/style candidate once; optional spacing omission preserves, null clears, and
+the old pair/three-field APIs retain unaddressed spacing. Read the
+[spacing contract](research/document-bond-spacing.md) and
+[receiving](verification-document-bond-spacing.md). No dependency, shader or planned-tool
 binding is added; foreign style resolution remains separate work.
 
 CDXML backing now separates Canonical, Preserved and Opaque profiles. The closed-v0

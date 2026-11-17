@@ -251,6 +251,10 @@ fn structured(source: &[u8], data: &[u8]) {
     );
     edited.model_mut().set_drawing_style(
         DrawingStyle::new([None, Some(0.5), Some(2.0), Some(100000.0)][usize::from(byte(7) % 4)])
+            .unwrap()
+            .with_bond_spacing_percent(
+                [None, Some(0.0), Some(18.5), Some(3276.7)][usize::from(byte(8) % 4)],
+            )
             .unwrap(),
     );
     edited
@@ -302,4 +306,10 @@ fuzz_target!(|data: &[u8]| {
             .unwrap()
             .replacen("<CDXML ", "<CDXML LineWidth='.500' ", 1);
     structured(styled.as_bytes(), data);
+    let spaced = std::str::from_utf8(ORIGINAL).unwrap().replacen(
+        "<CDXML ",
+        "<CDXML LineWidth='.500' BondLength='40.00' BondSpacing='18.00' ",
+        1,
+    );
+    structured(spaced.as_bytes(), data);
 });

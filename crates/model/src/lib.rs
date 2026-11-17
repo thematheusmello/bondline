@@ -103,7 +103,9 @@ pub enum Error {
         "drawing settings need a finite bond length above zero through 100000 pt and a finite chain angle 1..179 degrees"
     )]
     InvalidDrawingSettings,
-    #[error("line width must be a finite number above zero through 100000 pt")]
+    #[error(
+        "line width must be finite above zero through 100000 pt; bond spacing must be finite within 0..3276.7 percent"
+    )]
     InvalidDrawingStyle,
     #[error("page {0} does not exist")]
     MissingPage(u32),

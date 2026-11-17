@@ -1,4 +1,6 @@
 //! Independent actual-App File menu baseline; no new Rust API.
+#[path = "bond_spacing_ui_tests.rs"]
+mod bond_spacing;
 #[path = "document_settings_ui_tests.rs"]
 mod document_style;
 

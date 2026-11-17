@@ -19,6 +19,7 @@ fn typed_triple_retains_explicit_nulls_and_never_serializes_nonfinite_as_clear()
         bond_length_pt: None,
         chain_angle_degrees: Some(120.5),
         line_width_pt: Some(2.0),
+        bond_spacing_percent: None,
     };
     assert_eq!(
         serde_json::to_value(Command::DocumentSettingsSet(value))?,
@@ -34,6 +35,7 @@ fn typed_triple_retains_explicit_nulls_and_never_serializes_nonfinite_as_clear()
                 bond_length_pt: values[0],
                 chain_angle_degrees: values[1],
                 line_width_pt: values[2],
+                bond_spacing_percent: None,
             };
             assert!(
                 serde_json::to_value(Command::DocumentSettingsSet(value.clone())).is_err(),
@@ -56,6 +58,7 @@ fn typed_triple_retains_explicit_nulls_and_never_serializes_nonfinite_as_clear()
         bond_length_pt: None,
         chain_angle_degrees: None,
         line_width_pt: None,
+        bond_spacing_percent: None,
     };
     assert_eq!(
         serde_json::to_value(all_null)?,

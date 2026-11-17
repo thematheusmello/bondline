@@ -1,7 +1,7 @@
 use crate::{
     Cancellation, Error, GraphScene, MAX_HIT_REGIONS, PageViewport, Primitive, Rectangle, Stroke,
 };
-use bondline_model::{AtomId, DrawingStyle, Page, PageSize, Point2};
+use bondline_model::{AtomId, DrawingSettings, DrawingStyle, Page, PageSize, Point2};
 use std::collections::BTreeMap;
 
 /// A logical-unit camera. Fit retains the legacy rounded viewport exactly; explicit
@@ -21,9 +21,15 @@ pub struct PageView {
 }
 
 impl PageView {
-    /// Authored ink width is independent of this camera's label and spacing metrics.
+    /// Authored ink and separation are independent of this camera's label scale.
     pub fn with_drawing_style(mut self, style: DrawingStyle) -> Self {
         self.viewport = self.viewport.with_drawing_style(style);
+        self
+    }
+
+    /// Preferred bond length is used by explicit relative spacing, never to move atoms.
+    pub fn with_drawing_settings(mut self, settings: DrawingSettings) -> Self {
+        self.viewport = self.viewport.with_drawing_settings(settings);
         self
     }
 

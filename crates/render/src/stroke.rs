@@ -29,6 +29,24 @@ pub fn centered_bond_strokes_with_unit(
     )
 }
 
+pub(crate) fn centered_bond_strokes_with_spacing(
+    axis: &Stroke,
+    order: BondOrder,
+    unit: f32,
+    spacing: f64,
+) -> Result<Vec<Stroke>, Error> {
+    axis.centered_components_with_spacing(
+        match order {
+            BondOrder::Single => 1,
+            BondOrder::Double => 2,
+            BondOrder::Triple => 3,
+            _ => return Err(Error::UnsupportedChemicalContent),
+        },
+        unit,
+        Some(spacing),
+    )
+}
+
 /// Closed, constant-width butt stroke in canvas units, without blending or antialiasing.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Stroke {
@@ -288,31 +306,46 @@ impl Stroke {
     }
 
     fn centered_components_with_unit(&self, count: usize, unit: f32) -> Result<Vec<Self>, Error> {
+        self.centered_components_with_spacing(count, unit, None)
+    }
+
+    fn centered_components_with_spacing(
+        &self,
+        count: usize,
+        unit: f32,
+        spacing: Option<f64>,
+    ) -> Result<Vec<Self>, Error> {
         self.validate()?;
         if !unit.is_finite() || unit <= 0.0 || unit > 100_000.0 {
             return Err(Error::InvalidStroke);
         }
-        let offsets: &[f64] = match count {
-            1 => return Ok(vec![self.clone()]),
-            2 => &[-1.5, 1.5],
-            3 => &[-3.0, 0.0, 3.0],
+        let offsets: &[f64] = match (count, spacing.is_some()) {
+            (1, _) => return Ok(vec![self.clone()]),
+            (2, false) => &[-1.5, 1.5],
+            (3, false) => &[-3.0, 0.0, 3.0],
+            (2, true) => &[-0.5, 0.5],
+            (3, true) => &[-1.0, 0.0, 1.0],
             _ => return Err(Error::UnsupportedChemicalContent),
         };
         let [ax, ay] = self.begin.map(f64::from);
         let [bx, by] = self.end.map(f64::from);
         let (dx, dy) = (bx - ax, by - ay);
         let length = dx.hypot(dy);
-        if f64::from(self.width) >= 3.0 * f64::from(unit) {
+        let separation = spacing.unwrap_or(3.0 * f64::from(unit));
+        if (spacing.is_some()
+            && (!separation.is_finite() || separation <= 0.0 || separation > 100_000.0))
+            || f64::from(self.width) >= separation
+        {
             return Err(Error::BondScale);
         }
         // Original centered profile: adjacent spacing3w must not exceed one-third axis.
-        if 9.0 * f64::from(unit) > length {
+        if spacing.is_none() && 9.0 * f64::from(unit) > length {
             return Err(Error::UnsupportedChemicalContent);
         }
         offsets
             .iter()
             .map(|factor| {
-                let distance = factor * f64::from(unit);
+                let distance = factor * spacing.unwrap_or(f64::from(unit));
                 let shift = [-dy / length * distance, dx / length * distance];
                 let stroke = Self {
                     begin: [(ax + shift[0]) as f32, (ay + shift[1]) as f32],

@@ -11,15 +11,21 @@ from present-short palettes. Source bytes and syntax admission are unchanged. Th
 not widen complete IO authoring or render imported fonts/colours; see
 [resource scope and evidence](verification-cdxml-resources.md).
 
-Explicit document-root `LineWidth` is now separate validated appearance data, in physical
-points. The original native/Preserved CDXML profile reads, patches, adds and clears it
+Explicit document-root `LineWidth` and `BondSpacing` are separate validated appearance
+data, in points and percentages respectively. The original native/Preserved CDXML profile
+reads, patches, adds and clears each independently
 without changing geometry or unrelated source bytes. Unsupported/nested/foreign styles
-stay opaque. Complete-owner display and candidate validation use actual width with
-unchanged label size and spacing. Whole-MOL refuses any explicit style before raw reuse;
-CDX/SMILES drift guards remain. The existing form is wired for width, with independent
+stay opaque. Per-property changes preserve the other property's numeric lexemes.
+Relative spacing uses preferred bond length; absence retains legacy geometry. The data
+domain0..3276.7 is an initial nonnegative INT16/10 policy, distinct from authoring1..100;
+negative nonzero XML underflow stays opaque rather than becoming supported negative zero.
+Complete-owner display and candidate validation use current preferences/style with
+independent width and unchanged label size. Whole-MOL refuses any explicit style before raw reuse;
+CDX/SMILES drift guards remain. The four-field form is wired for width/spacing, with independent
 App/adapter/file and CPU/Metal evidence; new native interaction is unverified. See
-[contract](research/document-line-width.md) and [receiving](verification-document-line-width.md).
-Other style properties, CDX style projection and foreign style resolution remain missing.
+[contract](research/document-bond-spacing.md) and [receiving](verification-document-bond-spacing.md).
+Absolute spacing, object overrides, other style properties, CDX style projection and
+foreign style resolution remain missing.
 
 Equivalent Bondline-v0 elemental CDXML now has headlessly verified source-aware editing:
 mixed quotes/whitespace/comments, sparse/scoped IDs, integral numeric lexemes and interleaved

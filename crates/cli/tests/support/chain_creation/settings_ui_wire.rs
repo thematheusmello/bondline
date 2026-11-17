@@ -223,7 +223,7 @@ fn authenticated_settings_open_cancel_wake_without_authoring_then_host_apply_sav
     assert_eq!(
         opened["result"]["ui_drawing_settings"],
         json!({"id":1,"input_revision":1,
-        "bond_length_pt":null,"chain_angle_degrees":137.5,"line_width_pt":null,"current":true})
+        "bond_length_pt":null,"chain_angle_degrees":137.5,"line_width_pt":null,"bond_spacing_percent":null,"current":true})
     );
     assert_eq!(opened["result"]["changed"], false);
     assert_eq!(

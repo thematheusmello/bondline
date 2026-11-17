@@ -215,9 +215,14 @@ fn closed_required_nullable_triple_validates_before_any_partial_commit() -> Test
     );
     assert_eq!(
         schema["properties"].as_object().ok_or("properties")?.len(),
-        4
+        5
     );
-    for key in ["bond_length_pt", "chain_angle_degrees", "line_width_pt"] {
+    for key in [
+        "bond_length_pt",
+        "chain_angle_degrees",
+        "line_width_pt",
+        "bond_spacing_percent",
+    ] {
         let types = schema["properties"][key]["type"]
             .as_array()
             .ok_or("nullable types")?;
@@ -229,6 +234,11 @@ fn closed_required_nullable_triple_validates_before_any_partial_commit() -> Test
         assert_eq!(schema["properties"][key]["maximum"], 100_000.0);
     }
     assert_eq!(schema["properties"]["chain_angle_degrees"]["minimum"], 1.0);
+    assert_eq!(schema["properties"]["bond_spacing_percent"]["minimum"], 1.0);
+    assert_eq!(
+        schema["properties"]["bond_spacing_percent"]["maximum"],
+        100.0
+    );
     assert_eq!(
         schema["properties"]["chain_angle_degrees"]["maximum"],
         179.0

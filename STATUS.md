@@ -7,8 +7,54 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-Implementation checkpoint: c84c2bd. The subsequent spacing-research record changes no Rust
-or test input; the fresh1831/0/1 aggregate below remains its exact code evidence.
+Recoverable state: the atomic `feat(styles): support explicit document bond spacing`
+commit containing this update, based onb377456. Current continuation supersedes all
+historical task/live-job lists below.
+
+### Explicit relative spacing integrated; full local gate passes
+
+Read [contract](docs/research/document-bond-spacing.md) and
+[receiving](docs/verification-document-bond-spacing.md). Optional root spacing and width
+have independent source-preserving deltas. Shared rendering uses percentage × preferred
+bond length, with actual ink/gap/paper/hit checks and unchanged label metrics/positions.
+Absent spacing retains exact legacy behavior. Command46 keeps its old4 required keys
+and adds optional spacing: omit preserves, null clears, number1..100 sets. Pair/Apply3
+preserve it; the four-field form uses the same bounded ordered/currentness/Cancel rules.
+The final settings/style candidate is certified once, including active reference-length
+changes. Actual CLI/stdio/authenticated-loopback Unicode files, independent Expat/Decimal/
+RDKit, history/source/no-op/error tests, App input and twelve analytic CPU/GPU captures pass.
+
+Fresh full12360 exits0: **1861 passed/0 failed/1 ignored**,278 result lines, all fmt,
+warnings-denied workspace/vendor, layers, strict license/asset/notice and pinned corpus
+gates. Log234592B/SHA256
+`b632b34f1886ad042d79de27991b05b9dff1f8f8e3cd0da44822f6a60f0b3927`.
+First14853 stops238/1 at an old dialog-response expectation; two exact expectations now
+include the new nullable field. The failed log is retained; no guard is weakened.
+The historical MCP replacement-bind failure remains unexplained and is not claimed fixed.
+ASan43341 passes10000 runs/65s, actual NEW/REDUCE16384B,37 immutable seeds unchanged.
+
+Registry46 and catalogue16/124 remain. Old45 metadata, locks, workflow, listener tests/
+policy, vendor, fonts/assets and existing goldens remain exact. Fresh controller startup
+still fails; new native width/spacing interaction is **wired/unverified**. No user app or
+drawing is touched. No owned live job or worker remains; isolated data/render worktrees
+and commits remain completed provenance. Actions OFF; no push/publication.
+
+Next executable work:
+
+1. Continue M1 effective fonts/colours/Text and style ownership. Source-lock the public
+   LabelFont/LabelSize/LabelFace/LabelColor and Caption/Text contracts against the SDK,
+   existing resource/SetText primitives and bundled-font capabilities. Declare original
+   licensed vectors and an external consumer that actually honors each tested property.
+2. Implement a complete supported source/model/render/history/Save/reopen slice before
+   widening foreign authoring. Keep Abs, local overrides, unknown font/default/charset
+   semantics opaque; explicit native spacing is not a universal foreign default.
+3. Continue broader CDX/interchange, chemistry/analysis and all M0–M5 roadmap requirements.
+   Native/DPI/modifier/accessibility, Windows/Linux/browser acceptance and release work
+   remain required; do not restart delivered primitives or enable Actions for evidence.
+
+## Historical checkpoints
+
+The following records describe their recorded revisions, not current tasks or live jobs.
 
 ### Resolved numeric composition integrated; fresh full local gate passes
 
@@ -1032,7 +1078,7 @@ Do not replace, close or lose either draft. Revalidate handles before restarting
 never retry an unchanged failed socket test for green. Independent workers supplied
 ignored proposals/source reviews only; Root integrated and executed checks.
 
-## Next exact steps
+## Historical chain continuation steps (superseded above)
 
 1. Read docs/research/native-chain-plan.md and docs/research/native-drawing-settings.md.
    Existing fixed/path candidates, ordered native modifier transport, optional settings

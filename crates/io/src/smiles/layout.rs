@@ -264,6 +264,20 @@ pub(super) fn validate_ink_with_style(
     style: bondline_model::DrawingStyle,
     cancel: &bondline_render::Cancellation,
 ) -> Result<bondline_render::GraphScene, LayoutError> {
+    validate_ink_with_settings(
+        page,
+        style,
+        bondline_model::DrawingSettings::default(),
+        cancel,
+    )
+}
+
+pub(super) fn validate_ink_with_settings(
+    page: &bondline_model::Page,
+    style: bondline_model::DrawingStyle,
+    settings: bondline_model::DrawingSettings,
+    cancel: &bondline_render::Cancellation,
+) -> Result<bondline_render::GraphScene, LayoutError> {
     use bondline_render::{PageView, PageViewport, Primitive, page_scene};
     if cancel.is_cancelled() {
         return Err(LayoutError::Cancelled);
@@ -271,6 +285,7 @@ pub(super) fn validate_ink_with_style(
     let background = page_scene(REFERENCE_SIZE, REFERENCE_SIZE, page.size())?;
     let graph = PageView::fit(REFERENCE_SIZE, REFERENCE_SIZE, page.size())?
         .with_drawing_style(style)
+        .with_drawing_settings(settings)
         .graph_scene(page, cancel)
         .map_err(|error| {
             if matches!(error, bondline_render::Error::Cancelled) {
