@@ -4,6 +4,25 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The persistent goal includes **all M0–M5 open points** and every remaining in-scope row
+in the parity checklist. It is complete only after actual install/create/open/edit/
+analyse/cleanup/history/save/recovery/reopen/publish/clipboard journeys have independent
+evidence on the supported desktop platforms and browser. A scaffold, command count,
+grey tool, passing component or partial milestone cannot complete it. Continue from
+STATUS rather than restarting or repeating historical next-task paragraphs. Actions
+stays OFF during development.
+
+Current M1 [plain-caption receiving](docs/verification-styled-captions.md) integrates
+explicit styled runs, a separate source capability, actual CPU/Metal display and one
+shared run-body edit/history/Save command. Bounded Mac Open, remote-edit repaint, keyboard
+history and Unicode Save As/reopen pass. Registry47 preserves the old46 byte prefix;
+catalogue16/124 stays. This is partial Text support: the native Text tool/editor, chemical
+formatting, dependent labels, inherited fonts/styles, mixed foreign diagrams and CDX text
+remain missing. The aggregate's old MCP bind failure remains unexplained; final receiving
+records the separate local components. Full M0–M5 remains active/incomplete.
+
+Earlier paragraphs below are historical checkpoints with their recorded evidence/scope.
+
 Explicit native root relative spacing now follows the
 [preferred-length contract](docs/research/document-bond-spacing.md) and
 [receiving](docs/verification-document-bond-spacing.md): independent source deltas,

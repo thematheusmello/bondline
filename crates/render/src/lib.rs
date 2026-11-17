@@ -70,6 +70,8 @@ pub enum Error {
         "the preview requires supported neutral elements, coordinates and Single or centered Double/Triple bonds; literal isolated carbon needs authored H and physical H cannot carry attached H"
     )]
     UnsupportedChemicalContent,
+    #[error("unsupported caption text: {0}")]
+    UnsupportedText(&'static str),
     #[error("the bundled label font could not be decoded")]
     InvalidFont,
     #[error(
@@ -135,6 +137,7 @@ mod page;
 mod scene;
 mod skeletal;
 mod stroke;
+mod text;
 mod view;
 pub use hits::{GraphScene, HitTarget, MAX_HIT_REGIONS};
 pub use page::{

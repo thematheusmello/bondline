@@ -184,6 +184,7 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "ring.sprout",
             "ui.preferences",
             "document.set_document_settings",
+            "text.set_run",
         ]
         .into_iter()
         .collect()

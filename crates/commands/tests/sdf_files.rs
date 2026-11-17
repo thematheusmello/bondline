@@ -64,6 +64,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "ring.sprout",
             "ui.preferences",
             "document.set_document_settings",
+            "text.set_run",
         ]
         .into_iter()
         .collect()

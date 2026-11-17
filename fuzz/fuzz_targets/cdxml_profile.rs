@@ -4,7 +4,8 @@
 use bondline_io::{DocumentError, StoredDocument};
 use bondline_model::{
     Atom, AtomId, Bond, BondId, BondOrder, Document, DoublePosition, DrawingSettings, DrawingStyle,
-    Element, Fragment, FragmentId, PageSize, Point2, Radical,
+    Element, Fragment, FragmentId, PageSize, Point2, Radical, StyledText, TextId, TextRun,
+    TextStyle,
 };
 use libfuzzer_sys::fuzz_target;
 use std::{borrow::Cow, collections::BTreeMap, num::NonZeroU16, sync::Arc};
@@ -22,6 +23,7 @@ const ORIGINAL: &[u8] = br##"<?xml version="1.0" encoding="UTF-8"?>
 </CDXML>
 "##;
 const SCOPED: &[u8] = br##"<CDXML CreationProgram='Bondline 0.1.0'><page id='4294967295' Width='612.00' DrawingSpace='Poster' Height='792.000'><fragment id='7'><!--a--><b id='900' E='207' B='101' Order='1'/><n id='101' NodeType='Element' Element='6' Charge='0' Radical='None' p='72.00 96.000' NumHydrogens='3'/><n id='207' NodeType='Element' Element='6' Charge='0' Radical='None' p='120 96' NumHydrogens='3'/></fragment><fragment id='8'><n id='101' NodeType='Element' Element='8' Charge='0' Radical='None' p='192 192' NumHydrogens='2'/></fragment></page></CDXML>"##;
+const CAPTION: &str = "<CDXML CreationProgram='Original caption fuzz'><fonttable><font id='42' name='Roboto'/></fonttable><colortable><color r='1' g='1' b='1'/><color r='0' g='0' b='0'/><color r='.2' g='.4' b='.8'/></colortable><page id='90' DrawingSpace='Poster' Width='256.00' Height='256'><t id='21' p='72.00 96.000' Justification='Left'><s font='42' size='12.00' face='0' color='4'>Phase β &amp; A</s><s font='42' size='18' face='0' color='3'> q</s></t></page></CDXML>";
 
 fn original_unchanged(base: &StoredDocument, source: &[u8], snapshot: &Arc<Document>) {
     let info = base.source_info().unwrap();
@@ -42,6 +44,12 @@ fn same_semantics(expected: &Document, actual: &Document) {
     assert_eq!(expected.pages().len(), actual.pages().len());
     for (left, right) in expected.pages().iter().zip(actual.pages()) {
         assert_eq!(left.size(), right.size());
+        assert_eq!(left.texts().len(), right.texts().len());
+        // Native source IDs, including TextId, rebind by their ordered object position.
+        for (a, b) in left.texts().iter().zip(right.texts()) {
+            assert_eq!(a.position(), b.position());
+            assert_eq!(a.runs(), b.runs());
+        }
         assert_eq!(left.fragments().len(), right.fragments().len());
         for (lf, rf) in left.fragments().iter().zip(right.fragments()) {
             assert_eq!(lf.atoms().len(), rf.atoms().len());
@@ -146,6 +154,236 @@ fn arbitrary_source(data: &[u8]) {
     *edited.model_mut() = base.model().clone();
     assert_eq!(edited.export_cdxml().unwrap(), data);
     assert!(!edited.source_info().unwrap().modified);
+}
+
+fn refused_caption_drift(base: &StoredDocument, source: &[u8], mut bad: StoredDocument) {
+    let snapshot = base.model_snapshot();
+    let bad_snapshot = bad.model_snapshot();
+    assert!(!bad.has_caption_projection());
+    assert!(!bad.is_fully_mapped());
+    assert!(matches!(
+        bad.to_cdxml(),
+        Err(DocumentError::UnsupportedEdit)
+    ));
+    assert!(Arc::ptr_eq(&bad_snapshot, &bad.model_snapshot()));
+    original_unchanged(base, source, &snapshot);
+    *bad.model_mut() = base.model().clone();
+    assert!(bad.has_caption_projection());
+    assert!(!bad.is_fully_mapped());
+    assert_eq!(bad.export_cdxml().unwrap(), source);
+    assert!(!bad.source_info().unwrap().modified);
+}
+
+fn escaped_text(value: &str) -> String {
+    let mut output = String::new();
+    for character in value.chars() {
+        match character {
+            '&' => output.push_str("&amp;"),
+            '<' => output.push_str("&lt;"),
+            '>' => output.push_str("&gt;"),
+            '\"' => output.push_str("&quot;"),
+            '\'' => output.push_str("&apos;"),
+            '\t' => output.push_str("&#x9;"),
+            '\r' => output.push_str("&#xD;"),
+            '\n' => output.push_str("&#xA;"),
+            other => output.push(other),
+        }
+    }
+    output
+}
+
+fn structured_caption(data: &[u8]) {
+    let base = StoredDocument::from_cdxml(CAPTION.as_bytes().into(), PageSize::A4).unwrap();
+    let snapshot = base.model_snapshot();
+    assert!(base.has_caption_projection());
+    assert!(!base.is_fully_mapped());
+    let page = &base.model().pages()[0];
+    let page_id = page.id();
+    let text = page.texts()[0].as_ref();
+    assert_eq!(text.runs().len(), 2);
+    let index = usize::from(data.first().copied().unwrap_or(0) % 2);
+    let value = format!(
+        "edit:{}",
+        std::str::from_utf8(data).unwrap_or("Phase β & q")
+    );
+    let mut edited = base.clone();
+    match text.with_run_text(index, value.clone()) {
+        Ok(replacement) => {
+            edited
+                .model_mut()
+                .replace_text(page_id, replacement)
+                .unwrap();
+            assert!(edited.has_caption_projection());
+            assert!(!edited.is_fully_mapped());
+            assert!(edited.source_info().unwrap().modified);
+            assert!(matches!(
+                edited.export_cdxml(),
+                Err(DocumentError::UnsupportedEdit)
+            ));
+            let inner = ["Phase β &amp; A", " q"][index];
+            let expected = CAPTION.replacen(
+                &format!(">{inner}</s>"),
+                &format!(">{}</s>", escaped_text(&value)),
+                1,
+            );
+            let output = edited.to_cdxml().unwrap().into_owned();
+            assert_eq!(output, expected.as_bytes());
+            assert_eq!(output, edited.to_cdxml().unwrap().as_ref());
+            let reopened = StoredDocument::from_cdxml(output.into(), PageSize::A4).unwrap();
+            assert!(reopened.has_caption_projection() || reopened.is_fully_mapped());
+            same_semantics(edited.model(), reopened.model());
+        }
+        Err(error) => {
+            assert!(matches!(error, bondline_model::TextError::InvalidCharacter));
+            assert!(Arc::ptr_eq(&snapshot, &edited.model_snapshot()));
+        }
+    }
+    original_unchanged(&base, CAPTION.as_bytes(), &snapshot);
+    *edited.model_mut() = base.model().clone();
+    assert!(edited.has_caption_projection());
+    assert!(!edited.is_fully_mapped());
+    assert_eq!(edited.export_cdxml().unwrap(), CAPTION.as_bytes());
+
+    let mut bad = base.clone();
+    bad.model_mut()
+        .replace_text(
+            page_id,
+            text.with_position(Point2::new(73.0, 96.0).unwrap())
+                .unwrap(),
+        )
+        .unwrap();
+    refused_caption_drift(&base, CAPTION.as_bytes(), bad);
+
+    let mut runs = text.runs().to_vec();
+    runs[0] = TextRun::new(
+        runs[0].text().to_owned(),
+        TextStyle::new("Roboto".into(), 13.0, 0, [0.2, 0.4, 0.8]).unwrap(),
+    )
+    .unwrap();
+    let changed = StyledText::new(text.id(), text.position(), runs).unwrap();
+    let mut bad = base.clone();
+    bad.model_mut().replace_text(page_id, changed).unwrap();
+    refused_caption_drift(&base, CAPTION.as_bytes(), bad);
+
+    let mut bad = base.clone();
+    let mut changed_ids = Document::default();
+    changed_ids.set_page_size(page_id, page.size()).unwrap();
+    changed_ids
+        .append_texts(
+            page_id,
+            vec![
+                StyledText::new(
+                    TextId::new(2).unwrap(),
+                    text.position(),
+                    text.runs().to_vec(),
+                )
+                .unwrap(),
+            ],
+        )
+        .unwrap();
+    *bad.model_mut() = changed_ids;
+    refused_caption_drift(&base, CAPTION.as_bytes(), bad);
+
+    let mut bad = base.clone();
+    bad.model_mut()
+        .set_page_size(page_id, PageSize::new(257.0, 256.0).unwrap())
+        .unwrap();
+    refused_caption_drift(&base, CAPTION.as_bytes(), bad);
+
+    let mut bad = base.clone();
+    bad.model_mut()
+        .set_drawing_style(DrawingStyle::new(Some(1.0)).unwrap());
+    refused_caption_drift(&base, CAPTION.as_bytes(), bad);
+
+    let mut bad = base.clone();
+    bad.model_mut()
+        .set_drawing_settings(DrawingSettings::new(Some(48.0), None).unwrap());
+    refused_caption_drift(&base, CAPTION.as_bytes(), bad);
+
+    let mut bad = base.clone();
+    bad.model_mut()
+        .append_texts(
+            page_id,
+            vec![
+                StyledText::new(
+                    TextId::new(2).unwrap(),
+                    text.position(),
+                    text.runs().to_vec(),
+                )
+                .unwrap(),
+            ],
+        )
+        .unwrap();
+    refused_caption_drift(&base, CAPTION.as_bytes(), bad);
+
+    let mut bad = base.clone();
+    let mut atom = Atom::new(
+        AtomId::new(1).unwrap(),
+        Element::new(6).unwrap(),
+        Some(Point2::new(192.0, 192.0).unwrap()),
+    );
+    atom.explicit_hydrogens = Some(4);
+    bad.model_mut()
+        .append_fragments(
+            page_id,
+            vec![Fragment::new(FragmentId::new(1).unwrap(), vec![atom], vec![]).unwrap()],
+        )
+        .unwrap();
+    refused_caption_drift(&base, CAPTION.as_bytes(), bad);
+}
+
+fn native_caption_transition(data: &[u8]) {
+    let mut native = StoredDocument::default();
+    let page_id = native.model().pages()[0].id();
+    native
+        .model_mut()
+        .set_page_size(page_id, PageSize::new(256.0, 256.0).unwrap())
+        .unwrap();
+    native
+        .model_mut()
+        .append_texts(
+            page_id,
+            vec![
+                StyledText::new(
+                    TextId::new(100 + u32::from(data.first().copied().unwrap_or(0))).unwrap(),
+                    Point2::new(72.0, 96.0).unwrap(),
+                    vec![
+                        TextRun::new(
+                            String::new(),
+                            TextStyle::new("Roboto".into(), 12.0, 0, [0.0; 3]).unwrap(),
+                        )
+                        .unwrap(),
+                        TextRun::new(
+                            " β & q".into(),
+                            TextStyle::new("Roboto".into(), 18.0, 0, [0.2, 0.4, 0.8]).unwrap(),
+                        )
+                        .unwrap(),
+                    ],
+                )
+                .unwrap(),
+            ],
+        )
+        .unwrap();
+    let bytes = native.to_cdxml().unwrap().into_owned();
+    let native_reopened = StoredDocument::from_cdxml(bytes.clone().into(), PageSize::A4).unwrap();
+    assert!(native_reopened.is_fully_mapped());
+    same_semantics(native.model(), native_reopened.model());
+    let canonical = String::from_utf8(bytes).unwrap();
+    assert_eq!(canonical.matches("></s>").count(), 1);
+    let source = canonical.replacen("></s>", "/>", 1);
+    let mut caption = StoredDocument::from_cdxml(source.as_bytes().into(), PageSize::A4).unwrap();
+    assert!(caption.has_caption_projection());
+    assert!(!caption.is_fully_mapped());
+    let text = caption.model().pages()[0].texts()[0]
+        .with_run_text(0, "Phase B".into())
+        .unwrap();
+    caption.model_mut().replace_text(page_id, text).unwrap();
+    let output = caption.to_cdxml().unwrap().into_owned();
+    let expected = canonical.replacen("></s>", ">Phase B</s>", 1);
+    assert_eq!(output, expected.as_bytes());
+    let reopened = StoredDocument::from_cdxml(output.into(), PageSize::A4).unwrap();
+    assert!(reopened.is_fully_mapped());
+    same_semantics(caption.model(), reopened.model());
 }
 
 fn structured(source: &[u8], data: &[u8]) {
@@ -299,6 +537,8 @@ fuzz_target!(|data: &[u8]| {
     }
     assert_eq!(ORIGINAL.len(), 464);
     arbitrary_source(data);
+    structured_caption(data);
+    native_caption_transition(data);
     structured(ORIGINAL, data);
     structured(SCOPED, data);
     let styled =

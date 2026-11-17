@@ -85,6 +85,7 @@ enum CdxmlProfile {
     Opaque,
     Canonical,
     Preserved,
+    Caption,
 }
 
 #[derive(Clone, PartialEq)]
@@ -131,7 +132,7 @@ impl OriginalSource {
                 profile, baseline, ..
             } => match profile {
                 CdxmlProfile::Canonical => true,
-                CdxmlProfile::Opaque => false,
+                CdxmlProfile::Opaque | CdxmlProfile::Caption => false,
                 CdxmlProfile::Preserved => {
                     Arc::ptr_eq(current, baseline)
                         || crate::cdxml::supports_delta(baseline, current)
@@ -196,6 +197,8 @@ impl StoredDocument {
             CdxmlProfile::Canonical
         } else if crate::cdxml::is_preserved(&bytes, &model) {
             CdxmlProfile::Preserved
+        } else if crate::cdxml::is_caption(&bytes, &model) {
+            CdxmlProfile::Caption
         } else {
             CdxmlProfile::Opaque
         };
@@ -376,6 +379,17 @@ impl StoredDocument {
         Arc::make_mut(&mut self.model)
     }
 
+    /// Source-qualified caption edits/display, without chemical authoring permission.
+    pub fn has_caption_projection(&self) -> bool {
+        matches!(self.original.as_ref(),Some(OriginalSource::Cdxml{profile:CdxmlProfile::Caption,baseline,..})
+            if Arc::ptr_eq(&self.model,baseline) || crate::cdxml::supports_caption_delta(baseline,&self.model))
+    }
+
+    /// Source coverage to attempt display; scale, glyph and geometry checks still apply.
+    pub fn has_display_projection(&self) -> bool {
+        self.is_fully_mapped() || self.has_smiles_projection() || self.has_caption_projection()
+    }
+
     pub fn source_info(&self) -> Option<SourceInfo> {
         self.original.as_ref().map(|original| SourceInfo {
             format: original.format(),
@@ -452,6 +466,15 @@ impl StoredDocument {
                     baseline,
                     &self.model,
                 )?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Caption,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_caption_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
                 _ => Err(DocumentError::UnsupportedEdit),
             },
             Err(error) => Err(error),
@@ -495,6 +518,16 @@ impl StoredDocument {
         if !self.model.drawing_settings().is_empty() {
             return Err(DocumentError::UnsupportedMolLayout(
                 "drawing settings cannot be represented",
+            ));
+        }
+        if self
+            .model
+            .pages()
+            .iter()
+            .any(|page| !page.texts().is_empty())
+        {
+            return Err(DocumentError::UnsupportedMolLayout(
+                "caption text cannot be represented",
             ));
         }
         if !self.model.drawing_style().is_empty() {
@@ -557,7 +590,7 @@ impl StoredDocument {
                 (*transform, Some(headers), (page.id(), page.size()))
             }
             Some(OriginalSource::Cdxml {
-                profile: CdxmlProfile::Opaque | CdxmlProfile::Preserved,
+                profile: CdxmlProfile::Opaque | CdxmlProfile::Preserved | CdxmlProfile::Caption,
                 ..
             }) => {
                 return Err(DocumentError::CrossFormatSource {

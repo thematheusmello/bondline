@@ -79,6 +79,7 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
             "ring.sprout",
             "ui.preferences",
             "document.set_document_settings",
+            "text.set_run",
         ]
         .into_iter()
         .collect()

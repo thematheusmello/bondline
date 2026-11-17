@@ -493,6 +493,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "selection.translate",
             "smiles.record.inspect",
             "structure.paste_smiles",
+            "text.set_run",
             "ui.atom_label",
             "ui.bond_tool",
             "ui.chain_tool",

@@ -139,6 +139,15 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 
 ## Workflow overview
 
+The [plain caption file workflow](verification-styled-captions.md) now supports explicit
+Roboto Regular runs, colours/sizes, source-preserving body edits, history and Save/reopen
+through command47 and all adapters. Bounded actual Mac Open, remote-edit repaint,
+keyboard history, read-only drag and Unicode Save As/reopen pass. This is partial Text
+support; TD-005 and the font/size/style/format menu actions below remain missing and grey.
+Chemical dependent labels, inherited defaults, mixed foreign diagrams and the complete
+native Text editor remain required. Current registry47/catalogue16/124 supersede the
+historical counts in the prerequisite paragraphs below.
+
 The [numeric composition library](verification-formula-composition.md) independently
 verifies explicitly resolved element/isotope/charge data. It does not implement inferred
 formula/mass or the Analysis window; those reference workflows remain missing. Registry46
@@ -161,7 +170,7 @@ render/edit workflows below; registry46 and catalogue16/124 retain their existin
 | Bond, ring, chain tools | GUIDE-25 | partial: bounded Single/Double/Triple Mac authoring verified | Shared create/extend/set_order, explicit H policies, transient tool state, component geometry and exact complete-source/history/consumer checks. Actual Mac multiple creation, existing-bond click/1/2/3 keys/endpoint Double→Triple and Unicode Save As pass at readable420pt-square scale; native multiple extension and broader keys/styles/selection/rings/chains remain incomplete. See verification-bond-order-{command,ui,native}.md and verification-native-sdf-and-extension.md. |
 | Atom labels, charges, isotopes, radicals | GUIDE-25 / ATOM-LABEL-AUTHORING / NATIVE-ATOM-LABELS | partial: bounded elemental authoring verified, Mac | Fresh Alt-click atom/label→explicit Element/H→Apply/Cancel calls the shared setter. Native OH/NH2, history, draft-close protection and Unicode Save/reopen pass with independent actual-file consumers; see verification-native-atom-labels.md. Original incremental form, not exact26.1 inline Text parity. Inline labels/aliases, inference, foreign-source edits and charge/isotope/radical workflows remain missing. Earlier source-aware MOL display preserves None; see verification-neutral-element-labels.md |
 | Stereo bonds and labels | GUIDE-25 | missing | M2/M3 |
-| Text, captions, chemical formatting | GUIDE-25 | missing | M2/M3 |
+| Text, captions, chemical formatting | GUIDE-25 / STYLED-CAPTIONS | partial: bounded plain file/command workflow and Mac preview verified | Explicit Roboto Regular, ordered run sizes/colours, source-preserving run-body edits/history/Save/reopen and CPU/Metal captures; see verification-styled-captions.md. Native canvas stays read-only; full Text tool, rich/chemical formatting, font/style editing, mixed foreign diagrams and broader platforms remain missing. |
 | Reaction and curved arrows | GUIDE-25 | missing | M3 |
 | Brackets, repeating units and annotations | GUIDE-25 | missing | M3 |
 | Document/object styles, journal settings | GUIDE-25 / DRAWING-SETTINGS-DATA-IMPLEMENTATION / DRAWING-SETTINGS-COMMAND / NATIVE-CARBON-CHAINS | partial: two native preferences and chain application verified | Optional BondLength/ChainAngle model/CDXML/CDX projection, atomic required-nullable set/clear, history, source preservation and whole-MOL loss guards pass independent core/CLI/MCP/socket/file checks. Native two-field form and later-chain application pass bounded Mac Save/reopen and independent file checks; old geometry stays. Inherited/object styles, remaining tools/settings and journal presets remain missing; public author-guideline sources still required. See verification-native-chains.md, verification-native-drawing-settings.md and verification-drawing-settings-data.md. |

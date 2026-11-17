@@ -7,6 +7,69 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+Recoverable state: the atomic styled-caption workflow integration containing this record,
+based on `eff16ae` (the existing pinned GPOS dependency edge). The full persistent goal covers
+**all M0–M5 open points**, not just this increment. This section supersedes every older
+next-task/job paragraph, including the stale line-width continuation in the goal's history.
+
+### Explicit plain styled captions integrated; components pass, aggregate failure retained
+
+Read [contract](docs/research/styled-captions.md) and
+[receiving](docs/verification-styled-captions.md), with the isolated model/parser/render
+receiving records. Checked owned runs and native font/palette encoding now preserve caption
+data. One complete explicit foreign caption-only profile can Open→render→edit run through
+the shared registry→history→Save/reopen with every unrelated source byte intact. It keeps
+global chemical completeness false; foreign page/style/chemical edits remain refused.
+Source-free/native text has real encoding. Root source-aware, whole-MOL/CDX/retained-SMILES,
+font/glyph/scale/paper/work, no-op/close/Save-lease and full-snapshot history guards stay.
+A reviewed Caption→Canonical self-closing expansion refusal has actual RED→GREEN.
+
+Registry47 appends text.set_run; actual old46 serialized metadata/schema/order prefix stays
+byte-exact, catalogue16/124 unchanged. Three actual CLI/initialized stdio/authenticated
+socket cases, independent Expat/Decimal/FontTools/Pillow, generated24-case history,
+CPU/Metal and four App cases pass. Bounded actual Mac own-window Open, remote-edit repaint,
+keyboard Undo/Redo, read-only drag and Unicode Save As/reopen pass. The391-byte saved file
+has only the edited run delta and independent exact font/size/colour/position evidence.
+The full native Text editor/tool, chemical formatting and mixed foreign diagrams are missing.
+
+Initial full5056 fails1217/1/0 at the unchanged MCP replacement_bind58833 AddrInUse; log
+154693B/SHA25656902ca0d24c9e403f7229cfcb2507b401495591acaa2e42bb5b712d104f0cd4.
+Complete no-fail-fast workspace74577 records1906/1/1 at one obsolete UI registry46 assertion;
+log238678B/SHA256548d5e10cf20c244bb3b190b129ebe19d6886458e3dfa6f44e4f6520debda3f6.
+Its unchanged MCP test passes naturally, explaining no cause. The exact current UI count
+is corrected; qualified11820 passes whole UI322/0/1, vendor3/0 plus clippy, workspace
+warnings-denied clippy, rustfmt/layers/strict licenses/seven assets/notices/pinned corpus.
+Remaining log40517B/SHA256c36f6ae8b8e8868685c9ed1a03fdaf9e3ddce6bd7ca49325e313955f1090a95b.
+All components pass separately; **no clean aggregate or causal MCP fix** is claimed.
+No listener policy, assertion, timeout, retry or exhausted diagnostic is changed.
+
+Qualified parser ASan passes10000/6s and profile passes10000/87s; both actual NEW/REDUCE
+reach16384B. All42 source seeds per directory stay exact. Initial new-harness namespace
+expectation failure and its API qualification are retained; the product/qualified data
+retention remains unchanged. Root/fuzz locks differ from b34 only by eff16ae's already
+pinned ttf-parser edge, with no package/version changes. Workflow, protected MCP test,
+vendor/fonts/assets and old goldens stay exact. All owned jobs/workers are terminal;
+completed isolated worktrees remain provenance. The own review is observed closed;
+older user apps/drawings stay untouched. Actions OFF; no push/publication.
+
+Next executable work:
+
+1. Continue M1 effective chemical LabelFont/LabelSize/LabelFace and Node child Text
+   ownership. Source-lock inheritance/default/charset and chemical-display semantics;
+   declare independent foreign/XML/retention/render/history vectors before widening
+   the closed profile. Do not restart delivered caption/resource/SetText primitives.
+2. Finish the real native Text tool/editor and richer supported style workflows through
+   shared commands and source-aware complete candidates, with actual OS evidence. Mixed
+   foreign diagrams, other fonts/faces/shaping/layout and CDX text mapping remain required.
+3. Continue all broader CDX/interchange, M2 drawing/selection/styles, M3 chemistry/analysis,
+   M4 publishing/clipboard/printing and M5 naming/templates/WASM/distribution. M0 full
+   inventory/addressability/jobs and native race/DPI/accessibility/platform acceptance,
+   including the unexplained MCP listener failure, remain open. Native width/spacing,
+   Windows/Linux/browser and release checks need actual evidence. Keep Actions OFF.
+
+## Historical checkpoints
+
+
 Recoverable state: the atomic `feat(styles): support explicit document bond spacing`
 commit containing this update, based onb377456. Current continuation supersedes all
 historical task/live-job lists below.
@@ -52,7 +115,7 @@ Next executable work:
    Native/DPI/modifier/accessibility, Windows/Linux/browser acceptance and release work
    remain required; do not restart delivered primitives or enable Actions for evidence.
 
-## Historical checkpoints
+
 
 The following records describe their recorded revisions, not current tasks or live jobs.
 

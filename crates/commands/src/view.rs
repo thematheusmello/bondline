@@ -179,7 +179,7 @@ impl Engine {
                 None
             } else {
                 let stored = self.stored_document()?;
-                if !stored.is_fully_mapped() && !stored.has_smiles_projection() {
+                if !stored.has_display_projection() {
                     return Err(Error::UnsupportedDocumentPreview);
                 }
                 Some(stored.model().pages().first().ok_or(Error::InvalidPageId)?)

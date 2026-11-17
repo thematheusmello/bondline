@@ -47,6 +47,8 @@ pub(super) fn borrowed(attributes: &Attributes) -> Vec<(&'static str, &str)> {
 pub fn write_document(document: &Document) -> Result<Vec<u8>, MappingError> {
     let attributes = root_attributes(document);
     let mut writer = Writer::new(&borrowed(&attributes))?;
+    let resources = super::caption::NativeResources::new(document)?;
+    resources.write(&mut writer)?;
     let mut next = 0_u32;
     for page in document.pages() {
         let attributes = page_attributes(page, allocate(&mut next)?);
@@ -69,6 +71,9 @@ pub fn write_document(document: &Document) -> Result<Vec<u8>, MappingError> {
                 write_bond(&mut writer, bond, allocate(&mut next)?, begin, end)?;
             }
             writer.end_element()?;
+        }
+        for text in page.texts() {
+            resources.write_text(&mut writer, text, allocate(&mut next)?)?;
         }
         writer.end_element()?;
     }

@@ -3,8 +3,34 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has46 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has47 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
+
+## Existing plain caption runs
+
+`text.set_run` is record47; all previous46 records/schemas/order remain exact. All five
+keys are required in a closed object:
+
+```json
+{"command":"text.set_run","params":{"expected_revision":1,"page_id":1,"text_id":1,"run_index":0,"text":"Phase β & q"}}
+```
+
+IDs name application Page/Text objects, not source XML or font IDs; `run_index` is
+zero-based. The command replaces decoded UTF-8 text while preserving style, position,
+identity and every other run. Source-free/complete-native captions and the separate
+explicit caption-only source capability are eligible. It does not grant chemical,
+page-size or style authority on foreign captions. Stale revision, closed session,
+unsupported source, invalid/missing target and unrenderable candidate refuse atomically.
+A real edit receives one ordinary history step after final source-write and whole-page
+render certification. Equal text preserves sharing, redo, close state and Save contexts.
+Captured Save still acknowledges its captured snapshot; later edits remain dirty.
+
+Native File Open/canvas/view/capture display accepted captions, and remote edits repaint
+the same app. The canvas remains read-only and the full Text tool remains disabled.
+Roboto Regular single-line/glyph/scale/page/work bounds are explicit; no font fallback
+or chemical inference occurs. [Contract](research/styled-captions.md) and
+[evidence](verification-styled-captions.md) separate actual Mac acceptance from headless
+adapters, App frames and missing editor/platform workflows.
 
 ## Atomic document appearance and creation settings
 
@@ -213,7 +239,9 @@ Capture dimensions are 1..2048 pixels per axis. A successful result adds `captur
 `png_base64`. GPU output includes the actual adapter name/backend/device type; CPU output
 has `adapter: null`. There is no automatic CPU fallback. This captures the shared page
 scene, not window chrome, operating-system dialogs or print-resolution chemical output.
-Unmapped source-backed documents return unsupported_content before rendering. Empty pages
+Source-backed documents without a supported complete display capability return
+unsupported_content before rendering. Accepted caption-only files use their separate
+display capability without granting chemical edits. Empty pages
 and supported positioned neutral-element Single/centered Double/Triple plus explicit
 Left/Right Double graphs can be captured, including safe branches,
 cycles and disconnected components. Source-free/CDXML use literal H, including connected

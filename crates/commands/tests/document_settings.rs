@@ -191,9 +191,9 @@ fn validated_noop_preserves_redo_selection_file_request_and_all_weak_contexts() 
 #[test]
 fn closed_required_nullable_triple_validates_before_any_partial_commit() -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 46);
-    assert_eq!(rows.last().ok_or("new row")?.name, COMBINED);
-    let row = rows.last().ok_or("new row")?;
+    assert_eq!(rows.len(), 47);
+    assert_eq!(rows.get(45).ok_or("settings row46")?.name, COMBINED);
+    let row = rows.get(45).ok_or("settings row46")?;
     assert!(!row.read_only);
     let schema = row.input_schema.as_value();
     assert_eq!(schema["type"], "object");

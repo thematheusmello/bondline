@@ -143,10 +143,10 @@ fn schema_node<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
 #[test]
 fn five_closed_action_objects_reject_null_missing_unknown_and_wrong_scalar_fields() -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 46);
+    assert_eq!(rows.len(), 47);
     assert_eq!(rows.get(44).ok_or("preferences registry")?.name, NAME);
     assert_eq!(
-        rows.last().ok_or("last row")?.name,
+        rows.get(45).ok_or("preserved settings position")?.name,
         "document.set_document_settings"
     );
     let schema = rows.get(44).ok_or("schema")?.input_schema.as_value();

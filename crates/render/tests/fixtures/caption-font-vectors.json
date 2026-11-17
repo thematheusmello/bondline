@@ -1,0 +1,135 @@
+{
+  "source": "existing Apache-2.0 Roboto Regular; original metric extraction",
+  "font_sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+  "fonttools": "4.61.1",
+  "units_per_em": 2048,
+  "metrics": {
+    "A": {
+      "glyph_id": 38,
+      "advance": 1336,
+      "lsb": 28,
+      "bounds": [
+        28,
+        0,
+        1309,
+        1456
+      ]
+    },
+    "V": {
+      "glyph_id": 59,
+      "advance": 1303,
+      "lsb": 28,
+      "bounds": [
+        28,
+        0,
+        1277,
+        1456
+      ]
+    },
+    " ": {
+      "glyph_id": 5,
+      "advance": 507,
+      "lsb": 0,
+      "bounds": null
+    },
+    "T": {
+      "glyph_id": 57,
+      "advance": 1222,
+      "lsb": 49,
+      "bounds": [
+        49,
+        0,
+        1175,
+        1456
+      ]
+    },
+    "o": {
+      "glyph_id": 84,
+      "advance": 1168,
+      "lsb": 91,
+      "bounds": [
+        91,
+        -20,
+        1076,
+        1102
+      ]
+    },
+    "H": {
+      "glyph_id": 45,
+      "advance": 1460,
+      "lsb": 169,
+      "bounds": [
+        169,
+        0,
+        1288,
+        1456
+      ]
+    },
+    "g": {
+      "glyph_id": 76,
+      "advance": 1149,
+      "lsb": 96,
+      "bounds": [
+        96,
+        -426,
+        1010,
+        1102
+      ]
+    },
+    "λ": {
+      "glyph_id": 579,
+      "advance": 1134,
+      "lsb": 37,
+      "bounds": [
+        37,
+        -17,
+        1083,
+        1518
+      ]
+    },
+    "Ω": {
+      "glyph_id": 569,
+      "advance": 1362,
+      "lsb": 113,
+      "bounds": [
+        113,
+        0,
+        1227,
+        1476
+      ]
+    },
+    "é": {
+      "glyph_id": 2317,
+      "advance": 1085,
+      "lsb": 93,
+      "bounds": [
+        93,
+        -20,
+        1011,
+        1536
+      ]
+    },
+    " ": {
+      "glyph_id": 2274,
+      "advance": 507,
+      "lsb": 0,
+      "bounds": null
+    }
+  },
+  "kern": {
+    " H": 0,
+    " T": -40,
+    "AV": -87,
+    "Hg": 0,
+    "To": -99,
+    "V ": 0,
+    "VA": -75,
+    "oH": 0,
+    "Ωé": 0,
+    "λΩ": 0
+  },
+  "legacy_kern_present": false,
+  "gpos_dflt_kern_lookups": [
+    13
+  ]
+}

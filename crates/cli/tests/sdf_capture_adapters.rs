@@ -345,3 +345,6 @@ mod terminal_label_wire;
 
 #[path = "support/noncanonical_cdxml_wire.rs"]
 mod noncanonical_cdxml_wire;
+
+#[path = "support/caption_run_wire.rs"]
+mod caption_run_wire;

@@ -1,5 +1,23 @@
 # Verification log
 
+## Explicit plain styled captions, 2026-11-17
+
+[Receiving](verification-styled-captions.md) integrates checked model/standalone syntax,
+real native encoding, separate foreign-caption source capability, shared GPOS rendering
+and command47 with exact old46 serialized metadata. Independent XML/font/colour/geometry,
+CPU/Metal, generated history, actual CLI/stdio/authenticated socket and four App cases
+pass. Bounded actual Mac Open/remote-edit repaint/keyboard history/read-only drag/Unicode
+Save As/reopen preserves all bytes outside one run. The full Text tool remains grey.
+
+Initial5056 fails1217/1/0 at the unchanged MCP replacement bind58833. Complete workspace
+74577 records1906/1/1 at an obsolete UI registry46 assertion; qualified11820 passes the
+whole UI322/0/1 plus vendor3/0, warnings-denied clippy/fmt/layers/licenses/assets/corpus.
+All components pass separately, not a clean aggregate or causal MCP repair. Parser ASan
+10000/6s and profile10000/87s reach actual16KiB; a new qualified-attribute harness
+expectation is corrected without changing the product. All42 immutable seeds per corpus
+stay exact. Own review is closed, all jobs/workers terminal, Actions OFF. Full M0–M5,
+chemical dependent labels/defaults, rich/native Text editing and platform acceptance stay open.
+
 ## Explicit document relative spacing, 2026-11-17
 
 [Receiving](verification-document-bond-spacing.md) records public preferred-length

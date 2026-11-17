@@ -35,7 +35,7 @@ fn import_binding_is_one_typed_file_presentation_without_a_second_registry_comma
         import["command"],
         json!({"command":"ui.file","params":{"expected_revision":0,"action":"import_smiles_records"}})
     );
-    assert_eq!(bondline_commands::registry().len(), 46);
+    assert_eq!(bondline_commands::registry().len(), 47);
     engine.set_ui_file_host(true);
     let rows = controls(&engine)?;
     let import = control(&rows, "file.import_smiles_records")?;

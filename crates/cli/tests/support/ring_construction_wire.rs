@@ -296,7 +296,7 @@ fn names(entries: &[Value]) -> TestResult {
         .iter()
         .map(|entry| entry["name"].as_str().ok_or("name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(entries.len(), 46);
+    assert_eq!(entries.len(), 47);
     assert_eq!(
         names,
         OLD_NAMES
@@ -312,6 +312,7 @@ fn names(entries: &[Value]) -> TestResult {
                 "ring.sprout",
                 "ui.preferences",
                 "document.set_document_settings",
+                "text.set_run",
             ])
             .collect::<BTreeSet<_>>()
     );

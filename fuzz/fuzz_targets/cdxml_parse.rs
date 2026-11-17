@@ -2,6 +2,173 @@
 
 use libfuzzer_sys::fuzz_target;
 
+const INPUT_LIMIT: usize = 16 * 1024;
+
+fn writer_text_property(value: &str) {
+    use bondline_cdxml::{Document, Error, Writer};
+    let mut writer = Writer::new(&[]).unwrap();
+    writer.start_element("t", &[]).unwrap();
+    writer
+        .start_element(
+            "s",
+            &[
+                ("font", "65535"),
+                ("size", "1.25"),
+                ("face", "65535"),
+                ("color", "65535"),
+            ],
+        )
+        .unwrap();
+    writer.text("prefix:").unwrap();
+    writer.text("").unwrap();
+    let expected = match writer.text(value) {
+        Ok(()) => format!("prefix:{value}:suffix"),
+        Err(error) => {
+            // At most16KiB data cannot exhaust this fixed writer's size/node budgets.
+            assert!(matches!(error, Error::InvalidTextValue));
+            "prefix::suffix".to_owned()
+        }
+    };
+    writer.text(":suffix").unwrap();
+    writer.end_element().unwrap();
+    writer.end_element().unwrap();
+    let bytes = writer.finish().unwrap();
+    let document = Document::parse(&bytes).unwrap();
+    let text = document.xml().root_element().first_element_child().unwrap();
+    let view = document.styled_text(text).unwrap();
+    assert_eq!(view.runs().len(), 1);
+    let run = view.runs().first().unwrap();
+    assert_eq!(run.text(), expected);
+    assert_eq!(run.font(), Some(u16::MAX));
+    assert_eq!(run.size_pt(), Some(1.25));
+    assert_eq!(run.face(), Some(u16::MAX));
+    assert_eq!(run.color(), Some(u16::MAX));
+    assert_eq!(document.as_bytes(), bytes);
+}
+
+fn text_selector_property(value: &str) {
+    use bondline_cdxml::{Document, Error, TextError, Writer};
+    for index in 0..4 {
+        let mut attributes = [("font", "0"), ("size", "12"), ("face", "0"), ("color", "1")];
+        attributes[index].1 = value;
+        let property = attributes[index].0;
+        let mut writer = Writer::new(&[]).unwrap();
+        writer.start_element("t", &[]).unwrap();
+        if let Err(error) = writer.empty_element("s", &attributes) {
+            assert!(matches!(error, Error::InvalidAttributeValue));
+            continue;
+        }
+        writer.end_element().unwrap();
+        let bytes = writer.finish().unwrap();
+        let document = Document::parse(&bytes).unwrap();
+        let text = document.xml().root_element().first_element_child().unwrap();
+        let integer = bondline_cdxml::parse_integer(value)
+            .ok()
+            .and_then(|value| u16::try_from(value).ok());
+        let size = value
+            .trim_matches([' ', '\t', '\r', '\n'])
+            .parse::<f64>()
+            .ok()
+            .filter(|value| value.is_finite() && *value > 0.0);
+        match document.styled_text(text) {
+            Ok(view) => {
+                assert!(if index == 1 {
+                    size.is_some()
+                } else {
+                    integer.is_some()
+                });
+                let run = view.runs().first().unwrap();
+                assert_eq!(run.font(), if index == 0 { integer } else { Some(0) });
+                assert_eq!(run.size_pt(), if index == 1 { size } else { Some(12.0) });
+                assert_eq!(run.face(), if index == 2 { integer } else { Some(0) });
+                assert_eq!(run.color(), if index == 3 { integer } else { Some(1) });
+                assert_eq!(run.text(), "");
+            }
+            Err(error) => {
+                assert!(if index == 1 {
+                    size.is_none()
+                } else {
+                    integer.is_none()
+                });
+                assert_eq!(error, TextError::InvalidProperty(property));
+            }
+        }
+        assert_eq!(document.as_bytes(), bytes);
+    }
+}
+
+fn text_views(document: &bondline_cdxml::Document<'_>, source: &[u8]) {
+    use bondline_cdxml::{Document, TextError};
+    let foreign = Document::parse(b"<CDXML><t><s/></t></CDXML>").unwrap();
+    let foreign_text = foreign.xml().root_element().first_element_child().unwrap();
+    assert_eq!(
+        document.styled_text(foreign_text).err(),
+        Some(TextError::InvalidElement)
+    );
+    assert_eq!(
+        document.styled_text(document.xml().root_element()).err(),
+        Some(TextError::InvalidElement)
+    );
+    for element in document.xml().descendants().filter(|node| {
+        node.is_element() && node.tag_name().namespace().is_none() && node.tag_name().name() == "t"
+    }) {
+        if let Ok(view) = document.styled_text(element) {
+            assert_eq!(view.element(), element);
+            assert!(!view.runs().is_empty());
+            assert!(view.runs().len() <= bondline_cdxml::MAX_NODES as usize);
+            for run in view.runs() {
+                let node = run.element();
+                assert_eq!(node.parent(), Some(element));
+                assert_eq!(node.tag_name().name(), "s");
+                assert!(node.tag_name().namespace().is_none());
+                assert!(node.children().all(|child| child.is_text()));
+                let decoded: String = node.children().filter_map(|child| child.text()).collect();
+                assert_eq!(run.text(), decoded);
+                assert!(run.text().len() <= source.len());
+                let ordinary = |name| {
+                    node.attributes()
+                        .find(|attribute| {
+                            attribute.namespace().is_none() && attribute.name() == name
+                        })
+                        .map(|attribute| attribute.value())
+                };
+                for (name, actual) in [
+                    ("font", run.font()),
+                    ("face", run.face()),
+                    ("color", run.color()),
+                ] {
+                    let expected = ordinary(name).map(|raw| {
+                        u16::try_from(bondline_cdxml::parse_integer(raw).unwrap()).unwrap()
+                    });
+                    assert_eq!(actual, expected);
+                }
+                let expected_size = ordinary("size").map(|raw| {
+                    raw.trim_matches([' ', '\t', '\r', '\n'])
+                        .parse::<f64>()
+                        .unwrap()
+                });
+                assert_eq!(run.size_pt(), expected_size);
+                assert!(
+                    run.size_pt()
+                        .is_none_or(|value| value.is_finite() && value > 0.0)
+                );
+                for attribute in node
+                    .attributes()
+                    .filter(|attribute| attribute.namespace().is_some())
+                {
+                    if let Some(namespace) = attribute.namespace() {
+                        assert_eq!(
+                            run.element().attribute((namespace, attribute.name())),
+                            Some(attribute.value())
+                        );
+                    }
+                }
+            }
+        }
+        assert_eq!(document.as_bytes(), source);
+    }
+}
+
 fn integer_property(value: &str) {
     let id = value.parse::<bondline_cdxml::ObjectId>();
     if let Ok(integer) = bondline_cdxml::parse_integer(value) {
@@ -109,15 +276,21 @@ fn resource_value_property(value: &str) {
 }
 
 fuzz_target!(|data: &[u8]| {
+    if data.len() > INPUT_LIMIT {
+        return;
+    }
     if let Ok(value) = std::str::from_utf8(data) {
         integer_property(value);
         writer_property(value);
         resource_value_property(value);
+        writer_text_property(value);
+        text_selector_property(value);
     }
     if let Ok(document) = bondline_cdxml::Document::parse(data) {
         assert_eq!(document.as_bytes(), data);
         assert_eq!(document.to_bytes(), data);
         assert_eq!(document.xml().root_element().tag_name().name(), "CDXML");
+        text_views(&document, data);
         if let Ok(resources) = document.resources() {
             assert_eq!(resources.color(0).unwrap(), [0.0; 3]);
             assert_eq!(resources.color(1).unwrap(), [1.0; 3]);

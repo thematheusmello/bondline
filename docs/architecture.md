@@ -1,5 +1,23 @@
 # Architecture
 
+Owned `StyledText` objects contain checked ordered `TextRun`/`TextStyle` data on a Page,
+separate from chemical atoms and their derived labels. Empty text collections preserve
+legacy JSON/native bytes; shared history accounts for text allocations. Standalone CDXML
+reads borrowed Style nodes without model/render dependencies. IO resolves explicit runs
+and proves a separate caption-only capability: same-style text deltas may use SetText,
+but do not grant chemical, page or style edits or global `is_fully_mapped` authority.
+Native encoding includes owned captions and deterministic font/palette resources.
+
+`text.set_run` appends command47 with one final source/write and whole-page render
+certificate before an ordinary history commit. Display/capture/view use the complete
+display capability; chemical controls keep their narrower authority. Shared CPU/GPU
+caption rendering uses the existing Roboto file and GPOS positioning, bounds the whole
+page before raster work, and publishes separate min/max caption ems for logical DPI
+checks. The native inspector identifies a read-only caption canvas. There is no Text tool
+binding or inline editor. See [contract](research/styled-captions.md) and
+[receiving](verification-styled-captions.md). Registry47 and catalogue16/124 are current;
+counts in the checkpoints below retain their historical scope.
+
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks
 cancellation/arithmetic and refuses unresolved H; bonds/geometry are not chemistry-inferred.
@@ -35,7 +53,7 @@ the old pair/three-field APIs retain unaddressed spacing. Read the
 [receiving](verification-document-bond-spacing.md). No dependency, shader or planned-tool
 binding is added; foreign style resolution remains separate work.
 
-CDXML backing now separates Canonical, Preserved and Opaque profiles. The closed-v0
+CDXML backing separates Canonical, Preserved, Caption and Opaque profiles. The closed-v0
 Preserved proof uses all syntax facts/nodes/keys and typed source correspondence; current
 prefix/domain validation also gates eligibility. Its source-aware writer patches typed
 changes and appends new-only native-helper output, with final ID/semantic certification.

@@ -32,6 +32,9 @@ pub(crate) fn supports_delta(baseline: &Document, current: &Document) -> bool {
     if before.id() != after.id() || before.fragments().len() > after.fragments().len() {
         return false;
     }
+    if before.texts() != after.texts() {
+        return false;
+    }
     if after
         .fragments()
         .iter()

@@ -37,6 +37,7 @@ impl DisplayError {
             Self::MissingPage { .. } => "not_found",
             Self::IncompleteSource
             | Self::Unsupported { .. }
+            | Self::Render(bondline_render::Error::UnsupportedText(_))
             | Self::Render(bondline_render::Error::UnsupportedChemicalContent)
             | Self::Render(bondline_render::Error::LabelPlacement)
             | Self::Render(bondline_render::Error::LabelOverlap) => "unsupported_content",
@@ -100,7 +101,7 @@ fn display_facts<'a>(
     if cancel.is_cancelled() {
         return Err(DisplayError::Cancelled);
     }
-    if !stored.is_fully_mapped() && !stored.has_smiles_projection() {
+    if !stored.has_display_projection() {
         return Err(DisplayError::IncompleteSource);
     }
     let page = stored

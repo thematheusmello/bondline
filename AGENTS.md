@@ -1,5 +1,26 @@
 # Bondline agent instructions
 
+Explicit plain styled captions are integrated on baseeff16ae; read
+docs/research/styled-captions.md and docs/verification-styled-captions.md. Keep checked
+owned Page text runs distinct from chemical labels, exact empty legacy bytes, native
+font/palette/text encoding and whole-format loss guards. Foreign caption-only authority
+never sets is_fully_mapped: only same-object/style run bodies change through SetText;
+geometry/styles/page/IDs/mixed/unknown drift revoke it. Caption→Canonical after a proven
+self-closing leaf expansion is valid only with complete-model equality. Registry47
+appends text.set_run; old46 bytes/schema/order stay exact, catalogue16/124 unchanged.
+Per-run em min/max (including blanks), source-aware display/capture, GPOS, work/paper/
+glyph limits and read-only native pointer gates stay. Actual Mac Open/remote repaint/
+keyboard history/Unicode Save As/reopen and independent actual-file checks pass; this
+does not implement the grey Text tool/editor or native font/chemical-format controls.
+Initial5056 fails1217/1/0 at unchanged MCP replacement_bind58833; full no-fail-fast74577
+records1906/1/1 at one obsolete UI registry46 assertion. Qualified11820 passes whole
+UI322/0/1 and remaining vendor3/0/clippy/fmt/layers/licenses/assets/corpus. All components
+pass separately; no clean aggregate or causal MCP fix is claimed. Qualified parser ASan
+10000/6s and profile10000/87s pass with actual16KiB after a namespace-expectation harness
+qualification; unchanged product retention stays. All jobs/workers are terminal, own
+review closed, older apps/drawings protected, Actions OFF. Next M1 effective chemical
+Label font/size/face/child Text and mixed-source proofs; full M0–M5 remains active/incomplete.
+
 Explicit root relative spacing is integrated on baseb377456; read
 docs/research/document-bond-spacing.md and docs/verification-document-bond-spacing.md.
 Preserve independent optional width/spacing, exact legacy absence, preferred-length

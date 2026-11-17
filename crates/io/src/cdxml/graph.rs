@@ -214,6 +214,11 @@ impl<'input> ElementalGraph<'input> {
             .id();
         model.set_page_size(id, size)?;
         model.append_fragments(id, self.fragments.clone())?;
+        if let Some(page) = root.children().find(|node| is_element(*node, "page"))
+            && let Ok(texts) = super::caption::project(&self.source, page)
+        {
+            model.append_texts(id, texts)?;
+        }
         Ok(model)
     }
 }

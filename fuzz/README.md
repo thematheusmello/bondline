@@ -44,6 +44,35 @@ The unchanged cdxml_parse target can independently use another fresh corpus from
 same recipe. [Profile receiving](../docs/verification-source-preserving-cdxml-profile.md)
 records actual runs, reached lengths, separate independent consumers and native limits.
 
+### Styled caption sources
+
+The existing `cdxml_parse` and `cdxml_profile` targets now bound each input at16KiB.
+All earlier invariants remain inside that bound. Standalone parsing reads every ordinary
+Text object without changing source, checks owned/foreign-node context, optional exact
+UINT16/positive-size selectors and decoded text. Arbitrary UTF8 additionally exercises
+`Writer::text` decoded equality and atomic invalid-XML-character refusal. The IO target
+compares every text position/style/run string when rebinding native IDs, edits original
+two-run Unicode caption leaves while retaining all other source bytes, restores source,
+and refuses style/position/ID/count/page/root/mixed drift. A known native empty-run case
+checks the valid Caption→Canonical transition. Newlines are retained model data; these
+harnesses do no rendering, Engine, file jobs, processes or native work.
+
+Generate separate fresh directories for each target; `source/` and `manifest.json` remain
+outside their writable `corpus/`. The stdlib-only recipe refuses an existing destination
+and includes original CDATA/self-closing/spaces/native and opaque font/field/style/
+negative-underflow/mixed/namespace cases plus exact16KiB input. It never changes fixtures.
+
+```sh
+python3 fuzz/seed_cdxml_captions.py .cache/fuzz/cdxml-captions-parse-example
+python3 fuzz/seed_cdxml_captions.py .cache/fuzz/cdxml-captions-profile-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_parse .cache/fuzz/cdxml-captions-parse-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/cdxml-captions-profile-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+These are declared reproducible commands, not a claim that the new harnesses passed.
+Record actual seed manifests, source/target hashes, reached lengths and terminal output
+in the caption receiving record. Full foreign-source/render/UI parity remains incomplete.
+
 `cdxml_edits` exercises the standalone immutable batch editor over at most 16KiB input.
 Fixed root edits retain existing subtrees; nested appends in both caller orders must
 retain their intended owners. Namespace-isolation controls, duplicate/foreign targets,

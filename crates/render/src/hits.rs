@@ -48,6 +48,7 @@ impl BondHit {
 /// Paint and picking share an immutable, bounded projection of the same Page.
 pub struct GraphScene {
     pub(crate) label_em_px: Option<f32>,
+    pub(crate) text_em_range_px: Option<[f32; 2]>,
     pub(crate) scene: Scene,
     pub(crate) atoms: Vec<AtomHit>,
     pub(crate) bonds: Vec<BondHit>,
@@ -75,6 +76,11 @@ impl GraphScene {
     /// Smallest main atom-label em in this actual scene, excluding subscript scaling.
     pub fn label_em_px(&self) -> Option<f32> {
         self.label_em_px
+    }
+
+    /// Minimum and maximum actual caption-run em, including blank runs, excluding chemistry.
+    pub fn text_em_range_px(&self) -> Option<[f32; 2]> {
+        self.text_em_range_px
     }
 
     pub fn scene(&self) -> &Scene {

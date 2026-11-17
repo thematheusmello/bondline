@@ -229,6 +229,11 @@ fn readable_graph(
     if graph
         .label_em_px()
         .is_some_and(|em| !(8.0..=256.0).contains(&(em / density)))
+        || graph.text_em_range_px().is_some_and(|range| {
+            range
+                .into_iter()
+                .any(|em| !(8.0..=256.0).contains(&(em / density)))
+        })
     {
         return Err(bondline_render::Error::LabelScale.into());
     }
@@ -393,6 +398,9 @@ fn activation_event(response: &egui::Response, event: &egui::Event) -> bool {
 
 fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
     let state = engine.state();
+    let caption_preview = engine
+        .stored_document()
+        .is_ok_and(|stored| stored.has_caption_projection());
     ui.heading("Document");
     if let Some(message) = error {
         ui.colored_label(egui::Color32::DARK_RED, message);
@@ -431,7 +439,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         }
         if engine
             .stored_document()
-            .is_ok_and(|stored| stored.is_fully_mapped() || stored.has_smiles_projection())
+            .is_ok_and(|stored| stored.has_display_projection())
         {
             let (atoms, bonds, fragments) = document
                 .pages()
@@ -451,6 +459,13 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             ui.label(format!("{atoms} atoms"));
             ui.label(format!("{bonds} bonds"));
             ui.label(format!("{fragments} fragments"));
+            let captions: usize = document.pages().iter().map(|page| page.texts().len()).sum();
+            if captions > 0 {
+                ui.label(format!(
+                    "{captions} caption{}",
+                    if captions == 1 { "" } else { "s" }
+                ));
+            }
             if let Some(summary) = engine.content().smiles_summary()
                 && let Some(projected) = summary.projected_records
             {
@@ -466,43 +481,51 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         ui.add_space(8.0);
         ui.separator();
         ui.weak("ACTIVE TOOL");
-        let tool = match engine.effective_tool() {
-            EffectiveTool::Selection => "Marquee selection".to_owned(),
-            EffectiveTool::Ring { size } => format!("{size}-member Single ring selected"),
-            EffectiveTool::NamedRing { kind } => match kind {
-                RingKind::Benzene => "Benzene selected",
-                RingKind::Cyclopentadiene => "Cyclopentadiene selected",
-            }
-            .to_owned(),
-            EffectiveTool::Chain { kind } => format!("{kind:?} chain selected"),
-            EffectiveTool::ChairRing { kind } => format!(
-                "Cyclohexane chair {} selected",
-                match kind {
-                    bondline_commands::ChairKind::One => 1,
-                    bondline_commands::ChairKind::Two => 2,
+        let tool = if caption_preview {
+            "Caption preview".to_owned()
+        } else {
+            match engine.effective_tool() {
+                EffectiveTool::Selection => "Marquee selection".to_owned(),
+                EffectiveTool::Ring { size } => format!("{size}-member Single ring selected"),
+                EffectiveTool::NamedRing { kind } => match kind {
+                    RingKind::Benzene => "Benzene selected",
+                    RingKind::Cyclopentadiene => "Cyclopentadiene selected",
                 }
-            ),
-            EffectiveTool::Bond => match engine.bond_tool().order {
-                BondDrawOrder::Single => "Single bond selected",
-                BondDrawOrder::Double => "Double bond selected",
-                BondDrawOrder::Triple => "Triple bond selected",
+                .to_owned(),
+                EffectiveTool::Chain { kind } => format!("{kind:?} chain selected"),
+                EffectiveTool::ChairRing { kind } => format!(
+                    "Cyclohexane chair {} selected",
+                    match kind {
+                        bondline_commands::ChairKind::One => 1,
+                        bondline_commands::ChairKind::Two => 2,
+                    }
+                ),
+                EffectiveTool::Bond => match engine.bond_tool().order {
+                    BondDrawOrder::Single => "Single bond selected",
+                    BondDrawOrder::Double => "Double bond selected",
+                    BondDrawOrder::Triple => "Triple bond selected",
+                }
+                .to_owned(),
             }
-            .to_owned(),
         };
         ui.label(egui::RichText::new(tool).color(ACCENT).strong());
-        if matches!(
-            engine.effective_tool(),
-            EffectiveTool::Ring { .. }
-                | EffectiveTool::NamedRing { .. }
-                | EffectiveTool::ChairRing { .. }
-        ) {
+        if !caption_preview
+            && matches!(
+                engine.effective_tool(),
+                EffectiveTool::Ring { .. }
+                    | EffectiveTool::NamedRing { .. }
+                    | EffectiveTool::ChairRing { .. }
+            )
+        {
             ui.weak(if engine.preferences().sprout_rings_when_clicking {
                 "Atom clicks sprout a separate ring (Preferences). Alt also forces sprout."
             } else {
                 "Alt-click an atom to sprout a separate ring."
             });
         }
-        if engine.effective_tool() == EffectiveTool::Selection {
+        if caption_preview {
+            ui.label("Read-only canvas. Save preserves the complete caption file.");
+        } else if engine.effective_tool() == EffectiveTool::Selection {
             ui.label(if engine.selection_available() {
                 "Click or drag to select. Drag selected atoms to move; arrows nudge 1 pt, Shift 10 pt."
             } else { "Selection and movement are unavailable for this source." });
@@ -1403,7 +1426,7 @@ fn show_workspace_with_preview(
                     return;
                 }
             };
-            if !stored.is_fully_mapped() && !stored.has_smiles_projection() {
+            if !stored.has_display_projection() {
                 drawing.cancel_canvas_gestures();
                 ui.colored_label(
                     egui::Color32::DARK_RED,
@@ -1706,6 +1729,14 @@ fn show_workspace_with_preview(
                             target: None,
                         });
                         drawing.navigation_position = (!text_focused).then_some(*pos);
+                    }
+                    if engine.stored_document().is_ok_and(|stored|stored.has_caption_projection())
+                        && !matches!(event,egui::Event::MouseWheel {..})
+                    {
+                        drawing.gesture=None;
+                        drawing.ring.cancel();drawing.chain.cancel_gesture();drawing.selection.reset();
+                        drawing.hover_fresh=false;drawing.key_hotspot=None;
+                        continue;
                     }
                     let chain_input=matches!(engine.effective_tool(),EffectiveTool::Chain{..})
                         && matches!(event,egui::Event::PointerMoved(_)|egui::Event::PointerButton{..}|egui::Event::ModifiersChanged(_));

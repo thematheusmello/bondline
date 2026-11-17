@@ -1,5 +1,7 @@
 //! Independent original-A4 view and numeric field acceptance through actual App frames.
 use super::*;
+#[path = "caption_app_tests.rs"]
+mod caption_app;
 
 #[path = "native_drawing_settings_tests.rs"]
 mod native_drawing_settings;

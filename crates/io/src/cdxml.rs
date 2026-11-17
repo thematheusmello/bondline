@@ -1,8 +1,13 @@
 //! Source-backed CDXML projections; application document import remains separate.
 
+mod caption;
 mod graph;
 mod preserved;
 mod write;
+pub(crate) use caption::{
+    is_caption, supports_delta as supports_caption_delta,
+    write_preserved as write_caption_preserved,
+};
 pub use graph::{ElementalGraph, MappingError};
 pub(crate) use preserved::{is_preserved, supports_delta, write_preserved};
 pub use write::write_document;

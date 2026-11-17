@@ -252,7 +252,7 @@ impl PageViewport {
             .min(f64::from(self.paper.height) / self.page.height_pt())
     }
 
-    fn paper_bounds(&self) -> [f64; 4] {
+    pub(crate) fn paper_bounds(&self) -> [f64; 4] {
         if let Some(raster) = &self.raster {
             return [
                 raster.origin[0],
@@ -893,8 +893,10 @@ pub(crate) fn graph_scene_in_viewport(
             cancel,
         )?;
     }
+    let text_em_range_px = crate::text::append(page, viewport, &mut scene, cancel)?;
     Ok(GraphScene {
         label_em_px,
+        text_em_range_px,
         scene,
         atoms,
         bonds,

@@ -11,6 +11,7 @@ mod atom;
 mod atom_ui;
 mod bond;
 mod bond_tool;
+mod caption;
 mod capture;
 mod chain;
 mod chain_tool;
@@ -40,6 +41,7 @@ pub use bond::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
 };
 pub use bond_tool::{BondToolOperation, BondToolState, EffectiveTool, SelectBondTool};
+pub use caption::TextSetRun;
 pub use chain::{
     ChainCreate, ChainCreatePath, ChainPathPlacement, ChainPathPoint, ChainPlacement, ChainSide,
 };
@@ -221,12 +223,17 @@ command_registry! {
     RingSprout(RingSprout) => ("ring.sprout", "Attach an independent native carbon ring through one Single connector in one edit, with explicit cycle geometry and literal hydrogen policy.", false),
     UiPreferences(UiPreferences) => ("ui.preferences", "Inspect or set session application preferences, or open/apply/cancel their native draft; never authors document data or acknowledges Save.", false),
     DocumentSettingsSet(DocumentSettingsSet) => ("document.set_document_settings", "Replace explicit bond length, chain angle and line width atomically; optionally set or clear spacing. Appearance or active spacing-reference changes must pass the whole-page ink certificate without moving geometry or changing label metrics.", false),
+    TextSetRun(TextSetRun) => ("text.set_run", "Replace the decoded text of one existing styled caption run, preserving its font, size, face, colour, placement and every unrelated source byte. Requires native or caption-qualified CDXML and validates the final page and Save representation before one history edit.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("unknown command: {0}")]
     UnknownCommand(String),
+    #[error("caption editing requires native or completely supported caption CDXML source")]
+    UnsupportedCaptionSource,
+    #[error("text ID must be greater than zero")]
+    InvalidTextId,
     #[error("invalid command parameters: {0}")]
     InvalidParams(#[from] serde_json::Error),
     #[error(transparent)]
@@ -413,7 +420,10 @@ impl Error {
             Self::UnknownCommand(_) => "unknown_command",
             Self::NothingToUndo | Self::NothingToRedo => "empty_history",
             Self::Model(
-                bondline_model::Error::MissingPage(_) | bondline_model::Error::MissingFragment(_),
+                bondline_model::Error::MissingPage(_)
+                | bondline_model::Error::MissingFragment(_)
+                | bondline_model::Error::MissingText(_)
+                | bondline_model::Error::Text(bondline_model::TextError::MissingRun(_)),
             )
             | Self::MissingAtom { .. }
             | Self::MissingBond { .. } => "not_found",
@@ -428,6 +438,7 @@ impl Error {
                 bondline_render::Error::InvalidDimensions | bondline_render::Error::InvalidView,
             ) => "invalid_params",
             Self::Render(bondline_render::Error::UnsupportedChemicalContent)
+            | Self::Render(bondline_render::Error::UnsupportedText(_))
             | Self::Render(bondline_render::Error::LabelPlacement)
             | Self::Render(bondline_render::Error::LabelOverlap)
             | Self::SourceBackedEdit
@@ -440,6 +451,7 @@ impl Error {
             | Self::UnsupportedRing(_)
             | Self::UnsupportedChain(_)
             | Self::UnsupportedDrawingSettingsSource
+            | Self::UnsupportedCaptionSource
             | Self::UnsupportedDrawingStyle(_)
             | Self::UnsupportedSmilesPasteSource
             | Self::UnsupportedBondConversion(_) => "unsupported_content",
@@ -1020,6 +1032,9 @@ impl Engine {
                 ));
             }
             Command::PageSetSize(params) => {
+                if self.stored_document()?.has_caption_projection() {
+                    return Err(Error::UnsupportedCaptionSource);
+                }
                 if self
                     .stored_document()?
                     .source_info()
@@ -1058,6 +1073,15 @@ impl Engine {
                     return Err(Error::StaleRevision);
                 }
                 let candidate = drawing_settings::set_document(self.stored_document()?, params)?;
+                let changed = self.commit(candidate)?;
+                drawing_focus = self.view_focus;
+                changed
+            }
+            Command::TextSetRun(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let candidate = caption::set_run(self.stored_document()?, params)?;
                 let changed = self.commit(candidate)?;
                 drawing_focus = self.view_focus;
                 changed
@@ -1196,9 +1220,7 @@ impl Engine {
                     .iter()
                     .find(|page| page.id() == id)
                     .ok_or(bondline_model::Error::MissingPage(id.get()))?;
-                if !self.stored_document()?.is_fully_mapped()
-                    && !self.stored_document()?.has_smiles_projection()
-                {
+                if !self.stored_document()?.has_display_projection() {
                     return Err(Error::UnsupportedDocumentPreview);
                 }
                 return self.prepare_capture(params);
@@ -1397,6 +1419,7 @@ mod tests {
                 "ring.sprout",
                 "ui.preferences",
                 "document.set_document_settings",
+                "text.set_run",
             ]
             .into_iter()
             .collect()

@@ -282,6 +282,7 @@ impl Engine {
                 stored
                     .source_info()
                     .is_some_and(|source| source.format == "smiles")
+                    || stored.has_caption_projection()
             })
             .then_some("unsupported_content"));
         if let Ok(document) = self.document()
@@ -326,7 +327,7 @@ impl Engine {
             let [width_px, height_px] = self.view_canvas_size.unwrap_or([1, 1]);
             let percent = self.view_percent();
             let source_reason = authoring_reason.or(stored
-                .is_some_and(|stored| !stored.is_fully_mapped() && !stored.has_smiles_projection())
+                .is_some_and(|stored| !stored.has_display_projection())
                 .then_some("unsupported_content"));
             for (id, label, key, action, selected, limit) in [
                 (

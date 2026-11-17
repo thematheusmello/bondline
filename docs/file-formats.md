@@ -1,9 +1,22 @@
 # File capabilities
 
+Explicit caption-only CDXML now has a separate checked source capability. One Poster
+page, left-baseline Text objects and explicit ordered font/size/face/colour runs can open,
+render, edit run bodies through the registry, save and reopen while retaining every
+unaddressed source byte. Only exact bundled Roboto Regular and a white default palette
+background are supported. Unknown fonts, defaults, styles, mixed diagrams and objects
+remain source-backed and unsupported. No producer string grants this capability.
+It keeps `is_fully_mapped` false and refuses chemical/page/style edits. Native model
+encoding also preserves owned captions; whole-MOL/CDX/retained-SMILES guards prevent
+text loss. [Contract](research/styled-captions.md), [verification](verification-styled-captions.md).
+Native Mac file/preview/history acceptance is bounded; the full Text editor, chemical
+formatting and general foreign/CDX text mapping remain missing.
+
 The CDXML syntax batch API can set an owned text-only element's decoded value, preserving
 semantic no-op lexemes, attributes/QName and unrelated source. It rejects mixed content
-rather than erasing it. This enables later dependent-label synchronization, not wider
-imported-file authoring or text/font rendering. [Text receiving](verification-source-preserving-xml-text.md).
+rather than erasing it. This syntax primitive alone grants no imported-file authority;
+the caption workflow above supplies its first text application. Chemical dependent-label
+synchronization remains missing. [Text receiving](verification-source-preserving-xml-text.md).
 
 The standalone CDXML syntax API also has checked logical font/colour tables and reference
 lookup, including source-node access for owned attribute edits. Absent palettes differ

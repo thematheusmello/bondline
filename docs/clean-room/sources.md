@@ -1,5 +1,23 @@
 # Clean-room source register
 
+Styled captions reviewed2026-11-17 follow primary SDK [Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm),
+[Style](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Style.htm),
+[Font](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Font.htm),
+[position](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/2DPosition.htm),
+[justification](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Justification.htm)
+and [foreground colour](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ForegroundColor.htm).
+Ordered explicit regular runs, separate chemical meaning and left baseline are documented;
+the bounded one-page capability, command, budgets and no-substitution policy are original
+Bondline choices. The [BackgroundColor page](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BackgroundColor.htm)
+marks it future-only and excludes Document ownership; no root bgcolor is admitted.
+[LabelColor](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelStyleColor.htm)
+and [CaptionColor](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/CaptionStyleColor.htm)
+are also future-only in this archive; modern default/inheritance behavior is not inferred.
+[Contract](../research/styled-captions.md) and [receiving](../verification-styled-captions.md)
+record original licensed vectors, independent Expat/Decimal/FontTools/Pillow, CPU/Metal,
+actual adapters and bounded own-window Mac evidence. No proprietary program/code/assets,
+new font or glyph substitution is used; the full Text tool remains missing.
+
 Caption kerning needs the bundled Roboto's GPOS table, not its absent legacy kern table.
 The existing MIT OR Apache-2.0 ttf-parser0.25.1 is now a direct render dependency;
 this adds no package, font or license exception. Its [published API](https://docs.rs/ttf-parser/0.25.1/ttf_parser/)
@@ -65,6 +83,7 @@ programs/assets. Never download, run, inspect, decompile or disassemble referenc
 
 | ID | Public source | Decision / limitations |
 |---|---|---|
+| STYLED-CAPTIONS | Primary Text/Style/Font/2DPosition/Justification/ForegroundColor and OpenType GPOS linked above; [contract](../research/styled-captions.md), [receiving](../verification-styled-captions.md) | Ordered explicit plain runs, independent native/model/XML/font/image expectations, source-preserving bodies and separately bounded own-window native evidence. Roboto-only regular/Left/white-background profile and protocol/budgets are original policies; no chemical-label meaning, font fallback, future-only background/default-colour inference, rich Text tool or CDX text parity. |
 | DOCUMENT-LINE-WIDTH | Public [LineWidth](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LineWidth.htm), [CDXCoordinate](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm), GUIDE25 printed 40–43; [contract](../research/document-line-width.md) | Explicit document-root width is measured in points. Missing foreign values require inheritance/style resolution; no universal numeric default is asserted. Optional data, positive 100000pt bound, original 1pt fallback/12pt labels/3pt separation, combined atomic command and strict original source profile are Bondline policies. Render, persistence, loss guards and native evidence are qualified separately in receiving. No proprietary program/assets or broader foreign-style admission. |
 | SOURCE-PRESERVING-CDXML-PROFILE | [XML1.0](https://www.w3.org/TR/2008/REC-xml-20081126/#sec-starttags), [Namespaces1.0](https://www.w3.org/TR/2009/REC-xml-names-20091208/#defaulting), public [CDXML lexical](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDXML.htm)/[containment](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/General.htm) rules; [contract](../research/source-preserving-cdxml-profile.md), [receiving](../verification-source-preserving-cdxml-profile.md) | Implements the strict original Canonical/Preserved/Opaque grammar, pure current-prefix/domain check, all-current typed update/append writer and explicit sparse-ID reprojection certificate. Four existing-preflight facts preserve lexical evidence lost by the DOM without widening parser admission. Independent literal/Expat/Decimal/RDKit, actual engine/CLI/stdio/socket/history/Unicode files, paired authoring/CPU captures and two bounded ASan runs pass; final local1766/0/1. Three old lexical-only refusal expectations become explicit stronger positives while semantic negatives remain. Native controller access is unavailable, so that path is wired/unverified. Whole-MOL stays canonical-only; generated-only IDs remain per-snapshot. No proprietary program/assets, new dependency, corpus/golden or reference-behavior claim. |
 | SOURCE-PRESERVING-CDXML-PROFILE-PLAN | Same public XML/CDXML lexical, containment and scoped-ID sources as SOURCE-PRESERVING-XML-BATCH and existing elemental projection; [locked next contract](../research/source-preserving-cdxml-profile.md) | Strict Canonical/Preserved/Opaque split, complete all-node/key/value/trivia proof, original scoped IDs and typed prefix correspondence, coalesced source-only updates/appends and lowest-unused generated IDs are original policies. Preserved edit completeness stays separate from canonical-only whole-MOL permission. Generated-only IDs are per-snapshot, not persistently stable. Lexical facts must distinguish declarations/PI/CDATA/namespaces; plain roxmltree projections are insufficient. Contract only: no source authority is enabled, and general foreign styles/defaults plus native workflow verification remain required. |

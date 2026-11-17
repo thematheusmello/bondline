@@ -1,5 +1,22 @@
 # Open questions
 
+## Styled captions, 2026-11-17
+
+The [explicit plain-caption contract](../research/styled-captions.md) uses actual run
+ForegroundColor, logical resources and Left baseline. Archived BackgroundColor,
+LabelColor and CaptionColor pages mark them future-only; they do not establish26.1
+document/default/override behavior. Resolve effective LabelFont/Size/Face, inherited
+caption settings, charset mappings and chemical Node child Text before granting general
+foreign label authority. The existing owned caption source profile does not authorize it.
+
+Only exact bundled Roboto Regular and supported single-line glyphs are rendered. Other
+families/faces, shaping, bidi/marks, wrapping, rotation, formula/script styles, insertion,
+deletion, selection and rich native editing remain missing. Public binary styled-string
+examples disagree about offsets/size conventions; this increment adds no CDX text codec.
+Mixed chemical/caption foreign files and source-stable general Text IDs still need their
+own complete source/retention/render/history tests. Bounded Mac preview/remote-edit/file
+acceptance does not prove native Text-tool, measured DPI, race or other-platform parity.
+
 - Public [relative spacing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacing.htm),
   absolute spacing and GUIDE25 establish units/precedence. New public
   [implementation/measurement evidence](../research/bond-spacing-evidence.md) supports
