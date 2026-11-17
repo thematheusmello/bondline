@@ -39,6 +39,11 @@ edit helper, source authority, registry45, controls and catalogue are unchanged.
 the source-aware IO profile for equivalent noncanonical elemental files; the actual464B
 CLI edit remains unsupported until complete mapping/writing/history/consumer evidence.
 Whole-MOL permission must stay separate. Actions OFF; no new native/platform/parity claim.
+Next implementation follows the reviewed docs/research/source-preserving-cdxml-profile.md.
+It is still a contract, not a delivered profile. Strict lexical proof must include DTD/
+PI/CDATA and redundant namespace declarations; ordinary roxmltree attributes/nodes lose
+some of that evidence. Preserve current model-prefix drift guards and every supported
+update/append before enabling Preserved; tests/public API runtime RED precede producer.
 
 The original logo and planned-tool UI follow docs/design/branding-and-tools.md,
 docs/design/brand.md and docs/verification-branding-and-tools.md. The static UI catalogue

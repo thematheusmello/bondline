@@ -9,7 +9,7 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ### Source-preserving batch XML edits; full local gate passes
 
-The complete M0–M5 goal stays active. On base3240a1f, the accompanying format feature
+The complete M0–M5 goal stays active. On base3240a1f, committed format feature1176039
 adds standalone SetAttribute/RemoveAttribute/AppendChildren operations with one checked
 immutable byte plan. Source quotes, unrelated/unknown bytes, semantic string no-op lexemes
 and original qualified tag names stay exact. Duplicate/foreign ownership, namespace
@@ -37,6 +37,18 @@ adapter/native acceptance before broadening authority. General foreign styles/de
 unknown semantic objects and full M1–M5 remain required. No owned execution job remains
 at this primitive checkpoint. Actions OFF; no push/publication/hosted, lock/dependency/
 vendor/font/golden/corpus change. Both protected user apps/drawings stay untouched.
+
+The independently prepared next [IO contract](docs/research/source-preserving-cdxml-profile.md)
+is now reviewed and locked, not implemented. It covers strict all-node/key/value/prolog/
+namespace proof, original scoped ID bindings, current-prefix drift guards, all-current
+typed edits/appends, optional-field add/remove, lowest-unused generated IDs even with
+u32::MAX input and canonical-only whole-MOL permission. Per-snapshot generated-only ID
+renumbering remains explicit; stronger stability and general foreign styles remain in
+scope. First declare the existing-public-API positive/unknown/drift/loss tests and observe
+RED. The proof also needs four lexical facts (DTD/PI/CDATA/namespace declarations) that
+ordinary roxmltree nodes alone cannot establish; collect them without changing parser
+admission. No IO producer or new authority is enabled by this contract. All agents and
+Root execution jobs are terminal; ignored evidence remains under target/noncanonical-cdxml/.
 
 ### Logo and planned-tool recheck
 

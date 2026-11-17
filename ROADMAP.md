@@ -11,6 +11,9 @@ bounded10000-run ASan and full local1735/0/1 pass. No new command/tool/source au
 enabled. The original noncanonical-file edit still refuses; next complete source-aware
 model mapping/writing and actual adapter/history/native-file acceptance without relaxing
 unknown-data, preview or whole-MOL loss guards. This does not complete M0, M1 or M2–M5.
+The next [source-aware IO contract](docs/research/source-preserving-cdxml-profile.md) is
+locked with exact proof, typed drift/write and format-loss requirements; implementation
+and its independent public-API/runtime/native receiving remain next.
 
 The [native selection acceptance/fix](docs/verification-native-selection.md) continues
 base0c9e6af with actual Mac click/Shift/rectangle/component, drag/nudge/history/modal and
