@@ -2,8 +2,10 @@
 
 mod edit;
 mod numbers;
+mod patch;
 mod writer;
 pub use numbers::{ObjectId, parse_integer};
+pub use patch::{Edit, MAX_EDITS};
 pub use writer::Writer;
 
 pub const MAX_INPUT_BYTES: usize = 64 * 1024 * 1024;
@@ -44,6 +46,12 @@ pub enum Error {
     NodeLimit,
     #[error("attribute source range is inconsistent with the validated XML")]
     InvalidAttributeRange,
+    #[error("batch XML edits exceed the 200000-operation bound")]
+    EditLimit,
+    #[error("batch XML edits address the same attribute/container twice or overlap")]
+    ConflictingEdits,
+    #[error("appended XML must be a self-contained fragment without a declaration or DTD")]
+    InvalidFragment,
     #[error(
         "an exact decimal integer is required; fractional values and exponents are unsupported"
     )]

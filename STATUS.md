@@ -7,6 +7,37 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Source-preserving batch XML edits; full local gate passes
+
+The complete M0–M5 goal stays active. On base3240a1f, the accompanying format feature
+adds standalone SetAttribute/RemoveAttribute/AppendChildren operations with one checked
+immutable byte plan. Source quotes, unrelated/unknown bytes, semantic string no-op lexemes
+and original qualified tag names stay exact. Duplicate/foreign ownership, namespace
+capture and existing resource errors fail atomically. Metadata is indexed once per
+element; parser admission and legacy edit/writer behavior stay unchanged. Read
+[contract](docs/research/source-preserving-xml-edits.md) and
+[receiving](docs/verification-source-preserving-xml-edits.md).
+
+Eighteen new cases and all33 cdxml cases pass independent exact-byte/Expat/resource
+expectations, also with the Python override unset. Shared-boundary and namespace defects
+have actual runtime RED→GREEN. Test-helper lint/Root syntax corrections and the first
+fuzz constant's None→Some("") API qualification remain explicit. Corrected ASan4982
+passes10000 runs with actual16KiB reached. Frozen source review finds no further issue.
+Fresh full70957 exits0: **1735 passed/0 failed/1 ignored across253 result lines**, plus
+fmt, warnings-denied workspace/vendor checks, layers, seven assets/notices, strict
+runtime license closures and pinned corpus. Log218681B/SHA256
+d1ab9b942d053d3ad1793ccdc2aa5f3641baeb38d8bd1a3074089e5c744d55ae.
+
+This is a syntax prerequisite, not imported-file authoring. Registry45, controls39/22/16/12
+and catalogue16/124 stay. The original464B noncanonical CLI bond edit still refuses;
+preserve that RED, source guards and whole-MOL loss permission. Next complete source↔
+baseline bindings, strict supported-profile proof, typed source-aware field edits and
+new-object appends for every current authoring operation, with independent file/history/
+adapter/native acceptance before broadening authority. General foreign styles/defaults,
+unknown semantic objects and full M1–M5 remain required. No owned execution job remains
+at this primitive checkpoint. Actions OFF; no push/publication/hosted, lock/dependency/
+vendor/font/golden/corpus change. Both protected user apps/drawings stay untouched.
+
 ### Logo and planned-tool recheck
 
 The user-requested original bond-loop B, five SVG variants and native header/icon are
@@ -17,19 +48,6 @@ catalogue, foreground and workspace tests pass: 17 executions over 13 distinct c
 No tool is enabled by presentation alone. A fresh desktop preview cannot run this turn:
 CUA reports native-pipe startup failure/browser host unavailable. Earlier actual native
 captures retain their original binary/date scope. No user app/drawing is touched.
-
-The preceding M1 batch-XML work remains intentionally uncommitted in cdxml/lib.rs,
-writer.rs, new patch.rs, batch_edits.rs, batch_edit_limits.rs and its research contract.
-It is a format primitive, not imported-document editing. Its first 11 independent cases
-and the additional shared-boundary regression have GREEN evidence; the latter has an
-actual runtime RED before the nesting-order fix. The latest test-helper lint correction
-was formatted but has not yet had its fresh clippy run. The source review additionally
-flags repeated long-tag scans and default-namespace dependence in appended fragments;
-resolve/qualify both before committing or advertising this API. Exact receiving logs,
-frozen inputs and review are under ignored target/noncanonical-cdxml/. No execution job
-remains. Next run the focused clippy, declare the namespace/performance checks, finish
-the bounded fuzz/full local gate and commit the complete primitive; then continue the
-source-aware IO profile without relaxing existing source authority. Actions stays OFF.
 
 ### Native selection acceptance and stale-drag fixes; full local gate passes
 

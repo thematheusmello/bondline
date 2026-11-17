@@ -114,3 +114,10 @@ path = "fuzz_targets/preferences_request.rs"
 test = false
 doc = false
 bench = false
+
+[[bin]]
+name = "cdxml_edits"
+path = "fuzz_targets/cdxml_edits.rs"
+test = false
+doc = false
+bench = false

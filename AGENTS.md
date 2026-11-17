@@ -26,6 +26,20 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
+The current M1 syntax prerequisite follows docs/research/source-preserving-xml-edits.md
+and docs/verification-source-preserving-xml-edits.md on base3240a1f/ab7c312. The standalone
+immutable Edit batch preserves original bytes/lexemes/QNames, rejects duplicate ownership,
+foreign targets and destination-dependent namespace capture, caches source metadata once
+per element and keeps existing parser/resource errors. Eighteen new cases have independent
+literal/Expat/resource evidence; actual shared-boundary and namespace REDs precede fixes.
+The helper-lint/Root rewrite and Some("") fuzz qualifications are not producer regressions.
+All33 cdxml cases pass with and without BONDLINE_PYTHON; full local70957 passes1735/0/1,
+and corrected bounded ASan4982 passes10000 runs, actual reached16KiB. The legacy parser/
+edit helper, source authority, registry45, controls and catalogue are unchanged. Next finish
+the source-aware IO profile for equivalent noncanonical elemental files; the actual464B
+CLI edit remains unsupported until complete mapping/writing/history/consumer evidence.
+Whole-MOL permission must stay separate. Actions OFF; no new native/platform/parity claim.
+
 The original logo and planned-tool UI follow docs/design/branding-and-tools.md,
 docs/design/brand.md and docs/verification-branding-and-tools.md. The static UI catalogue
 covers124 public TD/TQ/TB roles as140 entries:16 delivered bindings and124 disabled planned

@@ -1,5 +1,12 @@
 # File capabilities
 
+The CDXML syntax library has source-preserving batch attribute edits and child appends,
+with exact unrelated-byte retention and self-contained namespace/resource validation.
+This is an IO prerequisite, not a broader native edit profile: equivalent noncanonical
+imports still preserve their original source and refuse unsupported authoring. The
+source-aware model writer and complete workflow remain required. See
+[receiving](verification-source-preserving-xml-edits.md).
+
 Document-root `BondLength`/`ChainAngle` now retain independent supported explicit values:
 CDXML decimal points/degrees and CDX unique four-byte signed little-endian fixed16.16.
 Absent values stay absent. Invalid/out-of-subset/ambiguous/nested source settings remain

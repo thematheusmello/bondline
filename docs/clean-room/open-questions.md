@@ -1,5 +1,12 @@
 # Open questions
 
+- Equivalent noncanonical elemental CDXML still needs a complete source-aware model
+  writer/profile after [the batch syntax prerequisite](../verification-source-preserving-xml-edits.md).
+  Public XML/CDXML permits lexical/order variation, but source styles/defaults, unknown
+  semantic objects, stable generated XML IDs across edits and reference-compatible
+  migrations are separate obligations. Keep the original source guard and whole-MOL
+  loss permission until complete bindings/writing/history/consumer/native evidence exists.
+
 - Ring sprout follows [the locked public-source/original policy](../research/native-ring-sprout.md).
   GUIDE25 describes generic Alt-click and a Building/Display preference, not Alt inversion,
   Alt-drag, mixed modifier timing, restart storage or exact26.1/Mac defaults. The original

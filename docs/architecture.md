@@ -1,5 +1,12 @@
 # Architecture
 
+The standalone cdxml crate now supports a checked immutable batch byte plan for ordinary
+attribute changes/removals and self-contained child appends. It retains source lexemes,
+unknown bytes, ownership and namespace meaning, with per-element source indexes and the
+existing final parser/resource checks. This primitive adds no source-profile or command
+authority; io still guards noncanonical edits. See [contract](research/source-preserving-xml-edits.md)
+and [receiving](verification-source-preserving-xml-edits.md).
+
 The UI's original branding and static roadmap catalogue are presentation only.
 tool_catalogue_data.rs maps124 source roles to140 entries;124 have no binding. The sixteen
 delivered entries resolve current Engine.controls() and use the existing ordered action

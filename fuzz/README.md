@@ -5,6 +5,29 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Source-preserving XML edits
+
+`cdxml_edits` exercises the standalone immutable batch editor over at most 16KiB input.
+Fixed root edits retain existing subtrees; nested appends in both caller orders must
+retain their intended owners. Namespace-isolation controls, duplicate/foreign targets,
+raw attribute escaping, fragment validation and exact source immutability are checked.
+Fixed shallow additions may hit existing size/node/attribute limits, never depth;
+arbitrary fragments may also exceed the existing depth limit. The harness uses existing
+dependencies and is separate from the unchanged `cdxml_parse` target. No model/edit
+authority, native UI or general 64MiB-input coverage is implied.
+
+The original 25-seed recipe refuses an existing destination and writes its SHA256
+manifest outside the mutable corpus. Use a fresh ignored directory:
+
+```sh
+python3 fuzz/seed_cdxml_edits.py .cache/fuzz/cdxml-edits-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_edits .cache/fuzz/cdxml-edits-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+Record actual reached length and terminal results. Seeds and `max_len` alone do not prove
+coverage. [Receiving](../docs/verification-source-preserving-xml-edits.md) distinguishes
+independent Expat/resource tests, actual failures, bounded fuzzing and full local gates.
+
 ## Ring JSON requests
 
 `ring_request` wraps up to16KiB of raw parameter bytes separately in the real

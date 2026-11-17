@@ -4,6 +4,14 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The next M1 source-preserving workflow now has its [batch syntax prerequisite](docs/verification-source-preserving-xml-edits.md):
+ordinary attribute changes/removals and self-contained child appends preserve unrelated
+bytes and namespace meaning. Eighteen independent cases, actual nesting/namespace REDs,
+bounded10000-run ASan and full local1735/0/1 pass. No new command/tool/source authority is
+enabled. The original noncanonical-file edit still refuses; next complete source-aware
+model mapping/writing and actual adapter/history/native-file acceptance without relaxing
+unknown-data, preview or whole-MOL loss guards. This does not complete M0, M1 or M2–M5.
+
 The [native selection acceptance/fix](docs/verification-native-selection.md) continues
 base0c9e6af with actual Mac click/Shift/rectangle/component, drag/nudge/history/modal and
 Unicode Save/reopen evidence. Eleven actual native/fixture files pass independent XML/

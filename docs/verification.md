@@ -1,5 +1,18 @@
 # Verification log
 
+## Source-preserving XML batch prerequisite, 2026-11-17
+
+[Receiving](verification-source-preserving-xml-edits.md) records18 new independent
+literal/Expat/resource cases, actual nesting/namespace RED→GREEN, the explicit helper/
+fuzz setup qualifications, and corrected bounded ASan10000-run evidence. All33 cdxml
+cases pass with and without the Python override. Fresh full local70957 passes1735/0/1
+across253 result lines and all format/lint/layer/license/asset/corpus gates; log218681B/
+SHA256 d1ab9b942d053d3ad1793ccdc2aa5f3641baeb38d8bd1a3074089e5c744d55ae.
+Parser admission, legacy helper, source authority, registry/control/catalogue remain
+unchanged. This is a library prerequisite; the original noncanonical CLI edit remains
+RED pending source-aware IO integration. No new native/platform/golden/hosted claim.
+Actions OFF; full M0–M5 active/incomplete; all primitive execution jobs are terminal.
+
 ## Native selection acceptance and cancellation, 2026-11-17
 
 [Receiving](verification-native-selection.md) records the predeclared Mac workflow,
