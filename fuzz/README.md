@@ -7,6 +7,22 @@ not an expansion of the native runtime dependency allowlist.
 
 ## Source-preserving XML edits
 
+The application IO boundary also has `cdxml_profile`: accepted source passthrough,
+guaranteed page edits, structured scalar/optional changes and sparse appends, old-ID/
+endpoint drift refusal, source/current purity and explicitly rebound reopening. It uses
+existing dependencies, at most16KiB input and small fixed native-domain cases, without
+Engine, filesystem/process, GUI or GPU work. No arbitrary error is treated as a success.
+Generate fresh original source/corpus copies and a separate manifest:
+
+```sh
+python3 fuzz/seed_cdxml_profile.py .cache/fuzz/cdxml-profile-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/cdxml-profile-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The unchanged cdxml_parse target can independently use another fresh corpus from the
+same recipe. [Profile receiving](../docs/verification-source-preserving-cdxml-profile.md)
+records actual runs, reached lengths, separate independent consumers and native limits.
+
 `cdxml_edits` exercises the standalone immutable batch editor over at most 16KiB input.
 Fixed root edits retain existing subtrees; nested appends in both caller orders must
 retain their intended owners. Namespace-isolation controls, duplicate/foreign targets,

@@ -71,7 +71,6 @@ fn creator_name_does_not_authorize_dropping_unknown_source_or_unmodeled_styles()
         original.replacen("</page>", "<t><s>caption</s></t></page>", 1),
         original.replacen("</CDXML>", "<!-- retain --><?future opaque?></CDXML>", 1),
         original.replacen("Bondline 0.1.0", "Bondline 999.0.0", 1),
-        original.replace("\"", "'"),
     ] {
         let mut stored = StoredDocument::from_cdxml(source.as_bytes().into(), PageSize::A4)?;
         assert!(!stored.is_fully_mapped());
@@ -84,5 +83,25 @@ fn creator_name_does_not_authorize_dropping_unknown_source_or_unmodeled_styles()
             Err(bondline_io::DocumentError::UnsupportedEdit)
         ));
     }
+    Ok(())
+}
+
+#[test]
+fn quote_only_native_equivalent_now_edits_without_rewriting_its_original_xml()
+-> Result<(), Box<dyn std::error::Error>> {
+    let source = std::str::from_utf8(ORIGINAL)?.replace('"', "'");
+    let mut stored = StoredDocument::from_cdxml(source.as_bytes().into(), PageSize::A4)?;
+    assert!(stored.is_fully_mapped());
+    assert_eq!(stored.to_cdxml()?.as_ref(), source.as_bytes());
+    let original = stored.clone();
+    stored
+        .model_mut()
+        .set_page_size(PageId::new(1).ok_or("page")?, PageSize::new(400.0, 600.0)?)?;
+    let expected = source
+        .replace("Width='612'", "Width='400'")
+        .replace("Height='792'", "Height='600'");
+    assert_ne!(expected, source);
+    assert_eq!(stored.to_cdxml()?.as_ref(), expected.as_bytes());
+    assert_eq!(original.to_cdxml()?.as_ref(), source.as_bytes());
     Ok(())
 }

@@ -1,10 +1,21 @@
 # File capabilities
 
+Equivalent Bondline-v0 elemental CDXML now has headlessly verified source-aware editing:
+mixed quotes/whitespace/comments, sparse/scoped IDs, integral numeric lexemes and interleaved
+forward-referenced bonds retain original bytes outside typed edits. Known optional fields
+can change/remove and current authoring operations can append. The strict proof rejects
+unknown objects/attributes, namespaces/DTD/PI/CDATA, unsupported defaults/styles and raw
+identity/membership/order drift; unchanged source remains exact. Native interaction is
+wired but unverified for this new profile. Whole-MOL permission remains canonical-only;
+explicit graph-only SMILES export retains its context-loss report. See
+[receiving](verification-source-preserving-cdxml-profile.md). This is not general foreign
+CDXML/style support or completion of M1.
+
 The CDXML syntax library has source-preserving batch attribute edits and child appends,
 with exact unrelated-byte retention and self-contained namespace/resource validation.
-This is an IO prerequisite, not a broader native edit profile: equivalent noncanonical
-imports still preserve their original source and refuse unsupported authoring. The
-source-aware model writer and complete workflow remain required. See
+The IO profile above is its first application; broader unsupported imports still preserve
+their original source and refuse unsupported authoring. Complete foreign/native workflows
+remain required. See
 [receiving](verification-source-preserving-xml-edits.md).
 
 Document-root `BondLength`/`ChainAngle` now retain independent supported explicit values:

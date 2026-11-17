@@ -2,8 +2,10 @@
 
 2026-11-17; implementation contract following batch primitive `1176039`. Root reviewed
 and adopted the independently prepared policy below. It supersedes the earlier looser
-architecture/reference/test-design suggestions. This profile is **not implemented**;
-the original 464-byte CLI edit still refuses. Full M1–M5 remains required.
+architecture/reference/test-design suggestions. This profile now has a complete IO
+implementation and [headless receiving](../verification-source-preserving-cdxml-profile.md):
+the original 464-byte CLI edit preserves its three value changes. Native interaction
+remains unverified because desktop access is unavailable. Full M1–M5 remains required.
 
 The source-only draft was 10,420B/SHA256
 `a85ca8ccc2a3a38c5b5cdbb964b6b677ec42c6e1a127d29fa98dad4e616c2fd0`;
@@ -96,6 +98,10 @@ and Undo restoration. On supported changes:
   Changed modeled attributes use batch Set/Remove, including optional settings/flag
   insertion/removal. Input key-presence qualification does not forbid later supported
   optional field edits. Existing B/E/ID spellings are never rewritten.
+  Insert new optional keys in the existing native helper order: root BondLength then
+  ChainAngle; atom p, Isotope, NumHydrogens, terminal then nonterminal display flag;
+  bond DoublePosition. This is original deterministic ordering, not reference behavior;
+  existing attributes retain their original positions and quote delimiters.
 - Aggregate one AppendChildren per existing container, coalescing appended atoms/bonds
   and new fragments as needed; duplicate append ownership conflicts in the primitive.
   Empty paired/self-closing parents use its tested expansion/composition behavior.

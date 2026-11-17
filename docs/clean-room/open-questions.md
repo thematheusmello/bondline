@@ -1,11 +1,11 @@
 # Open questions
 
-- Equivalent noncanonical elemental CDXML still needs a complete source-aware model
-  writer/profile after [the batch syntax prerequisite](../verification-source-preserving-xml-edits.md).
-  Public XML/CDXML permits lexical/order variation, but source styles/defaults, unknown
-  semantic objects, stable generated XML IDs across edits and reference-compatible
-  migrations are separate obligations. Keep the original source guard and whole-MOL
-  loss permission until complete bindings/writing/history/consumer/native evidence exists.
+- Equivalent closed-v0 elemental CDXML now has [headless source-aware receiving](../verification-source-preserving-cdxml-profile.md)
+  after the batch prerequisite. General foreign styles/defaults, labels/semantic objects,
+  stable generated XML IDs across edits and reference-compatible migrations remain open.
+  Native controller access fails, so actual new native interaction remains unverified.
+  Keep opaque-source guards and canonical-only whole-MOL permission; broader completeness
+  needs independent source/field/render/native evidence rather than producer-name trust.
 
 - Ring sprout follows [the locked public-source/original policy](../research/native-ring-sprout.md).
   GUIDE25 describes generic Alt-click and a Building/Display preference, not Alt inversion,

@@ -80,13 +80,20 @@ pub struct SourceInfo {
     pub modified: bool,
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum CdxmlProfile {
+    Opaque,
+    Canonical,
+    Preserved,
+}
+
 #[derive(Clone, PartialEq)]
 enum OriginalSource {
     Smiles(Arc<smiles::SmilesBacking>),
     Cdxml {
         bytes: Arc<[u8]>,
         baseline: Arc<Document>,
-        fully_mapped: bool,
+        profile: CdxmlProfile,
     },
     Cdx {
         bytes: Arc<[u8]>,
@@ -118,9 +125,19 @@ impl OriginalSource {
             Self::Smiles(backing) => &backing.baseline,
         }
     }
-    fn fully_mapped(&self) -> bool {
+    fn fully_mapped(&self, current: &Arc<Document>) -> bool {
         match self {
-            Self::Cdxml { fully_mapped, .. } | Self::Mol { fully_mapped, .. } => *fully_mapped,
+            Self::Cdxml {
+                profile, baseline, ..
+            } => match profile {
+                CdxmlProfile::Canonical => true,
+                CdxmlProfile::Opaque => false,
+                CdxmlProfile::Preserved => {
+                    Arc::ptr_eq(current, baseline)
+                        || crate::cdxml::supports_delta(baseline, current)
+                }
+            },
+            Self::Mol { fully_mapped, .. } => *fully_mapped,
             Self::Cdx { .. } | Self::Smiles(_) => false,
         }
     }
@@ -172,16 +189,22 @@ impl StoredDocument {
         let graph = ElementalGraph::parse(&bytes)?;
         let model = Arc::new(graph.preview_document(preview_size)?);
         drop(graph);
-        // A producer name is insufficient: every source byte must match our complete profile.
-        // shortcut: current canonical profile only; broaden with complete mappings and migrations.
-        let fully_mapped = crate::cdxml::write_document(&model)
-            .is_ok_and(|encoded| encoded.as_slice() == bytes.as_ref());
+        // Producer text alone grants no authority; every source field needs a complete proof.
+        let profile = if crate::cdxml::write_document(&model)
+            .is_ok_and(|encoded| encoded.as_slice() == bytes.as_ref())
+        {
+            CdxmlProfile::Canonical
+        } else if crate::cdxml::is_preserved(&bytes, &model) {
+            CdxmlProfile::Preserved
+        } else {
+            CdxmlProfile::Opaque
+        };
         Ok(Self {
             model: Arc::clone(&model),
             original: Some(OriginalSource::Cdxml {
                 bytes,
                 baseline: model,
-                fully_mapped,
+                profile,
             }),
         })
     }
@@ -256,11 +279,11 @@ impl StoredDocument {
     }
 
     /// Every authored field is represented by the native elemental codec.
-    /// Noncanonical or extended imports retain source but cannot be regenerated safely.
+    /// Preserved sources also require a supported current delta; opaque extensions stay guarded.
     pub fn is_fully_mapped(&self) -> bool {
         self.original
             .as_ref()
-            .is_none_or(OriginalSource::fully_mapped)
+            .is_none_or(|source| source.fully_mapped(&self.model))
     }
 
     /// Imported MOL drawing frame. Saving that source always keeps this frame.
@@ -412,11 +435,25 @@ impl StoredDocument {
         }
         match self.export_cdxml() {
             Ok(bytes) => Ok(Cow::Borrowed(bytes)),
-            Err(DocumentError::NoCdxmlSource | DocumentError::UnsupportedEdit)
-                if self.is_fully_mapped() =>
-            {
+            Err(DocumentError::NoCdxmlSource) => {
                 Ok(Cow::Owned(crate::cdxml::write_document(&self.model)?))
             }
+            Err(DocumentError::UnsupportedEdit) => match self.original.as_ref() {
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Canonical,
+                    ..
+                }) => Ok(Cow::Owned(crate::cdxml::write_document(&self.model)?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Preserved,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
+                _ => Err(DocumentError::UnsupportedEdit),
+            },
             Err(error) => Err(error),
         }
     }
@@ -515,7 +552,7 @@ impl StoredDocument {
                 (*transform, Some(headers), (page.id(), page.size()))
             }
             Some(OriginalSource::Cdxml {
-                fully_mapped: false,
+                profile: CdxmlProfile::Opaque | CdxmlProfile::Preserved,
                 ..
             }) => {
                 return Err(DocumentError::CrossFormatSource {
@@ -524,7 +561,8 @@ impl StoredDocument {
                 });
             }
             Some(OriginalSource::Cdxml {
-                fully_mapped: true, ..
+                profile: CdxmlProfile::Canonical,
+                ..
             })
             | None => (
                 native_frame,

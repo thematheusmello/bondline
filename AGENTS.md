@@ -26,24 +26,33 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
-The current M1 syntax prerequisite follows docs/research/source-preserving-xml-edits.md
-and docs/verification-source-preserving-xml-edits.md on base3240a1f/ab7c312. The standalone
-immutable Edit batch preserves original bytes/lexemes/QNames, rejects duplicate ownership,
-foreign targets and destination-dependent namespace capture, caches source metadata once
-per element and keeps existing parser/resource errors. Eighteen new cases have independent
-literal/Expat/resource evidence; actual shared-boundary and namespace REDs precede fixes.
-The helper-lint/Root rewrite and Some("") fuzz qualifications are not producer regressions.
-All33 cdxml cases pass with and without BONDLINE_PYTHON; full local70957 passes1735/0/1,
-and corrected bounded ASan4982 passes10000 runs, actual reached16KiB. The legacy parser/
-edit helper, source authority, registry45, controls and catalogue are unchanged. Next finish
-the source-aware IO profile for equivalent noncanonical elemental files; the actual464B
-CLI edit remains unsupported until complete mapping/writing/history/consumer evidence.
-Whole-MOL permission must stay separate. Actions OFF; no new native/platform/parity claim.
-Next implementation follows the reviewed docs/research/source-preserving-cdxml-profile.md.
-It is still a contract, not a delivered profile. Strict lexical proof must include DTD/
-PI/CDATA and redundant namespace declarations; ordinary roxmltree attributes/nodes lose
-some of that evidence. Preserve current model-prefix drift guards and every supported
-update/append before enabling Preserved; tests/public API runtime RED precede producer.
+The current M1 IO profile follows docs/research/source-preserving-cdxml-profile.md and
+docs/verification-source-preserving-cdxml-profile.md on base03d5205. Canonical remains
+byte-exact-native first; closed-v0 Preserved uses complete lexical/node/key/typed proof,
+positive scoped source IDs, pure current-prefix/domain guards and a source-aware writer.
+Opaque source stays unchanged-only. Never infer provenance from producer text alone.
+SyntaxFeatures captures DTD/PI/CDATA/every namespace declaration during old preflight;
+ordinary roxmltree nodes lose some evidence. Admission/resource/entity policies stay.
+Preserve original ID/B/E/quote/order/unchanged numeric bytes; coalesce appends through
+native attribute helpers, lowest-unused IDs and explicit sparse-ID semantic certification.
+Generated-only IDs are per-snapshot; stronger stability is still required later.
+Whole-MOL remains canonical/source-free only; explicit fragment SMILES keeps its reported
+geometry/context loss and never saves the session. Source/current/saved/history ownership
+and old unknown-source/geometry/H/physical/context guards remain. All current authoring
+families and CPU captures have paired public-API tests, plus actual CLI/stdio/socket/
+Unicode files and unchanged Expat/Decimal/RDKit consumers. First API/command runtime REDs,
+QName/root-empty-namespace/lifetime qualifications and three deliberate old lexical-only
+refusal upgrades stay explicit; do not weaken remaining negatives or old listener policy.
+Fresh full48986 passes1766/0/1; new IO and old parser ASan each pass10000 runs. Actual CLI45
+records/schema/order remain byte-exact, controls39/22/16/12 and catalogue16/124 unchanged.
+Native controller startup fails, so this new native path is wired/unverified; no user
+window is inspected. New Windows/Linux, foreign styles/defaults/labels/objects and full
+M0–M5 remain open. Next source-lock broader published CDXML style/default data and add
+independent foreign-source/retention/render cases before widening this closed profile.
+Revisit native acceptance when access returns; keep Actions OFF and goal active.
+The batch syntax prerequisite remains in docs/research/source-preserving-xml-edits.md
+and docs/verification-source-preserving-xml-edits.md; retain its namespace/ownership and
+source-span/caller-order invariants when extending these writers.
 
 The original logo and planned-tool UI follow docs/design/branding-and-tools.md,
 docs/design/brand.md and docs/verification-branding-and-tools.md. The static UI catalogue

@@ -342,3 +342,6 @@ mod skeletal_label_wire;
 
 #[path = "support/terminal_label_wire.rs"]
 mod terminal_label_wire;
+
+#[path = "support/noncanonical_cdxml_wire.rs"]
+mod noncanonical_cdxml_wire;

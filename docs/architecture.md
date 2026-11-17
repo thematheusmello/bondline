@@ -1,10 +1,19 @@
 # Architecture
 
+CDXML backing now separates Canonical, Preserved and Opaque profiles. The closed-v0
+Preserved proof uses all syntax facts/nodes/keys and typed source correspondence; current
+prefix/domain validation also gates eligibility. Its source-aware writer patches typed
+changes and appends new-only native-helper output, with final ID/semantic certification.
+Temporary maps are rebuilt, not retained. Canonical output and canonical-only whole-MOL
+permission stay separate. Existing commands/adapters inherit this capability; schemas,
+UI bindings and unknown-source guards stay. See [contract](research/source-preserving-cdxml-profile.md)
+and [verified headless scope](verification-source-preserving-cdxml-profile.md).
+
 The standalone cdxml crate now supports a checked immutable batch byte plan for ordinary
 attribute changes/removals and self-contained child appends. It retains source lexemes,
 unknown bytes, ownership and namespace meaning, with per-element source indexes and the
 existing final parser/resource checks. This primitive adds no source-profile or command
-authority; io still guards noncanonical edits. See [contract](research/source-preserving-xml-edits.md)
+authority; IO alone proves the closed supported profile. See [contract](research/source-preserving-xml-edits.md)
 and [receiving](verification-source-preserving-xml-edits.md).
 
 The UI's original branding and static roadmap catalogue are presentation only.

@@ -35,9 +35,13 @@ object: {format: "cdxml"|"cdx"|"mol"|"sdf"|"smiles", byte_length, modified}.
 The field is omitted for native in-memory documents. Raw source bytes are not serialized.
 The open/save commands below use that complete backing. bond.create authors a limited native
 chemical fragment; source-backed creation is refused unless a complete profile is proven.
-Exact current native encoding byte equality now permits headless edits/captures after
-reopening. Other modified source-backed models cannot export stale XML; exact undo restores
-original bytes/exportability.
+Exact current native encoding byte equality permits the existing canonical edit path.
+A separate closed Bondline-v0 profile now preserves equivalent lexical/ID/order variants
+through supported typed updates/appends, while checking current identity/prefix drift.
+Opaque extensions still refuse edits; exact undo restores original bytes/exportability.
+This adds no command/schema or native verification. Whole-document MOL conversion remains
+canonical-only; explicit fragment SMILES export continues to report omitted geometry/
+document context. See [source-aware receiving](verification-source-preserving-cdxml-profile.md).
 Failed imports retain the prior complete state/history/path. Registry saves encode through
 StoredDocument's format-specific export guards; no command result includes raw source bytes. Native file-menu delivery
 is a separate UI integration; general imported structural editing remains missing.

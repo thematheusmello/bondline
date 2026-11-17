@@ -377,7 +377,9 @@ fn one_real_edit_keeps_scene_pages_h_and_floors_but_invalidates_old_selection() 
 fn unsupported_whole_sources_refuse_equal_values_before_domain_or_noop() -> TestResult {
     for source in [
         String::from_utf8(NATIVE.to_vec())?.replace("<CDXML ", "<CDXML Private=\"retain\" "),
-        String::from_utf8(NATIVE.to_vec())?.replace("><page", ">\n<page"),
+        String::from_utf8(NATIVE.to_vec())?
+            .replace("><page", ">\n<page")
+            .replace("<CDXML ", "<CDXML Private=\"retain\" "),
     ] {
         let stored = StoredDocument::from_cdxml(source.as_bytes().into(), PageSize::A4)?;
         assert!(!stored.is_fully_mapped());
@@ -457,6 +459,40 @@ fn unsupported_whole_sources_refuse_equal_values_before_domain_or_noop() -> Test
     assert!(closed.complete_close());
     let input = json!({"expected_revision":99,"bond_length_pt":0,"chain_angle_degrees":180});
     refuse(&mut closed, input, "close_committed")?;
+    Ok(())
+}
+
+#[test]
+fn whitespace_only_source_now_keeps_noop_sharing_and_writes_settings_without_normalizing_xml()
+-> TestResult {
+    let source = String::from_utf8(NATIVE.to_vec())?.replace("><page", ">\n<page");
+    let stored = StoredDocument::from_cdxml(source.as_bytes().into(), PageSize::A4)?;
+    assert!(stored.is_fully_mapped());
+    let mut engine = Engine::from_document(stored);
+    shared_noop(&mut engine)?;
+    let invalid = params(&engine, Some(0.0), Some(180.0));
+    refuse(&mut engine, invalid, "invalid_params")?;
+    let original = engine.stored_document()?.model_snapshot();
+    let input = params(&engine, Some(24.5), Some(120.5));
+    let result = engine.dispatch(NAME, input)?;
+    assert!(result.changed);
+    assert_eq!(engine.document()?.pages(), original.pages());
+    let expected = source.replace(
+        "<CDXML CreationProgram=\"Bondline 0.1.0\">",
+        "<CDXML CreationProgram=\"Bondline 0.1.0\" BondLength=\"24.5\" ChainAngle=\"120.5\">",
+    );
+    assert_ne!(expected, source);
+    assert_eq!(
+        engine.stored_document()?.to_cdxml()?.as_ref(),
+        expected.as_bytes()
+    );
+    shared_noop(&mut engine)?;
+    engine.dispatch("history.undo", json!({}))?;
+    assert!(Arc::ptr_eq(
+        &original,
+        &engine.stored_document()?.model_snapshot()
+    ));
+    assert_eq!(engine.stored_document()?.export_cdxml()?, source.as_bytes());
     Ok(())
 }
 

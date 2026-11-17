@@ -121,3 +121,10 @@ path = "fuzz_targets/cdxml_edits.rs"
 test = false
 doc = false
 bench = false
+
+[[bin]]
+name = "cdxml_profile"
+path = "fuzz_targets/cdxml_profile.rs"
+test = false
+doc = false
+bench = false

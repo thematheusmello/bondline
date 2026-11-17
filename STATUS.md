@@ -7,7 +7,53 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-### Source-preserving batch XML edits; full local gate passes
+### Source-aware closed-v0 CDXML editing; full local gate passes
+
+Base03d5205; the accompanying atomic source/test/docs commit is the recoverable work.
+The source-aware IO implementation follows [contract](docs/research/source-preserving-cdxml-profile.md)
+and [receiving](docs/verification-source-preserving-cdxml-profile.md). Equivalent native-v0
+whitespace/quotes/comments, numeric lexemes, sparse/scoped IDs and interleaved forward
+references now support every delivered typed update/append without canonicalizing old
+source. Canonical stays byte-exact first; Preserved validates every node/key/known value
+and current typed prefix/domain; Opaque stays unchanged-only. Original source IDs/B/E
+and unrelated bytes are retained, with final explicit ID/semantic certification. New
+generated-only XML IDs are deterministic per snapshot, not persistently stable.
+
+Actual existing-API IO and registered bond-edit REDs precede the producer. Thirteen IO
+cases, independent Expat/Decimal/RDKit, actual CLI/initialized stdio/authenticated socket/
+Unicode Save/history/reopen and paired current authoring families pass. The original464B
+C2 file changes only Order and two H value bytes, CC/C2H6→C=C/C2H4. CPU captures of equal
+canonical/Preserved models are identical and non-authoring. All31 opaque variants,12
+valid-model identity/order/membership/direction drifts and canonical-only whole-MOL
+controls pass. Explicit graph-only SMILES export declares geometry/context loss and
+preserves the session. Four new lexical-fact tests retain all33 older syntax cases.
+
+Three old lexical-only refusal expectations become explicit stronger positives; all
+semantic/other-format negatives remain. SDK QName/root-empty-namespace and private
+helper lifetime qualifications are recorded separately. First full75528 fails369/1 at
+the last whitespace-only expectation. Fresh qualified full48986 exits0: **1766 passed/
+0 failed/1 ignored across263 result lines**, plus fmt, warnings-denied workspace/vendor
+checks, layers, seven assets/notices, strict runtime licenses and pinned corpus. Log
+222486B/SHA2565436dbb7b99972b071208f0968dce919d51cdfe7ea318b88bbc704809777226b.
+New IO ASan69021 passes10000/33s, actual16KiB; unchanged parser84686 passes10000/2s,
+observed NEW/REDUCE maximum15502B of16KiB. Frozen review finds no material issue.
+
+Actual rebuilt CLI45 records/schema/order remain byte-exact to the prior5dbb59f… hash;
+controls39/22/16/12 and catalogue16/124 stay. No planned entry gains a binding. Locks, workflow,
+protected MCP test/listener policy, vendor/font/assets/corpus/golden and both protected
+user binaries retain their hashes. Natural passing tests do not explain historical
+AddrInUse. Fresh CUA startup still fails; no app/window/drawing is selected or changed.
+The new native path is wired, **unverified**; new Windows/Linux execution is unverified.
+Actions stays OFF; no hosted run, push or publication. All owned jobs/agents are terminal.
+
+Full M0–M5 remains active/incomplete. Next research/lock public CDXML style/default data
+(line width/spacing, labels/fonts/colour and inheritance) and original foreign-program
+fixtures with independent source/field/render expectations before widening the profile.
+General foreign files, labels/objects, full CDX/chemistry/interchange and stable generated
+IDs remain required. Revisit actual native Open/edit/history/Save/reopen when desktop
+access returns; do not treat headless/capture evidence as native workflow verification.
+
+### Earlier checkpoint: batch XML prerequisite and pre-implementation contract
 
 The complete M0–M5 goal stays active. On base3240a1f, committed format feature1176039
 adds standalone SetAttribute/RemoveAttribute/AppendChildren operations with one checked
@@ -38,8 +84,8 @@ unknown semantic objects and full M1–M5 remain required. No owned execution jo
 at this primitive checkpoint. Actions OFF; no push/publication/hosted, lock/dependency/
 vendor/font/golden/corpus change. Both protected user apps/drawings stay untouched.
 
-The independently prepared next [IO contract](docs/research/source-preserving-cdxml-profile.md)
-is now reviewed and locked, not implemented. It covers strict all-node/key/value/prolog/
+At that checkpoint the independently prepared next [IO contract](docs/research/source-preserving-cdxml-profile.md)
+was reviewed and locked, not implemented. It covers strict all-node/key/value/prolog/
 namespace proof, original scoped ID bindings, current-prefix drift guards, all-current
 typed edits/appends, optional-field add/remove, lowest-unused generated IDs even with
 u32::MAX input and canonical-only whole-MOL permission. Per-snapshot generated-only ID

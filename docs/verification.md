@@ -1,5 +1,20 @@
 # Verification log
 
+## Source-aware closed-v0 CDXML profile, 2026-11-17
+
+[Receiving](verification-source-preserving-cdxml-profile.md) records actual existing-API/
+command REDs, thirteen independent IO cases, four lexical facts, actual CLI/stdio/socket/
+Unicode history/files and unchanged Expat/Decimal/RDKit consumers. Current authoring
+families and CPU captures have paired canonical controls. Three old lexical-only guard
+expectations become stronger positives; semantic negatives and source/loss/ownership
+guards stay. Fresh full48986 passes1766/0/1 across263 result lines and all local gates;
+log222486B/SHA2565436dbb7b99972b071208f0968dce919d51cdfe7ea318b88bbc704809777226b.
+New IO ASan69021 and unchanged parser84686 each pass10000 runs, with actual reached lengths
+16KiB and15502B respectively in NEW/REDUCE logs. Registry45 remains byte-exact; controls/
+catalogue stay. Desktop access fails, so native interaction is wired/unverified; new
+Windows/Linux and general foreign style/label/object compatibility remain unverified/
+missing. All jobs are terminal; Actions OFF; full M0–M5 active/incomplete.
+
 ## Source-preserving XML batch prerequisite, 2026-11-17
 
 [Receiving](verification-source-preserving-xml-edits.md) records18 new independent

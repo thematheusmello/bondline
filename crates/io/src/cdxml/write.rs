@@ -1,39 +1,50 @@
 use super::MappingError;
 use bondline_cdxml::Writer;
-use bondline_model::{Atom, AtomId, BondOrder, Document, DoublePosition, Radical};
+use bondline_model::{Atom, AtomId, Bond, BondOrder, Document, DoublePosition, Page, Radical};
 use std::collections::BTreeMap;
+
+pub(super) type Attributes = Vec<(&'static str, String)>;
+
+pub(super) fn root_attributes(document: &Document) -> Attributes {
+    let settings = document.drawing_settings();
+    let mut attributes = vec![(
+        "CreationProgram",
+        concat!("Bondline ", env!("CARGO_PKG_VERSION")).to_owned(),
+    )];
+    if let Some(value) = settings.bond_length_pt() {
+        attributes.push(("BondLength", value.to_string()));
+    }
+    if let Some(value) = settings.chain_angle_degrees() {
+        attributes.push(("ChainAngle", value.to_string()));
+    }
+    attributes
+}
+
+pub(super) fn page_attributes(page: &Page, id: u32) -> Attributes {
+    vec![
+        ("id", id.to_string()),
+        ("DrawingSpace", "Poster".to_owned()),
+        ("Width", page.size().width_pt().to_string()),
+        ("Height", page.size().height_pt().to_string()),
+    ]
+}
+
+pub(super) fn borrowed(attributes: &Attributes) -> Vec<(&'static str, &str)> {
+    attributes
+        .iter()
+        .map(|(name, value)| (*name, value.as_str()))
+        .collect()
+}
 
 /// New elemental CDXML only. Never regenerate a source-backed projection with this API.
 /// Canvas dimensions are explicit Poster extents, not native printer configuration.
 pub fn write_document(document: &Document) -> Result<Vec<u8>, MappingError> {
-    let settings = document.drawing_settings();
-    let length = settings.bond_length_pt().map(|v| v.to_string());
-    let angle = settings.chain_angle_degrees().map(|v| v.to_string());
-    let mut attributes = vec![(
-        "CreationProgram",
-        concat!("Bondline ", env!("CARGO_PKG_VERSION")),
-    )];
-    if let Some(value) = length.as_deref() {
-        attributes.push(("BondLength", value));
-    }
-    if let Some(value) = angle.as_deref() {
-        attributes.push(("ChainAngle", value));
-    }
-    let mut writer = Writer::new(&attributes)?;
+    let attributes = root_attributes(document);
+    let mut writer = Writer::new(&borrowed(&attributes))?;
     let mut next = 0_u32;
     for page in document.pages() {
-        let id = allocate(&mut next)?.to_string();
-        let width = page.size().width_pt().to_string();
-        let height = page.size().height_pt().to_string();
-        writer.start_element(
-            "page",
-            &[
-                ("id", &id),
-                ("DrawingSpace", "Poster"),
-                ("Width", &width),
-                ("Height", &height),
-            ],
-        )?;
+        let attributes = page_attributes(page, allocate(&mut next)?);
+        writer.start_element("page", &borrowed(&attributes))?;
         for fragment in page.fragments() {
             writer.start_element("fragment", &[("id", &allocate(&mut next)?.to_string())])?;
             let mut ids = BTreeMap::<AtomId, u32>::new();
@@ -43,31 +54,13 @@ pub fn write_document(document: &Document) -> Result<Vec<u8>, MappingError> {
                 ids.insert(atom.id, id);
             }
             for bond in fragment.bonds() {
-                let begin = ids
+                let begin = *ids
                     .get(&bond.begin)
-                    .ok_or(MappingError::UnresolvedReference)?
-                    .to_string();
-                let end = ids
+                    .ok_or(MappingError::UnresolvedReference)?;
+                let end = *ids
                     .get(&bond.end)
-                    .ok_or(MappingError::UnresolvedReference)?
-                    .to_string();
-                let id = allocate(&mut next)?.to_string();
-                let mut attributes = vec![
-                    ("id", id.as_str()),
-                    ("B", begin.as_str()),
-                    ("E", end.as_str()),
-                    ("Order", order(bond.order)),
-                ];
-                let position = match bond.double_position {
-                    DoublePosition::Unspecified => None,
-                    DoublePosition::Center => Some("Center"),
-                    DoublePosition::Right => Some("Right"),
-                    DoublePosition::Left => Some("Left"),
-                };
-                if let Some(position) = position {
-                    attributes.push(("DoublePosition", position));
-                }
-                writer.empty_element("b", &attributes)?;
+                    .ok_or(MappingError::UnresolvedReference)?;
+                write_bond(&mut writer, bond, allocate(&mut next)?, begin, end)?;
             }
             writer.end_element()?;
         }
@@ -81,7 +74,7 @@ fn allocate(counter: &mut u32) -> Result<u32, MappingError> {
     Ok(*counter)
 }
 
-fn write_atom(writer: &mut Writer, atom: &Atom, id: u32) -> Result<(), MappingError> {
+pub(super) fn atom_attributes(atom: &Atom, id: u32) -> Result<Attributes, MappingError> {
     let mut attributes = vec![
         ("id", id.to_string()),
         ("NodeType", "Element".to_owned()),
@@ -122,11 +115,42 @@ fn write_atom(writer: &mut Writer, atom: &Atom, id: u32) -> Result<(), MappingEr
             if show { "yes" } else { "no" }.to_owned(),
         ));
     }
-    let borrowed: Vec<_> = attributes
-        .iter()
-        .map(|(key, value)| (*key, value.as_str()))
-        .collect();
-    Ok(writer.empty_element("n", &borrowed)?)
+    Ok(attributes)
+}
+
+pub(super) fn bond_attributes(bond: &Bond, id: u32, begin: u32, end: u32) -> Attributes {
+    let mut attributes = vec![
+        ("id", id.to_string()),
+        ("B", begin.to_string()),
+        ("E", end.to_string()),
+        ("Order", order(bond.order).to_owned()),
+    ];
+    let position = match bond.double_position {
+        DoublePosition::Unspecified => None,
+        DoublePosition::Center => Some("Center"),
+        DoublePosition::Right => Some("Right"),
+        DoublePosition::Left => Some("Left"),
+    };
+    if let Some(position) = position {
+        attributes.push(("DoublePosition", position.to_owned()));
+    }
+    attributes
+}
+
+pub(super) fn write_atom(writer: &mut Writer, atom: &Atom, id: u32) -> Result<(), MappingError> {
+    writer.empty_element("n", &borrowed(&atom_attributes(atom, id)?))?;
+    Ok(())
+}
+
+pub(super) fn write_bond(
+    writer: &mut Writer,
+    bond: &Bond,
+    id: u32,
+    begin: u32,
+    end: u32,
+) -> Result<(), MappingError> {
+    writer.empty_element("b", &borrowed(&bond_attributes(bond, id, begin, end)))?;
+    Ok(())
 }
 
 fn order(order: BondOrder) -> &'static str {

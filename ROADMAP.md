@@ -4,6 +4,17 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The [source-aware closed-v0 profile](docs/verification-source-preserving-cdxml-profile.md)
+now preserves lexical/order/scoped-ID variants through all delivered typed edits/appends,
+with complete syntax/semantic proof and current-prefix guards. Actual CLI/stdio/socket/
+Unicode history/files, independent Expat/Decimal/RDKit, paired authoring/CPU captures,
+two bounded10000-run ASan checks and full local1766/0/1 pass. Unknown semantics remain
+guarded and whole-MOL stays canonical-only. Native access is unavailable, so the new
+desktop path is wired/unverified; foreign styles/defaults/labels/objects and full M1
+remain open. Next source-lock broader published style/default data and independent
+foreign-source retention/render vectors; revisit native acceptance when access returns.
+Full M0–M5 stays active/incomplete, Actions OFF. Earlier paragraphs are checkpoints.
+
 The next M1 source-preserving workflow now has its [batch syntax prerequisite](docs/verification-source-preserving-xml-edits.md):
 ordinary attribute changes/removals and self-contained child appends preserve unrelated
 bytes and namespace meaning. Eighteen independent cases, actual nesting/namespace REDs,
@@ -12,8 +23,8 @@ enabled. The original noncanonical-file edit still refuses; next complete source
 model mapping/writing and actual adapter/history/native-file acceptance without relaxing
 unknown-data, preview or whole-MOL loss guards. This does not complete M0, M1 or M2–M5.
 The next [source-aware IO contract](docs/research/source-preserving-cdxml-profile.md) is
-locked with exact proof, typed drift/write and format-loss requirements; implementation
-and its independent public-API/runtime/native receiving remain next.
+locked with exact proof, typed drift/write and format-loss requirements; its headless
+implementation/receiving is now above, while native interaction remains unverified.
 
 The [native selection acceptance/fix](docs/verification-native-selection.md) continues
 base0c9e6af with actual Mac click/Shift/rectangle/component, drag/nudge/history/modal and

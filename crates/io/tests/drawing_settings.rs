@@ -204,8 +204,8 @@ fn style_only_current_and_original_models_do_not_erase_settings_or_change_the_ch
 }
 
 #[test]
-fn invalid_partial_noncanonical_nested_and_opaque_styles_stay_source_preserved_without_authority()
--> TestResult {
+fn invalid_partial_nested_and_opaque_styles_stay_source_preserved_without_authority() -> TestResult
+{
     let mut cases = vec![
         (
             source(" BondLength=\"broken\" ChainAngle=\"120.5\"")?,
@@ -231,11 +231,6 @@ fn invalid_partial_noncanonical_nested_and_opaque_styles_stay_source_preserved_w
             source(" BondLength=\"0\" ChainAngle=\"1\"")?,
             None,
             Some(1.0),
-        ),
-        (
-            source(" BondLength=\"24.500\" ChainAngle=\"120.500\"")?,
-            Some(24.5),
-            Some(120.5),
         ),
     ];
     cases.push((
@@ -305,5 +300,34 @@ fn invalid_partial_noncanonical_nested_and_opaque_styles_stay_source_preserved_w
             "unsupported preference and all other bytes remain authoritative"
         );
     }
+    Ok(())
+}
+
+#[test]
+fn equivalent_numeric_setting_lexemes_now_edit_only_the_changed_typed_value() -> TestResult {
+    let raw = source(" BondLength=\"24.500\" ChainAngle=\"120.500\"")?;
+    let mut stored = StoredDocument::from_cdxml(raw.as_slice().into(), PageSize::A4)?;
+    assert!(stored.is_fully_mapped());
+    assert_eq!(
+        stored.model().drawing_settings().bond_length_pt(),
+        Some(24.5)
+    );
+    assert_eq!(
+        stored.model().drawing_settings().chain_angle_degrees(),
+        Some(120.5)
+    );
+    assert_eq!(stored.to_cdxml()?.as_ref(), raw);
+    let before = stored.clone();
+    stored
+        .model_mut()
+        .set_drawing_settings(DrawingSettings::new(Some(36.25), Some(120.5))?);
+    let expected =
+        std::str::from_utf8(&raw)?.replace("BondLength=\"24.500\"", "BondLength=\"36.25\"");
+    assert_ne!(expected.as_bytes(), raw);
+    assert_eq!(stored.to_cdxml()?.as_ref(), expected.as_bytes());
+    assert_eq!(stored.model().pages(), before.model().pages());
+    assert_eq!(before.to_cdxml()?.as_ref(), raw);
+    *stored.model_mut() = before.model().clone();
+    assert_eq!(stored.export_cdxml()?, raw);
     Ok(())
 }

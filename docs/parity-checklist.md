@@ -11,10 +11,16 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
+The closed-v0 [source-aware IO profile](verification-source-preserving-cdxml-profile.md)
+has verified headless current-command/file/history/adapter and independent raw/chemical
+evidence on lexical/scoped-ID variants. Full local1766/0/1 and two bounded ASan runs pass.
+Its native path is wired/unverified because desktop access fails; general foreign styles/
+labels/objects remain missing. No new tool or broad reference-parity status is promoted.
+
 The M1 source-preserving XML batch now has independent syntax/Expat/resource/fuzz evidence
 and a full local1735/0/1 gate; see [receiving](verification-source-preserving-xml-edits.md).
-It enables no new reference workflow or tool. Source-aware model writing and actual
-noncanonical imported editing remain missing, with the original CLI refusal retained.
+It enables no new reference workflow or tool by itself. The closed-v0 source-aware
+workflow above now fixes the original CLI refusal; broader imported editing stays missing.
 
 All124 TD/TQ/TB roles now have visible catalogue entries (140 with explicit variants).
 Sixteen reference delivered bindings;124 remain disabled with no command and **retain
