@@ -7,6 +7,23 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### User visual request: logo and planned-tool catalogue delivered
+
+Read-only review on base `3b3c7d6` confirms the original five SVG masters, native header/
+window-icon geometry and complete documented tool catalogue already delivered in `f077ed2`
+and subsequent chain/chair commits. The current split is 140 entries covering 124 source
+roles, with 16 delivered bindings and 124 disabled planned entries. Do not restart this
+visual increment or enable tools merely because their icons exist. See the current
+[identity](docs/design/brand.md), [catalogue](docs/design/tool-catalogue.md) and
+[review evidence](docs/verification-branding-and-tools.md#2026-11-17-delivery-review).
+
+The logo proof sheet and earlier actual native catalogue image were inspected from disk;
+both committed native image hashes match their provenance record. No new native launch,
+capture or platform claim follows. No producer changed, so tests were not repeated; the
+full local 1766/0/1 checkpoint below remains the latest execution evidence. The full M0–M5
+goal stays active/incomplete, Actions OFF, and public style research remains the next
+implementation work. The displayed earlier capture retains its original 12/128 split.
+
 ### Source-aware closed-v0 CDXML editing; full local gate passes
 
 Base03d5205; the accompanying atomic source/test/docs commit is the recoverable work.

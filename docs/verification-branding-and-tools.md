@@ -134,3 +134,20 @@ feature verification follows from this recheck. A fresh native preview is unavai
 CUA inventory reports native-pipe startup failure and browser access host unavailable.
 No app is selected, launched or changed. Existing native photographs are inspected from
 disk only; no fresh native/platform or whole-workspace pass is claimed. Actions stays OFF.
+
+## 2026-11-17 delivery review
+
+On base `3b3c7d6`, the user's logo/planned-tool request is already delivered. Read-only review
+checks the five SVG masters, header/icon integration, all 140 catalogue entries and the
+independent 124-source-role inventory test. Sixteen entries bind to real controls; 124
+planned entries have no command. The grouped rail and searchable catalogue
+resolve availability through current controls; disabled entries cannot dispatch an action.
+Existing File/Atom/SDF ownership and catalogue Escape checks remain in place.
+
+The original light/dark 16/32/64px proof sheet and committed actual native catalogue JPEG
+were visually inspected. SHA-256 checks of both native JPEGs match every image entry in
+`docs/media/branding-native-provenance.json`. Those photographs retain their earlier
+twelve-binding/128-planned checkpoint; the current split is 16/124. No new native launch or
+capture occurred, and no user app/drawing was inspected or changed. Source/test inspection
+is distinct from execution: no producer changed and no tests were repeated. The later
+source-aware-profile full local gate records 1766/0/1; no new platform claim follows.
