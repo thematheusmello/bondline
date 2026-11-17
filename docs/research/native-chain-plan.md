@@ -150,3 +150,10 @@ external chemistry. Keep old API/control consumers and all previous geometry ass
 
 The first path/preview prerequisite now has [receiving evidence](../verification-chain-paths.md).
 This does not complete steps2–6 or enable either native chain tool.
+
+Current dependency checkpoint2026-11-17: step2 now has authored data/format preservation
+and the atomic settings command, with the native form/default application still missing.
+Step3 has [ordered transport evidence](../verification-ordered-native-modifiers.md):
+six synthetic SDK cases and bounded actual Mac OS input, preserving old gesture semantics.
+This does not implement a chain consumer. Continue steps4–6 and the settings form/application;
+both chain controls stay grey until their corresponding complete workflows are checked.

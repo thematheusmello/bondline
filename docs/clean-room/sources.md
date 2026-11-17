@@ -1872,3 +1872,24 @@ the historical owner. Actual Mac keyboard editing/history/Unicode Save/reopen pr
 the independently consumed file at100%. The same Fit still refuses; effective native DPI
 and2× operation remain unverified. No native first-click or Fit correction is claimed.
 No new proprietary observation, dependency, asset/font, parser policy or golden is introduced.
+
+## Ordered native modifier transport, 2026-11-17
+
+The pinned public [egui input API](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/data/input.rs),
+[egui-winit translator](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui-winit/src/lib.rs)
+and [common eframe native adapter](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/eframe/src/native/epi_integration.rs)
+support the [locked boundary decision](../research/ordered-native-modifiers.md).
+The upstream translator normalizes the latest modifier snapshot but emits no ordered
+report; PointerMoved carries none. Bondline adds one original event variant and appends
+the already mapped state at the actual native report, preserving original EventResponse,
+global semantics and old gestures. This is an original MIT/Apache SDK extension, not
+inferred reference-product behavior or an upstream accepted change. Existing notices stay.
+
+[Receiving](../verification-ordered-native-modifiers.md) distinguishes the inconclusive
+first probe, actual focused OS-input runtime RED, missing-API compile qualification,
+six independent synthetic SDK tests, probe privacy and Mac OS GREEN. The actual release
+frame preserves ctrl=true on the button before a later NONE report despite final ctrl=false.
+No broader chain, other integration/platform or hardware-operation parity follows.
+Both source patch notices retain exact before/after hashes. No new dependency, proprietary
+program/asset, font, parser policy or chemical golden is introduced. Both user apps and
+Actions remain untouched.

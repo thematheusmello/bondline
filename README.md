@@ -40,11 +40,12 @@ Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with indep
 checks of the actual files. See [atom-editor evidence](docs/verification-native-atom-labels.md),
 [native record evidence](docs/verification-native-smiles-records.md) and the separate
 [paste checkpoint](docs/verification-native-smiles-paste.md). The latest full local gate
-**fails the known macOS MCP listener rebind test** after 1,012 passes. Formatting and
-warnings-denied workspace linting pass. A separate UI readiness failure has a
-[test-only qualification](docs/verification-smiles-order-readiness.md); the modified UI
-suite and then-unstarted layer/license/corpus checks pass separately. This is not a
-passing aggregate. [Atomic drawing-settings evidence](docs/verification-drawing-settings-command.md)
+**passes 1,613 tests, with none failed and one ignored**, plus formatting, warnings-denied
+linting, layer, license and corpus checks. [Ordered native input evidence](docs/verification-ordered-native-modifiers.md)
+separates actual Mac OS behavior from synthetic SDK checks. Earlier MCP listener and UI
+readiness failures remain recorded; this pass does not establish a causal socket repair.
+The UI wait has its separate [test-only qualification](docs/verification-smiles-order-readiness.md).
+[Atomic drawing-settings evidence](docs/verification-drawing-settings-command.md)
 records 15 new passing cases and actual CLI/MCP/socket/file checks. Typed non-finite
 values cannot serialize as accidental clear requests. The earlier
 [data prerequisite](docs/verification-drawing-settings-data.md) retains its separate bounded ASan evidence. The

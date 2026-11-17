@@ -7,6 +7,60 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Verified ordered native input; fresh local gate passes
+
+This atomic source/test/docs increment follows071f34c. Previous goal turn is PROGRESS;
+full M0–M5 remains active. Read [contract](docs/research/ordered-native-modifiers.md) and
+[receiving](docs/verification-ordered-native-modifiers.md). One appended egui observation
+and the existing common eframe wrapper preserve actual native modifier reports after
+unchanged platform mapping. Original EventResponse/global snapshots, old gestures,
+source/modal/worker guards and per-viewport queues stay. No fake keys/resets, new
+dependency, unsafe, model/command/file authority or native chain control. Registry41,
+controls31/20/14/10 and catalogue12 delivered/128 disabled remain unchanged.
+
+First native probe omits empty-event snapshots and fails Control-up setup: inconclusive.
+Qualified actual Mac OS baseline establishes focused true→false but zero ordered reports;
+the desired oracle fails before producer edits. SDK96800 E0599 is separate API qualification.
+Producer46709 passes original3 SDK tests; supplemental97410 adds3 SDK cases/1 privacy pass.
+Exact order/filter/take/append, five bits, press snapshot, focus, no replay/fake keys,
+duplicates, viewport separation and discard are synthetic SDK evidence, not a chain consumer.
+
+Actual native75511 builds the real app and a separate observation wrapper. On macOS27.2/
+AppleM3Max, CUA OS-injected Control+click yields6 trace rows/10 events/4 modifier reports;
+the unchanged oracle passes. Release frame11 retains ctrl=true on the button, then NONE
+at its actual event position despite final ctrl=false. The original logo, grey rail and
+12 available/128 planned catalogue are inspected in that native app. Final dev probe uses
+a typed whitelist and forwards the app hook, qualified separately by privacy tests; the
+native evidence is not relabeled as that later probe binary. No hardware/DPI/other-platform
+or complete chain-flow claim follows. All three disposable review apps are observed closed.
+
+First fresh full cargo xtask ci50402 exits0: **1613 passed/0 failed/1 ignored across240
+result lines**. Fmt, warnings-denied workspace lint/tests, existing vendor tests/lint,
+layers, seven assets, unchanged155/166/221 strict runtime license closures and pinned
+corpus pass. Log202013B SHA256
+8e12c6ca45b048fbe33073c89747e35430e00ad55e85bf87d4ab1c188b61f5f7.
+The existing ignored offscreen application-frame artifact case stays ignored. Historical
+MCP/UI failed runs remain recorded; this pass is not an identity-based causal repair.
+No full gate is retried or exhausted probe/context, assertion, socket/timing policy changed.
+Bounded source/evidence review finds no material production issue; final doc/comment
+qualification passes formatting, diff hygiene and local links without another full run.
+Scoped Cargo cleanup removes only two inspected inactive1.6GiB compile caches, preserving
+current builds, separate evidence/fixtures and protected bundles; this gate has no disk error.
+
+Native product build a36cc6ea44742cc840119b435aeffca9fe09bb07e45628fd2c0a893198d0f5e3
+contains the input patch. Both user apps17806/96449 are observed live with their original
+copied binary hashes; neither current drawing is inspected, saved, closed or refreshed.
+No new chemical golden, hosted run, push or publication. All managed execution jobs are terminal.
+
+Next exact task: lock original full native chain pose/count/snapping/backtracking/reversal/
+repeat policies, then implement their source/context-qualified controller and authored
+settings form/application through existing candidate/history/registry paths. Finish Add
+Chain/drag counter/Alt repeat/Snaking/full previews/modal/retirement/DPI and independent
+App/files/adapters plus actual native acceptance per native-chain-plan.md steps4–6.
+Keep both chain tools grey until corresponding complete workflows are checked. Windows/
+Linux/Glow/Web modifier behavior, human hardware/measured DPI, styles, broader chemistry/
+formats/publishing/distribution and proper MCP identity-based diagnosis remain required.
+
 ### Verified atomic settings command; full gate remains failed
 
 This atomic source/test/docs increment follows b6497dd, contract dede5ee and separate

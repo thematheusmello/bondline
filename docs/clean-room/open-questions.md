@@ -9,14 +9,16 @@
   style-sheet resolution, native defaults/forms, journal styles and26.1 behavior remain
   required. A data-only field never proves native tool application of the preference.
   The source-qualified atomic command/history/adapters now have bounded independent
-  evidence in verification-drawing-settings-command.md. Ordered native modifiers, the
-  settings form and actual tool application remain required.
+  evidence in verification-drawing-settings-command.md. Native modifier transport now has
+  bounded SDK/Mac OS evidence in verification-ordered-native-modifiers.md; the settings
+  form and actual tool application remain required.
 
 - The full native-chain dependency contract is in research/native-chain-plan.md.
   Snaking requires one positioned-path edit rather than repeated fixed-chain commits.
   Pinned egui PointerMoved lacks modifiers, and egui-winit stores only frame-level
-  ModifiersChanged; ordered native Control transitions require an input-boundary change
-  and actual execution. Document ChainAngle/BondLength data persistence is now delivered;
+  ModifiersChanged. The paired egui/eframe extension now has actual Mac OS transport and
+  synthetic SDK evidence; full chain consumption and other platforms remain unverified.
+  Document ChainAngle/BondLength data persistence is now delivered;
   effective defaults/inheritance and tool application remain missing. Count/pose/sampling/turn ties,
   repeat lifecycle, modifiers and modern/platform defaults remain unknown. The literal
   path prerequisite does not resolve or enable the complete native workflows.

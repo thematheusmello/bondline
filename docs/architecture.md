@@ -90,6 +90,14 @@ context. No native tool is enabled. [The dependency contract](research/native-ch
 keeps authored style persistence, ordered modifier evidence, full native workflows and
 actual acceptance required; frame-global modifiers are not chronological evidence.
 
+The native eframe wrapper now preserves each actual Winit modifier report after the
+unchanged egui-winit mapping as Event::ModifiersChanged in that viewport's ordered queue.
+It retains the original EventResponse/global snapshot and all old gesture semantics.
+There is no side channel or fabricated key. A future drag must seed from its press
+payload, retain observed state across frames and cancel on focus loss. The extension
+has synthetic SDK and bounded actual Mac OS evidence, separate from future chain
+consumers and other integrations/platforms; see [receiving](verification-ordered-native-modifiers.md).
+
 Bond's optional directed DoublePosition is authored data, copied with the whole bond and
 retained by snapshots even when dormant on another order. CDXML maps/preserves it; model
 MOL export and synchronized SMILES replacement reject unsupported loss. The shared scene

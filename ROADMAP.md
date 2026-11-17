@@ -21,12 +21,13 @@ Root BondLength/ChainAngle preserve explicit supported data and opaque source va
 native tool application, settings forms and full style inheritance remain missing.
 The [atomic settings command/history/adapters](docs/verification-drawing-settings-command.md)
 now pass independent required/null/source/lease/history and actual file/wire checks.
-Next implement ordered modifier input,
-complete native drawing/forms/repeat and actual acceptance. Do not substitute frame-global
+Ordered native modifier transport now has [SDK and actual Mac OS evidence](docs/verification-ordered-native-modifiers.md).
+Next implement complete native drawing/forms/repeat and actual acceptance. Do not substitute frame-global
 Control state or unsaved UI settings for those requirements; the native tools stay grey.
-The latest full local gate fails the unchanged MCP replacement bind. A remaining UI wait
-has a [test-only readiness qualification](docs/verification-smiles-order-readiness.md);
-then-unstarted stages pass separately. Preserve all failed results and diagnostic boundaries.
+The fresh input increment's full local gate passes1613/0/1. Earlier settings-command
+MCP replacement-bind and UI readiness failures remain recorded; the latter has a
+[test-only qualification](docs/verification-smiles-order-readiness.md). This new pass
+does not establish a causal socket repair. Preserve all diagnostic boundaries.
 
 The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now has a
 [shared skeletal display/explicit-label follow-up](docs/verification-skeletal-carbon.md).

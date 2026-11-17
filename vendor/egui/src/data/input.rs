@@ -531,6 +531,12 @@ pub enum Event {
         viewport_id: crate::ViewportId,
         image: std::sync::Arc<ColorImage>,
     },
+
+    /// The integration reported this full modifier state at this point in the event stream.
+    ///
+    /// Not all integrations emit this observation. Use a pointer button's own snapshot
+    /// to start a drag; never apply the frame's latest modifiers to earlier movements.
+    ModifiersChanged(Modifiers),
 }
 
 /// IME event.

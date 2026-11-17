@@ -1,5 +1,17 @@
 # Verification log
 
+## Ordered native modifier transport, 2026-11-17
+
+[Receiving](verification-ordered-native-modifiers.md) separates an incomplete first probe,
+the actual focused Mac OS runtime RED, missing-API qualification96800 and six independent
+SDK cases plus a bounded-probe privacy test. The paired existing SDK forks append actual
+native reports after normalization without changing global snapshots or old gestures.
+Actual native GREEN preserves the coalesced mouse-release-before-Control-up sequence.
+Original logo/grey tools/catalogue are inspected; no new chemical golden or user-app change.
+First fresh full50402 passes1613/0/1 across240 result lines, fmt/workspace/vendor lint/tests,
+layers, unchanged strict license closures and pinned corpus. This does not attribute earlier
+MCP failures or implement chain consumers/forms/defaults. Actions stays OFF; full M0–M5 stays active.
+
 ## Atomic drawing-settings command, 2026-11-16–17
 
 [Receiving](verification-drawing-settings-command.md) records actual JSON35719

@@ -63,7 +63,14 @@ raw/fragment reuse/publication; keep existing forbidden-version precedence and w
 source/SMILES drift guards. Explicit fragment export retains its declared context loss.
 Stored settings do not alter existing geometry or yet drive native tools. That data-only
 checkpoint keeps registry40; the following command increment is separate.
-Current egui-winit loses modifier chronology; never apply final-frame modifiers retroactively.
+Unpatched egui-winit loses modifier chronology. The reviewed eframe wrapper now appends
+Event::ModifiersChanged only after an actual native report is mapped. Read
+docs/research/ordered-native-modifiers.md and docs/verification-ordered-native-modifiers.md.
+Preserve the original response/global snapshot, per-viewport order and old gestures;
+never apply final-frame modifiers retroactively or fabricate key/reset events. A future
+drag seeds from its press, carries observed state between frames and cancels on focus loss.
+Six synthetic SDK tests and actual Mac OS input qualify transport, not chain consumers,
+other integrations/platforms or human hardware operation. Both chain tools remain grey.
 The new bounded chain_path_request ASan harness prepares JSON only, never completes file/
 render work; read fuzz/README.md for pinned tools/new ignored seed directory and evidence.
 
@@ -84,7 +91,8 @@ MCP bind51300. Remaining24093 fails the old UI readiness helper; test-only e516d
 actual order-owner retirement and timeout diagnostics, preserving every old predicate,
 assertion, two warm frames, ten-second deadline and production fence. Qualified UI and
 then-unstarted stages pass separately; no green aggregate or captured failure cause follows.
-Next ordered Control events and full native settings/chain forms/gestures/acceptance.
+Ordered native Control transport is now separately verified; next full native settings/
+chain forms/gestures/acceptance.
 Keep grey tools disabled; no native setting/default application is delivered by this command.
 The later serializer check hit actual StorageFull in six file tests. Scoped Cargo cleanup
 removes only old target/debug-pre-index-recovery/deps artifacts; protected copied apps,

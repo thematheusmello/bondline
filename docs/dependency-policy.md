@@ -23,10 +23,13 @@ fork/pin and evidence practices, not those projects' broader permitted license s
   Disable only the optional native external-URL launcher, eliminating URL/IDNA Unicode data.
   Keep accessibility and native text clipboard. Delete orphaned private DummyStorage.
   Full upstream licenses are adjacent; see BONDLINE-PATCH.md for the exact changes.
-- `vendor/egui`: exact0.29.1 published sources with one current-focus filter guard fix.
+- `vendor/egui`: exact0.29.1 published sources with a current-focus filter guard fix
+  and an appended ordered modifier observation paired with the existing eframe fork.
   MIT OR Apache-2.0; exact archive/VCS, adjacent full notices and source hashes are in
   its BONDLINE-PATCH.md. Independent bare SDK and actual Bondline regressions reproduce
   and fix immediate first-arrow focus loss; versions/features/allowlist remain unchanged.
+  [Ordered native input](verification-ordered-native-modifiers.md) has separate raw queue
+  and Mac OS evidence; the observation preserves existing global modifier semantics.
 - `vendor/winit`: the unchanged 0.30.13 package plus one macOS application-delegate
   callback, retaining original notices. Archive SHA-256 and VCS identity are recorded in
   its BONDLINE-PATCH.md. Native Quit now requests cancellable client close approval; its

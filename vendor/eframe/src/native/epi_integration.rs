@@ -251,7 +251,15 @@ impl EpiIntegration {
             self.can_drag_window = true;
         }
 
-        egui_winit.on_window_event(window, event)
+        let response = egui_winit.on_window_event(window, event);
+        if matches!(event, WindowEvent::ModifiersChanged(_)) {
+            // Preserve the already normalized state at its actual place in this viewport's queue.
+            let input = egui_winit.egui_input_mut();
+            input
+                .events
+                .push(egui::Event::ModifiersChanged(input.modifiers));
+        }
+        response
     }
 
     pub fn pre_update(&mut self) {
