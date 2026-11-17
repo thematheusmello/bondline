@@ -1,5 +1,15 @@
 # Verification log
 
+## Source-preserving text-only XML edits, 2026-11-17
+
+[Receiving](verification-source-preserving-xml-text.md) records independent declarations,
+missing-variant compiler RED,10 new Expat/literal cases, unchanged old syntax tests and
+bounded10000-run ASan. All local component checks pass (workspace1818/0/1, vendor3/0),
+but the initial aggregate failed at the old MCP replacement-bind AddrInUse. That failure
+is retained and unexplained; later natural success is not a fix or clean aggregate claim.
+No source/model/UI authority, command/catalogue or listener policy changes. Full M0–M5
+remains active/incomplete; Actions OFF.
+
 ## Standalone CDXML logical resources, 2026-11-17
 
 [Receiving](verification-cdxml-resources.md) records public-domain/default expectations,

@@ -216,6 +216,27 @@ fn raw_text(value: &str) {
     } else {
         assert!(matches!(result, Err(Error::InvalidAttributeValue)));
     }
+    let result = document.apply_edits(&[Edit::SetText {
+        element: root,
+        value,
+    }]);
+    if allowed {
+        let output = result.unwrap();
+        let written = Document::parse(&output).unwrap();
+        assert_eq!(
+            written.xml().root_element().text().unwrap_or_default(),
+            value
+        );
+        let again = written
+            .apply_edits(&[Edit::SetText {
+                element: written.xml().root_element(),
+                value,
+            }])
+            .unwrap();
+        assert_eq!(again, output);
+    } else {
+        assert!(matches!(result, Err(Error::InvalidTextValue)));
+    }
     assert_eq!(document.as_bytes(), EMPTY);
     match document.apply_edits(&[Edit::AppendChildren {
         element: root,
@@ -235,6 +256,103 @@ fn raw_text(value: &str) {
         ),
     }
     assert_eq!(document.as_bytes(), EMPTY);
+}
+
+fn text_edits(document: &Document<'_>, input: &[u8]) {
+    let root = document.xml().root_element();
+    if root.children().any(|child| !child.is_text()) {
+        assert!(matches!(
+            document.apply_edits(&[Edit::SetText {
+                element: root,
+                value: ""
+            }]),
+            Err(Error::InvalidTextContent)
+        ));
+    }
+    let Some(element) = root
+        .descendants()
+        .find(|node| node.is_element() && node.children().all(|child| child.is_text()))
+    else {
+        return;
+    };
+    let previous: String = element
+        .children()
+        .filter_map(|child| child.text())
+        .collect();
+    assert_eq!(
+        document
+            .apply_edits(&[Edit::SetText {
+                element,
+                value: &previous
+            }])
+            .unwrap(),
+        input
+    );
+    let text = Edit::SetText {
+        element,
+        value: VALUE,
+    };
+    // At most16KiB source plus this fixed scalar cannot exceed any syntax quota.
+    let output = document.apply_edits(&[text]).unwrap();
+    let parsed = Document::parse(&output).unwrap();
+    let after = parsed.xml().get_node(element.id()).unwrap();
+    assert_eq!(after.text(), Some(VALUE));
+    assert_eq!(after.attributes().len(), element.attributes().len());
+    for (before, after) in element.attributes().zip(after.attributes()) {
+        assert_eq!(
+            (before.namespace(), before.name(), before.value()),
+            (after.namespace(), after.name(), after.value())
+        );
+    }
+    assert_eq!(
+        input.get(..element.range().start),
+        output.get(..after.range().start)
+    );
+    assert_eq!(
+        input.get(element.range().end..),
+        output.get(after.range().end..)
+    );
+    for edits in [
+        [text, text],
+        [text, Edit::AppendChildren { element, xml: "" }],
+        [Edit::AppendChildren { element, xml: "" }, text],
+    ] {
+        assert!(matches!(
+            document.apply_edits(&edits),
+            Err(Error::ConflictingEdits)
+        ));
+    }
+    if let Some(parent) = element.parent().filter(|parent| parent.is_element()) {
+        let append = Edit::AppendChildren {
+            element: parent,
+            xml: CHILD,
+        };
+        let forward = document.apply_edits(&[text, append]).unwrap();
+        assert_eq!(forward, document.apply_edits(&[append, text]).unwrap());
+        let written = Document::parse(&forward).unwrap();
+        let parent_after = written.xml().get_node(parent.id()).unwrap();
+        assert_eq!(
+            parent_after.children().count(),
+            parent.children().count() + 1
+        );
+        assert_eq!(
+            parent_after
+                .last_element_child()
+                .unwrap()
+                .tag_name()
+                .namespace(),
+            Some("urn:bondline:fuzz:batch")
+        );
+    }
+    let foreign = Document::parse(EMPTY).unwrap();
+    assert!(matches!(
+        document.apply_edits(&[Edit::SetText {
+            element: foreign.xml().root_element(),
+            value: VALUE
+        }]),
+        Err(Error::InvalidElement)
+    ));
+    assert_eq!(document.as_bytes(), input);
 }
 
 fn invalid_fragments() {
@@ -315,6 +433,7 @@ fuzz_target!(|data: &[u8]| {
     if let Ok(document) = Document::parse(data) {
         fixed_edits(&document, data);
         nested_appends(&document, data);
+        text_edits(&document, data);
     }
     if let Ok(value) = std::str::from_utf8(data) {
         raw_text(value);

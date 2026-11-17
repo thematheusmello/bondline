@@ -1,5 +1,15 @@
 # Clean-room source register
 
+Text edits reviewed2026-11-17 use [XML1.0](https://www.w3.org/TR/2008/REC-xml-20081126/)
+character-data rules and CDXML [Style](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Style.htm)/
+[Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm) structure. The original
+[contract](../research/source-preserving-xml-text.md) specifies owned text-only batches,
+exact no-op lexemes, whole-inner-span replacement, escaping and strict mixed-content/
+conflict/resource guards. Pinned roxmltree source explains merged-text range limitations;
+no implementation is copied. [Receiving](../verification-source-preserving-xml-text.md)
+separates missing-API qualification and independent Expat/literal/actual execution. No
+imported-label/model/UI authority or proprietary program/asset use follows.
+
 CDXML resource-table work reviewed2026-11-17 uses the public SDK [font table](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/FontTable.htm),
 [font entry](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Font.htm),
 [font-table datatype](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXFontTable.htm),

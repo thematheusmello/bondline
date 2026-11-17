@@ -4,6 +4,12 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+M1 now has [source-preserving text-only syntax edits](docs/verification-source-preserving-xml-text.md),
+with independent bytes/Expat, old parser regressions and bounded ASan. All local components
+pass; an initial aggregate MCP bind failure remains recorded/unexplained. Effective styles,
+fonts and synchronized dependent labels still need real model/render/history/Save/native
+integration before general foreign authoring. The full target below is unchanged.
+
 M1 [logical font/colour resource decoding](docs/verification-cdxml-resources.md) now passes
 independent format/Expat expectations, full local1811/0/1 and qualified bounded ASan.
 It retains raw source and explicit missing references without granting foreign authoring.

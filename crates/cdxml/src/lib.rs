@@ -45,6 +45,10 @@ pub enum Error {
     MissingAttribute,
     #[error("attribute value contains a character forbidden in XML 1.0")]
     InvalidAttributeValue,
+    #[error("text edits require an empty element or only character-data children")]
+    InvalidTextContent,
+    #[error("text value contains a character forbidden in XML 1.0")]
+    InvalidTextValue,
     #[error(
         "new element/attribute names must be unnamespaced ASCII XML names; xmlns is not an ordinary attribute"
     )]

@@ -49,8 +49,10 @@ arbitrary fragments may also exceed the existing depth limit. The harness uses e
 dependencies and is separate from the unchanged `cdxml_parse` target. No model/edit
 authority, native UI or general 64MiB-input coverage is implied.
 
-The original 25-seed recipe refuses an existing destination and writes its SHA256
-manifest outside the mutable corpus. Use a fresh ignored directory:
+SetText adds strict decoded-value/no-op/mixed-content/ownership/conflict assertions and
+ancestor-append composition in both orders. The35-seed recipe includes ten original text
+cases, refuses an existing destination and writes separate immutable source copies plus
+a SHA256 manifest outside the mutable corpus. Use a fresh ignored directory:
 
 ```sh
 python3 fuzz/seed_cdxml_edits.py .cache/fuzz/cdxml-edits-example

@@ -11,6 +11,8 @@ args = parser.parse_args()
 args.output.mkdir(parents=True, exist_ok=False)
 corpus = args.output / "corpus"
 corpus.mkdir()
+source = args.output / "source"
+source.mkdir()
 seeds = {
     "empty": b"",
     "selfclosing": b"<CDXML/>",
@@ -37,12 +39,24 @@ seeds = {
     "attribute-limit": ("<CDXML " + " ".join(f"a{i}='v'" for i in range(256)) + "/>").encode("ascii"),
     "deep-document": b"<CDXML>" + b"<x>" * 255 + b"</x>" * 255 + b"</CDXML>",
     "value-boundary-16384": b"A" * (16 * 1024),
+    "text-leaf": b"<CDXML><t><s font='0' face='0'>OH</s><s>keep</s></t></CDXML>",
+    "text-merged-segments": b"<CDXML><s>A<![CDATA[B&]]>C&#x44;</s></CDXML>",
+    "text-cdata-fake-close": b"<CDXML><s><![CDATA[not </s> yet]]>old</s></CDXML>",
+    "text-line-endings": b"<CDXML><s>first\r\nsecond&#xD;third</s></CDXML>",
+    "text-empty-cdata": b"<CDXML><s><![CDATA[]]></s></CDXML>",
+    "text-selfclosing-qualified": "<CDXML xmlns:f='urn:text'><f:μ marker='a>b' /></CDXML>".encode(),
+    "text-mixed-element": b"<CDXML><s>before<x/>after</s></CDXML>",
+    "text-mixed-comment": b"<CDXML><s>before<!--keep-->after</s></CDXML>",
+    "text-mixed-pi": b"<CDXML><s>before<?keep value?>after</s></CDXML>",
+    "text-shared-offset": b"<CDXML><t><s/></t></CDXML>",
 }
 manifest = []
 for name, value in seeds.items():
     assert len(value) <= 16 * 1024
     path = corpus / name
     with path.open("xb") as stream:
+        stream.write(value)
+    with (source / name).open("xb") as stream:
         stream.write(value)
     manifest.append({"name": name, "bytes": len(value), "sha256": hashlib.sha256(value).hexdigest()})
 with (args.output / "manifest.json").open("x", encoding="utf-8") as stream:

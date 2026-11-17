@@ -1,5 +1,15 @@
 # Bondline agent instructions
 
+The latest M1 syntax prerequisite is docs/research/source-preserving-xml-text.md and
+docs/verification-source-preserving-xml-text.md. SetText is owned decoded character data,
+text-only before no-op, whole-inner span, raw QName, shared append conflict key and checked
+suffix/escape budgets; it grants no complete source/model/UI authority. Preserve old append
+validation/owner sorting and attribute errors. Standalone58/0 and ASan10000/2s pass. Initial
+aggregate88496 fails at old MCP AddrInUse; complete workspace21957 passes1818/0/1 and exact
+remaining38504 components pass vendor3/0 plus clippy/layers/licenses/assets/corpus. Do not
+claim a clean aggregate or causal listener fix. Next integrate effective styles/dependent
+labels; check STATUS for the isolated formula worker before duplicating that work.
+
 ## Development Actions policy — user instruction, 2026-11-14
 
 GitHub Actions is disabled during development to avoid hosted-run charges. Repository

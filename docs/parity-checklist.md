@@ -138,6 +138,11 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 
 ## Workflow overview
 
+[Text-only syntax edits](verification-source-preserving-xml-text.md) are another M1
+prerequisite. Text/font/colour controls and general imported-label edit/render workflows
+retain their missing status pending real source/model/history/Save/native integration;
+no command or catalogue binding follows from this library operation.
+
 Standalone [font/colour table decoding](verification-cdxml-resources.md) is a format
 prerequisite only. It does not promote the missing font, colour, Text or foreign-file
 render/edit workflows below; registry46 and catalogue16/124 retain their existing scope.

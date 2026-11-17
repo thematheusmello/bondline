@@ -1,5 +1,12 @@
 # Architecture
 
+CDXML batch `SetText` changes decoded data in an owned empty/text-only element, preserving
+exact no-op lexemes, raw QNames/attributes and unrelated bytes. Mixed content refuses;
+attribute changes and ancestor appends compose under existing bounds/ownership. Complete
+IO authority stays unchanged. See [contract](research/source-preserving-xml-text.md) and
+[receiving](verification-source-preserving-xml-text.md). Dependent-label synchronization
+still belongs in a later complete source/model candidate.
+
 The standalone CDXML `Document::resources()` view decodes document-level logical fonts
 and ordered RGB palettes while retaining original nodes/bytes. UINT16 font lookup is
 separate from chemical object identity. Absent-only colour defaults, present-short tables,

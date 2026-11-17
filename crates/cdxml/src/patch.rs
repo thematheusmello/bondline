@@ -11,7 +11,8 @@ pub const MAX_EDITS: usize = MAX_ATTRIBUTES + MAX_NODES as usize;
 
 /// Elements must belong to the receiver. Appended XML is self-contained, without a DTD
 /// or declaration or destination-dependent namespace names. Namespace declarations
-/// themselves cannot be edited.
+/// themselves cannot be edited. SetText accepts decoded text for empty/text-only elements;
+/// it never flattens child elements, comments or processing instructions.
 #[derive(Clone, Copy, Debug)]
 pub enum Edit<'doc, 'input: 'doc, 'value> {
     SetAttribute {
@@ -26,6 +27,10 @@ pub enum Edit<'doc, 'input: 'doc, 'value> {
     AppendChildren {
         element: Node<'doc, 'input>,
         xml: &'value str,
+    },
+    SetText {
+        element: Node<'doc, 'input>,
+        value: &'value str,
     },
 }
 
@@ -124,10 +129,60 @@ struct Tag<'input> {
     empty: bool,
 }
 
+impl Tag<'_> {
+    fn closing_start(&self, source: &[u8]) -> Result<usize, Error> {
+        let mut name_end = self
+            .element_end
+            .checked_sub(1)
+            .ok_or(Error::InvalidAttributeRange)?;
+        while name_end > 0
+            && source
+                .get(name_end - 1)
+                .is_some_and(|&byte| xml_space(byte))
+        {
+            name_end -= 1;
+        }
+        let name_start = name_end
+            .checked_sub(self.name.len())
+            .ok_or(Error::InvalidAttributeRange)?;
+        let at = name_start
+            .checked_sub(2)
+            .filter(|&at| at >= self.content_start)
+            .ok_or(Error::InvalidAttributeRange)?;
+        if source.get(at..name_start) != Some(b"</")
+            || source.get(name_start..name_end) != Some(self.name.as_bytes())
+        {
+            return Err(Error::InvalidAttributeRange);
+        }
+        Ok(at)
+    }
+
+    fn expand(&self, plan: &mut Plan, content: &str, owner_start: usize) -> Result<(), Error> {
+        let length = content
+            .len()
+            .checked_add(self.name.len())
+            .and_then(|length| length.checked_add(3))
+            .filter(|&length| length <= plan.remaining())
+            .ok_or(Error::InputTooLarge)?;
+        let mut text = String::with_capacity(length);
+        text.push_str(content);
+        text.push_str("</");
+        text.push_str(self.name);
+        text.push('>');
+        let slash_end = self
+            .delimiter
+            .checked_add(1)
+            .ok_or(Error::InvalidAttributeRange)?;
+        plan.push(self.delimiter..slash_end, String::new(), owner_start)?;
+        plan.push(self.content_start..self.content_start, text, owner_start)
+    }
+}
+
 impl Document<'_> {
-    /// Change ordinary attributes and append children in one checked source-preserving
-    /// batch. Duplicate targets conflict even when individually unchanged; unrelated bytes,
-    /// quote delimiters and decoded-string no-op lexemes remain exact.
+    /// Change ordinary attributes, append children and set text-only content in one checked
+    /// source-preserving batch. Duplicate targets conflict even when individually unchanged;
+    /// text and append share a container target. Unrelated bytes, quote delimiters and
+    /// decoded-string no-op lexemes remain exact.
     pub fn apply_edits(&self, edits: &[Edit<'_, '_, '_>]) -> Result<Vec<u8>, Error> {
         if edits.len() > MAX_EDITS {
             return Err(Error::EditLimit);
@@ -140,7 +195,9 @@ impl Document<'_> {
             let (element, name) = match *edit {
                 Edit::SetAttribute { element, name, .. }
                 | Edit::RemoveAttribute { element, name } => (element, Some(name)),
-                Edit::AppendChildren { element, .. } => (element, None),
+                Edit::AppendChildren { element, .. } | Edit::SetText { element, .. } => {
+                    (element, None)
+                }
             };
             if !element.is_element() || !std::ptr::eq(element.document(), &self.xml) {
                 return Err(Error::InvalidElement);
@@ -208,6 +265,38 @@ impl Document<'_> {
                         plan.push(attribute.whole, String::new(), element.range().start)?;
                     }
                 }
+                Edit::SetText { element, value } => {
+                    if element.children().any(|child| !child.is_text()) {
+                        return Err(Error::InvalidTextContent);
+                    }
+                    let previous = element
+                        .children()
+                        .filter_map(|child| child.text())
+                        .flat_map(str::chars);
+                    if previous.eq(value.chars()) {
+                        continue;
+                    }
+                    let available = if tag.empty {
+                        tag.name
+                            .len()
+                            .checked_add(3)
+                            .and_then(|overhead| plan.remaining().checked_sub(overhead))
+                            .ok_or(Error::InputTooLarge)?
+                    } else {
+                        plan.remaining()
+                    };
+                    let text = escaped(value, available).map_err(|error| match error {
+                        Error::InvalidAttributeValue => Error::InvalidTextValue,
+                        other => other,
+                    })?;
+                    if tag.empty {
+                        tag.expand(&mut plan, &text, element.range().start)?;
+                    } else {
+                        // Adjacent entity/CDATA segments may share an incomplete text-node range.
+                        let end = tag.closing_start(self.source)?;
+                        plan.push(tag.content_start..end, text, element.range().start)?;
+                    }
+                }
                 Edit::AppendChildren { element, xml } => {
                     if xml.is_empty() {
                         continue;
@@ -222,51 +311,9 @@ impl Document<'_> {
                             .is_some_and(|uri| !uri.is_empty()),
                     )?;
                     if tag.empty {
-                        let length = xml
-                            .len()
-                            .checked_add(tag.name.len())
-                            .and_then(|length| length.checked_add(3))
-                            .filter(|&length| length <= plan.remaining())
-                            .ok_or(Error::InputTooLarge)?;
-                        let mut text = String::with_capacity(length);
-                        text.push_str(xml);
-                        text.push_str("</");
-                        text.push_str(tag.name);
-                        text.push('>');
-                        plan.push(
-                            tag.delimiter..tag.delimiter + 1,
-                            String::new(),
-                            element.range().start,
-                        )?;
-                        plan.push(
-                            tag.content_start..tag.content_start,
-                            text,
-                            element.range().start,
-                        )?;
+                        tag.expand(&mut plan, xml, element.range().start)?;
                     } else {
-                        let mut name_end = tag
-                            .element_end
-                            .checked_sub(1)
-                            .ok_or(Error::InvalidAttributeRange)?;
-                        while name_end > 0
-                            && self
-                                .source
-                                .get(name_end - 1)
-                                .is_some_and(|&byte| xml_space(byte))
-                        {
-                            name_end -= 1;
-                        }
-                        let name_start = name_end
-                            .checked_sub(tag.name.len())
-                            .ok_or(Error::InvalidAttributeRange)?;
-                        let at = name_start
-                            .checked_sub(2)
-                            .ok_or(Error::InvalidAttributeRange)?;
-                        if self.source.get(at..name_start) != Some(b"</")
-                            || self.source.get(name_start..name_end) != Some(tag.name.as_bytes())
-                        {
-                            return Err(Error::InvalidAttributeRange);
-                        }
+                        let at = tag.closing_start(self.source)?;
                         plan.push(at..at, xml.to_owned(), element.range().start)?;
                     }
                 }

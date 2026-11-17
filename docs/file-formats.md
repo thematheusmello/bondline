@@ -1,5 +1,10 @@
 # File capabilities
 
+The CDXML syntax batch API can set an owned text-only element's decoded value, preserving
+semantic no-op lexemes, attributes/QName and unrelated source. It rejects mixed content
+rather than erasing it. This enables later dependent-label synchronization, not wider
+imported-file authoring or text/font rendering. [Text receiving](verification-source-preserving-xml-text.md).
+
 The standalone CDXML syntax API also has checked logical font/colour tables and reference
 lookup, including source-node access for owned attribute edits. Absent palettes differ
 from present-short palettes. Source bytes and syntax admission are unchanged. This does

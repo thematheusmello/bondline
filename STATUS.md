@@ -7,6 +7,46 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Source-preserving text edits; components pass, aggregate bind failure retained
+
+Base8e030bf; accompanying atomic format commit is the recoverable state. Read
+[contract](docs/research/source-preserving-xml-text.md) and
+[receiving](docs/verification-source-preserving-xml-text.md). Owned SetText edits decoded
+data in empty/text-only elements while preserving exact no-op lexemes, attributes/QName,
+unrelated bytes and batch atomicity. Mixed child elements/comments/PIs refuse. Shared
+append helpers retain old validation and descendant-first planning. No complete IO,
+model/render, command/schema, native binding or imported-label authority is expanded.
+
+Independent declarations precede the implementation; missing-API RED is compile evidence,
+not a runtime failure claim. Ten new literal/Expat tests pass on first implementation,
+all58 standalone cases pass and ASan18323 passes10000/2s (initial16KiB, NEW/REDUCE max13164B,
+cov2951/ft8425/RSS447MiB). All35 separate original seed source hashes remain intact.
+Source review finds no material issue. Actual CLI46 bytes/hash stay exact; catalogue16/124.
+
+Initial aggregate88496 fails at the old MCP shutdown replacement bind:1164/1/0,
+127.0.0.1:64249 AddrInUse. Preserve log147083B/SHA256
+e651b9c781a93f2e44392f5c0171731e036217040383a614785480d926136741.
+Complete no-fail-fast workspace21957 then passes1818/0/1; remaining38504 passes vendor3/0,
+clippy/layers/licenses/assets/notices/corpus. All components pass, not a clean aggregate.
+The natural later shutdown pass explains no cause; listener policy/tests/timing and
+exhausted prior diagnostics remain untouched. Locks/workflow/vendor/fonts/goldens stay.
+All Root execution jobs are terminal; no native app/user drawing is touched. Actions OFF.
+
+Parallel ownership: `/root/native_acceptance` is implementing checked formula composition
+ONLY in sibling worktree `/Users/sarenaberg/Workspace/doozle/open-source-world/bondline-formula`,
+branch `feat/formula-composition`, based on8e030bf. Agent is confirmed running; its first
+API RED and nine-case GREEN are reported, with targeted qualification/commit in progress.
+Do not duplicate, mutate or integrate partial worker files. Inspect its actual status,
+commit/evidence and source before integration, then run receiving checks in this root.
+No formula capability is integrated or advertised yet.
+
+Next complete effective font/colour/style and synchronized dependent Text through model,
+render, commands/history/Save/reopen before widening foreign authoring. Independent public
+open-source spacing research now supports a centreline convention, while Abs/ancestry and
+exact26.1 remain unverified; see the pinned source report under target/bond-spacing/independent-research.
+General CDX/interchange/chemistry, fresh native and other-platform acceptance and all
+M0–M5 remain required. The full persistent goal stays active/incomplete.
+
 ### Standalone CDXML font/colour resources; local gate passes
 
 Base70e6f27; the accompanying atomic format commit is the recoverable state. Read
