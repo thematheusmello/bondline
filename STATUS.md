@@ -7,6 +7,30 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Logo and planned-tool recheck
+
+The user-requested original bond-loop B, five SVG variants and native header/icon are
+already delivered. The current catalogue covers all 124 documented TD/TQ/TB roles as 140
+entries: 16 delivered bindings and 124 disabled planned entries. Fresh logo, inventory/font,
+catalogue, foreground and workspace tests pass: 17 executions over 13 distinct cases. See
+[recheck evidence](docs/verification-branding-and-tools.md#2026-11-17-current-state-recheck).
+No tool is enabled by presentation alone. A fresh desktop preview cannot run this turn:
+CUA reports native-pipe startup failure/browser host unavailable. Earlier actual native
+captures retain their original binary/date scope. No user app/drawing is touched.
+
+The preceding M1 batch-XML work remains intentionally uncommitted in cdxml/lib.rs,
+writer.rs, new patch.rs, batch_edits.rs, batch_edit_limits.rs and its research contract.
+It is a format primitive, not imported-document editing. Its first 11 independent cases
+and the additional shared-boundary regression have GREEN evidence; the latter has an
+actual runtime RED before the nesting-order fix. The latest test-helper lint correction
+was formatted but has not yet had its fresh clippy run. The source review additionally
+flags repeated long-tag scans and default-namespace dependence in appended fragments;
+resolve/qualify both before committing or advertising this API. Exact receiving logs,
+frozen inputs and review are under ignored target/noncanonical-cdxml/. No execution job
+remains. Next run the focused clippy, declare the namespace/performance checks, finish
+the bounded fuzz/full local gate and commit the complete primitive; then continue the
+source-aware IO profile without relaxing existing source authority. Actions stays OFF.
+
 ### Native selection acceptance and stale-drag fixes; full local gate passes
 
 Base0c9e6af; the accompanying atomic source/test/docs commit is the recoverable state.

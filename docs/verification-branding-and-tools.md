@@ -111,3 +111,26 @@ or Windows/Linux interaction is claimed. The logo proof sheet and updated banner
 and visually inspected with external librsvg 2.60.0; no renderer is shipped. Existing
 photographs and approved chemistry golden retain their original provenance. Parser
 fuzzing is not repeated for unchanged parsers. Actions stays off; no push/publication.
+
+## 2026-11-17 current-state recheck
+
+On base `ab7c312`, the original five SVG masters, native mark/icon and all 140 catalogue
+entries already exist. Later chain/chair work brings the current split to 16 delivered
+bindings and 124 disabled planned entries; all 124 documented TD/TQ/TB source roles remain
+covered. The earlier photographs above retain their original 12/128 checkpoint, not the
+new split. The original light/dark/16px/32px/64px proof sheet is visually inspected again.
+
+Fresh local commands use Rust 1.94.1 and the pinned independent-oracle interpreter:
+
+| Command | Result |
+| --- | --- |
+| `cargo test -p bondline-ui --lib --locked tool_catalogue` | 2 passed: exact source-role/variant coverage and bundled-font coverage. |
+| `cargo test -p bondline-ui --lib --locked branding_tests::` | 2 passed: original icon geometry/colours and SVG-matching header joins. |
+| `cargo test -p bondline-ui --lib --locked planned_tools` | 6 passed: disabled pointer/accessibility attempts, search, real binding selection, persistent selection and File/Atom/SDF foreground ownership. |
+| `cargo test -p bondline-ui --lib --locked workspace_presentation_tests::` | 7 passed, including four cases already in the preceding filter. |
+
+These are 17 successful executions of 13 distinct cases. No producer/UI change or new
+feature verification follows from this recheck. A fresh native preview is unavailable:
+CUA inventory reports native-pipe startup failure and browser access host unavailable.
+No app is selected, launched or changed. Existing native photographs are inspected from
+disk only; no fresh native/platform or whole-workspace pass is claimed. Actions stays OFF.
