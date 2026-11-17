@@ -329,7 +329,7 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
         "ui.view",
     ];
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 44);
+    assert_eq!(registry.len(), 45);
     let mut expected = OLD_37.into_iter().collect::<BTreeSet<_>>();
     assert!(expected.insert("ui.ring_tool"));
     assert!(expected.insert("chain.create"));
@@ -338,6 +338,7 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
     assert!(expected.insert("ui.drawing_settings"));
     assert!(expected.insert("ui.chain_tool"));
     assert!(expected.insert("ring.sprout"));
+    assert!(expected.insert("ui.preferences"));
     assert_eq!(
         registry.iter().map(|r| r.name).collect::<BTreeSet<_>>(),
         expected
@@ -364,7 +365,7 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
     assert_eq!(schema["properties"]["size"]["minimum"].as_f64(), Some(3.0));
     assert_eq!(schema["properties"]["size"]["maximum"].as_f64(), Some(8.0));
     let mut engine = Engine::default();
-    assert_eq!(engine.controls().len(), 38);
+    assert_eq!(engine.controls().len(), 39);
     for (size, label) in [
         (3, "Cyclopropane"),
         (4, "Cyclobutane"),
@@ -436,9 +437,9 @@ fn source_eligibility_precedes_same_mode_noop_and_complete_owners_stay_preserved
             "full.sdf",
             include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf").as_slice(),
             "document.open_sdf",
-            Some(15),
+            Some(16),
         ),
-        ("full.smiles", RAW_SMILES, "document.open_smiles", Some(11)),
+        ("full.smiles", RAW_SMILES, "document.open_smiles", Some(12)),
         (
             "opaque.cdxml",
             opaque.as_bytes(),
@@ -477,7 +478,7 @@ fn source_eligibility_precedes_same_mode_noop_and_complete_owners_stay_preserved
                 "selection":{"mode":"record","record_id":1},"bond_length_pt":48,"origin_x_pt":72,"origin_y_pt":72,
                 "page_width_pt":612,"page_height_pt":792}))?;
             assert!(engine.stored_document()?.has_smiles_projection());
-            assert_eq!(engine.controls().len(), 21);
+            assert_eq!(engine.controls().len(), 22);
             assert!(
                 !engine
                     .controls()

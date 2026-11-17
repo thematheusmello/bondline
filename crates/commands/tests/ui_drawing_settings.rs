@@ -165,7 +165,7 @@ fn schema_node<'a>(
 fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_name_order()
 -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 44);
+    assert_eq!(rows.len(), 45);
     assert_eq!(
         rows[..41].iter().map(|row| row.name).collect::<Vec<_>>(),
         OLD_NAMES
@@ -173,6 +173,7 @@ fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_na
     assert_eq!(rows[41].name, NAME);
     assert_eq!(rows[42].name, "ui.chain_tool");
     assert_eq!(rows[43].name, "ring.sprout");
+    assert_eq!(rows[44].name, "ui.preferences");
     assert!(!rows[41].read_only);
     let schema = rows[41].input_schema.as_value();
     assert_eq!(schema["type"], "object");
@@ -248,7 +249,7 @@ fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_na
         "stale_revision",
     )?;
     let controls = serde_json::to_value(engine.controls())?;
-    assert_eq!(controls.as_array().ok_or("controls")?.len(), 38);
+    assert_eq!(controls.as_array().ok_or("controls")?.len(), 39);
     let control = controls
         .as_array()
         .ok_or("controls")?
@@ -491,25 +492,25 @@ fn host_source_and_other_form_guards_fail_before_request_id_allocation() -> Test
             "old.mol",
             include_bytes!("../../io/tests/fixtures/mol/ethane-v2000.mol").as_slice(),
             "document.open_mol",
-            21,
+            22,
         ),
         (
             "old.cdx",
             include_bytes!("../../io/tests/fixtures/cdx/metadata-explicit.cdx").as_slice(),
             "document.open_cdx",
-            21,
+            22,
         ),
         (
             "old.sdf",
             include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf").as_slice(),
             "document.open_sdf",
-            15,
+            16,
         ),
         (
             "old.smi",
             b"CC opaque\0\xff\r\n".as_slice(),
             "document.open_smiles",
-            11,
+            12,
         ),
     ] {
         let path = directory.path(name);
@@ -524,6 +525,19 @@ fn host_source_and_other_form_guards_fail_before_request_id_allocation() -> Test
             "unsupported_content",
         )?;
         assert_eq!(engine.controls().len(), controls);
+        let preferences = engine
+            .controls()
+            .into_iter()
+            .find(|row| row.id == "file.preferences")
+            .ok_or("Preferences remains available for every source family")?;
+        assert!(preferences.enabled);
+        assert_eq!(preferences.disabled_reason, None);
+        assert!(preferences.shortcut.is_none());
+        assert_eq!(
+            serde_json::to_value(preferences.command)?,
+            json!({"command":"ui.preferences",
+            "params":{"action":"open","expected_revision":1}})
+        );
         assert_eq!(fs::read(&path)?, before);
         engine.dispatch("document.new", json!({"expected_revision":1}))?;
         assert_eq!(open(&mut engine)?, 1);

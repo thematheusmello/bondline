@@ -1944,3 +1944,23 @@ actual Unicode bytes/Expat/Decimal/RDKit and CPU/GPU/PNG evidence through one re
 real adapters. New-vector geometry/notation setup corrections remain distinct from the
 actual nested-array command-boundary RED/GREEN. Native preferences/sprout integration,
 stereo and exact26.1 behavior remain separate; no new golden, dependency or source waiver.
+
+
+## Session Preferences and native sprout, 2026-11-17
+
+The pinned RING-SPROUT-PLAN facts remain: GUIDE25 printed32/99/101–102 identifies an
+application preference and generic Alt-atom sprout, separate from shared-atom attachment.
+The [original interaction lock](../research/native-ring-sprout.md) supplies the explicit
+centroid/outward pose, OR policy, press/release combinations, length-coupled drag and
+current-session lifetime. No interoperable sprout property was found or invented.
+Existing public egui0.29.1 Checkbox/Response/Context source, previously pinned for
+[ordered input](../research/ordered-native-modifiers.md), supports a real SDK control,
+raw activation replay and discard-qualified accessible paint. No proprietary UI assets
+or new font/dependency/unsafe boundary is used.
+
+[Receiving](../verification-native-ring-sprout.md) separates actual command/App/publication
+RED/GREENs, validated-model/legacy-spiro setup qualifications, bounded ASan and final
+native/full-gate scope. Normal snapshots/files omit application preferences; only checked
+real changes bump the shared tool epoch. Separate modal identity and exact Cancel tokens
+prevent hidden ABA and false input/Save/close authority. Broader preferences, restart
+persistence, stereo and exact26.1 defaults remain explicit future work.

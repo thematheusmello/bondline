@@ -22,6 +22,7 @@ mod drawing_settings_ui;
 mod file_ui;
 mod files;
 mod new_document;
+mod preferences;
 mod ring;
 mod ring_tool;
 mod sdf_edit;
@@ -59,6 +60,9 @@ pub use files::{
     OpenSdf, OpenSmiles, SaveCdx, SaveCdxml, SaveMol, SaveSdf, SaveSmiles,
 };
 pub use new_document::NewDocument;
+pub use preferences::{
+    ApplicationPreferences, UiPreferences, UiPreferencesOperation, UiPreferencesRequest,
+};
 pub use ring::{
     ChairKind, ChairRingCreate, NamedRingCreate, RingCreate, RingCreateRequest, RingKind,
     RingPhase, RingPlacement, RingSide, RingSprout, SproutRing,
@@ -215,6 +219,7 @@ command_registry! {
     UiDrawingSettings(UiDrawingSettings) => ("ui.drawing_settings", "Open or cancel a native document creation-preference draft; requires an attached host and grants no authoring or Save authority.", false),
     UiChainTool(UiChainTool) => ("ui.chain_tool", "Select a chain tool, set its transient constraints, or open/cancel a source-qualified numeric Add Chain draft; authoring uses the existing chain commands.", false),
     RingSprout(RingSprout) => ("ring.sprout", "Attach an independent native carbon ring through one Single connector in one edit, with explicit cycle geometry and literal hydrogen policy.", false),
+    UiPreferences(UiPreferences) => ("ui.preferences", "Inspect or set session application preferences, or open/apply/cancel their native draft; never authors document data or acknowledges Save.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -554,6 +559,12 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_drawing_settings_operation: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferences: Option<ApplicationPreferences>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_preferences: Option<UiPreferencesRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_preferences_operation: Option<UiPreferencesOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_add_chain: Option<UiAddChainRequest>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_add_chain_operation: Option<u64>,
@@ -589,6 +600,7 @@ pub struct Engine {
     file_ui: file_ui::FileUiPolicy,
     atom_ui: atom_ui::AtomLabelUiPolicy,
     drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy,
+    preferences_ui: preferences::PreferencesPolicy,
     chain_ui: chain_tool::ChainUiPolicy,
     selection: selection::SelectionPolicy,
     bond_tool: BondToolState,
@@ -649,6 +661,7 @@ impl Engine {
             file_ui: file_ui::FileUiPolicy::default(),
             atom_ui: atom_ui::AtomLabelUiPolicy::default(),
             drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy::default(),
+            preferences_ui: preferences::PreferencesPolicy::default(),
             chain_ui: chain_tool::ChainUiPolicy::default(),
             selection: selection::SelectionPolicy::default(),
             bond_tool: BondToolState::default(),
@@ -706,6 +719,9 @@ impl Engine {
             ui_atom_label_operation: None,
             ui_drawing_settings: self.ui_drawing_settings_request(),
             ui_drawing_settings_operation: None,
+            preferences: None,
+            ui_preferences: self.ui_preferences_request(),
+            ui_preferences_operation: None,
             ui_add_chain: self.ui_add_chain_request(),
             ui_add_chain_operation: None,
             ui_chain_tool_operation: None,
@@ -760,6 +776,9 @@ impl Engine {
             }
             Command::UiDrawingSettings(params) => {
                 return Ok(Prepared::immediate(self.ui_drawing_settings(params)?));
+            }
+            Command::UiPreferences(params) => {
+                return Ok(Prepared::immediate(self.ui_preferences(params)?));
             }
             Command::UiChainTool(params) => {
                 return Ok(Prepared::immediate(self.ui_chain_tool(params)?));
@@ -1361,6 +1380,7 @@ mod tests {
                 "ui.file",
                 "ui.chain_tool",
                 "ring.sprout",
+                "ui.preferences",
             ]
             .into_iter()
             .collect()

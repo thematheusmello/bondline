@@ -7,6 +7,49 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Native ring sprout and session Preferences; full local gate passes
+
+Base6996862; the accompanying atomic source/test/docs commit is the recoverable state.
+Read [lock](docs/research/native-ring-sprout.md) and
+[receiving](docs/verification-native-ring-sprout.md). All ten ring tools now route
+atom-targeted Alt or preference-driven sprout through the same guarded preview/command.
+File > Preferences… has one real current-session checkbox, ordered local Defaults/OK/
+Cancel, stale drafts, exact cancellation and modal/retirement/ABA fences. No chemical-file
+attribute, Save receipt, close ACK or restart persistence is invented.
+
+Registry45 preserves all44 earlier complete actual CLI records/schema/order. Controls
+39/22/16/12 add only Preferences; the original logo and140-entry/124-role catalogue stay
+16 delivered/124 planned disabled. Nineteen new independent cases pass. Actual runtime
+REDs, new fixture/closed-Inspect qualifications and the two deliberately upgraded old
+Alt-atom assertions remain explicit. All unsupported old vectors/guards stay. Fresh full
+42232 exits0: **1713 passed/0 failed/1 ignored across249 result lines**, plus fmt,
+warnings-denied workspace/vendor checks, layers, seven assets, strict155/166/221 runtime
+closures and pinned corpus. New ASan88252 passes10000 runs, max reached92B of16KiB.
+Historical MCP listener failure remains unattributed; no listener policy/test change.
+
+An isolated actual Mac app verifies Alt-sprout, Undo/Redo, preference-driven Chair2 sprout,
+confirmed64pt creation setting, Unicode Save/reopen, retained session preference, Defaults/
+Cancel and unchanged OK without dirtying. Its actual3897B20/21/two-fragment CDXML passes
+independent Expat/Decimal and pinned RDKit C12H16/C8H16 checks; old48pt benzene stays.
+The catalogue visibly shows16/124; grey Curved arrow cannot activate or change the clean
+drawing. Initial background-focus/input and first filename setup misses are qualified,
+not product fixes. Probe and normal review are explicitly closed and later observed absent.
+Both older user apps stay running with unchanged binaries; their drawings remain untouched.
+
+No owned jobs remain. No new golden, dependency/font/vendor/lock/corpus/workflow change,
+hosted run or publication. Native all-tool/modifier/race coverage, measured2×/DPI, Windows/
+Linux, CJK glyph coverage, full styles/preferences/stereo and exact26.1 policies remain
+unverified or missing. Next take the highest unblocked labels/styles/selection acceptance
+item from ROADMAP/parity, lock its public behavior, write independent RED expectations,
+then finish its complete existing-registry/native/file workflow before changing a grey
+binding. A concrete available acceptance item is TD-001/M2 selection: read its cited guide
+pages and existing selection tests, exercise marquee/click/toggle/drag/nudge/Undo/Redo in
+a separate own native app, then independently consume its Unicode Save/reopen file. Keep
+the existing protected apps and report any failing first observation before fixing code.
+Full M0–M5 remains active and incomplete; Actions stays OFF.
+
+## Earlier checkpoints
+
 ### Atomic headless sprout; full local gate passes
 
 Baseec84717; the accompanying atomic command/test/docs commit is the recoverable state.
@@ -33,10 +76,9 @@ same-candidate click/drag and adapter repaint. Verify in a fresh own native Mac 
 consume actual saved files independently before enabling/claiming those flows. Logo and
 all140 catalogue entries remain; grey entries never gain fake bindings. No user app/
 drawing, dependency/font/vendor/lock/corpus/workflow, golden or publication changes.
-All Root execution jobs are terminal; parallel source-only next-stage preparation is active.
+At that checkpoint Root execution jobs are terminal; source-only next-stage preparation
+continues into the separately recorded native increment above.
 Full M0–M5 stays active and incomplete. Earlier native/platform/style limits remain.
-
-## Earlier checkpoints
 
 ### Cyclohexane-chair tools; full local gate passes
 

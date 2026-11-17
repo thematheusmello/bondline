@@ -182,6 +182,7 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "ring.create",
             "ui.chain_tool",
             "ring.sprout",
+            "ui.preferences",
         ]
         .into_iter()
         .collect()

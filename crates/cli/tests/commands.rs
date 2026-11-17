@@ -498,6 +498,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "ui.controls",
             "ui.drawing_settings",
             "ui.file",
+            "ui.preferences",
             "ui.ring_tool",
             "ui.selection",
             "ui.view"

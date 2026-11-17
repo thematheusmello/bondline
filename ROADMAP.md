@@ -4,13 +4,20 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
-The [atomic headless sprout checkpoint](docs/verification-ring-sprout.md) appends
-`ring.sprout` as command44 while preserving all43 earlier actual records/schema/order.
-All ten ring types, H/geometry/source/history and actual adapters/files/rendering pass
-independent checks. Controls38/21/15/11 and catalogue16/124 stay unchanged. Immediately
-continue the [locked native/preferences stage](docs/research/native-ring-sprout.md):
-its existing-API tests are frozen, but Alt-sprout and Preferences remain missing until
-their complete guarded workflow and actual native acceptance land. Full M0–M5 stays open.
+The [native sprout/preferences increment](docs/verification-native-ring-sprout.md)
+continues the [atomic headless checkpoint](docs/verification-ring-sprout.md). Registry45
+retains all44 earlier complete CLI records/schema/order; controls39/22/16/12 add only
+File Preferences, while catalogue16/124 stays. All ten ring tools use the shared candidate
+for atom-targeted preference OR Alt sprout. One session checkbox has ordered Defaults/OK/
+Cancel and source/modal/retirement/ABA guards. Fresh full local1713/0/1 and bounded ASan
+pass. An isolated actual Mac app checks Alt-sprout, preference-driven Chair2, history,
+64pt setting, Unicode Save/reopen and Defaults-Cancel; independent actual-file readers
+confirm geometry/H/C12H16/C8H16. Native all-tool/modifier/race/DPI/other-platform coverage,
+restart/full preferences/styles/stereo and exact26.1 policies remain open. Next source-
+lock and finish an unblocked labels/styles/selection acceptance slice, with independent
+RED expectations and full registry/native/file evidence before enabling a grey tool.
+Actions stays OFF; full M0–M5 stays active and incomplete. The paragraphs below retain
+earlier checkpoints and their original scope.
 
 The user-directed identity and planned-tool presentation exposes all124 documented
 TD/TQ/TB roles as140 entries, with sixteen real bindings and124 disabled planned entries.
@@ -535,8 +542,8 @@ DPI calibration, SDF navigation, saved view preferences or complete reference pa
 See docs/verification-view-{render,commands,ui,native}.md and
 docs/verification-ordered-file-actions.md.
 
-Next: outstanding native modifier/DPI/selection/ring acceptance, missing sprout/preference
-construction, remaining chair stereo/platform workflows, snapping, transforms, broader labels and styles. Do not restart the
+Next: outstanding native modifier/DPI/selection/ring acceptance, broader preferences,
+remaining chair stereo/platform workflows, snapping, transforms, broader labels and styles. Do not restart the
 delivered chain prerequisites or treat their bounded Mac checks as full tool/platform parity.
 M1 source-faithful interoperability and M0 addressability/inventory/platform evidence
 remain open. Keep imported-source/mapping gaps visible; these bounded workflows do not

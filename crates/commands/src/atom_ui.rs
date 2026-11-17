@@ -56,6 +56,10 @@ pub(super) struct AtomLabelUiPolicy {
 }
 
 impl AtomLabelUiPolicy {
+    pub(super) fn has_request(&self) -> bool {
+        self.active.is_some()
+    }
+
     pub(super) fn epoch(&self) -> u64 {
         self.epoch
     }
@@ -77,6 +81,7 @@ impl Engine {
                 && self.ui_file_context_stamp_matches(&active.file_context)
                 && self.file_ui.epoch == active.file_epoch
                 && self.file_ui_state().request.is_none()
+                && !self.preferences_ui.has_request()
                 && self.close_state() == CloseState::Open
                 && self.close_policy.epoch == active.close_epoch
                 && self.view().epoch == active.view_epoch
@@ -127,6 +132,7 @@ impl Engine {
                 ..
             } => {
                 if self.atom_ui.active.is_some()
+                    || self.preferences_ui.has_request()
                     || self.ui_drawing_settings_request().is_some()
                     || self.ui_add_chain_request().is_some()
                     || self.close_state() != CloseState::Open

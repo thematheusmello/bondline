@@ -117,6 +117,33 @@ The recorded source manifest lists40 original entries spanning1..264B, SHA256
 Use a new ignored destination on each run, never a committed fixture directory. Report
 actual reached length separately from the16KiB ceiling. Both lockfiles stay unchanged.
 
+## Session Preferences JSON requests
+
+`preferences_request` prepares a fixed `ui.preferences` envelope with at most16KiB of
+raw parameters. Each input gets two fresh attached-host Engines: no form, or one real
+preopened request1. It never completes file/render work. Errors retain preference/tool/
+request/token state; every result retains authored content/model sharing, source/stamp,
+history, selection, view and file/close authority. Accepted boolean changes alone advance
+the preference/shared-tool epochs; active drafts keep their captured values and become
+stale when appropriate. A separate fixed bond.create preparation AFTER those checks
+verifies untouched ID floors through fragment1/atoms1,2/bond1. Its Engine is then discarded.
+
+The original [20-seed generator](seeds/preferences.py) covers all five actions in cold/
+warm contexts, stale/wrong IDs, null/missing/extra/array fields and malformed UTF-8/JSON/
+envelopes. Source and mutation copies stay separate; destination creation refuses overwrite.
+
+```sh
+python3 fuzz/seeds/preferences.py .cache/fuzz/preferences-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address preferences_request .cache/fuzz/preferences-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+Use a fresh ignored name; never mutate committed fixtures. The recorded20 initial
+sources span2..92B; actual10000-run ASan coverage/reached limits are separate
+[receiving evidence](../docs/verification-native-ring-sprout.md). This does not establish
+exhaustion coverage, full1MiB parser security, explicit reply/publication, native input,
+deep source/ABA sequences or restart persistence. Those have separate tests or remain open.
+No new dependency or lockfile is needed; the existing test-only toolchain/license terms apply.
+
 ## Literal chain JSON requests
 
 `chain_path_request` wraps up to16KiB of raw parameter bytes in the real command

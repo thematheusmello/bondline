@@ -107,3 +107,10 @@ bench = false
 [patch.crates-io]
 hexf-parse = { path = "../compat/hexf-parse" }
 libloading = { path = "../compat/libloading" }
+
+[[bin]]
+name = "preferences_request"
+path = "fuzz_targets/preferences_request.rs"
+test = false
+doc = false
+bench = false

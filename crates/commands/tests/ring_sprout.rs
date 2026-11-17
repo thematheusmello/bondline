@@ -408,10 +408,11 @@ fn required(v: &Value) -> Check<BTreeSet<&str>> {
 #[test]
 fn one_closed_sprout_schema_and_runtime_selectors_add_only_the_authoring_command() -> TestResult {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 44);
+    assert_eq!(registry.len(), 45);
     let names = registry.iter().map(|e| e.name).collect::<Vec<_>>();
     assert_eq!(&names[..43], OLD_COMMANDS.as_slice());
     assert_eq!(names[43], "ring.sprout");
+    assert_eq!(names[44], "ui.preferences");
     let entry = registry
         .iter()
         .find(|e| e.name == "ring.sprout")
@@ -550,7 +551,7 @@ fn one_closed_sprout_schema_and_runtime_selectors_add_only_the_authoring_command
     }
     assert_eq!(
         e.controls().len(),
-        38,
+        39,
         "headless authoring adds no native binding"
     );
     Ok(())

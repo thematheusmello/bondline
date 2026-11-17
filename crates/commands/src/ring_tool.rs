@@ -107,6 +107,7 @@ pub struct RingContext {
     atom_epoch: u64,
     settings_epoch: u64,
     add_epoch: u64,
+    preferences_open_epoch: u64,
 }
 
 impl RingContext {
@@ -123,6 +124,8 @@ impl RingContext {
             && engine.atom_ui.epoch() == self.atom_epoch
             && engine.drawing_settings_ui.epoch() == self.settings_epoch
             && engine.chain_ui.epoch() == self.add_epoch
+            && engine.ui_preferences_epoch() == self.preferences_open_epoch
+            && !engine.preferences_ui.has_request()
             && engine.ui_atom_label_request().is_none()
             && engine.ui_drawing_settings_request().is_none()
             && engine.ui_add_chain_request().is_none()
@@ -202,6 +205,7 @@ impl Engine {
             || self.ui_atom_label_request().is_some()
             || self.ui_drawing_settings_request().is_some()
             || self.ui_add_chain_request().is_some()
+            || self.preferences_ui.has_request()
         {
             return Err(Error::UiBusy);
         }
@@ -226,6 +230,7 @@ impl Engine {
             atom_epoch: self.atom_ui.epoch(),
             settings_epoch: self.drawing_settings_ui.epoch(),
             add_epoch: self.chain_ui.epoch(),
+            preferences_open_epoch: self.ui_preferences_epoch(),
         })
     }
 

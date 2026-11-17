@@ -4,17 +4,29 @@ The UI's original branding and static roadmap catalogue are presentation only.
 tool_catalogue_data.rs maps124 source roles to140 entries;124 have no binding. The sixteen
 delivered entries resolve current Engine.controls() and use the existing ordered action
 path. No planned command, source/edit authority, renderer dependency or history state is
-introduced. The private catalogue owns only open/search state; current File/Atom/SDF
-foreground ownership gates it. See [design](design/tool-catalogue.md) and
+introduced. The private catalogue owns only open/search state; current File/Atom/SDF,
+drawing-settings/Add Chain and Preferences foreground ownership gates it. See [design](design/tool-catalogue.md) and
 [receiving](verification-branding-and-tools.md).
 
-The appended `ring.sprout` command now brings the registry to44. One private optional
+The registry now has45 commands. Session `ui.preferences` adds closed Inspect/Set/Open/
+Apply/Cancel actions; only explicit replies contain the preferences value. An active weak
+request appears in ordinary state. Checked value/shared-tool epochs differ from the
+modal-open epoch, which invalidates hidden Open/Cancel ABA across native gestures. Raw
+modal ownership avoids recursive request getters. Exact cancellation, source/association/
+File/close/view/effective-tool proofs, ordered real-SDK checkbox replay and existing
+frame-start/retirement fences grant no authored/Save/close authority. State lasts for one
+Engine session across New/Open/history; files and restart storage do not contain it.
+All ten ring tools choose atom sprout on preference OR Alt at press, sharing one complete
+preview/commit candidate and physical guards. File Preferences adds the sole new native
+control; catalogue bindings stay16/124. See [native evidence](verification-native-ring-sprout.md).
+
+The preceding `ring.sprout` command is record44. One private optional
 bridge target reuses the existing ring builder without changing public sized/named/chair
 or placement APIs. It adds an entirely new cycle to the same Fragment, charges1H to
 the old root, allocates the Single connector before perimeter bonds and commits once.
 `preview_ring_sprout` returns the same immutable candidate without spending IDs or
 granting source/Save authority. The command's nested ring value requires an object;
-native gesture/preferences integration remains the next separate stage. See
+native gesture/preferences integration is qualified separately above. See
 [lock](research/native-ring-sprout.md) and [evidence](verification-ring-sprout.md).
 
 Both cyclohexane-chair tools extend the existing ring request/tool unions with a third

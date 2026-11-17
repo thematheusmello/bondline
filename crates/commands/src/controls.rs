@@ -4,7 +4,7 @@ use crate::{
     BondDrawOrder, ChainKind, ChairKind, CloseAction, CloseDocument, CloseState, Command,
     EffectiveTool, Engine, NoParams, PageSetSize, RingKind, SelectBondTool, SelectChairRingTool,
     SelectNamedRingTool, SelectRingTool, UiChainTool, UiDrawingSettings, UiFile, UiFileAction,
-    UiFilePhase, UiSelection, UiView,
+    UiFilePhase, UiPreferences, UiSelection, UiView,
 };
 use serde::Serialize;
 
@@ -64,6 +64,7 @@ impl Engine {
             .is_some_and(|request| request.phase != UiFilePhase::Running)
             || state.ui_atom_label.is_some()
             || state.ui_drawing_settings.is_some()
+            || state.ui_preferences.is_some()
             || state.ui_add_chain.is_some();
         let authoring_reason = if state.close != CloseState::Open {
             Some("close_pending")
@@ -161,6 +162,19 @@ impl Engine {
                 action: UiFileAction::ConvertSmiles,
                 request_id: None,
                 close_epoch: None,
+            }),
+            enabled: file_reason.is_none(),
+            disabled_reason: file_reason,
+            selected: None,
+        });
+        controls.push(ControlInfo {
+            id: "file.preferences",
+            label: "Preferences…",
+            menu: "File",
+            submenu: None,
+            shortcut: None,
+            command: Command::UiPreferences(UiPreferences::Open {
+                expected_revision: state.revision,
             }),
             enabled: file_reason.is_none(),
             disabled_reason: file_reason,

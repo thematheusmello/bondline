@@ -79,6 +79,7 @@ pub struct SelectionContext {
     close_epoch: u64,
     file_epoch: u64,
     file_context: UiFileContextStamp,
+    preferences_open_epoch: u64,
 }
 
 impl SelectionContext {
@@ -93,6 +94,8 @@ impl SelectionContext {
             && engine.file_ui.epoch == self.file_epoch
             && engine.file_ui_state().request.is_none()
             && engine.ui_file_context_stamp_matches(&self.file_context)
+            && engine.ui_preferences_epoch() == self.preferences_open_epoch
+            && !engine.preferences_ui.has_request()
     }
 }
 
@@ -102,7 +105,10 @@ impl Engine {
         if self.effective_tool() != EffectiveTool::Selection {
             return Err(Error::StaleSelection);
         }
-        if self.close_state() != CloseState::Open || self.file_ui_state().request.is_some() {
+        if self.close_state() != CloseState::Open
+            || self.file_ui_state().request.is_some()
+            || self.preferences_ui.has_request()
+        {
             return Err(Error::UiBusy);
         }
         Ok(SelectionContext {
@@ -113,6 +119,7 @@ impl Engine {
             close_epoch: self.close_policy.epoch,
             file_epoch: self.file_ui.epoch,
             file_context: self.ui_file_context_stamp(),
+            preferences_open_epoch: self.ui_preferences_epoch(),
         })
     }
 

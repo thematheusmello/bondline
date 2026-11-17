@@ -320,7 +320,15 @@ fn names(value: &Value) -> TestResult<BTreeSet<&str>> {
         .collect::<Result<_, _>>()?)
 }
 fn discovery(entries: &[Value], key: &str) -> TestResult {
-    assert_eq!(entries.len(), 44);
+    assert_eq!(entries.len(), 45);
+    assert_eq!(
+        entries.get(43).ok_or("preserved sprout index")?["name"],
+        NAME
+    );
+    assert_eq!(
+        entries.get(44).ok_or("appended preferences index")?["name"],
+        "ui.preferences"
+    );
     assert_eq!(
         entries
             .iter()
@@ -336,7 +344,8 @@ fn discovery(entries: &[Value], key: &str) -> TestResult {
                 "document.set_drawing_settings",
                 "ui.drawing_settings",
                 "ui.chain_tool",
-                NAME
+                NAME,
+                "ui.preferences"
             ])
             .collect::<BTreeSet<_>>()
     );
@@ -637,7 +646,7 @@ fn initialized_stdio_sprout_all_ring_families_and_phases_are_closed_literal_file
     rejected(&mut client, 110, stale, "stale_revision")?;
     assert_eq!(client.call(111, "document.inspect", json!({}))?, stable);
     let queried = client.call(112, "ui.controls", json!({}))?;
-    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 38);
+    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 39);
     client.finish()
 }
 

@@ -77,6 +77,7 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
             "ring.create",
             "ui.chain_tool",
             "ring.sprout",
+            "ui.preferences",
         ]
         .into_iter()
         .collect()

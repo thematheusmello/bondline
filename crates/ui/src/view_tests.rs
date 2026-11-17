@@ -1415,8 +1415,14 @@ mod selection_translation;
 #[path = "native_ring_tests.rs"]
 mod native_ring;
 
+#[path = "native_ring_sprout_tests.rs"]
+mod native_ring_sprout;
+
 #[path = "native_chain_tests.rs"]
 mod native_chain;
 
 #[path = "native_chair_tests.rs"]
 mod native_chair;
+
+#[path = "native_preferences_tests.rs"]
+mod native_preferences;

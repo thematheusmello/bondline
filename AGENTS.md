@@ -37,7 +37,28 @@ Keep the bundled-font coverage regression: angle and replacement-arrow icons use
 geometry because Roboto lacks those characters. Native photographs are actual own-window
 captures, separate from illustrations/goldens; preserve the user's older unsaved app/draft.
 
-Current headless sprout follows docs/research/native-ring-sprout.md and
+Current native sprout/preferences follows docs/research/native-ring-sprout.md and
+docs/verification-native-ring-sprout.md on base6996862. Registry45 preserves all old44
+actual CLI records/schema/order; controls39/22/16/12, catalogue16/124. One ui.preferences
+has five closed actions, per-Engine/session boolean+epoch, separate checked modal-open
+epoch, exact Cancel identity and source/association/File/close/view/effective-tool proofs.
+Preserve raw nonrecursive modal ownership, hidden-modal ABA guards for all gestures,
+ordered real-SDK checkbox replay/discard and stale copyable drafts. Preferences never
+authors model data, acknowledges Save/close or persists into a chemical file. All ten
+ring tools choose sprout on atom press when preference OR Alt; late Alt cannot change
+an unarmed gesture. Same candidate supplies preview/commit, old geometry/H/ID/source and
+physical guards stay. Nineteen new cases, fresh full42232:1713/0/1 and bounded10000-run
+ASan pass. Old authorized Alt-atom assertions gain stronger positive checks; unsupported
+vectors/tolerances and protected MCP listener policy/tests remain unchanged. Actual own
+Mac Alt/preference/chair/history/64pt/Unicode Save/reopen/Defaults-Cancel/unchanged-OK and
+disabled-catalogue checks pass independent actual-file Expat/Decimal/RDKit consumers.
+Focus/filename setup qualifications are not product fixes. Both own probe/review are
+closed; both older user apps/drawings stay protected. No jobs remain. Restart sharing,
+full preferences/styles/stereo, native race/DPI/other-platform and exact26.1 coverage stay
+open. Next source-lock the highest unblocked labels/styles/selection acceptance item;
+Actions stays OFF and full M0–M5 remains active. Earlier notes below are checkpoints.
+
+The preceding headless sprout follows docs/research/native-ring-sprout.md and
 docs/verification-ring-sprout.md on baseec84717. One appended ring.sprout brings registry44;
 all43 earlier actual CLI records/schema/order stay exact. Controls38/21/15/11 and
 catalogue16/124 stay unchanged. The same builder appends a new cycle plus one connector

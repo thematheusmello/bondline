@@ -112,7 +112,7 @@ fn same_session(result: &Value, before: &Value) -> TestResult {
 }
 fn controls(value: &Value, selected: &str) -> TestResult {
     let rows = value["controls"].as_array().ok_or("controls")?;
-    assert_eq!(rows.len(), 38);
+    assert_eq!(rows.len(), 39);
     for (kind, id, label) in [
         (ONE, "tool.ring.chair_1", "Cyclohexane chair 1"),
         (TWO, "tool.ring.chair_2", "Cyclohexane chair 2"),
@@ -233,7 +233,7 @@ fn schema(root: &Value, creation: bool) -> TestResult {
     Ok(())
 }
 fn discovery(entries: &[Value], key: &str) -> TestResult {
-    names(entries)?; // Original literal historical36 + the eight current additions =44.
+    names(entries)?; // Original literal historical36 + the nine current additions =45.
     for (name, creation) in [("ring.create", true), ("ui.ring_tool", false)] {
         let row = entries
             .iter()

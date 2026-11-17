@@ -156,6 +156,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "ring.create",
             "ui.chain_tool",
             "ring.sprout",
+            "ui.preferences",
         ]
         .into_iter()
         .collect()

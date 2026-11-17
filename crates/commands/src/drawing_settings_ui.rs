@@ -57,6 +57,10 @@ pub(super) struct DrawingSettingsUiPolicy {
 }
 
 impl DrawingSettingsUiPolicy {
+    pub(super) fn has_request(&self) -> bool {
+        self.active.is_some()
+    }
+
     pub(super) fn epoch(&self) -> u64 {
         self.epoch
     }
@@ -86,6 +90,7 @@ impl Engine {
                     && self.ui_file_context_stamp_matches(&request.file_context)
                     && self.file_ui.epoch == request.file_epoch
                     && self.file_ui_state().request.is_none()
+                    && !self.preferences_ui.has_request()
                     && self.ui_atom_label_request().is_none()
                     && self.close_state() == CloseState::Open
                     && self.close_policy.epoch == request.close_epoch
@@ -133,6 +138,7 @@ impl Engine {
         let id = match params {
             UiDrawingSettings::Open { .. } => {
                 if self.drawing_settings_ui.active.is_some()
+                    || self.preferences_ui.has_request()
                     || self.ui_atom_label_request().is_some()
                     || self.ui_add_chain_request().is_some()
                     || self.file_ui_state().request.is_some()

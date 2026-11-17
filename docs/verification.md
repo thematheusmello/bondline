@@ -1,5 +1,27 @@
 # Verification log
 
+## Native ring sprout and session Preferences, 2026-11-17
+
+[Receiving](verification-native-ring-sprout.md) records19 new independent JSON/App/
+publication cases, actual RED/GREENs, closed-Inspect and fixture qualifications, and the
+two old authorized Alt-atom assertions upgraded to stronger positives. Unsupported old
+vectors and protected MCP listener policy/tests stay. Fresh full42232 passes1713/0/1
+across249 result lines with fmt, warnings-denied workspace/vendor checks, layers, seven
+assets, unchanged strict155/166/221 runtime closures and pinned corpus. Log214541B/SHA256
+ca10623d9cc70e99c50c2a5a4af095f5bee46814b11be15cb0c8b11ff723db3e.
+New bounded10000-run ASan88252 passes, max reached92B of16KiB. Actual CLI retains old44
+full records/schema/order as a prefix of45; controls39/22/16/12, catalogue16/124.
+
+Actual isolated Mac Alt-sprout, preference-driven Chair2, history,64pt setting, Unicode
+Save/reopen, Defaults-Cancel and unchanged OK pass. The3897B20/21/two-fragment saved file
+passes independent Expat/Decimal/RDKit geometry/flags/H and C12H16/C8H16 checks. Original
+logo/grey catalogue are inspected; planned Curved arrow stays inactive and Escape closes.
+Initial focus/input and first filename misses are setup qualifications, not product fixes.
+Own probe/review are observed stopped; both user apps/drawings remain protected. No jobs,
+new golden/hosted run/dependency/font/vendor/lock/corpus/workflow or publication change.
+Historical MCP cause, native race/DPI/other-platform, full preferences/styles/stereo and
+exact26.1 policies remain open. Actions OFF; full M0–M5 stays active and incomplete.
+
 ## Atomic headless ring sprout, 2026-11-17
 
 [Receiving](verification-ring-sprout.md) records preimplementation JSON/adapters REDs,

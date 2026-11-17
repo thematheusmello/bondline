@@ -1060,7 +1060,7 @@ fn chair_visible_error(f: &Fixture, out: &egui::FullOutput) -> TestResult {
     Ok(())
 }
 #[test]
-fn chairs_refuse_modified_primary_and_protect_focused_modal_and_file_surfaces() -> TestResult {
+fn chairs_refuse_unsupported_modifiers_and_protect_focused_modal_and_file_surfaces() -> TestResult {
     let modifiers = [
         egui::Modifiers::SHIFT,
         egui::Modifiers {
@@ -1095,9 +1095,29 @@ fn chairs_refuse_modified_primary_and_protect_focused_modal_and_file_surfaces() 
                 egui::Event::PointerMoved(moved),
                 chair_pointer(moved, false, modifier),
             ]);
-            chair_same(&f, &before)?;
+            if modifier == egui::Modifiers::ALT {
+                let points = chair_outward_right(kind, [0.0, 0.0], 40.0)
+                    .map(|[x, y]| [208.0 + y, 260.0 - x]);
+                let mut expected = old.clone();
+                expected["atoms"][1]["explicit_hydrogens"] = json!(2);
+                expected["bonds"]
+                    .as_array_mut()
+                    .ok_or("old bonds")?
+                    .push(json!({"id":2,"begin":2,"end":3,"order":"single"}));
+                let mut expected = chair_join(expected, &points, [3, 4, 5, 6, 7, 8], 0, 3)?;
+                expected["atoms"][2]["explicit_hydrogens"] = json!(1);
+                chair_compare(&f, &before, &[expected])?;
+                chair_one_edit(&f, &before, &source, &raw)?;
+                f.command("history.undo", json!({}))?;
+                assert_eq!(f.state()?["document"], before["document"]);
+                assert_eq!(f.state()?["file"], before["file"]);
+                assert_eq!(f.state()?["source"], before["source"]);
+                assert_eq!(f.state()?["redo_depth"], 1);
+            } else {
+                chair_same(&f, &before)?;
+                chair_visible_error(&f, &out)?;
+            }
             chair_no_modal(&f)?;
-            chair_visible_error(&f, &out)?;
             assert_eq!(fs::read(&source)?, raw);
         }
         chair_select(&mut f, kind)?;

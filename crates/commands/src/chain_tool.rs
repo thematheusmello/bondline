@@ -123,6 +123,7 @@ pub struct ChainContext {
     add_owner: Option<u64>,
     atom_epoch: u64,
     settings_epoch: u64,
+    preferences_open_epoch: u64,
 }
 
 impl ChainContext {
@@ -141,6 +142,8 @@ impl ChainContext {
             && engine.chain_ui.active.as_ref().map(|r| r.view.id) == self.add_owner
             && engine.atom_ui.epoch() == self.atom_epoch
             && engine.drawing_settings_ui.epoch() == self.settings_epoch
+            && engine.ui_preferences_epoch() == self.preferences_open_epoch
+            && !engine.preferences_ui.has_request()
             && engine.ui_atom_label_request().is_none()
             && engine.ui_drawing_settings_request().is_none()
             && engine
@@ -164,6 +167,10 @@ pub(super) struct ChainUiPolicy {
 }
 
 impl ChainUiPolicy {
+    pub(super) fn has_request(&self) -> bool {
+        self.active.is_some()
+    }
+
     pub(super) fn epoch(&self) -> u64 {
         self.epoch
     }
@@ -208,6 +215,7 @@ impl Engine {
             || self.ui_atom_label_request().is_some()
             || self.ui_drawing_settings_request().is_some()
             || self.chain_ui.active.is_some()
+            || self.preferences_ui.has_request()
         {
             return Err(Error::UiBusy);
         }
@@ -225,6 +233,7 @@ impl Engine {
             add_owner: None,
             atom_epoch: self.atom_ui.epoch(),
             settings_epoch: self.drawing_settings_ui.epoch(),
+            preferences_open_epoch: self.ui_preferences_epoch(),
         })
     }
 

@@ -3,15 +3,41 @@ use super::{HoverContext, readable_graph, selection::Surface};
 use bondline_commands::{
     ChairKind, ChairRingCreate, Command, EffectiveTool, Engine, Error, NamedRingCreate,
     OrderHydrogenPolicy, RingContext, RingCreate, RingCreateRequest, RingPhase, RingPlacement,
-    RingSide,
+    RingSide, RingSprout, SproutRing,
 };
 use bondline_model::{AtomId, BondId, Document, Fragment, FragmentId, Page, Point2};
 use bondline_render::{GraphScene, HitTarget, PageView};
 use eframe::egui;
 use std::sync::Arc;
 
+#[derive(Clone)]
+enum Request {
+    Create(RingCreateRequest),
+    Sprout(RingSprout),
+}
+
+impl Request {
+    fn named(&self) -> bool {
+        matches!(self, Self::Create(RingCreateRequest::Named(_)))
+            || matches!(
+                self,
+                Self::Sprout(RingSprout {
+                    ring: SproutRing::Benzene { .. } | SproutRing::Cyclopentadiene { .. },
+                    ..
+                })
+            )
+    }
+
+    fn command(self) -> Command {
+        match self {
+            Self::Create(params) => Command::RingCreate(params),
+            Self::Sprout(params) => Command::RingSprout(params),
+        }
+    }
+}
+
 struct Candidate {
-    params: RingCreateRequest,
+    params: Request,
     document: Arc<Document>,
     graph: GraphScene,
 }
@@ -20,7 +46,7 @@ struct Gesture {
     proof: RingContext,
     hover: HoverContext,
     layer: egui::LayerId,
-    params: RingCreateRequest,
+    params: Request,
     begin: Point2,
     bond_end: Option<Point2>,
     press: egui::Pos2,
@@ -35,7 +61,23 @@ impl Gesture {
         if !self.dragged {
             return;
         }
-        match placement_mut(&mut self.params) {
+        let params = match &mut self.params {
+            Request::Create(params) => params,
+            Request::Sprout(params) => {
+                let end = sprout_end(
+                    &params.ring,
+                    point,
+                    point.x_pt() - self.begin.x_pt(),
+                    point.y_pt() - self.begin.y_pt(),
+                );
+                params.ring_begin_x_pt = point.x_pt();
+                params.ring_begin_y_pt = point.y_pt();
+                params.ring_end_x_pt = end.0;
+                params.ring_end_y_pt = end.1;
+                return;
+            }
+        };
+        match placement_mut(params) {
             RingPlacement::Free {
                 end_x_pt, end_y_pt, ..
             }
@@ -75,7 +117,9 @@ impl Gesture {
         match first {
             Ok(candidate) => Ok(candidate),
             Err(first_error) => {
-                if let RingPlacement::Bond { side, .. } = placement_mut(&mut self.params) {
+                if let Request::Create(params) = &mut self.params
+                    && let RingPlacement::Bond { side, .. } = placement_mut(params)
+                {
                     *side = match side {
                         RingSide::Positive => RingSide::Negative,
                         RingSide::Negative => RingSide::Positive,
@@ -134,7 +178,8 @@ impl RingWorkflow {
                     EffectiveTool::ChairRing { kind } => (6, None, Some(kind)),
                     _ => return Ok(None),
                 };
-                if !supported_modifiers(*modifiers, kind.is_some()) {
+                let alt_only = *modifiers == egui::Modifiers::ALT;
+                if !supported_modifiers(*modifiers, kind.is_some()) && !alt_only {
                     return Err(Error::UnsupportedRing(
                         "modified ring gestures are unavailable",
                     ));
@@ -144,6 +189,12 @@ impl RingWorkflow {
                 let hit = surface
                     .graph
                     .hit_test(surface.local(*pos), 5.0 * surface.density)?;
+                let atom_hit = matches!(&hit, Some(HitTarget::Atom { .. }));
+                if alt_only && !atom_hit {
+                    return Err(Error::UnsupportedRing("Alt-sprout requires an atom target"));
+                }
+                let sprout =
+                    atom_hit && (alt_only || engine.preferences().sprout_rings_when_clicking);
                 let (placement, begin, bond_end) = match hit {
                     None => {
                         let end = match chair {
@@ -206,7 +257,7 @@ impl RingWorkflow {
                 let expected_revision = engine.state().revision;
                 let page_id = surface.page.id().get();
                 let hydrogen_policy = OrderHydrogenPolicy::RectifyNeutralCarbon;
-                let params = if let Some(kind) = chair {
+                let params: RingCreateRequest = if let Some(kind) = chair {
                     ChairRingCreate {
                         expected_revision,
                         page_id,
@@ -235,6 +286,11 @@ impl RingWorkflow {
                         }
                         .into(),
                     }
+                };
+                let params = if sprout {
+                    Request::Sprout(sprout_request(engine, surface.page, params)?)
+                } else {
+                    Request::Create(params)
                 };
                 self.gesture = Some(Gesture {
                     proof,
@@ -279,10 +335,9 @@ impl RingWorkflow {
                 if !surface.accepts(context, *pos) {
                     return Ok(None);
                 }
-                if !supported_modifiers(
-                    *modifiers,
-                    matches!(&gesture.params, RingCreateRequest::Named(_)),
-                ) {
+                let alt_sprout = matches!(&gesture.params, Request::Sprout(_))
+                    && *modifiers == egui::Modifiers::ALT;
+                if !(supported_modifiers(*modifiers, gesture.params.named()) || alt_sprout) {
                     return Err(Error::UnsupportedRing(
                         "modified ring gestures are unavailable",
                     ));
@@ -292,7 +347,7 @@ impl RingWorkflow {
                 if !gesture.proof.is_current(engine) {
                     return Ok(None);
                 }
-                Ok(Some(Command::RingCreate(candidate.params)))
+                Ok(Some(candidate.params.command()))
             }
             _ => Ok(None),
         }
@@ -325,17 +380,122 @@ fn supported_modifiers(modifiers: egui::Modifiers, named: bool) -> bool {
     modifiers.is_none() || (named && modifiers == egui::Modifiers::SHIFT)
 }
 
+fn sprout_request(
+    engine: &Engine,
+    page: &Page,
+    params: RingCreateRequest,
+) -> Result<RingSprout, Error> {
+    let (expected_revision, page_id, hydrogen_policy, ring, placement) = match params {
+        RingCreateRequest::Sized(p) => (
+            p.expected_revision,
+            p.page_id,
+            p.hydrogen_policy,
+            SproutRing::Polygon { size: p.size },
+            p.placement,
+        ),
+        RingCreateRequest::Named(p) => (
+            p.expected_revision,
+            p.page_id,
+            p.hydrogen_policy,
+            match p.kind {
+                bondline_commands::RingKind::Benzene => SproutRing::Benzene { phase: p.phase },
+                bondline_commands::RingKind::Cyclopentadiene => {
+                    SproutRing::Cyclopentadiene { phase: p.phase }
+                }
+            },
+            p.placement,
+        ),
+        RingCreateRequest::Chair(p) => (
+            p.expected_revision,
+            p.page_id,
+            p.hydrogen_policy,
+            match p.kind {
+                ChairKind::One => SproutRing::CyclohexaneChair1 {},
+                ChairKind::Two => SproutRing::CyclohexaneChair2 {},
+            },
+            p.placement,
+        ),
+    };
+    let RingPlacement::Atom {
+        fragment_id,
+        atom_id,
+        ..
+    } = placement
+    else {
+        return Err(Error::UnsupportedRing("sprout requires an atom target"));
+    };
+    let fragment = fragment(
+        page,
+        FragmentId::new(fragment_id).ok_or(Error::InvalidFragmentId)?,
+    )?;
+    let atom =
+        AtomId::new(atom_id).ok_or(Error::UnsupportedRing("a sprout needs a positive atom ID"))?;
+    let root = position(fragment, atom)?;
+    let axis = outward(fragment, atom, root)?.unwrap_or((1.0, 0.0));
+    let length = engine
+        .document()?
+        .drawing_settings()
+        .bond_length_pt()
+        .unwrap_or(48.0);
+    let anchor = Point2::new(root.x_pt() + length * axis.0, root.y_pt() + length * axis.1)?;
+    let end = sprout_end(&ring, anchor, length * axis.0, length * axis.1);
+    Ok(RingSprout {
+        expected_revision,
+        page_id,
+        fragment_id,
+        atom_id,
+        hydrogen_policy,
+        ring,
+        ring_begin_x_pt: anchor.x_pt(),
+        ring_begin_y_pt: anchor.y_pt(),
+        ring_end_x_pt: end.0,
+        ring_end_y_pt: end.1,
+        side: RingSide::Positive,
+    })
+}
+
+fn sprout_end(ring: &SproutRing, anchor: Point2, dx: f64, dy: f64) -> (f64, f64) {
+    let chair = match ring {
+        SproutRing::CyclohexaneChair1 {} => Some(ChairKind::One),
+        SproutRing::CyclohexaneChair2 {} => Some(ChairKind::Two),
+        _ => None,
+    };
+    let offset = match chair {
+        Some(kind) => {
+            let center = kind
+                .reference_vertices()
+                .iter()
+                .fold((0.0, 0.0), |sum, [x, y]| (sum.0 + x, sum.1 + y));
+            center.1.atan2(center.0)
+        }
+        None => {
+            (f64::from(ring.size()) - 2.0) * std::f64::consts::PI / (2.0 * f64::from(ring.size()))
+        }
+    };
+    let angle = dy.atan2(dx) - offset;
+    let length = dx.hypot(dy);
+    (
+        anchor.x_pt() + length * angle.cos(),
+        anchor.y_pt() + length * angle.sin(),
+    )
+}
+
 fn candidate(
     engine: &Engine,
-    params: &RingCreateRequest,
+    params: &Request,
     view: &PageView,
     density: f32,
 ) -> Result<Candidate, Error> {
-    let stored = engine.preview_ring_request(params)?;
-    let page_id = match params {
-        RingCreateRequest::Sized(params) => params.page_id,
-        RingCreateRequest::Named(params) => params.page_id,
-        RingCreateRequest::Chair(params) => params.page_id,
+    let (stored, page_id) = match params {
+        Request::Sprout(params) => (engine.preview_ring_sprout(params)?, params.page_id),
+        Request::Create(params) => (
+            engine.preview_ring_request(params)?,
+            match params {
+                RingCreateRequest::Sized(params) => params.page_id,
+                RingCreateRequest::Named(params) => params.page_id,
+                RingCreateRequest::Chair(params) => params.page_id,
+            },
+        ),
     };
     let page = stored
         .model()
@@ -535,29 +695,33 @@ pub(super) fn chair_bond_command(
     density: f32,
 ) -> Result<Command, Error> {
     let (_, _, side) = bond_anchor(page, fragment_id, bond_id)?;
-    let mut params: RingCreateRequest = ChairRingCreate {
-        expected_revision: engine.state().revision,
-        page_id: page.id().get(),
-        kind,
-        hydrogen_policy: OrderHydrogenPolicy::RectifyNeutralCarbon,
-        placement: RingPlacement::Bond {
-            fragment_id: fragment_id.get(),
-            bond_id: bond_id.get(),
-            side,
-        },
-    }
-    .into();
+    let mut params = Request::Create(
+        ChairRingCreate {
+            expected_revision: engine.state().revision,
+            page_id: page.id().get(),
+            kind,
+            hydrogen_policy: OrderHydrogenPolicy::RectifyNeutralCarbon,
+            placement: RingPlacement::Bond {
+                fragment_id: fragment_id.get(),
+                bond_id: bond_id.get(),
+                side,
+            },
+        }
+        .into(),
+    );
     match candidate(engine, &params, view, density) {
-        Ok(candidate) => Ok(Command::RingCreate(candidate.params)),
+        Ok(candidate) => Ok(candidate.params.command()),
         Err(first_error) => {
-            if let RingPlacement::Bond { side, .. } = placement_mut(&mut params) {
+            if let Request::Create(params) = &mut params
+                && let RingPlacement::Bond { side, .. } = placement_mut(params)
+            {
                 *side = match side {
                     RingSide::Positive => RingSide::Negative,
                     RingSide::Negative => RingSide::Positive,
                 };
             }
             candidate(engine, &params, view, density)
-                .map(|candidate| Command::RingCreate(candidate.params))
+                .map(|candidate| candidate.params.command())
                 .map_err(|_| first_error)
         }
     }

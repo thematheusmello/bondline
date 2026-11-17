@@ -943,7 +943,7 @@ fn all_six_bindings_use_one_effective_mode_and_same_ring_noop_preserves_an_armed
         assert_eq!(ring_selected(&f)?, vec![format!("tool.ring.{n}")]);
         let controls = f.command("ui.controls", json!({}))?;
         let rows = controls["controls"].as_array().ok_or("controls")?;
-        assert_eq!(rows.len(), 38);
+        assert_eq!(rows.len(), 39);
         let row = rows
             .iter()
             .find(|r| r["id"] == format!("tool.ring.{n}"))
@@ -1102,7 +1102,7 @@ fn ring_cancellation_and_source_contexts_never_revive_an_old_preview_or_guess_a_
                 let bytes = include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf");
                 fs::write(&input, bytes)?;
                 f.command("document.open_sdf", json!({"path":input}))?;
-                replacement = Some((input, bytes.to_vec(), 15));
+                replacement = Some((input, bytes.to_vec(), 16));
             }
             "raw_smiles" | "retained_smiles" => {
                 let input = f.directory.path("replacement-原.smi");
@@ -1115,7 +1115,7 @@ fn ring_cancellation_and_source_contexts_never_revive_an_old_preview_or_guess_a_
                 replacement = Some((
                     input,
                     bytes.to_vec(),
-                    if change == "retained_smiles" { 21 } else { 11 },
+                    if change == "retained_smiles" { 22 } else { 12 },
                 ));
             }
             _ => return Err("undeclared ring cancellation".into()),
@@ -1318,22 +1318,64 @@ fn ring_modified_primary_and_ineligible_hits_never_open_another_form_or_fall_bac
         let path = ring_seed(&mut f, Some([[120.0, 168.0], [120.0, 120.0]]))?;
         let raw = fs::read(&path)?;
         ring_choose(&mut f, "Cyclohexane")?;
-        let before = f.state()?;
         for p in [[120.0, 168.0], [72.0, 240.0]] {
             let a = ring_point(&mut f, p)?;
+            let before = f.state()?;
             f.frame(vec![
                 Event::PointerMoved(a),
                 ring_pointer(a, true, modifiers),
             ]);
             f.frame(vec![ring_pointer(a, false, modifiers)]);
             f.warm();
-            assert_eq!(f.state()?, before);
+            if modifiers == Modifiers::ALT && p == [120.0, 168.0] {
+                let q = 24.0 * 3.0_f64.sqrt();
+                let mut expected = ring_graph(
+                    &[
+                        [120.0, 168.0],
+                        [120.0, 120.0],
+                        [120.0, 216.0],
+                        [120.0 + q, 240.0],
+                        [120.0 + q, 288.0],
+                        [120.0, 312.0],
+                        [120.0 - q, 288.0],
+                        [120.0 - q, 240.0],
+                    ],
+                    &[2, 3, 1, 2, 2, 2, 2, 2],
+                    &[
+                        [1, 2],
+                        [1, 3],
+                        [3, 4],
+                        [4, 5],
+                        [5, 6],
+                        [6, 7],
+                        [7, 8],
+                        [8, 3],
+                    ],
+                );
+                for atom in expected["atoms"]
+                    .as_array_mut()
+                    .ok_or("sprout atoms")?
+                    .iter_mut()
+                    .skip(2)
+                {
+                    atom["show_non_terminal_carbon_labels"] = json!(false);
+                }
+                ring_assert_graph(&f, &expected)?;
+                ring_one_edit(&f, &before, &path, &raw)?;
+                f.command("history.undo", json!({}))?;
+                assert_eq!(f.state()?["document"], before["document"]);
+                assert_eq!(f.state()?["file"], before["file"]);
+                assert_eq!(f.state()?["source"], before["source"]);
+                assert_eq!(f.state()?["redo_depth"], 1);
+            } else {
+                assert_eq!(f.state()?, before);
+                assert!(
+                    f.app.error.is_some(),
+                    "unsupported Ring modifier must be reported"
+                );
+            }
             assert!(f.node("Element", &[Role::TextInput]).is_err());
             assert_eq!(f.state()?["ui_atom_label"], Value::Null);
-            assert!(
-                f.app.error.is_some(),
-                "unsupported Ring modifier must be reported"
-            );
             assert_eq!(fs::read(&path)?, raw);
         }
     }

@@ -50,6 +50,7 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "file.save",
             "file.save_as",
             "file.document_settings",
+            "file.preferences",
             "file.convert_smiles",
             "file.import_smiles_records",
             "file.close",
@@ -134,6 +135,20 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
     );
     assert_eq!(settings["enabled"], false);
     assert_eq!(settings["disabled_reason"], "ui_unavailable");
+    let preferences = controls
+        .iter()
+        .find(|control| control["id"] == "file.preferences")
+        .ok_or("Preferences binding")?;
+    assert_eq!(preferences["label"], "Preferences…");
+    assert_eq!(preferences["menu"], "File");
+    assert_eq!(preferences["shortcut"], Value::Null);
+    assert_eq!(
+        preferences["command"],
+        json!({"command":"ui.preferences",
+        "params":{"action":"open","expected_revision":0}})
+    );
+    assert_eq!(preferences["enabled"], false);
+    assert_eq!(preferences["disabled_reason"], "ui_unavailable");
     let rotate = controls
         .iter()
         .find(|control| control["id"] == "page.rotate")

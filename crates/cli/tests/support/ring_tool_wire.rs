@@ -131,7 +131,7 @@ fn names(entries: &[Value]) -> TestResult {
         .iter()
         .map(|v| v["name"].as_str().ok_or("command name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(entries.len(), 44);
+    assert_eq!(entries.len(), 45);
     assert_eq!(
         actual,
         OLD_NAMES
@@ -144,6 +144,7 @@ fn names(entries: &[Value]) -> TestResult {
                 "ui.drawing_settings",
                 "ui.chain_tool",
                 "ring.sprout",
+                "ui.preferences",
             ])
             .collect::<BTreeSet<_>>()
     );
@@ -167,7 +168,7 @@ fn schema(value: &Value) -> TestResult {
 }
 fn controls(value: &Value, ring: Option<u8>, bond: Option<&str>, selection: bool) -> TestResult {
     let all = value["controls"].as_array().ok_or("controls")?;
-    assert_eq!(all.len(), 38);
+    assert_eq!(all.len(), 39);
     for (size, label) in [
         (3, "Cyclopropane"),
         (4, "Cyclobutane"),
@@ -427,7 +428,7 @@ fn initialized_stdio_validates_closed_sizes_modes_noops_close_and_source_before_
     let all = source_controls["controls"]
         .as_array()
         .ok_or("SDF controls")?;
-    assert_eq!(all.len(), 15);
+    assert_eq!(all.len(), 16);
     let settings = all
         .iter()
         .find(|row| row["id"] == "file.document_settings")
@@ -596,7 +597,7 @@ fn authenticated_ring_mode_and_size_repaint_only_after_reply_publication_and_rea
     );
     let controls = call_socket(&mut client, "ui.controls", json!({}))?;
     let all = controls["controls"].as_array().ok_or("retained controls")?;
-    assert_eq!(all.len(), 21);
+    assert_eq!(all.len(), 22);
     let settings = all
         .iter()
         .find(|row| row["id"] == "file.document_settings")

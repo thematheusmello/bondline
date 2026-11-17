@@ -42,3 +42,9 @@ The later [chair receiving](../verification-native-chairs.md) adds both original
 bindings with horizontal/rotated drawing, attachment and contextual bond-hotspot9/0.
 These are constitutional depictions, with stereochemistry unspecified. Native
 Control-drag/DPI and full platform/reference parity remain separate requirements.
+
+The later [native sprout/preferences receiving](../verification-native-ring-sprout.md)
+preserves all140 entries and16/124 availability. An actual Mac review searches Curved
+arrow, clicks its grey row and observes the same selected chair, saved state and20/21
+drawing counts; Escape closes. Extra ring gestures and File Preferences add no new tool
+binding and do not promote any planned catalogue entry.

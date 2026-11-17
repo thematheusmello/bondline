@@ -273,7 +273,7 @@ fn initialized_stdio_schema_required_nulls_noops_source_and_whole_history() -> T
     let response = client.replies.recv_timeout(Duration::from_secs(10))??;
     assert_eq!(response["id"], 2);
     let tools = response["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 44);
+    assert_eq!(tools.len(), 45);
     assert_eq!(
         tools
             .iter()
@@ -287,7 +287,8 @@ fn initialized_stdio_schema_required_nulls_noops_source_and_whole_history() -> T
                 SET,
                 "ui.drawing_settings",
                 "ui.chain_tool",
-                "ring.sprout"
+                "ring.sprout",
+                "ui.preferences"
             ])
             .collect::<BTreeSet<_>>()
     );

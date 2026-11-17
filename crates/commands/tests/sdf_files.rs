@@ -62,6 +62,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "sdf.record.inspect",
             "ui.chain_tool",
             "ring.sprout",
+            "ui.preferences",
         ]
         .into_iter()
         .collect()

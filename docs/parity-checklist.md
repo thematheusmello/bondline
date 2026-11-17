@@ -19,9 +19,12 @@ not complete tool functionality, modern inventory research, M0 or M2–M5.
 
 The distinct-ring-plus-Single operation now has [headless independent evidence](verification-ring-sprout.md)
 through `ring.sprout`: all ten ring types, literal H/ID/history/source retention, actual
-CLI/MCP/socket/files and CPU/GPU/PNG. Registry44 leaves controls/catalogue unchanged.
-This does not deliver native Alt-sprout or File > Preferences; those remain missing
-until the separate [locked integration](research/native-ring-sprout.md) is checked.
+CLI/MCP/socket/files and CPU/GPU/PNG. The later [native integration](verification-native-ring-sprout.md)
+adds only ui.preferences as record45 and File Preferences as controls39/22/16/12;
+catalogue16/124 stays. Actual Mac Cyclohexane Alt-sprout, preference-driven Chair2,
+history,64pt setting, Unicode Save/reopen and Defaults-Cancel pass independent actual-
+file consumers. This verifies one session checkbox, not the entire Preferences workflow
+or all native ring gestures. Restart/DPI/other-platform/exact26.1 behavior remains open.
 
 File > Document Settings now delivers only two stored creation preferences: explicit
 bond length and interior chain angle. [Receiving](verification-native-drawing-settings.md)
@@ -171,7 +174,7 @@ establish chemical preview, data-edit UI or other platforms.
 | MF-011 | File > Document Annotations | 14 | missing | Add/delete keywords and their values. |
 | MF-012 | File > Document Properties | 16 | missing | Typed custom properties. |
 | MF-013 | File > Document Settings | 19, 22-23, 40, 59 | wired (partial) | Bounded two-preference form has Mac set/clear/history/Save/reopen evidence; later chains now apply them without changing old geometry. Remaining settings categories, inherited styles and other-tool application are missing; see DP-011, verification-native-drawing-settings.md and verification-native-chains.md. |
-| MF-014 | File > Preferences | 15, 19, 32-39 | missing | The guide explicitly places this under File. |
+| MF-014 | File > Preferences | 15, 19, 32-39 | wired (partial; one checkbox verified on Mac) | Real File binding and Building/Display session ring-sprout checkbox, Defaults/OK/Cancel and weak modal guards. Mac retained state across Open, Defaults-Cancel and unchanged OK pass; other pages, restart persistence and other platforms remain missing. See verification-native-ring-sprout.md. |
 | MF-015 | Application menu > Settings (macOS) | 19 | missing | Platform-specific path; do not infer all Mac shortcuts from CTRL tables. |
 | MF-016 | File > Apply Document Settings | 40, 49 | missing | Merge settings from a source document. |
 | MF-017 | File > Apply Document Settings from > Other | 49 | missing | Alternate label in the same guide. |
@@ -408,8 +411,8 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-023 | Snaking chain | 104-105 | verified (partial, Mac) | One native drag creates a literal turning path through chain.create_path with full preview/count, stored preferences and one-edit history. Actual Mac six-carbon path/Save/reopen passes independent48pt/headings/raw-H/flags/RDKit checks. Independent App tests cover ordered Control conversion, mouse-before-Control, early release, sampling/backtrack/limits/physical contexts. Supported Control/reversal/backtracking remains unverified natively; no OS sampling-invariance, measured DPI, other-platform or exact26.1 claim. See research/native-chain-interactions.md and verification-native-chains.md. |
 | TD-024 | Benzene ring | 74, 101-103 | wired (partial) | Native palette/preview/free/atom/fused/shared-Double/Shift/history/Unicode-file paths share ring.create. Original icons, actual-App1×/2×/raw-order/modal/context checks, real adapters and independent file consumers pass. OS/monitor, exact26.1 defaults and hotkeys remain unverified/missing. See verification-native-unsaturated-rings.md and verification-unsaturated-rings.md. |
 | TD-025 | Cyclopentadiene ring | 74 | wired (partial) | Native kind-only tool, original icon, same-builder full preview, press-latched Shift and Cp spiro have actual-App/file evidence. Core all-five-phase/asymmetric H checks remain. Real OS/monitor, exact26.1 and hotkey acceptance remain missing. See verification-native-unsaturated-rings.md. |
-| TD-026 | Ring sizes 3-8 | 101-103, 73 | wired (partial) | Six original procedural tools share one effective mode and the existing ring.create builder. Independent command/context/adapter and actual-App click/drag/full-preview/free/atom/fused/spiro/Unicode-file checks pass. Native OS interaction is still unverified. Original poses/modifier/side policies do not prove26.1 defaults; general aromatic perception, sprout and general faces remain missing; the distinct bounded chair slice is TD-027. See verification-native-rings.md and verification-ring-authoring.md. |
-| TD-027 | Cyclohexane chair, both orientations | 102, 73 | verified (partial, Mac) | Both original constitutional depictions have independent core/App/CLI/MCP/socket/file checks: horizontal click, rotated drag, BondLength, terminal/spiro/Single-edge fusion, history and full-scene guards. Native Mac horizontal/near-vertical tools, default-labelled terminal attachment,9/0 fusion, refusal recovery, history,64pt preferences and Unicode Save/reopen pass. Native direct bond-click/spiro, stereo/ring flips, Alt-sprout, exact26.1 defaults and other platforms remain missing or unverified. See verification-native-chairs.md. |
+| TD-026 | Ring sizes 3-8 | 101-103, 73 | wired (partial; Mac Cyclohexane sprout verified) | Six original procedural tools share one effective mode and guarded builders. Independent command/context/adapter and actual-App click/drag/full-preview/free/atom/fused/spiro/sprout/Unicode-file checks pass. Actual Mac Cyclohexane Alt-sprout, history,64pt setting and Save/reopen pass; other native ring gestures remain unverified. Original poses/modifier/side policies do not prove26.1 defaults; general aromatic perception/faces remain missing. See verification-native-rings.md, verification-ring-authoring.md and verification-native-ring-sprout.md. |
+| TD-027 | Cyclohexane chair, both orientations | 102, 73 | verified (partial, Mac) | Both original constitutional depictions have independent core/App/CLI/MCP/socket/file checks: horizontal click, rotated drag, BondLength, terminal/spiro/Single-edge fusion, sprout, history and full-scene guards. Native Mac horizontal/near-vertical tools, default-labelled terminal attachment,9/0 fusion, refusal recovery, history,64pt preferences and Unicode Save/reopen pass; the later Mac review adds preference-driven Chair2 sprout. Native direct bond-click/spiro, all modifiers, stereo/ring flips, exact26.1 defaults and other platforms remain missing or unverified. See verification-native-chairs.md and verification-native-ring-sprout.md. |
 | TD-028 | Arrows palette | 106-109 | missing | Unnamed glyph variants still need independent semantic identification. |
 | TD-029 | Hollow/block arrow | 107, 109-110 | missing | - |
 | TD-030 | Equilibrium arrow | 109 | missing | - |
@@ -527,7 +530,7 @@ establish chemical preview, data-edit UI or other platforms.
 | DP-003 | Preferences > General | 32-33, 38 | missing | Theme, units/tolerance and general behavior. |
 | DP-004 | Preferences > Open/Save | 33, 38-39 | missing | File format, default tool, return-key and default style behavior. |
 | DP-005 | Preferences > Directories | 33, 38-39 | missing | Search paths and default document location; no app install inspection. |
-| DP-006 | Preferences > Building/Display | 99, 102, 104 | missing | Geometry, label positioning and chain/ring behavior. |
+| DP-006 | Preferences > Building/Display | 99, 102, 104 | wired (partial; one checkbox verified on Mac) | Session atom-click ring-sprout checkbox only; Defaults/OK/Cancel and independent source/history/modal checks. Actual Mac preference-driven Chair2, retained state across Open and Defaults-Cancel pass. Other geometry/label/chain controls and full platform/reference behavior remain missing. See verification-native-ring-sprout.md. |
 | DP-007 | Preferences > Warnings | 87, 127-128 | missing | Explicit validation/warning policy. |
 | DP-008 | Preferences > Monomer Libraries | 178-182 | missing | User/document/library state and versions. |
 | DP-009 | Document Settings > Layout | 22-23 | missing | Pages, poster dimensions/overlap and page registration marks. |

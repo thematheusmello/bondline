@@ -18,6 +18,7 @@ mod mol_display_tests;
 #[cfg(test)]
 mod multiple_bond_tests;
 mod pair_input;
+mod preferences_editor;
 mod preview;
 mod ring;
 mod sdf_draft_text;
@@ -109,6 +110,7 @@ pub fn configure_context(context: &egui::Context) {
 #[derive(Default)]
 pub struct DrawingState {
     settings: drawing_settings_editor::DrawingSettingsEditor,
+    preferences: preferences_editor::PreferencesEditor,
     gesture: Option<BondGesture>,
     hover: Option<bondline_render::HitTarget>,
     hover_context: Option<HoverContext>,
@@ -126,7 +128,10 @@ pub struct DrawingState {
 
 impl DrawingState {
     fn authoring_modal(&self) -> bool {
-        self.atom_labels.present() || self.settings.present() || self.chain.present()
+        self.atom_labels.present()
+            || self.settings.present()
+            || self.chain.present()
+            || self.preferences.present()
     }
     /// Transient result from the current viewport; never part of authored history.
     pub fn hover_target(&self) -> Option<bondline_render::HitTarget> {
@@ -159,6 +164,7 @@ struct HoverContext {
     host_origin: Option<egui::Pos2>,
     pixels_per_point: f32,
     view_epoch: u64,
+    preferences_open_epoch: u64,
 }
 
 struct BondGesture {
@@ -476,6 +482,18 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             .to_owned(),
         };
         ui.label(egui::RichText::new(tool).color(ACCENT).strong());
+        if matches!(
+            engine.effective_tool(),
+            EffectiveTool::Ring { .. }
+                | EffectiveTool::NamedRing { .. }
+                | EffectiveTool::ChairRing { .. }
+        ) {
+            ui.weak(if engine.preferences().sprout_rings_when_clicking {
+                "Atom clicks sprout a separate ring (Preferences). Alt also forces sprout."
+            } else {
+                "Alt-click an atom to sprout a separate ring."
+            });
+        }
         if engine.effective_tool() == EffectiveTool::Selection {
             ui.label(if engine.selection_available() {
                 "Click or drag to select. Drag selected atoms to move; arrows nudge 1 pt, Shift 10 pt."
@@ -637,6 +655,7 @@ fn pending_ui_blocks_authoring(state: &bondline_commands::CommandResult) -> bool
     state.close != CloseState::Open
         || state.ui_atom_label.is_some()
         || state.ui_drawing_settings.is_some()
+        || state.ui_preferences.is_some()
         || state.ui_add_chain.is_some()
         || state
             .ui_file
@@ -943,11 +962,13 @@ fn show_workspace_with_preview(
             .as_ref()
             .is_some_and(|fields| fields.presentation_present())
     {
-        if !drawing.settings.present() && !drawing.chain.present() {
+        if !drawing.settings.present() && !drawing.chain.present() && !drawing.preferences.present()
+        {
             drawing.atom_labels.sync(engine, error);
         }
         if !drawing.atom_labels.present()
             && !drawing.chain.present()
+            && !drawing.preferences.present()
             && !order_busy_at_start
             && !drawing.order.is_busy()
         {
@@ -955,10 +976,19 @@ fn show_workspace_with_preview(
         }
         if !drawing.atom_labels.present()
             && !drawing.settings.present()
+            && !drawing.preferences.present()
             && !order_busy_at_start
             && !drawing.order.is_busy()
         {
             drawing.chain.sync_form(engine, error);
+        }
+        if !drawing.atom_labels.present()
+            && !drawing.settings.present()
+            && !drawing.chain.present()
+            && !order_busy_at_start
+            && !drawing.order.is_busy()
+        {
+            drawing.preferences.sync(engine);
         }
     }
     let authoring_modal_at_start = drawing.authoring_modal();
@@ -990,6 +1020,12 @@ fn show_workspace_with_preview(
         .atom_labels
         .show(context, Some(&mut *engine), &events);
     drawing.settings.show(
+        context,
+        Some(&mut *engine),
+        &events,
+        !order_busy_at_start && !drawing.order.is_busy(),
+    );
+    drawing.preferences.show(
         context,
         Some(&mut *engine),
         &events,
@@ -1300,6 +1336,7 @@ fn show_workspace_with_preview(
                             .map(|rect| rect.min),
                         pixels_per_point: input.pixels_per_point,
                         view_epoch: engine.view().epoch,
+                        preferences_open_epoch: engine.ui_preferences_epoch(),
                     });
                     if drawing.hover_context != Some(key) {
                         drawing.invalidate_hover();
@@ -1497,6 +1534,7 @@ fn show_workspace_with_preview(
                     host_origin: info.inner_rect.or(info.outer_rect).map(|r| r.min),
                     pixels_per_point: input.pixels_per_point,
                     view_epoch: engine.view().epoch,
+                    preferences_open_epoch: engine.ui_preferences_epoch(),
                 };
                 (key, input.key_down(egui::Key::Escape), input.focused)
             });
@@ -2373,6 +2411,7 @@ fn show_workspace_with_preview(
         || drawing.authoring_modal()
         || engine.state().ui_atom_label.is_some()
         || engine.state().ui_drawing_settings.is_some()
+        || engine.state().ui_preferences.is_some()
         || engine.state().ui_add_chain.is_some()
     {
         return None;
@@ -2497,20 +2536,32 @@ impl BondlineApp {
                     && !self.files.is_busy()
                     && !self.sdf_fields.presentation_present()
                 {
-                    if !self.drawing.settings.present() && !self.drawing.chain.present() {
+                    if !self.drawing.settings.present()
+                        && !self.drawing.chain.present()
+                        && !self.drawing.preferences.present()
+                    {
                         self.drawing.atom_labels.sync(&engine, &mut self.error);
                     }
                     if !self.drawing.atom_labels.present()
                         && !self.drawing.chain.present()
+                        && !self.drawing.preferences.present()
                         && !order_busy_at_start
                     {
                         self.drawing.settings.sync(&engine, &mut self.error);
                     }
                     if !self.drawing.atom_labels.present()
                         && !self.drawing.settings.present()
+                        && !self.drawing.preferences.present()
                         && !order_busy_at_start
                     {
                         self.drawing.chain.sync_form(&engine, &mut self.error);
+                    }
+                    if !self.drawing.atom_labels.present()
+                        && !self.drawing.settings.present()
+                        && !self.drawing.chain.present()
+                        && !order_busy_at_start
+                    {
+                        self.drawing.preferences.sync(&engine);
                     }
                 }
                 paste_modal_at_start |= self.drawing.authoring_modal();
@@ -2526,19 +2577,25 @@ impl BondlineApp {
                 self.sdf_fields.sync(&engine, context);
                 self.smiles_records.sync(&engine, context);
                 self.sdf_fields.settle_editor(&mut engine, context);
+                let preferences_pending = engine.ui_preferences_request().is_some();
                 if native_close
                     && (engine.state().close != CloseState::Committed
-                        || self.drawing.authoring_modal())
+                        || self.drawing.authoring_modal()
+                        || preferences_pending)
                 {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
-                    if self.drawing.authoring_modal() {
-                        self.error = Some(if self.drawing.settings.present() {
-                            "Apply or Cancel Document Settings before closing.".into()
-                        } else if self.drawing.chain.present() {
-                            "Add or Cancel the chain before closing.".into()
-                        } else {
-                            "Apply or Cancel the atom label before closing.".into()
-                        });
+                    if self.drawing.authoring_modal() || preferences_pending {
+                        self.error = Some(
+                            if self.drawing.preferences.present() || preferences_pending {
+                                "OK or Cancel Preferences before closing.".into()
+                            } else if self.drawing.settings.present() {
+                                "Apply or Cancel Document Settings before closing.".into()
+                            } else if self.drawing.chain.present() {
+                                "Add or Cancel the chain before closing.".into()
+                            } else {
+                                "Apply or Cancel the atom label before closing.".into()
+                            },
+                        );
                     } else if !self.sdf_fields.native_close(&engine, context) {
                         self.files.request_close(&mut engine, &mut self.error);
                         self.drawing.order.cancel_for_context();
@@ -2576,6 +2633,7 @@ impl BondlineApp {
                 self.smiles_records.sync(&engine, context);
                 self.sdf_fields.settle_editor(&mut engine, context);
                 let add_pending = engine.ui_add_chain_request().is_some();
+                let preferences_pending = engine.ui_preferences_request().is_some();
                 if self.files.complete_close_if_idle(
                     &mut engine,
                     self.executor.has_active_work()
@@ -2584,7 +2642,8 @@ impl BondlineApp {
                         || self.smiles_records.is_busy()
                         || self.drawing.order.is_busy()
                         || self.drawing.authoring_modal()
-                        || add_pending,
+                        || add_pending
+                        || preferences_pending,
                     action.is_some(),
                 ) {
                     context.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -2597,6 +2656,12 @@ impl BondlineApp {
                     &context.input(|input| input.events.clone()),
                 );
                 self.drawing.settings.show(
+                    context,
+                    None,
+                    &context.input(|input| input.events.clone()),
+                    false,
+                );
+                self.drawing.preferences.show(
                     context,
                     None,
                     &context.input(|input| input.events.clone()),
