@@ -131,7 +131,7 @@ fn names(entries: &[Value]) -> TestResult {
         .iter()
         .map(|v| v["name"].as_str().ok_or("command name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(entries.len(), 41);
+    assert_eq!(entries.len(), 42);
     assert_eq!(
         actual,
         OLD_NAMES
@@ -140,7 +140,8 @@ fn names(entries: &[Value]) -> TestResult {
                 NAME,
                 "chain.create",
                 "chain.create_path",
-                "document.set_drawing_settings"
+                "document.set_drawing_settings",
+                "ui.drawing_settings"
             ])
             .collect::<BTreeSet<_>>()
     );
@@ -164,7 +165,7 @@ fn schema(value: &Value) -> TestResult {
 }
 fn controls(value: &Value, ring: Option<u8>, bond: Option<&str>, selection: bool) -> TestResult {
     let all = value["controls"].as_array().ok_or("controls")?;
-    assert_eq!(all.len(), 31);
+    assert_eq!(all.len(), 32);
     for (size, label) in [
         (3, "Cyclopropane"),
         (4, "Cyclobutane"),
@@ -424,7 +425,13 @@ fn initialized_stdio_validates_closed_sizes_modes_noops_close_and_source_before_
     let all = source_controls["controls"]
         .as_array()
         .ok_or("SDF controls")?;
-    assert_eq!(all.len(), 14);
+    assert_eq!(all.len(), 15);
+    let settings = all
+        .iter()
+        .find(|row| row["id"] == "file.document_settings")
+        .ok_or("Document Settings remains visible but unavailable")?;
+    assert_eq!(settings["enabled"], false);
+    assert_eq!(settings["disabled_reason"], "ui_unavailable");
     assert!(!all.iter().any(|v| {
         v["id"]
             .as_str()
@@ -587,7 +594,13 @@ fn authenticated_ring_mode_and_size_repaint_only_after_reply_publication_and_rea
     );
     let controls = call_socket(&mut client, "ui.controls", json!({}))?;
     let all = controls["controls"].as_array().ok_or("retained controls")?;
-    assert_eq!(all.len(), 20);
+    assert_eq!(all.len(), 21);
+    let settings = all
+        .iter()
+        .find(|row| row["id"] == "file.document_settings")
+        .ok_or("Document Settings remains visible but unavailable")?;
+    assert_eq!(settings["enabled"], false);
+    assert_eq!(settings["disabled_reason"], "unsupported_content");
     assert!(!all.iter().any(|v| {
         v["id"]
             .as_str()

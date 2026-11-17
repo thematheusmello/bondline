@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has41 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has42 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -69,6 +69,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.close` | `expected_revision`, optional `action="request"` (`request`, `discard`, `cancel`) | Shared conditional close intent; retains authored data/history; native shutdown waits for host acknowledgement |
 | `ui.controls` | `{}` | Discover delivered menu/shortcut bindings, typed invocation and contextual enabled/disabled reason |
 | `ui.atom_label` | Tagged `action`: `open` requires `expected_revision`, positive `page_id`, `fragment_id`, `atom_id`; `cancel` requires `expected_revision`, positive `request_id` | Queue or cancel one source-qualified native atom-label presentation; no authored edit/history or empty-target binding |
+| `ui.drawing_settings` | Closed tagged `action`: `open` requires `expected_revision`; `cancel` requires `expected_revision`, positive `request_id` | Open/cancel one source-qualified native two-preference form; no authored edit/history, FilePlan or Save acknowledgment |
 | `ui.bond_tool` | Required `order` (`single`, `double`, `triple`) | Select a transient drawing tool; explicit operation receipt/epoch, no authored edit or history entry |
 | `ui.ring_tool` | Either `size` (integer3..8) or `kind:"benzene"/"cyclopentadiene"`, two closed objects | Select a transient native ring tool; unchanged derived-size operation receipt, one shared tool epoch, no authored edit or history entry |
 | `ui.view` | Tagged `action`: `inspect`, `fit`, `actual`, `set_zoom`, `magnify`, `reduce`, `pan`; action-specific geometry/percentage | Inspect or change the transient camera without editing content/history; source-qualified display/readability guards remain |
@@ -1328,8 +1329,8 @@ capture, native races/other-platform execution and complete reference parity rem
 `ui.controls` additionally exposes `file.import_smiles_records`, File → Import SMILES
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
-counts are31 native Drawing/14 SDF/10 raw SMILES; retained-SMILES Drawing keeps20.
-The current registry has41 commands. Accepting
+counts are32 native Drawing/15 SDF/11 raw SMILES; retained-SMILES Drawing keeps21.
+The current registry has42 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag
@@ -1389,17 +1390,55 @@ Its historical input revision does not acknowledge the newer edit as saved.
 Whole-MOL V2000/V3000 Save refuses nonempty preferences before publication. Native CDXML
 persists present values; unchanged source and explicit graph-only export retain their
 existing policies. [The contract](research/drawing-settings-command.md) distinguishes
-this stored-data operation from missing native settings/tool application, inheritance and
-style sheets. Native controls31/20/14/10 and catalogue12 delivered/128 disabled stay.
+this stored-data operation from tool application, inheritance and style sheets. The
+native form below reuses it. Native controls are now32/21/15/11; the catalogue remains
+12 delivered/128 disabled.
+
+## Native drawing-settings presentation
+
+`ui.drawing_settings` is one additional presentation command with two closed actions:
+
+```json
+{"command":"ui.drawing_settings","params":{"action":"open","expected_revision":1}}
+{"command":"ui.drawing_settings","params":{"action":"cancel","expected_revision":1,"request_id":1}}
+```
+
+Open requires an attached host, the atomic command's exact source authority, Open close
+state and no other File/Atom/settings request. It captures source allocation/revision/
+generation, opaque file association, File/close/view epochs and effective tool. Its checked
+monotone request ID is separate from atom/bond IDs. Result `ui_drawing_settings` contains
+exactly `id`, `input_revision`, nullable `bond_length_pt`, nullable `chain_angle_degrees`
+and `current`. Successful Open/Cancel returns `ui_drawing_settings_operation` with that
+ID, while `changed` remains false. Both notify the native repaint callback after reply
+publication. No FilePlan, file worker, Save receipt or close acknowledgment is created.
+
+File > Document Settings… has two384-byte bounded fields, Bond length (pt) and Chain
+angle (degrees). Absent values start blank and clearing means null, never a default.
+The trusted host's Apply rechecks the exact request and executes
+`document.set_drawing_settings` under the same Engine guard. Validated no-op closes the
+form without changing redo/history; failed Apply retains the draft. Existing geometry
+and view remain unchanged. The request's private cancellation token is not serialized:
+only exact explicit Cancel marks it. Remote Cancel therefore dismisses its form; host
+detach or context changes instead retain a copyable stale draft with Apply disabled.
+Cancel needs the current revision and attached host even for a stale request. Local
+Cancel can also dismiss its obsolete draft after detachment or committed close.
+
+The new `file.document_settings` control is always listed, disabled for unavailable host,
+unsupported content or foreground work. App modal-at-start fences prevent same-frame
+history/canvas/File actions after dismissal; native close waits for Apply/Cancel.
+Bounded core/App/CLI/stdio/authenticated-loopback and actual Mac persistence evidence is
+in [receiving](verification-native-drawing-settings.md). This implements two stored
+creation preferences. Defaults/inheritance, tool application, other settings categories,
+complete reference-dialog parity and Windows/Linux native interaction remain missing.
 
 ## Native tool catalogue presentation
 
 The native **All tools…** catalogue is roadmap presentation, not additional executable
 registry entries. All124 documented roles/140 expanded entries are visible;128 planned
 entries have no binding and cannot dispatch. Available entries use the same current
-delivered control IDs. `ui.controls` continues to list delivered bindings only, retaining
-counts31/20/14/10. The headless chain commands previously brought the registry to40;
-the stored-preferences command now brings it to41.
+delivered control IDs. `ui.controls` lists delivered bindings only, now counting
+32/21/15/11. The headless chain commands brought the registry to40, the stored-preferences
+command to41, and its native presentation to42. These additions do not enable chain tools.
 See [catalogue](design/tool-catalogue.md).
 
 ## Exact-target atom-label presentation

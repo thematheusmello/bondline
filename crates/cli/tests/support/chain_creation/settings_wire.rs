@@ -273,7 +273,7 @@ fn initialized_stdio_schema_required_nulls_noops_source_and_whole_history() -> T
     let response = client.replies.recv_timeout(Duration::from_secs(10))??;
     assert_eq!(response["id"], 2);
     let tools = response["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 41);
+    assert_eq!(tools.len(), 42);
     assert_eq!(
         tools
             .iter()
@@ -281,10 +281,13 @@ fn initialized_stdio_schema_required_nulls_noops_source_and_whole_history() -> T
             .collect::<Result<BTreeSet<_>, _>>()?,
         OLD_NAMES
             .into_iter()
-            .chain([super::NAME, "chain.create_path", SET])
+            .chain([super::NAME, "chain.create_path", SET, "ui.drawing_settings"])
             .collect::<BTreeSet<_>>()
     );
-    assert_eq!(tools.last().ok_or("last command")?["name"], SET);
+    assert_eq!(
+        tools.get(40).ok_or("legacy settings position")?["name"],
+        SET
+    );
     let entry = tools
         .iter()
         .find(|v| v["name"] == SET)

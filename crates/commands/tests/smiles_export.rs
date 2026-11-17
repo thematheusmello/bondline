@@ -147,7 +147,7 @@ fn export_selects_the_exact_nonfirst_fragment_and_preserves_complete_session() -
 fn export_schema_selection_and_source_guards_are_closed_and_precede_io() -> TestResult {
     use bondline_commands::Command;
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 41);
+    assert_eq!(registry.len(), 42);
     let info = registry
         .iter()
         .find(|i| i.name == NAME)

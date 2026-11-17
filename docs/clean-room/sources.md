@@ -1890,6 +1890,37 @@ first probe, actual focused OS-input runtime RED, missing-API compile qualificat
 six independent synthetic SDK tests, probe privacy and Mac OS GREEN. The actual release
 frame preserves ctrl=true on the button before a later NONE report despite final ctrl=false.
 No broader chain, other integration/platform or hardware-operation parity follows.
+
+## Native Document Settings form, 2026-11-17
+
+[GUIDE-25](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), printed
+40–42, documents File > Document Settings > Drawing, per-document creation preferences,
+bond length and an interior chain angle1..179°. Printed104–105 separately documents chain
+Fixed Lengths/Fixed Angles and drag/count/Add Chain/repeat/Snaking. These are version25
+facts, not proof of all26.1 or Mac controls/defaults. The already pinned public PDF remains
+17,721,447 bytes/SHA256 `3f1ebc429df07efdd47b6218a148dc346a215043f60bf89ee9a1cb90629bd5b3`;
+its reviewed layout text is728,816 bytes/SHA256
+`6af3ecb27a0b6c19f2b64005ad95582ba7795876c54a42bf210232f75e84c43f`.
+The large PDF exceeds this web reader's content bound; the hash-verified public-source
+cache was read and printed105 visually inspected. No proprietary executable or asset
+was downloaded, opened, copied or inspected for this work.
+
+The [bounded form contract](../research/native-drawing-settings.md) deliberately exposes
+only the two existing optional root values. Blank-as-absent,384-byte text fields, finite
+validation, fractional input, explicit Apply/Cancel, exact cancellation identity, stale
+copyable drafts and modal input fences are original Bondline policies. They do not infer
+a source default or rescale old geometry. Existing own Atom form/TextBuffer, typed JSON
+registry, weak source/context proofs and egui AccessKit/raw-input handling are reused;
+the shared two-field router is a mechanical parameterization of that original code.
+No new dependency, font, template, journal preset or copied dialog artwork is introduced.
+
+[Receiving](../verification-native-drawing-settings.md) separates independent root/graph/
+RDKit readers and core/App/adapters from actual native Mac set/clear/history/Save/reopen.
+The exact saved body and80pt bond remain unchanged even with explicit64.25pt preference.
+The native run exposes missing CJK filename glyphs, not failed Unicode persistence.
+Creation-tool application, inherited/full styles, complete dialog parity and other native
+platforms remain unimplemented or unverified. Existing parser corpus, approved golden,
+strict runtime license policy and reference-tool boundary remain unchanged.
 Both source patch notices retain exact before/after hashes. No new dependency, proprietary
 program/asset, font, parser policy or chemical golden is introduced. Both user apps and
 Actions remain untouched.

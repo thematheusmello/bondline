@@ -68,10 +68,21 @@ fragment reuse, while existing full-model equality guards retained source drift.
 do not alter existing geometry or yet drive native tools. The immediate
 `document.set_drawing_settings` command now requires both nullable values plus a revision,
 validates source before domain/no-op and uses one normal commit while retaining view focus.
-It adds no worker, ID allocation, Save lease or native binding. The native form remains
-subsequent work; see [command contract](research/drawing-settings-command.md),
+It adds no worker, atom/bond ID allocation or Save lease; see [command contract](research/drawing-settings-command.md),
 [data contract](research/drawing-settings-data.md) and
 [receiving](verification-drawing-settings-data.md).
+
+`ui.drawing_settings` now opens/cancels a source-qualified native presentation. Its weak
+request captures source, opaque association, File/close/view and effective-tool context;
+Apply rechecks that proof and calls the atomic pair command under the same Engine guard.
+Only explicit Cancel marks a fresh per-request, serde-skipped cancellation token; ordinary
+retirement/context loss leaves stale local drafts copyable with Apply disabled. Both
+numeric fields reuse the byte-bounded text buffer and extracted Atom input-prefix router.
+Frame-start modal fences cover dismissal, File/SDF/Atom/catalogue ownership and native
+close. Successful changed=false Open/Cancel also wakes the native host after reply
+publication. No FilePlan, worker, Save receipt or close acknowledgment is created.
+This form persists two preferences; it adds no tool-default resolution or geometry change.
+See [contract](research/native-drawing-settings.md) and [receiving](verification-native-drawing-settings.md).
 
 `chain.create` adds an explicit bounded carbon path of Single bonds in the immediate command lane.
 It reuses bond identity floors and a shared target-local neutral-C literal-H proof with

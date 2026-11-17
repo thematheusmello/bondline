@@ -147,6 +147,7 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "document.close",
             "ui.file",
             "ui.controls",
+            "ui.drawing_settings",
             "ui.atom_label",
             "ui.selection",
             "selection.translate",

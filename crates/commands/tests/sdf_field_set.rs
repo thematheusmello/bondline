@@ -42,6 +42,7 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
             "document.close",
             "ui.file",
             "ui.controls",
+            "ui.drawing_settings",
             "ui.atom_label",
             "ui.selection",
             "selection.translate",

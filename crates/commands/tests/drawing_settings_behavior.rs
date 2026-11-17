@@ -108,8 +108,8 @@ fn shared_noop(engine: &mut Engine) -> TestResult {
 #[test]
 fn closed_required_nullable_pair_replaces_both_values_and_validates_atomically() -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 41);
-    assert_eq!(rows.last().ok_or("last registry entry")?.name, NAME);
+    assert_eq!(rows.len(), 42);
+    assert_eq!(rows.get(40).ok_or("legacy settings position")?.name, NAME);
     let row = rows
         .iter()
         .find(|row| row.name == NAME)

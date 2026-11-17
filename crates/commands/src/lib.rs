@@ -17,6 +17,7 @@ mod close;
 mod content;
 mod controls;
 mod drawing_settings;
+mod drawing_settings_ui;
 mod file_ui;
 mod files;
 mod new_document;
@@ -44,6 +45,7 @@ pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
 pub use drawing_settings::DrawingSettingsSet;
+pub use drawing_settings_ui::{UiDrawingSettings, UiDrawingSettingsRequest};
 pub use file_ui::{
     UiFile, UiFileAction, UiFileContextStamp, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState,
 };
@@ -203,6 +205,7 @@ command_registry! {
     ChainCreate(ChainCreate) => ("chain.create", "Construct an explicit native carbon chain of Single bonds with a required interior angle and literal hydrogen policy, optionally sharing one existing neutral carbon.", false),
     ChainCreatePath(ChainCreatePath) => ("chain.create_path", "Construct a literal ordered native carbon path in one edit, optionally starting at an existing carbon; no snapping or angle/length inference.", false),
     DrawingSettingsSet(DrawingSettingsSet) => ("document.set_drawing_settings", "Replace both optional document-root creation preferences in one native drawing edit; explicit null clears a value and existing geometry stays unchanged.", false),
+    UiDrawingSettings(UiDrawingSettings) => ("ui.drawing_settings", "Open or cancel a native document creation-preference draft; requires an attached host and grants no authoring or Save authority.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -538,6 +541,10 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_atom_label_operation: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_drawing_settings: Option<UiDrawingSettingsRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_drawing_settings_operation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_selection: Option<SelectionState>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_selection_operation: Option<SelectionOperation>,
@@ -566,6 +573,7 @@ pub struct Engine {
     close_policy: close::ClosePolicy,
     file_ui: file_ui::FileUiPolicy,
     atom_ui: atom_ui::AtomLabelUiPolicy,
+    drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy,
     selection: selection::SelectionPolicy,
     bond_tool: BondToolState,
     effective_tool: EffectiveTool,
@@ -624,6 +632,7 @@ impl Engine {
             close_policy: close::ClosePolicy::default(),
             file_ui: file_ui::FileUiPolicy::default(),
             atom_ui: atom_ui::AtomLabelUiPolicy::default(),
+            drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy::default(),
             selection: selection::SelectionPolicy::default(),
             bond_tool: BondToolState::default(),
             effective_tool: EffectiveTool::default(),
@@ -678,6 +687,8 @@ impl Engine {
             ui_file_operation: None,
             ui_atom_label: self.ui_atom_label_request(),
             ui_atom_label_operation: None,
+            ui_drawing_settings: self.ui_drawing_settings_request(),
+            ui_drawing_settings_operation: None,
             ui_selection: (self.selection().epoch != 0).then(|| self.selection().clone()),
             ui_selection_operation: None,
             ui_bond_tool_operation: None,
@@ -726,6 +737,9 @@ impl Engine {
             Command::UiFile(params) => return Ok(Prepared::immediate(self.ui_file(params)?)),
             Command::UiAtomLabel(params) => {
                 return Ok(Prepared::immediate(self.ui_atom_label(params)?));
+            }
+            Command::UiDrawingSettings(params) => {
+                return Ok(Prepared::immediate(self.ui_drawing_settings(params)?));
             }
             Command::UiSelection(params) => {
                 return Ok(Prepared::immediate(self.ui_selection(params)?));
@@ -1303,6 +1317,7 @@ mod tests {
                 "smiles.record.inspect",
                 "structure.paste_smiles",
                 "ui.controls",
+                "ui.drawing_settings",
                 "ui.atom_label",
                 "ui.selection",
                 "selection.translate",

@@ -36,7 +36,7 @@ The earlier component1188/0/1 and CDX1172/0/1 gates remain historical checkpoint
 | Check carbon-label data preservation | [Independent RED/GREEN, source retention and temporary render boundary](verification-carbon-label-data.md), [locked standard-field contract](research/carbon-label-data.md) |
 | Check skeletal carbon display and restore labels | [Shared renderer, command/wire/App evidence and exact numeric-fixture qualification](verification-skeletal-carbon.md), [locked source-backed policy](research/skeletal-carbon-display.md) |
 | Automate the app | [Command and control protocol](control-protocol.md) |
-| Set stored document drawing preferences | [Atomic set/clear, history/source/loss and adapter evidence](verification-drawing-settings-command.md), [locked contract](research/drawing-settings-command.md); native form/tool application remains missing |
+| Set stored document drawing preferences | [Native form, bounded fields, history and actual Mac Save/reopen evidence](verification-native-drawing-settings.md), [atomic source/loss/adapter checks](verification-drawing-settings-command.md); tool application/inheritance/full styles remain missing |
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
 | Start a fresh drawing safely | [New document, native Save/Discard/Cancel and race evidence](verification-new-document.md) |

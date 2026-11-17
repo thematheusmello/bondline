@@ -18,13 +18,18 @@ turning-path/preview prerequisite with [independent evidence](docs/verification-
 The [drawing-settings data prerequisite](docs/research/drawing-settings-data.md) now has
 [independent persistence/loss evidence](docs/verification-drawing-settings-data.md).
 Root BondLength/ChainAngle preserve explicit supported data and opaque source values;
-native tool application, settings forms and full style inheritance remain missing.
+native tool application and full style inheritance remain missing. File > Document
+Settings… now has a [bounded two-preference form](docs/verification-native-drawing-settings.md)
+with actual Mac set/clear/history/Save/reopen evidence. It does not complete the dialog,
+apply preferences to tools or enable chains.
 The [atomic settings command/history/adapters](docs/verification-drawing-settings-command.md)
 now pass independent required/null/source/lease/history and actual file/wire checks.
 Ordered native modifier transport now has [SDK and actual Mac OS evidence](docs/verification-ordered-native-modifiers.md).
 Next implement complete native drawing/forms/repeat and actual acceptance. Do not substitute frame-global
 Control state or unsaved UI settings for those requirements; the native tools stay grey.
-The fresh input increment's full local gate passes1613/0/1. Earlier settings-command
+The fresh native-settings increment's full local gate passes1629/0/1 after correcting
+one newly added headless-control expectation; its first gate is recorded as failed.
+Earlier settings-command
 MCP replacement-bind and UI readiness failures remain recorded; the latter has a
 [test-only qualification](docs/verification-smiles-order-readiness.md). This new pass
 does not establish a causal socket repair. Preserve all diagnostic boundaries.
@@ -38,7 +43,7 @@ The separate terminal-label prerequisite now has
 [independent data/render/editor/file evidence](docs/verification-terminal-carbon-labels.md).
 Actual degree selects the appropriate flag and isolated C/C2 labels remain mandatory.
 The chain engine and native dependency contracts are now locked. Add Chain, repeat,
-Snaking and the full settings workflow remain required beyond these prerequisites.
+Snaking, preference application and the remaining settings workflow remain required.
 Named benzene/cyclopentadiene candidates now share ring.create with the unchanged sized
 requests. Independent phase/H/source/history and actual adapter/file checks pass; see
 [receiving](docs/verification-unsaturated-rings.md). Their two native controls now share

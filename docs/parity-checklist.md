@@ -1,7 +1,7 @@
 # Parity checklist
 
 Target: publicly documented Professional-family26.1 desktop behavior.
-Reviewed through2026-11-16. Historical authorized installed-profile records below retain
+Reviewed through2026-11-17. Historical authorized installed-profile records below retain
 their original method. Current work follows the user's public-source-only instructions;
 the installed reference application is not opened or inspected.
 The historical installed license tier remains unknown.
@@ -16,6 +16,13 @@ Twelve reference delivered bindings;128 remain disabled with no command and **re
 their missing status**. Original branding, grey controls, search and bounded native
 presentation evidence are in [receiving](verification-branding-and-tools.md). This does
 not complete tool functionality, modern inventory research, M0 or M2–M5.
+
+File > Document Settings now delivers only two stored creation preferences: explicit
+bond length and interior chain angle. [Receiving](verification-native-drawing-settings.md)
+records independent core/App/adapters and actual Mac set/clear/history/Save/reopen.
+MF-013/DP-011 are **wired** for the broader documented workflow: remaining fields,
+inheritance, tool application and other-platform execution lack completion/evidence.
+This does not promote either disabled chain tool.
 
 Directed DoublePosition now has [independent data/format evidence](verification-double-position.md):
 native CDXML presence/direction/history and guarded loss boundaries. Center Double retains
@@ -154,7 +161,7 @@ establish chemical preview, data-edit UI or other platforms.
 | MF-010 | File > Print | 25, 78 | missing | - |
 | MF-011 | File > Document Annotations | 14 | missing | Add/delete keywords and their values. |
 | MF-012 | File > Document Properties | 16 | missing | Typed custom properties. |
-| MF-013 | File > Document Settings | 19, 22-23, 40, 59 | missing | Detailed settings categories below. |
+| MF-013 | File > Document Settings | 19, 22-23, 40, 59 | wired | Bounded two-preference form has Mac set/clear/history/Save/reopen evidence. Remaining settings categories and tool application are missing; see DP-011 and verification-native-drawing-settings.md. |
 | MF-014 | File > Preferences | 15, 19, 32-39 | missing | The guide explicitly places this under File. |
 | MF-015 | Application menu > Settings (macOS) | 19 | missing | Platform-specific path; do not infer all Mac shortcuts from CTRL tables. |
 | MF-016 | File > Apply Document Settings | 40, 49 | missing | Merge settings from a source document. |
@@ -388,7 +395,7 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-019 | Dative bond | 86 | missing | - |
 | TD-020 | Hydrogen bond (dotted) | 87 | missing | Requires explicit donor hydrogen; differs from ordinary dashed/coordination bonds. |
 | TD-021 | Aromatic/tautomeric double-bond display | 88 | missing | Separate visual/chemical conventions need tests. |
-| TD-022 | Acyclic chain | 104-105 | missing | Explicit headless chain.create has independent geometry/adapter/file evidence; native tool remains disabled. Drag/count, Add Chain, Alt repeat, settings/modifier/default/hotkey workflows and native acceptance remain required. See verification-chain-authoring.md. |
+| TD-022 | Acyclic chain | 104-105 | missing | Explicit headless chain.create has independent geometry/adapter/file evidence; native tool remains disabled. The two stored preferences now have a native form, but application/defaults, drag/count, Add Chain, Alt repeat, modifier/hotkey workflows and native acceptance remain required. See verification-chain-authoring.md and verification-native-drawing-settings.md. |
 | TD-023 | Snaking chain | 104-105 | missing | Headless chain.create_path preserves one literal turning path/history edit. Ordered native input transport has bounded Mac OS/SDK evidence; neither prerequisite enables Snaking. Full modifier consumption, sampling/turn/backtrack rules, settings/contexts/preview/release and actual native acceptance remain required. See research/native-chain-plan.md, verification-chain-paths.md and verification-ordered-native-modifiers.md. |
 | TD-024 | Benzene ring | 74, 101-103 | wired (partial) | Native palette/preview/free/atom/fused/shared-Double/Shift/history/Unicode-file paths share ring.create. Original icons, actual-App1×/2×/raw-order/modal/context checks, real adapters and independent file consumers pass. OS/monitor, exact26.1 defaults and hotkeys remain unverified/missing. See verification-native-unsaturated-rings.md and verification-unsaturated-rings.md. |
 | TD-025 | Cyclopentadiene ring | 74 | wired (partial) | Native kind-only tool, original icon, same-builder full preview, press-latched Shift and Cp spiro have actual-App/file evidence. Core all-five-phase/asymmetric H checks remain. Real OS/monitor, exact26.1 and hotkey acceptance remain missing. See verification-native-unsaturated-rings.md. |
@@ -516,7 +523,7 @@ establish chemical preview, data-edit UI or other platforms.
 | DP-008 | Preferences > Monomer Libraries | 178-182 | missing | User/document/library state and versions. |
 | DP-009 | Document Settings > Layout | 22-23 | missing | Pages, poster dimensions/overlap and page registration marks. |
 | DP-010 | Document Settings > Header/Footer | 23 | missing | Header/footer variables and alignment. |
-| DP-011 | Document Settings > Drawing | 40-43 | missing | Root BondLength/ChainAngle data and shared atomic set/clear command have independent core/CLI/MCP/socket/file evidence. The native form, effective defaults, tool application and remaining geometry/style settings are missing. See research/drawing-settings-command.md. |
+| DP-011 | Document Settings > Drawing | 40-43 | wired | Only BondLength/ChainAngle have a bounded native Apply/Cancel form and Mac set/clear/history/Save/reopen checks. Effective defaults, tool application, inheritance and remaining geometry/style settings are missing. See verification-native-drawing-settings.md. |
 | DP-012 | Document Settings > Atom Labels | 44, 99 | missing | - |
 | DP-013 | Document Settings > Captions | 44-48 | missing | - |
 | DP-014 | Document Settings > Analysis | 44 | missing | Analysis field labels and formatting. |

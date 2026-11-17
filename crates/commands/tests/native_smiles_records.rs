@@ -24,7 +24,7 @@ fn control<'a>(rows: &'a Value, id: &str) -> TestResult<&'a Value> {
 fn import_binding_is_one_typed_file_presentation_without_a_second_registry_command() -> TestResult {
     let mut engine = Engine::default();
     let rows = controls(&engine)?;
-    assert_eq!(rows.as_array().ok_or("controls")?.len(), 31);
+    assert_eq!(rows.as_array().ok_or("controls")?.len(), 32);
     let import = control(&rows, "file.import_smiles_records")?;
     assert_eq!(import["label"], "Import SMILES records…");
     assert_eq!(import["menu"], "File");
@@ -35,7 +35,7 @@ fn import_binding_is_one_typed_file_presentation_without_a_second_registry_comma
         import["command"],
         json!({"command":"ui.file","params":{"expected_revision":0,"action":"import_smiles_records"}})
     );
-    assert_eq!(bondline_commands::registry().len(), 41);
+    assert_eq!(bondline_commands::registry().len(), 42);
     engine.set_ui_file_host(true);
     let rows = controls(&engine)?;
     let import = control(&rows, "file.import_smiles_records")?;
@@ -55,7 +55,12 @@ fn projected_smiles_exposes_view_and_order_modes_without_granting_generic_source
     engine.set_ui_file_host(true);
     engine.dispatch("document.open_smiles", json!({"path":input}))?;
     let raw = controls(&engine)?;
-    assert_eq!(raw.as_array().ok_or("raw controls")?.len(), 10);
+    assert_eq!(raw.as_array().ok_or("raw controls")?.len(), 11);
+    assert_eq!(control(&raw, "file.document_settings")?["enabled"], false);
+    assert_eq!(
+        control(&raw, "file.document_settings")?["disabled_reason"],
+        "unsupported_content"
+    );
     assert_eq!(
         control(&raw, "file.import_smiles_records")?["enabled"],
         true
@@ -80,7 +85,7 @@ fn projected_smiles_exposes_view_and_order_modes_without_granting_generic_source
     let before = serde_json::to_value(engine.state())?;
     engine.set_view_canvas_size(1024, 1024)?;
     let rows = controls(&engine)?;
-    assert_eq!(rows.as_array().ok_or("projected controls")?.len(), 20);
+    assert_eq!(rows.as_array().ok_or("projected controls")?.len(), 21);
     for id in [
         "view.actual",
         "view.fit",
@@ -98,6 +103,7 @@ fn projected_smiles_exposes_view_and_order_modes_without_granting_generic_source
         "page.rotate",
         "file.import_smiles_records",
         "edit.paste_smiles",
+        "file.document_settings",
     ] {
         let row = control(&rows, id)?;
         assert_eq!(row["enabled"], false, "{id}");
@@ -139,7 +145,12 @@ fn sdf_retains_its_own_controls_and_raw_import_obeys_host_and_close_guards() -> 
     sdf.set_ui_file_host(true);
     sdf.dispatch("document.open_sdf", json!({"path":sdf_path}))?;
     let rows = controls(&sdf)?;
-    assert_eq!(rows.as_array().ok_or("SDF controls")?.len(), 14);
+    assert_eq!(rows.as_array().ok_or("SDF controls")?.len(), 15);
+    assert_eq!(control(&rows, "file.document_settings")?["enabled"], false);
+    assert_eq!(
+        control(&rows, "file.document_settings")?["disabled_reason"],
+        "unsupported_content"
+    );
     assert_eq!(
         control(&rows, "file.import_smiles_records")?["enabled"],
         false

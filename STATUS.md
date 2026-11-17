@@ -7,7 +7,52 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-### Verified ordered native input; fresh local gate passes
+### Verified native two-preference form; full local gate passes
+
+Base `b6e1b18`; the accompanying atomic source/test/docs commit is the recoverable state.
+Read [contract](docs/research/native-drawing-settings.md) and
+[receiving](docs/verification-native-drawing-settings.md). File > Document Settings…
+now edits/clears stored bond length and interior chain angle, using the existing atomic
+command under one Engine guard. Blank stays absent; existing geometry/view stay unchanged.
+Weak source/association/File/close/view/tool proofs, explicit request-cancel identity,
+copyable stale drafts,384-byte fields and modal/action-prefix/close fences are checked.
+No FilePlan, worker, Save receipt, close ACK or source authority is added.
+
+Registry42 retains all old41 actual CLI records/schema/order. Controls32/21/15/11;
+catalogue124 roles/140 entries stays12 delivered/128 disabled. Sixteen new cases pass;
+all17 old Atom cases pass before/after the mechanical shared input-router extraction.
+Actual runtime UnknownCommand/missing-menu/missing-repaint REDs remain separate from
+compile, filter and new-consumer setup qualifications. Exact cancellation fixes the
+remote-Cancel retained form; ordinary context loss still preserves a copyable draft.
+
+First full14206 fails167/1 after fmt/lint at one newly added headless-control reason.
+Its explicit unavailable-host premise and source-qualified expectation correction pass
+focused30846, then fresh full84512 exits0: **1629 passed/0 failed/1 ignored across242
+result lines**. Fmt, warnings-denied workspace/vendor lint/tests, layers, seven assets,
+unchanged155/166/221 strict runtime closures and pinned corpus pass. Log203657B/SHA256
+`c5e046fd7ee237e3065a9c379f615cfdd480d185e85cbc57d25e57e476bf6c82`.
+The existing ignored offscreen artifact case stays ignored. This does not explain or
+repair historical MCP listener failures; no exhausted diagnostic experiment is retried.
+
+Native/CLI build10841 passes. The isolated actual Mac app creates/saves a bond, sets
+64.25pt/137.5°, checks Undo/Redo, clears angle, saves/reopens exact Unicode filenames and
+applies unchanged without dirtying. Independent root/body/geometry/RDKit readers confirm
+only BondLength64.25 is added and the existing80pt C2H6 geometry stays unchanged. CJK
+filename glyphs are missing visually despite correct AX names and IO; this is recorded,
+not complete Unicode UI support. CUA AX focus/diff qualifications are not product fixes.
+The disposable review app is observed closed. Both older user apps remain running with
+unchanged executable hashes, and their drawings are untouched. No new golden, hosted run,
+publication, dependency/font/lock/corpus/workflow change or other-platform claim follows.
+
+Both chain tools stay grey. Next lock the original complete native chain interactions,
+then implement drag/count, Add Chain, repeat, Snaking and preference application through
+existing candidates/history/registry, with full previews, physical/source/modal/retirement
+guards and actual acceptance. Inheritance, remaining settings/styles, native2×/DPI,
+Windows/Linux and the remaining M0–M5 workflows stay open. No owned live jobs remain.
+
+## Earlier checkpoints
+
+### Ordered native input; its fresh local gate passes
 
 This atomic source/test/docs increment follows071f34c. Previous goal turn is PROGRESS;
 full M0–M5 remains active. Read [contract](docs/research/ordered-native-modifiers.md) and
@@ -444,11 +489,12 @@ named-ring-tool workflow or approved golden; no asset is shipped or user draft c
 
 ## Existing application and remaining parity
 
-Registry38 serves UI, CLI, stdio MCP and authenticated loopback. Native controls31,
-retained SMILES20, SDF14 and raw SMILES10. Earlier bounded Mac bonds, atom labels,
+Registry42 serves UI, CLI, stdio MCP and authenticated loopback. Native controls32,
+retained SMILES21, SDF15 and raw SMILES11. Earlier bounded Mac bonds, atom labels,
 history/source files and SMILES/SDF workflows retain their individually scoped evidence.
 Selection/translation and six3–8 Single-ring tools have independent command/adapter/App
-checks; actual native OS interaction is unverified. No new command/UI control lands here.
+checks; most actual native OS interaction remains unverified. The two-preference form
+above has its separate bounded native Mac acceptance.
 
 Explicit Left/Right Double retains unchanged authored axes, bisector-shortened secondary
 strokes, finite-cap/strict-edge gaps, role-qualified joins, distinct arm pixels and actual
@@ -484,24 +530,30 @@ remains intact; iTerm tabs remain unchecked because access is restricted. No pro
 reference binary/asset is opened or inspected. Native OS/DPI/Windows/Linux workflow
 acceptance for inset/selection/rings remains unverified.
 
-Root owns Cargo/Git/CUA/live mutation. Full gate 19445, build 47945 and focused terminal-
-label checks are terminal. No Root Cargo job is live. The user's copied Bondline process
-96449 remains running, separate from Cargo; its executable is still d0873d6c…5c64.
-Do not replace it or lose its unsaved draft. Revalidate newer handles before restarting;
-never retry an unchanged failed socket test for green. Branding/catalogue workers only
-write ignored proposals, not live product code or Git changes.
+Root owns Cargo/Git/CUA/live mutation. Full gate84512, build10841 and all focused settings
+checks/reviews are terminal; no owned job or disposable review app is live. Two protected
+user processes are revalidated without inspecting drawings: PID96449 at
+target/desktop-review-caa8d60/Bondline.app, executable SHA256
+`d0873d6c812187d936c915265137d8da6be658720e4dc88a7a747f680c7b5c64`, and PID17806 at
+target/desktop-review-branding-4948cec/Bondline.app, SHA256
+`c1b8c8849cf44c097ad07e915cfb495ba41c3300e13c5db1537c5f17c53a04bd`.
+Do not replace, close or lose either draft. Revalidate handles before restarting;
+never retry an unchanged failed socket test for green. Independent workers supplied
+ignored proposals/source reviews only; Root integrated and executed checks.
 
 ## Next exact steps
 
-1. After the visual commit, select chain authoring from the existing public-source proposal
-   target/chain-authoring/source-proposal/PROPOSAL.md (5049B/SHA256443374b3d722e49d8b822e815df3e0515aa27f58d9b937681fd000345831d999).
-   GUIDE25 printed104–105 covers drag/count, Snaking/Control, atom attachment, Add Chain
-   and Alt repeat. Lock original count/quantization/geometry/placement policies before
-   tests. The terminal-label prerequisite is delivered; never erase literal H. No chain
-   command/tool is implemented or enabled by the visible catalogue.
+1. Read docs/research/native-chain-plan.md and docs/research/native-drawing-settings.md.
+   Existing fixed/path candidates, ordered native modifier transport, optional settings
+   data and the actual two-preference form are delivered. GUIDE25 printed104–105 covers
+   drag/count, Snaking/Control, attachment, Add Chain and Alt repeat. Lock original
+   count/quantization/poses/snapping/backtrack/reversal/repeat policies before independent
+   native-controller/App REDs. Preserve literal H; never infer26.1 defaults from these APIs.
 2. Continue full Add Chain/repeat/Snaking/chair/sprout/style/chemistry/publishing/backlog
-   workflows, with independent core/wire/App/native evidence. Preserve unsupported-source
-   authority, preview IDs/history and all physical/density/input guards.
+   workflows, with independent core/wire/App/native evidence. Implement preference
+   application/default policy as part of complete chain tools. Preserve unsupported-source
+   authority, preview IDs/history and all physical/density/input/modal/retirement guards.
+   Both tools remain grey until corresponding complete workflows are independently checked.
 3. Preserve initial native File-menu first-click uncertainty for a bounded own-app
    investigation; Cmd+O is verified. Fused/spiro/Shift/density and other-platform native
    acceptance remain required. GitHub Actions stays disabled; no unrequested publication.

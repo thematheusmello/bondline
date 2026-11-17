@@ -14,7 +14,7 @@ fn stdio_discovers_converter_intent_but_cannot_show_a_headless_dialog() -> TestR
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
     assert_eq!(
         tools.len(),
-        41,
+        42,
         "presentation adds no second converter command"
     );
     let file = tools
@@ -103,7 +103,13 @@ fn authenticated_converter_presentation_and_cancel_preserve_the_complete_source(
     let controls = controls["result"]["controls"]
         .as_array()
         .ok_or("controls")?;
-    assert_eq!(controls.len(), 14);
+    assert_eq!(controls.len(), 15);
+    let settings = controls
+        .iter()
+        .find(|row| row["id"] == "file.document_settings")
+        .ok_or("Document Settings remains visible but unavailable")?;
+    assert_eq!(settings["enabled"], false);
+    assert_eq!(settings["disabled_reason"], "unsupported_content");
     let control = controls
         .iter()
         .find(|control| control["id"] == "file.convert_smiles")

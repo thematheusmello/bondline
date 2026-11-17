@@ -7,15 +7,18 @@ opaque with exact source passthrough; no inheritance/default or new native autho
 inferred. Native CDXML emits present values canonically and keeps old empty-profile bytes.
 Whole-document MOL V2000/V3000 refuses any nonempty settings before raw/fragment reuse
 or publication. Existing complete-model comparisons guard source drift; explicit fragment
-SMILES export retains its declared document-context loss. This data-only support neither
-applies settings to drawing tools nor implements the settings form/style sheets. See
+SMILES export retains its declared document-context loss. This data-only support does not
+apply settings to drawing tools or implement style sheets. See
 [lock](research/drawing-settings-data.md) and [evidence](verification-drawing-settings-data.md).
 
 The shared atomic settings command now edits that pair with explicit nullable values,
 source authority and normal history. Registered MOL Save has positive unstyled controls,
 settings-loss refusals and clear-to-supported success for both versions. Typed nonfinite
-values cannot serialize as clear requests. Native form/tool application remains missing;
-see [command receiving](verification-drawing-settings-command.md).
+values cannot serialize as clear requests; see [command receiving](verification-drawing-settings-command.md).
+File > Document Settings… now edits/clears this same pair. Native Mac Save/reopen files
+pass independent root/graph checks with unchanged geometry; see
+[native receiving](verification-native-drawing-settings.md). Tool application, inherited
+styles and the remaining settings fields stay missing.
 
 The bounded SMILES record library now retains complete original/current source while
 projecting an explicit record or all records into Drawing fragments. Live token/global-ID

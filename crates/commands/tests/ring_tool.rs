@@ -329,12 +329,13 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
         "ui.view",
     ];
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 41);
+    assert_eq!(registry.len(), 42);
     let mut expected = OLD_37.into_iter().collect::<BTreeSet<_>>();
     assert!(expected.insert("ui.ring_tool"));
     assert!(expected.insert("chain.create"));
     assert!(expected.insert("chain.create_path"));
     assert!(expected.insert("document.set_drawing_settings"));
+    assert!(expected.insert("ui.drawing_settings"));
     assert_eq!(
         registry.iter().map(|r| r.name).collect::<BTreeSet<_>>(),
         expected
@@ -361,7 +362,7 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
     assert_eq!(schema["properties"]["size"]["minimum"].as_f64(), Some(3.0));
     assert_eq!(schema["properties"]["size"]["maximum"].as_f64(), Some(8.0));
     let mut engine = Engine::default();
-    assert_eq!(engine.controls().len(), 31);
+    assert_eq!(engine.controls().len(), 32);
     for (size, label) in [
         (3, "Cyclopropane"),
         (4, "Cyclobutane"),
@@ -433,9 +434,9 @@ fn source_eligibility_precedes_same_mode_noop_and_complete_owners_stay_preserved
             "full.sdf",
             include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf").as_slice(),
             "document.open_sdf",
-            Some(14),
+            Some(15),
         ),
-        ("full.smiles", RAW_SMILES, "document.open_smiles", Some(10)),
+        ("full.smiles", RAW_SMILES, "document.open_smiles", Some(11)),
         (
             "opaque.cdxml",
             opaque.as_bytes(),
@@ -458,6 +459,13 @@ fn source_eligibility_precedes_same_mode_noop_and_complete_owners_stay_preserved
         );
         if let Some(count) = count {
             assert_eq!(engine.controls().len(), count);
+            let settings = engine
+                .controls()
+                .into_iter()
+                .find(|row| row.id == "file.document_settings")
+                .ok_or("Document Settings binding")?;
+            assert!(!settings.enabled);
+            assert_eq!(settings.disabled_reason, Some("ui_unavailable"));
         }
         refused_tool(&mut engine, json!({"size":6}), "unsupported_content")?;
         refused_tool(&mut engine, json!({"size":7}), "unsupported_content")?;
@@ -467,7 +475,7 @@ fn source_eligibility_precedes_same_mode_noop_and_complete_owners_stay_preserved
                 "selection":{"mode":"record","record_id":1},"bond_length_pt":48,"origin_x_pt":72,"origin_y_pt":72,
                 "page_width_pt":612,"page_height_pt":792}))?;
             assert!(engine.stored_document()?.has_smiles_projection());
-            assert_eq!(engine.controls().len(), 20);
+            assert_eq!(engine.controls().len(), 21);
             assert!(
                 !engine
                     .controls()

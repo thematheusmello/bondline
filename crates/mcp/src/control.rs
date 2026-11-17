@@ -188,6 +188,7 @@ async fn publish_result(
             || result.close_operation.is_some()
             || result.ui_file_operation.is_some()
             || result.ui_atom_label_operation.is_some()
+            || result.ui_drawing_settings_operation.is_some()
             || result
                 .ui_selection_operation
                 .is_some_and(|operation| operation.changed)

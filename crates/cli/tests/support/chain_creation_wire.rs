@@ -343,7 +343,7 @@ fn resolve<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
     }
 }
 fn discovery(entries: &[Value], schema_key: &str) -> TestResult {
-    assert_eq!(entries.len(), 41);
+    assert_eq!(entries.len(), 42);
     assert_eq!(
         entries
             .iter()
@@ -351,7 +351,12 @@ fn discovery(entries: &[Value], schema_key: &str) -> TestResult {
             .collect::<Result<BTreeSet<_>, _>>()?,
         OLD_NAMES
             .into_iter()
-            .chain([NAME, "chain.create_path", "document.set_drawing_settings"])
+            .chain([
+                NAME,
+                "chain.create_path",
+                "document.set_drawing_settings",
+                "ui.drawing_settings"
+            ])
             .collect::<BTreeSet<_>>()
     );
     let entry = entries
@@ -768,3 +773,6 @@ fn authenticated_benzene_attachment_preserves_integer_styles_source_and_publishe
 mod path_wire;
 #[path = "chain_creation/settings_wire.rs"]
 mod settings_wire;
+
+#[path = "chain_creation/settings_ui_wire.rs"]
+mod settings_ui_wire;

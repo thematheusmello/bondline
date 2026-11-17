@@ -8,12 +8,14 @@ mod bond_order_tests;
 mod branding;
 #[cfg(test)]
 mod branding_tests;
+mod drawing_settings_editor;
 mod file_workflow;
 pub mod files;
 #[cfg(test)]
 mod mol_display_tests;
 #[cfg(test)]
 mod multiple_bond_tests;
+mod pair_input;
 mod preview;
 mod ring;
 mod sdf_draft_text;
@@ -104,6 +106,7 @@ pub fn configure_context(context: &egui::Context) {
 
 #[derive(Default)]
 pub struct DrawingState {
+    settings: drawing_settings_editor::DrawingSettingsEditor,
     gesture: Option<BondGesture>,
     hover: Option<bondline_render::HitTarget>,
     hover_context: Option<HoverContext>,
@@ -604,6 +607,7 @@ fn workspace_shortcut(engine: &Engine, event: &egui::Event, text_focused: bool) 
 fn pending_ui_blocks_authoring(state: &bondline_commands::CommandResult) -> bool {
     state.close != CloseState::Open
         || state.ui_atom_label.is_some()
+        || state.ui_drawing_settings.is_some()
         || state
             .ui_file
             .request
@@ -622,7 +626,7 @@ struct ShortcutRouting<'a> {
     files: Option<&'a mut FileWorkflow>,
     canvas: Option<(egui::Rect, egui::LayerId)>,
     modal_at_start: bool,
-    atom_modal_at_start: bool,
+    authoring_modal_at_start: bool,
     order_busy_at_start: bool,
 }
 
@@ -641,7 +645,7 @@ fn replay_edit_shortcuts(
         mut files,
         canvas,
         modal_at_start,
-        atom_modal_at_start,
+        authoring_modal_at_start,
         order_busy_at_start,
     } = routing;
     let from_drawing = engine.content().drawing().is_ok();
@@ -664,7 +668,7 @@ fn replay_edit_shortcuts(
         }
     }
     for (index, event) in events.iter().enumerate() {
-        if !atom_modal_at_start {
+        if !authoring_modal_at_start {
             if let Some(fields) = fields.as_deref_mut() {
                 fields.replay_editor(index, engine, context);
             }
@@ -905,14 +909,19 @@ fn show_workspace_with_preview(
             .as_ref()
             .is_some_and(|fields| fields.presentation_present())
     {
-        drawing.atom_labels.sync(engine, error);
+        if !drawing.settings.present() {
+            drawing.atom_labels.sync(engine, error);
+        }
+        if !drawing.atom_labels.present() && !order_busy_at_start && !drawing.order.is_busy() {
+            drawing.settings.sync(engine, error);
+        }
     }
-    let atom_modal_at_start = drawing.atom_labels.present();
-    if !atom_modal_at_start && let Some(fields) = sdf_fields.as_deref_mut() {
+    let authoring_modal_at_start = drawing.atom_labels.present() || drawing.settings.present();
+    if !authoring_modal_at_start && let Some(fields) = sdf_fields.as_deref_mut() {
         fields.begin_ui();
     }
     let paste_modal_at_start = modal_at_start
-        || atom_modal_at_start
+        || authoring_modal_at_start
         || files
             .as_ref()
             .is_some_and(|files| files.paste_present() || files.import_present());
@@ -935,7 +944,13 @@ fn show_workspace_with_preview(
     drawing
         .atom_labels
         .show(context, Some(&mut *engine), &events);
-    if !atom_modal_at_start && let Some(files) = files.as_deref_mut() {
+    drawing.settings.show(
+        context,
+        Some(&mut *engine),
+        &events,
+        !order_busy_at_start && !drawing.order.is_busy(),
+    );
+    if !authoring_modal_at_start && let Some(files) = files.as_deref_mut() {
         files.begin_new_ui(context, &events);
         files.begin_conversion_ui(context, Some(engine), &events);
         files.begin_paste_ui(context, Some(engine), &events);
@@ -970,7 +985,7 @@ fn show_workspace_with_preview(
                 files: files.as_deref_mut(),
                 canvas: None,
                 modal_at_start: paste_modal_at_start,
-                atom_modal_at_start,
+                authoring_modal_at_start,
                 order_busy_at_start,
             },
         );
@@ -1120,7 +1135,7 @@ fn show_workspace_with_preview(
                 }
             });
         });
-    if !atom_modal_at_start && let Some(fields) = sdf_fields.as_deref_mut() {
+    if !authoring_modal_at_start && let Some(fields) = sdf_fields.as_deref_mut() {
         fields.show_editor(context, Some(engine), &events);
     }
     let mut history_handled = false;
@@ -1144,7 +1159,7 @@ fn show_workspace_with_preview(
                     summary.record_count, summary.byte_length
                 ));
                 ui.label("Chemical preview is unavailable for SMILES files.");
-                if !atom_modal_at_start && let Some(records) = smiles_records.as_deref_mut() {
+                if !authoring_modal_at_start && let Some(records) = smiles_records.as_deref_mut() {
                     records.show(ui, engine);
                 }
                 drawing.presented_generation = Some(engine.session_generation());
@@ -1176,7 +1191,7 @@ fn show_workspace_with_preview(
                                             && ui
                                                 .add_enabled(
                                                     state.close == CloseState::Open
-                                                        && !atom_modal_at_start,
+                                                        && !authoring_modal_at_start,
                                                     egui::Button::new(format!(
                                                         "Inspect record {} fields",
                                                         record.id
@@ -1192,7 +1207,7 @@ fn show_workspace_with_preview(
                                             && ui
                                                 .add_enabled(
                                                     state.close == CloseState::Open
-                                                        && !atom_modal_at_start
+                                                        && !authoring_modal_at_start
                                                         && state.ui_file.request.is_none()
                                                         && collection.record_count > 1
                                                         && !fields.is_busy(),
@@ -1265,7 +1280,7 @@ fn show_workspace_with_preview(
                             files: files.as_deref_mut(),
                             canvas: Some((rect, response.layer_id)),
                             modal_at_start: paste_modal_at_start,
-                            atom_modal_at_start,
+                            authoring_modal_at_start,
                             order_busy_at_start,
                         },
                     );
@@ -1483,7 +1498,7 @@ fn show_workspace_with_preview(
             // A native frame may contain the entire drag; press_origin is cleared on release.
             history_handled = true;
             for (index, event) in events.iter().enumerate() {
-                if !atom_modal_at_start {
+                if !authoring_modal_at_start {
                 if let Some(fields) = sdf_fields.as_deref_mut() {
                     fields.replay_editor(index, engine, context);
                 }
@@ -2251,14 +2266,16 @@ fn show_workspace_with_preview(
                 files: files.as_deref_mut(),
                 canvas: None,
                 modal_at_start: paste_modal_at_start,
-                atom_modal_at_start,
+                authoring_modal_at_start,
                 order_busy_at_start,
             },
         );
     }
-    if atom_modal_at_start
+    if authoring_modal_at_start
         || drawing.atom_labels.present()
+        || drawing.settings.present()
         || engine.state().ui_atom_label.is_some()
+        || engine.state().ui_drawing_settings.is_some()
     {
         return None;
     }
@@ -2374,7 +2391,8 @@ impl BondlineApp {
         // Retirement may close a form or finish an edit before this packet replays.
         let mut paste_modal_at_start = self.files.paste_present()
             || self.files.import_present()
-            || self.drawing.atom_labels.present();
+            || self.drawing.atom_labels.present()
+            || self.drawing.settings.present();
         let order_busy_at_start = self.drawing.order.is_busy();
         match self.engine.lock() {
             Ok(mut engine) => {
@@ -2382,9 +2400,15 @@ impl BondlineApp {
                     && !self.files.is_busy()
                     && !self.sdf_fields.presentation_present()
                 {
-                    self.drawing.atom_labels.sync(&engine, &mut self.error);
+                    if !self.drawing.settings.present() {
+                        self.drawing.atom_labels.sync(&engine, &mut self.error);
+                    }
+                    if !self.drawing.atom_labels.present() && !order_busy_at_start {
+                        self.drawing.settings.sync(&engine, &mut self.error);
+                    }
                 }
-                paste_modal_at_start |= self.drawing.atom_labels.present();
+                paste_modal_at_start |=
+                    self.drawing.atom_labels.present() || self.drawing.settings.present();
                 self.files
                     .poll_paste(Some(&engine), context, &mut self.error);
                 self.files
@@ -2399,11 +2423,16 @@ impl BondlineApp {
                 self.sdf_fields.settle_editor(&mut engine, context);
                 if native_close
                     && (engine.state().close != CloseState::Committed
-                        || self.drawing.atom_labels.present())
+                        || self.drawing.atom_labels.present()
+                        || self.drawing.settings.present())
                 {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
-                    if self.drawing.atom_labels.present() {
-                        self.error = Some("Apply or Cancel the atom label before closing.".into());
+                    if self.drawing.atom_labels.present() || self.drawing.settings.present() {
+                        self.error = Some(if self.drawing.settings.present() {
+                            "Apply or Cancel Document Settings before closing.".into()
+                        } else {
+                            "Apply or Cancel the atom label before closing.".into()
+                        });
                     } else if !self.sdf_fields.native_close(&engine, context) {
                         self.files.request_close(&mut engine, &mut self.error);
                         self.drawing.order.cancel_for_context();
@@ -2411,6 +2440,7 @@ impl BondlineApp {
                 }
                 if smoke_close
                     && !self.drawing.atom_labels.present()
+                    && !self.drawing.settings.present()
                     && !self.sdf_fields.native_close(&engine, context)
                 {
                     self.files.request_close(&mut engine, &mut self.error);
@@ -2447,7 +2477,8 @@ impl BondlineApp {
                         || self.sdf_fields.blocks_close()
                         || self.smiles_records.is_busy()
                         || self.drawing.order.is_busy()
-                        || self.drawing.atom_labels.present(),
+                        || self.drawing.atom_labels.present()
+                        || self.drawing.settings.present(),
                     action.is_some(),
                 ) {
                     context.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -2458,6 +2489,12 @@ impl BondlineApp {
                     context,
                     None,
                     &context.input(|input| input.events.clone()),
+                );
+                self.drawing.settings.show(
+                    context,
+                    None,
+                    &context.input(|input| input.events.clone()),
+                    false,
                 );
                 self.files.deactivate_paste(context, &mut self.error);
                 self.files.deactivate_import(context, &mut self.error);

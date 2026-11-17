@@ -37,10 +37,7 @@ fn finite_nullable<S: Serializer>(value: &Option<f64>, serializer: S) -> Result<
     value.serialize(serializer)
 }
 
-pub(super) fn set(
-    document: &StoredDocument,
-    params: DrawingSettingsSet,
-) -> Result<StoredDocument, Error> {
+pub(super) fn require_source(document: &StoredDocument) -> Result<(), Error> {
     if !document.is_fully_mapped()
         || document
             .source_info()
@@ -48,6 +45,14 @@ pub(super) fn set(
     {
         return Err(Error::UnsupportedDrawingSettingsSource);
     }
+    Ok(())
+}
+
+pub(super) fn set(
+    document: &StoredDocument,
+    params: DrawingSettingsSet,
+) -> Result<StoredDocument, Error> {
+    require_source(document)?;
     let settings = DrawingSettings::new(params.bond_length_pt, params.chain_angle_degrees)?;
     if document.model().drawing_settings() == settings {
         return Ok(document.clone());

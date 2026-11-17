@@ -943,7 +943,7 @@ fn all_six_bindings_use_one_effective_mode_and_same_ring_noop_preserves_an_armed
         assert_eq!(ring_selected(&f)?, vec![format!("tool.ring.{n}")]);
         let controls = f.command("ui.controls", json!({}))?;
         let rows = controls["controls"].as_array().ok_or("controls")?;
-        assert_eq!(rows.len(), 31);
+        assert_eq!(rows.len(), 32);
         let row = rows
             .iter()
             .find(|r| r["id"] == format!("tool.ring.{n}"))
@@ -1102,7 +1102,7 @@ fn ring_cancellation_and_source_contexts_never_revive_an_old_preview_or_guess_a_
                 let bytes = include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf");
                 fs::write(&input, bytes)?;
                 f.command("document.open_sdf", json!({"path":input}))?;
-                replacement = Some((input, bytes.to_vec(), 14));
+                replacement = Some((input, bytes.to_vec(), 15));
             }
             "raw_smiles" | "retained_smiles" => {
                 let input = f.directory.path("replacement-原.smi");
@@ -1115,7 +1115,7 @@ fn ring_cancellation_and_source_contexts_never_revive_an_old_preview_or_guess_a_
                 replacement = Some((
                     input,
                     bytes.to_vec(),
-                    if change == "retained_smiles" { 20 } else { 10 },
+                    if change == "retained_smiles" { 21 } else { 11 },
                 ));
             }
             _ => return Err("undeclared ring cancellation".into()),
@@ -1134,6 +1134,12 @@ fn ring_cancellation_and_source_contexts_never_revive_an_old_preview_or_guess_a_
             let c = f.command("ui.controls", json!({}))?;
             let rows = c["controls"].as_array().ok_or("controls")?;
             assert_eq!(rows.len(), count);
+            let settings = rows
+                .iter()
+                .find(|row| row["id"] == "file.document_settings")
+                .ok_or("Document Settings remains visible but unavailable")?;
+            assert_eq!(settings["enabled"], false);
+            assert_eq!(settings["disabled_reason"], "unsupported_content");
             assert!(
                 rows.iter()
                     .all(|r| !r["id"].as_str().unwrap_or("").starts_with("tool.ring."))

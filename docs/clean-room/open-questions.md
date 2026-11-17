@@ -6,12 +6,20 @@
   XML points/CDX points×65536. Missing values have no universal numeric default. Root-only
   supported projection is distinct from inherited effective styles; out-of-subset, nested,
   duplicate or other-width binary settings remain opaque/source-backed. Fixed toggles,
-  style-sheet resolution, native defaults/forms, journal styles and26.1 behavior remain
+  style-sheet resolution, native defaults, remaining forms, journal styles and26.1 behavior remain
   required. A data-only field never proves native tool application of the preference.
   The source-qualified atomic command/history/adapters now have bounded independent
   evidence in verification-drawing-settings-command.md. Native modifier transport now has
-  bounded SDK/Mac OS evidence in verification-ordered-native-modifiers.md; the settings
-  form and actual tool application remain required.
+  bounded SDK/Mac OS evidence in verification-ordered-native-modifiers.md. The bounded
+  two-preference form now has actual Mac set/clear/history/Save/reopen evidence in
+  verification-native-drawing-settings.md. Tool application and the remaining settings
+  workflow stay required. Missing source values remain absent, never guessed defaults.
+
+- The native settings review saves/reopens exact Unicode filenames, but the bundled
+  Roboto face displays the reviewed CJK filename characters as missing glyphs. AX reports
+  their correct names and independent readers verify the correct files. Wider font
+  coverage under the unchanged MIT/Apache/BSD asset policy remains unresolved; this
+  is not complete Unicode text/IME or platform validation.
 
 - The full native-chain dependency contract is in research/native-chain-plan.md.
   Snaking requires one positioned-path edit rather than repeated fixed-chain commits.

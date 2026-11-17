@@ -494,6 +494,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "ui.atom_label",
             "ui.bond_tool",
             "ui.controls",
+            "ui.drawing_settings",
             "ui.file",
             "ui.ring_tool",
             "ui.selection",

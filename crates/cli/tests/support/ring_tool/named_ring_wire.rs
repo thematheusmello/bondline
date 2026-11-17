@@ -17,7 +17,7 @@ use std::{
 
 fn named_controls(value: &Value, selected: &str) -> TestResult {
     let entries = value["controls"].as_array().ok_or("controls")?;
-    assert_eq!(entries.len(), 31);
+    assert_eq!(entries.len(), 32);
     for (kind, label) in [
         ("benzene", "Benzene"),
         ("cyclopentadiene", "Cyclopentadiene"),
@@ -95,7 +95,7 @@ fn cli_and_initialized_stdio_preserve_the_exact_receipt_and_distinguish_named_fr
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     assert_eq!(listed["id"], 2);
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 41);
+    assert_eq!(tools.len(), 42);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == NAME)
@@ -265,10 +265,17 @@ fn authenticated_named_modes_publish_only_real_changes_and_revalidate_complete_s
         raw
     );
     let controls = call_socket(&mut client, "ui.controls", json!({}))?;
+    assert_eq!(controls["ui_file"]["available"], false);
     let rows = controls["controls"]
         .as_array()
         .ok_or("raw source controls")?;
-    assert_eq!(rows.len(), 10);
+    assert_eq!(rows.len(), 11);
+    let settings = rows
+        .iter()
+        .find(|row| row["id"] == "file.document_settings")
+        .ok_or("Document Settings remains visible but unavailable")?;
+    assert_eq!(settings["enabled"], false);
+    assert_eq!(settings["disabled_reason"], "ui_unavailable");
     assert!(!rows.iter().any(|row| {
         row["id"]
             .as_str()

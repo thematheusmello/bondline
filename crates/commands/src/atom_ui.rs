@@ -121,6 +121,7 @@ impl Engine {
                 ..
             } => {
                 if self.atom_ui.active.is_some()
+                    || self.ui_drawing_settings_request().is_some()
                     || self.close_state() != CloseState::Open
                     || self.file_ui_state().request.is_some()
                 {

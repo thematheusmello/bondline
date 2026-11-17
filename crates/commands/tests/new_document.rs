@@ -121,6 +121,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "document.new",
             "ui.file",
             "ui.controls",
+            "ui.drawing_settings",
             "ui.atom_label",
             "ui.selection",
             "selection.translate",

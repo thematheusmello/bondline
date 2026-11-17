@@ -2,8 +2,8 @@
 
 use crate::{
     BondDrawOrder, CloseAction, CloseDocument, CloseState, Command, EffectiveTool, Engine,
-    NoParams, PageSetSize, RingKind, SelectBondTool, SelectNamedRingTool, SelectRingTool, UiFile,
-    UiFileAction, UiFilePhase, UiSelection, UiView,
+    NoParams, PageSetSize, RingKind, SelectBondTool, SelectNamedRingTool, SelectRingTool,
+    UiDrawingSettings, UiFile, UiFileAction, UiFilePhase, UiSelection, UiView,
 };
 use serde::Serialize;
 
@@ -61,7 +61,8 @@ impl Engine {
             .request
             .as_ref()
             .is_some_and(|request| request.phase != UiFilePhase::Running)
-            || state.ui_atom_label.is_some();
+            || state.ui_atom_label.is_some()
+            || state.ui_drawing_settings.is_some();
         let authoring_reason = if state.close != CloseState::Open {
             Some("close_pending")
         } else if pending {
@@ -132,6 +133,21 @@ impl Engine {
                 selected: None,
             });
         }
+        let settings_reason =
+            file_reason.or((!self.drawing_settings_available()).then_some("unsupported_content"));
+        controls.push(ControlInfo {
+            id: "file.document_settings",
+            label: "Document Settings…",
+            menu: "File",
+            submenu: None,
+            shortcut: None,
+            command: Command::UiDrawingSettings(UiDrawingSettings::Open {
+                expected_revision: state.revision,
+            }),
+            enabled: settings_reason.is_none(),
+            disabled_reason: settings_reason,
+            selected: None,
+        });
         controls.push(ControlInfo {
             id: "file.convert_smiles",
             label: "Convert SMILES file…",

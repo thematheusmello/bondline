@@ -1,5 +1,23 @@
 # Verification log
 
+## Native Document Settings, 2026-11-17
+
+[Receiving](verification-native-drawing-settings.md) records actual UnknownCommand,
+missing-menu and missing-repaint runtime REDs separately from compile/selection/consumer
+setup qualifications. Sixteen new cases pass; the original17 Atom cases pass before and
+after extracting their existing input router. Exact request-cancel identity fixes remote
+Cancel without destroying stale copyable drafts. The actual CLI retains all old41
+records/schema/order and appends one presentation; controls32/21/15/11, catalogue12/128.
+First full14206 fails167/1 at a newly added headless control-reason expectation. Its
+source-qualified fix passes30846, then fresh full84512 passes1629/0/1 across242 result
+lines with formatting, warnings-denied workspace/vendor lint/tests, layers/licenses/corpus.
+Historical MCP listener failures remain unattributed. Native/CLI build10841 passes.
+Actual disposable Mac app author/save→set64.25/137.5→Undo/Redo→clear angle→Unicode Save/
+reopen→unchanged Apply passes independent root/body/geometry/RDKit checks. CJK filename
+glyphs are missing visually despite correct names/IO. The review app is closed, both user
+apps/drafts untouched, Actions OFF. Tool application, full settings/styles/chains, native
+2×/DPI, other platforms and full M0–M5 remain incomplete; no new golden is approved.
+
 ## Ordered native modifier transport, 2026-11-17
 
 [Receiving](verification-ordered-native-modifiers.md) separates an incomplete first probe,

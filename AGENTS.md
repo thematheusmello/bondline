@@ -37,6 +37,24 @@ Keep the bundled-font coverage regression: angle and replacement-arrow icons use
 geometry because Roboto lacks those characters. Native photographs are actual own-window
 captures, separate from illustrations/goldens; preserve the user's older unsaved app/draft.
 
+Current native drawing-settings work follows docs/research/native-drawing-settings.md
+and docs/verification-native-drawing-settings.md on base b6e1b18. One appended
+ui.drawing_settings brings the registry to42, preserving all old41 CLI records/schema/order;
+controls32/21/15/11, catalogue12 delivered/128 disabled. File > Document Settings… only
+sets/clears stored BondLength/ChainAngle via the existing atomic pair command under one
+Engine guard. Keep source/opaque-association/File/close/view/effective-tool weak proofs,
+fresh per-request serde-skipped explicit-cancel identity, stale copyable drafts, bounded
+384-byte fields and action-prefix/modal-start/retirement fences. Reuse pair_input for
+Atom/settings; all17 old Atom cases pass before/after extraction. Changed=false Open/Cancel
+wakes the native host; socket policy, workers and Save/close authority are unchanged.
+Sixteen new cases pass. First full14206 fails only a new headless control-reason expectation;
+the source-qualified correction and fresh84512 pass1629/0/1 with all local gates. This does
+not attribute historical MCP failures. Actual Mac set/clear/history/Unicode Save/reopen
+passes independent readers; CJK filename glyph coverage remains limited. Both user apps/
+drafts stay protected. Full chain workflows, preference application/defaults, inheritance
+and remaining styles/platforms stay required; chain tools stay grey. Earlier checkpoint
+counts/results below remain historical, not the current discovery inventory.
+
 The headless chain.create increment follows docs/research/chain-authoring-plan.md and
 docs/verification-chain-authoring.md. One immediate candidate, explicit count2..64 including
 anchor/angle1..179/first-edge/side, target-local weighted neutral-C literal-H proof shared

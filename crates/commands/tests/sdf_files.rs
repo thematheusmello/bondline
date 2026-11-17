@@ -27,6 +27,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "document.close",
             "ui.file",
             "ui.controls",
+            "ui.drawing_settings",
             "ui.atom_label",
             "ui.selection",
             "selection.translate",
