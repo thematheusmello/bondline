@@ -4,12 +4,14 @@ mod drawing;
 mod element;
 mod graph;
 mod point;
+mod style;
 pub use drawing::DrawingSettings;
 pub use graph::{
     Atom, AtomId, Bond, BondId, BondOrder, DoublePosition, Element, Fragment, FragmentId,
     GraphError, MAX_GRAPH_ITEMS, Radical,
 };
 pub use point::{MAX_POSITION_PT, Point2};
+pub use style::DrawingStyle;
 
 use serde::{Deserialize, Serialize};
 use std::{
@@ -101,6 +103,8 @@ pub enum Error {
         "drawing settings need a finite bond length above zero through 100000 pt and a finite chain angle 1..179 degrees"
     )]
     InvalidDrawingSettings,
+    #[error("line width must be a finite number above zero through 100000 pt")]
+    InvalidDrawingStyle,
     #[error("page {0} does not exist")]
     MissingPage(u32),
     #[error("fragment {0} does not exist on the requested page")]
@@ -132,6 +136,8 @@ pub struct Document {
     pages: Vec<Page>,
     #[serde(skip_serializing_if = "DrawingSettings::is_empty")]
     drawing_settings: DrawingSettings,
+    #[serde(skip_serializing_if = "DrawingStyle::is_empty")]
+    drawing_style: DrawingStyle,
 }
 
 impl Default for Document {
@@ -143,11 +149,20 @@ impl Default for Document {
                 fragments: Vec::new(),
             }],
             drawing_settings: DrawingSettings::default(),
+            drawing_style: DrawingStyle::default(),
         }
     }
 }
 
 impl Document {
+    pub const fn drawing_style(&self) -> DrawingStyle {
+        self.drawing_style
+    }
+
+    pub fn set_drawing_style(&mut self, style: DrawingStyle) {
+        self.drawing_style = style;
+    }
+
     pub const fn drawing_settings(&self) -> DrawingSettings {
         self.drawing_settings
     }

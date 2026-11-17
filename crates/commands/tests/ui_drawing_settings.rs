@@ -165,7 +165,7 @@ fn schema_node<'a>(
 fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_name_order()
 -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 45);
+    assert_eq!(rows.len(), 46);
     assert_eq!(
         rows[..41].iter().map(|row| row.name).collect::<Vec<_>>(),
         OLD_NAMES
@@ -287,7 +287,7 @@ fn apply_reuses_the_atomic_pair_once_and_validated_noop_retires_without_clearing
     assert_eq!(
         serde_json::to_value(engine.ui_drawing_settings_request().ok_or("request")?)?,
         json!({"id":id,"input_revision":3,"bond_length_pt":24.5,
-            "chain_angle_degrees":null,"current":true})
+            "chain_angle_degrees":null,"line_width_pt":null,"current":true})
     );
     assert!(!engine.finish_ui_drawing_settings(id + 1));
     assert!(engine.ui_drawing_settings_request_current(id));

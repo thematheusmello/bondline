@@ -17,6 +17,9 @@ pub(super) fn root_attributes(document: &Document) -> Attributes {
     if let Some(value) = settings.chain_angle_degrees() {
         attributes.push(("ChainAngle", value.to_string()));
     }
+    if let Some(value) = document.drawing_style().line_width_pt() {
+        attributes.push(("LineWidth", value.to_string()));
+    }
     attributes
 }
 

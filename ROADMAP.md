@@ -4,6 +4,16 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The user explicitly recreated/resumed the full end-to-end M0–M5 goal. Explicit document
+LineWidth now has [independent receiving](docs/verification-document-line-width.md):
+typed/source-preserving data, actual width separate from em/spacing, complete-owner
+display/previews/capture, atomic three-field settings and preserved pair behavior. Full
+local1800/0/1 and bounded10000-run ASan pass; registry46 retains all45 prior schemas/order,
+catalogue16/124 stays. Native access fails, so new native width interaction is unverified.
+Next broaden M1 styles/font/text/default resolution with independent foreign fixtures,
+then CDX semantic mapping/writing and the remaining file workflows. All M0–M5 requirements
+below remain; no milestone or full source compatibility is complete. Actions stays OFF.
+
 The [source-aware closed-v0 profile](docs/verification-source-preserving-cdxml-profile.md)
 now preserves lexical/order/scoped-ID variants through all delivered typed edits/appends,
 with complete syntax/semantic proof and current-prefix guards. Actual CLI/stdio/socket/

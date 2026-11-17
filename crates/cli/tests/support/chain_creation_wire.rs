@@ -343,7 +343,7 @@ fn resolve<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
     }
 }
 fn discovery(entries: &[Value], schema_key: &str) -> TestResult {
-    assert_eq!(entries.len(), 45);
+    assert_eq!(entries.len(), 46);
     assert_eq!(
         entries
             .iter()
@@ -359,6 +359,7 @@ fn discovery(entries: &[Value], schema_key: &str) -> TestResult {
                 "ui.chain_tool",
                 "ring.sprout",
                 "ui.preferences",
+                "document.set_document_settings",
             ])
             .collect::<BTreeSet<_>>()
     );

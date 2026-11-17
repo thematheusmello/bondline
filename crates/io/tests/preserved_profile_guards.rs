@@ -13,6 +13,28 @@ type TestResult<T = ()> = Result<T, Box<dyn std::error::Error>>;
 const SOURCE: &str = "<CDXML CreationProgram='Bondline 0.1.0'><page id='91' DrawingSpace='Poster' Width='612.00' Height='792.000'><fragment id='400'><n id='101' NodeType='Element' Element='6' Charge='0' Radical='None' p='100 200' NumHydrogens='3'/><n id='207' NodeType='Element' Element='6' Charge='0' Radical='None' p='140 200' NumHydrogens='3'/><b id='900' B='101' E='207' Order='1'/></fragment><fragment id='500'><n id='301' NodeType='Element' Element='8' Charge='0' Radical='None' p='240 240' NumHydrogens='2'/></fragment></page></CDXML>";
 
 #[test]
+fn formerly_opaque_root_width_is_now_typed_and_edits_preserve_every_other_source_byte() -> TestResult
+{
+    let source = SOURCE.replacen("<CDXML ", "<CDXML LineWidth='9' ", 1);
+    let mut stored = StoredDocument::from_cdxml(source.as_bytes().into(), PageSize::A4)?;
+    assert!(stored.is_fully_mapped());
+    assert_eq!(stored.model().drawing_style().line_width_pt(), Some(9.0));
+    assert_eq!(stored.to_cdxml()?.as_ref(), source.as_bytes());
+    let pages = stored.model().pages().to_vec();
+    stored
+        .model_mut()
+        .set_drawing_style(bondline_model::DrawingStyle::new(Some(0.5))?);
+    assert_eq!(stored.model().pages(), pages);
+    assert_eq!(
+        stored.to_cdxml()?.as_ref(),
+        source
+            .replacen("LineWidth='9'", "LineWidth='0.5'", 1)
+            .as_bytes()
+    );
+    Ok(())
+}
+
+#[test]
 fn opaque_syntax_metadata_and_default_key_mismatches_keep_readonly_source_exact() -> TestResult {
     let mut sources = vec![
         SOURCE.replacen(
@@ -28,7 +50,6 @@ fn opaque_syntax_metadata_and_default_key_mismatches_keep_readonly_source_exact(
         SOURCE.replacen("</fragment>", "<![CDATA[ \t]]></fragment>", 1),
         SOURCE.replacen("</fragment>", "not whitespace</fragment>", 1),
         SOURCE.replacen("<CDXML ", "<CDXML Future='opaque' ", 1),
-        SOURCE.replacen("<CDXML ", "<CDXML LineWidth='9' ", 1),
         SOURCE.replacen("<page ", "<page Future='opaque' ", 1),
         SOURCE.replacen("<fragment ", "<fragment Future='opaque' ", 1),
         SOURCE.replacen("<n ", "<n Future='opaque' ", 1),

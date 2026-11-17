@@ -365,7 +365,7 @@ fn schema_node<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
 fn named_union_schema_and_native31_foreign20_14_10_controls_preserve_closed_source_authority()
 -> TestResult {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 45);
+    assert_eq!(registry.len(), 46);
     let row = registry
         .iter()
         .find(|r| r.name == "ui.ring_tool")

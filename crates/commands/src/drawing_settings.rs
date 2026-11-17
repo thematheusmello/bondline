@@ -1,6 +1,6 @@
 use crate::Error;
 use bondline_io::StoredDocument;
-use bondline_model::DrawingSettings;
+use bondline_model::{DrawingSettings, DrawingStyle};
 use schemars::JsonSchema;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
@@ -22,6 +22,32 @@ pub struct DrawingSettingsSet {
     )]
     #[schemars(range(min = 1, max = 179))]
     pub chain_angle_degrees: Option<f64>,
+}
+
+/// Atomic full document settings replacement; the legacy pair command is unchanged.
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+#[schemars(extend("required" = ["expected_revision", "bond_length_pt", "chain_angle_degrees", "line_width_pt"]))]
+pub struct DocumentSettingsSet {
+    pub expected_revision: u64,
+    #[serde(
+        deserialize_with = "required_nullable",
+        serialize_with = "finite_nullable"
+    )]
+    #[schemars(extend("exclusiveMinimum" = 0.0, "maximum" = bondline_model::MAX_POSITION_PT))]
+    pub bond_length_pt: Option<f64>,
+    #[serde(
+        deserialize_with = "required_nullable",
+        serialize_with = "finite_nullable"
+    )]
+    #[schemars(range(min = 1, max = 179))]
+    pub chain_angle_degrees: Option<f64>,
+    #[serde(
+        deserialize_with = "required_nullable",
+        serialize_with = "finite_nullable"
+    )]
+    #[schemars(extend("exclusiveMinimum" = 0.0, "maximum" = bondline_model::MAX_POSITION_PT))]
+    pub line_width_pt: Option<f64>,
 }
 
 fn required_nullable<'de, D: Deserializer<'de>>(value: D) -> Result<Option<f64>, D::Error> {
@@ -59,5 +85,39 @@ pub(super) fn set(
     }
     let mut candidate = document.clone();
     candidate.model_mut().set_drawing_settings(settings);
+    Ok(candidate)
+}
+
+pub(super) fn set_document(
+    document: &StoredDocument,
+    params: DocumentSettingsSet,
+) -> Result<StoredDocument, Error> {
+    require_source(document)?;
+    let style = DrawingStyle::new(params.line_width_pt)?;
+    let mut candidate = set(
+        document,
+        DrawingSettingsSet {
+            expected_revision: params.expected_revision,
+            bond_length_pt: params.bond_length_pt,
+            chain_angle_degrees: params.chain_angle_degrees,
+        },
+    )?;
+    if style != document.model().drawing_style() {
+        candidate.model_mut().set_drawing_style(style);
+        for page in candidate.model().pages() {
+            bondline_io::smiles::validate_authoring_page_with_style(
+                page,
+                style,
+                &bondline_render::Cancellation::default(),
+            )
+            .map_err(|error| match error {
+                bondline_io::smiles::LayoutError::Render(error) => Error::Render(error),
+                bondline_io::smiles::LayoutError::Geometry(reason) => {
+                    Error::UnsupportedDrawingStyle(reason)
+                }
+                other => Error::SmilesLayout(other),
+            })?;
+        }
+    }
     Ok(candidate)
 }

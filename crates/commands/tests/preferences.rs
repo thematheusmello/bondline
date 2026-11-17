@@ -143,9 +143,13 @@ fn schema_node<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
 #[test]
 fn five_closed_action_objects_reject_null_missing_unknown_and_wrong_scalar_fields() -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 45);
-    assert_eq!(rows.last().ok_or("preferences registry")?.name, NAME);
-    let schema = rows.last().ok_or("schema")?.input_schema.as_value();
+    assert_eq!(rows.len(), 46);
+    assert_eq!(rows.get(44).ok_or("preferences registry")?.name, NAME);
+    assert_eq!(
+        rows.last().ok_or("last row")?.name,
+        "document.set_document_settings"
+    );
+    let schema = rows.get(44).ok_or("schema")?.input_schema.as_value();
     assert_eq!(schema["type"], "object");
     let branches = schema["oneOf"].as_array().ok_or("closed action branches")?;
     assert_eq!(branches.len(), 5);

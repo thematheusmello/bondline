@@ -1,4 +1,7 @@
 //! Independent post-producer adapter acceptance; no native form/default claim.
+#[path = "document_settings_wire.rs"]
+mod document_settings;
+
 use super::{
     Client, OLD_NAMES, PROPANE, TestResult, cli, consume, graph, initialize, original_propane,
     python, request, socket, support,
@@ -273,7 +276,7 @@ fn initialized_stdio_schema_required_nulls_noops_source_and_whole_history() -> T
     let response = client.replies.recv_timeout(Duration::from_secs(10))??;
     assert_eq!(response["id"], 2);
     let tools = response["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 45);
+    assert_eq!(tools.len(), 46);
     assert_eq!(
         tools
             .iter()
@@ -288,7 +291,8 @@ fn initialized_stdio_schema_required_nulls_noops_source_and_whole_history() -> T
                 "ui.drawing_settings",
                 "ui.chain_tool",
                 "ring.sprout",
-                "ui.preferences"
+                "ui.preferences",
+                "document.set_document_settings",
             ])
             .collect::<BTreeSet<_>>()
     );

@@ -44,9 +44,11 @@ history,64pt setting, Unicode Save/reopen and Defaults-Cancel pass independent a
 file consumers. This verifies one session checkbox, not the entire Preferences workflow
 or all native ring gestures. Restart/DPI/other-platform/exact26.1 behavior remains open.
 
-File > Document Settings now delivers only two stored creation preferences: explicit
-bond length and interior chain angle. [Receiving](verification-native-drawing-settings.md)
-records independent core/App/adapters and actual Mac set/clear/history/Save/reopen.
+File > Document Settings delivers two stored creation preferences (explicit bond length
+and interior chain angle) and now an explicit root Line width field. The creation pair's
+[receiving](verification-native-drawing-settings.md) includes actual Mac persistence.
+The new width [receiving](verification-document-line-width.md) covers independent
+core/App/adapters/files and CPU/Metal rendering; new native interaction is unverified.
 MF-013/DP-011 are **wired** for the broader documented workflow: remaining fields,
 inheritance, remaining-tool application and other-platform execution lack completion/evidence.
 The later [native chain workflow](verification-native-chains.md) now applies these
@@ -191,7 +193,7 @@ establish chemical preview, data-edit UI or other platforms.
 | MF-010 | File > Print | 25, 78 | missing | - |
 | MF-011 | File > Document Annotations | 14 | missing | Add/delete keywords and their values. |
 | MF-012 | File > Document Properties | 16 | missing | Typed custom properties. |
-| MF-013 | File > Document Settings | 19, 22-23, 40, 59 | wired (partial) | Bounded two-preference form has Mac set/clear/history/Save/reopen evidence; later chains now apply them without changing old geometry. Remaining settings categories, inherited styles and other-tool application are missing; see DP-011, verification-native-drawing-settings.md and verification-native-chains.md. |
+| MF-013 | File > Document Settings | 19, 22-23, 40, 59 | wired (partial) | Creation pair has bounded Mac persistence/tool evidence. Explicit root Line width now joins the atomic three-field form, with App/adapter/file and CPU/Metal evidence; new native width interaction is unverified. Other categories/inherited styles remain missing; see DP-011 and verification-document-line-width.md. |
 | MF-014 | File > Preferences | 15, 19, 32-39 | wired (partial; one checkbox verified on Mac) | Real File binding and Building/Display session ring-sprout checkbox, Defaults/OK/Cancel and weak modal guards. Mac retained state across Open, Defaults-Cancel and unchanged OK pass; other pages, restart persistence and other platforms remain missing. See verification-native-ring-sprout.md. |
 | MF-015 | Application menu > Settings (macOS) | 19 | missing | Platform-specific path; do not infer all Mac shortcuts from CTRL tables. |
 | MF-016 | File > Apply Document Settings | 40, 49 | missing | Merge settings from a source document. |
@@ -553,7 +555,7 @@ establish chemical preview, data-edit UI or other platforms.
 | DP-008 | Preferences > Monomer Libraries | 178-182 | missing | User/document/library state and versions. |
 | DP-009 | Document Settings > Layout | 22-23 | missing | Pages, poster dimensions/overlap and page registration marks. |
 | DP-010 | Document Settings > Header/Footer | 23 | missing | Header/footer variables and alignment. |
-| DP-011 | Document Settings > Drawing | 40-43 | wired (partial) | Only BondLength/ChainAngle have a bounded native Apply/Cancel form and Mac set/clear/history/Save/reopen checks. Later chains use both with explicit original48pt/120° fallback for known absence; chairs use BondLength alone. Old geometry stays. Inheritance, remaining tools/geometry/style settings and exact26.1 defaults remain missing. See verification-native-drawing-settings.md, verification-native-chains.md and verification-native-chairs.md. |
+| DP-011 | Document Settings > Drawing | 40-43 | wired (partial) | BondLength/ChainAngle retain scoped Mac persistence and chain/chair application. Explicit root LineWidth has typed/source-preserving Save, shared actual-ink rendering and atomic three-field Apply, independently checked through App/CLI/MCP/socket/files/CPU/Metal. Native width interaction is unverified; inheritance, spacing/bold/margin/hash/journal styles and exact26.1 defaults remain missing. See verification-document-line-width.md and earlier native-settings/chain/chair receiving. |
 | DP-012 | Document Settings > Atom Labels | 44, 99 | missing | - |
 | DP-013 | Document Settings > Captions | 44-48 | missing | - |
 | DP-014 | Document Settings > Analysis | 44 | missing | Analysis field labels and formatting. |

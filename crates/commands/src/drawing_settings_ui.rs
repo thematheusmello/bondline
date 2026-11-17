@@ -1,7 +1,7 @@
 //! Native presentation owns a weak draft; the existing settings command authors.
 use crate::{
-    BondToolState, CaptureStamp, CloseState, Command, CommandResult, DrawingSettingsSet,
-    EffectiveTool, Engine, Error, UiFileContextStamp,
+    BondToolState, CaptureStamp, CloseState, Command, CommandResult, DocumentSettingsSet,
+    DrawingSettingsSet, EffectiveTool, Engine, Error, UiFileContextStamp,
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -26,6 +26,7 @@ pub struct UiDrawingSettingsRequest {
     pub input_revision: u64,
     pub bond_length_pt: Option<f64>,
     pub chain_angle_degrees: Option<f64>,
+    pub line_width_pt: Option<f64>,
     pub current: bool,
     #[serde(skip)]
     cancelled: crate::Cancellation,
@@ -160,6 +161,7 @@ impl Engine {
                         input_revision: self.revision,
                         bond_length_pt: settings.bond_length_pt(),
                         chain_angle_degrees: settings.chain_angle_degrees(),
+                        line_width_pt: stored.model().drawing_style().line_width_pt(),
                         current: true,
                         cancelled: crate::Cancellation::default(),
                     },
@@ -209,6 +211,29 @@ impl Engine {
             expected_revision: self.revision,
             bond_length_pt,
             chain_angle_degrees,
+        }))?;
+        self.finish_ui_drawing_settings(id);
+        result.ui_drawing_settings = None;
+        result.ui_drawing_settings_operation = Some(id);
+        Ok(result)
+    }
+
+    /// The same current draft, committing the full settings form through one registry entry.
+    pub fn apply_ui_document_settings(
+        &mut self,
+        id: u64,
+        bond_length_pt: Option<f64>,
+        chain_angle_degrees: Option<f64>,
+        line_width_pt: Option<f64>,
+    ) -> Result<CommandResult, Error> {
+        if !self.ui_drawing_settings_request_current(id) {
+            return Err(Error::UiStaleRequest);
+        }
+        let mut result = self.execute(Command::DocumentSettingsSet(DocumentSettingsSet {
+            expected_revision: self.revision,
+            bond_length_pt,
+            chain_angle_degrees,
+            line_width_pt,
         }))?;
         self.finish_ui_drawing_settings(id);
         result.ui_drawing_settings = None;

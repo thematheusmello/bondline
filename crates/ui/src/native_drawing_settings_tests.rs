@@ -1,4 +1,7 @@
 //! Independent actual-App File menu baseline; no new Rust API.
+#[path = "document_settings_ui_tests.rs"]
+mod document_style;
+
 use super::{Fixture, TestResult};
 use eframe::egui;
 use serde_json::json;

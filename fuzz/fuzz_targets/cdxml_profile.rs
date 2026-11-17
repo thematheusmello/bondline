@@ -3,8 +3,8 @@
 // Bounded IO invariants; independent external literal consumers remain separate.
 use bondline_io::{DocumentError, StoredDocument};
 use bondline_model::{
-    Atom, AtomId, Bond, BondId, BondOrder, Document, DoublePosition, DrawingSettings, Element,
-    Fragment, FragmentId, PageSize, Point2, Radical,
+    Atom, AtomId, Bond, BondId, BondOrder, Document, DoublePosition, DrawingSettings, DrawingStyle,
+    Element, Fragment, FragmentId, PageSize, Point2, Radical,
 };
 use libfuzzer_sys::fuzz_target;
 use std::{borrow::Cow, collections::BTreeMap, num::NonZeroU16, sync::Arc};
@@ -38,6 +38,7 @@ fn original_unchanged(base: &StoredDocument, source: &[u8], snapshot: &Arc<Docum
 // Rebind by explicit array position, not fresh dense imported object identities.
 fn same_semantics(expected: &Document, actual: &Document) {
     assert_eq!(expected.drawing_settings(), actual.drawing_settings());
+    assert_eq!(expected.drawing_style(), actual.drawing_style());
     assert_eq!(expected.pages().len(), actual.pages().len());
     for (left, right) in expected.pages().iter().zip(actual.pages()) {
         assert_eq!(left.size(), right.size());
@@ -248,6 +249,10 @@ fn structured(source: &[u8], data: &[u8]) {
         )
         .unwrap(),
     );
+    edited.model_mut().set_drawing_style(
+        DrawingStyle::new([None, Some(0.5), Some(2.0), Some(100000.0)][usize::from(byte(7) % 4)])
+            .unwrap(),
+    );
     edited
         .model_mut()
         .set_page_size(
@@ -292,4 +297,9 @@ fuzz_target!(|data: &[u8]| {
     arbitrary_source(data);
     structured(ORIGINAL, data);
     structured(SCOPED, data);
+    let styled =
+        std::str::from_utf8(ORIGINAL)
+            .unwrap()
+            .replacen("<CDXML ", "<CDXML LineWidth='.500' ", 1);
+    structured(styled.as_bytes(), data);
 });

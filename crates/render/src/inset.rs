@@ -2,15 +2,19 @@ use crate::stroke::{PixelRegion, first_lattice_true, visible_pixel};
 use crate::{Cancellation, Error, Rectangle, Stroke};
 use bondline_model::DoublePosition;
 
-pub(crate) fn strokes(
+pub(crate) fn strokes_with_unit(
     axis: &Stroke,
     side: DoublePosition,
     begin_neighbours: &[[f32; 2]],
     end_neighbours: &[[f32; 2]],
     cancel: &Cancellation,
+    unit: f32,
 ) -> Result<Vec<Stroke>, Error> {
     cancel.check()?;
     axis.validate()?;
+    if !unit.is_finite() || unit <= 0.0 || unit > 100_000.0 {
+        return Err(Error::InvalidStroke);
+    }
     let sign = match side {
         DoublePosition::Right => 1.0,
         DoublePosition::Left => -1.0,
@@ -20,7 +24,10 @@ pub(crate) fn strokes(
     let end = axis.end.map(f64::from);
     let delta = [end[0] - begin[0], end[1] - begin[1]];
     let length = delta[0].hypot(delta[1]);
-    let spacing = 3.0 * f64::from(axis.width);
+    let spacing = 3.0 * f64::from(unit);
+    if f64::from(axis.width) >= spacing {
+        return Err(Error::BondScale);
+    }
     if 3.0 * spacing > length {
         return Err(Error::UnsupportedChemicalContent);
     }

@@ -12,6 +12,23 @@ pub fn centered_bond_strokes(axis: &Stroke, order: BondOrder) -> Result<Vec<Stro
     })
 }
 
+/// Original 3-unit separation, with ink width independent of the geometric unit.
+pub fn centered_bond_strokes_with_unit(
+    axis: &Stroke,
+    order: BondOrder,
+    unit: f32,
+) -> Result<Vec<Stroke>, Error> {
+    axis.centered_components_with_unit(
+        match order {
+            BondOrder::Single => 1,
+            BondOrder::Double => 2,
+            BondOrder::Triple => 3,
+            _ => return Err(Error::UnsupportedChemicalContent),
+        },
+        unit,
+    )
+}
+
 /// Closed, constant-width butt stroke in canvas units, without blending or antialiasing.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Stroke {
@@ -267,7 +284,14 @@ impl Stroke {
     }
 
     pub(crate) fn centered_components(&self, count: usize) -> Result<Vec<Self>, Error> {
+        self.centered_components_with_unit(count, self.width)
+    }
+
+    fn centered_components_with_unit(&self, count: usize, unit: f32) -> Result<Vec<Self>, Error> {
         self.validate()?;
+        if !unit.is_finite() || unit <= 0.0 || unit > 100_000.0 {
+            return Err(Error::InvalidStroke);
+        }
         let offsets: &[f64] = match count {
             1 => return Ok(vec![self.clone()]),
             2 => &[-1.5, 1.5],
@@ -278,14 +302,17 @@ impl Stroke {
         let [bx, by] = self.end.map(f64::from);
         let (dx, dy) = (bx - ax, by - ay);
         let length = dx.hypot(dy);
+        if f64::from(self.width) >= 3.0 * f64::from(unit) {
+            return Err(Error::BondScale);
+        }
         // Original centered profile: adjacent spacing3w must not exceed one-third axis.
-        if 9.0 * f64::from(self.width) > length {
+        if 9.0 * f64::from(unit) > length {
             return Err(Error::UnsupportedChemicalContent);
         }
         offsets
             .iter()
             .map(|factor| {
-                let distance = factor * f64::from(self.width);
+                let distance = factor * f64::from(unit);
                 let shift = [-dy / length * distance, dx / length * distance];
                 let stroke = Self {
                     begin: [(ax + shift[0]) as f32, (ay + shift[1]) as f32],

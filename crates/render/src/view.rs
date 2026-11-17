@@ -1,13 +1,14 @@
 use crate::{
     Cancellation, Error, GraphScene, MAX_HIT_REGIONS, PageViewport, Primitive, Rectangle, Stroke,
 };
-use bondline_model::{AtomId, Page, PageSize, Point2};
+use bondline_model::{AtomId, DrawingStyle, Page, PageSize, Point2};
 use std::collections::BTreeMap;
 
 /// A logical-unit camera. Fit retains the legacy rounded viewport exactly; explicit
 /// zoom uses one authored point per logical unit at 100%, independent of device DPI.
 /// The integer camera translation never resamples glyph pixels. Its centered point
 /// can differ from the exact viewport center by at most half a logical unit per axis.
+#[derive(Clone)]
 pub struct PageView {
     page: PageSize,
     viewport: PageViewport,
@@ -20,6 +21,12 @@ pub struct PageView {
 }
 
 impl PageView {
+    /// Authored ink width is independent of this camera's label and spacing metrics.
+    pub fn with_drawing_style(mut self, style: DrawingStyle) -> Self {
+        self.viewport = self.viewport.with_drawing_style(style);
+        self
+    }
+
     pub fn fit(width: u32, height: u32, page: PageSize) -> Result<Self, Error> {
         let viewport = PageViewport::new(width, height, page)?;
         let percent = viewport.scale() * 100.0;
@@ -226,6 +233,10 @@ impl PageView {
 
     pub fn stroke_width(&self) -> f32 {
         self.viewport.stroke_width()
+    }
+
+    pub fn ink_width(&self) -> f32 {
+        self.viewport.ink_width()
     }
 
     /// Build chemical geometry and run its existing whole-source checks before camera clipping.

@@ -26,6 +26,19 @@ The persistent project goal is active. M0's native license blocker is resolved; 
 not complete M0. See docs/control-protocol.md for the delivered command/adapter contract and
 docs/verification.md for exact RED/GREEN and platform evidence.
 
+Explicit document line width now follows docs/research/document-line-width.md and
+docs/verification-document-line-width.md on baseab912a2. Keep separate optional style,
+legacy1pt/12pt/3pt metrics, actual ink/paper/gap/hit guards, source-aware typed splicing and
+whole-format loss boundaries. The combined required-nullable triple command appends46;
+old45 schemas/order and legacy pair semantics stay exact. Three-field native presentation
+shares bounded ordered input with the old two-field Atom form. Two old LineWidth9
+negatives are deliberate positive upgrades; all other opaque/refusal policies remain.
+Full71103 passes1800/0/1 and IO ASan60878 passes10000/51s. Fresh controller access still
+fails, so new native width/Windows/Linux interaction is unverified. Catalogue16/124 stays;
+no grey tool gains a binding. All owned jobs are terminal. The user recreated/resumed the
+full M0–M5 goal; continue broader M1 styles/fonts/text/default proofs and foreign fixtures,
+not a repetition of this width workflow. Actions OFF; user apps/drawings stay protected.
+
 The current M1 IO profile follows docs/research/source-preserving-cdxml-profile.md and
 docs/verification-source-preserving-cdxml-profile.md on base03d5205. Canonical remains
 byte-exact-native first; closed-v0 Preserved uses complete lexical/node/key/typed proof,

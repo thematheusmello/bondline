@@ -142,7 +142,7 @@ pub use page::{
     graph_page_scene_with_display_hydrogens,
 };
 pub use scene::{Primitive, Rectangle, Scene, cpu_scene, cpu_scene_with_cancel, page_scene};
-pub use stroke::{Stroke, centered_bond_strokes};
+pub use stroke::{Stroke, centered_bond_strokes, centered_bond_strokes_with_unit};
 pub use view::PageView;
 
 #[cfg(not(target_arch = "wasm32"))]

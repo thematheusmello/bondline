@@ -50,7 +50,7 @@ pub use chain_tool::{
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
-pub use drawing_settings::DrawingSettingsSet;
+pub use drawing_settings::{DocumentSettingsSet, DrawingSettingsSet};
 pub use drawing_settings_ui::{UiDrawingSettings, UiDrawingSettingsRequest};
 pub use file_ui::{
     UiFile, UiFileAction, UiFileContextStamp, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState,
@@ -220,6 +220,7 @@ command_registry! {
     UiChainTool(UiChainTool) => ("ui.chain_tool", "Select a chain tool, set its transient constraints, or open/cancel a source-qualified numeric Add Chain draft; authoring uses the existing chain commands.", false),
     RingSprout(RingSprout) => ("ring.sprout", "Attach an independent native carbon ring through one Single connector in one edit, with explicit cycle geometry and literal hydrogen policy.", false),
     UiPreferences(UiPreferences) => ("ui.preferences", "Inspect or set session application preferences, or open/apply/cancel their native draft; never authors document data or acknowledges Save.", false),
+    DocumentSettingsSet(DocumentSettingsSet) => ("document.set_document_settings", "Replace explicit bond length, chain angle and line width atomically; a width change must pass the whole-page ink certificate and leaves geometry and label metrics unchanged.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -290,6 +291,8 @@ pub enum Error {
     UnsupportedChain(&'static str),
     #[error("drawing settings require source-free or completely mapped native CDXML data")]
     UnsupportedDrawingSettingsSource,
+    #[error("the requested document style cannot be displayed safely: {0}")]
+    UnsupportedDrawingStyle(&'static str),
     #[error(transparent)]
     Render(#[from] bondline_render::Error),
     #[error(transparent)]
@@ -435,6 +438,7 @@ impl Error {
             | Self::UnsupportedRing(_)
             | Self::UnsupportedChain(_)
             | Self::UnsupportedDrawingSettingsSource
+            | Self::UnsupportedDrawingStyle(_)
             | Self::UnsupportedSmilesPasteSource
             | Self::UnsupportedBondConversion(_) => "unsupported_content",
             Self::IncompleteSmilesExportSource => "unsupported_content",
@@ -1047,6 +1051,15 @@ impl Engine {
                 drawing_focus = self.view_focus;
                 changed
             }
+            Command::DocumentSettingsSet(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let candidate = drawing_settings::set_document(self.stored_document()?, params)?;
+                let changed = self.commit(candidate)?;
+                drawing_focus = self.view_focus;
+                changed
+            }
             Command::ChainCreate(params) => {
                 if params.expected_revision != self.revision {
                     return Err(Error::StaleRevision);
@@ -1381,6 +1394,7 @@ mod tests {
                 "ui.chain_tool",
                 "ring.sprout",
                 "ui.preferences",
+                "document.set_document_settings",
             ]
             .into_iter()
             .collect()

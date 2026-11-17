@@ -1,5 +1,15 @@
 # Architecture
 
+Document has a separate optional `DrawingStyle` for explicit root line width, not a
+creation preference or resolved foreign default. Empty omission preserves old snapshots
+and native bytes. PageView carries style through logical/physical cameras; complete-owner
+IO overrides stale caller style. Actual ink width is independent of legacy glyph/spacing
+scale, including native previews and whole-page paste/settings certificates. The new
+combined settings command commits the full creation/style triple once; the old pair API
+retains its contract. Read [contract](research/document-line-width.md) and
+[receiving](verification-document-line-width.md). No dependency, shader or planned-tool
+binding is added; foreign style resolution remains separate work.
+
 CDXML backing now separates Canonical, Preserved and Opaque profiles. The closed-v0
 Preserved proof uses all syntax facts/nodes/keys and typed source correspondence; current
 prefix/domain validation also gates eligibility. Its source-aware writer patches typed

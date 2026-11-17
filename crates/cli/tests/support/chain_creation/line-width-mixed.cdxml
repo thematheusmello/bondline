@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDXML LineWidth='.500' CreationProgram="Bondline 0.1.0">
+ <!-- original lexical witness -->
+ <page id='1' DrawingSpace="Poster" Width='612.00' Height="792">
+  <fragment id="2"><n id='3' NodeType="Element" Element='6' Charge="0" Radical='None' p="100.0 200" NumHydrogens='3'/><n id="4" NodeType='Element' Element="6" Charge='0' Radical="None" p='140 200.00' NumHydrogens="3"/><b id='5' B="3" E='4' Order="1"/></fragment>
+ </page>
+</CDXML>

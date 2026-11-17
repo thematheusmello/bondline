@@ -1,5 +1,15 @@
 # File capabilities
 
+Explicit document-root `LineWidth` is now separate validated appearance data, in physical
+points. The original native/Preserved CDXML profile reads, patches, adds and clears it
+without changing geometry or unrelated source bytes. Unsupported/nested/foreign styles
+stay opaque. Complete-owner display and candidate validation use actual width with
+unchanged label size and spacing. Whole-MOL refuses any explicit style before raw reuse;
+CDX/SMILES drift guards remain. The existing form is wired for width, with independent
+App/adapter/file and CPU/Metal evidence; new native interaction is unverified. See
+[contract](research/document-line-width.md) and [receiving](verification-document-line-width.md).
+Other style properties, CDX style projection and foreign style resolution remain missing.
+
 Equivalent Bondline-v0 elemental CDXML now has headlessly verified source-aware editing:
 mixed quotes/whitespace/comments, sparse/scoped IDs, integral numeric lexemes and interleaved
 forward-referenced bonds retain original bytes outside typed edits. Known optional fields

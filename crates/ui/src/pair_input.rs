@@ -1,9 +1,9 @@
 //! Ordered input routing shared by bounded native forms.
 use eframe::egui;
 
-pub(super) struct Routed {
-    pub fields: [Vec<egui::Event>; 2],
-    pub errors: [Option<String>; 2],
+pub(super) struct Routed<const N: usize = 2> {
+    pub fields: [Vec<egui::Event>; N],
+    pub errors: [Option<String>; N],
     pub focus: Option<usize>,
 }
 
@@ -17,20 +17,20 @@ fn key_event(key: egui::Key, modifiers: egui::Modifiers) -> egui::Event {
     }
 }
 
-pub(super) fn route_prefix(
-    fields: &[Option<egui::text_edit::TextEditOutput>; 2],
-    limits: [usize; 2],
+pub(super) fn route_prefix<const N: usize>(
+    fields: &[Option<egui::text_edit::TextEditOutput>; N],
+    limits: [usize; N],
     caret_limit: usize,
     field_id: impl Fn(usize) -> egui::Id,
     context: &egui::Context,
     events: &[egui::Event],
     focus: Option<egui::Id>,
-) -> Routed {
+) -> Routed<N> {
     use egui::accesskit::{Action, ActionData, ActionRequest, NodeId, TextPosition, TextSelection};
-    let index_of = |node: u64| (0..2).find(|index| field_id(*index).value() == node);
+    let index_of = |node: u64| (0..N).find(|index| field_id(*index).value() == node);
     let mut routed = Routed {
-        fields: [Vec::new(), Vec::new()],
-        errors: [None, None],
+        fields: std::array::from_fn(|_| Vec::new()),
+        errors: std::array::from_fn(|_| None),
         focus: focus.and_then(|id| index_of(id.value())),
     };
     let mut dragging = fields.iter().position(|shown| {

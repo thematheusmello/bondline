@@ -199,7 +199,7 @@ fn accepted_conversion_publishes_real_cdxml_without_saving_the_open_dirty_sdf() 
     assert!(!engine.finish_ui_file(id, false));
     assert_eq!(state(&engine)?, unchanged);
     drop(save_plan(&mut engine, &directory.path("released.sdf"))?);
-    assert_eq!(bondline_commands::registry().len(), 45);
+    assert_eq!(bondline_commands::registry().len(), 46);
     Ok(())
 }
 

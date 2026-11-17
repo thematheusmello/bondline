@@ -5,12 +5,12 @@ use super::*;
 const UI_SETTINGS: &str = "ui.drawing_settings";
 
 fn settings_schema(entries: &[Value], key: &str) -> TestResult {
-    assert_eq!(entries.len(), 45);
+    assert_eq!(entries.len(), 46);
     let names = entries
         .iter()
         .map(|v| v["name"].as_str().ok_or("name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(names.len(), 45);
+    assert_eq!(names.len(), 46);
     assert_eq!(
         names,
         OLD_NAMES
@@ -23,6 +23,7 @@ fn settings_schema(entries: &[Value], key: &str) -> TestResult {
                 "ui.chain_tool",
                 "ring.sprout",
                 "ui.preferences",
+                "document.set_document_settings",
             ])
             .collect::<BTreeSet<_>>()
     );
@@ -39,8 +40,12 @@ fn settings_schema(entries: &[Value], key: &str) -> TestResult {
         "ring.sprout"
     );
     assert_eq!(
-        entries.last().ok_or("last entry")?["name"],
+        entries.get(44).ok_or("preserved preferences entry")?["name"],
         "ui.preferences"
+    );
+    assert_eq!(
+        entries.last().ok_or("last entry")?["name"],
+        "document.set_document_settings"
     );
     let entry = entries
         .iter()
@@ -218,7 +223,7 @@ fn authenticated_settings_open_cancel_wake_without_authoring_then_host_apply_sav
     assert_eq!(
         opened["result"]["ui_drawing_settings"],
         json!({"id":1,"input_revision":1,
-        "bond_length_pt":null,"chain_angle_degrees":137.5,"current":true})
+        "bond_length_pt":null,"chain_angle_degrees":137.5,"line_width_pt":null,"current":true})
     );
     assert_eq!(opened["result"]["changed"], false);
     assert_eq!(

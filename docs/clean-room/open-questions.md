@@ -1,5 +1,13 @@
 # Open questions
 
+- [Explicit document LineWidth](../research/document-line-width.md) now has a complete
+  original-profile data/render/command/form path, with native interaction still unverified.
+  General foreign editing still needs complete effective spacing, fonts/labels, colours
+  and object inheritance. The SDK's missing-width rule depends on a last-used style
+  sheet, so no universal foreign fallback is known. Preserve unresolved styles, tables
+  and Text without granting edit authority; the original Bondline fallback is not proof
+  of another application's appearance. Binary style projection remains separate work.
+
 - Equivalent closed-v0 elemental CDXML now has [headless source-aware receiving](../verification-source-preserving-cdxml-profile.md)
   after the batch prerequisite. General foreign styles/defaults, labels/semantic objects,
   stable generated XML IDs across edits and reference-compatible migrations remain open.

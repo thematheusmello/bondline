@@ -5,7 +5,9 @@ use crate::{
     Cancellation, Error, GraphScene, HitTarget, MAX_HIT_REGIONS, Primitive, Rectangle, Scene,
     Stroke,
 };
-use bondline_model::{AtomId, BondOrder, DoublePosition, Page, PageSize, Point2, Radical};
+use bondline_model::{
+    AtomId, BondOrder, DoublePosition, DrawingStyle, Page, PageSize, Point2, Radical,
+};
 use std::collections::BTreeMap;
 
 /// The same rounded fit used for the paper and authoring pointer conversion.
@@ -15,6 +17,7 @@ pub struct PageViewport {
     page: PageSize,
     exact_scale: Option<f64>,
     raster: Option<RasterTransform>,
+    style: DrawingStyle,
 }
 
 #[derive(Clone)]
@@ -54,6 +57,7 @@ impl PageViewport {
             page,
             exact_scale: None,
             raster: None,
+            style: DrawingStyle::default(),
         })
     }
 
@@ -86,6 +90,7 @@ impl PageViewport {
                 page,
                 exact_scale: Some(scale),
                 raster: None,
+                style: DrawingStyle::default(),
             },
             source,
         ))
@@ -125,6 +130,7 @@ impl PageViewport {
                     size[1] / self.page.height_pt(),
                 ],
             }),
+            style: self.style,
         })
     }
 
@@ -206,6 +212,15 @@ impl PageViewport {
 
     pub fn stroke_width(&self) -> f32 {
         self.scale() as f32
+    }
+
+    pub(crate) fn with_drawing_style(mut self, style: DrawingStyle) -> Self {
+        self.style = style;
+        self
+    }
+
+    pub(crate) fn ink_width(&self) -> f32 {
+        (self.style.line_width_pt().unwrap_or(1.0) * self.scale()) as f32
     }
 
     pub(crate) fn scale(&self) -> f64 {
@@ -413,9 +428,14 @@ pub(crate) fn graph_scene_in_viewport(
             let stroke = Stroke {
                 begin,
                 end,
-                width: viewport.stroke_width(),
+                width: viewport.ink_width(),
                 color: [0, 0, 0, 255],
             };
+            if viewport.style.line_width_pt().is_some()
+                && (!stroke.width.is_finite() || stroke.width <= 0.0 || stroke.width > 100_000.0)
+            {
+                return Err(Error::BondScale);
+            }
             stroke.validate()?;
             let strokes = if matches!(
                 bond.double_position,
@@ -429,15 +449,20 @@ pub(crate) fn graph_scene_in_viewport(
                         .filter_map(|(neighbour, point)| (*neighbour != other).then_some(*point))
                         .collect::<Vec<_>>()
                 };
-                crate::inset::strokes(
+                crate::inset::strokes_with_unit(
                     &stroke,
                     bond.double_position,
                     &neighbours(bond.begin, bond.end),
                     &neighbours(bond.end, bond.begin),
                     cancel,
+                    viewport.stroke_width(),
                 )?
             } else {
-                crate::centered_bond_strokes(&stroke, bond.order)?
+                crate::stroke::centered_bond_strokes_with_unit(
+                    &stroke,
+                    bond.order,
+                    viewport.stroke_width(),
+                )?
             };
             for (id, dx) in [
                 (bond.begin, f64::from(end[0]) - f64::from(begin[0])),
@@ -720,7 +745,12 @@ pub(crate) fn graph_scene_in_viewport(
                 } else {
                     // Original centered profile reserves the full inter-line corridor.
                     let envelope = Stroke {
-                        width: bond.stroke.width * if bond.strokes.len() == 2 { 4.0 } else { 7.0 },
+                        width: if bond.stroke.width == viewport.stroke_width() {
+                            bond.stroke.width * if bond.strokes.len() == 2 { 4.0 } else { 7.0 }
+                        } else {
+                            3.0 * viewport.stroke_width() * (bond.strokes.len() - 1) as f32
+                                + bond.stroke.width
+                        },
                         ..bond.stroke.clone()
                     };
                     for component in &other.strokes {
@@ -762,7 +792,11 @@ pub(crate) fn graph_scene_in_viewport(
                             (a.begin[1] + b.begin[1]) / 2.0,
                         ],
                         end: [(a.end[0] + b.end[0]) / 2.0, (a.end[1] + b.end[1]) / 2.0],
-                        width: bond.stroke.width * 2.0,
+                        width: if bond.stroke.width == viewport.stroke_width() {
+                            bond.stroke.width * 2.0
+                        } else {
+                            3.0 * viewport.stroke_width() - bond.stroke.width
+                        },
                         color: [255; 4],
                     };
                     gap.validate()?;
@@ -790,6 +824,24 @@ pub(crate) fn graph_scene_in_viewport(
             }
         }
     }
+    if viewport.style.line_width_pt().is_some() {
+        let masks = labels
+            .iter()
+            .flat_map(|(_, _, label)| label.masks())
+            .collect::<Vec<_>>();
+        for stroke in bonds
+            .iter()
+            .filter(|bond| bond.strokes.len() == 1)
+            .flat_map(|bond| &bond.strokes)
+        {
+            if !stroke.has_visible_pixel([width, height], &[], None, &[], cancel)? {
+                return Err(Error::BondScale);
+            }
+            if !stroke.has_visible_pixel([width, height], &masks, None, &[], cancel)? {
+                return Err(Error::LabelOverlap);
+            }
+        }
+    }
     let label_em_px = labels
         .iter()
         .map(|(_, _, label)| label.em_px)
@@ -801,7 +853,7 @@ pub(crate) fn graph_scene_in_viewport(
             .extend(label.pixels.into_iter().map(Primitive::Rectangle));
     }
     cancel.check()?;
-    if counts.is_some() {
+    if counts.is_some() || viewport.style.line_width_pt().is_some() {
         validate_paper_ink(
             &scene,
             viewport,

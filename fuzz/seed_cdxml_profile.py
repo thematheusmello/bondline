@@ -29,6 +29,11 @@ def seed(name, category, expected, data):
 seed('original-forward-464.xml', 'positive/original-sparse-forward-reference', 'complete', ORIGINAL)
 seed('scoped-u32max.xml', 'positive/repeated-scoped-ids-and-max-id', 'complete', SCOPED)
 seed('native-v0-literal.xml', 'positive/original-native-v0-literal', 'complete', CANONICAL)
+for name, width in [('half', b'.500'), ('two', b'2.0'), ('maximum', b'100000')]:
+    seed('style-'+name+'.xml', 'positive/explicit-document-line-width', 'complete', ORIGINAL.replace(b'<CDXML ', b'<CDXML LineWidth="'+width+b'" ', 1))
+for name, width in [('zero', b'0'), ('nonfinite', b'NaN')]:
+    seed('style-'+name+'.xml', 'opaque/unsupported-line-width', 'opaque', ORIGINAL.replace(b'<CDXML ', b'<CDXML LineWidth="'+width+b'" ', 1))
+seed('style-object-override.xml', 'opaque/unmodelled-object-line-width', 'opaque', ORIGINAL.replace(b'<n ', b'<n LineWidth="2" ', 1))
 seed('empty-selfclosing-page.xml', 'positive/selfclosing-parent', 'complete', b"<CDXML CreationProgram='Bondline 0.1.0'><page id='91' DrawingSpace='Poster' Width='612.00' Height='792.000' /></CDXML>")
 seed('empty-paired-fragment.xml', 'positive/paired-parent-and-comment', 'complete', b"<CDXML CreationProgram='Bondline 0.1.0'><page id='91' DrawingSpace='Poster' Width='612.00' Height='792.000'><fragment id='7'><!--stay--></fragment></page></CDXML>")
 seed('optional-flags-and-side.xml', 'positive/optional-settings-and-fields', 'complete', ORIGINAL.replace(b'<CDXML ', b'<CDXML BondLength="48.00" ChainAngle="90.0" ', 1).replace(b' Order=\'1\'', b' DoublePosition="Right" Order=\'1\'', 1).replace(b"<n Radical=", b"<n Isotope='13' ShowTerminalCarbonLabels='no' ShowNonTerminalCarbonLabels='yes' Radical=", 1))

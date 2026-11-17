@@ -2310,14 +2310,15 @@ fn show_workspace_with_preview(
                             BondDrawOrder::Double => bondline_model::BondOrder::Double,
                             BondDrawOrder::Triple => bondline_model::BondOrder::Triple,
                         };
-                        let result = bondline_render::centered_bond_strokes(
+                        let result = bondline_render::centered_bond_strokes_with_unit(
                             &bondline_render::Stroke {
                                 begin,
                                 end,
-                                width: viewport.stroke_width(),
+                                width: viewport.ink_width(),
                                 color: [70, 105, 155, 255],
                             },
                             order,
+                            viewport.stroke_width(),
                         )
                         .and_then(|strokes| {
                             for stroke in &strokes {

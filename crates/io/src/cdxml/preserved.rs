@@ -230,6 +230,7 @@ fn certify_projection(source: &[u8], expected: &Document) -> Result<()> {
     let projected = graph.preview_document(page.size())?;
     let actual = one_page(&projected)?;
     if projected.drawing_settings() != expected.drawing_settings()
+        || projected.drawing_style() != expected.drawing_style()
         || actual.size() != page.size()
         || actual.fragments().len() != page.fragments().len()
     {
@@ -497,6 +498,10 @@ pub(crate) fn write_preserved(
             (
                 "ChainAngle",
                 old.chain_angle_degrees() != new.chain_angle_degrees(),
+            ),
+            (
+                "LineWidth",
+                baseline.drawing_style() != current.drawing_style(),
             ),
         ],
     )?;

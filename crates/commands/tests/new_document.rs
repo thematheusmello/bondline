@@ -157,6 +157,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "ui.chain_tool",
             "ring.sprout",
             "ui.preferences",
+            "document.set_document_settings",
         ]
         .into_iter()
         .collect()

@@ -4,7 +4,7 @@ use super::{
     LayoutError, SmilesDocument,
     acyclic::{WORK_PER_ROTATION, check, geometry, polygons_overlap},
     components,
-    layout::validate_ink_with_cancel,
+    layout::validate_ink_with_style,
 };
 use bondline_model::{AtomId, BondId, Document, Fragment, FragmentId, Page, PageSize, Point2};
 use bondline_render::{Cancellation, MAX_HIT_REGIONS};
@@ -36,6 +36,15 @@ impl SmilesDocument {
 /// Original policy uses the page diagonal for epsilon and at most100000 pair comparisons.
 /// This 1024-square certificate is not a promise that every native zoom can be rendered.
 pub fn validate_authoring_page(page: &Page, cancel: &Cancellation) -> Result<(), LayoutError> {
+    validate_authoring_page_with_style(page, bondline_model::DrawingStyle::default(), cancel)
+}
+
+/// The same whole-page certificate over the actual authored ink width.
+pub fn validate_authoring_page_with_style(
+    page: &Page,
+    style: bondline_model::DrawingStyle,
+    cancel: &Cancellation,
+) -> Result<(), LayoutError> {
     check(cancel)?;
     let mut items = 0_usize;
     for fragment in page.fragments() {
@@ -134,7 +143,7 @@ pub fn validate_authoring_page(page: &Page, cancel: &Cancellation) -> Result<(),
             return Err(LayoutError::Geometry("whole-page authored geometry"));
         }
     }
-    let scene = validate_ink_with_cancel(page, cancel)?;
+    let scene = validate_ink_with_style(page, style, cancel)?;
     let actual_bonds = page
         .fragments()
         .iter()

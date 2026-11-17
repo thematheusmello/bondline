@@ -17,7 +17,7 @@ pub(crate) mod projection;
 mod ring;
 pub(crate) mod write;
 pub use authoring::AuthoringError;
-pub use authoring_layout::validate_authoring_page;
+pub use authoring_layout::{validate_authoring_page, validate_authoring_page_with_style};
 pub use file::{SmilesFileDocument, SmilesFileError};
 pub use layout::LayoutError;
 pub use normalize::NormalizeError;

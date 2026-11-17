@@ -177,6 +177,10 @@ impl<'input> ElementalGraph<'input> {
             scalar("BondLength"),
             scalar("ChainAngle"),
         )?);
+        model.set_drawing_style(bondline_model::DrawingStyle::new(
+            scalar("LineWidth")
+                .filter(|width| bondline_model::DrawingStyle::new(Some(*width)).is_ok()),
+        )?);
         let id = model
             .pages()
             .first()

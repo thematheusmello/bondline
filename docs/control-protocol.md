@@ -3,8 +3,29 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has45 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has46 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
+
+## Atomic document appearance and creation settings
+
+`document.set_document_settings` appends record 46, retaining the previous 45 command
+records, schemas and order. Its four required keys form one closed parameter object:
+
+```json
+{"command":"document.set_document_settings","params":{"expected_revision":1,"bond_length_pt":48,"chain_angle_degrees":120,"line_width_pt":0.5}}
+```
+
+All three values are nullable; null clears explicit data. Width is finite, above zero
+through 100000 points. A width change must pass the bounded whole-page ink certificate
+before the single history commit. A closed or invisible multiple-bond gap is an
+`unsupported_scale` refusal, not a partial edit. Geometry and font/spacing metrics stay
+unchanged. No-op sharing/redo, source/close/revision guards and Save leases remain.
+The existing pair command remains closed to width and preserves the current style.
+File > Document Settings applies the full triple through this registry entry; the legacy
+Rust pair-Apply method retains its old behavior. Full details and native limits are in
+[receiving](verification-document-line-width.md).
+
+## Shared request and result rules
 
 An engine JSON request is exactly:
 
@@ -1414,15 +1435,15 @@ Open requires an attached host, the atomic command's exact source authority, Ope
 state and no other File/Atom/settings request. It captures source allocation/revision/
 generation, opaque file association, File/close/view epochs and effective tool. Its checked
 monotone request ID is separate from atom/bond IDs. Result `ui_drawing_settings` contains
-exactly `id`, `input_revision`, nullable `bond_length_pt`, nullable `chain_angle_degrees`
-and `current`. Successful Open/Cancel returns `ui_drawing_settings_operation` with that
+exactly `id`, `input_revision`, nullable `bond_length_pt`, nullable `chain_angle_degrees`,
+nullable `line_width_pt` and `current`. Successful Open/Cancel returns `ui_drawing_settings_operation` with that
 ID, while `changed` remains false. Both notify the native repaint callback after reply
 publication. No FilePlan, file worker, Save receipt or close acknowledgment is created.
 
-File > Document Settings… has two384-byte bounded fields, Bond length (pt) and Chain
-angle (degrees). Absent values start blank and clearing means null, never a default.
+File > Document Settings… has three 384-byte bounded fields: Bond length (pt), Chain
+angle (degrees), and Line width (pt). Absent values start blank and clearing means null.
 The trusted host's Apply rechecks the exact request and executes
-`document.set_drawing_settings` under the same Engine guard. Validated no-op closes the
+`document.set_document_settings` under the same Engine guard. Validated no-op closes the
 form without changing redo/history; failed Apply retains the draft. Existing geometry
 and view remain unchanged. The request's private cancellation token is not serialized:
 only exact explicit Cancel marks it. Remote Cancel therefore dismisses its form; host
@@ -1434,8 +1455,11 @@ The new `file.document_settings` control is always listed, disabled for unavaila
 unsupported content or foreground work. App modal-at-start fences prevent same-frame
 history/canvas/File actions after dismissal; native close waits for Apply/Cancel.
 Bounded core/App/CLI/stdio/authenticated-loopback and actual Mac persistence evidence is
-in [receiving](verification-native-drawing-settings.md). This implements two stored
-creation preferences. Chains resolve them separately below. Inheritance, other tools/settings categories,
+in [the earlier pair receiving](verification-native-drawing-settings.md). The new width
+field has [App/adapter/render/file evidence](verification-document-line-width.md), with
+actual native interaction unverified because controller startup fails. This implements
+two creation preferences and explicit root line width. Chains resolve preferences
+separately below. Inheritance, other tools/settings categories,
 complete reference-dialog parity and Windows/Linux native interaction remain missing.
 
 ## Native carbon-chain tools

@@ -256,12 +256,22 @@ pub(super) fn validate_ink_with_cancel(
     page: &bondline_model::Page,
     cancel: &bondline_render::Cancellation,
 ) -> Result<bondline_render::GraphScene, LayoutError> {
-    use bondline_render::{PageViewport, Primitive, graph_page_scene_with_cancel, page_scene};
+    validate_ink_with_style(page, bondline_model::DrawingStyle::default(), cancel)
+}
+
+pub(super) fn validate_ink_with_style(
+    page: &bondline_model::Page,
+    style: bondline_model::DrawingStyle,
+    cancel: &bondline_render::Cancellation,
+) -> Result<bondline_render::GraphScene, LayoutError> {
+    use bondline_render::{PageView, PageViewport, Primitive, page_scene};
     if cancel.is_cancelled() {
         return Err(LayoutError::Cancelled);
     }
     let background = page_scene(REFERENCE_SIZE, REFERENCE_SIZE, page.size())?;
-    let graph = graph_page_scene_with_cancel(REFERENCE_SIZE, REFERENCE_SIZE, page, cancel)
+    let graph = PageView::fit(REFERENCE_SIZE, REFERENCE_SIZE, page.size())?
+        .with_drawing_style(style)
+        .graph_scene(page, cancel)
         .map_err(|error| {
             if matches!(error, bondline_render::Error::Cancelled) {
                 LayoutError::Cancelled

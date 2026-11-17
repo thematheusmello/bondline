@@ -7,6 +7,51 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Explicit document line width; full local gate passes
+
+The user recreated/resumed the complete M0–M5 goal after pausing/clearing the earlier goal.
+Base `ab912a2`; the accompanying atomic feature commit is the recoverable state. Read
+[contract](docs/research/document-line-width.md) and
+[receiving](docs/verification-document-line-width.md). Optional root width now reaches
+source-preserving CDXML, the pure model, actual shared CPU/GPU ink, complete-owner/stale-
+camera display, native previews, paste/settings certificates, history and registered
+capture. Original glyph/spacing metrics, empty JSON/native bytes and unknown-source guards
+stay. Whole-MOL refuses explicit style; CDX/SMILES drift guards remain.
+
+One appended combined settings command commits nullable length/angle/width atomically;
+the old pair API/schema retains style. The existing form has three bounded fields with
+the original prefix/stale/cancel/modal safeguards. No planned tool gains a binding.
+Four initial actual IO/JSON/render/App REDs and a later numeric scale RED precede fixes.
+Independent Expat/Decimal/RDKit/Pillow, eight CPU/Metal render cases, real CLI/initialized
+stdio/authenticated socket/Unicode files and exact history/lease/guard cases pass. Source
+review finds no additional material issue. Source-only declarations remain distinct from
+executions. Two old LineWidth9 negatives become stronger positives while unmodeled
+styles/unknown metadata retain their refusals. Old current inventories and presentation
+expectations are updated explicitly; historical prefixes and old45 schemas remain exact.
+
+First aggregate attempts fail at obsolete inventory/presentation expectations; complete
+workspace15849 reports1795/1/1 at the final native-profile refusal. After its reviewed
+positive upgrade, fresh full71103 exits0: **1800 passed/0 failed/1 ignored across268 result
+lines**, with fmt, warnings-denied workspace/vendor checks, layers, assets/notices, strict
+runtime licenses and pinned corpus. Log226886B/SHA256
+58f0d907e4348e30ccf1eb4ee4d944518a879e1144c8cce12f133afb2543e782.
+ASan60878 passes10000 runs/51s;26 original seeds, initial16KiB, actual NEW/REDUCE max9731B,
+cov4413/ft8905/RSS473MiB. No claim of full-size/general/parser/chemistry coverage.
+
+Actual CLI46 records occupy43338B/SHA25602bb76b9f909a3691fddbb5a1f3c2cc794a72f759f43194791b880213558a12c;
+the first45 complete records/schema/order remain equal. Catalogue16/124 stays. Locks,
+workflow, protected listener test/policy, vendor/fonts/assets/golden/corpus stay unchanged.
+Fresh CUA startup still fails; no app/window is selected or changed. Both older user
+apps/drawings remain protected. New native width and Windows/Linux interaction are
+unverified. Actions OFF; no hosted run, push or publication. All owned jobs are terminal.
+
+Next finish broader M1 source-faithful styles/font/text/default resolution using independent
+foreign-source fixtures and explicit effective-property proof before expanding authority.
+Then continue full CDX mapping/writing and remaining MOL/SDF/SMILES workflows alongside
+necessary chemistry/model work. Revisit actual native width Open/Apply/history/Save/reopen
+when controller access returns. Full M0–M5 remains active/incomplete; earlier checkpoints
+below retain their own revision/evidence scope.
+
 ### User visual request: logo and planned-tool catalogue delivered
 
 Read-only review on base `3b3c7d6` confirms the original five SVG masters, native header/

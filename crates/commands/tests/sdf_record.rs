@@ -65,6 +65,7 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "ui.chain_tool",
             "ring.sprout",
             "ui.preferences",
+            "document.set_document_settings",
         ]
         .into_iter()
         .collect()

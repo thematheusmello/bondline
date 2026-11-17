@@ -497,6 +497,11 @@ impl StoredDocument {
                 "drawing settings cannot be represented",
             ));
         }
+        if !self.model.drawing_style().is_empty() {
+            return Err(DocumentError::UnsupportedMolLayout(
+                "drawing style cannot be represented",
+            ));
+        }
         if self.mol_version() == Some(version)
             && let Ok(bytes) = self.export_mol()
         {
