@@ -1,4 +1,4 @@
-# Status — 2026-11-16
+# Status — 2026-11-17
 
 The full M0–M5 goal is **active after the user resumed it** on `feat/multiple-bonds`.
 Its scope is unchanged. The native/GPU license
@@ -7,19 +7,35 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-### Next atomic drawing-settings command — contract locked
+### Atomic settings command in receiving; UI readiness qualified
 
-On b6497dd, the previous goal turn is PROGRESS (17 new settings-data cases, two10k ASan
-runs, native/CLI build and independent actual Unicode CLI files). The full aggregate
-remains failed998/1 at unchanged MCP bind58634; separate remaining592/0/1 is not a pass.
-Read docs/research/drawing-settings-command.md. One append-only command will replace
-two explicitly required nullable fields using existing validated data and one normal
-commit, preserving source guards, no-op contexts and view focus. No command/test/type
-is present at this documentation checkpoint. Root owns tracked edits/runtime; workers
-supply ignored source/inventory reviews. Next record the actual existing-JSON runtime
-RED, implement and verify the full command/adapters slice, then native input/forms.
-Registry40 and native tools stay unchanged/grey. No execution job, user-window change,
-new platform/golden, hosted run, push or publication is claimed.
+Previous goal turn is PROGRESS, committed b6497dd. Contract dede5ee now has an
+uncommitted engine/adapter implementation: one appended document.set_drawing_settings,
+all three keys required, explicit-null clearing, source-before-domain/no-op authority,
+one normal history edit and retained view focus. Fourteen new focused cases pass;
+actual CLI/stdio/authenticated socket files and the old40-record/schema prefix compare
+independently. Working registry41 leaves native controls31/20/14/10/catalogue12/128.
+
+First full run79447 stops at a new-test numeric-separator lint; its correction preserves
+the literal value. Corrected aggregate37811 fails1012/1 at unchanged MCP replacement
+bind51300; no unchanged retry or failure-time owner capture. Remaining24093 fails486/1/1
+at the existing SMILES order UI ready wait. [Qualification](docs/verification-smiles-order-readiness.md)
+records its source-demonstrated missing thread-retirement precondition, strengthened
+test-only helper and unchanged assertions/deadline/production fences. It does not prove
+the uncaptured failing schedule or a product/new-command defect. Modified UI library
+passes268/0/1; a subsequent target selection repeats that library and adds50 UI binary/
+integration passes, then stops on the invalid xtask --lib selector. Then-unstarted74317
+passes55/0/0 plus formatting, UI/vendor lint, layers/licenses/corpus. Both failed test
+runs remain failed, not a green aggregate.
+
+Native/CLI build89296 passes; actual Unicode CLI settings/bond/history/Save/reopen yields
+independently read C2H4/C=C and exact root angle137.5 with absent length. All40 previous
+command records/schema/order remain equal in actual CLI discovery. No native launch,
+copied-bundle/draft change, current-drawing inspection, new platform/golden or publication.
+At this test-readiness checkpoint, the settings feature remains uncommitted in the working
+tree; this test-only correction has its own atomic commit. All execution jobs are terminal.
+Next finish its receiving records/local commit, then ordered native modifiers and full
+settings/chain forms/gestures/acceptance. Full M0–M5 and the known MCP uncertainty remain.
 
 ### Verified drawing-settings data — aggregate gate failed
 

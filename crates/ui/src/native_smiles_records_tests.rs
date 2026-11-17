@@ -53,6 +53,7 @@ fn has_text(output: &egui::FullOutput, text: &str) -> bool {
     output.shapes.iter().any(|paint| matches!(&paint.shape,egui::Shape::Text(shape)
         if shape.galley.text()==text && paint.clip_rect.contains_rect(paint.shape.visual_bounding_rect())))
 }
+#[track_caller]
 fn wait_for(
     f: &mut Fixture,
     ready: impl Fn(&Fixture, &egui::FullOutput) -> bool,
@@ -64,7 +65,16 @@ fn wait_for(
             return Ok(output);
         }
         if Instant::now() >= deadline {
-            return Err(format!("record UI did not become ready: {:?}", f.app.error).into());
+            return Err(format!(
+                "record UI did not become ready at {}: order_busy={}, file_busy={}, executor_active={}, revision={:?}, error={:?}",
+                std::panic::Location::caller(),
+                f.app.drawing.order.is_busy(),
+                f.app.files.is_busy(),
+                f.app.executor.has_active_work(),
+                f.state().ok().and_then(|state| state["revision"].as_u64()),
+                f.app.error,
+            )
+            .into());
         }
         std::thread::yield_now();
     }
@@ -322,6 +332,8 @@ fn finish_order(f: &mut Fixture, revision: u64) -> TestResult {
         f.state().is_ok_and(|s| s["revision"] == revision)
             && !f.app.files.is_busy()
             && !f.app.executor.has_active_work()
+            // Executor completion precedes the owner's actual thread retirement.
+            && !f.app.drawing.order.is_busy()
     })?;
     f.warm();
     Ok(())
