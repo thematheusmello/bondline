@@ -6,14 +6,16 @@
   XML points/CDX points×65536. Missing values have no universal numeric default. Root-only
   supported projection is distinct from inherited effective styles; out-of-subset, nested,
   duplicate or other-width binary settings remain opaque/source-backed. Fixed toggles,
-  style-sheet resolution, native defaults, remaining forms, journal styles and26.1 behavior remain
+  style-sheet resolution, reference native defaults, remaining forms, journal styles and26.1 behavior remain
   required. A data-only field never proves native tool application of the preference.
   The source-qualified atomic command/history/adapters now have bounded independent
   evidence in verification-drawing-settings-command.md. Native modifier transport now has
   bounded SDK/Mac OS evidence in verification-ordered-native-modifiers.md. The bounded
   two-preference form now has actual Mac set/clear/history/Save/reopen evidence in
-  verification-native-drawing-settings.md. Tool application and the remaining settings
-  workflow stay required. Missing source values remain absent, never guessed defaults.
+  verification-native-drawing-settings.md. Native chains now apply them with independent
+  App/file and bounded Mac evidence in verification-native-chains.md. Known native absence
+  alone uses explicit original48pt/120° creation presets without storing them. Other tools,
+  inheritance and remaining settings stay required; missing source values remain absent.
 
 - The native settings review saves/reopens exact Unicode filenames, but the bundled
   Roboto face displays the reviewed CJK filename characters as missing glyphs. AX reports
@@ -25,19 +27,23 @@
   Snaking requires one positioned-path edit rather than repeated fixed-chain commits.
   Pinned egui PointerMoved lacks modifiers, and egui-winit stores only frame-level
   ModifiersChanged. The paired egui/eframe extension now has actual Mac OS transport and
-  synthetic SDK evidence; full chain consumption and other platforms remain unverified.
+  synthetic SDK evidence; chain consumption now has independent App tests. Supported
+  native Control-drag, early release, reversal/backtrack and other platforms remain unverified.
   Document ChainAngle/BondLength data persistence is now delivered;
-  effective defaults/inheritance and tool application remain missing. Count/pose/sampling/turn ties,
-  repeat lifecycle, modifiers and modern/platform defaults remain unknown. The literal
-  path prerequisite does not resolve or enable the complete native workflows.
+  original fallback and chain application are now delivered; inherited styles remain missing.
+  Count/pose/sampling/turn ties, repeat lifecycle and modifier policy are explicitly locked
+  as original Bondline behavior in research/native-chain-interactions.md. Corresponding
+  reference26.1/platform algorithms/defaults remain unknown. Actual native ordinary
+  Acyclic/Snaking/Add/repeat/attachment/persistence is checked; hardware/measured2×/DPI is not.
 
 - Chain engine policy is locked in research/chain-authoring-plan.md. Public25 guide
   documents drag/count, Add Chain, attachment, Alt repeat, Snaking/Control and conditional
   settings; exact26.1/Mac defaults, count inclusion, quantization/ties/hysteresis, repeat
   lifecycle and modifier precedence remain unknown. Explicit headless placement/count
-  is original policy, not an automatic recommended attachment pose. In particular
-  IUPAC180° Single+Triple/two-Double centers need consideration in later native posing.
-  Complete chain UI remains required and disabled until implemented and checked.
+  is original policy. Native automatic numeric poses now honor IUPAC180° Single+Triple
+  and preserve the two-Double/H0 target refusal; ordinary candidates use explicit original
+  ranking. Acyclic/Snaking are enabled for their checked supported workflows, not full
+  reference parity. General chemistry/stereo, styles and platform acceptance remain open.
 
 - Native ring tools are the next integration after checked command ac340db. The
   original policies in research/ring-native-plan.md lock48pt/pose, unit-neighbor

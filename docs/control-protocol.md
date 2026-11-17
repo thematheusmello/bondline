@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has42 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has43 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -72,6 +72,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `ui.drawing_settings` | Closed tagged `action`: `open` requires `expected_revision`; `cancel` requires `expected_revision`, positive `request_id` | Open/cancel one source-qualified native two-preference form; no authored edit/history, FilePlan or Save acknowledgment |
 | `ui.bond_tool` | Required `order` (`single`, `double`, `triple`) | Select a transient drawing tool; explicit operation receipt/epoch, no authored edit or history entry |
 | `ui.ring_tool` | Either `size` (integer3..8) or `kind:"benzene"/"cyclopentadiene"`, two closed objects | Select a transient native ring tool; unchanged derived-size operation receipt, one shared tool epoch, no authored edit or history entry |
+| `ui.chain_tool` | Closed tagged `select`, `constraints`, `open_add` or `cancel_add`; [details](#native-carbon-chain-tools) | Select a transient chain mode, set chain constraints or open/cancel source-qualified native numeric presentation; no authored edit/history |
 | `ui.view` | Tagged `action`: `inspect`, `fit`, `actual`, `set_zoom`, `magnify`, `reduce`, `pan`; action-specific geometry/percentage | Inspect or change the transient camera without editing content/history; source-qualified display/readability guards remain |
 | `ui.file` | `expected_revision`, `action`, conditional `request_id` / `close_epoch` | Request guarded New/SMILES forms or Open/Save/Save As presentation, or cancel the matching intent; a native host is required |
 | `page.set_size` | `page_id`, `width_pt`, `height_pt` | One validated page edit |
@@ -1329,8 +1330,8 @@ capture, native races/other-platform execution and complete reference parity rem
 `ui.controls` additionally exposes `file.import_smiles_records`, File → Import SMILES
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
-counts are32 native Drawing/15 SDF/11 raw SMILES; retained-SMILES Drawing keeps21.
-The current registry has42 commands. Accepting
+counts are36 native Drawing/15 SDF/11 raw SMILES; retained-SMILES Drawing keeps21.
+The current registry has43 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag
@@ -1391,8 +1392,8 @@ Whole-MOL V2000/V3000 Save refuses nonempty preferences before publication. Nati
 persists present values; unchanged source and explicit graph-only export retain their
 existing policies. [The contract](research/drawing-settings-command.md) distinguishes
 this stored-data operation from tool application, inheritance and style sheets. The
-native form below reuses it. Native controls are now32/21/15/11; the catalogue remains
-12 delivered/128 disabled.
+native form below reuses it. Native controls are now36/21/15/11; the catalogue has
+14 delivered/126 disabled, including the later chain controls.
 
 ## Native drawing-settings presentation
 
@@ -1428,17 +1429,74 @@ unsupported content or foreground work. App modal-at-start fences prevent same-f
 history/canvas/File actions after dismissal; native close waits for Apply/Cancel.
 Bounded core/App/CLI/stdio/authenticated-loopback and actual Mac persistence evidence is
 in [receiving](verification-native-drawing-settings.md). This implements two stored
-creation preferences. Defaults/inheritance, tool application, other settings categories,
+creation preferences. Chains resolve them separately below. Inheritance, other tools/settings categories,
 complete reference-dialog parity and Windows/Linux native interaction remain missing.
+
+## Native carbon-chain tools
+
+`ui.chain_tool` appends one command, preserving every old42 command record/schema/order.
+All actions and nested targets are closed tagged objects:
+
+```json
+{"command":"ui.chain_tool","params":{"action":"select","kind":"acyclic"}}
+{"command":"ui.chain_tool","params":{"action":"select","kind":"snaking"}}
+{"command":"ui.chain_tool","params":{"action":"constraints","fixed_lengths":false,"fixed_angles":true}}
+{"command":"ui.chain_tool","params":{"action":"open_add","expected_revision":0,"page_id":1,"target":{"mode":"free","x_pt":200,"y_pt":200}}}
+{"command":"ui.chain_tool","params":{"action":"cancel_add","expected_revision":0,"request_id":1}}
+```
+
+An atom target instead has exactly `mode:"atom"`, positive `fragment_id` and `atom_id`.
+Free coordinates use the existing±100000pt finite bounds. Source-free or byte-proven
+native CDXML is required; foreign/opaque sources retain refusal before equality/no-op.
+Select/constraints need no native host. Constraints require active Chain mode; otherwise
+the direct command returns `unsupported_content` and its disabled native control reports
+`chain_tool_required`. Real changes advance the shared checked effective-tool epoch,
+retaining remembered bond order. Both switches initially true and survive New/Open as
+transient tool policy, never authored document data. Result `ui_chain_tool_operation`
+has kind,fixed_lengths,fixed_angles,epoch,changed; outer changed remains false.
+
+Open Add requires an attached native host, current revision, source/H/target/page
+authority and idle File/Atom/settings/Add/Open-close context. Its checked monotone ID
+also advances a modal-open epoch when no request remains. Result `ui_add_chain` contains
+exactly id,input_revision,page_id,target,count,bond_length_pt,angle_degrees,current.
+Default count6 includes an existing anchor. Each missing supported native preference
+independently resolves to original48pt/120° without storing it or dirtying the document.
+Unknown/inherited source settings do not gain guessed defaults or editing authority.
+
+The384-byte count editor accepts trimmed ASCII2..64. Host preview tries bounded numeric
+candidates against the actual full scene, paper, logical/physical ink and viewport.
+Apply recomputes the same candidate index under the same Engine guard and invokes
+existing chain.create once; drag invokes chain.create_path once. Old geometry/H/source
+rules and one-edit history remain. Add alone seeds count repeat with a new POST-commit
+proof captured under that guard. Alt-click resolves a fresh target/preferences; stale
+repeat opens Add instead. Tool/constraints/view/source/File/close/association/modal or
+actual canvas/DPI/layer changes disarm repeat. Returning equal values cannot revive it.
+
+The weak request/context captures source allocation/revision/generation, opaque file
+association, File/close/view/shared-tool and Atom/settings/Add open epochs. Exact explicit
+Cancel checks current revision/host/ID and marks only its private serde-skipped token;
+ordinary staleness/detach instead retains copyable drafts with Add disabled. Local Cancel
+may dismiss an obsolete form. Open/Cancel return ui_add_chain_operation ID and wake the
+native host after reply publication; changed tool operations also wake it. No worker,
+FilePlan, Save receipt or close acknowledgment is created.
+
+Native controls chain.acyclic/chain.snaking use these actions. Object > Chain constraints
+contains chain.fixed_lengths/chain.fixed_angles. Delivered controls total36/21/15/11;
+the additional four appear only for native Drawing and preserve existing source/modal/
+close precedence. [The interaction lock](research/native-chain-interactions.md) defines
+ordered physical modifiers, original count/pose/turn/reversal and repeat policies.
+[Receiving](verification-native-chains.md) separates actual-App/adapters/files from
+bounded Mac execution and unverified native Control-drag/DPI/other-platform acceptance.
 
 ## Native tool catalogue presentation
 
 The native **All tools…** catalogue is roadmap presentation, not additional executable
-registry entries. All124 documented roles/140 expanded entries are visible;128 planned
+registry entries. All124 documented roles/140 expanded entries are visible;126 planned
 entries have no binding and cannot dispatch. Available entries use the same current
 delivered control IDs. `ui.controls` lists delivered bindings only, now counting
-32/21/15/11. The headless chain commands brought the registry to40, the stored-preferences
-command to41, and its native presentation to42. These additions do not enable chain tools.
+36/21/15/11. The headless chain commands brought the registry to40, the stored-preferences
+command to41, its native presentation to42 and chain presentation to43. Only the later
+checked chain workflow binds Acyclic/Snaking; both chairs stay disabled.
 See [catalogue](design/tool-catalogue.md).
 
 ## Exact-target atom-label presentation
@@ -1716,9 +1774,10 @@ invalidation. Like ring.create, prepare commits synchronously; later cancellatio
 cannot reverse a completed edit. An outstanding captured Save remains historical and
 retains its existing reservation through finish.
 
-This adds one registry command (38→39), with no new native control/binding. Both chain
-entries stay disabled. Drag/count, Add Chain, Alt repeat, Snaking/Control, settings,
-hotkeys, automatic poses and actual native/platform acceptance remain required.
+That headless increment adds one registry command (38→39), with no new native binding.
+At that checkpoint both chain entries stay disabled and native workflows remain required.
+The later [native carbon-chain tools](#native-carbon-chain-tools) provide their separately
+checked controls/forms/gestures; exact hotkeys and outstanding platform acceptance stay open.
 
 ## Literal headless chain paths
 
@@ -1744,6 +1803,7 @@ editing, reserving IDs, changing context or granting Save/gesture authority. Bot
 current revision and reject committed close. Path vectors are borrowed and checked
 before resolved allocation. Existing fixed ChainCreate types, fields, schema, defaults
 and command variant remain exact. CLI/MCP/authenticated loopback expose both commands;
-registry40 adds no native binding. Native chain entries remain disabled until the full
-[dependency/workflow contract](research/native-chain-plan.md) is implemented and checked.
+That registry40 prerequisite adds no native binding; chain entries stay disabled at that
+checkpoint. The later [native carbon-chain tools](#native-carbon-chain-tools) implement
+the [dependency/workflow contract](research/native-chain-plan.md) for their scoped evidence.
 See [receiving](verification-chain-paths.md) for exact evidence and limits.

@@ -243,11 +243,12 @@ fn assert_layout(workspace: &Workspace, output: &egui::FullOutput) -> TestResult
         })
         .collect::<Vec<_>>();
     assert_eq!(catalogue_count, 1);
-    assert_eq!(planned_count, 128);
+    assert_eq!(planned_count, 126);
     rail_buttons.sort();
     assert_eq!(
         rail_buttons,
         [
+            "Acyclic chain",
             "Benzene",
             "Cyclobutane",
             "Cycloheptane",
@@ -259,6 +260,7 @@ fn assert_layout(workspace: &Workspace, output: &egui::FullOutput) -> TestResult
             "Double bond",
             "Marquee selection",
             "Single bond",
+            "Snaking chain",
             "Triple bond"
         ]
     );

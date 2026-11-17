@@ -24,7 +24,7 @@ fn control<'a>(rows: &'a Value, id: &str) -> TestResult<&'a Value> {
 fn import_binding_is_one_typed_file_presentation_without_a_second_registry_command() -> TestResult {
     let mut engine = Engine::default();
     let rows = controls(&engine)?;
-    assert_eq!(rows.as_array().ok_or("controls")?.len(), 32);
+    assert_eq!(rows.as_array().ok_or("controls")?.len(), 36);
     let import = control(&rows, "file.import_smiles_records")?;
     assert_eq!(import["label"], "Import SMILES records…");
     assert_eq!(import["menu"], "File");
@@ -35,7 +35,7 @@ fn import_binding_is_one_typed_file_presentation_without_a_second_registry_comma
         import["command"],
         json!({"command":"ui.file","params":{"expected_revision":0,"action":"import_smiles_records"}})
     );
-    assert_eq!(bondline_commands::registry().len(), 42);
+    assert_eq!(bondline_commands::registry().len(), 43);
     engine.set_ui_file_host(true);
     let rows = controls(&engine)?;
     let import = control(&rows, "file.import_smiles_records")?;

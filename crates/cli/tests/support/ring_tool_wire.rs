@@ -131,7 +131,7 @@ fn names(entries: &[Value]) -> TestResult {
         .iter()
         .map(|v| v["name"].as_str().ok_or("command name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(entries.len(), 42);
+    assert_eq!(entries.len(), 43);
     assert_eq!(
         actual,
         OLD_NAMES
@@ -141,7 +141,8 @@ fn names(entries: &[Value]) -> TestResult {
                 "chain.create",
                 "chain.create_path",
                 "document.set_drawing_settings",
-                "ui.drawing_settings"
+                "ui.drawing_settings",
+                "ui.chain_tool",
             ])
             .collect::<BTreeSet<_>>()
     );
@@ -165,7 +166,7 @@ fn schema(value: &Value) -> TestResult {
 }
 fn controls(value: &Value, ring: Option<u8>, bond: Option<&str>, selection: bool) -> TestResult {
     let all = value["controls"].as_array().ok_or("controls")?;
-    assert_eq!(all.len(), 32);
+    assert_eq!(all.len(), 36);
     for (size, label) in [
         (3, "Cyclopropane"),
         (4, "Cyclobutane"),

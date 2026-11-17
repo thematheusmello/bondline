@@ -943,7 +943,7 @@ fn all_six_bindings_use_one_effective_mode_and_same_ring_noop_preserves_an_armed
         assert_eq!(ring_selected(&f)?, vec![format!("tool.ring.{n}")]);
         let controls = f.command("ui.controls", json!({}))?;
         let rows = controls["controls"].as_array().ok_or("controls")?;
-        assert_eq!(rows.len(), 32);
+        assert_eq!(rows.len(), 36);
         let row = rows
             .iter()
             .find(|r| r["id"] == format!("tool.ring.{n}"))

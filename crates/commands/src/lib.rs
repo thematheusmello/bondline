@@ -13,6 +13,7 @@ mod bond;
 mod bond_tool;
 mod capture;
 mod chain;
+mod chain_tool;
 mod close;
 mod content;
 mod controls;
@@ -40,6 +41,10 @@ pub use bond::{
 pub use bond_tool::{BondToolOperation, BondToolState, EffectiveTool, SelectBondTool};
 pub use chain::{
     ChainCreate, ChainCreatePath, ChainPathPlacement, ChainPathPoint, ChainPlacement, ChainSide,
+};
+pub use chain_tool::{
+    ChainContext, ChainKind, ChainPreferences, ChainTarget, ChainToolOperation, UiAddChainRequest,
+    UiChainTool,
 };
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
@@ -206,6 +211,7 @@ command_registry! {
     ChainCreatePath(ChainCreatePath) => ("chain.create_path", "Construct a literal ordered native carbon path in one edit, optionally starting at an existing carbon; no snapping or angle/length inference.", false),
     DrawingSettingsSet(DrawingSettingsSet) => ("document.set_drawing_settings", "Replace both optional document-root creation preferences in one native drawing edit; explicit null clears a value and existing geometry stays unchanged.", false),
     UiDrawingSettings(UiDrawingSettings) => ("ui.drawing_settings", "Open or cancel a native document creation-preference draft; requires an attached host and grants no authoring or Save authority.", false),
+    UiChainTool(UiChainTool) => ("ui.chain_tool", "Select a chain tool, set its transient constraints, or open/cancel a source-qualified numeric Add Chain draft; authoring uses the existing chain commands.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -545,6 +551,12 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_drawing_settings_operation: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_add_chain: Option<UiAddChainRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_add_chain_operation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_chain_tool_operation: Option<ChainToolOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_selection: Option<SelectionState>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_selection_operation: Option<SelectionOperation>,
@@ -574,6 +586,7 @@ pub struct Engine {
     file_ui: file_ui::FileUiPolicy,
     atom_ui: atom_ui::AtomLabelUiPolicy,
     drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy,
+    chain_ui: chain_tool::ChainUiPolicy,
     selection: selection::SelectionPolicy,
     bond_tool: BondToolState,
     effective_tool: EffectiveTool,
@@ -633,6 +646,7 @@ impl Engine {
             file_ui: file_ui::FileUiPolicy::default(),
             atom_ui: atom_ui::AtomLabelUiPolicy::default(),
             drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy::default(),
+            chain_ui: chain_tool::ChainUiPolicy::default(),
             selection: selection::SelectionPolicy::default(),
             bond_tool: BondToolState::default(),
             effective_tool: EffectiveTool::default(),
@@ -689,6 +703,9 @@ impl Engine {
             ui_atom_label_operation: None,
             ui_drawing_settings: self.ui_drawing_settings_request(),
             ui_drawing_settings_operation: None,
+            ui_add_chain: self.ui_add_chain_request(),
+            ui_add_chain_operation: None,
+            ui_chain_tool_operation: None,
             ui_selection: (self.selection().epoch != 0).then(|| self.selection().clone()),
             ui_selection_operation: None,
             ui_bond_tool_operation: None,
@@ -740,6 +757,9 @@ impl Engine {
             }
             Command::UiDrawingSettings(params) => {
                 return Ok(Prepared::immediate(self.ui_drawing_settings(params)?));
+            }
+            Command::UiChainTool(params) => {
+                return Ok(Prepared::immediate(self.ui_chain_tool(params)?));
             }
             Command::UiSelection(params) => {
                 return Ok(Prepared::immediate(self.ui_selection(params)?));
@@ -1324,7 +1344,8 @@ mod tests {
                 "ui.bond_tool",
                 "ui.ring_tool",
                 "ui.view",
-                "ui.file"
+                "ui.file",
+                "ui.chain_tool",
             ]
             .into_iter()
             .collect()

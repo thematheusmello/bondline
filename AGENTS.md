@@ -28,7 +28,7 @@ docs/verification.md for exact RED/GREEN and platform evidence.
 
 The original logo and planned-tool UI follow docs/design/branding-and-tools.md,
 docs/design/brand.md and docs/verification-branding-and-tools.md. The static UI catalogue
-covers124 public TD/TQ/TB roles as140 entries:12 delivered bindings and128 disabled planned
+covers124 public TD/TQ/TB roles as140 entries:14 delivered bindings and126 disabled planned
 entries. It does not add commands or promote missing features. Resolve active bindings
 through current Engine.controls(), retaining every source/modal guard. SDF presentation/
 busy state must gate both catalogue ownership and its rail button, or it steals Escape
@@ -37,7 +37,34 @@ Keep the bundled-font coverage regression: angle and replacement-arrow icons use
 geometry because Roboto lacks those characters. Native photographs are actual own-window
 captures, separate from illustrations/goldens; preserve the user's older unsaved app/draft.
 
-Current native drawing-settings work follows docs/research/native-drawing-settings.md
+Current native chains follow docs/research/native-chain-interactions.md and
+docs/verification-native-chains.md on base f6f1cac. Registry43 retains old42 actual CLI
+records/schema/order; controls36/21/15/11, catalogue14/126. Acyclic/Snaking alone gain
+bindings; both chairs stay grey. One ui.chain_tool has closed select/constraints/open_add/
+cancel_add actions. Reuse fixed/path builders, source/H/ID/history and full scene guards.
+Root absence alone permits original48pt/120° creation presets, never authored defaults.
+Preferences affect new chains only. Keep checked shared-tool and modal-open epochs,
+opaque association/source/view/File/close proofs and exact explicit Cancel tokens.
+None→Open→Cancel→None must invalidate old gestures/repeat. Capture successful Add's
+repeat proof POST-commit under the same Engine guard; drag never seeds count repeat.
+Latch actual surface/DPI/layer loss, including zero surface followed by equal restoration.
+Preserve unsupported-chord errors through later inactive events in the same packet.
+The counter uses nonallocating ui.new_child so its first move paints immediately.
+The384-byte count editor reuses pair_input; modal/action-prefix/retirement/close fences
+remain. No worker/FilePlan/Save receipt/close authority is added. MCP adds only explicit
+Add and changed-tool repaint conditions; protected listener policy/tests stay unchanged.
+Twenty-eight new cases pass; first full10212 passes1657/0/1 and all local gates. Actual
+own Mac drawing/Add/repeat/attachment/preferences/refusal/history/Unicode Save/reopen
+passes independent Expat/Decimal/RDKit readers. Supported native Control-drag/reversal/
+backtracking, measured2×/DPI and other platforms remain unverified; App tests are separate.
+The old MCP bind failure and CJK filename-glyph limitation remain unresolved. Both older
+user apps/drafts stay protected. No new golden or Actions run. Next take missing drawing
+tools from the parity checklist, source-lock them, and verify complete shared/native
+workflows before binding grey entries; chair/sprout, broader labels/styles and the full
+M0–M5 scope remain. Historical prerequisite notes below do not disable these checked
+chain bindings or replace this continuation record. All owned execution jobs are terminal.
+
+The earlier native drawing-settings checkpoint follows docs/research/native-drawing-settings.md
 and docs/verification-native-drawing-settings.md on base b6e1b18. One appended
 ui.drawing_settings brings the registry to42, preserving all old41 CLI records/schema/order;
 controls32/21/15/11, catalogue12 delivered/128 disabled. File > Document Settings… only
@@ -51,8 +78,8 @@ Sixteen new cases pass. First full14206 fails only a new headless control-reason
 the source-qualified correction and fresh84512 pass1629/0/1 with all local gates. This does
 not attribute historical MCP failures. Actual Mac set/clear/history/Unicode Save/reopen
 passes independent readers; CJK filename glyph coverage remains limited. Both user apps/
-drafts stay protected. Full chain workflows, preference application/defaults, inheritance
-and remaining styles/platforms stay required; chain tools stay grey. Earlier checkpoint
+drafts stay protected. At that checkpoint full chain workflows, preference application,
+inheritance and remaining styles/platforms were required; chain tools stayed grey. Earlier checkpoint
 counts/results below remain historical, not the current discovery inventory.
 
 The headless chain.create increment follows docs/research/chain-authoring-plan.md and
@@ -61,7 +88,7 @@ anchor/angle1..179/first-edge/side, target-local weighted neutral-C literal-H pr
 with rings, both false flags only on new atoms, and checked normal commit/floors. Keep
 rounded-point fidelity and exact center occupancy distinct from native real-ink guards.
 Registry39 does not enable a new UI control: catalogue12/128 and controls31/20/14/10 stay.
-Next lock full native drag/count/Add Chain/repeat/Snaking/settings behavior before tests;
+That prerequisite required locking full native drag/count/Add Chain/repeat/Snaking/settings behavior before tests;
 never infer source-default/modifier/stereo/attachment poses from this explicit engine API.
 Preserve the new raw two-flag checker and all unchanged chemistry consumers, and distinguish
 CDXML source IDs from application IDs in fixtures and history/floor assertions.
@@ -79,7 +106,7 @@ values stay opaque without hard Open failures or broader native authority. Empty
 preserves old JSON/native-v0 bytes. Whole-MOL V2000/V3000 refuses nonempty settings before
 raw/fragment reuse/publication; keep existing forbidden-version precedence and whole-model
 source/SMILES drift guards. Explicit fragment export retains its declared context loss.
-Stored settings do not alter existing geometry or yet drive native tools. That data-only
+Stored settings do not alter existing geometry; that data-only checkpoint did not yet drive native tools. Its
 checkpoint keeps registry40; the following command increment is separate.
 Unpatched egui-winit loses modifier chronology. The reviewed eframe wrapper now appends
 Event::ModifiersChanged only after an actual native report is mapped. Read
@@ -88,7 +115,7 @@ Preserve the original response/global snapshot, per-viewport order and old gestu
 never apply final-frame modifiers retroactively or fabricate key/reset events. A future
 drag seeds from its press, carries observed state between frames and cancels on focus loss.
 Six synthetic SDK tests and actual Mac OS input qualify transport, not chain consumers,
-other integrations/platforms or human hardware operation. Both chain tools remain grey.
+other integrations/platforms or human hardware operation. Both chain tools stayed grey at that checkpoint.
 The new bounded chain_path_request ASan harness prepares JSON only, never completes file/
 render work; read fuzz/README.md for pinned tools/new ignored seed directory and evidence.
 
@@ -111,7 +138,7 @@ assertion, two warm frames, ten-second deadline and production fence. Qualified 
 then-unstarted stages pass separately; no green aggregate or captured failure cause follows.
 Ordered native Control transport is now separately verified; next full native settings/
 chain forms/gestures/acceptance.
-Keep grey tools disabled; no native setting/default application is delivered by this command.
+Grey tools stayed disabled; no native setting/default application was delivered by that command alone.
 The later serializer check hit actual StorageFull in six file tests. Scoped Cargo cleanup
 removes only old target/debug-pre-index-recovery/deps artifacts; protected copied apps,
 current target/debug and evidence stay. Only affected/not-started checks rerun successfully.

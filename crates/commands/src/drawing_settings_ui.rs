@@ -56,6 +56,12 @@ pub(super) struct DrawingSettingsUiPolicy {
     active: Option<Request>,
 }
 
+impl DrawingSettingsUiPolicy {
+    pub(super) fn epoch(&self) -> u64 {
+        self.epoch
+    }
+}
+
 impl Engine {
     pub fn drawing_settings_available(&self) -> bool {
         self.stored_document()
@@ -128,6 +134,7 @@ impl Engine {
             UiDrawingSettings::Open { .. } => {
                 if self.drawing_settings_ui.active.is_some()
                     || self.ui_atom_label_request().is_some()
+                    || self.ui_add_chain_request().is_some()
                     || self.file_ui_state().request.is_some()
                     || self.close_state() != CloseState::Open
                 {

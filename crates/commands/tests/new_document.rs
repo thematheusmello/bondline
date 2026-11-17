@@ -154,6 +154,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "history.redo",
             "render.capture",
             "ring.create",
+            "ui.chain_tool",
         ]
         .into_iter()
         .collect()

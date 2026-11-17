@@ -343,7 +343,7 @@ fn resolve<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
     }
 }
 fn discovery(entries: &[Value], schema_key: &str) -> TestResult {
-    assert_eq!(entries.len(), 42);
+    assert_eq!(entries.len(), 43);
     assert_eq!(
         entries
             .iter()
@@ -355,7 +355,8 @@ fn discovery(entries: &[Value], schema_key: &str) -> TestResult {
                 NAME,
                 "chain.create_path",
                 "document.set_drawing_settings",
-                "ui.drawing_settings"
+                "ui.drawing_settings",
+                "ui.chain_tool",
             ])
             .collect::<BTreeSet<_>>()
     );
@@ -776,3 +777,6 @@ mod settings_wire;
 
 #[path = "chain_creation/settings_ui_wire.rs"]
 mod settings_ui_wire;
+
+#[path = "chain_creation/chain_ui_wire.rs"]
+mod chain_ui_wire;

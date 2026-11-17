@@ -7,6 +7,55 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Native carbon chains; full local gate passes
+
+Base `f6f1cac`; the accompanying atomic source/test/docs commit is the recoverable state.
+Read [interaction lock](docs/research/native-chain-interactions.md) and
+[receiving](docs/verification-native-chains.md). Acyclic/Snaking now have native controls,
+full previews/count, Add Chain, count repeat, supported-carbon attachment, conditional
+ordered modifiers and one-edit history. Stored48/90 then48/120 creation preferences
+affect later chains while old geometry stays. Source/H/ID/full-ink/paper guards remain.
+
+Registry43 preserves all old42 actual CLI records/schema/order. Native controls36;
+retained/SDF/raw stay21/15/11. Catalogue140/124 roles is14 delivered/126 planned. Only
+Acyclic/Snaking gain bindings; both chairs remain disabled. Weak modal-open epochs prevent
+hidden Open/Cancel ABA; successful Add captures repeat POST-commit under one Engine lock.
+Surface loss cannot revive repeat, and same-packet inactive events retain refusals.
+Exact Cancel/stale copyable drafts, bounded input and modal/retirement/close fences stay.
+No worker, FilePlan, Save receipt or close ACK is added.
+
+Actual JSON/App REDs precede implementation. Independent acceptance adds28 unique cases.
+Actual counter and two repeat/refusal defects have unchanged RED/GREEN assertions;
+compile/lint/setup and one rustc StorageFull qualification remain distinct. First full
+10212 exits0: **1657 passed/0 failed/1 ignored across245 result lines**, including fmt,
+warnings-denied workspace/vendor checks, layers, seven assets, unchanged strict runtime
+closures155/166/221 and pinned corpus. Log208096B/SHA256
+`a8bb8526c8bb5efe1b33def053c6f72b6302848c2bad5f1b5f1f6339ee540660`.
+This is not causal repair of historical MCP AddrInUse failures; no exhausted probe repeats.
+The bounded source delta review finds no material issue; its earlier two candidates are
+the actual App regressions above. A rejected source-only inventory proposal briefly
+misbound chairs; Root catches it before application, and corrected v2 excludes that file.
+
+Native/CLI build61504 passes. The isolated actual Mac app checks right-angle drawing,
+turning Snaking, invalid/valid Add, Alt repeat, supported-carbon Add attachment, invalid
+chord refusal, Fixed Lengths OFF, Undo/Redo and Unicode Save/reopen. The actual5024-byte
+file has23 atoms/18 bonds/5 fragments. Independent Expat/Decimal/RDKit checks old geometry,
+preferences, literal flags/H/orders,48pt fixed and45.455pt variable lengths, snapped endpoint
+and formulas C5H12/C6H14/three C4H10. Native catalogue shows14/126 and a disabled chair click
+cannot activate. Explicit Quit and a later list observe the disposable review gone;
+an earlier immediate shutdown observation is inconclusive. Both older user apps remain
+running with their copied binary hashes unchanged; their drawings are untouched.
+
+Supported native Control-drag/reversal/backtracking, hardware/measured2×/DPI, Windows/Linux,
+full styles/inheritance and exact26.1 defaults/hotkeys remain unverified or missing.
+CJK filename glyph coverage and historical MCP attribution remain unresolved. No new
+golden, hosted run, publication, dependency/font/lock/corpus/workflow change. Scoped cache
+cleanup preserves evidence and protected bundles. All owned execution jobs are terminal.
+Next source-lock and independently implement missing drawing tools before binding them;
+chair/sprout, broader labels/styles, native acceptance and full M0–M5 remain required.
+
+## Earlier checkpoints
+
 ### Verified native two-preference form; full local gate passes
 
 Base `b6e1b18`; the accompanying atomic source/test/docs commit is the recoverable state.
@@ -49,8 +98,6 @@ then implement drag/count, Add Chain, repeat, Snaking and preference application
 existing candidates/history/registry, with full previews, physical/source/modal/retirement
 guards and actual acceptance. Inheritance, remaining settings/styles, native2×/DPI,
 Windows/Linux and the remaining M0–M5 workflows stay open. No owned live jobs remain.
-
-## Earlier checkpoints
 
 ### Ordered native input; its fresh local gate passes
 

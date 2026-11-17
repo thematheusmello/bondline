@@ -1,5 +1,21 @@
 # Verification log
 
+## Native carbon chains, 2026-11-17
+
+[Receiving](verification-native-chains.md) records preimplementation JSON/App REDs,
+the first-frame counter fix and independent repeat-revival/refusal-erasure RED→GREEN
+without weakened assertions. Twenty-eight new cases pass. Future-API, compile/lint and
+StorageFull qualifications stay explicit. First full10212 passes1657/0/1 across245 result
+lines plus fmt, warnings-denied workspace/vendor checks, layers/licenses/corpus. Old42
+actual CLI records/schema/order remain an exact prefix of43; native controls36/21/15/11,
+catalogue14 available/126 planned. Both chairs stay disabled. No old MCP/socket policy
+changes or attribution follows. Bounded source/delta reviews find no additional issue.
+Actual own Mac Acyclic/Snaking/Add/repeat/attachment/preferences/refusal/history/Unicode
+Save/reopen pass; the5024-byte23/18/5 file passes independent XML/geometry/RDKit checks.
+Native supported Control-drag/reversal/backtracking and measured2×/DPI remain separate
+unverified acceptance. Both older user apps remain untouched; disposable review is closed.
+No new golden/hosted run; full M0–M5 remains active, Actions OFF, owned jobs terminal.
+
 ## Native Document Settings, 2026-11-17
 
 [Receiving](verification-native-drawing-settings.md) records actual UnknownCommand,

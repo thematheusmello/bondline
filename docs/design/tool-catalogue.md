@@ -1,13 +1,13 @@
 # Available and planned tools
 
-The native workspace keeps its twelve delivered tool bindings at the top of the original
+The native workspace keeps its fourteen delivered tool bindings at the top of the original
 64-point rail. A scrollable section shows the planned tools in grey. **All tools…** opens
 a searchable, grouped catalogue; search accepts names, group names and source IDs.
 
 There are **140 display entries covering 124 documented tool roles**: TD-001–058,
 TQ-001–034 and TB-001–032 in the [parity checklist](../parity-checklist.md). The count
 expands the explicitly documented ring sizes, two chairs, arc angles and bracket forms.
-Twelve entries reference delivered bindings; **128 remain disabled**. This is the
+Fourteen entries reference delivered bindings; **126 remain disabled**. This is the
 documented inventory, not a claim to know every modern dynamic palette variant.
 
 Groups cover selection, bonds, chains, rings, reactions, shapes, brackets, curves,
@@ -36,3 +36,7 @@ evidence in the same commit. A grey icon alone never changes a feature's missing
 
 The [design contract](branding-and-tools.md) and [receiving evidence](../verification-branding-and-tools.md)
 record the original request, public-source boundaries and actual validation.
+The later [chain receiving](../verification-native-chains.md) adds only Acyclic and
+Snaking bindings after independent App/adapter/file and bounded native Mac checks.
+Both chairs remain planned. Native Control-drag/DPI and full platform/reference parity
+are separate from the checked chain workflows.

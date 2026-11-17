@@ -165,12 +165,13 @@ fn schema_node<'a>(
 fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_name_order()
 -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 42);
+    assert_eq!(rows.len(), 43);
     assert_eq!(
         rows[..41].iter().map(|row| row.name).collect::<Vec<_>>(),
         OLD_NAMES
     );
     assert_eq!(rows[41].name, NAME);
+    assert_eq!(rows[42].name, "ui.chain_tool");
     assert!(!rows[41].read_only);
     let schema = rows[41].input_schema.as_value();
     assert_eq!(schema["type"], "object");
@@ -246,7 +247,7 @@ fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_na
         "stale_revision",
     )?;
     let controls = serde_json::to_value(engine.controls())?;
-    assert_eq!(controls.as_array().ok_or("controls")?.len(), 32);
+    assert_eq!(controls.as_array().ok_or("controls")?.len(), 36);
     let control = controls
         .as_array()
         .ok_or("controls")?

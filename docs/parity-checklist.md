@@ -12,7 +12,7 @@ but the stated platform/workflow lacks execution evidence; **verified** = only t
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
 All124 TD/TQ/TB roles now have visible catalogue entries (140 with explicit variants).
-Twelve reference delivered bindings;128 remain disabled with no command and **retain
+Fourteen reference delivered bindings;126 remain disabled with no command and **retain
 their missing status**. Original branding, grey controls, search and bounded native
 presentation evidence are in [receiving](verification-branding-and-tools.md). This does
 not complete tool functionality, modern inventory research, M0 or M2–M5.
@@ -21,8 +21,10 @@ File > Document Settings now delivers only two stored creation preferences: expl
 bond length and interior chain angle. [Receiving](verification-native-drawing-settings.md)
 records independent core/App/adapters and actual Mac set/clear/history/Save/reopen.
 MF-013/DP-011 are **wired** for the broader documented workflow: remaining fields,
-inheritance, tool application and other-platform execution lack completion/evidence.
-This does not promote either disabled chain tool.
+inheritance, remaining-tool application and other-platform execution lack completion/evidence.
+The later [native chain workflow](verification-native-chains.md) now applies these
+preferences and enables Acyclic/Snaking for their checked supported scope. Native
+Control-drag/reversal/DPI, exact26.1 defaults and full tool parity remain unverified.
 
 Directed DoublePosition now has [independent data/format evidence](verification-double-position.md):
 native CDXML presence/direction/history and guarded loss boundaries. Center Double retains
@@ -44,7 +46,8 @@ remain missing; named-tool OS acceptance is unverified. No full inventory status
 Separate terminal-node flags now have [data, renderer and explicit-editor evidence](verification-terminal-carbon-labels.md).
 Actual degree selects the active flag, mandatory isolated C/C2 labels remain, and both
 flags survive files/history or trigger explicit loss refusals. App/adapter evidence does
-not establish native OS/default-style parity. TD-022/023 chain workflows remain missing.
+not establish native OS/default-style parity by themselves. TD-022/023 now have their
+separate bounded native-chain evidence above; broader workflows remain missing.
 
 Current native source-backed SMILES records have bounded Mac selected/all import,
 refusal/retry, click/key order editing, history and Unicode whole-file Save/reopen/reimport.
@@ -117,7 +120,7 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 | Text, captions, chemical formatting | GUIDE-25 | missing | M2/M3 |
 | Reaction and curved arrows | GUIDE-25 | missing | M3 |
 | Brackets, repeating units and annotations | GUIDE-25 | missing | M3 |
-| Document/object styles, journal settings | GUIDE-25 / DRAWING-SETTINGS-DATA-IMPLEMENTATION / DRAWING-SETTINGS-COMMAND | partial: root data and shared command verified; native workflows missing | Optional BondLength/ChainAngle model/CDXML/CDX projection, atomic required-nullable set/clear, history, source preservation and whole-MOL loss guards pass independent core/CLI/MCP/socket/file checks. See research/drawing-settings-command.md and verification-drawing-settings-data.md. Native form/tool application, inherited/object styles and journal presets remain missing; public author-guideline sources still required. |
+| Document/object styles, journal settings | GUIDE-25 / DRAWING-SETTINGS-DATA-IMPLEMENTATION / DRAWING-SETTINGS-COMMAND / NATIVE-CARBON-CHAINS | partial: two native preferences and chain application verified | Optional BondLength/ChainAngle model/CDXML/CDX projection, atomic required-nullable set/clear, history, source preservation and whole-MOL loss guards pass independent core/CLI/MCP/socket/file checks. Native two-field form and later-chain application pass bounded Mac Save/reopen and independent file checks; old geometry stays. Inherited/object styles, remaining tools/settings and journal presets remain missing; public author-guideline sources still required. See verification-native-chains.md, verification-native-drawing-settings.md and verification-drawing-settings-data.md. |
 | Structure check and cleanup | GUIDE-25 | missing | M3; independent chemistry oracles |
 | Formula/mass and analysis | GUIDE-25 | missing | M3; pinned conventions |
 | Naming and mixtures | PROFESSIONAL-26.1 | missing | M5; public standards/oracles |
@@ -161,7 +164,7 @@ establish chemical preview, data-edit UI or other platforms.
 | MF-010 | File > Print | 25, 78 | missing | - |
 | MF-011 | File > Document Annotations | 14 | missing | Add/delete keywords and their values. |
 | MF-012 | File > Document Properties | 16 | missing | Typed custom properties. |
-| MF-013 | File > Document Settings | 19, 22-23, 40, 59 | wired | Bounded two-preference form has Mac set/clear/history/Save/reopen evidence. Remaining settings categories and tool application are missing; see DP-011 and verification-native-drawing-settings.md. |
+| MF-013 | File > Document Settings | 19, 22-23, 40, 59 | wired (partial) | Bounded two-preference form has Mac set/clear/history/Save/reopen evidence; later chains now apply them without changing old geometry. Remaining settings categories, inherited styles and other-tool application are missing; see DP-011, verification-native-drawing-settings.md and verification-native-chains.md. |
 | MF-014 | File > Preferences | 15, 19, 32-39 | missing | The guide explicitly places this under File. |
 | MF-015 | Application menu > Settings (macOS) | 19 | missing | Platform-specific path; do not infer all Mac shortcuts from CTRL tables. |
 | MF-016 | File > Apply Document Settings | 40, 49 | missing | Merge settings from a source document. |
@@ -395,8 +398,8 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-019 | Dative bond | 86 | missing | - |
 | TD-020 | Hydrogen bond (dotted) | 87 | missing | Requires explicit donor hydrogen; differs from ordinary dashed/coordination bonds. |
 | TD-021 | Aromatic/tautomeric double-bond display | 88 | missing | Separate visual/chemical conventions need tests. |
-| TD-022 | Acyclic chain | 104-105 | missing | Explicit headless chain.create has independent geometry/adapter/file evidence; native tool remains disabled. The two stored preferences now have a native form, but application/defaults, drag/count, Add Chain, Alt repeat, modifier/hotkey workflows and native acceptance remain required. See verification-chain-authoring.md and verification-native-drawing-settings.md. |
-| TD-023 | Snaking chain | 104-105 | missing | Headless chain.create_path preserves one literal turning path/history edit. Ordered native input transport has bounded Mac OS/SDK evidence; neither prerequisite enables Snaking. Full modifier consumption, sampling/turn/backtrack rules, settings/contexts/preview/release and actual native acceptance remain required. See research/native-chain-plan.md, verification-chain-paths.md and verification-ordered-native-modifiers.md. |
+| TD-022 | Acyclic chain | 104-105 | verified (partial, Mac) | Native drag/count, Add Chain, Alt count-repeat, supported-carbon attachment, preferences, fixed switches, full preview and one-edit history are wired through shared commands. Independent App/adapter/files and actual Mac drawing, invalid-count recovery, repeat, attachment, invalid-chord refusal, OFF projected endpoint, Undo/Redo and Unicode Save/reopen pass. Supported native Control-drag/reversal/backtracking, measured DPI, other platforms, exact26.1 defaults/hotkeys and broader chemistry remain unverified/missing. Original pose/count/tie/repeat policies are explicit, not reference algorithms. See verification-native-chains.md. |
+| TD-023 | Snaking chain | 104-105 | verified (partial, Mac) | One native drag creates a literal turning path through chain.create_path with full preview/count, stored preferences and one-edit history. Actual Mac six-carbon path/Save/reopen passes independent48pt/headings/raw-H/flags/RDKit checks. Independent App tests cover ordered Control conversion, mouse-before-Control, early release, sampling/backtrack/limits/physical contexts. Supported Control/reversal/backtracking remains unverified natively; no OS sampling-invariance, measured DPI, other-platform or exact26.1 claim. See research/native-chain-interactions.md and verification-native-chains.md. |
 | TD-024 | Benzene ring | 74, 101-103 | wired (partial) | Native palette/preview/free/atom/fused/shared-Double/Shift/history/Unicode-file paths share ring.create. Original icons, actual-App1×/2×/raw-order/modal/context checks, real adapters and independent file consumers pass. OS/monitor, exact26.1 defaults and hotkeys remain unverified/missing. See verification-native-unsaturated-rings.md and verification-unsaturated-rings.md. |
 | TD-025 | Cyclopentadiene ring | 74 | wired (partial) | Native kind-only tool, original icon, same-builder full preview, press-latched Shift and Cp spiro have actual-App/file evidence. Core all-five-phase/asymmetric H checks remain. Real OS/monitor, exact26.1 and hotkey acceptance remain missing. See verification-native-unsaturated-rings.md. |
 | TD-026 | Ring sizes 3-8 | 101-103, 73 | wired (partial) | Six original procedural tools share one effective mode and the existing ring.create builder. Independent command/context/adapter and actual-App click/drag/full-preview/free/atom/fused/spiro/Unicode-file checks pass. Native OS interaction is still unverified. Original poses/modifier/side policies do not prove26.1 defaults; aromatic/chair/sprout/general faces remain missing. See verification-native-rings.md and verification-ring-authoring.md. |
@@ -523,7 +526,7 @@ establish chemical preview, data-edit UI or other platforms.
 | DP-008 | Preferences > Monomer Libraries | 178-182 | missing | User/document/library state and versions. |
 | DP-009 | Document Settings > Layout | 22-23 | missing | Pages, poster dimensions/overlap and page registration marks. |
 | DP-010 | Document Settings > Header/Footer | 23 | missing | Header/footer variables and alignment. |
-| DP-011 | Document Settings > Drawing | 40-43 | wired | Only BondLength/ChainAngle have a bounded native Apply/Cancel form and Mac set/clear/history/Save/reopen checks. Effective defaults, tool application, inheritance and remaining geometry/style settings are missing. See verification-native-drawing-settings.md. |
+| DP-011 | Document Settings > Drawing | 40-43 | wired (partial) | Only BondLength/ChainAngle have a bounded native Apply/Cancel form and Mac set/clear/history/Save/reopen checks. Later chains use them with explicit original48pt/120° fallback for known absence; old geometry stays. Inheritance, remaining tools/geometry/style settings and exact26.1 defaults remain missing. See verification-native-drawing-settings.md and verification-native-chains.md. |
 | DP-012 | Document Settings > Atom Labels | 44, 99 | missing | - |
 | DP-013 | Document Settings > Captions | 44-48 | missing | - |
 | DP-014 | Document Settings > Analysis | 44 | missing | Analysis field labels and formatting. |

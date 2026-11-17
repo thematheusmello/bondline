@@ -55,6 +55,12 @@ pub(super) struct AtomLabelUiPolicy {
     active: Option<Request>,
 }
 
+impl AtomLabelUiPolicy {
+    pub(super) fn epoch(&self) -> u64 {
+        self.epoch
+    }
+}
+
 impl Engine {
     pub fn ui_atom_label_request(&self) -> Option<UiAtomLabelRequest> {
         let active = self.atom_ui.active.as_ref()?;
@@ -122,6 +128,7 @@ impl Engine {
             } => {
                 if self.atom_ui.active.is_some()
                     || self.ui_drawing_settings_request().is_some()
+                    || self.ui_add_chain_request().is_some()
                     || self.close_state() != CloseState::Open
                     || self.file_ui_state().request.is_some()
                 {

@@ -50,12 +50,14 @@ fn every_documented_tool_role_and_explicit_variant_has_one_honest_catalogue_entr
             "tool.ring.7",
             "tool.ring.8",
             "tool.ring.benzene",
-            "tool.ring.cyclopentadiene"
+            "tool.ring.cyclopentadiene",
+            "chain.acyclic",
+            "chain.snaking"
         ]
     );
     assert_eq!(
         ENTRIES.iter().filter(|e| e.binding_id.is_none()).count(),
-        128
+        126
     );
     for (id, count) in [
         ("TD-026", 6),

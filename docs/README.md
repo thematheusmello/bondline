@@ -6,15 +6,22 @@ The app is in early development; documented plans are not implemented features.
 Original branding and the complete planned-tool catalogue have
 [current receiving evidence](verification-branding-and-tools.md) and
 [design/availability rules](design/tool-catalogue.md). All140 entries remain explicit
-about their twelve delivered bindings versus128 disabled future tools. That branding
+about their fourteen delivered bindings versus126 disabled future tools. That branding
 checkpoint's local gate passes1551/0/1. Native visual checks do not establish full reference/platform parity.
 
-The current [atomic drawing-settings command](verification-drawing-settings-command.md)
+The current [native chain receiving](verification-native-chains.md) records Acyclic/
+Snaking drawing, Add Chain, repeat, supported attachment and stored preference application.
+Independent App/adapters/files and bounded actual Mac Undo/Redo/Unicode Save/reopen pass.
+First full local gate10212 passes1657/0/1. Supported native Control-drag/reversal/backtrack,
+measured2×/DPI, other platforms and full M0–M5 remain open; historical MCP failures stay
+unattributed. Only the two chain entries gain bindings; both chairs remain disabled.
+
+The earlier [atomic drawing-settings command](verification-drawing-settings-command.md)
 adds15 passing focused cases and actual CLI/MCP/socket/file evidence, with unchanged
 geometry and old40 command schemas. Full gate37811 fails1012/1 at the unchanged MCP
 replacement bind. A separate [UI readiness qualification](verification-smiles-order-readiness.md)
-and then-unstarted gates pass without making that aggregate green. Native settings/
-tool application, inheritance and full M0–M5 remain required.
+and then-unstarted gates pass without making that aggregate green. Later settings and
+chain checkpoints have their own gate/native evidence; inheritance and full styles remain required.
 
 The earlier skeletal display/label-restoration gate passes1494/0/1, following data1470/0/1
 and inset1451/0/1. Known-H/C4 display, mandatory labels, atom hits and the existing editor
@@ -36,7 +43,8 @@ The earlier component1188/0/1 and CDX1172/0/1 gates remain historical checkpoint
 | Check carbon-label data preservation | [Independent RED/GREEN, source retention and temporary render boundary](verification-carbon-label-data.md), [locked standard-field contract](research/carbon-label-data.md) |
 | Check skeletal carbon display and restore labels | [Shared renderer, command/wire/App evidence and exact numeric-fixture qualification](verification-skeletal-carbon.md), [locked source-backed policy](research/skeletal-carbon-display.md) |
 | Automate the app | [Command and control protocol](control-protocol.md) |
-| Set stored document drawing preferences | [Native form, bounded fields, history and actual Mac Save/reopen evidence](verification-native-drawing-settings.md), [atomic source/loss/adapter checks](verification-drawing-settings-command.md); tool application/inheritance/full styles remain missing |
+| Set stored document drawing preferences | [Native form, bounded fields, history and actual Mac Save/reopen evidence](verification-native-drawing-settings.md), [atomic source/loss/adapter checks](verification-drawing-settings-command.md), [new-chain application](verification-native-chains.md); inheritance/remaining tools/full styles remain missing |
+| Draw carbon chains | [Native Acyclic/Snaking, Add Chain/repeat/preferences/history and actual Mac files](verification-native-chains.md), [locked original policies](research/native-chain-interactions.md); native supported Control-drag/DPI/other-platform acceptance remains open |
 | Understand format support | [Capability matrix](file-formats.md), [native file I/O](native-file-io.md) |
 | Use the delivered file workflow | [Native file UI and exact verification](native-file-ui.md) |
 | Start a fresh drawing safely | [New document, native Save/Discard/Cancel and race evidence](verification-new-document.md) |

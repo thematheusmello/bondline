@@ -180,6 +180,7 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "history.redo",
             "render.capture",
             "ring.create",
+            "ui.chain_tool",
         ]
         .into_iter()
         .collect()

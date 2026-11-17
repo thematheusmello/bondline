@@ -1,9 +1,9 @@
 //! Typed native bindings. Metadata and actual command invocation share one registry.
 
 use crate::{
-    BondDrawOrder, CloseAction, CloseDocument, CloseState, Command, EffectiveTool, Engine,
-    NoParams, PageSetSize, RingKind, SelectBondTool, SelectNamedRingTool, SelectRingTool,
-    UiDrawingSettings, UiFile, UiFileAction, UiFilePhase, UiSelection, UiView,
+    BondDrawOrder, ChainKind, CloseAction, CloseDocument, CloseState, Command, EffectiveTool,
+    Engine, NoParams, PageSetSize, RingKind, SelectBondTool, SelectNamedRingTool, SelectRingTool,
+    UiChainTool, UiDrawingSettings, UiFile, UiFileAction, UiFilePhase, UiSelection, UiView,
 };
 use serde::Serialize;
 
@@ -62,7 +62,8 @@ impl Engine {
             .as_ref()
             .is_some_and(|request| request.phase != UiFilePhase::Running)
             || state.ui_atom_label.is_some()
-            || state.ui_drawing_settings.is_some();
+            || state.ui_drawing_settings.is_some()
+            || state.ui_add_chain.is_some();
         let authoring_reason = if state.close != CloseState::Open {
             Some("close_pending")
         } else if pending {
@@ -494,6 +495,62 @@ impl Engine {
                     enabled: authoring_reason.is_none(),
                     disabled_reason: authoring_reason,
                     selected: Some(self.effective_tool() == (EffectiveTool::NamedRing { kind })),
+                });
+            }
+        }
+        if self.selection_available()
+            && let Ok(preferences) = self.chain_preferences()
+        {
+            for (id, label, kind) in [
+                ("chain.acyclic", "Acyclic chain", ChainKind::Acyclic),
+                ("chain.snaking", "Snaking chain", ChainKind::Snaking),
+            ] {
+                controls.push(ControlInfo {
+                    id,
+                    label,
+                    menu: "Tools",
+                    submenu: None,
+                    shortcut: None,
+                    command: Command::UiChainTool(UiChainTool::Select { kind }),
+                    enabled: authoring_reason.is_none(),
+                    disabled_reason: authoring_reason,
+                    selected: Some(self.effective_tool() == (EffectiveTool::Chain { kind })),
+                });
+            }
+            let reason = authoring_reason.or((!matches!(
+                self.effective_tool(),
+                EffectiveTool::Chain { .. }
+            ))
+            .then_some("chain_tool_required"));
+            for (id, label, lengths) in [
+                ("chain.fixed_lengths", "Fixed Lengths", true),
+                ("chain.fixed_angles", "Fixed Angles", false),
+            ] {
+                controls.push(ControlInfo {
+                    id,
+                    label,
+                    menu: "Object",
+                    submenu: Some("Chain constraints"),
+                    shortcut: None,
+                    command: Command::UiChainTool(UiChainTool::Constraints {
+                        fixed_lengths: if lengths {
+                            !preferences.fixed_lengths
+                        } else {
+                            preferences.fixed_lengths
+                        },
+                        fixed_angles: if lengths {
+                            preferences.fixed_angles
+                        } else {
+                            !preferences.fixed_angles
+                        },
+                    }),
+                    enabled: reason.is_none(),
+                    disabled_reason: reason,
+                    selected: Some(if lengths {
+                        preferences.fixed_lengths
+                    } else {
+                        preferences.fixed_angles
+                    }),
                 });
             }
         }

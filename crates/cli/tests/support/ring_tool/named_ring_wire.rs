@@ -17,7 +17,7 @@ use std::{
 
 fn named_controls(value: &Value, selected: &str) -> TestResult {
     let entries = value["controls"].as_array().ok_or("controls")?;
-    assert_eq!(entries.len(), 32);
+    assert_eq!(entries.len(), 36);
     for (kind, label) in [
         ("benzene", "Benzene"),
         ("cyclopentadiene", "Cyclopentadiene"),
@@ -95,7 +95,7 @@ fn cli_and_initialized_stdio_preserve_the_exact_receipt_and_distinguish_named_fr
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     assert_eq!(listed["id"], 2);
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 42);
+    assert_eq!(tools.len(), 43);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == NAME)

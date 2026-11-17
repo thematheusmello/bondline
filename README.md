@@ -31,6 +31,8 @@ Numeric zoom, Actual/Fit, pan and wheel navigation now make unchanged A4 paper u
 for the checked multiple-bond workflow. Small-ring tools and selection/movement have
 shared-engine and actual-App checks; most native interaction remains pending. A bounded
 macOS Benzene click/Undo check now passes in the updated workspace.
+Native Acyclic/Snaking chains now have bounded macOS drawing, Add Chain, repeat,
+attachment, preference, history and editable Save/reopen checks.
 General labels and chemical analysis are still being built.
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
@@ -40,11 +42,13 @@ Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with indep
 checks of the actual files. See [atom-editor evidence](docs/verification-native-atom-labels.md),
 [native record evidence](docs/verification-native-smiles-records.md) and the separate
 [paste checkpoint](docs/verification-native-smiles-paste.md). The latest full local gate
-**passes 1,629 tests, with none failed and one ignored**, plus formatting, warnings-denied
-linting, layer, license and corpus checks. [Native Document Settings evidence](docs/verification-native-drawing-settings.md)
+**passes 1,657 tests, with none failed and one ignored**, plus formatting, warnings-denied
+linting, layer, license and corpus checks. [Native chain evidence](docs/verification-native-chains.md)
+records independent App/adapter/file checks and actual Mac workflows, with native
+Control-drag/DPI/platform limits stated separately. [Native Document Settings evidence](docs/verification-native-drawing-settings.md)
 records set/clear, Undo/Redo, unchanged Apply and Unicode CDXML Save/reopen on macOS.
-The two stored creation preferences preserve existing geometry; applying them to drawing
-tools and full style settings remain unfinished. [Ordered native input evidence](docs/verification-ordered-native-modifiers.md)
+The two stored creation preferences preserve existing geometry and now guide new chains;
+inheritance, other tools and full style settings remain unfinished. [Ordered native input evidence](docs/verification-ordered-native-modifiers.md)
 separates actual Mac OS behavior from synthetic SDK checks. Earlier MCP listener and UI
 readiness failures remain recorded; this pass does not establish a causal socket repair.
 The UI wait has its separate [test-only qualification](docs/verification-smiles-order-readiness.md).
@@ -70,7 +74,7 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 <details>
 <summary>See the available and planned tool catalogue</summary>
 <p><img src="docs/media/planned-tools-catalogue-native.jpg" alt="Actual native All tools catalogue with working controls and explicitly disabled future tools" width="100%"></p>
-<p>140 entries cover the documented tool inventory. The 128 planned entries remain disabled until their workflows are implemented.</p>
+<p>140 entries cover the documented tool inventory. Fourteen are available for supported drawings; 126 planned entries remain disabled until their workflows are implemented. This earlier capture records the original twelve-tool checkpoint.</p>
 </details>
 
 | Capability | Delivered scope |
@@ -79,8 +83,8 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 | Double and Triple bonds | Native macOS tool selection, centered drawing, history and CDXML Save As pass at a readable scale. Carbon terminal extension also passes independent headless checks; its native multiple-bond workflow and context-sensitive styles remain unverified/missing. |
 | Explicit sided doubles | Shortened Left/Right Double geometry, real gaps/hits and CPU/GPU capture pass independent engine/native-profile CDXML history and save/reopen checks. Native interaction, alignment controls and automatic styles remain unverified/missing. See [receiving](docs/verification-inset-doubles.md). |
 | Skeletal carbon labels | Separate terminal/nonterminal node flags preserve literal H and mandatory isolated C/C2 labels. Shared CPU/GPU rendering, explicit-label restoration, history and Unicode save/reopen pass independent tests. Style-setting controls and native OS acceptance remain outstanding. See [evidence](docs/verification-terminal-carbon-labels.md). |
-| Stored drawing preferences | File → Document Settings… edits or clears optional bond length/chain angle through the shared atomic command. Native macOS history, unchanged Apply and Unicode CDXML Save/reopen pass independent actual-file checks. Existing geometry stays unchanged. Inheritance, application to drawing tools and full styles remain missing. See [native evidence](docs/verification-native-drawing-settings.md), [format/loss guards](docs/verification-drawing-settings-command.md). |
-| Complete tool catalogue | All124 documented drawing/query/biology/HELM roles appear as140 entries. Twelve use existing bindings;128 planned entries stay grey, disabled and explicitly marked Not implemented. Search, scrolling and available-tool selection have bounded native macOS checks. See [catalogue](docs/design/tool-catalogue.md). |
+| Stored drawing preferences | File → Document Settings… edits or clears optional bond length/chain angle through the shared atomic command. Native macOS history, unchanged Apply and Unicode CDXML Save/reopen pass independent actual-file checks. Later chains use those preferences; existing geometry stays unchanged. Inheritance, remaining tools and full styles remain missing. See [native evidence](docs/verification-native-drawing-settings.md), [chain application](docs/verification-native-chains.md), [format/loss guards](docs/verification-drawing-settings-command.md). |
+| Complete tool catalogue | All124 documented drawing/query/biology/HELM roles appear as140 entries. Fourteen use existing bindings;126 planned entries stay grey, disabled and explicitly marked Not implemented. Search, scrolling and available-tool selection have bounded native macOS checks. Both chair tools remain disabled. See [catalogue](docs/design/tool-catalogue.md). |
 | Existing-bond editing | Set Single/Double/Triple with hotspot1/2/3; convert an existing Single by clicking, or draw across Single/Double endpoints with Single selected. Same edge and geometry, corrected literal carbon H, one history step. Bounded native Mac and independent graph/file checks; alignment and general imported edits remain unavailable. |
 | Small carbon rings | Six3–8 Single-ring tools plus Benzene/Cyclopentadiene share the engine and preview/history path. Independent command/adapter/App free/fused/spiro/Unicode-file checks pass. Native macOS Benzene click/Undo is checked; other native gestures, chair/sprout and aromatic perception remain unfinished. See [receiving](docs/verification-branding-and-tools.md). |
 | Workspace | Original logo, light header, compact working-tool rail, scrollable planned tools, white paper, live document inspector and contextual guidance. The searchable All tools catalogue distinguishes working, unavailable and planned entries. Bounded macOS review passes; full platform and reference-layout parity remains open. |
@@ -102,8 +106,8 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 | Skeletal carbon display | Supported native drawings can omit eligible carbon labels while retaining literal H and atom targets. Required collinear/cumulene labels stay visible; the existing explicit-label editor restores a hidden label. Independent renderer/CLI/MCP/App and saved-file checks pass. Default tools/styles, false-setting controls and native OS acceptance remain unfinished. [Evidence](docs/verification-skeletal-carbon.md). |
 | Selection and movement | Marquee, atom/bond/component click, Shift toggle and Select All call the shared selection registry. Drag selected atoms or nudge1pt/Shift10pt with one undoable literal-position edit. Independent commands, actual-App input, CLI/MCP/socket and Unicode file-consumer checks pass; native desktop interaction remains unverified. Native CDXML/source-free only; lasso, rotation, resizing, snapping and group workflows remain missing. |
 | Ring construction | Six native Single-ring tools plus Benzene and Cyclopentadiene use the shared CLI/MCP/loopback engine. Named tools support complete previews, press-latched Shift, standalone/shared-atom/shared-edge placement, history and editable Unicode saves. Independent geometry/H, actual-App1×/2×, adapter and file checks pass. Native OS/monitor acceptance, chair/sprout workflows, automatic styles and general ring-system editing remain unfinished. [Named-ring evidence](docs/verification-native-unsaturated-rings.md). |
-| Chain engine | Headless `chain.create` creates2–64 carbons with explicit angle/placement; `chain.create_path` preserves literal turning paths. Both support existing-carbon attachments and one-edit history with old metadata/literal H preserved. CLI/MCP/loopback and independent saved-file checks pass. The native tools remain grey: drag, Add Chain, repeat, Snaking and application of drawing preferences are still required. [Fixed](docs/verification-chain-authoring.md), [path evidence](docs/verification-chain-paths.md). |
-| Automation | 42 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
+| Carbon chains | Native Acyclic/Snaking controls provide drag/count previews, Add Chain, Alt-click count repeat, supported-carbon attachment and Fixed Lengths/Angles controls. Later chains use stored length/angle; each drag/Add is one history edit. Independent App/CLI/MCP/loopback/Unicode-file checks and bounded native Mac creation, repeat, attachment, refusal, Undo/Redo and Save/reopen pass. Supported Control-drag/reversal/backtracking remains App-only; measured DPI, other platforms and complete reference parity remain unverified. [Native evidence](docs/verification-native-chains.md), [fixed engine](docs/verification-chain-authoring.md), [literal paths](docs/verification-chain-paths.md). |
+| Automation | 43 typed commands in one registry, used by the UI, CLI, stdio MCP and opt-in authenticated localhost control. |
 
 Native drawing/file workflows have been inspected on macOS. Earlier hosted CI tested all
 three platforms and window launches. GitHub Actions is disabled during development to

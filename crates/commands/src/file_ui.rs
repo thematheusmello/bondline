@@ -127,6 +127,7 @@ impl Engine {
             self.invalidate_file_ui();
             self.detach_atom_label();
             self.detach_drawing_settings();
+            self.detach_add_chain();
             self.file_ui.available = available;
         }
     }
@@ -211,7 +212,8 @@ impl Engine {
             }
             self.file_ui.active = None;
         } else {
-            if self.ui_drawing_settings_request().is_some() {
+            if self.ui_drawing_settings_request().is_some() || self.ui_add_chain_request().is_some()
+            {
                 return Err(Error::UiBusy);
             }
             if self.file_ui.active.is_some() {

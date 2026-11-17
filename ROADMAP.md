@@ -5,30 +5,40 @@ documented workflows. The initial reference baseline is Professional 26.1; older
 guides are versioned evidence, not proof of complete modern parity.
 
 The user-directed identity and planned-tool presentation exposes all124 documented
-TD/TQ/TB roles as140 entries, with twelve real bindings and128 disabled planned entries.
+TD/TQ/TB roles as140 entries, with fourteen real bindings and126 disabled planned entries.
 Original logo assets, native review and independent input/foreground/font regressions are
 recorded in [receiving](docs/verification-branding-and-tools.md). A visible grey icon does
 not implement its tool; the full M0–M5 scope and missing-feature states remain intact.
-After this visual increment, the explicit headless chain candidate follows the
+After that visual increment, the explicit headless chain candidate follows the
 [locked contract](docs/research/chain-authoring-plan.md) and
 [receiving evidence](docs/verification-chain-authoring.md). Continue its complete native
-workflow, then the remaining drawing, chemistry, publishing and distribution scope.
+workflow is now integrated below; continue the remaining drawing, chemistry, publishing
+and distribution scope.
 The [native dependency contract](docs/research/native-chain-plan.md) now has a literal
 turning-path/preview prerequisite with [independent evidence](docs/verification-chain-paths.md).
 The [drawing-settings data prerequisite](docs/research/drawing-settings-data.md) now has
 [independent persistence/loss evidence](docs/verification-drawing-settings-data.md).
 Root BondLength/ChainAngle preserve explicit supported data and opaque source values;
-native tool application and full style inheritance remain missing. File > Document
+new-chain application is now checked, while full style inheritance remains missing. File > Document
 Settings… now has a [bounded two-preference form](docs/verification-native-drawing-settings.md)
-with actual Mac set/clear/history/Save/reopen evidence. It does not complete the dialog,
-apply preferences to tools or enable chains.
+with actual Mac set/clear/history/Save/reopen evidence. It does not complete the dialog;
+new-chain application belongs to the separate workflow below.
 The [atomic settings command/history/adapters](docs/verification-drawing-settings-command.md)
 now pass independent required/null/source/lease/history and actual file/wire checks.
 Ordered native modifier transport now has [SDK and actual Mac OS evidence](docs/verification-ordered-native-modifiers.md).
-Next implement complete native drawing/forms/repeat and actual acceptance. Do not substitute frame-global
-Control state or unsaved UI settings for those requirements; the native tools stay grey.
-The fresh native-settings increment's full local gate passes1629/0/1 after correcting
-one newly added headless-control expectation; its first gate is recorded as failed.
+The [complete native chain interaction lock](docs/research/native-chain-interactions.md)
+now has [independent App/adapter/file and bounded actual Mac evidence](docs/verification-native-chains.md).
+Acyclic/Snaking alone become available: drag/count, Add Chain, repeat, supported-carbon
+attachment, stored preferences, fixed switches, full previews and one-edit history.
+Registry43 preserves all old42 actual records/schema/order; controls36/21/15/11,
+catalogue14/126. First full local10212 passes1657/0/1; actual preimplementation and later
+counter/repeat/refusal RED→GREENs remain separate from compile/lint/storage qualifications.
+Native supported Control-drag/reversal/backtracking and measured2×/DPI remain unverified;
+other platforms and exact26.1 defaults/hotkeys stay open. Frame-global Control is never
+substituted for observed ordered events. Next continue missing drawing tools, including
+chair/sprout and broader labels/styles, with source locks and independent workflows before
+binding grey entries. The earlier native-settings gate passes1629/0/1 after correcting
+one newly added headless-control expectation; that first gate remains recorded as failed.
 Earlier settings-command
 MCP replacement-bind and UI readiness failures remain recorded; the latter has a
 [test-only qualification](docs/verification-smiles-order-readiness.md). This new pass
@@ -42,8 +52,9 @@ None/true no-ops. Native OS acceptance/default styles/preferences remain outstan
 The separate terminal-label prerequisite now has
 [independent data/render/editor/file evidence](docs/verification-terminal-carbon-labels.md).
 Actual degree selects the appropriate flag and isolated C/C2 labels remain mandatory.
-The chain engine and native dependency contracts are now locked. Add Chain, repeat,
-Snaking, preference application and the remaining settings workflow remain required.
+The chain engine, native dependency and full interaction contracts are locked. Add Chain,
+repeat, Snaking and preference application now have scoped evidence above; remaining
+settings/styles and native modifier/DPI/platform acceptance remain required.
 Named benzene/cyclopentadiene candidates now share ring.create with the unchanged sized
 requests. Independent phase/H/source/history and actual adapter/file checks pass; see
 [receiving](docs/verification-unsaturated-rings.md). Their two native controls now share
@@ -437,8 +448,10 @@ corpus and reference/chemical mapping remain M1 work.
 
 ## M2: drawing — in progress
 
-Current ring command37 verifies explicit3–8/free/fused/spiro construction through the
-engine/adapters/files/renderers; native ring controls and gestures are next. Selection
+The earlier ring command37 verifies explicit3–8/free/fused/spiro construction through the
+engine/adapters/files/renderers; native tools now have their separately scoped evidence
+above. Current carbon-chain controls, Add/repeat/preferences and bounded Mac evidence
+are in [receiving](docs/verification-native-chains.md). Selection
 and movement are wired with12 actual-App passes, but native desktop acceptance remains
 pending. See [ring receiving](docs/verification-ring-authoring.md) and
 [selection receiving](docs/verification-selection-authoring.md) for exact scope.
@@ -504,8 +517,9 @@ DPI calibration, SDF navigation, saved view preferences or complete reference pa
 See docs/verification-view-{render,commands,ui,native}.md and
 docs/verification-ordered-file-actions.md.
 
-Next: native ring tools/gestures and outstanding desktop selection acceptance, then
-aromatic/chair/sprout/chain construction, snapping, transforms, broader labels and styles.
+Next: outstanding native modifier/DPI/selection/ring acceptance, missing chair/sprout
+construction, snapping, transforms, broader labels and styles. Do not restart the
+delivered chain prerequisites or treat their bounded Mac checks as full tool/platform parity.
 M1 source-faithful interoperability and M0 addressability/inventory/platform evidence
 remain open. Keep imported-source/mapping gaps visible; these bounded workflows do not
 complete a milestone.

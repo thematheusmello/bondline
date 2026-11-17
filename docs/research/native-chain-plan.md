@@ -58,6 +58,19 @@ registry egui-winit source73260B SHA256
 Both SDK source URLs use crate VCS commitfe368bacc4a15697e347607e73a56c0299b3d42d;
 no vendor code is changed by this prerequisite.
 
+## Current delivery checkpoint, 2026-11-17
+
+The literal-path, stored preference/form and ordered native-input prerequisites have
+landed. [The interaction lock](native-chain-interactions.md) fixes original remaining
+policies before consumer tests. [Native-chain receiving](../verification-native-chains.md)
+records steps4–6: Acyclic/Snaking drag/count, Add/repeat, supported attachment, preference
+application, whole-candidate previews, shared commands/history and bounded actual Mac
+Save/reopen. Tools are now bound only for the supported native Drawing profile. Registry43,
+controls36/21/15/11 and catalogue14/126 preserve all old records and remaining grey tools.
+The first full local gate passes1657/0/1. Actual supported Control-drag/reversal/backtrack,
+measured2×/DPI, other platforms, inherited/full styles and exact26.1 remain open. Earlier
+prerequisite statements below describe their checkpoints, not the current enabled inventory.
+
 ## Delivery order and acceptance gates
 
 1. Deliver the literal positioned-path command below, using the existing common H,

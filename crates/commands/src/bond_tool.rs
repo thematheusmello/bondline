@@ -28,6 +28,9 @@ pub enum EffectiveTool {
     NamedRing {
         kind: RingKind,
     },
+    Chain {
+        kind: crate::ChainKind,
+    },
 }
 
 #[derive(Clone, Copy, Debug, Serialize)]

@@ -1414,3 +1414,6 @@ mod selection_translation;
 
 #[path = "native_ring_tests.rs"]
 mod native_ring;
+
+#[path = "native_chain_tests.rs"]
+mod native_chain;

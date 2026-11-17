@@ -76,7 +76,11 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "tool.ring.benzene",
             "tool.ring.cyclopentadiene",
             "edit.select_all",
-            "edit.deselect"
+            "edit.deselect",
+            "chain.acyclic",
+            "chain.snaking",
+            "chain.fixed_lengths",
+            "chain.fixed_angles",
         ])
     );
     assert_eq!(

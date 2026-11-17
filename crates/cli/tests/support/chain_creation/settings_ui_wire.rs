@@ -5,12 +5,12 @@ use super::*;
 const UI_SETTINGS: &str = "ui.drawing_settings";
 
 fn settings_schema(entries: &[Value], key: &str) -> TestResult {
-    assert_eq!(entries.len(), 42);
+    assert_eq!(entries.len(), 43);
     let names = entries
         .iter()
         .map(|v| v["name"].as_str().ok_or("name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(names.len(), 42);
+    assert_eq!(names.len(), 43);
     assert_eq!(
         names,
         OLD_NAMES
@@ -20,10 +20,15 @@ fn settings_schema(entries: &[Value], key: &str) -> TestResult {
                 "chain.create_path",
                 "document.set_drawing_settings",
                 UI_SETTINGS,
+                "ui.chain_tool",
             ])
             .collect::<BTreeSet<_>>()
     );
-    assert_eq!(entries.last().ok_or("last entry")?["name"], UI_SETTINGS);
+    assert_eq!(
+        entries.get(41).ok_or("old42 final entry")?["name"],
+        UI_SETTINGS
+    );
+    assert_eq!(entries.last().ok_or("last entry")?["name"], "ui.chain_tool");
     let entry = entries
         .iter()
         .find(|v| v["name"] == UI_SETTINGS)

@@ -124,7 +124,7 @@ fn names(value: &Value) -> TestResult<BTreeSet<&str>> {
 fn registry_schema_keeps_the_legacy_object_and_adds_a_closed_nonnullable_named_object() -> TestResult
 {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 42);
+    assert_eq!(registry.len(), 43);
     let entry = registry
         .iter()
         .find(|v| v.name == "ring.create")

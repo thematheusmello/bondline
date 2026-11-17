@@ -190,7 +190,7 @@ pub(super) fn create(
     append(document, page, anchor, points, floor)
 }
 
-fn require_source(document: &StoredDocument) -> Result<(), Error> {
+pub(super) fn require_source(document: &StoredDocument) -> Result<(), Error> {
     if !document.is_fully_mapped()
         || document
             .source_info()
@@ -203,7 +203,7 @@ fn require_source(document: &StoredDocument) -> Result<(), Error> {
     Ok(())
 }
 
-fn page(document: &StoredDocument, page_id: u32) -> Result<&Page, Error> {
+pub(super) fn page(document: &StoredDocument, page_id: u32) -> Result<&Page, Error> {
     let id = PageId::new(page_id).ok_or(Error::InvalidPageId)?;
     document
         .model()
@@ -213,14 +213,14 @@ fn page(document: &StoredDocument, page_id: u32) -> Result<&Page, Error> {
         .ok_or_else(|| bondline_model::Error::MissingPage(page_id).into())
 }
 
-struct Anchor<'a> {
-    fragment: &'a Fragment,
+pub(super) struct Anchor<'a> {
+    pub(super) fragment: &'a Fragment,
     id: AtomId,
     hydrogens: u16,
-    position: Point2,
+    pub(super) position: Point2,
 }
 
-fn attachment(page: &Page, fragment_id: u32, atom_id: u32) -> Result<Anchor<'_>, Error> {
+pub(super) fn attachment(page: &Page, fragment_id: u32, atom_id: u32) -> Result<Anchor<'_>, Error> {
     let id = FragmentId::new(fragment_id).ok_or(Error::InvalidFragmentId)?;
     let fragment = page
         .fragments()

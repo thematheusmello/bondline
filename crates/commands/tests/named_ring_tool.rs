@@ -365,7 +365,7 @@ fn schema_node<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
 fn named_union_schema_and_native31_foreign20_14_10_controls_preserve_closed_source_authority()
 -> TestResult {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 42);
+    assert_eq!(registry.len(), 43);
     let row = registry
         .iter()
         .find(|r| r.name == "ui.ring_tool")
@@ -405,7 +405,7 @@ fn named_union_schema_and_native31_foreign20_14_10_controls_preserve_closed_sour
         std::collections::BTreeSet::from(["size", "kind"])
     );
     let mut e = Engine::default();
-    assert_eq!(e.controls().len(), 32);
+    assert_eq!(e.controls().len(), 36);
     for (kind, label, size) in [
         ("benzene", "Benzene", 6),
         ("cyclopentadiene", "Cyclopentadiene", 5),

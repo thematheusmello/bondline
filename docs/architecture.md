@@ -1,7 +1,7 @@
 # Architecture
 
 The UI's original branding and static roadmap catalogue are presentation only.
-tool_catalogue_data.rs maps124 source roles to140 entries;128 have no binding. The twelve
+tool_catalogue_data.rs maps124 source roles to140 entries;126 have no binding. The fourteen
 delivered entries resolve current Engine.controls() and use the existing ordered action
 path. No planned command, source/edit authority, renderer dependency or history state is
 introduced. The private catalogue owns only open/search state; current File/Atom/SDF
@@ -65,7 +65,7 @@ Root-only XML and CDX projections retain supported values without flattening inh
 invalid/ambiguous values stay in authoritative source. Native CDXML writes present values
 without widening exact-byte edit authority. Whole-document MOL guards run before raw/
 fragment reuse, while existing full-model equality guards retained source drift. Settings
-do not alter existing geometry or yet drive native tools. The immediate
+do not alter existing geometry; new chain creation now resolves them as described below. The immediate
 `document.set_drawing_settings` command now requires both nullable values plus a revision,
 validates source before domain/no-op and uses one normal commit while retaining view focus.
 It adds no worker, atom/bond ID allocation or Save lease; see [command contract](research/drawing-settings-command.md),
@@ -81,7 +81,7 @@ numeric fields reuse the byte-bounded text buffer and extracted Atom input-prefi
 Frame-start modal fences cover dismissal, File/SDF/Atom/catalogue ownership and native
 close. Successful changed=false Open/Cancel also wakes the native host after reply
 publication. No FilePlan, worker, Save receipt or close acknowledgment is created.
-This form persists two preferences; it adds no tool-default resolution or geometry change.
+This form persists two preferences; chain-specific resolution is separate below.
 See [contract](research/native-drawing-settings.md) and [receiving](verification-native-drawing-settings.md).
 
 `chain.create` adds an explicit bounded carbon path of Single bonds in the immediate command lane.
@@ -97,17 +97,34 @@ closed point requests reuse model coordinate validation without adding a model s
 dependency. Fixed and positioned paths share one target-local attachment proof and final
 immutable append/identity/history builder. Borrowed path parameters are bounded before
 resolved-point allocation; same-builder fixed/path previews never reserve IDs or mutate
-context. No native tool is enabled. [The dependency contract](research/native-chain-plan.md)
+context. That engine prerequisite alone enables no native tool. [The dependency contract](research/native-chain-plan.md)
 keeps authored style persistence, ordered modifier evidence, full native workflows and
 actual acceptance required; frame-global modifiers are not chronological evidence.
 
 The native eframe wrapper now preserves each actual Winit modifier report after the
 unchanged egui-winit mapping as Event::ModifiersChanged in that viewport's ordered queue.
 It retains the original EventResponse/global snapshot and all old gesture semantics.
-There is no side channel or fabricated key. A future drag must seed from its press
+There is no side channel or fabricated key. Chain gestures seed from their press
 payload, retain observed state across frames and cancel on focus loss. The extension
-has synthetic SDK and bounded actual Mac OS evidence, separate from future chain
-consumers and other integrations/platforms; see [receiving](verification-ordered-native-modifiers.md).
+has synthetic SDK and bounded actual Mac OS evidence, separate from other
+integrations/platforms; see [receiving](verification-ordered-native-modifiers.md).
+
+`ui.chain_tool` appends one transient/presentation command. Chain mode shares the checked
+effective-tool epoch; fixed switches stay outside authored state. Independently absent
+native preferences resolve to original48pt/120° only for new chains. Unknown source
+settings retain refusal. Weak proofs include modal-open epochs even when no owner
+exists, preventing hidden Open/Cancel ABA from reviving gestures or repeat. The private
+UI ChainWorkflow owns only an ordered gesture, bounded Add editor and repeat count/proof.
+Whole candidates reuse the existing builder and full logical/physical scene guards;
+the same guarded request commits once. Add success captures repeat POST-commit under
+the same Engine lock. Actual canvas loss is latched; returning equal viewport values
+does not revive authority. Form drafts survive ordinary staleness; only exact explicit
+Cancel marks its private token. No worker, FilePlan, Save receipt or close ACK is added.
+The first-move counter uses nonallocating `Ui::new_child`, avoiding Area's invisible
+sizing frame. See [interaction lock](research/native-chain-interactions.md),
+[protocol](control-protocol.md#native-carbon-chain-tools) and
+[App/native evidence](verification-native-chains.md). Native Control-drag/reversal and
+measured DPI remain distinct from synthetic input evidence.
 
 Bond's optional directed DoublePosition is authored data, copied with the whole bond and
 retained by snapshots even when dormant on another order. CDXML maps/preserves it; model
