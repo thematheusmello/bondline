@@ -86,7 +86,7 @@ where
 }
 
 // A missing field defaults to None; a present null must not become contextual phase.
-fn present_phase<'de, D>(deserializer: D) -> Result<Option<RingPhase>, D::Error>
+pub(super) fn present_phase<'de, D>(deserializer: D) -> Result<Option<RingPhase>, D::Error>
 where
     D: Deserializer<'de>,
 {

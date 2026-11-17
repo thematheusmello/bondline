@@ -485,6 +485,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "page.set_size",
             "render.capture",
             "ring.create",
+            "ring.sprout",
             "sdf.field.set_value",
             "sdf.record.inspect",
             "sdf.record.remove",

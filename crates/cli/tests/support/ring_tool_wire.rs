@@ -131,7 +131,7 @@ fn names(entries: &[Value]) -> TestResult {
         .iter()
         .map(|v| v["name"].as_str().ok_or("command name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(entries.len(), 43);
+    assert_eq!(entries.len(), 44);
     assert_eq!(
         actual,
         OLD_NAMES
@@ -143,6 +143,7 @@ fn names(entries: &[Value]) -> TestResult {
                 "document.set_drawing_settings",
                 "ui.drawing_settings",
                 "ui.chain_tool",
+                "ring.sprout",
             ])
             .collect::<BTreeSet<_>>()
     );

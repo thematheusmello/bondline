@@ -281,7 +281,7 @@ fn real_cli_and_stdio_append_history_edit_and_unicode_persistence_share_one_comm
     client.send(json!({"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}))?;
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 43);
+    assert_eq!(tools.len(), 44);
     let tool = tools
         .iter()
         .find(|t| t["name"] == NAME)

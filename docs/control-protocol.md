@@ -3,7 +3,7 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has43 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has44 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 An engine JSON request is exactly:
@@ -86,6 +86,7 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `ui.selection` | Closed tagged `activate`, `set`, `all`, `clear` or `inspect`; required `expected_revision`; `set` also requires `page_id` and `atom_ids`, `all` requires `page_id` | Transient one-page native atom selection; no authored edit or native-host requirement |
 | `selection.translate` | Required `expected_revision`, `expected_selection_epoch`, `delta_x_pt`, `delta_y_pt` | One atomic literal-position edit of the current native selection; complete source, chemistry, IDs and history retained |
 | `ring.create` | Required `expected_revision`, `page_id`, one of the three size/named/chair alternatives, `hydrogen_policy:"rectify_neutral_carbon"`, closed tagged `placement`; named requests alone allow optional non-null `phase` | Construct one native carbon ring on paper or sharing a declared atom/edge; one whole-source history commit; [chair contract](#cyclohexane-chair-requests) |
+| `ring.sprout` | Required `expected_revision`, `page_id`, `fragment_id`, `atom_id`, `hydrogen_policy:"rectify_neutral_carbon"`, closed object `ring`, `ring_begin_x_pt`, `ring_begin_y_pt`, `ring_end_x_pt`, `ring_end_y_pt`, string `side` | One new3–8 carbon cycle joined to the target by one Single, in the same Fragment and one history edit; explicit independent cycle-edge geometry, pure preview and unchanged source guards. Ring kinds: polygon+size3..8, benzene/cyclopentadiene+optional non-null phase, or either cyclohexane chair. [Contract](research/native-ring-sprout.md), [headless evidence](verification-ring-sprout.md); native integration remains separate. |
 
 SMILES record import requires explicit selection of the already-open raw file. It starts
 a clean Drawing namespace with generated geometry, retains the complete file association,
@@ -1331,7 +1332,7 @@ capture, native races/other-platform execution and complete reference parity rem
 records…, with no shortcut and typed `ui.file` action `import_smiles_records`. It is enabled
 only for a raw open SMILES file, attached host and idle/Open presentation context. Default
 counts are38 native Drawing/15 SDF/11 raw SMILES; retained-SMILES Drawing keeps21.
-The current registry has43 commands. Accepting
+The current registry has44 commands. Accepting
 `UiFilePlan::SmilesImport` opens explicit One record/All records plus the existing five
 geometry parameters. Import calls only `document.import_smiles_records`; it reads the
 already-retained file, not a new path. The backing's generic source-completeness flag

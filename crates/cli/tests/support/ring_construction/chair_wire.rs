@@ -233,7 +233,7 @@ fn schema(root: &Value, creation: bool) -> TestResult {
     Ok(())
 }
 fn discovery(entries: &[Value], key: &str) -> TestResult {
-    names(entries)?; // Original literal historical36 + the seven existing additions =43, unchanged.
+    names(entries)?; // Original literal historical36 + the eight current additions =44.
     for (name, creation) in [("ring.create", true), ("ui.ring_tool", false)] {
         let row = entries
             .iter()

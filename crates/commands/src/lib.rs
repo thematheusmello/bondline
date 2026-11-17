@@ -61,7 +61,7 @@ pub use files::{
 pub use new_document::NewDocument;
 pub use ring::{
     ChairKind, ChairRingCreate, NamedRingCreate, RingCreate, RingCreateRequest, RingKind,
-    RingPhase, RingPlacement, RingSide,
+    RingPhase, RingPlacement, RingSide, RingSprout, SproutRing,
 };
 pub use ring_tool::{
     RingContext, RingToolOperation, SelectChairRingTool, SelectNamedRingTool, SelectRingTool,
@@ -214,6 +214,7 @@ command_registry! {
     DrawingSettingsSet(DrawingSettingsSet) => ("document.set_drawing_settings", "Replace both optional document-root creation preferences in one native drawing edit; explicit null clears a value and existing geometry stays unchanged.", false),
     UiDrawingSettings(UiDrawingSettings) => ("ui.drawing_settings", "Open or cancel a native document creation-preference draft; requires an attached host and grants no authoring or Save authority.", false),
     UiChainTool(UiChainTool) => ("ui.chain_tool", "Select a chain tool, set its transient constraints, or open/cancel a source-qualified numeric Add Chain draft; authoring uses the existing chain commands.", false),
+    RingSprout(RingSprout) => ("ring.sprout", "Attach an independent native carbon ring through one Single connector in one edit, with explicit cycle geometry and literal hydrogen policy.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -1049,6 +1050,17 @@ impl Engine {
                 drawing_focus = self.view_focus;
                 changed
             }
+            Command::RingSprout(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let (document, identities) =
+                    ring::create_sprout(self.stored_document()?, params, self.identities)?;
+                let changed = self.commit(document)?;
+                self.identities = identities;
+                drawing_focus = self.view_focus;
+                changed
+            }
             Command::BondCreate(params) => {
                 let focus = (
                     params.page_id,
@@ -1348,6 +1360,7 @@ mod tests {
                 "ui.view",
                 "ui.file",
                 "ui.chain_tool",
+                "ring.sprout",
             ]
             .into_iter()
             .collect()

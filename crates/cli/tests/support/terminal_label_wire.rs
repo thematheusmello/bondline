@@ -43,7 +43,7 @@ fn cli_restores_both_terminal_flags_once_and_saves_exact_unicode_properties_with
     assert!(listed.status.success());
     let entries: Value = serde_json::from_slice(&listed.stdout)?;
     let entries = entries.as_array().ok_or("commands")?;
-    assert_eq!(entries.len(), 43);
+    assert_eq!(entries.len(), 44);
     let spec = &entries
         .iter()
         .find(|v| v["name"] == "atom.set_label")

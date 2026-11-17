@@ -7,6 +7,37 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Atomic headless sprout; full local gate passes
+
+Baseec84717; the accompanying atomic command/test/docs commit is the recoverable state.
+Read [lock](docs/research/native-ring-sprout.md) and
+[receiving](docs/verification-ring-sprout.md). One ring.sprout command/preview appends an
+entirely new3–8 cycle, either named ring or either chair, through one Single in the same
+Fragment and one history edit. All43 old actual CLI records/schema/order stay exact;
+registry44 leaves native controls38/21/15/11 and catalogue16 available/124 planned unchanged.
+
+Thirteen new independent core/property/render/file/actual-CLI/MCP/socket cases pass.
+Actual UnknownCommand REDs precede producer edits; the real positional-array schema
+gap has unchanged RED/GREEN assertions. Negative-square occupancy and notation atom-order
+setup corrections preserve the discovered refusal and all old consumers/thresholds.
+Full local22063 exits0: **1694 passed/0 failed/1 ignored across248 result lines**, plus
+fmt, warnings-denied workspace/vendor checks, layers, seven assets, strict155/166/221
+runtime closures and corpus. New ASan55045 passes10000 runs, max reached264B of16KiB.
+Current inventory changes are positive exact additions; historical arrays and protected
+MCP policy/tests stay unchanged. The historical listener failure remains unattributed.
+
+This is headless delivery; native Alt-sprout and application preferences remain missing.
+Next immediately adopt the independently frozen existing-App/JSON tests, observe their
+runtime REDs and finish the locked session preference/modal policy, ordered native form,
+same-candidate click/drag and adapter repaint. Verify in a fresh own native Mac app and
+consume actual saved files independently before enabling/claiming those flows. Logo and
+all140 catalogue entries remain; grey entries never gain fake bindings. No user app/
+drawing, dependency/font/vendor/lock/corpus/workflow, golden or publication changes.
+All Root execution jobs are terminal; parallel source-only next-stage preparation is active.
+Full M0–M5 stays active and incomplete. Earlier native/platform/style limits remain.
+
+## Earlier checkpoints
+
 ### Cyclohexane-chair tools; full local gate passes
 
 Base59e3403; the accompanying atomic source/test/docs commit is the recoverable state.
@@ -57,8 +88,6 @@ required. No new golden, hosted run, publication, dependency/font/vendor/lock/co
 workflow change. No owned execution jobs remain. Next lock the missing ring sprout/
 preference flow from public sources and implement a complete guarded registry/native
 slice, or take the next unblocked labels/styles item. Preserve the existing user bundles.
-
-## Earlier checkpoints
 
 ### Native carbon chains; full local gate passes
 

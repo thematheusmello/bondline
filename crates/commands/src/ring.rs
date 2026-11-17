@@ -9,10 +9,12 @@ use serde::{Deserialize, Serialize};
 
 mod chair;
 mod request;
+mod sprout;
 pub use chair::ChairKind;
 pub(crate) use request::present_chair_kind;
 pub(crate) use request::present_kind;
 pub use request::{ChairRingCreate, NamedRingCreate, RingCreateRequest, RingKind, RingPhase};
+pub use sprout::{RingSprout, SproutRing};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -252,7 +254,7 @@ pub(super) fn create(
     params: RingCreate,
     floor: bond::Ids,
 ) -> Result<(StoredDocument, bond::Ids), Error> {
-    create_inner(document, params, floor, Pattern::Regular)
+    create_inner(document, params, floor, Pattern::Regular, None)
 }
 
 #[derive(Clone, Copy)]
@@ -289,6 +291,7 @@ pub(super) fn create_request(
                 },
                 floor,
                 Pattern::Named(kind, phase),
+                None,
             )
         }
         RingCreateRequest::Chair(params) => create_inner(
@@ -302,8 +305,43 @@ pub(super) fn create_request(
             },
             floor,
             Pattern::Chair(params.kind),
+            None,
         ),
     }
+}
+
+struct SproutTarget {
+    fragment_id: u32,
+    atom_id: u32,
+}
+
+pub(super) fn create_sprout(
+    document: &StoredDocument,
+    params: RingSprout,
+    floor: bond::Ids,
+) -> Result<(StoredDocument, bond::Ids), Error> {
+    create_inner(
+        document,
+        RingCreate {
+            expected_revision: params.expected_revision,
+            page_id: params.page_id,
+            size: params.ring.size(),
+            hydrogen_policy: params.hydrogen_policy,
+            placement: RingPlacement::Free {
+                begin_x_pt: params.ring_begin_x_pt,
+                begin_y_pt: params.ring_begin_y_pt,
+                end_x_pt: params.ring_end_x_pt,
+                end_y_pt: params.ring_end_y_pt,
+                side: params.side,
+            },
+        },
+        floor,
+        params.ring.pattern(),
+        Some(SproutTarget {
+            fragment_id: params.fragment_id,
+            atom_id: params.atom_id,
+        }),
+    )
 }
 
 fn create_inner(
@@ -311,6 +349,7 @@ fn create_inner(
     params: RingCreate,
     floor: bond::Ids,
     pattern: Pattern,
+    sprout: Option<SproutTarget>,
 ) -> Result<(StoredDocument, bond::Ids), Error> {
     if !document.is_fully_mapped()
         || document
@@ -337,7 +376,48 @@ fn create_inner(
         .find(|page| page.id() == page_id)
         .ok_or(bondline_model::Error::MissingPage(params.page_id))?;
     let mut weights = vec![1_u16; usize::from(params.size)];
-    let (target, mut perimeter, hydrogen_updates, begin, end, side) =
+    let mut bridge = None;
+    let (target, mut perimeter, hydrogen_updates, begin, end, side) = if let Some(sprout) = sprout {
+        let fragment = fragment(page, sprout.fragment_id)?;
+        let root = atom(fragment, sprout.atom_id)?;
+        let root_position = position(root)?;
+        let h = bond::remaining_carbon_hydrogens(fragment, root, 1).ok_or(
+                Error::UnsupportedRing("a sprout target needs consistent sufficient literal H on positioned natural neutral carbon"),
+            )?;
+        let RingPlacement::Free {
+            begin_x_pt,
+            begin_y_pt,
+            end_x_pt,
+            end_y_pt,
+            side,
+        } = params.placement
+        else {
+            return Err(Error::InvalidRing(
+                "sprout requires an explicit new cycle edge",
+            ));
+        };
+        let begin = Point2::new(begin_x_pt, begin_y_pt)?;
+        let length =
+            (begin.x_pt() - root_position.x_pt()).hypot(begin.y_pt() - root_position.y_pt());
+        if !length.is_finite() || length == 0.0 {
+            return Err(Error::InvalidRing(
+                "a sprout connector needs distinct finite endpoints",
+            ));
+        }
+        if let Some((kind, phase)) = named {
+            // The fresh junction carbon spends one valence unit on the connector.
+            weights = named_weights(kind, phase, SharedBudget::Atom(3))?;
+        }
+        bridge = Some(root.id);
+        (
+            Some(fragment),
+            Vec::new(),
+            vec![(root.id, h)],
+            begin,
+            Point2::new(end_x_pt, end_y_pt)?,
+            side,
+        )
+    } else {
         match params.placement {
             RingPlacement::Free {
                 begin_x_pt,
@@ -447,7 +527,8 @@ fn create_inner(
                     side,
                 )
             }
-        };
+        }
+    };
     let shared = perimeter.len();
     let points = match pattern {
         Pattern::Chair(kind) => chair::points(kind, begin, end, side)?,
@@ -493,15 +574,32 @@ fn create_inner(
             .ok_or(Error::IdentityExhausted)?;
         let id = AtomId::new(maximum.atom).ok_or(Error::IdentityExhausted)?;
         let mut atom = Atom::new(id, carbon, Some(*point));
-        atom.explicit_hydrogens =
-            Some(4_u16.checked_sub(incident_weight(&weights, index)?).ok_or(
-                Error::UnsupportedRing("ring bond orders exceed neutral carbon valence"),
-            )?);
-        if !matches!(pattern, Pattern::Regular) {
+        let weight = incident_weight(&weights, index)?
+            .checked_add(u16::from(bridge.is_some() && index == 0))
+            .ok_or(Error::InvalidRing("ring bond-order sum is too large"))?;
+        atom.explicit_hydrogens = Some(4_u16.checked_sub(weight).ok_or(Error::UnsupportedRing(
+            "ring bond orders exceed neutral carbon valence",
+        ))?);
+        if bridge.is_some() || !matches!(pattern, Pattern::Regular) {
             atom.show_non_terminal_carbon_labels = Some(false);
         }
         atoms.push(atom);
         perimeter.push(id);
+    }
+    if let Some(root) = bridge {
+        maximum.bond = maximum
+            .bond
+            .checked_add(1)
+            .ok_or(Error::IdentityExhausted)?;
+        bonds.push(Bond {
+            id: BondId::new(maximum.bond).ok_or(Error::IdentityExhausted)?,
+            begin: root,
+            end: *perimeter
+                .first()
+                .ok_or(Error::InvalidRing("missing new ring anchor"))?,
+            order: BondOrder::Single,
+            double_position: bondline_model::DoublePosition::Unspecified,
+        });
     }
     for (index, (begin, end)) in perimeter
         .iter()

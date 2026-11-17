@@ -17,6 +17,12 @@ their missing status**. Original branding, grey controls, search and bounded nat
 presentation evidence are in [receiving](verification-branding-and-tools.md). This does
 not complete tool functionality, modern inventory research, M0 or M2–M5.
 
+The distinct-ring-plus-Single operation now has [headless independent evidence](verification-ring-sprout.md)
+through `ring.sprout`: all ten ring types, literal H/ID/history/source retention, actual
+CLI/MCP/socket/files and CPU/GPU/PNG. Registry44 leaves controls/catalogue unchanged.
+This does not deliver native Alt-sprout or File > Preferences; those remain missing
+until the separate [locked integration](research/native-ring-sprout.md) is checked.
+
 File > Document Settings now delivers only two stored creation preferences: explicit
 bond length and interior chain angle. [Receiving](verification-native-drawing-settings.md)
 records independent core/App/adapters and actual Mac set/clear/history/Save/reopen.

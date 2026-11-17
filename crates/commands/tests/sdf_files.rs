@@ -61,6 +61,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "structure.paste_smiles",
             "sdf.record.inspect",
             "ui.chain_tool",
+            "ring.sprout",
         ]
         .into_iter()
         .collect()

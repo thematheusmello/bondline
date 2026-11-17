@@ -258,4 +258,19 @@ impl Engine {
         crate::ring::create_request(self.stored_document()?, params.clone(), self.identities)
             .map(|(document, _)| document)
     }
+
+    /// The complete connector-plus-cycle candidate, without state changes or ID reservation.
+    pub fn preview_ring_sprout(
+        &self,
+        params: &crate::RingSprout,
+    ) -> Result<bondline_io::StoredDocument, Error> {
+        if self.close_state() == CloseState::Committed {
+            return Err(Error::CloseCommitted);
+        }
+        if params.expected_revision != self.revision {
+            return Err(Error::StaleRevision);
+        }
+        crate::ring::create_sprout(self.stored_document()?, params.clone(), self.identities)
+            .map(|(document, _)| document)
+    }
 }

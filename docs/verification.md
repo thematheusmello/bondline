@@ -1,5 +1,18 @@
 # Verification log
 
+## Atomic headless ring sprout, 2026-11-17
+
+[Receiving](verification-ring-sprout.md) records preimplementation JSON/adapters REDs,
+13 passing independent core/property/file/CPU-GPU/actual-wire cases and the actual nested-
+array command-boundary RED/GREEN. New-vector occupancy/notation-order and test-helper
+lint qualifications remain explicit; all old consumers, thresholds and historical lists
+stay intact. Actual CLI preserves all43 old full records/schema/order and appends44.
+Fresh full22063 passes1694/0/1 across248 result lines plus fmt, warnings-denied workspace/
+vendor checks, layers, seven assets, strict155/166/221 runtime license closures and corpus.
+New bounded10000-run ASan passes, max reached264B of16KiB. Controls38/21/15/11 and catalogue
+16/124 stay unchanged. No native sprout, Preferences, new golden/hosted run or old socket
+repair is claimed. Immediately continue the locked native stage; Actions OFF, full goal active.
+
 ## Native carbon chains, 2026-11-17
 
 [Receiving](verification-native-chains.md) records preimplementation JSON/App REDs,

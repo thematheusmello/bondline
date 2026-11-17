@@ -1,5 +1,13 @@
 # Open questions
 
+- Ring sprout follows [the locked public-source/original policy](../research/native-ring-sprout.md).
+  GUIDE25 describes generic Alt-click and a Building/Display preference, not Alt inversion,
+  Alt-drag, mixed modifier timing, restart storage or exact26.1/Mac defaults. The original
+  rule is preference OR Alt at an atom press, with Alt+Shift still unsupported. The
+  application/session preference stays outside chemical files/history; broader persistent/
+  multi-window preferences remain required. A separate new cycle and Single connector
+  must not be confused with shared-atom/spiro construction or SpiroOrHigher query metadata.
+
 - Both constitutional chair tools follow [the original contract](../research/native-chair-workflow.md)
   and [receiving](../verification-native-chairs.md). GUIDE25 establishes two tools,
   horizontal click/drag and contextual bond-hotspot9/0, not exact26.1/Mac coordinates,

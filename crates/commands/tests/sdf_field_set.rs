@@ -76,6 +76,7 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
             "render.capture",
             "ring.create",
             "ui.chain_tool",
+            "ring.sprout",
         ]
         .into_iter()
         .collect()

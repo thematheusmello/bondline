@@ -37,7 +37,21 @@ Keep the bundled-font coverage regression: angle and replacement-arrow icons use
 geometry because Roboto lacks those characters. Native photographs are actual own-window
 captures, separate from illustrations/goldens; preserve the user's older unsaved app/draft.
 
-Current chairs follow docs/research/native-chair-workflow.md and
+Current headless sprout follows docs/research/native-ring-sprout.md and
+docs/verification-ring-sprout.md on baseec84717. One appended ring.sprout brings registry44;
+all43 earlier actual CLI records/schema/order stay exact. Controls38/21/15/11 and
+catalogue16/124 stay unchanged. The same builder appends a new cycle plus one connector
+to the same Fragment, charges old-root1H and commits once; preview spends no IDs. Preserve
+its explicit geometry, closed nested object/string-only boundary and existing source/H/
+ID/history guards. Thirteen new cases, full local22063:1694/0/1 and bounded10000-run
+ASan pass. New-vector negative-square/SMILES-order and test-helper lint qualifications
+remain distinct from the actual nested-array command RED/GREEN. No old consumer/socket/
+workflow/dependency/golden change or native sprout claim follows. Immediately continue
+the separate locked preferences/native stage, beginning with the frozen independent
+existing-JSON/App runtime REDs before producer changes. Both older user apps/drawings
+stay protected; Actions stays OFF; full M0–M5 remains active.
+
+Earlier chairs follow docs/research/native-chair-workflow.md and
 docs/verification-native-chairs.md on base59e3403. Two existing ring commands gain a
 third closed Chair alternative; old branches/definitions and41 unrelated CLI records
 stay exact, registry43. Controls38/21/15/11 and catalogue16/124 bind only TD-027.1/.2.

@@ -443,3 +443,6 @@ fn authenticated_named_atom_attachment_retains_old_source_and_opaque_refusal_is_
 
 #[path = "chair_wire.rs"]
 mod chair_wire;
+
+#[path = "sprout_wire.rs"]
+mod sprout_wire;

@@ -4,6 +4,14 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The [atomic headless sprout checkpoint](docs/verification-ring-sprout.md) appends
+`ring.sprout` as command44 while preserving all43 earlier actual records/schema/order.
+All ten ring types, H/geometry/source/history and actual adapters/files/rendering pass
+independent checks. Controls38/21/15/11 and catalogue16/124 stay unchanged. Immediately
+continue the [locked native/preferences stage](docs/research/native-ring-sprout.md):
+its existing-API tests are frozen, but Alt-sprout and Preferences remain missing until
+their complete guarded workflow and actual native acceptance land. Full M0–M5 stays open.
+
 The user-directed identity and planned-tool presentation exposes all124 documented
 TD/TQ/TB roles as140 entries, with sixteen real bindings and124 disabled planned entries.
 Original logo assets, native review and independent input/foreground/font regressions are

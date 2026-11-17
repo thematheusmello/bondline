@@ -104,7 +104,7 @@ fn conversion_publishes_a_new_drawing_without_changing_the_session() -> TestResu
 #[test]
 fn conversion_has_one_closed_required_schema_and_validates_direct_typed_numbers() -> TestResult {
     let all = bondline_commands::registry();
-    assert_eq!(all.len(), 43);
+    assert_eq!(all.len(), 44);
     let found = all
         .iter()
         .filter(|entry| entry.name == NAME)

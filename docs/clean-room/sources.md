@@ -10,6 +10,7 @@ programs/assets. Never download, run, inspect, decompile or disassemble referenc
 
 | ID | Public source | Decision / limitations |
 |---|---|---|
+| RING-SPROUT-PLAN | [GUIDE25](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), printed32/99/101–103; [IUPAC GR4.2.1/4.2.6](https://iupac.qmul.ac.uk/drawing/drawing.html#GR421); public SDK property/document lists and official DTD; [lock](../research/native-ring-sprout.md) | Generic Alt-click and application preference distinguish a separate cycle plus one connector from spiro sharing. No public sprout chemical-file property is found; SpiroOrHigher is an unrelated query restriction. The separate atomic ring.sprout boundary preserves old APIs; target H1 consumption, complete new cycle, explicit geometry/ID order and whole-source guards are original policy. Session preference, OR rather than XOR, press-latched modifiers, forbidden Alt+Shift, length-coupled drag, centroid-outward chairs and source/physical/modal guards are locked original choices. Restart/multi-window persistence and exact26.1 behavior stay open; no proprietary source/image/template is adopted or native result inferred from research. |
 | NATIVE-CHAIR-FUNCTIONS | [GUIDE25](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), printed101–102 and72–73; [lock](../research/native-chair-workflow.md) | Two chair tools, horizontal click/drag and generic atom/bond attachment are documented;9/0 are bond-hotspot operations, not global selectors. Shift phase belongs to unsaturated tools; chairs are excluded from Ctrl-delocalization. PDF17721447B/SHA2563f1ebc429df07efdd47b6218a148dc346a215043f60bf89ee9a1cb90629bd5b3 and layout728816B/SHA2566af3ecb27a0b6c19f2b64005ad95582ba7795876c54a42bf210232f75e84c43f remain pinned. Alt-sprout/preference, exact26.1/Mac defaults/coordinates/timing and wider ring workflows stay open. |
 | NATIVE-CHAIR-DEPICTION | [IUPAC1996 chair definition](https://iupac.qmul.ac.uk/stereo/BC.html), [IUPAC2006 ST3](https://iupac.qmul.ac.uk/drawing/stereo.html#ST3), [IUPAC2008 GR3.3.1/4.2.6](https://iupac.qmul.ac.uk/drawing/drawing.html#GR426) | Coplanarity/opposite-side criterion and clear noncrossing perspective inform an independently derived tetrahedral seed and original unit orthographic camera. Perspective may imply configuration; no stereo, ring flip or energy result is inferred. HTML1996 mirror18215B/SHA256bd28027e8f4e74badd7102be115e5378e30d5f7ea072db9ebec72e9cf6531844;2006 page223719B/SHA256b702d3493a3a64f4090cf75c697301d56ff3b5ae7861dc97d604286b7cd51cee. The public GoldBook body returns403; no raw-body claim follows. No diagrams, templates or icons are copied. |
 | NATIVE-CHAIR-IMPLEMENTATION | Same primary sources; [locked original policy](../research/native-chair-workflow.md), [receiving](../verification-native-chairs.md); pinned egui0.29.1 input_state repeat handling | Third closed alternatives in the two existing ring commands preserve old branches/count43. Original supporting-edge indexing, centroid-outward attachment,48pt known-absence fallback and bounded rounded-similarity certificate retain source/H/ID/history/full-ink guards. Independent literal3D/2D, core/modal/App/actual-wire/Unicode-file checks and bounded JSON ASan distinguish constitution from stereo and synthetic density from native hardware. Hidden modal ABA has actual RED/GREEN. SDK-derived key repeat requires an actually held key; the corrected acceptance setup does not change production. No model/parser authority, worker, Save receipt, runtime dependency, proprietary binary/asset or new golden is adopted. |
@@ -1929,3 +1930,17 @@ strict runtime license policy and reference-tool boundary remain unchanged.
 Both source patch notices retain exact before/after hashes. No new dependency, proprietary
 program/asset, font, parser policy or chemical golden is introduced. Both user apps and
 Actions remain untouched.
+
+
+## Atomic headless ring sprout, 2026-11-17
+
+RING-SPROUT-PLAN records the pinned public GUIDE25 printed101–102 distinction between
+a shared atom and a distinct ring joined by one bond. The [contract](../research/native-ring-sprout.md)
+separates that fact from original explicit geometry, H/ID ordering and transient UI
+policies. The delivered `ring.sprout` reuses existing public-format fields and rounded
+regular/chair builders; it introduces no new chemical-file attribute or copied asset.
+[Receiving](../verification-ring-sprout.md) records independent analytic/graph/H/history,
+actual Unicode bytes/Expat/Decimal/RDKit and CPU/GPU/PNG evidence through one registry and
+real adapters. New-vector geometry/notation setup corrections remain distinct from the
+actual nested-array command-boundary RED/GREEN. Native preferences/sprout integration,
+stereo and exact26.1 behavior remain separate; no new golden, dependency or source waiver.

@@ -8,6 +8,15 @@ introduced. The private catalogue owns only open/search state; current File/Atom
 foreground ownership gates it. See [design](design/tool-catalogue.md) and
 [receiving](verification-branding-and-tools.md).
 
+The appended `ring.sprout` command now brings the registry to44. One private optional
+bridge target reuses the existing ring builder without changing public sized/named/chair
+or placement APIs. It adds an entirely new cycle to the same Fragment, charges1H to
+the old root, allocates the Single connector before perimeter bonds and commits once.
+`preview_ring_sprout` returns the same immutable candidate without spending IDs or
+granting source/Save authority. The command's nested ring value requires an object;
+native gesture/preferences integration remains the next separate stage. See
+[lock](research/native-ring-sprout.md) and [evidence](verification-ring-sprout.md).
+
 Both cyclohexane-chair tools extend the existing ring request/tool unions with a third
 closed alternative, leaving old sized/named branches and the43-command count intact.
 The same append/source/H/identity/history builder uses an original six-point orthographic

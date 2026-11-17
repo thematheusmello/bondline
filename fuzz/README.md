@@ -56,6 +56,67 @@ directory; [receiving](../docs/verification-native-chairs.md) states actual reac
 length/coverage and platform limits. This does not exercise the full1MiB wire budget
 or establish a general JSON security audit. No shipped dependency changes.
 
+## Ring sprout JSON requests
+
+`ring_sprout_request` seeds an original C2, then prepares only the real `ring.sprout`
+envelope over at most16KiB. It never completes file/render work. Failures preserve full
+content/stamp/history; successes have one connected carbon cycle, independently weighted
+literal C4 hydrogens, one history entry and exact Undo/Redo. This is the authoring boundary,
+not native input, the standalone enum decoder, preferences, chemistry perception or a
+general JSON security audit. Actual files/adapters/rendering have separate
+[receiving evidence](../docs/verification-ring-sprout.md).
+
+Generate40 fresh original seeds (28 positive,12 hostile), preserving their source copies:
+
+```sh
+python3 - <<'PY'
+from pathlib import Path
+from hashlib import sha256
+import copy,json,shutil
+root=Path('.cache/fuzz/sprout-example')
+root.mkdir(parents=True,exist_ok=False)
+source=root/'source'; source.mkdir(); corpus=root/'corpus';corpus.mkdir()
+base={'expected_revision':1,'page_id':1,'fragment_id':1,'atom_id':2,
+      'hydrogen_policy':'rectify_neutral_carbon','ring':{'kind':'polygon','size':6},
+      'ring_begin_x_pt':168,'ring_begin_y_pt':144,'ring_end_x_pt':168,
+      'ring_end_y_pt':96,'side':'positive'}
+seeds={}
+rings=[{'kind':'polygon','size':n} for n in range(3,9)]
+rings += [dict(kind=k,**({} if phase is None else {'phase':phase}))
+          for k in ['benzene','cyclopentadiene']
+          for phase in [None,'double_first','single_first']]
+rings += [{'kind':'cyclohexane_chair_1'},{'kind':'cyclohexane_chair_2'}]
+for i,ring in enumerate(rings):
+ for side in ['positive','negative']:
+  p=copy.deepcopy(base);p['ring']=ring;p['side']=side
+  if ring=={'kind':'polygon','size':4} and side=='negative':
+   p['ring_begin_x_pt']=p['ring_end_x_pt']=216
+  seeds[f'valid-{i:02}-{side}']=json.dumps(p,separators=(',',':')).encode()
+for name,changes in [
+ ('null-phase',{'ring':{'kind':'benzene','phase':None}}),
+ ('extra-chair',{'ring':{'kind':'cyclohexane_chair_1','size':6}}),
+ ('map-side',{'side':{'positive':None}}),
+ ('map-hydrogen',{'hydrogen_policy':{'rectify_neutral_carbon':None}}),
+ ('array-ring',{'ring':['polygon',6]}),('zero',{'ring_end_y_pt':144}),
+ ('occupied',{'ring':{'kind':'polygon','size':4},'side':'negative'}),
+ ('stale',{'expected_revision':0})]:
+ seeds[name]=json.dumps(dict(base,**changes),separators=(',',':')).encode()
+seeds.update({'truncated':b'{"ring":','invalid-utf8':b'\xff',
+ 'duplicate':b'{"ring":{"kind":"benzene","kind":"polygon"}}',
+ 'injected':b'{} ,"command":"document.open_cdxml","params":{"path":"must-not-open"}'})
+for name,data in seeds.items():
+ (source/name).write_bytes(data);shutil.copyfile(source/name,corpus/name)
+manifest=[{'name':n,'bytes':len(d),'sha256':sha256(d).hexdigest()} for n,d in seeds.items()]
+(root/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+PY
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address ring_sprout_request .cache/fuzz/sprout-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recorded source manifest lists40 original entries spanning1..264B, SHA256
+`484c469bdb214d988544e2a0dd0e14a3ab03b2ea2215e862d5eb2f38f827a3aa`.
+Use a new ignored destination on each run, never a committed fixture directory. Report
+actual reached length separately from the16KiB ceiling. Both lockfiles stay unchanged.
+
 ## Literal chain JSON requests
 
 `chain_path_request` wraps up to16KiB of raw parameter bytes in the real command
