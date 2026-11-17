@@ -39,6 +39,15 @@ no grey tool gains a binding. All owned jobs are terminal. The user recreated/re
 full M0–M5 goal; continue broader M1 styles/fonts/text/default proofs and foreign fixtures,
 not a repetition of this width workflow. Actions OFF; user apps/drawings stay protected.
 
+CDXML logical resource lookup follows docs/research/cdxml-resources.md and its receiving
+record. Keep UINT16 font IDs distinct from chemical IDs, absence distinct from a present
+short palette, namespace-expanded attribute meaning, raw nodes/source and typed errors.
+Final full5632 passes1811/0/1; qualified ASan1865 passes10000/3s. Initial ASan's older
+harness namespace readback failure is independently qualified with the unchanged writer;
+keep the corrected ordinary lookup plus qualified-attribute retention assertion. It adds
+no complete IO authority or UI binding. Next finish source-preserving Text edits
+and effective style/label/render workflows; table lookup alone is not foreign-file parity.
+
 The current M1 IO profile follows docs/research/source-preserving-cdxml-profile.md and
 docs/verification-source-preserving-cdxml-profile.md on base03d5205. Canonical remains
 byte-exact-native first; closed-v0 Preserved uses complete lexical/node/key/typed proof,

@@ -1,5 +1,11 @@
 # File capabilities
 
+The standalone CDXML syntax API also has checked logical font/colour tables and reference
+lookup, including source-node access for owned attribute edits. Absent palettes differ
+from present-short palettes. Source bytes and syntax admission are unchanged. This does
+not widen complete IO authoring or render imported fonts/colours; see
+[resource scope and evidence](verification-cdxml-resources.md).
+
 Explicit document-root `LineWidth` is now separate validated appearance data, in physical
 points. The original native/Preserved CDXML profile reads, patches, adds and clears it
 without changing geometry or unrelated source bytes. Unsupported/nested/foreign styles

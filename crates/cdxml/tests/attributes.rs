@@ -102,6 +102,22 @@ fn namespaced_values_escape_xml_and_keep_the_original_quote_delimiters()
 }
 
 #[test]
+fn qualified_lookalikes_do_not_replace_or_read_back_as_the_ordinary_attribute()
+-> Result<(), Box<dyn std::error::Error>> {
+    let source = br#"<CDXML xmlns:x='urn:other' x:id='invalid' id='7'/>"#;
+    let document = Document::parse(source)?;
+    let output = document.replace_attribute(document.xml().root_element(), "id", "9")?;
+    assert_eq!(
+        output,
+        br#"<CDXML xmlns:x='urn:other' x:id='invalid' id='9'/>"#
+    );
+    expat_attribute(&output, "CDXML", "9", "id", "9")?;
+    expat_attribute(&output, "CDXML", "9", "urn:other|id", "invalid")?;
+    assert_eq!(document.as_bytes(), source);
+    Ok(())
+}
+
+#[test]
 fn no_ops_and_large_attribute_positions_do_not_normalize_or_overwrite_other_content()
 -> Result<(), Box<dyn std::error::Error>> {
     let name = format!("attribute_{}", "a".repeat(70_000));

@@ -1,5 +1,12 @@
 # Architecture
 
+The standalone CDXML `Document::resources()` view decodes document-level logical fonts
+and ordered RGB palettes while retaining original nodes/bytes. UINT16 font lookup is
+separate from chemical object identity. Absent-only colour defaults, present-short tables,
+unresolved references and unsupported resource content remain explicit. This view adds
+no IO profile, model/render authority or UI binding. See [contract](research/cdxml-resources.md)
+and [receiving](verification-cdxml-resources.md); foreign effective styles/Text remain required.
+
 Document has a separate optional `DrawingStyle` for explicit root line width, not a
 creation preference or resolved foreign default. Empty omission preserves old snapshots
 and native bytes. PageView carries style through logical/physical cameras; complete-owner

@@ -3,9 +3,11 @@
 mod edit;
 mod numbers;
 mod patch;
+mod resources;
 mod writer;
 pub use numbers::{ObjectId, parse_integer};
 pub use patch::{Edit, MAX_EDITS};
+pub use resources::{Color, Font, ResourceError, Resources};
 pub use writer::Writer;
 
 pub const MAX_INPUT_BYTES: usize = 64 * 1024 * 1024;

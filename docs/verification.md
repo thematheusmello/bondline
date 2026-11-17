@@ -1,5 +1,15 @@
 # Verification log
 
+## Standalone CDXML logical resources, 2026-11-17
+
+[Receiving](verification-cdxml-resources.md) records public-domain/default expectations,
+original source vectors, qualified Expat/Decimal consumption and actual namespace/number
+REDs. Fresh final aggregate5632 passes1811/0/1 and all local gates. Qualified ASan1865
+passes10000 runs after a separately proven older harness lookup defect; that failure,
+replay and unchanged legacy writer are explicit. Complete IO authority and UI bindings
+stay unchanged; foreign styles/Text and the active full M0–M5 goal remain incomplete.
+All owned execution jobs are terminal; GitHub Actions stays OFF.
+
 ## Source-aware closed-v0 CDXML profile, 2026-11-17
 
 [Receiving](verification-source-preserving-cdxml-profile.md) records actual existing-API/

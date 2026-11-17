@@ -4,6 +4,14 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+M1 [logical font/colour resource decoding](docs/verification-cdxml-resources.md) now passes
+independent format/Expat expectations, full local1811/0/1 and qualified bounded ASan.
+It retains raw source and explicit missing references without granting foreign authoring.
+Continue with checked source-preserving Text edits and complete effective-style/label
+resolution before activating a broader imported-file profile. Spacing centreline/ink-gap
+semantics remain an open evidence question, not an invented default. All milestones and
+the full end-to-end goal remain open.
+
 The user explicitly recreated/resumed the full end-to-end M0–M5 goal. Explicit document
 LineWidth now has [independent receiving](docs/verification-document-line-width.md):
 typed/source-preserving data, actual width separate from em/spacing, complete-owner

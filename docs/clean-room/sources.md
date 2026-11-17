@@ -1,5 +1,17 @@
 # Clean-room source register
 
+CDXML resource-table work reviewed2026-11-17 uses the public SDK [font table](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/FontTable.htm),
+[font entry](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Font.htm),
+[font-table datatype](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXFontTable.htm),
+[colour table](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/ColorTable.htm),
+[colour entry](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Color.htm), the official DTD
+and W3C namespaces. [Decisions](../research/cdxml-resources.md) record UINT16 logical IDs,
+ordered palette indices, absent-only defaults, borrowed raw nodes, namespace boundaries
+and exact retention. [Receiving](../verification-cdxml-resources.md) distinguishes compile
+qualification, runtime RED/GREEN and bounded fuzzing. This read API adds no foreign-file
+authoring authority, installed font, UI binding or proprietary asset. Spacing centreline/
+ink-gap ambiguity remains in open questions; no guessed geometry is adopted.
+
 Reviewed through 2026-11-17. A source is permission to learn documented behavior, not to copy
 proprietary implementation, help text or assets. Record more specific sections as features land.
 The folder name and policy checkpoint72fafb3 are historical. New work follows the latest

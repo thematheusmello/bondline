@@ -7,6 +7,20 @@ not an expansion of the native runtime dependency allowlist.
 
 ## Source-preserving XML edits
 
+`cdxml_parse` also decodes logical font/palette tables. Arbitrary XML retains exact
+source on either projection success or failure. Fixed valid tables with arbitrary
+escaped names, font IDs and RGB values check exact typed success/error results, reserved
+colours and the present-one-entry-table distinction. This is standalone format coverage,
+not foreign styled rendering or authoring. Generate fresh original sources/corpus and a
+separate manifest, then run the existing target with the pinned tooling:
+
+```sh
+python3 fuzz/seed_cdxml_resources.py .cache/fuzz/cdxml-resources-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_parse .cache/fuzz/cdxml-resources-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+See [resource receiving](../docs/verification-cdxml-resources.md) for actual runs and limits.
+
 The application IO boundary also has `cdxml_profile`: accepted source passthrough,
 guaranteed page edits, structured scalar/optional changes and sparse appends, old-ID/
 endpoint drift refusal, source/current purity and explicitly rebound reopening. It uses

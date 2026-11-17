@@ -7,6 +7,43 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Standalone CDXML font/colour resources; local gate passes
+
+Base70e6f27; the accompanying atomic format commit is the recoverable state. Read
+[contract](docs/research/cdxml-resources.md) and
+[receiving](docs/verification-cdxml-resources.md). Checked borrowed resource tables now
+support unique UINT16 font IDs, raw charset/name data, ordered RGB palettes, intrinsic
+colours and absent-only defaults. A present one-entry palette leaves foreground3 unresolved.
+Raw nodes drive existing owned edits without disturbing unrelated bytes. Syntax admission,
+complete IO authority, model/render behaviour, registry46 and catalogue16/124 stay unchanged.
+
+Three actual namespace/numeric REDs precede the fixes. Ten original resource cases and
+one legacy-writer qualification use public domain/default rules, literal bytes and
+independent Expat/Decimal. Initial ASan exposes an older harness local-name readback bug;
+the unchanged writer passes exact/Expat proof. The corrected harness also asserts every
+qualified attribute survives. Fixed replay passes; fresh qualified10000-run ASan passes
+in3s, actual16KiB, cov2834/ft6839/RSS381MiB. All19 original source pins remain intact.
+
+Final full local5632 exits0:1811 passed/0 failed/1 ignored across269 result lines, plus
+fmt, warnings-denied workspace/vendor checks, layers, strict runtime licenses, seven
+assets/notices and pinned corpus. Log227941B/SHA256
+54c007d42f8433f18d40eb03e60b99bcf8b8e9012c3bc12c813013f4c5123aa4.
+Actual CLI46 bytes/hash remain exact. Source review finds no outstanding codec issue.
+Locks, protected MCP listener/test, workflow, vendor/fonts/assets/goldens stay unchanged.
+All Root execution jobs are terminal; no native app is launched or inspected. Both
+older user apps/drawings stay untouched. Actions stays OFF; no push or publication.
+
+This prerequisite is not foreign-file appearance or authoring. Next add a checked owned
+text-only SetText syntax operation: retain decoded no-op lexemes; replace complete inner
+content rather than roxmltree's potentially partial text-node source range; reject element/
+comment/PI mixed content; preserve attributes/QName; cover CDATA/entities/CRLF, self-closing
+expansion, duplicate/container conflicts, bounds and atomicity with independent Expat tests
+before implementation. Then integrate effective font/colour/label styles and synchronized
+dependent Text through real model/render/commands/history/Save/reopen. Do not broaden the
+closed IO profile prematurely. Spacing centreline/ink-gap and inherited/default evidence,
+general CDX/interchange/chemistry, fresh native/other-platform acceptance and full M0–M5
+remain required. The persistent goal remains active/incomplete.
+
 ### Explicit document line width; full local gate passes
 
 The user recreated/resumed the complete M0–M5 goal after pausing/clearing the earlier goal.

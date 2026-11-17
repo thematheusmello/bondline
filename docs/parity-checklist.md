@@ -138,6 +138,10 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 
 ## Workflow overview
 
+Standalone [font/colour table decoding](verification-cdxml-resources.md) is a format
+prerequisite only. It does not promote the missing font, colour, Text or foreign-file
+render/edit workflows below; registry46 and catalogue16/124 retain their existing scope.
+
 | Capability | Source | State | Evidence / next work |
 |---|---|---|---|
 | New/open/save documents | GUIDE-25 / MAC-FILE-KEYS | partial: Mac CDXML/CDX/MOL/SDF Open/Save verified | Complete-source registry persistence, explicit format choice, native Save As, dirty-close protection and guarded same-window New pass on Mac. Styled/multiple-document New and other formats remain missing. |

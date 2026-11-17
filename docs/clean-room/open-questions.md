@@ -1,5 +1,12 @@
 # Open questions
 
+- Public [relative spacing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacing.htm),
+  absolute spacing and GUIDE25 establish units/precedence, but reviewed evidence does
+  not decisively settle centreline separation versus visible ink gap. Root absolute-
+  property ownership also differs between DTD and SDK owner tables. Keep imported
+  spacing guarded pending independent evidence. Font/colour resource decoding does
+  not resolve font availability, charset mappings, inherited defaults or dependent Text.
+
 - [Explicit document LineWidth](../research/document-line-width.md) now has a complete
   original-profile data/render/command/form path, with native interaction still unverified.
   General foreign editing still needs complete effective spacing, fonts/labels, colours
