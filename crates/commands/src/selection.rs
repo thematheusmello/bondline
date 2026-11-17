@@ -79,6 +79,8 @@ pub struct SelectionContext {
     close_epoch: u64,
     file_epoch: u64,
     file_context: UiFileContextStamp,
+    atom_open_epoch: u64,
+    settings_open_epoch: u64,
     preferences_open_epoch: u64,
 }
 
@@ -94,6 +96,10 @@ impl SelectionContext {
             && engine.file_ui.epoch == self.file_epoch
             && engine.file_ui_state().request.is_none()
             && engine.ui_file_context_stamp_matches(&self.file_context)
+            && engine.atom_ui.epoch() == self.atom_open_epoch
+            && engine.drawing_settings_ui.epoch() == self.settings_open_epoch
+            && !engine.atom_ui.has_request()
+            && !engine.drawing_settings_ui.has_request()
             && engine.ui_preferences_epoch() == self.preferences_open_epoch
             && !engine.preferences_ui.has_request()
     }
@@ -107,6 +113,8 @@ impl Engine {
         }
         if self.close_state() != CloseState::Open
             || self.file_ui_state().request.is_some()
+            || self.atom_ui.has_request()
+            || self.drawing_settings_ui.has_request()
             || self.preferences_ui.has_request()
         {
             return Err(Error::UiBusy);
@@ -119,6 +127,8 @@ impl Engine {
             close_epoch: self.close_policy.epoch,
             file_epoch: self.file_ui.epoch,
             file_context: self.ui_file_context_stamp(),
+            atom_open_epoch: self.atom_ui.epoch(),
+            settings_open_epoch: self.drawing_settings_ui.epoch(),
             preferences_open_epoch: self.ui_preferences_epoch(),
         })
     }

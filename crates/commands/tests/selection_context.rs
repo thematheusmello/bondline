@@ -344,3 +344,9 @@ fn literal_preview_uses_authoring_geometry_without_changing_engine_and_errors_ar
     no_file_change(&path, &bytes)?;
     Ok(())
 }
+
+#[path = "selection_context/modal_regressions.rs"]
+mod modal_regressions;
+
+#[path = "selection_context/active_modal_supplement.rs"]
+mod active_modal_supplement;

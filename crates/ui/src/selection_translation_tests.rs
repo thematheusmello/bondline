@@ -1111,3 +1111,6 @@ fn leaving_the_canvas_cancels_selection_drag_even_when_pointer_returns_before_re
     }
     Ok(())
 }
+
+#[path = "selection_translation_regressions.rs"]
+mod regressions;

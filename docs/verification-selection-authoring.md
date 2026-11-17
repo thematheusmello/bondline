@@ -2,7 +2,9 @@
 
 2026-11-16. The full M0–M5 goal remains active. The [locked original contract](research/selection-translation-plan.md)
 extends the public guide's selection/movement roles; it does not establish exact26.1
-screens or modifier precedence. Actions remains off. Native interaction is not yet verified.
+screens or modifier precedence. Actions remains off. Native interaction is unverified at
+this historical checkpoint; the later [native acceptance and cancellation fixes](verification-native-selection.md)
+record their separate exact binary, workflow and platform scope.
 
 ## Atomic model batch
 

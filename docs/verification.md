@@ -1,5 +1,29 @@
 # Verification log
 
+## Native selection acceptance and cancellation, 2026-11-17
+
+[Receiving](verification-native-selection.md) records the predeclared Mac workflow,
+independent11 accepted native/fixture files, four new regression declarations and actual
+runtime REDs before producer changes. Hidden Atom/settings modal epochs/raw ownership
+and equal-surface restoration now retire old disposable input. Full source/model sharing,
+selection/history, no-loss movement and fresh recovery remain checked. Command46899
+passes4/0 and App19297 passes14/0 with all old cases intact. Fresh full36217 exits0:
+**1717 passed/0 failed/1 ignored across249 result lines**, plus fmt, warnings-denied
+workspace/vendor checks, layers, seven assets, strict155/166/221 runtime closures and
+corpus. Log215726B/SHA256
+ba1eab4167faebed304afd0ecc67593970911abc6be01658b3a0979d3db83338.
+
+Build26772 and actual rebuilt Mac single-Fragment component selection, modal arrows/
+Cancel, fresh drag/history/nudges/Unicode Save/reopen pass. Independent Expat/Decimal/
+RDKit confirms exact coordinates and unchanged chemistry; cancelled/input is byte-exact.
+Baseline source profile and initial interpreter setup qualifications remain explicit.
+Registry45 output stays byte-exact; controls/catalogue stay39/22/16/12 and16/124. Own
+reviews are observed stopped; both older user apps/drawings stay untouched. No new
+parser/fuzz, dependency/font/vendor/lock/corpus/workflow/golden/listener-policy or hosted
+change. Historical MCP cause, native races/additive marquee/DPI/other platforms and
+full M0–M5 remain open. Actions OFF; no owned jobs; next source-lock M1 noncanonical
+elemental CDXML authority without weakening unknown-source/preview/loss guards.
+
 ## Native ring sprout and session Preferences, 2026-11-17
 
 [Receiving](verification-native-ring-sprout.md) records19 new independent JSON/App/

@@ -1964,3 +1964,20 @@ native/full-gate scope. Normal snapshots/files omit application preferences; onl
 real changes bump the shared tool epoch. Separate modal identity and exact Cancel tokens
 prevent hidden ABA and false input/Save/close authority. Broader preferences, restart
 persistence, stereo and exact26.1 defaults remain explicit future work.
+
+## Native selection and cancellation, 2026-11-17
+
+Pinned GUIDE25 printed88/115–116/120 supplies atom/bond/object/structure selection,
+rectangular regions, Shift addition/removal, Select All, drag and1pt/Shift10pt nudges.
+The [native acceptance lock](../research/native-selection-acceptance.md) records the
+exact existing public PDF/layout hashes and separates these version25 facts from
+original anchor inclusion, selected-target-only movement, Escape/history and modal
+ownership policies. No reference program/assets or new dependency is used.
+
+[Receiving](../verification-native-selection.md) records actual own Mac workflow and
+independent Expat/Decimal/RDKit saved-file checks separately from synthetic App races.
+Existing public egui input/shape APIs and original monotone weak-context design support
+the cancellation fixes; no reference-product modal algorithm is inferred. Hidden Atom/
+settings presentation and equal surface restoration must not revive old input authority.
+Lasso, transforms/groups, full platform/modern selection behavior and measured DPI remain
+required. No new chemical-file attribute, source waiver or human-approved golden follows.

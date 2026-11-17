@@ -37,7 +37,28 @@ Keep the bundled-font coverage regression: angle and replacement-arrow icons use
 geometry because Roboto lacks those characters. Native photographs are actual own-window
 captures, separate from illustrations/goldens; preserve the user's older unsaved app/draft.
 
-Current native sprout/preferences follows docs/research/native-ring-sprout.md and
+Current native selection acceptance/fix follows docs/research/native-selection-acceptance.md
+and docs/verification-native-selection.md on base0c9e6af. Four new declared regressions
+have actual RED→GREEN; all old selection cases stay. SelectionContext must capture existing
+Atom/settings-open epochs and refuse their raw active ownership, alongside Preferences.
+Hidden Open/Cancel must permanently stale old proofs while exact Cancel permits fresh
+capture. Keep the shared cancel_canvas_gestures path: only disposable SelectionWorkflow
+is added to old Ring/Chain/Bond/hover cancellation. Generic invalidate_hover stays hover-
+only and the old Chain lose_surface/repeat policy stays. Persistent selection/source/
+model/history and public schemas are unchanged. Command4/0 and App14/0 pass; fresh full
+36217 passes1717/0/1. Actual baseline and rebuilt Mac selection, component targeting,
+drag/nudge/history/modal and Unicode editable persistence pass independent exact XML/
+Decimal/RDKit consumers. Rebuilt CLI45 records are byte-exact; controls39/22/16/12 and
+catalogue16/124 stay. The manually combined noncanonical fixture refusal is preserved,
+not fixed by relaxing source guards. Both own reviews are observed closed; user apps/
+drawings stay protected, no jobs remain. Native races/additive marquee/measured DPI/other
+platforms and full selection/26.1 parity stay open. Next return to M1: source-lock safe
+noncanonical elemental CDXML mapping/writing with independent equivalent whitespace/ID/
+order and unknown-data REDs before changing complete-source authority. Preserve parser/
+format/source/history/preview guards; do not weaken byte equality alone. Actions OFF,
+full M0–M5 active/incomplete. Earlier notes below retain historical checkpoint scope.
+
+The preceding native sprout/preferences follows docs/research/native-ring-sprout.md and
 docs/verification-native-ring-sprout.md on base6996862. Registry45 preserves all old44
 actual CLI records/schema/order; controls39/22/16/12, catalogue16/124. One ui.preferences
 has five closed actions, per-Engine/session boolean+epoch, separate checked modal-open

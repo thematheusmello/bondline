@@ -4,6 +4,20 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The [native selection acceptance/fix](docs/verification-native-selection.md) continues
+base0c9e6af with actual Mac click/Shift/rectangle/component, drag/nudge/history/modal and
+Unicode Save/reopen evidence. Eleven actual native/fixture files pass independent XML/
+Decimal/RDKit checks. Four new preimplementation regressions expose/fix hidden Atom/
+settings modal authority and equal surface-restoration revival; ordinary no-loss controls
+and all old cases stay. Full local1717/0/1 passes; registry45/control/catalogue outputs
+stay unchanged. Native races/additive marquee/measured DPI/other platforms, Lasso and
+broader transforms remain open. Next return to the explicit M1 priority: source-lock
+safe noncanonical elemental CDXML mapping/writing, starting with equivalent whitespace/
+ID/order variants and unknown-source retention. A real native noncanonical fixture still
+refuses faithfully; do not relax the canonical byte-profile gate without complete
+mapping, independent source/format/history tests and native evidence. Full M0–M5 remains
+active and incomplete; Actions stays OFF. Earlier paragraphs retain checkpoint scope.
+
 The [native sprout/preferences increment](docs/verification-native-ring-sprout.md)
 continues the [atomic headless checkpoint](docs/verification-ring-sprout.md). Registry45
 retains all44 earlier complete CLI records/schema/order; controls39/22/16/12 add only
@@ -477,8 +491,9 @@ The earlier ring command37 verifies explicit3–8/free/fused/spiro construction 
 engine/adapters/files/renderers; native tools now have their separately scoped evidence
 above. Current carbon-chain controls, Add/repeat/preferences and bounded Mac evidence
 are in [receiving](docs/verification-native-chains.md). Selection
-and movement are wired with12 actual-App passes, but native desktop acceptance remains
-pending. See [ring receiving](docs/verification-ring-authoring.md) and
+and movement have14 actual-App passes plus the separately scoped bounded native Mac
+acceptance. See [ring receiving](docs/verification-ring-authoring.md),
+[native selection](docs/verification-native-selection.md) and
 [selection receiving](docs/verification-selection-authoring.md) for exact scope.
 
 The [elemental authoring contract](docs/research/atom-label-authoring-contract.md) now
@@ -542,7 +557,7 @@ DPI calibration, SDF navigation, saved view preferences or complete reference pa
 See docs/verification-view-{render,commands,ui,native}.md and
 docs/verification-ordered-file-actions.md.
 
-Next: outstanding native modifier/DPI/selection/ring acceptance, broader preferences,
+Next: outstanding native modifier/DPI/race/ring acceptance, broader preferences,
 remaining chair stereo/platform workflows, snapping, transforms, broader labels and styles. Do not restart the
 delivered chain prerequisites or treat their bounded Mac checks as full tool/platform parity.
 M1 source-faithful interoperability and M0 addressability/inventory/platform evidence

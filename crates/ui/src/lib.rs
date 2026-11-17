@@ -138,6 +138,14 @@ impl DrawingState {
         self.hover
     }
 
+    fn cancel_canvas_gestures(&mut self) {
+        self.ring.cancel();
+        self.chain.cancel_gesture();
+        self.gesture = None;
+        self.selection.reset();
+        self.invalidate_hover();
+    }
+
     fn invalidate_hover(&mut self) {
         self.hover = None;
         self.hover_context = None;
@@ -730,10 +738,7 @@ fn replay_edit_shortcuts(
             }
         }
         if !from_drawing && engine.content().drawing().is_ok() {
-            drawing.ring.cancel();
-            drawing.chain.cancel_gesture();
-            drawing.gesture = None;
-            drawing.invalidate_hover();
+            drawing.cancel_canvas_gestures();
             context.request_discard("New document replaced the collection surface");
             return;
         }
@@ -822,10 +827,7 @@ fn replay_edit_shortcuts(
             let position = view_command
                 .then_some(drawing.navigation_position)
                 .flatten();
-            drawing.ring.cancel();
-            drawing.chain.cancel_gesture();
-            drawing.gesture = None;
-            drawing.invalidate_hover();
+            drawing.cancel_canvas_gestures();
             drawing.navigation_position = position;
             context.request_repaint();
             if !from_drawing && engine.content().drawing().is_ok() {
@@ -947,11 +949,7 @@ fn show_workspace_with_preview(
             .presented_generation
             .is_some_and(|generation| generation != engine.session_generation());
     if discard_stale_canvas_input {
-        drawing.selection.reset();
-        drawing.ring.cancel();
-        drawing.chain.cancel_gesture();
-        drawing.gesture = None;
-        drawing.invalidate_hover();
+        drawing.cancel_canvas_gestures();
         drawing.navigation_position = None;
     }
     let mut events = context.input(|input| input.events.clone());
@@ -1045,10 +1043,7 @@ fn show_workspace_with_preview(
     .any(|dimension| !dimension.is_finite() || !(1.0..=100_000.0).contains(dimension))
     {
         drawing.chain.lose_surface();
-        drawing.ring.cancel();
-        drawing.chain.cancel_gesture();
-        drawing.gesture = None;
-        drawing.invalidate_hover();
+        drawing.cancel_canvas_gestures();
         let current = engine.state();
         let blocked = paste_modal_at_start
             || current.close != CloseState::Open
@@ -1236,9 +1231,7 @@ fn show_workspace_with_preview(
             if matches!(engine.content(), bondline_commands::StoredContent::SmilesFile(_))
                 && let Some(summary) = engine.content().smiles_summary()
             {
-                drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                drawing.gesture = None;
-                drawing.invalidate_hover();
+                drawing.cancel_canvas_gestures();
                 ui.label(format!(
                     "SMILES file: {} records, {} bytes",
                     summary.record_count, summary.byte_length
@@ -1405,17 +1398,13 @@ fn show_workspace_with_preview(
             let stored = match engine.stored_document() {
                 Ok(stored) => stored,
                 Err(error) => {
-                    drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                    drawing.gesture = None;
-                    drawing.invalidate_hover();
+                    drawing.cancel_canvas_gestures();
                     ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                     return;
                 }
             };
             if !stored.is_fully_mapped() && !stored.has_smiles_projection() {
-                drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                drawing.gesture = None;
-                drawing.invalidate_hover();
+                drawing.cancel_canvas_gestures();
                 ui.colored_label(
                     egui::Color32::DARK_RED,
                     bondline_commands::Error::UnsupportedDocumentPreview.to_string(),
@@ -1423,24 +1412,18 @@ fn show_workspace_with_preview(
                 return;
             }
             let Some(mut document) = engine.state().document else {
-                drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                drawing.gesture = None;
-                drawing.invalidate_hover();
+                drawing.cancel_canvas_gestures();
                 return;
             };
             let Some(page) = document.pages().first() else {
-                drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                drawing.gesture = None;
-                drawing.invalidate_hover();
+                drawing.cancel_canvas_gestures();
                 return;
             };
             let width = available.width().floor().max(1.0) as u32;
             let height = available.height().floor().max(1.0) as u32;
             let density = context.pixels_per_point();
             if !density.is_finite() || density <= 0.0 {
-                drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                drawing.gesture = None;
-                drawing.invalidate_hover();
+                drawing.cancel_canvas_gestures();
                 ui.colored_label(
                     egui::Color32::DARK_RED,
                     bondline_render::Error::InvalidView.to_string(),
@@ -1480,9 +1463,7 @@ fn show_workspace_with_preview(
             };
             let previous_percent = engine.view_percent();
             if let Err(failure) = engine.set_view_canvas_size(width, height) {
-                drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                drawing.gesture = None;
-                drawing.invalidate_hover();
+                drawing.cancel_canvas_gestures();
                 ui.colored_label(egui::Color32::DARK_RED, failure.to_string());
                 return;
             }
@@ -1492,9 +1473,7 @@ fn show_workspace_with_preview(
             let mut viewport = match view_for(engine, page.id()) {
                 Ok(viewport) => viewport,
                 Err(error) => {
-                    drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                    drawing.gesture = None;
-                    drawing.invalidate_hover();
+                    drawing.cancel_canvas_gestures();
                     ui.colored_label(egui::Color32::DARK_RED, error.to_string());
                     return;
                 }
@@ -1518,8 +1497,7 @@ fn show_workspace_with_preview(
             };
             let mut graph = scene_for(engine, &viewport, page.id());
             if graph.is_err() {
-                drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                drawing.gesture = None;
+                drawing.cancel_canvas_gestures();
             }
             let mut interaction_attempted = false;
             let (mut key, mut escape_held, mut focused) = context.input(|input| {
@@ -1599,9 +1577,7 @@ fn show_workspace_with_preview(
                 }
                 }
                 if key.revision != engine.state().revision {
-                    drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                    drawing.gesture = None;
-                    drawing.invalidate_hover();
+                    drawing.cancel_canvas_gestures();
                     let Ok(stored) = engine.stored_document() else {
                         return;
                     };
@@ -2144,9 +2120,7 @@ fn show_workspace_with_preview(
                         && let Ok(Command::BondSetOrder(params)) = &command
                     {
                         drawing.order.queue(engine, params.clone(), context, error);
-                        drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                        drawing.gesture = None;
-                        drawing.invalidate_hover();
+                        drawing.cancel_canvas_gestures();
                         interaction_attempted = true;
                         continue;
                     }
@@ -2180,9 +2154,7 @@ fn show_workspace_with_preview(
                     drawing.navigation_position = navigation_position;
                     // Later same-frame presses pick the graph that actually committed.
                     let Ok(stored) = engine.stored_document() else {
-                        drawing.ring.cancel(); drawing.chain.cancel_gesture();
-                        drawing.gesture = None;
-                        drawing.invalidate_hover();
+                        drawing.cancel_canvas_gestures();
                         return;
                     };
                     document = stored.model_snapshot();

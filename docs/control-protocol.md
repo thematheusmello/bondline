@@ -1598,8 +1598,11 @@ mutation. Stable errors include `invalid_params`, `not_found`, `unsupported_cont
 `stale_revision`, `stale_selection` and `ui_selection_epoch_exhausted`.
 
 Rust-only `selection_context()` supplies weak source/revision/generation, selection,
-tool/view/close/file epochs and opaque file-association proof. Canvas/DPI qualifiers
-stay in the UI. `preview_selection_translation` builds the same validated immutable
+tool/view/close/file and Atom/settings/Preferences-open epochs, plus opaque file-
+association proof. Raw active Atom/settings/Preferences ownership refuses capture;
+exact Cancel permits a fresh proof without reviving a prior one. Canvas/DPI qualifiers
+stay in the UI; losing a canvas retires disposable selection input before equal surface
+restoration. `preview_selection_translation` builds the same validated immutable
 candidate without committing, changing Engine state or granting Save authority.
 
 Three shared controls are added only for eligible Drawing sources: `tool.selection`
@@ -1611,7 +1614,9 @@ cancels a gesture while retaining targets; otherwise it clears targets. Text/mod
 frame-start barriers win. Tool activations resolve their fresh binding in raw input
 order so later mode changes cannot suppress earlier authoring. Full lasso, transform,
 group, snapping and exact26.1/platform parity remain open. See
-[receiving evidence](verification-selection-authoring.md) for the tested execution scope.
+[command/App evidence](verification-selection-authoring.md) and
+[native acceptance/cancellation receiving](verification-native-selection.md) for the
+tested execution scope. Selection/history/source state is unchanged by cancellation.
 
 ## Explicit native ring construction
 

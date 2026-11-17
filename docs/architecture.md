@@ -192,6 +192,12 @@ the thin native host adds canvas/DPI qualification and disposable preview gestur
 No new model fields, worker, runtime dependency or alternate dispatcher is introduced.
 See [the protocol](control-protocol.md#persistent-native-selection-and-translation) and
 [receiving evidence](verification-selection-authoring.md) for exact scope and limits.
+The later [native acceptance](verification-native-selection.md) separately qualifies
+actual Mac selection/movement and independent saved files. Selection weak proofs now
+include existing Atom/settings-open epochs and raw ownership, closing hidden modal ABA.
+One private canvas-cancellation path also retires disposable selection gestures alongside
+the existing ring/chain/bond/hover state, so equal surface restoration cannot revive them.
+Persistent selection, source/model/history and public command schemas stay unchanged.
 
 `ring.create` builds a bounded regular3–8 carbon Single polygon from an explicit first
 edge and side, optionally sharing a declared atom or Single edge. The command layer

@@ -7,6 +7,57 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+### Native selection acceptance and stale-drag fixes; full local gate passes
+
+Base0c9e6af; the accompanying atomic source/test/docs commit is the recoverable state.
+Read [lock](docs/research/native-selection-acceptance.md) and
+[receiving](docs/verification-native-selection.md). The preceding goal turn is progress:
+committed sprout/preferences and independently verified desktop/catalogue work. This turn
+adds bounded native Mac Marquee acceptance and fixes two independently reproduced input
+authority defects. Existing Atom/settings-open epochs/raw ownership now qualify selection
+proofs; shared canvas cancellation retires disposable selection input before equal
+surface restoration. Persistent selection, source/model/history and schemas stay intact.
+
+Actual preimplementation command11533/App27637/supplement66346 fail at the intended
+hidden-Atom/zero-surface/active-modal assertions, after ordinary no-loss controls. Unchanged
+assertions then pass command46899:4/0 and App19297:14/0, retaining all old cases. Fresh full
+36217 exits0: **1717 passed/0 failed/1 ignored across249 result lines**, plus fmt,
+warnings-denied workspace/vendor checks, layers, seven assets, unchanged155/166/221 strict
+runtime closures and pinned corpus. Log215726B/SHA256
+ba1eab4167faebed304afd0ecc67593970911abc6be01658b3a0979d3db83338.
+Bounded frozen producer review finds no material issue. No listener policy/test change,
+exhausted probe retry or attribution of the historical MCP AddrInUse failure.
+
+The baseline actual Mac workflow verifies atom/Shift/bond/rectangle/component/All/Deselect/
+Escape, precise drag, separate nudges/history and editable Unicode Save/reopen. Six691B
+outputs pass independent Expat/Decimal/RDKit CH4O+C2H6 checks. Final build26772 succeeds;
+its executable SHA256 is0fa9d4ff4e8bc50da033a82c9519dedc66636653c56a6a1531b8b59a64ca20c2.
+The rebuilt app additionally verifies disconnected components within one Fragment, visible
+Atom/settings arrow/Cancel fences, fresh drag/history/nudges and editable Unicode reopening.
+Five663B fixture/native files pass independent exact fields/coordinates/CC.CO/C3H10O;
+cancelled/input are byte-exact. Both own reviews are Quit and later observed absent.
+Both older user apps/drawings remain protected; no other user window is inspected.
+
+Rebuilt CLI45-command output is byte-exact to its predecessor; controls39/22/16/12 and
+catalogue16 available/124 planned stay. No new tool is enabled. A manually combined valid
+XML fixture still refuses the current canonical source profile. The guard is retained;
+a separate existing-registry-authored canonical fixture supplies the component test.
+The initial system-Python RDKit import miss is setup only, corrected with the pinned venv.
+No owned jobs remain. Actions stays OFF; no dependency/font/vendor/lock/corpus/workflow,
+golden, new fuzz/parser, hosted run or publication change.
+
+Native held-button races/additive Shift-marquee/horizontal10pt arrows, measured2×/DPI,
+Windows/Linux, broader object/source editing, Lasso/transforms/styles/stereo and exact26.1
+behavior remain unverified or missing. Full M0–M5 remains active/incomplete. Next return
+to the user's M1 priority: inspect io/document.rs canonical-profile gate, cdxml mapping/
+writer and the actual refused fixture; cite public XML/CDXML identity/order rules; lock
+source-preserving support for equivalent noncanonical elemental documents. Write independent
+whitespace/ID/order/unknown-data preservation and unsupported-source REDs before changing
+mapping/writing authority. Do not loosen byte equality alone or promote preview/editing
+without complete mappings, actual file consumers/history and native evidence.
+
+## Earlier checkpoints
+
 ### Native ring sprout and session Preferences; full local gate passes
 
 Base6996862; the accompanying atomic source/test/docs commit is the recoverable state.
@@ -42,13 +93,11 @@ Linux, CJK glyph coverage, full styles/preferences/stereo and exact26.1 policies
 unverified or missing. Next take the highest unblocked labels/styles/selection acceptance
 item from ROADMAP/parity, lock its public behavior, write independent RED expectations,
 then finish its complete existing-registry/native/file workflow before changing a grey
-binding. A concrete available acceptance item is TD-001/M2 selection: read its cited guide
+binding. At that checkpoint the next acceptance item is TD-002/M2 Marquee: read its cited guide
 pages and existing selection tests, exercise marquee/click/toggle/drag/nudge/Undo/Redo in
 a separate own native app, then independently consume its Unicode Save/reopen file. Keep
 the existing protected apps and report any failing first observation before fixing code.
 Full M0–M5 remains active and incomplete; Actions stays OFF.
-
-## Earlier checkpoints
 
 ### Atomic headless sprout; full local gate passes
 

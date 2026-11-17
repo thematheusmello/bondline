@@ -28,8 +28,10 @@ for ordinary drawing and saving.
 **Early development:** Single/Double/Triple carbon drawing, existing-bond conversions,
 1/2/3 order keys, Undo/Redo and editable CDXML saves have bounded native macOS checks.
 Numeric zoom, Actual/Fit, pan and wheel navigation now make unchanged A4 paper usable
-for the checked multiple-bond workflow. Small-ring tools and selection/movement have
-shared-engine and actual-App checks; most native interaction remains pending. A bounded
+for the checked multiple-bond workflow. Small-ring tools have shared-engine and actual-App
+checks; broader native interaction remains pending. Marquee selection/movement now has
+bounded macOS click/Shift/rectangle/component, drag/nudge/history and editable persistence
+checks. A bounded
 macOS Benzene click/Undo check now passes in the updated workspace.
 Native Acyclic/Snaking chains now have bounded macOS drawing, Add Chain, repeat,
 attachment, preference, history and editable Save/reopen checks.
@@ -47,8 +49,10 @@ Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with indep
 checks of the actual files. See [atom-editor evidence](docs/verification-native-atom-labels.md),
 [native record evidence](docs/verification-native-smiles-records.md) and the separate
 [paste checkpoint](docs/verification-native-smiles-paste.md). The latest full local gate
-**passes 1,713 tests, with none failed and one ignored**, plus formatting, warnings-denied
-linting, layer, license and corpus checks. [Native chain evidence](docs/verification-native-chains.md)
+**passes 1,717 tests, with none failed and one ignored**, plus formatting, warnings-denied
+linting, layer, license and corpus checks. [Native selection evidence](docs/verification-native-selection.md)
+records exact saved-file coordinates/chemistry and test-first hidden-modal/surface cancellation
+fixes, with actual Mac scope separated from synthetic races. [Native chain evidence](docs/verification-native-chains.md)
 records independent App/adapter/file checks and actual Mac workflows, with native
 Control-drag/DPI/platform limits stated separately. [Native Document Settings evidence](docs/verification-native-drawing-settings.md)
 records set/clear, Undo/Redo, unchanged Apply and Unicode CDXML Save/reopen on macOS.
@@ -109,7 +113,7 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 | Source-backed SMILES editing | File → Import SMILES records… and the CLI/MCP/loopback share explicit selected/all import and supported carbon bond-order edits. Bounded Mac refusal/retry, click/hotkey editing, Undo/Redo, Unicode Save As, raw reopen and explicit reimport pass; actual saved files retain opaque metadata and unselected records. Independent file checks and CPU/GPU captures pass. Selection is bounded to64 atoms/128 bonds. Geometry/record membership stay fixed; wider chemistry, native races and other platforms remain unfinished. |
 | Elemental atom labels | Alt-click an existing atom/label, enter its element and explicit attached-H count, then Apply or Cancel. The shared `atom.set_label` preserves IDs, geometry and neighbors. Bounded macOS OH/NH2 editing, history, close protection and Unicode Save/reopen pass with independent actual-file checks. Source-free/native CDXML only; inline text, aliases, charges/isotopes/radicals and general H inference remain missing. |
 | Skeletal carbon display | Supported native drawings can omit eligible carbon labels while retaining literal H and atom targets. Required collinear/cumulene labels stay visible; the existing explicit-label editor restores a hidden label. Independent renderer/CLI/MCP/App and saved-file checks pass. Default tools/styles, false-setting controls and native OS acceptance remain unfinished. [Evidence](docs/verification-skeletal-carbon.md). |
-| Selection and movement | Marquee, atom/bond/component click, Shift toggle and Select All call the shared selection registry. Drag selected atoms or nudge1pt/Shift10pt with one undoable literal-position edit. Independent commands, actual-App input, CLI/MCP/socket and Unicode file-consumer checks pass; native desktop interaction remains unverified. Native CDXML/source-free only; lasso, rotation, resizing, snapping and group workflows remain missing. |
+| Selection and movement | Marquee, atom/bond/component click, Shift toggle and Select All share the registry. Drag or nudge1pt/Shift10pt with one undoable literal-position edit. Bounded Mac selection, single-Fragment component targeting, drag/nudge/history, modal cancellation and Unicode Save/reopen pass independent actual-file checks. Hidden-modal and surface-restoration regressions pass command/App tests. Native CDXML/source-free only; full native race/DPI/platform coverage, lasso, rotation, resizing, snapping and groups remain unfinished. See [evidence](docs/verification-native-selection.md). |
 | Ring construction | Six native Single-ring tools plus Benzene and Cyclopentadiene use the shared CLI/MCP/loopback engine. Named tools support complete previews, press-latched Shift, standalone/shared-atom/shared-edge placement, history and editable Unicode saves. Independent geometry/H, actual-App1×/2×, adapter and file checks pass. Native OS/monitor acceptance beyond the stated Benzene/sprout checks, automatic styles and general ring-system editing remain unfinished. Chairs have separate scoped evidence below. [Named-ring evidence](docs/verification-native-unsaturated-rings.md). |
 | Carbon chains | Native Acyclic/Snaking controls provide drag/count previews, Add Chain, Alt-click count repeat, supported-carbon attachment and Fixed Lengths/Angles controls. Later chains use stored length/angle; each drag/Add is one history edit. Independent App/CLI/MCP/loopback/Unicode-file checks and bounded native Mac creation, repeat, attachment, refusal, Undo/Redo and Save/reopen pass. Supported Control-drag/reversal/backtracking remains App-only; measured DPI, other platforms and complete reference parity remain unverified. [Native evidence](docs/verification-native-chains.md), [fixed engine](docs/verification-chain-authoring.md), [literal paths](docs/verification-chain-paths.md). |
 | Cyclohexane chairs | Both original orientations support horizontal click, rotated drag, stored bond length, terminal attachment and contextual9/0 fusion in the native Mac review. Independent App/core/adapter/file checks also cover spiro and direct fusion, cancellation and full physical guards. Stereo/ring flips and broader platform/reference parity remain missing. See [receiving](docs/verification-native-chairs.md). |
