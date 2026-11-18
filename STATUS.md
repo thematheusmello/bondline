@@ -1,12 +1,24 @@
 # Status — 2026-11-18
 
-The full M0–M5 goal is **active after the user resumed it** on `feat/multiple-bonds`.
+The full M0–M5 goal is **active after the user resumed it**. Verified delivery now lands
+into `main`; current work is on `feat/cdx-resources-integration`.
 Its scope is unchanged. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
-commit as the user requires; merge/release/publication remains separately authorized.
+commit as the user requires. The user now expressly authorizes merging completed feature
+PRs into main; release/publication and enabling Actions remain separate.
 
 ## Current recoverable work and evidence
+
+Main integration is delivered: [PR1](https://github.com/thematheusmello/bondline/pull/1)
+lands199 atomic commits as96794f4573237aa019e6fb1c28aa65113547c38e. Local/remote main match;
+the merge tree exactly equals reviewed e7dcd85, whose code equals tested1606d62.
+No resource WIP was staged.41 already-contained remote branches are retired;158 inactive
+local heads are explicitly archived with IDs/worktrees/files preserved. Active Root59
+resource files remain byte-exact.33 older Rust/Markdown variants are pushed under recovery
+tag archive/legacy-worker-recovery-2026-11-18 (commit140754b), not merged as verified code.
+All73 worktree directories remain. See [delivery/recovery policy](docs/branch-lifecycle.md)
+and [ref ledger](docs/branch-inventory-2026-11-18.json). Full M0–M5 remains incomplete.
 
 The next standalone-resource increment is **in progress** after source contract391639c.
 No resource API/decoder is integrated yet. Parallel fixture/oracle work owns only new

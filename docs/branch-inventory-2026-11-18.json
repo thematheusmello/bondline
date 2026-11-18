@@ -1,0 +1,1027 @@
+{
+  "date": "2026-11-18",
+  "main_landing": {
+    "pr": 1,
+    "url": "https://github.com/thematheusmello/bondline/pull/1",
+    "main": "96794f4573237aa019e6fb1c28aa65113547c38e",
+    "candidate": "e7dcd850cdaead345858fedd965e3b0f9275eae5",
+    "tree": "1229f81fcf45ea147c5cd486f5d4b732da8c2ab2",
+    "tree_exact": true,
+    "atomic_commits_preserved": 199,
+    "local_main_fast_forwarded": true,
+    "active_branch": "feat/cdx-resources-integration",
+    "preserved_wip_files": 59,
+    "protected_apps_touched": false
+  },
+  "active_local_branches": [
+    "main",
+    "feat/cdx-resources-integration",
+    "feat/cdx-resources"
+  ],
+  "archived_local_heads": [
+    {
+      "original": "checkpoint/carbon-before-ordered-input",
+      "archive": "archive/2026-11-18/checkpoint/carbon-before-ordered-input",
+      "sha": "a97966aa2b59b9b22af6920ea3edfb7f2c48a5a5"
+    },
+    {
+      "original": "chore/disable-development-actions",
+      "archive": "archive/2026-11-18/chore/disable-development-actions",
+      "sha": "2ea6f827447fe7cda24c5d283c54f795f5df3f60"
+    },
+    {
+      "original": "docs/installed-tool-research",
+      "archive": "archive/2026-11-18/docs/installed-tool-research",
+      "sha": "0830a2357b1b18c7b934d0bf11a4833fc6ac7b10"
+    },
+    {
+      "original": "docs/installed-ui-research",
+      "archive": "archive/2026-11-18/docs/installed-ui-research",
+      "sha": "291c3a6b7b0af4f51bcbea65536566b3c0d9bfba"
+    },
+    {
+      "original": "docs/native-progress-media",
+      "archive": "archive/2026-11-18/docs/native-progress-media",
+      "sha": "5c14f406e37e1d7836649e41bc48d72d2ea4d993"
+    },
+    {
+      "original": "docs/project-presentation",
+      "archive": "archive/2026-11-18/docs/project-presentation",
+      "sha": "91e2f730a1053ffbf891782f9e1456fa363af1c4"
+    },
+    {
+      "original": "feat/bond-spacing-data",
+      "archive": "archive/2026-11-18/feat/bond-spacing-data",
+      "sha": "f5181286f7831f3678f01116eb2ad188e9d89e6a"
+    },
+    {
+      "original": "feat/bond-spacing-render",
+      "archive": "archive/2026-11-18/feat/bond-spacing-render",
+      "sha": "105be5dd4b2b8fd5da5e51dd9d1dd56b96a58a6d"
+    },
+    {
+      "original": "feat/boxed-atom-label-io",
+      "archive": "archive/2026-11-18/feat/boxed-atom-label-io",
+      "sha": "47f752179b1adb460cbabbec814e4109dc6148df"
+    },
+    {
+      "original": "feat/boxed-atom-label-render",
+      "archive": "archive/2026-11-18/feat/boxed-atom-label-render",
+      "sha": "919cf5477ce765b75516629f5cfab7e896f47801"
+    },
+    {
+      "original": "feat/carbon-graph-integration",
+      "archive": "archive/2026-11-18/feat/carbon-graph-integration",
+      "sha": "983ffee6951e0b3d8c17e5135645cb2cbd3830a3"
+    },
+    {
+      "original": "feat/carbon-graph-scene",
+      "archive": "archive/2026-11-18/feat/carbon-graph-scene",
+      "sha": "0830a2357b1b18c7b934d0bf11a4833fc6ac7b10"
+    },
+    {
+      "original": "feat/cdx-application-integration",
+      "archive": "archive/2026-11-18/feat/cdx-application-integration",
+      "sha": "450962cdcbad2abd5aa74b514ef77d58923d3d8f"
+    },
+    {
+      "original": "feat/cdx-corpus",
+      "archive": "archive/2026-11-18/feat/cdx-corpus",
+      "sha": "30ae30e73a4ee3b68d41069376fc5690faa99bc4"
+    },
+    {
+      "original": "feat/cdx-corpus-checks",
+      "archive": "archive/2026-11-18/feat/cdx-corpus-checks",
+      "sha": "98bc59aa0b5b2e574a342c81b4945956983b448f"
+    },
+    {
+      "original": "feat/cdx-elemental-projection",
+      "archive": "archive/2026-11-18/feat/cdx-elemental-projection",
+      "sha": "15125322c23279d8a48d8fdd556f74a57bfc322d"
+    },
+    {
+      "original": "feat/cdx-file-commands",
+      "archive": "archive/2026-11-18/feat/cdx-file-commands",
+      "sha": "e37d129d932afdbb5e99e3cae653694504233a69"
+    },
+    {
+      "original": "feat/cdx-file-end-app-tests",
+      "archive": "archive/2026-11-18/feat/cdx-file-end-app-tests",
+      "sha": "29be7967b7f7ddd557ed3d65efa0d443ed698621"
+    },
+    {
+      "original": "feat/cdx-file-end-tests",
+      "archive": "archive/2026-11-18/feat/cdx-file-end-tests",
+      "sha": "29be7967b7f7ddd557ed3d65efa0d443ed698621"
+    },
+    {
+      "original": "feat/cdx-framing-integration",
+      "archive": "archive/2026-11-18/feat/cdx-framing-integration",
+      "sha": "6447c6ca2d83405503417a6d0e141fa6387f3538"
+    },
+    {
+      "original": "feat/cdx-header-document",
+      "archive": "archive/2026-11-18/feat/cdx-header-document",
+      "sha": "e9bffd393ced9e5f7074a2aaf8ac823823eb93ba"
+    },
+    {
+      "original": "feat/cdx-literal-metadata-io",
+      "archive": "archive/2026-11-18/feat/cdx-literal-metadata-io",
+      "sha": "c018738955d8448c8070415010e9152f19d30e81"
+    },
+    {
+      "original": "feat/cdx-metadata-integration",
+      "archive": "archive/2026-11-18/feat/cdx-metadata-integration",
+      "sha": "a3613c0968dbce126ba0e1632d36db3d034be14f"
+    },
+    {
+      "original": "feat/cdx-native-io",
+      "archive": "archive/2026-11-18/feat/cdx-native-io",
+      "sha": "00e5b02fb6cd5b845a6343ee6bcd34b3add95d7e"
+    },
+    {
+      "original": "feat/cdx-native-metadata",
+      "archive": "archive/2026-11-18/feat/cdx-native-metadata",
+      "sha": "f67883a425958900115fd7eed5a6962172700a54"
+    },
+    {
+      "original": "feat/cdx-owned-document",
+      "archive": "archive/2026-11-18/feat/cdx-owned-document",
+      "sha": "5e6b644ba56b43e95f0306f032a8c4a39c46fe0b"
+    },
+    {
+      "original": "feat/cdx-plain-bonds-io",
+      "archive": "archive/2026-11-18/feat/cdx-plain-bonds-io",
+      "sha": "6c9fff086a5699d84da5c3933671eec6fe5f8ea0"
+    },
+    {
+      "original": "feat/cdx-syntax",
+      "archive": "archive/2026-11-18/feat/cdx-syntax",
+      "sha": "a73bed747059dd1718ac593589509853fc872671"
+    },
+    {
+      "original": "feat/cdxml-file-workflow",
+      "archive": "archive/2026-11-18/feat/cdxml-file-workflow",
+      "sha": "bd10afc894438adb21592505b1c8dc4eb291e83b"
+    },
+    {
+      "original": "feat/connected-atom-label-io",
+      "archive": "archive/2026-11-18/feat/connected-atom-label-io",
+      "sha": "8a533a971ae0be41078fb056a9d704c333e97f53"
+    },
+    {
+      "original": "feat/connected-bond-integration",
+      "archive": "archive/2026-11-18/feat/connected-bond-integration",
+      "sha": "69a27bc266a1b56855dd2bfc4aa53aa1437da294"
+    },
+    {
+      "original": "feat/connected-label-render",
+      "archive": "archive/2026-11-18/feat/connected-label-render",
+      "sha": "1a41a389ffb75fe61148850133e7535ac1adc066"
+    },
+    {
+      "original": "feat/dependent-label-io",
+      "archive": "archive/2026-11-18/feat/dependent-label-io",
+      "sha": "047d45130c58ce9e006e460b2cae0725111759bd"
+    },
+    {
+      "original": "feat/explicit-label-creation",
+      "archive": "archive/2026-11-18/feat/explicit-label-creation",
+      "sha": "62b98419063d4700febb29bea929f338b9833921"
+    },
+    {
+      "original": "feat/formula-composition",
+      "archive": "archive/2026-11-18/feat/formula-composition",
+      "sha": "41ab8161d70b438779ab7fb898c00402ad757c61"
+    },
+    {
+      "original": "feat/hidden-carbon-capability",
+      "archive": "archive/2026-11-18/feat/hidden-carbon-capability",
+      "sha": "4bebd35bfef4f69219130113a52fce295628cacb"
+    },
+    {
+      "original": "feat/label-default-metadata-io",
+      "archive": "archive/2026-11-18/feat/label-default-metadata-io",
+      "sha": "47b021b5ec2bf57ec277345baa4f9d1a8fd1b731"
+    },
+    {
+      "original": "feat/m1-application-integration",
+      "archive": "archive/2026-11-18/feat/m1-application-integration",
+      "sha": "85bf5ebfd53580b66cde9726a374658fc9befcee"
+    },
+    {
+      "original": "feat/m1-container-integration",
+      "archive": "archive/2026-11-18/feat/m1-container-integration",
+      "sha": "23a43aad728aa295b73ae0a88ffb56bcb7abe846"
+    },
+    {
+      "original": "feat/m1-integration",
+      "archive": "archive/2026-11-18/feat/m1-integration",
+      "sha": "226396e1a6cdc32dc6edb00f48da691aebeeabc5"
+    },
+    {
+      "original": "feat/m1-rxn-integration",
+      "archive": "archive/2026-11-18/feat/m1-rxn-integration",
+      "sha": "c351bb839ee183f2b8a069642b39de32a8ad52ab"
+    },
+    {
+      "original": "feat/m1-smiles-sdf-integration",
+      "archive": "archive/2026-11-18/feat/m1-smiles-sdf-integration",
+      "sha": "e6471961bc88eeb97a0bb7a8fe115c1bed2392e7"
+    },
+    {
+      "original": "feat/mixed-skeletal-io",
+      "archive": "archive/2026-11-18/feat/mixed-skeletal-io",
+      "sha": "48d22a0cf455f45f64c5fd498230f7cd84fbb8dc"
+    },
+    {
+      "original": "feat/mol-display",
+      "archive": "archive/2026-11-18/feat/mol-display",
+      "sha": "a279bced1fee31eebc163b5d1e02e3ade0fd05ff"
+    },
+    {
+      "original": "feat/mol-display-io",
+      "archive": "archive/2026-11-18/feat/mol-display-io",
+      "sha": "70bf174ad6d87e7ab5c37cbda86698d7893c3bbd"
+    },
+    {
+      "original": "feat/mol-files",
+      "archive": "archive/2026-11-18/feat/mol-files",
+      "sha": "bac395d33b8bdb35eb8f8cc8cb7f9899101e7a51"
+    },
+    {
+      "original": "feat/mol-v2000",
+      "archive": "archive/2026-11-18/feat/mol-v2000",
+      "sha": "670178b943ce2e9c7ea477e8064adf09f98eac58"
+    },
+    {
+      "original": "feat/mol-v3000",
+      "archive": "archive/2026-11-18/feat/mol-v3000",
+      "sha": "5caf6ce0ecf40badf2666e36dcb73dc8c4337b51"
+    },
+    {
+      "original": "feat/mol-v3000-corpus",
+      "archive": "archive/2026-11-18/feat/mol-v3000-corpus",
+      "sha": "7596c777e2a3453dadeefc2b9c82144d7b8850a3"
+    },
+    {
+      "original": "feat/mol-v3000-files",
+      "archive": "archive/2026-11-18/feat/mol-v3000-files",
+      "sha": "2a69de2e6056a2b8c01bd7446d7b1128cbdd17dd"
+    },
+    {
+      "original": "feat/multiple-bonds",
+      "archive": "archive/2026-11-18/feat/multiple-bonds",
+      "sha": "e7dcd850cdaead345858fedd965e3b0f9275eae5"
+    },
+    {
+      "original": "feat/multiple-render",
+      "archive": "archive/2026-11-18/feat/multiple-render",
+      "sha": "a279bced1fee31eebc163b5d1e02e3ade0fd05ff"
+    },
+    {
+      "original": "feat/native-carbon-attachment",
+      "archive": "archive/2026-11-18/feat/native-carbon-attachment",
+      "sha": "f0910ca09e2cfa12691dd03d965e3053e482928e"
+    },
+    {
+      "original": "feat/native-cdx-accepted",
+      "archive": "archive/2026-11-18/feat/native-cdx-accepted",
+      "sha": "81858a120434aa6889405da096479ecbd721d406"
+    },
+    {
+      "original": "feat/native-smiles-conversion",
+      "archive": "archive/2026-11-18/feat/native-smiles-conversion",
+      "sha": "ac11ce6f0d15c087777deb7637eb63422f9388b9"
+    },
+    {
+      "original": "feat/neutral-element-labels",
+      "archive": "archive/2026-11-18/feat/neutral-element-labels",
+      "sha": "49b1005c4af733c8f1ef71bbb77119d0151c6694"
+    },
+    {
+      "original": "feat/new-document-workspace",
+      "archive": "archive/2026-11-18/feat/new-document-workspace",
+      "sha": "69e4b3765dca6de3697ae9b45cc04d92b79b1b0b"
+    },
+    {
+      "original": "feat/owned-atom-label-model",
+      "archive": "archive/2026-11-18/feat/owned-atom-label-model",
+      "sha": "fdaec40dbe2d16583126f2e39ea1cae6644a7264"
+    },
+    {
+      "original": "feat/preview-capture-contract",
+      "archive": "archive/2026-11-18/feat/preview-capture-contract",
+      "sha": "f91aa949c777e724342859822fd4d8ffc0deb94f"
+    },
+    {
+      "original": "feat/preview-registered-work",
+      "archive": "archive/2026-11-18/feat/preview-registered-work",
+      "sha": "803c83e633f19bddaa7af47123c9f47b8fc74d4a"
+    },
+    {
+      "original": "feat/printed-label-io",
+      "archive": "archive/2026-11-18/feat/printed-label-io",
+      "sha": "33092ca5e145b02a9fd2321d5367e05ff06406c4"
+    },
+    {
+      "original": "feat/rxn-v2000",
+      "archive": "archive/2026-11-18/feat/rxn-v2000",
+      "sha": "4cbc89bc87feed80b86e2fb38c08865dbc480acb"
+    },
+    {
+      "original": "feat/sdf-capture",
+      "archive": "archive/2026-11-18/feat/sdf-capture",
+      "sha": "a5993e0c470eac11e51867bcfbda512777a36a60"
+    },
+    {
+      "original": "feat/sdf-corpus",
+      "archive": "archive/2026-11-18/feat/sdf-corpus",
+      "sha": "c797262d23524dd949047b3bbe3b4b4022d37fbc"
+    },
+    {
+      "original": "feat/sdf-display-render",
+      "archive": "archive/2026-11-18/feat/sdf-display-render",
+      "sha": "3438b043eaead2655b97a3c912176b5c810d71c1"
+    },
+    {
+      "original": "feat/sdf-draft-buffer",
+      "archive": "archive/2026-11-18/feat/sdf-draft-buffer",
+      "sha": "778ea4755fc99a92dbfce6f9ed7e9ab4ca3fe0c8"
+    },
+    {
+      "original": "feat/sdf-field-integration",
+      "archive": "archive/2026-11-18/feat/sdf-field-integration",
+      "sha": "3ec8b4cb372e3a3c297829c382bb2ff2b687cc5b"
+    },
+    {
+      "original": "feat/sdf-field-set",
+      "archive": "archive/2026-11-18/feat/sdf-field-set",
+      "sha": "6cc6bf8fd46963691fd191c528b6fe79c9cc1458"
+    },
+    {
+      "original": "feat/sdf-field-values",
+      "archive": "archive/2026-11-18/feat/sdf-field-values",
+      "sha": "f63f15305b7e18b00de42664a374d9be2a719137"
+    },
+    {
+      "original": "feat/sdf-native-preview",
+      "archive": "archive/2026-11-18/feat/sdf-native-preview",
+      "sha": "70bf174ad6d87e7ab5c37cbda86698d7893c3bbd"
+    },
+    {
+      "original": "feat/sdf-owned-integration",
+      "archive": "archive/2026-11-18/feat/sdf-owned-integration",
+      "sha": "9436bf4c9ce0bb4a4425112a0bbfb2a1b7f1a484"
+    },
+    {
+      "original": "feat/sdf-owned-source",
+      "archive": "archive/2026-11-18/feat/sdf-owned-source",
+      "sha": "0ae10e57abfa4839d9d3bebffb5dcc57050302d4"
+    },
+    {
+      "original": "feat/sdf-preview-model",
+      "archive": "archive/2026-11-18/feat/sdf-preview-model",
+      "sha": "3438b043eaead2655b97a3c912176b5c810d71c1"
+    },
+    {
+      "original": "feat/sdf-record-codec",
+      "archive": "archive/2026-11-18/feat/sdf-record-codec",
+      "sha": "379fed065ca1cf1f9e490470e7f3a2d1a1010421"
+    },
+    {
+      "original": "feat/sdf-record-inspect",
+      "archive": "archive/2026-11-18/feat/sdf-record-inspect",
+      "sha": "9cc40d084e159dffd98eefa6e433622dfac5a786"
+    },
+    {
+      "original": "feat/sdf-session-files",
+      "archive": "archive/2026-11-18/feat/sdf-session-files",
+      "sha": "b842e36fb5ea7e3f342048b949ad61355506c213"
+    },
+    {
+      "original": "feat/sdf-session-integration",
+      "archive": "archive/2026-11-18/feat/sdf-session-integration",
+      "sha": "bb6d5b9d2e6dd0d34e9b326dc9bf8061ffaff5a2"
+    },
+    {
+      "original": "feat/sdf-v2000",
+      "archive": "archive/2026-11-18/feat/sdf-v2000",
+      "sha": "2d665de553849d60331136384da0386e0a252605"
+    },
+    {
+      "original": "feat/sdf-v3000",
+      "archive": "archive/2026-11-18/feat/sdf-v3000",
+      "sha": "6aeb9f23647a0d8ea8601253ef8c92e2a66f6ebd"
+    },
+    {
+      "original": "feat/shared-close",
+      "archive": "archive/2026-11-18/feat/shared-close",
+      "sha": "a135a2419aefad57a71f917b803be8dd6c5d7e83"
+    },
+    {
+      "original": "feat/shared-file-controls",
+      "archive": "archive/2026-11-18/feat/shared-file-controls",
+      "sha": "31ac8ca6bc6e5b82c988684eb6301c14c595a5e8"
+    },
+    {
+      "original": "feat/smiles-acyclic-layout",
+      "archive": "archive/2026-11-18/feat/smiles-acyclic-layout",
+      "sha": "97fd2ac416b705185a37b607d87ba0d7c6d91ac7"
+    },
+    {
+      "original": "feat/smiles-aromatic-integration",
+      "archive": "archive/2026-11-18/feat/smiles-aromatic-integration",
+      "sha": "7c596d9c04f982763f598d739394644dcb10c610"
+    },
+    {
+      "original": "feat/smiles-aromatic-syntax",
+      "archive": "archive/2026-11-18/feat/smiles-aromatic-syntax",
+      "sha": "178aee9cd811de6c8897680b6d61ecb646450d12"
+    },
+    {
+      "original": "feat/smiles-conversion-command",
+      "archive": "archive/2026-11-18/feat/smiles-conversion-command",
+      "sha": "c4335405b8dc66605868236cb70ac19870aecfba"
+    },
+    {
+      "original": "feat/smiles-conversion-integration",
+      "archive": "archive/2026-11-18/feat/smiles-conversion-integration",
+      "sha": "a393fb93147e871a548926edf8adb840723b7ed8"
+    },
+    {
+      "original": "feat/smiles-conversion-io",
+      "archive": "archive/2026-11-18/feat/smiles-conversion-io",
+      "sha": "6a731074dd8cb890878549897e3f8828360d05d6"
+    },
+    {
+      "original": "feat/smiles-corpus",
+      "archive": "archive/2026-11-18/feat/smiles-corpus",
+      "sha": "2d8a6713572e0f5b6efa77965ad6c2ba6ceb1f0b"
+    },
+    {
+      "original": "feat/smiles-corpus-integration",
+      "archive": "archive/2026-11-18/feat/smiles-corpus-integration",
+      "sha": "28ac0b50d40948b56c76631b73a030f33fc4fb9a"
+    },
+    {
+      "original": "feat/smiles-explicit-writer",
+      "archive": "archive/2026-11-18/feat/smiles-explicit-writer",
+      "sha": "685a1c8e24b7cd3d819f526cf6462014252b9bc0"
+    },
+    {
+      "original": "feat/smiles-export-command",
+      "archive": "archive/2026-11-18/feat/smiles-export-command",
+      "sha": "d8e8bb2c809072c8895ba5fb8bb5330f6bcb5496"
+    },
+    {
+      "original": "feat/smiles-export-integration",
+      "archive": "archive/2026-11-18/feat/smiles-export-integration",
+      "sha": "df34c66c6ef9ac471be995315b3d8274579fa17b"
+    },
+    {
+      "original": "feat/smiles-export-io",
+      "archive": "archive/2026-11-18/feat/smiles-export-io",
+      "sha": "5f308ac16ee100ac848c7af7ebcd83d4163629f4"
+    },
+    {
+      "original": "feat/smiles-file-app",
+      "archive": "archive/2026-11-18/feat/smiles-file-app",
+      "sha": "a7c638f4d8318470da337de454be04ba7e7b9ded"
+    },
+    {
+      "original": "feat/smiles-file-codec",
+      "archive": "archive/2026-11-18/feat/smiles-file-codec",
+      "sha": "3745908b754bf2ea72edbac5d73b8dffcfa134b0"
+    },
+    {
+      "original": "feat/smiles-file-integration",
+      "archive": "archive/2026-11-18/feat/smiles-file-integration",
+      "sha": "17e2a4a9f485450f5decfa864bd731ae0e5545d0"
+    },
+    {
+      "original": "feat/smiles-file-io",
+      "archive": "archive/2026-11-18/feat/smiles-file-io",
+      "sha": "a42e8c963dbf1adfc819566556f83a6094eb6ce5"
+    },
+    {
+      "original": "feat/smiles-integration",
+      "archive": "archive/2026-11-18/feat/smiles-integration",
+      "sha": "8e0e92b7437e5123e5a5ebd4a7fb981968194d69"
+    },
+    {
+      "original": "feat/smiles-layout-integration",
+      "archive": "archive/2026-11-18/feat/smiles-layout-integration",
+      "sha": "c2b739ac7d75523a49ca8b4b66dc1328dcff7f84"
+    },
+    {
+      "original": "feat/smiles-normalization",
+      "archive": "archive/2026-11-18/feat/smiles-normalization",
+      "sha": "3295e8e72a5f226bca55d074f3baee696bb163a9"
+    },
+    {
+      "original": "feat/smiles-path-layout",
+      "archive": "archive/2026-11-18/feat/smiles-path-layout",
+      "sha": "e5fe306f5f4fe44c0fe7644a83d3c40d6511ddee"
+    },
+    {
+      "original": "feat/smiles-record-adapters",
+      "archive": "archive/2026-11-18/feat/smiles-record-adapters",
+      "sha": "e10affbe025e2acd8a9ca45c96991439ab788b60"
+    },
+    {
+      "original": "feat/smiles-record-contract",
+      "archive": "archive/2026-11-18/feat/smiles-record-contract",
+      "sha": "17e2a4a9f485450f5decfa864bd731ae0e5545d0"
+    },
+    {
+      "original": "feat/smiles-record-inspect",
+      "archive": "archive/2026-11-18/feat/smiles-record-inspect",
+      "sha": "3438b043eaead2655b97a3c912176b5c810d71c1"
+    },
+    {
+      "original": "feat/smiles-record-oracles",
+      "archive": "archive/2026-11-18/feat/smiles-record-oracles",
+      "sha": "388a664b89526942742bbe7f07732e2422ba0cb9"
+    },
+    {
+      "original": "feat/smiles-record-workspace",
+      "archive": "archive/2026-11-18/feat/smiles-record-workspace",
+      "sha": "976ef42fdc66084e4f7efa0c8f5023cb5dfdcb0c"
+    },
+    {
+      "original": "feat/smiles-simple-ring-layout",
+      "archive": "archive/2026-11-18/feat/smiles-simple-ring-layout",
+      "sha": "492905a20196490525b30d6398980709f8e4d698"
+    },
+    {
+      "original": "feat/smiles-syntax",
+      "archive": "archive/2026-11-18/feat/smiles-syntax",
+      "sha": "5df1b289a908f1d75e9ed0d5e291dd7015ba04c0"
+    },
+    {
+      "original": "feat/styled-caption-cdxml",
+      "archive": "archive/2026-11-18/feat/styled-caption-cdxml",
+      "sha": "33b8ea07be124988949a5b9db458818cd35e76f8"
+    },
+    {
+      "original": "feat/styled-caption-model",
+      "archive": "archive/2026-11-18/feat/styled-caption-model",
+      "sha": "3f001095eb1f9de9a965cd0c165f6588b3a71b06"
+    },
+    {
+      "original": "feat/styled-caption-render",
+      "archive": "archive/2026-11-18/feat/styled-caption-render",
+      "sha": "0f15dad682c8947233d439fd393ad4039476b095"
+    },
+    {
+      "original": "feat/terminal-carbon-extension",
+      "archive": "archive/2026-11-18/feat/terminal-carbon-extension",
+      "sha": "9162a1ef3cd43d0d999c14d896f8037f9e8485a0"
+    },
+    {
+      "original": "feat/view-raster-density",
+      "archive": "archive/2026-11-18/feat/view-raster-density",
+      "sha": "af7fab05a0689626d2f2666776307891993df7a6"
+    },
+    {
+      "original": "feat/view-render",
+      "archive": "archive/2026-11-18/feat/view-render",
+      "sha": "2ac7739217d748880cf3e96c1a7163a78be0c22d"
+    },
+    {
+      "original": "fix/connected-stroke-coverage",
+      "archive": "archive/2026-11-18/fix/connected-stroke-coverage",
+      "sha": "321e1b2223c4d763fba6d664dc1fb1020de7fcd8"
+    },
+    {
+      "original": "fix/save-completion-order",
+      "archive": "archive/2026-11-18/fix/save-completion-order",
+      "sha": "a689b0d8aba8ed44b1af8442549d1e882eee4d27"
+    },
+    {
+      "original": "research/sdf-edit-lifecycle",
+      "archive": "archive/2026-11-18/research/sdf-edit-lifecycle",
+      "sha": "778ea4755fc99a92dbfce6f9ed7e9ab4ca3fe0c8"
+    },
+    {
+      "original": "research/sdf-record-workspace",
+      "archive": "archive/2026-11-18/research/sdf-record-workspace",
+      "sha": "379fed065ca1cf1f9e490470e7f3a2d1a1010421"
+    },
+    {
+      "original": "research/sdf-workflows",
+      "archive": "archive/2026-11-18/research/sdf-workflows",
+      "sha": "9fc6944e581ece40c0fdd79b9036a61f809bd12e"
+    },
+    {
+      "original": "research/smiles-general-layout-sources",
+      "archive": "archive/2026-11-18/research/smiles-general-layout-sources",
+      "sha": "97fd2ac416b705185a37b607d87ba0d7c6d91ac7"
+    },
+    {
+      "original": "research/smiles-native-workflow",
+      "archive": "archive/2026-11-18/research/smiles-native-workflow",
+      "sha": "976ef42fdc66084e4f7efa0c8f5023cb5dfdcb0c"
+    },
+    {
+      "original": "research/smiles-ring-layout-sources",
+      "archive": "archive/2026-11-18/research/smiles-ring-layout-sources",
+      "sha": "492905a20196490525b30d6398980709f8e4d698"
+    },
+    {
+      "original": "research/view-navigation",
+      "archive": "archive/2026-11-18/research/view-navigation",
+      "sha": "2ac7739217d748880cf3e96c1a7163a78be0c22d"
+    },
+    {
+      "original": "review/fit-density",
+      "archive": "archive/2026-11-18/review/fit-density",
+      "sha": "976ef42fdc66084e4f7efa0c8f5023cb5dfdcb0c"
+    },
+    {
+      "original": "review/sdf-record-removal-ui",
+      "archive": "archive/2026-11-18/review/sdf-record-removal-ui",
+      "sha": "379fed065ca1cf1f9e490470e7f3a2d1a1010421"
+    },
+    {
+      "original": "test/capture-envelope-fuzz",
+      "archive": "archive/2026-11-18/test/capture-envelope-fuzz",
+      "sha": "e76ed3a5091407e15e655b9ab99715129e17b9e7"
+    },
+    {
+      "original": "test/created-source-render",
+      "archive": "archive/2026-11-18/test/created-source-render",
+      "sha": "d8b8d97933b4ad8779b075c2a7437f503406d07f"
+    },
+    {
+      "original": "test/label-metadata-render",
+      "archive": "archive/2026-11-18/test/label-metadata-render",
+      "sha": "0f025d0a718f4afec5cc47b49c2b063dc4e8056f"
+    },
+    {
+      "original": "test/mixed-source-render",
+      "archive": "archive/2026-11-18/test/mixed-source-render",
+      "sha": "69e550c5e8cb39a82b92dbcba0322e1593930fba"
+    },
+    {
+      "original": "test/mol-display",
+      "archive": "archive/2026-11-18/test/mol-display",
+      "sha": "fd51ca17f36caba16c412d6ef8165a3175e48490"
+    },
+    {
+      "original": "test/mol-display-fuzz",
+      "archive": "archive/2026-11-18/test/mol-display-fuzz",
+      "sha": "fd51ca17f36caba16c412d6ef8165a3175e48490"
+    },
+    {
+      "original": "test/mol-display-ui",
+      "archive": "archive/2026-11-18/test/mol-display-ui",
+      "sha": "fd51ca17f36caba16c412d6ef8165a3175e48490"
+    },
+    {
+      "original": "test/multiple-bonds",
+      "archive": "archive/2026-11-18/test/multiple-bonds",
+      "sha": "a279bced1fee31eebc163b5d1e02e3ade0fd05ff"
+    },
+    {
+      "original": "test/multiple-ui",
+      "archive": "archive/2026-11-18/test/multiple-ui",
+      "sha": "a279bced1fee31eebc163b5d1e02e3ade0fd05ff"
+    },
+    {
+      "original": "test/preview-acceptance",
+      "archive": "archive/2026-11-18/test/preview-acceptance",
+      "sha": "e76ed3a5091407e15e655b9ab99715129e17b9e7"
+    },
+    {
+      "original": "test/sdf-preview-acceptance",
+      "archive": "archive/2026-11-18/test/sdf-preview-acceptance",
+      "sha": "043b410b1d55278e61ec3cf2f1a9d0cb1e0956c8"
+    },
+    {
+      "original": "tests/bond-order-edit",
+      "archive": "archive/2026-11-18/tests/bond-order-edit",
+      "sha": "13222902f8360d1859a91d5875eea6f9298e9d27"
+    },
+    {
+      "original": "tests/bond-order-history",
+      "archive": "archive/2026-11-18/tests/bond-order-history",
+      "sha": "13222902f8360d1859a91d5875eea6f9298e9d27"
+    },
+    {
+      "original": "tests/bond-order-ui",
+      "archive": "archive/2026-11-18/tests/bond-order-ui",
+      "sha": "13222902f8360d1859a91d5875eea6f9298e9d27"
+    },
+    {
+      "original": "tests/branched-label-attachment",
+      "archive": "archive/2026-11-18/tests/branched-label-attachment",
+      "sha": "ad68dc9da9b005446b4df813c1d988d17f64841c"
+    },
+    {
+      "original": "tests/fit-readout",
+      "archive": "archive/2026-11-18/tests/fit-readout",
+      "sha": "976ef42fdc66084e4f7efa0c8f5023cb5dfdcb0c"
+    },
+    {
+      "original": "tests/literal-ring-attachment",
+      "archive": "archive/2026-11-18/tests/literal-ring-attachment",
+      "sha": "d76a0ab9141d2e599d510f20b2b52705fb2963e9"
+    },
+    {
+      "original": "tests/native-conversion-commands",
+      "archive": "archive/2026-11-18/tests/native-conversion-commands",
+      "sha": "ac11ce6f0d15c087777deb7637eb63422f9388b9"
+    },
+    {
+      "original": "tests/native-conversion-ui",
+      "archive": "archive/2026-11-18/tests/native-conversion-ui",
+      "sha": "ac11ce6f0d15c087777deb7637eb63422f9388b9"
+    },
+    {
+      "original": "tests/new-document-command",
+      "archive": "archive/2026-11-18/tests/new-document-command",
+      "sha": "69e4b3765dca6de3697ae9b45cc04d92b79b1b0b"
+    },
+    {
+      "original": "tests/new-document-ui",
+      "archive": "archive/2026-11-18/tests/new-document-ui",
+      "sha": "69e4b3765dca6de3697ae9b45cc04d92b79b1b0b"
+    },
+    {
+      "original": "tests/sdf-edit-ui",
+      "archive": "archive/2026-11-18/tests/sdf-edit-ui",
+      "sha": "778ea4755fc99a92dbfce6f9ed7e9ab4ca3fe0c8"
+    },
+    {
+      "original": "tests/sdf-field-workspace",
+      "archive": "archive/2026-11-18/tests/sdf-field-workspace",
+      "sha": "9fc6944e581ece40c0fdd79b9036a61f809bd12e"
+    },
+    {
+      "original": "tests/sdf-inspector",
+      "archive": "archive/2026-11-18/tests/sdf-inspector",
+      "sha": "5f8b076726f7c2fbbcea98fb641695f88200fff6"
+    },
+    {
+      "original": "tests/sdf-record-command",
+      "archive": "archive/2026-11-18/tests/sdf-record-command",
+      "sha": "379fed065ca1cf1f9e490470e7f3a2d1a1010421"
+    },
+    {
+      "original": "tests/sdf-record-ui",
+      "archive": "archive/2026-11-18/tests/sdf-record-ui",
+      "sha": "379fed065ca1cf1f9e490470e7f3a2d1a1010421"
+    },
+    {
+      "original": "tests/sdf-view-control",
+      "archive": "archive/2026-11-18/tests/sdf-view-control",
+      "sha": "af7fab05a0689626d2f2666776307891993df7a6"
+    },
+    {
+      "original": "tests/sdf-view-native-frames",
+      "archive": "archive/2026-11-18/tests/sdf-view-native-frames",
+      "sha": "af7fab05a0689626d2f2666776307891993df7a6"
+    },
+    {
+      "original": "tests/smiles-acyclic-conversion",
+      "archive": "archive/2026-11-18/tests/smiles-acyclic-conversion",
+      "sha": "97fd2ac416b705185a37b607d87ba0d7c6d91ac7"
+    },
+    {
+      "original": "tests/smiles-graph-layout",
+      "archive": "archive/2026-11-18/tests/smiles-graph-layout",
+      "sha": "97fd2ac416b705185a37b607d87ba0d7c6d91ac7"
+    },
+    {
+      "original": "tests/smiles-record-ui",
+      "archive": "archive/2026-11-18/tests/smiles-record-ui",
+      "sha": "976ef42fdc66084e4f7efa0c8f5023cb5dfdcb0c"
+    },
+    {
+      "original": "tests/smiles-simple-ring",
+      "archive": "archive/2026-11-18/tests/smiles-simple-ring",
+      "sha": "492905a20196490525b30d6398980709f8e4d698"
+    },
+    {
+      "original": "tests/view-navigation",
+      "archive": "archive/2026-11-18/tests/view-navigation",
+      "sha": "2ac7739217d748880cf3e96c1a7163a78be0c22d"
+    }
+  ],
+  "retired_remote_heads": [
+    {
+      "branch": "chore/disable-development-actions",
+      "sha": "2ea6f827447fe7cda24c5d283c54f795f5df3f60",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "docs/installed-tool-research",
+      "sha": "0830a2357b1b18c7b934d0bf11a4833fc6ac7b10",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "docs/installed-ui-research",
+      "sha": "291c3a6b7b0af4f51bcbea65536566b3c0d9bfba",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "docs/native-progress-media",
+      "sha": "5c14f406e37e1d7836649e41bc48d72d2ea4d993",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/carbon-graph-integration",
+      "sha": "983ffee6951e0b3d8c17e5135645cb2cbd3830a3",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/cdx-application-integration",
+      "sha": "450962cdcbad2abd5aa74b514ef77d58923d3d8f",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/cdx-corpus",
+      "sha": "30ae30e73a4ee3b68d41069376fc5690faa99bc4",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/cdx-corpus-checks",
+      "sha": "98bc59aa0b5b2e574a342c81b4945956983b448f",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/cdx-framing-integration",
+      "sha": "6447c6ca2d83405503417a6d0e141fa6387f3538",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/cdx-metadata-integration",
+      "sha": "a3613c0968dbce126ba0e1632d36db3d034be14f",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/cdx-native-io",
+      "sha": "00e5b02fb6cd5b845a6343ee6bcd34b3add95d7e",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/cdx-owned-document",
+      "sha": "5e6b644ba56b43e95f0306f032a8c4a39c46fe0b",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/cdx-syntax",
+      "sha": "a73bed747059dd1718ac593589509853fc872671",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/cdxml-file-workflow",
+      "sha": "bd10afc894438adb21592505b1c8dc4eb291e83b",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/connected-bond-integration",
+      "sha": "501a315f2fd92a05702cc4518b5d33c8f72abb7c",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/m1-application-integration",
+      "sha": "85bf5ebfd53580b66cde9726a374658fc9befcee",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/m1-container-integration",
+      "sha": "23a43aad728aa295b73ae0a88ffb56bcb7abe846",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/m1-integration",
+      "sha": "226396e1a6cdc32dc6edb00f48da691aebeeabc5",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/m1-rxn-integration",
+      "sha": "c351bb839ee183f2b8a069642b39de32a8ad52ab",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/m1-smiles-sdf-integration",
+      "sha": "e6471961bc88eeb97a0bb7a8fe115c1bed2392e7",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/mol-files",
+      "sha": "bac395d33b8bdb35eb8f8cc8cb7f9899101e7a51",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/mol-v2000",
+      "sha": "670178b943ce2e9c7ea477e8064adf09f98eac58",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/mol-v3000",
+      "sha": "5caf6ce0ecf40badf2666e36dcb73dc8c4337b51",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/mol-v3000-corpus",
+      "sha": "7596c777e2a3453dadeefc2b9c82144d7b8850a3",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/mol-v3000-files",
+      "sha": "2a69de2e6056a2b8c01bd7446d7b1128cbdd17dd",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/multiple-bonds",
+      "sha": "e7dcd850cdaead345858fedd965e3b0f9275eae5",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/native-carbon-attachment",
+      "sha": "f0910ca09e2cfa12691dd03d965e3053e482928e",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/native-cdx-accepted",
+      "sha": "29cac7ff45861f0ebd7c4196e55d1fccbca3e8f5",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/rxn-v2000",
+      "sha": "4cbc89bc87feed80b86e2fb38c08865dbc480acb",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/sdf-corpus",
+      "sha": "c797262d23524dd949047b3bbe3b4b4022d37fbc",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/sdf-field-integration",
+      "sha": "15ecbc7f1ca543f2875e76e6f536fd8051245ad9",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/sdf-owned-integration",
+      "sha": "9436bf4c9ce0bb4a4425112a0bbfb2a1b7f1a484",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/sdf-session-integration",
+      "sha": "bb6d5b9d2e6dd0d34e9b326dc9bf8061ffaff5a2",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/sdf-v2000",
+      "sha": "2d665de553849d60331136384da0386e0a252605",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/sdf-v3000",
+      "sha": "6aeb9f23647a0d8ea8601253ef8c92e2a66f6ebd",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/shared-close",
+      "sha": "a135a2419aefad57a71f917b803be8dd6c5d7e83",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/shared-file-controls",
+      "sha": "31ac8ca6bc6e5b82c988684eb6301c14c595a5e8",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/smiles-aromatic-integration",
+      "sha": "7c596d9c04f982763f598d739394644dcb10c610",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/smiles-integration",
+      "sha": "8e0e92b7437e5123e5a5ebd4a7fb981968194d69",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "feat/smiles-layout-integration",
+      "sha": "c2b739ac7d75523a49ca8b4b66dc1328dcff7f84",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    },
+    {
+      "branch": "fix/save-completion-order",
+      "sha": "a689b0d8aba8ed44b1af8442549d1e882eee4d27",
+      "contained_in_main": "96794f4573237aa019e6fb1c28aa65113547c38e"
+    }
+  ],
+  "legacy_recovery": {
+    "tag": "archive/legacy-worker-recovery-2026-11-18",
+    "commit": "140754baddfe11f91c9bb4a6675b94f0924dfe8b",
+    "entries": 33,
+    "status": "unverified snapshots, not an application release"
+  },
+  "worktree_directories_removed": 0
+}

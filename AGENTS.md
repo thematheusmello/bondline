@@ -1,14 +1,19 @@
 # Bondline agent instructions
 
-## Commit and push policy — user instruction, 2026-11-18
+## Commit, push and main delivery — user instruction, 2026-11-18
 
 The user explicitly authorizes and requires pushing after EVERY atomic local commit.
-Use the current integrated `feat/multiple-bonds` branch, now tracking its same origin
-branch. Keep source/tests/evidence together, push immediately after each commit and
-verify the remote ref. Never force-push, rewrite shared history, merge/release or publish
-artifacts as an inferred part of sync. Retain isolated worker branches locally unless
-separately needed. Actions remains OFF; source pushes do not authorize enabling it.
-This supersedes historical no-push checkpoint statements; the full M0–M5 goal stays active.
+The later instruction explicitly authorizes landing completed branches/PRs into main;
+do not wait for the whole M0–M5 project to finish. Use short focused branches from current
+main, keep source/tests/evidence together, push immediately and verify the remote ref.
+After applicable local gates/review, create and merge the feature PR promptly, preserving
+atomic commits and checking its head/result. Never bypass protection, force-push, rewrite
+shared history or infer release publication. Actions stays OFF through feature merges.
+See docs/branch-lifecycle.md and STATUS for the actual active branch and recovery ledger.
+PR1 landed the old199-commit feature branch; inactive local refs are under archive/2026-11-18,
+with working files preserved. The current resource task uses feat/cdx-resources-integration
+and core worker feat/cdx-resources. No archived prototype is automatically eligible for main.
+This supersedes old no-push/no-merge/current-multiple-bonds notes; full M0–M5 stays active.
 
 Plain CDX bonds follow docs/research/cdx-plain-bonds.md and
 docs/verification-cdx-plain-bonds.md: contract6c9fff0, fixtures/helperc29c1a1, IO37d094d,
