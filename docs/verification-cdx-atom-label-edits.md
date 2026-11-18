@@ -66,3 +66,17 @@ Registry SHA-256 is
 `3cfd51a6e72891137cf0cc56fd756ff33652cfc685e5aaf877634b259cc41e4f`.
 The first aggregate stopped at a new conversion lint. The checked bound
 and cast rules remain the same after the Clippy correction.
+
+## Final local gate
+
+The exact source and tests at `ca307af` passed `cargo xtask ci` with the
+pinned `BONDLINE_PYTHON`. The workspace passed **2,245 tests** with zero
+failures and one existing ignored case across 332 reports. The vendored
+AccessKit suite passed three tests. Formatting, warnings-denied Clippy,
+layers, runtime license closure, seven assets and the pinned eight-file
+corpus passed. The final workspace log includes the new App test. The
+historical MCP listener failure remains unexplained.
+
+The 281,832-byte `ci-final.log` SHA-256 is
+`1bc654874b68d33f34e8ee6e27776778fd29659ef4d1bdb538a6121bf1c2366b`.
+All owned execution jobs exited. GitHub Actions remained disabled.

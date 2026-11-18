@@ -229,6 +229,12 @@ Windows MSVC, Linux GNU and WebAssembly. ASan completes 10,000 iterations
 with 199 unchanged originals. Evidence is in
 `target/cdx-resources/next-text/label-edits`.
 
+[PR 10](https://github.com/thematheusmello/bondline/pull/10) carries the
+reviewed producer `ca307af`. The final local gate passed **2,245/0/1**
+workspace tests and **3/0** AccessKit tests, including the new App test.
+Formatting, Clippy, layers, licenses, assets and corpus passed. The owned
+jobs exited. The isolated review stayed unlaunched and Actions stayed off.
+
 ### Next executable work
 
 1. Source-lock binary insertion from the [CDX object framing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm)
