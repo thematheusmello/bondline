@@ -7,6 +7,71 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+Recoverable Mixed skeletal workflow: basef16b79f, contracts b30f0d6/5f58276, shared
+renderer query bb719c9, independent fixtures71129ab, IOc3cc351 and render oracles1473353,
+plus the receiving command/UI commit containing this record. Read
+[contract](docs/research/mixed-skeletal-labels.md) and
+[receiving](docs/verification-mixed-skeletal-labels.md). This supersedes every historical
+next-task/job paragraph and the persistent goal's old line-width first task.
+
+A separate Mixed capability admits explicit printed labels and explicitly/currently
+hidden no-Text carbons, with literal C4 and neutral/natural/nonradical metadata. Source
+children/keys/resources/ink/styles/scoped IDs and current geometry are fully checked.
+Shared classification reuses old glyphless/mandatory rules; getter/writer re-prove after
+point/neighbor changes so no default font can appear. Old foreign Boxed remains all-
+explicit/zero-bond and Connected all-explicit; globalfullfalse and every other loss/
+authoring guard stay. Existing48/form edits printed labels; Selection moves both kinds.
+Hidden-node label creation stays refused. All48 actual metadata remain byte-exact45486B/
+SHA256c861b31ce690ec5808e6262884dc7195e4e7e796f0e2ec6dcf47e082de9ad1da;
+catalogue16/124 stays, no grey tool is enabled.
+
+Independent source9/font boxes16/reader refusals11, renderer query5, IO14, command3
+(including16 fixed-seed history sequences), App2 and actual CLI/initialized stdio/socket3
+pass. Source-aware independent render checks cover21 whole CPU/GPU frames,75 bonds and
+five painted cases with exactly one predeclared uncertain black pixel. The physical2x
+1152 interior/actual1153 qualification stays explicit; no data/tolerance/old test changed.
+
+Actual own Mac retained Ring→Open→Actual100%→hidden Alt refusal→printed OH→N/H2 Apply→
+Marquee/CmdA→all5-atom hidden-anchor(24,-12) drag→Undo/Redo→Unicode Save As→explicit
+reopen→printed draft Cancel passes. Native1736B output equals frozen edited_all_p24_m12,
+SHA25676ebdbe5f11486e48719a552470388d7fe7ef2b97af7e6896846ca9467e27942, with independent
+actual-file Expat/Decimal/constructed+direct RDKit and exact model/flags/IDs. Attached
+CPU/Metal1088 PNGs are byte-exact28920B/SHA256
+9c3492c014fc51846b1f99e1e22140fe99c1d3b403d6e4c080a5c6eff2345156. SDK key spelling/AX
+truncation setup qualifications and CJK filename-glyph limits remain. Own review60177
+is explicitly quit/PID absent; older protected apps/drawings remain untouched.
+
+Fresh aggregate7935 PASSES all310 reports: workspace2091/0/1 plus vendor3/0; workspace
+fmt/warnings-denied clippy, vendor clippy, layers, strict runtime licenses/seven assets
+and pinned eight-file/five-bundle corpus. Separate fuzz fmt passes. Log264235B/SHA256
+8282b884b83bb7377d19799b12ea979c3208f9f81fb5aba1ee4301b289480dc1. This is a clean local
+aggregate; the preceding MCP bind failures remain unexplained, not causally repaired.
+Protected control test/policy remains exact. Qualified ASan26920 passes10000/203s,
+cov8392/ft17830/RSS523MiB, actual16KiB mutation and23 exact immutable sources; fresh seed
+regeneration is exact. Its initial undeclared-render compiler miss is a harness-only
+qualification using existing model constructors/frozen NH2 bounds, no new dependency.
+
+All owned jobs/workers are terminal; own review is closed and isolated worktrees retained.
+No dependency/lock/vendor/font/asset/old-golden/workflow change, push or publication.
+Actions OFF, full M0–M5 stays active/incomplete.
+
+Next executable work:
+
+1. Record any actual reply before promoting the earlier NH2 image to a human golden;
+   approval remains pending and does not block independent implementation.
+2. Source-lock explicit printed-label creation on hidden imported carbons, including
+   deliberate authored font/size/colour versus unresolved foreign defaults, public child
+   insertion/IDs/resources and complete source/model/history/native transaction. Declare
+   independent byte/layout/chemical/owner/refusal vectors before changing the current
+   hidden-target refusal; preserve old48 schema/order and unknown/whole-format guards.
+   Broader effective foreign fonts/defaults/styles remain a parallel required M1 workstream.
+3. Finish CDX/general interchange, then all remaining M2 drawing/selection/journal tools,
+   M3 chemistry/reactions, M4 publishing/clipboard and M5 naming/templates/WASM/installers.
+   M0 accessibility/input/DPI/platform/jobs/addressability and the unexplained historical
+   listener failure stay open. Do not repeat exhausted listener diagnosis or enable Actions.
+
+### Preceding dependent-label movement checkpoint
+
 Recoverable dependent-label movement: base9cf7103, IO783a632, renderer6bda2d9
 (isolated321e1b2), SDF test-only readiness edbd837 and the receiving command/UI commit
 containing this record. Read [contract](docs/research/dependent-label-translation.md)

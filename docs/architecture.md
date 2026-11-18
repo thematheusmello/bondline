@@ -1,5 +1,15 @@
 # Architecture
 
+The [mixed skeletal/printed workflow](verification-mixed-skeletal-labels.md) adds a
+separate complete Mixed source capability. A shared pure renderer query returns current
+explicit hidden-carbon IDs without duplicating C4/degree/mandatory-label rules. IO also
+checks neutral/natural/nonradical metadata and actual absence of source children; no
+omitted/root/font default is supplied. Both getter and writer re-prove current glyphless
+status after geometry/neighbor edits. Old Boxed/Connected/native scopes stay literal and
+global full remains false. Existing printed-label command48/form and Selection consume
+Mixed; hidden-node creation and all other source writers remain closed. The same source
+splices, final whole-page certificate, history/Save and weak native owners apply.
+
 The [dependent-label movement workflow](verification-dependent-label-translation.md)
 widens only selection authority to the precise Boxed/Connected source capabilities.
 `has_full_native_source` retains the old predicate for rings/chairs/chains. A changed

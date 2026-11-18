@@ -5,6 +5,25 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Mixed skeletal and printed labels
+
+`cdxml_profile` preserves all old invariants and adds five fixed original Mixed-source
+edit/move/reimport controls, plus current mandatory-carbon revocation and exact restoration.
+The model constructors use the independently frozen NH2 body/box rather than adding a
+renderer dependency to this isolated harness. No Engine/history/filesystem/GPU/native
+workflow is fuzzed by those controls.
+
+```sh
+python3 fuzz/seed_mixed_labels.py .cache/fuzz/mixed-labels-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/mixed-labels-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recipe refuses an existing destination and keeps23 immutable sources/manifest outside
+the writable corpus:9 frozen originals,8 unsupported-source controls, exact16KiB and five
+selector bytes. Fresh regeneration reproduces every source hash. Actual10000/203s ASan,
+reached16KiB mutation and the initial compiler-only harness qualification are recorded in
+[receiving](../docs/verification-mixed-skeletal-labels.md), not inferred from this recipe.
+
 ## Synchronized atom/box translation
 
 `cdxml_profile` additionally selects four frozen Boxed/Connected subset/all/compound

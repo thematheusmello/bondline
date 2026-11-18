@@ -14,6 +14,16 @@ native/Boxed/Connected profiles and loss guards stay separate. No-Text chemistry
 general fallback/inheritance and exact reference behavior remain unresolved. Original
 fixtures/oracles and actual verification must precede any authoring/UI claim.
 
+The [Mixed receiving record](../verification-mixed-skeletal-labels.md) now pins actual
+source/font/pixel/history/adapter/native evidence and the clean local aggregate. Fresh
+primary receipts are target/mixed-labels/research/sources.json, SHA256
+e9e71886e3341edc8a84e2ab62b2fdf8cc3529877e627acf4caad9c09762a3f0;
+the qualified report is9802B/SHA256
+9a1c9ade9007fea818190b4b66d6b937636864579822f6418786db7a3d08f829.
+The new pure hidden-carbon query adds no depiction rule; XML/chemical metadata admission
+and current source/page checks remain separate. Native evidence covers the declared
+original amino-alcohol workflow, not arbitrary foreign defaults or full reference parity.
+
 The native moved-label regression reviewed2026-11-18 exposes nine closed-stroke pixel
 differences caused by normalized f32 GPU geometry. The primary
 [WGSL2026-08-25 specification](https://www.w3.org/TR/2026/CRD-WGSL-20260825/),

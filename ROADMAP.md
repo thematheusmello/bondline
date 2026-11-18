@@ -12,7 +12,16 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
-The current M1 [dependent-label receiving](docs/verification-dependent-label-translation.md)
+The current M1 [mixed skeletal-label receiving](docs/verification-mixed-skeletal-labels.md)
+adds a separate foreign-source capability for explicit printed labels plus explicitly
+hidden, known-H carbon. Current no-glyph proofs prevent borrowed fonts after point/neighbor
+changes. Existing label/selection/history/Save workflows and bounded native Mac exact
+Unicode files pass. Fresh local2091/0/1+vendor3/0 and10000-run ASan pass; prior listener
+failures remain unexplained, not fixed. Old Boxed/Connected/full-authority boundaries,
+registry48/catalogue16/124 and Actions OFF remain. Full foreign defaults/styles, hidden-
+node label creation and all remaining M0–M5 workflows below are required.
+
+The preceding M1 [dependent-label receiving](docs/verification-dependent-label-translation.md)
 extends existing selection/translation to qualified Boxed and Connected sources. Current
 Node points and raw label boxes move together, preserving exact source/history/Save owners
 and refusing invalid whole-page candidates. Independent source/adapters/App and bounded Mac

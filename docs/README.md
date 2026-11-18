@@ -3,7 +3,14 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
-The current [dependent-label translation](verification-dependent-label-translation.md)
+The current [mixed skeletal/printed-label workflow](verification-mixed-skeletal-labels.md)
+imports proven no-Text carbons without borrowing foreign fonts, edits existing printed
+labels and moves both kinds through shared selection/history/source-preserving Save.
+Independent source/font/pixel oracles, actual adapters, bounded native Mac Unicode files,
+full local2091/0/1+vendor3/0 and10000-run ASan pass. Prior MCP failures remain unexplained;
+full M0–M5 and broader defaults/fonts/hidden-label creation remain open, Actions OFF.
+
+The preceding [dependent-label translation](verification-dependent-label-translation.md)
 connects existing Marquee/Select All and drag/nudge to qualified imported atom labels,
 keeping point/box/source/history synchronized. Independent command/App/adapters and bounded
 Mac Unicode Save/reopen pass. A real nine-pixel GPU edge discrepancy is corrected, with

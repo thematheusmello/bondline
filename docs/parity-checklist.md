@@ -11,6 +11,13 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
+The [Mixed skeletal/printed-label workflow](verification-mixed-skeletal-labels.md) extends
+only existing TD-002/ME-011 movement and printed-label edits to separately proven foreign
+diagrams. Current explicit hidden-C proofs, independent source/geometry/pixel/history/
+adapters and bounded native Mac exact Unicode files pass. Hidden-node label creation,
+omitted/default/inherited fonts/styles and general reference parity remain missing;
+no grey tool, static binding or full milestone is promoted.
+
 The [dependent-label movement increment](verification-dependent-label-translation.md)
 extends only the existing TD-002/ME-011 selection workflow to complete Boxed/Connected
 foreign sources. Point and current raw box move together, with source/whole-page proofs,
@@ -291,7 +298,7 @@ establish chemical preview, data-edit UI or other platforms.
 | ME-008 | Edit > Copy | 78 | missing | - |
 | ME-009 | Edit > Paste | 78 | missing | - |
 | ME-010 | Edit > Clear | 78, 121 | missing | - |
-| ME-011 | Edit > Select All | 19-20, 116 | verified (partial, Mac) | Shared typed all-atoms-on-page command, actual Mac menu/CmdA, Deselect/Escape and clean transient selection pass. Source-free/native and complete Boxed/Connected CDXML profiles; mixed objects and other native platforms remain unverified. See verification-native-selection.md and verification-dependent-label-translation.md. |
+| ME-011 | Edit > Select All | 19-20, 116 | verified (partial, Mac) | Shared typed all-atoms-on-page command, actual Mac menu/CmdA, Deselect/Escape and clean transient selection pass. Source-free/native and complete Boxed/Connected/Mixed CDXML profiles; mixed objects and other native platforms remain unverified. See verification-native-selection.md and verification-dependent-label-translation.md. |
 | ME-012 | Edit > Copy As > CDXML Text | 352 | missing | Syntax parser exists; editable clipboard mapping missing. |
 | ME-013 | Edit > Copy As > MOL Text | 352 | missing | - |
 | ME-014 | Edit > Copy As > MOL V2000 Text | 352 | missing | - |
@@ -474,7 +481,7 @@ establish chemical preview, data-edit UI or other platforms.
 | ID | Reference control/action | G25 p. | State | Notes |
 |---|---|---|---|---|
 | TD-001 | Lasso | 115-116 | missing | Freehand whole-object selection. |
-| TD-002 | Marquee | 115-116 | verified (partial, Mac) | Original anchor rectangle in both directions, atom/bond/component click, Shift add/remove, same-Fragment disconnected-component double-click and selected drag/nudge/history/Unicode persistence pass bounded Mac checks and independent actual-file readers. Hidden modal/equal-surface cancellation passes command/App regressions. Qualified Boxed/Connected atom/box movement adds exact independent source/history and bounded Mac subset/all drag/nudge/Unicode files. Native additive Shift-marquee/races/DPI/other platforms and exact26.1 inclusion remain unverified. See verification-native-selection.md and verification-dependent-label-translation.md. |
+| TD-002 | Marquee | 115-116 | verified (partial, Mac) | Original anchor rectangle in both directions, atom/bond/component click, Shift add/remove, same-Fragment disconnected-component double-click and selected drag/nudge/history/Unicode persistence pass bounded Mac checks and independent actual-file readers. Hidden modal/equal-surface cancellation passes command/App regressions. Qualified Boxed/Connected atom/box and Mixed skeletal movement add exact independent source/history and bounded Mac subset/all drag/nudge/Unicode files. Native additive Shift-marquee/races/DPI/other platforms and exact26.1 inclusion remain unverified. See verification-native-selection.md and verification-dependent-label-translation.md. |
 | TD-003 | Structure Perspective | 192, 242-243 | missing | Structure rotation/projection handling. |
 | TD-004 | Eraser | 86, 91, 121 | missing | Deletion and bond-order reduction have distinct contexts. |
 | TD-005 | Text | 91-94 | missing | KB-LABEL-25.5 changes existing-label entry to Alt-click; separate KB-REPEAT-25.5 gives Windows Alt/Mac Option-click repetition. Tool context/version/source-target semantics require tests; no26.1 inference. |

@@ -1,5 +1,14 @@
 # File capabilities
 
+The [Mixed CDXML workflow](verification-mixed-skeletal-labels.md) covers foreign diagrams
+with explicit printed labels plus no-Text carbon nodes proven currently glyphless. Each
+hidden C needs literal H, explicit active suppression and neutral/natural/nonradical
+metadata. Source children, ink/resources/styles and complete geometry remain checked;
+no default font/H or root flag inheritance is inferred. Existing source splices support
+point-only hidden edits and synchronized existing printed labels, with full reimport and
+final page proof. Old Boxed/Connected scopes, globalfullfalse and loss/unknown guards
+remain; hidden-node text insertion and CDX/general style support remain missing.
+
 The [dependent-label workflow](verification-dependent-label-translation.md) adds literal
 Node.p/BBox translation to the complete Boxed and Connected CDXML capabilities. Selected
 atoms retain body/styles/chemistry while their current raw boxes move with them. Existing

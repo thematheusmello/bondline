@@ -1,5 +1,29 @@
 # Bondline agent instructions
 
+Mixed skeletal/printed labels follow docs/research/mixed-skeletal-labels.md and
+docs/verification-mixed-skeletal-labels.md on basef16b79f, contractb30f0d6/5f58276,
+querybb719c9/fixtures71129ab/IOc3cc351/oracles1473353 and receiving command/UI commit.
+Keep a SEPARATE Mixed capability: at least one explicit certified label, current-hidden
+no-Text neutral/natural/nonradical C and supported bond. Explicit active node no, literal
+C4 and shared CURRENT hidden classification are mandatory. Query is not metadata/source
+authority; XML no-child proof cannot be replaced by missing projected data. Getter and
+writer re-prove current no-glyph status after moves/neighbour edits, refusing mandatory
+collinear/C2/default-font ink. Old foreign Boxed all-explicit/zero-bond, Connected all-
+explicit/native conventions/globalfullfalse stay literal. Printed-label48/form and
+selection alone consume Mixed; hidden-node creation/other writers/loss guards stay closed.
+Metadata48 bytes/catalogue16/124 exact. Independent9sources/16boxes/11reader negatives,
+query5/IO14/command3/App2/wire3 and21wholeCPU-GPU/75bond/fivepainted checks pass; frozen
+uncertainty1pixel and1152crop/1153actual qualification stay. Native own Mac hidden refusal/
+printed edit/all5hidden-anchor drag/history/Unicode exact1736B Save/reopen/Cancel and
+CPU/Metal28920B equality pass. SDK key spelling/AX truncation setup and CJK font limits
+stay distinct from product behavior. Ownreview60177 is quit/PIDabsent, protected apps
+untouched. Fresh full7935 PASSES workspace2091/0/1+vendor3/0 and all local gates; prior
+MCP bind failures remain unexplained, not fixed. Qualified ASan26920 passes10000/203s
+with23 immutable sources/actual16KiB; initial harness render-path compile miss introduces
+no dependency/producer change. No old test/golden/schema/workflow/font/asset changes.
+All jobs/workers terminal, Actions OFF; full M0–M5 active/incomplete. STATUS has exact
+next hidden-label creation/effective-style task; older first-task/job lists are historical.
+
 Dependent-label movement follows docs/research/dependent-label-translation.md and
 docs/verification-dependent-label-translation.md on base9cf7103, IO783a632/render6bda2d9
 and the receiving command/UI commit. Existing selection alone gains precise Boxed/

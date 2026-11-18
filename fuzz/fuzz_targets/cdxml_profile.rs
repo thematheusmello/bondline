@@ -969,12 +969,126 @@ fn translated_label_source(data: &[u8]) {
     original_unchanged(&base, source, &snapshot);
 }
 
+fn mixed_label_source(data: &[u8]) {
+    const SOURCE: &[u8] =
+        include_bytes!("../../crates/io/tests/fixtures/mixed-labels/amino_alcohol.cdxml");
+    let variant = data.first().copied().unwrap_or(0) % 5;
+    let source: &[u8] = if variant == 3 {
+        include_bytes!("../../crates/io/tests/fixtures/mixed-labels/amino_diamine.cdxml")
+    } else {
+        SOURCE
+    };
+    let expected: &[u8] = match variant {
+        0 => include_bytes!(
+            "../../crates/io/tests/fixtures/mixed-labels/hidden_middle_p12_5_m7_25.cdxml"
+        ),
+        1 => include_bytes!("../../crates/io/tests/fixtures/mixed-labels/all_p24_m12.cdxml"),
+        2 => include_bytes!(
+            "../../crates/io/tests/fixtures/mixed-labels/subset_1_3_5_p12_5_m7_25.cdxml"
+        ),
+        3 => include_bytes!("../../crates/io/tests/fixtures/mixed-labels/edited_all_p24_m12.cdxml"),
+        _ => include_bytes!("../../crates/io/tests/fixtures/mixed-labels/amino_diamine.cdxml"),
+    };
+    let base = StoredDocument::from_cdxml(source.into(), PageSize::A4).unwrap();
+    let snapshot = base.model_snapshot();
+    assert!(base.has_mixed_atom_labels());
+    assert!(!base.has_boxed_atom_labels());
+    assert!(!base.has_connected_atom_labels());
+    assert!(!base.is_fully_mapped());
+    let page = &base.model().pages()[0];
+    let fragment = &page.fragments()[0];
+    let mut atoms = fragment.atoms().to_vec();
+    if variant == 4 {
+        let atom = atoms.first_mut().unwrap();
+        atom.element = Element::new(7).unwrap();
+        atom.explicit_hydrogens = Some(2);
+        let old = atom.authored_label.as_ref().unwrap();
+        // Independently frozen amino_diamine FontTools box; no render dependency.
+        atom.authored_label = Some(Arc::new(
+            AtomLabel::new(
+                old.position(),
+                old.justification(),
+                old.label_justification(),
+                old.label_alignment(),
+                vec![TextRun::new("NH2".into(), old.runs()[0].style().clone()).unwrap()],
+            )
+            .unwrap()
+            .with_bounding_box(Some([
+                92.7216796875,
+                155.6171875,
+                115.1396484375,
+                164.265625,
+            ]))
+            .unwrap(),
+        ));
+    } else {
+        let (dx, dy) = if variant == 1 || variant == 3 {
+            (24., -12.)
+        } else {
+            (12.5, -7.25)
+        };
+        for atom in &mut atoms {
+            let selected = match variant {
+                0 => atom.id.get() == 3,
+                2 => [1, 3, 5].contains(&atom.id.get()),
+                _ => true,
+            };
+            if selected {
+                let p = atom.position.unwrap();
+                atom.position = Some(Point2::new(p.x_pt() + dx, p.y_pt() + dy).unwrap());
+                if let Some(label) = &atom.authored_label {
+                    let [l, t, r, b] = label.bounding_box().unwrap();
+                    atom.authored_label = Some(Arc::new(
+                        label
+                            .with_bounding_box(Some([l + dx, t + dy, r + dx, b + dy]))
+                            .unwrap(),
+                    ));
+                }
+            }
+        }
+    }
+    let mut current = base.clone();
+    current
+        .model_mut()
+        .replace_fragment(
+            page.id(),
+            Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec()).unwrap(),
+        )
+        .unwrap();
+    assert!(current.has_mixed_atom_labels());
+    assert!(!current.is_fully_mapped());
+    let encoded = current.to_cdxml().unwrap();
+    assert_eq!(encoded.as_ref(), expected);
+    let reimport = StoredDocument::from_cdxml(encoded.into_owned().into(), PageSize::A4).unwrap();
+    assert_eq!(reimport.model(), current.model());
+    assert!(reimport.has_mixed_atom_labels());
+    let mut bad = base.clone();
+    let mut atoms = fragment.atoms().to_vec();
+    atoms.get_mut(2).unwrap().position = Some(Point2::new(240., 208.).unwrap());
+    bad.model_mut()
+        .replace_fragment(
+            page.id(),
+            Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec()).unwrap(),
+        )
+        .unwrap();
+    assert!(!bad.has_mixed_atom_labels());
+    assert!(!bad.has_display_projection());
+    assert!(matches!(
+        bad.to_cdxml(),
+        Err(DocumentError::UnsupportedEdit)
+    ));
+    *bad.model_mut() = base.model().clone();
+    assert_eq!(bad.to_cdxml().unwrap().as_ref(), source);
+    original_unchanged(&base, source, &snapshot);
+}
+
 fuzz_target!(|data: &[u8]| {
     if data.len() > INPUT_LIMIT {
         return;
     }
     assert_eq!(ORIGINAL.len(), 464);
     arbitrary_source(data);
+    mixed_label_source(data);
     connected_source_workflow(data);
     translated_label_source(data);
     boxed_source_workflow(data);

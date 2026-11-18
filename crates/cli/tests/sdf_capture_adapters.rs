@@ -5,6 +5,8 @@ mod atom_child_text_wire;
 mod boxed_label_wire;
 #[path = "support/chain_creation_wire.rs"]
 mod chain_creation_wire;
+#[path = "support/mixed_label_wire.rs"]
+mod mixed_label_wire;
 #[path = "support/native_conversion_wire.rs"]
 mod native_conversion_wire;
 #[path = "support/new_document_adapters.rs"]

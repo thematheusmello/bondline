@@ -112,3 +112,17 @@ worktrees/targets, bounded parser/profile fuzzing and complete local gates. Insp
 own disposable native workflow, preserve user apps/drawings, record platform/golden scope
 and all failures exactly. Never weaken old tests, regenerate references to fit output,
 rerun the protected MCP failure blindly or enable Actions. Full M0–M5 stays active.
+
+## Declared own-window acceptance
+
+Use a fresh disposable Bondline bundle and an ignored byte-exact copy of amino_alcohol;
+never edit the tracked fixtures or an older user app/drawing. Select a ring before Open,
+then set Actual100%. Alt-target a hidden carbon: no form or authored change is permitted.
+Alt-target the printed OH at(96,160), set N/H2 and Apply through the existing form.
+Choose Marquee, Select All five atoms and drag from the hidden middle anchor(240,160)
+by(24,-12)pt. One edit and one drag must yield the exact edited_all_p24_m12 source.
+Undo/Redo must restore both complete intermediate sources; Save As a fresh Unicode path,
+explicitly reopen, compare actual source/model/facts and confirm clean zero-history state.
+Inspect actual CPU/GPU1088 captures, then Cancel a printed-label draft without changing
+saved state. Explicitly quit the own review and observe its exact PID absent. Keep actual
+OS input separate from App frames, camera/DPI proofs and human golden approval.

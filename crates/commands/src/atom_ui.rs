@@ -141,12 +141,14 @@ impl Engine {
                     return Err(Error::UiBusy);
                 }
                 let document = self.stored_document()?;
-                let (_, atom) =
-                    if document.has_boxed_atom_labels() || document.has_connected_atom_labels() {
-                        crate::boxed_atom::editable_atom(document, page_id, fragment_id, atom_id)
-                    } else {
-                        crate::atom::editable_atom(document, page_id, fragment_id, atom_id)
-                    }?;
+                let (_, atom) = if document.has_boxed_atom_labels()
+                    || document.has_connected_atom_labels()
+                    || document.has_mixed_atom_labels()
+                {
+                    crate::boxed_atom::editable_atom(document, page_id, fragment_id, atom_id)
+                } else {
+                    crate::atom::editable_atom(document, page_id, fragment_id, atom_id)
+                }?;
                 let id = self
                     .atom_ui
                     .epoch
@@ -207,7 +209,10 @@ impl Engine {
             explicit_hydrogens,
         };
         let document = self.stored_document()?;
-        let command = if document.has_boxed_atom_labels() || document.has_connected_atom_labels() {
+        let command = if document.has_boxed_atom_labels()
+            || document.has_connected_atom_labels()
+            || document.has_mixed_atom_labels()
+        {
             Command::AtomSetAuthoredLabel(params)
         } else {
             Command::AtomSetLabel(params)

@@ -149,7 +149,9 @@ impl Engine {
     pub fn selection_available(&self) -> bool {
         self.has_full_native_source()
             || self.stored_document().is_ok_and(|stored| {
-                stored.has_boxed_atom_labels() || stored.has_connected_atom_labels()
+                stored.has_boxed_atom_labels()
+                    || stored.has_connected_atom_labels()
+                    || stored.has_mixed_atom_labels()
             })
     }
 

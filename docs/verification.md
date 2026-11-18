@@ -1,6 +1,13 @@
 # Verification log
 
-The latest [dependent-label receiving](verification-dependent-label-translation.md) records
+The latest [mixed skeletal-label receiving](verification-mixed-skeletal-labels.md) records
+independent source/font/pixel/history/adapter checks, actual native Mac hidden-target
+refusal/printed edit/all-atom drag/history/Unicode Save/reopen/Cancel and CPU/Metal captures.
+Fresh full2091/0/1+vendor3/0 and bounded ASan10000/203s pass, with explicit compiler/oracle/
+input setup qualifications and unchanged expectations. Earlier MCP failures remain
+unexplained; no causal fix, new platform/golden or full M0–M5 completion is claimed.
+
+The preceding [dependent-label receiving](verification-dependent-label-translation.md) records
 source-preserving atom/box movement, exact command/IO/App/adapter checks, actual Mac
 drag/nudge/history/Unicode files, bounded ASan and the corrected nine-pixel GPU discrepancy.
 The rebuilt native CPU/Metal capture is exact. The unchanged MCP aggregate failure remains

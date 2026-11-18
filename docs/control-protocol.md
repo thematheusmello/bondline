@@ -6,6 +6,14 @@ adapters must call it; they must not implement their own authoring operations.
 The delivered registry has48 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
+The [Mixed source grant](verification-mixed-skeletal-labels.md) additionally reuses the
+same48 metadata and existing printed-label/selection operations for qualified foreign
+skeletal diagrams. `has_mixed_atom_labels` is distinct from old Boxed/Connected/global
+full. Only explicitly/currently hidden, known-H neutral C may lack child Text. Movement
+or neighbor edits that would expose unproven default glyphs refuse atomically. Hidden
+nodes permit point movement but not command48/form label creation; other source writers
+retain their refusals. All source/page/history/Save/native owner guards remain.
+
 The [connected-label grant](verification-connected-labels.md) reuses48 and ui.atom_label
 without changing any record/schema/order. Qualified foreign diagrams have a separate
 `has_connected_atom_labels` capability; old foreign Boxed remains zero-bond. Only existing
@@ -1662,7 +1670,7 @@ Activate/set/all enter selection mode. Set validates the page, accepts unsorted 
 sorts them, and rejects zero, duplicates, missing atoms or more than100000 entries.
 Empty set is allowed after page validation. Clear empties targets and keeps the current
 tool. Inspect changes nothing. Activate/set/all require source-free/completely mapped
-native CDXML Drawing or a complete Boxed/Connected atom-label capability; clear/inspect
+native CDXML Drawing or a complete Boxed/Connected/Mixed atom-label capability; clear/inspect
 work across content kinds. No native host is required.
 Transient mutations follow the existing close/file-busy tool policy. Inspect can read a
 pending-close selection; all commands still refuse after committed close.

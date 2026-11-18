@@ -10,7 +10,10 @@ pub(super) fn editable_atom(
     fragment: u32,
     atom: u32,
 ) -> Result<(&Fragment, &Atom), Error> {
-    if !document.has_boxed_atom_labels() && !document.has_connected_atom_labels() {
+    if !document.has_boxed_atom_labels()
+        && !document.has_connected_atom_labels()
+        && !document.has_mixed_atom_labels()
+    {
         return Err(Error::UnsupportedAtomLabel(
             "complete box-positioned literal label source is required",
         ));
