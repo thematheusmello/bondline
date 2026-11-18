@@ -1,0 +1,97 @@
+{
+  "base": "42ccefb",
+  "contract": "docs/research/cdx-literal-atom-metadata.md",
+  "method": "Original Python struct only; no product parser/writer/output",
+  "cases": [
+    {
+      "name": "absent_implied",
+      "bytes": 303,
+      "sha256": "fcf06b97d927ac78811a2061a97528a2441d8c55045c617730e5552a90ab5fe2"
+    },
+    {
+      "name": "scalar_zero_implied",
+      "bytes": 319,
+      "sha256": "51331f9aee952799c280214e2b27643a924d66f6442978b5608838f058e3c813"
+    },
+    {
+      "name": "zero_present_explicit",
+      "bytes": 331,
+      "sha256": "168979f4167d1ff7d4cf9e291b69c7de368467a51337c96b8b573ef778b17ac3"
+    },
+    {
+      "name": "methylammonium_explicit",
+      "bytes": 353,
+      "sha256": "25966d5b508ab7ef1d064d831f85bf79bbeec65f331b0cb62e27a6a91942f554"
+    },
+    {
+      "name": "methylammonium_extended",
+      "bytes": 379,
+      "sha256": "bf04d80146c8cc3944f18b0347574674fc13ae7e4bc353dc2dd32605f780bd20"
+    },
+    {
+      "name": "methylammonium_embedded",
+      "bytes": 349,
+      "sha256": "c188f612a2c5cc6a1c8fc9fd60fe4fa809639205b2798300fdce17fa9b9f577d"
+    },
+    {
+      "name": "methyl_doublet",
+      "bytes": 227,
+      "sha256": "54e044c4d1d21f1092ce732dbdaa72b117bdacf56363e745a77c9e68295e85fd"
+    },
+    {
+      "name": "singlet",
+      "bytes": 227,
+      "sha256": "9002748092a87056ddd232b98355bcfa7f953d1b9c8561428dfdad0f07ddf1dc"
+    },
+    {
+      "name": "triplet",
+      "bytes": 227,
+      "sha256": "5658ede2daab5e3bfeabe7f7ebcba9cb12281f6e84523a69f6babb50f591a8d9"
+    },
+    {
+      "name": "extrema",
+      "bytes": 353,
+      "sha256": "11d5203e6c31d2f9057d665cb242b79c7943e9cd3d6a66b6cd77b12ede6fced7"
+    },
+    {
+      "name": "reordered",
+      "bytes": 353,
+      "sha256": "72e73df88891f19b1afd91d132a2fc8c8c40e0d49311b55d60eaba79216c4dce"
+    },
+    {
+      "name": "default_carbon_fields",
+      "bytes": 209,
+      "sha256": "a9bf522d085d7eb7a8eaf667219881fdac3d80582c3314cd063b80f6f2d4882a"
+    },
+    {
+      "name": "deuteron",
+      "bytes": 227,
+      "sha256": "54f1a5a915c028bcfd03ab2cd3fe59aebbcf24738a2481dd1e9b9779e5801dfc"
+    },
+    {
+      "name": "charge4_low_one",
+      "bytes": 230,
+      "sha256": "932ab7ef6fde6aea2c12a86330d9fda2356a44a6312997e560bd67fb569b4710"
+    },
+    {
+      "name": "charge4_high_one",
+      "bytes": 230,
+      "sha256": "7e5170c72ce0275ec6d01bfdecf515032e5470c381dcce2575e681b5510a06fb"
+    },
+    {
+      "name": "charge4_high_minus_one",
+      "bytes": 230,
+      "sha256": "4eb81bd993dbbb13d9c206fc9d8e6a08c2e2a85bf60e3ed3d48dea3f90143917"
+    },
+    {
+      "name": "charge4_low_noise_max",
+      "bytes": 230,
+      "sha256": "b9a0a9f4b58226666d4aba20fa35fb669834ead30b202ad5c99531ae03cd57eb"
+    },
+    {
+      "name": "charge4_min",
+      "bytes": 230,
+      "sha256": "e4578bdf40bcfe5dcb8fb12de653844101e958f9ec9c7c71617e8f40aaa38c99"
+    }
+  ]
+}

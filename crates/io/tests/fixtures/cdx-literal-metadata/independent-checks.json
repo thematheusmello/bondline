@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "sources": 18,
+  "reader_refusals": [
+    "width_0420_0",
+    "width_0420_1",
+    "width_0420_3",
+    "width_0420_4",
+    "duplicate_0420",
+    "width_0421_0",
+    "width_0421_2",
+    "width_0421_3",
+    "width_0421_5",
+    "duplicate_0421",
+    "width_0422_0",
+    "width_0422_2",
+    "width_0422_3",
+    "duplicate_0422",
+    "width_042b_0",
+    "width_042b_1",
+    "width_042b_3",
+    "width_042b_4",
+    "duplicate_042b",
+    "isotope_domain_-32768",
+    "isotope_domain_-1",
+    "radical_domain_4",
+    "radical_domain_255",
+    "node_unspecified_not_element",
+    "wrong_owner_8000",
+    "wrong_owner_8001",
+    "wrong_owner_8003",
+    "wrong_owner_8005",
+    "wrong_owner_c123",
+    "truncated_eof_1",
+    "truncated_eof_2",
+    "truncated_eof_3",
+    "truncated_extended_1",
+    "truncated_extended_3",
+    "truncated_extended_7",
+    "truncated_extended_9"
+  ],
+  "rdkit": "2026.09.2",
+  "binary_cdx_support": true,
+  "valid_literal_agreement_cases": 8,
+  "charge4_normative": {
+    "charge4_low_one": 0,
+    "charge4_high_one": 1,
+    "charge4_high_minus_one": -1,
+    "charge4_low_noise_max": 127,
+    "charge4_min": -128
+  },
+  "charge4_rdkit_differences": {
+    "charge4_low_one": {
+      "normative": 0,
+      "rdkit": 1
+    },
+    "charge4_low_noise_max": {
+      "normative": 127,
+      "rdkit": -86
+    }
+  },
+  "singlet_triplet_distinct_struct_only": true,
+  "absent_h_unresolved": true,
+  "equal_model_distinct_scalar_presence": true,
+  "prefreeze_qualification": "Draft explicit NodeType0 was corrected to public Element1; no product guard changed",
+  "product_execution": false
+}
