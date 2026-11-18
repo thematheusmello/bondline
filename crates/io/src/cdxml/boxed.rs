@@ -1,8 +1,12 @@
 //! Closed box-positioned atom labels; source coverage is separate from full authoring.
 use super::{MappingError, atom_text, caption, graph, is_element, parse_position, write};
 use crate::{DocumentError, StoredDocument};
-use bondline_cdxml::{Document as Xml, Edit, ObjectId, TextObject, parse_integer};
-use bondline_model::{Atom, Bond, BondOrder, Document, DoublePosition, Page, Radical};
+use bondline_cdxml::{
+    Document as Xml, Edit, ObjectId, Resources, TextObject, Writer, parse_integer,
+};
+use bondline_model::{
+    Atom, AtomId, AtomLabel, Bond, BondOrder, Document, DoublePosition, Page, Radical,
+};
 use roxmltree::Node;
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -19,6 +23,7 @@ enum Profile {
     Boxed,
     Connected,
     Mixed,
+    Flagged,
 }
 
 fn unsupported<T>() -> Result<T> {
@@ -40,6 +45,10 @@ fn one_page(model: &Document) -> Result<&Page> {
 
 /// Known model coverage, before physical view, collision and raster-work checks.
 pub(crate) fn model_supported(model: &Document) -> bool {
+    model_supported_with_flags(model, false)
+}
+
+fn model_supported_with_flags(model: &Document, allow_flags: bool) -> bool {
     let Ok(page) = one_page(model) else {
         return false;
     };
@@ -89,6 +98,10 @@ pub(crate) fn model_supported(model: &Document) -> bool {
         .flat_map(|fragment| fragment.atoms())
     {
         if atom.position.is_none()
+            || !allow_flags
+                && atom.authored_label.is_some()
+                && (atom.show_terminal_carbon_labels.is_some()
+                    || atom.show_non_terminal_carbon_labels.is_some())
             || atom.authored_label.is_some() && bondline_render::validate_atom_label(atom).is_err()
         {
             return false;
@@ -221,6 +234,10 @@ fn connected_style(model: &Document, page: &Page) -> bool {
 }
 
 pub(crate) fn supports_delta(baseline: &Document, current: &Document) -> bool {
+    model_delta(baseline, current, false)
+}
+
+fn model_delta(baseline: &Document, current: &Document, creation: bool) -> bool {
     let (Ok(before), Ok(after)) = (one_page(baseline), one_page(current)) else {
         return false;
     };
@@ -230,8 +247,8 @@ pub(crate) fn supports_delta(baseline: &Document, current: &Document) -> bool {
         && before.size() == after.size()
         && before.texts() == after.texts()
         && before.fragments().len() == after.fragments().len()
-        && model_supported(baseline)
-        && model_supported(current)
+        && model_supported_with_flags(baseline, creation)
+        && model_supported_with_flags(current, creation)
         && before
             .fragments()
             .iter()
@@ -240,11 +257,19 @@ pub(crate) fn supports_delta(baseline: &Document, current: &Document) -> bool {
                 old.id() == new.id()
                     && old.bonds() == new.bonds()
                     && old.atoms().len() == new.atoms().len()
-                    && old
-                        .atoms()
-                        .iter()
-                        .zip(new.atoms())
-                        .all(|(a, b)| allowed_atom_delta(a, b))
+                    && old.atoms().iter().zip(new.atoms()).all(|(a, b)| {
+                        allowed_atom_delta(a, b)
+                            || creation
+                                && a.authored_label.is_none()
+                                && b.authored_label.is_some()
+                                && a.id == b.id
+                                && a.isotope == b.isotope
+                                && a.charge == b.charge
+                                && a.radical == b.radical
+                                && a.show_terminal_carbon_labels == b.show_terminal_carbon_labels
+                                && a.show_non_terminal_carbon_labels
+                                    == b.show_non_terminal_carbon_labels
+                    })
             })
 }
 
@@ -254,6 +279,10 @@ pub(crate) fn supports_connected_delta(baseline: &Document, current: &Document) 
 }
 
 fn mixed_hidden_supported(page: &Page) -> bool {
+    hidden_supported(page, true)
+}
+
+fn hidden_supported(page: &Page, require_any: bool) -> bool {
     let cancel = bondline_render::Cancellation::default();
     let mut has_hidden = false;
     for fragment in page.fragments() {
@@ -276,7 +305,76 @@ fn mixed_hidden_supported(page: &Page) -> bool {
             has_hidden = true;
         }
     }
-    has_hidden
+    has_hidden || !require_any
+}
+
+fn flagged_page_supported(model: &Document, page: &Page) -> bool {
+    connected_style(model, page)
+        && hidden_supported(page, false)
+        && page.fragments().iter().flat_map(|f| f.atoms()).any(|atom| {
+            atom.authored_label.is_some()
+                && (atom.show_terminal_carbon_labels.is_some()
+                    || atom.show_non_terminal_carbon_labels.is_some())
+        })
+}
+
+fn flagged_model_delta(baseline: &Document, current: &Document) -> bool {
+    model_delta(baseline, current, true)
+        && one_page(current).is_ok_and(|page| flagged_page_supported(current, page))
+}
+
+fn run_resources(label: &AtomLabel, resources: &Resources<'_, '_>) -> Result<(u16, u16)> {
+    let style = label
+        .runs()
+        .first()
+        .ok_or(DocumentError::UnsupportedEdit)?
+        .style();
+    let font = resources
+        .fonts()
+        .find(|font| font.name() == style.font_family())
+        .ok_or(DocumentError::UnsupportedEdit)?
+        .id();
+    let color = [0, 1]
+        .into_iter()
+        .chain(resources.colors().iter().map(|c| c.index()))
+        .find(|index| resources.color(*index).ok() == Some(style.rgb()))
+        .ok_or(DocumentError::UnsupportedEdit)?;
+    Ok((font, color))
+}
+
+pub(crate) fn supports_flagged_delta(
+    source: &[u8],
+    baseline: &Document,
+    current: &Document,
+) -> bool {
+    if !flagged_model_delta(baseline, current) {
+        return false;
+    }
+    let Ok(xml) = Xml::parse(source) else {
+        return false;
+    };
+    let Ok(resources) = xml.resources() else {
+        return false;
+    };
+    baseline
+        .pages()
+        .iter()
+        .flat_map(|p| p.fragments())
+        .flat_map(|f| f.atoms())
+        .zip(
+            current
+                .pages()
+                .iter()
+                .flat_map(|p| p.fragments())
+                .flat_map(|f| f.atoms()),
+        )
+        .all(|(before, after)| {
+            before.authored_label.is_some()
+                || after
+                    .authored_label
+                    .as_ref()
+                    .is_none_or(|label| run_resources(label, &resources).is_ok())
+        })
 }
 
 pub(crate) fn supports_mixed_delta(baseline: &Document, current: &Document) -> bool {
@@ -338,7 +436,7 @@ fn bindings<'doc, 'input: 'doc>(
     baseline: &Document,
     profile: Profile,
 ) -> Result<Vec<Vec<BoundAtom<'doc, 'input>>>> {
-    if !model_supported(baseline) {
+    if !model_supported_with_flags(baseline, matches!(profile, Profile::Flagged)) {
         return unsupported();
     }
     let own = one_page(baseline)?;
@@ -351,6 +449,7 @@ fn bindings<'doc, 'input: 'doc>(
         Profile::Boxed => !has_unlabelled && own.fragments().iter().all(|f| f.bonds().is_empty()),
         Profile::Connected => !has_unlabelled && connected_style(baseline, own),
         Profile::Mixed => connected_style(baseline, own) && mixed_hidden_supported(own),
+        Profile::Flagged => flagged_page_supported(baseline, own),
     };
     if !supported {
         return unsupported();
@@ -581,7 +680,10 @@ fn bindings<'doc, 'input: 'doc>(
             let end = reference(node, "E")?;
             let expected = write::bond_attributes(bond, source_id, begin, end);
             let mut expected_keys: Vec<_> = expected.iter().map(|(name, _)| *name).collect();
-            if matches!(profile, Profile::Connected | Profile::Mixed) {
+            if matches!(
+                profile,
+                Profile::Connected | Profile::Mixed | Profile::Flagged
+            ) {
                 for name in ["Display", "Display2", "color"] {
                     if node.attribute(name).is_some() {
                         expected_keys.push(name);
@@ -639,6 +741,10 @@ pub(crate) fn is_mixed(source: &[u8], baseline: &Document) -> bool {
     is_profile(source, baseline, Profile::Mixed)
 }
 
+pub(crate) fn is_flagged(source: &[u8], baseline: &Document) -> bool {
+    is_profile(source, baseline, Profile::Flagged)
+}
+
 fn is_profile(source: &[u8], baseline: &Document, profile: Profile) -> bool {
     let Ok(xml) = Xml::parse(source) else {
         return false;
@@ -670,6 +776,87 @@ pub(crate) fn write_mixed_preserved(
     write_in_profile(source, baseline, current, Profile::Mixed)
 }
 
+pub(crate) fn write_flagged_preserved(
+    source: &[u8],
+    baseline: &Document,
+    current: &Document,
+) -> Result<Vec<u8>> {
+    write_in_profile(source, baseline, current, Profile::Flagged)
+}
+
+fn creation_ids(
+    xml: &Xml<'_>,
+    before: &Page,
+    bound: &[Vec<BoundAtom<'_, '_>>],
+) -> Result<BTreeMap<AtomId, u32>> {
+    let mut used = BTreeSet::new();
+    for node in xml
+        .xml()
+        .root_element()
+        .descendants()
+        .filter(Node::is_element)
+    {
+        if node.attribute("id").is_some() && !is_element(node, "font") {
+            used.insert(assigned(node)?);
+        }
+    }
+    let mut next = 1_u32;
+    let mut ids = BTreeMap::new();
+    for (fragment, nodes) in before.fragments().iter().zip(bound) {
+        for (atom, _) in fragment.atoms().iter().zip(nodes) {
+            if atom.authored_label.is_none() {
+                while used.contains(&next) {
+                    next = next.checked_add(1).ok_or(DocumentError::UnsupportedEdit)?;
+                }
+                ids.insert(atom.id, next);
+                used.insert(next);
+            }
+        }
+    }
+    Ok(ids)
+}
+
+fn label_xml(label: &AtomLabel, id: u32, resources: &Resources<'_, '_>) -> Result<String> {
+    let (font, color) = run_resources(label, resources)?;
+    let [l, t, r, b] = label.bounding_box().ok_or(DocumentError::UnsupportedEdit)?;
+    let run = label.runs().first().ok_or(DocumentError::UnsupportedEdit)?;
+    let mut writer = syntax(Writer::new(&[]))?;
+    syntax(writer.start_element(
+        "t",
+        &[
+            ("id", &id.to_string()),
+            ("BoundingBox", &format!("{l} {t} {r} {b}")),
+            ("Justification", "Left"),
+            ("LabelJustification", "Left"),
+        ],
+    ))?;
+    syntax(writer.start_element(
+        "s",
+        &[
+            ("font", &font.to_string()),
+            ("size", &run.style().size_pt().to_string()),
+            ("face", "0"),
+            ("color", &color.to_string()),
+        ],
+    ))?;
+    syntax(writer.text(run.text()))?;
+    syntax(writer.end_element())?;
+    syntax(writer.end_element())?;
+    let bytes = syntax(writer.finish())?;
+    let parsed = syntax(Xml::parse(&bytes))?;
+    let child = parsed
+        .xml()
+        .root_element()
+        .first_element_child()
+        .ok_or(DocumentError::UnsupportedEdit)?;
+    parsed
+        .xml()
+        .input_text()
+        .get(child.range())
+        .map(str::to_owned)
+        .ok_or(DocumentError::UnsupportedEdit)
+}
+
 fn write_in_profile(
     source: &[u8],
     baseline: &Document,
@@ -679,7 +866,10 @@ fn write_in_profile(
     let supported = match profile {
         Profile::Boxed => supports_delta(baseline, current),
         Profile::Connected => supports_connected_delta(baseline, current),
-        Profile::Mixed => supports_mixed_delta(baseline, current),
+        Profile::Mixed => {
+            supports_mixed_delta(baseline, current) || flagged_model_delta(baseline, current)
+        }
+        Profile::Flagged => flagged_model_delta(baseline, current),
     };
     if !supported {
         return unsupported();
@@ -691,9 +881,20 @@ fn write_in_profile(
     }
     let before = one_page(baseline)?;
     let after = one_page(current)?;
+    let resources = xml
+        .resources()
+        .map_err(|_| DocumentError::UnsupportedEdit)?;
+    let ids = creation_ids(&xml, before, &bound)?;
+    let mut appends = Vec::new();
     let mut values = Vec::new();
     for ((old, new), nodes) in before.fragments().iter().zip(after.fragments()).zip(&bound) {
         for ((a, b), binding) in old.atoms().iter().zip(new.atoms()).zip(nodes) {
+            if a.authored_label.is_none()
+                && let Some(label) = &b.authored_label
+            {
+                let id = ids.get(&a.id).ok_or(DocumentError::UnsupportedEdit)?;
+                appends.push((binding.node, label_xml(label, *id, &resources)?));
+            }
             if a.position != b.position {
                 let point = b.position.ok_or(DocumentError::UnsupportedEdit)?;
                 values.push((
@@ -731,6 +932,10 @@ fn write_in_profile(
             value,
         })
         .collect();
+    edits.extend(appends.iter().map(|(element, xml)| Edit::AppendChildren {
+        element: *element,
+        xml,
+    }));
     for ((old, new), nodes) in before.fragments().iter().zip(after.fragments()).zip(&bound) {
         for ((a, b), binding) in old.atoms().iter().zip(new.atoms()).zip(nodes) {
             if let (Some(old), Some(new), Some(text)) =
@@ -759,7 +964,12 @@ fn write_in_profile(
         Profile::Connected => {
             reopened.has_connected_atom_labels() || reopened.has_boxed_atom_labels()
         }
-        Profile::Mixed => reopened.has_mixed_atom_labels() || reopened.has_boxed_atom_labels(),
+        Profile::Mixed => {
+            reopened.has_mixed_atom_labels()
+                || reopened.has_flagged_atom_labels()
+                || reopened.has_boxed_atom_labels()
+        }
+        Profile::Flagged => reopened.has_flagged_atom_labels(),
     };
     if reopened.model() != current || !source_supported {
         return unsupported();

@@ -89,6 +89,7 @@ enum CdxmlProfile {
     Boxed,
     Connected,
     Mixed,
+    Flagged,
 }
 
 #[derive(Clone, PartialEq)]
@@ -139,7 +140,8 @@ impl OriginalSource {
                 | CdxmlProfile::Caption
                 | CdxmlProfile::Boxed
                 | CdxmlProfile::Connected
-                | CdxmlProfile::Mixed => false,
+                | CdxmlProfile::Mixed
+                | CdxmlProfile::Flagged => false,
                 CdxmlProfile::Preserved => {
                     Arc::ptr_eq(current, baseline)
                         || crate::cdxml::supports_delta(baseline, current)
@@ -198,7 +200,9 @@ impl StoredDocument {
         let model = Arc::new(graph.preview_document(preview_size)?);
         drop(graph);
         // Producer text alone grants no authority; every source field needs a complete proof.
-        let profile = if crate::cdxml::write_document(&model)
+        let profile = if crate::cdxml::is_flagged(&bytes, &model) {
+            CdxmlProfile::Flagged
+        } else if crate::cdxml::write_document(&model)
             .is_ok_and(|encoded| encoded.as_slice() == bytes.as_ref())
         {
             CdxmlProfile::Canonical
@@ -440,6 +444,14 @@ impl StoredDocument {
             || crate::cdxml::supports_mixed_delta(baseline, &self.model))
     }
 
+    /// Complete printed labels with retained flags and current hidden source atoms.
+    /// New runs must resolve against original resources; no foreign defaults are inferred.
+    pub fn has_flagged_atom_labels(&self) -> bool {
+        matches!(self.original.as_ref(), Some(OriginalSource::Cdxml {
+            profile: CdxmlProfile::Mixed | CdxmlProfile::Flagged, bytes, baseline,
+        }) if crate::cdxml::supports_flagged_delta(bytes, baseline, &self.model))
+    }
+
     /// Source coverage to attempt display; scale, glyph and geometry checks still apply.
     pub fn has_display_projection(&self) -> bool {
         self.is_fully_mapped()
@@ -448,6 +460,7 @@ impl StoredDocument {
             || self.has_boxed_atom_labels()
             || self.has_connected_atom_labels()
             || self.has_mixed_atom_labels()
+            || self.has_flagged_atom_labels()
     }
 
     pub fn source_info(&self) -> Option<SourceInfo> {
@@ -562,6 +575,21 @@ impl StoredDocument {
                     baseline,
                     &self.model,
                 )?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Flagged,
+                    bytes,
+                    baseline,
+                }) => match crate::cdxml::write_flagged_preserved(bytes, baseline, &self.model) {
+                    Ok(output) => Ok(Cow::Owned(output)),
+                    Err(DocumentError::UnsupportedEdit)
+                        if crate::cdxml::write_document(baseline)
+                            .is_ok_and(|native| native.as_slice() == bytes.as_ref()) =>
+                    {
+                        // Preserve the prior exact-native data codec, never edit authority.
+                        Ok(Cow::Owned(crate::cdxml::write_document(&self.model)?))
+                    }
+                    Err(error) => Err(error),
+                },
                 _ => Err(DocumentError::UnsupportedEdit),
             },
             Err(error) => Err(error),
@@ -688,7 +716,8 @@ impl StoredDocument {
                     | CdxmlProfile::Caption
                     | CdxmlProfile::Boxed
                     | CdxmlProfile::Connected
-                    | CdxmlProfile::Mixed,
+                    | CdxmlProfile::Mixed
+                    | CdxmlProfile::Flagged,
                 ..
             }) => {
                 return Err(DocumentError::CrossFormatSource {

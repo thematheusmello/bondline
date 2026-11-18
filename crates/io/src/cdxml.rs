@@ -7,9 +7,10 @@ mod graph;
 mod preserved;
 mod write;
 pub(crate) use boxed::{
-    is_boxed, is_connected, is_mixed, model_supported as boxed_model_supported,
-    supports_connected_delta, supports_delta as supports_boxed_delta, supports_mixed_delta,
-    write_connected_preserved, write_mixed_preserved, write_preserved as write_boxed_preserved,
+    is_boxed, is_connected, is_flagged, is_mixed, model_supported as boxed_model_supported,
+    supports_connected_delta, supports_delta as supports_boxed_delta, supports_flagged_delta,
+    supports_mixed_delta, write_connected_preserved, write_flagged_preserved,
+    write_mixed_preserved, write_preserved as write_boxed_preserved,
 };
 pub(crate) use caption::{
     is_caption, supports_delta as supports_caption_delta,
