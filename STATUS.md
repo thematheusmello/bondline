@@ -7,6 +7,37 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+**In progress: explicit printed-label creation**, base7113237, locked contract126f99e,
+renderer8f1225e (isolated62b9841), frozen independent source/oracle data9acd1a5.
+Read [creation contract](docs/research/printed-label-creation.md). This is the current
+executable work, superseding the prior next-task paragraph and the persistent goal's
+historical line-width first task. Full M0–M5 scope is unchanged and active.
+
+Root's pending commands/UI/fuzz files add command49, explicit style and the native form,
+retained flags, current-candidate source fences and independent history/Save tests. They
+depend on the in-flight IO Flagged capability; integrated build/gates have not run yet.
+The original existing dispatch/form declarations actually fail0/2 at the missing command
+and hidden-target refusal. Renderer existing-API RED0/2→GREEN2/0, complete195/0 plus
+fmt/clippy pass. The20 frozen sources/64 FontTools boxes/eight independent reader
+refusals pass before IO/caller production. These are component results, not an integrated
+creation workflow or a native claim. All old48 metadata and protected MCP tests stay exact.
+
+Parallel owned lanes: `label_layout_evidence` implements IO in retained
+`../bondline-dependent-label-io`, branch `feat/printed-label-io`;
+`boxed_label_render` prepares independent created-source rendering in retained
+`../bondline-render-coverage`; `label_workflow_review` owns only the new actual CLI/MCP/
+socket wire tests in this root worktree. Preserve unrelated pending files and earlier
+branches. Query worker/job state before resuming; no new own native app is open.
+
+Next: finish/integrate precise IO source/resource/ID proof while preserving old native
+data-only codec behavior; run command/App/adapter and independent render checks, bounded
+profile ASan, complete local CI, then actual own native creation/history/Unicode Save/
+reopen/Cancel. Update the receiving record and commit all remaining files atomically.
+Old human golden approval remains pending; other-platform execution/full parity remains
+unverified. Actions is OFF and protected older user apps/drawings remain untouched.
+
+### Last integrated Mixed skeletal workflow
+
 Recoverable Mixed skeletal workflow: basef16b79f, contracts b30f0d6/5f58276, shared
 renderer query bb719c9, independent fixtures71129ab, IOc3cc351 and render oracles1473353,
 plus the receiving command/UI commit containing this record. Read

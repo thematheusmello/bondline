@@ -1,5 +1,26 @@
 # Clean-room source register
 
+Explicit child-label creation reviewed2026-11-18 follows the
+[creation contract](../research/printed-label-creation.md) and fresh primary
+[Node](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm),
+[Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm),
+[Style](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Style.htm),
+[IntroCDX Objects](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm#Objects),
+[Font](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Font.htm),
+[ColorTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ColorTable.htm)
+and the official CDXML DTD. General explicit child Text display precedence supports
+retaining existing flags; it does not establish every modern flag interaction or26.1
+pixels. Four-byte object identity and separate UINT16 font resources justify distinct
+allocation. Global lowest-unused reservations, existing-resource-only authoring, the
+visible native Roboto12 black preset and bounded placement are original Bondline policies.
+Fresh ignored receipts `target/label-creation/research/sources.json` have SHA256
+`671d2ebfffc24969fdba081c80cbfeb4baa4d54c6e1bda9ee8d6524d7d5ed0ac`;
+Node35477B SHA256 `a14fc69ab53f80e154c02ace61cdb8f7f9669384ea3573e90fff3a68c6163791`,
+Text25165B SHA256 `12e25d945c16fe6820a792822740c2adb4cfd80f8e7760d19cfafb362a59d201`,
+IntroCDX9132B SHA256 `05720e49f4caca8d0074e45f68a0f34d9876bb7a20951298e9943a8a49485763`.
+No documentation body is bundled as an asset or asserted to have a permissive asset
+licence; no reference executable, artwork or installed font is inspected.
+
 Mixed authored/skeletal diagrams reviewed2026-11-18 use primary
 [Node child-Text precedence](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm),
 [terminal/nonterminal properties0x0442/0x0443](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/TableOfProperties.htm),
