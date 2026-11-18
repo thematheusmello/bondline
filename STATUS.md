@@ -93,9 +93,14 @@ socket module. With that module included, all 115 adapter tests and warnings-den
 CLI all-targets clippy passed. ASan passed 10,000 runs with 75 original inputs and
 158-byte maximum recorded mutation. Registry 49 stays byte-identical. Evidence
 and actual PNGs are in `target/cdx-resources/next-text/preview-freeze.Ue3WwW`.
+The additional two command tests pass with warnings-denied all-targets clippy.
+Equal-model A→B→A source changes retire old weak file/capture contexts and preserve
+the original committed output of an earlier Save. Offscreen Fit and Actual at 1.5
+pixel density match CPU/Metal and independent FreeType placement.
 
 Native read-only presentation is wired. The user apps and drawings remain
-untouched. Execution jobs have finished. Actions remains off.
+untouched. Recent Mac input kept this round offscreen. Execution jobs have finished.
+Actions remains off.
 
 ### Next executable work
 
@@ -104,10 +109,9 @@ untouched. Execution jobs have finished. Actions remains off.
    read-only behavior, Fit, Actual and fractional density. Exercise known Save,
    Unicode Save As and reopen, and check the actual files with the independent
    reader. Keep protected apps and live user input out of the review.
-2. Finish equal-model different-source stale Save/capture tests and publish
-   qualified native evidence, then land the verified caption branch into
-   `main`. Continue with multiple CDX captions, explicit styles, child labels
-   and editable source from public evidence.
+2. Publish qualified native evidence, then land the verified caption branch
+   into `main`. Continue with multiple CDX captions, explicit styles, child
+   labels and editable source from public evidence.
 3. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 

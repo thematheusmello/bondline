@@ -67,6 +67,20 @@ The 14,599-byte adapter log `wire-suite.log` has SHA-256
 `8a14040f2a6b57297092d6f7f041a92e1d9f7dcd79a2fc310ba301f2ef2886e7`.
 Both are in the local evidence directory below.
 
+## Exact source owners and fractional-scale views
+
+Two additional command tests passed with warnings-denied all-targets clippy.
+Opening the reversed-field source with the same model retires the old capture
+and file contexts. Completing the prior Save leaves the new session unchanged
+and keeps the old source bytes in the completed file. Reopening the first input
+creates a fresh owner again.
+
+At 1.5 pixels per logical unit, the 12.05 pt caption passes the existing Fit and
+Actual views at 768 × 768 output. CPU and Metal captures match at each view.
+Independent Pillow FreeType places the ink within four pixels of the expected
+baseline for both cameras. The view and capture calls preserve the exact model,
+source bytes and history. This is an offscreen density check.
+
 ## Sanitizer
 
 The [fuzz recipe](../fuzz/README.md#direct-page-cdx-caption-projection) reused the 75
@@ -83,7 +97,7 @@ bytes with SHA-256
 The successful wire summary in `wire-sequential-results/summary.json` has SHA-256
 `894c19eef1fe90067f023c8db18f1ef894a2d4e698b8e973abd866a61cb9823e`.
 
-Native window Open, read-only pointer behavior, Fit/Actual/fractional-density
+Native window Open, read-only pointer behavior, Fit/Actual/measured-display density
 capture and Unicode Save/reopen remain to be checked on an owned macOS review.
 Windows, Linux and browser execution remain open. The supported source
 profile covers one explicit caption. General CDX typography and editing
