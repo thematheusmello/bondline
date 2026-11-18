@@ -3,6 +3,8 @@ use bondline_commands::Engine;
 mod atom_child_text_wire;
 #[path = "support/boxed_label_wire.rs"]
 mod boxed_label_wire;
+#[path = "support/cdx_literal_wire.rs"]
+mod cdx_literal_wire;
 #[path = "support/chain_creation_wire.rs"]
 mod chain_creation_wire;
 #[path = "support/created_label_wire.rs"]
