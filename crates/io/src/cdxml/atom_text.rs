@@ -57,7 +57,7 @@ pub(super) fn project<'doc, 'input: 'doc>(
     let view = xml
         .styled_text(text)
         .map_err(|_| DocumentError::UnsupportedEdit)?;
-    AtomLabel::new(
+    let label = AtomLabel::new(
         position,
         read_justification("Justification")?,
         read_justification("LabelJustification")?,
@@ -66,7 +66,28 @@ pub(super) fn project<'doc, 'input: 'doc>(
     )
     .map_err(bondline_model::Error::from)
     .map_err(MappingError::from)
-    .map_err(DocumentError::from)
+    .map_err(DocumentError::from)?;
+    let bounds = text.attribute("BoundingBox").map(parse_box).transpose()?;
+    label
+        .with_bounding_box(bounds)
+        .map_err(bondline_model::Error::from)
+        .map_err(MappingError::from)
+        .map_err(DocumentError::from)
+}
+
+fn parse_box(raw: &str) -> Result<[f64; 4], DocumentError> {
+    let mut fields = raw.split_ascii_whitespace();
+    let mut next = || {
+        fields
+            .next()
+            .and_then(|value| value.parse::<f64>().ok())
+            .ok_or(DocumentError::UnsupportedEdit)
+    };
+    let bounds = [next()?, next()?, next()?, next()?];
+    if fields.next().is_some() {
+        return Err(DocumentError::UnsupportedEdit);
+    }
+    Ok(bounds)
 }
 
 fn justification(value: TextJustification) -> &'static str {
@@ -91,6 +112,9 @@ pub(super) fn write(
     let mut attributes = vec![("id", id.to_string())];
     if let Some(position) = label.position() {
         attributes.push(("p", format!("{} {}", position.x_pt(), position.y_pt())));
+    }
+    if let Some([left, top, right, bottom]) = label.bounding_box() {
+        attributes.push(("BoundingBox", format!("{left} {top} {right} {bottom}")));
     }
     if let Some(value) = label.justification() {
         attributes.push(("Justification", justification(value).to_owned()));

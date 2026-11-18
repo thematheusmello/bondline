@@ -35,6 +35,14 @@ pub(super) fn project<'doc, 'input: 'doc>(
     let resources = xml
         .resources()
         .map_err(|_| DocumentError::UnsupportedEdit)?;
+    project_with_resources(xml, &resources, page)
+}
+
+pub(super) fn project_with_resources<'doc, 'input: 'doc>(
+    xml: &'doc Xml<'input>,
+    resources: &Resources<'doc, 'input>,
+    page: Node<'doc, 'input>,
+) -> Result<Vec<StyledText>> {
     let mut texts = Vec::new();
     for element in page.children().filter(|node| is_element(*node, "t")) {
         let view = xml
@@ -44,7 +52,7 @@ pub(super) fn project<'doc, 'input: 'doc>(
             .attribute("p")
             .and_then(|raw| parse_position(raw).ok())
             .ok_or(DocumentError::UnsupportedEdit)?;
-        let runs = project_runs(&resources, &view)?;
+        let runs = project_runs(resources, &view)?;
         let ordinal = u32::try_from(texts.len())
             .ok()
             .and_then(|value| value.checked_add(1))

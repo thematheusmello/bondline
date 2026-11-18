@@ -86,6 +86,7 @@ enum CdxmlProfile {
     Canonical,
     Preserved,
     Caption,
+    Boxed,
 }
 
 #[derive(Clone, PartialEq)]
@@ -132,7 +133,7 @@ impl OriginalSource {
                 profile, baseline, ..
             } => match profile {
                 CdxmlProfile::Canonical => true,
-                CdxmlProfile::Opaque | CdxmlProfile::Caption => false,
+                CdxmlProfile::Opaque | CdxmlProfile::Caption | CdxmlProfile::Boxed => false,
                 CdxmlProfile::Preserved => {
                     Arc::ptr_eq(current, baseline)
                         || crate::cdxml::supports_delta(baseline, current)
@@ -199,6 +200,8 @@ impl StoredDocument {
             CdxmlProfile::Preserved
         } else if crate::cdxml::is_caption(&bytes, &model) {
             CdxmlProfile::Caption
+        } else if crate::cdxml::is_boxed(&bytes, &model) {
+            CdxmlProfile::Boxed
         } else {
             CdxmlProfile::Opaque
         };
@@ -387,9 +390,34 @@ impl StoredDocument {
             if Arc::ptr_eq(&self.model,baseline) || crate::cdxml::supports_caption_delta(baseline,&self.model))
     }
 
+    /// Closed source/model coverage for the box-positioned literal label workflow.
+    /// Full chemical authoring stays false; view/raster and final-edit guards still apply.
+    pub fn has_boxed_atom_labels(&self) -> bool {
+        match self.original.as_ref() {
+            None => crate::cdxml::boxed_model_supported(&self.model),
+            Some(OriginalSource::Cdxml {
+                profile: CdxmlProfile::Canonical,
+                baseline,
+                ..
+            }) => crate::cdxml::supports_boxed_delta(baseline, &self.model),
+            Some(OriginalSource::Cdxml {
+                profile: CdxmlProfile::Boxed,
+                baseline,
+                ..
+            }) => {
+                Arc::ptr_eq(&self.model, baseline)
+                    || crate::cdxml::supports_boxed_delta(baseline, &self.model)
+            }
+            _ => false,
+        }
+    }
+
     /// Source coverage to attempt display; scale, glyph and geometry checks still apply.
     pub fn has_display_projection(&self) -> bool {
-        self.is_fully_mapped() || self.has_smiles_projection() || self.has_caption_projection()
+        self.is_fully_mapped()
+            || self.has_smiles_projection()
+            || self.has_caption_projection()
+            || self.has_boxed_atom_labels()
     }
 
     pub fn source_info(&self) -> Option<SourceInfo> {
@@ -473,6 +501,15 @@ impl StoredDocument {
                     bytes,
                     baseline,
                 }) => Ok(Cow::Owned(crate::cdxml::write_caption_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Boxed,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_boxed_preserved(
                     bytes,
                     baseline,
                     &self.model,
@@ -597,7 +634,11 @@ impl StoredDocument {
                 (*transform, Some(headers), (page.id(), page.size()))
             }
             Some(OriginalSource::Cdxml {
-                profile: CdxmlProfile::Opaque | CdxmlProfile::Preserved | CdxmlProfile::Caption,
+                profile:
+                    CdxmlProfile::Opaque
+                    | CdxmlProfile::Preserved
+                    | CdxmlProfile::Caption
+                    | CdxmlProfile::Boxed,
                 ..
             }) => {
                 return Err(DocumentError::CrossFormatSource {

@@ -309,7 +309,7 @@ fn integer(node: Node<'_, '_>, name: &'static str) -> Result<Option<i64>, Mappin
         .transpose()
 }
 
-fn read_atom(node: Node<'_, '_>, id: AtomId) -> Result<Atom, MappingError> {
+pub(super) fn read_atom(node: Node<'_, '_>, id: AtomId) -> Result<Atom, MappingError> {
     if node
         .attribute("NodeType")
         .is_some_and(|kind| kind != "Element")
@@ -365,7 +365,7 @@ fn read_atom(node: Node<'_, '_>, id: AtomId) -> Result<Atom, MappingError> {
     Ok(atom)
 }
 
-fn read_double_position(value: Option<&str>) -> Result<DoublePosition, MappingError> {
+pub(super) fn read_double_position(value: Option<&str>) -> Result<DoublePosition, MappingError> {
     match value {
         None => Ok(DoublePosition::Unspecified),
         Some("Center") => Ok(DoublePosition::Center),
@@ -375,7 +375,7 @@ fn read_double_position(value: Option<&str>) -> Result<DoublePosition, MappingEr
     }
 }
 
-fn read_order(value: Option<&str>) -> Result<BondOrder, MappingError> {
+pub(super) fn read_order(value: Option<&str>) -> Result<BondOrder, MappingError> {
     let Some(value) = value else {
         return Ok(BondOrder::Single);
     };

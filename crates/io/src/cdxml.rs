@@ -1,10 +1,15 @@
 //! Source-backed CDXML projections; application document import remains separate.
 
 mod atom_text;
+mod boxed;
 mod caption;
 mod graph;
 mod preserved;
 mod write;
+pub(crate) use boxed::{
+    is_boxed, model_supported as boxed_model_supported, supports_delta as supports_boxed_delta,
+    write_preserved as write_boxed_preserved,
+};
 pub(crate) use caption::{
     is_caption, supports_delta as supports_caption_delta,
     write_preserved as write_caption_preserved,
