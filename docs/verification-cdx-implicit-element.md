@@ -60,3 +60,17 @@ Receipts are in `target/cdx-resources/next-text/implicit-element`.
 `ba036053b737a152047dfc2aab1d6df11e0f331973d0f7c44011e8cde1fe3b93`.
 The actual CLI's 49 registry entries retain SHA-256
 `3cfd51a6e72891137cf0cc56fd756ff33652cfc685e5aaf877634b259cc41e4f`.
+
+## Final local gate
+
+The exact source and tests at `20f3644` passed `cargo xtask ci` with the
+pinned `BONDLINE_PYTHON`. The workspace passed **2,254 tests** with no
+failures and one existing ignored case across 334 reports. AccessKit
+passed three tests. Fmt, warnings-denied Clippy, layers, runtime license
+closure, seven assets and the pinned eight-file corpus passed.
+The historical MCP listener failure remains unexplained.
+
+The 284,300-byte `ci.log` SHA-256 is
+`932aa7ff0895516937f3b36c0708ce9c43e01e4e7e5d834e832a30bb9eb113e0`.
+All owned execution jobs exited. The prepared desktop review was never
+launched. GitHub Actions remained disabled.

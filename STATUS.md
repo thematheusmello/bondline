@@ -253,6 +253,12 @@ The signed review stayed prepared during hardware activity. Live
 macOS input remains unverified. Evidence is in
 `target/cdx-resources/next-text/implicit-element`.
 
+[PR 11](https://github.com/thematheusmello/bondline/pull/11) carries
+reviewed producer `20f3644`. The final local gate passed **2,254/0/1**
+workspace tests and **3/0** AccessKit tests, including the new App case.
+Fmt, Clippy, layers, licenses, assets and corpus passed. All owned jobs
+exited and Actions stayed off.
+
 ### Next executable work
 
 1. Source-lock editing existing qualified CDX caption runs using the
@@ -261,6 +267,8 @@ macOS input remains unverified. Evidence is in
    including shifted start offsets, exact retained style words, unchanged
    peers and rejection of ambiguity and unsupported styles. Use scoped
    replacements, whole-page re-import and exact history/Save proofs.
+   Preserve the caption reader's stable TextId assignment by source ID and
+   encounter order separately from paint depth.
    Check the current command discovery description and actual adapters.
 2. Verify the current supported edit through actual macOS input when the
    desktop is idle. Continue broader M1 styles, captions, source edits and
