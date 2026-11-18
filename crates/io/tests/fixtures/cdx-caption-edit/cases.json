@@ -1,0 +1,1853 @@
+{
+  "font_sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+  "cases": {
+    "single_grow": {
+      "before": "single_before.cdx",
+      "after": "single_after.cdx",
+      "params": {
+        "page_id": 1,
+        "text_id": 1,
+        "run_index": 0,
+        "text": "Bondline λ notes"
+      },
+      "before_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "after_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline λ notes",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source": {
+        "framing": "ImplicitDocument",
+        "before_sha256": "05b1a1c45dbd11611223a5907c17986eea5f675008c71e6b2116c508bc5699c5",
+        "after_sha256": "b98f37df74fe244a216dd4b2cead9a0c9604c7e71a6a9f53fce22c640bca5b07",
+        "record_count": 12,
+        "order": {
+          "page_source_id": 90,
+          "encounter": [
+            {
+              "record": 5,
+              "source_id": 73,
+              "text_id": 1,
+              "depth": null
+            }
+          ],
+          "source_id_order": [
+            1
+          ],
+          "paint_order": [
+            1
+          ]
+        },
+        "owner_record": 5,
+        "owner_source_id": 73,
+        "text_property_record": 8,
+        "before_range": [
+          122,
+          150
+        ],
+        "after_range": [
+          122,
+          155
+        ],
+        "before_encoding": "extended",
+        "after_encoding": "short",
+        "run_count_hex": "0100",
+        "before_starts": [
+          0
+        ],
+        "after_starts": [
+          0
+        ],
+        "style_hex": [
+          "00000000f0000000"
+        ],
+        "before_record_hex": "0007ffff140000000100000000000000f0000000426f6e646c696e65",
+        "after_record_hex": "00071d000100000000000000f0000000426f6e646c696e6520cebb206e6f746573"
+      },
+      "before_ink": [
+        {
+          "text_id": 1,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 80.25,
+              "end_x_pt": 126.755859375,
+              "bounds_pt": [
+                81.240234375,
+                91.75,
+                126.322265625,
+                100.8671875
+              ]
+            }
+          ]
+        }
+      ],
+      "after_ink": [
+        {
+          "text_id": 1,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 80.25,
+              "end_x_pt": 169.271484375,
+              "bounds_pt": [
+                81.240234375,
+                91.75,
+                168.6796875,
+                100.8671875
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "multi_shift": {
+      "before": "multi_before.cdx",
+      "after": "multi_after.cdx",
+      "params": {
+        "page_id": 1,
+        "text_id": 2,
+        "run_index": 0,
+        "text": "AVAV"
+      },
+      "before_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 248.0,
+                  "y_pt": 176.25
+                },
+                "runs": [
+                  {
+                    "text": "AV2",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.6,
+                        0.2
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "position": {
+                  "x_pt": 120.0,
+                  "y_pt": 228.0
+                },
+                "runs": [
+                  {
+                    "text": "AV",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 24.0,
+                      "face": 0,
+                      "rgb": [
+                        0.2,
+                        0.4,
+                        0.8
+                      ]
+                    }
+                  },
+                  {
+                    "text": " ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 16.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "λΩé",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 32.0,
+                      "face": 0,
+                      "rgb": [
+                        0.8,
+                        0.2,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "after_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 248.0,
+                  "y_pt": 176.25
+                },
+                "runs": [
+                  {
+                    "text": "AV2",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.6,
+                        0.2
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "position": {
+                  "x_pt": 120.0,
+                  "y_pt": 228.0
+                },
+                "runs": [
+                  {
+                    "text": "AVAV",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 24.0,
+                      "face": 0,
+                      "rgb": [
+                        0.2,
+                        0.4,
+                        0.8
+                      ]
+                    }
+                  },
+                  {
+                    "text": " ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 16.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "λΩé",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 32.0,
+                      "face": 0,
+                      "rgb": [
+                        0.8,
+                        0.2,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source": {
+        "framing": "ExplicitDocumentFileEnd",
+        "before_sha256": "4a31a7bb94bbefb504f075bbfddd2042847b4511150cf5406613f66e38c971c7",
+        "after_sha256": "b927c2390349ba8d2313bf161565f81a9e31f667b536cd375d607024576d9139",
+        "record_count": 34,
+        "order": {
+          "page_source_id": 55,
+          "encounter": [
+            {
+              "record": 5,
+              "source_id": 91,
+              "text_id": 4,
+              "depth": 4
+            },
+            {
+              "record": 11,
+              "source_id": 0,
+              "text_id": 1,
+              "depth": -20
+            },
+            {
+              "record": 17,
+              "source_id": 17,
+              "text_id": 3,
+              "depth": -5
+            },
+            {
+              "record": 23,
+              "source_id": 0,
+              "text_id": 2,
+              "depth": 17
+            }
+          ],
+          "source_id_order": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "paint_order": [
+            1,
+            3,
+            4,
+            2
+          ]
+        },
+        "owner_record": 23,
+        "owner_source_id": 0,
+        "text_property_record": 25,
+        "before_range": [
+          223,
+          272
+        ],
+        "after_range": [
+          223,
+          270
+        ],
+        "before_encoding": "extended",
+        "after_encoding": "short",
+        "run_count_hex": "0300",
+        "before_starts": [
+          0,
+          2,
+          3
+        ],
+        "after_starts": [
+          0,
+          4,
+          5
+        ],
+        "style_hex": [
+          "00000000e0010300",
+          "0100000040010000",
+          "0000000080020400"
+        ],
+        "before_record_hex": "0007ffff290000000300000000000000e00103000200010000004001000003000000000080020400415620cebbcea9c3a9",
+        "after_record_hex": "00072b000300000000000000e001030004000100000040010000050000000000800204004156415620cebbcea9c3a9"
+      },
+      "before_ink": [
+        {
+          "text_id": 1,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 248.0,
+              "end_x_pt": 269.69140625,
+              "bounds_pt": [
+                248.1640625,
+                167.6015625,
+                269.251953125,
+                176.25
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 3,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 4,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                153,
+                51
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 2,
+          "runs": [
+            {
+              "rgb8": [
+                51,
+                102,
+                204
+              ],
+              "start_x_pt": 120.0,
+              "end_x_pt": 149.90625,
+              "bounds_pt": [
+                120.328125,
+                210.9375,
+                149.6015625,
+                228.0
+              ]
+            },
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 149.90625,
+              "end_x_pt": 153.8671875,
+              "bounds_pt": null
+            },
+            {
+              "rgb8": [
+                204,
+                51,
+                0
+              ],
+              "start_x_pt": 153.8671875,
+              "end_x_pt": 209.8203125,
+              "bounds_pt": [
+                154.4453125,
+                204.0,
+                208.6640625,
+                228.3125
+              ]
+            }
+          ]
+        }
+      ],
+      "after_ink": [
+        {
+          "text_id": 1,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 248.0,
+              "end_x_pt": 269.69140625,
+              "bounds_pt": [
+                248.1640625,
+                167.6015625,
+                269.251953125,
+                176.25
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 3,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 4,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                153,
+                51
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 2,
+          "runs": [
+            {
+              "rgb8": [
+                51,
+                102,
+                204
+              ],
+              "start_x_pt": 120.0,
+              "end_x_pt": 178.93359375,
+              "bounds_pt": [
+                120.328125,
+                210.9375,
+                178.62890625,
+                228.0
+              ]
+            },
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 178.93359375,
+              "end_x_pt": 182.89453125,
+              "bounds_pt": null
+            },
+            {
+              "rgb8": [
+                204,
+                51,
+                0
+              ],
+              "start_x_pt": 182.89453125,
+              "end_x_pt": 238.84765625,
+              "bounds_pt": [
+                183.47265625,
+                204.0,
+                237.69140625,
+                228.3125
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "tail_unicode": {
+      "before": "multi_before.cdx",
+      "after": "tail_after.cdx",
+      "params": {
+        "page_id": 1,
+        "text_id": 2,
+        "run_index": 2,
+        "text": "λéπΩ"
+      },
+      "before_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 248.0,
+                  "y_pt": 176.25
+                },
+                "runs": [
+                  {
+                    "text": "AV2",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.6,
+                        0.2
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "position": {
+                  "x_pt": 120.0,
+                  "y_pt": 228.0
+                },
+                "runs": [
+                  {
+                    "text": "AV",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 24.0,
+                      "face": 0,
+                      "rgb": [
+                        0.2,
+                        0.4,
+                        0.8
+                      ]
+                    }
+                  },
+                  {
+                    "text": " ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 16.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "λΩé",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 32.0,
+                      "face": 0,
+                      "rgb": [
+                        0.8,
+                        0.2,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "after_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 248.0,
+                  "y_pt": 176.25
+                },
+                "runs": [
+                  {
+                    "text": "AV2",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.6,
+                        0.2
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "position": {
+                  "x_pt": 120.0,
+                  "y_pt": 228.0
+                },
+                "runs": [
+                  {
+                    "text": "AV",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 24.0,
+                      "face": 0,
+                      "rgb": [
+                        0.2,
+                        0.4,
+                        0.8
+                      ]
+                    }
+                  },
+                  {
+                    "text": " ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 16.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "λéπΩ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 32.0,
+                      "face": 0,
+                      "rgb": [
+                        0.8,
+                        0.2,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source": {
+        "framing": "ExplicitDocumentFileEnd",
+        "before_sha256": "4a31a7bb94bbefb504f075bbfddd2042847b4511150cf5406613f66e38c971c7",
+        "after_sha256": "94e6d7684f2fd5e67a0f941e57ec3e3968950b40168285b85a74b2b41a8490e0",
+        "record_count": 34,
+        "order": {
+          "page_source_id": 55,
+          "encounter": [
+            {
+              "record": 5,
+              "source_id": 91,
+              "text_id": 4,
+              "depth": 4
+            },
+            {
+              "record": 11,
+              "source_id": 0,
+              "text_id": 1,
+              "depth": -20
+            },
+            {
+              "record": 17,
+              "source_id": 17,
+              "text_id": 3,
+              "depth": -5
+            },
+            {
+              "record": 23,
+              "source_id": 0,
+              "text_id": 2,
+              "depth": 17
+            }
+          ],
+          "source_id_order": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "paint_order": [
+            1,
+            3,
+            4,
+            2
+          ]
+        },
+        "owner_record": 23,
+        "owner_source_id": 0,
+        "text_property_record": 25,
+        "before_range": [
+          223,
+          272
+        ],
+        "after_range": [
+          223,
+          270
+        ],
+        "before_encoding": "extended",
+        "after_encoding": "short",
+        "run_count_hex": "0300",
+        "before_starts": [
+          0,
+          2,
+          3
+        ],
+        "after_starts": [
+          0,
+          2,
+          3
+        ],
+        "style_hex": [
+          "00000000e0010300",
+          "0100000040010000",
+          "0000000080020400"
+        ],
+        "before_record_hex": "0007ffff290000000300000000000000e00103000200010000004001000003000000000080020400415620cebbcea9c3a9",
+        "after_record_hex": "00072b000300000000000000e00103000200010000004001000003000000000080020400415620cebbc3a9cf80cea9"
+      },
+      "before_ink": [
+        {
+          "text_id": 1,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 248.0,
+              "end_x_pt": 269.69140625,
+              "bounds_pt": [
+                248.1640625,
+                167.6015625,
+                269.251953125,
+                176.25
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 3,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 4,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                153,
+                51
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 2,
+          "runs": [
+            {
+              "rgb8": [
+                51,
+                102,
+                204
+              ],
+              "start_x_pt": 120.0,
+              "end_x_pt": 149.90625,
+              "bounds_pt": [
+                120.328125,
+                210.9375,
+                149.6015625,
+                228.0
+              ]
+            },
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 149.90625,
+              "end_x_pt": 153.8671875,
+              "bounds_pt": null
+            },
+            {
+              "rgb8": [
+                204,
+                51,
+                0
+              ],
+              "start_x_pt": 153.8671875,
+              "end_x_pt": 209.8203125,
+              "bounds_pt": [
+                154.4453125,
+                204.0,
+                208.6640625,
+                228.3125
+              ]
+            }
+          ]
+        }
+      ],
+      "after_ink": [
+        {
+          "text_id": 1,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 248.0,
+              "end_x_pt": 269.69140625,
+              "bounds_pt": [
+                248.1640625,
+                167.6015625,
+                269.251953125,
+                176.25
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 3,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 4,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                153,
+                51
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 2,
+          "runs": [
+            {
+              "rgb8": [
+                51,
+                102,
+                204
+              ],
+              "start_x_pt": 120.0,
+              "end_x_pt": 149.90625,
+              "bounds_pt": [
+                120.328125,
+                210.9375,
+                149.6015625,
+                228.0
+              ]
+            },
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 149.90625,
+              "end_x_pt": 153.8671875,
+              "bounds_pt": null
+            },
+            {
+              "rgb8": [
+                204,
+                51,
+                0
+              ],
+              "start_x_pt": 153.8671875,
+              "end_x_pt": 228.8828125,
+              "bounds_pt": [
+                154.4453125,
+                204.0,
+                226.7734375,
+                228.3125
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "multi_shrink": {
+      "before": "multi_before.cdx",
+      "after": "shrink_after.cdx",
+      "params": {
+        "page_id": 1,
+        "text_id": 2,
+        "run_index": 0,
+        "text": "V"
+      },
+      "before_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 248.0,
+                  "y_pt": 176.25
+                },
+                "runs": [
+                  {
+                    "text": "AV2",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.6,
+                        0.2
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "position": {
+                  "x_pt": 120.0,
+                  "y_pt": 228.0
+                },
+                "runs": [
+                  {
+                    "text": "AV",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 24.0,
+                      "face": 0,
+                      "rgb": [
+                        0.2,
+                        0.4,
+                        0.8
+                      ]
+                    }
+                  },
+                  {
+                    "text": " ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 16.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "λΩé",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 32.0,
+                      "face": 0,
+                      "rgb": [
+                        0.8,
+                        0.2,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "after_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 248.0,
+                  "y_pt": 176.25
+                },
+                "runs": [
+                  {
+                    "text": "AV2",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "position": {
+                  "x_pt": 96.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.6,
+                        0.2
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "position": {
+                  "x_pt": 120.0,
+                  "y_pt": 228.0
+                },
+                "runs": [
+                  {
+                    "text": "V",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 24.0,
+                      "face": 0,
+                      "rgb": [
+                        0.2,
+                        0.4,
+                        0.8
+                      ]
+                    }
+                  },
+                  {
+                    "text": " ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 16.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "λΩé",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 32.0,
+                      "face": 0,
+                      "rgb": [
+                        0.8,
+                        0.2,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source": {
+        "framing": "ExplicitDocumentFileEnd",
+        "before_sha256": "4a31a7bb94bbefb504f075bbfddd2042847b4511150cf5406613f66e38c971c7",
+        "after_sha256": "1d500fbf31d8ea14bb55d5812b370bb1764f56fb6c296b78a488801d0472d06d",
+        "record_count": 34,
+        "order": {
+          "page_source_id": 55,
+          "encounter": [
+            {
+              "record": 5,
+              "source_id": 91,
+              "text_id": 4,
+              "depth": 4
+            },
+            {
+              "record": 11,
+              "source_id": 0,
+              "text_id": 1,
+              "depth": -20
+            },
+            {
+              "record": 17,
+              "source_id": 17,
+              "text_id": 3,
+              "depth": -5
+            },
+            {
+              "record": 23,
+              "source_id": 0,
+              "text_id": 2,
+              "depth": 17
+            }
+          ],
+          "source_id_order": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "paint_order": [
+            1,
+            3,
+            4,
+            2
+          ]
+        },
+        "owner_record": 23,
+        "owner_source_id": 0,
+        "text_property_record": 25,
+        "before_range": [
+          223,
+          272
+        ],
+        "after_range": [
+          223,
+          267
+        ],
+        "before_encoding": "extended",
+        "after_encoding": "short",
+        "run_count_hex": "0300",
+        "before_starts": [
+          0,
+          2,
+          3
+        ],
+        "after_starts": [
+          0,
+          1,
+          2
+        ],
+        "style_hex": [
+          "00000000e0010300",
+          "0100000040010000",
+          "0000000080020400"
+        ],
+        "before_record_hex": "0007ffff290000000300000000000000e00103000200010000004001000003000000000080020400415620cebbcea9c3a9",
+        "after_record_hex": "000728000300000000000000e001030001000100000040010000020000000000800204005620cebbcea9c3a9"
+      },
+      "before_ink": [
+        {
+          "text_id": 1,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 248.0,
+              "end_x_pt": 269.69140625,
+              "bounds_pt": [
+                248.1640625,
+                167.6015625,
+                269.251953125,
+                176.25
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 3,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 4,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                153,
+                51
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 2,
+          "runs": [
+            {
+              "rgb8": [
+                51,
+                102,
+                204
+              ],
+              "start_x_pt": 120.0,
+              "end_x_pt": 149.90625,
+              "bounds_pt": [
+                120.328125,
+                210.9375,
+                149.6015625,
+                228.0
+              ]
+            },
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 149.90625,
+              "end_x_pt": 153.8671875,
+              "bounds_pt": null
+            },
+            {
+              "rgb8": [
+                204,
+                51,
+                0
+              ],
+              "start_x_pt": 153.8671875,
+              "end_x_pt": 209.8203125,
+              "bounds_pt": [
+                154.4453125,
+                204.0,
+                208.6640625,
+                228.3125
+              ]
+            }
+          ]
+        }
+      ],
+      "after_ink": [
+        {
+          "text_id": 1,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 248.0,
+              "end_x_pt": 269.69140625,
+              "bounds_pt": [
+                248.1640625,
+                167.6015625,
+                269.251953125,
+                176.25
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 3,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 4,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                153,
+                51
+              ],
+              "start_x_pt": 96.25,
+              "end_x_pt": 104.8046875,
+              "bounds_pt": [
+                97.240234375,
+                92.21875,
+                103.796875,
+                100.75
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 2,
+          "runs": [
+            {
+              "rgb8": [
+                51,
+                102,
+                204
+              ],
+              "start_x_pt": 120.0,
+              "end_x_pt": 135.26953125,
+              "bounds_pt": [
+                120.328125,
+                210.9375,
+                134.96484375,
+                228.0
+              ]
+            },
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 135.26953125,
+              "end_x_pt": 139.23046875,
+              "bounds_pt": null
+            },
+            {
+              "rgb8": [
+                204,
+                51,
+                0
+              ],
+              "start_x_pt": 139.23046875,
+              "end_x_pt": 195.18359375,
+              "bounds_pt": [
+                139.80859375,
+                204.0,
+                194.02734375,
+                228.3125
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
