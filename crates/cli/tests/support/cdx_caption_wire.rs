@@ -168,3 +168,40 @@ fn ordered_caption_cli_renders_the_same_stack_on_cpu_and_gpu() -> TestResult {
     }
     Ok(())
 }
+
+#[test]
+fn explicit_caption_runs_share_the_real_cli_render_and_exact_save_paths() -> TestResult {
+    let directory = support::SdfTestDirectory::new()?;
+    let input = directory.path("styled-原-λ.cdx");
+    let output = directory.path("styled-再開-β.cdx");
+    let raw = include_bytes!("../../../io/tests/fixtures/cdx-caption/runs/mixed_runs.cdx");
+    fs::write(&input, raw)?;
+    let manifest: Value = serde_json::from_str(include_str!(
+        "../../../io/tests/fixtures/cdx-caption/runs/cases.json"
+    ))?;
+    let model = &manifest["cases"]["mixed_runs"]["model"];
+    let open = request("document.open_cdx", json!({"path":input}));
+    let cpu = cli(&[open.clone(), request("render.capture", capture())])?;
+    let mut gpu = capture();
+    gpu["backend"] = json!("gpu");
+    let metal_or_native_gpu = cli(&[open.clone(), request("render.capture", gpu)])?;
+    let image = &cpu["capture"]["png_base64"];
+    assert!(image.as_str().is_some_and(|png| !png.is_empty()));
+    assert_eq!(&cpu["document"], model);
+    assert_eq!(&metal_or_native_gpu["document"], model);
+    assert_eq!(&metal_or_native_gpu["capture"]["png_base64"], image);
+    assert_eq!(metal_or_native_gpu["capture"]["backend"], "gpu");
+
+    let reopened = cli(&[
+        open,
+        request("document.save_cdx", json!({"path":output})),
+        request("document.open_cdx", json!({"path":output})),
+        request("render.capture", capture()),
+    ])?;
+    assert_eq!(fs::read(&output)?, raw);
+    assert_eq!(&reopened["document"], model);
+    assert_eq!(&reopened["capture"]["png_base64"], image);
+    assert_eq!(reopened["file"]["dirty"], false);
+    assert_eq!(reopened["undo_depth"], 0);
+    Ok(())
+}

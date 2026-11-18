@@ -79,6 +79,10 @@ fn unsupported_caption_profiles_reproduce_every_legacy_refusal() -> Result {
             continue;
         }
         let name = case["name"].as_str().ok_or("missing source name")?;
+        if name == "two_runs" {
+            // The unchanged fixture has a stronger model and pixel test in cdx_caption_runs.
+            continue;
+        }
         let bytes = raw(name)?;
         let syntax = bondline_cdx::Document::parse(&bytes)?;
         assert_eq!(syntax.to_bytes(), bytes.as_ref(), "{name}");
@@ -93,7 +97,7 @@ fn unsupported_caption_profiles_reproduce_every_legacy_refusal() -> Result {
         );
         refused += 1;
     }
-    assert_eq!(refused, 63);
+    assert_eq!(refused, 62);
     Ok(())
 }
 

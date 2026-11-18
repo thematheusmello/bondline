@@ -299,7 +299,32 @@ fuzz_target!(|data: &[u8]| {
             .count();
         assert!(source_texts > 0);
         assert_eq!(page.texts().len(), source_texts);
-        assert!(page.texts().iter().all(|text| text.runs().len() == 1));
+        let mut original: Vec<_> = document
+            .records()
+            .iter()
+            .filter(|record| matches!(record.kind(), RecordKind::Property { tag: 0x0700, .. }))
+            .map(|record| {
+                let value = document.string(record).unwrap();
+                let starts: Vec<_> = value.runs().map(|run| usize::from(run.start())).collect();
+                (value.text_bytes().to_vec(), starts)
+            })
+            .collect();
+        let mut projected: Vec<_> = page
+            .texts()
+            .iter()
+            .map(|text| {
+                let mut bytes = Vec::new();
+                let mut starts = Vec::new();
+                for run in text.runs() {
+                    starts.push(bytes.len());
+                    bytes.extend_from_slice(run.text().as_bytes());
+                }
+                (bytes, starts)
+            })
+            .collect();
+        original.sort_unstable();
+        projected.sort_unstable();
+        assert_eq!(original, projected);
         let page_id = page.id();
         // One point changes the validated positive extent even if the source uses A4.
         let changed =

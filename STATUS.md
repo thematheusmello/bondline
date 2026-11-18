@@ -4,7 +4,9 @@ The full M0–M5 goal is **active**. Verified delivery lands into `main`.
 [PR 5](https://github.com/thematheusmello/bondline/pull/5) landed direct-Page CDX
 caption preview at `9f27fe9`. Its merge tree matches the reviewed tip `dbb821e`.
 The remote feature ref was retired after the ancestry check.
-Ordered captions build on that tree in `feat/cdx-caption-order`. The native/GPU license
+[PR 6](https://github.com/thematheusmello/bondline/pull/6) landed ordered captions
+at `a13a0f4`. The tree matches `7ed63cc` and its merged ref is retired.
+`feat/cdx-caption-runs` starts from that main revision. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
 commit as the user requires. The user now expressly authorizes merging completed feature
@@ -136,11 +138,30 @@ library type-checks on Windows MSVC, Linux GNU and WebAssembly. Runtime
 verification on those platforms remains open. Registry 49 stays byte-exact.
 All ordered-caption execution jobs are terminal.
 
+### Multiple explicit CDX caption runs
+
+The [explicit run increment](docs/verification-cdx-caption-runs.md) keeps
+resolved styles and unambiguous starts in one Text. It preserves blank runs,
+colours, sizes and supported Unicode tails. Shared page budgets apply before
+run allocations, and unresolved joins leave the older Open refusal intact.
+The original `two_runs.cdx` has stronger model, pixel and source tests.
+
+Actual CLI, initialized stdio MCP, independent FreeType and the isolated
+macOS app pass the read-only preview and exact Unicode Save/reopen workflow.
+The native ambiguous-offset refusal preserves the active file. The owned app
+has exited. ASan passed 10,000 runs with 117 original seeds. Registry 49
+remains byte-identical. The full local gate passed **2,223/0/1** plus **3/0**
+AccessKit tests and all local checks. The IO crate type-checks on Linux,
+Windows and WebAssembly. Other runtime platforms, broader typography and CDX
+authoring remain open. Evidence is in
+`target/cdx-resources/next-text/caption-runs.aTZunB`. All owned jobs are terminal.
+
 ### Next executable work
 
-1. Source-lock multiple explicit CDXString runs, including unambiguous start
-   offsets and glyph layout at run boundaries. Continue child labels and
-   editable source from public evidence.
+1. Source-lock CDX Node child Text projection into the existing owned
+   AtomLabel model. Preserve both authored text and numeric fields, and freeze
+   independent owner, resource and precedence witnesses. Grant display only
+   with separate placement and label agreement evidence.
 2. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 

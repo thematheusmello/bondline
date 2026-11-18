@@ -59,3 +59,26 @@ diff -r crates/io/tests/fixtures/cdx-caption/ordered "$output/ordered"
 ```
 
 Ordered manifest SHA-256 is `d277c5394a84d043ad6d5b8a9595157e221a74873f04f44e4b7e299e93130adb`.
+
+## Multiple style runs
+
+[Run witnesses](runs/cases.json) record 25 independent originals, five proposed
+models and twenty exact legacy refusals. The previously frozen `two_runs.cdx`
+keeps its bytes and gains a complete positive expectation. All other cases use
+new original binaries. The generator uses Python struct and the independent
+resource reader. FontTools 4.61.1 checks the named, licensed Roboto asset's
+ligature and pair data. In particular, its space–T join adjusts by −40 font
+units and belongs with the refusals.
+
+```sh
+output=$(mktemp -d)
+python3 -B crates/io/tests/fixtures/cdx-caption/generate_runs.py \
+  --font assets/fonts/Roboto-Regular.ttf --output-dir "$output/runs" \
+  --baseline-cli /path/to/pre-run/bondline-cli
+diff -r crates/io/tests/fixtures/cdx-caption/runs "$output/runs"
+```
+
+Run manifest SHA-256 is `a86575f1fd873283433d931f366e579029a176c846ea1faa554cb6f06805a8dd`.
+The final manifest expresses point sizes as JSON floats to match the public
+model field type. The numeric values, original bytes and other facts agree
+with the initial frozen manifest.
