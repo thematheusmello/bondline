@@ -11,6 +11,8 @@
 /crates/cdx/tests/fixtures/raw-strings/data/*.json -text
 /crates/io/tests/fixtures/cdx/metadata-explicit.cdx -text
 /crates/io/tests/fixtures/cdx/metadata-header.cdx -text
+/crates/io/tests/fixtures/cdx-caption/*.cdx -text
+/crates/io/tests/fixtures/cdx-caption/*.json -text
 /crates/io/tests/fixtures/mol/*.mol -text
 /crates/io/tests/fixtures/v3000/*.mol -text
 /crates/io/tests/fixtures/sdf/*.sdf -text

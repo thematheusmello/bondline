@@ -1,5 +1,12 @@
 # Clean-room source register
 
+The [direct-Page CDX caption contract](../research/cdx-caption-preview.md) records the
+published Text/position/Poster/font/style definitions, selected code page and white
+paper checks for a bounded read-only preview. It uses exact contained fields and an
+explicit left baseline. The 75 original witnesses preserve complete record facts.
+They distinguish independently sourced projection expectations from actual legacy
+Open errors. The contract precedes the application producer.
+
 The [raw CDXString contract](../research/cdx-string.md) follows the public
 [datatype](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXString.htm),
 [binary framing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm) and

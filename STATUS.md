@@ -1,8 +1,8 @@
 # Status — 2026-11-18
 
 The full M0–M5 goal is **active after the user resumed it**. Verified delivery lands
-into `main`. The current raw CDXString work is based on merged main `b9527ab`
-on `feat/cdx-string`.
+into `main`. Caption preview work follows merged main `6565e58` on
+`feat/cdx-caption-preview`.
 Its scope is unchanged. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
@@ -57,8 +57,8 @@ resource worktree remains recoverable. GitHub Actions is off.
 
 ### Verified raw CDXString data
 
-The [raw string reader](docs/verification-cdx-string.md) is implemented on
-`feat/cdx-string`, based on the resources merge. Raw property handles, UINT16
+The [raw string reader](docs/verification-cdx-string.md) landed through
+[PR 4](https://github.com/thematheusmello/bondline/pull/4) at `6565e58`. Raw property handles, UINT16
 run fields and text bytes stay exact. An independent 32-source oracle checks all
 five envelopes, 131,070 maximum-count entries, long text and invalid prefixes
 confined to their own property. The API compiler probe preceded the four passing
@@ -73,15 +73,15 @@ reproducible recipe, fixture hashes and logs at
 production paths are unchanged for this standalone increment.
 Standalone 51/0 and parser-library cross-checks for Windows MSVC, Linux GNU and
 WebAssembly passed. App execution remains unverified there.
+The resource and string feature branches are merged and their remote refs retired.
+The prototype worktrees and user apps remain preserved.
 
 ### Next executable work
 
-1. Finish the direct-Page read-only caption contract using
-   `target/cdx-resources/next-text/caption-contract-draft.md` and the independent
-   witnesses under `caption-fixtures` in the same directory. The actual legacy CLI
-   refused all 75 current candidates with `unsupported_content`; exact details,
-   including the 12 planned positives, are frozen in `caption-baseline.json`
-   (SHA-256 `55862eaea4c6e50cfbe4aea815233ba48f16d87805a4d0755b3c6faba4a45910`).
+1. Follow the [direct-Page read-only caption contract](docs/research/cdx-caption-preview.md)
+   and [frozen independent witnesses](crates/io/tests/fixtures/cdx-caption/SOURCES.md).
+   The actual legacy CLI refused all 75 candidates with `unsupported_content`.
+   The fixture directory records exact errors and the 12 independent positive models.
 2. Freeze an existing-API runtime Open/capture RED, then implement the separate
    CDX display proof with explicit Page/font/colour/baseline and complete source
    guards. Use the existing shared scene and leave CDXML caption edits and
