@@ -1,0 +1,756 @@
+{
+  "manifest_sha256": "a9a7d7b429312ebe488f7efcc1b0345e4c0cf656c1bb180446014ff4b7aa6fc0",
+  "cli_sha256": "20ea3eb8746e55b4642f08cdab94017c7ed307f0ff00c24ad2bc075706de15c2",
+  "cases": [
+    {
+      "name": "caption_ascii",
+      "preview_candidate": true,
+      "sha256": "6e94388187d08ba852e7058938e2414c0f19cf1c0a42f168884e1610a4dd8660",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_ascii_explicit",
+      "preview_candidate": true,
+      "sha256": "31a26e5bb5a5ca764bb4a9bc29d99cc37ac6b3c287685e197a129f6d2ddf8bd2",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_ascii_header",
+      "preview_candidate": true,
+      "sha256": "71c6fef11a57018033eafd010b2f6e07b7ac1d5314d5e6856c6a8d5a777b28c0",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_ascii_implicit_file_end",
+      "preview_candidate": true,
+      "sha256": "43753f2f138384ff67f2195c9907a85982517110ef5e7f6356db7ddbd888ba89",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_ascii_explicit_file_end",
+      "preview_candidate": true,
+      "sha256": "a0755117b048799aa7e90f77dad102c8d0432845ca85070c1228b4d130ec27b6",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_extended",
+      "preview_candidate": true,
+      "sha256": "05b1a1c45dbd11611223a5907c17986eea5f675008c71e6b2116c508bc5699c5",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_fractional",
+      "preview_candidate": true,
+      "sha256": "1c8ba87ed3c947c60e6b4ef97bb0512891973d5a724b1d81b29352934e151a5b",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_greek",
+      "preview_candidate": true,
+      "sha256": "2c194b7155797bbd0c3669f2cab006bbba58d7ad817feb5a973cc3816bee476a",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_short_white",
+      "preview_candidate": true,
+      "sha256": "37159e5b897a5205267614d4fcf4e3ba155f7960561fa6427b1ecfaff28a2ea8",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_rgb16",
+      "preview_candidate": true,
+      "sha256": "6cb0f22e15ec4b0fbc0aab277d811637480e12db6c6cc51bc35018b507c81f25",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_font_one",
+      "preview_candidate": true,
+      "sha256": "b3fc1915d357d7966561a1873248ba2d8a2d6810a0d995b2b6dd4946295f869b",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "caption_shifted",
+      "preview_candidate": true,
+      "sha256": "6545e65511c5b20117c8146bbbdd922d88f79af462ae5a174256615aecf24082",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "missing_font_table",
+      "preview_candidate": false,
+      "sha256": "b05fc76f479b6ce5e8ba1b8f80ca78781add89ef6ada571e3d4e12d670fa2a90",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 4",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_ordinal_only",
+      "preview_candidate": false,
+      "sha256": "ae3944bc4432cbce28139aaf34af71ccc051d375ec2de57f67a868a4b71a8a96",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_id_only",
+      "preview_candidate": false,
+      "sha256": "9920e8f78cc5faabe404eda8d38186d0eef31515f640c33a85b58659e74403ed",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_max_id_only",
+      "preview_candidate": false,
+      "sha256": "2368df2592c612fc17fe0ac0a3d63a7a04bcf291761003ac6766124090bbe33f",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_unknown_charset",
+      "preview_candidate": false,
+      "sha256": "25154c1ff093afeba66007d57a5ee8f3bbeac8f2799b68fde9049567c4251fa4",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_other_charset",
+      "preview_candidate": false,
+      "sha256": "50c0b50c20f4853ba078c3395fcb0751a5e111b87911002b0bf5937367649075",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_other_family",
+      "preview_candidate": false,
+      "sha256": "6e71fcff61d169454497458c6c12dcc2ec55f2c17837d75ad3572422e6a5ff96",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_nul_name",
+      "preview_candidate": false,
+      "sha256": "753f9cb35d90792fc3c2ef8bb7c4058f44e0d1dedab65789650ce0689619bb88",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_nonutf8_name",
+      "preview_candidate": false,
+      "sha256": "08c98008c88e0160ffbd2051270919e694364cb56f2fcba03bc33f48413e77f4",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_platform0",
+      "preview_candidate": false,
+      "sha256": "d5da2eb8124ba05c688b8c32fde6d0b76069821550b55aafde48ff8ff2ed58e3",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_duplicate_id",
+      "preview_candidate": false,
+      "sha256": "07a1cfcaf63d8a4a6a69fb15245f7a00c69dbd3efbe0248e8e38435af9c16725",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "font_wrong_owner",
+      "preview_candidate": false,
+      "sha256": "73252e4f2537336a2bbe0c72e798d977289d7a7faa20fed2f33395812351c0e9",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 4",
+        "exit": 2
+      }
+    },
+    {
+      "name": "palette_empty",
+      "preview_candidate": false,
+      "sha256": "d0c9ed24514281a40f16cb242e29e4b27ddead995801f661e84dc4d5c65c6771",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "palette_nonwhite2",
+      "preview_candidate": false,
+      "sha256": "6d178a1640a3e34f525f98ebf04255af57c35e7a72a9f01e2d96c5a338514f27",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "palette_missing_ink3",
+      "preview_candidate": false,
+      "sha256": "5a3b3a4bb210eb599f7b6154a4c5df6bbf14441cacf8f3173a4189cf161dc879",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "missing_poster",
+      "preview_candidate": false,
+      "sha256": "f865d250c47253f813f6013d4fb9846d50ee70334030970da13b9be9f9bab84b",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 4",
+        "exit": 2
+      }
+    },
+    {
+      "name": "drawing_pages",
+      "preview_candidate": false,
+      "sha256": "d836e9aaf9e44b8e50fa15b9a98e47330a3257f937e5724c0c7979701833cf0c",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "missing_width",
+      "preview_candidate": false,
+      "sha256": "6fd177554d12513454bb085b8021715f4f37ece4d0308a67a7f8440bc3dd4ce5",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 4",
+        "exit": 2
+      }
+    },
+    {
+      "name": "width_wrong_size",
+      "preview_candidate": false,
+      "sha256": "b44a1ff7d479c4b2f4ec4a7bb137a2ee83635aeb0191320738fba099d7238aba",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "width_zero",
+      "preview_candidate": false,
+      "sha256": "c5e159d9bdd6d3684442c5ba67654c5d28cf5942c6cb24bb9ccaaa08b8f68dbf",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "width_negative",
+      "preview_candidate": false,
+      "sha256": "b1072bf1ddc1d5d9260ecae89221b061410cf7c2eb91173087ce7b0d411a4531",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "width_wrong_owner",
+      "preview_candidate": false,
+      "sha256": "c4d9b334663c3cc4fa9e059102f10bae1298e8cc764e6a2c92c9f2ce4a8bb4f1",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 4",
+        "exit": 2
+      }
+    },
+    {
+      "name": "missing_position",
+      "preview_candidate": false,
+      "sha256": "a80812edf7f3ac65a814531811cff3a4ea5fb237bab705bfda2598f93a1e6a4b",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "position_wrong_size",
+      "preview_candidate": false,
+      "sha256": "49d1f85330d92eacbd4e132f6cecc0c76a0cc124ff6eb2dee5f9f3d813b0488c",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "position_wrong_owner",
+      "preview_candidate": false,
+      "sha256": "3cd0e29ebdc004499cfea84e6d2b7200dcccc93afc6b7bbca9cf590c964b785d",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "missing_justification",
+      "preview_candidate": false,
+      "sha256": "d6ddbeee6c32373df6118b383c05e2cb8879b2b7587c1217f50866e132dc9c8f",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "justification_right",
+      "preview_candidate": false,
+      "sha256": "301ba07ae2b93190e371e2c0a4c4cd8c89d0d04ed5eae306da51de766890bbac",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "justification_auto",
+      "preview_candidate": false,
+      "sha256": "ed4ed8189c8a0fb9bb43fd96469bc1983ed0a060a87c09172ddcae326a2b6e2b",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "justification_wrong_size",
+      "preview_candidate": false,
+      "sha256": "89d3cedd490fe65a58ce2592080db80f4e46c222905c7b7bc051b7abcdb7538c",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "root_left_local_absent",
+      "preview_candidate": false,
+      "sha256": "b544813c9a103619b0e6de5796d4ec33a5706534a3f6a7780ec8eaf54fa3144e",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "missing_text",
+      "preview_candidate": false,
+      "sha256": "0ef0ad62762958aba931b147be0de1a79b7ec2160d0166f3bdb7b29b18f58fcf",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "text_wrong_owner",
+      "preview_candidate": false,
+      "sha256": "124e498d2fdf0fb278ca361953781efaf78e308cd8d7d39a4646548995fd901a",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "missing_run_count",
+      "preview_candidate": false,
+      "sha256": "79cebc5aa037a665602e6b4be40a1f403bef7c61916745e67294bc33eb7da140",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "truncated_run",
+      "preview_candidate": false,
+      "sha256": "5599046ac33d3a77759a23795cfbe7e7909e827145a9131523d89f47e71415f0",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "zero_runs",
+      "preview_candidate": false,
+      "sha256": "1ce4e89cbfd9de93204a098977012fe2583c4e41edd569db67c3c76ae7ab3071",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "two_runs",
+      "preview_candidate": false,
+      "sha256": "aa17275bad012a2b189b37da99047c8867645a64322bdc2c41a249f860e9938b",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "run_start1",
+      "preview_candidate": false,
+      "sha256": "3b1fe86bc43bed5dbbc83333962b8db7fc11e9ada8cf9767bf07166fbf2b5573",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "face_bold",
+      "preview_candidate": false,
+      "sha256": "4e6a949ccdcfcbb1b6ed5fbacc384e56357bf94ffa2dc03fbaa5cff86248f0f0",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "face_formula",
+      "preview_candidate": false,
+      "sha256": "0409c294edf7539f9cef6e7986d2b2bd63abbc79806f726ce9722d3a625126f6",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "size_zero",
+      "preview_candidate": false,
+      "sha256": "71fc657d7391b903d000d0063e9c8f930e42eefb7fdc3f94257e0bfde984db54",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "invalid_utf8",
+      "preview_candidate": false,
+      "sha256": "4eab62066e9d344476efc9267950b4f47de0b40be43a06cfec0681264f1232e4",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "incomplete_utf8",
+      "preview_candidate": false,
+      "sha256": "4621097c9c9f5bb5f8cb36e4e6b61457a3d461265f19c75014912e2efd2a1557",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "empty_text",
+      "preview_candidate": false,
+      "sha256": "341c1c46bbbaf4b38c74118834b3e1cea5ca85f516af6f7bf6f98c78e48e9467",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "embedded_nul",
+      "preview_candidate": false,
+      "sha256": "e1168b105fef16b4647a2dea17a7bc7703f01b8a92421d2acb2e3d699b366585",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "line_feed",
+      "preview_candidate": false,
+      "sha256": "2b82628dbf2a1fa4f5ceff048a122751371b5b3e305937c5d9561c93f2e5cdee",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "unicode_bom",
+      "preview_candidate": false,
+      "sha256": "59745fa00893c69ddaed9ffc3be78bc55bbf0a54ee24c10916c2d70ab82459dd",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "unicode_emoji",
+      "preview_candidate": false,
+      "sha256": "89709ec404e55e832c694763a34072b5a33f30ef1e7f5447a7d7d12aa6cfd06a",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "unknown_root_property",
+      "preview_candidate": false,
+      "sha256": "43491173e1153b60bda62067a64925e5cfbce7c515ed5d0fcbaae77cffce24f9",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "user_font_alias",
+      "preview_candidate": false,
+      "sha256": "373605014665833e3509b50eca1cf2904a1bf84ce17317c29229a7ee5232db24",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "unknown_text_property",
+      "preview_candidate": false,
+      "sha256": "d79a84cb9cc2ad1a28a7ac0c97e0e9776845075422f1b1f62d23cc4dead52208",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "unknown_root_object",
+      "preview_candidate": false,
+      "sha256": "2717fc5f95113851bbf55742af860f20eb1519707462698853c5e9062df299e4",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "text_under_group",
+      "preview_candidate": false,
+      "sha256": "82f688e8a9759eae37b23e27c85ff4f5d4c66f51b8639881b811d22ef5f8ab26",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "nested_text",
+      "preview_candidate": false,
+      "sha256": "05913777cc9f7c50c6ca1fbac757eb1baaa454e380ba55d444fb154d0cf01b45",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "utf8text_same",
+      "preview_candidate": false,
+      "sha256": "9d85f95ba1bd299021d615260d32e32dd4f3f4b8304d78bc9fb993d8d55a1762",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "utf8text_conflict",
+      "preview_candidate": false,
+      "sha256": "d5f78614da6b5f3ba874d856d54982f31c7613f47145b27d2c03ec98f1117f2d",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "shadowed_legacy_right",
+      "preview_candidate": false,
+      "sha256": "89de3a6171fca76bcb69e4c5a8e8ab03d84ebc9d891ba9012741c7b55342444b",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "root_caption_style",
+      "preview_candidate": false,
+      "sha256": "ea8725bdbe46c46995f63da648efdfb83382038e1efe8c85a2288c987f10f642",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6",
+        "exit": 2
+      }
+    },
+    {
+      "name": "text_box",
+      "preview_candidate": false,
+      "sha256": "4cf080a058466b1c28f13a5af601f84d8e3079073ccc2e3ef9eee9e6e4ecf730",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "rotation_zero",
+      "preview_candidate": false,
+      "sha256": "63aa8efdd216e0c3e6d2976d12dfba1e0899e2a98915984bb2f099a5d9429e77",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "page_background_black",
+      "preview_candidate": false,
+      "sha256": "b2abcae9b01069734db6d0630d2e289af71bcd13355e25820d4df35e33612a79",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "duplicate_text",
+      "preview_candidate": false,
+      "sha256": "ac8d2928cc6425b6e17570769f59c54ba2fd128e5b2a33437ac177317907f1d4",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "duplicate_position",
+      "preview_candidate": false,
+      "sha256": "c62a9e245729864a0168f28857de4f403fa79245546d3bb9b05f96968ec113b6",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    },
+    {
+      "name": "header_opaque",
+      "preview_candidate": false,
+      "sha256": "3990925f914a816d27ab528ec18f48fb60bc951b7274950c911797d2f8db00fa",
+      "outcome": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5",
+        "exit": 2
+      }
+    }
+  ]
+}

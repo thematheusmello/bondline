@@ -1,0 +1,1105 @@
+{
+  "scope": "Original proposed caption preview witnesses, not application evidence",
+  "method": "Public SDK layout and Python stdlib struct only; no product imports/output",
+  "positive_names": [
+    "caption_ascii",
+    "caption_ascii_explicit",
+    "caption_ascii_header",
+    "caption_ascii_implicit_file_end",
+    "caption_ascii_explicit_file_end",
+    "caption_extended",
+    "caption_fractional",
+    "caption_greek",
+    "caption_short_white",
+    "caption_rgb16",
+    "caption_font_one",
+    "caption_shifted"
+  ],
+  "negative_names": [
+    "missing_font_table",
+    "font_ordinal_only",
+    "font_id_only",
+    "font_max_id_only",
+    "font_unknown_charset",
+    "font_other_charset",
+    "font_other_family",
+    "font_nul_name",
+    "font_nonutf8_name",
+    "font_platform0",
+    "font_duplicate_id",
+    "font_wrong_owner",
+    "palette_empty",
+    "palette_nonwhite2",
+    "palette_missing_ink3",
+    "missing_poster",
+    "drawing_pages",
+    "missing_width",
+    "width_wrong_size",
+    "width_zero",
+    "width_negative",
+    "width_wrong_owner",
+    "missing_position",
+    "position_wrong_size",
+    "position_wrong_owner",
+    "missing_justification",
+    "justification_right",
+    "justification_auto",
+    "justification_wrong_size",
+    "root_left_local_absent",
+    "missing_text",
+    "text_wrong_owner",
+    "missing_run_count",
+    "truncated_run",
+    "zero_runs",
+    "two_runs",
+    "run_start1",
+    "face_bold",
+    "face_formula",
+    "size_zero",
+    "invalid_utf8",
+    "incomplete_utf8",
+    "empty_text",
+    "embedded_nul",
+    "line_feed",
+    "unicode_bom",
+    "unicode_emoji",
+    "unknown_root_property",
+    "user_font_alias",
+    "unknown_text_property",
+    "unknown_root_object",
+    "text_under_group",
+    "nested_text",
+    "utf8text_same",
+    "utf8text_conflict",
+    "shadowed_legacy_right",
+    "root_caption_style",
+    "text_box",
+    "rotation_zero",
+    "page_background_black",
+    "duplicate_text",
+    "duplicate_position",
+    "header_opaque"
+  ],
+  "cases": [
+    {
+      "name": "caption_ascii",
+      "file": "caption_ascii.cdx",
+      "preview_candidate": true,
+      "byte_length": 128,
+      "sha256": "6e94388187d08ba852e7058938e2414c0f19cf1c0a42f168884e1610a4dd8660",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_ascii_explicit",
+      "file": "caption_ascii_explicit.cdx",
+      "preview_candidate": true,
+      "byte_length": 134,
+      "sha256": "31a26e5bb5a5ca764bb4a9bc29d99cc37ac6b3c287685e197a129f6d2ddf8bd2",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_ascii_header",
+      "file": "caption_ascii_header.cdx",
+      "preview_candidate": true,
+      "byte_length": 130,
+      "sha256": "71c6fef11a57018033eafd010b2f6e07b7ac1d5314d5e6856c6a8d5a777b28c0",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_ascii_implicit_file_end",
+      "file": "caption_ascii_implicit_file_end.cdx",
+      "preview_candidate": true,
+      "byte_length": 130,
+      "sha256": "43753f2f138384ff67f2195c9907a85982517110ef5e7f6356db7ddbd888ba89",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_ascii_explicit_file_end",
+      "file": "caption_ascii_explicit_file_end.cdx",
+      "preview_candidate": true,
+      "byte_length": 136,
+      "sha256": "a0755117b048799aa7e90f77dad102c8d0432845ca85070c1228b4d130ec27b6",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_extended",
+      "file": "caption_extended.cdx",
+      "preview_candidate": true,
+      "byte_length": 156,
+      "sha256": "05b1a1c45dbd11611223a5907c17986eea5f675008c71e6b2116c508bc5699c5",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_fractional",
+      "file": "caption_fractional.cdx",
+      "preview_candidate": true,
+      "byte_length": 123,
+      "sha256": "1c8ba87ed3c947c60e6b4ef97bb0512891973d5a724b1d81b29352934e151a5b",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "AV2",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.05,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_greek",
+      "file": "caption_greek.cdx",
+      "preview_candidate": true,
+      "byte_length": 128,
+      "sha256": "2c194b7155797bbd0c3669f2cab006bbba58d7ad817feb5a973cc3816bee476a",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Phase λ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_short_white",
+      "file": "caption_short_white.cdx",
+      "preview_candidate": true,
+      "byte_length": 140,
+      "sha256": "37159e5b897a5205267614d4fcf4e3ba155f7960561fa6427b1ecfaff28a2ea8",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_rgb16",
+      "file": "caption_rgb16.cdx",
+      "preview_candidate": true,
+      "byte_length": 146,
+      "sha256": "6cb0f22e15ec4b0fbc0aab277d811637480e12db6c6cc51bc35018b507c81f25",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.2500038147554742,
+                        0.5000076295109483,
+                        0.7500114442664225
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_font_one",
+      "file": "caption_font_one.cdx",
+      "preview_candidate": true,
+      "byte_length": 147,
+      "sha256": "b3fc1915d357d7966561a1873248ba2d8a2d6810a0d995b2b6dd4946295f869b",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "caption_shifted",
+      "file": "caption_shifted.cdx",
+      "preview_candidate": true,
+      "byte_length": 128,
+      "sha256": "6545e65511c5b20117c8146bbbdd922d88f79af462ae5a174256615aecf24082",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 104.25,
+                  "y_pt": 88.75
+                },
+                "runs": [
+                  {
+                    "text": "Bondline",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "missing_font_table",
+      "file": "missing_font_table.cdx",
+      "preview_candidate": false,
+      "byte_length": 108,
+      "sha256": "b05fc76f479b6ce5e8ba1b8f80ca78781add89ef6ada571e3d4e12d670fa2a90",
+      "model": null
+    },
+    {
+      "name": "font_ordinal_only",
+      "file": "font_ordinal_only.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "ae3944bc4432cbce28139aaf34af71ccc051d375ec2de57f67a868a4b71a8a96",
+      "model": null
+    },
+    {
+      "name": "font_id_only",
+      "file": "font_id_only.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "9920e8f78cc5faabe404eda8d38186d0eef31515f640c33a85b58659e74403ed",
+      "model": null
+    },
+    {
+      "name": "font_max_id_only",
+      "file": "font_max_id_only.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "2368df2592c612fc17fe0ac0a3d63a7a04bcf291761003ac6766124090bbe33f",
+      "model": null
+    },
+    {
+      "name": "font_unknown_charset",
+      "file": "font_unknown_charset.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "25154c1ff093afeba66007d57a5ee8f3bbeac8f2799b68fde9049567c4251fa4",
+      "model": null
+    },
+    {
+      "name": "font_other_charset",
+      "file": "font_other_charset.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "50c0b50c20f4853ba078c3395fcb0751a5e111b87911002b0bf5937367649075",
+      "model": null
+    },
+    {
+      "name": "font_other_family",
+      "file": "font_other_family.cdx",
+      "preview_candidate": false,
+      "byte_length": 135,
+      "sha256": "6e71fcff61d169454497458c6c12dcc2ec55f2c17837d75ad3572422e6a5ff96",
+      "model": null
+    },
+    {
+      "name": "font_nul_name",
+      "file": "font_nul_name.cdx",
+      "preview_candidate": false,
+      "byte_length": 129,
+      "sha256": "753f9cb35d90792fc3c2ef8bb7c4058f44e0d1dedab65789650ce0689619bb88",
+      "model": null
+    },
+    {
+      "name": "font_nonutf8_name",
+      "file": "font_nonutf8_name.cdx",
+      "preview_candidate": false,
+      "byte_length": 129,
+      "sha256": "08c98008c88e0160ffbd2051270919e694364cb56f2fcba03bc33f48413e77f4",
+      "model": null
+    },
+    {
+      "name": "font_platform0",
+      "file": "font_platform0.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "d5da2eb8124ba05c688b8c32fde6d0b76069821550b55aafde48ff8ff2ed58e3",
+      "model": null
+    },
+    {
+      "name": "font_duplicate_id",
+      "file": "font_duplicate_id.cdx",
+      "preview_candidate": false,
+      "byte_length": 147,
+      "sha256": "07a1cfcaf63d8a4a6a69fb15245f7a00c69dbd3efbe0248e8e38435af9c16725",
+      "model": null
+    },
+    {
+      "name": "font_wrong_owner",
+      "file": "font_wrong_owner.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "73252e4f2537336a2bbe0c72e798d977289d7a7faa20fed2f33395812351c0e9",
+      "model": null
+    },
+    {
+      "name": "palette_empty",
+      "file": "palette_empty.cdx",
+      "preview_candidate": false,
+      "byte_length": 134,
+      "sha256": "d0c9ed24514281a40f16cb242e29e4b27ddead995801f661e84dc4d5c65c6771",
+      "model": null
+    },
+    {
+      "name": "palette_nonwhite2",
+      "file": "palette_nonwhite2.cdx",
+      "preview_candidate": false,
+      "byte_length": 140,
+      "sha256": "6d178a1640a3e34f525f98ebf04255af57c35e7a72a9f01e2d96c5a338514f27",
+      "model": null
+    },
+    {
+      "name": "palette_missing_ink3",
+      "file": "palette_missing_ink3.cdx",
+      "preview_candidate": false,
+      "byte_length": 140,
+      "sha256": "5a3b3a4bb210eb599f7b6154a4c5df6bbf14441cacf8f3173a4189cf161dc879",
+      "model": null
+    },
+    {
+      "name": "missing_poster",
+      "file": "missing_poster.cdx",
+      "preview_candidate": false,
+      "byte_length": 123,
+      "sha256": "f865d250c47253f813f6013d4fb9846d50ee70334030970da13b9be9f9bab84b",
+      "model": null
+    },
+    {
+      "name": "drawing_pages",
+      "file": "drawing_pages.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "d836e9aaf9e44b8e50fa15b9a98e47330a3257f937e5724c0c7979701833cf0c",
+      "model": null
+    },
+    {
+      "name": "missing_width",
+      "file": "missing_width.cdx",
+      "preview_candidate": false,
+      "byte_length": 120,
+      "sha256": "6fd177554d12513454bb085b8021715f4f37ece4d0308a67a7f8440bc3dd4ce5",
+      "model": null
+    },
+    {
+      "name": "width_wrong_size",
+      "file": "width_wrong_size.cdx",
+      "preview_candidate": false,
+      "byte_length": 126,
+      "sha256": "b44a1ff7d479c4b2f4ec4a7bb137a2ee83635aeb0191320738fba099d7238aba",
+      "model": null
+    },
+    {
+      "name": "width_zero",
+      "file": "width_zero.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "c5e159d9bdd6d3684442c5ba67654c5d28cf5942c6cb24bb9ccaaa08b8f68dbf",
+      "model": null
+    },
+    {
+      "name": "width_negative",
+      "file": "width_negative.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "b1072bf1ddc1d5d9260ecae89221b061410cf7c2eb91173087ce7b0d411a4531",
+      "model": null
+    },
+    {
+      "name": "width_wrong_owner",
+      "file": "width_wrong_owner.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "c4d9b334663c3cc4fa9e059102f10bae1298e8cc764e6a2c92c9f2ce4a8bb4f1",
+      "model": null
+    },
+    {
+      "name": "missing_position",
+      "file": "missing_position.cdx",
+      "preview_candidate": false,
+      "byte_length": 116,
+      "sha256": "a80812edf7f3ac65a814531811cff3a4ea5fb237bab705bfda2598f93a1e6a4b",
+      "model": null
+    },
+    {
+      "name": "position_wrong_size",
+      "file": "position_wrong_size.cdx",
+      "preview_candidate": false,
+      "byte_length": 124,
+      "sha256": "49d1f85330d92eacbd4e132f6cecc0c76a0cc124ff6eb2dee5f9f3d813b0488c",
+      "model": null
+    },
+    {
+      "name": "position_wrong_owner",
+      "file": "position_wrong_owner.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "3cd0e29ebdc004499cfea84e6d2b7200dcccc93afc6b7bbca9cf590c964b785d",
+      "model": null
+    },
+    {
+      "name": "missing_justification",
+      "file": "missing_justification.cdx",
+      "preview_candidate": false,
+      "byte_length": 123,
+      "sha256": "d6ddbeee6c32373df6118b383c05e2cb8879b2b7587c1217f50866e132dc9c8f",
+      "model": null
+    },
+    {
+      "name": "justification_right",
+      "file": "justification_right.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "301ba07ae2b93190e371e2c0a4c4cd8c89d0d04ed5eae306da51de766890bbac",
+      "model": null
+    },
+    {
+      "name": "justification_auto",
+      "file": "justification_auto.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "ed4ed8189c8a0fb9bb43fd96469bc1983ed0a060a87c09172ddcae326a2b6e2b",
+      "model": null
+    },
+    {
+      "name": "justification_wrong_size",
+      "file": "justification_wrong_size.cdx",
+      "preview_candidate": false,
+      "byte_length": 129,
+      "sha256": "89d3cedd490fe65a58ce2592080db80f4e46c222905c7b7bc051b7abcdb7538c",
+      "model": null
+    },
+    {
+      "name": "root_left_local_absent",
+      "file": "root_left_local_absent.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "b544813c9a103619b0e6de5796d4ec33a5706534a3f6a7780ec8eaf54fa3144e",
+      "model": null
+    },
+    {
+      "name": "missing_text",
+      "file": "missing_text.cdx",
+      "preview_candidate": false,
+      "byte_length": 104,
+      "sha256": "0ef0ad62762958aba931b147be0de1a79b7ec2160d0166f3bdb7b29b18f58fcf",
+      "model": null
+    },
+    {
+      "name": "text_wrong_owner",
+      "file": "text_wrong_owner.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "124e498d2fdf0fb278ca361953781efaf78e308cd8d7d39a4646548995fd901a",
+      "model": null
+    },
+    {
+      "name": "missing_run_count",
+      "file": "missing_run_count.cdx",
+      "preview_candidate": false,
+      "byte_length": 109,
+      "sha256": "79cebc5aa037a665602e6b4be40a1f403bef7c61916745e67294bc33eb7da140",
+      "model": null
+    },
+    {
+      "name": "truncated_run",
+      "file": "truncated_run.cdx",
+      "preview_candidate": false,
+      "byte_length": 119,
+      "sha256": "5599046ac33d3a77759a23795cfbe7e7909e827145a9131523d89f47e71415f0",
+      "model": null
+    },
+    {
+      "name": "zero_runs",
+      "file": "zero_runs.cdx",
+      "preview_candidate": false,
+      "byte_length": 118,
+      "sha256": "1ce4e89cbfd9de93204a098977012fe2583c4e41edd569db67c3c76ae7ab3071",
+      "model": null
+    },
+    {
+      "name": "two_runs",
+      "file": "two_runs.cdx",
+      "preview_candidate": false,
+      "byte_length": 138,
+      "sha256": "aa17275bad012a2b189b37da99047c8867645a64322bdc2c41a249f860e9938b",
+      "model": null
+    },
+    {
+      "name": "run_start1",
+      "file": "run_start1.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "3b1fe86bc43bed5dbbc83333962b8db7fc11e9ada8cf9767bf07166fbf2b5573",
+      "model": null
+    },
+    {
+      "name": "face_bold",
+      "file": "face_bold.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "4e6a949ccdcfcbb1b6ed5fbacc384e56357bf94ffa2dc03fbaa5cff86248f0f0",
+      "model": null
+    },
+    {
+      "name": "face_formula",
+      "file": "face_formula.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "0409c294edf7539f9cef6e7986d2b2bd63abbc79806f726ce9722d3a625126f6",
+      "model": null
+    },
+    {
+      "name": "size_zero",
+      "file": "size_zero.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "71fc657d7391b903d000d0063e9c8f930e42eefb7fdc3f94257e0bfde984db54",
+      "model": null
+    },
+    {
+      "name": "invalid_utf8",
+      "file": "invalid_utf8.cdx",
+      "preview_candidate": false,
+      "byte_length": 129,
+      "sha256": "4eab62066e9d344476efc9267950b4f47de0b40be43a06cfec0681264f1232e4",
+      "model": null
+    },
+    {
+      "name": "incomplete_utf8",
+      "file": "incomplete_utf8.cdx",
+      "preview_candidate": false,
+      "byte_length": 122,
+      "sha256": "4621097c9c9f5bb5f8cb36e4e6b61457a3d461265f19c75014912e2efd2a1557",
+      "model": null
+    },
+    {
+      "name": "empty_text",
+      "file": "empty_text.cdx",
+      "preview_candidate": false,
+      "byte_length": 120,
+      "sha256": "341c1c46bbbaf4b38c74118834b3e1cea5ca85f516af6f7bf6f98c78e48e9467",
+      "model": null
+    },
+    {
+      "name": "embedded_nul",
+      "file": "embedded_nul.cdx",
+      "preview_candidate": false,
+      "byte_length": 123,
+      "sha256": "e1168b105fef16b4647a2dea17a7bc7703f01b8a92421d2acb2e3d699b366585",
+      "model": null
+    },
+    {
+      "name": "line_feed",
+      "file": "line_feed.cdx",
+      "preview_candidate": false,
+      "byte_length": 123,
+      "sha256": "2b82628dbf2a1fa4f5ceff048a122751371b5b3e305937c5d9561c93f2e5cdee",
+      "model": null
+    },
+    {
+      "name": "unicode_bom",
+      "file": "unicode_bom.cdx",
+      "preview_candidate": false,
+      "byte_length": 131,
+      "sha256": "59745fa00893c69ddaed9ffc3be78bc55bbf0a54ee24c10916c2d70ab82459dd",
+      "model": null
+    },
+    {
+      "name": "unicode_emoji",
+      "file": "unicode_emoji.cdx",
+      "preview_candidate": false,
+      "byte_length": 126,
+      "sha256": "89709ec404e55e832c694763a34072b5a33f30ef1e7f5447a7d7d12aa6cfd06a",
+      "model": null
+    },
+    {
+      "name": "unknown_root_property",
+      "file": "unknown_root_property.cdx",
+      "preview_candidate": false,
+      "byte_length": 157,
+      "sha256": "43491173e1153b60bda62067a64925e5cfbce7c515ed5d0fcbaae77cffce24f9",
+      "model": null
+    },
+    {
+      "name": "user_font_alias",
+      "file": "user_font_alias.cdx",
+      "preview_candidate": false,
+      "byte_length": 135,
+      "sha256": "373605014665833e3509b50eca1cf2904a1bf84ce17317c29229a7ee5232db24",
+      "model": null
+    },
+    {
+      "name": "unknown_text_property",
+      "file": "unknown_text_property.cdx",
+      "preview_candidate": false,
+      "byte_length": 162,
+      "sha256": "d79a84cb9cc2ad1a28a7ac0c97e0e9776845075422f1b1f62d23cc4dead52208",
+      "model": null
+    },
+    {
+      "name": "unknown_root_object",
+      "file": "unknown_root_object.cdx",
+      "preview_candidate": false,
+      "byte_length": 148,
+      "sha256": "2717fc5f95113851bbf55742af860f20eb1519707462698853c5e9062df299e4",
+      "model": null
+    },
+    {
+      "name": "text_under_group",
+      "file": "text_under_group.cdx",
+      "preview_candidate": false,
+      "byte_length": 136,
+      "sha256": "82f688e8a9759eae37b23e27c85ff4f5d4c66f51b8639881b811d22ef5f8ab26",
+      "model": null
+    },
+    {
+      "name": "nested_text",
+      "file": "nested_text.cdx",
+      "preview_candidate": false,
+      "byte_length": 158,
+      "sha256": "05913777cc9f7c50c6ca1fbac757eb1baaa454e380ba55d444fb154d0cf01b45",
+      "model": null
+    },
+    {
+      "name": "utf8text_same",
+      "file": "utf8text_same.cdx",
+      "preview_candidate": false,
+      "byte_length": 152,
+      "sha256": "9d85f95ba1bd299021d615260d32e32dd4f3f4b8304d78bc9fb993d8d55a1762",
+      "model": null
+    },
+    {
+      "name": "utf8text_conflict",
+      "file": "utf8text_conflict.cdx",
+      "preview_candidate": false,
+      "byte_length": 153,
+      "sha256": "d5f78614da6b5f3ba874d856d54982f31c7613f47145b27d2c03ec98f1117f2d",
+      "model": null
+    },
+    {
+      "name": "shadowed_legacy_right",
+      "file": "shadowed_legacy_right.cdx",
+      "preview_candidate": false,
+      "byte_length": 133,
+      "sha256": "89de3a6171fca76bcb69e4c5a8e8ab03d84ebc9d891ba9012741c7b55342444b",
+      "model": null
+    },
+    {
+      "name": "root_caption_style",
+      "file": "root_caption_style.cdx",
+      "preview_candidate": false,
+      "byte_length": 140,
+      "sha256": "ea8725bdbe46c46995f63da648efdfb83382038e1efe8c85a2288c987f10f642",
+      "model": null
+    },
+    {
+      "name": "text_box",
+      "file": "text_box.cdx",
+      "preview_candidate": false,
+      "byte_length": 148,
+      "sha256": "4cf080a058466b1c28f13a5af601f84d8e3079073ccc2e3ef9eee9e6e4ecf730",
+      "model": null
+    },
+    {
+      "name": "rotation_zero",
+      "file": "rotation_zero.cdx",
+      "preview_candidate": false,
+      "byte_length": 136,
+      "sha256": "63aa8efdd216e0c3e6d2976d12dfba1e0899e2a98915984bb2f099a5d9429e77",
+      "model": null
+    },
+    {
+      "name": "page_background_black",
+      "file": "page_background_black.cdx",
+      "preview_candidate": false,
+      "byte_length": 134,
+      "sha256": "b2abcae9b01069734db6d0630d2e289af71bcd13355e25820d4df35e33612a79",
+      "model": null
+    },
+    {
+      "name": "duplicate_text",
+      "file": "duplicate_text.cdx",
+      "preview_candidate": false,
+      "byte_length": 152,
+      "sha256": "ac8d2928cc6425b6e17570769f59c54ba2fd128e5b2a33437ac177317907f1d4",
+      "model": null
+    },
+    {
+      "name": "duplicate_position",
+      "file": "duplicate_position.cdx",
+      "preview_candidate": false,
+      "byte_length": 140,
+      "sha256": "c62a9e245729864a0168f28857de4f403fa79245546d3bb9b05f96968ec113b6",
+      "model": null
+    },
+    {
+      "name": "header_opaque",
+      "file": "header_opaque.cdx",
+      "preview_candidate": false,
+      "byte_length": 128,
+      "sha256": "3990925f914a816d27ab528ec18f48fb60bc951b7274950c911797d2f8db00fa",
+      "model": null
+    }
+  ]
+}

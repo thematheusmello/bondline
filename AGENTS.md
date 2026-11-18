@@ -12,8 +12,9 @@ shared history or infer release publication. Actions stays OFF through feature m
 See docs/branch-lifecycle.md and STATUS for the actual active branch and recovery ledger.
 PR1 landed the old199-commit feature branch; inactive local refs are under archive/2026-11-18,
 with working files preserved. PR3 landed the standalone CDX resource query.
-The current `feat/cdx-string` task follows `docs/research/cdx-string.md`. No archived
-prototype is automatically eligible for main.
+PR4 landed the raw CDXString query. The current `feat/cdx-caption-preview` task follows
+`docs/research/cdx-caption-preview.md`. No archived prototype is automatically eligible
+for main.
 This supersedes old no-push/no-merge/current-multiple-bonds notes; full M0–M5 stays active.
 
 The raw CDXString reader follows `docs/research/cdx-string.md` and
@@ -24,6 +25,16 @@ the raw reader, and font selectors, encoding, offsets and rendering belong to th
 next application path. The 32 independent sources, raw writer comparison and
 10000-run ASan pass. The full local gate passes 2206/0/1 plus AccessKit 3/0.
 STATUS gives the exact caption preview continuation and its legacy CLI baseline.
+
+The direct-Page CDX caption candidate follows `docs/research/cdx-caption-preview.md`
+and `docs/verification-cdx-caption-preview.md`. Keep the one explicit Left Text,
+Poster extents, platform1/UTF8 selected font with coincident ID and ordinal,
+white palette2 and whole-source proof. The existing 100% paper scene checks
+admission and every native view retains its own guards. Keep a separate display
+proof bound to exact current model equality. CDXML caption edits, legacy CDX
+fallback diagnostics, detached page history, cross-format loss and registry 49
+keep their prior policies. Actual macOS Open/view/read-only/Save/reopen and the full
+local gate passed. Follow STATUS for the next M1 source-shape work.
 
 Read `docs/research/cdx-resources.md` and `docs/verification-cdx-resources.md` before
 CDX string or Text work. The table query is opt-in and runtime-dependency-free. Preserve

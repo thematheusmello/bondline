@@ -11,6 +11,12 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
+The [direct-Page CDX caption increment](verification-cdx-caption-preview.md) verifies
+read-only preview and exact native macOS Open and Unicode Save/reopen for one explicitly
+positioned Roboto caption on white paper. The shared command and render paths pass
+independent source and pixel checks. General CDX typography, authoring and other
+platforms remain open.
+
 The [plain CDX bond increment](verification-cdx-plain-bonds.md) expands only read-only
 data coverage to Single/Double/Triple, Solid fields and directed position. Source presence/
 automatic-manual bytes, complete models and unchanged Unicode files pass independent

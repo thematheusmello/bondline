@@ -274,6 +274,37 @@ fuzz_target!(|data: &[u8]| {
     assert_eq!(offset, data.len());
     check_resources(&document);
 
+    if document
+        .records()
+        .iter()
+        .any(|record| matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8006, .. }))
+        && let Ok(mut stored) = bondline_io::StoredDocument::from_cdx(
+            std::sync::Arc::from(data),
+            bondline_model::PageSize::A4,
+        )
+        && stored.has_cdx_caption_preview()
+    {
+        assert_eq!(stored.export_cdx().unwrap(), data);
+        assert!(!stored.is_fully_mapped());
+        assert!(!stored.has_caption_projection());
+        assert!(stored.has_display_projection());
+        assert!(stored.to_cdxml().is_err());
+        let baseline = stored.clone();
+        let page = stored.model().pages().first().unwrap();
+        assert!(page.fragments().is_empty());
+        assert_eq!(page.texts().len(), 1);
+        assert_eq!(page.texts().first().unwrap().runs().len(), 1);
+        let page_id = page.id();
+        // One point changes the validated positive extent even if the source uses A4.
+        let changed =
+            bondline_model::PageSize::new(page.size().width_pt() + 1.0, page.size().height_pt())
+                .unwrap();
+        stored.model_mut().set_page_size(page_id, changed).unwrap();
+        assert!(!stored.has_display_projection());
+        assert!(stored.to_cdx().is_err());
+        assert_eq!(baseline.to_cdx().unwrap().as_ref(), data);
+    }
+
     if let Ok(graph) = bondline_io::cdx::ElementalGraph::parse(data) {
         assert_eq!(graph.as_bytes(), data);
         assert_eq!(graph.to_bytes(), data);

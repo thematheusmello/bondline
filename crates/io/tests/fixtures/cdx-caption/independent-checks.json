@@ -1,0 +1,82 @@
+{
+  "scope": "original independent source/facts checks, NOT app acceptance",
+  "source_count": 75,
+  "planned_positive": 12,
+  "planned_refused": 63,
+  "all_raw_syntax_valid": true,
+  "all_declared_models_match": true,
+  "manifest_sha256": "a9a7d7b429312ebe488f7efcc1b0345e4c0cf656c1bb180446014ff4b7aa6fc0",
+  "facts_sha256": "e7ab8cbfcff49f2b6397371984889321337a3e8c875641ce25e3b58dbe8a6577",
+  "model_drift_sha256": "1f2cef22637e1d36c58143ca5b872325e9532a777265a3346421d3cd01604118",
+  "reader_sha256": "6a5a8473762518221869a409e9cf27883e8f3d525d9014824815d9bfb6c1ae3d",
+  "generator_sha256": "b1b3e86dc79492075f2d5d700534b07b918cd9347440624490ff94a123d4efa0",
+  "resource_reader_sha256": "a5a2df85a9fc1a2df9ba57b1a7b5538c812a6f724e18d25a42a16d98d6ad5db2",
+  "equal_model_source_pairs": [
+    [
+      "caption_ascii",
+      "caption_ascii_explicit"
+    ],
+    [
+      "caption_ascii",
+      "caption_ascii_header"
+    ],
+    [
+      "caption_ascii",
+      "caption_ascii_implicit_file_end"
+    ],
+    [
+      "caption_ascii",
+      "caption_ascii_explicit_file_end"
+    ],
+    [
+      "caption_ascii",
+      "caption_extended"
+    ],
+    [
+      "caption_ascii",
+      "caption_short_white"
+    ],
+    [
+      "caption_ascii",
+      "caption_font_one"
+    ]
+  ],
+  "rejected_with_same_nominal_model_as_base": [
+    "font_id_only",
+    "font_max_id_only",
+    "font_unknown_charset",
+    "font_other_charset",
+    "font_platform0",
+    "palette_empty",
+    "palette_nonwhite2",
+    "missing_poster",
+    "drawing_pages",
+    "missing_justification",
+    "justification_right",
+    "justification_auto",
+    "justification_wrong_size",
+    "root_left_local_absent",
+    "run_start1",
+    "unknown_root_property",
+    "user_font_alias",
+    "unknown_text_property",
+    "unknown_root_object",
+    "nested_text",
+    "utf8text_same",
+    "utf8text_conflict",
+    "shadowed_legacy_right",
+    "root_caption_style",
+    "text_box",
+    "rotation_zero",
+    "page_background_black",
+    "header_opaque"
+  ],
+  "raw_invalid_controls": [
+    "empty",
+    "header_short",
+    "header_magic",
+    "truncated_end",
+    "trailing_byte",
+    "property_length_beyond_source"
+  ]
+}

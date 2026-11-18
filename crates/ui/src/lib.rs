@@ -400,7 +400,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
     let state = engine.state();
     let caption_preview = engine
         .stored_document()
-        .is_ok_and(|stored| stored.has_caption_projection());
+        .is_ok_and(|stored| stored.has_caption_projection() || stored.has_cdx_caption_preview());
     let atom_label_preview = engine.effective_tool() != EffectiveTool::Selection
         && engine.stored_document().is_ok_and(|stored| {
             stored.has_boxed_atom_labels()
@@ -1785,7 +1785,8 @@ fn show_workspace_with_preview(
                         });
                         drawing.navigation_position = (!text_focused).then_some(*pos);
                     }
-                    if engine.stored_document().is_ok_and(|stored|stored.has_caption_projection())
+                    if engine.stored_document().is_ok_and(|stored|
+                        stored.has_caption_projection() || stored.has_cdx_caption_preview())
                         && !matches!(event,egui::Event::MouseWheel {..})
                     {
                         drawing.gesture=None;

@@ -1,8 +1,8 @@
 # Status — 2026-11-18
 
 The full M0–M5 goal is **active after the user resumed it**. Verified delivery lands
-into `main`. The current raw CDXString work is based on merged main `b9527ab`
-on `feat/cdx-string`.
+into `main`. Caption preview work follows merged main `6565e58` on
+`feat/cdx-caption-preview`, tracked by [draft PR 5](https://github.com/thematheusmello/bondline/pull/5).
 Its scope is unchanged. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
@@ -57,8 +57,8 @@ resource worktree remains recoverable. GitHub Actions is off.
 
 ### Verified raw CDXString data
 
-The [raw string reader](docs/verification-cdx-string.md) is implemented on
-`feat/cdx-string`, based on the resources merge. Raw property handles, UINT16
+The [raw string reader](docs/verification-cdx-string.md) landed through
+[PR 4](https://github.com/thematheusmello/bondline/pull/4) at `6565e58`. Raw property handles, UINT16
 run fields and text bytes stay exact. An independent 32-source oracle checks all
 five envelopes, 131,070 maximum-count entries, long text and invalid prefixes
 confined to their own property. The API compiler probe preceded the four passing
@@ -73,21 +73,52 @@ reproducible recipe, fixture hashes and logs at
 production paths are unchanged for this standalone increment.
 Standalone 51/0 and parser-library cross-checks for Windows MSVC, Linux GNU and
 WebAssembly passed. App execution remains unverified there.
+The resource and string feature branches are merged and their remote refs retired.
+The prototype worktrees and user apps remain preserved.
+
+### Direct-Page CDX captions
+
+The [caption profile](docs/research/cdx-caption-preview.md) and original fixture
+commit `a90e3b5` fix 12 independent positive models and 63 exact legacy refusals.
+The implemented source path projects one explicit Roboto Regular caption on a white
+Poster page. It grants read-only display for the exact source-derived model.
+Model drift retires preview and exact Save, and Undo restores both. The CDXML
+caption-edit and chemical source guards keep their earlier scope.
+
+[Verification](docs/verification-cdx-caption-preview.md) records 1/3 runtime RED
+and 4/0 on the same IO tests, actual CLI+initialized stdio+authenticated loopback,
+Unicode known Save/Save As/reopen, exact CPU/Metal pixels and independent FreeType
+placement. Local CI passed 2,210/0/1 and AccessKit 3/0 before adding the test-only
+socket module. With that module included, all 115 adapter tests and warnings-denied
+CLI all-targets clippy passed. ASan passed 10,000 runs with 75 original inputs and
+158-byte maximum recorded mutation. Registry 49 stays byte-identical. Evidence
+and actual PNGs are in `target/cdx-resources/next-text/preview-freeze.Ue3WwW`.
+The additional two command tests pass with warnings-denied all-targets clippy.
+Equal-model A→B→A source changes retire old weak file/capture contexts and preserve
+the original committed output of an earlier Save. Offscreen Fit and Actual at 1.5
+pixel density match CPU/Metal and independent FreeType placement.
+
+Actual macOS Open, retained-tool pointer safety, Fit/Actual/112.5% zoom, known
+Save, Unicode Save As and reopen pass. An unsupported palette shows the old
+error, then Cancel recovers the prior caption. Independent readers confirm the
+actual files and models. CPU and Metal captures at the explicit offscreen 1.5
+density match at both tested views and across reopen. Physical display density
+variation, CJK title glyph coverage, Windows, Linux, and browser execution
+still need work. The owned review is closed. Evidence is under
+`target/cdx-resources/next-text/native-review.hdS0xZ/native-evidence`.
+
+The final gate on `cbaa4b0` passed **2,213/0/1** workspace tests and **3/0**
+AccessKit tests, with fmt, clippy, layers, licenses, assets and corpus. The earlier
+MCP listener rebind failure at 127.0.0.1:64951 remains unexplained.
+See [verification](docs/verification-cdx-caption-preview.md) for both
+runs. All feature execution jobs and review agents are terminal. Actions is off.
 
 ### Next executable work
 
-1. Finish the direct-Page read-only caption contract using
-   `target/cdx-resources/next-text/caption-contract-draft.md` and the independent
-   witnesses under `caption-fixtures` in the same directory. The actual legacy CLI
-   refused all 75 current candidates with `unsupported_content`; exact details,
-   including the 12 planned positives, are frozen in `caption-baseline.json`
-   (SHA-256 `55862eaea4c6e50cfbe4aea815233ba48f16d87805a4d0755b3c6faba4a45910`).
-2. Freeze an existing-API runtime Open/capture RED, then implement the separate
-   CDX display proof with explicit Page/font/colour/baseline and complete source
-   guards. Use the existing shared scene and leave CDXML caption edits and
-   chemical authoring separate. Verify nonmatching legacy errors, model-only
-   resize/Undo, stale owners, actual adapters, CPU/GPU, and owned native Unicode
-   Save/reopen.
+1. Land the verified caption branch through PR 5 and confirm the main tree.
+2. Source-lock multiple CDX captions and explicit Z-order with independent
+   models and ordering witnesses. Continue explicit styles, child labels and
+   editable source from public evidence.
 3. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 
