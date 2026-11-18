@@ -1,0 +1,147 @@
+//! Synchronize one existing atom label and certify the entire edited CDX.
+use super::{CdxEdit, DocumentError, OriginalSource, StoredDocument};
+use crate::cdx::{MappingError, Preview, label_edit::LabelFields, project_document};
+use bondline_cdx::Document;
+use bondline_model::{AtomId, Element, Fragment, FragmentId, PageId};
+use std::sync::Arc;
+
+impl StoredDocument {
+    /// The current preview owns all four existing records for this atom's label.
+    pub fn can_edit_cdx_atom_label(&self, atom: AtomId) -> bool {
+        self.has_cdx_atom_label_preview()
+            && self
+                .export_cdx()
+                .ok()
+                .and_then(|bytes| Document::parse(bytes).ok())
+                .is_some_and(|source| LabelFields::find(&source, atom).is_some())
+    }
+
+    /// Replace one qualified existing label's Element, H count, text and bounds together.
+    /// The result owns exact edited source and a matching whole-page projection.
+    pub fn with_cdx_atom_label(
+        &self,
+        page_id: PageId,
+        fragment_id: FragmentId,
+        atom_id: AtomId,
+        element: Element,
+        explicit_hydrogens: u16,
+    ) -> Result<Self, DocumentError> {
+        let Some(OriginalSource::Cdx {
+            bytes,
+            baseline,
+            preview,
+            ..
+        }) = &self.original
+        else {
+            return Err(DocumentError::NoCdxSource);
+        };
+        if !self.has_cdx_atom_label_preview() {
+            return Err(DocumentError::UnsupportedCdxEdit);
+        }
+        let page = self
+            .model
+            .pages()
+            .iter()
+            .find(|page| page.id() == page_id)
+            .ok_or(bondline_model::Error::MissingPage(page_id.get()))
+            .map_err(MappingError::from)?;
+        let fragment = page
+            .fragments()
+            .iter()
+            .find(|fragment| fragment.id() == fragment_id)
+            .ok_or(bondline_model::Error::MissingFragment(fragment_id.get()))
+            .map_err(MappingError::from)?;
+        let (index, atom) = fragment
+            .atoms()
+            .iter()
+            .enumerate()
+            .find(|(_, atom)| atom.id == atom_id)
+            .ok_or(DocumentError::UnsupportedCdxLabel(
+                "an atom in the specified fragment",
+            ))?;
+        let source = Document::parse(self.export_cdx()?).map_err(MappingError::from)?;
+        let fields =
+            LabelFields::find(&source, atom_id).ok_or(DocumentError::UnsupportedCdxLabel(
+                "existing Element, H count, boxed Text and style records",
+            ))?;
+        if element.get() == 1 && explicit_hydrogens != 0 {
+            return Err(DocumentError::UnsupportedCdxLabel(
+                "zero attached hydrogens on a physical hydrogen atom",
+            ));
+        }
+        if atom.element == element && atom.explicit_hydrogens == Some(explicit_hydrogens) {
+            return Ok(self.clone());
+        }
+
+        let mut target = atom.clone();
+        target.element = element;
+        target.explicit_hydrogens = Some(explicit_hydrogens);
+        let layout_error = || DocumentError::UnsupportedCdxLabel("a representable boxed placement");
+        let label = bondline_render::position_atom_label(&target).map_err(|_| layout_error())?;
+        let coordinates = label.bounding_box().ok_or_else(layout_error)?.map(fixed);
+        let [Some(left), Some(top), Some(right), Some(bottom)] = coordinates else {
+            return Err(layout_error());
+        };
+        let raw_bounds = [top, left, bottom, right].map(i32::to_le_bytes);
+        let [run] = label.runs() else {
+            return Err(layout_error());
+        };
+        let output = fields.replace(
+            &source,
+            element,
+            explicit_hydrogens,
+            run.text(),
+            raw_bounds.as_flattened(),
+        )?;
+        let bounds = [left, top, right, bottom].map(|value| f64::from(value) / FIXED_SCALE);
+        target.authored_label = Some(Arc::new(
+            label
+                .with_bounding_box(Some(bounds))
+                .map_err(|_| layout_error())?,
+        ));
+
+        let mut atoms = fragment.atoms().to_vec();
+        *atoms.get_mut(index).ok_or_else(layout_error)? = target;
+        let fragment = Fragment::new(fragment_id, atoms, fragment.bonds().to_vec())
+            .map_err(MappingError::from)?;
+        let mut expected = self.model.as_ref().clone();
+        expected
+            .replace_fragment(page_id, fragment)
+            .map_err(MappingError::from)?;
+        let (projected, profile) = project_document(&output, page.size())?;
+        if profile != Preview::AtomLabels || projected != expected {
+            return Err(DocumentError::UnsupportedCdxLabel(
+                "complete agreement, page bounds and bond clearance after the edit",
+            ));
+        }
+
+        let (model, edit) = if expected == **baseline && output == bytes.as_ref() {
+            (Arc::clone(baseline), None)
+        } else {
+            let model = Arc::new(expected);
+            let edit = CdxEdit {
+                bytes: Arc::from(output),
+                model: Arc::clone(&model),
+            };
+            (model, Some(edit))
+        };
+        Ok(Self {
+            model,
+            original: Some(OriginalSource::Cdx {
+                bytes: Arc::clone(bytes),
+                baseline: Arc::clone(baseline),
+                preview: *preview,
+                edit,
+            }),
+        })
+    }
+}
+
+const FIXED_SCALE: f64 = 65_536.0;
+
+fn fixed(value: f64) -> Option<i32> {
+    let scaled = (value * FIXED_SCALE).round_ties_even();
+    (f64::from(i32::MIN)..=f64::from(i32::MAX))
+        .contains(&scaled)
+        .then_some(scaled as i32)
+}

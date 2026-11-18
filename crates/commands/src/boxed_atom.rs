@@ -52,18 +52,22 @@ pub struct AtomCreateLabel {
     pub style: AtomLabelStyle,
 }
 
+pub(super) fn supports_edit(document: &StoredDocument) -> bool {
+    document.has_boxed_atom_labels()
+        || document.has_connected_atom_labels()
+        || document.has_mixed_atom_labels()
+        || document.has_flagged_atom_labels()
+        || document.has_label_defaults_projection()
+        || document.has_cdx_atom_label_preview()
+}
+
 pub(super) fn editable_atom(
     document: &StoredDocument,
     page: u32,
     fragment: u32,
     atom: u32,
 ) -> Result<(&Fragment, &Atom), Error> {
-    if !document.has_boxed_atom_labels()
-        && !document.has_connected_atom_labels()
-        && !document.has_mixed_atom_labels()
-        && !document.has_flagged_atom_labels()
-        && !document.has_label_defaults_projection()
-    {
+    if !supports_edit(document) {
         return Err(Error::UnsupportedAtomLabel(
             "complete box-positioned literal label source is required",
         ));
@@ -141,6 +145,15 @@ pub(super) fn set_label(
         return Err(Error::InvalidAtomLabel(
             "a physical hydrogen atom cannot carry inline attached hydrogens",
         ));
+    }
+    if document.has_cdx_atom_label_preview() {
+        return Ok(document.with_cdx_atom_label(
+            PageId::new(params.page_id).ok_or(Error::InvalidPageId)?,
+            fragment.id(),
+            atom.id,
+            element,
+            params.explicit_hydrogens,
+        )?);
     }
     if atom.element == element && atom.explicit_hydrogens == Some(params.explicit_hydrogens) {
         return Ok(document.clone());

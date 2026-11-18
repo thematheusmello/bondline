@@ -416,6 +416,52 @@ fn check_batch(document: &Document<'_>) {
     }
 }
 
+fn check_label_edit(stored: &bondline_io::StoredDocument, original: &[u8]) {
+    let page = stored.model().pages().first().unwrap();
+    let (fragment, atom) = page
+        .fragments()
+        .iter()
+        .find_map(|fragment| fragment.atoms().first().map(|atom| (fragment.id(), atom)))
+        .unwrap();
+    let unchanged = stored.with_cdx_atom_label(
+        page.id(),
+        fragment,
+        atom.id,
+        atom.element,
+        atom.explicit_hydrogens.unwrap(),
+    );
+    if !stored.can_edit_cdx_atom_label(atom.id) {
+        assert!(unchanged.is_err());
+        return;
+    }
+    let unchanged = unchanged.unwrap();
+    assert!(std::sync::Arc::ptr_eq(
+        &stored.model_snapshot(),
+        &unchanged.model_snapshot()
+    ));
+    assert_eq!(unchanged.export_cdx().unwrap(), original);
+    let element =
+        bondline_model::Element::new(if atom.element.get() == 7 { 8 } else { 7 }).unwrap();
+    if let Ok(edited) = stored.with_cdx_atom_label(page.id(), fragment, atom.id, element, 1) {
+        let bytes = edited.export_cdx().unwrap();
+        assert_ne!(bytes, original);
+        assert!(edited.has_cdx_atom_label_preview());
+        assert!(!edited.is_fully_mapped());
+        assert!(edited.to_cdxml().is_err());
+        let info = edited.source_info().unwrap();
+        assert!(info.modified);
+        assert_eq!(info.byte_length, original.len());
+        let reopened = bondline_io::StoredDocument::from_cdx(
+            std::sync::Arc::from(bytes),
+            bondline_model::PageSize::A4,
+        )
+        .unwrap();
+        assert_eq!(reopened.model(), edited.model());
+        assert_eq!(reopened.export_cdx().unwrap(), bytes);
+    }
+    assert_eq!(stored.export_cdx().unwrap(), original);
+}
+
 fn construct(document: &Document<'_>) -> Result<Vec<u8>, Error> {
     let body = body(document);
     assert_eq!(
@@ -617,6 +663,7 @@ fuzz_target!(|data: &[u8]| {
         if preview {
             assert!(has_labels);
             check_label_preview(&document, stored.model());
+            check_label_edit(&stored, data);
         }
         assert_eq!(stored.model().has_authored_atom_labels(), has_labels);
         assert!(

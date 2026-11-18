@@ -183,8 +183,8 @@ See model.md for the data boundary; serialized graphs are not a project-save wor
 | `document.set_drawing_settings` | All required: `expected_revision`, `bond_length_pt:number|null`, `chain_angle_degrees:number|null` | Replace both stored document-root preferences atomically in a complete native drawing; null clears, missing keys refuse; existing geometry/view unchanged |
 | `document.open_cdxml` | `path`, optional `discard_unsaved=false` | Bounded native CDXML read; successful application starts a clean document session and clears history |
 | `document.save_cdxml` | `path`, optional `overwrite=false` | Atomic complete-source save; default no-clobber; authoring revision/history retained |
-| `document.open_cdx` | `path`, optional `discard_unsaved=false` | Bounded read of the supported CDX projection with complete source; new clean session and cleared history; A4 preview policy, faithful preview/editing unavailable |
-| `document.save_cdx` | `path`, optional `overwrite=false` | Atomic exact unchanged CDX backing only; changed models, source-free encoding and lossy cross-format export refuse |
+| `document.open_cdx` | `path`, optional `discard_unsaved=false` | Open supported CDX data with complete retained source and fresh history. Qualified captions and atom labels use their explicit Poster size. The elemental data view uses the caller's A4 policy. |
+| `document.save_cdx` | `path`, optional `overwrite=false` | Atomically save the exact CDX bytes that match the current model, including certified existing-label edits. Detached model changes and lossy conversion refuse. |
 | `document.open_mol` | `path`, optional `discard_unsaved=false`, `points_per_unit=24`, `origin_x_pt=72`, `origin_y_pt=72` | Validate and decode the actual V2000/V3000 version; retain complete source/frame; same guarded new-session behavior as CDXML |
 | `document.save_mol` | `path`, optional `overwrite=false`, `version="auto"` (`auto`, `v2000`, `v3000`) | Atomic MOL save with captured output version; refuses unsupported conversion/metadata/layout loss; imported source retains its frame |
 | `document.open_sdf` | `path`, optional `discard_unsaved=false` | Validate every mixed V2000/V3000 record and retain complete ordered source; clean collection session and cleared history, without a drawing projection |
@@ -362,6 +362,10 @@ current snapshot with the last successful save/open baseline, including unknown 
 Undo back to that baseline is clean; exact no-ops do not dirty it. `source.modified` instead
 describes the retained original backing's baseline. A changed native-profile file may be
 saved with `source.modified=true` and `file.dirty=false`; these describe different baselines.
+The CDX existing-label path uses the same distinction. `source.byte_length` is the
+original input size. A Save receipt reports the edited file size. Reopening the saved
+file starts a fresh original snapshot and history. The existing `atom.set_authored_label`
+schema serves the guarded CDX and CDXML paths. [CDX edit contract](research/cdx-atom-label-edit.md).
 
 ```json
 {"command":"document.open_cdxml","params":{"path":"target/example.cdxml"}}

@@ -10,8 +10,9 @@ at `a13a0f4`. The tree matches `7ed63cc` and its merged ref is retired.
 runs at `4d8ae68`. Its tree matches `2808443` and the merged ref is retired.
 [PR 8](https://github.com/thematheusmello/bondline/pull/8) landed owned CDX
 atom labels at `3ac74a3`. Its tree matches `b999bfe` and the merged ref is
-retired. `feat/cdx-atom-label-preview` starts from that revision and follows
-the [display contract](docs/research/cdx-atom-label-preview.md). The native/GPU license
+retired. [PR 9](https://github.com/thematheusmello/bondline/pull/9) landed the
+[boxed-label preview](docs/verification-cdx-atom-label-preview.md) at `37d85f0`
+and its feature ref is retired. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
 commit as the user requires. The user now expressly authorizes merging completed feature
@@ -206,19 +207,41 @@ ASan passed 10,000 runs with 196 immutable originals. All local jobs are
 terminal. Receipts are under `target/cdx-resources/next-text/label-preview`.
 GitHub Actions remains disabled.
 
+### Source-preserving CDX existing-label edits
+
+The [binary batch](docs/verification-cdx-batch-edits.md) at `a280f11` checks
+all five supported framings and copies every unrelated record, including
+unchanged extended lengths. The independent edit witnesses are at `110bee9`.
+Qualified atoms with explicit Element and H and an owned boxed Text can
+update the four existing properties. Re-import must certify the whole page
+and match every model field. History and Save retain their exact snapshots,
+with original provenance separate from current edited bytes.
+
+[Verification](docs/verification-cdx-atom-label-edits.md) covers all three
+independent file pairs, scoped repeated IDs, original and current byte
+accounting, no-op and inverse edits, detached drift and the missing-Element
+control. The shared command, CLI, MCP stdio and authenticated loopback pass
+with CPU/Metal equality. The App harness verifies Alt-open, Cancel, Apply,
+keyboard history, known Save and Unicode Save As/reopen at synthetic 2×.
+The isolated macOS app was prepared while hardware was active. Actual
+window input remains unverified for this increment. IO type-checks on
+Windows MSVC, Linux GNU and WebAssembly. ASan completes 10,000 iterations
+with 199 unchanged originals. Evidence is in
+`target/cdx-resources/next-text/label-edits`.
+
 ### Next executable work
 
-1. Establish atomic binary property replacement in the standalone CDX
-   crate for supported source-preserving editing. Start with the existing
-   `Document::replace_property` and the published framing/length rules.
-   Freeze independent disjoint replacements of Element, H, child Text
-   and box, including changed payload lengths, equal-length no-ops,
-   extended lengths, duplicate targets, foreign handles and unmodified
-   byte spans. Build one bounded batch before giving it app edit authority.
-   Then use a complete re-import and page proof for an existing qualified
-   label edit across commands, history, native input and Save/reopen.
-2. Continue broader M1 styles, labels, objects, editable source and formats, then
-   the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
+1. Source-lock binary insertion from the [CDX object framing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm)
+   and the [Element default](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Node_Element.htm).
+   Start with the implicit-C cyanide case in `crates/io/tests/cdx_label_edits.rs`.
+   Freeze a scoped new Element record beside the existing explicit H, with
+   exact bytes, unchanged descendants and an independent chemistry check.
+   Prove a bounded insertion/replacement batch before widening the edit or
+   native form. A same-element/H no-op keeps original absence. Missing H,
+   unresolved layout and other source extensions retain their refusals.
+2. Verify the current supported edit through actual macOS input when the
+   desktop is idle. Continue broader M1 styles, captions, source edits and
+   formats, then the remaining M0 and M2–M5 workflows from the roadmap.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

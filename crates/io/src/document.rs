@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod carbon_label_tests;
+mod cdx_label;
 mod smiles;
 
 use crate::cdx::Preview as CdxPreview;
@@ -37,6 +38,8 @@ pub enum DocumentError {
     UnsupportedMolEdit,
     #[error("the model changed; source-preserving CDX regeneration is not supported")]
     UnsupportedCdxEdit,
+    #[error("CDX atom label editing requires {0}")]
+    UnsupportedCdxLabel(&'static str),
     #[error("saving {from} source as {to} would discard source metadata")]
     CrossFormatSource {
         from: &'static str,
@@ -68,6 +71,7 @@ impl DocumentError {
             | Self::UnsupportedEdit
             | Self::UnsupportedMolEdit
             | Self::UnsupportedCdxEdit
+            | Self::UnsupportedCdxLabel(_)
             | Self::CrossFormatSource { .. }
             | Self::UnsupportedMolLayout(_) => "unsupported_content",
         }
@@ -95,6 +99,12 @@ enum CdxmlProfile {
 }
 
 #[derive(Clone, PartialEq)]
+struct CdxEdit {
+    bytes: Arc<[u8]>,
+    model: Arc<Document>,
+}
+
+#[derive(Clone, PartialEq)]
 enum OriginalSource {
     Smiles(Arc<smiles::SmilesBacking>),
     Cdxml {
@@ -106,6 +116,7 @@ enum OriginalSource {
         bytes: Arc<[u8]>,
         baseline: Arc<Document>,
         preview: CdxPreview,
+        edit: Option<CdxEdit>,
     },
     Mol {
         version: Version,
@@ -132,6 +143,22 @@ impl OriginalSource {
             | Self::Mol { baseline, .. } => baseline,
             Self::Smiles(backing) => &backing.baseline,
         }
+    }
+    fn current_cdx(&self) -> Option<(&[u8], &Arc<Document>, CdxPreview)> {
+        let Self::Cdx {
+            bytes,
+            baseline,
+            preview,
+            edit,
+        } = self
+        else {
+            return None;
+        };
+        let (bytes, model) = match edit {
+            Some(edit) => (&edit.bytes, &edit.model),
+            None => (bytes, baseline),
+        };
+        Some((bytes, model, *preview))
     }
     fn fully_mapped(&self, current: &Arc<Document>) -> bool {
         match self {
@@ -195,6 +222,7 @@ impl StoredDocument {
                 bytes,
                 baseline: model,
                 preview,
+                edit: None,
             }),
         })
     }
@@ -380,6 +408,15 @@ impl StoredDocument {
                 } else if sources.insert(original.bytes().as_ptr()) {
                     bytes = bytes.saturating_add(original.bytes().len());
                 }
+                if let OriginalSource::Cdx {
+                    edit: Some(edit), ..
+                } = original
+                {
+                    if sources.insert(edit.bytes.as_ptr()) {
+                        bytes = bytes.saturating_add(edit.bytes.len());
+                    }
+                    models.push(edit.model.as_ref());
+                }
                 if let OriginalSource::Mol { headers, .. } = original
                     && header_arrays.insert(Arc::as_ptr(headers))
                 {
@@ -415,15 +452,18 @@ impl StoredDocument {
         self.has_cdx_preview(CdxPreview::Caption)
     }
 
-    /// Read-only CDX atom-label proof for the exact unchanged projected model.
+    /// CDX atom-label display proof for the exact source-certified model.
     pub fn has_cdx_atom_label_preview(&self) -> bool {
         self.has_cdx_preview(CdxPreview::AtomLabels)
     }
 
     fn has_cdx_preview(&self, required: CdxPreview) -> bool {
-        matches!(self.original.as_ref(), Some(OriginalSource::Cdx {
-            preview, baseline, ..
-        }) if *preview == required && (Arc::ptr_eq(&self.model, baseline) || self.model == *baseline))
+        self.original
+            .as_ref()
+            .and_then(OriginalSource::current_cdx)
+            .is_some_and(|(_, model, preview)| {
+                preview == required && (Arc::ptr_eq(&self.model, model) || self.model == *model)
+            })
     }
 
     /// Closed source/model coverage for the box-positioned literal label workflow.
@@ -503,25 +543,25 @@ impl StoredDocument {
             byte_length: original.bytes().len(),
             modified: (!Arc::ptr_eq(&self.model, original.baseline())
                 && self.model != *original.baseline())
-                || matches!(original, OriginalSource::Smiles(backing) if backing.current!=backing.original),
+                || matches!(original, OriginalSource::Smiles(backing) if backing.current!=backing.original)
+                || matches!(original, OriginalSource::Cdx { edit: Some(_), .. }),
         })
     }
 
-    /// Only complete unchanged backing can be exported; never substitute its projection.
+    /// Borrow the exact CDX bytes certified for the current model.
     pub fn export_cdx(&self) -> Result<&[u8], DocumentError> {
-        let Some(OriginalSource::Cdx {
-            bytes, baseline, ..
-        }) = self.original.as_ref()
-        else {
-            return Err(DocumentError::NoCdxSource);
-        };
-        if !Arc::ptr_eq(&self.model, baseline) && self.model != *baseline {
+        let (bytes, model, _) = self
+            .original
+            .as_ref()
+            .and_then(OriginalSource::current_cdx)
+            .ok_or(DocumentError::NoCdxSource)?;
+        if !Arc::ptr_eq(&self.model, model) && self.model != *model {
             return Err(DocumentError::UnsupportedCdxEdit);
         }
         Ok(bytes)
     }
 
-    /// No model encoder exists yet. Preserve unchanged imports or explicitly refuse.
+    /// Preserve original or source-edited CDX without transcoding other formats.
     pub fn to_cdx(&self) -> Result<Cow<'_, [u8]>, DocumentError> {
         if matches!(self.original.as_ref(), Some(OriginalSource::Smiles(_))) {
             return Err(DocumentError::CrossFormatSource {

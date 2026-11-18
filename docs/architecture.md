@@ -3,8 +3,11 @@
 The [CDX boxed-label preview](verification-cdx-atom-label-preview.md) shares
 the verified Poster and whole-page scene checks with caption preview and
 the explicit connected-bond checks with CDXML. Source kind and exact
-model equality authorize display. Other CDX data remains available
-through the earlier projection, and original source bytes govern Save.
+model equality authorize display. The [existing-label writer](research/cdx-atom-label-edit.md)
+replaces four scoped properties and re-imports the complete candidate before
+attaching its bytes to the immutable current model. History owns original and
+current backing. Save borrows the bytes certified for its captured snapshot.
+Other CDX data remains available through the earlier projection.
 
 The [CDX Node label projection](verification-cdx-node-labels.md) reads a
 direct child Text with explicit styles through the shared caption string
