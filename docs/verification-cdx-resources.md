@@ -63,3 +63,20 @@ The 26,298-byte ASan log in `target/cdx-resources/resume.lQ1sz7/asan.log` has SH
 `6bccf47698deb8e19b7f8e50cb020e1f499117efce9e7c780eeecb4076dfc34f`.
 The new assertions verify source records, resource queries and exact raw byte
 preservation. They do not test font rendering or caption interpretation.
+
+## Workspace acceptance
+
+The first resumed run reached the existing external CDX checks and failed five
+tests because `BONDLINE_PYTHON` was unset. The next run used the absolute pinned
+interpreter with RDKit 2026.09.2, Pillow 12.3.0 and NumPy 2.5.4. It passed
+`cargo xtask ci` with 2,202 workspace tests passed, zero failed and one ignored
+across 323 reports, plus three macOS AccessKit tests. Formatting, warnings-denied
+workspace and AccessKit clippy, layer checks, runtime license checks, seven bundled
+assets and the eight-file corpus passed. The fuzz workspace formatting check also
+passed. No test assertions or listener behavior changed between these runs.
+
+The successful 275,882-byte log at
+`target/cdx-resources/resume.lQ1sz7/ci-qualified.log` has SHA-256
+`47d75c8e8044e6829b8bf2859de1176404c573d19e3904baf163be839aac897d`.
+The pre-pause aggregate was interrupted and does not contribute to this result.
+Native resource display and new Windows, Linux and WebAssembly runs remain unverified.

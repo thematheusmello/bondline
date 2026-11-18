@@ -20,16 +20,49 @@ tag archive/legacy-worker-recovery-2026-11-18 (commit140754b), not merged as ver
 All73 worktree directories remain. See [delivery/recovery policy](docs/branch-lifecycle.md)
 and [ref ledger](docs/branch-inventory-2026-11-18.json). Full M0–M5 remains incomplete.
 
-The next standalone-resource increment is **in progress** after source contract391639c.
-No resource API/decoder is integrated yet. Parallel fixture/oracle work owns only new
-`crates/cdx/tests/fixtures/resources/` and `xtask/oracles/cdx_resource_support.rs` on Root;
-boundary acceptance owns new IO/CLI test paths. The core worker prepares tests in the NEW
-`../bondline-cdx-resources` worktree/`feat/cdx-resources` at391639c, reusing the existing
-IO-worker Cargo cache. Prior worker worktrees/branches are preserved. No Cargo/native job
-has started for this increment; all earlier jobs below are terminal. Root coordinates
-fixture freeze, true API compiler/runtime phases and build windows before any producer.
-Optional existing serde_json use is DEV-only and may update only its CDX manifest/lock
-edge; no new packages/versions/runtime dependency are authorized by that exception.
+### Verified standalone CDX resources
+
+The [resource contract](docs/research/cdx-resources.md) at 391639c is implemented by
+the frozen fixtures at 88cb7e9, query and boundary tests at dce5e0f, and sanitizer
+coverage at ae329ed. The standalone API reads declared FontTable and ColorTable data
+with strict owner, duplicate and payload checks. It retains raw name bytes, unsigned
+charsets, RGB16 values and absent/empty/short palette distinctions. The data API
+addresses index 65536. Font ID lookup leaves the CDXString index ambiguity unresolved.
+The existing `serde_json` edge is dev-only. Registry 49 and catalogue 16/124 are unchanged.
+
+[Resource verification](docs/verification-cdx-resources.md) records the API compiler
+probe, runtime 5/7 RED and 12/0 GREEN, whole standalone 47/0, two file boundary
+tests and one CLI boundary test. Exact unchanged Save and old authoring/capture/loss
+refusals passed. The resource query remains opt-in. Native caption/chemical preview,
+CDX editing and general styles are open.
+
+After the user resumed, the first aggregate exposed missing `BONDLINE_PYTHON` in five
+existing checks. The qualified `cargo xtask ci` passed **2,202/0/1** workspace tests and
+**3/0** AccessKit tests, plus fmt, warnings-denied clippy, layers, licenses, seven assets
+and the pinned eight-file corpus. The prior interrupted run and historical MCP listener
+failures remain separate. Rust source and test assertions were unchanged between the
+resumed runs. The dev commands now show the required Python setting (84a89b5).
+
+ASan passed 10,000 runs in 2 seconds, with 85 immutable inputs and a largest observed
+mutation of 393,481 bytes. All seed files reproduced exactly. The resumed CI and fuzz
+jobs are terminal. Logs and seed receipts are under
+`target/cdx-resources/resume.lQ1sz7`. No user app or drawing was re-opened. The isolated
+resource worktree remains recoverable. GitHub Actions is off.
+
+### Next executable work
+
+1. Lock and test a borrowed raw CDXString query using the public count/10-byte run
+   layout. Preserve the complete uninterpreted text remainder and raw five UINT16
+   fields even for ambiguous start values. Keep syntax admission, exact raw Save and
+   the existing model/display/authoring guards. Freeze original-byte independent
+   fixtures before the new API compiler probe and producer.
+2. Deliver a complete read-only CDX caption preview against a public source contract,
+   with original fixtures, actual CLI/MCP/socket/native Open/capture/Unicode Save/
+   reopen and refusal evidence. Lock font reference/charset, page size, left baseline,
+   foreground and white background proofs first. Keep this display capability
+   separate from CDXML caption edits and from general chemical authority.
+3. Continue the broader M1 styles, labels, objects, editable source and formats, then
+   the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read
@@ -94,7 +127,7 @@ the following [resource contract](docs/research/cdx-resources.md) now locks the 
 API/policies before code. No resource decoder/Text permission is implemented by that audit. Actions OFF;
 full M0–M5 remains active/incomplete.
 
-Next executable work:
+Historical next-work plan for the delivered resource increment:
 
 1. Read the locked [resource contract](docs/research/cdx-resources.md), source register/
    open questions and optional ignored audit. The planned standalone

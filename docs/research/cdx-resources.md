@@ -1,8 +1,8 @@
 # Standalone CDX font and colour resources
 
-Locked2026-11-18 ondd57e2a, after full local2882. This is a planned checked data query in
-the standalone cdx crate. It changes no syntax admission, IO/model/command/render/UI
-policy. No Text/font availability, styled-run reference, codec or authoring grant follows.
+Locked 2026-11-18 on `dd57e2a`. The checked data query is implemented in the standalone
+CDX crate. See [resource verification](../verification-cdx-resources.md) for the independent
+results. The contract below records the original source and API decisions.
 
 ## Public evidence and decisions
 
