@@ -1,0 +1,295 @@
+{
+  "base": "dd57e2a",
+  "contract": "391639c docs/research/cdx-resources.md",
+  "method": "Original Python struct only; no product implementation/output",
+  "cases": [
+    {
+      "name": "tables_implicit",
+      "query_valid": true,
+      "bytes": 334,
+      "sha256": "223b27f1ef62bd0b4cdb68e508fab5b02b156de61b01252552ba04e3c6e535d9"
+    },
+    {
+      "name": "tables_explicit",
+      "query_valid": true,
+      "bytes": 340,
+      "sha256": "2eaae58e42dd02bfe52ed6e534ed104aca57cb5c896a41f9d475a2879e376777"
+    },
+    {
+      "name": "tables_header",
+      "query_valid": true,
+      "bytes": 336,
+      "sha256": "33e57d5c738ade8f2399de79ccb9370996583a67f45744e9a37481700d79ffbc"
+    },
+    {
+      "name": "tables_implicit_file_end",
+      "query_valid": true,
+      "bytes": 336,
+      "sha256": "a21fe988fe2741f04307636b7d4e8ac14351c50700204697bd84f937f4918722"
+    },
+    {
+      "name": "tables_explicit_file_end",
+      "query_valid": true,
+      "bytes": 342,
+      "sha256": "e729cca6333b8d515fc4c6c6cf124df0c8ff16afd24ae6355c26ab7983ad4e7c"
+    },
+    {
+      "name": "tables_reordered",
+      "query_valid": true,
+      "bytes": 340,
+      "sha256": "9c59c348ef1d0a5abb1a470bef266dcaaf6e35381e479a0a10e45857eabd9963"
+    },
+    {
+      "name": "tables_extended",
+      "query_valid": true,
+      "bytes": 348,
+      "sha256": "fd31ba0ef227bf6052ddb279664e0ed459f84ea2bfed7ab97657025a00be1537"
+    },
+    {
+      "name": "absent",
+      "query_valid": true,
+      "bytes": 259,
+      "sha256": "9fcf9ef144f09014ff66b246fc06a289caaa89aeccafc2e96dc1eb6be9147b40"
+    },
+    {
+      "name": "empty_tables",
+      "query_valid": true,
+      "bytes": 273,
+      "sha256": "35fa03ada81c24ec4c7c9f25d9cb16cd960c26dfd40a441f53ac7d3763ab78ad"
+    },
+    {
+      "name": "font_empty_mac",
+      "query_valid": true,
+      "bytes": 267,
+      "sha256": "537b6141e578012b6cbf60e54ddd7969ca7af29bd473ffdc859c381dcfc380de"
+    },
+    {
+      "name": "palette_empty",
+      "query_valid": true,
+      "bytes": 265,
+      "sha256": "9a85b18bd9063112a9f2af9b1e825bee7a9ee2c172e45abf5153881154fcaef7"
+    },
+    {
+      "name": "palette_one",
+      "query_valid": true,
+      "bytes": 271,
+      "sha256": "cf03de42326003064b485b79c6bc1e9ffd1ad81df9b40001f95cae61efcbc501"
+    },
+    {
+      "name": "palette_nondefault",
+      "query_valid": true,
+      "bytes": 277,
+      "sha256": "5a9faa3710838d0c5adb28e167ba01b8967ff412160a52728dd9b99f6ab80fc0"
+    },
+    {
+      "name": "max_name",
+      "query_valid": true,
+      "bytes": 65812,
+      "sha256": "421beeda83f410f5131ddbd8e1f5f20e9d4057e5a75d4232294983641938c122"
+    },
+    {
+      "name": "user_tags_only",
+      "query_valid": true,
+      "bytes": 271,
+      "sha256": "33bf1931cb1ff76516960e1048fefcb4f02b87857e18ba7c4ad4dd4492de8f74"
+    },
+    {
+      "name": "max_fonts",
+      "query_valid": true,
+      "bytes": 393481,
+      "sha256": "ce3efbb6e74c4d35b4d79e294365dfa6b619aa111c683e2cf9007a7687141d87"
+    },
+    {
+      "name": "max_colors",
+      "query_valid": true,
+      "bytes": 393479,
+      "sha256": "9fa7c17e4e4b1f51d17f4ecf6d06a38df213c81c166fabb9b8f7e2562e74bd21"
+    },
+    {
+      "name": "invalid_font_header",
+      "query_valid": false,
+      "bytes": 264,
+      "sha256": "3c6ed0084281582269f1795d3fe5020eaf9774fb9300c73ab89d39026ce6f6a5"
+    },
+    {
+      "name": "invalid_font_count",
+      "query_valid": false,
+      "bytes": 274,
+      "sha256": "83329966c802b88eda8e6450f4fefdb9b2757d336131b6a0b6551de83b05fb3e"
+    },
+    {
+      "name": "invalid_font_name",
+      "query_valid": false,
+      "bytes": 276,
+      "sha256": "183ff150aeef79fd640e734780fc61d601cfd4eec5f7d5f089c17368ae7e9f93"
+    },
+    {
+      "name": "invalid_font_trailing",
+      "query_valid": false,
+      "bytes": 317,
+      "sha256": "17a27504405534a8103249bdd7d48abd8abc0d31424c955c241e0a0fdc44faae"
+    },
+    {
+      "name": "invalid_font_max_count",
+      "query_valid": false,
+      "bytes": 267,
+      "sha256": "6785b4a77bd083c981fe6d5bcec2789c061110cfd20a836c1b1fe0701565e0bc"
+    },
+    {
+      "name": "invalid_color_header",
+      "query_valid": false,
+      "bytes": 264,
+      "sha256": "ca5758a624117d37b8897d525fb663c0d89abb7af922bde77dfeffca48be6796"
+    },
+    {
+      "name": "invalid_color_count",
+      "query_valid": false,
+      "bytes": 271,
+      "sha256": "edc196b590c682f1f5043d3672b6d772bdb2b27aeb78da76b30934e29e7d3eea"
+    },
+    {
+      "name": "invalid_color_trailing",
+      "query_valid": false,
+      "bytes": 284,
+      "sha256": "3e74f53edd8203d445af72c082b733eb8013a0ef1ee7c09942ce433d96eb4bd4"
+    },
+    {
+      "name": "invalid_color_max_count",
+      "query_valid": false,
+      "bytes": 265,
+      "sha256": "1a8e85175f977e195f8533b6d4f8db125a8699dacf7e622b742ebffb04b218c7"
+    },
+    {
+      "name": "unsupported_platform_2",
+      "query_valid": false,
+      "bytes": 267,
+      "sha256": "4f7af1f1961ac0c84fd7af9bbeb5daf0337c9646b700513d8ef70d13c0ef7bd8"
+    },
+    {
+      "name": "unsupported_platform_65535",
+      "query_valid": false,
+      "bytes": 267,
+      "sha256": "5d655942ce71be2034eb6e6456dab58fefc84952d089c968df5b7fdbdf8978bf"
+    },
+    {
+      "name": "duplicate_font_id",
+      "query_valid": false,
+      "bytes": 290,
+      "sha256": "3e390820fad2447370253d0ff4caf61118871be44633946f490f344f774ef94b"
+    },
+    {
+      "name": "duplicate_font_late",
+      "query_valid": false,
+      "bytes": 393481,
+      "sha256": "3015fd487703d012d6bc0b98836c154b6dad1267ab03277aeba1834a945e20c2"
+    },
+    {
+      "name": "duplicate_font_table",
+      "query_valid": false,
+      "bytes": 373,
+      "sha256": "3c860f35c56f7997a7a7ff37b09c9c68daefebd0d8c34bf5dfdde99487c44772"
+    },
+    {
+      "name": "duplicate_color_table",
+      "query_valid": false,
+      "bytes": 307,
+      "sha256": "05a27608d0244efc82771708b6993a507e8e0344bcef88dc98410ef396713775"
+    },
+    {
+      "name": "duplicate_before_invalid_font",
+      "query_valid": false,
+      "bytes": 321,
+      "sha256": "264c90128fdf12c8afed9bbafac904767800144fb41e3c3c16ef59f03d93818f"
+    },
+    {
+      "name": "owner_before_invalid_font",
+      "query_valid": false,
+      "bytes": 288,
+      "sha256": "b9216689fcec9d8b826d1a9881356bd2e96077f6773dfa9af4d76fe91c2fe767"
+    },
+    {
+      "name": "owner_font_page",
+      "query_valid": false,
+      "bytes": 316,
+      "sha256": "e86115cd372cb77b41fe9e1ffec6eaba85ab5caf2f0f4fe872ee11b30347bf2f"
+    },
+    {
+      "name": "owner_font_group",
+      "query_valid": false,
+      "bytes": 324,
+      "sha256": "fa0df70eafd7ba03903ef2818d384e6647427884b1fbe9b231e8fa53a834c595"
+    },
+    {
+      "name": "owner_font_fragment",
+      "query_valid": false,
+      "bytes": 316,
+      "sha256": "7fa24cdea671b3c5214b5a7780fb37dcf7458a08747be7101337dfb70c7ccb35"
+    },
+    {
+      "name": "owner_font_node",
+      "query_valid": false,
+      "bytes": 316,
+      "sha256": "bbcc9a6e9938804e452065e85e0e4dc8f5616409324301a12bee462642463c87"
+    },
+    {
+      "name": "owner_font_text",
+      "query_valid": false,
+      "bytes": 324,
+      "sha256": "c51b2677f1a8ba779e6535abe2a3c9de5792392247a1c036dd202754a62839f1"
+    },
+    {
+      "name": "owner_font_custom",
+      "query_valid": false,
+      "bytes": 316,
+      "sha256": "52e2a856edc92e1a5d90cddefc97de0a2ee4c3a2605d7515bfb7121dd6c92717"
+    },
+    {
+      "name": "owner_font_nested_document",
+      "query_valid": false,
+      "bytes": 324,
+      "sha256": "0fd767d5896c2a33c1e8ab201839bf5ed3a09d11b5aa02f247210da6289244cf"
+    },
+    {
+      "name": "owner_color_page",
+      "query_valid": false,
+      "bytes": 283,
+      "sha256": "8e463abdae183a90779575ee6f1e3cdcfacb418c02fd56b66301bebddf2899a9"
+    },
+    {
+      "name": "owner_color_group",
+      "query_valid": false,
+      "bytes": 291,
+      "sha256": "388cb998453bc7772cada38792ea0eba276b3522296cd2a45765e139d287b457"
+    },
+    {
+      "name": "owner_color_fragment",
+      "query_valid": false,
+      "bytes": 283,
+      "sha256": "1d8ecbc59a31164507ac4315ed1163fbc8bd7c3e27cc2ff564d1f40642267eec"
+    },
+    {
+      "name": "owner_color_node",
+      "query_valid": false,
+      "bytes": 283,
+      "sha256": "6e96586bdb344c3207eb60c75d654e3d0dee04cbd569ac517989aea937ca6a83"
+    },
+    {
+      "name": "owner_color_text",
+      "query_valid": false,
+      "bytes": 291,
+      "sha256": "6d4fe679c0cd819158d34bb468c12aec59c7acab045949a6d98dcc1d48b494d5"
+    },
+    {
+      "name": "owner_color_custom",
+      "query_valid": false,
+      "bytes": 283,
+      "sha256": "e3716dd4f417edfb68ab18fb693ac8dc806a868e85cf9deeb55d3a3ac79b17f0"
+    },
+    {
+      "name": "owner_color_nested_document",
+      "query_valid": false,
+      "bytes": 291,
+      "sha256": "4741de57a298081e00831e4af2d9c92711498e045bd20c5c9e9e40688174f14a"
+    }
+  ]
+}
