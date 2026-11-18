@@ -10,7 +10,7 @@ charset differs from XML Font's signed wording; the linked charset page404 leave
 name codec unresolved. Do not infer UTF-8/platform codec,−1 inheritance or a system font.
 
 Palette0/1 are implicit black/white; stored entries start at2. Table absence alone gives
-2white/3black. Present-short tables must not activate absent defaults. Choose an explicit
+2white/3black. Present-short tables must not activate absent defaults. The explicit
 present-zero policy is locked as an empty binary table, while a u32 data index preserves
 count65535/index65536 without wrap/drop. Those decisions still require independent tests.
 Wrong owners, duplicate tables/IDs, platform0/1, length/trailing-byte and allocation

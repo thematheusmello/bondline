@@ -8,6 +8,17 @@ commit as the user requires; merge/release/publication remains separately author
 
 ## Current recoverable work and evidence
 
+The next standalone-resource increment is **in progress** after source contract391639c.
+No resource API/decoder is integrated yet. Parallel fixture/oracle work owns only new
+`crates/cdx/tests/fixtures/resources/` and `xtask/oracles/cdx_resource_support.rs` on Root;
+boundary acceptance owns new IO/CLI test paths. The core worker prepares tests in the NEW
+`../bondline-cdx-resources` worktree/`feat/cdx-resources` at391639c, reusing the existing
+IO-worker Cargo cache. Prior worker worktrees/branches are preserved. No Cargo/native job
+has started for this increment; all earlier jobs below are terminal. Root coordinates
+fixture freeze, true API compiler/runtime phases and build windows before any producer.
+Optional existing serde_json use is DEV-only and may update only its CDX manifest/lock
+edge; no new packages/versions/runtime dependency are authorized by that exception.
+
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read
 [contract](docs/research/cdx-plain-bonds.md),
