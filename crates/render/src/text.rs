@@ -1,4 +1,4 @@
-//! Resolved plain captions; no system font, substitution, bidi or chemical interpretation.
+//! Resolved literal text rasterization; no system font, substitution, bidi or inference.
 use crate::{Cancellation, Error, PageViewport, Primitive, Rectangle, Scene};
 use ab_glyph::{Font, GlyphId, OutlinedGlyph, point};
 use bondline_model::Page;
@@ -11,84 +11,59 @@ const MAX_GLYPHS: usize = 4096;
 const MAX_RUNS: usize = 4096;
 const MAX_RASTER_PIXELS: u64 = 1_048_576;
 
+#[derive(Default)]
+pub(crate) struct RasterBudget {
+    glyphs: usize,
+    pixels: u64,
+}
+impl RasterBudget {
+    pub(crate) fn reserve(
+        &mut self,
+        glyph: &OutlinedGlyph,
+        viewport: &PageViewport,
+    ) -> Result<(), Error> {
+        self.glyphs = self
+            .glyphs
+            .checked_add(1)
+            .filter(|n| *n <= MAX_GLYPHS)
+            .ok_or(Error::SceneTooComplex)?;
+        let b = bounds(glyph, viewport)?;
+        self.pixels = self
+            .pixels
+            .checked_add(u64::from(b.width) * u64::from(b.height))
+            .filter(|n| *n <= MAX_RASTER_PIXELS)
+            .ok_or(Error::SceneTooComplex)?;
+        Ok(())
+    }
+}
+
 pub(crate) fn append(
     page: &Page,
     viewport: &PageViewport,
     scene: &mut Scene,
+    budget: &mut RasterBudget,
     cancel: &Cancellation,
 ) -> Result<Option<[f32; 2]>, Error> {
     if page.texts().is_empty() {
         return Ok(None);
     }
-    let mut raster_pixels = 0_u64;
     let mut outlined_glyphs = scene.primitives.len();
-    // Validate the entire immutable page before allocating the first glyph bitmap.
+    // Validate all captions before allocating their first glyph bitmap.
     let range = walk(page, viewport, cancel, |glyph, _| {
         outlined_glyphs = outlined_glyphs
             .checked_add(1)
             .filter(|total| *total <= 4096)
             .ok_or(Error::SceneTooComplex)?;
-        let bounds = bounds(&glyph, viewport)?;
-        raster_pixels = raster_pixels
-            .checked_add(u64::from(bounds.width) * u64::from(bounds.height))
-            .filter(|total| *total <= MAX_RASTER_PIXELS)
-            .ok_or(Error::SceneTooComplex)?;
-        Ok(())
+        budget.reserve(&glyph, viewport)
     })?;
     walk(page, viewport, cancel, |glyph, color| {
-        let bounds = bounds(&glyph, viewport)?;
-        let length = usize::try_from(u64::from(bounds.width) * u64::from(bounds.height))
-            .map_err(|_| Error::SceneTooComplex)?;
-        let mut bitmap = vec![false; length];
-        let mut invalid = false;
-        glyph.draw(|x, y, coverage| {
-            if cancel.is_cancelled() {
-                return;
-            }
-            if x >= bounds.width || y >= bounds.height || !coverage.is_finite() {
-                invalid = true;
-                return;
-            }
-            if let Some(pixel) =
-                bitmap.get_mut((u64::from(y) * u64::from(bounds.width) + u64::from(x)) as usize)
-            {
-                *pixel = coverage >= 0.5;
-            } else {
-                invalid = true;
-            }
-        });
-        cancel.check()?;
-        if invalid {
-            return Err(Error::InvalidFont);
+        let pixels = raster(&glyph, viewport, color, cancel)?;
+        if scene.primitives.len().saturating_add(pixels.len()) > 4096 {
+            return Err(Error::SceneTooComplex);
         }
-        let start = scene.primitives.len();
-        for (row, scanline) in bitmap.chunks_exact(bounds.width as usize).enumerate() {
-            cancel.check()?;
-            let mut column = 0;
-            while column < scanline.len() {
-                if scanline.get(column) != Some(&true) {
-                    column += 1;
-                    continue;
-                }
-                let begin = column;
-                while scanline.get(column) == Some(&true) {
-                    column += 1;
-                }
-                if scene.primitives.len() >= 4096 {
-                    return Err(Error::SceneTooComplex);
-                }
-                scene.primitives.push(Primitive::Rectangle(Rectangle {
-                    x: bounds.x + begin as u32,
-                    y: bounds.y + row as u32,
-                    width: (column - begin) as u32,
-                    height: 1,
-                    color,
-                }));
-            }
-        }
-        if scene.primitives.len() == start {
-            return Err(Error::LabelScale);
-        }
+        scene
+            .primitives
+            .extend(pixels.into_iter().map(Primitive::Rectangle));
         Ok(())
     })?;
     Ok(range)
@@ -195,7 +170,7 @@ fn walk(
     Ok(range)
 }
 
-fn bounds(glyph: &OutlinedGlyph, viewport: &PageViewport) -> Result<Rectangle, Error> {
+pub(crate) fn bounds(glyph: &OutlinedGlyph, viewport: &PageViewport) -> Result<Rectangle, Error> {
     let bounds = glyph.px_bounds();
     let [left, top, right, bottom] = viewport.paper_bounds();
     if [bounds.min.x, bounds.min.y, bounds.max.x, bounds.max.y]
@@ -224,7 +199,7 @@ fn bounds(glyph: &OutlinedGlyph, viewport: &PageViewport) -> Result<Rectangle, E
 
 // The pinned Roboto's DFLT/Latin/Greek/Cyrillic kern features share the same
 // pair lookup (FontTools-qualified). No GSUB, contextual, mark or device shaping.
-fn kerning(face: &Face<'_>, first: GlyphId, second: GlyphId) -> Result<f64, Error> {
+pub(crate) fn kerning(face: &Face<'_>, first: GlyphId, second: GlyphId) -> Result<f64, Error> {
     let table = face.tables().gpos.ok_or(Error::InvalidFont)?;
     let language = table
         .scripts
@@ -283,4 +258,117 @@ fn plain_advance(value: ValueRecord<'_>) -> bool {
         && value.y_placement_device.is_none()
         && value.x_advance_device.is_none()
         && value.y_advance_device.is_none()
+}
+
+pub(crate) fn raster(
+    glyph: &OutlinedGlyph,
+    viewport: &PageViewport,
+    color: [u8; 4],
+    cancel: &Cancellation,
+) -> Result<Vec<Rectangle>, Error> {
+    let bounds = bounds(glyph, viewport)?;
+    let length = usize::try_from(u64::from(bounds.width) * u64::from(bounds.height))
+        .map_err(|_| Error::SceneTooComplex)?;
+    if length as u64 > MAX_RASTER_PIXELS {
+        return Err(Error::SceneTooComplex);
+    }
+    let mut bitmap = vec![false; length];
+    let mut invalid = false;
+    glyph.draw(|x, y, coverage| {
+        if cancel.is_cancelled() {
+            return;
+        }
+        if x >= bounds.width || y >= bounds.height || !coverage.is_finite() {
+            invalid = true;
+            return;
+        }
+        if let Some(pixel) =
+            bitmap.get_mut((u64::from(y) * u64::from(bounds.width) + u64::from(x)) as usize)
+        {
+            *pixel = coverage >= 0.5;
+        } else {
+            invalid = true;
+        }
+    });
+    cancel.check()?;
+    if invalid {
+        return Err(Error::InvalidFont);
+    }
+    let mut pixels = Vec::new();
+    for (row, scanline) in bitmap.chunks_exact(bounds.width as usize).enumerate() {
+        cancel.check()?;
+        let mut column = 0;
+        while column < scanline.len() {
+            if scanline.get(column) != Some(&true) {
+                column += 1;
+                continue;
+            }
+            let begin = column;
+            while scanline.get(column) == Some(&true) {
+                column += 1;
+            }
+            if pixels.len() >= 4096 {
+                return Err(Error::SceneTooComplex);
+            }
+            pixels.push(Rectangle {
+                x: bounds.x + begin as u32,
+                y: bounds.y + row as u32,
+                width: (column - begin) as u32,
+                height: 1,
+                color,
+            });
+        }
+    }
+    if pixels.is_empty() {
+        return Err(Error::LabelScale);
+    }
+    Ok(pixels)
+}
+
+#[cfg(test)]
+mod budget_tests {
+    use super::*;
+    use bondline_model::PageSize;
+    #[test]
+    fn literal_text_bitmap_and_outline_budgets_are_cumulative_before_allocation()
+    -> Result<(), Error> {
+        let viewport = PageViewport::new(
+            1088,
+            1088,
+            PageSize::new(1024.0, 1024.0).map_err(|_| Error::InvalidGeometry)?,
+        )?;
+        let font = crate::label::font()?;
+        let outline = font
+            .outline_glyph(font.glyph_id('O').with_scale_and_position(
+                256.0 / font.units_per_em().ok_or(Error::InvalidFont)? * font.height_unscaled(),
+                point(300.0, 300.0),
+            ))
+            .ok_or(Error::InvalidFont)?;
+        let b = bounds(&outline, &viewport)?;
+        let area = u64::from(b.width) * u64::from(b.height);
+        let count = MAX_RASTER_PIXELS / area;
+        let mut budget = RasterBudget::default();
+        for _ in 0..count {
+            budget.reserve(&outline, &viewport)?;
+        }
+        assert!(matches!(
+            budget.reserve(&outline, &viewport),
+            Err(Error::SceneTooComplex)
+        ));
+        let small = font
+            .outline_glyph(font.glyph_id('l').with_scale_and_position(
+                8.0 / font.units_per_em().ok_or(Error::InvalidFont)? * font.height_unscaled(),
+                point(300.0, 300.0),
+            ))
+            .ok_or(Error::InvalidFont)?;
+        let mut budget = RasterBudget::default();
+        for _ in 0..MAX_GLYPHS {
+            budget.reserve(&small, &viewport)?;
+        }
+        assert!(matches!(
+            budget.reserve(&small, &viewport),
+            Err(Error::SceneTooComplex)
+        ));
+        Ok(())
+    }
 }

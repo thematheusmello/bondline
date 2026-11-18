@@ -12,6 +12,16 @@ pub(crate) struct Label {
 }
 
 impl Label {
+    pub(crate) fn flat(em_px: f32, mask: Rectangle, pixels: Vec<Rectangle>) -> Self {
+        Self {
+            em_px,
+            symbol_mask: mask.clone(),
+            mask,
+            pixels,
+            hydrogen_mask: None,
+            stacked: false,
+        }
+    }
     pub fn masks(&self) -> impl Iterator<Item = &Rectangle> {
         std::iter::once(if self.stacked {
             &self.symbol_mask

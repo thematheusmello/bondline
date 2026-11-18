@@ -387,6 +387,8 @@ pub(crate) fn graph_scene_in_viewport(
             return Err(Error::SceneTooComplex);
         }
     }
+    let mut raster_budget = crate::text::RasterBudget::default();
+    let mut authored_range: Option<[f32; 2]> = None;
     let mut labels = Vec::new();
     let mut atoms = Vec::new();
     let mut bonds = Vec::new();
@@ -396,12 +398,11 @@ pub(crate) fn graph_scene_in_viewport(
         let mut neighbours = BTreeMap::<_, (usize, i32)>::new();
         for atom in fragment.atoms() {
             cancel.check()?;
-            if atom.charge != 0
-                || atom.isotope.is_some()
-                || atom.radical != Radical::None
-                || atom.authored_label.is_some()
-            {
+            if atom.charge != 0 || atom.isotope.is_some() || atom.radical != Radical::None {
                 return Err(Error::UnsupportedChemicalContent);
+            }
+            if atom.authored_label.is_some() {
+                crate::validate_atom_label(atom)?;
             }
             let position = viewport
                 .canvas_position(atom.position.ok_or(Error::UnsupportedChemicalContent)?)?;
@@ -551,7 +552,15 @@ pub(crate) fn graph_scene_in_viewport(
                 } else {
                     None
                 };
-            let label = if matches!(carbon_label, Some(crate::skeletal::CarbonLabel::Hidden)) {
+            let label = if atom.authored_label.is_some() {
+                let label =
+                    crate::authored_label::render(atom, viewport, &mut raster_budget, cancel)?;
+                authored_range = Some(match authored_range {
+                    Some([min, max]) => [min.min(label.em_px), max.max(label.em_px)],
+                    None => [label.em_px; 2],
+                });
+                Some(label)
+            } else if matches!(carbon_label, Some(crate::skeletal::CarbonLabel::Hidden)) {
                 None
             } else if let Some(hydrogens) = resolved_h {
                 let preferred_left = neighbours.0 != 0 && neighbours.1 >= 0;
@@ -653,7 +662,7 @@ pub(crate) fn graph_scene_in_viewport(
             .primitives
             .extend(label.masks().cloned().map(Primitive::Rectangle));
     }
-    if counts.is_some() {
+    if counts.is_some() || authored_range.is_some() {
         for bond in &bonds {
             cancel.check()?;
             if bond.strokes.len() != 1 {
@@ -858,7 +867,7 @@ pub(crate) fn graph_scene_in_viewport(
             }
         }
     }
-    if !viewport.style.is_empty() {
+    if !viewport.style.is_empty() || authored_range.is_some() {
         let masks = labels
             .iter()
             .flat_map(|(_, _, label)| label.masks())
@@ -887,7 +896,7 @@ pub(crate) fn graph_scene_in_viewport(
             .extend(label.pixels.into_iter().map(Primitive::Rectangle));
     }
     cancel.check()?;
-    if counts.is_some() || !viewport.style.is_empty() {
+    if counts.is_some() || !viewport.style.is_empty() || authored_range.is_some() {
         validate_paper_ink(
             &scene,
             viewport,
@@ -897,7 +906,11 @@ pub(crate) fn graph_scene_in_viewport(
             cancel,
         )?;
     }
-    let text_em_range_px = crate::text::append(page, viewport, &mut scene, cancel)?;
+    let captions = crate::text::append(page, viewport, &mut scene, &mut raster_budget, cancel)?;
+    let text_em_range_px = match (authored_range, captions) {
+        (Some([a, b]), Some([c, d])) => Some([a.min(c), b.max(d)]),
+        (a, b) => a.or(b),
+    };
     Ok(GraphScene {
         label_em_px,
         text_em_range_px,

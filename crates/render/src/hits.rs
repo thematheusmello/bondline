@@ -78,7 +78,7 @@ impl GraphScene {
         self.label_em_px
     }
 
-    /// Minimum and maximum actual caption-run em, including blank runs, excluding chemistry.
+    /// Minimum/maximum literal caption and authored atom-run em, including blank captions.
     pub fn text_em_range_px(&self) -> Option<[f32; 2]> {
         self.text_em_range_px
     }
