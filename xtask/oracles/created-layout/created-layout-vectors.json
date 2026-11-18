@@ -1,0 +1,5091 @@
+{
+  "base": "7113237",
+  "contract": "126f99e",
+  "method": "Frozen original Expat/Decimal facts, independent FontTools curves and bounded butt-strip margin oracle; no Bondline output",
+  "fonttools": "4.61.1",
+  "font_sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+  "source_facts_sha256": "15f6f0cb086bc300327cc141f72db669d86f373017f5d5fff5bcfe6d1a7e264f",
+  "cases": [
+    {
+      "source_case": "created_3_black",
+      "view": {
+        "id": "fit1x",
+        "width_px": 576,
+        "height_px": 576,
+        "scale": 1.0,
+        "origin_px": [
+          32.0,
+          32.0
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          200.0,
+          240.0
+        ],
+        "4": [
+          344.0,
+          240.0
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              236.0185546875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              243.8291015625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              252.3837890625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              138.17835003249513,
+              138.17835115468083
+            ],
+            [
+              198.78556668833008,
+              198.78556743645387
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              200.0,
+              200.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            5.809220603000669,
+            5.809228139306357
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              200.0,
+              200.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              267.1664300168145,
+              267.16643628739985
+            ],
+            [
+              195.2223758084001,
+              195.22237998879035
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 71,
+          "oracle_max_depth": 7
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.233015430814842,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              282.1784840898489,
+              282.1784852120346
+            ],
+            [
+              198.78565605989925,
+              198.78565680802305
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              344.0,
+              344.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 51,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              344.0,
+              344.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              410.3749965267974,
+              410.3749973203025
+            ],
+            [
+              195.750001786465,
+              195.75000231546838
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_black",
+      "view": {
+        "id": "fit2x",
+        "width_px": 1088,
+        "height_px": 1088,
+        "scale": 2.0,
+        "origin_px": [
+          32.0,
+          32.0
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          368.0,
+          448.0
+        ],
+        "4": [
+          656.0,
+          448.0
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              236.0185546875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              243.8291015625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              252.3837890625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              244.35670006499024,
+              244.35670230936165
+            ],
+            [
+              365.57113337666016,
+              365.57113487290775
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              368.0,
+              368.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            5.8092221424678225,
+            5.809224146348503
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              368.0,
+              368.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              502.3328666783124,
+              502.33287001297145
+            ],
+            [
+              358.4447533246857,
+              358.4447555477917
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 73,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.233015430814842,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              532.3569681796978,
+              532.3569704240692
+            ],
+            [
+              365.5713121197985,
+              365.5713136160461
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              656.0,
+              656.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 51,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              656.0,
+              656.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              788.7499930535948,
+              788.749994640605
+            ],
+            [
+              359.50000357293,
+              359.50000463093676
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_black",
+      "view": {
+        "id": "physical2x",
+        "logical_width": 576,
+        "logical_height": 576,
+        "physical_scale": 2.0,
+        "phase": [
+          0.25,
+          0.75
+        ],
+        "width_px": 1153,
+        "height_px": 1153,
+        "scale": 2.0,
+        "origin_px": [
+          64.25,
+          64.75
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          400.25,
+          480.75
+        ],
+        "4": [
+          688.25,
+          480.75
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              236.0185546875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              243.8291015625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              252.3837890625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              276.60670006499026,
+              276.60670230936165
+            ],
+            [
+              398.32113337666016,
+              398.32113487290775
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              400.25,
+              400.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            5.8092221424678225,
+            5.809224146348503
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              400.25,
+              400.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              534.5828666783125,
+              534.5828700129714
+            ],
+            [
+              391.1947533246857,
+              391.1947555477917
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 73,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.233015430814842,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              564.6069681796978,
+              564.6069704240692
+            ],
+            [
+              398.3213121197985,
+              398.3213136160461
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              688.25,
+              688.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 51,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              688.25,
+              688.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              820.9999930535948,
+              820.999994640605
+            ],
+            [
+              392.25000357293,
+              392.25000463093676
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_all_black",
+      "view": {
+        "id": "fit1x",
+        "width_px": 576,
+        "height_px": 576,
+        "scale": 1.0,
+        "origin_px": [
+          32.0,
+          32.0
+        ]
+      },
+      "hidden_model_atoms": [],
+      "hidden_canvas_anchors": {},
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "2": [
+          {
+            "character": "C",
+            "origin_pt": [
+              164.0185546875,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              171.8291015625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              180.3837890625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              236.0185546875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              243.8291015625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              252.3837890625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "4": [
+          {
+            "character": "C",
+            "origin_pt": [
+              308.0185546875,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              315.8291015625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              324.3837890625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "2": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "4": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            5.798412781381077,
+            5.798420327239291
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              138.17835003249513,
+              138.17835115468083
+            ],
+            [
+              198.78556668833008,
+              198.78556743645387
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              195.17542266002602,
+              195.17542893855955
+            ],
+            [
+              236.783615106684,
+              236.78361929237303
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 111,
+          "oracle_max_depth": 7
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.23301543081484,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            5.809220603000669,
+            5.809228139306357
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              210.17848408984887,
+              210.1784852120346
+            ],
+            [
+              233.21434319197695,
+              233.21434394010075
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              267.1664300168145,
+              267.16643628739985
+            ],
+            [
+              195.2223758084001,
+              195.22237998879035
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 122,
+          "oracle_max_depth": 7
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.233015430814842,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            5.798412781381077,
+            5.798420327239291
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              282.1784840898489,
+              282.1784852120346
+            ],
+            [
+              198.78565605989925,
+              198.78565680802305
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              339.175422660026,
+              339.17542893855955
+            ],
+            [
+              236.783615106684,
+              236.78361929237303
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 126,
+          "oracle_max_depth": 7
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.23301543081484,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              354.1784840898489,
+              354.17848521203456
+            ],
+            [
+              233.21434319197695,
+              233.21434394010075
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              410.3749965267974,
+              410.3749973203025
+            ],
+            [
+              195.750001786465,
+              195.75000231546838
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 91,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_all_black",
+      "view": {
+        "id": "fit2x",
+        "width_px": 1088,
+        "height_px": 1088,
+        "scale": 2.0,
+        "origin_px": [
+          32.0,
+          32.0
+        ]
+      },
+      "hidden_model_atoms": [],
+      "hidden_canvas_anchors": {},
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "2": [
+          {
+            "character": "C",
+            "origin_pt": [
+              164.0185546875,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              171.8291015625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              180.3837890625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              236.0185546875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              243.8291015625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              252.3837890625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "4": [
+          {
+            "character": "C",
+            "origin_pt": [
+              308.0185546875,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              315.8291015625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              324.3837890625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "2": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "4": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            5.79841330734902,
+            5.798414658325285
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              244.35670006499024,
+              244.35670230936165
+            ],
+            [
+              365.57113337666016,
+              365.57113487290775
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              358.35085475369516,
+              358.35085700185556
+            ],
+            [
+              441.56723650246346,
+              441.56723800123706
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 115,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.23301543081484,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            5.8092221424678225,
+            5.809224146348503
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              388.35696817969773,
+              388.3569704240692
+            ],
+            [
+              434.4286863839539,
+              434.4286878802015
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              502.3328666783124,
+              502.33287001297145
+            ],
+            [
+              358.4447533246857,
+              358.4447555477917
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 124,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.233015430814842,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            5.79841330734902,
+            5.798414658325285
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              532.3569681796978,
+              532.3569704240692
+            ],
+            [
+              365.5713121197985,
+              365.5713136160461
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              646.3508547536951,
+              646.3508570018555
+            ],
+            [
+              441.56723650246346,
+              441.56723800123706
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 130,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.23301543081484,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              676.3569681796978,
+              676.3569704240691
+            ],
+            [
+              434.4286863839539,
+              434.4286878802015
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              788.7499930535948,
+              788.749994640605
+            ],
+            [
+              359.50000357293,
+              359.50000463093676
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 91,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_all_black",
+      "view": {
+        "id": "physical2x",
+        "logical_width": 576,
+        "logical_height": 576,
+        "physical_scale": 2.0,
+        "phase": [
+          0.25,
+          0.75
+        ],
+        "width_px": 1153,
+        "height_px": 1153,
+        "scale": 2.0,
+        "origin_px": [
+          64.25,
+          64.75
+        ]
+      },
+      "hidden_model_atoms": [],
+      "hidden_canvas_anchors": {},
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "2": [
+          {
+            "character": "C",
+            "origin_pt": [
+              164.0185546875,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              171.8291015625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              180.3837890625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              236.0185546875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              243.8291015625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              252.3837890625,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "4": [
+          {
+            "character": "C",
+            "origin_pt": [
+              308.0185546875,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              315.8291015625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              324.3837890625,
+              212.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "2": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "4": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            5.79841330734902,
+            5.798414658325285
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              276.60670006499026,
+              276.60670230936165
+            ],
+            [
+              398.32113337666016,
+              398.32113487290775
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              390.60085475369516,
+              390.60085700185556
+            ],
+            [
+              474.31723650246346,
+              474.31723800123706
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 115,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.23301543081484,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            5.8092221424678225,
+            5.809224146348503
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              420.60696817969773,
+              420.6069704240692
+            ],
+            [
+              467.1786863839539,
+              467.1786878802015
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              534.5828666783125,
+              534.5828700129714
+            ],
+            [
+              391.1947533246857,
+              391.1947555477917
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 124,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.233015430814842,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            5.79841330734902,
+            5.798414658325285
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              564.6069681796978,
+              564.6069704240692
+            ],
+            [
+              398.3213121197985,
+              398.3213136160461
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              678.6008547536951,
+              678.6008570018555
+            ],
+            [
+              474.31723650246346,
+              474.31723800123706
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 130,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.23301543081484,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              708.6069681796978,
+              708.6069704240691
+            ],
+            [
+              467.1786863839539,
+              467.1786878802015
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              820.9999930535948,
+              820.999994640605
+            ],
+            [
+              392.25000357293,
+              392.25000463093676
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 91,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_blue14",
+      "view": {
+        "id": "fit1x",
+        "width_px": 576,
+        "height_px": 576,
+        "scale": 1.0,
+        "origin_px": [
+          32.0,
+          32.0
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          200.0,
+          240.0
+        ],
+        "4": [
+          344.0,
+          240.0
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              235.35498046875,
+              164.9765625
+            ],
+            "size_pt": 14.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              244.46728515625,
+              164.9765625
+            ],
+            "size_pt": 14.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              254.44775390625,
+              164.9765625
+            ],
+            "size_pt": 14.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              138.17835003249513,
+              138.17835115468083
+            ],
+            [
+              198.78556668833008,
+              198.78556743645387
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              200.0,
+              200.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.433733186793864,
+            6.433742606328204
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              200.0,
+              200.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              266.6468025707107,
+              266.646810408237
+            ],
+            [
+              195.5687930611753,
+              195.56879828619287
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 75,
+          "oracle_max_depth": 7
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            13.429634029215851,
+            13.429635377915227
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              283.17413094685855,
+              283.1741320690443
+            ],
+            [
+              199.44942063123904,
+              199.44942137936286
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              344.0,
+              344.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 51,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              344.0,
+              344.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              410.3749965267974,
+              410.3749973203025
+            ],
+            [
+              195.750001786465,
+              195.75000231546838
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_blue14",
+      "view": {
+        "id": "fit2x",
+        "width_px": 1088,
+        "height_px": 1088,
+        "scale": 2.0,
+        "origin_px": [
+          32.0,
+          32.0
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          368.0,
+          448.0
+        ],
+        "4": [
+          656.0,
+          448.0
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              235.35498046875,
+              164.9765625
+            ],
+            "size_pt": 14.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              244.46728515625,
+              164.9765625
+            ],
+            "size_pt": 14.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              254.44775390625,
+              164.9765625
+            ],
+            "size_pt": 14.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              244.35670006499024,
+              244.35670230936165
+            ],
+            [
+              365.57113337666016,
+              365.57113487290775
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              368.0,
+              368.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.43373492489223,
+            6.433737170102957
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              368.0,
+              368.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              501.293614187847,
+              501.2936179241035
+            ],
+            [
+              359.1375880505977,
+              359.1375905414353
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 77,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            13.429634029215851,
+            13.429635377915227
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              534.3482618937171,
+              534.3482641380886
+            ],
+            [
+              366.8988412624781,
+              366.8988427587257
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              656.0,
+              656.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 51,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              656.0,
+              656.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              788.7499930535948,
+              788.749994640605
+            ],
+            [
+              359.50000357293,
+              359.50000463093676
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_blue14",
+      "view": {
+        "id": "physical2x",
+        "logical_width": 576,
+        "logical_height": 576,
+        "physical_scale": 2.0,
+        "phase": [
+          0.25,
+          0.75
+        ],
+        "width_px": 1153,
+        "height_px": 1153,
+        "scale": 2.0,
+        "origin_px": [
+          64.25,
+          64.75
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          400.25,
+          480.75
+        ],
+        "4": [
+          688.25,
+          480.75
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              235.35498046875,
+              164.9765625
+            ],
+            "size_pt": 14.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              244.46728515625,
+              164.9765625
+            ],
+            "size_pt": 14.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              254.44775390625,
+              164.9765625
+            ],
+            "size_pt": 14.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              276.60670006499026,
+              276.60670230936165
+            ],
+            [
+              398.32113337666016,
+              398.32113487290775
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              400.25,
+              400.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.43373492489223,
+            6.433737170102957
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              400.25,
+              400.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              533.543614187847,
+              533.5436179241035
+            ],
+            [
+              391.8875880505977,
+              391.8875905414353
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 77,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            13.429634029215851,
+            13.429635377915227
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              566.5982618937171,
+              566.5982641380886
+            ],
+            [
+              399.6488412624781,
+              399.6488427587257
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              688.25,
+              688.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 51,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              688.25,
+              688.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              820.9999930535948,
+              820.999994640605
+            ],
+            [
+              392.25000357293,
+              392.25000463093676
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_nh",
+      "view": {
+        "id": "fit1x",
+        "width_px": 576,
+        "height_px": 576,
+        "scale": 1.0,
+        "origin_px": [
+          32.0,
+          32.0
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          200.0,
+          240.0
+        ],
+        "4": [
+          344.0,
+          240.0
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "N",
+            "origin_pt": [
+              235.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              244.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              138.17835003249513,
+              138.17835115468083
+            ],
+            [
+              198.78556668833008,
+              198.78556743645387
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              200.0,
+              200.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              200.0,
+              200.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              266.3749965267974,
+              266.37499732030255
+            ],
+            [
+              195.750001786465,
+              195.75000231546838
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 22,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.216598993726242,
+            12.216600342425618
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              282.1648247885373,
+              282.16482591072304
+            ],
+            [
+              198.77654985902487,
+              198.7765506071487
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              344.0,
+              344.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 22,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              344.0,
+              344.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              410.3749965267974,
+              410.3749973203025
+            ],
+            [
+              195.750001786465,
+              195.75000231546838
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_nh",
+      "view": {
+        "id": "fit2x",
+        "width_px": 1088,
+        "height_px": 1088,
+        "scale": 2.0,
+        "origin_px": [
+          32.0,
+          32.0
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          368.0,
+          448.0
+        ],
+        "4": [
+          656.0,
+          448.0
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "N",
+            "origin_pt": [
+              235.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              244.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              244.35670006499024,
+              244.35670230936165
+            ],
+            [
+              365.57113337666016,
+              365.57113487290775
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              368.0,
+              368.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              368.0,
+              368.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              500.74999305359484,
+              500.74999464060505
+            ],
+            [
+              359.50000357293,
+              359.50000463093676
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 22,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.216598993726242,
+            12.216600342425618
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              532.3296495770746,
+              532.3296518214461
+            ],
+            [
+              365.55309971804974,
+              365.5531012142974
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              656.0,
+              656.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 22,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              656.0,
+              656.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              788.7499930535948,
+              788.749994640605
+            ],
+            [
+              359.50000357293,
+              359.50000463093676
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_nh",
+      "view": {
+        "id": "physical2x",
+        "logical_width": 576,
+        "logical_height": 576,
+        "physical_scale": 2.0,
+        "phase": [
+          0.25,
+          0.75
+        ],
+        "width_px": 1153,
+        "height_px": 1153,
+        "scale": 2.0,
+        "origin_px": [
+          64.25,
+          64.75
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          400.25,
+          480.75
+        ],
+        "4": [
+          688.25,
+          480.75
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "N",
+            "origin_pt": [
+              235.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              244.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              276.60670006499026,
+              276.60670230936165
+            ],
+            [
+              398.32113337666016,
+              398.32113487290775
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              400.25,
+              400.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              240.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              400.25,
+              400.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              532.9999930535948,
+              532.9999946406051
+            ],
+            [
+              392.25000357293,
+              392.25000463093676
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 22,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              240.0,
+              160.0
+            ],
+            [
+              312.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.216598993726242,
+            12.216600342425618
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              564.5796495770746,
+              564.5796518214461
+            ],
+            [
+              398.30309971804974,
+              398.3031012142974
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              688.25,
+              688.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 22,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              312.0,
+              208.0
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            -0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.760411862090536,
+            6.760412815764966
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              688.25,
+              688.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              820.9999930535948,
+              820.999994640605
+            ],
+            [
+              392.25000357293,
+              392.25000463093676
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_selected_p12_5_m7_25",
+      "view": {
+        "id": "fit1x",
+        "width_px": 576,
+        "height_px": 576,
+        "scale": 1.0,
+        "origin_px": [
+          32.0,
+          32.0
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          200.0,
+          240.0
+        ],
+        "4": [
+          356.5,
+          232.75
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              248.5185546875,
+              157.015625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              256.3291015625,
+              157.015625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              264.8837890625,
+              157.015625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              138.17835003249513,
+              138.17835115468083
+            ],
+            [
+              198.78556668833008,
+              198.78556743645387
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              200.0,
+              200.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              252.5,
+              152.75
+            ]
+          ],
+          "direction": [
+            0.8369696139735455,
+            -0.5472493629827029
+          ],
+          "length_pt": 100.95945968555894,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            5.799651114273679,
+            5.799652802913779
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              200.0,
+              200.0
+            ],
+            [
+              240.0,
+              240.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              279.6458668323647,
+              279.6458682457051
+            ],
+            [
+              187.9238553778082,
+              187.9238563019154
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 79,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              252.5,
+              152.75
+            ],
+            [
+              324.5,
+              200.75
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.233015430814842,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              294.6784840898489,
+              294.67848521203456
+            ],
+            [
+              191.53565605989925,
+              191.53565680802305
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              356.5,
+              356.5
+            ],
+            [
+              232.75,
+              232.75
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 51,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              324.5,
+              200.75
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8250520872083775,
+            -0.5650566815754855
+          ],
+          "length_pt": 72.11665896309951,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.822262958646832,
+            6.8222639123212625
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              356.5,
+              356.5
+            ],
+            [
+              232.75,
+              232.75
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              410.3712769196529,
+              410.371277706484
+            ],
+            [
+              195.85496526824832,
+              195.85496580712845
+            ]
+          ],
+          "width_canvas": 1.25,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_selected_p12_5_m7_25",
+      "view": {
+        "id": "fit2x",
+        "width_px": 1088,
+        "height_px": 1088,
+        "scale": 2.0,
+        "origin_px": [
+          32.0,
+          32.0
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          368.0,
+          448.0
+        ],
+        "4": [
+          681.0,
+          433.5
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              248.5185546875,
+              157.015625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              256.3291015625,
+              157.015625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              264.8837890625,
+              157.015625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              244.35670006499024,
+              244.35670230936165
+            ],
+            [
+              365.57113337666016,
+              365.57113487290775
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              368.0,
+              368.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              252.5,
+              152.75
+            ]
+          ],
+          "direction": [
+            0.8369696139735455,
+            -0.5472493629827029
+          ],
+          "length_pt": 100.95945968555894,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            5.799651114273679,
+            5.799652802913779
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              368.0,
+              368.0
+            ],
+            [
+              448.0,
+              448.0
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              527.2917336647293,
+              527.2917364914102
+            ],
+            [
+              343.8477107556164,
+              343.8477126038308
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 79,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              252.5,
+              152.75
+            ],
+            [
+              324.5,
+              200.75
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.233015430814842,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              557.3569681796978,
+              557.3569704240691
+            ],
+            [
+              351.0713121197985,
+              351.0713136160461
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              681.0,
+              681.0
+            ],
+            [
+              433.5,
+              433.5
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 51,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              324.5,
+              200.75
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8250520872083775,
+            -0.5650566815754855
+          ],
+          "length_pt": 72.11665896309951,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.822262958646832,
+            6.8222639123212625
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              681.0,
+              681.0
+            ],
+            [
+              433.5,
+              433.5
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              788.7425538393059,
+              788.742555412968
+            ],
+            [
+              359.70993053649664,
+              359.7099316142569
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    },
+    {
+      "source_case": "created_3_selected_p12_5_m7_25",
+      "view": {
+        "id": "physical2x",
+        "logical_width": 576,
+        "logical_height": 576,
+        "physical_scale": 2.0,
+        "phase": [
+          0.25,
+          0.75
+        ],
+        "width_px": 1153,
+        "height_px": 1153,
+        "scale": 2.0,
+        "origin_px": [
+          64.25,
+          64.75
+        ]
+      },
+      "hidden_model_atoms": [
+        2,
+        4
+      ],
+      "hidden_canvas_anchors": {
+        "2": [
+          400.25,
+          480.75
+        ],
+        "4": [
+          713.25,
+          466.25
+        ]
+      },
+      "authored_glyphs": {
+        "1": [
+          {
+            "character": "O",
+            "origin_pt": [
+              91.8779296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              100.1279296875,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "3": [
+          {
+            "character": "C",
+            "origin_pt": [
+              248.5185546875,
+              157.015625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              256.3291015625,
+              157.015625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              264.8837890625,
+              157.015625
+            ],
+            "size_pt": 12.0
+          }
+        ],
+        "5": [
+          {
+            "character": "N",
+            "origin_pt": [
+              379.7314453125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "H",
+            "origin_pt": [
+              388.2861328125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          },
+          {
+            "character": "2",
+            "origin_pt": [
+              396.8408203125,
+              164.265625
+            ],
+            "size_pt": 12.0
+          }
+        ]
+      },
+      "glyph_rgb": {
+        "1": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.2,
+          0.4,
+          0.8
+        ]
+      },
+      "bonds": [
+        {
+          "source_id": 900,
+          "model_id": 1,
+          "begin_model_atom": 1,
+          "end_model_atom": 2,
+          "untrimmed_points_pt": [
+            [
+              96.0,
+              160.0
+            ],
+            [
+              168.0,
+              208.0
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.232854313927232,
+            12.232855662626609
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              276.60670006499026,
+              276.60670230936165
+            ],
+            [
+              398.32113337666016,
+              398.32113487290775
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              400.25,
+              400.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 36,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 901,
+          "model_id": 2,
+          "begin_model_atom": 2,
+          "end_model_atom": 3,
+          "untrimmed_points_pt": [
+            [
+              168.0,
+              208.0
+            ],
+            [
+              252.5,
+              152.75
+            ]
+          ],
+          "direction": [
+            0.8369696139735455,
+            -0.5472493629827029
+          ],
+          "length_pt": 100.95945968555894,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            5.799651114273679,
+            5.799652802913779
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              400.25,
+              400.25
+            ],
+            [
+              480.75,
+              480.75
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              559.5417336647293,
+              559.5417364914102
+            ],
+            [
+              376.5977107556164,
+              376.5977126038308
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 79,
+          "oracle_max_depth": 8
+        },
+        {
+          "source_id": 902,
+          "model_id": 3,
+          "begin_model_atom": 3,
+          "end_model_atom": 4,
+          "untrimmed_points_pt": [
+            [
+              252.5,
+              152.75
+            ],
+            [
+              324.5,
+              200.75
+            ]
+          ],
+          "direction": [
+            0.8320502943378436,
+            0.554700196225229
+          ],
+          "length_pt": 86.53323061113575,
+          "begin_cut_pt_interval": [
+            12.233015430814842,
+            12.233016779514216
+          ],
+          "end_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              589.6069681796978,
+              589.6069704240691
+            ],
+            [
+              383.8213121197985,
+              383.8213136160461
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              713.25,
+              713.25
+            ],
+            [
+              466.25,
+              466.25
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 51,
+          "oracle_max_depth": 0
+        },
+        {
+          "source_id": 903,
+          "model_id": 4,
+          "begin_model_atom": 4,
+          "end_model_atom": 5,
+          "untrimmed_points_pt": [
+            [
+              324.5,
+              200.75
+            ],
+            [
+              384.0,
+              160.0
+            ]
+          ],
+          "direction": [
+            0.8250520872083775,
+            -0.5650566815754855
+          ],
+          "length_pt": 72.11665896309951,
+          "begin_cut_pt_interval": [
+            0.0,
+            0.0
+          ],
+          "end_cut_pt_interval": [
+            6.822262958646832,
+            6.8222639123212625
+          ],
+          "begin_canvas_xy_intervals": [
+            [
+              713.25,
+              713.25
+            ],
+            [
+              466.25,
+              466.25
+            ]
+          ],
+          "end_canvas_xy_intervals": [
+            [
+              820.9925538393059,
+              820.992555412968
+            ],
+            [
+              392.45993053649664,
+              392.4599316142569
+            ]
+          ],
+          "width_canvas": 2.5,
+          "oracle_work_nodes": 40,
+          "oracle_max_depth": 0
+        }
+      ],
+      "output_f32_allowance": "8*f32::EPSILON*max(1,abs(canvas coordinate))",
+      "oracle_tolerance_canvas": 1e-05
+    }
+  ]
+}
