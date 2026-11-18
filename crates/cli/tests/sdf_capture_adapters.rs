@@ -7,6 +7,8 @@ mod boxed_label_wire;
 mod cdx_bond_wire;
 #[path = "support/cdx_literal_wire.rs"]
 mod cdx_literal_wire;
+#[path = "support/cdx_resource_boundary_wire.rs"]
+mod cdx_resource_boundary_wire;
 #[path = "support/chain_creation_wire.rs"]
 mod chain_creation_wire;
 #[path = "support/created_label_wire.rs"]

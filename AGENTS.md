@@ -15,6 +15,17 @@ with working files preserved. The current resource task uses feat/cdx-resources-
 and core worker feat/cdx-resources. No archived prototype is automatically eligible for main.
 This supersedes old no-push/no-merge/current-multiple-bonds notes; full M0–M5 stays active.
 
+Read `docs/research/cdx-resources.md` and `docs/verification-cdx-resources.md` before
+CDX string or Text work. The table query is opt-in and runtime-dependency-free. Preserve
+actual root ownership, raw UINT16 ID/charset/RGB, byte-borrowed names, table presence,
+duplicate precedence and colour index 65536. Declared ID lookup does not resolve a
+styled-run font. Resource query failure leaves raw Open/Save and old display/authoring
+guards as before. Integrated 47 standalone tests, 2 IO tests and 1 actual CLI test
+passed. Final local 2202/0/1 and AccessKit 3/0 plus all gates, and ASan 10000/2 seconds,
+passed with no change to old listener behavior. Use the pinned absolute
+`BONDLINE_PYTHON` for workspace checks. STATUS gives the current CDXString/preview
+continuation. Actions stays off, and the full M0–M5 goal remains active.
+
 Plain CDX bonds follow docs/research/cdx-plain-bonds.md and
 docs/verification-cdx-plain-bonds.md: contract6c9fff0, fixtures/helperc29c1a1, IO37d094d,
 caller5afb434 and fuzz1606d62. Keep binary Order1/2/4 (never query3), absent position

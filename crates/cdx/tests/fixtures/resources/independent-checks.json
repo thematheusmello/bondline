@@ -1,0 +1,186 @@
+{
+  "status": "passed",
+  "sources": 48,
+  "positive_queries": 17,
+  "query_errors": 31,
+  "raw_syntax_valid": 48,
+  "framings": {
+    "tables_implicit": "ImplicitDocument",
+    "tables_explicit": "ExplicitDocument",
+    "tables_header": "HeaderDocument",
+    "tables_implicit_file_end": "ImplicitDocumentFileEnd",
+    "tables_explicit_file_end": "ExplicitDocumentFileEnd"
+  },
+  "full_fonts_checked": 65535,
+  "full_colors_checked": 65535,
+  "max_name_bytes_checked": 65535,
+  "last_color_index": 65536,
+  "last_color_rgb": [
+    65401,
+    32254,
+    1
+  ],
+  "query_error_expectations": {
+    "invalid_font_header": {
+      "kind": "InvalidTable",
+      "tag": 256,
+      "record": 1
+    },
+    "invalid_font_count": {
+      "kind": "InvalidTable",
+      "tag": 256,
+      "record": 1
+    },
+    "invalid_font_name": {
+      "kind": "InvalidTable",
+      "tag": 256,
+      "record": 1
+    },
+    "invalid_font_trailing": {
+      "kind": "InvalidTable",
+      "tag": 256,
+      "record": 1
+    },
+    "invalid_font_max_count": {
+      "kind": "InvalidTable",
+      "tag": 256,
+      "record": 1
+    },
+    "invalid_color_header": {
+      "kind": "InvalidTable",
+      "tag": 768,
+      "record": 1
+    },
+    "invalid_color_count": {
+      "kind": "InvalidTable",
+      "tag": 768,
+      "record": 1
+    },
+    "invalid_color_trailing": {
+      "kind": "InvalidTable",
+      "tag": 768,
+      "record": 1
+    },
+    "invalid_color_max_count": {
+      "kind": "InvalidTable",
+      "tag": 768,
+      "record": 1
+    },
+    "unsupported_platform_2": {
+      "kind": "UnsupportedPlatform",
+      "record": 1,
+      "value": 2
+    },
+    "unsupported_platform_65535": {
+      "kind": "UnsupportedPlatform",
+      "record": 1,
+      "value": 65535
+    },
+    "duplicate_font_id": {
+      "kind": "DuplicateFontId",
+      "record": 1,
+      "id": 7,
+      "ordinal": 1
+    },
+    "duplicate_font_late": {
+      "kind": "DuplicateFontId",
+      "record": 1,
+      "id": 0,
+      "ordinal": 65534
+    },
+    "duplicate_font_table": {
+      "kind": "DuplicateTable",
+      "tag": 256,
+      "record": 2
+    },
+    "duplicate_color_table": {
+      "kind": "DuplicateTable",
+      "tag": 768,
+      "record": 2
+    },
+    "duplicate_before_invalid_font": {
+      "kind": "DuplicateTable",
+      "tag": 256,
+      "record": 2
+    },
+    "owner_before_invalid_font": {
+      "kind": "UnsupportedTable",
+      "tag": 768,
+      "record": 4
+    },
+    "owner_font_page": {
+      "kind": "UnsupportedTable",
+      "tag": 256,
+      "record": 3
+    },
+    "owner_font_group": {
+      "kind": "UnsupportedTable",
+      "tag": 256,
+      "record": 24
+    },
+    "owner_font_fragment": {
+      "kind": "UnsupportedTable",
+      "tag": 256,
+      "record": 4
+    },
+    "owner_font_node": {
+      "kind": "UnsupportedTable",
+      "tag": 256,
+      "record": 5
+    },
+    "owner_font_text": {
+      "kind": "UnsupportedTable",
+      "tag": 256,
+      "record": 24
+    },
+    "owner_font_custom": {
+      "kind": "UnsupportedTable",
+      "tag": 256,
+      "record": 24
+    },
+    "owner_font_nested_document": {
+      "kind": "UnsupportedTable",
+      "tag": 256,
+      "record": 24
+    },
+    "owner_color_page": {
+      "kind": "UnsupportedTable",
+      "tag": 768,
+      "record": 3
+    },
+    "owner_color_group": {
+      "kind": "UnsupportedTable",
+      "tag": 768,
+      "record": 24
+    },
+    "owner_color_fragment": {
+      "kind": "UnsupportedTable",
+      "tag": 768,
+      "record": 4
+    },
+    "owner_color_node": {
+      "kind": "UnsupportedTable",
+      "tag": 768,
+      "record": 5
+    },
+    "owner_color_text": {
+      "kind": "UnsupportedTable",
+      "tag": 768,
+      "record": 24
+    },
+    "owner_color_custom": {
+      "kind": "UnsupportedTable",
+      "tag": 768,
+      "record": 24
+    },
+    "owner_color_nested_document": {
+      "kind": "UnsupportedTable",
+      "tag": 768,
+      "record": 24
+    }
+  },
+  "raw_truncation_controls": 3,
+  "no_font_codec_or_style_resolution": true,
+  "no_external_rdkit_claim": true,
+  "product_execution": false
+}

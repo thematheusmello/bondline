@@ -2,21 +2,17 @@
 
 ## CDX font/colour resources, 2026-11-18
 
-The next standalone resource view now has a [locked contract](../research/cdx-resources.md).
+The occasional layout ambiguity remains separate from the implemented
+[standalone resource query](../verification-cdx-resources.md).
 FontTable uses declared nonsequential UINT16 IDs/raw charsets/name bytes; CDXString
 calls its style font an index, so resource ID lookup alone cannot certify Text references.
 The font hex example appears shorter than its normative offset table. Binary unsigned
 charset differs from XML Font's signed wording; the linked charset page404 leaves the
 name codec unresolved. Do not infer UTF-8/platform codec,−1 inheritance or a system font.
 
-Palette0/1 are implicit black/white; stored entries start at2. Table absence alone gives
-2white/3black. Present-short tables must not activate absent defaults. The explicit
-present-zero policy is locked as an empty binary table, while a u32 data index preserves
-count65535/index65536 without wrap/drop. Those decisions still require independent tests.
-Wrong owners, duplicate tables/IDs, platform0/1, length/trailing-byte and allocation
-boundaries are source-locked. Optional query errors must preserve syntax/raw passthrough and must
-not become new IO Open failures. See the source register and current STATUS; no resource
-decoder or faithful CDX typography/display/editing is delivered by the research alone.
+The query distinguishes absent, empty and short palettes and exposes all stored indices
+through 65536. Original-source tests exercise malformed and duplicate resource tables.
+Full CDX typography, Text positioning, display and editing remain open.
 
 ## Plain CDX bonds, 2026-11-18
 

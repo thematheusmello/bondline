@@ -12,6 +12,12 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
+The M1 [CDX resource increment](docs/verification-cdx-resources.md) reads document
+font and colour tables on demand. The independent fixtures and sanitizer cover empty,
+malformed and maximum-sized tables, literal unsigned fields and exact source retention.
+The full local gate passed. Next decode the raw CDXString run records and certify a
+direct-Page caption through the shared preview and unchanged-file workflows.
+
 The current M1 [plain CDX bond receiving](docs/verification-cdx-plain-bonds.md) adds
 read-only Single/Double/Triple and explicit directed position, preserving raw automatic/
 manual provenance and every source byte. Independent16-source/149-refusal checks, actual

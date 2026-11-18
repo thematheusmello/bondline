@@ -5,6 +5,8 @@ use std::{fmt, ops::Range};
 
 mod write;
 pub use write::Writer;
+mod resources;
+pub use resources::{Color, Font, ResourceError, Resources};
 
 pub const MAX_INPUT_BYTES: usize = 64 * 1024 * 1024;
 pub const MAX_RECORDS: usize = 100_000;

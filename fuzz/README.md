@@ -5,6 +5,24 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## CDX font and colour resources
+
+`cdx_parse` checks table ownership and duplicate discovery against the original
+record index. For successful queries it compares every raw font and colour entry,
+borrowed name slice, record and range, and checks the reserved and absent-palette
+lookups. It retains the existing syntax, writer and graph checks.
+
+```sh
+python3 -B fuzz/seed_cdx_resources.py .cache/fuzz/cdx-resources-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdx_parse .cache/fuzz/cdx-resources-example/corpus -- -runs=10000 -seed=721533879 -max_len=524288 -timeout=5 -rss_limit_mb=2048
+```
+
+The generator verifies all 48 resource sources with the independent reader, adds
+three independently refused framing truncations and rechecks the SHA-256 of the
+16 plain-bond and 18 literal-atom sources. It copies the 85 checked inputs into a
+writable corpus and keeps the originals and manifest separate. See the actual run
+and mutation sizes in [resource verification](../docs/verification-cdx-resources.md).
+
 ## Plain CDX bond data
 
 `cdx_parse` additionally compares every projected bond against its own raw Order,

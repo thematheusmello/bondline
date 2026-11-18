@@ -10,3 +10,6 @@ layer = 0
 
 [lints]
 workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true

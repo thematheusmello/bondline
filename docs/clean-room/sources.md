@@ -1,6 +1,7 @@
 # Clean-room source register
 
-The next CDX resource query is [source-locked](../research/cdx-resources.md)2026-11-18 against primary
+The CDX resource query follows the [contract for the binary table layouts](../research/cdx-resources.md),
+reviewed 2026-11-18 against the primary
 [FontTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/FontTable.htm),
 [CDXFontTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXFontTable.htm),
 [ColorTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ColorTable.htm),
@@ -13,16 +14,13 @@ entries; ColorTable0300 has count/RGB UINT16 triples and distinct reserved/absen
 rules. No universal font-name codec or styled-run font reference resolution is established.
 The font datatype's offsets conflict with its apparently short hex example; String's
 index wording conflicts with nonsequential font IDs. The linked charset page returns404.
-These are open evidence, not invented fallbacks. Present-empty/short palette handling
-and the maximum colour index are locked as binary empty tables plus a wider u32 data index, preserving
-all65535 entries through index65536. Platform0/1, raw unsigned charset/name bytes,
-declared-ID-only lookup and optional-query error/source boundaries are explicit original
-support/API policies, without resolving styled Text or changing IO admission.
+Empty binary palettes remain present and short palettes contain only their stored entries.
+A `u32` data index preserves all 65,535 entries through index 65536. The library exposes
+both published platform values, raw unsigned charset and name bytes, and lookup by declared ID.
 Ignored receipt manifest6375B SHA256
 `a8574c064609a29687d1a4cc1632283766d4372cc1241607ced3fbe32adad9e4`
-pins five fresh200 bodies, one404 and five reused current receipts. STATUS records the
-proposed standalone query and independent original-byte acceptance; no resource API,
-Text/IO/render/edit authority or consumer agreement is implemented by this audit.
+pins five fresh 200 responses, one 404 and five earlier receipts. The implementation and
+independent original-byte evidence are recorded in [resource verification](../verification-cdx-resources.md).
 
 The bounded read-only plain CDX bond prerequisite follows
 [the bond contract](../research/cdx-plain-bonds.md), freshly reviewed2026-11-18 against
