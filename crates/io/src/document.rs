@@ -90,6 +90,7 @@ enum CdxmlProfile {
     Connected,
     Mixed,
     Flagged,
+    LabelDefaults,
 }
 
 #[derive(Clone, PartialEq)]
@@ -141,7 +142,8 @@ impl OriginalSource {
                 | CdxmlProfile::Boxed
                 | CdxmlProfile::Connected
                 | CdxmlProfile::Mixed
-                | CdxmlProfile::Flagged => false,
+                | CdxmlProfile::Flagged
+                | CdxmlProfile::LabelDefaults => false,
                 CdxmlProfile::Preserved => {
                     Arc::ptr_eq(current, baseline)
                         || crate::cdxml::supports_delta(baseline, current)
@@ -216,6 +218,8 @@ impl StoredDocument {
             CdxmlProfile::Connected
         } else if crate::cdxml::is_mixed(&bytes, &model) {
             CdxmlProfile::Mixed
+        } else if crate::cdxml::is_label_defaults(&bytes, &model) {
+            CdxmlProfile::LabelDefaults
         } else {
             CdxmlProfile::Opaque
         };
@@ -452,6 +456,15 @@ impl StoredDocument {
         }) if crate::cdxml::supports_flagged_delta(bytes, baseline, &self.model))
     }
 
+    /// Explicit runs beside immutable, source-checked Label* metadata.
+    /// Defaults never supply missing run fields or grant full chemical authoring.
+    pub fn has_label_defaults_projection(&self) -> bool {
+        matches!(self.original.as_ref(), Some(OriginalSource::Cdxml {
+            profile: CdxmlProfile::LabelDefaults, bytes, baseline,
+        }) if Arc::ptr_eq(&self.model, baseline)
+            || crate::cdxml::supports_label_defaults_delta(bytes, baseline, &self.model))
+    }
+
     /// Source coverage to attempt display; scale, glyph and geometry checks still apply.
     pub fn has_display_projection(&self) -> bool {
         self.is_fully_mapped()
@@ -461,6 +474,7 @@ impl StoredDocument {
             || self.has_connected_atom_labels()
             || self.has_mixed_atom_labels()
             || self.has_flagged_atom_labels()
+            || self.has_label_defaults_projection()
     }
 
     pub fn source_info(&self) -> Option<SourceInfo> {
@@ -590,6 +604,15 @@ impl StoredDocument {
                     }
                     Err(error) => Err(error),
                 },
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::LabelDefaults,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_label_defaults_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
                 _ => Err(DocumentError::UnsupportedEdit),
             },
             Err(error) => Err(error),
@@ -717,7 +740,8 @@ impl StoredDocument {
                     | CdxmlProfile::Boxed
                     | CdxmlProfile::Connected
                     | CdxmlProfile::Mixed
-                    | CdxmlProfile::Flagged,
+                    | CdxmlProfile::Flagged
+                    | CdxmlProfile::LabelDefaults,
                 ..
             }) => {
                 return Err(DocumentError::CrossFormatSource {

@@ -703,6 +703,32 @@ fn boxed_capability_is_complete_source_specific_and_raw_model_drift_never_repair
 fn boxed_source_stays_opaque_for_geometry_style_defaults_unknowns_and_present_text_points()
 -> TestResult {
     let raw = std::str::from_utf8(SOURCE)?;
+    let plain = StoredDocument::from_cdxml(SOURCE.into(), PageSize::A4)?;
+    let page = plain.model().pages()[0].id();
+    let scene =
+        bondline_io::display::drawing_page_scene(1024, 1024, &plain, page, &Default::default())?;
+    let plain_frame = bondline_render::cpu_scene(scene.scene())?;
+    {
+        let variant = raw.replace("<CDXML ", "<CDXML LabelFont='42' ");
+        let stored = StoredDocument::from_cdxml(variant.as_bytes().into(), PageSize::A4)?;
+        assert!(!stored.has_boxed_atom_labels());
+        assert!(stored.has_label_defaults_projection());
+        assert!(stored.has_display_projection());
+        assert!(!stored.is_fully_mapped());
+        assert_eq!(stored.model(), plain.model());
+        assert_eq!(stored.to_cdxml()?.as_ref(), variant.as_bytes());
+        let scene = bondline_io::display::drawing_page_scene(
+            1024,
+            1024,
+            &stored,
+            page,
+            &Default::default(),
+        )?;
+        assert_eq!(
+            bondline_render::cpu_scene(scene.scene())?.rgba,
+            plain_frame.rgba
+        );
+    }
     let variants = [
         raw.replace(">OH</s>", ">N</s>"),
         raw.replace(">OH</s>", "></s>"),
@@ -724,7 +750,6 @@ fn boxed_source_stays_opaque_for_geometry_style_defaults_unknowns_and_present_te
         ),
         raw.replace("80.69140625 91.3515625 95.796875 100.1171875", "1 2 3"),
         raw.replace("<CDXML ", "<CDXML Future='opaque' "),
-        raw.replace("<CDXML ", "<CDXML LabelFont='42' "),
         raw.replace("<page ", "<page Future='opaque' "),
         raw.replace("<fragment ", "<fragment Future='opaque' "),
         raw.replace("<n id=\"73\"", "<n id=\"73\" Future='opaque'"),

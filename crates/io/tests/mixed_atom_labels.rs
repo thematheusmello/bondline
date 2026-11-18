@@ -375,9 +375,30 @@ fn complete_mixed_binding_keeps_unknown_styles_namespaces_and_lexical_features_o
             bondline_io::cdxml::MappingError::Syntax(bondline_cdxml::Error::UnsupportedDtd)
         ))
     ));
+    let plain = stored(raw.as_bytes())?;
+    let page = plain.model().pages()[0].id();
+    let scene =
+        bondline_io::display::drawing_page_scene(1024, 1024, &plain, page, &Default::default())?;
+    let plain_frame = bondline_render::cpu_scene(scene.scene())?;
     for changed in [
         raw.replace("<CDXML ", "<CDXML LabelFont='42' "),
         raw.replace("<n id='97' ", "<n id='97' LabelSize='12' "),
+    ] {
+        let own = stored(changed.as_bytes())?;
+        assert!(!own.has_mixed_atom_labels());
+        assert!(own.has_label_defaults_projection());
+        assert!(own.has_display_projection());
+        assert!(!own.is_fully_mapped());
+        assert_eq!(own.model(), plain.model());
+        assert_eq!(own.to_cdxml()?.as_ref(), changed.as_bytes());
+        let scene =
+            bondline_io::display::drawing_page_scene(1024, 1024, &own, page, &Default::default())?;
+        assert_eq!(
+            bondline_render::cpu_scene(scene.scene())?.rgba,
+            plain_frame.rgba
+        );
+    }
+    for changed in [
         raw.replace("<b id='900' ", "<b id='900' LineWidth='1.25' "),
         raw.replace("<CDXML ", "<CDXML xmlns:q='urn:unowned' "),
         raw.replace("<n id='97' ", "<n id='97' FutureValue='retain' "),

@@ -24,6 +24,7 @@ enum Profile {
     Connected,
     Mixed,
     Flagged,
+    LabelDefaults,
 }
 
 fn unsupported<T>() -> Result<T> {
@@ -318,6 +319,17 @@ fn flagged_page_supported(model: &Document, page: &Page) -> bool {
         })
 }
 
+fn label_defaults_page_supported(model: &Document, page: &Page) -> bool {
+    if page.fragments().iter().all(|f| f.bonds().is_empty()) {
+        page.fragments()
+            .iter()
+            .flat_map(|f| f.atoms())
+            .all(|atom| atom.authored_label.is_some())
+    } else {
+        connected_style(model, page) && hidden_supported(page, false)
+    }
+}
+
 fn flagged_model_delta(baseline: &Document, current: &Document) -> bool {
     model_delta(baseline, current, true)
         && one_page(current).is_ok_and(|page| flagged_page_supported(current, page))
@@ -350,6 +362,20 @@ pub(crate) fn supports_flagged_delta(
     if !flagged_model_delta(baseline, current) {
         return false;
     }
+    created_resources_supported(source, baseline, current)
+}
+
+pub(crate) fn supports_label_defaults_delta(
+    source: &[u8],
+    baseline: &Document,
+    current: &Document,
+) -> bool {
+    model_delta(baseline, current, true)
+        && one_page(current).is_ok_and(|page| label_defaults_page_supported(current, page))
+        && created_resources_supported(source, baseline, current)
+}
+
+fn created_resources_supported(source: &[u8], baseline: &Document, current: &Document) -> bool {
     let Ok(xml) = Xml::parse(source) else {
         return false;
     };
@@ -387,6 +413,57 @@ fn keys(node: Node<'_, '_>, expected: &[&str]) -> bool {
         && node
             .attributes()
             .all(|a| a.namespace().is_none() && expected.contains(&a.name()))
+}
+
+const LABEL_DEFAULT_KEYS: [&str; 3] = ["LabelFont", "LabelSize", "LabelFace"];
+
+fn label_default_owner(node: Node<'_, '_>) -> bool {
+    ["CDXML", "n", "b", "t"]
+        .iter()
+        .any(|name| is_element(node, name))
+}
+
+fn profile_keys(node: Node<'_, '_>, expected: &[&str], profile: Profile) -> bool {
+    if !matches!(profile, Profile::LabelDefaults) || !label_default_owner(node) {
+        return keys(node, expected);
+    }
+    let mut expected = expected.to_vec();
+    expected.extend(
+        LABEL_DEFAULT_KEYS
+            .iter()
+            .copied()
+            .filter(|name| node.attribute(*name).is_some()),
+    );
+    keys(node, &expected)
+}
+
+fn label_defaults_supported(xml: &Xml<'_>, resources: &Resources<'_, '_>) -> bool {
+    let mut has_metadata = false;
+    for node in xml.xml().descendants().filter(Node::is_element) {
+        let has_own = LABEL_DEFAULT_KEYS
+            .iter()
+            .any(|name| node.attribute(*name).is_some());
+        if !label_default_owner(node) {
+            if has_own {
+                return false;
+            }
+            continue;
+        }
+        has_metadata |= has_own;
+        // Visiting every owner checks resources even when a nearer default shadows it.
+        let Ok(defaults) = xml.label_defaults(node) else {
+            return false;
+        };
+        if defaults.font().is_some_and(|font| {
+            u16::try_from(font.value())
+                .ok()
+                .is_none_or(|id| resources.font(id).is_err())
+        }) || defaults.face().is_some_and(|face| face.value() < 0)
+        {
+            return false;
+        }
+    }
+    has_metadata
 }
 
 fn trivia(node: Node<'_, '_>) -> bool {
@@ -436,7 +513,10 @@ fn bindings<'doc, 'input: 'doc>(
     baseline: &Document,
     profile: Profile,
 ) -> Result<Vec<Vec<BoundAtom<'doc, 'input>>>> {
-    if !model_supported_with_flags(baseline, matches!(profile, Profile::Flagged)) {
+    if !model_supported_with_flags(
+        baseline,
+        matches!(profile, Profile::Flagged | Profile::LabelDefaults),
+    ) {
         return unsupported();
     }
     let own = one_page(baseline)?;
@@ -450,6 +530,7 @@ fn bindings<'doc, 'input: 'doc>(
         Profile::Connected => !has_unlabelled && connected_style(baseline, own),
         Profile::Mixed => connected_style(baseline, own) && mixed_hidden_supported(own),
         Profile::Flagged => flagged_page_supported(baseline, own),
+        Profile::LabelDefaults => label_defaults_page_supported(baseline, own),
     };
     if !supported {
         return unsupported();
@@ -475,7 +556,7 @@ fn bindings<'doc, 'input: 'doc>(
     if root.attribute("CreationProgram").is_some() {
         root_keys.push("CreationProgram");
     }
-    if !keys(root, &root_keys) {
+    if !profile_keys(root, &root_keys, profile) {
         return unsupported();
     }
     for (name, value) in root_attributes
@@ -493,6 +574,9 @@ fn bindings<'doc, 'input: 'doc>(
     let resources = xml
         .resources()
         .map_err(|_| DocumentError::UnsupportedEdit)?;
+    if matches!(profile, Profile::LabelDefaults) && !label_defaults_supported(xml, &resources) {
+        return unsupported();
+    }
     if resources
         .color(2)
         .map_err(|_| DocumentError::UnsupportedEdit)?
@@ -573,7 +657,7 @@ fn bindings<'doc, 'input: 'doc>(
         return unsupported();
     }
     for text in texts {
-        if !keys(text, &["id", "p", "Justification"])
+        if !profile_keys(text, &["id", "p", "Justification"], profile)
             || text.attribute("Justification") != Some("Left")
         {
             return unsupported();
@@ -617,9 +701,10 @@ fn bindings<'doc, 'input: 'doc>(
         for (node, atom) in source_atoms.into_iter().zip(fragment.atoms()) {
             let source_id = assigned(node)?;
             let expected = write::atom_attributes(atom, source_id)?;
-            if !keys(
+            if !profile_keys(
                 node,
                 &expected.iter().map(|(name, _)| *name).collect::<Vec<_>>(),
+                profile,
             ) || node.attribute("NodeType") != Some("Element")
                 || node
                     .attribute("p")
@@ -636,9 +721,10 @@ fn bindings<'doc, 'input: 'doc>(
                 let text = children.next().ok_or(DocumentError::UnsupportedEdit)?;
                 if children.next().is_some()
                     || !is_element(text, "t")
-                    || !keys(
+                    || !profile_keys(
                         text,
                         &["id", "BoundingBox", "Justification", "LabelJustification"],
+                        profile,
                     )
                     || text.attribute("Justification") != Some("Left")
                     || text.attribute("LabelJustification") != Some("Left")
@@ -682,7 +768,7 @@ fn bindings<'doc, 'input: 'doc>(
             let mut expected_keys: Vec<_> = expected.iter().map(|(name, _)| *name).collect();
             if matches!(
                 profile,
-                Profile::Connected | Profile::Mixed | Profile::Flagged
+                Profile::Connected | Profile::Mixed | Profile::Flagged | Profile::LabelDefaults
             ) {
                 for name in ["Display", "Display2", "color"] {
                     if node.attribute(name).is_some() {
@@ -710,7 +796,7 @@ fn bindings<'doc, 'input: 'doc>(
                     return unsupported();
                 }
             }
-            if !keys(node, &expected_keys) {
+            if !profile_keys(node, &expected_keys, profile) {
                 return unsupported();
             }
             let mapped = Bond {
@@ -743,6 +829,10 @@ pub(crate) fn is_mixed(source: &[u8], baseline: &Document) -> bool {
 
 pub(crate) fn is_flagged(source: &[u8], baseline: &Document) -> bool {
     is_profile(source, baseline, Profile::Flagged)
+}
+
+pub(crate) fn is_label_defaults(source: &[u8], baseline: &Document) -> bool {
+    is_profile(source, baseline, Profile::LabelDefaults)
 }
 
 fn is_profile(source: &[u8], baseline: &Document, profile: Profile) -> bool {
@@ -782,6 +872,14 @@ pub(crate) fn write_flagged_preserved(
     current: &Document,
 ) -> Result<Vec<u8>> {
     write_in_profile(source, baseline, current, Profile::Flagged)
+}
+
+pub(crate) fn write_label_defaults_preserved(
+    source: &[u8],
+    baseline: &Document,
+    current: &Document,
+) -> Result<Vec<u8>> {
+    write_in_profile(source, baseline, current, Profile::LabelDefaults)
 }
 
 fn creation_ids(
@@ -870,6 +968,7 @@ fn write_in_profile(
             supports_mixed_delta(baseline, current) || flagged_model_delta(baseline, current)
         }
         Profile::Flagged => flagged_model_delta(baseline, current),
+        Profile::LabelDefaults => supports_label_defaults_delta(source, baseline, current),
     };
     if !supported {
         return unsupported();
@@ -970,6 +1069,7 @@ fn write_in_profile(
                 || reopened.has_boxed_atom_labels()
         }
         Profile::Flagged => reopened.has_flagged_atom_labels(),
+        Profile::LabelDefaults => reopened.has_label_defaults_projection(),
     };
     if reopened.model() != current || !source_supported {
         return unsupported();
