@@ -23,7 +23,8 @@ The bounded preparation report11091B/SHA256
 records current code and wider-width questions. Documentation is not bundled/relicensed
 as an asset. No reference executable/export/font/sample is inspected or copied.
 
-All four properties belong to Node. Preserve existing Element-node restrictions and
+All four properties belong to Node. Explicit NodeType1 is Element;0 is Unspecified and
+stays unsupported. Preserve existing Element-node restrictions and
 old absent NodeType/Element behavior. Binary payloads are little-endian; framing length
 encoding and numeric payload width are separate. The original bounded decoder policy is:
 
@@ -72,6 +73,9 @@ These are explicit original adapter policies, not universal reference error sema
 StoredDocument owns complete CDX source and its baseline. Full/display/edit stay false;
 unchanged/no-op snapshots borrow source, any model drift refuses to_cdx and restoration
 recovers original bytes. Cross-format/CDXML/MOL and render/authoring refusals stay exact.
+The existing detached page-size/history operation remains available: it may dirty the
+model, but CDX Save refuses drift until Undo restores the source. Read-only projection
+does not imply a new blanket prohibition on every model-only command.
 Preserve source generation/identity even when default-valued files have equal models.
 Registry49 actual bytes/schema/order and catalogue16/124 stay unchanged. Actions OFF.
 
