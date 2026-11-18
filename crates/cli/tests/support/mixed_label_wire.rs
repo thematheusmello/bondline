@@ -26,7 +26,7 @@ fn consume(path: &std::path::Path, case: &str) -> Result {
     assert_eq!(f::read(&raw)?, f::facts(case));
     Ok(())
 }
-fn captures(cpu: &Value, gpu: &Value) -> Result {
+pub(super) fn captures(cpu: &Value, gpu: &Value) -> Result {
     use std::process::{Command, Stdio};
     let python = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
         if cfg!(windows) {
