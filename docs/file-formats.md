@@ -1,5 +1,13 @@
 # File capabilities
 
+The standalone CDXML default-property view now returns per-property LabelFont/Size/Face
+values with their exact containing owners and decoded attribute values. Missing values
+stay unresolved; signed scalar selectors do not become unsigned font/run IDs. Independent
+source-preserving edits/Expat and bounded ASan verify lookup/retention. This does not fill
+missing run fields or widen imported chemical-label display/editing. Node child Text,
+style-sheet/default/geometry ambiguities and complete foreign ownership remain required.
+See [evidence](verification-label-default-lookup.md).
+
 Explicit caption-only CDXML now has a separate checked source capability. One Poster
 page, left-baseline Text objects and explicit ordered font/size/face/colour runs can open,
 render, edit run bodies through the registry, save and reopen while retaining every

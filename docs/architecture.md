@@ -1,5 +1,13 @@
 # Architecture
 
+Standalone CDXML `label_defaults` resolves LabelFont/Size/Face separately along the owned
+containment chain, retaining each selected node and decoded attribute value. Signed
+scalar selectors differ from unsigned resource/run IDs; absent properties stay unresolved.
+Strict owner/value validation does not resolve missing Style fields, external style sheets,
+chemical meaning or Node-child layout. No model, IO authority, registry or UI binding
+follows from this read API. [Contract](research/label-default-lookup.md) and
+[receiving](verification-label-default-lookup.md) record its source conflicts and scope.
+
 Owned `StyledText` objects contain checked ordered `TextRun`/`TextStyle` data on a Page,
 separate from chemical atoms and their derived labels. Empty text collections preserve
 legacy JSON/native bytes; shared history accounts for text allocations. Standalone CDXML

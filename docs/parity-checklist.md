@@ -139,6 +139,12 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 
 ## Workflow overview
 
+The [LabelFont/Size/Face containment lookup](verification-label-default-lookup.md) is a
+verified standalone M1 prerequisite. It retains property owners, signed scalar data and
+unresolved absence, without granting foreign style/display/edit authority or filling Style
+fields. Font/size/style controls and chemical child-Text workflows remain missing. Public
+layout/default conflicts are tracked explicitly; no reference behavior is guessed.
+
 The [plain caption file workflow](verification-styled-captions.md) now supports explicit
 Roboto Regular runs, colours/sizes, source-preserving body edits, history and Save/reopen
 through command47 and all adapters. Bounded actual Mac Open, remote-edit repaint,

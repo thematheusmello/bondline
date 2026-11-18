@@ -4,6 +4,346 @@ use libfuzzer_sys::fuzz_target;
 
 const INPUT_LIMIT: usize = 16 * 1024;
 
+fn label_default_role(name: &str, namespace: Option<&str>, actual_root: bool) -> bool {
+    namespace.is_none_or(str::is_empty)
+        && (actual_root
+            || matches!(
+                name,
+                "n" | "b" | "t" | "table" | "spectrum" | "constraint" | "tlcplate"
+            ))
+}
+
+fn label_default_value_valid(name: &str, value: &str) -> bool {
+    if name == "LabelSize" {
+        value
+            .trim_matches([' ', '\t', '\r', '\n'])
+            .parse::<f64>()
+            .ok()
+            .is_some_and(|value| value.is_finite() && value > 0.0)
+    } else {
+        bondline_cdxml::parse_integer(value)
+            .ok()
+            .is_some_and(|value| i16::try_from(value).is_ok())
+    }
+}
+
+fn label_default_views(document: &bondline_cdxml::Document<'_>, source: &[u8]) {
+    use bondline_cdxml::{Document, LabelDefaultsError};
+    let foreign = Document::parse(source).unwrap();
+    assert_eq!(
+        document
+            .label_defaults(foreign.xml().root_element())
+            .unwrap_err(),
+        LabelDefaultsError::InvalidElement
+    );
+    let root = document.xml().root_element();
+    for element in document.xml().descendants() {
+        let admitted = element.is_element()
+            && label_default_role(
+                element.tag_name().name(),
+                element.tag_name().namespace(),
+                element == root,
+            );
+        let result = document.label_defaults(element);
+        if !admitted {
+            assert_eq!(result.unwrap_err(), LabelDefaultsError::InvalidElement);
+            continue;
+        }
+        match result {
+            Ok(defaults) => {
+                for name in ["LabelFont", "LabelSize", "LabelFace"] {
+                    for owner in element.ancestors().filter(|node| node.is_element()) {
+                        if let Some(attribute) = owner
+                            .attributes()
+                            .find(|a| a.namespace().is_none() && a.name() == name)
+                        {
+                            assert!(label_default_role(
+                                owner.tag_name().name(),
+                                owner.tag_name().namespace(),
+                                owner == root
+                            ));
+                            assert!(label_default_value_valid(name, attribute.value()));
+                        }
+                    }
+                    let nearest = element
+                        .ancestors()
+                        .filter(|node| node.is_element())
+                        .find_map(|owner| {
+                            owner
+                                .attributes()
+                                .find(|a| a.namespace().is_none() && a.name() == name)
+                                .map(|attribute| (owner, attribute.value()))
+                        });
+                    if name == "LabelSize" {
+                        let expected = nearest.map(|(owner, raw)| {
+                            (
+                                owner,
+                                raw,
+                                raw.trim_matches([' ', '\t', '\r', '\n'])
+                                    .parse::<f64>()
+                                    .unwrap(),
+                            )
+                        });
+                        assert_eq!(
+                            defaults
+                                .size_pt()
+                                .map(|p| (p.owner(), p.attribute_value(), p.value())),
+                            expected
+                        );
+                    } else {
+                        let expected = nearest.map(|(owner, raw)| {
+                            (
+                                owner,
+                                raw,
+                                i16::try_from(bondline_cdxml::parse_integer(raw).unwrap()).unwrap(),
+                            )
+                        });
+                        let actual = if name == "LabelFont" {
+                            defaults.font()
+                        } else {
+                            defaults.face()
+                        };
+                        assert_eq!(
+                            actual.map(|p| (p.owner(), p.attribute_value(), p.value())),
+                            expected
+                        );
+                    }
+                }
+            }
+            Err(LabelDefaultsError::InvalidElement) => {
+                panic!("ordinary owned admitted target was refused")
+            }
+            Err(LabelDefaultsError::UnsupportedOwner(name)) => assert!(
+                element.ancestors().filter(|node| node.is_element()).any(
+                    |owner| !label_default_role(
+                        owner.tag_name().name(),
+                        owner.tag_name().namespace(),
+                        owner == root
+                    ) && owner
+                        .attributes()
+                        .any(|a| a.namespace().is_none() && a.name() == name)
+                )
+            ),
+            Err(LabelDefaultsError::InvalidProperty(name)) => assert!(
+                element.ancestors().filter(|node| node.is_element()).any(
+                    |owner| label_default_role(
+                        owner.tag_name().name(),
+                        owner.tag_name().namespace(),
+                        owner == root
+                    ) && owner.attributes().any(|a| a.namespace().is_none()
+                        && a.name() == name
+                        && !label_default_value_valid(name, a.value()))
+                )
+            ),
+        }
+        for attribute in element
+            .attributes()
+            .filter(|attribute| attribute.namespace().is_some())
+        {
+            if let Some(namespace) = attribute.namespace() {
+                assert_eq!(
+                    element.attribute((namespace, attribute.name())),
+                    Some(attribute.value())
+                );
+            }
+        }
+        assert_eq!(document.as_bytes(), source);
+    }
+    assert_eq!(document.as_bytes(), source);
+}
+
+fn label_default_value_property(value: &str) {
+    use bondline_cdxml::{Document, Error, LabelDefaultsError, Writer};
+    for name in ["LabelFont", "LabelSize", "LabelFace"] {
+        let mut writer = Writer::new(&[]).unwrap();
+        if let Err(error) = writer.empty_element("t", &[(name, value)]) {
+            assert!(matches!(error, Error::InvalidAttributeValue));
+            continue;
+        }
+        let bytes = writer.finish().unwrap();
+        let document = Document::parse(&bytes).unwrap();
+        let text = document.xml().root_element().first_element_child().unwrap();
+        match document.label_defaults(text) {
+            Ok(defaults) => {
+                assert!(label_default_value_valid(name, value));
+                assert_eq!(defaults.font().is_some(), name == "LabelFont");
+                assert_eq!(defaults.size_pt().is_some(), name == "LabelSize");
+                assert_eq!(defaults.face().is_some(), name == "LabelFace");
+                if name == "LabelSize" {
+                    let p = defaults.size_pt().unwrap();
+                    assert_eq!(
+                        p.value(),
+                        value
+                            .trim_matches([' ', '\t', '\r', '\n'])
+                            .parse::<f64>()
+                            .unwrap()
+                    );
+                    assert_eq!(p.owner(), text);
+                    assert_eq!(p.attribute_value(), value);
+                } else {
+                    let p = if name == "LabelFont" {
+                        defaults.font()
+                    } else {
+                        defaults.face()
+                    }
+                    .unwrap();
+                    assert_eq!(
+                        p.value(),
+                        i16::try_from(bondline_cdxml::parse_integer(value).unwrap()).unwrap()
+                    );
+                    assert_eq!(p.owner(), text);
+                    assert_eq!(p.attribute_value(), value);
+                }
+            }
+            Err(error) => {
+                assert!(!label_default_value_valid(name, value));
+                assert_eq!(error, LabelDefaultsError::InvalidProperty(name));
+            }
+        }
+        assert_eq!(document.as_bytes(), bytes);
+    }
+}
+
+fn structured_label_defaults(data: &[u8]) {
+    use bondline_cdxml::{Document, LabelDefaultsError};
+    let font = i16::from_le_bytes([
+        data.first().copied().unwrap_or(0),
+        data.get(1).copied().unwrap_or(0),
+    ]);
+    let sizes = ["0.25", "14.5", "100001", "1e300"];
+    let size = sizes[usize::from(data.get(2).copied().unwrap_or(0)) % sizes.len()];
+    let source = format!(
+        "<CDXML LabelFont='{font}' LabelSize='10' LabelFace='96'><page><fragment><n LabelSize='{size}'><t LabelFace='0'><s>OH</s></t></n></fragment></page></CDXML>"
+    );
+    let document = Document::parse(source.as_bytes()).unwrap();
+    let root = document.xml().root_element();
+    let node = document
+        .xml()
+        .descendants()
+        .find(|n| n.is_element() && n.tag_name().name() == "n")
+        .unwrap();
+    let text = node.first_element_child().unwrap();
+    let defaults = document.label_defaults(text).unwrap();
+    let own_font = defaults.font().unwrap();
+    assert_eq!(own_font.value(), font);
+    assert_eq!(own_font.owner(), root);
+    assert_eq!(own_font.attribute_value(), font.to_string());
+    let own_size = defaults.size_pt().unwrap();
+    assert_eq!(own_size.value(), size.parse::<f64>().unwrap());
+    assert_eq!(own_size.owner(), node);
+    assert_eq!(own_size.attribute_value(), size);
+    let own_face = defaults.face().unwrap();
+    assert_eq!(own_face.value(), 0);
+    assert_eq!(own_face.owner(), text);
+    let run = document.styled_text(text).unwrap().runs()[0];
+    assert_eq!((run.font(), run.size_pt(), run.face()), (None, None, None));
+    assert_eq!(document.as_bytes(), source.as_bytes());
+
+    let absent = Document::parse(b"<CDXML><n><t><s/></t></n></CDXML>").unwrap();
+    let text = absent
+        .xml()
+        .root_element()
+        .first_element_child()
+        .unwrap()
+        .first_element_child()
+        .unwrap();
+    let defaults = absent.label_defaults(text).unwrap();
+    assert_eq!(
+        (defaults.font(), defaults.size_pt(), defaults.face()),
+        (None, None, None)
+    );
+
+    for (name, valid, invalid) in [
+        ("LabelFont", "-32768.00", "65535"),
+        ("LabelSize", "0.25", "-1e-9999"),
+        ("LabelFace", "32767", "32768"),
+    ] {
+        let bad_shadow =
+            format!("<CDXML {name}='{invalid}'><n {name}='{valid}'><t><s/></t></n></CDXML>");
+        let document = Document::parse(bad_shadow.as_bytes()).unwrap();
+        let text = document
+            .xml()
+            .root_element()
+            .first_element_child()
+            .unwrap()
+            .first_element_child()
+            .unwrap();
+        assert_eq!(
+            document.label_defaults(text).unwrap_err(),
+            LabelDefaultsError::InvalidProperty(name)
+        );
+        assert_eq!(document.as_bytes(), bad_shadow.as_bytes());
+        let bad_owner = format!(
+            "<CDXML {name}='{valid}'><group {name}='{valid}'><n {name}='{valid}'><t><s/></t></n></group></CDXML>"
+        );
+        let document = Document::parse(bad_owner.as_bytes()).unwrap();
+        let text = document
+            .xml()
+            .descendants()
+            .find(|node| node.is_element() && node.tag_name().name() == "t")
+            .unwrap();
+        assert_eq!(
+            document.label_defaults(text).unwrap_err(),
+            LabelDefaultsError::UnsupportedOwner(name)
+        );
+        assert_eq!(document.as_bytes(), bad_owner.as_bytes());
+    }
+    for (source, error) in [
+        (
+            "<CDXML LabelFont='bad'><n><t LabelSize='bad'><s/></t></n></CDXML>",
+            LabelDefaultsError::InvalidProperty("LabelSize"),
+        ),
+        (
+            "<CDXML><n><t LabelFont='bad' LabelSize='0' LabelFace='bad'><s/></t></n></CDXML>",
+            LabelDefaultsError::InvalidProperty("LabelFont"),
+        ),
+        (
+            "<CDXML LabelFont='bad'><group LabelSize='bad'><n><t><s/></t></n></group></CDXML>",
+            LabelDefaultsError::UnsupportedOwner("LabelSize"),
+        ),
+        (
+            "<CDXML xmlns:x='urn:label'><x:n LabelSize='12'><t><s/></t></x:n></CDXML>",
+            LabelDefaultsError::UnsupportedOwner("LabelSize"),
+        ),
+    ] {
+        let document = Document::parse(source.as_bytes()).unwrap();
+        let text = document
+            .xml()
+            .descendants()
+            .find(|node| node.is_element() && node.tag_name().name() == "t")
+            .unwrap();
+        assert_eq!(document.label_defaults(text).unwrap_err(), error);
+        assert_eq!(document.as_bytes(), source.as_bytes());
+    }
+    const QUALIFIED: &[u8] = b"<CDXML xmlns:x='urn:label' LabelFont='-1' x:LabelFont='bad'><x:n xmlns='urn:other'><t xmlns='' LabelSize='2.5' x:LabelSize='bad'><s/></t></x:n></CDXML>";
+    let document = Document::parse(QUALIFIED).unwrap();
+    let text = document
+        .xml()
+        .descendants()
+        .find(|node| {
+            node.is_element()
+                && node.tag_name().namespace().is_none_or(str::is_empty)
+                && node.tag_name().name() == "t"
+        })
+        .unwrap();
+    let defaults = document.label_defaults(text).unwrap();
+    assert_eq!(defaults.font().unwrap().value(), -1);
+    assert_eq!(
+        defaults.font().unwrap().owner(),
+        document.xml().root_element()
+    );
+    assert_eq!(defaults.size_pt().unwrap().value(), 2.5);
+    assert_eq!(text.attribute(("urn:label", "LabelSize")), Some("bad"));
+    assert_eq!(
+        document
+            .xml()
+            .root_element()
+            .attribute(("urn:label", "LabelFont")),
+        Some("bad")
+    );
+    assert_eq!(document.as_bytes(), QUALIFIED);
+}
+
 fn writer_text_property(value: &str) {
     use bondline_cdxml::{Document, Error, Writer};
     let mut writer = Writer::new(&[]).unwrap();
@@ -285,12 +625,15 @@ fuzz_target!(|data: &[u8]| {
         resource_value_property(value);
         writer_text_property(value);
         text_selector_property(value);
+        label_default_value_property(value);
     }
+    structured_label_defaults(data);
     if let Ok(document) = bondline_cdxml::Document::parse(data) {
         assert_eq!(document.as_bytes(), data);
         assert_eq!(document.to_bytes(), data);
         assert_eq!(document.xml().root_element().tag_name().name(), "CDXML");
         text_views(&document, data);
+        label_default_views(&document, data);
         if let Ok(resources) = document.resources() {
             assert_eq!(resources.color(0).unwrap(), [0.0; 3]);
             assert_eq!(resources.color(1).unwrap(), [1.0; 3]);

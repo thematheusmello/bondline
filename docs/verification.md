@@ -1,5 +1,18 @@
 # Verification log
 
+## Source-backed label defaults, 2026-11-18
+
+[Receiving](verification-label-default-lookup.md) records primary-source conflicts and
+the standalone per-property owner/value lookup. Initial missing-API RED precedes code;
+nine literal/Expat/Decimal/namespace/domain/source-edit cases pass after correcting a new
+test's None-only empty-namespace assumption. Source review finds no material discrepancy.
+ASan74732 passes10000/5s with54 unchanged original seeds, max seed16384B and actual
+NEW/REDUCE maximum8885B. Fresh full40637 passes1919/0/1 across288 result lines and all
+local gates. This natural pass does not fix/explain the earlier MCP bind failure.
+Actual CLI47 bytes, catalogue16/124, model/IO/commands/UI/render, dependencies/locks,
+vendor/fonts/assets/goldens/workflow remain unchanged. No new native/platform result or
+foreign-label authority is added. All jobs/workers terminal, Actions OFF; full M0–M5 open.
+
 ## Explicit plain styled captions, 2026-11-17
 
 [Receiving](verification-styled-captions.md) integrates checked model/standalone syntax,

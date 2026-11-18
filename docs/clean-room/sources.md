@@ -1,5 +1,30 @@
 # Clean-room source register
 
+Chemical-label default lookup reviewed2026-11-18 follows the primary
+[LabelFont](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelStyleFont.htm),
+[LabelSize](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelStyleSize.htm),
+[LabelFace](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelStyleFace.htm)
+and [Node](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) pages. Per-property
+containment fallback ends in an unavailable external style sheet; signed scalar selectors
+remain distinct from UINT16 resource/run IDs. Positive finite XML size and strict owner/
+shadowed-value checks are explicit original reader policies. Source nodes and decoded
+attribute values preserve provenance; this lookup does not fill missing run fields or
+grant model/render/chemical-edit authority. [Contract](../research/label-default-lookup.md).
+The linked Geometry page serves ObjectTag content, so that owner is not inferred.
+
+Node child-Text geometry has conflicting public evidence: pinned Apache-2.0
+[Octet exporter](https://github.com/SamChemMan/Octet-Draw/blob/6395bd582d2c5ba9404e9ddaf175e52e2a9f387c/src/cdxml.ts#L750)
+uses a baseline convention; its importer does not preserve arbitrary child positions.
+Pinned Apache-2.0 [Indigo writer](https://github.com/epam/Indigo/blob/cc2ea85187433c253c0233a13f1859a6a5298d97/core/indigo-core/molecule/src/molecule_cdxml_saver.cpp#L742)
+uses a different coordinate convention. The MIT author's
+[public26.1 measurement report](https://github.com/scotthartley/chem-svg-cdxml/blob/71622e02b4b2b0a976c0e141ddb80db9a78f4c09/references/style-spec.md#L854)
+distinguishes stored positions from baselines in specific formula-face/font contexts.
+These are qualified source observations, not independently reproduced Bondline/vendor
+measurements or a universal plain-face transform. Only public source/license text is
+read; no linked exports, reference fonts, screenshots, samples or implementation ships.
+The current DTD Left default also differs from archived LabelJustification fallback;
+see [open questions](open-questions.md#chemical-label-defaults-and-placement-2026-11-18).
+
 Styled captions reviewed2026-11-17 follow primary SDK [Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm),
 [Style](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Style.htm),
 [Font](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Font.htm),
@@ -83,6 +108,7 @@ programs/assets. Never download, run, inspect, decompile or disassemble referenc
 
 | ID | Public source | Decision / limitations |
 |---|---|---|
+| LABEL-DEFAULT-LOOKUP | LabelFont/LabelSize/LabelFace, Node, Justification and DTD; pinned public source observations linked above; [contract](../research/label-default-lookup.md), [receiving](../verification-label-default-lookup.md) | Per-property containing-owner lookup with decoded-value/raw-node provenance and unresolved absence. Signed scalar selectors differ from unsigned run/resources. Positive finite XML size and strict shadowed/owner checks are original policies. No guessed external stylesheet, omitted-run fallback, child-Text baseline, model/render/edit authority or UI binding. |
 | STYLED-CAPTIONS | Primary Text/Style/Font/2DPosition/Justification/ForegroundColor and OpenType GPOS linked above; [contract](../research/styled-captions.md), [receiving](../verification-styled-captions.md) | Ordered explicit plain runs, independent native/model/XML/font/image expectations, source-preserving bodies and separately bounded own-window native evidence. Roboto-only regular/Left/white-background profile and protocol/budgets are original policies; no chemical-label meaning, font fallback, future-only background/default-colour inference, rich Text tool or CDX text parity. |
 | DOCUMENT-LINE-WIDTH | Public [LineWidth](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LineWidth.htm), [CDXCoordinate](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm), GUIDE25 printed 40–43; [contract](../research/document-line-width.md) | Explicit document-root width is measured in points. Missing foreign values require inheritance/style resolution; no universal numeric default is asserted. Optional data, positive 100000pt bound, original 1pt fallback/12pt labels/3pt separation, combined atomic command and strict original source profile are Bondline policies. Render, persistence, loss guards and native evidence are qualified separately in receiving. No proprietary program/assets or broader foreign-style admission. |
 | SOURCE-PRESERVING-CDXML-PROFILE | [XML1.0](https://www.w3.org/TR/2008/REC-xml-20081126/#sec-starttags), [Namespaces1.0](https://www.w3.org/TR/2009/REC-xml-names-20091208/#defaulting), public [CDXML lexical](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDXML.htm)/[containment](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/General.htm) rules; [contract](../research/source-preserving-cdxml-profile.md), [receiving](../verification-source-preserving-cdxml-profile.md) | Implements the strict original Canonical/Preserved/Opaque grammar, pure current-prefix/domain check, all-current typed update/append writer and explicit sparse-ID reprojection certificate. Four existing-preflight facts preserve lexical evidence lost by the DOM without widening parser admission. Independent literal/Expat/Decimal/RDKit, actual engine/CLI/stdio/socket/history/Unicode files, paired authoring/CPU captures and two bounded ASan runs pass; final local1766/0/1. Three old lexical-only refusal expectations become explicit stronger positives while semantic negatives remain. Native controller access is unavailable, so that path is wired/unverified. Whole-MOL stays canonical-only; generated-only IDs remain per-snapshot. No proprietary program/assets, new dependency, corpus/golden or reference-behavior claim. |

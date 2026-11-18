@@ -12,6 +12,13 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
+The M1 [label-default lookup prerequisite](docs/verification-label-default-lookup.md)
+now has owned per-property provenance, independent Expat/Decimal/source tests and bounded
+ASan. Fresh local1919/0/1 passes; the earlier MCP failure remains unexplained. This adds
+no drawing/foreign-authoring authority. Node child Text precedence, unresolved Style-run
+fallback and conflicting public placement evidence must guide the next complete
+model/source/render/edit/Save workflow; do not invent a universal baseline or style sheet.
+
 Current M1 [plain-caption receiving](docs/verification-styled-captions.md) integrates
 explicit styled runs, a separate source capability, actual CPU/Metal display and one
 shared run-body edit/history/Save command. Bounded Mac Open, remote-edit repaint, keyboard

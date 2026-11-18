@@ -1,5 +1,23 @@
 # Bondline agent instructions
 
+Source-backed LabelFont/Size/Face containment lookup follows
+docs/research/label-default-lookup.md and docs/verification-label-default-lookup.md on
+base7747111. Keep per-property nearest owners, signed font/face vs unsigned run/resources,
+positive-finite XML size as original reader policy, decoded-value/raw-node provenance,
+unresolved absence and strict shadowed/unsupported-owner/namespace/identity checks. It
+does not fill s fields, interpret−1 as inherit, resolve style sheets, grant IO/chemical/
+render authority or enable a tool. Node child Text takes precedence when read; numeric
+Element/H alone cannot certify conflicting labels. Public baseline/default evidence is
+qualified/contradictory; do not adopt a universal offset. Geometry owner remains unsupported.
+Nine standalone new cases pass after a new test's empty-namespace representation
+qualification, without producer changes. Fresh full40637 passes1919/0/1 and all local
+gates; ASan74732 passes10000/5s with54 original seeds, actual NEW/REDUCE8885B/maxseed16KiB.
+The preceding MCP failure stays unexplained, not fixed. CLI47 bytes/catalogue16/124,
+model/IO/commands/UI/render, locks/vendor/assets/fonts/goldens/workflow stay exact.
+All jobs/workers terminal, no native window touched, Actions OFF. Continue owned chemical
+child-Text/effective-style source/model/render/history/Save work from STATUS; no duplication
+of the delivered resource/default/SetText prerequisites. Full M0–M5 remains active/incomplete.
+
 Explicit plain styled captions are integrated on baseeff16ae; read
 docs/research/styled-captions.md and docs/verification-styled-captions.md. Keep checked
 owned Page text runs distinct from chemical labels, exact empty legacy bytes, native

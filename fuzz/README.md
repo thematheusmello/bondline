@@ -7,6 +7,32 @@ not an expansion of the native runtime dependency allowlist.
 
 ## Source-preserving XML edits
 
+### Source-backed label defaults
+
+The existing `cdxml_parse` target additionally checks the standalone LabelFont/LabelSize/
+LabelFace containment view on accepted sources: owned target/source provenance, exact
+decoded values, independent nearest fields, shadowed validation, unsupported owners,
+signed INT16 versus unsigned run selectors, expanded namespace meaning and source purity.
+Structured original controls retain absence and old Style-run fields; no missing run
+attribute is filled. Positive finite XML size is the explicit reader policy, not a
+font/default/binary-unit or foreign rendering claim. All old invariants and the 16KiB
+input guard remain. These new lookup assertions use only standalone format readers;
+existing IO/model checks remain unchanged and no native workflow is exercised.
+
+Generate a fresh source/corpus/manifest directory, then use pinned ASan tooling:
+
+```sh
+python3 fuzz/seed_cdxml_label_defaults.py .cache/fuzz/cdxml-label-defaults-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_parse .cache/fuzz/cdxml-label-defaults-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The stdlib recipe refuses an existing destination and keeps immutable `source/` and
+`manifest.json` outside writable `corpus/`. Original seeds cover all admitted roles,
+partial defaults, negative/shadowed/unsupported values, qualified attributes/owners,
+empty namespace resets, decoded/lexical differences and exact 16KiB. These commands are
+declarations, not passes; Root records actual source hashes, manifests, reached lengths
+and terminal results. [Contract](../docs/research/label-default-lookup.md).
+
 `cdxml_parse` also decodes logical font/palette tables. Arbitrary XML retains exact
 source on either projection success or failure. Fixed valid tables with arbitrary
 escaped names, font IDs and RGB values check exact typed success/error results, reserved

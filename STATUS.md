@@ -1,4 +1,4 @@
-# Status — 2026-11-17
+# Status — 2026-11-18
 
 The full M0–M5 goal is **active after the user resumed it** on `feat/multiple-bonds`.
 Its scope is unchanged. The native/GPU license
@@ -6,6 +6,66 @@ blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publication.
 
 ## Current recoverable work and evidence
+
+Recoverable state: the atomic source-backed label-default lookup integration containing
+this record, based on7747111. Full M0–M5 remains active/incomplete; this section supersedes
+all historical next-task/job lists and the stale line-width continuation in the goal history.
+
+### Label-default provenance integrated; fresh full local gate passes
+
+Read [contract](docs/research/label-default-lookup.md) and
+[receiving](docs/verification-label-default-lookup.md). The standalone CDXML view resolves
+LabelFont/LabelSize/LabelFace independently along legal containment owners, retaining
+source nodes and decoded attribute values. Signed scalar selectors remain distinct from
+unsigned run/resource IDs. Absence remains unresolved; positive finite XML size is an
+original checked reader policy. Strict namespace/identity/unsupported-owner/shadowed-value
+checks prevent guessed defaults. No model/IO/render/command/native authority or tool is added.
+
+Source research establishes child Text precedence over redundant chemistry, missing-run
+fallback gaps, DTD/archived justification conflict and conflicting qualified placement
+conventions. Do not render authored child Text as derived Element/H or assume a universal
+baseline. The Geometry SDK link serves ObjectTag; that lookup owner remains unsupported.
+Primary/public source/license pins and limits are in the receiving/source registers.
+
+Initial API compile RED precedes production. Nine independent literal/Expat/Decimal,
+provenance, domain, namespace/ownership and exact-source edit cases pass. One new test's
+None-only assertion for explicit empty namespace is qualified to ordinary None-or-empty
+and strengthened with Expat; no producer change fixes it. Source review finds no material
+issue. Fresh full40637 exits0: **1919 passed/0 failed/1 ignored**,288 result lines, all
+fmt, warnings-denied workspace/vendor, layers, strict runtime licenses, seven assets/
+notices and eight-file pinned corpus gates. Log242691B/SHA256
+8da88225b3393901040181e8cc69a19af1cf32049f3deb8929ef871cdb91abf7.
+The earlier MCP replacement-bind failure remains unexplained, not fixed by this natural pass.
+ASan74732 passes10000/5s,54 immutable source seeds intact, maxseed16384B and actual
+NEW/REDUCE maximum8885B. Do not call that16KiB mutation coverage.
+
+Actual CLI47 discovery remains44407B/SHA256
+8d5a7031cfc0ce8e444878ed058ee6080dcff601f48cdfd8149648eee0b575df; catalogue16/124 stays.
+Model/IO/commands/UI/render, dependencies/locks, vendor/fonts/assets/goldens/workflow and
+protected MCP policy/tests remain exact. No native window/user drawing is accessed;
+all workers and Root jobs are terminal. Actions OFF; no push/publication.
+
+Next executable work:
+
+1. Integrate owned chemical Node child Text and effective style data separately from
+   numeric Element/H. Use the new default/resource/SetText primitives without inferring
+   omitted-run fallback or a universal baseline. First lock the supported placement/face/
+   ownership and semantic-agreement contract against pinned public evidence, then declare
+   independent foreign/source/retention/render/history/Save vectors before widening IO.
+2. Every supported H/Element/position edit must synchronize dependent authored labels or
+   explicitly refuse: atom setter, bond order/extension, chain/ring/sprout attachment and
+   translation all matter. Native encoding, history heap budgets, MOL/SMILES loss guards,
+   actual glyph masks/hits and both logical em endpoints need coverage. Keep old legacy
+   atom-setter data-only behavior exact; do not add a blanket renderability restriction.
+3. Finish native Text editing/style workflows and mixed foreign diagrams; continue CDX/
+   general interchange, all remaining M2 drawing/selection/styles, M3 chemistry/analysis,
+   M4 publishing/clipboard/printing and M5 naming/templates/WASM/distribution. M0 full
+   inventory/addressability/jobs, native races/DPI/accessibility/platform acceptance and
+   the unexplained listener failure remain open. Native width/spacing, Windows/Linux/
+   browser and release checks still need actual evidence. Keep Actions OFF.
+
+## Historical checkpoints
+
 
 Recoverable state: the atomic styled-caption workflow integration containing this record,
 based on `eff16ae` (the existing pinned GPOS dependency edge). The full persistent goal covers
@@ -67,7 +127,7 @@ Next executable work:
    including the unexplained MCP listener failure, remain open. Native width/spacing,
    Windows/Linux/browser and release checks need actual evidence. Keep Actions OFF.
 
-## Historical checkpoints
+
 
 
 Recoverable state: the atomic `feat(styles): support explicit document bond spacing`

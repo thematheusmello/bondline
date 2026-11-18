@@ -1,5 +1,33 @@
 # Open questions
 
+## Chemical label defaults and placement, 2026-11-18
+
+Primary LabelFont/Size/Face pages define containing-object fallback then a last-used
+style sheet, not a universal font/size/face. The new
+[lookup contract](../research/label-default-lookup.md) retains each property's owner,
+decoded value and unresolved absence; it does not resolve omitted Style-run fields.
+The SDK links for Style font/size/face and charset are unavailable. Fractional/extended
+XML LabelSize domains beyond illustrated point values remain an original reader policy;
+the separate signed scalar fields do not inherit the legacy composite Style's−1 sentinel.
+Geometry's linked SDK page incorrectly serves ObjectTag content; its default-owner
+mapping remains unsupported pending evidence. Current DTD syntax and archived property
+owner lists also need version qualification for newer objects.
+
+The archived eventual-Auto LabelJustification fallback conflicts with the current DTD's
+Left default. Node LabelDisplay, Text LabelAlignment and LabelJustification are distinct
+properties/enumerations. A child Text is authored data that takes precedence when read;
+redundant Element/H alone cannot certify a conflicting displayed label. Current opacity
+is correct; do not enable authoring by ignoring child Text.
+
+A general Node child Left p→baseline transform is not established. Public Octet export,
+Indigo export and the MIT author's26.1 formula-face/font measurements differ or qualify
+their conventions. Octet import does not preserve arbitrary t.p, and graph-only toolkit
+acceptance cannot prove visual correspondence. Do not reuse a caption baseline, Node.p
+or a font-independent offset without an explicit qualified contract and independent
+vectors. Full child-Text data, effective fonts/styles, source-preserving synchronized
+chemical edits, all H/position mutators, masks/hits/DPI and native/foreign acceptance
+remain required; the format-default lookup alone completes none of those workflows.
+
 ## Styled captions, 2026-11-17
 
 The [explicit plain-caption contract](../research/styled-captions.md) uses actual run

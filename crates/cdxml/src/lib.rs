@@ -1,11 +1,13 @@
 //! Standalone source-preserving CDXML syntax. No document model or native I/O.
 
+mod defaults;
 mod edit;
 mod numbers;
 mod patch;
 mod resources;
 mod text;
 mod writer;
+pub use defaults::{LabelDefault, LabelDefaults, LabelDefaultsError};
 pub use numbers::{ObjectId, parse_integer};
 pub use patch::{Edit, MAX_EDITS};
 pub use resources::{Color, Font, ResourceError, Resources};
