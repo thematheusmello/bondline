@@ -1,5 +1,6 @@
 //! Frozen creation workflows through the actual CLI, initialized MCP and loopback.
 use super::{Client, cli, mixed_label_wire::captures, socket, support};
+use crate::registry_fixture;
 use bondline_commands::Engine;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::{Value, json};
@@ -59,7 +60,8 @@ fn schema(v: &Value) {
     );
 }
 fn discovery(rows: &[Value], mcp: bool) -> Result {
-    let old: Vec<Value> = serde_json::from_str(f::METADATA48)?;
+    let old: Vec<Value> =
+        serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA48))?;
     assert_eq!((old.len(), rows.len()), (48, 49));
     for (row, expected) in rows.iter().take(48).zip(&old) {
         if mcp {
@@ -113,7 +115,8 @@ fn actual_cli_creation_keeps_discovery_prefix_and_explicit_style_value_dense_id_
     );
     let rows: Value = serde_json::from_slice(&listing.stdout)?;
     discovery(rows.as_array().ok_or("command rows")?, false)?;
-    let prefix = f::METADATA48.trim().strip_suffix(']').ok_or("old array")?;
+    let expected = registry_fixture::with_cdx_caption_edit(f::METADATA48);
+    let prefix = expected.trim().strip_suffix(']').ok_or("old array")?;
     assert!(
         listing.stdout.starts_with(prefix.as_bytes()),
         "actual CLI serialized old48 records must remain byte-exact"

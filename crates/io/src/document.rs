@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod carbon_label_tests;
+mod cdx_caption;
 mod cdx_label;
 mod smiles;
 
@@ -40,6 +41,8 @@ pub enum DocumentError {
     UnsupportedCdxEdit,
     #[error("CDX atom label editing requires {0}")]
     UnsupportedCdxLabel(&'static str),
+    #[error("CDX caption editing requires {0}")]
+    UnsupportedCdxCaption(&'static str),
     #[error("saving {from} source as {to} would discard source metadata")]
     CrossFormatSource {
         from: &'static str,
@@ -72,6 +75,7 @@ impl DocumentError {
             | Self::UnsupportedMolEdit
             | Self::UnsupportedCdxEdit
             | Self::UnsupportedCdxLabel(_)
+            | Self::UnsupportedCdxCaption(_)
             | Self::CrossFormatSource { .. }
             | Self::UnsupportedMolLayout(_) => "unsupported_content",
         }
@@ -447,7 +451,7 @@ impl StoredDocument {
             if Arc::ptr_eq(&self.model,baseline) || crate::cdxml::supports_caption_delta(baseline,&self.model))
     }
 
-    /// Read-only CDX caption proof for the exact unchanged projected model.
+    /// CDX caption proof for the exact source-certified model.
     pub fn has_cdx_caption_preview(&self) -> bool {
         self.has_cdx_preview(CdxPreview::Caption)
     }
@@ -464,6 +468,48 @@ impl StoredDocument {
             .is_some_and(|(_, model, preview)| {
                 preview == required && (Arc::ptr_eq(&self.model, model) || self.model == *model)
             })
+    }
+
+    /// Re-import a qualified edit and retain original and current snapshots together.
+    fn finish_cdx_edit(
+        &self,
+        output: Vec<u8>,
+        expected: Document,
+        page_size: PageSize,
+        mismatch: DocumentError,
+    ) -> Result<Self, DocumentError> {
+        let Some(OriginalSource::Cdx {
+            bytes,
+            baseline,
+            preview,
+            ..
+        }) = &self.original
+        else {
+            return Err(DocumentError::NoCdxSource);
+        };
+        let (projected, profile) = crate::cdx::project_document(&output, page_size)?;
+        if profile != *preview || projected != expected {
+            return Err(mismatch);
+        }
+        let (model, edit) = if expected == **baseline && output == bytes.as_ref() {
+            (Arc::clone(baseline), None)
+        } else {
+            let model = Arc::new(expected);
+            let edit = CdxEdit {
+                bytes: Arc::from(output),
+                model: Arc::clone(&model),
+            };
+            (model, Some(edit))
+        };
+        Ok(Self {
+            model,
+            original: Some(OriginalSource::Cdx {
+                bytes: Arc::clone(bytes),
+                baseline: Arc::clone(baseline),
+                preview: *preview,
+                edit,
+            }),
+        })
     }
 
     /// Closed source/model coverage for the box-positioned literal label workflow.

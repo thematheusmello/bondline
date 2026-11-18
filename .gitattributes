@@ -25,6 +25,8 @@
 /crates/io/tests/fixtures/cdx-label-edit/*.json -text
 /crates/io/tests/fixtures/cdx-implicit-element/*.cdx -text
 /crates/io/tests/fixtures/cdx-implicit-element/*.json -text
+/crates/io/tests/fixtures/cdx-caption-edit/*.cdx -text
+/crates/io/tests/fixtures/cdx-caption-edit/*.json -text
 /crates/io/tests/fixtures/mol/*.mol -text
 /crates/io/tests/fixtures/v3000/*.mol -text
 /crates/io/tests/fixtures/sdf/*.sdf -text

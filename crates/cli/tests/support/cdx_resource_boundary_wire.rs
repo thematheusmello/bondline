@@ -1,5 +1,6 @@
 //! One actual CLI boundary case: invalid resource queries do not harden CDX Open.
 use super::{cli, support};
+use crate::registry_fixture;
 use bondline_commands::Engine;
 use serde_json::{Value, json};
 use std::{fs, process::Command, sync::Arc};
@@ -34,7 +35,10 @@ fn actual_cli_invalid_resource_queries_keep49_unchanged_saves_and_old_authority(
     );
     assert_eq!(
         listed.stdout,
-        include_str!("../../../io/tests/fixtures/cdx-literal-metadata/old49.json").as_bytes()
+        registry_fixture::with_cdx_caption_edit(include_str!(
+            "../../../io/tests/fixtures/cdx-literal-metadata/old49.json"
+        ))
+        .as_bytes()
     );
     let opened = cli(&[request("document.open_cdx", json!({"path":input}))])?;
     assert_eq!(opened["revision"], 1);

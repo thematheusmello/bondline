@@ -1,4 +1,6 @@
 //! Existing APIs only, compiled against9cf7103 before selection/source producers.
+#[path = "../../../xtask/oracles/registry_fixture_support.rs"]
+mod registry_fixture;
 use bondline_commands::{Engine, SelectionTranslate};
 use bondline_io::StoredDocument;
 use bondline_model::PageSize;
@@ -13,7 +15,9 @@ mod boxed;
 mod connected;
 
 fn selection_preview(raw: &str, old_point: [f64; 2], old_box: [f64; 4]) -> TestResult {
-    let old: Vec<Value> = serde_json::from_str(connected::METADATA48)?;
+    let old: Vec<Value> = serde_json::from_str(&registry_fixture::with_cdx_caption_edit(
+        connected::METADATA48,
+    ))?;
     assert_eq!(
         serde_json::to_value(
             bondline_commands::registry()

@@ -1,5 +1,9 @@
 # Clean-room source register
 
+The [existing CDX caption edit contract](../research/cdx-caption-edits.md)
+uses published Text, CDXString, framing and ZOrder rules. It preserves
+explicit style words and source identity while updating proven run starts.
+
 The [implicit CDX Element contract](../research/cdx-implicit-element.md)
 cites the published carbon default, H count and binary containment rules.
 It defines insertion through an exact source handle and preserves a

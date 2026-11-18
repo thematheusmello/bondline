@@ -254,22 +254,50 @@ macOS input remains unverified. Evidence is in
 `target/cdx-resources/next-text/implicit-element`.
 
 [PR 11](https://github.com/thematheusmello/bondline/pull/11) carries
-reviewed producer `20f3644`. The final local gate passed **2,254/0/1**
+reviewed producer `20f3644` and landed at `7b5e9c1`. The final local gate passed **2,254/0/1**
 workspace tests and **3/0** AccessKit tests, including the new App case.
 Fmt, Clippy, layers, licenses, assets and corpus passed. All owned jobs
 exited and Actions stayed off.
 
+### Editing CDX caption runs
+
+The independent sources at `f6b71ad` cover single-run growth, earlier-run
+growth and shrinkage, and a UTF-8 final run. Source and paint order can
+differ, including anonymous Texts. The existing command updates one
+owned Text property while preserving count, style words, placement, paint
+order and unrelated bytes. It reimports the full caption model and
+retains original and edited source snapshots.
+
+The [verification](docs/verification-cdx-caption-edits.md) covers compiler
+and runtime REDs, the exact 16-bit start boundary, four full-model/byte
+witnesses and history, actual CLI/stdio/loopback, App repaint and file
+controls. Independent FontTools agrees with actual coloured ink within
+the declared three-pixel allowance. Before and after CPU/Metal captures
+match. Registry49 changes one description and keeps schemas and order.
+ASan passes 10,000 runs with 211 unchanged files. The signed desktop
+review was prepared during hardware activity. Native caption input
+remains open. Receipts are in
+`target/cdx-resources/next-text/caption-edits`.
+
+[PR 12](https://github.com/thematheusmello/bondline/pull/12) carries reviewed
+producer `bdae9cb`. The final local gate passed **2,263/0/1** workspace
+tests and **3/0** AccessKit tests, including the new encoder and App cases.
+Fmt, Clippy, layers, licenses, assets and corpus passed. IO type-checks
+on Windows MSVC, Linux GNU and WebAssembly. All owned jobs exited and
+Actions stayed off.
+
 ### Next executable work
 
-1. Source-lock editing existing qualified CDX caption runs using the
-   [explicit run contract](docs/research/cdx-caption-runs.md) and the existing
-   `text.set_run` path. Freeze originals for one-run and multi-run changes,
-   including shifted start offsets, exact retained style words, unchanged
-   peers and rejection of ambiguity and unsupported styles. Use scoped
-   replacements, whole-page re-import and exact history/Save proofs.
-   Preserve the caption reader's stable TextId assignment by source ID and
-   encounter order separately from paint depth.
-   Check the current command discovery description and actual adapters.
+1. Source-lock native editing of existing qualified captions from the
+   public Text workflow. Add an original editable-run presentation that
+   dispatches `text.set_run`, with stable TextId targeting and existing
+   document and draft ownership patterns. Freeze independent App cases
+   for overlapping captions, ordered styled runs, keyboard history and
+   exact Unicode Save/reopen. Keep the separate new-Text creation,
+   typography and unresolved-source work in the full backlog.
+   The pinned version 25 guide describes editing by clicking existing
+   text with the Text tool on printed page 92. Qualify that behavior
+   against the target version before claiming parity. [Public guide](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf#page=93).
 2. Verify the current supported edit through actual macOS input when the
    desktop is idle. Continue broader M1 styles, captions, source edits and
    formats, then the remaining M0 and M2–M5 workflows from the roadmap.

@@ -1,4 +1,6 @@
 //! Explicit run typography and immutable scalar metadata are separate source facts.
+#[path = "../../../xtask/oracles/registry_fixture_support.rs"]
+mod registry_fixture;
 use bondline_commands::{Command, Engine};
 use bondline_io::StoredDocument;
 use bondline_model::PageSize;
@@ -246,7 +248,8 @@ fn exact(e: &Engine, before: &serde_json::Value, name: &str) -> TestResult {
 #[test]
 fn frozen_metadata_sources_compose_explicit_edits_movement_history_and_real_file_continuation()
 -> TestResult {
-    let old: serde_json::Value = serde_json::from_str(f::METADATA49)?;
+    let old: serde_json::Value =
+        serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?;
     assert_eq!(
         serde_json::to_value(bondline_commands::registry())?,
         old,

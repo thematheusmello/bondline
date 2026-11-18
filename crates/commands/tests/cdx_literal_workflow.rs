@@ -1,4 +1,6 @@
 //! Literal binary metadata crosses existing file/history owners without granting drawing authority.
+#[path = "../../../xtask/oracles/registry_fixture_support.rs"]
+mod registry_fixture;
 use bondline_commands::{Command, Engine};
 use serde_json::{Value, json};
 use std::{fs, sync::Arc};
@@ -31,7 +33,7 @@ fn exact(e: &Engine, name: &str) -> TestResult {
 fn literal_cdx_atoms_survive_registered_open_unchanged_unicode_save_and_reopen() -> TestResult {
     assert_eq!(
         serde_json::to_value(bondline_commands::registry())?,
-        serde_json::from_str::<Value>(f::METADATA49)?
+        serde_json::from_str::<Value>(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?
     );
     for name in [
         "methylammonium_explicit",

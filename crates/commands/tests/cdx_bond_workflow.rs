@@ -1,4 +1,6 @@
 //! Directed CDX bond data retains source identity without granting drawing authority.
+#[path = "../../../xtask/oracles/registry_fixture_support.rs"]
+mod registry_fixture;
 use bondline_commands::{Command, Engine};
 use serde_json::{Value, json};
 use std::{fs, sync::Arc};
@@ -26,7 +28,7 @@ fn exact(e: &Engine, name: &str) -> TestResult {
 fn directed_bonds_survive_registered_unicode_files_with_all_authoring_guards() -> TestResult {
     assert_eq!(
         serde_json::to_value(bondline_commands::registry())?,
-        serde_json::from_str::<Value>(f::METADATA49)?
+        serde_json::from_str::<Value>(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?
     );
     for name in [
         "ethene",

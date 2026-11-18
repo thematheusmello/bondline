@@ -1,18 +1,24 @@
-//! Whole-source proof for read-only, explicitly positioned CDX captions.
+//! Whole-source proof and stable source identity for explicitly positioned CDX captions.
 use super::{
     COLOR_TABLE, DOCUMENT, DRAWING_SPACE, FONT_TABLE, HEIGHT, PAGE, POSITION, TEXT, TEXT_OBJECT,
     WIDTH, Z_ORDER, has_preview_header, payload, poster_size, read_position,
     text::{TextRole, decode_runs},
     verify_preview_page,
 };
-use bondline_cdx::{Document, RecordKind, Resources};
-use bondline_model::{StyledText, TextId};
+use bondline_cdx::{Document, Record, RecordKind, Resources};
+use bondline_model::{PageSize, StyledText, TextId};
 use bondline_render::{MAX_PAGE_TEXT_RUNS, validate_caption_run_joins};
 use std::collections::{BTreeMap, BTreeSet};
 
 const CAPTION_JUSTIFICATION: u16 = 0x080c;
+type Fields = BTreeMap<u16, usize>;
 
-pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document> {
+struct CaptionLayout {
+    size: PageSize,
+    captions: Vec<(u32, Fields)>,
+}
+
+fn layout(source: &Document<'_>) -> Option<CaptionLayout> {
     if !has_preview_header(source) {
         return None;
     }
@@ -58,18 +64,35 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
             RecordKind::ObjectEnd { .. } | RecordKind::FileEnd => {}
         }
     }
-    let size = poster_size(source, &page_fields)?;
+    let mut captions: Vec<_> = text_fields.into_values().collect();
+    // A stable sort keeps anonymous captions in encounter order.
+    captions.sort_by_key(|(id, _)| *id);
+    Some(CaptionLayout {
+        size: poster_size(source, &page_fields)?,
+        captions,
+    })
+}
+
+pub(crate) fn text_record<'record>(
+    source: &'record Document<'_>,
+    text: TextId,
+) -> Option<&'record Record> {
+    let ordinal = usize::try_from(text.get()).ok()?.checked_sub(1)?;
+    let layout = layout(source)?;
+    let (_, fields) = layout.captions.get(ordinal)?;
+    source.records().get(*fields.get(&TEXT)?)
+}
+
+pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document> {
+    let layout = layout(source)?;
     let resources = source.resources().ok()?;
     if resources.color(2).ok()? != [u16::MAX; 3] {
         return None;
     }
-    let mut captions: Vec<_> = text_fields.into_values().collect();
-    // A stable sort keeps anonymous captions in encounter order.
-    captions.sort_by_key(|(id, _)| *id);
     let mut ordered = BTreeMap::new();
     let mut omitted = false;
     let mut remaining_runs = MAX_PAGE_TEXT_RUNS;
-    for (ordinal, (_, fields)) in captions.into_iter().enumerate() {
+    for (ordinal, (_, fields)) in layout.captions.into_iter().enumerate() {
         let depth = if let Some(&property) = fields.get(&Z_ORDER) {
             i16::from_le_bytes(payload(source, property, Z_ORDER).ok()?)
         } else {
@@ -96,7 +119,7 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
     }
     let mut document = bondline_model::Document::default();
     let page = document.pages().first()?.id();
-    document.set_page_size(page, size).ok()?;
+    document.set_page_size(page, layout.size).ok()?;
     document
         .append_texts(page, ordered.into_values().collect())
         .ok()?;
@@ -107,7 +130,7 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
 fn project_text(
     source: &Document<'_>,
     resources: &Resources<'_, '_>,
-    fields: &BTreeMap<u16, usize>,
+    fields: &Fields,
     id: TextId,
     remaining_runs: &mut usize,
 ) -> Option<StyledText> {

@@ -417,6 +417,60 @@ fn check_batch(document: &Document<'_>) {
     }
 }
 
+fn check_caption_edit(stored: &bondline_io::StoredDocument, source: &Document<'_>) {
+    let page = stored.model().pages().first().unwrap();
+    let caption = page.texts().last().unwrap();
+    let run = if source.as_bytes().len() % 2 == 0 {
+        caption.runs().len() - 1
+    } else {
+        0
+    };
+    let old = caption.runs().get(run).unwrap().text();
+    let unchanged = stored
+        .with_cdx_caption_run(page.id(), caption.id(), run, old.to_owned())
+        .unwrap();
+    assert!(std::sync::Arc::ptr_eq(
+        &stored.model_snapshot(),
+        &unchanged.model_snapshot()
+    ));
+    assert_eq!(unchanged.export_cdx().unwrap(), source.as_bytes());
+    let replacement = if old == "QX" { "MM" } else { "QX" };
+    if let Ok(edited) =
+        stored.with_cdx_caption_run(page.id(), caption.id(), run, replacement.to_owned())
+    {
+        assert!(edited.has_cdx_caption_preview());
+        assert!(!edited.is_fully_mapped());
+        let bytes = edited.export_cdx().unwrap();
+        let parsed = Document::parse(bytes).unwrap();
+        assert_eq!(parsed.framing(), source.framing());
+        assert_eq!(parsed.records().len(), source.records().len());
+        assert_eq!(parsed.header(), source.header());
+        let mut changed = 0;
+        for (before, after) in source.records().iter().zip(parsed.records()) {
+            assert_eq!(before.parent(), after.parent());
+            if source.as_bytes().get(before.range()) != bytes.get(after.range()) {
+                assert!(matches!(
+                    before.kind(),
+                    RecordKind::Property { tag: 0x0700, .. }
+                ));
+                assert!(matches!(
+                    after.kind(),
+                    RecordKind::Property { tag: 0x0700, .. }
+                ));
+                changed += 1;
+            }
+        }
+        assert_eq!(changed, 1);
+        let reopened = bondline_io::StoredDocument::from_cdx(
+            std::sync::Arc::from(bytes),
+            bondline_model::PageSize::A4,
+        )
+        .unwrap();
+        assert_eq!(reopened.model(), edited.model());
+    }
+    assert_eq!(stored.export_cdx().unwrap(), source.as_bytes());
+}
+
 fn check_label_edit(stored: &bondline_io::StoredDocument, original: &[u8]) {
     let page = stored.model().pages().first().unwrap();
     let atoms = page
@@ -569,6 +623,7 @@ fuzz_target!(|data: &[u8]| {
         assert!(!stored.has_caption_projection());
         assert!(stored.has_display_projection());
         assert!(stored.to_cdxml().is_err());
+        check_caption_edit(&stored, &document);
         let baseline = stored.clone();
         let page = stored.model().pages().first().unwrap();
         assert!(page.fragments().is_empty());

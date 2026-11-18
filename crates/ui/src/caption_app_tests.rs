@@ -307,3 +307,66 @@ fn actual_caption_read_only_gate_preserves_keyboard_history_and_save() -> TestRe
     assert!(f.app.error.is_none(), "{:?}", f.app.error);
     Ok(())
 }
+
+#[test]
+fn actual_app_cdx_caption_run_command_repaints_without_enabling_canvas_authoring() -> TestResult {
+    let before = include_bytes!("../../io/tests/fixtures/cdx-caption-edit/multi_before.cdx");
+    let after = include_bytes!("../../io/tests/fixtures/cdx-caption-edit/multi_after.cdx");
+    let witnesses: Value = serde_json::from_str(include_str!(
+        "../../io/tests/fixtures/cdx-caption-edit/cases.json"
+    ))?;
+    let case = &witnesses["cases"]["multi_shift"];
+    let mut f = Fixture::new(1160.0, 800.0, 2.0)?;
+    let input = f.directory.path("caption-CDX-原-λ.cdx");
+    fs::write(&input, before)?;
+    f.command("document.open_cdx", json!({"path":input}))?;
+    f.command("ui.view", json!({"action":"actual"}))?;
+    let opened = f.state()?;
+    assert_eq!(opened["document"], case["before_model"]);
+    let original_ink = caption_ink(&f.warm());
+    assert!(!original_ink.is_empty());
+    let original_png = caption_capture(&f)?;
+    let mut params = case["params"].clone();
+    params["expected_revision"] = opened["revision"].clone();
+    f.command("text.set_run", params)?;
+    let edited = f.state()?;
+    assert_eq!(edited["document"], case["after_model"]);
+    assert_eq!(edited["file"]["dirty"], true);
+    let shown = f.warm();
+    let edited_ink = caption_ink(&shown);
+    assert!(!edited_ink.is_empty());
+    assert_ne!(edited_ink, original_ink);
+    assert_ne!(caption_capture(&f)?, original_png);
+
+    let paper = canvas(&shown)?;
+    let start = paper.center() + egui::vec2(-20.0, 50.0);
+    let end = start + egui::vec2(40.0, 0.0);
+    f.frame(vec![Event::PointerMoved(start), button(start, true)]);
+    f.frame(vec![Event::PointerMoved(end)]);
+    f.frame(vec![button(end, false)]);
+    assert_eq!(f.state()?, edited);
+
+    f.frame(vec![
+        key(Key::Z, true, Modifiers::COMMAND),
+        key(Key::Z, false, Modifiers::COMMAND),
+    ]);
+    assert_eq!(f.state()?["document"], case["before_model"]);
+    assert_eq!(caption_ink(&f.warm()), original_ink);
+    let redo = Modifiers {
+        shift: true,
+        ..Modifiers::COMMAND
+    };
+    f.frame(vec![key(Key::Z, true, redo), key(Key::Z, false, redo)]);
+    assert_eq!(f.state()?["document"], case["after_model"]);
+    assert_eq!(caption_ink(&f.warm()), edited_ink);
+    assert_eq!(fs::read(&input)?, before);
+    f.frame(vec![
+        key(Key::S, true, Modifiers::COMMAND),
+        key(Key::S, false, Modifiers::COMMAND),
+    ]);
+    finish_actual_file_workflow(&mut f)?;
+    assert_eq!(fs::read(&input)?, after);
+    assert_eq!(f.state()?["file"]["dirty"], false);
+    assert!(f.app.error.is_none(), "{:?}", f.app.error);
+    Ok(())
+}

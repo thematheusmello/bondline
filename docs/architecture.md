@@ -1,5 +1,11 @@
 # Architecture
 
+The [CDX caption editor](research/cdx-caption-edits.md) uses the same ordered
+source records as the caption reader to resolve a stable TextId. The encoder
+preserves raw styles, updates proven starts and patches one property. Captions
+and atom labels share complete candidate re-import and immutable edited
+backing. Native view, history and Save consume the certified snapshot.
+
 The [CDX boxed-label preview](verification-cdx-atom-label-preview.md) shares
 the verified Poster and whole-page scene checks with caption preview and
 the explicit connected-bond checks with CDXML. Source kind and exact

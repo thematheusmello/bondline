@@ -1,4 +1,6 @@
 //! Independent current-API source/history/physical acceptance, declared before producers.
+#[path = "../../../xtask/oracles/registry_fixture_support.rs"]
+mod registry_fixture;
 use bondline_commands::{Command, Engine, SelectionTranslate};
 use bondline_io::StoredDocument;
 use bondline_model::{Fragment, PageSize, Point2};
@@ -105,7 +107,8 @@ fn literal_candidate(
 }
 #[test]
 fn subset_all_and_tolerated_current_boxes_move_with_exact_source_and_history() -> TestResult {
-    let metadata: Vec<Value> = serde_json::from_str(f::METADATA48)?;
+    let metadata: Vec<Value> =
+        serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA48))?;
     assert_eq!(
         serde_json::to_value(
             bondline_commands::registry()

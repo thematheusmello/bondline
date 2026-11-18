@@ -1,5 +1,6 @@
 //! Explicit run workflows preserve unused scalar metadata through actual adapters.
 use super::{Client, cli, mixed_label_wire::captures, socket, support};
+use crate::registry_fixture;
 use bondline_commands::Engine;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::{Value, json};
@@ -34,7 +35,8 @@ fn consume(path: &std::path::Path, name: &str) -> Result {
     Ok(())
 }
 fn discovery(rows: &[Value], mcp: bool) -> Result {
-    let expected: Vec<Value> = serde_json::from_str(f::METADATA49)?;
+    let expected: Vec<Value> =
+        serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?;
     assert_eq!((rows.len(), expected.len()), (49, 49));
     for (row, expected) in rows.iter().zip(&expected) {
         if mcp {
@@ -78,7 +80,10 @@ fn actual_cli_metadata_keeps_all49_records_and_compound_unicode_file_bytes() -> 
         "{}",
         String::from_utf8_lossy(&listing.stderr)
     );
-    assert_eq!(listing.stdout, f::METADATA49.as_bytes());
+    assert_eq!(
+        listing.stdout,
+        registry_fixture::with_cdx_caption_edit(f::METADATA49).as_bytes()
+    );
     let rows: Value = serde_json::from_slice(&listing.stdout)?;
     discovery(rows.as_array().ok_or("command rows")?, false)?;
     let directory = support::SdfTestDirectory::new()?;

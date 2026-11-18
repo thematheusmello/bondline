@@ -1,5 +1,11 @@
 # Verification log
 
+The [CDX caption edit verification](verification-cdx-caption-edits.md)
+records exact before/after sources and models, shifted starts, anonymous
+caption identity, independent FontTools geometry, App history and actual
+adapters. It preserves the rest of the command registry and the existing
+atom-label and CDXML caption workflows.
+
 The [implicit CDX Element verification](verification-cdx-implicit-element.md)
 covers exact source insertion, omission-preserving edits, complete models,
 actual adapters, App history and files, and both standalone batch budgets.

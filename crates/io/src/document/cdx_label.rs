@@ -1,6 +1,6 @@
 //! Synchronize one existing atom label and certify the entire edited CDX.
-use super::{CdxEdit, DocumentError, OriginalSource, StoredDocument};
-use crate::cdx::{MappingError, Preview, label_edit::LabelFields, project_document};
+use super::{DocumentError, OriginalSource, StoredDocument};
+use crate::cdx::{MappingError, label_edit::LabelFields};
 use bondline_cdx::Document;
 use bondline_model::{AtomId, Element, Fragment, FragmentId, PageId};
 use std::sync::Arc;
@@ -26,15 +26,9 @@ impl StoredDocument {
         element: Element,
         explicit_hydrogens: u16,
     ) -> Result<Self, DocumentError> {
-        let Some(OriginalSource::Cdx {
-            bytes,
-            baseline,
-            preview,
-            ..
-        }) = &self.original
-        else {
+        if !matches!(self.original, Some(OriginalSource::Cdx { .. })) {
             return Err(DocumentError::NoCdxSource);
-        };
+        }
         if !self.has_cdx_atom_label_preview() {
             return Err(DocumentError::UnsupportedCdxEdit);
         }
@@ -108,32 +102,14 @@ impl StoredDocument {
         expected
             .replace_fragment(page_id, fragment)
             .map_err(MappingError::from)?;
-        let (projected, profile) = project_document(&output, page.size())?;
-        if profile != Preview::AtomLabels || projected != expected {
-            return Err(DocumentError::UnsupportedCdxLabel(
+        self.finish_cdx_edit(
+            output,
+            expected,
+            page.size(),
+            DocumentError::UnsupportedCdxLabel(
                 "complete agreement, page bounds and bond clearance after the edit",
-            ));
-        }
-
-        let (model, edit) = if expected == **baseline && output == bytes.as_ref() {
-            (Arc::clone(baseline), None)
-        } else {
-            let model = Arc::new(expected);
-            let edit = CdxEdit {
-                bytes: Arc::from(output),
-                model: Arc::clone(&model),
-            };
-            (model, Some(edit))
-        };
-        Ok(Self {
-            model,
-            original: Some(OriginalSource::Cdx {
-                bytes: Arc::clone(bytes),
-                baseline: Arc::clone(baseline),
-                preview: *preview,
-                edit,
-            }),
-        })
+            ),
+        )
     }
 }
 

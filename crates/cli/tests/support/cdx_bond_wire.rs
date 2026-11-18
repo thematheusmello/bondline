@@ -1,5 +1,6 @@
 //! Plain binary bond data never grants display, chemical-edit or lossy-save authority.
 use super::{Client, cli, socket, support};
+use crate::registry_fixture;
 use bondline_commands::{Command as EngineCommand, Engine};
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::{Value, json};
@@ -75,7 +76,10 @@ fn actual_cli_plain_cdx_bonds_keep49_records_direction_side_and_unicode_source_b
         "{}",
         String::from_utf8_lossy(&listing.stderr)
     );
-    assert_eq!(listing.stdout, f::METADATA49.as_bytes());
+    assert_eq!(
+        listing.stdout,
+        registry_fixture::with_cdx_caption_edit(f::METADATA49).as_bytes()
+    );
     assert_eq!(
         serde_json::from_slice::<Value>(&listing.stdout)?
             .as_array()
@@ -140,7 +144,8 @@ fn initialized_mcp_plain_cdx_bonds_keep_exact_discovery_refusals_and_unchanged_s
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     assert_eq!(listed["id"], 2);
     let rows = listed["result"]["tools"].as_array().ok_or("MCP tools")?;
-    let expected: Vec<Value> = serde_json::from_str(f::METADATA49)?;
+    let expected: Vec<Value> =
+        serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?;
     assert_eq!((rows.len(), expected.len()), (49, 49));
     for (row, expected) in rows.iter().zip(&expected) {
         assert_eq!(row["name"], expected["name"]);

@@ -1,9 +1,11 @@
 //! Existing public registry APIs only, declared before command48 production.
 use bondline_commands::Command;
+#[path = "../../../xtask/oracles/registry_fixture_support.rs"]
+mod registry_fixture;
 use serde_json::{Value, json};
 type TestResult = Result<(), Box<dyn std::error::Error>>;
 #[test]
-fn boxed_atom_command48_parses_the_closed_old_target_shape_without_changing_old47_metadata()
+fn boxed_atom_command48_parses_the_closed_old_target_shape_with_the_qualified_registry_prefix()
 -> TestResult {
     let command = Command::parse(
         "atom.set_authored_label",
@@ -15,8 +17,8 @@ fn boxed_atom_command48_parses_the_closed_old_target_shape_without_changing_old4
     );
     let rows = serde_json::to_value(bondline_commands::registry())?;
     let rows = rows.as_array().ok_or("registry rows")?;
-    let old: Vec<Value> = serde_json::from_str(include_str!(
-        "../../cli/tests/support/atom-child-old47.json"
+    let old: Vec<Value> = serde_json::from_str(&registry_fixture::with_cdx_caption_edit(
+        include_str!("../../cli/tests/support/atom-child-old47.json"),
     ))?;
     assert_eq!(rows.len(), 49);
     assert_eq!(old.len(), 47);

@@ -1,5 +1,5 @@
 //! Resolve the bounded, explicit UTF-8 subset of CDX styled strings.
-use bondline_cdx::{Document, Resources};
+use bondline_cdx::{Document, Record, Resources};
 use bondline_model::{MAX_TEXT_BYTES, MAX_TEXT_RUNS, TextRun, TextStyle};
 
 pub(super) enum TextRole {
@@ -63,4 +63,86 @@ pub(super) fn decode_runs(
         runs.push(TextRun::new(part.to_owned(), style).ok()?);
     }
     Some(runs)
+}
+
+pub(crate) fn encode_caption_runs(
+    source: &Document<'_>,
+    record: &Record,
+    runs: &[TextRun],
+) -> Option<Vec<u8>> {
+    let original = source.string(record).ok()?;
+    let styles = original.runs();
+    if runs.is_empty() || styles.len() != runs.len() {
+        return None;
+    }
+    let mut start = 0_usize;
+    let payload = source.payload(record).ok()?;
+    let prefix = payload.strip_suffix(original.text_bytes())?;
+    let body_len = runs
+        .iter()
+        .try_fold(0_usize, |size, run| size.checked_add(run.text().len()))?;
+    if body_len > MAX_TEXT_BYTES {
+        return None;
+    }
+    let mut encoded = Vec::new();
+    encoded
+        .try_reserve_exact(prefix.len().checked_add(body_len)?)
+        .ok()?;
+    encoded.extend_from_slice(prefix.get(..2)?);
+    for (index, (run, style)) in runs.iter().zip(styles).enumerate() {
+        let text = run.text();
+        if text.is_empty() || (index + 1 < runs.len() && !text.is_ascii()) {
+            return None;
+        }
+        encoded.extend_from_slice(&u16::try_from(start).ok()?.to_le_bytes());
+        let range = style.range();
+        encoded.extend_from_slice(
+            source
+                .as_bytes()
+                .get(range.start.checked_add(2)?..range.end)?,
+        );
+        start = start.checked_add(text.len())?;
+    }
+    for run in runs {
+        encoded.extend_from_slice(run.text().as_bytes());
+    }
+    Some(encoded)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn caption_wire_start_limit_and_raw_style_words_are_exact()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let payload = [
+            2, 0, 0, 0, 1, 0, 0, 0, 240, 0, 3, 0, 1, 0, 1, 0, 0, 0, 128, 1, 4, 0, b'A', 0xce, 0xa9,
+        ];
+        let mut input = b"VjCD0100\x04\x03\x02\x01".to_vec();
+        input.resize(28, 0);
+        input.extend_from_slice(&[0, 7, 25, 0]);
+        input.extend_from_slice(&payload);
+        input.extend_from_slice(&[0, 0]);
+        let source = Document::parse(&input)?;
+        let record = source.records().first().ok_or("Text property")?;
+        let style = TextStyle::new("Roboto".into(), 12.0, 0, [0.0; 3])?;
+        let last = TextRun::new("Ω".into(), style.clone())?;
+        let prefix = " ".repeat(usize::from(u16::MAX));
+        let runs = [TextRun::new(prefix.clone(), style.clone())?, last.clone()];
+        let mut expected = payload.get(..22).ok_or("test style prefix")?.to_vec();
+        expected
+            .get_mut(12..14)
+            .ok_or("second start")?
+            .copy_from_slice(&[0xff, 0xff]);
+        expected.extend_from_slice(prefix.as_bytes());
+        expected.extend_from_slice("Ω".as_bytes());
+        assert_eq!(encode_caption_runs(&source, record, &runs), Some(expected));
+
+        for invalid_prefix in [prefix + " ", "β".into(), String::new()] {
+            let runs = [TextRun::new(invalid_prefix, style.clone())?, last.clone()];
+            assert!(encode_caption_runs(&source, record, &runs).is_none());
+        }
+        Ok(())
+    }
 }

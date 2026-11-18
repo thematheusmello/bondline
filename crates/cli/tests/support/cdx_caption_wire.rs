@@ -21,6 +21,19 @@ fn request(command: &str, params: Value) -> Value {
     json!({"command":command,"params":params})
 }
 
+fn connect(server: &LoopbackServer) -> Result<BufReader<TcpStream>, Box<dyn std::error::Error>> {
+    let timeout = Duration::from_secs(5);
+    let stream = TcpStream::connect_timeout(&server.address(), timeout)?;
+    stream.set_read_timeout(Some(timeout))?;
+    stream.set_write_timeout(Some(timeout))?;
+    let mut client = BufReader::new(stream);
+    assert_eq!(
+        socket(&mut client, json!({"token":server.token()}))?,
+        json!({"authenticated":true})
+    );
+    Ok(client)
+}
+
 #[test]
 fn cdx_caption_cli_and_authenticated_socket_share_readonly_capture_and_history() -> TestResult {
     let directory = support::SdfTestDirectory::new()?;
@@ -52,15 +65,7 @@ fn cdx_caption_cli_and_authenticated_socket_share_readonly_capture_and_history()
     let server = LoopbackServer::bind(0, engine, move || {
         counter.fetch_add(1, Ordering::SeqCst);
     })?;
-    let timeout = Duration::from_secs(5);
-    let stream = TcpStream::connect_timeout(&server.address(), timeout)?;
-    stream.set_read_timeout(Some(timeout))?;
-    stream.set_write_timeout(Some(timeout))?;
-    let mut client = BufReader::new(stream);
-    assert_eq!(
-        socket(&mut client, json!({"token":server.token()}))?,
-        json!({"authenticated":true})
-    );
+    let mut client = connect(&server)?;
     let opened = socket(&mut client, open)?;
     assert_eq!(&opened["result"]["document"], model);
     assert_eq!(opened["result"]["revision"], 1);
@@ -70,19 +75,14 @@ fn cdx_caption_cli_and_authenticated_socket_share_readonly_capture_and_history()
     let image = socket(&mut client, capture_request.clone())?;
     assert_eq!(image["result"]["capture"]["png_base64"].as_str(), Some(png));
     assert_eq!(image["result"]["changed"], false);
-    for refused in [
-        request(
-            "text.set_run",
-            json!({"expected_revision":1,"page_id":1,"text_id":1,"run_index":0,"text":"Edit"}),
-        ),
+    let refused = socket(
+        &mut client,
         request(
             "document.save_cdxml",
             json!({"path":sentinel,"overwrite":true}),
         ),
-    ] {
-        let reply = socket(&mut client, refused)?;
-        assert_eq!(reply["error"]["code"], "unsupported_content");
-    }
+    )?;
+    assert_eq!(refused["error"]["code"], "unsupported_content");
     assert_eq!(fs::read(&sentinel)?, b"unchanged destination");
     assert_eq!(socket(&mut client, inspect)?, before);
     assert_eq!(changes.load(Ordering::SeqCst), 1);
@@ -96,6 +96,14 @@ fn cdx_caption_cli_and_authenticated_socket_share_readonly_capture_and_history()
     )?;
     assert_eq!(resized["result"]["changed"], true);
     assert_eq!(resized["result"]["source"]["modified"], true);
+    let refused = socket(
+        &mut client,
+        request(
+            "text.set_run",
+            json!({"expected_revision":2,"page_id":1,"text_id":1,"run_index":0,"text":"Edit"}),
+        ),
+    )?;
+    assert_eq!(refused["error"]["code"], "unsupported_content");
     let refused = socket(&mut client, capture_request.clone())?;
     assert_eq!(refused["error"]["code"], "unsupported_content");
     let refused = socket(
@@ -203,5 +211,91 @@ fn explicit_caption_runs_share_the_real_cli_render_and_exact_save_paths() -> Tes
     assert_eq!(&reopened["capture"]["png_base64"], image);
     assert_eq!(reopened["file"]["dirty"], false);
     assert_eq!(reopened["undo_depth"], 0);
+    Ok(())
+}
+
+#[test]
+fn cdx_caption_run_edit_round_trips_through_cli_and_authenticated_loopback() -> TestResult {
+    let before = include_bytes!("../../../io/tests/fixtures/cdx-caption-edit/multi_before.cdx");
+    let after = include_bytes!("../../../io/tests/fixtures/cdx-caption-edit/multi_after.cdx");
+    let witnesses: Value = serde_json::from_str(include_str!(
+        "../../../io/tests/fixtures/cdx-caption-edit/cases.json"
+    ))?;
+    let case = &witnesses["cases"]["multi_shift"];
+    let directory = support::SdfTestDirectory::new()?;
+    let input = directory.path("caption-run-原-λ.cdx");
+    let cli_output = directory.path("caption-run-cli-保存-λ.cdx");
+    let loopback_output = directory.path("caption-run-loopback-保存-β.cdx");
+    fs::write(&input, before)?;
+    let open = request("document.open_cdx", json!({"path":input}));
+    let mut params = case["params"].clone();
+    params["expected_revision"] = json!(1);
+    let edit = request("text.set_run", params.clone());
+    let render = request("render.capture", capture());
+    let reopened = cli(&[
+        open.clone(),
+        edit.clone(),
+        request("history.undo", json!({})),
+        request("history.redo", json!({})),
+        request("document.save_cdx", json!({"path":cli_output})),
+        request("document.open_cdx", json!({"path":cli_output})),
+        render.clone(),
+    ])?;
+    assert_eq!(reopened["document"], case["after_model"]);
+    assert_eq!(reopened["undo_depth"], 0);
+    assert_eq!(reopened["file"]["dirty"], false);
+    assert_eq!(fs::read(&cli_output)?, after);
+    let png = reopened["capture"]["png_base64"]
+        .as_str()
+        .filter(|png| !png.is_empty())
+        .ok_or("missing edited caption PNG")?;
+
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, engine, move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let mut client = connect(&server)?;
+    let opened = socket(&mut client, open)?;
+    assert_eq!(opened["result"]["document"], case["before_model"]);
+    let edited = socket(&mut client, edit)?;
+    assert_eq!(edited["result"]["document"], case["after_model"]);
+    assert_eq!(edited["result"]["undo_depth"], 1);
+    assert_eq!(edited["result"]["file"]["dirty"], true);
+    let inspect = request("document.inspect", json!({}));
+    let edited_state = socket(&mut client, inspect.clone())?;
+    assert_eq!(changes.load(Ordering::SeqCst), 2);
+    params["expected_revision"] = json!(2);
+    let noop = socket(&mut client, request("text.set_run", params))?;
+    assert_eq!(noop["result"]["changed"], false);
+    assert_eq!(noop["result"]["revision"], 2);
+    assert_eq!(socket(&mut client, inspect)?, edited_state);
+    assert_eq!(changes.load(Ordering::SeqCst), 2);
+
+    let saved = socket(
+        &mut client,
+        request("document.save_cdx", json!({"path":loopback_output})),
+    )?;
+    assert_eq!(saved["result"]["file"]["dirty"], false);
+    assert_eq!(
+        saved["result"]["source"],
+        json!({"format":"cdx","byte_length":before.len(),"modified":true})
+    );
+    assert_eq!(fs::read(&input)?, before);
+    assert_eq!(fs::read(&loopback_output)?, after);
+    let opened = socket(
+        &mut client,
+        request("document.open_cdx", json!({"path":loopback_output})),
+    )?;
+    assert_eq!(opened["result"]["document"], case["after_model"]);
+    assert_eq!(opened["result"]["undo_depth"], 0);
+    let rendered = socket(&mut client, render)?;
+    assert_eq!(
+        rendered["result"]["capture"]["png_base64"].as_str(),
+        Some(png)
+    );
+    drop(client);
+    server.shutdown()?;
     Ok(())
 }
