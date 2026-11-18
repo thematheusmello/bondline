@@ -167,7 +167,7 @@ fn arbitrary_source(data: &[u8]) {
             assert!(!edited.has_boxed_atom_labels());
             assert_eq!(
                 reopened.has_display_projection(),
-                reopened.has_boxed_atom_labels()
+                reopened.has_boxed_atom_labels() || reopened.has_flagged_atom_labels()
             );
         } else {
             assert!(matches!(
@@ -1082,12 +1082,121 @@ fn mixed_label_source(data: &[u8]) {
     original_unchanged(&base, source, &snapshot);
 }
 
+fn created_label_source(data: &[u8]) {
+    const BASE: &[u8] = include_bytes!("../../crates/io/tests/fixtures/created-labels/base.cdxml");
+    let choice = data.first().copied().unwrap_or(0) % 6;
+    let (source, expected): (&[u8], &[u8]) = match choice {
+        1 => (
+            include_bytes!("../../crates/io/tests/fixtures/created-labels/dense_base.cdxml"),
+            include_bytes!("../../crates/io/tests/fixtures/created-labels/dense_created_3.cdxml"),
+        ),
+        2 => (
+            include_bytes!("../../crates/io/tests/fixtures/created-labels/paired_base.cdxml"),
+            include_bytes!("../../crates/io/tests/fixtures/created-labels/paired_created_3.cdxml"),
+        ),
+        3 => (
+            include_bytes!("../../crates/io/tests/fixtures/created-labels/caption_base.cdxml"),
+            include_bytes!("../../crates/io/tests/fixtures/created-labels/caption_created_3.cdxml"),
+        ),
+        4 => (
+            BASE,
+            include_bytes!("../../crates/io/tests/fixtures/created-labels/created_all_black.cdxml"),
+        ),
+        5 => (
+            BASE,
+            include_bytes!("../../crates/io/tests/fixtures/created-labels/created_3_blue14.cdxml"),
+        ),
+        _ => (
+            BASE,
+            include_bytes!("../../crates/io/tests/fixtures/created-labels/created_3_black.cdxml"),
+        ),
+    };
+    let base = StoredDocument::from_cdxml(source.into(), PageSize::A4).unwrap();
+    let snapshot = base.model_snapshot();
+    assert!(base.has_mixed_atom_labels());
+    assert!(!base.has_flagged_atom_labels());
+    let expected_model = StoredDocument::from_cdxml(expected.into(), PageSize::A4).unwrap();
+    assert!(expected_model.has_flagged_atom_labels());
+    let page = &base.model().pages()[0];
+    let fragment = &page.fragments()[0];
+    let mut atoms = fragment.atoms().to_vec();
+    // Frozen independent source supplies only the explicitly inserted label data.
+    for (a, b) in atoms
+        .iter_mut()
+        .zip(expected_model.model().pages()[0].fragments()[0].atoms())
+    {
+        if a.authored_label.is_none() {
+            a.authored_label = b.authored_label.clone();
+        }
+    }
+    let mut current = base.clone();
+    current
+        .model_mut()
+        .replace_fragment(
+            page.id(),
+            Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec()).unwrap(),
+        )
+        .unwrap();
+    assert!(current.has_flagged_atom_labels());
+    assert!(!current.has_boxed_atom_labels());
+    assert!(!current.has_connected_atom_labels());
+    assert!(!current.has_mixed_atom_labels());
+    assert!(!current.is_fully_mapped());
+    let raw = current.to_cdxml().unwrap();
+    assert_eq!(raw.as_ref(), expected);
+    assert_eq!(current.to_cdxml().unwrap().as_ref(), expected);
+    let reopened = StoredDocument::from_cdxml(raw.into_owned().into(), PageSize::A4).unwrap();
+    assert_eq!(reopened.model(), current.model());
+    assert!(reopened.has_flagged_atom_labels());
+    let mut bad = current.clone();
+    let mut atoms = bad.model().pages()[0].fragments()[0].atoms().to_vec();
+    let target = atoms.get_mut(2).unwrap();
+    let old = target.authored_label.as_ref().unwrap();
+    let style = TextStyle::new(
+        "Roboto".into(),
+        old.runs()[0].style().size_pt(),
+        0,
+        [1., 0., 0.],
+    )
+    .unwrap();
+    target.authored_label = Some(Arc::new(
+        AtomLabel::new(
+            None,
+            Some(TextJustification::Left),
+            Some(TextJustification::Left),
+            None,
+            vec![TextRun::new("CH2".into(), style).unwrap()],
+        )
+        .unwrap()
+        .with_bounding_box(old.bounding_box())
+        .unwrap(),
+    ));
+    bad.model_mut()
+        .replace_fragment(
+            page.id(),
+            Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec()).unwrap(),
+        )
+        .unwrap();
+    assert!(!bad.has_flagged_atom_labels());
+    assert!(!bad.has_display_projection());
+    assert!(matches!(
+        bad.to_cdxml(),
+        Err(DocumentError::UnsupportedEdit)
+    ));
+    *bad.model_mut() = base.model().clone();
+    assert!(!bad.source_info().unwrap().modified);
+    assert!(matches!(bad.to_cdxml().unwrap(), Cow::Borrowed(_)));
+    assert_eq!(bad.to_cdxml().unwrap().as_ref(), source);
+    original_unchanged(&base, source, &snapshot);
+}
+
 fuzz_target!(|data: &[u8]| {
     if data.len() > INPUT_LIMIT {
         return;
     }
     assert_eq!(ORIGINAL.len(), 464);
     arbitrary_source(data);
+    created_label_source(data);
     mixed_label_source(data);
     connected_source_workflow(data);
     translated_label_source(data);

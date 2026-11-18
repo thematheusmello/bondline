@@ -5,6 +5,37 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Explicit printed-label creation
+
+`cdxml_profile` retains every old invariant and adds six frozen Mixed→Flagged creation
+controls: ordinary/dense/paired/caption sources, all three hidden atoms, and explicit
+blue14pt. Only inserted label data is read from independently frozen original XML;
+the candidate must reproduce the exact complete expected source and re-imported model.
+An unavailable new RGB must revoke the precise capability/writer, and restoration must
+recover original borrowed bytes without changing the baseline allocation. No Engine,
+history, filesystem, native input or GPU behavior is fuzzed by this structured path.
+
+The old exact-native data-only page codec invariant stays. Its reopened display equality
+now includes the separate Flagged capability, an intentional new display scope rather
+than widening old Boxed admission or granting page-edit authority. Native data encoding
+can remain possible while the current source capability is false; command/selection
+certificates must refuse that candidate before calling the codec.
+
+```sh
+python3 fuzz/seed_created_labels.py .cache/fuzz/created-labels-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/created-labels-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recipe refuses existing destinations and keeps34 immutable sources/manifest beside
+the writable corpus:20 originals, seven source mutations, exact16KiB and six selector
+bytes. Actual AddressSanitizer session22691 passes10000/305s, cov8796/ft20218/RSS513MiB,
+with four actual NEW/REDUCE16KiB mutations. Fresh source regeneration is byte-exact;
+manifest SHA256 `af870a2cab7b5632cb6650d70aee37be1c56e71d925dfdc9533d537fefe5eeaf`.
+Ignored log `target/label-creation/research/asan.log` is111425B/SHA256
+`fd25628a3e92a2d0a806402f6447dc7a8c200b67c9034e06b17898fb681cdd08`.
+This is bounded parser/profile evidence, not exhaustive safety, graphical parity,
+human golden approval or full-workspace/native verification. No dependency is added.
+
 ## Mixed skeletal and printed labels
 
 `cdxml_profile` preserves all old invariants and adds five fixed original Mixed-source
