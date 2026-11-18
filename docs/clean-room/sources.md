@@ -1,5 +1,10 @@
 # Clean-room source register
 
+The [owned CDX Node label contract](../research/cdx-node-labels.md) uses the
+public Node, Text, coordinate, justification, alignment, numeric and style
+specifications reviewed 2026-11-18. It distinguishes authored content from
+numeric metadata and keeps separate data, display and editing proofs.
+
 The [explicit CDX caption runs contract](../research/cdx-caption-runs.md) uses
 the CDXString and Unicode encoding specifications and OpenType pair/ligature
 definitions reviewed 2026-11-18. It checks style boundaries where offset

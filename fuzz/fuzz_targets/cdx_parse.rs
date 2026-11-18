@@ -4,6 +4,7 @@ use bondline_cdx::{
     Document, Error, Framing, Record, RecordKind, ResourceError, StringError, Writer,
 };
 use libfuzzer_sys::fuzz_target;
+use std::collections::BTreeMap;
 
 fn check_string(document: &Document<'_>, index: usize, record: &Record) {
     let RecordKind::Property { payload, .. } = record.kind() else {
@@ -196,6 +197,92 @@ fn literal_metadata(fields: [Option<&[u8]>; 4], atom: &bondline_model::Atom) {
     );
 }
 
+fn child_label_records(document: &Document<'_>) -> BTreeMap<usize, [Option<usize>; 3]> {
+    let mut owners = BTreeMap::new();
+    let mut fields = BTreeMap::new();
+    for (index, record) in document.records().iter().enumerate() {
+        match *record.kind() {
+            RecordKind::ObjectStart { tag: 0x8006, .. } => {
+                let node = record.parent().unwrap();
+                assert!(matches!(
+                    document.records()[node].kind(),
+                    RecordKind::ObjectStart { tag: 0x8004, .. }
+                ));
+                owners.insert(index, node);
+                assert!(fields.insert(node, [None; 3]).is_none());
+            }
+            RecordKind::Property { tag, .. } => {
+                if let Some(node) = record.parent().and_then(|parent| owners.get(&parent)) {
+                    let slot = match tag {
+                        0x0700 => 0,
+                        0x0200 => 1,
+                        0x0204 => 2,
+                        _ => continue,
+                    };
+                    assert!(fields.get_mut(node).unwrap()[slot].replace(index).is_none());
+                }
+            }
+            _ => {}
+        }
+    }
+    fields
+}
+
+fn check_label(
+    document: &Document<'_>,
+    resources: &bondline_cdx::Resources<'_, '_>,
+    [text, position, bounds]: [Option<usize>; 3],
+    label: &bondline_model::AtomLabel,
+) {
+    let record = |index| document.records().get(index).unwrap();
+    let coordinate =
+        |bytes: &[u8]| f64::from(i32::from_le_bytes(bytes.try_into().unwrap())) / 65536.0;
+    let position = position.map(|index| {
+        let raw = document.payload(record(index)).unwrap();
+        [coordinate(&raw[4..]), coordinate(&raw[..4])]
+    });
+    let bounds = bounds.map(|index| {
+        let raw = document.payload(record(index)).unwrap();
+        [
+            coordinate(&raw[4..8]),
+            coordinate(&raw[..4]),
+            coordinate(&raw[12..]),
+            coordinate(&raw[8..12]),
+        ]
+    });
+    assert_eq!(label.position().map(|p| [p.x_pt(), p.y_pt()]), position);
+    assert_eq!(label.bounding_box(), bounds);
+
+    let value = document.string(record(text.unwrap())).unwrap();
+    assert_eq!(value.runs().len(), label.runs().len());
+    assert_eq!(resources.font_platform(), Some(1));
+    let mut offset = 0;
+    for (raw, projected) in value.runs().zip(label.runs()) {
+        assert_eq!(usize::from(raw.start()), offset);
+        let end = offset + projected.text().len();
+        assert_eq!(
+            &value.text_bytes()[offset..end],
+            projected.text().as_bytes()
+        );
+        offset = end;
+        let font = &resources.fonts()[usize::from(raw.font())];
+        assert_eq!(font.id(), raw.font());
+        assert_eq!(font.charset(), 65001);
+        let style = projected.style();
+        assert_eq!(font.name_bytes(), style.font_family().as_bytes());
+        assert_eq!(style.face(), raw.face());
+        assert_eq!(style.size_pt(), f64::from(raw.size_twentieths()) / 20.0);
+        assert_eq!(
+            style.rgb(),
+            resources
+                .color(u32::from(raw.color()))
+                .unwrap()
+                .map(|n| f64::from(n) / 65535.0)
+        );
+    }
+    assert_eq!(offset, value.text_bytes().len());
+}
+
 fn plain_bond(fields: [Option<&[u8]>; 4], bond: &bondline_model::Bond) {
     use bondline_model::{BondOrder, DoublePosition};
     let [order, display, display2, position] = fields;
@@ -340,6 +427,9 @@ fuzz_target!(|data: &[u8]| {
         assert_eq!(graph.as_bytes(), data);
         assert_eq!(graph.to_bytes(), data);
         assert_eq!(graph.source().as_bytes(), data);
+        let mut labels = child_label_records(&document);
+        let label_resources = (!labels.is_empty()).then(|| document.resources().unwrap());
+        let has_labels = !labels.is_empty();
         let mut fields = vec![[None; 4]; document.records().len()];
         for record in document.records() {
             let RecordKind::Property { tag, .. } = record.kind() else {
@@ -395,7 +485,15 @@ fuzz_target!(|data: &[u8]| {
             for atom in fragment.atoms() {
                 atom_id += 1;
                 assert_eq!(atom.id.get(), atom_id);
-                literal_metadata(*fields.get(nodes.next().unwrap()).unwrap(), atom);
+                let node = nodes.next().unwrap();
+                literal_metadata(*fields.get(node).unwrap(), atom);
+                match (labels.remove(&node), atom.authored_label.as_deref()) {
+                    (Some(raw), Some(label)) => {
+                        check_label(&document, label_resources.as_ref().unwrap(), raw, label);
+                    }
+                    (None, None) => {}
+                    _ => panic!("direct Node child Text lost its owner"),
+                }
                 assert!(local_atoms.insert(atom.id));
             }
             for bond in fragment.bonds() {
@@ -408,6 +506,7 @@ fuzz_target!(|data: &[u8]| {
         }
         assert!(nodes.next().is_none());
         assert!(source_bonds.next().is_none());
+        assert!(labels.is_empty());
         let mut stored = bondline_io::StoredDocument::from_cdx(
             std::sync::Arc::from(data),
             bondline_model::PageSize::A4,
@@ -416,6 +515,18 @@ fuzz_target!(|data: &[u8]| {
         assert_eq!(stored.export_cdx().unwrap(), data);
         assert!(!stored.is_fully_mapped());
         assert!(!stored.has_display_projection());
+        assert_eq!(stored.model().has_authored_atom_labels(), has_labels);
+        assert!(
+            stored
+                .model()
+                .pages()
+                .first()
+                .unwrap()
+                .fragments()
+                .iter()
+                .map(std::sync::Arc::as_ref)
+                .eq(graph.fragments())
+        );
         let original = stored.clone();
         let page = stored.model().pages().first().unwrap().id();
         stored

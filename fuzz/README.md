@@ -5,6 +5,16 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Owned CDX Node labels
+
+`cdx_parse` compares every admitted child with its actual Node owner. It
+checks literal positions, box coordinates, raw run boundaries, resolved
+styles and exact source retention in both the graph and the stored document.
+The [verification record](../docs/verification-cdx-node-labels.md) has the
+results for the 34 Node label and 117 caption originals. To repeat that run,
+copy the `cdx-node-labels/*.cdx` fixtures into the caption recipe's writable
+corpus and use `-seed=268010327`.
+
 ## Direct-Page CDX caption projection
 
 `cdx_parse` also checks the caption-only display proof against source-preserving

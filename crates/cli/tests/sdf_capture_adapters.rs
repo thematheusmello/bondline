@@ -9,6 +9,8 @@ mod cdx_bond_wire;
 mod cdx_caption_wire;
 #[path = "support/cdx_literal_wire.rs"]
 mod cdx_literal_wire;
+#[path = "support/cdx_node_label_wire.rs"]
+mod cdx_node_label_wire;
 #[path = "support/cdx_resource_boundary_wire.rs"]
 mod cdx_resource_boundary_wire;
 #[path = "support/chain_creation_wire.rs"]

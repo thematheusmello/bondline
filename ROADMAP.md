@@ -27,6 +27,12 @@ preview to multiple resolved styles within a caption. Verified cases retain
 their colours, sizes and run boundaries through exact native Save/reopen.
 Inherited styles, ambiguous starts, general shaping and editing remain open.
 
+The [CDX Node label increment](docs/verification-cdx-node-labels.md)
+preserves explicit child Text beside literal atom fields. Independent
+examples and native macOS Save and reopen verify exact source retention.
+Next establish sourced placement and label agreement before allowing
+faithful preview and chemical editing for qualified CDX.
+
 The [CDXString increment](docs/verification-cdx-string.md) preserves literal style runs
 and text bytes, with borrowed property boundaries and independent original fixtures.
 The caption workflow uses this reader for its explicit validated run.

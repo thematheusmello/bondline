@@ -50,6 +50,15 @@ possible ligature effects out of the admitted joins. Preserve every run and raw
 byte, the existing authored CDXML run layout, detached-edit refusal, registry
 49 and the native read-only guards.
 
+The [CDX Node label workflow](docs/verification-cdx-node-labels.md) retains
+one direct child Text in the existing atom model. Keep literal numeric
+fields independent of its body, exact optional placement and enums, scoped
+Text identity, and original Save bytes. The shared explicit run reader keeps
+the earlier caption resource, face, width and join restrictions. Preserve
+the bounded run allocations, legacy candidate refusals and the page,
+label, display and conversion guards. Native macOS Open and unchanged
+Unicode Save/reopen pass. STATUS gives the next placement and agreement work.
+
 Read `docs/research/cdx-resources.md` and `docs/verification-cdx-resources.md` before
 CDX string or Text work. The table query is opt-in and runtime-dependency-free. Preserve
 actual root ownership, raw UINT16 ID/charset/RGB, byte-borrowed names, table presence,

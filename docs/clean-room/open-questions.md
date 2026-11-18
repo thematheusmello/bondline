@@ -1,5 +1,21 @@
 # Open questions
 
+## CDX Node label interpretation, 2026-11-18
+
+The [CDX Node label contract](../research/cdx-node-labels.md) retains explicit
+child data. Layout with missing bounds or position, alignment/justification
+precedence, inherited styles, label versus chemical field agreement and
+editing the original CDX remain open.
+
+The [2DPosition property](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/2DPosition.htm)
+identifies the center of the element token for an Element Node and the left
+baseline for a left-aligned caption. For a Text object without its own point
+it favors the bounding box, then the Node point for an atom label. The
+calculation from that box to the atom label baseline still needs evidence.
+The [LabelAlignment property](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelAlignment.htm)
+describes the value as a multi-attachment mechanism. Its data presence alone
+does not establish ordinary label placement.
+
 ## CDX caption ordering, 2026-11-18
 
 The [ZOrder description](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ZOrder.htm)

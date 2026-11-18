@@ -1,5 +1,12 @@
 # Architecture
 
+The [CDX Node label projection](verification-cdx-node-labels.md) reads a
+direct child Text with explicit styles through the shared caption string
+reader. The elemental layout still owns source identity and the numeric
+graph. Candidate rejection preserves the earlier diagnostic. The existing
+model keeps both literal values and raw source for byte-exact unchanged Save.
+Display, editing and conversion keep their existing authority checks.
+
 The [plain CDX bond projection](verification-cdx-plain-bonds.md) reuses existing
 BondOrder/DoublePosition. One checked private field reader maps binary1/2/4 and six
 explicit directed side values, leaving absent position Unspecified. Both owner/admitted

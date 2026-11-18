@@ -33,8 +33,11 @@ remote feature ref was retired. See [caption verification](verification-cdx-capt
 [PR 6](https://github.com/thematheusmello/bondline/pull/6) landed the
 [ordered caption increment](verification-cdx-caption-order.md) at `a13a0f4`.
 Its tree matches the reviewed tip and its merged ref is retired.
-The [explicit run contract](research/cdx-caption-runs.md) follows on
-`feat/cdx-caption-runs`.
+[PR 7](https://github.com/thematheusmello/bondline/pull/7) landed
+[explicit caption runs](verification-cdx-caption-runs.md) at `4d8ae68`.
+Its tree matches the reviewed tip and its merged ref is retired.
+The [Node label contract](research/cdx-node-labels.md) follows on
+`feat/cdx-node-labels`.
 
 ## Main integration checkpoint
 

@@ -1,15 +1,15 @@
 //! Whole-source proof for read-only, explicitly positioned CDX captions.
-use super::{DOCUMENT, PAGE, POSITION, coordinate, payload, read_position};
+use super::{
+    DOCUMENT, PAGE, POSITION, TEXT, TEXT_OBJECT, Z_ORDER, coordinate, payload, read_position,
+    text::{TextRole, decode_runs},
+};
 use bondline_cdx::{Document, RecordKind, Resources};
-use bondline_model::{MAX_TEXT_BYTES, PageSize, Point2, StyledText, TextId, TextRun, TextStyle};
+use bondline_model::{PageSize, Point2, StyledText, TextId};
 use bondline_render::{Cancellation, MAX_PAGE_TEXT_RUNS, PageView, validate_caption_run_joins};
 use std::collections::{BTreeMap, BTreeSet};
 
-const Z_ORDER: u16 = 0x000a;
 const FONT_TABLE: u16 = 0x0100;
 const COLOR_TABLE: u16 = 0x0300;
-const TEXT_OBJECT: u16 = 0x8006;
-const TEXT: u16 = 0x0700;
 const CAPTION_JUSTIFICATION: u16 = 0x080c;
 const DRAWING_SPACE: u16 = 0x0811;
 const WIDTH: u16 = 0x0812;
@@ -68,7 +68,7 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
     let height = coordinate(payload(source, *page_fields.get(&HEIGHT)?, HEIGHT).ok()?);
     let size = PageSize::new(width, height).ok()?;
     let resources = source.resources().ok()?;
-    if resources.font_platform() != Some(1) || resources.color(2).ok()? != [u16::MAX; 3] {
+    if resources.color(2).ok()? != [u16::MAX; 3] {
         return None;
     }
     let mut captions: Vec<_> = text_fields.into_values().collect();
@@ -134,47 +134,13 @@ fn project_text(
         return None;
     }
     let position = read_position(source, *fields.get(&POSITION)?).ok()?;
-    let value = source
-        .string(source.records().get(*fields.get(&TEXT)?)?)
-        .ok()?;
-    let text = value.text_bytes();
-    if text.is_empty() || text.len() > MAX_TEXT_BYTES {
-        return None;
-    }
-    let body = std::str::from_utf8(text).ok()?;
-    let mut source_runs = value.runs().peekable();
-    let count = source_runs.len();
-    *remaining_runs = remaining_runs.checked_sub(count)?;
-    if source_runs.peek()?.start() != 0 {
-        return None;
-    }
-    let mut runs = Vec::with_capacity(count);
-    while let Some(run) = source_runs.next() {
-        let next = source_runs.peek().map(|next| usize::from(next.start()));
-        let part = body.get(usize::from(run.start())..next.unwrap_or(body.len()))?;
-        if part.is_empty() || (next.is_some() && !part.is_ascii()) || run.face() != 0 {
-            return None;
-        }
-        let font = resources.font_by_id(run.font()).ok()?;
-        if font.ordinal() != usize::from(run.font())
-            || font.charset() != 65001
-            || font.name_bytes() != b"Roboto"
-        {
-            return None;
-        }
-        let rgb = resources
-            .color(u32::from(run.color()))
-            .ok()?
-            .map(|channel| f64::from(channel) / f64::from(u16::MAX));
-        let style = TextStyle::new(
-            "Roboto".to_owned(),
-            f64::from(run.size_twentieths()) / 20.0,
-            run.face(),
-            rgb,
-        )
-        .ok()?;
-        runs.push(TextRun::new(part.to_owned(), style).ok()?);
-    }
+    let runs = decode_runs(
+        source,
+        resources,
+        *fields.get(&TEXT)?,
+        TextRole::Caption,
+        remaining_runs,
+    )?;
     validate_caption_run_joins(&runs).ok()?;
     StyledText::new(id, position, runs).ok()
 }
