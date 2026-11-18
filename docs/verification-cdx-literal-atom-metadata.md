@@ -67,9 +67,27 @@ GREEN. All caller production code stays unchanged.
 
 The App test uses real controls for retained Ring→Open inferred CDX→known Save→Unicode
 CDX Save As→explicit reopen, with complete independent model/raw/facts and clean history.
-It proves the App workflow, not OS input. Native macOS, bounded ASan and final aggregate
+It proves the App workflow, not OS input. Native macOS and final aggregate
 are pending separately. Protect user-viewed review365 and older apps/files; any new
 native acceptance must use a separate own app.
+
+## Bounded sanitizer
+
+ASan97553 passes10000/1s, cov1261/ft2818/RSS173MiB. Forty-three immutable seeds and a
+fresh regeneration match exactly; manifest SHA256
+`bb61c910883ed54656d174fba53e9fd72b85c4b194eeae49096f88b2a19cb026`.
+Independent checks accept19 new positive seeds/refuse21 controls; three original legacy
+seeds retain prior qualification. Initial corpus max131072B differs from actual retained
+mutation limit65746B and NEW/REDUCE max777B; no128KiB mutation claim follows.
+The29351B ignored log has SHA256
+`4b178ddf322325c03628a64cac41dbe6de2a38ba46dfb51df68471729750a17b`.
+
+The old HNone invariant becomes an independent raw-record scalar/owner/duplicate proof
+for all four fields, retaining strict absentHNone. The bounded linear record table avoids
+repeated whole-source scans. Existing framing/source/replacement/new-tree/snapshot
+assertions stay unchanged; display remains unavailable and model-page drift still refuses
+CDX export. [Reproduction](../fuzz/README.md) adds no dependency and does not test Engine,
+files, native input or chemistry validity through this parser harness.
 
 No dependency/lock/vendor/font/asset/golden/workflow change. Actions stays OFF; every
 atomic integrated commit is pushed. Windows/Linux/WASM, full CDX Text/styles/queries/

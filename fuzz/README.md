@@ -5,6 +5,33 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Literal CDX atom metadata
+
+`cdx_parse` keeps its framing/span/source-replacement/new-tree/snapshot invariants.
+The former blanket HNone assertion becomes a stronger source-record proof for isotope,
+charge, radical and inline H, including strict absent HNone, explicit H0 and documented
+four-byte Charge recovery. A bounded linear record table also checks known-field owners
+and duplicates. CDX display stays unavailable; detached page drift still refuses Save.
+
+```sh
+python3 -B fuzz/seed_cdx_literal.py .cache/fuzz/cdx-literal-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdx_parse .cache/fuzz/cdx-literal-example/corpus -- -runs=10000 -seed=721533879 -max_len=131072 -timeout=5 -rss_limit_mb=2048
+```
+
+The recipe refuses existing destinations and separates43 immutable sources/manifest
+from writable corpus:18 original literal cases, three retained original legacy files,
+21 domain/width/duplicate/owner/truncation controls and one exact131072B source. The
+independent strict reader accepts all19 new positive seeds and refuses21 controls;
+legacy seeds retain their existing independent qualification. Manifest SHA256
+`bb61c910883ed54656d174fba53e9fd72b85c4b194eeae49096f88b2a19cb026`.
+This is parser/IO fuzzing, not filesystem/Engine/native/GPU/chemical validity proof.
+Record actual runs/reached mutation sizes and immutable verification in
+[receiving](../docs/verification-cdx-literal-atom-metadata.md). Actions remains OFF.
+Actual ASan97553 passes10000/1s, cov1261/ft2818/RSS173MiB. All43 immutable inputs and
+fresh regeneration are byte-exact. The initial corpus includes131072B; actual retained
+mutation limit is65746B and largest NEW/REDUCE is777B. No128KiB mutation is claimed.
+Log29351B/SHA256 `4b178ddf322325c03628a64cac41dbe6de2a38ba46dfb51df68471729750a17b`.
+
 ## Explicit typography beside scalar defaults
 
 The existing `cdxml_profile` target also exercises five frozen metadata-source
