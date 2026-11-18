@@ -1,6 +1,42 @@
 use crate::{Document, Error, MAX_DEPTH, MAX_INPUT_BYTES, MAX_RECORDS, PREFIX};
 use std::fmt;
 
+#[derive(Clone, Copy)]
+pub(super) enum EncodedLength {
+    Short(u16),
+    Extended(u32),
+}
+
+impl EncodedLength {
+    pub(super) fn new(len: usize) -> Result<Self, Error> {
+        if let Ok(short) = u16::try_from(len)
+            && short != u16::MAX
+        {
+            return Ok(Self::Short(short));
+        }
+        u32::try_from(len)
+            .map(Self::Extended)
+            .map_err(|_| Error::InputTooLarge)
+    }
+
+    pub(super) fn property_prefix_len(self) -> usize {
+        match self {
+            Self::Short(_) => 4,
+            Self::Extended(_) => 8,
+        }
+    }
+
+    pub(super) fn append(self, bytes: &mut Vec<u8>) {
+        match self {
+            Self::Short(len) => bytes.extend_from_slice(&len.to_le_bytes()),
+            Self::Extended(len) => {
+                bytes.extend_from_slice(&u16::MAX.to_le_bytes());
+                bytes.extend_from_slice(&len.to_le_bytes());
+            }
+        }
+    }
+}
+
 /// New canonical explicit-root syntax. This never regenerates an imported document
 /// and does not validate property types, object IDs, containment or chemical meaning.
 pub struct Writer {
@@ -57,21 +93,14 @@ impl Writer {
         if tag == 0 || tag & 0x8000 != 0 {
             return Err(Error::InvalidTag);
         }
-        let length = u32::try_from(value.len()).map_err(|_| Error::InputTooLarge)?;
-        let short = u16::try_from(value.len())
-            .ok()
-            .filter(|length| *length < u16::MAX);
-        let prefix = if short.is_some() { 4_usize } else { 8 };
-        let additional = prefix
+        let length = EncodedLength::new(value.len())?;
+        let additional = length
+            .property_prefix_len()
             .checked_add(value.len())
             .ok_or(Error::InputTooLarge)?;
         let records = self.reserve_record(additional, self.depth)?;
         self.bytes.extend_from_slice(&tag.to_le_bytes());
-        self.bytes
-            .extend_from_slice(&short.unwrap_or(u16::MAX).to_le_bytes());
-        if short.is_none() {
-            self.bytes.extend_from_slice(&length.to_le_bytes());
-        }
+        length.append(&mut self.bytes);
         self.bytes.extend_from_slice(value);
         self.records = records;
         Ok(())

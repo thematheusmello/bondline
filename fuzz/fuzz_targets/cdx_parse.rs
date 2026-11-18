@@ -355,6 +355,67 @@ fn body<'a>(document: &'a Document<'_>) -> Vec<&'a Record> {
     }).collect()
 }
 
+fn check_batch(document: &Document<'_>) {
+    let mut properties = document
+        .records()
+        .iter()
+        .enumerate()
+        .filter(|(_, record)| matches!(record.kind(), RecordKind::Property { .. }));
+    let Some((first_index, first)) = properties.next() else {
+        assert_eq!(
+            document.replace_properties(&[]).unwrap(),
+            document.as_bytes()
+        );
+        return;
+    };
+    let old_first = document.payload(first).unwrap();
+    assert_eq!(
+        document.replace_properties(&[(first, old_first), (first, old_first)]),
+        Err(Error::ConflictingEdits)
+    );
+    let Some((last_index, last)) = properties.next_back() else {
+        return;
+    };
+    let replacement = [0xff, 0x80, 0];
+    let second = if document.as_bytes().len() % 2 == 0 {
+        document.payload(last).unwrap()
+    } else {
+        &[1, 0x82, 0, 3, 4, 5][..]
+    };
+    let edits = [(first, replacement.as_slice()), (last, second)];
+    let output = document.replace_properties(&edits).unwrap();
+    assert_eq!(
+        output,
+        document.replace_properties(&[edits[1], edits[0]]).unwrap()
+    );
+    let parsed = Document::parse(&output).unwrap();
+    assert_eq!(parsed.framing(), document.framing());
+    assert_eq!(parsed.header(), document.header());
+    assert_eq!(parsed.records().len(), document.records().len());
+    for (index, (old, new)) in document.records().iter().zip(parsed.records()).enumerate() {
+        assert_eq!(old.parent(), new.parent());
+        let updated = match index {
+            index if index == first_index => Some(replacement.as_slice()),
+            index if index == last_index => Some(second),
+            _ => None,
+        };
+        if let Some(value) = updated.filter(|&value| document.payload(old).unwrap() != value) {
+            assert_eq!(parsed.payload(new).unwrap(), value);
+            assert_eq!(
+                document
+                    .as_bytes()
+                    .get(old.range().start..old.range().start + 2),
+                output.get(new.range().start..new.range().start + 2)
+            );
+        } else {
+            assert_eq!(
+                document.as_bytes().get(old.range()),
+                output.get(new.range())
+            );
+        }
+    }
+}
+
 fn construct(document: &Document<'_>) -> Result<Vec<u8>, Error> {
     let body = body(document);
     assert_eq!(
@@ -396,6 +457,7 @@ fuzz_target!(|data: &[u8]| {
     }
     assert_eq!(offset, data.len());
     check_resources(&document);
+    check_batch(&document);
 
     if document
         .records()
