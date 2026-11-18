@@ -14,8 +14,10 @@ quadratic control hull subdivision. Both account separately for output float32 r
 The fixture includes authored and native derived placements; source-labelled authority
 is tested separately. Public scene tests use independent raw boxes, not our box generator.
 
-The independent generator, fixed-seed dense controls, Pillow painted-span controls and
-source-workflow cases are retained by the receiving review lane under ignored
-`target/connected-labels/independent/`, with exact pins in its handoff. Renderer numerical
-and public-scene tests consume this frozen fixture without importing the generator.
+The [independent generator and checks](../../../../xtask/oracles/README-clearance.md)
+reproduce the128 semantic vectors, fixed-seed dense controls and Pillow painted spans.
+Only elapsed timing metadata differs during regeneration; never overwrite this frozen
+fixture automatically. Original research receipts and rejected countermodels remain in
+ignored `target/connected-labels/independent/`. Renderer numerical and public-scene tests
+consume this frozen fixture without importing the generator.
 No exact reference behavior for Roboto, other fonts or formula faces is established.
