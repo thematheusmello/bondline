@@ -44,13 +44,23 @@ General labels and chemical analysis are still being built.
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
-**Current validation:** native macOS atom targeting, explicit element/H editing, Cancel,
+**Current validation:** supported imported CDXML atom labels with an explicit ink box,
+no child text position and one plain Roboto run now support native macOS Option-click
+editing, Cancel, history and Unicode Save/reopen. Numeric fields, literal text and bounds
+change together. Foreign scenes need explicit labels on every atom and no bonds; other
+drawing tools stay unavailable for that source.
+[Current label receiving](docs/verification-boxed-atom-labels.md) records independent
+font/XML/image/file checks, CPU/Metal agreement, sanitizer results and the separate
+workspace versus recurring MCP aggregate failure. General labels and the Text tool remain
+unfinished; the new image reference still needs human approval.
+
+Earlier native macOS atom targeting, explicit element/H editing, Cancel,
 Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with independent
 checks of the actual files. See [atom-editor evidence](docs/verification-native-atom-labels.md),
 [native record evidence](docs/verification-native-smiles-records.md) and the separate
-[paste checkpoint](docs/verification-native-smiles-paste.md). The latest full local gate
+[paste checkpoint](docs/verification-native-smiles-paste.md). That earlier selection checkpoint
 **passes 1,717 tests, with none failed and one ignored**, plus formatting, warnings-denied
-linting, layer, license and corpus checks. [Native selection evidence](docs/verification-native-selection.md)
+linting, layer, license and corpus checks; it is not the latest aggregate. [Native selection evidence](docs/verification-native-selection.md)
 records exact saved-file coordinates/chemistry and test-first hidden-modal/surface cancellation
 fixes, with actual Mac scope separated from synthetic races. [Native chain evidence](docs/verification-native-chains.md)
 records independent App/adapter/file checks and actual Mac workflows, with native
@@ -102,6 +112,7 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 | View navigation | Numeric zoom, Actual/Fit/Magnify/Reduce, two-axis position controls and ordinary wheel navigation without resizing paper or changing history. Mac A4 drawing/editing at100%/150% and read-only SDF Actual/pan pass. SDF Fit reports `Fit`, without an invented numeric percentage. SDF wheel and DPI/source invalidation pass actual-App tests; native wheel remains unverified. Rendering/readability guards apply. |
 | Pages | A4 and Letter presets, rotation and validated physical dimensions. |
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files. Equivalent v0 whitespace/quote/ID/order variants now pass headless source-aware edits, history and real adapter/file checks; their native path is wired but unverified. Unknown imported content remains backed by its original bytes. [Scope](docs/verification-source-preserving-cdxml-profile.md). |
+| Box-positioned atom labels | Explicit no-p, known Roboto Regular/face0 CDXML labels render as authored and support synchronized Element/H/text/bounds edits, history and source-preserving Save/reopen. Foreign scenes require every atom explicitly labelled and no bonds. API/CLI/MCP/loopback, CPU/Metal and bounded macOS Option-click/form/Unicode-file checks pass. All other drawing edits remain refused for these sources; general placement, formulas, styles, Text tool and other platforms remain unfinished. [Evidence](docs/verification-boxed-atom-labels.md). |
 | Plain styled captions | Explicit Roboto Regular, single-line CDXML captions retain ordered runs, sizes, colours and original source. `text.set_run` shares history, Save/reopen and CLI/MCP/loopback; CPU/Metal and independent font/XML checks pass. Bounded macOS Open, remote-edit repaint, keyboard history and Unicode Save As/reopen pass. The canvas is read-only; the Text tool, chemical formatting, font editing and general foreign diagrams remain missing. [Scope and evidence](docs/verification-styled-captions.md). |
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
 | MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |

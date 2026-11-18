@@ -1,16 +1,28 @@
 # File capabilities
 
+The [box-positioned literal label workflow](research/boxed-atom-label-workflow.md) now
+admits a separately proven CDXML subset for display and command48 edits. Foreign
+scenes require every atom explicitly labelled and zero bonds; missing foreign font/ink
+defaults stay unresolved. Source-free/exact-native models keep their own conventions. Explicit no-p
+Text boxes, known Roboto Regular face0 runs and matching numeric element/H reconstruct
+actual glyph placement. A complete foreign-source proof preserves all IDs/resources/
+lexemes while editing only existing Element/H, run body and BoundingBox. Other styles,
+explicit child positions, formula/script faces, abbreviations, unknown objects/defaults
+and broader layering remain unsupported. This does not make global source completeness
+true or authorize other drawing/page/caption writers. Whole-MOL still refuses text loss.
+
 Explicit elemental Node child Text now has owned literal data: supported explicit runs,
 raw optional point and independent Justification/LabelJustification/LabelAlignment.
 Native CDXML writes all ordered runs/resources; unchanged foreign source stays byte-exact.
 Missing/unsupported/unresolved/ambiguous child text stays opaque. Any owned child label
-refuses current chemical/page/caption edits and rendering, even when its data codec is
-complete. MOL refuses text loss, and retained-SMILES/Preserved deltas cannot inject or
+retains its original data-only refusal unless the separate box-qualified workflow above
+proves the stated display/edit operation. Other chemical/page/caption edits stay closed.
+MOL refuses text loss, and retained-SMILES/Preserved deltas cannot inject or
 discard it. Raw native model encoding is separate from editing capability. See
 [contract](research/owned-atom-label-data.md) and
-[receiving](verification-owned-atom-label-data.md). Faithful label layout, synchronized
-edits, inherited effective styles, full foreign mapping and the native Text tool remain
-required; no new command or binding is added.
+[receiving](verification-owned-atom-label-data.md). General label layout, dependent edits, inherited effective styles, full foreign mapping
+and the native Text tool remain required. That data-only checkpoint added no command;
+the separate boxed workflow above appends record48.
 
 The standalone CDXML default-property view now returns per-property LabelFont/Size/Face
 values with their exact containing owners and decoded attribute values. Missing values
@@ -35,8 +47,9 @@ formatting and general foreign/CDX text mapping remain missing.
 The CDXML syntax batch API can set an owned text-only element's decoded value, preserving
 semantic no-op lexemes, attributes/QName and unrelated source. It rejects mixed content
 rather than erasing it. This syntax primitive alone grants no imported-file authority;
-the caption workflow above supplies its first text application. Chemical dependent-label
-synchronization remains missing. [Text receiving](verification-source-preserving-xml-text.md).
+the caption workflow above supplies its first text application. General chemical dependent-label
+synchronization remains missing; the box-qualified atom setter above is its first bounded
+application. [Text receiving](verification-source-preserving-xml-text.md).
 
 The standalone CDXML syntax API also has checked logical font/colour tables and reference
 lookup, including source-node access for owned attribute edits. Absent palettes differ

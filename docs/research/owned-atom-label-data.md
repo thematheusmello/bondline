@@ -1,5 +1,9 @@
 # Owned Node child Text data
 
+This receiving contract records the data-only checkpoint. The later
+[boxed workflow](boxed-atom-label-workflow.md) adds optional bounds and a separately
+certified display/command48 path; old non-box/unsupported labels keep every refusal.
+
 2026-11-18, basea546e46. Continue the full M0–M5 goal through the next required M1
 model/format boundary. This increment owns supported authored child Text and loss guards;
 it does not guess label geometry/chemistry or complete the later renderer/native editor.

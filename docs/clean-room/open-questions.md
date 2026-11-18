@@ -5,7 +5,11 @@
 [Owned child-Text data](../verification-owned-atom-label-data.md) now retains explicit
 runs/raw optional placement in the model/native codec with independent loss/refusal/file
 evidence. This resolves data ownership only; the layout/default/agreement questions
-below remain. Chemical authoring/rendering refuses these labels until those proofs exist.
+below remain. The separate [boxed workflow](../verification-boxed-atom-labels.md) now
+qualifies bond-free foreign scenes with explicit labels on every atom, actual display
+and one synchronized Element/H/body/box edit with native Mac
+history/Save/reopen evidence. Unqualified labels and all other dependent edits still
+refuse; global full authoring stays false. It resolves no universal child-p convention.
 
 Primary LabelFont/Size/Face pages define containing-object fallback then a last-used
 style sheet, not a universal font/size/face. The new
@@ -30,8 +34,8 @@ their conventions. Octet import does not preserve arbitrary t.p, and graph-only 
 acceptance cannot prove visual correspondence. Do not reuse a caption baseline, Node.p
 or a font-independent offset without an explicit qualified contract and independent
 vectors. Full child-Text data, effective fonts/styles, source-preserving synchronized
-chemical edits, all H/position mutators, masks/hits/DPI and native/foreign acceptance
-remain required; the format-default lookup alone completes none of those workflows.
+chemical edits beyond the qualified atom setter, all other H/position mutators and full
+DPI/native/foreign acceptance remain required; the format-default lookup alone completes none of those workflows.
 
 ## Styled captions, 2026-11-17
 

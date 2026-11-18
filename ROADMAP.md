@@ -12,7 +12,23 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
-The next M1 [owned child-Text boundary](docs/verification-owned-atom-label-data.md)
+The current M1 [box-positioned label receiving](docs/verification-boxed-atom-labels.md)
+delivers a complete bounded imported-file workflow: authored display, synchronized
+Element/H/body/bounds edits, history, Unicode Save/reopen and a reused native atom form.
+Foreign sources require all atoms explicitly labelled and no bonds; unknown font/ink
+defaults cannot borrow native conventions. Independent font/XML/image/adapter checks,
+CPU/Metal equality and bounded actual macOS
+acceptance pass. Registry48 preserves all old47 metadata; catalogue16/124 stays.
+The latest aggregate MCP listener failure remains recorded, not repaired. A human-approved
+label golden, broader placement/styles/defaults/dependent edits and general Text-tool
+editing remain open. First source-lock the next connected foreign label/style workflow, including explicit
+bond ink/gap/margin and effective-font ownership. Admit it only after independent source/
+render/history/native proof; other writers keep explicit refusals. Continue full M1, then all remaining M2–M5 work below.
+
+The following paragraphs record historical checkpoints. Their next-task/count statements
+retain that scope; current executable continuation is in STATUS.
+
+The earlier M1 [owned child-Text boundary](docs/verification-owned-atom-label-data.md)
 preserves explicit Node label data in the model/native codec, accounts for shared history
 and refuses unsupported edits, rendering and lossy conversion. Independent actual
 CLI/stdio/socket unchanged Unicode Save/reopen passes. This does not finish the chemical

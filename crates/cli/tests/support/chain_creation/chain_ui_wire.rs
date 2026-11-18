@@ -41,12 +41,12 @@ fn closed_fields(variant: &Value, fields: &[&str]) -> TestResult {
     Ok(())
 }
 fn chain_ui_discovery(entries: &[Value], schema_key: &str) -> TestResult {
-    assert_eq!(entries.len(), 47);
+    assert_eq!(entries.len(), 48);
     let names = entries
         .iter()
         .map(|v| v["name"].as_str().ok_or("command name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(names.len(), 47);
+    assert_eq!(names.len(), 48);
     assert_eq!(
         names,
         OLD_NAMES
@@ -61,6 +61,7 @@ fn chain_ui_discovery(entries: &[Value], schema_key: &str) -> TestResult {
                 "ui.preferences",
                 "document.set_document_settings",
                 "text.set_run",
+                "atom.set_authored_label",
             ])
             .collect::<BTreeSet<_>>()
     );

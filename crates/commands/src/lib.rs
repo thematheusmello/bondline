@@ -11,6 +11,7 @@ mod atom;
 mod atom_ui;
 mod bond;
 mod bond_tool;
+mod boxed_atom;
 mod caption;
 mod capture;
 mod chain;
@@ -224,6 +225,7 @@ command_registry! {
     UiPreferences(UiPreferences) => ("ui.preferences", "Inspect or set session application preferences, or open/apply/cancel their native draft; never authors document data or acknowledges Save.", false),
     DocumentSettingsSet(DocumentSettingsSet) => ("document.set_document_settings", "Replace explicit bond length, chain angle and line width atomically; optionally set or clear spacing. Appearance or active spacing-reference changes must pass the whole-page ink certificate without moving geometry or changing label metrics.", false),
     TextSetRun(TextSetRun) => ("text.set_run", "Replace the decoded text of one existing styled caption run, preserving its font, size, face, colour, placement and every unrelated source byte. Requires native or caption-qualified CDXML and validates the final page and Save representation before one history edit.", false),
+    AtomSetAuthoredLabel(AtomSetLabel) => ("atom.set_authored_label", "Replace one qualified box-positioned atom label's explicit element/H, literal text and bounds in one source-preserving edit; keeps node/bond geometry and style, validates the final page and Save representation, and performs no valence inference.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -1208,6 +1210,14 @@ impl Engine {
                 drawing_focus = self.view_focus;
                 self.commit(document)?
             }
+            Command::AtomSetAuthoredLabel(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let document = boxed_atom::set_label(self.stored_document()?, params)?;
+                drawing_focus = self.view_focus;
+                self.commit(document)?
+            }
             Command::Undo(_) => self.undo()?,
             Command::Redo(_) => self.redo()?,
             Command::Capture(params) => {
@@ -1376,6 +1386,7 @@ mod tests {
         assert_eq!(
             names,
             [
+                "atom.set_authored_label",
                 "atom.set_label",
                 "bond.create",
                 "bond.extend",

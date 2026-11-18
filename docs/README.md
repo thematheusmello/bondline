@@ -3,6 +3,13 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
+The current [box-positioned label workflow](verification-boxed-atom-labels.md) connects
+explicit imported label rendering, synchronized Element/H/body/bounds editing and
+source-preserving history/Unicode Save/reopen through every adapter and the bounded
+macOS atom form. Registry48/catalogue16/124 is current. Unqualified labels, other dependent
+edits and the full Text tool remain open; local component evidence is separate from
+the recurring aggregate MCP failure and pending human golden approval.
+
 Original branding and the complete planned-tool catalogue have
 [current receiving evidence](verification-branding-and-tools.md) and
 [design/availability rules](design/tool-catalogue.md). All140 entries remain explicit
@@ -16,7 +23,7 @@ First full local gate10212 passes1657/0/1. Supported native Control-drag/reversa
 measured2×/DPI, other platforms and full M0–M5 remain open; historical MCP failures stay
 unattributed. At that checkpoint only the two chain entries gain bindings; both chairs remain disabled.
 
-The current [chair receiving](verification-native-chairs.md) adds both original chair
+The earlier [chair receiving](verification-native-chairs.md) adds both original chair
 bindings:16 available/124 planned, controls38/21/15/11 and registry43. Twenty-four new
 cases and full local1681/0/1 pass after explicit inventory/lint qualifications. Bounded
 native Mac horizontal/rotated drawing, terminal attachment,9/0 fusion, history, Unicode

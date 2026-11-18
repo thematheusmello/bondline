@@ -11,8 +11,22 @@ BoundsPen/GPOS and Expat/Decimal vectors use the already bundled Apache-2.0 Robo
 no reference export or new font is used. The
 [contract](../research/boxed-atom-label-workflow.md) separates published fallback/units
 from original centre-agreement, float-tolerance, literal-body and closed-capability
-policies. Data ownership/implementation/verification are separate gates; a planned
-workflow is not evidence of completed rendering/editing or general reference parity.
+policies. [Receiving](../verification-boxed-atom-labels.md) records the independently
+measured font/XML/image vectors, actual registry/files and scoped native execution.
+[ZOrder](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ZOrder.htm) defines omitted
+Z as0 and allows arbitrary order for ties. Bondline's deterministic caption-last tie
+policy is original; it is not a reference overlap-order claim. Explicit Z remains refused.
+The reviewed MIT OR Apache-2.0 [ReShiki revision73abecb50d75c334ff492c4d540ef23440002dd0](https://github.com/Ameyanagi/ReShiki/tree/73abecb50d75c334ff492c4d540ef23440002dd0)
+likewise supplies no general child-p baseline proof: its measured caption anchors are
+separate from elemental node-centre positions. It is qualifying evidence, not copied code
+or authorization to reinterpret arbitrary labels. Independent review also found that an
+explicit child run cannot resolve another node's absent LabelFont/Size/Face or absent
+bond ink defaults; the primary containing-object/external-style-sheet rules cited below
+remain unresolved there. Foreign Boxed sources therefore require every atom explicitly
+labelled and no bonds, while source-free/exact-native conventions remain original.
+[Receiving](../verification-boxed-atom-labels.md) records runtime RED→GREEN, opaque retention
+and both native positives rather than weakening this missing-default boundary.
+Full reference parity remains open.
 
 Owned Node child Text data reviewed2026-11-18 follows the public
 [Node](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) and

@@ -1,5 +1,21 @@
 # Architecture
 
+The [box-positioned child-label workflow](research/boxed-atom-label-workflow.md) adds a
+separate complete `has_boxed_atom_labels` source capability. Foreign Boxed sources require every atom explicitly labelled
+and zero bonds; missing foreign fonts/ink defaults cannot borrow native conventions.
+Source-free and byte-exact Canonical models retain their richer original path. An absent Text p, explicit
+ink box and known literal face0 run reconstruct placement from exact font curves/GPOS.
+Numeric body and complete element-token centre must agree under the declared original
+policy; no arbitrary p/default/formula-face convention is inferred. Actual authored
+glyphs, colours, masks, hits and em endpoints enter the shared CPU/GPU scene.
+
+Command48 `atom.set_authored_label` updates element/H, body and box together, certifies
+source/whole-page output and commits once. Its source writer splices only those existing
+fields and re-imports the complete candidate. The generic native atom form reuses exact
+weak owners and dispatches48 for qualified labels. Other chemical/page/style/caption
+writers remain closed and global full authority remainsfalse. Old47 metadata and
+catalogue16/124 stay; native Text creation/rich editing and general styles remain open.
+
 Chemical atoms now optionally own an `Arc<AtomLabel>` with literal ordered runs, raw
 optional point and separate justification/alignment data. This is distinct from Page
 caption identity and numeric Element/H. Combined text budgets count logical occurrences;
@@ -8,11 +24,13 @@ encoding retain both kinds of text without changing old absent-label bytes.
 
 Data codec coverage does not grant chemical authoring/display capability. Any authored
 Node label makes `is_fully_mapped` false, even for source-free or exact native data.
-Current dependent edits/page controls and direct graph rendering refuse it. MOL refuses
+Unqualified labels retain their direct-render/edit refusal; the separate box-qualified
+path above grants only its stated operations. Page/other dependent writers stay closed. MOL refuses
 loss, retained-SMILES metadata comparison includes it, and Preserved source deltas cannot
 inject/drop labels. Unknown source remains authoritative. See
 [contract](research/owned-atom-label-data.md) and
-[receiving](verification-owned-atom-label-data.md). Registry47/catalogue16/124 stay.
+[receiving](verification-owned-atom-label-data.md). That data-only checkpoint retained
+registry47; the current box-qualified workflow appends48 and keeps catalogue16/124.
 
 Standalone CDXML `label_defaults` resolves LabelFont/Size/Face separately along the owned
 containment chain, retaining each selected node and decoded attribute value. Signed
@@ -37,8 +55,8 @@ caption rendering uses the existing Roboto file and GPOS positioning, bounds the
 page before raster work, and publishes separate min/max caption ems for logical DPI
 checks. The native inspector identifies a read-only caption canvas. There is no Text tool
 binding or inline editor. See [contract](research/styled-captions.md) and
-[receiving](verification-styled-captions.md). Registry47 and catalogue16/124 are current;
-counts in the checkpoints below retain their historical scope.
+[receiving](verification-styled-captions.md). That caption checkpoint retained registry47; current registry48/catalogue16/124 is
+described above. Counts in the checkpoints below retain their historical scope.
 
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks

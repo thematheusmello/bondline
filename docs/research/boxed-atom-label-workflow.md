@@ -55,7 +55,14 @@ Global is_fully_mapped staysfalse for every authored label. Add separate closed 
 source capability `has_boxed_atom_labels()` for qualified CDXML/native/source-free data.
 It validates all lexical objects/keys/scoped positive IDs/resources/page/style/model
 correspondence and the complete label geometry/body profile; names alone grant nothing.
-Native data encoding owns BoundingBox. Unsupported/raw sources stay unchanged-only.
+Native data encoding owns BoundingBox. Foreign Boxed admission additionally requires
+every atom to own its explicit certified label and zero bonds. The explicit run cannot
+supply absent font defaults for another node, or line width/spacing/preferred-length
+defaults for bonds. Even explicit root bond fields do not yet supply a complete foreign
+bond-style proof. No producer string bypasses this boundary. Source-free and byte-exact
+Canonical data retain Bondline's own defined conventions; the model renderer stays richer.
+Unsupported/raw sources stay unchanged-only. This correction follows actual independent
+review counterexamples and runtime REDs; broader foreign styles remain required M1 work.
 An admitted foreign writer changes only existing Node Element/NumHydrogens, its one s
 body and its t BoundingBox via one syntax batch. Numeric no-ops retain every source byte.
 Delta permission preserves all other content, identities, geometry, styles and context;

@@ -1,5 +1,34 @@
 # Bondline agent instructions
 
+Box-positioned labels follow docs/research/boxed-atom-label-workflow.md and
+docs/verification-boxed-atom-labels.md on base3b4dc17, integrated model5bca3b0/render2b89f7a/
+IO1aecd5a/budget-fix5611a03/foreign-default-fix44896bc. Keep optional bounds/legacy absence,
+exact curve/GPOS placement,
+whole element-token anchor, no-p/explicit Left+Left/Roboto face0/body agreement and separate
+complete has_boxed_atom_labels capability. Foreign admission is all atoms explicitly
+labelled and zero bonds: no unproved foreign glyph/ink defaults or producer exception.
+Source-free/exact-native richer conventions stay. Global full staysfalse. Only command48
+updates
+existing Element/H/body/box with source re-import plus one final page certificate; other
+dependent/page/style/caption/loss guards stay. Native ui.atom_label reuses exact weak proofs
+and common dispatch; event-local Alt targets before all retained modes, never grants other
+canvas authors. Old47 actual records/schema/order/prefix and catalogue16/124 stay exact.
+Shared logical counters include spaces/empty runs once, retaining old caption validation/
+primitive/raster order; reviewer finding is closed by runtime REDs plus source follow-up.
+Seven command cases include fixed-seed generated exact-source history; native own Mac
+Open/edit/history/Cancel/Unicode Save/reopen passes independent actual-file readers.
+Qualified final ASan10000/119s passes with42 immutable seeds/actual16KiB mutation. New golden
+approval is pending. Fresh aggregate9314 fails unchanged MCP replacement_bind55778;
+earlier inventory-only qualifications stay explicit. Final76536 local components pass
+workspace1989/0/1 +vendor3/0 and all fmt/clippy/layers/licenses/assets/corpus gates;
+qualified structural22/0 remains, with all four supported +eight opaque negatives. This
+is not a clean xtask aggregate or causal listener fix. Final native guard build refuses
+unresolved defaults then edits/Save/reopens qualified NH2 with exact independent files/
+CPU/GPU; both own reviews are quit, all jobs/workers terminal.
+See STATUS for final checks/job state and exact next M1 dependent-label task, not the
+historical next-task paragraphs below. No protected user app/drawing is touched; Actions
+OFF; full M0–M5 remains active/incomplete.
+
 Owned Node child Text follows docs/research/owned-atom-label-data.md and
 docs/verification-owned-atom-label-data.md on base `a546e46`; isolated model fdaec40 is
 integrated as `1bf29d2`. Keep optional Arc data independent of Element/H/caption TextIds,

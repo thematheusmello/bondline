@@ -96,7 +96,7 @@ fn checked(value: &Value, revision: u64) {
 }
 fn metadata(rows: &[Value], mcp: bool) -> TestResult {
     let expected: Vec<Value> = serde_json::from_str(OLD47)?;
-    assert_eq!((expected.len(), rows.len()), (47, 47));
+    assert_eq!((expected.len(), rows.len()), (47, 48));
     for (row, old) in rows.iter().zip(&expected) {
         if mcp {
             assert_eq!(row["name"], old["name"]);

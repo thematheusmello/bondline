@@ -7,6 +7,92 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+Recoverable state: the box-positioned label workflow commit containing this record, on
+base3b4dc17. Model5bca3b0, render2b89f7a, IO1aecd5a, renderer fix5611a03 and
+foreign-default fix44896bc are integrated.
+This section supersedes every historical next-task/job paragraph and the stale line-width
+continuation inside the persistent goal. Full M0–M5 scope is unchanged.
+
+Read [contract](docs/research/boxed-atom-label-workflow.md) and
+[receiving](docs/verification-boxed-atom-labels.md). Optional checked BoundingBox data,
+exact curve/GPOS layout, authored colours/masks/Atom hits/em bounds and a separate complete
+source capability now connect imported display to synchronized label editing. Only explicit
+no-p/Left/Left/Roboto Regular face0 canonical Element/H labels qualify. Foreign scenes
+require explicit labels on every atom and no bonds; missing styles never borrow native
+defaults. Exact-native/source-free conventions remain richer. Global full
+authority staysfalse; unqualified labels and all other dependent/page/style/caption edits
+keep their refusals. Unknown data never gains authority from a producer name.
+
+Registry48 appends atom.set_authored_label with the old AtomSetLabel shape. All old47
+actual serialized records/schema/order retain their exact44405B literal prefix. Native
+ui.atom_label chooses48 under the same weak owners and common dispatcher; the qualified
+canvas takes event-local Alt-primary before a retained mode without authoring a ring/chain.
+Catalogue16/124 stays, Text tool grey. Source edits change only existing Element/H/body/box,
+certify re-import plus one final page and commit once. No-op/redo/Save lease/dirty/history
+ownership and every other source/loss guard remain.
+
+TDD model API/IO/command/App REDs become GREEN. Independent FontTools/Expat/Decimal/Pillow/
+unsanitized no-implicit-H RDKit checks, actual CLI/initialized stdio/authenticated socket
+and Unicode files pass. Seven command tests include24 fixed-seed generated edit sequences
+with independent numeric/body consumption and exact whole-source undo/redo. Renderer175/0
+includes two real combined text-work RED→GREEN fixes; independent source review confirms
+closure. CPU/Metal1024 captures match exactly; human golden approval is pending.
+
+Actual own signed macOS review verifies Ring→Open→Option-target→N/H2 Apply→Cmd-Z/Redo→
+Unicode Save As→explicit reopen→draft Cancel→read-only drag→O/H1 Apply→known Save. Both
+actual saved versions pass independent readers and exact four-field source comparisons.
+The second603B output equals the original OH source exactly. Controller field-focus/key
+setup and CJK filename-glyph limitations are qualified, not product fixes. The disposable
+review is explicitly quit and its exact-path processes are absent; older user apps/drawings
+remain untouched. No general native race/DPI/other-platform or full26.1 claim follows.
+
+A final independent review catches foreign unlabelled glyph/bond defaults. IO actual
+RED2/4→GREEN6/0 and command RED0/1→GREEN precede/qualify44896bc. Three old broad positives
+are narrowed while retaining all negatives, plus four supported structural-drift controls.
+No producer-string exception; source-free/exact-native richer controls remain positive.
+The final rebuilt native app refuses an unproven701B diagram, then Option-edits a qualified
+file and Save/reopens the exact596B NH2 output through its attached control adapter; both
+actual-session CPU/GPU captures equal the displayed candidate. Both reviews are quit and
+exact-path process checks report none. Earlier full native chooser/history/Cancel/Save
+scope remains separately pinned to its preceding build, not silently relabelled.
+
+Post-boundary76536 passes ALL local components: **workspace1989/0/1 plus vendor3/0**,
+fmt/fuzz-fmt, warnings-denied workspace/vendor clippy, layers, strict runtime licenses,
+seven assets and pinned eight-file/five-bundle corpus;297 result lines. Log251580B/SHA256
+24f9c87e3182eab2543e8c8df4d6789184e73300785d922d52bb431d885d7ba7.
+Final qualified structural controls additionally pass22/0 with IO clippy/fmt. The actual
+cargo xtask ci9314 failure at unchanged replacement_bind55778/AddrInUse remains recorded,
+1266/1. Earlier inventory-only qualifications remain too. Do not call this a clean xtask
+aggregate or a causal listener repair; all final components pass separately.
+Qualified final ASan84513 passes10000/119s, cov7520/ft14222/RSS503MiB, actual mutated16384B
+and all42 immutable source hashes. Its79753B log SHA256 is
+c64a3e8ac71b0897796d8ec20e7697badbea9bab7c4928a21f59b64895e473a3.
+No dependency/lock/vendor/font/asset/old golden/workflow change. All owned jobs/workers
+are terminal and isolated worktrees remain for provenance. Actions OFF, no push/publication.
+
+Next executable work:
+
+1. Record any actual reply for the displayed1024 NH2 candidate before promoting a human
+   golden; older single-bond approval does not cover this scene. Do not block unrelated work.
+2. Continue M1 with a connected, source-backed foreign label/style workflow. First lock
+   explicit bond ink/gap/margin and relevant spacing/preferred-length ownership plus
+   effective fonts for any unlabelled nodes against published sources. Declare independent
+   connected foreign/render/hit/source/history/native vectors before admitting bonds or
+   borrowed defaults. Preserve the current all-labelled/no-bond foreign boundary until
+   that proof exists. Literal Node+box translation is a separate bounded dependent-label
+   task through existing selection/history guards. Arbitrary child p, inherited defaults,
+   formula/script faces and the full Text editor remain open; do not invent a baseline.
+3. Finish full CDX/general interchange and effective foreign fonts/styles/text; all remaining
+   M2 drawing/selection/journal styles, M3 chemistry/analysis/reactions, M4 publishing/
+   clipboard/printing and M5 naming/templates/WASM/distribution remain required. M0 full
+   inventory/addressability/jobs, accessibility/native races/DPI/platform evidence and the
+   unexplained listener failure stay open. Full M0–M5 remains active/incomplete.
+
+## Historical checkpoints
+
+The following statements retain their checkpoint scope and do not replace the current
+continuation, command inventory, source capability or job state above.
+
 Recoverable state: the atomic owned Node child-Text integration containing this record,
 based on `a546e46` with isolated model fdaec40 integrated as `1bf29d2`. Full M0–M5 remains
 active/incomplete. This section supersedes every older next-task/job list and the stale
@@ -68,8 +154,6 @@ Next executable work:
    WASM/distribution. M0 complete inventory/addressability/jobs, native races/accessibility/
    DPI/platform evidence and the unexplained listener failure remain open. Windows/Linux/
    browser/new native/release execution remains unverified. All M0–M5 stays active.
-
-## Historical checkpoints
 
 Recoverable state: the atomic source-backed label-default lookup integration containing
 this record, based on7747111. Full M0–M5 remains active/incomplete; this section supersedes

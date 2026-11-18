@@ -67,6 +67,7 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "ui.preferences",
             "document.set_document_settings",
             "text.set_run",
+            "atom.set_authored_label",
         ]
         .into_iter()
         .collect()

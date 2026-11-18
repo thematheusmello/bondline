@@ -255,7 +255,7 @@ fn final_settings_are_certified_once_and_preferred_only_changes_can_close_the_ga
 #[test]
 fn optional_nullable_schema_domain_and_source_errors_are_closed_and_atomic() -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 47);
+    assert_eq!(rows.len(), 48);
     let row = rows.get(45).ok_or("combined settings row46")?;
     assert_eq!(row.name, SETTINGS);
     let schema = row.input_schema.as_value();

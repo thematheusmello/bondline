@@ -3,8 +3,30 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has47 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has48 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
+
+## Box-positioned authored atom labels
+
+`atom.set_authored_label` appends record48. All old47 metadata, schema and order remain
+exact; it shares the old AtomSetLabel parameter shape without broadening that command:
+
+```json
+{"command":"atom.set_authored_label","params":{"expected_revision":1,"page_id":1,"fragment_id":1,"atom_id":1,"element":7,"explicit_hydrogens":2}}
+```
+
+Only a complete qualified no-p BoundingBox/Roboto Regular/face0 source or native model
+may use this operation on an existing authored label. The body, numeric element/H and
+box change together while Node/bond positions, IDs, styles and all unrelated source stay.
+The full final page and Save representation must pass before one history entry. No-op
+retains byte lexemes, Arc sharing, redo and weak contexts. This performs no valence
+inference or general text interpretation. Global `is_fully_mapped` remainsfalse; old
+chemical/page/style/caption writers stay refused for these sources.
+
+The existing exact-target `ui.atom_label` form chooses this operation under the same
+request/source/file/view/tool/close proof. Old requests and metadata stay exact. A
+qualified canvas accepts Alt-primary on an atom from any retained mode; other drawing
+gestures remain unavailable. [Contract](research/boxed-atom-label-workflow.md).
 
 ## Existing plain caption runs
 

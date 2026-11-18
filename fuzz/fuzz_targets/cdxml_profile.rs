@@ -159,7 +159,16 @@ fn arbitrary_source(data: &[u8]) {
                 StoredDocument::from_cdxml(encoded.into_owned().into(), PageSize::A4).unwrap();
             same_semantics(edited.model(), reopened.model());
             assert!(!reopened.is_fully_mapped());
-            assert!(!reopened.has_display_projection());
+            assert_eq!(
+                reopened.has_boxed_atom_labels(),
+                base.has_boxed_atom_labels()
+            );
+            // The old source certificate forbids page drift; fresh native data is requalified.
+            assert!(!edited.has_boxed_atom_labels());
+            assert_eq!(
+                reopened.has_display_projection(),
+                reopened.has_boxed_atom_labels()
+            );
         } else {
             assert!(matches!(
                 edited.to_cdxml(),
@@ -660,12 +669,107 @@ fn structured_atom_label(data: &[u8]) {
     original_unchanged(&base, ATOM_LABEL.as_bytes(), &snapshot);
 }
 
+// Original FontTools/Expat vector; no explicit child p or formula face is inferred.
+const BOXED_ORIGINAL: &[u8] = br#"<CDXML CreationProgram="Original box-label oracle"><fonttable><font id="42" name="Roboto"/></fonttable><colortable><color r="1" g="1" b="1"/><color r="0" g="0" b="0"/><color r="0.2" g="0.4" b="0.8"/></colortable><page id="90" DrawingSpace="Poster" Width="512" Height="512"><fragment id="51"><n id="73" NodeType="Element" Element="8" Charge="0" Radical="None" NumHydrogens="1" p="84.1220703125 95.734375"><t id="21" BoundingBox="80.69140625 91.3515625 95.796875 100.1171875" Justification="Left" LabelJustification="Left"><s font="42" size="12" face="0" color="4">OH</s></t></n></fragment></page></CDXML>"#;
+
+fn boxed_source_workflow(data: &[u8]) {
+    let base = StoredDocument::from_cdxml(BOXED_ORIGINAL.into(), PageSize::A4).unwrap();
+    let snapshot = base.model_snapshot();
+    assert!(!base.is_fully_mapped());
+    assert!(base.has_boxed_atom_labels());
+    assert!(base.has_display_projection());
+    let page = &base.model().pages()[0];
+    let fragment = &page.fragments()[0];
+    let changed = data.first().copied().unwrap_or(0) & 1 != 0;
+    let mut current = base.clone();
+    if changed {
+        let mut atoms = fragment.atoms().to_vec();
+        let atom = atoms.first_mut().unwrap();
+        atom.element = Element::new(7).unwrap();
+        atom.explicit_hydrogens = Some(2);
+        atom.authored_label = Some(Arc::new(
+            atom.authored_label
+                .as_ref()
+                .unwrap()
+                .with_run_text(0, "NH2".into())
+                .unwrap()
+                .with_bounding_box(Some([80.84375, 91.3515625, 103.26171875, 100.0]))
+                .unwrap(),
+        ));
+        current
+            .model_mut()
+            .replace_fragment(
+                page.id(),
+                Fragment::new(fragment.id(), atoms, vec![]).unwrap(),
+            )
+            .unwrap();
+    }
+    let encoded = current.to_cdxml().unwrap();
+    let expected = if changed {
+        std::str::from_utf8(BOXED_ORIGINAL)
+            .unwrap()
+            .replace("Element=\"8\"", "Element=\"7\"")
+            .replace("NumHydrogens=\"1\"", "NumHydrogens=\"2\"")
+            .replace(
+                "80.69140625 91.3515625 95.796875 100.1171875",
+                "80.84375 91.3515625 103.26171875 100",
+            )
+            .replace(">OH</s>", ">NH2</s>")
+            .into_bytes()
+    } else {
+        BOXED_ORIGINAL.to_vec()
+    };
+    assert_eq!(encoded.as_ref(), expected);
+    let reopened = StoredDocument::from_cdxml(encoded.into_owned().into(), PageSize::A4).unwrap();
+    assert_eq!(current.model(), reopened.model());
+    assert!(reopened.has_boxed_atom_labels());
+    assert!(reopened.has_display_projection());
+    assert!(!reopened.is_fully_mapped());
+    let mut broken = current.clone();
+    let fragment = &current.model().pages()[0].fragments()[0];
+    let mut atoms = fragment.atoms().to_vec();
+    let atom = atoms.first_mut().unwrap();
+    let label = atom.authored_label.as_ref().unwrap();
+    let bad = if data.get(1).copied().unwrap_or(0) & 1 != 0 {
+        label
+            .with_position(Some(Point2::new(80.0, 100.0).unwrap()))
+            .unwrap()
+    } else {
+        let mut bounds = label.bounding_box().unwrap();
+        bounds[2] += 0.25;
+        label.with_bounding_box(Some(bounds)).unwrap()
+    };
+    atom.authored_label = Some(Arc::new(bad));
+    broken
+        .model_mut()
+        .replace_fragment(
+            page.id(),
+            Fragment::new(fragment.id(), atoms, vec![]).unwrap(),
+        )
+        .unwrap();
+    assert!(!broken.has_boxed_atom_labels());
+    assert!(!broken.has_display_projection());
+    assert!(matches!(
+        broken.to_cdxml(),
+        Err(DocumentError::UnsupportedEdit)
+    ));
+    let mut native = StoredDocument::default();
+    *native.model_mut() = current.model().clone();
+    let native_bytes = native.to_cdxml().unwrap().into_owned();
+    let native_reopened = StoredDocument::from_cdxml(native_bytes.into(), PageSize::A4).unwrap();
+    assert!(native_reopened.has_boxed_atom_labels());
+    same_semantics(native.model(), native_reopened.model());
+    arbitrary_source(native_reopened.export_cdxml().unwrap());
+    original_unchanged(&base, BOXED_ORIGINAL, &snapshot);
+}
+
 fuzz_target!(|data: &[u8]| {
     if data.len() > INPUT_LIMIT {
         return;
     }
     assert_eq!(ORIGINAL.len(), 464);
     arbitrary_source(data);
+    boxed_source_workflow(data);
     structured_atom_label(data);
     structured_caption(data);
     native_caption_transition(data);

@@ -345,10 +345,9 @@ fn pure_native_data_requires_a_qualified_box_and_delta_preserves_all_other_field
     Ok(())
 }
 #[test]
-fn mixed_captions_native_graph_and_root_settings_are_complete_but_stay_readonly_in_the_delta()
--> TestResult {
+fn mixed_explicit_captions_labels_and_root_settings_stay_readonly_in_the_delta() -> TestResult {
     let raw=std::str::from_utf8(SOURCE)?.replace("<CDXML ","<CDXML BondLength='48.000' ChainAngle='120' LineWidth='1.00' BondSpacing='12.000' ")
-        .replace("</fragment></page>","<n id='99' NodeType='Element' Element='6' Charge='0' Radical='None' NumHydrogens='4' p='200 200'/></fragment><t id='101' p='72 180' Justification='Left'><s font='42' size='12' face='0' color='3'>caption</s></t></page>");
+        .replace("</fragment></page>","</fragment><t id='101' p='72 180' Justification='Left'><s font='42' size='12' face='0' color='3'>caption</s></t></page>");
     let own = stored(raw.as_bytes())?;
     assert!(own.has_boxed_atom_labels());
     let changed = replace_label(&own, 7, 2)?;
@@ -383,52 +382,58 @@ fn mixed_captions_native_graph_and_root_settings_are_complete_but_stay_readonly_
 #[test]
 fn valid_geometry_does_not_authorize_position_style_or_unlabeled_atom_drift() -> TestResult {
     let raw=std::str::from_utf8(SOURCE)?.replace("</n></fragment>","</n><n id='99' NodeType='Element' Element='6' Charge='0' Radical='None' NumHydrogens='4' p='200 200'/></fragment>");
-    let base = stored(raw.as_bytes())?;
-    assert!(base.has_boxed_atom_labels());
-    for kind in 0..3 {
-        let mut drift = base.clone();
-        let page = drift.model().pages()[0].id();
-        let fragment = drift.model().pages()[0].fragments()[0].clone();
-        let mut atoms = fragment.atoms().to_vec();
-        if kind == 2 {
-            atoms.get_mut(1).ok_or("unlabeled")?.element = Element::try_from(7)?;
-        } else {
-            let atom = atoms.first_mut().ok_or("atom")?;
-            if kind == 0 {
-                let p = atom.position.ok_or("p")?;
-                atom.position = Some(bondline_model::Point2::new(
-                    p.x_pt() + 16.0,
-                    p.y_pt() + 16.0,
-                )?);
-            } else {
-                let old = atom.authored_label.as_ref().ok_or("label")?;
-                let run = old.runs().first().ok_or("run")?;
-                let style =
-                    bondline_model::TextStyle::new("Roboto".into(), 24.0, 0, [0.8, 0.1, 0.3])?;
-                let label = bondline_model::AtomLabel::new(
-                    None,
-                    old.justification(),
-                    old.label_justification(),
-                    None,
-                    vec![bondline_model::TextRun::new(run.text().into(), style)?],
-                )?;
-                atom.authored_label = Some(Arc::new(label));
-            }
-            atom.authored_label = Some(Arc::new(bondline_render::position_atom_label(atom)?));
-            bondline_render::validate_atom_label(atom)?;
-        }
-        drift
-            .model_mut()
-            .replace_fragment(page, Fragment::new(fragment.id(), atoms, vec![])?)?;
-        assert!(
-            !drift.has_boxed_atom_labels(),
-            "forbidden drift{kind} with otherwise qualified geometry"
-        );
-        assert!(matches!(
-            drift.to_cdxml(),
-            Err(bondline_io::DocumentError::UnsupportedEdit)
-        ));
+    for (raw, authority) in [
+        (std::str::from_utf8(SOURCE)?.to_owned(), true),
+        (raw, false),
+    ] {
+        let base = stored(raw.as_bytes())?;
+        assert_eq!(base.has_boxed_atom_labels(), authority);
         assert_eq!(base.to_cdxml()?.as_ref(), raw.as_bytes());
+        for kind in 0..(if authority { 2 } else { 3 }) {
+            let mut drift = base.clone();
+            let page = drift.model().pages()[0].id();
+            let fragment = drift.model().pages()[0].fragments()[0].clone();
+            let mut atoms = fragment.atoms().to_vec();
+            if kind == 2 {
+                atoms.get_mut(1).ok_or("unlabeled")?.element = Element::try_from(7)?;
+            } else {
+                let atom = atoms.first_mut().ok_or("atom")?;
+                if kind == 0 {
+                    let p = atom.position.ok_or("p")?;
+                    atom.position = Some(bondline_model::Point2::new(
+                        p.x_pt() + 16.0,
+                        p.y_pt() + 16.0,
+                    )?);
+                } else {
+                    let old = atom.authored_label.as_ref().ok_or("label")?;
+                    let run = old.runs().first().ok_or("run")?;
+                    let style =
+                        bondline_model::TextStyle::new("Roboto".into(), 24.0, 0, [0.8, 0.1, 0.3])?;
+                    let label = bondline_model::AtomLabel::new(
+                        None,
+                        old.justification(),
+                        old.label_justification(),
+                        None,
+                        vec![bondline_model::TextRun::new(run.text().into(), style)?],
+                    )?;
+                    atom.authored_label = Some(Arc::new(label));
+                }
+                atom.authored_label = Some(Arc::new(bondline_render::position_atom_label(atom)?));
+                bondline_render::validate_atom_label(atom)?;
+            }
+            drift
+                .model_mut()
+                .replace_fragment(page, Fragment::new(fragment.id(), atoms, vec![])?)?;
+            assert!(
+                !drift.has_boxed_atom_labels(),
+                "forbidden drift{kind} with otherwise qualified geometry"
+            );
+            assert!(matches!(
+                drift.to_cdxml(),
+                Err(bondline_io::DocumentError::UnsupportedEdit)
+            ));
+            assert_eq!(base.to_cdxml()?.as_ref(), raw.as_bytes());
+        }
     }
     Ok(())
 }
@@ -522,10 +527,14 @@ fn source_scope_and_malformed_box_guards_keep_original_bytes_without_promoting_c
 }
 
 #[test]
-fn multiple_labels_batch_preserves_local_text_ids_and_directed_bonds_and_refuses_structure_drift()
--> TestResult {
+fn multiple_labels_batch_preserves_local_text_ids_and_bonded_source_stays_opaque() -> TestResult {
     let second = r#"<n id='97' NodeType='Element' Element='8' Charge='0' Radical='None' NumHydrogens='1' p='184.1220703125 95.734375'><t id='21' BoundingBox='180.69140625 91.3515625 195.796875 100.1171875' Justification='Left' LabelJustification='Left'><s font='42' size='12' face='0' color='4'>OH</s></t></n><b id='900' B='97' E='73' Order='1'/>"#;
     let raw = std::str::from_utf8(SOURCE)?.replace("</fragment>", &format!("{second}</fragment>"));
+    let bonded = stored(raw.as_bytes())?;
+    assert!(!bonded.has_boxed_atom_labels());
+    assert!(!bonded.has_display_projection());
+    assert_eq!(bonded.to_cdxml()?.as_ref(), raw.as_bytes());
+    let raw = raw.replace("<b id='900' B='97' E='73' Order='1'/>", "");
     let base = stored(raw.as_bytes())?;
     assert!(
         base.has_boxed_atom_labels(),
@@ -554,50 +563,61 @@ fn multiple_labels_batch_preserves_local_text_ids_and_directed_bonds_and_refuses
         assert_eq!(facts[i]["label"]["id"], 21);
         assert_eq!(facts[i]["label"]["text"], "NH2");
     }
-    assert!(std::str::from_utf8(&encoded)?.contains("<b id='900' B='97' E='73' Order='1'/>"));
+    assert!(!std::str::from_utf8(&encoded)?.contains("<b "));
+    assert!(
+        std::str::from_utf8(bonded.to_cdxml()?.as_ref())?
+            .contains("<b id='900' B='97' E='73' Order='1'/>")
+    );
     assert_eq!(stored(&encoded)?.model(), edited.model());
     assert_eq!(base.to_cdxml()?.as_ref(), raw.as_bytes());
-    for kind in 0..8 {
-        let mut atoms = fragment.atoms().to_vec();
-        let mut bonds = fragment.bonds().to_vec();
-        let mut id = fragment.id();
-        match kind {
-            0 => atoms.swap(0, 1),
-            1 => id = bondline_model::FragmentId::new(17).ok_or("fragment ID")?,
-            2 => {
-                let bond = bonds.first_mut().ok_or("bond")?;
-                std::mem::swap(&mut bond.begin, &mut bond.end);
+    // Even removing the unresolved bond cannot repair the retained opaque source.
+    for (owner, kinds) in [
+        (&base, &[0, 1, 6, 7][..]),
+        (&bonded, &[0, 1, 2, 3, 4, 5, 6, 7][..]),
+    ] {
+        let fragment = owner.model().pages()[0].fragments()[0].clone();
+        for &kind in kinds {
+            let mut atoms = fragment.atoms().to_vec();
+            let mut bonds = fragment.bonds().to_vec();
+            let mut id = fragment.id();
+            match kind {
+                0 => atoms.swap(0, 1),
+                1 => id = bondline_model::FragmentId::new(17).ok_or("fragment ID")?,
+                2 => {
+                    let bond = bonds.first_mut().ok_or("bond")?;
+                    std::mem::swap(&mut bond.begin, &mut bond.end);
+                }
+                3 => bonds.first_mut().ok_or("bond")?.order = bondline_model::BondOrder::Double,
+                4 => {
+                    bonds.first_mut().ok_or("bond")?.id =
+                        bondline_model::BondId::new(17).ok_or("bond ID")?
+                }
+                5 => bonds.clear(),
+                6 => atoms.first_mut().ok_or("atom")?.authored_label = None,
+                _ => atoms.first_mut().ok_or("atom")?.isotope = std::num::NonZeroU16::new(18),
             }
-            3 => bonds.first_mut().ok_or("bond")?.order = bondline_model::BondOrder::Double,
-            4 => {
-                bonds.first_mut().ok_or("bond")?.id =
-                    bondline_model::BondId::new(17).ok_or("bond ID")?
+            let replacement = Fragment::new(id, atoms, bonds)?;
+            let mut drift = owner.clone();
+            if id == fragment.id() {
+                drift.model_mut().replace_fragment(page, replacement)?;
+            } else {
+                *drift.model_mut() = bondline_model::Document::default();
+                drift
+                    .model_mut()
+                    .set_page_size(page, PageSize::new(512.0, 512.0)?)?;
+                drift
+                    .model_mut()
+                    .append_fragments(page, vec![replacement])?;
             }
-            5 => bonds.clear(),
-            6 => atoms.first_mut().ok_or("atom")?.authored_label = None,
-            _ => atoms.first_mut().ok_or("atom")?.isotope = std::num::NonZeroU16::new(18),
+            assert!(
+                !drift.has_boxed_atom_labels(),
+                "forbidden structure drift {kind}"
+            );
+            assert!(matches!(
+                drift.to_cdxml(),
+                Err(bondline_io::DocumentError::UnsupportedEdit)
+            ));
         }
-        let replacement = Fragment::new(id, atoms, bonds)?;
-        let mut drift = base.clone();
-        if id == fragment.id() {
-            drift.model_mut().replace_fragment(page, replacement)?;
-        } else {
-            *drift.model_mut() = bondline_model::Document::default();
-            drift
-                .model_mut()
-                .set_page_size(page, PageSize::new(512.0, 512.0)?)?;
-            drift
-                .model_mut()
-                .append_fragments(page, vec![replacement])?;
-        }
-        assert!(
-            !drift.has_boxed_atom_labels(),
-            "forbidden structure drift {kind}"
-        );
-        assert!(matches!(
-            drift.to_cdxml(),
-            Err(bondline_io::DocumentError::UnsupportedEdit)
-        ));
     }
     Ok(())
 }
@@ -624,4 +644,107 @@ fn original_source(case: &Value) -> Out<String> {
     Ok(format!(
         r#"<CDXML CreationProgram="Original box-label oracle"><fonttable><font id="42" name="Roboto"/></fonttable><colortable><color r="1" g="1" b="1"/><color r="0" g="0" b="0"/><color r="0.2" g="0.4" b="0.8"/></colortable><page id="90" DrawingSpace="Poster" Width="512" Height="512"><fragment id="51"><n id="73" NodeType="Element" Element="{element}" Charge="0" Radical="None" NumHydrogens="{h}" p="{point}"><t id="21" BoundingBox="{bounds}" Justification="Left" LabelJustification="Left"><s font="42" size="{size}" face="0" color="4">{body}</s></t></n></fragment></page></CDXML>"#
     ))
+}
+// Append to first_boxed_io_red.rs after its frozen runtime RED.
+#[path = "../../../xtask/oracles/boxed_label_support.rs"]
+#[allow(
+    dead_code,
+    reason = "shared source/file literals also serve commands/adapters/App"
+)]
+mod boxed;
+
+#[test]
+fn boxed_capability_is_complete_source_specific_and_raw_model_drift_never_repairs_text()
+-> TestResult {
+    let mut stored = StoredDocument::from_cdxml(SOURCE.into(), PageSize::A4)?;
+    assert!(stored.has_boxed_atom_labels());
+    assert!(!stored.is_fully_mapped());
+    assert!(stored.has_display_projection());
+    assert_eq!(boxed::read(SOURCE)?, boxed::facts(8, 1));
+    let page = stored.model().pages()[0].id();
+    let fragment = &stored.model().pages()[0].fragments()[0];
+    let mut atoms = fragment.atoms().to_vec();
+    atoms[0].element = bondline_model::Element::new(7).ok_or("N")?;
+    atoms[0].explicit_hydrogens = Some(2);
+    let replacement =
+        bondline_model::Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec())?;
+    stored.model_mut().replace_fragment(page, replacement)?;
+    assert!(
+        !stored.has_boxed_atom_labels(),
+        "changed numeric chemistry cannot leave old OH body/box as an authoring proof"
+    );
+    assert!(!stored.has_display_projection());
+    assert!(stored.to_cdxml().is_err());
+    Ok(())
+}
+
+#[test]
+fn boxed_source_stays_opaque_for_geometry_style_defaults_unknowns_and_present_text_points()
+-> TestResult {
+    let raw = std::str::from_utf8(SOURCE)?;
+    let variants = [
+        raw.replace(">OH</s>", ">N</s>"),
+        raw.replace(">OH</s>", "></s>"),
+        raw.replace("NumHydrogens=\"1\" ", ""),
+        raw.replace("font=\"42\"", "font=\"43\""),
+        raw.replace("name=\"Roboto\"", "name=\"Other\""),
+        raw.replace("face=\"0\"", "face=\"96\""),
+        raw.replace("size=\"12\"", "size=\"13\""),
+        raw.replace("<t id=\"21\"", "<t id=\"21\" p='80 100'"),
+        raw.replace("<t id=\"21\"", "<t id=\"21\" LabelAlignment='Left'"),
+        raw.replace(" LabelJustification=\"Left\"", ""),
+        raw.replace(
+            "80.69140625 91.3515625 95.796875 100.1171875",
+            "80.69140625 91.3515625 95.79690625 100.1171875",
+        ),
+        raw.replace(
+            "80.69140625 91.3515625 95.796875 100.1171875",
+            "80.69140625 91.3515625 80.69140625 100.1171875",
+        ),
+        raw.replace("80.69140625 91.3515625 95.796875 100.1171875", "1 2 3"),
+        raw.replace("<CDXML ", "<CDXML Future='opaque' "),
+        raw.replace("<CDXML ", "<CDXML LabelFont='42' "),
+        raw.replace("<page ", "<page Future='opaque' "),
+        raw.replace("<fragment ", "<fragment Future='opaque' "),
+        raw.replace("<n id=\"73\"", "<n id=\"73\" Future='opaque'"),
+        raw.replace("<t id=\"21\"", "<t id=\"21\" Future='opaque'"),
+        raw.replace("<s font=\"42\"", "<s font=\"42\" Future='opaque'"),
+        raw.replace("<font id=\"42\"", "<font id=\"42\" charset='utf-8'"),
+        raw.replace(
+            "</t>",
+            "</t><t id='22'><s font='42' size='12' face='0' color='4'>OH</s></t>",
+        ),
+        raw.replace("<CDXML ", "<CDXML xmlns:x='urn:unused' "),
+        raw.replace("<t id=\"21\"", "<t xmlns='' id=\"21\""),
+    ];
+    for variant in variants {
+        let stored = StoredDocument::from_cdxml(variant.as_bytes().into(), PageSize::A4)?;
+        assert!(
+            !stored.has_boxed_atom_labels(),
+            "must stay unsupported: {variant}"
+        );
+        assert!(!stored.is_fully_mapped());
+        assert!(!stored.has_display_projection());
+        assert_eq!(stored.to_cdxml()?.as_ref(), variant.as_bytes());
+    }
+    Ok(())
+}
+
+#[test]
+fn a_readonly_plain_page_caption_is_covered_without_granting_its_edit_permission() -> TestResult {
+    let source=std::str::from_utf8(SOURCE)?.replace("</fragment></page>","</fragment><t id='22' p='220 160' Justification='Left'><s font='42' size='12' face='0' color='3'>caption</s></t></page>");
+    let stored = StoredDocument::from_cdxml(source.as_bytes().into(), PageSize::A4)?;
+    assert!(stored.has_boxed_atom_labels());
+    assert!(stored.has_display_projection());
+    assert!(!stored.is_fully_mapped());
+    assert!(!stored.has_caption_projection());
+    let model = serde_json::to_value(stored.model())?;
+    assert_eq!(model["pages"][0]["texts"][0]["runs"][0]["text"], "caption");
+    let page = stored.model().pages()[0].id();
+    let graph =
+        bondline_io::display::drawing_page_scene(1024, 1024, &stored, page, &Default::default())?;
+    assert!(graph.label_em_px().is_some());
+    assert!(graph.text_em_range_px().is_some());
+    assert_eq!(stored.to_cdxml()?.as_ref(), source.as_bytes());
+    Ok(())
 }

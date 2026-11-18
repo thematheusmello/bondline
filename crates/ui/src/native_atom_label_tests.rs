@@ -1463,3 +1463,6 @@ mod skeletal_display;
 
 #[path = "terminal_label_tests.rs"]
 mod terminal_label;
+
+#[path = "boxed_atom_label_app_tests.rs"]
+mod boxed_atom_label_app_tests;

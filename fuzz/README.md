@@ -1007,3 +1007,27 @@ The same recipe can supply another fresh corpus to the existing standalone `cdxm
 target; no new harness or dependency is required. Record actual terminal results,
 immutable source hashes, reached mutation lengths and qualifications in the receiving
 record. The default/placement/chemistry/native Text-tool work remains incomplete.
+
+### Box-positioned literal label workflow
+
+The same `cdxml_profile` target now exercises the complete qualified absent-p/explicit
+BoundingBox path: exact source retention, numeric Element/H + literal body + box edits,
+complete re-import, native data rebinding and corrupt-box/presence controls. Global full
+authoring stays false; an old native-data encoding exception grants display only when
+the separate boxed certificate holds. Changed opaque page data still refuses; it cannot
+borrow that certificate. The harness prepares bounded model/source work, not GPU/PNG or
+native input. Direct public renderer logical-work regressions are ordinary tests.
+
+Generate a fresh ignored directory with42 original Expat-checked seeds, including exact
+16KiB source, unsupported/default/namespace/Z/DTD/PI controls and unlabelled/bonded/producer
+foreign-default refusals. Immutable sources and their
+manifest stay outside writable corpus. Existing destination is refused.
+
+```sh
+python3 -B fuzz/seed_cdxml_boxed_labels.py .cache/fuzz/boxed-label-workflow-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/boxed-label-workflow-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+Record observed terminal iterations, coverage/RSS, actual mutated lengths and immutable
+source verification in [receiving](../docs/verification-boxed-atom-labels.md). This is a
+bounded sanitizer check, not exhaustive parser/render/chemistry/platform proof.

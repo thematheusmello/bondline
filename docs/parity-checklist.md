@@ -1,7 +1,7 @@
 # Parity checklist
 
 Target: publicly documented Professional-family26.1 desktop behavior.
-Reviewed through2026-11-17. Historical authorized installed-profile records below retain
+Reviewed through2026-11-18. Historical authorized installed-profile records below retain
 their original method. Current work follows the user's public-source-only instructions;
 the installed reference application is not opened or inspected.
 The historical installed license tier remains unknown.
@@ -139,6 +139,19 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 
 ## Workflow overview
 
+The [box-positioned child-label workflow](verification-boxed-atom-labels.md) now verifies
+its explicitly bounded imported-file display/edit/history/Unicode Save/reopen scope,
+including actual macOS Option-click/form and independent actual-file consumption.
+Foreign scenes require explicit labels on every atom and zero bonds, without borrowed
+native defaults. Command48 synchronizes numeric Element/H, literal body and Bounds only for complete
+qualified no-p/Roboto Regular/face0 sources. Global full authoring staysfalse and all
+other writers keep their refusals. Registry48 preserves old47; catalogue16/124 stays.
+General Text creation/rich editing, arbitrary placement/defaults/styles, dependent
+geometry/H edits and broader reference/platform parity stay missing. Golden approval
+is pending; passing individual checks do not erase the aggregate listener failure.
+
+Older prerequisite/workflow paragraphs below retain their recorded checkpoint scope.
+
 The [owned chemical child-Text data boundary](verification-owned-atom-label-data.md)
 retains explicit literal runs/placement in the model/native CDXML codec and guards
 unsupported edits, rendering and conversion loss. Actual CLI/stdio/socket unchanged
@@ -158,7 +171,7 @@ through command47 and all adapters. Bounded actual Mac Open, remote-edit repaint
 keyboard history, read-only drag and Unicode Save As/reopen pass. This is partial Text
 support; TD-005 and the font/size/style/format menu actions below remain missing and grey.
 Chemical dependent labels, inherited defaults, mixed foreign diagrams and the complete
-native Text editor remain required. Current registry47/catalogue16/124 supersede the
+native Text editor remain required. That checkpoint's registry47/catalogue16/124 supersede the
 historical counts in the prerequisite paragraphs below.
 
 The [numeric composition library](verification-formula-composition.md) independently
@@ -181,7 +194,7 @@ render/edit workflows below; registry46 and catalogue16/124 retain their existin
 | Undo/redo | GUIDE-25 / MAC-HISTORY | verified for pages and supported C2/C3/C4 edits, Mac only | Exact engine properties; native page and bond Undo/Redo plus saved-C3/dirty-C4 recovery. Other chemical edits and Windows/Linux runtime missing |
 | Selection and transforms | GUIDE-25 | wired (partial) | Persistent one-page native atom-set selection and atomic literal translation pass independent command/context/wire and actual-App input/file-consumer checks. Native interaction remains unverified; lasso/rotate/resize/groups/snapping and broader sources remain missing. See verification-selection-authoring.md. |
 | Bond, ring, chain tools | GUIDE-25 | partial: bounded Single/Double/Triple Mac authoring verified | Shared create/extend/set_order, explicit H policies, transient tool state, component geometry and exact complete-source/history/consumer checks. Actual Mac multiple creation, existing-bond click/1/2/3 keys/endpoint Double→Triple and Unicode Save As pass at readable420pt-square scale; native multiple extension and broader keys/styles/selection/rings/chains remain incomplete. See verification-bond-order-{command,ui,native}.md and verification-native-sdf-and-extension.md. |
-| Atom labels, charges, isotopes, radicals | GUIDE-25 / ATOM-LABEL-AUTHORING / NATIVE-ATOM-LABELS | partial: bounded elemental authoring verified, Mac | Fresh Alt-click atom/label→explicit Element/H→Apply/Cancel calls the shared setter. Native OH/NH2, history, draft-close protection and Unicode Save/reopen pass with independent actual-file consumers; see verification-native-atom-labels.md. Original incremental form, not exact26.1 inline Text parity. Inline labels/aliases, inference, foreign-source edits and charge/isotope/radical workflows remain missing. Earlier source-aware MOL display preserves None; see verification-neutral-element-labels.md |
+| Atom labels, charges, isotopes, radicals | GUIDE-25 / ATOM-LABEL-AUTHORING / NATIVE-ATOM-LABELS | partial: bounded elemental authoring verified, Mac | Fresh Alt-click atom/label→explicit Element/H→Apply/Cancel calls the shared setter. Native OH/NH2, history, draft-close protection and Unicode Save/reopen pass with independent actual-file consumers; see verification-native-atom-labels.md. Original incremental form, not exact26.1 inline Text parity. Box-qualified imported labels now have [bounded source/native evidence](verification-boxed-atom-labels.md); inline aliases, inference, broader foreign edits and charge/isotope/radical workflows remain missing. Earlier source-aware MOL display preserves None; see verification-neutral-element-labels.md |
 | Stereo bonds and labels | GUIDE-25 | missing | M2/M3 |
 | Text, captions, chemical formatting | GUIDE-25 / STYLED-CAPTIONS | partial: bounded plain file/command workflow and Mac preview verified | Explicit Roboto Regular, ordered run sizes/colours, source-preserving run-body edits/history/Save/reopen and CPU/Metal captures; see verification-styled-captions.md. Native canvas stays read-only; full Text tool, rich/chemical formatting, font/style editing, mixed foreign diagrams and broader platforms remain missing. |
 | Reaction and curved arrows | GUIDE-25 | missing | M3 |

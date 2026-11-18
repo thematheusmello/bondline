@@ -408,7 +408,7 @@ fn required(v: &Value) -> Check<BTreeSet<&str>> {
 #[test]
 fn one_closed_sprout_schema_and_runtime_selectors_add_only_the_authoring_command() -> TestResult {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 47);
+    assert_eq!(registry.len(), 48);
     let names = registry.iter().map(|e| e.name).collect::<Vec<_>>();
     assert_eq!(&names[..43], OLD_COMMANDS.as_slice());
     assert_eq!(names[43], "ring.sprout");

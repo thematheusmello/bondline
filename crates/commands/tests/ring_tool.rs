@@ -329,7 +329,7 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
         "ui.view",
     ];
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 47);
+    assert_eq!(registry.len(), 48);
     let mut expected = OLD_37.into_iter().collect::<BTreeSet<_>>();
     assert!(expected.insert("ui.ring_tool"));
     assert!(expected.insert("chain.create"));
@@ -341,6 +341,7 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
     assert!(expected.insert("ui.preferences"));
     assert!(expected.insert("document.set_document_settings"));
     assert!(expected.insert("text.set_run"));
+    assert!(expected.insert("atom.set_authored_label"));
     assert_eq!(
         registry.iter().map(|r| r.name).collect::<BTreeSet<_>>(),
         expected

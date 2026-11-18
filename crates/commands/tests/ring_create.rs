@@ -512,7 +512,7 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
         "ui.view",
     ];
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 47);
+    assert_eq!(registry.len(), 48);
     let mut expected = OLD_36.into_iter().collect::<BTreeSet<_>>();
     assert!(expected.insert("ring.create"));
     assert!(expected.insert("ui.ring_tool"));
@@ -525,6 +525,7 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
     assert!(expected.insert("ui.preferences"));
     assert!(expected.insert("document.set_document_settings"));
     assert!(expected.insert("text.set_run"));
+    assert!(expected.insert("atom.set_authored_label"));
     assert_eq!(
         registry.iter().map(|r| r.name).collect::<BTreeSet<_>>(),
         expected

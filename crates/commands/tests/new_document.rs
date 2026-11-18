@@ -159,6 +159,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "ui.preferences",
             "document.set_document_settings",
             "text.set_run",
+            "atom.set_authored_label",
         ]
         .into_iter()
         .collect()

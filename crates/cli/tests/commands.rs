@@ -457,6 +457,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
     assert_eq!(
         names,
         [
+            "atom.set_authored_label",
             "atom.set_label",
             "bond.create",
             "bond.extend",

@@ -1,4 +1,4 @@
-//! Exact-target native presentation; authored edits still use `atom.set_label`.
+//! Exact-target native presentation; the current source selects the registered label edit.
 use crate::{
     AtomSetLabel, BondToolState, CaptureStamp, CloseState, Command, CommandResult, Engine, Error,
     UiFileContextStamp,
@@ -140,12 +140,12 @@ impl Engine {
                 {
                     return Err(Error::UiBusy);
                 }
-                let (_, atom) = crate::atom::editable_atom(
-                    self.stored_document()?,
-                    page_id,
-                    fragment_id,
-                    atom_id,
-                )?;
+                let document = self.stored_document()?;
+                let (_, atom) = if document.has_boxed_atom_labels() {
+                    crate::boxed_atom::editable_atom(document, page_id, fragment_id, atom_id)
+                } else {
+                    crate::atom::editable_atom(document, page_id, fragment_id, atom_id)
+                }?;
                 let id = self
                     .atom_ui
                     .epoch
@@ -205,7 +205,12 @@ impl Engine {
             element,
             explicit_hydrogens,
         };
-        let mut result = self.execute(Command::AtomSetLabel(params))?;
+        let command = if self.stored_document()?.has_boxed_atom_labels() {
+            Command::AtomSetAuthoredLabel(params)
+        } else {
+            Command::AtomSetLabel(params)
+        };
+        let mut result = self.execute(command)?;
         self.finish_ui_atom_label(id);
         result.ui_atom_label = None;
         result.ui_atom_label_operation = Some(id);

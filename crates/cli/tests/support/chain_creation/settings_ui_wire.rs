@@ -5,12 +5,12 @@ use super::*;
 const UI_SETTINGS: &str = "ui.drawing_settings";
 
 fn settings_schema(entries: &[Value], key: &str) -> TestResult {
-    assert_eq!(entries.len(), 47);
+    assert_eq!(entries.len(), 48);
     let names = entries
         .iter()
         .map(|v| v["name"].as_str().ok_or("name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(names.len(), 47);
+    assert_eq!(names.len(), 48);
     assert_eq!(
         names,
         OLD_NAMES
@@ -25,6 +25,7 @@ fn settings_schema(entries: &[Value], key: &str) -> TestResult {
                 "ui.preferences",
                 "document.set_document_settings",
                 "text.set_run",
+                "atom.set_authored_label",
             ])
             .collect::<BTreeSet<_>>()
     );

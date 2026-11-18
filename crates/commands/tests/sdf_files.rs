@@ -65,6 +65,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "ui.preferences",
             "document.set_document_settings",
             "text.set_run",
+            "atom.set_authored_label",
         ]
         .into_iter()
         .collect()
