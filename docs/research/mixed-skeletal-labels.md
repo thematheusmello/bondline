@@ -49,7 +49,9 @@ Add a distinct Mixed profile and `StoredDocument::has_mixed_atom_labels`. Preser
 foreign Boxed all-explicit/zero-bond and Connected all-explicit semantics literally;
 source-free/exact-native richer conventions also stay unchanged. Mixed requires at least
 one complete explicit authored label, at least one no-Text atom and at least one supported
-bond. Every no-Text atom must be a CURRENT member of the shared hidden-carbon set.
+bond. Every no-Text atom must be neutral, natural-isotope, nonradical carbon and a CURRENT
+member of the shared hidden-carbon set. The shared query does not replace these upstream
+metadata guards; the existing page renderer already checks them separately.
 
 Reuse the complete lexical/features/node/key/scoped-ID/resource/model binding proof and
 Connected style/black-bond/pure noncrossing geometry checks. Each hidden source node must
