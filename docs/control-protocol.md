@@ -3,15 +3,47 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has48 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has49 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
-The [Mixed source grant](verification-mixed-skeletal-labels.md) additionally reuses the
+## Explicit child-label creation
+
+`atom.create_authored_label` appends record49; every old48 serialized metadata byte,
+schema and order stays exact. All fields are required in closed objects:
+
+```json
+{"command":"atom.create_authored_label","params":{"expected_revision":1,"page_id":1,"fragment_id":1,"atom_id":3,"element":6,"explicit_hydrogens":2,"style":{"font_family":"Roboto","size_pt":12,"face":0,"rgb":[0,0,0]}}}
+```
+
+Only a currently hidden carbon without child Text in a complete imported Mixed/Flagged
+source may be targeted. The style is an explicit authoring choice, resolved against
+existing font/palette resources; unavailable resources refuse. One edit adds a positioned
+literal label, optionally changing Element/H, while retaining both carbon flags, IDs,
+geometry and all unrelated data. Repeating creation on a labelled target refuses; use
+the unchanged48 operation to edit its existing label. No H/valence/default is inferred.
+
+The separate `has_flagged_atom_labels` grant admits current created labels and reopened
+flag-bearing explicit labels, including the last-hidden→all-printed transition. Old
+foreign Boxed/Connected/Mixed predicates stay literal and full authority staysfalse.
+Current source/resource and hidden-neighbour proofs precede the source writer and one
+final physical-page certificate. The old exact-native data codec cannot replace these
+command/selection authoring proofs. Source IDs are reserved against the immutable
+baseline for every eligible no-Text atom; reverse-order creation never renames a child.
+
+The existing `ui.atom_label` Open/Cancel schemas stay exact. Creation requests add only
+an optional `creation_style` response, omitted for old forms. Native creation visibly
+states its original Roboto Regular12pt black preset, then Apply dispatches49 under the
+same weak owners/Engine guard. Existing printed forms keep48; legacy numeric forms keep
+their old operation. Static catalogue16/124 and all other authoring/loss guards remain.
+[Contract](research/printed-label-creation.md); current verification is in STATUS.
+
+The preceding [Mixed source grant](verification-mixed-skeletal-labels.md) reuses the
 same48 metadata and existing printed-label/selection operations for qualified foreign
 skeletal diagrams. `has_mixed_atom_labels` is distinct from old Boxed/Connected/global
 full. Only explicitly/currently hidden, known-H neutral C may lack child Text. Movement
 or neighbor edits that would expose unproven default glyphs refuse atomically. Hidden
-nodes permit point movement but not command48/form label creation; other source writers
+nodes permit point movement but not command48 label creation; the separate49 workflow
+above now owns eligible creation through the form. Other source writers
 retain their refusals. All source/page/history/Save/native owner guards remain.
 
 The [connected-label grant](verification-connected-labels.md) reuses48 and ui.atom_label

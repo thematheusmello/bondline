@@ -42,6 +42,7 @@ pub use bond::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
 };
 pub use bond_tool::{BondToolOperation, BondToolState, EffectiveTool, SelectBondTool};
+pub use boxed_atom::{AtomCreateLabel, AtomLabelStyle};
 pub use caption::TextSetRun;
 pub use chain::{
     ChainCreate, ChainCreatePath, ChainPathPlacement, ChainPathPoint, ChainPlacement, ChainSide,
@@ -226,6 +227,7 @@ command_registry! {
     DocumentSettingsSet(DocumentSettingsSet) => ("document.set_document_settings", "Replace explicit bond length, chain angle and line width atomically; optionally set or clear spacing. Appearance or active spacing-reference changes must pass the whole-page ink certificate without moving geometry or changing label metrics.", false),
     TextSetRun(TextSetRun) => ("text.set_run", "Replace the decoded text of one existing styled caption run, preserving its font, size, face, colour, placement and every unrelated source byte. Requires native or caption-qualified CDXML and validates the final page and Save representation before one history edit.", false),
     AtomSetAuthoredLabel(AtomSetLabel) => ("atom.set_authored_label", "Replace one qualified box-positioned atom label's explicit element/H, literal text and bounds in one source-preserving edit; keeps node/bond geometry and style, validates the final page and Save representation, and performs no valence inference.", false),
+    AtomCreateAuthoredLabel(AtomCreateLabel) => ("atom.create_authored_label", "Create one explicit box-positioned child label on a qualified imported hidden carbon using a supplied style and existing file resources; preserves IDs, geometry and carbon-display flags, synchronizes literal element/H and validates source and the final page before one history edit.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -1218,6 +1220,14 @@ impl Engine {
                 drawing_focus = self.view_focus;
                 self.commit(document)?
             }
+            Command::AtomCreateAuthoredLabel(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let document = boxed_atom::create_label(self.stored_document()?, params)?;
+                drawing_focus = self.view_focus;
+                self.commit(document)?
+            }
             Command::Undo(_) => self.undo()?,
             Command::Redo(_) => self.redo()?,
             Command::Capture(params) => {
@@ -1386,6 +1396,7 @@ mod tests {
         assert_eq!(
             names,
             [
+                "atom.create_authored_label",
                 "atom.set_authored_label",
                 "atom.set_label",
                 "bond.create",

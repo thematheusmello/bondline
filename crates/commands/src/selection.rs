@@ -152,6 +152,7 @@ impl Engine {
                 stored.has_boxed_atom_labels()
                     || stored.has_connected_atom_labels()
                     || stored.has_mixed_atom_labels()
+                    || stored.has_flagged_atom_labels()
             })
     }
 
@@ -448,6 +449,15 @@ impl Engine {
             )?;
         }
         if changed && candidate.model().has_authored_atom_labels() {
+            if !candidate.has_boxed_atom_labels()
+                && !candidate.has_connected_atom_labels()
+                && !candidate.has_mixed_atom_labels()
+                && !candidate.has_flagged_atom_labels()
+            {
+                return Err(Error::UnsupportedSelection(
+                    "the final candidate must retain complete literal label source coverage",
+                ));
+            }
             candidate.to_cdxml()?;
             let page = candidate
                 .model()

@@ -26,7 +26,7 @@ fn capture() -> Value {
 }
 fn metadata(rows: &[Value], mcp: bool) -> TestResult {
     let old: Vec<Value> = serde_json::from_str(include_str!("atom-child-old47.json"))?;
-    assert_eq!((old.len(), rows.len()), (47, 48));
+    assert_eq!((old.len(), rows.len()), (47, 49));
     for (row, expected) in rows.iter().zip(&old) {
         if mcp {
             assert_eq!(row["name"], expected["name"]);

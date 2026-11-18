@@ -156,8 +156,8 @@ fn closed_tagged_schema_host_and_invalid_target_errors_are_non_authoring() -> Te
         .iter()
         .map(|v| v.name)
         .collect::<std::collections::BTreeSet<_>>();
-    assert_eq!(registry.len(), 48);
-    assert_eq!(names.len(), 48);
+    assert_eq!(registry.len(), 49);
+    assert_eq!(names.len(), 49);
     for old in [
         "document.inspect",
         "document.new",

@@ -172,17 +172,18 @@ fn mixed_printed_label_edit_and_all_atom_drag_history_unicode_save_reopen_are_re
 }
 
 #[test]
-fn mixed_hidden_carbon_target_and_neighbor_c2_apply_are_refused_without_font_fallback() -> TestResult
-{
+fn mixed_hidden_creation_draft_cancel_and_neighbor_c2_apply_keep_font_guards() -> TestResult {
     let mut app = Fixture::new(1160., 800., 1.)?;
     open(&mut app, "methanol")?;
     marquee(&mut app)?;
     let before = app.state()?;
     click_alt(&mut app, [128., 192.])?;
     assert!(
-        !painted(&app.warm(), "Atom label"),
-        "No child insertion or hidden-node chemical edit is supported"
+        painted(&app.warm(), "Atom label"),
+        "Command49 now permits an explicit hidden-carbon creation draft"
     );
+    assert_eq!(app.state()?["document"], before["document"]);
+    close_form(&mut app, "Cancel")?;
     assert_eq!(app.state()?, before);
     exact(&app, "methanol")?;
     click_alt(&mut app, [208., 144.])?;

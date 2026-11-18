@@ -1,7 +1,7 @@
 //! Exact-target native presentation; the current source selects the registered label edit.
 use crate::{
-    AtomSetLabel, BondToolState, CaptureStamp, CloseState, Command, CommandResult, Engine, Error,
-    UiFileContextStamp,
+    AtomCreateLabel, AtomLabelStyle, AtomSetLabel, BondToolState, CaptureStamp, CloseState,
+    Command, CommandResult, Engine, Error, UiFileContextStamp,
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -36,6 +36,8 @@ pub struct UiAtomLabelRequest {
     pub element: u8,
     pub explicit_hydrogens: Option<u16>,
     pub current: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_style: Option<AtomLabelStyle>,
 }
 
 #[derive(Debug)]
@@ -141,14 +143,42 @@ impl Engine {
                     return Err(Error::UiBusy);
                 }
                 let document = self.stored_document()?;
-                let (_, atom) = if document.has_boxed_atom_labels()
+                let (atom, creation_style) = if document.has_boxed_atom_labels()
                     || document.has_connected_atom_labels()
                     || document.has_mixed_atom_labels()
+                    || document.has_flagged_atom_labels()
                 {
-                    crate::boxed_atom::editable_atom(document, page_id, fragment_id, atom_id)
+                    let (_, target) =
+                        crate::boxed_atom::atom_at(document, page_id, fragment_id, atom_id)?;
+                    if target.authored_label.is_some() {
+                        (
+                            crate::boxed_atom::editable_atom(
+                                document,
+                                page_id,
+                                fragment_id,
+                                atom_id,
+                            )?
+                            .1,
+                            None,
+                        )
+                    } else {
+                        (
+                            crate::boxed_atom::creation_atom(
+                                document,
+                                page_id,
+                                fragment_id,
+                                atom_id,
+                            )?
+                            .1,
+                            Some(AtomLabelStyle::native_preset()),
+                        )
+                    }
                 } else {
-                    crate::atom::editable_atom(document, page_id, fragment_id, atom_id)
-                }?;
+                    (
+                        crate::atom::editable_atom(document, page_id, fragment_id, atom_id)?.1,
+                        None,
+                    )
+                };
                 let id = self
                     .atom_ui
                     .epoch
@@ -164,6 +194,7 @@ impl Engine {
                         element: atom.element.get(),
                         explicit_hydrogens: atom.explicit_hydrogens,
                         current: true,
+                        creation_style,
                     },
                     owner: self.capture_stamp(),
                     file_context: self.ui_file_context_stamp(),
@@ -209,9 +240,20 @@ impl Engine {
             explicit_hydrogens,
         };
         let document = self.stored_document()?;
-        let command = if document.has_boxed_atom_labels()
+        let command = if let Some(style) = request.view.creation_style.clone() {
+            Command::AtomCreateAuthoredLabel(AtomCreateLabel {
+                expected_revision: params.expected_revision,
+                page_id: params.page_id,
+                fragment_id: params.fragment_id,
+                atom_id: params.atom_id,
+                element: params.element,
+                explicit_hydrogens: params.explicit_hydrogens,
+                style,
+            })
+        } else if document.has_boxed_atom_labels()
             || document.has_connected_atom_labels()
             || document.has_mixed_atom_labels()
+            || document.has_flagged_atom_labels()
         {
             Command::AtomSetAuthoredLabel(params)
         } else {

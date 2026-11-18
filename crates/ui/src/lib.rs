@@ -406,6 +406,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             stored.has_boxed_atom_labels()
                 || stored.has_connected_atom_labels()
                 || stored.has_mixed_atom_labels()
+                || stored.has_flagged_atom_labels()
         });
     ui.heading("Document");
     if let Some(message) = error {
@@ -535,7 +536,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         if caption_preview {
             ui.label("Read-only canvas. Save preserves the complete caption file.");
         } else if atom_label_preview {
-            ui.label("Alt-click a printed atom label to edit its element and attached hydrogens. Use Marquee selection to move supported atoms and their labels.");
+            ui.label("Alt-click an atom to edit its printed label or create one on a supported hidden carbon. Use Marquee selection to move supported atoms and their labels.");
         } else if engine.effective_tool() == EffectiveTool::Selection {
             ui.label(if engine.selection_available() {
                 "Click or drag to select. Drag selected atoms to move; arrows nudge 1 pt, Shift 10 pt."
@@ -1727,7 +1728,7 @@ fn show_workspace_with_preview(
                     button: egui::PointerButton::Primary, pressed: true, modifiers, ..
                 } if modifiers.alt);
                 if command.is_none()
-                    && engine.stored_document().is_ok_and(|stored| stored.has_boxed_atom_labels() || stored.has_connected_atom_labels() || stored.has_mixed_atom_labels())
+                    && engine.stored_document().is_ok_and(|stored| stored.has_boxed_atom_labels() || stored.has_connected_atom_labels() || stored.has_mixed_atom_labels() || stored.has_flagged_atom_labels())
                     && !matches!(event, egui::Event::MouseWheel { .. })
                     && (!label_selection_input || label_alt_press)
                 {

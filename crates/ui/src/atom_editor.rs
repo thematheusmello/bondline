@@ -183,6 +183,9 @@ impl AtomEditor {
             .default_width(370.0).show(context,|ui| {
                 ui.label(format!("Page {} · Fragment {} · Atom {}",form.request.page_id,form.request.fragment_id,form.request.atom_id));
                 ui.label("Set literal element and attached-H fields. Neighbors are unchanged.");
+                if form.request.creation_style.is_some() {
+                    ui.label("New printed label · Roboto Regular · 12 pt · Black");
+                }
                 for (index,(label,text)) in [("Element",&mut form.element),("Attached hydrogens",&mut form.hydrogens)].into_iter().enumerate() {
                     if let Some(routed)=&mut routed {
                         let queue=routed.fields.get_mut(index).map(std::mem::take).unwrap_or_default();

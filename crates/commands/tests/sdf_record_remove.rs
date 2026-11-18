@@ -186,6 +186,7 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "document.set_document_settings",
             "text.set_run",
             "atom.set_authored_label",
+            "atom.create_authored_label",
         ]
         .into_iter()
         .collect()

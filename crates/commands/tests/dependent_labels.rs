@@ -15,7 +15,12 @@ mod connected;
 fn selection_preview(raw: &str, old_point: [f64; 2], old_box: [f64; 4]) -> TestResult {
     let old: Vec<Value> = serde_json::from_str(connected::METADATA48)?;
     assert_eq!(
-        serde_json::to_value(bondline_commands::registry())?,
+        serde_json::to_value(
+            bondline_commands::registry()
+                .into_iter()
+                .take(48)
+                .collect::<Vec<_>>()
+        )?,
         json!(old)
     );
     let mut e = Engine::from_document(StoredDocument::from_cdxml(

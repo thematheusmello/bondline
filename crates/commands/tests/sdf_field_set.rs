@@ -81,6 +81,7 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
             "document.set_document_settings",
             "text.set_run",
             "atom.set_authored_label",
+            "atom.create_authored_label",
         ]
         .into_iter()
         .collect()

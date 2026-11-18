@@ -37,7 +37,12 @@ fn connected_command48_edits_numeric_body_box_and_clearance_in_one_exact_source_
 -> TestResult {
     let frozen: Vec<Value> = serde_json::from_str(connected::METADATA48)?;
     assert_eq!(
-        serde_json::to_value(bondline_commands::registry())?,
+        serde_json::to_value(
+            bondline_commands::registry()
+                .into_iter()
+                .take(48)
+                .collect::<Vec<_>>()
+        )?,
         json!(frozen)
     );
     let mut e = engine(connected::SOURCE)?;

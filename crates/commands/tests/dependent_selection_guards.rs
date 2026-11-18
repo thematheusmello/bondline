@@ -107,7 +107,12 @@ fn literal_candidate(
 fn subset_all_and_tolerated_current_boxes_move_with_exact_source_and_history() -> TestResult {
     let metadata: Vec<Value> = serde_json::from_str(f::METADATA48)?;
     assert_eq!(
-        serde_json::to_value(bondline_commands::registry())?,
+        serde_json::to_value(
+            bondline_commands::registry()
+                .into_iter()
+                .take(48)
+                .collect::<Vec<_>>()
+        )?,
         json!(metadata)
     );
     for (base, after, ids, dx, dy) in [

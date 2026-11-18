@@ -164,7 +164,12 @@ fn mixed_frozen_transitions_keep_exact_source_history_sharing_and_generated_noop
 {
     let old: Vec<Value> = serde_json::from_str(f::METADATA48)?;
     assert_eq!(
-        serde_json::to_value(bondline_commands::registry())?,
+        serde_json::to_value(
+            bondline_commands::registry()
+                .into_iter()
+                .take(48)
+                .collect::<Vec<_>>()
+        )?,
         json!(old)
     );
     let mut e = engine("amino_alcohol")?;
@@ -314,11 +319,30 @@ fn current_c2_collinear_hidden_target_and_foreign_authority_guards_refuse_atomic
         "atom.set_authored_label",
         json!({"expected_revision":0,"page_id":1,"fragment_id":1,"atom_id":3,"element":6,"explicit_hydrogens":2}),
     )?;
-    failed(
-        &mut e,
+    let before_form = serde_json::to_value(e.state())?;
+    let original = e.content().clone();
+    let model = e.stored_document()?.model_snapshot();
+    assert!(
+        !e.dispatch(
+            "ui.atom_label",
+            json!({"action":"open","expected_revision":0,"page_id":1,"fragment_id":1,"atom_id":3})
+        )?
+        .changed
+    );
+    let request = e
+        .ui_atom_label_request()
+        .ok_or("command49 creation draft")?;
+    assert_eq!(
+        serde_json::to_value(&request)?["creation_style"],
+        json!({"font_family":"Roboto","size_pt":12.0,"face":0,"rgb":[0.0,0.0,0.0]})
+    );
+    assert_eq!(e.content(), &original);
+    assert!(Arc::ptr_eq(&model, &e.stored_document()?.model_snapshot()));
+    e.dispatch(
         "ui.atom_label",
-        json!({"action":"open","expected_revision":0,"page_id":1,"fragment_id":1,"atom_id":3}),
+        json!({"action":"cancel","expected_revision":0,"request_id":request.id}),
     )?;
+    assert_eq!(serde_json::to_value(e.state())?, before_form);
     let bad = literal_move(e.stored_document()?, &[3], 0., 48.)?;
     assert_eq!(
         bad.model(),
