@@ -141,12 +141,19 @@ fn profile_errors_and_fixed_point_tolerance_do_not_certify_unknown_styles_or_geo
     let mut a = original.clone();
     a.position = None;
     variants.push(a);
-    let mut a = original.clone();
-    a.show_terminal_carbon_labels = Some(true);
-    variants.push(a);
-    let mut a = original.clone();
-    a.show_non_terminal_carbon_labels = Some(false);
-    variants.push(a);
+    // Child Text takes display precedence; these former flag-only refusals now retain
+    // exactly the same body, style and box as the unflagged literal label.
+    for (terminal, nonterminal) in [(Some(true), None), (None, Some(false))] {
+        let mut qualified = original.clone();
+        qualified.show_terminal_carbon_labels = terminal;
+        qualified.show_non_terminal_carbon_labels = nonterminal;
+        validate_atom_label(&qualified)?;
+        assert_eq!(
+            position_atom_label(&qualified)?,
+            position_atom_label(&original)?
+        );
+        assert_eq!(qualified.authored_label, original.authored_label);
+    }
     let mut a = original.clone();
     a.element = bondline_model::Element::try_from(1)?;
     a.explicit_hydrogens = Some(1);

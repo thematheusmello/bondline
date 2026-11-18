@@ -1,7 +1,8 @@
 //! Literal no-p atom text whose explicit ink box certifies placement and numeric agreement.
 use crate::{Cancellation, Error, PageViewport, Rectangle, label::Label};
 use ab_glyph::{Font, GlyphId, point};
-use bondline_model::{Atom, AtomLabel, Point2, Radical, TextJustification, TextRun};
+use bondline_model::{Atom, AtomLabel, Point2, Radical, TextJustification, TextRun, TextStyle};
+use std::sync::Arc;
 use ttf_parser::{Face, OutlineBuilder};
 
 struct Layout {
@@ -20,8 +21,6 @@ fn layout(atom: &Atom) -> Result<Layout, Error> {
     if atom.charge != 0
         || atom.isotope.is_some()
         || atom.radical != Radical::None
-        || atom.show_terminal_carbon_labels.is_some()
-        || atom.show_non_terminal_carbon_labels.is_some()
         || label.position().is_some()
         || label.justification() != Some(TextJustification::Left)
         || label.label_justification() != Some(TextJustification::Left)
@@ -103,6 +102,34 @@ fn generated_box(atom: &Atom, layout: &Layout) -> Result<[f64; 4], Error> {
         baseline[0] + layout.ink[2] * layout.factor,
         baseline[1] - layout.ink[1] * layout.factor,
     ])
+}
+
+/// Create a positioned literal label with a deliberately supplied supported style.
+/// The input must have no authored label. No defaults, H or editing authority are inferred.
+pub fn create_atom_label(atom: &Atom, style: TextStyle) -> Result<AtomLabel, Error> {
+    if atom.authored_label.is_some() {
+        return Err(Error::UnsupportedChemicalContent);
+    }
+    let symbol = atom
+        .element
+        .symbol()
+        .ok_or(Error::UnsupportedChemicalContent)?;
+    let seed = AtomLabel::new(
+        None,
+        Some(TextJustification::Left),
+        Some(TextJustification::Left),
+        None,
+        vec![
+            TextRun::new(symbol.to_owned(), style)
+                .map_err(|_| Error::UnsupportedChemicalContent)?,
+        ],
+    )
+    .map_err(|_| Error::UnsupportedChemicalContent)?;
+    // This private typed seed never enters a document. The shared generator supplies
+    // the complete canonical body and exact curve/GPOS box, retaining all atom data.
+    let mut candidate = atom.clone();
+    candidate.authored_label = Some(Arc::new(seed));
+    position_atom_label(&candidate)
 }
 
 /// Generate literal body/ink bounds around the unchanged complete element-token anchor.

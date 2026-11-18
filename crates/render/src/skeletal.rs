@@ -62,7 +62,7 @@ pub(crate) fn labels(
     }
     for atom in fragment.atoms() {
         cancel.check()?;
-        if atom.element.get() != 6 {
+        if atom.element.get() != 6 || atom.authored_label.is_some() {
             continue;
         }
         let neighbours = adjoining.get(&atom.id).map_or(&[][..], Vec::as_slice);

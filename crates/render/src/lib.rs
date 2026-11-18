@@ -130,7 +130,7 @@ mod authored_label;
 mod clearance;
 #[cfg(test)]
 mod display_label_tests;
-pub use authored_label::{position_atom_label, validate_atom_label};
+pub use authored_label::{create_atom_label, position_atom_label, validate_atom_label};
 mod hits;
 mod inset;
 mod label;
