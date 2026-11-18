@@ -30,6 +30,9 @@ Unicode path, saved a Unicode copy and reopened it. Both files equal the origina
 with SHA-256
 `6cb0f22e15ec4b0fbc0aab277d811637480e12db6c6cc51bc35018b507c81f25`.
 The independent struct reader checked the complete facts from both actual files.
+An additional known-path Save advanced the owned input's controlled 2000-01-01
+mtime and retained all 146 bytes, proving publication. Its receipt is in
+`known-save-receipt/publication.json` below.
 
 At 1024 × 1024, CPU and Metal produced identical decoded RGBA bytes. Their shared
 RGBA SHA-256 is
@@ -67,6 +70,18 @@ The 14,599-byte adapter log `wire-suite.log` has SHA-256
 `8a14040f2a6b57297092d6f7f041a92e1d9f7dcd79a2fc310ba301f2ef2886e7`.
 Both are in the local evidence directory below.
 
+The exact-tree gate on `53642e9` later stopped at the existing MCP
+`shutdown_without_clients_releases_the_listener_address` test. The observed
+`replacement_bind` failure was `AddrInUse` on 127.0.0.1:64951. A post-failure
+check found the port clear. The cause remains unresolved. The listener and
+its test stayed byte-identical. The 181,214-byte `ci-final.log` has SHA-256
+`956497907e35084d8ff13d9409f25cda3f9bac861eb4a0d2800d71e93beb7a6f`.
+That attempt reported 1,463 passes and one failure before stopping. The remaining
+97 workspace reports passed 749 tests with one ignored. The AccessKit tests,
+clippy, layer, license, asset and corpus checks also passed separately. These
+are two runs with one unresolved failure. The 98,404-byte `remaining.log`
+has SHA-256 `21f90986dbe5bfe2474dc2bc43bab41d26f743fb159f624639c6c2502920c33b`.
+
 ## Exact source owners and fractional-scale views
 
 Two additional command tests passed with warnings-denied all-targets clippy.
@@ -99,6 +114,10 @@ The successful wire summary in `wire-sequential-results/summary.json` has SHA-25
 
 Native window Open, read-only pointer behavior, Fit/Actual/measured-display density
 capture and Unicode Save/reopen remain to be checked on an owned macOS review.
+The signed review bundle and four checked, isolated inputs are ready under
+`target/cdx-resources/next-text/native-review.hdS0xZ`. Its 1,196-byte receipt
+`prepared.json` has SHA-256
+`dbf0de7f0da5847c7239c13a6b53ad944f151cde7950e960d458010e6ebad167`.
 Windows, Linux and browser execution remain open. The supported source
 profile covers one explicit caption. General CDX typography and editing
 remain separate M1 work.

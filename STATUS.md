@@ -2,7 +2,7 @@
 
 The full M0–M5 goal is **active after the user resumed it**. Verified delivery lands
 into `main`. Caption preview work follows merged main `6565e58` on
-`feat/cdx-caption-preview`.
+`feat/cdx-caption-preview`, tracked by [draft PR 5](https://github.com/thematheusmello/bondline/pull/5).
 Its scope is unchanged. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
@@ -99,12 +99,17 @@ the original committed output of an earlier Save. Offscreen Fit and Actual at 1.
 pixel density match CPU/Metal and independent FreeType placement.
 
 Native read-only presentation is wired. The user apps and drawings remain
-untouched. Recent Mac input kept this round offscreen. Execution jobs have finished.
-Actions remains off.
+untouched. Recent Mac input kept this round offscreen. The signed review app and
+four isolated inputs are prepared in `target/cdx-resources/next-text/native-review.hdS0xZ`.
+The latest exact-tree gate reproduced the existing MCP listener rebind failure at
+127.0.0.1:64951. See [verification](docs/verification-cdx-caption-preview.md) for
+that distinct run and the remaining gates, which passed separately. The
+candidate's final verification is split across the failed aggregate and passing
+remaining checks. All execution jobs and review agents are terminal. Actions remains off.
 
 ### Next executable work
 
-1. Verify the caption workflow in a separate owned macOS review app. Open the
+1. Verify the caption workflow in the prepared separate macOS review app. Open the
    original fixtures with a retained drawing tool. Observe the caption, pointer
    read-only behavior, Fit, Actual and fractional density. Exercise known Save,
    Unicode Save As and reopen, and check the actual files with the independent

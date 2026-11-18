@@ -22,6 +22,14 @@ The user’s authorization persists for ordinary verified feature integrations. 
 history rewriting, release publication and enabling Actions require their own authority.
 Do not merge an obsolete prototype over current code merely because Git calls it unique.
 
+## Current CDX delivery
+
+[PR 3](https://github.com/thematheusmello/bondline/pull/3) and
+[PR 4](https://github.com/thematheusmello/bondline/pull/4) landed the resource and
+raw string readers. Both source branch tips are reachable from main and their
+remote refs have been retired. [Draft PR 5](https://github.com/thematheusmello/bondline/pull/5)
+tracks the active caption preview. Its native review is the next integration gate.
+
 ## Main integration checkpoint
 
 [PR1](https://github.com/thematheusmello/bondline/pull/1) merged199 atomic commits at
