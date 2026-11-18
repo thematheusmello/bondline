@@ -829,6 +829,12 @@ fn apply_before_previous_fields_refreshes_then_installs_the_requested_prior_page
     wait_for(&mut fixture, |fixture| {
         fixture.state().is_ok_and(|state| state["revision"] == 2)
             && !fixture.app.sdf_fields.is_busy()
+            && fixture
+                .node("Field 1: F01", &[egui::accesskit::Role::Button])
+                .is_ok()
+            && fixture
+                .node("Field 65: F65", &[egui::accesskit::Role::Button])
+                .is_err()
     })?;
     assert_eq!(current_bytes(&fixture)?, expected);
     assert_eq!(fixture.state()?["undo_depth"], 1);
