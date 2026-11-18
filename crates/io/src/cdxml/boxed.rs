@@ -198,6 +198,17 @@ fn bindings<'doc, 'input: 'doc>(
     if !model_supported(baseline) {
         return unsupported();
     }
+    let own = one_page(baseline)?;
+    // Foreign explicit Text cannot supply missing glyph or bond drawing defaults.
+    if own.fragments().iter().any(|fragment| {
+        !fragment.bonds().is_empty()
+            || fragment
+                .atoms()
+                .iter()
+                .any(|atom| atom.authored_label.is_none())
+    }) {
+        return unsupported();
+    }
     let features = xml.features();
     if features.doctype
         || features.processing_instructions
@@ -280,7 +291,6 @@ fn bindings<'doc, 'input: 'doc>(
         }
     }
     let page = page.ok_or(DocumentError::UnsupportedEdit)?;
-    let own = one_page(baseline)?;
     if !keys(page, &["id", "DrawingSpace", "Width", "Height"])
         || page.attribute("DrawingSpace") != Some("Poster")
         || page.attribute("Width").and_then(|s| s.parse::<f64>().ok())
