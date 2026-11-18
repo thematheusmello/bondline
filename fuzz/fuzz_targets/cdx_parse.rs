@@ -1,7 +1,129 @@
 #![no_main]
 
-use bondline_cdx::{Document, Error, Framing, Record, RecordKind, Writer};
+use bondline_cdx::{Document, Error, Framing, Record, RecordKind, ResourceError, Writer};
 use libfuzzer_sys::fuzz_target;
+
+fn check_resources(document: &Document<'_>) {
+    let result = document.resources();
+    let parent = document.framing().has_encoded_document().then_some(0);
+    let mut tables = [None, None];
+    for (index, record) in document.records().iter().enumerate() {
+        let RecordKind::Property { tag, .. } = *record.kind() else {
+            continue;
+        };
+        let slot = match tag {
+            0x0100 => &mut tables[0],
+            0x0300 => &mut tables[1],
+            _ => continue,
+        };
+        if record.parent() != parent {
+            assert_eq!(
+                result.unwrap_err(),
+                ResourceError::UnsupportedTable { tag, record: index }
+            );
+            return;
+        }
+        if slot.replace(record).is_some() {
+            assert_eq!(
+                result.unwrap_err(),
+                ResourceError::DuplicateTable { tag, record: index }
+            );
+            return;
+        }
+    }
+
+    let Ok(resources) = result else {
+        return;
+    };
+    let [font_table, color_table] = tables;
+    let word = |bytes: &[u8]| u16::from_le_bytes(bytes.try_into().unwrap());
+    let bytes = document.as_bytes();
+    match (font_table, resources.font_table()) {
+        (Some(raw), Some(table)) => {
+            assert!(std::ptr::eq(raw, table));
+            let RecordKind::Property { payload, .. } = raw.kind() else {
+                unreachable!();
+            };
+            let mut cursor = payload.start + 4;
+            let platform = word(&bytes[payload.start..payload.start + 2]);
+            assert!(matches!(platform, 0 | 1));
+            assert_eq!(resources.font_platform(), Some(platform));
+            assert_eq!(
+                resources.fonts().len(),
+                usize::from(word(&bytes[payload.start + 2..cursor]))
+            );
+            for (ordinal, font) in resources.fonts().iter().enumerate() {
+                assert!(std::ptr::eq(font.record(), raw));
+                assert_eq!(font.ordinal(), ordinal);
+                assert_eq!(font.id(), word(&bytes[cursor..cursor + 2]));
+                assert_eq!(font.charset(), word(&bytes[cursor + 2..cursor + 4]));
+                let name_len = usize::from(word(&bytes[cursor + 4..cursor + 6]));
+                let end = cursor + 6 + name_len;
+                assert!(end <= payload.end);
+                assert_eq!(font.range(), cursor..end);
+                let name = &bytes[cursor + 6..end];
+                assert_eq!(font.name_bytes(), name);
+                assert!(std::ptr::eq(font.name_bytes(), name));
+                assert!(std::ptr::eq(resources.font_by_id(font.id()).unwrap(), font));
+                cursor = end;
+            }
+            assert_eq!(cursor, payload.end);
+        }
+        (None, None) => {
+            assert_eq!(resources.font_platform(), None);
+            assert!(resources.fonts().is_empty());
+            assert!(matches!(
+                resources.font_by_id(0),
+                Err(ResourceError::MissingFont(0))
+            ));
+        }
+        _ => panic!("font table presence changed"),
+    }
+    assert_eq!(resources.color(0).unwrap(), [0; 3]);
+    assert_eq!(resources.color(1).unwrap(), [u16::MAX; 3]);
+    match (color_table, resources.color_table()) {
+        (Some(raw), Some(table)) => {
+            assert!(std::ptr::eq(raw, table));
+            let RecordKind::Property { payload, .. } = raw.kind() else {
+                unreachable!();
+            };
+            let mut cursor = payload.start + 2;
+            assert_eq!(
+                resources.colors().len(),
+                usize::from(word(&bytes[payload.start..cursor]))
+            );
+            for (ordinal, color) in resources.colors().iter().enumerate() {
+                let index = u32::try_from(ordinal).unwrap() + 2;
+                let end = cursor + 6;
+                assert!(end <= payload.end);
+                let rgb = [
+                    word(&bytes[cursor..cursor + 2]),
+                    word(&bytes[cursor + 2..cursor + 4]),
+                    word(&bytes[cursor + 4..end]),
+                ];
+                assert!(std::ptr::eq(color.record(), raw));
+                assert_eq!(color.index(), index);
+                assert_eq!(color.range(), cursor..end);
+                assert_eq!(color.rgb(), rgb);
+                assert_eq!(resources.color(index).unwrap(), rgb);
+                cursor = end;
+            }
+            assert_eq!(cursor, payload.end);
+            let missing = u32::try_from(resources.colors().len()).unwrap() + 2;
+            assert_eq!(
+                resources.color(missing),
+                Err(ResourceError::MissingColor(missing))
+            );
+        }
+        (None, None) => {
+            assert!(resources.colors().is_empty());
+            assert_eq!(resources.color(2).unwrap(), [u16::MAX; 3]);
+            assert_eq!(resources.color(3).unwrap(), [0; 3]);
+            assert_eq!(resources.color(4), Err(ResourceError::MissingColor(4)));
+        }
+        _ => panic!("color table presence changed"),
+    }
+}
 
 fn literal_metadata(fields: [Option<&[u8]>; 4], atom: &bondline_model::Atom) {
     let [isotope, charge, radical, hydrogens] = fields;
@@ -106,6 +228,7 @@ fuzz_target!(|data: &[u8]| {
         offset = range.end;
     }
     assert_eq!(offset, data.len());
+    check_resources(&document);
 
     if let Ok(graph) = bondline_io::cdx::ElementalGraph::parse(data) {
         assert_eq!(graph.as_bytes(), data);

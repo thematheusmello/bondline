@@ -46,3 +46,20 @@ The first patch application stopped when the filesystem ran out of space. Three 
 paths were restored from the preceding commit. Reclaiming only superseded Cargo test
 executables and disabled incremental build cache made space for a clean apply. All five
 imported paths matched the tested worker bytes before the integrated run.
+
+## Sanitizer verification
+
+The [resource fuzz recipe](../fuzz/README.md#cdx-font-and-colour-resources) ran 10,000
+AddressSanitizer cases in 2 seconds on macOS with nightly-2026-04-01. It finished at
+coverage 1639, feature count 3419 and RSS 373 MiB. The run started with 85 independently
+checked immutable sources. The maximum source, final fuzzer limit and largest
+recorded NEW/REDUCE input were each 393,481 bytes under the configured 524,288-byte
+cap. All original sources and their copies passed length and SHA-256 checks after
+the run.
+
+Seed manifest SHA-256 is
+`2698d4cf1150cb2190c3de590778380459d3792a999c42438e872d6ee3adf899`.
+The 26,298-byte ASan log in `target/cdx-resources/resume.lQ1sz7/asan.log` has SHA-256
+`6bccf47698deb8e19b7f8e50cb020e1f499117efce9e7c780eeecb4076dfc34f`.
+The new assertions verify source records, resource queries and exact raw byte
+preservation. They do not test font rendering or caption interpretation.
