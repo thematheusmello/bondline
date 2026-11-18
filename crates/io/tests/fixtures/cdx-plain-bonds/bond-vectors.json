@@ -1,0 +1,87 @@
+{
+  "base": "baa3d90",
+  "contract": "6c9fff0 docs/research/cdx-plain-bonds.md",
+  "method": "Original Python struct only; no product parser/writer/output",
+  "cases": [
+    {
+      "name": "single_absent",
+      "bytes": 337,
+      "sha256": "196ec2d9f0510b0bfca8cdeabb8ca24ee0035b3c5cd0a130dd54dce71da5d07e"
+    },
+    {
+      "name": "single_solid",
+      "bytes": 355,
+      "sha256": "684461a01031dce33a028f795ed8e3f240103b3cfc46758657e0b35754701865"
+    },
+    {
+      "name": "ethene",
+      "bytes": 361,
+      "sha256": "b0a1a1f8bdd69a93bda64c83ca3959142a3989abf02ef467daf47a179cdd7785"
+    },
+    {
+      "name": "ethyne",
+      "bytes": 367,
+      "sha256": "79856421a31d22c75737236738a4a26e0af342cc77a127746b0afe551cf3c579"
+    },
+    {
+      "name": "auto_center",
+      "bytes": 373,
+      "sha256": "102bfd5c9115fb0eefb9c72c1c2023ec6c973f976f78a3c5393c43f60e3a03cb"
+    },
+    {
+      "name": "auto_right",
+      "bytes": 379,
+      "sha256": "5bf7ec5374200edf5fa38a92660e7c394f455050fec280c6fc8c4604f84e6707"
+    },
+    {
+      "name": "auto_left",
+      "bytes": 373,
+      "sha256": "7d5e41afe8b74d77d3f75af8b0a6eca43921581743ac72d1febccb7d51493834"
+    },
+    {
+      "name": "manual_center",
+      "bytes": 373,
+      "sha256": "6c7d3166d046e684e94f39eed8c1591978988f05694a494e356a9a26770e0f4e"
+    },
+    {
+      "name": "manual_right",
+      "bytes": 379,
+      "sha256": "33727f121e74d276fbc93f22ed274e193118bc166f97a36ba79849efe42df7bc"
+    },
+    {
+      "name": "manual_left",
+      "bytes": 373,
+      "sha256": "c1f5ae149720ded777453f2ac10b3fdcf7b4202aa06089444d95f5c4a93e9fb9"
+    },
+    {
+      "name": "reversed_right",
+      "bytes": 379,
+      "sha256": "bcb8eef6a7d88566a60866156afde7278d63dadc6341577ff989ffc73b5af9c4"
+    },
+    {
+      "name": "reordered_right",
+      "bytes": 379,
+      "sha256": "d65ef4e8e97b726049effd4fd1a187b1bfa6b4f5481af1e00a48901539f83325"
+    },
+    {
+      "name": "extended_right",
+      "bytes": 395,
+      "sha256": "7d786dea41a9cabd261304fb181ab9085f373e5eeefe1139e8bb6a420144e875"
+    },
+    {
+      "name": "embedded_right",
+      "bytes": 375,
+      "sha256": "26a22521a6a0f31f9fdd5b7efe47eef57894138906d4210a882da2cb6d3421df"
+    },
+    {
+      "name": "implied_right",
+      "bytes": 373,
+      "sha256": "79d3497bfddd062f1321adf6542c01d87c1e3ca8356a2e4177e6827ed97a865c"
+    },
+    {
+      "name": "ethene_unknown_h",
+      "bytes": 349,
+      "sha256": "f01e8b624a7810c0a6184aae33f3d4a271c7f988a0bd4e5b1ea059daa42e5431"
+    }
+  ]
+}
