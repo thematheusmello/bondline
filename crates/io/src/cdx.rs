@@ -10,6 +10,8 @@ use std::{
     num::NonZeroU16,
 };
 
+mod caption;
+
 const DOCUMENT: u16 = 0x8000;
 const PAGE: u16 = 0x8001;
 const GROUP: u16 = 0x8002;
@@ -105,7 +107,10 @@ pub struct ElementalGraph<'input> {
 
 impl<'input> ElementalGraph<'input> {
     pub fn parse(input: &'input [u8]) -> Result<Self, MappingError> {
-        let source = Document::parse(input)?;
+        Self::from_source(Document::parse(input)?)
+    }
+
+    fn from_source(source: Document<'input>) -> Result<Self, MappingError> {
         let layout = Layout::read(&source)?;
         let (mut next_fragment, mut next_atom, mut next_bond) = (0, 0, 0);
         let mut fragments = Vec::new();
@@ -220,6 +225,20 @@ impl<'input> ElementalGraph<'input> {
         model.append_fragments(page, self.fragments.clone())?;
         Ok(model)
     }
+}
+
+pub(crate) fn project_document(
+    input: &[u8],
+    preview_size: bondline_model::PageSize,
+) -> Result<(bondline_model::Document, bool), MappingError> {
+    let source = Document::parse(input)?;
+    if let Some(model) = caption::preview(&source) {
+        return Ok((model, true));
+    }
+    Ok((
+        ElementalGraph::from_source(source)?.preview_document(preview_size)?,
+        false,
+    ))
 }
 
 fn root_scalar(source: &Document<'_>, tag: u16) -> Option<f64> {
@@ -355,6 +374,20 @@ fn payload<const N: usize>(
     property_bytes(source, index, tag)?
         .try_into()
         .map_err(|_| MappingError::InvalidProperty { tag, record: index })
+}
+
+fn coordinate(bytes: [u8; 4]) -> f64 {
+    f64::from(i32::from_le_bytes(bytes)) / 65_536.0
+}
+
+fn read_position(source: &Document<'_>, record: usize) -> Result<Point2, MappingError> {
+    let [a, b, c, d, e, f, g, h] = payload(source, record, POSITION)?;
+    Point2::new(coordinate([e, f, g, h]), coordinate([a, b, c, d])).map_err(|_| {
+        MappingError::InvalidProperty {
+            tag: POSITION,
+            record,
+        }
+    })
 }
 
 fn property_bytes<'input>(
@@ -494,15 +527,7 @@ fn read_atom(
     };
     let position = fields
         .get(&POSITION)
-        .map(|record| {
-            let [a, b, c, d, e, f, g, h] = payload(source, *record, POSITION)?;
-            let y = f64::from(i32::from_le_bytes([a, b, c, d])) / 65_536.0;
-            let x = f64::from(i32::from_le_bytes([e, f, g, h])) / 65_536.0;
-            Point2::new(x, y).map_err(|_| MappingError::InvalidProperty {
-                tag: POSITION,
-                record: *record,
-            })
-        })
+        .map(|record| read_position(source, *record))
         .transpose()?;
     let mut atom = Atom::new(id, element, position);
     read_literal_metadata(source, &fields, &mut atom)?;

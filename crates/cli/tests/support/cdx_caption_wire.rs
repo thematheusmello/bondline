@@ -1,0 +1,128 @@
+//! Actual CLI and authenticated loopback consumers of the shared caption preview.
+use super::{TestResult, capture, cli, socket, support};
+use bondline_commands::Engine;
+use bondline_mcp::{SharedEngine, control::LoopbackServer};
+use serde_json::{Value, json};
+use std::{
+    fs,
+    io::BufReader,
+    net::TcpStream,
+    sync::{
+        Arc, Mutex,
+        atomic::{AtomicUsize, Ordering},
+    },
+    time::Duration,
+};
+
+const SOURCE: &[u8] = include_bytes!("../../../io/tests/fixtures/cdx-caption/caption_rgb16.cdx");
+const VECTORS: &str = include_str!("../../../io/tests/fixtures/cdx-caption/caption-vectors.json");
+
+fn request(command: &str, params: Value) -> Value {
+    json!({"command":command,"params":params})
+}
+
+#[test]
+fn cdx_caption_cli_and_authenticated_socket_share_readonly_capture_and_history() -> TestResult {
+    let directory = support::SdfTestDirectory::new()?;
+    let input = directory.path("caption-wire-原-λ.cdx");
+    let output = directory.path("caption-wire-保存-λ.cdx");
+    let sentinel = directory.path("caption-wire-guard.cdx");
+    fs::write(&input, SOURCE)?;
+    fs::write(&sentinel, b"unchanged destination")?;
+    let manifest: Value = serde_json::from_str(VECTORS)?;
+    let model = &manifest["cases"]
+        .as_array()
+        .ok_or("missing original cases")?
+        .iter()
+        .find(|case| case["name"] == "caption_rgb16")
+        .ok_or("missing caption original")?["model"];
+    let open = request("document.open_cdx", json!({"path":input}));
+    let capture_request = request("render.capture", capture());
+    let headless = cli(&[open.clone(), capture_request.clone()])?;
+    assert_eq!(&headless["document"], model);
+    assert_eq!(headless["capture"]["backend"], "cpu");
+    let png = headless["capture"]["png_base64"]
+        .as_str()
+        .filter(|png| !png.is_empty())
+        .ok_or("missing caption image")?;
+
+    let engine: SharedEngine = Arc::new(Mutex::new(Engine::default()));
+    let changes = Arc::new(AtomicUsize::new(0));
+    let counter = Arc::clone(&changes);
+    let server = LoopbackServer::bind(0, engine, move || {
+        counter.fetch_add(1, Ordering::SeqCst);
+    })?;
+    let timeout = Duration::from_secs(5);
+    let stream = TcpStream::connect_timeout(&server.address(), timeout)?;
+    stream.set_read_timeout(Some(timeout))?;
+    stream.set_write_timeout(Some(timeout))?;
+    let mut client = BufReader::new(stream);
+    assert_eq!(
+        socket(&mut client, json!({"token":server.token()}))?,
+        json!({"authenticated":true})
+    );
+    let opened = socket(&mut client, open)?;
+    assert_eq!(&opened["result"]["document"], model);
+    assert_eq!(opened["result"]["revision"], 1);
+    let inspect = request("document.inspect", json!({}));
+    let before = socket(&mut client, inspect.clone())?;
+    assert_eq!(changes.load(Ordering::SeqCst), 1);
+    let image = socket(&mut client, capture_request.clone())?;
+    assert_eq!(image["result"]["capture"]["png_base64"].as_str(), Some(png));
+    assert_eq!(image["result"]["changed"], false);
+    for refused in [
+        request(
+            "text.set_run",
+            json!({"expected_revision":1,"page_id":1,"text_id":1,"run_index":0,"text":"Edit"}),
+        ),
+        request(
+            "document.save_cdxml",
+            json!({"path":sentinel,"overwrite":true}),
+        ),
+    ] {
+        let reply = socket(&mut client, refused)?;
+        assert_eq!(reply["error"]["code"], "unsupported_content");
+    }
+    assert_eq!(fs::read(&sentinel)?, b"unchanged destination");
+    assert_eq!(socket(&mut client, inspect)?, before);
+    assert_eq!(changes.load(Ordering::SeqCst), 1);
+
+    let resized = socket(
+        &mut client,
+        request(
+            "page.set_size",
+            json!({"page_id":1,"width_pt":612.0,"height_pt":792.0}),
+        ),
+    )?;
+    assert_eq!(resized["result"]["changed"], true);
+    assert_eq!(resized["result"]["source"]["modified"], true);
+    let refused = socket(&mut client, capture_request.clone())?;
+    assert_eq!(refused["error"]["code"], "unsupported_content");
+    let refused = socket(
+        &mut client,
+        request(
+            "document.save_cdx",
+            json!({"path":sentinel,"overwrite":true}),
+        ),
+    )?;
+    assert_eq!(refused["error"]["code"], "unsupported_content");
+    assert_eq!(fs::read(&sentinel)?, b"unchanged destination");
+
+    let undone = socket(&mut client, request("history.undo", json!({})))?;
+    assert_eq!(&undone["result"]["document"], model);
+    assert_eq!(undone["result"]["source"]["modified"], false);
+    let restored = socket(&mut client, capture_request)?;
+    assert_eq!(
+        restored["result"]["capture"]["png_base64"].as_str(),
+        Some(png)
+    );
+    let saved = socket(
+        &mut client,
+        request("document.save_cdx", json!({"path":output})),
+    )?;
+    assert_eq!(saved["result"]["file"]["dirty"], false);
+    assert_eq!(fs::read(&input)?, SOURCE);
+    assert_eq!(fs::read(&output)?, SOURCE);
+    server.shutdown()?;
+    Ok(())
+}

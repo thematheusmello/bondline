@@ -26,6 +26,15 @@ next application path. The 32 independent sources, raw writer comparison and
 10000-run ASan pass. The full local gate passes 2206/0/1 plus AccessKit 3/0.
 STATUS gives the exact caption preview continuation and its legacy CLI baseline.
 
+The direct-Page CDX caption candidate follows `docs/research/cdx-caption-preview.md`
+and `docs/verification-cdx-caption-preview.md`. Keep the one explicit Left Text,
+Poster extents, platform1/UTF8 selected font with coincident ID and ordinal,
+white palette2 and whole-source proof. The existing 100% paper scene checks
+admission and every native view retains its own guards. Keep a separate display
+proof bound to exact current model equality. CDXML caption edits, legacy CDX
+fallback diagnostics, detached page history, cross-format loss and registry 49
+keep their prior policies. Native Open/view/up-to-date Save acceptance is next.
+
 Read `docs/research/cdx-resources.md` and `docs/verification-cdx-resources.md` before
 CDX string or Text work. The table query is opt-in and runtime-dependency-free. Preserve
 actual root ownership, raw UINT16 ID/charset/RGB, byte-borrowed names, table presence,

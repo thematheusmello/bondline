@@ -5,6 +5,8 @@ mod atom_child_text_wire;
 mod boxed_label_wire;
 #[path = "support/cdx_bond_wire.rs"]
 mod cdx_bond_wire;
+#[path = "support/cdx_caption_wire.rs"]
+mod cdx_caption_wire;
 #[path = "support/cdx_literal_wire.rs"]
 mod cdx_literal_wire;
 #[path = "support/cdx_resource_boundary_wire.rs"]

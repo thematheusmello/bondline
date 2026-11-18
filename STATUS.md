@@ -76,18 +76,38 @@ WebAssembly passed. App execution remains unverified there.
 The resource and string feature branches are merged and their remote refs retired.
 The prototype worktrees and user apps remain preserved.
 
+### Direct-Page CDX captions
+
+The [caption profile](docs/research/cdx-caption-preview.md) and original fixture
+commit `a90e3b5` fix 12 independent positive models and 63 exact legacy refusals.
+The implemented source path projects one explicit Roboto Regular caption on a white
+Poster page. It grants read-only display for the exact source-derived model.
+Model drift retires preview and exact Save, and Undo restores both. The CDXML
+caption-edit and chemical source guards keep their earlier scope.
+
+[Verification](docs/verification-cdx-caption-preview.md) records 1/3 runtime RED
+and 4/0 on the same IO tests, actual CLI+initialized stdio+authenticated loopback,
+Unicode known Save/Save As/reopen, exact CPU/Metal pixels and independent FreeType
+placement. Local CI passed 2,210/0/1 and AccessKit 3/0 before adding the test-only
+socket module. With that module included, all 115 adapter tests and warnings-denied
+CLI all-targets clippy passed. ASan passed 10,000 runs with 75 original inputs and
+158-byte maximum recorded mutation. Registry 49 stays byte-identical. Evidence
+and actual PNGs are in `target/cdx-resources/next-text/preview-freeze.Ue3WwW`.
+
+Native read-only presentation is wired. The user apps and drawings remain
+untouched. Execution jobs have finished. Actions remains off.
+
 ### Next executable work
 
-1. Follow the [direct-Page read-only caption contract](docs/research/cdx-caption-preview.md)
-   and [frozen independent witnesses](crates/io/tests/fixtures/cdx-caption/SOURCES.md).
-   The actual legacy CLI refused all 75 candidates with `unsupported_content`.
-   The fixture directory records exact errors and the 12 independent positive models.
-2. Freeze an existing-API runtime Open/capture RED, then implement the separate
-   CDX display proof with explicit Page/font/colour/baseline and complete source
-   guards. Use the existing shared scene and leave CDXML caption edits and
-   chemical authoring separate. Verify nonmatching legacy errors, model-only
-   resize/Undo, stale owners, actual adapters, CPU/GPU, and owned native Unicode
-   Save/reopen.
+1. Verify the caption workflow in a separate owned macOS review app. Open the
+   original fixtures with a retained drawing tool. Observe the caption, pointer
+   read-only behavior, Fit, Actual and fractional density. Exercise known Save,
+   Unicode Save As and reopen, and check the actual files with the independent
+   reader. Keep protected apps and live user input out of the review.
+2. Finish equal-model different-source stale Save/capture tests and publish
+   qualified native evidence, then land the verified caption branch into
+   `main`. Continue with multiple CDX captions, explicit styles, child labels
+   and editable source from public evidence.
 3. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 

@@ -12,9 +12,14 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
+The [CDX caption increment](docs/verification-cdx-caption-preview.md) opens one
+source-qualified caption and preserves original files through display and Save.
+Headless CLI, MCP, loopback and CPU/Metal checks passed. Native interaction
+acceptance, additional typography and editing remain required.
+
 The [CDXString increment](docs/verification-cdx-string.md) preserves literal style runs
 and text bytes, with borrowed property boundaries and independent original fixtures.
-Next certify direct-Page CDX captions through preview and exact unchanged files.
+The caption workflow uses this reader for its explicit validated run.
 
 The M1 [CDX resource increment](docs/verification-cdx-resources.md) reads document
 font and colour tables on demand. The independent fixtures and sanitizer cover empty,

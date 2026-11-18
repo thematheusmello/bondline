@@ -1,5 +1,11 @@
 # File capabilities
 
+A source-qualified CDX caption can be displayed in the shared renderer and saved
+byte-exactly. This read-only profile requires one explicitly styled and positioned
+caption on a white Poster page. The CLI, MCP, authenticated loopback and CPU/Metal
+captures have bounded evidence. Native window interaction is wired pending its
+platform review. [Caption verification](verification-cdx-caption-preview.md)
+
 The standalone CDX parser reads [font and colour tables](verification-cdx-resources.md)
 on demand. It preserves declared IDs, raw font names and charsets, raw RGB16 channels
 and the distinction between absent and present tables. The app retains the old
@@ -190,7 +196,7 @@ new source authority, root inheritance, CDX flag projection or default-tool migr
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Standalone syntax, new-tree writer, raw font/colour tables and CDXString reader. Atomic I/O for guarded unchanged files with literal atom metadata and plain bonds | Independent source, handle and boundary checks, actual CLI and native Mac file evidence. [Resources](verification-cdx-resources.md), [strings](verification-cdx-string.md), [plain bonds](verification-cdx-plain-bonds.md) | Faithful preview, other bonds/styles, Text/query/stereo mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
+| CDX | Raw syntax, resource and string readers. Guarded unchanged files with literal atom metadata, plain bonds, and one read-only styled caption profile | Independent source and exact-file checks, native Mac atom/bond Open and unchanged Save, and headless CLI/Metal caption evidence. [Resources](verification-cdx-resources.md), [strings](verification-cdx-string.md), [captions](verification-cdx-caption-preview.md) | Native caption interaction, general preview, other bonds/styles, Text/query/stereo mapping, editing/encoder and general corpus |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000/V3000 | Complete mixed-version session/native Mac files, occurrence inspector and existing-value editor, source-preserving capture and read-only Actual/Zoom/pan preview | Exact raw spans/order/versions, pinned corpus and unchanged raw/per-MOL consumers; bounded Mac files/field edits/Actual/pan; actual-App wheel/DPI/source freshness and edit→preview→Save/reopen; command/adapter guards and earlier bounded ASAN | Native wheel/physical-DPI/new combined edit-preview acceptance, record creation/reordering and field-header editing, broader layout/chemistry, fetched mixed-version corpus, syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |

@@ -104,6 +104,7 @@ enum OriginalSource {
     Cdx {
         bytes: Arc<[u8]>,
         baseline: Arc<Document>,
+        caption_preview: bool,
     },
     Mol {
         version: Version,
@@ -182,17 +183,17 @@ impl std::fmt::Debug for StoredDocument {
 }
 
 impl StoredDocument {
-    /// Own the limited elemental view and all original binary content. The preview page
-    /// is caller policy; source style, annotations and paper settings remain opaque.
+    /// Own the binary source and supported view. The closed caption profile reads
+    /// explicit Poster dimensions, while the elemental fallback uses the caller's page.
     pub fn from_cdx(bytes: Arc<[u8]>, preview_size: PageSize) -> Result<Self, DocumentError> {
-        let graph = crate::cdx::ElementalGraph::parse(&bytes)?;
-        let model = Arc::new(graph.preview_document(preview_size)?);
-        drop(graph);
+        let (model, caption_preview) = crate::cdx::project_document(&bytes, preview_size)?;
+        let model = Arc::new(model);
         Ok(Self {
             model: Arc::clone(&model),
             original: Some(OriginalSource::Cdx {
                 bytes,
                 baseline: model,
+                caption_preview,
             }),
         })
     }
@@ -408,6 +409,13 @@ impl StoredDocument {
             if Arc::ptr_eq(&self.model,baseline) || crate::cdxml::supports_caption_delta(baseline,&self.model))
     }
 
+    /// Read-only CDX caption proof for the exact unchanged projected model.
+    pub fn has_cdx_caption_preview(&self) -> bool {
+        matches!(self.original.as_ref(), Some(OriginalSource::Cdx {
+            caption_preview: true, baseline, ..
+        }) if Arc::ptr_eq(&self.model, baseline) || self.model == *baseline)
+    }
+
     /// Closed source/model coverage for the box-positioned literal label workflow.
     /// Full chemical authoring stays false; view/raster and final-edit guards still apply.
     pub fn has_boxed_atom_labels(&self) -> bool {
@@ -470,6 +478,7 @@ impl StoredDocument {
         self.is_fully_mapped()
             || self.has_smiles_projection()
             || self.has_caption_projection()
+            || self.has_cdx_caption_preview()
             || self.has_boxed_atom_labels()
             || self.has_connected_atom_labels()
             || self.has_mixed_atom_labels()
@@ -489,7 +498,10 @@ impl StoredDocument {
 
     /// Only complete unchanged backing can be exported; never substitute its projection.
     pub fn export_cdx(&self) -> Result<&[u8], DocumentError> {
-        let Some(OriginalSource::Cdx { bytes, baseline }) = self.original.as_ref() else {
+        let Some(OriginalSource::Cdx {
+            bytes, baseline, ..
+        }) = self.original.as_ref()
+        else {
             return Err(DocumentError::NoCdxSource);
         };
         if !Arc::ptr_eq(&self.model, baseline) && self.model != *baseline {

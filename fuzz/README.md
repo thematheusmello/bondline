@@ -5,6 +5,25 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Direct-Page CDX caption projection
+
+`cdx_parse` also checks the caption-only display proof against source-preserving
+Save, absence of chemical or CDXML caption authority, and revocation on a detached
+page edit. The tracked originals remain the immutable sources.
+
+```sh
+fixtures=crates/io/tests/fixtures/cdx-caption
+mkdir -p .cache/fuzz
+fuzz_run=$(mktemp -d "$PWD/.cache/fuzz/cdx-caption.XXXXXX")
+python3 -B "$fixtures/check_captions.py" --input-dir "$fixtures" --output-dir "$fuzz_run/facts"
+mkdir "$fuzz_run/corpus"
+cp "$fixtures"/*.cdx "$fuzz_run/corpus/"
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdx_parse "$fuzz_run/corpus" -- -runs=10000 -seed=1561040507 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+See the [caption verification](../docs/verification-cdx-caption-preview.md) for the
+actual mutation sizes and results.
+
 ## Raw CDXString records
 
 `cdx_parse` compares the raw string query with the original bytes of every

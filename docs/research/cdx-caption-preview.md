@@ -1,9 +1,11 @@
 # Direct-Page CDX caption preview
 
-The next M1 workflow opens a source-qualified CDX caption, renders it through the
+This M1 workflow opens a source-qualified CDX caption, renders it through the
 same canvas and capture entry points, and saves and reopens the original bytes.
 The standalone source and datatype readers already expose checked resources,
 records, style runs and raw text.
+See [current verification](../verification-cdx-caption-preview.md) for the actual
+coverage and the pending native checks.
 
 ## Source agreement
 
