@@ -514,6 +514,11 @@ pub(crate) fn write_preserved(
                 baseline.drawing_style().bond_spacing_percent()
                     != current.drawing_style().bond_spacing_percent(),
             ),
+            (
+                "MarginWidth",
+                baseline.drawing_style().margin_width_pt()
+                    != current.drawing_style().margin_width_pt(),
+            ),
         ],
     )?;
     plan.attributes(

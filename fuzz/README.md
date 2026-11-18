@@ -1031,3 +1031,20 @@ CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROF
 Record observed terminal iterations, coverage/RSS, actual mutated lengths and immutable
 source verification in [receiving](../docs/verification-boxed-atom-labels.md). This is a
 bounded sanitizer check, not exhaustive parser/render/chemistry/platform proof.
+
+### Physical label-margin data
+
+The profile target also sets/clears independent margin data during proven native-source
+style edits. Whole source/model semantics are compared after re-import. Eighteen original
+Expat-checked inputs cover absence/zero/fractions/bounds/negative underflow/nonfinite/
+unknown/qualified/local owners and exact16KiB source. Fresh destinations deliberately
+refuse overwrite; immutable source/manifest remain outside writable corpus.
+
+```sh
+python3 -B fuzz/seed_margin_style.py .cache/fuzz/margin-data-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/margin-data-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+[Data receiving](../docs/verification-margin-data.md) records actual bounds/iterations/
+coverage and exact source verification. This tests parser/model/splice retention, not
+connected outline rendering, GPU/native behavior, full format parity or a security audit.

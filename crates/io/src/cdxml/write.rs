@@ -23,6 +23,9 @@ pub(super) fn root_attributes(document: &Document) -> Attributes {
     if let Some(value) = document.drawing_style().bond_spacing_percent() {
         attributes.push(("BondSpacing", value.to_string()));
     }
+    if let Some(value) = document.drawing_style().margin_width_pt() {
+        attributes.push(("MarginWidth", value.to_string()));
+    }
     attributes
 }
 

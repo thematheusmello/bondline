@@ -1,5 +1,19 @@
 # Clean-room source register
 
+Explicit label-margin data reviewed2026-11-18 follows primary
+[MarginWidth](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/MarginWidth.htm),
+[coordinate units](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm)
+and GUIDE25 printed42. The property0x0808 uses physical points in XML, containing-owner
+then external-style-sheet fallback, and describes whitespace around labels/attached bonds.
+No foreign numeric default or universal box/corner algorithm follows. Optional root
+`margin_width_pt`, independent Some0/None, finite0..100000 bounds and negative-nonzero
+underflow refusal are original checked policies. The [connected-label contract](../research/connected-label-styles.md)
+separates data ownership from the pending outline renderer/source grant, preserves the
+old foreign Boxed zero-bond profile and48 metadata, and retains all loss guards.
+Public FontTools/Expat/Decimal/direct RDKit and selected original-source evidence are
+SHA-pinned under ignored target/connected-labels; no reference binary/export/font/asset
+is inspected or copied. Exact Roboto reference clipping remains an open question.
+
 The box-positioned label workflow reviewed2026-11-18 uses primary
 [absent Text-position fallback](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/2DPosition.htm),
 [graphical BoundingBox](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BoundingBox.htm)

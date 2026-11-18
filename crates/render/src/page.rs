@@ -354,6 +354,15 @@ pub(crate) fn graph_scene_in_viewport(
     viewport: &PageViewport,
 ) -> Result<GraphScene, Error> {
     cancel.check()?;
+    // shortcut: owned margin data needs the outline-shortening renderer before use on bonds.
+    if viewport.style.margin_width_pt().is_some()
+        && page
+            .fragments()
+            .iter()
+            .any(|fragment| !fragment.bonds().is_empty())
+    {
+        return Err(Error::UnsupportedChemicalContent);
+    }
     let mut scene = crate::scene::page_scene_in_viewport(width, height, viewport);
     let mut hit_count = 0_usize;
     let mut count = scene.primitives.len();

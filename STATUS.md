@@ -7,6 +7,35 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+Recoverable data checkpoint: optional physical label-margin data on base61be8e6, in the
+commit containing this record. Read [contract](docs/research/connected-label-styles.md)
+and [data receiving](docs/verification-margin-data.md). Root-only MarginWidth now retains
+independent optional0..100000pt values through strict model/JSON/native CDXML and per-field
+source splices; true signed zero differs from absence, negative nonzero underflow stays
+opaque. Generic MOL/CDX/SMILES loss guards include the field. Old48 actual registry
+records and catalogue16/124 remain exact. Explicit margin on a bond-bearing page has a
+temporary renderer refusal, so the new data is never silently ignored.
+
+Actual existing-API IO0/1 RED and model missing-API qualification precede producers.
+Fresh full97406 passes1999/0/1 across299 result lines and all local gates; bounded
+ASan67587 passes10000/125s, actual16KiB,18 immutable sources exact. Historical MCP failure
+remains unexplained, not fixed by this natural passing aggregate. No native/user app,
+dependency/font/asset/old golden/workflow change; Actions OFF.
+
+This data checkpoint does NOT complete the connected workflow. Three parallel lanes
+continue the outline renderer, a distinct Connected source capability and independent
+FontTools/paint oracles; all workers wait for this tested parent before producer edits.
+No Root execution jobs remain live. Keep foreign Boxed literally all-explicit/zero-bond;
+the future Connected grant needs explicit effective ink/margin/spacing/colour and pure
+geometry proof. Implement actual-outline Euclidean butt-strip clearance/common rail cuts
+from the contract, preserving old glyphs/hits/None pixels and real-ink guards. Wire existing
+command48/form only after complete source/render/history/Unicode/native evidence. Exact
+Roboto reference pixels, other fonts/defaults and the full M0–M5 target remain open.
+The older boxed-label checkpoint below retains its full verification but not its next
+source-work/job paragraph as the newest continuation.
+
+### Preceding boxed-label workflow checkpoint
+
 Recoverable state: the box-positioned label workflow commit containing this record, on
 base3b4dc17. Model5bca3b0, render2b89f7a, IO1aecd5a, renderer fix5611a03 and
 foreign-default fix44896bc are integrated.

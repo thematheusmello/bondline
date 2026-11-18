@@ -1,5 +1,19 @@
 # Open questions
 
+## Connected label margins, 2026-11-18
+
+The [connected-label contract](../research/connected-label-styles.md) uses explicit
+physical margin/width and relevant spacing/preferred length, checked colour resources
+and all explicit label certificates. Margin data alone grants no connected-source
+authority. The SDK and public guide establish attached-bond whitespace, not a universal
+AABB, contour, cap or shared-rail algorithm. Public original outline-based renderers and
+the qualified Helvetica26.1 measurement report contradict universal box trimming but
+do not qualify Roboto face0/no-p pixels. The original Euclidean butt-strip rule must be
+tested independently and kept separate from unresolved exact reference behavior,
+including open glyphs, off-axis H/counts, near-axis transitions and other fonts. No
+Helvetica fitted constants are transferred. Keep the old foreign Boxed zero-bond
+profile; a separate Connected capability needs its full source/render/history/native proof.
+
 ## Chemical label defaults and placement, 2026-11-18
 
 [Owned child-Text data](../verification-owned-atom-label-data.md) now retains explicit

@@ -79,6 +79,28 @@ fn data_valid_but_unrepresentable_physical_width_is_a_scale_error() -> TestResul
     Ok(())
 }
 
+#[test]
+fn owned_margin_cannot_be_silently_ignored_before_outline_shortening_is_available() -> TestResult {
+    let page = drawing(
+        &[
+            (1, [32.0, 64.125], 6, Some(3)),
+            (2, [96.0, 64.125], 6, Some(3)),
+        ],
+        &[(1, 1, 2, BondOrder::Single, DoublePosition::Unspecified)],
+    )?;
+    let original = page.clone();
+    for margin in [0.0, 2.0] {
+        let view = PageView::fit(576, 576, page.size())?
+            .with_drawing_style(DrawingStyle::default().with_margin_width(Some(margin))?);
+        assert!(matches!(
+            view.graph_scene(&page, &Cancellation::default()),
+            Err(Error::UnsupportedChemicalContent)
+        ));
+    }
+    assert_eq!(page, original);
+    Ok(())
+}
+
 // Expanded independent declarations; the first1762-byte source remains exact.
 use bondline_model::Page;
 use bondline_render::{

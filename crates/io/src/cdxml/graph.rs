@@ -198,35 +198,42 @@ impl<'input> ElementalGraph<'input> {
             scalar("BondLength"),
             scalar("ChainAngle"),
         )?);
-        let spacing = root
-            .attributes()
-            .find(|attribute| attribute.namespace().is_none() && attribute.name() == "BondSpacing")
-            .and_then(|attribute| {
-                let raw = attribute.value().trim();
-                let value = raw.parse::<f64>().ok()?;
-                // A genuinely negative source magnitude may underflow to -0. Numeric
-                // signed-zero lexemes remain valid; only the decoded mantissa matters.
-                if value == 0.0
-                    && raw.starts_with('-')
-                    && raw.split(['e', 'E']).next().is_some_and(|mantissa| {
-                        mantissa.bytes().any(|byte| matches!(byte, b'1'..=b'9'))
-                    })
-                {
-                    return None;
-                }
-                Some(value)
-            })
-            .filter(|value| {
-                bondline_model::DrawingStyle::default()
-                    .with_bond_spacing_percent(Some(*value))
-                    .is_ok()
-            });
+        let nonnegative = |name| {
+            root.attributes()
+                .find(|attribute| attribute.namespace().is_none() && attribute.name() == name)
+                .and_then(|attribute| {
+                    let raw = attribute.value().trim();
+                    let value = raw.parse::<f64>().ok()?;
+                    // A genuinely negative source magnitude may underflow to -0. Numeric
+                    // signed-zero lexemes remain valid; only the decoded mantissa matters.
+                    if value == 0.0
+                        && raw.starts_with('-')
+                        && raw.split(['e', 'E']).next().is_some_and(|mantissa| {
+                            mantissa.bytes().any(|byte| matches!(byte, b'1'..=b'9'))
+                        })
+                    {
+                        return None;
+                    }
+                    Some(value)
+                })
+        };
+        let spacing = nonnegative("BondSpacing").filter(|value| {
+            bondline_model::DrawingStyle::default()
+                .with_bond_spacing_percent(Some(*value))
+                .is_ok()
+        });
+        let margin = nonnegative("MarginWidth").filter(|value| {
+            bondline_model::DrawingStyle::default()
+                .with_margin_width(Some(*value))
+                .is_ok()
+        });
         model.set_drawing_style(
             bondline_model::DrawingStyle::new(
                 scalar("LineWidth")
                     .filter(|width| bondline_model::DrawingStyle::new(Some(*width)).is_ok()),
             )?
-            .with_bond_spacing_percent(spacing)?,
+            .with_bond_spacing_percent(spacing)?
+            .with_margin_width(margin)?,
         );
         let id = model
             .pages()

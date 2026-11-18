@@ -11,6 +11,8 @@ pub struct DrawingStyle {
     line_width_pt: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     bond_spacing_percent: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    margin_width_pt: Option<f64>,
 }
 
 #[derive(Deserialize)]
@@ -18,6 +20,7 @@ pub struct DrawingStyle {
 struct RawStyle {
     line_width_pt: Option<f64>,
     bond_spacing_percent: Option<f64>,
+    margin_width_pt: Option<f64>,
 }
 
 impl DrawingStyle {
@@ -28,6 +31,7 @@ impl DrawingStyle {
         Ok(Self {
             line_width_pt,
             bond_spacing_percent: None,
+            margin_width_pt: None,
         })
     }
 
@@ -52,7 +56,20 @@ impl DrawingStyle {
         Ok(self)
     }
     pub const fn is_empty(&self) -> bool {
-        self.line_width_pt.is_none() && self.bond_spacing_percent.is_none()
+        self.line_width_pt.is_none()
+            && self.bond_spacing_percent.is_none()
+            && self.margin_width_pt.is_none()
+    }
+    pub const fn margin_width_pt(self) -> Option<f64> {
+        self.margin_width_pt
+    }
+    /// Explicit physical label clearance; absence does not resolve an imported style sheet.
+    pub fn with_margin_width(mut self, value: Option<f64>) -> Result<Self, Error> {
+        if value.is_some_and(|v| !v.is_finite() || !(0.0..=MAX_POSITION_PT).contains(&v)) {
+            return Err(Error::InvalidDrawingStyle);
+        }
+        self.margin_width_pt = value;
+        Ok(self)
     }
 }
 
@@ -68,6 +85,7 @@ impl<'de> Deserialize<'de> for DrawingStyle {
                 let raw = RawStyle::deserialize(MapAccessDeserializer::new(map))?;
                 DrawingStyle::new(raw.line_width_pt)
                     .and_then(|style| style.with_bond_spacing_percent(raw.bond_spacing_percent))
+                    .and_then(|style| style.with_margin_width(raw.margin_width_pt))
                     .map_err(A::Error::custom)
             }
         }

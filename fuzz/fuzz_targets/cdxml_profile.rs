@@ -520,6 +520,10 @@ fn structured(source: &[u8], data: &[u8]) {
             .with_bond_spacing_percent(
                 [None, Some(0.0), Some(18.5), Some(3276.7)][usize::from(byte(8) % 4)],
             )
+            .unwrap()
+            .with_margin_width(
+                [None, Some(0.0), Some(2.0), Some(100000.0)][usize::from(byte(9) % 4)],
+            )
             .unwrap(),
     );
     edited

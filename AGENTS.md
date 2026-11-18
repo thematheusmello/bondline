@@ -1,5 +1,17 @@
 # Bondline agent instructions
 
+Physical label-margin data now follows docs/research/connected-label-styles.md and
+docs/verification-margin-data.md on base61be8e6. Keep optional root MarginWidth independent
+of width/spacing, Some0 vs None, exact absent bytes,0..100000 bounds, signed-zero vs
+negative-nonzero-underflow source checks, per-field splices and all generic loss guards.
+A temporary bonded-render refusal prevents silently ignored data until the real outline
+kernel replaces it. Old48 records/schema/order and catalogue16/124 stay exact. Full97406
+passes1999/0/1 and all local gates; ASan67587 passes10000/125s with18 exact immutable
+sources and actual16KiB mutation. The old MCP failure is not causally fixed. Root jobs
+are terminal; renderer/Connected/oracle lanes continue from the tested data parent.
+Preserve the old foreign Boxed zero-bond profile; new connected authority requires a
+SEPARATE complete capability, not a producer/default waiver. Full M0–M5 active, Actions OFF.
+
 Box-positioned labels follow docs/research/boxed-atom-label-workflow.md and
 docs/verification-boxed-atom-labels.md on base3b4dc17, integrated model5bca3b0/render2b89f7a/
 IO1aecd5a/budget-fix5611a03/foreign-default-fix44896bc. Keep optional bounds/legacy absence,
