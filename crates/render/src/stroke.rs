@@ -248,7 +248,12 @@ impl Stroke {
         )
     }
 
-    fn pixel_range(&self, horizontal: bool, major: u32, range: &mut std::ops::Range<u32>) -> bool {
+    pub(crate) fn pixel_range(
+        &self,
+        horizontal: bool,
+        major: u32,
+        range: &mut std::ops::Range<u32>,
+    ) -> bool {
         let [ax, ay] = self.begin.map(f64::from);
         let [bx, by] = self.end.map(f64::from);
         let (dx, dy) = (bx - ax, by - ay);

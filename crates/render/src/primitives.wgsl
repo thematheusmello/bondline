@@ -3,14 +3,9 @@ struct Primitive {
     y: u32,
     width: u32,
     height: u32,
-    begin_x: f32,
-    begin_y: f32,
-    direction_x: f32,
-    direction_y: f32,
-    length: f32,
-    stroke_width: f32,
     color: u32,
     kind: u32,
+    row_offset: u32,
 };
 
 struct Scene {
@@ -20,6 +15,7 @@ struct Scene {
 };
 
 @group(0) @binding(0) var<storage, read> scene: Scene;
+@group(0) @binding(1) var<storage, read> stroke_rows: array<vec2<u32>>;
 
 struct Vertex {
     @builtin(position) position: vec4<f32>,
@@ -42,11 +38,12 @@ struct Vertex {
 @fragment fn fragment(input: Vertex) -> @location(0) vec4<f32> {
     let primitive = scene.primitives[input.instance];
     if primitive.kind == 1u {
-        let offset = input.position.xy - vec2(primitive.begin_x, primitive.begin_y);
-        let direction = vec2(primitive.direction_x, primitive.direction_y);
-        let along = dot(offset, direction);
-        let across = offset.x * direction.y - offset.y * direction.x;
-        if along < 0.0 || along > primitive.length || abs(across) > primitive.stroke_width * 0.5 { discard; }
+        // Host prepares bounded analytic row geometry, never a finished CPU image.
+        // Integer coverage preserves the shared closed-cap predicate without f32 ties.
+        let pixel = vec2<u32>(input.position.xy);
+        if pixel.y < primitive.y || pixel.y >= primitive.y + primitive.height { discard; }
+        let range = stroke_rows[primitive.row_offset + pixel.y - primitive.y];
+        if pixel.x < range.x || pixel.x >= range.y { discard; }
     }
     return unpack4x8unorm(primitive.color);
 }
