@@ -1,7 +1,9 @@
 # CDX literal atom metadata: next M1 contract
 
-Locked2026-11-18 after verified metadata code `c965607`/full98153. This work is **planned**:
-no new CDX decoder, fixture, consumer agreement or native acceptance is claimed here.
+Locked2026-11-18 after verified metadata code `c965607`/full98153. The decoder is now
+implemented in4996ee7; [receiving](../verification-cdx-literal-atom-metadata.md) records
+the frozen independent inputs, actual consumer qualifications and bounded native evidence.
+The requirements below retain their preimplementation contract scope.
 Implement literal data in the existing read-only projection, retaining every source
 byte. No new model type, command, display/edit authority or chemical inference is needed.
 

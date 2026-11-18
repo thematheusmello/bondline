@@ -8,6 +8,78 @@ commit as the user requires; merge/release/publication remains separately author
 
 ## Current recoverable work and evidence
 
+Recoverable literal CDX metadata: base42ccefb/clarification4af42c5, frozen originals9a56c97/
+helper9b77891, IO4996ee7 (isolatedc018738), actual wired414c6a, command/App29e8831 and
+fuzzf11a40c. Read [contract](docs/research/cdx-literal-atom-metadata.md),
+[receiving](docs/verification-cdx-literal-atom-metadata.md) and
+[fixture provenance](crates/io/tests/fixtures/cdx-literal-metadata/SOURCES.md).
+This supersedes every historical next-task/job paragraph and the goal's old line-width
+first task. Each atomic commit is pushed to the same origin branch.
+
+The limited read-only graph now reads Node isotope/charge/radical/NumHydrogens into
+existing fields. Both owner lists/duplicates/widths/domains are strict; missing H stays
+None. Four-byte charge follows the SDK signedINT32>>24 instruction and preserves every
+low byte. No full/display/chemical-authoring/cross-format authority, command or grey tool
+is added. The old model-only page edit/history stays available but CDX Save refuses drift
+until Undo. All49 actual command metadata and catalogue16/124 stay exact.
+
+Eighteen independent original sources/36 strict-reader refusals reproduce exactly.
+Actual RDKit agrees on qualified isotope/charge/H/doublet vectors;01000000 differs
+(normative0/RDKit1), as does AABBCC7F (127/−86). Electron count cannot prove singlet/triplet.
+Runtime IO0/4 and grouped3pass/10fail, commands0/3, App0/1 and actual adapters0/3 precede
+production; GREEN13IO/3command/1App/3wire pass. WholeIO529/0 passes. Exactly six old valid
+literal-field witnesses become stronger positives; all other unknown/query/label/stereo/
+owner/refusal guards stay unchanged. Test declaration/helper/lint qualifications remain
+separate from the actual runtime REDs in receiving.
+
+Separate own Mac review86673 verifies retained Ring→Open isotope compound→known Save→
+Unicode Save As→reopen, then four-byte-charge Open→Unicode Save As→reopen. Complete
+independent models/actual files/struct/RDKit checks pass, with the legacy consumer
+discrepancy preserved. Actual files353B/SHA256
+25966d5b508ab7ef1d064d831f85bf79bbeec65f331b0cb62e27a6a91942f554 and230B/SHA256
+b9a0a9f4b58226666d4aba20fa35fb669834ead30b202ad5c99531ae03cd57eb equal original sources.
+CPU/GPU capture both refuse unsupported_content without state changes; no CDX image or
+render parity is claimed. Retained Ring inspector instructions and CJK filename glyph
+coverage remain presentation limits. Own review is quit, exact bundle/original PID absent;
+user-viewed review365 and older apps/drawings remain protected.
+
+ASan97553 passes10000/1s, cov1261/ft2818/RSS173MiB,43 immutable/regenerated seeds. Initial
+max131072B, mutationlimit65746B and actual NEW/REDUCEmax777B stay distinct. Manifest
+bb61c910883ed54656d174fba53e9fd72b85c4b194eeae49096f88b2a19cb026;
+log29351B/SHA2564b178ddf322325c03628a64cac41dbe6de2a38ba46dfb51df68471729750a17b.
+
+Full local xtask CI1390 onf11a40c fails1420/1/0 across222 reports at unchanged MCP
+replacement_bind51670/AddrInUse. Log176572B/SHA256
+af9fda65b0b4dbb69272ec51a431f1ed9da140cafcabf683a6dc11f33adb754e. Remaining11036 passes
+751/0/1 across98 reports, including vendor3/0, and every previously unexecuted stage;
+log98069B/SHA256f1316e84970dc580d04d0d4264a9dfad98ca9f812f6a35a6dc5c92151783f8db.
+Combined workspace2168/1/1 across319 reports plus vendor3/0 is **not a clean aggregate
+or causal listener fix**. The failed case is not retried or weakened. Workspace/fuzz fmt,
+warnings-denied workspace/vendor clippy, layers, strict runtime licenses/seven assets
+and pinned eight-file/five-bundle corpus pass. All implementation/execution jobs are
+terminal; worker worktrees/branches remain for provenance. No dependency/lock/vendor/font/
+asset/golden/workflow change. Human NH2 golden approval remains pending; new Windows/
+Linux/WASM execution is unverified. Actions remains OFF; full M0–M5 stays incomplete.
+
+Next executable work:
+
+1. Source-lock a bounded plain CDX bond projection: binary Order bitmasks1/2/4,
+   Solid Display/Display2 and DoublePosition presence/Center/Right/Left relative to B→E.
+   Declare automatic/manual source distinctions, omitted position and non-Double rules
+   before code; do not infer Center or render permission. Freeze independent original
+   bytes/complete facts plus actual external graph observations, then observe runtime RED.
+2. Implement only the agreed data prerequisite through both global/local owner lists,
+   exact source/unchanged Save/model-drift/history/adapter/native workflows, parser fuzz
+   and local gates. Preserve all existing source/full/display/loss guards and registry49/
+   catalogue16/124. Faithful CDX styles/resources/Text/preview/editing remain separate
+   requirements; general omitted-run typography is still unproved, not a default to invent.
+3. Continue broader M1 interchange, all remaining M2 tools/selection/journal styles,
+   M3 chemistry/reactions, M4 publishing/clipboard and M5 naming/templates/WASM/installers.
+   M0 platforms/input/accessibility/DPI/jobs/addressability and historical listener cause
+   remain open. Keep pushing every atomic commit and keep Actions OFF.
+
+### Previous scalar-default metadata checkpoint
+
 Recoverable scalar-default metadata workflow: base0aa97cd, contract8c2b608, original
 fixtures deb078d, IO4e8470f (isolated47b021b), command/UI d8bc3ba, wire51fa159,
 isolated owner-test qualification2e939f6, render e615cbf (isolated0f025d0) and fuzzc965607.

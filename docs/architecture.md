@@ -1,5 +1,15 @@
 # Architecture
 
+The [literal CDX projection](verification-cdx-literal-atom-metadata.md) populates existing
+Atom isotope/charge/radical/explicit-H fields without adding model or adapter types.
+Both global owner classification and local Node properties enforce the same four tags;
+absence and original source bytes remain distinct. Four-byte Charge uses the published
+property-specific signed high-byte rule. Missing H is unresolved, with no chemical
+inference. StoredDocument keeps its old incomplete/full/display/edit/loss boundaries;
+unchanged Save borrows source and model drift refuses CDX output until restored. The
+existing detached page/history edit remains model-only. CLI/MCP/socket/native use their
+unchanged registry49; no UI/command/renderer production source changes.
+
 The [printed-label creation workflow](verification-printed-label-creation.md) adds one
 explicit-style command49 and a separate complete Flagged source capability. Its immutable
 baseline reserves child Text IDs for every eligible no-Text atom, using existing object

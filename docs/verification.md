@@ -1,6 +1,17 @@
 # Verification log
 
-The latest [scalar-default metadata receiving](verification-label-default-metadata.md)
+The latest [literal CDX metadata receiving](verification-cdx-literal-atom-metadata.md)
+records independent preimplementation bytes/facts/runtime RED, literal read-only data,
+actual CLI/MCP/socket/App and bounded native Mac unchanged Unicode Save/reopen. Two
+RDKit legacy-charge differences and spin-consumer limits stay explicit. ASan10000/1s
+passes with43 immutable sources. Full1390 fails1420/1/0 at unchanged MCP replacement_bind
+51670; remaining11036 completes all unexecuted stages. Combined workspace2168/1/1 across
+319 reports plus vendor3/0 is not a clean aggregate or a causal listener fix. Formatting,
+warnings-denied clippy, layers, licenses/seven assets and corpus pass. Own review86673 is
+quit; user-viewed review365 and older apps/files remain protected. No new display/edit
+authority, human golden or other-platform evidence. Full M0–M5 remains active; Actions OFF.
+
+The preceding [scalar-default metadata receiving](verification-label-default-metadata.md)
 records explicit labels beside preserved unused LabelFont/Size/Face, precise48/49/
 Selection permissions and exact source/weak-owner/history/native Unicode files. Full
 local98153 PASSES workspace2149/0/1 across317 reports plus vendor3/0 and all gates;

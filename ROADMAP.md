@@ -12,7 +12,16 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
-The current M1 [scalar-default metadata receiving](docs/verification-label-default-metadata.md)
+The current M1 [literal CDX receiving](docs/verification-cdx-literal-atom-metadata.md)
+adds read-only isotope/charge/radical/explicit-H projection with exact source retention.
+Frozen independent facts, actual adapters/native Mac Unicode files and bounded ASan pass.
+The final aggregate fails at the unchanged MCP listener-release case; all unexecuted
+stages pass separately. No display/chemical-authoring/loss authority or tool is added.
+Next source-lock plain CDX Single/Double/Triple order and explicit bond display/position
+metadata, then freeze independent bitmask/direction/absence/owner vectors before code.
+CDX fonts/Text/styles, faithful display/editing and every remaining M0–M5 workflow stay open.
+
+The preceding M1 [scalar-default metadata receiving](docs/verification-label-default-metadata.md)
 qualifies explicit-label files carrying checked unused LabelFont/Size/Face on supported
 owners. Existing label/Selection/history/Unicode Save/reopen works through immutable
 source spans, with bounded native Mac, exact CPU/Metal and independent source/font/

@@ -11,6 +11,13 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
+The [literal CDX metadata increment](verification-cdx-literal-atom-metadata.md) expands
+only read-only isotope/charge/radical/explicit-H data projection. Frozen independent
+bytes, actual adapters and bounded Mac unchanged Unicode Save/reopen pass; no faithful
+CDX display or chemical editing follows. Charge recovery consumer differences and the
+unchanged failing MCP aggregate are explicit. Registry49/catalogue16/124 stay unchanged;
+no reference tool/menu/flow or milestone is promoted to complete.
+
 The [scalar-metadata increment](verification-label-default-metadata.md) lets the existing
 qualified label/Selection workflows retain validated unused LabelFont/Size/Face values
 on supported source owners. Independent file/font/pixel/history/adapters and bounded

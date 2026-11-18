@@ -1,5 +1,16 @@
 # File capabilities
 
+The [literal CDX atom projection](verification-cdx-literal-atom-metadata.md) now reads
+Node-owned isotope0420/signed16, charge0421/signed8 or documented four-byte recovery,
+radical0422/unsigned8 and NumHydrogens042B/unsigned16. Absent H stays unresolved; present0
+is explicit. Duplicate/wrong-owner/domain/width guards and complete raw-source retention
+are verified against independent original bytes, actual adapters and bounded Mac Unicode
+Save/reopen. Two external RDKit four-byte-charge differences are recorded explicitly.
+Full/display/chemical-authoring and cross-format permissions remain closed. Detached
+page edits still require Undo before an unchanged CDX Save can succeed. General bond/
+Text/resource/style/query/stereo mapping, faithful preview and changed-CDX encoding remain
+missing; no new command or planned tool is enabled.
+
 The [explicit-label metadata workflow](verification-label-default-metadata.md) adds a
 separate checked source mode for unused LabelFont/LabelSize/LabelFace beside fully
 explicit run typography. Root/Node/Bond/Text owners and shadowed values/resources are
@@ -159,7 +170,7 @@ new source authority, root inheritance, CDX flag projection or default-tool migr
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Standalone syntax/property/new-tree writer, additive canonical FileEnd envelopes; limited source snapshots, atomic I/O and guarded shared/native Mac Open/Save | Original vectors/fetched scene and earlier native checks; new 258-byte source, eight syntax/six IO/engine/wire cases, 18 oracle controls, 10,000 ASan runs and bounded Mac Open/Unicode Save As/reopen pass. Final full gate1172/0/1 passes; earlier intermittent MCP failure remains unexplained | Faithful preview, broader typed metadata/Text/Double/style mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
+| CDX | Standalone syntax/property/new-tree writer, canonical FileEnd envelopes, limited graph/literal atom metadata, atomic I/O and guarded shared/native Mac unchanged Open/Save | Earlier framing checks plus18 new original metadata sources/36 reader controls, actual CLI/MCP/socket/App, bounded Mac Unicode files and10,000 ASan runs. Current aggregate listener failure is retained separately from remaining passing stages; see verification-cdx-literal-atom-metadata.md | Faithful preview, broader bond/Text/resource/style/query/stereo mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000/V3000 | Complete mixed-version session/native Mac files, occurrence inspector and existing-value editor, source-preserving capture and read-only Actual/Zoom/pan preview | Exact raw spans/order/versions, pinned corpus and unchanged raw/per-MOL consumers; bounded Mac files/field edits/Actual/pan; actual-App wheel/DPI/source freshness and edit→preview→Save/reopen; command/adapter guards and earlier bounded ASAN | Native wheel/physical-DPI/new combined edit-preview acceptance, record creation/reordering and field-header editing, broader layout/chemistry, fetched mixed-version corpus, syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |

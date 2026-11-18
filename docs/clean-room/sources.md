@@ -1,6 +1,6 @@
 # Clean-room source register
 
-The next planned read-only CDX literal-metadata slice is locked in
+The read-only CDX literal-metadata slice is locked in
 [the CDX contract](../research/cdx-literal-atom-metadata.md), reviewed2026-11-18 against
 primary [Isotope](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_Isotope.htm),
 [Charge](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_Charge.htm),
@@ -9,13 +9,18 @@ primary [Isotope](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom
 [IntroCDX](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm) and
 [numeric types](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXNumeric.htm).
 The property-specific four-byte Charge arithmetic-shift rule is explicit public evidence
-and takes precedence in the bounded planned decoder. General-width guidance is broader
+and takes precedence in the bounded decoder. General-width guidance is broader
 than this slice. Exact accepted widths/domains/owners, absent-H retention, duplicate/error
 policy and source/display/edit/loss fences are documented before code. Eight fresh200
 receipts have manifest SHA256
 `1ebc79d957c8edcd0624e0582fd1f735c9d4dc61df0668e4fc7c85bb642a2764`.
-No new CDX implementation, external-consumer agreement or native result is claimed yet;
-no vendor body/sample/binary/asset is shipped or inspected.
+Implementation4996ee7 and [receiving](../verification-cdx-literal-atom-metadata.md) retain
+those boundaries. Eighteen original struct sources/facts and36 reader refusals precede
+production. Actual RDKit2026.09.2 agrees on qualified isotope/charge/H/doublet sources;
+two four-byte charges differ from the SDK recovery rule and remain explicit. Electron
+count cannot certify singlet versus triplet. Actual CLI/MCP/socket/App and bounded native
+Mac unchanged Unicode Save/reopen preserve every byte, without display/edit authority.
+No vendor body/sample/binary/asset is shipped or inspected.
 
 Explicit labels beside unused scalar defaults reviewed2026-11-18 follow the
 [metadata contract](../research/label-default-metadata.md), primary

@@ -3,7 +3,14 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
-The current [explicit-label metadata receiving](verification-label-default-metadata.md)
+The current [literal CDX metadata receiving](verification-cdx-literal-atom-metadata.md)
+records read-only isotope/charge/radical/H data, independent source/consumer qualifications,
+actual adapters/native Mac unchanged Unicode files and bounded ASan. Faithful CDX display
+and chemical editing remain missing. The final aggregate's unchanged MCP listener failure
+stays separate from the completed remaining gates. Push each atomic commit; Actions OFF,
+user apps protected, full M0–M5 active/incomplete.
+
+The preceding [explicit-label metadata receiving](verification-label-default-metadata.md)
 preserves checked unused LabelFont/Size/Face beside fully explicit runs through label/
 Selection/history/Unicode Save/reopen. Independent source/font/pixel/adapter and bounded
 native Mac checks pass; full local2149/0/1+vendor3/0 and10000/391s ASan pass. Missing-run

@@ -25,12 +25,21 @@ files/CPU-Metal and ASan10000/391s pass; full aggregate/job state and exact next
 are in STATUS. Own metadata review40752 is quit; user-viewed creation review365 and
 older apps/files stay protected. Actions OFF; full M0–M5 active/incomplete.
 
-The next M1 CDX literal-atom data contract is docs/research/cdx-literal-atom-metadata.md.
-It is planned, with no decoder/consumer/native result yet. Begin frozen independent bytes/
-facts/runtime RED; change both read_atom's admitted fields and Layout's global Node-owner
-list. Follow the explicit four-byte Charge arithmetic-shift rule, canonical other widths,
-missing-HNone, duplicate/source/history and full/display/edit/loss fences. No producer
-waiver, H/spin inference, new command or planned-tool binding. Exact next steps are in STATUS.
+M1 CDX literal-atom data follows docs/research/cdx-literal-atom-metadata.md and
+docs/verification-cdx-literal-atom-metadata.md: contracts42ccefb/4af42c5, fixtures9a56c97/
+helper9b77891, IO4996ee7 (isolatedc018738), wired414c6a, consumer29e8831 and fuzzf11a40c.
+Keep both global Node-owner and local read_atom guards, strict duplicates, canonical
+widths, missing-HNone and distinct radical enums. Four-byte Charge is signedINT32>>24,
+not a full numeric value or its low byte; preserve raw low bytes/source presence exactly.
+Actual RDKit differs on01000000 and AABBCC7F; never rewrite the rule or source to match it.
+No H/spin/chemical inference, full/display/chemical-authoring/cross-format permission,
+new command or planned tool follows. Legacy detached page edits still dirty/history and
+refuse CDX Save until Undo. Independent sources/runtime REDs/adapters/App/native Unicode
+files and bounded ASan pass. Full1390 fails unchanged MCP replacement_bind51670; remaining
+11036 passes all unexecuted gates. Combined2168/1/1+vendor3/0 is not a clean aggregate or
+causal listener fix. Own review86673 is quit; user-viewed365/older apps stay protected.
+STATUS gives exact next bond-metadata source lock; no repeating delivered scalar work.
+Actions OFF; full M0–M5 active/incomplete; push each atomic commit.
 
 Printed-label creation is integrated through091328d, with contract126f99e,
 render8f1225e/fixtures9acd1a5/IObb30dca/wire8c37996/oracles38283d4 and fuzz a186933.
