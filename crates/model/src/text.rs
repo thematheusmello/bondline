@@ -109,6 +109,8 @@ pub enum TextError {
     DocumentRunLimit,
     #[error("document exceeds 64 MiB of UTF-8 text")]
     DocumentTextLimit,
+    #[error("text bounds must be ordered finite left/top/right/bottom points within ±100000")]
+    InvalidBounds,
 }
 
 /// Literal resolved style data; a renderer separately proves font/face support.
@@ -314,6 +316,8 @@ pub struct AtomLabel {
     label_justification: Option<TextJustification>,
     label_alignment: Option<LabelAlignment>,
     runs: Vec<TextRun>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    bounding_box: Option<[f64; 4]>,
 }
 
 #[derive(Deserialize)]
@@ -325,6 +329,7 @@ struct RawAtomLabel {
     label_justification: Option<TextJustification>,
     label_alignment: Option<LabelAlignment>,
     runs: Vec<TextRun>,
+    bounding_box: Option<[f64; 4]>,
 }
 
 impl AtomLabel {
@@ -351,6 +356,7 @@ impl AtomLabel {
             label_justification,
             label_alignment,
             runs,
+            bounding_box: None,
         })
     }
 
@@ -368,6 +374,25 @@ impl AtomLabel {
     }
     pub fn runs(&self) -> &[TextRun] {
         &self.runs
+    }
+
+    pub const fn bounding_box(&self) -> Option<[f64; 4]> {
+        self.bounding_box
+    }
+
+    pub fn with_bounding_box(&self, bounds: Option<[f64; 4]>) -> Result<Self, TextError> {
+        if let Some([left, top, right, bottom]) = bounds
+            && ([left, top, right, bottom]
+                .iter()
+                .any(|value| !value.is_finite() || value.abs() > MAX_POSITION_PT)
+                || left > right
+                || top > bottom)
+        {
+            return Err(TextError::InvalidBounds);
+        }
+        let mut result = self.clone();
+        result.bounding_box = bounds;
+        Ok(result)
     }
 
     pub fn with_run_text(&self, index: usize, text: String) -> Result<Self, TextError> {
@@ -390,6 +415,10 @@ impl AtomLabel {
             self.label_alignment,
             runs,
         )
+        .map(|mut result| {
+            result.bounding_box = self.bounding_box;
+            result
+        })
     }
 
     pub fn with_position(&self, position: Option<Point2>) -> Result<Self, TextError> {
@@ -400,6 +429,10 @@ impl AtomLabel {
             self.label_alignment,
             self.runs.clone(),
         )
+        .map(|mut result| {
+            result.bounding_box = self.bounding_box;
+            result
+        })
     }
 
     pub(crate) fn storage_bytes(&self) -> usize {
@@ -425,6 +458,7 @@ impl TryFrom<RawAtomLabel> for AtomLabel {
             raw.label_alignment,
             raw.runs,
         )
+        .and_then(|label| label.with_bounding_box(raw.bounding_box))
     }
 }
 

@@ -1,5 +1,19 @@
 # Clean-room source register
 
+The box-positioned label workflow reviewed2026-11-18 uses primary
+[absent Text-position fallback](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/2DPosition.htm),
+[graphical BoundingBox](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BoundingBox.htm)
+and [point/rectangle coordinates](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm).
+It avoids the unresolved arbitrary child-p convention. The
+[OpenType outline specification](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf)
+distinguishes loose control-point bounds from actual curve bounds. Original FontTools
+BoundsPen/GPOS and Expat/Decimal vectors use the already bundled Apache-2.0 Roboto;
+no reference export or new font is used. The
+[contract](../research/boxed-atom-label-workflow.md) separates published fallback/units
+from original centre-agreement, float-tolerance, literal-body and closed-capability
+policies. Data ownership/implementation/verification are separate gates; a planned
+workflow is not evidence of completed rendering/editing or general reference parity.
+
 Owned Node child Text data reviewed2026-11-18 follows the public
 [Node](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) and
 [Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm) containment/precedence facts,
