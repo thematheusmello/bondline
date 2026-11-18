@@ -419,10 +419,51 @@ fn unsupported_labels_queries_and_chemical_metadata_are_explicit_errors() -> Tes
                 bond(103, 101, 102, &[property(0x0600, &order.to_le_bytes())]),
             ],
         )]);
-        assert!(matches!(
-            ElementalGraph::parse(&source),
-            Err(MappingError::UnsupportedBondOrder { .. })
-        ));
+        if order == 2 {
+            let graph = ElementalGraph::parse(&source)?;
+            let fragment = graph.fragments().first().ok_or("fragment")?;
+            assert_eq!(fragment.atoms().len(), 2);
+            assert_eq!(fragment.bonds().len(), 1);
+            let bond = fragment.bonds().first().ok_or("bond")?;
+            assert_eq!(
+                (bond.id.get(), bond.begin.get(), bond.end.get(), bond.order),
+                (1, 1, 2, BondOrder::Double)
+            );
+            assert_eq!(
+                bond.double_position,
+                bondline_model::DoublePosition::Unspecified
+            );
+            for atom in fragment.atoms() {
+                assert_eq!(
+                    (
+                        atom.element.get(),
+                        atom.position,
+                        atom.isotope,
+                        atom.charge,
+                        atom.radical,
+                        atom.explicit_hydrogens
+                    ),
+                    (6, None, None, 0, Radical::None, None)
+                );
+                assert_eq!(atom.show_terminal_carbon_labels, None);
+                assert_eq!(atom.show_non_terminal_carbon_labels, None);
+                assert!(atom.authored_label.is_none());
+            }
+            assert_eq!(graph.as_bytes(), source);
+            assert_eq!(graph.to_bytes(), source);
+            let stored = bondline_io::StoredDocument::from_cdx(
+                source.clone().into(),
+                bondline_model::PageSize::A4,
+            )?;
+            assert!(!stored.is_fully_mapped());
+            assert!(!stored.has_display_projection());
+            assert_eq!(stored.to_cdx()?.as_ref(), source);
+        } else {
+            assert!(matches!(
+                ElementalGraph::parse(&source),
+                Err(MappingError::UnsupportedBondOrder { .. })
+            ));
+        }
     }
     Ok(())
 }

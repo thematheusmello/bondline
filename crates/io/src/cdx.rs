@@ -2,8 +2,8 @@
 
 use bondline_cdx::{Document, RecordKind};
 use bondline_model::{
-    Atom, AtomId, Bond, BondId, BondOrder, Element, Fragment, FragmentId, GraphError,
-    MAX_GRAPH_ITEMS, Point2, Radical,
+    Atom, AtomId, Bond, BondId, BondOrder, DoublePosition, Element, Fragment, FragmentId,
+    GraphError, MAX_GRAPH_ITEMS, Point2, Radical,
 };
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -29,6 +29,9 @@ const HYDROGENS: u16 = 0x042b;
 const ATOM_CIP: u16 = 0x0437;
 const ATOM_ID: u16 = 0x044d;
 const ORDER: u16 = 0x0600;
+const DISPLAY: u16 = 0x0601;
+const DISPLAY2: u16 = 0x0602;
+const DOUBLE_POSITION: u16 = 0x0603;
 const BEGIN: u16 = 0x0604;
 const END: u16 = 0x0605;
 const BOND_CIP: u16 = 0x060a;
@@ -63,7 +66,7 @@ pub enum MappingError {
     UnsupportedProperty { tag: u16, record: usize },
     #[error("only Element nodes are mapped, at record {record}")]
     UnsupportedNodeType { record: usize },
-    #[error("only single bonds are mapped, at record {record}")]
+    #[error("only plain Single, Double and Triple bond orders are mapped, at record {record}")]
     UnsupportedBondOrder { record: usize },
     #[error("elemental mapping exceeds the application identity budget")]
     IdentityLimit,
@@ -135,14 +138,20 @@ impl<'input> ElementalGraph<'input> {
                             .children
                             .get(child)
                             .ok_or(MappingError::UnsupportedLayout { record: child })?,
-                        &[ORDER, BEGIN, END, Z_ORDER, WARNING, BOND_CIP],
+                        &[
+                            ORDER,
+                            DISPLAY,
+                            DISPLAY2,
+                            DOUBLE_POSITION,
+                            BEGIN,
+                            END,
+                            Z_ORDER,
+                            WARNING,
+                            BOND_CIP,
+                        ],
                     )?;
                     validate_metadata(&source, &fields)?;
-                    if let Some(record) = fields.get(&ORDER)
-                        && u16::from_le_bytes(payload(&source, *record, ORDER)?) != 1
-                    {
-                        return Err(MappingError::UnsupportedBondOrder { record: *record });
-                    }
+                    let (order, double_position) = read_bond_style(&source, &fields)?;
                     let endpoint = |tag| -> Result<AtomId, MappingError> {
                         let record = fields
                             .get(&tag)
@@ -158,12 +167,12 @@ impl<'input> ElementalGraph<'input> {
                             .ok_or(MappingError::UnresolvedReference { id, record })
                     };
                     bonds.push(Bond {
-                        double_position: bondline_model::DoublePosition::Unspecified,
+                        double_position,
                         id: BondId::new(allocate(&mut next_bond)?)
                             .ok_or(MappingError::IdentityLimit)?,
                         begin: endpoint(BEGIN)?,
                         end: endpoint(END)?,
-                        order: BondOrder::Single,
+                        order,
                     });
                 }
             }
@@ -243,7 +252,8 @@ impl Layout {
                 let owner = match *tag {
                     POSITION | NODE_TYPE | ELEMENT | ISOTOPE | CHARGE | RADICAL | HYDROGENS
                     | ATOM_CIP | ATOM_ID => Some(NODE),
-                    ORDER | BEGIN | END | BOND_CIP | WARNING => Some(BOND),
+                    ORDER | DISPLAY | DISPLAY2 | DOUBLE_POSITION | BEGIN | END | BOND_CIP
+                    | WARNING => Some(BOND),
                     _ => None,
                 };
                 if let Some(owner) = owner
@@ -402,6 +412,47 @@ fn validate_metadata(
         }
     }
     Ok(())
+}
+
+fn read_bond_style(
+    source: &Document<'_>,
+    fields: &BTreeMap<u16, usize>,
+) -> Result<(BondOrder, DoublePosition), MappingError> {
+    let order = if let Some(&record) = fields.get(&ORDER) {
+        match u16::from_le_bytes(payload(source, record, ORDER)?) {
+            1 => BondOrder::Single,
+            2 => BondOrder::Double,
+            4 => BondOrder::Triple,
+            _ => return Err(MappingError::UnsupportedBondOrder { record }),
+        }
+    } else {
+        BondOrder::Single
+    };
+    let mut position = DoublePosition::Unspecified;
+    for tag in [DISPLAY, DISPLAY2, DOUBLE_POSITION] {
+        let Some(&record) = fields.get(&tag) else {
+            continue;
+        };
+        let unsupported = || MappingError::UnsupportedProperty { tag, record };
+        let bytes = property_bytes(source, record, tag)?
+            .try_into()
+            .map_err(|_| unsupported())?;
+        let value = i16::from_le_bytes(bytes);
+        if tag != DISPLAY && order != BondOrder::Double {
+            return Err(unsupported());
+        }
+        if tag == DOUBLE_POSITION {
+            position = match value {
+                0 | 256 => DoublePosition::Center,
+                1 | 257 => DoublePosition::Right,
+                2 | 258 => DoublePosition::Left,
+                _ => return Err(unsupported()),
+            };
+        } else if value != 0 {
+            return Err(unsupported());
+        }
+    }
+    Ok((order, position))
 }
 
 fn read_atom(
