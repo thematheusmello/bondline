@@ -58,7 +58,13 @@ pub fn write_document(document: &Document) -> Result<Vec<u8>, MappingError> {
             let mut ids = BTreeMap::<AtomId, u32>::new();
             for atom in fragment.atoms() {
                 let id = allocate(&mut next)?;
-                write_atom(&mut writer, atom, id)?;
+                if let Some(label) = &atom.authored_label {
+                    writer.start_element("n", &borrowed(&atom_attributes(atom, id)?))?;
+                    super::atom_text::write(&mut writer, &resources, label, allocate(&mut next)?)?;
+                    writer.end_element()?;
+                } else {
+                    write_atom(&mut writer, atom, id)?;
+                }
                 ids.insert(atom.id, id);
             }
             for bond in fragment.bonds() {
@@ -149,6 +155,9 @@ pub(super) fn bond_attributes(bond: &Bond, id: u32, begin: u32, end: u32) -> Att
 }
 
 pub(super) fn write_atom(writer: &mut Writer, atom: &Atom, id: u32) -> Result<(), MappingError> {
+    if atom.authored_label.is_some() {
+        return Err(MappingError::InvalidProperty("authored node text"));
+    }
     writer.empty_element("n", &borrowed(&atom_attributes(atom, id)?))?;
     Ok(())
 }

@@ -58,6 +58,12 @@ pub fn write_v2000_with_header(
     let mut ids = BTreeMap::<AtomId, usize>::new();
     let mut totals = BTreeMap::<AtomId, Option<u16>>::new();
     for (index, atom) in fragment.atoms().iter().enumerate() {
+        if atom.authored_label.is_some() {
+            return Err(MolError::Unsupported {
+                line: 0,
+                feature: "authored atom text",
+            });
+        }
         if atom.show_terminal_carbon_labels.is_some() {
             return Err(MolError::Unsupported {
                 line: 0,

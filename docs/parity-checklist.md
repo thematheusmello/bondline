@@ -139,6 +139,13 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 
 ## Workflow overview
 
+The [owned chemical child-Text data boundary](verification-owned-atom-label-data.md)
+retains explicit literal runs/placement in the model/native CDXML codec and guards
+unsupported edits, rendering and conversion loss. Actual CLI/stdio/socket unchanged
+Unicode Save/reopen is verified. This prerequisite implements no reference Text tool,
+chemical formatting/layout or broader imported authoring workflow. Those rows stay
+missing/partial and catalogue16/124/registry47 stays unchanged.
+
 The [LabelFont/Size/Face containment lookup](verification-label-default-lookup.md) is a
 verified standalone M1 prerequisite. It retains property owners, signed scalar data and
 unresolved absence, without granting foreign style/display/edit authority or filling Style

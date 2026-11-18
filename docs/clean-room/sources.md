@@ -1,5 +1,20 @@
 # Clean-room source register
 
+Owned Node child Text data reviewed2026-11-18 follows the public
+[Node](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) and
+[Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm) containment/precedence facts,
+and the distinct named domains of
+[Justification](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Justification.htm),
+[LabelJustification](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelJustification.htm)
+and [LabelAlignment](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelAlignment.htm).
+These support retaining authored text separately from redundant Element/H and retaining
+absence/raw point data. They do not establish a universal baseline, missing-run fallback
+or chemical agreement. The [contract](../research/owned-atom-label-data.md) supplies
+original checked model budgets, Arc ownership and fail-closed authoring/display/loss
+policies. [Receiving](../verification-owned-atom-label-data.md) separates independent
+XML/Decimal/native data tests from unfinished layout/editor/reference parity. No new
+reference binary, font, icon, template, dependency or source-code copy is used.
+
 Chemical-label default lookup reviewed2026-11-18 follows the primary
 [LabelFont](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelStyleFont.htm),
 [LabelSize](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelStyleSize.htm),

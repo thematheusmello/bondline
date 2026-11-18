@@ -2,6 +2,11 @@
 
 ## Chemical label defaults and placement, 2026-11-18
 
+[Owned child-Text data](../verification-owned-atom-label-data.md) now retains explicit
+runs/raw optional placement in the model/native codec with independent loss/refusal/file
+evidence. This resolves data ownership only; the layout/default/agreement questions
+below remain. Chemical authoring/rendering refuses these labels until those proofs exist.
+
 Primary LabelFont/Size/Face pages define containing-object fallback then a last-used
 style sheet, not a universal font/size/face. The new
 [lookup contract](../research/label-default-lookup.md) retains each property's owner,

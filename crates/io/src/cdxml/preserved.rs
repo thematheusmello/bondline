@@ -26,6 +26,9 @@ fn one_page(model: &Document) -> Result<&Page> {
 }
 
 pub(crate) fn supports_delta(baseline: &Document, current: &Document) -> bool {
+    if baseline.has_authored_atom_labels() || current.has_authored_atom_labels() {
+        return false;
+    }
     let (Ok(before), Ok(after)) = (one_page(baseline), one_page(current)) else {
         return false;
     };

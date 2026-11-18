@@ -12,6 +12,14 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
+The next M1 [owned child-Text boundary](docs/verification-owned-atom-label-data.md)
+preserves explicit Node label data in the model/native codec, accounts for shared history
+and refuses unsupported edits, rendering and lossy conversion. Independent actual
+CLI/stdio/socket unchanged Unicode Save/reopen passes. This does not finish the chemical
+Text workflow: supported layout/semantic agreement, effective font/face/default data,
+synchronized source-preserving edits and a native editor remain the next work. The full
+M0–M5 target below and registry47/catalogue16/124 are unchanged.
+
 The M1 [label-default lookup prerequisite](docs/verification-label-default-lookup.md)
 now has owned per-property provenance, independent Expat/Decimal/source tests and bounded
 ASan. Fresh local1919/0/1 passes; the earlier MCP failure remains unexplained. This adds

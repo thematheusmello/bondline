@@ -1032,6 +1032,9 @@ impl Engine {
                 ));
             }
             Command::PageSetSize(params) => {
+                if self.stored_document()?.model().has_authored_atom_labels() {
+                    return Err(bondline_io::DocumentError::UnsupportedEdit.into());
+                }
                 if self.stored_document()?.has_caption_projection() {
                     return Err(Error::UnsupportedCaptionSource);
                 }

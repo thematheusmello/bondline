@@ -396,7 +396,11 @@ pub(crate) fn graph_scene_in_viewport(
         let mut neighbours = BTreeMap::<_, (usize, i32)>::new();
         for atom in fragment.atoms() {
             cancel.check()?;
-            if atom.charge != 0 || atom.isotope.is_some() || atom.radical != Radical::None {
+            if atom.charge != 0
+                || atom.isotope.is_some()
+                || atom.radical != Radical::None
+                || atom.authored_label.is_some()
+            {
                 return Err(Error::UnsupportedChemicalContent);
             }
             let position = viewport

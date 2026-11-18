@@ -1,5 +1,26 @@
 # Bondline agent instructions
 
+Owned Node child Text follows docs/research/owned-atom-label-data.md and
+docs/verification-owned-atom-label-data.md on base `a546e46`; isolated model fdaec40 is
+integrated as `1bf29d2`. Keep optional Arc data independent of Element/H/caption TextIds,
+strict optional/raw point and distinct string enums, exact absent legacy bytes, logical
+combined text budgets and global unique heap/capacity accounting. Fragment/Document stay
+Serialize-only. Explicit supported child runs/resources project best-effort; unsupported
+source stays opaque. Native data encoding retains runs/placement/resources/IDs but never
+grants chemical authority: any label makes full/display false. Preserve dependent edit/
+page-control/caption/direct-render refusals, low/whole MOL loss guards, strict SMILES
+metadata comparison and Preserved rejection. Do not weaken unknown-source or legacy
+labelNone setter behavior. New command count stays 47 and catalogue 16/124; no tool enabled.
+Actual IO/Page runtime REDs and independent 22 new cases pass. Root new-test producer
+qualification is corrected to old closed-profile sparsePage91; product policy stays.
+Fresh full 61058 passes 1941/0/1; qualified ASan 5091 passes 10000/100s with 54 immutable seeds
+and actual 16384B mutation. Fuzz initial compile only fixes the harness's scene path.
+Older MCP failure stays unexplained, not fixed. All jobs/workers terminal, model worktree
+retained, no native/user app touched, Actions OFF. Next supported label layout/agreement,
+effective styles and synchronized source/registry/native Text workflow from STATUS;
+full M0–M5 remains active/incomplete.
+
+
 Source-backed LabelFont/Size/Face containment lookup follows
 docs/research/label-default-lookup.md and docs/verification-label-default-lookup.md on
 base7747111. Keep per-property nearest owners, signed font/face vs unsigned run/resources,

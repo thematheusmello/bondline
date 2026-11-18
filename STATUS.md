@@ -7,6 +7,70 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+Recoverable state: the atomic owned Node child-Text integration containing this record,
+based on `a546e46` with isolated model fdaec40 integrated as `1bf29d2`. Full M0–M5 remains
+active/incomplete. This section supersedes every older next-task/job list and the stale
+line-width continuation in the persistent goal history.
+
+### Owned chemical label data integrated; fresh full local gate passes
+
+Read [contract](docs/research/owned-atom-label-data.md) and
+[receiving](docs/verification-owned-atom-label-data.md). Atoms optionally own literal
+ordered text runs/raw optional placement and independent justification/alignment, separate
+from numeric Element/H and Page caption identities. Combined logical text budgets and
+globally deduplicated Arc/capacity history accounting are checked. Fragment/Document stay
+Serialize-only; Atom/AtomLabel decoding is strict. Old absent-label JSON/native bytes stay.
+
+Best-effort explicit Node child Text projects without new style/default/geometry guesses.
+Unsupported/missing/unresolved/multiple text stays raw/opaque. Native encoding preserves
+runs, resources, placement absence and positive source IDs. Any authored label revokes full
+chemical authoring/display, even on source-free/exact native data. All current dependent
+edits/page controls/caption edits and direct render paths refuse; MOL refuses loss, strict
+retained-SMILES comparison includes labels and Preserved deltas cannot inject/drop them.
+Raw native model encoding is a data codec, not registry/UI editing authority.
+
+Actual model API, existing-API IO and PageSetSize runtime REDs precede their producers/
+guards. Final model 8 / IO 9 / commands 2 / adapters 3 new cases pass, with independent literal JSON,
+Expat/Decimal, all 23 enum names, absence/empty/namespace/opaque cases, full bounds/heap,
+source/history/no-op/refusal and actual CLI/initialized stdio/authenticated socket Unicode
+unchanged Save/reopen. A new test's wrong closed-source producer qualification is corrected
+to sparse PageID91 without changing product policy. The compound pre-fix IO RED stops at
+V2000; no distinct pre-fix renderer RED is claimed.
+
+Fresh full 61058 exits0: **1941 passed/0 failed/1 ignored**,291 result lines; all fmt,
+warnings-denied workspace/vendor clippy/tests, layers, strict declared runtime licenses,
+seven assets/notices and eight-file/five-bundle corpus gates pass. Log245870B/SHA256
+431e6e92810e8307c74f1f97a3083ba64dea8d814dcf0be42d07a999db5c4257.
+Qualified ASan 5091 passes 10000/100s, cov6228/ft12893/RSS508MiB and actual mutated16384B.
+All 54 original586..16384B seeds remain exact. Initial fuzz compile only qualifies the
+new harness's scene export path; no producer/dependency change addresses it.
+The preceding MCP failure stays unexplained, not fixed by this natural passing aggregate.
+
+Actual CLI 47 discovery remains 44407B/SHA256
+8d5a7031cfc0ce8e444878ed058ee6080dcff601f48cdfd8149648eee0b575df; catalogue 16/124 stays.
+No new command/tool, dependency/lock, vendor/font/asset/golden/workflow or native window
+change. Protected user apps/drawings are untouched. All Root jobs/workers are terminal;
+isolated model worktree/branch retained for provenance. Actions OFF, no push/publication.
+
+Next executable work:
+
+1. Continue M1 with supported Node-child layout and numeric/text semantic agreement,
+   using pinned public evidence rather than a universal p-to-baseline guess. Source-lock
+   effective font/default/face and placement conditions; declare independent foreign/render/
+   source/history/Save vectors before widening current authoring/display authority.
+2. Implement synchronized source-preserving supported label edits through the shared
+   registry. Every H/Element/position mutator (atom/bond/chain/ring/sprout/selection) must
+   update dependent text or keep its explicit refusal. Prove actual masks/hits/em/DPI,
+   source/current/saved/history ownership and real native Text editing before enabling
+   the grey tool. Do not duplicate delivered resource/default/SetText/owned-data work.
+3. Continue full CDX/general interchange, remaining M2 drawing/selection/styles, M3
+   chemistry/analysis/reactions, M4 publishing/clipboard/printing and M5 naming/templates/
+   WASM/distribution. M0 complete inventory/addressability/jobs, native races/accessibility/
+   DPI/platform evidence and the unexplained listener failure remain open. Windows/Linux/
+   browser/new native/release execution remains unverified. All M0–M5 stays active.
+
+## Historical checkpoints
+
 Recoverable state: the atomic source-backed label-default lookup integration containing
 this record, based on7747111. Full M0–M5 remains active/incomplete; this section supersedes
 all historical next-task/job lists and the stale line-width continuation in the goal history.
@@ -64,7 +128,6 @@ Next executable work:
    the unexplained listener failure remain open. Native width/spacing, Windows/Linux/
    browser and release checks still need actual evidence. Keep Actions OFF.
 
-## Historical checkpoints
 
 
 Recoverable state: the atomic styled-caption workflow integration containing this record,

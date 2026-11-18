@@ -1,10 +1,22 @@
 # File capabilities
 
+Explicit elemental Node child Text now has owned literal data: supported explicit runs,
+raw optional point and independent Justification/LabelJustification/LabelAlignment.
+Native CDXML writes all ordered runs/resources; unchanged foreign source stays byte-exact.
+Missing/unsupported/unresolved/ambiguous child text stays opaque. Any owned child label
+refuses current chemical/page/caption edits and rendering, even when its data codec is
+complete. MOL refuses text loss, and retained-SMILES/Preserved deltas cannot inject or
+discard it. Raw native model encoding is separate from editing capability. See
+[contract](research/owned-atom-label-data.md) and
+[receiving](verification-owned-atom-label-data.md). Faithful label layout, synchronized
+edits, inherited effective styles, full foreign mapping and the native Text tool remain
+required; no new command or binding is added.
+
 The standalone CDXML default-property view now returns per-property LabelFont/Size/Face
 values with their exact containing owners and decoded attribute values. Missing values
 stay unresolved; signed scalar selectors do not become unsigned font/run IDs. Independent
 source-preserving edits/Expat and bounded ASan verify lookup/retention. This does not fill
-missing run fields or widen imported chemical-label display/editing. Node child Text,
+missing run fields or widen imported chemical-label display/editing. Node child layout,
 style-sheet/default/geometry ambiguities and complete foreign ownership remain required.
 See [evidence](verification-label-default-lookup.md).
 

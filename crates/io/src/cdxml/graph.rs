@@ -2,12 +2,13 @@ use super::{is_element, parse_position};
 use bondline_cdxml::{ObjectId, parse_integer};
 use bondline_model::{
     Atom, AtomId, Bond, BondId, BondOrder, DoublePosition, Element, Fragment, FragmentId,
-    GraphError, MAX_GRAPH_ITEMS, Radical,
+    GraphError, MAX_DOCUMENT_TEXT_BYTES, MAX_GRAPH_ITEMS, Radical, TextError,
 };
 use roxmltree::Node;
 use std::{
     collections::{BTreeMap, BTreeSet},
     num::NonZeroU16,
+    sync::Arc,
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -70,6 +71,8 @@ impl<'input> ElementalGraph<'input> {
             }
         }
         let (mut next_atom, mut next_bond, mut next_fragment) = (0, 0, 0);
+        let resources = source.resources().ok();
+        let (mut label_runs, mut label_bytes) = (0_usize, 0_usize);
         let mut fragments = Vec::new();
         for fragment in source
             .xml()
@@ -81,7 +84,25 @@ impl<'input> ElementalGraph<'input> {
             for node in fragment.children().filter(|node| is_element(*node, "n")) {
                 let id =
                     AtomId::new(allocate(&mut next_atom)?).ok_or(MappingError::IdentityLimit)?;
-                atoms.push(read_atom(node, id)?);
+                let mut atom = read_atom(node, id)?;
+                if let Some(resources) = &resources
+                    && let Ok(label) = super::atom_text::project(&source, resources, node)
+                {
+                    label_runs = label_runs.saturating_add(label.runs().len());
+                    label_bytes = label.runs().iter().fold(label_bytes, |bytes, run| {
+                        bytes.saturating_add(run.text().len())
+                    });
+                    if label_runs > MAX_GRAPH_ITEMS {
+                        return Err(bondline_model::Error::from(TextError::DocumentRunLimit).into());
+                    }
+                    if label_bytes > MAX_DOCUMENT_TEXT_BYTES {
+                        return Err(
+                            bondline_model::Error::from(TextError::DocumentTextLimit).into()
+                        );
+                    }
+                    atom.authored_label = Some(Arc::new(label));
+                }
+                atoms.push(atom);
                 if let Some(source_id) = source_id(node)?.filter(|id| id.is_assigned()) {
                     references.insert(source_id, id);
                 }
@@ -295,7 +316,7 @@ fn read_atom(node: Node<'_, '_>, id: AtomId) -> Result<Atom, MappingError> {
     {
         return Err(MappingError::UnsupportedNodeType);
     }
-    if node.attribute("Element").is_none() && node.children().any(|child| is_element(child, "t")) {
+    if node.attribute("Element").is_none() && node.children().any(super::atom_text::is_text) {
         return Err(MappingError::UnsupportedLabelOnlyAtom);
     }
     let element = u8::try_from(integer(node, "Element")?.unwrap_or(6))

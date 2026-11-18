@@ -281,12 +281,14 @@ impl StoredDocument {
         Arc::clone(&self.model)
     }
 
-    /// Every authored field is represented by the native elemental codec.
-    /// Preserved sources also require a supported current delta; opaque extensions stay guarded.
+    /// Complete chemical authoring/display capability, beyond raw data codec coverage.
+    /// Authored child labels need layout/agreement proofs; opaque extensions stay guarded.
     pub fn is_fully_mapped(&self) -> bool {
-        self.original
-            .as_ref()
-            .is_none_or(|source| source.fully_mapped(&self.model))
+        !self.model.has_authored_atom_labels()
+            && self
+                .original
+                .as_ref()
+                .is_none_or(|source| source.fully_mapped(&self.model))
     }
 
     /// Imported MOL drawing frame. Saving that source always keeps this frame.
@@ -515,6 +517,11 @@ impl StoredDocument {
                 to: "mol_v2000",
             });
         }
+        if self.model.has_authored_atom_labels() {
+            return Err(DocumentError::UnsupportedMolLayout(
+                "authored atom text cannot be represented",
+            ));
+        }
         if !self.model.drawing_settings().is_empty() {
             return Err(DocumentError::UnsupportedMolLayout(
                 "drawing settings cannot be represented",
@@ -697,6 +704,7 @@ fn same_mol_authored_fields(fragment: &Fragment, mapped: &Fragment) -> bool {
                     && before.show_terminal_carbon_labels == after.show_terminal_carbon_labels
                     && before.show_non_terminal_carbon_labels
                         == after.show_non_terminal_carbon_labels
+                    && before.authored_label == after.authored_label
             })
 }
 

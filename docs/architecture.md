@@ -1,5 +1,19 @@
 # Architecture
 
+Chemical atoms now optionally own an `Arc<AtomLabel>` with literal ordered runs, raw
+optional point and separate justification/alignment data. This is distinct from Page
+caption identity and numeric Element/H. Combined text budgets count logical occurrences;
+history counts each shared label allocation/capacity once. Native CDXML resources and
+encoding retain both kinds of text without changing old absent-label bytes.
+
+Data codec coverage does not grant chemical authoring/display capability. Any authored
+Node label makes `is_fully_mapped` false, even for source-free or exact native data.
+Current dependent edits/page controls and direct graph rendering refuse it. MOL refuses
+loss, retained-SMILES metadata comparison includes it, and Preserved source deltas cannot
+inject/drop labels. Unknown source remains authoritative. See
+[contract](research/owned-atom-label-data.md) and
+[receiving](verification-owned-atom-label-data.md). Registry47/catalogue16/124 stay.
+
 Standalone CDXML `label_defaults` resolves LabelFont/Size/Face separately along the owned
 containment chain, retaining each selected node and decoded attribute value. Signed
 scalar selectors differ from unsigned resource/run IDs; absent properties stay unresolved.

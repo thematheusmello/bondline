@@ -283,6 +283,7 @@ impl Engine {
                     .source_info()
                     .is_some_and(|source| source.format == "smiles")
                     || stored.has_caption_projection()
+                    || stored.model().has_authored_atom_labels()
             })
             .then_some("unsupported_content"));
         if let Ok(document) = self.document()

@@ -1,8 +1,10 @@
 //! Explicit caption capability; it never grants chemical or arbitrary source edits.
 use super::{MappingError, is_element, parse_position};
 use crate::{DocumentError, StoredDocument};
-use bondline_cdxml::{Document as Xml, Edit, ObjectId, Writer};
-use bondline_model::{Document, StyledText, TextId, TextRun, TextStyle};
+use bondline_cdxml::{Document as Xml, Edit, ObjectId, Resources, TextObject, Writer};
+use bondline_model::{
+    Document, MAX_TEXT_BYTES, MAX_TEXT_RUNS, StyledText, TextError, TextId, TextRun, TextStyle,
+};
 use roxmltree::Node;
 use std::collections::BTreeMap;
 
@@ -42,24 +44,7 @@ pub(super) fn project<'doc, 'input: 'doc>(
             .attribute("p")
             .and_then(|raw| parse_position(raw).ok())
             .ok_or(DocumentError::UnsupportedEdit)?;
-        let mut runs = Vec::new();
-        for run in view.runs() {
-            let font = resources
-                .font(run.font().ok_or(DocumentError::UnsupportedEdit)?)
-                .map_err(|_| DocumentError::UnsupportedEdit)?;
-            let rgb = resources
-                .color(run.color().ok_or(DocumentError::UnsupportedEdit)?)
-                .map_err(|_| DocumentError::UnsupportedEdit)?;
-            runs.push(model(TextRun::new(
-                run.text().to_owned(),
-                model(TextStyle::new(
-                    font.name().to_owned(),
-                    run.size_pt().ok_or(DocumentError::UnsupportedEdit)?,
-                    run.face().ok_or(DocumentError::UnsupportedEdit)?,
-                    rgb,
-                ))?,
-            ))?);
-        }
+        let runs = project_runs(&resources, &view)?;
         let ordinal = u32::try_from(texts.len())
             .ok()
             .and_then(|value| value.checked_add(1))
@@ -68,6 +53,43 @@ pub(super) fn project<'doc, 'input: 'doc>(
         texts.push(model(StyledText::new(ordinal, position, runs))?);
     }
     Ok(texts)
+}
+
+pub(super) fn project_runs(
+    resources: &Resources<'_, '_>,
+    view: &TextObject<'_, '_>,
+) -> Result<Vec<TextRun>> {
+    if view.runs().len() > MAX_TEXT_RUNS {
+        return model(Err(TextError::RunLimit));
+    }
+    if view
+        .runs()
+        .iter()
+        .fold(0_usize, |bytes, run| bytes.saturating_add(run.text().len()))
+        > MAX_TEXT_BYTES
+    {
+        return model(Err(TextError::TextLimit));
+    }
+    view.runs()
+        .iter()
+        .map(|run| {
+            let font = resources
+                .font(run.font().ok_or(DocumentError::UnsupportedEdit)?)
+                .map_err(|_| DocumentError::UnsupportedEdit)?;
+            let rgb = resources
+                .color(run.color().ok_or(DocumentError::UnsupportedEdit)?)
+                .map_err(|_| DocumentError::UnsupportedEdit)?;
+            model(TextRun::new(
+                run.text().to_owned(),
+                model(TextStyle::new(
+                    font.name().to_owned(),
+                    run.size_pt().ok_or(DocumentError::UnsupportedEdit)?,
+                    run.face().ok_or(DocumentError::UnsupportedEdit)?,
+                    rgb,
+                ))?,
+            ))
+        })
+        .collect()
 }
 
 fn keys(node: Node<'_, '_>, allowed: &[&str], required: &[&str]) -> bool {
@@ -326,7 +348,9 @@ fn color_key(rgb: [f64; 3]) -> [u64; 3] {
 
 impl NativeResources {
     pub(super) fn new(document: &Document) -> std::result::Result<Self, MappingError> {
-        if document.pages().iter().all(|p| p.texts().is_empty()) {
+        if document.pages().iter().all(|p| p.texts().is_empty())
+            && !document.has_authored_atom_labels()
+        {
             return Ok(Self {
                 fonts: BTreeMap::new(),
                 colors: Vec::new(),
@@ -338,13 +362,19 @@ impl NativeResources {
             colors: vec![[1.0; 3], [0.0; 3]],
             color_ids: BTreeMap::from([(color_key([1.0; 3]), 2), (color_key([0.0; 3]), 3)]),
         };
-        for style in document
+        let captions = document
             .pages()
             .iter()
             .flat_map(|p| p.texts())
-            .flat_map(|t| t.runs())
-            .map(TextRun::style)
-        {
+            .flat_map(|t| t.runs());
+        let labels = document
+            .pages()
+            .iter()
+            .flat_map(|p| p.fragments())
+            .flat_map(|f| f.atoms())
+            .filter_map(|a| a.authored_label.as_ref())
+            .flat_map(|label| label.runs());
+        for style in captions.chain(labels).map(TextRun::style) {
             if !result.fonts.contains_key(style.font_family()) {
                 let id =
                     u16::try_from(result.fonts.len()).map_err(|_| MappingError::IdentityLimit)?;
@@ -400,7 +430,17 @@ impl NativeResources {
                 ("Justification", "Left"),
             ],
         )?;
-        for run in text.runs() {
+        self.write_runs(writer, text.runs())?;
+        writer.end_element()?;
+        Ok(())
+    }
+
+    pub(super) fn write_runs(
+        &self,
+        writer: &mut Writer,
+        runs: &[TextRun],
+    ) -> std::result::Result<(), MappingError> {
+        for run in runs {
             let style = run.style();
             let font = self
                 .fonts
@@ -422,7 +462,6 @@ impl NativeResources {
             writer.text(run.text())?;
             writer.end_element()?;
         }
-        writer.end_element()?;
         Ok(())
     }
 }

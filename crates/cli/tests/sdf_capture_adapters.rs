@@ -1,4 +1,6 @@
 use bondline_commands::Engine;
+#[path = "support/atom_child_text_wire.rs"]
+mod atom_child_text_wire;
 #[path = "support/chain_creation_wire.rs"]
 mod chain_creation_wire;
 #[path = "support/native_conversion_wire.rs"]

@@ -975,3 +975,35 @@ The recorded ASan runs each execute10000 iterations; observed maxima are404/388b
 not the65536 ceiling. Twelve fixed replays and independent source/scene classifications
 are separate checks. This is bounded parser/display smoke, not GPU/native raster, broad
 chemistry, exhaustive coverage or a security audit. Fresh mutation results may differ.
+### Owned Node child Text data
+
+The existing `cdxml_profile` target additionally includes ordered authored Node labels in
+native semantic rebinding. An original mixed Page-caption/Node two-run source retains
+text, raw optional placement, independent justification/alignment enums and styles. A
+bounded input body mutates one label run through checked model data, encodes it with
+native resources and reopens it while global editing/display/caption authority remains
+false. Both low-level and whole MOL writers refuse authored labels; the source-aware
+scene entry refuses before allocating render work. Direct renderer refusal has separate
+integration tests because this fuzz manifest does not directly depend on render.
+
+The old arbitrary-source assertion now qualifies only byte-identical native label data
+encoding (`write_document(model) == input`): raw data re-encoding can succeed without
+editing/display authority. Every other opaque input retains its strict changed-source
+refusal. No unknown-source policy, old mutation assertion or parser limit is weakened.
+
+Generate NEW, separate ignored directories for each target. The stdlib recipe keeps
+immutable `source/` plus `manifest.json` outside the writable `corpus/`, refuses an
+existing destination and syntax-checks all54 original seeds with Expat. Seeds cover
+mixed fonts/colours, every enum, exact optional absence/empty text, unknown/qualified/
+unresolved/multiple children, explicit empty namespace and one original exact16KiB
+input. This is a declared seed bound, not a claim about mutated reached lengths.
+
+```sh
+python3 fuzz/seed_cdxml_atom_labels.py .cache/fuzz/cdxml-atom-labels-profile-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/cdxml-atom-labels-profile-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The same recipe can supply another fresh corpus to the existing standalone `cdxml_parse`
+target; no new harness or dependency is required. Record actual terminal results,
+immutable source hashes, reached mutation lengths and qualifications in the receiving
+record. The default/placement/chemistry/native Text-tool work remains incomplete.

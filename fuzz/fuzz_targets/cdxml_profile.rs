@@ -3,9 +3,9 @@
 // Bounded IO invariants; independent external literal consumers remain separate.
 use bondline_io::{DocumentError, StoredDocument};
 use bondline_model::{
-    Atom, AtomId, Bond, BondId, BondOrder, Document, DoublePosition, DrawingSettings, DrawingStyle,
-    Element, Fragment, FragmentId, PageSize, Point2, Radical, StyledText, TextId, TextRun,
-    TextStyle,
+    Atom, AtomId, AtomLabel, Bond, BondId, BondOrder, Document, DoublePosition, DrawingSettings,
+    DrawingStyle, Element, Fragment, FragmentId, LabelAlignment, PageSize, Point2, Radical,
+    StyledText, TextId, TextJustification, TextRun, TextStyle,
 };
 use libfuzzer_sys::fuzz_target;
 use std::{borrow::Cow, collections::BTreeMap, num::NonZeroU16, sync::Arc};
@@ -76,7 +76,8 @@ fn same_semantics(expected: &Document, actual: &Document) {
                         a.radical,
                         a.explicit_hydrogens,
                         a.show_terminal_carbon_labels,
-                        a.show_non_terminal_carbon_labels
+                        a.show_non_terminal_carbon_labels,
+                        a.authored_label.as_deref()
                     ),
                     (
                         b.element,
@@ -86,7 +87,8 @@ fn same_semantics(expected: &Document, actual: &Document) {
                         b.radical,
                         b.explicit_hydrogens,
                         b.show_terminal_carbon_labels,
-                        b.show_non_terminal_carbon_labels
+                        b.show_non_terminal_carbon_labels,
+                        b.authored_label.as_deref()
                     )
                 );
             }
@@ -144,10 +146,26 @@ fn arbitrary_source(data: &[u8]) {
         assert_eq!(edited.model().pages()[0].size(), target);
     } else {
         assert!(!edited.is_fully_mapped());
-        assert!(matches!(
-            edited.to_cdxml(),
-            Err(DocumentError::UnsupportedEdit)
-        ));
+        let native_label_codec = base.model().has_authored_atom_labels()
+            && bondline_io::cdxml::write_document(base.model())
+                .ok()
+                .as_deref()
+                == Some(data);
+        if native_label_codec {
+            // Exact native data encoding is separate from editing/display authority.
+            let encoded = edited.to_cdxml().unwrap();
+            assert!(matches!(encoded, Cow::Owned(_)));
+            let reopened =
+                StoredDocument::from_cdxml(encoded.into_owned().into(), PageSize::A4).unwrap();
+            same_semantics(edited.model(), reopened.model());
+            assert!(!reopened.is_fully_mapped());
+            assert!(!reopened.has_display_projection());
+        } else {
+            assert!(matches!(
+                edited.to_cdxml(),
+                Err(DocumentError::UnsupportedEdit)
+            ));
+        }
     }
     original_unchanged(&base, data, &snapshot);
     assert_eq!(input.as_ref(), data);
@@ -531,12 +549,124 @@ fn structured(source: &[u8], data: &[u8]) {
     }
 }
 
+const ATOM_LABEL: &str = "<CDXML CreationProgram='Original owned label fuzz'><fonttable><font id='42' name='Roboto'/><font id='7' name='Other'/></fonttable><colortable><color r='1' g='1' b='1'/><color r='0' g='0' b='0'/><color r='.2' g='.4' b='.8'/></colortable><page id='90' DrawingSpace='Poster' Width='256' Height='256'><fragment id='51'><n id='73' Element='8' NumHydrogens='1' p='72 96'><t id='21' p='71.5 96.25' Justification='Left' LabelJustification='Auto' LabelAlignment='Right'><s font='42' size='12.5' face='96' color='4'>OH</s><s font='7' size='18' face='0' color='3'>β &amp; q</s></t></n></fragment><t id='84' p='72 144' Justification='Left'><s font='42' size='12' face='0' color='4'>Caption</s></t></page></CDXML>";
+
+fn structured_atom_label(data: &[u8]) {
+    let byte = |i| data.get(i).copied().unwrap_or(0);
+    let base = StoredDocument::from_cdxml(ATOM_LABEL.as_bytes().into(), PageSize::A4).unwrap();
+    let snapshot = base.model_snapshot();
+    assert!(base.model().has_authored_atom_labels());
+    assert!(!base.is_fully_mapped());
+    assert!(!base.has_display_projection());
+    assert!(!base.has_caption_projection());
+    original_unchanged(&base, ATOM_LABEL.as_bytes(), &snapshot);
+    let page = &base.model().pages()[0];
+    let fragment = &page.fragments()[0];
+    let old = fragment.atoms()[0].authored_label.as_ref().unwrap();
+    assert_eq!(old.runs()[0].text(), "OH");
+    assert_eq!(old.runs()[1].text(), "β & q");
+    assert_eq!(old.position(), Some(Point2::new(71.5, 96.25).unwrap()));
+    let value = std::str::from_utf8(data).unwrap_or("OH β & q").to_owned();
+    let changed = match old.with_run_text(usize::from(byte(0) % 2), value) {
+        Ok(value) => value,
+        Err(error) => {
+            assert!(matches!(error, bondline_model::TextError::InvalidCharacter));
+            original_unchanged(&base, ATOM_LABEL.as_bytes(), &snapshot);
+            return;
+        }
+    };
+    let options = [
+        None,
+        Some(TextJustification::Right),
+        Some(TextJustification::Left),
+        Some(TextJustification::Center),
+        Some(TextJustification::Full),
+        Some(TextJustification::Above),
+        Some(TextJustification::Below),
+        Some(TextJustification::Auto),
+        Some(TextJustification::Best),
+    ];
+    let alignments = [
+        None,
+        Some(LabelAlignment::Auto),
+        Some(LabelAlignment::Left),
+        Some(LabelAlignment::Center),
+        Some(LabelAlignment::Right),
+        Some(LabelAlignment::Above),
+        Some(LabelAlignment::Below),
+        Some(LabelAlignment::Best),
+    ];
+    let label = AtomLabel::new(
+        (byte(1) & 1 != 0).then_some(Point2::new(71.5 + f64::from(byte(5)), 96.25).unwrap()),
+        options[usize::from(byte(2) % 9)],
+        options[usize::from(byte(3) % 9)],
+        alignments[usize::from(byte(4) % 8)],
+        changed.runs().to_vec(),
+    )
+    .unwrap();
+    let mut atoms = fragment.atoms().to_vec();
+    atoms[0].authored_label = Some(Arc::new(label));
+    let replacement = Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec()).unwrap();
+    let mut native = StoredDocument::default();
+    *native.model_mut() = base.model().clone();
+    native
+        .model_mut()
+        .replace_fragment(page.id(), replacement)
+        .unwrap();
+    assert!(!native.is_fully_mapped());
+    assert!(!native.has_display_projection());
+    assert!(!native.has_caption_projection());
+    let encoded = native.to_cdxml().unwrap().into_owned();
+    let reopened = StoredDocument::from_cdxml(encoded.clone().into(), PageSize::A4).unwrap();
+    same_semantics(native.model(), reopened.model());
+    assert!(!reopened.is_fully_mapped());
+    assert!(!reopened.has_display_projection());
+    assert!(!reopened.has_caption_projection());
+    assert_eq!(reopened.to_cdxml().unwrap().as_ref(), encoded);
+    let page = &native.model().pages()[0];
+    let fragment = &page.fragments()[0];
+    let frame = bondline_io::mol::MolTransform::new(1.0, Point2::new(0.0, 0.0).unwrap()).unwrap();
+    assert_eq!(
+        bondline_io::mol::write_v2000(fragment, "label", frame)
+            .unwrap_err()
+            .code(),
+        "unsupported_content"
+    );
+    assert_eq!(
+        bondline_io::mol::v3000::write_v3000(fragment, "label", frame)
+            .unwrap_err()
+            .code(),
+        "unsupported_content"
+    );
+    for version in [
+        bondline_io::mol::Version::V2000,
+        bondline_io::mol::Version::V3000,
+    ] {
+        assert_eq!(
+            native.to_mol_as(version, frame).unwrap_err().code(),
+            "unsupported_content"
+        );
+    }
+    let error = bondline_io::display::drawing_page_scene(
+        1024,
+        1024,
+        &native,
+        page.id(),
+        &Default::default(),
+    )
+    .err()
+    .unwrap();
+    assert_eq!(error.code(), "unsupported_content");
+    original_unchanged(&base, ATOM_LABEL.as_bytes(), &snapshot);
+}
+
 fuzz_target!(|data: &[u8]| {
     if data.len() > INPUT_LIMIT {
         return;
     }
     assert_eq!(ORIGINAL.len(), 464);
     arbitrary_source(data);
+    structured_atom_label(data);
     structured_caption(data);
     native_caption_transition(data);
     structured(ORIGINAL, data);

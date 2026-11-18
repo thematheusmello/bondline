@@ -1,5 +1,6 @@
 //! Source-backed CDXML projections; application document import remains separate.
 
+mod atom_text;
 mod caption;
 mod graph;
 mod preserved;
