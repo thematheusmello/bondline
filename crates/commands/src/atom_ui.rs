@@ -143,15 +143,17 @@ impl Engine {
                     return Err(Error::UiBusy);
                 }
                 let document = self.stored_document()?;
-                let (atom, creation_style) = if document.has_boxed_atom_labels()
-                    || document.has_connected_atom_labels()
-                    || document.has_mixed_atom_labels()
-                    || document.has_flagged_atom_labels()
-                    || document.has_label_defaults_projection()
-                {
+                let (atom, creation_style) = if crate::boxed_atom::supports_edit(document) {
                     let (_, target) =
                         crate::boxed_atom::atom_at(document, page_id, fragment_id, atom_id)?;
                     if target.authored_label.is_some() {
+                        if document.has_cdx_atom_label_preview()
+                            && !document.can_edit_cdx_atom_label(target.id)
+                        {
+                            return Err(Error::UnsupportedAtomLabel(
+                                "CDX requires explicit Element and H fields on the selected atom",
+                            ));
+                        }
                         (
                             crate::boxed_atom::editable_atom(
                                 document,
@@ -251,12 +253,7 @@ impl Engine {
                 explicit_hydrogens: params.explicit_hydrogens,
                 style,
             })
-        } else if document.has_boxed_atom_labels()
-            || document.has_connected_atom_labels()
-            || document.has_mixed_atom_labels()
-            || document.has_flagged_atom_labels()
-            || document.has_label_defaults_projection()
-        {
+        } else if crate::boxed_atom::supports_edit(document) {
             Command::AtomSetAuthoredLabel(params)
         } else {
             Command::AtomSetLabel(params)

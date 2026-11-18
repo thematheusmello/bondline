@@ -355,6 +355,113 @@ fn body<'a>(document: &'a Document<'_>) -> Vec<&'a Record> {
     }).collect()
 }
 
+fn check_batch(document: &Document<'_>) {
+    let mut properties = document
+        .records()
+        .iter()
+        .enumerate()
+        .filter(|(_, record)| matches!(record.kind(), RecordKind::Property { .. }));
+    let Some((first_index, first)) = properties.next() else {
+        assert_eq!(
+            document.replace_properties(&[]).unwrap(),
+            document.as_bytes()
+        );
+        return;
+    };
+    let old_first = document.payload(first).unwrap();
+    assert_eq!(
+        document.replace_properties(&[(first, old_first), (first, old_first)]),
+        Err(Error::ConflictingEdits)
+    );
+    let Some((last_index, last)) = properties.next_back() else {
+        return;
+    };
+    let replacement = [0xff, 0x80, 0];
+    let second = if document.as_bytes().len() % 2 == 0 {
+        document.payload(last).unwrap()
+    } else {
+        &[1, 0x82, 0, 3, 4, 5][..]
+    };
+    let edits = [(first, replacement.as_slice()), (last, second)];
+    let output = document.replace_properties(&edits).unwrap();
+    assert_eq!(
+        output,
+        document.replace_properties(&[edits[1], edits[0]]).unwrap()
+    );
+    let parsed = Document::parse(&output).unwrap();
+    assert_eq!(parsed.framing(), document.framing());
+    assert_eq!(parsed.header(), document.header());
+    assert_eq!(parsed.records().len(), document.records().len());
+    for (index, (old, new)) in document.records().iter().zip(parsed.records()).enumerate() {
+        assert_eq!(old.parent(), new.parent());
+        let updated = match index {
+            index if index == first_index => Some(replacement.as_slice()),
+            index if index == last_index => Some(second),
+            _ => None,
+        };
+        if let Some(value) = updated.filter(|&value| document.payload(old).unwrap() != value) {
+            assert_eq!(parsed.payload(new).unwrap(), value);
+            assert_eq!(
+                document
+                    .as_bytes()
+                    .get(old.range().start..old.range().start + 2),
+                output.get(new.range().start..new.range().start + 2)
+            );
+        } else {
+            assert_eq!(
+                document.as_bytes().get(old.range()),
+                output.get(new.range())
+            );
+        }
+    }
+}
+
+fn check_label_edit(stored: &bondline_io::StoredDocument, original: &[u8]) {
+    let page = stored.model().pages().first().unwrap();
+    let (fragment, atom) = page
+        .fragments()
+        .iter()
+        .find_map(|fragment| fragment.atoms().first().map(|atom| (fragment.id(), atom)))
+        .unwrap();
+    let unchanged = stored.with_cdx_atom_label(
+        page.id(),
+        fragment,
+        atom.id,
+        atom.element,
+        atom.explicit_hydrogens.unwrap(),
+    );
+    if !stored.can_edit_cdx_atom_label(atom.id) {
+        assert!(unchanged.is_err());
+        return;
+    }
+    let unchanged = unchanged.unwrap();
+    assert!(std::sync::Arc::ptr_eq(
+        &stored.model_snapshot(),
+        &unchanged.model_snapshot()
+    ));
+    assert_eq!(unchanged.export_cdx().unwrap(), original);
+    let element =
+        bondline_model::Element::new(if atom.element.get() == 7 { 8 } else { 7 }).unwrap();
+    if let Ok(edited) = stored.with_cdx_atom_label(page.id(), fragment, atom.id, element, 1) {
+        let bytes = edited.export_cdx().unwrap();
+        assert_ne!(bytes, original);
+        assert!(edited.has_cdx_atom_label_preview());
+        assert!(!edited.is_fully_mapped());
+        assert!(edited.to_cdxml().is_err());
+        let info = edited.source_info().unwrap();
+        assert!(info.modified);
+        assert_eq!(info.byte_length, original.len());
+        let reopened = bondline_io::StoredDocument::from_cdx(
+            std::sync::Arc::from(bytes),
+            bondline_model::PageSize::A4,
+        )
+        .unwrap();
+        assert_eq!(reopened.model(), edited.model());
+        assert_eq!(reopened.export_cdx().unwrap(), bytes);
+    }
+    assert_eq!(stored.export_cdx().unwrap(), original);
+}
+
 fn construct(document: &Document<'_>) -> Result<Vec<u8>, Error> {
     let body = body(document);
     assert_eq!(
@@ -396,6 +503,7 @@ fuzz_target!(|data: &[u8]| {
     }
     assert_eq!(offset, data.len());
     check_resources(&document);
+    check_batch(&document);
 
     if document
         .records()
@@ -555,6 +663,7 @@ fuzz_target!(|data: &[u8]| {
         if preview {
             assert!(has_labels);
             check_label_preview(&document, stored.model());
+            check_label_edit(&stored, data);
         }
         assert_eq!(stored.model().has_authored_atom_labels(), has_labels);
         assert!(

@@ -1,0 +1,1002 @@
+{
+  "font_sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+  "cases": {
+    "water_to_nh": {
+      "before": "../cdx-label-preview/water.cdx",
+      "after": "water_to_nh.cdx",
+      "params": {
+        "page_id": 1,
+        "fragment_id": 1,
+        "atom_id": 2,
+        "element": 7,
+        "explicit_hydrogens": 1
+      },
+      "before_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [
+              {
+                "id": 1,
+                "atoms": [
+                  {
+                    "id": 1,
+                    "element": 1,
+                    "position": {
+                      "x_pt": 191.5,
+                      "y_pt": 270.25
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 0,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "H",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              0.0,
+                              0.0,
+                              1.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        184.943359375,
+                        261.71875,
+                        198.056640625,
+                        278.78125
+                      ]
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "element": 8,
+                    "position": {
+                      "x_pt": 256.0,
+                      "y_pt": 218.25
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 0,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "O",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              1.0,
+                              0.0,
+                              0.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        249.138671875,
+                        209.484375,
+                        262.861328125,
+                        227.015625
+                      ]
+                    }
+                  },
+                  {
+                    "id": 3,
+                    "element": 1,
+                    "position": {
+                      "x_pt": 321.75,
+                      "y_pt": 270.0
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 0,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "H",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              0.0,
+                              0.611764705882353,
+                              0.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        315.193359375,
+                        261.46875,
+                        328.306640625,
+                        278.53125
+                      ]
+                    }
+                  }
+                ],
+                "bonds": [
+                  {
+                    "id": 1,
+                    "begin": 1,
+                    "end": 2,
+                    "order": "single"
+                  },
+                  {
+                    "id": 2,
+                    "begin": 2,
+                    "end": 3,
+                    "order": "single"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "drawing_style": {
+          "line_width_pt": 1.5,
+          "margin_width_pt": 1.75
+        }
+      },
+      "after_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [
+              {
+                "id": 1,
+                "atoms": [
+                  {
+                    "id": 1,
+                    "element": 1,
+                    "position": {
+                      "x_pt": 191.5,
+                      "y_pt": 270.25
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 0,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "H",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              0.0,
+                              0.0,
+                              1.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        184.943359375,
+                        261.71875,
+                        198.056640625,
+                        278.78125
+                      ]
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "element": 7,
+                    "position": {
+                      "x_pt": 256.0,
+                      "y_pt": 218.25
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 1,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "NH",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              1.0,
+                              0.0,
+                              0.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        249.443359375,
+                        209.71875,
+                        279.666015625,
+                        226.78125
+                      ]
+                    }
+                  },
+                  {
+                    "id": 3,
+                    "element": 1,
+                    "position": {
+                      "x_pt": 321.75,
+                      "y_pt": 270.0
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 0,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "H",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              0.0,
+                              0.611764705882353,
+                              0.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        315.193359375,
+                        261.46875,
+                        328.306640625,
+                        278.53125
+                      ]
+                    }
+                  }
+                ],
+                "bonds": [
+                  {
+                    "id": 1,
+                    "begin": 1,
+                    "end": 2,
+                    "order": "single"
+                  },
+                  {
+                    "id": 2,
+                    "begin": 2,
+                    "end": 3,
+                    "order": "single"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "drawing_style": {
+          "line_width_pt": 1.5,
+          "margin_width_pt": 1.75
+        }
+      },
+      "source": {
+        "framing": "ImplicitDocumentFileEnd",
+        "before_sha256": "4a6559f8ef9474f1c8f0c6fd3d5c4e6847db08ac3038eeb812e5bda3a2c1e173",
+        "after_sha256": "8f44355eb7f55483e6234f114ed77194c3b2531b31f5833300c1c46134dd88f9",
+        "record_count": 59,
+        "source_owner_ids": {
+          "page": 51,
+          "fragment": 901,
+          "node": 7,
+          "text": 73
+        },
+        "properties": [
+          {
+            "record": 24,
+            "tag": 1026,
+            "changed": true,
+            "before_range": [
+              250,
+              256
+            ],
+            "after_range": [
+              250,
+              256
+            ],
+            "before_encoding": "short",
+            "after_encoding": "short",
+            "before_hex": "020402000800",
+            "after_hex": "020402000700"
+          },
+          {
+            "record": 25,
+            "tag": 1067,
+            "changed": true,
+            "before_range": [
+              256,
+              262
+            ],
+            "after_range": [
+              256,
+              262
+            ],
+            "before_encoding": "short",
+            "after_encoding": "short",
+            "before_hex": "2b0402000000",
+            "after_hex": "2b0402000100"
+          },
+          {
+            "record": 27,
+            "tag": 1792,
+            "changed": true,
+            "before_range": [
+              268,
+              285
+            ],
+            "after_range": [
+              268,
+              286
+            ],
+            "before_encoding": "short",
+            "after_encoding": "short",
+            "before_hex": "00070d000100000000000000e00104004f",
+            "after_hex": "00070e000100000000000000e00104004e48"
+          },
+          {
+            "record": 28,
+            "tag": 516,
+            "changed": true,
+            "before_range": [
+              285,
+              305
+            ],
+            "after_range": [
+              286,
+              306
+            ],
+            "before_encoding": "short",
+            "after_encoding": "short",
+            "before_hex": "04021000007cd1008023f9000004e30080dc0601",
+            "after_hex": "0402100000b8d1008071f90000c8e20080aa1701"
+          }
+        ]
+      }
+    },
+    "boxed_nh2_to_oh": {
+      "before": "../cdx-label-preview/boxed_reordered.cdx",
+      "after": "boxed_nh2_to_oh.cdx",
+      "params": {
+        "page_id": 1,
+        "fragment_id": 1,
+        "atom_id": 1,
+        "element": 8,
+        "explicit_hydrogens": 1
+      },
+      "before_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [
+              {
+                "id": 1,
+                "atoms": [
+                  {
+                    "id": 1,
+                    "element": 7,
+                    "position": {
+                      "x_pt": 147.375,
+                      "y_pt": 123.125
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 2,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "NH2",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              1.0,
+                              0.0,
+                              0.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        140.818359375,
+                        114.359375,
+                        185.654296875,
+                        131.65625
+                      ]
+                    }
+                  }
+                ],
+                "bonds": []
+              },
+              {
+                "id": 2,
+                "atoms": [
+                  {
+                    "id": 2,
+                    "element": 17,
+                    "position": {
+                      "x_pt": 350.5,
+                      "y_pt": 277.75
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 0,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "Cl",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              0.0,
+                              0.0,
+                              1.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        341.388671875,
+                        268.6328125,
+                        359.611328125,
+                        286.8671875
+                      ]
+                    }
+                  }
+                ],
+                "bonds": []
+              }
+            ]
+          }
+        ]
+      },
+      "after_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [
+              {
+                "id": 1,
+                "atoms": [
+                  {
+                    "id": 1,
+                    "element": 8,
+                    "position": {
+                      "x_pt": 147.375,
+                      "y_pt": 123.125
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 1,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "OH",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              1.0,
+                              0.0,
+                              0.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        140.513671875,
+                        114.359375,
+                        170.724609375,
+                        131.890625
+                      ]
+                    }
+                  }
+                ],
+                "bonds": []
+              },
+              {
+                "id": 2,
+                "atoms": [
+                  {
+                    "id": 2,
+                    "element": 17,
+                    "position": {
+                      "x_pt": 350.5,
+                      "y_pt": 277.75
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 0,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "Cl",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              0.0,
+                              0.0,
+                              1.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        341.388671875,
+                        268.6328125,
+                        359.611328125,
+                        286.8671875
+                      ]
+                    }
+                  }
+                ],
+                "bonds": []
+              }
+            ]
+          }
+        ]
+      },
+      "source": {
+        "framing": "ExplicitDocumentFileEnd",
+        "before_sha256": "6ae1b09ead99a24a1402046525ba1451e7887c904cb8952bd5ddca4447592342",
+        "after_sha256": "0db1af4b5dda5f899dc2c1deeeb1ff37e4775caf0301f48beea6fcff20a1852b",
+        "record_count": 38,
+        "source_owner_ids": {
+          "page": 51,
+          "fragment": 901,
+          "node": 81,
+          "text": 73
+        },
+        "properties": [
+          {
+            "record": 9,
+            "tag": 1026,
+            "changed": true,
+            "before_range": [
+              99,
+              105
+            ],
+            "after_range": [
+              99,
+              105
+            ],
+            "before_encoding": "short",
+            "after_encoding": "short",
+            "before_hex": "020402000700",
+            "after_hex": "020402000800"
+          },
+          {
+            "record": 10,
+            "tag": 1067,
+            "changed": true,
+            "before_range": [
+              105,
+              111
+            ],
+            "after_range": [
+              105,
+              111
+            ],
+            "before_encoding": "short",
+            "after_encoding": "short",
+            "before_hex": "2b0402000200",
+            "after_hex": "2b0402000100"
+          },
+          {
+            "record": 14,
+            "tag": 516,
+            "changed": true,
+            "before_range": [
+              127,
+              147
+            ],
+            "after_range": [
+              127,
+              147
+            ],
+            "before_encoding": "short",
+            "after_encoding": "short",
+            "before_hex": "04021000005c720080d18c0000a8830080a7b900",
+            "after_hex": "04021000005c720080838c0000e4830080b9aa00"
+          },
+          {
+            "record": 15,
+            "tag": 1792,
+            "changed": true,
+            "before_range": [
+              147,
+              170
+            ],
+            "after_range": [
+              147,
+              165
+            ],
+            "before_encoding": "extended",
+            "after_encoding": "short",
+            "before_hex": "0007ffff0f0000000100000000000000e00104004e4832",
+            "after_hex": "00070e000100000000000000e00104004f48"
+          }
+        ]
+      }
+    },
+    "boxed_cl_to_br": {
+      "before": "../cdx-label-preview/boxed_reordered.cdx",
+      "after": "boxed_cl_to_br.cdx",
+      "params": {
+        "page_id": 1,
+        "fragment_id": 2,
+        "atom_id": 2,
+        "element": 35,
+        "explicit_hydrogens": 0
+      },
+      "before_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [
+              {
+                "id": 1,
+                "atoms": [
+                  {
+                    "id": 1,
+                    "element": 7,
+                    "position": {
+                      "x_pt": 147.375,
+                      "y_pt": 123.125
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 2,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "NH2",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              1.0,
+                              0.0,
+                              0.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        140.818359375,
+                        114.359375,
+                        185.654296875,
+                        131.65625
+                      ]
+                    }
+                  }
+                ],
+                "bonds": []
+              },
+              {
+                "id": 2,
+                "atoms": [
+                  {
+                    "id": 2,
+                    "element": 17,
+                    "position": {
+                      "x_pt": 350.5,
+                      "y_pt": 277.75
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 0,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "Cl",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              0.0,
+                              0.0,
+                              1.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        341.388671875,
+                        268.6328125,
+                        359.611328125,
+                        286.8671875
+                      ]
+                    }
+                  }
+                ],
+                "bonds": []
+              }
+            ]
+          }
+        ]
+      },
+      "after_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [
+              {
+                "id": 1,
+                "atoms": [
+                  {
+                    "id": 1,
+                    "element": 7,
+                    "position": {
+                      "x_pt": 147.375,
+                      "y_pt": 123.125
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 2,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "NH2",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              1.0,
+                              0.0,
+                              0.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        140.818359375,
+                        114.359375,
+                        185.654296875,
+                        131.65625
+                      ]
+                    }
+                  }
+                ],
+                "bonds": []
+              },
+              {
+                "id": 2,
+                "atoms": [
+                  {
+                    "id": 2,
+                    "element": 35,
+                    "position": {
+                      "x_pt": 350.5,
+                      "y_pt": 277.75
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 0,
+                    "authored_label": {
+                      "position": null,
+                      "justification": "left",
+                      "label_justification": "left",
+                      "label_alignment": null,
+                      "runs": [
+                        {
+                          "text": "Br",
+                          "style": {
+                            "font_family": "Roboto",
+                            "size_pt": 24.0,
+                            "face": 0,
+                            "rgb": [
+                              0.0,
+                              0.0,
+                              1.0
+                            ]
+                          }
+                        }
+                      ],
+                      "bounding_box": [
+                        340.134765625,
+                        269.21875,
+                        360.865234375,
+                        286.28125
+                      ]
+                    }
+                  }
+                ],
+                "bonds": []
+              }
+            ]
+          }
+        ]
+      },
+      "source": {
+        "framing": "ExplicitDocumentFileEnd",
+        "before_sha256": "6ae1b09ead99a24a1402046525ba1451e7887c904cb8952bd5ddca4447592342",
+        "after_sha256": "2b6318e0b8222910ca1562c4b0e3db252ec49fea76caeb8cecdbc54c165e98e6",
+        "record_count": 38,
+        "source_owner_ids": {
+          "page": 51,
+          "fragment": 902,
+          "node": 81,
+          "text": 73
+        },
+        "properties": [
+          {
+            "record": 23,
+            "tag": 1026,
+            "changed": true,
+            "before_range": [
+              206,
+              212
+            ],
+            "after_range": [
+              206,
+              212
+            ],
+            "before_encoding": "short",
+            "after_encoding": "short",
+            "before_hex": "020402001100",
+            "after_hex": "020402002300"
+          },
+          {
+            "record": 24,
+            "tag": 1067,
+            "changed": false,
+            "before_range": [
+              212,
+              218
+            ],
+            "after_range": [
+              212,
+              218
+            ],
+            "before_encoding": "short",
+            "after_encoding": "short",
+            "before_hex": "2b0402000000",
+            "after_hex": "2b0402000000"
+          },
+          {
+            "record": 28,
+            "tag": 516,
+            "changed": true,
+            "before_range": [
+              234,
+              254
+            ],
+            "after_range": [
+              234,
+              254
+            ],
+            "before_encoding": "short",
+            "after_encoding": "short",
+            "before_hex": "0402100000a20c018063550100de1e01809c6701",
+            "after_hex": "0402100000380d018022540100481e0180dd6801"
+          },
+          {
+            "record": 29,
+            "tag": 1792,
+            "changed": true,
+            "before_range": [
+              254,
+              276
+            ],
+            "after_range": [
+              254,
+              272
+            ],
+            "before_encoding": "extended",
+            "after_encoding": "short",
+            "before_hex": "0007ffff0e0000000100000000000000e0010500436c",
+            "after_hex": "00070e000100000000000000e00105004272"
+          }
+        ]
+      }
+    }
+  }
+}

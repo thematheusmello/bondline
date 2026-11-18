@@ -1,6 +1,12 @@
 # Verification log
 
-The latest [plain CDX bond receiving](verification-cdx-plain-bonds.md) records independent
+The [existing CDX label edit verification](verification-cdx-atom-label-edits.md)
+records exact preserved bytes, complete models, Undo/Redo, captured Save and
+reopen through IO, the actual App harness and all command adapters. It also
+records independent FontTools/RDKit, CPU/Metal equality, 199 unchanged ASan
+seeds and the remaining desktop input evidence.
+
+The [plain CDX bond receiving](verification-cdx-plain-bonds.md) records independent
 16-source/149-refusal declarations, runtime IO/command/App/actual-adapter RED→GREEN,
 source/direction/manual-mode retention and bounded native Mac exact Unicode files.
 FullIO541/0 and ASan10000/1s with184 immutable sources/actual104971B mutation pass.

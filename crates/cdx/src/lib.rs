@@ -3,6 +3,7 @@
 
 use std::{fmt, ops::Range};
 
+mod patch;
 mod write;
 pub use write::Writer;
 mod resources;
@@ -108,6 +109,7 @@ pub enum Error {
     RecordLimit,
     InvalidProperty,
     InvalidPropertyRange,
+    ConflictingEdits,
     InvalidTag,
     ObjectBalance,
     Allocation,
@@ -131,6 +133,7 @@ impl fmt::Display for Error {
             Self::InvalidPropertyRange => {
                 output.write_str("CDX property ranges are inconsistent with the source")
             }
+            Self::ConflictingEdits => output.write_str("a CDX property may be edited only once per batch"),
             Self::InvalidTag => output.write_str(
                 "CDX object tags need bit15 set; property tags must be nonzero with bit15 clear",
             ),
@@ -324,72 +327,6 @@ impl<'input> Document<'input> {
             .get(payload.clone())
             .ok_or(Error::InvalidPropertyRange)
     }
-
-    /// Replace only an existing opaque payload. Untouched bytes and the parsed source
-    /// remain exact. Changed lengths use the documented threshold; no-ops preserve even
-    /// a noncanonical extended prefix from the original input.
-    pub fn replace_property(&self, record: &Record, value: &[u8]) -> Result<Vec<u8>, Error> {
-        let old = self.payload(record)?;
-        let prefix_size = if value.len() < usize::from(u16::MAX) {
-            4_usize
-        } else {
-            8
-        };
-        let old_size = record
-            .range
-            .end
-            .checked_sub(record.range.start)
-            .ok_or(Error::InvalidPropertyRange)?;
-        let output_size = self
-            .source
-            .len()
-            .checked_sub(old_size)
-            .and_then(|size| size.checked_add(prefix_size))
-            .and_then(|size| size.checked_add(value.len()))
-            .filter(|size| *size <= MAX_INPUT_BYTES)
-            .ok_or(Error::InputTooLarge)?;
-        if value == old {
-            return copy_source(self.source);
-        }
-        let tag_end = record
-            .range
-            .start
-            .checked_add(2)
-            .ok_or(Error::InvalidPropertyRange)?;
-        let before = self
-            .source
-            .get(..tag_end)
-            .ok_or(Error::InvalidPropertyRange)?;
-        let after = self
-            .source
-            .get(record.range.end..)
-            .ok_or(Error::InvalidPropertyRange)?;
-        let mut output = Vec::new();
-        output
-            .try_reserve_exact(output_size)
-            .map_err(|_| Error::Allocation)?;
-        output.extend_from_slice(before);
-        if prefix_size == 4 {
-            let length = u16::try_from(value.len()).map_err(|_| Error::InputTooLarge)?;
-            output.extend_from_slice(&length.to_le_bytes());
-        } else {
-            let length = u32::try_from(value.len()).map_err(|_| Error::InputTooLarge)?;
-            output.extend_from_slice(&u16::MAX.to_le_bytes());
-            output.extend_from_slice(&length.to_le_bytes());
-        }
-        output.extend_from_slice(value);
-        output.extend_from_slice(after);
-        Ok(output)
-    }
-}
-
-fn copy_source(source: &[u8]) -> Result<Vec<u8>, Error> {
-    let mut output = Vec::new();
-    output
-        .try_reserve_exact(source.len())
-        .map_err(|_| Error::Allocation)?;
-    output.extend_from_slice(source);
-    Ok(output)
 }
 
 fn push_record(

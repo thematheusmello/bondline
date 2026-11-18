@@ -13,6 +13,7 @@ use std::{
 
 mod atom_label;
 mod caption;
+pub(crate) mod label_edit;
 mod label_preview;
 mod text;
 

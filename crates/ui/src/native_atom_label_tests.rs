@@ -1486,3 +1486,6 @@ mod cdx_literal_app_tests;
 
 #[path = "cdx_bond_app_tests.rs"]
 mod cdx_bond_app_tests;
+
+#[path = "cdx_label_edit_app_tests.rs"]
+mod cdx_label_edit_app_tests;

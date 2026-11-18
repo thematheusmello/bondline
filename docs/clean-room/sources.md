@@ -1,5 +1,14 @@
 # Clean-room source register
 
+The [existing CDX atom label edit contract](../research/cdx-atom-label-edit.md)
+records the four source fields, signed coordinate rounding, scoped owners,
+and the unchanged source proof. FontTools and RDKit verify the original
+[edit pairs](../../crates/io/tests/fixtures/cdx-label-edit/SOURCES.md).
+
+The [CDX property batch](../verification-cdx-batch-edits.md) follows the
+published short and extended property lengths. It copies all untouched
+bytes for the original framing and scoped object tree. [Binary framing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm).
+
 The [CDX atom label preview contract](../research/cdx-atom-label-preview.md)
 uses the published coordinate, Poster, label and bond-style properties of
 the archived SDK. The independent placement checks use the approved
