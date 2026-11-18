@@ -1,0 +1,434 @@
+{
+  "status": "passed",
+  "cases": 12,
+  "font_boxes": 31,
+  "fonttools": "4.61.1",
+  "font_sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+  "rdkit": "2026.09.2",
+  "geometry": [
+    {
+      "case": "mixed_a",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        92.5693359375,
+        155.6171875,
+        107.6748046875,
+        164.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "mixed_a",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        380.7216796875,
+        155.6171875,
+        403.1396484375,
+        164.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "mixed_b",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        92.5693359375,
+        155.6171875,
+        107.6748046875,
+        164.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "mixed_b",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        380.7216796875,
+        155.6171875,
+        403.1396484375,
+        164.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "edited_endpoint",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        92.7216796875,
+        155.6171875,
+        115.1396484375,
+        164.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "edited_endpoint",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        380.7216796875,
+        155.6171875,
+        403.1396484375,
+        164.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "created_3",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        92.5693359375,
+        155.6171875,
+        107.6748046875,
+        164.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "created_3",
+      "source_node": 109,
+      "model_atom": 3,
+      "actual_size": 12,
+      "expected_font_box": [
+        236.7158203125,
+        155.6171875,
+        258.6826171875,
+        164.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "created_3",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        380.7216796875,
+        155.6171875,
+        403.1396484375,
+        164.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "all_printed",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        92.5693359375,
+        155.6171875,
+        107.6748046875,
+        164.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "all_printed",
+      "source_node": 97,
+      "model_atom": 2,
+      "actual_size": 12,
+      "expected_font_box": [
+        164.7158203125,
+        203.6171875,
+        186.6826171875,
+        212.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "all_printed",
+      "source_node": 109,
+      "model_atom": 3,
+      "actual_size": 12,
+      "expected_font_box": [
+        236.7158203125,
+        155.6171875,
+        258.6826171875,
+        164.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "all_printed",
+      "source_node": 137,
+      "model_atom": 4,
+      "actual_size": 12,
+      "expected_font_box": [
+        308.7158203125,
+        203.6171875,
+        330.6826171875,
+        212.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "all_printed",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        380.7216796875,
+        155.6171875,
+        403.1396484375,
+        164.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "mixed_moved",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        116.5693359375,
+        143.6171875,
+        131.6748046875,
+        152.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "mixed_moved",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        404.7216796875,
+        143.6171875,
+        427.1396484375,
+        152.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "compound",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        116.7216796875,
+        143.6171875,
+        139.1396484375,
+        152.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "compound",
+      "source_node": 109,
+      "model_atom": 3,
+      "actual_size": 12,
+      "expected_font_box": [
+        260.7158203125,
+        143.6171875,
+        282.6826171875,
+        152.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "compound",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        404.7216796875,
+        143.6171875,
+        427.1396484375,
+        152.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "all_moved",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        116.5693359375,
+        143.6171875,
+        131.6748046875,
+        152.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "all_moved",
+      "source_node": 97,
+      "model_atom": 2,
+      "actual_size": 12,
+      "expected_font_box": [
+        188.7158203125,
+        191.6171875,
+        210.6826171875,
+        200.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "all_moved",
+      "source_node": 109,
+      "model_atom": 3,
+      "actual_size": 12,
+      "expected_font_box": [
+        260.7158203125,
+        143.6171875,
+        282.6826171875,
+        152.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "all_moved",
+      "source_node": 137,
+      "model_atom": 4,
+      "actual_size": 12,
+      "expected_font_box": [
+        332.7158203125,
+        191.6171875,
+        354.6826171875,
+        200.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "all_moved",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        404.7216796875,
+        143.6171875,
+        427.1396484375,
+        152.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "caption_owners",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        92.5693359375,
+        155.6171875,
+        107.6748046875,
+        164.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "caption_owners",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        380.7216796875,
+        155.6171875,
+        403.1396484375,
+        164.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "unsigned_actual_font",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        92.5693359375,
+        155.6171875,
+        107.6748046875,
+        164.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "unsigned_actual_font",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        380.7216796875,
+        155.6171875,
+        403.1396484375,
+        164.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "partial",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        92.5693359375,
+        155.6171875,
+        107.6748046875,
+        164.3828125
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "partial",
+      "source_node": 149,
+      "model_atom": 5,
+      "actual_size": 12,
+      "expected_font_box": [
+        380.7216796875,
+        155.6171875,
+        403.1396484375,
+        164.265625
+      ],
+      "max_point_error": 0.0
+    },
+    {
+      "case": "boxed",
+      "source_node": 73,
+      "model_atom": 1,
+      "actual_size": 12,
+      "expected_font_box": [
+        80.69140625,
+        91.3515625,
+        95.796875,
+        100.1171875
+      ],
+      "max_point_error": 0.0
+    }
+  ],
+  "reader_refusals": [
+    "missing_actual_font",
+    "missing_actual_size",
+    "missing_actual_face",
+    "missing_actual_color",
+    "scalar_minus_one_not_font65535",
+    "scalar_font65535_not_unsigned",
+    "missing_scalar_font_resource",
+    "shadowed_bad_size",
+    "negative_face",
+    "unsupported_page_owner",
+    "unsupported_s_owner",
+    "unsupported_caption_defaults",
+    "unused_namespace",
+    "missing_caption_actual_size"
+  ],
+  "wrong16pt_box_for12pt_detected": true,
+  "current_mandatory_hidden_detected": true,
+  "equal_model_different_metadata": true,
+  "omitted_run_inheritance": false,
+  "product_execution": false
+}
