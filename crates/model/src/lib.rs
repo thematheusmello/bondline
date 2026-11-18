@@ -14,8 +14,8 @@ pub use graph::{
 pub use point::{MAX_POSITION_PT, Point2};
 pub use style::DrawingStyle;
 pub use text::{
-    MAX_DOCUMENT_TEXT_BYTES, MAX_TEXT_BYTES, MAX_TEXT_RUNS, StyledText, TextError, TextId, TextRun,
-    TextStyle,
+    AtomLabel, LabelAlignment, MAX_DOCUMENT_TEXT_BYTES, MAX_TEXT_BYTES, MAX_TEXT_RUNS, StyledText,
+    TextError, TextId, TextJustification, TextRun, TextStyle,
 };
 
 use serde::{Deserialize, Serialize};
@@ -193,12 +193,25 @@ impl Document {
         &self.pages
     }
 
+    pub fn has_authored_atom_labels(&self) -> bool {
+        self.atom_labels().next().is_some()
+    }
+
+    fn atom_labels(&self) -> impl Iterator<Item = &AtomLabel> {
+        self.pages
+            .iter()
+            .flat_map(|page| page.fragments.iter())
+            .flat_map(|fragment| fragment.atoms())
+            .filter_map(|atom| atom.authored_label.as_deref())
+    }
+
     /// Retained payload/container bytes, including reserved vector capacity, shared once.
     /// Excludes Arc/allocator headers and unrelated snapshots; saturates on overflow.
     pub fn retained_bytes<'a>(documents: impl IntoIterator<Item = &'a Self>) -> usize {
         let mut models = HashSet::new();
         let mut fragments = HashSet::new();
         let mut texts = HashSet::new();
+        let mut labels = HashSet::new();
         let mut bytes = 0_usize;
         for document in documents {
             if !models.insert(std::ptr::from_ref(document)) {
@@ -216,6 +229,15 @@ impl Document {
                 for fragment in &page.fragments {
                     if fragments.insert(Arc::as_ptr(fragment)) {
                         bytes = bytes.saturating_add(fragment.storage_bytes());
+                        for label in fragment
+                            .atoms()
+                            .iter()
+                            .filter_map(|atom| atom.authored_label.as_ref())
+                        {
+                            if labels.insert(Arc::as_ptr(label)) {
+                                bytes = bytes.saturating_add(label.storage_bytes());
+                            }
+                        }
                     }
                 }
                 bytes = bytes.saturating_add(
@@ -247,7 +269,7 @@ impl Document {
             .pages
             .iter()
             .flat_map(|page| page.texts.iter().map(Arc::as_ref));
-        validate_texts(existing.chain(texts.iter()))?;
+        validate_texts(existing.chain(texts.iter()), self.atom_labels())?;
         self.pages
             .get_mut(index)
             .ok_or(Error::MissingPage(page_id.get()))?
@@ -283,7 +305,7 @@ impl Document {
                     current
                 }
             });
-        validate_texts(existing)?;
+        validate_texts(existing, self.atom_labels())?;
         let current = self
             .pages
             .get_mut(page_index)
@@ -315,7 +337,16 @@ impl Document {
             .pages
             .iter()
             .flat_map(|page| page.fragments.iter().map(Arc::as_ref));
-        validate_fragments(existing.chain(fragments.iter()))?;
+        let candidate = existing.chain(fragments.iter());
+        validate_fragments(candidate.clone())?;
+        validate_texts(
+            self.pages
+                .iter()
+                .flat_map(|page| page.texts.iter().map(Arc::as_ref)),
+            candidate
+                .flat_map(|fragment| fragment.atoms())
+                .filter_map(|atom| atom.authored_label.as_deref()),
+        )?;
         self.pages
             .get_mut(index)
             .ok_or(Error::MissingPage(page_id.get()))?
@@ -363,7 +394,15 @@ impl Document {
             .iter()
             .flat_map(|page| page.fragments.iter().map(Arc::as_ref))
             .map(|current| replacements.get(&current.id()).unwrap_or(current));
-        validate_fragments(candidate)?;
+        validate_fragments(candidate.clone())?;
+        validate_texts(
+            self.pages
+                .iter()
+                .flat_map(|page| page.texts.iter().map(Arc::as_ref)),
+            candidate
+                .flat_map(|fragment| fragment.atoms())
+                .filter_map(|atom| atom.authored_label.as_deref()),
+        )?;
         let page = self
             .pages
             .get_mut(page_index)
@@ -387,25 +426,20 @@ impl Document {
     }
 }
 
-fn validate_texts<'a>(texts: impl Iterator<Item = &'a StyledText>) -> Result<(), Error> {
+fn validate_texts<'a>(
+    texts: impl Iterator<Item = &'a StyledText>,
+    labels: impl Iterator<Item = &'a AtomLabel>,
+) -> Result<(), Error> {
     let mut ids = BTreeSet::new();
-    let (mut count, mut runs, mut bytes) = (0_usize, 0_usize, 0_usize);
+    let mut budget = text::TextBudget::default();
     for text in texts {
-        count = count.saturating_add(1);
-        runs = runs.saturating_add(text.runs().len());
-        bytes = bytes.saturating_add(text.text_bytes());
-        if count > MAX_GRAPH_ITEMS {
-            return Err(TextError::TextCountLimit.into());
-        }
-        if runs > MAX_GRAPH_ITEMS {
-            return Err(TextError::DocumentRunLimit.into());
-        }
-        if bytes > MAX_DOCUMENT_TEXT_BYTES {
-            return Err(TextError::DocumentTextLimit.into());
-        }
+        budget.add(text.runs())?;
         if !ids.insert(text.id()) {
             return Err(TextError::DuplicateText(text.id().get()).into());
         }
+    }
+    for label in labels {
+        budget.add(label.runs())?;
     }
     Ok(())
 }

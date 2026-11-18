@@ -9,6 +9,64 @@ pub const MAX_TEXT_RUNS: usize = 4096;
 pub const MAX_TEXT_BYTES: usize = 1024 * 1024;
 pub const MAX_DOCUMENT_TEXT_BYTES: usize = 64 * MAX_TEXT_BYTES;
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", try_from = "String")]
+pub enum TextJustification {
+    Right,
+    Left,
+    Center,
+    Full,
+    Above,
+    Below,
+    Auto,
+    Best,
+}
+
+impl TryFrom<String> for TextJustification {
+    type Error = &'static str;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        match value.as_str() {
+            "right" => Ok(Self::Right),
+            "left" => Ok(Self::Left),
+            "center" => Ok(Self::Center),
+            "full" => Ok(Self::Full),
+            "above" => Ok(Self::Above),
+            "below" => Ok(Self::Below),
+            "auto" => Ok(Self::Auto),
+            "best" => Ok(Self::Best),
+            _ => Err("unknown text justification"),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", try_from = "String")]
+pub enum LabelAlignment {
+    Auto,
+    Left,
+    Center,
+    Right,
+    Above,
+    Below,
+    Best,
+}
+
+impl TryFrom<String> for LabelAlignment {
+    type Error = &'static str;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        match value.as_str() {
+            "auto" => Ok(Self::Auto),
+            "left" => Ok(Self::Left),
+            "center" => Ok(Self::Center),
+            "right" => Ok(Self::Right),
+            "above" => Ok(Self::Above),
+            "below" => Ok(Self::Below),
+            "best" => Ok(Self::Best),
+            _ => Err("unknown label alignment"),
+        }
+    }
+}
+
 /// Application text identity, independent of atom and source font identities.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -248,6 +306,155 @@ impl TryFrom<RawText> for StyledText {
     }
 }
 
+/// Authored Node child Text. Position and alignment are literal, not layout authority.
+#[derive(Clone, Debug, PartialEq, Serialize)]
+pub struct AtomLabel {
+    position: Option<Point2>,
+    justification: Option<TextJustification>,
+    label_justification: Option<TextJustification>,
+    label_alignment: Option<LabelAlignment>,
+    runs: Vec<TextRun>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct RawAtomLabel {
+    #[serde(default, deserialize_with = "deserialize_optional_position")]
+    position: Option<Point2>,
+    justification: Option<TextJustification>,
+    label_justification: Option<TextJustification>,
+    label_alignment: Option<LabelAlignment>,
+    runs: Vec<TextRun>,
+}
+
+impl AtomLabel {
+    pub fn new(
+        position: Option<Point2>,
+        justification: Option<TextJustification>,
+        label_justification: Option<TextJustification>,
+        label_alignment: Option<LabelAlignment>,
+        runs: Vec<TextRun>,
+    ) -> Result<Self, TextError> {
+        if runs.is_empty() || runs.len() > MAX_TEXT_RUNS {
+            return Err(TextError::RunLimit);
+        }
+        if runs
+            .iter()
+            .fold(0_usize, |bytes, run| bytes.saturating_add(run.text.len()))
+            > MAX_TEXT_BYTES
+        {
+            return Err(TextError::TextLimit);
+        }
+        Ok(Self {
+            position,
+            justification,
+            label_justification,
+            label_alignment,
+            runs,
+        })
+    }
+
+    pub const fn position(&self) -> Option<Point2> {
+        self.position
+    }
+    pub const fn justification(&self) -> Option<TextJustification> {
+        self.justification
+    }
+    pub const fn label_justification(&self) -> Option<TextJustification> {
+        self.label_justification
+    }
+    pub const fn label_alignment(&self) -> Option<LabelAlignment> {
+        self.label_alignment
+    }
+    pub fn runs(&self) -> &[TextRun] {
+        &self.runs
+    }
+
+    pub fn with_run_text(&self, index: usize, text: String) -> Result<Self, TextError> {
+        let current = self.runs.get(index).ok_or(TextError::MissingRun(index))?;
+        validate_text(&text)?;
+        if self.runs.iter().map(|run| run.text.len()).sum::<usize>() - current.text.len()
+            + text.len()
+            > MAX_TEXT_BYTES
+        {
+            return Err(TextError::TextLimit);
+        }
+        let mut runs = self.runs.clone();
+        runs.get_mut(index)
+            .ok_or(TextError::MissingRun(index))?
+            .text = text;
+        Self::new(
+            self.position,
+            self.justification,
+            self.label_justification,
+            self.label_alignment,
+            runs,
+        )
+    }
+
+    pub fn with_position(&self, position: Option<Point2>) -> Result<Self, TextError> {
+        Self::new(
+            position,
+            self.justification,
+            self.label_justification,
+            self.label_alignment,
+            self.runs.clone(),
+        )
+    }
+
+    pub(crate) fn storage_bytes(&self) -> usize {
+        self.runs.iter().fold(
+            size_of::<Self>()
+                .saturating_add(self.runs.capacity().saturating_mul(size_of::<TextRun>())),
+            |bytes, run| {
+                bytes
+                    .saturating_add(run.text.capacity())
+                    .saturating_add(run.style.font_family.capacity())
+            },
+        )
+    }
+}
+
+impl TryFrom<RawAtomLabel> for AtomLabel {
+    type Error = TextError;
+    fn try_from(raw: RawAtomLabel) -> Result<Self, Self::Error> {
+        Self::new(
+            raw.position,
+            raw.justification,
+            raw.label_justification,
+            raw.label_alignment,
+            raw.runs,
+        )
+    }
+}
+
+#[derive(Default)]
+pub(crate) struct TextBudget {
+    objects: usize,
+    runs: usize,
+    bytes: usize,
+}
+
+impl TextBudget {
+    pub(crate) fn add(&mut self, runs: &[TextRun]) -> Result<(), TextError> {
+        self.objects = self.objects.saturating_add(1);
+        self.runs = self.runs.saturating_add(runs.len());
+        self.bytes = runs.iter().fold(self.bytes, |bytes, run| {
+            bytes.saturating_add(run.text.len())
+        });
+        if self.objects > crate::MAX_GRAPH_ITEMS {
+            return Err(TextError::TextCountLimit);
+        }
+        if self.runs > crate::MAX_GRAPH_ITEMS {
+            return Err(TextError::DocumentRunLimit);
+        }
+        if self.bytes > MAX_DOCUMENT_TEXT_BYTES {
+            return Err(TextError::DocumentTextLimit);
+        }
+        Ok(())
+    }
+}
+
 macro_rules! map_deserialize {
     ($name:ident, $raw:ident, $description:literal) => {
         impl<'de> Deserialize<'de> for $name {
@@ -275,6 +482,16 @@ macro_rules! map_deserialize {
 map_deserialize!(TextStyle, RawStyle, "a text style object");
 map_deserialize!(TextRun, RawRun, "a text run object");
 map_deserialize!(StyledText, RawText, "a styled text object");
+map_deserialize!(AtomLabel, RawAtomLabel, "an atom label object");
+
+fn deserialize_optional_position<'de, D: Deserializer<'de>>(
+    deserializer: D,
+) -> Result<Option<Point2>, D::Error> {
+    #[derive(Deserialize)]
+    #[serde(transparent)]
+    struct Position(#[serde(deserialize_with = "deserialize_position")] Point2);
+    Ok(Option::<Position>::deserialize(deserializer)?.map(|position| position.0))
+}
 
 fn deserialize_position<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Point2, D::Error> {
     #[derive(Deserialize)]

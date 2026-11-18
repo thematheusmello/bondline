@@ -1,8 +1,9 @@
-use crate::Point2;
+use crate::{AtomLabel, Point2, TextError, text::TextBudget};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeSet,
     num::{NonZeroU16, NonZeroU32},
+    sync::Arc,
 };
 
 // shortcut: cap each graph item category at 100000; revise with large-document memory budgets.
@@ -88,6 +89,8 @@ pub struct Atom {
     pub show_terminal_carbon_labels: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub show_non_terminal_carbon_labels: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub authored_label: Option<Arc<AtomLabel>>,
 }
 
 impl Atom {
@@ -102,6 +105,7 @@ impl Atom {
             explicit_hydrogens: None,
             show_terminal_carbon_labels: None,
             show_non_terminal_carbon_labels: None,
+            authored_label: None,
         }
     }
 }
@@ -158,6 +162,8 @@ pub struct Bond {
 
 #[derive(Debug, PartialEq, Eq, thiserror::Error)]
 pub enum GraphError {
+    #[error(transparent)]
+    Text(#[from] TextError),
     #[error("atomic number {0} is outside the supported 1..118 catalog")]
     InvalidElement(u8),
     #[error("graph exceeds 100000 {0}")]
@@ -215,6 +221,13 @@ impl Fragment {
             if !pairs.insert((bond.begin.min(bond.end), bond.begin.max(bond.end))) {
                 return Err(GraphError::DuplicateConnection);
             }
+        }
+        let mut budget = TextBudget::default();
+        for label in atoms
+            .iter()
+            .filter_map(|atom| atom.authored_label.as_deref())
+        {
+            budget.add(label.runs())?;
         }
         Ok(Self { id, atoms, bonds })
     }
