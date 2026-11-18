@@ -1,5 +1,15 @@
 # Open questions
 
+## Mixed skeletal diagrams, 2026-11-18
+
+The [mixed-label contract](../research/mixed-skeletal-labels.md) resolves no absent/root
+carbon-flag inheritance or universal foreign font/size/ink default. It relies on explicit
+active node no flags, known C4 and the shared CURRENT no-glyph result, plus actual absence
+of child Text in source. Mandatory glyph appearance after point/neighbor changes must
+revoke this capability rather than borrow a font. Old foreign Boxed/Connected remain
+all-explicit. General omitted flags/H/defaults, hidden-node label creation/editing,
+inherited styles, arbitrary child positions and modern reference parity remain required.
+
 ## Dependent label movement, 2026-11-18
 
 The [literal translation contract](../research/dependent-label-translation.md) supports

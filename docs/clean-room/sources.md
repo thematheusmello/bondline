@@ -1,5 +1,19 @@
 # Clean-room source register
 
+Mixed authored/skeletal diagrams reviewed2026-11-18 use primary
+[Node child-Text precedence](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm),
+[terminal/nonterminal properties0x0442/0x0443](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/TableOfProperties.htm),
+[explicit hydrogen data](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm),
+the [official DTD](https://static.chemistry.revvitycloud.com/cdxml/CDXML.dtd) and
+[IUPAC2008 representation standards](https://iupac.qmul.ac.uk/drawing/drawing.html#GR211).
+The [locked mixed-label contract](../research/mixed-skeletal-labels.md) requires explicit
+active node suppression and literal C4 proof; it adopts no omitted/root flag or font
+default. A shared CURRENT no-glyph result, source child inspection and a distinct complete
+Mixed capability prevent default ink from appearing after geometry/neighbor edits. Existing
+native/Boxed/Connected profiles and loss guards stay separate. No-Text chemistry edits,
+general fallback/inheritance and exact reference behavior remain unresolved. Original
+fixtures/oracles and actual verification must precede any authoring/UI claim.
+
 The native moved-label regression reviewed2026-11-18 exposes nine closed-stroke pixel
 differences caused by normalized f32 GPU geometry. The primary
 [WGSL2026-08-25 specification](https://www.w3.org/TR/2026/CRD-WGSL-20260825/),
