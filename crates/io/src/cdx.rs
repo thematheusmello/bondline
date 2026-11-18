@@ -8,9 +8,12 @@ use bondline_model::{
 use std::{
     collections::{BTreeMap, BTreeSet},
     num::NonZeroU16,
+    sync::Arc,
 };
 
+mod atom_label;
 mod caption;
+mod text;
 
 const DOCUMENT: u16 = 0x8000;
 const PAGE: u16 = 0x8001;
@@ -18,6 +21,7 @@ const GROUP: u16 = 0x8002;
 const FRAGMENT: u16 = 0x8003;
 const NODE: u16 = 0x8004;
 const BOND: u16 = 0x8005;
+const TEXT_OBJECT: u16 = 0x8006;
 const Z_ORDER: u16 = 0x000a;
 const WARNING: u16 = 0x0010;
 const POSITION: u16 = 0x0200;
@@ -37,6 +41,7 @@ const DOUBLE_POSITION: u16 = 0x0603;
 const BEGIN: u16 = 0x0604;
 const END: u16 = 0x0605;
 const BOND_CIP: u16 = 0x060a;
+const TEXT: u16 = 0x0700;
 
 #[derive(Debug, thiserror::Error)]
 pub enum MappingError {
@@ -111,7 +116,42 @@ impl<'input> ElementalGraph<'input> {
     }
 
     fn from_source(source: Document<'input>) -> Result<Self, MappingError> {
-        let layout = Layout::read(&source)?;
+        let label_candidate = source.records().iter().any(|record| {
+            matches!(
+                record.kind(),
+                RecordKind::ObjectStart {
+                    tag: TEXT_OBJECT,
+                    ..
+                }
+            ) && object(&source, record.parent()).is_some_and(|(owner, _)| owner == NODE)
+        });
+        // Failed label candidates keep the original elemental diagnostic and its precedence.
+        let fragments = if label_candidate {
+            Self::read_fragments(&source, true).or_else(|_| Self::read_fragments(&source, false))?
+        } else {
+            Self::read_fragments(&source, false)?
+        };
+        Ok(Self { source, fragments })
+    }
+
+    fn read_fragments(
+        source: &Document<'_>,
+        allow_labels: bool,
+    ) -> Result<Vec<Fragment>, MappingError> {
+        let layout = Layout::read(source, allow_labels)?;
+        let resources = layout
+            .node_labels
+            .first_key_value()
+            .map(|(_, &record)| {
+                source
+                    .resources()
+                    .map_err(|_| MappingError::UnsupportedObject {
+                        tag: TEXT_OBJECT,
+                        record,
+                    })
+            })
+            .transpose()?;
+        let mut remaining_runs = MAX_GRAPH_ITEMS;
         let (mut next_fragment, mut next_atom, mut next_bond) = (0, 0, 0);
         let mut fragments = Vec::new();
         for index in layout.fragments.iter().copied() {
@@ -120,15 +160,31 @@ impl<'input> ElementalGraph<'input> {
                 .get(index)
                 .ok_or(MappingError::UnsupportedLayout { record: index })?;
             // Fragment Z is a qualified public graphic-base compatibility case.
-            let fields = properties(&source, children, &[Z_ORDER, BOUNDING_BOX])?;
-            validate_metadata(&source, &fields)?;
+            let fields = properties(source, children, &[Z_ORDER, BOUNDING_BOX])?;
+            validate_metadata(source, &fields)?;
             let mut atoms = Vec::new();
             let mut references = BTreeMap::new();
             for child in children.iter().copied() {
-                if let Some((NODE, source_id)) = object(&source, Some(child)) {
+                if let Some((NODE, source_id)) = object(source, Some(child)) {
                     let id = AtomId::new(allocate(&mut next_atom)?)
                         .ok_or(MappingError::IdentityLimit)?;
-                    atoms.push(read_atom(&source, &layout, child, id)?);
+                    let mut atom = read_atom(source, &layout, child, id)?;
+                    if let (Some(resources), Some(&label)) =
+                        (&resources, layout.node_labels.get(&child))
+                    {
+                        let children = layout
+                            .children
+                            .get(label)
+                            .ok_or(MappingError::UnsupportedLayout { record: label })?;
+                        atom.authored_label = Some(Arc::new(atom_label::read(
+                            source,
+                            resources,
+                            label,
+                            children,
+                            &mut remaining_runs,
+                        )?));
+                    }
+                    atoms.push(atom);
                     if source_id != 0 {
                         references.insert(source_id, id);
                     }
@@ -136,9 +192,9 @@ impl<'input> ElementalGraph<'input> {
             }
             let mut bonds = Vec::new();
             for child in children.iter().copied() {
-                if let Some((BOND, _)) = object(&source, Some(child)) {
+                if let Some((BOND, _)) = object(source, Some(child)) {
                     let fields = properties(
-                        &source,
+                        source,
                         layout
                             .children
                             .get(child)
@@ -155,14 +211,14 @@ impl<'input> ElementalGraph<'input> {
                             BOND_CIP,
                         ],
                     )?;
-                    validate_metadata(&source, &fields)?;
-                    let (order, double_position) = read_bond_style(&source, &fields)?;
+                    validate_metadata(source, &fields)?;
+                    let (order, double_position) = read_bond_style(source, &fields)?;
                     let endpoint = |tag| -> Result<AtomId, MappingError> {
                         let record = fields
                             .get(&tag)
                             .copied()
                             .ok_or(MappingError::MissingProperty { tag, record: child })?;
-                        let id = u32::from_le_bytes(payload(&source, record, tag)?);
+                        let id = u32::from_le_bytes(payload(source, record, tag)?);
                         if id == 0 {
                             return Err(MappingError::UnassignedReference { record });
                         }
@@ -188,7 +244,7 @@ impl<'input> ElementalGraph<'input> {
                 bonds,
             )?);
         }
-        Ok(Self { source, fragments })
+        Ok(fragments)
     }
 
     pub fn fragments(&self) -> &[Fragment] {
@@ -258,12 +314,14 @@ fn root_scalar(source: &Document<'_>, tag: u16) -> Option<f64> {
 struct Layout {
     children: Vec<Vec<usize>>,
     fragments: Vec<usize>,
+    node_labels: BTreeMap<usize, usize>,
 }
 
 impl Layout {
-    fn read(source: &Document<'_>) -> Result<Self, MappingError> {
+    fn read(source: &Document<'_>, allow_labels: bool) -> Result<Self, MappingError> {
         let mut children = vec![Vec::new(); source.records().len()];
         let mut fragments = Vec::new();
+        let mut node_labels = BTreeMap::new();
         let mut identities = BTreeSet::new();
         let mut page_seen = false;
         for (index, record) in source.records().iter().enumerate() {
@@ -275,13 +333,16 @@ impl Layout {
                     | WARNING => Some(BOND),
                     _ => None,
                 };
-                if let Some(owner) = owner
-                    && object(source, record.parent()).map(|(tag, _)| tag) != Some(owner)
-                {
-                    return Err(MappingError::UnsupportedProperty {
-                        tag: *tag,
-                        record: index,
-                    });
+                if let Some(owner) = owner {
+                    let actual = object(source, record.parent()).map(|(tag, _)| tag);
+                    let label_position =
+                        allow_labels && *tag == POSITION && actual == Some(TEXT_OBJECT);
+                    if actual != Some(owner) && !label_position {
+                        return Err(MappingError::UnsupportedProperty {
+                            tag: *tag,
+                            record: index,
+                        });
+                    }
                 }
             }
             if matches!(
@@ -315,6 +376,14 @@ impl Layout {
                     }
                 }
                 NODE | BOND if parent == Some(FRAGMENT) => {}
+                TEXT_OBJECT if allow_labels && parent == Some(NODE) => {
+                    let node = record
+                        .parent()
+                        .ok_or(MappingError::UnsupportedLayout { record: index })?;
+                    if node_labels.insert(node, index).is_some() {
+                        return Err(MappingError::UnsupportedObject { tag, record: index });
+                    }
+                }
                 DOCUMENT | PAGE | GROUP | FRAGMENT | NODE | BOND => {
                     return Err(MappingError::UnsupportedLayout { record: index });
                 }
@@ -325,6 +394,7 @@ impl Layout {
         Ok(Self {
             children,
             fragments,
+            node_labels,
         })
     }
 }

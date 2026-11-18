@@ -158,11 +158,37 @@ Windows and WebAssembly. Other runtime platforms, broader typography and CDX
 authoring remain open. Evidence is in
 `target/cdx-resources/next-text/caption-runs.aTZunB`. All owned jobs are terminal.
 
+### Owned CDX Node labels
+
+The [Node label increment](docs/verification-cdx-node-labels.md) preserves a
+direct child Text in the existing atom model. The seven complete original
+models preserve their literal fields and all 27 refusal controls keep the
+earlier diagnostics. The graph and stored document share the original bytes
+for unchanged Save. Numeric fields and authored text remain independent.
+Display, authoring, and conversion retain their previous authority checks.
+
+Actual CLI, loopback and initialized stdio MCP recovered the complete model
+and exact files. A separate macOS app verified Open, read-only canvas guards,
+known Save, Unicode Save As, unsupported-source Cancel and clean reopen.
+The independent binary reader confirmed both saved files. The owned review
+has exited. ASan passed 10,000 runs with 151 immutable originals. Registry
+49 stays byte-identical. The IO crate type-checks for Windows, Linux and
+WebAssembly. Other runtime platforms remain open. The local receipts are
+under `target/cdx-resources/next-text/node-labels.B6ZqBH`.
+The full local gate passed **2,227/0/1** workspace tests, **3/0** AccessKit
+tests, formatting, clippy, layers, licenses, assets and the pinned corpus.
+All local execution jobs and the owned review are terminal. GitHub Actions
+remains disabled.
+
 ### Next executable work
 
-1. Implement the [CDX Node child Text contract](docs/research/cdx-node-labels.md)
-   with independent RED/GREEN and exact file checks. Grant display only with
-   separate placement and label agreement evidence.
+1. Establish a separate read-only CDX label display profile. Start with the
+   [published position and alignment questions](docs/clean-room/open-questions.md#cdx-node-label-interpretation-2026-11-18)
+   and the existing [CDXML box proof](docs/research/boxed-atom-label-workflow.md).
+   Before changing display, pin original binaries with explicit bounding
+   boxes, supported font/style, and text that agrees with the numeric atom.
+   Add independent placement, whole-source, disagreement and unsupported
+   owner checks. Verify CPU/Metal and the actual native view.
 2. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 

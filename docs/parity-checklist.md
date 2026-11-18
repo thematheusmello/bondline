@@ -20,6 +20,11 @@ The shared command and render paths pass independent source and pixel checks.
 read-only macOS workflow for proven offsets, resources and glyph joins.
 Tied depths, general CDX typography, authoring and other platforms remain open.
 
+The [Node child Text increment](verification-cdx-node-labels.md) verifies
+literal label and numeric atom data through read-only import and byte-exact
+native macOS Save/reopen. Faithful label preview, editing, inherited styles
+and native runtime on other platforms remain open.
+
 The [plain CDX bond increment](verification-cdx-plain-bonds.md) expands only read-only
 data coverage to Single/Double/Triple, Solid fields and directed position. Source presence/
 automatic-manual bytes, complete models and unchanged Unicode files pass independent
