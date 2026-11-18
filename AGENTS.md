@@ -25,6 +25,13 @@ files/CPU-Metal and ASan10000/391s pass; full aggregate/job state and exact next
 are in STATUS. Own metadata review40752 is quit; user-viewed creation review365 and
 older apps/files stay protected. Actions OFF; full M0–M5 active/incomplete.
 
+The next M1 CDX literal-atom data contract is docs/research/cdx-literal-atom-metadata.md.
+It is planned, with no decoder/consumer/native result yet. Begin frozen independent bytes/
+facts/runtime RED; change both read_atom's admitted fields and Layout's global Node-owner
+list. Follow the explicit four-byte Charge arithmetic-shift rule, canonical other widths,
+missing-HNone, duplicate/source/history and full/display/edit/loss fences. No producer
+waiver, H/spin inference, new command or planned-tool binding. Exact next steps are in STATUS.
+
 Printed-label creation is integrated through091328d, with contract126f99e,
 render8f1225e/fixtures9acd1a5/IObb30dca/wire8c37996/oracles38283d4 and fuzz a186933.
 Read docs/research/printed-label-creation.md and docs/verification-printed-label-creation.md.

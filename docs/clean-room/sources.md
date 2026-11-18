@@ -1,5 +1,22 @@
 # Clean-room source register
 
+The next planned read-only CDX literal-metadata slice is locked in
+[the CDX contract](../research/cdx-literal-atom-metadata.md), reviewed2026-11-18 against
+primary [Isotope](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_Isotope.htm),
+[Charge](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_Charge.htm),
+[Radical](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_Radical.htm),
+[NumHydrogens](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm),
+[IntroCDX](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm) and
+[numeric types](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXNumeric.htm).
+The property-specific four-byte Charge arithmetic-shift rule is explicit public evidence
+and takes precedence in the bounded planned decoder. General-width guidance is broader
+than this slice. Exact accepted widths/domains/owners, absent-H retention, duplicate/error
+policy and source/display/edit/loss fences are documented before code. Eight fresh200
+receipts have manifest SHA256
+`1ebc79d957c8edcd0624e0582fd1f735c9d4dc61df0668e4fc7c85bb642a2764`.
+No new CDX implementation, external-consumer agreement or native result is claimed yet;
+no vendor body/sample/binary/asset is shipped or inspected.
+
 Explicit labels beside unused scalar defaults reviewed2026-11-18 follow the
 [metadata contract](../research/label-default-metadata.md), primary
 [Style](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Style.htm),

@@ -1,5 +1,16 @@
 # Open questions
 
+## CDX literal metadata, 2026-11-18
+
+[The next CDX contract](../research/cdx-literal-atom-metadata.md) has public canonical
+types/owners/defaults and a specific four-byte Charge recovery instruction. It locks
+that instruction ahead of generic numeric-width guidance; no producer certificate is
+invented. Broader numeric widths, actual external legacy-charge interpretation and
+singlet/triplet consumer evidence remain unverified. RDKit electron count cannot alone
+prove spin state. No new metadata decoder or source/display/edit authority is delivered
+by this research. Missing-H inference, Text/fonts/styles/stereo and general CDX parity
+remain required; preserve the exact read-only/source-loss boundaries during integration.
+
 ## Explicit typography beside defaults, 2026-11-18
 
 The [metadata contract](../research/label-default-metadata.md) preserves checked unused

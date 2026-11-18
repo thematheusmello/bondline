@@ -53,19 +53,21 @@ Protected test/policy remains byte-exact. All workers/execution jobs are termina
 The separate next-CDX source audit is complete: eight fresh primary receipts, canonical
 type/owner/absence evidence and the documented four-byte Charge recovery rule are ready
 for the next source lock. No CDX implementation or new external-chemistry result follows.
-Push this final receiving/docs checkpoint with the same per-commit policy.
+The final receiving checkpoint is dfedef8; keep pushing each next atomic commit.
 Actions API enabledfalse and foundation workflow disabled_manually are verified.
 
 Next executable work:
 
-1. Source-lock the bounded next-CDX contract below; the metadata workflow is complete
-   only for its stated checked scope, with no full milestone promotion.
-2. Start the independent M1 CDX literal-atom metadata slice: public type/width/owner
-   contract, original independent byte vectors/runtime RED, then read-only isotope/
-   charge/radical/NumHydrogens mapping with absent H unresolved. Keep source retention,
-   display/edit/loss authority closed. Source-lock the property's explicit four-byte
-   Charge recovery instruction separately from generic integer-width guidance. The
-   current public omitted-run evidence does not justify general
+1. Read the now-locked [CDX literal-atom contract](docs/research/cdx-literal-atom-metadata.md),
+   source register and existing cdx.rs/read_atom/Layout/property tests. Freeze independent
+   Python-struct bytes/facts and qualify actual external RDKit before changing production;
+   observe existing-API runtime RED for Node data and wrong owners. No new decoder exists yet.
+2. Implement that M1 read-only isotope/charge/radical/NumHydrogens projection, including
+   the explicit property-specific four-byte Charge recovery rule, with absent H unresolved.
+   Keep source retention/display/edit/loss authority closed, duplicates strict and all49
+   metadata/catalogue exact. Complete actual adapters/Unicode files/native scope, bounded
+   fuzz and local gates before committing/pushing. The current public omitted-run evidence
+   does not justify general
    typography inheritance; keep it required/open and continue other unblocked M1 work.
 3. Broader CDX/styles/rich labels/interchange, remaining M2 drawing/selection/journal tools,
    M3 chemistry/reactions, M4 publishing/clipboard and M5 naming/templates/WASM/installers
