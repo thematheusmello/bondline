@@ -1,5 +1,16 @@
 # Open questions
 
+## Plain CDX bonds, 2026-11-18
+
+[The planned bond contract](../research/cdx-plain-bonds.md) can project three plain orders
+and directed DoublePosition while retaining automatic/manual distinctions in source.
+The current model has no non-Solid Display/Display2 field; do not silently replace those
+with Solid or grant faithful rendering. Dormant Display2/position on non-Double orders
+remains outside the bounded subset, including explicit0. Automatic positioning,
+noncanonical integer widths, other bond kinds/stereo, typography/styles and general
+CDX authoring remain unresolved. No implementation or new consumer agreement follows
+from this research alone.
+
 ## CDX literal metadata, 2026-11-18
 
 [The CDX contract](../research/cdx-literal-atom-metadata.md) has public canonical
