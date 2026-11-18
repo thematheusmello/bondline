@@ -21,4 +21,7 @@ python3 -B crates/io/tests/fixtures/cdx-label-preview/generate.py \
 diff -r -x SOURCES.md -x generate.py crates/io/tests/fixtures/cdx-label-preview "$out/preview"
 ```
 
-Manifest SHA-256 is `1a1b9a557a60a509ce12a3a842899430d39c863151b3035d8f9f9f2fe3ff619a`.
+Manifest SHA-256 is `5158a2c049fac8a9d01b74aa05f69a06b9f668e8437bc514f745dcda4c9a9492`.
+The qualification changes only the existing JSON field spelling
+`chain_angle_degrees` in the expected cyanide model. Every original
+CDX file, numerical value, and other declaration reproduces exactly.

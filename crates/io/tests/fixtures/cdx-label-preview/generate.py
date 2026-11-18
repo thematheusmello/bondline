@@ -97,7 +97,7 @@ def scene(fragments, *, framing="implicit", reverse=False, width=None, margin=No
     if authored_style:
         model["drawing_style"] = authored_style
     settings = {}
-    for tag, value, key in [(0x0805, length, "bond_length_pt"), (0x0803, angle, "chain_angle_deg")]:
+    for tag, value, key in [(0x0805, length, "bond_length_pt"), (0x0803, angle, "chain_angle_degrees")]:
         if value is not None:
             resources.append((tag, coordinate(value)))
             settings[key] = float(value)

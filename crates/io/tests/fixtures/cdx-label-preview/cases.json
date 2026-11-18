@@ -1077,7 +1077,7 @@
         },
         "drawing_settings": {
           "bond_length_pt": 48.0,
-          "chain_angle_deg": 120.0
+          "chain_angle_degrees": 120.0
         }
       },
       "ink": [
