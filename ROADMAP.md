@@ -12,7 +12,16 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
-The current M1 [mixed skeletal-label receiving](docs/verification-mixed-skeletal-labels.md)
+The current M1 [printed-label creation receiving](docs/verification-printed-label-creation.md)
+adds explicit-style hidden-carbon child Text creation, retained flags, stable IDs and a
+separate source capability that survives partial/all-labelled Save/reopen. Native Mac
+creation/continued editing/history/movement/Unicode files and exact CPU/Metal captures
+pass bounded independent checks. Old profiles/full/loss authority stay literal; new49
+preserves all old48 metadata and catalogue16/124. The user now requires pushing each
+atomic commit; Actions stays OFF. Effective foreign typography/default ownership, broader
+resources/placement, CDX/general interchange and every remaining M0–M5 workflow stay open.
+
+The preceding M1 [mixed skeletal-label receiving](docs/verification-mixed-skeletal-labels.md)
 adds a separate foreign-source capability for explicit printed labels plus explicitly
 hidden, known-H carbon. Current no-glyph proofs prevent borrowed fonts after point/neighbor
 changes. Existing label/selection/history/Save workflows and bounded native Mac exact

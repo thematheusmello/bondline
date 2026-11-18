@@ -1,5 +1,16 @@
 # Open questions
 
+## Explicit label creation, 2026-11-18
+
+The [creation receiving](../verification-printed-label-creation.md) resolves a bounded
+hidden-carbon→printed-child workflow with deliberate supported style, existing resources,
+retained flags and stable source IDs. It does not resolve absent/inherited foreign font
+defaults, arbitrary resource insertion, rich chemical runs or general child placement.
+The archived Node specification's general child-Text precedence supports the original
+scoped display policy; a stronger public version26.1 statement for every later Show* flag
+interaction was not found. Modern reference behavior and pixels remain unverified rather
+than inferred from the installed application. Broader effective typography is next.
+
 ## Mixed skeletal diagrams, 2026-11-18
 
 The [mixed-label contract](../research/mixed-skeletal-labels.md) resolves no absent/root

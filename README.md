@@ -44,16 +44,16 @@ General labels and chemical analysis are still being built.
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
-**Current validation:** explicit imported CDXML labels now support connected Single,
-centered Double and Triple diagrams with proven styles and glyph-margin clearance.
-Native macOS Option-click editing, Cancel, history and Unicode Save/reopen pass; numeric
-fields, literal text and bounds change together. Every foreign atom needs an explicit
-qualified label; bonded sources additionally need proven width/margin and relevant
-spacing/colour. Other drawing tools stay unavailable for these sources.
-[Current receiving](docs/verification-connected-labels.md) records independent
-font/XML/image/file checks, CPU/Metal agreement and10,000 sanitizer runs. Full local CI
-still fails at the recurring MCP listener-release test; remaining checks pass separately.
-General labels and the Text tool remain unfinished; golden approval remains pending.
+**Current validation:** qualified imported CDXML diagrams support explicit labels and
+explicitly hidden, known-H carbons with proven styles and glyph-margin clearance.
+Option-click can create a printed label on a supported hidden carbon using a visibly
+stated Roboto Regular12pt black style, preserving its flags and stable source IDs.
+Native macOS partial/full Save/reopen, further label editing, selection/movement and
+history pass independent exact-file checks; CPU/Metal captures match byte-for-byte.
+[Current receiving](docs/verification-printed-label-creation.md) records source/font/pixel/
+adapter evidence,10,000 sanitizer runs and the exact local-gate qualifications. General
+foreign defaults/styles, rich chemical labels and the Text tool remain unfinished.
+The historical MCP listener failure remains unexplained; golden approval remains pending.
 
 Earlier native macOS atom targeting, explicit element/H editing, Cancel,
 Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with independent
@@ -115,7 +115,7 @@ complete pan behavior remain unverified or limited; see [density evidence](docs/
 | CDXML files | Native Open, Save and Save As; editable reopening of proven Bondline-native files. Equivalent v0 whitespace/quote/ID/order variants now pass headless source-aware edits, history and real adapter/file checks; their native path is wired but unverified. Unknown imported content remains backed by its original bytes. [Scope](docs/verification-source-preserving-cdxml-profile.md). |
 | Box-positioned atom labels | Explicit no-p, known Roboto Regular/face0 CDXML labels render as authored and support synchronized Element/H/text/bounds edits, history and source-preserving Save/reopen. Foreign scenes require every atom explicitly labelled and no bonds. API/CLI/MCP/loopback, CPU/Metal and bounded macOS Option-click/form/Unicode-file checks pass. Marquee/Select All now move supported atoms and their raw label boxes together; unrelated drawing edits remain refused. General placement, formulas, styles, Text tool and other platforms remain unfinished. [Evidence](docs/verification-boxed-atom-labels.md). |
 | Connected explicit labels | A separate qualified CDXML profile supports fully explicit labelled Single/centered Double/Triple diagrams, original glyph-margin clearance, synchronized element/H edits and atom/box movement. Source/history/Unicode Save/reopen and bounded Mac input pass independent checks. Moved-source CPU/Metal captures now agree exactly after an independently checked nine-pixel edge correction. Other styles/defaults/source mutators remain unsupported. [Evidence](docs/verification-dependent-label-translation.md). |
-| Imported skeletal diagrams | A separate qualified CDXML workflow displays explicit printed labels with explicitly hidden, known-H carbon bends. Edit printed labels and move either kind through existing selection, history and source-preserving Save/reopen. Independent source/font/pixel/adapter checks and bounded native Mac Unicode workflows pass; CPU/Metal captures match exactly. Hidden-node label creation, omitted/default styles and general foreign diagrams remain missing. [Evidence](docs/verification-mixed-skeletal-labels.md). |
+| Imported skeletal diagrams | Qualified CDXML displays printed labels and explicitly hidden, known-H carbon bends. Alt-create a printed label with the visible original Roboto12 black preset, retaining flags, resources and stable child IDs. Partial/all-labelled continuation, existing-label edits, atom/box movement, history and Unicode Save/reopen pass bounded native Mac and independent source/font/pixel/adapter checks; CPU/Metal captures match exactly. General foreign defaults/styles, rich labels and the Text tool remain missing. [Evidence](docs/verification-printed-label-creation.md). |
 | Plain styled captions | Explicit Roboto Regular, single-line CDXML captions retain ordered runs, sizes, colours and original source. `text.set_run` shares history, Save/reopen and CLI/MCP/loopback; CPU/Metal and independent font/XML checks pass. Bounded macOS Open, remote-edit repaint, keyboard history and Unicode Save As/reopen pass. The canvas is read-only; the Text tool, chemical formatting, font editing and general foreign diagrams remain missing. [Scope and evidence](docs/verification-styled-captions.md). |
 | MOL V2000 files | Source-preserving native Open/Save/Save As, retained headers/frame, explicit format choice and guarded close. Verified on macOS; one-fragment/layout/metadata limits apply. |
 | MOL V3000 files | Native Open/Save/Save As and guarded close verified on macOS; retained source/headers, full-precision output and explicit versions. One-fragment/layout/metadata limits apply. |

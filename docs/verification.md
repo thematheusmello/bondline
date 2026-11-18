@@ -1,6 +1,15 @@
 # Verification log
 
-The latest [mixed skeletal-label receiving](verification-mixed-skeletal-labels.md) records
+The latest [printed-label creation receiving](verification-printed-label-creation.md)
+records source/resource/ID/history and native partial/all-labelled continuation through
+command49, preserving old48 metadata and the old source/loss guards. Fresh local27673
+PASSES workspace2122/0/1 plus vendor3/0, all fmt/clippy/layers/licenses/assets/corpus
+gates, and separate bounded10000/305s ASan. Exact native Unicode files and CPU/Metal
+captures pass; the historical MCP bind cause remains unexplained. The user-viewed review
+is left open. Other platforms, human goldens and the full M0–M5 scope remain incomplete.
+The user now explicitly requires pushing each atomic commit; Actions stays OFF.
+
+The preceding [mixed skeletal-label receiving](verification-mixed-skeletal-labels.md) records
 independent source/font/pixel/history/adapter checks, actual native Mac hidden-target
 refusal/printed edit/all-atom drag/history/Unicode Save/reopen/Cancel and CPU/Metal captures.
 Fresh full2091/0/1+vendor3/0 and bounded ASan10000/203s pass, with explicit compiler/oracle/

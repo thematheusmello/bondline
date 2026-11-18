@@ -3,7 +3,14 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
-The current [mixed skeletal/printed-label workflow](verification-mixed-skeletal-labels.md)
+The current [printed-label creation receiving](verification-printed-label-creation.md)
+adds explicit-style hidden-carbon child Text, retained flags/stable IDs and continued
+editing/movement through partial/all-printed Save/reopen. Independent native Mac files/
+captures, workspace2122/0/1 plus vendor3/0, all local gates and bounded ASan pass. General
+defaults/fonts/rich Text and the full [M0–M5 goal](../ROADMAP.md) remain open. Push each
+atomic commit per the user's instruction; Actions stays OFF. Protect the user-viewed review.
+
+The preceding [mixed skeletal/printed-label workflow](verification-mixed-skeletal-labels.md)
 imports proven no-Text carbons without borrowing foreign fonts, edits existing printed
 labels and moves both kinds through shared selection/history/source-preserving Save.
 Independent source/font/pixel oracles, actual adapters, bounded native Mac Unicode files,

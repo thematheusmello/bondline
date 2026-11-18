@@ -1,13 +1,31 @@
 # Architecture
 
-The [mixed skeletal/printed workflow](verification-mixed-skeletal-labels.md) adds a
+The [printed-label creation workflow](verification-printed-label-creation.md) adds one
+explicit-style command49 and a separate complete Flagged source capability. Its immutable
+baseline reserves child Text IDs for every eligible no-Text atom, using existing object
+IDs including captions but excluding font resources. New runs resolve against original
+resources in both getter and writer. Existing node splices and checked child appends
+compose before full re-import; current no-Text atoms are re-proved glyphless. Partial and
+all-printed reopened sources remain editable without producer claims or global authority.
+Old foreign Boxed/Connected/Mixed predicates keep explicit authored-flag absence fences.
+
+Child Text display precedence retains carbon flags and skips only that atom's own skeletal
+classification; all neighbouring topology remains. The pure creation helper delegates to
+old body/GPOS/curve placement with a supplied style. Current source capability and one
+whole-page certificate precede command/selection commit. The prior exact-native broader
+data codec stays available under an exact original-byte proof, but cannot substitute for
+those authoring certificates. Existing native request owners hold the visible original
+Roboto12 black style; Apply calls49 or old48, with catalogue16/124 unchanged.
+
+The preceding [mixed skeletal/printed workflow](verification-mixed-skeletal-labels.md) adds a
 separate complete Mixed source capability. A shared pure renderer query returns current
 explicit hidden-carbon IDs without duplicating C4/degree/mandatory-label rules. IO also
 checks neutral/natural/nonradical metadata and actual absence of source children; no
 omitted/root/font default is supplied. Both getter and writer re-prove current glyphless
 status after geometry/neighbor edits. Old Boxed/Connected/native scopes stay literal and
 global full remains false. Existing printed-label command48/form and Selection consume
-Mixed; hidden-node creation and all other source writers remain closed. The same source
+Mixed; command48 still refuses hidden-node creation, now supplied separately by49 above.
+All unrelated source writers remain closed. The same source
 splices, final whole-page certificate, history/Save and weak native owners apply.
 
 The [dependent-label movement workflow](verification-dependent-label-translation.md)

@@ -1,5 +1,31 @@
 # Bondline agent instructions
 
+## Commit and push policy — user instruction, 2026-11-18
+
+The user explicitly authorizes and requires pushing after EVERY atomic local commit.
+Use the current integrated `feat/multiple-bonds` branch, now tracking its same origin
+branch. Keep source/tests/evidence together, push immediately after each commit and
+verify the remote ref. Never force-push, rewrite shared history, merge/release or publish
+artifacts as an inferred part of sync. Retain isolated worker branches locally unless
+separately needed. Actions remains OFF; source pushes do not authorize enabling it.
+This supersedes historical no-push checkpoint statements; the full M0–M5 goal stays active.
+
+Printed-label creation is integrated through091328d, with contract126f99e,
+render8f1225e/fixtures9acd1a5/IObb30dca/wire8c37996/oracles38283d4 and fuzz a186933.
+Read docs/research/printed-label-creation.md and docs/verification-printed-label-creation.md.
+Preserve explicit styles/existing resources, retained flags, stable all-baseline child-ID
+reservations, separate Flagged capability and exact old Boxed/Connected/Mixed/full/loss
+boundaries. Constructor/child precedence never removes topology for other hidden atoms.
+Current resource/hidden proofs must precede the old exact-native DATA codec; its fallback
+does not grant authoring. New49 creates absent labels; old48 remains existing-label only.
+Old48 actual metadata/prefix and catalogue16/124 stay exact; native form owns its displayed
+Roboto12 black creation preset. Shared source/page/history/Save/modal/Cancel guards stay.
+Native partial/all-labelled Unicode files, continuation edits, movement and captures pass;
+user then manually zooms the own review. LEAVE `target/label-creation/Bondline Label Review.app`
+PID365 open/protected with the older user windows; no final draft Cancel/quit is claimed.
+ASan10000/305s and component checks pass; final aggregate state/next tasks are in STATUS.
+Other platforms/golden approval/full M0–M5 remain incomplete. Push each next atomic commit.
+
 Mixed skeletal/printed labels follow docs/research/mixed-skeletal-labels.md and
 docs/verification-mixed-skeletal-labels.md on basef16b79f, contractb30f0d6/5f58276,
 querybb719c9/fixtures71129ab/IOc3cc351/oracles1473353 and receiving command/UI commit.

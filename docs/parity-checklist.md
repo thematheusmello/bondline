@@ -11,7 +11,15 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
-The [Mixed skeletal/printed-label workflow](verification-mixed-skeletal-labels.md) extends
+The [explicit creation increment](verification-printed-label-creation.md) extends existing
+Alt atom editing to a qualified hidden carbon using a displayed original style. One49
+transaction preserves flags and stable source IDs; partial/all-printed files reopen for
+continued48 edits and Selection. Independent source/font/pixel/history/adapters and
+bounded native Mac Unicode workflows pass. This is a limited original authoring flow;
+general Text, chemical formatting, fonts/defaults, modern/platform parity and every
+disabled tool remain missing. Registry49 retains old48 metadata, catalogue16/124 stays.
+
+The preceding [Mixed skeletal/printed-label workflow](verification-mixed-skeletal-labels.md) extends
 only existing TD-002/ME-011 movement and printed-label edits to separately proven foreign
 diagrams. Current explicit hidden-C proofs, independent source/geometry/pixel/history/
 adapters and bounded native Mac exact Unicode files pass. Hidden-node label creation,

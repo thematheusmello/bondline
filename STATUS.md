@@ -7,34 +7,74 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
-**In progress: explicit printed-label creation**, base7113237, locked contract126f99e,
-renderer8f1225e (isolated62b9841), frozen independent source/oracle data9acd1a5.
-Read [creation contract](docs/research/printed-label-creation.md). This is the current
-executable work, superseding the prior next-task paragraph and the persistent goal's
-historical line-width first task. Full M0–M5 scope is unchanged and active.
+Recoverable printed-label creation: base7113237, contract126f99e, renderer8f1225e
+(isolated62b9841), original fixtures9acd1a5, IObb30dca (isolated33092ca), wire8c37996,
+oracles38283d4 (isolatedd8b8d97), command/UI091328d and fuzz a186933. Read
+[creation contract](docs/research/printed-label-creation.md) and
+[receiving](docs/verification-printed-label-creation.md). This supersedes all historical
+next-task/job paragraphs and the persistent goal's old line-width first task.
 
-Root's pending commands/UI/fuzz files add command49, explicit style and the native form,
-retained flags, current-candidate source fences and independent history/Save tests. They
-depend on the in-flight IO Flagged capability; integrated build/gates have not run yet.
-The original existing dispatch/form declarations actually fail0/2 at the missing command
-and hidden-target refusal. Renderer existing-API RED0/2→GREEN2/0, complete195/0 plus
-fmt/clippy pass. The20 frozen sources/64 FontTools boxes/eight independent reader
-refusals pass before IO/caller production. These are component results, not an integrated
-creation workflow or a native claim. All old48 metadata and protected MCP tests stay exact.
+New49 creates a child label on a qualified current-hidden imported carbon with an
+explicit style and existing resources. Flags/identity/geometry stay; Element/H/body/box
+change together in one source/page-certified edit. Separate Flagged authority survives
+partial/all-printed Save/reopen and further48 edits/movement. New source resource checks
+and current hidden proofs precede the old native DATA codec; no fallback authoring.
+Immutable-baseline reservations include child Text/captions but exclude font IDs, so
+reverse creations never rename earlier children. Old Boxed/Connected/Mixed/full/loss
+guards and every unrelated authoring refusal stay literal. Actual old48 byte/schema/
+order prefix45486B/SHA256c861b31ce690ec5808e6262884dc7195e4e7e796f0e2ec6dcf47e082de9ad1da
+and catalogue16/124 stay exact; no grey tool gains a binding.
 
-Parallel owned lanes: `label_layout_evidence` implements IO in retained
-`../bondline-dependent-label-io`, branch `feat/printed-label-io`;
-`boxed_label_render` prepares independent created-source rendering in retained
-`../bondline-render-coverage`; `label_workflow_review` owns only the new actual CLI/MCP/
-socket wire tests in this root worktree. Preserve unrelated pending files and earlier
-branches. Query worker/job state before resuming; no new own native app is open.
+Original20sources/64FontToolsboxes/eight-reader controls, renderer195/0, IO502/0, new
+command8/App1/wire3/render3 and exact-source history pass. Source-aware rendering covers
+15 whole CPU/GPU frames/60 bonds/five painted cases, with three predeclared uncertain
+pixels and unchanged old masks. Native Mac retained8-Ring→Open→100%→hidden Alt creation/
+Cancel/fresh/Apply→Undo/Redo→Unicode partial Save/reopen→old48 N/H1/history→remaining
+creation→Selection/all-five(24,-12)drag/history→final Unicode Save/reopen passes exact
+independent model/files. Final2279B SHA2565690e2fe8ce05ebdf5cb8d96399e49e1e86aef387ecd2aa2f677f2f848c92a7e;
+CPU/Metal1088 PNGs byte-exact29110B/SHA256
+d9b8c028f1bf76f6d3e7ccce195897ffb53134ea2c1cdfb59a6f490610318fb4.
+AX truncation/coordinate-focus setup qualifications and CJK filename-glyph limits stay.
 
-Next: finish/integrate precise IO source/resource/ID proof while preserving old native
-data-only codec behavior; run command/App/adapter and independent render checks, bounded
-profile ASan, complete local CI, then actual own native creation/history/Unicode Save/
-reopen/Cancel. Update the receiving record and commit all remaining files atomically.
-Old human golden approval remains pending; other-platform execution/full parity remains
-unverified. Actions is OFF and protected older user apps/drawings remain untouched.
+Fresh final27673 PASSES workspace2122/0/1 across314 reports plus vendor3/0 and all local
+fmt/clippy/layers/licenses/seven-assets/pinned-corpus gates; fuzz fmt also passes.
+Log266746B/SHA256d5c2ab9d8f6a2ede7761986453f0210e8981e624636d473dba5df417041e9e27.
+Initial28685 has twelve stale CLI inventory failures; qualified51825 has one intentionally
+superseded hidden-Open negative. Exact49 inventory/prefix and stronger nonauthoring
+creation-style/Cancel checks correct them, with old48 hidden and other guards unchanged.
+The earlier duplicate test module lint and wire slice lint are test-only qualifications.
+No causal historical MCP listener fix is claimed; protected test/policy stays exact.
+ASan22691 passes10000/305s, cov8796/ft20218/RSS513MiB,34 immutable sources and four actual
+16KiB mutations. Manifest af870a2cab7b5632cb6650d70aee37be1c56e71d925dfdc9533d537fefe5eeaf
+reproduces exactly; log111425B/SHA256fd25628a3e92a2d0a806402f6447dc7a8c200b67c9034e06b17898fb681cdd08.
+
+All execution jobs/workers are terminal; isolated branches/worktrees remain for provenance.
+The NEW own `target/label-creation/Bondline Label Review.app`, PID365, is LEFT OPEN:
+the user manually changes zoom to158% after final reopen, then confirms they stopped.
+Preserve this now-user-viewed review, its files and all older protected apps/drawings.
+No final reopened-draft Cancel/quit is claimed. No dependency/lock/vendor/font/asset/
+old golden/workflow change; full M0–M5 and human golden approval remain incomplete.
+
+The user explicitly requires push-after-EVERY-atomic-commit. Code091328d and fuzz a186933
+are pushed on `feat/multiple-bonds`, now tracking the same origin branch. Keep this
+receiving record/next changes synced too; never force-push or infer merge/release approval.
+Actions is confirmed OFF through repository API and stays OFF during development.
+
+Next executable work:
+
+1. Record any actual reply before promoting the older NH2 image to a human golden;
+   approval remains pending and does not block independent implementation.
+2. Source-lock effective foreign label typography: omitted Style-run font/size/face may
+   use ONLY explicit, supported per-property LabelFont/LabelSize/LabelFace owners already
+   represented by standalone lookup. Declare shadowed/unsupported/unresolved/resource/
+   placement and exact-source/history/native vectors before widening complete authority.
+   No external stylesheet/default,−1-as-inherit, universal baseline or producer exception.
+   Broader resources/fonts/rich runs/child placement remain required; do not repeat the
+   delivered child insertion/flag/ID workflow or weaken unknown-source/loss guards.
+3. Continue general CDX/interchange, remaining M2 drawing/selection/journal tools, M3
+   chemistry/reactions, M4 publishing/clipboard and M5 naming/templates/WASM/installers.
+   M0 accessibility/input/DPI/platform/jobs/addressability and historical listener cause
+   remain open. Keep the full goal active and push each tested atomic commit; Actions OFF.
 
 ### Last integrated Mixed skeletal workflow
 
