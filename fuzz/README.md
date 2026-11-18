@@ -5,6 +5,26 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Connected label sources
+
+`cdxml_profile` additionally checks the separate Connected source capability: supported
+four-field label edits must equal original independently frozen CDXML, preserve every
+other source byte and re-import the same complete model. Root style/bond/point/body/
+child-placement drift must revoke the capability and source writer; restoration recovers
+exact unchanged source. Old Boxed/native/opaque invariants remain intact. The fixed
+structured vectors do no rendering, Engine/history, filesystem or GPU/native work.
+
+```sh
+python3 fuzz/seed_connected_labels.py .cache/fuzz/connected-labels-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/connected-labels-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The stdlib/Expat recipe refuses an existing destination and keeps25 immutable original
+sources/manifest outside writable corpus, including exact16KiB and missing/local/qualified/
+colour/body/font/negative-underflow cases. [Receiving](../docs/verification-connected-labels.md)
+records the actual10000/151s ASan pass, source hashes and reached16KiB mutation; these
+commands alone are declarations, not an exhaustive safety or graphical correctness claim.
+
 ## Source-preserving XML edits
 
 ### Source-backed label defaults

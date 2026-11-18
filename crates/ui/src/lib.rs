@@ -403,7 +403,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         .is_ok_and(|stored| stored.has_caption_projection());
     let atom_label_preview = engine
         .stored_document()
-        .is_ok_and(|stored| stored.has_boxed_atom_labels());
+        .is_ok_and(|stored| stored.has_boxed_atom_labels() || stored.has_connected_atom_labels());
     ui.heading("Document");
     if let Some(message) = error {
         ui.colored_label(egui::Color32::DARK_RED, message);
@@ -1715,7 +1715,7 @@ fn show_workspace_with_preview(
                     drawing.gesture = None;
                 }
                 if command.is_none()
-                    && engine.stored_document().is_ok_and(|stored| stored.has_boxed_atom_labels())
+                    && engine.stored_document().is_ok_and(|stored| stored.has_boxed_atom_labels() || stored.has_connected_atom_labels())
                     && !matches!(event, egui::Event::MouseWheel { .. })
                 {
                     drawing.cancel_canvas_gestures();

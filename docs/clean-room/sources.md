@@ -8,11 +8,29 @@ then external-style-sheet fallback, and describes whitespace around labels/attac
 No foreign numeric default or universal box/corner algorithm follows. Optional root
 `margin_width_pt`, independent Some0/None, finite0..100000 bounds and negative-nonzero
 underflow refusal are original checked policies. The [connected-label contract](../research/connected-label-styles.md)
-separates data ownership from the pending outline renderer/source grant, preserves the
+separates data ownership from the qualified outline renderer/source grant, preserves the
 old foreign Boxed zero-bond profile and48 metadata, and retains all loss guards.
 Public FontTools/Expat/Decimal/direct RDKit and selected original-source evidence are
 SHA-pinned under ignored target/connected-labels; no reference binary/export/font/asset
 is inspected or copied. Exact Roboto reference clipping remains an open question.
+
+The distinct Connected workflow is recorded in
+[receiving](../verification-connected-labels.md). Public
+[ForegroundColor](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ForegroundColor.htm)
+defaults to resource3, whose resolved RGB must be checked rather than presumed black.
+[Display](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Display.htm) and
+[Display2](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Display2.htm)
+support the qualified absent/Solid intersection; unspecified
+[DoublePosition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/DoublePosition.htm)
+is not explicit Center. Relevant
+[LineWidth](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LineWidth.htm),
+[BondLength](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondLength.htm) and
+[BondSpacing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacing.htm)
+remain explicit root owners in this profile. No producer-name default waiver follows.
+The Euclidean butt-strip rule, common cut planes, error/work bounds, point-space crossing
+certificate and capability separation are original checked policies, not universal
+reference claims. The tracked independent FontTools/Expat/Decimal/RDKit/Pillow tools and
+original fixture provenance make those decisions reproducible without reference assets.
 
 The box-positioned label workflow reviewed2026-11-18 uses primary
 [absent Text-position fallback](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/2DPosition.htm),

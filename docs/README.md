@@ -3,7 +3,14 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
-The current [box-positioned label workflow](verification-boxed-atom-labels.md) connects
+The current [connected-label workflow](verification-connected-labels.md) adds explicit
+bonded foreign sources, actual-outline glyph-margin clearance and synchronized label
+edits through the existing command/native form. Source/history/Unicode Save/reopen,
+independent oracles, actual adapters and bounded macOS acceptance pass. The aggregate
+listener failure remains recorded; remaining gates pass separately. Full M0–M5 remains
+active, with no new tool or golden approval.
+
+The preceding [box-positioned label workflow](verification-boxed-atom-labels.md) connects
 explicit imported label rendering, synchronized Element/H/body/bounds editing and
 source-preserving history/Unicode Save/reopen through every adapter and the bounded
 macOS atom form. Registry48/catalogue16/124 is current. Unqualified labels, other dependent

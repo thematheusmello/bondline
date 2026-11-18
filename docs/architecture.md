@@ -1,5 +1,18 @@
 # Architecture
 
+The [connected label workflow](verification-connected-labels.md) adds a distinct complete
+`has_connected_atom_labels` grant for explicit foreign bonded diagrams. Old foreign Boxed
+stays zero-bond; global full authority staysfalse. Root width/margin, relevant explicit
+preferred length/spacing, resolved-black bonds and source-space geometry precede display.
+The existing48/form consumes either label capability, keeping all other mutators closed.
+Both source writers certify complete re-import after only Element/H/body/box splices.
+
+For explicit margin, bounded quadratic/linear glyph outlines shorten actual butt strokes
+under the original Euclidean rule, using common cut planes for multiple rails. Actual
+components feed render/hits/paper/ink certificates; glyph placement and AtomHit masks
+stay exact. Some paints no old white erasers, while None retains the old path. Independent
+FontTools/pixel/source/history/native evidence and remaining limits are in receiving.
+
 The [box-positioned child-label workflow](research/boxed-atom-label-workflow.md) adds a
 separate complete `has_boxed_atom_labels` source capability. Foreign Boxed sources require every atom explicitly labelled
 and zero bonds; missing foreign fonts/ink defaults cannot borrow native conventions.
@@ -79,8 +92,8 @@ unresolved references and unsupported resource content remain explicit. This vie
 no IO profile, model/render authority or UI binding. See [contract](research/cdxml-resources.md)
 and [receiving](verification-cdxml-resources.md); foreign effective styles/Text remain required.
 
-Document has a separate optional `DrawingStyle` for explicit root line width and relative
-spacing, not a
+Document has a separate optional `DrawingStyle` for explicit root line width, relative
+spacing and label margin, not a
 creation preference or resolved foreign default. Empty omission preserves old snapshots
 and native bytes. PageView carries style through logical/physical cameras; complete-owner
 IO overrides stale caller style. Actual ink width is independent of legacy glyph/spacing

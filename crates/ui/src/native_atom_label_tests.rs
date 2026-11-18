@@ -1466,3 +1466,6 @@ mod terminal_label;
 
 #[path = "boxed_atom_label_app_tests.rs"]
 mod boxed_atom_label_app_tests;
+
+#[path = "connected_atom_label_app_tests.rs"]
+mod connected_atom_label_app_tests;

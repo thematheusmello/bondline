@@ -6,6 +6,12 @@ adapters must call it; they must not implement their own authoring operations.
 The delivered registry has48 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
+The [connected-label grant](verification-connected-labels.md) reuses48 and ui.atom_label
+without changing any record/schema/order. Qualified foreign diagrams have a separate
+`has_connected_atom_labels` capability; old foreign Boxed remains zero-bond. Only existing
+Element/H/body/box edits qualify, with explicit source styles, full re-import and one
+final physical-page certificate. Other chemical/page/style/caption writers stay refused.
+
 ## Box-positioned authored atom labels
 
 `atom.set_authored_label` appends record48. All old47 metadata, schema and order remain

@@ -12,7 +12,17 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
-The current M1 [box-positioned label receiving](docs/verification-boxed-atom-labels.md)
+The current M1 [connected-label receiving](docs/verification-connected-labels.md) adds
+explicit foreign bonded diagrams through a separate source capability, actual-outline
+margin shortening and the existing synchronized label command/native form. Old Boxed
+remains zero-bond, global full staysfalse and all48 metadata/catalogue16/124 remain exact.
+Independent source/render/history/adapters and bounded Mac Unicode Save/reopen pass.
+Aggregate MCP listener-release failure remains open; other components and sanitizer pass.
+Continue literal dependent Node+box movement with independently declared source/geometry/
+history proofs, broader foreign styles/fonts/text and the full remaining milestones.
+Human golden approval and exact reference/platform behavior remain unverified.
+
+The preceding M1 [box-positioned label receiving](docs/verification-boxed-atom-labels.md)
 delivers a complete bounded imported-file workflow: authored display, synchronized
 Element/H/body/bounds edits, history, Unicode Save/reopen and a reused native atom form.
 Foreign sources require all atoms explicitly labelled and no bonds; unknown font/ink

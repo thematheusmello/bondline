@@ -1,5 +1,10 @@
 # Verification log
 
+The latest [connected-label receiving](verification-connected-labels.md) records independent
+source/render/history/adapter/native evidence, exact source and registry pins,10000-run
+ASan and the recurring failed MCP aggregate versus separately completed remaining gates.
+Full M0–M5, human golden approval and new Windows/Linux/browser execution remain open.
+
 ## Source-backed label defaults, 2026-11-18
 
 [Receiving](verification-label-default-lookup.md) records primary-source conflicts and

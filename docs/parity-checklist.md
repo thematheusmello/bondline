@@ -139,6 +139,15 @@ active tool, enabled state and flyout flows remain unobserved; no shipped glyph 
 
 ## Workflow overview
 
+The [connected label workflow](verification-connected-labels.md) verifies its bounded
+explicit foreign display/edit/history/Unicode Save/reopen scope, including actual macOS.
+It requires its own complete source capability with all atoms labelled and explicit
+root ink/margin/relevant spacing; old foreign Boxed remains zero-bond. Shared outline
+clearance and command48/form are integrated without enabling a new tool or changing48
+metadata/catalogue16/124. Other writers/defaults/geometry/Text and broader reference
+parity remain missing. The new aggregate listener failure is recorded; remaining gates
+pass separately. Golden approval and Windows/Linux/browser execution remain unverified.
+
 The [box-positioned child-label workflow](verification-boxed-atom-labels.md) now verifies
 its explicitly bounded imported-file display/edit/history/Unicode Save/reopen scope,
 including actual macOS Option-click/form and independent actual-file consumption.

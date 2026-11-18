@@ -7,6 +7,52 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+Recoverable connected-label workflow: data0014935, render0ba92cf, IO74375bd and
+independent oracle7500599, plus the receiving command/UI commit containing this record.
+Read [contract](docs/research/connected-label-styles.md) and
+[receiving](docs/verification-connected-labels.md). This continuation supersedes the
+persistent goal's historical line-width first-task text and older next-task/job paragraphs.
+
+A separate Connected capability admits explicit all-labelled, noncrossing foreign
+Single/centered Double/Triple diagrams with proven root ink/margin/spacing/colour.
+Old foreign Boxed remains zero-bond; global full staysfalse. Actual-outline Euclidean
+butt-strip shortening/common rail cuts replace the temporary margin refusal, preserving
+old None pixels/glyph placement/Atom hits. Only existing command48/form may synchronize
+Element/H/body/box, certify final source/page and commit once. Other mutators remain
+refused. All48 metadata remain byte-exact; catalogue16/124 stays, no grey tool is enabled.
+
+Independent FontTools128 cases, external line/curve/dense/Pillow controls, Expat/Decimal/
+direct RDKit, exact-source generated history, actual CLI/stdio/socket and CPU/Metal pass.
+Actual own Mac Open from retained Ring, Option-edit, history, Unicode Save As/reopen,
+Cancel and read-only drag pass; actual saved1291B source equals the independent fixture.
+Controller focus/typeText setup qualifications and CJK filename-glyph limits remain.
+The disposable review is explicitly quit/PID50034 absent; protected apps are untouched.
+
+Fresh aggregate12224 fails1300/1 at unchanged MCP replacement_bind56994/AddrInUse.
+Not-yet-run components62118 pass732/0/1 including vendor3/0, all remaining gates and
+fuzz fmt. Combined unique execution is workspace2029/1/1 plus vendor3/0. Workspace
+fmt/clippy pass, but this is NOT a clean aggregate or a causal listener repair. Bounded
+ASan63302 passes10000/151s, actual16KiB mutation and25 exact immutable sources. Full
+pins, conditions and scope are in receiving; no dependency/lock/vendor/font/asset/old
+golden/workflow change. All owned jobs/workers are terminal; isolated worktrees remain.
+
+Next executable work:
+
+1. Record an actual reply before promoting the earlier NH2 candidate to a human golden;
+   approval remains pending and does not block independent implementation.
+2. Continue M1 dependent labels: source-lock literal Node+ink-box translation together,
+   declare independent exact-source/geometry/selection/history/refusal vectors, and extend
+   supported movement through existing guards only after final page/source certification.
+   Preserve both complete capabilities, unsupported child-p/styles/defaults and all other
+   loss/authoring boundaries. Arbitrary chemical layout/face conventions remain unresolved.
+3. Finish broader foreign styles/fonts/text, CDX/general interchange, then all remaining
+   M2 drawing/selection/journal tools, M3 chemistry/reactions, M4 publishing/clipboard and
+   M5 naming/templates/WASM/installers. M0 accessibility, input/DPI/platform acceptance,
+   jobs/addressability and the unexplained listener-release failure remain open. Do not
+   restart exhausted historical listener diagnosis or enable Actions. Full M0–M5 stays active.
+
+### Preceding margin-data checkpoint
+
 Recoverable data checkpoint: optional physical label-margin data on base61be8e6, in the
 commit containing this record. Read [contract](docs/research/connected-label-styles.md)
 and [data receiving](docs/verification-margin-data.md). Root-only MarginWidth now retains
@@ -22,7 +68,7 @@ ASan67587 passes10000/125s, actual16KiB,18 immutable sources exact. Historical M
 remains unexplained, not fixed by this natural passing aggregate. No native/user app,
 dependency/font/asset/old golden/workflow change; Actions OFF.
 
-This data checkpoint does NOT complete the connected workflow. Three parallel lanes
+At that checkpoint the data did NOT complete the connected workflow. Three parallel lanes
 continue the outline renderer, a distinct Connected source capability and independent
 FontTools/paint oracles; all workers wait for this tested parent before producer edits.
 No Root execution jobs remain live. Keep foreign Boxed literally all-explicit/zero-bond;

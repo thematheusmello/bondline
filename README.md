@@ -44,15 +44,16 @@ General labels and chemical analysis are still being built.
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
-**Current validation:** supported imported CDXML atom labels with an explicit ink box,
-no child text position and one plain Roboto run now support native macOS Option-click
-editing, Cancel, history and Unicode Save/reopen. Numeric fields, literal text and bounds
-change together. Foreign scenes need explicit labels on every atom and no bonds; other
-drawing tools stay unavailable for that source.
-[Current label receiving](docs/verification-boxed-atom-labels.md) records independent
-font/XML/image/file checks, CPU/Metal agreement, sanitizer results and the separate
-workspace versus recurring MCP aggregate failure. General labels and the Text tool remain
-unfinished; the new image reference still needs human approval.
+**Current validation:** explicit imported CDXML labels now support connected Single,
+centered Double and Triple diagrams with proven styles and glyph-margin clearance.
+Native macOS Option-click editing, Cancel, history and Unicode Save/reopen pass; numeric
+fields, literal text and bounds change together. Every foreign atom needs an explicit
+qualified label; bonded sources additionally need proven width/margin and relevant
+spacing/colour. Other drawing tools stay unavailable for these sources.
+[Current receiving](docs/verification-connected-labels.md) records independent
+font/XML/image/file checks, CPU/Metal agreement and10,000 sanitizer runs. Full local CI
+still fails at the recurring MCP listener-release test; remaining checks pass separately.
+General labels and the Text tool remain unfinished; golden approval remains pending.
 
 Earlier native macOS atom targeting, explicit element/H editing, Cancel,
 Undo/Redo, draft-close protection and Unicode CDXML Save/reopen pass, with independent

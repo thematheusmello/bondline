@@ -767,12 +767,123 @@ fn boxed_source_workflow(data: &[u8]) {
     original_unchanged(&base, BOXED_ORIGINAL, &snapshot);
 }
 
+fn connected_source_workflow(data: &[u8]) {
+    const SOURCE: &[u8] =
+        include_bytes!("../../crates/io/tests/fixtures/connected-labels/water.cdxml");
+    const EDITED: &[u8] = include_bytes!(
+        "../../crates/io/tests/fixtures/connected-labels/ammonia_after_label_edit.cdxml"
+    );
+    let base = StoredDocument::from_cdxml(SOURCE.into(), PageSize::A4).unwrap();
+    let snapshot = base.model_snapshot();
+    assert!(base.has_connected_atom_labels());
+    assert!(!base.has_boxed_atom_labels());
+    assert!(!base.is_fully_mapped());
+    let changed = data.first().copied().unwrap_or(0) & 1 != 0;
+    let page = &base.model().pages()[0];
+    let fragment = &page.fragments()[0];
+    let mut current = base.clone();
+    if changed {
+        let mut atoms = fragment.atoms().to_vec();
+        let atom = atoms.first_mut().unwrap();
+        atom.element = Element::new(7).unwrap();
+        atom.explicit_hydrogens = Some(1);
+        atom.authored_label = Some(Arc::new(
+            atom.authored_label
+                .as_ref()
+                .unwrap()
+                .with_run_text(0, "NH".into())
+                .unwrap()
+                .with_bounding_box(Some([
+                    156.7216796875,
+                    155.734375,
+                    171.8330078125,
+                    164.265625,
+                ]))
+                .unwrap(),
+        ));
+        current
+            .model_mut()
+            .replace_fragment(
+                page.id(),
+                Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec()).unwrap(),
+            )
+            .unwrap();
+    }
+    let encoded = current.to_cdxml().unwrap();
+    assert_eq!(encoded.as_ref(), if changed { EDITED } else { SOURCE });
+    let reopened = StoredDocument::from_cdxml(encoded.into_owned().into(), PageSize::A4).unwrap();
+    assert_eq!(reopened.model(), current.model());
+    assert!(reopened.has_connected_atom_labels());
+    assert!(!reopened.has_boxed_atom_labels());
+    assert!(reopened.has_display_projection());
+    assert!(!reopened.is_fully_mapped());
+
+    let mut bad = current.clone();
+    let page = &current.model().pages()[0];
+    let fragment = &page.fragments()[0];
+    match data.get(1).copied().unwrap_or(0) % 6 {
+        0 => {
+            let style = bad
+                .model()
+                .drawing_style()
+                .with_margin_width(Some(3.0))
+                .unwrap();
+            bad.model_mut().set_drawing_style(style);
+        }
+        1 => {
+            let style = bad
+                .model()
+                .drawing_style()
+                .with_line_width(Some(2.0))
+                .unwrap();
+            bad.model_mut().set_drawing_style(style);
+        }
+        mode => {
+            let mut atoms = fragment.atoms().to_vec();
+            let mut bonds = fragment.bonds().to_vec();
+            let atom = atoms.first_mut().unwrap();
+            if mode == 2 {
+                bonds.first_mut().unwrap().order = BondOrder::Double;
+            } else if mode == 3 {
+                let old = atom.position.unwrap();
+                atom.position = Some(Point2::new(old.x_pt() + 0.25, old.y_pt()).unwrap());
+            } else {
+                let label = atom.authored_label.as_ref().unwrap();
+                atom.authored_label = Some(Arc::new(if mode == 4 {
+                    label.with_run_text(0, "unknown".into()).unwrap()
+                } else {
+                    label
+                        .with_position(Some(Point2::new(160.0, 160.0).unwrap()))
+                        .unwrap()
+                }));
+            }
+            bad.model_mut()
+                .replace_fragment(
+                    page.id(),
+                    Fragment::new(fragment.id(), atoms, bonds).unwrap(),
+                )
+                .unwrap();
+        }
+    }
+    assert!(!bad.has_connected_atom_labels());
+    assert!(!bad.has_boxed_atom_labels());
+    assert!(!bad.has_display_projection());
+    assert!(matches!(
+        bad.to_cdxml(),
+        Err(DocumentError::UnsupportedEdit)
+    ));
+    *bad.model_mut() = base.model().clone();
+    assert_eq!(bad.to_cdxml().unwrap().as_ref(), SOURCE);
+    original_unchanged(&base, SOURCE, &snapshot);
+}
+
 fuzz_target!(|data: &[u8]| {
     if data.len() > INPUT_LIMIT {
         return;
     }
     assert_eq!(ORIGINAL.len(), 464);
     arbitrary_source(data);
+    connected_source_workflow(data);
     boxed_source_workflow(data);
     structured_atom_label(data);
     structured_caption(data);

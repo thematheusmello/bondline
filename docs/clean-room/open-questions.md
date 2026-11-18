@@ -12,7 +12,12 @@ do not qualify Roboto face0/no-p pixels. The original Euclidean butt-strip rule 
 tested independently and kept separate from unresolved exact reference behavior,
 including open glyphs, off-axis H/counts, near-axis transitions and other fonts. No
 Helvetica fitted constants are transferred. Keep the old foreign Boxed zero-bond
-profile; a separate Connected capability needs its full source/render/history/native proof.
+profile. A separate Connected capability now has its bounded
+[source/render/history/native proof](../verification-connected-labels.md), without
+resolving universal font/layout/reference-pixel behavior. Same-atom incident bonds may
+share ink; the original clearance rule and nonincident-collision checks do not establish
+a universal white gap at incident joins. Short connectors retain atom-priority hit masks.
+No stricter incident-angle policy or broader reference claim follows from these observations.
 
 ## Chemical label defaults and placement, 2026-11-18
 

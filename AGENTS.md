@@ -1,5 +1,26 @@
 # Bondline agent instructions
 
+Connected explicit labels follow docs/research/connected-label-styles.md and
+docs/verification-connected-labels.md: data0014935/render0ba92cf/IO74375bd/oracles7500599
+plus the receiving command/UI commit. Preserve old foreign Boxed zero-bond semantics;
+has_connected_atom_labels is separate, requires all explicit labels/root styles/resolved
+black ink/noncrossing geometry and never grants globalfull. Existing48/form reuse both
+capabilities with exact metadata/weak owners/one final source+page proof. Only four-field
+Element/H/body/box deltas qualify. Other writers/grey tools stay closed, catalogue16/124.
+Some margin uses actual outline/butt-strip cuts and common rails, no white erasers; None,
+glyph placement and AtomHit ownership stay exact. Short connectors may remain atom-owned;
+same-atom incident joins are allowed, not a new universal gap requirement. Independent128
+FontTools/Pillow/Expat/Decimal/RDKit/history/adapters/CPU-GPU and actual own Mac
+Open/Option-edit/history/Unicode Save/reopen/Cancel/read-only drag pass. Native controller
+focus/typeText and filename-glyph qualifications stay explicit. Review quit/PID50034
+absent, protected apps untouched, all owned jobs/workers terminal. Aggregate12224 fails
+unchanged replacement_bind56994; remaining62118 passes all not-yet-run components/gates.
+Combined workspace2029/1/1+vendor3/0 is NOT a clean aggregate/causal listener fix.
+ASan63302 passes10000/151s with25 exact immutable sources and actual16KiB mutation.
+Golden approval remains pending. Full M0–M5 remains active/incomplete; Actions OFF.
+Next exact dependent Node+box translation/source/history task is in STATUS, superseding
+all historical first-task/job paragraphs below and the stale goal line-width paragraph.
+
 Physical label-margin data now follows docs/research/connected-label-styles.md and
 docs/verification-margin-data.md on base61be8e6. Keep optional root MarginWidth independent
 of width/spacing, Some0 vs None, exact absent bytes,0..100000 bounds, signed-zero vs
