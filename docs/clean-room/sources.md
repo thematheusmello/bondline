@@ -1,5 +1,10 @@
 # Clean-room source register
 
+The [implicit CDX Element contract](../research/cdx-implicit-element.md)
+cites the published carbon default, H count and binary containment rules.
+It defines insertion through an exact source handle and preserves a
+carbon omission through an H-only edit or numeric no-op.
+
 The [existing CDX atom label edit contract](../research/cdx-atom-label-edit.md)
 records the four source fields, signed coordinate rounding, scoped owners,
 and the unchanged source proof. FontTools and RDKit verify the original

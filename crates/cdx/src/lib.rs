@@ -5,6 +5,7 @@ use std::{fmt, ops::Range};
 
 mod patch;
 mod write;
+pub use patch::PropertyInsertion;
 pub use write::Writer;
 mod resources;
 pub use resources::{Color, Font, ResourceError, Resources};

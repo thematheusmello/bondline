@@ -1,7 +1,8 @@
 #![no_main]
 
 use bondline_cdx::{
-    Document, Error, Framing, Record, RecordKind, ResourceError, StringError, Writer,
+    Document, Error, Framing, MAX_INPUT_BYTES, MAX_RECORDS, PropertyInsertion, Record, RecordKind,
+    ResourceError, StringError, Writer,
 };
 use libfuzzer_sys::fuzz_target;
 use std::collections::BTreeMap;
@@ -418,10 +419,16 @@ fn check_batch(document: &Document<'_>) {
 
 fn check_label_edit(stored: &bondline_io::StoredDocument, original: &[u8]) {
     let page = stored.model().pages().first().unwrap();
+    let atoms = page
+        .fragments()
+        .iter()
+        .map(|fragment| fragment.atoms().len())
+        .sum::<usize>();
     let (fragment, atom) = page
         .fragments()
         .iter()
-        .find_map(|fragment| fragment.atoms().first().map(|atom| (fragment.id(), atom)))
+        .flat_map(|fragment| fragment.atoms().iter().map(|atom| (fragment.id(), atom)))
+        .nth(atoms / 2)
         .unwrap();
     let unchanged = stored.with_cdx_atom_label(
         page.id(),
@@ -460,6 +467,47 @@ fn check_label_edit(stored: &bondline_io::StoredDocument, original: &[u8]) {
         assert_eq!(reopened.export_cdx().unwrap(), bytes);
     }
     assert_eq!(stored.export_cdx().unwrap(), original);
+}
+
+fn check_insertion(document: &Document<'_>) {
+    let Some((index, before)) = document
+        .records()
+        .iter()
+        .enumerate()
+        .find(|(_, record)| matches!(record.kind(), RecordKind::Property { .. }))
+    else {
+        return;
+    };
+    let tag: u16 = 0x7fd2;
+    let edits = [(before, document.payload(before).unwrap())];
+    let insertions = [PropertyInsertion {
+        before,
+        tag,
+        value: &[],
+    }];
+    let result = document.edit_properties(&edits, &insertions);
+    if document.records().len() == MAX_RECORDS {
+        assert_eq!(result, Err(Error::RecordLimit));
+    } else if document.records().iter().any(|record| {
+        record.parent() == before.parent()
+            && matches!(record.kind(), RecordKind::Property { tag: value, .. } if *value == tag)
+    }) {
+        assert_eq!(result, Err(Error::ConflictingEdits));
+    } else if document.as_bytes().len() > MAX_INPUT_BYTES - 4 {
+        assert_eq!(result, Err(Error::InputTooLarge));
+    } else {
+        let output = result.unwrap();
+        let offset = before.range().start;
+        let mut expected = document.as_bytes()[..offset].to_vec();
+        expected.extend_from_slice(&tag.to_le_bytes());
+        expected.extend_from_slice(&[0, 0]);
+        expected.extend_from_slice(&document.as_bytes()[offset..]);
+        assert_eq!(output, expected);
+        let parsed = Document::parse(&output).unwrap();
+        assert_eq!(parsed.framing(), document.framing());
+        assert_eq!(parsed.records().len(), document.records().len() + 1);
+        assert_eq!(parsed.records()[index].parent(), before.parent());
+    }
 }
 
 fn construct(document: &Document<'_>) -> Result<Vec<u8>, Error> {
@@ -504,6 +552,7 @@ fuzz_target!(|data: &[u8]| {
     assert_eq!(offset, data.len());
     check_resources(&document);
     check_batch(&document);
+    check_insertion(&document);
 
     if document
         .records()
