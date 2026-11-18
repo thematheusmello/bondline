@@ -16,6 +16,13 @@ The [LabelAlignment property](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/pro
 describes the value as a multi-attachment mechanism. Its data presence alone
 does not establish ordinary label placement.
 
+The [boxed CDX display work](../research/cdx-atom-label-preview.md) uses
+matching explicit ink boxes and token centers. It leaves arbitrary child
+points, missing placement or style, local/absolute bond spacing, mixed
+captions and label stacking open. Explicit relative spacing and recorded
+centered rails have separate source evidence from reference-specific
+clearance and automatic alignment.
+
 ## CDX caption ordering, 2026-11-18
 
 The [ZOrder description](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ZOrder.htm)

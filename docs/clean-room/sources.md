@@ -1,5 +1,12 @@
 # Clean-room source register
 
+The [CDX atom label preview contract](../research/cdx-atom-label-preview.md)
+uses the published coordinate, Poster, label and bond-style properties of
+the archived SDK. The independent placement checks use the approved
+bundled Roboto Regular and the OpenType outline and pair positioning
+interpreted by FontTools. Bondline's shared outline clearance is the
+original rule documented for [connected labels](../research/connected-label-styles.md).
+
 The [owned CDX Node label contract](../research/cdx-node-labels.md) uses the
 public Node, Text, coordinate, justification, alignment, numeric and style
 specifications reviewed 2026-11-18. It distinguishes authored content from

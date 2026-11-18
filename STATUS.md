@@ -8,7 +8,10 @@ The remote feature ref was retired after the ancestry check.
 at `a13a0f4`. The tree matches `7ed63cc` and its merged ref is retired.
 [PR 7](https://github.com/thematheusmello/bondline/pull/7) landed explicit caption
 runs at `4d8ae68`. Its tree matches `2808443` and the merged ref is retired.
-`feat/cdx-node-labels` starts from that main revision. The native/GPU license
+[PR 8](https://github.com/thematheusmello/bondline/pull/8) landed owned CDX
+atom labels at `3ac74a3`. Its tree matches `b999bfe` and the merged ref is
+retired. `feat/cdx-atom-label-preview` starts from that revision and follows
+the [display contract](docs/research/cdx-atom-label-preview.md). The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
 commit as the user requires. The user now expressly authorizes merging completed feature
