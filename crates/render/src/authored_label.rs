@@ -198,6 +198,8 @@ pub(crate) fn render(
     }
     let font = crate::label::font()?;
     let factor = em / f64::from(font.units_per_em().ok_or(Error::InvalidFont)?);
+    budget.reserve_runs(1)?;
+    budget.reserve_characters(layout.body.chars().count())?;
     let glyphs = layout
         .glyphs
         .iter()

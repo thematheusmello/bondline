@@ -13,10 +13,30 @@ const MAX_RASTER_PIXELS: u64 = 1_048_576;
 
 #[derive(Default)]
 pub(crate) struct RasterBudget {
+    runs: usize,
+    characters: usize,
     glyphs: usize,
     pixels: u64,
 }
 impl RasterBudget {
+    pub(crate) fn reserve_runs(&mut self, count: usize) -> Result<(), Error> {
+        self.runs = self
+            .runs
+            .checked_add(count)
+            .filter(|n| *n <= MAX_RUNS)
+            .ok_or(Error::SceneTooComplex)?;
+        Ok(())
+    }
+
+    pub(crate) fn reserve_characters(&mut self, count: usize) -> Result<(), Error> {
+        self.characters = self
+            .characters
+            .checked_add(count)
+            .filter(|n| *n <= MAX_GLYPHS)
+            .ok_or(Error::SceneTooComplex)?;
+        Ok(())
+    }
+
     pub(crate) fn reserve(
         &mut self,
         glyph: &OutlinedGlyph,
@@ -49,15 +69,15 @@ pub(crate) fn append(
     }
     let mut outlined_glyphs = scene.primitives.len();
     // Validate all captions before allocating their first glyph bitmap.
-    let range = walk(page, viewport, cancel, |glyph, _| {
+    let range = walk(page, viewport, cancel, Some(budget), |_, _| {
         outlined_glyphs = outlined_glyphs
             .checked_add(1)
             .filter(|total| *total <= 4096)
             .ok_or(Error::SceneTooComplex)?;
-        budget.reserve(&glyph, viewport)
+        Ok(())
     })?;
-    walk(page, viewport, cancel, |glyph, color| {
-        let pixels = raster(&glyph, viewport, color, cancel)?;
+    walk(page, viewport, cancel, None, |glyph, color| {
+        let pixels = raster(glyph, viewport, color, cancel)?;
         if scene.primitives.len().saturating_add(pixels.len()) > 4096 {
             return Err(Error::SceneTooComplex);
         }
@@ -73,7 +93,8 @@ fn walk(
     page: &Page,
     viewport: &PageViewport,
     cancel: &Cancellation,
-    mut visit: impl FnMut(OutlinedGlyph, [u8; 4]) -> Result<(), Error>,
+    mut budget: Option<&mut RasterBudget>,
+    mut visit: impl FnMut(&OutlinedGlyph, [u8; 4]) -> Result<(), Error>,
 ) -> Result<Option<[f32; 2]>, Error> {
     let mut runs = 0_usize;
     for text in page.texts() {
@@ -82,6 +103,9 @@ fn walk(
             .checked_add(text.runs().len())
             .filter(|total| *total <= MAX_RUNS)
             .ok_or(Error::SceneTooComplex)?;
+    }
+    if let Some(budget) = budget.as_deref_mut() {
+        budget.reserve_runs(runs)?;
     }
     let font = crate::label::font()?;
     let face = Face::parse(font.font_data(), 0).map_err(|_| Error::InvalidFont)?;
@@ -115,6 +139,9 @@ fn walk(
                     .checked_add(1)
                     .filter(|total| *total <= MAX_GLYPHS)
                     .ok_or(Error::SceneTooComplex)?;
+                if let Some(budget) = budget.as_deref_mut() {
+                    budget.reserve_characters(1)?;
+                }
                 if character.is_control()
                     || matches!(character,
                     '\u{0590}'..='\u{1cff}' | '\u{1dc0}'..='\u{1dff}' |
@@ -157,7 +184,10 @@ fn walk(
                     (factor * f64::from(font.height_unscaled())) as f32,
                     point(cursor as f32, baseline as f32),
                 )) {
-                    visit(outline, [r, g, b, 255])?;
+                    visit(&outline, [r, g, b, 255])?;
+                    if let Some(budget) = budget.as_deref_mut() {
+                        budget.reserve(&outline, viewport)?;
+                    }
                 }
                 cursor += f64::from(font.h_advance_unscaled(glyph)) * factor;
                 if !cursor.is_finite() || cursor.abs() > 100_000.0 {

@@ -323,3 +323,160 @@ fn large_authored_style_cannot_hide_behind_a_small_legacy_label_em() -> TestResu
     ));
     Ok(())
 }
+
+fn page_with_literal_and_caption_work(
+    authored: bool,
+    characters: usize,
+    runs: usize,
+) -> TestResult<bondline_model::Page> {
+    use bondline_model::{
+        Atom, AtomId, Document, Element, Fragment, FragmentId, PageSize, Point2, StyledText,
+        TextId, TextRun, TextStyle,
+    };
+    let mut d = Document::default();
+    let id = d.pages()[0].id();
+    d.set_page_size(id, PageSize::new(512.0, 512.0)?)?;
+    let mut atoms = Vec::new();
+    if authored {
+        let v = cases()?
+            .into_iter()
+            .find(|v| v["name"] == "O-12pt-80-100")
+            .ok_or("vector")?;
+        atoms.push(atom(&v)?);
+    }
+    let mut legacy = Atom::new(
+        AtomId::new(2).ok_or("id")?,
+        Element::try_from(6)?,
+        Some(Point2::new(220.0, 220.0)?),
+    );
+    legacy.explicit_hydrogens = Some(4);
+    atoms.push(legacy);
+    d.append_fragments(
+        id,
+        vec![Fragment::new(
+            FragmentId::new(1).ok_or("fragment")?,
+            atoms,
+            vec![],
+        )?],
+    )?;
+    let style = TextStyle::new("Roboto".into(), 12.0, 0, [0.0; 3])?;
+    let mut parts = Vec::new();
+    for n in 0..runs {
+        parts.push(TextRun::new(
+            if n == 0 {
+                " ".repeat(characters)
+            } else {
+                String::new()
+            },
+            style.clone(),
+        )?);
+    }
+    d.append_texts(
+        id,
+        vec![StyledText::new(
+            TextId::new(1).ok_or("text")?,
+            Point2::new(60.0, 320.0)?,
+            parts,
+        )?],
+    )?;
+    Ok(d.pages()[0].clone())
+}
+#[test]
+fn authored_and_caption_characters_share_one_bound_including_unoutlined_spaces() -> TestResult {
+    use bondline_render::Error;
+    let exact = page_with_literal_and_caption_work(true, 4095, 1)?;
+    assert!(
+        graph_page_scene(1088, 1088, &exact).is_ok(),
+        "one authored O plus4095 spaces is exactly4096; legacy synthetic CH4 is excluded"
+    );
+    let over = page_with_literal_and_caption_work(true, 4096, 1)?;
+    let before = over.clone();
+    assert!(
+        matches!(
+            graph_page_scene(1088, 1088, &over),
+            Err(Error::SceneTooComplex)
+        ),
+        "one authored O plus4096 spaces exceeds the combined logical character bound"
+    );
+    assert_eq!(over, before);
+    let legacy = page_with_literal_and_caption_work(false, 4096, 1)?;
+    assert!(
+        graph_page_scene(1088, 1088, &legacy).is_ok(),
+        "old no-authored-label caption work stays exact"
+    );
+    Ok(())
+}
+#[test]
+fn authored_and_caption_runs_share_one_bound_and_the_raster_pass_never_charges_twice() -> TestResult
+{
+    use bondline_render::Error;
+    let exact = page_with_literal_and_caption_work(true, 0, 4095)?;
+    assert!(
+        graph_page_scene(1088, 1088, &exact).is_ok(),
+        "one authored run plus4095 empty caption runs is exactly4096 and counted once"
+    );
+    let over = page_with_literal_and_caption_work(true, 0, 4096)?;
+    let before = over.clone();
+    assert!(
+        matches!(
+            graph_page_scene(1088, 1088, &over),
+            Err(Error::SceneTooComplex)
+        ),
+        "one authored run plus4096 empty caption runs exceeds the combined run bound"
+    );
+    assert_eq!(over, before);
+    let legacy = page_with_literal_and_caption_work(false, 0, 4096)?;
+    assert!(
+        graph_page_scene(1088, 1088, &legacy).is_ok(),
+        "legacy synthetic labels never consume literal run budget"
+    );
+    Ok(())
+}
+
+#[test]
+fn legacy_caption_run_and_style_precedence_stays_ahead_of_character_validation() -> TestResult {
+    use bondline_model::{Document, PageSize, Point2, StyledText, TextId, TextRun, TextStyle};
+    use bondline_render::Error;
+    for extra_run in [false, true] {
+        let style = TextStyle::new("Other".into(), 12.0, 0, [0.0; 3])?;
+        let runs = if extra_run {
+            (0..4096)
+                .map(|_| TextRun::new(String::new(), style.clone()))
+                .collect::<Result<Vec<_>, _>>()?
+        } else {
+            vec![TextRun::new(" ".repeat(4097), style)?]
+        };
+        let mut texts = vec![StyledText::new(
+            TextId::new(1).ok_or("text")?,
+            Point2::new(60.0, 320.0)?,
+            runs,
+        )?];
+        if extra_run {
+            texts.push(StyledText::new(
+                TextId::new(2).ok_or("text")?,
+                Point2::new(60.0, 320.0)?,
+                vec![TextRun::new(
+                    String::new(),
+                    TextStyle::new("Roboto".into(), 12.0, 0, [0.0; 3])?,
+                )?],
+            )?);
+        }
+        let mut d = Document::default();
+        let id = d.pages()[0].id();
+        d.set_page_size(id, PageSize::new(512.0, 512.0)?)?;
+        d.append_texts(id, texts)?;
+        let result = graph_page_scene(1088, 1088, &d.pages()[0]);
+        if extra_run {
+            assert!(
+                matches!(result, Err(Error::SceneTooComplex)),
+                "all-run preflight must precede unknown style"
+            );
+        } else {
+            assert!(
+                matches!(result, Err(Error::UnsupportedText(_))),
+                "a validated run's style must precede its excess character count"
+            );
+        }
+    }
+    Ok(())
+}
