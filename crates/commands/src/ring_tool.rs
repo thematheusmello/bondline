@@ -137,7 +137,7 @@ impl RingContext {
 
 impl Engine {
     fn require_ring_source(&self) -> Result<(), Error> {
-        if !self.selection_available() {
+        if !self.has_full_native_source() {
             return Err(Error::UnsupportedRing(
                 "source-free or completely mapped native CDXML is required",
             ));

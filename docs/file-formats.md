@@ -1,5 +1,14 @@
 # File capabilities
 
+The [dependent-label workflow](verification-dependent-label-translation.md) adds literal
+Node.p/BBox translation to the complete Boxed and Connected CDXML capabilities. Selected
+atoms retain body/styles/chemistry while their current raw boxes move with them. Existing
+source leaves are spliced and fully re-imported, with current Connected geometry and a
+final authoring-page certificate. Unknown data/defaults and unrelated edits retain their
+refusals; global source completeness stays false. This does not add CDX label editing.
+Connected bond-bearing sources have their separate explicit styles/all-labels/black-ink
+profile; foreign Boxed below remains strictly zero-bond.
+
 The [box-positioned literal label workflow](research/boxed-atom-label-workflow.md) now
 admits a separately proven CDXML subset for display and command48 edits. Foreign
 scenes require every atom explicitly labelled and zero bonds; missing foreign font/ink
@@ -9,7 +18,8 @@ actual glyph placement. A complete foreign-source proof preserves all IDs/resour
 lexemes while editing only existing Element/H, run body and BoundingBox. Other styles,
 explicit child positions, formula/script faces, abbreviations, unknown objects/defaults
 and broader layering remain unsupported. This does not make global source completeness
-true or authorize other drawing/page/caption writers. Whole-MOL still refuses text loss.
+true or authorize unrelated drawing/page/caption writers. The separately certified
+selection movement above is its only additional geometry edit. Whole-MOL still refuses text loss.
 
 Explicit elemental Node child Text now has owned literal data: supported explicit runs,
 raw optional point and independent Justification/LabelJustification/LabelAlignment.

@@ -3,7 +3,15 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
-The current [connected-label workflow](verification-connected-labels.md) adds explicit
+The current [dependent-label translation](verification-dependent-label-translation.md)
+connects existing Marquee/Select All and drag/nudge to qualified imported atom labels,
+keeping point/box/source/history synchronized. Independent command/App/adapters and bounded
+Mac Unicode Save/reopen pass. A real nine-pixel GPU edge discrepancy is corrected, with
+exact rebuilt native CPU/Metal capture. The unchanged MCP aggregate failure remains
+recorded separately from other passing components. Full
+M0–M5 remains active, with Actions OFF and no new tool or human golden approval.
+
+The preceding [connected-label workflow](verification-connected-labels.md) adds explicit
 bonded foreign sources, actual-outline glyph-margin clearance and synchronized label
 edits through the existing command/native form. Source/history/Unicode Save/reopen,
 independent oracles, actual adapters and bounded macOS acceptance pass. The aggregate

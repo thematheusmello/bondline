@@ -877,6 +877,98 @@ fn connected_source_workflow(data: &[u8]) {
     original_unchanged(&base, SOURCE, &snapshot);
 }
 
+fn translated_label_source(data: &[u8]) {
+    let (source, expected, all): (&[u8], &[u8], bool) = match data.first().copied().unwrap_or(0) % 4
+    {
+        0 => (
+            include_bytes!("../../crates/io/tests/fixtures/dependent-labels/boxed.cdxml"),
+            include_bytes!(
+                "../../crates/io/tests/fixtures/dependent-labels/boxed_sub_p12_5_m7_25.cdxml"
+            ),
+            false,
+        ),
+        1 => (
+            include_bytes!("../../crates/io/tests/fixtures/dependent-labels/connected.cdxml"),
+            include_bytes!(
+                "../../crates/io/tests/fixtures/dependent-labels/connected_sub_p12_5_m7_25.cdxml"
+            ),
+            false,
+        ),
+        2 => (
+            include_bytes!("../../crates/io/tests/fixtures/dependent-labels/connected_nh.cdxml"),
+            include_bytes!(
+                "../../crates/io/tests/fixtures/dependent-labels/connected_nh_sub_p12_5_m7_25.cdxml"
+            ),
+            false,
+        ),
+        _ => (
+            include_bytes!("../../crates/io/tests/fixtures/dependent-labels/connected.cdxml"),
+            include_bytes!(
+                "../../crates/io/tests/fixtures/dependent-labels/connected_all_p24_m12.cdxml"
+            ),
+            true,
+        ),
+    };
+    let base = StoredDocument::from_cdxml(source.into(), PageSize::A4).unwrap();
+    let snapshot = base.model_snapshot();
+    let connected = base.has_connected_atom_labels();
+    assert!(connected || base.has_boxed_atom_labels());
+    assert!(!base.is_fully_mapped());
+    let page = &base.model().pages()[0];
+    let fragment = &page.fragments()[0];
+    let (dx, dy) = if all { (24.0, -12.0) } else { (12.5, -7.25) };
+    let mut atoms = fragment.atoms().to_vec();
+    for atom in atoms.iter_mut().take(if all { usize::MAX } else { 1 }) {
+        let point = atom.position.unwrap();
+        atom.position = Some(Point2::new(point.x_pt() + dx, point.y_pt() + dy).unwrap());
+        let label = atom.authored_label.as_ref().unwrap();
+        let [l, t, r, b] = label.bounding_box().unwrap();
+        atom.authored_label = Some(Arc::new(
+            label
+                .with_bounding_box(Some([l + dx, t + dy, r + dx, b + dy]))
+                .unwrap(),
+        ));
+    }
+    let mut moved = base.clone();
+    moved
+        .model_mut()
+        .replace_fragment(
+            page.id(),
+            Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec()).unwrap(),
+        )
+        .unwrap();
+    assert_eq!(moved.has_connected_atom_labels(), connected);
+    assert_eq!(moved.has_boxed_atom_labels(), !connected);
+    assert!(moved.has_display_projection());
+    assert!(!moved.is_fully_mapped());
+    let encoded = moved.to_cdxml().unwrap();
+    assert_eq!(encoded.as_ref(), expected);
+    let reopened = StoredDocument::from_cdxml(encoded.into_owned().into(), PageSize::A4).unwrap();
+    assert_eq!(moved.model(), reopened.model());
+    assert_eq!(reopened.has_connected_atom_labels(), connected);
+    let mut bad = moved.clone();
+    let fragment = &moved.model().pages()[0].fragments()[0];
+    let mut atoms = fragment.atoms().to_vec();
+    let atom = atoms.first_mut().unwrap();
+    let point = atom.position.unwrap();
+    atom.position = Some(Point2::new(point.x_pt() + 0.25, point.y_pt()).unwrap());
+    bad.model_mut()
+        .replace_fragment(
+            page.id(),
+            Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec()).unwrap(),
+        )
+        .unwrap();
+    assert!(!bad.has_boxed_atom_labels());
+    assert!(!bad.has_connected_atom_labels());
+    assert!(matches!(
+        bad.to_cdxml(),
+        Err(DocumentError::UnsupportedEdit)
+    ));
+    *bad.model_mut() = base.model().clone();
+    assert_eq!(bad.to_cdxml().unwrap().as_ref(), source);
+    original_unchanged(&base, source, &snapshot);
+}
+
 fuzz_target!(|data: &[u8]| {
     if data.len() > INPUT_LIMIT {
         return;
@@ -884,6 +976,7 @@ fuzz_target!(|data: &[u8]| {
     assert_eq!(ORIGINAL.len(), 464);
     arbitrary_source(data);
     connected_source_workflow(data);
+    translated_label_source(data);
     boxed_source_workflow(data);
     structured_atom_label(data);
     structured_caption(data);

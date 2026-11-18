@@ -5,6 +5,25 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Synchronized atom/box translation
+
+`cdxml_profile` additionally selects four frozen Boxed/Connected subset/all/compound
+translation controls, requires exact source bytes and complete re-import, refuses
+point-only drift, then verifies exact restoration. Old parser/source/label invariants
+remain. This fixed structured path does no Engine/history, filesystem, render or native
+work. Generate a fresh immutable source/manifest and writable corpus, then run pinned ASan:
+
+```sh
+python3 fuzz/seed_dependent_labels.py .cache/fuzz/dependent-labels-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/dependent-labels-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recipe refuses existing destinations and retains28 immutable originals outside the
+writable corpus, including19 independent XML files, four opaque variants, exact16KiB and
+four one-byte selector controls. Fresh regeneration reproduces the exact manifest/source
+hashes. [Receiving](../docs/verification-dependent-label-translation.md) records the actual
+10000/161s pass and16KiB mutation, separately from GPU/native correctness and parser safety.
+
 ## Connected label sources
 
 `cdxml_profile` additionally checks the separate Connected source capability: supported

@@ -27,10 +27,12 @@ The copied generator/checker have only path-routing changes: repository discover
 from the tracked fixture location and generated/check outputs go to ignored
 `target/dependent-labels/independent/`. Their mathematics, methods, values and frozen source
 bytes are unchanged. The production test consumes the frozen facts and invokes the copied
-independent reader on actual output. With the documented oracle environment installed:
+independent reader on actual output. Use a Python with FontTools4.61.1 installed; the
+checker separately invokes the documented RDKit virtualenv at
+`.cache/oracles/format-python/bin/python`:
 
 ```sh
-.cache/oracles/format-python/bin/python -B crates/io/tests/fixtures/dependent-labels/check_moves.py
+python3 -B crates/io/tests/fixtures/dependent-labels/check_moves.py
 ```
 
 This checks the tracked frozen inputs and writes fresh independent results in the ignored

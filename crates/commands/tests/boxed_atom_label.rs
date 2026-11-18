@@ -192,8 +192,7 @@ fn authored_command_couples_numeric_body_and_box_in_one_source_preserving_histor
 }
 
 #[test]
-fn command48_is_the_only_chemical_writer_on_the_boxed_source_and_old_noop_guards_stay_closed()
--> TestResult {
+fn command48_retains_chemical_guards_while_selection_and_zero_motion_are_qualified() -> TestResult {
     let mut e = boxed_engine(boxed::SOURCE)?;
     for (name, p) in [
         ("atom.set_label", boxed::params(0, 8, 1)),
@@ -219,14 +218,6 @@ fn command48_is_the_only_chemical_writer_on_the_boxed_source_and_old_noop_guards
             json!({"expected_revision":0,"page_id":1,"fragment_id":1,"bond_id":1,"order":"single","hydrogen_policy":"rectify_neutral_carbon"}),
         ),
         (
-            "ui.selection",
-            json!({"expected_revision":0,"action":"all","page_id":1}),
-        ),
-        (
-            "selection.translate",
-            json!({"expected_revision":0,"expected_selection_epoch":0,"delta_x_pt":0,"delta_y_pt":0}),
-        ),
-        (
             "document.set_drawing_settings",
             json!({"expected_revision":0,"bond_length_pt":null,"chain_angle_degrees":null}),
         ),
@@ -241,6 +232,31 @@ fn command48_is_the_only_chemical_writer_on_the_boxed_source_and_old_noop_guards
     ] {
         unchanged_error(&mut e, name, p, "unsupported_content")?;
     }
+    unchanged_error(
+        &mut e,
+        "selection.translate",
+        json!({"expected_revision":0,"expected_selection_epoch":0,"delta_x_pt":0,"delta_y_pt":0}),
+        "stale_selection",
+    )?;
+    let content = e.content().clone();
+    let model = e.stored_document()?.model_snapshot();
+    let stamp = e.capture_stamp();
+    let selected = e.dispatch(
+        "ui.selection",
+        json!({"expected_revision":0,"action":"all","page_id":1}),
+    )?;
+    assert!(!selected.changed);
+    assert_eq!(e.selection().atom_ids, vec![1]);
+    assert_eq!(e.content(), &content);
+    assert_eq!(e.capture_stamp(), stamp);
+    assert!(Arc::ptr_eq(&model, &e.stored_document()?.model_snapshot()));
+    let selected_state = serde_json::to_value(e.state())?;
+    assert!(!e.dispatch(
+        "selection.translate",
+        json!({"expected_revision":0,"expected_selection_epoch":e.selection().epoch,"delta_x_pt":0,"delta_y_pt":0}),
+    )?.changed);
+    assert_eq!(serde_json::to_value(e.state())?, selected_state);
+    assert!(Arc::ptr_eq(&model, &e.stored_document()?.model_snapshot()));
     unchanged_error(
         &mut e,
         "atom.set_authored_label",

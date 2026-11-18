@@ -473,7 +473,7 @@ impl Engine {
                 });
             }
         }
-        if self.selection_available() {
+        if self.has_full_native_source() {
             for (size, id, label) in [
                 (3, "tool.ring.3", "Cyclopropane"),
                 (4, "tool.ring.4", "Cyclobutane"),
@@ -531,7 +531,7 @@ impl Engine {
                 });
             }
         }
-        if self.selection_available()
+        if self.has_full_native_source()
             && let Ok(preferences) = self.chain_preferences()
         {
             for (id, label, kind) in [

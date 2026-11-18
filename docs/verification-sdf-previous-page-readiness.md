@@ -24,3 +24,9 @@ Focused26864 passes1/0. The final receiving aggregate will report its own result
 No timeout/retry/socket policy, field pagination/authoring behavior or old assertion is
 weakened. Initial patch context matched a different similar wait; it was corrected to
 this exact test before any execution, leaving the other wait unchanged.
+
+Final dependent-label aggregate3289 stops earlier at the unchanged MCP listener test.
+The qualified SDF case then passes both the remaining selected-package checks32361 and
+the exact full-workspace UI artifact99124. These are separate component receipts, not
+a passing aggregate or a causal listener repair; see
+[integrated receiving](verification-dependent-label-translation.md).

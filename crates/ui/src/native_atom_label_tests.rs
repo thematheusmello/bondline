@@ -1469,3 +1469,6 @@ mod boxed_atom_label_app_tests;
 
 #[path = "connected_atom_label_app_tests.rs"]
 mod connected_atom_label_app_tests;
+
+#[path = "dependent_label_app_tests.rs"]
+mod dependent_label_app_tests;

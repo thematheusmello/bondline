@@ -12,7 +12,16 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
-The current M1 [connected-label receiving](docs/verification-connected-labels.md) adds
+The current M1 [dependent-label receiving](docs/verification-dependent-label-translation.md)
+extends existing selection/translation to qualified Boxed and Connected sources. Current
+Node points and raw label boxes move together, preserving exact source/history/Save owners
+and refusing invalid whole-page candidates. Independent source/adapters/App and bounded Mac
+drag/nudge/Unicode Save/reopen checks pass. The native all-atom CPU/Metal capture is exact
+after an independently checked nine-pixel coverage correction. The unchanged MCP listener
+aggregate failure remains open; other local components are verified separately.
+Full M0–M5, human golden approval and other-platform acceptance remain open; Actions is OFF.
+
+The preceding M1 [connected-label receiving](docs/verification-connected-labels.md) adds
 explicit foreign bonded diagrams through a separate source capability, actual-outline
 margin shortening and the existing synchronized label command/native form. Old Boxed
 remains zero-bond, global full staysfalse and all48 metadata/catalogue16/124 remain exact.

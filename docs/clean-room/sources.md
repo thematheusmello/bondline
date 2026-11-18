@@ -1,5 +1,31 @@
 # Clean-room source register
 
+The native moved-label regression reviewed2026-11-18 exposes nine closed-stroke pixel
+differences caused by normalized f32 GPU geometry. The primary
+[WGSL2026-08-25 specification](https://www.w3.org/TR/2026/CRD-WGSL-20260825/),
+§15.7.5 and§17.5.32, permits floating-point reassociation/fusion and does not guarantee
+a fused fma. Bondline's original correction prepares bounded analytic integer row
+intervals with the existing lattice search and keeps ordered compositing on the GPU;
+it uploads no finished CPU frame. CPU coverage remains unchanged. Exact-dyadic Fraction
+checks, original saved-source provenance, memory bounds and actual Metal evidence are in
+[renderer receiving](../../crates/render/tests/fixtures/README-connected-coverage.md).
+This is an independently checked Bondline raster policy, not reference-app pixel parity
+or a measured GPU-acceleration claim.
+
+Dependent atom-label movement reviewed2026-11-18 uses primary
+[coordinate types](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm),
+[2DPosition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/2DPosition.htm) and
+[BoundingBox](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BoundingBox.htm).
+CDXML x/y and left/top/right/bottom point units support translating known positions and
+their existing rectangles together; binary ordering differs. Existing GUIDE25 printed
+88,115–116,120 supplies selection/drag/nudge roles with the pinned public guide in
+[native acceptance](../research/native-selection-acceptance.md). The
+[dependent-label contract](../research/dependent-label-translation.md) retains old
+placement/body/style certificates rather than guessing a child-p baseline. Rounded-point
+no-op, literal current-box motion, snapshot edit composition, capability separation and
+final source/page admission are original checked policies. Public evidence does not
+establish universal26.1 transform/modifier/label-reflow behavior.
+
 Explicit label-margin data reviewed2026-11-18 follows primary
 [MarginWidth](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/MarginWidth.htm),
 [coordinate units](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm)

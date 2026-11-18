@@ -6,7 +6,7 @@ use crate::{
 use bondline_model::{Fragment, MAX_GRAPH_ITEMS, Page, PageId, Point2};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use std::collections::BTreeSet;
+use std::{collections::BTreeSet, sync::Arc};
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(tag = "action", rename_all = "snake_case", deny_unknown_fields)]
@@ -137,7 +137,7 @@ impl Engine {
         &self.selection.state
     }
 
-    pub fn selection_available(&self) -> bool {
+    pub(super) fn has_full_native_source(&self) -> bool {
         self.stored_document().is_ok_and(|stored| {
             stored.is_fully_mapped()
                 && stored
@@ -146,10 +146,17 @@ impl Engine {
         })
     }
 
+    pub fn selection_available(&self) -> bool {
+        self.has_full_native_source()
+            || self.stored_document().is_ok_and(|stored| {
+                stored.has_boxed_atom_labels() || stored.has_connected_atom_labels()
+            })
+    }
+
     fn require_selection_source(&self) -> Result<(), Error> {
         if !self.selection_available() {
             return Err(Error::UnsupportedSelection(
-                "source-free or completely mapped native CDXML is required",
+                "complete source coverage for atom movement is required",
             ));
         }
         Ok(())
@@ -401,8 +408,26 @@ impl Engine {
                         old.x_pt() + params.delta_x_pt,
                         old.y_pt() + params.delta_y_pt,
                     )?;
-                    changed |= new != old;
-                    atom.position = Some(new);
+                    if new != old {
+                        if let Some(label) = &atom.authored_label {
+                            let [left, top, right, bottom] =
+                                label.bounding_box().ok_or(Error::UnsupportedSelection(
+                                    "an explicit atom-label box is required",
+                                ))?;
+                            atom.authored_label = Some(Arc::new(
+                                label
+                                    .with_bounding_box(Some([
+                                        left + params.delta_x_pt,
+                                        top + params.delta_y_pt,
+                                        right + params.delta_x_pt,
+                                        bottom + params.delta_y_pt,
+                                    ]))
+                                    .map_err(bondline_model::Error::from)?,
+                            ));
+                        }
+                        atom.position = Some(new);
+                        changed = true;
+                    }
                 }
             }
             if changed {
@@ -413,11 +438,31 @@ impl Engine {
             }
         }
         let mut candidate = self.stored_document()?.clone();
-        if !replacements.is_empty() {
+        let changed = !replacements.is_empty();
+        if changed {
             candidate.model_mut().replace_fragments(
                 PageId::new(page_id).ok_or(Error::InvalidPageId)?,
                 replacements,
             )?;
+        }
+        if changed && candidate.model().has_authored_atom_labels() {
+            candidate.to_cdxml()?;
+            let page = candidate
+                .model()
+                .pages()
+                .iter()
+                .find(|page| page.id().get() == page_id)
+                .ok_or(Error::InvalidPageId)?;
+            bondline_io::smiles::validate_authoring_page_with_settings(
+                page,
+                candidate.model().drawing_style(),
+                candidate.model().drawing_settings(),
+                &bondline_render::Cancellation::default(),
+            )
+            .map_err(|error| match error {
+                bondline_io::smiles::LayoutError::Render(error) => Error::Render(error),
+                other => Error::SmilesLayout(other),
+            })?;
         }
         Ok(candidate)
     }

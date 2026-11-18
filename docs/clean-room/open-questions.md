@@ -1,5 +1,16 @@
 # Open questions
 
+## Dependent label movement, 2026-11-18
+
+The [literal translation contract](../research/dependent-label-translation.md) supports
+already-certified absent-child-p labels, preserving their current raw bounds, styles
+and chemical fields. It does not resolve arbitrary child p, formula faces, automatic
+reflow/reorientation, groups, transforms or implicit foreign defaults. Version25 public
+selection/drag/nudge guidance remains qualified for exact26.1/native modifier behavior.
+Whole source/geometry/page checks may refuse a move rather than change chemistry, shrink
+ink or repair unsupported data. Existing tolerance certifies layout agreement, not a
+universal provenance claim for every tiny direct model mutation.
+
 ## Connected label margins, 2026-11-18
 
 The [connected-label contract](../research/connected-label-styles.md) uses explicit

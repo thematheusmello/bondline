@@ -355,3 +355,6 @@ mod caption_run_wire;
 
 #[path = "support/connected_label_wire.rs"]
 mod connected_label_wire;
+
+#[path = "support/dependent_selection_wire.rs"]
+mod dependent_selection_wire;

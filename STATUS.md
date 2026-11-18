@@ -7,6 +7,66 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publ
 
 ## Current recoverable work and evidence
 
+Recoverable dependent-label movement: base9cf7103, IO783a632, renderer6bda2d9
+(isolated321e1b2), SDF test-only readiness edbd837 and the receiving command/UI commit
+containing this record. Read [contract](docs/research/dependent-label-translation.md)
+and [receiving](docs/verification-dependent-label-translation.md). This supersedes earlier
+connected-label and persistent-goal line-width first-task/job text; full scope is unchanged.
+
+Existing selection/translation moves qualified Boxed/Connected atom points and CURRENT
+raw label boxes together. Rounded-identical points preserve the entire atom/box/Arc/redo;
+changed previews prove complete source and the final physical page before returning the
+same commit candidate. Source writers splice existing p/label leaves and re-prove current
+Connected geometry. Ring/chair/chain keep their old native predicate; other source/loss
+and modal/file/view/input guards stay. Exact Alt-form targeting precedes Selection.
+Actual48 metadata remain byte-exact45486B/SHA256
+c861b31ce690ec5808e6262884dc7195e4e7e796f0e2ec6dcf47e082de9ad1da;
+catalogue16/124 stays, no planned tool is enabled.
+
+Independent IO476/0, focused commands8/App3/adapters3, source review, exact raw/chemical/
+font consumers and native Mac subset/all drag/nudge/history/Unicode Save/reopen/Cancel
+pass. Initial subset/all fixture naming is explicitly qualified without changing frozen
+bytes. A native all-atom capture exposes nine real GPU edge pixels. Exact Fraction
+oracles reproduce all nine; bounded analytic row geometry fixes them while preserving
+CPU math and real ordered GPU compositing. Full renderer186/0 passes. Row data costs at
+most64MiB host plus64MiB GPU, with other buffer/allocator overhead separate; no measured
+acceleration claim. Final rebuilt native CPU/Metal1088 PNGs are byte-exact27397B, SHA256
+eda39c081d72330fecab5c391222c3e72065a0219565d208a0657e4a1ed5805c, equal to the retained
+pre-fix CPU output. Both own reviews are explicitly quit/PIDs87125 and35667 absent;
+protected older apps/drawings are untouched. Filename CJK glyphs remain limited.
+
+Final aggregate3289 fails1327/1 at unchanged MCP replacement_bind58656/AddrInUse.
+Remaining32361 passes737/0/1 including vendor3/0 and every remaining gate. Exact workspace
+artifact audit99124 additionally passes475/0/1 for20 not-yet-observed full-workspace
+variants; one redundant example/variant runs are excluded from unique counts. All293
+workspace executables and12 metadata-derived doc groups are observed: unique workspace
+2061/1/1 plus vendor3/0. Workspace fmt/clippy, vendor clippy, layers, strict runtime
+licenses/seven assets, pinned eight-file/five-bundle corpus and fuzz fmt pass. This is
+NOT a clean aggregate or causal listener fix; protected control test/policy is unchanged.
+Earlier obsolete-selection and SDF readiness qualifications remain in receiving.
+ASan54835 passes10000/161s with28 immutable sources and actual16KiB; independent fresh
+seed regeneration is exact. No dependency/lock/vendor/font/asset/old-golden/workflow change.
+
+All owned execution jobs/workers are terminal. Isolated IO/render worktrees are retained;
+no review window is left running. Actions OFF, no push/publication. The full goal stays active.
+
+Next executable work:
+
+1. Record an actual reply before promoting the earlier NH2 image to a human golden;
+   approval remains pending and does not block independent implementation.
+2. Continue M1 by source-locking mixed labelled/skeletal foreign diagrams and effective
+   font/ink/default ownership. Declare independent source/layout/history/native vectors
+   before widening a complete capability; preserve current explicit Boxed/Connected,
+   arbitrary-child-p/style refusals and whole-format loss boundaries. Do not infer hidden
+   carbon/font defaults from producer names or replace conflicting child Text numerically.
+3. Finish broader styles/fonts/text, CDX/general interchange, then all remaining M2 drawing/
+   selection/journal tools, M3 chemistry/reactions, M4 publishing/clipboard and M5 naming/
+   templates/WASM/installers. M0 accessibility/input/DPI/platform/jobs/addressability and
+   the unexplained listener failure remain open. Do not repeat exhausted listener diagnosis
+   or enable Actions. Full M0–M5 remains active/incomplete.
+
+### Preceding connected-label checkpoint
+
 Recoverable connected-label workflow: data0014935, render0ba92cf, IO74375bd and
 independent oracle7500599, plus the receiving command/UI commit containing this record.
 Read [contract](docs/research/connected-label-styles.md) and

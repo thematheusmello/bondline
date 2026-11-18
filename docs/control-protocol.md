@@ -9,8 +9,10 @@ schemas; the current contracts are listed below.
 The [connected-label grant](verification-connected-labels.md) reuses48 and ui.atom_label
 without changing any record/schema/order. Qualified foreign diagrams have a separate
 `has_connected_atom_labels` capability; old foreign Boxed remains zero-bond. Only existing
-Element/H/body/box edits qualify, with explicit source styles, full re-import and one
-final physical-page certificate. Other chemical/page/style/caption writers stay refused.
+Element/H/body/box edits qualify for command48. Existing selection/translation additionally
+moves Node.p and its current raw BoundingBox together under the same complete source and
+final physical-page certificates. Other chemical/page/style/caption writers stay refused.
+[Dependent-label contract and evidence](verification-dependent-label-translation.md).
 
 ## Box-positioned authored atom labels
 
@@ -31,8 +33,9 @@ chemical/page/style/caption writers stay refused for these sources.
 
 The existing exact-target `ui.atom_label` form chooses this operation under the same
 request/source/file/view/tool/close proof. Old requests and metadata stay exact. A
-qualified canvas accepts Alt-primary on an atom from any retained mode; other drawing
-gestures remain unavailable. [Contract](research/boxed-atom-label-workflow.md).
+qualified canvas accepts Alt-primary on an atom from any retained mode. Marquee selection
+also permits certified atom/box translation; unrelated drawing gestures remain unavailable.
+[Contract](research/boxed-atom-label-workflow.md).
 
 ## Existing plain caption runs
 
@@ -1658,8 +1661,9 @@ or cross-platform parity.
 Activate/set/all enter selection mode. Set validates the page, accepts unsorted IDs,
 sorts them, and rejects zero, duplicates, missing atoms or more than100000 entries.
 Empty set is allowed after page validation. Clear empties targets and keeps the current
-tool. Inspect changes nothing. Activate/set/all require source-free or completely mapped
-native CDXML Drawing; clear/inspect work across content kinds. No native host is required.
+tool. Inspect changes nothing. Activate/set/all require source-free/completely mapped
+native CDXML Drawing or a complete Boxed/Connected atom-label capability; clear/inspect
+work across content kinds. No native host is required.
 Transient mutations follow the existing close/file-busy tool policy. Inspect can read a
 pending-close selection; all commands still refuse after committed close.
 
@@ -1676,10 +1680,14 @@ selection change before releasing request activity and requesting host repaint.
 {"command":"selection.translate","params":{"expected_revision":3,"expected_selection_epoch":1,"delta_x_pt":24,"delta_y_pt":-12}}
 ```
 
-Translation checks revision, finite deltas, complete native source authority, current
+Translation checks revision, finite deltas, complete source authority for movement, current
 nonempty selection/epoch/private weak owner and every authored position. It replaces
 affected same-ID fragments in one whole-document validation and one history commit.
-Only selected positions change. Atom metadata, literal/absent H, directed bonds,
+Only selected positions and their existing authored-label boxes change. Each changed
+point translates its CURRENT raw box literally; no relayout/normalization occurs. A
+rounded-identical point also retains its box. Labelled changed previews and commits
+certify complete source output and the final whole page; invalid paper/ink/source/geometry
+refuses before publishing a candidate. Atom metadata, literal/absent H, directed bonds,
 topology, arrays, pages and unrelated shared data remain exact. This performs no H or
 stereo inference, snapping, layout, publication or Save/close acknowledgement. MOL,
 CDX, opaque CDXML, SDF and raw/retained SMILES do not gain geometry-edit authority.
@@ -1711,7 +1719,9 @@ order so later mode changes cannot suppress earlier authoring. Full lasso, trans
 group, snapping and exact26.1/platform parity remain open. See
 [command/App evidence](verification-selection-authoring.md) and
 [native acceptance/cancellation receiving](verification-native-selection.md) for the
-tested execution scope. Selection/history/source state is unchanged by cancellation.
+tested execution scope. The later [dependent-label evidence](verification-dependent-label-translation.md)
+adds qualified foreign label movement without authorizing ring/chair/chain tools or any
+other source mutator. Selection/history/source state is unchanged by cancellation.
 
 ## Explicit native ring construction
 

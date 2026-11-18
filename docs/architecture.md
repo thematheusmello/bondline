@@ -1,11 +1,23 @@
 # Architecture
 
+The [dependent-label movement workflow](verification-dependent-label-translation.md)
+widens only selection authority to the precise Boxed/Connected source capabilities.
+`has_full_native_source` retains the old predicate for rings/chairs/chains. A changed
+selected atom translates its CURRENT raw label box with its point; a rounded-identical
+point preserves the whole atom and sharing. The candidate passes complete source output
+and one final settings/style-aware physical-page certificate before preview/commit.
+Node.p joins the existing source splices; Connected re-proves current geometry rather
+than relying on original coordinates. Global full authority and all unrelated writers
+remain closed. Existing Selection input and exact Alt-form targeting share old modal/
+owner/view/file fences; registry48 and catalogue16/124 stay exact.
+
 The [connected label workflow](verification-connected-labels.md) adds a distinct complete
 `has_connected_atom_labels` grant for explicit foreign bonded diagrams. Old foreign Boxed
 stays zero-bond; global full authority staysfalse. Root width/margin, relevant explicit
 preferred length/spacing, resolved-black bonds and source-space geometry precede display.
-The existing48/form consumes either label capability, keeping all other mutators closed.
-Both source writers certify complete re-import after only Element/H/body/box splices.
+The existing48/form consumes either label capability. In addition to its Element/H/body/box
+splices, the dependent movement workflow above certifies Node.p; both writers completely
+re-import the candidate. All unrelated mutators remain closed.
 
 For explicit margin, bounded quadratic/linear glyph outlines shorten actual butt strokes
 under the original Euclidean rule, using common cut planes for multiple rails. Actual

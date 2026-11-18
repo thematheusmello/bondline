@@ -1,5 +1,31 @@
 # Bondline agent instructions
 
+Dependent-label movement follows docs/research/dependent-label-translation.md and
+docs/verification-dependent-label-translation.md on base9cf7103, IO783a632/render6bda2d9
+and the receiving command/UI commit. Existing selection alone gains precise Boxed/
+Connected authority; has_full_native_source retains old ring/chair/chain semantics.
+Only changed Point2 values translate CURRENT raw boxes through checked owned data;
+rounded-identical points retain the whole atom/box/Arc/redo/weak owners. Writers add
+existing Node.p splices and re-prove current Connected geometry; no relayout or original-
+box-plus-net-delta rule. Labelled previews certify source plus one final settings/style-
+aware page before returning the same commit candidate. Other source/chemical/page/style/
+caption/loss guards stay. Exact event-local Alt-primary precedes Selection, unsupported
+mac_cmd/chords stay refused; only Selection pointer/arrows/benign modifier reports bypass
+the label fence. Metadata48/catalogue16/124 stay exact. Independent IO/command/App/wire,
+exact source/history/Save and actual Mac subset/all drag/nudge/Unicode files/Cancel pass.
+First subset/ALL fixture-name qualification remains explicit with frozen bytes unchanged.
+Nine native GPU edge pixels have exact Fraction RED→GREEN and bounded analytic row geometry
+with real ordered GPU compositing, unchanged CPU math and no CPU RGBA upload. Renderer186/0
+and final rebuilt native CPU/Metal PNG equality pass. Row data max64MiB host+64MiB GPU;
+overhead separate, acceleration unmeasured. Final3289 retains protected MCP bind58656
+failure; remaining32361 plus exact artifact99124 qualification covers all293 executables/
+12 doc groups, unique workspace2061/1/1+vendor3/0 and every other gate. NOT a clean aggregate
+or causal listener fix. Redundant example/variant runs are excluded. ASan54835 passes
+10000/161s,28 immutable sources and actual16KiB; fresh seed reproduction exact. Golden
+approval pending, CJK filename glyphs limited. Both own reviews quit/PIDs87125/35667 absent;
+protected apps/drawings untouched, all jobs/workers terminal. Full M0–M5 active/incomplete,
+Actions OFF. STATUS has next M1 task; older first-task/job text below is historical.
+
 Connected explicit labels follow docs/research/connected-label-styles.md and
 docs/verification-connected-labels.md: data0014935/render0ba92cf/IO74375bd/oracles7500599
 plus the receiving command/UI commit. Preserve old foreign Boxed zero-bond semantics;

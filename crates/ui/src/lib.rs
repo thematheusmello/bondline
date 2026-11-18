@@ -401,9 +401,10 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
     let caption_preview = engine
         .stored_document()
         .is_ok_and(|stored| stored.has_caption_projection());
-    let atom_label_preview = engine
-        .stored_document()
-        .is_ok_and(|stored| stored.has_boxed_atom_labels() || stored.has_connected_atom_labels());
+    let atom_label_preview = engine.effective_tool() != EffectiveTool::Selection
+        && engine.stored_document().is_ok_and(|stored| {
+            stored.has_boxed_atom_labels() || stored.has_connected_atom_labels()
+        });
     ui.heading("Document");
     if let Some(message) = error {
         ui.colored_label(egui::Color32::DARK_RED, message);
@@ -532,7 +533,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         if caption_preview {
             ui.label("Read-only canvas. Save preserves the complete caption file.");
         } else if atom_label_preview {
-            ui.label("Alt-click an atom to edit its element and attached hydrogens. Other drawing edits are unavailable for this file.");
+            ui.label("Alt-click an atom to edit its element and attached hydrogens. Use Marquee selection to move atoms and their labels.");
         } else if engine.effective_tool() == EffectiveTool::Selection {
             ui.label(if engine.selection_available() {
                 "Click or drag to select. Drag selected atoms to move; arrows nudge 1 pt, Shift 10 pt."
@@ -1714,9 +1715,19 @@ fn show_workspace_with_preview(
                 {
                     drawing.gesture = None;
                 }
+                let selection_input=engine.effective_tool() == EffectiveTool::Selection && matches!(event,
+                    egui::Event::PointerMoved(_) | egui::Event::PointerButton { .. }
+                    | egui::Event::Key {key:egui::Key::ArrowLeft|egui::Key::ArrowRight|egui::Key::ArrowUp|egui::Key::ArrowDown,..});
+                let label_selection_input = selection_input
+                    || engine.effective_tool() == EffectiveTool::Selection
+                        && matches!(event, egui::Event::ModifiersChanged(_));
+                let label_alt_press = matches!(event, egui::Event::PointerButton {
+                    button: egui::PointerButton::Primary, pressed: true, modifiers, ..
+                } if modifiers.alt);
                 if command.is_none()
                     && engine.stored_document().is_ok_and(|stored| stored.has_boxed_atom_labels() || stored.has_connected_atom_labels())
                     && !matches!(event, egui::Event::MouseWheel { .. })
+                    && (!label_selection_input || label_alt_press)
                 {
                     drawing.cancel_canvas_gestures();
                     if discard_stale_canvas_input || text_focused {
@@ -1811,9 +1822,6 @@ fn show_workspace_with_preview(
                             Err(failure) => command = Some(Err(failure)),
                         }
                     }
-                    let selection_input=engine.effective_tool() == EffectiveTool::Selection && matches!(event,
-                        egui::Event::PointerMoved(_) | egui::Event::PointerButton { .. }
-                        | egui::Event::Key {key:egui::Key::ArrowLeft|egui::Key::ArrowRight|egui::Key::ArrowUp|egui::Key::ArrowDown,..});
                     if selection_input {
                         drawing.ring.cancel(); drawing.chain.cancel_gesture();
                         drawing.gesture=None;

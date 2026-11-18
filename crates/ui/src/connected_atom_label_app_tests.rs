@@ -45,7 +45,7 @@ fn start_connected(f: &mut Fixture, mode: &str) -> TestResult {
 }
 
 #[test]
-fn connected_native_alt_target_precedes_every_retained_tool_and_other_canvas_input_is_readonly()
+fn connected_alt_targeting_preserves_retained_tools_and_marquee_only_changes_transient_targets()
 -> TestResult {
     for mode in ["bond", "ring", "chain", "selection"] {
         let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
@@ -73,10 +73,17 @@ fn connected_native_alt_target_precedes_every_retained_tool_and_other_canvas_inp
             modifiers: Modifiers::NONE,
         }]);
         f.warm();
+        let mut expected = before.clone();
+        if mode == "selection" {
+            let epoch = before["ui_selection"]["epoch"].as_u64().ok_or("epoch")?;
+            expected["ui_selection"] = json!({
+                "active":true,"atom_ids":[3],"epoch":epoch+1,"page_id":1
+            });
+        }
         assert_eq!(
             f.state()?,
-            before,
-            "{mode} authored on the read-only source"
+            expected,
+            "{mode} changed unrelated source state"
         );
         click_alt(&mut f, connected::POINT)?;
         wait(&mut f, |f, o| {

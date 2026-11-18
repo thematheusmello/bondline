@@ -1,6 +1,13 @@
 # Verification log
 
-The latest [connected-label receiving](verification-connected-labels.md) records independent
+The latest [dependent-label receiving](verification-dependent-label-translation.md) records
+source-preserving atom/box movement, exact command/IO/App/adapter checks, actual Mac
+drag/nudge/history/Unicode files, bounded ASan and the corrected nine-pixel GPU discrepancy.
+The rebuilt native CPU/Metal capture is exact. The unchanged MCP aggregate failure remains
+recorded separately from the remaining passing components. Actions remains OFF;
+full M0–M5, human golden approval and new Windows/Linux/browser execution remain open.
+
+The preceding [connected-label receiving](verification-connected-labels.md) records independent
 source/render/history/adapter/native evidence, exact source and registry pins,10000-run
 ASan and the recurring failed MCP aggregate versus separately completed remaining gates.
 Full M0–M5, human golden approval and new Windows/Linux/browser execution remain open.
