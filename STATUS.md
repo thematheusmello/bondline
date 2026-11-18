@@ -1,9 +1,10 @@
 # Status — 2026-11-18
 
-The full M0–M5 goal is **active after the user resumed it**. Verified delivery lands
-into `main`. Caption preview work follows merged main `6565e58` on
-`feat/cdx-caption-preview`, tracked by [draft PR 5](https://github.com/thematheusmello/bondline/pull/5).
-Its scope is unchanged. The native/GPU license
+The full M0–M5 goal is **active**. Verified delivery lands into `main`.
+[PR 5](https://github.com/thematheusmello/bondline/pull/5) landed direct-Page CDX
+caption preview at `9f27fe9`. Its merge tree matches the reviewed tip `dbb821e`.
+The remote feature ref was retired after the ancestry check.
+Ordered captions build on that tree in `feat/cdx-caption-order`. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
 commit as the user requires. The user now expressly authorizes merging completed feature
@@ -113,13 +114,34 @@ MCP listener rebind failure at 127.0.0.1:64951 remains unexplained.
 See [verification](docs/verification-cdx-caption-preview.md) for both
 runs. All feature execution jobs and review agents are terminal. Actions is off.
 
+### Ordered CDX captions
+
+The [ordered caption increment](docs/verification-cdx-caption-order.md) admits
+multiple direct Text siblings on one Poster page. Signed depths establish paint
+order independently of scoped caption identity. One omitted depth beneath
+positive depths has published order. Equal depths and omission beside negative
+depths need further proof.
+
+Eight IO tests pass after three runtime REDs. The actual CLI, CPU/Metal,
+independent binary reader and FreeType agree with the original witnesses.
+The actual macOS app shows both disjoint captions and the blue top caption in
+the overlap. Native Open, read-only input, known Save, Unicode Save As, tied-depth
+refusal/Cancel and exact reopen pass. The owned review is closed. ASan passed
+10,000 runs and preserved 93 seed hashes. Evidence is in
+`target/cdx-resources/next-text/caption-order.8KvDal`.
+
+The full local gate passed **2,218/0/1** workspace tests with three AccessKit
+tests and all format, lint, layer, license, asset and corpus checks. The IO
+library type-checks on Windows MSVC, Linux GNU and WebAssembly. Runtime
+verification on those platforms remains open. Registry 49 stays byte-exact.
+All ordered-caption execution jobs are terminal.
+
 ### Next executable work
 
-1. Land the verified caption branch through PR 5 and confirm the main tree.
-2. Source-lock multiple CDX captions and explicit Z-order with independent
-   models and ordering witnesses. Continue explicit styles, child labels and
+1. Source-lock multiple explicit CDXString runs, including unambiguous start
+   offsets and glyph layout at run boundaries. Continue child labels and
    editable source from public evidence.
-3. Continue broader M1 styles, labels, objects, editable source and formats, then
+2. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/

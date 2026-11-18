@@ -1,5 +1,10 @@
 # Clean-room source register
 
+The [CDX caption ordering contract](../research/cdx-caption-order.md) records the
+published Page/Text containment, scoped source IDs and signed ZOrder semantics
+reviewed 2026-11-18. The exact-source projection uses the existing read-only
+caption model. Caption identity and paint order are independent.
+
 The [direct-Page CDX caption contract](../research/cdx-caption-preview.md) records the
 published Text/position/Poster/font/style definitions, selected code page and white
 paper checks for a bounded read-only preview. It uses exact contained fields and an

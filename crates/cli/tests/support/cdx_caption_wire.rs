@@ -126,3 +126,45 @@ fn cdx_caption_cli_and_authenticated_socket_share_readonly_capture_and_history()
     server.shutdown()?;
     Ok(())
 }
+
+#[test]
+fn ordered_caption_cli_renders_the_same_stack_on_cpu_and_gpu() -> TestResult {
+    let directory = support::SdfTestDirectory::new()?;
+    let front_first = directory.path("front-first.cdx");
+    let back_first = directory.path("back-first.cdx");
+    fs::write(
+        &front_first,
+        include_bytes!("../../../io/tests/fixtures/cdx-caption/ordered/front_first.cdx"),
+    )?;
+    fs::write(
+        &back_first,
+        include_bytes!("../../../io/tests/fixtures/cdx-caption/ordered/back_first.cdx"),
+    )?;
+    let witness: Value = serde_json::from_str(include_str!(
+        "../../../io/tests/fixtures/cdx-caption/ordered/cases.json"
+    ))?;
+    let expected = &witness["front_first"]["model"];
+    let frame = |path: &std::path::Path, backend| {
+        cli(&[
+            request("document.open_cdx", json!({"path":path})),
+            request(
+                "render.capture",
+                json!({"page_id":1,"width_px":1024,"height_px":1024,"backend":backend}),
+            ),
+        ])
+    };
+    let cpu = frame(&front_first, "cpu")?;
+    let png = cpu["capture"]["png_base64"]
+        .as_str()
+        .filter(|image| !image.is_empty())
+        .ok_or("missing ordered preview")?;
+    let reordered = frame(&back_first, "cpu")?;
+    let gpu = frame(&front_first, "gpu")?;
+    for captured in [&cpu, &reordered, &gpu] {
+        assert_eq!(&captured["document"], expected);
+        assert_eq!(captured["capture"]["png_base64"].as_str(), Some(png));
+        assert_eq!(captured["source"]["modified"], false);
+        assert_eq!(captured["undo_depth"], 0);
+    }
+    Ok(())
+}

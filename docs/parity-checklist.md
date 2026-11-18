@@ -13,9 +13,10 @@ scope has independent evidence. A page-only history test does not verify chemica
 
 The [direct-Page CDX caption increment](verification-cdx-caption-preview.md) verifies
 read-only preview and exact native macOS Open and Unicode Save/reopen for one explicitly
-positioned Roboto caption on white paper. The shared command and render paths pass
-independent source and pixel checks. General CDX typography, authoring and other
-platforms remain open.
+positioned Roboto caption on white paper. [Ordered captions](verification-cdx-caption-order.md)
+extend that workflow to multiple source-qualified siblings with provable depths.
+The shared command and render paths pass independent source and pixel checks.
+Tied depths, general CDX typography, authoring and other platforms remain open.
 
 The [plain CDX bond increment](verification-cdx-plain-bonds.md) expands only read-only
 data coverage to Single/Double/Triple, Solid fields and directed position. Source presence/

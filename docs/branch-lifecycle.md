@@ -28,8 +28,10 @@ Do not merge an obsolete prototype over current code merely because Git calls it
 [PR 4](https://github.com/thematheusmello/bondline/pull/4) landed the resource and
 raw string readers. Both source branch tips are reachable from main and their
 remote refs have been retired. [PR 5](https://github.com/thematheusmello/bondline/pull/5)
-tracks the caption preview. Its full local gate and actual macOS workflow are
-recorded in [caption verification](verification-cdx-caption-preview.md).
+landed caption preview at `9f27fe9`. Its tree equals the reviewed tip and its
+remote feature ref was retired. See [caption verification](verification-cdx-caption-preview.md).
+The next branch `feat/cdx-caption-order` follows the
+[ordering contract](research/cdx-caption-order.md).
 
 ## Main integration checkpoint
 

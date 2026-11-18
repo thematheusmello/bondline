@@ -17,6 +17,11 @@ source-qualified caption and preserves original files through display and Save.
 Headless CLI, MCP, loopback, CPU/Metal and native macOS Open/view/Save/reopen
 checks passed. Additional typography, editing and other platforms remain required.
 
+[Ordered CDX captions](docs/verification-cdx-caption-order.md) add multiple
+explicitly positioned captions on one page. Independent overlaps establish
+paint order and macOS Save/reopen preserves the complete source. Tied depths
+and unproved default ordering remain open.
+
 The [CDXString increment](docs/verification-cdx-string.md) preserves literal style runs
 and text bytes, with borrowed property boundaries and independent original fixtures.
 The caption workflow uses this reader for its explicit validated run.

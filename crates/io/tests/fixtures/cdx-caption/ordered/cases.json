@@ -1,0 +1,660 @@
+{
+  "front_first": {
+    "sha256": "bacc5c24e6220971a3f6920b5c7237e6e96c29c683f98b0842754ce954189ce3",
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [],
+          "texts": [
+            {
+              "id": 2,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.2500038147554742,
+                      0.5000076295109483,
+                      0.7500114442664225
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      },
+      {
+        "owner_record": 12,
+        "owner_tag": 32774,
+        "source_id": 4294967295,
+        "payload": "0080",
+        "value": -32768
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "back_first": {
+    "sha256": "214cdbf2880bc007faee85f4e5d03e50ba1cccb46b0f3cf42e9bc5abbe3f7845",
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [],
+          "texts": [
+            {
+              "id": 2,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.2500038147554742,
+                      0.5000076295109483,
+                      0.7500114442664225
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 4294967295,
+        "payload": "0080",
+        "value": -32768
+      },
+      {
+        "owner_record": 12,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "omitted_below_positive": {
+    "sha256": "25548c4fed4c848a080a0f80ee58b5d593a106b3a163cc31fcf6d94791cd1989",
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [],
+          "texts": [
+            {
+              "id": 2,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.2500038147554742,
+                      0.5000076295109483,
+                      0.7500114442664225
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "0700",
+        "value": 7
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "separate_anonymous": {
+    "sha256": "f908dd7386e0c7e648223741c3054490b55c9afbf6f8a7e06c1f58f291362141",
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [],
+          "texts": [
+            {
+              "id": 2,
+              "position": {
+                "x_pt": 142.5,
+                "y_pt": 110.25
+              },
+              "runs": [
+                {
+                  "text": "Phase λ",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.2500038147554742,
+                      0.5000076295109483,
+                      0.7500114442664225
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "AV2",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 0,
+        "payload": "0000",
+        "value": 0
+      },
+      {
+        "owner_record": 12,
+        "owner_tag": 32774,
+        "source_id": 0,
+        "payload": "fdff",
+        "value": -3
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "explicit_single": {
+    "sha256": "8f7ec1023679b2ef3216c673d775152f1e6dbd2642676a41d291d447cc7e3f03",
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 4294967295,
+        "payload": "0080",
+        "value": -32768
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "omitted_overlap": {
+    "sha256": "04b43032c932ec4399eeb0ddb1862bcceafb7f106c30e234de080d3068ce33b6",
+    "model": null,
+    "z_order": [],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "omitted_disjoint": {
+    "sha256": "0f764bf83fb3e57ae6ef72d42f81e3e1ac31454e0d89e32e0f9bdb79841db5fe",
+    "model": null,
+    "z_order": [],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "explicit_tie": {
+    "sha256": "329e434829003a5d64fb0338c199102343b13bcd123e47e0524da7484d50f0f1",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 9,
+        "payload": "ff7f",
+        "value": 32767
+      },
+      {
+        "owner_record": 12,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "zero_tie": {
+    "sha256": "265bc4ce15c35c0bca6ff17dfddb3ff64f96848497712a0bedcd05f0f200ad79",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": 11,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "0000",
+        "value": 0
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "omitted_with_negative": {
+    "sha256": "e6cad2fe351e7f73502f2c4026307ecf612ce27a08e10a57169e90c6c11f203b",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": 11,
+        "owner_tag": 32774,
+        "source_id": 4294967295,
+        "payload": "0080",
+        "value": -32768
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "duplicate_owner_field": {
+    "sha256": "2944aeddaada902c57009e234ee3fdb365dc842939fe329f26234e911ff2c866",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 9,
+        "payload": "fdff",
+        "value": -3
+      },
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 9,
+        "payload": "0700",
+        "value": 7
+      },
+      {
+        "owner_record": 13,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "duplicate_sibling_id": {
+    "sha256": "4cb21f24ec879288ee258a1a5165d3c8413be4a52a8f5df63199737d2cacd140",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "fdff",
+        "value": -3
+      },
+      {
+        "owner_record": 12,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "page_owner": {
+    "sha256": "98849595f5ea76bb8e7184ea205f7694f76e0c8c2bfa590d341032742102e54e",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": 2,
+        "owner_tag": 32769,
+        "source_id": 55,
+        "payload": "0700",
+        "value": 7
+      },
+      {
+        "owner_record": 7,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      },
+      {
+        "owner_record": 13,
+        "owner_tag": 32774,
+        "source_id": 4294967295,
+        "payload": "0080",
+        "value": -32768
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 7"
+    }
+  },
+  "root_owner": {
+    "sha256": "b01bcabb22660f46a8125e12c4f9872f98dae1c2eaf2f3f81f055588082aaf98",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": null,
+        "owner_tag": null,
+        "source_id": null,
+        "payload": "0700",
+        "value": 7
+      },
+      {
+        "owner_record": 7,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      },
+      {
+        "owner_record": 13,
+        "owner_tag": 32774,
+        "source_id": 4294967295,
+        "payload": "0080",
+        "value": -32768
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 7"
+    }
+  },
+  "width_one": {
+    "sha256": "57098ab33c4eef2a947b6e35fdf75cf0a3e3c66d93105fa0fe0215e03dca1c42",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 9,
+        "payload": "ff",
+        "value": null
+      },
+      {
+        "owner_record": 12,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "width_four": {
+    "sha256": "97e28d9897e1c960140288e2c6dafbedb1b88eb04d5c29f92dfeaeb62fbe393f",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 9,
+        "payload": "00000000",
+        "value": null
+      },
+      {
+        "owner_record": 12,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "grouped_peer": {
+    "sha256": "40a093c298c325eb595360efa75f6f3360e878298ca0e0ff3a4a44db1f034652",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      },
+      {
+        "owner_record": 13,
+        "owner_tag": 32774,
+        "source_id": 4294967295,
+        "payload": "0080",
+        "value": -32768
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  },
+  "bad_peer": {
+    "sha256": "a21554ae77acc29335ab5b547366c41fad66dccc776978f8d0fcbdcc1b8b7d8e",
+    "model": null,
+    "z_order": [
+      {
+        "owner_record": 6,
+        "owner_tag": 32774,
+        "source_id": 17,
+        "payload": "ff7f",
+        "value": 32767
+      },
+      {
+        "owner_record": 12,
+        "owner_tag": 32774,
+        "source_id": 9,
+        "payload": "fdff",
+        "value": -3
+      }
+    ],
+    "legacy": {
+      "code": "unsupported_content",
+      "detail": "unsupported object 0x8006 at record 6"
+    }
+  }
+}

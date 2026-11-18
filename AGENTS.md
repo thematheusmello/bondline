@@ -36,6 +36,13 @@ fallback diagnostics, detached page history, cross-format loss and registry 49
 keep their prior policies. Actual macOS Open/view/read-only/Save/reopen and the full
 local gate passed. Follow STATUS for the next M1 source-shape work.
 
+The [ordered caption increment](docs/verification-cdx-caption-order.md) retains
+the earlier proof and admits additional direct siblings. Signed distinct paint
+depth is separate from scoped source identity. Keep the missing-zero ambiguity,
+canonical payload width, exact owner and bad-peer guards. Anonymous source ID
+zero stays unreferenced. No additional command, authoring permission or tool
+binding follows.
+
 Read `docs/research/cdx-resources.md` and `docs/verification-cdx-resources.md` before
 CDX string or Text work. The table query is opt-in and runtime-dependency-free. Preserve
 actual root ownership, raw UINT16 ID/charset/RGB, byte-borrowed names, table presence,
