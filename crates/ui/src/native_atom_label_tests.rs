@@ -1483,3 +1483,6 @@ mod label_metadata_app_tests;
 
 #[path = "cdx_literal_app_tests.rs"]
 mod cdx_literal_app_tests;
+
+#[path = "cdx_bond_app_tests.rs"]
+mod cdx_bond_app_tests;
