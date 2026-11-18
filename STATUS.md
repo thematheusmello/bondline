@@ -3,7 +3,8 @@
 The full M0–M5 goal is **active after the user resumed it** on `feat/multiple-bonds`.
 Its scope is unchanged. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
-incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun, push or publication.
+incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
+commit as the user requires; merge/release/publication remains separately authorized.
 
 ## Current recoverable work and evidence
 
