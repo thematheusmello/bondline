@@ -1,0 +1,261 @@
+{
+  "method": "Original stdlib struct generation; raw fields only; runtime maxima are not bundled binary files.",
+  "cases": [
+    {
+      "name": "zero_empty",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 100,
+      "sha256": "2764fc90558d64f5c0c15a55600c0693be811a9c3c883555ae34e5bdf6a48a26"
+    },
+    {
+      "name": "zero_control_bytes",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 108,
+      "sha256": "a807de342eaf2da5823a042a74a28bdda95e07275f5004c9e1e72e4987800061"
+    },
+    {
+      "name": "zero_all_bytes",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 356,
+      "sha256": "67578f59b31b82cbbfaea0aba54032528494004f73613d6a7fbefaccb2618f57"
+    },
+    {
+      "name": "single_empty",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 110,
+      "sha256": "3e8ec6ed55a87ff614d945844c607a17924e59e6be9a7f316ca14912f98b1ece"
+    },
+    {
+      "name": "single_size_240",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 118,
+      "sha256": "725e39b0cc4c89603ce275111702484d31500bb780a25ed30f741b025190117e"
+    },
+    {
+      "name": "single_size_241",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 118,
+      "sha256": "d264404223fd3e24550fcbbe3be45a6261a56305ac1d64e1df608f55aeff0e62"
+    },
+    {
+      "name": "literal_zero_fields",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 111,
+      "sha256": "fcdab78914ce8dc729f7520318ff66cb727f197af29a8ea8611955c285708ce7"
+    },
+    {
+      "name": "full_uint16_fields",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 114,
+      "sha256": "06717fd9a192b0e431f76af8375bfca527fd8fb40b6a3c3c863dbb56e8309d9d"
+    },
+    {
+      "name": "duplicate_starts",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 122,
+      "sha256": "9aad8ff4ba0c63928d8247e1939f930848d3d757e107d469b4b13c612d70ded3"
+    },
+    {
+      "name": "decreasing_starts",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 132,
+      "sha256": "bf2cea2e18cd0b67e0b356f0a23a6469e5af9b815efb62e0a22fa2061ea9e6d0"
+    },
+    {
+      "name": "out_of_range_starts",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 121,
+      "sha256": "6cb5247d18338538da024816e4117ff9b5e1f0c3a3286365513aa410472767e5"
+    },
+    {
+      "name": "scalar_byte_witness",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 198,
+      "sha256": "7de90858a826c01054ad9308bbd519de36fe3925a7aaa3fbd5518ca665142990"
+    },
+    {
+      "name": "style_looking_remainder",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 123,
+      "sha256": "710a03c4cf784f493bc4e5a56aa0ef39a66d3be68b808b3aaa1fcc17add7381d"
+    },
+    {
+      "name": "invalid_empty_payload",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": false,
+      "bytes": 98,
+      "sha256": "d964c18db0c32e89c66f3c0d0613e7abeafb8d9de3ea5ba034a85776de16aa06"
+    },
+    {
+      "name": "invalid_one_byte",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": false,
+      "bytes": 99,
+      "sha256": "631d28e2183ff20bba7d1aa7d3e31128a792744988057dea83d8ad2f6b943450"
+    },
+    {
+      "name": "invalid_one_missing",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": false,
+      "bytes": 100,
+      "sha256": "94f832dcd55490a96c3fc38122fbcd5fb3f26f8d07f2fc3c0eb1683e3e8d8abb"
+    },
+    {
+      "name": "invalid_one_nine",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": false,
+      "bytes": 109,
+      "sha256": "7caf0d83ad035199afd8719c6b50ffee56bb5d922d5aa9774346cbbc850bf6c9"
+    },
+    {
+      "name": "invalid_three_29",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": false,
+      "bytes": 129,
+      "sha256": "740ebaca37aa1cd9df3c6bcd8562b21797a2125c7f9ffae99100bc5d2eece67f"
+    },
+    {
+      "name": "plain_implicit",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 127,
+      "sha256": "4d35b6ae7c1b18903538c0322965a5289f4aa9f9cd26700cbeec4a8bddcf78be"
+    },
+    {
+      "name": "plain_explicit",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 133,
+      "sha256": "434e8b735203fcb4e21a659d52c5a37cae44d9511966e207eec4ea4cb4ec38b7"
+    },
+    {
+      "name": "plain_header",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 129,
+      "sha256": "a84a1a4a7a5a790306fd136d8b17c51192adbce38d4273c18052adfc71dcd03e"
+    },
+    {
+      "name": "plain_implicit_file_end",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 129,
+      "sha256": "91cc5bce7a9164a825891e7bebbe1a0d03d3f52d3432de181bb497e55d2667ba"
+    },
+    {
+      "name": "plain_explicit_file_end",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 135,
+      "sha256": "8841f30979584c358adc65443269eefca6489d2986dabb804a124cd7eddaaadd"
+    },
+    {
+      "name": "extended_small",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 137,
+      "sha256": "c62976b8e62a0018c16454691cd221781fd736845d1903dac7db40ff9f0df025"
+    },
+    {
+      "name": "opaque_tag_0700",
+      "storage": "file",
+      "query_tag": 1792,
+      "query_valid": true,
+      "bytes": 127,
+      "sha256": "0c98d3a7a557c873bd3f8542208456badd32cc4c19576f2983036666a9456122"
+    },
+    {
+      "name": "opaque_tag_0805",
+      "storage": "file",
+      "query_tag": 2053,
+      "query_valid": true,
+      "bytes": 127,
+      "sha256": "88a188f946f1b5513ef9dcfe4c6c3209da4b5eb527fc90df597c58bf43731238"
+    },
+    {
+      "name": "nested_user_object",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 158,
+      "sha256": "8a076eaa00583cc0d8283c7a4ee33682ae652925628b02bff4ff5938646cced6"
+    },
+    {
+      "name": "invalid_extended_one_nine",
+      "storage": "file",
+      "query_tag": 16385,
+      "query_valid": false,
+      "bytes": 121,
+      "sha256": "d8f603b288f057eefd1cd7955669801db7abad59efd5fac0fd359183db395c31"
+    },
+    {
+      "name": "invalid_max_count_following_padding",
+      "storage": "runtime",
+      "query_tag": 16385,
+      "query_valid": false,
+      "bytes": 655463,
+      "sha256": "5c90147704aeb448046e143c651c2125ee16a992b98bc2ae6a11ca709d887c8e"
+    },
+    {
+      "name": "long_text_65553",
+      "storage": "runtime",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 65679,
+      "sha256": "51b153dcf517d1affe299bdf040586165da27aa13c6a771394d70c5a5cb4ed2c"
+    },
+    {
+      "name": "max_runs_65535_empty",
+      "storage": "runtime",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 655462,
+      "sha256": "25cafbe35129f0bc8fabfb9d3d3a5d4059ed2cc0949a786677b3dd6cf210d11e"
+    },
+    {
+      "name": "max_runs_65535_text",
+      "storage": "runtime",
+      "query_tag": 16385,
+      "query_valid": true,
+      "bytes": 655466,
+      "sha256": "62b5f357b3845bcc14c186b60178e8385a1513a27c4c4fce188d76604ded660f"
+    }
+  ]
+}

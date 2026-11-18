@@ -1,0 +1,20 @@
+{
+  "literal_little_endian_and_ten_byte_run": true,
+  "literal_payload_boundary_one_byte_short": true,
+  "scalar_byte_witness": {
+    "raw_bytes": 8,
+    "scalars_if_utf8": 4,
+    "utf16_units_if_utf8": 5,
+    "codec_or_offset_interpretation_authorized": false
+  },
+  "sources": 32,
+  "stored_sources": 28,
+  "runtime_sources": 4,
+  "query_accepted": 25,
+  "query_invalid_prefix": 7,
+  "all_raw_syntax_valid": true,
+  "maximum_run_entries_individually_checked": 131070,
+  "property_local_max_count_refusal": true,
+  "zero_duplicate_decreasing_and_out_of_range_starts_preserved": true,
+  "no_product_code_or_external_consumer_used": true
+}

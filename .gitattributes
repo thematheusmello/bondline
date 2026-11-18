@@ -7,6 +7,8 @@
 /crates/cdx/tests/fixtures/*.cdx -text
 /crates/cdx/tests/fixtures/resources/*.cdx -text
 /crates/cdx/tests/fixtures/resources/*.json -text
+/crates/cdx/tests/fixtures/raw-strings/data/*.cdx -text
+/crates/cdx/tests/fixtures/raw-strings/data/*.json -text
 /crates/io/tests/fixtures/cdx/metadata-explicit.cdx -text
 /crates/io/tests/fixtures/cdx/metadata-header.cdx -text
 /crates/io/tests/fixtures/mol/*.mol -text

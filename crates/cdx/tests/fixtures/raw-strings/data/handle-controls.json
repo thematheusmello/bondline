@@ -1,0 +1,33 @@
+{
+  "source": "plain_explicit_file_end",
+  "controls": {
+    "object": {
+      "record": 0,
+      "error": {
+        "kind": "Source",
+        "error": "InvalidProperty"
+      }
+    },
+    "end": {
+      "record": 4,
+      "error": {
+        "kind": "Source",
+        "error": "InvalidProperty"
+      }
+    },
+    "file_end": {
+      "record": 5,
+      "error": {
+        "kind": "Source",
+        "error": "InvalidProperty"
+      }
+    },
+    "foreign_same_bytes": {
+      "record": 2,
+      "error": {
+        "kind": "Source",
+        "error": "InvalidProperty"
+      }
+    }
+  }
+}
