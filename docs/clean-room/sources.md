@@ -1,16 +1,41 @@
 # Clean-room source register
 
-The next bounded read-only plain CDX bond prerequisite follows
+The next CDX resource query is researched2026-11-18 against primary
+[FontTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/FontTable.htm),
+[CDXFontTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXFontTable.htm),
+[ColorTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ColorTable.htm),
+[CDXColorTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXColorTable.htm),
+[Unformatted](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/Unformatted.htm),
+[CDXString](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXString.htm) and
+[Font](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Font.htm).
+FontTable0100 has platform/count and length-delimited declared-ID/raw-charset/name-byte
+entries; ColorTable0300 has count/RGB UINT16 triples and distinct reserved/absent-table
+rules. No universal font-name codec or styled-run font reference resolution is established.
+The font datatype's offsets conflict with its apparently short hex example; String's
+index wording conflicts with nonsequential font IDs. The linked charset page returns404.
+These are open evidence, not invented fallbacks. Present-empty/short palette handling
+and count65535's implicit index65536 require an explicit support/API decision before code.
+Ignored receipt manifest6375B SHA256
+`a8574c064609a29687d1a4cc1632283766d4372cc1241607ced3fbe32adad9e4`
+pins five fresh200 bodies, one404 and five reused current receipts. STATUS records the
+proposed standalone query and independent original-byte acceptance; no resource API,
+Text/IO/render/edit authority or consumer agreement is implemented by this audit.
+
+The bounded read-only plain CDX bond prerequisite follows
 [the bond contract](../research/cdx-plain-bonds.md), freshly reviewed2026-11-18 against
 SDK Bond/Order/Display/Display2/DoublePosition/Begin/End/numeric pages linked there.
 Binary Order1/2/4 is distinct from query3; missing Display2 inherits Display. Position
 absence and directed side stay separate from automatic/manual source provenance.
-Only plain Single/Double/Triple and absent/Solid displays are planned. The non-Double
+Only plain Single/Double/Triple and absent/Solid displays are admitted. The non-Double
 Display2/position refusal and exact2-byte new-field support are bounded original policies,
 not universal malformed-file claims. Eight200 receipts have manifest SHA256
 `3e0665ad7298e2b15300f01926a1d9505af8733b7558a3d9df3bdbba7f9870a3`.
-Freeze original independent facts/consumer evidence and runtime RED before production;
-no new bond decoder/display/edit permission is claimed by this source lock.
+Original independent facts/consumer evidence and runtime RED precede decoder37d094d.
+[Receiving](../verification-cdx-plain-bonds.md) records16 original sources/149 refusals,
+actual RDKit graph/order/direction qualifications, existing adapters/App and bounded
+native Mac unchanged Unicode files. Automatic/manual provenance remains raw source;
+none of those results grants display or chemical-edit permission. No vendor text, asset,
+sample or executable is copied into the product.
 
 The read-only CDX literal-metadata slice is locked in
 [the CDX contract](../research/cdx-literal-atom-metadata.md), reviewed2026-11-18 against

@@ -1,8 +1,11 @@
 # Plain CDX bond data: M1 contract
 
-Locked2026-11-18 onbaa3d90. This is a planned read-only projection prerequisite, not
-faithful CDX depiction or authoring. Existing Atom/Bond/DoublePosition fields and the
-unchanged source snapshot suffice; no new command, model type or dependency is needed.
+Locked2026-11-18 onbaa3d90, implemented in37d094d. The requirements below retain their
+preimplementation contract scope; [receiving](../verification-cdx-plain-bonds.md) records
+independent fixtures, runtime RED/GREEN, actual files/native scope and local gate results.
+This is a read-only projection prerequisite, not faithful CDX depiction or authoring.
+Existing Atom/Bond/DoublePosition fields and the unchanged source snapshot suffice;
+no new command, model type or dependency is needed.
 
 ## Primary evidence
 

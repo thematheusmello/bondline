@@ -10,6 +10,25 @@ artifacts as an inferred part of sync. Retain isolated worker branches locally u
 separately needed. Actions remains OFF; source pushes do not authorize enabling it.
 This supersedes historical no-push checkpoint statements; the full M0–M5 goal stays active.
 
+Plain CDX bonds follow docs/research/cdx-plain-bonds.md and
+docs/verification-cdx-plain-bonds.md: contract6c9fff0, fixtures/helperc29c1a1, IO37d094d,
+caller5afb434 and fuzz1606d62. Keep binary Order1/2/4 (never query3), absent position
+Unspecified, all six directed side codes and raw automatic/manual source identity.
+Only absent/explicit Solid passes; Display2/position are Double-only INCLUDING0.
+Both global/local Bond lists, exact duplicates/second-record errors, old Order-width
+InvalidProperty and new-field UnsupportedProperty stay. No full/display/chemical-authoring/
+cross-format grant, default positioning, new command or grey tool follows. The old detached
+page/history workflow still refuses CDX Save until Undo. Only old Order2 gains its stronger
+positive; all0/3/FFFF and wedge/query/stereo/owner negatives stay. Independent16/149, IO541,
+command2/App1/wire3 and native379/367B exact Unicode files pass. The App known-Save test
+has stronger request/success proof; native also witnesses actual mtime publication. Initial
+batched native tool/Open did not establish Ring; fresh AX-confirmed selection is separate.
+ASan10000/1s passes with184 immutable seeds/actual104971B mutation. Full2882 on1606d62
+passes2187/0/1+vendor3/0 and all local gates; older MCP failures remain unexplained, not
+fixed. Own review95769 is quit; review365/older apps protected. STATUS holds exact next
+standalone font/colour resource source lock, not another atom/bond data slice. All jobs
+terminal, Actions OFF, full M0–M5 active/incomplete; push each atomic commit.
+
 Explicit typography beside scalar defaults follows docs/research/label-default-metadata.md
 and docs/verification-label-default-metadata.md: contract8c2b608, fixturesdeb078d,
 IO4e8470f, consumerd8bc3ba/ownership2e939f6, wire51fa159, rendere615cbf and fuzzc965607.

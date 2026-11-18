@@ -1,6 +1,18 @@
 # Verification log
 
-The latest [literal CDX metadata receiving](verification-cdx-literal-atom-metadata.md)
+The latest [plain CDX bond receiving](verification-cdx-plain-bonds.md) records independent
+16-source/149-refusal declarations, runtime IO/command/App/actual-adapter RED→GREEN,
+source/direction/manual-mode retention and bounded native Mac exact Unicode files.
+FullIO541/0 and ASan10000/1s with184 immutable sources/actual104971B mutation pass.
+Fresh full local2882 on1606d62 PASSES workspace2187/0/1 across321 reports plus vendor3/0
+and all fmt/clippy/layers/licenses/seven-assets/pinned-corpus gates. The earlier1390
+MCP listener failure remains unexplained, not causally fixed by this natural pass.
+Own native95769 is quit; user-viewed365 and older apps/files remain protected. Registry49/
+catalogue16/124, closed CDX display/edit/loss guards, Actions OFF and full M0–M5 scope stay.
+Standalone CDX font/colour resources are the next source-lock task; no Text/rendering
+permission or human golden/other-platform acceptance follows from the new data coverage.
+
+The preceding [literal CDX metadata receiving](verification-cdx-literal-atom-metadata.md)
 records independent preimplementation bytes/facts/runtime RED, literal read-only data,
 actual CLI/MCP/socket/App and bounded native Mac unchanged Unicode Save/reopen. Two
 RDKit legacy-charge differences and spin-consumer limits stay explicit. ASan10000/1s

@@ -3,7 +3,14 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
-The current [literal CDX metadata receiving](verification-cdx-literal-atom-metadata.md)
+The current [plain CDX bond receiving](verification-cdx-plain-bonds.md) records checked
+Single/Double/Triple/directed-position data with immutable raw source, independent16/
+149 source/control declarations, actual adapters/App/native Unicode files and bounded
+ASan. Faithful CDX preview/editing remain missing; fonts/colours/Text/styles are next.
+Exact latest local gate results are in STATUS. Registry49/catalogue16/124 and full M0–M5
+scope stay unchanged; push each atomic commit, keep user apps protected and Actions OFF.
+
+The preceding [literal CDX metadata receiving](verification-cdx-literal-atom-metadata.md)
 records read-only isotope/charge/radical/H data, independent source/consumer qualifications,
 actual adapters/native Mac unchanged Unicode files and bounded ASan. Faithful CDX display
 and chemical editing remain missing. The final aggregate's unchanged MCP listener failure

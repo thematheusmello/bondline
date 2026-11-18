@@ -1,5 +1,15 @@
 # Architecture
 
+The [plain CDX bond projection](verification-cdx-plain-bonds.md) reuses existing
+BondOrder/DoublePosition. One checked private field reader maps binary1/2/4 and six
+explicit directed side values, leaving absent position Unspecified. Both owner/admitted
+lists enforce the three new Bond properties. Only absent/Solid styles pass; explicit
+secondary style/position is Double-only. Raw automatic/manual provenance stays in the
+immutable complete source, with no writer/default positioning or display permission.
+Existing registry49/adapters/history/source-loss checks consume the data unchanged.
+Standalone font/colour resources and complete Text/styles/source certificates still
+precede faithful CDX rendering or chemical edits.
+
 The [literal CDX projection](verification-cdx-literal-atom-metadata.md) populates existing
 Atom isotope/charge/radical/explicit-H fields without adding model or adapter types.
 Both global owner classification and local Node properties enforce the same four tags;

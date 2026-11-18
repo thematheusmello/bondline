@@ -117,6 +117,70 @@ The25214B ignored log has SHA256
 `447008f3d4939b8e718513be70a348fd28324e66892371d691b387cff184974c`.
 Fuzz formatting and seed self-checks pass; no dependency or manifest/lock changes.
 
+## Actual native macOS files
+
+A separate signed `target/cdx-bonds/Bondline CDX Bond Review.app`, PID95769, runs the
+37d094d production code. Later commits change only tests/fuzz/docs. Signed executable
+SHA256 `cf0fe0d0e01e3f50fb4e2280589524972e10053f6dc8eed9a0873c5384bfe9c6`;
+unbundled build SHA256
+`b85688aedc715402c75e039f8c2e2cfe40eec56ea42430f47c35fd970424882e`.
+
+After explicit AX-confirmed eight-membered Ring selection, actual OS controls perform
+Open manual-Right Double→known Save→Unicode CDX Save As→explicit reopen, then Open Triple
+→Unicode Save As→explicit reopen. Seven complete queried models equal independently
+frozen A4 expectations, with revisions1/2/3/4, exact H2/H1, clean history/source and correct
+file associations. Known Save advances public request epoch3→4 and changes the owned
+input's controlled2000-01-01 mtime to its publication time, without changing model/bytes.
+This is an actual write witness in addition to the stronger SDK App request check.
+
+| Actual Unicode output | Bytes | SHA256 |
+|---|---:|---|
+|Manual-Right Double|379|`33727f121e74d276fbc93f22ed274e193118bc166f97a36ba79849efe42df7bc`|
+|Triple|367|`79856421a31d22c75737236738a4a26e0af342cc77a127746b0afe551cf3c579`|
+
+Both actual saved files equal their frozen sources. The independent struct reader and
+pinned RDKit are rerun on those files: complete observations match, including graph/
+order/direction, explicit H and C2H4/C=C versus C2H2/C#C. Raw-coordinate convention is
+still qualified; this does not establish layout/side/rendering fidelity. Exact raw
+manual257/Right and source identity survive unchanged. Attached CPU/GPU captures,
+same-order Triple edit and whole CDXML/MOL conversion all refuse unsupported_content;
+the complete state and unrelated owned sentinel bytes remain unchanged.
+
+The canvas displays its honest unmapped-source warning and unavailable drawing controls.
+The retained Ring inspector still shows drawing instructions, a preexisting presentation
+limit. An initial batched Ring-click/Open attempt did not establish Ring selection; it
+is not counted as a passed selection. Exact Cancel followed by a fresh coordinate click
+and AX-confirmed Ring-on establishes the precondition before the actual workflow above.
+That batched chronology has no causal qualification or product fix. AX100-row truncation
+requires fresh own-window screenshots for file fields; CJK filename glyph coverage stays
+limited while exact UTF-8 files/paths pass. No other platform, human hardware/DPI,
+successful CDX image or human golden approval is claimed.
+
+The disposable review is explicitly quit; exact bundle inventory and original PID are
+observed absent. No post-Quit app probe relaunches it. User-viewed creation review365 and
+older apps/drawings remain protected. Ignored receipts live in
+`target/cdx-bonds/research/`; startup credentials stay private0600 and are never committed.
+
+## Final local gates
+
+Fresh full `cargo xtask ci`2882 on code1606d62 PASSES: workspace2187/0/1 across321
+result reports, plus vendor3/0. Workspace formatting, warnings-denied all-target clippy,
+workspace tests/doctests, vendor tests/clippy, enforced layers, strict runtime licenses/
+seven assets and the pinned eight-file/five-bundle corpus all pass. Separate fuzz fmt
+and the bounded sanitizer above also pass. The275214B ignored aggregate log has SHA256
+`f3fdf9aaa2c25c4ab76d9ce03486ec6f34d9a0f372bfa0dd315c706855ebbb0c`.
+
+This is a clean local aggregate. Earlier literal-metadata1390 failed the unchanged MCP
+replacement_bind51670 test, and other historical occurrences remain unexplained; this
+passing run is not a causal listener fix. Protected test SHA256 remains
+`fd96b257cd6c00b52e97544d652ed69fdbaaaa454e1f3a9360d77f3292218fb0`.
+No failing test is retried/waived to obtain this result. No dependency/lock/vendor/font/
+asset/golden/workflow change or new Windows/Linux/WASM execution is claimed.
+
+All implementation, native, sanitizer, gate and worker jobs are terminal. Worker branch/
+worktree and exact scoped patches remain for provenance; integrated source/tests are
+committed and pushed. Full M0–M5 and human NH2 golden approval remain incomplete.
+
 Native user reviews/apps/files stay protected, Actions stays OFF, and every created
 atomic commit is pushed. No full CDX display/edit authority, command or tool is added by
 the fixture/source work. M1 and all remaining M0–M5 requirements remain incomplete.

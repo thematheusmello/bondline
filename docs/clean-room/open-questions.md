@@ -1,15 +1,36 @@
 # Open questions
 
+## CDX font/colour resources, 2026-11-18
+
+The next standalone resource view has public table layouts, but a contract is not yet
+locked. FontTable uses declared nonsequential UINT16 IDs/raw charsets/name bytes; CDXString
+calls its style font an index, so resource ID lookup alone cannot certify Text references.
+The font hex example appears shorter than its normative offset table. Binary unsigned
+charset differs from XML Font's signed wording; the linked charset page404 leaves the
+name codec unresolved. Do not infer UTF-8/platform codec,−1 inheritance or a system font.
+
+Palette0/1 are implicit black/white; stored entries start at2. Table absence alone gives
+2white/3black. Present-short tables must not activate absent defaults. Choose an explicit
+present-zero policy and handle count65535/index65536 without wrap/drop; either a wider
+raw index or an honest typed support refusal needs independent tests. Wrong owners,
+duplicate tables/IDs, platform domain, length/trailing-byte and allocation boundaries
+also need locking. Optional query errors must preserve syntax/raw passthrough and must
+not become new IO Open failures. See the source register and current STATUS; no resource
+decoder or faithful CDX typography/display/editing is delivered by the research alone.
+
 ## Plain CDX bonds, 2026-11-18
 
-[The planned bond contract](../research/cdx-plain-bonds.md) can project three plain orders
+[The bond contract](../research/cdx-plain-bonds.md) now projects three plain orders
 and directed DoublePosition while retaining automatic/manual distinctions in source.
 The current model has no non-Solid Display/Display2 field; do not silently replace those
 with Solid or grant faithful rendering. Dormant Display2/position on non-Double orders
 remains outside the bounded subset, including explicit0. Automatic positioning,
 noncanonical integer widths, other bond kinds/stereo, typography/styles and general
-CDX authoring remain unresolved. No implementation or new consumer agreement follows
-from this research alone.
+CDX authoring remain unresolved. [Receiving](../verification-cdx-plain-bonds.md) qualifies
+actual graph/order/direction observations and exact native files without claiming side/
+manual-state/rendering parity from RDKit. The first batched native tool/Open precondition
+miss and retained Ring inspector instructions have no causal fix; ordinary explicit
+selection/file workflows have their separate bounded evidence.
 
 ## CDX literal metadata, 2026-11-18
 

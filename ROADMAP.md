@@ -12,7 +12,16 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
-The current M1 [literal CDX receiving](docs/verification-cdx-literal-atom-metadata.md)
+The current M1 [plain CDX bond receiving](docs/verification-cdx-plain-bonds.md) adds
+read-only Single/Double/Triple and explicit directed position, preserving raw automatic/
+manual provenance and every source byte. Independent16-source/149-refusal checks, actual
+adapters/App/native Unicode files, fullIO541/0 and bounded ASan pass. No display/chemical-
+authoring/loss authority, command or grey tool is added. Next source-lock checked standalone
+CDX font/colour resources before interpreting styled Text or granting faithful preview.
+Broader CDX/interchange and every remaining M0–M5 workflow stay required; STATUS records
+the latest aggregate and exact continuation rather than these historical next-task notes.
+
+The preceding M1 [literal CDX receiving](docs/verification-cdx-literal-atom-metadata.md)
 adds read-only isotope/charge/radical/explicit-H projection with exact source retention.
 Frozen independent facts, actual adapters/native Mac Unicode files and bounded ASan pass.
 The final aggregate fails at the unchanged MCP listener-release case; all unexecuted

@@ -1,5 +1,14 @@
 # File capabilities
 
+The [plain CDX bond projection](verification-cdx-plain-bonds.md) reads binary Order1/2/4,
+absent/explicit Solid and six directed DoublePosition encodings. Absence remains
+Unspecified; automatic/manual mode survives only in raw source. Display2/position on
+non-Double orders, non-Solid styles and other/query orders remain unsupported. Independent
+bytes/complete models/adapters and bounded Mac Unicode Save/reopen prove exact retention;
+no normalization or source-regenerating encoder is added. Full/display/chemical-authoring
+and cross-format guards stay closed; source restoration is still required after detached
+model edits. Fonts/colours/Text/styles and faithful CDX preview/editing remain missing.
+
 The [literal CDX atom projection](verification-cdx-literal-atom-metadata.md) now reads
 Node-owned isotope0420/signed16, charge0421/signed8 or documented four-byte recovery,
 radical0422/unsigned8 and NumHydrogens042B/unsigned16. Absent H stays unresolved; present0
@@ -170,7 +179,7 @@ new source authority, root inheritance, CDX flag projection or default-tool migr
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Standalone syntax/property/new-tree writer, canonical FileEnd envelopes, limited graph/literal atom metadata, atomic I/O and guarded shared/native Mac unchanged Open/Save | Earlier framing checks plus18 new original metadata sources/36 reader controls, actual CLI/MCP/socket/App, bounded Mac Unicode files and10,000 ASan runs. Current aggregate listener failure is retained separately from remaining passing stages; see verification-cdx-literal-atom-metadata.md | Faithful preview, broader bond/Text/resource/style/query/stereo mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
+| CDX | Standalone syntax/property/new-tree writer, canonical envelopes, literal atom metadata/plain bonds/directed positions, atomic I/O and guarded shared/native Mac unchanged files | Atom18-source/36-refusal and bond16-source/149-refusal declarations, actual adapters/App/native Unicode files and bounded ASan. Exact latest local gates/qualifications are in verification-cdx-plain-bonds.md | Faithful preview, other bonds/styles, font/colour/Text/query/stereo mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000/V3000 | Complete mixed-version session/native Mac files, occurrence inspector and existing-value editor, source-preserving capture and read-only Actual/Zoom/pan preview | Exact raw spans/order/versions, pinned corpus and unchanged raw/per-MOL consumers; bounded Mac files/field edits/Actual/pan; actual-App wheel/DPI/source freshness and edit→preview→Save/reopen; command/adapter guards and earlier bounded ASAN | Native wheel/physical-DPI/new combined edit-preview acceptance, record creation/reordering and field-header editing, broader layout/chemistry, fetched mixed-version corpus, syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
@@ -757,6 +766,10 @@ diagnostic contexts and a contradicted outbound-owner hypothesis establish no ca
 general CDX compatibility are separate unfinished work.
 
 ## Owned limited CDX model snapshots
+
+Current literal atom and plain-bond data coverage is documented in the two receiving
+records above. It preserves missing H and position, source IDs/direction and raw
+automatic/manual distinctions without promoting the complete-source/display predicate.
 
 StoredDocument::from_cdx now owns the complete source, initial elemental view and model
 baseline. The private preview helper uses one caller-sized page; print/style data remain

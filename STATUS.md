@@ -8,6 +8,91 @@ commit as the user requires; merge/release/publication remains separately author
 
 ## Current recoverable work and evidence
 
+Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
+helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read
+[contract](docs/research/cdx-plain-bonds.md),
+[receiving](docs/verification-cdx-plain-bonds.md) and
+[provenance](crates/io/tests/fixtures/cdx-plain-bonds/SOURCES.md).
+This supersedes historical next-task/job paragraphs and the persistent goal's old
+line-width first task. Every created atomic commit is pushed to the same origin branch.
+
+The limited read-only graph now handles binary Single/Double/Triple, absent/explicit
+Solid and six directed DoublePosition values. Query3 is never Triple. Missing position
+stays Unspecified; automatic/manual mode remains exact immutable source data, not a new
+model field. Explicit Display2/position on non-Double orders refuses even0. Both global/
+local owner lists and exact duplicate/width/error policy stay strict. No full/display/
+chemical-authoring/cross-format permission, command or grey tool is added. Existing
+detached page edits/history still refuse CDX Save until Undo. Registry49 actual records/
+schema/order and catalogue16/124 stay exact.
+
+Original16 sources/149 strict-reader refusals reproduce exactly; pinned external RDKit
+agrees on graph/order/direction/H2/H1 across three envelopes, without certifying visual
+side/manual-mode/layout. IO initial0/4 then frozen2pass/10fail precede producer→12/0.
+Exactly old Order2 becomes a stronger positive after its observed failure;0/3/FFFF and all
+other negatives remain. FullIO541/0 passes. One new-test needless borrow and stronger exact
+duplicate-record assertions are separately qualified by final12/clippy/fmt; no product
+change follows fullIO. Root commands0/2→2/0, App0/1→1/0 and actual CLI/MCP/socket0/3→3/0
+pass. Peer review strengthens known-Save request/success proof with qualified App1/0.
+
+Separate own Mac review95769 passes AX-confirmed retained8Ring→Open manual-Right Double→
+known Save→Unicode Save As→reopen, then Triple Open→Unicode Save As→reopen. Seven complete
+models, clean history/source and actual-byte/struct/RDKit observations agree. Known Save
+has public epoch3→4 plus controlled2000mtime→actual-publication proof. Actual files379B/
+SHA25633727f121e74d276fbc93f22ed274e193118bc166f97a36ba79849efe42df7bc and367B/SHA256
+79856421a31d22c75737236738a4a26e0af342cc77a127746b0afe551cf3c579 equal frozen sources.
+CPU/GPU capture, same-order Triple edit and whole CDXML/MOL saves all refuse with unchanged
+state/sentinel. The unmapped-source banner is honest; stale Ring inspector instructions,
+initial batched tool/Open setup miss, AX truncation and CJK filename-glyph limits remain
+explicit. No successful CDX preview/image or causal UI fix is claimed. Own review is quit,
+exact bundle/original PID absent; user-viewed365 and older apps/drawings stay protected.
+
+ASan13740 passes10000/1s, cov1321/ft2901/RSS232MiB,184 immutable/regenerated sources.
+Initialmax131072B and final limit131072B differ from actual NEW/REDUCEmax104971B. Manifest
+8438fb643a457f5ddd2c534914517980bbbf8d9597b51973e9f6dac2e52f6cda;
+log25214B/SHA256447008f3d4939b8e718513be70a348fd28324e66892371d691b387cff184974c.
+
+Fresh full local xtask CI2882 on1606d62 PASSES workspace2187/0/1 across321 reports plus
+vendor3/0, workspace/fuzz fmt, warnings-denied workspace/vendor clippy, layers, strict
+runtime licenses/seven assets and pinned eight-file/five-bundle corpus gates.
+Log275214B/SHA256f3fdf9aaa2c25c4ab76d9ce03486ec6f34d9a0f372bfa0dd315c706855ebbb0c.
+This is a clean local aggregate. Earlier1390's MCP replacement_bind51670 failure and
+historical occurrences remain unexplained, not causally fixed; protected test/policy
+stays exact. No dependency/lock/vendor/font/asset/golden/workflow change. Human NH2 golden
+approval and new Windows/Linux/WASM execution remain unverified.
+
+All owned implementation/native/sanitizer/gate jobs and workers are terminal. Root source/
+tests are committed/pushed; isolated branch/worktree retains only the integrated candidate
+and copied fixtures/helper for provenance, with no worker commit or unique pending code.
+The next-resource read-only audit is complete: report8097B/SHA256
+bc29b83cc3704e5ede4abea40940872300f112caca8750f09a760abd9302aebc and receipt manifest6375B/
+SHA256a8574c064609a29687d1a4cc1632283766d4372cc1241607ced3fbe32adad9e4. Five fresh200
+bodies, linked charset404 and five reused current receipts support the proposed next task;
+no resource contract/decoder/Text permission is implemented by that audit. Actions OFF;
+full M0–M5 remains active/incomplete.
+
+Next executable work:
+
+1. Read `target/cdx-bonds/research/next-resources/report.md` and primary SDK FontTable/
+   CDXFontTable/ColorTable/CDXColorTable/CDXString sources. Source-lock one standalone
+   `bondline_cdx::Document::resources()` view before production: literal platform/id/raw
+   UINT16 charset/name bytes, count/length/duplicate/owner limits and palette presence.
+   Resolve the API's index65536 boundary without dropping a stored colour. Retain the
+   font-style index-versus-declared-ID conflict and unknown name codec; do not resolve
+   styled Text or infer a font from the apparently truncated published hex example.
+2. Freeze independent original struct vectors/readers and runtime RED; implement the
+   checked standalone view with exact source retention and borrowed/owned budget policy.
+   Missing tables remain distinct from present zero/short tables; no default-font/codec,
+   style/H/placement inference, IO admission, registry/UI or display/edit grant follows.
+   Cover raw charset high values, nonsequential IDs, malformed/duplicate/truncated/owner
+   cases and boundary sizes, then parser fuzz/local gates and atomic commit+push.
+3. Continue actual CDX Text/styles/resources/faithful preview/source-preserving edits,
+   broader M1 interchange, all remaining M2 tools/selection/journal styles, M3 chemistry/
+   reactions, M4 publishing/clipboard and M5 naming/templates/WASM/installers. M0 platform/
+   input/accessibility/DPI/jobs/addressability and historical listener cause stay open.
+   Do not repeat delivered scalar/plain-bond work or enable Actions at this checkpoint.
+
+### Previous literal CDX metadata checkpoint
+
 Recoverable literal CDX metadata: base42ccefb/clarification4af42c5, frozen originals9a56c97/
 helper9b77891, IO4996ee7 (isolatedc018738), actual wired414c6a, command/App29e8831 and
 fuzzf11a40c. Read [contract](docs/research/cdx-literal-atom-metadata.md),

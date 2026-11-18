@@ -11,6 +11,13 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
+The [plain CDX bond increment](verification-cdx-plain-bonds.md) expands only read-only
+data coverage to Single/Double/Triple, Solid fields and directed position. Source presence/
+automatic-manual bytes, complete models and unchanged Unicode files pass independent
+IO/adapters/App and bounded native Mac checks, with sanitizer evidence. CDX display/edit
+and broader bond styles remain missing; no tool/menu/reference-flow status is promoted.
+Registry49/catalogue16/124 stay exact. STATUS records current gates and next M1 work.
+
 The [literal CDX metadata increment](verification-cdx-literal-atom-metadata.md) expands
 only read-only isotope/charge/radical/explicit-H data projection. Frozen independent
 bytes, actual adapters and bounded Mac unchanged Unicode Save/reopen pass; no faithful
