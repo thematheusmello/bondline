@@ -1190,12 +1190,93 @@ fn created_label_source(data: &[u8]) {
     original_unchanged(&base, source, &snapshot);
 }
 
+fn label_default_metadata_source(data: &[u8]) {
+    const BASE: &[u8] =
+        include_bytes!("../../crates/io/tests/fixtures/label-metadata/mixed_a.cdxml");
+    const CREATED: &[u8] =
+        include_bytes!("../../crates/io/tests/fixtures/label-metadata/created_3.cdxml");
+    const ALL: &[u8] =
+        include_bytes!("../../crates/io/tests/fixtures/label-metadata/all_printed.cdxml");
+    let (source, expected): (&[u8], &[u8]) = match data.first().copied().unwrap_or(0) % 5 {
+        0 => (
+            BASE,
+            include_bytes!("../../crates/io/tests/fixtures/label-metadata/edited_endpoint.cdxml"),
+        ),
+        1 => (BASE, CREATED),
+        2 => (
+            CREATED,
+            include_bytes!("../../crates/io/tests/fixtures/label-metadata/compound.cdxml"),
+        ),
+        3 => (
+            ALL,
+            include_bytes!("../../crates/io/tests/fixtures/label-metadata/all_moved.cdxml"),
+        ),
+        _ => (
+            BASE,
+            include_bytes!("../../crates/io/tests/fixtures/label-metadata/mixed_moved.cdxml"),
+        ),
+    };
+    let base = StoredDocument::from_cdxml(source.into(), PageSize::A4).unwrap();
+    let snapshot = base.model_snapshot();
+    assert!(base.has_label_defaults_projection());
+    let frozen = StoredDocument::from_cdxml(expected.into(), PageSize::A4).unwrap();
+    let page = &base.model().pages()[0];
+    let fragment = &page.fragments()[0];
+    let mut atoms = fragment.atoms().to_vec();
+    for (a, b) in atoms
+        .iter_mut()
+        .zip(frozen.model().pages()[0].fragments()[0].atoms())
+    {
+        // Only the declared edit fields come from independently frozen expected source.
+        a.position = b.position;
+        a.element = b.element;
+        a.explicit_hydrogens = b.explicit_hydrogens;
+        a.authored_label = b.authored_label.clone();
+    }
+    let mut current = base.clone();
+    current
+        .model_mut()
+        .replace_fragment(
+            page.id(),
+            Fragment::new(fragment.id(), atoms, fragment.bonds().to_vec()).unwrap(),
+        )
+        .unwrap();
+    assert!(current.has_label_defaults_projection());
+    assert!(!current.is_fully_mapped());
+    assert!(!current.has_boxed_atom_labels());
+    assert!(!current.has_connected_atom_labels());
+    assert!(!current.has_mixed_atom_labels());
+    assert!(!current.has_flagged_atom_labels());
+    assert_eq!(current.to_cdxml().unwrap().as_ref(), expected);
+    let reopened = StoredDocument::from_cdxml(
+        current.to_cdxml().unwrap().into_owned().into(),
+        PageSize::A4,
+    )
+    .unwrap();
+    assert!(reopened.has_label_defaults_projection());
+    assert_eq!(reopened.model(), current.model());
+    let mut bad = current.clone();
+    bad.model_mut()
+        .set_page_size(page.id(), PageSize::new(513., 512.).unwrap())
+        .unwrap();
+    assert!(!bad.has_label_defaults_projection());
+    assert!(!bad.has_display_projection());
+    assert!(matches!(
+        bad.to_cdxml(),
+        Err(DocumentError::UnsupportedEdit)
+    ));
+    *bad.model_mut() = base.model().clone();
+    assert_eq!(bad.to_cdxml().unwrap().as_ref(), source);
+    original_unchanged(&base, source, &snapshot);
+}
+
 fuzz_target!(|data: &[u8]| {
     if data.len() > INPUT_LIMIT {
         return;
     }
     assert_eq!(ORIGINAL.len(), 464);
     arbitrary_source(data);
+    label_default_metadata_source(data);
     created_label_source(data);
     mixed_label_source(data);
     connected_source_workflow(data);

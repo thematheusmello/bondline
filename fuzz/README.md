@@ -5,6 +5,31 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Explicit typography beside scalar defaults
+
+The existing `cdxml_profile` target also exercises five frozen metadata-source
+edit/create/move/compound/reimport paths, unchanged source/Arc retention, current
+capability proof and page-drift refusal. All old invariants stay. Actual run typography
+remains explicit; this does not fuzz inheritance, Engine/history, GPU or OS input.
+
+```sh
+python3 -B fuzz/seed_label_metadata.py .cache/fuzz/label-metadata-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/label-metadata-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recipe refuses an existing destination and separates30 immutable source seeds/
+manifest from writable corpus:12 originals,12 hostile controls, exact16KiB and five
+selector bytes. Expat checks source syntax; missing run fields, shadowed defaults,
+unresolved resources, signed selectors, wrong owners, namespaces and body drift remain
+refusal inputs. Record actual sanitizer iterations/reached lengths and source checks
+in [receiving](../docs/verification-label-default-metadata.md); these bounds alone are
+not execution evidence or exhaustive safety proof. No dependency is added.
+Actual session76283 passes10000/391s, cov9099/ft22007/RSS488MiB, with a NEW16384B
+mutation. Thirty immutable seeds and fresh regeneration are exact; manifest SHA256
+`682f24b1a5e599feb28ebcf67bd24e0219cfcfdee330ccfd4749014dafafb872`.
+The116952B ignored log has SHA256
+`f2e2dc2d5e141ba6c1660e2aec61b3d9f5ebdd6b85aeb18539831c18d3264327`.
+
 ## Explicit printed-label creation
 
 `cdxml_profile` retains every old invariant and adds six frozen Mixed→Flagged creation
