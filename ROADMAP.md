@@ -33,6 +33,12 @@ examples and native macOS Save and reopen verify exact source retention.
 Next establish sourced placement and label agreement before allowing
 faithful preview and chemical editing for qualified CDX.
 
+The [CDX label preview increment](docs/verification-cdx-atom-label-preview.md)
+adds isolated and connected labelled structures whose source determines
+placement, paper and plain bond styles. Mac viewing and unchanged Save
+are verified. Atomic typed binary source replacement and an independently
+tested edit workflow remain required.
+
 The [CDXString increment](docs/verification-cdx-string.md) preserves literal style runs
 and text bytes, with borrowed property boundaries and independent original fixtures.
 The caption workflow uses this reader for its explicit validated run.

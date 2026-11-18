@@ -1,12 +1,10 @@
 //! Closed box-positioned atom labels; source coverage is separate from full authoring.
 use super::{MappingError, atom_text, caption, graph, is_element, parse_position, write};
-use crate::{DocumentError, StoredDocument};
+use crate::{DocumentError, StoredDocument, display::connected_label_bonds};
 use bondline_cdxml::{
     Document as Xml, Edit, ObjectId, Resources, TextObject, Writer, parse_integer,
 };
-use bondline_model::{
-    Atom, AtomId, AtomLabel, Bond, BondOrder, Document, DoublePosition, Page, Radical,
-};
+use bondline_model::{Atom, AtomId, AtomLabel, Bond, Document, Page, Radical};
 use roxmltree::Node;
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -136,104 +134,6 @@ fn allowed_atom_delta(before: &Atom, after: &Atom) -> bool {
             .is_some_and(|(a, b)| a.style() == b.style())
 }
 
-fn connected_geometry(page: &Page) -> bool {
-    let vertices: Vec<_> = page
-        .fragments()
-        .iter()
-        .flat_map(|fragment| fragment.atoms())
-        .filter_map(|atom| atom.position.map(|point| (atom.id, point)))
-        .collect();
-    let positions: BTreeMap<_, _> = vertices.iter().copied().collect();
-    let edges = page
-        .fragments()
-        .iter()
-        .flat_map(|fragment| fragment.bonds())
-        .map(|bond| {
-            Some((
-                bond.begin,
-                bond.end,
-                *positions.get(&bond.begin)?,
-                *positions.get(&bond.end)?,
-            ))
-        })
-        .collect::<Option<Vec<_>>>();
-    let Some(edges) = edges else {
-        return false;
-    };
-    // Reuse point-space predicates, with conservative authored-coordinate roundoff.
-    let mut extent = 1.0_f64;
-    let mut magnitude = 1.0_f64;
-    if let Some((_, origin)) = vertices.first() {
-        for (_, point) in &vertices {
-            extent = extent
-                .max((point.x_pt() - origin.x_pt()).abs())
-                .max((point.y_pt() - origin.y_pt()).abs());
-            magnitude = magnitude.max(point.x_pt().abs()).max(point.y_pt().abs());
-        }
-    }
-    let epsilon = (extent * 1e-12).max(128.0 * f64::EPSILON * magnitude);
-    let area_epsilon = epsilon * extent;
-    for (i, (id, point)) in vertices.iter().enumerate() {
-        for (_, other) in vertices.iter().skip(i + 1) {
-            if (point.x_pt() - other.x_pt()).hypot(point.y_pt() - other.y_pt()) <= epsilon {
-                return false;
-            }
-        }
-        for (a, b, start, end) in &edges {
-            if id != a
-                && id != b
-                && crate::smiles::on_segment(*start, *end, *point, epsilon, area_epsilon)
-            {
-                return false;
-            }
-        }
-    }
-    for (i, (a, b, start, end)) in edges.iter().enumerate() {
-        for (c, d, other_start, other_end) in edges.iter().skip(i + 1) {
-            if a != c
-                && a != d
-                && b != c
-                && b != d
-                && crate::smiles::segments_intersect(
-                    *start,
-                    *end,
-                    *other_start,
-                    *other_end,
-                    epsilon,
-                    area_epsilon,
-                )
-            {
-                return false;
-            }
-        }
-    }
-    true
-}
-
-fn connected_style(model: &Document, page: &Page) -> bool {
-    let style = model.drawing_style();
-    if style.line_width_pt().is_none() || style.margin_width_pt().is_none() {
-        return false;
-    }
-    let mut has_bond = false;
-    for bond in page
-        .fragments()
-        .iter()
-        .flat_map(|fragment| fragment.bonds())
-    {
-        has_bond = true;
-        match (bond.order, bond.double_position) {
-            (BondOrder::Single, DoublePosition::Unspecified) => {}
-            (BondOrder::Double, DoublePosition::Center)
-            | (BondOrder::Triple, DoublePosition::Unspecified)
-                if model.drawing_settings().bond_length_pt().is_some()
-                    && style.bond_spacing_percent().is_some() => {}
-            _ => return false,
-        }
-    }
-    has_bond && connected_geometry(page)
-}
-
 pub(crate) fn supports_delta(baseline: &Document, current: &Document) -> bool {
     model_delta(baseline, current, false)
 }
@@ -276,7 +176,7 @@ fn model_delta(baseline: &Document, current: &Document, creation: bool) -> bool 
 
 pub(crate) fn supports_connected_delta(baseline: &Document, current: &Document) -> bool {
     supports_delta(baseline, current)
-        && one_page(current).is_ok_and(|page| connected_style(current, page))
+        && one_page(current).is_ok_and(|page| connected_label_bonds(current, page))
 }
 
 fn mixed_hidden_supported(page: &Page) -> bool {
@@ -310,7 +210,7 @@ fn hidden_supported(page: &Page, require_any: bool) -> bool {
 }
 
 fn flagged_page_supported(model: &Document, page: &Page) -> bool {
-    connected_style(model, page)
+    connected_label_bonds(model, page)
         && hidden_supported(page, false)
         && page.fragments().iter().flat_map(|f| f.atoms()).any(|atom| {
             atom.authored_label.is_some()
@@ -326,7 +226,7 @@ fn label_defaults_page_supported(model: &Document, page: &Page) -> bool {
             .flat_map(|f| f.atoms())
             .all(|atom| atom.authored_label.is_some())
     } else {
-        connected_style(model, page) && hidden_supported(page, false)
+        connected_label_bonds(model, page) && hidden_supported(page, false)
     }
 }
 
@@ -527,8 +427,8 @@ fn bindings<'doc, 'input: 'doc>(
         .any(|atom| atom.authored_label.is_none());
     let supported = match profile {
         Profile::Boxed => !has_unlabelled && own.fragments().iter().all(|f| f.bonds().is_empty()),
-        Profile::Connected => !has_unlabelled && connected_style(baseline, own),
-        Profile::Mixed => connected_style(baseline, own) && mixed_hidden_supported(own),
+        Profile::Connected => !has_unlabelled && connected_label_bonds(baseline, own),
+        Profile::Mixed => connected_label_bonds(baseline, own) && mixed_hidden_supported(own),
         Profile::Flagged => flagged_page_supported(baseline, own),
         Profile::LabelDefaults => label_defaults_page_supported(baseline, own),
     };

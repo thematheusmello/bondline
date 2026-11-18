@@ -8,7 +8,10 @@ The remote feature ref was retired after the ancestry check.
 at `a13a0f4`. The tree matches `7ed63cc` and its merged ref is retired.
 [PR 7](https://github.com/thematheusmello/bondline/pull/7) landed explicit caption
 runs at `4d8ae68`. Its tree matches `2808443` and the merged ref is retired.
-`feat/cdx-node-labels` starts from that main revision. The native/GPU license
+[PR 8](https://github.com/thematheusmello/bondline/pull/8) landed owned CDX
+atom labels at `3ac74a3`. Its tree matches `b999bfe` and the merged ref is
+retired. `feat/cdx-atom-label-preview` starts from that revision and follows
+the [display contract](docs/research/cdx-atom-label-preview.md). The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
 commit as the user requires. The user now expressly authorizes merging completed feature
@@ -180,15 +183,40 @@ tests, formatting, clippy, layers, licenses, assets and the pinned corpus.
 All local execution jobs and the owned review are terminal. GitHub Actions
 remains disabled.
 
+### Source-qualified CDX atom label preview
+
+The [preview increment](docs/verification-cdx-atom-label-preview.md)
+certifies one explicit Poster page with boxed Roboto labels and qualified
+plain Single, centered Double and Triple bonds. Six independent models,
+39 source controls and exact earlier caption/data behavior pass. The
+display proof requires exact current model equality. The original source
+still governs unchanged Save and existing edit and conversion guards.
+
+Actual CPU/Metal captures and independent FreeType masks pass. CLI, stdio
+MCP and authenticated loopback verify capture and exact file reopening.
+macOS Open, Actual size, Fit, read-only canvas, known Save and Unicode
+Save As/reopen passed with independent actual-file readers. The signed
+review exited. New runtime coverage on Windows, Linux and WebAssembly
+remains open after IO type-checks on all three targets. Human golden
+approval remains open.
+
+The full local gate passed **2,232/0/1** workspace tests, **3/0** AccessKit
+tests, and all fmt, Clippy, layer, license, asset and corpus checks.
+ASan passed 10,000 runs with 196 immutable originals. All local jobs are
+terminal. Receipts are under `target/cdx-resources/next-text/label-preview`.
+GitHub Actions remains disabled.
+
 ### Next executable work
 
-1. Establish a separate read-only CDX label display profile. Start with the
-   [published position and alignment questions](docs/clean-room/open-questions.md#cdx-node-label-interpretation-2026-11-18)
-   and the existing [CDXML box proof](docs/research/boxed-atom-label-workflow.md).
-   Before changing display, pin original binaries with explicit bounding
-   boxes, supported font/style, and text that agrees with the numeric atom.
-   Add independent placement, whole-source, disagreement and unsupported
-   owner checks. Verify CPU/Metal and the actual native view.
+1. Establish atomic binary property replacement in the standalone CDX
+   crate for supported source-preserving editing. Start with the existing
+   `Document::replace_property` and the published framing/length rules.
+   Freeze independent disjoint replacements of Element, H, child Text
+   and box, including changed payload lengths, equal-length no-ops,
+   extended lengths, duplicate targets, foreign handles and unmodified
+   byte spans. Build one bounded batch before giving it app edit authority.
+   Then use a complete re-import and page proof for an existing qualified
+   label edit across commands, history, native input and Save/reopen.
 2. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 

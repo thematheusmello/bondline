@@ -401,6 +401,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
     let caption_preview = engine
         .stored_document()
         .is_ok_and(|stored| stored.has_caption_projection() || stored.has_cdx_caption_preview());
+    let cdx_atom_label_preview = engine
+        .stored_document()
+        .is_ok_and(|stored| stored.has_cdx_atom_label_preview());
     let atom_label_preview = engine.effective_tool() != EffectiveTool::Selection
         && engine.stored_document().is_ok_and(|stored| {
             stored.has_boxed_atom_labels()
@@ -491,6 +494,8 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         ui.weak("ACTIVE TOOL");
         let tool = if caption_preview {
             "Caption preview".to_owned()
+        } else if cdx_atom_label_preview {
+            "CDX atom label preview".to_owned()
         } else if atom_label_preview {
             "Atom label editing".to_owned()
         } else {
@@ -520,6 +525,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         };
         ui.label(egui::RichText::new(tool).color(ACCENT).strong());
         if !caption_preview
+            && !cdx_atom_label_preview
             && !atom_label_preview
             && matches!(
                 engine.effective_tool(),
@@ -536,6 +542,8 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         }
         if caption_preview {
             ui.label("Read-only canvas. Save preserves the complete caption file.");
+        } else if cdx_atom_label_preview {
+            ui.label("Read-only canvas. Save preserves the complete CDX file.");
         } else if atom_label_preview {
             ui.label("Alt-click an atom to edit its printed label or create one on a supported hidden carbon. Use Marquee selection to move supported atoms and their labels.");
         } else if engine.effective_tool() == EffectiveTool::Selection {
@@ -1786,7 +1794,7 @@ fn show_workspace_with_preview(
                         drawing.navigation_position = (!text_focused).then_some(*pos);
                     }
                     if engine.stored_document().is_ok_and(|stored|
-                        stored.has_caption_projection() || stored.has_cdx_caption_preview())
+                        stored.has_caption_projection() || stored.has_cdx_caption_preview() || stored.has_cdx_atom_label_preview())
                         && !matches!(event,egui::Event::MouseWheel {..})
                     {
                         drawing.gesture=None;

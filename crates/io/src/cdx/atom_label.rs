@@ -9,9 +9,9 @@ use bondline_cdx::{Document, Resources};
 use bondline_model::{AtomLabel, Error, LabelAlignment, TextJustification};
 use std::collections::BTreeMap;
 
-const JUSTIFICATION: u16 = 0x0701;
+pub(super) const JUSTIFICATION: u16 = 0x0701;
 const LABEL_ALIGNMENT: u16 = 0x0705;
-const LABEL_JUSTIFICATION: u16 = 0x0823;
+pub(super) const LABEL_JUSTIFICATION: u16 = 0x0823;
 
 pub(super) fn read(
     source: &Document<'_>,

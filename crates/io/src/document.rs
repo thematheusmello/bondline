@@ -2,6 +2,7 @@
 mod carbon_label_tests;
 mod smiles;
 
+use crate::cdx::Preview as CdxPreview;
 use crate::cdxml::{ElementalGraph, MappingError};
 use crate::mol::{
     MolError, MolFile, MolTransform, Version, v3000, write_v2000, write_v2000_with_header,
@@ -104,7 +105,7 @@ enum OriginalSource {
     Cdx {
         bytes: Arc<[u8]>,
         baseline: Arc<Document>,
-        caption_preview: bool,
+        preview: CdxPreview,
     },
     Mol {
         version: Version,
@@ -183,17 +184,17 @@ impl std::fmt::Debug for StoredDocument {
 }
 
 impl StoredDocument {
-    /// Own the binary source and supported view. The closed caption profile reads
-    /// explicit Poster dimensions, while the elemental fallback uses the caller's page.
+    /// Own the binary source and supported view. Certified display reads explicit Poster
+    /// dimensions, while the data-only elemental projection uses the caller's page.
     pub fn from_cdx(bytes: Arc<[u8]>, preview_size: PageSize) -> Result<Self, DocumentError> {
-        let (model, caption_preview) = crate::cdx::project_document(&bytes, preview_size)?;
+        let (model, preview) = crate::cdx::project_document(&bytes, preview_size)?;
         let model = Arc::new(model);
         Ok(Self {
             model: Arc::clone(&model),
             original: Some(OriginalSource::Cdx {
                 bytes,
                 baseline: model,
-                caption_preview,
+                preview,
             }),
         })
     }
@@ -411,9 +412,18 @@ impl StoredDocument {
 
     /// Read-only CDX caption proof for the exact unchanged projected model.
     pub fn has_cdx_caption_preview(&self) -> bool {
+        self.has_cdx_preview(CdxPreview::Caption)
+    }
+
+    /// Read-only CDX atom-label proof for the exact unchanged projected model.
+    pub fn has_cdx_atom_label_preview(&self) -> bool {
+        self.has_cdx_preview(CdxPreview::AtomLabels)
+    }
+
+    fn has_cdx_preview(&self, required: CdxPreview) -> bool {
         matches!(self.original.as_ref(), Some(OriginalSource::Cdx {
-            caption_preview: true, baseline, ..
-        }) if Arc::ptr_eq(&self.model, baseline) || self.model == *baseline)
+            preview, baseline, ..
+        }) if *preview == required && (Arc::ptr_eq(&self.model, baseline) || self.model == *baseline))
     }
 
     /// Closed source/model coverage for the box-positioned literal label workflow.
@@ -479,6 +489,7 @@ impl StoredDocument {
             || self.has_smiles_projection()
             || self.has_caption_projection()
             || self.has_cdx_caption_preview()
+            || self.has_cdx_atom_label_preview()
             || self.has_boxed_atom_labels()
             || self.has_connected_atom_labels()
             || self.has_mixed_atom_labels()

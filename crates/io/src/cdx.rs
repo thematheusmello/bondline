@@ -13,6 +13,7 @@ use std::{
 
 mod atom_label;
 mod caption;
+mod label_preview;
 mod text;
 
 const DOCUMENT: u16 = 0x8000;
@@ -24,8 +25,10 @@ const BOND: u16 = 0x8005;
 const TEXT_OBJECT: u16 = 0x8006;
 const Z_ORDER: u16 = 0x000a;
 const WARNING: u16 = 0x0010;
+const FONT_TABLE: u16 = 0x0100;
 const POSITION: u16 = 0x0200;
 const BOUNDING_BOX: u16 = 0x0204;
+const COLOR_TABLE: u16 = 0x0300;
 const NODE_TYPE: u16 = 0x0400;
 const ELEMENT: u16 = 0x0402;
 const ISOTOPE: u16 = 0x0420;
@@ -42,6 +45,18 @@ const BEGIN: u16 = 0x0604;
 const END: u16 = 0x0605;
 const BOND_CIP: u16 = 0x060a;
 const TEXT: u16 = 0x0700;
+const CHAIN_ANGLE: u16 = 0x0803;
+const BOND_LENGTH: u16 = 0x0805;
+const DRAWING_SPACE: u16 = 0x0811;
+const WIDTH: u16 = 0x0812;
+const HEIGHT: u16 = 0x0813;
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub(crate) enum Preview {
+    Elemental,
+    Caption,
+    AtomLabels,
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum MappingError {
@@ -269,8 +284,8 @@ impl<'input> ElementalGraph<'input> {
     ) -> Result<bondline_model::Document, MappingError> {
         let mut model = bondline_model::Document::default();
         model.set_drawing_settings(crate::drawing_settings::project(
-            root_scalar(&self.source, 0x0805),
-            root_scalar(&self.source, 0x0803),
+            root_scalar(&self.source, BOND_LENGTH),
+            root_scalar(&self.source, CHAIN_ANGLE),
         )?);
         let page = model
             .pages()
@@ -286,15 +301,50 @@ impl<'input> ElementalGraph<'input> {
 pub(crate) fn project_document(
     input: &[u8],
     preview_size: bondline_model::PageSize,
-) -> Result<(bondline_model::Document, bool), MappingError> {
+) -> Result<(bondline_model::Document, Preview), MappingError> {
     let source = Document::parse(input)?;
     if let Some(model) = caption::preview(&source) {
-        return Ok((model, true));
+        return Ok((model, Preview::Caption));
     }
-    Ok((
-        ElementalGraph::from_source(source)?.preview_document(preview_size)?,
-        false,
-    ))
+    let graph = ElementalGraph::from_source(source)?;
+    if let Some(model) = label_preview::preview(&graph) {
+        return Ok((model, Preview::AtomLabels));
+    }
+    Ok((graph.preview_document(preview_size)?, Preview::Elemental))
+}
+
+fn has_preview_header(source: &Document<'_>) -> bool {
+    source
+        .header()
+        .get(12..)
+        .is_some_and(|bytes| bytes.iter().all(|&byte| byte == 0))
+}
+
+fn poster_size(
+    source: &Document<'_>,
+    fields: &BTreeMap<u16, usize>,
+) -> Option<bondline_model::PageSize> {
+    if payload(source, *fields.get(&DRAWING_SPACE)?, DRAWING_SPACE).ok()? != [1] {
+        return None;
+    }
+    let width = coordinate(payload(source, *fields.get(&WIDTH)?, WIDTH).ok()?);
+    let height = coordinate(payload(source, *fields.get(&HEIGHT)?, HEIGHT).ok()?);
+    bondline_model::PageSize::new(width, height).ok()
+}
+
+fn verify_preview_page(model: &bondline_model::Document) -> Option<()> {
+    use bondline_render::{Cancellation, PageView};
+
+    let page = model.pages().first()?;
+    let size = page.size();
+    let center = Point2::new(size.width_pt() / 2.0, size.height_pt() / 2.0).ok()?;
+    let view = PageView::zoom(1, 1, size, 100.0, center)
+        .ok()?
+        .with_drawing_style(model.drawing_style())
+        .with_drawing_settings(model.drawing_settings());
+    // Check the source paper before clipping to the admission camera.
+    view.graph_scene(page, &Cancellation::default()).ok()?;
+    Some(())
 }
 
 fn root_scalar(source: &Document<'_>, tag: u16) -> Option<f64> {

@@ -1,7 +1,9 @@
 //! Source-aware drawing display; derived facts never change authored data or Save authority.
 
 use crate::StoredDocument;
-use bondline_model::{AtomId, BondOrder, Fragment, PageId, Point2, Radical};
+use bondline_model::{
+    AtomId, BondOrder, Document, DoublePosition, Fragment, Page, PageId, Point2, Radical,
+};
 use bondline_render::{Cancellation, GraphScene};
 use std::collections::BTreeMap;
 
@@ -89,6 +91,104 @@ pub fn drawing_page_scene_with_view(
         None => view.graph_scene(page, cancel)?,
         Some(counts) => view.graph_scene_with_display_hydrogens(page, &counts, cancel)?,
     })
+}
+
+fn connected_geometry(page: &Page) -> bool {
+    let vertices: Vec<_> = page
+        .fragments()
+        .iter()
+        .flat_map(|fragment| fragment.atoms())
+        .filter_map(|atom| atom.position.map(|point| (atom.id, point)))
+        .collect();
+    let positions: BTreeMap<_, _> = vertices.iter().copied().collect();
+    let edges = page
+        .fragments()
+        .iter()
+        .flat_map(|fragment| fragment.bonds())
+        .map(|bond| {
+            Some((
+                bond.begin,
+                bond.end,
+                *positions.get(&bond.begin)?,
+                *positions.get(&bond.end)?,
+            ))
+        })
+        .collect::<Option<Vec<_>>>();
+    let Some(edges) = edges else {
+        return false;
+    };
+    // Reuse point-space predicates, with conservative authored-coordinate roundoff.
+    let mut extent = 1.0_f64;
+    let mut magnitude = 1.0_f64;
+    if let Some((_, origin)) = vertices.first() {
+        for (_, point) in &vertices {
+            extent = extent
+                .max((point.x_pt() - origin.x_pt()).abs())
+                .max((point.y_pt() - origin.y_pt()).abs());
+            magnitude = magnitude.max(point.x_pt().abs()).max(point.y_pt().abs());
+        }
+    }
+    let epsilon = (extent * 1e-12).max(128.0 * f64::EPSILON * magnitude);
+    let area_epsilon = epsilon * extent;
+    for (i, (id, point)) in vertices.iter().enumerate() {
+        for (_, other) in vertices.iter().skip(i + 1) {
+            if (point.x_pt() - other.x_pt()).hypot(point.y_pt() - other.y_pt()) <= epsilon {
+                return false;
+            }
+        }
+        for (a, b, start, end) in &edges {
+            if id != a
+                && id != b
+                && crate::smiles::on_segment(*start, *end, *point, epsilon, area_epsilon)
+            {
+                return false;
+            }
+        }
+    }
+    for (i, (a, b, start, end)) in edges.iter().enumerate() {
+        for (c, d, other_start, other_end) in edges.iter().skip(i + 1) {
+            if a != c
+                && a != d
+                && b != c
+                && b != d
+                && crate::smiles::segments_intersect(
+                    *start,
+                    *end,
+                    *other_start,
+                    *other_end,
+                    epsilon,
+                    area_epsilon,
+                )
+            {
+                return false;
+            }
+        }
+    }
+    true
+}
+
+pub(crate) fn connected_label_bonds(model: &Document, page: &Page) -> bool {
+    let style = model.drawing_style();
+    if style.line_width_pt().is_none() || style.margin_width_pt().is_none() {
+        return false;
+    }
+    let mut has_bond = false;
+    for bond in page
+        .fragments()
+        .iter()
+        .flat_map(|fragment| fragment.bonds())
+    {
+        has_bond = true;
+        match (bond.order, bond.double_position) {
+            (BondOrder::Single, DoublePosition::Unspecified) => {}
+            (BondOrder::Double, DoublePosition::Center)
+            | (BondOrder::Triple, DoublePosition::Unspecified)
+                if model.drawing_settings().bond_length_pt().is_some()
+                    && style.bond_spacing_percent().is_some() => {}
+            _ => return false,
+        }
+    }
+    has_bond && connected_geometry(page)
 }
 
 type DisplayFacts<'a> = (&'a bondline_model::Page, Option<BTreeMap<AtomId, u16>>);

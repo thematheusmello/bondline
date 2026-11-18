@@ -283,6 +283,42 @@ fn check_label(
     assert_eq!(offset, value.text_bytes().len());
 }
 
+fn check_label_preview(document: &Document<'_>, model: &bondline_model::Document) {
+    let property = |wanted| {
+        let mut records = document
+            .records()
+            .iter()
+            .filter(|r| matches!(r.kind(), RecordKind::Property { tag, .. } if *tag == wanted));
+        let record = records.next()?;
+        assert!(records.next().is_none());
+        Some(document.payload(record).unwrap())
+    };
+    let coordinate = |tag| {
+        property(tag).map(|raw| f64::from(i32::from_le_bytes(raw.try_into().unwrap())) / 65536.0)
+    };
+    let page = model.pages().first().unwrap();
+    assert_eq!(model.pages().len(), 1);
+    assert_eq!(property(0x0811).unwrap(), [1]);
+    assert_eq!(Some(page.size().width_pt()), coordinate(0x0812));
+    assert_eq!(Some(page.size().height_pt()), coordinate(0x0813));
+    assert!(page.texts().is_empty());
+    let style = model.drawing_style();
+    assert_eq!(style.line_width_pt(), coordinate(0x0807));
+    assert_eq!(style.margin_width_pt(), coordinate(0x0808));
+    assert_eq!(
+        style.bond_spacing_percent(),
+        property(0x0804).map(|raw| f64::from(i16::from_le_bytes(raw.try_into().unwrap())) / 10.0)
+    );
+    assert_eq!(
+        model.drawing_settings().bond_length_pt(),
+        coordinate(0x0805)
+    );
+    assert_eq!(
+        model.drawing_settings().chain_angle_degrees(),
+        coordinate(0x0803)
+    );
+}
+
 fn plain_bond(fields: [Option<&[u8]>; 4], bond: &bondline_model::Bond) {
     use bondline_model::{BondOrder, DoublePosition};
     let [order, display, display2, position] = fields;
@@ -514,7 +550,12 @@ fuzz_target!(|data: &[u8]| {
         .unwrap();
         assert_eq!(stored.export_cdx().unwrap(), data);
         assert!(!stored.is_fully_mapped());
-        assert!(!stored.has_display_projection());
+        let preview = stored.has_cdx_atom_label_preview();
+        assert_eq!(stored.has_display_projection(), preview);
+        if preview {
+            assert!(has_labels);
+            check_label_preview(&document, stored.model());
+        }
         assert_eq!(stored.model().has_authored_atom_labels(), has_labels);
         assert!(
             stored
@@ -528,15 +569,18 @@ fuzz_target!(|data: &[u8]| {
                 .eq(graph.fragments())
         );
         let original = stored.clone();
-        let page = stored.model().pages().first().unwrap().id();
-        stored
-            .model_mut()
-            .set_page_size(page, bondline_model::PageSize::new(420.0, 594.0).unwrap())
-            .unwrap();
+        let page = stored.model().pages().first().unwrap();
+        let changed =
+            bondline_model::PageSize::new(page.size().width_pt() + 1.0, page.size().height_pt())
+                .unwrap();
+        let id = page.id();
+        stored.model_mut().set_page_size(id, changed).unwrap();
         assert!(stored.source_info().unwrap().modified);
+        assert!(!stored.has_display_projection());
         assert!(stored.export_cdx().is_err());
         assert!(stored.to_cdxml().is_err());
         stored = original;
+        assert_eq!(stored.has_cdx_atom_label_preview(), preview);
         assert_eq!(stored.to_cdx().unwrap().as_ref(), data);
     }
 

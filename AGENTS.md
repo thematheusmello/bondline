@@ -59,6 +59,15 @@ the bounded run allocations, legacy candidate refusals and the page,
 label, display and conversion guards. Native macOS Open and unchanged
 Unicode Save/reopen pass. STATUS gives the next placement and agreement work.
 
+The [CDX atom label preview](docs/verification-cdx-atom-label-preview.md)
+separately certifies a whole explicit Poster page. Keep exact body/box
+agreement and CDX fixed-point units, scoped object coverage, palette
+indices 2 and 3, and the existing connected glyph clearance check for
+explicit solid styles. Raw Center modes remain distinct through Save.
+The display proof requires exact model equality and grants only viewing.
+Preserve data-only fallback and the established CDX and CDXML edit guards.
+STATUS records the next lossless source-edit prerequisite.
+
 Read `docs/research/cdx-resources.md` and `docs/verification-cdx-resources.md` before
 CDX string or Text work. The table query is opt-in and runtime-dependency-free. Preserve
 actual root ownership, raw UINT16 ID/charset/RGB, byte-borrowed names, table presence,

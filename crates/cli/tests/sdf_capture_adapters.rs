@@ -7,6 +7,8 @@ mod boxed_label_wire;
 mod cdx_bond_wire;
 #[path = "support/cdx_caption_wire.rs"]
 mod cdx_caption_wire;
+#[path = "support/cdx_label_preview_wire.rs"]
+mod cdx_label_preview_wire;
 #[path = "support/cdx_literal_wire.rs"]
 mod cdx_literal_wire;
 #[path = "support/cdx_node_label_wire.rs"]
