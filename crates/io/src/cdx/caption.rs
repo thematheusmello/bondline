@@ -1,10 +1,11 @@
-//! Whole-source proof for one read-only, explicitly positioned CDX caption.
+//! Whole-source proof for read-only, explicitly positioned CDX captions.
 use super::{DOCUMENT, PAGE, POSITION, coordinate, payload, read_position};
-use bondline_cdx::{Document, RecordKind};
+use bondline_cdx::{Document, RecordKind, Resources};
 use bondline_model::{MAX_TEXT_BYTES, PageSize, Point2, StyledText, TextId, TextRun, TextStyle};
 use bondline_render::{Cancellation, PageView};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
+const Z_ORDER: u16 = 0x000a;
 const FONT_TABLE: u16 = 0x0100;
 const COLOR_TABLE: u16 = 0x0300;
 const TEXT_OBJECT: u16 = 0x8006;
@@ -20,9 +21,9 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
     }
     let root = source.framing().has_encoded_document().then_some(0);
     let mut page = None;
-    let mut text = None;
     let mut page_fields = BTreeMap::new();
     let mut text_fields = BTreeMap::new();
+    let mut named_ids = BTreeSet::new();
     for (index, record) in source.records().iter().enumerate() {
         match *record.kind() {
             RecordKind::ObjectStart { tag: DOCUMENT, .. } if root == Some(index) => {}
@@ -32,9 +33,13 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
                 page = Some(index);
             }
             RecordKind::ObjectStart {
-                tag: TEXT_OBJECT, ..
-            } if page.is_some() && record.parent() == page && text.is_none() => {
-                text = Some(index);
+                tag: TEXT_OBJECT,
+                id,
+            } if page.is_some() && record.parent() == page => {
+                if id != 0 && !named_ids.insert(id) {
+                    return None;
+                }
+                text_fields.insert(index, (id, BTreeMap::new()));
             }
             RecordKind::ObjectStart { .. } => return None,
             RecordKind::Property { tag, .. } => {
@@ -44,8 +49,8 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
                     DRAWING_SPACE | WIDTH | HEIGHT if page.is_some() && owner == page => {
                         &mut page_fields
                     }
-                    TEXT | CAPTION_JUSTIFICATION | POSITION if text.is_some() && owner == text => {
-                        &mut text_fields
+                    TEXT | CAPTION_JUSTIFICATION | POSITION | Z_ORDER => {
+                        &mut text_fields.get_mut(&owner?)?.1
                     }
                     _ => return None,
                 };
@@ -56,28 +61,76 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
             RecordKind::ObjectEnd { .. } | RecordKind::FileEnd => {}
         }
     }
-    if payload(source, *page_fields.get(&DRAWING_SPACE)?, DRAWING_SPACE).ok()? != [1]
-        || payload(
-            source,
-            *text_fields.get(&CAPTION_JUSTIFICATION)?,
-            CAPTION_JUSTIFICATION,
-        )
-        .ok()?
-            != [0]
-    {
+    if payload(source, *page_fields.get(&DRAWING_SPACE)?, DRAWING_SPACE).ok()? != [1] {
         return None;
     }
     let width = coordinate(payload(source, *page_fields.get(&WIDTH)?, WIDTH).ok()?);
     let height = coordinate(payload(source, *page_fields.get(&HEIGHT)?, HEIGHT).ok()?);
     let size = PageSize::new(width, height).ok()?;
-    let position = read_position(source, *text_fields.get(&POSITION)?).ok()?;
-
     let resources = source.resources().ok()?;
     if resources.font_platform() != Some(1) || resources.color(2).ok()? != [u16::MAX; 3] {
         return None;
     }
+    let mut captions: Vec<_> = text_fields.into_values().collect();
+    // A stable sort keeps anonymous captions in encounter order.
+    captions.sort_by_key(|(id, _)| *id);
+    let mut ordered = BTreeMap::new();
+    let mut omitted = false;
+    for (ordinal, (_, fields)) in captions.into_iter().enumerate() {
+        let depth = if let Some(&property) = fields.get(&Z_ORDER) {
+            i16::from_le_bytes(payload(source, property, Z_ORDER).ok()?)
+        } else {
+            omitted = true;
+            0
+        };
+        let id = TextId::new(u32::try_from(ordinal).ok()?.checked_add(1)?)?;
+        if ordered
+            .insert(depth, project_text(source, &resources, &fields, id)?)
+            .is_some()
+        {
+            return None;
+        }
+    }
+    // The published description of the default zero group leaves this case ambiguous.
+    if omitted && *ordered.first_key_value()?.0 < 0 {
+        return None;
+    }
+    if ordered.is_empty() {
+        return None;
+    }
+    let mut document = bondline_model::Document::default();
+    let page = document.pages().first()?.id();
+    document.set_page_size(page, size).ok()?;
+    document
+        .append_texts(page, ordered.into_values().collect())
+        .ok()?;
+    // The ordinary scene checks the entire paper before destination clipping.
+    let center = Point2::new(width / 2.0, height / 2.0).ok()?;
+    let view = PageView::zoom(1, 1, size, 100.0, center).ok()?;
+    view.graph_scene(document.pages().first()?, &Cancellation::default())
+        .ok()?;
+    Some(document)
+}
+
+fn project_text(
+    source: &Document<'_>,
+    resources: &Resources<'_, '_>,
+    fields: &BTreeMap<u16, usize>,
+    id: TextId,
+) -> Option<StyledText> {
+    if payload(
+        source,
+        *fields.get(&CAPTION_JUSTIFICATION)?,
+        CAPTION_JUSTIFICATION,
+    )
+    .ok()?
+        != [0]
+    {
+        return None;
+    }
+    let position = read_position(source, *fields.get(&POSITION)?).ok()?;
     let value = source
-        .string(source.records().get(*text_fields.get(&TEXT)?)?)
+        .string(source.records().get(*fields.get(&TEXT)?)?)
         .ok()?;
     let mut runs = value.runs();
     if runs.len() != 1 {
@@ -110,20 +163,10 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
         rgb,
     )
     .ok()?;
-    let text = StyledText::new(
-        TextId::new(1)?,
+    StyledText::new(
+        id,
         position,
         vec![TextRun::new(body.to_owned(), style).ok()?],
     )
-    .ok()?;
-    let mut document = bondline_model::Document::default();
-    let page = document.pages().first()?.id();
-    document.set_page_size(page, size).ok()?;
-    document.append_texts(page, vec![text]).ok()?;
-    // The ordinary scene checks the entire paper before destination clipping.
-    let center = Point2::new(width / 2.0, height / 2.0).ok()?;
-    let view = PageView::zoom(1, 1, size, 100.0, center).ok()?;
-    view.graph_scene(document.pages().first()?, &Cancellation::default())
-        .ok()?;
-    Some(document)
+    .ok()
 }

@@ -16,6 +16,7 @@ mod files;
 type Result<T = ()> = std::result::Result<T, Box<dyn std::error::Error>>;
 const MANIFEST: &str = include_str!("fixtures/cdx-caption/caption-vectors.json");
 const LEGACY_OPEN: &str = include_str!("fixtures/cdx-caption/legacy-open.json");
+const ORDERED: &str = include_str!("fixtures/cdx-caption/ordered/cases.json");
 
 fn raw(name: &str) -> Result<Arc<[u8]>> {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -152,5 +153,118 @@ fn source_equal_model_allows_preview_and_model_drift_retires_it() -> Result {
     let restored = drawing_page_scene(1024, 1024, &document, page()?, &cancel)?;
     assert_eq!(cpu_scene(restored.scene())?, cpu_scene(before.scene())?);
     assert_eq!(document.export_cdx()?.as_ptr(), bytes.as_ptr());
+    Ok(())
+}
+
+#[test]
+fn ordered_caption_models_include_every_sibling_with_stable_ids() -> Result {
+    let witnesses: Value = serde_json::from_str(ORDERED)?;
+    let mut failures = Vec::new();
+    let mut opened = 0;
+    for (name, case) in witnesses.as_object().ok_or("missing ordered cases")? {
+        if case["model"].is_null() {
+            continue;
+        }
+        let bytes = raw(&format!("ordered/{name}"))?;
+        match StoredDocument::from_cdx(Arc::clone(&bytes), PageSize::A4) {
+            Ok(document) => {
+                assert_eq!(
+                    serde_json::to_value(document.model())?,
+                    case["model"],
+                    "{name}"
+                );
+                assert!(document.has_display_projection(), "{name}");
+                assert!(!document.has_caption_projection(), "{name}");
+                assert!(!document.is_fully_mapped(), "{name}");
+                assert_eq!(document.export_cdx()?.as_ptr(), bytes.as_ptr(), "{name}");
+                opened += 1;
+            }
+            Err(error) => failures.push(format!("{name}: {error}")),
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "ordered caption rejections: {failures:?}"
+    );
+    assert_eq!(opened, 5);
+    Ok(())
+}
+
+#[test]
+fn unsupported_sibling_depths_and_owner_fields_keep_the_legacy_errors() -> Result {
+    let witnesses: Value = serde_json::from_str(ORDERED)?;
+    let mut rejected = 0;
+    for (name, case) in witnesses.as_object().ok_or("missing ordered cases")? {
+        if !case["model"].is_null() {
+            continue;
+        }
+        let bytes = raw(&format!("ordered/{name}"))?;
+        assert_eq!(
+            bondline_cdx::Document::parse(&bytes)?.to_bytes(),
+            bytes.as_ref(),
+            "{name}"
+        );
+        let error = StoredDocument::from_cdx(bytes, PageSize::A4)
+            .err()
+            .ok_or_else(|| format!("unsupported ordered case opened: {name}"))?;
+        assert_eq!(Value::from(error.code()), case["legacy"]["code"], "{name}");
+        assert_eq!(
+            Value::from(error.to_string()),
+            case["legacy"]["detail"],
+            "{name}"
+        );
+        rejected += 1;
+    }
+    assert_eq!(rejected, 13);
+    Ok(())
+}
+
+#[test]
+fn signed_depth_selects_the_visible_ink_independently_of_record_order() -> Result {
+    let frame = |name| {
+        let source = raw(&format!("ordered/{name}"))?;
+        let document = StoredDocument::from_cdx(source, PageSize::A4)?;
+        let scene = drawing_page_scene(1024, 1024, &document, page()?, &Cancellation::default())?;
+        assert_eq!(scene.hit_test([184.0, 214.0], 100_000.0)?, None);
+        Ok::<_, Box<dyn std::error::Error>>(cpu_scene(scene.scene())?)
+    };
+    let front = frame("front_first")?;
+    assert_eq!(front, frame("back_first")?);
+    assert_eq!(front, frame("omitted_below_positive")?);
+    let ink_window = (200..226)
+        .flat_map(|y| (180..208).map(move |x| (y * 1024 + x) * 4))
+        .filter_map(|offset| front.rgba.get(offset..offset + 4))
+        .collect::<Vec<_>>();
+    assert!(ink_window.contains(&[64, 128, 191, 255].as_slice()));
+    assert!(!ink_window.contains(&[0, 0, 0, 255].as_slice()));
+
+    let separate = frame("separate_anonymous")?;
+    for ink in [[64, 128, 191, 255], [0, 0, 0, 255]] {
+        assert!(separate.rgba.chunks_exact(4).any(|pixel| pixel == ink));
+    }
+    Ok(())
+}
+
+#[test]
+fn ordered_unicode_save_preserves_source_and_keeps_cross_format_guard() -> Result {
+    let directory = files::FileTestDirectory::new()?;
+    let input = directory.path("ordered-原-λ.cdx");
+    let output = directory.path("ordered-再開-β.cdx");
+    let bytes = raw("ordered/front_first")?;
+    fs::write(&input, &bytes)?;
+    let cancel = Cancellation::default();
+    let loaded = read_cdx_file(&input, &cancel)?.document;
+    assert!(matches!(
+        loaded.to_cdxml(),
+        Err(DocumentError::CrossFormatSource {
+            from: "cdx",
+            to: "cdxml"
+        })
+    ));
+    save_cdx_file(&output, &loaded, false, &cancel)?;
+    assert_eq!(fs::read(&output)?, bytes.as_ref());
+    let reopened = read_cdx_file(&output, &cancel)?.document;
+    assert_eq!(reopened, loaded);
+    assert!(reopened.has_display_projection());
     Ok(())
 }

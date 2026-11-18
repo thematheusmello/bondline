@@ -9,7 +9,8 @@ not an expansion of the native runtime dependency allowlist.
 
 `cdx_parse` also checks the caption-only display proof against source-preserving
 Save, absence of chemical or CDXML caption authority, and revocation on a detached
-page edit. The tracked originals remain the immutable sources.
+page edit. It checks that every admitted source caption reaches the document
+and retains one explicit style run. The tracked originals remain immutable.
 
 ```sh
 fixtures=crates/io/tests/fixtures/cdx-caption
@@ -18,6 +19,7 @@ fuzz_run=$(mktemp -d "$PWD/.cache/fuzz/cdx-caption.XXXXXX")
 python3 -B "$fixtures/check_captions.py" --input-dir "$fixtures" --output-dir "$fuzz_run/facts"
 mkdir "$fuzz_run/corpus"
 cp "$fixtures"/*.cdx "$fuzz_run/corpus/"
+cp "$fixtures"/ordered/*.cdx "$fuzz_run/corpus/"
 CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdx_parse "$fuzz_run/corpus" -- -runs=10000 -seed=1561040507 -max_len=16384 -timeout=5 -rss_limit_mb=2048
 ```
 

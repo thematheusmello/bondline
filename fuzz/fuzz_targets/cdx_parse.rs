@@ -292,8 +292,14 @@ fuzz_target!(|data: &[u8]| {
         let baseline = stored.clone();
         let page = stored.model().pages().first().unwrap();
         assert!(page.fragments().is_empty());
-        assert_eq!(page.texts().len(), 1);
-        assert_eq!(page.texts().first().unwrap().runs().len(), 1);
+        let source_texts = document
+            .records()
+            .iter()
+            .filter(|record| matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8006, .. }))
+            .count();
+        assert!(source_texts > 0);
+        assert_eq!(page.texts().len(), source_texts);
+        assert!(page.texts().iter().all(|text| text.runs().len() == 1));
         let page_id = page.id();
         // One point changes the validated positive extent even if the source uses A4.
         let changed =
