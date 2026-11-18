@@ -33,7 +33,8 @@ white palette2 and whole-source proof. The existing 100% paper scene checks
 admission and every native view retains its own guards. Keep a separate display
 proof bound to exact current model equality. CDXML caption edits, legacy CDX
 fallback diagnostics, detached page history, cross-format loss and registry 49
-keep their prior policies. Native Open/view/up-to-date Save acceptance is next.
+keep their prior policies. Actual macOS Open/view/read-only/Save/reopen and the full
+local gate passed. Follow STATUS for the next M1 source-shape work.
 
 Read `docs/research/cdx-resources.md` and `docs/verification-cdx-resources.md` before
 CDX string or Text work. The table query is opt-in and runtime-dependency-free. Preserve

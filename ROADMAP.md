@@ -14,8 +14,8 @@ stays OFF during development.
 
 The [CDX caption increment](docs/verification-cdx-caption-preview.md) opens one
 source-qualified caption and preserves original files through display and Save.
-Headless CLI, MCP, loopback and CPU/Metal checks passed. Native interaction
-acceptance, additional typography and editing remain required.
+Headless CLI, MCP, loopback, CPU/Metal and native macOS Open/view/Save/reopen
+checks passed. Additional typography, editing and other platforms remain required.
 
 The [CDXString increment](docs/verification-cdx-string.md) preserves literal style runs
 and text bytes, with borrowed property boundaries and independent original fixtures.

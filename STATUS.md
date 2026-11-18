@@ -98,25 +98,27 @@ Equal-model A→B→A source changes retire old weak file/capture contexts and p
 the original committed output of an earlier Save. Offscreen Fit and Actual at 1.5
 pixel density match CPU/Metal and independent FreeType placement.
 
-Native read-only presentation is wired. The user apps and drawings remain
-untouched. Recent Mac input kept this round offscreen. The signed review app and
-four isolated inputs are prepared in `target/cdx-resources/next-text/native-review.hdS0xZ`.
-The latest exact-tree gate reproduced the existing MCP listener rebind failure at
-127.0.0.1:64951. See [verification](docs/verification-cdx-caption-preview.md) for
-that distinct run and the remaining gates, which passed separately. The
-candidate's final verification is split across the failed aggregate and passing
-remaining checks. All execution jobs and review agents are terminal. Actions remains off.
+Actual macOS Open, retained-tool pointer safety, Fit/Actual/112.5% zoom, known
+Save, Unicode Save As and reopen pass. An unsupported palette shows the old
+error, then Cancel recovers the prior caption. Independent readers confirm the
+actual files and models. CPU and Metal captures at the explicit offscreen 1.5
+density match at both tested views and across reopen. Physical display density
+variation, CJK title glyph coverage, Windows, Linux, and browser execution
+still need work. The owned review is closed. Evidence is under
+`target/cdx-resources/next-text/native-review.hdS0xZ/native-evidence`.
+
+The final gate on `cbaa4b0` passed **2,213/0/1** workspace tests and **3/0**
+AccessKit tests, with fmt, clippy, layers, licenses, assets and corpus. The earlier
+MCP listener rebind failure at 127.0.0.1:64951 remains unexplained.
+See [verification](docs/verification-cdx-caption-preview.md) for both
+runs. All feature execution jobs and review agents are terminal. Actions is off.
 
 ### Next executable work
 
-1. Verify the caption workflow in the prepared separate macOS review app. Open the
-   original fixtures with a retained drawing tool. Observe the caption, pointer
-   read-only behavior, Fit, Actual and fractional density. Exercise known Save,
-   Unicode Save As and reopen, and check the actual files with the independent
-   reader. Keep protected apps and live user input out of the review.
-2. Publish qualified native evidence, then land the verified caption branch
-   into `main`. Continue with multiple CDX captions, explicit styles, child
-   labels and editable source from public evidence.
+1. Land the verified caption branch through PR 5 and confirm the main tree.
+2. Source-lock multiple CDX captions and explicit Z-order with independent
+   models and ordering witnesses. Continue explicit styles, child labels and
+   editable source from public evidence.
 3. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 

@@ -19,9 +19,8 @@ exact source pointer passthrough, CPU colour, Unicode files and restoration afte
 detached model drift.
 
 The legacy elemental projection remains the fallback after the same syntax parse.
-The predicate for editable CDXML captions keeps its previous scope. The actual
-native inspector and canvas read-only branch recognize the new CDX proof. Native
-window interaction remains wired pending a platform run.
+The predicate for editable CDXML captions keeps its previous scope. The native
+inspector and canvas read-only branch recognize the CDX proof.
 
 ## Offscreen CLI and stdio MCP
 
@@ -82,6 +81,14 @@ clippy, layer, license, asset and corpus checks also passed separately. These
 are two runs with one unresolved failure. The 98,404-byte `remaining.log`
 has SHA-256 `21f90986dbe5bfe2474dc2bc43bab41d26f743fb159f624639c6c2502920c33b`.
 
+The subsequent complete local gate on `cbaa4b058ca1a16606e94a06580a283dbaaff439`
+passed **2,213/0/1** workspace tests across 326 reports and **3/0** AccessKit
+tests. It also passed fmt, warnings-denied clippy, layers, licenses, assets and
+the pinned corpus. The 277,379-byte `ci.log` in
+`target/cdx-resources/next-text/caption-final.dw7Q4x` has SHA-256
+`9dd44b53a63a23ddb623fe0a85defcbb5821715bf2bc2a8f7df50fda1025a915`.
+The previous listener failure remains unexplained.
+
 ## Exact source owners and fractional-scale views
 
 Two additional command tests passed with warnings-denied all-targets clippy.
@@ -95,6 +102,50 @@ Actual views at 768 × 768 output. CPU and Metal captures match at each view.
 Independent Pillow FreeType places the ink within four pixels of the expected
 baseline for both cameras. The view and capture calls preserve the exact model,
 source bytes and history. This is an offscreen density check.
+
+## Actual macOS Open, view and Save
+
+The separate signed review bundle ran on Apple M3 Max with Metal. Its
+executable SHA-256 was
+`f9ae7e39d9f05f8aa4d5f9d6b401e4866cc1ac8ab7aa8ce0b65c0258c4bcb7da`.
+It was built from `53642e9`, whose runtime sources are identical to the
+final-gate revision above. Only this owned review instance was opened and quit.
+
+- Select Cyclooctane, then open the 146-byte RGB fixture in the actual File
+  panel. The native canvas displays the blue caption on white paper. The
+  inspector reports one caption and read-only canvas. Blank click, drag and
+  Option-click on the caption leave the complete adapter snapshots byte-identical.
+- F5 goes to Actual 100%, F6 returns to Fit (125.78% at this window size), and
+  entering 112.5 in the native zoom field gives 112.5%. View epochs advance
+  from 0 to 3 while the revision, file, source and history stay exact.
+- Native known-path Save advances the controlled 2000-01-01 mtime to
+  `1795033675172974439` ns and retains all 146 bytes. Save As writes
+  `caption-再開-λ.cdx` with the same bytes. The chooser and title show
+  placeholder glyphs for the CJK characters while accessibility and the actual
+  filename preserve them.
+- Open the independent 12.05 pt fixture and observe the black `AV2` caption.
+  Opening the nonwhite-palette fixture shows the old unsupported Text error.
+  Cancel leaves the prior caption, revision, path and view intact. Reopen the
+  Unicode copy and recover the original model at revision 3 with empty history.
+
+The independent binary reader checked all four owned input files and the
+actual Save As output against the frozen record facts. The two RGB files share
+SHA-256 `6cb0f22e15ec4b0fbc0aab277d811637480e12db6c6cc51bc35018b507c81f25`.
+On the attached review process, 768 × 768 captures of a declared 512 × 512
+logical viewport matched CPU against Metal at both Fit and 112.5%. The
+solid-colour ink bounds were `[155, 168, 213, 179]` and
+`[89, 107, 164, 121]`, within four pixels of the independent FreeType bounds.
+The reopened Metal frame matched the pre-Save 112.5% frame exactly. These
+offscreen captures specify 1.5 px/logical unit. The native screenshots prove
+visible layout and interaction at the observed window scale. Physical display
+density variation remains unverified.
+
+The owned app exited after Quit. The snapshots, independent check and PNGs
+are in `target/cdx-resources/next-text/native-review.hdS0xZ/native-evidence`.
+`verified.json` has SHA-256
+`f33a63fc35af7f12df1d242ddb1cdbcbf628508c4a18041398db7eb57065ea0b`.
+The 1,196-byte `prepared.json` receipt in the parent directory has SHA-256
+`dbf0de7f0da5847c7239c13a6b53ad944f151cde7950e960d458010e6ebad167`.
 
 ## Sanitizer
 
@@ -112,12 +163,6 @@ bytes with SHA-256
 The successful wire summary in `wire-sequential-results/summary.json` has SHA-256
 `894c19eef1fe90067f023c8db18f1ef894a2d4e698b8e973abd866a61cb9823e`.
 
-Native window Open, read-only pointer behavior, Fit/Actual/measured-display density
-capture and Unicode Save/reopen remain to be checked on an owned macOS review.
-The signed review bundle and four checked, isolated inputs are ready under
-`target/cdx-resources/next-text/native-review.hdS0xZ`. Its 1,196-byte receipt
-`prepared.json` has SHA-256
-`dbf0de7f0da5847c7239c13a6b53ad944f151cde7950e960d458010e6ebad167`.
 Windows, Linux and browser execution remain open. The supported source
 profile covers one explicit caption. General CDX typography and editing
 remain separate M1 work.

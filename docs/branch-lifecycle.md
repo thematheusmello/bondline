@@ -27,8 +27,9 @@ Do not merge an obsolete prototype over current code merely because Git calls it
 [PR 3](https://github.com/thematheusmello/bondline/pull/3) and
 [PR 4](https://github.com/thematheusmello/bondline/pull/4) landed the resource and
 raw string readers. Both source branch tips are reachable from main and their
-remote refs have been retired. [Draft PR 5](https://github.com/thematheusmello/bondline/pull/5)
-tracks the active caption preview. Its native review is the next integration gate.
+remote refs have been retired. [PR 5](https://github.com/thematheusmello/bondline/pull/5)
+tracks the caption preview. Its full local gate and actual macOS workflow are
+recorded in [caption verification](verification-cdx-caption-preview.md).
 
 ## Main integration checkpoint
 
