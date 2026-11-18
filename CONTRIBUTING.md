@@ -93,6 +93,10 @@ to make a test pass; changing that reference requires renewed human approval.
 
 ## Send a pull request
 
+Use a focused branch from current main and land verified work promptly. Push each atomic
+commit; preserve its history when merging. The [branch lifecycle](docs/branch-lifecycle.md)
+records the delivery policy, active work and recovery archives. Hosted Actions stays OFF.
+
 Keep commits small and use conventional messages such as `feat(commands): ...`
 or `fix(cdxml): ...`. Keep one command or format feature with its tests, provenance
 and relevant documentation in the same commit. Record RED evidence without leaving
