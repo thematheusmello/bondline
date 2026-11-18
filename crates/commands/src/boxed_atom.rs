@@ -62,6 +62,7 @@ pub(super) fn editable_atom(
         && !document.has_connected_atom_labels()
         && !document.has_mixed_atom_labels()
         && !document.has_flagged_atom_labels()
+        && !document.has_label_defaults_projection()
     {
         return Err(Error::UnsupportedAtomLabel(
             "complete box-positioned literal label source is required",
@@ -78,7 +79,10 @@ pub(super) fn creation_atom(
     fragment: u32,
     atom: u32,
 ) -> Result<(&Fragment, &Atom), Error> {
-    if !document.has_mixed_atom_labels() && !document.has_flagged_atom_labels() {
+    if !document.has_mixed_atom_labels()
+        && !document.has_flagged_atom_labels()
+        && !document.has_label_defaults_projection()
+    {
         return Err(Error::UnsupportedAtomLabel(
             "complete imported skeletal label source is required for creation",
         ));
@@ -198,6 +202,7 @@ fn finish_label(
         && !candidate.has_connected_atom_labels()
         && !candidate.has_mixed_atom_labels()
         && !candidate.has_flagged_atom_labels()
+        && !candidate.has_label_defaults_projection()
     {
         return Err(Error::UnsupportedAtomLabel(
             "the final candidate must retain complete literal label source coverage",

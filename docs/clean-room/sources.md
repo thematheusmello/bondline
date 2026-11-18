@@ -1,5 +1,28 @@
 # Clean-room source register
 
+Explicit labels beside unused scalar defaults reviewed2026-11-18 follow the
+[metadata contract](../research/label-default-metadata.md), primary
+[Style](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Style.htm),
+[Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm),
+[Node](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm),
+[LabelFont](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelStyleFont.htm),
+[LabelSize](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelStyleSize.htm),
+[LabelFace](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/LabelStyleFace.htm),
+[CDXString](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXString.htm)
+and [official DTD](https://static.chemistry.revvitycloud.com/cdxml/CDXML.dtd).
+Legal default owners and per-property containment are distinct from explicit run
+typography. CDXString includes omission examples but does not establish general
+Label*/Caption* substitution. All four actual run fields stay required. Nonnegative
+signed scalar font/face, resolved unused font resources, positive finite unused size,
+immutable lexical retention and the bounded root/n/b/t profile are original checked
+policies. They grant no missing-field inheritance, stylesheet or new rendering rule.
+Fresh ignored30-receipt manifest SHA256
+`8566911f1bc2ec07dca4e278f4daa6b8d831337854893072e4a7c5fa724fcb49`
+records25 successful responses/five404s. Twelve original sources,31 FontTools boxes
+and14 independent reader refusals are documented with hashes in
+[fixture provenance](../../crates/io/tests/fixtures/label-metadata/SOURCES.md).
+No reference binary, installed font, sample or artwork is inspected or copied.
+
 Explicit child-label creation reviewed2026-11-18 follows the
 [creation contract](../research/printed-label-creation.md) and fresh primary
 [Node](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm),

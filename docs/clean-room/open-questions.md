@@ -1,5 +1,16 @@
 # Open questions
 
+## Explicit typography beside defaults, 2026-11-18
+
+The [metadata contract](../research/label-default-metadata.md) preserves checked unused
+LabelFont/LabelSize/LabelFace while actual s font/size/face/color remain explicit.
+Fresh Style/Text/Node/property/DTD research does not establish a general mapping from
+every omitted run field to Label* versus Caption* or an external stylesheet. CDXString's
+omission examples are qualified evidence, not a complete inheritance rule. Missing
+actual fields, scalar−1 sentinels, unsupported owners and unresolved resources still
+refuse complete authority. This bounded preservation workflow does not close effective
+foreign typography, rich runs, general child-p placement or exact26.1 pixel parity.
+
 ## Explicit label creation, 2026-11-18
 
 The [creation receiving](../verification-printed-label-creation.md) resolves a bounded

@@ -153,6 +153,7 @@ impl Engine {
                     || stored.has_connected_atom_labels()
                     || stored.has_mixed_atom_labels()
                     || stored.has_flagged_atom_labels()
+                    || stored.has_label_defaults_projection()
             })
     }
 
@@ -453,6 +454,7 @@ impl Engine {
                 && !candidate.has_connected_atom_labels()
                 && !candidate.has_mixed_atom_labels()
                 && !candidate.has_flagged_atom_labels()
+                && !candidate.has_label_defaults_projection()
             {
                 return Err(Error::UnsupportedSelection(
                     "the final candidate must retain complete literal label source coverage",

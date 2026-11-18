@@ -85,6 +85,16 @@ inject/drop labels. Unknown source remains authoritative. See
 [receiving](verification-owned-atom-label-data.md). That data-only checkpoint retained
 registry47; the current box-qualified workflow appends48 and keeps catalogue16/124.
 
+The separate LabelDefaults IO mode composes complete explicit-label/current-hidden graph
+proofs with immutable checked root/n/b/t LabelFont/LabelSize/LabelFace metadata. The
+standalone lookup validates every legal owner and shadowed resource. It never supplies
+actual run fields. Existing48/49/Selection and their exact-target form consume the precise
+grant; all old profile predicates and global full remain unchanged. Baseline Arc identity
+reuses the import certificate; changed snapshots re-prove geometry, hidden atoms and new
+label resources. Source identity includes unused raw defaults even for equal models,
+so stale Save/form/gesture owners cannot transfer to another source. See
+[contract](research/label-default-metadata.md) and [receiving](verification-label-default-metadata.md).
+
 Standalone CDXML `label_defaults` resolves LabelFont/Size/Face separately along the owned
 containment chain, retaining each selected node and decoded attribute value. Signed
 scalar selectors differ from unsigned resource/run IDs; absent properties stay unresolved.

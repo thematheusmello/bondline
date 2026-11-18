@@ -1477,3 +1477,6 @@ mod dependent_label_app_tests;
 mod created_label_app_tests;
 #[path = "mixed_label_app_tests.rs"]
 mod mixed_label_app_tests;
+
+#[path = "label_metadata_app_tests.rs"]
+mod label_metadata_app_tests;

@@ -147,6 +147,7 @@ impl Engine {
                     || document.has_connected_atom_labels()
                     || document.has_mixed_atom_labels()
                     || document.has_flagged_atom_labels()
+                    || document.has_label_defaults_projection()
                 {
                     let (_, target) =
                         crate::boxed_atom::atom_at(document, page_id, fragment_id, atom_id)?;
@@ -254,6 +255,7 @@ impl Engine {
             || document.has_connected_atom_labels()
             || document.has_mixed_atom_labels()
             || document.has_flagged_atom_labels()
+            || document.has_label_defaults_projection()
         {
             Command::AtomSetAuthoredLabel(params)
         } else {

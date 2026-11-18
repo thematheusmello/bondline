@@ -1,5 +1,14 @@
 # File capabilities
 
+The [explicit-label metadata workflow](verification-label-default-metadata.md) adds a
+separate checked source mode for unused LabelFont/LabelSize/LabelFace beside fully
+explicit run typography. Root/Node/Bond/Text owners and shadowed values/resources are
+validated; default lexemes/owners stay immutable. Existing48/49 and Selection can edit
+qualified labels/points through exact source spans, with complete re-import and final
+page checks. No missing run field is filled, unused font/face/size is never rendered,
+old profile getters remain literal and global full stays false. This does not implement
+general inheritance or broaden chemistry, caption/style or cross-format permissions.
+
 The [Mixed CDXML workflow](verification-mixed-skeletal-labels.md) covers foreign diagrams
 with explicit printed labels plus no-Text carbon nodes proven currently glyphless. Each
 hidden C needs literal H, explicit active suppression and neutral/natural/nonradical

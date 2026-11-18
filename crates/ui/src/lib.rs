@@ -407,6 +407,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
                 || stored.has_connected_atom_labels()
                 || stored.has_mixed_atom_labels()
                 || stored.has_flagged_atom_labels()
+                || stored.has_label_defaults_projection()
         });
     ui.heading("Document");
     if let Some(message) = error {
@@ -1728,7 +1729,7 @@ fn show_workspace_with_preview(
                     button: egui::PointerButton::Primary, pressed: true, modifiers, ..
                 } if modifiers.alt);
                 if command.is_none()
-                    && engine.stored_document().is_ok_and(|stored| stored.has_boxed_atom_labels() || stored.has_connected_atom_labels() || stored.has_mixed_atom_labels() || stored.has_flagged_atom_labels())
+                    && engine.stored_document().is_ok_and(|stored| stored.has_boxed_atom_labels() || stored.has_connected_atom_labels() || stored.has_mixed_atom_labels() || stored.has_flagged_atom_labels() || stored.has_label_defaults_projection())
                     && !matches!(event, egui::Event::MouseWheel { .. })
                     && (!label_selection_input || label_alt_press)
                 {
