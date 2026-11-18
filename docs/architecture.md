@@ -1,5 +1,11 @@
 # Architecture
 
+The [CDX boxed-label preview](verification-cdx-atom-label-preview.md) shares
+the verified Poster and whole-page scene checks with caption preview and
+the explicit connected-bond checks with CDXML. Source kind and exact
+model equality authorize display. Other CDX data remains available
+through the earlier projection, and original source bytes govern Save.
+
 The [CDX Node label projection](verification-cdx-node-labels.md) reads a
 direct child Text with explicit styles through the shared caption string
 reader. The elemental layout still owns source identity and the numeric

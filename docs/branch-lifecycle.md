@@ -36,8 +36,11 @@ Its tree matches the reviewed tip and its merged ref is retired.
 [PR 7](https://github.com/thematheusmello/bondline/pull/7) landed
 [explicit caption runs](verification-cdx-caption-runs.md) at `4d8ae68`.
 Its tree matches the reviewed tip and its merged ref is retired.
-The [Node label contract](research/cdx-node-labels.md) follows on
-`feat/cdx-node-labels`.
+[PR 8](https://github.com/thematheusmello/bondline/pull/8) landed
+[owned Node labels](verification-cdx-node-labels.md) at `3ac74a3`.
+Its tree matches `b999bfe` and the merged ref is retired.
+The [read-only display contract](research/cdx-atom-label-preview.md) follows on
+`feat/cdx-atom-label-preview`.
 
 ## Main integration checkpoint
 

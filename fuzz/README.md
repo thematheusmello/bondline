@@ -15,6 +15,12 @@ results for the 34 Node label and 117 caption originals. To repeat that run,
 copy the `cdx-node-labels/*.cdx` fixtures into the caption recipe's writable
 corpus and use `-seed=268010327`.
 
+The [CDX atom label preview run](../docs/verification-cdx-atom-label-preview.md)
+adds the 45 `cdx-label-preview/*.cdx` files and checks admitted Poster
+extents and explicit binary styles against the raw properties. Copy all
+three fixture sets into a fresh writable corpus and use `-seed=781944217`
+with the same 65,536-byte mutation cap.
+
 ## Direct-Page CDX caption projection
 
 `cdx_parse` also checks the caption-only display proof against source-preserving

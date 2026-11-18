@@ -1,22 +1,19 @@
 //! Whole-source proof for read-only, explicitly positioned CDX captions.
 use super::{
-    DOCUMENT, PAGE, POSITION, TEXT, TEXT_OBJECT, Z_ORDER, coordinate, payload, read_position,
+    COLOR_TABLE, DOCUMENT, DRAWING_SPACE, FONT_TABLE, HEIGHT, PAGE, POSITION, TEXT, TEXT_OBJECT,
+    WIDTH, Z_ORDER, has_preview_header, payload, poster_size, read_position,
     text::{TextRole, decode_runs},
+    verify_preview_page,
 };
 use bondline_cdx::{Document, RecordKind, Resources};
-use bondline_model::{PageSize, Point2, StyledText, TextId};
-use bondline_render::{Cancellation, MAX_PAGE_TEXT_RUNS, PageView, validate_caption_run_joins};
+use bondline_model::{StyledText, TextId};
+use bondline_render::{MAX_PAGE_TEXT_RUNS, validate_caption_run_joins};
 use std::collections::{BTreeMap, BTreeSet};
 
-const FONT_TABLE: u16 = 0x0100;
-const COLOR_TABLE: u16 = 0x0300;
 const CAPTION_JUSTIFICATION: u16 = 0x080c;
-const DRAWING_SPACE: u16 = 0x0811;
-const WIDTH: u16 = 0x0812;
-const HEIGHT: u16 = 0x0813;
 
 pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document> {
-    if source.header().get(12..)?.iter().any(|&byte| byte != 0) {
+    if !has_preview_header(source) {
         return None;
     }
     let root = source.framing().has_encoded_document().then_some(0);
@@ -61,12 +58,7 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
             RecordKind::ObjectEnd { .. } | RecordKind::FileEnd => {}
         }
     }
-    if payload(source, *page_fields.get(&DRAWING_SPACE)?, DRAWING_SPACE).ok()? != [1] {
-        return None;
-    }
-    let width = coordinate(payload(source, *page_fields.get(&WIDTH)?, WIDTH).ok()?);
-    let height = coordinate(payload(source, *page_fields.get(&HEIGHT)?, HEIGHT).ok()?);
-    let size = PageSize::new(width, height).ok()?;
+    let size = poster_size(source, &page_fields)?;
     let resources = source.resources().ok()?;
     if resources.color(2).ok()? != [u16::MAX; 3] {
         return None;
@@ -108,11 +100,7 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
     document
         .append_texts(page, ordered.into_values().collect())
         .ok()?;
-    // The ordinary scene checks the entire paper before destination clipping.
-    let center = Point2::new(width / 2.0, height / 2.0).ok()?;
-    let view = PageView::zoom(1, 1, size, 100.0, center).ok()?;
-    view.graph_scene(document.pages().first()?, &Cancellation::default())
-        .ok()?;
+    verify_preview_page(&document)?;
     Some(document)
 }
 

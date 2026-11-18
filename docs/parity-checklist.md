@@ -22,8 +22,10 @@ Tied depths, general CDX typography, authoring and other platforms remain open.
 
 The [Node child Text increment](verification-cdx-node-labels.md) verifies
 literal label and numeric atom data through read-only import and byte-exact
-native macOS Save/reopen. Faithful label preview, editing, inherited styles
-and native runtime on other platforms remain open.
+native macOS Save/reopen. [Qualified label preview](verification-cdx-atom-label-preview.md)
+adds independent placement and CPU/Metal evidence for boxed and connected
+plain structures, plus macOS view and Save. Editing, inherited styles,
+broader typography and runtime on other platforms remain open.
 
 The [plain CDX bond increment](verification-cdx-plain-bonds.md) expands only read-only
 data coverage to Single/Double/Triple, Solid fields and directed position. Source presence/
