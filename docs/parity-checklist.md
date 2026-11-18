@@ -26,8 +26,9 @@ native macOS Save/reopen. [Qualified label preview](verification-cdx-atom-label-
 adds independent placement and CPU/Metal evidence for boxed and connected
 plain structures, plus macOS view and Save. [Existing-label editing](verification-cdx-atom-label-edits.md)
 adds exact Element/H/text/bounds replacement and verified history and Save/reopen
-on the shared command paths. Label creation, broader typography and other platform
-runtime coverage remain open.
+on the shared command paths. [Implicit Element editing](verification-cdx-implicit-element.md)
+covers omitted carbon with an explicit H count and the existing boxed label.
+Label creation, broader typography and other platform runtime coverage remain open.
 
 The [plain CDX bond increment](verification-cdx-plain-bonds.md) expands only read-only
 data coverage to Single/Double/Triple, Solid fields and directed position. Source presence/

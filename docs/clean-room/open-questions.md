@@ -5,9 +5,10 @@
 The [CDX Node label contract](../research/cdx-node-labels.md) retains explicit
 child data. Layout with missing bounds or position, alignment/justification
 precedence and inherited styles remain open. The [existing-label writer](../research/cdx-atom-label-edit.md)
-checks agreement and edits qualified explicit fields. Editing an implicit
-Element or creating a new label needs a sourced insertion operation and
-independent before/after cases.
+checks agreement and edits qualified fields. A resolved carbon default has
+its own [insertion proof](../research/cdx-implicit-element.md). Missing H
+still depends on a valence calculation, and creating a new label requires
+its own placement and source-writing evidence.
 
 The [2DPosition property](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/2DPosition.htm)
 identifies the center of the element token for an Element Node and the left

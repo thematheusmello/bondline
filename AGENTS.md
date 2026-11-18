@@ -19,13 +19,16 @@ This supersedes old no-push/no-merge/current-multiple-bonds notes; full M0–M5 
 Existing CDX label edits follow `docs/research/cdx-atom-label-edit.md` and
 `docs/verification-cdx-atom-label-edits.md`. The standalone binary batch preserves
 untouched records and rejects duplicate and foreign handles under one byte budget.
-Require exact qualified CDX preview and explicit scoped Element, H, Text and box.
+Require exact qualified CDX preview and scoped explicit H, Text and box.
+Validate signed INT16 Element when present. The published carbon default
+permits omission and a non-carbon edit inserts before the same Node's H.
+See `docs/research/cdx-implicit-element.md` for the insertion and no-op rules.
 Retain the raw run prefix, quantize the box to signed 16.16 and re-import the entire
 candidate under the whole-page proof. Each snapshot owns its certified current bytes
 and keeps original source provenance and budget accounting. Detached data stays refused.
 Reuse registry49 and the guarded Alt form. Ordinary canvas input, label creation and
-cross-format operations keep their earlier gates. Follow STATUS for the next binary
-insertion and implicit Element work. Actions stays OFF.
+cross-format operations keep their earlier gates. Follow STATUS for the next
+CDX caption edit work. Actions stays OFF.
 
 The raw CDXString reader follows `docs/research/cdx-string.md` and
 `docs/verification-cdx-string.md`. Keep exact owned property handles, payload-local

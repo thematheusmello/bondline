@@ -151,7 +151,7 @@ impl Engine {
                             && !document.can_edit_cdx_atom_label(target.id)
                         {
                             return Err(Error::UnsupportedAtomLabel(
-                                "CDX requires explicit Element and H fields on the selected atom",
+                                "CDX requires an explicit H count and a boxed label on the selected atom",
                             ));
                         }
                         (

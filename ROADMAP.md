@@ -38,8 +38,10 @@ adds isolated and connected labelled structures whose source determines
 placement, paper and plain bond styles. Mac viewing and unchanged Save
 are verified. Atomic typed binary source replacement and an independently
 tested [existing-label edit workflow](docs/verification-cdx-atom-label-edits.md)
-now preserve explicit Element, H, styled Text and box across change, history
-and Save/reopen. CDX creation and editing of other objects remain required.
+now preserve Element, H, styled Text and box across change, history and
+Save/reopen. The [implicit Element increment](docs/verification-cdx-implicit-element.md)
+can keep carbon omitted or insert a changed element. CDX creation and
+editing of other objects remain required.
 
 The [CDXString increment](docs/verification-cdx-string.md) preserves literal style runs
 and text bytes, with borrowed property boundaries and independent original fixtures.

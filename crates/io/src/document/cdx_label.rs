@@ -6,7 +6,7 @@ use bondline_model::{AtomId, Element, Fragment, FragmentId, PageId};
 use std::sync::Arc;
 
 impl StoredDocument {
-    /// The current preview owns all four existing records for this atom's label.
+    /// The current preview owns the fields needed to edit this atom's boxed label.
     pub fn can_edit_cdx_atom_label(&self, atom: AtomId) -> bool {
         self.has_cdx_atom_label_preview()
             && self
@@ -16,8 +16,8 @@ impl StoredDocument {
                 .is_some_and(|source| LabelFields::find(&source, atom).is_some())
     }
 
-    /// Replace one qualified existing label's Element, H count, text and bounds together.
-    /// The result owns exact edited source and a matching whole-page projection.
+    /// Edit one qualified label's element, explicit H count, text and bounds together.
+    /// An omitted Element remains absent on carbon and is inserted for another element.
     pub fn with_cdx_atom_label(
         &self,
         page_id: PageId,
@@ -62,7 +62,7 @@ impl StoredDocument {
         let source = Document::parse(self.export_cdx()?).map_err(MappingError::from)?;
         let fields =
             LabelFields::find(&source, atom_id).ok_or(DocumentError::UnsupportedCdxLabel(
-                "existing Element, H count, boxed Text and style records",
+                "an explicit H count and existing boxed Text and style records",
             ))?;
         if element.get() == 1 && explicit_hydrogens != 0 {
             return Err(DocumentError::UnsupportedCdxLabel(

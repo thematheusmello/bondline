@@ -106,13 +106,28 @@ fn cdx_label_preview_wire_matches_real_cpu_gpu_and_preserves_unchanged_save() ->
 #[test]
 fn cdx_authored_label_edit_round_trips_exactly_through_cli_and_authenticated_loopback() -> TestResult
 {
+    let witnesses: Value = serde_json::from_str(EDIT_WITNESSES)?;
+    label_edit_round_trip(RAW, EDITED, &witnesses["cases"]["water_to_nh"])
+}
+
+#[test]
+fn cdx_implicit_element_round_trips_exactly_through_cli_and_authenticated_loopback() -> TestResult {
+    let witnesses: Value = serde_json::from_str(include_str!(
+        "../../../io/tests/fixtures/cdx-implicit-element/cases.json"
+    ))?;
+    label_edit_round_trip(
+        include_bytes!("../../../io/tests/fixtures/cdx-implicit-element/cyanide_implicit.cdx"),
+        include_bytes!("../../../io/tests/fixtures/cdx-implicit-element/cyanide_si.cdx"),
+        &witnesses["cases"]["cyanide_c_to_si"],
+    )
+}
+
+fn label_edit_round_trip(original: &[u8], expected: &[u8], witness: &Value) -> TestResult {
     let directory = support::SdfTestDirectory::new()?;
     let input = directory.path("label-source-原-λ.cdx");
     let cli_output = directory.path("label-cli-保存-λ.cdx");
     let socket_output = directory.path("label-loopback-保存-β.cdx");
-    fs::write(&input, RAW)?;
-    let witnesses: Value = serde_json::from_str(EDIT_WITNESSES)?;
-    let witness = &witnesses["cases"]["water_to_nh"];
+    fs::write(&input, original)?;
     let mut params = witness["params"].clone();
     params["expected_revision"] = json!(1);
     let open = request("document.open_cdx", json!({"path":input}));
@@ -136,9 +151,9 @@ fn cdx_authored_label_edit_round_trips_exactly_through_cli_and_authenticated_loo
     assert_eq!(reopened["file"]["dirty"], false);
     assert_eq!(
         reopened["source"],
-        json!({"format":"cdx","byte_length":EDITED.len(),"modified":false})
+        json!({"format":"cdx","byte_length":expected.len(),"modified":false})
     );
-    assert_eq!(fs::read(&cli_output)?, EDITED);
+    assert_eq!(fs::read(&cli_output)?, expected);
     let expected_png = reopened["capture"]["png_base64"]
         .as_str()
         .ok_or("missing edited PNG")?;
@@ -177,10 +192,10 @@ fn cdx_authored_label_edit_round_trips_exactly_through_cli_and_authenticated_loo
     assert_eq!(saved["result"]["file"]["dirty"], false);
     assert_eq!(
         saved["result"]["source"],
-        json!({"format":"cdx","byte_length":RAW.len(),"modified":true})
+        json!({"format":"cdx","byte_length":original.len(),"modified":true})
     );
-    assert_eq!(fs::read(&input)?, RAW);
-    assert_eq!(fs::read(&socket_output)?, EDITED);
+    assert_eq!(fs::read(&input)?, original);
+    assert_eq!(fs::read(&socket_output)?, expected);
     let opened = socket(
         &mut client,
         request("document.open_cdx", json!({"path":socket_output})),
