@@ -3,9 +3,12 @@
 use bondline_cdx::{Document, RecordKind};
 use bondline_model::{
     Atom, AtomId, Bond, BondId, BondOrder, Element, Fragment, FragmentId, GraphError,
-    MAX_GRAPH_ITEMS, Point2,
+    MAX_GRAPH_ITEMS, Point2, Radical,
 };
-use std::collections::{BTreeMap, BTreeSet};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    num::NonZeroU16,
+};
 
 const DOCUMENT: u16 = 0x8000;
 const PAGE: u16 = 0x8001;
@@ -19,6 +22,10 @@ const POSITION: u16 = 0x0200;
 const BOUNDING_BOX: u16 = 0x0204;
 const NODE_TYPE: u16 = 0x0400;
 const ELEMENT: u16 = 0x0402;
+const ISOTOPE: u16 = 0x0420;
+const CHARGE: u16 = 0x0421;
+const RADICAL: u16 = 0x0422;
+const HYDROGENS: u16 = 0x042b;
 const ATOM_CIP: u16 = 0x0437;
 const ATOM_ID: u16 = 0x044d;
 const ORDER: u16 = 0x0600;
@@ -234,7 +241,8 @@ impl Layout {
         for (index, record) in source.records().iter().enumerate() {
             if let RecordKind::Property { tag, .. } = record.kind() {
                 let owner = match *tag {
-                    POSITION | NODE_TYPE | ELEMENT | ATOM_CIP | ATOM_ID => Some(NODE),
+                    POSITION | NODE_TYPE | ELEMENT | ISOTOPE | CHARGE | RADICAL | HYDROGENS
+                    | ATOM_CIP | ATOM_ID => Some(NODE),
                     ORDER | BEGIN | END | BOND_CIP | WARNING => Some(BOND),
                     _ => None,
                 };
@@ -408,7 +416,10 @@ fn read_atom(
             .children
             .get(index)
             .ok_or(MappingError::UnsupportedLayout { record: index })?,
-        &[POSITION, NODE_TYPE, ELEMENT, Z_ORDER, ATOM_CIP, ATOM_ID],
+        &[
+            POSITION, NODE_TYPE, ELEMENT, ISOTOPE, CHARGE, RADICAL, HYDROGENS, Z_ORDER, ATOM_CIP,
+            ATOM_ID,
+        ],
     )?;
     validate_metadata(source, &fields)?;
     if let Some(record) = fields.get(&NODE_TYPE)
@@ -442,7 +453,58 @@ fn read_atom(
             })
         })
         .transpose()?;
-    Ok(Atom::new(id, element, position))
+    let mut atom = Atom::new(id, element, position);
+    read_literal_metadata(source, &fields, &mut atom)?;
+    Ok(atom)
+}
+
+fn read_literal_metadata(
+    source: &Document<'_>,
+    fields: &BTreeMap<u16, usize>,
+    atom: &mut Atom,
+) -> Result<(), MappingError> {
+    for (&tag, &record) in fields {
+        let widths: &[usize] = match tag {
+            ISOTOPE | HYDROGENS => &[2],
+            CHARGE => &[1, 4],
+            RADICAL => &[1],
+            _ => continue,
+        };
+        let width = property_bytes(source, record, tag)?.len();
+        if !widths.contains(&width) {
+            return Err(MappingError::UnsupportedProperty { tag, record });
+        }
+        let invalid = || MappingError::InvalidProperty { tag, record };
+        match tag {
+            ISOTOPE => {
+                let mass = i16::from_le_bytes(payload(source, record, tag)?);
+                atom.isotope = NonZeroU16::new(u16::try_from(mass).map_err(|_| invalid())?);
+            }
+            CHARGE => {
+                atom.charge = if width == 1 {
+                    i8::from_le_bytes(payload(source, record, tag)?)
+                } else {
+                    // The property-specific SDK recovers the signed high byte for 8.0 data.
+                    let saved = i32::from_le_bytes(payload(source, record, tag)?);
+                    i8::try_from(saved >> 24).map_err(|_| invalid())?
+                };
+            }
+            RADICAL => {
+                atom.radical = match payload(source, record, tag)? {
+                    [0] => Radical::None,
+                    [1] => Radical::Singlet,
+                    [2] => Radical::Doublet,
+                    [3] => Radical::Triplet,
+                    _ => return Err(invalid()),
+                };
+            }
+            HYDROGENS => {
+                atom.explicit_hydrogens = Some(u16::from_le_bytes(payload(source, record, tag)?));
+            }
+            _ => {}
+        }
+    }
+    Ok(())
 }
 
 fn allocate(counter: &mut u32) -> Result<u32, MappingError> {

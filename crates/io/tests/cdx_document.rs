@@ -188,14 +188,30 @@ fn syntax_unsupported_metadata_and_input_budget_keep_distinct_error_codes() -> T
     source.start_object(0x8001, 42)?;
     source.start_object(0x8003, 100)?;
     source.start_object(0x8004, 101)?;
-    // Published UINT16 NumHydrogens is valid syntax, outside this first projection.
+    // Published UINT16 NumHydrogens now projects literal data without source authority.
     source.property(0x042b, &4_u16.to_le_bytes())?;
     source.end_object()?;
     source.end_object()?;
     source.end_object()?;
     let source = source.finish()?;
+    let stored = StoredDocument::from_cdx(source.clone().into(), PageSize::A4)?;
     assert_eq!(
-        StoredDocument::from_cdx(Arc::from(source), PageSize::A4)
+        stored.model().pages()[0].fragments()[0].atoms()[0].explicit_hydrogens,
+        Some(4)
+    );
+    assert!(!stored.is_fully_mapped());
+    assert!(!stored.has_display_projection());
+    assert_eq!(stored.to_cdx()?.as_ref(), source);
+    let mut unsupported = bondline_cdx::Writer::new()?;
+    unsupported.start_object(0x8001, 42)?;
+    unsupported.start_object(0x8003, 100)?;
+    unsupported.start_object(0x8004, 101)?;
+    unsupported.property(0x0430, &[1])?;
+    unsupported.end_object()?;
+    unsupported.end_object()?;
+    unsupported.end_object()?;
+    assert_eq!(
+        StoredDocument::from_cdx(unsupported.finish()?.into(), PageSize::A4)
             .err()
             .ok_or("unsupported metadata")?
             .code(),
