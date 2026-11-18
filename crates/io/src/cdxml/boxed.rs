@@ -2,7 +2,7 @@
 use super::{MappingError, atom_text, caption, graph, is_element, parse_position, write};
 use crate::{DocumentError, StoredDocument};
 use bondline_cdxml::{Document as Xml, Edit, ObjectId, TextObject, parse_integer};
-use bondline_model::{Atom, Bond, BondOrder, Document, DoublePosition, Page};
+use bondline_model::{Atom, Bond, BondOrder, Document, DoublePosition, Page, Radical};
 use roxmltree::Node;
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -18,6 +18,7 @@ const MAX_TEXT_WORK: usize = 4096;
 enum Profile {
     Boxed,
     Connected,
+    Mixed,
 }
 
 fn unsupported<T>() -> Result<T> {
@@ -252,6 +253,37 @@ pub(crate) fn supports_connected_delta(baseline: &Document, current: &Document) 
         && one_page(current).is_ok_and(|page| connected_style(current, page))
 }
 
+fn mixed_hidden_supported(page: &Page) -> bool {
+    let cancel = bondline_render::Cancellation::default();
+    let mut has_hidden = false;
+    for fragment in page.fragments() {
+        let Ok(hidden) = bondline_render::hidden_carbon_atoms(fragment, &cancel) else {
+            return false;
+        };
+        for atom in fragment
+            .atoms()
+            .iter()
+            .filter(|atom| atom.authored_label.is_none())
+        {
+            if atom.element.get() != 6
+                || atom.charge != 0
+                || atom.isotope.is_some()
+                || atom.radical != Radical::None
+                || !hidden.contains(&atom.id)
+            {
+                return false;
+            }
+            has_hidden = true;
+        }
+    }
+    has_hidden
+}
+
+pub(crate) fn supports_mixed_delta(baseline: &Document, current: &Document) -> bool {
+    supports_connected_delta(baseline, current)
+        && one_page(current).is_ok_and(mixed_hidden_supported)
+}
+
 fn keys(node: Node<'_, '_>, expected: &[&str]) -> bool {
     node.attributes().len() == expected.len()
         && node
@@ -310,19 +342,17 @@ fn bindings<'doc, 'input: 'doc>(
         return unsupported();
     }
     let own = one_page(baseline)?;
-    if own
+    let has_unlabelled = own
         .fragments()
         .iter()
         .flat_map(|fragment| fragment.atoms())
-        .any(|atom| atom.authored_label.is_none())
-        || match profile {
-            Profile::Boxed => own
-                .fragments()
-                .iter()
-                .any(|fragment| !fragment.bonds().is_empty()),
-            Profile::Connected => !connected_style(baseline, own),
-        }
-    {
+        .any(|atom| atom.authored_label.is_none());
+    let supported = match profile {
+        Profile::Boxed => !has_unlabelled && own.fragments().iter().all(|f| f.bonds().is_empty()),
+        Profile::Connected => !has_unlabelled && connected_style(baseline, own),
+        Profile::Mixed => connected_style(baseline, own) && mixed_hidden_supported(own),
+    };
+    if !supported {
         return unsupported();
     }
     let features = xml.features();
@@ -551,7 +581,7 @@ fn bindings<'doc, 'input: 'doc>(
             let end = reference(node, "E")?;
             let expected = write::bond_attributes(bond, source_id, begin, end);
             let mut expected_keys: Vec<_> = expected.iter().map(|(name, _)| *name).collect();
-            if let Profile::Connected = profile {
+            if matches!(profile, Profile::Connected | Profile::Mixed) {
                 for name in ["Display", "Display2", "color"] {
                     if node.attribute(name).is_some() {
                         expected_keys.push(name);
@@ -605,6 +635,10 @@ pub(crate) fn is_connected(source: &[u8], baseline: &Document) -> bool {
     is_profile(source, baseline, Profile::Connected)
 }
 
+pub(crate) fn is_mixed(source: &[u8], baseline: &Document) -> bool {
+    is_profile(source, baseline, Profile::Mixed)
+}
+
 fn is_profile(source: &[u8], baseline: &Document, profile: Profile) -> bool {
     let Ok(xml) = Xml::parse(source) else {
         return false;
@@ -628,6 +662,14 @@ pub(crate) fn write_connected_preserved(
     write_in_profile(source, baseline, current, Profile::Connected)
 }
 
+pub(crate) fn write_mixed_preserved(
+    source: &[u8],
+    baseline: &Document,
+    current: &Document,
+) -> Result<Vec<u8>> {
+    write_in_profile(source, baseline, current, Profile::Mixed)
+}
+
 fn write_in_profile(
     source: &[u8],
     baseline: &Document,
@@ -637,6 +679,7 @@ fn write_in_profile(
     let supported = match profile {
         Profile::Boxed => supports_delta(baseline, current),
         Profile::Connected => supports_connected_delta(baseline, current),
+        Profile::Mixed => supports_mixed_delta(baseline, current),
     };
     if !supported {
         return unsupported();
@@ -716,6 +759,7 @@ fn write_in_profile(
         Profile::Connected => {
             reopened.has_connected_atom_labels() || reopened.has_boxed_atom_labels()
         }
+        Profile::Mixed => reopened.has_mixed_atom_labels() || reopened.has_boxed_atom_labels(),
     };
     if reopened.model() != current || !source_supported {
         return unsupported();
