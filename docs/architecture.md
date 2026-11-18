@@ -4,8 +4,10 @@ The [CDX boxed-label preview](verification-cdx-atom-label-preview.md) shares
 the verified Poster and whole-page scene checks with caption preview and
 the explicit connected-bond checks with CDXML. Source kind and exact
 model equality authorize display. The [existing-label writer](research/cdx-atom-label-edit.md)
-replaces four scoped properties and re-imports the complete candidate before
-attaching its bytes to the immutable current model. History owns original and
+edits scoped properties and re-imports the complete candidate before
+attaching its bytes to the immutable current model. The [implicit Element path](research/cdx-implicit-element.md)
+uses a checked insertion before the same Node's explicit H record when required.
+History owns original and
 current backing. Save borrows the bytes certified for its captured snapshot.
 Other CDX data remains available through the earlier projection.
 

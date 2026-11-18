@@ -1,5 +1,9 @@
 # Verification log
 
+The [implicit CDX Element verification](verification-cdx-implicit-element.md)
+covers exact source insertion, omission-preserving edits, complete models,
+actual adapters, App history and files, and both standalone batch budgets.
+
 The [existing CDX label edit verification](verification-cdx-atom-label-edits.md)
 records exact preserved bytes, complete models, Undo/Redo, captured Save and
 reopen through IO, the actual App harness and all command adapters. It also

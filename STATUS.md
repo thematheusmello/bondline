@@ -230,21 +230,38 @@ with 199 unchanged originals. Evidence is in
 `target/cdx-resources/next-text/label-edits`.
 
 [PR 10](https://github.com/thematheusmello/bondline/pull/10) carries the
-reviewed producer `ca307af`. The final local gate passed **2,245/0/1**
+reviewed producer `ca307af` and landed at `c8f4baf`. The final local gate passed **2,245/0/1**
 workspace tests and **3/0** AccessKit tests, including the new App test.
 Formatting, Clippy, layers, licenses, assets and corpus passed. The owned
 jobs exited. The isolated review stayed unlaunched and Actions stayed off.
 
+### CDX implicit Element editing
+
+The [scoped binary insertion batch](docs/verification-cdx-property-insertions.md)
+at `217968b` combines insertion and replacement under the existing limits.
+Independent witnesses at `7c25dde` cover connected C→Si and two boxed
+cases with reused source IDs. A carbon H-only change keeps omission.
+The missing-H control retains the original file and its data projection.
+
+[Verification](docs/verification-cdx-implicit-element.md) covers the
+compiler and runtime REDs, exact models and saved bytes, omission-preserving
+no-op and history, the existing Alt form and Unicode file workflow at
+synthetic 2×, CLI/stdio/loopback and matching CPU/Metal PNGs. RDKit reads
+the actual 503-byte output. ASan passes 10,000 runs with 205 unchanged
+originals. IO type-checks for Windows MSVC, Linux GNU and WebAssembly.
+The signed review stayed prepared during hardware activity. Live
+macOS input remains unverified. Evidence is in
+`target/cdx-resources/next-text/implicit-element`.
+
 ### Next executable work
 
-1. Source-lock binary insertion from the [CDX object framing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm)
-   and the [Element default](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Node_Element.htm).
-   Start with the implicit-C cyanide case in `crates/io/tests/cdx_label_edits.rs`.
-   Freeze a scoped new Element record beside the existing explicit H, with
-   exact bytes, unchanged descendants and an independent chemistry check.
-   Prove a bounded insertion/replacement batch before widening the edit or
-   native form. A same-element/H no-op keeps original absence. Missing H,
-   unresolved layout and other source extensions retain their refusals.
+1. Source-lock editing existing qualified CDX caption runs using the
+   [explicit run contract](docs/research/cdx-caption-runs.md) and the existing
+   `text.set_run` path. Freeze originals for one-run and multi-run changes,
+   including shifted start offsets, exact retained style words, unchanged
+   peers and rejection of ambiguity and unsupported styles. Use scoped
+   replacements, whole-page re-import and exact history/Save proofs.
+   Check the current command discovery description and actual adapters.
 2. Verify the current supported edit through actual macOS input when the
    desktop is idle. Continue broader M1 styles, captions, source edits and
    formats, then the remaining M0 and M2–M5 workflows from the roadmap.

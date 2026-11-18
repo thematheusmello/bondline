@@ -1,12 +1,12 @@
-//! Scope the four existing fields of a source-certified CDX label.
+//! Scope the fields of a source-certified CDX label.
 use super::{
     BOUNDING_BOX, ELEMENT, FRAGMENT, HYDROGENS, MappingError, NODE, TEXT, TEXT_OBJECT, object,
 };
-use bondline_cdx::{Document, Record, RecordKind};
+use bondline_cdx::{Document, PropertyInsertion, Record, RecordKind};
 use bondline_model::{AtomId, Element};
 
 pub(crate) struct LabelFields<'record, 'input> {
-    element: &'record Record,
+    element: Option<&'record Record>,
     hydrogens: &'record Record,
     text: &'record Record,
     bounds: &'record Record,
@@ -41,13 +41,17 @@ impl<'record, 'input> LabelFields<'record, 'input> {
             return None;
         }
         let element = owned_property(source, node, ELEMENT)?;
-        let hydrogens = owned_property(source, node, HYDROGENS)?;
-        let text = owned_property(source, label, TEXT)?;
-        let bounds = owned_property(source, label, BOUNDING_BOX)?;
+        let hydrogens = owned_property(source, node, HYDROGENS).flatten()?;
+        let text = owned_property(source, label, TEXT).flatten()?;
+        let bounds = owned_property(source, label, BOUNDING_BOX).flatten()?;
         let string = source.string(text).ok()?;
         let mut runs = string.runs();
-        if source.payload(element).ok()?.len() != 2
-            || source.payload(hydrogens).ok()?.len() != 2
+        if let Some(element) = element
+            && source.payload(element).ok()?.len() != 2
+        {
+            return None;
+        }
+        if source.payload(hydrogens).ok()?.len() != 2
             || source.payload(bounds).ok()?.len() != 16
             || runs.len() != 1
             || runs.next()?.start() != 0
@@ -76,12 +80,30 @@ impl<'record, 'input> LabelFields<'record, 'input> {
     ) -> Result<Vec<u8>, MappingError> {
         let mut text = self.run_prefix.to_vec();
         text.extend_from_slice(body.as_bytes());
-        Ok(source.replace_properties(&[
-            (self.element, &i16::from(element.get()).to_le_bytes()),
-            (self.hydrogens, &hydrogens.to_le_bytes()),
-            (self.text, &text),
+        let element_word = i16::from(element.get()).to_le_bytes();
+        let hydrogen_word = hydrogens.to_le_bytes();
+        let changes = [
+            (self.hydrogens, hydrogen_word.as_slice()),
+            (self.text, text.as_slice()),
             (self.bounds, bounds),
-        ])?)
+        ];
+        let output = match self.element {
+            Some(record) => {
+                let [h, text, bounds] = changes;
+                source.replace_properties(&[(record, &element_word), h, text, bounds])
+            }
+            // The published default carries the element through a carbon H-only edit.
+            None if element.get() == 6 => source.replace_properties(&changes),
+            None => source.edit_properties(
+                &changes,
+                &[PropertyInsertion {
+                    before: self.hydrogens,
+                    tag: ELEMENT,
+                    value: &element_word,
+                }],
+            ),
+        }?;
+        Ok(output)
     }
 }
 
@@ -89,11 +111,11 @@ fn owned_property<'record>(
     source: &'record Document<'_>,
     parent: usize,
     tag: u16,
-) -> Option<&'record Record> {
+) -> Option<Option<&'record Record>> {
     let mut records = source.records().iter().filter(|record| {
         record.parent() == Some(parent)
             && matches!(record.kind(), RecordKind::Property { tag: field, .. } if *field == tag)
     });
-    let record = records.next()?;
+    let record = records.next();
     records.next().is_none().then_some(record)
 }

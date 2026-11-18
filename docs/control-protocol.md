@@ -365,7 +365,9 @@ saved with `source.modified=true` and `file.dirty=false`; these describe differe
 The CDX existing-label path uses the same distinction. `source.byte_length` is the
 original input size. A Save receipt reports the edited file size. Reopening the saved
 file starts a fresh original snapshot and history. The existing `atom.set_authored_label`
-schema serves the guarded CDX and CDXML paths. [CDX edit contract](research/cdx-atom-label-edit.md).
+schema serves the guarded CDX and CDXML paths. The CDX path also accepts a
+qualified carbon label with Element omitted and NumHydrogens explicit.
+[CDX edit contract](research/cdx-atom-label-edit.md), [implicit Element](research/cdx-implicit-element.md).
 
 ```json
 {"command":"document.open_cdxml","params":{"path":"target/example.cdxml"}}

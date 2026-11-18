@@ -1,10 +1,12 @@
 # File capabilities
 
-Qualified CDX atom labels with explicit Element and NumHydrogens can be changed
-in place. The writer preserves their one-run style, reapplies exact placement on the
-signed 16.16 grid and replaces four original records. Complete re-import checks the
-model, paper and bond clearance before the edit enters history. The CDX file retains
-its framing, IDs and all unrelated bytes. [Existing-label contract](research/cdx-atom-label-edit.md).
+Qualified CDX atom labels with explicit NumHydrogens can be changed in place.
+The writer preserves their one-run style and reapplies placement on the signed
+16.16 grid. Carbon keeps an existing omission of Element. Changing to another
+element inserts its signed record before NumHydrogens. Complete re-import checks
+the model, paper and bond clearance before the edit enters history. The CDX file
+retains its framing, IDs and unrelated bytes. [Existing-label contract](research/cdx-atom-label-edit.md),
+[implicit Element contract](research/cdx-implicit-element.md).
 
 A source-qualified CDX caption can be displayed in the shared renderer and saved
 byte-exactly. This read-only profile requires one explicitly styled and positioned
