@@ -1,5 +1,5 @@
 //! Original CDX bytes and independent struct facts; test-only external reader.
-use serde_json::Value;
+use serde_json::{Value, json};
 use std::{
     io::Write,
     process::{Command, Stdio},
@@ -77,6 +77,61 @@ pub fn facts(name: &str) -> Value {
     let row = all.get(name).cloned().unwrap_or(Value::Null);
     assert!(row.is_object(), "declared original literal CDX facts");
     row
+}
+/// Complete expected A4 document, projected only from independently frozen facts.
+pub fn model(name: &str) -> Result<Value> {
+    let facts = facts(name);
+    let all_atoms = facts["atoms"].as_array().ok_or("frozen CDX atoms")?;
+    let all_bonds = facts["bonds"].as_array().ok_or("frozen CDX bonds")?;
+    let mut fragments = Vec::new();
+    for fragment in facts["fragments"]
+        .as_array()
+        .ok_or("frozen CDX fragments")?
+    {
+        let mut atoms = Vec::new();
+        for id in fragment["atom_ids"].as_array().ok_or("frozen atom ids")? {
+            let fact = all_atoms
+                .iter()
+                .find(|fact| fact["model_id"] == *id)
+                .ok_or("frozen atom identity")?;
+            let mut atom = serde_json::Map::new();
+            atom.insert("id".into(), id.clone());
+            for key in [
+                "element",
+                "position",
+                "isotope",
+                "charge",
+                "radical",
+                "explicit_hydrogens",
+            ] {
+                atom.insert(
+                    key.into(),
+                    fact.get(key).ok_or("frozen atom field")?.clone(),
+                );
+            }
+            atoms.push(Value::Object(atom));
+        }
+        let mut bonds = Vec::new();
+        for id in fragment["bond_ids"].as_array().ok_or("frozen bond ids")? {
+            let fact = all_bonds
+                .iter()
+                .find(|fact| fact["model_id"] == *id)
+                .ok_or("frozen bond identity")?;
+            let mut bond = serde_json::Map::new();
+            bond.insert("id".into(), id.clone());
+            for key in ["begin", "end", "order"] {
+                bond.insert(
+                    key.into(),
+                    fact.get(key).ok_or("frozen bond field")?.clone(),
+                );
+            }
+            bonds.push(Value::Object(bond));
+        }
+        fragments.push(json!({"id":fragment.get("model_id").ok_or("frozen fragment identity")?,"atoms":atoms,"bonds":bonds}));
+    }
+    Ok(
+        json!({"pages":[{"id":1,"size":{"width_pt":210.0*72.0/25.4,"height_pt":297.0*72.0/25.4},"fragments":fragments}]}),
+    )
 }
 pub fn read(raw: &[u8]) -> Result<Value> {
     let python = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
