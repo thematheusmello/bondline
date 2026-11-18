@@ -61,3 +61,17 @@ The actual CLI registry SHA-256 is
 `89b1b1b8416e4da29ed39e1f0e07099bf3788337d7af7480cfe8982c3aeb8c4f`.
 The first full gate caught duplicate test helper modules. The qualified
 run uses one module per test root and preserves the exact comparisons.
+
+## Final local gate
+
+The exact source and tests at `bdae9cb` passed `cargo xtask ci` with the
+pinned `BONDLINE_PYTHON`. The workspace passed **2,263 tests** with no
+failures and one existing ignored case across 336 reports. AccessKit
+passed three tests. Formatting, warnings-denied Clippy, layering,
+licenses, seven assets and the pinned eight-file corpus passed. The
+historical MCP listener failure remains unexplained.
+
+The 285,391-byte `ci-qualified.log` SHA-256 is
+`eb6352b185e7bae5d6f1c8da98b4c0967175223b7ca753e32b8057591a7ceeb8`.
+All owned execution jobs exited. The prepared review did not launch
+while hardware input was active. GitHub Actions remained disabled.

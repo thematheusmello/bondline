@@ -279,6 +279,13 @@ review was prepared during hardware activity. Native caption input
 remains open. Receipts are in
 `target/cdx-resources/next-text/caption-edits`.
 
+[PR 12](https://github.com/thematheusmello/bondline/pull/12) carries reviewed
+producer `bdae9cb`. The final local gate passed **2,263/0/1** workspace
+tests and **3/0** AccessKit tests, including the new encoder and App cases.
+Fmt, Clippy, layers, licenses, assets and corpus passed. IO type-checks
+on Windows MSVC, Linux GNU and WebAssembly. All owned jobs exited and
+Actions stayed off.
+
 ### Next executable work
 
 1. Source-lock native editing of existing qualified captions from the
@@ -288,6 +295,9 @@ remains open. Receipts are in
    for overlapping captions, ordered styled runs, keyboard history and
    exact Unicode Save/reopen. Keep the separate new-Text creation,
    typography and unresolved-source work in the full backlog.
+   The pinned version 25 guide describes editing by clicking existing
+   text with the Text tool on printed page 92. Qualify that behavior
+   against the target version before claiming parity. [Public guide](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf#page=93).
 2. Verify the current supported edit through actual macOS input when the
    desktop is idle. Continue broader M1 styles, captions, source edits and
    formats, then the remaining M0 and M2–M5 workflows from the roadmap.
