@@ -1,5 +1,15 @@
 # Clean-room source register
 
+The [raw CDXString contract](../research/cdx-string.md) follows the public
+[datatype](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXString.htm),
+[binary framing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm) and
+[Text property](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Text.htm)
+specifications, reviewed 2026-11-18. The raw data layout is a UINT16 count, five
+UINT16 words per run and the exact remaining bytes. It is bounded to the selected
+property. The original borrowed view preserves ambiguous starts and font selectors
+without interpreting encodings, layout or supplied defaults. No proprietary sample
+or implementation supplies expected bytes.
+
 The CDX resource query follows the [contract for the binary table layouts](../research/cdx-resources.md),
 reviewed 2026-11-18 against the primary
 [FontTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/FontTable.htm),

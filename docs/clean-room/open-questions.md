@@ -1,5 +1,13 @@
 # Open questions
 
+## CDXString typography, 2026-11-18
+
+The [raw string contract](../research/cdx-string.md) retains original starts.
+The published datatype does not establish which length unit every encoding uses for
+styled run boundaries, or resolve font ordinal versus declared ID. Code-page and
+UTF8Text precedence, inherited styles, omitted-position fallback, text wrapping and
+bounding-box placement need separate proof before they can grant display or editing.
+
 ## CDX font/colour resources, 2026-11-18
 
 The occasional layout ambiguity remains separate from the implemented

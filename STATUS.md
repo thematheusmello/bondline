@@ -1,7 +1,8 @@
 # Status — 2026-11-18
 
-The full M0–M5 goal is **active after the user resumed it**. Verified delivery now lands
-into `main`; current work is on `feat/cdx-resources-integration`.
+The full M0–M5 goal is **active after the user resumed it**. Verified delivery lands
+into `main`. The current raw CDXString work is based on merged main `b9527ab`
+on `feat/cdx-string`.
 Its scope is unchanged. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
@@ -21,6 +22,11 @@ All73 worktree directories remain. See [delivery/recovery policy](docs/branch-li
 and [ref ledger](docs/branch-inventory-2026-11-18.json). Full M0–M5 remains incomplete.
 
 ### Verified standalone CDX resources
+
+[PR 3](https://github.com/thematheusmello/bondline/pull/3) merged the verified
+resource commits into main at `b9527ab99fb2b5549652efc9f824b149edf5b8a9`. The
+merge tree matches the reviewed feature head, including the original fixture,
+producer, sanitizer and documentation commits. Local main fast-forwarded to it.
 
 The [resource contract](docs/research/cdx-resources.md) at 391639c is implemented by
 the frozen fixtures at 88cb7e9, query and boundary tests at dce5e0f, and sanitizer
@@ -51,11 +57,10 @@ resource worktree remains recoverable. GitHub Actions is off.
 
 ### Next executable work
 
-1. Lock and test a borrowed raw CDXString query using the public count/10-byte run
-   layout. Preserve the complete uninterpreted text remainder and raw five UINT16
-   fields even for ambiguous start values. Keep syntax admission, exact raw Save and
-   the existing model/display/authoring guards. Freeze original-byte independent
-   fixtures before the new API compiler probe and producer.
+1. Follow the [locked raw CDXString API](docs/research/cdx-string.md). Freeze the
+   independent original-byte fixtures and query tests before the compiler probe and
+   implementation. The fixture worker owns only ignored output beneath
+   `target/cdx-resources/next-text/raw-string-fixtures`. Root owns tracked integration.
 2. Deliver a complete read-only CDX caption preview against a public source contract,
    with original fixtures, actual CLI/MCP/socket/native Open/capture/Unicode Save/
    reopen and refusal evidence. Lock font reference/charset, page size, left baseline,

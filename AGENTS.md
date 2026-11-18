@@ -11,8 +11,9 @@ atomic commits and checking its head/result. Never bypass protection, force-push
 shared history or infer release publication. Actions stays OFF through feature merges.
 See docs/branch-lifecycle.md and STATUS for the actual active branch and recovery ledger.
 PR1 landed the old199-commit feature branch; inactive local refs are under archive/2026-11-18,
-with working files preserved. The current resource task uses feat/cdx-resources-integration
-and core worker feat/cdx-resources. No archived prototype is automatically eligible for main.
+with working files preserved. PR3 landed the standalone CDX resource query.
+The current `feat/cdx-string` task follows `docs/research/cdx-string.md`. No archived
+prototype is automatically eligible for main.
 This supersedes old no-push/no-merge/current-multiple-bonds notes; full M0–M5 stays active.
 
 Read `docs/research/cdx-resources.md` and `docs/verification-cdx-resources.md` before
