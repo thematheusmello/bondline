@@ -1480,3 +1480,6 @@ mod mixed_label_app_tests;
 
 #[path = "label_metadata_app_tests.rs"]
 mod label_metadata_app_tests;
+
+#[path = "cdx_literal_app_tests.rs"]
+mod cdx_literal_app_tests;
