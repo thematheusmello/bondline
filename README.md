@@ -321,8 +321,8 @@ After setting up the pinned [external test consumers](docs/development.md):
 ```sh
 cargo fmt --all -- --check
 cargo clippy --workspace --all-targets --locked -- -D warnings
-cargo test --workspace --locked
-cargo xtask ci
+BONDLINE_PYTHON="$PWD/.venv/bin/python" cargo test --workspace --locked
+BONDLINE_PYTHON="$PWD/.venv/bin/python" cargo xtask ci
 ```
 
 GitHub Actions is disabled during development to control costs. Run the local checks

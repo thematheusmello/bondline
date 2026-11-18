@@ -14,9 +14,10 @@ BONDLINE_PYTHON="$PWD/.venv/bin/python" cargo test --workspace --locked
 BONDLINE_PYTHON="$PWD/.venv/bin/python" cargo xtask ci
 ```
 
-On Windows, use `python -m venv .venv` and `.venv\Scripts\python.exe`; set BONDLINE_PYTHON
-to that interpreter in the invoking shell. If it is unset, tests use python3 on Unix and
-python on Windows. A missing or different oracle version fails explicitly, never skips.
+On Windows, use `python -m venv .venv` and `.venv\Scripts\python.exe`. Set
+`BONDLINE_PYTHON` to the pinned interpreter for workspace checks. Some independent CDX
+checks require the explicit setting. Individual checks may fall back to system Python
+and still require the pinned oracle versions.
 The current Mac's new consumers are isolated under ignored .cache/oracles/format-python;
 the system environment was not changed. Both documented .venv and BONDLINE_PYTHON selection
 work the same way. RDKit is only an independent file consumer here; Bondline does not gain
