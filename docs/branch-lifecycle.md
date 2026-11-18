@@ -30,8 +30,11 @@ raw string readers. Both source branch tips are reachable from main and their
 remote refs have been retired. [PR 5](https://github.com/thematheusmello/bondline/pull/5)
 landed caption preview at `9f27fe9`. Its tree equals the reviewed tip and its
 remote feature ref was retired. See [caption verification](verification-cdx-caption-preview.md).
-The next branch `feat/cdx-caption-order` follows the
-[ordering contract](research/cdx-caption-order.md).
+[PR 6](https://github.com/thematheusmello/bondline/pull/6) landed the
+[ordered caption increment](verification-cdx-caption-order.md) at `a13a0f4`.
+Its tree matches the reviewed tip and its merged ref is retired.
+The [explicit run contract](research/cdx-caption-runs.md) follows on
+`feat/cdx-caption-runs`.
 
 ## Main integration checkpoint
 

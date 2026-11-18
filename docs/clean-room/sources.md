@@ -1,5 +1,11 @@
 # Clean-room source register
 
+The [explicit CDX caption runs contract](../research/cdx-caption-runs.md) uses
+the CDXString and Unicode encoding specifications and OpenType pair/ligature
+definitions reviewed 2026-11-18. It checks style boundaries where offset
+units agree, retains all literal styles and verifies joins against the existing
+licensed Roboto font and the independently extracted font facts.
+
 The [CDX caption ordering contract](../research/cdx-caption-order.md) records the
 published Page/Text containment, scoped source IDs and signed ZOrder semantics
 reviewed 2026-11-18. The exact-source projection uses the existing read-only

@@ -1,0 +1,1133 @@
+{
+  "font": {
+    "sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+    "ascii_ligature_joins": [
+      "ff",
+      "fi",
+      "fl",
+      "st"
+    ],
+    "pair_units": {
+      "AV": -87,
+      "V ": 0,
+      " H": 0,
+      " T": -40,
+      " λ": 0,
+      "Hg": 0,
+      " g": 0,
+      "dl": 0
+    }
+  },
+  "cases": {
+    "mixed_runs": {
+      "file": "mixed_runs.cdx",
+      "sha256": "7566ff6b374b51dc19c26d55426be04da1320a75a80bbb5f6c68d6c40604def3",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "AV",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 24,
+                      "face": 0,
+                      "rgb": [
+                        1.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": " ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 16,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "Hg",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 32,
+                      "face": 0,
+                      "rgb": [
+                        0.2500038147554742,
+                        0.5000076295109483,
+                        0.7500114442664225
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 3,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              480,
+              3
+            ],
+            [
+              2,
+              0,
+              0,
+              320,
+              0
+            ],
+            [
+              3,
+              0,
+              0,
+              640,
+              4
+            ]
+          ],
+          "body_sha256": "0470700edbb897bc10fc1611a3721478520330c6b47498de57d5f902b03c4f27"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6"
+      }
+    },
+    "unicode_tail": {
+      "file": "unicode_tail.cdx",
+      "sha256": "c47e76a65d02ff9b4562d7b521e8d3a800f420121cfabd3f4466f30a2055a8f7",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "λΩé",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 13,
+                      "face": 0,
+                      "rgb": [
+                        0.2500038147554742,
+                        0.5000076295109483,
+                        0.7500114442664225
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              2,
+              0,
+              0,
+              260,
+              3
+            ]
+          ],
+          "body_sha256": "79c3d5e6419d2378ba3fcb0df8c69e06094091589f2118fc06c558b9d98281f9"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6"
+      }
+    },
+    "font_one": {
+      "file": "font_one.cdx",
+      "sha256": "d11588df51b96a07884b9edcb016c740ad63b542ece37405e183c2412219e69f",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "H",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "g",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "77291232118bec95706135c02576ae1bb16739df6cdfd85fa1b430b129aaa5d7"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "ordered_peer": {
+      "file": "ordered_peer.cdx",
+      "sha256": "1312211d0b557332dfb631fa02d4153eddc639a2fe8f509b3fe420eb94a5b6a9",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "AV",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "position": {
+                  "x_pt": 130.0,
+                  "y_pt": 145.0
+                },
+                "runs": [
+                  {
+                    "text": "H ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12,
+                      "face": 0,
+                      "rgb": [
+                        0.2500038147554742,
+                        0.5000076295109483,
+                        0.7500114442664225
+                      ]
+                    }
+                  },
+                  {
+                    "text": "g",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              3
+            ],
+            [
+              2,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "1235fdc0e8f98f93e030356b8309530322b9d31f47478d79fa673f4762e2ce74"
+        },
+        {
+          "owner_id": 17,
+          "count": 1,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "10203ae4fc14a963f9d30ab2a1d0e52f2d824b30911118a9cc5089e1e0e6c969"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6"
+      }
+    },
+    "legacy_two_runs": {
+      "file": "../two_runs.cdx",
+      "sha256": "aa17275bad012a2b189b37da99047c8867645a64322bdc2c41a249f860e9938b",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.25,
+                  "y_pt": 100.75
+                },
+                "runs": [
+                  {
+                    "text": "Bond",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "line",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "35c647e6f40edf31cb3c562c52ddbda0f5f2f95aaa72e7b853772ed2bec228cf"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "initial_gap": {
+      "file": "initial_gap.cdx",
+      "sha256": "80fa874397a878b94e9efd9e6a8f384d67c7333e42f1fb74e86e1ff07f54ce79",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              1,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              2,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "35579874af1e0d50b4a4bccd368417be6809cd1fea7767276d9ab4690ba42c7e"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "duplicate_start": {
+      "file": "duplicate_start.cdx",
+      "sha256": "06d4b3aa12a5cd66d16e4917cedf8f0bb3811bfdb6a194102fc28bf2f179182e",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 3,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              2,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "35579874af1e0d50b4a4bccd368417be6809cd1fea7767276d9ab4690ba42c7e"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "descending_start": {
+      "file": "descending_start.cdx",
+      "sha256": "252746a552e0590099f66532b83defc8120ffa6ba47a8d1a692891b87faf975e",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 3,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              2,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "84a739705287c33f3467b0ddecec59e17f3101c1c2663da9eb39c454b7fd6f87"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "empty_tail": {
+      "file": "empty_tail.cdx",
+      "sha256": "c2ba13b067cd7b6965eb6cd2cd0b8e6cb4a21145e22cb71b04559385eb834eba",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              2,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "77291232118bec95706135c02576ae1bb16739df6cdfd85fa1b430b129aaa5d7"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "past_tail": {
+      "file": "past_tail.cdx",
+      "sha256": "d82922d15c40a3315753939e81486cafd66437a6e5bf5809e1b3dfd201a4d8ab",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              65535,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "77291232118bec95706135c02576ae1bb16739df6cdfd85fa1b430b129aaa5d7"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "ambiguous_utf8": {
+      "file": "ambiguous_utf8.cdx",
+      "sha256": "6a9f885deaf36812caa2c5e51d6ba78a2d002aae2e79e336bb4536650abb7e91",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              3,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "ef48ed57da7fbc8950552eddcbf0240752c03af39d2df3d0d1f057350785dd65"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "split_utf8_scalar": {
+      "file": "split_utf8_scalar.cdx",
+      "sha256": "79d6150a6a961914506ce2e5950b85831f25a0a32fa433c543659462575268b7",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              2,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "dbf70ebdea35947e5afb4be43522255fd5558ab313639039d0e77ff9f981c776"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "late_invalid_utf8": {
+      "file": "late_invalid_utf8.cdx",
+      "sha256": "472043b1abef865640f5f2081f8646551e951513611715b550a6b0b81a87ca70",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "c6b35a4d747a9aa164b376dbe8a5f01d3e02a8860a56961c7ba632458465b45a"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "late_font_ordinal": {
+      "file": "late_font_ordinal.cdx",
+      "sha256": "c02f72a899b4c29f59e2f599ad7922f37bd8b451d1fb4976db79744ba9b810de",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              7,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "77291232118bec95706135c02576ae1bb16739df6cdfd85fa1b430b129aaa5d7"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "late_charset": {
+      "file": "late_charset.cdx",
+      "sha256": "506f1a8b58bf714cb3182beb708822060b1b7baa68a4971562983c256644cc78",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "77291232118bec95706135c02576ae1bb16739df6cdfd85fa1b430b129aaa5d7"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "late_face": {
+      "file": "late_face.cdx",
+      "sha256": "569188d82ac6ade05529971f66fa4c4b19c422252930899b522c1338d9ac6c34",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              0,
+              1,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "77291232118bec95706135c02576ae1bb16739df6cdfd85fa1b430b129aaa5d7"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "late_ink": {
+      "file": "late_ink.cdx",
+      "sha256": "b6f8346487bedc52a154a1c7804aad73d5b3342f9d3966e487d19c92a99d8c49",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              240,
+              4
+            ]
+          ],
+          "body_sha256": "77291232118bec95706135c02576ae1bb16739df6cdfd85fa1b430b129aaa5d7"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 6"
+      }
+    },
+    "late_em": {
+      "file": "late_em.cdx",
+      "sha256": "9cd6b1fe32c60c4db9ce403edef69392d7805643477e3131510d6560cdc6702f",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              159,
+              0
+            ]
+          ],
+          "body_sha256": "77291232118bec95706135c02576ae1bb16739df6cdfd85fa1b430b129aaa5d7"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "pair_kern": {
+      "file": "pair_kern.cdx",
+      "sha256": "65d625a7680be4b99213638d007884da211c7b513eecca1876f30a5993b61e8b",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "10203ae4fc14a963f9d30ab2a1d0e52f2d824b30911118a9cc5089e1e0e6c969"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "space_pair_kern": {
+      "file": "space_pair_kern.cdx",
+      "sha256": "784aa1da71dd4d91f7576f4ec59429e934fb194b656405e5ca728ea8a6cb9ac5",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              2,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "8fce19408b047c5042403f25dfe0e3bb094ad3717ed8b5064cf1598354561ec9"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "ligature_fi": {
+      "file": "ligature_fi.cdx",
+      "sha256": "537df3675a4c2134f862299eefec2d807a9df36e279430db5bbda2b16bec525c",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "b4bdc848109722a383d0a972c6eb859f2abd29565b8c4cc7199e7c9eb708f1b7"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "ligature_fl": {
+      "file": "ligature_fl.cdx",
+      "sha256": "cd61d9a829f33d5475b184a5aca57dc72dd0c8d0d91dd658edfbfeab2e9bcf13",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "593f2d04aab251f60c9e4b8bbc1e05a34e920980ec08351a18459b2bc7dbf2f6"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "ligature_ff": {
+      "file": "ligature_ff.cdx",
+      "sha256": "5b95a0a47252d2687956bf5ae3e1c594ca0e51c568cbdc4ac1ed04045bef07c4",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "05a9bf223fedf80a9d0da5f73f5c191a665bf4a0a4a3e608f2f9e7d5ff23959c"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "ligature_st": {
+      "file": "ligature_st.cdx",
+      "sha256": "9a9422f70cf7760ef2fb89f49c87efc77b298a26996fe95254950a245b754fba",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 2,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "56af4bde70a47ae7d0f1ebb30e45ed336165d5c9ec00ba9a92311e33a4256d74"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    },
+    "run_limit": {
+      "file": "run_limit.cdx",
+      "sha256": "ed9f25ea549bc0d315322e24250f154803580b07bb5880ea967f043bd0883c60",
+      "model": null,
+      "source_runs": [
+        {
+          "owner_id": 73,
+          "count": 4097,
+          "words": [
+            [
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              4096,
+              0,
+              0,
+              240,
+              0
+            ]
+          ],
+          "body_sha256": "3919896ce8e6da9d8e5833e74f568430c32b69b4b6201843b7eee001f69618fa"
+        }
+      ],
+      "legacy": {
+        "code": "unsupported_content",
+        "detail": "unsupported object 0x8006 at record 5"
+      }
+    }
+  }
+}

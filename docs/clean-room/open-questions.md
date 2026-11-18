@@ -15,6 +15,9 @@ The published datatype does not establish which length unit every encoding uses 
 styled run boundaries, or resolve font ordinal versus declared ID. Code-page and
 UTF8Text precedence, inherited styles, omitted-position fallback, text wrapping and
 bounding-box placement need separate proof before they can grant display or editing.
+The [explicit run contract](../research/cdx-caption-runs.md) covers starts where
+the units agree. Joins with pair adjustment or a possible ligature, and
+general shaping, stay open.
 
 ## CDX font/colour resources, 2026-11-18
 
