@@ -1,5 +1,12 @@
 # Open questions
 
+## CDX Node label interpretation, 2026-11-18
+
+The [CDX Node label contract](../research/cdx-node-labels.md) retains explicit
+child data. Layout with missing bounds or position, alignment/justification
+precedence, inherited styles, label versus chemical field agreement and
+editing the original CDX remain open.
+
 ## CDX caption ordering, 2026-11-18
 
 The [ZOrder description](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ZOrder.htm)

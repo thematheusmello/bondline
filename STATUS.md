@@ -6,7 +6,9 @@ caption preview at `9f27fe9`. Its merge tree matches the reviewed tip `dbb821e`.
 The remote feature ref was retired after the ancestry check.
 [PR 6](https://github.com/thematheusmello/bondline/pull/6) landed ordered captions
 at `a13a0f4`. The tree matches `7ed63cc` and its merged ref is retired.
-`feat/cdx-caption-runs` starts from that main revision. The native/GPU license
+[PR 7](https://github.com/thematheusmello/bondline/pull/7) landed explicit caption
+runs at `4d8ae68`. Its tree matches `2808443` and the merged ref is retired.
+`feat/cdx-node-labels` starts from that main revision. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
 commit as the user requires. The user now expressly authorizes merging completed feature
@@ -158,10 +160,9 @@ authoring remain open. Evidence is in
 
 ### Next executable work
 
-1. Source-lock CDX Node child Text projection into the existing owned
-   AtomLabel model. Preserve both authored text and numeric fields, and freeze
-   independent owner, resource and precedence witnesses. Grant display only
-   with separate placement and label agreement evidence.
+1. Implement the [CDX Node child Text contract](docs/research/cdx-node-labels.md)
+   with independent RED/GREEN and exact file checks. Grant display only with
+   separate placement and label agreement evidence.
 2. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 
