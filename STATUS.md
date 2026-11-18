@@ -55,18 +55,40 @@ jobs are terminal. Logs and seed receipts are under
 `target/cdx-resources/resume.lQ1sz7`. No user app or drawing was re-opened. The isolated
 resource worktree remains recoverable. GitHub Actions is off.
 
+### Verified raw CDXString data
+
+The [raw string reader](docs/verification-cdx-string.md) is implemented on
+`feat/cdx-string`, based on the resources merge. Raw property handles, UINT16
+run fields and text bytes stay exact. An independent 32-source oracle checks all
+five envelopes, 131,070 maximum-count entries, long text and invalid prefixes
+confined to their own property. The API compiler probe preceded the four passing
+runtime tests. Three test-only lint corrections retained the same expected errors.
+
+The qualified local gate passed **2,206/0/1** workspace tests across 324 reports
+and **3/0** AccessKit tests, plus fmt, clippy, layers, licenses, assets and corpus.
+ASan passed 10,000 runs on 32 immutable seeds. Its maximum observed mutation was
+623,179 bytes. The seed sets reproduced exactly. The verification page links the
+reproducible recipe, fixture hashes and logs at
+`target/cdx-resources/next-text/raw-query.HoJhSI`. The app Open/Save and rendering
+production paths are unchanged for this standalone increment.
+Standalone 51/0 and parser-library cross-checks for Windows MSVC, Linux GNU and
+WebAssembly passed. App execution remains unverified there.
+
 ### Next executable work
 
-1. Follow the [locked raw CDXString API](docs/research/cdx-string.md). Freeze the
-   independent original-byte fixtures and query tests before the compiler probe and
-   implementation. The fixture worker owns only ignored output beneath
-   `target/cdx-resources/next-text/raw-string-fixtures`. Root owns tracked integration.
-2. Deliver a complete read-only CDX caption preview against a public source contract,
-   with original fixtures, actual CLI/MCP/socket/native Open/capture/Unicode Save/
-   reopen and refusal evidence. Lock font reference/charset, page size, left baseline,
-   foreground and white background proofs first. Keep this display capability
-   separate from CDXML caption edits and from general chemical authority.
-3. Continue the broader M1 styles, labels, objects, editable source and formats, then
+1. Finish the direct-Page read-only caption contract using
+   `target/cdx-resources/next-text/caption-contract-draft.md` and the independent
+   witnesses under `caption-fixtures` in the same directory. The actual legacy CLI
+   refused all 75 current candidates with `unsupported_content`; exact details,
+   including the 12 planned positives, are frozen in `caption-baseline.json`
+   (SHA-256 `55862eaea4c6e50cfbe4aea815233ba48f16d87805a4d0755b3c6faba4a45910`).
+2. Freeze an existing-API runtime Open/capture RED, then implement the separate
+   CDX display proof with explicit Page/font/colour/baseline and complete source
+   guards. Use the existing shared scene and leave CDXML caption edits and
+   chemical authoring separate. Verify nonmatching legacy errors, model-only
+   resize/Undo, stale owners, actual adapters, CPU/GPU, and owned native Unicode
+   Save/reopen.
+3. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/

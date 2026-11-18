@@ -5,6 +5,21 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Raw CDXString records
+
+`cdx_parse` compares the raw string query with the original bytes of every
+property. It checks the count and run extent within that property, original
+handle and borrowed text identity, five raw UINT16 fields and absolute ranges.
+
+```sh
+python3 -B fuzz/seed_cdx_strings.py .cache/fuzz/cdx-strings-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdx_parse .cache/fuzz/cdx-strings-example/corpus -- -runs=10000 -seed=926476187 -max_len=1048576 -timeout=5 -rss_limit_mb=2048
+```
+
+The seed generator verifies 32 original inputs, including 65,535-run styles,
+text larger than 65,535 bytes, and malformed prefixes followed by other
+properties. See [string verification](../docs/verification-cdx-string.md).
+
 ## CDX font and colour resources
 
 `cdx_parse` checks table ownership and duplicate discovery against the original

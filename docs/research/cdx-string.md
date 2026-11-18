@@ -1,5 +1,8 @@
 # Raw CDXString values
 
+The standalone query is implemented. See [verification](../verification-cdx-string.md)
+for the independent results and [fixture provenance](../../crates/cdx/tests/fixtures/raw-strings/SOURCES.md).
+
 The public [CDXString datatype](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXString.htm)
 stores a little-endian unsigned 16-bit run count, ten bytes per run and the remaining
 text bytes. Each run contains five unsigned 16-bit fields in order: start, font,

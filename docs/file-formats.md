@@ -5,6 +5,11 @@ on demand. It preserves declared IDs, raw font names and charsets, raw RGB16 cha
 and the distinction between absent and present tables. The app retains the old
 guarded open and save path, including files whose resource query fails.
 
+The standalone [CDXString reader](verification-cdx-string.md) borrows the text bytes
+and exposes raw start, font, face, size and colour words within the selected property.
+It preserves zero run counts, unusual start words and long text under the existing source
+limit. Caption projection needs separate evidence for font selection, decoding and layout.
+
 The [plain CDX bond projection](verification-cdx-plain-bonds.md) reads binary Order1/2/4,
 absent/explicit Solid and six directed DoublePosition encodings. Absence remains
 Unspecified; automatic/manual mode survives only in raw source. Display2/position on
@@ -185,7 +190,7 @@ new source authority, root inheritance, CDX flag projection or default-tool migr
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Standalone syntax, new-tree writer and typed font/colour resource query. Atomic I/O for guarded unchanged files with literal atom metadata and plain bonds | Independent source/owner/boundary checks, actual CLI and native Mac file evidence. Resource query checks cover 48 original sources. [Resources](verification-cdx-resources.md), [plain bonds](verification-cdx-plain-bonds.md) | Faithful preview, other bonds/styles, Text/query/stereo mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
+| CDX | Standalone syntax, new-tree writer, raw font/colour tables and CDXString reader. Atomic I/O for guarded unchanged files with literal atom metadata and plain bonds | Independent source, handle and boundary checks, actual CLI and native Mac file evidence. [Resources](verification-cdx-resources.md), [strings](verification-cdx-string.md), [plain bonds](verification-cdx-plain-bonds.md) | Faithful preview, other bonds/styles, Text/query/stereo mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000/V3000 | Complete mixed-version session/native Mac files, occurrence inspector and existing-value editor, source-preserving capture and read-only Actual/Zoom/pan preview | Exact raw spans/order/versions, pinned corpus and unchanged raw/per-MOL consumers; bounded Mac files/field edits/Actual/pan; actual-App wheel/DPI/source freshness and edit→preview→Save/reopen; command/adapter guards and earlier bounded ASAN | Native wheel/physical-DPI/new combined edit-preview acceptance, record creation/reordering and field-header editing, broader layout/chemistry, fetched mixed-version corpus, syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |

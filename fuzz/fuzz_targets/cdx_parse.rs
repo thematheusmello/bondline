@@ -1,7 +1,50 @@
 #![no_main]
 
-use bondline_cdx::{Document, Error, Framing, Record, RecordKind, ResourceError, Writer};
+use bondline_cdx::{
+    Document, Error, Framing, Record, RecordKind, ResourceError, StringError, Writer,
+};
 use libfuzzer_sys::fuzz_target;
+
+fn check_string(document: &Document<'_>, index: usize, record: &Record) {
+    let RecordKind::Property { payload, .. } = record.kind() else {
+        return;
+    };
+    let raw = &document.as_bytes()[payload.clone()];
+    let shape = raw.first_chunk::<2>().and_then(|count| {
+        let runs_end = 2 + usize::from(u16::from_le_bytes(*count)) * 10;
+        raw.get(2..runs_end).zip(raw.get(runs_end..))
+    });
+    let result = document.string(record);
+    let Some((styles, text)) = shape else {
+        assert_eq!(
+            result.unwrap_err(),
+            StringError::InvalidPayload { record: index }
+        );
+        return;
+    };
+    let view = result.unwrap();
+    assert!(std::ptr::eq(view.record(), record));
+    assert!(std::ptr::eq(view.text_bytes(), text));
+    assert_eq!(view.text_range(), payload.end - text.len()..payload.end);
+    let runs = view.runs();
+    assert_eq!(runs.len(), styles.len() / 10);
+    for (ordinal, (run, raw_run)) in runs.zip(styles.chunks_exact(10)).enumerate() {
+        let start = payload.start + 2 + ordinal * 10;
+        assert_eq!(run.range(), start..start + 10);
+        assert!(
+            [
+                run.start(),
+                run.font(),
+                run.face(),
+                run.size_twentieths(),
+                run.color(),
+            ]
+            .into_iter()
+            .flat_map(u16::to_le_bytes)
+            .eq(raw_run.iter().copied())
+        );
+    }
+}
 
 fn check_resources(document: &Document<'_>) {
     let result = document.resources();
@@ -221,11 +264,12 @@ fuzz_target!(|data: &[u8]| {
     assert_eq!(document.as_bytes(), data);
     assert_eq!(document.to_bytes(), data);
     let mut offset = document.header().len();
-    for record in document.records() {
+    for (index, record) in document.records().iter().enumerate() {
         let range = record.range();
         assert_eq!(range.start, offset);
         assert!(range.end <= data.len());
         offset = range.end;
+        check_string(&document, index, record);
     }
     assert_eq!(offset, data.len());
     check_resources(&document);

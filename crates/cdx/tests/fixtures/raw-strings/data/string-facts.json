@@ -1,0 +1,4213 @@
+{
+  "zero_empty": {
+    "framing": "ImplicitDocument",
+    "byte_length": 100,
+    "sha256": "2764fc90558d64f5c0c15a55600c0693be811a9c3c883555ae34e5bdf6a48a26",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          67
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          67
+        ],
+        "payload": {
+          "byte_length": 2,
+          "sha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+          "hex": "0000"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          67,
+          98
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          71,
+          98
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          98,
+          100
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        67
+      ],
+      "run_count": 0,
+      "runs_range": [
+        67,
+        67
+      ],
+      "runs_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runs_compact": false,
+      "runs": [],
+      "text_range": [
+        67,
+        67
+      ],
+      "text": {
+        "byte_length": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "hex": ""
+      }
+    }
+  },
+  "zero_control_bytes": {
+    "framing": "ImplicitDocument",
+    "byte_length": 108,
+    "sha256": "a807de342eaf2da5823a042a74a28bdda95e07275f5004c9e1e72e4987800061",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          75
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          75
+        ],
+        "payload": {
+          "byte_length": 10,
+          "sha256": "46993abf53ad8174b31b145621ec67579965e1b184a140171746fc338c410bd0",
+          "hex": "0000000d0a1b7f80e9ff"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          75,
+          106
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          79,
+          106
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          106,
+          108
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        75
+      ],
+      "run_count": 0,
+      "runs_range": [
+        67,
+        67
+      ],
+      "runs_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runs_compact": false,
+      "runs": [],
+      "text_range": [
+        67,
+        75
+      ],
+      "text": {
+        "byte_length": 8,
+        "sha256": "acf444ce7e84372411f810722f903471d1f1e6b32cfab5b8a243d1ae68684250",
+        "hex": "000d0a1b7f80e9ff"
+      }
+    }
+  },
+  "zero_all_bytes": {
+    "framing": "ImplicitDocument",
+    "byte_length": 356,
+    "sha256": "67578f59b31b82cbbfaea0aba54032528494004f73613d6a7fbefaccb2618f57",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          323
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          323
+        ],
+        "payload": {
+          "byte_length": 258,
+          "sha256": "09e4b35d1d479b97ba439323bca3a2526070500ea07698d0b4e66050e5f4aca3",
+          "prefix_hex": "0000000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d",
+          "suffix_hex": "e0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          323,
+          354
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          327,
+          354
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          354,
+          356
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        323
+      ],
+      "run_count": 0,
+      "runs_range": [
+        67,
+        67
+      ],
+      "runs_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runs_compact": false,
+      "runs": [],
+      "text_range": [
+        67,
+        323
+      ],
+      "text": {
+        "byte_length": 256,
+        "sha256": "40aff2e9d2d8922e47afd4648e6967497158785fbd1da870e7110266bf944880",
+        "prefix_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+        "suffix_hex": "e0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff"
+      }
+    }
+  },
+  "single_empty": {
+    "framing": "ImplicitDocument",
+    "byte_length": 110,
+    "sha256": "3e8ec6ed55a87ff614d945844c607a17924e59e6be9a7f316ca14912f98b1ece",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          77
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          77
+        ],
+        "payload": {
+          "byte_length": 12,
+          "sha256": "ad03129dd23c741ce88222ef94f7dd811d3d0e4cf5ec11e9e32a8b040e89b4cd",
+          "hex": "0100ffff2a000000f0000400"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          77,
+          108
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          81,
+          108
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          108,
+          110
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        77
+      ],
+      "run_count": 1,
+      "runs_range": [
+        67,
+        77
+      ],
+      "runs_sha256": "3f6d92473e957b411a38caa0bf72afc450f2ee12295294d5e272c4f0e76b0611",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 65535,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        }
+      ],
+      "text_range": [
+        77,
+        77
+      ],
+      "text": {
+        "byte_length": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "hex": ""
+      }
+    }
+  },
+  "single_size_240": {
+    "framing": "ImplicitDocument",
+    "byte_length": 118,
+    "sha256": "725e39b0cc4c89603ce275111702484d31500bb780a25ed30f741b025190117e",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          85
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          85
+        ],
+        "payload": {
+          "byte_length": 20,
+          "sha256": "d142a9fb6652c0772849efd31225ddb4fd4f42d76deb94df994163f124db7eb2",
+          "hex": "010000002a000000f0000400426f6e646c696e65"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          85,
+          116
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          89,
+          116
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          116,
+          118
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        85
+      ],
+      "run_count": 1,
+      "runs_range": [
+        67,
+        77
+      ],
+      "runs_sha256": "a960451f13068c143dcf6feeb22e3fb558780444a06c475aaa69daa3cb53184b",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        }
+      ],
+      "text_range": [
+        77,
+        85
+      ],
+      "text": {
+        "byte_length": 8,
+        "sha256": "35c647e6f40edf31cb3c562c52ddbda0f5f2f95aaa72e7b853772ed2bec228cf",
+        "hex": "426f6e646c696e65"
+      }
+    }
+  },
+  "single_size_241": {
+    "framing": "ImplicitDocument",
+    "byte_length": 118,
+    "sha256": "d264404223fd3e24550fcbbe3be45a6261a56305ac1d64e1df608f55aeff0e62",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          85
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          85
+        ],
+        "payload": {
+          "byte_length": 20,
+          "sha256": "ae2d4b3058353ae494de67cfe228366901802eb61b3b43f8da46bd8d9a5dd383",
+          "hex": "010000002a000000f1000400426f6e646c696e65"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          85,
+          116
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          89,
+          116
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          116,
+          118
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        85
+      ],
+      "run_count": 1,
+      "runs_range": [
+        67,
+        77
+      ],
+      "runs_sha256": "9cd19ba7e03610204ac25a3417f60c84cc77cda18cdda62e77dee5e2c3b8fa6a",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 241,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        }
+      ],
+      "text_range": [
+        77,
+        85
+      ],
+      "text": {
+        "byte_length": 8,
+        "sha256": "35c647e6f40edf31cb3c562c52ddbda0f5f2f95aaa72e7b853772ed2bec228cf",
+        "hex": "426f6e646c696e65"
+      }
+    }
+  },
+  "literal_zero_fields": {
+    "framing": "ImplicitDocument",
+    "byte_length": 111,
+    "sha256": "fcdab78914ce8dc729f7520318ff66cb727f197af29a8ea8611955c285708ce7",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          78
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          78
+        ],
+        "payload": {
+          "byte_length": 13,
+          "sha256": "6fe4edda9f73a1b097851d4b344d6f18c99184294e157bbd8c752c78bcfe2f78",
+          "hex": "010000000000000000000000ff"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          78,
+          109
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          82,
+          109
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          109,
+          111
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        78
+      ],
+      "run_count": 1,
+      "runs_range": [
+        67,
+        77
+      ],
+      "runs_sha256": "01d448afd928065458cf670b60f5a594d735af0172c8d67f22a81680132681ca",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 0,
+          "face": 0,
+          "size_twentieths": 0,
+          "color": 0,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        }
+      ],
+      "text_range": [
+        77,
+        78
+      ],
+      "text": {
+        "byte_length": 1,
+        "sha256": "a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89",
+        "hex": "ff"
+      }
+    }
+  },
+  "full_uint16_fields": {
+    "framing": "ImplicitDocument",
+    "byte_length": 114,
+    "sha256": "06717fd9a192b0e431f76af8375bfca527fd8fb40b6a3c3c863dbb56e8309d9d",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          81
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          81
+        ],
+        "payload": {
+          "byte_length": 16,
+          "sha256": "83cc8a2a86ff47827706d8636dd4d3525455c674fc9e27f4d1043285ca15f85d",
+          "hex": "0100ffffffffffffffffffff00ff0d0a"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          81,
+          112
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          85,
+          112
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          112,
+          114
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        81
+      ],
+      "run_count": 1,
+      "runs_range": [
+        67,
+        77
+      ],
+      "runs_sha256": "0083af118d18a63c6bb552f21d0c4ee78741f988ecd319d3cd06cb6c85a68a63",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 65535,
+          "font": 65535,
+          "face": 65535,
+          "size_twentieths": 65535,
+          "color": 65535,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        }
+      ],
+      "text_range": [
+        77,
+        81
+      ],
+      "text": {
+        "byte_length": 4,
+        "sha256": "e9489f37fb3051e9efa1dc916004d7274e7b63975e3209708947267f2393a9be",
+        "hex": "00ff0d0a"
+      }
+    }
+  },
+  "duplicate_starts": {
+    "framing": "ImplicitDocument",
+    "byte_length": 122,
+    "sha256": "9aad8ff4ba0c63928d8247e1939f930848d3d757e107d469b4b13c612d70ded3",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          89
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          89
+        ],
+        "payload": {
+          "byte_length": 24,
+          "sha256": "a9a5d31e17efc59bfd5b6d2d9140b20998a63da246460926fd549eae02941dea",
+          "hex": "0200000007000000f000040000000800fffff10005004142"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          89,
+          120
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          93,
+          120
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          120,
+          122
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        89
+      ],
+      "run_count": 2,
+      "runs_range": [
+        67,
+        87
+      ],
+      "runs_sha256": "ca865991676479dddac2f0c38281745c228f4faf13303478200bceca82a436cd",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        },
+        {
+          "start": 0,
+          "font": 8,
+          "face": 65535,
+          "size_twentieths": 241,
+          "color": 5,
+          "ordinal": 1,
+          "range": [
+            77,
+            87
+          ]
+        }
+      ],
+      "text_range": [
+        87,
+        89
+      ],
+      "text": {
+        "byte_length": 2,
+        "sha256": "38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153",
+        "hex": "4142"
+      }
+    }
+  },
+  "decreasing_starts": {
+    "framing": "ImplicitDocument",
+    "byte_length": 132,
+    "sha256": "bf2cea2e18cd0b67e0b356f0a23a6469e5af9b815efb62e0a22fa2061ea9e6d0",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          99
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          99
+        ],
+        "payload": {
+          "byte_length": 34,
+          "sha256": "39b093de5409c700b76e94d398df98aac12054060833aac5a0b118c28af53630",
+          "hex": "0300080001006000f0000200050002000000f100030000000300ffff0000ffff4142"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          99,
+          130
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          103,
+          130
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          130,
+          132
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        99
+      ],
+      "run_count": 3,
+      "runs_range": [
+        67,
+        97
+      ],
+      "runs_sha256": "030c9eaa24bd21b5b2053938ed3805832645cc7ee3bfd8357d5ad0b447504ae4",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 8,
+          "font": 1,
+          "face": 96,
+          "size_twentieths": 240,
+          "color": 2,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        },
+        {
+          "start": 5,
+          "font": 2,
+          "face": 0,
+          "size_twentieths": 241,
+          "color": 3,
+          "ordinal": 1,
+          "range": [
+            77,
+            87
+          ]
+        },
+        {
+          "start": 0,
+          "font": 3,
+          "face": 65535,
+          "size_twentieths": 0,
+          "color": 65535,
+          "ordinal": 2,
+          "range": [
+            87,
+            97
+          ]
+        }
+      ],
+      "text_range": [
+        97,
+        99
+      ],
+      "text": {
+        "byte_length": 2,
+        "sha256": "38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153",
+        "hex": "4142"
+      }
+    }
+  },
+  "out_of_range_starts": {
+    "framing": "ImplicitDocument",
+    "byte_length": 121,
+    "sha256": "6cb5247d18338538da024816e4117ff9b5e1f0c3a3286365513aa410472767e5",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          88
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          88
+        ],
+        "payload": {
+          "byte_length": 23,
+          "sha256": "cf44addf1492b4787c451ad712c711dd6d3213abe7a5709f0c10eb0c6baa05f1",
+          "hex": "0200ffff00000000000000000200ffffffffffffffff58"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          88,
+          119
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          92,
+          119
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          119,
+          121
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        88
+      ],
+      "run_count": 2,
+      "runs_range": [
+        67,
+        87
+      ],
+      "runs_sha256": "62b212fc22366c13e9e6167fcb690d30c30e77c852039f9a45a3bf1a4ac8b3b3",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 65535,
+          "font": 0,
+          "face": 0,
+          "size_twentieths": 0,
+          "color": 0,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65535,
+          "face": 65535,
+          "size_twentieths": 65535,
+          "color": 65535,
+          "ordinal": 1,
+          "range": [
+            77,
+            87
+          ]
+        }
+      ],
+      "text_range": [
+        87,
+        88
+      ],
+      "text": {
+        "byte_length": 1,
+        "sha256": "4b68ab3847feda7d6c62c1fbcbeebfa35eab7351ed5e78f4ddadea5df64b8015",
+        "hex": "58"
+      }
+    }
+  },
+  "scalar_byte_witness": {
+    "framing": "ImplicitDocument",
+    "byte_length": 198,
+    "sha256": "7de90858a826c01054ad9308bbd519de36fe3925a7aaa3fbd5518ca665142990",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          165
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          165
+        ],
+        "payload": {
+          "byte_length": 100,
+          "sha256": "fad3d0daeda3e9642ea7ce557cbf34d2f47455ecfc61b5a7b19de05df940072f",
+          "hex": "090000002a000000f000040001002a000000f100040002002a000000f000040003002a000000f100040004002a000000f000040005002a000000f100040007002a000000f000040008002a000000f1000400ffff2a000000f000040041c385f09f98805a"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          165,
+          196
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          169,
+          196
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          196,
+          198
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        165
+      ],
+      "run_count": 9,
+      "runs_range": [
+        67,
+        157
+      ],
+      "runs_sha256": "6e4d2cc8e7b873fdd9e2a5c34597c3ac2f320fcf798c8dbee0158d6ac9ad4a14",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        },
+        {
+          "start": 1,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 241,
+          "color": 4,
+          "ordinal": 1,
+          "range": [
+            77,
+            87
+          ]
+        },
+        {
+          "start": 2,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 2,
+          "range": [
+            87,
+            97
+          ]
+        },
+        {
+          "start": 3,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 241,
+          "color": 4,
+          "ordinal": 3,
+          "range": [
+            97,
+            107
+          ]
+        },
+        {
+          "start": 4,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 4,
+          "range": [
+            107,
+            117
+          ]
+        },
+        {
+          "start": 5,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 241,
+          "color": 4,
+          "ordinal": 5,
+          "range": [
+            117,
+            127
+          ]
+        },
+        {
+          "start": 7,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 6,
+          "range": [
+            127,
+            137
+          ]
+        },
+        {
+          "start": 8,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 241,
+          "color": 4,
+          "ordinal": 7,
+          "range": [
+            137,
+            147
+          ]
+        },
+        {
+          "start": 65535,
+          "font": 42,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 8,
+          "range": [
+            147,
+            157
+          ]
+        }
+      ],
+      "text_range": [
+        157,
+        165
+      ],
+      "text": {
+        "byte_length": 8,
+        "sha256": "393152f1f1b7a505c645eeea0b8f5833c7683dd42c941b7c52f2c010411390b9",
+        "hex": "41c385f09f98805a"
+      }
+    }
+  },
+  "style_looking_remainder": {
+    "framing": "ImplicitDocument",
+    "byte_length": 123,
+    "sha256": "710a03c4cf784f493bc4e5a56aa0ef39a66d3be68b808b3aaa1fcc17add7381d",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          90
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          90
+        ],
+        "payload": {
+          "byte_length": 25,
+          "sha256": "ff4cf3a80dae23624f62e57b6616a51723d8ddc5de4496ec272305e3abb94442",
+          "hex": "0100000007000100f0000400ffff03000500f1000200726177"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          90,
+          121
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          94,
+          121
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          121,
+          123
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        90
+      ],
+      "run_count": 1,
+      "runs_range": [
+        67,
+        77
+      ],
+      "runs_sha256": "9fbb8dd7fc17157619249bbe33ec0c7a43e854a967138c159801c49318ecfc8b",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 1,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        }
+      ],
+      "text_range": [
+        77,
+        90
+      ],
+      "text": {
+        "byte_length": 13,
+        "sha256": "cf1fd12bc97dc9a3ac3b4f39e9176d4502c5c3d4092c19e3e53bd6744e719f9c",
+        "hex": "ffff03000500f1000200726177"
+      }
+    }
+  },
+  "invalid_empty_payload": {
+    "framing": "ImplicitDocument",
+    "byte_length": 98,
+    "sha256": "d964c18db0c32e89c66f3c0d0613e7abeafb8d9de3ea5ba034a85776de16aa06",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          65
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          65
+        ],
+        "payload": {
+          "byte_length": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "hex": ""
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          65,
+          96
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          69,
+          96
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          96,
+          98
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": false,
+      "error": {
+        "kind": "InvalidPayload",
+        "record": 1
+      }
+    }
+  },
+  "invalid_one_byte": {
+    "framing": "ImplicitDocument",
+    "byte_length": 99,
+    "sha256": "631d28e2183ff20bba7d1aa7d3e31128a792744988057dea83d8ad2f6b943450",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          66
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          66
+        ],
+        "payload": {
+          "byte_length": 1,
+          "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+          "hex": "00"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          66,
+          97
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          70,
+          97
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          97,
+          99
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": false,
+      "error": {
+        "kind": "InvalidPayload",
+        "record": 1
+      }
+    }
+  },
+  "invalid_one_missing": {
+    "framing": "ImplicitDocument",
+    "byte_length": 100,
+    "sha256": "94f832dcd55490a96c3fc38122fbcd5fb3f26f8d07f2fc3c0eb1683e3e8d8abb",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          67
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          67
+        ],
+        "payload": {
+          "byte_length": 2,
+          "sha256": "47dc540c94ceb704a23875c11273e16bb0b8a87aed84de911f2133568115f254",
+          "hex": "0100"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          67,
+          98
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          71,
+          98
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          98,
+          100
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": false,
+      "error": {
+        "kind": "InvalidPayload",
+        "record": 1
+      }
+    }
+  },
+  "invalid_one_nine": {
+    "framing": "ImplicitDocument",
+    "byte_length": 109,
+    "sha256": "7caf0d83ad035199afd8719c6b50ffee56bb5d922d5aa9774346cbbc850bf6c9",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          76
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          76
+        ],
+        "payload": {
+          "byte_length": 11,
+          "sha256": "fd1b99579c88a4f533613a38dd643f7bd7e6cf97feeac1c95a0d90e68d7ae3db",
+          "hex": "0100000000000000000000"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          76,
+          107
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          80,
+          107
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          107,
+          109
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": false,
+      "error": {
+        "kind": "InvalidPayload",
+        "record": 1
+      }
+    }
+  },
+  "invalid_three_29": {
+    "framing": "ImplicitDocument",
+    "byte_length": 129,
+    "sha256": "740ebaca37aa1cd9df3c6bcd8562b21797a2125c7f9ffae99100bc5d2eece67f",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          96
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          96
+        ],
+        "payload": {
+          "byte_length": 31,
+          "sha256": "7c3a400f033cf69605b2ea0701025b124d0f597128323e9ca97bfba49e686971",
+          "hex": "03000000000000000000000000000000000000000000000000000000000000"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          96,
+          127
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          100,
+          127
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          127,
+          129
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": false,
+      "error": {
+        "kind": "InvalidPayload",
+        "record": 1
+      }
+    }
+  },
+  "plain_implicit": {
+    "framing": "ImplicitDocument",
+    "byte_length": 127,
+    "sha256": "4d35b6ae7c1b18903538c0322965a5289f4aa9f9cd26700cbeec4a8bddcf78be",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          94
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          94
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "4df2d0e2e805ab5b02235b1b91518422c2b2f4e4d1d6a320a163f9895528ef3e",
+          "hex": "0200000007000000f00004000200ffff6000f100030052617700ff0d0a"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          94,
+          125
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          98,
+          125
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          125,
+          127
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        94
+      ],
+      "run_count": 2,
+      "runs_range": [
+        67,
+        87
+      ],
+      "runs_sha256": "51b41578f0529e1b81a5cf7cc3ac352dd214ac35f0463edec4418350cdcc7697",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65535,
+          "face": 96,
+          "size_twentieths": 241,
+          "color": 3,
+          "ordinal": 1,
+          "range": [
+            77,
+            87
+          ]
+        }
+      ],
+      "text_range": [
+        87,
+        94
+      ],
+      "text": {
+        "byte_length": 7,
+        "sha256": "8133be345ac9b041623b0285da0bc1b788d9e389faa6e61d81f50b9eb708532e",
+        "hex": "52617700ff0d0a"
+      }
+    }
+  },
+  "plain_explicit": {
+    "framing": "ExplicitDocument",
+    "byte_length": 133,
+    "sha256": "434e8b735203fcb4e21a659d52c5a37cae44d9511966e207eec4ea4cb4ec38b7",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "object",
+        "parent": null,
+        "range": [
+          28,
+          34
+        ],
+        "tag": 32768,
+        "id": 73
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          34,
+          67
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          38,
+          67
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          67,
+          100
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          71,
+          100
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "4df2d0e2e805ab5b02235b1b91518422c2b2f4e4d1d6a320a163f9895528ef3e",
+          "hex": "0200000007000000f00004000200ffff6000f100030052617700ff0d0a"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          100,
+          131
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          104,
+          131
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 4,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          131,
+          133
+        ],
+        "matched": 0
+      }
+    ],
+    "query_record": 2,
+    "query": {
+      "ok": true,
+      "record": 2,
+      "tag": 16385,
+      "payload_range": [
+        71,
+        100
+      ],
+      "run_count": 2,
+      "runs_range": [
+        73,
+        93
+      ],
+      "runs_sha256": "51b41578f0529e1b81a5cf7cc3ac352dd214ac35f0463edec4418350cdcc7697",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            73,
+            83
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65535,
+          "face": 96,
+          "size_twentieths": 241,
+          "color": 3,
+          "ordinal": 1,
+          "range": [
+            83,
+            93
+          ]
+        }
+      ],
+      "text_range": [
+        93,
+        100
+      ],
+      "text": {
+        "byte_length": 7,
+        "sha256": "8133be345ac9b041623b0285da0bc1b788d9e389faa6e61d81f50b9eb708532e",
+        "hex": "52617700ff0d0a"
+      }
+    }
+  },
+  "plain_header": {
+    "framing": "HeaderDocument",
+    "byte_length": 129,
+    "sha256": "a84a1a4a7a5a790306fd136d8b17c51192adbce38d4273c18052adfc71dcd03e",
+    "header_range": [
+      0,
+      22
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "object",
+        "parent": null,
+        "range": [
+          22,
+          28
+        ],
+        "tag": 32768,
+        "id": 73
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          61,
+          94
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          94
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "4df2d0e2e805ab5b02235b1b91518422c2b2f4e4d1d6a320a163f9895528ef3e",
+          "hex": "0200000007000000f00004000200ffff6000f100030052617700ff0d0a"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          94,
+          125
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          98,
+          125
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 4,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          125,
+          127
+        ],
+        "matched": 0
+      },
+      {
+        "index": 5,
+        "kind": "file_end",
+        "parent": null,
+        "range": [
+          127,
+          129
+        ]
+      }
+    ],
+    "query_record": 2,
+    "query": {
+      "ok": true,
+      "record": 2,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        94
+      ],
+      "run_count": 2,
+      "runs_range": [
+        67,
+        87
+      ],
+      "runs_sha256": "51b41578f0529e1b81a5cf7cc3ac352dd214ac35f0463edec4418350cdcc7697",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65535,
+          "face": 96,
+          "size_twentieths": 241,
+          "color": 3,
+          "ordinal": 1,
+          "range": [
+            77,
+            87
+          ]
+        }
+      ],
+      "text_range": [
+        87,
+        94
+      ],
+      "text": {
+        "byte_length": 7,
+        "sha256": "8133be345ac9b041623b0285da0bc1b788d9e389faa6e61d81f50b9eb708532e",
+        "hex": "52617700ff0d0a"
+      }
+    }
+  },
+  "plain_implicit_file_end": {
+    "framing": "ImplicitDocumentFileEnd",
+    "byte_length": 129,
+    "sha256": "91cc5bce7a9164a825891e7bebbe1a0d03d3f52d3432de181bb497e55d2667ba",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          94
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          94
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "4df2d0e2e805ab5b02235b1b91518422c2b2f4e4d1d6a320a163f9895528ef3e",
+          "hex": "0200000007000000f00004000200ffff6000f100030052617700ff0d0a"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          94,
+          125
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          98,
+          125
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          125,
+          127
+        ],
+        "matched": null
+      },
+      {
+        "index": 4,
+        "kind": "file_end",
+        "parent": null,
+        "range": [
+          127,
+          129
+        ]
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 16385,
+      "payload_range": [
+        65,
+        94
+      ],
+      "run_count": 2,
+      "runs_range": [
+        67,
+        87
+      ],
+      "runs_sha256": "51b41578f0529e1b81a5cf7cc3ac352dd214ac35f0463edec4418350cdcc7697",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65535,
+          "face": 96,
+          "size_twentieths": 241,
+          "color": 3,
+          "ordinal": 1,
+          "range": [
+            77,
+            87
+          ]
+        }
+      ],
+      "text_range": [
+        87,
+        94
+      ],
+      "text": {
+        "byte_length": 7,
+        "sha256": "8133be345ac9b041623b0285da0bc1b788d9e389faa6e61d81f50b9eb708532e",
+        "hex": "52617700ff0d0a"
+      }
+    }
+  },
+  "plain_explicit_file_end": {
+    "framing": "ExplicitDocumentFileEnd",
+    "byte_length": 135,
+    "sha256": "8841f30979584c358adc65443269eefca6489d2986dabb804a124cd7eddaaadd",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "object",
+        "parent": null,
+        "range": [
+          28,
+          34
+        ],
+        "tag": 32768,
+        "id": 73
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          34,
+          67
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          38,
+          67
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          67,
+          100
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          71,
+          100
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "4df2d0e2e805ab5b02235b1b91518422c2b2f4e4d1d6a320a163f9895528ef3e",
+          "hex": "0200000007000000f00004000200ffff6000f100030052617700ff0d0a"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          100,
+          131
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          104,
+          131
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 4,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          131,
+          133
+        ],
+        "matched": 0
+      },
+      {
+        "index": 5,
+        "kind": "file_end",
+        "parent": null,
+        "range": [
+          133,
+          135
+        ]
+      }
+    ],
+    "query_record": 2,
+    "query": {
+      "ok": true,
+      "record": 2,
+      "tag": 16385,
+      "payload_range": [
+        71,
+        100
+      ],
+      "run_count": 2,
+      "runs_range": [
+        73,
+        93
+      ],
+      "runs_sha256": "51b41578f0529e1b81a5cf7cc3ac352dd214ac35f0463edec4418350cdcc7697",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            73,
+            83
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65535,
+          "face": 96,
+          "size_twentieths": 241,
+          "color": 3,
+          "ordinal": 1,
+          "range": [
+            83,
+            93
+          ]
+        }
+      ],
+      "text_range": [
+        93,
+        100
+      ],
+      "text": {
+        "byte_length": 7,
+        "sha256": "8133be345ac9b041623b0285da0bc1b788d9e389faa6e61d81f50b9eb708532e",
+        "hex": "52617700ff0d0a"
+      }
+    }
+  },
+  "extended_small": {
+    "framing": "ExplicitDocument",
+    "byte_length": 137,
+    "sha256": "c62976b8e62a0018c16454691cd221781fd736845d1903dac7db40ff9f0df025",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "object",
+        "parent": null,
+        "range": [
+          28,
+          34
+        ],
+        "tag": 32768,
+        "id": 73
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          34,
+          67
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          38,
+          67
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          67,
+          104
+        ],
+        "tag": 16385,
+        "encoding": "extended",
+        "payload_range": [
+          75,
+          104
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "4df2d0e2e805ab5b02235b1b91518422c2b2f4e4d1d6a320a163f9895528ef3e",
+          "hex": "0200000007000000f00004000200ffff6000f100030052617700ff0d0a"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          104,
+          135
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          108,
+          135
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 4,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          135,
+          137
+        ],
+        "matched": 0
+      }
+    ],
+    "query_record": 2,
+    "query": {
+      "ok": true,
+      "record": 2,
+      "tag": 16385,
+      "payload_range": [
+        75,
+        104
+      ],
+      "run_count": 2,
+      "runs_range": [
+        77,
+        97
+      ],
+      "runs_sha256": "51b41578f0529e1b81a5cf7cc3ac352dd214ac35f0463edec4418350cdcc7697",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            77,
+            87
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65535,
+          "face": 96,
+          "size_twentieths": 241,
+          "color": 3,
+          "ordinal": 1,
+          "range": [
+            87,
+            97
+          ]
+        }
+      ],
+      "text_range": [
+        97,
+        104
+      ],
+      "text": {
+        "byte_length": 7,
+        "sha256": "8133be345ac9b041623b0285da0bc1b788d9e389faa6e61d81f50b9eb708532e",
+        "hex": "52617700ff0d0a"
+      }
+    }
+  },
+  "opaque_tag_0700": {
+    "framing": "ImplicitDocument",
+    "byte_length": 127,
+    "sha256": "0c98d3a7a557c873bd3f8542208456badd32cc4c19576f2983036666a9456122",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          94
+        ],
+        "tag": 1792,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          94
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "4df2d0e2e805ab5b02235b1b91518422c2b2f4e4d1d6a320a163f9895528ef3e",
+          "hex": "0200000007000000f00004000200ffff6000f100030052617700ff0d0a"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          94,
+          125
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          98,
+          125
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          125,
+          127
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 1792,
+      "payload_range": [
+        65,
+        94
+      ],
+      "run_count": 2,
+      "runs_range": [
+        67,
+        87
+      ],
+      "runs_sha256": "51b41578f0529e1b81a5cf7cc3ac352dd214ac35f0463edec4418350cdcc7697",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65535,
+          "face": 96,
+          "size_twentieths": 241,
+          "color": 3,
+          "ordinal": 1,
+          "range": [
+            77,
+            87
+          ]
+        }
+      ],
+      "text_range": [
+        87,
+        94
+      ],
+      "text": {
+        "byte_length": 7,
+        "sha256": "8133be345ac9b041623b0285da0bc1b788d9e389faa6e61d81f50b9eb708532e",
+        "hex": "52617700ff0d0a"
+      }
+    }
+  },
+  "opaque_tag_0805": {
+    "framing": "ImplicitDocument",
+    "byte_length": 127,
+    "sha256": "88a188f946f1b5513ef9dcfe4c6c3209da4b5eb527fc90df597c58bf43731238",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          94
+        ],
+        "tag": 2053,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          94
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "4df2d0e2e805ab5b02235b1b91518422c2b2f4e4d1d6a320a163f9895528ef3e",
+          "hex": "0200000007000000f00004000200ffff6000f100030052617700ff0d0a"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          94,
+          125
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          98,
+          125
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          125,
+          127
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": true,
+      "record": 1,
+      "tag": 2053,
+      "payload_range": [
+        65,
+        94
+      ],
+      "run_count": 2,
+      "runs_range": [
+        67,
+        87
+      ],
+      "runs_sha256": "51b41578f0529e1b81a5cf7cc3ac352dd214ac35f0463edec4418350cdcc7697",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            67,
+            77
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65535,
+          "face": 96,
+          "size_twentieths": 241,
+          "color": 3,
+          "ordinal": 1,
+          "range": [
+            77,
+            87
+          ]
+        }
+      ],
+      "text_range": [
+        87,
+        94
+      ],
+      "text": {
+        "byte_length": 7,
+        "sha256": "8133be345ac9b041623b0285da0bc1b788d9e389faa6e61d81f50b9eb708532e",
+        "hex": "52617700ff0d0a"
+      }
+    }
+  },
+  "nested_user_object": {
+    "framing": "ExplicitDocument",
+    "byte_length": 158,
+    "sha256": "8a076eaa00583cc0d8283c7a4ee33682ae652925628b02bff4ff5938646cced6",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "object",
+        "parent": null,
+        "range": [
+          28,
+          34
+        ],
+        "tag": 32768,
+        "id": 73
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          34,
+          67
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          38,
+          67
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "object",
+        "parent": 0,
+        "range": [
+          67,
+          73
+        ],
+        "tag": 49443,
+        "id": 149
+      },
+      {
+        "index": 3,
+        "kind": "property",
+        "parent": 2,
+        "range": [
+          73,
+          90
+        ],
+        "tag": 16391,
+        "encoding": "short",
+        "payload_range": [
+          77,
+          90
+        ],
+        "payload": {
+          "byte_length": 13,
+          "sha256": "3d764e4bcbf22c6100b5609ddf4a852e232213887c098909397e7b5ef2a939d4",
+          "hex": "6e65737465642d6f726967696e"
+        }
+      },
+      {
+        "index": 4,
+        "kind": "property",
+        "parent": 2,
+        "range": [
+          90,
+          123
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          94,
+          123
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "4df2d0e2e805ab5b02235b1b91518422c2b2f4e4d1d6a320a163f9895528ef3e",
+          "hex": "0200000007000000f00004000200ffff6000f100030052617700ff0d0a"
+        }
+      },
+      {
+        "index": 5,
+        "kind": "end",
+        "parent": 0,
+        "range": [
+          123,
+          125
+        ],
+        "matched": 2
+      },
+      {
+        "index": 6,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          125,
+          156
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          129,
+          156
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 7,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          156,
+          158
+        ],
+        "matched": 0
+      }
+    ],
+    "query_record": 4,
+    "query": {
+      "ok": true,
+      "record": 4,
+      "tag": 16385,
+      "payload_range": [
+        94,
+        123
+      ],
+      "run_count": 2,
+      "runs_range": [
+        96,
+        116
+      ],
+      "runs_sha256": "51b41578f0529e1b81a5cf7cc3ac352dd214ac35f0463edec4418350cdcc7697",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 0,
+          "font": 7,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            96,
+            106
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65535,
+          "face": 96,
+          "size_twentieths": 241,
+          "color": 3,
+          "ordinal": 1,
+          "range": [
+            106,
+            116
+          ]
+        }
+      ],
+      "text_range": [
+        116,
+        123
+      ],
+      "text": {
+        "byte_length": 7,
+        "sha256": "8133be345ac9b041623b0285da0bc1b788d9e389faa6e61d81f50b9eb708532e",
+        "hex": "52617700ff0d0a"
+      }
+    }
+  },
+  "invalid_extended_one_nine": {
+    "framing": "ExplicitDocumentFileEnd",
+    "byte_length": 121,
+    "sha256": "d8f603b288f057eefd1cd7955669801db7abad59efd5fac0fd359183db395c31",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "object",
+        "parent": null,
+        "range": [
+          28,
+          34
+        ],
+        "tag": 32768,
+        "id": 73
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          34,
+          67
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          38,
+          67
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          67,
+          86
+        ],
+        "tag": 16385,
+        "encoding": "extended",
+        "payload_range": [
+          75,
+          86
+        ],
+        "payload": {
+          "byte_length": 11,
+          "sha256": "fd1b99579c88a4f533613a38dd643f7bd7e6cf97feeac1c95a0d90e68d7ae3db",
+          "hex": "0100000000000000000000"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          86,
+          117
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          90,
+          117
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 4,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          117,
+          119
+        ],
+        "matched": 0
+      },
+      {
+        "index": 5,
+        "kind": "file_end",
+        "parent": null,
+        "range": [
+          119,
+          121
+        ]
+      }
+    ],
+    "query_record": 2,
+    "query": {
+      "ok": false,
+      "error": {
+        "kind": "InvalidPayload",
+        "record": 2
+      }
+    }
+  },
+  "invalid_max_count_following_padding": {
+    "framing": "ImplicitDocument",
+    "byte_length": 655463,
+    "sha256": "5c90147704aeb448046e143c651c2125ee16a992b98bc2ae6a11ca709d887c8e",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          61,
+          76
+        ],
+        "tag": 16385,
+        "encoding": "short",
+        "payload_range": [
+          65,
+          76
+        ],
+        "payload": {
+          "byte_length": 11,
+          "sha256": "0c96453e00857d93667b8707aa250fca0c7783d874c973f38782573b4215ca5f",
+          "hex": "ffff000000000000000000"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": null,
+        "range": [
+          76,
+          655461
+        ],
+        "tag": 16387,
+        "encoding": "extended",
+        "payload_range": [
+          84,
+          655461
+        ],
+        "payload": {
+          "byte_length": 655377,
+          "sha256": "9d5adfb95506b24045b08e47a92bc3841e5ba26f04364512e455d8f07af62cf5",
+          "prefix_hex": "666f6c6c6f77696e672d70726f70657274792d626f756e646172790000000000",
+          "suffix_hex": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          655461,
+          655463
+        ],
+        "matched": null
+      }
+    ],
+    "query_record": 1,
+    "query": {
+      "ok": false,
+      "error": {
+        "kind": "InvalidPayload",
+        "record": 1
+      }
+    }
+  },
+  "long_text_65553": {
+    "framing": "HeaderDocument",
+    "byte_length": 65679,
+    "sha256": "51b153dcf517d1affe299bdf040586165da27aa13c6a771394d70c5a5cb4ed2c",
+    "header_range": [
+      0,
+      22
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "object",
+        "parent": null,
+        "range": [
+          22,
+          28
+        ],
+        "tag": 32768,
+        "id": 73
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          28,
+          61
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          32,
+          61
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          61,
+          65644
+        ],
+        "tag": 16385,
+        "encoding": "extended",
+        "payload_range": [
+          69,
+          65644
+        ],
+        "payload": {
+          "byte_length": 65575,
+          "sha256": "a1aa1a3a65e3006a7d515c95f228e8a8f267ae8a725743debee2d2cfa163b8e6",
+          "prefix_hex": "0200fffffffffffff100ffff000000000000f000000000010203040506070809",
+          "suffix_hex": "f1f2f3f4f5f6f7f8f9fafbfcfdfeff000102030405060708090a0b0c0d0e0f10"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          65644,
+          65675
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          65648,
+          65675
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 4,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          65675,
+          65677
+        ],
+        "matched": 0
+      },
+      {
+        "index": 5,
+        "kind": "file_end",
+        "parent": null,
+        "range": [
+          65677,
+          65679
+        ]
+      }
+    ],
+    "query_record": 2,
+    "query": {
+      "ok": true,
+      "record": 2,
+      "tag": 16385,
+      "payload_range": [
+        69,
+        65644
+      ],
+      "run_count": 2,
+      "runs_range": [
+        71,
+        91
+      ],
+      "runs_sha256": "6bfc2ccedbf1c574e0c25a088e732ef1f182710ab4db429d180a42267fac4569",
+      "runs_compact": false,
+      "runs": [
+        {
+          "start": 65535,
+          "font": 65535,
+          "face": 65535,
+          "size_twentieths": 241,
+          "color": 65535,
+          "ordinal": 0,
+          "range": [
+            71,
+            81
+          ]
+        },
+        {
+          "start": 0,
+          "font": 0,
+          "face": 0,
+          "size_twentieths": 240,
+          "color": 0,
+          "ordinal": 1,
+          "range": [
+            81,
+            91
+          ]
+        }
+      ],
+      "text_range": [
+        91,
+        65644
+      ],
+      "text": {
+        "byte_length": 65553,
+        "sha256": "4de6ff0a51a4cd16f2bb867a3f3ff954ee6509504b64ba03c20eb4b34adf2b81",
+        "prefix_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+        "suffix_hex": "f1f2f3f4f5f6f7f8f9fafbfcfdfeff000102030405060708090a0b0c0d0e0f10"
+      }
+    }
+  },
+  "max_runs_65535_empty": {
+    "framing": "ExplicitDocumentFileEnd",
+    "byte_length": 655462,
+    "sha256": "25cafbe35129f0bc8fabfb9d3d3a5d4059ed2cc0949a786677b3dd6cf210d11e",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "object",
+        "parent": null,
+        "range": [
+          28,
+          34
+        ],
+        "tag": 32768,
+        "id": 73
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          34,
+          67
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          38,
+          67
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          67,
+          655427
+        ],
+        "tag": 16385,
+        "encoding": "extended",
+        "payload_range": [
+          75,
+          655427
+        ],
+        "payload": {
+          "byte_length": 655352,
+          "sha256": "b27f2ed29f850b8924731c359d2f5865a9ad5cec402b0f6689473c42226cc012",
+          "prefix_hex": "ffffffff07006000f0000400feff500061010d010f00fdff990062022a011a00",
+          "suffix_hex": "cdff0300e3fe5cfc7c00d8ff02002cff5dfd9900e3ff010075ff5efeb600eeff"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          655427,
+          655458
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          655431,
+          655458
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 4,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          655458,
+          655460
+        ],
+        "matched": 0
+      },
+      {
+        "index": 5,
+        "kind": "file_end",
+        "parent": null,
+        "range": [
+          655460,
+          655462
+        ]
+      }
+    ],
+    "query_record": 2,
+    "query": {
+      "ok": true,
+      "record": 2,
+      "tag": 16385,
+      "payload_range": [
+        75,
+        655427
+      ],
+      "run_count": 65535,
+      "runs_range": [
+        77,
+        655427
+      ],
+      "runs_sha256": "8a49f76746127bbdb148d742c1449c1078071bf9f29eea43d60f2ee390070607",
+      "runs_compact": true,
+      "runs": [
+        {
+          "start": 65535,
+          "font": 7,
+          "face": 96,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            77,
+            87
+          ]
+        },
+        {
+          "start": 65534,
+          "font": 80,
+          "face": 353,
+          "size_twentieths": 269,
+          "color": 15,
+          "ordinal": 1,
+          "range": [
+            87,
+            97
+          ]
+        },
+        {
+          "start": 32768,
+          "font": 32702,
+          "face": 32607,
+          "size_twentieths": 32979,
+          "color": 32761,
+          "ordinal": 32767,
+          "range": [
+            327747,
+            327757
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65324,
+          "face": 64861,
+          "size_twentieths": 153,
+          "color": 65507,
+          "ordinal": 65533,
+          "range": [
+            655407,
+            655417
+          ]
+        },
+        {
+          "start": 1,
+          "font": 65397,
+          "face": 65118,
+          "size_twentieths": 182,
+          "color": 65518,
+          "ordinal": 65534,
+          "range": [
+            655417,
+            655427
+          ]
+        }
+      ],
+      "text_range": [
+        655427,
+        655427
+      ],
+      "text": {
+        "byte_length": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "hex": ""
+      }
+    }
+  },
+  "max_runs_65535_text": {
+    "framing": "ExplicitDocumentFileEnd",
+    "byte_length": 655466,
+    "sha256": "62b5f357b3845bcc14c186b60178e8385a1513a27c4c4fce188d76604ded660f",
+    "header_range": [
+      0,
+      28
+    ],
+    "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+    "records": [
+      {
+        "index": 0,
+        "kind": "object",
+        "parent": null,
+        "range": [
+          28,
+          34
+        ],
+        "tag": 32768,
+        "id": 73
+      },
+      {
+        "index": 1,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          34,
+          67
+        ],
+        "tag": 16386,
+        "encoding": "short",
+        "payload_range": [
+          38,
+          67
+        ],
+        "payload": {
+          "byte_length": 29,
+          "sha256": "8057987be3f76bde6cb1e7ee73f1c172197851258c641cc6c8d9bc0b3b2057e4",
+          "hex": "426f6e646c696e65206f726967696e616c2072617720737472696e6700"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          67,
+          655431
+        ],
+        "tag": 16385,
+        "encoding": "extended",
+        "payload_range": [
+          75,
+          655431
+        ],
+        "payload": {
+          "byte_length": 655356,
+          "sha256": "a98101bbe43c0231589e0002f488adf64e2b8d8e3f4cd97e578493a019bcac7a",
+          "prefix_hex": "ffffffff07006000f0000400feff500061010d010f00fdff990062022a011a00",
+          "suffix_hex": "e3fe5cfc7c00d8ff02002cff5dfd9900e3ff010075ff5efeb600eeff00ff8041"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "property",
+        "parent": 0,
+        "range": [
+          655431,
+          655462
+        ],
+        "tag": 16387,
+        "encoding": "short",
+        "payload_range": [
+          655435,
+          655462
+        ],
+        "payload": {
+          "byte_length": 27,
+          "sha256": "739e93fc0f7a4a64e07b1c4dd35f5f8179d765256f58da206ad01ae55c8cda98",
+          "hex": "666f6c6c6f77696e672d70726f70657274792d626f756e64617279"
+        }
+      },
+      {
+        "index": 4,
+        "kind": "end",
+        "parent": null,
+        "range": [
+          655462,
+          655464
+        ],
+        "matched": 0
+      },
+      {
+        "index": 5,
+        "kind": "file_end",
+        "parent": null,
+        "range": [
+          655464,
+          655466
+        ]
+      }
+    ],
+    "query_record": 2,
+    "query": {
+      "ok": true,
+      "record": 2,
+      "tag": 16385,
+      "payload_range": [
+        75,
+        655431
+      ],
+      "run_count": 65535,
+      "runs_range": [
+        77,
+        655427
+      ],
+      "runs_sha256": "8a49f76746127bbdb148d742c1449c1078071bf9f29eea43d60f2ee390070607",
+      "runs_compact": true,
+      "runs": [
+        {
+          "start": 65535,
+          "font": 7,
+          "face": 96,
+          "size_twentieths": 240,
+          "color": 4,
+          "ordinal": 0,
+          "range": [
+            77,
+            87
+          ]
+        },
+        {
+          "start": 65534,
+          "font": 80,
+          "face": 353,
+          "size_twentieths": 269,
+          "color": 15,
+          "ordinal": 1,
+          "range": [
+            87,
+            97
+          ]
+        },
+        {
+          "start": 32768,
+          "font": 32702,
+          "face": 32607,
+          "size_twentieths": 32979,
+          "color": 32761,
+          "ordinal": 32767,
+          "range": [
+            327747,
+            327757
+          ]
+        },
+        {
+          "start": 2,
+          "font": 65324,
+          "face": 64861,
+          "size_twentieths": 153,
+          "color": 65507,
+          "ordinal": 65533,
+          "range": [
+            655407,
+            655417
+          ]
+        },
+        {
+          "start": 1,
+          "font": 65397,
+          "face": 65118,
+          "size_twentieths": 182,
+          "color": 65518,
+          "ordinal": 65534,
+          "range": [
+            655417,
+            655427
+          ]
+        }
+      ],
+      "text_range": [
+        655427,
+        655431
+      ],
+      "text": {
+        "byte_length": 4,
+        "sha256": "3507b01e644277ad3cd10dadd6e33cb801151e62e3cb899a67409ef701d6079c",
+        "hex": "00ff8041"
+      }
+    }
+  }
+}
