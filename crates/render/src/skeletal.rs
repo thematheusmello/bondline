@@ -1,6 +1,29 @@
 use crate::{Cancellation, Error};
 use bondline_model::{Atom, AtomId, BondOrder, Fragment};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
+
+/// Return only explicitly hidden carbons without an authored label, using current geometry.
+///
+/// This reuses the existing display decision with literal H, without a resolved-count
+/// sidecar. Absence from the set is not proof that a glyph exists: legacy paths differ.
+/// The set alone grants no source, chemistry, physical-page or mutation authority.
+pub fn hidden_carbon_atoms(
+    fragment: &Fragment,
+    cancel: &Cancellation,
+) -> Result<BTreeSet<AtomId>, Error> {
+    cancel.check()?;
+    let labels = labels(fragment, None, cancel)?;
+    let mut hidden = BTreeSet::new();
+    for atom in fragment.atoms() {
+        cancel.check()?;
+        if atom.authored_label.is_none()
+            && matches!(labels.get(&atom.id), Some(CarbonLabel::Hidden))
+        {
+            hidden.insert(atom.id);
+        }
+    }
+    Ok(hidden)
+}
 
 pub(crate) enum CarbonLabel {
     Hidden,
