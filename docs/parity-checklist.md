@@ -11,6 +11,13 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
+The [scalar-metadata increment](verification-label-default-metadata.md) lets the existing
+qualified label/Selection workflows retain validated unused LabelFont/Size/Face values
+on supported source owners. Independent file/font/pixel/history/adapters and bounded
+native Mac Save/reopen pass. Actual runs remain explicit; omitted-field inheritance,
+rich typography and general foreign defaults stay missing. Registry49 and catalogue16/124
+are unchanged, with no new tool/menu/reference-parity promotion.
+
 The [explicit creation increment](verification-printed-label-creation.md) extends existing
 Alt atom editing to a qualified hidden carbon using a displayed original style. One49
 transaction preserves flags and stable source IDs; partial/all-printed files reopen for

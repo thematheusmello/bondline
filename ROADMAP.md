@@ -12,7 +12,17 @@ grey tool, passing component or partial milestone cannot complete it. Continue f
 STATUS rather than restarting or repeating historical next-task paragraphs. Actions
 stays OFF during development.
 
-The current M1 [printed-label creation receiving](docs/verification-printed-label-creation.md)
+The current M1 [scalar-default metadata receiving](docs/verification-label-default-metadata.md)
+qualifies explicit-label files carrying checked unused LabelFont/Size/Face on supported
+owners. Existing label/Selection/history/Unicode Save/reopen works through immutable
+source spans, with bounded native Mac, exact CPU/Metal and independent source/font/
+adapter/sanitizer evidence. Missing actual run fields remain refused: public omission
+examples do not resolve general Label*/Caption*/stylesheet inheritance. Registry49 and
+catalogue16/124 stay exact. Broader effective typography/rich labels remain required;
+continue the independent CDX literal-atom metadata workstream rather than guessing
+unproved inheritance. Full M0–M5 and all workflows below remain active/incomplete.
+
+The preceding M1 [printed-label creation receiving](docs/verification-printed-label-creation.md)
 adds explicit-style hidden-carbon child Text creation, retained flags, stable IDs and a
 separate source capability that survives partial/all-labelled Save/reopen. Native Mac
 creation/continued editing/history/movement/Unicode files and exact CPU/Metal captures

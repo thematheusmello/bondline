@@ -105,8 +105,21 @@ uses fresh own-window screenshots/coordinates; CJK filename-glyph limitations re
 
 The review is quit. An after-Quit AX probe reaches a fresh own Untitled instance, also
 quit; the exact bundle is absent from final inventory and originalPID40752 is absent.
-No protected user app/drawing is touched. Final aggregate checks are pending separately;
-native behavior is verified only for this bounded Mac workflow, not other platforms.
+No protected user app/drawing is touched. Native behavior is verified only for this
+bounded Mac workflow, not other platforms.
+
+## Final local gate
+
+Full98153 PASSES on code `c965607`: workspace2149/0/1 across317 reports, vendor3/0/0,
+workspace/vendor warnings-denied clippy, workspace fmt, layers, strict runtime licenses/
+seven assets and pinned eight-file/five-bundle corpus. Separate fuzz fmt passes. Ignored
+log270979B/SHA256 `768d1dae09310a6d6b200f6347e0b974cf113318faf180eb2b994be74a6101cb`.
+This is a clean local aggregate, not a causal fix for historical MCP listener failures.
+Protected control test/policy remains unchanged, SHA256
+`fd96b257cd6c00b52e97544d652ed69fdbaaaa454e1f3a9360d77f3292218fb0`.
+No production source changes after the native build: later commits add tests/fuzz/docs.
+All implementation commits are pushed atomically; final records follow the same policy.
+Repository Actions enabledfalse and workflow disabled_manually are verified read-only.
 
 No dependency/lock/vendor/font/asset/golden/workflow change. Actions OFF. Windows/Linux,
 WASM, human golden approval, missing-run effective styles, richer labels/general CDX

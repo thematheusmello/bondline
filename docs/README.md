@@ -3,7 +3,14 @@
 Start with the [project README](../README.md) and [current status](../STATUS.md).
 The app is in early development; documented plans are not implemented features.
 
-The current [printed-label creation receiving](verification-printed-label-creation.md)
+The current [explicit-label metadata receiving](verification-label-default-metadata.md)
+preserves checked unused LabelFont/Size/Face beside fully explicit runs through label/
+Selection/history/Unicode Save/reopen. Independent source/font/pixel/adapter and bounded
+native Mac checks pass; full local2149/0/1+vendor3/0 and10000/391s ASan pass. Missing-run
+inheritance, general fonts/rich Text and full M0–M5 remain open. The disposable review is
+closed; user-viewed creation review stays protected. Push each atomic commit; Actions OFF.
+
+The preceding [printed-label creation receiving](verification-printed-label-creation.md)
 adds explicit-style hidden-carbon child Text, retained flags/stable IDs and continued
 editing/movement through partial/all-printed Save/reopen. Independent native Mac files/
 captures, workspace2122/0/1 plus vendor3/0, all local gates and bounded ASan pass. General

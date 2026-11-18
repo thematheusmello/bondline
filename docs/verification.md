@@ -1,6 +1,16 @@
 # Verification log
 
-The latest [printed-label creation receiving](verification-printed-label-creation.md)
+The latest [scalar-default metadata receiving](verification-label-default-metadata.md)
+records explicit labels beside preserved unused LabelFont/Size/Face, precise48/49/
+Selection permissions and exact source/weak-owner/history/native Unicode files. Full
+local98153 PASSES workspace2149/0/1 across317 reports plus vendor3/0 and all gates;
+ASan10000/391s and native CPU/Metal equality pass. Missing-run inheritance remains
+unresolved/refused. The disposable metadata review is quit; the user-viewed creation
+review stays protected. Other platforms/golden approval/full M0–M5 remain incomplete,
+and the historical listener failure is not causally fixed. Each atomic commit is pushed;
+Actions remains OFF.
+
+The preceding [printed-label creation receiving](verification-printed-label-creation.md)
 records source/resource/ID/history and native partial/all-labelled continuation through
 command49, preserving old48 metadata and the old source/loss guards. Fresh local27673
 PASSES workspace2122/0/1 plus vendor3/0, all fmt/clippy/layers/licenses/assets/corpus

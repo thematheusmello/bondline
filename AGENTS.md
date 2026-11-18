@@ -10,6 +10,21 @@ artifacts as an inferred part of sync. Retain isolated worker branches locally u
 separately needed. Actions remains OFF; source pushes do not authorize enabling it.
 This supersedes historical no-push checkpoint statements; the full M0–M5 goal stays active.
 
+Explicit typography beside scalar defaults follows docs/research/label-default-metadata.md
+and docs/verification-label-default-metadata.md: contract8c2b608, fixturesdeb078d,
+IO4e8470f, consumerd8bc3ba/ownership2e939f6, wire51fa159, rendere615cbf and fuzzc965607.
+Keep separate LabelDefaults capability, immutable raw root/n/b/t metadata, per-owner/
+shadowed resource checks, signed nonnegative font/face versus unsigned run/font IDs,
+unused finite sizes and ALL actual s fields explicit. Never synthesize run inheritance,
+interpret−1, render unused face96/size1e308 or use defaults as the native creation preset.
+Old Boxed/Connected/Mixed/Flagged/full/loss authority remains literal. Existing48/49 and
+Selection alone consume the precise grant with current source/resources/hidden/page
+proofs. Equal-model source A→B/ABA retires old weak owners and cannot accept A's Save
+association. Registry49 metadata/catalogue16/124 stay exact. Mac native exact compound
+files/CPU-Metal and ASan10000/391s pass; full aggregate/job state and exact next CDX task
+are in STATUS. Own metadata review40752 is quit; user-viewed creation review365 and
+older apps/files stay protected. Actions OFF; full M0–M5 active/incomplete.
+
 Printed-label creation is integrated through091328d, with contract126f99e,
 render8f1225e/fixtures9acd1a5/IObb30dca/wire8c37996/oracles38283d4 and fuzz a186933.
 Read docs/research/printed-label-creation.md and docs/verification-printed-label-creation.md.

@@ -8,6 +8,73 @@ commit as the user requires; merge/release/publication remains separately author
 
 ## Current recoverable work and evidence
 
+Recoverable scalar-default metadata workflow: base0aa97cd, contract8c2b608, original
+fixtures deb078d, IO4e8470f (isolated47b021b), command/UI d8bc3ba, wire51fa159,
+isolated owner-test qualification2e939f6, render e615cbf (isolated0f025d0) and fuzzc965607.
+Read [contract](docs/research/label-default-metadata.md) and
+[receiving](docs/verification-label-default-metadata.md). This supersedes historical
+next-task/job paragraphs below and the persistent goal's old line-width first task.
+
+Separate LabelDefaults authority covers checked unused root/n/b/t LabelFont/Size/Face
+beside fully explicit runs. All owners/shadowed values/resources are checked; signed
+scalar fields remain distinct from actual UINT16 run/font IDs. Unused different fonts,
+face96/32767 and finite size1e308 stay source data, never glyph/default/preset input.
+Every actual s font/size/face/color stays required. Existing48/49/Selection alone gain
+the precise permission, with immutable metadata spans, current hidden/resource/source
+proofs and a final page certificate. Old Boxed/Connected/Mixed/Flagged getters, fullfalse,
+other authors/loss guards, all49 metadata and catalogue16/124 stay exact.
+
+Twelve original sources/31 FontTools boxes/14 strict-reader negatives reproduce exactly.
+IO516/0, command7, App1, actual CLI/initialized stdio/authenticated socket3, source-aware
+render2/six whole CPU-GPU frames and renderer195/0 pass. Exactly three old metadata-only
+IO negatives become stronger oldgetterfalse/newtrue/source/model/CPU equality positives;
+all other negatives stay exact. Test-only Result alias, single-case loop and zero-match
+App filter qualifications are recorded. Independent review strengthens A→B→A gesture
+invalidation separately from form Open; no producer guard is weakened.
+
+Fresh own Mac review40752 passes retained Ring→Open→100%→Alt49 visible-style/Cancel/
+Apply→Undo/Redo→Alt48 N/H2→Marquee/Select All→all-five(24,-12)drag/history→Unicode Save/
+reopen→existing-label Cancel. Actual2109B file equals frozen compound, SHA256
+4b836da2349a33f2776a1355f739c65d6a2cfbd3ec84f34e9cee0226c8f4d7df; independent actual-file
+Expat/Decimal/constructed+direct RDKit facts agree. Native1088 CPU/Metal PNGs are exact
+29007B/SHA2568a21d02c21e044560c63d0f4d669f3dd1555ba9765adc572198b5ff9778dc71e.
+AX100-row truncation/after-Quit own Untitled probe and CJK filename-glyph limits remain
+explicit. Both own metadata instances are quit; originalPID40752 and bundle inventory
+are absent. User-viewed creation review365 and older apps/drawings stay protected.
+
+ASan76283 PASSES10000/391s, cov9099/ft22007/RSS488MiB,30 immutable/regenerated sources,
+actual NEW16384B. Manifest682f24b1a5e599feb28ebcf67bd24e0219cfcfdee330ccfd4749014dafafb872;
+log116952B/SHA256f2e2dc2d5e141ba6c1660e2aec61b3d9f5ebdd6b85aeb18539831c18d3264327.
+Full local xtask CI98153 PASSES on code `c965607`: workspace2149/0/1 across317 reports,
+vendor3/0 and all fmt/clippy/layers/licenses/seven-assets/pinned-corpus gates. Log270979B,
+SHA256768d1dae09310a6d6b200f6347e0b974cf113318faf180eb2b994be74a6101cb. This is a clean
+local aggregate; the historical MCP listener failure remains unexplained, not fixed.
+Protected test/policy remains byte-exact. All workers/execution jobs are terminal.
+The separate next-CDX source audit is complete: eight fresh primary receipts, canonical
+type/owner/absence evidence and the documented four-byte Charge recovery rule are ready
+for the next source lock. No CDX implementation or new external-chemistry result follows.
+Push this final receiving/docs checkpoint with the same per-commit policy.
+Actions API enabledfalse and foundation workflow disabled_manually are verified.
+
+Next executable work:
+
+1. Source-lock the bounded next-CDX contract below; the metadata workflow is complete
+   only for its stated checked scope, with no full milestone promotion.
+2. Start the independent M1 CDX literal-atom metadata slice: public type/width/owner
+   contract, original independent byte vectors/runtime RED, then read-only isotope/
+   charge/radical/NumHydrogens mapping with absent H unresolved. Keep source retention,
+   display/edit/loss authority closed. Source-lock the property's explicit four-byte
+   Charge recovery instruction separately from generic integer-width guidance. The
+   current public omitted-run evidence does not justify general
+   typography inheritance; keep it required/open and continue other unblocked M1 work.
+3. Broader CDX/styles/rich labels/interchange, remaining M2 drawing/selection/journal tools,
+   M3 chemistry/reactions, M4 publishing/clipboard and M5 naming/templates/WASM/installers
+   remain required. M0 platform/input/accessibility/DPI/jobs/addressability and historical
+   listener cause remain open. Human NH2 golden approval remains pending. Full M0–M5 stays
+   active/incomplete; push each atomic commit and keep Actions OFF.
+
+### Previous printed-label creation checkpoint
+
 Recoverable printed-label creation: base7113237, contract126f99e, renderer8f1225e
 (isolated62b9841), original fixtures9acd1a5, IObb30dca (isolated33092ca), wire8c37996,
 oracles38283d4 (isolatedd8b8d97), command/UI091328d and fuzz a186933. Read
