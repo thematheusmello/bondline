@@ -1,0 +1,448 @@
+{
+  "kind": "unverified legacy worker recovery",
+  "date": "2026-11-18",
+  "verified_main": "96794f4573237aa019e6fb1c28aa65113547c38e",
+  "entries": [
+    {
+      "path": "crates/cli/tests/mcp.rs",
+      "archive_path": "snapshots/f83ff6d53085bc8e5ca4c3432294ede8fd0794c7/crates/cli/tests/mcp.rs",
+      "blob": "f83ff6d53085bc8e5ca4c3432294ede8fd0794c7",
+      "sha256": "f04168fbb443d7514617793e54382e43ec3562a64f7ec4d5bcf3d1d2b42a9bad",
+      "bytes": 67176,
+      "owners": [
+        {
+          "branch": "refs/heads/test/multiple-bonds",
+          "worktree": "bondline-multiple-tests"
+        },
+        {
+          "branch": "refs/heads/test/multiple-ui",
+          "worktree": "bondline-multiple-ui"
+        }
+      ]
+    },
+    {
+      "path": "crates/commands/src/lib.rs",
+      "archive_path": "snapshots/1d9ae1f6801e1455ffe5e88ef9b53fd5f1a9ee14/crates/commands/src/lib.rs",
+      "blob": "1d9ae1f6801e1455ffe5e88ef9b53fd5f1a9ee14",
+      "sha256": "c61adc2fcf49074161ae3123c2bd7944aae9b64508b190bf0d29bd8efd5ad114",
+      "bytes": 50824,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/new-document-command",
+          "worktree": "bondline-new-document-command-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/commands/src/lib.rs",
+      "archive_path": "snapshots/c73b13ba59cf5f4e9167a36a867d8a55b7f0dde8/crates/commands/src/lib.rs",
+      "blob": "c73b13ba59cf5f4e9167a36a867d8a55b7f0dde8",
+      "sha256": "13530ab57d57b2e2b318cb1c7ecf79e11393d8029c454b512b5727a666fbc0fb",
+      "bytes": 45433,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/bond-order-edit",
+          "worktree": "bondline-order-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/commands/src/new_document.rs",
+      "archive_path": "snapshots/0e37668b7d8281a501cce609e5bd7d771bf8a032/crates/commands/src/new_document.rs",
+      "blob": "0e37668b7d8281a501cce609e5bd7d771bf8a032",
+      "sha256": "339c4d7b548b1b95f978533ffea2f13559325b9cb0410812454fba1c27bfedae",
+      "bytes": 2000,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/new-document-command",
+          "worktree": "bondline-new-document-command-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/mcp/src/work.rs",
+      "archive_path": "snapshots/bf8abc74166c266518315a3d18a7331b8806a4da/crates/mcp/src/work.rs",
+      "blob": "bf8abc74166c266518315a3d18a7331b8806a4da",
+      "sha256": "5b9d95c58c610558f5c5afb732533c3303d862c3b8f901fa38abbfeb5f0f745b",
+      "bytes": 47395,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/sdf-record-command",
+          "worktree": "bondline-sdf-record-command-tests"
+        },
+        {
+          "branch": "refs/heads/tests/sdf-record-ui",
+          "worktree": "bondline-sdf-record-ui-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/bond_order_tests.rs",
+      "archive_path": "snapshots/a6030aac543109fba63ef7ba6a7ba256c9a062da/crates/ui/src/bond_order_tests.rs",
+      "blob": "a6030aac543109fba63ef7ba6a7ba256c9a062da",
+      "sha256": "d330f663894328d6fdb40331e90c672be12cef0ed986d41f764be7ab3e3d0dce",
+      "bytes": 34279,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/bond-order-history",
+          "worktree": "bondline-order-history"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/file_workflow/smiles_conversion.rs",
+      "archive_path": "snapshots/9c7c00b4b4168bf257d3f297e20218df306a51b7/crates/ui/src/file_workflow/smiles_conversion.rs",
+      "blob": "9c7c00b4b4168bf257d3f297e20218df306a51b7",
+      "sha256": "44817cc42febe0ffe1ea23af5e0f52a2a4f6975c03211ac1fb07010e6791743b",
+      "bytes": 25988,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/native-conversion-commands",
+          "worktree": "bondline-native-conversion-command-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/files.rs",
+      "archive_path": "snapshots/40f80c2635d88390f0534a9de95c99250cb74143/crates/ui/src/files.rs",
+      "blob": "40f80c2635d88390f0534a9de95c99250cb74143",
+      "sha256": "bae00fc9643e9d6421be1dcb24df16471d3483f4b644fc9ec6942c9ff78a736d",
+      "bytes": 58678,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/native-conversion-ui",
+          "worktree": "bondline-native-conversion-ui-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/lib.rs",
+      "archive_path": "snapshots/1ec57754dbec14cf9e4f26e86f05755b8d72c9a4/crates/ui/src/lib.rs",
+      "blob": "1ec57754dbec14cf9e4f26e86f05755b8d72c9a4",
+      "sha256": "540d4e0893ae438a0140480c098418b6511da19d8bb3deb3db170058659693da",
+      "bytes": 56533,
+      "owners": [
+        {
+          "branch": "refs/heads/test/multiple-bonds",
+          "worktree": "bondline-multiple-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/lib.rs",
+      "archive_path": "snapshots/947bd46570339ef72ee6bb64e160ad9e39a27d25/crates/ui/src/lib.rs",
+      "blob": "947bd46570339ef72ee6bb64e160ad9e39a27d25",
+      "sha256": "15519baa0a37ecb05721ce431aae1e00c8702d9e352bbdd5bdc42129eefd034c",
+      "bytes": 80709,
+      "owners": [
+        {
+          "branch": "refs/heads/feat/sdf-draft-buffer",
+          "worktree": "bondline-sdf-draft-buffer"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/lib.rs",
+      "archive_path": "snapshots/dc0c335673a6a4f4b1c1268ca99d609ae5d375fc/crates/ui/src/lib.rs",
+      "blob": "dc0c335673a6a4f4b1c1268ca99d609ae5d375fc",
+      "sha256": "d02f88f72d5839719d3ca2d378e78b536b6c49fcac5310ab27eed169d9fef5b7",
+      "bytes": 56572,
+      "owners": [
+        {
+          "branch": "refs/heads/test/multiple-ui",
+          "worktree": "bondline-multiple-ui"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/lib.rs",
+      "archive_path": "snapshots/e98492aae94e6b9fb39833e1752fff7c9272c55d/crates/ui/src/lib.rs",
+      "blob": "e98492aae94e6b9fb39833e1752fff7c9272c55d",
+      "sha256": "d57cc3bf6506c06bfdf90397c8dbc29c3db7c62f23e3c24d010c2c622a35e117",
+      "bytes": 50559,
+      "owners": [
+        {
+          "branch": "refs/heads/feat/multiple-render",
+          "worktree": "bondline-multiple-render"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/native_conversion_tests.rs",
+      "archive_path": "snapshots/518ce62131873f10a0e2319f3b63a1b15e62e827/crates/ui/src/native_conversion_tests.rs",
+      "blob": "518ce62131873f10a0e2319f3b63a1b15e62e827",
+      "sha256": "7959533aa76f0400c59ce614b40544dd61a989b6602df6f2f6ceaa205bfb3113",
+      "bytes": 30232,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/native-conversion-ui",
+          "worktree": "bondline-native-conversion-ui-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/new_document_lifecycle_tests.rs",
+      "archive_path": "snapshots/9e68d6ebc1696377a0a56bcb268f3f63806a2ba8/crates/ui/src/new_document_lifecycle_tests.rs",
+      "blob": "9e68d6ebc1696377a0a56bcb268f3f63806a2ba8",
+      "sha256": "bdfe79addb90e0d98f835e173c39ec15b6335b5994ab4e2d4195c7c40a354372",
+      "bytes": 14760,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/new-document-ui",
+          "worktree": "bondline-new-document-ui-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/sdf_editor.rs",
+      "archive_path": "snapshots/19de9278506c9eefab5672bf3d1f9f19d7067a85/crates/ui/src/sdf_editor.rs",
+      "blob": "19de9278506c9eefab5672bf3d1f9f19d7067a85",
+      "sha256": "964e60187d9426b0fc1550fac62ec6648a6f09eca5eedaf2e5fdbbc3f9a7b089",
+      "bytes": 36795,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/sdf-record-ui",
+          "worktree": "bondline-sdf-record-ui-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/sdf_record_removal_lifecycle_tests.rs",
+      "archive_path": "snapshots/29c86e5c5cbaf313111a4b83f72a2e00b894e16d/crates/ui/src/sdf_record_removal_lifecycle_tests.rs",
+      "blob": "29c86e5c5cbaf313111a4b83f72a2e00b894e16d",
+      "sha256": "bbe4933bb1637a47b39a4cdafa42acab154d7a0fba7674607cf0f0b0d8ca30b5",
+      "bytes": 12386,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/sdf-record-ui",
+          "worktree": "bondline-sdf-record-ui-tests"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/view_tests.rs",
+      "archive_path": "snapshots/14d1dd05070c892b72037f95a53c10eea4b30bfd/crates/ui/src/view_tests.rs",
+      "blob": "14d1dd05070c892b72037f95a53c10eea4b30bfd",
+      "sha256": "ef3dedace2aff5f15b4867ff7c7fc59a89263c80ae0d32676c339684c08c2bfa",
+      "bytes": 48322,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/smiles-record-ui",
+          "worktree": "bondline-smiles-record-ui-tests"
+        },
+        {
+          "branch": "refs/heads/feat/smiles-record-workspace",
+          "worktree": "bondline-smiles-record-workspace"
+        }
+      ]
+    },
+    {
+      "path": "crates/ui/src/view_tests.rs",
+      "archive_path": "snapshots/a1b04df020dbf098c261dcb091b987d77b061e3a/crates/ui/src/view_tests.rs",
+      "blob": "a1b04df020dbf098c261dcb091b987d77b061e3a",
+      "sha256": "4034f4573a4214d0208c711c4ca62ca3e50f71d219206763ccea90e450e16b14",
+      "bytes": 48430,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/sdf-record-ui",
+          "worktree": "bondline-sdf-record-ui-tests"
+        }
+      ]
+    },
+    {
+      "path": "docs/research/bond-order-edit-plan.md",
+      "archive_path": "snapshots/3dc96efbbd3aa521873a9fe9985a6e89cbba5796/docs/research/bond-order-edit-plan.md",
+      "blob": "3dc96efbbd3aa521873a9fe9985a6e89cbba5796",
+      "sha256": "f757d6af965f952bceff8379894c8514d5ff754006ab1f219e1389986e4604b7",
+      "bytes": 9402,
+      "owners": [
+        {
+          "branch": "refs/heads/test/multiple-bonds",
+          "worktree": "bondline-multiple-tests"
+        }
+      ]
+    },
+    {
+      "path": "docs/research/owned-atom-label-data.md",
+      "archive_path": "snapshots/adc66d68919816c28dd665c02f23b5bf3f8e4a89/docs/research/owned-atom-label-data.md",
+      "blob": "adc66d68919816c28dd665c02f23b5bf3f8e4a89",
+      "sha256": "62b5f6f7331c971b05faa0ac6f1c5f1688cfe50c9c81afaecb49b40d49d1e084",
+      "bytes": 6375,
+      "owners": [
+        {
+          "branch": "refs/heads/feat/owned-atom-label-model",
+          "worktree": "bondline-atom-label-model"
+        }
+      ]
+    },
+    {
+      "path": "docs/research/view-navigation-plan.md",
+      "archive_path": "snapshots/e8429302692569485ae5e8b42c56f36bba065e9d/docs/research/view-navigation-plan.md",
+      "blob": "e8429302692569485ae5e8b42c56f36bba065e9d",
+      "sha256": "3ff3b2efb7c1704d37b49ea47424dd0bdc0660440b2afe3ccf42d7ef503f3cbf",
+      "bytes": 11660,
+      "owners": [
+        {
+          "branch": "refs/heads/research/view-navigation",
+          "worktree": "bondline-view-research"
+        }
+      ]
+    },
+    {
+      "path": "docs/research/visual-direction.md",
+      "archive_path": "snapshots/e951bcf1b67ce983665f7459e945df72c662b57c/docs/research/visual-direction.md",
+      "blob": "e951bcf1b67ce983665f7459e945df72c662b57c",
+      "sha256": "9a21267f77cb9e01f1b1f20fc9b8049db452dbe8c79817737c401130c4a6ea29",
+      "bytes": 12063,
+      "owners": [
+        {
+          "branch": "refs/heads/test/multiple-bonds",
+          "worktree": "bondline-multiple-tests"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-bond-order-command.md",
+      "archive_path": "snapshots/6c99f455aa86085d24a24fcd5d602b48bb6d53e7/docs/verification-bond-order-command.md",
+      "blob": "6c99f455aa86085d24a24fcd5d602b48bb6d53e7",
+      "sha256": "b76c1f4ee9d1ae872866e6d8072f7e933ad2422c621e474a96dfa12f0520f618",
+      "bytes": 10673,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/bond-order-edit",
+          "worktree": "bondline-order-tests"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-bond-order-ui.md",
+      "archive_path": "snapshots/0c52f1387381606941e69681a7f0cfac71fe16b7/docs/verification-bond-order-ui.md",
+      "blob": "0c52f1387381606941e69681a7f0cfac71fe16b7",
+      "sha256": "f805373a340ffa5a0caa5ec35161a5f64916025d187adb283b7ca18a89639aa7",
+      "bytes": 18815,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/bond-order-ui",
+          "worktree": "bondline-order-ui"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-capture-image-fuzz.md",
+      "archive_path": "snapshots/96cf70d8bbcce9b60b3d1ff51151c4c76e588b64/docs/verification-capture-image-fuzz.md",
+      "blob": "96cf70d8bbcce9b60b3d1ff51151c4c76e588b64",
+      "sha256": "bb26d1106e2c508f56733e460b429eaf6e96fad9409ab343aae36fd0e3ff1441",
+      "bytes": 9222,
+      "owners": [
+        {
+          "branch": "refs/heads/test/capture-envelope-fuzz",
+          "worktree": "bondline-preview-fuzz"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-listener-shutdown-portability.md",
+      "archive_path": "snapshots/cbb9b92b7894aebc357bf99c79a6af3a667a05a4/docs/verification-listener-shutdown-portability.md",
+      "blob": "cbb9b92b7894aebc357bf99c79a6af3a667a05a4",
+      "sha256": "03657cc2597864ce7dfa72e65bacfa1466b91409dc9452c787e6bbbc0c3c87d7",
+      "bytes": 6355,
+      "owners": [
+        {
+          "branch": "refs/heads/feat/multiple-render",
+          "worktree": "bondline-multiple-render"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-ordered-file-actions.md",
+      "archive_path": "snapshots/8f040ee327f91bba9d897ab91aaa121a6e8fb5ea/docs/verification-ordered-file-actions.md",
+      "blob": "8f040ee327f91bba9d897ab91aaa121a6e8fb5ea",
+      "sha256": "61c005ca8fcfd09ab3e0fa831bec77c9e276bfa1cb3ba4677c8304b3735ae97d",
+      "bytes": 4100,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/view-navigation",
+          "worktree": "bondline-view-acceptance"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-sdf-inspector.md",
+      "archive_path": "snapshots/bb8f7de5efe813386381228dae30013d1035fe4e/docs/verification-sdf-inspector.md",
+      "blob": "bb8f7de5efe813386381228dae30013d1035fe4e",
+      "sha256": "602a1fefd9d442f6f7b81de11b0df961d513e5d7e47b0eef6d1b7bfcdd8136f0",
+      "bytes": 11392,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/sdf-inspector",
+          "worktree": "bondline-sdf-inspector-acceptance"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-sdf-record-remove-ui.md",
+      "archive_path": "snapshots/ebd5109d5ab59345c6e2967d1cd5b9887e973958/docs/verification-sdf-record-remove-ui.md",
+      "blob": "ebd5109d5ab59345c6e2967d1cd5b9887e973958",
+      "sha256": "cda685a5ea15d1d4be7f3e6b7fc0da4985d596c083ba06f8d99146e19597f858",
+      "bytes": 7551,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/sdf-record-ui",
+          "worktree": "bondline-sdf-record-ui-tests"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-smiles-ui-work.md",
+      "archive_path": "snapshots/9830b39625c31be8d605b0a3dd3401c9833c0779/docs/verification-smiles-ui-work.md",
+      "blob": "9830b39625c31be8d605b0a3dd3401c9833c0779",
+      "sha256": "12f00e39a8a7ee6cce3e4510b41f96b04140c8cee29001d199f74b2607cfa0d7",
+      "bytes": 7208,
+      "owners": [
+        {
+          "branch": "refs/heads/research/smiles-native-workflow",
+          "worktree": "bondline-smiles-native-plan"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-ui-sdf-work.md",
+      "archive_path": "snapshots/4535f3fdfbe8ceba7c8d34013f69e2c0ea71d575/docs/verification-ui-sdf-work.md",
+      "blob": "4535f3fdfbe8ceba7c8d34013f69e2c0ea71d575",
+      "sha256": "8a3f9a275391d6c6059de5405ea7942e4a56a1b3f2e4ffb91dcfc23cffcd5bb9",
+      "bytes": 7453,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/sdf-field-workspace",
+          "worktree": "bondline-sdf-field-acceptance"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-view-ui.md",
+      "archive_path": "snapshots/e1dae52074f8382ae3e8ebc6f890ed587f45a54b/docs/verification-view-ui.md",
+      "blob": "e1dae52074f8382ae3e8ebc6f890ed587f45a54b",
+      "sha256": "ec6e241d61ae1fdf859aea889c1361719b7e0121eb94e00ce0119338e86a86b8",
+      "bytes": 14742,
+      "owners": [
+        {
+          "branch": "refs/heads/tests/view-navigation",
+          "worktree": "bondline-view-acceptance"
+        }
+      ]
+    },
+    {
+      "path": "docs/verification-visual-capture.md",
+      "archive_path": "snapshots/aa7290eb5814ecaafd7812a34ac0c713f432de26/docs/verification-visual-capture.md",
+      "blob": "aa7290eb5814ecaafd7812a34ac0c713f432de26",
+      "sha256": "c7f5cb9b2d301150947cf9ab914aa673c283db40d0d460d0f3871939545ff969",
+      "bytes": 9027,
+      "owners": [
+        {
+          "branch": "refs/heads/test/multiple-ui",
+          "worktree": "bondline-multiple-ui"
+        }
+      ]
+    }
+  ]
+}
