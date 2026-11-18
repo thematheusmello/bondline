@@ -511,8 +511,7 @@ fn box_only_native_and_source_free_capabilities_stay_separate_from_foreign_conne
 }
 
 #[test]
-fn context_styles_geometry_memberships_and_other_authoring_drift_revoke_connected_permission()
--> TestResult {
+fn certified_position_changes_preserve_connected_context_and_other_drift_refusals() -> TestResult {
     let raw = source("water")?;
     let base = connected(&raw)?;
     for kind in 0..8 {
@@ -550,13 +549,32 @@ fn context_styles_geometry_memberships_and_other_authoring_drift_revoke_connecte
                 .model_mut()
                 .replace_fragment(page, Fragment::new(fragment.id(), atoms, bonds)?)?;
         }
-        assert!(!drift.has_connected_atom_labels(), "drift{kind}");
-        assert!(!drift.has_boxed_atom_labels());
-        assert!(!drift.has_display_projection());
-        assert!(matches!(
-            drift.to_cdxml(),
-            Err(bondline_io::DocumentError::UnsupportedEdit)
-        ));
+        if kind == 2 {
+            assert!(drift.has_connected_atom_labels());
+            assert!(!drift.has_boxed_atom_labels());
+            assert!(!drift.is_fully_mapped());
+            assert!(drift.has_display_projection());
+            let expected = raw.replace("p='128 100'", "p='128 101'").replace(
+                "124.5693359375 95.6171875 131.4306640625 104.3828125",
+                "124.5693359375 96.6171875 131.4306640625 105.3828125",
+            );
+            let encoded = drift.to_cdxml()?;
+            assert_eq!(encoded.as_ref(), expected.as_bytes());
+            let mut facts = independent(raw.as_bytes())?;
+            facts["nodes"][1]["point"] = json!([128.0, 101.0]);
+            facts["nodes"][1]["box"] =
+                json!([124.5693359375, 96.6171875, 131.4306640625, 105.3828125]);
+            assert_eq!(independent(encoded.as_ref())?, facts);
+        } else {
+            assert!(!drift.has_connected_atom_labels(), "drift{kind}");
+            assert!(!drift.has_boxed_atom_labels());
+            assert!(!drift.has_display_projection());
+            assert!(matches!(
+                drift.to_cdxml(),
+                Err(bondline_io::DocumentError::UnsupportedEdit)
+            ));
+        }
+        assert_eq!(base.to_cdxml()?.as_ref(), raw.as_bytes());
     }
     Ok(())
 }

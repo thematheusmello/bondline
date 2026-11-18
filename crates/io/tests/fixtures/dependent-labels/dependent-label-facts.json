@@ -1,0 +1,1536 @@
+{
+  "boxed": {
+    "style": {},
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 1,
+        "point": [
+          84.1220703125,
+          95.734375
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            80.69140625,
+            91.3515625,
+            95.796875,
+            100.1171875
+          ],
+          "text": "OH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [],
+    "literal_formula": "HO"
+  },
+  "boxed_pair": {
+    "style": {},
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 1,
+        "point": [
+          84.1220703125,
+          95.734375
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            80.69140625,
+            91.3515625,
+            95.796875,
+            100.1171875
+          ],
+          "text": "OH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 8,
+        "hydrogens": 1,
+        "point": [
+          200.0,
+          200.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            196.5693359375,
+            195.6171875,
+            211.6748046875,
+            204.3828125
+          ],
+          "text": "OH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [],
+    "literal_formula": "H2O2"
+  },
+  "boxed_rounding_boundary": {
+    "style": {},
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 0,
+        "point": [
+          128.0,
+          128.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            124.5693359375,
+            123.6171875,
+            131.4306640625,
+            132.3828125
+          ],
+          "text": "O",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [],
+    "literal_formula": "O"
+  },
+  "boxed_tolerated_raw": {
+    "style": {},
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 1,
+        "point": [
+          84.1220703125,
+          95.734375
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            80.69141006469727,
+            91.3515625,
+            95.796875,
+            100.1171875
+          ],
+          "text": "OH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [],
+    "literal_formula": "HO"
+  },
+  "connected": {
+    "style": {
+      "LineWidth": 1.5,
+      "MarginWidth": 2.0,
+      "BondLength": 40.0,
+      "BondSpacing": 15.0
+    },
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 0,
+        "point": [
+          160.0,
+          160.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            156.5693359375,
+            155.6171875,
+            163.4306640625,
+            164.3828125
+          ],
+          "text": "O",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          80.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            76.7216796875,
+            215.734375,
+            83.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          240.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            236.7216796875,
+            215.734375,
+            243.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "id": 900,
+        "begin": 73,
+        "end": 97,
+        "order": 1
+      },
+      {
+        "id": 901,
+        "begin": 73,
+        "end": 109,
+        "order": 1
+      }
+    ],
+    "literal_formula": "H2O"
+  },
+  "connected_nh": {
+    "style": {
+      "LineWidth": 1.5,
+      "MarginWidth": 2.0,
+      "BondLength": 40.0,
+      "BondSpacing": 15.0
+    },
+    "nodes": [
+      {
+        "id": 73,
+        "element": 7,
+        "hydrogens": 1,
+        "point": [
+          160.0,
+          160.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            156.7216796875,
+            155.734375,
+            171.8330078125,
+            164.265625
+          ],
+          "text": "NH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          80.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            76.7216796875,
+            215.734375,
+            83.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          240.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            236.7216796875,
+            215.734375,
+            243.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "id": 900,
+        "begin": 73,
+        "end": 97,
+        "order": 1
+      },
+      {
+        "id": 901,
+        "begin": 73,
+        "end": 109,
+        "order": 1
+      }
+    ],
+    "literal_formula": "H3N"
+  },
+  "connected_component": {
+    "style": {
+      "LineWidth": 1.5,
+      "MarginWidth": 2.0,
+      "BondLength": 40.0,
+      "BondSpacing": 15.0
+    },
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 0,
+        "point": [
+          160.0,
+          160.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            156.5693359375,
+            155.6171875,
+            163.4306640625,
+            164.3828125
+          ],
+          "text": "O",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          80.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            76.7216796875,
+            215.734375,
+            83.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          240.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            236.7216796875,
+            215.734375,
+            243.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 137,
+        "element": 7,
+        "hydrogens": 3,
+        "point": [
+          360.0,
+          360.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            356.7216796875,
+            355.6171875,
+            378.7998046875,
+            364.3828125
+          ],
+          "text": "NH3",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "id": 900,
+        "begin": 73,
+        "end": 97,
+        "order": 1
+      },
+      {
+        "id": 901,
+        "begin": 73,
+        "end": 109,
+        "order": 1
+      }
+    ],
+    "literal_formula": "H5NO"
+  },
+  "connected_crossing_base": {
+    "style": {
+      "LineWidth": 1.5,
+      "MarginWidth": 2.0,
+      "BondLength": 40.0,
+      "BondSpacing": 15.0
+    },
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 0,
+        "point": [
+          160.0,
+          160.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            156.5693359375,
+            155.6171875,
+            163.4306640625,
+            164.3828125
+          ],
+          "text": "O",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          80.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            76.7216796875,
+            215.734375,
+            83.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          240.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            236.7216796875,
+            215.734375,
+            243.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 137,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          180.0,
+          250.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            176.7216796875,
+            245.734375,
+            183.2783203125,
+            254.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 149,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          280.0,
+          250.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            276.7216796875,
+            245.734375,
+            283.2783203125,
+            254.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "id": 900,
+        "begin": 73,
+        "end": 97,
+        "order": 1
+      },
+      {
+        "id": 901,
+        "begin": 73,
+        "end": 109,
+        "order": 1
+      },
+      {
+        "id": 902,
+        "begin": 137,
+        "end": 149,
+        "order": 1
+      }
+    ],
+    "literal_formula": "H4O"
+  },
+  "boxed_sub_p12_5_m7_25": {
+    "style": {},
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 1,
+        "point": [
+          96.6220703125,
+          88.484375
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            93.19140625,
+            84.1015625,
+            108.296875,
+            92.8671875
+          ],
+          "text": "OH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [],
+    "literal_formula": "HO"
+  },
+  "boxed_all_p24_m12": {
+    "style": {},
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 1,
+        "point": [
+          108.1220703125,
+          83.734375
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            104.69140625,
+            79.3515625,
+            119.796875,
+            88.1171875
+          ],
+          "text": "OH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [],
+    "literal_formula": "HO"
+  },
+  "boxed_nudge_p25_m2": {
+    "style": {},
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 1,
+        "point": [
+          109.1220703125,
+          93.734375
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            105.69140625,
+            89.3515625,
+            120.796875,
+            98.1171875
+          ],
+          "text": "OH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [],
+    "literal_formula": "HO"
+  },
+  "boxed_tolerated_sub_p12_5_m7_25": {
+    "style": {},
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 1,
+        "point": [
+          96.6220703125,
+          88.484375
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            93.19141006469727,
+            84.1015625,
+            108.296875,
+            92.8671875
+          ],
+          "text": "OH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [],
+    "literal_formula": "HO"
+  },
+  "boxed_pair_all_p24_m12": {
+    "style": {},
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 1,
+        "point": [
+          108.1220703125,
+          83.734375
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            104.69140625,
+            79.3515625,
+            119.796875,
+            88.1171875
+          ],
+          "text": "OH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 8,
+        "hydrogens": 1,
+        "point": [
+          224.0,
+          188.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            220.5693359375,
+            183.6171875,
+            235.6748046875,
+            192.3828125
+          ],
+          "text": "OH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [],
+    "literal_formula": "H2O2"
+  },
+  "connected_sub_p12_5_m7_25": {
+    "style": {
+      "LineWidth": 1.5,
+      "MarginWidth": 2.0,
+      "BondLength": 40.0,
+      "BondSpacing": 15.0
+    },
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 0,
+        "point": [
+          172.5,
+          152.75
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            169.0693359375,
+            148.3671875,
+            175.9306640625,
+            157.1328125
+          ],
+          "text": "O",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          80.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            76.7216796875,
+            215.734375,
+            83.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          240.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            236.7216796875,
+            215.734375,
+            243.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "id": 900,
+        "begin": 73,
+        "end": 97,
+        "order": 1
+      },
+      {
+        "id": 901,
+        "begin": 73,
+        "end": 109,
+        "order": 1
+      }
+    ],
+    "literal_formula": "H2O"
+  },
+  "connected_all_p24_m12": {
+    "style": {
+      "LineWidth": 1.5,
+      "MarginWidth": 2.0,
+      "BondLength": 40.0,
+      "BondSpacing": 15.0
+    },
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 0,
+        "point": [
+          184.0,
+          148.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            180.5693359375,
+            143.6171875,
+            187.4306640625,
+            152.3828125
+          ],
+          "text": "O",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          104.0,
+          208.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            100.7216796875,
+            203.734375,
+            107.2783203125,
+            212.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          264.0,
+          208.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            260.7216796875,
+            203.734375,
+            267.2783203125,
+            212.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "id": 900,
+        "begin": 73,
+        "end": 97,
+        "order": 1
+      },
+      {
+        "id": 901,
+        "begin": 73,
+        "end": 109,
+        "order": 1
+      }
+    ],
+    "literal_formula": "H2O"
+  },
+  "connected_nh_sub_p12_5_m7_25": {
+    "style": {
+      "LineWidth": 1.5,
+      "MarginWidth": 2.0,
+      "BondLength": 40.0,
+      "BondSpacing": 15.0
+    },
+    "nodes": [
+      {
+        "id": 73,
+        "element": 7,
+        "hydrogens": 1,
+        "point": [
+          172.5,
+          152.75
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            169.2216796875,
+            148.484375,
+            184.3330078125,
+            157.015625
+          ],
+          "text": "NH",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          80.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            76.7216796875,
+            215.734375,
+            83.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          240.0,
+          220.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            236.7216796875,
+            215.734375,
+            243.2783203125,
+            224.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "id": 900,
+        "begin": 73,
+        "end": 97,
+        "order": 1
+      },
+      {
+        "id": 901,
+        "begin": 73,
+        "end": 109,
+        "order": 1
+      }
+    ],
+    "literal_formula": "H3N"
+  },
+  "connected_drag_p24_m12": {
+    "style": {
+      "LineWidth": 1.5,
+      "MarginWidth": 2.0,
+      "BondLength": 40.0,
+      "BondSpacing": 15.0
+    },
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 0,
+        "point": [
+          184.0,
+          148.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            180.5693359375,
+            143.6171875,
+            187.4306640625,
+            152.3828125
+          ],
+          "text": "O",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          104.0,
+          208.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            100.7216796875,
+            203.734375,
+            107.2783203125,
+            212.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          264.0,
+          208.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            260.7216796875,
+            203.734375,
+            267.2783203125,
+            212.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "id": 900,
+        "begin": 73,
+        "end": 97,
+        "order": 1
+      },
+      {
+        "id": 901,
+        "begin": 73,
+        "end": 109,
+        "order": 1
+      }
+    ],
+    "literal_formula": "H2O"
+  },
+  "connected_nudge_p25_m2": {
+    "style": {
+      "LineWidth": 1.5,
+      "MarginWidth": 2.0,
+      "BondLength": 40.0,
+      "BondSpacing": 15.0
+    },
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 0,
+        "point": [
+          185.0,
+          158.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            181.5693359375,
+            153.6171875,
+            188.4306640625,
+            162.3828125
+          ],
+          "text": "O",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          105.0,
+          218.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            101.7216796875,
+            213.734375,
+            108.2783203125,
+            222.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          265.0,
+          218.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            261.7216796875,
+            213.734375,
+            268.2783203125,
+            222.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "id": 900,
+        "begin": 73,
+        "end": 97,
+        "order": 1
+      },
+      {
+        "id": 901,
+        "begin": 73,
+        "end": 109,
+        "order": 1
+      }
+    ],
+    "literal_formula": "H2O"
+  },
+  "connected_component_p24_m12": {
+    "style": {
+      "LineWidth": 1.5,
+      "MarginWidth": 2.0,
+      "BondLength": 40.0,
+      "BondSpacing": 15.0
+    },
+    "nodes": [
+      {
+        "id": 73,
+        "element": 8,
+        "hydrogens": 0,
+        "point": [
+          184.0,
+          148.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            180.5693359375,
+            143.6171875,
+            187.4306640625,
+            152.3828125
+          ],
+          "text": "O",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 97,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          104.0,
+          208.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            100.7216796875,
+            203.734375,
+            107.2783203125,
+            212.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "element": 1,
+        "hydrogens": 0,
+        "point": [
+          264.0,
+          208.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            260.7216796875,
+            203.734375,
+            267.2783203125,
+            212.265625
+          ],
+          "text": "H",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      },
+      {
+        "id": 137,
+        "element": 7,
+        "hydrogens": 3,
+        "point": [
+          360.0,
+          360.0
+        ],
+        "label": {
+          "id": 21,
+          "bounding_box": [
+            356.7216796875,
+            355.6171875,
+            378.7998046875,
+            364.3828125
+          ],
+          "text": "NH3",
+          "font": "Roboto",
+          "size": 12.0,
+          "face": 0,
+          "rgb": [
+            0.2,
+            0.4,
+            0.8
+          ]
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "id": 900,
+        "begin": 73,
+        "end": 97,
+        "order": 1
+      },
+      {
+        "id": 901,
+        "begin": 73,
+        "end": 109,
+        "order": 1
+      }
+    ],
+    "literal_formula": "H5NO"
+  }
+}

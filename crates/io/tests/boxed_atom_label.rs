@@ -380,7 +380,7 @@ fn mixed_explicit_captions_labels_and_root_settings_stay_readonly_in_the_delta()
 }
 
 #[test]
-fn valid_geometry_does_not_authorize_position_style_or_unlabeled_atom_drift() -> TestResult {
+fn certified_position_moves_preserve_style_and_opaque_unlabeled_atom_refusals() -> TestResult {
     let raw=std::str::from_utf8(SOURCE)?.replace("</n></fragment>","</n><n id='99' NodeType='Element' Element='6' Charge='0' Radical='None' NumHydrogens='4' p='200 200'/></fragment>");
     for (raw, authority) in [
         (std::str::from_utf8(SOURCE)?.to_owned(), true),
@@ -424,14 +424,35 @@ fn valid_geometry_does_not_authorize_position_style_or_unlabeled_atom_drift() ->
             drift
                 .model_mut()
                 .replace_fragment(page, Fragment::new(fragment.id(), atoms, vec![])?)?;
-            assert!(
-                !drift.has_boxed_atom_labels(),
-                "forbidden drift{kind} with otherwise qualified geometry"
-            );
-            assert!(matches!(
-                drift.to_cdxml(),
-                Err(bondline_io::DocumentError::UnsupportedEdit)
-            ));
+            if authority && kind == 0 {
+                assert!(drift.has_boxed_atom_labels());
+                assert!(!drift.is_fully_mapped());
+                let expected = raw
+                    .replace("84.1220703125 95.734375", "100.1220703125 111.734375")
+                    .replace(
+                        "80.69140625 91.3515625 95.796875 100.1171875",
+                        "96.69140625 107.3515625 111.796875 116.1171875",
+                    );
+                let encoded = drift.to_cdxml()?;
+                assert_eq!(encoded.as_ref(), expected.as_bytes());
+                assert_eq!(
+                    independent(encoded.as_ref())?,
+                    json!([{
+                        "id":73,"element":8,"h":1,"p":[100.1220703125,111.734375],
+                        "label":{"id":21,"box":[96.69140625,107.3515625,111.796875,116.1171875],
+                            "text":"OH","font":"Roboto","size":12.0,"face":0,"rgb":[0.2,0.4,0.8]}
+                    }])
+                );
+            } else {
+                assert!(
+                    !drift.has_boxed_atom_labels(),
+                    "forbidden drift{kind} with otherwise qualified geometry"
+                );
+                assert!(matches!(
+                    drift.to_cdxml(),
+                    Err(bondline_io::DocumentError::UnsupportedEdit)
+                ));
+            }
             assert_eq!(base.to_cdxml()?.as_ref(), raw.as_bytes());
         }
     }

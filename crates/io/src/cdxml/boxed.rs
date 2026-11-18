@@ -98,10 +98,11 @@ pub(crate) fn model_supported(model: &Document) -> bool {
 
 fn allowed_atom_delta(before: &Atom, after: &Atom) -> bool {
     let (Some(old), Some(new)) = (&before.authored_label, &after.authored_label) else {
-        return before == after;
+        let mut point_only = before.clone();
+        point_only.position = after.position;
+        return point_only == *after;
     };
     before.id == after.id
-        && before.position == after.position
         && before.isotope == after.isotope
         && before.charge == after.charge
         && before.radical == after.radical
@@ -244,6 +245,11 @@ pub(crate) fn supports_delta(baseline: &Document, current: &Document) -> bool {
                         .zip(new.atoms())
                         .all(|(a, b)| allowed_atom_delta(a, b))
             })
+}
+
+pub(crate) fn supports_connected_delta(baseline: &Document, current: &Document) -> bool {
+    supports_delta(baseline, current)
+        && one_page(current).is_ok_and(|page| connected_style(current, page))
 }
 
 fn keys(node: Node<'_, '_>, expected: &[&str]) -> bool {
@@ -628,7 +634,11 @@ fn write_in_profile(
     current: &Document,
     profile: Profile,
 ) -> Result<Vec<u8>> {
-    if !supports_delta(baseline, current) {
+    let supported = match profile {
+        Profile::Boxed => supports_delta(baseline, current),
+        Profile::Connected => supports_connected_delta(baseline, current),
+    };
+    if !supported {
         return unsupported();
     }
     let xml = syntax(Xml::parse(source))?;
@@ -641,6 +651,14 @@ fn write_in_profile(
     let mut values = Vec::new();
     for ((old, new), nodes) in before.fragments().iter().zip(after.fragments()).zip(&bound) {
         for ((a, b), binding) in old.atoms().iter().zip(new.atoms()).zip(nodes) {
+            if a.position != b.position {
+                let point = b.position.ok_or(DocumentError::UnsupportedEdit)?;
+                values.push((
+                    binding.node,
+                    "p",
+                    format!("{} {}", point.x_pt(), point.y_pt()),
+                ));
+            }
             if a.element != b.element {
                 values.push((binding.node, "Element", b.element.get().to_string()));
             }

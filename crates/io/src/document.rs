@@ -424,7 +424,7 @@ impl StoredDocument {
         matches!(self.original.as_ref(), Some(OriginalSource::Cdxml {
             profile: CdxmlProfile::Connected, baseline, ..
         }) if Arc::ptr_eq(&self.model, baseline)
-            || crate::cdxml::supports_boxed_delta(baseline, &self.model))
+            || crate::cdxml::supports_connected_delta(baseline, &self.model))
     }
 
     /// Source coverage to attempt display; scale, glyph and geometry checks still apply.

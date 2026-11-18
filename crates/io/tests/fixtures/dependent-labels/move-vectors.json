@@ -1,0 +1,110 @@
+{
+  "base": "9cf7103",
+  "scope": "Original exact numeric source splices, no product encoder/native/reference execution",
+  "source_id_to_app_atom": {
+    "73": 1,
+    "97": 2,
+    "109": 3,
+    "137": 4,
+    "149": 5
+  },
+  "field_policy": "Pure translation changes Node.p and child BoundingBox only. Compound label edit then translation permits exactly Element/NumHydrogens/body/BoundingBox/Node.p; no other field.",
+  "font_sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+  "cases": [
+    {
+      "name": "boxed",
+      "bytes": 603,
+      "sha256": "ec4e5442d71cb8d70f63b47fa7169cc07bb4af84d1da3db3cb17386ffb83c2e2"
+    },
+    {
+      "name": "boxed_pair",
+      "bytes": 882,
+      "sha256": "cf2a1278c71170dda33a48b2278b6a0f30dede1a21c841683a7bd94c609678e4"
+    },
+    {
+      "name": "boxed_rounding_boundary",
+      "bytes": 595,
+      "sha256": "c4607c08d9b87394a1535d4c77445334d4e908e0db9122f865624c8668c07e76"
+    },
+    {
+      "name": "boxed_tolerated_raw",
+      "bytes": 613,
+      "sha256": "dc989830a2b0e7a6bafb9a77ac89754a761c5e9615ea90c86de908b0720f4ba4"
+    },
+    {
+      "name": "connected",
+      "bytes": 1292,
+      "sha256": "63796f70ee63c93f7a2bac2ef7bda718f8574fd433338f691900bf2c2539ca06"
+    },
+    {
+      "name": "connected_nh",
+      "bytes": 1291,
+      "sha256": "bd8fea5d1608cee9d0a6c043ba9d276916145c7ebc2cee0b006d93a00d976bb0"
+    },
+    {
+      "name": "connected_component",
+      "bytes": 1573,
+      "sha256": "febf7e86def7734af8252f6d73c2808fef68ce5f36edf32ad9ef83b9ab9ea600"
+    },
+    {
+      "name": "connected_crossing_base",
+      "bytes": 1885,
+      "sha256": "5be665ffab009552f36229becf490a52da6b1107b8926fdf9e24dce93e46ac4f"
+    },
+    {
+      "name": "boxed_sub_p12_5_m7_25",
+      "bytes": 603,
+      "sha256": "3cb4a9195f530c729528a28ebd2f398ef0d4543a0b04fde286a54cff7d068553"
+    },
+    {
+      "name": "boxed_all_p24_m12",
+      "bytes": 605,
+      "sha256": "a550327e65258e98a499dd5570b3617936622ef0c80d6b828bebb634233becf2"
+    },
+    {
+      "name": "boxed_nudge_p25_m2",
+      "bytes": 605,
+      "sha256": "bbd15ec22bad1ae198b19f9adff98e329948c8b05637a3a40b81fad6a7e78693"
+    },
+    {
+      "name": "boxed_tolerated_sub_p12_5_m7_25",
+      "bytes": 609,
+      "sha256": "f74ce8f51bebfcc71f45e993b0cadf05cb69c524edc0c044d90d0f66fccf2ced"
+    },
+    {
+      "name": "boxed_pair_all_p24_m12",
+      "bytes": 884,
+      "sha256": "b37e94b2dca33ab2b00de8cc38379ee06c87bf4a383e303d0a2d25f7e56a6cc1"
+    },
+    {
+      "name": "connected_sub_p12_5_m7_25",
+      "bytes": 1297,
+      "sha256": "23003759b7f7c2336cfc87ab3a70c95e2d0ba4a2bfae4aa53cab15781f29e67d"
+    },
+    {
+      "name": "connected_all_p24_m12",
+      "bytes": 1295,
+      "sha256": "d8e1b4e0cb3de6645db081bff698552c08626a9e2d25c8f64aded9c50012b654"
+    },
+    {
+      "name": "connected_nh_sub_p12_5_m7_25",
+      "bytes": 1296,
+      "sha256": "a04765db2dc5feb8f2ea41d9f72aa44a06d3146490753119ba921159739d1ed1"
+    },
+    {
+      "name": "connected_drag_p24_m12",
+      "bytes": 1295,
+      "sha256": "d8e1b4e0cb3de6645db081bff698552c08626a9e2d25c8f64aded9c50012b654"
+    },
+    {
+      "name": "connected_nudge_p25_m2",
+      "bytes": 1295,
+      "sha256": "757dbeb94faecbfc94b63547af4a09892a21e4458288ad68a4cc744ad9593db4"
+    },
+    {
+      "name": "connected_component_p24_m12",
+      "bytes": 1576,
+      "sha256": "19a43b1e2e575ae2c0fc56db536e1aff9e0ddd08aff48e842544c4a28c552e54"
+    }
+  ]
+}
