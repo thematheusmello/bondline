@@ -43,7 +43,7 @@
                     "text": "AV",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 24,
+                      "size_pt": 24.0,
                       "face": 0,
                       "rgb": [
                         1.0,
@@ -56,7 +56,7 @@
                     "text": " ",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 16,
+                      "size_pt": 16.0,
                       "face": 0,
                       "rgb": [
                         0.0,
@@ -69,7 +69,7 @@
                     "text": "Hg",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 32,
+                      "size_pt": 32.0,
                       "face": 0,
                       "rgb": [
                         0.2500038147554742,
@@ -143,7 +143,7 @@
                     "text": "H ",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 12,
+                      "size_pt": 12.0,
                       "face": 0,
                       "rgb": [
                         0.0,
@@ -156,7 +156,7 @@
                     "text": "λΩé",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 13,
+                      "size_pt": 13.0,
                       "face": 0,
                       "rgb": [
                         0.2500038147554742,
@@ -223,7 +223,7 @@
                     "text": "H",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 12,
+                      "size_pt": 12.0,
                       "face": 0,
                       "rgb": [
                         0.0,
@@ -236,7 +236,7 @@
                     "text": "g",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 12,
+                      "size_pt": 12.0,
                       "face": 0,
                       "rgb": [
                         0.0,
@@ -303,7 +303,7 @@
                     "text": "AV",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 12,
+                      "size_pt": 12.0,
                       "face": 0,
                       "rgb": [
                         0.0,
@@ -325,7 +325,7 @@
                     "text": "H ",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 12,
+                      "size_pt": 12.0,
                       "face": 0,
                       "rgb": [
                         0.2500038147554742,
@@ -338,7 +338,7 @@
                     "text": "g",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 12,
+                      "size_pt": 12.0,
                       "face": 0,
                       "rgb": [
                         0.0,
@@ -419,7 +419,7 @@
                     "text": "Bond",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 12,
+                      "size_pt": 12.0,
                       "face": 0,
                       "rgb": [
                         0.0,
@@ -432,7 +432,7 @@
                     "text": "line",
                     "style": {
                       "font_family": "Roboto",
-                      "size_pt": 12,
+                      "size_pt": 12.0,
                       "face": 0,
                       "rgb": [
                         0.0,

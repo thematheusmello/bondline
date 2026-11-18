@@ -1,14 +1,16 @@
 //! Resolved literal text rasterization; no system font, substitution, bidi or inference.
 use crate::{Cancellation, Error, PageViewport, Primitive, Rectangle, Scene};
 use ab_glyph::{Font, GlyphId, OutlinedGlyph, point};
-use bondline_model::Page;
+use bondline_model::{Page, TextRun};
 use ttf_parser::{
     Face, Tag,
     gpos::{PairAdjustment, PositioningSubtable, ValueRecord},
+    gsub::SubstitutionSubtable,
 };
 
 const MAX_GLYPHS: usize = 4096;
-const MAX_RUNS: usize = 4096;
+/// Maximum combined explicit text runs in one page scene.
+pub const MAX_PAGE_TEXT_RUNS: usize = 4096;
 const MAX_RASTER_PIXELS: u64 = 1_048_576;
 
 #[derive(Default)]
@@ -23,7 +25,7 @@ impl RasterBudget {
         self.runs = self
             .runs
             .checked_add(count)
-            .filter(|n| *n <= MAX_RUNS)
+            .filter(|n| *n <= MAX_PAGE_TEXT_RUNS)
             .ok_or(Error::SceneTooComplex)?;
         Ok(())
     }
@@ -101,7 +103,7 @@ fn walk(
         cancel.check()?;
         runs = runs
             .checked_add(text.runs().len())
-            .filter(|total| *total <= MAX_RUNS)
+            .filter(|total| *total <= MAX_PAGE_TEXT_RUNS)
             .ok_or(Error::SceneTooComplex)?;
     }
     if let Some(budget) = budget.as_deref_mut() {
@@ -225,6 +227,56 @@ pub(crate) fn bounds(glyph: &OutlinedGlyph, viewport: &PageViewport) -> Result<R
         height: height as u32,
         color: [0; 4],
     })
+}
+
+/// Prove that adjacent resolved Roboto caption runs have no pair adjustment or
+/// possible ligature at the ASCII join. Full glyph and page validation is separate.
+pub fn validate_caption_run_joins(runs: &[TextRun]) -> Result<(), Error> {
+    const UNRESOLVED: Error =
+        Error::UnsupportedText("unresolved glyph layout at a caption run boundary");
+    if runs.len() < 2 {
+        return Ok(());
+    }
+    let font = crate::label::font()?;
+    let face = Face::parse(font.font_data(), 0).map_err(|_| Error::InvalidFont)?;
+    for (left, right) in runs.iter().zip(runs.iter().skip(1)) {
+        let last = left
+            .text()
+            .chars()
+            .next_back()
+            .filter(char::is_ascii)
+            .ok_or(UNRESOLVED)?;
+        let next = right.text().chars().next().ok_or(UNRESOLVED)?;
+        let (first, second) = (font.glyph_id(last), font.glyph_id(next));
+        if kerning(&face, first, second)? != 0.0 || ligature_join(&face, first, second)? {
+            return Err(UNRESOLVED);
+        }
+    }
+    Ok(())
+}
+
+fn ligature_join(face: &Face<'_>, first: GlyphId, second: GlyphId) -> Result<bool, Error> {
+    let table = face.tables().gsub.ok_or(Error::InvalidFont)?;
+    let (first, second) = (ttf_parser::GlyphId(first.0), ttf_parser::GlyphId(second.0));
+    // FontTools confirms that any eligible ASCII join in the bundled font starts its ligature.
+    for lookup in table.lookups {
+        for subtable in lookup.subtables.into_iter::<SubstitutionSubtable<'_>>() {
+            let SubstitutionSubtable::Ligature(ligature) = subtable else {
+                continue;
+            };
+            if let Some(set) = ligature
+                .coverage
+                .get(first)
+                .and_then(|index| ligature.ligature_sets.get(index))
+                && set
+                    .into_iter()
+                    .any(|value| value.components.get(0) == Some(second))
+            {
+                return Ok(true);
+            }
+        }
+    }
+    Ok(false)
 }
 
 // The pinned Roboto's DFLT/Latin/Greek/Cyrillic kern features share the same

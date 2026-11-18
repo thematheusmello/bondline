@@ -78,4 +78,7 @@ python3 -B crates/io/tests/fixtures/cdx-caption/generate_runs.py \
 diff -r crates/io/tests/fixtures/cdx-caption/runs "$output/runs"
 ```
 
-Run manifest SHA-256 is `8ea51c6e69e944e99e8ab31ea0fbb44b5d25556222af25133f22835d2f12c5b9`.
+Run manifest SHA-256 is `a86575f1fd873283433d931f366e579029a176c846ea1faa554cb6f06805a8dd`.
+The final manifest expresses point sizes as JSON floats to match the public
+model field type. The numeric values, original bytes and other facts agree
+with the initial frozen manifest.

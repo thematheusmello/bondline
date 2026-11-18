@@ -2,7 +2,7 @@
 use super::{DOCUMENT, PAGE, POSITION, coordinate, payload, read_position};
 use bondline_cdx::{Document, RecordKind, Resources};
 use bondline_model::{MAX_TEXT_BYTES, PageSize, Point2, StyledText, TextId, TextRun, TextStyle};
-use bondline_render::{Cancellation, PageView};
+use bondline_render::{Cancellation, MAX_PAGE_TEXT_RUNS, PageView, validate_caption_run_joins};
 use std::collections::{BTreeMap, BTreeSet};
 
 const Z_ORDER: u16 = 0x000a;
@@ -76,6 +76,7 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
     captions.sort_by_key(|(id, _)| *id);
     let mut ordered = BTreeMap::new();
     let mut omitted = false;
+    let mut remaining_runs = MAX_PAGE_TEXT_RUNS;
     for (ordinal, (_, fields)) in captions.into_iter().enumerate() {
         let depth = if let Some(&property) = fields.get(&Z_ORDER) {
             i16::from_le_bytes(payload(source, property, Z_ORDER).ok()?)
@@ -85,7 +86,10 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
         };
         let id = TextId::new(u32::try_from(ordinal).ok()?.checked_add(1)?)?;
         if ordered
-            .insert(depth, project_text(source, &resources, &fields, id)?)
+            .insert(
+                depth,
+                project_text(source, &resources, &fields, id, &mut remaining_runs)?,
+            )
             .is_some()
         {
             return None;
@@ -117,6 +121,7 @@ fn project_text(
     resources: &Resources<'_, '_>,
     fields: &BTreeMap<u16, usize>,
     id: TextId,
+    remaining_runs: &mut usize,
 ) -> Option<StyledText> {
     if payload(
         source,
@@ -132,41 +137,44 @@ fn project_text(
     let value = source
         .string(source.records().get(*fields.get(&TEXT)?)?)
         .ok()?;
-    let mut runs = value.runs();
-    if runs.len() != 1 {
-        return None;
-    }
-    let run = runs.next()?;
-    if run.start() != 0 || run.face() != 0 {
-        return None;
-    }
-    let font = resources.font_by_id(run.font()).ok()?;
-    if font.ordinal() != usize::from(run.font())
-        || font.charset() != 65001
-        || font.name_bytes() != b"Roboto"
-    {
-        return None;
-    }
     let text = value.text_bytes();
     if text.is_empty() || text.len() > MAX_TEXT_BYTES {
         return None;
     }
     let body = std::str::from_utf8(text).ok()?;
-    let rgb = resources
-        .color(u32::from(run.color()))
-        .ok()?
-        .map(|channel| f64::from(channel) / f64::from(u16::MAX));
-    let style = TextStyle::new(
-        "Roboto".to_owned(),
-        f64::from(run.size_twentieths()) / 20.0,
-        run.face(),
-        rgb,
-    )
-    .ok()?;
-    StyledText::new(
-        id,
-        position,
-        vec![TextRun::new(body.to_owned(), style).ok()?],
-    )
-    .ok()
+    let mut source_runs = value.runs().peekable();
+    let count = source_runs.len();
+    *remaining_runs = remaining_runs.checked_sub(count)?;
+    if source_runs.peek()?.start() != 0 {
+        return None;
+    }
+    let mut runs = Vec::with_capacity(count);
+    while let Some(run) = source_runs.next() {
+        let next = source_runs.peek().map(|next| usize::from(next.start()));
+        let part = body.get(usize::from(run.start())..next.unwrap_or(body.len()))?;
+        if part.is_empty() || (next.is_some() && !part.is_ascii()) || run.face() != 0 {
+            return None;
+        }
+        let font = resources.font_by_id(run.font()).ok()?;
+        if font.ordinal() != usize::from(run.font())
+            || font.charset() != 65001
+            || font.name_bytes() != b"Roboto"
+        {
+            return None;
+        }
+        let rgb = resources
+            .color(u32::from(run.color()))
+            .ok()?
+            .map(|channel| f64::from(channel) / f64::from(u16::MAX));
+        let style = TextStyle::new(
+            "Roboto".to_owned(),
+            f64::from(run.size_twentieths()) / 20.0,
+            run.face(),
+            rgb,
+        )
+        .ok()?;
+        runs.push(TextRun::new(part.to_owned(), style).ok()?);
+    }
+    validate_caption_run_joins(&runs).ok()?;
+    StyledText::new(id, position, runs).ok()
 }

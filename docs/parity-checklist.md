@@ -16,6 +16,8 @@ read-only preview and exact native macOS Open and Unicode Save/reopen for one ex
 positioned Roboto caption on white paper. [Ordered captions](verification-cdx-caption-order.md)
 extend that workflow to multiple source-qualified siblings with provable depths.
 The shared command and render paths pass independent source and pixel checks.
+[Multiple explicit style runs](verification-cdx-caption-runs.md) also pass the
+read-only macOS workflow for proven offsets, resources and glyph joins.
 Tied depths, general CDX typography, authoring and other platforms remain open.
 
 The [plain CDX bond increment](verification-cdx-plain-bonds.md) expands only read-only

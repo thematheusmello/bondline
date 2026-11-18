@@ -22,6 +22,11 @@ explicitly positioned captions on one page. Independent overlaps establish
 paint order and macOS Save/reopen preserves the complete source. Tied depths
 and unproved default ordering remain open.
 
+[Explicit CDX style runs](docs/verification-cdx-caption-runs.md) extend that
+preview to multiple resolved styles within a caption. Verified cases retain
+their colours, sizes and run boundaries through exact native Save/reopen.
+Inherited styles, ambiguous starts, general shaping and editing remain open.
+
 The [CDXString increment](docs/verification-cdx-string.md) preserves literal style runs
 and text bytes, with borrowed property boundaries and independent original fixtures.
 The caption workflow uses this reader for its explicit validated run.

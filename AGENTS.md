@@ -12,9 +12,8 @@ shared history or infer release publication. Actions stays OFF through feature m
 See docs/branch-lifecycle.md and STATUS for the actual active branch and recovery ledger.
 PR1 landed the old199-commit feature branch; inactive local refs are under archive/2026-11-18,
 with working files preserved. PR3 landed the standalone CDX resource query.
-PR4 landed the raw CDXString query. The current `feat/cdx-caption-preview` task follows
-`docs/research/cdx-caption-preview.md`. No archived prototype is automatically eligible
-for main.
+PR4 landed the raw CDXString query. PR5 landed direct-Page captions and PR6 added
+ordered siblings. No archived prototype is automatically eligible for main.
 This supersedes old no-push/no-merge/current-multiple-bonds notes; full M0–M5 stays active.
 
 The raw CDXString reader follows `docs/research/cdx-string.md` and
@@ -42,6 +41,14 @@ depth is separate from scoped source identity. Keep the missing-zero ambiguity,
 canonical payload width, exact owner and bad-peer guards. Anonymous source ID
 zero stays unreferenced. No additional command, authoring permission or tool
 binding follows.
+
+The [explicit CDX caption run increment](docs/verification-cdx-caption-runs.md)
+requires start zero, nonempty increasing slices, common offset units through the
+last start and a fully resolved style for each run. Check the shared page run
+budget before ownership allocations. The pinned Roboto join proof keeps pair and
+possible ligature effects out of the admitted joins. Preserve every run and raw
+byte, the existing authored CDXML run layout, detached-edit refusal, registry
+49 and the native read-only guards.
 
 Read `docs/research/cdx-resources.md` and `docs/verification-cdx-resources.md` before
 CDX string or Text work. The table query is opt-in and runtime-dependency-free. Preserve

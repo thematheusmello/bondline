@@ -37,7 +37,7 @@ def projected(segments, *, identity=1, point=(80.25, 100.75)):
         {
             "text": body,
             "style": {
-                "font_family": "Roboto", "size_pt": points, "face": 0,
+                "font_family": "Roboto", "size_pt": float(points), "face": 0,
                 "rgb": [channel / 65535 for channel in colour],
             },
         }
