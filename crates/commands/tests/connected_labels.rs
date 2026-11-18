@@ -1,4 +1,6 @@
 //! Existing public APIs only; freeze and observe runtime RED before command48 routing changes.
+#[path = "../../../xtask/oracles/registry_fixture_support.rs"]
+mod registry_fixture;
 use bondline_commands::{Command, Engine};
 use bondline_io::StoredDocument;
 use bondline_model::PageSize;
@@ -35,7 +37,9 @@ fn refused(e: &mut Engine, name: &str, p: Value, code: &str) -> TestResult {
 #[test]
 fn connected_command48_edits_numeric_body_box_and_clearance_in_one_exact_source_history_step()
 -> TestResult {
-    let frozen: Vec<Value> = serde_json::from_str(connected::METADATA48)?;
+    let frozen: Vec<Value> = serde_json::from_str(&registry_fixture::with_cdx_caption_edit(
+        connected::METADATA48,
+    ))?;
     assert_eq!(
         serde_json::to_value(
             bondline_commands::registry()

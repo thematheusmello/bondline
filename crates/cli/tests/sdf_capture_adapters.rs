@@ -1,3 +1,5 @@
+#[path = "../../../xtask/oracles/registry_fixture_support.rs"]
+mod registry_fixture;
 use bondline_commands::Engine;
 #[path = "support/atom_child_text_wire.rs"]
 mod atom_child_text_wire;

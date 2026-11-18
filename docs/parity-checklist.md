@@ -18,7 +18,9 @@ extend that workflow to multiple source-qualified siblings with provable depths.
 The shared command and render paths pass independent source and pixel checks.
 [Multiple explicit style runs](verification-cdx-caption-runs.md) also pass the
 read-only macOS workflow for proven offsets, resources and glyph joins.
-Tied depths, general CDX typography, authoring and other platforms remain open.
+[Caption run edits](verification-cdx-caption-edits.md) reuse the command across
+CLI, MCP and loopback, with App repaint and exact Save/reopen. Tied depths,
+general typography, the native editor and other platform workflows remain open.
 
 The [Node child Text increment](verification-cdx-node-labels.md) verifies
 literal label and numeric atom data through read-only import and byte-exact

@@ -1,5 +1,6 @@
 //! Independent adapter declarations; adopt beneath sdf_capture_adapters.rs unchanged.
 use super::{Client, cli, socket, support};
+use crate::registry_fixture;
 use bondline_commands::Engine;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::{Value, json};
@@ -81,7 +82,8 @@ fn checked(
     );
 }
 fn metadata(rows: &[Value], mcp: bool) -> TestResult {
-    let old: Vec<Value> = serde_json::from_str(f::METADATA48)?;
+    let old: Vec<Value> =
+        serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA48))?;
     assert_eq!((old.len(), rows.len()), (48, 49));
     for (actual, expected) in rows.iter().zip(&old) {
         if mcp {

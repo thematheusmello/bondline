@@ -1,5 +1,6 @@
 //! Adopt as a child of sdf_capture_adapters.rs; use its unchanged process/socket lifecycle.
 use super::{Client, cli, socket, support};
+use crate::registry_fixture;
 use bondline_commands::Engine;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::{Value, json};
@@ -25,7 +26,9 @@ fn capture() -> Value {
     json!({"page_id":1,"width_px":1024,"height_px":1024,"backend":"cpu"})
 }
 fn metadata(rows: &[Value], mcp: bool) -> TestResult {
-    let old: Vec<Value> = serde_json::from_str(connected::METADATA48)?;
+    let old: Vec<Value> = serde_json::from_str(&registry_fixture::with_cdx_caption_edit(
+        connected::METADATA48,
+    ))?;
     assert_eq!((old.len(), rows.len()), (48, 49));
     for (row, expected) in rows.iter().zip(&old) {
         if mcp {

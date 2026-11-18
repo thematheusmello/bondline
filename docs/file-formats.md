@@ -8,11 +8,11 @@ the model, paper and bond clearance before the edit enters history. The CDX file
 retains its framing, IDs and unrelated bytes. [Existing-label contract](research/cdx-atom-label-edit.md),
 [implicit Element contract](research/cdx-implicit-element.md).
 
-A source-qualified CDX caption can be displayed in the shared renderer and saved
-byte-exactly. This read-only profile requires one explicitly styled and positioned
-caption on a white Poster page. The CLI, MCP, authenticated loopback and CPU/Metal
-captures have bounded evidence. Native window interaction is wired pending its
-platform review. [Caption verification](verification-cdx-caption-preview.md)
+Source-qualified CDX captions can be displayed, saved byte for byte when
+unchanged, and edited through the shared caption command. Editing preserves
+explicit style words, positions and depths on a white Poster page. CLI,
+MCP, authenticated loopback, App repaint and CPU/Metal captures have
+independent evidence. [Caption edit verification](verification-cdx-caption-edits.md).
 
 The standalone CDX parser reads [font and colour tables](verification-cdx-resources.md)
 on demand. It preserves declared IDs, raw font names and charsets, raw RGB16 channels
@@ -204,7 +204,7 @@ new source authority, root inheritance, CDX flag projection or default-tool migr
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Retained syntax, resources, literal atom metadata and plain bonds. Qualified read-only captions and synchronized edits to existing explicitly boxed labels. | Independent byte, model, layout and chemistry witnesses through IO, CLI, MCP and loopback. [Existing-label edits](verification-cdx-atom-label-edits.md), [caption runs](verification-cdx-caption-runs.md). | Label creation, general styles, drawing edits, queries, stereo, broader corpus and platform acceptance |
+| CDX | Retained syntax, resources, literal atom metadata and plain bonds. Qualified edits to existing caption runs and explicitly boxed labels. | Independent byte, model, layout and chemistry witnesses through IO, CLI, MCP and loopback. [Existing-label edits](verification-cdx-atom-label-edits.md), [caption edits](verification-cdx-caption-edits.md). | New objects, native text editor, general styles, drawing edits, queries, stereo, broader corpus and platform acceptance |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
 | SDF V2000/V3000 | Complete mixed-version session/native Mac files, occurrence inspector and existing-value editor, source-preserving capture and read-only Actual/Zoom/pan preview | Exact raw spans/order/versions, pinned corpus and unchanged raw/per-MOL consumers; bounded Mac files/field edits/Actual/pan; actual-App wheel/DPI/source freshness and edit→preview→Save/reopen; command/adapter guards and earlier bounded ASAN | Native wheel/physical-DPI/new combined edit-preview acceptance, record creation/reordering and field-header editing, broader layout/chemistry, fetched mixed-version corpus, syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |

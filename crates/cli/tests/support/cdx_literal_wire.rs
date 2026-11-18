@@ -1,5 +1,6 @@
 //! Independent literal CDX data through the real, unchanged command transports.
 use super::{Client, cli, socket, support};
+use crate::registry_fixture;
 use bondline_commands::Engine;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::{Value, json};
@@ -56,7 +57,8 @@ fn consume(path: &Path, name: &str) -> Result {
     Ok(())
 }
 fn discovery(rows: &[Value], mcp: bool) -> Result {
-    let expected: Vec<Value> = serde_json::from_str(f::METADATA49)?;
+    let expected: Vec<Value> =
+        serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?;
     assert_eq!((rows.len(), expected.len()), (49, 49));
     for (row, expected) in rows.iter().zip(&expected) {
         if mcp {
@@ -113,7 +115,10 @@ fn actual_cli_literal_cdx_keeps49_records_and_independently_read_unicode_copies(
         "{}",
         String::from_utf8_lossy(&listing.stderr)
     );
-    assert_eq!(listing.stdout, f::METADATA49.as_bytes());
+    assert_eq!(
+        listing.stdout,
+        registry_fixture::with_cdx_caption_edit(f::METADATA49).as_bytes()
+    );
     let rows: Value = serde_json::from_slice(&listing.stdout)?;
     discovery(rows.as_array().ok_or("commands")?, false)?;
     let directory = support::SdfTestDirectory::new()?;

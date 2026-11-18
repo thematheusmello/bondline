@@ -16,6 +16,8 @@ mod caption;
 pub(crate) mod label_edit;
 mod label_preview;
 mod text;
+pub(crate) use caption::text_record as caption_text_record;
+pub(crate) use text::encode_caption_runs;
 
 const DOCUMENT: u16 = 0x8000;
 const PAGE: u16 = 0x8001;

@@ -225,7 +225,7 @@ command_registry! {
     RingSprout(RingSprout) => ("ring.sprout", "Attach an independent native carbon ring through one Single connector in one edit, with explicit cycle geometry and literal hydrogen policy.", false),
     UiPreferences(UiPreferences) => ("ui.preferences", "Inspect or set session application preferences, or open/apply/cancel their native draft; never authors document data or acknowledges Save.", false),
     DocumentSettingsSet(DocumentSettingsSet) => ("document.set_document_settings", "Replace explicit bond length, chain angle and line width atomically; optionally set or clear spacing. Appearance or active spacing-reference changes must pass the whole-page ink certificate without moving geometry or changing label metrics.", false),
-    TextSetRun(TextSetRun) => ("text.set_run", "Replace the decoded text of one existing styled caption run, preserving its font, size, face, colour, placement and every unrelated source byte. Requires native or caption-qualified CDXML and validates the final page and Save representation before one history edit.", false),
+    TextSetRun(TextSetRun) => ("text.set_run", "Replace the decoded text of one existing styled caption run, preserving its font, size, face, colour, placement and every unrelated source byte. Supports native drawings or qualified CDXML or CDX captions and validates the final page and Save representation before one history edit.", false),
     AtomSetAuthoredLabel(AtomSetLabel) => ("atom.set_authored_label", "Replace one qualified box-positioned atom label's explicit element/H, literal text and bounds in one source-preserving edit; keeps node/bond geometry and style, validates the final page and Save representation, and performs no valence inference.", false),
     AtomCreateAuthoredLabel(AtomCreateLabel) => ("atom.create_authored_label", "Create one explicit box-positioned child label on a qualified imported hidden carbon using a supplied style and existing file resources; preserves IDs, geometry and carbon-display flags, synchronizes literal element/H and validates source and the final page before one history edit.", false),
 }
@@ -234,7 +234,7 @@ command_registry! {
 pub enum Error {
     #[error("unknown command: {0}")]
     UnknownCommand(String),
-    #[error("caption editing requires native or completely supported caption CDXML source")]
+    #[error("caption editing requires a native drawing or a source-qualified CDXML or CDX caption")]
     UnsupportedCaptionSource,
     #[error("text ID must be greater than zero")]
     InvalidTextId,

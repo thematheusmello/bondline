@@ -1,4 +1,6 @@
 //! Original explicit creation contract; exercise the existing dispatch and modal APIs.
+#[path = "../../../xtask/oracles/registry_fixture_support.rs"]
+mod registry_fixture;
 use bondline_commands::Engine;
 use bondline_io::StoredDocument;
 use bondline_model::PageSize;
@@ -19,7 +21,8 @@ type TestResult = mixed::Result;
 fn creation_appends_one_closed_typed_command_and_preserves_all_old48_records() -> TestResult {
     let rows = serde_json::to_value(bondline_commands::registry())?;
     let rows = rows.as_array().ok_or("registry")?;
-    let old: Vec<Value> = serde_json::from_str(mixed::METADATA48)?;
+    let old: Vec<Value> =
+        serde_json::from_str(&registry_fixture::with_cdx_caption_edit(mixed::METADATA48))?;
     assert_eq!((old.len(), rows.len()), (48, 49));
     assert_eq!(&rows[..48], old.as_slice());
     assert_eq!(rows[48]["name"], "atom.create_authored_label");

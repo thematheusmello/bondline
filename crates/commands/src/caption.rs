@@ -21,15 +21,25 @@ pub(super) fn set_run(
     document: &StoredDocument,
     params: TextSetRun,
 ) -> Result<StoredDocument, Error> {
-    if (!document.is_fully_mapped() && !document.has_caption_projection())
-        || document
-            .source_info()
-            .is_some_and(|source| source.format != "cdxml")
+    let cdx_caption = document.has_cdx_caption_preview();
+    if !cdx_caption
+        && ((!document.is_fully_mapped() && !document.has_caption_projection())
+            || document
+                .source_info()
+                .is_some_and(|source| source.format != "cdxml"))
     {
         return Err(Error::UnsupportedCaptionSource);
     }
     let page_id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
     let text_id = TextId::new(params.text_id).ok_or(Error::InvalidTextId)?;
+    if cdx_caption {
+        return Ok(document.with_cdx_caption_run(
+            page_id,
+            text_id,
+            params.run_index,
+            params.text,
+        )?);
+    }
     let page = document
         .model()
         .pages()

@@ -103,6 +103,14 @@ or chemical inference occurs. [Contract](research/styled-captions.md) and
 [evidence](verification-styled-captions.md) separate actual Mac acceptance from headless
 adapters, App frames and missing editor/platform workflows.
 
+Qualified CDX captions use the same command and schema. Their Text IDs
+follow source-ID and anonymous encounter order independently of paint depth.
+Keep the style words and nonempty runs, with ASCII before any later start.
+The UTF-8 final run stays subject to the current renderer's glyph, join and
+paper checks. Save writes the patched CDX and the original source length
+continues to describe the input file. Only this command's discoverable
+description changes in the 49-entry registry. [CDX caption evidence](verification-cdx-caption-edits.md).
+
 ## Atomic document appearance and creation settings
 
 `document.set_document_settings` appends record 46, retaining the previous 45 command
