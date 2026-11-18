@@ -5,6 +5,35 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Plain CDX bond data
+
+`cdx_parse` additionally compares every projected bond against its own raw Order,
+Display/Display2 and DoublePosition fields. Binary order4 is Triple,3 never is; absent
+position stays Unspecified, six explicit side codes retain directed meaning, and only
+Double accepts explicit secondary-display/position data. The bounded existing record
+table is shared with atom metadata, retaining owner/duplicate and all older framing/
+source/replacement/new-tree/snapshot invariants. Auto/manual provenance remains raw
+source; no rendering or authoring permission is granted.
+
+```sh
+python3 -B fuzz/seed_cdx_bonds.py .cache/fuzz/cdx-plain-bonds-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdx_parse .cache/fuzz/cdx-plain-bonds-example/corpus -- -runs=10000 -seed=721533879 -max_len=131072 -timeout=5 -rss_limit_mb=2048
+```
+
+The fresh-directory recipe separates184 immutable sources/manifest from writable corpus:
+16 independent bond cases,149 original refusal controls,18 unchanged literal-atom cases
+and one exact131072B original opaque-padding source. Standard-library checks compare
+all16 whole facts, accept the padded source with the same model and refuse all149 controls.
+Old literal seeds retain their earlier qualification. Fresh regeneration is byte-exact;
+manifest SHA256 `8438fb643a457f5ddd2c534914517980bbbf8d9597b51973e9f6dac2e52f6cda`.
+Record actual sanitizer results/mutation lengths separately from these declared seed
+bounds in [receiving](../docs/verification-cdx-plain-bonds.md). This is parser/IO evidence,
+not Engine/files/native/GPU/chemical-validity or exhaustive security verification.
+ASan13740 passes10000/1s, cov1321/ft2901/RSS232MiB. Initial max131072B and final limit
+131072B are distinct from actual NEW/REDUCE max104971B. All184 immutable/regenerated
+sources stay exact. The25214B log has SHA256
+`447008f3d4939b8e718513be70a348fd28324e66892371d691b387cff184974c`.
+
 ## Literal CDX atom metadata
 
 `cdx_parse` keeps its framing/span/source-replacement/new-tree/snapshot invariants.

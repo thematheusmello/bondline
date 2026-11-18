@@ -31,6 +31,32 @@ fn literal_metadata(fields: [Option<&[u8]>; 4], atom: &bondline_model::Atom) {
     );
 }
 
+fn plain_bond(fields: [Option<&[u8]>; 4], bond: &bondline_model::Bond) {
+    use bondline_model::{BondOrder, DoublePosition};
+    let [order, display, display2, position] = fields;
+    let order = match order.map(|raw| u16::from_le_bytes(raw.try_into().unwrap())) {
+        None | Some(1) => BondOrder::Single,
+        Some(2) => BondOrder::Double,
+        Some(4) => BondOrder::Triple,
+        _ => panic!("unsupported/query order admitted"),
+    };
+    for raw in display.into_iter().chain(display2) {
+        assert_eq!(i16::from_le_bytes(raw.try_into().unwrap()), 0);
+    }
+    if display2.is_some() || position.is_some() {
+        assert_eq!(order, BondOrder::Double, "non-Double metadata admitted");
+    }
+    let position = match position.map(|raw| i16::from_le_bytes(raw.try_into().unwrap())) {
+        None => DoublePosition::Unspecified,
+        Some(0 | 256) => DoublePosition::Center,
+        Some(1 | 257) => DoublePosition::Right,
+        Some(2 | 258) => DoublePosition::Left,
+        _ => panic!("unsupported position admitted"),
+    };
+    assert_eq!(bond.order, order);
+    assert_eq!(bond.double_position, position);
+}
+
 fn body<'a>(document: &'a Document<'_>) -> Vec<&'a Record> {
     let explicit = document.framing().has_encoded_document();
     document.records().iter().enumerate().filter_map(|(index, record)| {
@@ -90,17 +116,21 @@ fuzz_target!(|data: &[u8]| {
             let RecordKind::Property { tag, .. } = record.kind() else {
                 continue;
             };
-            let slot = match tag {
-                0x0420 => 0,
-                0x0421 => 1,
-                0x0422 => 2,
-                0x042b => 3,
+            let (owner, slot) = match tag {
+                0x0420 => (0x8004, 0),
+                0x0421 => (0x8004, 1),
+                0x0422 => (0x8004, 2),
+                0x042b => (0x8004, 3),
+                0x0600 => (0x8005, 0),
+                0x0601 => (0x8005, 1),
+                0x0602 => (0x8005, 2),
+                0x0603 => (0x8005, 3),
                 _ => continue,
             };
             let parent = record.parent().unwrap();
             assert!(matches!(
                 document.records().get(parent).unwrap().kind(),
-                RecordKind::ObjectStart { tag: 0x8004, .. }
+                RecordKind::ObjectStart { tag, .. } if *tag == owner
             ));
             let previous = fields
                 .get_mut(parent)
@@ -120,6 +150,15 @@ fuzz_target!(|data: &[u8]| {
                     matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8004, .. })
                         .then_some(index)
                 });
+        let mut source_bonds =
+            document
+                .records()
+                .iter()
+                .enumerate()
+                .filter_map(|(index, record)| {
+                    matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8005, .. })
+                        .then_some(index)
+                });
         let (mut atom_id, mut bond_id) = (0_u32, 0_u32);
         for (index, fragment) in graph.fragments().iter().enumerate() {
             assert_eq!(fragment.id().get() as usize, index + 1);
@@ -133,11 +172,13 @@ fuzz_target!(|data: &[u8]| {
             for bond in fragment.bonds() {
                 bond_id += 1;
                 assert_eq!(bond.id.get(), bond_id);
+                plain_bond(*fields.get(source_bonds.next().unwrap()).unwrap(), bond);
                 assert!(local_atoms.contains(&bond.begin));
                 assert!(local_atoms.contains(&bond.end));
             }
         }
         assert!(nodes.next().is_none());
+        assert!(source_bonds.next().is_none());
         let mut stored = bondline_io::StoredDocument::from_cdx(
             std::sync::Arc::from(data),
             bondline_model::PageSize::A4,

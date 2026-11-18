@@ -4,8 +4,8 @@
 integrated IO37d094d.
 Read [the locked contract](research/cdx-plain-bonds.md) and
 [fixture provenance](../crates/io/tests/fixtures/cdx-plain-bonds/SOURCES.md).
-Native acceptance, sanitizer and final local gates are pending separately; none is
-claimed by the headless evidence below. M1 and the full M0–M5 goal remain incomplete.
+Native acceptance and final local gates are recorded separately from the headless and
+bounded sanitizer evidence below. M1 and the full M0–M5 goal remain incomplete.
 
 ## Implemented data boundary
 
@@ -94,6 +94,28 @@ history fences and same-order/capture/loss refusals. Test14172B SHA256
 `9c9f817bb3160f3a714658c68e96902587a74b8628a7d978fae885f453397c9f` is unchanged between
 RED and GREEN. CLI all-target warnings-denied clippy also passes. Registry49 and
 catalogue16/124 stay exact; no caller production source changes.
+
+## Bounded sanitizer
+
+The existing cdx_parse harness adds raw-record proof for every accepted bond's binary
+order, Solid fields and exact directed side/presence. It shares the bounded record table
+with existing atom metadata, checking owners/duplicates without another whole-source
+scan per bond. Old framing/source/replacement/new-tree/snapshot and missing-H assertions
+remain. No filesystem, Engine, native, GPU or chemical-validity behavior is fuzzed here.
+
+Fresh [seed generation](../fuzz/README.md) keeps184 immutable sources/manifest outside
+the writable corpus:16 original bond sources,149 independent refusal controls,18 unchanged
+literal-atom sources and one exact131072B original opaque-padding input. Independent
+reader checks accept17 new positive inputs/refuse149 controls; all seeds and fresh
+regeneration remain byte-exact after execution. Manifest SHA256
+`8438fb643a457f5ddd2c534914517980bbbf8d9597b51973e9f6dac2e52f6cda`.
+
+ASan13740 passes10000/1s, cov1321/ft2901/RSS232MiB. Initial184 files total195897B, max
+131072B; final mutation limit131072B and actual NEW/REDUCE maximum104971B are distinct.
+The maximum is read from the log's L: record, not inferred from its limit/initial corpus.
+The25214B ignored log has SHA256
+`447008f3d4939b8e718513be70a348fd28324e66892371d691b387cff184974c`.
+Fuzz formatting and seed self-checks pass; no dependency or manifest/lock changes.
 
 Native user reviews/apps/files stay protected, Actions stays OFF, and every created
 atomic commit is pushed. No full CDX display/edit authority, command or tool is added by
