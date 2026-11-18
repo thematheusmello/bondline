@@ -183,6 +183,7 @@ impl<'a> MolFile<'a> {
                 endpoints.push(id);
             }
             bonds.push(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(u32::try_from(index + 1).map_err(|_| Error::Resource("bond IDs"))?)
                     .ok_or(Error::Resource("bond IDs"))?,
                 begin: *endpoints.first().ok_or(Error::Syntax {

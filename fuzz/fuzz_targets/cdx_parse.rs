@@ -3,8 +3,62 @@
 use bondline_cdx::{Document, Error, Framing, Record, RecordKind, Writer};
 use libfuzzer_sys::fuzz_target;
 
+fn literal_metadata(fields: [Option<&[u8]>; 4], atom: &bondline_model::Atom) {
+    let [isotope, charge, radical, hydrogens] = fields;
+    let isotope = isotope.and_then(|raw| {
+        let mass = i16::from_le_bytes(raw.try_into().unwrap());
+        std::num::NonZeroU16::new(u16::try_from(mass).unwrap())
+    });
+    let charge = charge.map_or(0, |raw| match raw {
+        [value] => i8::from_le_bytes([*value]),
+        [a, b, c, d] => i8::try_from(i32::from_le_bytes([*a, *b, *c, *d]) >> 24).unwrap(),
+        _ => panic!("unsupported charge width admitted"),
+    });
+    let radical = radical.map_or(bondline_model::Radical::None, |raw| match raw {
+        [0] => bondline_model::Radical::None,
+        [1] => bondline_model::Radical::Singlet,
+        [2] => bondline_model::Radical::Doublet,
+        [3] => bondline_model::Radical::Triplet,
+        _ => panic!("unsupported radical value/width admitted"),
+    });
+    let hydrogens = hydrogens.map(|raw| u16::from_le_bytes(raw.try_into().unwrap()));
+    assert_eq!(atom.isotope, isotope);
+    assert_eq!(atom.charge, charge);
+    assert_eq!(atom.radical, radical);
+    assert_eq!(
+        atom.explicit_hydrogens, hydrogens,
+        "absence stays unresolved"
+    );
+}
+
+fn plain_bond(fields: [Option<&[u8]>; 4], bond: &bondline_model::Bond) {
+    use bondline_model::{BondOrder, DoublePosition};
+    let [order, display, display2, position] = fields;
+    let order = match order.map(|raw| u16::from_le_bytes(raw.try_into().unwrap())) {
+        None | Some(1) => BondOrder::Single,
+        Some(2) => BondOrder::Double,
+        Some(4) => BondOrder::Triple,
+        _ => panic!("unsupported/query order admitted"),
+    };
+    for raw in display.into_iter().chain(display2) {
+        assert_eq!(i16::from_le_bytes(raw.try_into().unwrap()), 0);
+    }
+    if display2.is_some() || position.is_some() {
+        assert_eq!(order, BondOrder::Double, "non-Double metadata admitted");
+    }
+    let position = match position.map(|raw| i16::from_le_bytes(raw.try_into().unwrap())) {
+        None => DoublePosition::Unspecified,
+        Some(0 | 256) => DoublePosition::Center,
+        Some(1 | 257) => DoublePosition::Right,
+        Some(2 | 258) => DoublePosition::Left,
+        _ => panic!("unsupported position admitted"),
+    };
+    assert_eq!(bond.order, order);
+    assert_eq!(bond.double_position, position);
+}
+
 fn body<'a>(document: &'a Document<'_>) -> Vec<&'a Record> {
-    let explicit = document.framing() != Framing::ImplicitDocument;
+    let explicit = document.framing().has_encoded_document();
     document.records().iter().enumerate().filter_map(|(index, record)| {
         let root = explicit && index == 0
             || matches!(record.kind(), RecordKind::ObjectEnd { start } if start.is_none() || explicit && *start == Some(0))
@@ -14,8 +68,20 @@ fn body<'a>(document: &'a Document<'_>) -> Vec<&'a Record> {
 }
 
 fn construct(document: &Document<'_>) -> Result<Vec<u8>, Error> {
+    let body = body(document);
+    assert_eq!(
+        body.iter()
+            .filter(|record| matches!(record.kind(), RecordKind::Property { .. }))
+            .count(),
+        document
+            .records()
+            .iter()
+            .filter(|record| matches!(record.kind(), RecordKind::Property { .. }))
+            .count(),
+        "new-tree reconstruction must retain every source property"
+    );
     let mut writer = Writer::new()?;
-    for record in body(document) {
+    for record in body {
         match record.kind() {
             RecordKind::ObjectStart { tag, id } => writer.start_object(*tag, *id)?,
             RecordKind::Property { tag, .. } => writer.property(*tag, document.payload(record)?)?,
@@ -45,6 +111,54 @@ fuzz_target!(|data: &[u8]| {
         assert_eq!(graph.as_bytes(), data);
         assert_eq!(graph.to_bytes(), data);
         assert_eq!(graph.source().as_bytes(), data);
+        let mut fields = vec![[None; 4]; document.records().len()];
+        for record in document.records() {
+            let RecordKind::Property { tag, .. } = record.kind() else {
+                continue;
+            };
+            let (owner, slot) = match tag {
+                0x0420 => (0x8004, 0),
+                0x0421 => (0x8004, 1),
+                0x0422 => (0x8004, 2),
+                0x042b => (0x8004, 3),
+                0x0600 => (0x8005, 0),
+                0x0601 => (0x8005, 1),
+                0x0602 => (0x8005, 2),
+                0x0603 => (0x8005, 3),
+                _ => continue,
+            };
+            let parent = record.parent().unwrap();
+            assert!(matches!(
+                document.records().get(parent).unwrap().kind(),
+                RecordKind::ObjectStart { tag, .. } if *tag == owner
+            ));
+            let previous = fields
+                .get_mut(parent)
+                .unwrap()
+                .get_mut(slot)
+                .unwrap()
+                .replace(document.payload(record).unwrap());
+            assert!(previous.is_none(), "duplicate admitted literal property");
+        }
+        let mut nodes =
+            graph
+                .source()
+                .records()
+                .iter()
+                .enumerate()
+                .filter_map(|(index, record)| {
+                    matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8004, .. })
+                        .then_some(index)
+                });
+        let mut source_bonds =
+            document
+                .records()
+                .iter()
+                .enumerate()
+                .filter_map(|(index, record)| {
+                    matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8005, .. })
+                        .then_some(index)
+                });
         let (mut atom_id, mut bond_id) = (0_u32, 0_u32);
         for (index, fragment) in graph.fragments().iter().enumerate() {
             assert_eq!(fragment.id().get() as usize, index + 1);
@@ -52,16 +166,19 @@ fuzz_target!(|data: &[u8]| {
             for atom in fragment.atoms() {
                 atom_id += 1;
                 assert_eq!(atom.id.get(), atom_id);
-                assert_eq!(atom.explicit_hydrogens, None);
+                literal_metadata(*fields.get(nodes.next().unwrap()).unwrap(), atom);
                 assert!(local_atoms.insert(atom.id));
             }
             for bond in fragment.bonds() {
                 bond_id += 1;
                 assert_eq!(bond.id.get(), bond_id);
+                plain_bond(*fields.get(source_bonds.next().unwrap()).unwrap(), bond);
                 assert!(local_atoms.contains(&bond.begin));
                 assert!(local_atoms.contains(&bond.end));
             }
         }
+        assert!(nodes.next().is_none());
+        assert!(source_bonds.next().is_none());
         let mut stored = bondline_io::StoredDocument::from_cdx(
             std::sync::Arc::from(data),
             bondline_model::PageSize::A4,
@@ -69,6 +186,7 @@ fuzz_target!(|data: &[u8]| {
         .unwrap();
         assert_eq!(stored.export_cdx().unwrap(), data);
         assert!(!stored.is_fully_mapped());
+        assert!(!stored.has_display_projection());
         let original = stored.clone();
         let page = stored.model().pages().first().unwrap().id();
         stored

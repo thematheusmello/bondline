@@ -1,0 +1,408 @@
+{
+  "scope": "Original source/FontTools vectors. No Bondline renderer or reference exporter used.",
+  "fonttools": "4.61.1",
+  "font_sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+  "units_per_em": 2048,
+  "gpos_NH": 0,
+  "cases": [
+    {
+      "name": "water",
+      "source": "<CDXML CreationProgram='Original independent connected label vectors' LineWidth='.60' MarginWidth='1.600'><fonttable><font id='42' name='Roboto'/></fonttable><colortable><color r='1' g='1' b='1'/><color r='0' g='0' b='0'/><color r='.2' g='.4' b='.8'/></colortable><page id='91' DrawingSpace='Poster' Width='512' Height='512'><fragment id='901'><n id='71' NodeType='Element' Element='1' Charge='0' Radical='None' NumHydrogens='0' p='80 100'><t id='21' BoundingBox='76.7216796875 95.734375 83.2783203125 104.265625' Justification='Left' LabelJustification='Left'><s font='42' size='12' face='0' color='4'>H</s></t></n><n id='207' NodeType='Element' Element='8' Charge='0' Radical='None' NumHydrogens='0' p='128 100'><t id='21' BoundingBox='124.5693359375 95.6171875 131.4306640625 104.3828125' Justification='Left' LabelJustification='Left'><s font='42' size='12' face='0' color='4'>O</s></t></n><n id='13' NodeType='Element' Element='1' Charge='0' Radical='None' NumHydrogens='0' p='176 100'><t id='21' BoundingBox='172.7216796875 95.734375 179.2783203125 104.265625' Justification='Left' LabelJustification='Left'><s font='42' size='12' face='0' color='4'>H</s></t></n><b id='700' B='71' E='207' Order='1'/><b id='702' B='207' E='13' Order='1'/></fragment></page></CDXML>",
+      "nodes": [
+        {
+          "id": 71,
+          "element": 1,
+          "h": 0,
+          "text": "H",
+          "point": [
+            80,
+            100
+          ],
+          "size_pt": 12,
+          "bounding_box": [
+            76.7216796875,
+            95.734375,
+            83.2783203125,
+            104.265625
+          ],
+          "baseline": [
+            75.7314453125,
+            104.265625
+          ],
+          "glyphs": [
+            {
+              "character": "H",
+              "outline_bounds": [
+                169,
+                0,
+                1288,
+                1456
+              ],
+              "pen_x_units": 0
+            }
+          ]
+        },
+        {
+          "id": 207,
+          "element": 8,
+          "h": 0,
+          "text": "O",
+          "point": [
+            128,
+            100
+          ],
+          "size_pt": 12,
+          "bounding_box": [
+            124.5693359375,
+            95.6171875,
+            131.4306640625,
+            104.3828125
+          ],
+          "baseline": [
+            123.8779296875,
+            104.265625
+          ],
+          "glyphs": [
+            {
+              "character": "O",
+              "outline_bounds": [
+                118,
+                -20,
+                1289,
+                1476
+              ],
+              "pen_x_units": 0
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "element": 1,
+          "h": 0,
+          "text": "H",
+          "point": [
+            176,
+            100
+          ],
+          "size_pt": 12,
+          "bounding_box": [
+            172.7216796875,
+            95.734375,
+            179.2783203125,
+            104.265625
+          ],
+          "baseline": [
+            171.7314453125,
+            104.265625
+          ],
+          "glyphs": [
+            {
+              "character": "H",
+              "outline_bounds": [
+                169,
+                0,
+                1288,
+                1456
+              ],
+              "pen_x_units": 0
+            }
+          ]
+        }
+      ],
+      "bonds": [
+        [
+          700,
+          71,
+          207,
+          1
+        ],
+        [
+          702,
+          207,
+          13,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "carbon-dioxide",
+      "source": "<CDXML CreationProgram='Original independent connected label vectors' LineWidth='.60' MarginWidth='1.600' BondLength='48.000' BondSpacing='12.0'><fonttable><font id='42' name='Roboto'/></fonttable><colortable><color r='1' g='1' b='1'/><color r='0' g='0' b='0'/><color r='.2' g='.4' b='.8'/></colortable><page id='91' DrawingSpace='Poster' Width='512' Height='512'><fragment id='901'><n id='23' NodeType='Element' Element='8' Charge='0' Radical='None' NumHydrogens='0' p='80 180'><t id='21' BoundingBox='76.5693359375 175.6171875 83.4306640625 184.3828125' Justification='Left' LabelJustification='Left'><s font='42' size='12' face='0' color='4'>O</s></t></n><n id='88' NodeType='Element' Element='6' Charge='0' Radical='None' NumHydrogens='0' p='128 180'><t id='21' BoundingBox='124.7158203125 175.6171875 131.2841796875 184.3828125' Justification='Left' LabelJustification='Left'><s font='42' size='12' face='0' color='4'>C</s></t></n><n id='75' NodeType='Element' Element='8' Charge='0' Radical='None' NumHydrogens='0' p='176 180'><t id='21' BoundingBox='172.5693359375 175.6171875 179.4306640625 184.3828125' Justification='Left' LabelJustification='Left'><s font='42' size='12' face='0' color='4'>O</s></t></n><b id='40' B='23' E='88' Order='2' DoublePosition='Center'/><b id='92' B='88' E='75' Order='2' DoublePosition='Center'/></fragment></page></CDXML>",
+      "nodes": [
+        {
+          "id": 23,
+          "element": 8,
+          "h": 0,
+          "text": "O",
+          "point": [
+            80,
+            180
+          ],
+          "size_pt": 12,
+          "bounding_box": [
+            76.5693359375,
+            175.6171875,
+            83.4306640625,
+            184.3828125
+          ],
+          "baseline": [
+            75.8779296875,
+            184.265625
+          ],
+          "glyphs": [
+            {
+              "character": "O",
+              "outline_bounds": [
+                118,
+                -20,
+                1289,
+                1476
+              ],
+              "pen_x_units": 0
+            }
+          ]
+        },
+        {
+          "id": 88,
+          "element": 6,
+          "h": 0,
+          "text": "C",
+          "point": [
+            128,
+            180
+          ],
+          "size_pt": 12,
+          "bounding_box": [
+            124.7158203125,
+            175.6171875,
+            131.2841796875,
+            184.3828125
+          ],
+          "baseline": [
+            124.0185546875,
+            184.265625
+          ],
+          "glyphs": [
+            {
+              "character": "C",
+              "outline_bounds": [
+                119,
+                -20,
+                1240,
+                1476
+              ],
+              "pen_x_units": 0
+            }
+          ]
+        },
+        {
+          "id": 75,
+          "element": 8,
+          "h": 0,
+          "text": "O",
+          "point": [
+            176,
+            180
+          ],
+          "size_pt": 12,
+          "bounding_box": [
+            172.5693359375,
+            175.6171875,
+            179.4306640625,
+            184.3828125
+          ],
+          "baseline": [
+            171.8779296875,
+            184.265625
+          ],
+          "glyphs": [
+            {
+              "character": "O",
+              "outline_bounds": [
+                118,
+                -20,
+                1289,
+                1476
+              ],
+              "pen_x_units": 0
+            }
+          ]
+        }
+      ],
+      "bonds": [
+        [
+          40,
+          23,
+          88,
+          2
+        ],
+        [
+          92,
+          88,
+          75,
+          2
+        ]
+      ]
+    },
+    {
+      "name": "hydrogen-cyanide",
+      "source": "<CDXML CreationProgram='Original independent connected label vectors' LineWidth='.60' MarginWidth='1.600' BondLength='48.000' BondSpacing='12.0'><fonttable><font id='42' name='Roboto'/></fonttable><colortable><color r='1' g='1' b='1'/><color r='0' g='0' b='0'/><color r='.2' g='.4' b='.8'/></colortable><page id='91' DrawingSpace='Poster' Width='512' Height='512'><fragment id='901'><n id='6' NodeType='Element' Element='1' Charge='0' Radical='None' NumHydrogens='0' p='80 260'><t id='21' BoundingBox='76.7216796875 255.734375 83.2783203125 264.265625' Justification='Left' LabelJustification='Left'><s font='42' size='12' face='0' color='4'>H</s></t></n><n id='99' NodeType='Element' Element='6' Charge='0' Radical='None' NumHydrogens='0' p='128 260'><t id='21' BoundingBox='124.7158203125 255.6171875 131.2841796875 264.3828125' Justification='Left' LabelJustification='Left'><s font='42' size='12' face='0' color='4'>C</s></t></n><n id='42' NodeType='Element' Element='7' Charge='0' Radical='None' NumHydrogens='0' p='176 260'><t id='21' BoundingBox='172.7216796875 255.734375 179.2783203125 264.265625' Justification='Left' LabelJustification='Left'><s font='42' size='12' face='0' color='4'>N</s></t></n><b id='55' B='6' E='99' Order='1'/><b id='56' B='99' E='42' Order='3'/></fragment></page></CDXML>",
+      "nodes": [
+        {
+          "id": 6,
+          "element": 1,
+          "h": 0,
+          "text": "H",
+          "point": [
+            80,
+            260
+          ],
+          "size_pt": 12,
+          "bounding_box": [
+            76.7216796875,
+            255.734375,
+            83.2783203125,
+            264.265625
+          ],
+          "baseline": [
+            75.7314453125,
+            264.265625
+          ],
+          "glyphs": [
+            {
+              "character": "H",
+              "outline_bounds": [
+                169,
+                0,
+                1288,
+                1456
+              ],
+              "pen_x_units": 0
+            }
+          ]
+        },
+        {
+          "id": 99,
+          "element": 6,
+          "h": 0,
+          "text": "C",
+          "point": [
+            128,
+            260
+          ],
+          "size_pt": 12,
+          "bounding_box": [
+            124.7158203125,
+            255.6171875,
+            131.2841796875,
+            264.3828125
+          ],
+          "baseline": [
+            124.0185546875,
+            264.265625
+          ],
+          "glyphs": [
+            {
+              "character": "C",
+              "outline_bounds": [
+                119,
+                -20,
+                1240,
+                1476
+              ],
+              "pen_x_units": 0
+            }
+          ]
+        },
+        {
+          "id": 42,
+          "element": 7,
+          "h": 0,
+          "text": "N",
+          "point": [
+            176,
+            260
+          ],
+          "size_pt": 12,
+          "bounding_box": [
+            172.7216796875,
+            255.734375,
+            179.2783203125,
+            264.265625
+          ],
+          "baseline": [
+            171.7314453125,
+            264.265625
+          ],
+          "glyphs": [
+            {
+              "character": "N",
+              "outline_bounds": [
+                169,
+                0,
+                1288,
+                1456
+              ],
+              "pen_x_units": 0
+            }
+          ]
+        }
+      ],
+      "bonds": [
+        [
+          55,
+          6,
+          99,
+          1
+        ],
+        [
+          56,
+          99,
+          42,
+          3
+        ]
+      ]
+    }
+  ],
+  "ammonia_middle": {
+    "element": 7,
+    "h": 1,
+    "text": "NH",
+    "point": [
+      128,
+      100
+    ],
+    "size_pt": 12,
+    "bounding_box": [
+      124.7216796875,
+      95.734375,
+      139.8330078125,
+      104.265625
+    ],
+    "baseline": [
+      123.7314453125,
+      104.265625
+    ],
+    "glyphs": [
+      {
+        "character": "N",
+        "outline_bounds": [
+          169,
+          0,
+          1288,
+          1456
+        ],
+        "pen_x_units": 0
+      },
+      {
+        "character": "H",
+        "outline_bounds": [
+          169,
+          0,
+          1288,
+          1456
+        ],
+        "pen_x_units": 1460
+      }
+    ]
+  }
+}

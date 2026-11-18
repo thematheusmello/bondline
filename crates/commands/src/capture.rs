@@ -1,5 +1,5 @@
 use crate::files::{Completed, Completion, FilePlan};
-use crate::{CommandResult, Engine, Error, StoredContent};
+use crate::{CommandResult, Engine, Error, StoredContent, ViewState};
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 use bondline_model::PageId;
 use bondline_render::{Cancellation, MAX_CAPTURE_DIMENSION_PX, cpu_scene_with_cancel};
@@ -75,27 +75,78 @@ impl Engine {
 fn capture_scene(
     content: &StoredContent,
     params: &RenderCapture,
+    context: Option<&ViewCaptureContext>,
     cancel: &Cancellation,
-) -> Result<bondline_render::GraphScene, Error> {
+) -> Result<
+    (
+        bondline_render::GraphScene,
+        Option<bondline_model::PageSize>,
+    ),
+    Error,
+> {
     match content {
         StoredContent::Sdf { .. } => {
             let preview = bondline_io::sdf::preview::prepare_sdf_preview(content.sdf()?, cancel)?;
-            Ok(bondline_render::graph_page_scene_with_display_hydrogens(
-                params.width_px,
-                params.height_px,
-                preview.page(),
-                preview.display_hydrogens(),
-                cancel,
-            )?)
+            let graph = if let Some(context) = context {
+                capture_view(params, context, preview.page().size())?
+                    .graph_scene_with_display_hydrogens(
+                        preview.page(),
+                        preview.display_hydrogens(),
+                        cancel,
+                    )?
+            } else {
+                bondline_render::graph_page_scene_with_display_hydrogens(
+                    params.width_px,
+                    params.height_px,
+                    preview.page(),
+                    preview.display_hydrogens(),
+                    cancel,
+                )?
+            };
+            Ok((graph, Some(preview.page().size())))
         }
-        _ => Ok(bondline_io::display::drawing_page_scene(
-            params.width_px,
-            params.height_px,
-            content.drawing()?,
-            PageId::new(params.page_id).ok_or(Error::InvalidPageId)?,
-            cancel,
-        )?),
+        _ => {
+            let stored = content.drawing()?;
+            let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
+            let graph = if let Some(context) = context {
+                let page = stored
+                    .model()
+                    .pages()
+                    .iter()
+                    .find(|page| page.id() == id)
+                    .ok_or(bondline_model::Error::MissingPage(id.get()))?;
+                bondline_io::display::drawing_page_scene_with_view(
+                    &capture_view(params, context, page.size())?,
+                    stored,
+                    id,
+                    cancel,
+                )?
+            } else {
+                bondline_io::display::drawing_page_scene(
+                    params.width_px,
+                    params.height_px,
+                    stored,
+                    id,
+                    cancel,
+                )?
+            };
+            Ok((graph, None))
+        }
     }
+}
+
+fn capture_view(
+    params: &RenderCapture,
+    context: &ViewCaptureContext,
+    size: bondline_model::PageSize,
+) -> Result<bondline_render::PageView, Error> {
+    let view = params
+        .view
+        .ok_or(Error::InvalidView("current-view dimensions are missing"))?;
+    Ok(
+        crate::view::page_view_for(context.state, view.logical_width, view.logical_height, size)?
+            .at_pixel_size(params.width_px, params.height_px)?,
+    )
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, JsonSchema)]
@@ -115,6 +166,50 @@ pub struct RenderCapture {
     #[schemars(range(min = 1, max = MAX_CAPTURE_DIMENSION_PX))]
     pub height_px: u32,
     pub backend: RenderBackend,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub view: Option<CaptureView>,
+}
+
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct CaptureView {
+    #[schemars(range(min = 1, max = 100_000))]
+    pub logical_width: u32,
+    #[schemars(range(min = 1, max = 100_000))]
+    pub logical_height: u32,
+    pub expected_view_epoch: u64,
+}
+
+#[derive(Debug)]
+pub(super) struct ViewCaptureContext {
+    pub state: ViewState,
+    pub stamp: CaptureStamp,
+    pub close_epoch: u64,
+}
+
+impl Engine {
+    pub(super) fn prepare_capture(&self, params: RenderCapture) -> Result<Prepared, Error> {
+        let context = if let Some(view) = params.view {
+            if !(1..=100_000).contains(&view.logical_width)
+                || !(1..=100_000).contains(&view.logical_height)
+            {
+                return Err(Error::InvalidView(
+                    "logical dimensions must be within 1..100000",
+                ));
+            }
+            if view.expected_view_epoch != self.view().epoch {
+                return Err(Error::StaleView);
+            }
+            Some(ViewCaptureContext {
+                state: self.view(),
+                stamp: self.capture_stamp(),
+                close_epoch: self.close_policy.epoch,
+            })
+        } else {
+            None
+        };
+        Prepared::capture(self.state(), params, Arc::clone(&self.document), context)
+    }
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -286,11 +381,17 @@ impl PngCapture {
 #[derive(Debug)]
 pub struct Prepared {
     result: CommandResult,
-    capture: Option<(RenderCapture, Arc<StoredContent>)>,
+    capture: Option<(
+        RenderCapture,
+        Arc<StoredContent>,
+        Option<ViewCaptureContext>,
+    )>,
     file: Option<FilePlan>,
     sdf_record: Option<crate::sdf_query::RecordPlan>,
-    sdf_field_set: Option<crate::sdf_edit::FieldPlan>,
+    sdf_edit: Option<crate::sdf_edit::EditPlan>,
     smiles_record: Option<crate::smiles_query::RecordPlan>,
+    smiles_paste: Option<crate::smiles_paste::PastePlan>,
+    smiles_records: Option<crate::smiles_records::RecordsPlan>,
 }
 
 impl Prepared {
@@ -300,8 +401,10 @@ impl Prepared {
             capture: None,
             file: None,
             sdf_record: None,
-            sdf_field_set: None,
+            sdf_edit: None,
             smiles_record: None,
+            smiles_paste: None,
+            smiles_records: None,
         }
     }
 
@@ -311,8 +414,10 @@ impl Prepared {
             capture: None,
             file: Some(file),
             sdf_record: None,
-            sdf_field_set: None,
+            sdf_edit: None,
             smiles_record: None,
+            smiles_paste: None,
+            smiles_records: None,
         }
     }
 
@@ -320,6 +425,7 @@ impl Prepared {
         result: CommandResult,
         params: RenderCapture,
         content: Arc<StoredContent>,
+        context: Option<ViewCaptureContext>,
     ) -> Result<Self, Error> {
         if [params.width_px, params.height_px]
             .iter()
@@ -329,11 +435,13 @@ impl Prepared {
         }
         Ok(Self {
             result,
-            capture: Some((params, content)),
+            capture: Some((params, content, context)),
             file: None,
             sdf_record: None,
-            sdf_field_set: None,
+            sdf_edit: None,
             smiles_record: None,
+            smiles_paste: None,
+            smiles_records: None,
         })
     }
 
@@ -343,19 +451,23 @@ impl Prepared {
             capture: None,
             file: None,
             sdf_record: Some(plan),
-            sdf_field_set: None,
+            sdf_edit: None,
             smiles_record: None,
+            smiles_paste: None,
+            smiles_records: None,
         }
     }
 
-    pub(super) fn sdf_field_set(result: CommandResult, plan: crate::sdf_edit::FieldPlan) -> Self {
+    pub(super) fn sdf_edit(result: CommandResult, plan: crate::sdf_edit::EditPlan) -> Self {
         Self {
             result,
             capture: None,
             file: None,
             sdf_record: None,
-            sdf_field_set: Some(plan),
+            sdf_edit: Some(plan),
             smiles_record: None,
+            smiles_paste: None,
+            smiles_records: None,
         }
     }
 
@@ -368,9 +480,29 @@ impl Prepared {
             capture: None,
             file: None,
             sdf_record: None,
-            sdf_field_set: None,
+            sdf_edit: None,
             smiles_record: Some(plan),
+            smiles_paste: None,
+            smiles_records: None,
         }
+    }
+
+    pub(super) fn smiles_paste(
+        result: CommandResult,
+        plan: crate::smiles_paste::PastePlan,
+    ) -> Self {
+        let mut prepared = Self::immediate(result);
+        prepared.smiles_paste = Some(plan);
+        prepared
+    }
+
+    pub(super) fn smiles_records(
+        result: CommandResult,
+        plan: crate::smiles_records::RecordsPlan,
+    ) -> Self {
+        let mut prepared = Self::immediate(result);
+        prepared.smiles_records = Some(plan);
+        prepared
     }
 
     pub(super) fn bind_ui_request(&mut self, id: u64) -> Result<(), Error> {
@@ -386,8 +518,10 @@ impl Prepared {
         self.capture.is_some()
             || self.file.is_some()
             || self.sdf_record.is_some()
-            || self.sdf_field_set.is_some()
+            || self.sdf_edit.is_some()
             || self.smiles_record.is_some()
+            || self.smiles_paste.is_some()
+            || self.smiles_records.is_some()
     }
 
     pub fn complete(self) -> Result<Completed, Error> {
@@ -398,8 +532,14 @@ impl Prepared {
         if let Some(file) = self.file {
             return file.complete(cancel);
         }
-        if let Some(plan) = self.sdf_field_set {
-            return Ok(Completed(Completion::SdfFieldSet(plan.complete(cancel)?)));
+        if let Some(plan) = self.sdf_edit {
+            return Ok(Completed(Completion::SdfEdit(plan.complete(cancel)?)));
+        }
+        if let Some(plan) = self.smiles_paste {
+            return Ok(Completed(Completion::SmilesPaste(plan.complete(cancel)?)));
+        }
+        if let Some(plan) = self.smiles_records {
+            return Ok(Completed(Completion::SmilesRecords(plan.complete(cancel)?)));
         }
         let deferred_query =
             self.capture.is_some() || self.sdf_record.is_some() || self.smiles_record.is_some();
@@ -409,9 +549,10 @@ impl Prepared {
         if let Some(plan) = self.smiles_record {
             self.result.smiles_record = Some(plan.complete(cancel)?);
         }
-        if let Some((params, content)) = self.capture {
+        let mut view_completion = None;
+        if let Some((params, content, context)) = self.capture {
             cancel.check()?;
-            let graph = capture_scene(&content, &params, cancel)?;
+            let (graph, extent) = capture_scene(&content, &params, context.as_ref(), cancel)?;
             let label_em_px = graph.label_em_px();
             let scene = graph.into_scene();
             let (frame, adapter) = match params.backend {
@@ -447,6 +588,17 @@ impl Prepared {
                 png_base64: STANDARD.encode(png),
                 label_em_px,
             });
+            if let Some(context) = context {
+                view_completion = Some((context, extent));
+            }
+        }
+        if let Some((context, extent)) = view_completion {
+            return Ok(Completed(Completion::ViewCapture {
+                result: Box::new(self.result),
+                context,
+                extent,
+                cancel: cancel.clone(),
+            }));
         }
         Ok(Completed(Completion::Result {
             result: Box::new(self.result),

@@ -1,4 +1,6 @@
 use serde_json::{Value, json};
+#[path = "support/bond_order.rs"]
+mod bond_order;
 #[path = "support/cdx.rs"]
 mod cdx_support;
 #[path = "support/chain.rs"]
@@ -9,6 +11,8 @@ mod conversion_support;
 mod file_support;
 #[path = "support/mol.rs"]
 mod mol_support;
+#[path = "support/multiple_bonds.rs"]
+mod multiple_bonds;
 #[path = "../../../xtask/oracles/sdf_field_test_support.rs"]
 mod sdf_field_support;
 #[path = "../../../xtask/oracles/sdf_record_test_support.rs"]
@@ -121,7 +125,7 @@ fn stdio_smiles_record_query_is_bounded_exact_private_and_not_cached()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 25);
+    assert_eq!(tools.len(), 49);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "smiles.record.inspect")
@@ -363,7 +367,7 @@ fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 25);
+    assert_eq!(tools.len(), 49);
     let tool = tools
         .iter()
         .find(|t| t["name"] == "file.export_smiles_fragment")
@@ -420,7 +424,7 @@ fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real(
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 25);
+    assert_eq!(tools.len(), 49);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
@@ -1064,10 +1068,18 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
     assert_eq!(
         names,
         [
+            "atom.create_authored_label",
+            "atom.set_authored_label",
+            "atom.set_label",
             "bond.create",
             "bond.extend",
+            "bond.set_order",
+            "chain.create",
+            "chain.create_path",
             "document.close",
+            "document.import_smiles_records",
             "document.inspect",
+            "document.new",
             "document.open_cdx",
             "document.open_cdxml",
             "document.open_mol",
@@ -1078,17 +1090,33 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "document.save_mol",
             "document.save_sdf",
             "document.save_smiles",
+            "document.set_document_settings",
+            "document.set_drawing_settings",
             "file.convert_smiles_to_cdxml",
             "file.export_smiles_fragment",
             "history.redo",
             "history.undo",
             "page.set_size",
             "render.capture",
+            "ring.create",
+            "ring.sprout",
             "sdf.field.set_value",
             "sdf.record.inspect",
+            "sdf.record.remove",
+            "selection.translate",
             "smiles.record.inspect",
+            "structure.paste_smiles",
+            "text.set_run",
+            "ui.atom_label",
+            "ui.bond_tool",
+            "ui.chain_tool",
             "ui.controls",
-            "ui.file"
+            "ui.drawing_settings",
+            "ui.file",
+            "ui.preferences",
+            "ui.ring_tool",
+            "ui.selection",
+            "ui.view"
         ]
     );
     for (name, permission) in [
@@ -1717,7 +1745,7 @@ fn stdio_file_presentation_is_unavailable_without_a_host_and_cannot_forge_acknow
         queried["ui_file"],
         json!({"available":false,"epoch":0,"request":null})
     );
-    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 9);
+    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 39);
     assert!(queried.get("ui_file_operation").is_none());
     for (id, arguments, code) in [
         (

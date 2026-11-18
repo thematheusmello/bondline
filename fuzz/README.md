@@ -5,6 +5,471 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Plain CDX bond data
+
+`cdx_parse` additionally compares every projected bond against its own raw Order,
+Display/Display2 and DoublePosition fields. Binary order4 is Triple,3 never is; absent
+position stays Unspecified, six explicit side codes retain directed meaning, and only
+Double accepts explicit secondary-display/position data. The bounded existing record
+table is shared with atom metadata, retaining owner/duplicate and all older framing/
+source/replacement/new-tree/snapshot invariants. Auto/manual provenance remains raw
+source; no rendering or authoring permission is granted.
+
+```sh
+python3 -B fuzz/seed_cdx_bonds.py .cache/fuzz/cdx-plain-bonds-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdx_parse .cache/fuzz/cdx-plain-bonds-example/corpus -- -runs=10000 -seed=721533879 -max_len=131072 -timeout=5 -rss_limit_mb=2048
+```
+
+The fresh-directory recipe separates184 immutable sources/manifest from writable corpus:
+16 independent bond cases,149 original refusal controls,18 unchanged literal-atom cases
+and one exact131072B original opaque-padding source. Standard-library checks compare
+all16 whole facts, accept the padded source with the same model and refuse all149 controls.
+Old literal seeds retain their earlier qualification. Fresh regeneration is byte-exact;
+manifest SHA256 `8438fb643a457f5ddd2c534914517980bbbf8d9597b51973e9f6dac2e52f6cda`.
+Record actual sanitizer results/mutation lengths separately from these declared seed
+bounds in [receiving](../docs/verification-cdx-plain-bonds.md). This is parser/IO evidence,
+not Engine/files/native/GPU/chemical-validity or exhaustive security verification.
+ASan13740 passes10000/1s, cov1321/ft2901/RSS232MiB. Initial max131072B and final limit
+131072B are distinct from actual NEW/REDUCE max104971B. All184 immutable/regenerated
+sources stay exact. The25214B log has SHA256
+`447008f3d4939b8e718513be70a348fd28324e66892371d691b387cff184974c`.
+
+## Literal CDX atom metadata
+
+`cdx_parse` keeps its framing/span/source-replacement/new-tree/snapshot invariants.
+The former blanket HNone assertion becomes a stronger source-record proof for isotope,
+charge, radical and inline H, including strict absent HNone, explicit H0 and documented
+four-byte Charge recovery. A bounded linear record table also checks known-field owners
+and duplicates. CDX display stays unavailable; detached page drift still refuses Save.
+
+```sh
+python3 -B fuzz/seed_cdx_literal.py .cache/fuzz/cdx-literal-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdx_parse .cache/fuzz/cdx-literal-example/corpus -- -runs=10000 -seed=721533879 -max_len=131072 -timeout=5 -rss_limit_mb=2048
+```
+
+The recipe refuses existing destinations and separates43 immutable sources/manifest
+from writable corpus:18 original literal cases, three retained original legacy files,
+21 domain/width/duplicate/owner/truncation controls and one exact131072B source. The
+independent strict reader accepts all19 new positive seeds and refuses21 controls;
+legacy seeds retain their existing independent qualification. Manifest SHA256
+`bb61c910883ed54656d174fba53e9fd72b85c4b194eeae49096f88b2a19cb026`.
+This is parser/IO fuzzing, not filesystem/Engine/native/GPU/chemical validity proof.
+Record actual runs/reached mutation sizes and immutable verification in
+[receiving](../docs/verification-cdx-literal-atom-metadata.md). Actions remains OFF.
+Actual ASan97553 passes10000/1s, cov1261/ft2818/RSS173MiB. All43 immutable inputs and
+fresh regeneration are byte-exact. The initial corpus includes131072B; actual retained
+mutation limit is65746B and largest NEW/REDUCE is777B. No128KiB mutation is claimed.
+Log29351B/SHA256 `4b178ddf322325c03628a64cac41dbe6de2a38ba46dfb51df68471729750a17b`.
+
+## Explicit typography beside scalar defaults
+
+The existing `cdxml_profile` target also exercises five frozen metadata-source
+edit/create/move/compound/reimport paths, unchanged source/Arc retention, current
+capability proof and page-drift refusal. All old invariants stay. Actual run typography
+remains explicit; this does not fuzz inheritance, Engine/history, GPU or OS input.
+
+```sh
+python3 -B fuzz/seed_label_metadata.py .cache/fuzz/label-metadata-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/label-metadata-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recipe refuses an existing destination and separates30 immutable source seeds/
+manifest from writable corpus:12 originals,12 hostile controls, exact16KiB and five
+selector bytes. Expat checks source syntax; missing run fields, shadowed defaults,
+unresolved resources, signed selectors, wrong owners, namespaces and body drift remain
+refusal inputs. Record actual sanitizer iterations/reached lengths and source checks
+in [receiving](../docs/verification-label-default-metadata.md); these bounds alone are
+not execution evidence or exhaustive safety proof. No dependency is added.
+Actual session76283 passes10000/391s, cov9099/ft22007/RSS488MiB, with a NEW16384B
+mutation. Thirty immutable seeds and fresh regeneration are exact; manifest SHA256
+`682f24b1a5e599feb28ebcf67bd24e0219cfcfdee330ccfd4749014dafafb872`.
+The116952B ignored log has SHA256
+`f2e2dc2d5e141ba6c1660e2aec61b3d9f5ebdd6b85aeb18539831c18d3264327`.
+
+## Explicit printed-label creation
+
+`cdxml_profile` retains every old invariant and adds six frozen Mixed→Flagged creation
+controls: ordinary/dense/paired/caption sources, all three hidden atoms, and explicit
+blue14pt. Only inserted label data is read from independently frozen original XML;
+the candidate must reproduce the exact complete expected source and re-imported model.
+An unavailable new RGB must revoke the precise capability/writer, and restoration must
+recover original borrowed bytes without changing the baseline allocation. No Engine,
+history, filesystem, native input or GPU behavior is fuzzed by this structured path.
+
+The old exact-native data-only page codec invariant stays. Its reopened display equality
+now includes the separate Flagged capability, an intentional new display scope rather
+than widening old Boxed admission or granting page-edit authority. Native data encoding
+can remain possible while the current source capability is false; command/selection
+certificates must refuse that candidate before calling the codec.
+
+```sh
+python3 fuzz/seed_created_labels.py .cache/fuzz/created-labels-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/created-labels-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recipe refuses existing destinations and keeps34 immutable sources/manifest beside
+the writable corpus:20 originals, seven source mutations, exact16KiB and six selector
+bytes. Actual AddressSanitizer session22691 passes10000/305s, cov8796/ft20218/RSS513MiB,
+with four actual NEW/REDUCE16KiB mutations. Fresh source regeneration is byte-exact;
+manifest SHA256 `af870a2cab7b5632cb6650d70aee37be1c56e71d925dfdc9533d537fefe5eeaf`.
+Ignored log `target/label-creation/research/asan.log` is111425B/SHA256
+`fd25628a3e92a2d0a806402f6447dc7a8c200b67c9034e06b17898fb681cdd08`.
+This is bounded parser/profile evidence, not exhaustive safety, graphical parity,
+human golden approval or full-workspace/native verification. No dependency is added.
+
+## Mixed skeletal and printed labels
+
+`cdxml_profile` preserves all old invariants and adds five fixed original Mixed-source
+edit/move/reimport controls, plus current mandatory-carbon revocation and exact restoration.
+The model constructors use the independently frozen NH2 body/box rather than adding a
+renderer dependency to this isolated harness. No Engine/history/filesystem/GPU/native
+workflow is fuzzed by those controls.
+
+```sh
+python3 fuzz/seed_mixed_labels.py .cache/fuzz/mixed-labels-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/mixed-labels-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recipe refuses an existing destination and keeps23 immutable sources/manifest outside
+the writable corpus:9 frozen originals,8 unsupported-source controls, exact16KiB and five
+selector bytes. Fresh regeneration reproduces every source hash. Actual10000/203s ASan,
+reached16KiB mutation and the initial compiler-only harness qualification are recorded in
+[receiving](../docs/verification-mixed-skeletal-labels.md), not inferred from this recipe.
+
+## Synchronized atom/box translation
+
+`cdxml_profile` additionally selects four frozen Boxed/Connected subset/all/compound
+translation controls, requires exact source bytes and complete re-import, refuses
+point-only drift, then verifies exact restoration. Old parser/source/label invariants
+remain. This fixed structured path does no Engine/history, filesystem, render or native
+work. Generate a fresh immutable source/manifest and writable corpus, then run pinned ASan:
+
+```sh
+python3 fuzz/seed_dependent_labels.py .cache/fuzz/dependent-labels-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/dependent-labels-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recipe refuses existing destinations and retains28 immutable originals outside the
+writable corpus, including19 independent XML files, four opaque variants, exact16KiB and
+four one-byte selector controls. Fresh regeneration reproduces the exact manifest/source
+hashes. [Receiving](../docs/verification-dependent-label-translation.md) records the actual
+10000/161s pass and16KiB mutation, separately from GPU/native correctness and parser safety.
+
+## Connected label sources
+
+`cdxml_profile` additionally checks the separate Connected source capability: supported
+four-field label edits must equal original independently frozen CDXML, preserve every
+other source byte and re-import the same complete model. Root style/bond/point/body/
+child-placement drift must revoke the capability and source writer; restoration recovers
+exact unchanged source. Old Boxed/native/opaque invariants remain intact. The fixed
+structured vectors do no rendering, Engine/history, filesystem or GPU/native work.
+
+```sh
+python3 fuzz/seed_connected_labels.py .cache/fuzz/connected-labels-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/connected-labels-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The stdlib/Expat recipe refuses an existing destination and keeps25 immutable original
+sources/manifest outside writable corpus, including exact16KiB and missing/local/qualified/
+colour/body/font/negative-underflow cases. [Receiving](../docs/verification-connected-labels.md)
+records the actual10000/151s ASan pass, source hashes and reached16KiB mutation; these
+commands alone are declarations, not an exhaustive safety or graphical correctness claim.
+
+## Source-preserving XML edits
+
+### Source-backed label defaults
+
+The existing `cdxml_parse` target additionally checks the standalone LabelFont/LabelSize/
+LabelFace containment view on accepted sources: owned target/source provenance, exact
+decoded values, independent nearest fields, shadowed validation, unsupported owners,
+signed INT16 versus unsigned run selectors, expanded namespace meaning and source purity.
+Structured original controls retain absence and old Style-run fields; no missing run
+attribute is filled. Positive finite XML size is the explicit reader policy, not a
+font/default/binary-unit or foreign rendering claim. All old invariants and the 16KiB
+input guard remain. These new lookup assertions use only standalone format readers;
+existing IO/model checks remain unchanged and no native workflow is exercised.
+
+Generate a fresh source/corpus/manifest directory, then use pinned ASan tooling:
+
+```sh
+python3 fuzz/seed_cdxml_label_defaults.py .cache/fuzz/cdxml-label-defaults-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_parse .cache/fuzz/cdxml-label-defaults-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The stdlib recipe refuses an existing destination and keeps immutable `source/` and
+`manifest.json` outside writable `corpus/`. Original seeds cover all admitted roles,
+partial defaults, negative/shadowed/unsupported values, qualified attributes/owners,
+empty namespace resets, decoded/lexical differences and exact 16KiB. These commands are
+declarations, not passes; Root records actual source hashes, manifests, reached lengths
+and terminal results. [Contract](../docs/research/label-default-lookup.md).
+
+`cdxml_parse` also decodes logical font/palette tables. Arbitrary XML retains exact
+source on either projection success or failure. Fixed valid tables with arbitrary
+escaped names, font IDs and RGB values check exact typed success/error results, reserved
+colours and the present-one-entry-table distinction. This is standalone format coverage,
+not foreign styled rendering or authoring. Generate fresh original sources/corpus and a
+separate manifest, then run the existing target with the pinned tooling:
+
+```sh
+python3 fuzz/seed_cdxml_resources.py .cache/fuzz/cdxml-resources-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_parse .cache/fuzz/cdxml-resources-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+See [resource receiving](../docs/verification-cdxml-resources.md) for actual runs and limits.
+
+The application IO boundary also has `cdxml_profile`: accepted source passthrough,
+guaranteed page edits, structured scalar/optional changes and sparse appends, old-ID/
+endpoint drift refusal, source/current purity and explicitly rebound reopening. It uses
+existing dependencies, at most16KiB input and small fixed native-domain cases, without
+Engine, filesystem/process, GUI or GPU work. No arbitrary error is treated as a success.
+Explicit document LineWidth now participates in source/reopening equality, structured
+set/clear/unchanged-lexeme edits. Root-relative spacing additionally varies absent/zero/
+fractional/maximum data with independent width/preference state. The37-seed recipe
+includes negative-underflow, Abs and local-owner refusals and preserves immutable source
+copies outside the mutation corpus. This is IO data coverage; independent render/command/
+native checks remain separate. The spacing receiving record reports an actual10000-run,
+65-second ASan pass reaching16384B; it does not establish general foreign-style support.
+Generate fresh original source/corpus copies and a separate manifest:
+
+```sh
+python3 fuzz/seed_cdxml_profile.py .cache/fuzz/cdxml-profile-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/cdxml-profile-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The unchanged cdxml_parse target can independently use another fresh corpus from the
+same recipe. [Profile receiving](../docs/verification-source-preserving-cdxml-profile.md)
+records actual runs, reached lengths, separate independent consumers and native limits.
+
+### Styled caption sources
+
+The existing `cdxml_parse` and `cdxml_profile` targets now bound each input at16KiB.
+All earlier invariants remain inside that bound. Standalone parsing reads every ordinary
+Text object without changing source, checks owned/foreign-node context, optional exact
+UINT16/positive-size selectors and decoded text. Arbitrary UTF8 additionally exercises
+`Writer::text` decoded equality and atomic invalid-XML-character refusal. The IO target
+compares every text position/style/run string when rebinding native IDs, edits original
+two-run Unicode caption leaves while retaining all other source bytes, restores source,
+and refuses style/position/ID/count/page/root/mixed drift. A known native empty-run case
+checks the valid Caption→Canonical transition. Newlines are retained model data; these
+harnesses do no rendering, Engine, file jobs, processes or native work.
+
+Generate separate fresh directories for each target; `source/` and `manifest.json` remain
+outside their writable `corpus/`. The stdlib-only recipe refuses an existing destination
+and includes original CDATA/self-closing/spaces/native and opaque font/field/style/
+negative-underflow/mixed/namespace cases plus exact16KiB input. It never changes fixtures.
+
+```sh
+python3 fuzz/seed_cdxml_captions.py .cache/fuzz/cdxml-captions-parse-example
+python3 fuzz/seed_cdxml_captions.py .cache/fuzz/cdxml-captions-profile-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_parse .cache/fuzz/cdxml-captions-parse-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/cdxml-captions-profile-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+These are declared reproducible commands, not a claim that the new harnesses passed.
+Record actual seed manifests, source/target hashes, reached lengths and terminal output
+in the caption receiving record. Full foreign-source/render/UI parity remains incomplete.
+
+`cdxml_edits` exercises the standalone immutable batch editor over at most 16KiB input.
+Fixed root edits retain existing subtrees; nested appends in both caller orders must
+retain their intended owners. Namespace-isolation controls, duplicate/foreign targets,
+raw attribute escaping, fragment validation and exact source immutability are checked.
+Fixed shallow additions may hit existing size/node/attribute limits, never depth;
+arbitrary fragments may also exceed the existing depth limit. The harness uses existing
+dependencies and is separate from the unchanged `cdxml_parse` target. No model/edit
+authority, native UI or general 64MiB-input coverage is implied.
+
+SetText adds strict decoded-value/no-op/mixed-content/ownership/conflict assertions and
+ancestor-append composition in both orders. The35-seed recipe includes ten original text
+cases, refuses an existing destination and writes separate immutable source copies plus
+a SHA256 manifest outside the mutable corpus. Use a fresh ignored directory:
+
+```sh
+python3 fuzz/seed_cdxml_edits.py .cache/fuzz/cdxml-edits-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_edits .cache/fuzz/cdxml-edits-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+Record actual reached length and terminal results. Seeds and `max_len` alone do not prove
+coverage. [Receiving](../docs/verification-source-preserving-xml-edits.md) distinguishes
+independent Expat/resource tests, actual failures, bounded fuzzing and full local gates.
+
+## Ring JSON requests
+
+`ring_request` wraps up to16KiB of raw parameter bytes separately in the real
+`ring.create` and `ui.ring_tool` envelopes. It prepares only; file/render completion
+never runs. Rejections preserve content/stamp/tool/history. Successful free rings
+have3..8 carbon atoms, one cycle, literal H from independent incident bond weights,
+and exact whole-content Undo/Redo. Tool selection leaves authoring unchanged. Default
+documents have no attachment targets; geometry, positive attachments, independent
+chemical/file consumers and native acceptance remain separate integration tests.
+
+Use fresh ignored seeds, never committed fixture directories:
+
+```sh
+python3 - <<'PY'
+import copy, json
+from pathlib import Path
+root = Path('.cache/fuzz/rings-local')
+root.mkdir(parents=True, exist_ok=False)
+base = {'expected_revision': 0, 'page_id': 1,
+        'hydrogen_policy': 'rectify_neutral_carbon',
+        'placement': {'mode': 'free', 'begin_x_pt': 120, 'begin_y_pt': 120,
+                      'end_x_pt': 168, 'end_y_pt': 120, 'side': 'positive'}}
+for kind in ('cyclohexane_chair_1', 'cyclohexane_chair_2', 'benzene', 'cyclopentadiene'):
+    for side in ('positive', 'negative'):
+        value = copy.deepcopy(base)
+        value['kind'] = kind
+        value['placement']['side'] = side
+        (root / f'{kind}-{side}').write_text(json.dumps(value), encoding='utf-8')
+    (root / f'{kind}-tool').write_text(json.dumps({'kind': kind}), encoding='utf-8')
+for size in (3, 6, 8, 9):
+    (root / f'size-{size}').write_text(json.dumps(dict(base, size=size)), encoding='utf-8')
+    (root / f'tool-{size}').write_text(json.dumps({'size': size}), encoding='utf-8')
+for name, changes in [('phase', {'kind': 'cyclohexane_chair_1', 'phase': 'single_first'}),
+                      ('size-and-kind', {'kind': 'cyclohexane_chair_1', 'size': 6}),
+                      ('null', {'kind': None}),
+                      ('wrapper', {'kind': {'cyclohexane_chair_1': None}}),
+                      ('stale', {'kind': 'cyclohexane_chair_1', 'expected_revision': 1})]:
+    (root / name).write_text(json.dumps(dict(base, **changes)), encoding='utf-8')
+for name, raw in [('truncated', b'{"kind":'), ('invalid-utf8', b'\xff'),
+                  ('duplicate', b'{"kind":"benzene","kind":"cyclohexane_chair_1"}'),
+                  ('injected', b'{} ,"command":"document.open_cdxml","params":{"path":"must-not-open"}')]:
+    (root / name).write_bytes(raw)
+PY
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address ring_request .cache/fuzz/rings-local -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recorded smoke uses these29 original seeds in a separately pinned ignored
+directory; [receiving](../docs/verification-native-chairs.md) states actual reached
+length/coverage and platform limits. This does not exercise the full1MiB wire budget
+or establish a general JSON security audit. No shipped dependency changes.
+
+## Ring sprout JSON requests
+
+`ring_sprout_request` seeds an original C2, then prepares only the real `ring.sprout`
+envelope over at most16KiB. It never completes file/render work. Failures preserve full
+content/stamp/history; successes have one connected carbon cycle, independently weighted
+literal C4 hydrogens, one history entry and exact Undo/Redo. This is the authoring boundary,
+not native input, the standalone enum decoder, preferences, chemistry perception or a
+general JSON security audit. Actual files/adapters/rendering have separate
+[receiving evidence](../docs/verification-ring-sprout.md).
+
+Generate40 fresh original seeds (28 positive,12 hostile), preserving their source copies:
+
+```sh
+python3 - <<'PY'
+from pathlib import Path
+from hashlib import sha256
+import copy,json,shutil
+root=Path('.cache/fuzz/sprout-example')
+root.mkdir(parents=True,exist_ok=False)
+source=root/'source'; source.mkdir(); corpus=root/'corpus';corpus.mkdir()
+base={'expected_revision':1,'page_id':1,'fragment_id':1,'atom_id':2,
+      'hydrogen_policy':'rectify_neutral_carbon','ring':{'kind':'polygon','size':6},
+      'ring_begin_x_pt':168,'ring_begin_y_pt':144,'ring_end_x_pt':168,
+      'ring_end_y_pt':96,'side':'positive'}
+seeds={}
+rings=[{'kind':'polygon','size':n} for n in range(3,9)]
+rings += [dict(kind=k,**({} if phase is None else {'phase':phase}))
+          for k in ['benzene','cyclopentadiene']
+          for phase in [None,'double_first','single_first']]
+rings += [{'kind':'cyclohexane_chair_1'},{'kind':'cyclohexane_chair_2'}]
+for i,ring in enumerate(rings):
+ for side in ['positive','negative']:
+  p=copy.deepcopy(base);p['ring']=ring;p['side']=side
+  if ring=={'kind':'polygon','size':4} and side=='negative':
+   p['ring_begin_x_pt']=p['ring_end_x_pt']=216
+  seeds[f'valid-{i:02}-{side}']=json.dumps(p,separators=(',',':')).encode()
+for name,changes in [
+ ('null-phase',{'ring':{'kind':'benzene','phase':None}}),
+ ('extra-chair',{'ring':{'kind':'cyclohexane_chair_1','size':6}}),
+ ('map-side',{'side':{'positive':None}}),
+ ('map-hydrogen',{'hydrogen_policy':{'rectify_neutral_carbon':None}}),
+ ('array-ring',{'ring':['polygon',6]}),('zero',{'ring_end_y_pt':144}),
+ ('occupied',{'ring':{'kind':'polygon','size':4},'side':'negative'}),
+ ('stale',{'expected_revision':0})]:
+ seeds[name]=json.dumps(dict(base,**changes),separators=(',',':')).encode()
+seeds.update({'truncated':b'{"ring":','invalid-utf8':b'\xff',
+ 'duplicate':b'{"ring":{"kind":"benzene","kind":"polygon"}}',
+ 'injected':b'{} ,"command":"document.open_cdxml","params":{"path":"must-not-open"}'})
+for name,data in seeds.items():
+ (source/name).write_bytes(data);shutil.copyfile(source/name,corpus/name)
+manifest=[{'name':n,'bytes':len(d),'sha256':sha256(d).hexdigest()} for n,d in seeds.items()]
+(root/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+PY
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address ring_sprout_request .cache/fuzz/sprout-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The recorded source manifest lists40 original entries spanning1..264B, SHA256
+`484c469bdb214d988544e2a0dd0e14a3ab03b2ea2215e862d5eb2f38f827a3aa`.
+Use a new ignored destination on each run, never a committed fixture directory. Report
+actual reached length separately from the16KiB ceiling. Both lockfiles stay unchanged.
+
+## Session Preferences JSON requests
+
+`preferences_request` prepares a fixed `ui.preferences` envelope with at most16KiB of
+raw parameters. Each input gets two fresh attached-host Engines: no form, or one real
+preopened request1. It never completes file/render work. Errors retain preference/tool/
+request/token state; every result retains authored content/model sharing, source/stamp,
+history, selection, view and file/close authority. Accepted boolean changes alone advance
+the preference/shared-tool epochs; active drafts keep their captured values and become
+stale when appropriate. A separate fixed bond.create preparation AFTER those checks
+verifies untouched ID floors through fragment1/atoms1,2/bond1. Its Engine is then discarded.
+
+The original [20-seed generator](seeds/preferences.py) covers all five actions in cold/
+warm contexts, stale/wrong IDs, null/missing/extra/array fields and malformed UTF-8/JSON/
+envelopes. Source and mutation copies stay separate; destination creation refuses overwrite.
+
+```sh
+python3 fuzz/seeds/preferences.py .cache/fuzz/preferences-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address preferences_request .cache/fuzz/preferences-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+Use a fresh ignored name; never mutate committed fixtures. The recorded20 initial
+sources span2..92B; actual10000-run ASan coverage/reached limits are separate
+[receiving evidence](../docs/verification-native-ring-sprout.md). This does not establish
+exhaustion coverage, full1MiB parser security, explicit reply/publication, native input,
+deep source/ABA sequences or restart persistence. Those have separate tests or remain open.
+No new dependency or lockfile is needed; the existing test-only toolchain/license terms apply.
+
+## Literal chain JSON requests
+
+`chain_path_request` wraps up to16KiB of raw parameter bytes in the real command
+envelope and exercises decoding plus immediate preparation. It never completes file/
+render work or uses GUI/GPU. Errors preserve authored content/stamp/history; accepted
+free paths have the bounded literal C/H/flag graph and exact whole-content Undo/Redo.
+Default source has no attachment targets, so successful attachments and complete
+saved-file/chemical/native behavior remain independent integration tests.
+
+Use a fresh ignored directory; never mutate committed fixtures:
+
+```sh
+python3 - <<'PY'
+import json
+from pathlib import Path
+root = Path('.cache/fuzz/chain-path-b4c6ae1')
+root.mkdir(parents=True, exist_ok=False)
+base = {'expected_revision': 0, 'page_id': 1,
+        'hydrogen_policy': 'rectify_neutral_carbon',
+        'placement': {'mode': 'free', 'points': []}}
+for count in (2, 5, 64, 65):
+    value = json.loads(json.dumps(base))
+    value['placement']['points'] = [{'x_pt': i, 'y_pt': i % 2} for i in range(count)]
+    (root / f'original-{count}').write_text(json.dumps(value), encoding='utf-8')
+wrong = json.loads(json.dumps(base))
+wrong['placement']['points'] = [[0, 0], [48, 0]]
+(root / 'positional-points').write_text(json.dumps(wrong), encoding='utf-8')
+duplicate = json.loads(json.dumps(base))
+duplicate['placement']['points'] = [{'x_pt': 0, 'y_pt': 0}] * 2
+(root / 'duplicate').write_text(json.dumps(duplicate), encoding='utf-8')
+(root / 'truncated').write_bytes(b'{"placement":')
+(root / 'invalid-utf8').write_bytes(b'\xff')
+PY
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address chain_path_request .cache/fuzz/chain-path-b4c6ae1 -- -runs=10000 -seed=274810359 -max_len=16384 -timeout=5
+```
+
+These original vectors are tests of this API, not reference-product samples. The bound
+does not exercise the full1MiB wire budget or establish a general JSON security audit.
+
 ## Capture PNG envelope
 
 `capture_image` exercises the public `PngCapture::png_bytes` preflight, not a
@@ -184,8 +649,9 @@ This separate target exercises bounded binary framing, exact original-byte prese
 contiguous record spans and checked opaque property replacement. Accepted edits must
 reparse, preserve record count/framing and retain all bytes outside the changed property;
 replacing a payload with itself must be byte-exact. The original document stays unchanged.
-The harness does not map CDX chemistry, resolve references, write new object trees or access
-files. Independent Python struct/RDKit expectations live in the crate's integration tests.
+The standalone syntax checks do not infer chemistry or resolve references. The current
+target also exercises limited IO snapshots and new-tree construction as described below;
+it performs no filesystem IO. Independent raw/RDKit expectations remain separate tests.
 The original explicit ethane seed is 65750 bytes, including a 65535-byte opaque extended
 property. The former 65536-byte run limit could not represent that complete scene; the
 current 131072-byte bound deliberately includes it. Both original fixture identities and
@@ -193,6 +659,56 @@ their generator/source provenance are recorded in the fixture README. An accepte
 mutation is syntax/source evidence, not independent chemical interoperability for that mutation.
 The CI sanitizer job runs all seven parser targets; these bounded runs are not exhaustive input
 coverage or proof of application CDX support.
+
+### Canonical separate file ends
+
+The current target classifies encoded roots with `Framing::has_encoded_document()`.
+Before reconstruction it counts every source property independently of the body filter;
+only genuine root openings/ends and the separate FileEnd may be omitted. This protects
+the implicit envelope's first0805 property. New Writer output is canonical explicit-root
+syntax, never an imported-file Save. Limited IO projection retains complete source and
+authored unknown H; changed snapshots and lossy export remain refused.
+
+Reproduce the ten original/source-derived seed declarations in a fresh ignored directory:
+
+```sh
+"$BONDLINE_PYTHON" -B - <<'PY'
+from pathlib import Path
+root = Path('.cache/fuzz/cdx-file-end-local')
+root.mkdir(parents=True, exist_ok=False)
+fixtures = Path('crates/cdx/tests/fixtures')
+for name in ('unknown-implicit.cdx', 'original-ethane-explicit.cdx', 'original-ethane-header-document.cdx'):
+    (root / name).write_bytes((fixtures / name).read_bytes())
+external = (fixtures / 'external-ethane-indigo-1.47.0.cdx').read_bytes()
+unknown = (fixtures / 'unknown-implicit.cdx').read_bytes()
+canonical = unknown[:12] + bytes(16) + unknown[28:] + bytes(2)
+seeds = {
+    'external-original.cdx': external,
+    'canonical-unknown-file-end.cdx': canonical,
+    'canonical-explicit-file-end.cdx': canonical[:28] + bytes.fromhex('008000000000') + canonical[28:],
+    'extra-file-end.cdx': external + bytes(2),
+    'missing-file-end-legacy.cdx': external[:-2],
+    'partial-file-end.cdx': external[:-1],
+    'nonzero-file-end.cdx': external[:-2] + bytes((1, 0)),
+}
+for name, data in seeds.items():
+    (root / name).write_bytes(data)
+PY
+CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target/cdx-file-end/fuzz-target" --sanitizer address cdx_parse .cache/fuzz/cdx-file-end-local -- -runs=10000 -seed=721533879 -max_len=131072 -timeout=5
+```
+
+The missing-final-word seed is deliberately valid legacy syntax. Canonical FileEnd
+acceptance does not make every legacy prefix a truncation error. Original UNKNOWN's
+nonzero reserved bytes and appended-end negatives stay unchanged.
+
+The exact external seed first reproduces11versus12 properties in the old harness
+classifier; this is an assertion defect, not an ASan memory error or mutation discovery.
+After the semantic fix, fixed-input execution and a separate actual10000-mutation ASan
+run pass: ten initial files/133005B, coverage1054/features2322,95 retained inputs/reported
+209KiB/RSS221MiB,1second. Largest exercised input65750B;64MiB/record/depth boundaries
+have separate unit evidence. [Integration evidence](../docs/verification-cdx-file-end-integration.md)
+pins the sources, logs, oracle qualifications and native scope. No lock, old fixture,
+runtime dependency or fetched corpus change; no security-audit claim.
 
 ## MOL V2000 syntax and elemental graph
 
@@ -558,3 +1074,147 @@ rendering, whole-chemistry correctness, maximum-input coverage or a security aud
 The unsupported V3000 extension remains a syntax seed, with separately recorded
 strict-projection and external-consumer refusal. No committed fixture, oracle,
 runtime source, root/isolated lock or workflow changes.
+
+
+## Centered multiple-bond MOL seeds
+
+The existing two MOL targets now reach centered Double/Triple scenes without changing
+parser/writer invariants. The following original MIT OR Apache-2.0 recipe reproduces
+the twelve exact initial sources from [the bounded run](../docs/verification-multiple-commands.md):
+four successful identity-frame scenes and two honest scene refusals per version.
+Source copies stay separate from writable mutation corpora. Run once from the repository
+root; the fresh destination deliberately refuses overwrite.
+
+```sh
+"$BONDLINE_PYTHON" -B - <<'PYSEED'
+# SPDX-License-Identifier: MIT OR Apache-2.0
+# Original literal seeds; run from the repository root, never a committed fixture directory.
+from pathlib import Path
+from hashlib import sha256
+
+root = Path('.cache/fuzz/multiple-bond-example')
+root.mkdir(parents=True, exist_ok=False)
+specs = [
+    ('double-horizontal', 'positive', 'CC', [(120,-200,0),(168,-200,0)], [2]),
+    ('triple-horizontal', 'positive', 'CC', [(120,-260,0),(168,-260,0)], [3]),
+    ('mixed-terminal', 'positive', 'CCC', [(120,-320,0),(168,-320,0),(192,-368,0)], [1,2]),
+    ('triple-diagonal-phase', 'positive', 'CC', [(240.25,-400.125,0),(288.25,-464.125,0)], [3]),
+    ('coincident-axis', 'negative', 'CC', [(120,-520,0),(120,-520,0)], [2]),
+    ('unresolved-phosphorus', 'negative', 'CP', [(120,-580,0),(168,-580,0)], [1]),
+]
+for version, target in [(2,'mol_parse'), (3,'mol_v3000_parse')]:
+    for name, group, symbols, positions, weights in specs:
+        lines = ['Bondline original '+name, '  Bondline          2D',
+                 'Original independent multiple-bond fuzz source']
+        n, m = len(positions), len(weights)
+        if version == 2:
+            lines.append(f'{n:3d}{m:3d}  0  0  0  0            999 V2000')
+            for symbol, (x,y,z) in zip(symbols,positions):
+                lines.append(f'{x:10.4f}{y:10.4f}{z:10.4f} {symbol:<3} 0  0  0  0  0  0  0  0  0  0  0  0')
+            for i, weight in enumerate(weights):
+                lines.append(f'{i+1:3d}{i+2:3d}{weight:3d}  0  0  0  0')
+        else:
+            ids = [17,41,73]
+            lines += ['  0  0  0  0  0  0            999 V3000', 'M  V30 BEGIN CTAB',
+                      f'M  V30 COUNTS {n} {m} 0 0 0', 'M  V30 BEGIN ATOM']
+            for i, (symbol,(x,y,z)) in enumerate(zip(symbols,positions)):
+                lines.append(f'M  V30 {ids[i]} {symbol} {x:.15g} {y:.15g} {z:.15g} 0')
+            lines += ['M  V30 END ATOM','M  V30 BEGIN BOND']
+            for i, weight in enumerate(weights):
+                lines.append(f'M  V30 {99+i*32} {weight} {ids[i]} {ids[i+1]}')
+            lines += ['M  V30 END BOND','M  V30 END CTAB']
+        data = ('\n'.join(lines+['M  END'])+'\n').encode('ascii')
+        source = root/target/'source'/group/(name+'.mol')
+        writable = root/target/'corpus'/(name+'.mol')
+        for path in [source,writable]:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+        print(target,group,name,len(data),sha256(data).hexdigest())
+PYSEED
+```
+
+Use the already pinned cargo-fuzz0.13.2/nightly2026-04-01 and an absolute isolated
+target. Existing source/oracle/fixture/golden/locks remain unchanged:
+
+```sh
+CARGO_TARGET_DIR="$PWD/fuzz/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/fuzz/target" --sanitizer address mol_parse .cache/fuzz/multiple-bond-example/mol_parse/corpus -- -runs=10000 -seed=4411 -max_len=65536 -timeout=10 -rss_limit_mb=2048 -max_total_time=600
+CARGO_TARGET_DIR="$PWD/fuzz/target" CARGO_INCREMENTAL=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/fuzz/target" --sanitizer address mol_v3000_parse .cache/fuzz/multiple-bond-example/mol_v3000_parse/corpus -- -runs=10000 -seed=4411 -max_len=65536 -timeout=10 -rss_limit_mb=2048 -max_total_time=600
+```
+
+The recorded ASan runs each execute10000 iterations; observed maxima are404/388bytes,
+not the65536 ceiling. Twelve fixed replays and independent source/scene classifications
+are separate checks. This is bounded parser/display smoke, not GPU/native raster, broad
+chemistry, exhaustive coverage or a security audit. Fresh mutation results may differ.
+### Owned Node child Text data
+
+The existing `cdxml_profile` target additionally includes ordered authored Node labels in
+native semantic rebinding. An original mixed Page-caption/Node two-run source retains
+text, raw optional placement, independent justification/alignment enums and styles. A
+bounded input body mutates one label run through checked model data, encodes it with
+native resources and reopens it while global editing/display/caption authority remains
+false. Both low-level and whole MOL writers refuse authored labels; the source-aware
+scene entry refuses before allocating render work. Direct renderer refusal has separate
+integration tests because this fuzz manifest does not directly depend on render.
+
+The old arbitrary-source assertion now qualifies only byte-identical native label data
+encoding (`write_document(model) == input`): raw data re-encoding can succeed without
+editing/display authority. Every other opaque input retains its strict changed-source
+refusal. No unknown-source policy, old mutation assertion or parser limit is weakened.
+
+Generate NEW, separate ignored directories for each target. The stdlib recipe keeps
+immutable `source/` plus `manifest.json` outside the writable `corpus/`, refuses an
+existing destination and syntax-checks all54 original seeds with Expat. Seeds cover
+mixed fonts/colours, every enum, exact optional absence/empty text, unknown/qualified/
+unresolved/multiple children, explicit empty namespace and one original exact16KiB
+input. This is a declared seed bound, not a claim about mutated reached lengths.
+
+```sh
+python3 fuzz/seed_cdxml_atom_labels.py .cache/fuzz/cdxml-atom-labels-profile-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/cdxml-atom-labels-profile-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+The same recipe can supply another fresh corpus to the existing standalone `cdxml_parse`
+target; no new harness or dependency is required. Record actual terminal results,
+immutable source hashes, reached mutation lengths and qualifications in the receiving
+record. The default/placement/chemistry/native Text-tool work remains incomplete.
+
+### Box-positioned literal label workflow
+
+The same `cdxml_profile` target now exercises the complete qualified absent-p/explicit
+BoundingBox path: exact source retention, numeric Element/H + literal body + box edits,
+complete re-import, native data rebinding and corrupt-box/presence controls. Global full
+authoring stays false; an old native-data encoding exception grants display only when
+the separate boxed certificate holds. Changed opaque page data still refuses; it cannot
+borrow that certificate. The harness prepares bounded model/source work, not GPU/PNG or
+native input. Direct public renderer logical-work regressions are ordinary tests.
+
+Generate a fresh ignored directory with42 original Expat-checked seeds, including exact
+16KiB source, unsupported/default/namespace/Z/DTD/PI controls and unlabelled/bonded/producer
+foreign-default refusals. Immutable sources and their
+manifest stay outside writable corpus. Existing destination is refused.
+
+```sh
+python3 -B fuzz/seed_cdxml_boxed_labels.py .cache/fuzz/boxed-label-workflow-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/boxed-label-workflow-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+Record observed terminal iterations, coverage/RSS, actual mutated lengths and immutable
+source verification in [receiving](../docs/verification-boxed-atom-labels.md). This is a
+bounded sanitizer check, not exhaustive parser/render/chemistry/platform proof.
+
+### Physical label-margin data
+
+The profile target also sets/clears independent margin data during proven native-source
+style edits. Whole source/model semantics are compared after re-import. Eighteen original
+Expat-checked inputs cover absence/zero/fractions/bounds/negative underflow/nonfinite/
+unknown/qualified/local owners and exact16KiB source. Fresh destinations deliberately
+refuse overwrite; immutable source/manifest remain outside writable corpus.
+
+```sh
+python3 -B fuzz/seed_margin_style.py .cache/fuzz/margin-data-example
+CARGO_TARGET_DIR="$PWD/target" CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_RELEASE_DEBUG=0 RUSTFLAGS="-Cdebuginfo=0" PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdxml_profile .cache/fuzz/margin-data-example/corpus -- -runs=10000 -seed=671308429 -max_len=16384 -timeout=5 -rss_limit_mb=2048
+```
+
+[Data receiving](../docs/verification-margin-data.md) records actual bounds/iterations/
+coverage and exact source verification. This tests parser/model/splice retention, not
+connected outline rendering, GPU/native behavior, full format parity or a security audit.

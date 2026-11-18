@@ -3,6 +3,40 @@ use bondline_model::{PageSize, Point2};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum SmilesConversionProfile {
+    #[default]
+    NeutralCarbonPathV1,
+    NeutralAcyclicV1,
+    NeutralSimpleRingV1,
+    NeutralComponentsV1,
+}
+
+impl SmilesConversionProfile {
+    pub const fn name(self) -> &'static str {
+        match self {
+            Self::NeutralCarbonPathV1 => "neutral_carbon_path_v1",
+            Self::NeutralAcyclicV1 => "neutral_acyclic_v1",
+            Self::NeutralSimpleRingV1 => "neutral_simple_ring_v1",
+            Self::NeutralComponentsV1 => "neutral_components_v1",
+        }
+    }
+
+    pub const fn label(self) -> &'static str {
+        match self {
+            Self::NeutralCarbonPathV1 => "Carbon chains",
+            Self::NeutralAcyclicV1 => "Acyclic neutral structures",
+            Self::NeutralSimpleRingV1 => "Neutral ring structures",
+            Self::NeutralComponentsV1 => "Neutral components",
+        }
+    }
+
+    fn is_legacy(&self) -> bool {
+        *self == Self::NeutralCarbonPathV1
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct ConvertSmilesToCdxml {
@@ -19,6 +53,8 @@ pub struct ConvertSmilesToCdxml {
     pub page_width_pt: f64,
     #[schemars(extend("exclusiveMinimum" = 0.0, "maximum" = bondline_model::MAX_PAGE_DIMENSION_PT))]
     pub page_height_pt: f64,
+    #[serde(default, skip_serializing_if = "SmilesConversionProfile::is_legacy")]
+    pub profile: SmilesConversionProfile,
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -80,6 +116,7 @@ impl ConversionReceipt {
         receipt: bondline_io::files::SmilesConversionReceipt,
         input_revision: u64,
         session_generation: u64,
+        profile: SmilesConversionProfile,
     ) -> Result<Self, Error> {
         let path = |path: std::path::PathBuf| {
             path.into_os_string()
@@ -87,7 +124,7 @@ impl ConversionReceipt {
                 .map_err(|_| Error::UnrepresentableFilePath { published: true })
         };
         Ok(Self {
-            profile: "neutral_carbon_path_v1",
+            profile: profile.name(),
             input_revision,
             session_generation,
             input_path: path(receipt.input_path)?,

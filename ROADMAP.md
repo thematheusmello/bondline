@@ -4,6 +4,343 @@ The complete target is an offline desktop and WebAssembly chemical editor with f
 documented workflows. The initial reference baseline is Professional 26.1; older public
 guides are versioned evidence, not proof of complete modern parity.
 
+The persistent goal includes **all M0–M5 open points** and every remaining in-scope row
+in the parity checklist. It is complete only after actual install/create/open/edit/
+analyse/cleanup/history/save/recovery/reopen/publish/clipboard journeys have independent
+evidence on the supported desktop platforms and browser. A scaffold, command count,
+grey tool, passing component or partial milestone cannot complete it. Continue from
+STATUS rather than restarting or repeating historical next-task paragraphs. Actions
+stays OFF during development.
+
+The current M1 [plain CDX bond receiving](docs/verification-cdx-plain-bonds.md) adds
+read-only Single/Double/Triple and explicit directed position, preserving raw automatic/
+manual provenance and every source byte. Independent16-source/149-refusal checks, actual
+adapters/App/native Unicode files, fullIO541/0 and bounded ASan pass. No display/chemical-
+authoring/loss authority, command or grey tool is added. Next source-lock checked standalone
+CDX font/colour resources before interpreting styled Text or granting faithful preview.
+Broader CDX/interchange and every remaining M0–M5 workflow stay required; STATUS records
+the latest aggregate and exact continuation rather than these historical next-task notes.
+
+The preceding M1 [literal CDX receiving](docs/verification-cdx-literal-atom-metadata.md)
+adds read-only isotope/charge/radical/explicit-H projection with exact source retention.
+Frozen independent facts, actual adapters/native Mac Unicode files and bounded ASan pass.
+The final aggregate fails at the unchanged MCP listener-release case; all unexecuted
+stages pass separately. No display/chemical-authoring/loss authority or tool is added.
+Next source-lock plain CDX Single/Double/Triple order and explicit bond display/position
+metadata, then freeze independent bitmask/direction/absence/owner vectors before code.
+CDX fonts/Text/styles, faithful display/editing and every remaining M0–M5 workflow stay open.
+
+The preceding M1 [scalar-default metadata receiving](docs/verification-label-default-metadata.md)
+qualifies explicit-label files carrying checked unused LabelFont/Size/Face on supported
+owners. Existing label/Selection/history/Unicode Save/reopen works through immutable
+source spans, with bounded native Mac, exact CPU/Metal and independent source/font/
+adapter/sanitizer evidence. Missing actual run fields remain refused: public omission
+examples do not resolve general Label*/Caption*/stylesheet inheritance. Registry49 and
+catalogue16/124 stay exact. Broader effective typography/rich labels remain required;
+continue the independent CDX literal-atom metadata workstream rather than guessing
+unproved inheritance. Full M0–M5 and all workflows below remain active/incomplete.
+
+The preceding M1 [printed-label creation receiving](docs/verification-printed-label-creation.md)
+adds explicit-style hidden-carbon child Text creation, retained flags, stable IDs and a
+separate source capability that survives partial/all-labelled Save/reopen. Native Mac
+creation/continued editing/history/movement/Unicode files and exact CPU/Metal captures
+pass bounded independent checks. Old profiles/full/loss authority stay literal; new49
+preserves all old48 metadata and catalogue16/124. The user now requires pushing each
+atomic commit; Actions stays OFF. Effective foreign typography/default ownership, broader
+resources/placement, CDX/general interchange and every remaining M0–M5 workflow stay open.
+
+The preceding M1 [mixed skeletal-label receiving](docs/verification-mixed-skeletal-labels.md)
+adds a separate foreign-source capability for explicit printed labels plus explicitly
+hidden, known-H carbon. Current no-glyph proofs prevent borrowed fonts after point/neighbor
+changes. Existing label/selection/history/Save workflows and bounded native Mac exact
+Unicode files pass. Fresh local2091/0/1+vendor3/0 and10000-run ASan pass; prior listener
+failures remain unexplained, not fixed. Old Boxed/Connected/full-authority boundaries,
+registry48/catalogue16/124 and Actions OFF remain. Full foreign defaults/styles, hidden-
+node label creation and all remaining M0–M5 workflows below are required.
+
+The preceding M1 [dependent-label receiving](docs/verification-dependent-label-translation.md)
+extends existing selection/translation to qualified Boxed and Connected sources. Current
+Node points and raw label boxes move together, preserving exact source/history/Save owners
+and refusing invalid whole-page candidates. Independent source/adapters/App and bounded Mac
+drag/nudge/Unicode Save/reopen checks pass. The native all-atom CPU/Metal capture is exact
+after an independently checked nine-pixel coverage correction. The unchanged MCP listener
+aggregate failure remains open; other local components are verified separately.
+Full M0–M5, human golden approval and other-platform acceptance remain open; Actions is OFF.
+
+The preceding M1 [connected-label receiving](docs/verification-connected-labels.md) adds
+explicit foreign bonded diagrams through a separate source capability, actual-outline
+margin shortening and the existing synchronized label command/native form. Old Boxed
+remains zero-bond, global full staysfalse and all48 metadata/catalogue16/124 remain exact.
+Independent source/render/history/adapters and bounded Mac Unicode Save/reopen pass.
+Aggregate MCP listener-release failure remains open; other components and sanitizer pass.
+Continue literal dependent Node+box movement with independently declared source/geometry/
+history proofs, broader foreign styles/fonts/text and the full remaining milestones.
+Human golden approval and exact reference/platform behavior remain unverified.
+
+The preceding M1 [box-positioned label receiving](docs/verification-boxed-atom-labels.md)
+delivers a complete bounded imported-file workflow: authored display, synchronized
+Element/H/body/bounds edits, history, Unicode Save/reopen and a reused native atom form.
+Foreign sources require all atoms explicitly labelled and no bonds; unknown font/ink
+defaults cannot borrow native conventions. Independent font/XML/image/adapter checks,
+CPU/Metal equality and bounded actual macOS
+acceptance pass. Registry48 preserves all old47 metadata; catalogue16/124 stays.
+The latest aggregate MCP listener failure remains recorded, not repaired. A human-approved
+label golden, broader placement/styles/defaults/dependent edits and general Text-tool
+editing remain open. First source-lock the next connected foreign label/style workflow, including explicit
+bond ink/gap/margin and effective-font ownership. Admit it only after independent source/
+render/history/native proof; other writers keep explicit refusals. Continue full M1, then all remaining M2–M5 work below.
+
+The following paragraphs record historical checkpoints. Their next-task/count statements
+retain that scope; current executable continuation is in STATUS.
+
+The earlier M1 [owned child-Text boundary](docs/verification-owned-atom-label-data.md)
+preserves explicit Node label data in the model/native codec, accounts for shared history
+and refuses unsupported edits, rendering and lossy conversion. Independent actual
+CLI/stdio/socket unchanged Unicode Save/reopen passes. This does not finish the chemical
+Text workflow: supported layout/semantic agreement, effective font/face/default data,
+synchronized source-preserving edits and a native editor remain the next work. The full
+M0–M5 target below and registry47/catalogue16/124 are unchanged.
+
+The M1 [label-default lookup prerequisite](docs/verification-label-default-lookup.md)
+now has owned per-property provenance, independent Expat/Decimal/source tests and bounded
+ASan. Fresh local1919/0/1 passes; the earlier MCP failure remains unexplained. This adds
+no drawing/foreign-authoring authority. Node child Text precedence, unresolved Style-run
+fallback and conflicting public placement evidence must guide the next complete
+model/source/render/edit/Save workflow; do not invent a universal baseline or style sheet.
+
+Current M1 [plain-caption receiving](docs/verification-styled-captions.md) integrates
+explicit styled runs, a separate source capability, actual CPU/Metal display and one
+shared run-body edit/history/Save command. Bounded Mac Open, remote-edit repaint, keyboard
+history and Unicode Save As/reopen pass. Registry47 preserves the old46 byte prefix;
+catalogue16/124 stays. This is partial Text support: the native Text tool/editor, chemical
+formatting, dependent labels, inherited fonts/styles, mixed foreign diagrams and CDX text
+remain missing. The aggregate's old MCP bind failure remains unexplained; final receiving
+records the separate local components. Full M0–M5 remains active/incomplete.
+
+Earlier paragraphs below are historical checkpoints with their recorded evidence/scope.
+
+Explicit native root relative spacing now follows the
+[preferred-length contract](docs/research/document-bond-spacing.md) and
+[receiving](docs/verification-document-bond-spacing.md): independent source deltas,
+shared ink/hit/render certificates, one final settings transaction and a four-field form.
+Missing spacing retains legacy geometry; Abs/local overrides/default inheritance remain
+guarded. The full M0–M5 goal remains active. Native width/spacing interaction is unverified;
+no planned tool is enabled. Continue broader M1 effective fonts/colours/Text and foreign
+style ownership, then CDX semantic mapping and the remaining milestone workflows.
+
+M1 now has [source-preserving text-only syntax edits](docs/verification-source-preserving-xml-text.md),
+with independent bytes/Expat, old parser regressions and bounded ASan. All local components
+pass; an initial aggregate MCP bind failure remains recorded/unexplained. Effective styles,
+fonts and synchronized dependent labels still need real model/render/history/Save/native
+integration before general foreign authoring. The full target below is unchanged.
+
+M1 [logical font/colour resource decoding](docs/verification-cdxml-resources.md) now passes
+independent format/Expat expectations, full local1811/0/1 and qualified bounded ASan.
+It retains raw source and explicit missing references without granting foreign authoring.
+Continue with checked source-preserving Text edits and complete effective-style/label
+resolution before activating a broader imported-file profile. The later spacing increment
+above supplies bounded explicit-root evidence, without inventing foreign defaults. All milestones and
+the full end-to-end goal remain open.
+
+The user explicitly recreated/resumed the full end-to-end M0–M5 goal. Explicit document
+LineWidth now has [independent receiving](docs/verification-document-line-width.md):
+typed/source-preserving data, actual width separate from em/spacing, complete-owner
+display/previews/capture, atomic three-field settings and preserved pair behavior. Full
+local1800/0/1 and bounded10000-run ASan pass; registry46 retains all45 prior schemas/order,
+catalogue16/124 stays. Native access fails, so new native width interaction is unverified.
+Next broaden M1 styles/font/text/default resolution with independent foreign fixtures,
+then CDX semantic mapping/writing and the remaining file workflows. All M0–M5 requirements
+below remain; no milestone or full source compatibility is complete. Actions stays OFF.
+
+The [source-aware closed-v0 profile](docs/verification-source-preserving-cdxml-profile.md)
+now preserves lexical/order/scoped-ID variants through all delivered typed edits/appends,
+with complete syntax/semantic proof and current-prefix guards. Actual CLI/stdio/socket/
+Unicode history/files, independent Expat/Decimal/RDKit, paired authoring/CPU captures,
+two bounded10000-run ASan checks and full local1766/0/1 pass. Unknown semantics remain
+guarded and whole-MOL stays canonical-only. Native access is unavailable, so the new
+desktop path is wired/unverified; foreign styles/defaults/labels/objects and full M1
+remain open. Next source-lock broader published style/default data and independent
+foreign-source retention/render vectors; revisit native acceptance when access returns.
+Full M0–M5 stays active/incomplete, Actions OFF. Earlier paragraphs are checkpoints.
+
+The next M1 source-preserving workflow now has its [batch syntax prerequisite](docs/verification-source-preserving-xml-edits.md):
+ordinary attribute changes/removals and self-contained child appends preserve unrelated
+bytes and namespace meaning. Eighteen independent cases, actual nesting/namespace REDs,
+bounded10000-run ASan and full local1735/0/1 pass. No new command/tool/source authority is
+enabled. The original noncanonical-file edit still refuses; next complete source-aware
+model mapping/writing and actual adapter/history/native-file acceptance without relaxing
+unknown-data, preview or whole-MOL loss guards. This does not complete M0, M1 or M2–M5.
+The next [source-aware IO contract](docs/research/source-preserving-cdxml-profile.md) is
+locked with exact proof, typed drift/write and format-loss requirements; its headless
+implementation/receiving is now above, while native interaction remains unverified.
+
+The [native selection acceptance/fix](docs/verification-native-selection.md) continues
+base0c9e6af with actual Mac click/Shift/rectangle/component, drag/nudge/history/modal and
+Unicode Save/reopen evidence. Eleven actual native/fixture files pass independent XML/
+Decimal/RDKit checks. Four new preimplementation regressions expose/fix hidden Atom/
+settings modal authority and equal surface-restoration revival; ordinary no-loss controls
+and all old cases stay. Full local1717/0/1 passes; registry45/control/catalogue outputs
+stay unchanged. Native races/additive marquee/measured DPI/other platforms, Lasso and
+broader transforms remain open. Next return to the explicit M1 priority: source-lock
+safe noncanonical elemental CDXML mapping/writing, starting with equivalent whitespace/
+ID/order variants and unknown-source retention. A real native noncanonical fixture still
+refuses faithfully; do not relax the canonical byte-profile gate without complete
+mapping, independent source/format/history tests and native evidence. Full M0–M5 remains
+active and incomplete; Actions stays OFF. Earlier paragraphs retain checkpoint scope.
+
+The [native sprout/preferences increment](docs/verification-native-ring-sprout.md)
+continues the [atomic headless checkpoint](docs/verification-ring-sprout.md). Registry45
+retains all44 earlier complete CLI records/schema/order; controls39/22/16/12 add only
+File Preferences, while catalogue16/124 stays. All ten ring tools use the shared candidate
+for atom-targeted preference OR Alt sprout. One session checkbox has ordered Defaults/OK/
+Cancel and source/modal/retirement/ABA guards. Fresh full local1713/0/1 and bounded ASan
+pass. An isolated actual Mac app checks Alt-sprout, preference-driven Chair2, history,
+64pt setting, Unicode Save/reopen and Defaults-Cancel; independent actual-file readers
+confirm geometry/H/C12H16/C8H16. Native all-tool/modifier/race/DPI/other-platform coverage,
+restart/full preferences/styles/stereo and exact26.1 policies remain open. Next source-
+lock and finish an unblocked labels/styles/selection acceptance slice, with independent
+RED expectations and full registry/native/file evidence before enabling a grey tool.
+Actions stays OFF; full M0–M5 stays active and incomplete. The paragraphs below retain
+earlier checkpoints and their original scope.
+
+The user-directed identity and planned-tool presentation exposes all124 documented
+TD/TQ/TB roles as140 entries, with sixteen real bindings and124 disabled planned entries.
+Original logo assets, native review and independent input/foreground/font regressions are
+recorded in [receiving](docs/verification-branding-and-tools.md). A visible grey icon does
+not implement its tool; the full M0–M5 scope and missing-feature states remain intact.
+The current [chair increment](docs/verification-native-chairs.md) adds both original
+constitutional depictions through the two existing ring commands, with full same-builder
+previews and source/H/ID/history/physical guards. Independent core/modal/App/actual-wire/
+Unicode-file checks and bounded native Mac horizontal/vertical, terminal,9/0, refusal,
+history,64pt preference and persistence workflows pass. Full local1681/0/1 and bounded
+ASan pass; four earlier inventory/lint gate stops remain explicit. Registry43 stays;
+controls38/21/15/11, catalogue16/124. Native direct fusion/spiro, hardware/DPI, other
+platforms, stereo/ring flips, Alt-sprout and wider labels/styles remain required.
+This does not complete M0, M1 or M2–M5.
+
+After that visual increment, the explicit headless chain candidate follows the
+[locked contract](docs/research/chain-authoring-plan.md) and
+[receiving evidence](docs/verification-chain-authoring.md). Continue its complete native
+workflow is now integrated below; continue the remaining drawing, chemistry, publishing
+and distribution scope.
+The [native dependency contract](docs/research/native-chain-plan.md) now has a literal
+turning-path/preview prerequisite with [independent evidence](docs/verification-chain-paths.md).
+The [drawing-settings data prerequisite](docs/research/drawing-settings-data.md) now has
+[independent persistence/loss evidence](docs/verification-drawing-settings-data.md).
+Root BondLength/ChainAngle preserve explicit supported data and opaque source values;
+new-chain application is now checked, while full style inheritance remains missing. File > Document
+Settings… now has a [bounded two-preference form](docs/verification-native-drawing-settings.md)
+with actual Mac set/clear/history/Save/reopen evidence. It does not complete the dialog;
+new-chain application belongs to the separate workflow below.
+The [atomic settings command/history/adapters](docs/verification-drawing-settings-command.md)
+now pass independent required/null/source/lease/history and actual file/wire checks.
+Ordered native modifier transport now has [SDK and actual Mac OS evidence](docs/verification-ordered-native-modifiers.md).
+The [complete native chain interaction lock](docs/research/native-chain-interactions.md)
+now has [independent App/adapter/file and bounded actual Mac evidence](docs/verification-native-chains.md).
+Acyclic/Snaking alone become available: drag/count, Add Chain, repeat, supported-carbon
+attachment, stored preferences, fixed switches, full previews and one-edit history.
+Registry43 preserves all old42 actual records/schema/order; controls36/21/15/11,
+catalogue14/126. First full local10212 passes1657/0/1; actual preimplementation and later
+counter/repeat/refusal RED→GREENs remain separate from compile/lint/storage qualifications.
+Native supported Control-drag/reversal/backtracking and measured2×/DPI remain unverified;
+other platforms and exact26.1 defaults/hotkeys stay open. Frame-global Control is never
+substituted for observed ordered events. Next continue missing drawing tools, including
+sprout and broader labels/styles, with source locks and independent workflows before
+binding grey entries. The earlier native-settings gate passes1629/0/1 after correcting
+one newly added headless-control expectation; that first gate remains recorded as failed.
+Earlier settings-command
+MCP replacement-bind and UI readiness failures remain recorded; the latter has a
+[test-only qualification](docs/verification-smiles-order-readiness.md). This new pass
+does not establish a causal socket repair. Preserve all diagnostic boundaries.
+
+The [carbon-label data prerequisite](docs/verification-carbon-label-data.md) now has a
+[shared skeletal display/explicit-label follow-up](docs/verification-skeletal-carbon.md).
+Known-H/C4 suppression preserves mandatory labels, hits and real-ink guards; existing
+atom.set_label restores visibility through the same registry/form without changing old
+None/true no-ops. Native OS acceptance/default styles/preferences remain outstanding.
+The separate terminal-label prerequisite now has
+[independent data/render/editor/file evidence](docs/verification-terminal-carbon-labels.md).
+Actual degree selects the appropriate flag and isolated C/C2 labels remain mandatory.
+The chain engine, native dependency and full interaction contracts are locked. Add Chain,
+repeat, Snaking and preference application now have scoped evidence above; remaining
+settings/styles and native modifier/DPI/platform acceptance remain required.
+Named benzene/cyclopentadiene candidates now share ring.create with the unchanged sized
+requests. Independent phase/H/source/history and actual adapter/file checks pass; see
+[receiving](docs/verification-unsaturated-rings.md). Their two native controls now share
+the same-builder preview and ordered Shift flow with independent actual-App/adapters/
+file checks; [native receiving](docs/verification-native-unsaturated-rings.md) separates
+this from pending OS/monitor/platform acceptance. Continue chair/sprout/chains/styles
+and broader chemistry; full scope remains intact.
+
+The aromatic-tool prerequisite now persists directed DoublePosition through the
+model and native CDXML, with independent property/file/history tests and explicit loss/
+render refusals. [Receiving evidence](docs/verification-double-position.md) separates
+this from later depiction. Shortened inset strokes with actual bounds/gaps/hits now
+have independent geometry/pixel/density/CPU-GPU and actual-file/history evidence in
+[renderer receiving](docs/verification-inset-doubles.md). The explicit nonterminal
+skeletal policy now retains literal H; weighted benzene/cyclopentadiene candidates now
+preserve old shared edges and rank bounded phases against proven H budgets. The ranking
+is original Bondline policy, not established reference precedence. Named native tools
+are wired with actual-App evidence; real native acceptance remains. The full parity scope is intact.
+The [inset rendering contract](docs/research/inset-double-rendering.md) retains the
+preimplementation geometry, component-role joins and independent guard requirements.
+
+The shared `ring.create` command now implements explicit3–8 carbon Single polygons,
+including shared-atom and shared-Single-edge attachments. Independent geometry,
+cyclohexane/decalin/spiro/terminal chemistry, source/history/ID guards, Unicode files,
+CPU/GPU and actual CLI/MCP/socket checks pass. Its rounded-precision counterexamples
+are fixed without a blanket minimum length. Registry38 now adds ui.ring_tool, one
+effective tool mode, six original procedural controls and same-candidate preview plus
+free/atom/bond gestures. Native Drawing controls29; retained/SDF/raw stay20/14/10.
+Independent App/adapter/file checks are in [native receiving](docs/verification-native-rings.md);
+actual native OS interaction remains unverified while the desktop is in use. Follow
+with native selection/ring acceptance and aromatic/chair/sprout/styles and broader
+chemistry. This is bounded integration, not complete native ring parity or M2.
+
+Bounded native Mac atom labels now support fresh Alt-click target/fields/Apply/Cancel,
+OH/NH2 editing, history, draft-close protection and Unicode editable CDXML Save/reopen.
+Independent consumers verify the actual files; see
+[atom-editor evidence](docs/verification-native-atom-labels.md). This original form is not
+full inline Text/alias/charge/isotope/radical parity. The selection checkpoint's registry36 adds
+persistent selection and literal translation; native Drawing controls23, retained-SMILES
+Drawing20, SDF14 and raw SMILES10. Independent command/context/wire and actual-App input
+checks now exercise selection/movement/history/Unicode persistence. Native selection
+execution remains unverified; see [receiving](docs/verification-selection-authoring.md).
+The atom checkpoint's full gate fails848/1 at the old MCP replacement bind; remaining480/0/1 and
+xtask stages pass separately. The current selection gate passes1361/0/1 with no socket
+policy change; that pass does not explain the historical failure. The [controlled inheritance experiment](docs/research/macos-listener-lifetime.md)
+does not attribute that natural failure. Full M0–M5 remains incomplete. Continue source-
+preserving M2 authoring and independent native checks; keep broader format/chemistry,
+publishing and M5 workflows visible rather than treating this slice as completion.
+The [locked selection/translation contract](docs/research/selection-translation-plan.md)
+now has a source-qualified implementation, reviewed local gates and an inspected
+offscreen App frame. Finish actual native acceptance, then continue ring/chain/style
+and broader label workflows. Full
+selection/transform/26.1 parity remains required beyond this bounded atom-set slice.
+The [ring-authoring contract](docs/research/ring-authoring-plan.md) locks the delivered
+command and independent cyclohexane/decalin/spiro persistence. Lock its remaining native
+tool/gesture/default policies before App REDs; it does not resolve aromatic/chair/sprout
+or style workflows.
+
+Native source-backed SMILES records now have bounded Mac selected/all import, refusal/
+retry, registered click/key order editing, history and Unicode whole-file Save/reopen/
+reimport, with independent actual-file consumers. See
+[native receiving](docs/verification-native-smiles-records.md) and the earlier
+headless1270/0/1 record checkpoint. The later atom-label command gate passes1306/0/1;
+the earlier intermittent MCP listener-release AddrInUse failure remains unexplained.
+Fit78.79% still refuses the edited multiple-bond scene, Actual100% recovers, pan
+attempts did not change the view, and native races/DPI/other platforms remain unverified.
+Full M0–M5 remains open. Continue M2 atom/selection/ring/style authoring after preserving
+these complete-source/worker boundaries; broader record and chemistry parity remains.
+
+The earlier native editable SMILES checkpoint passes the full local gate1245/0/1, with bounded
+Mac OS clipboard/refusal/retry/history/edit/Unicode Save/reopen and independent file checks.
+The earlier density pipeline78964's MCP `AddrInUse` failure remains unexplained; this pass
+is not a causal fix. Automatic clipboard capture, exact reference-dialog behavior and
+native2×/DPI remain unverified. See
+[paste evidence](docs/verification-native-smiles-paste.md) and
+[density evidence](docs/verification-native-drawing-density.md).
+
 ## M0: foundation — in progress
 
 - [x] Resolve declared runtime/asset license closure for native egui/wgpu on all three platforms.
@@ -30,7 +367,7 @@ guides are versioned evidence, not proof of complete modern parity.
       original SMILES notations. Foreign/general CDX, broader SMILES/InChI and chemistry
       corpus coverage remain missing.
 - [ ] Complete public-document menu/tool/shortcut inventory; continuation instructions.
-      576 stable-ID source-cited control rows now exist, including three provisional
+      582 stable-ID source-cited control rows now exist, including three provisional
       unversioned Help roles; modern menus, unnamed glyphs and remaining
       context menus still need evidence. Six versioned screen/flow groups and pinned public
       research now guide implementation; the download center requires login and observed
@@ -38,23 +375,168 @@ guides are versioned evidence, not proof of complete modern parity.
 
 ## M1: files — in progress
 
+Fresh document sessions now have `document.new`, File → New Document and primaryN,
+guarded dirty/draft decisions and Save-before-New through actual worker retirement.
+Independent tests reproduce and close both old-surface pointer races. The local aggregate
+passes1090/0/1; actual Mac SDF→New, Cancel/Discard/Save, Unicode output, editable reopening
+and Undo pass. See docs/verification-new-document.md. Styles/templates and multiple
+windows remain missing. This closes the source-file→fresh-drawing dead end, not M0/M1.
+The later user-authorized live26.1.0.6801 pass actually observes New creating a second
+styled window while retaining the first; see docs/research/live-ui-review-2026-11-15.md.
+That independent-window/style workflow remains required for parity.
+
+The original native restricted SMILES→CDXML workflow is now delivered through the same
+registry and registered-worker lifecycle. Input/output browsing, explicit geometry,
+existing-destination refusal, successful Unicode retry without replacing unsaved work,
+guarded explicit Open, Double edit/Undo and separate Save As/reopen pass on macOS.
+Independent consumers accept both actual433-byte outputs. The final local aggregate
+passes1116/0/1; native race/close/cancellation and other platforms remain unverified.
+See docs/verification-native-smiles-conversion.md. This is a1–12 neutral-carbon Single
+path utility, not general SMILES import or Copy As/Paste Special parity.
+
+The additive neutral-acyclic conversion profile now delivers connected trees up to64
+H/C/N/O/F/Cl/Br/I atoms, branches and Single/Double/Triple edges under the existing fixed-H
+policy and bounded geometry. Original default/profile/receipt contracts remain exact.
+Eight IO, two renderer, five command, two actual-wire and three App checks add20 passes;
+the full local gate passes1136/0/1. Actual Mac profile/refusal/Unicode retry, retained unsaved
+work, guarded Open, branch Double edit/Undo/Redo and Unicode Save As/reopen pass. Both actual
+766-byte files agree with independent raw/RDKit expectations. Source/H, stereo, geometry
+and platform limits are in docs/verification-smiles-acyclic-integration.md.
+
+The additive `neutral_simple_ring_v1` profile now implements one actual connected3–8
+Single cycle plus supported attached trees, at most64 neutral H/C/N/O/F/Cl/Br/I atoms.
+It retains fixed H/source/IDs, exact supplied length, minimum atom-center origin and full
+geometry/ink guards without scaling. The ordered third native choice uses the same
+create-only command/worker/lease and grants no active-session Save or source-file editing
+authority. Focused9 IO/4 command/2 wire/3 App/4 renderer checks pass, as do the producer's
+308 default IO tests. Bounded native Mac profile/refusal/Unicode retry, retained unsaved
+work, explicit Open Cancel/Discard, external methyl-bond Double edit/Undo/Redo and separate
+Unicode Save As/reopen pass. Independent readers accept both actual1254-byte outputs,
+C7H14→C7H12; source and existing-output sentinel remain exact. Geometry entry/browsing,
+native races, large/bulky cases and other platforms remain unverified. The final local aggregate passes1158/0/1, including unchanged legacy receipt checks
+after the shared dialog sizing fix. See [the integration record](docs/verification-smiles-ring-integration.md),
+[independent layout checks](docs/verification-smiles-ring-layout.md), and the separate
+[ring attachment](docs/verification-literal-ring-attachment.md) and
+[compact-H extension](docs/verification-literal-compact-star-attachment.md) evidence.
+
+The additive `neutral_components_v1` / **Neutral components** fourth choice now derives
+all supported actual components into one complete Fragment, up to 64 total atoms. It
+normalizes once, retains global arrays/IDs/directed edges/fixed H and changes positions
+only. Existing tree or 3–8 Single-cycle poses use source-order center-box shelves with
+gap L, no rotation/rescaling, divided search quotas and one whole geometry/ink certificate.
+One-component output remains byte-exact with the corresponding earlier profile.
+
+Root90518 passes eight independent IO cases. Root5986 passes three command, one schema,
+two actual-wire and three App cases, including the complete 9-atom/7-bond/3-component
+C8H20O drawing, identical CPU/GPU capture, explicit Open, first-edge Double edit to C8H18O,
+Undo/Redo and Unicode Save/reopen through independent consumers. The fourth profile's
+component checkpoint's full local gate passed1188/0/1, including fmt, workspace/vendor warnings-denied clippy,
+tests, layers, licenses and corpus. Bounded Mac legacy/existing-output refusals, Unicode
+retry with dirty work retained, explicit Open Cancel/Discard, Double edit/Undo/Redo and
+Unicode Save As/reopen now pass. Independent consumers verify both actual 1407-byte
+9/7/3 outputs as C8H20O/C8H18O, with only the intended first-edge order/H change; input,
+sentinel and prior ring remain exact. Authoring worked at100%; edited Fit78.79% refuses
+the distinct-pixel bond guard and an initial top label was clipped. Full native overview/
+pan and other platforms remain unverified. Earlier counts stay historical checkpoints;
+no new parser-fuzz or dependency change.
+See [component integration](docs/verification-smiles-components-integration.md) and
+[independent layout evidence](docs/verification-smiles-components-layout.md).
+
+Drawing's additive physical-display path now shares the existing pixel transform with
+exact effective DPI/fractional device origin, fresh glyph generation and inverse paint/hit
+mapping. Logical zoom, source authority and the old1×/capture routes remain unchanged.
+Five renderer and five actual-App cases pass, including honest1× refusal,2× Metal strip/
+gap checks, fractional phase and logical-readability limits. This is headless verification,
+not a native2× measurement or a Fit fix. The latest Mac build still refuses the edited
+component scene at Fit78.79%; hotspot2/Undo/Redo/Actual100% and exact Unicode Save/reopen
+pass, while two clicks with Double selected produced no mutation of unknown cause. Full overview/
+pan remains unverified. [Receiving evidence](docs/verification-native-drawing-density.md)
+records the failed aggregate and separately passing remaining checks.
+
+The external CDX framing counterexample now has an additive canonical 28-byte implicit/
+explicit Document + FileEnd path: eight syntax and six IO/engine/wire cases pass, retaining
+all legacy successes, source bytes and limited application authority. The new oracle's
+18 controls and a 10,000-run ASan mutation smoke pass. Bounded Mac Open, Unicode Save As
+and explicit reopen preserve all 258 original bytes, with faithful preview still refused.
+The final local receiving gate81324 passes1172/0/1, including the original MCP test.
+Earlier97729's754/1 replacement-bind AddrInUse remains unexplained; twenty passing
+diagnostic contexts and a contradicted outbound-owner hypothesis establish no causal fix.
+See [integration](docs/verification-cdx-file-end-integration.md) and
+[independent declarations](docs/verification-cdx-file-end-tests.md). No corpus admission
+or broad CDX compatibility follows. That checkpoint proposed source-qualified SMILES drawing
+import: selected/all-record behavior, complete opaque source/baseline and ID mapping,
+stale-job/history/unsaved decisions and explicit Save/loss authority. Broader packing,
+larger/polycyclic/multiple-bond rings and chemistry remain; retain unsupported source
+rather than silently projecting it. The new utility still does not grant an opened SMILES source
+session molecular editing authority or complete clipboard parity.
+SDF creation/reordering and wider format editing stay in the backlog. The earlier proposed
+SDF reordering priority was deferred after the sourced File New audit, not implemented.
+The [SMILES authoring/import study](docs/research/smiles-source-import-plan.md) recommends
+editable Paste Special with real benzene support, then source-preserving record editing
+and whole-file Save. Neutral fixed-H/Kekulé chemistry, bounded layout and the one-step
+Drawing append now pass independent engine/CLI/stdio/socket and actual saved-file checks;
+the explicit native Paste Special form now adds actual OS clipboard/refusal/retry,
+one Undo/Redo, native bond edit and Unicode Save/reopen. The full gate passes1245/0/1;
+see docs/verification-native-smiles-paste.md. The later bounded record engine now adds
+selected/all retained Drawing import, synchronized order edits and whole-file Save through
+all delivered headless adapters. The later [native record gate](docs/verification-native-smiles-records.md)
+adds bounded Mac explicit import/order/history/whole-file Save/reopen. Wider navigation, automatic
+clipboard capture and broader chemistry/import remain. Finish native record acceptance
+from the same plan, then the missing M2 atom/selection/ring/style workflows below.
+
+Whole-record SDF removal now has a source-preserving codec, the shared typed command,
+CLI/stdio/authenticated-loopback routes and original Records confirmation UI. Independent
+literal raw/per-MOL consumers and actual-App checks cover exact surviving bytes,
+Undo/Redo, draft decisions and Unicode Save/reopen. A real pre-spawn file-context race
+was reproduced, fixed and retested without changing its regression. Root's final local
+gate passes1060/0/1; native evidence is scoped in
+docs/verification-sdf-record-removal.md. Record creation/reordering, broader format
+editing and complete M1 remain required. This does not complete M0 or any later milestone.
+
+The original SDF occurrence inspector and existing-value editor are delivered. Nine
+independent actual-App editor cases cover exact duplicate-field edits, history, real Save,
+Apply→Save input ordering, navigation decisions, external requests/source replacement,
+no-op CRLF retention and refusal without publication. Two finite registered-worker gates
+protect real commit/cancellation/retirement. Native Mac multiline Apply, Unicode Save As,
+Undo/Redo and reopen preserve the predeclared788-byte output and both molecular records.
+The editor's994-test local gate passes. See docs/verification-sdf-editor-integration.md and the
+earlier inspector evidence. Native draft/close races, record operations and full M1 remain
+required next work; the later view acceptance is below.
+The subsequent [SDF view integration](docs/verification-sdf-view-integration.md) now delivers
+Actual/Zoom/pan through the shared camera and source-preserving current-view captures.
+Seven command cases, four actual-App cases, two native-adapter gates and eight renderer
+cases pass; the full local gate is1016/0/1. Native Mac F5/Actual and both position controls
+visibly display the ordinary CCO/CN records without changing source/history. Native wheel,
+physical-DPI measurement and the combined edit/preview/Save workflow remain unverified.
+The [original proposal and receiving decision](docs/research/sdf-view-plan.md) retain why
+success-only prepared bounds replaced the proposed error-side-effect bootstrap.
+
+The subsequent Fit readout correction labels SDF Fit textually before/after extent
+preparation and retains explicit percentage entry, without changing legacy images or
+camera routing. Actual-App cases and native read-only AX/painting are recorded in
+docs/verification-fit-readout.md. Native percentage typing remains separate; high-DPI
+relative steps still use the declared logical Fit basis rather than a measured overview.
+
 A restricted all-record SDF capture route now connects source-preserving mixed-version
 projection, separate display-H provenance and faithful resolved-H labels through the
 existing command/CLI/MCP interfaces. Ordinary VAL-absent CCO/CN, both source orientations,
 full CPU/GPU image comparisons and exact Save pass headlessly. The native read-only workspace
 preview now has registered background work, source/view/DPI/
 close-epoch invalidation and independent actual-frame texture/paint/retirement tests. Actual
-native-window acceptance still waits for user availability. Ordinary source-backed MOL
+default Fit can still refuse its em guard; the bounded native Actual/pan recovery above
+now works. Ordinary source-backed MOL
 absent-H depiction now uses the same closed display facts in its actual Page/IDs/frame,
 with complete deferred ownership, independent CPU/GPU/source checks and headless canvas
 acceptance. Authored None and source bytes remain exact; source-free/CDXML stay literal.
 See docs/verification-mol-display-tests.md and docs/verification-mol-display-ui.md.
-The next graph prerequisite is Double/Triple depiction, which currently refuses honestly;
-research IUPAC multiple-bond spacing/attachment and define independent geometry/pixel
-expectations before changing the shared renderer and associated capture tests. Broader
-formats, source metadata, SDF field UI and full M1 interoperability remain unfinished.
-This is partial M1, with Single/
-neutral chemistry and explicit whole-capture refusals; general layout and reference packing
+Centered Double/Triple depiction now passes independent analytic pixel/geometry, actual
+CPU/GPU and source-preserving MOL/SDF checks. It uses an original3w profile, without
+mapping inherited styles or automatic side selection. Explicit positioned doubles now
+have the separate inset evidence above. See
+docs/verification-multiple-render.md and docs/verification-multiple-commands.md.
+Broader formats, source metadata, SDF record operations and full M1 interoperability remain unfinished.
+This is partial M1, with neutral Single/Double/Triple geometry and explicit whole-capture
+refusals; general layout and reference packing
 remain open. See docs/verification-sdf-capture-command.md and the linked independent evidence.
 
 The complete SDF session/Open/Save slice now retains every mixed-version record and
@@ -62,7 +544,7 @@ ordered data byte through current/saved/history and all shared adapters. Native 
 version Open/Save/Unicode Save As/reopen and failed-import retention now pass onbb6d5b9;
 the690-byte and additional refusal checks are controller-only. Root's590 gate and matching
 three-platform hosted checks pass. Bounded field inspection/existing-value commands now pass engine/CLI/MCP tests.
-Actual native chemical preview acceptance, field-edit UI, record operations and
+Broader native chemical preview acceptance, record operations and
 broader SDF interoperability remain missing; see docs/verification-sdf-session-files.md and
 docs/verification-native-sdf-and-extension.md. That earlier native build used a static summary;
 the new read-only preview is wired/headlessly tested, with its native workflow unverified.
@@ -130,6 +612,15 @@ user availability. All-record chemical preview/editing, record operations, broad
 and native conversion/export remain missing. See [file/application evidence](docs/verification-smiles-file-app.md)
 and [UI evidence](docs/verification-smiles-file-ui.md). M0/M1 remain incomplete and Actions remains disabled.
 
+The next [original record-inspector plan](docs/research/smiles-native-workflow-plan.md)
+now has a delivered typed native query bridge: three literal/background/guard/authority
+tests and the full Root1024/0/1 local gate pass. See docs/verification-smiles-ui-work.md.
+The actual UI component is now delivered with five independent App cases and two finite
+worker/close gates. Root's full local gate passes1031/0/1. Native Mac AX/painting shows
+ordinal/Inspect/navigation and no automatic notation disclosure, with an exact native-
+process query/source check. Native input/clipboard/dialog acceptance, chemical preview
+and complete M1 remain unverified/missing. See docs/verification-smiles-record-integration.md.
+
 
 Standalone CDXML source preservation and checked existing-attribute replacement have
 original-fixture/Expat and ASan smoke evidence plus one pinned unchanged RDKit corpus
@@ -166,34 +657,92 @@ corpus and reference/chemical mapping remain M1 work.
 
 ## M2: drawing — in progress
 
-Positioned neutral elemental symbols and literal authored H now have independent font,
-CPU/GPU, actual CDXML/MOL and registered-capture evidence under the local696 gate. The
-118-symbol catalog is shared from pure model. Source authority and old carbon pixels/golden
-remain exact. This is headless display only: atom-label tools, native element workflows,
-other chemical metadata/orders and general layout remain missing. See
-docs/verification-neutral-element-labels.md.
+The earlier ring command37 verifies explicit3–8/free/fused/spiro construction through the
+engine/adapters/files/renderers; native tools now have their separately scoped evidence
+above. Current carbon-chain controls, Add/repeat/preferences and bounded Mac evidence
+are in [receiving](docs/verification-native-chains.md). Selection
+and movement have14 actual-App passes plus the separately scoped bounded native Mac
+acceptance. See [ring receiving](docs/verification-ring-authoring.md),
+[native selection](docs/verification-native-selection.md) and
+[selection receiving](docs/verification-selection-authoring.md) for exact scope.
 
-The first command creates an independent single C-C fragment with three authored H per
-carbon. Native drag creation, exact history, automation and bounded rendering have evidence.
-This is partial solid-bond coverage. A separate headless bond.extend command now extends
-a supported terminal carbon with required explicit H3→H2 policy, one snapshot/ID/source
-guards and independently consumed saved propane/butane. Closed terminal attachment is
-now wired through that registry with17 new input/history/consumer regressions; actual
-native acceptance remains pending. Broader connected construction, click creation,
-snapping, order changes and general atom labels remain missing.
+The [elemental authoring contract](docs/research/atom-label-authoring-contract.md) now
+has a bounded headless `atom.set_label` implementation. Nine core, four actual-wire and
+one independent MOL-reference CPU/GPU case pass, including complete history and actual
+saved-file consumers; see [receiving evidence](docs/verification-atom-label-authoring.md).
+It changes only explicit element/literal-H fields in existing neutral atoms in source-free/
+native CDXML. The original `ui.atom_label` presentation now adds fresh atom/label targets,
+explicit fields, Apply/Cancel and stale/modal/Save/close guards. Actual Mac OH/NH2,
+history, close protection and Unicode Save/reopen pass; see
+[native evidence](docs/verification-native-atom-labels.md). No general valence inference.
+Modern label-entry and repeat-label evidence stay separate; full inline labels, aliases,
+charges/isotopes/radicals, full native selection/transforms/rings/chains and styles remain required.
 
-The shared carbon GraphScene/hit-testing prerequisite now supports positioned neutral
-carbon/Single topology, literal authored H and bounded atom/bond hover. Independent geometry/
-pixels/fonts, unchanged golden and receiving467+3 aggregate pass. Native baseline revision/
-Escape hover failures prompted sticky freshness/context regressions and a fix; final
-Root476+3 and actual MacC2/C3/input acceptance now pass. Its own hosted checks remain
-pending. This display slice does not add
-connected editing, selection, other atoms/orders, source-faithful styles or finish M2-02.
+The shared118-symbol catalog, positioned neutral-element labels and literal H have
+independent font/CPU/GPU/file evidence. MOL/SDF display H stays separate from authored
+None. Centered Single/Double/Triple scenes use logical bond IDs, actual component hits,
+attachment/mask/visibility guards and the unchanged approved Single golden. Other metadata,
+context-sensitive multiple placement and source-faithful styles remain missing.
+
+`bond.create` accepts an explicit Single/Double/Triple order (defaultSingle) and authors
+literal H=`4-order_weight`. `bond.extend` preserves identities/source/history while
+extending a consistent neutral-carbon terminal within its explicit H budget; source-free
+or byte-proven native CDXML only. Native Single C3/C4 authoring/history/CDXML reopening
+has Mac evidence. The new multiple workflows are wired and pass independent actual-frame,
+file/chemistry/image tests. Bounded native multiple creation now has Mac evidence at the
+recorded readable scale; native multiple terminal extension remains unverified.
+
+`ui.bond_tool` supplies three procedural accessible palette controls and a checked
+transient epoch, outside authored history/dirty/source state. Ordered activations cancel
+older gestures; held previews and hover use the same actual component geometry. Existing
+Single/attachment regressions remain. See docs/verification-multiple-ui.md and
+docs/verification-multiple-authoring.md. This does not finish M2 or establish26.1 styles.
+
+The original refreshed workspace has a compact rail and contextual document inspector,
+with source/count/file state and stable paper geometry. Native macOS visual review,
+Single/Double/Triple selection, pointer authoring, existing-edge edits, history and Unicode
+CDXML Save As now have finite actual-window evidence. The later scene is native-authored;
+its420pt-square page was explicitly registry-prepared. Broader native attachment, source,
+platform and view workflows remain unverified. See docs/verification-bond-order-native.md;
+the earlier registry-authored captures retain their original scope.
+
+Existing-bond editing now has a sourced public-guide contract and one typed
+`bond.set_order` command with explicit order/revision/IDs and a required literal neutral-
+carbon C4 H policy. Exact no-op/history/source/overflow/error guards, real CLI/stdio/socket,
+independent Expat/Decimal/RDKit saved files and fixed-seed edit properties pass. The UI
+wires absolute1/2/3, source-supported Single conversion clicks and Single-tool endpoint
+Single→Double / Double→Triple; unsupported alignment/click cases report their gap.
+Ordered commands reacquire full backing, graph and page geometry. See
+verification-bond-order-{command,ui,native}.md under docs/ for exact evidence and limits.
+Actual native Mac drawing/conversion/hotkeys/history/Unicode Save As pass for the recorded
+readable-scale scene; no universal26.1 click matrix or native multiple extension is claimed.
+
+Usable transient view navigation now has one typed command, exact legacy Fit, uniform
+logical zoom, numeric entry, Actual/Fit/Magnify/Reduce, two-axis controls and wheel pan.
+Independent renderer/command/adapters/actual-App tests and native Mac unchanged-A4
+Single/Double/Triple creation and150% editing/persistence pass. The fresh-focus SDK
+filter and rapid Undo→Save prepass bugs were independently reproduced and corrected.
+The aggregate961-test gate passes; source/scale/label guards remain strict. No physical
+DPI calibration, SDF navigation, saved view preferences or complete reference parity.
+See docs/verification-view-{render,commands,ui,native}.md and
+docs/verification-ordered-file-actions.md.
+
+Next: outstanding native modifier/DPI/race/ring acceptance, broader preferences,
+remaining chair stereo/platform workflows, snapping, transforms, broader labels and styles. Do not restart the
+delivered chain prerequisites or treat their bounded Mac checks as full tool/platform parity.
+M1 source-faithful interoperability and M0 addressability/inventory/platform evidence
+remain open. Keep imported-source/mapping gaps visible; these bounded workflows do not
+complete a milestone.
 
 Bonds, rings, chains, labels/abbreviations, charges, isotopes, radicals, wedge/hash bonds,
 selection, transforms, hotkeys, undo/redo and style sheets from public journal guidelines.
 
-## M3: chemistry — planned
+## M3: chemistry — in progress
+
+The [resolved numeric composition prerequisite](docs/verification-formula-composition.md)
+now has independent full-bound/literal/RDKit evidence and main full1831/0/1. It refuses
+unknown H and keeps isotope bins/charge exact. Source-aware inference, formula formatting,
+mass and the actual Analysis workflow remain missing; no command/tool is enabled here.
 
 Valence, aromaticity, stereo/CIP, checking, cleanup, formula/mass, analysis, reactions,
 curved arrows, brackets and chemically formatted captions. Compare against independently
@@ -278,5 +827,8 @@ notation and global ranges/counts, with opaque data retained privately. It uses 
 historical deferred-result/cancellation/close machinery, no write lease or mutation, and
 a128KiB serialized-object budget. Core and independent raw/graph/wire evidence are linked
 from docs/verification-smiles-record.md; native selection/preview/editing remain missing.
-Next M1 work should move all-record chemical display/import toward real drawing workflows,
-not treat these source/automation foundations as completed format or editor parity.
+The newer bounded source-backed record engine now delivers selected/all import, supported
+order edits and complete-source Save/history headlessly. Finish its native worker/control
+gate next. Wider CDX typed metadata/Text/Double/style mapping,
+faithful rendering and source-backed editing remain required; these source/automation
+foundations do not complete format or editor parity.

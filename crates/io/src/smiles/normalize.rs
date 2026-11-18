@@ -118,6 +118,7 @@ impl SmilesDocument {
                     .ok_or(NormalizeError::Limit { kind: Limit::Bonds })?;
             }
             bonds.push(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(identity(index, Limit::Bonds)?)
                     .ok_or(NormalizeError::Limit { kind: Limit::Bonds })?,
                 begin: AtomId::new(identity(begin, Limit::Atoms)?)

@@ -30,8 +30,9 @@ Separate x/y conversion factors follow that rounding, whose aspect error remains
 background, gray 210 shadow, gray 196 border and white interior. This is not a journal preset.
 Existing hand-authored 8×8 page-grid, clipping and odd-pitch tests continue to pass.
 
-The literal chemical producer builds one GraphScene for positioned neutral elements and Single
-bonds, including chains, branches, cycles and disconnected components. Noncarbon symbols
+The literal chemical producer builds one GraphScene for positioned neutral elements and
+Single/centered Double/Triple and explicit sided Double bonds, including safe chains,
+branches, cycles and disconnected components. Noncarbon symbols
 are explicit; authored H is literal and unknown H is omitted without changing model None.
 Carbon retains H0/C, H1/CH and larger literal subscripts, skeletal connected unknown-H and
 isolated unknown-H refusal. Physical H cannot carry positive inline H. Other orders,
@@ -46,10 +47,55 @@ closed neutral C/N/O/halogen profile; the renderer chooses no valence. Literal c
 authoritative and authored None/source bytes remain exact. MOL keeps its actual Page/IDs/
 frame, while SDF retains its separately documented row packing. Both use the resolved-H
 entry's attachment and paper-ink checks; its masks/strokes must fit the paper interior.
-The source-free/CDXML literal entry above retains its old behavior. See
+All-Single source-free/CDXML scenes retain their old behavior. Multiple-containing literal
+scenes reuse the component-aware attachment choices with exact literal counts, without
+the resolved entry's additional physical-paper restriction. See
 verification-mol-display-tests.md and verification-sdf-display-render.md for independent
 data/geometry/font/pixel evidence and explicit refusal scope. Native MOL/SDF label workflow
 acceptance remains unverified; these display policies do not establish general perception.
+
+Centered multiple bonds use the original `centered_multiple_v1` profile: separation3w,
+Double offsets ±1.5w, Triple offsets -3w/0/+3w and a minimum axis length9w. Each required
+component and adjacent gap must retain a visible pixel center after masks/clipping.
+Expanded stroke counts join the4096 primitive bound; hits and neighbour votes stay
+logical. The explicit corridor/junction rules refuse unsafe overlaps for the whole scene.
+Exact bounded lattice searches retain the existing stroke coverage arithmetic. See
+[multiple-bond evidence](verification-multiple-render.md) for analytic/CPU/GPU/search
+oracles, retained failures and the exact original policy. No imported style inheritance,
+general layout/join solver, new human-approved golden or vendor default is inferred.
+
+Explicit Left/Right Double uses an unchanged authored-axis stroke and a3w parallel
+secondary, shortened at each end by actual adjoining-angle bisectors. Terminal/trans-only
+ends do not shorten. Its true validation gap has closed actual longitudinal caps and
+strict inner ink edges, using unnormalized dot/cross/squared-width comparisons. The
+existing bounded lattice/mask/excluded-ink search handles that convex validation region
+and ordinary strokes; no new paint primitive or shader is needed. Actual component
+ink plus the finite gap protect the asymmetric corridor and primary tails.
+
+Only qualified authored-axis joins gain the ordinary Single–Single union behavior;
+offset collisions retain the old anchor/mask rule. Each joined arm must retain distinct
+unmasked pixels, without a blanket angle limit. Unspecified/Center keep their exact
+old geometry/pixels. Labels/H, source authority, actual clipped hits, density/camera,
+readability and resource/cancellation guards remain. See
+[the contract](research/inset-double-rendering.md) and
+[independent receiving](verification-inset-doubles.md) for20 new cases, actual Metal
+and Engine PNG/file evidence. Native OS interaction, automatic side/style selection,
+full style/preferences and aromatic tools remain separate work.
+
+Explicit nonterminal-carbon flags now share one per-fragment label decision. None and
+dormant noncarbon/degree0–1 values use old pixels; active true prints known H, while
+active false requires checked actual bond weight+known H=4. Mandatory identical rays
+within170–190° and every two-Double center keep full labels. Suppression removes glyphs
+and masks together, retaining stable atom hits and every actual-ink guard. Angles use
+authored normalized f64 rays, not camera/DPI-rounded coordinates. No inferred H, nominal
+hidden-font metrics, new source authority or general chemistry. See
+[the locked policy](research/skeletal-carbon-display.md) and
+[independent receiving](verification-skeletal-carbon.md); native OS acceptance is pending.
+
+Held previews call the same `centered_bond_strokes` constructor; hover outlines actual
+`GraphScene::bond_strokes` components. Tool order/epoch and event ordering remain UI-only,
+outside captured pixels/model/history. Six actual-frame workflows pass; new native-window
+acceptance remains unverified. See [UI evidence](verification-multiple-ui.md).
 
 IUPAC GR-2.1.2 requires terminal labels for an isolated ethane bond. The producer uses H3C/CH3
 with the 3 subscripted, keeping C centered at its authored endpoint and facing the bond.

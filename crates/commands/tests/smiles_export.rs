@@ -36,6 +36,7 @@ fn owner() -> Result<StoredDocument, Box<dyn std::error::Error>> {
         FragmentId::new(9).ok_or("fragment")?,
         vec![carbon, oxygen],
         vec![Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: BondId::new(5).ok_or("bond")?,
             begin: AtomId::new(80).ok_or("atom")?,
             end: AtomId::new(7).ok_or("atom")?,
@@ -146,7 +147,7 @@ fn export_selects_the_exact_nonfirst_fragment_and_preserves_complete_session() -
 fn export_schema_selection_and_source_guards_are_closed_and_precede_io() -> TestResult {
     use bondline_commands::Command;
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 25);
+    assert_eq!(registry.len(), 49);
     let info = registry
         .iter()
         .find(|i| i.name == NAME)
@@ -286,6 +287,7 @@ fn full_writer_profile_is_not_restricted_to_carbon_layout_or_twelve_atoms() -> T
     .enumerate()
     .map(|(i, (a, b, order))| {
         Ok(Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: BondId::new(i as u32 + 1).ok_or("bond")?,
             begin: AtomId::new(a).ok_or("atom")?,
             end: AtomId::new(b).ok_or("atom")?,

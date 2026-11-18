@@ -4,6 +4,7 @@ pub mod cdx;
 pub mod cdxml;
 pub mod display;
 mod document;
+mod drawing_settings;
 pub mod mol;
 pub mod rxn;
 pub mod sdf;

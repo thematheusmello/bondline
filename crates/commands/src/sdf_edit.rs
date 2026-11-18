@@ -1,4 +1,4 @@
-//! Deferred immutable candidates for one existing ordered field occurrence.
+//! Deferred immutable candidates for source-preserving SDF edits.
 
 use crate::{
     Cancellation, CloseState, CommandResult, Engine, Error, MAX_SDF_INSPECT_VALUE_BYTES,
@@ -30,15 +30,30 @@ impl std::fmt::Debug for SdfFieldSet {
     }
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct SdfRecordRemove {
+    pub expected_revision: u64,
+    #[schemars(range(min = 1))]
+    pub record_id: u32,
+}
+
 #[derive(Debug)]
-pub(super) struct FieldPlan {
+enum Edit {
+    FieldValue(SdfFieldSet),
+    RemoveRecord(SdfRecordRemove),
+}
+
+#[derive(Debug)]
+pub(super) struct EditPlan {
     input: Arc<StoredContent>,
-    params: SdfFieldSet,
+    edit: Edit,
+    revision: u64,
     generation: u64,
 }
 
 #[derive(Debug)]
-pub(super) struct FieldCandidate {
+pub(super) struct EditCandidate {
     input: Arc<StoredContent>,
     candidate: StoredContent,
     revision: u64,
@@ -47,7 +62,7 @@ pub(super) struct FieldCandidate {
 }
 
 impl Engine {
-    pub(super) fn sdf_field_plan(&self, params: SdfFieldSet) -> Result<FieldPlan, Error> {
+    pub(super) fn sdf_field_plan(&self, params: SdfFieldSet) -> Result<EditPlan, Error> {
         if params.expected_revision != self.revision {
             return Err(Error::StaleRevision);
         }
@@ -64,16 +79,41 @@ impl Engine {
             }
             .into());
         }
-        Ok(FieldPlan {
+        Ok(EditPlan {
             input: Arc::clone(&self.document),
-            params,
+            edit: Edit::FieldValue(params),
+            revision: self.revision,
             generation: self.generation,
         })
     }
 
-    pub(super) fn finish_sdf_field(
+    pub(super) fn sdf_record_remove_plan(
+        &self,
+        params: SdfRecordRemove,
+    ) -> Result<EditPlan, Error> {
+        if params.expected_revision != self.revision {
+            return Err(Error::StaleRevision);
+        }
+        let current = self.content().sdf()?;
+        let id = RecordId::new(params.record_id)
+            .ok_or(Error::InvalidSdfRecord("record_id must be positive"))?;
+        current.record(id).ok_or(SdfError::MissingRecord {
+            record_id: params.record_id,
+        })?;
+        if current.records().len() == 1 {
+            return Err(SdfError::Empty.into());
+        }
+        Ok(EditPlan {
+            input: Arc::clone(&self.document),
+            edit: Edit::RemoveRecord(params),
+            revision: self.revision,
+            generation: self.generation,
+        })
+    }
+
+    pub(super) fn finish_sdf_edit(
         &mut self,
-        completed: FieldCandidate,
+        completed: EditCandidate,
     ) -> Result<CommandResult, Error> {
         if self.close_state() == CloseState::Committed {
             return Err(Error::CloseCommitted);
@@ -93,36 +133,19 @@ impl Engine {
     }
 }
 
-impl FieldPlan {
-    pub(super) fn complete(self, cancel: &Cancellation) -> Result<FieldCandidate, Error> {
+impl EditPlan {
+    pub(super) fn complete(self, cancel: &Cancellation) -> Result<EditCandidate, Error> {
         cancel.check()?;
-        let mut authored_bytes = 0_usize;
-        for line in &self.params.value_lines {
-            authored_bytes = authored_bytes
-                .checked_add(line.len())
-                .and_then(|n| n.checked_add(1))
-                .filter(|n| *n <= MAX_SDF_INSPECT_VALUE_BYTES)
-                .ok_or(Error::SdfFieldInputLimit)?;
-        }
-        if !crate::sdf_query::serialized_fits(
-            &self.params.value_lines,
-            MAX_SDF_INSPECT_VALUE_BYTES,
-        )? {
-            return Err(Error::SdfFieldInputLimit);
-        }
-        cancel.check()?;
-        let id = RecordId::new(self.params.record_id)
-            .ok_or(Error::InvalidSdfField("record_id must be positive"))?;
-        let lines = self
-            .params
-            .value_lines
-            .iter()
-            .map(String::as_str)
-            .collect::<Vec<_>>();
         let candidate = match self.input.as_ref() {
             StoredContent::Sdf { original, current } => StoredContent::Sdf {
                 original: original.clone(),
-                current: current.with_field_value(id, self.params.field_index, &lines)?,
+                current: match self.edit {
+                    Edit::FieldValue(params) => set_field(current, params, cancel)?,
+                    Edit::RemoveRecord(params) => current.without_record(
+                        RecordId::new(params.record_id)
+                            .ok_or(Error::InvalidSdfRecord("record_id must be positive"))?,
+                    )?,
+                },
             },
             StoredContent::Drawing(_) => {
                 return Err(Error::WrongContent {
@@ -138,14 +161,41 @@ impl FieldPlan {
             }
         };
         cancel.check()?;
-        Ok(FieldCandidate {
+        Ok(EditCandidate {
             input: self.input,
             candidate,
-            revision: self.params.expected_revision,
+            revision: self.revision,
             generation: self.generation,
             cancel: cancel.clone(),
         })
     }
+}
+
+fn set_field(
+    current: &bondline_io::sdf::SdfDocument,
+    params: SdfFieldSet,
+    cancel: &Cancellation,
+) -> Result<bondline_io::sdf::SdfDocument, Error> {
+    let mut authored_bytes = 0_usize;
+    for line in &params.value_lines {
+        authored_bytes = authored_bytes
+            .checked_add(line.len())
+            .and_then(|n| n.checked_add(1))
+            .filter(|n| *n <= MAX_SDF_INSPECT_VALUE_BYTES)
+            .ok_or(Error::SdfFieldInputLimit)?;
+    }
+    if !crate::sdf_query::serialized_fits(&params.value_lines, MAX_SDF_INSPECT_VALUE_BYTES)? {
+        return Err(Error::SdfFieldInputLimit);
+    }
+    cancel.check()?;
+    let id = RecordId::new(params.record_id)
+        .ok_or(Error::InvalidSdfField("record_id must be positive"))?;
+    let lines = params
+        .value_lines
+        .iter()
+        .map(String::as_str)
+        .collect::<Vec<_>>();
+    Ok(current.with_field_value(id, params.field_index, &lines)?)
 }
 
 #[cfg(test)]

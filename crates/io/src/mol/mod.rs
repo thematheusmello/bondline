@@ -243,6 +243,7 @@ impl<'a> MolFile<'a> {
                 };
             }
             bonds.push(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(u32::try_from(index + 1).map_err(|_| MolError::CountLimit)?)
                     .ok_or(MolError::CountLimit)?,
                 begin: AtomId::new(u32::from(raw.begin)).ok_or(MolError::CountLimit)?,

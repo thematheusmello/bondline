@@ -13,6 +13,7 @@ fn document(
     let mut first = Atom::new(a, carbon, Some(Point2::new(10.0, 20.5)?));
     let mut second = Atom::new(b, carbon, Some(Point2::new(50.0, 20.5)?));
     let mut bond = Bond {
+        double_position: bondline_model::DoublePosition::Unspecified,
         id: BondId::new(1).ok_or("bond id")?,
         begin: a,
         end: b,
@@ -89,7 +90,7 @@ fn unsupported_atom_metadata_and_bond_kinds_fail_instead_of_being_hidden()
             2 => atom.charge = 1,
             3 => atom.isotope = std::num::NonZeroU16::new(13),
             4 => atom.radical = Radical::Doublet,
-            _ => bond.order = BondOrder::Double,
+            _ => bond.order = BondOrder::Quadruple,
         })?;
         assert!(matches!(
             carbon_page_scene(80, 80, document.pages().first().ok_or("page")?),
@@ -120,5 +121,72 @@ fn unsupported_atom_metadata_and_bond_kinds_fail_instead_of_being_hidden()
         carbon_page_scene(80, 80, isolated.pages().first().ok_or("page")?),
         Err(Error::UnsupportedChemicalContent)
     ));
+    Ok(())
+}
+
+#[test]
+fn the_original_double_case_keeps_literal_h3_and_draws_two_independent_strips()
+-> Result<(), Box<dyn std::error::Error>> {
+    let input = document(|_, bond| bond.order = BondOrder::Double)?;
+    let before = input.clone();
+    let page = input.pages().first().ok_or("page")?;
+    let scene = carbon_page_scene(80, 80, page)?;
+    let strokes = scene
+        .primitives
+        .iter()
+        .filter_map(|p| match p {
+            bondline_render::Primitive::Stroke(s) => Some(s.clone()),
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(
+        strokes,
+        vec![
+            bondline_render::Stroke {
+                begin: [20.0, 29.0],
+                end: [60.0, 29.0],
+                width: 1.0,
+                color: [0, 0, 0, 255]
+            },
+            bondline_render::Stroke {
+                begin: [20.0, 32.0],
+                end: [60.0, 32.0],
+                width: 1.0,
+                color: [0, 0, 0, 255]
+            }
+        ]
+    );
+    let cpu = cpu_scene(&scene)?;
+    for y in 27..35 {
+        let at = ((y * 80 + 40) * 4) as usize;
+        assert_eq!(
+            &cpu.rgba[at..at + 4],
+            if [28, 29, 31, 32].contains(&y) {
+                &[0, 0, 0, 255]
+            } else {
+                &[255; 4]
+            }
+        );
+    }
+    let single = document(|_, _| {})?;
+    let old = cpu_scene(&carbon_page_scene(80, 80, &single.pages()[0])?)?;
+    for y in 25..39 {
+        for x in (2..25).chain(55..78) {
+            let at = ((y * 80 + x) * 4) as usize;
+            assert_eq!(
+                &cpu.rgba[at..at + 4],
+                &old.rgba[at..at + 4],
+                "unchanged literalH3 label pixel{x},{y}"
+            );
+        }
+    }
+    assert!(
+        page.fragments()[0]
+            .atoms()
+            .iter()
+            .all(|a| a.explicit_hydrogens == Some(3))
+    );
+    assert_eq!(pollster::block_on(gpu_scene(&scene))?.0, cpu);
+    assert_eq!(input, before);
     Ok(())
 }

@@ -1,0 +1,320 @@
+//! Document creation preferences and appearance; the registry authors one validated edit.
+use crate::{file_workflow::smiles_paste::field_output, sdf_draft_text::SdfDraftText};
+use bondline_commands::{Command, Engine, UiDrawingSettings, UiDrawingSettingsRequest};
+use bondline_model::{DrawingSettings, DrawingStyle};
+use eframe::egui;
+
+type SettingsValues = (Option<f64>, Option<f64>, Option<f64>, Option<f64>);
+
+struct Form {
+    request: UiDrawingSettingsRequest,
+    bond_length: SdfDraftText,
+    chain_angle: SdfDraftText,
+    line_width: SdfDraftText,
+    bond_spacing: SdfDraftText,
+    detached: bool,
+    message: Option<String>,
+    buttons: [Option<egui::Id>; 2],
+    fields: [Option<egui::text_edit::TextEditOutput>; 4],
+    deferred_text: Vec<egui::Event>,
+}
+
+impl Form {
+    fn values(&self) -> Result<SettingsValues, String> {
+        let number = |text: &str| {
+            let text = text.trim();
+            if text.is_empty() {
+                Ok(None)
+            } else {
+                text.parse::<f64>().map(Some).map_err(|_| {
+                    "Enter a finite number, or leave the field blank to clear it.".to_owned()
+                })
+            }
+        };
+        let length = number(self.bond_length.as_str())?;
+        let angle = number(self.chain_angle.as_str())?;
+        let width = number(self.line_width.as_str())?;
+        let spacing = number(self.bond_spacing.as_str())?;
+        if spacing.is_some_and(|value| !(1.0..=100.0).contains(&value)) {
+            return Err(bondline_commands::Error::InvalidBondSpacing.to_string());
+        }
+        DrawingSettings::new(length, angle).map_err(|error| error.to_string())?;
+        DrawingStyle::new(width)
+            .and_then(|style| style.with_bond_spacing_percent(spacing))
+            .map_err(|error| error.to_string())?;
+        Ok((length, angle, width, spacing))
+    }
+}
+
+#[derive(Default)]
+pub(super) struct DrawingSettingsEditor {
+    form: Option<Form>,
+}
+
+#[derive(Clone, Copy)]
+enum Action {
+    Apply,
+    Cancel,
+}
+
+fn route_prefix(
+    form: &Form,
+    context: &egui::Context,
+    events: &[egui::Event],
+    focus: Option<egui::Id>,
+) -> crate::pair_input::Routed<4> {
+    crate::pair_input::route_prefix(
+        &form.fields,
+        [384; 4],
+        384,
+        |index| field_id(form.request.id, index),
+        context,
+        events,
+        focus,
+    )
+}
+
+fn field_id(key: u64, index: usize) -> egui::Id {
+    egui::Id::new(("drawing-settings-field", key, index))
+}
+
+impl DrawingSettingsEditor {
+    pub fn present(&self) -> bool {
+        self.form.is_some()
+    }
+
+    pub fn sync(&mut self, engine: &Engine, error: &mut Option<String>) {
+        if self.form.is_some() {
+            return;
+        }
+        let Some(request) = engine.ui_drawing_settings_request() else {
+            return;
+        };
+        let values = (|| {
+            let length = request
+                .bond_length_pt
+                .map_or_else(String::new, |value| value.to_string());
+            let angle = request
+                .chain_angle_degrees
+                .map_or_else(String::new, |value| value.to_string());
+            let width = request
+                .line_width_pt
+                .map_or_else(String::new, |value| value.to_string());
+            let spacing = request
+                .bond_spacing_percent
+                .map_or_else(String::new, |value| value.to_string());
+            let length =
+                SdfDraftText::with_byte_limit(&length, 384).map_err(|error| error.to_string())?;
+            let angle =
+                SdfDraftText::with_byte_limit(&angle, 384).map_err(|error| error.to_string())?;
+            let width =
+                SdfDraftText::with_byte_limit(&width, 384).map_err(|error| error.to_string())?;
+            let spacing =
+                SdfDraftText::with_byte_limit(&spacing, 384).map_err(|error| error.to_string())?;
+            Ok::<_, String>((length, angle, width, spacing))
+        })();
+        match values {
+            Ok((bond_length, chain_angle, line_width, bond_spacing)) => {
+                self.form = Some(Form {
+                    detached: !request.current,
+                    request,
+                    bond_length,
+                    chain_angle,
+                    line_width,
+                    bond_spacing,
+                    message: None,
+                    buttons: [None, None],
+                    fields: [None, None, None, None],
+                    deferred_text: Vec::new(),
+                })
+            }
+            Err(message) => *error = Some(message),
+        }
+    }
+
+    fn end(&mut self, context: &egui::Context) {
+        if let Some(form) = self.form.take() {
+            for index in 0..4 {
+                let id = field_id(form.request.id, index);
+                context.data_mut(|data| data.remove::<egui::text_edit::TextEditState>(id));
+                context.memory_mut(|memory| memory.surrender_focus(id));
+            }
+            context.request_repaint();
+        }
+    }
+
+    pub fn show(
+        &mut self,
+        context: &egui::Context,
+        mut engine: Option<&mut Engine>,
+        events: &[egui::Event],
+        editable: bool,
+    ) {
+        let Some(form) = &mut self.form else {
+            return;
+        };
+        if form.request.was_cancelled() {
+            self.end(context);
+            return;
+        }
+        let id = form.request.id;
+        let original_focus = context.memory(|memory| memory.focused());
+        if !engine
+            .as_ref()
+            .is_some_and(|engine| engine.ui_drawing_settings_request_current(id))
+        {
+            form.detached = true;
+        }
+        let mut action = None;
+        for (at, event) in events.iter().enumerate() {
+            if matches!(event,egui::Event::Key {key:egui::Key::Escape,pressed:true,repeat:false,modifiers,..} if modifiers.is_none())
+            {
+                action = Some((at, Action::Cancel));
+                break;
+            }
+            for (index, button) in form.buttons.iter().enumerate() {
+                if button
+                    .and_then(|id| context.read_response(id))
+                    .is_some_and(|response| {
+                        response.enabled()
+                            && response.clicked()
+                            && crate::activation_event(&response, event)
+                    })
+                {
+                    action = Some((
+                        at,
+                        if index == 0 {
+                            Action::Apply
+                        } else {
+                            Action::Cancel
+                        },
+                    ));
+                    break;
+                }
+            }
+            if action.is_some() {
+                break;
+            }
+        }
+        // The SDK aggregates focus/pointer for the full packet; fields see only the action prefix.
+        let mut field_events = std::mem::take(&mut form.deferred_text);
+        field_events.extend_from_slice(
+            action.map_or(events, |(at, _)| events.get(..=at).unwrap_or_default()),
+        );
+        let mut routed = action.map(|_| route_prefix(form, context, &field_events, original_focus));
+        let saved_events =
+            context.input_mut(|input| std::mem::replace(&mut input.events, field_events));
+        let mut saved_pointer =
+            action.map(|_| context.input_mut(|input| std::mem::take(&mut input.pointer)));
+        let mut current_values = form.values();
+        let mut input_rejected = false;
+        egui::Window::new("Document Settings")
+            .id(egui::Id::new(("drawing-settings",id)))
+            .anchor(egui::Align2::CENTER_CENTER,egui::Vec2::ZERO)
+            .order(egui::Order::Foreground).collapsible(false).resizable(false)
+            .default_width(370.0).show(context,|ui| {
+                ui.heading("Drawing");
+                ui.label("Bond length and angle affect new structures. Spacing uses the preferred bond length; width and spacing update existing bonds.");
+                ui.weak("Leave a field blank to clear its explicit value.");
+                for (index,(label,text)) in [("Bond length (pt)",&mut form.bond_length),("Chain angle (degrees)",&mut form.chain_angle),("Line width (pt)",&mut form.line_width),("Bond spacing (%)",&mut form.bond_spacing)].into_iter().enumerate() {
+                    if let Some(routed)=&mut routed {
+                        let queue=routed.fields.get_mut(index).map(std::mem::take).unwrap_or_default();
+                        let focus=!queue.is_empty() || routed.focus==Some(index);
+                        context.input_mut(|input|input.events=queue);
+                        context.memory_mut(|memory| {
+                            if focus {memory.request_focus(field_id(id,index));}
+                            else {memory.surrender_focus(field_id(id,index));}
+                        });
+                    }
+                    let (shown,failure)=field_output(ui,field_id(id,index),label,text,false,true);
+                    if shown.response.enabled() && ui.is_visible() && !context.will_discard()
+                        && let Some(slot)=form.fields.get_mut(index) {*slot=Some(shown);}
+                    let failure=failure.or_else(||routed.as_ref().and_then(|routed|routed.errors.get(index)).cloned().flatten());
+                    if let Some(message)=failure {form.message=Some(message);input_rejected=true;}
+                }
+                if let Some(routed)=&routed {
+                    context.memory_mut(|memory| {
+                        for index in 0..4 {memory.surrender_focus(field_id(id,index));}
+                        if let Some(index)=routed.focus {memory.request_focus(field_id(id,index));}
+                    });
+                }
+                if let Some(pointer)=saved_pointer.take() {context.input_mut(|input|input.pointer=pointer);}
+                current_values=form.values();
+                if form.detached {
+                    ui.colored_label(egui::Color32::DARK_RED,"The document or view changed. Copy this draft or Cancel; it cannot be applied here.");
+                }
+                if let Err(message)=&current_values {ui.colored_label(egui::Color32::DARK_RED,message.as_str());}
+                if let Some(message)=&form.message {ui.colored_label(egui::Color32::DARK_RED,message);}
+                ui.horizontal(|ui| {
+                    let apply=ui.add_enabled(!form.detached && !input_rejected && editable && current_values.is_ok(),egui::Button::new("Apply"));
+                    let cancel=ui.button("Cancel");
+                    form.buttons=[Some(apply.id),Some(cancel.id)];
+                });
+            });
+        if let Some(pointer) = saved_pointer {
+            context.input_mut(|input| input.pointer = pointer);
+        }
+        context.input_mut(|input| input.events = saved_events);
+        match action {
+            Some((_, Action::Cancel)) => {
+                if let Some(engine) = engine.as_deref_mut() {
+                    // Explicit local Cancel also retires a stale/remote-cancelled shutdown form.
+                    let _ = engine.execute(Command::UiDrawingSettings(UiDrawingSettings::Cancel {
+                        expected_revision: engine.state().revision,
+                        request_id: id,
+                    }));
+                    engine.finish_ui_drawing_settings(id);
+                }
+                self.end(context);
+            }
+            Some((at, Action::Apply)) => {
+                if !form.detached
+                    && editable
+                    && !input_rejected
+                    && let (Some(engine), Ok((bond_length, chain_angle, line_width, bond_spacing))) =
+                        (engine, current_values)
+                {
+                    match engine.apply_ui_document_settings_with_spacing(
+                        id,
+                        bond_length,
+                        chain_angle,
+                        line_width,
+                        bond_spacing,
+                    ) {
+                        Ok(_) => {
+                            self.end(context);
+                            return;
+                        }
+                        Err(error) => form.message = Some(error.to_string()),
+                    }
+                }
+                // Match the field bridge's last replacement, bounded before retaining any payload.
+                let suffix = events.get(at.saturating_add(1)..).unwrap_or_default();
+                for (index, limit) in [(0, 384), (1, 384), (2, 384), (3, 384)] {
+                    if let Some(event) = suffix.iter().rev().find(|event| {
+                        matches!(event,
+                        egui::Event::AccessKitActionRequest(request)
+                        if request.action == egui::accesskit::Action::SetValue
+                            && request.target.0 == field_id(id,index).value())
+                    }) && let egui::Event::AccessKitActionRequest(request) = event
+                        && let Some(egui::accesskit::ActionData::Value(value)) = &request.data
+                    {
+                        if value.len() <= limit {
+                            form.deferred_text.push(event.clone());
+                        } else {
+                            form.message = Some(
+                                crate::sdf_draft_text::DraftTextError::ByteLimit {
+                                    attempted_bytes: value.len(),
+                                    limit_bytes: limit,
+                                }
+                                .to_string(),
+                            );
+                        }
+                    }
+                }
+                context.request_repaint();
+            }
+            None => {}
+        }
+    }
+}

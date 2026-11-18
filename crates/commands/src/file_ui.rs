@@ -6,10 +6,25 @@ use crate::{
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use std::sync::{Arc, Weak};
+
+/// Opaque native presentation identity; file-association ABA must not revive old work.
+#[derive(Clone)]
+pub struct UiFileContextStamp(Weak<()>);
+
+impl std::fmt::Debug for UiFileContextStamp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("UiFileContextStamp(..)")
+    }
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum UiFileAction {
+    New,
+    ConvertSmiles,
+    PasteSmiles,
+    ImportSmilesRecords,
     Open,
     Save,
     SaveAs,
@@ -55,6 +70,10 @@ pub struct UiFileState {
 /// Acceptance by a native host is not a claim that pixels have been displayed.
 #[derive(Clone, Debug)]
 pub enum UiFilePlan {
+    NewDocument,
+    SmilesConversion,
+    SmilesPaste,
+    SmilesImport,
     OpenPicker,
     SavePicker,
     SaveExisting {
@@ -77,9 +96,18 @@ pub(super) struct FileUiPolicy {
     available: bool,
     pub(super) epoch: u64,
     active: Option<ActiveRequest>,
+    context: Arc<()>,
 }
 
 impl Engine {
+    pub fn ui_file_context_stamp(&self) -> UiFileContextStamp {
+        UiFileContextStamp(Arc::downgrade(&self.file_ui.context))
+    }
+
+    pub fn ui_file_context_stamp_matches(&self, stamp: &UiFileContextStamp) -> bool {
+        Weak::ptr_eq(&stamp.0, &Arc::downgrade(&self.file_ui.context))
+    }
+
     pub(super) fn file_ui_state(&self) -> UiFileState {
         UiFileState {
             available: self.file_ui.available,
@@ -97,11 +125,17 @@ impl Engine {
     pub fn set_ui_file_host(&mut self, available: bool) {
         if self.file_ui.available != available {
             self.invalidate_file_ui();
+            self.detach_atom_label();
+            self.detach_drawing_settings();
+            self.detach_preferences();
+            self.detach_add_chain();
             self.file_ui.available = available;
         }
     }
 
     pub(super) fn invalidate_file_ui(&mut self) {
+        // Keep invalidation latched even after a paste consumed the active request.
+        self.file_ui.context = Arc::new(());
         if let Some(active) = &mut self.file_ui.active {
             if active.view.phase == UiFilePhase::Running {
                 // Published work must still finish truthfully, but cannot reopen an old picker.
@@ -179,6 +213,12 @@ impl Engine {
             }
             self.file_ui.active = None;
         } else {
+            if self.ui_drawing_settings_request().is_some()
+                || self.ui_add_chain_request().is_some()
+                || self.preferences_ui.has_request()
+            {
+                return Err(Error::UiBusy);
+            }
             if self.file_ui.active.is_some() {
                 return Err(Error::UiBusy);
             }
@@ -189,6 +229,21 @@ impl Engine {
                 Some(_) => return Err(Error::UiStaleRequest),
                 None if self.close_state() == CloseState::Open => {}
                 None => return Err(Error::UiBusy),
+            }
+            if params.action == UiFileAction::PasteSmiles {
+                self.smiles_paste_source()?;
+            }
+            if params.action == UiFileAction::ImportSmilesRecords
+                && !matches!(self.content(), crate::StoredContent::SmilesFile(_))
+            {
+                return Err(Error::WrongContent {
+                    required: "unprojected smiles file",
+                    actual: if matches!(self.content(), crate::StoredContent::Sdf { .. }) {
+                        "sdf"
+                    } else {
+                        "drawing"
+                    },
+                });
             }
             self.file_ui.active = Some(ActiveRequest {
                 view: UiFileRequest {
@@ -220,6 +275,10 @@ impl Engine {
             return Err(Error::UiBusy);
         }
         let plan = match active.view.action {
+            UiFileAction::New => UiFilePlan::NewDocument,
+            UiFileAction::ConvertSmiles => UiFilePlan::SmilesConversion,
+            UiFileAction::PasteSmiles => UiFilePlan::SmilesPaste,
+            UiFileAction::ImportSmilesRecords => UiFilePlan::SmilesImport,
             UiFileAction::Open => UiFilePlan::OpenPicker,
             UiFileAction::Save => {
                 active
@@ -241,6 +300,89 @@ impl Engine {
             active.view.phase = UiFilePhase::Accepted;
         }
         Ok(plan)
+    }
+
+    /// A New intent changes the session immediately; it never publishes a file receipt.
+    pub fn create_ui_document(
+        &mut self,
+        id: u64,
+        discard_unsaved: bool,
+    ) -> Result<CommandResult, Error> {
+        let active = self.current_ui_file(id)?;
+        if active.view.phase != UiFilePhase::Accepted {
+            return Err(Error::UiBusy);
+        }
+        if active.view.action != UiFileAction::New {
+            return Err(Error::InvalidUiFileParameters(
+                "New document requires the matching accepted New request",
+            ));
+        }
+        self.execute(Command::NewDocument(crate::NewDocument {
+            expected_revision: active.view.input_revision,
+            discard_unsaved,
+        }))
+    }
+
+    /// Convert into a new file without binding a Save or creating completion authority.
+    /// Consume the presentation only after the existing conversion plan is prepared.
+    pub fn prepare_ui_smiles_conversion(
+        &mut self,
+        id: u64,
+        params: crate::ConvertSmilesToCdxml,
+    ) -> Result<Prepared, Error> {
+        let active = self.current_ui_file(id)?;
+        if active.view.phase != UiFilePhase::Accepted {
+            return Err(Error::UiBusy);
+        }
+        if active.view.action != UiFileAction::ConvertSmiles {
+            return Err(Error::InvalidUiFileParameters(
+                "SMILES conversion requires the matching accepted conversion request",
+            ));
+        }
+        let prepared = self.prepare(Command::ConvertSmilesToCdxml(params))?;
+        self.file_ui.active = None;
+        Ok(prepared)
+    }
+
+    /// Consume the accepted paste presentation only after preparing its real authoring command.
+    /// The caller reserves its registered worker first; this creates no Save acknowledgment.
+    pub fn prepare_ui_smiles_paste(
+        &mut self,
+        id: u64,
+        params: crate::PasteSmiles,
+    ) -> Result<Prepared, Error> {
+        let active = self.current_ui_file(id)?;
+        if active.view.phase != UiFilePhase::Accepted {
+            return Err(Error::UiBusy);
+        }
+        if active.view.action != UiFileAction::PasteSmiles {
+            return Err(Error::InvalidUiFileParameters(
+                "SMILES paste requires the matching accepted paste request",
+            ));
+        }
+        let prepared = self.prepare(Command::PasteSmiles(params))?;
+        self.file_ui.active = None;
+        Ok(prepared)
+    }
+
+    /// Reserve native work before consuming this presentation; import grants no Save ACK.
+    pub fn prepare_ui_smiles_import(
+        &mut self,
+        id: u64,
+        params: crate::ImportSmilesRecords,
+    ) -> Result<Prepared, Error> {
+        let active = self.current_ui_file(id)?;
+        if active.view.phase != UiFilePhase::Accepted {
+            return Err(Error::UiBusy);
+        }
+        if active.view.action != UiFileAction::ImportSmilesRecords {
+            return Err(Error::InvalidUiFileParameters(
+                "SMILES import requires the matching accepted import request",
+            ));
+        }
+        let prepared = self.prepare(Command::ImportSmilesRecords(params))?;
+        self.file_ui.active = None;
+        Ok(prepared)
     }
 
     /// Validate a host selection and prepare its actual file command under the same

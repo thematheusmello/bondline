@@ -1,9 +1,17 @@
 //! Standalone source-preserving CDXML syntax. No document model or native I/O.
 
+mod defaults;
 mod edit;
 mod numbers;
+mod patch;
+mod resources;
+mod text;
 mod writer;
+pub use defaults::{LabelDefault, LabelDefaults, LabelDefaultsError};
 pub use numbers::{ObjectId, parse_integer};
+pub use patch::{Edit, MAX_EDITS};
+pub use resources::{Color, Font, ResourceError, Resources};
+pub use text::{StyleRun, TextError, TextObject};
 pub use writer::Writer;
 
 pub const MAX_INPUT_BYTES: usize = 64 * 1024 * 1024;
@@ -11,6 +19,15 @@ pub const MAX_NODES: u32 = 100_000;
 pub const MAX_DEPTH: usize = 256;
 pub const MAX_ATTRIBUTES_PER_ELEMENT: usize = 256;
 pub const MAX_ATTRIBUTES: usize = 100_000;
+
+/// Lexical information a read-only XML tree may omit. These facts do not grant edit authority.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct SyntaxFeatures {
+    pub doctype: bool,
+    pub processing_instructions: bool,
+    pub cdata: bool,
+    pub namespace_declarations: bool,
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -32,6 +49,10 @@ pub enum Error {
     MissingAttribute,
     #[error("attribute value contains a character forbidden in XML 1.0")]
     InvalidAttributeValue,
+    #[error("text edits require an empty element or only character-data children")]
+    InvalidTextContent,
+    #[error("text value contains a character forbidden in XML 1.0")]
+    InvalidTextValue,
     #[error(
         "new element/attribute names must be unnamespaced ASCII XML names; xmlns is not an ordinary attribute"
     )]
@@ -44,6 +65,12 @@ pub enum Error {
     NodeLimit,
     #[error("attribute source range is inconsistent with the validated XML")]
     InvalidAttributeRange,
+    #[error("batch XML edits exceed the 200000-operation bound")]
+    EditLimit,
+    #[error("batch XML edits address the same attribute/container twice or overlap")]
+    ConflictingEdits,
+    #[error("appended XML must be a self-contained fragment without a declaration or DTD")]
+    InvalidFragment,
     #[error(
         "an exact decimal integer is required; fractional values and exponents are unsupported"
     )]
@@ -63,6 +90,7 @@ pub enum Error {
 pub struct Document<'input> {
     source: &'input [u8],
     xml: roxmltree::Document<'input>,
+    features: SyntaxFeatures,
 }
 
 impl<'input> Document<'input> {
@@ -71,7 +99,7 @@ impl<'input> Document<'input> {
             return Err(Error::InputTooLarge);
         }
         let source = std::str::from_utf8(input)?;
-        preflight(source)?;
+        let features = preflight(source)?;
         let xml = roxmltree::Document::parse_with_options(
             source,
             roxmltree::ParsingOptions {
@@ -85,11 +113,18 @@ impl<'input> Document<'input> {
         if root.tag_name().name() != "CDXML" || root.tag_name().namespace().is_some() {
             return Err(Error::InvalidRoot);
         }
-        Ok(Self { source: input, xml })
+        Ok(Self {
+            source: input,
+            xml,
+            features,
+        })
     }
 
     pub fn xml(&self) -> &roxmltree::Document<'input> {
         &self.xml
+    }
+    pub fn features(&self) -> SyntaxFeatures {
+        self.features
     }
     pub fn as_bytes(&self) -> &'input [u8] {
         self.source
@@ -99,11 +134,12 @@ impl<'input> Document<'input> {
     }
 }
 
-fn preflight(source: &str) -> Result<(), Error> {
+fn preflight(source: &str) -> Result<SyntaxFeatures, Error> {
     use quick_xml::{Reader, events::Event};
     let mut reader = Reader::from_str(source);
     let mut depth = 0_usize;
     let mut attributes = 0_usize;
+    let mut features = SyntaxFeatures::default();
     loop {
         let event = reader.read_event()?;
         match &event {
@@ -124,6 +160,7 @@ fn preflight(source: &str) -> Result<(), Error> {
                 }
             }
             Event::DocType(doctype) => {
+                features.doctype = true;
                 let mut quote = None;
                 for character in doctype.chars() {
                     match (quote, character) {
@@ -142,7 +179,10 @@ fn preflight(source: &str) -> Result<(), Error> {
                     depth += 1;
                 }
                 for (index, attribute) in element.attributes().with_checks(false).enumerate() {
-                    attribute.map_err(quick_xml::Error::from)?;
+                    let attribute = attribute.map_err(quick_xml::Error::from)?;
+                    let name = attribute.key.as_ref();
+                    features.namespace_declarations |=
+                        name == "xmlns" || name.starts_with("xmlns:");
                     attributes += 1;
                     if index >= MAX_ATTRIBUTES_PER_ELEMENT || attributes > MAX_ATTRIBUTES {
                         return Err(Error::AttributeLimit);
@@ -150,7 +190,9 @@ fn preflight(source: &str) -> Result<(), Error> {
                 }
             }
             Event::End(_) => depth = depth.saturating_sub(1),
-            Event::Eof => return Ok(()),
+            Event::PI(_) => features.processing_instructions = true,
+            Event::CData(_) => features.cdata = true,
+            Event::Eof => return Ok(features),
             _ => {}
         }
     }

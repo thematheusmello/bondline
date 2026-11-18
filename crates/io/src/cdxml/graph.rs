@@ -1,13 +1,14 @@
 use super::{is_element, parse_position};
 use bondline_cdxml::{ObjectId, parse_integer};
 use bondline_model::{
-    Atom, AtomId, Bond, BondId, BondOrder, Element, Fragment, FragmentId, GraphError,
-    MAX_GRAPH_ITEMS, Radical,
+    Atom, AtomId, Bond, BondId, BondOrder, DoublePosition, Element, Fragment, FragmentId,
+    GraphError, MAX_DOCUMENT_TEXT_BYTES, MAX_GRAPH_ITEMS, Radical, TextError,
 };
 use roxmltree::Node;
 use std::{
     collections::{BTreeMap, BTreeSet},
     num::NonZeroU16,
+    sync::Arc,
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -70,6 +71,8 @@ impl<'input> ElementalGraph<'input> {
             }
         }
         let (mut next_atom, mut next_bond, mut next_fragment) = (0, 0, 0);
+        let resources = source.resources().ok();
+        let (mut label_runs, mut label_bytes) = (0_usize, 0_usize);
         let mut fragments = Vec::new();
         for fragment in source
             .xml()
@@ -81,7 +84,25 @@ impl<'input> ElementalGraph<'input> {
             for node in fragment.children().filter(|node| is_element(*node, "n")) {
                 let id =
                     AtomId::new(allocate(&mut next_atom)?).ok_or(MappingError::IdentityLimit)?;
-                atoms.push(read_atom(node, id)?);
+                let mut atom = read_atom(node, id)?;
+                if let Some(resources) = &resources
+                    && let Ok(label) = super::atom_text::project(&source, resources, node)
+                {
+                    label_runs = label_runs.saturating_add(label.runs().len());
+                    label_bytes = label.runs().iter().fold(label_bytes, |bytes, run| {
+                        bytes.saturating_add(run.text().len())
+                    });
+                    if label_runs > MAX_GRAPH_ITEMS {
+                        return Err(bondline_model::Error::from(TextError::DocumentRunLimit).into());
+                    }
+                    if label_bytes > MAX_DOCUMENT_TEXT_BYTES {
+                        return Err(
+                            bondline_model::Error::from(TextError::DocumentTextLimit).into()
+                        );
+                    }
+                    atom.authored_label = Some(Arc::new(label));
+                }
+                atoms.push(atom);
                 if let Some(source_id) = source_id(node)?.filter(|id| id.is_assigned()) {
                     references.insert(source_id, id);
                 }
@@ -109,6 +130,7 @@ impl<'input> ElementalGraph<'input> {
                     begin: endpoint("B")?,
                     end: endpoint("E")?,
                     order: read_order(node.attribute("Order"))?,
+                    double_position: read_double_position(node.attribute("DoublePosition"))?,
                 });
             }
             let id = FragmentId::new(allocate(&mut next_fragment)?)
@@ -168,6 +190,51 @@ impl<'input> ElementalGraph<'input> {
             size
         };
         let mut model = bondline_model::Document::default();
+        let scalar = |name| {
+            root.attribute(name)
+                .and_then(|value| value.trim().parse::<f64>().ok())
+        };
+        model.set_drawing_settings(crate::drawing_settings::project(
+            scalar("BondLength"),
+            scalar("ChainAngle"),
+        )?);
+        let nonnegative = |name| {
+            root.attributes()
+                .find(|attribute| attribute.namespace().is_none() && attribute.name() == name)
+                .and_then(|attribute| {
+                    let raw = attribute.value().trim();
+                    let value = raw.parse::<f64>().ok()?;
+                    // A genuinely negative source magnitude may underflow to -0. Numeric
+                    // signed-zero lexemes remain valid; only the decoded mantissa matters.
+                    if value == 0.0
+                        && raw.starts_with('-')
+                        && raw.split(['e', 'E']).next().is_some_and(|mantissa| {
+                            mantissa.bytes().any(|byte| matches!(byte, b'1'..=b'9'))
+                        })
+                    {
+                        return None;
+                    }
+                    Some(value)
+                })
+        };
+        let spacing = nonnegative("BondSpacing").filter(|value| {
+            bondline_model::DrawingStyle::default()
+                .with_bond_spacing_percent(Some(*value))
+                .is_ok()
+        });
+        let margin = nonnegative("MarginWidth").filter(|value| {
+            bondline_model::DrawingStyle::default()
+                .with_margin_width(Some(*value))
+                .is_ok()
+        });
+        model.set_drawing_style(
+            bondline_model::DrawingStyle::new(
+                scalar("LineWidth")
+                    .filter(|width| bondline_model::DrawingStyle::new(Some(*width)).is_ok()),
+            )?
+            .with_bond_spacing_percent(spacing)?
+            .with_margin_width(margin)?,
+        );
         let id = model
             .pages()
             .first()
@@ -175,6 +242,11 @@ impl<'input> ElementalGraph<'input> {
             .id();
         model.set_page_size(id, size)?;
         model.append_fragments(id, self.fragments.clone())?;
+        if let Some(page) = root.children().find(|node| is_element(*node, "page"))
+            && let Ok(texts) = super::caption::project(&self.source, page)
+        {
+            model.append_texts(id, texts)?;
+        }
         Ok(model)
     }
 }
@@ -244,14 +316,14 @@ fn integer(node: Node<'_, '_>, name: &'static str) -> Result<Option<i64>, Mappin
         .transpose()
 }
 
-fn read_atom(node: Node<'_, '_>, id: AtomId) -> Result<Atom, MappingError> {
+pub(super) fn read_atom(node: Node<'_, '_>, id: AtomId) -> Result<Atom, MappingError> {
     if node
         .attribute("NodeType")
         .is_some_and(|kind| kind != "Element")
     {
         return Err(MappingError::UnsupportedNodeType);
     }
-    if node.attribute("Element").is_none() && node.children().any(|child| is_element(child, "t")) {
+    if node.attribute("Element").is_none() && node.children().any(super::atom_text::is_text) {
         return Err(MappingError::UnsupportedLabelOnlyAtom);
     }
     let element = u8::try_from(integer(node, "Element")?.unwrap_or(6))
@@ -278,6 +350,18 @@ fn read_atom(node: Node<'_, '_>, id: AtomId) -> Result<Atom, MappingError> {
             u16::try_from(count).map_err(|_| MappingError::InvalidProperty("NumHydrogens"))
         })
         .transpose()?;
+    atom.show_terminal_carbon_labels = match node.attribute("ShowTerminalCarbonLabels") {
+        None => None,
+        Some("yes") => Some(true),
+        Some("no") => Some(false),
+        Some(_) => return Err(MappingError::InvalidProperty("ShowTerminalCarbonLabels")),
+    };
+    atom.show_non_terminal_carbon_labels = match node.attribute("ShowNonTerminalCarbonLabels") {
+        None => None,
+        Some("yes") => Some(true),
+        Some("no") => Some(false),
+        Some(_) => return Err(MappingError::InvalidProperty("ShowNonTerminalCarbonLabels")),
+    };
     atom.radical = match node.attribute("Radical") {
         None | Some("None") => Radical::None,
         Some("Singlet") => Radical::Singlet,
@@ -288,7 +372,17 @@ fn read_atom(node: Node<'_, '_>, id: AtomId) -> Result<Atom, MappingError> {
     Ok(atom)
 }
 
-fn read_order(value: Option<&str>) -> Result<BondOrder, MappingError> {
+pub(super) fn read_double_position(value: Option<&str>) -> Result<DoublePosition, MappingError> {
+    match value {
+        None => Ok(DoublePosition::Unspecified),
+        Some("Center") => Ok(DoublePosition::Center),
+        Some("Right") => Ok(DoublePosition::Right),
+        Some("Left") => Ok(DoublePosition::Left),
+        Some(_) => Err(MappingError::InvalidProperty("DoublePosition")),
+    }
+}
+
+pub(super) fn read_order(value: Option<&str>) -> Result<BondOrder, MappingError> {
     let Some(value) = value else {
         return Ok(BondOrder::Single);
     };

@@ -1,17 +1,26 @@
 //! GUI-free authored document data. Coordinates are points, increasing right and down.
 
+mod drawing;
 mod element;
 mod graph;
 mod point;
+mod style;
+mod text;
+pub use drawing::DrawingSettings;
 pub use graph::{
-    Atom, AtomId, Bond, BondId, BondOrder, Element, Fragment, FragmentId, GraphError,
-    MAX_GRAPH_ITEMS, Radical,
+    Atom, AtomId, Bond, BondId, BondOrder, DoublePosition, Element, Fragment, FragmentId,
+    GraphError, MAX_GRAPH_ITEMS, Radical,
 };
 pub use point::{MAX_POSITION_PT, Point2};
+pub use style::DrawingStyle;
+pub use text::{
+    AtomLabel, LabelAlignment, MAX_DOCUMENT_TEXT_BYTES, MAX_TEXT_BYTES, MAX_TEXT_RUNS, StyledText,
+    TextError, TextId, TextJustification, TextRun, TextStyle,
+};
 
 use serde::{Deserialize, Serialize};
 use std::{
-    collections::{BTreeSet, HashSet},
+    collections::{BTreeMap, BTreeSet, HashSet},
     mem::size_of,
     num::NonZeroU32,
     sync::Arc,
@@ -91,14 +100,26 @@ impl PageSize {
 pub enum Error {
     #[error(transparent)]
     Graph(#[from] GraphError),
+    #[error(transparent)]
+    Text(#[from] TextError),
     #[error("point coordinates must be finite, within -100000..100000 points")]
     InvalidPosition,
     #[error("page dimensions must be finite and greater than zero, up to 100000 points")]
     InvalidPageSize,
+    #[error(
+        "drawing settings need a finite bond length above zero through 100000 pt and a finite chain angle 1..179 degrees"
+    )]
+    InvalidDrawingSettings,
+    #[error(
+        "line width must be finite above zero through 100000 pt; bond spacing must be finite within 0..3276.7 percent"
+    )]
+    InvalidDrawingStyle,
     #[error("page {0} does not exist")]
     MissingPage(u32),
     #[error("fragment {0} does not exist on the requested page")]
     MissingFragment(u32),
+    #[error("text {0} does not exist on the requested page")]
+    MissingText(u32),
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize)]
@@ -106,6 +127,8 @@ pub struct Page {
     id: PageId,
     size: PageSize,
     fragments: Vec<Arc<Fragment>>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    texts: Vec<Arc<StyledText>>,
 }
 
 impl Page {
@@ -118,12 +141,19 @@ impl Page {
     pub fn fragments(&self) -> &[Arc<Fragment>] {
         &self.fragments
     }
+    pub fn texts(&self) -> &[Arc<StyledText>] {
+        &self.texts
+    }
 }
 
 /// Authored state only: history, selections, viewport and caches belong to the engine.
 #[derive(Clone, Debug, PartialEq, Serialize)]
 pub struct Document {
     pages: Vec<Page>,
+    #[serde(skip_serializing_if = "DrawingSettings::is_empty")]
+    drawing_settings: DrawingSettings,
+    #[serde(skip_serializing_if = "DrawingStyle::is_empty")]
+    drawing_style: DrawingStyle,
 }
 
 impl Default for Document {
@@ -133,14 +163,46 @@ impl Default for Document {
                 id: PageId(NonZeroU32::MIN),
                 size: PageSize::A4,
                 fragments: Vec::new(),
+                texts: Vec::new(),
             }],
+            drawing_settings: DrawingSettings::default(),
+            drawing_style: DrawingStyle::default(),
         }
     }
 }
 
 impl Document {
+    pub const fn drawing_style(&self) -> DrawingStyle {
+        self.drawing_style
+    }
+
+    pub fn set_drawing_style(&mut self, style: DrawingStyle) {
+        self.drawing_style = style;
+    }
+
+    pub const fn drawing_settings(&self) -> DrawingSettings {
+        self.drawing_settings
+    }
+
+    /// Stores validated authored data without changing existing pages or geometry.
+    pub fn set_drawing_settings(&mut self, settings: DrawingSettings) {
+        self.drawing_settings = settings;
+    }
+
     pub fn pages(&self) -> &[Page] {
         &self.pages
+    }
+
+    pub fn has_authored_atom_labels(&self) -> bool {
+        self.atom_labels().next().is_some()
+    }
+
+    fn atom_labels(&self) -> impl Iterator<Item = &AtomLabel> {
+        self.pages
+            .iter()
+            .flat_map(|page| page.fragments.iter())
+            .flat_map(|fragment| fragment.atoms())
+            .filter_map(|atom| atom.authored_label.as_deref())
     }
 
     /// Retained payload/container bytes, including reserved vector capacity, shared once.
@@ -148,6 +210,8 @@ impl Document {
     pub fn retained_bytes<'a>(documents: impl IntoIterator<Item = &'a Self>) -> usize {
         let mut models = HashSet::new();
         let mut fragments = HashSet::new();
+        let mut texts = HashSet::new();
+        let mut labels = HashSet::new();
         let mut bytes = 0_usize;
         for document in documents {
             if !models.insert(std::ptr::from_ref(document)) {
@@ -165,11 +229,94 @@ impl Document {
                 for fragment in &page.fragments {
                     if fragments.insert(Arc::as_ptr(fragment)) {
                         bytes = bytes.saturating_add(fragment.storage_bytes());
+                        for label in fragment
+                            .atoms()
+                            .iter()
+                            .filter_map(|atom| atom.authored_label.as_ref())
+                        {
+                            if labels.insert(Arc::as_ptr(label)) {
+                                bytes = bytes.saturating_add(label.storage_bytes());
+                            }
+                        }
+                    }
+                }
+                bytes = bytes.saturating_add(
+                    page.texts
+                        .capacity()
+                        .saturating_mul(size_of::<Arc<StyledText>>()),
+                );
+                for text in &page.texts {
+                    if texts.insert(Arc::as_ptr(text)) {
+                        bytes = bytes.saturating_add(text.storage_bytes());
                     }
                 }
             }
         }
         bytes
+    }
+
+    /// Append literal text objects atomically, with document-wide identities and budgets.
+    pub fn append_texts(&mut self, page_id: PageId, texts: Vec<StyledText>) -> Result<(), Error> {
+        let index = self
+            .pages
+            .iter()
+            .position(|page| page.id == page_id)
+            .ok_or(Error::MissingPage(page_id.get()))?;
+        if texts.len() > MAX_GRAPH_ITEMS {
+            return Err(TextError::TextCountLimit.into());
+        }
+        let existing = self
+            .pages
+            .iter()
+            .flat_map(|page| page.texts.iter().map(Arc::as_ref));
+        validate_texts(existing.chain(texts.iter()), self.atom_labels())?;
+        self.pages
+            .get_mut(index)
+            .ok_or(Error::MissingPage(page_id.get()))?
+            .texts
+            .extend(texts.into_iter().map(Arc::new));
+        Ok(())
+    }
+
+    /// Replace one same-ID text, preserving unrelated sharing and exact no-op sharing.
+    pub fn replace_text(&mut self, page_id: PageId, text: StyledText) -> Result<(), Error> {
+        let page_index = self
+            .pages
+            .iter()
+            .position(|page| page.id == page_id)
+            .ok_or(Error::MissingPage(page_id.get()))?;
+        let page = self
+            .pages
+            .get(page_index)
+            .ok_or(Error::MissingPage(page_id.get()))?;
+        let index = page
+            .texts
+            .iter()
+            .position(|current| current.id() == text.id())
+            .ok_or(Error::MissingText(text.id().get()))?;
+        let existing = self
+            .pages
+            .iter()
+            .flat_map(|page| page.texts.iter().map(Arc::as_ref))
+            .map(|current| {
+                if current.id() == text.id() {
+                    &text
+                } else {
+                    current
+                }
+            });
+        validate_texts(existing, self.atom_labels())?;
+        let current = self
+            .pages
+            .get_mut(page_index)
+            .ok_or(Error::MissingPage(page_id.get()))?
+            .texts
+            .get_mut(index)
+            .ok_or(Error::MissingText(text.id().get()))?;
+        if current.as_ref() != &text {
+            *current = Arc::new(text);
+        }
+        Ok(())
     }
 
     /// Append a batch atomically, validating document-wide identities and resource budgets.
@@ -190,7 +337,16 @@ impl Document {
             .pages
             .iter()
             .flat_map(|page| page.fragments.iter().map(Arc::as_ref));
-        validate_fragments(existing.chain(fragments.iter()))?;
+        let candidate = existing.chain(fragments.iter());
+        validate_fragments(candidate.clone())?;
+        validate_texts(
+            self.pages
+                .iter()
+                .flat_map(|page| page.texts.iter().map(Arc::as_ref)),
+            candidate
+                .flat_map(|fragment| fragment.atoms())
+                .filter_map(|atom| atom.authored_label.as_deref()),
+        )?;
         self.pages
             .get_mut(index)
             .ok_or(Error::MissingPage(page_id.get()))?
@@ -201,6 +357,15 @@ impl Document {
 
     /// Replace one same-ID fragment atomically, retaining every unrelated shared payload.
     pub fn replace_fragment(&mut self, page_id: PageId, fragment: Fragment) -> Result<(), Error> {
+        self.replace_fragments(page_id, vec![fragment])
+    }
+
+    /// Replace a batch with one global identity/budget validation; retain page order.
+    pub fn replace_fragments(
+        &mut self,
+        page_id: PageId,
+        fragments: Vec<Fragment>,
+    ) -> Result<(), Error> {
         let page_index = self
             .pages
             .iter()
@@ -210,25 +375,43 @@ impl Document {
             .pages
             .get(page_index)
             .ok_or(Error::MissingPage(page_id.get()))?;
-        let index = page
-            .fragments
-            .iter()
-            .position(|current| current.id() == fragment.id())
-            .ok_or(Error::MissingFragment(fragment.id().get()))?;
-        let retained = self
+        if fragments.len() > MAX_GRAPH_ITEMS {
+            return Err(GraphError::Limit("fragments").into());
+        }
+        let ids: BTreeSet<_> = page.fragments.iter().map(|current| current.id()).collect();
+        let mut replacements = BTreeMap::new();
+        for fragment in fragments {
+            let id = fragment.id();
+            if !ids.contains(&id) {
+                return Err(Error::MissingFragment(id.get()));
+            }
+            if replacements.insert(id, fragment).is_some() {
+                return Err(GraphError::DuplicateFragment(id.get()).into());
+            }
+        }
+        let candidate = self
             .pages
             .iter()
             .flat_map(|page| page.fragments.iter().map(Arc::as_ref))
-            .filter(|current| current.id() != fragment.id());
-        validate_fragments(retained.chain(std::iter::once(&fragment)))?;
-        let destination = self
+            .map(|current| replacements.get(&current.id()).unwrap_or(current));
+        validate_fragments(candidate.clone())?;
+        validate_texts(
+            self.pages
+                .iter()
+                .flat_map(|page| page.texts.iter().map(Arc::as_ref)),
+            candidate
+                .flat_map(|fragment| fragment.atoms())
+                .filter_map(|atom| atom.authored_label.as_deref()),
+        )?;
+        let page = self
             .pages
             .get_mut(page_index)
-            .ok_or(Error::MissingPage(page_id.get()))?
-            .fragments
-            .get_mut(index)
-            .ok_or(Error::MissingFragment(fragment.id().get()))?;
-        *destination = Arc::new(fragment);
+            .ok_or(Error::MissingPage(page_id.get()))?;
+        for current in &mut page.fragments {
+            if let Some(fragment) = replacements.remove(&current.id()) {
+                *current = Arc::new(fragment);
+            }
+        }
         Ok(())
     }
 
@@ -241,6 +424,24 @@ impl Document {
         page.size = size;
         Ok(())
     }
+}
+
+fn validate_texts<'a>(
+    texts: impl Iterator<Item = &'a StyledText>,
+    labels: impl Iterator<Item = &'a AtomLabel>,
+) -> Result<(), Error> {
+    let mut ids = BTreeSet::new();
+    let mut budget = text::TextBudget::default();
+    for text in texts {
+        budget.add(text.runs())?;
+        if !ids.insert(text.id()) {
+            return Err(TextError::DuplicateText(text.id().get()).into());
+        }
+    }
+    for label in labels {
+        budget.add(label.runs())?;
+    }
+    Ok(())
 }
 
 fn validate_fragments<'a>(fragments: impl Iterator<Item = &'a Fragment>) -> Result<(), Error> {

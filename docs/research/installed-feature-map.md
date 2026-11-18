@@ -1,5 +1,14 @@
 # Installed desktop feature map
 
+The later [2026-11-15 live UI review](live-ui-review-2026-11-15.md) rechecks the visible
+build and selected File/Edit/View/New roles through CUA under the user's renewed explicit
+instruction. It observes separate styled New windows and records Bondline's remaining
+single-window gap. It does not repeat/revalidate every historical catalog row below.
+The renewed document-settings pass in that same note observes Layout, Drawing, Atom Labels
+and Reaction Display fields, then cancels without edits. Its About screen identifies
+Signals26.1.0.6801; this still does not establish Professional entitlement. Historical
+metadata/capture hashes below were not rechecked by that CUA pass.
+
 Reviewed 2026-11-14. This is the first, **partial** installed-runtime reconciliation for the
 complete Professional desktop parity target. It supplements the
 [qualified public inventory](../parity-checklist.md), [public UI evidence](official-ui-evidence.md),

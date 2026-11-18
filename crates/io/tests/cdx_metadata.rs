@@ -336,8 +336,18 @@ fn atom_id_is_retained_metadata_and_never_an_endpoint_or_application_identity() 
 
 #[test]
 fn nonstereo_cip_does_not_authorize_other_unmapped_chemical_properties() -> TestResult {
+    let input = changed(EXPLICIT, 101, 0x4003, 0x042b, &[0, 0])?;
+    let graph = ElementalGraph::parse(&input)?;
+    let mut expected = serde_json::to_value(ElementalGraph::parse(EXPLICIT)?.fragments())?;
+    expected[0]["atoms"][0]["explicit_hydrogens"] = serde_json::json!(0);
+    assert_eq!(serde_json::to_value(graph.fragments())?, expected);
+    assert_eq!(graph.as_bytes(), input);
+    assert_eq!(graph.to_bytes(), input);
+    let stored = StoredDocument::from_cdx(input.clone().into(), PageSize::A4)?;
+    assert!(!stored.is_fully_mapped());
+    assert!(!stored.has_display_projection());
+    assert_eq!(stored.to_cdx()?.as_ref(), input);
     for (owner, old, tag, payload) in [
-        (101, 0x4003, 0x042b, vec![0, 0]),
         (101, 0x4003, 0x0430, vec![1]),
         (101, 0x4003, 0x0431, vec![1, 0]),
         (101, 0x4003, 0x0446, vec![1]),

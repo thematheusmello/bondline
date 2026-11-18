@@ -6,6 +6,20 @@ endpoints and one bond object per unordered pair. Cycles, empty fragments and di
 components are accepted. These are structural checks, not chemical validity/perception.
 The single-bond-object-per-pair restriction is an explicit current model policy.
 
+Document also owns fixed-size Copy `DrawingSettings`, with independently optional private
+bond length in points and chain angle in degrees. Its validated constructor accepts finite
+length>0 through100000pt and angle1..179°, including fractions. Empty settings omit the
+entire JSON container, preserving old snapshots/native XML. Missing data does not resolve
+an inherited numeric default; in a partial source projection it may mean opaque unsupported
+source data. Root-only format projection and authoritative backing stay distinct.
+
+The shared `document.set_drawing_settings` command requires both nullable fields and a
+revision. It replaces the pair in one normal history edit on source-free or fully mapped
+native CDXML; equal validated requests retain sharing/context/redo. It changes no pages,
+chemistry or existing geometry. Whole-MOL export refuses these preferences; source drift
+guards compare the whole model. This is authored data and automation, with native form,
+tool application and inheritance still required. See [contract](research/drawing-settings-command.md).
+
 AtomId, BondId and FragmentId are distinct nonzero-u32 types. IDs are stable and unique
 document-wide within each kind. The three namespaces may overlap numerically. Source file
 IDs have separate scoping/zero rules and must be mapped rather than reused blindly.
@@ -17,11 +31,36 @@ from Some(0); valence-derived hydrogen generation is not implemented. Radical st
 none, singlet, doublet and triplet. No isotope-existence, valence or stereo inference occurs.
 The element range is the reviewed IUPAC catalog, not a claim that future elements cannot exist.
 
+Atom retains optional show_terminal_carbon_labels and show_non_terminal_carbon_labels
+independently of each other and literal H.
+None is omitted for old Bondline JSON/native-v0 compatibility; false and true preserve
+explicit node no/yes. This fixed-size datum survives copies/replacement/history and needs
+no additional heap accounting. It does not infer H, root inheritance or SDK absence
+semantics. Both MOL model writers refuse its loss; retained-SMILES synchronization cannot
+change it. Shared rendering now interprets active flags with known literal/resolved H,
+checked C4 suppression and mandatory-label exceptions; no model H is inferred or erased.
+Degree zero/one selects terminal; higher degree selects nonterminal. Unbonded carbon
+and actual isolated C2 components retain mandatory labels. Explicit atom.set_label
+independently restores each existing false to true. See
+[data evidence](verification-carbon-label-data.md) and
+[skeletal receiving](verification-skeletal-carbon.md) and
+[terminal-label evidence](verification-terminal-carbon-labels.md); default-style parity remains.
+
 BondOrder stores the sixteen single-term kinds in the archived file specification: single
 through sextuple, half/aromatic/two-and-half through five-and-half, dative, ionic, hydrogen
 and three-center. Begin/end direction is retained, including for dative bonds. Query
 alternatives, non-element nodes, stereo/display styles and reactions remain future work.
 Storing an authored aromatic kind does not establish an aromaticity-perception algorithm.
+
+Bond also retains DoublePosition: Unspecified, Center, Right or Left, with side relative
+to authored begin→end. JSON defaults to Unspecified and omits that default; old JSON
+stays exact. Specified values remain data even on non-Double orders. No automatic side,
+CDX manual/automatic flag or chemical rule is inferred. Whole-bond copies/order edits
+preserve the field; size_of::<Bond>() already covers its fixed-size storage. The
+[data/format prerequisite](research/sided-double-prerequisite.md) and
+[independent evidence](verification-double-position.md) distinguish persistence and
+the [inset renderer](verification-inset-doubles.md) from still-missing automatic styles,
+full style preferences and alignment/unsaturated-tool workflows.
 
 Document::append_fragments validates a whole batch before installing any state. It rejects
 missing pages and duplicate fragment/atom/bond IDs, including collisions with existing

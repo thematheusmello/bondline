@@ -4,7 +4,7 @@ use super::{
     Limit, MAX_SMILES_ATOMS, MAX_SMILES_BONDS, MAX_SMILES_BRANCHES, MAX_SMILES_BYTES,
     MAX_SMILES_CHAINS, MAX_SMILES_RINGS,
 };
-use bondline_model::{Atom, BondOrder, Element, Fragment, Radical};
+use bondline_model::{Atom, AtomId, BondOrder, Element, Fragment, Radical};
 use std::collections::BTreeMap;
 
 #[derive(Debug, thiserror::Error, PartialEq, Eq)]
@@ -311,7 +311,17 @@ enum Event {
 /// Authored IDs choose traversal; positions are intentionally not encoded. This is
 /// structure export, not a whole-document Save or permission to discard source backing.
 pub fn write_fragment(fragment: &Fragment) -> Result<Vec<u8>, WriteError> {
+    write_fragment_mapped(fragment).map(|written| written.bytes)
+}
+
+pub(crate) struct WrittenFragment {
+    pub(crate) bytes: Vec<u8>,
+    pub(crate) atom_ids: Vec<AtomId>,
+}
+
+pub(crate) fn write_fragment_mapped(fragment: &Fragment) -> Result<WrittenFragment, WriteError> {
     let plan = prepare(fragment)?;
+    let mut atom_ids = Vec::with_capacity(plan.atoms.len());
     let mut output = Vec::new();
     let mut labels = vec![None; plan.orders.len()];
     let mut occupied = [false; MAX_SMILES_RINGS];
@@ -373,6 +383,7 @@ pub fn write_fragment(fragment: &Fragment) -> Result<Vec<u8>, WriteError> {
                 )
             };
             append(&mut output, token.as_bytes())?;
+            atom_ids.push(atom.id);
             // Close first so labels freed at this atom are available for its openings.
             for &edge in plan
                 .closings
@@ -448,7 +459,10 @@ pub fn write_fragment(fragment: &Fragment) -> Result<Vec<u8>, WriteError> {
     if labels.iter().any(Option::is_some) || occupied.iter().any(|used| *used) {
         return Err(structure("unclosed generated ring"));
     }
-    Ok(output)
+    Ok(WrittenFragment {
+        bytes: output,
+        atom_ids,
+    })
 }
 
 #[cfg(test)]

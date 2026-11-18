@@ -1,5 +1,5 @@
 use crate::{Error, Rectangle, Scene, Stroke};
-use bondline_model::{AtomId, BondId, FragmentId};
+use bondline_model::{AtomId, BondId, DoublePosition, FragmentId};
 
 pub const MAX_HIT_REGIONS: usize = 4096;
 
@@ -26,22 +26,84 @@ pub(crate) struct AtomHit {
 pub(crate) struct BondHit {
     pub target: HitTarget,
     pub endpoints: [AtomId; 2],
+    pub double_position: DoublePosition,
     pub stroke: Stroke,
-    pub polygon: Vec<[f64; 2]>,
+    pub strokes: Vec<Stroke>,
+    pub polygons: Vec<Vec<[f64; 2]>>,
+}
+
+impl BondHit {
+    pub(crate) fn painted_axis(&self, explicit_margin: bool) -> Result<Stroke, Error> {
+        if !explicit_margin {
+            return Ok(self.stroke.clone());
+        }
+        let first = self.strokes.first().ok_or(Error::InvalidGeometry)?;
+        let last = self.strokes.last().ok_or(Error::InvalidGeometry)?;
+        let mut axis = self.stroke.clone();
+        if self.strokes.len() == 1 || self.is_sided() {
+            axis.begin = first.begin;
+            axis.end = first.end;
+        } else {
+            axis.begin = [
+                (first.begin[0] + last.begin[0]) / 2.0,
+                (first.begin[1] + last.begin[1]) / 2.0,
+            ];
+            axis.end = [
+                (first.end[0] + last.end[0]) / 2.0,
+                (first.end[1] + last.end[1]) / 2.0,
+            ];
+        }
+        Ok(axis)
+    }
+
+    pub(crate) fn is_sided(&self) -> bool {
+        matches!(
+            self.double_position,
+            DoublePosition::Left | DoublePosition::Right
+        )
+    }
+
+    pub(crate) fn natural_axis(&self, component: usize) -> bool {
+        component == 0 && (self.strokes.len() == 1 || self.is_sided())
+    }
 }
 
 /// Paint and picking share an immutable, bounded projection of the same Page.
 pub struct GraphScene {
     pub(crate) label_em_px: Option<f32>,
+    pub(crate) text_em_range_px: Option<[f32; 2]>,
     pub(crate) scene: Scene,
     pub(crate) atoms: Vec<AtomHit>,
     pub(crate) bonds: Vec<BondHit>,
 }
 
 impl GraphScene {
+    /// Actual rendered components in canvas units, grouped under one authored bond.
+    pub fn bond_strokes(
+        &self,
+        fragment_id: FragmentId,
+        bond_id: BondId,
+    ) -> impl Iterator<Item = &Stroke> {
+        self.bonds
+            .iter()
+            .filter(move |bond| {
+                bond.target
+                    == HitTarget::Bond {
+                        fragment_id,
+                        bond_id,
+                    }
+            })
+            .flat_map(|bond| bond.strokes.iter())
+    }
+
     /// Smallest main atom-label em in this actual scene, excluding subscript scaling.
     pub fn label_em_px(&self) -> Option<f32> {
         self.label_em_px
+    }
+
+    /// Minimum/maximum literal caption and authored atom-run em, including blank captions.
+    pub fn text_em_range_px(&self) -> Option<[f32; 2]> {
+        self.text_em_range_px
     }
 
     pub fn scene(&self) -> &Scene {
@@ -87,7 +149,12 @@ impl GraphScene {
             return Ok(Some(target));
         }
         for bond in &self.bonds {
-            if let Some(distance) = polygon_distance2(p, &bond.polygon) {
+            if let Some(distance) = bond
+                .polygons
+                .iter()
+                .filter_map(|polygon| polygon_distance2(p, polygon))
+                .reduce(f64::min)
+            {
                 consider(
                     &mut best,
                     (
@@ -166,15 +233,17 @@ pub(crate) fn visible_polygon(stroke: &Stroke, width: u32, height: u32) -> Vec<[
 }
 
 pub(crate) fn intersects_label(bond: &BondHit, label: &Rectangle) -> bool {
-    area2(&clip_polygon(
-        &bond.polygon,
-        [
-            f64::from(label.x),
-            f64::from(label.y),
-            f64::from(label.x + label.width),
-            f64::from(label.y + label.height),
-        ],
-    )) != 0.0
+    bond.polygons.iter().any(|polygon| {
+        area2(&clip_polygon(
+            polygon,
+            [
+                f64::from(label.x),
+                f64::from(label.y),
+                f64::from(label.x + label.width),
+                f64::from(label.y + label.height),
+            ],
+        )) != 0.0
+    })
 }
 
 // Convex clipping needs at most eight vertices for a rectangle against a viewport.

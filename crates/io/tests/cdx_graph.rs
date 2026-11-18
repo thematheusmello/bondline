@@ -1,5 +1,5 @@
 use bondline_io::cdx::{ElementalGraph, MappingError};
-use bondline_model::{BondOrder, Point2};
+use bondline_model::{BondOrder, Point2, Radical};
 use std::{
     io::Write,
     process::{Command, Stdio},
@@ -322,7 +322,7 @@ fn ambiguous_missing_and_cross_fragment_endpoints_are_refused() {
 }
 
 #[test]
-fn unsupported_labels_queries_and_chemical_metadata_are_explicit_errors() {
+fn unsupported_labels_queries_and_chemical_metadata_are_explicit_errors() -> TestResult {
     for node_type in [0_i16, 2, 4, 13, -1] {
         let source = document(&[object(
             0x8003,
@@ -338,17 +338,58 @@ fn unsupported_labels_queries_and_chemical_metadata_are_explicit_errors() {
             Err(MappingError::UnsupportedNodeType { .. })
         ));
     }
-    for field in [
-        property(0x0420, &13_i16.to_le_bytes()),
-        property(0x0421, &[0xff]),
-        property(0x0422, &[2]),
-        property(0x042B, &0_u16.to_le_bytes()),
+    for (field, isotope, charge, radical, hydrogens) in [
+        (
+            property(0x0420, &13_i16.to_le_bytes()),
+            Some(13_u16),
+            0_i8,
+            Radical::None,
+            None,
+        ),
+        (property(0x0421, &[0xff]), None, -1, Radical::None, None),
+        (property(0x0422, &[2]), None, 0, Radical::Doublet, None),
+        (
+            property(0x042B, &0_u16.to_le_bytes()),
+            None,
+            0,
+            Radical::None,
+            Some(0_u16),
+        ),
     ] {
         let source = document(&[object(0x8003, 100, &[object(0x8004, 101, &[field])])]);
-        assert!(matches!(
-            ElementalGraph::parse(&source),
-            Err(MappingError::UnsupportedProperty { .. })
-        ));
+        let graph = ElementalGraph::parse(&source)?;
+        let atom = graph
+            .fragments()
+            .first()
+            .ok_or("fragment")?
+            .atoms()
+            .first()
+            .ok_or("atom")?;
+        assert_eq!(
+            (atom.id.get(), atom.element.get(), atom.position),
+            (1, 6, None)
+        );
+        assert_eq!(
+            (
+                atom.isotope.map(|v| v.get()),
+                atom.charge,
+                atom.radical,
+                atom.explicit_hydrogens
+            ),
+            (isotope, charge, radical, hydrogens)
+        );
+        assert_eq!(atom.show_terminal_carbon_labels, None);
+        assert_eq!(atom.show_non_terminal_carbon_labels, None);
+        assert!(atom.authored_label.is_none());
+        assert_eq!(graph.as_bytes(), source);
+        assert_eq!(graph.to_bytes(), source);
+        let stored = bondline_io::StoredDocument::from_cdx(
+            source.clone().into(),
+            bondline_model::PageSize::A4,
+        )?;
+        assert!(!stored.is_fully_mapped());
+        assert!(!stored.has_display_projection());
+        assert_eq!(stored.to_cdx()?.as_ref(), source);
     }
     let labeled = document(&[object(
         0x8003,
@@ -378,11 +419,53 @@ fn unsupported_labels_queries_and_chemical_metadata_are_explicit_errors() {
                 bond(103, 101, 102, &[property(0x0600, &order.to_le_bytes())]),
             ],
         )]);
-        assert!(matches!(
-            ElementalGraph::parse(&source),
-            Err(MappingError::UnsupportedBondOrder { .. })
-        ));
+        if order == 2 {
+            let graph = ElementalGraph::parse(&source)?;
+            let fragment = graph.fragments().first().ok_or("fragment")?;
+            assert_eq!(fragment.atoms().len(), 2);
+            assert_eq!(fragment.bonds().len(), 1);
+            let bond = fragment.bonds().first().ok_or("bond")?;
+            assert_eq!(
+                (bond.id.get(), bond.begin.get(), bond.end.get(), bond.order),
+                (1, 1, 2, BondOrder::Double)
+            );
+            assert_eq!(
+                bond.double_position,
+                bondline_model::DoublePosition::Unspecified
+            );
+            for atom in fragment.atoms() {
+                assert_eq!(
+                    (
+                        atom.element.get(),
+                        atom.position,
+                        atom.isotope,
+                        atom.charge,
+                        atom.radical,
+                        atom.explicit_hydrogens
+                    ),
+                    (6, None, None, 0, Radical::None, None)
+                );
+                assert_eq!(atom.show_terminal_carbon_labels, None);
+                assert_eq!(atom.show_non_terminal_carbon_labels, None);
+                assert!(atom.authored_label.is_none());
+            }
+            assert_eq!(graph.as_bytes(), source);
+            assert_eq!(graph.to_bytes(), source);
+            let stored = bondline_io::StoredDocument::from_cdx(
+                source.clone().into(),
+                bondline_model::PageSize::A4,
+            )?;
+            assert!(!stored.is_fully_mapped());
+            assert!(!stored.has_display_projection());
+            assert_eq!(stored.to_cdx()?.as_ref(), source);
+        } else {
+            assert!(matches!(
+                ElementalGraph::parse(&source),
+                Err(MappingError::UnsupportedBondOrder { .. })
+            ));
+        }
     }
+    Ok(())
 }
 
 #[test]

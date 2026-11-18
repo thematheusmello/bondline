@@ -14,6 +14,7 @@ pub struct Writer {
     closing_bytes: usize,
     attributes: usize,
     nodes: usize,
+    last_text: bool,
 }
 
 impl Writer {
@@ -24,6 +25,7 @@ impl Writer {
             closing_bytes: 0,
             attributes: 0,
             nodes: 1,
+            last_text: false,
         };
         writer.start_element("CDXML", attributes)?;
         Ok(writer)
@@ -35,6 +37,41 @@ impl Writer {
 
     pub fn empty_element(&mut self, name: &str, attributes: &[(&str, &str)]) -> Result<(), Error> {
         self.element(name, attributes, true)
+    }
+
+    /// Append decoded character data, preserving line endings through XML references.
+    /// Validation reserves all closing tags before mutating the owned output.
+    pub fn text(&mut self, value: &str) -> Result<(), Error> {
+        if value.is_empty() {
+            return Ok(());
+        }
+        if !self.last_text && self.nodes >= MAX_NODES as usize {
+            return Err(Error::NodeLimit);
+        }
+        let mut length = self.output.len().saturating_add(self.closing_bytes);
+        for character in value.chars() {
+            if !valid_character(character) {
+                return Err(Error::InvalidTextValue);
+            }
+            length =
+                length.saturating_add(escape(character).map_or(character.len_utf8(), str::len));
+            if length > MAX_INPUT_BYTES {
+                return Err(Error::InputTooLarge);
+            }
+        }
+        for character in value.chars() {
+            if let Some(escaped) = escape(character) {
+                self.output.extend_from_slice(escaped.as_bytes());
+            } else {
+                self.output
+                    .extend_from_slice(character.encode_utf8(&mut [0; 4]).as_bytes());
+            }
+        }
+        if !self.last_text {
+            self.nodes += 1;
+        }
+        self.last_text = true;
+        Ok(())
     }
 
     pub fn end_element(&mut self) -> Result<(), Error> {
@@ -59,6 +96,7 @@ impl Writer {
         self.output.extend_from_slice(name.as_bytes());
         self.output.push(b'>');
         self.closing_bytes -= name.len() + 3;
+        self.last_text = false;
         Ok(())
     }
 
@@ -120,6 +158,7 @@ impl Writer {
                 return Err(Error::InputTooLarge);
             }
         }
+        self.last_text = false;
         self.output.push(b'<');
         self.output.extend_from_slice(name.as_bytes());
         for &(key, value) in attributes {
@@ -148,7 +187,7 @@ impl Writer {
     }
 }
 
-fn valid_name(name: &str) -> bool {
+pub(crate) fn valid_name(name: &str) -> bool {
     let mut bytes = name.bytes();
     matches!(bytes.next(), Some(b'A'..=b'Z' | b'a'..=b'z' | b'_'))
         && bytes.all(|b| b.is_ascii_alphanumeric() || matches!(b, b'_' | b'-' | b'.'))

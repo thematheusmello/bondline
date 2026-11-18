@@ -1,5 +1,615 @@
 # Verification log
 
+The latest [plain CDX bond receiving](verification-cdx-plain-bonds.md) records independent
+16-source/149-refusal declarations, runtime IO/command/App/actual-adapter RED→GREEN,
+source/direction/manual-mode retention and bounded native Mac exact Unicode files.
+FullIO541/0 and ASan10000/1s with184 immutable sources/actual104971B mutation pass.
+Fresh full local2882 on1606d62 PASSES workspace2187/0/1 across321 reports plus vendor3/0
+and all fmt/clippy/layers/licenses/seven-assets/pinned-corpus gates. The earlier1390
+MCP listener failure remains unexplained, not causally fixed by this natural pass.
+Own native95769 is quit; user-viewed365 and older apps/files remain protected. Registry49/
+catalogue16/124, closed CDX display/edit/loss guards, Actions OFF and full M0–M5 scope stay.
+Standalone CDX font/colour resources are the next source-lock task; no Text/rendering
+permission or human golden/other-platform acceptance follows from the new data coverage.
+
+The preceding [literal CDX metadata receiving](verification-cdx-literal-atom-metadata.md)
+records independent preimplementation bytes/facts/runtime RED, literal read-only data,
+actual CLI/MCP/socket/App and bounded native Mac unchanged Unicode Save/reopen. Two
+RDKit legacy-charge differences and spin-consumer limits stay explicit. ASan10000/1s
+passes with43 immutable sources. Full1390 fails1420/1/0 at unchanged MCP replacement_bind
+51670; remaining11036 completes all unexecuted stages. Combined workspace2168/1/1 across
+319 reports plus vendor3/0 is not a clean aggregate or a causal listener fix. Formatting,
+warnings-denied clippy, layers, licenses/seven assets and corpus pass. Own review86673 is
+quit; user-viewed review365 and older apps/files remain protected. No new display/edit
+authority, human golden or other-platform evidence. Full M0–M5 remains active; Actions OFF.
+
+The preceding [scalar-default metadata receiving](verification-label-default-metadata.md)
+records explicit labels beside preserved unused LabelFont/Size/Face, precise48/49/
+Selection permissions and exact source/weak-owner/history/native Unicode files. Full
+local98153 PASSES workspace2149/0/1 across317 reports plus vendor3/0 and all gates;
+ASan10000/391s and native CPU/Metal equality pass. Missing-run inheritance remains
+unresolved/refused. The disposable metadata review is quit; the user-viewed creation
+review stays protected. Other platforms/golden approval/full M0–M5 remain incomplete,
+and the historical listener failure is not causally fixed. Each atomic commit is pushed;
+Actions remains OFF.
+
+The preceding [printed-label creation receiving](verification-printed-label-creation.md)
+records source/resource/ID/history and native partial/all-labelled continuation through
+command49, preserving old48 metadata and the old source/loss guards. Fresh local27673
+PASSES workspace2122/0/1 plus vendor3/0, all fmt/clippy/layers/licenses/assets/corpus
+gates, and separate bounded10000/305s ASan. Exact native Unicode files and CPU/Metal
+captures pass; the historical MCP bind cause remains unexplained. The user-viewed review
+is left open. Other platforms, human goldens and the full M0–M5 scope remain incomplete.
+The user now explicitly requires pushing each atomic commit; Actions stays OFF.
+
+The preceding [mixed skeletal-label receiving](verification-mixed-skeletal-labels.md) records
+independent source/font/pixel/history/adapter checks, actual native Mac hidden-target
+refusal/printed edit/all-atom drag/history/Unicode Save/reopen/Cancel and CPU/Metal captures.
+Fresh full2091/0/1+vendor3/0 and bounded ASan10000/203s pass, with explicit compiler/oracle/
+input setup qualifications and unchanged expectations. Earlier MCP failures remain
+unexplained; no causal fix, new platform/golden or full M0–M5 completion is claimed.
+
+The preceding [dependent-label receiving](verification-dependent-label-translation.md) records
+source-preserving atom/box movement, exact command/IO/App/adapter checks, actual Mac
+drag/nudge/history/Unicode files, bounded ASan and the corrected nine-pixel GPU discrepancy.
+The rebuilt native CPU/Metal capture is exact. The unchanged MCP aggregate failure remains
+recorded separately from the remaining passing components. Actions remains OFF;
+full M0–M5, human golden approval and new Windows/Linux/browser execution remain open.
+
+The preceding [connected-label receiving](verification-connected-labels.md) records independent
+source/render/history/adapter/native evidence, exact source and registry pins,10000-run
+ASan and the recurring failed MCP aggregate versus separately completed remaining gates.
+Full M0–M5, human golden approval and new Windows/Linux/browser execution remain open.
+
+## Source-backed label defaults, 2026-11-18
+
+[Receiving](verification-label-default-lookup.md) records primary-source conflicts and
+the standalone per-property owner/value lookup. Initial missing-API RED precedes code;
+nine literal/Expat/Decimal/namespace/domain/source-edit cases pass after correcting a new
+test's None-only empty-namespace assumption. Source review finds no material discrepancy.
+ASan74732 passes10000/5s with54 unchanged original seeds, max seed16384B and actual
+NEW/REDUCE maximum8885B. Fresh full40637 passes1919/0/1 across288 result lines and all
+local gates. This natural pass does not fix/explain the earlier MCP bind failure.
+Actual CLI47 bytes, catalogue16/124, model/IO/commands/UI/render, dependencies/locks,
+vendor/fonts/assets/goldens/workflow remain unchanged. No new native/platform result or
+foreign-label authority is added. All jobs/workers terminal, Actions OFF; full M0–M5 open.
+
+## Explicit plain styled captions, 2026-11-17
+
+[Receiving](verification-styled-captions.md) integrates checked model/standalone syntax,
+real native encoding, separate foreign-caption source capability, shared GPOS rendering
+and command47 with exact old46 serialized metadata. Independent XML/font/colour/geometry,
+CPU/Metal, generated history, actual CLI/stdio/authenticated socket and four App cases
+pass. Bounded actual Mac Open/remote-edit repaint/keyboard history/read-only drag/Unicode
+Save As/reopen preserves all bytes outside one run. The full Text tool remains grey.
+
+Initial5056 fails1217/1/0 at the unchanged MCP replacement bind58833. Complete workspace
+74577 records1906/1/1 at an obsolete UI registry46 assertion; qualified11820 passes the
+whole UI322/0/1 plus vendor3/0, warnings-denied clippy/fmt/layers/licenses/assets/corpus.
+All components pass separately, not a clean aggregate or causal MCP repair. Parser ASan
+10000/6s and profile10000/87s reach actual16KiB; a new qualified-attribute harness
+expectation is corrected without changing the product. All42 immutable seeds per corpus
+stay exact. Own review is closed, all jobs/workers terminal, Actions OFF. Full M0–M5,
+chemical dependent labels/defaults, rich/native Text editing and platform acceptance stay open.
+
+## Explicit document relative spacing, 2026-11-17
+
+[Receiving](verification-document-bond-spacing.md) records public preferred-length
+evidence, independent data/render/command/App REDs, source-preserving width/spacing deltas,
+atomic final-candidate history, actual CLI/stdio/socket Unicode files and twelve analytic
+CPU/GPU captures. Full12360 passes1861/0/1 across278 result lines and all local gates;
+first14853's old Open-response shape failure is retained and fixed with exact nullable
+expectations. ASan43341 passes10000/65s, actual NEW/REDUCE16384B. The historical MCP bind
+failure stays unexplained. Registry46/old45 metadata and catalogue16/124 remain; native
+interaction is wired/unverified, broader foreign styles and all M0–M5 remain incomplete.
+All jobs/workers are terminal; protected user apps/drawings untouched; Actions OFF.
+
+## Checked resolved composition, 2026-11-17
+
+[Receiving](verification-formula-composition.md) records isolated worker commit41ab816,
+independent API RED/literal/full-bound/RDKit tests and review, then main integration on
+6d9ce09. Fresh full6948 passes1831/0/1 across272 result lines and all local gates. CLI46
+bytes remain exact; no dependency, source/registry/UI or listener policy changes. This
+natural pass does not explain the retained Text-stage MCP failure. Full M0–M5 and actual
+source-aware formula/mass/analysis remain incomplete; all jobs terminal, Actions OFF.
+
+## Source-preserving text-only XML edits, 2026-11-17
+
+[Receiving](verification-source-preserving-xml-text.md) records independent declarations,
+missing-variant compiler RED,10 new Expat/literal cases, unchanged old syntax tests and
+bounded10000-run ASan. All local component checks pass (workspace1818/0/1, vendor3/0),
+but the initial aggregate failed at the old MCP replacement-bind AddrInUse. That failure
+is retained and unexplained; later natural success is not a fix or clean aggregate claim.
+No source/model/UI authority, command/catalogue or listener policy changes. Full M0–M5
+remains active/incomplete; Actions OFF.
+
+## Standalone CDXML logical resources, 2026-11-17
+
+[Receiving](verification-cdxml-resources.md) records public-domain/default expectations,
+original source vectors, qualified Expat/Decimal consumption and actual namespace/number
+REDs. Fresh final aggregate5632 passes1811/0/1 and all local gates. Qualified ASan1865
+passes10000 runs after a separately proven older harness lookup defect; that failure,
+replay and unchanged legacy writer are explicit. Complete IO authority and UI bindings
+stay unchanged; foreign styles/Text and the active full M0–M5 goal remain incomplete.
+All owned execution jobs are terminal; GitHub Actions stays OFF.
+
+## Source-aware closed-v0 CDXML profile, 2026-11-17
+
+[Receiving](verification-source-preserving-cdxml-profile.md) records actual existing-API/
+command REDs, thirteen independent IO cases, four lexical facts, actual CLI/stdio/socket/
+Unicode history/files and unchanged Expat/Decimal/RDKit consumers. Current authoring
+families and CPU captures have paired canonical controls. Three old lexical-only guard
+expectations become stronger positives; semantic negatives and source/loss/ownership
+guards stay. Fresh full48986 passes1766/0/1 across263 result lines and all local gates;
+log222486B/SHA2565436dbb7b99972b071208f0968dce919d51cdfe7ea318b88bbc704809777226b.
+New IO ASan69021 and unchanged parser84686 each pass10000 runs, with actual reached lengths
+16KiB and15502B respectively in NEW/REDUCE logs. Registry45 remains byte-exact; controls/
+catalogue stay. Desktop access fails, so native interaction is wired/unverified; new
+Windows/Linux and general foreign style/label/object compatibility remain unverified/
+missing. All jobs are terminal; Actions OFF; full M0–M5 active/incomplete.
+
+## Source-preserving XML batch prerequisite, 2026-11-17
+
+[Receiving](verification-source-preserving-xml-edits.md) records18 new independent
+literal/Expat/resource cases, actual nesting/namespace RED→GREEN, the explicit helper/
+fuzz setup qualifications, and corrected bounded ASan10000-run evidence. All33 cdxml
+cases pass with and without the Python override. Fresh full local70957 passes1735/0/1
+across253 result lines and all format/lint/layer/license/asset/corpus gates; log218681B/
+SHA256 d1ab9b942d053d3ad1793ccdc2aa5f3641baeb38d8bd1a3074089e5c744d55ae.
+Parser admission, legacy helper, source authority, registry/control/catalogue remain
+unchanged. This is a library prerequisite; the original noncanonical CLI edit remains
+RED pending source-aware IO integration. No new native/platform/golden/hosted claim.
+Actions OFF; full M0–M5 active/incomplete; all primitive execution jobs are terminal.
+
+## Native selection acceptance and cancellation, 2026-11-17
+
+[Receiving](verification-native-selection.md) records the predeclared Mac workflow,
+independent11 accepted native/fixture files, four new regression declarations and actual
+runtime REDs before producer changes. Hidden Atom/settings modal epochs/raw ownership
+and equal-surface restoration now retire old disposable input. Full source/model sharing,
+selection/history, no-loss movement and fresh recovery remain checked. Command46899
+passes4/0 and App19297 passes14/0 with all old cases intact. Fresh full36217 exits0:
+**1717 passed/0 failed/1 ignored across249 result lines**, plus fmt, warnings-denied
+workspace/vendor checks, layers, seven assets, strict155/166/221 runtime closures and
+corpus. Log215726B/SHA256
+ba1eab4167faebed304afd0ecc67593970911abc6be01658b3a0979d3db83338.
+
+Build26772 and actual rebuilt Mac single-Fragment component selection, modal arrows/
+Cancel, fresh drag/history/nudges/Unicode Save/reopen pass. Independent Expat/Decimal/
+RDKit confirms exact coordinates and unchanged chemistry; cancelled/input is byte-exact.
+Baseline source profile and initial interpreter setup qualifications remain explicit.
+Registry45 output stays byte-exact; controls/catalogue stay39/22/16/12 and16/124. Own
+reviews are observed stopped; both older user apps/drawings stay untouched. No new
+parser/fuzz, dependency/font/vendor/lock/corpus/workflow/golden/listener-policy or hosted
+change. Historical MCP cause, native races/additive marquee/DPI/other platforms and
+full M0–M5 remain open. Actions OFF; no owned jobs; next source-lock M1 noncanonical
+elemental CDXML authority without weakening unknown-source/preview/loss guards.
+
+## Native ring sprout and session Preferences, 2026-11-17
+
+[Receiving](verification-native-ring-sprout.md) records19 new independent JSON/App/
+publication cases, actual RED/GREENs, closed-Inspect and fixture qualifications, and the
+two old authorized Alt-atom assertions upgraded to stronger positives. Unsupported old
+vectors and protected MCP listener policy/tests stay. Fresh full42232 passes1713/0/1
+across249 result lines with fmt, warnings-denied workspace/vendor checks, layers, seven
+assets, unchanged strict155/166/221 runtime closures and pinned corpus. Log214541B/SHA256
+ca10623d9cc70e99c50c2a5a4af095f5bee46814b11be15cb0c8b11ff723db3e.
+New bounded10000-run ASan88252 passes, max reached92B of16KiB. Actual CLI retains old44
+full records/schema/order as a prefix of45; controls39/22/16/12, catalogue16/124.
+
+Actual isolated Mac Alt-sprout, preference-driven Chair2, history,64pt setting, Unicode
+Save/reopen, Defaults-Cancel and unchanged OK pass. The3897B20/21/two-fragment saved file
+passes independent Expat/Decimal/RDKit geometry/flags/H and C12H16/C8H16 checks. Original
+logo/grey catalogue are inspected; planned Curved arrow stays inactive and Escape closes.
+Initial focus/input and first filename misses are setup qualifications, not product fixes.
+Own probe/review are observed stopped; both user apps/drawings remain protected. No jobs,
+new golden/hosted run/dependency/font/vendor/lock/corpus/workflow or publication change.
+Historical MCP cause, native race/DPI/other-platform, full preferences/styles/stereo and
+exact26.1 policies remain open. Actions OFF; full M0–M5 stays active and incomplete.
+
+## Atomic headless ring sprout, 2026-11-17
+
+[Receiving](verification-ring-sprout.md) records preimplementation JSON/adapters REDs,
+13 passing independent core/property/file/CPU-GPU/actual-wire cases and the actual nested-
+array command-boundary RED/GREEN. New-vector occupancy/notation-order and test-helper
+lint qualifications remain explicit; all old consumers, thresholds and historical lists
+stay intact. Actual CLI preserves all43 old full records/schema/order and appends44.
+Fresh full22063 passes1694/0/1 across248 result lines plus fmt, warnings-denied workspace/
+vendor checks, layers, seven assets, strict155/166/221 runtime license closures and corpus.
+New bounded10000-run ASan passes, max reached264B of16KiB. Controls38/21/15/11 and catalogue
+16/124 stay unchanged. No native sprout, Preferences, new golden/hosted run or old socket
+repair is claimed. Immediately continue the locked native stage; Actions OFF, full goal active.
+
+## Native carbon chains, 2026-11-17
+
+[Receiving](verification-native-chains.md) records preimplementation JSON/App REDs,
+the first-frame counter fix and independent repeat-revival/refusal-erasure RED→GREEN
+without weakened assertions. Twenty-eight new cases pass. Future-API, compile/lint and
+StorageFull qualifications stay explicit. First full10212 passes1657/0/1 across245 result
+lines plus fmt, warnings-denied workspace/vendor checks, layers/licenses/corpus. Old42
+actual CLI records/schema/order remain an exact prefix of43; native controls36/21/15/11,
+catalogue14 available/126 planned. Both chairs stay disabled. No old MCP/socket policy
+changes or attribution follows. Bounded source/delta reviews find no additional issue.
+Actual own Mac Acyclic/Snaking/Add/repeat/attachment/preferences/refusal/history/Unicode
+Save/reopen pass; the5024-byte23/18/5 file passes independent XML/geometry/RDKit checks.
+Native supported Control-drag/reversal/backtracking and measured2×/DPI remain separate
+unverified acceptance. Both older user apps remain untouched; disposable review is closed.
+No new golden/hosted run; full M0–M5 remains active, Actions OFF, owned jobs terminal.
+
+## Native Document Settings, 2026-11-17
+
+[Receiving](verification-native-drawing-settings.md) records actual UnknownCommand,
+missing-menu and missing-repaint runtime REDs separately from compile/selection/consumer
+setup qualifications. Sixteen new cases pass; the original17 Atom cases pass before and
+after extracting their existing input router. Exact request-cancel identity fixes remote
+Cancel without destroying stale copyable drafts. The actual CLI retains all old41
+records/schema/order and appends one presentation; controls32/21/15/11, catalogue12/128.
+First full14206 fails167/1 at a newly added headless control-reason expectation. Its
+source-qualified fix passes30846, then fresh full84512 passes1629/0/1 across242 result
+lines with formatting, warnings-denied workspace/vendor lint/tests, layers/licenses/corpus.
+Historical MCP listener failures remain unattributed. Native/CLI build10841 passes.
+Actual disposable Mac app author/save→set64.25/137.5→Undo/Redo→clear angle→Unicode Save/
+reopen→unchanged Apply passes independent root/body/geometry/RDKit checks. CJK filename
+glyphs are missing visually despite correct names/IO. The review app is closed, both user
+apps/drafts untouched, Actions OFF. Tool application, full settings/styles/chains, native
+2×/DPI, other platforms and full M0–M5 remain incomplete; no new golden is approved.
+
+## Ordered native modifier transport, 2026-11-17
+
+[Receiving](verification-ordered-native-modifiers.md) separates an incomplete first probe,
+the actual focused Mac OS runtime RED, missing-API qualification96800 and six independent
+SDK cases plus a bounded-probe privacy test. The paired existing SDK forks append actual
+native reports after normalization without changing global snapshots or old gestures.
+Actual native GREEN preserves the coalesced mouse-release-before-Control-up sequence.
+Original logo/grey tools/catalogue are inspected; no new chemical golden or user-app change.
+First fresh full50402 passes1613/0/1 across240 result lines, fmt/workspace/vendor lint/tests,
+layers, unchanged strict license closures and pinned corpus. This does not attribute earlier
+MCP failures or implement chain consumers/forms/defaults. Actions stays OFF; full M0–M5 stays active.
+
+## Atomic drawing-settings command, 2026-11-16–17
+
+[Receiving](verification-drawing-settings-command.md) records actual JSON35719
+UnknownCommand RED before producer18321 GREEN,15 new independent core/property/counter/
+Save/actual-adapter cases, positive46-count/16-name inventory updates and actual unchanged
+old40 CLI schemas/order. A numeric-separator-only test lint stops79447 before tests;
+corrected full37811 passes fmt/workspace lint then fails1012/1 at unchanged MCP bind51300.
+Remaining24093 fails the old UI ready wait; [test-only e516dd9](verification-smiles-order-readiness.md)
+adds actual worker retirement without weakening deadlines/assertions/product fences or
+claiming the uncaptured failure's cause. Modified UI and then-unstarted checks pass
+separately; duplicate UI-library coverage and invalid xtask --lib setup stay explicit.
+No green aggregate or MCP attribution/repair follows. Native/CLI build89296 and actual
+Unicode set/clear/bond/history/Save/reopen pass, with independent root/graph/RDKit file
+checks. A later serialization RED/GREEN prevents nonfinite typed values becoming null/
+clear requests. Its integration run hits six actual StorageFull errors; scoped Cargo
+cache cleanup and affected/not-started42816 checks recover without weakening tests.
+All41 schema records remain unchanged. Registry41 enables no new native control; settings form/tool application,
+inheritance, actual platforms and full M0–M5 remain required. User apps/Actions stay untouched.
+
+## Drawing-settings data prerequisite, 2026-11-16
+
+[Receiving](verification-drawing-settings-data.md) records actual XML82691/CDX3733
+missing-model-data runtime REDs before producer98821 GREEN2/0 and17 passing focused
+model/IO/command cases. Original fixed-point vectors, independent Expat/Decimal root
+checks, source/loss/publication/scene guards and unchanged semantic export remain distinct
+from full styles. Full local gate94003 exits1 at unchanged MCP replacement_bind58634,
+AddrInUse/OS48, after998 passes; fmt and warnings-denied workspace clippy pass first.
+No unchanged retry. Only not-started checks pass separately:61803 583/0/1, then22798
+9/0/0 for compatibility targets identified by a coverage audit. Combined592/0/1 is not
+a green aggregate. Vendor lint/tests, layers/licenses/corpus pass separately. No causal
+owner identity or repair is established; post-terminal lsof is empty, not failure-time
+evidence. Both unchanged projection harnesses complete10000 ASan runs with fresh original
+seeds. Native/CLI build88017 and actual Unicode CLI Open/edit/history/Save/reopen pass;
+independent readers check the actual output. Registry40/native bindings stay unchanged.
+No native launch, user-window/draft change, new platform/golden or hosted/publication claim.
+
+## Literal turning-chain prerequisite, 2026-11-16
+
+[Receiving](verification-chain-paths.md) distinguishes actual first UnknownCommand RED
+from post-draft engine/API/adapters and the new-test disconnect/re-authentication setup
+correction. Eleven new focused cases pass; all39 old command records/schema/order stay.
+First full gate20061 exits0:1574/0/1 across225 result lines, with fmt/workspace/vendor
+lint/tests/layers/licenses/corpus. Native/CLI build44866 passes. New isolated request
+ASan38563 completes10000 runs/seed274810359, no crash in the bounded run; separate fuzz
+fmt/clippy pass. Registry40 adds no native control. Native chain/settings/modifiers,
+actual platforms/goldens and full M0–M5 remain required. User windows and Actions stay
+untouched; no publication or causal historical MCP-bind repair is claimed.
+
+## Explicit chain engine, 2026-11-16
+
+[Receiving](verification-chain-authoring.md) records the actual existing-JSON
+UnknownCommand RED before producer, later independent geometry/metadata/source/history/
+API/adapter/file checks, separate new-test setup/syntax qualifications and positive
+legacy-inventory upgrades. Twelve new cases pass. Final local gate52340 exits0:
+1563/0/1 across223 result lines, with fmt, warnings-denied workspace/vendor clippy/tests,
+layers/licenses/corpus. Native/CLI build16149 passes. Registry39; native/control and
+catalogue bindings stay unchanged, and chain tools remain disabled. No native chain,
+new platform/golden, user-window change, hosted run or causal MCP repair is claimed.
+
+## Native benzene/cyclopentadiene tools, 2026-11-16
+
+[Receiving](verification-native-unsaturated-rings.md) separates initial JSON/App runtime
+REDs and missing-type qualification from post-draft acceptance. Twelve new core/API/
+adapter/App cases pass, including original icons, complete preview/press-latched Shift,
+attachments, source/context/raw chronology, independent Unicode files and physical
+refusal/recovery. Disabled initial Cancel, SDK Click-verb readiness and CLI operation-
+versus-snapshot setup corrections preserve original packet/assertions and product.
+Two Copy-test lint corrections and exact native inventory additions are qualified.
+Final full gate19064 passes1522/0/1 across216 result lines; build85439 and explicit
+actual-App GPU dev capture77304 pass. The inspected1600×1000 frame is offscreen, not
+native OS or a golden. Source review finds no material issue. No dependency, old consumer,
+approved golden, socket policy, user bundle/draft, hosted or publication change.
+
+## Named benzene/cyclopentadiene command, 2026-11-16
+
+[Receiving](verification-unsaturated-rings.md) records existing-JSON runtime REDs,
+separate Rust API/closure/test-borrow compile qualifications, strict object-parameter
+boundary correction, positive legacy-schema upgrades and independent literal/phase/H/
+source/history/actual-adapter/Unicode-file checks. The old Single-only RDKit consumer
+remains exact; a new raw-integer/unsanitized/sanitized composition is qualified first
+on five manual positives and twelve negatives. Full local gate18337 passes1510/0/1
+across214 result lines and native/CLI build75233 passes. An actual named-ring CLI
+authoring/Save/CPU-Metal-GPU capture has equal whole RGBA and independently consumed
+C6H6/C5H6; the actual PNG is visually inspected, not human-approved. Native named tools
+remain next; no user window, source authority, dependency or golden changes.
+
+## Skeletal carbon display and explicit-label restoration, 2026-11-16
+
+[Receiving evidence](verification-skeletal-carbon.md) records actual preimplementation
+renderer/core/transport/App REDs, separate missing-prolog and zero-test-filter setup
+qualifications, first shared-render/command/App GREENs and24 new independent cases.
+Five supplemental renderer cases follow the first draft; one strict exact-dot fixture
+precondition is corrected mathematically without product/predicate/assertion changes.
+The single old DATA blanket refusal is positively upgraded on exact old inputs; legacy/
+cancel cases and other old expectations stay. No new dependency, parser, font/shader,
+golden, native-window or hosted execution. Corrected aggregate42092 passes1494/0/1
+across212 result lines, including fmt, workspace/vendor clippy/tests and layer/license/
+corpus stages; native/CLI build63733 passes. Earlier MCP failures remain unattributed.
+
+## Persistent non-terminal carbon-label data, 2026-11-16
+
+[Receiving evidence](verification-carbon-label-data.md) separates actual runtime REDs
+from public-API compile qualification and later test expansion. Nineteen new focused
+cases cover explicit presence/false, exact node XML/native-v0, independent qualified
+Expat/Decimal and actual-file RDKit, MOL/retained-SMILES loss guards, history and temporary
+shared-render refusal. Six adopted declarations are format-only; old expectations stay.
+The unchanged CDXML harness passes10,000 bounded ASan runs with fresh11-file seeds;
+442B exercised is not64KiB coverage. No native window, UI/command addition, dependency,
+asset or hosted execution is claimed. Full local gate19662 passes1470/0/1 across210 result
+lines, with fmt, workspace/vendor clippy/tests and layer/license/corpus stages. Native/CLI
+build19572 passes. Earlier MCP failures remain unattributed; see receiving for exact limits.
+
+## Shortened explicit double bonds, 2026-11-16
+
+[Receiving evidence](verification-inset-doubles.md) records public-API runtime refusal,
+independent analytic/guard/covered-arm REDs, separate private-helper compile qualification,
+20 new tests, a passing-first near-parallel pixel control and an independently reproduced
+source-review bounds counterexample/fix. Actual shared scenes,
+finite strict gaps, real shortened hits, fractional density, CPU/GPU and Unicode
+CDXML capture/history/Save/reopen have independently scoped checks. Only the old blanket
+Left/Right refusal test is upgraded; dormant/Center/cancel and all other old controls stay.
+Final local gate95915 passes1451/0/1 across205 result lines, including fmt, warnings-denied
+workspace/vendor clippy/tests, layers/licenses/corpus. The old MCP listener failure remains
+unattributed, not causally fixed by this pass. No native window, parser-fuzz replay, new
+golden/dependency/asset or hosted execution; full M0–M5 remains open.
+
+## Persistent directed double-bond data, 2026-11-16
+
+[Receiving evidence](verification-double-position.md) separates initial JSON/XML runtime
+REDs from missing-public-API compile evidence, the compiler-led63-site default migration,
+19 focused passing cases and one new-test lint qualification. Independent Expat/Decimal
+property controls, unchanged external graph/RDKit consumers and actual Unicode Save/
+Open/history files verify scoped persistence and no-loss refusals. Center/legacy scenes
+retain exact analytic/pixel/hit/CPU-GPU behavior; unsupported placement refuses a scene.
+The unchanged CDXML fuzz harness passes10,000 bounded ASan executions with fresh seeds;
+its observed450B limit does not establish full-size coverage. The isolated lock alignment
+adds only an existing local crate, with all external packages exact. No native/window,
+inset/skeletal/aromatic tool, CDX manual/automatic projection or milestone claim follows.
+GitHub Actions stays off; full local aggregate results are recorded in receiving.
+
+## Native ring command construction, 2026-11-16
+
+[Independent receiving](verification-ring-authoring.md) records the37th command, actual
+existing-JSON/CLI and four-placement runtime UnknownCommand REDs, the expanded baseline,
+qualified new-test setup corrections and all21 new passing cases. Regular3–8/free/
+fused/spiro/terminal geometry/H, sparse arrays/IDs/source/history/selection/overflow,
+actual Unicode file chemistry and CLI/MCP/socket behavior are independently checked.
+Literal renderer controls pass first; later generated pages match CPU/GPU/Pillow.
+Actual ULP/subnormal nonregular acceptance is fixed against frozen precision expectations
+without a minimum-length shortcut. A separate accurate1e-200 control passes before and after the guard.
+
+Full local gate45460 passes1382/0/1 across195 result lines, with fmt, warnings-denied
+workspace/vendor clippy/tests and layers/licenses/corpus. Native bindings/gestures are
+not delivered by this command checkpoint. No new runtime/dependency/font/golden/parser
+policy or hosted execution; Actions stays off. The earlier intermittent MCP AddrInUse
+failure remains unattributed, not causally fixed by this pass. Full M0–M5 stays open.
+
+## Persistent native selection and translation, 2026-11-16
+
+[Receiving evidence](verification-selection-authoring.md) records the independent
+missing-command/model/context/control REDs, nine public/two private/two context cases,
+four actual-wire cases and12 actual-App cases. Literal multi-fragment metadata/geometry,
+source/history/no-op/overflow/ABA, Unicode independent file consumers and publication
+boundaries have scoped checks. Two tool-order and two pointer-lifecycle runtime
+counterexamples are fixed against unchanged frozen assertions. Model batch replacement
+is committed separately; no parser/IO/dependency/font/golden policy changes.
+
+The final local gate77152 passes1361/0/1 across192 result lines, including all fmt,
+workspace/vendor clippy/tests and layer/license/corpus stages. Earlier clippy and
+catalogue receiving failures/corrections remain explicit in the linked record. The
+unchanged actual-App capture passes and is visually inspected offscreen on Metal.
+Native selection
+interaction remains unverified while the desktop is in use; no complete M2/26.1 or
+cross-platform claim follows. Earlier MCP AddrInUse evidence remains unattributed;
+consumed investigations are not repeated. Actions stays off.
+
+## Native elemental atom presentation, 2026-11-16
+
+[Native/App/wire receiving](verification-native-atom-labels.md) records the shared34th
+command, missing-command/form REDs, schema/input/owner/bounds counterexamples and their
+unchanged GREEN expectations. Actual macOS Alt-target→O/H1→history→Unicode Save/reopen→
+N/H2→Save As, Cancel, draft Save fencing and native close protection pass. Unchanged
+external Expat/Decimal and RDKit consume all three actual files; only the target's two
+literal fields differ. No general Text-tool/chemistry/reference-screen parity follows.
+
+Aggregate95827 fails848/1 at the old unchanged MCP replacement bind60475 after fmt and
+workspace clippy pass. Separate64815 passes480/0/1 plus remaining vendor/clippy/layers/
+licenses/corpus/build stages. This is not a passing aggregate. The separately controlled
+[listener experiment](research/macos-listener-lifetime.md) qualifies inheritance before
+FIOCLEX; no natural failure owner is attributed or policy changed. Actions stays off.
+
+## Literal elemental atom authoring, 2026-11-16
+
+[Core/actual-transport/independent-image evidence](verification-atom-label-authoring.md)
+records two real UnknownCommand REDs before implementation, nine core/four actual-wire
+GREEN cases and one passing independent MOL-reference CPU/GPU control. All118 literal
+symbols,64 fixed-seed whole-snapshot histories and actual Unicode CDXML files have scoped
+independent checks. The final full gate80684 log reaches success:1306/0/1,188 result lines,
+including rustfmt, warnings-denied clippy, native vendor tests, layers/licenses/corpus.
+The earlier intermittent MCP replacement-bind failure remains unexplained. Native atom
+presentation and broader chemistry/platform workflows remain missing or unverified.
+Default native controls remain20/14/10; registry33. No old consumer/fixture/font/golden,
+dependency/lock or fuzz change; Actions stays disabled.
+
+## Native retained SMILES records, 2026-11-16
+
+[Native/control/worker/App evidence](verification-native-smiles-records.md) records22
+independent cases, real Accepted-retry and input-order REDs/fixes, and bounded Mac
+selected/all import, refusal/retry, click/key edits, history and Unicode whole-source
+Save/reopen/reimport. Unchanged external consumers verify the actual41/62-byte files,
+unprojected isotope, opaque data and original inputs. Fit78.79% still refuses; Actual100%
+recovers; pan/race/DPI/other-platform limits stay explicit.
+
+Initial gate26982 passes1291/0/1 before the added radio-order regression/fix. Final-source
+gate65944 fails825/1 at unchanged MCP replacement_bind127.0.0.1:57773 AddrInUse after
+fmt/workspace clippy pass. Separate21784 passes466/0/1 plus remaining native/vendor/
+layers/licenses/corpus stages; this is not a passing aggregate or a causal socket fix.
+No assertion/deadline/retry/socket-policy, old consumer/fixture/font/golden/dependency
+or parser-fuzz change. Actions stays disabled; full M0–M5 remains open.
+
+## Complete-source SMILES record authoring, 2026-11-16
+
+[Format/retained-model/command/transport evidence](verification-smiles-record-authoring.md)
+records missing-API/unknown-command REDs, a real stdio closed-selector regression, 25 new
+passes including generated whole-snapshot history and actual CPU/GPU PNG checks, and
+the final1270/0/1 full local gate. Actual saved files preserve opaque/unselected bytes.
+Native record selection/navigation/order inputs remain blocked until registered workers
+and actual desktop acceptance are implemented. This does not complete M1 or wider parity.
+
+## Native editable SMILES paste, 2026-11-16
+
+[Native/worker/App evidence](verification-native-smiles-paste.md) records missing-control
+RED, real file-association ABA and postcommit regressions, ten worker/six App GREEN and
+the1245/0/1 full local gate. Actual Mac OS clipboard/refusal/retry/history/edit/Unicode
+Save/reopen passes; independent consumers accept the actual C8H14 output and preserved
+original fragment. Automatic clipboard capture and broader reference parity remain open.
+
+## Editable SMILES engine, 2026-11-15
+
+[Engine/layout/actual-transport evidence](verification-smiles-paste-engine.md) records
+the missing behavior REDs, first6+6+3 GREEN and independently read saved files. After
+explicit31-name catalogue updates, receiving71552 passes1229/0/1 with all xtask gates.
+Native clipboard/dialog and broader chemistry/import remain separate, unverified work.
+
+## Neutral authoring chemistry, 2026-11-15
+
+[Independent core and actual-Fragment evidence](verification-smiles-authoring-chem.md)
+records the missing-API REDs, qualified external consumer, first9+6 GREEN and323 IO
+regressions with clippy. Editable paste/layout/native execution remain separate gates.
+
+## Integer-bond ring control, 2026-11-15
+
+The [analytic existing-renderer control](verification-kekule-render-control.md) passes
+first with exact CPU/GPU ring ink, literal H and picking. Targeted clippy passes. This
+supports the later aromatic authoring work; no chemistry/paste/native feature is claimed.
+
+## Canonical CDX separate file ends, 2026-11-15
+
+[Integrated evidence](verification-cdx-file-end-integration.md) records original external
+258-byte input/provenance, runtime syntax/Open RED, eight syntax and six IO/engine/actual-
+wire GREEN cases and eighteen new independent raw/RDKit oracle controls. The two new
+framing variants retain legacy-first interpretation, bounded exact EOF and separate
+Document/FileEnd ownership. Writer and all old fixtures/oracles remain unchanged.
+
+The original first0805 property independently exposes11versus12 fuzz reconstruction
+properties with the old classifier. The shared exhaustive root classification fixes that
+harness defect. Fixed-input and actual10000-mutation ASan runs pass; this is not a memory-
+error discovery or exhaustive/security claim. Ten original distinct external files now
+parse/pass through exactly; only the existing closed application mapping is authorized.
+
+Native Mac Open/Unicode Save As/explicit reopen passes on binaryc052d758…: actual258-byte
+output remains source-exact85648226… and passes the new raw/RDKit consumer. The UI retains
+Saved/CDX, Original source preserved and faithful-preview refusal; chemical counts are
+IO/consumer evidence, not native display. Saved editable ring is restored in the one
+current preview. The earlier binary's native TrailingData refusal remains recorded.
+
+Earlier complete-gate attempt97729 **fails754/1** at the older MCP shutdown test's
+replacement_bind127.0.0.1:51670, AddrInUse/Os48, after fmt/workspace clippy pass. Its
+91080-byte log remains SHA25678153a7443ff803009751be506278666a9b200a823b07f755cf8d40edc1e4a88.
+Twenty fixed default control contexts64662 pass500 tests; no failure-only socket snapshot
+ran, and these diagnostics do not establish cause or make that aggregate green. A separate
+held-outbound-socket hypothesis is contradicted by actual execution: std's replacement
+listener also binds successfully. Preserve that counterevidence; do not infer the cause.
+Exactly one final declared receiving aggregate81324 then passes **1172/0/1**,169 result
+lines, including fmt, warnings-denied workspace/vendor clippy/tests, layers, licenses and
+corpus. Its141627-byte log is SHA256
+a59098b56b4293de7e7da3f81b26ff1f2e61c6137d6ceea256cc6509b2e8ded6.
+Original MCP assertions/deadlines/default concurrency and all declared source pins stay
+exact. This pass does not explain the earlier failure; see the
+[separate diagnostic evidence](verification-loopback-shutdown-observations.md).
+Actions stays disabled; no new Windows/Linux receiving, push or publication.
+
+## Simple-ring conversion and renewed UI review, 2026-11-15
+
+[Integrated evidence](verification-smiles-ring-integration.md) records the frozen IO/
+command/wire/App REDs, independent small-ring/branch/stereo/source oracle, two reproduced
+literal-H renderer prerequisites and the passing-first rotated-star/boundary controls.
+No old format consumer, fixture, golden, dependency or shipped asset changes. The old
+closed schema intentionally adds the third name before implementation; other contracts stay.
+
+Root38859's old listener AddrInUse failure remains unexplained; the
+[diagnostic-only test change](verification-loopback-shutdown-diagnostics.md) preserves
+all assertions/deadlines/socket policy. Root95551 then exposes two unchanged old App
+receipt-count failures. The shared measured-height re-layout fixes cached anchored-window
+clipping; Root26008 passes13 conversion App cases without test/SDK changes. Independent
+review confirms later passes have no raw activation events to replay. The earlier new-
+test-only readiness correction was insufficient; both stages remain recorded.
+
+Final Root71585, Rust1.94.1, literal pinned BONDLINE_PYTHON, CARGO_INCREMENTAL=0 and
+CARGO_BUILD_JOBS=2: cargo xtask ci exits0, **1158 passed/0 failed/1 ignored**,166 result
+lines. Formatting, warnings-denied all-target workspace/vendor clippy/tests, layers,
+licenses and corpus pass. The140,000-byte log target/smiles-ring/root-final-ci.log is
+SHA2565a71e81792427bee67bea5793d38ae115d5cde1f7ad394dc3e7af217b8306a57.
+License closures154/165/220 runtime packages and2 assets; eight corpus files/five bundles
+retain explicit foreign/general CDX and chemistry omissions. No later product/test change.
+
+Actual Mac retained-unsaved conversion/refusal/Unicode retry, guarded Open, external-bond
+edit/Undo/Redo and separate Save/reopen pass. Both1254-byte C7H14/C7H12 outputs agree with
+predeclared literal graphs and independent Expat/Decimal/RDKit consumers. The later sizing-
+fixed native receiving pass shows the full receipt, produces byte-identical C7H14 output,
+and reopens the saved edit; it is not misattributed to the earlier binary or claimed as
+native first-pass timing. All source/input/sentinel/output pins and app handles are in the
+integration record. Three obsolete Saved preview apps close under the user's instruction;
+only the current Bondline version and requested reference remain in this task's app scope.
+
+The [renewed installed CUA observation](research/live-ui-review-2026-11-15.md#document-settings-observation-on-renewed-instruction)
+rechecks Signals26.1.0.6801 and four settings pages, then cancels without edits. Selected-
+document values are not defaults or a completed settings workflow. Professional entitlement,
+full palette/icon geometry, native races/large-bulky/geometry typing/browsing, hardware DPI,
+Windows/Linux interaction, broader chemistry and M0–M5 remain unverified/incomplete.
+Actions remains disabled; no new fuzz/hosted execution, push or publication.
+
+Latest2026-11-14 receiving: ordered Single/Double/Triple [authoring and adapters](verification-multiple-authoring.md),
+[geometry/CPU/GPU](verification-multiple-render.md), [independent files/images/fuzz](verification-multiple-commands.md)
+and [actual egui workflows](verification-multiple-ui.md). The refreshed
+[workspace evidence](verification-workspace-presentation.md) records the actual macOS
+visual review, finite native interactions, preserved failed checks and local aggregate:
+891 passed, zero failed, one intentionally ignored explicit capture utility. That utility
+also passes when explicitly run. Native new drag workflows and full parity remain pending.
+GitHub Actions stays disabled; these are local checks, not new Windows/Linux execution.
+After intermediate-tree checking exposed shared cached metadata, final clean Root1724
+rebuilds the normal target and passes the same891/0/1 aggregate. Failed logs and the prior
+debug cache are retained; details are in the workspace evidence above.
+
 2026-11-13, bootstrap documentation: no application checks yet. Starting workspace was empty.
 Rust 1.94.1 is installed. Public specifications and reference license practices were inspected.
 Future behavioral entries must identify the RED command/failure, GREEN command/result,
@@ -2383,3 +2993,438 @@ match published bytes; incorrect initial paths and style/default/flag ambiguitie
 retained. Centered C2H4/C2H2 analytic geometry, masks/hits, CPU/GPU and source-persistence
 REDs are concrete next actions but remain unexecuted. No universal default, native pixels,
 new golden or completed M1/M2 follows from this plan.
+
+
+## Existing-bond order and ordered native editing, 2026-11-15
+
+`bond.set_order` is one27th typed registry operation with a required explicit neutral-
+carbon H policy, whole-source authority, all-incident valence accounting, exact no-op,
+revision/identity exhaustion guards and complete-history preservation. Independent command,
+real CLI/stdio/authenticated-loopback, Expat/Decimal/RDKit saved-file and fixed-seed
+property evidence is in [command verification](verification-bond-order-command.md).
+Its isolated backend tree passes912 tests; full original authoring integration passes924.
+
+[Six application-frame workflows](verification-bond-order-ui.md) and
+[six ordered history regressions](verification-bond-history-order.md) cover palette clicks,
+absolute keys, logical stationary targets, safety contexts, source refusal, endpoint
+conversion, keyboard/menu sequencing, page-size restoration and whole-SDF fallback. RED
+failures are retained. Corrected new-harness setup covers actual egui repeat normalization,
+required close revision and a proven stale tooltipLabel locator; all behavior assertions
+remain. The old attachment negative becomes a stronger same-input Single→Double positive,
+with its other four occupied-endpoint negatives retained.
+
+Final Root `cargo xtask ci`3957 exits0:925passed/0failed/1ignored explicit development
+capture utility across140 result lines, including3Mac bridge tests. Fmt, warnings-denied
+all-target clippy, layers, two assets/notices, three-platform declared runtime license
+closures and eight pinned corpus files pass. Log110951B/SHA
+`b7f4db314e1d490f59357731bfebf82660cc216cc5051f5d69634306a8826ad3`.
+[Finite actual Mac evidence](verification-bond-order-native.md) separately verifies native
+multiple creation, supported click/key/endpoint conversion, keyboard/menu history,
+Unicode Save As, exact editable reopening/known Save and independent consumers. The final
+native executable/UI source match the frozen identities in that record.
+
+No new dependencies/locks, parser/renderer behavior, old fixtures/oracles/font or approved
+golden changed. No new parser-fuzz, Windows/Linux runtime or hosted run is implied.
+Actions stays disabled. Full M0–M5 remains active; default-fit zoom/readability, complete
+control/inventory/platform coverage, broader formats/chemistry and full tool parity remain.
+
+
+## Logical page camera, 2026-11-15
+
+[Renderer evidence](verification-view-render.md) records exact legacy Fit, explicit
+uniform zoom/pan, shared forward/inverse picking and clipped geometry with preserved
+whole-source chemistry/label/component guards. Independent literal coordinate/pixel/GPU
+tests and a large-coordinate zero-tolerance anchor regression pass: Root receiving
+`target/view-render-receiving-green.log` (session22937) has76 passed,0 failed.
+The renderer handoff has separate all-target warnings-denied clippy/rustfmt evidence.
+This lower-layer API does not establish native controls, complete zoom-range rendering,
+physical monitor calibration or full M0/M2 parity. No new golden or dependency changes.
+
+
+## Pinned SDK focus correction, 2026-11-15
+
+The public egui0.29.1 source incorrectly deferred the first focus-lock filter. A bare
+Slider/neighbor probe reproduces lost immediate Right→Left input without a Bondline
+engine: original assertions70877 yield1passed/1failed; the one-guard candidate25670
+yields2passed with the identical desired test source. The independent eframe::egui
+[regressions](../crates/ui/tests/slider_focus.rs) pass2/0 in Root6076, without an idle
+frame workaround or new font. Root's actual-frame pan regression also fails before
+the patch and passes after it. [Exact source/notices](../vendor/egui/BONDLINE-PATCH.md)
+retain the published version/features and MIT/Apache licenses. Root58403 license gate
+passes154/165/220 native runtime packages and the same two assets.
+
+
+## Shared transient view integration, 2026-11-15
+
+The28th command `ui.view`, source-qualified IO camera, actual numeric/position controls
+and ordered picking/gesture invalidation pass [independent command/adapter checks](verification-view-commands.md)
+and [ten frozen real-App frame checks](verification-view-ui.md). Root's initial compile,
+schema, extra-field, reverse-axis, fractional-wheel, smaller-page, direction, focus and
+recovery REDs are distinguished from harness-only corrections. Original fixtures, font,
+parser oracles and the approved golden remain unchanged. Two private guards are
+additional coverage, not claimed original REDs.
+
+[Native Mac evidence](verification-view-native.md) verifies bounded original-A4 creation,
+zoom/pan/menu/keys, transformed existing-edge picking and separated persistence flows.
+The rapid Undo/Save counterexample is explicitly pending a separate ordering correction.
+The corrected saved scene faces independent Expat/Decimal/RDKit and the public screenshot
+is a genuine unedited window buffer. Full local gate68260:960passed/0failed/1ignored;
+clippy/fmt/layers/licenses/corpus pass. First parallel listener-rebind failure remains
+recorded separately, followed by unchanged isolated and full successful runs.
+
+
+## Ordered File actions, 2026-11-15
+
+A native rapid Undo→Save counterexample exposed an existing eager File shortcut prepass.
+[Independent actual-App/file regression and native follow-up](verification-ordered-file-actions.md)
+prove the cause and correction. File menu/keys now resolve the current central command
+at their raw event, after earlier edits/history; pending intents block later authoring.
+Save leases, worker publication and close receipts are unchanged. The frozen eleventh
+case passes after actual completed-file RED, including a separated-input positive control.
+Whole UI and bounded peer review pass. Root52827 aggregate:961passed/0failed/1ignored,
+rustfmt/clippy/layers/licenses/corpus pass. New native binary/source hashes and literal
+external saved-file checks are in the linked record; earlier failed native output remains
+explicit evidence. Full M0–M5 stays incomplete; hosted Actions remains disabled.
+
+## Registered native SDF field work, 2026-11-15
+
+[Seven independent adapter tests](verification-ui-sdf-work.md) freeze ordered selected
+fields, the literal second-DUP edit and actual788-byte saved output, history/no-op/source
+identity, shared worker limits, cancellation, stale/foreign/close guards and no Save/ACK
+authority. Missing API compiler RED precedes the minimal two-file implementation;
+Root's private-method compile correction changed production only. Independent receiving
+execution passes all seven unchanged. Root98860 aggregate passes968/0/1 plus every local
+gate. The original commands and wire schema are unchanged. Native field presentation,
+draft transactions and actual-window acceptance remain separate work; no milestone ends.
+
+## Native ordinary SDF files and truthful preview refusal, 2026-11-15
+
+[Actual-window evidence](verification-sdf-native-current.md) verifies Unicode chooser
+Open, both mixed-version record summaries, Unicode Save As/reopen, full740-byte equality
+and unchanged external CCO/CN consumers. The current default window honestly refuses
+chemical preview under the existing em guard; effective DPI/enlargement were not measured.
+Successful native preview, field presentation and scheduling races remain unverified.
+The prior saved150% drawing is restored on the desktop. No guard, golden, fixture or
+consumer changed, and no milestone is complete.
+
+## Read-only native SDF occurrence inspector, 2026-11-15
+
+[Independent real-App and bounded Mac evidence](verification-sdf-inspector.md) verifies
+explicit ordered/duplicate/empty/spaces inspection, immutable selection/copy, source
+refresh, true JSON-budget page offsets and explicit omission. Missing-button, ReadOnly
+flag and retained-text runtime REDs precede their fixes; a separate queued/finished-job
+gate protects host retirement. No assertions, original fixtures, SDK, fonts or approved
+golden changed. Root68521 full gate passes975/0/1, including all local quality gates.
+Actual native Unicode Save As/reopen retains every777 source byte and both external
+MOL consumers pass. Default native chemical preview still refuses the em guard; mutating
+drafts/editor/Apply/Save ordering and complete M0–M5 remain required. Actions stays off.
+
+## Transactional SDF occurrence editor, 2026-11-15
+
+[Integrated Root and native evidence](verification-sdf-editor-integration.md) records the
+original temporary value editor over the unchanged shared setter. Nine independent App
+cases cover literal second-DUP788-byte Apply/Save/history, same-packet ordering, guarded
+navigation/close/external requests, source replacement, CRLF no-op and invalid-input
+nonpublication. Eight bounded-buffer tests and two finite real-worker publication/
+retirement gates add independent boundary evidence. Intended missing-control, lost-
+Previous and late-cancellation-notice REDs remain distinct from setup/lint corrections.
+Earlier test/input prefixes, fixtures, consumers, SDK, font and approved golden stay exact.
+
+Root44537 full local gate passes994/0/1, including rustfmt, all-target warnings-denied
+clippy, layer/license/corpus checks and three native AccessKit bridge tests. A preceding
+invocation omitted the pinned Python environment and failed unchanged RDKit imports;
+correcting only the environment yielded the recorded pass. The original native Mac
+input→multiline draft→Apply→Unicode Save As→Undo/Redo→reopen preserves the exact788-byte
+expectation and both independent molecular consumers. Native race/accessibility, huge
+values, Windows/Linux and successful default native chemical preview remain unverified.
+No Actions run, new dependency, source-paper change, glyph guard relaxation or milestone
+completion is claimed. The full M0–M5 goal remains active.
+
+## Physical raster density for logical cameras, 2026-11-15
+
+[Renderer evidence](verification-view-raster.md) adds an immutable pixel-space view while
+retaining the logical percentage and exact1x output. Fresh glyphs incorporate fractional
+camera phase; old masks are not resampled. Eight tests cover declared affine positions,
+rounded nonsquare Fit, fractional/capped/subunit density, independent font coverage,
+CPU/GPU agreement, whole-source refusal and bounds/cancellation/noncomposition. Seven
+tests were frozen before the missing-API compiler RED; the eighth is explicitly additive
+postimplementation coverage. All original renderer tests/fixtures/font/oracles/goldens
+remain exact. Independent96521 runs84/0/0,40201 all-target renderer clippy exits0 and
+rustfmt passes. This foundation alone does not wire native SDF navigation or establish
+new native/Windows/Linux behavior; application integration has its own gate.
+
+## Source-qualified SDF camera, 2026-11-15
+
+[Integrated evidence](verification-sdf-view-integration.md) now joins the renderer to the
+unchanged28-command registry and native preview. Optional current-view context retains
+exact legacy whole-page defaults; only successful current work prepares Weak-source SDF
+bounds. Seven command cases and two native-adapter cases cover strict context/schema,
+actual image/field/file/source/cancel/close/foreign/worker/notification semantics. Four
+App cases cover real F5/pan/wheel, fresh view/DPI/source ABA uploads and749-byte NOTE
+Apply→fresh equal-chemistry preview→real Save/reopen. An additional ordinary-MOL current-
+view case passes its first run at1x/2x with independent pixel and unchanged file consumers;
+it is postimplementation coverage, not an invented RED.
+
+Intended Actual/menu/capture/wheel/notification REDs and fixes remain separate from new
+H-box/viewport-baseline setup corrections, one explicit old SDF Actual capability upgrade
+and the named-routing clippy correction. Independent inputs, old assertions except that
+identified upgrade, default pixels, SDK/font/oracles/approved golden remain unchanged.
+Root77879 full local gate passes1016/0/1 plus fmt, warnings-denied clippy, layers, licenses
+and corpus. Root91855's earlier1015/0/1 predates the additive Drawing case.
+
+Native Mac F5 and pointer sliders render both ordinary chemical records at100%, preserving
+exact740 bytes/revision1/clean history; read-only inspection confirms center100,143 and
+epoch3. Numeric AX SetValue and CJK glyph coverage have finite limitations. A native scroll
+was aborted before dispatch; wheel, measured hardware DPI, combined edit-preview native
+flow and other platforms remain unverified. No new fuzz/hosted run, source paper change,
+glyph-guard relaxation or milestone completion. GitHub Actions stays disabled.
+
+## Truthful Fit readout, 2026-11-15
+
+[Five independent actual-App cases and native read-only AX/painting](verification-fit-readout.md)
+now distinguish Fit from an explicit percentage, including an accepted picker disabling
+the field and explicit100 Enter/blur. Unknown-Fit and modal runtime REDs, corrected new
+locator/format setup, unchanged prefixes and scoped native source/executable receipts are
+separate. Root77768 full local gate passes1021/0/1, rustfmt, warnings-denied clippy,
+layers, licenses and corpus. No image/SDK/asset/oracle/dependency change. High-DPI relative
+steps, native typing/wheel/hardware measurement and broader platform workflows remain
+unverified. The full goal remains active and Actions stays disabled.
+
+## Typed native SMILES query work, 2026-11-15
+
+[The registered Rust bridge](verification-smiles-ui-work.md) now prepares only the
+existing selected-record query before native spawn. Independent and receiving tests
+verify exact49-byte source/history, historical reply routing, source/close refusal,
+shared worker capacity/cancellation and absence of Save/native-ACK authority. Missing-
+API compile RED is distinct from the two documented new-test setup corrections.
+Root69771 local gate passes1024/0/1, formatting, warnings-denied clippy, layers, licenses
+and corpus. No new wire tool or dependency. Actual inspector UI/input/thread-retirement
+and native SMILES workflow acceptance remain separate work; no milestone is completed.
+
+## Original SMILES record workspace, 2026-11-15
+
+[The integrated App inspector](verification-smiles-record-integration.md) now passes
+five independently authored input/copy/privacy/navigation/Unicode Save/reopen cases and
+two finite actual-worker/close gates. Root33868's missing-control runtime RED remains
+distinct from helper-path/private-type compilation and reviewed async/canonical-path
+test setup corrections. Six old fixtures gain only a default field; old assertions and
+Root's later Fit cases are retained exactly. Receiving Root54986 passes8/0 (seven new
+cases plus one matched old case), and independent97627 passes5/0 with clippy/fmt.
+
+Root29041 full local gate passes1031/0/1, formatting, all-target warnings-denied clippy,
+layers, licenses and corpus. Actual final native UI shows three records/49 bytes and
+the ordinal/Inspect/navigation controls without automatic notation. An authenticated
+native-process record2 query preserves clean state/source; no OS input/clipboard/dialog
+journey is claimed. No parser/dependency/oracle/golden/hosted/fuzz change. Actions stays
+disabled; M0/M1 and M2–M5 remain incomplete.
+
+## Whole SDF record removal, 2026-11-15
+
+[Integrated evidence](verification-sdf-record-removal.md) records the complete-record
+codec,29th shared command, CLI/stdio/authenticated-loopback and original confirmation UI.
+Seven codec, six command, three wire, three native-adapter, four independent App, five
+finite lifecycle and one reproduced preparation-race cases are additive to1031 checks.
+Root96793 final local gate passes **1060/0/1**,153 result lines, formatting, all-target
+warnings-denied clippy, layers, licenses and corpus. The original ignored capture remains.
+Exact source/log pins, test setup corrections and first catalogue failures are separate
+from intended REDs; no original fixture/oracle/dependency/golden changed.
+
+Native PID58926 now passes a bounded actual Mac Open→Keep/Confirm→Undo/Redo→Unicode
+Save As→reopen→Actual/pan→retained NOTE workflow. Actual330 bytes equal the literal
+740-byte input suffix; unchanged external raw/MOL consumers verify fields and CN/CH5N.
+A real pre-spawn file-context race was independently reproduced before the atomic native
+preparation guard; its unchanged regression passes. Native race/draft/close paths, other
+platform input, hardware DPI and complete reference parity remain unverified. No new
+fuzz or hosted execution; Actions remains disabled and the full goal remains active.
+
+## Fresh document sessions, 2026-11-15
+
+[Integrated New evidence](verification-new-document.md) records the30th command, File New/
+primaryN, source-qualified Save/Discard/Cancel and unchanged actual worker-retirement
+authority. Six independent command, three counter, three presentation, three actual-wire,
+one namespace, six actual-App and eight finite worker cases are additive. Minimal
+UnknownCommand/missing-control runtime REDs, compiler stages and reviewed new-test setup
+corrections are separate. Two further independent runtime REDs reproduce old-surface
+pointer drags becoming unintended bonds; the final persistent presented-namespace guard
+passes both unchanged regressions, replacing the insufficient poll-only intermediate fix.
+
+Root7556 full local gate passes **1090/0/1**,156 result lines; formatting, warnings-denied
+all-target clippy, layers, licenses and corpus pass. Earlier clippy signature/catalogue
+failures and two unexplained old UI timeouts remain recorded. No timeout/assertion,
+fixture, external oracle, dependency, font, SDK or approved golden was weakened/changed.
+
+Actual native PID52347, final binarye38d0e91…d2105, passes SDF→New, dirty Cancel/Discard/
+Save, Unicode Save-before-New, editable reopen, hotspot order edit and Undo to Saved.
+Actual436-byte old drawing is accepted by unchanged external RDKit plus separate Expat
+checks. This bounded Mac journey does not prove native races, styles/templates/multiple
+windows or Windows/Linux input. No new fuzz/hosted check; Actions remains disabled.
+The full M0–M5 goal remains active. Continue from STATUS.md, without redoing delivered New.
+
+## Original native restricted SMILES file conversion, 2026-11-15
+
+[Integration evidence](verification-native-smiles-conversion.md) records File → Convert
+SMILES file… over the unchanged restricted create-only command, explicit geometry, shared
+worker/lease and separate guarded output Open. Registry30 remains; Drawing controls18 and
+readonly SDF12. Six core, two public adapter, three transport and15 UI/lifecycle/picker
+checks add26 passing cases. Minimal runtime REDs, missing-API compilers, reviewed new-test
+setup corrections and passing-first-run additional cases are recorded separately.
+
+Unstarted stale forms, actual publication after FileWorkflow Drop and a stale global error
+after successful retry were independently reproduced and fixed. Separate deterministic
+pointer evidence proves directory-scan completion changes a footer control's identity.
+A candidate correction's hidden-error regression is also reproduced; stable browser and
+separate bounded error regions pass both frozen tests. Earlier aggregate UI timeouts remain
+recorded without claiming that this proved identity defect caused them.
+
+Root84363 final local `cargo xtask ci` passes **1116/0/1**,158 result lines, formatting,
+warnings-denied all-target clippy, workspace/vendor tests, layers, unchanged licenses and
+corpus. Root97224 builds the matching native binary. Actual Mac PID52075 passes browse,
+existing-destination refusal, successful Unicode retry while retaining Untitled*, explicit
+Open/Cancel/Discard, Double edit/Undo and separate Unicode Save As/reopen. Both433-byte
+outputs remain exact and pass unchanged external RDKit plus independent Expat/Decimal.
+No auto Open/current Save, native race/close/cancellation, numeric geometry typing,
+hardware-DPI, general SMILES or clipboard parity is inferred. Other platforms remain
+unverified; no new parser/fuzz/dependency/SDK/oracle/font/golden or hosted execution.
+Actions stays disabled and the full M0–M5 goal remains active.
+
+## Neutral acyclic SMILES conversion, 2026-11-15
+
+[Integrated evidence](verification-smiles-acyclic-integration.md) records the additive
+optional profile, unchanged30-command registry/eight required scalars, deterministic
+connected-tree layout, original ordered native choices and shared create-only lifecycle.
+Eight IO, two renderer, five command, two actual-wire and three App cases add20 passes.
+Actual runtime REDs, missing-API compilers and reviewed new-test setup errors stay distinct.
+The shared branch-label prerequisite is independently reproduced; a suggested collision
+defect was disproved. The new consumer's blanket-NONE error is explicitly corrected from
+primary RDKit source: exact qualified ANY is unknown, assigned stereo remains rejected.
+
+Root40759 full local gate passes **1136/0/1**,161 result lines, exit0: rustfmt, warnings-
+denied all-target workspace/vendor clippy/tests, layers, licenses and corpus. Root87151
+builds the matching native binary. Actual Mac PID70457 passes profile selection/refusal,
+create-only protection/Unicode retry with original retained, guarded Open/Cancel/Discard,
+branch Double edit, Undo/Redo and Unicode Save As/reopen. Independent Expat/Decimal/RDKit
+checks accept both actual766-byte outputs and verify source/sentinel/original output retention.
+
+No new dependency/lock/SDK/font/old-oracle/fixture/golden change, hosted or fuzz execution.
+Native numeric geometry typing, clipboard, race/cancel/close timing, hardware DPI and other
+platform interaction remain unverified. Rings/general import and complete M0–M5 remain
+incomplete. ChemDraw is raised afterward with the existing blank reference window unchanged.
+Actions remains disabled and the persistent goal remains active.
+
+## Neutral disconnected SMILES conversion, 2026-11-15
+
+[Integrated evidence](verification-smiles-components-integration.md) and the
+[independent layout record](verification-smiles-components-layout.md) separate the
+missing-profile/radio runtime REDs, missing-method compiler REDs and corrected new-test
+setup errors. Eight IO, three command, one closed-schema, two actual-wire and three App
+cases add16 passes. The new external consumer was first qualified against seven original
+manual-XML positives and20 negatives, including same-formula changed connectivity and
+assigned stereo. Its exact source, existing oracles and approved golden remain unchanged.
+
+The fourth optional profile normalizes once and keeps one complete Fragment, global IDs,
+directed arrays and fixed H. Actual-edge components use existing bounded tree/simple-ring
+poses, divided search quotas and original source-order center-box shelves with gap L.
+One-component output retains earlier exact bytes; the assembled whole graph must pass
+geometry, finite-width strokes, literal/resolved-H agreement and paper-ink certification.
+The same30-command registry, create-only publisher, worker/lease, source/history/close
+barriers and explicit output Open remain. This grants no molecular edit/Save authority
+to an opened complete SMILES source-file session and does not implement general import.
+
+Root5986 targeted command3/schema1/wire2/App3 and Root90518 independent IO8 pass. Root59627
+full local `cargo xtask ci` passes **1188/0/1**,171 result lines: rustfmt, warnings-denied
+all-target workspace/vendor clippy/tests, layers, licenses and corpus. Log144,934B SHA256
+`fc0778bdce5498e14f113c6f8ca31a7f4ea8cd8544bb7e4794b71929f0b2e7d3`.
+The subsequent native build passes; all11 declared product identities remain exact.
+The previously recorded listener AddrInUse failure remains unexplained; this passing gate
+is not evidence of a causal fix. Runtime closures154/165/220 and corpus8 files/5 bundles
+remain unchanged. No new parser-fuzz, dependency, SDK, font or asset change.
+
+Actual Mac PID21951, refreshed sole existing review bundle, passes legacy-profile refusal,
+occupied-destination refusal, Unicode retry while retaining the known unsaved7/7 drawing,
+explicit Open Cancel then Discard/Open, first-edge Double edit at100%, CmdZ/ShiftCmdZ and
+Unicode Save As/reopen. Both actual1,407-byte files pass the unchanged Expat/Decimal/RDKit
+consumer and literal whole-graph expectations:9 atoms/7 bonds/3 components, C8H20O→C8H18O.
+Input, destination sentinel and previous saved ring stay exact; there is no automatic Open.
+
+The edited drawing's Fit78.79% refuses rendering because multiple strokes/gaps need distinct
+pixels;100% is restored and renders. A top ring H label is partly clipped at100%, and AX
+SetValue/coordinate slider drag produce no change. Full overview/pan success is not claimed.
+Native races/cancellation/close, hardware DPI, Windows/Linux and general chemistry/import
+remain unverified or missing. No new human-approved golden; Actions stays disabled and
+the full M0–M5 goal remains active.
+
+## Native Drawing physical density, 2026-11-15
+
+[Receiving evidence](verification-native-drawing-density.md) records the exact-DPI and
+fractional device-origin transform, shared source-qualified renderer, fresh glyphs and
+logical input/hover/gesture mapping. The new geometry-only display view retains existing
+100000-unit vector bounds; capture/readback stays2048. Old1× pixels, visibility negatives,
+logical8..256/physical font limits, sources and the approved golden remain unchanged.
+
+The existing-API Metal control passes first; new API absence gives exactly one E0599,
+then ten E0599 in the final expanded declaration. Actual-App1× passes while2× fails;
+expanded cases give2/2, and an additive fractional case fails only after its actual
+phase[.25,.75] setup succeeds. No test/input/tolerance changes obtain GREEN. Root93429
+passes all five renderer and five App cases against the first three-file product.
+Independent source review of the Engine/UI paths reports no material finding; it is
+source review, separate from execution.
+
+**The full local gate is not green.** Root78964 fails after767 passes at unchanged MCP
+shutdown replacement_bind127.0.0.1:54691, AddrInUse/Os48. Formatting and warnings-denied
+workspace clippy pass first; later stages did not run. Log94,414B/SHA256
+58502c60022de553eecda0fea87f21c44d47034ea80a5249fb5a5316f2a68615. A single delayed
+lsof/netstat owner snapshot is empty; it establishes no failure-time owner or cause.
+The prior bounded diagnostics are not restarted; neither the failed test nor aggregate
+is retried, and no assertion/socket policy/deadline is weakened.
+
+Root21912 executes only the remaining stages: MCP23/0, model/render/UI/compat/xtask403/0/1,
+remaining docs1/0 and native vendor3/0, totaling430/0/1; vendor clippy, layers, licenses,
+corpus and the native build pass. These separate results preserve the original failure.
+All source/test pins remain exact. Environment: Rust1.94.1, DEV/TEST_DEBUG0,
+CARGO_INCREMENTAL0, CARGO_BUILD_JOBS2 and the literal pinned external Python path.
+
+Actual Mac PID39216 reuses the sole review bundle, binary20,531,936B/SHA256
+`a290421488b83805d48194acff6ef9c0d7fc626ad6c5eb1fd5dcbca672949f9f`.
+Two coordinate clicks leave the original drawing Saved; their cause is unknown. Key2 at
+the first bond commits Double/H2, CmdZ/ShiftCmdZ restore saved/dirty states, and100% renders.
+Unicode Save As and explicit reopen preserve actual1,407B SHA256
+`d7c9074698b737d37ff15addf8858232992468a5536739bcfe5959c324af3cb2`, byte-identical to the
+prior edited file. The unchanged raw/Decimal/Expat/RDKit consumer verifies9/7/3 and C8H18O;
+original files and sentinel remain exact.
+
+Native Fit78.79% still refuses the distinct-pixel guard. Effective native DPI/canvas are
+not measured; native2×, full overview, first-click success and other platforms are not
+claimed. No new golden/fuzz/dependency/font/asset/hosted execution. Actions stays disabled,
+the full M0–M5 goal remains active, and STATUS.md records the next exact work.
+
+## Native Single-ring integration, 2026-11-16
+
+[The receiving record](verification-native-rings.md) holds the separate existing-JSON
+UnknownCommand, missing actionable App control and missing Rust API REDs, independent
+expanded declarations, setup-only qualifications, same-candidate preview/authoring and
+actual file-consumer evidence. It records local quality gates and native/platform limits;
+App input and offscreen GPU execution do not establish native OS interaction. The full
+M0–M5 goal remains active and GitHub Actions stays disabled.
+
+## Terminal carbon-label integration, 2026-11-16
+
+[Receiving evidence](verification-terminal-carbon-labels.md) records independent
+model/API/IO/render/Engine/adapter/App tests, actual RED/GREEN results and two qualified
+new-test setup corrections. Local gate 19445 passes 1,540/0/1 and the native/CLI build
+passes. Missing/null omission, degree-selected flags, mandatory isolated C/C2 labels,
+loss refusals and explicit restoration retain source/history and strict rendering guards.
+Native OS/default-style/chain parity remains unfinished; the existing desktop draft stays
+untouched. The latest user request prioritizes an original logo and a visible disabled
+catalogue of planned tools next. Actions remains off and the complete goal stays active.
+
+## Original branding and planned tools, 2026-11-16
+
+[Receiving evidence](verification-branding-and-tools.md) records original vector assets,
+all124 source roles/140 UI entries,128 disabled/no-command future tools, independent
+inventory/input/modal/font regressions and actual native captures. Final local gate20773
+passes1551/0/1 and native/CLI build3564 passes. Actual Mac search/disabled/available-tool/
+scroll/Escape and bounded Benzene free-click/Undo have explicit scope; first File-menu
+Open click uncertainty, full named-ring gestures, measured DPI and other platforms remain
+unverified. The old user app/draft stays untouched; a separate final preview remains open.
+No historical MCP bind failure is attributed, no golden is regenerated, and grey features
+remain missing. Full M0–M5 stays active and Actions remains disabled.

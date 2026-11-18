@@ -1,0 +1,69 @@
+{
+  "base": "f16b79f",
+  "contract": "b30f0d6",
+  "method": "Original FontTools boxes plus Expat/Decimal lexical source splices; no Bondline output",
+  "font_sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+  "source_to_model_ids": {
+    "73": 1,
+    "97": 2,
+    "109": 3,
+    "137": 4,
+    "149": 5
+  },
+  "cases": [
+    {
+      "name": "amino_alcohol",
+      "bytes": 1734,
+      "sha256": "6993e31d4150909bbb4198629c16eaa05107c19ec5b370e7125c6e596474bf75",
+      "mixed_expected": true
+    },
+    {
+      "name": "amino_diamine",
+      "bytes": 1734,
+      "sha256": "a6af43b6e2c4615b9a6d4bb56ea191f774f3855522262e777c7704c1fc59b3a2",
+      "mixed_expected": true
+    },
+    {
+      "name": "hidden_middle_p12_5_m7_25",
+      "bytes": 1739,
+      "sha256": "6cb1600160bcd385343a8049de8c027860345fc7c28025a5f5cd1b55bd40ba43",
+      "mixed_expected": true
+    },
+    {
+      "name": "all_p24_m12",
+      "bytes": 1736,
+      "sha256": "f21fe575da6fefa5d8d2caa41cf65a38c9f339bf3d064f953aba1c555f09cdfb",
+      "mixed_expected": true
+    },
+    {
+      "name": "subset_1_3_5_p12_5_m7_25",
+      "bytes": 1751,
+      "sha256": "afa7d676785fb54752ad8dccb0a12f47666a00abae4e656878f5a3ada86be271",
+      "mixed_expected": true
+    },
+    {
+      "name": "edited_all_p24_m12",
+      "bytes": 1736,
+      "sha256": "76ebdbe5f11486e48719a552470388d7fe7ef2b97af7e6896846ca9467e27942",
+      "mixed_expected": true
+    },
+    {
+      "name": "methanol",
+      "bytes": 917,
+      "sha256": "14415e874806bdfdd3a4f8df4ce31bc15222ccf0dc9a5dbef71ad9967b03f192",
+      "mixed_expected": true
+    },
+    {
+      "name": "methanol_bad_c2",
+      "bytes": 918,
+      "sha256": "f3aded95d3d5d184809cd396dcb5e361d226256f6f13657515bc19e63d1f234f",
+      "mixed_expected": false
+    },
+    {
+      "name": "mandatory_collinear",
+      "bytes": 1734,
+      "sha256": "d2c815576a08abc2e1157afc9a992fe07ce1c9dd3a69071a2630c27736091efd",
+      "mixed_expected": false
+    }
+  ]
+}

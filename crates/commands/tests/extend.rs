@@ -33,6 +33,7 @@ fn pair(fragment: u32, first: u32, second: u32, bond: u32) -> TestResult<Fragmen
         FragmentId::new(fragment).ok_or("fragment")?,
         vec![atom(first, 100.0, 200.0)?, atom(second, 140.0, 200.0)?],
         vec![Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: BondId::new(bond).ok_or("bond")?,
             begin: AtomId::new(first).ok_or("begin")?,
             end: AtomId::new(second).ok_or("end")?,

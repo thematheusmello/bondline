@@ -1,0 +1,7055 @@
+{
+  "absent_implied": {
+    "envelope": "implied",
+    "byte_length": 303,
+    "sha256": "fcf06b97d927ac78811a2061a97528a2441d8c55045c617730e5552a90ab5fe2",
+    "records": [
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": null,
+        "start": 28,
+        "end": 47,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 32,
+        "payload_end": 47,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": null,
+        "start": 47,
+        "end": 53
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 1,
+        "start": 53,
+        "end": 72,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 57,
+        "payload_end": 72,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 1,
+        "start": 72,
+        "end": 78
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 3,
+        "start": 78,
+        "end": 101,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 82,
+        "payload_end": 101,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 3,
+        "start": 101,
+        "end": 107
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 5,
+        "start": 107,
+        "end": 113,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 111,
+        "payload_end": 113,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 5,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 5,
+        "start": 119,
+        "end": 131,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 123,
+        "payload_end": 131,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 5,
+        "start": 131,
+        "end": 154,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 135,
+        "payload_end": 154,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 3,
+        "matched": 5,
+        "start": 154,
+        "end": 156
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 149,
+        "parent": 3,
+        "start": 156,
+        "end": 162
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 11,
+        "start": 162,
+        "end": 168,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 166,
+        "payload_end": 168,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 11,
+        "start": 168,
+        "end": 174,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 172,
+        "payload_end": 174,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 11,
+        "start": 174,
+        "end": 186,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 178,
+        "payload_end": 186,
+        "payload_hex": "0080a00000409000"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 11,
+        "start": 186,
+        "end": 209,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 190,
+        "payload_end": 209,
+        "payload_hex": "6f726967696e616c2061746f6d00ff95000000"
+      },
+      {
+        "kind": "end",
+        "parent": 3,
+        "matched": 11,
+        "start": 209,
+        "end": 211
+      },
+      {
+        "kind": "start",
+        "tag": 32773,
+        "source_id": 900,
+        "parent": 3,
+        "start": 211,
+        "end": 217
+      },
+      {
+        "kind": "property",
+        "tag": 1541,
+        "parent": 17,
+        "start": 217,
+        "end": 225,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 221,
+        "payload_end": 225,
+        "payload_hex": "95000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1540,
+        "parent": 17,
+        "start": 225,
+        "end": 233,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 229,
+        "payload_end": 233,
+        "payload_hex": "49000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1536,
+        "parent": 17,
+        "start": 233,
+        "end": 239,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 237,
+        "payload_end": 239,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 16388,
+        "parent": 17,
+        "start": 239,
+        "end": 258,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 243,
+        "payload_end": 258,
+        "payload_hex": "6f726967696e616c20626f6e6400fe"
+      },
+      {
+        "kind": "end",
+        "parent": 3,
+        "matched": 17,
+        "start": 258,
+        "end": 260
+      },
+      {
+        "kind": "end",
+        "parent": 1,
+        "matched": 3,
+        "start": 260,
+        "end": 262
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 1,
+        "start": 262,
+        "end": 268
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 24,
+        "start": 268,
+        "end": 289,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 272,
+        "payload_end": 289,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 24,
+        "start": 289,
+        "end": 295
+      },
+      {
+        "kind": "end",
+        "parent": 24,
+        "matched": 26,
+        "start": 295,
+        "end": 297
+      },
+      {
+        "kind": "end",
+        "parent": 1,
+        "matched": 24,
+        "start": 297,
+        "end": 299
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 1,
+        "start": 299,
+        "end": 301
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": null,
+        "start": 301,
+        "end": 303
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1,
+          2
+        ],
+        "bond_ids": [
+          1
+        ]
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": null,
+        "properties": {
+          "isotope": {
+            "present": false
+          },
+          "charge": {
+            "present": false
+          },
+          "radical": {
+            "present": false
+          },
+          "explicit_hydrogens": {
+            "present": false
+          }
+        }
+      },
+      {
+        "source_id": 149,
+        "model_id": 2,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 144.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": null,
+        "properties": {
+          "isotope": {
+            "present": false
+          },
+          "charge": {
+            "present": false
+          },
+          "radical": {
+            "present": false
+          },
+          "explicit_hydrogens": {
+            "present": false
+          }
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "source_id": 900,
+        "model_id": 1,
+        "begin": 1,
+        "end": 2,
+        "order": "single"
+      }
+    ]
+  },
+  "scalar_zero_implied": {
+    "envelope": "implied",
+    "byte_length": 319,
+    "sha256": "51331f9aee952799c280214e2b27643a924d66f6442978b5608838f058e3c813",
+    "records": [
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": null,
+        "start": 28,
+        "end": 47,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 32,
+        "payload_end": 47,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": null,
+        "start": 47,
+        "end": 53
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 1,
+        "start": 53,
+        "end": 72,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 57,
+        "payload_end": 72,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 1,
+        "start": 72,
+        "end": 78
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 3,
+        "start": 78,
+        "end": 101,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 82,
+        "payload_end": 101,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 3,
+        "start": 101,
+        "end": 107
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 5,
+        "start": 107,
+        "end": 113,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 111,
+        "payload_end": 113,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 5,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 5,
+        "start": 119,
+        "end": 131,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 123,
+        "payload_end": 131,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 5,
+        "start": 131,
+        "end": 137,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 135,
+        "payload_end": 137,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 5,
+        "start": 137,
+        "end": 142,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 141,
+        "payload_end": 142,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 5,
+        "start": 142,
+        "end": 147,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 146,
+        "payload_end": 147,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 5,
+        "start": 147,
+        "end": 170,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 151,
+        "payload_end": 170,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 3,
+        "matched": 5,
+        "start": 170,
+        "end": 172
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 149,
+        "parent": 3,
+        "start": 172,
+        "end": 178
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 14,
+        "start": 178,
+        "end": 184,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 182,
+        "payload_end": 184,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 14,
+        "start": 184,
+        "end": 190,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 188,
+        "payload_end": 190,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 14,
+        "start": 190,
+        "end": 202,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 194,
+        "payload_end": 202,
+        "payload_hex": "0080a00000409000"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 14,
+        "start": 202,
+        "end": 225,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 206,
+        "payload_end": 225,
+        "payload_hex": "6f726967696e616c2061746f6d00ff95000000"
+      },
+      {
+        "kind": "end",
+        "parent": 3,
+        "matched": 14,
+        "start": 225,
+        "end": 227
+      },
+      {
+        "kind": "start",
+        "tag": 32773,
+        "source_id": 900,
+        "parent": 3,
+        "start": 227,
+        "end": 233
+      },
+      {
+        "kind": "property",
+        "tag": 1541,
+        "parent": 20,
+        "start": 233,
+        "end": 241,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 237,
+        "payload_end": 241,
+        "payload_hex": "95000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1540,
+        "parent": 20,
+        "start": 241,
+        "end": 249,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 245,
+        "payload_end": 249,
+        "payload_hex": "49000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1536,
+        "parent": 20,
+        "start": 249,
+        "end": 255,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 253,
+        "payload_end": 255,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 16388,
+        "parent": 20,
+        "start": 255,
+        "end": 274,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 259,
+        "payload_end": 274,
+        "payload_hex": "6f726967696e616c20626f6e6400fe"
+      },
+      {
+        "kind": "end",
+        "parent": 3,
+        "matched": 20,
+        "start": 274,
+        "end": 276
+      },
+      {
+        "kind": "end",
+        "parent": 1,
+        "matched": 3,
+        "start": 276,
+        "end": 278
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 1,
+        "start": 278,
+        "end": 284
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 27,
+        "start": 284,
+        "end": 305,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 288,
+        "payload_end": 305,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 27,
+        "start": 305,
+        "end": 311
+      },
+      {
+        "kind": "end",
+        "parent": 27,
+        "matched": 29,
+        "start": 311,
+        "end": 313
+      },
+      {
+        "kind": "end",
+        "parent": 1,
+        "matched": 27,
+        "start": 313,
+        "end": 315
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 1,
+        "start": 315,
+        "end": 317
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": null,
+        "start": 317,
+        "end": 319
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1,
+          2
+        ],
+        "bond_ids": [
+          1
+        ]
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": null,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 9
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 10
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 11
+          },
+          "explicit_hydrogens": {
+            "present": false
+          }
+        }
+      },
+      {
+        "source_id": 149,
+        "model_id": 2,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 144.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": null,
+        "properties": {
+          "isotope": {
+            "present": false
+          },
+          "charge": {
+            "present": false
+          },
+          "radical": {
+            "present": false
+          },
+          "explicit_hydrogens": {
+            "present": false
+          }
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "source_id": 900,
+        "model_id": 1,
+        "begin": 1,
+        "end": 2,
+        "order": "single"
+      }
+    ]
+  },
+  "zero_present_explicit": {
+    "envelope": "explicit",
+    "byte_length": 331,
+    "sha256": "168979f4167d1ff7d4cf9e291b69c7de368467a51337c96b8b573ef778b17ac3",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 148,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 147,
+        "payload_end": 148,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 148,
+        "end": 153,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 152,
+        "payload_end": 153,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 153,
+        "end": 159,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 157,
+        "payload_end": 159,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 159,
+        "end": 182,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 163,
+        "payload_end": 182,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 182,
+        "end": 184
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 149,
+        "parent": 4,
+        "start": 184,
+        "end": 190
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 16,
+        "start": 190,
+        "end": 196,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 194,
+        "payload_end": 196,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 16,
+        "start": 196,
+        "end": 202,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 200,
+        "payload_end": 202,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 16,
+        "start": 202,
+        "end": 214,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 206,
+        "payload_end": 214,
+        "payload_hex": "0080a00000409000"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 16,
+        "start": 214,
+        "end": 237,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 218,
+        "payload_end": 237,
+        "payload_hex": "6f726967696e616c2061746f6d00ff95000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 16,
+        "start": 237,
+        "end": 239
+      },
+      {
+        "kind": "start",
+        "tag": 32773,
+        "source_id": 900,
+        "parent": 4,
+        "start": 239,
+        "end": 245
+      },
+      {
+        "kind": "property",
+        "tag": 1541,
+        "parent": 22,
+        "start": 245,
+        "end": 253,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 249,
+        "payload_end": 253,
+        "payload_hex": "95000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1540,
+        "parent": 22,
+        "start": 253,
+        "end": 261,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 257,
+        "payload_end": 261,
+        "payload_hex": "49000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1536,
+        "parent": 22,
+        "start": 261,
+        "end": 267,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 265,
+        "payload_end": 267,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 16388,
+        "parent": 22,
+        "start": 267,
+        "end": 286,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 271,
+        "payload_end": 286,
+        "payload_hex": "6f726967696e616c20626f6e6400fe"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 22,
+        "start": 286,
+        "end": 288
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 288,
+        "end": 290
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 290,
+        "end": 296
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 29,
+        "start": 296,
+        "end": 317,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 300,
+        "payload_end": 317,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 29,
+        "start": 317,
+        "end": 323
+      },
+      {
+        "kind": "end",
+        "parent": 29,
+        "matched": 31,
+        "start": 323,
+        "end": 325
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 29,
+        "start": 325,
+        "end": 327
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 327,
+        "end": 329
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 329,
+        "end": 331
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1,
+          2
+        ],
+        "bond_ids": [
+          1
+        ]
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": 0,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 11
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 13
+          }
+        }
+      },
+      {
+        "source_id": 149,
+        "model_id": 2,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 144.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": null,
+        "properties": {
+          "isotope": {
+            "present": false
+          },
+          "charge": {
+            "present": false
+          },
+          "radical": {
+            "present": false
+          },
+          "explicit_hydrogens": {
+            "present": false
+          }
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "source_id": 900,
+        "model_id": 1,
+        "begin": 1,
+        "end": 2,
+        "order": "single"
+      }
+    ]
+  },
+  "methylammonium_explicit": {
+    "envelope": "explicit",
+    "byte_length": 353,
+    "sha256": "25966d5b508ab7ef1d064d831f85bf79bbeec65f331b0cb62e27a6a91942f554",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0d00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 148,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 147,
+        "payload_end": 148,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 148,
+        "end": 153,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 152,
+        "payload_end": 153,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 153,
+        "end": 159,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 157,
+        "payload_end": 159,
+        "payload_hex": "0300"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 159,
+        "end": 182,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 163,
+        "payload_end": 182,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 182,
+        "end": 184
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 149,
+        "parent": 4,
+        "start": 184,
+        "end": 190
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 16,
+        "start": 190,
+        "end": 196,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 194,
+        "payload_end": 196,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 16,
+        "start": 196,
+        "end": 202,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 200,
+        "payload_end": 202,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 16,
+        "start": 202,
+        "end": 214,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 206,
+        "payload_end": 214,
+        "payload_hex": "0080a00000409000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 16,
+        "start": 214,
+        "end": 220,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 218,
+        "payload_end": 220,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 16,
+        "start": 220,
+        "end": 225,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 224,
+        "payload_end": 225,
+        "payload_hex": "01"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 16,
+        "start": 225,
+        "end": 230,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 229,
+        "payload_end": 230,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 16,
+        "start": 230,
+        "end": 236,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 234,
+        "payload_end": 236,
+        "payload_hex": "0300"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 16,
+        "start": 236,
+        "end": 259,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 240,
+        "payload_end": 259,
+        "payload_hex": "6f726967696e616c2061746f6d00ff95000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 16,
+        "start": 259,
+        "end": 261
+      },
+      {
+        "kind": "start",
+        "tag": 32773,
+        "source_id": 900,
+        "parent": 4,
+        "start": 261,
+        "end": 267
+      },
+      {
+        "kind": "property",
+        "tag": 1541,
+        "parent": 26,
+        "start": 267,
+        "end": 275,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 271,
+        "payload_end": 275,
+        "payload_hex": "95000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1540,
+        "parent": 26,
+        "start": 275,
+        "end": 283,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 279,
+        "payload_end": 283,
+        "payload_hex": "49000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1536,
+        "parent": 26,
+        "start": 283,
+        "end": 289,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 287,
+        "payload_end": 289,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 16388,
+        "parent": 26,
+        "start": 289,
+        "end": 308,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 293,
+        "payload_end": 308,
+        "payload_hex": "6f726967696e616c20626f6e6400fe"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 26,
+        "start": 308,
+        "end": 310
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 310,
+        "end": 312
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 312,
+        "end": 318
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 33,
+        "start": 318,
+        "end": 339,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 322,
+        "payload_end": 339,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 33,
+        "start": 339,
+        "end": 345
+      },
+      {
+        "kind": "end",
+        "parent": 33,
+        "matched": 35,
+        "start": 345,
+        "end": 347
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 33,
+        "start": 347,
+        "end": 349
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 349,
+        "end": 351
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 351,
+        "end": 353
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1,
+          2
+        ],
+        "bond_ids": [
+          1
+        ]
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 13,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": 3,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0d00",
+            "value": 13,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 11
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0300",
+            "value": 3,
+            "record_index": 13
+          }
+        }
+      },
+      {
+        "source_id": 149,
+        "model_id": 2,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 144.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 1,
+        "radical": "none",
+        "explicit_hydrogens": 3,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 20
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "01",
+            "value": 1,
+            "record_index": 21
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 22
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0300",
+            "value": 3,
+            "record_index": 23
+          }
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "source_id": 900,
+        "model_id": 1,
+        "begin": 1,
+        "end": 2,
+        "order": "single"
+      }
+    ]
+  },
+  "methylammonium_extended": {
+    "envelope": "implied",
+    "byte_length": 379,
+    "sha256": "bf04d80146c8cc3944f18b0347574674fc13ae7e4bc353dc2dd32605f780bd20",
+    "records": [
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": null,
+        "start": 28,
+        "end": 47,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 32,
+        "payload_end": 47,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": null,
+        "start": 47,
+        "end": 53
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 1,
+        "start": 53,
+        "end": 72,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 57,
+        "payload_end": 72,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 1,
+        "start": 72,
+        "end": 78
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 3,
+        "start": 78,
+        "end": 101,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 82,
+        "payload_end": 101,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 3,
+        "start": 101,
+        "end": 107
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 5,
+        "start": 107,
+        "end": 113,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 111,
+        "payload_end": 113,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 5,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 5,
+        "start": 119,
+        "end": 131,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 123,
+        "payload_end": 131,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 5,
+        "start": 131,
+        "end": 141,
+        "encoding": "extended",
+        "width": 2,
+        "payload_start": 139,
+        "payload_end": 141,
+        "payload_hex": "0d00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 5,
+        "start": 141,
+        "end": 150,
+        "encoding": "extended",
+        "width": 1,
+        "payload_start": 149,
+        "payload_end": 150,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 5,
+        "start": 150,
+        "end": 159,
+        "encoding": "extended",
+        "width": 1,
+        "payload_start": 158,
+        "payload_end": 159,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 5,
+        "start": 159,
+        "end": 169,
+        "encoding": "extended",
+        "width": 2,
+        "payload_start": 167,
+        "payload_end": 169,
+        "payload_hex": "0300"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 5,
+        "start": 169,
+        "end": 192,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 173,
+        "payload_end": 192,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 3,
+        "matched": 5,
+        "start": 192,
+        "end": 194
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 149,
+        "parent": 3,
+        "start": 194,
+        "end": 200
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 15,
+        "start": 200,
+        "end": 206,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 204,
+        "payload_end": 206,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 15,
+        "start": 206,
+        "end": 212,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 210,
+        "payload_end": 212,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 15,
+        "start": 212,
+        "end": 224,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 216,
+        "payload_end": 224,
+        "payload_hex": "0080a00000409000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 15,
+        "start": 224,
+        "end": 234,
+        "encoding": "extended",
+        "width": 2,
+        "payload_start": 232,
+        "payload_end": 234,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 15,
+        "start": 234,
+        "end": 243,
+        "encoding": "extended",
+        "width": 1,
+        "payload_start": 242,
+        "payload_end": 243,
+        "payload_hex": "01"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 15,
+        "start": 243,
+        "end": 252,
+        "encoding": "extended",
+        "width": 1,
+        "payload_start": 251,
+        "payload_end": 252,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 15,
+        "start": 252,
+        "end": 262,
+        "encoding": "extended",
+        "width": 2,
+        "payload_start": 260,
+        "payload_end": 262,
+        "payload_hex": "0300"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 15,
+        "start": 262,
+        "end": 285,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 266,
+        "payload_end": 285,
+        "payload_hex": "6f726967696e616c2061746f6d00ff95000000"
+      },
+      {
+        "kind": "end",
+        "parent": 3,
+        "matched": 15,
+        "start": 285,
+        "end": 287
+      },
+      {
+        "kind": "start",
+        "tag": 32773,
+        "source_id": 900,
+        "parent": 3,
+        "start": 287,
+        "end": 293
+      },
+      {
+        "kind": "property",
+        "tag": 1541,
+        "parent": 25,
+        "start": 293,
+        "end": 301,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 297,
+        "payload_end": 301,
+        "payload_hex": "95000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1540,
+        "parent": 25,
+        "start": 301,
+        "end": 309,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 305,
+        "payload_end": 309,
+        "payload_hex": "49000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1536,
+        "parent": 25,
+        "start": 309,
+        "end": 315,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 313,
+        "payload_end": 315,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 16388,
+        "parent": 25,
+        "start": 315,
+        "end": 334,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 319,
+        "payload_end": 334,
+        "payload_hex": "6f726967696e616c20626f6e6400fe"
+      },
+      {
+        "kind": "end",
+        "parent": 3,
+        "matched": 25,
+        "start": 334,
+        "end": 336
+      },
+      {
+        "kind": "end",
+        "parent": 1,
+        "matched": 3,
+        "start": 336,
+        "end": 338
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 1,
+        "start": 338,
+        "end": 344
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 32,
+        "start": 344,
+        "end": 365,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 348,
+        "payload_end": 365,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 32,
+        "start": 365,
+        "end": 371
+      },
+      {
+        "kind": "end",
+        "parent": 32,
+        "matched": 34,
+        "start": 371,
+        "end": 373
+      },
+      {
+        "kind": "end",
+        "parent": 1,
+        "matched": 32,
+        "start": 373,
+        "end": 375
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 1,
+        "start": 375,
+        "end": 377
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": null,
+        "start": 377,
+        "end": 379
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1,
+          2
+        ],
+        "bond_ids": [
+          1
+        ]
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 13,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": 3,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "extended",
+            "payload_hex": "0d00",
+            "value": 13,
+            "record_index": 9
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "extended",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 10
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "extended",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 11
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "extended",
+            "payload_hex": "0300",
+            "value": 3,
+            "record_index": 12
+          }
+        }
+      },
+      {
+        "source_id": 149,
+        "model_id": 2,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 144.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 1,
+        "radical": "none",
+        "explicit_hydrogens": 3,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "extended",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 19
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "extended",
+            "payload_hex": "01",
+            "value": 1,
+            "record_index": 20
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "extended",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 21
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "extended",
+            "payload_hex": "0300",
+            "value": 3,
+            "record_index": 22
+          }
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "source_id": 900,
+        "model_id": 1,
+        "begin": 1,
+        "end": 2,
+        "order": "single"
+      }
+    ]
+  },
+  "methylammonium_embedded": {
+    "envelope": "embedded",
+    "byte_length": 349,
+    "sha256": "c188f612a2c5cc6a1c8fc9fd60fe4fa809639205b2798300fdce17fa9b9f577d",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 22,
+        "end": 28
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 28,
+        "end": 47,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 32,
+        "payload_end": 47,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 47,
+        "end": 53
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 53,
+        "end": 72,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 57,
+        "payload_end": 72,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 72,
+        "end": 78
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 78,
+        "end": 101,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 82,
+        "payload_end": 101,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 101,
+        "end": 107
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 107,
+        "end": 113,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 111,
+        "payload_end": 113,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 119,
+        "end": 131,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 123,
+        "payload_end": 131,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 131,
+        "end": 137,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 135,
+        "payload_end": 137,
+        "payload_hex": "0d00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 137,
+        "end": 142,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 141,
+        "payload_end": 142,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 142,
+        "end": 147,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 146,
+        "payload_end": 147,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 147,
+        "end": 153,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 151,
+        "payload_end": 153,
+        "payload_hex": "0300"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 153,
+        "end": 176,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 157,
+        "payload_end": 176,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 176,
+        "end": 178
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 149,
+        "parent": 4,
+        "start": 178,
+        "end": 184
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 16,
+        "start": 184,
+        "end": 190,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 188,
+        "payload_end": 190,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 16,
+        "start": 190,
+        "end": 196,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 194,
+        "payload_end": 196,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 16,
+        "start": 196,
+        "end": 208,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 200,
+        "payload_end": 208,
+        "payload_hex": "0080a00000409000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 16,
+        "start": 208,
+        "end": 214,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 212,
+        "payload_end": 214,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 16,
+        "start": 214,
+        "end": 219,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 218,
+        "payload_end": 219,
+        "payload_hex": "01"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 16,
+        "start": 219,
+        "end": 224,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 223,
+        "payload_end": 224,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 16,
+        "start": 224,
+        "end": 230,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 228,
+        "payload_end": 230,
+        "payload_hex": "0300"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 16,
+        "start": 230,
+        "end": 253,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 234,
+        "payload_end": 253,
+        "payload_hex": "6f726967696e616c2061746f6d00ff95000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 16,
+        "start": 253,
+        "end": 255
+      },
+      {
+        "kind": "start",
+        "tag": 32773,
+        "source_id": 900,
+        "parent": 4,
+        "start": 255,
+        "end": 261
+      },
+      {
+        "kind": "property",
+        "tag": 1541,
+        "parent": 26,
+        "start": 261,
+        "end": 269,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 265,
+        "payload_end": 269,
+        "payload_hex": "95000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1540,
+        "parent": 26,
+        "start": 269,
+        "end": 277,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 273,
+        "payload_end": 277,
+        "payload_hex": "49000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1536,
+        "parent": 26,
+        "start": 277,
+        "end": 283,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 281,
+        "payload_end": 283,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 16388,
+        "parent": 26,
+        "start": 283,
+        "end": 302,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 287,
+        "payload_end": 302,
+        "payload_hex": "6f726967696e616c20626f6e6400fe"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 26,
+        "start": 302,
+        "end": 304
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 304,
+        "end": 306
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 306,
+        "end": 312
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 33,
+        "start": 312,
+        "end": 333,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 316,
+        "payload_end": 333,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 33,
+        "start": 333,
+        "end": 339
+      },
+      {
+        "kind": "end",
+        "parent": 33,
+        "matched": 35,
+        "start": 339,
+        "end": 341
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 33,
+        "start": 341,
+        "end": 343
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 343,
+        "end": 345
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 345,
+        "end": 347
+      },
+      {
+        "kind": "file_end",
+        "parent": null,
+        "start": 347,
+        "end": 349
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1,
+          2
+        ],
+        "bond_ids": [
+          1
+        ]
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 13,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": 3,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0d00",
+            "value": 13,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 11
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0300",
+            "value": 3,
+            "record_index": 13
+          }
+        }
+      },
+      {
+        "source_id": 149,
+        "model_id": 2,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 144.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 1,
+        "radical": "none",
+        "explicit_hydrogens": 3,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 20
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "01",
+            "value": 1,
+            "record_index": 21
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 22
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0300",
+            "value": 3,
+            "record_index": 23
+          }
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "source_id": 900,
+        "model_id": 1,
+        "begin": 1,
+        "end": 2,
+        "order": "single"
+      }
+    ]
+  },
+  "methyl_doublet": {
+    "envelope": "explicit",
+    "byte_length": 227,
+    "sha256": "54e044c4d1d21f1092ce732dbdaa72b117bdacf56363e745a77c9e68295e85fd",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0d00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 148,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 147,
+        "payload_end": 148,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 148,
+        "end": 153,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 152,
+        "payload_end": 153,
+        "payload_hex": "02"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 153,
+        "end": 159,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 157,
+        "payload_end": 159,
+        "payload_hex": "0300"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 159,
+        "end": 182,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 163,
+        "payload_end": 182,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 182,
+        "end": 184
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 184,
+        "end": 186
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 186,
+        "end": 192
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 17,
+        "start": 192,
+        "end": 213,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 196,
+        "payload_end": 213,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 17,
+        "start": 213,
+        "end": 219
+      },
+      {
+        "kind": "end",
+        "parent": 17,
+        "matched": 19,
+        "start": 219,
+        "end": 221
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 17,
+        "start": 221,
+        "end": 223
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 223,
+        "end": 225
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 225,
+        "end": 227
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1
+        ],
+        "bond_ids": []
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 13,
+        "charge": 0,
+        "radical": "doublet",
+        "explicit_hydrogens": 3,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0d00",
+            "value": 13,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 11
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "02",
+            "value": 2,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0300",
+            "value": 3,
+            "record_index": 13
+          }
+        }
+      }
+    ],
+    "bonds": []
+  },
+  "singlet": {
+    "envelope": "explicit",
+    "byte_length": 227,
+    "sha256": "9002748092a87056ddd232b98355bcfa7f953d1b9c8561428dfdad0f07ddf1dc",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 148,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 147,
+        "payload_end": 148,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 148,
+        "end": 153,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 152,
+        "payload_end": 153,
+        "payload_hex": "01"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 153,
+        "end": 159,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 157,
+        "payload_end": 159,
+        "payload_hex": "0200"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 159,
+        "end": 182,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 163,
+        "payload_end": 182,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 182,
+        "end": 184
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 184,
+        "end": 186
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 186,
+        "end": 192
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 17,
+        "start": 192,
+        "end": 213,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 196,
+        "payload_end": 213,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 17,
+        "start": 213,
+        "end": 219
+      },
+      {
+        "kind": "end",
+        "parent": 17,
+        "matched": 19,
+        "start": 219,
+        "end": 221
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 17,
+        "start": 221,
+        "end": 223
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 223,
+        "end": 225
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 225,
+        "end": 227
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1
+        ],
+        "bond_ids": []
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 0,
+        "radical": "singlet",
+        "explicit_hydrogens": 2,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 11
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "01",
+            "value": 1,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0200",
+            "value": 2,
+            "record_index": 13
+          }
+        }
+      }
+    ],
+    "bonds": []
+  },
+  "triplet": {
+    "envelope": "explicit",
+    "byte_length": 227,
+    "sha256": "5658ede2daab5e3bfeabe7f7ebcba9cb12281f6e84523a69f6babb50f591a8d9",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 148,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 147,
+        "payload_end": 148,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 148,
+        "end": 153,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 152,
+        "payload_end": 153,
+        "payload_hex": "03"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 153,
+        "end": 159,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 157,
+        "payload_end": 159,
+        "payload_hex": "0200"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 159,
+        "end": 182,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 163,
+        "payload_end": 182,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 182,
+        "end": 184
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 184,
+        "end": 186
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 186,
+        "end": 192
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 17,
+        "start": 192,
+        "end": 213,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 196,
+        "payload_end": 213,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 17,
+        "start": 213,
+        "end": 219
+      },
+      {
+        "kind": "end",
+        "parent": 17,
+        "matched": 19,
+        "start": 219,
+        "end": 221
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 17,
+        "start": 221,
+        "end": 223
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 223,
+        "end": 225
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 225,
+        "end": 227
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1
+        ],
+        "bond_ids": []
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 0,
+        "radical": "triplet",
+        "explicit_hydrogens": 2,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 11
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "03",
+            "value": 3,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0200",
+            "value": 2,
+            "record_index": 13
+          }
+        }
+      }
+    ],
+    "bonds": []
+  },
+  "extrema": {
+    "envelope": "explicit",
+    "byte_length": 353,
+    "sha256": "11d5203e6c31d2f9057d665cb242b79c7943e9cd3d6a66b6cd77b12ede6fced7",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 148,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 147,
+        "payload_end": 148,
+        "payload_hex": "80"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 148,
+        "end": 153,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 152,
+        "payload_end": 153,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 153,
+        "end": 159,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 157,
+        "payload_end": 159,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 159,
+        "end": 182,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 163,
+        "payload_end": 182,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 182,
+        "end": 184
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 149,
+        "parent": 4,
+        "start": 184,
+        "end": 190
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 16,
+        "start": 190,
+        "end": 196,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 194,
+        "payload_end": 196,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 16,
+        "start": 196,
+        "end": 202,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 200,
+        "payload_end": 202,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 16,
+        "start": 202,
+        "end": 214,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 206,
+        "payload_end": 214,
+        "payload_hex": "0080a00000409000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 16,
+        "start": 214,
+        "end": 220,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 218,
+        "payload_end": 220,
+        "payload_hex": "ff7f"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 16,
+        "start": 220,
+        "end": 225,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 224,
+        "payload_end": 225,
+        "payload_hex": "7f"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 16,
+        "start": 225,
+        "end": 230,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 229,
+        "payload_end": 230,
+        "payload_hex": "03"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 16,
+        "start": 230,
+        "end": 236,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 234,
+        "payload_end": 236,
+        "payload_hex": "ffff"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 16,
+        "start": 236,
+        "end": 259,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 240,
+        "payload_end": 259,
+        "payload_hex": "6f726967696e616c2061746f6d00ff95000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 16,
+        "start": 259,
+        "end": 261
+      },
+      {
+        "kind": "start",
+        "tag": 32773,
+        "source_id": 900,
+        "parent": 4,
+        "start": 261,
+        "end": 267
+      },
+      {
+        "kind": "property",
+        "tag": 1541,
+        "parent": 26,
+        "start": 267,
+        "end": 275,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 271,
+        "payload_end": 275,
+        "payload_hex": "95000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1540,
+        "parent": 26,
+        "start": 275,
+        "end": 283,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 279,
+        "payload_end": 283,
+        "payload_hex": "49000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1536,
+        "parent": 26,
+        "start": 283,
+        "end": 289,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 287,
+        "payload_end": 289,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 16388,
+        "parent": 26,
+        "start": 289,
+        "end": 308,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 293,
+        "payload_end": 308,
+        "payload_hex": "6f726967696e616c20626f6e6400fe"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 26,
+        "start": 308,
+        "end": 310
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 310,
+        "end": 312
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 312,
+        "end": 318
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 33,
+        "start": 318,
+        "end": 339,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 322,
+        "payload_end": 339,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 33,
+        "start": 339,
+        "end": 345
+      },
+      {
+        "kind": "end",
+        "parent": 33,
+        "matched": 35,
+        "start": 345,
+        "end": 347
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 33,
+        "start": 347,
+        "end": 349
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 349,
+        "end": 351
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 351,
+        "end": 353
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1,
+          2
+        ],
+        "bond_ids": [
+          1
+        ]
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 1,
+        "charge": -128,
+        "radical": "none",
+        "explicit_hydrogens": 0,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0100",
+            "value": 1,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "80",
+            "value": -128,
+            "record_index": 11
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 13
+          }
+        }
+      },
+      {
+        "source_id": 149,
+        "model_id": 2,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 144.25,
+          "y_pt": 160.5
+        },
+        "isotope": 32767,
+        "charge": 127,
+        "radical": "triplet",
+        "explicit_hydrogens": 65535,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "ff7f",
+            "value": 32767,
+            "record_index": 20
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "7f",
+            "value": 127,
+            "record_index": 21
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "03",
+            "value": 3,
+            "record_index": 22
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "ffff",
+            "value": 65535,
+            "record_index": 23
+          }
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "source_id": 900,
+        "model_id": 1,
+        "begin": 1,
+        "end": 2,
+        "order": "single"
+      }
+    ]
+  },
+  "reordered": {
+    "envelope": "explicit",
+    "byte_length": 353,
+    "sha256": "72e73df88891f19b1afd91d132a2fc8c8c40e0d49311b55d60eaba79216c4dce",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0300"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 119,
+        "end": 124,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 123,
+        "payload_end": 124,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 124,
+        "end": 129,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 128,
+        "payload_end": 129,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 129,
+        "end": 135,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 133,
+        "payload_end": 135,
+        "payload_hex": "0d00"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 135,
+        "end": 147,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 139,
+        "payload_end": 147,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 147,
+        "end": 153,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 151,
+        "payload_end": 153,
+        "payload_hex": "0600"
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 153,
+        "end": 159,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 157,
+        "payload_end": 159,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 159,
+        "end": 182,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 163,
+        "payload_end": 182,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 182,
+        "end": 184
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 149,
+        "parent": 4,
+        "start": 184,
+        "end": 190
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 16,
+        "start": 190,
+        "end": 196,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 194,
+        "payload_end": 196,
+        "payload_hex": "0300"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 16,
+        "start": 196,
+        "end": 201,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 200,
+        "payload_end": 201,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 16,
+        "start": 201,
+        "end": 206,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 205,
+        "payload_end": 206,
+        "payload_hex": "01"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 16,
+        "start": 206,
+        "end": 212,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 210,
+        "payload_end": 212,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 16,
+        "start": 212,
+        "end": 224,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 216,
+        "payload_end": 224,
+        "payload_hex": "0080a00000409000"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 16,
+        "start": 224,
+        "end": 230,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 228,
+        "payload_end": 230,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 16,
+        "start": 230,
+        "end": 236,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 234,
+        "payload_end": 236,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 16,
+        "start": 236,
+        "end": 259,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 240,
+        "payload_end": 259,
+        "payload_hex": "6f726967696e616c2061746f6d00ff95000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 16,
+        "start": 259,
+        "end": 261
+      },
+      {
+        "kind": "start",
+        "tag": 32773,
+        "source_id": 900,
+        "parent": 4,
+        "start": 261,
+        "end": 267
+      },
+      {
+        "kind": "property",
+        "tag": 1541,
+        "parent": 26,
+        "start": 267,
+        "end": 275,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 271,
+        "payload_end": 275,
+        "payload_hex": "95000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1540,
+        "parent": 26,
+        "start": 275,
+        "end": 283,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 279,
+        "payload_end": 283,
+        "payload_hex": "49000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1536,
+        "parent": 26,
+        "start": 283,
+        "end": 289,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 287,
+        "payload_end": 289,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 16388,
+        "parent": 26,
+        "start": 289,
+        "end": 308,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 293,
+        "payload_end": 308,
+        "payload_hex": "6f726967696e616c20626f6e6400fe"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 26,
+        "start": 308,
+        "end": 310
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 310,
+        "end": 312
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 312,
+        "end": 318
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 33,
+        "start": 318,
+        "end": 339,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 322,
+        "payload_end": 339,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 33,
+        "start": 339,
+        "end": 345
+      },
+      {
+        "kind": "end",
+        "parent": 33,
+        "matched": 35,
+        "start": 345,
+        "end": 347
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 33,
+        "start": 347,
+        "end": 349
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 349,
+        "end": 351
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 351,
+        "end": 353
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1,
+          2
+        ],
+        "bond_ids": [
+          1
+        ]
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 13,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": 3,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0d00",
+            "value": 13,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 9
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 8
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0300",
+            "value": 3,
+            "record_index": 7
+          }
+        }
+      },
+      {
+        "source_id": 149,
+        "model_id": 2,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 144.25,
+          "y_pt": 160.5
+        },
+        "isotope": null,
+        "charge": 1,
+        "radical": "none",
+        "explicit_hydrogens": 3,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 20
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "01",
+            "value": 1,
+            "record_index": 19
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 18
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0300",
+            "value": 3,
+            "record_index": 17
+          }
+        }
+      }
+    ],
+    "bonds": [
+      {
+        "source_id": 900,
+        "model_id": 1,
+        "begin": 1,
+        "end": 2,
+        "order": "single"
+      }
+    ]
+  },
+  "default_carbon_fields": {
+    "envelope": "implied",
+    "byte_length": 209,
+    "sha256": "a9bf522d085d7eb7a8eaf667219881fdac3d80582c3314cd063b80f6f2d4882a",
+    "records": [
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": null,
+        "start": 28,
+        "end": 47,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 32,
+        "payload_end": 47,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": null,
+        "start": 47,
+        "end": 53
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 1,
+        "start": 53,
+        "end": 72,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 57,
+        "payload_end": 72,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 1,
+        "start": 72,
+        "end": 78
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 3,
+        "start": 78,
+        "end": 101,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 82,
+        "payload_end": 101,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 3,
+        "start": 101,
+        "end": 107
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 5,
+        "start": 107,
+        "end": 119,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 111,
+        "payload_end": 119,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 5,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0d00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 5,
+        "start": 125,
+        "end": 130,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 129,
+        "payload_end": 130,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 5,
+        "start": 130,
+        "end": 135,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 134,
+        "payload_end": 135,
+        "payload_hex": "02"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 5,
+        "start": 135,
+        "end": 141,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 139,
+        "payload_end": 141,
+        "payload_hex": "0300"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 5,
+        "start": 141,
+        "end": 164,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 145,
+        "payload_end": 164,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 3,
+        "matched": 5,
+        "start": 164,
+        "end": 166
+      },
+      {
+        "kind": "end",
+        "parent": 1,
+        "matched": 3,
+        "start": 166,
+        "end": 168
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 1,
+        "start": 168,
+        "end": 174
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 14,
+        "start": 174,
+        "end": 195,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 178,
+        "payload_end": 195,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 14,
+        "start": 195,
+        "end": 201
+      },
+      {
+        "kind": "end",
+        "parent": 14,
+        "matched": 16,
+        "start": 201,
+        "end": 203
+      },
+      {
+        "kind": "end",
+        "parent": 1,
+        "matched": 14,
+        "start": 203,
+        "end": 205
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 1,
+        "start": 205,
+        "end": 207
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": null,
+        "start": 207,
+        "end": 209
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1
+        ],
+        "bond_ids": []
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 6,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 13,
+        "charge": 0,
+        "radical": "doublet",
+        "explicit_hydrogens": 3,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0d00",
+            "value": 13,
+            "record_index": 7
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 8
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "02",
+            "value": 2,
+            "record_index": 9
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0300",
+            "value": 3,
+            "record_index": 10
+          }
+        }
+      }
+    ],
+    "bonds": []
+  },
+  "deuteron": {
+    "envelope": "explicit",
+    "byte_length": 227,
+    "sha256": "54f1a5a915c028bcfd03ab2cd3fe59aebbcf24738a2481dd1e9b9779e5801dfc",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0200"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 148,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 147,
+        "payload_end": 148,
+        "payload_hex": "01"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 148,
+        "end": 153,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 152,
+        "payload_end": 153,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 153,
+        "end": 159,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 157,
+        "payload_end": 159,
+        "payload_hex": "0000"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 159,
+        "end": 182,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 163,
+        "payload_end": 182,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 182,
+        "end": 184
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 184,
+        "end": 186
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 186,
+        "end": 192
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 17,
+        "start": 192,
+        "end": 213,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 196,
+        "payload_end": 213,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 17,
+        "start": 213,
+        "end": 219
+      },
+      {
+        "kind": "end",
+        "parent": 17,
+        "matched": 19,
+        "start": 219,
+        "end": 221
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 17,
+        "start": 221,
+        "end": 223
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 223,
+        "end": 225
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 225,
+        "end": 227
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1
+        ],
+        "bond_ids": []
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 1,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 2,
+        "charge": 1,
+        "radical": "none",
+        "explicit_hydrogens": 0,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0200",
+            "value": 2,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "01",
+            "value": 1,
+            "record_index": 11
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0000",
+            "value": 0,
+            "record_index": 13
+          }
+        }
+      }
+    ],
+    "bonds": []
+  },
+  "charge4_low_one": {
+    "envelope": "explicit",
+    "byte_length": 230,
+    "sha256": "932ab7ef6fde6aea2c12a86330d9fda2356a44a6312997e560bd67fb569b4710",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0f00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 151,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 147,
+        "payload_end": 151,
+        "payload_hex": "01000000"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 151,
+        "end": 156,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 155,
+        "payload_end": 156,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 156,
+        "end": 162,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 160,
+        "payload_end": 162,
+        "payload_hex": "0400"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 162,
+        "end": 185,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 166,
+        "payload_end": 185,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 185,
+        "end": 187
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 187,
+        "end": 189
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 189,
+        "end": 195
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 17,
+        "start": 195,
+        "end": 216,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 199,
+        "payload_end": 216,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 17,
+        "start": 216,
+        "end": 222
+      },
+      {
+        "kind": "end",
+        "parent": 17,
+        "matched": 19,
+        "start": 222,
+        "end": 224
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 17,
+        "start": 224,
+        "end": 226
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 226,
+        "end": 228
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 228,
+        "end": 230
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1
+        ],
+        "bond_ids": []
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 15,
+        "charge": 0,
+        "radical": "none",
+        "explicit_hydrogens": 4,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0f00",
+            "value": 15,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 4,
+            "encoding": "short",
+            "payload_hex": "01000000",
+            "value": 0,
+            "record_index": 11,
+            "saved_i32": 1
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0400",
+            "value": 4,
+            "record_index": 13
+          }
+        }
+      }
+    ],
+    "bonds": []
+  },
+  "charge4_high_one": {
+    "envelope": "explicit",
+    "byte_length": 230,
+    "sha256": "7e5170c72ce0275ec6d01bfdecf515032e5470c381dcce2575e681b5510a06fb",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0f00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 151,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 147,
+        "payload_end": 151,
+        "payload_hex": "00000001"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 151,
+        "end": 156,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 155,
+        "payload_end": 156,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 156,
+        "end": 162,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 160,
+        "payload_end": 162,
+        "payload_hex": "0400"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 162,
+        "end": 185,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 166,
+        "payload_end": 185,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 185,
+        "end": 187
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 187,
+        "end": 189
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 189,
+        "end": 195
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 17,
+        "start": 195,
+        "end": 216,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 199,
+        "payload_end": 216,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 17,
+        "start": 216,
+        "end": 222
+      },
+      {
+        "kind": "end",
+        "parent": 17,
+        "matched": 19,
+        "start": 222,
+        "end": 224
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 17,
+        "start": 224,
+        "end": 226
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 226,
+        "end": 228
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 228,
+        "end": 230
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1
+        ],
+        "bond_ids": []
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 15,
+        "charge": 1,
+        "radical": "none",
+        "explicit_hydrogens": 4,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0f00",
+            "value": 15,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 4,
+            "encoding": "short",
+            "payload_hex": "00000001",
+            "value": 1,
+            "record_index": 11,
+            "saved_i32": 16777216
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0400",
+            "value": 4,
+            "record_index": 13
+          }
+        }
+      }
+    ],
+    "bonds": []
+  },
+  "charge4_high_minus_one": {
+    "envelope": "explicit",
+    "byte_length": 230,
+    "sha256": "4eb81bd993dbbb13d9c206fc9d8e6a08c2e2a85bf60e3ed3d48dea3f90143917",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0f00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 151,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 147,
+        "payload_end": 151,
+        "payload_hex": "000000ff"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 151,
+        "end": 156,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 155,
+        "payload_end": 156,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 156,
+        "end": 162,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 160,
+        "payload_end": 162,
+        "payload_hex": "0400"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 162,
+        "end": 185,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 166,
+        "payload_end": 185,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 185,
+        "end": 187
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 187,
+        "end": 189
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 189,
+        "end": 195
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 17,
+        "start": 195,
+        "end": 216,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 199,
+        "payload_end": 216,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 17,
+        "start": 216,
+        "end": 222
+      },
+      {
+        "kind": "end",
+        "parent": 17,
+        "matched": 19,
+        "start": 222,
+        "end": 224
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 17,
+        "start": 224,
+        "end": 226
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 226,
+        "end": 228
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 228,
+        "end": 230
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1
+        ],
+        "bond_ids": []
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 15,
+        "charge": -1,
+        "radical": "none",
+        "explicit_hydrogens": 4,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0f00",
+            "value": 15,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 4,
+            "encoding": "short",
+            "payload_hex": "000000ff",
+            "value": -1,
+            "record_index": 11,
+            "saved_i32": -16777216
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0400",
+            "value": 4,
+            "record_index": 13
+          }
+        }
+      }
+    ],
+    "bonds": []
+  },
+  "charge4_low_noise_max": {
+    "envelope": "explicit",
+    "byte_length": 230,
+    "sha256": "b9a0a9f4b58226666d4aba20fa35fb669834ead30b202ad5c99531ae03cd57eb",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0f00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 151,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 147,
+        "payload_end": 151,
+        "payload_hex": "aabbcc7f"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 151,
+        "end": 156,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 155,
+        "payload_end": 156,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 156,
+        "end": 162,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 160,
+        "payload_end": 162,
+        "payload_hex": "0400"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 162,
+        "end": 185,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 166,
+        "payload_end": 185,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 185,
+        "end": 187
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 187,
+        "end": 189
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 189,
+        "end": 195
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 17,
+        "start": 195,
+        "end": 216,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 199,
+        "payload_end": 216,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 17,
+        "start": 216,
+        "end": 222
+      },
+      {
+        "kind": "end",
+        "parent": 17,
+        "matched": 19,
+        "start": 222,
+        "end": 224
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 17,
+        "start": 224,
+        "end": 226
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 226,
+        "end": 228
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 228,
+        "end": 230
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1
+        ],
+        "bond_ids": []
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 15,
+        "charge": 127,
+        "radical": "none",
+        "explicit_hydrogens": 4,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0f00",
+            "value": 15,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 4,
+            "encoding": "short",
+            "payload_hex": "aabbcc7f",
+            "value": 127,
+            "record_index": 11,
+            "saved_i32": 2144123818
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0400",
+            "value": 4,
+            "record_index": 13
+          }
+        }
+      }
+    ],
+    "bonds": []
+  },
+  "charge4_min": {
+    "envelope": "explicit",
+    "byte_length": 230,
+    "sha256": "e4578bdf40bcfe5dcb8fb12de653844101e958f9ec9c7c71617e8f40aaa38c99",
+    "records": [
+      {
+        "kind": "start",
+        "tag": 32768,
+        "source_id": 0,
+        "parent": null,
+        "start": 28,
+        "end": 34
+      },
+      {
+        "kind": "property",
+        "tag": 16384,
+        "parent": 0,
+        "start": 34,
+        "end": 53,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 38,
+        "payload_end": 53,
+        "payload_hex": "6f726967696e616c20726f6f7400fb"
+      },
+      {
+        "kind": "start",
+        "tag": 32769,
+        "source_id": 90,
+        "parent": 0,
+        "start": 53,
+        "end": 59
+      },
+      {
+        "kind": "property",
+        "tag": 16385,
+        "parent": 2,
+        "start": 59,
+        "end": 78,
+        "encoding": "short",
+        "width": 15,
+        "payload_start": 63,
+        "payload_end": 78,
+        "payload_hex": "6f726967696e616c207061676500fc"
+      },
+      {
+        "kind": "start",
+        "tag": 32771,
+        "source_id": 51,
+        "parent": 2,
+        "start": 78,
+        "end": 84
+      },
+      {
+        "kind": "property",
+        "tag": 16386,
+        "parent": 4,
+        "start": 84,
+        "end": 107,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 88,
+        "payload_end": 107,
+        "payload_hex": "6f726967696e616c20667261676d656e740080"
+      },
+      {
+        "kind": "start",
+        "tag": 32772,
+        "source_id": 73,
+        "parent": 4,
+        "start": 107,
+        "end": 113
+      },
+      {
+        "kind": "property",
+        "tag": 1024,
+        "parent": 6,
+        "start": 113,
+        "end": 119,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 117,
+        "payload_end": 119,
+        "payload_hex": "0100"
+      },
+      {
+        "kind": "property",
+        "tag": 1026,
+        "parent": 6,
+        "start": 119,
+        "end": 125,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 123,
+        "payload_end": 125,
+        "payload_hex": "0700"
+      },
+      {
+        "kind": "property",
+        "tag": 512,
+        "parent": 6,
+        "start": 125,
+        "end": 137,
+        "encoding": "short",
+        "width": 8,
+        "payload_start": 129,
+        "payload_end": 137,
+        "payload_hex": "0080a00000406000"
+      },
+      {
+        "kind": "property",
+        "tag": 1056,
+        "parent": 6,
+        "start": 137,
+        "end": 143,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 141,
+        "payload_end": 143,
+        "payload_hex": "0f00"
+      },
+      {
+        "kind": "property",
+        "tag": 1057,
+        "parent": 6,
+        "start": 143,
+        "end": 151,
+        "encoding": "short",
+        "width": 4,
+        "payload_start": 147,
+        "payload_end": 151,
+        "payload_hex": "00000080"
+      },
+      {
+        "kind": "property",
+        "tag": 1058,
+        "parent": 6,
+        "start": 151,
+        "end": 156,
+        "encoding": "short",
+        "width": 1,
+        "payload_start": 155,
+        "payload_end": 156,
+        "payload_hex": "00"
+      },
+      {
+        "kind": "property",
+        "tag": 1067,
+        "parent": 6,
+        "start": 156,
+        "end": 162,
+        "encoding": "short",
+        "width": 2,
+        "payload_start": 160,
+        "payload_end": 162,
+        "payload_hex": "0400"
+      },
+      {
+        "kind": "property",
+        "tag": 16387,
+        "parent": 6,
+        "start": 162,
+        "end": 185,
+        "encoding": "short",
+        "width": 19,
+        "payload_start": 166,
+        "payload_end": 185,
+        "payload_hex": "6f726967696e616c2061746f6d00ff49000000"
+      },
+      {
+        "kind": "end",
+        "parent": 4,
+        "matched": 6,
+        "start": 185,
+        "end": 187
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 4,
+        "start": 187,
+        "end": 189
+      },
+      {
+        "kind": "start",
+        "tag": 49443,
+        "source_id": 400000001,
+        "parent": 2,
+        "start": 189,
+        "end": 195
+      },
+      {
+        "kind": "property",
+        "tag": 16389,
+        "parent": 17,
+        "start": 195,
+        "end": 216,
+        "encoding": "short",
+        "width": 17,
+        "payload_start": 199,
+        "payload_end": 216,
+        "payload_hex": "6f726967696e616c206f706171756500fd"
+      },
+      {
+        "kind": "start",
+        "tag": 49444,
+        "source_id": 400000002,
+        "parent": 17,
+        "start": 216,
+        "end": 222
+      },
+      {
+        "kind": "end",
+        "parent": 17,
+        "matched": 19,
+        "start": 222,
+        "end": 224
+      },
+      {
+        "kind": "end",
+        "parent": 2,
+        "matched": 17,
+        "start": 224,
+        "end": 226
+      },
+      {
+        "kind": "end",
+        "parent": 0,
+        "matched": 2,
+        "start": 226,
+        "end": 228
+      },
+      {
+        "kind": "end",
+        "parent": null,
+        "matched": 0,
+        "start": 228,
+        "end": 230
+      }
+    ],
+    "fragments": [
+      {
+        "source_id": 51,
+        "model_id": 1,
+        "atom_ids": [
+          1
+        ],
+        "bond_ids": []
+      }
+    ],
+    "atoms": [
+      {
+        "source_id": 73,
+        "model_id": 1,
+        "source_fragment_id": 51,
+        "element": 7,
+        "position": {
+          "x_pt": 96.25,
+          "y_pt": 160.5
+        },
+        "isotope": 15,
+        "charge": -128,
+        "radical": "none",
+        "explicit_hydrogens": 4,
+        "properties": {
+          "isotope": {
+            "present": true,
+            "tag": 1056,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0f00",
+            "value": 15,
+            "record_index": 10
+          },
+          "charge": {
+            "present": true,
+            "tag": 1057,
+            "width": 4,
+            "encoding": "short",
+            "payload_hex": "00000080",
+            "value": -128,
+            "record_index": 11,
+            "saved_i32": -2147483648
+          },
+          "radical": {
+            "present": true,
+            "tag": 1058,
+            "width": 1,
+            "encoding": "short",
+            "payload_hex": "00",
+            "value": 0,
+            "record_index": 12
+          },
+          "explicit_hydrogens": {
+            "present": true,
+            "tag": 1067,
+            "width": 2,
+            "encoding": "short",
+            "payload_hex": "0400",
+            "value": 4,
+            "record_index": 13
+          }
+        }
+      }
+    ],
+    "bonds": []
+  }
+}

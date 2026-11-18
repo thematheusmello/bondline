@@ -1,4 +1,26 @@
 use bondline_commands::Engine;
+#[path = "support/atom_child_text_wire.rs"]
+mod atom_child_text_wire;
+#[path = "support/boxed_label_wire.rs"]
+mod boxed_label_wire;
+#[path = "support/cdx_bond_wire.rs"]
+mod cdx_bond_wire;
+#[path = "support/cdx_literal_wire.rs"]
+mod cdx_literal_wire;
+#[path = "support/chain_creation_wire.rs"]
+mod chain_creation_wire;
+#[path = "support/created_label_wire.rs"]
+mod created_label_wire;
+#[path = "support/label_metadata_wire.rs"]
+mod label_metadata_wire;
+#[path = "support/mixed_label_wire.rs"]
+mod mixed_label_wire;
+#[path = "support/native_conversion_wire.rs"]
+mod native_conversion_wire;
+#[path = "support/new_document_adapters.rs"]
+mod new_document;
+#[path = "support/sdf_remove_adapters.rs"]
+mod record_remove;
 use bondline_mcp::{SharedEngine, control::LoopbackServer};
 use serde_json::{Value, json};
 use std::{
@@ -296,3 +318,53 @@ fn authenticated_complete_sdf_capture_does_not_repaint_or_change_the_session() -
     server.shutdown()?;
     Ok(())
 }
+
+#[path = "support/acyclic_conversion_wire.rs"]
+mod acyclic_conversion_wire;
+
+#[path = "support/ring_conversion_wire.rs"]
+mod ring_conversion_wire;
+
+#[path = "support/cdx_file_end_wire.rs"]
+mod cdx_file_end_wire;
+
+#[path = "support/components_conversion_wire.rs"]
+mod components_conversion_wire;
+
+#[path = "support/smiles_paste_wire.rs"]
+mod smiles_paste_wire;
+#[path = "support/smiles_record_authoring_wire.rs"]
+mod smiles_record_authoring_wire;
+
+#[path = "support/atom_label_wire.rs"]
+mod atom_label_wire;
+
+#[path = "support/ui_atom_label_wire.rs"]
+mod ui_atom_label_wire;
+
+#[path = "support/selection_authoring_wire.rs"]
+mod selection_authoring_wire;
+
+#[path = "support/ring_construction_wire.rs"]
+mod ring_construction_wire;
+
+#[path = "support/ring_tool_wire.rs"]
+mod ring_tool_wire;
+
+#[path = "support/skeletal_label_wire.rs"]
+mod skeletal_label_wire;
+
+#[path = "support/terminal_label_wire.rs"]
+mod terminal_label_wire;
+
+#[path = "support/noncanonical_cdxml_wire.rs"]
+mod noncanonical_cdxml_wire;
+
+#[path = "support/caption_run_wire.rs"]
+mod caption_run_wire;
+
+#[path = "support/connected_label_wire.rs"]
+mod connected_label_wire;
+
+#[path = "support/dependent_selection_wire.rs"]
+mod dependent_selection_wire;

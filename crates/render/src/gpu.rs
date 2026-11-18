@@ -1,78 +1,175 @@
 use crate::{Cancellation, Error, Frame, Primitive, Scene};
 use wgpu::util::DeviceExt;
 
+// At most 4096 validated primitives, each clipped to the 2048-row capture bound.
+const MAX_STROKE_ROW_BYTES: usize = 4096 * crate::MAX_CAPTURE_DIMENSION_PX as usize * 8;
+
+struct DrawResources {
+    pipeline: wgpu::RenderPipeline,
+    group: wgpu::BindGroup,
+    _buffers: [wgpu::Buffer; 2],
+    count: u32,
+}
+
 fn draw_resources(
     device: &wgpu::Device,
     scene: &Scene,
-) -> Option<(wgpu::RenderPipeline, wgpu::BindGroup, wgpu::Buffer, u32)> {
+    cancel: &Cancellation,
+) -> Result<Option<DrawResources>, Error> {
+    let limits = device.limits();
+    let storage_limit =
+        u64::from(limits.max_storage_buffer_binding_size).min(limits.max_buffer_size);
+    let mut row_bytes = 0_usize;
+    for primitive in &scene.primitives {
+        cancel.check()?;
+        if let Primitive::Stroke(stroke) = primitive
+            && let Some(bounds) = stroke.bounds(scene.width, scene.height)
+        {
+            row_bytes = usize::try_from(bounds.height)
+                .ok()
+                .and_then(|height| height.checked_mul(8))
+                .and_then(|additional| row_bytes.checked_add(additional))
+                .ok_or(Error::SceneTooComplex)?;
+        }
+    }
+    let primitive_bytes = scene
+        .primitives
+        .len()
+        .checked_mul(28)
+        .and_then(|size| size.checked_add(8))
+        .ok_or(Error::SceneTooComplex)?;
+    if row_bytes > MAX_STROKE_ROW_BYTES
+        || u64::try_from(row_bytes.max(8)).map_err(|_| Error::SceneTooComplex)? > storage_limit
+        || u64::try_from(primitive_bytes).map_err(|_| Error::SceneTooComplex)? > storage_limit
+    {
+        return Err(Error::SceneTooComplex);
+    }
+    // Reserve once: per-primitive geometric growth could exceed the logical row cap.
     let mut bytes = Vec::new();
+    let mut rows = Vec::new();
+    bytes
+        .try_reserve_exact(primitive_bytes)
+        .map_err(|_| Error::SceneTooComplex)?;
+    rows.try_reserve_exact(row_bytes.max(8))
+        .map_err(|_| Error::SceneTooComplex)?;
     for value in [scene.width, scene.height] {
         bytes.extend_from_slice(&value.to_le_bytes());
     }
-    let mut count = 0;
+    let mut count = 0_u32;
     for primitive in &scene.primitives {
-        // Clip the conservative raster bounds before converting to vertex floats.
+        cancel.check()?;
+        // Integer pixel-cell bounds enclose the same centres as the CPU predicate.
         let Some(bounds) = primitive.bounds(scene.width, scene.height) else {
             continue;
         };
-        for value in [bounds.x, bounds.y, bounds.width, bounds.height] {
-            bytes.extend_from_slice(&value.to_le_bytes());
-        }
-        let (geometry, kind) = match primitive {
-            Primitive::Rectangle(_) => ([0.0; 6], 0u32),
-            Primitive::Stroke(stroke) => {
-                let [ax, ay] = stroke.begin.map(f64::from);
-                let [bx, by] = stroke.end.map(f64::from);
-                let (dx, dy) = (bx - ax, by - ay);
-                let length = dx.hypot(dy);
-                (
-                    [
-                        ax as f32,
-                        ay as f32,
-                        (dx / length) as f32,
-                        (dy / length) as f32,
-                        length as f32,
-                        stroke.width,
-                    ],
-                    1u32,
-                )
+        let (row_offset, kind) = if let Primitive::Stroke(stroke) = primitive {
+            let row_offset = u32::try_from(rows.len() / 8).map_err(|_| Error::SceneTooComplex)?;
+            let additional = usize::try_from(bounds.height)
+                .ok()
+                .and_then(|height| height.checked_mul(8))
+                .ok_or(Error::SceneTooComplex)?;
+            let end = rows
+                .len()
+                .checked_add(additional)
+                .ok_or(Error::SceneTooComplex)?;
+            if end > MAX_STROKE_ROW_BYTES
+                || u64::try_from(end).map_err(|_| Error::SceneTooComplex)? > storage_limit
+            {
+                return Err(Error::SceneTooComplex);
             }
+            let right = bounds
+                .x
+                .checked_add(bounds.width)
+                .ok_or(Error::InvalidGeometry)?;
+            let bottom = bounds
+                .y
+                .checked_add(bounds.height)
+                .ok_or(Error::InvalidGeometry)?;
+            for y in bounds.y..bottom {
+                cancel.check()?;
+                let mut range = bounds.x..right;
+                if !stroke.pixel_range(false, y, &mut range) {
+                    range = 0..0;
+                }
+                for value in [range.start, range.end] {
+                    rows.extend_from_slice(&value.to_le_bytes());
+                }
+            }
+            (row_offset, 1_u32)
+        } else {
+            (0, 0_u32)
         };
-        for value in geometry {
+        for value in [
+            bounds.x,
+            bounds.y,
+            bounds.width,
+            bounds.height,
+            u32::from_le_bytes(bounds.color),
+            kind,
+            row_offset,
+        ] {
             bytes.extend_from_slice(&value.to_le_bytes());
         }
-        bytes.extend_from_slice(&u32::from_le_bytes(bounds.color).to_le_bytes());
-        bytes.extend_from_slice(&kind.to_le_bytes());
-        count += 1;
+        count = count.checked_add(1).ok_or(Error::SceneTooComplex)?;
     }
     if count == 0 {
-        return None;
+        return Ok(None);
+    }
+    cancel.check()?;
+    if rows.is_empty() {
+        rows.extend_from_slice(&[0; 8]);
+    }
+    if u64::try_from(bytes.len()).map_err(|_| Error::SceneTooComplex)? > storage_limit {
+        return Err(Error::SceneTooComplex);
     }
     let buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
         label: Some("Bondline primitive instances"),
         contents: &bytes,
         usage: wgpu::BufferUsages::STORAGE,
     });
+    let row_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+        label: Some("Bondline exact stroke row geometry"),
+        contents: &rows,
+        usage: wgpu::BufferUsages::STORAGE,
+    });
     let layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
         label: Some("Bondline primitive storage"),
-        entries: &[wgpu::BindGroupLayoutEntry {
-            binding: 0,
-            visibility: wgpu::ShaderStages::VERTEX_FRAGMENT,
-            ty: wgpu::BindingType::Buffer {
-                ty: wgpu::BufferBindingType::Storage { read_only: true },
-                has_dynamic_offset: false,
-                min_binding_size: std::num::NonZeroU64::new(56),
+        entries: &[
+            wgpu::BindGroupLayoutEntry {
+                binding: 0,
+                visibility: wgpu::ShaderStages::VERTEX_FRAGMENT,
+                ty: wgpu::BindingType::Buffer {
+                    ty: wgpu::BufferBindingType::Storage { read_only: true },
+                    has_dynamic_offset: false,
+                    min_binding_size: std::num::NonZeroU64::new(36),
+                },
+                count: None,
             },
-            count: None,
-        }],
+            wgpu::BindGroupLayoutEntry {
+                binding: 1,
+                visibility: wgpu::ShaderStages::FRAGMENT,
+                ty: wgpu::BindingType::Buffer {
+                    ty: wgpu::BufferBindingType::Storage { read_only: true },
+                    has_dynamic_offset: false,
+                    min_binding_size: std::num::NonZeroU64::new(8),
+                },
+                count: None,
+            },
+        ],
     });
     let group = device.create_bind_group(&wgpu::BindGroupDescriptor {
         label: Some("Bondline primitive bindings"),
         layout: &layout,
-        entries: &[wgpu::BindGroupEntry {
-            binding: 0,
-            resource: buffer.as_entire_binding(),
-        }],
+        entries: &[
+            wgpu::BindGroupEntry {
+                binding: 0,
+                resource: buffer.as_entire_binding(),
+            },
+            wgpu::BindGroupEntry {
+                binding: 1,
+                resource: row_buffer.as_entire_binding(),
+            },
+        ],
     });
     let pipeline_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
         label: Some("Bondline primitive pipeline layout"),
@@ -108,7 +205,12 @@ fn draw_resources(
         multiview: None,
         cache: None,
     });
-    Some((pipeline, group, buffer, count))
+    Ok(Some(DrawResources {
+        pipeline,
+        group,
+        _buffers: [buffer, row_buffer],
+        count,
+    }))
 }
 
 /// Render and read back an empty native GPU canvas, with the actual adapter identity.
@@ -127,7 +229,8 @@ pub async fn gpu_solid(
     .await
 }
 
-/// Draw ordered instances with GPU coverage evaluation and read back straight RGBA8.
+/// Draw ordered GPU instances from bounded host-prepared stroke row geometry.
+/// Colour replacement and readback retain straight RGBA8 without blending.
 pub async fn gpu_scene(scene: &Scene) -> Result<(Frame, wgpu::AdapterInfo), Error> {
     gpu_scene_with_cancel(scene, &Cancellation::default()).await
 }
@@ -150,7 +253,7 @@ pub async fn gpu_scene_with_cancel(
         .await?;
     cancel.check()?;
     device.push_error_scope(wgpu::ErrorFilter::Validation);
-    let resources = draw_resources(&device, scene);
+    let resources = draw_resources(&device, scene, cancel)?;
     if let Some(error) = device.pop_error_scope().await {
         return Err(Error::Validation(error.to_string()));
     }
@@ -199,10 +302,10 @@ pub async fn gpu_scene_with_cancel(
             timestamp_writes: None,
             occlusion_query_set: None,
         });
-        if let Some((pipeline, group, _buffer, count)) = &resources {
-            pass.set_pipeline(pipeline);
-            pass.set_bind_group(0, group, &[]);
-            pass.draw(0..6, 0..*count);
+        if let Some(resources) = &resources {
+            pass.set_pipeline(&resources.pipeline);
+            pass.set_bind_group(0, &resources.group, &[]);
+            pass.draw(0..6, 0..resources.count);
         }
     }
     encoder.copy_texture_to_buffer(

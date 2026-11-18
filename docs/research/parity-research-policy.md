@@ -1,5 +1,15 @@
 # Parity target and research method
 
+Current method,2026-11-15: the supplied agent instructions narrowed research to public
+sources, then the user's later instruction explicitly authorized opening installed
+ChemDraw to inspect visible screens and workflows. Use CUA for that interaction and keep
+local runtime evidence separate from public documentation. Static executable/resource
+inspection is outside this UI pass. Redistribution rights and original Rust/assets still
+apply. See [the actual live pass](live-ui-review-2026-11-15.md) and current AGENTS.md.
+
+The broader2026-11-13 authorization described below is historical; it is not permission to
+ignore these later boundaries or evidence limits.
+
 The user's 2026-11-13 clarification explicitly authorizes reverse engineering and calls for
 one-to-one screens, buttons, icon roles, flows and functionality. The previous prohibition
 on program-binary inspection is superseded. The complete Professional desktop target,

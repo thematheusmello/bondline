@@ -22,6 +22,7 @@ fn page(atoms: Vec<Atom>, edges: &[[u32; 2]]) -> TestResult<Page> {
         .enumerate()
         .map(|(index, [begin, end])| {
             Ok(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(u32::try_from(index + 1)?).ok_or("bond id")?,
                 begin: AtomId::new(*begin).ok_or("begin")?,
                 end: AtomId::new(*end).ok_or("end")?,

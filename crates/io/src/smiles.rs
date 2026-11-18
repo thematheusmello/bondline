@@ -6,13 +6,28 @@
 use bondline_model::Element;
 use std::{collections::HashSet, ops::Range, sync::Arc};
 
+mod acyclic;
+mod authoring;
+mod authoring_layout;
+mod components;
 pub mod file;
 mod layout;
 mod normalize;
-mod write;
+pub(crate) mod projection;
+mod ring;
+pub(crate) mod write;
+pub use authoring::AuthoringError;
+pub use authoring_layout::{
+    validate_authoring_page, validate_authoring_page_with_settings,
+    validate_authoring_page_with_style,
+};
 pub use file::{SmilesFileDocument, SmilesFileError};
 pub use layout::LayoutError;
+pub(crate) use layout::{on_segment, segments_intersect};
 pub use normalize::NormalizeError;
+pub use projection::{
+    ProjectionError, RecordSelection, SmilesAtomMapping, SmilesBondMapping, SmilesRecordMapping,
+};
 pub use write::{WriteError, write_fragment};
 
 pub const MAX_SMILES_BYTES: usize = 65_536;

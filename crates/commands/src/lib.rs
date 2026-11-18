@@ -7,41 +7,100 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{collections::VecDeque, sync::Arc};
 
+mod atom;
+mod atom_ui;
 mod bond;
+mod bond_tool;
+mod boxed_atom;
+mod caption;
 mod capture;
+mod chain;
+mod chain_tool;
 mod close;
 mod content;
 mod controls;
+mod drawing_settings;
+mod drawing_settings_ui;
 mod file_ui;
 mod files;
+mod new_document;
+mod preferences;
+mod ring;
+mod ring_tool;
 mod sdf_edit;
 mod sdf_query;
+mod selection;
 mod smiles_conversion;
 mod smiles_export;
+mod smiles_paste;
 mod smiles_query;
-pub use bond::{BondCreate, BondExtend, ExtendHydrogenPolicy};
+mod smiles_records;
+mod view;
+pub use atom::AtomSetLabel;
+pub use atom_ui::{UiAtomLabel, UiAtomLabelRequest};
+pub use bond::{
+    BondCreate, BondDrawOrder, BondExtend, BondSetOrder, ExtendHydrogenPolicy, OrderHydrogenPolicy,
+};
+pub use bond_tool::{BondToolOperation, BondToolState, EffectiveTool, SelectBondTool};
+pub use boxed_atom::{AtomCreateLabel, AtomLabelStyle};
+pub use caption::TextSetRun;
+pub use chain::{
+    ChainCreate, ChainCreatePath, ChainPathPlacement, ChainPathPoint, ChainPlacement, ChainSide,
+};
+pub use chain_tool::{
+    ChainContext, ChainKind, ChainPreferences, ChainTarget, ChainToolOperation, UiAddChainRequest,
+    UiChainTool,
+};
 pub use close::{CloseAction, CloseDocument, CloseState};
 pub use content::{CollectionSummary, RecordSummary, SmilesFileSummary, StoredContent};
 pub use controls::{ControlInfo, ControlKey, ControlShortcut};
-pub use file_ui::{UiFile, UiFileAction, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState};
+pub use drawing_settings::{DocumentSettingsSet, DrawingSettingsSet};
+pub use drawing_settings_ui::{UiDrawingSettings, UiDrawingSettingsRequest};
+pub use file_ui::{
+    UiFile, UiFileAction, UiFileContextStamp, UiFilePhase, UiFilePlan, UiFileRequest, UiFileState,
+};
 pub use files::{
     Completed, FileFormat, FileOperation, FileState, MolVersionChoice, OpenCdx, OpenCdxml, OpenMol,
     OpenSdf, OpenSmiles, SaveCdx, SaveCdxml, SaveMol, SaveSdf, SaveSmiles,
 };
-pub use sdf_edit::SdfFieldSet;
+pub use new_document::NewDocument;
+pub use preferences::{
+    ApplicationPreferences, UiPreferences, UiPreferencesOperation, UiPreferencesRequest,
+};
+pub use ring::{
+    ChairKind, ChairRingCreate, NamedRingCreate, RingCreate, RingCreateRequest, RingKind,
+    RingPhase, RingPlacement, RingSide, RingSprout, SproutRing,
+};
+pub use ring_tool::{
+    RingContext, RingToolOperation, SelectChairRingTool, SelectNamedRingTool, SelectRingTool,
+    SelectRingToolRequest,
+};
+pub use sdf_edit::{SdfFieldSet, SdfRecordRemove};
 pub use sdf_query::{
     MAX_SDF_INSPECT_VALUE_BYTES, MAX_SDF_RECORD_PAGE_BYTES, SdfFieldInspection, SdfRecordInspect,
     SdfRecordInspection, SdfValueOmission,
 };
-pub use smiles_conversion::{ConversionOutput, ConversionReceipt, ConvertSmilesToCdxml};
+pub use selection::{
+    SelectionContext, SelectionOperation, SelectionState, SelectionTranslate, UiSelection,
+};
+pub use smiles_conversion::{
+    ConversionOutput, ConversionReceipt, ConvertSmilesToCdxml, SmilesConversionProfile,
+};
 pub use smiles_export::{ExportSmilesFragment, SmilesExportReceipt};
+pub use smiles_paste::PasteSmiles;
 pub use smiles_query::{
     MAX_SMILES_RECORD_INSPECT_BYTES, SmilesRecordInspect, SmilesRecordInspection,
 };
+pub use smiles_records::{ImportSmilesRecords, SmilesRecordSelection};
+pub use view::{UiView, ViewOperation, ViewState};
 #[cfg(test)]
 mod close_tests;
 #[cfg(test)]
+mod drawing_settings_tests;
+#[cfg(test)]
 mod file_ui_tests;
+#[cfg(test)]
+mod new_document_tests;
 #[cfg(test)]
 mod sdf_tests;
 #[cfg(test)]
@@ -50,11 +109,12 @@ mod source_tests;
 mod storage_tests;
 pub use bondline_render::Cancellation;
 pub use capture::{
-    CaptureAdapter, CaptureImageError, CaptureStamp, PngCapture, Prepared, RenderBackend,
-    RenderCapture,
+    CaptureAdapter, CaptureImageError, CaptureStamp, CaptureView, PngCapture, Prepared,
+    RenderBackend, RenderCapture,
 };
 
 pub const MAX_REQUEST_BYTES: usize = 1024 * 1024;
+pub const MAX_SMILES_PASTE_BYTES: usize = bondline_io::smiles::MAX_SMILES_BYTES;
 const MAX_HISTORY: usize = 128;
 const MAX_HISTORY_BYTES: usize = 128 * 1024 * 1024;
 
@@ -96,7 +156,16 @@ macro_rules! command_registry {
 
             pub fn parse(name: &str, params: Value) -> Result<Self, Error> {
                 match name {
-                    $($name => serde_json::from_value(params).map(Self::$variant).map_err(Error::InvalidParams)),+,
+                    $($name => {
+                        if !params.is_object() {
+                            return Err(Error::InvalidParams(
+                                <serde_json::Error as serde::de::Error>::custom(
+                                    "command parameters must be a JSON object"
+                                )
+                            ));
+                        }
+                        serde_json::from_value(params).map(Self::$variant).map_err(Error::InvalidParams)
+                    }),+,
                     _ => Err(Error::UnknownCommand(name.to_owned())),
                 }
             }
@@ -111,9 +180,13 @@ macro_rules! command_registry {
 
 command_registry! {
     Inspect(NoParams) => ("document.inspect", "Inspect the authored document and history state.", true),
+    NewDocument(NewDocument) => ("document.new", "Start a fresh source-free drawing session; unsaved data requires explicit discard and existing saved files remain untouched.", false),
     Close(CloseDocument) => ("document.close", "Request, explicitly discard, or cancel closing the current document revision.", false),
-    UiFile(UiFile) => ("ui.file", "Request or cancel native file presentation; requires an attached native host.", false),
+    UiFile(UiFile) => ("ui.file", "Request or cancel native document/file presentation, including the explicit SMILES paste form; requires an attached native host.", false),
+    UiAtomLabel(UiAtomLabel) => ("ui.atom_label", "Open or cancel an exact existing-atom literal element/H editor; requires an attached native host and grants no authoring or Save authority.", false),
     UiControls(NoParams) => ("ui.controls", "Discover delivered native controls, shortcuts, typed bindings and contextual availability.", true),
+    UiView(UiView) => ("ui.view", "Inspect or navigate the transient drawing view without editing content or history.", false),
+    UiBondToolSelect(SelectBondTool) => ("ui.bond_tool", "Select a drawing bond order without editing the document or its history; gestures pass this order explicitly.", false),
     OpenCdxml(OpenCdxml) => ("document.open_cdxml", "Open an explicitly selected CDXML file without discarding unsaved edits by default.", false),
     SaveCdxml(SaveCdxml) => ("document.save_cdxml", "Atomically save complete CDXML data to an explicitly selected path; overwrite requires opt-in.", false),
     OpenCdx(OpenCdx) => ("document.open_cdx", "Open the supported read-only CDX projection while retaining complete source bytes; unsaved changes require explicit discard.", false),
@@ -123,24 +196,48 @@ command_registry! {
     OpenSdf(OpenSdf) => ("document.open_sdf", "Open every validated SDF record with complete source and ordered data; chemical preview is unavailable.", false),
     SaveSdf(SaveSdf) => ("document.save_sdf", "Atomically save the complete SDF collection without changing molecular versions or ordered data.", false),
     OpenSmiles(OpenSmiles) => ("document.open_smiles", "Open every supported SMILES record while retaining the exact complete file and opaque application data; chemical preview is unavailable.", false),
-    SaveSmiles(SaveSmiles) => ("document.save_smiles", "Atomically save the exact complete SMILES file without selecting or regenerating a molecular record.", false),
-    ConvertSmilesToCdxml(ConvertSmilesToCdxml) => ("file.convert_smiles_to_cdxml", "Create new native CDXML from a 1–12 neutral carbon/Single path using explicit fixed H and supplied geometry; the current session stays unchanged.", false),
+    ImportSmilesRecords(ImportSmilesRecords) => ("document.import_smiles_records", "Create a clean source-backed drawing from explicitly selected records of the already-open complete SMILES file; generated layout and partial projection never discard unselected or opaque source bytes.", false),
+    SaveSmiles(SaveSmiles) => ("document.save_smiles", "Atomically save the complete current SMILES file, preserving opaque data and supported record edits.", false),
+    ConvertSmilesToCdxml(ConvertSmilesToCdxml) => ("file.convert_smiles_to_cdxml", "Create new native CDXML with a chosen fixed-H layout: the default 1–12 neutral carbon/Single path, a bounded neutral acyclic structure, one 3–8 member Single ring with supported attached trees, or a bounded collection of these components. Supplied geometry and the current session stay unchanged.", false),
     ExportSmilesFragment(ExportSmilesFragment) => ("file.export_smiles_fragment", "Create a noncanonical SMILES file from one explicitly selected, complete-source fragment's supported literal-H chemical graph; geometry and document context are not encoded and the session stays unchanged.", false),
     SdfRecordInspect(SdfRecordInspect) => ("sdf.record.inspect", "Read a bounded ordered field page from an explicitly identified captured SDF record; oversized values are omitted explicitly.", true),
     SmilesRecordInspect(SmilesRecordInspect) => ("smiles.record.inspect", "Read the exact notation and file-relative metadata of one explicit captured SMILES record; opaque application data is not disclosed or decoded.", true),
+    PasteSmiles(PasteSmiles) => ("structure.paste_smiles", "Append one complete supported neutral SMILES structure as a single undoable native drawing edit, preserving existing content; supplied aromatic markers resolve to a bounded deterministic integer-bond graph.", false),
     SdfFieldSet(SdfFieldSet) => ("sdf.field.set_value", "Replace one existing ordered SDF field value through a bounded immutable candidate, preserving every other source byte.", false),
+    SdfRecordRemove(SdfRecordRemove) => ("sdf.record.remove", "Remove one explicit SDF record while preserving every remaining source byte and retaining at least one complete record.", false),
     PageSetSize(PageSetSize) => ("page.set_size", "Set a page's width and height in physical points.", false),
-    BondCreate(BondCreate) => ("bond.create", "Create an independent single carbon bond between two authored points.", false),
-    BondExtend(BondExtend) => ("bond.extend", "Extend a terminal neutral carbon with a Single bond, explicitly authoring its H3 to H2 and the new carbon's H3; requires native complete data.", false),
+    BondCreate(BondCreate) => ("bond.create", "Create an independent carbon bond of the requested Single/Double/Triple order, authoring fixed neutral-carbon H counts; omitted order is Single.", false),
+    BondExtend(BondExtend) => ("bond.extend", "Extend a neutral terminal carbon with consistent literal H and one Single/Double/Triple carbon bond using an explicit requested order/H policy; omitted order is Single and native complete data is required.", false),
+    BondSetOrder(BondSetOrder) => ("bond.set_order", "Set an existing bond's Single/Double/Triple order and explicitly rectify both neutral-carbon endpoints' consistent literal hydrogen counts, preserving identities and geometry; requires editable native data or a synchronized SMILES record.", false),
+    AtomSetLabel(AtomSetLabel) => ("atom.set_label", "Set one existing neutral atom's explicit element and literal attached-H count, preserving IDs, geometry and neighbors; source-free or completely mapped native CDXML is required and no valence inference is performed.", false),
     Undo(NoParams) => ("history.undo", "Restore the previous authored document.", false),
     Redo(NoParams) => ("history.redo", "Restore the next authored document.", false),
     Capture(RenderCapture) => ("render.capture", "Render a page preview to PNG using the explicit CPU or GPU backend.", true),
+    UiSelection(UiSelection) => ("ui.selection", "Select native atoms without authoring", false),
+    SelectionTranslate(SelectionTranslate) => ("selection.translate", "Translate the current native atom selection atomically", false),
+    RingCreate(RingCreateRequest) => ("ring.create", "Construct a native carbon Single ring or named benzene/cyclopentadiene integer-bond ring, preserving shared data with explicit standalone or shared-atom/edge placement.", false),
+    UiRingToolSelect(SelectRingToolRequest) => ("ui.ring_tool", "Select a native carbon Single-ring or named benzene/cyclopentadiene tool without editing the document or its history.", false),
+    ChainCreate(ChainCreate) => ("chain.create", "Construct an explicit native carbon chain of Single bonds with a required interior angle and literal hydrogen policy, optionally sharing one existing neutral carbon.", false),
+    ChainCreatePath(ChainCreatePath) => ("chain.create_path", "Construct a literal ordered native carbon path in one edit, optionally starting at an existing carbon; no snapping or angle/length inference.", false),
+    DrawingSettingsSet(DrawingSettingsSet) => ("document.set_drawing_settings", "Replace both optional document-root creation preferences in one native drawing edit; explicit null clears a value and existing geometry stays unchanged.", false),
+    UiDrawingSettings(UiDrawingSettings) => ("ui.drawing_settings", "Open or cancel a native document creation-preference draft; requires an attached host and grants no authoring or Save authority.", false),
+    UiChainTool(UiChainTool) => ("ui.chain_tool", "Select a chain tool, set its transient constraints, or open/cancel a source-qualified numeric Add Chain draft; authoring uses the existing chain commands.", false),
+    RingSprout(RingSprout) => ("ring.sprout", "Attach an independent native carbon ring through one Single connector in one edit, with explicit cycle geometry and literal hydrogen policy.", false),
+    UiPreferences(UiPreferences) => ("ui.preferences", "Inspect or set session application preferences, or open/apply/cancel their native draft; never authors document data or acknowledges Save.", false),
+    DocumentSettingsSet(DocumentSettingsSet) => ("document.set_document_settings", "Replace explicit bond length, chain angle and line width atomically; optionally set or clear spacing. Appearance or active spacing-reference changes must pass the whole-page ink certificate without moving geometry or changing label metrics.", false),
+    TextSetRun(TextSetRun) => ("text.set_run", "Replace the decoded text of one existing styled caption run, preserving its font, size, face, colour, placement and every unrelated source byte. Requires native or caption-qualified CDXML and validates the final page and Save representation before one history edit.", false),
+    AtomSetAuthoredLabel(AtomSetLabel) => ("atom.set_authored_label", "Replace one qualified box-positioned atom label's explicit element/H, literal text and bounds in one source-preserving edit; keeps node/bond geometry and style, validates the final page and Save representation, and performs no valence inference.", false),
+    AtomCreateAuthoredLabel(AtomCreateLabel) => ("atom.create_authored_label", "Create one explicit box-positioned child label on a qualified imported hidden carbon using a supplied style and existing file resources; preserves IDs, geometry and carbon-display flags, synchronizes literal element/H and validates source and the final page before one history edit.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("unknown command: {0}")]
     UnknownCommand(String),
+    #[error("caption editing requires native or completely supported caption CDXML source")]
+    UnsupportedCaptionSource,
+    #[error("text ID must be greater than zero")]
+    InvalidTextId,
     #[error("invalid command parameters: {0}")]
     InvalidParams(#[from] serde_json::Error),
     #[error(transparent)]
@@ -169,16 +266,46 @@ pub enum Error {
         "terminal-carbon extension requires source-free or completely mapped native CDXML data"
     )]
     UnsupportedExtensionSource,
-    #[error("fragment and atom IDs must be greater than zero")]
+    #[error("fragment, atom and bond IDs must be greater than zero")]
     InvalidBondTarget,
+    #[error("bond {bond_id} does not exist in fragment {fragment_id}")]
+    MissingBond { fragment_id: u32, bond_id: u32 },
+    #[error(
+        "changing bond order requires editable native drawing data or a synchronized SMILES record"
+    )]
+    UnsupportedBondOrderSource,
+    #[error(
+        "changing bond order requires neutral nonisotopic carbon endpoints, Single/Double/Triple incident bonds and consistent sufficient literal hydrogens"
+    )]
+    UnsupportedBondOrder,
+    #[error("{0}")]
+    UnsupportedBondConversion(&'static str),
     #[error("atom {atom_id} does not exist in fragment {fragment_id}")]
     MissingAtom { fragment_id: u32, atom_id: u32 },
+    #[error("invalid atom label: {0}")]
+    InvalidAtomLabel(&'static str),
+    #[error("atom label editing unavailable: {0}")]
+    UnsupportedAtomLabel(&'static str),
     #[error(
-        "extension supports a positioned neutral terminal carbon with one Single carbon bond and literal H3 only"
+        "extension requires a positioned neutral terminal carbon with one Single/Double/Triple carbon bond and consistent sufficient literal hydrogen count"
     )]
     UnsupportedBondExtension,
     #[error("a new atom cannot occupy an existing atom's position")]
     OccupiedEndpoint,
+    #[error("invalid ring construction: {0}")]
+    InvalidRing(&'static str),
+    #[error("ring construction unavailable: {0}")]
+    UnsupportedRing(&'static str),
+    #[error("invalid chain construction: {0}")]
+    InvalidChain(&'static str),
+    #[error("chain construction unavailable: {0}")]
+    UnsupportedChain(&'static str),
+    #[error("drawing settings require source-free or completely mapped native CDXML data")]
+    UnsupportedDrawingSettingsSource,
+    #[error("the requested document style cannot be displayed safely: {0}")]
+    UnsupportedDrawingStyle(&'static str),
+    #[error("bond spacing must be a finite percentage from 1 through 100, or explicit null")]
+    InvalidBondSpacing,
     #[error(transparent)]
     Render(#[from] bondline_render::Error),
     #[error(transparent)]
@@ -198,8 +325,24 @@ pub enum Error {
     InvalidSmilesQuery(&'static str),
     #[error("invalid SDF field edit: {0}")]
     InvalidSdfField(&'static str),
+    #[error("invalid SDF record operation: {0}")]
+    InvalidSdfRecord(&'static str),
     #[error("invalid SMILES conversion parameters: {0}")]
     InvalidSmilesConversion(&'static str),
+    #[error("invalid SMILES paste parameters: {0}")]
+    InvalidSmilesPaste(&'static str),
+    #[error("SMILES paste requires source-free or completely mapped native CDXML data")]
+    UnsupportedSmilesPasteSource,
+    #[error("SMILES paste resource limit: {0}")]
+    SmilesPasteLimit(&'static str),
+    #[error(transparent)]
+    SmilesNotation(#[from] bondline_io::smiles::SmilesError),
+    #[error(transparent)]
+    SmilesLayout(#[from] bondline_io::smiles::LayoutError),
+    #[error(transparent)]
+    Document(#[from] bondline_io::DocumentError),
+    #[error("invalid SMILES record import: {0}")]
+    InvalidSmilesImport(&'static str),
     #[error("SDF field input exceeds the 64 KiB authored-LF or serialized-value budget")]
     SdfFieldInputLimit,
     #[error("a single SDF field exceeds the 1 MiB serialized query page budget")]
@@ -232,6 +375,28 @@ pub enum Error {
     UiStaleRequest,
     #[error("native file request identity counter exhausted")]
     UiEpochExhausted,
+    #[error("drawing tool epoch space exhausted")]
+    UiBondToolEpochExhausted,
+    #[error("selection epoch space exhausted")]
+    UiSelectionEpochExhausted,
+    #[error("the selected atoms or selection epoch are obsolete")]
+    StaleSelection,
+    #[error("invalid selection: {0}")]
+    InvalidSelection(&'static str),
+    #[error("selection operation unavailable: {0}")]
+    UnsupportedSelection(&'static str),
+    #[error("atom {0} does not exist on the selected page")]
+    MissingSelectionAtom(u32),
+    #[error("view epoch space exhausted")]
+    UiViewEpochExhausted,
+    #[error("invalid view parameters: {0}")]
+    InvalidView(&'static str),
+    #[error("view navigation unavailable: {0}")]
+    UnsupportedView(&'static str),
+    #[error("the current SDF view bounds are not prepared; render an explicit zoom first")]
+    ViewTargetUnavailable,
+    #[error("the requested camera epoch is obsolete")]
+    StaleView,
     #[error("invalid native file request parameters: {0}")]
     InvalidUiFileParameters(&'static str),
     #[error(transparent)]
@@ -259,22 +424,45 @@ impl Error {
             Self::UnknownCommand(_) => "unknown_command",
             Self::NothingToUndo | Self::NothingToRedo => "empty_history",
             Self::Model(
-                bondline_model::Error::MissingPage(_) | bondline_model::Error::MissingFragment(_),
+                bondline_model::Error::MissingPage(_)
+                | bondline_model::Error::MissingFragment(_)
+                | bondline_model::Error::MissingText(_)
+                | bondline_model::Error::Text(bondline_model::TextError::MissingRun(_)),
             )
-            | Self::MissingAtom { .. } => "not_found",
+            | Self::MissingAtom { .. }
+            | Self::MissingBond { .. } => "not_found",
+            Self::MissingSelectionAtom(_) => "not_found",
+            Self::StaleSelection => "stale_selection",
+            Self::UiSelectionEpochExhausted => "ui_selection_epoch_exhausted",
+            Self::UnsupportedSelection(_) => "unsupported_content",
             Self::RevisionExhausted => "revision_exhausted",
             Self::IdentityExhausted => "identity_exhausted",
             Self::Render(bondline_render::Error::Cancelled) => "cancelled",
-            Self::Render(bondline_render::Error::InvalidDimensions) => "invalid_params",
+            Self::Render(
+                bondline_render::Error::InvalidDimensions | bondline_render::Error::InvalidView,
+            ) => "invalid_params",
             Self::Render(bondline_render::Error::UnsupportedChemicalContent)
+            | Self::Render(bondline_render::Error::UnsupportedText(_))
             | Self::Render(bondline_render::Error::LabelPlacement)
             | Self::Render(bondline_render::Error::LabelOverlap)
             | Self::SourceBackedEdit
             | Self::WrongContent { .. }
             | Self::UnsupportedExtensionSource
-            | Self::UnsupportedBondExtension => "unsupported_content",
+            | Self::UnsupportedBondExtension
+            | Self::UnsupportedBondOrderSource
+            | Self::UnsupportedBondOrder
+            | Self::UnsupportedAtomLabel(_)
+            | Self::UnsupportedRing(_)
+            | Self::UnsupportedChain(_)
+            | Self::UnsupportedDrawingSettingsSource
+            | Self::UnsupportedCaptionSource
+            | Self::UnsupportedDrawingStyle(_)
+            | Self::UnsupportedSmilesPasteSource
+            | Self::UnsupportedBondConversion(_) => "unsupported_content",
             Self::IncompleteSmilesExportSource => "unsupported_content",
-            Self::Render(bondline_render::Error::LabelScale) => "unsupported_scale",
+            Self::Render(
+                bondline_render::Error::LabelScale | bondline_render::Error::BondScale,
+            ) => "unsupported_scale",
             Self::Render(_) | Self::Png(_) => "render_failed",
             Self::BackendUnavailable => "backend_unavailable",
             Self::UnsupportedDocumentPreview => "unsupported_content",
@@ -287,12 +475,21 @@ impl Error {
             Self::SaveBusy => "busy",
             Self::UiStaleRequest => "ui_stale_request",
             Self::UiEpochExhausted => "ui_epoch_exhausted",
+            Self::UiBondToolEpochExhausted | Self::UiViewEpochExhausted => "ui_epoch_exhausted",
+            Self::InvalidView(_) => "invalid_params",
+            Self::UnsupportedView(_) => "unsupported_content",
+            Self::ViewTargetUnavailable => "viewport_unavailable",
+            Self::StaleView => "stale_view",
             Self::FileBackendUnavailable => "backend_unavailable",
             Self::Mol(error) => error.code(),
             Self::Sdf(error) => error.code(),
             Self::SdfPreview(error) => error.code(),
             Self::Display(error) => error.code(),
             Self::SmilesFile(error) => error.code(),
+            Self::SmilesNotation(error) => error.code(),
+            Self::SmilesLayout(error) => error.code(),
+            Self::Document(error) => error.code(),
+            Self::SmilesPasteLimit(_) => "resource_limit",
             Self::SdfQueryPageLimit => "resource_limit",
             Self::SmilesQueryLimit => "resource_limit",
             Self::SdfFieldInputLimit => "resource_limit",
@@ -338,6 +535,12 @@ struct Request {
 /// A consistent snapshot. Documents are shared; later edits cannot change this result.
 #[derive(Clone, Debug, Serialize)]
 pub struct CommandResult {
+    #[serde(skip)]
+    pub view_target_prepared: bool,
+    /// Rust-only native result identity, captured atomically with its actual finish.
+    /// It cannot authorize a Save/close acknowledgment and is absent from every wire reply.
+    #[serde(skip)]
+    pub ui_file_context_stamp: Option<UiFileContextStamp>,
     pub changed: bool,
     pub revision: u64,
     pub document: Option<Arc<Document>>,
@@ -370,6 +573,36 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_file_operation: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_atom_label: Option<UiAtomLabelRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_atom_label_operation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_drawing_settings: Option<UiDrawingSettingsRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_drawing_settings_operation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferences: Option<ApplicationPreferences>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_preferences: Option<UiPreferencesRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_preferences_operation: Option<UiPreferencesOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_add_chain: Option<UiAddChainRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_add_chain_operation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_chain_tool_operation: Option<ChainToolOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_selection: Option<SelectionState>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_selection_operation: Option<SelectionOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_bond_tool_operation: Option<BondToolOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_ring_tool_operation: Option<RingToolOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_view_operation: Option<ViewOperation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub controls: Option<Vec<ControlInfo>>,
 }
 
@@ -387,6 +620,17 @@ pub struct Engine {
     redo: VecDeque<Arc<StoredContent>>,
     close_policy: close::ClosePolicy,
     file_ui: file_ui::FileUiPolicy,
+    atom_ui: atom_ui::AtomLabelUiPolicy,
+    drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy,
+    preferences_ui: preferences::PreferencesPolicy,
+    chain_ui: chain_tool::ChainUiPolicy,
+    selection: selection::SelectionPolicy,
+    bond_tool: BondToolState,
+    effective_tool: EffectiveTool,
+    view: ViewState,
+    view_canvas_size: Option<[u32; 2]>,
+    sdf_view_extent: Option<(CaptureStamp, bondline_model::PageSize)>,
+    view_focus: Option<(u64, PageId, bondline_model::Point2)>,
 }
 
 impl Default for Engine {
@@ -407,6 +651,11 @@ impl Engine {
             StoredContent::SmilesFile(_) => FileFormat::Smiles,
             StoredContent::Drawing(document) => {
                 if document
+                    .source_info()
+                    .is_some_and(|source| source.format == "smiles")
+                {
+                    FileFormat::Smiles
+                } else if document
                     .source_info()
                     .is_some_and(|source| source.format == "cdx")
                 {
@@ -432,6 +681,17 @@ impl Engine {
             redo: VecDeque::new(),
             close_policy: close::ClosePolicy::default(),
             file_ui: file_ui::FileUiPolicy::default(),
+            atom_ui: atom_ui::AtomLabelUiPolicy::default(),
+            drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy::default(),
+            preferences_ui: preferences::PreferencesPolicy::default(),
+            chain_ui: chain_tool::ChainUiPolicy::default(),
+            selection: selection::SelectionPolicy::default(),
+            bond_tool: BondToolState::default(),
+            effective_tool: EffectiveTool::default(),
+            view: ViewState::default(),
+            view_canvas_size: None,
+            sdf_view_extent: None,
+            view_focus: None,
         }
     }
 
@@ -449,6 +709,7 @@ impl Engine {
 
     pub fn state(&self) -> CommandResult {
         CommandResult {
+            view_target_prepared: false,
             changed: false,
             revision: self.revision,
             document: match self.document.as_ref() {
@@ -476,7 +737,23 @@ impl Engine {
             close_operation: None,
             ui_file: self.file_ui_state(),
             ui_file_operation: None,
+            ui_atom_label: self.ui_atom_label_request(),
+            ui_atom_label_operation: None,
+            ui_drawing_settings: self.ui_drawing_settings_request(),
+            ui_drawing_settings_operation: None,
+            preferences: None,
+            ui_preferences: self.ui_preferences_request(),
+            ui_preferences_operation: None,
+            ui_add_chain: self.ui_add_chain_request(),
+            ui_add_chain_operation: None,
+            ui_chain_tool_operation: None,
+            ui_selection: (self.selection().epoch != 0).then(|| self.selection().clone()),
+            ui_selection_operation: None,
+            ui_bond_tool_operation: None,
+            ui_ring_tool_operation: None,
+            ui_view_operation: None,
             controls: None,
+            ui_file_context_stamp: None,
         }
     }
 
@@ -507,10 +784,39 @@ impl Engine {
         if self.close_state() == CloseState::Committed && !matches!(command, Command::Inspect(_)) {
             return Err(Error::CloseCommitted);
         }
+        let mut drawing_focus = None;
         let changed = match command {
             Command::Inspect(_) => false,
+            Command::NewDocument(params) => {
+                return Ok(Prepared::immediate(self.new_document(params)?));
+            }
+            Command::UiView(params) => return Ok(Prepared::immediate(self.navigate_view(params)?)),
             Command::Close(params) => return Ok(Prepared::immediate(self.close(params)?)),
             Command::UiFile(params) => return Ok(Prepared::immediate(self.ui_file(params)?)),
+            Command::UiAtomLabel(params) => {
+                return Ok(Prepared::immediate(self.ui_atom_label(params)?));
+            }
+            Command::UiDrawingSettings(params) => {
+                return Ok(Prepared::immediate(self.ui_drawing_settings(params)?));
+            }
+            Command::UiPreferences(params) => {
+                return Ok(Prepared::immediate(self.ui_preferences(params)?));
+            }
+            Command::UiChainTool(params) => {
+                return Ok(Prepared::immediate(self.ui_chain_tool(params)?));
+            }
+            Command::UiSelection(params) => {
+                return Ok(Prepared::immediate(self.ui_selection(params)?));
+            }
+            Command::SelectionTranslate(params) => {
+                return Ok(Prepared::immediate(self.translate_selection(params)?));
+            }
+            Command::UiBondToolSelect(params) => {
+                return Ok(Prepared::immediate(self.select_bond_tool(params)?));
+            }
+            Command::UiRingToolSelect(params) => {
+                return Ok(Prepared::immediate(self.select_ring_tool(params)?));
+            }
             Command::UiControls(_) => {
                 return Ok(Prepared::immediate(CommandResult {
                     controls: Some(self.controls()),
@@ -525,9 +831,21 @@ impl Engine {
                 let plan = self.smiles_record_plan(params)?;
                 return Ok(Prepared::smiles_record(self.state(), plan));
             }
+            Command::PasteSmiles(params) => {
+                let plan = self.smiles_paste_plan(params)?;
+                return Ok(Prepared::smiles_paste(self.state(), plan));
+            }
+            Command::ImportSmilesRecords(params) => {
+                let plan = self.smiles_import_plan(params)?;
+                return Ok(Prepared::smiles_records(self.state(), plan));
+            }
             Command::SdfFieldSet(params) => {
                 let plan = self.sdf_field_plan(params)?;
-                return Ok(Prepared::sdf_field_set(self.state(), plan));
+                return Ok(Prepared::sdf_edit(self.state(), plan));
+            }
+            Command::SdfRecordRemove(params) => {
+                let plan = self.sdf_record_remove_plan(params)?;
+                return Ok(Prepared::sdf_edit(self.state(), plan));
             }
             Command::ConvertSmilesToCdxml(params) => {
                 let plan = self.smiles_conversion_plan(params)?;
@@ -718,28 +1036,197 @@ impl Engine {
                 ));
             }
             Command::PageSetSize(params) => {
+                if self.stored_document()?.model().has_authored_atom_labels() {
+                    return Err(bondline_io::DocumentError::UnsupportedEdit.into());
+                }
+                if self.stored_document()?.has_caption_projection() {
+                    return Err(Error::UnsupportedCaptionSource);
+                }
+                if self
+                    .stored_document()?
+                    .source_info()
+                    .is_some_and(|source| source.format == "smiles")
+                {
+                    return Err(Error::SourceBackedEdit);
+                }
                 let id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
                 let size = PageSize::new(params.width_pt, params.height_pt)?;
                 let mut document = self.stored_document()?.clone();
                 document.model_mut().set_page_size(id, size)?;
                 self.commit(document)?
             }
+            Command::ChainCreatePath(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let (document, identities) =
+                    chain::create_path(self.stored_document()?, &params, self.identities)?;
+                let changed = self.commit(document)?;
+                self.identities = identities;
+                drawing_focus = self.view_focus;
+                changed
+            }
+            Command::DrawingSettingsSet(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let candidate = drawing_settings::set(self.stored_document()?, params)?;
+                let changed = self.commit(candidate)?;
+                drawing_focus = self.view_focus;
+                changed
+            }
+            Command::DocumentSettingsSet(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let candidate = drawing_settings::set_document(self.stored_document()?, params)?;
+                let changed = self.commit(candidate)?;
+                drawing_focus = self.view_focus;
+                changed
+            }
+            Command::TextSetRun(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let candidate = caption::set_run(self.stored_document()?, params)?;
+                let changed = self.commit(candidate)?;
+                drawing_focus = self.view_focus;
+                changed
+            }
+            Command::ChainCreate(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let (document, identities) =
+                    chain::create(self.stored_document()?, params, self.identities)?;
+                let changed = self.commit(document)?;
+                self.identities = identities;
+                drawing_focus = self.view_focus;
+                changed
+            }
+            Command::RingCreate(params) => {
+                if params.expected_revision() != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let (document, identities) =
+                    ring::create_request(self.stored_document()?, params, self.identities)?;
+                let changed = self.commit(document)?;
+                self.identities = identities;
+                drawing_focus = self.view_focus;
+                changed
+            }
+            Command::RingSprout(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let (document, identities) =
+                    ring::create_sprout(self.stored_document()?, params, self.identities)?;
+                let changed = self.commit(document)?;
+                self.identities = identities;
+                drawing_focus = self.view_focus;
+                changed
+            }
             Command::BondCreate(params) => {
+                let focus = (
+                    params.page_id,
+                    params.begin_x_pt,
+                    params.begin_y_pt,
+                    params.end_x_pt,
+                    params.end_y_pt,
+                );
                 let (document, identities) =
                     bond::create(self.stored_document()?, params, self.identities)?;
                 let changed = self.commit(document)?;
                 self.identities = identities;
+                drawing_focus = PageId::new(focus.0)
+                    .zip(
+                        bondline_model::Point2::new(
+                            focus.1 / 2.0 + focus.3 / 2.0,
+                            focus.2 / 2.0 + focus.4 / 2.0,
+                        )
+                        .ok(),
+                    )
+                    .map(|(page, point)| (self.generation, page, point));
                 changed
             }
             Command::BondExtend(params) => {
                 if params.expected_revision != self.revision {
                     return Err(Error::StaleRevision);
                 }
+                let focus = (
+                    params.page_id,
+                    params.fragment_id,
+                    params.begin_atom_id,
+                    params.end_x_pt,
+                    params.end_y_pt,
+                );
                 let (document, identities) =
                     bond::extend(self.stored_document()?, params, self.identities)?;
                 let changed = self.commit(document)?;
                 self.identities = identities;
+                drawing_focus = self.document().ok().and_then(|document| {
+                    document
+                        .pages()
+                        .iter()
+                        .find(|page| page.id().get() == focus.0)
+                        .and_then(|page| {
+                            page.fragments()
+                                .iter()
+                                .find(|fragment| fragment.id().get() == focus.1)
+                                .and_then(|fragment| {
+                                    fragment
+                                        .atoms()
+                                        .iter()
+                                        .find(|atom| atom.id.get() == focus.2)
+                                })
+                                .and_then(|atom| atom.position)
+                                .and_then(|begin| {
+                                    bondline_model::Point2::new(
+                                        begin.x_pt() / 2.0 + focus.3 / 2.0,
+                                        begin.y_pt() / 2.0 + focus.4 / 2.0,
+                                    )
+                                    .ok()
+                                })
+                                .map(|point| (self.generation, page.id(), point))
+                        })
+                });
                 changed
+            }
+            Command::BondSetOrder(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                if self.stored_document()?.has_smiles_projection() {
+                    let plan = self.smiles_order_plan(params)?;
+                    return Ok(Prepared::smiles_records(self.state(), plan));
+                }
+                let document = bond::set_order(self.stored_document()?, params)?;
+                drawing_focus = self.view_focus;
+                self.commit(document)?
+            }
+            Command::AtomSetLabel(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let document = atom::set_label(self.stored_document()?, params)?;
+                drawing_focus = self.view_focus;
+                self.commit(document)?
+            }
+            Command::AtomSetAuthoredLabel(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let document = boxed_atom::set_label(self.stored_document()?, params)?;
+                drawing_focus = self.view_focus;
+                self.commit(document)?
+            }
+            Command::AtomCreateAuthoredLabel(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let document = boxed_atom::create_label(self.stored_document()?, params)?;
+                drawing_focus = self.view_focus;
+                self.commit(document)?
             }
             Command::Undo(_) => self.undo()?,
             Command::Redo(_) => self.redo()?,
@@ -749,19 +1236,22 @@ impl Engine {
                     if id.get() != 1 {
                         return Err(bondline_model::Error::MissingPage(id.get()).into());
                     }
-                    return Prepared::capture(self.state(), params, Arc::clone(&self.document));
+                    return self.prepare_capture(params);
                 }
                 self.document()?
                     .pages()
                     .iter()
                     .find(|page| page.id() == id)
                     .ok_or(bondline_model::Error::MissingPage(id.get()))?;
-                if !self.stored_document()?.is_fully_mapped() {
+                if !self.stored_document()?.has_display_projection() {
                     return Err(Error::UnsupportedDocumentPreview);
                 }
-                return Prepared::capture(self.state(), params, Arc::clone(&self.document));
+                return self.prepare_capture(params);
             }
         };
+        if changed {
+            self.view_focus = drawing_focus;
+        }
         Ok(Prepared::immediate(CommandResult {
             changed,
             ..self.state()
@@ -778,6 +1268,7 @@ impl Engine {
             return Ok(false);
         }
         let revision = self.next_revision()?;
+        let selection_epoch = self.selection_epoch_after_edit()?;
         self.undo
             .push_back(std::mem::replace(&mut self.document, Arc::new(document)));
         if self.undo.len() > MAX_HISTORY {
@@ -786,6 +1277,7 @@ impl Engine {
         self.redo.clear();
         self.trim_history(MAX_HISTORY_BYTES);
         self.revision = revision;
+        self.clear_selection_after_edit(selection_epoch);
         self.invalidate_close();
         Ok(true)
     }
@@ -828,10 +1320,12 @@ impl Engine {
     fn undo(&mut self) -> Result<bool, Error> {
         let previous = self.undo.back().cloned().ok_or(Error::NothingToUndo)?;
         let revision = self.next_revision()?;
+        let selection_epoch = self.selection_epoch_after_edit()?;
         self.undo.pop_back();
         self.redo
             .push_back(std::mem::replace(&mut self.document, previous));
         self.revision = revision;
+        self.clear_selection_after_edit(selection_epoch);
         self.invalidate_close();
         Ok(true)
     }
@@ -839,10 +1333,12 @@ impl Engine {
     fn redo(&mut self) -> Result<bool, Error> {
         let next = self.redo.back().cloned().ok_or(Error::NothingToRedo)?;
         let revision = self.next_revision()?;
+        let selection_epoch = self.selection_epoch_after_edit()?;
         self.redo.pop_back();
         self.undo
             .push_back(std::mem::replace(&mut self.document, next));
         self.revision = revision;
+        self.clear_selection_after_edit(selection_epoch);
         self.invalidate_close();
         Ok(true)
     }
@@ -893,16 +1389,24 @@ mod tests {
     }
 
     #[test]
-    fn registry_exposes_typed_closed_schemas() {
+    fn registry_exposes_typed_closed_schemas() -> Result<(), Box<dyn std::error::Error>> {
         let commands = super::registry();
         let names: std::collections::BTreeSet<_> =
             commands.iter().map(|command| command.name).collect();
         assert_eq!(
             names,
             [
+                "atom.create_authored_label",
+                "atom.set_authored_label",
+                "atom.set_label",
                 "bond.create",
                 "bond.extend",
+                "bond.set_order",
+                "chain.create",
+                "chain.create_path",
+                "document.import_smiles_records",
                 "document.inspect",
+                "document.new",
                 "document.close",
                 "document.open_cdxml",
                 "document.save_cdxml",
@@ -914,17 +1418,33 @@ mod tests {
                 "document.open_smiles",
                 "document.save_sdf",
                 "document.save_smiles",
+                "document.set_drawing_settings",
                 "file.convert_smiles_to_cdxml",
                 "file.export_smiles_fragment",
                 "history.redo",
                 "history.undo",
                 "page.set_size",
                 "render.capture",
+                "ring.create",
                 "sdf.field.set_value",
                 "sdf.record.inspect",
+                "sdf.record.remove",
                 "smiles.record.inspect",
+                "structure.paste_smiles",
                 "ui.controls",
-                "ui.file"
+                "ui.drawing_settings",
+                "ui.atom_label",
+                "ui.selection",
+                "selection.translate",
+                "ui.bond_tool",
+                "ui.ring_tool",
+                "ui.view",
+                "ui.file",
+                "ui.chain_tool",
+                "ring.sprout",
+                "ui.preferences",
+                "document.set_document_settings",
+                "text.set_run",
             ]
             .into_iter()
             .collect()
@@ -932,11 +1452,40 @@ mod tests {
         assert_eq!(names.len(), commands.len());
         for command in commands {
             assert_eq!(command.input_schema.as_value()["type"], "object");
-            assert_eq!(
-                command.input_schema.as_value()["additionalProperties"],
-                false
-            );
+            let schema = command.input_schema.as_value();
+            if let Some(variants) = schema["oneOf"].as_array() {
+                assert_eq!(schema["unevaluatedProperties"], false);
+                assert!(!variants.is_empty());
+                for variant in variants {
+                    assert_eq!(variant["type"], "object");
+                    assert_eq!(variant["additionalProperties"], false);
+                }
+            } else if let Some(variants) = schema["anyOf"].as_array() {
+                assert!(schema.get("additionalProperties").is_none());
+                assert!(!variants.is_empty());
+                for variant in variants {
+                    let variant = match variant.get("$ref") {
+                        None => variant,
+                        Some(reference) => {
+                            let reference = reference
+                                .as_str()
+                                .ok_or("schema reference must be a string")?;
+                            let pointer = reference
+                                .strip_prefix('#')
+                                .ok_or("schema reference must be local")?;
+                            schema
+                                .pointer(pointer)
+                                .ok_or("missing local schema reference target")?
+                        }
+                    };
+                    assert_eq!(variant["type"], "object");
+                    assert_eq!(variant["additionalProperties"], false);
+                }
+            } else {
+                assert_eq!(schema["additionalProperties"], false);
+            }
         }
+        Ok(())
     }
 
     #[test]

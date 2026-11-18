@@ -1,4 +1,6 @@
 use serde_json::{Value, json};
+#[path = "support/native_conversion_intent.rs"]
+mod native_conversion_intent;
 use std::{
     collections::BTreeSet,
     process::{Command, Output},
@@ -43,15 +45,45 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
     assert_eq!(
         ids,
         BTreeSet::from([
+            "file.new",
             "file.open",
             "file.save",
             "file.save_as",
+            "file.document_settings",
+            "file.preferences",
+            "file.convert_smiles",
+            "file.import_smiles_records",
             "file.close",
             "edit.undo",
             "edit.redo",
+            "edit.paste_smiles",
             "page.a4",
             "page.letter",
-            "page.rotate"
+            "page.rotate",
+            "view.actual",
+            "view.fit",
+            "view.magnify",
+            "view.reduce",
+            "tool.bond.single",
+            "tool.bond.double",
+            "tool.bond.triple",
+            "tool.selection",
+            "tool.ring.3",
+            "tool.ring.4",
+            "tool.ring.5",
+            "tool.ring.6",
+            "tool.ring.7",
+            "tool.ring.8",
+            "tool.ring.benzene",
+            "tool.ring.cyclopentadiene",
+            "tool.ring.chair_1",
+            "tool.ring.chair_2",
+            "edit.select_all",
+            "edit.deselect",
+            "chain.acyclic",
+            "chain.snaking",
+            "chain.fixed_lengths",
+            "chain.fixed_angles",
         ])
     );
     assert_eq!(
@@ -67,6 +99,7 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
         )?;
     }
     for (id, label, key, shift, action) in [
+        ("file.new", "New Document", "n", false, "new"),
         ("file.open", "Open…", "o", false, "open"),
         ("file.save", "Save", "s", false, "save"),
         ("file.save_as", "Save As…", "s", true, "save_as"),
@@ -88,6 +121,34 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
         assert_eq!(control["enabled"], false);
         assert_eq!(control["disabled_reason"], "ui_unavailable");
     }
+    let settings = controls
+        .iter()
+        .find(|control| control["id"] == "file.document_settings")
+        .ok_or("Document Settings binding")?;
+    assert_eq!(settings["label"], "Document Settings…");
+    assert_eq!(settings["menu"], "File");
+    assert_eq!(settings["shortcut"], Value::Null);
+    assert_eq!(
+        settings["command"],
+        json!({"command":"ui.drawing_settings",
+        "params":{"action":"open","expected_revision":0}})
+    );
+    assert_eq!(settings["enabled"], false);
+    assert_eq!(settings["disabled_reason"], "ui_unavailable");
+    let preferences = controls
+        .iter()
+        .find(|control| control["id"] == "file.preferences")
+        .ok_or("Preferences binding")?;
+    assert_eq!(preferences["label"], "Preferences…");
+    assert_eq!(preferences["menu"], "File");
+    assert_eq!(preferences["shortcut"], Value::Null);
+    assert_eq!(
+        preferences["command"],
+        json!({"command":"ui.preferences",
+        "params":{"action":"open","expected_revision":0}})
+    );
+    assert_eq!(preferences["enabled"], false);
+    assert_eq!(preferences["disabled_reason"], "ui_unavailable");
     let rotate = controls
         .iter()
         .find(|control| control["id"] == "page.rotate")

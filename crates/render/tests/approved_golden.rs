@@ -73,6 +73,7 @@ fn cpu_and_gpu_match_the_human_approved_native_bond_capture()
             FragmentId::new(1).ok_or("fragment")?,
             vec![a, b],
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(1).ok_or("bond")?,
                 begin: first,
                 end: second,

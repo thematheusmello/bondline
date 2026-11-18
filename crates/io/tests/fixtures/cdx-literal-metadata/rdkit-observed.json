@@ -1,0 +1,244 @@
+{
+  "version": "2026.09.2",
+  "binary_cdx_support": true,
+  "cases": {
+    "methylammonium_explicit": {
+      "sanitize": true,
+      "atoms": [
+        {
+          "element": 6,
+          "isotope": 13,
+          "charge": 0,
+          "explicit_hydrogens": 3,
+          "total_hydrogens": 3,
+          "radical_electrons": 0
+        },
+        {
+          "element": 7,
+          "isotope": 0,
+          "charge": 1,
+          "explicit_hydrogens": 3,
+          "total_hydrogens": 3,
+          "radical_electrons": 0
+        }
+      ],
+      "bonds": [
+        1.0
+      ],
+      "smiles": "[13CH3][NH3+]",
+      "formula": "CH6N+"
+    },
+    "methylammonium_extended": {
+      "sanitize": true,
+      "atoms": [
+        {
+          "element": 6,
+          "isotope": 13,
+          "charge": 0,
+          "explicit_hydrogens": 3,
+          "total_hydrogens": 3,
+          "radical_electrons": 0
+        },
+        {
+          "element": 7,
+          "isotope": 0,
+          "charge": 1,
+          "explicit_hydrogens": 3,
+          "total_hydrogens": 3,
+          "radical_electrons": 0
+        }
+      ],
+      "bonds": [
+        1.0
+      ],
+      "smiles": "[13CH3][NH3+]",
+      "formula": "CH6N+"
+    },
+    "methylammonium_embedded": {
+      "sanitize": true,
+      "atoms": [
+        {
+          "element": 6,
+          "isotope": 13,
+          "charge": 0,
+          "explicit_hydrogens": 3,
+          "total_hydrogens": 3,
+          "radical_electrons": 0
+        },
+        {
+          "element": 7,
+          "isotope": 0,
+          "charge": 1,
+          "explicit_hydrogens": 3,
+          "total_hydrogens": 3,
+          "radical_electrons": 0
+        }
+      ],
+      "bonds": [
+        1.0
+      ],
+      "smiles": "[13CH3][NH3+]",
+      "formula": "CH6N+"
+    },
+    "methyl_doublet": {
+      "sanitize": true,
+      "atoms": [
+        {
+          "element": 6,
+          "isotope": 13,
+          "charge": 0,
+          "explicit_hydrogens": 3,
+          "total_hydrogens": 3,
+          "radical_electrons": 1
+        }
+      ],
+      "bonds": [],
+      "smiles": "[13CH3]",
+      "formula": "CH3"
+    },
+    "singlet": {
+      "sanitize": true,
+      "atoms": [
+        {
+          "element": 6,
+          "isotope": 0,
+          "charge": 0,
+          "explicit_hydrogens": 2,
+          "total_hydrogens": 2,
+          "radical_electrons": 2
+        }
+      ],
+      "bonds": [],
+      "smiles": "[CH2]",
+      "formula": "CH2"
+    },
+    "triplet": {
+      "sanitize": true,
+      "atoms": [
+        {
+          "element": 6,
+          "isotope": 0,
+          "charge": 0,
+          "explicit_hydrogens": 2,
+          "total_hydrogens": 2,
+          "radical_electrons": 2
+        }
+      ],
+      "bonds": [],
+      "smiles": "[CH2]",
+      "formula": "CH2"
+    },
+    "default_carbon_fields": {
+      "sanitize": true,
+      "atoms": [
+        {
+          "element": 6,
+          "isotope": 13,
+          "charge": 0,
+          "explicit_hydrogens": 3,
+          "total_hydrogens": 3,
+          "radical_electrons": 1
+        }
+      ],
+      "bonds": [],
+      "smiles": "[13CH3]",
+      "formula": "CH3"
+    },
+    "deuteron": {
+      "sanitize": true,
+      "atoms": [
+        {
+          "element": 1,
+          "isotope": 2,
+          "charge": 1,
+          "explicit_hydrogens": 0,
+          "total_hydrogens": 0,
+          "radical_electrons": 0
+        }
+      ],
+      "bonds": [],
+      "smiles": "[2H+]",
+      "formula": "H+"
+    },
+    "charge4_low_one": {
+      "sanitize": false,
+      "atoms": [
+        {
+          "element": 7,
+          "isotope": 15,
+          "charge": 1,
+          "explicit_hydrogens": 4,
+          "total_hydrogens": 4,
+          "radical_electrons": 0
+        }
+      ],
+      "bonds": [],
+      "smiles": "[15NH4+]",
+      "formula": "H4N+"
+    },
+    "charge4_high_one": {
+      "sanitize": false,
+      "atoms": [
+        {
+          "element": 7,
+          "isotope": 15,
+          "charge": 1,
+          "explicit_hydrogens": 4,
+          "total_hydrogens": 4,
+          "radical_electrons": 0
+        }
+      ],
+      "bonds": [],
+      "smiles": "[15NH4+]",
+      "formula": "H4N+"
+    },
+    "charge4_high_minus_one": {
+      "sanitize": false,
+      "atoms": [
+        {
+          "element": 7,
+          "isotope": 15,
+          "charge": -1,
+          "explicit_hydrogens": 4,
+          "total_hydrogens": 4,
+          "radical_electrons": 0
+        }
+      ],
+      "bonds": [],
+      "smiles": "[15NH4-]",
+      "formula": "H4N-"
+    },
+    "charge4_low_noise_max": {
+      "sanitize": false,
+      "atoms": [
+        {
+          "element": 7,
+          "isotope": 15,
+          "charge": -86,
+          "explicit_hydrogens": 4,
+          "total_hydrogens": 4,
+          "radical_electrons": 0
+        }
+      ],
+      "bonds": [],
+      "smiles": "[15NH4-86]",
+      "formula": "H4N-86"
+    },
+    "charge4_min": {
+      "sanitize": false,
+      "atoms": [
+        {
+          "element": 7,
+          "isotope": 15,
+          "charge": -128,
+          "explicit_hydrogens": 4,
+          "total_hydrogens": 4,
+          "radical_electrons": 0
+        }
+      ],
+      "bonds": [],
+      "smiles": "[15NH4-128]",
+      "formula": "H4N-128"
+    }
+  }
+}

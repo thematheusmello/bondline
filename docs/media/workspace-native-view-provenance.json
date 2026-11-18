@@ -1,0 +1,120 @@
+{
+  "capture": {
+    "path": "workspace-native-view.jpg",
+    "format": "JPEG",
+    "width": 1160,
+    "height": 832,
+    "bytes": 68854,
+    "sha256": "e9555f9df3cc65a26f45057e01379c78cef98ffb90675c505c6caa35102c2708",
+    "method": "Unedited CUA own-window buffer, actual fixed macOS/Metal executable; no crop, resampling, retouching or conversion."
+  },
+  "binary": {
+    "bytes": 21188872,
+    "sha256": "af8a72ed079d15c32b4c1d68c2f7cf891ba5ab56f34029ae8505dbb903259d93"
+  },
+  "sources": {
+    "crates/ui/src/lib.rs": {
+      "bytes": 78758,
+      "sha256": "cf0bbee73e810a7f7fb0c06ffab0c08b575ce890be9a10c4cd761a3fb361e82e"
+    },
+    "crates/ui/src/view_controls.rs": {
+      "bytes": 9745,
+      "sha256": "3659ef60f345d5e456fd593ccbfd6bc2d7544292ba954439213a5b4d27bda05f"
+    },
+    "crates/commands/src/view.rs": {
+      "bytes": 11252,
+      "sha256": "a12501fb7697b1212fbf34a769b2d11048703e23203d89767017afed5391150b"
+    },
+    "vendor/egui/src/memory/mod.rs": {
+      "bytes": 43482,
+      "sha256": "62899ec4b99713a47341ea680fd458c703e41934bc300fc49e82a02fe6e22d46"
+    },
+    "crates/ui/src/file_workflow.rs": {
+      "bytes": 28850,
+      "sha256": "582a6a783223bcca43b5bc9186e20a2beeaccfd6d2bf7c06b27a5ec7365be396"
+    },
+    "crates/ui/src/view_tests.rs": {
+      "bytes": 47960,
+      "sha256": "e7dfb9cbc2940c1b855546b20cb34d9b9de90e9aa5fa190f67560e679b911906"
+    }
+  },
+  "native_file": {
+    "bytes": 952,
+    "sha256": "295e90470595acba479b95cf3be45d701e900a463fddeeafeb3e47e483b925f4",
+    "checks": [
+      "Exact original saved bytes",
+      "Unchanged Expat/Decimal graph consumer",
+      "RDKit2026.09.2: CC/C2H6, C=C/C2H4, C#C/C2H2",
+      "Actual clean revision3 Undo0/Redo1 after native batched CmdZ\u2192CmdS",
+      "Camera150%/epoch1 unchanged"
+    ]
+  },
+  "scene": {
+    "page": "Original A4 210x297mm; no page.set_size issued",
+    "zoom_percent": 150,
+    "native_pointer_authored": true,
+    "literal_points": [
+      [
+        160,
+        267
+      ],
+      [
+        280,
+        267
+      ],
+      [
+        160,
+        397
+      ],
+      [
+        280,
+        397
+      ],
+      [
+        160,
+        527
+      ],
+      [
+        280,
+        527
+      ]
+    ],
+    "orders": [
+      "single",
+      "double",
+      "triple"
+    ],
+    "H": [
+      [
+        3,
+        3
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        1,
+        1
+      ]
+    ]
+  },
+  "verification": "Original unchanged-A4 scene was native-pointer authored, saved and reopened. Fixed build then natively reopens, edits at150% and passes rapid CmdZ\u2192CmdS; memory/history and actual saved bytes independently checked. See verification-ordered-file-actions.md. No full-parity or new human-approved-golden claim.",
+  "previous_capture": {
+    "capture": {
+      "path": "workspace-native-view.jpg",
+      "format": "JPEG",
+      "width": 1160,
+      "height": 832,
+      "bytes": 69026,
+      "sha256": "47e6ee6136c4ced7f195b9a3179961fac68fbfb1ee6dfccb8a4282c4b4b77622",
+      "method": "Unedited own-window CUA buffer; no cropping, resampling, retouching or conversion; corrected after independent file check."
+    },
+    "binary": {
+      "bytes": 21195256,
+      "sha256": "fa584de0ea74d9fe2998ee2e3cd44d2e930e446e563819b0f3d6453e90e3033e"
+    },
+    "scope": "Earlier navigation checkpoint with separated Undo/Save; rapid batch defect was preserved, then fixed separately."
+  },
+  "license": "MIT OR Apache-2.0 original Bondline documentation media; existing Apache Roboto retained."
+}

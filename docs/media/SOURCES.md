@@ -5,7 +5,7 @@ No reference product screenshot, logo, icon, font, template or sample library wa
 
 | File | Origin | SHA-256 |
 |---|---|---|
-| [banner.svg](banner.svg) | Original SVG illustration | `f3363a2c1931feb95d6ef6b4e829b74460880ef486242f45bfde45d975946081` |
+| [banner.svg](banner.svg) | Original SVG illustration | `a13b41a9f091fc861ee3ad3faa29e0ae74697b3ba2e5c0bbee370a63acdc0c67` |
 | [contribute.svg](contribute.svg) | Original SVG illustration | `a6b6e5327002822d9ae8a83f07e34f8c6a6cccda86646650a154732b5754282b` |
 | [workspace.jpg](workspace.jpg) | Unedited original native JPEG capture,1160×832 | `d629c55f5b827bd5b336971c2753eabe12b7d09ed3a2857f27c327631d94929c` |
 | [save-as.jpg](save-as.jpg) | Unedited original native JPEG capture,1160×832 | `72e96c09e9d3b7ca22d66d5c383bcd11890cc36b3135a433d992ea9dd15d37dc` |
@@ -68,3 +68,108 @@ Earlier JPEG records above continue to identify their earlier source and limited
 Pillow12.3.0 independently verifies both published PNG format/dimensions and exact hashes.
 Retained EXIF/XMP contain only1160×832 dimensions and the generic Screenshot comment;
 no GPS, author identity or credential was found. Embedded color metadata remains unchanged.
+
+## Refreshed workspace, 2026-11-14
+
+| File | Origin | SHA-256 |
+|---|---|---|
+| [workspace-current.jpg](workspace-current.jpg) | Unedited native window,1160×832,73618B | `2806ed6f64f99ddf9db828c19534c1ff5b67a4f15032dc2c83fb41c321a33576` |
+| [format-chooser.jpg](format-chooser.jpg) | Unedited native format chooser,1160×832,99667B | `b04f9acb23bff133dff5ed5e5c158b1d73915909f5aa2d622290e9924f55abc4` |
+
+[Capture provenance](workspace-current-provenance.json) records the exact final binary/UI
+source and original420×280pt scene. These are actual macOS/Metal window buffers, with
+existing original glyphs and the attributed font. Native accessibility selection and
+File→Open→format-list→Cancel were inspected. The three structures were registry-authored,
+saved and reopened as native CDXML; they are not presented as successful native drags.
+Unchanged Expat/Decimal plus pinned RDKit independently confirm their coordinates,
+orders, H3/H2/H1 pairs and CC/C2H6, C=C/C2H4, C#C/C2H2 identities.
+
+Pillow independently confirms JPEG dimensions/hashes. The initial metadata check wrongly
+assumed no EXIF; inspection finds only an EXIF offset and image width/height. No GPS or
+author tags are present; Photoshop metadata contains empty IPTC data and its empty-data
+digest. Buffers remain untouched.
+The temporary localhost address is not a credential. This final app/listener is intentionally
+left open for the user, unlike the closed historical sessions above. No token is published.
+Original UI/scene images are MIT OR Apache-2.0 documentation media, separate from runtime
+assets and the unchanged approved chemical golden. See [finite native/frame evidence](../verification-workspace-presentation.md).
+
+
+## Native-authored bond edits, 2026-11-15
+
+[workspace-native-bonds.jpg](workspace-native-bonds.jpg) is the exact unedited final
+CUA own-window JPEG buffer:1160×832, 68558bytes, SHA-256
+`445ce19fa126451613b2530cabd980a17588027d63a0af95ce9befbd15ec1ac9`. [The public-safe provenance](workspace-native-bonds-provenance.json) records
+actual native binary/UI identities, page setup, saved-file bytes and consumer evidence.
+Pillow independently verifies format/dimensions. EXIF contains only a nested offset and
+image dimensions; no GPS/author tags are present. The initial ignored capture filename and
+format assertion assumed PNG; actual JPEG bytes are preserved with the correct public
+extension, without transcoding. Existing color metadata and empty IPTC resources stay exact.
+
+All three Single/Double/Triple structures were authored using native pointer input,
+with the custom420pt-square page prepared explicitly through the registry. The final
+build reopens their1093-byte CDXML, edits the first bond with1/2, performs known Save and
+native menu Undo/Redo, then restores and saves the exact original bytes. It remains open
+for the user. See [finite native evidence](../verification-bond-order-native.md).
+The screenshot records that final saved scene and original procedural glyphs/Roboto font;
+it is not a generated mockup, a new human-approved golden or evidence of full parity.
+No reference-product assets or credentials are included. The visible temporary localhost
+address is not a credential. This original Bondline UI/authored-data image is MIT OR
+Apache-2.0 documentation media, separate from runtime assets. The preceding26-command
+preview process and listener are now closed; their earlier captures retain their scope.
+
+
+## Logical view and ordered-save preview, 2026-11-15
+
+[workspace-native-view.jpg](workspace-native-view.jpg) is the exact final own-window
+CUA JPEG buffer,1160×832,68854B, SHA
+`e9555f9df3cc65a26f45057e01379c78cef98ffb90675c505c6caa35102c2708`.
+[Provenance](workspace-native-view-provenance.json) records the actual fixed binary,
+UI/SDK/command sources and native952B CDXML. Original A4 was never resized. The three
+pairs were mouse-authored in the navigation build, then the fixed build reopens, edits
+at150% and passes the native rapid Undo→Save check against exact original bytes and
+independent Expat/Decimal/RDKit consumers. See
+[ordered-file verification](../verification-ordered-file-actions.md).
+
+The earlier corrected navigation capture was69026B/SHA
+`47e6ee6136c4ced7f195b9a3179961fac68fbfb1ee6dfccb8a4282c4b4b77622`;
+its record remains in the provenance/history. The separate premature failed Undo/Save
+capture was never published. No cropping, conversion, retouching or model-generated UI
+was used. Pillow independently verifies JPEG/dimensions; EXIF contains only the nested
+image width/height, without author/GPS. Existing ICC/empty IPTC metadata is untouched.
+No credential or reference-product artwork is present; localhost address is not a token.
+The new original documentation image is MIT OR Apache-2.0, separate from runtime assets
+and the unchanged approved chemical golden. Full parity/Windows/Linux interaction is
+not established by the photo. The fixed preview remains open for the user.
+
+
+## Original identity refresh, 2026-11-16
+
+The banner now uses the original bond-loop B and custom path wordmark from
+[assets/brand](../../assets/brand/NOTICE.md). The SVG geometry and lettering are original
+MIT OR Apache-2.0 contributions, not copied typeface outlines or reference artwork.
+The five master variants and exact hashes are recorded in assets/manifest.json.
+The updated banner hash is `a13b41a9f091fc861ee3ad3faa29e0ae74697b3ba2e5c0bbee370a63acdc0c67`. It remains an illustration; existing native
+photographs and their historical build records are unchanged. External librsvg 2.60.0
+renders disposable preview PNGs for visual review; no generated UI mockup or new
+approved chemistry golden is introduced.
+
+## Native identity and catalogue, 2026-11-16
+
+| File | Exact original capture | SHA-256 |
+| --- | --- | --- |
+| [workspace-branding-native.jpg](workspace-branding-native.jpg) | Unedited CUA own-window JPEG,1160×832,79446B | `f1d139c83aacd2bdea8ebf11dbda76426cd7bebb994e59106a74053788bc07c4` |
+| [planned-tools-catalogue-native.jpg](planned-tools-catalogue-native.jpg) | Unedited CUA own-window JPEG,1160×832,121940B | `c37b5413277f0ac57edd09ec61091abc094e72d3a77e873dcf8c4e40d7679aaa` |
+
+[Provenance](branding-native-provenance.json) identifies the final compiled sources,
+native c1b8c884… binary, original command-authored/independently consumed ring scene,
+bounded native input checks and limitations. Final captures follow the missing-font
+regression and vector fix, not the earlier preliminary binary. Native macOS27.2/AppleM3Max
+is observed; physical monitor DPI and other-platform interaction are not inferred.
+
+These are exact app-window buffers saved without cropping, conversion, retouching or UI
+generation. Pillow verifies JPEG/dimensions; EXIF contains only an offset and nested image
+dimensions. Existing ICC metadata is retained. The scene/UI/art are original MIT OR
+Apache-2.0, with the separate Apache Roboto notice. No user drawing, private file contents,
+reference-product assets, credential or listener token is included. The older user's app
+and unsaved draft stay untouched; a separate final preview remains open. Grey controls
+remain unimplemented. These are documentation photographs, not new approved goldens.

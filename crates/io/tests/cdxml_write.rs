@@ -87,6 +87,7 @@ fn native_elemental_metadata_and_all_orders_match_an_independent_projection()
             FragmentId::new(index + 1).ok_or("fragment")?,
             vec![first, second],
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(index + 1).ok_or("bond")?,
                 begin: b,
                 end: a,
@@ -124,6 +125,7 @@ fn native_export_handles_sparse_maximal_ids_with_global_source_id_uniqueness()
                 Atom::new(b, Element::try_from(8)?, Some(Point2::new(-0.0, 100000.0)?)),
             ],
             vec![Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(u32::MAX).ok_or("bond")?,
                 begin: b,
                 end: a,

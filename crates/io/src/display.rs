@@ -37,12 +37,17 @@ impl DisplayError {
             Self::MissingPage { .. } => "not_found",
             Self::IncompleteSource
             | Self::Unsupported { .. }
+            | Self::Render(bondline_render::Error::UnsupportedText(_))
             | Self::Render(bondline_render::Error::UnsupportedChemicalContent)
             | Self::Render(bondline_render::Error::LabelPlacement)
             | Self::Render(bondline_render::Error::LabelOverlap) => "unsupported_content",
             Self::Limit { .. } => "resource_limit",
-            Self::Render(bondline_render::Error::InvalidDimensions) => "invalid_params",
-            Self::Render(bondline_render::Error::LabelScale) => "unsupported_scale",
+            Self::Render(
+                bondline_render::Error::InvalidDimensions | bondline_render::Error::InvalidView,
+            ) => "invalid_params",
+            Self::Render(
+                bondline_render::Error::LabelScale | bondline_render::Error::BondScale,
+            ) => "unsupported_scale",
             Self::Render(_) => "render_failed",
         }
     }
@@ -58,10 +63,45 @@ pub fn drawing_page_scene(
     page_id: PageId,
     cancel: &Cancellation,
 ) -> Result<GraphScene, DisplayError> {
+    let (page, counts) = display_facts(stored, page_id, cancel)?;
+    let view = bondline_render::PageView::fit(width, height, page.size())?
+        .with_drawing_style(stored.model().drawing_style())
+        .with_drawing_settings(stored.model().drawing_settings());
+    Ok(match counts {
+        None => view.graph_scene(page, cancel)?,
+        Some(counts) => view.graph_scene_with_display_hydrogens(page, &counts, cancel)?,
+    })
+}
+
+/// The same complete-source/chemical policy with a transient logical-unit camera.
+pub fn drawing_page_scene_with_view(
+    view: &bondline_render::PageView,
+    stored: &StoredDocument,
+    page_id: PageId,
+    cancel: &Cancellation,
+) -> Result<GraphScene, DisplayError> {
+    let (page, counts) = display_facts(stored, page_id, cancel)?;
+    let view = view
+        .clone()
+        .with_drawing_style(stored.model().drawing_style())
+        .with_drawing_settings(stored.model().drawing_settings());
+    Ok(match counts {
+        None => view.graph_scene(page, cancel)?,
+        Some(counts) => view.graph_scene_with_display_hydrogens(page, &counts, cancel)?,
+    })
+}
+
+type DisplayFacts<'a> = (&'a bondline_model::Page, Option<BTreeMap<AtomId, u16>>);
+
+fn display_facts<'a>(
+    stored: &'a StoredDocument,
+    page_id: PageId,
+    cancel: &Cancellation,
+) -> Result<DisplayFacts<'a>, DisplayError> {
     if cancel.is_cancelled() {
         return Err(DisplayError::Cancelled);
     }
-    if !stored.is_fully_mapped() {
+    if !stored.has_display_projection() {
         return Err(DisplayError::IncompleteSource);
     }
     let page = stored
@@ -71,9 +111,7 @@ pub fn drawing_page_scene(
         .find(|page| page.id() == page_id)
         .ok_or(DisplayError::MissingPage { page_id })?;
     if stored.mol_version().is_none() {
-        return Ok(bondline_render::graph_page_scene_with_cancel(
-            width, height, page, cancel,
-        )?);
+        return Ok((page, None));
     }
     // Keep the renderer's cheap hit bound ahead of allocating any derived topology.
     let mut hit_count = 0_usize;
@@ -107,9 +145,7 @@ pub fn drawing_page_scene(
             counts.insert(id, count);
         }
     }
-    Ok(bondline_render::graph_page_scene_with_display_hydrogens(
-        width, height, page, &counts, cancel,
-    )?)
+    Ok((page, Some(counts)))
 }
 
 pub(crate) enum HydrogenError {

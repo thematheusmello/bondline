@@ -70,6 +70,7 @@ fn drawing() -> Result<StoredDocument, Box<dyn std::error::Error>> {
             (left, right)
         };
         bonds.push(Bond {
+            double_position: bondline_model::DoublePosition::Unspecified,
             id: BondId::new(u32::try_from(index * 7 + 3)?).ok_or("bond ID")?,
             begin: atom_id(left)?,
             end: atom_id(right)?,

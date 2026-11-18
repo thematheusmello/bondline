@@ -1,0 +1,439 @@
+{
+  "version": "2026.09.2",
+  "binary_cdx_support": true,
+  "cases": {
+    "single_absent": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        0,
+        0
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 1.0,
+      "formula": "C2H6",
+      "smiles": "CC",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "single_solid": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        0,
+        0
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 1.0,
+      "formula": "C2H6",
+      "smiles": "CC",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "ethene": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "ethyne": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        1,
+        1
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 3.0,
+      "formula": "C2H2",
+      "smiles": "C#C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "auto_center": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "auto_right": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "auto_left": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "manual_center": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "manual_right": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "manual_left": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "reversed_right": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 1,
+      "end_index": 0,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "reordered_right": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "extended_right": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "embedded_right": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "implied_right": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        2,
+        2
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    },
+    "ethene_unknown_h": {
+      "elements": [
+        6,
+        6
+      ],
+      "explicit_hydrogens": [
+        0,
+        0
+      ],
+      "begin_index": 0,
+      "end_index": 1,
+      "order": 2.0,
+      "formula": "C2H4",
+      "smiles": "C=C",
+      "raw_coordinate_convention": [
+        [
+          6307840.0,
+          -10518528.0,
+          0.0
+        ],
+        [
+          9453568.0,
+          -10518528.0,
+          0.0
+        ]
+      ]
+    }
+  },
+  "scope": "graph/order/direction only; no side, manual-state, rendering or spin inference"
+}

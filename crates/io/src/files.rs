@@ -3,8 +3,9 @@
 mod platform;
 mod smiles;
 pub use smiles::{
-    SmilesConversionReceipt, convert_smiles_to_cdxml_file, export_smiles_fragment_file,
-    read_smiles_file, save_smiles_file,
+    SmilesConversionReceipt, convert_smiles_acyclic_to_cdxml_file,
+    convert_smiles_components_to_cdxml_file, convert_smiles_simple_ring_to_cdxml_file,
+    convert_smiles_to_cdxml_file, export_smiles_fragment_file, read_smiles_file, save_smiles_file,
 };
 #[cfg(test)]
 mod tests;

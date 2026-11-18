@@ -1,0 +1,250 @@
+{
+  "header_hex": "566a4344303130300403020100000000000000000000000000000000",
+  "rows": [
+    {
+      "kind": "property",
+      "tag": 2053,
+      "parent": null,
+      "start": 28,
+      "end": 36,
+      "payload_start": 32,
+      "payload_end": 36,
+      "encoding": "short",
+      "payload_hex": "00001e00"
+    },
+    {
+      "kind": "property",
+      "tag": 2074,
+      "parent": null,
+      "start": 36,
+      "end": 42,
+      "payload_start": 40,
+      "payload_end": 42,
+      "encoding": "short",
+      "payload_hex": "0300"
+    },
+    {
+      "kind": "property",
+      "tag": 2075,
+      "parent": null,
+      "start": 42,
+      "end": 48,
+      "payload_start": 46,
+      "payload_end": 48,
+      "encoding": "short",
+      "payload_hex": "0400"
+    },
+    {
+      "kind": "property",
+      "tag": 256,
+      "parent": null,
+      "start": 48,
+      "end": 88,
+      "payload_start": 52,
+      "payload_end": 88,
+      "encoding": "short",
+      "payload_hex": "000002000200e9fd0500417269616c0300e9fd0f0054696d6573204e657720526f6d616e"
+    },
+    {
+      "kind": "property",
+      "tag": 768,
+      "parent": null,
+      "start": 88,
+      "end": 142,
+      "payload_start": 92,
+      "payload_end": 142,
+      "encoding": "short",
+      "payload_hex": "0800ffffffffffff000000000000ffff00000000ffffffff00000000ffff00000000ffffffff00000000ffffffff0000ffff"
+    },
+    {
+      "kind": "object",
+      "tag": 32769,
+      "id": 0,
+      "parent": null,
+      "start": 142,
+      "end": 148
+    },
+    {
+      "kind": "property",
+      "tag": 2064,
+      "parent": 5,
+      "start": 148,
+      "end": 154,
+      "payload_start": 152,
+      "payload_end": 154,
+      "encoding": "short",
+      "payload_hex": "0100"
+    },
+    {
+      "kind": "property",
+      "tag": 2063,
+      "parent": 5,
+      "start": 154,
+      "end": 160,
+      "payload_start": 158,
+      "payload_end": 160,
+      "encoding": "short",
+      "payload_hex": "0100"
+    },
+    {
+      "kind": "property",
+      "tag": 516,
+      "parent": 5,
+      "start": 160,
+      "end": 180,
+      "payload_start": 164,
+      "payload_end": 180,
+      "encoding": "short",
+      "payload_hex": "00000000000000000000000000002d00"
+    },
+    {
+      "kind": "object",
+      "tag": 32771,
+      "id": 4,
+      "parent": 5,
+      "start": 180,
+      "end": 186
+    },
+    {
+      "kind": "object",
+      "tag": 32772,
+      "id": 5,
+      "parent": 9,
+      "start": 186,
+      "end": 192
+    },
+    {
+      "kind": "property",
+      "tag": 512,
+      "parent": 10,
+      "start": 192,
+      "end": 204,
+      "payload_start": 196,
+      "payload_end": 204,
+      "encoding": "short",
+      "payload_hex": "0000000000000000",
+      "signed_y_x_16_16_raw": [
+        0,
+        0
+      ],
+      "document_x_y_points": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "kind": "end",
+      "matched": 10,
+      "parent": 9,
+      "start": 204,
+      "end": 206
+    },
+    {
+      "kind": "object",
+      "tag": 32772,
+      "id": 6,
+      "parent": 9,
+      "start": 206,
+      "end": 212
+    },
+    {
+      "kind": "property",
+      "tag": 512,
+      "parent": 13,
+      "start": 212,
+      "end": 224,
+      "payload_start": 216,
+      "payload_end": 224,
+      "encoding": "short",
+      "payload_hex": "0000000000002d00",
+      "signed_y_x_16_16_raw": [
+        0,
+        2949120
+      ],
+      "document_x_y_points": [
+        45.0,
+        0.0
+      ]
+    },
+    {
+      "kind": "end",
+      "matched": 13,
+      "parent": 9,
+      "start": 224,
+      "end": 226
+    },
+    {
+      "kind": "object",
+      "tag": 32773,
+      "id": 7,
+      "parent": 9,
+      "start": 226,
+      "end": 232
+    },
+    {
+      "kind": "property",
+      "tag": 1540,
+      "parent": 16,
+      "start": 232,
+      "end": 240,
+      "payload_start": 236,
+      "payload_end": 240,
+      "encoding": "short",
+      "payload_hex": "05000000",
+      "reference_u32": 5
+    },
+    {
+      "kind": "property",
+      "tag": 1541,
+      "parent": 16,
+      "start": 240,
+      "end": 248,
+      "payload_start": 244,
+      "payload_end": 248,
+      "encoding": "short",
+      "payload_hex": "06000000",
+      "reference_u32": 6
+    },
+    {
+      "kind": "end",
+      "matched": 16,
+      "parent": 9,
+      "start": 248,
+      "end": 250
+    },
+    {
+      "kind": "end",
+      "matched": 9,
+      "parent": 5,
+      "start": 250,
+      "end": 252
+    },
+    {
+      "kind": "end",
+      "matched": 5,
+      "parent": null,
+      "start": 252,
+      "end": 254
+    },
+    {
+      "kind": "end",
+      "matched": null,
+      "parent": null,
+      "start": 254,
+      "end": 256
+    },
+    {
+      "kind": "end",
+      "matched": null,
+      "parent": null,
+      "start": 256,
+      "end": 258
+    }
+  ],
+  "first_implicit_end_offset": 256,
+  "remaining_after_first_implicit_end": {
+    "bytes": 2,
+    "hex": "0000"
+  },
+  "qualification": "All original bytes inventoried. Additional end words are observations, not a normative parse acceptance or permission to trim."
+}

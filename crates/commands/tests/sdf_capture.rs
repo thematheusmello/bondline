@@ -203,6 +203,7 @@ fn expected_page(mirrored: bool, control: u8) -> Result<Page, Box<dyn std::error
             .into_iter()
             .map(|(id, a, b)| {
                 Ok(Bond {
+                    double_position: bondline_model::DoublePosition::Unspecified,
                     id: BondId::new(id).ok_or("bond")?,
                     begin: AtomId::new(a).ok_or("begin")?,
                     end: AtomId::new(b).ok_or("end")?,
@@ -388,8 +389,7 @@ fn virtual_page_and_cancellation_fail_without_mutating_the_complete_sdf() -> Tes
 }
 
 #[test]
-fn an_unsupported_degenerate_or_empty_later_molecule_never_yields_a_partial_capture() -> TestResult
-{
+fn later_multiple_bond_renders_while_degenerate_or_empty_records_refuse_atomically() -> TestResult {
     let directory = support::FileTestDirectory::new()?;
     let base = String::from_utf8(source())?;
     let empty=b"Empty original\n  Bondline          2D\nEmpty CTAB is not a drawing\n  0  0  0  0  0  0            999 V2000\nM  END\n";
@@ -409,11 +409,56 @@ fn an_unsupported_degenerate_or_empty_later_molecule_never_yields_a_partial_capt
         engine.dispatch("document.open_sdf", json!({"path":input}))?;
         let before = serde_json::to_value(engine.state())?;
         let owner = engine.content().clone();
-        for backend in ["cpu", "gpu"] {
-            assert!(
-                engine.dispatch("render.capture", request(backend)).is_err(),
-                "partial capture forcase{case}"
+        let expected = if case == 0 {
+            let second = String::from_utf8(METHYLAMINE.to_vec())?.replace("91 1 17 4", "91 2 17 4");
+            let observed = external("mol_oracle.py", second.as_bytes())?;
+            assert_eq!(observed["smiles"], "C=N");
+            assert_eq!(observed["formula"], "CH3N");
+            assert_eq!(observed["atoms"][0]["hydrogens"], 1);
+            assert_eq!(observed["atoms"][1]["hydrogens"], 2);
+            let mut expected = Document::default();
+            for fragment in expected_page(false, 0)?.fragments() {
+                let mut atoms = fragment.atoms().to_vec();
+                let mut bonds = fragment.bonds().to_vec();
+                if fragment.id().get() == 2 {
+                    atoms[0].explicit_hydrogens = Some(1);
+                    atoms[1].explicit_hydrogens = Some(2);
+                    bonds[0].order = BondOrder::Double;
+                }
+                expected.append_fragments(
+                    PageId::new(1).ok_or("page")?,
+                    vec![Fragment::new(fragment.id(), atoms, bonds)?],
+                )?;
+            }
+            let scene = graph_page_scene(1024, 1024, &expected.pages()[0])?;
+            let png = STANDARD.encode(bondline_io::encode_png(&cpu_scene(scene.scene())?)?);
+            assert_ne!(
+                png,
+                literal_reference(false, 0)?,
+                "multiple record must not collapse to old Single/H2/H3"
             );
+            Some(png)
+        } else {
+            None
+        };
+        for backend in ["cpu", "gpu"] {
+            if let Some(expected) = &expected {
+                let capture = engine
+                    .dispatch("render.capture", request(backend))?
+                    .capture
+                    .ok_or("all-record multiple capture missing")?;
+                assert_eq!(
+                    capture.png_base64, *expected,
+                    "both actual records, coordinates, H counts and bond components"
+                );
+                assert_eq!(capture.adapter.is_some(), backend == "gpu");
+                assert_eq!((capture.width_px, capture.height_px), (1024, 1024));
+            } else {
+                assert!(
+                    engine.dispatch("render.capture", request(backend)).is_err(),
+                    "partial capture forcase{case}"
+                );
+            }
             assert_eq!(engine.content(), &owner);
             assert_eq!(serde_json::to_value(engine.state())?, before);
         }

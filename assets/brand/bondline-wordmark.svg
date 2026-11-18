@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 348 64" role="img" aria-labelledby="title desc">
+<title id="title">Bondline</title>
+<desc id="desc">Original bond-loop B mark and custom lowercase bondline lettering.</desc>
+<metadata>Original Bondline geometry. Copyright 2026 Bondline contributors. SPDX-License-Identifier: MIT OR Apache-2.0. No font outlines or external artwork.</metadata>
+<path d="M16 12V52M16 12H36L48 22L36 32H16M16 32H36L48 42L36 52H16" fill="none" stroke="#157576" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<g fill="none" stroke="#25303d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M88 12V52M88 38C88 30 93 24 100 24C107 24 112 30 112 38C112 46 107 52 100 52C93 52 88 46 88 38"/>
+<path d="M147 38C147 46 142 52 135 52C128 52 123 46 123 38C123 30 128 24 135 24C142 24 147 30 147 38Z"/>
+<path d="M160 52V24M160 37C160 29 165 24 172 24C179 24 184 29 184 37V52"/>
+<path d="M221 12V52M221 38C221 30 216 24 209 24C202 24 197 30 197 38C197 46 202 52 209 52C216 52 221 46 221 38"/>
+<path d="M236 12V52"/>
+<path d="M251 25V52"/>
+<path d="M266 52V24M266 37C266 29 271 24 278 24C285 24 290 29 290 37V52"/>
+<path d="M328 47C325 51 321 52 316 52C308 52 303 46 303 38C303 30 308 24 316 24C323 24 328 30 328 37H304"/>
+</g>
+<circle cx="251" cy="14" r="2.75" fill="#25303d"/>
+</svg>

@@ -1,0 +1,69 @@
+{
+  "fixture": {
+    "path": "../external-ethane-indigo-1.47.0.cdx",
+    "bytes": 258,
+    "sha256": "856482269dbd85640b87c11f608104dba72ebd308a686f1333a893965ed560ba"
+  },
+  "original_content_license": "MIT OR Apache-2.0",
+  "producer": {
+    "package": "epam.indigo",
+    "version": "1.47.0",
+    "runtime": "1.47.0.0-gcc2ea8518-aarch64-darwin-appleclang-17000013",
+    "platform": "macOS27.2 arm64; Python3.13.0",
+    "metadata_url": "https://pypi.org/pypi/epam.indigo/1.47.0/json",
+    "metadata_sha256": "b5d1c48eb3c14f62bf2b13c30f36a078991b3bd34e5de8f0ad148fefd5ebadc2",
+    "wheel_filename": "epam_indigo-1.47.0-py3-none-macosx_11_0_arm64.whl",
+    "wheel_bytes": 5844288,
+    "wheel_sha256": "e3f097c9818dc282fe0ae436c4b4f98fd310d2ccba4eb13617ad0ef547cc6f1e",
+    "declared_license": "Apache-2.0",
+    "tag": "indigo-1.47.0",
+    "tag_object": "fda5f80a8a2ea7bcf42a7c66c59462f86fff0ead",
+    "source_commit": "cc2ea85187433c253c0233a13f1859a6a5298d97",
+    "released_LICENSE_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "writer_source_url": "https://github.com/epam/Indigo/blob/cc2ea85187433c253c0233a13f1859a6a5298d97/core/indigo-core/molecule/src/molecule_cdxml_saver.cpp#L2015"
+  },
+  "exact_original_copies": [
+    {
+      "path": "input-graphs.json",
+      "bytes": 1584,
+      "sha256": "de63b15aaf55038c2a0c38f5779363a0d8f048a875052ea1b84eccb6ef43595e"
+    },
+    {
+      "path": "generate.py",
+      "bytes": 2722,
+      "sha256": "274a9cdee670e203eaab11c0cf6759dab8f1c99ca478d196b9704ee577800e19"
+    },
+    {
+      "path": "generate_positioned.py",
+      "bytes": 3250,
+      "sha256": "8db31ad726e72b914d06bb12116d2d39bedbfb4dfeda5eb4e1a346235c5f5460"
+    },
+    {
+      "path": "LICENSE-MIT",
+      "bytes": 1078,
+      "sha256": "8d09f457ac701dad79a8367ec5be4510f78066369b41f8ebc76d93b831d1d1dd"
+    },
+    {
+      "path": "LICENSE-APACHE",
+      "bytes": 10850,
+      "sha256": "8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90"
+    },
+    {
+      "path": "Indigo-release-LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "original-raw-scan.json",
+      "bytes": 5017,
+      "sha256": "a73a292895207b1c2b10a280f7738da3eb94294dd9c6831dd2646387533b585e"
+    }
+  ],
+  "limits": [
+    "unsigned public release tag, no reproducible-build or comprehensive binary license audit claimed",
+    "producer is external test tooling only; wheel/native libraries are not bundled or linked",
+    "font-name strings remain opaque original metadata; no font files included",
+    "input Indigo coordinate unit is not asserted to equal output document points",
+    "no fetched corpus admission or general/application CDX compatibility"
+  ]
+}

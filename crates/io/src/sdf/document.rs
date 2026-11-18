@@ -129,6 +129,32 @@ impl SdfDocument {
         SdfFile::parse(&self.source)
     }
 
+    /// Remove one complete record, retaining every other source byte unchanged.
+    /// The result is reparsed so its positive ordinal IDs and spans describe the new
+    /// source; IDs are not stable across removal. An SDfile must retain one record.
+    pub fn without_record(&self, record_id: RecordId) -> Result<Self, SdfError> {
+        let record = self.record(record_id).ok_or(SdfError::MissingRecord {
+            record_id: record_id.get(),
+        })?;
+        if self.records.len() == 1 {
+            return Err(SdfError::Empty);
+        }
+        let range = record.range();
+        let prefix = self
+            .source
+            .get(..range.start)
+            .ok_or(SdfError::InvalidSpan)?;
+        let suffix = self.source.get(range.end..).ok_or(SdfError::InvalidSpan)?;
+        let byte_count = prefix
+            .len()
+            .checked_add(suffix.len())
+            .ok_or(SdfError::InvalidSpan)?;
+        let mut output = Vec::with_capacity(byte_count);
+        output.extend_from_slice(prefix);
+        output.extend_from_slice(suffix);
+        Self::parse(output.into())
+    }
+
     /// Replace one existing ordered value occurrence, retaining all other source bytes.
     /// The field index is zero-based; an empty slice authors an empty value.
     /// Identical logical lines share the original snapshot, including its line endings;

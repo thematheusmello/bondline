@@ -1,11 +1,28 @@
 //! Native file-menu, background execution and unsaved-close lifecycle.
 
+mod new_document;
+mod smiles_conversion;
+mod smiles_import;
+pub(crate) mod smiles_paste;
+#[cfg(test)]
+use new_document::NewChoice;
+use new_document::NewWorkflow;
+use smiles_conversion::ConversionWorkflow;
+use smiles_import::ImportWorkflow;
+use smiles_paste::PasteWorkflow;
+
 #[cfg(test)]
 mod cdx_tests;
 #[cfg(test)]
 mod close_tests;
 #[cfg(test)]
+#[path = "conversion_lifecycle_tests.rs"]
+mod conversion_tests;
+#[cfg(test)]
 mod mol_tests;
+#[cfg(test)]
+#[path = "new_document_lifecycle_tests.rs"]
+mod new_document_tests;
 #[cfg(test)]
 mod request_tests;
 #[cfg(test)]
@@ -64,6 +81,10 @@ pub(crate) struct FileWorkflow {
     job: Option<FileJob>,
     save_for_close: Option<CloseSave>,
     request_id: Option<u64>,
+    new_document: NewWorkflow,
+    conversion: ConversionWorkflow,
+    paste: PasteWorkflow,
+    import: ImportWorkflow,
 }
 
 impl FileWorkflow {
@@ -74,21 +95,27 @@ impl FileWorkflow {
             job: None,
             save_for_close: None,
             request_id: None,
+            new_document: NewWorkflow::default(),
+            conversion: ConversionWorkflow::default(),
+            paste: PasteWorkflow::default(),
+            import: ImportWorkflow::default(),
         }
     }
 
     pub(crate) fn blocks_authoring(&self, state: &CommandResult) -> bool {
-        self.chooser.is_open()
-            || state.close != CloseState::Open
-            || state
-                .ui_file
-                .request
-                .as_ref()
-                .is_some_and(|request| request.phase != UiFilePhase::Running)
+        self.presentation_present() || crate::pending_ui_blocks_authoring(state)
+    }
+
+    pub(crate) fn presentation_present(&self) -> bool {
+        self.conversion.present()
+            || self.paste.present()
+            || self.import.present()
+            || self.new_document.pending()
+            || self.chooser.is_open()
     }
 
     pub(crate) fn is_busy(&self) -> bool {
-        self.job.is_some()
+        self.job.is_some() || self.conversion.busy() || self.paste.busy() || self.import.busy()
     }
 
     fn sync_close(&mut self, state: &CommandResult) {
@@ -142,20 +169,21 @@ impl FileWorkflow {
     pub(crate) fn menu(
         &mut self,
         ui: &mut egui::Ui,
-        engine: &mut Engine,
-        error: &mut Option<String>,
-    ) -> Option<FileIntentAction> {
-        let state = engine.state();
-        self.sync_close(&state);
-        let controls = engine.controls();
-        let shortcut = crate::control_shortcut(ui.ctx(), &controls, "File");
-        let menu = crate::control_menu(ui, &controls, "File");
-        let command = shortcut.or(menu);
-        if let Some(command) = command {
-            *error = engine.execute(command).err().map(|error| error.to_string());
-            self.sync_close(&engine.state());
+        engine: &Engine,
+        events: &[egui::Event],
+        order_busy: bool,
+    ) -> Option<(usize, &'static str)> {
+        self.sync_close(&engine.state());
+        let mut controls = engine.controls();
+        if order_busy {
+            for control in &mut controls {
+                if control.menu == "File" && !matches!(control.id, "file.close" | "file.cancel") {
+                    control.enabled = false;
+                    control.disabled_reason = Some("A bond-order change is still pending.");
+                }
+            }
         }
-        None
+        crate::control_menu_action(ui, &controls, "File", events)
     }
 
     fn request_file(
@@ -201,6 +229,10 @@ impl FileWorkflow {
             revision: request.input_revision,
         });
         match plan {
+            UiFilePlan::NewDocument => self.accepted_new(request.id, engine, error),
+            UiFilePlan::SmilesConversion => self.open_conversion(request.id, engine, error),
+            UiFilePlan::SmilesPaste => self.open_paste(request.id, engine, error),
+            UiFilePlan::SmilesImport => self.open_import(request.id, engine, error),
             UiFilePlan::OpenPicker => self.begin(FileMode::Open, &state),
             UiFilePlan::SavePicker => self.begin(FileMode::Save, &state),
             UiFilePlan::SaveExisting { format, params } => {
@@ -218,6 +250,9 @@ impl FileWorkflow {
     }
 
     fn cancel_picker(&mut self, engine: &mut Engine, error: &mut Option<String>) {
+        if self.job.is_none() {
+            self.abort_new_save();
+        }
         let Some(request_id) = self.request_id else {
             return;
         };
@@ -266,12 +301,17 @@ impl FileWorkflow {
             {
                 job.cancel.cancel();
                 job.cancelling = true;
+                self.new_document.disarm();
             }
             ui.ctx().request_repaint_after(Duration::from_millis(40));
         }
     }
 
     pub(crate) fn request_close(&mut self, engine: &mut Engine, error: &mut Option<String>) {
+        self.conversion_close(engine, error);
+        self.paste_close();
+        self.import_close();
+        self.cancel_new_for_close(engine, error);
         self.close_command(engine, CloseAction::Request, error);
     }
 
@@ -324,7 +364,13 @@ impl FileWorkflow {
         active_work: bool,
         pending_file_action: bool,
     ) -> bool {
-        !pending_file_action && !self.is_busy() && !active_work && engine.complete_close()
+        !pending_file_action
+            && !self.paste.present()
+            && !self.import.present()
+            && !self.new_document.pending()
+            && !self.is_busy()
+            && !active_work
+            && engine.complete_close()
     }
 
     pub(crate) fn keep_open_after_file_failure(
@@ -349,8 +395,28 @@ impl FileWorkflow {
         error: &mut Option<String>,
         active_work: bool,
     ) -> Option<FileIntentAction> {
+        self.sync_new(engine);
+        if self.paste.present() || self.import.present() {
+            return None;
+        }
+        if self.conversion.present() && engine.state().close == CloseState::Open {
+            self.conversion_picker(context);
+            return None;
+        }
+        let revision = engine.state().revision;
         if let Some(action) = self.adopt_request(engine, error) {
             return Some(action);
+        }
+        if engine.state().revision != revision {
+            context.request_discard("New document was created");
+        }
+        if self.paste.present() || self.import.present() {
+            context.request_repaint();
+            return None;
+        }
+        if self.conversion.present() && engine.state().close == CloseState::Open {
+            self.conversion_picker(context);
+            return None;
         }
         let state = engine.state();
         if self.chooser.is_open() {
@@ -511,37 +577,50 @@ impl FileWorkflow {
         let work = match executor.prepare_ui_file(request_id, command) {
             Ok(work) => work,
             Err(failure) => {
+                let new_aborted = self.abort_new_save();
                 if let Ok(mut engine) = executor.engine().lock() {
                     self.failed(request_id, format, action, &failure, &mut engine);
                 }
-                return Err(failure.message);
+                return Err(if new_aborted {
+                    format!("{} No new document was created.", failure.message)
+                } else {
+                    failure.message
+                });
             }
         };
         let context = context.clone();
         let (sender, result) = mpsc::sync_channel(1);
-        if let Err(error) = std::thread::Builder::new()
+        let worker = match std::thread::Builder::new()
             .name("bondline-ui-file".to_owned())
             .spawn(move || {
                 let result = work.complete_blocking(&worker_cancel);
                 let _ = sender.send(result);
                 context.request_repaint();
-            })
-        {
-            let message = format!("Cannot start file operation: {error}");
-            if let Ok(mut engine) = executor.engine().lock() {
-                self.failed(
-                    request_id,
-                    format,
-                    action,
-                    &ErrorInfo {
-                        code: "worker_failed",
-                        message: message.clone(),
-                    },
-                    &mut engine,
-                );
+            }) {
+            Ok(worker) => worker,
+            Err(error) => {
+                let new_aborted = self.abort_new_save();
+                let message = if new_aborted {
+                    format!("Cannot start file operation: {error}. No new document was created.")
+                } else {
+                    format!("Cannot start file operation: {error}")
+                };
+                if let Ok(mut engine) = executor.engine().lock() {
+                    self.failed(
+                        request_id,
+                        format,
+                        action,
+                        &ErrorInfo {
+                            code: "worker_failed",
+                            message: message.clone(),
+                        },
+                        &mut engine,
+                    );
+                }
+                return Err(message);
             }
-            return Err(message);
-        }
+        };
+        self.retain_new_worker(request_id, worker);
         self.job = Some(FileJob {
             request_id,
             format,
@@ -573,8 +652,15 @@ impl FileWorkflow {
     }
 
     pub(crate) fn poll(&mut self, engine: &mut Engine, error: &mut Option<String>) {
+        self.sync_conversion(Some(engine), error);
+        self.sync_new(engine);
         let current = engine.state();
         self.sync_close(&current);
+        if let Some(id) = self.job.as_ref().map(|job| job.request_id)
+            && !self.new_worker_retired(id)
+        {
+            return;
+        }
         let Some(job) = &self.job else {
             return;
         };
@@ -621,9 +707,15 @@ impl FileWorkflow {
                         *error = Some("The document changed during the file operation. Review the current changes before closing.".to_owned());
                     }
                 }
+                self.finish_new_save(&job, &result, current_completion, engine, error);
             }
             Err(failure) => {
-                *error = Some(failure.message.clone());
+                let new_aborted = self.abort_new_save();
+                *error = Some(if new_aborted {
+                    format!("{} No new document was created.", failure.message)
+                } else {
+                    failure.message.clone()
+                });
                 self.keep_open_after_file_failure(engine, error);
                 self.save_for_close = job.close_save;
                 self.failed(job.request_id, job.format, job.action, &failure, engine);
@@ -637,6 +729,9 @@ impl Drop for FileWorkflow {
         if let Some(job) = &self.job {
             job.cancel.cancel();
         }
+        self.conversion.cancel();
+        self.paste.cancel();
+        self.import.cancel();
     }
 }
 

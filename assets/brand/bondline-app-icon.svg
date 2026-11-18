@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<title id="title">Bondline</title>
+<desc id="desc">White bond-loop B on a restrained teal rounded tile.</desc>
+<metadata>Original Bondline geometry. Copyright 2026 Bondline contributors. SPDX-License-Identifier: MIT OR Apache-2.0. No font outlines or external artwork.</metadata>
+<rect width="64" height="64" rx="14" fill="#157576"/>
+<path d="M16 12V52M16 12H36L48 22L36 32H16M16 32H36L48 42L36 52H16" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

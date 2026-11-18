@@ -1,16 +1,192 @@
 # File capabilities
 
+The [plain CDX bond projection](verification-cdx-plain-bonds.md) reads binary Order1/2/4,
+absent/explicit Solid and six directed DoublePosition encodings. Absence remains
+Unspecified; automatic/manual mode survives only in raw source. Display2/position on
+non-Double orders, non-Solid styles and other/query orders remain unsupported. Independent
+bytes/complete models/adapters and bounded Mac Unicode Save/reopen prove exact retention;
+no normalization or source-regenerating encoder is added. Full/display/chemical-authoring
+and cross-format guards stay closed; source restoration is still required after detached
+model edits. Fonts/colours/Text/styles and faithful CDX preview/editing remain missing.
+
+The [literal CDX atom projection](verification-cdx-literal-atom-metadata.md) now reads
+Node-owned isotope0420/signed16, charge0421/signed8 or documented four-byte recovery,
+radical0422/unsigned8 and NumHydrogens042B/unsigned16. Absent H stays unresolved; present0
+is explicit. Duplicate/wrong-owner/domain/width guards and complete raw-source retention
+are verified against independent original bytes, actual adapters and bounded Mac Unicode
+Save/reopen. Two external RDKit four-byte-charge differences are recorded explicitly.
+Full/display/chemical-authoring and cross-format permissions remain closed. Detached
+page edits still require Undo before an unchanged CDX Save can succeed. General bond/
+Text/resource/style/query/stereo mapping, faithful preview and changed-CDX encoding remain
+missing; no new command or planned tool is enabled.
+
+The [explicit-label metadata workflow](verification-label-default-metadata.md) adds a
+separate checked source mode for unused LabelFont/LabelSize/LabelFace beside fully
+explicit run typography. Root/Node/Bond/Text owners and shadowed values/resources are
+validated; default lexemes/owners stay immutable. Existing48/49 and Selection can edit
+qualified labels/points through exact source spans, with complete re-import and final
+page checks. No missing run field is filled, unused font/face/size is never rendered,
+old profile getters remain literal and global full stays false. This does not implement
+general inheritance or broaden chemistry, caption/style or cross-format permissions.
+
+The [Mixed CDXML workflow](verification-mixed-skeletal-labels.md) covers foreign diagrams
+with explicit printed labels plus no-Text carbon nodes proven currently glyphless. Each
+hidden C needs literal H, explicit active suppression and neutral/natural/nonradical
+metadata. Source children, ink/resources/styles and complete geometry remain checked;
+no default font/H or root flag inheritance is inferred. Existing source splices support
+point-only hidden edits and synchronized existing printed labels, with full reimport and
+final page proof. Old Boxed/Connected scopes, globalfullfalse and loss/unknown guards
+remain; hidden-node text insertion and CDX/general style support remain missing.
+
+The [dependent-label workflow](verification-dependent-label-translation.md) adds literal
+Node.p/BBox translation to the complete Boxed and Connected CDXML capabilities. Selected
+atoms retain body/styles/chemistry while their current raw boxes move with them. Existing
+source leaves are spliced and fully re-imported, with current Connected geometry and a
+final authoring-page certificate. Unknown data/defaults and unrelated edits retain their
+refusals; global source completeness stays false. This does not add CDX label editing.
+Connected bond-bearing sources have their separate explicit styles/all-labels/black-ink
+profile; foreign Boxed below remains strictly zero-bond.
+
+The [box-positioned literal label workflow](research/boxed-atom-label-workflow.md) now
+admits a separately proven CDXML subset for display and command48 edits. Foreign
+scenes require every atom explicitly labelled and zero bonds; missing foreign font/ink
+defaults stay unresolved. Source-free/exact-native models keep their own conventions. Explicit no-p
+Text boxes, known Roboto Regular face0 runs and matching numeric element/H reconstruct
+actual glyph placement. A complete foreign-source proof preserves all IDs/resources/
+lexemes while editing only existing Element/H, run body and BoundingBox. Other styles,
+explicit child positions, formula/script faces, abbreviations, unknown objects/defaults
+and broader layering remain unsupported. This does not make global source completeness
+true or authorize unrelated drawing/page/caption writers. The separately certified
+selection movement above is its only additional geometry edit. Whole-MOL still refuses text loss.
+
+Explicit elemental Node child Text now has owned literal data: supported explicit runs,
+raw optional point and independent Justification/LabelJustification/LabelAlignment.
+Native CDXML writes all ordered runs/resources; unchanged foreign source stays byte-exact.
+Missing/unsupported/unresolved/ambiguous child text stays opaque. Any owned child label
+retains its original data-only refusal unless the separate box-qualified workflow above
+proves the stated display/edit operation. Other chemical/page/caption edits stay closed.
+MOL refuses text loss, and retained-SMILES/Preserved deltas cannot inject or
+discard it. Raw native model encoding is separate from editing capability. See
+[contract](research/owned-atom-label-data.md) and
+[receiving](verification-owned-atom-label-data.md). General label layout, dependent edits, inherited effective styles, full foreign mapping
+and the native Text tool remain required. That data-only checkpoint added no command;
+the separate boxed workflow above appends record48.
+
+The standalone CDXML default-property view now returns per-property LabelFont/Size/Face
+values with their exact containing owners and decoded attribute values. Missing values
+stay unresolved; signed scalar selectors do not become unsigned font/run IDs. Independent
+source-preserving edits/Expat and bounded ASan verify lookup/retention. This does not fill
+missing run fields or widen imported chemical-label display/editing. Node child layout,
+style-sheet/default/geometry ambiguities and complete foreign ownership remain required.
+See [evidence](verification-label-default-lookup.md).
+
+Explicit caption-only CDXML now has a separate checked source capability. One Poster
+page, left-baseline Text objects and explicit ordered font/size/face/colour runs can open,
+render, edit run bodies through the registry, save and reopen while retaining every
+unaddressed source byte. Only exact bundled Roboto Regular and a white default palette
+background are supported. Unknown fonts, defaults, styles, mixed diagrams and objects
+remain source-backed and unsupported. No producer string grants this capability.
+It keeps `is_fully_mapped` false and refuses chemical/page/style edits. Native model
+encoding also preserves owned captions; whole-MOL/CDX/retained-SMILES guards prevent
+text loss. [Contract](research/styled-captions.md), [verification](verification-styled-captions.md).
+Native Mac file/preview/history acceptance is bounded; the full Text editor, chemical
+formatting and general foreign/CDX text mapping remain missing.
+
+The CDXML syntax batch API can set an owned text-only element's decoded value, preserving
+semantic no-op lexemes, attributes/QName and unrelated source. It rejects mixed content
+rather than erasing it. This syntax primitive alone grants no imported-file authority;
+the caption workflow above supplies its first text application. General chemical dependent-label
+synchronization remains missing; the box-qualified atom setter above is its first bounded
+application. [Text receiving](verification-source-preserving-xml-text.md).
+
+The standalone CDXML syntax API also has checked logical font/colour tables and reference
+lookup, including source-node access for owned attribute edits. Absent palettes differ
+from present-short palettes. Source bytes and syntax admission are unchanged. This does
+not widen complete IO authoring or render imported fonts/colours; see
+[resource scope and evidence](verification-cdxml-resources.md).
+
+Explicit document-root `LineWidth` and `BondSpacing` are separate validated appearance
+data, in points and percentages respectively. The original native/Preserved CDXML profile
+reads, patches, adds and clears each independently
+without changing geometry or unrelated source bytes. Unsupported/nested/foreign styles
+stay opaque. Per-property changes preserve the other property's numeric lexemes.
+Relative spacing uses preferred bond length; absence retains legacy geometry. The data
+domain0..3276.7 is an initial nonnegative INT16/10 policy, distinct from authoring1..100;
+negative nonzero XML underflow stays opaque rather than becoming supported negative zero.
+Complete-owner display and candidate validation use current preferences/style with
+independent width and unchanged label size. Whole-MOL refuses any explicit style before raw reuse;
+CDX/SMILES drift guards remain. The four-field form is wired for width/spacing, with independent
+App/adapter/file and CPU/Metal evidence; new native interaction is unverified. See
+[contract](research/document-bond-spacing.md) and [receiving](verification-document-bond-spacing.md).
+Absolute spacing, object overrides, other style properties, CDX style projection and
+foreign style resolution remain missing.
+
+Equivalent Bondline-v0 elemental CDXML now has headlessly verified source-aware editing:
+mixed quotes/whitespace/comments, sparse/scoped IDs, integral numeric lexemes and interleaved
+forward-referenced bonds retain original bytes outside typed edits. Known optional fields
+can change/remove and current authoring operations can append. The strict proof rejects
+unknown objects/attributes, namespaces/DTD/PI/CDATA, unsupported defaults/styles and raw
+identity/membership/order drift; unchanged source remains exact. Native interaction is
+wired but unverified for this new profile. Whole-MOL permission remains canonical-only;
+explicit graph-only SMILES export retains its context-loss report. See
+[receiving](verification-source-preserving-cdxml-profile.md). This is not general foreign
+CDXML/style support or completion of M1.
+
+The CDXML syntax library has source-preserving batch attribute edits and child appends,
+with exact unrelated-byte retention and self-contained namespace/resource validation.
+The IO profile above is its first application; broader unsupported imports still preserve
+their original source and refuse unsupported authoring. Complete foreign/native workflows
+remain required. See
+[receiving](verification-source-preserving-xml-edits.md).
+
+Document-root `BondLength`/`ChainAngle` now retain independent supported explicit values:
+CDXML decimal points/degrees and CDX unique four-byte signed little-endian fixed16.16.
+Absent values stay absent. Invalid/out-of-subset/ambiguous/nested source settings remain
+opaque with exact source passthrough; no inheritance/default or new native authority is
+inferred. Native CDXML emits present values canonically and keeps old empty-profile bytes.
+Whole-document MOL V2000/V3000 refuses any nonempty settings before raw/fragment reuse
+or publication. Existing complete-model comparisons guard source drift; explicit fragment
+SMILES export retains its declared document-context loss. This data-only support does not
+apply settings to drawing tools or implement style sheets. See
+[lock](research/drawing-settings-data.md) and [evidence](verification-drawing-settings-data.md).
+
+The shared atomic settings command now edits that pair with explicit nullable values,
+source authority and normal history. Registered MOL Save has positive unstyled controls,
+settings-loss refusals and clear-to-supported success for both versions. Typed nonfinite
+values cannot serialize as clear requests; see [command receiving](verification-drawing-settings-command.md).
+File > Document Settings… now edits/clears this same pair. Native Mac Save/reopen files
+pass independent root/graph checks with unchanged geometry; see
+[native receiving](verification-native-drawing-settings.md). Tool application, inherited
+styles and the remaining settings fields stay missing.
+
+The bounded SMILES record library now retains complete original/current source while
+projecting an explicit record or all records into Drawing fragments. Live token/global-ID
+maps survive supported H/order edits and writer DFS reordering. It never claims global
+native completeness: source bytes remain authoritative, detached geometry refuses Save,
+and cross-format export cannot silently replace the file with selected fragments. See
+[the contract](research/smiles-record-authoring-contract.md) and
+[independent receiving](verification-smiles-record-authoring.md). Native record controls
+and broader SMILES support remain separate work.
+
+Node-level ShowNonTerminalCarbonLabels now preserves exact yes/no presence in the model
+and native CDXML; old absent-profile bytes stay exact. Unknown root styles/Text still
+prevent complete regeneration. Both MOL model writers reject specified data, and
+retained-SMILES H/order replacement cannot alter it. The
+[data prerequisite](verification-carbon-label-data.md) now has bounded
+[skeletal rendering/explicit-label restoration](verification-skeletal-carbon.md), without
+new source authority, root inheritance, CDX flag projection or default-tool migration.
+
 | Format | Delivered scope | Evidence | Missing |
 |---|---|---|---|
 | CDXML | Source preservation, elemental projections/encoding, registry open/save and native Mac file workflow | Expat/Decimal; pinned corpus; metadata/order/identity tests; actual engine/CLI/MCP/socket/native files read by external RDKit; parser/writer ASan | General imported structural edits, queries/labels/styles/stereo, wider corpus and complete file-menu parity |
-| CDX | Standalone syntax/property/new-tree writer; limited source snapshots, atomic I/O and guarded shared/native Mac Open/Save | Original vectors, fetched scene, independent struct/RDKit, bounded ASAN and actual native Mac unchanged files/refusals | Faithful preview, broader metadata/references/chemical mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
+| CDX | Standalone syntax/property/new-tree writer, canonical envelopes, literal atom metadata/plain bonds/directed positions, atomic I/O and guarded shared/native Mac unchanged files | Atom18-source/36-refusal and bond16-source/149-refusal declarations, actual adapters/App/native Unicode files and bounded ASan. Exact latest local gates/qualifications are in verification-cdx-plain-bonds.md | Faithful preview, other bonds/styles, font/colour/Text/query/stereo mapping, editing/encoder, foreign/general corpus and interactive Windows/Linux |
 | MOL V2000 | Source-preserving parser, strict elemental projection, canonical writer, atomic I/O and shared/native file workflow | Original fixed columns; pinned CH3 corpus/RDKit/Decimal; external-generated input; bounded ASAN; engine/CLI/MCP files; actual Mac chooser/save/reopen/close | Broader fields/layout/export policy and interactive Windows/Linux workflows below |
-| SDF V2000/V3000 | Complete mixed-version session Open/Save, native Mac files, bounded shared ordered-field inspection/existing-value edits and restricted all-record capture and wired/headlessly tested native read-only preview; preserving library codecs | Exact raw spans/order/versions, fetched V2000 corpus, unchanged raw/per-MOL consumers, actual Mac777-byte files, command/CLI/stdio/socket history and stale/close guards; bounded ASAN | Actual native preview acceptance, data-edit UI, record operations, broader layout/chemistry, fetched mixed-version corpus, broader syntax/encodings and interactive Windows/Linux |
+| SDF V2000/V3000 | Complete mixed-version session/native Mac files, occurrence inspector and existing-value editor, source-preserving capture and read-only Actual/Zoom/pan preview | Exact raw spans/order/versions, pinned corpus and unchanged raw/per-MOL consumers; bounded Mac files/field edits/Actual/pan; actual-App wheel/DPI/source freshness and edit→preview→Save/reopen; command/adapter guards and earlier bounded ASAN | Native wheel/physical-DPI/new combined edit-preview acceptance, record creation/reordering and field-header editing, broader layout/chemistry, fetched mixed-version corpus, syntax/encodings and interactive Windows/Linux |
 | MOL V3000 | Source-preserving codec, version-aware snapshots/atomic I/O/shared commands and native Mac file workflow | Original sparse-ID/token/property vectors; external RDKit8dp/1000-atom files; engine/CLI/stdio/loopback/UI; bounded Asan; actual Mac author/save/reopen/refusal/close; fetched original sparse-ID corpus | Interactive Windows/Linux and broader queries/stereo/blocks |
 | RXN V2000 wrapper | Standalone source-preserving reader/new-wrapper writer with ordered roles and raw V2000/V3000 molecular payloads | Published CTfile layout; original field/role/span vectors; external RDKit readers/writers and bounded ASAN | Reaction model, application/native commands, V3000 reaction wrapper, broader registry/extension handling and fetched corpus |
-| SMILES | Complete accepted multi-record source Open/Save through shared registry/CLI/MCP/loopback; explicit-H fragment export and restricted carbon-path→CDXML conversion; noncanonical output | Independent raw spans/opaque bytes and unchanged per-record consumers, framing/quotas, shared snapshots/guards and actual file/adaptor workflows | Chemical preview/editing of opened files, actual native acceptance of the wired chooser, native export/conversion controls, general layout/H policy, stereo/query/perception and canonicalization |
+| SMILES | Complete accepted file Open/Save, native read-only inspector, explicit-H fragment export, four create-only conversion profiles and native explicit paste; bounded source-backed record authoring through CLI/MCP/loopback | Selected/all retained Drawing import, synchronized carbon order/H edits, whole-source Save/history, independent actual-file consumers and exact CPU/GPU PNG checks pass under local1270/0/1. Aggregate selection64atoms/128bonds; native paste/converter evidence remains separately scoped | Native record import/navigation/order workers, wider chemistry/stereo/labels/layout, automatic clipboard capture, fragment-export controls and other-platform interaction |
 | InChI | None | Roadmap only | Reference-tool comparison and import/export conventions |
-| PNG | RGBA8 encoder and registry previews for empty pages and positioned neutral-element/Single graphs; source-aware MOL/SDF display H remains separate from authored data | External Pillow/FreeType, independent graph/pixel/geometry/font vectors, ordinary MOL CPU/GPU/adapter checks, actual earlier native capture and one approved golden | Other orders/metadata, new native MOL/SDF label acceptance, general chemical publishing, physical resolution and native save workflow |
+| PNG | RGBA8 encoder and whole-page/opt-in current-view captures for supported neutral-element scenes; source-aware display H stays separate from authored data | External Pillow/FreeType, independent geometry/font vectors, actual CPU/GPU comparisons, bounded native SDF Actual/pan, source-aware MOL current captures at1x/2x and unchanged approved golden | Reference styles/general chemistry, broader native label/DPI workflows, physical publishing resolution and native PNG save/clipboard |
 | SVG/PDF | None | Roadmap only | Authoring geometry/text, export and independent consumers |
 
 ## MOL V2000 library
@@ -217,6 +393,14 @@ bytes are validated and other prefix bytes stay opaque. A successful legacy inte
 wins when reserved bytes are ambiguous. Independent vectors/native observations establish
 these bounded profiles, not every historical or modern file variant.
 
+The [external writer investigation](research/cdx-external-writer-probe.md) now supplies a
+provenance-clear counterexample: original Indigo1.47.0 outputs pass the pinned independent
+RDKit chemical checks but current syntax refuses `TrailingData`. Their28-byte legacy
+implicit-document framing has one extra final zero word. No parser fix or corpus admission
+has occurred. Next work is exact-original TDD plus a public framing/spec decision, keeping
+arbitrary trailing-data, malformed-end and resource guards; producer behavior alone does
+not authorize trimming or general zero padding.
+
 Binary records are decoded little-endian with checked offsets. Limits are independent
 Bondline policies:64 MiB input/output,100000 records and256 simultaneously open encoded
 objects. Parsing and destruction are iterative. Missing fields/terminators, excessive
@@ -301,6 +485,20 @@ isotope, charge, radical, optional explicit hydrogen count, bond order and begin
 are retained. All sixteen modeled orders have independent Expat/Decimal projection evidence.
 Isotopes above the format's signed INT16 range and syntax-budget excesses fail without output.
 This is elemental interchange, not general text/style/stereo display serialization.
+
+DoublePosition now preserves exact optional Center/Right/Left names, presence and authored
+B→E direction. Absence stays Unspecified; old native-v0 bytes and exact-source completeness
+proof remain unchanged. Invalid names fail typed mapping while standalone syntax preserves
+the source. Native CDXML emits only specified values, including dormant metadata on other
+orders. Both MOL model writers refuse any specified placement before publication; raw
+SDF/RXN containers continue wrapping existing MOL bytes. Retained-SMILES H/order replacement
+cannot change placement; explicit graph-only SMILES export already excludes depiction.
+See [the independent property/file/history checks](verification-double-position.md).
+Explicit Left/Right Double now renders shortened bisector components through the shared
+scene; specified non-Double still refuses, and Center keeps the existing centered profile.
+[Renderer/actual-file evidence](verification-inset-doubles.md) verifies the bounded
+geometry, gap/hit/CPU-GPU and history/reopen scope. CDX auto/manual projection, automatic
+styles, alignment UI, skeletal policy and aromatic-tool parity remain missing.
 
 Native canvas dimensions are represented as `DrawingSpace="Poster"` plus Width/Height in
 points, as documented by the public SDK. This preserves the explicit drawing extent; it
@@ -535,7 +733,43 @@ native observation also passes syntax/passthrough and one opaque splice. This is
 bounded framing evidence, not general property interpretation, foreign-file corpus
 coverage, chemical model mapping or an application CDX Open/Save workflow.
 
+## Canonical 28-byte CDX file-end envelopes
+
+The default reader now additionally returns `Framing::ImplicitDocumentFileEnd` or
+`Framing::ExplicitDocumentFileEnd`. Every successful legacy parse wins first. Only legacy
+TrailingData plus the supported 12-byte prefix and all 16 reserved bytes 12..28 zero enables
+this fallback; the 22-byte HeaderDocument marker path stays unchanged. Header remains 28
+bytes. One Document end, one distinct counted FileEnd and exact EOF are required, without
+trimming, scanning, arbitrary padding or retries after other errors. Existing 64 MiB/100000-record/256-encoded-depth limits remain; the implicit root consumes no encoded depth.
+`Framing::has_encoded_document()` centralizes root classification. Fuzz reconstruction checks
+that every original property survives before writing a new tree, excluding only genuine
+root markers/ends and FileEnd. Imported Save never uses that Writer path.
+
+Removing the final two bytes may leave a complete legacy document accepted by default;
+the N−2 prefix cannot prove whether a required FileEnd was lost. All old Writer bytes,
+fixtures, oracles, locks and pins remain unchanged. The new original Indigo 1.47.0 ethane
+is 258 bytes (SHA256 `856482269dbd85640b87c11f608104dba72ebd308a686f1333a893965ed560ba`),
+with full provenance and eighteen qualified new raw/RDKit oracle controls. Eight syntax
+and six IO/engine/transport cases pass on exact bytes, raw 0/45 pt and authored H=None. This
+extends accepted envelopes, not chemistry/style interpretation: `is_fully_mapped` remains
+false, chemical authoring/rendering/cross-format export refuse, and changed page/model
+Save refuses until exact Undo. An exact-seed RED caught 11 reconstructed properties versus
+12 source properties before the classifier correction; fixed-seed GREEN and a 10,000-run
+ASan mutation smoke pass. Bounded Mac Open, Unicode Save As and explicit reopen preserve
+the same 258-byte hash with Saved/CDX state and faithful-preview refusal. The UI exposes
+no 2/1 chemical counts: these come from IO and the independent raw/RDKit consumer.
+The final receiving gate passes1172/0/1 with the original MCP assertions unchanged.
+Earlier97729's754/1 replacement-bind AddrInUse remains unexplained; twenty passing
+diagnostic contexts and a contradicted outbound-owner hypothesis establish no causal fix. See
+[integration](verification-cdx-file-end-integration.md) and
+[independent test declarations](verification-cdx-file-end-tests.md). Corpus admission and
+general CDX compatibility are separate unfinished work.
+
 ## Owned limited CDX model snapshots
+
+Current literal atom and plain-bond data coverage is documented in the two receiving
+records above. It preserves missing H and position, source IDs/direction and raw
+automatic/manual distinctions without promoting the complete-source/display predicate.
 
 StoredDocument::from_cdx now owns the complete source, initial elemental view and model
 baseline. The private preview helper uses one caller-sized page; print/style data remain
@@ -640,6 +874,93 @@ One LF follows the unchanged notation. The logical upper bound is65537file bytes
 refuse that boundary. No maximum-size graph/re-import parity or native control is claimed.
 See [exact command/file evidence](verification-smiles-export-command.md).
 
+## Explicit neutral acyclic drawing conversion
+
+`file.convert_smiles_to_cdxml` keeps its default `neutral_carbon_path_v1` output and adds
+optional `neutral_acyclic_v1`. Both read one complete bounded notation and publish a new
+native CDXML file create-only; neither chooses a record from an opened source collection.
+The acyclic profile supports one actual tree, up to64 neutral nonisotopic H/C/N/O/F/Cl/Br/I
+atoms, physical-H nodes, branches and Single/Double/Triple. It reuses the existing closed
+fixed-H normalization, preserves graph/source identity and assigns no chemical stereo.
+
+Origin anchors minimum atom-center x/y; exact bond length, contextual published angles,
+real-edge separation and full glyph/multiple-stroke paper clearance must fit bounded
+deterministic search. Rings/components, aromaticity, charge, isotope and potentially
+stereogenic degree-three internal-Double contexts refuse. A supported degree-two internal
+Double uses collinear substituents; a qualified external reader reports unknown ANY rather
+than assigned E/Z. This is no general layout, perception, canonicalization or cleanup claim.
+
+The current source session/history/association stays intact. Only explicitly opening the
+newly authored CDXML grants its existing proven native editing authority. Actual branch
+conversion and subsequent C–C→C=C edit, Undo/Redo, Unicode Save As and reopening pass on Mac;
+independent raw/Decimal/RDKit readers accept both766-byte outputs. Geometry typing, native
+race/close/cancellation and other platforms remain unverified. [Exact integrated evidence](verification-smiles-acyclic-integration.md)
+retains first REDs, the renderer prerequisite and the qualified new-oracle correction.
+
+## Explicit neutral simple-ring drawing conversion
+
+The additive `neutral_simple_ring_v1` uses the same create-only whole-notation operation,
+without changing either earlier profile or complete SMILES-file Open/Save. It requires one
+actual connected unicyclic graph, one3–8-member Single cycle with supported attached trees,
+and at most64 neutral nonisotopic H/C/N/O/F/Cl/Br/I atoms. Existing fixed-H normalization,
+physical-H nodes, graph/local identities/direction and original source stay intact.
+Regular-ring orientation and contextual substituents follow the documented depiction
+contract. Attached Single/Double/Triple edges retain the existing bounded stereo rules;
+cycle multiple bonds, larger/polycyclic/disconnected graphs and unsupported metadata refuse.
+
+Origin is the minimum x/y of all atom centers; exact length is never rescaled. Every
+candidate must pass actual graph/intersection, full label/stroke/paper/resource guards and
+literal-versus-same-count scene equality. The64-atom ceiling does not promise fit. The
+shared degree-two authored-H attachment correction and compact stacked-H fallback preserve
+literal counts, font/em and all masks/guards; they do not infer chemistry.
+
+Focused independent IO/command/wire/App/renderer checks pass. Bounded Mac C7 conversion,
+profile/existing-output refusals, Unicode retry without replacing unsaved work, explicit
+guarded Open, external Single→Double edit/Undo/Redo and separate Unicode Save As/reopen
+pass. Independent raw/Decimal/RDKit consumers accept the actual1254-byte C7H14 and C7H12
+files, with a Single ring in both. The final local aggregate passes1158/0/1; native
+geometry entry/browsing/races, large/bulky cases and other platforms are unverified. See
+[integrated ring scope](verification-smiles-ring-integration.md), [independent layout/oracle](verification-smiles-ring-layout.md),
+[ring attachment](verification-literal-ring-attachment.md) and [compact-H evidence](verification-literal-compact-star-attachment.md).
+No general source-backed molecular edit, ring drawing tool or SMILES clipboard parity follows.
+
+## Explicit neutral-component drawing conversion
+
+The fourth optional `neutral_components_v1` profile uses the same complete ≤64 KiB notation
+reader and create-only converter, accepting ≤64 total neutral nonisotopic H/C/N/O/F/Cl/Br/I
+atoms. Actual graph components, not dot count, must each be an existing supported tree or
+3–8-member Single cycle with supported attached trees. All current physical-H, fixed-H,
+Single/Double/Triple and qualified unassigned-Double rules remain; any unsupported member
+refuses the whole input without publication.
+
+Normalization runs once. Dense local views restore only positions into one complete
+Fragment with original global arrays/IDs/directed bonds/H and unchanged source/IR. Solved
+poses use source-order atom-center shelves, gap L and a supplied minimum-center origin;
+width wrapping accounts for row height. No rotation/rescale, omitted duplicate, alternative
+packing or paper enlargement is used. Per-rotation budgets divide 100000 work/64 scenes by
+K; one final 100000-work geometry pass and full literal/resolved-H/actual-stroke/paper
+certificate cover all components together. Single-component Document/CDXML stays exact.
+
+Eight independent IO cases and three command/one schema/two actual-wire/three App cases
+pass unchanged. Actual mixed 9 atoms/7 bonds/3 components give C8H20O, CPU/GPU captures match,
+and explicit Open→first-edge Double edit→Undo/Redo→Unicode Save/reopen retains every
+component with independent C8H18O edited-output checks. The full local gate passes1188/0/1;
+bounded Mac fourth-profile legacy/existing-output refusal, Unicode retry retaining dirty
+work, guarded explicit Open Cancel/Discard, Double edit/history and Unicode Save As/reopen
+pass. Independent raw/Decimal/RDKit consumers verify the actual 1407-byte original/edited
+9/7/3 graphs as C8H20O/C8H18O, with only the intended first-edge order/H change. Input,
+existing-output sentinel and prior ring stay exact. Native authoring worked at100%; edited
+Fit78.79% refuses the distinct-pixel multiple-bond guard. An initial top label was clipped;
+AX/drag pan produced no visible change. Full native overview/pan, races and other platforms
+remain unverified. Earlier ring1158/0/1 and CDX1172/0/1 gates remain historical checkpoints. No parser-fuzz/old oracle/fixture/font/golden/corpus/
+dependency change. See [integration](verification-smiles-components-integration.md) and
+[independent layout](verification-smiles-components-layout.md).
+
+General drawing import still needs selected/all-record behavior, complete original opaque
+source/baseline and ID mapping, stale jobs/history/unsaved decisions and explicit Save/loss
+authority. The complete SMILES source-file session never becomes an editable first-record
+Drawing through this utility. Broader packing/chemistry/rings and clipboard parity remain.
+
 ## Complete accepted SMILES source files
 
 `smiles::SmilesFileDocument` owns the exact complete byte source and compact immutable
@@ -675,3 +996,51 @@ the complete source during deferred work without creating a drawing or changing 
 Null versus empty data spans, old-source historical replies and a128KiB object budget are
 defined in verification-smiles-record.md. This adds automation addressability; chemical
 preview/editing and native record selection remain missing.
+
+## Native existing-field SDF edits
+
+The original native occurrence editor now uses the existing immutable value replacement.
+It can change one existing record/field occurrence, including an empty or multiline value;
+it does not add/delete/reorder fields, rename headers or edit molecular payloads.
+Whole-record removal is a separate operation below; record creation/reordering remain missing.
+All existing format limits/refusals remain. Temporary text is distinct from Apply and
+Save; invalid or stale drafts cannot silently publish the old source. Undo/Redo retains
+the complete collection and exact original/saved distinctions.
+
+Actual Mac multiline Apply, Unicode Save As, Undo/Redo and reopen match a predeclared
+literal788-byte source. Both actual saved MOL spans pass unchanged independent consumers;
+the complete byte comparison verifies opaque data retention. Draft/navigation/request/
+retirement cases have additional actual-App/worker evidence, rather than native race proof.
+See [integrated evidence and limits](verification-sdf-editor-integration.md).
+
+## Read-only SDF view bounds
+
+Successful opted-in `render.capture.view` derives and validates every molecular record
+before cropping to a camera. It may prepare only a source-qualified transient PageSize;
+errors/stale/cancelled/foreign work cannot. SDF stays document:null with complete original/
+current/saved source ownership. Pan and explicit zoom never become a structural edit,
+record subset, source-paper resize, source reconstruction or permission for cross-format Save.
+Whole-page captures retain their old default behavior. Read-only viewport capture is not
+print-scale publication or native project compatibility beyond the format scopes above.
+See [exact camera and native evidence](verification-sdf-view-integration.md).
+
+## Whole SDF record removal
+
+`SdfDocument::without_record(RecordId)` removes the complete validated raw record range
+and reparses the exact surviving bytes. It never re-encodes a MOL block or property map.
+Record IDs are positive source-local ordinals: deletion regenerates them and their spans;
+external callers must not retain an old ordinal as a stable molecular identity.
+
+CTFILE-2026 printed97 specifies one or more compounds. The existing Empty/invalid_sdf
+refusal therefore protects the sole record; MissingRecord/not_found takes precedence for
+an absent target. Existing ASCII/framing/EOF and resource limits remain unchanged.
+The registered `sdf.record.remove` retains original/current/saved whole sources and the
+same snapshot history, deferred cancellation/ownership checks and atomic SDF Save path.
+A one-record survivor stays SDF, with document:null and collection metadata. This is not
+record-to-Drawing conversion, chemical perception or editing the retained molecule.
+
+[Codec tests](verification-sdf-record-codec.md) cover first/middle/final, mixed versions,
+CRLF, suffixed/EOF delimiters, data duplicates and bounds with unchanged independent
+consumers. [Command](verification-sdf-record-command.md) and
+[integration](verification-sdf-record-removal.md) records scope transport/native evidence.
+No record insertion/reordering or field-header editing is delivered by this operation.

@@ -56,6 +56,10 @@ pub enum Error {
     InvalidDimensions,
     #[error("viewport dimensions must be between 1 and 100000 pixels")]
     InvalidViewport,
+    #[error(
+        "view needs finite zoom within 1..999 percent, a center inside the page, and matching page/source geometry"
+    )]
+    InvalidView,
     #[error("rectangle dimensions must be nonzero and their edges must not overflow")]
     InvalidGeometry,
     #[error(
@@ -63,15 +67,21 @@ pub enum Error {
     )]
     InvalidStroke,
     #[error(
-        "the preview supports positioned neutral elements and single bonds; isolated carbon needs authored H and physical H cannot carry attached H"
+        "the preview requires supported neutral elements, coordinates and Single or centered Double/Triple bonds; literal isolated carbon needs authored H and physical H cannot carry attached H"
     )]
     UnsupportedChemicalContent,
+    #[error("unsupported caption text: {0}")]
+    UnsupportedText(&'static str),
     #[error("the bundled label font could not be decoded")]
     InvalidFont,
     #[error(
         "chemical labels need an em size between 8 and 256 canvas units; enlarge the view or capture"
     )]
     LabelScale,
+    #[error(
+        "multiple bond components and gaps need distinct visible pixels; enlarge the view or separate the endpoints"
+    )]
+    BondScale,
     #[error("a chemical label would extend beyond the viewport")]
     LabelPlacement,
     #[error(
@@ -116,22 +126,31 @@ pub fn cpu_solid(width: u32, height: u32, color: [u8; 4]) -> Result<Frame, Error
     })
 }
 
+mod authored_label;
+mod clearance;
 #[cfg(test)]
 mod display_label_tests;
+pub use authored_label::{create_atom_label, position_atom_label, validate_atom_label};
 mod hits;
+mod inset;
 mod label;
 #[cfg(test)]
 mod label_tests;
 mod page;
 mod scene;
+mod skeletal;
 mod stroke;
+mod text;
+mod view;
 pub use hits::{GraphScene, HitTarget, MAX_HIT_REGIONS};
 pub use page::{
     PageViewport, carbon_page_scene, graph_page_scene, graph_page_scene_with_cancel,
     graph_page_scene_with_display_hydrogens,
 };
 pub use scene::{Primitive, Rectangle, Scene, cpu_scene, cpu_scene_with_cancel, page_scene};
-pub use stroke::Stroke;
+pub use skeletal::hidden_carbon_atoms;
+pub use stroke::{Stroke, centered_bond_strokes, centered_bond_strokes_with_unit};
+pub use view::PageView;
 
 #[cfg(not(target_arch = "wasm32"))]
 mod gpu;

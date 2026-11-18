@@ -501,6 +501,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "bondline-chem"
+version = "0.1.0"
+dependencies = [
+ "bondline-model",
+ "thiserror 2.0.21",
+]
+
+[[package]]
 name = "bondline-cli"
 version = "0.1.0"
 dependencies = [
@@ -532,6 +540,7 @@ version = "0.1.0"
 dependencies = [
  "bondline-cdx",
  "bondline-cdxml",
+ "bondline-chem",
  "bondline-model",
  "bondline-render",
  "exacl",
@@ -577,6 +586,7 @@ dependencies = [
  "pollster",
  "serde_json",
  "thiserror 2.0.21",
+ "ttf-parser",
  "wgpu",
 ]
 
@@ -1049,8 +1059,6 @@ dependencies = [
 [[package]]
 name = "egui"
 version = "0.29.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53eafabcce0cb2325a59a98736efe0bf060585b437763f8c476957fb274bb974"
 dependencies = [
  "accesskit",
  "ahash",

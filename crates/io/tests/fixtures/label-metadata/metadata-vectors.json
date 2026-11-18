@@ -1,0 +1,68 @@
+{
+  "base": "0aa97cd",
+  "contract": "8c2b608",
+  "method": "Original Expat/Decimal metadata overlays on prior independent sources; no Bondline expected output",
+  "scope": "Metadata only; every actual style-run font/size/face/color explicit; no omitted-run inheritance",
+  "cases": [
+    {
+      "name": "mixed_a",
+      "bytes": 1926,
+      "sha256": "8894943be45e00ae1ba064c6f4b2694df25255dcd1925542cd9710f37785eb63"
+    },
+    {
+      "name": "mixed_b",
+      "bytes": 1916,
+      "sha256": "3bc8ff8635b58cea6d897c09dab5b245f88ca281afd1edaf8c5f8ab8f087cf6a"
+    },
+    {
+      "name": "edited_endpoint",
+      "bytes": 1926,
+      "sha256": "7387f6c54a9a3471f1dd7a8aa7c8e8712c584da1305a5d713e00f96a4ee5699c"
+    },
+    {
+      "name": "created_3",
+      "bytes": 2107,
+      "sha256": "37f25ae6d5d9fc4ea18eed3afd9cf4f247dd8f20733961320ed36b409cd59414"
+    },
+    {
+      "name": "all_printed",
+      "bytes": 2469,
+      "sha256": "7310b683ae15ad7bf22d5c7f2a13a7ba73e69840942fe21d3579de90b583ce58"
+    },
+    {
+      "name": "mixed_moved",
+      "bytes": 1928,
+      "sha256": "0cd892678ffe0267937e4e411f96587d9cef6eba720a342d7672081eef20802e"
+    },
+    {
+      "name": "compound",
+      "bytes": 2109,
+      "sha256": "4b836da2349a33f2776a1355f739c65d6a2cfbd3ec84f34e9cee0226c8f4d7df"
+    },
+    {
+      "name": "all_moved",
+      "bytes": 2471,
+      "sha256": "62b9e60e9e71f59fc3a78de8ad25abf29cbda9861e60a47fa281c308096341b6"
+    },
+    {
+      "name": "caption_owners",
+      "bytes": 2088,
+      "sha256": "d2254f1e21746507cc6aad2a6a7939357e0ea060929add21dd8357ffec095d6f"
+    },
+    {
+      "name": "unsigned_actual_font",
+      "bytes": 1964,
+      "sha256": "3e726c0e948b7399ff1a3f1463f41a1fe13cbbc0d65959bddead9116171fe791"
+    },
+    {
+      "name": "partial",
+      "bytes": 1751,
+      "sha256": "5f9abf6efa0b443b2afb861fc46769e54b363cf0a6faacd09c8de490686bdb02"
+    },
+    {
+      "name": "boxed",
+      "bytes": 725,
+      "sha256": "d4da2fc6e50e9852e4783932967a18e2ca3c608c7f85a439adf5551cae328076"
+    }
+  ]
+}

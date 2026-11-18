@@ -1,5 +1,11 @@
 # Next gate: Double/Triple depiction
 
+This is the original pre-implementation research record. The centered policy is now
+adopted and implemented; see [renderer evidence](../verification-multiple-render.md),
+[authoring contract](../verification-multiple-authoring.md) and STATUS.md for current
+receiving checks. The unexecuted/proposed wording below describes the plan at writing,
+not the current implementation state. Reference styles and full M0–M5 remain unfinished.
+
 2026-11-14. Planned and unexecuted M1 file-display dependency / M2 drawing work.
 Research only: no application, chemistry consumer, render test, native UI or feature code
 ran for this plan. Full M0–M5 and context-sensitive professional multiple bonds remain targets.

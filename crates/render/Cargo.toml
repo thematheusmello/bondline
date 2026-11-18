@@ -13,6 +13,7 @@ bondline-model = { path = "../model" }
 wgpu.workspace = true
 thiserror = "2"
 ab_glyph = "=0.2.32"
+ttf-parser = "=0.25.1"
 
 [dev-dependencies]
 pollster = "=0.3.0"

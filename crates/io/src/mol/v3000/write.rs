@@ -116,11 +116,35 @@ pub fn write_v3000_with_header(
     let mut ids = BTreeMap::<AtomId, usize>::new();
     let mut totals = BTreeMap::<AtomId, u32>::new();
     for (index, atom) in fragment.atoms().iter().enumerate() {
+        if atom.authored_label.is_some() {
+            return Err(Error::Unsupported {
+                line: 0,
+                feature: "authored atom text",
+            });
+        }
+        if atom.show_terminal_carbon_labels.is_some() {
+            return Err(Error::Unsupported {
+                line: 0,
+                feature: "terminal carbon-label display metadata",
+            });
+        }
+        if atom.show_non_terminal_carbon_labels.is_some() {
+            return Err(Error::Unsupported {
+                line: 0,
+                feature: "non-terminal carbon-label display metadata",
+            });
+        }
         ids.insert(atom.id, index + 1);
         totals.insert(atom.id, 0);
     }
     let mut orders = Vec::with_capacity(fragment.bonds().len());
     for bond in fragment.bonds() {
+        if !bond.double_position.is_unspecified() {
+            return Err(Error::Unsupported {
+                line: 0,
+                feature: "double-bond placement metadata",
+            });
+        }
         let order = match bond.order {
             BondOrder::Single => 1_u8,
             BondOrder::Double => 2,

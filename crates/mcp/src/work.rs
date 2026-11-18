@@ -1,7 +1,8 @@
 use crate::SharedEngine;
 use bondline_commands::{
-    Cancellation, CaptureStamp, CloseState, Command, CommandResult, Error, ErrorInfo, Prepared,
-    RenderCapture,
+    Cancellation, CaptureStamp, CloseState, Command, CommandResult, ConvertSmilesToCdxml, Engine,
+    Error, ErrorInfo, FileFormat, PasteSmiles, Prepared, RenderCapture, SdfRecordRemove,
+    SmilesRecordInspect, UiFileAction, UiFileContextStamp, UiFilePhase,
 };
 use std::{
     future::Future,
@@ -11,6 +12,9 @@ use std::{
     },
 };
 use tokio::sync::Semaphore;
+
+mod smiles_records;
+pub use smiles_records::{UiSmilesRecordsContext, UiSmilesRecordsResult, UiSmilesRecordsWork};
 
 #[derive(Clone)]
 pub(crate) struct Workers {
@@ -74,6 +78,126 @@ impl UiFileWork {
     }
 }
 
+/// One create-only conversion, with no native Save/close acknowledgment authority.
+#[must_use = "complete or drop conversion work to release its reservations"]
+pub struct UiSmilesConversionWork {
+    engine: SharedEngine,
+    registered: RegisteredWork,
+}
+
+impl UiSmilesConversionWork {
+    pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
+        let Self { engine, registered } = self;
+        complete_registered_blocking(&engine, registered, cancel)
+    }
+}
+
+/// One opaque native paste presentation, independent of the command's absolute geometry.
+#[derive(Clone)]
+pub struct UiSmilesPasteContext {
+    stamp: CaptureStamp,
+    file_context: UiFileContextStamp,
+    close_epoch: u64,
+    view_epoch: u64,
+    file_epoch: u64,
+    path: Option<String>,
+    format: FileFormat,
+    request_id: u64,
+    page_id: u32,
+}
+
+impl UiSmilesPasteContext {
+    pub fn capture(engine: &Engine, request_id: u64, page_id: u32) -> Result<Self, ErrorInfo> {
+        let state = engine.state();
+        if !state.ui_file.available
+            || state.close != CloseState::Open
+            || !state.ui_file.request.as_ref().is_some_and(|request| {
+                request.id == request_id
+                    && request.action == UiFileAction::PasteSmiles
+                    && request.phase == UiFilePhase::Accepted
+            })
+        {
+            return Err(Error::UiStaleRequest.info());
+        }
+        let document = engine.document().map_err(|error| error.info())?;
+        if !document
+            .pages()
+            .iter()
+            .any(|page| page.id().get() == page_id)
+        {
+            return Err(Error::InvalidUiFileParameters("paste page is unavailable").info());
+        }
+        Ok(Self {
+            stamp: engine.capture_stamp(),
+            file_context: engine.ui_file_context_stamp(),
+            close_epoch: state.close_epoch,
+            view_epoch: engine.view().epoch,
+            file_epoch: state.ui_file.epoch,
+            path: state.file.path,
+            format: state.file.format,
+            request_id,
+            page_id,
+        })
+    }
+
+    /// Intent consumption alone does not obsolete an otherwise unchanged draft.
+    pub fn is_current(&self, engine: &Engine) -> bool {
+        self.validate(engine).is_ok()
+    }
+
+    fn validate(&self, engine: &Engine) -> Result<(), ErrorInfo> {
+        let state = engine.state();
+        if state.close == CloseState::Committed {
+            return Err(Error::CloseCommitted.info());
+        }
+        if !engine.capture_stamp_matches(&self.stamp) {
+            return Err(Error::StaleRevision.info());
+        }
+        if state.close != CloseState::Open
+            || state.close_epoch != self.close_epoch
+            || !state.ui_file.available
+            || !engine.ui_file_context_stamp_matches(&self.file_context)
+            || state.ui_file.epoch != self.file_epoch
+            || state.file.path != self.path
+            || state.file.format != self.format
+            || engine.view().epoch != self.view_epoch
+            || !engine.document().is_ok_and(|document| {
+                document
+                    .pages()
+                    .iter()
+                    .any(|page| page.id().get() == self.page_id)
+            })
+        {
+            return Err(Error::UiStaleRequest.info());
+        }
+        Ok(())
+    }
+}
+
+/// Native paste shares the registered two-worker budget; it has no Save/close authority.
+#[must_use = "complete or drop native paste work to release its worker reservation"]
+pub struct UiSmilesPasteWork {
+    engine: SharedEngine,
+    registered: RegisteredWork,
+    context: UiSmilesPasteContext,
+}
+
+impl UiSmilesPasteWork {
+    pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
+        let Self {
+            engine,
+            registered,
+            context,
+        } = self;
+        let (mut result, stamp) =
+            complete_registered_blocking_guarded(&engine, registered, cancel, |engine| {
+                context.validate(engine)
+            })?;
+        result.ui_file_context_stamp = Some(stamp);
+        Ok(result)
+    }
+}
+
 /// One immutable capture, registered before the native host spawns its worker.
 /// It belongs to the originating Engine and shares the existing worker budget.
 #[must_use = "complete or drop capture work to release its worker reservation"]
@@ -85,6 +209,64 @@ pub struct UiCaptureWork {
 impl UiCaptureWork {
     /// Run on a background thread. The host must keep its preview job/pending
     /// intent busy through later image decode, publication and channel retirement.
+    pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
+        let Self { engine, registered } = self;
+        complete_registered_blocking(&engine, registered, cancel)
+    }
+}
+
+/// One explicit SDF query, field edit or record removal, registered before native spawn.
+/// It retains its originating Engine and shares the existing two-worker budget.
+#[must_use = "complete or drop SDF work to release its worker reservation"]
+pub struct UiSdfWork {
+    engine: SharedEngine,
+    registered: RegisteredWork,
+}
+
+impl UiSdfWork {
+    /// Run off the UI thread. Keep the host job busy through delivery and retirement.
+    /// Queries may be historical: guard display by the captured source/close context.
+    /// Successful edits change that source; refresh inspection rather than replaying them.
+    pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
+        let Self { engine, registered } = self;
+        complete_registered_blocking(&engine, registered, cancel)
+    }
+}
+
+/// The source and file destination explicitly confirmed for native record removal.
+/// Capture while holding the frame Engine guard; preparation rechecks it atomically.
+pub struct UiSdfRemoveContext {
+    stamp: CaptureStamp,
+    close_epoch: u64,
+    path: Option<String>,
+    format: FileFormat,
+    file_epoch: u64,
+}
+
+impl UiSdfRemoveContext {
+    pub fn capture(engine: &Engine) -> Self {
+        let state = engine.state();
+        Self {
+            stamp: engine.capture_stamp(),
+            close_epoch: state.close_epoch,
+            path: state.file.path,
+            format: state.file.format,
+            file_epoch: state.ui_file.epoch,
+        }
+    }
+}
+
+/// One explicit SMILES record query, registered before the native host spawns work.
+/// It retains its originating Engine and shares the existing two-worker budget.
+#[must_use = "complete or drop SMILES work to release its worker reservation"]
+pub struct UiSmilesWork {
+    engine: SharedEngine,
+    registered: RegisteredWork,
+}
+
+impl UiSmilesWork {
+    /// Run off the UI thread. The host must retain its job through publication and
+    /// retirement, and reject historical display using its captured source/close context.
     pub fn complete_blocking(self, cancel: &Cancellation) -> Result<CommandResult, ErrorInfo> {
         let Self { engine, registered } = self;
         complete_registered_blocking(&engine, registered, cancel)
@@ -126,6 +308,65 @@ impl CommandExecutor {
         })
     }
 
+    /// Reserve and validate under the originating lock, after releasing the frame guard.
+    pub fn prepare_ui_smiles_conversion(
+        &self,
+        id: u64,
+        params: ConvertSmilesToCdxml,
+    ) -> Result<UiSmilesConversionWork, ErrorInfo> {
+        let mut engine = self.engine.lock().map_err(|_| unavailable())?;
+        let permit = self.workers.permit()?;
+        let prepared = engine
+            .prepare_ui_smiles_conversion(id, params)
+            .map_err(|error| error.info())?;
+        Ok(UiSmilesConversionWork {
+            engine: Arc::clone(&self.engine),
+            registered: RegisteredWork {
+                prepared,
+                permit: Some(permit),
+            },
+        })
+    }
+
+    /// Validate the presentation and reserve before consuming its accepted intent.
+    pub fn prepare_ui_smiles_paste(
+        &self,
+        context: &UiSmilesPasteContext,
+        params: PasteSmiles,
+    ) -> Result<UiSmilesPasteWork, ErrorInfo> {
+        let mut engine = self.engine.lock().map_err(|_| unavailable())?;
+        context.validate(&engine)?;
+        let state = engine.state();
+        if params.expected_revision != state.revision {
+            return Err(Error::StaleRevision.info());
+        }
+        if params.page_id != context.page_id {
+            return Err(Error::InvalidUiFileParameters(
+                "paste page differs from the presented page",
+            )
+            .info());
+        }
+        if !state.ui_file.request.as_ref().is_some_and(|request| {
+            request.id == context.request_id
+                && request.action == UiFileAction::PasteSmiles
+                && request.phase == UiFilePhase::Accepted
+        }) {
+            return Err(Error::UiStaleRequest.info());
+        }
+        let permit = self.workers.permit()?;
+        let prepared = engine
+            .prepare_ui_smiles_paste(context.request_id, params)
+            .map_err(|error| error.info())?;
+        Ok(UiSmilesPasteWork {
+            engine: Arc::clone(&self.engine),
+            context: context.clone(),
+            registered: RegisteredWork {
+                prepared,
+                permit: Some(permit),
+            },
+        })
+    }
+
     /// Validate and reserve under the originating Engine mutex before spawning.
     /// Release any frame Engine guard before calling; this method acquires that
     /// same lock. Keep the host's pending preview intent in its close busy gate.
@@ -134,13 +375,36 @@ impl CommandExecutor {
         stamp: &CaptureStamp,
         params: RenderCapture,
     ) -> Result<UiCaptureWork, ErrorInfo> {
+        self.prepare_ui_capture_context(stamp, None, params)
+    }
+
+    /// A native intent also belongs to the close context that produced its view key.
+    pub fn prepare_ui_capture_for_close(
+        &self,
+        stamp: &CaptureStamp,
+        close_epoch: u64,
+        params: RenderCapture,
+    ) -> Result<UiCaptureWork, ErrorInfo> {
+        self.prepare_ui_capture_context(stamp, Some(close_epoch), params)
+    }
+
+    fn prepare_ui_capture_context(
+        &self,
+        stamp: &CaptureStamp,
+        close_epoch: Option<u64>,
+        params: RenderCapture,
+    ) -> Result<UiCaptureWork, ErrorInfo> {
         let mut engine = self.engine.lock().map_err(|_| unavailable())?;
-        match engine.state().close {
+        let state = engine.state();
+        match state.close {
             CloseState::Committed => return Err(Error::CloseCommitted.info()),
             CloseState::Open => {}
             CloseState::NeedsDecision | CloseState::Approved => {
                 return Err(Error::UiStaleRequest.info());
             }
+        }
+        if close_epoch.is_some_and(|epoch| epoch != state.close_epoch) {
+            return Err(Error::UiStaleRequest.info());
         }
         if !engine.capture_stamp_matches(stamp) {
             return Err(Error::StaleRevision.info());
@@ -150,6 +414,117 @@ impl CommandExecutor {
             .prepare(Command::Capture(params))
             .map_err(|error| error.info())?;
         Ok(UiCaptureWork {
+            engine: Arc::clone(&self.engine),
+            registered: RegisteredWork {
+                prepared,
+                permit: Some(permit),
+            },
+        })
+    }
+
+    /// Validate the frame's source and close context before reserving and preparing.
+    /// Release the frame Engine guard first; pending intent must already block host close.
+    pub fn prepare_ui_sdf(
+        &self,
+        stamp: &CaptureStamp,
+        close_epoch: u64,
+        command: Command,
+    ) -> Result<UiSdfWork, ErrorInfo> {
+        if !matches!(
+            &command,
+            Command::SdfRecordInspect(_) | Command::SdfFieldSet(_)
+        ) {
+            return Err(ErrorInfo {
+                code: "invalid_params",
+                message: "native SDF work requires a field query or field edit".to_owned(),
+            });
+        }
+        self.prepare_ui_sdf_context(stamp, close_epoch, command, None)
+    }
+
+    /// Revalidate the confirmed file context under the same lock as preparation.
+    pub fn prepare_ui_sdf_remove(
+        &self,
+        context: &UiSdfRemoveContext,
+        params: SdfRecordRemove,
+    ) -> Result<UiSdfWork, ErrorInfo> {
+        self.prepare_ui_sdf_context(
+            &context.stamp,
+            context.close_epoch,
+            Command::SdfRecordRemove(params),
+            Some(context),
+        )
+    }
+
+    fn prepare_ui_sdf_context(
+        &self,
+        stamp: &CaptureStamp,
+        close_epoch: u64,
+        command: Command,
+        removal: Option<&UiSdfRemoveContext>,
+    ) -> Result<UiSdfWork, ErrorInfo> {
+        let mut engine = self.engine.lock().map_err(|_| unavailable())?;
+        let state = engine.state();
+        match state.close {
+            CloseState::Committed => return Err(Error::CloseCommitted.info()),
+            CloseState::Open => {}
+            CloseState::NeedsDecision | CloseState::Approved => {
+                return Err(Error::UiStaleRequest.info());
+            }
+        }
+        if state.close_epoch != close_epoch {
+            return Err(Error::UiStaleRequest.info());
+        }
+        if !engine.capture_stamp_matches(stamp) {
+            return Err(Error::StaleRevision.info());
+        }
+        if removal.is_some_and(|context| {
+            state.file.path != context.path
+                || state.file.format != context.format
+                || state.ui_file.epoch != context.file_epoch
+                || state.ui_file.request.is_some()
+        }) {
+            return Err(Error::UiStaleRequest.info());
+        }
+        let permit = self.workers.permit()?;
+        let prepared = engine.prepare(command).map_err(|error| error.info())?;
+        Ok(UiSdfWork {
+            engine: Arc::clone(&self.engine),
+            registered: RegisteredWork {
+                prepared,
+                permit: Some(permit),
+            },
+        })
+    }
+
+    /// Validate source and close context, reserve and prepare under the origin mutex.
+    /// Release the frame's Engine guard first; pending intent must already block host close.
+    pub fn prepare_ui_smiles(
+        &self,
+        stamp: &CaptureStamp,
+        close_epoch: u64,
+        params: SmilesRecordInspect,
+    ) -> Result<UiSmilesWork, ErrorInfo> {
+        let mut engine = self.engine.lock().map_err(|_| unavailable())?;
+        let state = engine.state();
+        match state.close {
+            CloseState::Committed => return Err(Error::CloseCommitted.info()),
+            CloseState::Open => {}
+            CloseState::NeedsDecision | CloseState::Approved => {
+                return Err(Error::UiStaleRequest.info());
+            }
+        }
+        if state.close_epoch != close_epoch {
+            return Err(Error::UiStaleRequest.info());
+        }
+        if !engine.capture_stamp_matches(stamp) {
+            return Err(Error::StaleRevision.info());
+        }
+        let permit = self.workers.permit()?;
+        let prepared = engine
+            .prepare(Command::SmilesRecordInspect(params))
+            .map_err(|error| error.info())?;
+        Ok(UiSmilesWork {
             engine: Arc::clone(&self.engine),
             registered: RegisteredWork {
                 prepared,
@@ -242,6 +617,16 @@ fn complete_registered_blocking(
     registered: RegisteredWork,
     cancel: &Cancellation,
 ) -> Result<CommandResult, ErrorInfo> {
+    complete_registered_blocking_guarded(engine, registered, cancel, |_| Ok(()))
+        .map(|(result, _)| result)
+}
+
+fn complete_registered_blocking_guarded(
+    engine: &SharedEngine,
+    registered: RegisteredWork,
+    cancel: &Cancellation,
+    validate: impl FnOnce(&Engine) -> Result<(), ErrorInfo>,
+) -> Result<(CommandResult, UiFileContextStamp), ErrorInfo> {
     let RegisteredWork {
         prepared,
         permit: _permit,
@@ -249,11 +634,11 @@ fn complete_registered_blocking(
     let completed = prepared
         .complete_with_cancel(cancel)
         .map_err(|error| error.info())?;
-    engine
-        .lock()
-        .map_err(|_| unavailable())?
-        .finish(completed)
-        .map_err(|error| error.info())
+    let mut engine = engine.lock().map_err(|_| unavailable())?;
+    validate(&engine)?;
+    let result = engine.finish(completed).map_err(|error| error.info())?;
+    let stamp = engine.ui_file_context_stamp();
+    Ok((result, stamp))
 }
 
 fn unavailable() -> ErrorInfo {
@@ -1133,6 +1518,7 @@ mod ui_capture_completion_tests {
                     width_px: 8,
                     height_px: 8,
                     backend: RenderBackend::Cpu,
+                    view: None,
                 },
             )
             .map_err(|error| error.message)?;

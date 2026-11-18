@@ -1,0 +1,137 @@
+{
+  "date": "2026-11-16",
+  "source_base_commit": "4948cec",
+  "source_state": "Original visual increment on this base; exact compiled UI source hashes below; committed after capture",
+  "platform": "macOS 27.2 arm64; Apple M3 Max",
+  "rust": "1.94.1",
+  "native_binary_sha256": "c1b8c8849cf44c097ad07e915cfb495ba41c3300e13c5db1537c5f17c53a04bd",
+  "bundle": "target/desktop-review-branding-4948cec/Bondline.app",
+  "bundle_identifier": "org.bondline.preview.branding4948cec",
+  "renderer": "native eframe/wgpu path; capture does not independently measure monitor DPI",
+  "source_hashes": {
+    "crates/ui/src/lib.rs": "0ceaf9d67a4f203fb6a6fb7dd9326efdd697866814cafb1064f68e7a1372ebee",
+    "crates/ui/src/branding.rs": "ce65724b482fb47748b7e7c604ed85dc921cd86db78bb41da3a2991fee9530ed",
+    "crates/ui/src/tool_catalogue.rs": "3c84e967f1593d7ced2eb80e58281a3c3b62921bd8155712f6e2e3cbd8a78092",
+    "crates/ui/src/tool_catalogue_data.rs": "1c55cec5bc84100843f806d9f72f69fd9c6531c836c624069b8f4ea893200e8a",
+    "crates/ui/src/tool_icons.rs": "aaa24df9fba992ff66e8c288df722763d5e6d0c05555f5cf2444353770281bdf"
+  },
+  "images": [
+    {
+      "file": "docs/media/workspace-branding-native.jpg",
+      "format": "JPEG",
+      "width": 1160,
+      "height": 832,
+      "bytes": 79446,
+      "sha256": "f1d139c83aacd2bdea8ebf11dbda76426cd7bebb994e59106a74053788bc07c4",
+      "exif_keys": [
+        "ExifOffset"
+      ],
+      "method": "Unedited CUA app-window JPEG buffer; no crop/conversion/retouch"
+    },
+    {
+      "file": "docs/media/planned-tools-catalogue-native.jpg",
+      "format": "JPEG",
+      "width": 1160,
+      "height": 832,
+      "bytes": 121940,
+      "sha256": "c37b5413277f0ac57edd09ec61091abc094e72d3a77e873dcf8c4e40d7679aaa",
+      "exif_keys": [
+        "ExifOffset"
+      ],
+      "method": "Unedited CUA app-window JPEG buffer; no crop/conversion/retouch"
+    }
+  ],
+  "scene": {
+    "source": "target/planned-tools/root-receiving/identity-demo.cdxml",
+    "bytes": 2287,
+    "sha256": "69ba4b4253032bcce65f30a046f363bb4c855366376481f252837163eb39fe8b",
+    "atom_bond_counts": [
+      [
+        6,
+        6
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "formulas": [
+      "C5H6",
+      "C6H6"
+    ],
+    "canonical_consumer_smiles": [
+      "C1=CCC=C1",
+      "c1ccccc1"
+    ],
+    "method": "Original actual registry scene; independent ElementTree/RDKit; no native gesture claim"
+  },
+  "scene_commands": [
+    {
+      "command": "page.set_size",
+      "params": {
+        "page_id": 1,
+        "width_pt": 520,
+        "height_pt": 360
+      }
+    },
+    {
+      "command": "ring.create",
+      "params": {
+        "expected_revision": 1,
+        "page_id": 1,
+        "kind": "benzene",
+        "hydrogen_policy": "rectify_neutral_carbon",
+        "placement": {
+          "mode": "free",
+          "begin_x_pt": 136,
+          "begin_y_pt": 152,
+          "end_x_pt": 184,
+          "end_y_pt": 152,
+          "side": "positive"
+        }
+      }
+    },
+    {
+      "command": "ring.create",
+      "params": {
+        "expected_revision": 2,
+        "page_id": 1,
+        "kind": "cyclopentadiene",
+        "hydrogen_policy": "rectify_neutral_carbon",
+        "placement": {
+          "mode": "free",
+          "begin_x_pt": 328,
+          "begin_y_pt": 160,
+          "end_x_pt": 376,
+          "end_y_pt": 160,
+          "side": "positive"
+        }
+      }
+    },
+    {
+      "command": "document.save_cdxml",
+      "params": {
+        "path": "<review-directory>/identity-demo.cdxml"
+      }
+    }
+  ],
+  "save_path_note": "Filesystem location replaced by a portable placeholder; authoring scalars are exact",
+  "capture_method": "Unedited CUA native app-window buffers, saved without cropping, conversion or retouching",
+  "native_observations": [
+    "Cmd+O/type path/Open loads original two-ring scene",
+    "Grey Lasso and searched DNA activation leave Saved11-atoms/11-bonds and tool unchanged (pre-glyph build)",
+    "Search available Double then click selects real existing tool without authoring (pre-glyph build)",
+    "Scroll reaches final biology/HELM groups; Escape closes catalogue",
+    "Native Benzene free click yields17-atoms/17-bonds/3-fragments dirty; Cmd+Z restores Saved11/11/2 (pre-glyph build)",
+    "Final glyph-corrected build reopens same original seed and visibly renders drawn monomer replacement/angle icons"
+  ],
+  "known_limits": [
+    "Initial File-menu Open click closed menu without chooser; cause unresolved; Cmd+O succeeds",
+    "The seed is command-authored and independently consumed, not a native two-ring authoring claim",
+    "No native Shift/attachments, measured DPI, Windows/Linux or full26.1 parity follows",
+    "Images are documentation, not approved chemistry goldens"
+  ],
+  "license": "Original Bondline UI/art/scene MIT OR Apache-2.0; bundled Roboto retains Apache-2.0 notice",
+  "user_draft": "Original desktop-review-caa8d60 bundle/draft untouched; separate preview left open",
+  "actions": "Disabled; no hosted run/push/publication"
+}

@@ -236,7 +236,15 @@ pub(super) enum Completion {
         receipt: crate::ConversionReceipt,
         save_slot: Arc<()>,
     },
-    SdfFieldSet(crate::sdf_edit::FieldCandidate),
+    SdfEdit(crate::sdf_edit::EditCandidate),
+    SmilesPaste(crate::smiles_paste::PasteCandidate),
+    SmilesRecords(crate::smiles_records::RecordsCandidate),
+    ViewCapture {
+        result: Box<CommandResult>,
+        context: crate::capture::ViewCaptureContext,
+        extent: Option<bondline_model::PageSize>,
+        cancel: Cancellation,
+    },
     Result {
         result: Box<CommandResult>,
         cancel: Option<Cancellation>,
@@ -323,7 +331,21 @@ impl FilePlan {
                     if output.to_str().is_none() {
                         return Err(Error::UnrepresentableFilePath { published: false });
                     }
-                    let receipt = bondline_io::files::convert_smiles_to_cdxml_file(
+                    let convert = match params.profile {
+                        crate::SmilesConversionProfile::NeutralCarbonPathV1 => {
+                            bondline_io::files::convert_smiles_to_cdxml_file
+                        }
+                        crate::SmilesConversionProfile::NeutralAcyclicV1 => {
+                            bondline_io::files::convert_smiles_acyclic_to_cdxml_file
+                        }
+                        crate::SmilesConversionProfile::NeutralSimpleRingV1 => {
+                            bondline_io::files::convert_smiles_simple_ring_to_cdxml_file
+                        }
+                        crate::SmilesConversionProfile::NeutralComponentsV1 => {
+                            bondline_io::files::convert_smiles_components_to_cdxml_file
+                        }
+                    };
+                    let receipt = convert(
                         Path::new(&params.input_path),
                         &output,
                         params.bond_length_pt,
@@ -336,6 +358,7 @@ impl FilePlan {
                             receipt,
                             params.expected_revision,
                             generation,
+                            params.profile,
                         )?,
                         save_slot,
                     }
@@ -523,7 +546,22 @@ impl Engine {
                 conversion: Some(receipt),
                 ..self.state()
             }),
-            Completion::SdfFieldSet(candidate) => self.finish_sdf_field(candidate),
+            Completion::SdfEdit(candidate) => self.finish_sdf_edit(candidate),
+            Completion::SmilesPaste(candidate) => self.finish_smiles_paste(candidate),
+            Completion::SmilesRecords(candidate) => self.finish_smiles_records(candidate),
+            Completion::ViewCapture {
+                mut result,
+                context,
+                extent,
+                cancel,
+            } => {
+                cancel.check()?;
+                if let Some(extent) = extent {
+                    result.view_target_prepared = self.install_sdf_view_extent(&context, extent);
+                }
+                self.refresh_close_result(&mut result);
+                Ok(*result)
+            }
             Completion::Result { mut result, cancel } => {
                 if let Some(cancel) = cancel {
                     cancel.check()?;
@@ -559,6 +597,7 @@ impl Engine {
                     .into_string()
                     .map_err(|_| Error::UnrepresentableFilePath { published: false })?;
                 let next_revision = self.next_revision()?;
+                let selection_epoch = self.selection_epoch_after_edit()?;
                 let next_generation = self
                     .generation
                     .checked_add(1)
@@ -577,6 +616,7 @@ impl Engine {
                 self.redo.clear();
                 self.generation = next_generation;
                 self.revision = next_revision;
+                self.clear_selection_after_edit(selection_epoch);
                 self.invalidate_close();
                 self.mark_ui_file_completed(ui_request_id, ui_request_current);
                 Ok(CommandResult {

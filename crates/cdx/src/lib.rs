@@ -21,6 +21,29 @@ pub enum Framing {
     ExplicitDocument,
     /// 22-byte prefix, encoded Document, its object end, and one separate file end.
     HeaderDocument,
+    /// Canonical 28-byte header, implied Document end, and one separate file end.
+    ImplicitDocumentFileEnd,
+    /// Canonical 28-byte header, encoded Document end, and one separate file end.
+    ExplicitDocumentFileEnd,
+}
+
+impl Framing {
+    /// Whether the record index contains an encoded Document opening and its matched end.
+    pub fn has_encoded_document(self) -> bool {
+        match self {
+            Self::ImplicitDocument | Self::ImplicitDocumentFileEnd => false,
+            Self::ExplicitDocument | Self::HeaderDocument | Self::ExplicitDocumentFileEnd => true,
+        }
+    }
+
+    fn has_file_end(self) -> bool {
+        match self {
+            Self::ImplicitDocument | Self::ExplicitDocument => false,
+            Self::HeaderDocument
+            | Self::ImplicitDocumentFileEnd
+            | Self::ExplicitDocumentFileEnd => true,
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -43,7 +66,7 @@ pub enum RecordKind {
     ObjectEnd {
         start: Option<usize>,
     },
-    /// Distinct file terminator after the encoded root in `HeaderDocument` framing.
+    /// Distinct file terminator after the Document end in a separate-file-end profile.
     FileEnd,
 }
 
@@ -136,9 +159,9 @@ impl fmt::Debug for Document<'_> {
 }
 
 impl<'input> Document<'input> {
-    /// Try the historical 28-byte profile first. Only its trailing-data failure with
-    /// a Document tag at byte22 enables the 22-byte prefix/separate-file-end profile.
-    /// A successful legacy parse wins when opaque header bytes are ambiguous.
+    /// Preserve every successful historical 28-byte interpretation. Only trailing data
+    /// may select a header-embedded Document or canonical zero-reserved header with one
+    /// separate file end. A complete legacy prefix remains inherently ambiguous.
     pub fn parse(input: &'input [u8]) -> Result<Self, Error> {
         if input.len() > MAX_INPUT_BYTES {
             return Err(Error::InputTooLarge);
@@ -160,6 +183,16 @@ impl<'input> Document<'input> {
                     == Some(&[0, 0x80]) =>
             {
                 Self::parse_records(input, HEADER_DOCUMENT_BYTES, Framing::HeaderDocument)
+            }
+            Err(Error::TrailingData)
+                if input.get(PREFIX.len()..HEADER_BYTES) == Some([0; 16].as_slice()) =>
+            {
+                let framing = if framing.has_encoded_document() {
+                    Framing::ExplicitDocumentFileEnd
+                } else {
+                    Framing::ImplicitDocumentFileEnd
+                };
+                Self::parse_records(input, HEADER_BYTES, framing)
             }
             result => result,
         }
@@ -187,8 +220,8 @@ impl<'input> Document<'input> {
                 parent = stack.last().copied();
                 kind = RecordKind::ObjectEnd { start: opening };
                 push_record(&mut records, parent, start..cursor.offset, kind)?;
-                if opening.is_none() || (framing != Framing::ImplicitDocument && stack.is_empty()) {
-                    if framing == Framing::HeaderDocument {
+                if opening.is_none() || (framing.has_encoded_document() && stack.is_empty()) {
+                    if framing.has_file_end() {
                         let file_end = cursor.offset;
                         if cursor.u16()? != 0 {
                             return Err(Error::TrailingData);

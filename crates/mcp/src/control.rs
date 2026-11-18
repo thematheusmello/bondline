@@ -183,9 +183,29 @@ async fn publish_result(
 ) -> io::Result<()> {
     let notify = result.as_ref().is_ok_and(|result| {
         result.changed
+            || result.view_target_prepared
             || result.file_operation.is_some()
             || result.close_operation.is_some()
             || result.ui_file_operation.is_some()
+            || result.ui_atom_label_operation.is_some()
+            || result.ui_drawing_settings_operation.is_some()
+            || result.ui_preferences_operation.is_some()
+            || result.ui_add_chain_operation.is_some()
+            || result
+                .ui_chain_tool_operation
+                .is_some_and(|operation| operation.changed)
+            || result
+                .ui_selection_operation
+                .is_some_and(|operation| operation.changed)
+            || result
+                .ui_bond_tool_operation
+                .is_some_and(|operation| operation.changed)
+            || result
+                .ui_ring_tool_operation
+                .is_some_and(|operation| operation.changed)
+            || result
+                .ui_view_operation
+                .is_some_and(|operation| operation.changed)
     });
     let value = match result {
         Ok(result) => json!({"result":result}),
@@ -765,4 +785,7 @@ mod tests {
         assert!(!executor.has_active_work());
         Ok(())
     }
+
+    mod atom_label_publication_tests;
+    mod preferences_publication_tests;
 }

@@ -1,5 +1,321 @@
 # Open questions
 
+## CDX font/colour resources, 2026-11-18
+
+The next standalone resource view now has a [locked contract](../research/cdx-resources.md).
+FontTable uses declared nonsequential UINT16 IDs/raw charsets/name bytes; CDXString
+calls its style font an index, so resource ID lookup alone cannot certify Text references.
+The font hex example appears shorter than its normative offset table. Binary unsigned
+charset differs from XML Font's signed wording; the linked charset page404 leaves the
+name codec unresolved. Do not infer UTF-8/platform codec,−1 inheritance or a system font.
+
+Palette0/1 are implicit black/white; stored entries start at2. Table absence alone gives
+2white/3black. Present-short tables must not activate absent defaults. The explicit
+present-zero policy is locked as an empty binary table, while a u32 data index preserves
+count65535/index65536 without wrap/drop. Those decisions still require independent tests.
+Wrong owners, duplicate tables/IDs, platform0/1, length/trailing-byte and allocation
+boundaries are source-locked. Optional query errors must preserve syntax/raw passthrough and must
+not become new IO Open failures. See the source register and current STATUS; no resource
+decoder or faithful CDX typography/display/editing is delivered by the research alone.
+
+## Plain CDX bonds, 2026-11-18
+
+[The bond contract](../research/cdx-plain-bonds.md) now projects three plain orders
+and directed DoublePosition while retaining automatic/manual distinctions in source.
+The current model has no non-Solid Display/Display2 field; do not silently replace those
+with Solid or grant faithful rendering. Dormant Display2/position on non-Double orders
+remains outside the bounded subset, including explicit0. Automatic positioning,
+noncanonical integer widths, other bond kinds/stereo, typography/styles and general
+CDX authoring remain unresolved. [Receiving](../verification-cdx-plain-bonds.md) qualifies
+actual graph/order/direction observations and exact native files without claiming side/
+manual-state/rendering parity from RDKit. The first batched native tool/Open precondition
+miss and retained Ring inspector instructions have no causal fix; ordinary explicit
+selection/file workflows have their separate bounded evidence.
+
+## CDX literal metadata, 2026-11-18
+
+[The CDX contract](../research/cdx-literal-atom-metadata.md) has public canonical
+types/owners/defaults and a specific four-byte Charge recovery instruction. It locks
+that instruction ahead of generic numeric-width guidance; no producer certificate is
+invented. [Receiving](../verification-cdx-literal-atom-metadata.md) now qualifies actual
+external legacy-charge interpretation: RDKit reads01000000 as1 rather than normative0,
+and AABBCC7F as−86 rather than127. Do not normalize source or change the property-specific
+rule to match that consumer. Broader numeric widths and independent singlet/triplet
+consumer evidence remain open; RDKit electron count cannot alone prove spin state.
+The literal metadata decoder adds no full/display/chemical-authoring authority.
+Missing-H inference, Text/fonts/styles/stereo and general CDX parity remain required;
+preserve the exact source-loss boundaries. The retained native Ring inspector's drawing
+instructions on an unpreviewable CDX source remain a presentation limitation.
+
+## Explicit typography beside defaults, 2026-11-18
+
+The [metadata contract](../research/label-default-metadata.md) preserves checked unused
+LabelFont/LabelSize/LabelFace while actual s font/size/face/color remain explicit.
+Fresh Style/Text/Node/property/DTD research does not establish a general mapping from
+every omitted run field to Label* versus Caption* or an external stylesheet. CDXString's
+omission examples are qualified evidence, not a complete inheritance rule. Missing
+actual fields, scalar−1 sentinels, unsupported owners and unresolved resources still
+refuse complete authority. This bounded preservation workflow does not close effective
+foreign typography, rich runs, general child-p placement or exact26.1 pixel parity.
+
+## Explicit label creation, 2026-11-18
+
+The [creation receiving](../verification-printed-label-creation.md) resolves a bounded
+hidden-carbon→printed-child workflow with deliberate supported style, existing resources,
+retained flags and stable source IDs. It does not resolve absent/inherited foreign font
+defaults, arbitrary resource insertion, rich chemical runs or general child placement.
+The archived Node specification's general child-Text precedence supports the original
+scoped display policy; a stronger public version26.1 statement for every later Show* flag
+interaction was not found. Modern reference behavior and pixels remain unverified rather
+than inferred from the installed application. Broader effective typography is next.
+
+## Mixed skeletal diagrams, 2026-11-18
+
+The [mixed-label contract](../research/mixed-skeletal-labels.md) resolves no absent/root
+carbon-flag inheritance or universal foreign font/size/ink default. It relies on explicit
+active node no flags, known C4 and the shared CURRENT no-glyph result, plus actual absence
+of child Text in source. Mandatory glyph appearance after point/neighbor changes must
+revoke this capability rather than borrow a font. Old foreign Boxed/Connected remain
+all-explicit. General omitted flags/H/defaults, hidden-node label creation/editing,
+inherited styles, arbitrary child positions and modern reference parity remain required.
+
+## Dependent label movement, 2026-11-18
+
+The [literal translation contract](../research/dependent-label-translation.md) supports
+already-certified absent-child-p labels, preserving their current raw bounds, styles
+and chemical fields. It does not resolve arbitrary child p, formula faces, automatic
+reflow/reorientation, groups, transforms or implicit foreign defaults. Version25 public
+selection/drag/nudge guidance remains qualified for exact26.1/native modifier behavior.
+Whole source/geometry/page checks may refuse a move rather than change chemistry, shrink
+ink or repair unsupported data. Existing tolerance certifies layout agreement, not a
+universal provenance claim for every tiny direct model mutation.
+
+## Connected label margins, 2026-11-18
+
+The [connected-label contract](../research/connected-label-styles.md) uses explicit
+physical margin/width and relevant spacing/preferred length, checked colour resources
+and all explicit label certificates. Margin data alone grants no connected-source
+authority. The SDK and public guide establish attached-bond whitespace, not a universal
+AABB, contour, cap or shared-rail algorithm. Public original outline-based renderers and
+the qualified Helvetica26.1 measurement report contradict universal box trimming but
+do not qualify Roboto face0/no-p pixels. The original Euclidean butt-strip rule must be
+tested independently and kept separate from unresolved exact reference behavior,
+including open glyphs, off-axis H/counts, near-axis transitions and other fonts. No
+Helvetica fitted constants are transferred. Keep the old foreign Boxed zero-bond
+profile. A separate Connected capability now has its bounded
+[source/render/history/native proof](../verification-connected-labels.md), without
+resolving universal font/layout/reference-pixel behavior. Same-atom incident bonds may
+share ink; the original clearance rule and nonincident-collision checks do not establish
+a universal white gap at incident joins. Short connectors retain atom-priority hit masks.
+No stricter incident-angle policy or broader reference claim follows from these observations.
+
+## Chemical label defaults and placement, 2026-11-18
+
+[Owned child-Text data](../verification-owned-atom-label-data.md) now retains explicit
+runs/raw optional placement in the model/native codec with independent loss/refusal/file
+evidence. This resolves data ownership only; the layout/default/agreement questions
+below remain. The separate [boxed workflow](../verification-boxed-atom-labels.md) now
+qualifies bond-free foreign scenes with explicit labels on every atom, actual display
+and one synchronized Element/H/body/box edit with native Mac
+history/Save/reopen evidence. Unqualified labels and all other dependent edits still
+refuse; global full authoring stays false. It resolves no universal child-p convention.
+
+Primary LabelFont/Size/Face pages define containing-object fallback then a last-used
+style sheet, not a universal font/size/face. The new
+[lookup contract](../research/label-default-lookup.md) retains each property's owner,
+decoded value and unresolved absence; it does not resolve omitted Style-run fields.
+The SDK links for Style font/size/face and charset are unavailable. Fractional/extended
+XML LabelSize domains beyond illustrated point values remain an original reader policy;
+the separate signed scalar fields do not inherit the legacy composite Style's−1 sentinel.
+Geometry's linked SDK page incorrectly serves ObjectTag content; its default-owner
+mapping remains unsupported pending evidence. Current DTD syntax and archived property
+owner lists also need version qualification for newer objects.
+
+The archived eventual-Auto LabelJustification fallback conflicts with the current DTD's
+Left default. Node LabelDisplay, Text LabelAlignment and LabelJustification are distinct
+properties/enumerations. A child Text is authored data that takes precedence when read;
+redundant Element/H alone cannot certify a conflicting displayed label. Current opacity
+is correct; do not enable authoring by ignoring child Text.
+
+A general Node child Left p→baseline transform is not established. Public Octet export,
+Indigo export and the MIT author's26.1 formula-face/font measurements differ or qualify
+their conventions. Octet import does not preserve arbitrary t.p, and graph-only toolkit
+acceptance cannot prove visual correspondence. Do not reuse a caption baseline, Node.p
+or a font-independent offset without an explicit qualified contract and independent
+vectors. Full child-Text data, effective fonts/styles, source-preserving synchronized
+chemical edits beyond the qualified atom setter, all other H/position mutators and full
+DPI/native/foreign acceptance remain required; the format-default lookup alone completes none of those workflows.
+
+## Styled captions, 2026-11-17
+
+The [explicit plain-caption contract](../research/styled-captions.md) uses actual run
+ForegroundColor, logical resources and Left baseline. Archived BackgroundColor,
+LabelColor and CaptionColor pages mark them future-only; they do not establish26.1
+document/default/override behavior. Resolve effective LabelFont/Size/Face, inherited
+caption settings, charset mappings and chemical Node child Text before granting general
+foreign label authority. The existing owned caption source profile does not authorize it.
+
+Only exact bundled Roboto Regular and supported single-line glyphs are rendered. Other
+families/faces, shaping, bidi/marks, wrapping, rotation, formula/script styles, insertion,
+deletion, selection and rich native editing remain missing. Public binary styled-string
+examples disagree about offsets/size conventions; this increment adds no CDX text codec.
+Mixed chemical/caption foreign files and source-stable general Text IDs still need their
+own complete source/retention/render/history tests. Bounded Mac preview/remote-edit/file
+acceptance does not prove native Text-tool, measured DPI, race or other-platform parity.
+
+- Public [relative spacing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BondSpacing.htm),
+  absolute spacing and GUIDE25 establish units/precedence. New public
+  [implementation/measurement evidence](../research/bond-spacing-evidence.md) supports
+  centreline spacing for plain bonds, without independently reproduced26.1 execution.
+  [Explicit native root spacing](../research/document-bond-spacing.md) now resolves against
+  preferred length, corroborated by actual external original vectors; this does not resolve
+  general foreign defaults. Root ownership of BondSpacingAbs differs between DTD and SDK
+  owner tables. Absolute spacing, local overrides and unresolved inheritance stay opaque.
+  Font/colour resource decoding does
+  not resolve font availability, charset mappings, inherited defaults or dependent Text.
+
+- [Explicit document LineWidth](../research/document-line-width.md) now has a complete
+  original-profile data/render/command/form path, with native interaction still unverified.
+  General foreign editing still needs complete effective spacing, fonts/labels, colours
+  and object inheritance. The SDK's missing-width rule depends on a last-used style
+  sheet, so no universal foreign fallback is known. Preserve unresolved styles, tables
+  and Text without granting edit authority; the original Bondline fallback is not proof
+  of another application's appearance. Binary style projection remains separate work.
+
+- Equivalent closed-v0 elemental CDXML now has [headless source-aware receiving](../verification-source-preserving-cdxml-profile.md)
+  after the batch prerequisite. General foreign styles/defaults, labels/semantic objects,
+  stable generated XML IDs across edits and reference-compatible migrations remain open.
+  Native controller access fails, so actual new native interaction remains unverified.
+  Keep opaque-source guards and canonical-only whole-MOL permission; broader completeness
+  needs independent source/field/render/native evidence rather than producer-name trust.
+
+- Ring sprout follows [the locked public-source/original policy](../research/native-ring-sprout.md).
+  GUIDE25 describes generic Alt-click and a Building/Display preference, not Alt inversion,
+  Alt-drag, mixed modifier timing, restart storage or exact26.1/Mac defaults. The original
+  rule is preference OR Alt at an atom press, with Alt+Shift still unsupported. The
+  application/session preference stays outside chemical files/history; broader persistent/
+  multi-window preferences remain required. A separate new cycle and Single connector
+  must not be confused with shared-atom/spiro construction or SpiroOrHigher query metadata.
+
+- Both constitutional chair tools follow [the original contract](../research/native-chair-workflow.md)
+  and [receiving](../verification-native-chairs.md). GUIDE25 establishes two tools,
+  horizontal click/drag and contextual bond-hotspot9/0, not exact26.1/Mac coordinates,
+  defaults or modifier timing. The tetrahedral seed, orthographic view, supporting
+  reference edge and centroid-outward attachment are original choices. Perspective can
+  imply configuration; no stereo assignment, conformer-energy optimization, cis/trans
+  solver or stereo-preserving ring flip is delivered. Alt-sprout/preference, inherited
+  styles, measured native2×/DPI and other-platform workflows remain separate requirements.
+
+- Drawing settings data is implemented against research/drawing-settings-data.md;
+  verification-drawing-settings-data.md records its bounded evidence. Primary scalar
+  comparison resolves XML ChainAngle as degrees versus CDX degrees×65536; BondLength is
+  XML points/CDX points×65536. Missing values have no universal numeric default. Root-only
+  supported projection is distinct from inherited effective styles; out-of-subset, nested,
+  duplicate or other-width binary settings remain opaque/source-backed. Fixed toggles,
+  style-sheet resolution, reference native defaults, remaining forms, journal styles and26.1 behavior remain
+  required. A data-only field never proves native tool application of the preference.
+  The source-qualified atomic command/history/adapters now have bounded independent
+  evidence in verification-drawing-settings-command.md. Native modifier transport now has
+  bounded SDK/Mac OS evidence in verification-ordered-native-modifiers.md. The bounded
+  two-preference form now has actual Mac set/clear/history/Save/reopen evidence in
+  verification-native-drawing-settings.md. Native chains now apply them with independent
+  App/file and bounded Mac evidence in verification-native-chains.md. Known native absence
+  alone uses explicit original48pt/120° creation presets without storing them. Other tools,
+  inheritance and remaining settings stay required; missing source values remain absent.
+
+- The native settings review saves/reopens exact Unicode filenames, but the bundled
+  Roboto face displays the reviewed CJK filename characters as missing glyphs. AX reports
+  their correct names and independent readers verify the correct files. Wider font
+  coverage under the unchanged MIT/Apache/BSD asset policy remains unresolved; this
+  is not complete Unicode text/IME or platform validation.
+
+- The full native-chain dependency contract is in research/native-chain-plan.md.
+  Snaking requires one positioned-path edit rather than repeated fixed-chain commits.
+  Pinned egui PointerMoved lacks modifiers, and egui-winit stores only frame-level
+  ModifiersChanged. The paired egui/eframe extension now has actual Mac OS transport and
+  synthetic SDK evidence; chain consumption now has independent App tests. Supported
+  native Control-drag, early release, reversal/backtrack and other platforms remain unverified.
+  Document ChainAngle/BondLength data persistence is now delivered;
+  original fallback and chain application are now delivered; inherited styles remain missing.
+  Count/pose/sampling/turn ties, repeat lifecycle and modifier policy are explicitly locked
+  as original Bondline behavior in research/native-chain-interactions.md. Corresponding
+  reference26.1/platform algorithms/defaults remain unknown. Actual native ordinary
+  Acyclic/Snaking/Add/repeat/attachment/persistence is checked; hardware/measured2×/DPI is not.
+
+- Chain engine policy is locked in research/chain-authoring-plan.md. Public25 guide
+  documents drag/count, Add Chain, attachment, Alt repeat, Snaking/Control and conditional
+  settings; exact26.1/Mac defaults, count inclusion, quantization/ties/hysteresis, repeat
+  lifecycle and modifier precedence remain unknown. Explicit headless placement/count
+  is original policy. Native automatic numeric poses now honor IUPAC180° Single+Triple
+  and preserve the two-Double/H0 target refusal; ordinary candidates use explicit original
+  ranking. Acyclic/Snaking are enabled for their checked supported workflows, not full
+  reference parity. General chemistry/stereo, styles and platform acceptance remain open.
+
+- Native ring tools are the next integration after checked command ac340db. The
+  original policies in research/ring-native-plan.md lock48pt/pose, unit-neighbor
+  bisectors/1e-12 cancellation ties, local-side candidates and a scene-success gate.
+  They are not observed26.1 defaults. In initial Ring mode, modified primary gestures
+  remain unsupported; Alt-sprout versus newer Alt-label precedence is unresolved.
+  Aromatic/chair/sprout/styles/face solving and actual native/platform behavior stay
+  open. Existing non-Ring atom editing retains its separate delivered scope.
+
+- Persistent native atom-set selection and literal translation now have independent
+  command/context/wire/App coverage; see verification-selection-authoring.md. Exact26.1
+  tool/modifier precedence, molecular rectangle inclusion versus anchor inclusion,
+  selection restoration through history, lasso/rotation/resize/groups/snapping and
+  geometry editing on foreign/retained sources remain unresolved or missing. Actual
+  new-tool macOS interaction, IME/measured DPI and Windows/Linux remain unverified.
+  Original Bondline policies must not be promoted to observed reference behavior.
+
+- `atom.set_label` and the original `ui.atom_label` form now have bounded native Mac
+  literal element/H, history, Cancel, close and Unicode Save/reopen evidence in
+  verification-native-atom-labels.md. They do not supply full inline Text-tool behavior,
+  an abbreviation parser or general valence correction. Official25.5 Alt-entry and
+  repeat-label articles describe distinct flows; exact26.1 Mac/tool/repetition precedence
+  remains unverified. Native stale races, IME, arbitrary mixed AX/physical input, multiclick
+  word selection, measured DPI and Windows/Linux execution remain unverified.
+
+- The atom checkpoint's full gate fails848/1 at the unchanged MCP replacement bind60475.
+  The drawing-settings gate94003 also naturally fails998/1 at127.0.0.1:58634. Only
+  not-started checks pass separately592/0/1; the aggregate is failed and is not retried.
+  A single post-terminal lsof finds no owner, not failure-time identity evidence.
+  Command aggregate37811 naturally fails1012/1 at51300; no owner identity is captured
+  and no unchanged retry is run. Its separate UI readiness failure receives test-only
+  e516dd9 qualification, not a production fix or causal attribution. Full gate remains
+  failed; see verification-drawing-settings-command.md and verification-smiles-order-readiness.md.
+  The later selection gate1361/0/1 passes without a socket-policy change and does not
+  explain that earlier failure. No natural
+  failure-time owner capture exists. The original external inheritance probe was inconclusive;
+  separately frozen v2 qualifies the controlled before-FIOCLEX mechanism, not this failure's
+  cause. See research/macos-listener-lifetime.md. The actual test, socket policy, timing and
+  concurrency stay unchanged. Obtain known socket/process identity at a new natural failure
+  before a causal repair; do not rerun exhausted contexts or consumed experiments.
+
+- The original external-writer CDX probe now reproduces an interoperability difference:
+  Apache-2.0 Indigo1.47.0 emits two terminal zero words; unchanged Bondline/stdlib framing
+  refuses the extra word, while pinned RDKit accepts all ten declared graph variants.
+  Public writer code explains emission, not normative EOF permission. Resolve the published
+  implicit-document/file-end contract before a narrowly bounded parser change; preserve
+  the exact originals, arbitrary-trailing negatives and existing corpus/oracles. See
+  research/cdx-external-writer-probe.md. This is an actionable gap, not corpus admission.
+
+- Neutral acyclic file conversion is delivered for its documented≤64-atom fixed-H scope;
+  it does not resolve rings/components, general source-qualified drawing import, aromatic/
+  charged/isotopic depiction or complete unspecified-stereo treatment. Degree-three internal
+  Double cases refuse. Qualified unknown ANY from the supported collinear degree-two case
+  is distinct from assigned E/Z; see verification-smiles-acyclic-integration.md. Exact26.1
+  clipboard conversion/depiction remains unverified. No reference default coordinates,
+  bond-length style, icon or artwork are inferred from Bondline's original choices.
+
+- The2026-11-15 user-authorized CUA pass observes About26.1.0.6801/Product Signals ChemDraw,
+  but does not establish Professional entitlement. File New creates a second styled window
+  and retains the first, unlike Bondline's current same-window fresh session. Styles and
+  multi-window ownership/history/close/save routing remain required. Show Main Toolbar was
+  activated, but the selected document capture did not expose the floating palette; its
+  actual visibility/geometry and individual tool roles remain unresolved in this pass.
+  Edit Copy As/Paste Special SMILES entries were observed, not executed conversion flows.
+  See research/live-ui-review-2026-11-15.md; do not infer clipboard semantics from labels.
+
 - Registry Save retains authoring Undo/Redo and a separate saved baseline. G25 printed14
   describes only actions since the last save. The installed26.1.0.6801 Mac local CDXML
   Save As route retains enabled Undo Drawing; this resolves that specific observation,
@@ -207,6 +523,13 @@ SMILES supplier or the new headless tests. Actual native Bondline acceptance is 
 unverified while the user is active. Chemical preview/editing remains missing; the separate
 headless smiles.record.inspect query is now delivered, without a native record browser; see verification-smiles-file-app.md and verification-smiles-file-ui.md.
 
+The original readonly ordinal inspector is now implemented and verified through actual
+App frames, independent raw/notation consumers and real-worker close gates. Actual Mac
+AX/painting shows its controls and no automatic notation disclosure after an external
+query. Full native typing/activation/copy/dialog acceptance remains pending availability;
+no Professional26.1 record-browser parity or chemical preview/editing follows. See
+verification-smiles-record-integration.md. The earlier missing-browser statement is historical.
+
 ## Faithful ordinary SDF molecular display
 
 The restricted derived-H profile, source-direction label placement and all-record headless
@@ -248,11 +571,281 @@ the implemented slice does not establish universal CTfile perception or referenc
 
 ## Multiple-bond styles and placement
 
-[The unexecuted next gate](../research/multiple-bond-plan.md) distinguishes centered
+[The original plan](../research/multiple-bond-plan.md) distinguishes centered
 segments from context-sensitive offset/joined Double bonds. Public SDK relative spacing,
 absolute override and inherited/last-used style semantics do not establish a universal26.1
-numeric default;18% is an example. Its absolute-spacing owner table/prose and automatic/
-manual flags sharing XML names need explicit interpretation before mapping. Relative
-spacing's reference length, actual tier/style defaults, low-resolution separation, ring/
-substituent placement and persistent style schema remain open. The proposed original3w
-centered test policy is not adopted reference behavior or an implemented feature.
+numeric default;18% is an example. Its absolute-spacing owner table/prose needs explicit
+interpretation before broader style mapping. Explicit root relative spacing now uses
+preferred length in the supported native profile, with public SDK and independently
+executed Octet-Draw evidence; [contract](../research/document-bond-spacing.md) separates
+these from undocumented defaults. Actual tier/style defaults, local overrides and
+automatic ring/substituent placement remain open. Absent spacing retains original3pt
+geometry and the one-third short-axis guard; explicit spacing uses actual ink/gap/paper/
+hit certificates without that arbitrary cap. Dedicated tool/drag flows do not establish
+conversion clicks, hotkeys, alignment cycling or actual native drawing acceptance.
+
+The [DoublePosition prerequisite](../research/sided-double-prerequisite.md) resolves the
+three XML names, directed side and absent/unspecified data. CDX automatic/manual variants
+remain opaque; they cannot be inferred from XML. Data persistence/loss guards now have
+[independent evidence](../verification-double-position.md). Explicit Left/Right rendering
+now has the [locked inset contract](../research/inset-double-rendering.md) and
+[independent evidence](../verification-inset-doubles.md); dormant non-Double still refuses.
+Automatic inherited style/side policy, skeletal display preserving authored H,
+unsaturated native tools and exact shared-edge precedence still need evidence.
+The locked unsaturated-ring-authoring.md now implements a bounded original ranking
+against preserved shared edge order and literal H, with verification-unsaturated-rings.md
+command/file evidence. GUIDE25 printed101–103/423–424 does not establish the reference
+tie algorithm; do not silently mutate an old edge or infer that from memory.
+
+The [carbon-label data contract](../research/carbon-label-data.md) identifies actual
+standard terminal/non-terminal display flags from the SDK table and official DTD, distinct
+from H counts/query restrictions. The older Node page omits them; individual property
+mirrors are archived error wrappers. Node/root defaults are no, but inheritance precedence,
+interaction with explicit child Text and actual vendor26.1 rendering remain unverified.
+Missing flags keep the legacy Bondline compatibility profile; no claim of a different
+standard absent/no meaning is made. Bounded skeletal eligibility/explicit-label restoration
+now has verification-skeletal-carbon.md evidence, preserving literal H and mandatory
+isolated-C/C2/near-collinear/two-Double labels. Reference defaults, root/Text precedence,
+terminal/H preferences and native OS behavior remain unresolved; no global metadata hiding.
+Separate terminal-node data and degree-selected depiction now have
+[bounded independent evidence](../verification-terminal-carbon-labels.md). This resolves
+the data/display prerequisite, not inheritance, vendor defaults or missing style controls.
+
+
+## Existing-bond order edits — 2026-11-15
+
+[The reviewed public-guide plan](../research/bond-order-edit-plan.md) now separates
+absolute1/2/3 keys, Single-on-Single conversion and endpoint drawing from Double alignment.
+The complete26.1 old-order/tool/modifier matrix, placement traversal and the automatic-H
+preference's defaults/precedence remain unknown. The explicit neutral-carbon C4 policy is
+original and required by the shared setter; it does not infer absent H or import editing
+authority. Double/Triple-on-Single follows the guide's general conversion procedure, not a
+separately observed26.1 example. Unsupported clicks retain state with visible diagnostics.
+
+A native Mac check of the current authoring build observes the existing multiple-component
+visibility guard at default A4 fit in1160×800 content. A registry-prepared420pt square
+permits native multiple authoring/conversion at a readable scale. The later shared
+zoom/navigation slice now enables actual100%/150% authoring on unchanged A4; it retains
+all pixel/label guards and does not establish universal Fit or screen/style parity.
+See verification-view-native.md and verification-ordered-file-actions.md.
+
+
+## View conventions and remaining scope, 2026-11-15
+
+Public GUIDE25 establishes roles, percentage range and F5–F8, but no verified26.1
+100%-screen-unit/DPI calibration, step factor, initial scale, fit margin or2D hand/wheel
+modifier. Bondline's explicit units,1.25 steps, clamped pan and input factors are original
+choices recorded in the pinned view plan. SDF view navigation, current-window capture,
+saved view preferences and broader gestures remain missing. Valid percentage acceptance
+does not imply every source/page/scale passes rendering bounds and readability guards.
+The rapid Undo/Save prepass counterexample is now fixed and independently/natively tested;
+its failed first output stays recorded rather than changing the expected file.
+
+[The next bounded SDF view proposal](../research/sdf-view-plan.md) identifies an exact
+off-lock extent dependency: the complete virtual page can exceed A4. Decide how a
+source-qualified transient extent becomes available to the existing camera without
+turning preview into edit/Save authority. Installing only extent after a failed opted-in
+capture is an observable error side effect and requires an explicit tested contract;
+an explicit deferred preparation action is the alternative. Neither is implemented.
+Keep current whole-page captures, complete-source checks and physical/logical glyph
+limits intact; current-view cropping is not permission to skip off-camera validation.
+
+The receiving decision in that plan now resolves bootstrap: Actual/Zoom need no bounds,
+and only successful opted-in capture prepares source-qualified extent. Errors have no
+cache side effect. Current-view capture and bounded native SDF Actual/pan are delivered;
+the earlier missing-navigation statement is historical. Default native Fit remains its
+legacy physical-margin path, distinct from opt-in logical Fit at higher density.
+
+Remaining native observations are scoped in verification-sdf-view-integration.md: numeric
+slider SetValue with string100 makes no observed change, while pointer pan works; provider/
+platform cause is unestablished. Monitor DPI was not measured, and wheel dispatch was
+aborted before execution. Wider font coverage is open: CJK filename pixels show question
+marks while AX/path bytes remain correct. Unprepared Fit can show the existing100% fallback
+before any extent is known; that label does not establish explicit Actual state. Improve
+the unknown-Fit readout without fabricating bounds or weakening the legacy image contract.
+Also test relative steps against the visible high-DPI legacy overview: current commands
+use declared logical Fit, whose scale can differ from the physical-margin image above1x.
+Any eventual explicit-fit policy must preserve initial legacy evidence and remain stable
+through nonchemical field edits; cache presence must not silently select a different camera.
+
+The label portion is now corrected independently: all SDF Fit states report `Fit` without
+a numeric AX seed, including after preparation. Known Drawing Fit retains its number;
+explicit100 remains enterable. Actual-App input plus native read-only AX/painting evidence
+is scoped in verification-fit-readout.md. This does not resolve the relative-step policy,
+hardware DPI, numeric native input, font coverage or the earlier aborted wheel check.
+
+## SDF record-removal presentation, 2026-11-15
+
+CTFILE-2026 defines the one-or-more-compounds container rule, not a Professional26.1
+record-browser deletion flow. No verified public source establishes that exact desktop
+screen/confirmation/shortcut. Bondline's Records action, explicit confirmation, draft
+resolution and source-local ordinal invalidation are original policies, recorded in
+research/sdf-record-removal-ui-plan.md and verification-sdf-record-removal.md. Do not mark
+reference-screen parity from their existence or copy proprietary reference assets.
+Record creation/reordering, field-header editing and broader native/platform acceptance
+remain separate work. The latest AGENTS.md public-source boundary applies to new research.
+
+## New document reference scope, 2026-11-15
+
+GUIDE-25 printed13/39/77 establishes New, untitled documents, default/style-sheet roles
+and Ctrl+N. No verified26.1 evidence establishes Bondline's current single-window
+replacement/default A4, camera reset or retained tool policy; those are original choices.
+Style-sheet defaults, style-dependent New labels and multi-document windows remain missing.
+Apple's indexed Command-N table is a platform convention; its body returned429 and does
+not establish reference-product Mac parity. Native Bondline and other-platform execution
+must be recorded at their actual scope. Do not copy reference stationery, templates or icons.
+
+The New namespace guard addresses source replacement between UI frames and during Save
+completion, without weakening full revision/source identity checks on jobs. Its cache key
+is local to the same Engine; it is not a globally unique document ID or file authority.
+Broader UI addressability, platform event ordering and native concurrency scenarios remain
+part of the full M0 audit rather than being implied by a passing headless App suite.
+
+## Renewed installed settings observation, 2026-11-15
+
+The [LIVE-012–018 pass](../research/live-ui-review-2026-11-15.md#document-settings-observation-on-renewed-instruction)
+observes four settings field groups and cancels. Numeric bounds, unit conversion,
+application to existing/new objects, undo/persistence and the other five pages remain
+unobserved. Selected-document values are not factory/journal defaults. Signals26.1.0.6801
+does not establish Professional entitlement. The selected-document capture still does not
+expose the separate toolbar; an invocation is not proof of its visibility or icon roles.
+Do not infer a settings implementation or full screen/functional parity from this pass.
+
+## Bounded simple-ring conversion, 2026-11-15
+
+The [delivered bounded profile](../verification-smiles-ring-integration.md) handles one
+small Single cycle plus supported trees. Components,≥9-member rings, fused/spiro/bridged
+graphs, ring multiple bonds, general neutral/charged/aromatic/stereo chemistry and source-
+qualified drawing import remain required. A graph fitting the64-atom budget can still
+refuse its full geometry/ink certificate. Native bulky/large/race/geometry-typing and
+other-platform flows remain unverified; conversion is neither a ring authoring tool nor
+ME-015/ME-025 clipboard parity.
+
+The legacy first-success receipt clipping is fixed through a measured-size re-layout,
+not new test waits. Extra sizing is subject to the pinned SDK pass budget; one-pass or
+intrinsically over-tall windows need separate acceptance/scrolling work. The older
+listener AddrInUse failure still has no proven cause: diagnostic-only labels preserve
+the failure and may identify a future phase; negative bounded runs are not a causal fix.
+
+## Canonical28-byte CDX file-end decision, 2026-11-15
+
+The [pinned plan](../research/cdx-file-end-plan.md) records the SDK's separate object/file
+ends versus its implicit EOF-only simple example, and original Indigo output with both
+words. Canonical-zero-header fallback is a supported-envelope policy, not a producer
+signature. Opaque-header legacy successes retain priority. Removing the new file's final
+word can produce a valid old Document; bytes cannot establish truncation intent. Do not
+claim default parsing requires FileEnd in every accepted file or rejects every extra zero
+relative to a legacy interpretation. An explicit strict-requirement API is future work
+only if a real caller needs that guarantee; no new user option is planned.
+This does not resolve wider CDX metadata/chemistry/scene mapping, corpus admission or
+editable general CDX output; source-preserving syntax and application authority stay separate.
+
+## Neutral component packing and source-qualified import, 2026-11-15
+
+The [component contract](../research/smiles-components-plan.md) uses actual graph edges:
+OpenSMILES ring links can join atoms across a dot. Generic neutral mixtures have no
+established26.1 ordering, spacing or association rule here. IUPAC's contextual salts/
+related-forms guidance does not specify source-order center-box shelves. The declared
+gapL, no-rotation shelf placement and divided work quotas are original Bondline policy;
+visible ink spacing and a universal fit guarantee do not follow from center boxes.
+
+The additive derived-file profile must preserve all source-local identities, direction,
+fixed H and components and refuse the whole unsupported candidate. It does not settle
+general source-qualified import: selected/all-record semantics, original opaque backing,
+baseline and ID mapping, editable/save authority and stale/unsaved/history decisions
+still need their own contract. Aromatic/charged/isotopic/stereo and larger/polycyclic
+structures, general packing and clipboard workflows remain required later work.
+
+## Editable SMILES paste and file authoring, 2026-11-15
+
+[The source-backed study](../research/smiles-source-import-plan.md) establishes public25
+selected-string paste/copy roles, not an exact26.1 dialog, insertion/selection/style or
+selected/all-file-record workflow. Keep those gaps explicit rather than treating the
+original converters or readonly inspector as complete parity. The next proposed gate
+requires actual benzene/aromatic representation, valid chemistry/depiction and one
+undoable native append that survives registered Save/reopen. No such command exists yet.
+
+Pinned eframe RequestPaste normalizes CRLF and emits no event for empty/unavailable text.
+A safe explicit clipboard-completion seam or separately justified dialog policy must be
+tested; never leave an implicit intent able to consume a later unrelated paste. File
+records remain a different source boundary: retain every opaque/unselected byte, map
+original/current/saved chemical graphs and refuse unsupported or geometry-losing saves.
+No general-edit authority follows from selecting or displaying a partial projection.
+
+## Native density, Fit and input evidence, 2026-11-15
+
+[The density record](../verification-native-drawing-density.md) verifies the shared physical
+transform with fixed CPU/GPU and actual-App cases. The actual current desktop still
+refuses the same edited Double at Fit78.79%, while100% renders; effective native DPI,
+canvas and device-origin phase were not measured. Do not equate those native facts with
+the synthetic2× case or infer a renderer/provider cause. Determine the actual density/
+input and antialiased native coverage contract before changing pixel-visibility rules;
+never silently alter paper, geometry, camera or density to hide a failed certificate.
+Legacy1× fractional-origin behavior also remains outside this change.
+
+Two native coordinate clicks at the first Single bond leave Saved content unchanged;
+hotspot key2 commits the independently verified intended Double. Neither event trace nor
+first-click success was established. Source review/App tests do not resolve that actual
+input question. Preserve the known successful100% keyboard/history/Unicode Save/reopen
+scope, old native evidence and file bytes when investigating it.
+
+The fresh natural full-gate replacement_bind54691 AddrInUse failure has no failure-time
+owner capture. A delayed empty snapshot and separately passing remaining stages are not
+a causal explanation or a green aggregate. Existing bounded diagnostic limits and socket
+assertions remain unchanged; do not restart exhausted probes or add retries to hide it.
+
+## Aromatic authoring representation, 2026-11-15
+
+[The chemistry contract](../research/aromatic-authoring-contract.md) chooses an original
+bounded neutral Kekulé projection, not a complete aromaticity-perception algorithm.
+OpenSMILES explicitly includes antiaromatic integer forms and qualifies its proposed
+Hückel table as discussion; do not guess a universal4n+2 gate from toolkit flags.
+The initial C/N/O, fixed-H/donor/exocyclic/sp2-cycle policy must be independently tested
+before authoring. B/P/S/As/Se, charged/radical/stereo/higher-valence cases and full chemical
+perception remain required, rather than being relabeled as supported input.
+
+Exact26.1 Paste Special geometry, styles, focus and empty/unavailable clipboard behavior
+remain unestablished. Chemistry projection alone grants no source-file rewrite, native
+paste, aromatic output or Save acknowledgment. Fused/large/disconnected graph chemistry
+and available layout are separate gates; unavailable topology must refuse whole paste
+without losing source, unselected records or pre-existing authored objects.
+
+## Native editable SMILES paste, 2026-11-16
+
+The [native receiving record](../verification-native-smiles-paste.md) now establishes the
+explicit Paste Special form, ordinary OS text paste, bounded neutral benzene authoring,
+retry/history/edit and registered Unicode Save/reopen on macOS. The previous study's
+missing-command and proposed-form statements describe their earlier checkpoints.
+Exact26.1 presentation/defaults, automatic clipboard capture with explicit empty or
+unavailable completion, and a Mac shortcut remain unestablished. The independent form
+does not resolve those parity requirements or authorize source-file record rewriting.
+
+First AX activation of the submenu and focus of its empty multiline field did not work;
+coordinate input succeeded. No event trace establishes their cause. A failed Double
+click clears the numeric hotspot; fresh positional input followed by key1 succeeded.
+Do not infer a generic OS or renderer defect from stationary-key attempts. Native
+race/cancel/poison paths, Windows/Linux interaction and measured DPI/2× remain unverified.
+
+## Retained SMILES record engine, 2026-11-16
+
+[Receiving evidence](../verification-smiles-record-authoring.md) now establishes bounded
+selected/all import, H/order transactions, whole-source Save/history and actual headless
+CLI/MCP/socket/capture workflows. It preserves opaque/unselected bytes and generated
+geometry separately. This resolves the earlier missing source-backing/record transaction
+for that declared subset, not a complete26.1 native file-browser or record-authoring flow.
+Public documentation here does not establish exact record selection, insertion, naming,
+styles or saved-layout behavior. The new policies are original Bondline choices.
+
+The later [native record evidence](../verification-native-smiles-records.md) establishes
+bounded Mac selected/all import, registered source-bound order/history and whole-file
+Save/reopen/reimport. It preserves complete source and keeps expensive work off the frame
+mutex. Exact reference screens/defaults, wider chemistry, stereo/charged/isotopic drawing,
+record/metadata editing, larger layouts and cross-format loss policies remain open.
+
+The edited native record scene still refuses Fit78.79%; Actual100% restores it. AX string
+SetValue and one visible-handle pan drag make no visible change; their cause is unknown.
+Existing-Double click alignment remains unavailable; fresh native position plus numeric
+order works. Native geometry/ordinal typing, race/cancel/poison, measured DPI/2× and other
+platforms remain unverified. The picker hint's historical raw-preview wording is now
+corrected with bounded native Save As evidence. The latest unchanged MCP replacement_bind failure
+has no failure-time owner capture; passing prior/remaining stages does not explain it.

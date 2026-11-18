@@ -1,3 +1,7 @@
+#[cfg(test)]
+mod carbon_label_tests;
+mod smiles;
+
 use crate::cdxml::{ElementalGraph, MappingError};
 use crate::mol::{
     MolError, MolFile, MolTransform, Version, v3000, write_v2000, write_v2000_with_header,
@@ -16,6 +20,10 @@ pub enum DocumentError {
     Mol(#[from] MolError),
     #[error(transparent)]
     V3000(#[from] v3000::Error),
+    #[error(transparent)]
+    SmilesFile(#[from] crate::smiles::SmilesFileError),
+    #[error(transparent)]
+    SmilesProjection(#[from] crate::smiles::ProjectionError),
     #[error("this document has no original CDXML source")]
     NoCdxmlSource,
     #[error("this document has no original MOL source")]
@@ -41,6 +49,8 @@ impl DocumentError {
     pub fn code(&self) -> &'static str {
         match self {
             Self::Mol(error) => error.code(),
+            Self::SmilesFile(error) => error.code(),
+            Self::SmilesProjection(error) => error.code(),
             Self::V3000(error) => error.code(),
             Self::CdxMapping(error) => error.code(),
             Self::Mapping(error) => match error {
@@ -70,12 +80,26 @@ pub struct SourceInfo {
     pub modified: bool,
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum CdxmlProfile {
+    Opaque,
+    Canonical,
+    Preserved,
+    Caption,
+    Boxed,
+    Connected,
+    Mixed,
+    Flagged,
+    LabelDefaults,
+}
+
 #[derive(Clone, PartialEq)]
 enum OriginalSource {
+    Smiles(Arc<smiles::SmilesBacking>),
     Cdxml {
         bytes: Arc<[u8]>,
         baseline: Arc<Document>,
-        fully_mapped: bool,
+        profile: CdxmlProfile,
     },
     Cdx {
         bytes: Arc<[u8]>,
@@ -93,9 +117,10 @@ enum OriginalSource {
 }
 
 impl OriginalSource {
-    fn bytes(&self) -> &Arc<[u8]> {
+    fn bytes(&self) -> &[u8] {
         match self {
             Self::Cdxml { bytes, .. } | Self::Cdx { bytes, .. } | Self::Mol { bytes, .. } => bytes,
+            Self::Smiles(backing) => backing.original.as_bytes(),
         }
     }
     fn baseline(&self) -> &Arc<Document> {
@@ -103,12 +128,29 @@ impl OriginalSource {
             Self::Cdxml { baseline, .. }
             | Self::Cdx { baseline, .. }
             | Self::Mol { baseline, .. } => baseline,
+            Self::Smiles(backing) => &backing.baseline,
         }
     }
-    fn fully_mapped(&self) -> bool {
+    fn fully_mapped(&self, current: &Arc<Document>) -> bool {
         match self {
-            Self::Cdxml { fully_mapped, .. } | Self::Mol { fully_mapped, .. } => *fully_mapped,
-            Self::Cdx { .. } => false,
+            Self::Cdxml {
+                profile, baseline, ..
+            } => match profile {
+                CdxmlProfile::Canonical => true,
+                CdxmlProfile::Opaque
+                | CdxmlProfile::Caption
+                | CdxmlProfile::Boxed
+                | CdxmlProfile::Connected
+                | CdxmlProfile::Mixed
+                | CdxmlProfile::Flagged
+                | CdxmlProfile::LabelDefaults => false,
+                CdxmlProfile::Preserved => {
+                    Arc::ptr_eq(current, baseline)
+                        || crate::cdxml::supports_delta(baseline, current)
+                }
+            },
+            Self::Mol { fully_mapped, .. } => *fully_mapped,
+            Self::Cdx { .. } | Self::Smiles(_) => false,
         }
     }
     fn format(&self) -> &'static str {
@@ -116,6 +158,7 @@ impl OriginalSource {
             Self::Cdxml { .. } => "cdxml",
             Self::Cdx { .. } => "cdx",
             Self::Mol { .. } => "mol",
+            Self::Smiles(_) => "smiles",
         }
     }
 }
@@ -158,16 +201,34 @@ impl StoredDocument {
         let graph = ElementalGraph::parse(&bytes)?;
         let model = Arc::new(graph.preview_document(preview_size)?);
         drop(graph);
-        // A producer name is insufficient: every source byte must match our complete profile.
-        // shortcut: current canonical profile only; broaden with complete mappings and migrations.
-        let fully_mapped = crate::cdxml::write_document(&model)
-            .is_ok_and(|encoded| encoded.as_slice() == bytes.as_ref());
+        // Producer text alone grants no authority; every source field needs a complete proof.
+        let profile = if crate::cdxml::is_flagged(&bytes, &model) {
+            CdxmlProfile::Flagged
+        } else if crate::cdxml::write_document(&model)
+            .is_ok_and(|encoded| encoded.as_slice() == bytes.as_ref())
+        {
+            CdxmlProfile::Canonical
+        } else if crate::cdxml::is_preserved(&bytes, &model) {
+            CdxmlProfile::Preserved
+        } else if crate::cdxml::is_caption(&bytes, &model) {
+            CdxmlProfile::Caption
+        } else if crate::cdxml::is_boxed(&bytes, &model) {
+            CdxmlProfile::Boxed
+        } else if crate::cdxml::is_connected(&bytes, &model) {
+            CdxmlProfile::Connected
+        } else if crate::cdxml::is_mixed(&bytes, &model) {
+            CdxmlProfile::Mixed
+        } else if crate::cdxml::is_label_defaults(&bytes, &model) {
+            CdxmlProfile::LabelDefaults
+        } else {
+            CdxmlProfile::Opaque
+        };
         Ok(Self {
             model: Arc::clone(&model),
             original: Some(OriginalSource::Cdxml {
                 bytes,
                 baseline: model,
-                fully_mapped,
+                profile,
             }),
         })
     }
@@ -241,12 +302,14 @@ impl StoredDocument {
         Arc::clone(&self.model)
     }
 
-    /// Every authored field is represented by the native elemental codec.
-    /// Noncanonical or extended imports retain source but cannot be regenerated safely.
+    /// Complete chemical authoring/display capability, beyond raw data codec coverage.
+    /// Authored child labels need layout/agreement proofs; opaque extensions stay guarded.
     pub fn is_fully_mapped(&self) -> bool {
-        self.original
-            .as_ref()
-            .is_none_or(OriginalSource::fully_mapped)
+        !self.model.has_authored_atom_labels()
+            && self
+                .original
+                .as_ref()
+                .is_none_or(|source| source.fully_mapped(&self.model))
     }
 
     /// Imported MOL drawing frame. Saving that source always keeps this frame.
@@ -267,9 +330,22 @@ impl StoredDocument {
     /// Approximate retained storage, deduplicating source/model/fragment allocations.
     /// Includes baselines and reserved vectors; excludes Arc/allocator headers and caches.
     pub fn retained_bytes<'a>(documents: impl IntoIterator<Item = &'a Self>) -> usize {
+        Self::retained_bytes_with_smiles_files(documents, std::iter::empty())
+    }
+
+    /// Include raw SMILES owners in the same source/index accountant as mapped drawings.
+    /// External file wrapper sizes are included; nested wrappers already belong to backing.
+    pub fn retained_bytes_with_smiles_files<'a>(
+        documents: impl IntoIterator<Item = &'a Self>,
+        raw_smiles_files: impl IntoIterator<Item = &'a crate::smiles::SmilesFileDocument>,
+    ) -> usize {
         let mut snapshots = HashSet::new();
         let mut sources = HashSet::new();
         let mut header_arrays = HashSet::new();
+        let mut backings = HashSet::new();
+        let mut mapping_arrays = HashSet::new();
+        let mut files = raw_smiles_files.into_iter().collect::<Vec<_>>();
+        let mut nested_inline = 0_usize;
         let mut models = Vec::new();
         let mut bytes = 0_usize;
         for document in documents {
@@ -279,7 +355,27 @@ impl StoredDocument {
             bytes = bytes.saturating_add(size_of::<Self>());
             models.push(document.model.as_ref());
             if let Some(original) = &document.original {
-                if sources.insert(original.bytes().as_ptr()) {
+                if let OriginalSource::Smiles(backing) = original {
+                    if backings.insert(Arc::as_ptr(backing)) {
+                        bytes = bytes.saturating_add(size_of::<smiles::SmilesBacking>());
+                        files.extend([&backing.original, &backing.current]);
+                        nested_inline = nested_inline
+                            .saturating_add(2 * size_of::<crate::smiles::SmilesFileDocument>());
+                        models.push(backing.mapped.as_ref());
+                        for maps in [&backing.original_maps, &backing.maps] {
+                            if mapping_arrays.insert(maps.as_ptr()) {
+                                bytes =
+                                    bytes.saturating_add(maps.len().saturating_mul(size_of::<
+                                        crate::smiles::SmilesRecordMapping,
+                                    >(
+                                    )));
+                                for mapping in maps.iter() {
+                                    bytes = bytes.saturating_add(mapping.reserved_bytes());
+                                }
+                            }
+                        }
+                    }
+                } else if sources.insert(original.bytes().as_ptr()) {
                     bytes = bytes.saturating_add(original.bytes().len());
                 }
                 if let OriginalSource::Mol { headers, .. } = original
@@ -293,7 +389,12 @@ impl StoredDocument {
                 models.push(original.baseline().as_ref());
             }
         }
-        bytes.saturating_add(Document::retained_bytes(models))
+        bytes
+            .saturating_add(Document::retained_bytes(models))
+            .saturating_add(
+                crate::smiles::SmilesFileDocument::retained_bytes(files)
+                    .saturating_sub(nested_inline),
+            )
     }
 
     /// Detached model edits preserve source data, but cannot be exported until synchronized.
@@ -301,12 +402,88 @@ impl StoredDocument {
         Arc::make_mut(&mut self.model)
     }
 
+    /// Source-qualified caption edits/display, without chemical authoring permission.
+    pub fn has_caption_projection(&self) -> bool {
+        matches!(self.original.as_ref(),Some(OriginalSource::Cdxml{profile:CdxmlProfile::Caption,baseline,..})
+            if Arc::ptr_eq(&self.model,baseline) || crate::cdxml::supports_caption_delta(baseline,&self.model))
+    }
+
+    /// Closed source/model coverage for the box-positioned literal label workflow.
+    /// Full chemical authoring stays false; view/raster and final-edit guards still apply.
+    pub fn has_boxed_atom_labels(&self) -> bool {
+        match self.original.as_ref() {
+            None => crate::cdxml::boxed_model_supported(&self.model),
+            Some(OriginalSource::Cdxml {
+                profile: CdxmlProfile::Canonical,
+                baseline,
+                ..
+            }) => crate::cdxml::supports_boxed_delta(baseline, &self.model),
+            Some(OriginalSource::Cdxml {
+                profile: CdxmlProfile::Boxed,
+                baseline,
+                ..
+            }) => {
+                Arc::ptr_eq(&self.model, baseline)
+                    || crate::cdxml::supports_boxed_delta(baseline, &self.model)
+            }
+            _ => false,
+        }
+    }
+
+    /// Complete foreign connected-source coverage; native conventions remain separate.
+    /// This grants only the synchronized existing-label workflow, never full authoring.
+    pub fn has_connected_atom_labels(&self) -> bool {
+        matches!(self.original.as_ref(), Some(OriginalSource::Cdxml {
+            profile: CdxmlProfile::Connected, baseline, ..
+        }) if Arc::ptr_eq(&self.model, baseline)
+            || crate::cdxml::supports_connected_delta(baseline, &self.model))
+    }
+
+    /// Complete mixed-source coverage; every unlabelled atom is currently glyphless.
+    /// Existing printed labels and point movement remain separate from full authoring.
+    pub fn has_mixed_atom_labels(&self) -> bool {
+        matches!(self.original.as_ref(), Some(OriginalSource::Cdxml {
+            profile: CdxmlProfile::Mixed, baseline, ..
+        }) if Arc::ptr_eq(&self.model, baseline)
+            || crate::cdxml::supports_mixed_delta(baseline, &self.model))
+    }
+
+    /// Complete printed labels with retained flags and current hidden source atoms.
+    /// New runs must resolve against original resources; no foreign defaults are inferred.
+    pub fn has_flagged_atom_labels(&self) -> bool {
+        matches!(self.original.as_ref(), Some(OriginalSource::Cdxml {
+            profile: CdxmlProfile::Mixed | CdxmlProfile::Flagged, bytes, baseline,
+        }) if crate::cdxml::supports_flagged_delta(bytes, baseline, &self.model))
+    }
+
+    /// Explicit runs beside immutable, source-checked Label* metadata.
+    /// Defaults never supply missing run fields or grant full chemical authoring.
+    pub fn has_label_defaults_projection(&self) -> bool {
+        matches!(self.original.as_ref(), Some(OriginalSource::Cdxml {
+            profile: CdxmlProfile::LabelDefaults, bytes, baseline,
+        }) if Arc::ptr_eq(&self.model, baseline)
+            || crate::cdxml::supports_label_defaults_delta(bytes, baseline, &self.model))
+    }
+
+    /// Source coverage to attempt display; scale, glyph and geometry checks still apply.
+    pub fn has_display_projection(&self) -> bool {
+        self.is_fully_mapped()
+            || self.has_smiles_projection()
+            || self.has_caption_projection()
+            || self.has_boxed_atom_labels()
+            || self.has_connected_atom_labels()
+            || self.has_mixed_atom_labels()
+            || self.has_flagged_atom_labels()
+            || self.has_label_defaults_projection()
+    }
+
     pub fn source_info(&self) -> Option<SourceInfo> {
         self.original.as_ref().map(|original| SourceInfo {
             format: original.format(),
             byte_length: original.bytes().len(),
-            modified: !Arc::ptr_eq(&self.model, original.baseline())
-                && self.model != *original.baseline(),
+            modified: (!Arc::ptr_eq(&self.model, original.baseline())
+                && self.model != *original.baseline())
+                || matches!(original, OriginalSource::Smiles(backing) if backing.current!=backing.original),
         })
     }
 
@@ -323,6 +500,12 @@ impl StoredDocument {
 
     /// No model encoder exists yet. Preserve unchanged imports or explicitly refuse.
     pub fn to_cdx(&self) -> Result<Cow<'_, [u8]>, DocumentError> {
+        if matches!(self.original.as_ref(), Some(OriginalSource::Smiles(_))) {
+            return Err(DocumentError::CrossFormatSource {
+                from: "smiles",
+                to: "cdx",
+            });
+        }
         self.export_cdx().map(Cow::Borrowed)
     }
 
@@ -353,11 +536,85 @@ impl StoredDocument {
         }
         match self.export_cdxml() {
             Ok(bytes) => Ok(Cow::Borrowed(bytes)),
-            Err(DocumentError::NoCdxmlSource | DocumentError::UnsupportedEdit)
-                if self.is_fully_mapped() =>
-            {
+            Err(DocumentError::NoCdxmlSource) => {
                 Ok(Cow::Owned(crate::cdxml::write_document(&self.model)?))
             }
+            Err(DocumentError::UnsupportedEdit) => match self.original.as_ref() {
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Canonical,
+                    ..
+                }) => Ok(Cow::Owned(crate::cdxml::write_document(&self.model)?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Preserved,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Caption,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_caption_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Boxed,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_boxed_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Connected,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_connected_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Mixed,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_mixed_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Flagged,
+                    bytes,
+                    baseline,
+                }) => match crate::cdxml::write_flagged_preserved(bytes, baseline, &self.model) {
+                    Ok(output) => Ok(Cow::Owned(output)),
+                    Err(DocumentError::UnsupportedEdit)
+                        if crate::cdxml::write_document(baseline)
+                            .is_ok_and(|native| native.as_slice() == bytes.as_ref()) =>
+                    {
+                        // Preserve the prior exact-native data codec, never edit authority.
+                        Ok(Cow::Owned(crate::cdxml::write_document(&self.model)?))
+                    }
+                    Err(error) => Err(error),
+                },
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::LabelDefaults,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_label_defaults_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
+                _ => Err(DocumentError::UnsupportedEdit),
+            },
             Err(error) => Err(error),
         }
     }
@@ -396,6 +653,31 @@ impl StoredDocument {
                 to: "mol_v2000",
             });
         }
+        if self.model.has_authored_atom_labels() {
+            return Err(DocumentError::UnsupportedMolLayout(
+                "authored atom text cannot be represented",
+            ));
+        }
+        if !self.model.drawing_settings().is_empty() {
+            return Err(DocumentError::UnsupportedMolLayout(
+                "drawing settings cannot be represented",
+            ));
+        }
+        if self
+            .model
+            .pages()
+            .iter()
+            .any(|page| !page.texts().is_empty())
+        {
+            return Err(DocumentError::UnsupportedMolLayout(
+                "caption text cannot be represented",
+            ));
+        }
+        if !self.model.drawing_style().is_empty() {
+            return Err(DocumentError::UnsupportedMolLayout(
+                "drawing style cannot be represented",
+            ));
+        }
         if self.mol_version() == Some(version)
             && let Ok(bytes) = self.export_mol()
         {
@@ -422,6 +704,12 @@ impl StoredDocument {
             }
         }
         let (frame, headers, expected_page) = match self.original.as_ref() {
+            Some(OriginalSource::Smiles(_)) => {
+                return Err(DocumentError::CrossFormatSource {
+                    from: "smiles",
+                    to: "mol",
+                });
+            }
             Some(OriginalSource::Cdx { .. }) => {
                 return Err(DocumentError::CrossFormatSource {
                     from: "cdx",
@@ -445,7 +733,15 @@ impl StoredDocument {
                 (*transform, Some(headers), (page.id(), page.size()))
             }
             Some(OriginalSource::Cdxml {
-                fully_mapped: false,
+                profile:
+                    CdxmlProfile::Opaque
+                    | CdxmlProfile::Preserved
+                    | CdxmlProfile::Caption
+                    | CdxmlProfile::Boxed
+                    | CdxmlProfile::Connected
+                    | CdxmlProfile::Mixed
+                    | CdxmlProfile::Flagged
+                    | CdxmlProfile::LabelDefaults,
                 ..
             }) => {
                 return Err(DocumentError::CrossFormatSource {
@@ -454,7 +750,8 @@ impl StoredDocument {
                 });
             }
             Some(OriginalSource::Cdxml {
-                fully_mapped: true, ..
+                profile: CdxmlProfile::Canonical,
+                ..
             })
             | None => (
                 native_frame,
@@ -548,6 +845,10 @@ fn same_mol_authored_fields(fragment: &Fragment, mapped: &Fragment) -> bool {
                     && before.charge == after.charge
                     && before.radical == after.radical
                     && before.explicit_hydrogens == after.explicit_hydrogens
+                    && before.show_terminal_carbon_labels == after.show_terminal_carbon_labels
+                    && before.show_non_terminal_carbon_labels
+                        == after.show_non_terminal_carbon_labels
+                    && before.authored_label == after.authored_label
             })
 }
 

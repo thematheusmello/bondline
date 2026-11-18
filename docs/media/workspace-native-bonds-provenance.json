@@ -1,0 +1,37 @@
+{
+  "captured_date": "2026-11-15",
+  "method": "CUA getScreenshot own native window; exact unedited JPEG buffer. Initial ignored filename used .png; real format is independently verified and public extension is .jpg. No transcode.",
+  "image": {
+    "path": "workspace-native-bonds.jpg",
+    "width": 1160,
+    "height": 832,
+    "bytes": 68558,
+    "sha256": "445ce19fa126451613b2530cabd980a17588027d63a0af95ce9befbd15ec1ac9"
+  },
+  "ui_source_sha256": "fd39fe34002841c7e1835b3521b6fb97640b4e2170f82c83cbeb59dc6cb502d0",
+  "native_binary": {
+    "bytes": 20626504,
+    "sha256": "aa38e594f35d6fb6ff23e4eb6cad63aa6ec20a78bc35fcad0dfb1e011e53292c"
+  },
+  "platform": "macOS arm64, Apple M3 Max, Metal",
+  "font": "attributed Apache-2.0 Roboto",
+  "scene": {
+    "native_filename": "native-bonds-λ.cdxml",
+    "bytes": 1093,
+    "sha256": "3940bfd4e27d5f8379f55e6c6270a85187a39614552202a35c1b11d588b5f0d8",
+    "page_pt": [
+      420,
+      420
+    ],
+    "creation": "All three bonds authored via actual native pointer input on earlier c14a383a build; custom page setup through registry only. Final fd39 build opens that file, edits with absolute1/2, saves, menuUndo/Redo and restores original saved bytes.",
+    "formula_order": [
+      "C2H6",
+      "C2H4",
+      "C2H2"
+    ],
+    "independent_consumers": "unchanged Expat/Decimal oracle and pinned RDKit2026.09.2"
+  },
+  "scope": "Bounded native authoring/conversion/history/save/reopen; not style parity, general chemistry or complete M0/M1/M2.",
+  "golden": false,
+  "loopback": "Temporary localhost address is not a credential; startup token remains only in ignored logs. App remains intentionally open."
+}

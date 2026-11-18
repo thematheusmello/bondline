@@ -20,5 +20,9 @@ bondline-model = { path = "../model" }
 name = "bondline"
 path = "src/main.rs"
 
+[[example]]
+name = "input_trace"
+test = true
+
 [lints]
 workspace = true

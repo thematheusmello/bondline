@@ -67,6 +67,7 @@ fn literal_engine(case: usize, hydrogens: &[Option<u16>]) -> TestResult<Engine> 
         .enumerate()
         .map(|(i, [a, b])| {
             Ok(Bond {
+                double_position: bondline_model::DoublePosition::Unspecified,
                 id: BondId::new(u32::try_from(i + 1)?).ok_or("bond")?,
                 begin: AtomId::new(*a).ok_or("begin")?,
                 end: AtomId::new(*b).ok_or("end")?,
@@ -147,6 +148,8 @@ impl Fixture {
             drawing: DrawingState::default(),
             files: FileWorkflow::new(directory.path(".")),
             preview: PreviewWorkflow::default(),
+            sdf_fields: crate::sdf_fields::SdfFieldsWorkflow::default(),
+            smiles_records: crate::smiles_records::SmilesRecordsWorkflow::default(),
         };
         let context = egui::Context::default();
         configure_context(&context);
