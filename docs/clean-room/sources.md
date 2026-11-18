@@ -1,6 +1,6 @@
 # Clean-room source register
 
-The next CDX resource query is researched2026-11-18 against primary
+The next CDX resource query is [source-locked](../research/cdx-resources.md)2026-11-18 against primary
 [FontTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/FontTable.htm),
 [CDXFontTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXFontTable.htm),
 [ColorTable](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ColorTable.htm),
@@ -14,7 +14,10 @@ rules. No universal font-name codec or styled-run font reference resolution is e
 The font datatype's offsets conflict with its apparently short hex example; String's
 index wording conflicts with nonsequential font IDs. The linked charset page returns404.
 These are open evidence, not invented fallbacks. Present-empty/short palette handling
-and count65535's implicit index65536 require an explicit support/API decision before code.
+and the maximum colour index are locked as binary empty tables plus a wider u32 data index, preserving
+all65535 entries through index65536. Platform0/1, raw unsigned charset/name bytes,
+declared-ID-only lookup and optional-query error/source boundaries are explicit original
+support/API policies, without resolving styled Text or changing IO admission.
 Ignored receipt manifest6375B SHA256
 `a8574c064609a29687d1a4cc1632283766d4372cc1241607ced3fbe32adad9e4`
 pins five fresh200 bodies, one404 and five reused current receipts. STATUS records the

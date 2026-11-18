@@ -67,19 +67,21 @@ The next-resource read-only audit is complete: report8097B/SHA256
 bc29b83cc3704e5ede4abea40940872300f112caca8750f09a760abd9302aebc and receipt manifest6375B/
 SHA256a8574c064609a29687d1a4cc1632283766d4372cc1241607ced3fbe32adad9e4. Five fresh200
 bodies, linked charset404 and five reused current receipts support the proposed next task;
-no resource contract/decoder/Text permission is implemented by that audit. Actions OFF;
+the following [resource contract](docs/research/cdx-resources.md) now locks the standalone
+API/policies before code. No resource decoder/Text permission is implemented by that audit. Actions OFF;
 full M0–M5 remains active/incomplete.
 
 Next executable work:
 
-1. Read `target/cdx-bonds/research/next-resources/report.md` and primary SDK FontTable/
-   CDXFontTable/ColorTable/CDXColorTable/CDXString sources. Source-lock one standalone
-   `bondline_cdx::Document::resources()` view before production: literal platform/id/raw
-   UINT16 charset/name bytes, count/length/duplicate/owner limits and palette presence.
-   Resolve the API's index65536 boundary without dropping a stored colour. Retain the
+1. Read the locked [resource contract](docs/research/cdx-resources.md), source register/
+   open questions and optional ignored audit. The planned standalone
+   `bondline_cdx::Document::resources()` view retains platform/id/raw UINT16 charset/name
+   bytes, strict count/length/duplicate/owner limits and palette presence. Binary empty
+   tables stay present; a u32 colour data index preserves all entries through65536. Retain the
    font-style index-versus-declared-ID conflict and unknown name codec; do not resolve
    styled Text or infer a font from the apparently truncated published hex example.
-2. Freeze independent original struct vectors/readers and runtime RED; implement the
+2. Freeze independent original struct vectors/readers; distinguish the new API compiler
+   probe from actual runtime RED as locked, then implement the
    checked standalone view with exact source retention and borrowed/owned budget policy.
    Missing tables remain distinct from present zero/short tables; no default-font/codec,
    style/H/placement inference, IO admission, registry/UI or display/edit grant follows.
