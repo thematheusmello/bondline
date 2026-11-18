@@ -124,6 +124,22 @@ fn identical_models_with_different_source_defaults_retire_old_gesture_form_and_s
     let model_a = e.stored_document()?.model_snapshot();
     let stamp_a = e.capture_stamp();
     let gesture_a = e.selection_context()?;
+    assert!(gesture_a.is_current(&e));
+    e.dispatch("document.open_cdxml", json!({"path":b}))?;
+    assert_eq!(e.stored_document()?.model(), model_a.as_ref());
+    assert!(!e.capture_stamp_matches(&stamp_a));
+    assert!(
+        !gesture_a.is_current(&e),
+        "Open B alone retires A's gesture"
+    );
+    e.dispatch("document.open_cdxml", json!({"path":a}))?;
+    e.dispatch("ui.selection", json!({"action":"set","expected_revision":e.state().revision,"page_id":1,"atom_ids":[1,2,3,4,5]}))?;
+    assert!(
+        !gesture_a.is_current(&e),
+        "equal-model A→B→A cannot revive it"
+    );
+    assert!(e.selection_context()?.is_current(&e));
+    let stamp_a = e.capture_stamp();
     e.set_ui_file_host(true);
     e.dispatch("ui.atom_label", json!({"action":"open","expected_revision":e.state().revision,"page_id":1,"fragment_id":1,"atom_id":3}))?;
     let request_a = e.ui_atom_label_request().ok_or("A form")?;

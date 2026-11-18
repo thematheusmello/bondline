@@ -50,6 +50,10 @@ unrelated-writer refusals. Equal-model/different-default source A→B invalidate
 capture/gesture/form. A's captured Save may publish A but never associates or acknowledges
 B, whose complete state and source bytes stay exact. The test-only generic Result alias
 compiler qualification changes no expected value or production behavior.
+Independent review identifies that the first gesture capture also precedes form Open,
+which already invalidates it. The strengthened case now asserts a current gesture,
+Open B alone, then A→B→A with fresh selection before testing form/Save ownership.
+That focused case passes without changing any production guard or old assertion.
 
 The actual App case passes retained Ring→Open→Alt49 visible-style/Cancel/Apply→Alt48
 Element/H edit→Marquee/Select All→preview/drag→history→Unicode Save/reopen→Cancel, with
