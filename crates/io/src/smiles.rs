@@ -23,6 +23,7 @@ pub use authoring_layout::{
 };
 pub use file::{SmilesFileDocument, SmilesFileError};
 pub use layout::LayoutError;
+pub(crate) use layout::{on_segment, segments_intersect};
 pub use normalize::NormalizeError;
 pub use projection::{
     ProjectionError, RecordSelection, SmilesAtomMapping, SmilesBondMapping, SmilesRecordMapping,

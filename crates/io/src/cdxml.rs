@@ -7,7 +7,8 @@ mod graph;
 mod preserved;
 mod write;
 pub(crate) use boxed::{
-    is_boxed, model_supported as boxed_model_supported, supports_delta as supports_boxed_delta,
+    is_boxed, is_connected, model_supported as boxed_model_supported,
+    supports_delta as supports_boxed_delta, write_connected_preserved,
     write_preserved as write_boxed_preserved,
 };
 pub(crate) use caption::{

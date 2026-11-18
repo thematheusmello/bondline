@@ -188,14 +188,14 @@ impl SmilesDocument {
 fn cross(a: Point2, b: Point2, p: Point2) -> f64 {
     (b.x_pt() - a.x_pt()) * (p.y_pt() - a.y_pt()) - (b.y_pt() - a.y_pt()) * (p.x_pt() - a.x_pt())
 }
-fn on_segment(a: Point2, b: Point2, p: Point2, epsilon: f64, area_epsilon: f64) -> bool {
+pub(crate) fn on_segment(a: Point2, b: Point2, p: Point2, epsilon: f64, area_epsilon: f64) -> bool {
     cross(a, b, p).abs() <= area_epsilon
         && p.x_pt() >= a.x_pt().min(b.x_pt()) - epsilon
         && p.x_pt() <= a.x_pt().max(b.x_pt()) + epsilon
         && p.y_pt() >= a.y_pt().min(b.y_pt()) - epsilon
         && p.y_pt() <= a.y_pt().max(b.y_pt()) + epsilon
 }
-fn segments_intersect(
+pub(crate) fn segments_intersect(
     a: Point2,
     b: Point2,
     c: Point2,

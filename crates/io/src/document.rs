@@ -87,6 +87,7 @@ enum CdxmlProfile {
     Preserved,
     Caption,
     Boxed,
+    Connected,
 }
 
 #[derive(Clone, PartialEq)]
@@ -133,7 +134,10 @@ impl OriginalSource {
                 profile, baseline, ..
             } => match profile {
                 CdxmlProfile::Canonical => true,
-                CdxmlProfile::Opaque | CdxmlProfile::Caption | CdxmlProfile::Boxed => false,
+                CdxmlProfile::Opaque
+                | CdxmlProfile::Caption
+                | CdxmlProfile::Boxed
+                | CdxmlProfile::Connected => false,
                 CdxmlProfile::Preserved => {
                     Arc::ptr_eq(current, baseline)
                         || crate::cdxml::supports_delta(baseline, current)
@@ -202,6 +206,8 @@ impl StoredDocument {
             CdxmlProfile::Caption
         } else if crate::cdxml::is_boxed(&bytes, &model) {
             CdxmlProfile::Boxed
+        } else if crate::cdxml::is_connected(&bytes, &model) {
+            CdxmlProfile::Connected
         } else {
             CdxmlProfile::Opaque
         };
@@ -412,12 +418,22 @@ impl StoredDocument {
         }
     }
 
+    /// Complete foreign connected-source coverage; native conventions remain separate.
+    /// This grants only the synchronized existing-label workflow, never full authoring.
+    pub fn has_connected_atom_labels(&self) -> bool {
+        matches!(self.original.as_ref(), Some(OriginalSource::Cdxml {
+            profile: CdxmlProfile::Connected, baseline, ..
+        }) if Arc::ptr_eq(&self.model, baseline)
+            || crate::cdxml::supports_boxed_delta(baseline, &self.model))
+    }
+
     /// Source coverage to attempt display; scale, glyph and geometry checks still apply.
     pub fn has_display_projection(&self) -> bool {
         self.is_fully_mapped()
             || self.has_smiles_projection()
             || self.has_caption_projection()
             || self.has_boxed_atom_labels()
+            || self.has_connected_atom_labels()
     }
 
     pub fn source_info(&self) -> Option<SourceInfo> {
@@ -510,6 +526,15 @@ impl StoredDocument {
                     bytes,
                     baseline,
                 }) => Ok(Cow::Owned(crate::cdxml::write_boxed_preserved(
+                    bytes,
+                    baseline,
+                    &self.model,
+                )?)),
+                Some(OriginalSource::Cdxml {
+                    profile: CdxmlProfile::Connected,
+                    bytes,
+                    baseline,
+                }) => Ok(Cow::Owned(crate::cdxml::write_connected_preserved(
                     bytes,
                     baseline,
                     &self.model,
@@ -638,7 +663,8 @@ impl StoredDocument {
                     CdxmlProfile::Opaque
                     | CdxmlProfile::Preserved
                     | CdxmlProfile::Caption
-                    | CdxmlProfile::Boxed,
+                    | CdxmlProfile::Boxed
+                    | CdxmlProfile::Connected,
                 ..
             }) => {
                 return Err(DocumentError::CrossFormatSource {

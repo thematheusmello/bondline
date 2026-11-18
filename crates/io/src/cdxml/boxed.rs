@@ -1,8 +1,8 @@
 //! Closed box-positioned atom labels; source coverage is separate from full authoring.
 use super::{MappingError, atom_text, caption, graph, is_element, parse_position, write};
 use crate::{DocumentError, StoredDocument};
-use bondline_cdxml::{Document as Xml, Edit, ObjectId, TextObject};
-use bondline_model::{Atom, Bond, Document, Page};
+use bondline_cdxml::{Document as Xml, Edit, ObjectId, TextObject, parse_integer};
+use bondline_model::{Atom, Bond, BondOrder, Document, DoublePosition, Page};
 use roxmltree::Node;
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -13,6 +13,12 @@ type Result<T> = std::result::Result<T, DocumentError>;
 
 // Match the shared renderer's run/glyph work bounds before measuring/copying source text.
 const MAX_TEXT_WORK: usize = 4096;
+
+#[derive(Clone, Copy)]
+enum Profile {
+    Boxed,
+    Connected,
+}
 
 fn unsupported<T>() -> Result<T> {
     Err(DocumentError::UnsupportedEdit)
@@ -114,6 +120,104 @@ fn allowed_atom_delta(before: &Atom, after: &Atom) -> bool {
             .is_some_and(|(a, b)| a.style() == b.style())
 }
 
+fn connected_geometry(page: &Page) -> bool {
+    let vertices: Vec<_> = page
+        .fragments()
+        .iter()
+        .flat_map(|fragment| fragment.atoms())
+        .filter_map(|atom| atom.position.map(|point| (atom.id, point)))
+        .collect();
+    let positions: BTreeMap<_, _> = vertices.iter().copied().collect();
+    let edges = page
+        .fragments()
+        .iter()
+        .flat_map(|fragment| fragment.bonds())
+        .map(|bond| {
+            Some((
+                bond.begin,
+                bond.end,
+                *positions.get(&bond.begin)?,
+                *positions.get(&bond.end)?,
+            ))
+        })
+        .collect::<Option<Vec<_>>>();
+    let Some(edges) = edges else {
+        return false;
+    };
+    // Reuse point-space predicates, with conservative authored-coordinate roundoff.
+    let mut extent = 1.0_f64;
+    let mut magnitude = 1.0_f64;
+    if let Some((_, origin)) = vertices.first() {
+        for (_, point) in &vertices {
+            extent = extent
+                .max((point.x_pt() - origin.x_pt()).abs())
+                .max((point.y_pt() - origin.y_pt()).abs());
+            magnitude = magnitude.max(point.x_pt().abs()).max(point.y_pt().abs());
+        }
+    }
+    let epsilon = (extent * 1e-12).max(128.0 * f64::EPSILON * magnitude);
+    let area_epsilon = epsilon * extent;
+    for (i, (id, point)) in vertices.iter().enumerate() {
+        for (_, other) in vertices.iter().skip(i + 1) {
+            if (point.x_pt() - other.x_pt()).hypot(point.y_pt() - other.y_pt()) <= epsilon {
+                return false;
+            }
+        }
+        for (a, b, start, end) in &edges {
+            if id != a
+                && id != b
+                && crate::smiles::on_segment(*start, *end, *point, epsilon, area_epsilon)
+            {
+                return false;
+            }
+        }
+    }
+    for (i, (a, b, start, end)) in edges.iter().enumerate() {
+        for (c, d, other_start, other_end) in edges.iter().skip(i + 1) {
+            if a != c
+                && a != d
+                && b != c
+                && b != d
+                && crate::smiles::segments_intersect(
+                    *start,
+                    *end,
+                    *other_start,
+                    *other_end,
+                    epsilon,
+                    area_epsilon,
+                )
+            {
+                return false;
+            }
+        }
+    }
+    true
+}
+
+fn connected_style(model: &Document, page: &Page) -> bool {
+    let style = model.drawing_style();
+    if style.line_width_pt().is_none() || style.margin_width_pt().is_none() {
+        return false;
+    }
+    let mut has_bond = false;
+    for bond in page
+        .fragments()
+        .iter()
+        .flat_map(|fragment| fragment.bonds())
+    {
+        has_bond = true;
+        match (bond.order, bond.double_position) {
+            (BondOrder::Single, DoublePosition::Unspecified) => {}
+            (BondOrder::Double, DoublePosition::Center)
+            | (BondOrder::Triple, DoublePosition::Unspecified)
+                if model.drawing_settings().bond_length_pt().is_some()
+                    && style.bond_spacing_percent().is_some() => {}
+            _ => return false,
+        }
+    }
+    has_bond && connected_geometry(page)
+}
+
 pub(crate) fn supports_delta(baseline: &Document, current: &Document) -> bool {
     let (Ok(before), Ok(after)) = (one_page(baseline), one_page(current)) else {
         return false;
@@ -194,19 +298,25 @@ struct BoundAtom<'doc, 'input: 'doc> {
 fn bindings<'doc, 'input: 'doc>(
     xml: &'doc Xml<'input>,
     baseline: &Document,
+    profile: Profile,
 ) -> Result<Vec<Vec<BoundAtom<'doc, 'input>>>> {
     if !model_supported(baseline) {
         return unsupported();
     }
     let own = one_page(baseline)?;
-    // Foreign explicit Text cannot supply missing glyph or bond drawing defaults.
-    if own.fragments().iter().any(|fragment| {
-        !fragment.bonds().is_empty()
-            || fragment
-                .atoms()
+    if own
+        .fragments()
+        .iter()
+        .flat_map(|fragment| fragment.atoms())
+        .any(|atom| atom.authored_label.is_none())
+        || match profile {
+            Profile::Boxed => own
+                .fragments()
                 .iter()
-                .any(|atom| atom.authored_label.is_none())
-    }) {
+                .any(|fragment| !fragment.bonds().is_empty()),
+            Profile::Connected => !connected_style(baseline, own),
+        }
+    {
         return unsupported();
     }
     let features = xml.features();
@@ -434,10 +544,35 @@ fn bindings<'doc, 'input: 'doc>(
             let begin = reference(node, "B")?;
             let end = reference(node, "E")?;
             let expected = write::bond_attributes(bond, source_id, begin, end);
-            if !keys(
-                node,
-                &expected.iter().map(|(name, _)| *name).collect::<Vec<_>>(),
-            ) {
+            let mut expected_keys: Vec<_> = expected.iter().map(|(name, _)| *name).collect();
+            if let Profile::Connected = profile {
+                for name in ["Display", "Display2", "color"] {
+                    if node.attribute(name).is_some() {
+                        expected_keys.push(name);
+                    }
+                }
+                if ["Display", "Display2"]
+                    .iter()
+                    .any(|name| node.attribute(*name).is_some_and(|value| value != "Solid"))
+                {
+                    return unsupported();
+                }
+                let color = match node.attribute("color") {
+                    None => 3,
+                    Some(raw) => parse_integer(raw)
+                        .ok()
+                        .and_then(|value| u16::try_from(value).ok())
+                        .ok_or(DocumentError::UnsupportedEdit)?,
+                };
+                if resources
+                    .color(color)
+                    .map_err(|_| DocumentError::UnsupportedEdit)?
+                    != [0.0; 3]
+                {
+                    return unsupported();
+                }
+            }
+            if !keys(node, &expected_keys) {
                 return unsupported();
             }
             let mapped = Bond {
@@ -457,10 +592,18 @@ fn bindings<'doc, 'input: 'doc>(
 }
 
 pub(crate) fn is_boxed(source: &[u8], baseline: &Document) -> bool {
+    is_profile(source, baseline, Profile::Boxed)
+}
+
+pub(crate) fn is_connected(source: &[u8], baseline: &Document) -> bool {
+    is_profile(source, baseline, Profile::Connected)
+}
+
+fn is_profile(source: &[u8], baseline: &Document, profile: Profile) -> bool {
     let Ok(xml) = Xml::parse(source) else {
         return false;
     };
-    bindings(&xml, baseline).is_ok()
+    bindings(&xml, baseline, profile).is_ok()
 }
 
 pub(crate) fn write_preserved(
@@ -468,11 +611,28 @@ pub(crate) fn write_preserved(
     baseline: &Document,
     current: &Document,
 ) -> Result<Vec<u8>> {
+    write_in_profile(source, baseline, current, Profile::Boxed)
+}
+
+pub(crate) fn write_connected_preserved(
+    source: &[u8],
+    baseline: &Document,
+    current: &Document,
+) -> Result<Vec<u8>> {
+    write_in_profile(source, baseline, current, Profile::Connected)
+}
+
+fn write_in_profile(
+    source: &[u8],
+    baseline: &Document,
+    current: &Document,
+    profile: Profile,
+) -> Result<Vec<u8>> {
     if !supports_delta(baseline, current) {
         return unsupported();
     }
     let xml = syntax(Xml::parse(source))?;
-    let bound = bindings(&xml, baseline)?;
+    let bound = bindings(&xml, baseline, profile)?;
     if baseline == current {
         return Ok(source.to_vec());
     }
@@ -532,7 +692,14 @@ pub(crate) fn write_preserved(
     }
     let bytes = syntax(xml.apply_edits(&edits))?;
     let reopened = StoredDocument::from_cdxml(bytes.clone().into(), after.size())?;
-    if reopened.model() != current || !reopened.has_boxed_atom_labels() {
+    let source_supported = match profile {
+        Profile::Boxed => reopened.has_boxed_atom_labels(),
+        // Fully equal re-import may become byte-exact native after owned lexical edits.
+        Profile::Connected => {
+            reopened.has_connected_atom_labels() || reopened.has_boxed_atom_labels()
+        }
+    };
+    if reopened.model() != current || !source_supported {
         return unsupported();
     }
     Ok(bytes)
