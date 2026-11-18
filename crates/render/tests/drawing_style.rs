@@ -80,7 +80,8 @@ fn data_valid_but_unrepresentable_physical_width_is_a_scale_error() -> TestResul
 }
 
 #[test]
-fn owned_margin_cannot_be_silently_ignored_before_outline_shortening_is_available() -> TestResult {
+fn owned_margin_shortens_the_actual_native_label_components_instead_of_being_ignored() -> TestResult
+{
     let page = drawing(
         &[
             (1, [32.0, 64.125], 6, Some(3)),
@@ -92,10 +93,17 @@ fn owned_margin_cannot_be_silently_ignored_before_outline_shortening_is_availabl
     for margin in [0.0, 2.0] {
         let view = PageView::fit(576, 576, page.size())?
             .with_drawing_style(DrawingStyle::default().with_margin_width(Some(margin))?);
-        assert!(matches!(
-            view.graph_scene(&page, &Cancellation::default()),
-            Err(Error::UnsupportedChemicalContent)
-        ));
+        let graph = view.graph_scene(&page, &Cancellation::default())?;
+        let component = graph
+            .bond_strokes(
+                FragmentId::new(1).ok_or("fragment")?,
+                BondId::new(1).ok_or("bond")?,
+            )
+            .next()
+            .ok_or("component")?;
+        assert!(component.begin[0] > 96.0 + (margin * 2.0) as f32);
+        assert!(component.end[0] < 224.0 - (margin * 2.0) as f32);
+        assert_eq!(component.width, 2.0);
     }
     assert_eq!(page, original);
     Ok(())

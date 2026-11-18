@@ -216,6 +216,7 @@ pub(crate) fn render(
         budget.reserve(glyph, viewport)?;
     }
     let [r, g, b] = style.rgb().map(|v| (v * 255.0).round() as u8);
+    let placed_glyphs = glyphs.iter().map(|glyph| glyph.glyph().clone()).collect();
     let mut pixels = Vec::new();
     let mut bounds = None;
     for glyph in glyphs {
@@ -248,7 +249,7 @@ pub(crate) fn render(
         height: (bottom - top) as u32 + 2,
         color: [255; 4],
     };
-    Ok(Label::flat(em as f32, mask, pixels))
+    Ok(Label::flat(em as f32, mask, pixels, placed_glyphs))
 }
 
 fn union(target: &mut Option<[f64; 4]>, other: [f64; 4]) {

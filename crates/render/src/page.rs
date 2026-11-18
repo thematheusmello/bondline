@@ -354,15 +354,7 @@ pub(crate) fn graph_scene_in_viewport(
     viewport: &PageViewport,
 ) -> Result<GraphScene, Error> {
     cancel.check()?;
-    // shortcut: owned margin data needs the outline-shortening renderer before use on bonds.
-    if viewport.style.margin_width_pt().is_some()
-        && page
-            .fragments()
-            .iter()
-            .any(|fragment| !fragment.bonds().is_empty())
-    {
-        return Err(Error::UnsupportedChemicalContent);
-    }
+    let explicit_margin = viewport.style.margin_width_pt().is_some();
     let mut scene = crate::scene::page_scene_in_viewport(width, height, viewport);
     let mut hit_count = 0_usize;
     let mut count = scene.primitives.len();
@@ -534,9 +526,11 @@ pub(crate) fn graph_scene_in_viewport(
                 strokes: strokes.clone(),
                 polygons,
             });
-            scene
-                .primitives
-                .extend(strokes.into_iter().map(Primitive::Stroke));
+            if !explicit_margin {
+                scene
+                    .primitives
+                    .extend(strokes.into_iter().map(Primitive::Stroke));
+            }
         }
         let carbon_labels = crate::skeletal::labels(fragment, counts, cancel)?;
         for atom in fragment.atoms() {
@@ -643,6 +637,36 @@ pub(crate) fn graph_scene_in_viewport(
             });
         }
     }
+    if let Some(margin) = viewport.style.margin_width_pt() {
+        let mut budget = crate::clearance::Budget::default();
+        for bond in &mut bonds {
+            cancel.check()?;
+            let HitTarget::Bond { fragment_id, .. } = bond.target else {
+                return Err(Error::InvalidGeometry);
+            };
+            let endpoints = bond.endpoints.map(|id| {
+                labels.iter().find_map(|(fragment, atom, label)| {
+                    (*fragment == fragment_id && *atom == id).then_some(label)
+                })
+            });
+            crate::clearance::shorten(
+                &bond.stroke,
+                &mut bond.strokes,
+                endpoints,
+                margin * viewport.scale(),
+                &mut budget,
+                cancel,
+            )?;
+            bond.polygons = bond
+                .strokes
+                .iter()
+                .map(|stroke| visible_polygon(stroke, width, height))
+                .collect();
+            scene
+                .primitives
+                .extend(bond.strokes.iter().cloned().map(Primitive::Stroke));
+        }
+    }
     for (index, (fragment, atom, label)) in labels.iter().enumerate() {
         cancel.check()?;
         if has_multiple {
@@ -667,9 +691,11 @@ pub(crate) fn graph_scene_in_viewport(
             !incident && intersects_label(bond,&label.mask)
         }) { return Err(Error::LabelOverlap); }
         }
-        scene
-            .primitives
-            .extend(label.masks().cloned().map(Primitive::Rectangle));
+        if !explicit_margin {
+            scene
+                .primitives
+                .extend(label.masks().cloned().map(Primitive::Rectangle));
+        }
     }
     if counts.is_some() || authored_range.is_some() {
         for bond in &bonds {
@@ -679,8 +705,15 @@ pub(crate) fn graph_scene_in_viewport(
             }
             let mut covered = labels
                 .iter()
-                .flat_map(|(_, _, label)| label.masks())
-                .filter_map(|mask| segment_interval(&bond.stroke, mask))
+                .flat_map(|(_, _, label)| label.occlusion(explicit_margin))
+                .filter_map(|mask| {
+                    let axis = if explicit_margin {
+                        bond.strokes.first()?
+                    } else {
+                        &bond.stroke
+                    };
+                    segment_interval(axis, mask)
+                })
                 .collect::<Vec<_>>();
             covered.sort_by(|a, b| a.0.total_cmp(&b.0));
             let mut end = 0.0_f64;
@@ -698,7 +731,7 @@ pub(crate) fn graph_scene_in_viewport(
     if has_multiple {
         let masks = labels
             .iter()
-            .flat_map(|(_, _, label)| label.masks())
+            .flat_map(|(_, _, label)| label.occlusion(explicit_margin))
             .collect::<Vec<_>>();
         let ink = bonds
             .iter()
@@ -709,9 +742,10 @@ pub(crate) fn graph_scene_in_viewport(
             if bond.strokes.len() == 1 {
                 continue;
             }
+            let painted_axis = bond.painted_axis(explicit_margin)?;
             let inset_gap = if bond.is_sided() {
                 Some(crate::inset::Gap::new(
-                    &bond.stroke,
+                    &painted_axis,
                     bond.strokes.get(1).ok_or(Error::InvalidGeometry)?,
                     bond.double_position,
                 )?)
@@ -801,7 +835,7 @@ pub(crate) fn graph_scene_in_viewport(
                             3.0 * viewport.stroke_width() * (bond.strokes.len() - 1) as f32
                                 + bond.stroke.width
                         },
-                        ..bond.stroke.clone()
+                        ..painted_axis.clone()
                     };
                     for component in &other.strokes {
                         if envelope.has_visible_pixel(
@@ -879,7 +913,7 @@ pub(crate) fn graph_scene_in_viewport(
     if !viewport.style.is_empty() || authored_range.is_some() {
         let masks = labels
             .iter()
-            .flat_map(|(_, _, label)| label.masks())
+            .flat_map(|(_, _, label)| label.occlusion(explicit_margin))
             .collect::<Vec<_>>();
         for stroke in bonds
             .iter()
@@ -891,6 +925,41 @@ pub(crate) fn graph_scene_in_viewport(
             }
             if !stroke.has_visible_pixel([width, height], &masks, None, &[], cancel)? {
                 return Err(Error::LabelOverlap);
+            }
+        }
+    }
+    if explicit_margin {
+        let masks = labels
+            .iter()
+            .flat_map(|(_, _, label)| label.occlusion(true))
+            .collect::<Vec<_>>();
+        for (index, bond) in bonds.iter().enumerate() {
+            if bond.strokes.len() != 1 {
+                continue;
+            }
+            for other in bonds.iter().skip(index + 1) {
+                if other.strokes.len() != 1 {
+                    continue;
+                }
+                cancel.check()?;
+                let same_fragment = matches!((bond.target, other.target),
+                    (HitTarget::Bond { fragment_id: a, .. }, HitTarget::Bond { fragment_id: b, .. }) if a == b);
+                if same_fragment && bond.endpoints.iter().any(|id| other.endpoints.contains(id)) {
+                    continue;
+                }
+                for first in &bond.strokes {
+                    for second in &other.strokes {
+                        if first.has_visible_pixel(
+                            [width, height],
+                            &masks,
+                            Some(second),
+                            &[],
+                            cancel,
+                        )? {
+                            return Err(Error::LabelOverlap);
+                        }
+                    }
+                }
             }
         }
     }

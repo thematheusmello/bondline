@@ -127,6 +127,7 @@ pub fn cpu_solid(width: u32, height: u32, color: [u8; 4]) -> Result<Frame, Error
 }
 
 mod authored_label;
+mod clearance;
 #[cfg(test)]
 mod display_label_tests;
 pub use authored_label::{position_atom_label, validate_atom_label};

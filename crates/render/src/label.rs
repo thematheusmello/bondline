@@ -1,5 +1,5 @@
 use crate::{Cancellation, Error, Rectangle};
-use ab_glyph::{Font, FontRef, point};
+use ab_glyph::{Font, FontRef, Glyph, point};
 use bondline_model::Element;
 
 pub(crate) struct Label {
@@ -8,17 +8,24 @@ pub(crate) struct Label {
     pub pixels: Vec<Rectangle>,
     pub symbol_mask: Rectangle,
     pub hydrogen_mask: Option<Rectangle>,
+    pub(crate) glyphs: Vec<Glyph>,
     stacked: bool,
 }
 
 impl Label {
-    pub(crate) fn flat(em_px: f32, mask: Rectangle, pixels: Vec<Rectangle>) -> Self {
+    pub(crate) fn flat(
+        em_px: f32,
+        mask: Rectangle,
+        pixels: Vec<Rectangle>,
+        glyphs: Vec<Glyph>,
+    ) -> Self {
         Self {
             em_px,
             symbol_mask: mask.clone(),
             mask,
             pixels,
             hydrogen_mask: None,
+            glyphs,
             stacked: false,
         }
     }
@@ -29,6 +36,11 @@ impl Label {
             &self.mask
         })
         .chain(self.hydrogen_mask.as_ref().filter(|_| self.stacked))
+    }
+    pub fn occlusion(&self, explicit_margin: bool) -> impl Iterator<Item = &Rectangle> {
+        self.masks()
+            .filter(move |_| !explicit_margin)
+            .chain(self.pixels.iter().filter(move |_| explicit_margin))
     }
 }
 
@@ -244,6 +256,7 @@ fn text(
     let mut bottom = 0;
     let mut symbol_bounds = [u32::MAX, u32::MAX, 0, 0];
     let mut hydrogen_bounds = [u32::MAX, u32::MAX, 0, 0];
+    let mut placed_glyphs = Vec::new();
     for (index, (glyph, x, y, factor)) in glyphs.into_iter().enumerate() {
         cancel.check()?;
         let outlined = font
@@ -251,6 +264,7 @@ fn text(
                 glyph.with_scale_and_position(factor * font.height_unscaled(), point(x, y)),
             )
             .ok_or(Error::InvalidFont)?;
+        placed_glyphs.push(outlined.glyph().clone());
         let bounds = outlined.px_bounds();
         if bounds.min.x < 1.0
             || bounds.min.y < 1.0
@@ -341,6 +355,7 @@ fn text(
         pixels,
         symbol_mask: mask(symbol_bounds),
         hydrogen_mask: (hydrogens != 0).then(|| mask(hydrogen_bounds)),
+        glyphs: placed_glyphs,
         stacked,
     })
 }

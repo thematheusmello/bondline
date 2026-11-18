@@ -33,6 +33,29 @@ pub(crate) struct BondHit {
 }
 
 impl BondHit {
+    pub(crate) fn painted_axis(&self, explicit_margin: bool) -> Result<Stroke, Error> {
+        if !explicit_margin {
+            return Ok(self.stroke.clone());
+        }
+        let first = self.strokes.first().ok_or(Error::InvalidGeometry)?;
+        let last = self.strokes.last().ok_or(Error::InvalidGeometry)?;
+        let mut axis = self.stroke.clone();
+        if self.strokes.len() == 1 || self.is_sided() {
+            axis.begin = first.begin;
+            axis.end = first.end;
+        } else {
+            axis.begin = [
+                (first.begin[0] + last.begin[0]) / 2.0,
+                (first.begin[1] + last.begin[1]) / 2.0,
+            ];
+            axis.end = [
+                (first.end[0] + last.end[0]) / 2.0,
+                (first.end[1] + last.end[1]) / 2.0,
+            ];
+        }
+        Ok(axis)
+    }
+
     pub(crate) fn is_sided(&self) -> bool {
         matches!(
             self.double_position,
