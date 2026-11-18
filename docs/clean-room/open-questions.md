@@ -1,5 +1,13 @@
 # Open questions
 
+## CDX caption ordering, 2026-11-18
+
+The [ZOrder description](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/ZOrder.htm)
+gives a zero group for omission and places other objects above it, while explicit
+signed values sort ascending. The [caption ordering contract](../research/cdx-caption-order.md)
+leaves mixed omission and negative values, tied depths, non-overlap proof across
+cameras and ordering across other visual object types open.
+
 ## CDXString typography, 2026-11-18
 
 The [raw string contract](../research/cdx-string.md) retains original starts.

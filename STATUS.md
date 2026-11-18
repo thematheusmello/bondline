@@ -1,9 +1,10 @@
 # Status — 2026-11-18
 
-The full M0–M5 goal is **active after the user resumed it**. Verified delivery lands
-into `main`. Caption preview work follows merged main `6565e58` on
-`feat/cdx-caption-preview`, tracked by [draft PR 5](https://github.com/thematheusmello/bondline/pull/5).
-Its scope is unchanged. The native/GPU license
+The full M0–M5 goal is **active**. Verified delivery lands into `main`.
+[PR 5](https://github.com/thematheusmello/bondline/pull/5) landed direct-Page CDX
+caption preview at `9f27fe9`. Its merge tree matches the reviewed tip `dbb821e`.
+The remote feature ref was retired after the ancestry check. The new
+`feat/cdx-caption-order` branch starts there. The native/GPU license
 blocker is resolved without broadening MIT/Apache/BSD. M0, M1 and M2–M5 remain
 incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each atomic
 commit as the user requires. The user now expressly authorizes merging completed feature
@@ -115,10 +116,9 @@ runs. All feature execution jobs and review agents are terminal. Actions is off.
 
 ### Next executable work
 
-1. Land the verified caption branch through PR 5 and confirm the main tree.
-2. Source-lock multiple CDX captions and explicit Z-order with independent
-   models and ordering witnesses. Continue explicit styles, child labels and
-   editable source from public evidence.
+1. Implement the [CDX caption ordering contract](docs/research/cdx-caption-order.md)
+   with runtime RED/GREEN, independent models and overlapping render witnesses.
+2. Continue explicit styles, child labels and editable source from public evidence.
 3. Continue broader M1 styles, labels, objects, editable source and formats, then
    the remaining M0 and M2–M5 requirements from the roadmap and parity checklist.
 
