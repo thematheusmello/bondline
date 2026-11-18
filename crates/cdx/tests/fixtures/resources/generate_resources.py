@@ -1,8 +1,11 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Original CDX font/palette source bytes; independent Python struct only."""
 
+import argparse
+import hashlib
+import json
+import struct
 from pathlib import Path
-import argparse, hashlib, json, struct
 
 SCRIPT = Path(__file__).resolve().parent
 REPO = next(
@@ -241,7 +244,9 @@ for name, raw in all_sources.items():
             "sha256": hashlib.sha256(raw).hexdigest(),
         }
     )
-(OUT / "resource-vectors.json").write_text(json.dumps(manifest, indent=2) + "\n")
+(OUT / "resource-vectors.json").write_bytes(
+    (json.dumps(manifest, indent=2) + "\n").encode()
+)
 print(
     json.dumps(
         {

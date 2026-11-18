@@ -1,7 +1,10 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Independent original CDX resource/framing reader; standard library only."""
 
-import hashlib, json, struct, sys
+import hashlib
+import json
+import struct
+import sys
 
 LIMIT = 64 * 1024 * 1024
 PREFIX = b"VjCD0100\x04\x03\x02\x01"

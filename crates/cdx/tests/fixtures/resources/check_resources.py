@@ -1,8 +1,12 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Independent full-entry qualification for original CDX resources; stdlib only."""
 
+import argparse
+import hashlib
+import importlib.util
+import json
+import struct
 from pathlib import Path
-import argparse, hashlib, importlib.util, json, struct
 
 SCRIPT = Path(__file__).resolve().parent
 REPO = next(
@@ -271,7 +275,7 @@ for raw in [
         pass
     else:
         raise AssertionError("raw truncation accepted")
-(OUT / "resource-facts.json").write_text(json.dumps(facts, indent=2) + "\n")
+(OUT / "resource-facts.json").write_bytes((json.dumps(facts, indent=2) + "\n").encode())
 checks = {
     "status": "passed",
     "sources": len(facts),
@@ -290,7 +294,9 @@ checks = {
     "no_external_rdkit_claim": True,
     "product_execution": False,
 }
-(OUT / "independent-checks.json").write_text(json.dumps(checks, indent=2) + "\n")
+(OUT / "independent-checks.json").write_bytes(
+    (json.dumps(checks, indent=2) + "\n").encode()
+)
 print(
     json.dumps(
         {
