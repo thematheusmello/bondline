@@ -7,6 +7,37 @@ use bondline_cdx::{
 use libfuzzer_sys::fuzz_target;
 use std::collections::BTreeMap;
 
+fn check_child_splice(document: &Document<'_>, input: &[u8]) {
+    let Some((index, end)) = document
+        .records()
+        .iter()
+        .enumerate()
+        .find(|(_, record)| matches!(record.kind(), RecordKind::ObjectEnd { start: Some(_) }))
+    else {
+        return;
+    };
+    let value = &input[..input.len().min(64)];
+    let output = match document.append_child(end, 0xc132, 0, &[(0x4132, value)]) {
+        Ok(bytes) => bytes,
+        Err(Error::InputTooLarge | Error::RecordLimit | Error::DepthLimit | Error::Allocation) => {
+            return;
+        }
+        Err(error) => panic!("valid owned child splice refused: {error}"),
+    };
+    let (prefix, suffix) = input.split_at(end.range().start);
+    let mut insertion = vec![0x32, 0xc1, 0, 0, 0, 0, 0x32, 0x41, value.len() as u8, 0];
+    insertion.extend_from_slice(value);
+    insertion.extend_from_slice(&[0, 0]);
+    assert_eq!(output, [prefix, &insertion, suffix].concat());
+    let reopened = Document::parse(&output).unwrap();
+    assert_eq!(reopened.framing(), document.framing());
+    let RecordKind::ObjectEnd { start } = end.kind() else {
+        unreachable!();
+    };
+    assert_eq!(reopened.records()[index].parent(), *start);
+    assert_eq!(reopened.records().len(), document.records().len() + 3);
+}
+
 fn check_string(document: &Document<'_>, index: usize, record: &Record) {
     let RecordKind::Property { payload, .. } = record.kind() else {
         return;
@@ -824,6 +855,8 @@ fuzz_target!(|data: &[u8]| {
         );
         assert_eq!(document.as_bytes(), data);
     }
+
+    check_child_splice(&document, data);
 
     // New syntax uses an explicit ID0 root and canonical lengths, not source passthrough.
     match construct(&document) {

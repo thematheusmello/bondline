@@ -1,4 +1,4 @@
-//! Standalone CDX source preservation, property edits and bounded new-tree syntax.
+//! Standalone CDX source preservation, bounded source edits and new-tree syntax.
 //! No model, native I/O or chemical interpretation.
 
 use std::{fmt, ops::Range};
@@ -110,6 +110,8 @@ pub enum Error {
     RecordLimit,
     InvalidProperty,
     InvalidPropertyRange,
+    InvalidObjectEnd,
+    DuplicateObjectId(u32),
     ConflictingEdits,
     InvalidTag,
     ObjectBalance,
@@ -133,6 +135,11 @@ impl fmt::Display for Error {
                 .write_str("property operations require a property record owned by this document"),
             Self::InvalidPropertyRange => {
                 output.write_str("CDX property ranges are inconsistent with the source")
+            }
+            Self::InvalidObjectEnd => output
+                .write_str("child insertion requires a matched object end owned by this document"),
+            Self::DuplicateObjectId(id) => {
+                write!(output, "CDX object ID {id} is already assigned in this container")
             }
             Self::ConflictingEdits => output.write_str("a CDX property may be edited only once per batch"),
             Self::InvalidTag => output.write_str(
