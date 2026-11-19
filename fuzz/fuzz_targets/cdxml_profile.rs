@@ -362,6 +362,7 @@ fn structured_caption(data: &[u8]) {
 fn native_caption_transition(data: &[u8]) {
     let mut native = StoredDocument::default();
     let page_id = native.model().pages()[0].id();
+    let text_id = 100 + u32::from(data.first().copied().unwrap_or(0));
     native
         .model_mut()
         .set_page_size(page_id, PageSize::new(256.0, 256.0).unwrap())
@@ -372,7 +373,7 @@ fn native_caption_transition(data: &[u8]) {
             page_id,
             vec![
                 StyledText::new(
-                    TextId::new(100 + u32::from(data.first().copied().unwrap_or(0))).unwrap(),
+                    TextId::new(text_id).unwrap(),
                     Point2::new(72.0, 96.0).unwrap(),
                     vec![
                         TextRun::new(
@@ -394,10 +395,33 @@ fn native_caption_transition(data: &[u8]) {
     let bytes = native.to_cdxml().unwrap().into_owned();
     let native_reopened = StoredDocument::from_cdxml(bytes.clone().into(), PageSize::A4).unwrap();
     assert!(native_reopened.is_fully_mapped());
-    same_semantics(native.model(), native_reopened.model());
+    assert_eq!(native.model(), native_reopened.model());
     let canonical = String::from_utf8(bytes).unwrap();
     assert_eq!(canonical.matches("></s>").count(), 1);
-    let source = canonical.replacen("></s>", "/>", 1);
+    let sparse_source = canonical.replacen("></s>", "/>", 1);
+    let mut sparse_caption =
+        StoredDocument::from_cdxml(sparse_source.as_bytes().into(), PageSize::A4).unwrap();
+    assert!(sparse_caption.has_caption_projection());
+    assert!(!sparse_caption.is_fully_mapped());
+    assert_eq!(sparse_caption.model().pages()[0].texts()[0].id().get(), 1);
+    assert_eq!(
+        sparse_caption.to_cdxml().unwrap().as_ref(),
+        sparse_source.as_bytes()
+    );
+    let changed = sparse_caption.model().pages()[0].texts()[0]
+        .with_run_text(0, "Phase B".into())
+        .unwrap();
+    sparse_caption
+        .model_mut()
+        .replace_text(page_id, changed)
+        .unwrap();
+    assert!(sparse_caption.to_cdxml().is_err());
+
+    // The former writer emitted the dense wire ID even for a sparse app ID.
+    // Keep that legacy empty-run splice and its unchanged identity proof.
+    let legacy = canonical.replacen(&format!("<t id=\"{}\"", text_id + 1), "<t id=\"2\"", 1);
+    assert_ne!(canonical, legacy);
+    let source = legacy.replacen("></s>", "/>", 1);
     let mut caption = StoredDocument::from_cdxml(source.as_bytes().into(), PageSize::A4).unwrap();
     assert!(caption.has_caption_projection());
     assert!(!caption.is_fully_mapped());
@@ -406,7 +430,7 @@ fn native_caption_transition(data: &[u8]) {
         .unwrap();
     caption.model_mut().replace_text(page_id, text).unwrap();
     let output = caption.to_cdxml().unwrap().into_owned();
-    let expected = canonical.replacen("></s>", ">Phase B</s>", 1);
+    let expected = legacy.replacen("></s>", ">Phase B</s>", 1);
     assert_eq!(output, expected.as_bytes());
     let reopened = StoredDocument::from_cdxml(output.into(), PageSize::A4).unwrap();
     assert!(reopened.is_fully_mapped());

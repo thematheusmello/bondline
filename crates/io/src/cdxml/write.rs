@@ -48,6 +48,7 @@ pub(super) fn borrowed(attributes: &Attributes) -> Vec<(&'static str, &str)> {
 /// New elemental CDXML only. Never regenerate a source-backed projection with this API.
 /// Canvas dimensions are explicit Poster extents, not native printer configuration.
 pub fn write_document(document: &Document) -> Result<Vec<u8>, MappingError> {
+    let text_id_base = native_caption_id_base(document);
     let attributes = root_attributes(document);
     let mut writer = Writer::new(&borrowed(&attributes))?;
     let resources = super::caption::NativeResources::new(document)?;
@@ -82,11 +83,39 @@ pub fn write_document(document: &Document) -> Result<Vec<u8>, MappingError> {
             writer.end_element()?;
         }
         for text in page.texts() {
-            resources.write_text(&mut writer, text, allocate(&mut next)?)?;
+            let id = match text_id_base {
+                Some(base) => base
+                    .checked_add(text.id().get())
+                    .ok_or(MappingError::IdentityLimit)?,
+                None => allocate(&mut next)?,
+            };
+            resources.write_text(&mut writer, text, id)?;
         }
         writer.end_element()?;
     }
     Ok(writer.finish()?)
+}
+
+/// The native plain-caption ID range is separate from font/palette identities.
+/// Unsupported existing data keeps the legacy sequential encoder for the whole document.
+pub(crate) fn native_caption_id_base(document: &Document) -> Option<u32> {
+    let [page] = document.pages() else {
+        return None;
+    };
+    if document.has_authored_atom_labels() {
+        return None;
+    }
+    let mut prefix = 1_u32;
+    for fragment in page.fragments() {
+        prefix = prefix
+            .checked_add(1)?
+            .checked_add(u32::try_from(fragment.atoms().len()).ok()?)?
+            .checked_add(u32::try_from(fragment.bonds().len()).ok()?)?;
+    }
+    page.texts()
+        .iter()
+        .all(|text| prefix.checked_add(text.id().get()).is_some())
+        .then_some(prefix)
 }
 
 fn allocate(counter: &mut u32) -> Result<u32, MappingError> {

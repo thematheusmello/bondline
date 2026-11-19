@@ -20,6 +20,7 @@ pub(crate) use caption::{
 };
 pub use graph::{ElementalGraph, MappingError};
 pub(crate) use preserved::{is_preserved, supports_delta, write_preserved};
+pub(crate) use write::native_caption_id_base;
 pub use write::write_document;
 
 use bondline_model::Point2;
