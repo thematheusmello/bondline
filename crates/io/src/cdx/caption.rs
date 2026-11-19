@@ -1,7 +1,7 @@
 //! Whole-source proof and stable source identity for explicitly positioned CDX captions.
 use super::{
     COLOR_TABLE, DOCUMENT, DRAWING_SPACE, FONT_TABLE, HEIGHT, PAGE, POSITION, TEXT, TEXT_OBJECT,
-    WIDTH, Z_ORDER, has_preview_header, payload, poster_size, read_position,
+    WIDTH, Z_ORDER, has_preview_header, payload, poster_size, property_bytes, read_position,
     text::{TextRole, decode_runs},
     verify_preview_page,
 };
@@ -11,11 +11,24 @@ use bondline_render::{MAX_PAGE_TEXT_RUNS, validate_caption_run_joins};
 use std::collections::{BTreeMap, BTreeSet};
 
 const CAPTION_JUSTIFICATION: u16 = 0x080c;
+const OBJECT_TAG: u16 = 0x8011;
+const TAG_NAME: u16 = 0x0008;
+const TAG_TYPE: u16 = 0x0d00;
+const TAG_PERSISTENT: u16 = 0x0d04;
+const TAG_VALUE: u16 = 0x0d05;
+const CAPTION_ID_NAME: &[u8] = b"org.bondline.caption-id";
+const CAPTION_ID_VERSION: &str = "1:";
 type Fields = BTreeMap<u16, usize>;
+
+struct SourceCaption {
+    raw_id: u32,
+    fields: Fields,
+    identity: Option<usize>,
+}
 
 struct CaptionLayout {
     size: PageSize,
-    captions: Vec<(u32, Fields)>,
+    captions: BTreeMap<TextId, Fields>,
 }
 
 fn layout(source: &Document<'_>) -> Option<CaptionLayout> {
@@ -25,7 +38,8 @@ fn layout(source: &Document<'_>) -> Option<CaptionLayout> {
     let root = source.framing().has_encoded_document().then_some(0);
     let mut page = None;
     let mut page_fields = BTreeMap::new();
-    let mut text_fields = BTreeMap::new();
+    let mut text_fields = BTreeMap::<usize, SourceCaption>::new();
+    let mut identities = BTreeMap::new();
     let mut named_ids = BTreeSet::new();
     for (index, record) in source.records().iter().enumerate() {
         match *record.kind() {
@@ -42,7 +56,24 @@ fn layout(source: &Document<'_>) -> Option<CaptionLayout> {
                 if id != 0 && !named_ids.insert(id) {
                     return None;
                 }
-                text_fields.insert(index, (id, BTreeMap::new()));
+                text_fields.insert(
+                    index,
+                    SourceCaption {
+                        raw_id: id,
+                        fields: BTreeMap::new(),
+                        identity: None,
+                    },
+                );
+            }
+            RecordKind::ObjectStart {
+                tag: OBJECT_TAG,
+                id: 0,
+            } => {
+                let caption = text_fields.get_mut(&record.parent()?)?;
+                if caption.identity.replace(index).is_some() {
+                    return None;
+                }
+                identities.insert(index, BTreeMap::new());
             }
             RecordKind::ObjectStart { .. } => return None,
             RecordKind::Property { tag, .. } => {
@@ -53,7 +84,10 @@ fn layout(source: &Document<'_>) -> Option<CaptionLayout> {
                         &mut page_fields
                     }
                     TEXT | CAPTION_JUSTIFICATION | POSITION | Z_ORDER => {
-                        &mut text_fields.get_mut(&owner?)?.1
+                        &mut text_fields.get_mut(&owner?)?.fields
+                    }
+                    TAG_NAME | TAG_TYPE | TAG_PERSISTENT | TAG_VALUE => {
+                        identities.get_mut(&owner?)?
                     }
                     _ => return None,
                 };
@@ -64,22 +98,54 @@ fn layout(source: &Document<'_>) -> Option<CaptionLayout> {
             RecordKind::ObjectEnd { .. } | RecordKind::FileEnd => {}
         }
     }
-    let mut captions: Vec<_> = text_fields.into_values().collect();
+    let mut by_raw_id: Vec<_> = text_fields.into_values().collect();
     // A stable sort keeps anonymous captions in encounter order.
-    captions.sort_by_key(|(id, _)| *id);
+    by_raw_id.sort_by_key(|caption| caption.raw_id);
+    let mut captions = BTreeMap::new();
+    let mut dense = 0_u32;
+    for caption in by_raw_id {
+        let id = if let Some(identity) = caption.identity {
+            read_identity(source, identities.get(&identity)?)?
+        } else {
+            dense = dense.checked_add(1)?;
+            TextId::new(dense)?
+        };
+        if captions.insert(id, caption.fields).is_some() {
+            return None;
+        }
+    }
     Some(CaptionLayout {
         size: poster_size(source, &page_fields)?,
         captions,
     })
 }
 
+fn read_identity(source: &Document<'_>, fields: &Fields) -> Option<TextId> {
+    if property_bytes(source, *fields.get(&TAG_NAME)?, TAG_NAME).ok()? != CAPTION_ID_NAME
+        || payload(source, *fields.get(&TAG_TYPE)?, TAG_TYPE).ok()? != [3, 0]
+    {
+        return None;
+    }
+    if let Some(&persistent) = fields.get(&TAG_PERSISTENT)
+        && payload(source, persistent, TAG_PERSISTENT).ok()? == [0]
+    {
+        return None;
+    }
+    let digits = property_bytes(source, *fields.get(&TAG_VALUE)?, TAG_VALUE)
+        .ok()?
+        .strip_prefix(CAPTION_ID_VERSION.as_bytes())?;
+    if digits.len() > 10 || !matches!(digits.first(), Some(b'1'..=b'9')) {
+        return None;
+    }
+    TextId::new(std::str::from_utf8(digits).ok()?.parse().ok()?)
+}
+
 pub(crate) fn text_record<'record>(
     source: &'record Document<'_>,
     text: TextId,
 ) -> Option<&'record Record> {
-    let ordinal = usize::try_from(text.get()).ok()?.checked_sub(1)?;
     let layout = layout(source)?;
-    let (_, fields) = layout.captions.get(ordinal)?;
+    let fields = layout.captions.get(&text)?;
     source.records().get(*fields.get(&TEXT)?)
 }
 
@@ -92,14 +158,13 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
     let mut ordered = BTreeMap::new();
     let mut omitted = false;
     let mut remaining_runs = MAX_PAGE_TEXT_RUNS;
-    for (ordinal, (_, fields)) in layout.captions.into_iter().enumerate() {
+    for (id, fields) in layout.captions {
         let depth = if let Some(&property) = fields.get(&Z_ORDER) {
             i16::from_le_bytes(payload(source, property, Z_ORDER).ok()?)
         } else {
             omitted = true;
             0
         };
-        let id = TextId::new(u32::try_from(ordinal).ok()?.checked_add(1)?)?;
         if ordered
             .insert(
                 depth,
