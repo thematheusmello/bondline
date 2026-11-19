@@ -366,6 +366,11 @@ reproduce with the independent Python reader. The positive files cover
 ID 2, an Undo gap leaving ID 3, and implicit persistence. Controls cover
 a duplicate live ID, unknown version and explicit false persistence.
 The receiving implementation and application checks are pending.
+The actual CLI on `main` opens the legacy input with live ID 1 and
+refuses the valid Undo-gap fixture with `unsupported_content` at Text
+object record 5. The primary worktree's
+`target/cdx-child-insertion-integration/first-caption-receiving-red.json`
+records the expected and observed results before the receiving change.
 
 ### Next executable work
 
