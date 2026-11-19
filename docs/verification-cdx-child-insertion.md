@@ -41,6 +41,15 @@ The sanitizer log SHA-256 is
 The passing standalone CDX log SHA-256 is
 `5e01826b71b18390cec7fab03cb1257df9219df024df92e2a8c7c25f9af0f24a`.
 
+## Full local gate
+
+`cargo xtask ci` on `dbc2f32` passed **2,305** workspace tests across
+344 reports, with one existing ignored case. AccessKit passed three tests.
+Formatting, warnings-denied Clippy, layers, licenses, assets and the pinned
+corpus passed. GitHub Actions stayed off. The 291,089-byte workspace log
+is `target/cdx-child-insertion-integration/ci.log`, SHA-256
+`853b53c191ff661d682ad19a4c40e8c21e0ec4d68031a2523395ff25933ea665`.
+
 ## Scope
 
 The splice adds one property-only child to a matched encoded owner.
