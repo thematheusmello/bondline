@@ -28,8 +28,10 @@ their colours, sizes and run boundaries through exact native Save/reopen.
 [Existing caption editing](docs/verification-cdx-caption-edits.md) updates
 those runs through the command adapters and repaints the app. The
 [Text tool](docs/verification-native-caption-editing.md) can edit one visible
-existing run in a qualified CDX or CDXML caption. Caption creation, multiline
-text, inherited styles, ambiguous starts and general shaping remain open.
+existing run in a qualified CDX or CDXML caption. [Caption creation](docs/verification-native-caption-creation.md)
+adds single-line text to blank paper with stable IDs, Undo/Redo and editable native
+CDXML Save/reopen. CDX object creation, multiline text, inherited styles, ambiguous
+starts and general shaping remain open.
 
 The [CDX Node label increment](docs/verification-cdx-node-labels.md)
 preserves explicit child Text beside literal atom fields. Independent

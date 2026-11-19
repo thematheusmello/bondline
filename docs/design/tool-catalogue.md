@@ -45,7 +45,8 @@ Control-drag/DPI and full platform/reference parity remain separate requirements
 
 The [caption editor](../verification-native-caption-editing.md) binds
 TD-005 for existing captions on a supported page. The Text button and `t`
-use the same typed control.
+use the same typed control. [Caption creation](../verification-native-caption-creation.md)
+uses that binding on a blank paper area of an eligible native drawing.
 
 The later [native sprout/preferences receiving](../verification-native-ring-sprout.md)
 preserves all140 entries and16/124 availability. An actual Mac review searches Curved

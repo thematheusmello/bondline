@@ -126,6 +126,13 @@ fn analytic_h_ink_cells_are_half_open_and_do_not_fill_the_glyph_hole() -> TestRe
     ] {
         assert_eq!(graph.caption_hit_test(point)?, None, "{point:?}");
     }
+    assert!(graph.caption_envelope_contains([128.0, 130.5])?);
+    assert!(!graph.caption_envelope_contains([115.999, 130.5])?);
+    assert!(!graph.caption_envelope_contains([116.5, 160.0])?);
+    assert!(matches!(
+        graph.caption_envelope_contains([f32::NAN, 1.0]),
+        Err(Error::InvalidHitTest)
+    ));
     Ok(())
 }
 

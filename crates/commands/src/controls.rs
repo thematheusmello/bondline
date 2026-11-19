@@ -422,11 +422,12 @@ impl Engine {
                 });
             }
         }
-        if self
-            .document()
-            .ok()
-            .and_then(|d| d.pages().first())
-            .is_some_and(|p| !p.texts().is_empty())
+        if (state.ui_file.available && self.caption_creation_available())
+            || self
+                .document()
+                .ok()
+                .and_then(|d| d.pages().first())
+                .is_some_and(|p| !p.texts().is_empty())
         {
             let reason =
                 file_reason.or((!self.caption_available()).then_some("unsupported_content"));

@@ -176,6 +176,7 @@ impl Engine {
                 self.document = Arc::clone(&document);
                 self.saved = document;
                 self.identities = crate::bond::Ids::default();
+                self.caption_id_floor = 0;
                 self.undo.clear();
                 self.redo.clear();
                 self.generation = generation;

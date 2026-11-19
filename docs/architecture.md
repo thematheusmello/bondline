@@ -167,6 +167,15 @@ owner on press and checks it again on release. Its bounded draft calls `ui.capti
 and Apply enters `text.set_run` under the same Engine guard. The earlier
 [caption contract](research/styled-captions.md) defines source and render eligibility.
 
+[Caption creation](research/native-caption-creation.md) extends the same tool and
+draft owner to a blank-paper press. Chemical hits and each painted caption's clipped
+envelope exclude creation. The viewport inverse supplies the press baseline. Apply
+calls `text.create`, publishes one validated candidate and advances a session-local
+Text ID floor. Undo preserves the floor. Single-page native CDXML without child atom
+labels writes each Text ID plus the canonical object count before captions. Sparse
+recovery requires a complete byte-exact re-encode. Foreign documents retain their
+existing source capabilities and ordinal projection.
+
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks
 cancellation/arithmetic and refuses unresolved H; bonds/geometry are not chemistry-inferred.

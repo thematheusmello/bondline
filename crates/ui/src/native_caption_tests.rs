@@ -1,4 +1,7 @@
 //! Actual App frames using independent CDX and CDXML caption witnesses.
+#[path = "native_caption_creation_tests.rs"]
+mod native_caption_creation_tests;
+
 use super::{Fixture, TestResult, button, canvas, finish_actual_file_workflow, key, projected};
 use eframe::egui::{
     self, Event, Key, Modifiers, PointerButton, Pos2,
@@ -438,7 +441,8 @@ fn text_mode_does_not_author_bonds_or_open_on_chemical_hits() -> TestResult {
     f.command("ui.view", json!({"action":"actual"}))?;
     f.choose("Text")?;
     let original = f.state()?;
-    for point in [[240.0, 300.0], [260.0, 300.0], [200.0, 260.0]] {
+    // The open area inside the H outline envelope remains owned by its existing caption.
+    for point in [[240.0, 300.0], [260.0, 300.0], [100.5, 93.5]] {
         let hit = paper_point(&mut f, point)?;
         click(&mut f, hit, Modifiers::NONE);
         closed(&mut f)?;

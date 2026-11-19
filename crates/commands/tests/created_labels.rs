@@ -23,7 +23,7 @@ fn creation_appends_one_closed_typed_command_and_preserves_all_old48_records() -
     let rows = rows.as_array().ok_or("registry")?;
     let old: Vec<Value> =
         serde_json::from_str(&registry_fixture::with_cdx_caption_edit(mixed::METADATA48))?;
-    assert_eq!((old.len(), rows.len()), (48, 50));
+    assert_eq!((old.len(), rows.len()), (48, 51));
     assert_eq!(&rows[..48], old.as_slice());
     assert_eq!(rows[48]["name"], "atom.create_authored_label");
     assert_eq!(rows[48]["read_only"], false);

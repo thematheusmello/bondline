@@ -57,6 +57,69 @@ fn request(engine: &mut Engine, revision: u64) -> TestResult<u64> {
 }
 
 #[test]
+fn registry_appends_creation_and_keeps_the_existing_caption_action_schemas() -> TestResult {
+    let rows = serde_json::to_value(bondline_commands::registry())?;
+    let rows = rows.as_array().ok_or("registry")?;
+    assert_eq!(rows.len(), 51);
+    let caption = &rows[49];
+    assert_eq!(caption["name"], "ui.caption");
+    assert_eq!(caption["read_only"], false);
+    assert_eq!(
+        caption["description"],
+        "Select Text or open, apply, or cancel a plain caption draft on an attached native host. Apply uses the shared caption authoring commands."
+    );
+    let mut existing = caption["input_schema"].clone();
+    let actions = existing["oneOf"].as_array_mut().ok_or("caption actions")?;
+    let open_new = actions.pop().ok_or("new caption action")?;
+    assert_eq!(open_new["properties"]["action"]["const"], "open_new");
+    assert_eq!(open_new["additionalProperties"], false);
+    assert_eq!(
+        open_new["required"],
+        json!(["action", "expected_revision", "page_id", "x_pt", "y_pt"])
+    );
+
+    // The four original alternatives are pinned from the verified registry at ad2cde9.
+    let revision = json!({"type":"integer","format":"uint64","minimum":0});
+    let object_id = json!({"type":"integer","format":"uint32","minimum":1});
+    let request_id = json!({"type":"integer","format":"uint64","minimum":1});
+    assert_eq!(
+        existing,
+        json!({
+            "$schema":"https://json-schema.org/draft/2020-12/schema",
+            "title":"UiCaption","type":"object","unevaluatedProperties":false,
+            "oneOf":[
+                {"type":"object","additionalProperties":false,
+                 "properties":{"action":{"type":"string","const":"select"}},
+                 "required":["action"]},
+                {"type":"object","additionalProperties":false,
+                 "properties":{"action":{"type":"string","const":"open"},
+                   "expected_revision":revision,"page_id":object_id,"text_id":object_id,
+                   "run_index":{"type":"integer","format":"uint","minimum":0}},
+                 "required":["action","expected_revision","page_id","text_id","run_index"]},
+                {"type":"object","additionalProperties":false,
+                 "properties":{"action":{"type":"string","const":"apply"},
+                   "expected_revision":revision,"request_id":request_id,
+                   "text":{"description":"Replacement UTF-8, at most 16384 bytes.","type":"string"}},
+                 "required":["action","expected_revision","request_id","text"]},
+                {"type":"object","additionalProperties":false,
+                 "properties":{"action":{"type":"string","const":"cancel"},
+                   "expected_revision":revision,"request_id":request_id},
+                 "required":["action","expected_revision","request_id"]}
+            ]
+        })
+    );
+    let create = &rows[50];
+    assert_eq!(create["name"], "text.create");
+    assert_eq!(create["read_only"], false);
+    assert_eq!(create["input_schema"]["additionalProperties"], false);
+    assert_eq!(
+        create["input_schema"]["required"],
+        json!(["expected_revision", "page_id", "x_pt", "y_pt", "text"])
+    );
+    Ok(())
+}
+
+#[test]
 fn presentation_requires_host_and_exact_caption_tool_and_source() -> TestResult {
     let mut current = engine(BEFORE)?;
     reject(&mut current, json!({"action":"select"}), "ui_unavailable")?;

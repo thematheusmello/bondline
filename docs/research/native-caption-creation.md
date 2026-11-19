@@ -97,5 +97,5 @@ prefix and retains its existing styled caption at XML id 6. It
 appends TextId 2 at XML id 7 using the existing resources and exact
 unrelated XML bytes. [Independent witnesses](../../crates/io/tests/fixtures/caption-create/SOURCES.md).
 
-The receiving tests still need to verify the command, native form,
-post-Apply repaint, exact Save/reopen, and history behavior.
+The [verification record](../verification-native-caption-creation.md) covers the
+command, native form, repaint, Save and reopen, and history behavior.

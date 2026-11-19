@@ -188,6 +188,7 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "atom.set_authored_label",
             "atom.create_authored_label",
             "ui.caption",
+            "text.create",
         ]
         .into_iter()
         .collect()

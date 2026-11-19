@@ -151,6 +151,35 @@ impl GraphScene {
         }))
     }
 
+    /// For creation on blank paper, gaps inside one painted caption are occupied.
+    /// The same clipped spans define this envelope and exact run picking.
+    pub fn caption_envelope_contains(&self, point: [f32; 2]) -> Result<bool, Error> {
+        if point.iter().any(|value| !value.is_finite()) {
+            return Err(Error::InvalidHitTest);
+        }
+        let [x, y] = point.map(f64::from);
+        Ok(self
+            .captions
+            .chunk_by(|a, b| a.target.text_id == b.target.text_id)
+            .any(|spans| {
+                let [left, top, right, bottom] = spans.iter().fold(
+                    [f64::INFINITY, f64::INFINITY, 0.0, 0.0],
+                    |[left, top, right, bottom], span| {
+                        let rect = &span.rectangle;
+                        let x = f64::from(rect.x);
+                        let y = f64::from(rect.y);
+                        [
+                            left.min(x),
+                            top.min(y),
+                            right.max(x + f64::from(rect.width)),
+                            bottom.max(y + f64::from(rect.height)),
+                        ]
+                    },
+                );
+                x >= left && x < right && y >= top && y < bottom
+            }))
+    }
+
     /// Five logical canvas units is the initial native policy. The caller chooses
     /// tolerance in the same units as this scene, not document points or device DPI.
     pub fn hit_test(&self, point: [f32; 2], tolerance: f32) -> Result<Option<HitTarget>, Error> {

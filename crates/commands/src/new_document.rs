@@ -48,6 +48,7 @@ impl Engine {
         self.file_path = None;
         self.file_format = FileFormat::Cdxml;
         self.identities = crate::bond::Ids::default();
+        self.caption_id_floor = 0;
         self.undo.clear();
         self.redo.clear();
         self.generation = generation;

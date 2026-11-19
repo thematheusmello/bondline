@@ -44,8 +44,10 @@ pub use bond::{
 };
 pub use bond_tool::{BondToolOperation, BondToolState, EffectiveTool, SelectBondTool};
 pub use boxed_atom::{AtomCreateLabel, AtomLabelStyle};
-pub use caption::TextSetRun;
-pub use caption_ui::{CaptionContext, MAX_CAPTION_DRAFT_BYTES, UiCaption, UiCaptionRequest};
+pub use caption::{TextCreate, TextSetRun};
+pub use caption_ui::{
+    CaptionContext, MAX_CAPTION_DRAFT_BYTES, UiCaption, UiCaptionRequest, UiCaptionTarget,
+};
 pub use chain::{
     ChainCreate, ChainCreatePath, ChainPathPlacement, ChainPathPoint, ChainPlacement, ChainSide,
 };
@@ -230,7 +232,8 @@ command_registry! {
     TextSetRun(TextSetRun) => ("text.set_run", "Replace the decoded text of one existing styled caption run, preserving its font, size, face, colour, placement and every unrelated source byte. Supports native drawings or qualified CDXML or CDX captions and validates the final page and Save representation before one history edit.", false),
     AtomSetAuthoredLabel(AtomSetLabel) => ("atom.set_authored_label", "Replace one qualified box-positioned atom label's explicit element/H, literal text and bounds in one source-preserving edit; keeps node/bond geometry and style, validates the final page and Save representation, and performs no valence inference.", false),
     AtomCreateAuthoredLabel(AtomCreateLabel) => ("atom.create_authored_label", "Create one explicit box-positioned child label on a qualified imported hidden carbon using a supplied style and existing file resources; preserves IDs, geometry and carbon-display flags, synchronizes literal element/H and validates source and the final page before one history edit.", false),
-    UiCaption(UiCaption) => ("ui.caption", "Select Text or open, apply, or cancel an exact existing caption run draft on an attached native host. Apply uses the source-preserving text.set_run command.", false),
+    UiCaption(UiCaption) => ("ui.caption", "Select Text or open, apply, or cancel a plain caption draft on an attached native host. Apply uses the shared caption authoring commands.", false),
+    TextCreate(TextCreate) => ("text.create", "Create one literal single-line Roboto Regular caption at an explicit left baseline on a native drawing. Validates the complete page and CDXML representation before one history edit.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -239,6 +242,12 @@ pub enum Error {
     UnknownCommand(String),
     #[error("caption editing requires a native drawing or a source-qualified CDXML or CDX caption")]
     UnsupportedCaptionSource,
+    #[error("caption creation requires a source-free drawing or byte-exact native CDXML")]
+    UnsupportedCaptionCreationSource,
+    #[error("the caption baseline must be inside the page")]
+    InvalidCaptionPosition,
+    #[error("enter text for the new caption")]
+    EmptyCaption,
     #[error("select Text before opening a caption")]
     CaptionToolRequired,
     #[error("caption drafts support at most 16384 UTF-8 bytes")]
@@ -463,6 +472,7 @@ impl Error {
             | Self::UnsupportedChain(_)
             | Self::UnsupportedDrawingSettingsSource
             | Self::UnsupportedCaptionSource
+            | Self::UnsupportedCaptionCreationSource
             | Self::CaptionToolRequired
             | Self::UnsupportedDrawingStyle(_)
             | Self::UnsupportedSmilesPasteSource
@@ -484,7 +494,9 @@ impl Error {
             Self::UiStaleRequest => "ui_stale_request",
             Self::UiEpochExhausted => "ui_epoch_exhausted",
             Self::UiBondToolEpochExhausted | Self::UiViewEpochExhausted => "ui_epoch_exhausted",
-            Self::InvalidView(_) => "invalid_params",
+            Self::InvalidView(_) | Self::InvalidCaptionPosition | Self::EmptyCaption => {
+                "invalid_params"
+            }
             Self::UnsupportedView(_) => "unsupported_content",
             Self::ViewTargetUnavailable => "viewport_unavailable",
             Self::StaleView => "stale_view",
@@ -627,6 +639,7 @@ pub struct Engine {
     save_slot: Arc<()>,
     generation: u64,
     identities: bond::Ids,
+    caption_id_floor: u32,
     revision: u64,
     undo: VecDeque<Arc<StoredContent>>,
     redo: VecDeque<Arc<StoredContent>>,
@@ -689,6 +702,7 @@ impl Engine {
             save_slot: Arc::new(()),
             generation: 0,
             identities: bond::Ids::default(),
+            caption_id_floor: 0,
             revision: 0,
             undo: VecDeque::new(),
             redo: VecDeque::new(),
@@ -1112,6 +1126,17 @@ impl Engine {
                 drawing_focus = self.view_focus;
                 changed
             }
+            Command::TextCreate(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let (candidate, id) =
+                    caption::create(self.stored_document()?, params, self.caption_id_floor)?;
+                let changed = self.commit(candidate)?;
+                self.caption_id_floor = id;
+                drawing_focus = self.view_focus;
+                changed
+            }
             Command::ChainCreate(params) => {
                 if params.expected_revision != self.revision {
                     return Err(Error::StaleRevision);
@@ -1465,6 +1490,7 @@ mod tests {
                 "ui.preferences",
                 "document.set_document_settings",
                 "text.set_run",
+                "text.create",
             ]
             .into_iter()
             .collect()

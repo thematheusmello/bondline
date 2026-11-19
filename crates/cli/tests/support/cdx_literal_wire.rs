@@ -59,7 +59,7 @@ fn consume(path: &Path, name: &str) -> Result {
 fn discovery(rows: &[Value], mcp: bool) -> Result {
     let expected: Vec<Value> =
         serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?;
-    assert_eq!((rows.len(), expected.len()), (50, 49));
+    assert_eq!((rows.len(), expected.len()), (51, 49));
     assert_eq!(rows[49]["name"], "ui.caption");
     for (row, expected) in rows.iter().zip(&expected) {
         if mcp {

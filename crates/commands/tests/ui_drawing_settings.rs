@@ -165,7 +165,7 @@ fn schema_node<'a>(
 fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_name_order()
 -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 50);
+    assert_eq!(rows.len(), 51);
     assert_eq!(
         rows[..41].iter().map(|row| row.name).collect::<Vec<_>>(),
         OLD_NAMES
@@ -249,7 +249,7 @@ fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_na
         "stale_revision",
     )?;
     let controls = serde_json::to_value(engine.controls())?;
-    assert_eq!(controls.as_array().ok_or("controls")?.len(), 39);
+    assert_eq!(controls.as_array().ok_or("controls")?.len(), 40);
     let control = controls
         .as_array()
         .ok_or("controls")?
