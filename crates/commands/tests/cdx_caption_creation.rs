@@ -1,0 +1,163 @@
+#![cfg(not(target_arch = "wasm32"))]
+
+use bondline_commands::Engine;
+use serde_json::{Value, json};
+use std::fs;
+
+#[path = "../../../xtask/oracles/files_test_support.rs"]
+#[allow(dead_code, reason = "reuse the isolated file directory")]
+mod files;
+
+type TestResult<T = ()> = Result<T, Box<dyn std::error::Error>>;
+
+const BEFORE: &[u8] = include_bytes!("../../io/tests/fixtures/cdx-caption-edit/single_before.cdx");
+const OLD_EDIT: &[u8] = include_bytes!("../../io/tests/fixtures/cdx-caption-edit/single_after.cdx");
+const FIRST: &[u8] = include_bytes!("../../io/tests/fixtures/cdx-caption-create/first.cdx");
+const SPARSE: &[u8] = include_bytes!("../../io/tests/fixtures/cdx-caption-create/after_undo.cdx");
+const WITNESSES: &str = include_str!("../../io/tests/fixtures/cdx-caption-edit/cases.json");
+const BODY: &str = "Phase β & q";
+
+fn create(revision: u64, text: &str) -> Value {
+    json!({"expected_revision":revision,"page_id":1,"x_pt":144.25,"y_pt":216.75,"text":text})
+}
+
+fn edit(revision: u64, id: u32, text: &str) -> Value {
+    json!({"expected_revision":revision,"page_id":1,"text_id":id,"run_index":0,"text":text})
+}
+
+fn reject(engine: &mut Engine, command: &str, params: Value, code: &str) -> TestResult {
+    let before = serde_json::to_value(engine.state())?;
+    let stamp = engine.capture_stamp();
+    let file = engine.ui_file_context_stamp();
+    let refusal = engine
+        .dispatch(command, params)
+        .err()
+        .ok_or("unexpected edit")?;
+    assert_eq!(refusal.info().code, code, "{refusal}");
+    assert_eq!(serde_json::to_value(engine.state())?, before);
+    assert!(engine.capture_stamp_matches(&stamp));
+    assert!(engine.ui_file_context_stamp_matches(&file));
+    Ok(())
+}
+
+#[test]
+fn cdx_creation_keeps_exact_history_sparse_identity_and_both_run_edits() -> TestResult {
+    let directory = files::FileTestDirectory::new()?;
+    let input = directory.path("caption-原-λ.cdx");
+    let output = directory.path("caption-保存-β.cdx");
+    fs::write(&input, BEFORE)?;
+    let manifest: Value = serde_json::from_str(WITNESSES)?;
+    let witness = &manifest["cases"]["single_grow"];
+
+    let mut engine = Engine::default();
+    let opened = engine.dispatch("document.open_cdx", json!({"path":input}))?;
+    assert_eq!(
+        serde_json::to_value(opened.document)?,
+        witness["before_model"]
+    );
+    let original = engine.content().clone();
+    let first = engine.dispatch("text.create", create(1, BODY))?;
+    assert!(first.changed && first.file.dirty);
+    assert_eq!(
+        (first.revision, first.undo_depth, first.redo_depth),
+        (2, 1, 0)
+    );
+    let mut model = witness["before_model"].clone();
+    let texts = model["pages"][0]["texts"]
+        .as_array_mut()
+        .ok_or("original captions")?;
+    texts.push(json!({"id":2,"position":{"x_pt":144.25,"y_pt":216.75},
+                     "runs":[{"text":BODY,"style":{"font_family":"Roboto","size_pt":12.0,
+                                                  "face":0,"rgb":[0.0,0.0,0.0]}}]}));
+    assert_eq!(serde_json::to_value(first.document)?, model);
+    assert_eq!(engine.stored_document()?.export_cdx()?, FIRST);
+    assert!(!engine.stored_document()?.is_fully_mapped());
+    assert!(!engine.selection_available());
+
+    let undo = engine.dispatch("history.undo", json!({}))?;
+    assert_eq!(engine.content(), &original);
+    assert!(!undo.file.dirty);
+    assert_eq!(engine.stored_document()?.export_cdx()?, BEFORE);
+    let redo = engine.dispatch("history.redo", json!({}))?;
+    assert!(redo.file.dirty);
+    assert_eq!(engine.stored_document()?.export_cdx()?, FIRST);
+    engine.dispatch("history.undo", json!({}))?;
+    reject(&mut engine, "text.create", create(5, ""), "invalid_params")?;
+    let branched = engine.dispatch("text.create", create(5, BODY))?;
+    assert_eq!(
+        (branched.revision, branched.undo_depth, branched.redo_depth),
+        (6, 1, 0)
+    );
+    model["pages"][0]["texts"][1]["id"] = json!(3);
+    assert_eq!(serde_json::to_value(branched.document)?, model);
+    assert_eq!(engine.stored_document()?.export_cdx()?, SPARSE);
+    assert!(branched.file.dirty);
+
+    let crossed = directory.path("would-lose-source.cdxml");
+    reject(
+        &mut engine,
+        "document.save_cdxml",
+        json!({"path":crossed}),
+        "unsupported_content",
+    )?;
+    assert!(!crossed.exists());
+    let saved = engine.dispatch("document.save_cdx", json!({"path":output}))?;
+    assert!(!saved.file.dirty);
+    let source = saved.source.ok_or("retained original CDX")?;
+    assert_eq!((source.byte_length, source.modified), (BEFORE.len(), true));
+    let receipt = saved.file_operation.ok_or("CDX save receipt")?;
+    assert_eq!(
+        (receipt.input_revision, receipt.byte_length),
+        (6, SPARSE.len())
+    );
+    assert_eq!(fs::read(&input)?, BEFORE);
+    assert_eq!(fs::read(&output)?, SPARSE);
+    let reopened = engine.dispatch("document.open_cdx", json!({"path":output}))?;
+    assert_eq!(serde_json::to_value(reopened.document)?, model);
+    assert_eq!(
+        (
+            reopened.undo_depth,
+            reopened.redo_depth,
+            reopened.file.dirty
+        ),
+        (0, 0, false)
+    );
+    let source = reopened.source.ok_or("reopened sparse CDX")?;
+    assert_eq!((source.byte_length, source.modified), (SPARSE.len(), false));
+    reject(
+        &mut engine,
+        "text.set_run",
+        edit(reopened.revision, 2, "Gap"),
+        "invalid_document",
+    )?;
+
+    // Two frozen oracles give the original caption rewrite and the splice before the Page end.
+    let insertion = SPARSE
+        .get(BEFORE.len() - 4..)
+        .ok_or("frozen inserted caption")?;
+    let old_prefix = OLD_EDIT
+        .get(..OLD_EDIT.len() - 4)
+        .ok_or("frozen old caption rewrite")?;
+    let mut expected = [old_prefix, insertion].concat();
+    let old_text = witness["params"]["text"].as_str().ok_or("old edit text")?;
+    let old_changed = engine.dispatch("text.set_run", edit(reopened.revision, 1, old_text))?;
+    model["pages"][0]["texts"][0] = witness["after_model"]["pages"][0]["texts"][0].clone();
+    assert_eq!(serde_json::to_value(old_changed.document)?, model);
+    assert_eq!(engine.stored_document()?.export_cdx()?, expected);
+
+    let replacement = "Phase β & r";
+    let mut bodies = expected
+        .windows(BODY.len())
+        .enumerate()
+        .filter(|(_, bytes)| *bytes == BODY.as_bytes());
+    let (start, _) = bodies.next().ok_or("new caption body")?;
+    assert!(bodies.next().is_none());
+    expected[start..start + BODY.len()].copy_from_slice(replacement.as_bytes());
+    let new_changed =
+        engine.dispatch("text.set_run", edit(old_changed.revision, 3, replacement))?;
+    model["pages"][0]["texts"][1]["runs"][0]["text"] = json!(replacement);
+    assert_eq!(serde_json::to_value(new_changed.document)?, model);
+    assert_eq!(engine.stored_document()?.export_cdx()?, expected);
+    assert_eq!(fs::read(output)?, SPARSE);
+    Ok(())
+}

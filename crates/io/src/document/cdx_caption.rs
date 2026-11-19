@@ -1,10 +1,42 @@
-//! Edit one existing caption run while preserving its current CDX source.
+//! Create captions and edit runs while preserving qualified CDX source.
 use super::{DocumentError, StoredDocument};
-use crate::cdx::{MappingError, caption_text_record, encode_caption_runs};
+use crate::cdx::{MappingError, append_caption, caption_text_record, encode_caption_runs};
 use bondline_cdx::Document;
-use bondline_model::{PageId, TextId};
+use bondline_model::{PageId, StyledText, TextId};
 
 impl StoredDocument {
+    /// Append a plain caption to a qualified CDX page and verify its saved identity.
+    pub fn with_cdx_caption(
+        &self,
+        page_id: PageId,
+        caption: StyledText,
+    ) -> Result<Self, DocumentError> {
+        if !self.has_cdx_caption_preview() {
+            return Err(DocumentError::UnsupportedCdxEdit);
+        }
+        let page = self
+            .model
+            .pages()
+            .first()
+            .filter(|page| page.id() == page_id)
+            .ok_or(bondline_model::Error::MissingPage(page_id.get()))
+            .map_err(MappingError::from)?;
+        let source = Document::parse(self.export_cdx()?).map_err(MappingError::from)?;
+        let (output, caption) = append_caption(&source, caption)?;
+        let mut expected = self.model.as_ref().clone();
+        expected
+            .append_texts(page_id, vec![caption])
+            .map_err(MappingError::from)?;
+        self.finish_cdx_edit(
+            output,
+            expected,
+            page.size(),
+            DocumentError::UnsupportedCdxCaption(
+                "complete caption agreement and paper fit after creation",
+            ),
+        )
+    }
+
     /// Change one existing run of a qualified CDX caption, preserving its style and placement.
     pub fn with_cdx_caption_run(
         &self,

@@ -186,6 +186,18 @@ fn text_tool_targets_top_painted_caption_and_ordered_runs_at_both_densities() ->
         let background = paper_point(&mut f, [350.0, 350.0])?;
         let spacing = paper_point(&mut f, SPACE_RUN)?;
         click(&mut f, background, Modifiers::NONE);
+        let creation = f.state()?["ui_caption"].clone();
+        assert!(creation["id"].as_u64().is_some_and(|id| id > 0));
+        assert_eq!(creation["input_revision"], original["revision"]);
+        assert_eq!(creation["page_id"], 1);
+        assert_eq!(creation["position"], json!({"x_pt":350.0,"y_pt":350.0}));
+        assert_eq!(creation["text"], "");
+        assert_eq!(creation["current"], true);
+        assert!(creation.get("text_id").is_none());
+        assert_eq!(field_value(&f, "Caption text")?, "");
+        f.choose("Cancel")?;
+        closed(&mut f)?;
+        assert_eq!(f.state()?, original);
         click(&mut f, spacing, Modifiers::NONE);
         click(&mut f, overlap, Modifiers::ALT);
         f.frame(vec![Event::PointerMoved(overlap), button(overlap, true)]);

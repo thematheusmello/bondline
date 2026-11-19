@@ -1,5 +1,11 @@
 # Clean-room source register
 
+The [CDX caption creation contract](../research/cdx-caption-creation.md)
+uses the public Page, Text and ObjectTag specifications. A per-new-Text
+persistent ObjectTag carries a versioned live identity. The published
+ObjectTag Name exception requires raw bytes. Original Python witnesses
+check parent ownership, unchanged binary source and the intended IDs.
+
 The [CDX child insertion contract](../research/cdx-child-insertion.md)
 uses the public binary object, property, ID and terminator rules. The
 exact borrowed close handle, same-parent collision check and bounds are

@@ -1,13 +1,23 @@
 # Open questions
 
+## CDX caption identity on external resave, 2026-11-19
+
+Persistent ObjectTag resave is documented. Actual external treatment
+of parent IDs, unmarked caption ordering, fonts and the complete
+caption profile remains unverified. Retaining allocator reservations for
+captions absent from the saved model would require a separate watermark.
+The first receiving profile is a qualified caption-only Poster Page.
+[Scope and sources](../research/cdx-caption-creation.md).
+
 ## Adding CDX objects, 2026-11-19
 
-The [child insertion contract](../research/cdx-child-insertion.md)
-uses physical object boundaries. Success means exact syntax retention
-and ownership. Unknown cross-container references can still require
-semantic checks when choosing an ID. The Page Text adapter needs proved
-global ID selection, fixed-point baseline conversion, resources,
-paint depth and stable live identity across Undo and reopen.
+The child insertion contract uses physical object boundaries and exact
+syntax retention. The caption-only adapter verifies global ID selection,
+baseline conversion, explicit resources, paint depth and stable live
+identity across Undo and reopen. Unknown cross-container references and
+broader object types still need their own semantic checks.
+[Child insertion](../research/cdx-child-insertion.md),
+[caption verification](../verification-cdx-caption-creation.md).
 
 ## Creating captions, 2026-11-19
 
@@ -16,8 +26,9 @@ closing the editor. Exact Desktop 26.1 baseline offsets, confirmation,
 multiline behavior and initial style selection remain open. Native
 canonical CDXML retains its existing resource-table order while the
 published DTD lists a different order. General native and foreign CDXML
-DTD interoperability and CDX object creation remain separate checks.
-[Creation sources and evidence](../research/native-caption-creation.md).
+DTD interoperability and CDX caption creation on empty or mixed source
+pages remain separate checks. [CDXML sources](../research/native-caption-creation.md),
+[CDX scope](../research/cdx-caption-creation.md).
 
 ## Existing native captions, 2026-11-19
 

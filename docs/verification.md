@@ -1,5 +1,10 @@
 # Verification log
 
+The [CDX caption creation evidence](verification-cdx-caption-creation.md)
+records exact binary fixtures, the shared command and App workflow,
+actual macOS history and Unicode Save/reopen, CPU/Metal equality, and
+10,000 AddressSanitizer iterations over 66 unchanged seeds.
+
 The [CDX caption edit verification](verification-cdx-caption-edits.md)
 records exact before/after sources and models, shifted starts, anonymous
 caption identity, independent FontTools geometry, App history and actual

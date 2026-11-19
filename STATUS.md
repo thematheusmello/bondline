@@ -357,17 +357,47 @@ The full local gate passes **2,305/0/1** workspace and **3/0** AccessKit
 tests, with formatting, Clippy, layers, licenses, assets and corpus checks.
 Owned CDX splice jobs are terminal. GitHub Actions stays off.
 
+### Creating captions in qualified CDX
+
+The public contract at `84b60c6` pins six original page and live-ID
+witnesses. `7b022b2` shares one effective live-ID map between reader
+and run editing. `a1ab05f` appends a direct Page Text and its persistent
+ObjectTag, then certifies the complete re-import and paper scene. All five
+framings have exact writer checks. Choose Text or press `t`, then click
+blank paper on a qualified caption-only Poster page with an existing
+caption. Apply writes one 12 pt black Roboto Regular run. The same command
+serves CLI and application paths. It retains the live-ID floor across Undo.
+[Contract](docs/research/cdx-caption-creation.md),
+[witnesses](crates/io/tests/fixtures/cdx-caption-create/SOURCES.md).
+
+Independent readers verify exact Unicode Save and reopen, even with an
+Undo gap leaving IDs 1 and 3. App frames pass at 1× and 2×. An isolated Mac
+review used real Open, Text, Cancel, Undo/Redo and Save As, then reopened
+and edited the new caption. Both captions resolve their own draft targets.
+CPU and Metal output matches exactly in both CLI and Mac review. The
+registry remains 51 entries with the first 50 byte-exact. The catalogue
+stays 17/123. AddressSanitizer passes 10,000 runs with 66 unchanged seeds.
+The command crate type-checks on Windows, Linux and WebAssembly. Native
+runtime is verified on macOS for this workflow. The review exited.
+[Evidence and limits](docs/verification-cdx-caption-creation.md).
+
+The final local gate on `6c0689a` passed **2,320/0/1** workspace and
+**3/0** AccessKit tests, plus formatting, Clippy, layers, licenses, assets
+and the pinned corpus. The preceding MCP listener replacement-bind failure
+is recorded separately. The retry passed with the listener code and test
+unchanged. All owned caption-creation checks exited. GitHub Actions stays off.
+
 ### Next executable work
 
-1. Pin independent CDX Page Text creation witnesses using the child
-   splice. Prove existing resources, fixed-point baseline conversion,
-   stacking, stable live IDs and exact Save and reopen. Cover identity
-   gaps after Undo before granting a native binding. Use the SDK's
-   persistent ObjectTag for new live IDs while retaining the existing
-   dense projection for unmarked captions. [ObjectTag](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/ObjectTag.htm).
-2. Extend beyond the qualified caption-only CDX profile with independent
-   blank/mixed source and retained data proof. Multiline, general
-   typography, platform verification and the rest of M0–M5 remain open.
+1. Pin an empty single Poster Page with the explicit qualified font and
+   paper resources. Derive exact before/after vectors across all five
+   framings, with missing and ambiguous resource controls and a fixed
+   first-caption depth. Verify Open, create, Undo to the empty page,
+   Unicode Save/reopen and editing the saved first caption. Keep the
+   mixed-object and unsupported-source refusals.
+2. Establish the independent mixed chemical and caption source, ordering
+   and retention proof. Multiline, general typography, broader platform
+   verification and the rest of M0–M5 remain open.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

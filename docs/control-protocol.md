@@ -50,10 +50,15 @@ The baseline is strictly inside the page. Text is a nonblank, single-line UTF-8
 body of at most 16384 bytes, with valid glyphs and room to render the whole page.
 The new run uses explicit 12 pt black Roboto Regular. Source-free drawings and
 byte-exact native CDXML qualify when they contain one complete page, no child atom
-labels and representable caption identities. A successful invocation creates one
-history edit after validating the scene and CDXML representation. Undo keeps the
-session's caption ID reservation. Reopening native CDXML recovers each live Text ID
-from the checked raw IDs. [Contract](research/native-caption-creation.md).
+labels and representable caption identities. Reopening native CDXML recovers
+each live Text ID from the checked raw IDs. [CDXML contract](research/native-caption-creation.md).
+
+CDX creation requires a qualified caption-only Poster page with an existing
+caption and an explicit UTF-8 Roboto font entry. New baselines use signed 16.16
+coordinates. Save writes the appended Text and its persistent live-ID ObjectTag
+into the original byte stream. Both formats commit one history edit after
+validating the complete scene and file representation. Undo retains the session's
+caption ID reservation. [CDX contract](research/cdx-caption-creation.md).
 
 ## Explicit child-label creation
 
@@ -152,8 +157,9 @@ or chemical inference occurs. [Contract](research/styled-captions.md) and
 [evidence](verification-styled-captions.md) separate actual Mac acceptance from headless
 adapters, App frames and missing editor/platform workflows.
 
-Qualified CDX captions use the same command and schema. Their Text IDs
+Qualified CDX captions use the same command and schema. Unmarked Text IDs
 follow source-ID and anonymous encounter order independently of paint depth.
+Persistent caption tags retain their checked live IDs across Save and reopen.
 Keep the style words and nonempty runs, with ASCII before any later start.
 The UTF-8 final run stays subject to the current renderer's glyph, join and
 paper checks. Save writes the patched CDX and the original source length
