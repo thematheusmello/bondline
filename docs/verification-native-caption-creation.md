@@ -78,6 +78,19 @@ counts in the ring App tests. Those tests now require all 40 controls and the av
 Text binding alongside their existing ring assertions. Both focused reruns pass.
 Production code was identical on those runs.
 
+## Final local gate
+
+The next aggregate stopped at the unchanged MCP listener replacement-bind
+test on port 53514. The later `cargo xtask ci` on `a98dc47` passed **2,297**
+workspace tests across 343 reports and the three AccessKit tests. One existing
+workspace case stays ignored. Formatting, warnings-denied Clippy, layers,
+licenses, assets and the pinned corpus passed. The listener failure's cause
+remains unknown. GitHub Actions stayed off.
+
+`ci-retry.log` has 288,592 bytes and SHA-256
+`67b467f0d4e93b264bdcfd399b479e0798655ae762da83fd911a08c85446c11f`.
+Command crate type-checks passed on Windows MSVC, Linux GNU and WebAssembly.
+
 ## CDXML source sanitizer
 
 The previous empty-run splice check now uses its original dense wire ID. The
