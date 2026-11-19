@@ -25,3 +25,19 @@ The identity RED log SHA-256 is
 `32a166b73416f59cdca10e4f0b73a6ea5e7d500f584374e9cebd2e1e9c341dd2`.
 The passing log SHA-256 is
 `af254ec993e56ca3561598e5e84838e02cb5ffc52c1188a2d18d80cbb80e46fc`.
+
+## Binary append
+
+The writer tests first failed to compile at the missing
+`StoredDocument::with_cdx_caption` API. Five focused tests now pass.
+They verify exact first and sparse-ID bytes, the signed fixed-point
+half-tie, all five binary framings, append after an existing edit, and
+atomic refusal at the paper, style, raw-ID and paint-depth limits.
+The backing bytes and model identities survive every refused edit.
+
+The writer checks the already certified source and appends the caption
+and its tag using two owned splices. A reparse between splices supplies
+the second handle. The final certification compares the complete
+projected model with the expected appended caption and runs the
+existing full-paper check. The original snapshot keeps its unchanged
+bytes and model.
