@@ -70,6 +70,23 @@ prefix. Initialized stdio MCP 2024-11-05 returns those names and schemas,
 and refuses the host-only Select on its headless engine. The CLI registry
 SHA-256 is `7152f0e0470bd4410f6aeeb736e5a6074e2c63d96fe951710d23948ea2bd4ba5`.
 
+## Final local gate
+
+`cargo xtask ci` exited successfully on `b26f5d5`. The workspace
+passed **2,280 tests** with no failures and one existing ignored case
+across 339 reports. AccessKit passed three tests. Formatting,
+warnings-denied Clippy, layering, licenses, seven assets and the
+pinned eight-file corpus passed. The 286,311-byte
+`ci-qualified.log` SHA-256 is
+`0c2c1cc0b06cf52ea3d6a3d3ef6b9742ea5a79b38fbeaa5e63a7d1eb1180cf23`.
+
+Command crate type-checks passed on Windows MSVC, Linux GNU and
+WebAssembly. AddressSanitizer completed 10,000 CDX runs in one second
+with 211 unchanged input files. The largest recorded new or reduced
+mutation was 894 bytes under a 65,536-byte limit. The `fuzz.log`
+SHA-256 is `e1712e2724aef645fb33cddc5d170726dcb704e75d482760fb95f92ca0346e19`.
+All owned verification jobs exited. GitHub Actions remained off.
+
 ## Coverage boundary
 
 The form edits a single existing plain run. Painted pixels determine

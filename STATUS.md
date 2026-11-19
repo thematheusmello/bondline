@@ -1,4 +1,4 @@
-# Status — 2026-11-18
+# Status — 2026-11-19
 
 The full M0–M5 goal is **active**. Verified delivery lands into `main`.
 [PR 5](https://github.com/thematheusmello/bondline/pull/5) landed direct-Page CDX
@@ -286,21 +286,49 @@ Fmt, Clippy, layers, licenses, assets and corpus passed. IO type-checks
 on Windows MSVC, Linux GNU and WebAssembly. All owned jobs exited and
 Actions stayed off.
 
+### Text tool for existing captions
+
+[PR 13](https://github.com/thematheusmello/bondline/pull/13) carries
+the [public workflow contract](docs/research/native-caption-editing.md)
+at `473aa31`, the independent painted-run hits at `149ad48`, and
+the tested application and command integration at `b26f5d5`.
+Choose Text or press `t` to edit a visible run in qualified CDXML or
+CDX. The tool uses the current paint order and exact press/release
+ownership. Apply routes through `text.set_run`, preserving styles and
+whole-source history. The draft remains copyable if its owner goes
+stale. Registry 50 appends `ui.caption` with the first 49 entries
+byte-exact, and the catalogue has 17 bindings and 123 planned entries.
+
+The [verification](docs/verification-native-caption-editing.md) records
+eight App-frame cases, five renderer cases, three command cases and a
+real authenticated loopback case. Exact independent CDX and CDXML
+bytes pass Unicode Save As and reopen. The command crate type-checks
+on Windows MSVC, Linux GNU and WebAssembly. Sanitizer checks pass
+10,000 runs with 211 unchanged inputs. The full local gate on
+`b26f5d5` passes **2,280/0/1** workspace tests and **3/0** AccessKit
+tests, with format, lint, layer, license, asset and corpus checks.
+Earlier runs stopped at superseded command and rail inventory
+expectations. The product source did not change between those gates.
+The signed review stayed unlaunched after recent desktop input.
+Live platform input and exact 26.1 interaction remain open. Evidence
+is under `target/native-caption-editing`. All owned check jobs exited.
+GitHub Actions remains off.
+
 ### Next executable work
 
-1. Source-lock native editing of existing qualified captions from the
-   public Text workflow. Add an original editable-run presentation that
-   dispatches `text.set_run`, with stable TextId targeting and existing
-   document and draft ownership patterns. Freeze independent App cases
-   for overlapping captions, ordered styled runs, keyboard history and
-   exact Unicode Save/reopen. Keep the separate new-Text creation,
-   typography and unresolved-source work in the full backlog.
-   The pinned version 25 guide describes editing by clicking existing
-   text with the Text tool on printed page 92. Qualify that behavior
-   against the target version before claiming parity. [Public guide](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf#page=93).
-2. Verify the current supported edit through actual macOS input when the
-   desktop is idle. Continue broader M1 styles, captions, source edits and
-   formats, then the remaining M0 and M2–M5 workflows from the roadmap.
+1. Pin the public creation and baseline placement workflow for a
+   new caption on empty paper. Predeclare an original explicit-run
+   CDXML input/output pair and its expected stable Text ID. Use the
+   existing model append and whole-page proof in the shared authoring
+   command. Cover source-free and complete native CDXML, preserve
+   existing bytes and resources in any admitted source, and refuse
+   unresolved foreign source before granting creation authority.
+   Extend the existing Text controller only after independent command
+   and file checks. Multiline, rich styles and general CDX object writing
+   remain required.
+2. Verify live macOS caption input on the isolated review when the
+   desktop is idle. Continue M1 source and format work and the remaining
+   M0 and M2–M5 requirements from the roadmap.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read
