@@ -73,7 +73,10 @@ cargo xtask ci
 Local receipts are under `target/caption-create` and `target/caption-creation`.
 The first two aggregate runs stopped on three stale 50-entry inventory assertions.
 The updates retain the historical discovery prefix, check the new record and keep
-the uniqueness assertions. Production code was identical on those runs.
+the uniqueness assertions. The third run stopped on two old attached-host control
+counts in the ring App tests. Those tests now require all 40 controls and the available
+Text binding alongside their existing ring assertions. Both focused reruns pass.
+Production code was identical on those runs.
 
 ## CDXML source sanitizer
 

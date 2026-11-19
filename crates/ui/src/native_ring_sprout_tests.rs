@@ -741,7 +741,12 @@ fn preferences_file_menu_and_ordered_checkbox_defaults_ok_cancel_are_real_sessio
         assert!(!f.app.files.is_busy());
         let controls = f.command("ui.controls", json!({}))?;
         let controls = controls["controls"].as_array().ok_or("controls")?;
-        assert_eq!(controls.len(), 39);
+        assert_eq!(controls.len(), 40);
+        assert!(
+            controls
+                .iter()
+                .any(|row| row["id"] == "tool.caption" && row["enabled"] == true)
+        );
         let control = controls
             .iter()
             .find(|row| row["id"] == "file.preferences")
