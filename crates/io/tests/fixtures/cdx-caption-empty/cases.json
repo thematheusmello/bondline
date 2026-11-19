@@ -1,0 +1,756 @@
+{
+  "cases": {
+    "implicit": {
+      "framing": "ImplicitDocument",
+      "insertion_offset": 83,
+      "font_selector": 0,
+      "background_origin": "absent_default",
+      "before": {
+        "file": "implicit_before.cdx",
+        "byte_length": 87,
+        "sha256": "84ace02e4a3512d44bc65c47ab28249e42155003f49078321068bfe6fbe8ac56",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": []
+            }
+          ]
+        }
+      },
+      "first": {
+        "file": "implicit_first.cdx",
+        "byte_length": 199,
+        "sha256": "c4b08d917a69a2fc874cf7cc8c97c0da1de9a73d00866ad08fe24d58854752f8",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 1,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "after_undo": {
+        "file": "implicit_after_undo.cdx",
+        "byte_length": 199,
+        "sha256": "66b1bfb0072c1259d2001b5936968348922fcfdf8cd63e1b2fad83803524f1c9",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 2,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "explicit": {
+      "framing": "ExplicitDocument",
+      "insertion_offset": 89,
+      "font_selector": 0,
+      "background_origin": "absent_default",
+      "before": {
+        "file": "explicit_before.cdx",
+        "byte_length": 93,
+        "sha256": "bd9d03f3d3429d051d0287e16463a6adb68530f9f9e7a4d08cc9916dba6ad009",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": []
+            }
+          ]
+        }
+      },
+      "first": {
+        "file": "explicit_first.cdx",
+        "byte_length": 205,
+        "sha256": "518e11451f51ee4c9cffbe27c32950ff64fd72f7bf7f2df1d3ce659cbfb58df0",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 1,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "after_undo": {
+        "file": "explicit_after_undo.cdx",
+        "byte_length": 205,
+        "sha256": "d3f45bedf29c4dbe8ec447177eeadeb9eb0879ffb39b5c01ec17f80592e62fe4",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 2,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "header": {
+      "framing": "HeaderDocument",
+      "insertion_offset": 83,
+      "font_selector": 0,
+      "background_origin": "absent_default",
+      "before": {
+        "file": "header_before.cdx",
+        "byte_length": 89,
+        "sha256": "9fd28fca0049ae2d0d3cc31cd58530f69e7fe02a1b6ca6e8f8329993d9a29c33",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": []
+            }
+          ]
+        }
+      },
+      "first": {
+        "file": "header_first.cdx",
+        "byte_length": 201,
+        "sha256": "821cb7e4c4bd938407f730d73903e11e38c3979124acdc2050afd3180ed8496f",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 1,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "after_undo": {
+        "file": "header_after_undo.cdx",
+        "byte_length": 201,
+        "sha256": "abe075893a483607d434898a1bea310a0ca6a9d9808ba9ec0324088e08856d1e",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 2,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "implicit_file_end": {
+      "framing": "ImplicitDocumentFileEnd",
+      "insertion_offset": 83,
+      "font_selector": 0,
+      "background_origin": "absent_default",
+      "before": {
+        "file": "implicit_file_end_before.cdx",
+        "byte_length": 89,
+        "sha256": "4d11ae4a23d5f2344f42d9a974ceec7acf8e97f2bcb838d36f332bb212f68299",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": []
+            }
+          ]
+        }
+      },
+      "first": {
+        "file": "implicit_file_end_first.cdx",
+        "byte_length": 201,
+        "sha256": "641aa52794bed362a6c491054a6201d22de9c76d3c0cdf2171b75af3754c0cfc",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 1,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "after_undo": {
+        "file": "implicit_file_end_after_undo.cdx",
+        "byte_length": 201,
+        "sha256": "13936d1871529fd884eb0b1e25cb90b4cd604d7fe95a48e124d9d38339be40ad",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 2,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "explicit_file_end": {
+      "framing": "ExplicitDocumentFileEnd",
+      "insertion_offset": 89,
+      "font_selector": 0,
+      "background_origin": "absent_default",
+      "before": {
+        "file": "explicit_file_end_before.cdx",
+        "byte_length": 95,
+        "sha256": "a68b26548669d5c6fa00f0af775377bf3f2fed9e54f33b113d795f4223d50651",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": []
+            }
+          ]
+        }
+      },
+      "first": {
+        "file": "explicit_file_end_first.cdx",
+        "byte_length": 207,
+        "sha256": "0e9a056e6ef5a2a6ed09766b338618fa06d8b7549033f84a28e7dd2d39ee0e3c",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 1,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "after_undo": {
+        "file": "explicit_file_end_after_undo.cdx",
+        "byte_length": 207,
+        "sha256": "703abf5b16865526e0d75cfd4a38401eeb7a7622b33f67b13e86e6c373c663d3",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 2,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "ordinal_one_white": {
+      "framing": "ImplicitDocument",
+      "insertion_offset": 94,
+      "font_selector": 1,
+      "background_origin": "entry",
+      "before": {
+        "file": "ordinal_one_white_before.cdx",
+        "byte_length": 110,
+        "sha256": "0be48d05c89f2a255c58a54ae08626c65323c5d9b2ddbaef9f208866fedaf832",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": []
+            }
+          ]
+        }
+      },
+      "first": {
+        "file": "ordinal_one_white_first.cdx",
+        "byte_length": 222,
+        "sha256": "20fe7f529144c42cf9a04e2ce2fbb72f2ddab3903babd653f3f502fabe2ac6ce",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 1,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "after_undo": {
+        "file": "ordinal_one_white_after_undo.cdx",
+        "byte_length": 222,
+        "sha256": "be680bac50b122551c2fdc98fe5f1227044af82c0544f6c3834fddcbd76ec7a4",
+        "model": {
+          "pages": [
+            {
+              "id": 1,
+              "size": {
+                "width_pt": 512.25,
+                "height_pt": 384.5
+              },
+              "fragments": [],
+              "texts": [
+                {
+                  "id": 2,
+                  "position": {
+                    "x_pt": 144.25,
+                    "y_pt": 216.75
+                  },
+                  "runs": [
+                    {
+                      "text": "Phase β & q",
+                      "style": {
+                        "font_family": "Roboto",
+                        "size_pt": 12.0,
+                        "face": 0,
+                        "rgb": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "controls": {
+    "missing_font": {
+      "file": "missing_font.cdx",
+      "byte_length": 63,
+      "sha256": "e6bdcb08a86aae8f3121e3b0c3c85ae7ce33760890fe71a926e3ae8d60207b76",
+      "expected_open": "legacy_elemental"
+    },
+    "empty_font": {
+      "file": "empty_font.cdx",
+      "byte_length": 75,
+      "sha256": "1f7bef1117238dedabb107de71a1ad33353c975b51d961e4e66c531312d6b8e2",
+      "expected_open": "legacy_elemental"
+    },
+    "font_platform0": {
+      "file": "font_platform0.cdx",
+      "byte_length": 87,
+      "sha256": "81c8bcdb88e8ad600d55ba3216f05448861e01e0f54f711a071e32e8dfb74c0f",
+      "expected_open": "legacy_elemental"
+    },
+    "font_id_ordinal_disagree": {
+      "file": "font_id_ordinal_disagree.cdx",
+      "byte_length": 87,
+      "sha256": "75244fa5ffe0d785f643b3e25889cadfd3033c63efcd359f88c327f5bdafc93a",
+      "expected_open": "legacy_elemental"
+    },
+    "font_not_utf8": {
+      "file": "font_not_utf8.cdx",
+      "byte_length": 87,
+      "sha256": "2849bf369d1b726aca561ade5d48d20db387010df717f6616a0735fc98066e3f",
+      "expected_open": "legacy_elemental"
+    },
+    "duplicate_font_table": {
+      "file": "duplicate_font_table.cdx",
+      "byte_length": 111,
+      "sha256": "f24a62421a36f8e135c1e3e5607b24cb25615a350ef3756e242027afa5319903",
+      "expected_open": "legacy_elemental"
+    },
+    "font_on_page": {
+      "file": "font_on_page.cdx",
+      "byte_length": 87,
+      "sha256": "b76afb7d6cd34e6d8a6f0fe5b73277c1a19a17ff654c486e767b3aed11b405c6",
+      "expected_open": "legacy_elemental"
+    },
+    "empty_palette": {
+      "file": "empty_palette.cdx",
+      "byte_length": 93,
+      "sha256": "2859d9062506b2975607da837331e734c51d33ce29b076f08fdc5dcd61dcaaf7",
+      "expected_open": "legacy_elemental"
+    },
+    "nonwhite_palette": {
+      "file": "nonwhite_palette.cdx",
+      "byte_length": 99,
+      "sha256": "37c1c0901f84ab6c18b875f69f2ed52d548a940bf1b5495dd3fc98ba02426563",
+      "expected_open": "legacy_elemental"
+    },
+    "no_drawing_space": {
+      "file": "no_drawing_space.cdx",
+      "byte_length": 82,
+      "sha256": "f8ddec5098a00ecffedd990ef6c8320a8875115f5d2bc09945b5953a77903ddc",
+      "expected_open": "legacy_elemental"
+    },
+    "missing_width": {
+      "file": "missing_width.cdx",
+      "byte_length": 79,
+      "sha256": "1cdea104014d2e00a570ff561a37f3fd5eae58d076612f56dcb07d77d92d0852",
+      "expected_open": "legacy_elemental"
+    },
+    "wrong_width_size": {
+      "file": "wrong_width_size.cdx",
+      "byte_length": 85,
+      "sha256": "f881851df628a848b9a475b9164d4676110b614c93bdbd8492dce03b09f52187",
+      "expected_open": "legacy_elemental"
+    },
+    "zero_height": {
+      "file": "zero_height.cdx",
+      "byte_length": 83,
+      "sha256": "49ab3a763d836aeb88dccf1aea81f5760999cc15baa758a6b6dfb6d800a60fb6",
+      "expected_open": "legacy_elemental"
+    },
+    "root_width": {
+      "file": "root_width.cdx",
+      "byte_length": 87,
+      "sha256": "459685a64601cf2f793413fda829fb52134dd000757041563d561454eef1d066",
+      "expected_open": "legacy_elemental"
+    },
+    "duplicate_width": {
+      "file": "duplicate_width.cdx",
+      "byte_length": 95,
+      "sha256": "2ccf506fa692b31468d04b926872ee55e2ecd99e1407a7bbe98b65b9369ca196",
+      "expected_open": "legacy_elemental"
+    },
+    "opaque_page_property": {
+      "file": "opaque_page_property.cdx",
+      "byte_length": 92,
+      "sha256": "1a065cf62b169548f11e8098e4d55efe0ae492d05e0488d20031c70eea513768",
+      "expected_open": "legacy_elemental"
+    },
+    "opaque_page_child": {
+      "file": "opaque_page_child.cdx",
+      "byte_length": 95,
+      "sha256": "07708957fda25cecee23355003486772d862b7cc063b0ccf16bcd3325d086df2",
+      "expected_open": "legacy_elemental"
+    },
+    "two_pages": {
+      "file": "two_pages.cdx",
+      "byte_length": 120,
+      "sha256": "d6a62bcbfd1a94db5ff545fcd5bf8fc1bc066a7604dfb14c040b4a3b1ca2d9a3",
+      "expected_open": "refused"
+    },
+    "no_page": {
+      "file": "no_page.cdx",
+      "byte_length": 54,
+      "sha256": "1f540371f6e2add2b803cc47a07daac6f3ce0f16c4224955dbae361fe1b4bf8d",
+      "expected_open": "legacy_elemental"
+    }
+  }
+}

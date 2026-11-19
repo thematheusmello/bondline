@@ -1,5 +1,13 @@
 # Clean-room source register
 
+The empty CDX caption contract uses the public Page and DrawingSpace
+properties for an empty Poster with explicit extents. Its first Text uses
+explicit depth zero from the specified effective default. Resource
+qualification stays the same as the existing caption writer. Original
+binary witnesses cover five framings and signed dimensions, explicit
+font and paper resources, and first and after-Undo identities.
+[Contract](../research/cdx-empty-caption.md).
+
 The [CDX caption creation contract](../research/cdx-caption-creation.md)
 uses the public Page, Text and ObjectTag specifications. A per-new-Text
 persistent ObjectTag carries a versioned live identity. The published

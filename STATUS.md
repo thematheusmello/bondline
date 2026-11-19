@@ -359,6 +359,10 @@ Owned CDX splice jobs are terminal. GitHub Actions stays off.
 
 ### Creating captions in qualified CDX
 
+[PR 16](https://github.com/thematheusmello/bondline/pull/16) landed at
+`c1bdbdd`. The merge tree matches reviewed tip `fe4082c` and the merged
+feature ref is retired.
+
 The public contract at `84b60c6` pins six original page and live-ID
 witnesses. `7b022b2` shares one effective live-ID map between reader
 and run editing. `a1ab05f` appends a direct Page Text and its persistent
@@ -387,14 +391,26 @@ and the pinned corpus. The preceding MCP listener replacement-bind failure
 is recorded separately. The retry passed with the listener code and test
 unchanged. All owned caption-creation checks exited. GitHub Actions stays off.
 
+### Empty CDX caption source lock
+
+The next branch `feat/cdx-empty-caption` starts from `c1bdbdd`. Six
+independent cases cover the existing five framings and an alternate font
+selector and paper palette. The 37 original files pass byte and resource
+replay with the frozen manifest. The baseline CLI opens all six empty
+sources at caller A4 and refuses creation. Controls retain the 18 existing
+data-only opens and one two-page refusal. The scope adds first-caption
+creation only when the same explicit font and paper resources are proved.
+[Contract](docs/research/cdx-empty-caption.md),
+[witnesses](crates/io/tests/fixtures/cdx-caption-empty/SOURCES.md).
+
 ### Next executable work
 
-1. Pin an empty single Poster Page with the explicit qualified font and
-   paper resources. Derive exact before/after vectors across all five
-   framings, with missing and ambiguous resource controls and a fixed
-   first-caption depth. Verify Open, create, Undo to the empty page,
-   Unicode Save/reopen and editing the saved first caption. Keep the
-   mixed-object and unsupported-source refusals.
+1. Run the receiving IO tests against the pinned empty Poster variants.
+   Admit the existing closed layout when a blank page supplies the
+   writer's explicit font and paper resources. Write explicit depth zero
+   for the first caption. Verify Open, create, Undo to the empty page,
+   Unicode Save/reopen and editing the saved first caption through the
+   shared registry and app. Keep mixed-object and unsupported-source refusals.
 2. Establish the independent mixed chemical and caption source, ordering
    and retention proof. Multiline, general typography, broader platform
    verification and the rest of M0–M5 remain open.
