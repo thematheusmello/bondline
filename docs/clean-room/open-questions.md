@@ -1,5 +1,14 @@
 # Open questions
 
+## CDX caption identity on external resave, 2026-11-19
+
+Persistent ObjectTag resave is documented. Actual external treatment
+of parent IDs, unmarked caption ordering, fonts and the complete
+caption profile remains unverified. Retaining allocator reservations for
+captions absent from the saved model would require a separate watermark.
+The first receiving profile is a qualified caption-only Poster Page.
+[Scope and sources](../research/cdx-caption-creation.md).
+
 ## Adding CDX objects, 2026-11-19
 
 The [child insertion contract](../research/cdx-child-insertion.md)

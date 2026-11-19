@@ -357,14 +357,25 @@ The full local gate passes **2,305/0/1** workspace and **3/0** AccessKit
 tests, with formatting, Clippy, layers, licenses, assets and corpus checks.
 Owned CDX splice jobs are terminal. GitHub Actions stays off.
 
+### CDX caption creation source lock
+
+The [public contract](docs/research/cdx-caption-creation.md) selects a
+standard persistent ObjectTag for new live IDs. The raw Name encoding
+and String value follow the SDK. Six [original witnesses](crates/io/tests/fixtures/cdx-caption-create/SOURCES.md)
+reproduce with the independent Python reader. The positive files cover
+ID 2, an Undo gap leaving ID 3, and implicit persistence. Controls cover
+a duplicate live ID, unknown version and explicit false persistence.
+The receiving implementation and application checks are pending.
+
 ### Next executable work
 
-1. Pin independent CDX Page Text creation witnesses using the child
-   splice. Prove existing resources, fixed-point baseline conversion,
-   stacking, stable live IDs and exact Save and reopen. Cover identity
-   gaps after Undo before granting a native binding. Use the SDK's
-   persistent ObjectTag for new live IDs while retaining the existing
-   dense projection for unmarked captions. [ObjectTag](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/ObjectTag.htm).
+1. Declare the IO tests against the frozen CDX files, then share one
+   effective ID map between caption projection and run-edit lookup.
+   Keep every prior unmarked ID and preserve malformed identities as
+   opaque source. Reuse two owned child splices and the whole-source
+   re-import certificate. Prove resources, baseline, paint order,
+   history and exact Save/reopen through the shared command and native
+   Text tool before enabling creation in the CDX profile.
 2. Extend beyond the qualified caption-only CDX profile with independent
    blank/mixed source and retained data proof. Multiline, general
    typography, platform verification and the rest of M0–M5 remain open.
