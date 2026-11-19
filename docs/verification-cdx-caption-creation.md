@@ -122,3 +122,9 @@ Clippy and earlier workspace stages passed, then the unchanged MCP
 at `replacement_bind` on port 63204. The focused guided App test
 passed before that aggregate. `ci-final.log` records the failure at
 SHA-256 `636a5e4aa05b35fce919eecf278d3b54a1b82c99f8e44ccba17080565d2ae986`.
+
+The unchanged retry on the final application code at `6c0689a` passed
+2,320 workspace tests with one ignored across 347 reports, all three
+AccessKit tests and every other local gate. The listener code and its
+test remained the same. `ci-retry.log` SHA-256 is
+`b732c519dc37e475ba35ec4711d0fee3fdfa41ff35117b8682a1f1b319c90e03`.

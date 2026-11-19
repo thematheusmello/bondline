@@ -381,11 +381,11 @@ The command crate type-checks on Windows, Linux and WebAssembly. Native
 runtime is verified on macOS for this workflow. The review exited.
 [Evidence and limits](docs/verification-cdx-caption-creation.md).
 
-The authoring build passed the full local gate with **2,320/0/1**
-workspace and **3/0** AccessKit tests. The follow-up build passed the
-focused App copy checks before an aggregate stopped at the unchanged
-MCP listener replacement-bind assertion. The same aggregate is being
-retried. GitHub Actions stays off.
+The final local gate on `6c0689a` passed **2,320/0/1** workspace and
+**3/0** AccessKit tests, plus formatting, Clippy, layers, licenses, assets
+and the pinned corpus. The preceding MCP listener replacement-bind failure
+is recorded separately. The retry passed with the listener code and test
+unchanged. All owned caption-creation checks exited. GitHub Actions stays off.
 
 ### Next executable work
 
