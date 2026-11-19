@@ -233,7 +233,7 @@ command_registry! {
     AtomSetAuthoredLabel(AtomSetLabel) => ("atom.set_authored_label", "Replace one qualified box-positioned atom label's explicit element/H, literal text and bounds in one source-preserving edit; keeps node/bond geometry and style, validates the final page and Save representation, and performs no valence inference.", false),
     AtomCreateAuthoredLabel(AtomCreateLabel) => ("atom.create_authored_label", "Create one explicit box-positioned child label on a qualified imported hidden carbon using a supplied style and existing file resources; preserves IDs, geometry and carbon-display flags, synchronizes literal element/H and validates source and the final page before one history edit.", false),
     UiCaption(UiCaption) => ("ui.caption", "Select Text or open, apply, or cancel a plain caption draft on an attached native host. Apply uses the shared caption authoring commands.", false),
-    TextCreate(TextCreate) => ("text.create", "Create one literal single-line Roboto Regular caption at an explicit left baseline on a native drawing. Validates the complete page and CDXML representation before one history edit.", false),
+    TextCreate(TextCreate) => ("text.create", "Create a single-line Roboto Regular caption at an explicit left baseline. Preserves supported CDXML and CDX source and validates the complete page before one history edit.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -242,7 +242,9 @@ pub enum Error {
     UnknownCommand(String),
     #[error("caption editing requires a native drawing or a source-qualified CDXML or CDX caption")]
     UnsupportedCaptionSource,
-    #[error("caption creation requires a source-free drawing or byte-exact native CDXML")]
+    #[error(
+        "caption creation requires a source-free drawing, byte-exact native CDXML, or a qualified CDX caption page"
+    )]
     UnsupportedCaptionCreationSource,
     #[error("the caption baseline must be inside the page")]
     InvalidCaptionPosition,

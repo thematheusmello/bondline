@@ -388,7 +388,7 @@ impl FileChooser {
                 } else {
                     match self.format {
                         FileFormat::Cdxml=>"CDXML files (*.cdxml).",
-                        FileFormat::Cdx=>"CDX files (*.cdx). Save preserves the imported source and supported label edits.",
+                        FileFormat::Cdx=>"CDX files (*.cdx). Saves the imported source with supported caption and atom label edits.",
                         FileFormat::MolV2000=>"MOL V2000 files (*.mol); unsupported content cannot be saved in this format.",
                         FileFormat::MolV3000=>"MOL V3000 files (*.mol); unsupported content cannot be saved in this format.",
                         FileFormat::Sdf=>"SDF collections (*.sdf, *.sd); all records and their molecular versions are retained.",

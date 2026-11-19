@@ -1,22 +1,33 @@
 # Bondline agent instructions
 
+CDX caption creation follows docs/research/cdx-caption-creation.md and
+docs/verification-cdx-caption-creation.md. Share live Text IDs between projection
+and exact run lookup. Retain the old unmarked order and accept only the closed
+persistent caption ObjectTag. New IDs use the session floor across Undo. The
+qualified caption-only Poster page uses its existing UTF-8 Roboto entry, a
+signed 16.16 left baseline and distinct signed depth. Preserve every original
+byte through the two owned splices, then certify the complete projected model
+and paper before committing one history edit. Keep the existing source and
+conversion guards. Registry 51 changes only the text.create description.
+The catalogue remains 17/123. See STATUS for blank-page and mixed-source work.
+
 Standalone CDX child insertion follows docs/research/cdx-child-insertion.md and
 docs/verification-cdx-child-insertion.md. Match the exact owned ObjectEnd's opening
 index. Preserve headers, old property encoding and every old terminator. Keep caller
 property order, same-parent nonzero ID collision checks, unassigned ID0 and the original
-byte/record/depth bounds. The splice grants no application creation authority. Continue
-the CDX Page Text adapter and stable identity proof from STATUS.
+byte/record/depth bounds. The application adapter supplies the complete-source
+and stable-identity proofs above.
 
 Native plain-caption creation follows docs/research/native-caption-creation.md and
 docs/verification-native-caption-creation.md. Blank-paper clicks and existing painted
 runs share the Text draft owner. Keep the press baseline, occupied hit refusal,
 explicit 12 pt black Roboto style, full-page certificate, and nonblank single-line
 input bound. `text.create` appends registry51 and `ui.caption` adds one final action.
-The first49 discovery records and catalogue17/123 stay exact. Only complete single-page
-source-free/byte-exact CDXML without child atom labels gains creation. Undo preserves the
+The first49 discovery records and catalogue17/123 stay exact. The native CDXML path
+requires one complete source-free or byte-exact page without child atom labels. Undo preserves the
 caption ID floor. Exact native re-encoding admits sparse raw IDs. Foreign drafts keep
-their earlier edit authority. STATUS documents the receiving evidence, active goal and
-next CDX child-object writer task. Actions stays off.
+their earlier edit authority. STATUS documents current receiving evidence and
+the active goal. Actions stays off.
 
 ## Commit, push and main delivery — user instruction, 2026-11-18
 

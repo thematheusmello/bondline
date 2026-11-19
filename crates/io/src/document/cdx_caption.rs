@@ -1,4 +1,4 @@
-//! Edit one existing caption run while preserving its current CDX source.
+//! Create captions and edit runs while preserving qualified CDX source.
 use super::{DocumentError, StoredDocument};
 use crate::cdx::{MappingError, append_caption, caption_text_record, encode_caption_runs};
 use bondline_cdx::Document;

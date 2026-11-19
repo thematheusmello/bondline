@@ -181,13 +181,26 @@ fn native_mixed_creation_appends_without_rewriting_existing_data() -> TestResult
 }
 
 #[test]
-fn retained_foreign_cdxml_and_cdx_refuse_creation_even_with_owned_caption_data() -> TestResult {
+fn retained_foreign_cdxml_and_detached_cdx_refuse_creation_even_with_owned_caption_data()
+-> TestResult {
     let mut xml = Engine::from_document(StoredDocument::from_cdxml(FOREIGN.into(), PageSize::A4)?);
     let mut cdx = Engine::from_document(StoredDocument::from_cdx(CDX.into(), PageSize::A4)?);
-    for engine in [&mut xml, &mut cdx] {
-        assert!(!engine.document()?.pages()[0].texts().is_empty());
-        reject(engine, create(0, "Phase A"), "unsupported_content")?;
-    }
+    assert!(!xml.document()?.pages()[0].texts().is_empty());
+    reject(&mut xml, create(0, "Phase A"), "unsupported_content")?;
+    assert!(cdx.stored_document()?.has_cdx_caption_preview());
+    let resized = cdx.dispatch(
+        "page.set_size",
+        json!({"page_id":1,"width_pt":612.0,"height_pt":792.0}),
+    )?;
+    assert!(resized.changed);
+    assert!(!cdx.document()?.pages()[0].texts().is_empty());
+    assert!(!cdx.stored_document()?.has_cdx_caption_preview());
+    reject(
+        &mut cdx,
+        create(resized.revision, "Phase A"),
+        "unsupported_content",
+    )?;
+    cdx.dispatch("history.undo", json!({}))?;
     assert_eq!(xml.stored_document()?.to_cdxml()?.as_ref(), FOREIGN);
     assert_eq!(cdx.stored_document()?.export_cdx()?, CDX);
     Ok(())

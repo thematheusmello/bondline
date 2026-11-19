@@ -502,6 +502,56 @@ fn check_caption_edit(stored: &bondline_io::StoredDocument, source: &Document<'_
     assert_eq!(stored.export_cdx().unwrap(), source.as_bytes());
 }
 
+fn check_caption_append(stored: &bondline_io::StoredDocument, source: &Document<'_>) {
+    use bondline_model::{PageSize, Point2, StyledText, TextId, TextRun, TextStyle};
+
+    let page = stored.model().pages().first().unwrap();
+    let Some(id) = page
+        .texts()
+        .iter()
+        .map(|caption| caption.id().get())
+        .max()
+        .and_then(|id| id.checked_add(1))
+        .and_then(TextId::new)
+    else {
+        return;
+    };
+    let size = page.size();
+    let position = Point2::new(size.width_pt() / 3.0, size.height_pt() / 2.0).unwrap();
+    let style = TextStyle::new("Roboto".into(), 12.0, 0, [0.0; 3]).unwrap();
+    let run = TextRun::new("Phase β & q".into(), style).unwrap();
+    let caption = StyledText::new(id, position, vec![run]).unwrap();
+    let candidate = stored.with_cdx_caption(page.id(), caption);
+    assert_eq!(stored.export_cdx().unwrap(), source.as_bytes());
+    let Ok(candidate) = candidate else {
+        return;
+    };
+    let owner = source
+        .records()
+        .iter()
+        .position(|record| matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8001, .. }))
+        .unwrap();
+    let boundary = source
+        .records()
+        .iter()
+        .find(|record| *record.kind() == RecordKind::ObjectEnd { start: Some(owner) })
+        .unwrap()
+        .range()
+        .start;
+    let bytes = candidate.export_cdx().unwrap();
+    let added = bytes.len().checked_sub(source.as_bytes().len()).unwrap();
+    assert!(added > 0);
+    assert_eq!(bytes[..boundary], source.as_bytes()[..boundary]);
+    assert_eq!(bytes[boundary + added..], source.as_bytes()[boundary..]);
+    assert_eq!(Document::parse(bytes).unwrap().framing(), source.framing());
+    let reopened =
+        bondline_io::StoredDocument::from_cdx(std::sync::Arc::from(bytes), PageSize::A4).unwrap();
+    assert!(reopened.has_cdx_caption_preview());
+    assert!(!reopened.is_fully_mapped());
+    assert_eq!(reopened.model(), candidate.model());
+    assert_eq!(reopened.model().pages()[0].texts().last().unwrap().id(), id);
+}
+
 fn check_label_edit(stored: &bondline_io::StoredDocument, original: &[u8]) {
     let page = stored.model().pages().first().unwrap();
     let atoms = page
@@ -655,6 +705,7 @@ fuzz_target!(|data: &[u8]| {
         assert!(stored.has_display_projection());
         assert!(stored.to_cdxml().is_err());
         check_caption_edit(&stored, &document);
+        check_caption_append(&stored, &document);
         let baseline = stored.clone();
         let page = stored.model().pages().first().unwrap();
         assert!(page.fragments().is_empty());

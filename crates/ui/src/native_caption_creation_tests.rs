@@ -5,7 +5,7 @@ use super::{
 };
 use bondline_commands::Engine;
 use bondline_model::PageSize;
-use eframe::egui::{self, Event, Key, Modifiers};
+use eframe::egui::{self, Event, Key, Modifiers, accesskit::Role};
 use serde_json::{Value, json};
 use std::fs;
 
@@ -18,11 +18,20 @@ const MIXED_AFTER: &[u8] =
 const NONCANONICAL: &[u8] =
     include_bytes!("../../io/tests/fixtures/caption-create/mixed_noncanonical.cdxml");
 const WITNESSES: &str = include_str!("../../io/tests/fixtures/caption-create/cases.json");
+const CDX_BEFORE: &[u8] =
+    include_bytes!("../../io/tests/fixtures/cdx-caption-edit/single_before.cdx");
+const CDX_FIRST: &[u8] = include_bytes!("../../io/tests/fixtures/cdx-caption-create/first.cdx");
+const CDX_AFTER_UNDO: &[u8] =
+    include_bytes!("../../io/tests/fixtures/cdx-caption-create/after_undo.cdx");
+const CDX_WITNESSES: &str = include_str!("../../io/tests/fixtures/cdx-caption-edit/cases.json");
 const BASELINE: [f64; 2] = [144.25, 216.75];
 const BODY: &str = "Phase β & q";
 // FontTools interior probes from the independent fixture generator.
 const ORIGINAL_INK: [f64; 2] = [85.0, 119.25];
 const NEW_INK: [f64; 2] = [148.25, 212.75];
+// Each FontTools probe and its eight +/-0.4 pt neighbours lie inside this glyph.
+const CDX_OLD_INK: [f64; 2] = [81.75, 95.75];
+const CDX_NEW_INK: [f64; 2] = [145.75, 211.75];
 
 fn blank_source_free(f: &mut Fixture) -> TestResult {
     let mut engine = f.app.engine.lock().map_err(|_| "engine")?;
@@ -42,7 +51,11 @@ fn current_xml(f: &Fixture) -> TestResult<Vec<u8>> {
 }
 
 fn open_creation(f: &mut Fixture, release_offset: egui::Vec2) -> TestResult {
-    let press = paper_point(f, BASELINE)?;
+    open_creation_at(f, BASELINE, release_offset)
+}
+
+fn open_creation_at(f: &mut Fixture, baseline: [f64; 2], release_offset: egui::Vec2) -> TestResult {
+    let press = paper_point(f, baseline)?;
     f.frame(vec![Event::PointerMoved(press), button(press, true)]);
     assert!(f.state()?["ui_caption"].is_null());
     let release = press + release_offset;
@@ -60,7 +73,7 @@ fn open_creation(f: &mut Fixture, release_offset: egui::Vec2) -> TestResult {
     assert_eq!(
         request,
         &json!({"id":id,"input_revision":state["revision"],"page_id":1,
-                "position":{"x_pt":BASELINE[0],"y_pt":BASELINE[1]},"text":"","current":true})
+                "position":{"x_pt":baseline[0],"y_pt":baseline[1]},"text":"","current":true})
     );
     assert_eq!(field_value(f, "Caption text")?, "");
     Ok(())
@@ -70,6 +83,192 @@ fn apply_body(f: &mut Fixture, body: &str) -> TestResult {
     set_field(f, "Caption text", body)?;
     f.choose("Apply")?;
     closed(f)
+}
+
+fn cdx_created_model(id: u32) -> TestResult<Value> {
+    let cdx: Value = serde_json::from_str(CDX_WITNESSES)?;
+    let xml: Value = serde_json::from_str(WITNESSES)?;
+    let mut expected = cdx["cases"]["single_grow"]["before_model"].clone();
+    let mut caption = xml["cases"]["first"]["after_model"]["pages"][0]["texts"][0].clone();
+    caption["id"] = json!(id);
+    expected["pages"][0]["texts"]
+        .as_array_mut()
+        .ok_or("independent existing captions")?
+        .push(caption);
+    Ok(expected)
+}
+
+#[test]
+fn cdx_paper_creation_keeps_sparse_history_and_unicode_save_reopens_both_editable_captions()
+-> TestResult {
+    let witnesses: Value = serde_json::from_str(CDX_WITNESSES)?;
+    for dpi in [1.0, 2.0] {
+        let mut f = Fixture::new(1160.0, 800.0, dpi)?;
+        let input = f.directory.path("existing-caption-原.cdx");
+        let output = f.directory.path("new-caption-保存-β.cdx");
+        open_pinned(&mut f, &input, "cdx", CDX_BEFORE)?;
+        assert!(f.warm().shapes.iter().any(|paint| {
+            matches!(&paint.shape, egui::Shape::Text(shape)
+                if shape.galley.text() == "Choose Text to add or edit a caption.")
+        }));
+        f.choose("Text")?;
+        let original = f.state()?;
+        assert_eq!(
+            original["document"],
+            witnesses["cases"]["single_grow"]["before_model"]
+        );
+        assert_eq!(original["undo_depth"], 0);
+        assert_eq!(
+            original["source"],
+            json!({"format":"cdx","byte_length":CDX_BEFORE.len(),"modified":false})
+        );
+        let stamp = f.app.engine.lock().map_err(|_| "engine")?.capture_stamp();
+
+        open_creation(&mut f, egui::vec2(1.0, 1.0))?;
+        set_field(&mut f, "Caption text", "Discard this CDX draft")?;
+        f.choose("Cancel")?;
+        closed(&mut f)?;
+        assert_eq!(f.state()?, original);
+        assert_eq!(current_cdx(&f)?, CDX_BEFORE);
+        assert!(
+            f.app
+                .engine
+                .lock()
+                .map_err(|_| "engine")?
+                .capture_stamp_matches(&stamp)
+        );
+
+        open_creation(&mut f, egui::Vec2::ZERO)?;
+        set_field(&mut f, "Caption text", &"W".repeat(80))?;
+        f.choose("Apply")?;
+        f.warm();
+        assert_eq!(field_value(&f, "Caption text")?, "W".repeat(80));
+        assert_eq!(f.state()?["revision"], original["revision"]);
+        assert_eq!(f.state()?["undo_depth"], 0);
+        assert_eq!(f.state()?["document"], original["document"]);
+        assert_eq!(current_cdx(&f)?, CDX_BEFORE);
+        f.choose("Cancel")?;
+        closed(&mut f)?;
+        assert_eq!(f.state()?, original);
+
+        open_creation(&mut f, egui::vec2(1.0, 1.0))?;
+        apply_body(&mut f, BODY)?;
+        assert_eq!(f.state()?["document"], cdx_created_model(2)?);
+        assert_eq!(f.state()?["undo_depth"], 1);
+        assert_eq!(f.state()?["file"]["dirty"], true);
+        assert_eq!(current_cdx(&f)?, CDX_FIRST);
+        shortcut(&mut f, Key::Z, false);
+        assert_eq!(f.state()?["document"], original["document"]);
+        assert_eq!(f.state()?["file"]["dirty"], false);
+        assert_eq!(current_cdx(&f)?, CDX_BEFORE);
+        shortcut(&mut f, Key::Z, true);
+        assert_eq!(f.state()?["document"], cdx_created_model(2)?);
+        assert_eq!(current_cdx(&f)?, CDX_FIRST);
+        shortcut(&mut f, Key::Z, false);
+        open_creation(&mut f, egui::Vec2::ZERO)?;
+        apply_body(&mut f, BODY)?;
+        let second = f.state()?;
+        assert_eq!(second["document"], cdx_created_model(3)?);
+        assert_eq!(second["redo_depth"], 0);
+        assert_eq!(current_cdx(&f)?, CDX_AFTER_UNDO);
+
+        shortcut(&mut f, Key::S, true);
+        assert!(f.warm().shapes.iter().any(|paint| {
+            matches!(&paint.shape, egui::Shape::Text(shape)
+                if shape.galley.text() == "CDX files (*.cdx). Saves the imported source with supported caption and atom label edits.")
+        }));
+        choose_file(&mut f, &output, "Save")?;
+        assert_eq!(fs::read(&input)?, CDX_BEFORE);
+        assert_eq!(fs::read(&output)?, CDX_AFTER_UNDO);
+        assert_eq!(f.state()?["file"]["dirty"], false);
+        shortcut(&mut f, Key::O, false);
+        choose_file(&mut f, &output, "Open")?;
+        let reopened = f.state()?;
+        assert_eq!(reopened["document"], second["document"]);
+        assert_eq!(reopened["undo_depth"], 0);
+        assert_eq!(
+            reopened["source"],
+            json!({"format":"cdx","byte_length":CDX_AFTER_UNDO.len(),"modified":false})
+        );
+        assert_eq!(current_cdx(&f)?, CDX_AFTER_UNDO);
+        f.command("ui.view", json!({"action":"actual"}))?;
+        f.choose("Text")?;
+
+        for (point, id, old, new) in [
+            (CDX_NEW_INK, 3, BODY, "Phase β & <"),
+            (CDX_OLD_INK, 1, "Bondline", "Bondline λ notes"),
+        ] {
+            open_run(&mut f, point, id, 0, 1, old)?;
+            apply_body(&mut f, new)?;
+            let mut expected = second["document"].clone();
+            let caption = expected["pages"][0]["texts"]
+                .as_array_mut()
+                .and_then(|texts| texts.iter_mut().find(|text| text["id"] == id))
+                .ok_or("independent edited caption ID")?;
+            caption["runs"][0]["text"] = json!(new);
+            assert_eq!(f.state()?["document"], expected);
+            assert_eq!(f.state()?["undo_depth"], 1);
+            assert_eq!(f.state()?["file"]["dirty"], true);
+            shortcut(&mut f, Key::Z, false);
+            assert_eq!(f.state()?["document"], second["document"]);
+            assert_eq!(f.state()?["file"]["dirty"], false);
+            assert_eq!(current_cdx(&f)?, CDX_AFTER_UNDO);
+        }
+    }
+    Ok(())
+}
+
+#[test]
+fn cdx_creation_press_and_visible_draft_refuse_equal_view_restoration() -> TestResult {
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    let input = f.directory.path("creation-weak-owner-原.cdx");
+    open_pinned(&mut f, &input, "cdx", CDX_BEFORE)?;
+    f.choose("Text")?;
+    let original = f.state()?;
+    let press = paper_point(&mut f, BASELINE)?;
+    f.frame(vec![Event::PointerMoved(press), button(press, true)]);
+    f.command("ui.view", json!({"action":"set_zoom","percent":125}))?;
+    f.command("ui.view", json!({"action":"actual"}))?;
+    assert_eq!(paper_point(&mut f, BASELINE)?, press);
+    f.frame(vec![button(press, false)]);
+    closed(&mut f)?;
+    assert_eq!(f.state()?["document"], original["document"]);
+    assert_eq!(current_cdx(&f)?, CDX_BEFORE);
+
+    open_creation(&mut f, egui::Vec2::ZERO)?;
+    set_field(&mut f, "Caption text", BODY)?;
+    let request = f.state()?["ui_caption"].clone();
+    f.command("ui.view", json!({"action":"set_zoom","percent":125}))?;
+    f.command("ui.view", json!({"action":"actual"}))?;
+    f.warm();
+    let detached = f.state()?;
+    assert_eq!(detached["ui_caption"]["id"], request["id"]);
+    assert_eq!(detached["ui_caption"]["current"], false);
+    assert_eq!(field_value(&f, "Caption text")?, BODY);
+    assert!(f.nodes.values().any(|node| node.role() == Role::Button
+        && node.name() == Some("Apply")
+        && node.is_disabled()));
+    let error = f
+        .app
+        .engine
+        .lock()
+        .map_err(|_| "engine")?
+        .dispatch(
+            "ui.caption",
+            json!({"action":"apply","expected_revision":detached["revision"],
+               "request_id":request["id"],"text":BODY}),
+        )
+        .err()
+        .ok_or("detached CDX creation request accepted")?;
+    assert_eq!(error.info().code, "ui_stale_request");
+    assert_eq!(f.state()?, detached);
+    assert_eq!(current_cdx(&f)?, CDX_BEFORE);
+    f.choose("Cancel")?;
+    closed(&mut f)?;
+    assert_eq!(f.state()?["document"], original["document"]);
+    assert_eq!(f.state()?["undo_depth"], 0);
+    assert_eq!(fs::read(&input)?, CDX_BEFORE);
+    Ok(())
 }
 
 #[test]
@@ -241,12 +440,17 @@ fn refuse_open_new(f: &Fixture, blank: [f64; 2], original: &Value) -> TestResult
 }
 
 #[test]
-fn imported_caption_sources_keep_editing_without_new_caption_creation() -> TestResult {
+fn imported_caption_sources_keep_cdx_creation_and_foreign_cdxml_edit_only_authority() -> TestResult
+{
     let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
     let cdx = f.directory.path("imported-caption.cdx");
     open_pinned(&mut f, &cdx, "cdx", MULTI)?;
     f.choose("Text")?;
-    refuse_new_caption(&mut f, [350.0, 350.0])?;
+    let imported = f.state()?;
+    open_creation_at(&mut f, [350.0, 350.0], egui::Vec2::ZERO)?;
+    f.choose("Cancel")?;
+    closed(&mut f)?;
+    assert_eq!(f.state()?, imported);
     open_run(&mut f, FIRST_RUN, 2, 0, 3, "AV")?;
     f.choose("Cancel")?;
     closed(&mut f)?;

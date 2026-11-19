@@ -357,33 +357,47 @@ The full local gate passes **2,305/0/1** workspace and **3/0** AccessKit
 tests, with formatting, Clippy, layers, licenses, assets and corpus checks.
 Owned CDX splice jobs are terminal. GitHub Actions stays off.
 
-### CDX caption creation source lock
+### Creating captions in qualified CDX
 
-The [public contract](docs/research/cdx-caption-creation.md) selects a
-standard persistent ObjectTag for new live IDs. The raw Name encoding
-and String value follow the SDK. Six [original witnesses](crates/io/tests/fixtures/cdx-caption-create/SOURCES.md)
-reproduce with the independent Python reader. The positive files cover
-ID 2, an Undo gap leaving ID 3, and implicit persistence. Controls cover
-a duplicate live ID, unknown version and explicit false persistence.
-The receiving implementation and application checks are pending.
-The actual CLI on `main` opens the legacy input with live ID 1 and
-refuses the valid Undo-gap fixture with `unsupported_content` at Text
-object record 5. The primary worktree's
-`target/cdx-child-insertion-integration/first-caption-receiving-red.json`
-records the expected and observed results before the receiving change.
+The public contract at `84b60c6` pins six original page and live-ID
+witnesses. `7b022b2` shares one effective live-ID map between reader
+and run editing. `a1ab05f` appends a direct Page Text and its persistent
+ObjectTag, then certifies the complete re-import and paper scene. All five
+framings have exact writer checks. Choose Text or press `t`, then click
+blank paper on a qualified caption-only Poster page with an existing
+caption. Apply writes one 12 pt black Roboto Regular run. The same command
+serves CLI and application paths. It retains the live-ID floor across Undo.
+[Contract](docs/research/cdx-caption-creation.md),
+[witnesses](crates/io/tests/fixtures/cdx-caption-create/SOURCES.md).
+
+Independent readers verify exact Unicode Save and reopen, even with an
+Undo gap leaving IDs 1 and 3. App frames pass at 1× and 2×. An isolated Mac
+review used real Open, Text, Cancel, Undo/Redo and Save As, then reopened
+and edited the new caption. Both captions resolve their own draft targets.
+CPU and Metal output matches exactly in both CLI and Mac review. The
+registry remains 51 entries with the first 50 byte-exact. The catalogue
+stays 17/123. AddressSanitizer passes 10,000 runs with 66 unchanged seeds.
+The command crate type-checks on Windows, Linux and WebAssembly. Native
+runtime is verified on macOS for this workflow. The review exited.
+[Evidence and limits](docs/verification-cdx-caption-creation.md).
+
+The authoring build passed the full local gate with **2,320/0/1**
+workspace and **3/0** AccessKit tests. The follow-up build passed the
+focused App copy checks before an aggregate stopped at the unchanged
+MCP listener replacement-bind assertion. The same aggregate is being
+retried. GitHub Actions stays off.
 
 ### Next executable work
 
-1. Declare the IO tests against the frozen CDX files, then share one
-   effective ID map between caption projection and run-edit lookup.
-   Keep every prior unmarked ID and preserve malformed identities as
-   opaque source. Reuse two owned child splices and the whole-source
-   re-import certificate. Prove resources, baseline, paint order,
-   history and exact Save/reopen through the shared command and native
-   Text tool before enabling creation in the CDX profile.
-2. Extend beyond the qualified caption-only CDX profile with independent
-   blank/mixed source and retained data proof. Multiline, general
-   typography, platform verification and the rest of M0–M5 remain open.
+1. Pin an empty single Poster Page with the explicit qualified font and
+   paper resources. Derive exact before/after vectors across all five
+   framings, with missing and ambiguous resource controls and a fixed
+   first-caption depth. Verify Open, create, Undo to the empty page,
+   Unicode Save/reopen and editing the saved first caption. Keep the
+   mixed-object and unsupported-source refusals.
+2. Establish the independent mixed chemical and caption source, ordering
+   and retention proof. Multiline, general typography, broader platform
+   verification and the rest of M0–M5 remain open.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

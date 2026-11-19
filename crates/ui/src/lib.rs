@@ -595,7 +595,11 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
                 "This page has no editable captions."
             });
         } else if caption_preview {
-            ui.label("Choose Text to edit an existing caption.");
+            ui.label(if engine.caption_creation_available() {
+                "Choose Text to add or edit a caption."
+            } else {
+                "Choose Text to edit an existing caption."
+            });
         } else if cdx_atom_label_preview {
             ui.label("Alt-click a printed label to edit its element and attached H count. Save preserves the CDX structure.");
         } else if atom_label_preview {

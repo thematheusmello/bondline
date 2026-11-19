@@ -173,8 +173,13 @@ envelope exclude creation. The viewport inverse supplies the press baseline. App
 calls `text.create`, publishes one validated candidate and advances a session-local
 Text ID floor. Undo preserves the floor. Single-page native CDXML without child atom
 labels writes each Text ID plus the canonical object count before captions. Sparse
-recovery requires a complete byte-exact re-encode. Foreign documents retain their
-existing source capabilities and ordinal projection.
+recovery requires a complete byte-exact re-encode.
+
+Qualified CDX caption pages append an owned Text and then its persistent ObjectTag.
+The second splice uses a handle from a fresh parse. Final re-import must match the
+entire expected model and fit the rendered page. Unmarked Text follows the original
+source-ID ordering and strict marked Text retains its live Text ID. Projection
+and run edits share the same lookup. [CDX contract](research/cdx-caption-creation.md).
 
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks
