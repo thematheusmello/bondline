@@ -1,5 +1,13 @@
 # Open questions
 
+## Existing native captions, 2026-11-19
+
+The public version 25 guide describes editing an existing caption with the
+Text tool. Exact Desktop 26.1 caption modifiers, overlap picking, confirmation
+and per-platform bindings still need public evidence. New and blank-caption
+targeting, multiline input and style-range editing are separate workflows.
+[Public evidence and original interaction](../research/native-caption-editing.md).
+
 ## CDX Node label interpretation, 2026-11-18
 
 The [CDX Node label contract](../research/cdx-node-labels.md) retains explicit
