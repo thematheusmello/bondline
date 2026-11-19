@@ -342,21 +342,32 @@ pinned corpus. Earlier gates found obsolete inventory assertions and one
 unchanged listener replacement-bind failure. All owned caption jobs exited.
 GitHub Actions stays off. Full M0–M5 remains active.
 
+### Standalone CDX child insertion
+
+[PR 15](https://github.com/thematheusmello/bondline/pull/15) records the
+independent vectors at `b9674ce` and the checked splice at `dbc2f32`.
+The [contract](docs/research/cdx-child-insertion.md) defines one bounded
+property-only child splice at the matched physical end of an owned
+encoded object. The [verification](docs/verification-cdx-child-insertion.md)
+records independently checked exact bytes across five framings, eight
+new ownership and bound regressions, 67 standalone CDX tests, and
+10,000 AddressSanitizer runs over 18 unchanged inputs. The tool and
+application registry retain their current source admission.
+The full local gate passes **2,305/0/1** workspace and **3/0** AccessKit
+tests, with formatting, Clippy, layers, licenses, assets and corpus checks.
+Owned CDX splice jobs are terminal. GitHub Actions stays off.
+
 ### Next executable work
 
-1. Freeze independent CDX bytes for appending one property-only child to
-   the matched physical end of an owned object. Add a standalone splice
-   beside `Document::edit_properties`. Test all five admitted framings,
-   exact prefix/suffix retention, child tag and scoped ID checks, foreign
-   handles, length thresholds, and depth, record and byte budgets. The
-   public format distinguishes object ends from the file end even though
-   they have the same wire value. [Binary format](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm).
-2. Build the qualified direct-Page CDX caption adapter on that splice.
-   Prove existing resources, baseline coordinates, stacking, stable live
-   IDs and whole-source equality after Save and reopen. Cover identity
-   gaps after Undo before granting a native binding. Blank and mixed CDX
-   page admission, multiline, general typography, platform verification
-   and the rest of the M0–M5 roadmap remain open.
+1. Pin independent CDX Page Text creation witnesses using the child
+   splice. Prove existing resources, fixed-point baseline conversion,
+   stacking, stable live IDs and exact Save and reopen. Cover identity
+   gaps after Undo before granting a native binding. Use the SDK's
+   persistent ObjectTag for new live IDs while retaining the existing
+   dense projection for unmarked captions. [ObjectTag](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/ObjectTag.htm).
+2. Extend beyond the qualified caption-only CDX profile with independent
+   blank/mixed source and retained data proof. Multiline, general
+   typography, platform verification and the rest of M0–M5 remain open.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

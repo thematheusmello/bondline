@@ -1,5 +1,12 @@
 # Bondline agent instructions
 
+Standalone CDX child insertion follows docs/research/cdx-child-insertion.md and
+docs/verification-cdx-child-insertion.md. Match the exact owned ObjectEnd's opening
+index. Preserve headers, old property encoding and every old terminator. Keep caller
+property order, same-parent nonzero ID collision checks, unassigned ID0 and the original
+byte/record/depth bounds. The splice grants no application creation authority. Continue
+the CDX Page Text adapter and stable identity proof from STATUS.
+
 Native plain-caption creation follows docs/research/native-caption-creation.md and
 docs/verification-native-caption-creation.md. Blank-paper clicks and existing painted
 runs share the Text draft owner. Keep the press baseline, occupied hit refusal,

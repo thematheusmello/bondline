@@ -1,5 +1,11 @@
 # Clean-room source register
 
+The [CDX child insertion contract](../research/cdx-child-insertion.md)
+uses the public binary object, property, ID and terminator rules. The
+exact borrowed close handle, same-parent collision check and bounds are
+Bondline policies. A Page Text adapter will select resources and preserve
+caption identity separately from the standalone splice.
+
 The [native caption creation contract](../research/native-caption-creation.md)
 uses the public version 25 Text workflow and the CDXML SDK's left-baseline
 position, Page ownership and explicit style fields. The click-to-baseline

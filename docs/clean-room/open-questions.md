@@ -1,5 +1,14 @@
 # Open questions
 
+## Adding CDX objects, 2026-11-19
+
+The [child insertion contract](../research/cdx-child-insertion.md)
+uses physical object boundaries. Success means exact syntax retention
+and ownership. Unknown cross-container references can still require
+semantic checks when choosing an ID. The Page Text adapter needs proved
+global ID selection, fixed-point baseline conversion, resources,
+paint depth and stable live identity across Undo and reopen.
+
 ## Creating captions, 2026-11-19
 
 Public sources describe choosing Text on empty paper, editing the body and

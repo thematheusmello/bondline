@@ -1,6 +1,7 @@
-//! Edit properties without rebuilding the original record tree.
+//! Edit properties and append children without rebuilding the original record tree.
 use crate::{
-    Document, Error, MAX_INPUT_BYTES, MAX_RECORDS, Record, RecordKind, write::EncodedLength,
+    Document, Error, MAX_DEPTH, MAX_INPUT_BYTES, MAX_RECORDS, Record, RecordKind,
+    write::EncodedLength,
 };
 
 /// An absent property to insert immediately before an owned property in the same object.
@@ -35,6 +36,94 @@ impl Document<'_> {
     /// while changed values use the standard short or extended length encoding.
     pub fn replace_properties(&self, values: &[(&Record, &[u8])]) -> Result<Vec<u8>, Error> {
         self.edit_properties(values, &[])
+    }
+
+    /// Insert a property-only child immediately before an owned object's matched end.
+    /// The caller supplies a raw ID. Zero leaves the child unassigned.
+    /// The supplied properties keep their order and the original bytes stay exact.
+    pub fn append_child(
+        &self,
+        end: &Record,
+        tag: u16,
+        id: u32,
+        properties: &[(u16, &[u8])],
+    ) -> Result<Vec<u8>, Error> {
+        let owner = self
+            .records
+            .get(end.index)
+            .filter(|owned| std::ptr::eq(*owned, end))
+            .and_then(|owned| match owned.kind {
+                RecordKind::ObjectEnd { start } => start,
+                _ => None,
+            })
+            .ok_or(Error::InvalidObjectEnd)?;
+        if tag & 0x8000 == 0 {
+            return Err(Error::InvalidTag);
+        }
+        self.records
+            .len()
+            .checked_add(properties.len())
+            .and_then(|count| count.checked_add(2))
+            .filter(|&count| count <= MAX_RECORDS)
+            .ok_or(Error::RecordLimit)?;
+        let mut depth = 1;
+        let mut ancestor = Some(owner);
+        while let Some(index) = ancestor {
+            depth += 1;
+            if depth > MAX_DEPTH {
+                return Err(Error::DepthLimit);
+            }
+            ancestor = self
+                .records
+                .get(index)
+                .ok_or(Error::InvalidObjectEnd)?
+                .parent;
+        }
+        if id != 0
+            && self.records.iter().any(|record| {
+                record.parent == Some(owner)
+                    && matches!(record.kind, RecordKind::ObjectStart { id: existing, .. } if existing == id)
+            })
+        {
+            return Err(Error::DuplicateObjectId(id));
+        }
+        let bare_size = self
+            .source
+            .len()
+            .checked_add(8)
+            .filter(|&size| size <= MAX_INPUT_BYTES)
+            .ok_or(Error::InputTooLarge)?;
+        let size = properties
+            .iter()
+            .try_fold(bare_size, |size, &(tag, value)| {
+                if tag == 0 || tag & 0x8000 != 0 {
+                    return Err(Error::InvalidTag);
+                }
+                let encoded = EncodedLength::new(value.len())?;
+                size.checked_add(encoded.property_prefix_len())
+                    .and_then(|size| size.checked_add(value.len()))
+                    .filter(|&size| size <= MAX_INPUT_BYTES)
+                    .ok_or(Error::InputTooLarge)
+            })?;
+        let (prefix, suffix) = self
+            .source
+            .split_at_checked(end.range.start)
+            .ok_or(Error::InvalidObjectEnd)?;
+        let mut output = Vec::new();
+        output
+            .try_reserve_exact(size)
+            .map_err(|_| Error::Allocation)?;
+        output.extend_from_slice(prefix);
+        output.extend_from_slice(&tag.to_le_bytes());
+        output.extend_from_slice(&id.to_le_bytes());
+        for &(tag, value) in properties {
+            output.extend_from_slice(&tag.to_le_bytes());
+            EncodedLength::new(value.len())?.append(&mut output);
+            output.extend_from_slice(value);
+        }
+        output.extend_from_slice(&[0, 0]);
+        output.extend_from_slice(suffix);
+        Ok(output)
     }
 
     /// Insert absent properties alongside replacements in one bounded splice.
