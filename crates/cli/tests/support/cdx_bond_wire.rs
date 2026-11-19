@@ -76,16 +76,16 @@ fn actual_cli_plain_cdx_bonds_keep49_records_direction_side_and_unicode_source_b
         "{}",
         String::from_utf8_lossy(&listing.stderr)
     );
-    assert_eq!(
-        listing.stdout,
-        registry_fixture::with_cdx_caption_edit(f::METADATA49).as_bytes()
+    let previous = registry_fixture::with_cdx_caption_edit(f::METADATA49);
+    let prefix = previous.strip_suffix("]\n").ok_or("frozen array end")?;
+    assert!(
+        listing.stdout.starts_with(prefix.as_bytes()),
+        "the original 49 discovery records retain their exact bytes"
     );
-    assert_eq!(
-        serde_json::from_slice::<Value>(&listing.stdout)?
-            .as_array()
-            .map(Vec::len),
-        Some(49)
-    );
+    assert_eq!(listing.stdout.get(prefix.len()), Some(&b','));
+    let rows: Value = serde_json::from_slice(&listing.stdout)?;
+    assert_eq!(rows.as_array().map(Vec::len), Some(50));
+    assert_eq!(rows[49]["name"], "ui.caption");
     let directory = support::SdfTestDirectory::new()?;
     for name in [
         "ethene",
@@ -146,7 +146,8 @@ fn initialized_mcp_plain_cdx_bonds_keep_exact_discovery_refusals_and_unchanged_s
     let rows = listed["result"]["tools"].as_array().ok_or("MCP tools")?;
     let expected: Vec<Value> =
         serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?;
-    assert_eq!((rows.len(), expected.len()), (49, 49));
+    assert_eq!((rows.len(), expected.len()), (50, 49));
+    assert_eq!(rows[49]["name"], "ui.caption");
     for (row, expected) in rows.iter().zip(&expected) {
         assert_eq!(row["name"], expected["name"]);
         assert_eq!(row["description"], expected["description"]);

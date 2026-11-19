@@ -492,7 +492,7 @@ fn node<'a>(root: &'a Value, v: &'a Value) -> Check<&'a Value> {
 fn chair_objects_are_a_third_closed_nonphase_alternative_without_changing_named_kinds() -> TestResult
 {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 49);
+    assert_eq!(registry.len(), 50);
     for command in ["ring.create", "ui.ring_tool"] {
         let entry = registry
             .iter()

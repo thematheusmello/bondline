@@ -126,6 +126,7 @@ impl Engine {
         if self.file_ui.available != available {
             self.invalidate_file_ui();
             self.detach_atom_label();
+            self.detach_caption();
             self.detach_drawing_settings();
             self.detach_preferences();
             self.detach_add_chain();

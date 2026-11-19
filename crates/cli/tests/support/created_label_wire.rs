@@ -62,7 +62,7 @@ fn schema(v: &Value) {
 fn discovery(rows: &[Value], mcp: bool) -> Result {
     let old: Vec<Value> =
         serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA48))?;
-    assert_eq!((old.len(), rows.len()), (48, 49));
+    assert_eq!((old.len(), rows.len()), (48, 50));
     for (row, expected) in rows.iter().take(48).zip(&old) {
         if mcp {
             assert_eq!(row["name"], expected["name"]);

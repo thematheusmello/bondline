@@ -54,13 +54,18 @@ fn every_documented_tool_role_and_explicit_variant_has_one_honest_catalogue_entr
             "chain.acyclic",
             "chain.snaking",
             "tool.ring.chair_1",
-            "tool.ring.chair_2"
+            "tool.ring.chair_2",
+            "tool.caption",
         ]
     );
     assert_eq!(
         ENTRIES.iter().filter(|e| e.binding_id.is_none()).count(),
-        124
+        123
     );
+    assert!(ENTRIES.iter().any(|entry| entry.id == "TD-005"
+        && entry.source_id == "TD-005"
+        && entry.label == "Text"
+        && entry.binding_id == Some("tool.caption")));
     for (id, count) in [
         ("TD-026", 6),
         ("TD-027", 2),

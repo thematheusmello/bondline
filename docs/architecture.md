@@ -160,10 +160,12 @@ certificate before an ordinary history commit. Display/capture/view use the comp
 display capability; chemical controls keep their narrower authority. Shared CPU/GPU
 caption rendering uses the existing Roboto file and GPOS positioning, bounds the whole
 page before raster work, and publishes separate min/max caption ems for logical DPI
-checks. The native inspector identifies a read-only caption canvas. There is no Text tool
-binding or inline editor. See [contract](research/styled-captions.md) and
-[receiving](verification-styled-captions.md). That caption checkpoint retained registry47; current registry48/catalogue16/124 is
-described above. Counts in the checkpoints below retain their historical scope.
+checks. The [native caption increment](verification-native-caption-editing.md)
+associates each already painted span with its Text ID and run index. Camera clipping
+uses the same rectangle transform for paint and hits. The Text tool captures a weak
+owner on press and checks it again on release. Its bounded draft calls `ui.caption`
+and Apply enters `text.set_run` under the same Engine guard. The earlier
+[caption contract](research/styled-captions.md) defines source and render eligibility.
 
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks

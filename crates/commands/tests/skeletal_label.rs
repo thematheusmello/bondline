@@ -121,14 +121,14 @@ fn fail(engine: &mut Engine, params: Value, code: &str) -> TestResult {
 fn legacy_none_and_explicit_true_noops_preserve_redo_close_source_and_arc_after_validation()
 -> TestResult {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 49, "restoration adds no command");
+    assert_eq!(registry.len(), 50, "restoration adds no command");
     assert_eq!(
         registry
             .iter()
             .map(|v| v.name)
             .collect::<std::collections::BTreeSet<_>>()
             .len(),
-        49
+        50
     );
     let schema = serde_json::to_value(
         &registry

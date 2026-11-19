@@ -218,6 +218,7 @@ fn assert_layout(workspace: &Workspace, output: &egui::FullOutput) -> TestResult
     }
     let mut planned_count = 0;
     let mut catalogue_count = 0;
+    let mut unavailable_text_count = 0;
     let mut rail_buttons = workspace
         .nodes
         .values()
@@ -232,6 +233,12 @@ fn assert_layout(workspace: &Workspace, output: &egui::FullOutput) -> TestResult
                 assert!(!node.is_disabled());
                 catalogue_count += 1;
                 None
+            } else if name == "Text" {
+                assert!(node.is_disabled());
+                assert_eq!(node.description(), Some("Unavailable for this document"));
+                assert_eq!(node.toggled(), Some(egui::accesskit::Toggled::False));
+                unavailable_text_count += 1;
+                None
             } else if node.description() == Some("Not implemented") {
                 assert!(node.is_disabled());
                 assert_eq!(node.toggled(), Some(egui::accesskit::Toggled::False));
@@ -243,7 +250,8 @@ fn assert_layout(workspace: &Workspace, output: &egui::FullOutput) -> TestResult
         })
         .collect::<Vec<_>>();
     assert_eq!(catalogue_count, 1);
-    assert_eq!(planned_count, 124);
+    assert_eq!(planned_count, 123);
+    assert_eq!(unavailable_text_count, 1);
     rail_buttons.sort();
     assert_eq!(
         rail_buttons,

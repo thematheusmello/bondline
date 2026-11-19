@@ -33,7 +33,7 @@ fn close_discovery_and_cli_policy_preserve_authored_revision_and_history()
     assert!(list.status.success());
     let commands: Value = serde_json::from_slice(&list.stdout)?;
     let commands = commands.as_array().ok_or("command array")?;
-    assert_eq!(commands.len(), 49);
+    assert_eq!(commands.len(), 50);
     let info = commands
         .iter()
         .find(|info| info["name"] == "document.close")

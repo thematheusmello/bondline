@@ -31,8 +31,11 @@ fn exact(e: &Engine, name: &str) -> TestResult {
 
 #[test]
 fn literal_cdx_atoms_survive_registered_open_unchanged_unicode_save_and_reopen() -> TestResult {
+    let commands = bondline_commands::registry();
+    assert_eq!(commands.len(), 50);
+    assert_eq!(commands[49].name, "ui.caption");
     assert_eq!(
-        serde_json::to_value(bondline_commands::registry())?,
+        serde_json::to_value(&commands[..49])?,
         serde_json::from_str::<Value>(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?
     );
     for name in [

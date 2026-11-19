@@ -3,8 +3,8 @@
 use crate::{
     BondDrawOrder, ChainKind, ChairKind, CloseAction, CloseDocument, CloseState, Command,
     EffectiveTool, Engine, NoParams, PageSetSize, RingKind, SelectBondTool, SelectChairRingTool,
-    SelectNamedRingTool, SelectRingTool, UiChainTool, UiDrawingSettings, UiFile, UiFileAction,
-    UiFilePhase, UiPreferences, UiSelection, UiView,
+    SelectNamedRingTool, SelectRingTool, UiCaption, UiChainTool, UiDrawingSettings, UiFile,
+    UiFileAction, UiFilePhase, UiPreferences, UiSelection, UiView,
 };
 use serde::Serialize;
 
@@ -16,6 +16,7 @@ pub enum ControlKey {
     O,
     P,
     S,
+    T,
     W,
     Z,
     Y,
@@ -63,6 +64,7 @@ impl Engine {
             .as_ref()
             .is_some_and(|request| request.phase != UiFilePhase::Running)
             || state.ui_atom_label.is_some()
+            || state.ui_caption.is_some()
             || state.ui_drawing_settings.is_some()
             || state.ui_preferences.is_some()
             || state.ui_add_chain.is_some();
@@ -419,6 +421,31 @@ impl Engine {
                     ),
                 });
             }
+        }
+        if self
+            .document()
+            .ok()
+            .and_then(|d| d.pages().first())
+            .is_some_and(|p| !p.texts().is_empty())
+        {
+            let reason =
+                file_reason.or((!self.caption_available()).then_some("unsupported_content"));
+            controls.push(ControlInfo {
+                id: "tool.caption",
+                label: "Text",
+                menu: "Tools",
+                submenu: None,
+                shortcut: Some(ControlShortcut {
+                    key: ControlKey::T,
+                    primary: false,
+                    shift: false,
+                    alt: false,
+                }),
+                command: Command::UiCaption(UiCaption::Select {}),
+                enabled: reason.is_none(),
+                disabled_reason: reason,
+                selected: Some(self.effective_tool() == EffectiveTool::Caption),
+            });
         }
         if self.selection_available() {
             controls.push(ControlInfo {

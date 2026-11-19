@@ -1,6 +1,6 @@
 use crate::Error;
 use bondline_io::StoredDocument;
-use bondline_model::{PageId, TextId};
+use bondline_model::{PageId, StyledText, TextId};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -17,17 +17,41 @@ pub struct TextSetRun {
     pub text: String,
 }
 
+fn supports_xml_source(document: &StoredDocument) -> bool {
+    (document.is_fully_mapped() || document.has_caption_projection())
+        && document
+            .source_info()
+            .is_none_or(|source| source.format == "cdxml")
+}
+
+pub(super) fn supports_source(document: &StoredDocument) -> bool {
+    document.has_cdx_caption_preview() || supports_xml_source(document)
+}
+
+pub(super) fn find(
+    document: &StoredDocument,
+    page_id: PageId,
+    text_id: TextId,
+) -> Result<&StyledText, Error> {
+    let page = document
+        .model()
+        .pages()
+        .iter()
+        .find(|page| page.id() == page_id)
+        .ok_or(bondline_model::Error::MissingPage(page_id.get()))?;
+    page.texts()
+        .iter()
+        .find(|text| text.id() == text_id)
+        .map(AsRef::as_ref)
+        .ok_or_else(|| bondline_model::Error::MissingText(text_id.get()).into())
+}
+
 pub(super) fn set_run(
     document: &StoredDocument,
     params: TextSetRun,
 ) -> Result<StoredDocument, Error> {
     let cdx_caption = document.has_cdx_caption_preview();
-    if !cdx_caption
-        && ((!document.is_fully_mapped() && !document.has_caption_projection())
-            || document
-                .source_info()
-                .is_some_and(|source| source.format != "cdxml"))
-    {
+    if !cdx_caption && !supports_xml_source(document) {
         return Err(Error::UnsupportedCaptionSource);
     }
     let page_id = PageId::new(params.page_id).ok_or(Error::InvalidPageId)?;
@@ -40,17 +64,7 @@ pub(super) fn set_run(
             params.text,
         )?);
     }
-    let page = document
-        .model()
-        .pages()
-        .iter()
-        .find(|page| page.id() == page_id)
-        .ok_or(bondline_model::Error::MissingPage(page_id.get()))?;
-    let text = page
-        .texts()
-        .iter()
-        .find(|text| text.id() == text_id)
-        .ok_or(bondline_model::Error::MissingText(text_id.get()))?;
+    let text = find(document, page_id, text_id)?;
     let run = text
         .runs()
         .get(params.run_index)

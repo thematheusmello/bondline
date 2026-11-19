@@ -343,7 +343,7 @@ fn resolve<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
     }
 }
 fn discovery(entries: &[Value], schema_key: &str) -> TestResult {
-    assert_eq!(entries.len(), 49);
+    assert_eq!(entries.len(), 50);
     assert_eq!(
         entries
             .iter()
@@ -363,6 +363,7 @@ fn discovery(entries: &[Value], schema_key: &str) -> TestResult {
                 "text.set_run",
                 "atom.set_authored_label",
                 "atom.create_authored_label",
+                "ui.caption",
             ])
             .collect::<BTreeSet<_>>()
     );

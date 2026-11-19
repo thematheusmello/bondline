@@ -1,7 +1,7 @@
 # Parity checklist
 
 Target: publicly documented Professional-family26.1 desktop behavior.
-Reviewed through2026-11-18. Historical authorized installed-profile records below retain
+Reviewed through 2026-11-19. Historical authorized installed-profile records below retain
 their original method. Current work follows the user's public-source-only instructions;
 the installed reference application is not opened or inspected.
 The historical installed license tier remains unknown.
@@ -19,8 +19,11 @@ The shared command and render paths pass independent source and pixel checks.
 [Multiple explicit style runs](verification-cdx-caption-runs.md) also pass the
 read-only macOS workflow for proven offsets, resources and glyph joins.
 [Caption run edits](verification-cdx-caption-edits.md) reuse the command across
-CLI, MCP and loopback, with App repaint and exact Save/reopen. Tied depths,
-general typography, the native editor and other platform workflows remain open.
+CLI, MCP and loopback, with App repaint and exact Save/reopen.
+[App-frame caption editing](verification-native-caption-editing.md) adds
+the Text control and contextual `t` for visible existing runs, with exact
+CDX and CDXML Unicode Save/reopen. Tied depths, general typography,
+new captions and broader platform workflows remain open.
 
 The [Node child Text increment](verification-cdx-node-labels.md) verifies
 literal label and numeric atom data through read-only import and byte-exact
@@ -88,8 +91,8 @@ It enables no new reference workflow or tool by itself. The closed-v0 source-awa
 workflow above now fixes the original CLI refusal; broader imported editing stays missing.
 
 All124 TD/TQ/TB roles now have visible catalogue entries (140 with explicit variants).
-Sixteen reference delivered bindings;124 remain disabled with no command and **retain
-their missing status**. Original branding, grey controls, search and bounded native
+Seventeen have command bindings. The remaining 123 disabled entries
+**retain their missing status**. Original branding, grey controls, search and bounded native
 presentation evidence are in [receiving](verification-branding-and-tools.md). This does
 not complete tool functionality, modern inventory research, M0 or M2–M5.
 
@@ -270,7 +273,7 @@ render/edit workflows below; registry46 and catalogue16/124 retain their existin
 | Bond, ring, chain tools | GUIDE-25 | partial: bounded Single/Double/Triple Mac authoring verified | Shared create/extend/set_order, explicit H policies, transient tool state, component geometry and exact complete-source/history/consumer checks. Actual Mac multiple creation, existing-bond click/1/2/3 keys/endpoint Double→Triple and Unicode Save As pass at readable420pt-square scale; native multiple extension and broader keys/styles/selection/rings/chains remain incomplete. See verification-bond-order-{command,ui,native}.md and verification-native-sdf-and-extension.md. |
 | Atom labels, charges, isotopes, radicals | GUIDE-25 / ATOM-LABEL-AUTHORING / NATIVE-ATOM-LABELS | partial: bounded elemental authoring verified, Mac | Fresh Alt-click atom/label→explicit Element/H→Apply/Cancel calls the shared setter. Native OH/NH2, history, draft-close protection and Unicode Save/reopen pass with independent actual-file consumers; see verification-native-atom-labels.md. Original incremental form, not exact26.1 inline Text parity. Box-qualified imported labels now have [bounded source/native evidence](verification-boxed-atom-labels.md); inline aliases, inference, broader foreign edits and charge/isotope/radical workflows remain missing. Earlier source-aware MOL display preserves None; see verification-neutral-element-labels.md |
 | Stereo bonds and labels | GUIDE-25 | missing | M2/M3 |
-| Text, captions, chemical formatting | GUIDE-25 / STYLED-CAPTIONS | partial: bounded plain file/command workflow and Mac preview verified | Explicit Roboto Regular, ordered run sizes/colours, source-preserving run-body edits/history/Save/reopen and CPU/Metal captures; see verification-styled-captions.md. Native canvas stays read-only; full Text tool, rich/chemical formatting, font/style editing, mixed foreign diagrams and broader platforms remain missing. |
+| Text, captions, chemical formatting | GUIDE-25 / STYLED-CAPTIONS | partial, existing visible runs checked in App frames | Text selects a painted run in supported CDXML and CDX. The form edits its body with source-preserving history and exact Unicode Save/reopen. Caption creation, multiline text, rich and chemical formatting, typography, mixed foreign diagrams and broader platforms remain open. [Evidence](verification-native-caption-editing.md). |
 | Reaction and curved arrows | GUIDE-25 | missing | M3 |
 | Brackets, repeating units and annotations | GUIDE-25 | missing | M3 |
 | Document/object styles, journal settings | GUIDE-25 / DRAWING-SETTINGS-DATA-IMPLEMENTATION / DRAWING-SETTINGS-COMMAND / NATIVE-CARBON-CHAINS | partial: two native preferences and chain application verified | Optional BondLength/ChainAngle model/CDXML/CDX projection, atomic required-nullable set/clear, history, source preservation and whole-MOL loss guards pass independent core/CLI/MCP/socket/file checks. Native two-field form and later-chain application pass bounded Mac Save/reopen and independent file checks; old geometry stays. Inherited/object styles, remaining tools/settings and journal presets remain missing; public author-guideline sources still required. See verification-native-chains.md, verification-native-drawing-settings.md and verification-drawing-settings-data.md. |
@@ -534,7 +537,7 @@ establish chemical preview, data-edit UI or other platforms.
 | TD-002 | Marquee | 115-116 | verified (partial, Mac) | Original anchor rectangle in both directions, atom/bond/component click, Shift add/remove, same-Fragment disconnected-component double-click and selected drag/nudge/history/Unicode persistence pass bounded Mac checks and independent actual-file readers. Hidden modal/equal-surface cancellation passes command/App regressions. Qualified Boxed/Connected atom/box and Mixed skeletal movement add exact independent source/history and bounded Mac subset/all drag/nudge/Unicode files. Native additive Shift-marquee/races/DPI/other platforms and exact26.1 inclusion remain unverified. See verification-native-selection.md and verification-dependent-label-translation.md. |
 | TD-003 | Structure Perspective | 192, 242-243 | missing | Structure rotation/projection handling. |
 | TD-004 | Eraser | 86, 91, 121 | missing | Deletion and bond-order reduction have distinct contexts. |
-| TD-005 | Text | 91-94 | missing | KB-LABEL-25.5 changes existing-label entry to Alt-click; separate KB-REPEAT-25.5 gives Windows Alt/Mac Option-click repetition. Tool context/version/source-target semantics require tests; no26.1 inference. |
+| TD-005 | Text | 91-94 | partial, existing caption runs checked in App frames | Choose Text and click a visible existing run. Apply or Cancel uses the shared registry. Atom label entry and repetition have separate documented gestures. New text, rich styles and exact 26.1 interaction remain open. [Evidence](verification-native-caption-editing.md). |
 | TD-006 | Solid/single bond | 85–86 | verified (partial, Mac) | Existing native C3/C4 plus new Single creation, click Single→Double and endpoint Double→Triple, exact H/IDs/history/CDXML Save As at readable scale. Also headless ordered/frame tests; modifiers/snapping/general imported editing/alignment/full tool parity remain missing. See verification-bond-order-native.md. |
 | TD-007 | Double bond | 85,88 | verified (partial, Mac) | Actual native tool selection/Double creation/Undo/Unicode CDXML Save As, shared typed order-aware create/extend/set_order and independent consumer/frame/image tests. Multiple terminal extension remains headless-only; Explicit-side shortening/gap/hit/CPU-GPU and native-profile file/history checks now pass headlessly (verification-inset-doubles.md); native sided interaction, automatic side/style selection, alignment and complete tool flows remain unverified/missing. See verification-bond-order-ui.md and verification-bond-order-native.md. |
 | TD-008 | Double either/crossed double bond | 86 | missing | - |
@@ -800,7 +803,7 @@ establish chemical preview, data-edit UI or other platforms.
 | KG-001 | Marquee: Spacebar | 74 | missing | No atom/bond hotspot; selection-toggle behavior also described at p.116. |
 | KG-002 | Solid bond tool: x | 74 | missing | - |
 | KG-003 | Acyclic chain tool: Shift+x | 74 | missing | - |
-| KG-004 | Text tool: t | 74 | missing | - |
+| KG-004 | Text tool: t | 74 | partial, checked in App frames | Plain `t` selects Text on eligible drawings. An open draft owns text entry. [Evidence](verification-native-caption-editing.md). |
 | KG-005 | Bracket tools: Shift+t | 74 | missing | - |
 | KG-006 | Arrow tools: e | 74 | missing | - |
 | KG-007 | Chemical Symbols tools: Shift+e | 74 | missing | - |

@@ -26,8 +26,10 @@ and unproved default ordering remain open.
 preview to multiple resolved styles within a caption. Verified cases retain
 their colours, sizes and run boundaries through exact native Save/reopen.
 [Existing caption editing](docs/verification-cdx-caption-edits.md) updates
-those runs through the command adapters and repaints the app. Inherited
-styles, ambiguous starts, general shaping and native text editing remain open.
+those runs through the command adapters and repaints the app. The
+[Text tool](docs/verification-native-caption-editing.md) can edit one visible
+existing run in a qualified CDX or CDXML caption. Caption creation, multiline
+text, inherited styles, ambiguous starts and general shaping remain open.
 
 The [CDX Node label increment](docs/verification-cdx-node-labels.md)
 preserves explicit child Text beside literal atom fields. Independent

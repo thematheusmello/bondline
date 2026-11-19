@@ -498,6 +498,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "text.set_run",
             "ui.atom_label",
             "ui.bond_tool",
+            "ui.caption",
             "ui.chain_tool",
             "ui.controls",
             "ui.drawing_settings",

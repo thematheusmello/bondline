@@ -116,10 +116,11 @@ fn names(values: &[Value]) -> TestResult {
             "text.set_run",
             "atom.set_authored_label",
             "atom.create_authored_label",
+            "ui.caption",
         ])
         .collect::<std::collections::BTreeSet<_>>();
-    assert_eq!(values.len(), 49);
-    assert_eq!(unique.len(), 49);
+    assert_eq!(values.len(), 50);
+    assert_eq!(unique.len(), 50);
     assert_eq!(unique, expected);
     Ok(())
 }

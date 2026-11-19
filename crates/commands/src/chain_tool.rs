@@ -212,6 +212,7 @@ impl Engine {
         }
         if self.close_state() != CloseState::Open
             || self.file_ui_state().request.is_some()
+            || self.caption_ui.has_request()
             || self.ui_atom_label_request().is_some()
             || self.ui_drawing_settings_request().is_some()
             || self.chain_ui.active.is_some()

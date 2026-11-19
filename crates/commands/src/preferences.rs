@@ -253,6 +253,7 @@ impl Engine {
             && file.request.is_none()
             && self.close_state() == CloseState::Open
             && !self.atom_ui.has_request()
+            && !self.caption_ui.has_request()
             && !self.drawing_settings_ui.has_request()
             && !self.chain_ui.has_request()
     }
