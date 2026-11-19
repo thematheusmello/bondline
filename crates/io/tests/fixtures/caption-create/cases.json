@@ -1,0 +1,761 @@
+{
+  "font_sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+  "cases": {
+    "first": {
+      "before": "blank.cdxml",
+      "after": "first.cdxml",
+      "params": {
+        "page_id": 1,
+        "x_pt": 144.25,
+        "y_pt": 216.75,
+        "text": "Phase β & q"
+      },
+      "before_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": []
+          }
+        ]
+      },
+      "after_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 144.25,
+                  "y_pt": 216.75
+                },
+                "runs": [
+                  {
+                    "text": "Phase β & q",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source": {
+        "before": {
+          "sha256": "631d749e9bf5bffe8f9c007a3328e7bea988f8476a32effffcd1d7fef20f2dfe",
+          "byte_length": 153,
+          "xml_prefix": [
+            [
+              "page",
+              1
+            ]
+          ],
+          "texts": [],
+          "comments": []
+        },
+        "after": {
+          "sha256": "e4947105e40a6044438eed68e3ed091fbbfa8e7959b8113f426769f8da997143",
+          "byte_length": 395,
+          "xml_prefix": [
+            [
+              "page",
+              1
+            ]
+          ],
+          "texts": [
+            {
+              "xml_id": 2,
+              "text_id": 1,
+              "p": "144.25 216.75",
+              "styles": [
+                {
+                  "font": "0",
+                  "size": "12",
+                  "face": "0",
+                  "color": "3"
+                }
+              ]
+            }
+          ],
+          "comments": []
+        }
+      },
+      "after_ink": [
+        {
+          "text_id": 1,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 144.25,
+              "end_x_pt": 207.80078125,
+              "bounds_pt": [
+                145.240234375,
+                207.75,
+                206.880859375,
+                219.1875
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "after_undo": {
+      "before": "blank.cdxml",
+      "after": "after_undo.cdxml",
+      "params": {
+        "page_id": 1,
+        "x_pt": 144.25,
+        "y_pt": 216.75,
+        "text": "Phase β & q"
+      },
+      "before_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": []
+          }
+        ]
+      },
+      "after_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [],
+            "texts": [
+              {
+                "id": 2,
+                "position": {
+                  "x_pt": 144.25,
+                  "y_pt": 216.75
+                },
+                "runs": [
+                  {
+                    "text": "Phase β & q",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source": {
+        "before": {
+          "sha256": "631d749e9bf5bffe8f9c007a3328e7bea988f8476a32effffcd1d7fef20f2dfe",
+          "byte_length": 153,
+          "xml_prefix": [
+            [
+              "page",
+              1
+            ]
+          ],
+          "texts": [],
+          "comments": []
+        },
+        "after": {
+          "sha256": "0b8a8ca43d022cf2856e0d931756c06dbe964c07bfeab4843a63aae4cd9c4fe4",
+          "byte_length": 395,
+          "xml_prefix": [
+            [
+              "page",
+              1
+            ]
+          ],
+          "texts": [
+            {
+              "xml_id": 3,
+              "text_id": 2,
+              "p": "144.25 216.75",
+              "styles": [
+                {
+                  "font": "0",
+                  "size": "12",
+                  "face": "0",
+                  "color": "3"
+                }
+              ]
+            }
+          ],
+          "comments": []
+        }
+      },
+      "after_ink": [
+        {
+          "text_id": 2,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 144.25,
+              "end_x_pt": 207.80078125,
+              "bounds_pt": [
+                145.240234375,
+                207.75,
+                206.880859375,
+                219.1875
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "mixed_append": {
+      "before": "mixed_before.cdxml",
+      "after": "mixed_after.cdxml",
+      "params": {
+        "page_id": 1,
+        "x_pt": 144.25,
+        "y_pt": 216.75,
+        "text": "Phase β & q"
+      },
+      "before_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [
+              {
+                "id": 1,
+                "atoms": [
+                  {
+                    "id": 1,
+                    "element": 6,
+                    "position": {
+                      "x_pt": 100.0,
+                      "y_pt": 200.0
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 3
+                  },
+                  {
+                    "id": 2,
+                    "element": 6,
+                    "position": {
+                      "x_pt": 140.0,
+                      "y_pt": 200.0
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 3
+                  }
+                ],
+                "bonds": [
+                  {
+                    "id": 1,
+                    "begin": 1,
+                    "end": 2,
+                    "order": "single"
+                  }
+                ]
+              }
+            ],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.75,
+                  "y_pt": 124.25
+                },
+                "runs": [
+                  {
+                    "text": "Sample ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 14.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "λ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 18.0,
+                      "face": 0,
+                      "rgb": [
+                        0.2,
+                        0.4,
+                        0.8
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "after_model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [
+              {
+                "id": 1,
+                "atoms": [
+                  {
+                    "id": 1,
+                    "element": 6,
+                    "position": {
+                      "x_pt": 100.0,
+                      "y_pt": 200.0
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 3
+                  },
+                  {
+                    "id": 2,
+                    "element": 6,
+                    "position": {
+                      "x_pt": 140.0,
+                      "y_pt": 200.0
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 3
+                  }
+                ],
+                "bonds": [
+                  {
+                    "id": 1,
+                    "begin": 1,
+                    "end": 2,
+                    "order": "single"
+                  }
+                ]
+              }
+            ],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.75,
+                  "y_pt": 124.25
+                },
+                "runs": [
+                  {
+                    "text": "Sample ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 14.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "λ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 18.0,
+                      "face": 0,
+                      "rgb": [
+                        0.2,
+                        0.4,
+                        0.8
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "position": {
+                  "x_pt": 144.25,
+                  "y_pt": 216.75
+                },
+                "runs": [
+                  {
+                    "text": "Phase β & q",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 12.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source": {
+        "before": {
+          "sha256": "158ce873e2aa768fc8df12e392907caca37eebbbeb8f92dea7788ac8dc33abd8",
+          "byte_length": 719,
+          "xml_prefix": [
+            [
+              "page",
+              1
+            ],
+            [
+              "fragment",
+              2
+            ],
+            [
+              "n",
+              3
+            ],
+            [
+              "n",
+              4
+            ],
+            [
+              "b",
+              5
+            ]
+          ],
+          "texts": [
+            {
+              "xml_id": 6,
+              "text_id": 1,
+              "p": "80.75 124.25",
+              "styles": [
+                {
+                  "font": "0",
+                  "size": "14",
+                  "face": "0",
+                  "color": "3"
+                },
+                {
+                  "font": "0",
+                  "size": "18",
+                  "face": "0",
+                  "color": "4"
+                }
+              ]
+            }
+          ],
+          "comments": []
+        },
+        "after": {
+          "sha256": "e1e23cecc37500af5e83a9db9398013532c4e24d1cc00d0e26b6c132c7f44830",
+          "byte_length": 833,
+          "xml_prefix": [
+            [
+              "page",
+              1
+            ],
+            [
+              "fragment",
+              2
+            ],
+            [
+              "n",
+              3
+            ],
+            [
+              "n",
+              4
+            ],
+            [
+              "b",
+              5
+            ]
+          ],
+          "texts": [
+            {
+              "xml_id": 6,
+              "text_id": 1,
+              "p": "80.75 124.25",
+              "styles": [
+                {
+                  "font": "0",
+                  "size": "14",
+                  "face": "0",
+                  "color": "3"
+                },
+                {
+                  "font": "0",
+                  "size": "18",
+                  "face": "0",
+                  "color": "4"
+                }
+              ]
+            },
+            {
+              "xml_id": 7,
+              "text_id": 2,
+              "p": "144.25 216.75",
+              "styles": [
+                {
+                  "font": "0",
+                  "size": "12",
+                  "face": "0",
+                  "color": "3"
+                }
+              ]
+            }
+          ],
+          "comments": []
+        }
+      },
+      "after_ink": [
+        {
+          "text_id": 1,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 80.75,
+              "end_x_pt": 131.076171875,
+              "bounds_pt": [
+                81.296875,
+                113.75,
+                127.1044921875,
+                127.09375
+              ]
+            },
+            {
+              "rgb8": [
+                51,
+                102,
+                204
+              ],
+              "start_x_pt": 131.076171875,
+              "end_x_pt": 141.04296875,
+              "bounds_pt": [
+                131.4013671875,
+                110.908203125,
+                140.5947265625,
+                124.3994140625
+              ]
+            }
+          ]
+        },
+        {
+          "text_id": 2,
+          "runs": [
+            {
+              "rgb8": [
+                0,
+                0,
+                0
+              ],
+              "start_x_pt": 144.25,
+              "end_x_pt": 207.80078125,
+              "bounds_pt": [
+                145.240234375,
+                207.75,
+                206.880859375,
+                219.1875
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "retained": {
+    "mixed_noncanonical": {
+      "file": "mixed_noncanonical.cdxml",
+      "model": {
+        "pages": [
+          {
+            "id": 1,
+            "size": {
+              "width_pt": 512.0,
+              "height_pt": 512.0
+            },
+            "fragments": [
+              {
+                "id": 1,
+                "atoms": [
+                  {
+                    "id": 1,
+                    "element": 6,
+                    "position": {
+                      "x_pt": 100.0,
+                      "y_pt": 200.0
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 3
+                  },
+                  {
+                    "id": 2,
+                    "element": 6,
+                    "position": {
+                      "x_pt": 140.0,
+                      "y_pt": 200.0
+                    },
+                    "isotope": null,
+                    "charge": 0,
+                    "radical": "none",
+                    "explicit_hydrogens": 3
+                  }
+                ],
+                "bonds": [
+                  {
+                    "id": 1,
+                    "begin": 1,
+                    "end": 2,
+                    "order": "single"
+                  }
+                ]
+              }
+            ],
+            "texts": [
+              {
+                "id": 1,
+                "position": {
+                  "x_pt": 80.75,
+                  "y_pt": 124.25
+                },
+                "runs": [
+                  {
+                    "text": "Sample ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 14.0,
+                      "face": 0,
+                      "rgb": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ]
+                    }
+                  },
+                  {
+                    "text": "λ",
+                    "style": {
+                      "font_family": "Roboto",
+                      "size_pt": 18.0,
+                      "face": 0,
+                      "rgb": [
+                        0.2,
+                        0.4,
+                        0.8
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source": {
+        "sha256": "f545688ad9871da323cadb7db98e2a00514f2b02f53f0acacd9c228bb1069f00",
+        "byte_length": 757,
+        "xml_prefix": [
+          [
+            "page",
+            1
+          ],
+          [
+            "fragment",
+            2
+          ],
+          [
+            "n",
+            3
+          ],
+          [
+            "n",
+            4
+          ],
+          [
+            "b",
+            5
+          ]
+        ],
+        "texts": [
+          {
+            "xml_id": 6,
+            "text_id": 1,
+            "p": "80.75 124.25",
+            "styles": [
+              {
+                "font": "0",
+                "size": "14",
+                "face": "0",
+                "color": "3"
+              },
+              {
+                "font": "0",
+                "size": "18",
+                "face": "0",
+                "color": "4"
+              }
+            ]
+          }
+        ],
+        "comments": [
+          " independent lexical variation "
+        ]
+      }
+    }
+  }
+}
