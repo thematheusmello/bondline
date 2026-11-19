@@ -105,7 +105,7 @@ fn new_schema(s: &Value) -> TestResult {
 }
 fn metadata(rows: &[Value], mcp: bool) -> TestResult {
     let old: Vec<Value> = serde_json::from_str(OLD45)?;
-    assert_eq!((old.len(), rows.len()), (45, 49));
+    assert_eq!((old.len(), rows.len()), (45, 50));
     for (actual, expected) in rows.iter().zip(&old) {
         if mcp {
             assert_eq!(actual["name"], expected["name"]);

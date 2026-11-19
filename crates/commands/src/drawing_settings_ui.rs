@@ -142,6 +142,7 @@ impl Engine {
                 if self.drawing_settings_ui.active.is_some()
                     || self.preferences_ui.has_request()
                     || self.ui_atom_label_request().is_some()
+                    || self.caption_ui.has_request()
                     || self.ui_add_chain_request().is_some()
                     || self.file_ui_state().request.is_some()
                     || self.close_state() != CloseState::Open

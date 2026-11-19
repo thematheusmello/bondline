@@ -33,13 +33,17 @@ fn actual_cli_invalid_resource_queries_keep49_unchanged_saves_and_old_authority(
         "{}",
         String::from_utf8_lossy(&listed.stderr)
     );
-    assert_eq!(
-        listed.stdout,
-        registry_fixture::with_cdx_caption_edit(include_str!(
-            "../../../io/tests/fixtures/cdx-literal-metadata/old49.json"
-        ))
-        .as_bytes()
+    let previous = registry_fixture::with_cdx_caption_edit(include_str!(
+        "../../../io/tests/fixtures/cdx-literal-metadata/old49.json"
+    ));
+    let prefix = previous.strip_suffix("]\n").ok_or("frozen array end")?;
+    assert!(
+        listed.stdout.starts_with(format!("{prefix},").as_bytes()),
+        "the previous 49 wire records must remain byte-for-byte exact"
     );
+    let rows: Vec<Value> = serde_json::from_slice(&listed.stdout)?;
+    assert_eq!(rows.len(), 50);
+    assert_eq!(rows[49]["name"], "ui.caption");
     let opened = cli(&[request("document.open_cdx", json!({"path":input}))])?;
     assert_eq!(opened["revision"], 1);
     let reopened = cli(&[

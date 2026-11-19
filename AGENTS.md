@@ -16,6 +16,16 @@ PR4 landed the raw CDXString query. PR5 landed direct-Page captions and PR6 adde
 ordered siblings. No archived prototype is automatically eligible for main.
 This supersedes old no-push/no-merge/current-multiple-bonds notes; full M0–M5 stays active.
 
+The existing-caption Text tool follows `docs/research/native-caption-editing.md`
+and `docs/verification-native-caption-editing.md`. Keep exact painted-cell
+targeting and reverse paint order separate from chemical hits. The same
+press/release must retain weak host/source/file/view/tool/modal and surface
+ownership. Apply uses the existing `text.set_run` command. Preserve ordered
+input prefixes, bounded retry text, explicit Cancel, copyable stale drafts,
+and shared camera behavior. Registry 50 retains the first 49 entries.
+TD-005 is limited to existing captions, with catalogue 17/123. STATUS
+records platform evidence and the next exact M1 task.
+
 Existing CDX caption edits follow `docs/research/cdx-caption-edits.md` and
 `docs/verification-cdx-caption-edits.md`. Project and resolve TextId with the
 same stable source-ID sort, including anonymous encounter order. Keep paint
@@ -23,7 +33,7 @@ depth separate. Edit one owned Text property, preserve count and style words,
 and recompute checked starts for nonempty runs with ASCII before the final run.
 Admit the result only after complete re-import and whole-paper proof. Keep
 original/current byte ownership and entry history. Only the text.set_run
-description changes in registry49. The native text editor is pending. Actions
+description changes in that checkpoint's registry49. Actions
 stays OFF and STATUS gives the next step.
 
 Existing CDX label edits follow `docs/research/cdx-atom-label-edit.md` and

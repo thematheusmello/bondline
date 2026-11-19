@@ -134,6 +134,7 @@ impl Engine {
                 ..
             } => {
                 if self.atom_ui.active.is_some()
+                    || self.caption_ui.has_request()
                     || self.preferences_ui.has_request()
                     || self.ui_drawing_settings_request().is_some()
                     || self.ui_add_chain_request().is_some()

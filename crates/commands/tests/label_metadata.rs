@@ -250,8 +250,11 @@ fn frozen_metadata_sources_compose_explicit_edits_movement_history_and_real_file
 -> TestResult {
     let old: serde_json::Value =
         serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?;
+    let commands = bondline_commands::registry();
+    assert_eq!(commands.len(), 50);
+    assert_eq!(commands[49].name, "ui.caption");
     assert_eq!(
-        serde_json::to_value(bondline_commands::registry())?,
+        serde_json::to_value(&commands[..49])?,
         old,
         "all49 records/schema/order unchanged"
     );

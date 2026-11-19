@@ -351,6 +351,26 @@ impl PageView {
                 })
                 .collect();
         }
+        let mut failure = None;
+        graph.captions.retain_mut(|ink| {
+            if failure.is_some() {
+                return false;
+            }
+            match cancel.check().and_then(|()| self.rectangle(&ink.rectangle)) {
+                Ok(Some(rectangle)) => {
+                    ink.rectangle = rectangle;
+                    true
+                }
+                Ok(None) => false,
+                Err(error) => {
+                    failure = Some(error);
+                    false
+                }
+            }
+        });
+        if let Some(error) = failure {
+            return Err(error);
+        }
         graph.scene.width = self.destination[0];
         graph.scene.height = self.destination[1];
         graph.scene.primitives = primitives;

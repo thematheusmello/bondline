@@ -3,8 +3,36 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has49 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has 50 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
+
+## Caption tool and draft
+
+`ui.caption` appends record 50. Every earlier name, description, schema
+and discovery position stays exact. These closed actions require an
+attached native host. The tool is available for supported existing
+captions on the displayed page.
+
+```json
+{"command":"ui.caption","params":{"action":"select"}}
+{"command":"ui.caption","params":{"action":"open","expected_revision":1,"page_id":1,"text_id":2,"run_index":0}}
+{"command":"ui.caption","params":{"action":"apply","expected_revision":1,"request_id":1,"text":"AVAV"}}
+{"command":"ui.caption","params":{"action":"cancel","expected_revision":1,"request_id":1}}
+```
+
+Open targets one stable Text ID and zero-based run index. It returns
+`ui_caption` with the current request ID, input revision, target, run
+count, original text and current-ownership flag. Select returns the
+tool epoch in `ui_caption_operation`. Open, Apply and Cancel return
+their request ID there. Loopback publishes each result before waking
+the host.
+
+Apply checks exact host, revision, source, view, tool, file and modal
+ownership, then uses the existing `text.set_run` command. The native
+draft is limited to 16384 UTF-8 bytes. A refusal keeps the draft open,
+and Cancel can retire the exact stale request. Successful Apply or
+Cancel retires the presentation. Headless clients can call
+`text.set_run` directly. [Evidence](verification-native-caption-editing.md).
 
 ## Explicit child-label creation
 
@@ -97,7 +125,7 @@ render certification. Equal text preserves sharing, redo, close state and Save c
 Captured Save still acknowledges its captured snapshot; later edits remain dirty.
 
 Native File Open/canvas/view/capture display accepted captions, and remote edits repaint
-the same app. The canvas remains read-only and the full Text tool remains disabled.
+the same app. The caption tool above reuses the same edit operation.
 Roboto Regular single-line/glyph/scale/page/work bounds are explicit; no font fallback
 or chemical inference occurs. [Contract](research/styled-captions.md) and
 [evidence](verification-styled-captions.md) separate actual Mac acceptance from headless

@@ -1,5 +1,8 @@
 //! Resolved literal text rasterization; no system font, substitution, bidi or inference.
-use crate::{Cancellation, Error, PageViewport, Primitive, Rectangle, Scene};
+use crate::{
+    Cancellation, CaptionRunTarget, Error, PageViewport, Primitive, Rectangle, Scene,
+    hits::CaptionInk,
+};
 use ab_glyph::{Font, GlyphId, OutlinedGlyph, point};
 use bondline_model::{Page, TextRun};
 use ttf_parser::{
@@ -64,6 +67,7 @@ pub(crate) fn append(
     viewport: &PageViewport,
     scene: &mut Scene,
     budget: &mut RasterBudget,
+    captions: &mut Vec<CaptionInk>,
     cancel: &Cancellation,
 ) -> Result<Option<[f32; 2]>, Error> {
     if page.texts().is_empty() {
@@ -71,18 +75,35 @@ pub(crate) fn append(
     }
     let mut outlined_glyphs = scene.primitives.len();
     // Validate all captions before allocating their first glyph bitmap.
-    let range = walk(page, viewport, cancel, Some(budget), |_, _| {
+    let range = walk(page, viewport, cancel, Some(budget), |_, _, _| {
         outlined_glyphs = outlined_glyphs
             .checked_add(1)
             .filter(|total| *total <= 4096)
             .ok_or(Error::SceneTooComplex)?;
         Ok(())
     })?;
-    walk(page, viewport, cancel, None, |glyph, color| {
+    walk(page, viewport, cancel, None, |target, glyph, color| {
         let pixels = raster(glyph, viewport, color, cancel)?;
         if scene.primitives.len().saturating_add(pixels.len()) > 4096 {
             return Err(Error::SceneTooComplex);
         }
+        let needed = captions
+            .len()
+            .checked_add(pixels.len())
+            .filter(|count| *count <= 4096)
+            .ok_or(Error::SceneTooComplex)?;
+        if needed > captions.capacity() {
+            let capacity = needed.max(captions.capacity().saturating_mul(2)).min(4096);
+            captions
+                .try_reserve_exact(capacity - captions.len())
+                .map_err(|_| Error::SceneTooComplex)?;
+        }
+        captions.extend(
+            pixels
+                .iter()
+                .cloned()
+                .map(|rectangle| CaptionInk { target, rectangle }),
+        );
         scene
             .primitives
             .extend(pixels.into_iter().map(Primitive::Rectangle));
@@ -96,7 +117,7 @@ fn walk(
     viewport: &PageViewport,
     cancel: &Cancellation,
     mut budget: Option<&mut RasterBudget>,
-    mut visit: impl FnMut(&OutlinedGlyph, [u8; 4]) -> Result<(), Error>,
+    mut visit: impl FnMut(CaptionRunTarget, &OutlinedGlyph, [u8; 4]) -> Result<(), Error>,
 ) -> Result<Option<[f32; 2]>, Error> {
     let mut runs = 0_usize;
     for text in page.texts() {
@@ -116,7 +137,7 @@ fn walk(
     let mut range: Option<[f32; 2]> = None;
     for text in page.texts() {
         let [mut cursor, baseline] = viewport.position_f64(text.position());
-        for run in text.runs() {
+        for (run_index, run) in text.runs().iter().enumerate() {
             cancel.check()?;
             let style = run.style();
             if style.font_family() != "Roboto" || style.face() != 0 {
@@ -186,7 +207,14 @@ fn walk(
                     (factor * f64::from(font.height_unscaled())) as f32,
                     point(cursor as f32, baseline as f32),
                 )) {
-                    visit(&outline, [r, g, b, 255])?;
+                    visit(
+                        CaptionRunTarget {
+                            text_id: text.id(),
+                            run_index,
+                        },
+                        &outline,
+                        [r, g, b, 255],
+                    )?;
                     if let Some(budget) = budget.as_deref_mut() {
                         budget.reserve(&outline, viewport)?;
                     }

@@ -22,6 +22,7 @@ pub enum EffectiveTool {
     #[default]
     Bond,
     Selection,
+    Caption,
     Ring {
         size: u8,
     },

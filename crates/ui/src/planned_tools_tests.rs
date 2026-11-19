@@ -272,6 +272,21 @@ fn modeless_catalogue_search_exposes_disabled_advanced_tools_and_text_escape_do_
         assert_eq!(w.engine.bond_tool(), tool);
         assert_eq!(w.error, error);
     }
+    search(&mut w, "Text")?;
+    let (id, _) = current(&w, "Text", &[Role::Button, Role::CheckBox], |r| {
+        r.right() > canvas.left()
+    })?;
+    let text = w.nodes.get(&id).ok_or("Text catalogue node")?;
+    assert!(text.is_disabled());
+    assert_eq!(text.description(), Some("Unavailable for this document"));
+    assert!(w.engine.controls().iter().all(|c| c.id != "tool.caption"));
+    w.frame(vec![default(id)]);
+    w.warm();
+    assert_eq!(w.state()?, before);
+    assert_eq!(w.engine.content(), &content);
+    assert_eq!(w.engine.effective_tool(), mode);
+    assert_eq!(w.engine.bond_tool(), tool);
+    assert_eq!(w.error, error);
     w.frame(vec![
         key(Key::Escape, true, Modifiers::NONE),
         key(Key::Escape, false, Modifiers::NONE),

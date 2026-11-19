@@ -984,8 +984,16 @@ pub(crate) fn graph_scene_in_viewport(
             cancel,
         )?;
     }
-    let captions = crate::text::append(page, viewport, &mut scene, &mut raster_budget, cancel)?;
-    let text_em_range_px = match (authored_range, captions) {
+    let mut captions = Vec::new();
+    let caption_range = crate::text::append(
+        page,
+        viewport,
+        &mut scene,
+        &mut raster_budget,
+        &mut captions,
+        cancel,
+    )?;
+    let text_em_range_px = match (authored_range, caption_range) {
         (Some([a, b]), Some([c, d])) => Some([a.min(c), b.max(d)]),
         (a, b) => a.or(b),
     };
@@ -995,6 +1003,7 @@ pub(crate) fn graph_scene_in_viewport(
         scene,
         atoms,
         bonds,
+        captions,
     })
 }
 

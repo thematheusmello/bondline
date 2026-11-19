@@ -2,6 +2,8 @@
 use super::*;
 #[path = "caption_app_tests.rs"]
 mod caption_app;
+#[path = "native_caption_tests.rs"]
+mod native_caption_tests;
 
 #[path = "native_drawing_settings_tests.rs"]
 mod native_drawing_settings;

@@ -13,6 +13,7 @@ mod bond;
 mod bond_tool;
 mod boxed_atom;
 mod caption;
+mod caption_ui;
 mod capture;
 mod chain;
 mod chain_tool;
@@ -44,6 +45,7 @@ pub use bond::{
 pub use bond_tool::{BondToolOperation, BondToolState, EffectiveTool, SelectBondTool};
 pub use boxed_atom::{AtomCreateLabel, AtomLabelStyle};
 pub use caption::TextSetRun;
+pub use caption_ui::{CaptionContext, MAX_CAPTION_DRAFT_BYTES, UiCaption, UiCaptionRequest};
 pub use chain::{
     ChainCreate, ChainCreatePath, ChainPathPlacement, ChainPathPoint, ChainPlacement, ChainSide,
 };
@@ -228,6 +230,7 @@ command_registry! {
     TextSetRun(TextSetRun) => ("text.set_run", "Replace the decoded text of one existing styled caption run, preserving its font, size, face, colour, placement and every unrelated source byte. Supports native drawings or qualified CDXML or CDX captions and validates the final page and Save representation before one history edit.", false),
     AtomSetAuthoredLabel(AtomSetLabel) => ("atom.set_authored_label", "Replace one qualified box-positioned atom label's explicit element/H, literal text and bounds in one source-preserving edit; keeps node/bond geometry and style, validates the final page and Save representation, and performs no valence inference.", false),
     AtomCreateAuthoredLabel(AtomCreateLabel) => ("atom.create_authored_label", "Create one explicit box-positioned child label on a qualified imported hidden carbon using a supplied style and existing file resources; preserves IDs, geometry and carbon-display flags, synchronizes literal element/H and validates source and the final page before one history edit.", false),
+    UiCaption(UiCaption) => ("ui.caption", "Select Text or open, apply, or cancel an exact existing caption run draft on an attached native host. Apply uses the source-preserving text.set_run command.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -236,6 +239,10 @@ pub enum Error {
     UnknownCommand(String),
     #[error("caption editing requires a native drawing or a source-qualified CDXML or CDX caption")]
     UnsupportedCaptionSource,
+    #[error("select Text before opening a caption")]
+    CaptionToolRequired,
+    #[error("caption drafts support at most 16384 UTF-8 bytes")]
+    CaptionDraftLimit,
     #[error("text ID must be greater than zero")]
     InvalidTextId,
     #[error("invalid command parameters: {0}")]
@@ -456,6 +463,7 @@ impl Error {
             | Self::UnsupportedChain(_)
             | Self::UnsupportedDrawingSettingsSource
             | Self::UnsupportedCaptionSource
+            | Self::CaptionToolRequired
             | Self::UnsupportedDrawingStyle(_)
             | Self::UnsupportedSmilesPasteSource
             | Self::UnsupportedBondConversion(_) => "unsupported_content",
@@ -489,7 +497,7 @@ impl Error {
             Self::SmilesNotation(error) => error.code(),
             Self::SmilesLayout(error) => error.code(),
             Self::Document(error) => error.code(),
-            Self::SmilesPasteLimit(_) => "resource_limit",
+            Self::SmilesPasteLimit(_) | Self::CaptionDraftLimit => "resource_limit",
             Self::SdfQueryPageLimit => "resource_limit",
             Self::SmilesQueryLimit => "resource_limit",
             Self::SdfFieldInputLimit => "resource_limit",
@@ -577,6 +585,10 @@ pub struct CommandResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_atom_label_operation: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_caption: Option<UiCaptionRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_caption_operation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_drawing_settings: Option<UiDrawingSettingsRequest>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ui_drawing_settings_operation: Option<u64>,
@@ -621,6 +633,7 @@ pub struct Engine {
     close_policy: close::ClosePolicy,
     file_ui: file_ui::FileUiPolicy,
     atom_ui: atom_ui::AtomLabelUiPolicy,
+    caption_ui: caption_ui::CaptionUiPolicy,
     drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy,
     preferences_ui: preferences::PreferencesPolicy,
     chain_ui: chain_tool::ChainUiPolicy,
@@ -682,6 +695,7 @@ impl Engine {
             close_policy: close::ClosePolicy::default(),
             file_ui: file_ui::FileUiPolicy::default(),
             atom_ui: atom_ui::AtomLabelUiPolicy::default(),
+            caption_ui: caption_ui::CaptionUiPolicy::default(),
             drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy::default(),
             preferences_ui: preferences::PreferencesPolicy::default(),
             chain_ui: chain_tool::ChainUiPolicy::default(),
@@ -739,6 +753,8 @@ impl Engine {
             ui_file_operation: None,
             ui_atom_label: self.ui_atom_label_request(),
             ui_atom_label_operation: None,
+            ui_caption: self.ui_caption_request(),
+            ui_caption_operation: None,
             ui_drawing_settings: self.ui_drawing_settings_request(),
             ui_drawing_settings_operation: None,
             preferences: None,
@@ -795,6 +811,9 @@ impl Engine {
             Command::UiFile(params) => return Ok(Prepared::immediate(self.ui_file(params)?)),
             Command::UiAtomLabel(params) => {
                 return Ok(Prepared::immediate(self.ui_atom_label(params)?));
+            }
+            Command::UiCaption(params) => {
+                return Ok(Prepared::immediate(self.ui_caption(params)?));
             }
             Command::UiDrawingSettings(params) => {
                 return Ok(Prepared::immediate(self.ui_drawing_settings(params)?));
@@ -1434,6 +1453,7 @@ mod tests {
                 "ui.controls",
                 "ui.drawing_settings",
                 "ui.atom_label",
+                "ui.caption",
                 "ui.selection",
                 "selection.translate",
                 "ui.bond_tool",

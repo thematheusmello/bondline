@@ -37,7 +37,8 @@ fn consume(path: &std::path::Path, name: &str) -> Result {
 fn discovery(rows: &[Value], mcp: bool) -> Result {
     let expected: Vec<Value> =
         serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?;
-    assert_eq!((rows.len(), expected.len()), (49, 49));
+    assert_eq!((rows.len(), expected.len()), (50, 49));
+    assert_eq!(rows[49]["name"], "ui.caption");
     for (row, expected) in rows.iter().zip(&expected) {
         if mcp {
             assert_eq!(row["name"], expected["name"]);
@@ -80,10 +81,13 @@ fn actual_cli_metadata_keeps_all49_records_and_compound_unicode_file_bytes() -> 
         "{}",
         String::from_utf8_lossy(&listing.stderr)
     );
-    assert_eq!(
-        listing.stdout,
-        registry_fixture::with_cdx_caption_edit(f::METADATA49).as_bytes()
+    let previous = registry_fixture::with_cdx_caption_edit(f::METADATA49);
+    let prefix = previous.strip_suffix("]\n").ok_or("frozen array end")?;
+    assert!(
+        listing.stdout.starts_with(prefix.as_bytes()),
+        "the original 49 discovery records retain their exact bytes"
     );
+    assert_eq!(listing.stdout.get(prefix.len()), Some(&b','));
     let rows: Value = serde_json::from_slice(&listing.stdout)?;
     discovery(rows.as_array().ok_or("command rows")?, false)?;
     let directory = support::SdfTestDirectory::new()?;

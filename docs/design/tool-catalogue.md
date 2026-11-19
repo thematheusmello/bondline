@@ -1,14 +1,14 @@
 # Available and planned tools
 
-The native workspace keeps its sixteen delivered tool bindings at the top of the original
+The native workspace keeps its seventeen tool bindings at the top of the original
 64-point rail. A scrollable section shows the planned tools in grey. **All tools…** opens
 a searchable, grouped catalogue; search accepts names, group names and source IDs.
 
 There are **140 display entries covering 124 documented tool roles**: TD-001–058,
 TQ-001–034 and TB-001–032 in the [parity checklist](../parity-checklist.md). The count
 expands the explicitly documented ring sizes, two chairs, arc angles and bracket forms.
-Sixteen entries reference delivered bindings; **124 remain disabled**. This is the
-documented inventory, not a claim to know every modern dynamic palette variant.
+Seventeen entries have command bindings. The **123 planned entries appear disabled**.
+The inventory tracks documented roles and leaves dynamic palette variants open.
 
 Groups cover selection, bonds, chains, rings, reactions, shapes, brackets, curves,
 labels/data, chemical symbols, orbitals, queries, biology and HELM. Icons are original
@@ -19,7 +19,7 @@ families; no proprietary artwork or library is copied.
 Planned entries have no command binding, are unselected, and expose **Not implemented**
 through tooltips and accessibility descriptions. Delivered tools unavailable for the
 current document instead say **Unavailable for this document**. Nothing in the catalogue
-grants editing authority. Existing file, atom-label and SDF foreground forms take input
+grants editing authority. Existing file, caption, atom-label and SDF foreground forms take input
 priority, including Escape. Opening/searching/closing this catalogue changes no document,
 history, persistent selection, file state or effective tool. Choosing an available tool
 uses its existing registered binding.
@@ -42,6 +42,10 @@ The later [chair receiving](../verification-native-chairs.md) adds both original
 bindings with horizontal/rotated drawing, attachment and contextual bond-hotspot9/0.
 These are constitutional depictions, with stereochemistry unspecified. Native
 Control-drag/DPI and full platform/reference parity remain separate requirements.
+
+The [caption editor](../verification-native-caption-editing.md) binds
+TD-005 for existing captions on a supported page. The Text button and `t`
+use the same typed control.
 
 The later [native sprout/preferences receiving](../verification-native-ring-sprout.md)
 preserves all140 entries and16/124 availability. An actual Mac review searches Curved

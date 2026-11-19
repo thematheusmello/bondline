@@ -1,7 +1,19 @@
 use crate::{Error, Rectangle, Scene, Stroke};
-use bondline_model::{AtomId, BondId, DoublePosition, FragmentId};
+use bondline_model::{AtomId, BondId, DoublePosition, FragmentId, TextId};
 
 pub const MAX_HIT_REGIONS: usize = 4096;
+
+/// One existing caption run, using model identity and a zero-based run index.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct CaptionRunTarget {
+    pub text_id: TextId,
+    pub run_index: usize,
+}
+
+pub(crate) struct CaptionInk {
+    pub target: CaptionRunTarget,
+    pub rectangle: Rectangle,
+}
 
 /// Application identities, never primitive indices or source-format identifiers.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -75,6 +87,7 @@ pub struct GraphScene {
     pub(crate) scene: Scene,
     pub(crate) atoms: Vec<AtomHit>,
     pub(crate) bonds: Vec<BondHit>,
+    pub(crate) captions: Vec<CaptionInk>,
 }
 
 impl GraphScene {
@@ -111,6 +124,31 @@ impl GraphScene {
     }
     pub fn into_scene(self) -> Scene {
         self.scene
+    }
+
+    /// Pick the last-painted caption run at a half-open painted pixel cell.
+    /// Coordinates use this scene's canvas units. Blank runs and glyph holes have no hit.
+    /// This supplies neither source-edit permission nor chemical picking authority.
+    pub fn caption_hit_test(&self, point: [f32; 2]) -> Result<Option<CaptionRunTarget>, Error> {
+        if point.iter().any(|value| !value.is_finite()) {
+            return Err(Error::InvalidHitTest);
+        }
+        let [x, y] = point.map(f64::from);
+        if x < 0.0
+            || y < 0.0
+            || x >= f64::from(self.scene.width)
+            || y >= f64::from(self.scene.height)
+        {
+            return Ok(None);
+        }
+        Ok(self.captions.iter().rev().find_map(|ink| {
+            let rectangle = &ink.rectangle;
+            (x >= f64::from(rectangle.x)
+                && x < f64::from(rectangle.x) + f64::from(rectangle.width)
+                && y >= f64::from(rectangle.y)
+                && y < f64::from(rectangle.y) + f64::from(rectangle.height))
+            .then_some(ink.target)
+        }))
     }
 
     /// Five logical canvas units is the initial native policy. The caller chooses

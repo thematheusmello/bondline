@@ -575,7 +575,7 @@ pub(crate) const ENTRIES: &[Entry] = &[
         source_id: "TD-005",
         label: "Text",
         group: "Labels and data",
-        binding_id: None,
+        binding_id: Some("tool.caption"),
         icon: Icon::Text,
         variant: "",
     },

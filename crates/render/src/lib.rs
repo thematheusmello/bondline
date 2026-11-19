@@ -142,7 +142,7 @@ mod skeletal;
 mod stroke;
 mod text;
 mod view;
-pub use hits::{GraphScene, HitTarget, MAX_HIT_REGIONS};
+pub use hits::{CaptionRunTarget, GraphScene, HitTarget, MAX_HIT_REGIONS};
 pub use page::{
     PageViewport, carbon_page_scene, graph_page_scene, graph_page_scene_with_cancel,
     graph_page_scene_with_display_hydrogens,

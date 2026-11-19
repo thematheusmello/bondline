@@ -8,6 +8,7 @@ mod bond_order_tests;
 mod branding;
 #[cfg(test)]
 mod branding_tests;
+mod caption_editor;
 mod chain;
 mod chain_math;
 mod drawing_settings_editor;
@@ -120,6 +121,7 @@ pub struct DrawingState {
     presented_generation: Option<u64>,
     order: smiles_order::OrderWorkflow,
     atom_labels: atom_editor::AtomEditor,
+    captions: caption_editor::CaptionEditor,
     selection: selection::SelectionWorkflow,
     ring: ring::RingWorkflow,
     chain: chain::ChainWorkflow,
@@ -129,6 +131,7 @@ pub struct DrawingState {
 impl DrawingState {
     fn authoring_modal(&self) -> bool {
         self.atom_labels.present()
+            || self.captions.present()
             || self.settings.present()
             || self.chain.present()
             || self.preferences.present()
@@ -139,11 +142,47 @@ impl DrawingState {
     }
 
     fn cancel_canvas_gestures(&mut self) {
+        self.captions.cancel_press();
         self.ring.cancel();
         self.chain.cancel_gesture();
         self.gesture = None;
         self.selection.reset();
         self.invalidate_hover();
+    }
+
+    fn sync_authoring_forms(
+        &mut self,
+        engine: &Engine,
+        context: &egui::Context,
+        error: &mut Option<String>,
+        order_busy: bool,
+    ) {
+        if !self.atom_labels.present()
+            && !self.settings.present()
+            && !self.chain.present()
+            && !self.preferences.present()
+            && !order_busy
+        {
+            self.captions.sync(engine, context, error);
+        }
+        if self.captions.present() {
+            return;
+        }
+        if !self.settings.present() && !self.chain.present() && !self.preferences.present() {
+            self.atom_labels.sync(engine, error);
+        }
+        if order_busy {
+            return;
+        }
+        if !self.atom_labels.present() && !self.chain.present() && !self.preferences.present() {
+            self.settings.sync(engine, error);
+        }
+        if !self.atom_labels.present() && !self.settings.present() && !self.preferences.present() {
+            self.chain.sync_form(engine, error);
+        }
+        if !self.atom_labels.present() && !self.settings.present() && !self.chain.present() {
+            self.preferences.sync(engine);
+        }
     }
 
     fn invalidate_hover(&mut self) {
@@ -266,6 +305,7 @@ fn bond_tool_buttons(
                     Command::UiBondToolSelect(params) => Some(params.order),
                     Command::UiRingToolSelect(_) => None,
                     Command::UiChainTool(bondline_commands::UiChainTool::Select { .. }) => None,
+                    Command::UiCaption(bondline_commands::UiCaption::Select {}) => None,
                     Command::UiSelection(bondline_commands::UiSelection::Activate { .. }) => None,
                     _ => continue,
                 };
@@ -338,7 +378,10 @@ fn bond_tool_buttons(
                                 egui::Stroke::new(1.5, color),
                             ));
                         }
-                    } else if matches!(control.command, Command::UiChainTool(_)) {
+                    } else if matches!(
+                        control.command,
+                        Command::UiChainTool(_) | Command::UiCaption(_)
+                    ) {
                         tool_icons::paint(ui.painter(), response.rect.shrink(3.0), entry, color);
                     } else if order.is_none() {
                         ui.painter().rect_stroke(
@@ -492,7 +535,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         ui.add_space(8.0);
         ui.separator();
         ui.weak("ACTIVE TOOL");
-        let tool = if caption_preview {
+        let tool = if engine.effective_tool() == EffectiveTool::Caption {
+            "Text selected".to_owned()
+        } else if caption_preview {
             "Caption preview".to_owned()
         } else if cdx_atom_label_preview {
             "CDX atom labels".to_owned()
@@ -501,6 +546,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         } else {
             match engine.effective_tool() {
                 EffectiveTool::Selection => "Marquee selection".to_owned(),
+                EffectiveTool::Caption => "Text selected".to_owned(),
                 EffectiveTool::Ring { size } => format!("{size}-member Single ring selected"),
                 EffectiveTool::NamedRing { kind } => match kind {
                     RingKind::Benzene => "Benzene selected",
@@ -540,8 +586,14 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
                 "Alt-click an atom to sprout a separate ring."
             });
         }
-        if caption_preview {
-            ui.label("Read-only canvas. Save preserves the complete caption file.");
+        if engine.effective_tool() == EffectiveTool::Caption {
+            ui.label(if engine.caption_available() {
+                "Click a caption run to edit its text."
+            } else {
+                "This page has no editable captions."
+            });
+        } else if caption_preview {
+            ui.label("Choose Text to edit an existing caption.");
         } else if cdx_atom_label_preview {
             ui.label("Alt-click a printed label to edit its element and attached H count. Save preserves the CDX structure.");
         } else if atom_label_preview {
@@ -666,6 +718,7 @@ fn control_shortcut_key(shortcut: ControlShortcut) -> egui::KeyboardShortcut {
         ControlKey::O => egui::Key::O,
         ControlKey::P => egui::Key::P,
         ControlKey::S => egui::Key::S,
+        ControlKey::T => egui::Key::T,
         ControlKey::W => egui::Key::W,
         ControlKey::Z => egui::Key::Z,
         ControlKey::Y => egui::Key::Y,
@@ -695,7 +748,8 @@ fn workspace_shortcut(engine: &Engine, event: &egui::Event, text_focused: bool) 
     };
     engine.controls().into_iter().find_map(|control| {
         let shortcut = control.shortcut.map(control_shortcut_key)?;
-        ((control.menu == "File" || (!text_focused && matches!(control.menu, "Edit" | "View")))
+        ((control.menu == "File"
+            || (!text_focused && matches!(control.menu, "Edit" | "View" | "Tools")))
             && control.enabled
             && shortcut.logical_key == *key
             && modifiers.matches_exact(shortcut.modifiers))
@@ -706,6 +760,7 @@ fn workspace_shortcut(engine: &Engine, event: &egui::Event, text_focused: bool) 
 fn pending_ui_blocks_authoring(state: &bondline_commands::CommandResult) -> bool {
     state.close != CloseState::Open
         || state.ui_atom_label.is_some()
+        || state.ui_caption.is_some()
         || state.ui_drawing_settings.is_some()
         || state.ui_preferences.is_some()
         || state.ui_add_chain.is_some()
@@ -1004,34 +1059,12 @@ fn show_workspace_with_preview(
             .as_ref()
             .is_some_and(|fields| fields.presentation_present())
     {
-        if !drawing.settings.present() && !drawing.chain.present() && !drawing.preferences.present()
-        {
-            drawing.atom_labels.sync(engine, error);
-        }
-        if !drawing.atom_labels.present()
-            && !drawing.chain.present()
-            && !drawing.preferences.present()
-            && !order_busy_at_start
-            && !drawing.order.is_busy()
-        {
-            drawing.settings.sync(engine, error);
-        }
-        if !drawing.atom_labels.present()
-            && !drawing.settings.present()
-            && !drawing.preferences.present()
-            && !order_busy_at_start
-            && !drawing.order.is_busy()
-        {
-            drawing.chain.sync_form(engine, error);
-        }
-        if !drawing.atom_labels.present()
-            && !drawing.settings.present()
-            && !drawing.chain.present()
-            && !order_busy_at_start
-            && !drawing.order.is_busy()
-        {
-            drawing.preferences.sync(engine);
-        }
+        drawing.sync_authoring_forms(
+            engine,
+            context,
+            error,
+            order_busy_at_start || drawing.order.is_busy(),
+        );
     }
     let authoring_modal_at_start = drawing.authoring_modal();
     if !authoring_modal_at_start && let Some(fields) = sdf_fields.as_deref_mut() {
@@ -1061,6 +1094,7 @@ fn show_workspace_with_preview(
     drawing
         .atom_labels
         .show(context, Some(&mut *engine), &events);
+    drawing.captions.show(context, Some(&mut *engine), &events);
     drawing.settings.show(
         context,
         Some(&mut *engine),
@@ -1209,6 +1243,7 @@ fn show_workspace_with_preview(
             .show(context, &engine.controls(), &events),
     );
     if blocked {
+        drawing.captions.cancel_press();
         drawing.ring.cancel();
         drawing.chain.cancel_gesture();
         drawing.gesture = None;
@@ -1562,6 +1597,7 @@ fn show_workspace_with_preview(
             });
             drawing.selection.sync(engine, key);
             drawing.ring.sync(engine, key, response.layer_id); drawing.chain.sync(engine, key, response.layer_id);
+            drawing.captions.sync_pointer(engine, key, response.layer_id);
             if drawing.hover_context != Some(key) {
                 drawing.hover_fresh = false;
                 drawing.key_hotspot = None;
@@ -1590,6 +1626,7 @@ fn show_workspace_with_preview(
             }
             let text_focused = text_edit_focused(context);
             if blocked || escape_held || !focused || text_focused {
+                drawing.captions.cancel_press();
                 drawing.ring.cancel(); drawing.chain.cancel_gesture();
                 drawing.key_hotspot = None;
                 drawing.navigation_position = None;
@@ -1656,6 +1693,7 @@ fn show_workspace_with_preview(
                     } => {
                         escape_held = *pressed;
                         if escape_held {
+                            drawing.captions.cancel_press();
                             if engine.effective_tool() == EffectiveTool::Selection && !blocked && focused && !text_focused {
                                 if let Some(command) = drawing.selection.escape(engine) {
                                     *error=engine.execute(command).err().map(|error|error.to_string());
@@ -1672,6 +1710,7 @@ fn show_workspace_with_preview(
                     egui::Event::WindowFocused(value) => {
                         focused = *value;
                         if !focused {
+                            drawing.captions.cancel_press();
                             drawing.ring.cancel(); drawing.chain.cancel_gesture();
                             drawing.selection.reset();
                             drawing.gesture = None;
@@ -1682,6 +1721,7 @@ fn show_workspace_with_preview(
                         continue;
                     }
                     egui::Event::PointerGone => {
+                        drawing.captions.cancel_press();
                         drawing.ring.cancel(); drawing.chain.cancel_gesture();
                         drawing.selection.reset();
                         drawing.gesture = None;
@@ -1708,6 +1748,7 @@ fn show_workspace_with_preview(
                     None
                 };
                 if (blocked || escape_held || !focused) && history_command.is_none() {
+                    drawing.captions.cancel_press();
                     continue;
                 }
                 let mut command = history_command.map(Ok);
@@ -1726,6 +1767,28 @@ fn show_workspace_with_preview(
                     .is_some_and(|command| !matches!(command, Ok(Command::UiView(_) | Command::UiBondToolSelect(_) | Command::UiRingToolSelect(_) | Command::UiChainTool(_) | Command::UiSelection(_))))
                 {
                     drawing.gesture = None;
+                }
+                if command.is_none() && engine.effective_tool() == EffectiveTool::Caption {
+                    if discard_stale_canvas_input || text_focused {
+                        drawing.captions.cancel_press();
+                        continue;
+                    }
+                    let position = match event {
+                        egui::Event::PointerMoved(pos) | egui::Event::PointerButton { pos, .. } => Some(*pos),
+                        _ => None,
+                    };
+                    if position.is_some() {
+                        drawing.navigation_position = position;
+                    }
+                    let hit = position
+                        .filter(|pos| response.interact_rect.contains(*pos)
+                            && viewport.contains(local(*pos))
+                            && context.layer_id_at(*pos) == Some(response.layer_id))
+                        .and_then(|pos| graph.as_ref().ok()?.caption_hit_test(local(pos)).ok().flatten());
+                    command = drawing.captions.pointer(engine, event, key, response.layer_id, hit).map(Ok);
+                    if command.is_none() && !matches!(event, egui::Event::MouseWheel { .. }) {
+                        continue;
+                    }
                 }
                 let selection_input=engine.effective_tool() == EffectiveTool::Selection && matches!(event,
                     egui::Event::PointerMoved(_) | egui::Event::PointerButton { .. }
@@ -2266,6 +2329,7 @@ fn show_workspace_with_preview(
                     key.revision = engine.state().revision;
                     key.tool = engine.bond_tool();
                     key.view_epoch = engine.view().epoch;
+                    drawing.captions.cancel_press();
                     if drawing.gesture.as_ref().is_some_and(|gesture| gesture.context != key) {drawing.gesture=None;}
                     drawing.selection.sync(engine,key);
                     drawing.ring.sync(engine, key, response.layer_id); drawing.chain.sync(engine, key, response.layer_id);
@@ -2279,11 +2343,13 @@ fn show_workspace_with_preview(
             }
             let pointer = context.input(|input| {
                 if !input.pointer.primary_down() {
+                    drawing.captions.cancel_press();
                     drawing.ring.cancel(); drawing.chain.cancel_gesture();
                     drawing.gesture = None;
                     drawing.selection.cancel();
                 }
                 if blocked || order_busy_at_start || drawing.order.is_busy() || !input.focused || input.key_down(egui::Key::Escape) {
+                    drawing.captions.cancel_press();
                     drawing.ring.cancel(); drawing.chain.cancel_gesture();
                     drawing.gesture = None;
                     drawing.selection.cancel();
@@ -2475,6 +2541,7 @@ fn show_workspace_with_preview(
     if authoring_modal_at_start
         || drawing.authoring_modal()
         || engine.state().ui_atom_label.is_some()
+        || engine.state().ui_caption.is_some()
         || engine.state().ui_drawing_settings.is_some()
         || engine.state().ui_preferences.is_some()
         || engine.state().ui_add_chain.is_some()
@@ -2601,33 +2668,12 @@ impl BondlineApp {
                     && !self.files.is_busy()
                     && !self.sdf_fields.presentation_present()
                 {
-                    if !self.drawing.settings.present()
-                        && !self.drawing.chain.present()
-                        && !self.drawing.preferences.present()
-                    {
-                        self.drawing.atom_labels.sync(&engine, &mut self.error);
-                    }
-                    if !self.drawing.atom_labels.present()
-                        && !self.drawing.chain.present()
-                        && !self.drawing.preferences.present()
-                        && !order_busy_at_start
-                    {
-                        self.drawing.settings.sync(&engine, &mut self.error);
-                    }
-                    if !self.drawing.atom_labels.present()
-                        && !self.drawing.settings.present()
-                        && !self.drawing.preferences.present()
-                        && !order_busy_at_start
-                    {
-                        self.drawing.chain.sync_form(&engine, &mut self.error);
-                    }
-                    if !self.drawing.atom_labels.present()
-                        && !self.drawing.settings.present()
-                        && !self.drawing.chain.present()
-                        && !order_busy_at_start
-                    {
-                        self.drawing.preferences.sync(&engine);
-                    }
+                    self.drawing.sync_authoring_forms(
+                        &engine,
+                        context,
+                        &mut self.error,
+                        order_busy_at_start,
+                    );
                 }
                 paste_modal_at_start |= self.drawing.authoring_modal();
                 self.files
@@ -2643,13 +2689,15 @@ impl BondlineApp {
                 self.smiles_records.sync(&engine, context);
                 self.sdf_fields.settle_editor(&mut engine, context);
                 let preferences_pending = engine.ui_preferences_request().is_some();
+                let caption_pending = engine.ui_caption_request().is_some();
                 if native_close
                     && (engine.state().close != CloseState::Committed
                         || self.drawing.authoring_modal()
-                        || preferences_pending)
+                        || preferences_pending
+                        || caption_pending)
                 {
                     context.send_viewport_cmd(egui::ViewportCommand::CancelClose);
-                    if self.drawing.authoring_modal() || preferences_pending {
+                    if self.drawing.authoring_modal() || preferences_pending || caption_pending {
                         self.error = Some(
                             if self.drawing.preferences.present() || preferences_pending {
                                 "OK or Cancel Preferences before closing.".into()
@@ -2657,6 +2705,8 @@ impl BondlineApp {
                                 "Apply or Cancel Document Settings before closing.".into()
                             } else if self.drawing.chain.present() {
                                 "Add or Cancel the chain before closing.".into()
+                            } else if self.drawing.captions.present() || caption_pending {
+                                "Apply or Cancel the caption before closing.".into()
                             } else {
                                 "Apply or Cancel the atom label before closing.".into()
                             },
@@ -2668,6 +2718,7 @@ impl BondlineApp {
                 }
                 if smoke_close
                     && !self.drawing.authoring_modal()
+                    && !caption_pending
                     && !self.sdf_fields.native_close(&engine, context)
                 {
                     self.files.request_close(&mut engine, &mut self.error);
@@ -2698,6 +2749,7 @@ impl BondlineApp {
                 self.smiles_records.sync(&engine, context);
                 self.sdf_fields.settle_editor(&mut engine, context);
                 let add_pending = engine.ui_add_chain_request().is_some();
+                let caption_pending = engine.ui_caption_request().is_some();
                 let preferences_pending = engine.ui_preferences_request().is_some();
                 if self.files.complete_close_if_idle(
                     &mut engine,
@@ -2708,6 +2760,7 @@ impl BondlineApp {
                         || self.drawing.order.is_busy()
                         || self.drawing.authoring_modal()
                         || add_pending
+                        || caption_pending
                         || preferences_pending,
                     action.is_some(),
                 ) {
@@ -2716,6 +2769,11 @@ impl BondlineApp {
             }
             Err(_) => {
                 self.drawing.atom_labels.show(
+                    context,
+                    None,
+                    &context.input(|input| input.events.clone()),
+                );
+                self.drawing.captions.show(
                     context,
                     None,
                     &context.input(|input| input.events.clone()),

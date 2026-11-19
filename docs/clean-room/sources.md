@@ -1,5 +1,11 @@
 # Clean-room source register
 
+The [native caption editing contract](../research/native-caption-editing.md)
+uses the public version 25 Text workflow and the published CDX drawing order.
+The exact painted-run hit, explicit draft confirmation and stale-draft
+ownership are original Bondline choices. Independent outline points come
+from FontTools and the existing CDX caption fixtures.
+
 The [existing CDX caption edit contract](../research/cdx-caption-edits.md)
 uses published Text, CDXString, framing and ZOrder rules. It preserves
 explicit style words and source identity while updating proven run starts.
