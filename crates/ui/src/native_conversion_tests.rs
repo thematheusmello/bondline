@@ -437,7 +437,7 @@ fn unsupported_existing_destination_and_nonfinite_geometry_refuse_then_explicit_
             .len(),
         8
     );
-    assert_eq!(bondline_commands::registry().len(), 50);
+    assert_eq!(bondline_commands::registry().len(), 51);
     for case in ["unsupported", "existing", "nonfinite"] {
         let mut fixture = Fixture::new(1160.0, 800.0, 1.0)?;
         let current = dirty_native_drawing(&mut fixture)?;

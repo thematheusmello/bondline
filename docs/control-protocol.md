@@ -3,36 +3,57 @@
 The delivered engine has one typed registry in `bondline-commands`. Names, Rust parameter
 types, schemas and discovery metadata originate in the same declaration. The UI and external
 adapters must call it; they must not implement their own authoring operations.
-The delivered registry has 50 commands. `bondline-cli commands` provides the authoritative
+The delivered registry has 51 commands. `bondline-cli commands` provides the authoritative
 schemas; the current contracts are listed below.
 
 ## Caption tool and draft
 
-`ui.caption` appends record 50. Every earlier name, description, schema
-and discovery position stays exact. These closed actions require an
-attached native host. The tool is available for supported existing
-captions on the displayed page.
+`ui.caption` is record 50. It adds `open_new` after its four existing
+actions. The first 49 registry records remain byte-exact. These closed
+actions require an attached native host. The tool is available for
+editing supported visible captions and creating captions on eligible single pages.
 
 ```json
 {"command":"ui.caption","params":{"action":"select"}}
 {"command":"ui.caption","params":{"action":"open","expected_revision":1,"page_id":1,"text_id":2,"run_index":0}}
+{"command":"ui.caption","params":{"action":"open_new","expected_revision":1,"page_id":1,"x_pt":144.25,"y_pt":216.75}}
 {"command":"ui.caption","params":{"action":"apply","expected_revision":1,"request_id":1,"text":"AVAV"}}
 {"command":"ui.caption","params":{"action":"cancel","expected_revision":1,"request_id":1}}
 ```
 
 Open targets one stable Text ID and zero-based run index. It returns
 `ui_caption` with the current request ID, input revision, target, run
-count, original text and current-ownership flag. Select returns the
-tool epoch in `ui_caption_operation`. Open, Apply and Cancel return
+count, original text and current-ownership flag. Open New returns the
+same request fields with `position` containing `x_pt` and `y_pt` in place
+of `text_id`, `run_index` and `run_count`, and starts with empty `text`.
+Select returns the tool epoch in `ui_caption_operation`. Open, Open New, Apply and Cancel return
 their request ID there. Loopback publishes each result before waking
 the host.
 
 Apply checks exact host, revision, source, view, tool, file and modal
-ownership, then uses the existing `text.set_run` command. The native
+ownership, then uses `text.set_run` or `text.create`. The native
 draft is limited to 16384 UTF-8 bytes. A refusal keeps the draft open,
 and Cancel can retire the exact stale request. Successful Apply or
-Cancel retires the presentation. Headless clients can call
-`text.set_run` directly. [Evidence](verification-native-caption-editing.md).
+Cancel retires the presentation. Headless clients can call either
+authoring command directly. [Creation evidence](verification-native-caption-creation.md),
+[existing-run evidence](verification-native-caption-editing.md).
+
+## Create a plain caption
+
+`text.create` is record 51. All five parameters are required.
+
+```json
+{"command":"text.create","params":{"expected_revision":1,"page_id":1,"x_pt":144.25,"y_pt":216.75,"text":"Phase β & q"}}
+```
+
+The baseline is strictly inside the page. Text is a nonblank, single-line UTF-8
+body of at most 16384 bytes, with valid glyphs and room to render the whole page.
+The new run uses explicit 12 pt black Roboto Regular. Source-free drawings and
+byte-exact native CDXML qualify when they contain one complete page, no child atom
+labels and representable caption identities. A successful invocation creates one
+history edit after validating the scene and CDXML representation. Undo keeps the
+session's caption ID reservation. Reopening native CDXML recovers each live Text ID
+from the checked raw IDs. [Contract](research/native-caption-creation.md).
 
 ## Explicit child-label creation
 

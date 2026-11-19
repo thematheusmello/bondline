@@ -1,5 +1,12 @@
 # Clean-room source register
 
+The [native caption creation contract](../research/native-caption-creation.md)
+uses the public version 25 Text workflow and the CDXML SDK's left-baseline
+position, Page ownership and explicit style fields. The click-to-baseline
+mapping, fixed initial style and native caption identity scheme are
+Bondline policies. Independent Expat and FontTools witnesses cover the
+written positions and literal UTF-8.
+
 The [native caption editing contract](../research/native-caption-editing.md)
 uses the public version 25 Text workflow and the published CDX drawing order.
 The exact painted-run hit, explicit draft confirmation and stale-draft

@@ -314,21 +314,49 @@ Live platform input and exact 26.1 interaction remain open. Evidence
 is under `target/native-caption-editing`. All owned check jobs exited.
 GitHub Actions remains off.
 
+### Native plain-caption creation
+
+[PR 14](https://github.com/thematheusmello/bondline/pull/14) records this increment.
+The [public contract and independent witnesses](docs/research/native-caption-creation.md)
+landed on the feature branch at `c20707b`. The CDXML identity codec at
+`223253d` retains sparse native Text IDs across exact save and re-import.
+The shared command and native Text tool at `e4e5f56` create a single-line
+caption at the blank-paper press baseline. Creation uses explicit 12 pt black
+Roboto Regular and requires a complete single page with source-free or
+byte-exact native CDXML authority. Apply certifies the file representation
+and whole page, then commits one history edit. Undo retains the Text ID floor.
+Registry 51 preserves the first 49 records byte-for-byte and adds one final
+`ui.caption` action. The catalogue stays at 17 bindings and 123 planned entries.
+
+[Verification](docs/verification-native-caption-creation.md) covers actual
+CLI and stdio MCP, exact native/foreign IO boundaries, App frames at 1×/2×
+and byte-identical CPU and Metal PNGs. The isolated macOS review passed
+blank-paper creation, Cancel, Undo/Redo, Unicode Save and editable reopen.
+Expat confirms the saved raw ID 3 and exact literal body. The review exited.
+Command crate type-checks pass on Windows MSVC, Linux GNU and WebAssembly.
+AddressSanitizer completed 10,000 runs on 48 unchanged seeds. Local records
+are under `target/caption-create` and `target/caption-creation`.
+The final local gate on `a98dc47` passed **2,297/0/1** workspace and **3/0**
+AccessKit tests, plus formatting, Clippy, layering, licenses, assets and the
+pinned corpus. Earlier gates found obsolete inventory assertions and one
+unchanged listener replacement-bind failure. All owned caption jobs exited.
+GitHub Actions stays off. Full M0–M5 remains active.
+
 ### Next executable work
 
-1. Pin the public creation and baseline placement workflow for a
-   new caption on empty paper. Predeclare an original explicit-run
-   CDXML input/output pair and its expected stable Text ID. Use the
-   existing model append and whole-page proof in the shared authoring
-   command. Cover source-free and complete native CDXML, preserve
-   existing bytes and resources in any admitted source, and refuse
-   unresolved foreign source before granting creation authority.
-   Extend the existing Text controller only after independent command
-   and file checks. Multiline, rich styles and general CDX object writing
-   remain required.
-2. Verify live macOS caption input on the isolated review when the
-   desktop is idle. Continue M1 source and format work and the remaining
-   M0 and M2–M5 requirements from the roadmap.
+1. Freeze independent CDX bytes for appending one property-only child to
+   the matched physical end of an owned object. Add a standalone splice
+   beside `Document::edit_properties`. Test all five admitted framings,
+   exact prefix/suffix retention, child tag and scoped ID checks, foreign
+   handles, length thresholds, and depth, record and byte budgets. The
+   public format distinguishes object ends from the file end even though
+   they have the same wire value. [Binary format](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm).
+2. Build the qualified direct-Page CDX caption adapter on that splice.
+   Prove existing resources, baseline coordinates, stacking, stable live
+   IDs and whole-source equality after Save and reopen. Cover identity
+   gaps after Undo before granting a native binding. Blank and mixed CDX
+   page admission, multiline, general typography, platform verification
+   and the rest of the M0–M5 roadmap remain open.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

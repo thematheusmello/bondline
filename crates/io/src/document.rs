@@ -346,6 +346,19 @@ impl StoredDocument {
                 .is_none_or(|source| source.fully_mapped(&self.model))
     }
 
+    /// Native plain-caption creation may be attempted without changing source authority.
+    /// Recheck the candidate's representable IDs and final source/page before committing it.
+    pub fn can_create_caption(&self) -> bool {
+        matches!(
+            self.original.as_ref(),
+            None | Some(OriginalSource::Cdxml {
+                profile: CdxmlProfile::Canonical,
+                ..
+            })
+        ) && self.is_fully_mapped()
+            && crate::cdxml::native_caption_id_base(&self.model).is_some()
+    }
+
     /// Imported MOL drawing frame. Saving that source always keeps this frame.
     pub fn mol_transform(&self) -> Option<MolTransform> {
         match self.original.as_ref() {

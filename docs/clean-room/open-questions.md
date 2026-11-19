@@ -1,5 +1,15 @@
 # Open questions
 
+## Creating captions, 2026-11-19
+
+Public sources describe choosing Text on empty paper, editing the body and
+closing the editor. Exact Desktop 26.1 baseline offsets, confirmation,
+multiline behavior and initial style selection remain open. Native
+canonical CDXML retains its existing resource-table order while the
+published DTD lists a different order. General native and foreign CDXML
+DTD interoperability and CDX object creation remain separate checks.
+[Creation sources and evidence](../research/native-caption-creation.md).
+
 ## Existing native captions, 2026-11-19
 
 The public version 25 guide describes editing an existing caption with the

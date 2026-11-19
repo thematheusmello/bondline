@@ -63,6 +63,37 @@ pub(super) fn project_with_resources<'doc, 'input: 'doc>(
     Ok(texts)
 }
 
+/// A candidate only: the caller must certify the entire re-encoded source first.
+pub(super) fn native_ids(
+    xml: &Xml<'_>,
+    page: Node<'_, '_>,
+    base: &Document,
+    texts: &[StyledText],
+) -> Option<Vec<StyledText>> {
+    if xml.xml().root_element().attribute("CreationProgram")
+        != Some(concat!("Bondline ", env!("CARGO_PKG_VERSION")))
+    {
+        return None;
+    }
+    let prefix = super::write::native_caption_id_base(base)?;
+    let ids = page
+        .children()
+        .filter(|node| is_element(*node, "t"))
+        .map(|node| {
+            let raw = node.attribute("id")?.parse::<ObjectId>().ok()?.get();
+            TextId::new(raw.checked_sub(prefix)?)
+        })
+        .collect::<Option<Vec<_>>>()?;
+    if ids.len() != texts.len() || ids.iter().zip(texts).all(|(id, text)| *id == text.id()) {
+        return None;
+    }
+    texts
+        .iter()
+        .zip(ids)
+        .map(|(text, id)| StyledText::new(id, text.position(), text.runs().to_vec()).ok())
+        .collect()
+}
+
 pub(super) fn project_runs(
     resources: &Resources<'_, '_>,
     view: &TextObject<'_, '_>,

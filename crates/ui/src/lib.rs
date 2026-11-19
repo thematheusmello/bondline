@@ -587,7 +587,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             });
         }
         if engine.effective_tool() == EffectiveTool::Caption {
-            ui.label(if engine.caption_available() {
+            ui.label(if engine.caption_creation_available() {
+                "Click blank paper to add a caption, or click a caption run to edit its text."
+            } else if engine.caption_available() {
                 "Click a caption run to edit its text."
             } else {
                 "This page has no editable captions."
@@ -1780,12 +1782,13 @@ fn show_workspace_with_preview(
                     if position.is_some() {
                         drawing.navigation_position = position;
                     }
-                    let hit = position
+                    let target = position
                         .filter(|pos| response.interact_rect.contains(*pos)
-                            && viewport.contains(local(*pos))
                             && context.layer_id_at(*pos) == Some(response.layer_id))
-                        .and_then(|pos| graph.as_ref().ok()?.caption_hit_test(local(pos)).ok().flatten());
-                    command = drawing.captions.pointer(engine, event, key, response.layer_id, hit).map(Ok);
+                        .and_then(|pos| caption_editor::canvas_target(
+                            engine, graph.as_ref().ok()?, &viewport, local(pos), density,
+                        ));
+                    command = drawing.captions.pointer(engine, event, key, response.layer_id, target).map(Ok);
                     if command.is_none() && !matches!(event, egui::Event::MouseWheel { .. }) {
                         continue;
                     }

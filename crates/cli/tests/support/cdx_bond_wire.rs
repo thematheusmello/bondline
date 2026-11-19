@@ -84,8 +84,9 @@ fn actual_cli_plain_cdx_bonds_keep49_records_direction_side_and_unicode_source_b
     );
     assert_eq!(listing.stdout.get(prefix.len()), Some(&b','));
     let rows: Value = serde_json::from_slice(&listing.stdout)?;
-    assert_eq!(rows.as_array().map(Vec::len), Some(50));
+    assert_eq!(rows.as_array().map(Vec::len), Some(51));
     assert_eq!(rows[49]["name"], "ui.caption");
+    assert_eq!(rows[50]["name"], "text.create");
     let directory = support::SdfTestDirectory::new()?;
     for name in [
         "ethene",
@@ -146,7 +147,7 @@ fn initialized_mcp_plain_cdx_bonds_keep_exact_discovery_refusals_and_unchanged_s
     let rows = listed["result"]["tools"].as_array().ok_or("MCP tools")?;
     let expected: Vec<Value> =
         serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?;
-    assert_eq!((rows.len(), expected.len()), (50, 49));
+    assert_eq!((rows.len(), expected.len()), (51, 49));
     assert_eq!(rows[49]["name"], "ui.caption");
     for (row, expected) in rows.iter().zip(&expected) {
         assert_eq!(row["name"], expected["name"]);

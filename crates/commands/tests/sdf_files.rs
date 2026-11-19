@@ -68,6 +68,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "atom.set_authored_label",
             "atom.create_authored_label",
             "ui.caption",
+            "text.create",
         ]
         .into_iter()
         .collect()

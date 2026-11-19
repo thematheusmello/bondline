@@ -245,7 +245,17 @@ impl<'input> ElementalGraph<'input> {
         if let Some(page) = root.children().find(|node| is_element(*node, "page"))
             && let Ok(texts) = super::caption::project(&self.source, page)
         {
-            model.append_texts(id, texts)?;
+            let native =
+                super::caption::native_ids(&self.source, page, &model, &texts).and_then(|texts| {
+                    let mut candidate = model.clone();
+                    candidate.append_texts(id, texts).ok()?;
+                    let encoded = super::write::write_document(&candidate).ok()?;
+                    (encoded.as_slice() == self.source.as_bytes()).then_some(candidate)
+                });
+            match native {
+                Some(candidate) => model = candidate,
+                None => model.append_texts(id, texts)?,
+            }
         }
         Ok(model)
     }

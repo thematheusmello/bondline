@@ -1,5 +1,16 @@
 # Bondline agent instructions
 
+Native plain-caption creation follows docs/research/native-caption-creation.md and
+docs/verification-native-caption-creation.md. Blank-paper clicks and existing painted
+runs share the Text draft owner. Keep the press baseline, occupied hit refusal,
+explicit 12 pt black Roboto style, full-page certificate, and nonblank single-line
+input bound. `text.create` appends registry51 and `ui.caption` adds one final action.
+The first49 discovery records and catalogue17/123 stay exact. Only complete single-page
+source-free/byte-exact CDXML without child atom labels gains creation. Undo preserves the
+caption ID floor. Exact native re-encoding admits sparse raw IDs. Foreign drafts keep
+their earlier edit authority. STATUS documents the receiving evidence, active goal and
+next CDX child-object writer task. Actions stays off.
+
 ## Commit, push and main delivery — user instruction, 2026-11-18
 
 The user explicitly authorizes and requires pushing after EVERY atomic local commit.

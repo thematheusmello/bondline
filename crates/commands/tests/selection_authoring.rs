@@ -218,8 +218,8 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
         .iter()
         .map(|entry| entry.name)
         .collect::<BTreeSet<_>>();
-    assert_eq!(registry.len(), 50);
-    assert_eq!(names.len(), 50);
+    assert_eq!(registry.len(), 51);
+    assert_eq!(names.len(), 51);
     assert_eq!(
         names,
         [
@@ -273,6 +273,7 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
             "atom.set_authored_label",
             "atom.create_authored_label",
             "ui.caption",
+            "text.create",
         ]
         .into_iter()
         .collect::<BTreeSet<_>>()

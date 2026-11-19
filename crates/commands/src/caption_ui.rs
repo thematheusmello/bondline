@@ -1,9 +1,9 @@
-//! Transient caption tool and draft. Authored edits go through text.set_run.
+//! Transient caption tool and draft. Authored edits use text.set_run or text.create.
 use crate::{
     Cancellation, CaptureStamp, CloseState, Command, CommandResult, EffectiveTool, Engine, Error,
-    TextSetRun, UiFileContextStamp, caption,
+    TextCreate, TextSetRun, UiFileContextStamp, caption,
 };
-use bondline_model::{PageId, TextId};
+use bondline_model::{PageId, Point2, TextId};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -35,6 +35,26 @@ pub enum UiCaption {
         #[schemars(range(min = 1))]
         request_id: u64,
     },
+    OpenNew {
+        expected_revision: u64,
+        #[schemars(range(min = 1))]
+        page_id: u32,
+        x_pt: f64,
+        y_pt: f64,
+    },
+}
+
+#[derive(Clone, Copy, Debug, Serialize)]
+#[serde(untagged)]
+pub enum UiCaptionTarget {
+    Existing {
+        text_id: u32,
+        run_index: usize,
+        run_count: usize,
+    },
+    New {
+        position: Point2,
+    },
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -42,9 +62,8 @@ pub struct UiCaptionRequest {
     pub id: u64,
     pub input_revision: u64,
     pub page_id: u32,
-    pub text_id: u32,
-    pub run_index: usize,
-    pub run_count: usize,
+    #[serde(flatten)]
+    pub target: UiCaptionTarget,
     pub text: String,
     pub current: bool,
     #[serde(skip)]
@@ -108,15 +127,21 @@ impl CaptionUiPolicy {
 }
 
 impl Engine {
+    pub fn caption_creation_available(&self) -> bool {
+        self.stored_document()
+            .is_ok_and(bondline_io::StoredDocument::can_create_caption)
+    }
+
     pub fn caption_available(&self) -> bool {
-        self.stored_document().is_ok_and(|stored| {
-            stored
-                .model()
-                .pages()
-                .first()
-                .is_some_and(|page| !page.texts().is_empty())
-                && caption::supports_source(stored)
-        })
+        self.caption_creation_available()
+            || self.stored_document().is_ok_and(|stored| {
+                stored
+                    .model()
+                    .pages()
+                    .first()
+                    .is_some_and(|page| !page.texts().is_empty())
+                    && caption::supports_source(stored)
+            })
     }
 
     fn caption_foreground(&self) -> Result<(), Error> {
@@ -197,6 +222,38 @@ impl Engine {
         self.caption_ui.active = None;
     }
 
+    fn begin_caption(
+        &mut self,
+        input_revision: u64,
+        page_id: u32,
+        target: UiCaptionTarget,
+        text: String,
+        mut context: CaptionContext,
+    ) -> Result<u64, Error> {
+        let id = self
+            .caption_ui
+            .epoch
+            .checked_add(1)
+            .ok_or(Error::UiEpochExhausted)?;
+        context.caption_epoch = id;
+        self.caption_ui = CaptionUiPolicy {
+            epoch: id,
+            active: Some(Request {
+                view: UiCaptionRequest {
+                    id,
+                    input_revision,
+                    page_id,
+                    target,
+                    text,
+                    current: true,
+                    cancelled: Cancellation::default(),
+                },
+                context,
+            }),
+        };
+        Ok(id)
+    }
+
     pub(super) fn ui_caption(&mut self, params: UiCaption) -> Result<CommandResult, Error> {
         if !self.file_ui_state().available {
             return Err(Error::UiUnavailable);
@@ -232,7 +289,7 @@ impl Engine {
                 if expected_revision != self.revision {
                     return Err(Error::StaleRevision);
                 }
-                let mut context = self.caption_context()?;
+                let context = self.caption_context()?;
                 let caption = caption::find(
                     self.stored_document()?,
                     PageId::new(page_id).ok_or(Error::InvalidPageId)?,
@@ -247,30 +304,37 @@ impl Engine {
                 if run.text().len() > MAX_CAPTION_DRAFT_BYTES {
                     return Err(Error::CaptionDraftLimit);
                 }
-                let id = self
-                    .caption_ui
-                    .epoch
-                    .checked_add(1)
-                    .ok_or(Error::UiEpochExhausted)?;
-                context.caption_epoch = id;
-                self.caption_ui = CaptionUiPolicy {
-                    epoch: id,
-                    active: Some(Request {
-                        view: UiCaptionRequest {
-                            id,
-                            input_revision: expected_revision,
-                            page_id,
-                            text_id,
-                            run_index,
-                            run_count: caption.runs().len(),
-                            text: run.text().to_owned(),
-                            current: true,
-                            cancelled: Cancellation::default(),
-                        },
-                        context,
-                    }),
-                };
-                id
+                self.begin_caption(
+                    expected_revision,
+                    page_id,
+                    UiCaptionTarget::Existing {
+                        text_id,
+                        run_index,
+                        run_count: caption.runs().len(),
+                    },
+                    run.text().to_owned(),
+                    context,
+                )?
+            }
+            UiCaption::OpenNew {
+                expected_revision,
+                page_id,
+                x_pt,
+                y_pt,
+            } => {
+                if expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                let context = self.caption_context()?;
+                let (_, position) =
+                    caption::creation_point(self.stored_document()?, page_id, x_pt, y_pt)?;
+                self.begin_caption(
+                    expected_revision,
+                    page_id,
+                    UiCaptionTarget::New { position },
+                    String::new(),
+                    context,
+                )?
             }
             UiCaption::Apply {
                 expected_revision,
@@ -289,13 +353,26 @@ impl Engine {
                 if text.len() > MAX_CAPTION_DRAFT_BYTES {
                     return Err(Error::CaptionDraftLimit);
                 }
-                let result = self.execute(Command::TextSetRun(TextSetRun {
-                    expected_revision,
-                    page_id: active.view.page_id,
-                    text_id: active.view.text_id,
-                    run_index: active.view.run_index,
-                    text,
-                }))?;
+                let page_id = active.view.page_id;
+                let command = match active.view.target {
+                    UiCaptionTarget::Existing {
+                        text_id, run_index, ..
+                    } => Command::TextSetRun(TextSetRun {
+                        expected_revision,
+                        page_id,
+                        text_id,
+                        run_index,
+                        text,
+                    }),
+                    UiCaptionTarget::New { position } => Command::TextCreate(TextCreate {
+                        expected_revision,
+                        page_id,
+                        x_pt: position.x_pt(),
+                        y_pt: position.y_pt(),
+                        text,
+                    }),
+                };
+                let result = self.execute(command)?;
                 self.finish_ui_caption(request_id);
                 return Ok(CommandResult {
                     ui_caption: None,

@@ -131,7 +131,7 @@ fn names(entries: &[Value]) -> TestResult {
         .iter()
         .map(|v| v["name"].as_str().ok_or("command name"))
         .collect::<Result<BTreeSet<_>, _>>()?;
-    assert_eq!(entries.len(), 50);
+    assert_eq!(entries.len(), 51);
     assert_eq!(
         actual,
         OLD_NAMES
@@ -150,6 +150,7 @@ fn names(entries: &[Value]) -> TestResult {
                 "atom.set_authored_label",
                 "atom.create_authored_label",
                 "ui.caption",
+                "text.create",
             ])
             .collect::<BTreeSet<_>>()
     );

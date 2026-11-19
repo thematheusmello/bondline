@@ -162,6 +162,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "atom.set_authored_label",
             "atom.create_authored_label",
             "ui.caption",
+            "text.create",
         ]
         .into_iter()
         .collect()

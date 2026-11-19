@@ -1,18 +1,48 @@
-//! An exact painted-run click and one bounded draft for the shared command.
+//! A painted-run or blank-paper click and one bounded caption draft.
 use crate::{
     HoverContext, file_workflow::smiles_paste::field_output, sdf_draft_text::SdfDraftText,
 };
 use bondline_commands::{
     CaptionContext, Command, Engine, MAX_CAPTION_DRAFT_BYTES, UiCaption, UiCaptionRequest,
+    UiCaptionTarget,
 };
-use bondline_render::CaptionRunTarget;
+use bondline_model::Point2;
+use bondline_render::{CaptionRunTarget, GraphScene, PageView};
 use eframe::egui;
 
 const CLICK_SLOP: f32 = 3.0;
 
+#[derive(Clone, Copy)]
+pub(super) enum Target {
+    Run(CaptionRunTarget),
+    Paper(Point2),
+}
+
+pub(super) fn canvas_target(
+    engine: &Engine,
+    graph: &GraphScene,
+    view: &PageView,
+    point: [f32; 2],
+    density: f32,
+) -> Option<Target> {
+    if !view.contains(point) {
+        return None;
+    }
+    if let Some(hit) = graph.caption_hit_test(point).ok()? {
+        return Some(Target::Run(hit));
+    }
+    if !engine.caption_creation_available()
+        || graph.hit_test(point, 5.0 * density).ok()?.is_some()
+        || graph.caption_envelope_contains(point).ok()?
+    {
+        return None;
+    }
+    view.document_position(point).ok().map(Target::Paper)
+}
+
 struct Press {
     position: egui::Pos2,
-    hit: CaptionRunTarget,
+    target: Target,
     surface: HoverContext,
     layer: egui::LayerId,
     context: CaptionContext,
@@ -63,12 +93,17 @@ impl CaptionEditor {
         event: &egui::Event,
         surface: HoverContext,
         layer: egui::LayerId,
-        hit: Option<CaptionRunTarget>,
+        target: Option<Target>,
     ) -> Option<Command> {
         let same = |press: &Press, pos: egui::Pos2| {
+            let same_target = match (press.target, target) {
+                (Target::Run(before), Some(Target::Run(now))) => before == now,
+                (Target::Paper(_), Some(Target::Paper(_))) => true,
+                _ => false,
+            };
             press.surface == surface
                 && press.layer == layer
-                && Some(press.hit) == hit
+                && same_target
                 && press.position.distance(pos) <= CLICK_SLOP
                 && press.context.is_current(engine)
         };
@@ -85,16 +120,15 @@ impl CaptionEditor {
                 pos,
                 modifiers,
             } => {
-                self.press = hit
-                    .filter(|_| modifiers.is_none())
-                    .zip(engine.caption_context().ok())
-                    .map(|(hit, context)| Press {
+                self.press = target.filter(|_| modifiers.is_none()).and_then(|target| {
+                    Some(Press {
                         position: *pos,
-                        hit,
+                        target,
                         surface,
                         layer,
-                        context,
-                    });
+                        context: engine.caption_context().ok()?,
+                    })
+                });
             }
             egui::Event::PointerButton {
                 button: egui::PointerButton::Primary,
@@ -104,12 +138,23 @@ impl CaptionEditor {
             } => {
                 let press = self.press.take()?;
                 if modifiers.is_none() && same(&press, *pos) {
-                    return Some(Command::UiCaption(UiCaption::Open {
-                        expected_revision: surface.revision,
-                        page_id: surface.page.get(),
-                        text_id: press.hit.text_id.get(),
-                        run_index: press.hit.run_index,
-                    }));
+                    let expected_revision = surface.revision;
+                    let page_id = surface.page.get();
+                    let open = match press.target {
+                        Target::Run(hit) => UiCaption::Open {
+                            expected_revision,
+                            page_id,
+                            text_id: hit.text_id.get(),
+                            run_index: hit.run_index,
+                        },
+                        Target::Paper(point) => UiCaption::OpenNew {
+                            expected_revision,
+                            page_id,
+                            x_pt: point.x_pt(),
+                            y_pt: point.y_pt(),
+                        },
+                    };
+                    return Some(Command::UiCaption(open));
                 }
             }
             egui::Event::PointerButton { .. } => self.cancel_press(),
@@ -225,58 +270,67 @@ impl CaptionEditor {
             (saved, error)
         });
         let mut input_rejected = false;
-        egui::Window::new("Edit caption")
-            .id(egui::Id::new(("edit-caption", request)))
-            .anchor(egui::Align2::CENTER_CENTER, egui::Vec2::ZERO)
-            .order(egui::Order::Foreground)
-            .collapsible(false)
-            .resizable(false)
-            .default_width(390.0)
-            .show(context, |ui| {
-                if form.request.run_count > 1 {
-                    ui.weak(format!(
-                        "Run {} of {}",
-                        form.request.run_index + 1,
-                        form.request.run_count
-                    ));
-                }
-                let (shown, failure) =
-                    field_output(ui, id, "Caption text", &mut form.text, false, true);
-                if ui.is_visible() && !context.will_discard() {
-                    form.field = [Some(shown)];
-                }
-                let failure =
-                    failure.or_else(|| input.as_mut().and_then(|(_, error)| error.take()));
-                if let Some(message) = failure {
-                    form.message = Some(message);
-                    input_rejected = true;
-                }
-                if let Some(((events, pointer), _)) = input.take() {
-                    context.input_mut(|input| {
-                        input.events = events;
-                        if let Some(pointer) = pointer {
-                            input.pointer = pointer;
-                        }
-                    });
-                }
-                if form.detached {
-                    ui.colored_label(
-                        egui::Color32::DARK_RED,
-                        "The document or view changed. Copy your draft or click Cancel.",
-                    );
-                }
-                if let Some(message) = &form.message {
-                    ui.colored_label(egui::Color32::DARK_RED, message);
-                }
-                ui.horizontal(|ui| {
-                    let apply = ui.add_enabled(
-                        !form.detached && !input_rejected,
-                        egui::Button::new("Apply"),
-                    );
-                    let cancel = ui.button("Cancel");
-                    form.buttons = [Some(apply.id), Some(cancel.id)];
+        let is_new = matches!(form.request.target, UiCaptionTarget::New { .. });
+        egui::Window::new(if is_new {
+            "New caption"
+        } else {
+            "Edit caption"
+        })
+        .id(egui::Id::new(("edit-caption", request)))
+        .anchor(egui::Align2::CENTER_CENTER, egui::Vec2::ZERO)
+        .order(egui::Order::Foreground)
+        .collapsible(false)
+        .resizable(false)
+        .default_width(390.0)
+        .show(context, |ui| {
+            if is_new {
+                ui.weak("Roboto Regular · 12 pt · Black");
+            }
+            if let UiCaptionTarget::Existing {
+                run_index,
+                run_count,
+                ..
+            } = form.request.target
+                && run_count > 1
+            {
+                ui.weak(format!("Run {} of {}", run_index + 1, run_count));
+            }
+            let (shown, failure) =
+                field_output(ui, id, "Caption text", &mut form.text, false, true);
+            if ui.is_visible() && !context.will_discard() {
+                form.field = [Some(shown)];
+            }
+            let failure = failure.or_else(|| input.as_mut().and_then(|(_, error)| error.take()));
+            if let Some(message) = failure {
+                form.message = Some(message);
+                input_rejected = true;
+            }
+            if let Some(((events, pointer), _)) = input.take() {
+                context.input_mut(|input| {
+                    input.events = events;
+                    if let Some(pointer) = pointer {
+                        input.pointer = pointer;
+                    }
                 });
+            }
+            if form.detached {
+                ui.colored_label(
+                    egui::Color32::DARK_RED,
+                    "The document or view changed. Copy your draft or click Cancel.",
+                );
+            }
+            if let Some(message) = &form.message {
+                ui.colored_label(egui::Color32::DARK_RED, message);
+            }
+            ui.horizontal(|ui| {
+                let apply = ui.add_enabled(
+                    !form.detached && !input_rejected,
+                    egui::Button::new("Apply"),
+                );
+                let cancel = ui.button("Cancel");
+                form.buttons = [Some(apply.id), Some(cancel.id)];
             });
+        });
         if let Some(((events, pointer), _)) = input {
             context.input_mut(|input| {
                 input.events = events;
