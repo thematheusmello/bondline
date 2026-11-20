@@ -154,12 +154,30 @@ fn presentation_requires_host_and_exact_caption_tool_and_source() -> TestResult 
 
     let mut labels = engine(ATOM_LABELS)?;
     labels.set_ui_file_host(true);
+    labels.dispatch("ui.caption", json!({"action":"select"}))?;
+    reject(&mut labels, open(0, 0), "not_found")?;
+    let draft = labels.dispatch(
+        "ui.caption",
+        json!({"action":"open_new","expected_revision":0,"page_id":1,"x_pt":144.25,"y_pt":216.75}),
+    )?;
+    let id = draft.ui_caption_operation.ok_or("new caption request")?;
+    let cancelled = labels.dispatch(
+        "ui.caption",
+        json!({"action":"cancel","expected_revision":0,"request_id":id}),
+    )?;
+    assert_eq!((cancelled.changed, cancelled.undo_depth), (false, 0));
+    assert_eq!(labels.stored_document()?.export_cdx()?, ATOM_LABELS);
+
+    let opaque =
+        include_bytes!("../../io/tests/fixtures/cdx-label-preview/contradictory_ink_box.cdx");
+    let mut invalid = engine(opaque)?;
+    invalid.set_ui_file_host(true);
     reject(
-        &mut labels,
+        &mut invalid,
         json!({"action":"select"}),
         "unsupported_content",
     )?;
-    assert_eq!(labels.stored_document()?.export_cdx()?, ATOM_LABELS);
+    assert_eq!(invalid.stored_document()?.export_cdx()?, opaque);
     Ok(())
 }
 
