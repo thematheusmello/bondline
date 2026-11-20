@@ -162,9 +162,15 @@ pub(crate) fn text_record<'record>(
 pub(crate) fn append_caption(
     source: &Document<'_>,
     caption: StyledText,
+    profile: Preview,
 ) -> Result<(Vec<u8>, StyledText), DocumentError> {
     let unsupported = DocumentError::UnsupportedCdxCaption;
-    let layout = layout(source, Scope::All).ok_or(unsupported("a certified caption-only page"))?;
+    let scope = match profile {
+        Preview::Caption => Scope::All,
+        Preview::Mixed | Preview::AtomLabels => Scope::Captions,
+        Preview::Elemental => return Err(DocumentError::UnsupportedCdxEdit),
+    };
+    let layout = layout(source, scope).ok_or(unsupported("a certified Page caption layout"))?;
     if layout.captions.contains_key(&caption.id()) {
         return Err(unsupported("an unused live caption ID"));
     }
@@ -203,7 +209,8 @@ pub(crate) fn append_caption(
         .and_then(|id| id.checked_add(1))
         .ok_or(unsupported("an available raw object ID"))?;
     let depth = if layout.captions.is_empty() {
-        0
+        // Chemical objects in the qualified profile use the published default depth zero.
+        i16::from(profile == Preview::AtomLabels)
     } else {
         layout
             .captions

@@ -54,7 +54,11 @@ fn open_creation(f: &mut Fixture, release_offset: egui::Vec2) -> TestResult {
     open_creation_at(f, BASELINE, release_offset)
 }
 
-fn open_creation_at(f: &mut Fixture, baseline: [f64; 2], release_offset: egui::Vec2) -> TestResult {
+pub(super) fn open_creation_at(
+    f: &mut Fixture,
+    baseline: [f64; 2],
+    release_offset: egui::Vec2,
+) -> TestResult {
     let press = paper_point(f, baseline)?;
     f.frame(vec![Event::PointerMoved(press), button(press, true)]);
     assert!(f.state()?["ui_caption"].is_null());
@@ -634,6 +638,91 @@ fn external_caption_apply_keeps_local_unsent_text_for_explicit_cancel() -> TestR
         f.choose("Cancel")?;
         closed(&mut f)?;
         assert_eq!(f.state()?["revision"], result["revision"]);
+    }
+    Ok(())
+}
+
+#[test]
+fn text_tool_adds_cdx_caption_beside_chemistry_and_reopens_the_undo_branch() -> TestResult {
+    for (name, before, first, branch, branch_id, hint) in [
+        (
+            "chemical",
+            include_bytes!("../../io/tests/fixtures/cdx-label-preview/boxed.cdx").as_slice(),
+            include_bytes!(
+                "../../io/tests/fixtures/cdx-chemical-caption-create/chemical_first.cdx"
+            )
+            .as_slice(),
+            include_bytes!(
+                "../../io/tests/fixtures/cdx-chemical-caption-create/chemical_after_undo.cdx"
+            )
+            .as_slice(),
+            2,
+            "Choose Text to add a caption.",
+        ),
+        (
+            "mixed",
+            include_bytes!("../../io/tests/fixtures/cdx-mixed-caption-edit/before.cdx").as_slice(),
+            include_bytes!("../../io/tests/fixtures/cdx-chemical-caption-create/mixed_first.cdx")
+                .as_slice(),
+            include_bytes!(
+                "../../io/tests/fixtures/cdx-chemical-caption-create/mixed_after_undo.cdx"
+            )
+            .as_slice(),
+            21,
+            "Choose Text to add or edit a caption.",
+        ),
+    ] {
+        let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+        let input = f.directory.path(&format!("{name}-原.cdx"));
+        let output = f.directory.path(&format!("{name}-保存-λ.cdx"));
+        open_pinned(&mut f, &input, "cdx", before)?;
+        assert!(
+            f.warm().shapes.iter().any(|paint| matches!(&paint.shape,
+            egui::Shape::Text(text) if text.galley.text() == hint)),
+            "{hint}"
+        );
+        f.choose("Text")?;
+        let opened = f.state()?;
+        let occupied = paper_point(&mut f, [159.5, 123.5])?;
+        click(&mut f, occupied, Modifiers::NONE);
+        closed(&mut f)?;
+        assert_eq!(f.state()?, opened);
+        if name == "mixed" {
+            open_run(&mut f, [166.5, 122.5], 19, 0, 2, "H ")?;
+            f.choose("Cancel")?;
+            closed(&mut f)?;
+            assert_eq!(f.state()?, opened);
+        }
+        open_creation(&mut f, egui::vec2(1.0, 1.0))?;
+        apply_body(&mut f, BODY)?;
+        assert_eq!(current_cdx(&f)?, first);
+        assert_eq!(f.state()?["undo_depth"], 1);
+        shortcut(&mut f, Key::Z, false);
+        assert_eq!(current_cdx(&f)?, before);
+        assert_eq!(f.state()?["document"], opened["document"]);
+        assert_eq!(f.state()?["file"]["dirty"], false);
+        open_creation(&mut f, egui::Vec2::ZERO)?;
+        apply_body(&mut f, BODY)?;
+        let branched = f.state()?;
+        assert_eq!(branched["undo_depth"], 1);
+        assert_eq!(branched["redo_depth"], 0);
+        assert_eq!(current_cdx(&f)?, branch);
+        shortcut(&mut f, Key::S, true);
+        choose_file(&mut f, &output, "Save")?;
+        assert_eq!(fs::read(&input)?, before);
+        assert_eq!(fs::read(&output)?, branch);
+        shortcut(&mut f, Key::O, false);
+        choose_file(&mut f, &output, "Open")?;
+        let reopened = f.state()?;
+        assert_eq!(reopened["document"], branched["document"]);
+        assert_eq!(reopened["undo_depth"], 0);
+        assert_eq!(reopened["file"]["dirty"], false);
+        f.command("ui.view", json!({"action":"actual"}))?;
+        f.choose("Text")?;
+        open_run(&mut f, CDX_NEW_INK, branch_id, 0, 1, BODY)?;
+        f.choose("Cancel")?;
+        closed(&mut f)?;
+        assert_eq!(current_cdx(&f)?, branch);
     }
     Ok(())
 }

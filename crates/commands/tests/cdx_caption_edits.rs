@@ -43,7 +43,7 @@ fn mixed_page_run_edit_keeps_exact_history_and_the_chemical_source() -> TestResu
     assert!(first.changed && first.file.dirty && first.source.ok_or("source")?.modified);
     assert_eq!(engine.stored_document()?.export_cdx()?, prefix);
     assert!(engine.stored_document()?.has_cdx_mixed_preview());
-    assert!(!engine.stored_document()?.can_create_caption());
+    assert!(engine.stored_document()?.can_create_caption());
     assert!(!engine.selection_available());
     let undo = engine.dispatch("history.undo", json!({}))?;
     assert_eq!(engine.content(), &original);

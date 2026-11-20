@@ -35,8 +35,10 @@ pages and reopens with stable live IDs. An empty single Poster page with a quali
 font and white paper preserves its physical size and accepts its first caption.
 Qualified mixed CDX pages now display structures and frontmost captions together
 and support editing existing caption runs. The Text tool respects paint order
-when a caption overlaps a label. Creating mixed-source captions, editing mixed
-structures, interleaved depths, missing font resources, multiline text,
+when a caption overlaps a label. Blank paper on a qualified mixed or chemical-only
+page accepts a new caption, with byte-exact Undo and editable Save/reopen.
+[Chemical drawing caption creation](docs/verification-cdx-chemical-caption-creation.md).
+Editing mixed structures, interleaved depths, missing font resources, multiline text,
 inherited styles, ambiguous starts and general shaping remain open.
 [CDX creation](docs/verification-cdx-caption-creation.md), [empty Poster verification](docs/verification-cdx-empty-caption.md), [mixed pages](docs/verification-cdx-mixed-caption.md), [mixed edits](docs/verification-cdx-mixed-caption-edits.md).
 

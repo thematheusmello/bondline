@@ -119,6 +119,7 @@ enum OriginalSource {
     Cdx {
         bytes: Arc<[u8]>,
         baseline: Arc<Document>,
+        // The profile certifies current_cdx()'s bytes and model in this history entry.
         preview: CdxPreview,
         edit: Option<CdxEdit>,
     },
@@ -349,7 +350,7 @@ impl StoredDocument {
     /// Source eligibility for plain-caption creation. The candidate still needs exact
     /// source and page certification before it can commit.
     pub fn can_create_caption(&self) -> bool {
-        self.has_cdx_caption_preview()
+        self.can_create_cdx_caption()
             || (matches!(
                 self.original.as_ref(),
                 None | Some(OriginalSource::Cdxml {
@@ -499,19 +500,17 @@ impl StoredDocument {
         output: Vec<u8>,
         expected: Document,
         page_size: PageSize,
+        expected_profile: CdxPreview,
         mismatch: DocumentError,
     ) -> Result<Self, DocumentError> {
         let Some(OriginalSource::Cdx {
-            bytes,
-            baseline,
-            preview,
-            ..
+            bytes, baseline, ..
         }) = &self.original
         else {
             return Err(DocumentError::NoCdxSource);
         };
         let (projected, profile) = crate::cdx::project_document(&output, page_size)?;
-        if profile != *preview || projected != expected {
+        if profile != expected_profile || projected != expected {
             return Err(mismatch);
         }
         let (model, edit) = if expected == **baseline && output == bytes.as_ref() {
@@ -529,7 +528,7 @@ impl StoredDocument {
             original: Some(OriginalSource::Cdx {
                 bytes: Arc::clone(bytes),
                 baseline: Arc::clone(baseline),
-                preview: *preview,
+                preview: profile,
                 edit,
             }),
         })

@@ -105,7 +105,7 @@ pub(super) fn create(
         TextStyle::new("Roboto".into(), 12.0, 0, [0.0; 3]).map_err(bondline_model::Error::from)?;
     let run = TextRun::new(params.text, style).map_err(bondline_model::Error::from)?;
     let text = StyledText::new(id, position, vec![run]).map_err(bondline_model::Error::from)?;
-    if document.has_cdx_caption_preview() {
+    if document.can_create_cdx_caption() {
         return Ok((document.with_cdx_caption(page_id, text)?, id.get()));
     }
     let mut candidate = document.clone();

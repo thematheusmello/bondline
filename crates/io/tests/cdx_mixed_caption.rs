@@ -44,7 +44,7 @@ fn mixed_pages_retain_every_fragment_and_caption_and_the_exact_source() -> Resul
             "{name}"
         );
         assert!(
-            !stored.is_fully_mapped() && !stored.can_create_caption(),
+            !stored.is_fully_mapped() && stored.can_create_caption(),
             "{name}"
         );
         assert!(stored.to_cdxml().is_err(), "{name}");
@@ -55,6 +55,7 @@ fn mixed_pages_retain_every_fragment_and_caption_and_the_exact_source() -> Resul
             !stored.has_cdx_mixed_preview() && !stored.has_display_projection(),
             "{name}"
         );
+        assert!(!stored.can_create_caption(), "{name}");
         assert!(stored.export_cdx().is_err(), "{name}");
         accepted += 1;
     }

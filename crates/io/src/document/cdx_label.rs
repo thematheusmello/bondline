@@ -1,5 +1,5 @@
 //! Synchronize one existing atom label and certify the entire edited CDX.
-use super::{DocumentError, OriginalSource, StoredDocument};
+use super::{CdxPreview, DocumentError, OriginalSource, StoredDocument};
 use crate::cdx::{MappingError, label_edit::LabelFields};
 use bondline_cdx::Document;
 use bondline_model::{AtomId, Element, Fragment, FragmentId, PageId};
@@ -106,6 +106,7 @@ impl StoredDocument {
             output,
             expected,
             page.size(),
+            CdxPreview::AtomLabels,
             DocumentError::UnsupportedCdxLabel(
                 "complete agreement, page bounds and bond clearance after the edit",
             ),

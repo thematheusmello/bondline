@@ -17,6 +17,75 @@ use std::{
 const SOURCE: &[u8] = include_bytes!("../../../io/tests/fixtures/cdx-caption/caption_rgb16.cdx");
 const VECTORS: &str = include_str!("../../../io/tests/fixtures/cdx-caption/caption-vectors.json");
 
+#[test]
+fn cli_adds_a_caption_above_the_chemical_graph_and_reopens_the_branched_id() -> TestResult {
+    let directory = support::SdfTestDirectory::new()?;
+    for (name, input_bytes, first_bytes, branched_bytes, new_id) in [
+        (
+            "chemical",
+            include_bytes!("../../../io/tests/fixtures/cdx-label-preview/boxed.cdx").as_slice(),
+            include_bytes!(
+                "../../../io/tests/fixtures/cdx-chemical-caption-create/chemical_first.cdx"
+            )
+            .as_slice(),
+            include_bytes!(
+                "../../../io/tests/fixtures/cdx-chemical-caption-create/chemical_after_undo.cdx"
+            )
+            .as_slice(),
+            2,
+        ),
+        (
+            "mixed",
+            include_bytes!("../../../io/tests/fixtures/cdx-mixed-caption-edit/before.cdx")
+                .as_slice(),
+            include_bytes!(
+                "../../../io/tests/fixtures/cdx-chemical-caption-create/mixed_first.cdx"
+            )
+            .as_slice(),
+            include_bytes!(
+                "../../../io/tests/fixtures/cdx-chemical-caption-create/mixed_after_undo.cdx"
+            )
+            .as_slice(),
+            21,
+        ),
+    ] {
+        let source = directory.path(&format!("{name}-原.cdx"));
+        let first = directory.path(&format!("{name}-first-Ω.cdx"));
+        let branch = directory.path(&format!("{name}-branch-β.cdx"));
+        fs::write(&source, input_bytes)?;
+        let create = |revision| {
+            request(
+                "text.create",
+                json!({"expected_revision":revision,
+            "page_id":1,"x_pt":144.25,"y_pt":216.75,"text":"Phase β & q"}),
+            )
+        };
+        let reopened = cli(&[
+            request("document.open_cdx", json!({"path":source})),
+            create(1),
+            request("history.undo", json!({})),
+            request("history.redo", json!({})),
+            request("document.save_cdx", json!({"path":first})),
+            request("history.undo", json!({})),
+            create(5),
+            request("document.save_cdx", json!({"path":branch})),
+            request("document.open_cdx", json!({"path":branch})),
+        ])?;
+        assert_eq!(fs::read(&source)?, input_bytes);
+        assert_eq!(fs::read(&first)?, first_bytes);
+        assert_eq!(fs::read(&branch)?, branched_bytes);
+        let texts = reopened["document"]["pages"][0]["texts"]
+            .as_array()
+            .ok_or("captions")?;
+        let caption = texts.last().ok_or("appended caption")?;
+        assert_eq!(caption["id"], new_id);
+        assert_eq!(caption["runs"][0]["text"], "Phase β & q");
+        assert_eq!(reopened["file"]["dirty"], false);
+        assert_eq!(reopened["undo_depth"], 0);
+    }
+    Ok(())
+}
+
 fn request(command: &str, params: Value) -> Value {
     json!({"command":command,"params":params})
 }

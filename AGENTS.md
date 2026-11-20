@@ -7,8 +7,13 @@ budget and full-paper certification. Direct captions have distinct positive dept
 above the certified chemical drawing. Existing mixed caption run editing follows
 the [run-edit contract](docs/research/cdx-mixed-caption-edits.md) and [tests](docs/verification-cdx-mixed-caption-edits.md).
 Use the exact certified source and stable Page Text ID. Preserve every Fragment
-and Node label, prove the entire edited page, and keep mixed blank-paper creation,
-chemical authoring and cross-format refusals in place.
+and Node label and prove the entire edited page. For new captions on chemical
+paper, use the [append contract](docs/research/cdx-chemical-caption-creation.md)
+and [receiving tests](docs/verification-cdx-chemical-caption-creation.md).
+Store the current re-imported CDX profile in each history entry. A first
+caption on chemical ink uses depth one and changes AtomLabels to Mixed.
+Further captions use the next signed depth. Chemical editing on mixed pages
+and cross-format conversion still require their own source proofs.
 
 An empty CDX Poster page follows the [empty-page contract](docs/research/cdx-empty-caption.md)
 and [verification](docs/verification-cdx-empty-caption.md). Require the closed Page, explicit

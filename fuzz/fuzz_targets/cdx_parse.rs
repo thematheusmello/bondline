@@ -504,7 +504,7 @@ fn check_caption_edit(
         assert_eq!(edited.has_cdx_mixed_preview(), mixed_owner.is_some());
         assert!(edited.can_edit_cdx_caption_run());
         if mixed_owner.is_some() {
-            assert!(!edited.can_create_caption());
+            assert_eq!(edited.can_create_caption(), stored.can_create_caption());
             assert!(!edited.has_cdx_atom_label_preview());
             assert!(edited.to_cdxml().is_err());
         }
@@ -587,12 +587,23 @@ fn check_caption_append(stored: &bondline_io::StoredDocument, source: &Document<
         return;
     };
     let size = page.size();
-    let position = Point2::new(size.width_pt() / 3.0, size.height_pt() / 2.0).unwrap();
+    let grid = |value: f64| (value * 65536.0).round() / 65536.0;
+    let position = Point2::new(grid(size.width_pt() / 3.0), grid(size.height_pt() / 2.0)).unwrap();
     let style = TextStyle::new("Roboto".into(), 12.0, 0, [0.0; 3]).unwrap();
     let run = TextRun::new("Phase β & q".into(), style).unwrap();
     let caption = StyledText::new(id, position, vec![run]).unwrap();
-    let candidate = stored.with_cdx_caption(page.id(), caption);
+    let candidate = stored.with_cdx_caption(page.id(), caption.clone());
     assert_eq!(stored.export_cdx().unwrap(), source.as_bytes());
+    if source.as_bytes()
+        == include_bytes!("../../crates/io/tests/fixtures/cdx-mixed-caption-edit/before.cdx")
+        || source.as_bytes()
+            == include_bytes!("../../crates/io/tests/fixtures/cdx-label-preview/boxed.cdx")
+    {
+        assert!(
+            candidate.is_ok(),
+            "the qualified chemical seed must accept a caption"
+        );
+    }
     let Ok(candidate) = candidate else {
         return;
     };
@@ -613,10 +624,72 @@ fn check_caption_append(stored: &bondline_io::StoredDocument, source: &Document<
     assert!(added > 0);
     assert_eq!(bytes[..boundary], source.as_bytes()[..boundary]);
     assert_eq!(bytes[boundary + added..], source.as_bytes()[boundary..]);
-    assert_eq!(Document::parse(bytes).unwrap().framing(), source.framing());
+    let written = Document::parse(bytes).unwrap();
+    assert_eq!(written.framing(), source.framing());
+    let (new_text, record) = written
+        .records()
+        .iter()
+        .enumerate()
+        .find(|(_, record)| record.range().start == boundary)
+        .unwrap();
+    let max_raw = source
+        .records()
+        .iter()
+        .filter_map(|record| match record.kind() {
+            RecordKind::ObjectStart { id, .. } => Some(*id),
+            _ => None,
+        })
+        .max()
+        .unwrap();
+    assert_eq!(record.parent(), Some(owner));
+    assert_eq!(
+        *record.kind(),
+        RecordKind::ObjectStart {
+            tag: 0x8006,
+            id: max_raw.checked_add(1).unwrap()
+        }
+    );
+    let chemical = !page.fragments().is_empty();
+    let mut highest = chemical.then_some(0i16);
+    let mut explicit = 0;
+    for field in source
+        .records()
+        .iter()
+        .filter(|r| matches!(r.kind(), RecordKind::Property { tag: 0x000a, .. }))
+    {
+        let parent = &source.records()[field.parent().unwrap()];
+        if parent.parent() == Some(owner)
+            && matches!(parent.kind(), RecordKind::ObjectStart { tag: 0x8006, .. })
+        {
+            let z = i16::from_le_bytes(source.payload(field).unwrap().try_into().unwrap());
+            highest = Some(highest.map_or(z, |h| h.max(z)));
+            explicit += 1;
+        }
+    }
+    if explicit < page.texts().len() {
+        highest = Some(highest.unwrap_or(0).max(0));
+    }
+    let expected_depth = highest.map_or(0, |z| z.checked_add(1).unwrap());
+    let depth = written
+        .records()
+        .iter()
+        .find(|r| {
+            r.parent() == Some(new_text)
+                && matches!(r.kind(), RecordKind::Property { tag: 0x000a, .. })
+        })
+        .unwrap();
+    assert_eq!(
+        written.payload(depth).unwrap(),
+        expected_depth.to_le_bytes()
+    );
+    let mut expected = stored.model().clone();
+    expected.append_texts(page.id(), vec![caption]).unwrap();
+    assert_eq!(candidate.model(), &expected);
     let reopened =
         bondline_io::StoredDocument::from_cdx(std::sync::Arc::from(bytes), PageSize::A4).unwrap();
-    assert!(reopened.has_cdx_caption_preview());
+    assert_eq!(reopened.has_cdx_caption_preview(), !chemical);
+    assert_eq!(reopened.has_cdx_mixed_preview(), chemical);
+    assert!(reopened.can_edit_cdx_caption_run());
     assert!(!reopened.is_fully_mapped());
     assert_eq!(reopened.model(), candidate.model());
     assert_eq!(reopened.model().pages()[0].texts().last().unwrap().id(), id);
@@ -630,7 +703,6 @@ fn check_mixed_preview(stored: &bondline_io::StoredDocument, source: &Document<'
     assert!(!stored.is_fully_mapped());
     assert!(!stored.has_cdx_caption_preview());
     assert!(!stored.has_cdx_atom_label_preview());
-    assert!(!stored.can_create_caption());
     assert!(stored.to_cdxml().is_err());
     assert_eq!(stored.export_cdx().unwrap(), source.as_bytes());
 
@@ -765,10 +837,12 @@ fn check_mixed_preview(stored: &bondline_io::StoredDocument, source: &Document<'
         assert_eq!(offset, text.text_bytes().len());
     }
     let caption = page.texts().first().unwrap();
-    assert!(matches!(
-        stored.with_cdx_caption(page.id(), caption.as_ref().clone()),
-        Err(bondline_io::DocumentError::UnsupportedCdxEdit)
-    ));
+    assert!(
+        stored
+            .with_cdx_caption(page.id(), caption.as_ref().clone())
+            .is_err()
+    );
+    check_caption_append(stored, source);
     check_caption_edit(stored, source, Some(front_owner));
     let unused = (1..=u32::try_from(live.len() + 1).unwrap())
         .find(|id| !live.contains(id))
@@ -810,6 +884,11 @@ fn check_mixed_preview(stored: &bondline_io::StoredDocument, source: &Document<'
     assert!(detached.source_info().unwrap().modified);
     assert!(!detached.has_cdx_mixed_preview());
     assert!(!detached.can_edit_cdx_caption_run());
+    assert!(!detached.can_create_caption());
+    assert!(matches!(
+        detached.with_cdx_caption(page.id(), caption.as_ref().clone()),
+        Err(bondline_io::DocumentError::UnsupportedCdxEdit)
+    ));
     assert!(matches!(
         detached.with_cdx_caption_run(page.id(), caption.id(), 0, "changed".into()),
         Err(bondline_io::DocumentError::UnsupportedCdxEdit)
@@ -1136,6 +1215,7 @@ fuzz_target!(|data: &[u8]| {
             assert!(has_labels);
             check_label_preview(&document, stored.model());
             check_label_edit(&stored, data);
+            check_caption_append(&stored, &document);
         }
         assert_eq!(stored.model().has_authored_atom_labels(), has_labels);
         assert!(

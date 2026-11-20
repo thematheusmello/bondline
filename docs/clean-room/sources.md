@@ -1,5 +1,10 @@
 # Clean-room source register
 
+The [chemical drawing caption creation contract](../research/cdx-chemical-caption-creation.md)
+uses the published Page children, binary object identity and signed ZOrder.
+Bondline appends above the existing chemical ink and preserves the enclosing
+fragment bytes and the positions and IDs of prior captions.
+
 The [mixed CDX caption run contract](../research/cdx-mixed-caption-edits.md)
 uses the published Text property, CDXString and container-scoped identity.
 Independent files retain two atom labels that share the target caption’s raw ID.

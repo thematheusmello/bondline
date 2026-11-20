@@ -5,6 +5,39 @@ libFuzzer 0.4.13 with AddressSanitizer on nightly-2026-04-01. The C++ libFuzzer 
 has NCSA terms in addition to its Rust wrapper's MIT/Apache terms; this is test tooling,
 not an expansion of the native runtime dependency allowlist.
 
+## Creating captions above chemical structures
+
+`cdx_parse` exercises the Page append on qualified pure and mixed sources.
+It checks the matched Page end, the new raw ID, signed depth, all original
+bytes, every fragment and the complete reopened model. The known boxed and
+mixed seeds must actually accept the edit. Detached models and duplicate
+live IDs must refuse. [Source contract](../docs/research/cdx-chemical-caption-creation.md).
+
+To rebuild the 142-input corpus, run the following from the workspace root
+with an empty destination. Naming inputs by digest keeps different source
+directories from overwriting each other's files.
+
+```sh
+corpus_dir=$(mktemp -d)
+python3 - "$corpus_dir" <<'PY'
+import hashlib
+from pathlib import Path
+import sys
+
+fixtures = Path("crates/io/tests/fixtures")
+groups = ("cdx-caption-create", "cdx-caption-edit", "cdx-caption-empty",
+          "cdx-caption/runs", "cdx-caption/ordered", "cdx-mixed-caption",
+          "cdx-mixed-caption-edit", "cdx-chemical-caption-create")
+sources = [path for group in groups for path in (fixtures / group).glob("*.cdx")]
+sources.extend(Path("crates/cdx/tests/fixtures/child-insertion").glob("*.cdx"))
+sources.append(fixtures / "cdx-label-preview/boxed.cdx")
+for path in sources:
+    content = path.read_bytes()
+    (Path(sys.argv[1]) / hashlib.sha256(content).hexdigest()).write_bytes(content)
+PY
+PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdx_parse "$corpus_dir" -- -runs=10000 -seed=60261120 -max_len=65536 -timeout=5 -rss_limit_mb=2048
+```
+
 ## Owned CDX Node labels
 
 `cdx_parse` compares every admitted child with its actual Node owner. It
