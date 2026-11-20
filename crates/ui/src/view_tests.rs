@@ -1431,15 +1431,16 @@ mod native_chair;
 #[path = "native_preferences_tests.rs"]
 mod native_preferences;
 
+fn painted(output: &egui::FullOutput, label: &str) -> bool {
+    output
+        .shapes
+        .iter()
+        .any(|s| matches!(&s.shape, egui::Shape::Text(t) if t.galley.text()==label))
+}
+
 #[test]
 fn analysis_window_menu_shows_current_formula_selected_atoms_and_empty_state() -> TestResult {
     let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
-    let painted = |output: &egui::FullOutput, label: &str| {
-        output
-            .shapes
-            .iter()
-            .any(|s| matches!(&s.shape, egui::Shape::Text(t) if t.galley.text()==label))
-    };
     f.choose("View")?;
     f.choose("Show Analysis Window")?;
     assert_eq!(f.state()?["analysis_window_open"], true);
@@ -1703,5 +1704,31 @@ fn elemental_table_copies_the_displayed_rows_without_changing_the_drawing() -> T
     let copied = f.frame(vec![Event::Copy]);
     assert_eq!(copied.platform_output.copied_text, table.galley.text());
     assert_eq!(f.state()?, before);
+    Ok(())
+}
+
+#[test]
+fn analysis_navigates_individual_sdf_molecules_and_resets_after_reopen() -> TestResult {
+    let mut f = Fixture::new(1160., 800., 1.)?;
+    let input = f.directory.path("分子-β.sdf");
+    let source = include_bytes!("../../io/tests/fixtures/sdf-preview/valence-absent-mixed.sdf");
+    std::fs::write(&input, source)?;
+    f.command("document.open_sdf", json!({"path":input}))?;
+    f.warm();
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    let first = f.warm();
+    assert!(painted(&first, "SDF record 1 of 2") && painted(&first, "C2H6O"));
+    assert!(painted(&first, "46.041865 Da"));
+    let before = f.state()?;
+    f.choose("Next molecule")?;
+    let second = f.warm();
+    assert!(painted(&second, "SDF record 2 of 2") && painted(&second, "CH5N"));
+    assert!(painted(&second, "31.042199 Da") && !painted(&second, "C2H6O"));
+    assert_eq!(f.state()?, before);
+    f.command("document.open_sdf", json!({"path":input}))?;
+    let reopened = f.warm();
+    assert!(painted(&reopened, "SDF record 1 of 2") && painted(&reopened, "C2H6O"));
+    assert_eq!(std::fs::read(&input)?, source);
     Ok(())
 }

@@ -815,6 +815,8 @@ Valence, aromaticity, stereo/CIP, checking, cleanup, formula/mass, analysis, rea
 curved arrows, brackets and chemically formatted captions. Compare against independently
 run RDKit, reference InChI and OPSIN; document conventions and tolerances before testing.
 
+The Analysis window can inspect the individual MOL blocks of an SDF with exact same-format Save/reopen. SDF-wide summaries and further chemistry coverage remain open. [Per-record verification](docs/verification-sdf-record-analysis.md).
+
 ## M4: publishing — planned
 
 SVG/PDF/PNG, physical-scale output, documented clipboard/Office workflows, atomic saving,

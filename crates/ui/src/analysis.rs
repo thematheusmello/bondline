@@ -7,29 +7,23 @@ use eframe::egui;
 #[derive(Default)]
 pub(super) struct AnalysisWindow {
     cached: Option<(CaptureStamp, u64, Result<AnalysisReport, String>)>,
+    record_number: u32,
 }
 
 impl AnalysisWindow {
     pub(super) fn show(&mut self, ctx: &egui::Context, engine: &mut Engine) {
         if !engine.analysis_window_open() {
             self.cached = None;
+            self.record_number = 1;
             return;
         }
-        let epoch = engine.selection().epoch;
-        if self.cached.as_ref().is_none_or(|(stamp, previous, _)| {
-            !engine.capture_stamp_matches(stamp) || *previous != epoch
-        }) {
-            let report = engine
-                .execute(Command::AnalysisProperties(
-                    engine.analysis_properties_request(true),
-                ))
-                .map_err(|error| error.to_string())
-                .and_then(|state| {
-                    state
-                        .analysis
-                        .ok_or_else(|| "The analysis result is unavailable.".into())
-                });
-            self.cached = Some((engine.capture_stamp(), epoch, report));
+        if self
+            .cached
+            .as_ref()
+            .is_some_and(|(stamp, _, _)| !engine.capture_stamp_matches(stamp))
+        {
+            self.record_number = 1;
+            self.cached = None;
         }
         let mut open = true;
         egui::Window::new("Analysis")
@@ -40,6 +34,35 @@ impl AnalysisWindow {
             ))
             .default_width(298.0)
             .show(ctx, |ui| {
+                let record_count = engine
+                    .content()
+                    .sdf()
+                    .ok()
+                    .and_then(|source| u32::try_from(source.records().len()).ok())
+                    .unwrap_or(0);
+                let mut request = engine.analysis_properties_request(true);
+                if record_count > 0 {
+                    if choose_record(ui, &mut self.record_number, record_count) {
+                        self.cached = None;
+                    }
+                    request.sdf_record_id = std::num::NonZeroU32::new(self.record_number);
+                }
+                let epoch = request.expected_selection_epoch;
+                if self
+                    .cached
+                    .as_ref()
+                    .is_none_or(|(_, previous, _)| *previous != epoch)
+                {
+                    let report = engine
+                        .execute(Command::AnalysisProperties(request))
+                        .map_err(|error| error.to_string())
+                        .and_then(|state| {
+                            state
+                                .analysis
+                                .ok_or_else(|| "The analysis result is unavailable.".into())
+                        });
+                    self.cached = Some((engine.capture_stamp(), epoch, report));
+                }
                 let Some((_, _, report)) = &self.cached else {
                     return;
                 };
@@ -47,9 +70,10 @@ impl AnalysisWindow {
                     Ok(report) => display(
                         ui,
                         report,
-                        engine
-                            .stored_document()
-                            .is_ok_and(|d| d.mol_version().is_some()),
+                        record_count > 0
+                            || engine
+                                .stored_document()
+                                .is_ok_and(|d| d.mol_version().is_some()),
                     ),
                     Err(message) => {
                         ui.label(message);
@@ -66,10 +90,43 @@ impl AnalysisWindow {
     }
 }
 
+fn choose_record(ui: &mut egui::Ui, number: &mut u32, count: u32) -> bool {
+    *number = (*number).clamp(1, count);
+    let previous = *number;
+    if count > 1 {
+        ui.horizontal(|ui| {
+            let label = ui.label("Record number");
+            ui.add(egui::DragValue::new(number).range(1..=count))
+                .labelled_by(label.id);
+        });
+        ui.horizontal(|ui| {
+            if ui
+                .add_enabled(*number > 1, egui::Button::new("Previous molecule"))
+                .clicked()
+            {
+                *number -= 1;
+            }
+            if ui
+                .add_enabled(*number < count, egui::Button::new("Next molecule"))
+                .clicked()
+            {
+                *number += 1;
+            }
+        });
+    }
+    ui.label(format!("SDF record {number} of {count}"));
+    *number != previous
+}
+
 fn display(ui: &mut egui::Ui, report: &AnalysisReport, mol: bool) {
     match report.scope {
-        AnalysisScope::Document => ui.weak("Entire drawing"),
-        AnalysisScope::Selection => ui.weak("Current selection"),
+        AnalysisScope::Document => {
+            ui.weak("Entire drawing");
+        }
+        AnalysisScope::Selection => {
+            ui.weak("Current selection");
+        }
+        AnalysisScope::SdfRecord => {}
     };
     match &report.outcome {
         AnalysisOutcome::Available {
@@ -142,6 +199,11 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport, mol: bool) {
             ui.label(
                 "Formula and masses unavailable. Complete chemical coverage is required for this source.",
             );
+        }
+        AnalysisOutcome::RecordByteLimit { limit } => {
+            ui.label(format!(
+                "This MOL block exceeds the {limit}-byte record analysis limit."
+            ));
         }
         AnalysisOutcome::LimitExceeded { limit } => {
             ui.label(format!("Formula and masses unavailable. The analysis limit is {limit} drawn atoms and {limit} fragments."));

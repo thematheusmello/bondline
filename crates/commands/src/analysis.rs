@@ -8,6 +8,8 @@ use serde::{Deserialize, Serialize};
 
 /// Bounded synchronous inspection while holding the session lock.
 pub const MAX_ANALYSIS_ITEMS: usize = 4096;
+/// Only the selected connection table is decoded while the session lock is held.
+const MAX_ANALYSIS_RECORD_BYTES: usize = 1024 * 1024;
 
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -23,6 +25,8 @@ pub struct AnalysisProperties {
     pub expected_selection_epoch: u64,
     #[serde(default)]
     pub include_elemental_analysis: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sdf_record_id: Option<std::num::NonZeroU32>,
 }
 
 pub(super) enum Fields {
@@ -50,11 +54,14 @@ pub struct UiAnalysis {
 pub enum AnalysisScope {
     Document,
     Selection,
+    SdfRecord,
 }
 
 #[derive(Clone, Debug, Serialize)]
 pub struct AnalysisReport {
     pub scope: AnalysisScope,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub record_id: Option<std::num::NonZeroU32>,
     #[serde(flatten)]
     pub outcome: AnalysisOutcome,
 }
@@ -112,6 +119,9 @@ pub enum AnalysisOutcome {
     UnresolvedHydrogens {
         atom_id: u32,
     },
+    RecordByteLimit {
+        limit: usize,
+    },
     LimitExceeded {
         limit: usize,
     },
@@ -133,6 +143,7 @@ impl Engine {
             expected_revision: self.revision,
             expected_selection_epoch: self.selection().epoch,
             include_elemental_analysis,
+            sdf_record_id: None,
         }
     }
 
@@ -145,9 +156,10 @@ impl Engine {
         revision: u64,
         epoch: u64,
         fields: Fields,
+        record_id: Option<std::num::NonZeroU32>,
     ) -> Result<Prepared, Error> {
         Ok(Prepared::immediate(CommandResult {
-            analysis: Some(self.analysis_report(revision, epoch, fields)?),
+            analysis: Some(self.analysis_report(revision, epoch, fields, record_id)?),
             ..self.state()
         }))
     }
@@ -157,6 +169,7 @@ impl Engine {
         revision: u64,
         epoch: u64,
         fields: Fields,
+        record_id: Option<std::num::NonZeroU32>,
     ) -> Result<AnalysisReport, Error> {
         if revision != self.revision {
             return Err(Error::StaleRevision);
@@ -167,13 +180,49 @@ impl Engine {
             return Err(Error::StaleSelection);
         }
         let selection = self.selection();
-        let scope = if selection.atom_ids.is_empty() {
+        let scope = if record_id.is_some() {
+            AnalysisScope::SdfRecord
+        } else if selection.atom_ids.is_empty() {
             AnalysisScope::Document
         } else {
             AnalysisScope::Selection
         };
-        let report = |outcome| AnalysisReport { scope, outcome };
-        let Ok(stored) = self.stored_document() else {
+        let report = |outcome| AnalysisReport {
+            scope,
+            record_id,
+            outcome,
+        };
+        let molecule;
+        let stored = if let Some(record_id) = record_id {
+            let sdf = self.content().sdf()?;
+            let id = bondline_io::sdf::RecordId::new(record_id.get())
+                .ok_or(bondline_io::sdf::SdfError::InvalidSpan)?;
+            let source = sdf
+                .record(id)
+                .ok_or(bondline_io::sdf::SdfError::MissingRecord {
+                    record_id: record_id.get(),
+                })?;
+            let bytes = sdf
+                .as_bytes()
+                .get(source.mol_range())
+                .ok_or(bondline_io::sdf::SdfError::InvalidSpan)?;
+            if bytes.len() > MAX_ANALYSIS_RECORD_BYTES {
+                return Ok(report(AnalysisOutcome::RecordByteLimit {
+                    limit: MAX_ANALYSIS_RECORD_BYTES,
+                }));
+            }
+            let Ok(record) = bondline_io::StoredDocument::from_mol(
+                bytes.into(),
+                bondline_model::PageSize::A4,
+                crate::files::native_mol_transform()?,
+            ) else {
+                return Ok(report(AnalysisOutcome::UnsupportedSource));
+            };
+            molecule = record;
+            &molecule
+        } else if let Ok(document) = self.stored_document() {
+            document
+        } else {
             return Ok(report(AnalysisOutcome::UnsupportedSource));
         };
         if !stored.has_analysis_coverage() {
@@ -289,7 +338,8 @@ mod tests {
             engine.analysis_report(
                 request.expected_revision,
                 request.expected_selection_epoch,
-                Fields::Formula
+                Fields::Formula,
+                None
             ),
             Err(Error::StaleSelection)
         ));
