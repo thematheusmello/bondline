@@ -640,7 +640,7 @@ Per-record SDF Analysis is integrated on `a26c1de`. Navigation, direct typed que
 ### Next executable work
 
 1. Integrate direct raw SMILES record analysis against the pinned isotope, multiple-ring and salt examples. Coordinate-free CDXML and individual SDF records have full local verification. [SMILES PR](https://github.com/thematheusmello/bondline/pull/40).
-2. Extend the CDX atom-label workflow to creating a printed heteroatom at a previously hidden carbon. Start with an independent expected file, resource selection, an exact scoped child ID, and the transition between the old and new complete-page representation. The current form edits existing labels. More general foreign files and mixed page styles are pending.
+2. Qualify source-backed label creation where the targeted carbon has explicit display flags or where the source has additional page objects. The guarded form already creates a printed heteroatom on an unflagged hidden carbon. Four independently generated files, three native macOS saves, the CLI, stdio MCP, browser codec and a 10,000-input sanitizer run cover this path. Windows and Linux native interaction remain open. [PR 39](https://github.com/thematheusmello/bondline/pull/39) · [Verification](docs/verification-cdx-skeletal-label-creation.md).
 3. Integrate the interactive WebAssembly host and verify offline recovery and simultaneous tabs. Windows and Linux still need native interaction evidence. Isotope distributions, general stereochemistry, live analysis captions, publishing, clipboard interoperability and the other M0–M5 work remain in the [roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/

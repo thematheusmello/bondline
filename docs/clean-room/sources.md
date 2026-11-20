@@ -2489,6 +2489,12 @@ byte budget with the chosen width. [CDX property framing](https://iupac.github.i
 
 A Fragment contains Nodes. A printed Node can carry both chemical fields and a child Text label. The binary point stores Y before X and the rectangle stores top, left, bottom and right as signed 16.16 coordinates. Bondline recomputes the selected label at the current atom position and checks the complete page before committing. Hidden carbon vertices retain their original Node and visibility records through editing and Save. [Node and its Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm), [explicit hydrogens](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm), [coordinate encoding](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm), [original witnesses](../../crates/io/tests/fixtures/cdx-skeletal-label-edit/SOURCES.md).
 
+### New child labels on skeletal CDX paper
+
+The Node object can carry both the element and attached-hydrogen fields and a direct Text child for its label. Bondline's test vectors use explicit run resources and justification, signed document coordinates and a newly allocated child ID. The retained input and an independent generator specify exactly which bytes change. [Published Node definition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) · [Published Text definition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm) · [Original witness provenance](../../crates/io/tests/fixtures/cdx-skeletal-label-creation/SOURCES.md).
+
+The independent binary also covers creating the first printed atom and replacing the last hidden one. It checks that existing Element and NumHydrogens payloads can be replaced while retaining their framing. [Fixtures, font and colour resource choices](../../crates/io/tests/fixtures/cdx-skeletal-label-creation/SOURCES.md).
+
 ### Darwin loopback listener lifetime, 2026-11-20
 
 The macOS 27.2 public SDK `sys/fcntl.h` and `fcntl(2)` manual define
@@ -2497,3 +2503,12 @@ the separate fork and exec stages. The experimental comparison uses the
 installed kernel and the real listener. The compatibility evidence identifies
 the older kernels and exact limits of the observed release guarantee.
 [Apple XNU fork and exec](https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_exec.c) · [Source decision and receiving evidence](../research/macos-listener-lifetime.md)
+
+### Accessible menu activation, 2026-11-20
+
+Apple's public AXPress action is the native entry point for pressing a control.
+egui 0.29.1 reports a click for an enabled button targeted by AccessKit
+Default. Its published nested menu originally opens on hover. Bondline uses
+the existing button activation for nested menus and grants the same current
+menu action at its event index when the window lacks keyboard focus.
+[Apple AXPress](https://developer.apple.com/documentation/applicationservices/kaxpressaction) · [egui button response](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/context.rs) · [egui submenu](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/menu.rs) · [Verification](../verification-accessible-menus.md)

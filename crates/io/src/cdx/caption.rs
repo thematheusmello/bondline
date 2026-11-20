@@ -200,16 +200,7 @@ pub(crate) fn append_caption(
     {
         return Err(unsupported("a rounded baseline inside the paper"));
     }
-    let raw_id = source
-        .records()
-        .iter()
-        .filter_map(|record| match *record.kind() {
-            RecordKind::ObjectStart { id, .. } => Some(id),
-            _ => None,
-        })
-        .max()
-        .and_then(|id| id.checked_add(1))
-        .ok_or(unsupported("an available raw object ID"))?;
+    let raw_id = super::next_object_id(source).ok_or(unsupported("an available raw object ID"))?;
     let depth = if layout.captions.is_empty() {
         // Chemical objects in the qualified profile use the published default depth zero.
         i16::from(profile == Preview::AtomLabels)
@@ -287,7 +278,10 @@ fn fixed(value: f64) -> Option<[u8; 4]> {
         .then_some((scaled as i32).to_le_bytes())
 }
 
-fn matched_end<'record>(source: &'record Document<'_>, owner: usize) -> Option<&'record Record> {
+pub(super) fn matched_end<'record>(
+    source: &'record Document<'_>,
+    owner: usize,
+) -> Option<&'record Record> {
     source
         .records()
         .iter()
@@ -300,7 +294,7 @@ fn paint_depth(source: &Document<'_>, fields: &Fields) -> Option<i16> {
     })
 }
 
-fn creation_font_id(resources: &Resources<'_, '_>) -> Option<u16> {
+pub(super) fn creation_font_id(resources: &Resources<'_, '_>) -> Option<u16> {
     if resources.font_platform() != Some(1) {
         return None;
     }

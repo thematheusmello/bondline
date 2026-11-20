@@ -14,12 +14,32 @@ use std::{
 mod atom_label;
 mod caption;
 pub(crate) mod label_edit;
+
 mod label_preview;
 mod mixed;
 use mixed::Scope;
 mod text;
 pub(crate) use caption::{append_caption, text_record as caption_text_record};
 pub(crate) use text::encode_caption_runs;
+
+pub(crate) fn has_label_creation_font(source: &Document<'_>) -> bool {
+    source
+        .resources()
+        .ok()
+        .is_some_and(|r| caption::creation_font_id(&r).is_some())
+}
+
+fn next_object_id(source: &Document<'_>) -> Option<u32> {
+    source
+        .records()
+        .iter()
+        .filter_map(|record| match *record.kind() {
+            RecordKind::ObjectStart { id, .. } => Some(id),
+            _ => None,
+        })
+        .max()?
+        .checked_add(1)
+}
 
 /// The two streams use Node opening indices, independent of property order and raw IDs.
 pub(crate) fn skeletal_positions<'a>(

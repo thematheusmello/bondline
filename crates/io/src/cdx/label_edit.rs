@@ -16,16 +16,7 @@ pub(crate) struct LabelFields<'record, 'input> {
 impl<'record, 'input> LabelFields<'record, 'input> {
     // The closed Page → Fragment → Node projection assigns AtomIds in this order.
     pub(crate) fn find(source: &'record Document<'input>, atom: AtomId) -> Option<Self> {
-        let ordinal = usize::try_from(atom.get()).ok()?.checked_sub(1)?;
-        let (node, _) = source
-            .records()
-            .iter()
-            .enumerate()
-            .filter(|(_, record)| {
-                matches!(record.kind(), RecordKind::ObjectStart { tag: NODE, .. })
-                    && matches!(object(source, record.parent()), Some((FRAGMENT, _)))
-            })
-            .nth(ordinal)?;
+        let node = node_index(source, atom)?;
         let mut labels = source.records().iter().enumerate().filter(|(_, record)| {
             record.parent() == Some(node)
                 && matches!(
@@ -113,6 +104,21 @@ impl<'record, 'input> LabelFields<'record, 'input> {
     }
 }
 
+// Atom IDs follow the source's Fragment/Node encounter order, including repeated raw IDs.
+fn node_index(source: &Document<'_>, atom: AtomId) -> Option<usize> {
+    let ordinal = usize::try_from(atom.get()).ok()?.checked_sub(1)?;
+    let (node, _) = source
+        .records()
+        .iter()
+        .enumerate()
+        .filter(|(_, record)| {
+            matches!(record.kind(), RecordKind::ObjectStart { tag: NODE, .. })
+                && matches!(object(source, record.parent()), Some((FRAGMENT, _)))
+        })
+        .nth(ordinal)?;
+    Some(node)
+}
+
 fn owned_property<'record>(
     source: &'record Document<'_>,
     parent: usize,
@@ -124,4 +130,94 @@ fn owned_property<'record>(
     });
     let record = records.next();
     records.next().is_none().then_some(record)
+}
+
+pub(crate) fn insert_label(
+    source: &Document<'_>,
+    atom: AtomId,
+    element: Element,
+    hydrogens: u16,
+    run: &bondline_model::TextRun,
+    bounds: &[u8],
+) -> Result<Vec<u8>, crate::DocumentError> {
+    use super::atom_label::{JUSTIFICATION, LABEL_JUSTIFICATION};
+    use crate::DocumentError::UnsupportedCdxLabel;
+    let site_error = || UnsupportedCdxLabel("an unlabelled carbon Node with an owned position");
+    let node = node_index(source, atom).ok_or_else(site_error)?;
+    let position = owned_property(source, node, super::POSITION)
+        .flatten()
+        .ok_or_else(site_error)?;
+    if source
+        .records()
+        .iter()
+        .any(|r| r.parent() == Some(node) && matches!(r.kind(), RecordKind::ObjectStart { .. }))
+    {
+        return Err(site_error());
+    }
+    let resources = source
+        .resources()
+        .map_err(|_| UnsupportedCdxLabel("declared CDX resources"))?;
+    let style = run.style();
+    let font = super::caption::creation_font_id(&resources)
+        .filter(|_| style.font_family() == "Roboto" && style.face() == 0)
+        .ok_or(UnsupportedCdxLabel("a declared UTF-8 Roboto Regular font"))?;
+    let size = style.size_pt() * 20.0;
+    if size.fract() != 0.0 || !(1.0..=f64::from(u16::MAX)).contains(&size) {
+        return Err(UnsupportedCdxLabel(
+            "an exact positive size in twentieths of a point",
+        ));
+    }
+    let ink = [0, 1]
+        .into_iter()
+        .chain(resources.colors().iter().map(|item| item.index()))
+        .find(|&i| {
+            resources
+                .color(i)
+                .is_ok_and(|rgb| rgb.map(|v| f64::from(v) / f64::from(u16::MAX)) == style.rgb())
+        })
+        .and_then(|i| u16::try_from(i).ok())
+        .ok_or(UnsupportedCdxLabel("an exact existing run colour"))?;
+    let words = [1, 0, font, 0, size as u16, ink].map(u16::to_le_bytes);
+    let mut text = words.as_flattened().to_vec();
+    text.extend_from_slice(run.text().as_bytes());
+
+    let id =
+        super::next_object_id(source).ok_or(UnsupportedCdxLabel("an available child object ID"))?;
+    let element = i16::from(element.get()).to_le_bytes();
+    let hydrogens = hydrogens.to_le_bytes();
+    let mut replacements = Vec::new();
+    let mut insertions = Vec::new();
+    for (tag, value) in [
+        (ELEMENT, element.as_slice()),
+        (HYDROGENS, hydrogens.as_slice()),
+    ] {
+        if let Some(property) = owned_property(source, node, tag).ok_or_else(site_error)? {
+            replacements.push((property, value));
+        } else {
+            insertions.push(PropertyInsertion {
+                before: position,
+                tag,
+                value,
+            });
+        }
+    }
+    let updated = source
+        .edit_properties_preserving_lengths(&replacements, &insertions)
+        .map_err(MappingError::from)?;
+    let updated = Document::parse(&updated).map_err(MappingError::from)?;
+    let updated_node = node_index(&updated, atom).ok_or_else(site_error)?;
+    let end = super::caption::matched_end(&updated, updated_node).ok_or_else(site_error)?;
+    Ok(updated
+        .append_child(
+            end,
+            TEXT_OBJECT,
+            id,
+            &[
+                (BOUNDING_BOX, bounds),
+                (TEXT, &text),
+                (JUSTIFICATION, &[0]),
+                (LABEL_JUSTIFICATION, &[0]),
+            ],
+        )
+        .map_err(MappingError::from)?)
 }

@@ -56,13 +56,13 @@ fn translate_field<const N: usize>(
 }
 
 impl StoredDocument {
-    fn cdx_movement_source(&self) -> Option<(&[u8], CdxPreview)> {
+    pub(super) fn cdx_skeletal_source(&self) -> Option<(&[u8], CdxPreview)> {
         self.cdx_source_for(|p| matches!(p, CdxPreview::Skeletal | CdxPreview::SkeletalLabels))
     }
 
     /// Source-preserving translation for qualified unlabelled and mixed skeletal pages.
     pub fn can_move_cdx_skeletal_atoms(&self) -> bool {
-        self.cdx_movement_source().is_some()
+        self.cdx_skeletal_source().is_some()
     }
 
     /// Move sorted, unique model atom IDs and re-import every resulting source byte.
@@ -73,7 +73,7 @@ impl StoredDocument {
         dx: f64,
         dy: f64,
     ) -> Result<Self, DocumentError> {
-        let (bytes, profile) = self.cdx_movement_source().ok_or_else(invalid_geometry)?;
+        let (bytes, profile) = self.cdx_skeletal_source().ok_or_else(invalid_geometry)?;
         let page = self
             .model
             .pages()

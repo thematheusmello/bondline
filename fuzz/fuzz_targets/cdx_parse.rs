@@ -1,5 +1,7 @@
 #![no_main]
 
+#[path = "cdx_parse/skeletal_creation.rs"]
+mod skeletal_creation;
 #[path = "cdx_parse/skeletal_move.rs"]
 mod skeletal_move;
 
@@ -1231,6 +1233,7 @@ fuzz_target!(|data: &[u8]| {
     }) {
         check_skeletal_preview(stored, &document);
         skeletal_move::check(stored, &document);
+        skeletal_creation::check(stored, &document);
         if stored.has_cdx_skeletal_label_preview() {
             assert!(stored.has_cdx_label_edit_profile());
             check_label_edit(stored, &document);

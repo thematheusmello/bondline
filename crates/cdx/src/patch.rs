@@ -43,7 +43,17 @@ impl Document<'_> {
         &self,
         values: &[(&Record, &[u8])],
     ) -> Result<Vec<u8>, Error> {
-        self.splice_properties(values, &[], true)
+        self.edit_properties_preserving_lengths(values, &[])
+    }
+
+    /// Insert absent properties and replace existing payloads while retaining
+    /// every existing length header width that can hold the replacement.
+    pub fn edit_properties_preserving_lengths(
+        &self,
+        values: &[(&Record, &[u8])],
+        insertions: &[PropertyInsertion<'_, '_>],
+    ) -> Result<Vec<u8>, Error> {
+        self.splice_properties(values, insertions, true)
     }
 
     /// Insert a property-only child immediately before an owned object's matched end.
@@ -212,6 +222,7 @@ impl Document<'_> {
                     .ok_or(Error::InvalidPropertyRange)?;
             }
             let encoding = if preserve_lengths
+                && matches!(edit.operation, Operation::Replace(_))
                 && matches!(
                     edit.record.kind(),
                     RecordKind::Property {

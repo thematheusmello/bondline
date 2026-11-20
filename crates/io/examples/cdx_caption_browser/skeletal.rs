@@ -119,5 +119,25 @@ pub(super) fn verify() -> Result {
     {
         return Err("editing a repeated Node ID lost its fragment, bytes or visible label".into());
     }
+    let before = include_bytes!("../../tests/fixtures/cdx-mixed-skeleton/literal_h.cdx");
+    let expected = include_bytes!("../../tests/fixtures/cdx-skeletal-label-creation/literal_h.cdx");
+    let source = StoredDocument::from_cdx(Arc::from(before.as_slice()), PageSize::A4)?;
+    let created = source.with_new_cdx_atom_label(
+        id,
+        FragmentId::new(1).ok_or("fragment 1")?,
+        AtomId::new(1).ok_or("atom 1")?,
+        Element::new(7).ok_or("nitrogen")?,
+        2,
+        bondline_model::TextStyle::new("Roboto".into(), 14.0, 0, [0.2, 0.4, 0.8])?,
+    )?;
+    let reference = StoredDocument::from_cdx(Arc::from(expected.as_slice()), PageSize::A4)?;
+    if source.export_cdx()? != before
+        || created.export_cdx()? != expected
+        || !created.has_cdx_atom_label_preview()
+        || created.model() != reference.model()
+        || cpu_scene(scene(&created)?.scene())? != cpu_scene(scene(&reference)?.scene())?
+    {
+        return Err("new blue chemical label differs from the independent binary drawing".into());
+    }
     Ok(())
 }

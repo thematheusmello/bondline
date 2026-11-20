@@ -48,6 +48,7 @@ and printed heteroatoms together. Four original mixed CDX drawings preserve
 source bytes on Save As and reopen. **Verified on macOS** for moving hidden and
 printed atoms together and preserving the dependent label boxes. App-frame drag
 and keyboard tests and three real command adapters pass. Alt-click also edits a printed heteroatom’s element and attached H count. Exact binary Save/reopen and the macOS form are covered. [Printed-label editing evidence](verification-cdx-skeletal-label-edits.md). [Mixed movement evidence](verification-cdx-mixed-skeletal-movement.md). [Mixed drawing evidence](verification-cdx-mixed-skeleton.md).
+The shared label form can create the first printed atom in qualified all-carbon CDX or replace the last hidden carbon in a mixed drawing. Original source flags still constrain which atoms accept a new label. Actual macOS form entry, history and three Unicode saves were checked. [Creation evidence](verification-cdx-skeletal-label-creation.md).
 [Movement evidence](verification-cdx-skeletal-movement.md). Windows and
 Linux native execution are unverified. [Acceptance](verification-cdx-skeletal.md).
 
