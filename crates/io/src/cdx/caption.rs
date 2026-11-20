@@ -168,7 +168,7 @@ pub(crate) fn append_caption(
     let scope = match profile {
         Preview::Caption => Scope::All,
         Preview::Mixed | Preview::AtomLabels => Scope::Captions,
-        Preview::Elemental => return Err(DocumentError::UnsupportedCdxEdit),
+        Preview::Elemental | Preview::Skeletal => return Err(DocumentError::UnsupportedCdxEdit),
     };
     let layout = layout(source, scope).ok_or(unsupported("a certified Page caption layout"))?;
     if layout.captions.contains_key(&caption.id()) {

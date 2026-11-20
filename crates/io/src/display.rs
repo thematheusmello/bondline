@@ -56,8 +56,8 @@ impl DisplayError {
 }
 
 /// Display the actual current Page and IDs from the complete drawing owner.
-/// Only original MOL backing selects the closed neutral display-H policy. All other
-/// drawings keep literal rendering; neither source bytes nor authored H is rewritten.
+/// Original MOL and certified hidden-carbon CDX use transient hydrogen counts.
+/// All other sources retain their existing literal drawing conventions.
 pub fn drawing_page_scene(
     width: u32,
     height: u32,
@@ -65,14 +65,9 @@ pub fn drawing_page_scene(
     page_id: PageId,
     cancel: &Cancellation,
 ) -> Result<GraphScene, DisplayError> {
-    let (page, counts) = display_facts(stored, page_id, cancel)?;
-    let view = bondline_render::PageView::fit(width, height, page.size())?
-        .with_drawing_style(stored.model().drawing_style())
-        .with_drawing_settings(stored.model().drawing_settings());
-    Ok(match counts {
-        None => view.graph_scene(page, cancel)?,
-        Some(counts) => view.graph_scene_with_display_hydrogens(page, &counts, cancel)?,
-    })
+    let page = display_page(stored, page_id, cancel)?;
+    let view = bondline_render::PageView::fit(width, height, page.size())?;
+    drawing_scene(&view, stored, page, cancel)
 }
 
 /// The same complete-source/chemical policy with a transient logical-unit camera.
@@ -82,15 +77,44 @@ pub fn drawing_page_scene_with_view(
     page_id: PageId,
     cancel: &Cancellation,
 ) -> Result<GraphScene, DisplayError> {
-    let (page, counts) = display_facts(stored, page_id, cancel)?;
+    let page = display_page(stored, page_id, cancel)?;
+    drawing_scene(view, stored, page, cancel)
+}
+
+fn drawing_scene(
+    view: &bondline_render::PageView,
+    stored: &StoredDocument,
+    page: &Page,
+    cancel: &Cancellation,
+) -> Result<GraphScene, DisplayError> {
     let view = view
         .clone()
         .with_drawing_style(stored.model().drawing_style())
         .with_drawing_settings(stored.model().drawing_settings());
-    Ok(match counts {
-        None => view.graph_scene(page, cancel)?,
-        Some(counts) => view.graph_scene_with_display_hydrogens(page, &counts, cancel)?,
-    })
+    if stored.has_cdx_skeletal_preview() {
+        skeletal_scene(&view, page, cancel)
+    } else if stored.mol_version().is_some() {
+        Ok(view.graph_scene_with_display_hydrogens(page, &display_counts(page, cancel)?, cancel)?)
+    } else {
+        Ok(view.graph_scene(page, cancel)?)
+    }
+}
+
+fn skeletal_scene(
+    view: &bondline_render::PageView,
+    page: &Page,
+    cancel: &Cancellation,
+) -> Result<GraphScene, DisplayError> {
+    Ok(view.graph_scene_with_hidden_carbons(page, &display_counts(page, cancel)?, cancel)?)
+}
+
+/// Admission uses the same hidden-carbon and H resolution as every later camera.
+pub(crate) fn certify_cdx_skeletal_page(model: &Document) -> bool {
+    let [page] = model.pages() else {
+        return false;
+    };
+    crate::cdx::preview_view(model)
+        .is_some_and(|view| skeletal_scene(&view, page, &Cancellation::default()).is_ok())
 }
 
 fn connected_geometry(page: &Page) -> bool {
@@ -191,28 +215,29 @@ pub(crate) fn connected_label_bonds(model: &Document, page: &Page) -> bool {
     has_bond && connected_geometry(page)
 }
 
-type DisplayFacts<'a> = (&'a bondline_model::Page, Option<BTreeMap<AtomId, u16>>);
-
-fn display_facts<'a>(
+fn display_page<'a>(
     stored: &'a StoredDocument,
     page_id: PageId,
     cancel: &Cancellation,
-) -> Result<DisplayFacts<'a>, DisplayError> {
+) -> Result<&'a Page, DisplayError> {
     if cancel.is_cancelled() {
         return Err(DisplayError::Cancelled);
     }
     if !stored.has_display_projection() {
         return Err(DisplayError::IncompleteSource);
     }
-    let page = stored
+    stored
         .model()
         .pages()
         .iter()
         .find(|page| page.id() == page_id)
-        .ok_or(DisplayError::MissingPage { page_id })?;
-    if stored.mol_version().is_none() {
-        return Ok((page, None));
-    }
+        .ok_or(DisplayError::MissingPage { page_id })
+}
+
+fn display_counts(
+    page: &Page,
+    cancel: &Cancellation,
+) -> Result<BTreeMap<AtomId, u16>, DisplayError> {
     // Keep the renderer's cheap hit bound ahead of allocating any derived topology.
     let mut hit_count = 0_usize;
     for fragment in page.fragments() {
@@ -245,7 +270,7 @@ fn display_facts<'a>(
             counts.insert(id, count);
         }
     }
-    Ok((page, Some(counts)))
+    Ok(counts)
 }
 
 pub(crate) enum HydrogenError {

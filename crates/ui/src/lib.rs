@@ -447,6 +447,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
     let cdx_atom_label_preview = engine
         .stored_document()
         .is_ok_and(|stored| stored.has_cdx_label_edit_profile());
+    let skeletal_preview = engine
+        .stored_document()
+        .is_ok_and(|stored| stored.has_cdx_skeletal_preview());
     let atom_label_preview = engine.effective_tool() != EffectiveTool::Selection
         && engine.stored_document().is_ok_and(|stored| {
             stored.has_boxed_atom_labels()
@@ -534,8 +537,14 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         }
         ui.add_space(8.0);
         ui.separator();
-        ui.weak("ACTIVE TOOL");
-        let tool = if engine.effective_tool() == EffectiveTool::Caption {
+        ui.weak(if skeletal_preview {
+            "VIEW"
+        } else {
+            "ACTIVE TOOL"
+        });
+        let tool = if skeletal_preview {
+            "Skeletal CDX preview".to_owned()
+        } else if engine.effective_tool() == EffectiveTool::Caption {
             "Text selected".to_owned()
         } else if caption_preview {
             "Caption preview".to_owned()
@@ -570,7 +579,8 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             }
         };
         ui.label(egui::RichText::new(tool).color(ACCENT).strong());
-        if !caption_preview
+        if !skeletal_preview
+            && !caption_preview
             && !cdx_atom_label_preview
             && !atom_label_preview
             && matches!(
@@ -589,7 +599,11 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         if caption_preview && cdx_atom_label_preview {
             ui.label("Alt-click an exposed atom label to edit its element and attached H count.");
         }
-        if engine.effective_tool() == EffectiveTool::Caption {
+        if skeletal_preview {
+            ui.label(
+                "Use the View controls to inspect the drawing. Save As preserves the original CDX.",
+            );
+        } else if engine.effective_tool() == EffectiveTool::Caption {
             ui.label(if engine.caption_creation_available() {
                 "Click blank paper to add a caption, or click a caption run to edit its text."
             } else if engine.caption_available() {
@@ -1880,7 +1894,8 @@ fn show_workspace_with_preview(
                     }
                     if engine.stored_document().is_ok_and(|stored|
                         stored.has_caption_projection() || stored.has_cdx_caption_preview()
-                        || stored.has_cdx_atom_label_preview() || stored.has_cdx_mixed_preview())
+                        || stored.has_cdx_atom_label_preview() || stored.has_cdx_mixed_preview()
+                        || stored.has_cdx_skeletal_preview())
                         && !matches!(event,egui::Event::MouseWheel {..})
                     {
                         drawing.gesture=None;

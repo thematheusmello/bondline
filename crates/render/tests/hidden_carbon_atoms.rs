@@ -251,3 +251,72 @@ fn authored_labels_take_priority_and_cancellation_covers_empty_and_legacy_fast_p
     }
     Ok(())
 }
+
+#[test]
+fn implied_carbon_flags_require_hidden_geometry_and_complete_c4_counts() -> TestResult {
+    use bondline_model::{Document, PageId, PageSize};
+    use bondline_render::PageView;
+    use std::collections::BTreeMap;
+    let cancel = Cancellation::default();
+    let size = PageSize::new(512.0, 512.0)?;
+    let page_id = PageId::new(1).ok_or("page")?;
+    let view = PageView::zoom(512, 512, size, 100.0, Point2::new(256.0, 256.0)?)?;
+    for (angle, active, inconsistent, qualifies) in [
+        (169.0_f64, false, false, true),
+        (170.0, false, false, false),
+        (171.0, false, false, false),
+        (180.0, false, false, false),
+        (106.0, true, false, false),
+        (106.0, false, true, false),
+    ] {
+        let theta = angle.to_radians();
+        let mut terminal = atom(1, 6, [96.0, 256.0], None)?;
+        terminal.show_non_terminal_carbon_labels = Some(true);
+        let mut center = atom(2, 6, [160.0, 256.0], None)?;
+        center.show_terminal_carbon_labels = Some(true);
+        if active {
+            center.show_non_terminal_carbon_labels = Some(true);
+        }
+        let end = atom(
+            3,
+            6,
+            [160.0 - 64.0 * theta.cos(), 256.0 + 64.0 * theta.sin()],
+            Some(3),
+        )?;
+        let graph = fragment(
+            vec![terminal, center, end],
+            &[(1, 1, 2, BondOrder::Single), (2, 2, 3, BondOrder::Single)],
+        )?;
+        let mut doc = Document::default();
+        doc.set_page_size(page_id, size)?;
+        doc.append_fragments(page_id, vec![graph])?;
+        let page = &doc.pages()[0];
+        let counts = [(1, 3), (2, if inconsistent { 1 } else { 2 }), (3, 3)]
+            .into_iter()
+            .map(|(i, h)| Ok((AtomId::new(i).ok_or("id")?, h)))
+            .collect::<TestResult<BTreeMap<_, _>>>()?;
+        let result = view.graph_scene_with_hidden_carbons(page, &counts, &cancel);
+        assert_eq!(
+            result.is_ok(),
+            qualifies,
+            "angle {angle} active {active} inconsistent {inconsistent}"
+        );
+        if let Ok(scene) = result {
+            assert!(scene.label_em_px().is_none());
+            // Generic resolved-H rendering still treats an absent active flag as unspecified.
+            assert!(
+                view.graph_scene_with_display_hydrogens(page, &counts, &cancel)?
+                    .label_em_px()
+                    .is_some()
+            );
+            let mut missing = counts.clone();
+            missing.remove(&AtomId::new(2).ok_or("middle")?);
+            assert!(
+                view.graph_scene_with_hidden_carbons(page, &missing, &cancel)
+                    .is_err()
+            );
+        }
+        assert_eq!(page.fragments()[0].atoms()[1].explicit_hydrogens, None);
+    }
+    Ok(())
+}

@@ -1,6 +1,7 @@
 use crate::hits::{AtomHit, BondHit, intersects_label, visible_polygon};
 #[cfg(test)]
 use crate::page_scene;
+use crate::skeletal::AtomDisplay;
 use crate::{
     Cancellation, Error, GraphScene, HitTarget, MAX_HIT_REGIONS, Primitive, Rectangle, Scene,
     Stroke,
@@ -286,7 +287,7 @@ pub fn graph_page_scene_with_cancel(
     page: &Page,
     cancel: &Cancellation,
 ) -> Result<GraphScene, Error> {
-    graph_scene(width, height, page, None, cancel)
+    graph_scene(width, height, page, AtomDisplay::Literal, cancel)
 }
 
 /// Display-only resolved counts: exact atom coverage, with authored values authoritative.
@@ -300,7 +301,7 @@ pub fn graph_page_scene_with_display_hydrogens(
     cancel: &Cancellation,
 ) -> Result<GraphScene, Error> {
     validate_display_hydrogens(page, counts, cancel)?;
-    graph_scene(width, height, page, Some(counts), cancel)
+    graph_scene(width, height, page, AtomDisplay::Resolved(counts), cancel)
 }
 
 pub(crate) fn validate_display_hydrogens(
@@ -337,23 +338,24 @@ fn graph_scene(
     width: u32,
     height: u32,
     page: &Page,
-    counts: Option<&BTreeMap<AtomId, u16>>,
+    display: AtomDisplay<'_>,
     cancel: &Cancellation,
 ) -> Result<GraphScene, Error> {
     cancel.check()?;
     let viewport = PageViewport::new(width, height, page.size())?;
-    graph_scene_in_viewport(width, height, page, counts, cancel, &viewport)
+    graph_scene_in_viewport(width, height, page, display, cancel, &viewport)
 }
 
 pub(crate) fn graph_scene_in_viewport(
     width: u32,
     height: u32,
     page: &Page,
-    counts: Option<&BTreeMap<AtomId, u16>>,
+    display: AtomDisplay<'_>,
     cancel: &Cancellation,
     viewport: &PageViewport,
 ) -> Result<GraphScene, Error> {
     cancel.check()?;
+    let counts = display.counts();
     let explicit_margin = viewport.style.margin_width_pt().is_some();
     let mut scene = crate::scene::page_scene_in_viewport(width, height, viewport);
     let mut hit_count = 0_usize;
@@ -532,7 +534,7 @@ pub(crate) fn graph_scene_in_viewport(
                     .extend(strokes.into_iter().map(Primitive::Stroke));
             }
         }
-        let carbon_labels = crate::skeletal::labels(fragment, counts, cancel)?;
+        let carbon_labels = crate::skeletal::labels(fragment, display, cancel)?;
         for atom in fragment.atoms() {
             cancel.check()?;
             let position = *positions
@@ -540,6 +542,11 @@ pub(crate) fn graph_scene_in_viewport(
                 .ok_or(Error::UnsupportedChemicalContent)?;
             let neighbours = neighbours.get(&atom.id).copied().unwrap_or_default();
             let carbon_label = carbon_labels.get(&atom.id);
+            if matches!(display, AtomDisplay::ImpliedHidden(_))
+                && !matches!(carbon_label, Some(crate::skeletal::CarbonLabel::Hidden))
+            {
+                return Err(Error::UnsupportedChemicalContent);
+            }
             let resolved_h =
                 if let Some(crate::skeletal::CarbonLabel::Visible(hydrogens)) = carbon_label {
                     Some(*hydrogens)

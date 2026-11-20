@@ -12,7 +12,7 @@ pub fn hidden_carbon_atoms(
     cancel: &Cancellation,
 ) -> Result<BTreeSet<AtomId>, Error> {
     cancel.check()?;
-    let labels = labels(fragment, None, cancel)?;
+    let labels = labels(fragment, AtomDisplay::Literal, cancel)?;
     let mut hidden = BTreeSet::new();
     for atom in fragment.atoms() {
         cancel.check()?;
@@ -25,6 +25,23 @@ pub fn hidden_carbon_atoms(
     Ok(hidden)
 }
 
+/// The source selects default carbon visibility separately from the supplied H counts.
+#[derive(Clone, Copy)]
+pub(crate) enum AtomDisplay<'a> {
+    Literal,
+    Resolved(&'a BTreeMap<AtomId, u16>),
+    ImpliedHidden(&'a BTreeMap<AtomId, u16>),
+}
+
+impl<'a> AtomDisplay<'a> {
+    pub(crate) fn counts(self) -> Option<&'a BTreeMap<AtomId, u16>> {
+        match self {
+            Self::Literal => None,
+            Self::Resolved(counts) | Self::ImpliedHidden(counts) => Some(counts),
+        }
+    }
+}
+
 pub(crate) enum CarbonLabel {
     Hidden,
     Visible(u16),
@@ -32,15 +49,18 @@ pub(crate) enum CarbonLabel {
 
 pub(crate) fn labels(
     fragment: &Fragment,
-    counts: Option<&BTreeMap<AtomId, u16>>,
+    display: AtomDisplay<'_>,
     cancel: &Cancellation,
 ) -> Result<BTreeMap<AtomId, CarbonLabel>, Error> {
     let mut labels = BTreeMap::new();
-    if !fragment.atoms().iter().any(|atom| {
-        atom.element.get() == 6
-            && (atom.show_terminal_carbon_labels.is_some()
-                || atom.show_non_terminal_carbon_labels.is_some())
-    }) {
+    let implied = matches!(display, AtomDisplay::ImpliedHidden(_));
+    if !implied
+        && !fragment.atoms().iter().any(|atom| {
+            atom.element.get() == 6
+                && (atom.show_terminal_carbon_labels.is_some()
+                    || atom.show_non_terminal_carbon_labels.is_some())
+        })
+    {
         return Ok(labels);
     }
     let mut atoms = BTreeMap::new();
@@ -71,12 +91,16 @@ pub(crate) fn labels(
         } else {
             atom.show_non_terminal_carbon_labels
         };
-        let Some(show) = flag else {
+        let Some(show) = flag.or(implied.then_some(false)) else {
             continue;
         };
         let hydrogens = atom
             .explicit_hydrogens
-            .or_else(|| counts.and_then(|counts| counts.get(&atom.id).copied()))
+            .or_else(|| {
+                display
+                    .counts()
+                    .and_then(|counts| counts.get(&atom.id).copied())
+            })
             .ok_or(Error::UnsupportedChemicalContent)?;
         let label = if show {
             CarbonLabel::Visible(hydrogens)

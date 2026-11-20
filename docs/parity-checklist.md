@@ -38,6 +38,13 @@ Tied depths, other mixed object edits, missing
 font resources, general typography and broader platforms remain open.
 [CDX creation](verification-cdx-caption-creation.md), [empty Poster verification](verification-cdx-empty-caption.md).
 
+**Verified on macOS** for source-qualified binary skeletal drawings. Open
+preserves the physical Poster dimensions. Save As and reopen preserve explicit
+and omitted hydrogen fields, the dormant node flag, and every source byte.
+CPU and Metal agree at 100% and 200%. **Missing** on this source profile are
+chemical editing and mixed hidden-carbon/printed-label depiction. Windows and
+Linux native execution are unverified. [Acceptance](verification-cdx-skeletal.md).
+
 The [Node child Text increment](verification-cdx-node-labels.md) verifies
 literal label and numeric atom data through read-only import and byte-exact
 native macOS Save/reopen. [Qualified label preview](verification-cdx-atom-label-preview.md)
