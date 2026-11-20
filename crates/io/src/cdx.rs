@@ -15,6 +15,8 @@ mod atom_label;
 mod caption;
 pub(crate) mod label_edit;
 mod label_preview;
+mod mixed;
+use mixed::Scope;
 mod text;
 pub(crate) use caption::{append_caption, text_record as caption_text_record};
 pub(crate) use text::encode_caption_runs;
@@ -59,6 +61,7 @@ pub(crate) enum Preview {
     Elemental,
     Caption,
     AtomLabels,
+    Mixed,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -156,7 +159,7 @@ impl<'input> ElementalGraph<'input> {
         source: &Document<'_>,
         allow_labels: bool,
     ) -> Result<Vec<Fragment>, MappingError> {
-        let layout = Layout::read(source, allow_labels)?;
+        let layout = Layout::read(source, allow_labels, Scope::All)?;
         let resources = layout
             .node_labels
             .first_key_value()
@@ -170,6 +173,15 @@ impl<'input> ElementalGraph<'input> {
             })
             .transpose()?;
         let mut remaining_runs = MAX_GRAPH_ITEMS;
+        Self::decode_fragments(source, &layout, resources.as_ref(), &mut remaining_runs)
+    }
+
+    fn decode_fragments(
+        source: &Document<'_>,
+        layout: &Layout,
+        resources: Option<&bondline_cdx::Resources<'_, '_>>,
+        remaining_runs: &mut usize,
+    ) -> Result<Vec<Fragment>, MappingError> {
         let (mut next_fragment, mut next_atom, mut next_bond) = (0, 0, 0);
         let mut fragments = Vec::new();
         for index in layout.fragments.iter().copied() {
@@ -186,9 +198,9 @@ impl<'input> ElementalGraph<'input> {
                 if let Some((NODE, source_id)) = object(source, Some(child)) {
                     let id = AtomId::new(allocate(&mut next_atom)?)
                         .ok_or(MappingError::IdentityLimit)?;
-                    let mut atom = read_atom(source, &layout, child, id)?;
+                    let mut atom = read_atom(source, layout, child, id)?;
                     if let (Some(resources), Some(&label)) =
-                        (&resources, layout.node_labels.get(&child))
+                        (resources, layout.node_labels.get(&child))
                     {
                         let children = layout
                             .children
@@ -199,7 +211,7 @@ impl<'input> ElementalGraph<'input> {
                             resources,
                             label,
                             children,
-                            &mut remaining_runs,
+                            remaining_runs,
                         )?));
                     }
                     atoms.push(atom);
@@ -280,25 +292,26 @@ impl<'input> ElementalGraph<'input> {
     pub fn to_bytes(&self) -> Vec<u8> {
         self.source.to_bytes()
     }
+}
 
-    pub(crate) fn preview_document(
-        &self,
-        size: bondline_model::PageSize,
-    ) -> Result<bondline_model::Document, MappingError> {
-        let mut model = bondline_model::Document::default();
-        model.set_drawing_settings(crate::drawing_settings::project(
-            root_scalar(&self.source, BOND_LENGTH),
-            root_scalar(&self.source, CHAIN_ANGLE),
-        )?);
-        let page = model
-            .pages()
-            .first()
-            .ok_or(MappingError::UnsupportedPageLayout { record: 0 })?
-            .id();
-        model.set_page_size(page, size)?;
-        model.append_fragments(page, self.fragments.clone())?;
-        Ok(model)
-    }
+fn project_fragments(
+    source: &Document<'_>,
+    fragments: &[Fragment],
+    size: bondline_model::PageSize,
+) -> Result<bondline_model::Document, MappingError> {
+    let mut model = bondline_model::Document::default();
+    model.set_drawing_settings(crate::drawing_settings::project(
+        root_scalar(source, BOND_LENGTH),
+        root_scalar(source, CHAIN_ANGLE),
+    )?);
+    let page = model
+        .pages()
+        .first()
+        .ok_or(MappingError::UnsupportedPageLayout { record: 0 })?
+        .id();
+    model.set_page_size(page, size)?;
+    model.append_fragments(page, fragments.to_vec())?;
+    Ok(model)
 }
 
 pub(crate) fn project_document(
@@ -309,11 +322,17 @@ pub(crate) fn project_document(
     if let Some(model) = caption::preview(&source) {
         return Ok((model, Preview::Caption));
     }
+    if let Some(model) = mixed::preview(&source) {
+        return Ok((model, Preview::Mixed));
+    }
     let graph = ElementalGraph::from_source(source)?;
     if let Some(model) = label_preview::preview(&graph) {
         return Ok((model, Preview::AtomLabels));
     }
-    Ok((graph.preview_document(preview_size)?, Preview::Elemental))
+    Ok((
+        project_fragments(graph.source(), graph.fragments(), preview_size)?,
+        Preview::Elemental,
+    ))
 }
 
 fn has_preview_header(source: &Document<'_>) -> bool {
@@ -371,13 +390,13 @@ struct Layout {
 }
 
 impl Layout {
-    fn read(source: &Document<'_>, allow_labels: bool) -> Result<Self, MappingError> {
+    fn read(source: &Document<'_>, allow_labels: bool, scope: Scope) -> Result<Self, MappingError> {
         let mut children = vec![Vec::new(); source.records().len()];
         let mut fragments = Vec::new();
         let mut node_labels = BTreeMap::new();
         let mut identities = BTreeSet::new();
         let mut page_seen = false;
-        for (index, record) in source.records().iter().enumerate() {
+        for (index, record) in scope.records(source) {
             if let RecordKind::Property { tag, .. } = record.kind() {
                 let owner = match *tag {
                     POSITION | NODE_TYPE | ELEMENT | ISOTOPE | CHARGE | RADICAL | HYDROGENS

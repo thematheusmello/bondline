@@ -25,7 +25,9 @@ the Text control and contextual `t` for visible existing runs, with exact
 CDX and CDXML Unicode Save/reopen. [Caption creation](verification-native-caption-creation.md)
 adds single-line captions to eligible native CDXML from a blank-paper click.
 The same macOS workflow appends to qualified caption-only CDX. Empty qualified
-Poster pages also accept their first caption. Tied depths, mixed pages, missing
+Poster pages also accept their first caption. Mixed pages display qualified
+chemical structures with frontmost captions and preserve unchanged CDX on Save.
+[Mixed-page evidence](verification-cdx-mixed-caption.md). Tied depths, mixed editing, missing
 font resources, general typography and broader platforms remain open.
 [CDX creation](verification-cdx-caption-creation.md), [empty Poster verification](verification-cdx-empty-caption.md).
 

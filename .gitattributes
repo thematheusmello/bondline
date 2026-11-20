@@ -33,6 +33,8 @@
 /crates/io/tests/fixtures/cdx-caption-create/*.cdx -text
 /crates/io/tests/fixtures/cdx-caption-empty/*.cdx -text
 /crates/io/tests/fixtures/cdx-caption-empty/*.json -text
+/crates/io/tests/fixtures/cdx-mixed-caption/*.cdx -text
+/crates/io/tests/fixtures/cdx-mixed-caption/*.json -text
 /crates/io/tests/fixtures/mol/*.mol -text
 /crates/io/tests/fixtures/v3000/*.mol -text
 /crates/io/tests/fixtures/sdf/*.sdf -text

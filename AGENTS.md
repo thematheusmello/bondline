@@ -1,5 +1,12 @@
 # Bondline agent instructions
 
+Mixed CDX viewing follows the [source contract](docs/research/cdx-mixed-caption.md) and
+[receiving evidence](docs/verification-cdx-mixed-caption.md). Preserve each original
+record index, exact owned subtree ends, same-container ID checks, one shared run
+budget and full-paper certification. Direct captions have distinct positive depth
+above the certified chemical drawing. Keep read-only native input, original bytes
+and existing pure-profile writers until each mixed operation is verified.
+
 An empty CDX Poster page follows the [empty-page contract](docs/research/cdx-empty-caption.md)
 and [verification](docs/verification-cdx-empty-caption.md). Require the closed Page, explicit
 physical size, white paper and an existing platform-1 UTF-8 Roboto entry with matching

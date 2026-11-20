@@ -184,6 +184,12 @@ closed layout and paper proof, with an explicit check for the writer's usable
 Roboto resource. Its first caption takes depth zero.
 [CDX contract](research/cdx-caption-creation.md), [empty page](research/cdx-empty-caption.md).
 
+Mixed CDX viewing uses one original record table. Each side validates its own
+Page children with shared resources and one text-run budget. Both views retain
+original record indices. Captions above the chemical ink must have distinct
+positive depths. Exact model equality controls display and unchanged CDX Save.
+[Mixed-page contract](research/cdx-mixed-caption.md).
+
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks
 cancellation/arithmetic and refuses unresolved H; bonds/geometry are not chemistry-inferred.

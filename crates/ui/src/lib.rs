@@ -534,6 +534,13 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         }
         ui.add_space(8.0);
         ui.separator();
+        if engine
+            .stored_document()
+            .is_ok_and(|stored| stored.has_cdx_mixed_preview())
+        {
+            ui.label("Read-only CDX preview");
+            return;
+        }
         ui.weak("ACTIVE TOOL");
         let tool = if engine.effective_tool() == EffectiveTool::Caption {
             "Text selected".to_owned()
@@ -1864,7 +1871,8 @@ fn show_workspace_with_preview(
                         drawing.navigation_position = (!text_focused).then_some(*pos);
                     }
                     if engine.stored_document().is_ok_and(|stored|
-                        stored.has_caption_projection() || stored.has_cdx_caption_preview() || stored.has_cdx_atom_label_preview())
+                        stored.has_caption_projection() || stored.has_cdx_caption_preview()
+                        || stored.has_cdx_atom_label_preview() || stored.has_cdx_mixed_preview())
                         && !matches!(event,egui::Event::MouseWheel {..})
                     {
                         drawing.gesture=None;
