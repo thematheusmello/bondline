@@ -1590,5 +1590,28 @@ fn analysis_window_refreshes_on_skeletal_cdx_open_and_suppresses_previous_formul
         assert_eq!(f.state()?, state);
         last = display;
     }
+    f.command(
+        "document.open_cdx",
+        json!({"path":sources.join("cdx-mixed-skeleton/ethanol.cdx")}),
+    )?;
+    let revision = f.state()?["revision"].clone();
+    for (ids, formula, count) in [(&[3][..], "HO", 0), (&[2, 3], "CH3O", 1)] {
+        f.command(
+            "ui.selection",
+            json!({"action":"set","expected_revision":revision,"page_id":1,"atom_ids":ids}),
+        )?;
+        let panel = f.warm();
+        let shows = |text: &str| {
+            panel.shapes.iter().any(
+                |shape| matches!(&shape.shape, egui::Shape::Text(t) if t.galley.text() == text),
+            )
+        };
+        assert!(shows("Selected-atom composition") && shows(formula));
+        assert_eq!(
+            shows("The CDX valence default supplies hydrogen counts for 1 atom."),
+            count == 1
+        );
+        assert!(!shows("C2H6O"));
+    }
     Ok(())
 }

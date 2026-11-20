@@ -15,7 +15,7 @@ fn fixture(name: &str) -> Result<Vec<u8>> {
 }
 
 #[test]
-fn hidden_vertices_and_printed_labels_share_a_read_only_binary_drawing() -> Result {
+fn hidden_vertices_and_printed_labels_share_a_source_certified_binary_drawing() -> Result {
     let cuts: std::collections::BTreeMap<String, Vec<[[f64; 2]; 2]>> =
         serde_json::from_slice(include_bytes!("fixtures/cdx-mixed-skeleton/clearance.json"))?;
     for (case, reference) in [
@@ -38,11 +38,7 @@ fn hidden_vertices_and_printed_labels_share_a_read_only_binary_drawing() -> Resu
         assert_eq!(page.size(), PageSize::new(512.0, 512.0)?);
         let fragment = &page.fragments()[0];
         assert_eq!(stored.export_cdx()?, bytes);
-        assert!(
-            stored
-                .with_cdx_skeletal_translation(page.id(), &[1], 1.0, 1.0)
-                .is_err()
-        );
+        assert!(stored.can_move_cdx_skeletal_atoms());
         let control = StoredDocument::from_cdxml(Arc::from(fixture(reference)?), PageSize::A4)?;
         let cf = &control.model().pages()[0].fragments()[0];
         assert_eq!(fragment.bonds(), cf.bonds());

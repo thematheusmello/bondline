@@ -1951,5 +1951,46 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
             false
         );
     }
+    let mut request_id = 14..;
+    let mut run = |name, args| -> Result<Value, Box<dyn std::error::Error>> {
+        let result = client.call(
+            request_id.next().ok_or("request ID")?,
+            "tools/call",
+            call(name, args),
+        )?;
+        Ok(result["result"]["structuredContent"].clone())
+    };
+    let source = fixtures.join("cdx-mixed-skeleton/ethanol.cdx");
+    let revision = run("document.open_cdx", json!({"path":source}))?["revision"].clone();
+    for (ids, expected) in [
+        (
+            &[3][..],
+            json!({"scope":"selection","status":"available","atom_count":1,"fragment_count":1,"partial_fragments":true,"formula":"HO"}),
+        ),
+        (
+            &[2, 3],
+            json!({"scope":"selection","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":true,"formula":"CH3O","defaulted_hydrogen_atoms":1}),
+        ),
+    ] {
+        let selected = run(
+            "ui.selection",
+            json!({"action":"set","expected_revision":revision,"page_id":1,"atom_ids":ids}),
+        )?;
+        let epoch = selected["ui_selection"]["epoch"]
+            .as_u64()
+            .ok_or("selection epoch")?;
+        let report = run(
+            "analysis.formula",
+            json!({"expected_revision":revision,"expected_selection_epoch":epoch}),
+        )?;
+        assert_eq!(report["analysis"], expected);
+        assert_eq!(report["undo_depth"], 0);
+        assert_eq!(report["file"]["dirty"], false);
+        let stale = run(
+            "analysis.formula",
+            json!({"expected_revision":revision,"expected_selection_epoch":epoch-1}),
+        )?;
+        assert_eq!(stale["error"]["code"], "stale_selection");
+    }
     client.finish()
 }

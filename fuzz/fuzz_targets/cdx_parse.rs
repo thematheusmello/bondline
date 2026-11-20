@@ -444,12 +444,7 @@ fn check_skeletal_preview(stored: &bondline_io::StoredDocument, source: &Documen
     }
     assert!(nodes.next().is_none() && children.is_empty());
     if printed {
-        assert!(!stored.has_cdx_skeletal_preview());
-        assert!(
-            stored
-                .with_cdx_skeletal_translation(page.id(), &[1], 1.0, 0.0)
-                .is_err()
-        );
+        assert!(!stored.has_cdx_skeletal_preview() && stored.can_move_cdx_skeletal_atoms());
     }
     let mut detached = stored.clone();
     let size = bondline_model::PageSize::new(page.size().width_pt() + 1.0, page.size().height_pt())
@@ -1217,9 +1212,7 @@ fuzz_target!(|data: &[u8]| {
         stored.has_cdx_skeletal_preview() || stored.has_cdx_skeletal_label_preview()
     }) {
         check_skeletal_preview(stored, &document);
-        if stored.has_cdx_skeletal_preview() {
-            skeletal_move::check(stored, &document);
-        }
+        skeletal_move::check(stored, &document);
     }
     if let Some(mut stored) = stored_page.filter(|stored| stored.has_cdx_caption_preview()) {
         assert_eq!(stored.export_cdx().unwrap(), data);
