@@ -49,3 +49,9 @@ The isolated macOS app also opened both ethanol MOL editions, selected their CHâ
 end, saved and reopened exact copies and displayed the whole and partial tables through
 its own accessibility tree. The integrated receipt SHA-256 is
 `85bf0521879d1674906a93e4fb5172c2667018a4d3a9ebfea6a6d1e14174ce73`.
+
+The App-frame test `elemental_table_copies_the_displayed_rows_without_changing_the_drawing`
+drags from the table heading to its last percentage, delivers a normal Copy event and
+checks that the outgoing clipboard text exactly equals the displayed table. The document,
+selection and history inspection before and after the gesture is identical. Native
+Accessibility establishes visibility separately from this clipboard-output test.

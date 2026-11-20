@@ -2493,3 +2493,17 @@ assets and corpus checks passed. Mixed CDX now also supplies a checked CH₃O
 selection with one defaulted carbon. Adjustable decimals, isotope distribution,
 elemental percentages, overrides and live captions remain open. Actions stays
 off and M0–M5 remains active.
+
+### Elemental analysis by weight
+
+[PR 33](https://github.com/thematheusmello/bondline/pull/33) adds an ordered,
+selectable elemental analysis table to the Analysis window and an opt-in result
+on `analysis.properties`. The original formula and mass requests retain exact
+wire results. Independent weight/isotope tests, all 118 possible rows, read-only
+command history, actual CLI/MCP and App-frame copy/selection passed. Native
+macOS CDX, V2000 and V3000 receiving runs verified whole-drawing and partial
+percentages, byte-exact Unicode Save/reopen and normal Close. Chemistry
+`8e68c16`, command `f494ea0`, panel `8022578` and combined MOL checks
+`d5a5eb2` are pushed. The full workspace integration gate, other platform
+visuals and the remaining Analysis workflows are pending. Actions stays off.
+[Source contract](docs/research/elemental-analysis.md) · [Checks and receipts](docs/verification-elemental-analysis.md).
