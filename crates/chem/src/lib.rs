@@ -13,6 +13,30 @@ pub use masses::{ElementWeight, MassUnavailable, MolecularMasses};
 
 use bondline_model::{Atom, AtomId, BondId, BondOrder, Fragment, GraphError, Radical};
 
+/// Attached H on one unbracketed, nonaromatic OpenSMILES organic-subset atom.
+/// The caller sums every actual incident bond order, including ring closures.
+pub fn opensmiles_implicit_hydrogens(
+    element: bondline_model::Element,
+    occupied: u16,
+) -> Option<u16> {
+    let normal: &[u16] = match element.get() {
+        5 => &[3],
+        6 => &[4],
+        7 | 15 => &[3, 5],
+        8 => &[2],
+        16 => &[2, 4, 6],
+        9 | 17 | 35 | 53 => &[1],
+        _ => return None,
+    };
+    // The specification assigns zero above the largest normal valence.
+    Some(
+        normal
+            .iter()
+            .find_map(|valence| valence.checked_sub(occupied))
+            .unwrap_or(0),
+    )
+}
+
 pub const MAX_AUTHORING_ATOMS: usize = 64;
 pub const MAX_AUTHORING_BONDS: usize = 128;
 const MAX_SEARCH_VISITS: usize = 100_000;
