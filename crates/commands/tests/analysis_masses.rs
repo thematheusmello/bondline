@@ -60,7 +60,15 @@ fn skeletal_source_scope_defaults_and_partial_contribution_use_one_composition()
     let all = properties(&mut e)?;
     assert_eq!(all["defaulted_hydrogen_atoms"], 2);
     check(&all, "C2H6O", 46.069, 46.04186481295)?;
-    // The mixed source is read-only. A qualified pure skeleton admits selection.
+    e.dispatch(
+        "ui.selection",
+        json!({"action":"set","expected_revision":0,"page_id":1,"atom_ids":[2,3]}),
+    )?;
+    let alcohol_end = properties(&mut e)?;
+    assert_eq!(alcohol_end["defaulted_hydrogen_atoms"], 1);
+    assert_eq!(alcohol_end["partial_fragments"], true);
+    check(&alcohol_end, "CH3O", 31.034, 31.01838971626)?;
+    // Pure skeletal pages use the same selection and source-aware hydrogen path.
     let bytes = include_bytes!("../../io/tests/fixtures/cdx-skeletal/all_h_missing.cdx");
     let stored =
         StoredDocument::from_cdx(Arc::from(bytes.as_slice()), bondline_model::PageSize::A4)?;

@@ -1907,7 +1907,7 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
         "stale_selection"
     );
     let properties = client.call(
-        20,
+        8,
         "tools/call",
         call(
             "analysis.properties",
@@ -1924,17 +1924,17 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
     let fixtures = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
     for (id, source, expected) in [
         (
-            8,
+            9,
             "cdx-skeletal/propane.cdx",
             json!({"scope":"document","status":"available","atom_count":3,"fragment_count":1,"partial_fragments":false,"formula":"C3H8"}),
         ),
         (
-            10,
+            11,
             "cdx-mixed-skeleton/literal_h.cdx",
             json!({"scope":"document","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":false,"formula":"CH4O"}),
         ),
         (
-            12,
+            13,
             "cdx-mixed-skeleton/amino_alcohol.cdx",
             json!({"scope":"document","status":"available","atom_count":5,"fragment_count":1,"partial_fragments":false,"formula":"C3H9NO","defaulted_hydrogen_atoms":3}),
         ),
@@ -1966,7 +1966,7 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
             false
         );
     }
-    let mut request_id = 14..;
+    let mut request_id = 15..;
     let mut run = |name, args| -> Result<Value, Box<dyn std::error::Error>> {
         let result = client.call(
             request_id.next().ok_or("request ID")?,
