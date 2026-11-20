@@ -25,9 +25,12 @@ The final unsigned executable SHA-256 was `d54a603e93b470b4fb7b5ad353a6f558042c7
 ```sh
 cargo test -p bondline-commands --test analysis_formula
 cargo test -p bondline-cli --test commands --test mcp analysis
+cargo test -p bondline-cli --test analysis_cdx
 cargo test -p bondline-mcp --lib analysis_visibility
 cargo test -p bondline-ui --lib analysis_
 cargo run -p bondline-cli -- run --cmd '{"command":"bond.create","params":{"page_id":1,"begin_x_pt":72,"begin_y_pt":72,"end_x_pt":120,"end_y_pt":72}}' --cmd '{"command":"analysis.formula","params":{"expected_revision":1,"expected_selection_epoch":0}}'
 ```
 
 The public source scope, missing fields and prospective CDX profiles are recorded in the [Analysis window contract](research/analysis-window.md).
+
+The standalone skeletal fixtures give propane with all three H counts declared, its central count omitted, or every count omitted. Before admission the new command test returned `unsupported_source` for complete propane. After admission the command and CLI return the declared formula or the corresponding missing atom. An unchanged native-source Save representation and a detached-model negative are checked in the engine.

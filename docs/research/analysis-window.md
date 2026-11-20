@@ -14,7 +14,7 @@ The formula query requires both the current document revision and selection epoc
 
 A source-free drawing supplies its entire atom model. Imported drawings must pass a closed source-profile check for the complete drawing. A detached CDX model, opaque extension, raw SDF or SMILES collection, and a drawing projected from selected SMILES records have no complete-source result. Formula analysis grants no file-export or authoring permissions. The bounded synchronous reader inspects at most 4,096 atoms and 4,096 fragments on the included pages. Larger inputs return an explicit limit result.
 
-On the integration branch, extend this allowlist only for complete certified CDX skeletal profiles. Use the independently generated propane source with all H counts written to check `C3H8`. The corresponding missing-H source must report the first unresolved atom. The renderer’s hidden-carbon inference does not supply chemistry data. Apply the same distinction before admitting a new mixed-heteroatom profile.
+Certified skeletal CDX pages disclose only the literal model counts. Propane with written H counts of 3, 2 and 3 yields `C3H8`. When the middle count is absent, whole-drawing analysis identifies atom 2. Selecting a resolved terminal carbon still yields `CH3` as a partial-fragment contribution. With all H omitted the first atom is unresolved. A detached source loses its analysis grant. [Skeletal CDX contract](cdx-skeletal.md).
 
 ## Remaining Analysis work
 

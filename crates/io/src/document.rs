@@ -362,6 +362,7 @@ impl StoredDocument {
                 self.has_cdx_caption_preview()
                     || self.has_cdx_atom_label_preview()
                     || self.has_cdx_mixed_preview()
+                    || self.has_cdx_skeletal_preview()
             }
             Some(OriginalSource::Cdxml { .. }) => {
                 self.is_fully_mapped()
