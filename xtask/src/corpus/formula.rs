@@ -1,6 +1,6 @@
 //! Compare the shared Analysis command with molecules read independently by RDKit.
 use super::{Fixture, Format};
-use bondline_commands::{AnalysisOutcome, Engine};
+use bondline_commands::{AnalysisOutcome, AnalysisScope, Command, Engine};
 use bondline_io::{StoredDocument, mol::MolTransform, sdf::SdfFile};
 use bondline_model::{PageSize, Point2};
 use serde::Deserialize;
@@ -173,6 +173,7 @@ impl Coverage {
                 return Err("SDF record count differs from RDKit mol-block scan".into());
             }
             let transform = MolTransform::new(24.0, Point2::new(0., 0.)?)?;
+            let mut isolated_blocks = Counts::default();
             for (index, (record, reference)) in source.records().iter().zip(&refs).enumerate() {
                 let drawing = StoredDocument::from_mol(
                     Arc::from(record.mol_bytes()),
@@ -180,10 +181,38 @@ impl Coverage {
                     transform,
                 )?;
                 let result = analysis(&mut Engine::from_document(drawing))?;
-                self.records.record(
-                    &format!("{name} isolated MOL block {}", index + 1),
+                let isolated = compare(result, reference)?;
+                let id = std::num::NonZeroU32::try_from(u32::try_from(index + 1)?)?;
+                let mut request = app.analysis_properties_request(false);
+                request.sdf_record_id = Some(id);
+                let report = app
+                    .execute(Command::AnalysisProperties(request))?
+                    .analysis
+                    .ok_or("missing open SDF record analysis")?;
+                if !matches!(report.scope, AnalysisScope::SdfRecord) || report.record_id != Some(id)
+                {
+                    return Err(
+                        format!("{name}: analysis returned a different record scope").into(),
+                    );
+                }
+                let direct = compare(report.outcome, reference)?;
+                if matches!(isolated, Comparison::Matched(_))
+                    && matches!(direct, Comparison::Unavailable(_))
+                {
+                    return Err(
+                        format!("{name}: record {id} was available only after extraction").into(),
+                    );
+                }
+                isolated_blocks.record(
+                    &format!("{name} isolated MOL block {id}"),
                     reference,
-                    compare(result, reference)?,
+                    isolated,
+                    output,
+                )?;
+                self.records.record(
+                    &format!("{name} open SDF record {id}"),
+                    reference,
+                    direct,
                     output,
                 )?;
             }

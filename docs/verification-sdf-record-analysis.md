@@ -6,6 +6,8 @@ The registry command `analysis.properties` accepts an optional positive `sdf_rec
 
 The independent test uses RDKit 2026.09.2 to read five molecules with both MOL editions from one SDfile. Bondline and RDKit agree on formula, average weight, exact mass and elemental percentages, including isotope-labelled methane and ammonium. A deliberately incorrect formula in a data field has no effect. All five Unicode Save As outputs match the original bytes and reproduce the same answer when reopened. A separate case checks a large valid connection table and its small neighbor. [Executable oracle](../xtask/oracles/sdf_record_analysis.py).
 
+The offline pinned corpus also opens the 690-byte SDF with ordered and duplicate fields. It checks that each query identifies the requested record and compares its formula and drawn atom count with RDKit. Both records yielded C₂H₆ with two drawn atoms. The separate extracted-block check still passes for each record. [Corpus evidence](corpus/README.md#molecular-formula-evidence).
+
 | Record in the original mixed fixture | Formula | Molecular weight | Exact mass (Da) |
 | --- | --- | ---: | ---: |
 | V3000 ethanol | C₂H₆O | 46.069 | 46.041865 |
