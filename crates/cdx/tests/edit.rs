@@ -131,3 +131,25 @@ fn retained_length_edits_keep_an_extended_header_even_when_the_new_text_is_short
     }
     Ok(())
 }
+
+#[test]
+fn inserted_scalar_and_replaced_extended_property_preserve_original_framing()
+-> Result<(), Box<dyn std::error::Error>> {
+    let document = Document::parse(UNKNOWN)?;
+    let record = document.records().get(2).ok_or("extended property")?;
+    let insertion = bondline_cdx::PropertyInsertion {
+        before: record,
+        tag: 0x0402,
+        value: &[7, 0],
+    };
+    let mut expected = UNKNOWN.get(..41).ok_or("property start")?.to_vec();
+    expected.extend_from_slice(&[2, 4, 2, 0, 7, 0]);
+    expected.extend_from_slice(UNKNOWN.get(41..43).ok_or("original tag")?);
+    expected.extend_from_slice(&[255, 255, 2, 0, 0, 0, 42, 19]);
+    expected.extend_from_slice(UNKNOWN.get(52..).ok_or("old suffix")?);
+    assert_eq!(
+        document.edit_properties_preserving_lengths(&[(record, &[42, 19])], &[insertion])?,
+        expected
+    );
+    Ok(())
+}
