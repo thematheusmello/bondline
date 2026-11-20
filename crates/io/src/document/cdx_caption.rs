@@ -5,15 +5,30 @@ use bondline_cdx::Document;
 use bondline_model::{PageId, StyledText, TextId};
 
 impl StoredDocument {
+    /// Whether the current CDX source and model qualify for the plain-caption writer.
+    /// The requested caption must still fit the paper, resources and available IDs.
+    pub fn can_create_cdx_caption(&self) -> bool {
+        self.cdx_caption_creation_source().is_some()
+    }
+
+    fn cdx_caption_creation_source(&self) -> Option<(&[u8], CdxPreview)> {
+        self.cdx_source_for(|profile| {
+            matches!(
+                profile,
+                CdxPreview::Caption | CdxPreview::Mixed | CdxPreview::AtomLabels
+            )
+        })
+    }
+
     /// Append a plain caption to a qualified CDX page and verify its saved identity.
     pub fn with_cdx_caption(
         &self,
         page_id: PageId,
         caption: StyledText,
     ) -> Result<Self, DocumentError> {
-        if !self.has_cdx_caption_preview() {
-            return Err(DocumentError::UnsupportedCdxEdit);
-        }
+        let (bytes, profile) = self
+            .cdx_caption_creation_source()
+            .ok_or(DocumentError::UnsupportedCdxEdit)?;
         let page = self
             .model
             .pages()
@@ -21,8 +36,8 @@ impl StoredDocument {
             .filter(|page| page.id() == page_id)
             .ok_or(bondline_model::Error::MissingPage(page_id.get()))
             .map_err(MappingError::from)?;
-        let source = Document::parse(self.export_cdx()?).map_err(MappingError::from)?;
-        let (output, caption) = append_caption(&source, caption)?;
+        let source = Document::parse(bytes).map_err(MappingError::from)?;
+        let (output, caption) = append_caption(&source, caption, profile)?;
         let mut expected = self.model.as_ref().clone();
         expected
             .append_texts(page_id, vec![caption])
@@ -31,6 +46,11 @@ impl StoredDocument {
             output,
             expected,
             page.size(),
+            if profile == CdxPreview::AtomLabels {
+                CdxPreview::Mixed
+            } else {
+                profile
+            },
             DocumentError::UnsupportedCdxCaption(
                 "complete caption agreement and paper fit after creation",
             ),
@@ -99,6 +119,7 @@ impl StoredDocument {
             output,
             expected,
             page.size(),
+            profile,
             DocumentError::UnsupportedCdxCaption(
                 "complete caption agreement and paper fit after the edit",
             ),

@@ -205,3 +205,103 @@ fn creation_refuses_raw_object_id_and_signed_depth_exhaustion_atomically() -> Re
     check_refusal(&source, "ZOrder exhaustion", plain_caption(4, X_PT, 300.0)?)?;
     Ok(())
 }
+
+fn expected_chemical_caption(source: &[u8], page_end: usize, depth: i16, id: u8) -> Vec<u8> {
+    // The independent child already encodes these coordinates, UTF-8 body, font and marker.
+    let mut child = FIRST[152..264].to_vec();
+    child[2..6].copy_from_slice(&903_u32.to_le_bytes()); // highest existing Fragment is 902
+    child[27..29].copy_from_slice(&depth.to_le_bytes());
+    assert_eq!(&child[105..108], b"1:2");
+    child[107] = b'0' + id;
+    [&source[..page_end], &child, &source[page_end..]].concat()
+}
+
+#[test]
+fn creation_above_chemical_ink_preserves_scoped_ids_and_all_original_records() -> Result {
+    let boxed = include_bytes!("fixtures/cdx-label-preview/boxed.cdx").as_slice();
+    let overlap = include_bytes!("fixtures/cdx-mixed-caption/overlap_before.cdx").as_slice();
+    for (original, end, depth, id) in [(boxed, 316, 1_i16, 1_u8), (overlap, 364, 8, 2)] {
+        let source = read(original)?;
+        let page = page_id()?;
+        let mut expected_model = source.model().clone();
+        let caption = plain_caption(u32::from(id), X_PT, Y_PT)?;
+        expected_model.append_texts(page, vec![caption.clone()])?;
+        let created = source.with_cdx_caption(page, caption)?;
+
+        let expected = expected_chemical_caption(original, end, depth, id);
+        assert_eq!(created.export_cdx()?, expected);
+        assert_eq!(created.model(), &expected_model);
+        assert!(created.has_cdx_mixed_preview() && created.can_edit_cdx_caption_run());
+        assert!(!created.has_cdx_atom_label_preview() && !created.is_fully_mapped());
+        assert_eq!(read(&expected)?.model(), &expected_model);
+        assert_eq!(
+            created.source_info().ok_or("source")?.byte_length,
+            original.len()
+        );
+        // A transitioned history entry owns the mixed proof for subsequent edits.
+        let edited =
+            created.with_cdx_caption_run(page, text_id(u32::from(id))?, 0, "Note".into())?;
+        assert!(edited.has_cdx_mixed_preview());
+        assert_eq!(read(edited.export_cdx()?)?.model(), edited.model());
+        assert_eq!(created.export_cdx()?, expected);
+        assert_eq!(source.export_cdx()?, original);
+        assert_eq!(source.has_cdx_atom_label_preview(), id == 1);
+    }
+    Ok(())
+}
+
+#[test]
+fn first_caption_preserves_a_prior_owned_atom_label_edit_and_its_original_source() -> Result {
+    use bondline_model::{AtomId, Element, FragmentId};
+    let raw = include_bytes!("fixtures/cdx-label-preview/boxed_reordered.cdx");
+    let labelled = include_bytes!("fixtures/cdx-label-edit/boxed_nh2_to_oh.cdx");
+    let original = read(raw)?;
+    let page = page_id()?;
+    let atom = AtomId::new(1).ok_or("atom")?;
+    let edited = original.with_cdx_atom_label(
+        page,
+        FragmentId::new(1).ok_or("fragment")?,
+        atom,
+        Element::new(8).ok_or("oxygen")?,
+        1,
+    )?;
+    assert_eq!(edited.export_cdx()?, labelled);
+    let with_text = edited.with_cdx_caption(page, plain_caption(1, X_PT, Y_PT)?)?;
+    assert_eq!(
+        with_text.export_cdx()?,
+        expected_chemical_caption(labelled, 277, 1, 1)
+    );
+    assert!(with_text.has_cdx_mixed_preview());
+    assert!(!with_text.can_edit_cdx_atom_label(atom));
+    assert!(edited.can_edit_cdx_atom_label(atom));
+    assert_eq!(
+        with_text.source_info().ok_or("provenance")?.byte_length,
+        raw.len()
+    );
+    assert_eq!(edited.export_cdx()?, labelled);
+    assert_eq!(original.export_cdx()?, raw);
+    Ok(())
+}
+
+#[test]
+fn mixed_creation_refuses_raw_id_and_front_depth_exhaustion_without_modifying_the_source() -> Result
+{
+    let max_object = include_bytes!("fixtures/cdx-mixed-caption/boxed_before.cdx").as_slice();
+    let mut max_depth = include_bytes!("fixtures/cdx-mixed-caption/overlap_before.cdx").to_vec();
+    assert_eq!(&max_depth[155..157], &7_i16.to_le_bytes());
+    max_depth[155..157].copy_from_slice(&i16::MAX.to_le_bytes());
+    for (raw, reason) in [
+        (max_object, "an available raw object ID"),
+        (max_depth.as_slice(), "an available caption depth"),
+    ] {
+        let source = read(raw)?;
+        assert!(source.has_cdx_mixed_preview());
+        let result = source.with_cdx_caption(page_id()?, plain_caption(2, X_PT, Y_PT)?);
+        assert!(
+            matches!(result, Err(DocumentError::UnsupportedCdxCaption(message)) if message == reason)
+        );
+        assert_eq!(source.export_cdx()?, raw);
+        assert!(!source.source_info().ok_or("source")?.modified);
+    }
+    Ok(())
+}
