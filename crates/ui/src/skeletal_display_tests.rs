@@ -757,6 +757,11 @@ fn mixed_skeletal_binary_moves_printed_ink_without_enabling_other_authors() -> T
         f.frame(vec![Event::PointerMoved(start), super::button(start, true)]);
         f.frame(vec![Event::PointerMoved(end), super::button(end, false)]);
         click_alt(&mut f, paper)?;
+        if paper == [205., 144.] {
+            wait(&mut f, |f, _| value(f, "Element").is_ok())?;
+            assert_eq!(value(&f, "Element")?, "O");
+            close_form(&mut f, "Cancel")?;
+        }
     }
     assert_eq!(f.state()?, opened);
     assert!(f.app.error.is_none(), "{:?}", f.app.error);
@@ -824,5 +829,17 @@ fn mixed_skeletal_binary_moves_printed_ink_without_enabling_other_authors() -> T
     assert_eq!(fs::read(&path)?, raw);
     f.command("document.open_cdx", json!({"path":saved}))?;
     assert_eq!(f.state()?["document"], moved);
+    f.command("ui.view", json!({"action":"actual"}))?;
+    click_alt(&mut f, [202.875, 147.25])?;
+    wait(&mut f, |f, _| value(f, "Element").is_ok())?;
+    set(&mut f, "Element", "N")?;
+    set(&mut f, "Attached hydrogens", "2")?;
+    close_form(&mut f, "Apply")?;
+    let amine = include_bytes!("../../io/tests/fixtures/cdx-skeletal-label-edit/printed.cdx");
+    assert_eq!(bytes(&f)?, amine);
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(bytes(&f)?, expected);
+    shortcut(&mut f, Key::Z, true);
+    assert_eq!(bytes(&f)?, amine);
     Ok(())
 }

@@ -1,6 +1,6 @@
 //! Edit properties and append children without rebuilding the original record tree.
 use crate::{
-    Document, Error, MAX_DEPTH, MAX_INPUT_BYTES, MAX_RECORDS, Record, RecordKind,
+    Document, Error, LengthEncoding, MAX_DEPTH, MAX_INPUT_BYTES, MAX_RECORDS, Record, RecordKind,
     write::EncodedLength,
 };
 
@@ -36,6 +36,14 @@ impl Document<'_> {
     /// while changed values use the standard short or extended length encoding.
     pub fn replace_properties(&self, values: &[(&Record, &[u8])]) -> Result<Vec<u8>, Error> {
         self.edit_properties(values, &[])
+    }
+
+    /// Replace payloads while retaining each existing length header's width whenever it fits.
+    pub fn replace_properties_preserving_lengths(
+        &self,
+        values: &[(&Record, &[u8])],
+    ) -> Result<Vec<u8>, Error> {
+        self.splice_properties(values, &[], true)
     }
 
     /// Insert a property-only child immediately before an owned object's matched end.
@@ -135,6 +143,15 @@ impl Document<'_> {
         values: &[(&Record, &[u8])],
         insertions: &[PropertyInsertion<'_, '_>],
     ) -> Result<Vec<u8>, Error> {
+        self.splice_properties(values, insertions, false)
+    }
+
+    fn splice_properties(
+        &self,
+        values: &[(&Record, &[u8])],
+        insertions: &[PropertyInsertion<'_, '_>],
+        preserve_lengths: bool,
+    ) -> Result<Vec<u8>, Error> {
         let edit_count = values
             .len()
             .checked_add(insertions.len())
@@ -194,7 +211,20 @@ impl Document<'_> {
                     .checked_add(old_width)
                     .ok_or(Error::InvalidPropertyRange)?;
             }
-            let encoding = EncodedLength::new(edit.value.len())?;
+            let encoding = if preserve_lengths
+                && matches!(
+                    edit.record.kind(),
+                    RecordKind::Property {
+                        length: LengthEncoding::Extended,
+                        ..
+                    }
+                ) {
+                EncodedLength::Extended(
+                    u32::try_from(edit.value.len()).map_err(|_| Error::InputTooLarge)?,
+                )
+            } else {
+                EncodedLength::new(edit.value.len())?
+            };
             edit.encoding = Some(encoding);
             added = added
                 .checked_add(encoding.property_prefix_len())

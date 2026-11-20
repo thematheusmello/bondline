@@ -40,7 +40,11 @@ terminal attachment, contextual9/0 fusion, history and editable Save/reopen chec
 Their perspective depictions leave stereochemistry unspecified.
 Atom-targeted Alt-sprout and a session Preferences checkbox now share the same guarded
 ring engine, with bounded macOS drawing, history and editable Save/reopen checks.
+In supported skeletal CDX drawings, Alt-click a printed atom label to change its element and attached hydrogen count. The edit follows the atom after a move and survives Undo, Redo, Save As and reopen. [Supported drawings and verification](docs/verification-cdx-skeletal-label-edits.md).
+
 Use **View → Show Analysis Window** to read the formula, molecular weight, monoisotopic exact mass and elemental percentages by weight of a supported drawing or its selected atoms. The panel identifies missing atomic data and valence-based hydrogen counts in skeletal CDX and elemental V2000/V3000 MOL. Selecting ethanol’s oxygen gives `HO`. Including its adjacent carbon gives `CH3O`. [Analysis](docs/research/analysis-window.md) · [Mass conventions](docs/research/molecular-masses.md) · [MOL examples and limits](docs/verification-mol-analysis.md) · [Elemental analysis](docs/verification-elemental-analysis.md). In a multi-record SDF, choose a molecule by record number to inspect it separately. [SDF record analysis](docs/verification-sdf-record-analysis.md).
+
+A coordinate-free CDXML carbon chain can also be analyzed. The pinned butane file opens with molecular formula C4H10, molecular weight 58.124 and exact mass 58.078250 Da. Same-format Save retains its original XML. [CDXML support and limits](docs/verification-cdxml-carbon-analysis.md).
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 

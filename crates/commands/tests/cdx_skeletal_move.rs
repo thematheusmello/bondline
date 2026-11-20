@@ -161,3 +161,41 @@ fn mixed_move_certifies_the_preview_then_commits_one_history_entry() -> Result {
     assert_eq!(e.stored_document()?.export_cdx()?, end);
     Ok(())
 }
+
+#[test]
+fn editing_a_printed_atom_preserves_hidden_neighbors_and_rejected_edits_preserve_redo() -> Result {
+    let input = include_bytes!("../../io/tests/fixtures/cdx-mixed-skeletal-move/twins.cdx");
+    let expected = include_bytes!("../../io/tests/fixtures/cdx-skeletal-label-edit/twins.cdx");
+    let mut engine = engine(input)?;
+    let change = |revision, fragment, atom, element, h| {
+        json!({
+            "expected_revision":revision,"page_id":1,"fragment_id":fragment,"atom_id":atom,
+            "element":element,"explicit_hydrogens":h
+        })
+    };
+    let start = engine.state().revision;
+    engine.dispatch("atom.set_authored_label", change(start, 2, 4, 7, 2))?;
+    assert_eq!(engine.stored_document()?.export_cdx()?, expected);
+    engine.dispatch("history.undo", json!({}))?;
+    let revision = engine.state().revision;
+    let stamp = engine.capture_stamp();
+    for invalid in [
+        change(start, 2, 4, 7, 2),    // stale edit
+        change(revision, 1, 4, 7, 2), // other fragment
+        change(revision, 2, 3, 7, 2), // hidden carbon has no owned Text
+        change(revision, 2, 4, 6, 3), // printed carbon would invalidate the drawing profile
+    ] {
+        assert!(engine.dispatch("atom.set_authored_label", invalid).is_err());
+    }
+    assert!(
+        !engine
+            .dispatch("atom.set_authored_label", change(revision, 2, 4, 8, 1))?
+            .changed
+    );
+    assert!(engine.capture_stamp_matches(&stamp));
+    assert_eq!(engine.state().redo_depth, 1);
+    assert_eq!(engine.stored_document()?.export_cdx()?, input);
+    engine.dispatch("history.redo", json!({}))?;
+    assert_eq!(engine.stored_document()?.export_cdx()?, expected);
+    Ok(())
+}

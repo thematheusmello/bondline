@@ -1819,3 +1819,32 @@ fn analysis_keeps_the_selected_molecule_through_field_edits_and_history() -> Tes
     assert_eq!(std::fs::read(&input)?, source);
     Ok(())
 }
+
+#[test]
+fn analysis_shows_cdxml_values_without_an_atom_canvas() -> TestResult {
+    let mut f = Fixture::new(1160., 800., 1.)?;
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../io/tests/fixtures/cdxml-carbon-analysis/butane.cdxml");
+    f.command("document.open_cdxml", json!({"path":path}))?;
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    let before = f.state()?;
+    let frame = f.warm();
+    for value in [
+        "C4H10",
+        "58.124",
+        "58.078250 Da",
+        "Element        Weight   Percent\nH              10.080    17.34%\nC              48.044    82.66%",
+        "The CDXML valence default supplies hydrogen counts for 3 atoms.",
+    ] {
+        assert!(
+            frame
+                .shapes
+                .iter()
+                .any(|shape| matches!(&shape.shape,egui::Shape::Text(t) if t.galley.text()==value)),
+            "{value}"
+        );
+    }
+    assert_eq!(f.state()?, before);
+    Ok(())
+}

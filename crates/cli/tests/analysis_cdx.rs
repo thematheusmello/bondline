@@ -173,3 +173,40 @@ fn elemental_analysis_of_imported_ethanol_and_an_uncapped_selection_agrees_with_
     }
     Ok(())
 }
+
+#[test]
+fn printed_skeletal_label_edits_reopen_with_the_exact_source_and_independent_formula() -> Test {
+    let oracle =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../xtask/oracles/cdx_skeletal_label.py");
+    let out = Command::new(std::env::var_os("BONDLINE_PYTHON").ok_or("pinned RDKit Python")?)
+        .arg("-B")
+        .arg(oracle)
+        .arg(env!("CARGO_BIN_EXE_bondline-cli"))
+        .output()?;
+    assert!(
+        out.status.success(),
+        "{}",
+        String::from_utf8_lossy(&out.stderr)
+    );
+    Ok(())
+}
+
+#[test]
+fn unpositioned_cdxml_carbon_properties_and_saved_bytes_match_the_independent_reader() -> Test {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let python = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
+        root.join(".cache/oracles/format-python/bin/python")
+            .into_os_string()
+    });
+    let out = Command::new(python)
+        .arg("-B")
+        .arg(root.join("xtask/oracles/cdxml_carbon.py"))
+        .arg(env!("CARGO_BIN_EXE_bondline-cli"))
+        .output()?;
+    assert!(
+        out.status.success(),
+        "{}",
+        String::from_utf8_lossy(&out.stderr)
+    );
+    Ok(())
+}
