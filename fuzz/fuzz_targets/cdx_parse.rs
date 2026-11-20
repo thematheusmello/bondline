@@ -555,6 +555,188 @@ fn check_caption_append(stored: &bondline_io::StoredDocument, source: &Document<
     assert_eq!(reopened.model().pages()[0].texts().last().unwrap().id(), id);
 }
 
+fn check_mixed_preview(stored: &bondline_io::StoredDocument, source: &Document<'_>) {
+    use bondline_model::PageSize;
+    use std::collections::BTreeSet;
+
+    assert!(stored.has_display_projection());
+    assert!(!stored.is_fully_mapped());
+    assert!(!stored.has_cdx_caption_preview());
+    assert!(!stored.has_cdx_atom_label_preview());
+    assert!(!stored.can_create_caption());
+    assert!(stored.to_cdxml().is_err());
+    assert_eq!(stored.export_cdx().unwrap(), source.as_bytes());
+
+    let records = source.records();
+    let page_index = records
+        .iter()
+        .position(|r| matches!(r.kind(), RecordKind::ObjectStart { tag: 0x8001, .. }))
+        .unwrap();
+    let [page] = stored.model().pages() else {
+        panic!("mixed page count")
+    };
+    let mut children = vec![Vec::new(); records.len()];
+    let mut named = BTreeSet::new();
+    let mut captions = Vec::new();
+    let mut fragment_count = 0;
+    for (index, record) in records.iter().enumerate() {
+        if let Some(parent) = record.parent() {
+            children[parent].push(index);
+        }
+        if record.parent() == Some(page_index)
+            && let RecordKind::ObjectStart { tag, id } = *record.kind()
+        {
+            assert!(id == 0 || named.insert(id), "duplicate Page child ID");
+            match tag {
+                0x8003 => fragment_count += 1,
+                0x8006 => captions.push((id, index)),
+                _ => panic!("unmapped Page child"),
+            }
+        }
+    }
+    assert!(fragment_count > 0 && !captions.is_empty());
+    assert_eq!(page.fragments().len(), fragment_count);
+    assert_eq!(page.texts().len(), captions.len());
+    let property = |owner: usize, tag: u16| {
+        children[owner]
+            .iter()
+            .find_map(|&index| match records[index].kind() {
+                RecordKind::Property { tag: actual, .. } if *actual == tag => Some(&records[index]),
+                _ => None,
+            })
+            .unwrap()
+    };
+    let payload = |owner, tag| source.payload(property(owner, tag)).unwrap();
+    let fixed = |bytes: &[u8]| f64::from(i32::from_le_bytes(bytes.try_into().unwrap())) / 65536.0;
+    assert_eq!(page.size().width_pt(), fixed(payload(page_index, 0x0812)));
+    assert_eq!(page.size().height_pt(), fixed(payload(page_index, 0x0813)));
+
+    // Strip only complete Page Text subtrees and compare every projected Fragment field
+    // to the standalone chemical reader. The original file remains the source of truth.
+    let caption_owners: BTreeSet<_> = captions.iter().map(|(_, index)| *index).collect();
+    let mut chemistry = Vec::new();
+    let mut cursor = 0;
+    for end in records {
+        if let RecordKind::ObjectEnd { start: Some(start) } = *end.kind()
+            && caption_owners.contains(&start)
+        {
+            chemistry.extend_from_slice(&source.as_bytes()[cursor..records[start].range().start]);
+            cursor = end.range().end;
+        }
+    }
+    chemistry.extend_from_slice(&source.as_bytes()[cursor..]);
+    let graph = bondline_io::cdx::ElementalGraph::parse(&chemistry).unwrap();
+    assert!(
+        page.fragments()
+            .iter()
+            .map(std::sync::Arc::as_ref)
+            .eq(graph.fragments())
+    );
+
+    // Stable source-ID assignment and signed paint depth come from separate raw fields.
+    captions.sort_by_key(|(raw, _)| *raw);
+    let mut dense = 0u32;
+    let mut by_depth = BTreeMap::new();
+    let mut live = BTreeSet::new();
+    for (_, owner) in captions {
+        let marker = children[owner].iter().copied().find(|i| {
+            matches!(
+                records[*i].kind(),
+                RecordKind::ObjectStart { tag: 0x8011, .. }
+            )
+        });
+        let id = match marker {
+            Some(tag) => std::str::from_utf8(payload(tag, 0x0d05))
+                .unwrap()
+                .strip_prefix("1:")
+                .unwrap()
+                .parse::<u32>()
+                .unwrap(),
+            None => {
+                dense += 1;
+                dense
+            }
+        };
+        assert!(id > 0 && live.insert(id));
+        let z = i16::from_le_bytes(payload(owner, 0x000a).try_into().unwrap());
+        assert!(z > 0 && by_depth.insert(z, (owner, id)).is_none());
+    }
+    let resources = source.resources().unwrap();
+    for (projected, (owner, id)) in page.texts().iter().zip(by_depth.into_values()) {
+        assert_eq!(projected.id().get(), id);
+        let p = payload(owner, 0x0200);
+        assert_eq!(
+            [projected.position().y_pt(), projected.position().x_pt()],
+            [fixed(&p[..4]), fixed(&p[4..])]
+        );
+        let text = source.string(property(owner, 0x0700)).unwrap();
+        assert_eq!(projected.runs().len(), text.runs().len());
+        let mut offset = 0;
+        for (run, raw) in projected.runs().iter().zip(text.runs()) {
+            assert_eq!(usize::from(raw.start()), offset);
+            let end = offset + run.text().len();
+            assert_eq!(run.text().as_bytes(), &text.text_bytes()[offset..end]);
+            assert_eq!(
+                run.style().size_pt(),
+                f64::from(raw.size_twentieths()) / 20.0
+            );
+            assert_eq!(run.style().face(), raw.face());
+            assert_eq!(
+                run.style().font_family().as_bytes(),
+                resources.font_by_id(raw.font()).unwrap().name_bytes()
+            );
+            assert_eq!(
+                run.style().rgb(),
+                resources
+                    .color(u32::from(raw.color()))
+                    .unwrap()
+                    .map(|c| f64::from(c) / 65535.0)
+            );
+            offset = end;
+        }
+        assert_eq!(offset, text.text_bytes().len());
+    }
+    let caption = page.texts().first().unwrap();
+    assert!(matches!(
+        stored.with_cdx_caption(page.id(), caption.as_ref().clone()),
+        Err(bondline_io::DocumentError::UnsupportedCdxEdit)
+    ));
+    assert!(matches!(
+        stored.with_cdx_caption_run(page.id(), caption.id(), 0, "changed".into()),
+        Err(bondline_io::DocumentError::UnsupportedCdxEdit)
+    ));
+    let (fragment, atom) = page
+        .fragments()
+        .iter()
+        .find_map(|f| f.atoms().first().map(|a| (f.id(), a)))
+        .unwrap();
+    assert!(!stored.can_edit_cdx_atom_label(atom.id));
+    assert!(
+        stored
+            .with_cdx_atom_label(
+                page.id(),
+                fragment,
+                atom.id,
+                atom.element,
+                atom.explicit_hydrogens.unwrap()
+            )
+            .is_err()
+    );
+
+    let mut detached = stored.clone();
+    let changed = PageSize::new(page.size().width_pt() + 1.0, page.size().height_pt()).unwrap();
+    detached
+        .model_mut()
+        .set_page_size(page.id(), changed)
+        .unwrap();
+    assert!(detached.source_info().unwrap().modified);
+    assert!(!detached.has_cdx_mixed_preview());
+    assert!(!detached.has_display_projection());
+    assert!(detached.to_cdx().is_err());
+    assert!(detached.to_cdxml().is_err());
+    assert_eq!(stored.to_cdx().unwrap().as_ref(), source.as_bytes());
+}
+
 fn check_label_edit(stored: &bondline_io::StoredDocument, original: &[u8]) {
     let page = stored.model().pages().first().unwrap();
     let atoms = page
@@ -692,16 +874,25 @@ fuzz_target!(|data: &[u8]| {
     check_batch(&document);
     check_insertion(&document);
 
-    if document
+    let stored_page = document
         .records()
         .iter()
         .any(|record| matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8001, .. }))
-        && let Ok(mut stored) = bondline_io::StoredDocument::from_cdx(
-            std::sync::Arc::from(data),
-            bondline_model::PageSize::A4,
-        )
-        && stored.has_cdx_caption_preview()
+        .then(|| {
+            bondline_io::StoredDocument::from_cdx(
+                std::sync::Arc::from(data),
+                bondline_model::PageSize::A4,
+            )
+            .ok()
+        })
+        .flatten();
+    if let Some(stored) = stored_page
+        .as_ref()
+        .filter(|stored| stored.has_cdx_mixed_preview())
     {
+        check_mixed_preview(stored, &document);
+    }
+    if let Some(mut stored) = stored_page.filter(|stored| stored.has_cdx_caption_preview()) {
         assert_eq!(stored.export_cdx().unwrap(), data);
         assert!(!stored.is_fully_mapped());
         assert!(!stored.has_caption_projection());
