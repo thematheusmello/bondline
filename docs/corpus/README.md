@@ -6,7 +6,7 @@ The checker opens each verified source through Bondline's command engine and rea
 
 | Pinned file | Bondline result on the complete source | Independent formula and per-record evidence |
 | --- | --- | --- |
-| `rdkit-chain1.cdxml` | Unsupported source | C4H10 |
+| `rdkit-chain1.cdxml` | C4H10 matched | C4H10, four drawn atoms with omitted H counts. [Properties and native checks](../verification-cdxml-carbon-analysis.md). |
 | `rdkit-methyl-radical.mol` | CH3 matched | CH3, one drawn atom |
 | `bondline-ordered-fields-v2000.sdf` | Unsupported collection | Both isolated mol blocks gave C2H6 in Bondline and RDKit, two drawn atoms each. The separate whole-supplier diagnostic returned one entry. |
 | `bondline-original-ethane-explicit.cdx` | Unsupported source | C2H6 |
@@ -15,7 +15,7 @@ The checker opens each verified source through Bondline's command engine and rea
 | `bondline-original-two-ring-labels.smi` | Unsupported collection | The record imports, and Analysis reports unsupported source. RDKit gives the combined C7H14. |
 | `bondline-original-salt-branch.smi` | Unsupported collection | The record import refuses this charged structure. RDKit gives the combined C4H9NaO. |
 
-Two of eight complete files returned a matching formula. Two of five record checks matched and three were unavailable. Each SDF comparison opens the original mol block as a standalone drawing with Bondline's MOL reader. The raw collection has its own reported outcome. SMILES component groups stay together within their original record. The printed reference for an unavailable result comes solely from RDKit. The corpus still needs independent comparisons for mass, aromaticity, stereo labels, canonical SMILES, InChI and names.
+Three of eight complete files returned a matching formula. The verifier identifies these three inputs by SHA-256 and fails if one loses proven coverage. Two of five record checks matched and three were unavailable. Each SDF comparison opens the original mol block as a standalone drawing with Bondline's MOL reader. The raw collection has its own reported outcome. SMILES component groups stay together within their original record. The printed reference for an unavailable result comes solely from RDKit. The corpus still needs independent comparisons for mass, aromaticity, stereo labels, canonical SMILES, InChI and names.
 
 Run `cargo xtask corpus --offline` after fetching the pinned files and setting `BONDLINE_PYTHON` to the RDKit interpreter. [Official molecular readers](https://www.rdkit.org/docs/source/rdkit.Chem.rdmolfiles.html) · [RDKit formula descriptor](https://www.rdkit.org/docs/source/rdkit.Chem.rdMolDescriptors.html#rdkit.Chem.rdMolDescriptors.CalcMolFormula).
 
@@ -73,7 +73,7 @@ Current coverage is deliberately separate:
 
 | Entry | Integrity | Syntax/semantic check | Chemistry |
 |---|---|---|---|
-| rdkit-chain1.cdxml | Exact 727 bytes and SHA-256 | Byte-preserving syntax and owned-snapshot passthrough; full XML view agrees with Expat; stored model projection agrees with independent Expat/Decimal | Calculations missing |
+| rdkit-chain1.cdxml | Exact 727 bytes and SHA-256 | Byte-preserving syntax and owned-snapshot passthrough; full XML view agrees with Expat; stored model projection agrees with independent Expat/Decimal | Complete-source C4H10 agrees with RDKit |
 | rdkit-methyl-radical.mol | Exact 170 bytes and SHA-256 | V2000 parse and exact source passthrough; strict elemental projection agrees with external RDKit/Decimal for one methyl radical | Calculations missing |
 | bondline-ordered-fields-v2000.sdf | Exact 690 bytes and SHA-256 | Exact source; two separate MOL records; every ordered field/raw span agrees with an independent scanner; each elemental projection agrees with a direct external RDKit read | Calculations missing |
 | bondline-original-ethane-explicit.cdx | Exact 65,750 bytes and SHA-256 | Original explicit scene; byte-exact parser passthrough and all29 events match independent struct; external RDKit verifies ethane | Bondline calculations missing |
@@ -96,7 +96,7 @@ Expat events and Decimal arithmetic. A deliberate model-property mutation is rej
 its verifier test; another test checks scopes, direction and explicit metadata. It does
 not use our parser/writer or compute chemistry. Source bytes are syntax-validated and
 bounded before either external oracle runs; neither fetches DTD/entity resources.
-The gate now also prints the missing formula/mass/aromaticity/stereo/SMILES/InChI checks.
+The independent chemistry gate reports complete-source formulas and lists the remaining comparisons.
 Its owned-snapshot count covers unchanged-source export, not edited-file compatibility.
 
 The separate MOL oracle uses pinned external RDKit 2026.09.2 for the raw elemental fields,
