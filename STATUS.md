@@ -2532,3 +2532,13 @@ three additional AccessKit tests passed. Windows and Linux visual acceptance,
 configurable precision, isotope distributions, overrides and live captions
 remain open. Actions stays off.
 [Source contract](docs/research/elemental-analysis.md) · [Checks and receipts](docs/verification-elemental-analysis.md).
+
+### macOS loopback shutdown
+
+[PR 38](https://github.com/thematheusmello/bondline/pull/38) protects a
+published control listener against retention while a child spawn is waiting
+to exec on macOS kernels supporting close-on-fork. At `8923167` the complete
+workspace gate passed 2,417 tests with zero failures and one ignored, plus
+three additional AccessKit tests. The earlier natural failures still lack an
+observed owner. The creation-to-flag interval and older-kernel behavior are
+qualified in the [verification](docs/research/macos-listener-lifetime.md).

@@ -176,3 +176,12 @@ and the new deterministic macOS regression both passed. Its log SHA-256 is
 `49f35c5a75f20db8f211ff1d7af7c880f95a41579787b257cf1020f6661affab`.
 All MCP Clippy targets, rustfmt, layers and the configured runtime license
 and asset checks also passed.
+
+The full local `cargo xtask ci` at `8923167` exited successfully. The
+workspace reported 2,417 passed, zero failed and one ignored test, followed
+by three passing AccessKit tests. The original control and the new held-spawn
+test both passed. The build was briefly suspended for disk space before any
+workspace test began. The same process then completed all checks.
+Receipt `target/analysis-ci/listener-8923167.log` in the analysis-window
+checkout is 311,132 bytes, SHA-256
+`5e27c5bb161c46573d6326c2f50b905f1cf13672bbfc368274f0aabe8736e3a1`.
