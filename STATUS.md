@@ -464,24 +464,50 @@ gates. The earlier intermittent MCP bind failure on port 64219 remains
 unexplained. GitHub Actions stays off.
 [Acceptance and reproduction](docs/verification-cdx-chemical-caption-creation.md).
 
+[PR 20](https://github.com/thematheusmello/bondline/pull/20) merged at
+`7c21f89`. Local main matched the remote merge and the reviewed tree at
+`a61fa56`. The completed feature ref is retired.
+
+### Editing existing chemical labels after annotation
+
+The public contract and 13 independent files are at `cb5b6f9`. IO `a031c62`
+and command history `cc8cd6f` preserve every direct Page caption and the
+other fragment when an existing atom label is changed. Native input `819e618`
+supports exact Alt-primary immediately after caption creation while Text stays
+selected. A painted caption shields an obscured atom. The actual CLI test is
+`ff69629`, source-preserving fuzz oracle `fc93f5a` and verified Rust browser
+example `7deea1f`. The Mac host, CLI and MCP passed seven exact output files
+and fourteen CPU/Metal frame comparisons each. Offline Chrome checked the
+codec against three patched files. Integrated local CI passed 2,353 workspace
+tests, one ignored, all three AccessKit tests and all gates. The three
+commands-crate cross-target checks passed. The temporary isolated checkout
+was retired after checking all 33 files against the committed tree. Full
+Windows/Linux desktop and browser UI workflows remain open.
+[Acceptance and reproduction](docs/verification-cdx-mixed-label-edits.md).
+
 ### Next executable work
 
-1. Preserve existing **atom-label editing after annotation**. The chemical-only
-   source becomes a mixed page after adding its first caption. That source can
-   display both kinds of text and edit its captions. Editing its atom label
-   currently refuses. Pin the exact same-container Node and child Text handles
-   independently of direct captions sharing raw ID 73. Reuse the existing
-   Element, H, label body and signed box writer with full mixed-page certification.
-   Test an edit on each fragment, a newly authored caption, a Page caption
-   before the fragments, a connected bond, Undo and Save/reopen. Check
-   paint order and occupied pointer hits separately. The ignored independent
-   replay under `target/cdx-mixed-label-edit-preparation` pins the first
-   432-to-431-byte OH change to
-   `f04822bdfed2d439f6b18811d3a0bf4012affb0655b04a6ed3c22909325e2af7`.
-2. Extend interleaved depths, supported styles, missing resources and
-   other format and authoring workflows in the roadmap. The conservative raw-ID
-   allocator still refuses when the old maximum is UINT32_MAX. A different
-   allocation policy needs a separately tested source contract.
+1. **Display ordinary skeletal-carbon CDX drawings at their declared paper
+   size.** A 283-byte original propane source currently opens as data on A4
+   and saves exactly. A CPU capture refuses despite its declared 512 pt
+   Poster and physical solid-bond styles. Its independent SHA-256 is
+   `d000b90042e8e9d4aff3f291cb062fae560b6447f0cd60bbece2135050e31ce0`.
+   Preserve the three C nodes and explicit H counts 3, 2, 3. The independently
+   constructed same-geometry CDXML control yields matching CPU/Metal output,
+   638 black pixels and RGB SHA-256
+   `d6b93e3e5b750c8bfb1816584e55d97b7747e2d848cd80f6b25468c08ee1b520`.
+   Verify the actual CDX bytes, paper and pixels through Open, capture, Save and
+   reopen. Binary `ShowTerminalCarbonLabels` and `ShowNonTerminalCarbonLabels`
+   are implied booleans. Check the owner and permitted width. Reuse the existing
+   carbon visibility rules for terminal, interior, diatomic and collinear cases.
+   [Public binary flags](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXBoolean.htm).
+2. The ignored `target/cdx-skeletal-planning/HANDOFF.md` holds the generator,
+   17 original byte cases, captured baseline and RDKit comparison. Translate
+   the independent fixtures into tracked regression tests. The 265-byte source
+   with all H counts omitted must retain literal absence through Open and Save.
+   Keep any derived display hydrogens separate from authored chemical data.
+   Other M0–M5 work, general interleaved depths and the raw-ID exhaustion
+   policy remain in the roadmap.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

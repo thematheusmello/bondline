@@ -38,7 +38,9 @@ and support editing existing caption runs. The Text tool respects paint order
 when a caption overlaps a label. Blank paper on a qualified mixed or chemical-only
 page accepts a new caption, with byte-exact Undo and editable Save/reopen.
 [Chemical drawing caption creation](docs/verification-cdx-chemical-caption-creation.md).
-Editing mixed structures, interleaved depths, missing font resources, multiline text,
+Changing an existing supported atom label on the mixed drawing now preserves the
+new annotation and prior captions. [Mixed label editing](docs/verification-cdx-mixed-label-edits.md).
+General chemical edits on mixed pages, interleaved depths, missing font resources, multiline text,
 inherited styles, ambiguous starts and general shaping remain open.
 [CDX creation](docs/verification-cdx-caption-creation.md), [empty Poster verification](docs/verification-cdx-empty-caption.md), [mixed pages](docs/verification-cdx-mixed-caption.md), [mixed edits](docs/verification-cdx-mixed-caption-edits.md).
 

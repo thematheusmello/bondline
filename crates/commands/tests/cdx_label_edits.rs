@@ -166,3 +166,54 @@ fn cdx_label_native_form_reuses_the_command_and_rejects_an_aba_owner_after_a_cap
     assert_eq!(serde_json::to_value(engine.state())?, before);
     Ok(())
 }
+
+#[test]
+fn first_page_caption_and_atom_edit_share_current_bytes_and_independent_history_entries()
+-> TestResult {
+    let source = include_bytes!("../../io/tests/fixtures/cdx-label-preview/boxed.cdx");
+    let created =
+        include_bytes!("../../io/tests/fixtures/cdx-chemical-caption-create/chemical_first.cdx");
+    let edited =
+        include_bytes!("../../io/tests/fixtures/cdx-mixed-label-edit/chemical_first_oh.cdx");
+    let files = FileTestDirectory::new()?;
+    let path = files.path("chemical-to-mixed-原.cdx");
+    fs::write(&path, source)?;
+    let mut engine = Engine::default();
+    engine.dispatch("document.open_cdx", json!({"path":path}))?;
+    let created_state = engine.dispatch(
+        "text.create",
+        json!({"expected_revision":1,"page_id":1,
+        "x_pt":144.25,"y_pt":216.75,"text":"Phase β & q"}),
+    )?;
+    assert_eq!(engine.stored_document()?.export_cdx()?, created);
+    let args = |rev| {
+        json!({"expected_revision":rev,"page_id":1,"fragment_id":1,"atom_id":1,
+                            "element":8,"explicit_hydrogens":1})
+    };
+    let change = engine.dispatch("atom.set_authored_label", args(created_state.revision))?;
+    assert_eq!(change.undo_depth, 2);
+    assert_eq!(engine.stored_document()?.export_cdx()?, edited);
+    assert!(
+        engine
+            .dispatch("atom.set_authored_label", args(created_state.revision))
+            .is_err()
+    );
+    assert!(!engine.selection_available());
+    let filename = files.path("chemical-to-mixed-保存.cdx");
+    engine.dispatch("document.save_cdx", json!({"path":filename}))?;
+    assert_eq!(fs::read(&filename)?, edited);
+    for (command, expected) in [
+        ("history.undo", created.as_slice()),
+        ("history.undo", source.as_slice()),
+        ("history.redo", created.as_slice()),
+        ("history.redo", edited.as_slice()),
+    ] {
+        engine.dispatch(command, json!({}))?;
+        assert_eq!(engine.stored_document()?.export_cdx()?, expected);
+    }
+    let reopened = engine.dispatch("document.open_cdx", json!({"path":filename}))?;
+    assert_eq!(reopened.document, change.document);
+    assert_eq!(reopened.undo_depth, 0);
+    assert_eq!(fs::read(path)?, source);
+    Ok(())
+}

@@ -1,5 +1,7 @@
 # Clean-room source register
 
+The [mixed CDX atom-label edit contract](../research/cdx-mixed-label-edits.md) covers Node-owned Element, attached H, child Text, signed rectangles and retained Page caption depths. Independent source pairs pin aliases between different containers and a change crossing the paper boundary.
+
 The [chemical drawing caption creation contract](../research/cdx-chemical-caption-creation.md)
 uses the published Page children, binary object identity and signed ZOrder.
 Bondline appends above the existing chemical ink and preserves the enclosing

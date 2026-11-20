@@ -726,3 +726,54 @@ fn text_tool_adds_cdx_caption_beside_chemistry_and_reopens_the_undo_branch() -> 
     }
     Ok(())
 }
+
+#[test]
+fn mixed_cdx_text_stays_selected_when_alt_editing_a_newly_annotated_drawing() -> TestResult {
+    let raw = include_bytes!("../../io/tests/fixtures/cdx-label-preview/boxed.cdx");
+    let caption =
+        include_bytes!("../../io/tests/fixtures/cdx-chemical-caption-create/chemical_first.cdx");
+    let oh = include_bytes!("../../io/tests/fixtures/cdx-mixed-label-edit/chemical_first_oh.cdx");
+    let mut f = Fixture::new(1160.0, 800.0, 2.0)?;
+    let input = f.directory.path("label-after-caption-原.cdx");
+    open_pinned(&mut f, &input, "cdx", raw)?;
+    f.choose("Text")?;
+    open_creation(&mut f, egui::Vec2::ZERO)?;
+    apply_body(&mut f, BODY)?;
+    assert_eq!(current_cdx(&f)?, caption);
+    let annotated = f.state()?;
+
+    let hint = "Alt-click an exposed atom label to edit its element and attached H count.";
+    assert!(f.warm().shapes.iter().any(|paint| {
+        matches!(&paint.shape, egui::Shape::Text(shape) if shape.galley.text() == hint)
+    }));
+    for (point, modifiers) in [
+        (CDX_NEW_INK, Modifiers::ALT),
+        ([350., 350.], Modifiers::ALT),
+        ([147.375, 123.125], Modifiers::ALT | Modifiers::SHIFT),
+        ([147.375, 123.125], Modifiers::NONE),
+    ] {
+        let pos = paper_point(&mut f, point)?;
+        click(&mut f, pos, modifiers);
+        assert_eq!(f.state()?, annotated);
+    }
+    let pos = paper_point(&mut f, [147.375, 123.125])?;
+    click(&mut f, pos, Modifiers::ALT);
+    assert_eq!(field_value(&f, "Element")?, "N");
+    set_field(&mut f, "Element", "O")?;
+    set_field(&mut f, "Attached hydrogens", "1")?;
+    f.choose("Apply")?;
+    f.warm();
+    assert_eq!(current_cdx(&f)?, oh);
+    assert_eq!(f.state()?["undo_depth"], 2);
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(current_cdx(&f)?, caption);
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(current_cdx(&f)?, raw);
+    shortcut(&mut f, Key::Z, true);
+    shortcut(&mut f, Key::Z, true);
+    assert_eq!(current_cdx(&f)?, oh);
+    open_run(&mut f, CDX_NEW_INK, 1, 0, 1, BODY)?;
+    f.choose("Cancel")?;
+    closed(&mut f)?;
+    Ok(())
+}

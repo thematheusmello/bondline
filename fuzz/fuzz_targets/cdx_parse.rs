@@ -857,23 +857,8 @@ fn check_mixed_preview(stored: &bondline_io::StoredDocument, source: &Document<'
             )
             .is_err()
     );
-    let (fragment, atom) = page
-        .fragments()
-        .iter()
-        .find_map(|f| f.atoms().first().map(|a| (f.id(), a)))
-        .unwrap();
-    assert!(!stored.can_edit_cdx_atom_label(atom.id));
-    assert!(
-        stored
-            .with_cdx_atom_label(
-                page.id(),
-                fragment,
-                atom.id,
-                atom.element,
-                atom.explicit_hydrogens.unwrap()
-            )
-            .is_err()
-    );
+    check_label_edit(stored, source);
+    let atom = page.fragments()[0].atoms()[0].id;
 
     let mut detached = stored.clone();
     let changed = PageSize::new(page.size().width_pt() + 1.0, page.size().height_pt()).unwrap();
@@ -884,6 +869,7 @@ fn check_mixed_preview(stored: &bondline_io::StoredDocument, source: &Document<'
     assert!(detached.source_info().unwrap().modified);
     assert!(!detached.has_cdx_mixed_preview());
     assert!(!detached.can_edit_cdx_caption_run());
+    assert!(!detached.can_edit_cdx_atom_label(atom));
     assert!(!detached.can_create_caption());
     assert!(matches!(
         detached.with_cdx_caption(page.id(), caption.as_ref().clone()),
@@ -899,7 +885,43 @@ fn check_mixed_preview(stored: &bondline_io::StoredDocument, source: &Document<'
     assert_eq!(stored.to_cdx().unwrap().as_ref(), source.as_bytes());
 }
 
-fn check_label_edit(stored: &bondline_io::StoredDocument, original: &[u8]) {
+/// All records except the four editable fields of this exact Node and its own Text.
+fn retained_atom_records<'a>(source: &Document<'a>, atom: bondline_model::AtomId) -> Vec<&'a [u8]> {
+    let records = source.records();
+    let node = records
+        .iter()
+        .enumerate()
+        .filter(|(_, record)| matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8004, .. }))
+        .nth(atom.get() as usize - 1)
+        .unwrap()
+        .0;
+    let label = records
+        .iter()
+        .position(|record| {
+            record.parent() == Some(node)
+                && matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8006, .. })
+        })
+        .unwrap();
+    records
+        .iter()
+        .filter(|r| match r.kind() {
+            RecordKind::Property {
+                tag: 0x0402 | 0x042b,
+                ..
+            } => r.parent() != Some(node),
+            RecordKind::Property {
+                tag: 0x0700 | 0x0204,
+                ..
+            } => r.parent() != Some(label),
+            _ => true,
+        })
+        .map(|record| &source.as_bytes()[record.range()])
+        .collect()
+}
+
+fn check_label_edit(stored: &bondline_io::StoredDocument, source: &Document<'_>) {
+    let original = source.as_bytes();
+    let mixed = stored.has_cdx_mixed_preview();
     let page = stored.model().pages().first().unwrap();
     let atoms = page
         .fragments()
@@ -919,7 +941,19 @@ fn check_label_edit(stored: &bondline_io::StoredDocument, original: &[u8]) {
         atom.element,
         atom.explicit_hydrogens.unwrap(),
     );
+    let known_mixed = original
+        == include_bytes!(
+            "../../crates/io/tests/fixtures/cdx-chemical-caption-create/mixed_first.cdx"
+        )
+        || original
+            == include_bytes!(
+                "../../crates/io/tests/fixtures/cdx-chemical-caption-create/chemical_first.cdx"
+            );
     if !stored.can_edit_cdx_atom_label(atom.id) {
+        assert!(
+            !known_mixed,
+            "a new Page caption must preserve the atom-label workflow"
+        );
         assert!(unchanged.is_err());
         return;
     }
@@ -929,12 +963,29 @@ fn check_label_edit(stored: &bondline_io::StoredDocument, original: &[u8]) {
         &unchanged.model_snapshot()
     ));
     assert_eq!(unchanged.export_cdx().unwrap(), original);
-    let element =
-        bondline_model::Element::new(if atom.element.get() == 7 { 8 } else { 7 }).unwrap();
-    if let Ok(edited) = stored.with_cdx_atom_label(page.id(), fragment, atom.id, element, 1) {
+    let (number, hydrogens) = match (mixed, atom.element.get()) {
+        (true, 17) => (35, 0),
+        (_, 7) => (8, 1),
+        _ => (7, 1),
+    };
+    let element = bondline_model::Element::new(number).unwrap();
+    let edited = stored.with_cdx_atom_label(page.id(), fragment, atom.id, element, hydrogens);
+    if known_mixed {
+        assert!(edited.is_ok(), "the qualified Cl to Br change must succeed");
+    }
+    if let Ok(edited) = edited {
         let bytes = edited.export_cdx().unwrap();
         assert_ne!(bytes, original);
-        assert!(edited.has_cdx_atom_label_preview());
+        assert_eq!(edited.has_cdx_atom_label_preview(), !mixed);
+        assert_eq!(edited.has_cdx_mixed_preview(), mixed);
+        assert_eq!(edited.model().pages()[0].texts(), page.texts());
+        let written = Document::parse(bytes).unwrap();
+        assert_eq!(written.header(), source.header());
+        assert_eq!(written.framing(), source.framing());
+        assert_eq!(
+            retained_atom_records(&written, atom.id),
+            retained_atom_records(source, atom.id)
+        );
         assert!(!edited.is_fully_mapped());
         assert!(edited.to_cdxml().is_err());
         let info = edited.source_info().unwrap();
@@ -1214,7 +1265,7 @@ fuzz_target!(|data: &[u8]| {
         if preview {
             assert!(has_labels);
             check_label_preview(&document, stored.model());
-            check_label_edit(&stored, data);
+            check_label_edit(&stored, &document);
             check_caption_append(&stored, &document);
         }
         assert_eq!(stored.model().has_authored_atom_labels(), has_labels);

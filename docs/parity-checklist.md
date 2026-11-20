@@ -31,7 +31,10 @@ Text can edit a frontmost caption in that drawing while retaining every chemical
 object. On chemical-only and mixed pages, a blank-paper click can add a new
 caption. Undo restores the previous source and the caption remains editable
 after Save/reopen. [Creation on chemical paper](verification-cdx-chemical-caption-creation.md), [mixed-page evidence](verification-cdx-mixed-caption.md), [run editing](verification-cdx-mixed-caption-edits.md).
-Tied depths, additional mixed authoring, missing
+Alt-clicking a qualified exposed atom now changes its printed label on the
+same mixed drawing, including directly after creating a caption. Save/reopen
+preserves the caption and peer atoms. [Mixed label editing](verification-cdx-mixed-label-edits.md).
+Tied depths, other mixed object edits, missing
 font resources, general typography and broader platforms remain open.
 [CDX creation](verification-cdx-caption-creation.md), [empty Poster verification](verification-cdx-empty-caption.md).
 

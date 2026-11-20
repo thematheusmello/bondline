@@ -43,7 +43,7 @@ fn mixed_run_edit_selects_the_page_owner_and_preserves_both_aliased_node_labels(
         assert!(current.can_edit_cdx_caption_run());
         assert!(current.has_cdx_mixed_preview() && current.has_display_projection());
         assert!(!current.has_cdx_caption_preview() && current.can_create_caption());
-        assert!(!current.can_edit_cdx_atom_label(atom) && !current.is_fully_mapped());
+        assert!(current.can_edit_cdx_atom_label(atom) && !current.is_fully_mapped());
         assert!(current.to_cdxml().is_err());
         assert_eq!(current.export_cdx()?, bytes);
         assert_eq!(serde_json::to_value(current.model())?, model(prefix, tail)?);

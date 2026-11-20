@@ -58,7 +58,7 @@ pub(super) fn supports_edit(document: &StoredDocument) -> bool {
         || document.has_mixed_atom_labels()
         || document.has_flagged_atom_labels()
         || document.has_label_defaults_projection()
-        || document.has_cdx_atom_label_preview()
+        || document.has_cdx_label_edit_profile()
 }
 
 pub(super) fn editable_atom(
@@ -146,7 +146,7 @@ pub(super) fn set_label(
             "a physical hydrogen atom cannot carry inline attached hydrogens",
         ));
     }
-    if document.has_cdx_atom_label_preview() {
+    if document.has_cdx_label_edit_profile() {
         return Ok(document.with_cdx_atom_label(
             PageId::new(params.page_id).ok_or(Error::InvalidPageId)?,
             fragment.id(),
