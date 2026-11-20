@@ -269,7 +269,32 @@ impl PageView {
         counts: &BTreeMap<AtomId, u16>,
         cancel: &Cancellation,
     ) -> Result<GraphScene, Error> {
-        self.build_graph(page, AtomDisplay::ImpliedHidden(counts), cancel)
+        self.build_graph(
+            page,
+            AtomDisplay::ImpliedHidden {
+                counts,
+                allow_printed: false,
+            },
+            cancel,
+        )
+    }
+
+    /// Each unlabelled atom must remain a hidden carbon. Draw existing child labels with
+    /// their explicit authored geometry and style, including clearance from incident bonds.
+    pub fn graph_scene_with_hidden_carbons_and_labels(
+        &self,
+        page: &Page,
+        counts: &BTreeMap<AtomId, u16>,
+        cancel: &Cancellation,
+    ) -> Result<GraphScene, Error> {
+        self.build_graph(
+            page,
+            AtomDisplay::ImpliedHidden {
+                counts,
+                allow_printed: true,
+            },
+            cancel,
+        )
     }
 
     fn build_graph(

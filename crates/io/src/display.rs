@@ -91,8 +91,8 @@ fn drawing_scene(
         .clone()
         .with_drawing_style(stored.model().drawing_style())
         .with_drawing_settings(stored.model().drawing_settings());
-    if stored.has_cdx_skeletal_preview() {
-        skeletal_scene(&view, page, cancel)
+    if stored.has_cdx_skeletal_preview() || stored.has_cdx_skeletal_label_preview() {
+        skeletal_scene(&view, page, stored.has_cdx_skeletal_label_preview(), cancel)
     } else if stored.mol_version().is_some() {
         Ok(view.graph_scene_with_display_hydrogens(page, &display_counts(page, cancel)?, cancel)?)
     } else {
@@ -103,18 +103,24 @@ fn drawing_scene(
 fn skeletal_scene(
     view: &bondline_render::PageView,
     page: &Page,
+    printed: bool,
     cancel: &Cancellation,
 ) -> Result<GraphScene, DisplayError> {
-    Ok(view.graph_scene_with_hidden_carbons(page, &display_counts(page, cancel)?, cancel)?)
+    let counts = display_counts(page, cancel)?;
+    if printed {
+        Ok(view.graph_scene_with_hidden_carbons_and_labels(page, &counts, cancel)?)
+    } else {
+        Ok(view.graph_scene_with_hidden_carbons(page, &counts, cancel)?)
+    }
 }
 
 /// Admission uses the same hidden-carbon and H resolution as every later camera.
-pub(crate) fn certify_cdx_skeletal_page(model: &Document) -> bool {
+pub(crate) fn certify_cdx_skeletal_page(model: &Document, printed: bool) -> bool {
     let [page] = model.pages() else {
         return false;
     };
     crate::cdx::preview_view(model)
-        .is_some_and(|view| skeletal_scene(&view, page, &Cancellation::default()).is_ok())
+        .is_some_and(|view| skeletal_scene(&view, page, printed, &Cancellation::default()).is_ok())
 }
 
 fn connected_geometry(page: &Page) -> bool {

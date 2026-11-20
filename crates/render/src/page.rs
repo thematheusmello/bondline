@@ -542,7 +542,8 @@ pub(crate) fn graph_scene_in_viewport(
                 .ok_or(Error::UnsupportedChemicalContent)?;
             let neighbours = neighbours.get(&atom.id).copied().unwrap_or_default();
             let carbon_label = carbon_labels.get(&atom.id);
-            if matches!(display, AtomDisplay::ImpliedHidden(_))
+            if let AtomDisplay::ImpliedHidden { allow_printed, .. } = display
+                && !(allow_printed && atom.authored_label.is_some())
                 && !matches!(carbon_label, Some(crate::skeletal::CarbonLabel::Hidden))
             {
                 return Err(Error::UnsupportedChemicalContent);
