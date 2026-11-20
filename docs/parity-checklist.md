@@ -45,8 +45,10 @@ CPU and Metal agree at 100% and 200%. **Verified** for skeletal atom movement
 through Marquee, drag, keyboard nudge, Undo, Redo and exact Save/reopen on the
 all-carbon profile. **Verified on macOS** for viewing hidden carbon vertices
 and printed heteroatoms together. Four original mixed CDX drawings preserve
-source bytes on Save As and reopen. Movement and label editing on mixed skeletal
-CDX remain open. [Mixed drawing evidence](verification-cdx-mixed-skeleton.md).
+source bytes on Save As and reopen. **Verified on macOS** for moving hidden and
+printed atoms together and preserving the dependent label boxes. App-frame drag
+and keyboard tests and three real command adapters pass. Editing the label text
+on these sources remains open. [Mixed movement evidence](verification-cdx-mixed-skeletal-movement.md). [Mixed drawing evidence](verification-cdx-mixed-skeleton.md).
 [Movement evidence](verification-cdx-skeletal-movement.md). Windows and
 Linux native execution are unverified. [Acceptance](verification-cdx-skeletal.md).
 

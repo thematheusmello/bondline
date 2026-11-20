@@ -84,3 +84,9 @@ zero failures and one ignored. All three additional macOS AccessKit tests,
 formatting, strict Clippy, workspace layers, asset and dependency license
 checks, and the eight-file corpus passed. The local gate log SHA-256 is
 `6366f31f9d2d727decb56961ec4aa22c76a56cdc207d3e006806c66564d4bcd8`.
+
+## Printed and hidden atoms selected together
+
+On the original ethanol CDX drawing, selecting the printed oxygen gives `HO` from the written H. Selecting only the middle or terminal hidden carbon gives `CH2` or `CH3` with one defaulted atom in each case. Selecting the middle carbon and oxygen gives `CH3O`. The terminal carbon and oxygen give `CH4O`, and all three atoms give `C2H6O` with two defaults. The full fragment supplies the incident bonds even when neighbouring atoms are unselected.
+
+The engine rejects stale selection epochs and detached sources. Actual initialized MCP and egui App frames exercised the selected-atom reports and the default-count disclosure. RDKit independently checked every selected sum before Save, after exact Unicode Save/reopen and after moving the middle carbon, Undo, Redo and a second Unicode Save. The final bytes matched the signed-coordinate movement fixture. [Regression tests](../crates/commands/tests/analysis_formula.rs) · [RDKit and CLI replay](../xtask/oracles/cdx_formula.py) · [Movement evidence](verification-cdx-mixed-skeletal-movement.md).

@@ -122,3 +122,42 @@ fn skeletal_move_rejects_out_of_paper_overflow_and_new_mandatory_carbon_ink() ->
     }
     Ok(())
 }
+
+#[test]
+fn mixed_move_certifies_the_preview_then_commits_one_history_entry() -> Result {
+    let raw = include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/amino_alcohol.cdx");
+    let end = include_bytes!("../../io/tests/fixtures/cdx-mixed-skeletal-move/combined.cdx");
+    let mut e = engine(raw)?;
+    let epoch = select(&mut e, &[5, 1, 3])?;
+    let p = bondline_commands::SelectionTranslate {
+        expected_revision: e.state().revision,
+        expected_selection_epoch: epoch,
+        delta_x_pt: 8.25,
+        delta_y_pt: -5.125,
+    };
+    let q = serde_json::to_value(&p)?;
+    let preview = e.preview_selection_translation(&p)?;
+    assert_eq!(preview.export_cdx()?, end);
+    assert_eq!(e.stored_document()?.export_cdx()?, raw);
+    e.dispatch("selection.translate", q.clone())?;
+    assert_eq!(e.stored_document()?.export_cdx()?, end);
+    assert_eq!(e.state().undo_depth, 1);
+    assert!(e.dispatch("selection.translate", q).is_err());
+    e.dispatch("history.undo", json!({}))?;
+    let epoch = select(&mut e, &[3, 1, 5])?;
+    let stamp = e.capture_stamp();
+    for delta in [0.0, 0.5 / 65536., -0.5 / 65536., 1024.] {
+        let r=e.dispatch("selection.translate",json!({"expected_revision":e.state().revision,"expected_selection_epoch":epoch,"delta_x_pt":delta,"delta_y_pt":-delta}));
+        if delta == 1024. {
+            assert!(r.is_err())
+        } else {
+            assert!(!r?.changed);
+        }
+        assert_eq!(e.state().redo_depth, 1);
+        assert!(e.capture_stamp_matches(&stamp));
+        assert_eq!(e.stored_document()?.export_cdx()?, raw);
+    }
+    e.dispatch("history.redo", json!({}))?;
+    assert_eq!(e.stored_document()?.export_cdx()?, end);
+    Ok(())
+}

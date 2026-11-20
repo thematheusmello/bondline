@@ -710,14 +710,14 @@ fn skeletal_selection_drag_previews_the_moved_ink_and_commits_one_exact_edit() -
 }
 
 #[test]
-fn mixed_skeletal_binary_shows_printed_paper_without_a_canvas_author() -> TestResult {
-    let raw = include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/ethanol.cdx");
+fn mixed_skeletal_binary_moves_printed_ink_without_enabling_other_authors() -> TestResult {
+    let raw = include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/methanol.cdx");
     let mut f = Fixture::new(1160., 800., 1.)?;
     let path = f.directory.path("éthanol-原.cdx");
     let saved = f.directory.path("éthanol-保存-β.cdx");
     fs::write(&path, raw)?;
     f.warm();
-    f.choose("Marquee selection")?;
+    f.command("ui.ring_tool", json!({"size":8}))?;
     f.command("document.open_cdx", json!({"path":path}))?;
     f.command("ui.view", json!({"action":"actual"}))?;
     let shown = f.warm();
@@ -727,7 +727,7 @@ fn mixed_skeletal_binary_shows_printed_paper_without_a_canvas_author() -> TestRe
     {
         let engine = f.app.engine.lock().map_err(|_| "engine")?;
         assert!(
-            !engine
+            engine
                 .controls()
                 .iter()
                 .any(|c| c.id == "tool.selection" && c.enabled)
@@ -749,7 +749,7 @@ fn mixed_skeletal_binary_shows_printed_paper_without_a_canvas_author() -> TestRe
                 "{id}"
             );
         }
-        assert!(!engine.caption_creation_available() && !engine.selection_available());
+        assert!(!engine.caption_creation_available() && engine.selection_available());
     }
     for paper in [[56., 144.], [128., 192.], [205., 144.], [310., 290.]] {
         let start = projected(area, [512., 512.], 100., None, paper);
@@ -760,6 +760,59 @@ fn mixed_skeletal_binary_shows_printed_paper_without_a_canvas_author() -> TestRe
     }
     assert_eq!(f.state()?, opened);
     assert!(f.app.error.is_none(), "{:?}", f.app.error);
+    f.choose("Marquee selection")?;
+    let to_screen = |p| projected(area, [512., 512.], 100., None, p);
+    let start = to_screen([208., 144.]);
+    let end = to_screen([202.875, 147.25]);
+    f.frame(vec![Event::PointerMoved(start), super::button(start, true)]);
+    f.frame(vec![super::button(start, false)]);
+    assert_eq!(f.state()?["ui_selection"]["atom_ids"], json!([2]));
+    let before = f.state()?;
+    f.frame(vec![super::button(start, true)]);
+    let ghost = f.frame(vec![Event::PointerMoved(end)]);
+    assert_eq!(f.state()?, before);
+    let ink = |out: &egui::FullOutput| {
+        out.shapes
+            .iter()
+            .filter_map(|shape| match &shape.shape {
+                egui::Shape::Rect(rect)
+                    if rect.fill == egui::Color32::from_rgb(51, 102, 204)
+                        && area.contains(rect.rect.center()) =>
+                {
+                    Some(rect.rect)
+                }
+                _ => None,
+            })
+            .fold(egui::Rect::NOTHING, |bounds, r| bounds.union(r))
+    };
+    let original = ink(&shown);
+    let candidate = ink(&ghost);
+    assert!(original.is_positive() && candidate.is_positive());
+    assert!((candidate.center() - original.center() - (end - start)).length() < 1.1);
+    f.frame(vec![super::button(end, false)]);
+    let expected = include_bytes!("../../io/tests/fixtures/cdx-mixed-skeletal-move/printed.cdx");
+    let bytes = |f: &Fixture| -> TestResult<Vec<u8>> {
+        Ok(f.app
+            .engine
+            .lock()
+            .map_err(|_| "engine")?
+            .stored_document()?
+            .export_cdx()?
+            .to_vec())
+    };
+    assert_eq!(bytes(&f)?, expected);
+    assert_eq!(f.state()?["undo_depth"], 1);
+    f.frame(vec![
+        super::key(Key::ArrowRight, true, egui::Modifiers::NONE),
+        super::key(Key::ArrowRight, false, egui::Modifiers::NONE),
+    ]);
+    assert_eq!(f.state()?["undo_depth"], 2);
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(bytes(&f)?, expected);
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(bytes(&f)?, raw);
+    shortcut(&mut f, Key::Z, true);
+    let moved = f.state()?["document"].clone();
     shortcut(&mut f, Key::S, true);
     wait(&mut f, |f, _| {
         f.node("File name", &[Role::TextInput]).is_ok()
@@ -767,8 +820,9 @@ fn mixed_skeletal_binary_shows_printed_paper_without_a_canvas_author() -> TestRe
     set(&mut f, "File name", saved.to_str().ok_or("path")?)?;
     f.choose("Save")?;
     finish_actual_file_workflow(&mut f)?;
-    assert_eq!(fs::read(&saved)?, raw);
+    assert_eq!(fs::read(&saved)?, expected);
+    assert_eq!(fs::read(&path)?, raw);
     f.command("document.open_cdx", json!({"path":saved}))?;
-    assert_eq!(f.state()?["document"], opened["document"]);
+    assert_eq!(f.state()?["document"], moved);
     Ok(())
 }
