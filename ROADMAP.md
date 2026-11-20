@@ -809,9 +809,7 @@ Resolved composition now formats molecular formulas in strict Hill order.
 Combined element totals and numbered isotope terms both preserve the net charge.
 Twenty independently specified structures were checked with external RDKit.
 Carbon-free formulas use alphabetical element order. The library reports
-unresolved H explicitly. Source-aware inference, mass and the native Analysis
-workflow are still open. [Composition evidence](docs/verification-formula-composition.md)
-and [formula conventions and tests](docs/research/hill-formula.md).
+unresolved H explicitly. The native Analysis window, CLI and MCP show the formula of a supported drawing or the contribution of selected atoms. Qualified skeletal CDX resolves omitted H on the entire graph and reports how many atoms used the default. Broader source-specific H inference, mass, isotope distributions, elemental percentages and live analysis captions remain open. [Composition evidence](docs/verification-formula-composition.md), [formula conventions](docs/research/hill-formula.md) and [native and wire acceptance](docs/verification-analysis-window.md).
 
 Valence, aromaticity, stereo/CIP, checking, cleanup, formula/mass, analysis, reactions,
 curved arrows, brackets and chemically formatted captions. Compare against independently

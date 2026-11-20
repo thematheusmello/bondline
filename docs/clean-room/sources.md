@@ -1,5 +1,7 @@
 # Clean-room source register
 
+The [Analysis window contract](../research/analysis-window.md) records the selected-atom and whole-drawing workflow in vendor support and guide v25, together with the independent Hill notation policy.
+
 The [binary skeletal carbon contract](../research/cdx-skeletal.md) uses the SDK property IDs, zero-length implied booleans, Node label precedence and Element/H defaults. Original CDX data and a matching CDXML drawing exercise hidden carbon vertices with literal and omitted hydrogen counts.
 
 The [mixed CDX atom-label edit contract](../research/cdx-mixed-label-edits.md) covers Node-owned Element, attached H, child Text, signed rectangles and retained Page caption depths. Independent source pairs pin aliases between different containers and a change crossing the paper boundary.
@@ -2435,3 +2437,5 @@ Atom movement on certified skeletal CDX uses the published directly owned Node p
 Mixed skeletal CDX paper uses the Node's direct Text for printed heteroatoms, the documented Element/H defaults for hidden carbon, and the Text's enclosing rectangle. The authoring and source-completeness gates, optical policies and original independently constructed cases are recorded in [the binary mixed skeletal study](../research/cdx-mixed-skeleton.md). [Node](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) · [Attached H](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm) · [BoundingBox](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BoundingBox.htm)
 
 Source-preserving movement on mixed skeletal CDX applies one signed fixed-point translation to the owning Node position and each edge of its directly owned Text box. [Scoped movement contract and sources](../research/cdx-mixed-skeletal-movement.md) · [Published field order](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm)
+
+The Analysis window resolves omitted carbon H counts on certified skeletal CDX using the complete fragment bond order before selection. The published CDX default specifies the minimum valence-satisfying count. Bondline reports the number of atoms that used this rule and keeps each original source property intact. [CDX attached hydrogen](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm) · [Analysis policy](../research/analysis-window.md).

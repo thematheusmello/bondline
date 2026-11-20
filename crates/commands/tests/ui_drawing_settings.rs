@@ -165,7 +165,7 @@ fn schema_node<'a>(
 fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_name_order()
 -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 51);
+    assert_eq!(rows.len(), 53);
     assert_eq!(
         rows[..41].iter().map(|row| row.name).collect::<Vec<_>>(),
         OLD_NAMES
@@ -249,7 +249,7 @@ fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_na
         "stale_revision",
     )?;
     let controls = serde_json::to_value(engine.controls())?;
-    assert_eq!(controls.as_array().ok_or("controls")?.len(), 40);
+    assert_eq!(controls.as_array().ok_or("controls")?.len(), 41);
     let control = controls
         .as_array()
         .ok_or("controls")?
@@ -492,25 +492,25 @@ fn host_source_and_other_form_guards_fail_before_request_id_allocation() -> Test
             "old.mol",
             include_bytes!("../../io/tests/fixtures/mol/ethane-v2000.mol").as_slice(),
             "document.open_mol",
-            22,
+            23,
         ),
         (
             "old.cdx",
             include_bytes!("../../io/tests/fixtures/cdx/metadata-explicit.cdx").as_slice(),
             "document.open_cdx",
-            22,
+            23,
         ),
         (
             "old.sdf",
             include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf").as_slice(),
             "document.open_sdf",
-            16,
+            17,
         ),
         (
             "old.smi",
             b"CC opaque\0\xff\r\n".as_slice(),
             "document.open_smiles",
-            12,
+            13,
         ),
     ] {
         let path = directory.path(name);

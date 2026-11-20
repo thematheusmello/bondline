@@ -240,6 +240,23 @@ fn display_page<'a>(
         .ok_or(DisplayError::MissingPage { page_id })
 }
 
+impl StoredDocument {
+    /// Resolve attached H on the original complete skeletal CDX graph. Other sources
+    /// supply no CDX defaults. The returned counts never enter the authored model.
+    pub fn cdx_skeletal_hydrogen_counts(
+        &self,
+        cancel: &Cancellation,
+    ) -> Result<BTreeMap<AtomId, u16>, DisplayError> {
+        if !self.has_cdx_skeletal_preview() && !self.has_cdx_skeletal_label_preview() {
+            return Ok(BTreeMap::new());
+        }
+        let [page] = self.model().pages() else {
+            return Err(DisplayError::IncompleteSource);
+        };
+        display_counts(page, cancel)
+    }
+}
+
 fn display_counts(
     page: &Page,
     cancel: &Cancellation,

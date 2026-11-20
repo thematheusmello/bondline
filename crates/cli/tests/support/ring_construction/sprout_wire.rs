@@ -320,7 +320,7 @@ fn names(value: &Value) -> TestResult<BTreeSet<&str>> {
         .collect::<Result<_, _>>()?)
 }
 fn discovery(entries: &[Value], key: &str) -> TestResult {
-    assert_eq!(entries.len(), 51);
+    assert_eq!(entries.len(), 53);
     assert_eq!(
         entries.get(43).ok_or("preserved sprout index")?["name"],
         NAME
@@ -352,6 +352,8 @@ fn discovery(entries: &[Value], key: &str) -> TestResult {
                 "atom.create_authored_label",
                 "ui.caption",
                 "text.create",
+                "analysis.formula",
+                "ui.analysis",
             ])
             .collect::<BTreeSet<_>>()
     );
@@ -652,7 +654,7 @@ fn initialized_stdio_sprout_all_ring_families_and_phases_are_closed_literal_file
     rejected(&mut client, 110, stale, "stale_revision")?;
     assert_eq!(client.call(111, "document.inspect", json!({}))?, stable);
     let queried = client.call(112, "ui.controls", json!({}))?;
-    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 39);
+    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 40);
     client.finish()
 }
 

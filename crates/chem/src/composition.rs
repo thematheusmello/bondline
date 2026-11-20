@@ -1,5 +1,5 @@
 //! Literal atom/H accounting, independent of valence, topology and presentation.
-use bondline_model::{AtomId, Element, Fragment, GraphError};
+use bondline_model::{Atom, AtomId, Element, Fragment, GraphError};
 use std::{collections::BTreeMap, num::NonZeroU16};
 
 /// Elemental total, including every explicitly resolved attached hydrogen.
@@ -114,26 +114,47 @@ pub fn analyze_fragment(
     fragment: &Fragment,
     cancelled: impl Fn() -> bool,
 ) -> Result<Composition, CompositionError> {
-    check_cancel(&cancelled)?;
-    let hydrogen = Element::try_from(1)?;
-    let mut counts = Counts::default();
-    for atom in fragment.atoms() {
-        check_cancel(&cancelled)?;
-        let h = atom
-            .explicit_hydrogens
-            .ok_or(CompositionError::UnresolvedHydrogens(atom.id))?;
-        counts.add(atom.element, atom.isotope, 1)?;
-        counts.add(hydrogen, None, u64::from(h))?;
-        counts.charge = counts
-            .charge
-            .checked_add(i64::from(atom.charge))
-            .ok_or(CompositionError::ArithmeticOverflow)?;
+    Composition::from_atoms(fragment.atoms(), cancelled)
+}
+
+impl Composition {
+    /// Sum resolved authored atoms from one or more fragments. The caller supplies
+    /// each selected atom once. Selection boundaries never add or remove hydrogen.
+    pub fn from_atoms<'a>(
+        atoms: impl IntoIterator<Item = &'a Atom>,
+        cancelled: impl Fn() -> bool,
+    ) -> Result<Self, CompositionError> {
+        Self::from_atoms_with_hydrogen_defaults(atoms, |_| None, cancelled)
     }
-    let result = Composition {
-        elements: counts.elements.into_values().collect(),
-        isotopes: counts.isotopes.into_values().collect(),
-        charge: counts.charge,
-    };
-    check_cancel(&cancelled)?;
-    Ok(result)
+
+    /// Use the source's hydrogen convention only where the author omitted a count.
+    pub fn from_atoms_with_hydrogen_defaults<'a>(
+        atoms: impl IntoIterator<Item = &'a Atom>,
+        missing_count: impl Fn(AtomId) -> Option<u16>,
+        cancelled: impl Fn() -> bool,
+    ) -> Result<Self, CompositionError> {
+        check_cancel(&cancelled)?;
+        let hydrogen = Element::try_from(1)?;
+        let mut counts = Counts::default();
+        for atom in atoms {
+            check_cancel(&cancelled)?;
+            let h = atom
+                .explicit_hydrogens
+                .or_else(|| missing_count(atom.id))
+                .ok_or(CompositionError::UnresolvedHydrogens(atom.id))?;
+            counts.add(atom.element, atom.isotope, 1)?;
+            counts.add(hydrogen, None, u64::from(h))?;
+            counts.charge = counts
+                .charge
+                .checked_add(i64::from(atom.charge))
+                .ok_or(CompositionError::ArithmeticOverflow)?;
+        }
+        let result = Composition {
+            elements: counts.elements.into_values().collect(),
+            isotopes: counts.isotopes.into_values().collect(),
+            charge: counts.charge,
+        };
+        check_cancel(&cancelled)?;
+        Ok(result)
+    }
 }

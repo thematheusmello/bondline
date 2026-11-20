@@ -1430,3 +1430,188 @@ mod native_chair;
 
 #[path = "native_preferences_tests.rs"]
 mod native_preferences;
+
+#[test]
+fn analysis_window_menu_shows_current_formula_selected_atoms_and_empty_state() -> TestResult {
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    let painted = |output: &egui::FullOutput, label: &str| {
+        output
+            .shapes
+            .iter()
+            .any(|s| matches!(&s.shape, egui::Shape::Text(t) if t.galley.text()==label))
+    };
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    assert_eq!(f.state()?["analysis_window_open"], true);
+    assert!(painted(&f.warm(), "No atoms in this drawing."));
+    f.command(
+        "bond.create",
+        json!({"page_id":1,"begin_x_pt":72,"begin_y_pt":72,"end_x_pt":120,"end_y_pt":72}),
+    )?;
+    let drawing = f.warm();
+    assert!(painted(&drawing, "Molecular formula"));
+    assert!(painted(&drawing, "C2H6"));
+    f.command(
+        "ui.selection",
+        json!({"action":"set","expected_revision":1,"page_id":1,"atom_ids":[2]}),
+    )?;
+    let selected = f.warm();
+    assert!(painted(&selected, "Selected-atom composition"));
+    assert!(painted(&selected, "CH3"));
+    assert!(!painted(&selected, "C2H6"));
+    f.command("history.undo", json!({}))?;
+    assert!(painted(&f.warm(), "No atoms in this drawing."));
+    f.choose("View")?;
+    f.choose("Hide Analysis Window")?;
+    assert!(f.state()?.get("analysis_window_open").is_none());
+    assert!(!painted(&f.warm(), "No atoms in this drawing."));
+    Ok(())
+}
+
+#[test]
+fn analysis_header_drag_and_close_consume_their_paper_gestures_with_the_bond_tool_active()
+-> TestResult {
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    f.choose("Single bond")?;
+    f.command(
+        "bond.create",
+        json!({"page_id":1,"begin_x_pt":240,"begin_y_pt":360,"end_x_pt":288,"end_y_pt":360}),
+    )?;
+    let blank = f.warm();
+    let canvas = canvas(&blank)?;
+    let atom = {
+        let engine = f.app.engine.lock().map_err(|_| "engine")?;
+        let camera = engine.page_view(
+            canvas.width().floor() as u32,
+            canvas.height().floor() as u32,
+            PageId::new(1).ok_or("page")?,
+        )?;
+        let [x, y] = camera.canvas_position(Point2::new(240.0, 360.0)?)?;
+        canvas.min + egui::vec2(x, y)
+    };
+    let paper = blank
+        .shapes
+        .iter()
+        .filter_map(|s| match &s.shape {
+            egui::Shape::Rect(r) if r.fill == egui::Color32::WHITE => {
+                Some(r.rect.intersect(s.clip_rect))
+            }
+            _ => None,
+        })
+        .max_by(|a, b| a.area().total_cmp(&b.area()))
+        .ok_or("paper")?;
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    f.warm();
+    let panel = |f: &Fixture| {
+        f.context
+            .memory(|m| m.area_rect(egui::Id::new("Analysis")))
+            .ok_or("Analysis window")
+    };
+    let initial = panel(&f)?;
+    let title = |r: egui::Rect| egui::pos2(r.center().x, r.top() + 12.0);
+    let drag = |f: &mut Fixture, a: Pos2, b: Pos2| {
+        f.frame(vec![Event::PointerMoved(a)]);
+        f.frame(vec![button(a, true)]);
+        f.frame(vec![Event::PointerMoved(b)]);
+        f.frame(vec![button(b, false)]);
+        f.warm();
+    };
+    let before = f.state()?;
+    // Put the whole title bar, including its close button, above real drawing paper.
+    let dest = atom;
+    drag(&mut f, title(initial), dest);
+    let in_paper = panel(&f)?;
+    assert!(
+        (title(in_paper) - dest).length() < 4.0,
+        "title did not move to paper: initial {initial:?}, new {in_paper:?}, dest {dest:?}, paper {paper:?}"
+    );
+    let first = title(in_paper);
+    let second = first + egui::vec2(32.0, 38.0);
+    assert!(paper.contains(first) && paper.contains(second));
+    drag(&mut f, first, second);
+    let moved = panel(&f)?;
+    assert!((title(moved) - second).length() < 4.0);
+    assert_eq!(
+        f.state()?,
+        before,
+        "dragging the Analysis header authored underlying paper"
+    );
+    // A same-frame press and release at the painted title-bar X must only close.
+    let close = egui::pos2(moved.right() - 16.0, moved.top() + 13.0);
+    assert!(paper.contains(close));
+    f.frame(vec![
+        Event::PointerMoved(close),
+        button(close, true),
+        button(close, false),
+    ]);
+    f.warm();
+    let mut expected = before;
+    expected
+        .as_object_mut()
+        .ok_or("snapshot")?
+        .remove("analysis_window_open");
+    assert_eq!(
+        f.state()?,
+        expected,
+        "close click leaked through to the bond tool"
+    );
+    Ok(())
+}
+
+#[test]
+fn analysis_window_refreshes_on_skeletal_cdx_open_and_suppresses_previous_formula() -> TestResult {
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    let sources = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
+    let mut last = "No atoms in this drawing.";
+    let default_note = "The CDX valence default supplies hydrogen counts for 3 atoms.";
+    for (source, display, derived) in [
+        ("cdx-skeletal/all_h_missing.cdx", "C3H8", true),
+        ("cdx-mixed-skeleton/literal_h.cdx", "CH4O", false),
+        ("cdx-mixed-skeleton/amino_alcohol.cdx", "C3H9NO", true),
+        ("cdx-skeletal/propane.cdx", "C3H8", false),
+    ] {
+        f.command("document.open_cdx", json!({"path":sources.join(source)}))?;
+        let state = f.state()?;
+        assert_eq!(state["undo_depth"], 0);
+        let painted = f.warm();
+        for (needle, expected) in [(display, true), (last, false), (default_note, derived)] {
+            assert_eq!(
+                painted
+                    .shapes
+                    .iter()
+                    .any(|s| matches!(&s.shape,egui::Shape::Text(t) if t.galley.text()==needle)),
+                expected,
+                "{source}: {needle}"
+            );
+        }
+        assert_eq!(f.state()?, state);
+        last = display;
+    }
+    f.command(
+        "document.open_cdx",
+        json!({"path":sources.join("cdx-mixed-skeleton/ethanol.cdx")}),
+    )?;
+    let revision = f.state()?["revision"].clone();
+    for (ids, formula, count) in [(&[3][..], "HO", 0), (&[2, 3], "CH3O", 1)] {
+        f.command(
+            "ui.selection",
+            json!({"action":"set","expected_revision":revision,"page_id":1,"atom_ids":ids}),
+        )?;
+        let panel = f.warm();
+        let shows = |text: &str| {
+            panel.shapes.iter().any(
+                |shape| matches!(&shape.shape, egui::Shape::Text(t) if t.galley.text() == text),
+            )
+        };
+        assert!(shows("Selected-atom composition") && shows(formula));
+        assert_eq!(
+            shows("The CDX valence default supplies hydrogen counts for 1 atom."),
+            count == 1
+        );
+        assert!(!shows("C2H6O"));
+    }
+    Ok(())
+}

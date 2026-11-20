@@ -351,6 +351,32 @@ impl StoredDocument {
                 .is_none_or(|source| source.fully_mapped(&self.model))
     }
 
+    /// Whole-source coverage for reading literal atom counts. Display of a partial
+    /// record collection does not certify a whole-drawing composition.
+    pub fn has_analysis_coverage(&self) -> bool {
+        match &self.original {
+            None => true,
+            Some(OriginalSource::Smiles(_)) => false,
+            Some(OriginalSource::Mol { .. }) => self.is_fully_mapped(),
+            Some(OriginalSource::Cdx { .. }) => {
+                self.has_cdx_caption_preview()
+                    || self.has_cdx_atom_label_preview()
+                    || self.has_cdx_mixed_preview()
+                    || self.has_cdx_skeletal_preview()
+                    || self.has_cdx_skeletal_label_preview()
+            }
+            Some(OriginalSource::Cdxml { .. }) => {
+                self.is_fully_mapped()
+                    || self.has_caption_projection()
+                    || self.has_boxed_atom_labels()
+                    || self.has_connected_atom_labels()
+                    || self.has_mixed_atom_labels()
+                    || self.has_flagged_atom_labels()
+                    || self.has_label_defaults_projection()
+            }
+        }
+    }
+
     /// Source eligibility for plain-caption creation. The candidate still needs exact
     /// source and page certification before it can commit.
     pub fn can_create_caption(&self) -> bool {

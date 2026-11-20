@@ -472,3 +472,29 @@ fn strict_hill_order_uses_symbols_and_plural_isotope_bins() -> TestResult {
     );
     Ok(())
 }
+
+#[test]
+fn a_source_default_supplies_only_an_omitted_atom_count() -> TestResult {
+    let mut carbon = Atom::new(AtomId::new(1).ok_or("carbon")?, Element::try_from(6)?, None);
+    carbon.explicit_hydrogens = Some(0);
+    let nitrogen = Atom::new(
+        AtomId::new(2).ok_or("nitrogen")?,
+        Element::try_from(7)?,
+        None,
+    );
+    let atoms = [carbon, nitrogen];
+    let composition = bondline_chem::Composition::from_atoms_with_hydrogen_defaults(
+        &atoms,
+        |id| {
+            assert_eq!(id, atoms[1].id);
+            Some(3)
+        },
+        || false,
+    )?;
+    assert_eq!(composition.hill_formula(FormulaIsotopes::Separate)?, "CH3N");
+    assert!(
+        matches!(bondline_chem::Composition::from_atoms(&atoms, || false),
+        Err(bondline_chem::CompositionError::UnresolvedHydrogens(id)) if id == atoms[1].id)
+    );
+    Ok(())
+}

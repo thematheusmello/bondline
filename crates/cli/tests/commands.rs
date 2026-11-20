@@ -457,6 +457,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
     assert_eq!(
         names,
         [
+            "analysis.formula",
             "atom.create_authored_label",
             "atom.set_authored_label",
             "atom.set_label",
@@ -497,6 +498,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
             "structure.paste_smiles",
             "text.create",
             "text.set_run",
+            "ui.analysis",
             "ui.atom_label",
             "ui.bond_tool",
             "ui.caption",
@@ -1170,5 +1172,25 @@ fn executable_opens_actual_v3000_and_default_save_preserves_all_original_source_
     assert_eq!(external["atoms"][0]["explicit_h"], 3);
     assert_eq!(external["atoms"][1]["explicit_h"], 3);
     assert_eq!(external["bonds"][0]["order"], 1.0);
+    Ok(())
+}
+
+#[test]
+fn analysis_formula_runs_through_the_cli_after_an_authored_edit()
+-> Result<(), Box<dyn std::error::Error>> {
+    let output=std::process::Command::new(env!("CARGO_BIN_EXE_bondline-cli")).arg("run")
+        .args(["--cmd",r#"{"command":"bond.create","params":{"page_id":1,"begin_x_pt":72,"begin_y_pt":72,"end_x_pt":120,"end_y_pt":72}}"#])
+        .args(["--cmd",r#"{"command":"analysis.formula","params":{"expected_revision":1,"expected_selection_epoch":0}}"#]).output()?;
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: serde_json::Value = serde_json::from_slice(&output.stdout)?;
+    assert_eq!(
+        result["analysis"],
+        serde_json::json!({"scope":"document","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":false,"formula":"C2H6"})
+    );
+    assert_eq!(result["undo_depth"], 1);
     Ok(())
 }

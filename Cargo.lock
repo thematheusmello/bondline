@@ -526,6 +526,7 @@ name = "bondline-commands"
 version = "0.1.0"
 dependencies = [
  "base64",
+ "bondline-chem",
  "bondline-io",
  "bondline-model",
  "bondline-render",

@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{collections::VecDeque, sync::Arc};
 
+mod analysis;
 mod atom;
 mod atom_ui;
 mod bond;
@@ -37,6 +38,7 @@ mod smiles_paste;
 mod smiles_query;
 mod smiles_records;
 mod view;
+pub use analysis::{AnalysisFormula, AnalysisOutcome, AnalysisReport, AnalysisScope, UiAnalysis};
 pub use atom::AtomSetLabel;
 pub use atom_ui::{UiAtomLabel, UiAtomLabelRequest};
 pub use bond::{
@@ -234,10 +236,14 @@ command_registry! {
     AtomCreateAuthoredLabel(AtomCreateLabel) => ("atom.create_authored_label", "Create one explicit box-positioned child label on a qualified imported hidden carbon using a supplied style and existing file resources; preserves IDs, geometry and carbon-display flags, synchronizes literal element/H and validates source and the final page before one history edit.", false),
     UiCaption(UiCaption) => ("ui.caption", "Select Text or open, apply, or cancel a plain caption draft on an attached native host. Apply uses the shared caption authoring commands.", false),
     TextCreate(TextCreate) => ("text.create", "Create a single-line Roboto Regular caption at an explicit left baseline. Preserves supported CDXML and CDX source and validates the complete page before one history edit.", false),
+    AnalysisFormula(AnalysisFormula) => ("analysis.formula", "Read the Hill formula for the current selection or complete drawing. Reports skeletal CDX hydrogen defaults, unresolved hydrogens, partial fragments and unsupported source coverage.", true),
+    UiAnalysis(UiAnalysis) => ("ui.analysis", "Show or hide the Analysis window for this session without changing the drawing or its history.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error(transparent)]
+    Composition(#[from] bondline_chem::CompositionError),
     #[error("unknown command: {0}")]
     UnknownCommand(String),
     #[error("caption editing requires a native drawing or a source-qualified CDXML or CDX caption")]
@@ -450,6 +456,7 @@ impl Error {
             | Self::MissingAtom { .. }
             | Self::MissingBond { .. } => "not_found",
             Self::MissingSelectionAtom(_) => "not_found",
+            Self::Composition(_) => "analysis_failure",
             Self::StaleSelection => "stale_selection",
             Self::UiSelectionEpochExhausted => "ui_selection_epoch_exhausted",
             Self::UnsupportedSelection(_) => "unsupported_content",
@@ -559,6 +566,8 @@ struct Request {
 pub struct CommandResult {
     #[serde(skip)]
     pub view_target_prepared: bool,
+    #[serde(skip)]
+    pub analysis_visibility_changed: bool,
     /// Rust-only native result identity, captured atomically with its actual finish.
     /// It cannot authorize a Save/close acknowledgment and is absent from every wire reply.
     #[serde(skip)]
@@ -630,6 +639,10 @@ pub struct CommandResult {
     pub ui_view_operation: Option<ViewOperation>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub controls: Option<Vec<ControlInfo>>,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub analysis_window_open: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis: Option<AnalysisReport>,
 }
 
 #[derive(Debug)]
@@ -652,6 +665,7 @@ pub struct Engine {
     drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy,
     preferences_ui: preferences::PreferencesPolicy,
     chain_ui: chain_tool::ChainUiPolicy,
+    analysis_window_open: bool,
     selection: selection::SelectionPolicy,
     bond_tool: BondToolState,
     effective_tool: EffectiveTool,
@@ -715,6 +729,7 @@ impl Engine {
             drawing_settings_ui: drawing_settings_ui::DrawingSettingsUiPolicy::default(),
             preferences_ui: preferences::PreferencesPolicy::default(),
             chain_ui: chain_tool::ChainUiPolicy::default(),
+            analysis_window_open: false,
             selection: selection::SelectionPolicy::default(),
             bond_tool: BondToolState::default(),
             effective_tool: EffectiveTool::default(),
@@ -740,6 +755,7 @@ impl Engine {
     pub fn state(&self) -> CommandResult {
         CommandResult {
             view_target_prepared: false,
+            analysis_visibility_changed: false,
             changed: false,
             revision: self.revision,
             document: match self.document.as_ref() {
@@ -785,6 +801,8 @@ impl Engine {
             ui_ring_tool_operation: None,
             ui_view_operation: None,
             controls: None,
+            analysis_window_open: self.analysis_window_open,
+            analysis: None,
             ui_file_context_stamp: None,
         }
     }
@@ -819,6 +837,26 @@ impl Engine {
         let mut drawing_focus = None;
         let changed = match command {
             Command::Inspect(_) => false,
+            Command::AnalysisFormula(params) => {
+                return Ok(Prepared::immediate(CommandResult {
+                    analysis: Some(self.analysis_formula(params)?),
+                    ..self.state()
+                }));
+            }
+            Command::UiAnalysis(params) => {
+                if params.expected_revision != self.revision {
+                    return Err(Error::StaleRevision);
+                }
+                if self.close_state() != CloseState::Open {
+                    return Err(Error::UiBusy);
+                }
+                let changed = self.analysis_window_open != params.visible;
+                self.analysis_window_open = params.visible;
+                return Ok(Prepared::immediate(CommandResult {
+                    analysis_visibility_changed: changed,
+                    ..self.state()
+                }));
+            }
             Command::NewDocument(params) => {
                 return Ok(Prepared::immediate(self.new_document(params)?));
             }
@@ -1493,6 +1531,8 @@ mod tests {
                 "document.set_document_settings",
                 "text.set_run",
                 "text.create",
+                "analysis.formula",
+                "ui.analysis",
             ]
             .into_iter()
             .collect()

@@ -550,14 +550,15 @@ and all required validation steps. [Tests and scope](docs/verification-cdx-mixed
 
 ### Next executable work
 
-1. Integrate the native Analysis window from `../bondline-analysis-window`.
-   Check the whole drawing and selected atoms through the real command adapters.
-   Source-specific hydrogen defaults for formula calculation need their own
-   evidence, including omissions that must survive Save/reopen.
-2. Mixed skeletal CDX movement now passes focused IO, command, App-frame, native
-   macOS, CLI and initialized MCP checks. Existing label contents remain outside
-   this edit. The integrated Analysis window should verify composition for a
-   selected printed atom and hidden atom on the same page.
+1. The Analysis window and CDX hydrogen defaults now run with mixed skeletal
+   movement. Whole drawings, selected printed oxygen, hidden carbons and mixed
+   selections pass formula checks using the complete fragment topology. The CLI
+   preserves source H omissions after movement and Unicode Save/reopen.
+   Mass, isotope distribution and elemental percentages remain open.
+   [Analysis evidence](docs/verification-analysis-window.md).
+2. Mixed skeletal CDX movement passes focused IO, command, App-frame, native
+   macOS, CLI and initialized MCP checks. Changing the printed label body on
+   these sources still needs its own byte and whole-page proof.
    [Movement tests and scope](docs/verification-cdx-mixed-skeletal-movement.md).
 3. The web host in `../bondline-web-workspace` is exercising actual egui/WebGPU
    startup, offline editing and history, and recovery across browser tabs.

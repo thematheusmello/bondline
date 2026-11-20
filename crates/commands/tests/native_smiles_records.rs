@@ -24,7 +24,7 @@ fn control<'a>(rows: &'a Value, id: &str) -> TestResult<&'a Value> {
 fn import_binding_is_one_typed_file_presentation_without_a_second_registry_command() -> TestResult {
     let mut engine = Engine::default();
     let rows = controls(&engine)?;
-    assert_eq!(rows.as_array().ok_or("controls")?.len(), 39);
+    assert_eq!(rows.as_array().ok_or("controls")?.len(), 40);
     let import = control(&rows, "file.import_smiles_records")?;
     assert_eq!(import["label"], "Import SMILES records…");
     assert_eq!(import["menu"], "File");
@@ -35,7 +35,7 @@ fn import_binding_is_one_typed_file_presentation_without_a_second_registry_comma
         import["command"],
         json!({"command":"ui.file","params":{"expected_revision":0,"action":"import_smiles_records"}})
     );
-    assert_eq!(bondline_commands::registry().len(), 51);
+    assert_eq!(bondline_commands::registry().len(), 53);
     engine.set_ui_file_host(true);
     let rows = controls(&engine)?;
     let import = control(&rows, "file.import_smiles_records")?;
@@ -55,7 +55,7 @@ fn projected_smiles_exposes_view_and_order_modes_without_granting_generic_source
     engine.set_ui_file_host(true);
     engine.dispatch("document.open_smiles", json!({"path":input}))?;
     let raw = controls(&engine)?;
-    assert_eq!(raw.as_array().ok_or("raw controls")?.len(), 12);
+    assert_eq!(raw.as_array().ok_or("raw controls")?.len(), 13);
     assert_eq!(control(&raw, "file.preferences")?["enabled"], true);
     assert_eq!(
         control(&raw, "file.preferences")?["disabled_reason"],
@@ -90,7 +90,7 @@ fn projected_smiles_exposes_view_and_order_modes_without_granting_generic_source
     let before = serde_json::to_value(engine.state())?;
     engine.set_view_canvas_size(1024, 1024)?;
     let rows = controls(&engine)?;
-    assert_eq!(rows.as_array().ok_or("projected controls")?.len(), 22);
+    assert_eq!(rows.as_array().ok_or("projected controls")?.len(), 23);
     assert_eq!(control(&rows, "file.preferences")?["enabled"], true);
     assert_eq!(
         control(&rows, "file.preferences")?["disabled_reason"],
@@ -155,7 +155,7 @@ fn sdf_retains_its_own_controls_and_raw_import_obeys_host_and_close_guards() -> 
     sdf.set_ui_file_host(true);
     sdf.dispatch("document.open_sdf", json!({"path":sdf_path}))?;
     let rows = controls(&sdf)?;
-    assert_eq!(rows.as_array().ok_or("SDF controls")?.len(), 16);
+    assert_eq!(rows.as_array().ok_or("SDF controls")?.len(), 17);
     assert_eq!(control(&rows, "file.preferences")?["enabled"], true);
     assert_eq!(
         control(&rows, "file.preferences")?["disabled_reason"],
