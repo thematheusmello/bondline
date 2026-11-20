@@ -190,8 +190,10 @@ original record indices. Captions above the chemical ink must have distinct
 positive depths. Exact model equality controls display and unchanged CDX Save.
 The existing-run CDX writer accepts a mixed drawing through its own exact
 source/model proof. It resolves the direct caption against its live ID and
-re-imports the whole candidate. The separate creation and atom-label writers
-keep their original source requirements. [Mixed-page contract](research/cdx-mixed-caption.md),
+re-imports the whole candidate. Appending a caption records its re-imported
+profile beside the exact current bytes and model in the new history entry.
+A chemical-only page becomes mixed. Undo restores its earlier profile, bytes
+and atom-label edit capability. [Creation and history](research/cdx-chemical-caption-creation.md). [Mixed-page contract](research/cdx-mixed-caption.md),
 [mixed caption edits](research/cdx-mixed-caption-edits.md).
 
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and

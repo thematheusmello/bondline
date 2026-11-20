@@ -57,7 +57,11 @@ each live Text ID from the checked raw IDs. [CDXML contract](research/native-cap
 
 CDX creation requires a single qualified Poster page with white paper, a usable
 UTF-8 Roboto entry and zero or more direct captions. The first caption on empty
-paper has explicit paint depth zero. New baselines use signed 16.16
+paper has explicit paint depth zero. The first caption on a qualified chemical
+drawing takes depth one. On a mixed page the new depth is one above the
+frontmost caption. All earlier fragment, label and caption bytes survive
+the append. [Chemical drawing workflow](verification-cdx-chemical-caption-creation.md).
+New baselines use signed 16.16
 coordinates. Save writes the appended Text and its persistent live-ID ObjectTag
 into the original byte stream. Both formats commit one history edit after
 validating the complete scene and file representation. Undo retains the session's

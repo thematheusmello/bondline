@@ -443,24 +443,45 @@ with one ignored, all three AccessKit tests, and the formatting, clippy, layer,
 license, asset and corpus checks. GitHub Actions stays off.
 [Run-edit evidence](docs/verification-cdx-mixed-caption-edits.md).
 
+[PR 19](https://github.com/thematheusmello/bondline/pull/19) landed at
+`c33987c`. Its tree equals the reviewed head and the merged feature ref is retired.
+
+### Adding captions to imported chemical drawings
+
+On `feat/cdx-chemical-caption-create`, the source contract is `4151329`,
+writer and receiving tests `373b327`, independent file and history witnesses
+`4f3144d`, sanitizer oracle `fa56c29`, native App input `d927dc5`, actual CLI
+`fdbd710` and refusal cases `50ba05f`. On supported chemical-only pages,
+a new caption sits above the chemical ink. On mixed pages it sits above all
+the earlier captions. Undo restores the exact input. The CLI, MCP server
+and native host now agree on the independently predicted files, colors and
+IDs, including both 595-byte “Note β” hashes from the preceding checkpoint.
+The new App tests cover ink selection and draft creation on blank paper.
+Offline Chrome ran the Rust IO example from `1e43cd8` and reproduced all
+four exact files. A deliberately wrong expected file failed. Final local CI
+passed 2,343 workspace tests with one ignored, three AccessKit tests and all
+gates. The earlier intermittent MCP bind failure on port 64219 remains
+unexplained. GitHub Actions stays off.
+[Acceptance and reproduction](docs/verification-cdx-chemical-caption-creation.md).
+
 ### Next executable work
 
-1. Add a plain caption to blank paper on a qualified mixed CDX source. Pin
-   source-wide ID selection and paint depth above existing captions, direct
-   Page ownership, exact Fragment retention, Undo and a sparse branched ID.
-   Verify occupied chemical/caption hits, Unicode Save/reopen and editable
-   picking of the inserted run. The checked first input is the 487-byte
-   mixed-edit `before.cdx`. Creating `Note β` at (300.25, 400.75) pt currently
-   refuses. The target insertion begins at byte 483, raw object ID 903, depth 8,
-   live ID 20, and produces 595 bytes with SHA-256
-   `6512f03f1272a12ddfdaeb77eccedce7f31f5a9e2f1f460f7ad8dcb5378eb12f`.
-   After Undo, live ID 21 gives `f45b8d50c6b36d1ba8958f7e170f3bf1f19a36c830f11223eb77f754be861f44`.
-   The first caption on a chemical-only drawing needs a separate AtomLabels-to-Mixed
-   proof and depth 1 above the chemical ink. Retain the established raw-ID
-   overflow check pending a separate allocator contract.
-2. Extend mixed chemical editing and interleaved depths from public semantics.
-   General imported styles, source objects, other platforms and all remaining
-   M0–M5 requirements stay in the roadmap and parity checklist.
+1. Preserve existing **atom-label editing after annotation**. The chemical-only
+   source becomes a mixed page after adding its first caption. That source can
+   display both kinds of text and edit its captions. Editing its atom label
+   currently refuses. Pin the exact same-container Node and child Text handles
+   independently of direct captions sharing raw ID 73. Reuse the existing
+   Element, H, label body and signed box writer with full mixed-page certification.
+   Test an edit on each fragment, a newly authored caption, a Page caption
+   before the fragments, a connected bond, Undo and Save/reopen. Check
+   paint order and occupied pointer hits separately. The ignored independent
+   replay under `target/cdx-mixed-label-edit-preparation` pins the first
+   432-to-431-byte OH change to
+   `f04822bdfed2d439f6b18811d3a0bf4012affb0655b04a6ed3c22909325e2af7`.
+2. Extend interleaved depths, supported styles, missing resources and
+   other format and authoring workflows in the roadmap. The conservative raw-ID
+   allocator still refuses when the old maximum is UINT32_MAX. A different
+   allocation policy needs a separately tested source contract.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read
