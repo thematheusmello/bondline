@@ -401,7 +401,10 @@ checks. All six variants match independent complete files, with 19 unsupported
 sources retaining their previous behavior. Physical Mac input reached the
 draft. The background Mac host completed Apply, history, Save, reopen, existing
 draft inspection and Cancel. CPU and Metal captures match. The qualified
-10,000-run sanitizer check passes with 103 immutable seeds.
+10,000-run sanitizer check passes with 103 immutable seeds. Feature commit
+`0728770` is pushed. Local `cargo xtask ci` passed 2,324 workspace tests with
+one ignored, plus three AccessKit tests and all local gates. The strengthened
+fallback assertions and their warnings-denied Clippy check also passed.
 [Contract](docs/research/cdx-empty-caption.md), [verification](docs/verification-cdx-empty-caption.md).
 
 ### Next executable work

@@ -76,9 +76,18 @@ input remain unverified.
 To replay the committed checks from the repository root, run
 
 ```sh
-python3 crates/io/tests/fixtures/cdx-caption-empty/generate.py
+python3 -B crates/io/tests/fixtures/cdx-caption-empty/generate.py
 cargo test --locked -p bondline-io --test cdx_empty_caption
 cargo test --locked -p bondline-commands --test cdx_caption_creation
 cargo test --locked -p bondline-ui empty_cdx_paper_creates_its_first_caption
 BONDLINE_PYTHON="$PWD/.cache/oracles/format-python/bin/python" cargo xtask ci
 ```
+
+
+The local `cargo xtask ci` run passed 2,324 workspace tests with one ignored,
+plus all three AccessKit tests. Formatting, warnings-denied Clippy, layers,
+licenses, assets and the pinned corpus passed. After adding explicit A4,
+empty-model, display and conversion checks for the 18 fallback files, the
+affected IO suite and warnings-denied Clippy also passed separately. The full
+log SHA-256 is `5b51fdf255d4d42d25f49accb5337de110b6d220d1f9c7105825fcbe50ce877f`.
+GitHub Actions stayed disabled.
