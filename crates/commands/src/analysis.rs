@@ -222,7 +222,7 @@ impl Engine {
                 .count(),
         );
         let hydrogens = if defaulted_hydrogen_atoms.is_some() {
-            stored.cdx_skeletal_hydrogen_counts(&Default::default())?
+            stored.analysis_hydrogen_counts(&Default::default())?
         } else {
             Default::default()
         };

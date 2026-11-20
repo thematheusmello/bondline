@@ -2020,3 +2020,52 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
     }
     client.finish()
 }
+
+#[test]
+fn stdio_mol_analysis_uses_unselected_neighbours_and_retains_original_valence_fields()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let source = include_str!("../../io/tests/fixtures/sdf-preview/valence-absent-mixed.sdf");
+    let end = source.find("M  END\n").ok_or("ethanol MOL block")? + "M  END\n".len();
+    let original = source.get(..end).ok_or("complete MOL block")?;
+    let input = directory.path("ethanol.mol");
+    let saved = directory.path("保存-ethanol.mol");
+    std::fs::write(&input, original)?;
+    let mut client = Client::start()?;
+    client.call(1, "initialize", json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"mol-analysis","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let mut id = 1;
+    let mut call = |name: &str, arguments: Value| -> Result<Value, Box<dyn std::error::Error>> {
+        id += 1;
+        Ok(client.call(id,"tools/call",json!({"name":name,"arguments":arguments}))?["result"]["structuredContent"].clone())
+    };
+    let opened = call("document.open_mol", json!({"path":input}))?;
+    assert_eq!(opened["revision"], 1);
+    let selected = call(
+        "ui.selection",
+        json!({"action":"set","expected_revision":1,"page_id":1,"atom_ids":[2,3]}),
+    )?;
+    let epoch = &selected["ui_selection"]["epoch"];
+    let result = call(
+        "analysis.formula",
+        json!({"expected_revision":1,"expected_selection_epoch":epoch}),
+    )?;
+    assert_eq!(
+        result["analysis"],
+        json!({"scope":"selection","status":"available","formula":"CH3O","atom_count":2,"fragment_count":1,"partial_fragments":true,"defaulted_hydrogen_atoms":2})
+    );
+    let blocked = call(
+        "selection.translate",
+        json!({"expected_revision":1,"expected_selection_epoch":epoch,"delta_x_pt":1,"delta_y_pt":0}),
+    )?;
+    assert_eq!(blocked["error"]["code"], "unsupported_content");
+    let state = call("document.inspect", json!({}))?;
+    assert_eq!(state["document"], opened["document"]);
+    assert_eq!(state["ui_selection"], selected["ui_selection"]);
+    assert_eq!(state["undo_depth"], 0);
+    assert_eq!(state["file"]["dirty"], false);
+    call("document.save_mol", json!({"path":saved}))?;
+    assert_eq!(std::fs::read(&saved)?, original.as_bytes());
+    client.finish()?;
+    Ok(())
+}
