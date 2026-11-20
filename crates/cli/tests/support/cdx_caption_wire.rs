@@ -86,6 +86,47 @@ fn cli_adds_a_caption_above_the_chemical_graph_and_reopens_the_branched_id() -> 
     Ok(())
 }
 
+#[test]
+fn cli_preserves_the_new_caption_when_editing_an_existing_chemical_label() -> TestResult {
+    let raw = include_bytes!("../../../io/tests/fixtures/cdx-label-preview/boxed.cdx");
+    let annotated =
+        include_bytes!("../../../io/tests/fixtures/cdx-chemical-caption-create/chemical_first.cdx");
+    let edited =
+        include_bytes!("../../../io/tests/fixtures/cdx-mixed-label-edit/chemical_first_oh.cdx");
+    let directory = support::SdfTestDirectory::new()?;
+    let input = directory.path("chemical-原.cdx");
+    let caption = directory.path("caption-β.cdx");
+    let output = directory.path("OH-保存.cdx");
+    fs::write(&input, raw)?;
+    let reopened = cli(&[
+        request("document.open_cdx", json!({"path":input})),
+        request(
+            "text.create",
+            json!({"expected_revision":1,"page_id":1,
+            "x_pt":144.25,"y_pt":216.75,"text":"Phase β & q"}),
+        ),
+        request(
+            "atom.set_authored_label",
+            json!({"expected_revision":2,"page_id":1,
+            "fragment_id":1,"atom_id":1,"element":8,"explicit_hydrogens":1}),
+        ),
+        request("history.undo", json!({})),
+        request("document.save_cdx", json!({"path":caption})),
+        request("history.redo", json!({})),
+        request("document.save_cdx", json!({"path":output})),
+        request("document.open_cdx", json!({"path":output})),
+    ])?;
+    assert_eq!(fs::read(&input)?, raw);
+    assert_eq!(fs::read(&caption)?, annotated);
+    assert_eq!(fs::read(&output)?, edited);
+    let page = &reopened["document"]["pages"][0];
+    assert_eq!(page["texts"][0]["runs"][0]["text"], "Phase β & q");
+    assert_eq!(page["fragments"][0]["atoms"][0]["element"], 8);
+    assert_eq!(reopened["file"]["dirty"], false);
+    assert_eq!(reopened["undo_depth"], 0);
+    Ok(())
+}
+
 fn request(command: &str, params: Value) -> Value {
     json!({"command":command,"params":params})
 }
