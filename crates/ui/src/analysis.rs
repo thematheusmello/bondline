@@ -20,7 +20,9 @@ impl AnalysisWindow {
             !engine.capture_stamp_matches(stamp) || *previous != epoch
         }) {
             let report = engine
-                .execute(Command::AnalysisProperties(engine.analysis_request()))
+                .execute(Command::AnalysisProperties(
+                    engine.analysis_properties_request(false),
+                ))
                 .map_err(|error| error.to_string())
                 .and_then(|state| {
                     state
@@ -71,6 +73,7 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
             defaulted_hydrogen_atoms,
             formula,
             masses,
+            ..
         } => {
             let title = if *partial_fragments {
                 "Selected-atom composition"
