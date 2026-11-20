@@ -554,9 +554,11 @@ and all required validation steps. [Tests and scope](docs/verification-cdx-mixed
    Check the whole drawing and selected atoms through the real command adapters.
    Source-specific hydrogen defaults for formula calculation need their own
    evidence, including omissions that must survive Save/reopen.
-2. `../bondline-cdx-mixed-skeletal-movement` is adding source-preserving
-   movement to the printed-label drawings. Verify position and dependent
-   bounding-box bytes together, then undo, redo and reopen.
+2. Mixed skeletal CDX movement now passes focused IO, command, App-frame, native
+   macOS, CLI and initialized MCP checks. Existing label contents remain outside
+   this edit. The integrated Analysis window should verify composition for a
+   selected printed atom and hidden atom on the same page.
+   [Movement tests and scope](docs/verification-cdx-mixed-skeletal-movement.md).
 3. The web host in `../bondline-web-workspace` is exercising actual egui/WebGPU
    startup, offline editing and history, and recovery across browser tabs.
    The codec test exercises a separate headless Wasm entry point. Interactive
