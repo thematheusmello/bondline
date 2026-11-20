@@ -635,7 +635,17 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
     )?;
     writeln!(
         output,
-        "additional corpus chemistry comparisons pending: mass, perceived aromaticity, stereo labels, canonical SMILES, InChI and names"
+        "mass source files: {} matched, {} unavailable",
+        chemistry.files.matched, chemistry.files.unavailable
+    )?;
+    writeln!(
+        output,
+        "mass record checks: {} matched, {} unavailable",
+        chemistry.records.matched, chemistry.records.unavailable
+    )?;
+    writeln!(
+        output,
+        "additional corpus chemistry comparisons pending: perceived aromaticity, stereo labels, canonical SMILES, InChI and names"
     )?;
     if round_trips == 0
         && mol_checks == 0
@@ -1548,6 +1558,16 @@ mod tests {
         }
         assert!(output.contains("formula source files: 2 matched RDKit, 5 unavailable"));
         assert!(output.contains("formula record checks: 5 matched RDKit, 0 unavailable"));
+        for observed in [
+            "bondline-original-isotopic-chain.smi open SMILES record 1 masses: Bondline molecular weight 47.061355, exact mass 47.045220 Da",
+            "bondline-original-salt-branch.smi open SMILES record 1 masses: Bondline molecular weight 96.104769, exact mass 96.055109 Da",
+            "RDKit MolWt 96.105000, reference adjusted for CIAAW atomic weights 96.104769",
+            "bondline-original-ethane-explicit.cdx drawing masses unavailable: unsupported_source",
+            "mass source files: 2 matched, 5 unavailable",
+            "mass record checks: 5 matched, 0 unavailable",
+        ] {
+            assert!(output.contains(observed), "{observed}");
+        }
         Ok(())
     }
 

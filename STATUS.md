@@ -18,6 +18,10 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each at
 commit as the user requires. The user now expressly authorizes merging completed feature
 PRs into main; release/publication and enabling Actions remain separate.
 
+## Pinned corpus mass comparisons
+
+The offline corpus gate compares full-precision molecular weight and monoisotopic exact mass with external RDKit on three complete drawings and five directly selected records. It prints the RDKit and CIAAW convention difference for the sodium salt and names the five unavailable whole-file scopes. [Measured values and numerical bounds](docs/corpus/README.md#mass-results).
+
 ## Individual SMILES record chemistry
 
 The raw SMILES Analysis panel, CLI and initialized MCP inspect one molecule without a drawing import. The three pinned records match RDKit on isotope-resolved formula and drawn atoms. The background macOS panel showed all three molecules, their masses and elemental percentages, preserved the Unicode Save/reopen bytes and closed normally. The two simultaneously visible record steppers now have distinct labels. Branch `feat/smiles-record-analysis` contains the chemistry and native selector checks. The [receiving record](docs/verification-smiles-record-analysis.md) gives commands, evidence and platform scope. Aromaticity, zero-isotope interpretation, generated canonical SMILES and InChI remain open.

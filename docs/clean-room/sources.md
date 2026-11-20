@@ -2499,3 +2499,5 @@ the separate fork and exec stages. The experimental comparison uses the
 installed kernel and the real listener. The compatibility evidence identifies
 the older kernels and exact limits of the observed release guarantee.
 [Apple XNU fork and exec](https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_exec.c) · [Source decision and receiving evidence](../research/macos-listener-lifetime.md)
+
+Per-scope corpus masses use external RDKit molecular descriptors with an explicit CIAAW natural-sodium adjustment for the salt fixture. The [pinned results, conventions and acceptance tolerances](../corpus/README.md#mass-results) identify the primary sources and uncovered files.

@@ -4,7 +4,7 @@ import re
 import sys
 
 from rdkit import Chem, rdBase
-from rdkit.Chem import rdMolDescriptors
+from rdkit.Chem import Descriptors, rdMolDescriptors
 
 
 def reference(molecule):
@@ -17,7 +17,15 @@ def reference(molecule):
         tokens = re.findall(r"(?:\[[0-9]+[A-Z][a-z]?\]|[A-Z][a-z]?)[0-9]*", body)
         assert "".join(tokens) == body
         formula = "".join(sorted(tokens, key=lambda t: re.search(r"[A-Z][a-z]?", t)[0])) + (charge or "")
-    return {"formula": formula, "atoms": molecule.GetNumAtoms()}
+    # Record the unmodified descriptor separately. This corpus' only differing
+    # standard atomic weight is natural sodium (CIAAW 22.98976928).
+    weight = Descriptors.MolWt(molecule)
+    sodium = sum(a.GetAtomicNum() == 11 and a.GetIsotope() == 0 for a in molecule.GetAtoms())
+    rdkit_na = Chem.GetPeriodicTable().GetAtomicWeight(11)
+    assert rdkit_na == 22.990, "review the pinned RDKit atomic-weight table"
+    return {"formula": formula, "atoms": molecule.GetNumAtoms(), "rdkit_weight": weight,
+            "conventional_weight": weight + sodium * (22.98976928 - rdkit_na),
+            "exact_mass_da": rdMolDescriptors.CalcExactMolWt(molecule)}
 
 
 def records(kind, source):
