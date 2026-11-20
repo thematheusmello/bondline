@@ -545,3 +545,36 @@ fn stdio_reopens_only_the_edited_printed_atom_in_the_second_fragment() -> Result
     assert_eq!(analysis["analysis"]["formula"], "C2H9NO");
     client.finish()
 }
+
+#[test]
+fn stdio_creates_the_first_printed_atom_on_an_all_carbon_page() -> Result {
+    let fixtures = Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
+    let directory = support::SdfTestDirectory::new()?;
+    let path = directory.path("エーテル-β.cdx");
+    let mut client = initialized_client()?;
+    let opened = client.call(
+        2,
+        "document.open_cdx",
+        json!({"path":fixtures.join("cdx-skeletal/propane.cdx")}),
+    )?;
+    let created = client.call(3, "atom.create_authored_label", json!({
+        "expected_revision":opened["revision"], "page_id":1, "fragment_id":1, "atom_id":2,
+        "element":8, "explicit_hydrogens":0, "style":{"font_family":"Roboto", "size_pt":12, "face":0, "rgb":[0,0,0]}
+    }))?;
+    assert_eq!(created["undo_depth"], 1);
+    client.call(4, "document.save_cdx", json!({"path":path}))?;
+    assert_eq!(
+        fs::read(&path)?,
+        fs::read(fixtures.join("cdx-skeletal-label-creation/propane.cdx"))?
+    );
+    let reopened = client.call(5, "document.open_cdx", json!({"path":path}))?;
+    assert_eq!(reopened["document"], created["document"]);
+    let analysis = client.call(
+        6,
+        "analysis.formula",
+        json!({"expected_revision":reopened["revision"],
+        "expected_selection_epoch":reopened["ui_selection"]["epoch"].as_u64().unwrap_or(0)}),
+    )?;
+    assert_eq!(analysis["analysis"]["formula"], "C2H6O");
+    client.finish()
+}
