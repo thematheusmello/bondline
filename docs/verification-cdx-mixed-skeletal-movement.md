@@ -17,7 +17,9 @@ On macOS, the CLI, initialized stdio MCP server and a background native applicat
 
 The integrated WebAssembly codec ran offline in Chromium. The 1,733,719-byte module returned zero and matched the independent CDXML reference after a scoped mixed move (SHA-256 `edc3c4b5b804b51ac7b2ec342169e08c77a92c06cfa87dec0c199351770536d4`). The parser AddressSanitizer run completed 10,000 iterations in four seconds with 108 distinct seed files, a final 600-byte mutation limit reached, and zero crash artifacts. The raw oracle translates each selected point and its owned rectangle and compares the complete binary. [Browser check](../crates/io/examples/cdx_caption_browser/skeletal_move.rs) · [Fuzz oracle](../fuzz/fuzz_targets/cdx_parse/skeletal_move.rs)
 
-Workspace Clippy with warnings denied passed on the implemented movement. Local focused tests cover IO, registry, egui and the CLI. The full workspace integration gate is tracked separately. Interactive Windows and Linux checks remain open.
+The full local `cargo xtask ci` passed on `2bbf28be639c5c8f0804a8749ddf50c1a0998895` after integrating the Analysis window and its CDX hydrogen defaults. The workspace recorded 2,395 passing tests, zero failures and one ignored. All three additional macOS AccessKit tests passed. Rustfmt, warnings-denied Clippy, dependency layers, seven bundled assets, runtime-license audits for macOS, Windows and Linux, and the eight-file pinned corpus passed. Interactive Windows and Linux execution remains open.
+
+The 302,816-byte gate log is stored in the verification worktree at `../bondline-analysis-window/target/analysis-ci/movement-2bbf28b.log`. Its SHA-256 is `e6b961822d311d5581944d3fb002e9fbf3403dfdcded32bbc6602baab1c98e3b`.
 
 ## Replay
 

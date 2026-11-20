@@ -597,6 +597,13 @@ mixed skeletal CDX inputs. The fragment supplies hydrogen counts for selected
 atoms. RDKit checked the formula before and after movement and Unicode
 Save/reopen. [Movement evidence](docs/verification-cdx-mixed-skeletal-movement.md).
 
+[PR 28](https://github.com/thematheusmello/bondline/pull/28) passed the full local
+`cargo xtask ci` at `2bbf28b` after integrating PR 27. The workspace recorded
+2,395 passed, zero failed and one ignored. All three additional macOS AccessKit
+tests, formatting, Clippy, layer, asset and license audits and the pinned corpus
+passed. The complete log SHA-256 is
+`e6b961822d311d5581944d3fb002e9fbf3403dfdcded32bbc6602baab1c98e3b`.
+
 ### Next executable work
 
 1. Integrate molecular weight and monoisotopic mass with independently
