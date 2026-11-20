@@ -4,12 +4,11 @@ use bondline_commands::{
     Error, ErrorInfo, FileFormat, PasteSmiles, Prepared, RenderCapture, SdfRecordRemove,
     SmilesRecordInspect, UiFileAction, UiFileContextStamp, UiFilePhase,
 };
-use std::{
-    future::Future,
-    sync::{
-        Arc,
-        atomic::{AtomicUsize, Ordering},
-    },
+#[cfg(not(target_arch = "wasm32"))]
+use std::future::Future;
+use std::sync::{
+    Arc,
+    atomic::{AtomicUsize, Ordering},
 };
 use tokio::sync::Semaphore;
 
@@ -42,12 +41,14 @@ pub(crate) struct RegisteredWork {
 
 pub(crate) struct Rejected {
     pub info: ErrorInfo,
+    #[cfg(not(target_arch = "wasm32"))]
     pub disconnect: bool,
 }
 
 impl Rejected {
     fn command(error: Error) -> Self {
         Self {
+            #[cfg(not(target_arch = "wasm32"))]
             disconnect: matches!(error, Error::InvalidParams(_)),
             info: error.info(),
         }
@@ -540,6 +541,7 @@ impl CommandExecutor {
     ) -> Result<(RegisteredWork, T), Rejected> {
         let mut engine = self.engine.lock().map_err(|_| Rejected {
             info: unavailable(),
+            #[cfg(not(target_arch = "wasm32"))]
             disconnect: true,
         })?;
         // Register replies before a short close command can approve shutdown. Deferred
@@ -549,6 +551,7 @@ impl CommandExecutor {
         let permit = if prepared.is_deferred() {
             Some(self.workers.permit().map_err(|info| Rejected {
                 info,
+                #[cfg(not(target_arch = "wasm32"))]
                 disconnect: false,
             })?)
         } else {
@@ -563,6 +566,7 @@ impl CommandExecutor {
             .map_err(|error| error.info)
     }
 
+    #[cfg(not(target_arch = "wasm32"))]
     pub(crate) fn prepare_json(
         &self,
         request: &[u8],
@@ -579,6 +583,7 @@ impl CommandExecutor {
         complete_registered_blocking(&self.engine, self.prepare_command(command)?, cancel)
     }
 
+    #[cfg(not(target_arch = "wasm32"))]
     pub async fn execute(
         &self,
         command: Command,
@@ -588,6 +593,7 @@ impl CommandExecutor {
         self.complete(prepared, cancelled).await
     }
 
+    #[cfg(not(target_arch = "wasm32"))]
     pub(crate) async fn complete(
         &self,
         registered: RegisteredWork,
@@ -657,8 +663,10 @@ impl Default for Workers {
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 struct CancelOnDrop(Cancellation);
 
+#[cfg(not(target_arch = "wasm32"))]
 impl Drop for CancelOnDrop {
     fn drop(&mut self) {
         self.0.cancel();
@@ -684,6 +692,7 @@ impl Workers {
         })
     }
 
+    #[cfg(not(target_arch = "wasm32"))]
     async fn run(
         &self,
         permit: WorkPermit,
