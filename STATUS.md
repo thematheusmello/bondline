@@ -531,20 +531,34 @@ passed 2,364 workspace tests, one ignored, all three AccessKit tests and
 all local checks. Main matched the tested tree and the feature ref was retired.
 [Formula examples and ordering conventions](docs/research/hill-formula.md).
 
+[PR 24](https://github.com/thematheusmello/bondline/pull/24) merged the
+all-carbon movement workflow into main at `d68390c`. The merged tree matched
+the tested feature with its final verification notes.
+
+### Printed heteroatoms on skeletal CDX paper
+
+[PR 25](https://github.com/thematheusmello/bondline/pull/25) adds native viewing
+of methanol, ethanol and 3-aminopropan-1-ol drawn with hidden carbon vertices.
+The four binary inputs include two encodings of methanol. Open, Unicode Save As
+and reopen preserved the original bytes. Actual macOS, CLI and initialized MCP
+returned matching CPU and Metal captures at 100% and 200%. FontTools verified
+the printed label bounds and bond clearance, and RDKit checked each formula
+and connectivity. The offline Chromium codec check and 10,000 AddressSanitizer
+iterations on the integrated parser passed. [Tests and scope](docs/verification-cdx-mixed-skeleton.md).
+
 ### Next executable work
 
-1. `../bondline-cdx-mixed-skeleton` started at `98f3edd` to display skeletal
-   carbon and printed heteroatoms together. Check actual methanol, ethanol and
-   amino-alcohol files, visible glyphs, bond clearance, source field presence
-   and exact Save/reopen. Keep source-specific authoring checks independent.
-2. `../bondline-analysis-window` started at `e1d6adb` to show the computed
-   formula through View, CLI and MCP. Verify whole-drawing and selected-atom
-   scopes, incomplete sources, unknown H and preservation of document history.
-3. `../bondline-web-workspace` started at `6fd6633` to run the actual egui
-   editor in a browser. Check offline startup, real bond creation and history,
-   safe recovery and the browser dependency licenses. The core codec's browser
-   tests cover a smaller workflow. Interactive Windows/Linux validation and
-   further work across M0–M5 remain outstanding.
+1. Integrate the native Analysis window from `../bondline-analysis-window`.
+   Check the whole drawing and selected atoms through the real command adapters.
+   Source-specific hydrogen defaults for formula calculation need their own
+   evidence, including omissions that must survive Save/reopen.
+2. `../bondline-cdx-mixed-skeletal-movement` is adding source-preserving
+   movement to the printed-label drawings. Verify position and dependent
+   bounding-box bytes together, then undo, redo and reopen.
+3. The web host in `../bondline-web-workspace` is exercising actual egui/WebGPU
+   startup, offline editing and history, and recovery across browser tabs.
+   The codec test exercises a separate headless Wasm entry point. Interactive
+   Windows/Linux validation and further work across M0–M5 remain outstanding.
    [Roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/

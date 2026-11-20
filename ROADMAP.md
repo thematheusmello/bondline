@@ -43,8 +43,10 @@ new annotation and prior captions. [Mixed label editing](docs/verification-cdx-m
 
 Qualified binary skeletal carbon chains open on the declared paper and preserve
 their original CDX through Save/reopen. Marquee now moves selected skeletal atoms
-with undo, redo and source-preserving Save. Mixed hidden-carbon/heteroatom labels
-and additional chemical drawing styles remain M1/M2 work.
+with Undo, Redo and source-preserving Save. Drawings with hidden carbons and
+explicitly positioned heteroatom labels now support viewing and exact unchanged
+Save/reopen. Moving or editing those labels and additional drawing styles
+remain M1/M2 work. [Printed labels on skeletal paper](docs/verification-cdx-mixed-skeleton.md).
 [Movement verification](docs/verification-cdx-skeletal-movement.md). [Skeletal drawing acceptance](docs/verification-cdx-skeletal.md).
 General chemical edits on mixed pages, interleaved depths, missing font resources, multiline text,
 inherited styles, ambiguous starts and general shaping remain open.
