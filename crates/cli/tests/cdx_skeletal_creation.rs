@@ -1,9 +1,9 @@
-//! Independently constructed binary molecules must analyze and paint before they are editing targets.
+//! Create, save and reopen labels against independently constructed binary molecules and RDKit.
 use std::{path::Path, process::Command};
 
 #[test]
-fn hidden_atom_label_witnesses_open_in_bondline_and_rdkit() -> Result<(), Box<dyn std::error::Error>>
-{
+fn created_cdx_atom_labels_match_independent_files_through_history()
+-> Result<(), Box<dyn std::error::Error>> {
     let output =
         Command::new(std::env::var_os("BONDLINE_PYTHON").ok_or("pinned RDKit interpreter")?)
             .arg("-B")
@@ -11,7 +11,7 @@ fn hidden_atom_label_witnesses_open_in_bondline_and_rdkit() -> Result<(), Box<dy
                 Path::new(env!("CARGO_MANIFEST_DIR"))
                     .join("../../xtask/oracles/cdx_skeletal_creation.py"),
             )
-            .arg("--check-witnesses")
+            .arg("--verify")
             .arg(env!("CARGO_BIN_EXE_bondline-cli"))
             .output()?;
     assert!(

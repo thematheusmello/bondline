@@ -2477,3 +2477,7 @@ A Fragment contains Nodes. A printed Node can carry both chemical fields and a c
 ### New child labels on skeletal CDX paper
 
 The Node object can carry both the element and attached-hydrogen fields and a direct Text child for its label. Bondline's test vectors use explicit run resources and justification, signed document coordinates and a newly allocated child ID. The retained input and an independent generator specify exactly which bytes change. [Published Node definition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) · [Published Text definition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm) · [Original witness provenance](../../crates/io/tests/fixtures/cdx-skeletal-label-creation/SOURCES.md).
+
+### CDX labels on hidden carbons
+
+Bondline writes a scoped Node Text, an explicit element and hydrogen count, a style run resolved from the existing font and colour tables, and a signed 16.16 bounding box. The independent binary witnesses document insertion order, replacement of existing payloads and the first and last hidden-carbon transitions. [Public SDK properties and original witnesses](../../crates/io/tests/fixtures/cdx-skeletal-label-creation/SOURCES.md).

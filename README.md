@@ -42,6 +42,8 @@ Atom-targeted Alt-sprout and a session Preferences checkbox now share the same g
 ring engine, with bounded macOS drawing, history and editable Save/reopen checks.
 In supported skeletal CDX drawings, Alt-click a printed atom label to change its element and attached hydrogen count. The edit follows the atom after a move and survives Undo, Redo, Save As and reopen. [Supported drawings and verification](docs/verification-cdx-skeletal-label-edits.md).
 
+The shared `atom.create_authored_label` command can also print a heteroatom at an eligible hidden carbon in a supported CDX drawing. The writer uses the drawing’s font and palette. Four byte-checked examples cover first and last hidden atoms, pre-existing hydrogen counts, and coloured type. [CDX label creation examples](crates/io/tests/fixtures/cdx-skeletal-label-creation/SOURCES.md).
+
 Use **View → Show Analysis Window** to read the formula, molecular weight, monoisotopic exact mass and elemental percentages by weight of a supported drawing or its selected atoms. The panel identifies missing atomic data and valence-based hydrogen counts in skeletal CDX and elemental V2000/V3000 MOL. Selecting ethanol’s oxygen gives `HO`. Including its adjacent carbon gives `CH3O`. [Analysis](docs/research/analysis-window.md) · [Mass conventions](docs/research/molecular-masses.md) · [MOL examples and limits](docs/verification-mol-analysis.md) · [Elemental analysis](docs/verification-elemental-analysis.md).
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.

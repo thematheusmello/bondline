@@ -199,3 +199,72 @@ fn editing_a_printed_atom_preserves_hidden_neighbors_and_rejected_edits_preserve
     assert_eq!(engine.stored_document()?.export_cdx()?, expected);
     Ok(())
 }
+
+#[test]
+fn created_cdx_label_can_be_edited_and_failed_attempts_preserve_redo() -> Result {
+    let input = include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/ethanol.cdx");
+    let created = include_bytes!("../../io/tests/fixtures/cdx-skeletal-label-creation/ethanol.cdx");
+    let mut engine = engine(input)?;
+    let mut create = json!({
+        "expected_revision":engine.state().revision, "page_id":1, "fragment_id":1, "atom_id":1,
+        "element":7, "explicit_hydrogens":2,
+        "style":{"font_family":"Roboto","size_pt":12,"face":0,"rgb":[0,0,0]}
+    });
+    engine.dispatch("atom.create_authored_label", create.clone())?;
+    assert_eq!(engine.stored_document()?.export_cdx()?, created);
+    let edit = json!({
+        "expected_revision":engine.state().revision, "page_id":1, "fragment_id":1, "atom_id":1,
+        "element":8, "explicit_hydrogens":1
+    });
+    engine.dispatch("atom.set_authored_label", edit)?;
+    let edited = engine.stored_document()?.export_cdx()?.to_vec();
+    assert_ne!(edited, created);
+    engine.dispatch("history.undo", json!({}))?;
+    assert_eq!(engine.stored_document()?.export_cdx()?, created);
+    engine.dispatch("history.undo", json!({}))?;
+    let stamp = engine.capture_stamp();
+    assert!(
+        engine
+            .dispatch("atom.create_authored_label", create.clone())
+            .is_err()
+    );
+    create["expected_revision"] = json!(engine.state().revision);
+    for (key, value) in [
+        ("atom_id", json!(2)), // This carbon carries a source display flag.
+        ("atom_id", json!(3)), // The oxygen already has a child Text.
+        ("fragment_id", json!(2)),
+        ("element", json!(6)),
+        ("element", json!(1)), // Physical H cannot itself carry attached H2.
+    ] {
+        let mut invalid = create.clone();
+        invalid[key] = value;
+        assert!(
+            engine
+                .dispatch("atom.create_authored_label", invalid)
+                .is_err(),
+            "{key}"
+        );
+    }
+    for (key, value) in [
+        ("font_family", json!("absent")),
+        ("face", json!(1)),
+        ("size_pt", json!(12.123)),
+        ("rgb", json!([0.1, 0.0, 0.1])),
+    ] {
+        let mut invalid = create.clone();
+        invalid["style"][key] = value;
+        assert!(
+            engine
+                .dispatch("atom.create_authored_label", invalid)
+                .is_err(),
+            "{key}"
+        );
+    }
+    assert!(engine.capture_stamp_matches(&stamp));
+    assert_eq!(engine.state().redo_depth, 2);
+    assert_eq!(engine.stored_document()?.export_cdx()?, input);
+    engine.dispatch("history.redo", json!({}))?;
+    engine.dispatch("history.redo", json!({}))?;
+    assert_eq!(engine.stored_document()?.export_cdx()?, edited);
+    Ok(())
+}

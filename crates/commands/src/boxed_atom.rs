@@ -59,6 +59,7 @@ pub(super) fn supports_edit(document: &StoredDocument) -> bool {
         || document.has_flagged_atom_labels()
         || document.has_label_defaults_projection()
         || document.has_cdx_label_edit_profile()
+        || document.has_cdx_skeletal_preview()
 }
 
 pub(super) fn editable_atom(
@@ -83,6 +84,15 @@ pub(super) fn creation_atom(
     fragment: u32,
     atom: u32,
 ) -> Result<(&Fragment, &Atom), Error> {
+    if document.has_cdx_skeletal_preview() || document.has_cdx_skeletal_label_preview() {
+        let (fragment, atom) = atom_at(document, page, fragment, atom)?;
+        if document.can_create_cdx_atom_label(atom.id) {
+            return Ok((fragment, atom));
+        }
+        return Err(Error::UnsupportedAtomLabel(
+            "an unflagged hidden carbon and a declared label font are required",
+        ));
+    }
     if !document.has_mixed_atom_labels()
         && !document.has_flagged_atom_labels()
         && !document.has_label_defaults_projection()
@@ -178,6 +188,16 @@ pub(super) fn create_label(
         return Err(Error::InvalidAtomLabel(
             "a physical hydrogen atom cannot carry inline attached hydrogens",
         ));
+    }
+    if document.has_cdx_skeletal_preview() || document.has_cdx_skeletal_label_preview() {
+        return Ok(document.with_new_cdx_atom_label(
+            PageId::new(params.page_id).ok_or(Error::InvalidPageId)?,
+            fragment.id(),
+            atom.id,
+            element,
+            params.explicit_hydrogens,
+            params.style.checked()?,
+        )?);
     }
     let mut target = atom.clone();
     target.element = element;
