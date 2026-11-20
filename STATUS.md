@@ -548,13 +548,38 @@ iterations on the integrated parser passed. The full local gate at `a0269d2`
 passed 2,373 workspace tests with one ignored, all three macOS AccessKit tests
 and all required validation steps. [Tests and scope](docs/verification-cdx-mixed-skeleton.md).
 
+### Analysis window and literal molecular formulas
+
+[PR 26](https://github.com/thematheusmello/bondline/pull/26) adds the native
+View menu window and shared queries for a supported complete drawing or its
+selected atoms. The first 51 published command records retained their order
+and metadata across the CLI and initialized MCP. The two new commands are
+`analysis.formula` and `ui.analysis`.
+
+The frozen macOS run opened seven original skeletal CDX files and read the
+actual window’s AX values. It showed `C3H8` for fully declared propane,
+`CH4O` for fully declared methanol, the selected terminal contribution
+`CH3`, and the first unresolved atom for omitted counts. The read-only
+mixed profile retained its selection restriction. PID 15528 exited through
+the registered Close command. [Scope and receiving evidence](docs/verification-analysis-window.md).
+
+The combined full local gate on `3e4cd08` passed 2,390 workspace tests
+with zero failures and one ignored. All three additional macOS AccessKit
+tests, formatting, strict Clippy, layers, asset and runtime license checks,
+and the eight-file pinned corpus passed. The log SHA-256 was
+`d1cc50dc360a47b854bacab39979ff680043066ad25e3016f3b0c06d2431238f`.
+PR 25 landed on main at `40455fd`. Its ancestry merge into PR 26 at
+`6508ff2` changed two documentation files relative to that tested tree.
+PR 26 landed on main at `7050792`. The local gate and native jobs are terminal.
+GitHub Actions remains disabled.
+
 ### Next executable work
 
 1. The Analysis window and CDX hydrogen defaults now run with mixed skeletal
    movement. Whole drawings, selected printed oxygen, hidden carbons and mixed
    selections pass formula checks using the complete fragment topology. The CLI
    preserves source H omissions after movement and Unicode Save/reopen.
-   Mass, isotope distribution and elemental percentages remain open.
+   Mass, isotope distribution, elemental percentages and live captions remain open.
    [Analysis evidence](docs/verification-analysis-window.md).
 2. Mixed skeletal CDX movement passes focused IO, command, App-frame, native
    macOS, CLI and initialized MCP checks. Changing the printed label body on
