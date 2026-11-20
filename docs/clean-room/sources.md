@@ -2423,3 +2423,5 @@ the cancellation fixes; no reference-product modal algorithm is inferred. Hidden
 settings presentation and equal surface restoration must not revive old input authority.
 Lasso, transforms/groups, full platform/modern selection behavior and measured DPI remain
 required. No new chemical-file attribute, source waiver or human-approved golden follows.
+
+Atom movement on certified skeletal CDX uses the published directly owned Node position and signed, vertical-first 16.16 coordinates. Bondline chooses ties-to-even rounding for a **common displacement**, and preserves every existing length header. [2DPosition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/2DPosition.htm) · [CDX coordinates](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm) · [Workflow and tests](../research/cdx-skeletal-movement.md)
