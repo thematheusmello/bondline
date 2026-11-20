@@ -123,6 +123,16 @@ impl SdfDocument {
         self.records.get(index)
     }
 
+    /// The original connection table of one record, excluding its data fields.
+    pub fn mol_bytes(&self, id: RecordId) -> Result<&[u8], SdfError> {
+        let record = self.record(id).ok_or(SdfError::MissingRecord {
+            record_id: id.get(),
+        })?;
+        self.source
+            .get(record.mol_range())
+            .ok_or(SdfError::InvalidSpan)
+    }
+
     /// A bounded borrowed read of the retained source. Reparse avoids self-reference;
     /// the returned view's temporary allocations are not owned by this snapshot.
     pub fn read(&self) -> Result<SdfFile<'_>, SdfError> {

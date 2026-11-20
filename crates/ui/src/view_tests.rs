@@ -1431,15 +1431,16 @@ mod native_chair;
 #[path = "native_preferences_tests.rs"]
 mod native_preferences;
 
+fn painted(output: &egui::FullOutput, label: &str) -> bool {
+    output
+        .shapes
+        .iter()
+        .any(|s| matches!(&s.shape, egui::Shape::Text(t) if t.galley.text()==label))
+}
+
 #[test]
 fn analysis_window_menu_shows_current_formula_selected_atoms_and_empty_state() -> TestResult {
     let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
-    let painted = |output: &egui::FullOutput, label: &str| {
-        output
-            .shapes
-            .iter()
-            .any(|s| matches!(&s.shape, egui::Shape::Text(t) if t.galley.text()==label))
-    };
     f.choose("View")?;
     f.choose("Show Analysis Window")?;
     assert_eq!(f.state()?["analysis_window_open"], true);
@@ -1702,6 +1703,148 @@ fn elemental_table_copies_the_displayed_rows_without_changing_the_drawing() -> T
     f.frame(vec![button(end, false)]);
     let copied = f.frame(vec![Event::Copy]);
     assert_eq!(copied.platform_output.copied_text, table.galley.text());
+    assert_eq!(f.state()?, before);
+    Ok(())
+}
+
+#[test]
+fn analysis_navigates_individual_sdf_molecules_and_resets_after_reopen() -> TestResult {
+    let mut f = Fixture::new(1160., 800., 1.)?;
+    let input = f.directory.path("分子-β.sdf");
+    let source = include_bytes!("../../io/tests/fixtures/sdf-preview/valence-absent-mixed.sdf");
+    std::fs::write(&input, source)?;
+    f.command("document.open_sdf", json!({"path":input}))?;
+    f.warm();
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    let first = f.warm();
+    assert!(painted(&first, "SDF record 1 of 2") && painted(&first, "C2H6O"));
+    assert!(painted(&first, "46.041865 Da"));
+    let before = f.state()?;
+    f.choose("Next molecule")?;
+    let second = f.warm();
+    assert!(painted(&second, "SDF record 2 of 2") && painted(&second, "CH5N"));
+    assert!(painted(&second, "31.042199 Da") && !painted(&second, "C2H6O"));
+    for (value, expected) in [(1.0, "C2H6O"), (2.0, "CH5N")] {
+        let (id, _) = f.node(
+            "Record number",
+            &[
+                egui::accesskit::Role::SpinButton,
+                egui::accesskit::Role::TextInput,
+            ],
+        )?;
+        f.frame(vec![egui::Event::AccessKitActionRequest(
+            egui::accesskit::ActionRequest {
+                action: egui::accesskit::Action::SetValue,
+                target: id,
+                data: Some(egui::accesskit::ActionData::NumericValue(value)),
+            },
+        )]);
+        assert!(painted(&f.warm(), expected));
+    }
+    use egui::accesskit::{Action, ActionRequest, Role};
+    for (action, number, formula) in [
+        (Action::Decrement, 1, "C2H6O"),
+        (Action::Decrement, 1, "C2H6O"),
+        (Action::Increment, 2, "CH5N"),
+        (Action::Increment, 2, "CH5N"),
+    ] {
+        let (target, _) = f.node("Record number", &[Role::SpinButton, Role::TextInput])?;
+        let stepped = f.frame(vec![egui::Event::AccessKitActionRequest(ActionRequest {
+            action,
+            target,
+            data: None,
+        })]);
+        assert!(painted(&stepped, &format!("SDF record {number} of 2")));
+        assert!(painted(&f.warm(), formula));
+    }
+    let (_, field) = f.node("Record number", &[Role::SpinButton])?;
+    f.frame(vec![
+        Event::PointerMoved(field.center()),
+        button(field.center(), true),
+    ]);
+    f.frame(vec![button(field.center(), false)]);
+    f.warm();
+    f.frame(vec![
+        key(Key::A, true, Modifiers::COMMAND),
+        key(Key::A, false, Modifiers::COMMAND),
+        Event::Text("1".into()),
+    ]);
+    f.frame(tap(Key::Enter));
+    assert!(painted(&f.warm(), "C2H6O"));
+    f.choose("Next molecule")?;
+    assert!(painted(&f.warm(), "CH5N"));
+    assert_eq!(f.state()?, before);
+    f.command("document.open_sdf", json!({"path":input}))?;
+    let reopened = f.warm();
+    assert!(painted(&reopened, "SDF record 1 of 2") && painted(&reopened, "C2H6O"));
+    assert_eq!(std::fs::read(&input)?, source);
+    Ok(())
+}
+
+#[test]
+fn analysis_keeps_the_selected_molecule_through_field_edits_and_history() -> TestResult {
+    let mut f = Fixture::new(1160., 800., 1.)?;
+    let input = f.directory.path("collection.sdf");
+    let source = include_bytes!("../../io/tests/fixtures/sdf-preview/valence-absent-mixed.sdf");
+    std::fs::write(&input, source)?;
+    f.command("document.open_sdf", json!({"path":input}))?;
+    f.warm();
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    f.choose("Next molecule")?;
+    assert!(painted(&f.warm(), "CH5N"));
+    // The first record changes length, so record two starts at a different byte offset.
+    let changed = f.command("sdf.field.set_value", json!({
+        "expected_revision":1, "record_id":1, "field_index":0, "value_lines":["corrected metadata"]
+    }))?;
+    assert_eq!(changed["undo_depth"], 1);
+    for step in [None, Some("history.undo"), Some("history.redo")] {
+        if let Some(command) = step {
+            f.command(command, json!({}))?;
+        }
+        let output = f.warm();
+        assert!(painted(&output, "SDF record 2 of 2") && painted(&output, "CH5N"));
+    }
+    let revision = f.state()?["revision"].as_u64().ok_or("expected revision")?;
+    f.command(
+        "sdf.record.remove",
+        json!({"expected_revision":revision,"record_id":1}),
+    )?;
+    let remaining = f.warm();
+    assert!(painted(&remaining, "SDF record 1 of 1") && painted(&remaining, "CH5N"));
+    f.command("history.undo", json!({}))?;
+    let restored = f.warm();
+    assert!(painted(&restored, "SDF record 1 of 2") && painted(&restored, "C2H6O"));
+    assert_eq!(std::fs::read(&input)?, source);
+    Ok(())
+}
+
+#[test]
+fn analysis_shows_cdxml_values_without_an_atom_canvas() -> TestResult {
+    let mut f = Fixture::new(1160., 800., 1.)?;
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../io/tests/fixtures/cdxml-carbon-analysis/butane.cdxml");
+    f.command("document.open_cdxml", json!({"path":path}))?;
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    let before = f.state()?;
+    let frame = f.warm();
+    for value in [
+        "C4H10",
+        "58.124",
+        "58.078250 Da",
+        "Element        Weight   Percent\nH              10.080    17.34%\nC              48.044    82.66%",
+        "The CDXML valence default supplies hydrogen counts for 3 atoms.",
+    ] {
+        assert!(
+            frame
+                .shapes
+                .iter()
+                .any(|shape| matches!(&shape.shape,egui::Shape::Text(t) if t.galley.text()==value)),
+            "{value}"
+        );
+    }
     assert_eq!(f.state()?, before);
     Ok(())
 }

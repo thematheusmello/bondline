@@ -607,12 +607,20 @@ passed. The complete log SHA-256 is
 ### Pinned chemistry corpus
 
 The shared Analysis command and an independent RDKit reader now compare formulas
-across all eight pinned files. Two complete MOL files and the two isolated SDF mol
-blocks match. Six complete sources and three SMILES record attempts report their
+across all eight pinned files. Two complete MOL files, the coordinate-free CDXML
+carbon chain and two isolated SDF mol blocks match. Five complete sources and
+three SMILES record attempts report their
 specific coverage limits. Cross-format molecule identity, stereo, canonical SMILES,
 InChI, names and corpus mass comparisons need separate checks.
 [Per-file results and replay](docs/corpus/README.md#molecular-formula-evidence).
-After integration with PR 30, the complete local gate passed at `018cf0b`
+A background macOS Analysis panel and the CLI showed C4H10, 58.124 and
+58.078250 Da for the pinned CDXML source across exact Unicode Save/reopen.
+[Qualified chemistry-only source and receiving evidence](docs/verification-cdxml-carbon-analysis.md).
+The integrated full local gate passed on `dfe23cb` with 2,424 workspace tests
+passed, zero failed and one ignored, plus three macOS AccessKit tests.
+
+The preceding two-matching-file corpus gate passed at `018cf0b`
+after integration with PR 30
 with 2,407 workspace tests passed, zero failed and one ignored, plus three
 macOS AccessKit tests. Its log SHA-256 is
 `fa5a4f0030145b4b218bd119b2419e930f3e1aa753cd00888684d774535ff8a0`.

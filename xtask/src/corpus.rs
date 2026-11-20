@@ -1534,6 +1534,8 @@ mod tests {
             "bondline-ordered-fields-v2000.sdf collection: unsupported_source; 2 molecule record(s)",
             "bondline-ordered-fields-v2000.sdf isolated MOL block 1: Bondline C2H6 matched RDKit",
             "bondline-ordered-fields-v2000.sdf isolated MOL block 2: Bondline C2H6 matched RDKit",
+            "bondline-ordered-fields-v2000.sdf open SDF record 1: Bondline C2H6 matched RDKit (2 drawn atoms)",
+            "bondline-ordered-fields-v2000.sdf open SDF record 2: Bondline C2H6 matched RDKit (2 drawn atoms)",
             "bondline-original-isotopic-chain.smi SMILES record 1: import refused",
             "RDKit reference C[13C]H6O",
             "bondline-original-two-ring-labels.smi SMILES record 1: unsupported_source; RDKit reference C7H14",

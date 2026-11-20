@@ -2458,7 +2458,22 @@ borane. [BIOVIA representation guide](https://manualzz.com/doc/44003874/biovia-c
 
 - Molecular weight, monoisotopic exact mass, nuclide completeness and ion conventions follow the [source register and numerical contract](../research/molecular-masses.md). It links the public v25 guide pp. 221–224, IUPAC definitions, CIAAW tables, NIST/CODATA and the MIT atomic-data revision.
 
+CDXML chemistry on coordinate-free carbon graphs distinguishes the plain document type declaration from an external system or public identifier. The lexical query preserves the validated source and treats text inside comments as ordinary comment data. [XML 1.0 document type declaration](https://www.w3.org/TR/xml/#NT-doctypedecl).
+
+Coordinate-free neutral carbon CDXML analysis applies the public elemental-node and minimum-valence H defaults only after checking every object, property and bond reference. Unused presentation resources remain in the original file. [Chemical coverage contract and public SDK properties](../research/cdxml-carbon-analysis.md).
+
 - Elemental analysis uses each element’s percentage of the molecular weight in the current scope. [Revvity Signals v25 guide, printed p. 221](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), [IUPAC mass fraction](https://goldbook.iupac.org/terms/view/M03722), [Bondline’s numeric and presentation conventions](../research/elemental-analysis.md).
+
+### Analysis of individual SDF molecules
+
+An SDfile holds separate structure records with optional data fields. A record’s
+connection table supplies the molecule. Bondline selects the current one-based
+record ordinal, reads its validated MOL byte range, and applies the same valence,
+mass and isotope conventions as a separately opened MOL. Named data fields do
+not supply chemical values. Current-revision checks prevent an old ordinal from
+silently analyzing a different molecule after removal. [BIOVIA CTfile Formats
+2026, chapter 10](https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf),
+[MOL analysis](../research/mol-analysis.md), [masses](../research/molecular-masses.md).
 
 ### Retaining CDX property length headers during replacement
 

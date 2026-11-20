@@ -13,7 +13,9 @@ impl StoredDocument {
         if cancel.is_cancelled() {
             return Err(DisplayError::Cancelled);
         }
-        if self.mol_version().is_none() {
+        // Certified CDXML neutral carbon uses the same tetravalent count on each
+        // complete fragment. Other XML sources have no grant to derive missing H.
+        if self.mol_version().is_none() && !self.has_cdxml_carbon_connectivity() {
             return self.cdx_skeletal_hydrogen_counts(cancel);
         }
         if !self.has_analysis_coverage() {

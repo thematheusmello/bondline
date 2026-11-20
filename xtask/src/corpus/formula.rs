@@ -1,6 +1,6 @@
 //! Compare the shared Analysis command with molecules read independently by RDKit.
 use super::{Fixture, Format};
-use bondline_commands::{AnalysisOutcome, Engine};
+use bondline_commands::{AnalysisOutcome, AnalysisScope, Command, Engine};
 use bondline_io::{StoredDocument, mol::MolTransform, sdf::SdfFile};
 use bondline_model::{PageSize, Point2};
 use serde::Deserialize;
@@ -39,6 +39,26 @@ fn analysis(engine: &mut Engine) -> Result<AnalysisOutcome> {
 enum Comparison {
     Matched(String),
     Unavailable(String),
+}
+
+// These exact sources have passed the whole-drawing comparison independently.
+const REQUIRED_DRAWINGS: &[&str] = &[
+    "fadcbe8eee438dfb55232cb2c3baca41ea6613edb0d6163af9486b6c84ff6fc9", // RDKit butane
+    "afd2352697ca20c0d580c4981fe8bd24da36c4e1661e9d2aee501a40364fd42d", // RDKit methyl radical
+    "1867a5904e742030431b523a31167951ff998007a89b9c3d94ec88cf7d4c4380", // V3000 ethane
+];
+
+fn require_proven_formula(file: &Fixture, result: &Comparison) -> Result<()> {
+    if let Comparison::Unavailable(reason) = result
+        && REQUIRED_DRAWINGS.contains(&file.sha256.as_str())
+    {
+        return Err(format!(
+            "{}: required source formula unavailable: {reason}",
+            file.name
+        )
+        .into());
+    }
+    Ok(())
 }
 
 fn compare(outcome: AnalysisOutcome, reference: &Reference) -> Result<Comparison> {
@@ -147,12 +167,11 @@ impl Coverage {
             let [reference] = refs.as_slice() else {
                 return Err("expected a whole-drawing reference".into());
             };
-            return self.files.record(
-                &format!("{name} drawing"),
-                reference,
-                compare(outcome, reference)?,
-                output,
-            );
+            let result = compare(outcome, reference)?;
+            require_proven_formula(file, &result)?;
+            return self
+                .files
+                .record(&format!("{name} drawing"), reference, result, output);
         }
         // A collection can contain unrelated structures. There is no reference formula
         // for adding its records together. Compare a molecular result only on that record.
@@ -173,6 +192,7 @@ impl Coverage {
                 return Err("SDF record count differs from RDKit mol-block scan".into());
             }
             let transform = MolTransform::new(24.0, Point2::new(0., 0.)?)?;
+            let mut isolated_blocks = Counts::default();
             for (index, (record, reference)) in source.records().iter().zip(&refs).enumerate() {
                 let drawing = StoredDocument::from_mol(
                     Arc::from(record.mol_bytes()),
@@ -180,10 +200,38 @@ impl Coverage {
                     transform,
                 )?;
                 let result = analysis(&mut Engine::from_document(drawing))?;
-                self.records.record(
-                    &format!("{name} isolated MOL block {}", index + 1),
+                let isolated = compare(result, reference)?;
+                let id = std::num::NonZeroU32::try_from(u32::try_from(index + 1)?)?;
+                let mut request = app.analysis_properties_request(false);
+                request.sdf_record_id = Some(id);
+                let report = app
+                    .execute(Command::AnalysisProperties(request))?
+                    .analysis
+                    .ok_or("missing open SDF record analysis")?;
+                if !matches!(report.scope, AnalysisScope::SdfRecord) || report.record_id != Some(id)
+                {
+                    return Err(
+                        format!("{name}: analysis returned a different record scope").into(),
+                    );
+                }
+                let direct = compare(report.outcome, reference)?;
+                if matches!(isolated, Comparison::Matched(_))
+                    && matches!(direct, Comparison::Unavailable(_))
+                {
+                    return Err(
+                        format!("{name}: record {id} was available only after extraction").into(),
+                    );
+                }
+                isolated_blocks.record(
+                    &format!("{name} isolated MOL block {id}"),
                     reference,
-                    compare(result, reference)?,
+                    isolated,
+                    output,
+                )?;
+                self.records.record(
+                    &format!("{name} open SDF record {id}"),
+                    reference,
+                    direct,
                     output,
                 )?;
             }
@@ -220,6 +268,26 @@ impl Coverage {
 mod tests {
     use super::*;
     use bondline_model::{Atom, AtomId, Element, Fragment, FragmentId, PageId};
+
+    #[test]
+    fn a_required_formula_cannot_regress_to_an_unavailable_source() -> Result<()> {
+        let manifest: super::super::Manifest =
+            serde_json::from_slice(include_bytes!("../../../docs/corpus/manifest.json"))?;
+        for drawing in manifest.files {
+            let reason = require_proven_formula(
+                &drawing,
+                &Comparison::Unavailable("unsupported_source".into()),
+            )
+            .err()
+            .ok_or("a previously supported source must keep its chemistry coverage")?;
+            assert!(
+                reason
+                    .to_string()
+                    .contains("required source formula unavailable: unsupported_source")
+            );
+        }
+        Ok(())
+    }
 
     #[test]
     fn formula_oracle_checks_isotopes_carbon_free_hill_order_and_drawn_atom_count() -> Result<()> {

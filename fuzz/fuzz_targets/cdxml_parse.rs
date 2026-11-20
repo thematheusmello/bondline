@@ -615,6 +615,52 @@ fn resource_value_property(value: &str) {
     assert_eq!(document.as_bytes(), bytes);
 }
 
+fn carbon_defaults(stored: &bondline_io::StoredDocument) {
+    let counts = stored
+        .analysis_hydrogen_counts(&Default::default())
+        .unwrap();
+    if counts.is_empty() {
+        return;
+    }
+    assert!(stored.has_analysis_coverage());
+    assert!(!stored.has_display_projection() && !stored.is_fully_mapped());
+    let mut h_total = 0_usize;
+    let mut omitted = 0_usize;
+    let mut carbons = 0_usize;
+    let mut bond_order = 0_usize;
+    for fragment in stored.model().pages()[0].fragments() {
+        for atom in fragment.atoms() {
+            assert_eq!(atom.element.get(), 6);
+            assert_eq!(atom.charge, 0);
+            assert_eq!(atom.radical, bondline_model::Radical::None);
+            assert!(atom.isotope.is_none());
+            let h = match atom.explicit_hydrogens {
+                Some(written) => {
+                    assert!(!counts.contains_key(&atom.id));
+                    written
+                }
+                None => {
+                    omitted += 1;
+                    counts[&atom.id]
+                }
+            };
+            h_total += usize::from(h);
+            carbons += 1;
+        }
+        for bond in fragment.bonds() {
+            bond_order += match bond.order {
+                bondline_model::BondOrder::Single => 1,
+                bondline_model::BondOrder::Double => 2,
+                bondline_model::BondOrder::Triple => 3,
+                _ => panic!("an unresolved bond cannot qualify for carbon defaults"),
+            };
+        }
+    }
+    assert_eq!(counts.len(), omitted);
+    // Valence conservation for neutral, uncharged carbons in any ring or chain.
+    assert_eq!(4 * carbons, 2 * bond_order + h_total);
+}
+
 fuzz_target!(|data: &[u8]| {
     if data.len() > INPUT_LIMIT {
         return;
@@ -754,6 +800,7 @@ fuzz_target!(|data: &[u8]| {
         ) {
             Ok(stored) => {
                 assert_eq!(stored.export_cdxml().unwrap(), data);
+                carbon_defaults(&stored);
                 let mut edited = stored.clone();
                 let page = edited.model().pages().first().unwrap().id();
                 let target = if stored.model().pages().first().unwrap().size()
@@ -764,6 +811,12 @@ fuzz_target!(|data: &[u8]| {
                     bondline_model::PageSize::new(72.0, 144.0).unwrap()
                 };
                 edited.model_mut().set_page_size(page, target).unwrap();
+                assert!(
+                    edited
+                        .analysis_hydrogen_counts(&Default::default())
+                        .unwrap()
+                        .is_empty()
+                );
                 assert!(matches!(
                     edited.export_cdxml(),
                     Err(bondline_io::DocumentError::UnsupportedEdit)
