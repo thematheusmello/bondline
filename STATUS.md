@@ -425,16 +425,42 @@ AccessKit tests and all gates. The first attempt hit the existing intermittent
 MCP replacement-bind error on port 55042. Its cause remains open.
 [Scope and verification](docs/verification-cdx-mixed-caption.md).
 
+[PR 18](https://github.com/thematheusmello/bondline/pull/18) landed the mixed
+view at `a838462` with the reviewed head tree. Its feature ref is retired.
+
+### Editing existing CDX captions on mixed pages
+
+The mixed-run feature on `feat/cdx-mixed-caption-run` has independent sources
+`8f23d38`, IO `29b4a3d`, command and UI `b83f50e`, and fuzz `1c2c9fa`.
+Text targets the painted direct Page run above the chemical label. ID 19,
+both atom-owned aliases, source styles, the second run's updated start and
+whole-file Undo/Save/reopen are independently checked. The actual hidden Mac
+host, CLI and stdio MCP agree on the edited files and 100%/200% CPU/Metal
+images. The bounded sanitizer passed 10,000 trials with 137 immutable inputs.
+Correction `f93778f` retires a pristine native form on external Apply and
+preserves unsent local text. The final local gate passed 2,336 workspace tests
+with one ignored, all three AccessKit tests, and the formatting, clippy, layer,
+license, asset and corpus checks. GitHub Actions stays off.
+[Run-edit evidence](docs/verification-cdx-mixed-caption-edits.md).
+
 ### Next executable work
 
-1. Allow an existing direct Page caption run on the qualified mixed CDX
-   source to be edited. Prove the original owner and live ID, keep all
-   original Fragment and Node Text bytes, and revalidate the entire combined
-   scene before one history entry. Cover growth, shrinkage, Unicode,
-   Undo/Redo, exact Save/reopen and native hit testing where ink overlaps.
-2. Extend mixed authoring, tied/interleaved depths and richer sources using
-   their own public semantics and oracle evidence. All other open M0–M5
-   requirements remain in the roadmap and parity checklist.
+1. Add a plain caption to blank paper on a qualified mixed CDX source. Pin
+   source-wide ID selection and paint depth above existing captions, direct
+   Page ownership, exact Fragment retention, Undo and a sparse branched ID.
+   Verify occupied chemical/caption hits, Unicode Save/reopen and editable
+   picking of the inserted run. The checked first input is the 487-byte
+   mixed-edit `before.cdx`. Creating `Note β` at (300.25, 400.75) pt currently
+   refuses. The target insertion begins at byte 483, raw object ID 903, depth 8,
+   live ID 20, and produces 595 bytes with SHA-256
+   `6512f03f1272a12ddfdaeb77eccedce7f31f5a9e2f1f460f7ad8dcb5378eb12f`.
+   After Undo, live ID 21 gives `f45b8d50c6b36d1ba8958f7e170f3bf1f19a36c830f11223eb77f754be861f44`.
+   The first caption on a chemical-only drawing needs a separate AtomLabels-to-Mixed
+   proof and depth 1 above the chemical ink. Retain the established raw-ID
+   overflow check pending a separate allocator contract.
+2. Extend mixed chemical editing and interleaved depths from public semantics.
+   General imported styles, source objects, other platforms and all remaining
+   M0–M5 requirements stay in the roadmap and parity checklist.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

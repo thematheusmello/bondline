@@ -27,8 +27,9 @@ multiline behavior and initial style selection remain open. Native
 canonical CDXML retains its existing resource-table order while the
 published DTD lists a different order. General native and foreign CDXML
 DTD interoperability, adding missing CDX font resources, interleaved paint
-depths and mixed-source edits remain open. Qualified mixed CDX drawings now
-retain structures and display captions above them. [Mixed pages](../verification-cdx-mixed-caption.md). An empty qualified Poster now
+depths and inserting captions among mixed source objects remain open. Qualified
+mixed CDX drawings support editing the existing captions above their structures.
+[Editing evidence](../verification-cdx-mixed-caption-edits.md). [Mixed pages](../verification-cdx-mixed-caption.md). An empty qualified Poster now
 accepts its first caption. [Empty-page evidence](../verification-cdx-empty-caption.md). [CDXML sources](../research/native-caption-creation.md),
 [CDX scope](../research/cdx-caption-creation.md).
 

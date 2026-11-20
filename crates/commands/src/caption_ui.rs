@@ -1,11 +1,12 @@
 //! Transient caption tool and draft. Authored edits use text.set_run or text.create.
 use crate::{
-    Cancellation, CaptureStamp, CloseState, Command, CommandResult, EffectiveTool, Engine, Error,
-    TextCreate, TextSetRun, UiFileContextStamp, caption,
+    CaptureStamp, CloseState, Command, CommandResult, EffectiveTool, Engine, Error, TextCreate,
+    TextSetRun, UiFileContextStamp, caption,
 };
 use bondline_model::{PageId, Point2, TextId};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use std::sync::{Arc, OnceLock};
 
 /// Four bytes per scalar at the existing 4096-character page scene limit.
 pub const MAX_CAPTION_DRAFT_BYTES: usize = 16_384;
@@ -67,12 +68,26 @@ pub struct UiCaptionRequest {
     pub text: String,
     pub current: bool,
     #[serde(skip)]
-    cancelled: Cancellation,
+    outcome: Arc<OnceLock<CaptionOutcome>>,
+}
+
+#[derive(Debug)]
+enum CaptionOutcome {
+    Applied(String),
+    Cancelled,
 }
 
 impl UiCaptionRequest {
     pub fn was_cancelled(&self) -> bool {
-        self.cancelled.is_cancelled()
+        matches!(self.outcome.get(), Some(CaptionOutcome::Cancelled))
+    }
+
+    /// Exact text accepted for this request, including successful no-op edits.
+    pub fn applied_text(&self) -> Option<&str> {
+        match self.outcome.get()? {
+            CaptionOutcome::Applied(text) => Some(text),
+            CaptionOutcome::Cancelled => None,
+        }
     }
 }
 
@@ -246,7 +261,7 @@ impl Engine {
                     target,
                     text,
                     current: true,
-                    cancelled: Cancellation::default(),
+                    outcome: Arc::default(),
                 },
                 context,
             }),
@@ -353,6 +368,8 @@ impl Engine {
                 if text.len() > MAX_CAPTION_DRAFT_BYTES {
                     return Err(Error::CaptionDraftLimit);
                 }
+                let outcome = Arc::clone(&active.view.outcome);
+                let submitted = text.clone();
                 let page_id = active.view.page_id;
                 let command = match active.view.target {
                     UiCaptionTarget::Existing {
@@ -373,6 +390,7 @@ impl Engine {
                     }),
                 };
                 let result = self.execute(command)?;
+                let _ = outcome.set(CaptionOutcome::Applied(submitted));
                 self.finish_ui_caption(request_id);
                 return Ok(CommandResult {
                     ui_caption: None,
@@ -393,7 +411,7 @@ impl Engine {
                     .as_ref()
                     .filter(|active| active.view.id == request_id)
                     .ok_or(Error::UiStaleRequest)?;
-                active.view.cancelled.cancel();
+                let _ = active.view.outcome.set(CaptionOutcome::Cancelled);
                 self.finish_ui_caption(request_id);
                 request_id
             }

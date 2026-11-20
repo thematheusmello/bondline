@@ -217,6 +217,7 @@ impl CaptionEditor {
         };
         let request = form.request.id;
         let id = field_id(request);
+        let externally_applied = !form.detached && form.request.applied_text().is_some();
         form.detached |= !engine
             .as_ref()
             .is_some_and(|engine| engine.ui_caption_request_current(request));
@@ -349,6 +350,7 @@ impl CaptionEditor {
                     engine.finish_ui_caption(request);
                 }
                 self.end(context);
+                return;
             }
             Some((at, Action::Apply)) => {
                 if !form.detached
@@ -394,6 +396,15 @@ impl CaptionEditor {
                 context.request_repaint();
             }
             _ => {}
+        }
+        // Consume this frame’s text input before retiring a remotely applied form.
+        if externally_applied
+            && !input_rejected
+            && form.deferred.is_none()
+            && (form.text.as_str() == form.request.text
+                || Some(form.text.as_str()) == form.request.applied_text())
+        {
+            self.end(context);
         }
     }
 }

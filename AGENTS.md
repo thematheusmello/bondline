@@ -4,8 +4,11 @@ Mixed CDX viewing follows the [source contract](docs/research/cdx-mixed-caption.
 [receiving evidence](docs/verification-cdx-mixed-caption.md). Preserve each original
 record index, exact owned subtree ends, same-container ID checks, one shared run
 budget and full-paper certification. Direct captions have distinct positive depth
-above the certified chemical drawing. Keep read-only native input, original bytes
-and existing pure-profile writers until each mixed operation is verified.
+above the certified chemical drawing. Existing mixed caption run editing follows
+the [run-edit contract](docs/research/cdx-mixed-caption-edits.md) and [tests](docs/verification-cdx-mixed-caption-edits.md).
+Use the exact certified source and stable Page Text ID. Preserve every Fragment
+and Node label, prove the entire edited page, and keep mixed blank-paper creation,
+chemical authoring and cross-format refusals in place.
 
 An empty CDX Poster page follows the [empty-page contract](docs/research/cdx-empty-caption.md)
 and [verification](docs/verification-cdx-empty-caption.md). Require the closed Page, explicit

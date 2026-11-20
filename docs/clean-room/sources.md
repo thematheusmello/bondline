@@ -1,5 +1,9 @@
 # Clean-room source register
 
+The [mixed CDX caption run contract](../research/cdx-mixed-caption-edits.md)
+uses the published Text property, CDXString and container-scoped identity.
+Independent files retain two atom labels that share the target caption’s raw ID.
+
 The [mixed CDX page contract](../research/cdx-mixed-caption.md) uses the published
 Page, Fragment, Text, binary ID and ZOrder rules. Original witnesses combine
 atom-owned labels and direct captions in both source orders. Independent Roboto

@@ -565,3 +565,75 @@ fn imported_caption_sources_keep_cdx_creation_and_foreign_cdxml_edit_only_author
     assert_eq!(current_xml(&f)?, NONCANONICAL);
     Ok(())
 }
+
+#[test]
+fn external_caption_apply_retires_the_presented_pristine_form_and_allows_close() -> TestResult {
+    for (body, local_matches_apply) in [("AV", false), ("AVAV", false), ("AVAV", true)] {
+        let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+        let input = f.directory.path("external-caption.cdx");
+        open_pinned(&mut f, &input, "cdx", MULTI)?;
+        f.choose("Text")?;
+        let request = open_run(&mut f, FIRST_RUN, 2, 0, 3, "AV")?;
+        if local_matches_apply {
+            set_field(&mut f, "Caption text", body)?;
+        }
+        let result = f.command(
+            "ui.caption",
+            json!({"action":"apply",
+            "expected_revision":request["input_revision"],"request_id":request["id"],"text":body}),
+        )?;
+        assert_eq!(result["changed"], body != "AV");
+        assert!(result["ui_caption"].is_null());
+        // Close can arrive before the first repaint acknowledging the external Apply.
+        let close = f.command(
+            "document.close",
+            json!({"expected_revision":result["revision"]}),
+        )?;
+        if body == "AVAV" {
+            assert_eq!(close["close"], "needs_decision");
+            f.command(
+                "document.close",
+                json!({"action":"discard","expected_revision":result["revision"]}),
+            )?;
+        } else {
+            assert_eq!(close["close"], "approved");
+        }
+        closed(&mut f)?;
+        assert!(!f.app.drawing.authoring_modal());
+        assert_eq!(f.state()?["close"], "committed");
+    }
+    Ok(())
+}
+
+#[test]
+fn external_caption_apply_keeps_local_unsent_text_for_explicit_cancel() -> TestResult {
+    for input_on_next_frame in [false, true] {
+        let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+        let input = f.directory.path("divergent-caption.cdx");
+        open_pinned(&mut f, &input, "cdx", MULTI)?;
+        f.choose("Text")?;
+        let request = open_run(&mut f, FIRST_RUN, 2, 0, 3, "AV")?;
+        if !input_on_next_frame {
+            set_field(&mut f, "Caption text", "my unsent text")?;
+        }
+        let result = f.command(
+            "ui.caption",
+            json!({"action":"apply",
+        "expected_revision":request["input_revision"],"request_id":request["id"],"text":"AVAV"}),
+        )?;
+        assert!(result["ui_caption"].is_null());
+        if input_on_next_frame {
+            set_field(&mut f, "Caption text", "my unsent text")?;
+        } else {
+            f.warm();
+        }
+        assert_eq!(field_value(&f, "Caption text")?, "my unsent text");
+        assert!(f.app.drawing.authoring_modal());
+        // Returning to the original visible value does not implicitly dismiss a detached draft.
+        set_field(&mut f, "Caption text", "AV")?;
+        f.choose("Cancel")?;
+        closed(&mut f)?;
+        assert_eq!(f.state()?["revision"], result["revision"]);
+    }
+    Ok(())
+}

@@ -38,7 +38,7 @@ fn supports_xml_source(document: &StoredDocument) -> bool {
 }
 
 pub(super) fn supports_source(document: &StoredDocument) -> bool {
-    document.has_cdx_caption_preview() || supports_xml_source(document)
+    document.can_edit_cdx_caption_run() || supports_xml_source(document)
 }
 
 pub(super) fn find(
@@ -121,7 +121,7 @@ pub(super) fn set_run(
     document: &StoredDocument,
     params: TextSetRun,
 ) -> Result<StoredDocument, Error> {
-    let cdx_caption = document.has_cdx_caption_preview();
+    let cdx_caption = document.can_edit_cdx_caption_run();
     if !cdx_caption && !supports_xml_source(document) {
         return Err(Error::UnsupportedCaptionSource);
     }

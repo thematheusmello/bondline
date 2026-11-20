@@ -299,3 +299,46 @@ fn cdx_caption_run_edit_round_trips_through_cli_and_authenticated_loopback() -> 
     server.shutdown()?;
     Ok(())
 }
+
+#[test]
+fn mixed_unicode_run_edits_survive_history_and_editable_reopen() -> TestResult {
+    let before =
+        include_bytes!("../../../io/tests/fixtures/cdx-mixed-caption-edit/extended_before.cdx");
+    let after = include_bytes!("../../../io/tests/fixtures/cdx-mixed-caption-edit/after_both.cdx");
+    let prefix =
+        include_bytes!("../../../io/tests/fixtures/cdx-mixed-caption-edit/after_prefix.cdx");
+    let dir = support::SdfTestDirectory::new()?;
+    let input = dir.path("Original β.cdx");
+    let output = dir.path("Modified λ.cdx");
+    let again = dir.path("Reopened Ω.cdx");
+    fs::write(&input, before)?;
+    let edit = |revision, run, body| {
+        request(
+            "text.set_run",
+            json!({"expected_revision":revision,"page_id":1,"text_id":19,"run_index":run,"text":body}),
+        )
+    };
+    let state = cli(&[
+        request("document.open_cdx", json!({"path":input})),
+        edit(1, 0, "H H "),
+        edit(2, 1, "λéπΩ"),
+        request("history.undo", json!({})),
+        request("history.redo", json!({})),
+        request("document.save_cdx", json!({"path":output})),
+        request("document.open_cdx", json!({"path":output})),
+    ])?;
+    assert_eq!(fs::read(&input)?, before);
+    assert_eq!(fs::read(&output)?, after);
+    assert_eq!(state["file"]["dirty"], false);
+    assert_eq!(state["undo_depth"], 0);
+    let text = &state["document"]["pages"][0]["texts"][1];
+    assert_eq!(text["id"], 19);
+    assert_eq!(text["runs"][1]["text"], "λéπΩ");
+    cli(&[
+        request("document.open_cdx", json!({"path":output})),
+        edit(1, 1, "λΩé"),
+        request("document.save_cdx", json!({"path":again})),
+    ])?;
+    assert_eq!(fs::read(&again)?, prefix);
+    Ok(())
+}

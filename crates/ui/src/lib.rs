@@ -443,7 +443,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
     let state = engine.state();
     let caption_preview = engine
         .stored_document()
-        .is_ok_and(|stored| stored.has_caption_projection() || stored.has_cdx_caption_preview());
+        .is_ok_and(|stored| stored.has_caption_projection() || stored.can_edit_cdx_caption_run());
     let cdx_atom_label_preview = engine
         .stored_document()
         .is_ok_and(|stored| stored.has_cdx_atom_label_preview());
@@ -534,13 +534,6 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         }
         ui.add_space(8.0);
         ui.separator();
-        if engine
-            .stored_document()
-            .is_ok_and(|stored| stored.has_cdx_mixed_preview())
-        {
-            ui.label("Read-only CDX preview");
-            return;
-        }
         ui.weak("ACTIVE TOOL");
         let tool = if engine.effective_tool() == EffectiveTool::Caption {
             "Text selected".to_owned()

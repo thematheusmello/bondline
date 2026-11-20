@@ -188,7 +188,11 @@ Mixed CDX viewing uses one original record table. Each side validates its own
 Page children with shared resources and one text-run budget. Both views retain
 original record indices. Captions above the chemical ink must have distinct
 positive depths. Exact model equality controls display and unchanged CDX Save.
-[Mixed-page contract](research/cdx-mixed-caption.md).
+The existing-run CDX writer accepts a mixed drawing through its own exact
+source/model proof. It resolves the direct caption against its live ID and
+re-imports the whole candidate. The separate creation and atom-label writers
+keep their original source requirements. [Mixed-page contract](research/cdx-mixed-caption.md),
+[mixed caption edits](research/cdx-mixed-caption-edits.md).
 
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks

@@ -475,18 +475,22 @@ impl StoredDocument {
         self.has_cdx_preview(CdxPreview::AtomLabels)
     }
 
-    /// Read-only display of qualified page captions over explicit atom labels.
+    /// Exact source/model proof for Page captions over explicit CDX atom labels.
     pub fn has_cdx_mixed_preview(&self) -> bool {
         self.has_cdx_preview(CdxPreview::Mixed)
     }
 
     fn has_cdx_preview(&self, required: CdxPreview) -> bool {
-        self.original
-            .as_ref()
-            .and_then(OriginalSource::current_cdx)
-            .is_some_and(|(_, model, preview)| {
-                preview == required && (Arc::ptr_eq(&self.model, model) || self.model == *model)
-            })
+        self.cdx_source_for(|preview| preview == required).is_some()
+    }
+
+    fn cdx_source_for(
+        &self,
+        accepts: impl FnOnce(CdxPreview) -> bool,
+    ) -> Option<(&[u8], CdxPreview)> {
+        let (bytes, model, preview) = self.original.as_ref()?.current_cdx()?;
+        (accepts(preview) && (Arc::ptr_eq(&self.model, model) || self.model == *model))
+            .then_some((bytes, preview))
     }
 
     /// Re-import a qualified edit and retain original and current snapshots together.
