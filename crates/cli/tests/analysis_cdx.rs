@@ -1,6 +1,10 @@
 //! The user-facing file Open, Analysis window and formula commands through the actual CLI.
 use serde_json::{Value, json};
-use std::{path::Path, process::Command};
+use std::{
+    io::Write,
+    path::Path,
+    process::{Command, Stdio},
+};
 
 type Test<T = ()> = Result<T, Box<dyn std::error::Error>>;
 
@@ -9,6 +13,15 @@ fn open_and_analyze(relative_source: &str, atom: Option<u32>) -> Test<Value> {
 }
 
 fn analyze(relative_source: &str, atom: Option<u32>, command: &str) -> Test<Value> {
+    analyze_options(relative_source, atom, command, false)
+}
+
+fn analyze_options(
+    relative_source: &str,
+    atom: Option<u32>,
+    command: &str,
+    elemental: bool,
+) -> Test<Value> {
     let path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../io/tests/fixtures")
         .join(relative_source);
@@ -19,7 +32,12 @@ fn analyze(relative_source: &str, atom: Option<u32>, command: &str) -> Test<Valu
     if let Some(id) = atom {
         commands.push(json!({"command":"ui.selection","params":{"action":"set","expected_revision":1,"page_id":1,"atom_ids":[id]}}));
     }
-    commands.push(json!({"command":command,"params":{"expected_revision":1,"expected_selection_epoch":u64::from(atom.is_some())}}));
+    let mut params =
+        json!({"expected_revision":1,"expected_selection_epoch":u64::from(atom.is_some())});
+    if elemental {
+        params["include_elemental_analysis"] = json!(true);
+    }
+    commands.push(json!({"command":command,"params":params}));
     let mut cli = Command::new(env!("CARGO_BIN_EXE_bondline-cli"));
     cli.arg("run");
     for command in commands {
@@ -114,6 +132,45 @@ fn open_file_returns_mass_and_weight_through_the_real_cli() -> Test {
             .abs()
             < 1e-8
     );
+    Ok(())
+}
+
+#[test]
+fn elemental_analysis_of_imported_ethanol_and_an_uncapped_selection_agrees_with_rdkit() -> Test {
+    for (source, atom, notation) in [
+        ("cdx-mixed-skeleton/ethanol.cdx", None, "CCO"),
+        ("cdx-skeletal/all_h_missing.cdx", Some(2), "[CH2]"),
+    ] {
+        let report = analyze_options(source, atom, "analysis.properties", true)?;
+        assert_eq!(report["partial_fragments"], atom.is_some());
+        let python = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
+            if cfg!(windows) {
+                "python".into()
+            } else {
+                "python3".into()
+            }
+        });
+        let mut child = Command::new(python)
+            .arg(concat!(
+                env!("CARGO_MANIFEST_DIR"),
+                "/../../xtask/oracles/analysis_elemental.py"
+            ))
+            .arg(notation)
+            .stdin(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()?;
+        child
+            .stdin
+            .take()
+            .ok_or("stdin")?
+            .write_all(&serde_json::to_vec(&report)?)?;
+        let output = child.wait_with_output()?;
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
     Ok(())
 }
 

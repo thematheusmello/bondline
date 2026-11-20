@@ -9,7 +9,7 @@ pub use composition::{
     Composition, CompositionError, ElementCount, IsotopeCount, analyze_fragment,
 };
 pub use formula::FormulaIsotopes;
-pub use masses::{MassUnavailable, MolecularMasses};
+pub use masses::{ElementWeight, MassUnavailable, MolecularMasses};
 
 use bondline_model::{Atom, AtomId, BondId, BondOrder, Fragment, GraphError, Radical};
 
