@@ -148,7 +148,7 @@ impl Engine {
                     let (_, target) =
                         crate::boxed_atom::atom_at(document, page_id, fragment_id, atom_id)?;
                     if target.authored_label.is_some() {
-                        if document.has_cdx_atom_label_preview()
+                        if document.has_cdx_label_edit_profile()
                             && !document.can_edit_cdx_atom_label(target.id)
                         {
                             return Err(Error::UnsupportedAtomLabel(
