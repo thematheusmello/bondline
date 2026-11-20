@@ -49,6 +49,22 @@ impl PageView {
         })
     }
 
+    /// One complete physical page, with the paper origin at output pixel (0, 0).
+    pub fn for_publication(page: PageSize, dpi: u16, background: [u8; 4]) -> Result<Self, Error> {
+        let viewport = PageViewport::for_publication(page, dpi, background)?;
+        let size = [viewport.paper().width, viewport.paper().height];
+        Ok(Self {
+            page,
+            viewport,
+            source: size,
+            destination: size,
+            offset: [0; 2],
+            percent: f64::from(dpi) * 100.0 / 72.0,
+            fit: true,
+            density: None,
+        })
+    }
+
     pub fn zoom(
         width: u32,
         height: u32,

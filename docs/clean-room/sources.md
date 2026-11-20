@@ -2486,3 +2486,7 @@ the separate fork and exec stages. The experimental comparison uses the
 installed kernel and the real listener. The compatibility evidence identifies
 the older kernels and exact limits of the observed release guarantee.
 [Apple XNU fork and exec](https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_exec.c) · [Source decision and receiving evidence](../research/macos-listener-lifetime.md)
+
+### Publishing a chemical page as a physical-resolution PNG
+
+The output records straight RGBA and an integral pHYs density in pixels per metre. Bondline maps document points to the requested pixels per inch and rounds the final page extents upward to include fractional final pixels. [W3C PNG physical pixel dimensions](https://www.w3.org/TR/png-3/#11pHYs) · [W3C absolute length units](https://www.w3.org/TR/css-values-4/#absolute-lengths) · [Implementation contract and independent reader](../research/physical-png.md).

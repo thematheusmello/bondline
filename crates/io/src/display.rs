@@ -81,6 +81,18 @@ pub fn drawing_page_scene_with_view(
     drawing_scene(view, stored, page, cancel)
 }
 
+pub(crate) fn publication_scene(
+    stored: &StoredDocument,
+    id: PageId,
+    dpi: u16,
+    background: [u8; 4],
+    cancel: &Cancellation,
+) -> Result<GraphScene, DisplayError> {
+    let page = display_page(stored, id, cancel)?;
+    let view = bondline_render::PageView::for_publication(page.size(), dpi, background)?;
+    drawing_scene(&view, stored, page, cancel)
+}
+
 fn drawing_scene(
     view: &bondline_render::PageView,
     stored: &StoredDocument,

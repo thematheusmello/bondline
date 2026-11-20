@@ -46,6 +46,11 @@ pub struct Scene {
 impl Scene {
     pub(crate) fn validate(&self) -> Result<usize, Error> {
         let count = byte_count(self.width, self.height)?;
+        self.validate_primitives()?;
+        Ok(count)
+    }
+
+    fn validate_primitives(&self) -> Result<(), Error> {
         if self.primitives.len() > 4096 {
             return Err(Error::SceneTooComplex);
         }
@@ -63,7 +68,7 @@ impl Scene {
                 }
             }
         }
-        Ok(count)
+        Ok(())
     }
 }
 
@@ -75,7 +80,43 @@ pub fn cpu_scene(scene: &Scene) -> Result<Frame, Error> {
 pub fn cpu_scene_with_cancel(scene: &Scene, cancel: &Cancellation) -> Result<Frame, Error> {
     scene.validate()?;
     cancel.check()?;
-    let mut frame = cpu_solid(scene.width, scene.height, scene.background)?;
+    let frame = cpu_solid(scene.width, scene.height, scene.background)?;
+    paint(scene, frame, cancel)
+}
+
+pub(crate) fn publication_pixels(width: u32, height: u32) -> Result<usize, Error> {
+    let pixels = u64::from(width) * u64::from(height);
+    if !(1..=16_384).contains(&width) || !(1..=16_384).contains(&height) || pixels > 36_000_000 {
+        return Err(Error::InvalidPublicationSize);
+    }
+    usize::try_from(pixels).map_err(|_| Error::InvalidPublicationSize)
+}
+
+/// Rasterize an entire publishing page within a separate allocation and paint-work budget.
+pub fn cpu_publication(scene: &Scene, cancel: &Cancellation) -> Result<Frame, Error> {
+    cancel.check()?;
+    let pixels = publication_pixels(scene.width, scene.height)?;
+    scene.validate_primitives()?;
+    let mut work = 0u64;
+    for bounds in scene
+        .primitives
+        .iter()
+        .filter_map(|p| p.bounds(scene.width, scene.height))
+    {
+        work += u64::from(bounds.width) * u64::from(bounds.height);
+        if work > 160_000_000 {
+            return Err(Error::SceneTooComplex);
+        }
+    }
+    let frame = Frame {
+        width: scene.width,
+        height: scene.height,
+        rgba: scene.background.repeat(pixels),
+    };
+    paint(scene, frame, cancel)
+}
+
+fn paint(scene: &Scene, mut frame: Frame, cancel: &Cancellation) -> Result<Frame, Error> {
     for primitive in &scene.primitives {
         let Some(bounds) = primitive.bounds(scene.width, scene.height) else {
             continue;
@@ -116,6 +157,14 @@ pub fn page_scene(width: u32, height: u32, page: PageSize) -> Result<Scene, Erro
 }
 
 pub(crate) fn page_scene_in_viewport(width: u32, height: u32, viewport: &PageViewport) -> Scene {
+    if let Some(background) = viewport.output_background {
+        return Scene {
+            width,
+            height,
+            background,
+            primitives: Vec::new(),
+        };
+    }
     let Rectangle {
         x,
         y,
