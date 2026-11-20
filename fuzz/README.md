@@ -38,6 +38,22 @@ PY
 PATH="$PWD/target/tools/bin:$PATH" cargo +nightly-2026-04-01 fuzz run --target-dir "$PWD/target" --sanitizer address cdx_parse "$corpus_dir" -- -runs=10000 -seed=60261120 -max_len=65536 -timeout=5 -rss_limit_mb=2048
 ```
 
+## Editing atom labels beside CDX page captions
+
+The same `cdx_parse` oracle exercises an existing boxed label on pure and
+mixed chemical drawings. On a successful edit it compares the header and
+all raw records except the target Node's Element and H and its direct
+Text's string and rectangle. This includes all Page captions, unaffected
+atom labels, bonds, siblings and original terminators. A no-op must retain
+the snapshot. Missing source fields and a detached drawing still refuse.
+
+For this run, extend the preceding 142-seed recipe with the tracked CDX
+files in `cdx-mixed-label-edit`, `cdx-label-edit`, `cdx-label-preview` and
+`cdx-implicit-element` (all paths relative to `crates/io/tests/fixtures`).
+Use content digests for input names and seed `260112052`. The two qualified
+creation fixtures must actually accept the Cl-to-Br edit.
+[Source and identity checks](../docs/research/cdx-mixed-label-edits.md).
+
 ## Owned CDX Node labels
 
 `cdx_parse` compares every admitted child with its actual Node owner. It
