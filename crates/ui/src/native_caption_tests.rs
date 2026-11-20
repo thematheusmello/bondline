@@ -205,9 +205,9 @@ fn mixed_cdx_paints_caption_over_label_and_reserves_chemical_ink_for_viewing() -
         let shown = f.warm();
         assert_eq!(f.view()?["zoom_percent"], 100.0);
         let instruction = if retained_text_tool {
-            "Click a caption run to edit its text."
+            "Click blank paper to add a caption, or click a caption run to edit its text."
         } else {
-            "Choose Text to edit an existing caption."
+            "Choose Text to add or edit a caption."
         };
         for label in [instruction, "1 caption"] {
             assert!(
@@ -258,7 +258,6 @@ fn mixed_cdx_paints_caption_over_label_and_reserves_chemical_ink_for_viewing() -
         for (point, modifiers) in [
             ([147.375, 123.125], Modifiers::ALT),
             ([159.5, 123.5], Modifiers::NONE),
-            ([350.0, 350.0], Modifiers::NONE),
         ] {
             let position = paper_point(&mut f, point)?;
             click(&mut f, position, modifiers);
@@ -267,10 +266,20 @@ fn mixed_cdx_paints_caption_over_label_and_reserves_chemical_ink_for_viewing() -
         assert!(f.node("Caption text", &[Role::TextInput]).is_err());
         assert!(f.node("Element", &[Role::TextInput]).is_err());
         if retained_text_tool {
+            native_caption_creation_tests::open_creation_at(
+                &mut f,
+                [350.0, 350.0],
+                egui::Vec2::ZERO,
+            )?;
+            f.choose("Cancel")?;
+            closed(&mut f)?;
+            assert_eq!(f.state()?, opened);
             open_run(&mut f, [166.5, 122.5], 1, 0, 1, "H")?;
             f.choose("Cancel")?;
             closed(&mut f)?;
         } else {
+            click(&mut f, blank, Modifiers::NONE);
+            assert_eq!(f.state()?, opened);
             let overlap = paper_point(&mut f, [166.5, 122.5])?;
             click(&mut f, overlap, Modifiers::NONE);
         }
@@ -308,12 +317,14 @@ fn mixed_cdx_text_tool_edits_the_painted_page_run_and_reopens_its_sparse_id() ->
     f.frame(super::tap(Key::F5));
     f.choose("Text")?;
     let opened = f.state()?;
-    for point in [[159.5, 123.5], [350.0, 350.0]] {
-        let position = paper_point(&mut f, point)?;
-        click(&mut f, position, Modifiers::NONE);
-        closed(&mut f)?;
-        assert_eq!(f.state()?, opened);
-    }
+    let label = paper_point(&mut f, [159.5, 123.5])?;
+    click(&mut f, label, Modifiers::NONE);
+    closed(&mut f)?;
+    assert_eq!(f.state()?, opened);
+    native_caption_creation_tests::open_creation_at(&mut f, [350.0, 350.0], egui::Vec2::ZERO)?;
+    f.choose("Cancel")?;
+    closed(&mut f)?;
+    assert_eq!(f.state()?, opened);
     open_run(&mut f, [166.5, 122.5], 19, 0, 2, "H ")?;
     set_field(&mut f, "Caption text", "H H ")?;
     f.choose("Apply")?;

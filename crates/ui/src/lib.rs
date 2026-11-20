@@ -602,6 +602,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             });
         } else if cdx_atom_label_preview {
             ui.label("Alt-click a printed label to edit its element and attached H count. Save preserves the CDX structure.");
+            if engine.caption_creation_available() {
+                ui.label("Choose Text to add a caption.");
+            }
         } else if atom_label_preview {
             ui.label("Alt-click an atom to edit its printed label or create one on a supported hidden carbon. Use Marquee selection to move supported atoms and their labels.");
         } else if engine.effective_tool() == EffectiveTool::Selection {
