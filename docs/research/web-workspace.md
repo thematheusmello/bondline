@@ -1,6 +1,6 @@
 # Shared browser workspace
 
-2026-11-20, based on main6fd6633. This work uses the real egui workspace, command registry,
+2026-11-20, started on main6fd6633 and integrated mainf64a20e. This work uses the real egui workspace, command registry,
 models, authoring and history. It does not substitute an illustrative canvas or enable
 native file paths in the browser. Initial actual wasm UI check fails because desktop MCP
 Tokio networking reaches mio. Target-specific network/server isolation retains desktop
@@ -25,12 +25,20 @@ The [Web Locks API](https://w3c.github.io/web-locks/) holds one cooperative writ
 per origin/page lifetime. A second tab or unsupported storage/locking remains visibly
 unable to save its edits. Unrecoverable in-tab edits retain the browser unload prompt;
 undo history and view state are not persisted. No native Save/close receipt is issued.
+New/restored browser sessions explicitly request100% through the shared `ui.view` command.
+This original host policy keeps the drawing readable in a660px-tall viewport. Explicit
+in-session zoom remains unchanged on resize. Existing View Fit/Actual controls and the
+renderer scale refusal remain shared; no label-size guard is weakened.
 
 The [service-worker lifecycle](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers)
 supports an independently hash-versioned, scope-specific static cache. Only own-origin
 assets are fetched. A loaded package must reload and edit while offline; a live local
 server alone is not offline-startup evidence. HTTP localhost or HTTPS is required for
 trusted browser APIs. No account, remote service or proprietary runtime is used.
+Updates use the normal waiting lifecycle until old clients close; no forced activation
+mixes a live editor's old JS with a new WASM bundle. Fetch consults only the current
+scope's versioned cache. Actual offline tests also reject all server requests because
+CDP page-offline alone leaves a service worker's independent network target available.
 
 ## Pinned SDK compatibility and license closure
 
@@ -53,6 +61,11 @@ replacement, Unicode-table copying or license allowlist expansion. lib.rs/tys.rs
 bytes remain exact, keeping the installed matching0.2.130 CLI. The four-target runtime
 license audit selects actual browser cdylib roots, not the unsupported native CLI binary.
 Archive/VCS and modified-file hashes belong to the adjacent vendor patch notices.
+Packaging runs the strict gate before generating assets and retains all selected runtime
+license files plus Roboto. Missing archive notices for AccessKit/profiling come from the
+exact published VCS roots, with checked copies in `docs/licenses/browser-runtime`; four
+egui family crates reuse the exact same-revision upstream notices already retained in
+`vendor/egui`. Missing or changed provenance refuses packaging, not silent substitution.
 
 ## Acceptance scope
 

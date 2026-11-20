@@ -599,11 +599,16 @@ name = "bondline-ui"
 version = "0.1.0"
 dependencies = [
  "bondline-commands",
+ "bondline-io",
  "bondline-mcp",
  "bondline-model",
  "bondline-render",
  "eframe",
+ "js-sys",
  "serde_json",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
 ]
 
 [[package]]

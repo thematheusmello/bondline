@@ -11,6 +11,14 @@ States: **missing** = no delivered reference workflow; **wired** = code calls an
 but the stated platform/workflow lacks execution evidence; **verified** = only the stated
 scope has independent evidence. A page-only history test does not verify chemical editing.
 
+The [initial browser host](verification-web-workspace.md) verifies original Bondline
+pointer bond drawing, keyboard history, the shared Analysis window and real CDXML
+recovery on Chrome157/WebGPU at1160×800 and1160×660. It reloads with all local server
+requests rejected, recovers readable zoom through the visible View control and refuses
+quota/conflicting/corrupt draft replacement. Native-only file controls remain unavailable.
+This is an initial M5 workflow, not full browser/reference parity; import/export,
+accessibility, other engines/hardware, optimized packaging and broader tools remain open.
+
 The [direct-Page CDX caption increment](verification-cdx-caption-preview.md) verifies
 read-only preview and exact native macOS Open and Unicode Save/reopen for one explicitly
 positioned Roboto caption on white paper. [Ordered captions](verification-cdx-caption-order.md)

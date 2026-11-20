@@ -177,8 +177,15 @@ does not verify a native Fit fix, physical density or full overview/pan.
 
 ## Get started
 
-Source builds are available now. Signed installers and browser delivery are planned in M5;
-there is no published installer release yet.
+Source builds are available now. The [initial browser workspace](web/README.md) uses the
+same Rust editor and runs offline after its static assets are cached. Signed installers,
+browser file import/export and broader browser acceptance remain M5 work; there is no
+published installer or hosted browser release yet.
+
+<p align="center">
+  <img src="docs/media/browser-workspace.png" width="960" alt="Actual Bondline browser workspace with a pointer-drawn carbon bond and the Analysis window showing C2H6">
+  <br><sub>Actual shared Rust editor in Chrome/WebGPU. Browser file controls remain unavailable; <a href="docs/verification-web-workspace.md">executed scope and limits</a>.</sub>
+</p>
 
 ```sh
 git clone https://github.com/thematheusmello/bondline.git
@@ -303,7 +310,7 @@ Its startup token is a credential; keep it out of reports and screenshots.
 | SMILES | Complete accepted source-file Open/Save and readonly inspector; explicit selected/all retained Drawing import, supported carbon order/H edits, whole-source history/Save and bounded native Mac reopen/reimport. Independent actual-file consumers preserve opaque/unselected bytes. Explicit-H fragment export and four create-only layout converters remain separate | Broader chemistry/packing, record insertion/reorder/metadata editing, saved authoring geometry, native fragment export, automatic clipboard workflows and exact reference screens. Native Fit/pan/DPI/races and other platforms remain limited or unverified |
 | InChI | Planned | Reference-tool comparison and import/export |
 | Publishing | Page PNG capture exists | SVG/PDF/PNG publishing, printing and clipboard workflows |
-| Web / installers | Planned M5 | Approved browser dependency graph, packaging and signing |
+| Web / installers | Initial shared egui/WebGPU editor: actual pointer drawing, keyboard history, Analysis and offline CDXML recovery; strict wasm runtime license gate and local dev package pass. [Build/evidence](web/README.md). | Browser file import/export, accessibility, other engines/hardware, release optimization, complete browser workflows, packaging and signing |
 
 The compatibility target includes CDXML and CDX files used by ChemDraw Professional.
 Bondline is independent and is not affiliated with, endorsed by or sponsored by ChemDraw

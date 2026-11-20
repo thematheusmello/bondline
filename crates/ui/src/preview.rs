@@ -305,6 +305,7 @@ impl PreviewWorkflow {
     }
 
     /// Called after the frame's Engine guard is released; pending intent already blocks close.
+    #[cfg(not(target_arch = "wasm32"))]
     pub(crate) fn start_pending(&mut self, executor: &CommandExecutor, context: &egui::Context) {
         let Some(key) = self.pending.take() else {
             return;
@@ -367,6 +368,7 @@ impl PreviewWorkflow {
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 fn decode(
     capture: PngCapture,
     key: &PreviewKey,

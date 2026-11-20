@@ -819,7 +819,15 @@ run RDKit, reference InChI and OPSIN; document conventions and tolerances before
 SVG/PDF/PNG, physical-scale output, documented clipboard/Office workflows, atomic saving,
 recovery and independent export consumers. Editable embedding needs public evidence.
 
-## M5: depth and distribution — planned
+## M5: depth and distribution — in progress
+
+The [initial shared browser editor](docs/verification-web-workspace.md) paints the real
+egui workspace, draws through the command registry, undoes/redoes, opens Analysis and
+restores real CDXML with the network unavailable. Recovery protects conflicting tabs,
+corrupt data and quota failures. Actual1160×800/660 workflows and the strict wasm runtime
+graph are checked. Browser native-file replacements, accessibility, broader tool/platform
+acceptance, optimized/release packaging and distribution remain required. No hosted
+release or complete M5 claim follows.
 
 Independent name/structure conversion, original templates, biopolymers/HELM, WebAssembly,
 packaging and signed installers. Keep documented advanced capabilities (including naming,

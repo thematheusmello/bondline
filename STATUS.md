@@ -597,9 +597,15 @@ The local gate and native verification jobs have finished.
 2. `../bondline-cdx-mixed-skeletal-movement` is adding source-preserving
    movement to the printed-label drawings. Verify position and dependent
    bounding-box bytes together, then undo, redo and reopen.
-3. The web host in `../bondline-web-workspace` is exercising actual egui/WebGPU
-   startup, offline editing and history, and recovery across browser tabs.
-   The codec test exercises a separate headless Wasm entry point. Interactive
+3. The initial web host in `../bondline-web-workspace` now passes actual egui/WebGPU
+   pointer editing, keyboard history, Analysis and offline recovery at1160×800/660,
+   with all local server requests rejected. It protects quota/conflicting/corrupt
+   recovery data, retains runtime notices and gates the actual wasm dependency graph.
+   Transport33fa36f and SDK463b0c6 are pushed; the complete host is on the same focused
+   branch based on mainf64a20e. [Receiving](docs/verification-web-workspace.md) records
+   exact artifact hashes, local checks and limits. Native file replacement, browser
+   accessibility, other engines/hardware and optimized release packaging are next.
+   The codec test remains a separate headless Wasm entry point. Interactive
    Windows/Linux validation and further work across M0–M5 remain outstanding.
    [Roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 

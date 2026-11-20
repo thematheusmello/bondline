@@ -1,4 +1,4 @@
-//! Native GPU workspace. Authoring controls dispatch through the shared command registry.
+//! Shared egui workspace. Native and browser hosts dispatch the same authoring commands.
 
 mod analysis;
 mod atom_editor;
@@ -38,14 +38,21 @@ mod view_controls;
 mod view_tests;
 #[cfg(test)]
 mod visual_capture_tests;
+#[cfg(target_arch = "wasm32")]
+mod web;
+#[cfg(any(target_arch = "wasm32", test))]
+mod web_recovery;
 #[cfg(test)]
 mod workspace_presentation_tests;
+#[cfg(target_arch = "wasm32")]
+pub use web::WebHandle;
 
 use bondline_commands::{
     BondCreate, BondDrawOrder, BondExtend, BondSetOrder, BondToolState, CloseState, Command,
     ControlInfo, ControlKey, ControlShortcut, EffectiveTool, Engine, ExtendHydrogenPolicy,
     OrderHydrogenPolicy, RingKind,
 };
+#[cfg(not(target_arch = "wasm32"))]
 use bondline_mcp::{CommandExecutor, SharedEngine, control::LoopbackServer};
 use bondline_model::{PageId, Point2};
 use eframe::egui;
@@ -53,6 +60,7 @@ use file_workflow::{FileIntentAction, FileWorkflow};
 use preview::PreviewWorkflow;
 use sdf_fields::SdfFieldsWorkflow;
 use smiles_records::SmilesRecordsWorkflow;
+#[cfg(not(target_arch = "wasm32"))]
 use std::{
     io::Write,
     sync::{Arc, Mutex},
@@ -61,6 +69,7 @@ use std::{
 const ACCENT: egui::Color32 = egui::Color32::from_rgb(21, 117, 118);
 
 /// Native startup configuration: use the audited wgpu backend on every desktop platform.
+#[cfg(not(target_arch = "wasm32"))]
 pub fn native_options() -> Result<eframe::NativeOptions, bondline_render::Error> {
     Ok(eframe::NativeOptions {
         renderer: eframe::Renderer::Wgpu,
@@ -72,6 +81,7 @@ pub fn native_options() -> Result<eframe::NativeOptions, bondline_render::Error>
     })
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 fn original_icon() -> Result<egui::IconData, bondline_render::Error> {
     branding::icon()
 }
@@ -2624,6 +2634,7 @@ fn show_workspace_with_preview(
 }
 
 /// Native application state for startup and bounded smoke verification.
+#[cfg(not(target_arch = "wasm32"))]
 pub struct BondlineApp {
     smoke_frames: Option<u8>,
     engine: SharedEngine,
@@ -2637,6 +2648,7 @@ pub struct BondlineApp {
     smiles_records: SmilesRecordsWorkflow,
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 impl BondlineApp {
     /// Initialize the real wgpu context and font; smoke mode closes after three painted frames.
     pub fn new(
@@ -2685,6 +2697,7 @@ impl BondlineApp {
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 impl BondlineApp {
     fn update_workspace(&mut self, context: &egui::Context) {
         if let Some(control) = &self.control {
@@ -2901,12 +2914,14 @@ impl BondlineApp {
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 impl eframe::App for BondlineApp {
     fn update(&mut self, context: &egui::Context, _frame: &mut eframe::Frame) {
         self.update_workspace(context);
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 impl Drop for BondlineApp {
     fn drop(&mut self) {
         if let Ok(mut engine) = self.engine.lock() {

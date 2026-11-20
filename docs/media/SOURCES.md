@@ -173,3 +173,26 @@ Apache-2.0, with the separate Apache Roboto notice. No user drawing, private fil
 reference-product assets, credential or listener token is included. The older user's app
 and unsaved draft stay untouched; a separate final preview remains open. Grey controls
 remain unimplemented. These are documentation photographs, not new approved goldens.
+
+
+## Shared browser workspace, 2026-11-20
+
+[browser-workspace.png](browser-workspace.png) is an unedited owned Chrome CDP
+PNG,1160×800/DPR1,59,718B/SHA-256
+`4708256b5f0467ff96c933b54c35cf668aa2c6d09e9eb052024146613be125fd`.
+It captures the real egui/WebGPU workspace after a real pointer-drawn120pt C–C
+and View→Show Analysis Window. RDKit independently reads the source asCC/C2H6.
+The original Bondline UI/icons and Apache Roboto retain their normal notices.
+No reference screen, generated mockup, composite, other user window or credential
+is included. This documentation image is not a human-approved render golden.
+
+Chrome157.0.8103.79/macOS arm64 uses a fresh owned headless profile, explicit
+headless WebGPU enablement and forcedDPR1. The build starts on mainf64a20e with
+the shared host in feat/web-workspace after transport33fa36f/SDK463b0c6. Exact
+artifact identity:dev WASM14,402,333B/SHA-256
+`9e8df27cd7854cc7c5ac315a6c20743781da9f6a60dbdbbe0da06882f076412a`,
+static bundle`fc431ed9dd2bf42bf8dc38bc89a1307c9d6aea2b96bbcca9940cfbcbad472468`.
+[Receiving](../verification-web-workspace.md) records startup,1160×660, actual
+offline input/history, conflict/quota and independent source evidence separately
+from unverified browser/file/platform workflows. Native file controls are
+unavailable. All owned Chrome profiles, processes and servers have exited.
