@@ -12,16 +12,21 @@ def package_values(root):
     weights = dict(re.findall(r"Self::(\w+) => ([\d.]+),",
                               (root / "src/standard_atomic_weight.rs").read_text()))
     isotopes = {}
-    for file in (root / "src/isotopes").glob("*.rs"):
+    modules = re.findall(r"^pub mod (\w+);", (root / "src/isotopes.rs").read_text(), re.MULTILINE)
+    assert len(modules) == 118
+    for name in modules:
+        # The archive also contains alternate spellings outside the compiled module tree.
+        file = root / "src/isotopes" / (name + ".rs")
         code = file.read_text()
         owner = re.search(r"fn element\(&self\) -> crate::Element \{\s*crate::Element::(\w+)", code)
-        if owner is None:
-            continue
+        assert owner is not None, name
         z = int(numbers[owner[1]])
         mass_numbers = dict(re.findall(r"Self::(\w+) => (\d+)u16,", code))
-        for variant, mass in re.findall(r"Self::(\w+) => ([\d.eE+-]+)f64,", code):
+        # Examine the production mass table independently of examples and tests.
+        mass_fn = code.split("fn relative_atomic_mass(&self) -> f64 {", 1)[1].split("\n}",1)[0]
+        for variant, mass in re.findall(r"Self::(\w+) => ([\d.eE+-]+)f64,", mass_fn):
             key = (z, int(mass_numbers[variant]))
-            assert key not in isotopes
+            assert key not in isotopes, (file,variant,key,mass,isotopes.get(key))
             isotopes[key] = Decimal(mass)
     return weights, isotopes
 
@@ -52,7 +57,7 @@ def check_isotopes(isotopes, document):
     same = sum(abs(isotopes[key] - nist[key]) <= Decimal("1e-10") for key in overlap)
     result = (len(isotopes), len(nist), len(overlap), same, len(overlap)-same,
               len(nist.keys()-isotopes.keys()), len(isotopes.keys()-nist.keys()))
-    assert result == (3414, 3352, 3264, 3131, 133, 88, 150), result
+    assert result == (3414, 3352, 3264, 3129, 135, 88, 150), result
     print("NIST: package, reference, shared, matching, different, NIST-only, package-only:", *result)
 
 
