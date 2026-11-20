@@ -1,6 +1,7 @@
 //! Source-preserving V2000 MOL syntax and an explicit, strict elemental model mapping.
 //! Numeric fields follow BIOVIA Chemistry 2026 CTfile Formats, printed pages 62–70/90.
 
+mod hydrogens;
 mod parse;
 pub(crate) mod symbols;
 pub mod v3000;

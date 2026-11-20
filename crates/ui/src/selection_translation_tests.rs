@@ -799,9 +799,29 @@ fn complete_foreign_and_collection_sources_never_gain_geometry_authority_from_se
         let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
         let path = f.directory.path(name);
         fs::write(&path, source)?;
-        f.command(command, json!({"path":path}))?;
+        let params = if command == "document.open_mol" {
+            json!({"path":path,"origin_x_pt":220,"origin_y_pt":340})
+        } else {
+            json!({"path":path})
+        };
+        f.command(command, params)?;
         f.warm();
         let before = f.state()?;
+        if command == "document.open_mol" {
+            f.command("ui.view", json!({"action":"actual"}))?;
+            selection_choose(&mut f, "Marquee selection")?;
+            let first = selection_position(&f, 1)?;
+            selection_click_at(&mut f, first, false)?;
+            selection_expect(&f, &[1])?;
+            selection_marquee(&mut f, first, [first[0] + 20.0, first[1] + 15.0], false)?;
+            selection_authored_unchanged(&f, &before)?;
+            selection_shortcut(&mut f, Key::A, false);
+            selection_expect(&f, &[1, 2])?;
+            f.frame(selection_key(Key::ArrowRight, Modifiers::NONE));
+            selection_authored_unchanged(&f, &before)?;
+            assert_eq!(fs::read(&path)?, source);
+            continue;
+        }
         let error = f
             .app
             .engine
