@@ -2458,7 +2458,45 @@ borane. [BIOVIA representation guide](https://manualzz.com/doc/44003874/biovia-c
 
 - Molecular weight, monoisotopic exact mass, nuclide completeness and ion conventions follow the [source register and numerical contract](../research/molecular-masses.md). It links the public v25 guide pp. 221–224, IUPAC definitions, CIAAW tables, NIST/CODATA and the MIT atomic-data revision.
 
+CDXML chemistry on coordinate-free carbon graphs distinguishes the plain document type declaration from an external system or public identifier. The lexical query preserves the validated source and treats text inside comments as ordinary comment data. [XML 1.0 document type declaration](https://www.w3.org/TR/xml/#NT-doctypedecl).
+
+Coordinate-free neutral carbon CDXML analysis applies the public elemental-node and minimum-valence H defaults only after checking every object, property and bond reference. Unused presentation resources remain in the original file. [Chemical coverage contract and public SDK properties](../research/cdxml-carbon-analysis.md).
+
 - Elemental analysis uses each element’s percentage of the molecular weight in the current scope. [Revvity Signals v25 guide, printed p. 221](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), [IUPAC mass fraction](https://goldbook.iupac.org/terms/view/M03722), [Bondline’s numeric and presentation conventions](../research/elemental-analysis.md).
+
+### Analysis of individual SDF molecules
+
+An SDfile holds separate structure records with optional data fields. A record’s
+connection table supplies the molecule. Bondline selects the current one-based
+record ordinal, reads its validated MOL byte range, and applies the same valence,
+mass and isotope conventions as a separately opened MOL. Named data fields do
+not supply chemical values. Current-revision checks prevent an old ordinal from
+silently analyzing a different molecule after removal. [BIOVIA CTfile Formats
+2026, chapter 10](https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf),
+[MOL analysis](../research/mol-analysis.md), [masses](../research/molecular-masses.md).
+
+### Retaining CDX property length headers during replacement
+
+The public binary specification defines the unsigned short length and the 0xFFFF
+marker followed by a little-endian 32-bit length. Some imported short payloads
+use the extended representation. A source-preserving replacement can keep that
+width, even after the payload shrinks. A short header must grow when the new
+length reaches 65,535. The standalone opt-in writer checks the final encoded
+byte budget with the chosen width. [CDX property framing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm).
+
+
+### Editing a printed heteroatom on skeletal CDX paper
+
+A Fragment contains Nodes. A printed Node can carry both chemical fields and a child Text label. The binary point stores Y before X and the rectangle stores top, left, bottom and right as signed 16.16 coordinates. Bondline recomputes the selected label at the current atom position and checks the complete page before committing. Hidden carbon vertices retain their original Node and visibility records through editing and Save. [Node and its Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm), [explicit hydrogens](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm), [coordinate encoding](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm), [original witnesses](../../crates/io/tests/fixtures/cdx-skeletal-label-edit/SOURCES.md).
+
+### Darwin loopback listener lifetime, 2026-11-20
+
+The macOS 27.2 public SDK `sys/fcntl.h` and `fcntl(2)` manual define
+`FD_CLOFORK`. Published XNU spawn and descriptor-table sources describe
+the separate fork and exec stages. The experimental comparison uses the
+installed kernel and the real listener. The compatibility evidence identifies
+the older kernels and exact limits of the observed release guarantee.
+[Apple XNU fork and exec](https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_exec.c) · [Source decision and receiving evidence](../research/macos-listener-lifetime.md)
 
 ### Accessible menu activation, 2026-11-20
 

@@ -96,6 +96,7 @@ pub struct SourceInfo {
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum CdxmlProfile {
     Opaque,
+    CarbonConnectivity,
     Canonical,
     Preserved,
     Caption,
@@ -176,6 +177,7 @@ impl OriginalSource {
             } => match profile {
                 CdxmlProfile::Canonical => true,
                 CdxmlProfile::Opaque
+                | CdxmlProfile::CarbonConnectivity
                 | CdxmlProfile::Caption
                 | CdxmlProfile::Boxed
                 | CdxmlProfile::Connected
@@ -239,7 +241,6 @@ impl StoredDocument {
     pub fn from_cdxml(bytes: Arc<[u8]>, preview_size: PageSize) -> Result<Self, DocumentError> {
         let graph = ElementalGraph::parse(&bytes)?;
         let model = Arc::new(graph.preview_document(preview_size)?);
-        drop(graph);
         // Producer text alone grants no authority; every source field needs a complete proof.
         let profile = if crate::cdxml::is_flagged(&bytes, &model) {
             CdxmlProfile::Flagged
@@ -259,9 +260,12 @@ impl StoredDocument {
             CdxmlProfile::Mixed
         } else if crate::cdxml::is_label_defaults(&bytes, &model) {
             CdxmlProfile::LabelDefaults
+        } else if graph.has_carbon_connectivity() {
+            CdxmlProfile::CarbonConnectivity
         } else {
             CdxmlProfile::Opaque
         };
+        drop(graph);
         Ok(Self {
             model: Arc::clone(&model),
             original: Some(OriginalSource::Cdxml {
@@ -351,8 +355,14 @@ impl StoredDocument {
                 .is_none_or(|source| source.fully_mapped(&self.model))
     }
 
-    /// Whole-source coverage for reading literal atom counts. Display of a partial
-    /// record collection does not certify a whole-drawing composition.
+    // The immutable source admitted this graph. A detached model cannot reuse that proof.
+    pub(crate) fn has_cdxml_carbon_connectivity(&self) -> bool {
+        matches!(&self.original, Some(OriginalSource::Cdxml {
+            profile: CdxmlProfile::CarbonConnectivity, baseline, ..
+        }) if Arc::ptr_eq(baseline, &self.model) || **baseline == *self.model)
+    }
+
+    /// Complete chemical coverage for the current model and source.
     pub fn has_analysis_coverage(&self) -> bool {
         match &self.original {
             None => true,
@@ -366,7 +376,8 @@ impl StoredDocument {
                     || self.has_cdx_skeletal_label_preview()
             }
             Some(OriginalSource::Cdxml { .. }) => {
-                self.is_fully_mapped()
+                self.has_cdxml_carbon_connectivity()
+                    || self.is_fully_mapped()
                     || self.has_caption_projection()
                     || self.has_boxed_atom_labels()
                     || self.has_connected_atom_labels()
@@ -909,6 +920,7 @@ impl StoredDocument {
             Some(OriginalSource::Cdxml {
                 profile:
                     CdxmlProfile::Opaque
+                    | CdxmlProfile::CarbonConnectivity
                     | CdxmlProfile::Preserved
                     | CdxmlProfile::Caption
                     | CdxmlProfile::Boxed

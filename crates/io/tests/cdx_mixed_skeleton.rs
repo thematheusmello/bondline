@@ -30,7 +30,7 @@ fn hidden_vertices_and_printed_labels_share_a_source_certified_binary_drawing() 
             stored.has_cdx_skeletal_label_preview() && stored.has_display_projection(),
             "{case}"
         );
-        assert!(!stored.has_cdx_skeletal_preview() && !stored.has_cdx_label_edit_profile());
+        assert!(!stored.has_cdx_skeletal_preview() && stored.has_cdx_label_edit_profile());
         assert!(
             !stored.can_create_caption() && !stored.is_fully_mapped() && stored.to_cdxml().is_err()
         );
@@ -62,7 +62,10 @@ fn hidden_vertices_and_printed_labels_share_a_source_certified_binary_drawing() 
                 atom.show_non_terminal_carbon_labels,
                 expected_flag(witness.show_non_terminal_carbon_labels)
             );
-            assert!(!stored.can_edit_cdx_atom_label(atom.id));
+            assert_eq!(
+                stored.can_edit_cdx_atom_label(atom.id),
+                atom.authored_label.is_some()
+            );
         }
         let cancel = Cancellation::default();
         for scale in [1, 2] {

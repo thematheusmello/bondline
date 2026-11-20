@@ -39,6 +39,30 @@ pub enum Error {
     WorkerPanicked,
 }
 
+fn bind_listener(port: u16) -> io::Result<std::net::TcpListener> {
+    let listener = std::net::TcpListener::bind((Ipv4Addr::LOCALHOST, port))?;
+    #[cfg(target_os = "macos")]
+    {
+        use rustix::io::{FdFlags, fcntl_getfd, fcntl_setfd};
+
+        // Darwin sys/fcntl.h defines FD_CLOFORK as 2. CLOEXEC alone retains a
+        // listening socket in a concurrent posix_spawn until its exec stage.
+        let flags = fcntl_getfd(&listener)?;
+        let close_on_fork = FdFlags::from_bits_retain(2);
+        fcntl_setfd(&listener, flags | close_on_fork).or_else(allow_unsupported_fd_flag)?;
+    }
+    Ok(listener)
+}
+
+#[cfg(target_os = "macos")]
+fn allow_unsupported_fd_flag(error: rustix::io::Errno) -> rustix::io::Result<()> {
+    use rustix::io::Errno;
+    match error {
+        Errno::INVAL | Errno::NOTSUP | Errno::OPNOTSUPP => Ok(()),
+        other => Err(other),
+    }
+}
+
 /// Owns the listener, connection tasks and worker. Drop closes all of them.
 pub struct LoopbackServer {
     address: SocketAddr,
@@ -69,7 +93,7 @@ impl LoopbackServer {
         }
         let token: Arc<str> = token.into();
         let session_token = Arc::clone(&token);
-        let listener = std::net::TcpListener::bind((Ipv4Addr::LOCALHOST, port))?;
+        let listener = bind_listener(port)?;
         let address = listener.local_addr()?;
         listener.set_nonblocking(true)?;
         let runtime = tokio::runtime::Builder::new_current_thread()
@@ -293,6 +317,7 @@ async fn connection(
 #[cfg(test)]
 mod tests {
     use super::publish_result;
+
     use crate::CommandExecutor;
     use bondline_commands::{CloseState, Engine};
     use serde_json::{Value, json};
@@ -308,6 +333,47 @@ mod tests {
         time::Duration,
     };
     use tokio::{io::AsyncWrite, sync::oneshot, time::timeout};
+
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn published_listener_preserves_close_on_exec_and_supported_close_on_fork() -> io::Result<()> {
+        use rustix::io::{FdFlags, fcntl_getfd, fcntl_setfd};
+
+        // A regular descriptor qualifies the installed kernel independently of the listener.
+        let reference = std::fs::File::open("/dev/null")?;
+        let close_on_fork = FdFlags::from_bits_retain(2);
+        let existing = fcntl_getfd(&reference)?;
+        let supported = match fcntl_setfd(&reference, existing | close_on_fork) {
+            Ok(()) => fcntl_getfd(&reference)?.contains(close_on_fork),
+            Err(error) => {
+                super::allow_unsupported_fd_flag(error)?;
+                false
+            }
+        };
+
+        let listener = super::bind_listener(0)?;
+        let flags = fcntl_getfd(&listener)?;
+        assert!(flags.contains(FdFlags::CLOEXEC));
+        assert_eq!(flags.contains(close_on_fork), supported);
+        Ok(())
+    }
+
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn old_kernels_can_decline_the_additional_descriptor_flag() {
+        use rustix::io::Errno;
+        for unsupported in [Errno::INVAL, Errno::NOTSUP, Errno::OPNOTSUPP] {
+            assert_eq!(super::allow_unsupported_fd_flag(unsupported), Ok(()));
+        }
+        assert_eq!(
+            super::allow_unsupported_fd_flag(Errno::BADF),
+            Err(Errno::BADF)
+        );
+        assert_eq!(
+            super::allow_unsupported_fd_flag(Errno::ACCESS),
+            Err(Errno::ACCESS)
+        );
+    }
 
     struct FlushGate {
         bytes: Arc<Mutex<Vec<u8>>>,

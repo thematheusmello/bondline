@@ -241,7 +241,7 @@ command_registry! {
     TextCreate(TextCreate) => ("text.create", "Create a single-line Roboto Regular caption at an explicit left baseline. Preserves supported CDXML and CDX source and validates the complete page before one history edit.", false),
     AnalysisFormula(AnalysisFormula) => ("analysis.formula", "Read the Hill formula for the current selection or complete drawing. Reports skeletal CDX hydrogen defaults, unresolved hydrogens, partial fragments and unsupported source coverage.", true),
     UiAnalysis(UiAnalysis) => ("ui.analysis", "Show or hide the Analysis window for this session without changing the drawing or its history.", false),
-    AnalysisProperties(AnalysisProperties) => ("analysis.properties", "Read formula, molecular weight and monoisotopic exact mass for the whole drawing or selection. Partial fragments report uncapped contributions; unavailable mass data identify the element or isotope. Request elemental analysis for percent by weight.", true),
+    AnalysisProperties(AnalysisProperties) => ("analysis.properties", "Read formula, molecular weight and monoisotopic exact mass for the whole drawing or selection. Partial fragments report uncapped contributions; unavailable mass data identify the element or isotope. Request elemental analysis for percent by weight or select one SDF molecule by record ID.", true),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -846,6 +846,7 @@ impl Engine {
                     params.expected_revision,
                     params.expected_selection_epoch,
                     analysis::Fields::Formula,
+                    None,
                 );
             }
             Command::AnalysisProperties(params) => {
@@ -858,6 +859,7 @@ impl Engine {
                     params.expected_revision,
                     params.expected_selection_epoch,
                     fields,
+                    params.sdf_record_id,
                 );
             }
             Command::UiAnalysis(params) => {

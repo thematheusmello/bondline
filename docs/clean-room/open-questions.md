@@ -4,6 +4,10 @@
 
 Guide v25 allows a partial structure selection. The hydrogen and charge treatment for a cut bond is unspecified. Bondline discloses the selected atoms’ recorded composition and leaves an excised or hydrogen-capped molecular formula unresolved. [Analysis window contract](../research/analysis-window.md).
 
+## Creating a printed label on a hidden CDX vertex
+
+The current skeletal source proof admits explicit heteroatom labels with an owned Text, style, bounding box and attached H property. Creating a new label on a hidden vertex needs a rule for assigning the child ID and selecting its font, color, placement and visibility flags. A mixed file can omit those fields entirely. The separate case of a printed carbon label also needs evidence. [Public Node rules](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm).
+
 ## Binary skeletal carbon visibility, 2026-11-20
 
 The SDK defines implied booleans and separate Node flags for terminal and
@@ -390,6 +394,10 @@ acceptance does not prove native Text-tool, measured DPI, race or other-platform
   cause. See research/macos-listener-lifetime.md. The actual test, socket policy, timing and
   concurrency stay unchanged. Obtain known socket/process identity at a new natural failure
   before a causal repair; do not rerun exhausted contexts or consumed experiments.
+  A later controlled post-publication spawn reproduces a distinct listener
+  retention interval on macOS 27.2. Its bounded fix and older-kernel limits are
+  documented in [the listener research](../research/macos-listener-lifetime.md).
+  The natural failures still lack a failure-time owner.
 
 - The original external-writer CDX probe now reproduces an interoperability difference:
   Apache-2.0 Indigo1.47.0 emits two terminal zero words; unchanged Bondline/stdlib framing
