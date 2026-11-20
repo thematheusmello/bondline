@@ -18,6 +18,10 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each at
 commit as the user requires. The user now expressly authorizes merging completed feature
 PRs into main; release/publication and enabling Actions remain separate.
 
+## Individual SMILES record chemistry
+
+The raw SMILES Analysis panel, CLI and initialized MCP inspect one molecule without a drawing import. The three pinned records match RDKit on isotope-resolved formula and drawn atoms. The background macOS panel showed all three molecules, their masses and elemental percentages, preserved the Unicode Save/reopen bytes and closed normally. The two simultaneously visible record steppers now have distinct labels. Branch `feat/smiles-record-analysis` contains the chemistry and native selector checks. The [receiving record](docs/verification-smiles-record-analysis.md) gives commands, evidence and platform scope. Aromaticity, zero-isotope interpretation, generated canonical SMILES and InChI remain open.
+
 ## Current recoverable work and evidence
 
 Main integration is delivered: [PR1](https://github.com/thematheusmello/bondline/pull/1)
