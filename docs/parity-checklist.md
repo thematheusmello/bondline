@@ -1046,3 +1046,5 @@ format-direction, monomer and optional-integration anchors. All remain missing. 
 capability cases, not nine new menu controls; the576-control count is unchanged. The chart
 is not a26.1 build or an exact workflow/default specification. Preserve its platform/tier
 qualifications and the independent offline target when choosing implementation tests.
+
+The [per-record SDF Analysis workflow](verification-sdf-record-analysis.md) reads one current V2000 or V3000 molecule at a time. Formula, weight, exact mass and elemental percentages are verified through the CLI and the native macOS record navigation buttons. Whole-collection molecular analysis, native numeric-entry interaction and macOS AX activation of the View menu item remain open.

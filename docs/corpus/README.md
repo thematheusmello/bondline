@@ -10,14 +10,14 @@ The checker opens each verified source through Bondline's command engine and rea
 | --- | --- | --- |
 | `rdkit-chain1.cdxml` | C4H10 matched | C4H10, four drawn atoms with omitted H counts. [Properties and native checks](../verification-cdxml-carbon-analysis.md). |
 | `rdkit-methyl-radical.mol` | CH3 matched | CH3, one drawn atom |
-| `bondline-ordered-fields-v2000.sdf` | Unsupported collection | Both isolated mol blocks gave C2H6 in Bondline and RDKit, two drawn atoms each. The separate whole-supplier diagnostic returned one entry. |
+| `bondline-ordered-fields-v2000.sdf` | Unsupported collection | The open collection returned C2H6 for records 1 and 2, two drawn atoms each. Both isolated MOL blocks independently reproduced the same results. The separate whole-supplier diagnostic returned one entry. |
 | `bondline-original-ethane-explicit.cdx` | Unsupported source | C2H6 |
 | `bondline-original-noncontiguous-v3000.mol` | C2H6 matched | C2H6, two drawn atoms |
 | `bondline-original-isotopic-chain.smi` | Unsupported collection | The record import refuses isotopic drawing labels. RDKit gives C[13C]H6O. |
 | `bondline-original-two-ring-labels.smi` | Unsupported collection | The record imports, and Analysis reports unsupported source. RDKit gives the combined C7H14. |
 | `bondline-original-salt-branch.smi` | Unsupported collection | The record import refuses this charged structure. RDKit gives the combined C4H9NaO. |
 
-Three of eight complete files returned a matching formula. The verifier identifies these three inputs by SHA-256 and fails if one loses proven coverage. Two of five record checks matched and three were unavailable. Each SDF comparison opens the original mol block as a standalone drawing with Bondline's MOL reader. The raw collection has its own reported outcome. SMILES component groups stay together within their original record. The printed reference for an unavailable result comes solely from RDKit. The corpus still needs independent comparisons for mass, aromaticity, stereo labels, canonical SMILES, InChI and names.
+Three of eight complete files returned a matching formula. The verifier identifies these three inputs by SHA-256 and fails if one loses proven coverage. Two of five record checks matched and three were unavailable. The SDF record count uses the result of querying the intact, SHA-256-verified collection through `analysis.properties`. Each extracted MOL block is checked separately against the same RDKit result. The two paths count each record once. The raw collection has its own reported outcome. SMILES component groups stay together within their original record. The printed reference for an unavailable result comes solely from RDKit. The corpus still needs independent comparisons for mass, aromaticity, stereo labels, canonical SMILES, InChI and names.
 
 Run `cargo xtask corpus --offline` after fetching the pinned files and setting `BONDLINE_PYTHON` to the RDKit interpreter. [Official molecular readers](https://www.rdkit.org/docs/source/rdkit.Chem.rdmolfiles.html) · [RDKit formula descriptor](https://www.rdkit.org/docs/source/rdkit.Chem.rdMolDescriptors.html#rdkit.Chem.rdMolDescriptors.CalcMolFormula).
 
