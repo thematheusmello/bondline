@@ -104,3 +104,84 @@ process birth, not port or PID alone. Do not query sockets in the shutdown→bin
 the observer itself briefly holds a kernel reference. The collector is designed only,
 not implemented or run. A close-all spawn policy can prevent persistent inheritance but
 does not promise zero transient fork references; no examined wrapper has been adopted.
+
+## A spawn begins after the listener is published, 2026-11-20
+
+PR 34 recorded two natural replacement bind failures on ports 52920 and
+59323, OS error 48. The logs identify their addresses and phase. Their
+historical owners remain unknown.
+
+A separate bounded experiment used the real `LoopbackServer`, zero connected
+clients and an ordinary concurrent `posix_spawn` after `bind` returned.
+An ordered child file action created a marker, then waited for a private FIFO
+before exec. The test called the normal server shutdown and tried one exact
+replacement bind while the child remained in that interval. It released the
+FIFO and reaped the child before evaluating the assertion. The earlier
+pre-close-on-exec experiment above concerns a different interval.
+
+| Measured on macOS 27.2 arm64 | Before listener change | With close-on-fork |
+| --- | --- | --- |
+| Original live address | Exclusive | Exclusive |
+| Shutdown and join | 211 µs | 2,010 µs |
+| First replacement bind while spawn is paused | AddrInUse (48) | Succeeded |
+| Bind after child exec and reap | Succeeded | Succeeded |
+
+These single-run times identify the observed calls. They are not performance
+benchmarks. An independent control with an anonymous pipe used no TCP ports.
+With only close-on-exec the pipe still had a writer while spawn was suspended.
+With both close-on-exec and close-on-fork it immediately had none. Both arms
+observed EOF after exec. These experiments establish causality for this
+controlled overlap; the cause of PR 34's historical failure is unconfirmed.
+
+Bondline preserves existing descriptor flags and requests `FD_CLOFORK` on
+its own listener before publishing it. The MacOSX27.2 SDK's public
+`sys/fcntl.h` defines the value as 2 and its `fcntl(2)` manual documents
+close-on-fork. Public XNU sources distinguish copying a process's file
+descriptors during spawn from discarding descriptors on exec.
+[Apple spawn implementation](https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_exec.c) · [Apple descriptor-table copy](https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_descrip.c)
+
+There is a brief interval between the standard socket constructor and the
+flag operation. A spawn that has already copied the descriptor by then may
+retain its reference. An unrelated process may also claim a released port.
+Neither case is covered by the controlled comparison.
+
+This repository sets no explicit macOS deployment target. The pinned Rust
+compiler reports defaults of 11.0 for arm64 and 10.12 for x86_64. The local
+arm64 desktop executable's `LC_BUILD_VERSION` reports minimum 11.0 and SDK
+27.2. Both historical XNU implementations below accept `F_SETFD` and process
+only the close-on-exec bit. On such systems the listener retains its prior
+behavior. An explicit unsupported-flag error (`EINVAL`, `ENOTSUP`, or
+`EOPNOTSUPP`) also preserves ordinary startup. Other errors propagate.
+Older macOS execution remains unverified.
+[XNU 3789](https://github.com/apple-oss-distributions/xnu/blob/88cc0b975a863932db8d475bd87c96c73292f9a3/bsd/kern/kern_descrip.c) · [XNU 7195](https://github.com/apple-oss-distributions/xnu/blob/bb611c8fecc755a0d8e56e2fa51513527c5b7a0e/bsd/kern/kern_descrip.c)
+
+The regression is `cargo test --locked -p bondline-mcp --test macos_listener_spawn`.
+The unmodified service failed it with OS48. The changed service passed. On
+older kernels the test measures support on a regular descriptor before
+exercising the stronger guarantee. Two unit tests check listener flags,
+unsupported errors and propagation of other descriptor errors. The original
+live exclusive bind, two-second shutdown and 200 ms replacement endpoint and
+byte-exchange checks are unchanged. Their test source retains SHA-256
+`fd96b257cd6c00b52e97544d652ed69fdbaaaa454e1f3a9360d77f3292218fb0`.
+
+The direct macOS dependency is the same rustix 1.1.6 already shipped through
+Bondline IO. The safe POSIX spawn wrapper from MIT-licensed nix 0.32.0 is a
+macOS test dependency. The MCP normal package names and versions match the
+previous revision for arm64/x86_64 macOS, Windows, Linux and WebAssembly.
+[Locked rustix](https://docs.rs/rustix/1.1.6/rustix/io/fn.fcntl_setfd.html) · [Test-only spawn API](https://docs.rs/nix/0.32.0/nix/spawn/fn.posix_spawn.html)
+
+At `59028ee`, the complete default-parallel MCP package ran once and passed
+98 tests, zero failed and zero ignored. The original 25-case control binary
+and the new deterministic macOS regression both passed. Its log SHA-256 is
+`49f35c5a75f20db8f211ff1d7af7c880f95a41579787b257cf1020f6661affab`.
+All MCP Clippy targets, rustfmt, layers and the configured runtime license
+and asset checks also passed.
+
+The full local `cargo xtask ci` at `8923167` exited successfully. The
+workspace reported 2,417 passed, zero failed and one ignored test, followed
+by three passing AccessKit tests. The original control and the new held-spawn
+test both passed. The build was briefly suspended for disk space before any
+workspace test began. The same process then completed all checks.
+Receipt `target/analysis-ci/listener-8923167.log` in the analysis-window
+checkout is 311,132 bytes, SHA-256
+`5e27c5bb161c46573d6326c2f50b905f1cf13672bbfc368274f0aabe8736e3a1`.
