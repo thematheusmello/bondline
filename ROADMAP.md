@@ -809,7 +809,7 @@ Resolved composition now formats molecular formulas in strict Hill order.
 Combined element totals and numbered isotope terms both preserve the net charge.
 Twenty independently specified structures were checked with external RDKit.
 Carbon-free formulas use alphabetical element order. The library reports
-unresolved H explicitly. The Analysis window, CLI and MCP report the formula, molecular weight and monoisotopic exact mass of qualified drawings and atom selections. Supported CDX and V2000/V3000 MOL omissions are resolved against the complete fragment before selection. Isotope distributions, elemental percentages, general valence and live analysis captions remain open. [Formula conventions](docs/research/hill-formula.md) · [MOL examples](docs/verification-mol-analysis.md) · [Mass coverage](docs/verification-analysis-masses.md).
+unresolved H explicitly. The Analysis window, CLI and MCP report the formula, molecular weight, monoisotopic exact mass and elemental percentages by weight of qualified drawings and atom selections. Supported CDX and V2000/V3000 MOL omissions are resolved against the complete fragment before selection. Adjustable display precision, isotope distributions, general valence and live analysis captions remain open. [Formula conventions](docs/research/hill-formula.md) · [MOL examples](docs/verification-mol-analysis.md) · [Mass coverage](docs/verification-analysis-masses.md) · [Elemental analysis](docs/verification-elemental-analysis.md).
 
 Valence, aromaticity, stereo/CIP, checking, cleanup, formula/mass, analysis, reactions,
 curved arrows, brackets and chemically formatted captions. Compare against independently
