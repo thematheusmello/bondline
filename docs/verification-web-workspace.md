@@ -198,3 +198,23 @@ unresolved readiness promise, not at the tested Unicode assertions. The worker d
 recorded a NetworkError and redundant registration. They are retained as failures; a
 full rerun after disk cleanup passes. No causal code fix for those installation failures
 is claimed. Current main and final aggregate are the next integration gate.
+
+## Integration with maindce8cb0
+
+PR30/31/33's MOL coverage, independent corpus chemistry and elemental analysis are
+retained. The actual browser still exposes54 registry entries. The11-stage workflow
+passes on the combined tree (`flow-dce-cache-quota`), including both Unicode boundaries,
+real pointer/history and Analysis, server-offline reload at both heights, quota and
+unload Cancel. The optional elemental query returns H6.048/20.113069504489527% and
+C24.022/79.88693049551047%, independently declared from the conventional weights.
+The current actual Analysis screenshot includes that table. The independent source
+reader (`source-dce.json`) still verifies the exact436B source and mass quantities.
+
+Executed dev bundle:`b60162b6dfb3010692657120493d2424e3c7245fcbff0717374b3826dcb3b4cc`.
+WASM14,736,786B/SHA-256
+`9ad43ff80197f4237e0da9174641823df23fa83fcd344256888e7fd7113b3d66`.
+Runtime graph/notices stay157/168/223/78 and7 assets. The normal first-install
+Cache.addAll path also had intermittent NetworkErrors despite complete HTTP200
+responses; the failed receipts include worker/cache diagnostics. A subsequent unchanged
+run passes, so neither disk cleanup nor diagnostic setup is claimed as a causal fix.
+The final aggregate and bounded failure handling remain the next receiving work.

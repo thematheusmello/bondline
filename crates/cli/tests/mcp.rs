@@ -1912,7 +1912,7 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
         "tools/call",
         call(
             "analysis.properties",
-            json!({"expected_revision":1,"expected_selection_epoch":1}),
+            json!({"expected_revision":1,"expected_selection_epoch":1,"include_elemental_analysis":true}),
         ),
     )?;
     let state = &properties["result"]["structuredContent"];
@@ -1922,6 +1922,16 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
     let mass = &state["analysis"]["masses"];
     assert!((mass["molecular_weight"].as_f64().ok_or("weight")? - 15.035).abs() < 1e-8);
     assert!((mass["exact_mass_da"].as_f64().ok_or("mass")? - 15.02347509669).abs() < 1e-8);
+    let elements = state["analysis"]["elemental_analysis"]["elements"]
+        .as_array()
+        .ok_or("elements")?;
+    assert_eq!(elements.len(), 2);
+    assert_eq!(elements[0]["symbol"], "H");
+    assert_eq!(elements[1]["symbol"], "C");
+    assert!(
+        (elements[0]["percent_by_weight"].as_f64().ok_or("H%")? - 100.0 * 3.024 / 15.035).abs()
+            < 1e-9
+    );
     let fixtures = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
     for (id, source, expected) in [
         (
@@ -2009,4 +2019,53 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
         assert_eq!(stale["error"]["code"], "stale_selection");
     }
     client.finish()
+}
+
+#[test]
+fn stdio_mol_analysis_uses_unselected_neighbours_and_retains_original_valence_fields()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let source = include_str!("../../io/tests/fixtures/sdf-preview/valence-absent-mixed.sdf");
+    let end = source.find("M  END\n").ok_or("ethanol MOL block")? + "M  END\n".len();
+    let original = source.get(..end).ok_or("complete MOL block")?;
+    let input = directory.path("ethanol.mol");
+    let saved = directory.path("保存-ethanol.mol");
+    std::fs::write(&input, original)?;
+    let mut client = Client::start()?;
+    client.call(1, "initialize", json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"mol-analysis","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let mut id = 1;
+    let mut call = |name: &str, arguments: Value| -> Result<Value, Box<dyn std::error::Error>> {
+        id += 1;
+        Ok(client.call(id,"tools/call",json!({"name":name,"arguments":arguments}))?["result"]["structuredContent"].clone())
+    };
+    let opened = call("document.open_mol", json!({"path":input}))?;
+    assert_eq!(opened["revision"], 1);
+    let selected = call(
+        "ui.selection",
+        json!({"action":"set","expected_revision":1,"page_id":1,"atom_ids":[2,3]}),
+    )?;
+    let epoch = &selected["ui_selection"]["epoch"];
+    let result = call(
+        "analysis.formula",
+        json!({"expected_revision":1,"expected_selection_epoch":epoch}),
+    )?;
+    assert_eq!(
+        result["analysis"],
+        json!({"scope":"selection","status":"available","formula":"CH3O","atom_count":2,"fragment_count":1,"partial_fragments":true,"defaulted_hydrogen_atoms":2})
+    );
+    let blocked = call(
+        "selection.translate",
+        json!({"expected_revision":1,"expected_selection_epoch":epoch,"delta_x_pt":1,"delta_y_pt":0}),
+    )?;
+    assert_eq!(blocked["error"]["code"], "unsupported_content");
+    let state = call("document.inspect", json!({}))?;
+    assert_eq!(state["document"], opened["document"]);
+    assert_eq!(state["ui_selection"], selected["ui_selection"]);
+    assert_eq!(state["undo_depth"], 0);
+    assert_eq!(state["file"]["dirty"], false);
+    call("document.save_mol", json!({"path":saved}))?;
+    assert_eq!(std::fs::read(&saved)?, original.as_bytes());
+    client.finish()?;
+    Ok(())
 }

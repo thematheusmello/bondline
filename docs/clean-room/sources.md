@@ -2453,4 +2453,22 @@ Source-preserving movement on mixed skeletal CDX applies one signed fixed-point 
 
 The Analysis window resolves omitted carbon H counts on certified skeletal CDX using the complete fragment bond order before selection. The published CDX default specifies the minimum valence-satisfying count. Bondline reports the number of atoms that used this rule and keeps each original source property intact. [CDX attached hydrogen](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm) · [Analysis policy](../research/analysis-window.md).
 
+The differential corpus compares each supported Bondline registry formula to RDKit's independent molecular readers and `CalcMolFormula`, with separate isotopes and explicit numbered hydrogen symbols. Carbon-free outputs follow the documented strict Hill ordering. The SDF diagnostic reads both original mol blocks separately, preserving the whole-supplier observation. [Corpus evidence](../corpus/README.md) · [RDKit reader documentation](https://www.rdkit.org/docs/source/rdkit.Chem.rdmolfiles.html) · [RDKit formula descriptor](https://www.rdkit.org/docs/source/rdkit.Chem.rdMolDescriptors.html#rdkit.Chem.rdMolDescriptors.CalcMolFormula) · [Hill order sources](../research/hill-formula.md).
+
+### MOL structure selection for Analysis
+
+A complete V2000 or V3000 drawing supports transient whole or partial atom
+selection. The public guide describes selecting part or all of a structure in
+the Analysis window. Bondline retains original coordinates and refuses direct
+MOL translation while supporting inspection. [Guide, pp. 221–224](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf) · [Acceptance contract](../research/mol-analysis.md).
+
+The modern BIOVIA default-valence table and its charge and radical rules
+govern read-only calculation for missing MOL valence on the covered
+nonmetals. The versioned CTfile specification governs the authored V2000
+and V3000 fields. RDKit independently reads the unchanged files and computes
+isotope-separated formulas. Bondline retains Hill order for carbon-free
+borane. [BIOVIA representation guide](https://manualzz.com/doc/44003874/biovia-chemical-representation) · [CTfile specification](https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf) · [RDKit valence reference](https://www.rdkit.org/docs/RDKit_Book.html#valence-calculation-and-allowed-valences) · [Evaluation and exclusions](../research/mol-analysis.md).
+
 - Molecular weight, monoisotopic exact mass, nuclide completeness and ion conventions follow the [source register and numerical contract](../research/molecular-masses.md). It links the public v25 guide pp. 221–224, IUPAC definitions, CIAAW tables, NIST/CODATA and the MIT atomic-data revision.
+
+- Elemental analysis uses each element’s percentage of the molecular weight in the current scope. [Revvity Signals v25 guide, printed p. 221](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), [IUPAC mass fraction](https://goldbook.iupac.org/terms/view/M03722), [Bondline’s numeric and presentation conventions](../research/elemental-analysis.md).

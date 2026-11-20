@@ -288,7 +288,7 @@ historical counts in the prerequisite paragraphs below.
 
 The chemistry library verifies resolved element, isotope and net-charge counts
 and formats them in Hill order. Independent tests include 20 structures and
-the carbon-free ordering difference from RDKit. The Analysis window shows literal formulas and resolves omitted carbon H in supported skeletal CDX. Mass and general valence assignment remain open.
+the carbon-free ordering difference from RDKit. The Analysis window shows formulas and masses for supported drawings and selections. Supported CDX and MOL omissions use complete fragment connectivity. General valence assignment remains open.
 [Composition](verification-formula-composition.md) and [Hill formulas](research/hill-formula.md).
 
 [Text-only syntax edits](verification-source-preserving-xml-text.md) are another M1
@@ -313,7 +313,7 @@ render/edit workflows below; registry46 and catalogue16/124 retain their existin
 | Brackets, repeating units and annotations | GUIDE-25 | missing | M3 |
 | Document/object styles, journal settings | GUIDE-25 / DRAWING-SETTINGS-DATA-IMPLEMENTATION / DRAWING-SETTINGS-COMMAND / NATIVE-CARBON-CHAINS | partial: two native preferences and chain application verified | Optional BondLength/ChainAngle model/CDXML/CDX projection, atomic required-nullable set/clear, history, source preservation and whole-MOL loss guards pass independent core/CLI/MCP/socket/file checks. Native two-field form and later-chain application pass bounded Mac Save/reopen and independent file checks; old geometry stays. Inherited/object styles, remaining tools/settings and journal presets remain missing; public author-guideline sources still required. See verification-native-chains.md, verification-native-drawing-settings.md and verification-drawing-settings-data.md. |
 | Structure check and cleanup | GUIDE-25 | missing | M3; independent chemistry oracles |
-| Formula/mass and analysis | GUIDE-25 | partial | Formula, molecular weight and monoisotopic exact mass have whole-drawing and selected-atom receiving tests. Isotope distributions, elemental percentages and live captions remain open. [Evidence](verification-analysis-masses.md). |
+| Formula/mass and analysis | GUIDE-25 | partial | Formula, molecular weight, monoisotopic exact mass and elemental percentages have whole-drawing and selected-atom receiving tests. Isotope distributions and live captions remain open. [Mass](verification-analysis-masses.md), [elemental analysis](verification-elemental-analysis.md). |
 | Naming and mixtures | PROFESSIONAL-26.1 | missing | M5; public standards/oracles |
 | Associated-data label selection | PROFESSIONAL-26.1 | missing | Documented 26.1 behavior |
 | Separate CDXML/MDL paste entries | PROFESSIONAL-26.1 | missing | M4; platform clipboard evidence |
@@ -437,7 +437,7 @@ establish chemical preview, data-edit UI or other platforms.
 | MV-021 | View > Show Info Window | 111-112, 120 | missing | - |
 | MV-022 | View > Show Chemical Warnings | 127 | missing | - |
 | MV-023 | View > Show Reaction Interpretation | 198, 200 | missing | - |
-| MV-024 | View > Show Analysis Window | 222 | verified | Show/Hide, current whole/selection formula, molecular weight, exact mass and explicit unavailable states. [Panel](verification-analysis-window.md), [mass receiving tests](verification-analysis-masses.md). |
+| MV-024 | View > Show Analysis Window | 222 | verified | Show/Hide, current whole/selection formula, molecular weight, exact mass, elemental percentages and explicit unavailable states. [Panel](verification-analysis-window.md), [mass receiving tests](verification-analysis-masses.md). |
 | MV-025 | View > Show Chemical Properties Window | 235 | missing | - |
 | MV-026 | View > Show Periodic Table Window | 54, 91 | missing | - |
 | MV-027 | View > Show Character Map Window | 94 | missing | - |
@@ -734,7 +734,7 @@ establish chemical preview, data-edit UI or other platforms.
 | DP-025 | Bracket Properties dialog | 324-328 | missing | Polymer types, connectivity and labels. |
 | DP-026 | Define Average Molecular Weight (bracket context) | 113 | missing | Explicit nonnegative override and derived calculations. |
 | DP-027 | R-Logic Query dialog | 338-339 | missing | - |
-| DP-028 | Analysis window | 221-224 | wired | Formula verified for the bounded complete-source profiles. Mass, isotope distribution, percentages and Paste remain missing. [Coverage](research/analysis-window.md). |
+| DP-028 | Analysis window | 221-224 | wired | Formula verified for complete supported drawings, including V2000/V3000 omitted valence and selected atoms. Molecular weight and monoisotopic exact mass are verified for supported compositions. Isotope distribution, percentages and Paste remain missing. [Mass acceptance](verification-analysis-masses.md) · [MOL acceptance](verification-mol-analysis.md). [Coverage](research/analysis-window.md). |
 | DP-029 | Chemical Properties window/report | 228-235 | missing | Predictions must have documented method/limits and independent evidence. |
 | DP-030 | Stoichiometry grid | 200-202 | missing | Reactant/product role, equivalents and typed values. |
 | DP-031 | Add-in Manager | 380-382 | missing | Developer/optional integration interface; offline core independent. |
@@ -1016,7 +1016,7 @@ application build; the filename/metadata are evidence for the guide, not every p
 | UI-001 | Main document: menus, grouped upper controls, two-column left palette, white paper, scrollbars and status; open/activate/close documents | G25 printed 12–14; MF-001–008, MV-029 | 26.1 Windows/macOS screens, menu nesting, focus, document switching and native execution |
 | UI-002 | Drawing palette: selected/hover/unavailable tools, nested palettes, tear-off, dock/float and visibility | G25 printed 12–14; MV-001–010, MV-030–032, TD-* | Every glyph's role/variant and geometry, activation/hover timing, original vector assets, real tool workflows |
 | UI-003 | Document settings: drawing geometry and separate atom-label typography/terminal-H controls; selection overrides remain distinct | G25 printed 40–43; MF-013, MF-016–017 | Typed settings, persistence, cancel/apply/history, all dialog controls and current platform layouts |
-| UI-004 | Analysis: selection or whole-document calculations; insert a live caption, edit structure and observe update | G25 printed 221–222; MV-024 | Formula and mass are covered for literal and qualified hydrogen defaults. Decimal control, isotope distribution, elemental percentages, live caption insertion, editing and persistence remain open |
+| UI-004 | Analysis: selection or whole-document calculations; insert a live caption, edit structure and observe update | G25 printed 221–222; MV-024 | Formula, mass and elemental percentages are covered for literal and qualified hydrogen defaults. Decimal control, isotope distribution and live caption insertion, editing and persistence remain open |
 | UI-005 | First connected drawing: empty click, endpoint extension, bond-order input, endpoint atom label, caption and ring fusion | G25 printed 422–424; TD-005–009, TD-024–026, related hotkey rows | Original acceptance scene; complete connected command model, exact history, independent graph/file checks and native workflow |
 | UI-006 | Paste submenu with distinct CDXML-text and MDL-text choices | R26.1; R26-003–004, legacy ME-024/KM-022 | Actual 26.1 platform menu and shortcut, clipboard decoding, retained unknown data and editable reopening |
 

@@ -154,6 +154,13 @@ impl Engine {
     }
 
     pub fn selection_available(&self) -> bool {
+        self.selection_translation_available()
+            || self.stored_document().is_ok_and(|stored| {
+                stored.mol_version().is_some() && stored.has_analysis_coverage()
+            })
+    }
+
+    pub fn selection_translation_available(&self) -> bool {
         self.has_full_native_source()
             || self.stored_document().is_ok_and(|stored| {
                 stored.can_move_cdx_skeletal_atoms()
@@ -385,7 +392,11 @@ impl Engine {
         if !params.delta_x_pt.is_finite() || !params.delta_y_pt.is_finite() {
             return Err(Error::InvalidSelection("translation deltas must be finite"));
         }
-        self.require_selection_source()?;
+        if !self.selection_translation_available() {
+            return Err(Error::UnsupportedSelection(
+                "complete source coverage for atom movement is required",
+            ));
+        }
         let selected = &self.selection.state;
         if self.effective_tool != EffectiveTool::Selection
             || selected.atom_ids.is_empty()

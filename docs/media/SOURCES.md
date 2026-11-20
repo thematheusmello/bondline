@@ -178,21 +178,21 @@ remain unimplemented. These are documentation photographs, not new approved gold
 ## Shared browser workspace, 2026-11-20
 
 [browser-workspace.png](browser-workspace.png) is an unedited owned Chrome CDP
-PNG,1160×800/DPR1,63,973B/SHA-256
-`150990820fa47e19dc88f093388c3af5dfeb5eab3d55f2eca70f25fb11f68780`.
+PNG,1160×800/DPR1,71,153B/SHA-256
+`6da69b215c6a7e705506403b0f8e4e223efa4d01d25bf42041293615ee37fbbc`.
 It captures the real egui/WebGPU workspace after a pointer-drawn120pt C–C
 and View→Show Analysis Window. The panel displays C2H6, molecular weight30.070
-and monoisotopic mass30.046950Da. RDKit independently reads the same source.
+and monoisotopic mass30.046950Da, with the current H/C elemental percentages. RDKit independently reads the same source.
 The original Bondline UI/icons and Apache Roboto retain their normal notices.
 No reference screen, generated mockup, composite, other user window or credential
 is included. This documentation image is not a human-approved render golden.
 
 Chrome157.0.8103.79/macOS arm64 uses a fresh owned headless profile, explicit
-headless WebGPU enablement and forcedDPR1. The build integrates main6dbd4e6
-into feat/web-workspace after transport33fa36f/SDK463b0c6/host944ed26.
-Exact artifact identity:dev WASM14,656,923B/SHA-256
-`b137b5e96a8087530b14c42c408ec48afc40af5cac5e7e0ff5a430a5dd26dbe3`,
-static bundle`98a25eef73fbae05cabc5d3dcb258c7c74d70198d4b8848da84559857e862f8f`.
+headless WebGPU enablement and forcedDPR1. The build integrates maindce8cb0
+into feat/web-workspace after transport33fa36f/SDK463b0c6/host944ed26/Unicode0700839.
+Exact artifact identity:dev WASM14,736,786B/SHA-256
+`9ad43ff80197f4237e0da9174641823df23fa83fcd344256888e7fd7113b3d66`,
+static bundle`b60162b6dfb3010692657120493d2424e3c7245fcbff0717374b3826dcb3b4cc`.
 [Receiving](../verification-web-workspace.md) records startup,1160×660, actual
 offline input/history, conflict/quota/unload and independent source evidence
 separately from unverified browser/file/platform workflows. Native file controls

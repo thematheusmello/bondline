@@ -1,7 +1,7 @@
 //! Read-only formula for a published drawing/selection scope.
-use crate::{Engine, Error};
+use crate::{CommandResult, Engine, Error, Prepared};
 use bondline_chem::{
-    Composition, CompositionError, FormulaIsotopes, MassUnavailable, MolecularMasses,
+    Composition, CompositionError, ElementWeight, FormulaIsotopes, MassUnavailable, MolecularMasses,
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -14,6 +14,28 @@ pub const MAX_ANALYSIS_ITEMS: usize = 4096;
 pub struct AnalysisFormula {
     pub expected_revision: u64,
     pub expected_selection_epoch: u64,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct AnalysisProperties {
+    pub expected_revision: u64,
+    pub expected_selection_epoch: u64,
+    #[serde(default)]
+    pub include_elemental_analysis: bool,
+}
+
+pub(super) enum Fields {
+    Formula,
+    Masses,
+    ElementalAnalysis,
+}
+
+#[derive(Clone, Debug, Serialize)]
+#[serde(untagged)]
+pub enum ElementalAnalysis {
+    Available { elements: Vec<ElementWeight> },
+    Unavailable(MassUnavailable),
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
@@ -82,6 +104,8 @@ pub enum AnalysisOutcome {
         formula: String,
         #[serde(skip_serializing_if = "Option::is_none")]
         masses: Option<AnalysisMasses>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        elemental_analysis: Option<ElementalAnalysis>,
     },
     Empty,
     UnsupportedSource,
@@ -101,19 +125,43 @@ impl Engine {
         }
     }
 
+    pub fn analysis_properties_request(
+        &self,
+        include_elemental_analysis: bool,
+    ) -> AnalysisProperties {
+        AnalysisProperties {
+            expected_revision: self.revision,
+            expected_selection_epoch: self.selection().epoch,
+            include_elemental_analysis,
+        }
+    }
+
     pub fn analysis_window_open(&self) -> bool {
         self.analysis_window_open
     }
 
-    pub(super) fn analysis_report(
+    pub(super) fn prepare_analysis(
         &self,
-        params: &AnalysisFormula,
-        include_masses: bool,
+        revision: u64,
+        epoch: u64,
+        fields: Fields,
+    ) -> Result<Prepared, Error> {
+        Ok(Prepared::immediate(CommandResult {
+            analysis: Some(self.analysis_report(revision, epoch, fields)?),
+            ..self.state()
+        }))
+    }
+
+    fn analysis_report(
+        &self,
+        revision: u64,
+        epoch: u64,
+        fields: Fields,
     ) -> Result<AnalysisReport, Error> {
-        if params.expected_revision != self.revision {
+        if revision != self.revision {
             return Err(Error::StaleRevision);
         }
-        if params.expected_selection_epoch != self.selection().epoch
+        if epoch != self.selection().epoch
             || (!self.selection().atom_ids.is_empty() && !self.selected_source_is_current())
         {
             return Err(Error::StaleSelection);
@@ -174,7 +222,7 @@ impl Engine {
                 .count(),
         );
         let hydrogens = if defaulted_hydrogen_atoms.is_some() {
-            stored.cdx_skeletal_hydrogen_counts(&Default::default())?
+            stored.analysis_hydrogen_counts(&Default::default())?
         } else {
             Default::default()
         };
@@ -191,13 +239,26 @@ impl Engine {
             }
             Err(error) => return Err(Error::Composition(error)),
         };
+        let (masses, elemental_analysis) = match fields {
+            Fields::Formula => (None, None),
+            Fields::Masses => (Some(composition.molecular_masses().into()), None),
+            Fields::ElementalAnalysis => {
+                let (masses, rows) = composition.masses_with_elemental_analysis();
+                let analysis = match rows {
+                    Ok(elements) => ElementalAnalysis::Available { elements },
+                    Err(reason) => ElementalAnalysis::Unavailable(reason),
+                };
+                (Some(masses.into()), Some(analysis))
+            }
+        };
         Ok(report(AnalysisOutcome::Available {
             atom_count,
             fragment_count,
             partial_fragments,
             defaulted_hydrogen_atoms,
             formula: composition.hill_formula(FormulaIsotopes::Separate)?,
-            masses: include_masses.then(|| composition.molecular_masses().into()),
+            masses,
+            elemental_analysis,
         }))
     }
 }
@@ -225,7 +286,11 @@ mod tests {
         engine.document = Arc::new((*original).clone());
         assert_eq!(engine.document, original);
         assert!(matches!(
-            engine.analysis_report(&request, false),
+            engine.analysis_report(
+                request.expected_revision,
+                request.expected_selection_epoch,
+                Fields::Formula
+            ),
             Err(Error::StaleSelection)
         ));
         Ok(())

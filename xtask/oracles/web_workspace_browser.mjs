@@ -19,7 +19,12 @@ for (const [name,record] of Object.entries(manifest.files)) {
 }
 const allowed = new Set(Object.keys(manifest.files));
 let localNetworkAvailable = true, blockedRequests = 0;
+const requests = [];
 const server = createServer(async (request, response) => {
+    const record = {url:request.url,referrer:request.headers.referer,destination:request.headers['sec-fetch-dest']};
+    if (requests.length<256) requests.push(record);
+    response.on('finish',()=>{record.status=response.statusCode;record.finished=true;});
+    response.on('close',()=>{if(!response.writableFinished)record.aborted=true;});
     if (!localNetworkAvailable) {blockedRequests++; request.socket.destroy(); return;}
     try {
         const url = new URL(request.url, 'http://localhost');
@@ -151,6 +156,7 @@ try {
     report.registry_count = registry.length;
     await writeFile(path.join(output, 'registry.json'), JSON.stringify(registry));
     const key = await page.evaluate('bondline.recovery_key()');
+    assert.equal(await page.evaluate('window.bondlineOfflineReady'),true,'install the real asset cache before closing any setup tab');
     const edit = {page_id:1,begin_x_pt:100,begin_y_pt:120,end_x_pt:148,end_y_pt:120};
     const captionSource = await readFile(new URL('../../crates/io/tests/fixtures/captions/explicit.cdxml',import.meta.url),'utf8');
     const malformedUtf16 = captionSource.replace('<fonttable>',`<!--${String.fromCharCode(0xd800)}--><fonttable>`);
@@ -206,12 +212,20 @@ try {
     report.steps.push('actual pointer drag created C-C with one registry history entry and real CDXML');
     const formula = await page.command('analysis.formula',{expected_revision:drawn.revision,expected_selection_epoch:drawn.ui_selection?.epoch??0});
     assert.equal(formula.analysis.formula,'C2H6'); assert.equal(formula.analysis.status,'available');
-    const properties = await page.command('analysis.properties',{expected_revision:drawn.revision,expected_selection_epoch:drawn.ui_selection?.epoch??0});
+    const properties = await page.command('analysis.properties',{expected_revision:drawn.revision,expected_selection_epoch:drawn.ui_selection?.epoch??0,include_elemental_analysis:true});
     assert(!properties.error,'the actual browser registry must expose the delivered mass query');
     assert.equal(properties.analysis.formula,'C2H6');
     assert(Math.abs(properties.analysis.masses.molecular_weight-30.07)<1e-9);
     assert(Math.abs(properties.analysis.masses.exact_mass_da-30.04695019338)<1e-9);
     report.masses = properties.analysis.masses;
+    const elements = properties.analysis.elemental_analysis.elements;
+    assert.deepEqual(elements.map(row=>[row.atomic_number,row.symbol]),[[1,'H'],[6,'C']]);
+    for (const row of elements) {
+        const contribution = row.atomic_number===1 ? 6.048 : 24.022;
+        assert(Math.abs(row.weight_contribution-contribution)<1e-12);
+        assert(Math.abs(row.percent_by_weight-contribution/30.07*100)<1e-10);
+    }
+    report.elemental_analysis = elements;
     await click(page,290,22); await page.screenshot('analysis-menu.png');
     await click(page,360,128);
     await page.wait(`JSON.parse(bondline.execute('{"command":"document.inspect","params":{}}')).analysis_window_open === true`);
@@ -340,11 +354,12 @@ try {
     for (const [index, client] of clients.entries()) {
         try {
             await client.screenshot(`failure-${index}.png`);
-            report[`failure_page_${index}`] = await client.evaluate('(async()=>({ready:window.bondlineReady,error:window.bondlineStartupError,body:document.body.innerText,workers:await navigator.serviceWorker.getRegistrations().then(rs=>rs.map(r=>({active:r.active?.state,installing:r.installing?.state,waiting:r.waiting?.state}))),cache_keys:await caches.keys()}))()');
+            report[`failure_page_${index}`] = await client.evaluate('(async()=>({ready:window.bondlineReady,error:window.bondlineStartupError,body:document.body.innerText,workers:await navigator.serviceWorker.getRegistrations().then(rs=>rs.map(r=>({active:r.active?.state,installing:r.installing?.state,waiting:r.waiting?.state}))),cache_keys:await caches.keys(),quota:await navigator.storage.estimate(),small_cache:await caches.open("bondline-diagnostic").then(c=>c.put("./diagnostic-small",new Response("owned cache probe"))).then(()=>"stored",e=>String(e))}))()');
             report[`events_${index}`] = client.events;
         } catch {}
     }
 } finally {
+    report.http_requests = requests;
     await writeFile(path.join(output,'report.json'), JSON.stringify(report,null,2)+'\n');
     await writeFile(path.join(output,'chrome.stderr.log'),stderr);
     for (const client of clients) client.socket.close();

@@ -1,6 +1,6 @@
 use bondline_commands::{
-    AnalysisMass, AnalysisOutcome, AnalysisReport, AnalysisScope, CaptureStamp, Command, Engine,
-    UiAnalysis,
+    AnalysisMass, AnalysisOutcome, AnalysisReport, AnalysisScope, CaptureStamp, Command,
+    ElementalAnalysis, Engine, UiAnalysis,
 };
 use eframe::egui;
 
@@ -20,7 +20,9 @@ impl AnalysisWindow {
             !engine.capture_stamp_matches(stamp) || *previous != epoch
         }) {
             let report = engine
-                .execute(Command::AnalysisProperties(engine.analysis_request()))
+                .execute(Command::AnalysisProperties(
+                    engine.analysis_properties_request(true),
+                ))
                 .map_err(|error| error.to_string())
                 .and_then(|state| {
                     state
@@ -42,7 +44,13 @@ impl AnalysisWindow {
                     return;
                 };
                 match report {
-                    Ok(report) => display(ui, report),
+                    Ok(report) => display(
+                        ui,
+                        report,
+                        engine
+                            .stored_document()
+                            .is_ok_and(|d| d.mol_version().is_some()),
+                    ),
                     Err(message) => {
                         ui.label(message);
                     }
@@ -58,7 +66,7 @@ impl AnalysisWindow {
     }
 }
 
-fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
+fn display(ui: &mut egui::Ui, report: &AnalysisReport, mol: bool) {
     match report.scope {
         AnalysisScope::Document => ui.weak("Entire drawing"),
         AnalysisScope::Selection => ui.weak("Current selection"),
@@ -71,6 +79,7 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
             defaulted_hydrogen_atoms,
             formula,
             masses,
+            elemental_analysis,
         } => {
             let title = if *partial_fragments {
                 "Selected-atom composition"
@@ -98,6 +107,9 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
                 mass_row(ui, weight, masses.molecular_weight, 3, "");
                 mass_row(ui, exact, masses.exact_mass_da, 6, " Da");
             }
+            if let Some(elements) = elemental_analysis {
+                elemental_table(ui, elements, *partial_fragments);
+            }
             ui.weak(format!(
                 "{atom_count} drawn {} · {fragment_count} {}",
                 if *atom_count == 1 { "atom" } else { "atoms" },
@@ -109,8 +121,9 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
             ));
             if let Some(count) = defaulted_hydrogen_atoms {
                 let unit = if count.get() == 1 { "atom" } else { "atoms" };
+                let source = if mol { "MOL" } else { "CDX" };
                 ui.label(format!(
-                    "The CDX valence default supplies hydrogen counts for {count} {unit}."
+                    "The {source} valence default supplies hydrogen counts for {count} {unit}."
                 ));
             }
             if *partial_fragments {
@@ -148,4 +161,37 @@ fn mass_row(ui: &mut egui::Ui, title: &str, mass: AnalysisMass, decimals: usize,
             }
         }
     });
+}
+
+fn elemental_table(ui: &mut egui::Ui, analysis: &ElementalAnalysis, partial: bool) {
+    use std::fmt::Write;
+    match analysis {
+        ElementalAnalysis::Available { elements } => {
+            ui.label(if partial {
+                "Selected atoms (% by weight)"
+            } else {
+                "Elemental analysis (% by weight)"
+            });
+            // A single selectable text block copies the headings and aligned rows.
+            let mut table = String::from("Element        Weight   Percent");
+            for row in elements {
+                let _ = write!(
+                    table,
+                    "\n{:<7} {:>13.3} {:>8.2}%",
+                    row.symbol, row.weight_contribution, row.percent_by_weight
+                );
+            }
+            egui::ScrollArea::vertical()
+                .id_salt("elemental-analysis")
+                .max_height(112.0)
+                .show(ui, |ui| {
+                    ui.add(
+                        egui::Label::new(egui::RichText::new(table).monospace()).selectable(true),
+                    );
+                });
+        }
+        ElementalAnalysis::Unavailable(reason) => {
+            ui.weak(format!("Elemental analysis unavailable ({reason})"));
+        }
+    }
 }

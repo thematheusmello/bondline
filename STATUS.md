@@ -604,6 +604,19 @@ tests, formatting, Clippy, layer, asset and license audits and the pinned corpus
 passed. The complete log SHA-256 is
 `e6b961822d311d5581944d3fb002e9fbf3403dfdcded32bbc6602baab1c98e3b`.
 
+### Pinned chemistry corpus
+
+The shared Analysis command and an independent RDKit reader now compare formulas
+across all eight pinned files. Two complete MOL files and the two isolated SDF mol
+blocks match. Six complete sources and three SMILES record attempts report their
+specific coverage limits. Cross-format molecule identity, stereo, canonical SMILES,
+InChI, names and corpus mass comparisons need separate checks.
+[Per-file results and replay](docs/corpus/README.md#molecular-formula-evidence).
+After integration with PR 30, the complete local gate passed at `018cf0b`
+with 2,407 workspace tests passed, zero failed and one ignored, plus three
+macOS AccessKit tests. Its log SHA-256 is
+`fa5a4f0030145b4b218bd119b2419e930f3e1aa753cd00888684d774535ff8a0`.
+
 ### Next executable work
 
 1. Extend Analysis beyond the now-delivered molecular weight and monoisotopic mass:
@@ -2499,3 +2512,29 @@ assets and corpus checks passed. Mixed CDX now also supplies a checked CH₃O
 selection with one defaulted carbon. Adjustable decimals, isotope distribution,
 elemental percentages, overrides and live captions remain open. Actions stays
 off and M0–M5 remains active.
+
+### MOL chemistry and selection
+
+[PR 30](https://github.com/thematheusmello/bondline/pull/30) extends analysis
+to qualified V2000 and V3000 valence defaults and selected-atom contributions.
+The local gate passed at `7c73558` with 2,406 passed, zero failed and one
+ignored, plus three AccessKit tests. The authenticated macOS app and MCP
+verified the source-preserving selection and Unicode save workflow.
+[Verification and full-gate digest](docs/verification-mol-analysis.md).
+
+### Elemental analysis by weight
+
+[PR 33](https://github.com/thematheusmello/bondline/pull/33) adds an ordered,
+selectable elemental analysis table to the Analysis window and an opt-in result
+on `analysis.properties`. The original formula and mass requests retain exact
+wire results. Independent weight/isotope tests, all 118 possible rows, read-only
+command history, actual CLI/MCP and App-frame copy/selection passed. Native
+macOS CDX, V2000 and V3000 receiving runs verified whole-drawing and partial
+percentages, byte-exact Unicode Save/reopen and normal Close. Chemistry
+`8e68c16`, command `f494ea0`, panel `8022578` and combined MOL checks
+`d5a5eb2` are pushed. After integration with main through PR 31, the full local
+gate passed at `0b352b1` with 2,414 workspace tests passed, one ignored and
+three additional AccessKit tests passed. Windows and Linux visual acceptance,
+configurable precision, isotope distributions, overrides and live captions
+remain open. Actions stays off.
+[Source contract](docs/research/elemental-analysis.md) · [Checks and receipts](docs/verification-elemental-analysis.md).
