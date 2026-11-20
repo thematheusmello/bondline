@@ -16,6 +16,74 @@ const WITNESSES: &str = include_str!("../../io/tests/fixtures/cdx-caption-edit/c
 const ATOM_LABELS: &[u8] = include_bytes!("../../io/tests/fixtures/cdx-label-preview/water.cdx");
 
 #[test]
+fn mixed_page_run_edit_keeps_exact_history_and_the_chemical_source() -> TestResult {
+    let before =
+        include_bytes!("../../io/tests/fixtures/cdx-mixed-caption-edit/extended_before.cdx");
+    let prefix = include_bytes!("../../io/tests/fixtures/cdx-mixed-caption-edit/after_prefix.cdx");
+    let both = include_bytes!("../../io/tests/fixtures/cdx-mixed-caption-edit/after_both.cdx");
+    let tail = include_bytes!("../../io/tests/fixtures/cdx-mixed-caption-edit/after_tail.cdx");
+    let directory = support::FileTestDirectory::new()?;
+    let input = directory.path("mixed-runs-原.cdx");
+    let output = directory.path("mixed-runs-保存-β.cdx");
+    fs::write(&input, before)?;
+    let mut engine = Engine::default();
+    let start = engine.dispatch("document.open_cdx", json!({"path":input}))?;
+    let run = |revision: u64, index: usize, body: &str| json!({"expected_revision":revision,"page_id":1,"text_id":19,"run_index":index,"text":body});
+    let original = engine.content().clone();
+    let stamp = engine.capture_stamp();
+    let unchanged = engine.dispatch("text.set_run", run(start.revision, 0, "H "))?;
+    assert!(!unchanged.changed && !unchanged.file.dirty);
+    assert_eq!(
+        (unchanged.revision, unchanged.undo_depth),
+        (start.revision, 0)
+    );
+    assert!(engine.capture_stamp_matches(&stamp));
+    assert_eq!(engine.stored_document()?.export_cdx()?, before);
+    let first = engine.dispatch("text.set_run", run(start.revision, 0, "H H "))?;
+    assert!(first.changed && first.file.dirty && first.source.ok_or("source")?.modified);
+    assert_eq!(engine.stored_document()?.export_cdx()?, prefix);
+    assert!(engine.stored_document()?.has_cdx_mixed_preview());
+    assert!(!engine.stored_document()?.can_create_caption());
+    assert!(!engine.selection_available());
+    let undo = engine.dispatch("history.undo", json!({}))?;
+    assert_eq!(engine.content(), &original);
+    assert_eq!(engine.stored_document()?.export_cdx()?, before);
+    assert!(!undo.file.dirty && !undo.source.ok_or("restored source")?.modified);
+    assert_eq!((undo.undo_depth, undo.redo_depth), (0, 1));
+    let stamp = engine.capture_stamp();
+    for params in [
+        run(start.revision, 0, "H H "),
+        run(undo.revision, 2, "H H "),
+        run(undo.revision, 0, "λ "),
+        {
+            let mut p = run(undo.revision, 0, "H H ");
+            p["text_id"] = json!(73);
+            p
+        },
+    ] {
+        assert!(engine.dispatch("text.set_run", params).is_err());
+        assert_eq!(engine.content(), &original);
+        assert!(engine.capture_stamp_matches(&stamp));
+        assert_eq!(engine.state().redo_depth, 1);
+    }
+    let redo = engine.dispatch("history.redo", json!({}))?;
+    assert_eq!(engine.stored_document()?.export_cdx()?, prefix);
+    let second = engine.dispatch("text.set_run", run(redo.revision, 1, "λéπΩ"))?;
+    assert_eq!((second.undo_depth, second.redo_depth), (2, 0));
+    assert_eq!(engine.stored_document()?.export_cdx()?, both);
+    engine.dispatch("document.save_cdx", json!({"path":output}))?;
+    assert_eq!(fs::read(&input)?, before);
+    assert_eq!(fs::read(&output)?, both);
+    let reopened = engine.dispatch("document.open_cdx", json!({"path":output}))?;
+    assert_eq!(reopened.document, second.document);
+    assert!(!reopened.file.dirty);
+    assert_eq!((reopened.undo_depth, reopened.redo_depth), (0, 0));
+    engine.dispatch("text.set_run", run(reopened.revision, 0, "H "))?;
+    assert_eq!(engine.stored_document()?.export_cdx()?, tail);
+    Ok(())
+}
+
+#[test]
 fn cdx_caption_edit_keeps_exact_noop_history_and_file_provenance() -> TestResult {
     let directory = support::FileTestDirectory::new()?;
     let input = directory.path("caption-原-λ.cdx");

@@ -167,7 +167,7 @@ fn choose_file(f: &mut Fixture, path: &Path, action: &str) -> TestResult {
 }
 
 #[test]
-fn mixed_cdx_paints_caption_over_label_and_keeps_the_paper_read_only() -> TestResult {
+fn mixed_cdx_paints_caption_over_label_and_reserves_chemical_ink_for_viewing() -> TestResult {
     let raw = include_bytes!("../../io/tests/fixtures/cdx-mixed-caption/overlap_before.cdx");
     let manifest: Value = serde_json::from_str(include_str!(
         "../../io/tests/fixtures/cdx-mixed-caption/cases.json"
@@ -194,12 +194,8 @@ fn mixed_cdx_paints_caption_over_label_and_keeps_the_paper_read_only() -> TestRe
                 retained_text_tool
             );
             let controls = engine.controls();
-            for id in [
-                "tool.bond.single",
-                "tool.caption",
-                "page.rotate",
-                "file.document_settings",
-            ] {
+            assert!(controls.iter().any(|c| c.id == "tool.caption" && c.enabled));
+            for id in ["tool.bond.single", "page.rotate", "file.document_settings"] {
                 let control = controls.iter().find(|c| c.id == id).ok_or("tool control")?;
                 assert!(!control.enabled, "{id}");
                 assert_eq!(control.disabled_reason, Some("unsupported_content"));
@@ -208,7 +204,12 @@ fn mixed_cdx_paints_caption_over_label_and_keeps_the_paper_read_only() -> TestRe
         f.frame(super::tap(Key::F5));
         let shown = f.warm();
         assert_eq!(f.view()?["zoom_percent"], 100.0);
-        for label in ["Read-only CDX preview", "1 caption"] {
+        let instruction = if retained_text_tool {
+            "Click a caption run to edit its text."
+        } else {
+            "Choose Text to edit an existing caption."
+        };
+        for label in [instruction, "1 caption"] {
             assert!(
                 shown.shapes.iter().any(|paint| {
                     matches!(&paint.shape, egui::Shape::Text(text) if text.galley.text() == label)
@@ -256,7 +257,7 @@ fn mixed_cdx_paints_caption_over_label_and_keeps_the_paper_read_only() -> TestRe
         f.frame(vec![button(end, false)]);
         for (point, modifiers) in [
             ([147.375, 123.125], Modifiers::ALT),
-            ([166.5, 122.5], Modifiers::NONE),
+            ([159.5, 123.5], Modifiers::NONE),
             ([350.0, 350.0], Modifiers::NONE),
         ] {
             let position = paper_point(&mut f, point)?;
@@ -265,6 +266,15 @@ fn mixed_cdx_paints_caption_over_label_and_keeps_the_paper_read_only() -> TestRe
         }
         assert!(f.node("Caption text", &[Role::TextInput]).is_err());
         assert!(f.node("Element", &[Role::TextInput]).is_err());
+        if retained_text_tool {
+            open_run(&mut f, [166.5, 122.5], 1, 0, 1, "H")?;
+            f.choose("Cancel")?;
+            closed(&mut f)?;
+        } else {
+            let overlap = paper_point(&mut f, [166.5, 122.5])?;
+            click(&mut f, overlap, Modifiers::NONE);
+        }
+        assert_eq!(f.state()?, opened);
         assert!(f.app.error.is_none(), "{:?}", f.app.error);
         f.frame(super::tap(Key::F7));
         assert_eq!(f.view()?["zoom_percent"], 125.0);
@@ -280,6 +290,67 @@ fn mixed_cdx_paints_caption_over_label_and_keeps_the_paper_read_only() -> TestRe
         assert_eq!(reopened["undo_depth"], 0);
         assert_eq!(reopened["file"]["dirty"], false);
     }
+    Ok(())
+}
+
+#[test]
+fn mixed_cdx_text_tool_edits_the_painted_page_run_and_reopens_its_sparse_id() -> TestResult {
+    let before = include_bytes!("../../io/tests/fixtures/cdx-mixed-caption-edit/before.cdx");
+    let prefix = include_bytes!("../../io/tests/fixtures/cdx-mixed-caption-edit/after_prefix.cdx");
+    let both = include_bytes!("../../io/tests/fixtures/cdx-mixed-caption-edit/after_both.cdx");
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    let input = f.directory.path("mixed-caption-原.cdx");
+    let output = f.directory.path("mixed-caption-保存-β.cdx");
+    fs::write(&input, before)?;
+    f.warm();
+    shortcut(&mut f, Key::O, false);
+    choose_file(&mut f, &input, "Open")?;
+    f.frame(super::tap(Key::F5));
+    f.choose("Text")?;
+    let opened = f.state()?;
+    for point in [[159.5, 123.5], [350.0, 350.0]] {
+        let position = paper_point(&mut f, point)?;
+        click(&mut f, position, Modifiers::NONE);
+        closed(&mut f)?;
+        assert_eq!(f.state()?, opened);
+    }
+    open_run(&mut f, [166.5, 122.5], 19, 0, 2, "H ")?;
+    set_field(&mut f, "Caption text", "H H ")?;
+    f.choose("Apply")?;
+    closed(&mut f)?;
+    assert_eq!(current_cdx(&f)?, prefix);
+    // FontTools' Roboto advances place the second run's λ at x=205.048828125 pt.
+    let tail_ink = [208.5, 126.5];
+    open_run(&mut f, tail_ink, 19, 1, 2, "λΩé")?;
+    set_field(&mut f, "Caption text", "λéπΩ")?;
+    f.choose("Apply")?;
+    closed(&mut f)?;
+    let edited = f.state()?;
+    assert_eq!(edited["undo_depth"], 2);
+    assert_eq!(current_cdx(&f)?, both);
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(current_cdx(&f)?, prefix);
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(current_cdx(&f)?, before);
+    assert_eq!(f.state()?["file"]["dirty"], false);
+    shortcut(&mut f, Key::Z, true);
+    shortcut(&mut f, Key::Z, true);
+    assert_eq!(current_cdx(&f)?, both);
+    shortcut(&mut f, Key::S, true);
+    choose_file(&mut f, &output, "Save")?;
+    assert_eq!(fs::read(&input)?, before);
+    assert_eq!(fs::read(&output)?, both);
+    shortcut(&mut f, Key::O, false);
+    choose_file(&mut f, &output, "Open")?;
+    let reopened = f.state()?;
+    assert_eq!(reopened["document"], edited["document"]);
+    assert_eq!(reopened["file"]["dirty"], false);
+    assert_eq!(reopened["undo_depth"], 0);
+    f.frame(super::tap(Key::F5));
+    open_run(&mut f, tail_ink, 19, 1, 2, "λéπΩ")?;
+    f.choose("Cancel")?;
+    closed(&mut f)?;
+    assert_eq!(current_cdx(&f)?, both);
     Ok(())
 }
 
