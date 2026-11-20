@@ -52,3 +52,13 @@ The integrated macOS window displayed V3000 ethanol at 46.069 and
 31.018390 Da. Methylamine and methyl radical also survived an exact Save
 and native reopen with both mass rows. The accessibility and file receipt
 SHA-256 is `0907d53cb8f7018157284cbca388c374e3566a6fec82e05a57ab6f3cf1330949`.
+
+The integrated local `cargo xtask ci` passed on `7c73558`: 2,406 workspace
+tests passed, zero failed and one was ignored. Three additional macOS
+AccessKit tests passed. The complete log SHA-256 is
+`0c007e693cb537a88950b0317194a8e307976c3109846c9500f85a15e2635f53`.
+An earlier run exposed a drawing-settings test that still expected 23
+controls for MOL. Its replacement verifies all 26 and explicitly checks
+Selection, Select All and Deselect All on MOL and their absence on the
+unsupported CDX, SDF and SMILES sources in the same test. Existing form
+guards and request-ID assertions still pass.
