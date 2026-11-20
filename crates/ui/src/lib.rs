@@ -635,9 +635,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         } else if atom_label_preview {
             ui.label("Alt-click an atom to edit its printed label or create one on a supported hidden carbon. Use Marquee selection to move supported atoms and their labels.");
         } else if engine.effective_tool() == EffectiveTool::Selection {
-            ui.label(if engine.selection_available() {
+            ui.label(if engine.selection_translation_available() {
                 "Click or drag to select. Drag selected atoms to move; arrows nudge 1 pt, Shift 10 pt."
-            } else { "Selection and movement are unavailable for this source." });
+            } else if engine.selection_available() { "Click or drag to select atoms for analysis." } else { "Selection and movement are unavailable for this source." });
         } else if matches!(engine.effective_tool(), EffectiveTool::NamedRing { .. }) {
             ui.label("Click paper, an atom or a bond to add a ring; drag to set its first edge or side. Hold Shift when starting for a Single first edge. Esc cancels.");
         } else if matches!(engine.effective_tool(), EffectiveTool::Ring { .. }) {

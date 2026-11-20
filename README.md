@@ -42,7 +42,7 @@ Atom-targeted Alt-sprout and a session Preferences checkbox now share the same g
 ring engine, with bounded macOS drawing, history and editable Save/reopen checks.
 In supported skeletal CDX drawings, Alt-click a printed atom label to change its element and attached hydrogen count. The edit follows the atom after a move and survives Undo, Redo, Save As and reopen. [Supported drawings and verification](docs/verification-cdx-skeletal-label-edits.md).
 
-Use **View → Show Analysis Window** to read a drawing’s formula, molecular weight and monoisotopic exact mass. Selecting part of a fragment shows the contribution of those atoms and their assigned hydrogens. Bondline preserves labelled isotopes and identifies missing atomic data or unresolved hydrogen counts. Qualified skeletal CDX files can supply omitted H through valence. [Analysis coverage](docs/research/analysis-window.md), [mass conventions](docs/research/molecular-masses.md).
+Use **View → Show Analysis Window** to read the formula, molecular weight and monoisotopic exact mass of a supported drawing or its selected atoms. The panel identifies missing atomic data and valence-based hydrogen counts in skeletal CDX and elemental V2000/V3000 MOL. Selecting ethanol’s oxygen gives `HO`. Including its adjacent carbon gives `CH3O`. [Analysis](docs/research/analysis-window.md) · [Mass conventions](docs/research/molecular-masses.md) · [MOL examples and limits](docs/verification-mol-analysis.md).
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 

@@ -2493,3 +2493,12 @@ assets and corpus checks passed. Mixed CDX now also supplies a checked CH₃O
 selection with one defaulted carbon. Adjustable decimals, isotope distribution,
 elemental percentages, overrides and live captions remain open. Actions stays
 off and M0–M5 remains active.
+
+### MOL chemistry and selection
+
+[PR 30](https://github.com/thematheusmello/bondline/pull/30) extends analysis
+to qualified V2000 and V3000 valence defaults and selected-atom contributions.
+The local gate passed at `7c73558` with 2,406 passed, zero failed and one
+ignored, plus three AccessKit tests. The authenticated macOS app and MCP
+verified the source-preserving selection and Unicode save workflow.
+[Verification and full-gate digest](docs/verification-mol-analysis.md).
