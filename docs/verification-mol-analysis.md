@@ -37,3 +37,18 @@ handling still need independent receiving runs.
 
 The macOS run closed its own process through the registry. Its final receipt
 SHA-256 is `20b14f7d2b5b35a1d5f6b9fe5799a90417441dc78117c4d5b755ec87475e3591`.
+
+With the shared mass query integrated, the same 37 sources and exact reopened
+copies also pass `analysis.properties` against RDKit `MolWt` and
+`CalcExactMolWt`. Both queries must return identical formula and scope data.
+Absolute tolerances fixed before comparison are 0.010 for molecular weight
+and 0.000001 Da for monoisotopic mass on these small molecules. Conventional
+weight tables have different editions. The separate chemistry table audit
+covers the underlying values and their stated uncertainty.
+[Mass validation](verification-analysis-masses.md).
+
+The integrated macOS window displayed V3000 ethanol at 46.069 and
+46.041865 Da and the selected carbon–oxygen contribution at 31.034 and
+31.018390 Da. Methylamine and methyl radical also survived an exact Save
+and native reopen with both mass rows. The accessibility and file receipt
+SHA-256 is `0907d53cb8f7018157284cbca388c374e3566a6fec82e05a57ab6f3cf1330949`.

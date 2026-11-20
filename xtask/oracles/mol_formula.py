@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 
 from rdkit import Chem, rdBase
-from rdkit.Chem import rdMolDescriptors
+from rdkit.Chem import Descriptors, rdMolDescriptors
 
 
 def dispatch(cli, commands):
@@ -17,7 +17,7 @@ def dispatch(cli, commands):
     return json.loads(subprocess.check_output(args))
 
 
-def verify(cli, path, expected_formula, selected=None):
+def verify(cli, path, expected_formula, selected=None, mass_reference=None):
     operations = [("document.open_mol", {"path": str(path)}),
                   ("ui.analysis", {"expected_revision": 1, "visible": True})]
     if selected:
@@ -31,6 +31,16 @@ def verify(cli, path, expected_formula, selected=None):
     omitted = sum(a["explicit_hydrogens"] is None for a in atoms if not selected or a["id"] == selected)
     assert analysis.get("defaulted_hydrogen_atoms", 0) == omitted, (path.name, analysis, omitted)
     assert not result["file"]["dirty"] and result["undo_depth"] == result["redo_depth"] == 0
+    if mass_reference is not None:
+        detailed = dispatch(cli, operations + [("analysis.properties", query[1])])
+        full_report = detailed["analysis"].copy()
+        masses = full_report.pop("masses")
+        assert full_report == analysis and detailed["document"] == result["document"]
+        weight, exact = mass_reference
+        # RDKit uses different editions for some standard weights. Fixed absolute
+        # tolerances for these small molecules were set before the comparison.
+        assert abs(masses["molecular_weight"] - weight) <= 0.010, (path, masses, weight)
+        assert abs(masses["exact_mass_da"] - exact) <= 0.000001, (path, masses, exact)
     return omitted
 
 
@@ -45,7 +55,8 @@ def exercise(cli, directory, name, source, selected_oxygen=None):
         boron, = molecule.GetAtoms()
         assert expected == "H3B" and boron.GetSymbol() == "B" and boron.GetTotalNumHs() == 3
         expected = "BH3"
-    counts = verify(cli, path, expected)
+    mass_reference = Descriptors.MolWt(molecule), rdMolDescriptors.CalcExactMolWt(molecule)
+    counts = verify(cli, path, expected, mass_reference=mass_reference)
     if selected_oxygen:
         atom = molecule.GetAtomWithIdx(selected_oxygen - 1)
         assert atom.GetSymbol() == "O" and atom.GetTotalNumHs() == 1
@@ -54,7 +65,7 @@ def exercise(cli, directory, name, source, selected_oxygen=None):
     dispatch(cli, [("document.open_mol", {"path": str(path)}),
                    ("document.save_mol", {"path": str(destination)})])
     assert destination.read_bytes() == path.read_bytes() == source
-    assert verify(cli, destination, expected) == counts
+    assert verify(cli, destination, expected, mass_reference=mass_reference) == counts
     print(f"{name}: {expected}, {counts} omitted counts", flush=True)
 
 
