@@ -236,7 +236,7 @@ command_registry! {
     AtomCreateAuthoredLabel(AtomCreateLabel) => ("atom.create_authored_label", "Create one explicit box-positioned child label on a qualified imported hidden carbon using a supplied style and existing file resources; preserves IDs, geometry and carbon-display flags, synchronizes literal element/H and validates source and the final page before one history edit.", false),
     UiCaption(UiCaption) => ("ui.caption", "Select Text or open, apply, or cancel a plain caption draft on an attached native host. Apply uses the shared caption authoring commands.", false),
     TextCreate(TextCreate) => ("text.create", "Create a single-line Roboto Regular caption at an explicit left baseline. Preserves supported CDXML and CDX source and validates the complete page before one history edit.", false),
-    AnalysisFormula(AnalysisFormula) => ("analysis.formula", "Read the literal Hill formula for the current selection or complete drawing. Reports unresolved hydrogens, partial fragments and unsupported source coverage explicitly.", true),
+    AnalysisFormula(AnalysisFormula) => ("analysis.formula", "Read the Hill formula for the current selection or complete drawing. Reports skeletal CDX hydrogen defaults, unresolved hydrogens, partial fragments and unsupported source coverage.", true),
     UiAnalysis(UiAnalysis) => ("ui.analysis", "Show or hide the Analysis window for this session without changing the drawing or its history.", false),
 }
 

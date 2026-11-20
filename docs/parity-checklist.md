@@ -278,8 +278,7 @@ historical counts in the prerequisite paragraphs below.
 
 The chemistry library verifies resolved element, isotope and net-charge counts
 and formats them in Hill order. Independent tests include 20 structures and
-the carbon-free ordering difference from RDKit. User-facing mass, formula
-for unresolved structures and the Analysis window remain missing.
+the carbon-free ordering difference from RDKit. The Analysis window shows literal formulas and resolves omitted carbon H in supported skeletal CDX. Mass and general valence assignment remain open.
 [Composition](verification-formula-composition.md) and [Hill formulas](research/hill-formula.md).
 
 [Text-only syntax edits](verification-source-preserving-xml-text.md) are another M1

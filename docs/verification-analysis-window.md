@@ -44,3 +44,43 @@ An activation-prohibited macOS test host opened seven original CDX files. Native
 ## Combined integration gate
 
 After including the complete mixed skeletal CDX implementation and its verification fixtures, `cargo xtask ci` passed on `3e4cd08` with the pinned absolute RDKit Python interpreter. The workspace recorded 2,390 passing tests, zero failures and one ignored. The three additional macOS AccessKit tests passed. Formatting, strict workspace and AccessKit Clippy, layers, bundled asset audits, runtime license checks and the pinned eight-file corpus passed. Merging main at `40455fd` changed only the status and mixed skeletal verification text relative to the tested tree.
+
+## Source-qualified hydrogen defaults
+
+The earlier literal-only CLI reported unresolved H for six independently readable
+CDX files. RDKit derives a formula for each of them. The updated command uses
+the same complete CDX topology as the certified viewer and lets the composition
+library use a source default only when the stored count is absent.
+
+| Input | Formula | Drawn atoms with defaulted H |
+| --- | --- | ---: |
+| Propane with all, some or no H properties | C3H8 | 0, 1 or 3 |
+| Cyclobutane with all H counts omitted | C4H8 | 4 |
+| Methanol with recorded or omitted carbon H | CH4O | 0 or 1 |
+| Ethanol | C2H6O | 2 |
+| 3-aminopropan-1-ol | C3H9NO | 3 |
+
+The independent reader and actual CLI agree before and after Unicode Save As
+and reopen for all eight inputs. The check compares every source byte and the
+number of absent H properties in the reopened model. Reproduce with the pinned
+RDKit interpreter and a built CLI from the same checkout.
+
+```sh
+cargo build --locked -p bondline-cli
+"$BONDLINE_PYTHON" -B xtask/oracles/cdx_formula.py target/debug/bondline-cli
+```
+
+A background-only Apple Silicon app showed the formula and default count
+in its native accessibility tree. Selecting the middle atom of propane with
+its H count omitted showed `CH2` and one calculated count. A separate CDXML
+drawing with unresolved H still identified its atom, and an opaque source
+reported incomplete chemical coverage. The process closed through the registry.
+The native receipt's SHA-256 is
+`2c81ef6809a989872f8e9bc291335cf6c47a208645edd08c905e5cf7a366a2f5`.
+[RDKit and file oracle](../xtask/oracles/cdx_formula.py) · [Analysis policy](research/analysis-window.md).
+
+The full local gate at `0efcab9` recorded 2,391 workspace tests passing,
+zero failures and one ignored. All three additional macOS AccessKit tests,
+formatting, strict Clippy, workspace layers, asset and dependency license
+checks, and the eight-file corpus passed. The local gate log SHA-256 is
+`6366f31f9d2d727decb56961ec4aa22c76a56cdc207d3e006806c66564d4bcd8`.

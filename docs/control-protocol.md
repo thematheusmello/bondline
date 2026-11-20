@@ -8,7 +8,7 @@ schemas; the current contracts are listed below.
 
 ## Formula analysis
 
-`analysis.formula` reads the current drawing or the current atom selection. Pass `{"expected_revision":0,"expected_selection_epoch":0}` for a fresh drawing. Use `document.inspect` for subsequent revisions and `ui_selection.epoch`, defaulting the latter to zero when absent. A stale snapshot returns `stale_revision` or `stale_selection`.
+`analysis.formula` reads the current drawing or the current atom selection. Pass `{"expected_revision":0,"expected_selection_epoch":0}` for a fresh drawing. Use `document.inspect` for subsequent revisions and `ui_selection.epoch`, defaulting the latter to zero when absent. A stale snapshot returns `stale_revision` or `stale_selection`. When a complete skeletal CDX graph supplies an omitted H count, `defaulted_hydrogen_atoms` gives the number of contributing atoms that used this rule. The field is absent for wholly literal compositions.
 
 The `analysis` object reports `scope` and `status`. An available result includes `formula`, `atom_count`, `fragment_count` and `partial_fragments`. A partial fragment gives uncapped selected-atom composition. Other statuses are `empty`, `unresolved_hydrogens` with the atom ID, `unsupported_source` and `limit_exceeded` with the inspection limit. The query preserves all session state.
 
