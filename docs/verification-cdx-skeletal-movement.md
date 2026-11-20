@@ -37,3 +37,12 @@ The CDX parser fuzz target exercised 10,000 AddressSanitizer iterations with
 movement oracle writes the expected signed coordinate words independently,
 tests alternate selected Node owners, compares a fresh re-import, then checks
 both a half-unit no-op and exact reversal.
+
+The first full lint run caught six redundant conversions in the movement test.
+Commit `e1a1cd3` compares the same expected bytes directly. The complete
+desktop binary type-checked on x86-64 MSVC Windows and GNU Linux.
+
+The full local gate at `e1a1cd3` passed 2,369 workspace tests with one
+ignored, then passed the three macOS AccessKit tests, both Clippy checks,
+formatting, layer, license, asset and corpus checks. The complete run is in
+`target/cdx-move-verification/final-ci.log` in the primary checkout.
