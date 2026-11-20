@@ -1,3 +1,4 @@
+use crate::skeletal::AtomDisplay;
 use crate::{
     Cancellation, Error, GraphScene, MAX_HIT_REGIONS, PageViewport, Primitive, Rectangle, Stroke,
 };
@@ -247,18 +248,7 @@ impl PageView {
 
     /// Build chemical geometry and run its existing whole-source checks before camera clipping.
     pub fn graph_scene(&self, page: &Page, cancel: &Cancellation) -> Result<GraphScene, Error> {
-        self.check_page(page, cancel)?;
-        self.project(
-            crate::page::graph_scene_in_viewport(
-                self.source[0],
-                self.source[1],
-                page,
-                None,
-                cancel,
-                &self.viewport,
-            )?,
-            cancel,
-        )
+        self.build_graph(page, AtomDisplay::Literal, cancel)
     }
 
     /// Separate display facts stay separate from authored H, with the same exact coverage checks.
@@ -268,14 +258,36 @@ impl PageView {
         counts: &BTreeMap<AtomId, u16>,
         cancel: &Cancellation,
     ) -> Result<GraphScene, Error> {
+        self.build_graph(page, AtomDisplay::Resolved(counts), cancel)
+    }
+
+    /// For a source whose absent active carbon-display flag means false. A visible or
+    /// mandatory label refuses the whole scene. The supplied counts never change authored H.
+    pub fn graph_scene_with_hidden_carbons(
+        &self,
+        page: &Page,
+        counts: &BTreeMap<AtomId, u16>,
+        cancel: &Cancellation,
+    ) -> Result<GraphScene, Error> {
+        self.build_graph(page, AtomDisplay::ImpliedHidden(counts), cancel)
+    }
+
+    fn build_graph(
+        &self,
+        page: &Page,
+        display: AtomDisplay<'_>,
+        cancel: &Cancellation,
+    ) -> Result<GraphScene, Error> {
         self.check_page(page, cancel)?;
-        crate::page::validate_display_hydrogens(page, counts, cancel)?;
+        if let Some(counts) = display.counts() {
+            crate::page::validate_display_hydrogens(page, counts, cancel)?;
+        }
         self.project(
             crate::page::graph_scene_in_viewport(
                 self.source[0],
                 self.source[1],
                 page,
-                Some(counts),
+                display,
                 cancel,
                 &self.viewport,
             )?,

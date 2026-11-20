@@ -1,5 +1,7 @@
 //! Project direct Page captions and chemical fragments against one original record table.
-use super::{ElementalGraph, FRAGMENT, Layout, PAGE, TEXT_OBJECT, caption, label_preview, object};
+use super::{
+    ElementalGraph, FRAGMENT, Layout, Nodes, PAGE, TEXT_OBJECT, caption, label_preview, object,
+};
 use bondline_cdx::{Document, Record, RecordKind};
 use bondline_render::MAX_PAGE_TEXT_RUNS;
 use std::collections::BTreeSet;
@@ -91,7 +93,7 @@ fn preview_with_run_budget(
     }
     let resources = source.resources().ok()?;
     let texts = caption::mixed_texts(source, &resources, &mut remaining_runs)?;
-    let layout = Layout::read(source, true, Scope::Fragments).ok()?;
+    let layout = Layout::read(source, Nodes::Labelled, Scope::Fragments).ok()?;
     let fragments =
         ElementalGraph::decode_fragments(source, &layout, Some(&resources), &mut remaining_runs)
             .ok()?;

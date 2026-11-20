@@ -485,29 +485,40 @@ was retired after checking all 33 files against the committed tree. Full
 Windows/Linux desktop and browser UI workflows remain open.
 [Acceptance and reproduction](docs/verification-cdx-mixed-label-edits.md).
 
+[PR 21](https://github.com/thematheusmello/bondline/pull/21) merged the tested
+mixed-label writer at `6fd6633`. Local and remote main matched the merge.
+Its completed feature ref was retired.
+
+### Skeletal CDX drawings on their original paper
+
+The renderer at `868169c`, source reader at `0b3681f` and desktop controls at
+`f6015a0` display a source-qualified neutral single-bond carbon chain on its
+declared Poster. Five source encodings render identically while retaining their
+individual hydrogen fields and carbon visibility flags. Offline Chrome runs the
+same IO and CPU renderer at `895b067`. The sanitizer at `0ed5d77` checks the raw
+Node owners, degree, H and flags, exact source output and detached-model refusal.
+The separate ring regression at `00ec56f` verifies 1,776 black pixels, the
+four retained omitted H fields, and atomic Save As and reopen. Both native
+desktop targets type-checked. The browser UI build still reaches native MCP
+networking and fails in mio. The full local gate on `00ec56f` passed 2,363
+workspace tests with one ignored, all three AccessKit tests and all gates.
+[Acceptance and local reproduction](docs/verification-cdx-skeletal.md).
+
 ### Next executable work
 
-1. **Display ordinary skeletal-carbon CDX drawings at their declared paper
-   size.** A 283-byte original propane source currently opens as data on A4
-   and saves exactly. A CPU capture refuses despite its declared 512 pt
-   Poster and physical solid-bond styles. Its independent SHA-256 is
-   `d000b90042e8e9d4aff3f291cb062fae560b6447f0cd60bbece2135050e31ce0`.
-   Preserve the three C nodes and explicit H counts 3, 2, 3. The independently
-   constructed same-geometry CDXML control yields matching CPU/Metal output,
-   638 black pixels and RGB SHA-256
-   `d6b93e3e5b750c8bfb1816584e55d97b7747e2d848cd80f6b25468c08ee1b520`.
-   Verify the actual CDX bytes, paper and pixels through Open, capture, Save and
-   reopen. Binary `ShowTerminalCarbonLabels` and `ShowNonTerminalCarbonLabels`
-   are implied booleans. Check the owner and permitted width. Reuse the existing
-   carbon visibility rules for terminal, interior, diatomic and collinear cases.
-   [Public binary flags](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXBoolean.htm).
-2. The ignored `target/cdx-skeletal-planning/HANDOFF.md` holds the generator,
-   17 original byte cases, captured baseline and RDKit comparison. Translate
-   the independent fixtures into tracked regression tests. The 265-byte source
-   with all H counts omitted must retain literal absence through Open and Save.
-   Keep any derived display hydrogens separate from authored chemical data.
-   Other M0–M5 work, general interleaved depths and the raw-ID exhaustion
-   policy remain in the roadmap.
+1. Implement source-preserving selection movement on this CDX profile. Verify
+   the signed 16.16 Node positions, a single history transaction, protected raw
+   headers, exact moved file, redo after a sub-grid no-op, and unchanged H/flags.
+   Test duplicate raw IDs across fragments, off-page and mandatory-label refusals.
+   A separate worktree `../bondline-cdx-skeletal-move` started on `f6015a0`.
+2. Extend the approved rendering profile to mixed hidden-carbon/printed-heteroatom
+   drawings. Source and optical acceptance must account for glyphs, clearance
+   and current graph visibility on every atom.
+3. Independently, `../bondline-formula-notation` starts from the verified numeric
+   composition in `bondline-chem` to produce a sourced molecular formula. Exercise
+   carbon-free ordering, isotopes and charge against independent conventions.
+   Windows/Linux runtime validation and the full browser editor remain outstanding.
+   [Roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

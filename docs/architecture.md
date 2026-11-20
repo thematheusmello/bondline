@@ -198,6 +198,12 @@ page resolve the current Node and its own Text, then check the same page
 classification and complete edited model after re-import. [Mixed atom-label editing](research/cdx-mixed-label-edits.md), [creation and history](research/cdx-chemical-caption-creation.md). [Mixed-page contract](research/cdx-mixed-caption.md),
 [mixed caption edits](research/cdx-mixed-caption-edits.md).
 
+The skeletal CDX display profile retains original Node fields and a separately
+certified model. IO computes temporary neutral-carbon H counts from graph degree
+for omitted fields. The same renderer checks source admission and every camera
+view, including mandatory glyphs and hit regions. A detached model loses this
+display proof. [Binary skeletal source contract](research/cdx-skeletal.md).
+
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks
 cancellation/arithmetic and refuses unresolved H; bonds/geometry are not chemistry-inferred.
