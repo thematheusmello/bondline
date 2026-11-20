@@ -1725,6 +1725,23 @@ fn analysis_navigates_individual_sdf_molecules_and_resets_after_reopen() -> Test
     let second = f.warm();
     assert!(painted(&second, "SDF record 2 of 2") && painted(&second, "CH5N"));
     assert!(painted(&second, "31.042199 Da") && !painted(&second, "C2H6O"));
+    for (value, expected) in [(1.0, "C2H6O"), (2.0, "CH5N")] {
+        let (id, _) = f.node(
+            "Record number",
+            &[
+                egui::accesskit::Role::SpinButton,
+                egui::accesskit::Role::TextInput,
+            ],
+        )?;
+        f.frame(vec![egui::Event::AccessKitActionRequest(
+            egui::accesskit::ActionRequest {
+                action: egui::accesskit::Action::SetValue,
+                target: id,
+                data: Some(egui::accesskit::ActionData::NumericValue(value)),
+            },
+        )]);
+        assert!(painted(&f.warm(), expected));
+    }
     assert_eq!(f.state()?, before);
     f.command("document.open_sdf", json!({"path":input}))?;
     let reopened = f.warm();
