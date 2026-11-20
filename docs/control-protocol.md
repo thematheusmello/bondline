@@ -136,6 +136,12 @@ retains byte lexemes, Arc sharing, redo and weak contexts. This performs no vale
 inference or general text interpretation. Global `is_fully_mapped` remainsfalse; old
 chemical/page/style/caption writers stay refused for these sources.
 
+For qualified skeletal CDX, existing Open, inspection, render capture and Save
+commands operate on the declared paper. Inspect exposes omitted H as null, even
+after rendering. Native page controls are disabled for this profile. A direct
+page resize detaches the source, and Undo can restore the certified drawing.
+[Skeletal CDX verification](verification-cdx-skeletal.md).
+
 The existing exact-target `ui.atom_label` form chooses this operation under the same
 request/source/file/view/tool/close proof. Old requests and metadata stay exact. A
 qualified canvas accepts Alt-primary on an atom from any retained mode. Marquee selection

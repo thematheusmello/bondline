@@ -1,20 +1,19 @@
-# Ordinary skeletal cycle witnesses
+# Cyclobutane CDX fixtures
 
-These four original binary fixtures, their standalone struct-only generator, the RDKit
-consumer and the Rust optics regression are MIT OR Apache-2.0. They were independently
-constructed during integration review on2026-11-20, rather than exported by Bondline or
-copied from a reference application. The earlier24-file chain generator is unchanged.
-The [public source/admission contract](../../../../../docs/research/cdx-skeletal.md)
-records the CDX object/coordinate/flag and carbon/H decisions.
+These four original CDX files, their Python generator and their verification
+code are dual-licensed MIT OR Apache-2.0. The generator packs each record from
+public field definitions. It uses sparse Node IDs 19, 2, 300 and 77 and omits
+Element, NodeType and NumHydrogens on all four atoms. [Public sources and display rules](../../../../../docs/research/cdx-skeletal.md).
 
-The four-carbon cycle has positions(128,128),(256,128),(256,256),(128,256), single bonds,
-512×512pt paper,4pt black width and2pt margin. Source Node IDs19,2,300,77 are deliberately
-sparse and out of order; all Element, NodeType and NumHydrogens properties are absent.
-There is no font table or Text because all four atoms are genuinely hidden. The binary
-palette supplies white2 and black3. The `dormant` twin adds a zero-length true terminal
-flag on its first degree-two Node. `active` instead adds the active nonterminal true
-flag; `h-inconsistent` assigns that same Node literal H3, exceeding neutral C4 with its
-two Single bonds. These controls must not become glyphless cycle previews.
+The four single bonds connect (128, 128), (256, 128), (256, 256) and
+(128, 256) on a 512 × 512 pt Poster. Ink is 4 pt wide, the margin is 2 pt
+and the palette supplies white at index 2 and black at index 3.
+
+The ordinary ring has no carbon visibility flags. The dormant variant sets the
+terminal flag on a two-neighbor atom. Neither requires a printed label. In the
+active variant, the nonterminal flag requires one. The inconsistent-H case
+declares three attached H on that same atom, exceeding the neutral carbon
+valence given its two bonds.
 
 | File | Bytes | SHA256 |
 | --- | ---: | --- |
@@ -23,21 +22,20 @@ two Single bonds. These controls must not become glyphless cycle previews.
 | active.cdx | 305 | 3c0d5df87b79c36dce543e12a9d9574c3ecf1272a8ff3a1de4df322cbd341d26 |
 | h-inconsistent.cdx | 307 | 6bbc950cd9637928e39ad6e817f88b6d9f4b1dc0c0ccd9a9c28390ee788533fd |
 
-At512×512 Fit,32px margins give scale7/8. The square's axes become144..256 and its
-stroke width3.5px. Independent rectangle-union arithmetic gives exactly1,776 black pixel
-cells, with all remaining inner-paper cells white. No product renderer computes these
-expected rectangles. Both positive sources must produce this exact complete inner-paper
-result before and after atomic Unicode Save/reopen, retaining authored HNone and topology.
-The external RDKit2026.09.2 consumer separately reads the actual saved CDX and requires
-four carbons, zero explicitly attached H, totals2/2/2/2, the literal ring edges, SMILES
-C1CCC1 and formulaC4H8. This test does not grant general chemistry inference or editing.
+At 512 × 512 in Fit view, the 32 px margin gives a scale of 7/8. Each side
+extends from pixel 144 to 256 and is 3.5 px wide. The union of these four
+rectangles covers 1,776 pixel centers. The regression checks every interior
+paper pixel before and after Unicode Save As and reopening. It also checks
+all four original H omissions and bonds. External RDKit 2026.09.2 reads the
+saved files and returns four carbons, two calculated H on each, molecular
+formula C4H8 and SMILES C1CCC1.
 
 ```sh
+export BONDLINE_PYTHON="$PWD/.cache/oracles/format-python/bin/python"
 python3 -B crates/io/tests/fixtures/cdx-skeletal-cycle/generate.py
-.cache/oracles/format-python/bin/python -B crates/io/tests/fixtures/cdx-skeletal-cycle/check_rdkit.py crates/io/tests/fixtures/cdx-skeletal-cycle/cycle.cdx
+"$BONDLINE_PYTHON" -B crates/io/tests/fixtures/cdx-skeletal-cycle/check_rdkit.py crates/io/tests/fixtures/cdx-skeletal-cycle/cycle.cdx
 cargo test -p bondline-io --test cdx_skeletal_cycle --locked
 ```
 
-The generator verifies committed source bytes by default. `--output-dir DIR` generates
-separate copies. Runtime test and gate results belong to the feature receiving record;
-the fixture declarations and independent review alone do not claim those gates passed.
+The generator checks the committed bytes by default. Pass `--output-dir DIR`
+to create fresh copies. [Integrated verification](../../../../../docs/verification-cdx-skeletal.md).
