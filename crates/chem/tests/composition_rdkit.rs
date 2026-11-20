@@ -1,5 +1,5 @@
 //! Independent explicit-H references, parsed by an external RDKit process.
-use bondline_chem::{Composition, analyze_fragment};
+use bondline_chem::{Composition, FormulaIsotopes, analyze_fragment};
 use bondline_model::{
     Atom, AtomId, Bond, BondId, BondOrder, DoublePosition, Element, Fragment, FragmentId,
 };
@@ -91,6 +91,7 @@ fn oracle(
     formula: &str,
     isotope_formula: &str,
     payload: &str,
+    hill_formulas: &[String],
 ) -> TestResult<Output> {
     let python = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
         if cfg!(windows) {
@@ -110,6 +111,7 @@ fn oracle(
             formula,
             isotope_formula,
         ])
+        .args(hill_formulas)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
@@ -128,9 +130,13 @@ fn external_checker_accepts_literal_controls_and_rejects_semantic_or_schema_chan
     // Durable subset of the manually authored, pre-production qualification controls.
     let methane = r#"{"element_counts":[[1,4],[6,1]],"isotope_counts":[[1,null,4],[6,null,1]],"total_charge":0}"#;
     let heavy = r#"{"element_counts":[[1,6],[6,2],[8,1]],"isotope_counts":[[1,null,5],[1,2,1],[6,null,1],[6,13,1],[8,null,1]],"total_charge":0}"#;
-    assert!(oracle("[CH4]", "CH4", "CH4", methane)?.status.success());
     assert!(
-        oracle("[2H][13CH2][CH2][OH]", "C2H6O", "C[13C]H5[2H]O", heavy)?
+        oracle("[CH4]", "CH4", "CH4", methane, &[])?
+            .status
+            .success()
+    );
+    assert!(
+        oracle("[2H][13CH2][CH2][OH]", "C2H6O", "C[13C]H5[2H]O", heavy, &[])?
             .status
             .success()
     );
@@ -142,13 +148,22 @@ fn external_checker_accepts_literal_controls_and_rejects_semantic_or_schema_chan
         r#"{"element_counts":[[1,4],[6,1]],"isotope_counts":[[1,null,4],[6,null,1]],"total_charge":false}"#,
         r#"{"element_counts":[[1,4],[6,1]],"isotope_counts":[[1,null,4],[6,null,1]],"total_charge":0,"extra":0}"#,
     ] {
-        assert_eq!(oracle("[CH4]", "CH4", "CH4", wrong)?.status.code(), Some(1));
+        assert_eq!(
+            oracle("[CH4]", "CH4", "CH4", wrong, &[])?.status.code(),
+            Some(1)
+        );
     }
     let collapsed = r#"{"element_counts":[[1,6],[6,2],[8,1]],"isotope_counts":[[1,null,6],[6,null,2],[8,null,1]],"total_charge":0}"#;
     assert_eq!(
-        oracle("[2H][13CH2][CH2][OH]", "C2H6O", "C[13C]H5[2H]O", collapsed)?
-            .status
-            .code(),
+        oracle(
+            "[2H][13CH2][CH2][OH]",
+            "C2H6O",
+            "C[13C]H5[2H]O",
+            collapsed,
+            &[]
+        )?
+        .status
+        .code(),
         Some(1)
     );
     Ok(())
@@ -277,6 +292,70 @@ fn explicitly_resolved_graphs_match_literal_formula_and_external_isotope_counter
             ],
             bonds: &[(1, 2, S), (2, 3, S), (3, 4, D), (3, 5, S)],
         },
+        Case {
+            notation: "[2H][Br]",
+            formula: "HBr",
+            isotope_formula: "[2H]Br",
+            atoms: &[(1, Some(2), 0, 0), (35, None, 0, 0)],
+            bonds: &[(1, 2, S)],
+        },
+        Case {
+            notation: "[Fe+3]",
+            formula: "Fe+3",
+            isotope_formula: "Fe+3",
+            atoms: &[(26, None, 0, 3)],
+            bonds: &[],
+        },
+        Case {
+            notation: "[O-][S](=[O])(=[O])[O-]",
+            formula: "O4S-2",
+            isotope_formula: "O4S-2",
+            atoms: &[
+                (8, None, 0, -1),
+                (16, None, 0, 0),
+                (8, None, 0, 0),
+                (8, None, 0, 0),
+                (8, None, 0, -1),
+            ],
+            bonds: &[(1, 2, S), (2, 3, D), (2, 4, D), (2, 5, S)],
+        },
+        Case {
+            notation: "[13CH4].[12CH4].[CH4].[13CH4]",
+            formula: "C4H16",
+            isotope_formula: "C[12C][13C]2H16",
+            atoms: &[
+                (6, Some(13), 4, 0),
+                (6, Some(12), 4, 0),
+                (6, None, 4, 0),
+                (6, Some(13), 4, 0),
+            ],
+            bonds: &[],
+        },
+        Case {
+            notation: "[100Mo].[92Mo].[100Mo]",
+            formula: "Mo3",
+            isotope_formula: "[92Mo][100Mo]2",
+            atoms: &[
+                (42, Some(100), 0, 0),
+                (42, Some(92), 0, 0),
+                (42, Some(100), 0, 0),
+            ],
+            bonds: &[],
+        },
+        Case {
+            notation: "[Og]",
+            formula: "Og",
+            isotope_formula: "Og",
+            atoms: &[(118, None, 0, 0)],
+            bonds: &[],
+        },
+        Case {
+            notation: "",
+            formula: "",
+            isotope_formula: "",
+            atoms: &[],
+            bonds: &[],
+        },
     ];
     for case in cases {
         let fragment = graph(&case)?;
@@ -287,6 +366,10 @@ fn explicitly_resolved_graphs_match_literal_formula_and_external_isotope_counter
             case.formula,
             case.isotope_formula,
             &payload(&result),
+            &[
+                result.hill_formula(FormulaIsotopes::Combined)?,
+                result.hill_formula(FormulaIsotopes::Separate)?,
+            ],
         )?;
         assert!(
             output.status.success(),

@@ -1,12 +1,13 @@
 """Independent test process only; never a linked/shipped chemistry dependency."""
 import collections
 import json
+import re
 import sys
 
 from rdkit import Chem, rdBase
 from rdkit.Chem import rdMolDescriptors
 
-assert len(sys.argv) == 4, "notation, collapsed formula, isotope formula required"
+assert len(sys.argv) in (4, 6), "notation, raw RDKit formulas and optionally both Hill outputs"
 raw = sys.stdin.buffer.read(65537)
 assert len(raw) <= 65536, "test payload bound"
 actual = json.loads(raw)
@@ -52,5 +53,19 @@ expected = {
     "total_charge": Chem.GetFormalCharge(reference),
 }
 assert actual == expected, (actual, expected)
+
+if len(sys.argv) == 6:
+    def strict_hill(rdkit_formula):
+        if 6 in elements:
+            return rdkit_formula
+        # RDKit 2026.09.2 places H first even without carbon. Keep its complete
+        # isotope/count tokens, moving whole element groups into Hill's alphabetic order.
+        body, charge = re.fullmatch(r"(.*?)([+-][0-9]*)?", rdkit_formula).groups()
+        tokens = re.findall(r"(?:\[[0-9]+[A-Z][a-z]?\]|[A-Z][a-z]?)[0-9]*", body)
+        assert "".join(tokens) == body
+        return "".join(sorted(tokens, key=lambda t: re.search(r"[A-Z][a-z]?", t)[0])) + (charge or "")
+
+    for produced, raw_formula in zip(sys.argv[4:], (formula, isotope_formula), strict=True):
+        assert produced == strict_hill(raw_formula), (produced, raw_formula, strict_hill(raw_formula))
 print(json.dumps({"rdkit": rdBase.rdkitVersion, "formula": formula,
                   "isotope_formula": isotope_formula, **expected}, separators=(",", ":")))
