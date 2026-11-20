@@ -5,6 +5,10 @@ use std::{path::Path, process::Command};
 type Test<T = ()> = Result<T, Box<dyn std::error::Error>>;
 
 fn open_and_analyze(relative_source: &str, atom: Option<u32>) -> Test<Value> {
+    analyze(relative_source, atom, "analysis.formula")
+}
+
+fn analyze(relative_source: &str, atom: Option<u32>, command: &str) -> Test<Value> {
     let path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../io/tests/fixtures")
         .join(relative_source);
@@ -15,7 +19,7 @@ fn open_and_analyze(relative_source: &str, atom: Option<u32>) -> Test<Value> {
     if let Some(id) = atom {
         commands.push(json!({"command":"ui.selection","params":{"action":"set","expected_revision":1,"page_id":1,"atom_ids":[id]}}));
     }
-    commands.push(json!({"command":"analysis.formula","params":{"expected_revision":1,"expected_selection_epoch":u64::from(atom.is_some())}}));
+    commands.push(json!({"command":command,"params":{"expected_revision":1,"expected_selection_epoch":u64::from(atom.is_some())}}));
     let mut cli = Command::new(env!("CARGO_BIN_EXE_bondline-cli"));
     cli.arg("run");
     for command in commands {
@@ -80,5 +84,35 @@ fn open_mixed_cdx_distinguishes_written_from_unspecified_hydrogens() -> Test {
             json!({"scope":"document","status":"available","atom_count":count,"fragment_count":1,"partial_fragments":false,"formula":formula,"defaulted_hydrogen_atoms":defaulted})
         );
     }
+    Ok(())
+}
+
+#[test]
+fn open_file_returns_mass_and_weight_through_the_real_cli() -> Test {
+    let entire = analyze(
+        "cdx-mixed-skeleton/ethanol.cdx",
+        None,
+        "analysis.properties",
+    )?;
+    assert_eq!(entire["formula"], "C2H6O");
+    assert!(
+        (entire["masses"]["exact_mass_da"].as_f64().ok_or("mass")? - 46.04186481295).abs() < 1e-8
+    );
+    assert_eq!(entire["masses"]["molecular_weight"], 46.069);
+    let partial = analyze(
+        "cdx-skeletal/all_h_missing.cdx",
+        Some(2),
+        "analysis.properties",
+    )?;
+    assert_eq!(partial["formula"], "CH2");
+    assert_eq!(partial["partial_fragments"], true);
+    assert!(
+        (partial["masses"]["molecular_weight"]
+            .as_f64()
+            .ok_or("weight")?
+            - 14.027)
+            .abs()
+            < 1e-8
+    );
     Ok(())
 }

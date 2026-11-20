@@ -27,7 +27,7 @@ fn exact(e: &Engine, name: &str) -> TestResult {
 #[test]
 fn directed_bonds_survive_registered_unicode_files_with_all_authoring_guards() -> TestResult {
     let commands = bondline_commands::registry();
-    assert_eq!(commands.len(), 53);
+    assert_eq!(commands.len(), 54);
     assert_eq!(commands[49].name, "ui.caption");
     assert_eq!(
         serde_json::to_value(&commands[..49])?,

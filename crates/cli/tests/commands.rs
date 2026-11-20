@@ -458,6 +458,7 @@ fn executable_lists_schemas_and_runs_a_stateful_command_sequence()
         names,
         [
             "analysis.formula",
+            "analysis.properties",
             "atom.create_authored_label",
             "atom.set_authored_label",
             "atom.set_label",
