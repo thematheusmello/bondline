@@ -1,5 +1,15 @@
 # Bondline agent instructions
 
+The initial browser host reuses the real Rust workspace and registry. Keep raw JS
+UTF-16/size checks before recovery or request conversion, one Web Locks writer and
+exact current-source comparison before persistence. Preserve corrupt/unsupported
+data and native Save/file guards. Cache readiness follows activated/redundant worker
+states; failed installation must not leave it pending. Keep matching versioned assets,
+the strict actual wasm license graph and runtime notices. Test actual offline reload,
+660px Fit/Actual recovery, pointer/history, Unicode, quota/conflicts and unload Cancel.
+[Contract](docs/research/web-workspace.md), [receiving](docs/verification-web-workspace.md).
+This initial workflow does not complete M5. Actions stays off.
+
 For skeletal CDX, keep each Node's literal hydrogen and implied-boolean presence.
 Only the source-qualified view resolves absent H and the active visibility flag.
 Use the same whole-paper proof for admission, capture and native viewing. Check

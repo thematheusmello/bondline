@@ -218,3 +218,24 @@ Cache.addAll path also had intermittent NetworkErrors despite complete HTTP200
 responses; the failed receipts include worker/cache diagnostics. A subsequent unchanged
 run passes, so neither disk cleanup nor diagnostic setup is claimed as a causal fix.
 The final aggregate and bounded failure handling remain the next receiving work.
+
+## Failed cache installation
+
+An actual HTTP503 for the worker's WASM asset leaves the real editor running but made
+the old `navigator.serviceWorker.ready` promise wait forever. `flow-worker-ready-red`
+records pending rather than unavailable, with the real failed request. Bootstrap now
+observes activated/redundant states and settles false on failed installation. It never
+claims that this prevents network/storage errors. Restoring networking and reloading
+installs the cache and preserves the unchanged initial document.
+
+`flow-worker-failure-qualified` passes all12 stages, including that real failure/retry,
+the current Analysis percentages, Unicode boundaries, pointer/history, both offline
+viewports, quota/conflicts and actual unload Cancel. The first new reload probe observed
+a transient CDP 'Inspected target navigated or closed'; the readiness observer now retries
+only that precise navigation-context response within its unchanged deadline. Actual
+readiness and every previous assertion remain required. HTTP and worker diagnostics are
+retained. No parser, document or native behavior changes.
+
+Executed bundle:`fe4e04f7d618f3a36b7734048b0eb04be7eeff9c47c2f6ce169c86e389ce43ac`.
+WASM and runtime notices remain byte-exact at the dce8cb0 checkpoint; only bootstrap and
+its complete asset-set hash change. Final full local CI is the remaining aggregate gate.

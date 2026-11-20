@@ -22,6 +22,9 @@ successful service-worker installation, the same origin can reload offline. A st
 localhost port or HTTPS origin matters: different origins have different browser drafts.
 No account or hosted application service is needed. Bundle updates wait until existing
 tabs close, so an active editor keeps its matching JS/WASM assets.
+Failed cache installation settles offline readiness unavailable while the editor stays
+running. Reload with the server available to retry; successful caching is required for
+offline startup. This does not turn browser recovery into a durable file backup.
 
 A bounded1MiB CDXML draft is retained automatically after real model changes. It is browser
 recovery, not a local-file Save receipt or a permanent backup. The page holds one browser

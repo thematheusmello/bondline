@@ -19,6 +19,7 @@ for (const [name,record] of Object.entries(manifest.files)) {
 }
 const allowed = new Set(Object.keys(manifest.files));
 let localNetworkAvailable = true, blockedRequests = 0;
+let rejectWorkerAssets = true, rejectedWorkerAssets = 0;
 const requests = [];
 const server = createServer(async (request, response) => {
     const record = {url:request.url,referrer:request.headers.referer,destination:request.headers['sec-fetch-dest']};
@@ -30,6 +31,9 @@ const server = createServer(async (request, response) => {
         const url = new URL(request.url, 'http://localhost');
         const name = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
         if (request.method !== 'GET' || !allowed.has(name)) {response.writeHead(404).end(); return;}
+        if (rejectWorkerAssets && name==='bondline_ui_bg.wasm' && request.headers.referer?.endsWith('/sw.js')) {
+            rejectedWorkerAssets++; response.writeHead(503).end('Owned cache-install failure'); return;
+        }
         response.setHeader('Content-Type', name.endsWith('.wasm') ? 'application/wasm' : name.endsWith('.js') ? 'text/javascript' : name.endsWith('.txt') ? 'text/plain' : 'text/html');
         response.end(await readFile(path.join(assets, name)));
     } catch {response.writeHead(404).end();}
@@ -81,8 +85,12 @@ class Page {
     async wait(expression, seconds=40) {
         const end = Date.now() + seconds*1000;
         while (Date.now() < end) {
-            const result = await this.evaluate(expression);
-            if (result) return result;
+            try {
+                const result = await this.evaluate(expression);
+                if (result) return result;
+            } catch (error) {
+                if (!String(error).includes('Inspected target navigated or closed')) throw error;
+            }
             await delay(60);
         }
         throw Error(`Browser wait timed out: ${expression}`);
@@ -156,7 +164,16 @@ try {
     report.registry_count = registry.length;
     await writeFile(path.join(output, 'registry.json'), JSON.stringify(registry));
     const key = await page.evaluate('bondline.recovery_key()');
+    const failedInstall = await page.evaluate('Promise.race([window.bondlineOfflineReady,new Promise(resolve=>setTimeout(()=>resolve("pending"),3000))])');
+    report.initial_offline_ready = failedInstall;
+    assert.equal(failedInstall,false,'failed cache installation must settle unavailable, while the real editor remains running');
+    assert(rejectedWorkerAssets>0);
+    assert.deepEqual((await page.command('document.inspect')).document,initial.document);
+    rejectWorkerAssets = false;
+    await page.evaluate('window.bondlineReady=false');
+    await page.call('Page.reload'); await page.ready();
     assert.equal(await page.evaluate('window.bondlineOfflineReady'),true,'install the real asset cache before closing any setup tab');
+    report.steps.push('an actual failed worker asset fetch settles offline readiness false; restored networking and reload install the real cache');
     const edit = {page_id:1,begin_x_pt:100,begin_y_pt:120,end_x_pt:148,end_y_pt:120};
     const captionSource = await readFile(new URL('../../crates/io/tests/fixtures/captions/explicit.cdxml',import.meta.url),'utf8');
     const malformedUtf16 = captionSource.replace('<fonttable>',`<!--${String.fromCharCode(0xd800)}--><fonttable>`);

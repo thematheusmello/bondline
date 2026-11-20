@@ -47,6 +47,13 @@ Updates use the normal waiting lifecycle until old clients close; no forced acti
 mixes a live editor's old JS with a new WASM bundle. Fetch consults only the current
 scope's versioned cache. Actual offline tests also reject all server requests because
 CDP page-offline alone leaves a service worker's independent network target available.
+[`ServiceWorkerContainer.ready`](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/ready)
+does not reject on installation failure. Track the actual
+[worker state](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker/state):
+activated permits the controller check, redundant settles offline readiness false.
+The already-running editor and document remain available; a later network-restored
+reload may install the cache. This handles failure without claiming that network or
+storage errors cannot occur. Normal version upgrades still wait for old clients.
 
 ## Pinned SDK compatibility and license closure
 

@@ -29,8 +29,22 @@ try {
         } catch { /* A destroyed workspace has no live draft. */ }
     });
     if ('serviceWorker' in navigator) {
-        window.bondlineOfflineReady = navigator.serviceWorker.register('./sw.js').then(async () => {
-            await navigator.serviceWorker.ready;
+        window.bondlineOfflineReady = navigator.serviceWorker.register('./sw.js').then(async registration => {
+            const worker = registration.active || registration.installing || registration.waiting;
+            if (!worker) return false;
+            if (worker.state !== 'activated') {
+                const activated = await new Promise(resolve => {
+                    const changed = () => {
+                        if (worker.state === 'activated' || worker.state === 'redundant') {
+                            worker.removeEventListener('statechange', changed);
+                            resolve(worker.state === 'activated');
+                        }
+                    };
+                    worker.addEventListener('statechange', changed);
+                    changed();
+                });
+                if (!activated) return false;
+            }
             if (!navigator.serviceWorker.controller) {
                 await new Promise(resolve => navigator.serviceWorker.addEventListener('controllerchange', resolve, {once:true}));
             }
