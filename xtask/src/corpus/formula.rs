@@ -1,6 +1,6 @@
 //! Compare the shared Analysis command with molecules read independently by RDKit.
 use super::{Fixture, Format};
-use bondline_commands::{AnalysisOutcome, AnalysisScope, Command, Engine};
+use bondline_commands::{AnalysisMass, AnalysisOutcome, AnalysisScope, Command, Engine};
 use bondline_io::{StoredDocument, mol::MolTransform, sdf::SdfFile};
 use bondline_model::{PageSize, Point2};
 use serde::Deserialize;
@@ -13,6 +13,9 @@ type Result<T> = std::result::Result<T, Box<dyn Error>>;
 struct Reference {
     formula: String,
     atoms: usize,
+    rdkit_weight: f64,
+    conventional_weight: f64,
+    exact_mass_da: f64,
 }
 
 #[derive(Default)]
@@ -29,15 +32,33 @@ pub(super) struct Coverage {
 
 fn analysis(engine: &mut Engine) -> Result<AnalysisOutcome> {
     let params = serde_json::to_value(engine.analysis_request())?;
-    Ok(engine
+    let formula = engine
         .dispatch("analysis.formula", params)?
         .analysis
-        .ok_or("missing Analysis result")?
-        .outcome)
+        .ok_or("missing formula report")?;
+    let request = engine.analysis_properties_request(false);
+    let properties = engine
+        .execute(Command::AnalysisProperties(request))?
+        .analysis
+        .ok_or("missing molecular properties")?;
+    // Require the old formula endpoint to agree on every shared field.
+    let mut shared = serde_json::to_value(&properties)?;
+    shared
+        .as_object_mut()
+        .ok_or("invalid properties report")?
+        .remove("masses");
+    if shared != serde_json::to_value(&formula)? {
+        return Err("formula and properties commands disagree on the same scope".into());
+    }
+    Ok(properties.outcome)
 }
 
 enum Comparison {
-    Matched(String),
+    Matched {
+        formula: String,
+        weight: f64,
+        exact: f64,
+    },
     Unavailable(String),
 }
 
@@ -66,12 +87,33 @@ fn compare(outcome: AnalysisOutcome, reference: &Reference) -> Result<Comparison
         AnalysisOutcome::Available {
             atom_count,
             formula,
+            masses,
             ..
         } => {
             if atom_count != reference.atoms || formula != reference.formula {
                 return Err(format!("Bondline {formula} ({atom_count} drawn atoms) differs from RDKit {} ({} drawn atoms)", reference.formula, reference.atoms).into());
             }
-            Ok(Comparison::Matched(formula))
+            let masses = masses.ok_or("missing masses on a resolved corpus molecule")?;
+            let (AnalysisMass::Value(weight), AnalysisMass::Value(exact)) =
+                (masses.molecular_weight, masses.exact_mass_da)
+            else {
+                return Err("a resolved corpus molecule lost a previously available mass".into());
+            };
+            if !weight.is_finite()
+                || !exact.is_finite()
+                || !reference.rdkit_weight.is_finite()
+                || !reference.conventional_weight.is_finite()
+                || !reference.exact_mass_da.is_finite()
+                || (weight - reference.conventional_weight).abs() > 1e-8
+                || (exact - reference.exact_mass_da).abs() > 1e-6
+            {
+                return Err(format!("Bondline {formula} weight {weight}, exact {exact} Da differs from reference weight {}, exact {} Da", reference.conventional_weight, reference.exact_mass_da).into());
+            }
+            Ok(Comparison::Matched {
+                formula,
+                weight,
+                exact,
+            })
         }
         AnalysisOutcome::UnsupportedSource => {
             Ok(Comparison::Unavailable("unsupported_source".into()))
@@ -95,12 +137,21 @@ impl Counts {
         output: &mut impl Write,
     ) -> Result<()> {
         match result {
-            Comparison::Matched(formula) => {
+            Comparison::Matched {
+                formula,
+                weight,
+                exact,
+            } => {
                 self.matched += 1;
                 writeln!(
                     output,
                     "{label}: Bondline {formula} matched RDKit ({} drawn atoms)",
                     reference.atoms
+                )?;
+                writeln!(
+                    output,
+                    "{label} masses: Bondline molecular weight {weight:.6}, exact mass {exact:.6} Da; RDKit MolWt {:.6}, reference adjusted for CIAAW atomic weights {:.6}, RDKit exact {:.6} Da",
+                    reference.rdkit_weight, reference.conventional_weight, reference.exact_mass_da
                 )?;
             }
             Comparison::Unavailable(reason) => {
@@ -110,6 +161,7 @@ impl Counts {
                     "{label}: {reason}; RDKit reference {}",
                     reference.formula
                 )?;
+                writeln!(output, "{label} masses unavailable: {reason}")?;
             }
         }
         Ok(())
@@ -183,6 +235,10 @@ impl Coverage {
         self.files.unavailable += 1;
         writeln!(
             output,
+            "{name} collection masses unavailable: unsupported_source"
+        )?;
+        writeln!(
+            output,
             "{name} collection: unsupported_source; {} molecule record(s)",
             refs.len()
         )?;
@@ -215,7 +271,16 @@ impl Coverage {
                     );
                 }
                 let direct = compare(report.outcome, reference)?;
-                if matches!(isolated, Comparison::Matched(_))
+                if file.sha256 == "f95838cbb55c107c649ce2eb99ac62e191f747ce6994a171e64019f8e6c53d1a"
+                    && (matches!(isolated, Comparison::Unavailable(_))
+                        || matches!(direct, Comparison::Unavailable(_)))
+                {
+                    return Err(format!(
+                        "{name}: pinned SDF record {id} lost its molecular properties"
+                    )
+                    .into());
+                }
+                if matches!(isolated, Comparison::Matched { .. })
                     && matches!(direct, Comparison::Unavailable(_))
                 {
                     return Err(
@@ -350,8 +415,37 @@ mod tests {
                 <[Reference; 1]>::try_from(answers).map_err(|_| "expected one reference")?;
             assert_eq!(reference.formula, expected);
             assert!(
-                matches!(compare(outcome.clone(), &reference)?, Comparison::Matched(formula) if formula == expected)
+                matches!(compare(outcome.clone(), &reference)?, Comparison::Matched { formula, .. } if formula == expected)
             );
+            let mut missing = outcome.clone();
+            let AnalysisOutcome::Available { masses, .. } = &mut missing else {
+                return Err("expected available properties".into());
+            };
+            *masses = None;
+            assert!(compare(missing, &reference).is_err());
+            for (weight, exact) in [
+                (
+                    reference.conventional_weight + 0.00001,
+                    reference.exact_mass_da,
+                ),
+                (
+                    reference.conventional_weight,
+                    reference.exact_mass_da + 0.00001,
+                ),
+                (f64::NAN, reference.exact_mass_da),
+            ] {
+                let mut wrong = outcome.clone();
+                let AnalysisOutcome::Available {
+                    masses: Some(masses),
+                    ..
+                } = &mut wrong
+                else {
+                    return Err("expected available masses".into());
+                };
+                masses.molecular_weight = AnalysisMass::Value(weight);
+                masses.exact_mass_da = AnalysisMass::Value(exact);
+                assert!(compare(wrong, &reference).is_err());
+            }
             reference.formula = wrong.into();
             assert!(compare(outcome.clone(), &reference).is_err());
             reference.formula = expected.into();

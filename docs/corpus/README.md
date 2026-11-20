@@ -1,10 +1,10 @@
 # Pinned public corpus
 
-## Molecular formula evidence
+## Molecular formula and mass evidence
 
 The full local integration gate at `018cf0b` passed 2,407 workspace tests and three additional macOS AccessKit tests. One workspace test was ignored. That run matched two complete MOL files and both isolated mol blocks. The CDXML workflow below adds a third matching complete file.
 
-The checker opens each verified source through Bondline's command engine and reads `analysis.formula`. A separate RDKit 2026.09.2 process reads the same file bytes and calculates the reference formula. Each positive comparison checks the complete split-isotope Hill formula, charge and number of drawn atoms. The oracle retains physical hydrogen atoms, spells numbered H explicitly, and reorders carbon-free element groups alphabetically for strict Hill notation. The tests exercise isotope loss, hydrogen-first ordering in hydrogen bromide and a wrong atom count. [Reference reader](../../xtask/oracles/corpus_formula.py) · [Registry comparison](../../xtask/src/corpus/formula.rs) · [Hill convention](../research/hill-formula.md).
+The checker opens each verified source through Bondline’s command engine and reads `analysis.formula` and `analysis.properties`. It requires both reports to agree on their shared fields. A separate RDKit 2026.09.2 process reads the same file bytes and calculates the reference formula. Each positive comparison checks the complete split-isotope Hill formula, charge and number of drawn atoms. The oracle retains physical hydrogen atoms, spells numbered H explicitly, and reorders carbon-free element groups alphabetically for strict Hill notation. The tests exercise isotope loss, hydrogen-first ordering in hydrogen bromide and a wrong atom count. [Reference reader](../../xtask/oracles/corpus_formula.py) · [Registry comparison](../../xtask/src/corpus/formula.rs) · [Hill convention](../research/hill-formula.md).
 
 | Pinned file | Bondline result on the complete source | Independent formula and per-record evidence |
 | --- | --- | --- |
@@ -17,9 +17,27 @@ The checker opens each verified source through Bondline's command engine and rea
 | `bondline-original-two-ring-labels.smi` | Unsupported collection | Record 1 matched C7H14 (seven drawn atoms across two rings). Chemistry on the imported drawing remains unavailable. |
 | `bondline-original-salt-branch.smi` | Unsupported collection | Record 1 matched C4H9NaO (six drawn atoms in two components). Drawing import refuses the charged structure. |
 
-Three of eight complete files returned a matching formula. The verifier identifies these three inputs by SHA-256 and fails if one loses proven coverage. All five record checks matched. Both raw record selectors queried the intact, SHA-256-verified collections through `analysis.properties`. Each extracted MOL block is checked separately against the same RDKit result. The two paths count each record once. The raw collection has its own reported outcome. SMILES component groups stay together within their original record. The printed reference for an unavailable result comes solely from RDKit. The corpus still needs independent comparisons for mass, aromaticity, stereo labels, canonical SMILES, InChI and names.
+Three of eight complete files returned a matching formula. The verifier identifies these three inputs by SHA-256 and fails if one loses proven coverage. All five record checks matched. Both raw record selectors queried the intact, SHA-256-verified collections through `analysis.properties`. Each extracted MOL block is checked separately against the same RDKit result. The two paths count each record once. The raw collection has its own reported outcome. SMILES component groups stay together within their original record. The printed reference for an unavailable result comes solely from RDKit. Aromaticity, stereo labels, canonical SMILES, InChI and names still need independent corpus comparisons.
 
 Run `cargo xtask corpus --offline` after fetching the pinned files and setting `BONDLINE_PYTHON` to the RDKit interpreter. [Official molecular readers](https://www.rdkit.org/docs/source/rdkit.Chem.rdmolfiles.html) · [RDKit formula descriptor](https://www.rdkit.org/docs/source/rdkit.Chem.rdMolDescriptors.html#rdkit.Chem.rdMolDescriptors.CalcMolFormula).
+
+### Mass results
+
+For three complete drawings and all five direct collection records, Bondline returned the following calculated values. RDKit 2026.09.2 read the same SHA-256-verified bytes in a separate process. The corpus reports the unmodified `Descriptors.MolWt`, the conventional-weight reference used for comparison and `CalcExactMolWt`. Each SDF record also has a separate isolated-block check. [RDKit mass descriptors](https://www.rdkit.org/docs/source/rdkit.Chem.Descriptors.html) · [Mass and charge conventions](../research/molecular-masses.md).
+
+| Scope | Molecular weight | Exact mass (Da) |
+| --- | ---: | ---: |
+| Complete CDXML butane | 58.124000 | 58.078250 |
+| Complete V2000 methyl radical | 15.035000 | 15.023475 |
+| Complete V3000 ethane | 30.070000 | 30.046950 |
+| Open SDF records 1 and 2, each | 30.070000 | 30.046950 |
+| Isotopic SMILES chain | 47.061355 | 47.045220 |
+| Two-ring SMILES record | 98.189000 | 98.109550 |
+| Sodium salt SMILES record | 96.104769 | 96.055109 |
+
+The salt is the only admitted pinned scope whose natural-element weight table differs. RDKit gives 96.105000 with Na 22.990. For each unnumbered Na atom, the independent reader applies the difference to the published CIAAW weight 22.98976928, giving 96.10476928. A numbered sodium nuclide receives no adjustment. All other pinned masses use the reference descriptor directly. The weight comparison uses 1e-8 absolute tolerance, accommodating binary summation and the pinned isotope table precision. Exact mass uses 1e-6 Da to cover small isotope-table edition differences while detecting a missed electron, isotope or hydrogen. The check runs at full numerical precision before rounding for display. A missing, nonfinite or mismatched resolved mass fails the gate. [CIAAW sodium table](https://ciaaw.org/sodium.htm) · [RDKit exact mass](https://www.rdkit.org/docs/source/rdkit.Chem.rdMolDescriptors.html#rdkit.Chem.rdMolDescriptors.CalcExactMolWt).
+
+Collection-wide mass is unavailable for the SDF and three SMILES files. Explicit-ethane CDX remains unavailable to Bondline’s source-coverage check. The independent reader can calculate a mass for that CDX, but it is excluded from Bondline’s matched count.
 
 ## Source bundles
 
