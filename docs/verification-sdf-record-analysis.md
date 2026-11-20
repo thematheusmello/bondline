@@ -27,3 +27,7 @@ cargo test -p bondline-ui --lib analysis_navigates_individual_sdf
 ```
 
 Set `BONDLINE_PYTHON` to the pinned RDKit environment for the external test.
+
+Integrating coordinate-free CDXML analysis retained distinct hydrogen-source labels. On `b66352b`, all seven Analysis App-frame tests passed together. The pinned corpus matched three complete files and the two SDF record queries to RDKit. The separate MOL-block checks also passed. In a background macOS window the combined SDF and accessibility-menu paths opened **View → Show Analysis Window**, advanced, went back, advanced again, saved to a Unicode filename and reopened at the first record. The receipt SHA-256 is `46a768821b1d862748eefb9052df80cb9d6fa7adf6b8a03ef57da694286d88f9` on the combined menu branch. [Menu verification](https://github.com/thematheusmello/bondline/pull/37).
+
+The first full run on `d7da358` exposed an obsolete registry expectation. The protocol now explicitly tests the optional, positive 32-bit SDF record ID on the CLI and MCP while retaining both complete older command-prefix digests. The exact integration gate on `a26c1de` passed 2,432 workspace tests, one ignored, three additional AccessKit tests and all local policies. Log SHA-256 `b00129ab64a69d18f26bc9e0c8b51e25905453daf8b33472a7cf24aa8a8d01bd`.
