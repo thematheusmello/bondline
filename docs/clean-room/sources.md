@@ -2472,3 +2472,12 @@ not supply chemical values. Current-revision checks prevent an old ordinal from
 silently analyzing a different molecule after removal. [BIOVIA CTfile Formats
 2026, chapter 10](https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf),
 [MOL analysis](../research/mol-analysis.md), [masses](../research/molecular-masses.md).
+
+### Darwin loopback listener lifetime, 2026-11-20
+
+The macOS 27.2 public SDK `sys/fcntl.h` and `fcntl(2)` manual define
+`FD_CLOFORK`. Published XNU spawn and descriptor-table sources describe
+the separate fork and exec stages. The experimental comparison uses the
+installed kernel and the real listener. The compatibility evidence identifies
+the older kernels and exact limits of the observed release guarantee.
+[Apple XNU fork and exec](https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_exec.c) · [Source decision and receiving evidence](../research/macos-listener-lifetime.md)
