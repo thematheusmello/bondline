@@ -53,7 +53,7 @@ fn cli_and_stdio_convert_every_component_without_replacing_complete_source() -> 
     client.send(json!({"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}))?;
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 53);
+    assert_eq!(tools.len(), 54);
     let converter = tools
         .iter()
         .find(|t| t["name"] == CONVERT)

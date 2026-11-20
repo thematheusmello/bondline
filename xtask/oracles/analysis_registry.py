@@ -10,11 +10,16 @@ for rows, expected in [
 ]:
     prefix = json.dumps(rows[:51], sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     assert hashlib.sha256(prefix.encode()).hexdigest() == expected
-    assert [r["name"] for r in rows[51:]] == ["analysis.formula", "ui.analysis"]
+    old = json.dumps(rows[:53], sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    old_digest = ("8a25ff5a637e7e4bce0e81e9b41d9b72b0154090e6cefd7d09853b6e2552722b" if rows is cli
+                  else "5d8d1358dac859440a50043fb899822f8605fa555857f7ce6be80cd4e3162d42")
+    assert hashlib.sha256(old.encode()).hexdigest() == old_digest
+    assert [r["name"] for r in rows[51:]] == ["analysis.formula", "ui.analysis", "analysis.properties"]
 
 epoch = {"type": "integer", "format": "uint64", "minimum": 0}
 for i, title, description, other, value, read_only in [
     (51, "AnalysisFormula", "Read the Hill formula for the current selection or complete drawing. Reports skeletal CDX hydrogen defaults, unresolved hydrogens, partial fragments and unsupported source coverage.", "expected_selection_epoch", epoch, True),
+    (53, "AnalysisFormula", "Read formula, molecular weight and monoisotopic exact mass for the whole drawing or selection. Partial fragments report uncapped contributions; unavailable mass data identify the element or isotope.", "expected_selection_epoch", epoch, True),
     (52, "UiAnalysis", "Show or hide the Analysis window for this session without changing the drawing or its history.", "visible", {"type": "boolean"}, False),
 ]:
     schema = {
@@ -23,7 +28,7 @@ for i, title, description, other, value, read_only in [
         "required": ["expected_revision", other],
         "properties": {"expected_revision": epoch, other: value},
     }
-    name = ["analysis.formula", "ui.analysis"][i - 51]
+    name = ["analysis.formula", "ui.analysis", "analysis.properties"][i - 51]
     assert cli[i] == {"name": name, "description": description, "read_only": read_only, "input_schema": schema}
     assert mcp[i] == {"name": name, "description": description, "inputSchema": schema,
                       "annotations": {"readOnlyHint": read_only, "openWorldHint": False}}

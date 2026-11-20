@@ -111,44 +111,60 @@ fn printed_cdx_labels_survive_cli_save_reopen_and_match_the_xml_drawing() -> Res
 
 #[test]
 fn skeletal_cdx_cli_moves_scoped_atoms_and_reopens_the_exact_bytes() -> Result {
-    let fixture =
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures/cdx-skeletal-move");
-    let original = fixture.join("aliased_extended.cdx");
-    let expected = fs::read(fixture.join("aliased_moved.cdx"))?;
-    let directory = support::SdfTestDirectory::new()?;
-    let dest = directory.path("moved-保存-β.cdx");
-    let open = request("document.open_cdx", json!({"path":original}));
-    let select = request(
-        "ui.selection",
-        json!({"expected_revision":1, "action":"set","page_id":1,"atom_ids":[4,2]}),
-    );
-    let selected = cli(&[open.clone(), select.clone()])?;
-    let epoch = selected["ui_selection"]["epoch"]
-        .as_u64()
-        .ok_or("selection epoch")?;
-    let result = cli(&[
-        open,
-        select,
-        request(
-            "selection.translate",
-            json!({"expected_revision":1, "expected_selection_epoch":epoch, "delta_x_pt":-5.125,"delta_y_pt":3.25}),
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
+    for (source, after, ids, first, second) in [
+        (
+            "cdx-skeletal-move/aliased_extended.cdx",
+            "cdx-skeletal-move/aliased_moved.cdx",
+            [4, 2],
+            [218.875, 195.25],
+            [186.875, 371.25],
         ),
-        request("history.undo", json!({})),
-        request("history.redo", json!({})),
-        request("document.save_cdx", json!({"path":dest})),
-        request("document.open_cdx", json!({"path":dest})),
-    ])?;
-    assert_eq!(fs::read(dest)?, expected);
-    let fragments = &result["document"]["pages"][0]["fragments"];
-    assert_eq!(
-        fragments[0]["atoms"][1]["position"],
-        json!({"x_pt":218.875,"y_pt":195.25})
-    );
-    assert_eq!(
-        fragments[1]["atoms"][0]["position"],
-        json!({"x_pt":186.875,"y_pt":371.25})
-    );
-    assert_eq!(result["file"]["dirty"], false);
+        (
+            "cdx-mixed-skeletal-move/twins.cdx",
+            "cdx-mixed-skeletal-move/scoped.cdx",
+            [3, 2],
+            [202.875, 147.25],
+            [154.875, 339.25],
+        ),
+    ] {
+        let original = root.join(source);
+        let expected = fs::read(root.join(after))?;
+        let directory = support::SdfTestDirectory::new()?;
+        let dest = directory.path("moved-保存-β.cdx");
+        let open = request("document.open_cdx", json!({"path":original}));
+        let select = request(
+            "ui.selection",
+            json!({"expected_revision":1, "action":"set","page_id":1,"atom_ids":ids}),
+        );
+        let selected = cli(&[open.clone(), select.clone()])?;
+        let epoch = selected["ui_selection"]["epoch"]
+            .as_u64()
+            .ok_or("selection epoch")?;
+        let result = cli(&[
+            open,
+            select,
+            request(
+                "selection.translate",
+                json!({"expected_revision":1, "expected_selection_epoch":epoch, "delta_x_pt":-5.125,"delta_y_pt":3.25}),
+            ),
+            request("history.undo", json!({})),
+            request("history.redo", json!({})),
+            request("document.save_cdx", json!({"path":dest})),
+            request("document.open_cdx", json!({"path":dest})),
+        ])?;
+        assert_eq!(fs::read(dest)?, expected);
+        let fragments = &result["document"]["pages"][0]["fragments"];
+        assert_eq!(
+            fragments[0]["atoms"][1]["position"],
+            json!({"x_pt":first[0],"y_pt":first[1]})
+        );
+        assert_eq!(
+            fragments[1]["atoms"][0]["position"],
+            json!({"x_pt":second[0],"y_pt":second[1]})
+        );
+        assert_eq!(result["file"]["dirty"], false);
+    }
     Ok(())
 }
 
@@ -212,7 +228,7 @@ fn actual_cli_plain_cdx_bonds_keep49_records_direction_side_and_unicode_source_b
     );
     assert_eq!(listing.stdout.get(prefix.len()), Some(&b','));
     let rows: Value = serde_json::from_slice(&listing.stdout)?;
-    assert_eq!(rows.as_array().map(Vec::len), Some(53));
+    assert_eq!(rows.as_array().map(Vec::len), Some(54));
     assert_eq!(rows[49]["name"], "ui.caption");
     assert_eq!(rows[50]["name"], "text.create");
     let directory = support::SdfTestDirectory::new()?;
@@ -275,7 +291,7 @@ fn initialized_mcp_plain_cdx_bonds_keep_exact_discovery_refusals_and_unchanged_s
     let rows = listed["result"]["tools"].as_array().ok_or("MCP tools")?;
     let expected: Vec<Value> =
         serde_json::from_str(&registry_fixture::with_cdx_caption_edit(f::METADATA49))?;
-    assert_eq!((rows.len(), expected.len()), (53, 49));
+    assert_eq!((rows.len(), expected.len()), (54, 49));
     assert_eq!(rows[49]["name"], "ui.caption");
     for (row, expected) in rows.iter().zip(&expected) {
         assert_eq!(row["name"], expected["name"]);

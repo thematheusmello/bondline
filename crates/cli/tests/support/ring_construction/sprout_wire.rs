@@ -320,7 +320,7 @@ fn names(value: &Value) -> TestResult<BTreeSet<&str>> {
         .collect::<Result<_, _>>()?)
 }
 fn discovery(entries: &[Value], key: &str) -> TestResult {
-    assert_eq!(entries.len(), 53);
+    assert_eq!(entries.len(), 54);
     assert_eq!(
         entries.get(43).ok_or("preserved sprout index")?["name"],
         NAME
@@ -354,6 +354,7 @@ fn discovery(entries: &[Value], key: &str) -> TestResult {
                 "text.create",
                 "analysis.formula",
                 "ui.analysis",
+                "analysis.properties",
             ])
             .collect::<BTreeSet<_>>()
     );

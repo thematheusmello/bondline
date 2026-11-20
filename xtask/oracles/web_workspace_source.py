@@ -10,7 +10,7 @@ from xml.parsers import expat
 
 import rdkit
 from rdkit import Chem
-from rdkit.Chem import rdMolDescriptors
+from rdkit.Chem import Descriptors, rdMolDescriptors
 
 
 def main():
@@ -41,9 +41,14 @@ def main():
     assert [atom.GetTotalNumHs() for atom in molecule.GetAtoms()] == [3, 3]
     assert Chem.MolToSmiles(molecule) == "CC"
     assert rdMolDescriptors.CalcMolFormula(molecule) == "C2H6"
+    molecular_weight = Descriptors.MolWt(molecule)
+    exact_mass = rdMolDescriptors.CalcExactMolWt(molecule)
+    assert abs(molecular_weight-30.07) < 1e-9
+    assert abs(exact_mass-30.04695019338) < 1e-7
     print(json.dumps({"sha256": sha256(source).hexdigest(), "bytes": len(source),
                       "rdkit": rdkit.__version__, "formula": "C2H6", "smiles": "CC",
-                      "bond_length_pt": 120, "page": "A4", "consumers": ["Expat", "Decimal", "RDKit"]}))
+                      "bond_length_pt": 120, "page": "A4", "molecular_weight": molecular_weight,
+                      "exact_mass_da": exact_mass, "consumers": ["Expat", "Decimal", "RDKit"]}))
 
 
 if __name__ == "__main__":

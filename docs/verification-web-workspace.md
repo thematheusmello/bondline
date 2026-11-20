@@ -53,9 +53,9 @@ conservative bound, legacy browser execution or upstream acceptance is claimed.
 
 ## Actual shared editor
 
-The host increment is based on mainf64a20e plus transport33fa36f and SDK463b0c6.
+The first host checkpoint944ed26 is based on mainf64a20e plus transport33fa36f and SDK463b0c6.
 `WebHandle` starts eframe WebRunner and the same Rust `show_workspace`, drawing state
-and Engine. It adds no authoring command; the current registry remains53. Native file
+and Engine. It adds no authoring command; that checkpoint's registry remains53. Native file
 presentation, filesystem requests and desktop transports stay unavailable in the browser.
 `web_recovery` uses the real CDXML codec and never acknowledges native Save.
 
@@ -65,7 +65,7 @@ and force DPR1; this is actual egui/WebGPU paint, not a CPU bitmap substitute or
 reference-product screen. No existing user app/profile/drawing was touched.
 
 `package_web.py --profile dev` produces the actual library/JS and local static assets.
-The final executed bundle is
+The executed f64a20e host bundle is
 `fc431ed9dd2bf42bf8dc38bc89a1307c9d6aea2b96bbcca9940cfbcbad472468`.
 WASM:14,402,333B/SHA-256
 `9e8df27cd7854cc7c5ac315a6c20743781da9f6a60dbdbbe0da06882f076412a`.
@@ -132,3 +132,36 @@ separate from launching the desktop app; no new desktop launch is claimed here.
 Wasm-only unused warnings and upstream SDK warnings remain explicit. The full workspace
 aggregate and main integration are the receiving root's next gate, not inferred from
 these focused component passes. A screenshot is not a newly approved golden.
+
+## Integration with main6dbd4e6
+
+Main's delivered mixed skeletal movement and molecular masses are retained; only STATUS
+needed a textual merge resolution. The browser adds no registry entry. Main's
+`analysis.properties` is record54, while `analysis.formula` retains its earlier response.
+The old actual browser bundle fails the new mass-query assertion, recorded separately
+in `flow-mass-red`; rebuilding the same shared UI against current main passes it.
+
+`flow-main-unload` repeats all nine actual workflow stages, including both viewports,
+offline server rejection, Fit/Actual recovery, pointer/history, real quota, competing
+tabs and corrupt/external replacement. The Analysis menu now paints molecular weight
+30.070 and exact mass30.046950Da. The real query returns30.07 and30.04695019338.
+The unchanged436B source independently gives RDKit30.07 and30.046950192; the prior
+declared1e-7Da edition tolerance is retained. The source geometry/formula checks stay exact.
+An actual pointer activation in the second tab enables Chrome's real beforeunload
+dialog. Canceling that dialog retains its unsaved document before the test undoes and
+closes the owned tab. This supplements host-state assertions with an actual unload flow.
+
+Combined dev bundle:
+`98a25eef73fbae05cabc5d3dcb258c7c74d70198d4b8848da84559857e862f8f`.
+WASM14,656,923B/SHA-256
+`b137b5e96a8087530b14c42c408ec48afc40af5cac5e7e0ff5a430a5dd26dbe3`.
+Runtime/font/source-patch notices865,546B/SHA-256
+`d45f8793f46e96e1c771789887110e7f245639ea3590e797676ad84a859e8c96`.
+The same strict audit now passes157/168/223/78 packages for macOS/Windows/Linux/wasm,
+plus7 existing assets; the two additional runtime packages are main's already-reviewed
+MIT elements_rs/strum. The packager retains their actual archive notices too.
+
+The combined package/flow/source receipts are `package-main-6db.log`,
+`flow-main-unload/report.json` and `source-main-6db.json` in the same ignored evidence
+directory. The final image in docs/media is this combined actual Analysis window.
+Full combined local CI is the next gate; no complete aggregate is inferred yet.

@@ -125,7 +125,7 @@ fn stdio_smiles_record_query_is_bounded_exact_private_and_not_cached()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 53);
+    assert_eq!(tools.len(), 54);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "smiles.record.inspect")
@@ -367,7 +367,7 @@ fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 53);
+    assert_eq!(tools.len(), 54);
     let tool = tools
         .iter()
         .find(|t| t["name"] == "file.export_smiles_fragment")
@@ -424,7 +424,7 @@ fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real(
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 53);
+    assert_eq!(tools.len(), 54);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
@@ -1069,6 +1069,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         names,
         [
             "analysis.formula",
+            "analysis.properties",
             "atom.create_authored_label",
             "atom.set_authored_label",
             "atom.set_label",
@@ -1906,20 +1907,35 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
         stale["result"]["structuredContent"]["error"]["code"],
         "stale_selection"
     );
+    let properties = client.call(
+        8,
+        "tools/call",
+        call(
+            "analysis.properties",
+            json!({"expected_revision":1,"expected_selection_epoch":1}),
+        ),
+    )?;
+    let state = &properties["result"]["structuredContent"];
+    assert_eq!(state["changed"], false);
+    assert_eq!(state["analysis"]["formula"], "CH3");
+    assert_eq!(state["analysis"]["partial_fragments"], true);
+    let mass = &state["analysis"]["masses"];
+    assert!((mass["molecular_weight"].as_f64().ok_or("weight")? - 15.035).abs() < 1e-8);
+    assert!((mass["exact_mass_da"].as_f64().ok_or("mass")? - 15.02347509669).abs() < 1e-8);
     let fixtures = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
     for (id, source, expected) in [
         (
-            8,
+            9,
             "cdx-skeletal/propane.cdx",
             json!({"scope":"document","status":"available","atom_count":3,"fragment_count":1,"partial_fragments":false,"formula":"C3H8"}),
         ),
         (
-            10,
+            11,
             "cdx-mixed-skeleton/literal_h.cdx",
             json!({"scope":"document","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":false,"formula":"CH4O"}),
         ),
         (
-            12,
+            13,
             "cdx-mixed-skeleton/amino_alcohol.cdx",
             json!({"scope":"document","status":"available","atom_count":5,"fragment_count":1,"partial_fragments":false,"formula":"C3H9NO","defaulted_hydrogen_atoms":3}),
         ),
@@ -1950,6 +1966,47 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
             response["result"]["structuredContent"]["file"]["dirty"],
             false
         );
+    }
+    let mut request_id = 15..;
+    let mut run = |name, args| -> Result<Value, Box<dyn std::error::Error>> {
+        let result = client.call(
+            request_id.next().ok_or("request ID")?,
+            "tools/call",
+            call(name, args),
+        )?;
+        Ok(result["result"]["structuredContent"].clone())
+    };
+    let source = fixtures.join("cdx-mixed-skeleton/ethanol.cdx");
+    let revision = run("document.open_cdx", json!({"path":source}))?["revision"].clone();
+    for (ids, expected) in [
+        (
+            &[3][..],
+            json!({"scope":"selection","status":"available","atom_count":1,"fragment_count":1,"partial_fragments":true,"formula":"HO"}),
+        ),
+        (
+            &[2, 3],
+            json!({"scope":"selection","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":true,"formula":"CH3O","defaulted_hydrogen_atoms":1}),
+        ),
+    ] {
+        let selected = run(
+            "ui.selection",
+            json!({"action":"set","expected_revision":revision,"page_id":1,"atom_ids":ids}),
+        )?;
+        let epoch = selected["ui_selection"]["epoch"]
+            .as_u64()
+            .ok_or("selection epoch")?;
+        let report = run(
+            "analysis.formula",
+            json!({"expected_revision":revision,"expected_selection_epoch":epoch}),
+        )?;
+        assert_eq!(report["analysis"], expected);
+        assert_eq!(report["undo_depth"], 0);
+        assert_eq!(report["file"]["dirty"], false);
+        let stale = run(
+            "analysis.formula",
+            json!({"expected_revision":revision,"expected_selection_epoch":epoch-1}),
+        )?;
+        assert_eq!(stale["error"]["code"], "stale_selection");
     }
     client.finish()
 }

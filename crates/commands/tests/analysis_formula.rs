@@ -260,7 +260,7 @@ fn skeletal_cdx_resolves_missing_carbon_hydrogens_and_preserves_source_presence(
 }
 
 #[test]
-fn mixed_skeletal_drawings_resolve_cdx_carbon_defaults_without_authoring() -> Test {
+fn mixed_skeletal_drawings_resolve_cdx_carbon_defaults_without_changing_the_source() -> Test {
     let literal =
         include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/literal_h.cdx").as_slice();
     let methanol =
@@ -283,24 +283,60 @@ fn mixed_skeletal_drawings_resolve_cdx_carbon_defaults_without_authoring() -> Te
         assert!(stored.has_cdx_skeletal_label_preview() && !stored.is_fully_mapped());
         let mut e = Engine::from_document(stored.clone());
         assert_eq!(read(&mut e)?, answer);
-        assert!(!e.selection_available());
-        let error = e
+        assert_eq!(e.stored_document()?.export_cdx()?, bytes);
+        stored
+            .model_mut()
+            .set_page_size(bondline_model::PageId::new(1).ok_or("page")?, PageSize::A4)?;
+        let mut detached = Engine::from_document(stored);
+        assert!(!detached.selection_available());
+        let refused = detached
             .dispatch(
                 "ui.selection",
                 json!({"action":"set","expected_revision":0,"page_id":1,"atom_ids":[1]}),
             )
             .err()
-            .ok_or("unqualified atom selection")?;
-        assert_eq!(error.info().code, "unsupported_content");
-        assert_eq!(read(&mut e)?, answer);
-        assert_eq!(e.stored_document()?.export_cdx()?, bytes);
-        stored
-            .model_mut()
-            .set_page_size(bondline_model::PageId::new(1).ok_or("page")?, PageSize::A4)?;
+            .ok_or("detached selection accepted")?;
+        assert_eq!(refused.info().code, "unsupported_content");
         assert_eq!(
-            read(&mut Engine::from_document(stored))?,
+            read(&mut detached)?,
             json!({"scope":"document","status":"unsupported_source"})
         );
     }
+    Ok(())
+}
+
+#[test]
+fn ethanol_selection_uses_the_whole_c_c_o_chain_for_attached_hydrogens() -> Test {
+    let bytes = include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/ethanol.cdx");
+    let stored = StoredDocument::from_cdx(Arc::from(bytes.as_slice()), PageSize::A4)?;
+    let mut engine = Engine::from_document(stored);
+    for (ids, formula, defaults) in [
+        (&[3][..], "HO", 0),
+        (&[2], "CH2", 1),
+        (&[1], "CH3", 1),
+        (&[2, 3], "CH3O", 1),
+        (&[1, 3], "CH4O", 1),
+        (&[1, 2, 3], "C2H6O", 2),
+    ] {
+        let old_epoch = engine.selection().epoch;
+        engine.dispatch(
+            "ui.selection",
+            json!({"action":"set","expected_revision":0,"page_id":1,"atom_ids":ids}),
+        )?;
+        assert!(matches!(
+            engine.dispatch(
+                "analysis.formula",
+                json!({"expected_revision":0,"expected_selection_epoch":old_epoch})
+            ),
+            Err(bondline_commands::Error::StaleSelection)
+        ));
+        let mut expected = json!({"scope":"selection","status":"available","atom_count":ids.len(),
+            "fragment_count":1,"partial_fragments":ids.len()<3,"formula":formula});
+        if defaults > 0 {
+            expected["defaulted_hydrogen_atoms"] = json!(defaults);
+        }
+        assert_eq!(read(&mut engine)?, expected);
+    }
+    assert_eq!(engine.stored_document()?.export_cdx()?, bytes);
     Ok(())
 }

@@ -588,24 +588,38 @@ ignored, all three additional macOS AccessKit tests, and every local audit.
 The local gate and native verification jobs have finished.
 [Acceptance and independent oracle](docs/verification-analysis-window.md).
 
+PR 27 landed on main at `f64a20e`.
+
+### Moving printed and hidden atoms together
+
+The native editor, CLI and initialized MCP can move selected atoms on four
+mixed skeletal CDX inputs. The fragment supplies hydrogen counts for selected
+atoms. RDKit checked the formula before and after movement and Unicode
+Save/reopen. [Movement evidence](docs/verification-cdx-mixed-skeletal-movement.md).
+
+[PR 28](https://github.com/thematheusmello/bondline/pull/28) passed the full local
+`cargo xtask ci` at `2bbf28b` after integrating PR 27. The workspace recorded
+2,395 passed, zero failed and one ignored. All three additional macOS AccessKit
+tests, formatting, Clippy, layer, asset and license audits and the pinned corpus
+passed. The complete log SHA-256 is
+`e6b961822d311d5581944d3fb002e9fbf3403dfdcded32bbc6602baab1c98e3b`.
+
 ### Next executable work
 
-1. Integrate molecular weight and monoisotopic mass with independent reference
-   data, explicit missing values and the existing whole-drawing and selection
-   controls. Isotope distributions, elemental percentages and live analysis
-   captions remain open.
-2. `../bondline-cdx-mixed-skeletal-movement` is adding source-preserving
-   movement to the printed-label drawings. Verify position and dependent
-   bounding-box bytes together, then undo, redo and reopen.
+1. Extend Analysis beyond the now-delivered molecular weight and monoisotopic mass:
+   isotope distributions, elemental percentages, configurable precision and live
+   analysis captions remain open.
+2. Extend editing of printed label bodies on mixed CDX drawings with an exact
+   byte comparison, whole-page proof and a native Save/reopen check.
 3. The initial web host in `../bondline-web-workspace` now passes actual egui/WebGPU
    pointer editing, keyboard history, Analysis and offline recovery at1160×800/660,
    with all local server requests rejected. It protects quota/conflicting/corrupt
    recovery data, retains runtime notices and gates the actual wasm dependency graph.
-   Transport33fa36f and SDK463b0c6 are pushed; the complete host is on the same focused
-   branch based on mainf64a20e. [Receiving](docs/verification-web-workspace.md) records
-   exact artifact hashes, local checks and limits. Native file replacement, browser
-   accessibility, other engines/hardware and optimized release packaging are next.
-   The codec test remains a separate headless Wasm entry point. Interactive
+   Transport33fa36f, SDK463b0c6 and host944ed26 are pushed in draft PR32.
+   Its combined main integration is on the same branch. [Receiving](docs/verification-web-workspace.md)
+   records exact artifact hashes, local checks and limits. Native file replacement,
+   browser accessibility, other engines/hardware and optimized release packaging are
+   next. The codec test remains a separate headless Wasm entry point. Interactive
    Windows/Linux validation and further work across M0–M5 remain outstanding.
    [Roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 
@@ -2465,3 +2479,23 @@ ignored proposals/source reviews only; Root integrated and executed checks.
 3. Preserve initial native File-menu first-click uncertainty for a bounded own-app
    investigation; Cmd+O is verified. Fused/spiro/Shift/density and other-platform native
    acceptance remain required. GitHub Actions stays disabled; no unrequested publication.
+
+### Analysis molecular weight and exact mass
+
+[PR 29](https://github.com/thematheusmello/bondline/pull/29) contains chemistry
+`b2ea49b`, shared command `2939458`, native panel `0f909f9` and main/#27 ancestry
+`2e92757`. The Analysis window now shows both mass quantities for complete
+structures and uncapped selected-atom contributions. Tabulated data, convention,
+licensing and unavailable reasons are documented. The 25 chemistry, 10 focused
+command, three CLI, one MCP and four App-frame tests passed. An isolated macOS
+background host verified the values through its own accessibility tree and
+closed. The native licenses and four-target dependency delta passed.
+[Acceptance and replay](docs/verification-analysis-masses.md).
+
+The complete local gate passed on `523e0c4` with main/#28 in its ancestry:
+workspace 2,403 passed, zero failed, one ignored; the separate AccessKit suite
+passed all three tests. Formatting, both Clippy checks, layering, licenses,
+assets and corpus checks passed. Mixed CDX now also supplies a checked CH₃O
+selection with one defaulted carbon. Adjustable decimals, isotope distribution,
+elemental percentages, overrides and live captions remain open. Actions stays
+off and M0–M5 remains active.

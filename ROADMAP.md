@@ -44,9 +44,10 @@ new annotation and prior captions. [Mixed label editing](docs/verification-cdx-m
 Qualified binary skeletal carbon chains open on the declared paper and preserve
 their original CDX through Save/reopen. Marquee now moves selected skeletal atoms
 with Undo, Redo and source-preserving Save. Drawings with hidden carbons and
-explicitly positioned heteroatom labels now support viewing and exact unchanged
-Save/reopen. Moving or editing those labels and additional drawing styles
-remain M1/M2 work. [Printed labels on skeletal paper](docs/verification-cdx-mixed-skeleton.md).
+explicitly positioned heteroatom labels support moving either kind of atom,
+including mixed selections across Fragments. The printed label moves with its atom
+and survives Undo, Redo and exact Save/reopen. Changing the label content and
+accepting additional drawing styles remain M1/M2 work. [Mixed movement](docs/verification-cdx-mixed-skeletal-movement.md). [Printed labels on skeletal paper](docs/verification-cdx-mixed-skeleton.md).
 [Movement verification](docs/verification-cdx-skeletal-movement.md). [Skeletal drawing acceptance](docs/verification-cdx-skeletal.md).
 General chemical edits on mixed pages, interleaved depths, missing font resources, multiline text,
 inherited styles, ambiguous starts and general shaping remain open.
@@ -808,7 +809,7 @@ Resolved composition now formats molecular formulas in strict Hill order.
 Combined element totals and numbered isotope terms both preserve the net charge.
 Twenty independently specified structures were checked with external RDKit.
 Carbon-free formulas use alphabetical element order. The library reports
-unresolved H explicitly. The native Analysis window, CLI and MCP show the formula of a supported drawing or the contribution of selected atoms. Qualified skeletal CDX resolves omitted H on the entire graph and reports how many atoms used the default. Broader source-specific H inference, mass, isotope distributions, elemental percentages and live analysis captions remain open. [Composition evidence](docs/verification-formula-composition.md), [formula conventions](docs/research/hill-formula.md) and [native and wire acceptance](docs/verification-analysis-window.md).
+unresolved H explicitly. The native Analysis window, CLI and MCP show formula, molecular weight and monoisotopic exact mass for a supported drawing or the contribution of selected atoms. Qualified skeletal CDX resolves omitted H on the entire graph and reports how many atoms used the default. Broader source-specific H inference, adjustable displayed decimals, isotope distributions, elemental percentages and live analysis captions remain open. [Mass coverage and receiving tests](docs/verification-analysis-masses.md). [Composition evidence](docs/verification-formula-composition.md), [formula conventions](docs/research/hill-formula.md) and [native and wire acceptance](docs/verification-analysis-window.md).
 
 Valence, aromaticity, stereo/CIP, checking, cleanup, formula/mass, analysis, reactions,
 curved arrows, brackets and chemically formatted captions. Compare against independently

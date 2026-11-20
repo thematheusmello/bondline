@@ -46,7 +46,7 @@ class Page {
         this.socket = socket; this.id = id; this.sequence = 0; this.pending = new Map(); this.events = [];
         socket.addEventListener('message', event => {
             const data = JSON.parse(event.data);
-            if (['Runtime.exceptionThrown','Runtime.consoleAPICalled','Log.entryAdded'].includes(data.method)) this.events.push(data);
+            if (['Runtime.exceptionThrown','Runtime.consoleAPICalled','Log.entryAdded','Page.javascriptDialogOpening'].includes(data.method)) this.events.push(data);
             if (data.id) {
                 const pending = this.pending.get(data.id);
                 if (pending) {
@@ -168,6 +168,12 @@ try {
     report.steps.push('actual pointer drag created C-C with one registry history entry and real CDXML');
     const formula = await page.command('analysis.formula',{expected_revision:drawn.revision,expected_selection_epoch:drawn.ui_selection?.epoch??0});
     assert.equal(formula.analysis.formula,'C2H6'); assert.equal(formula.analysis.status,'available');
+    const properties = await page.command('analysis.properties',{expected_revision:drawn.revision,expected_selection_epoch:drawn.ui_selection?.epoch??0});
+    assert(!properties.error,'the actual browser registry must expose the delivered mass query');
+    assert.equal(properties.analysis.formula,'C2H6');
+    assert(Math.abs(properties.analysis.masses.molecular_weight-30.07)<1e-9);
+    assert(Math.abs(properties.analysis.masses.exact_mass_da-30.04695019338)<1e-9);
+    report.masses = properties.analysis.masses;
     await click(page,290,22); await page.screenshot('analysis-menu.png');
     await click(page,360,128);
     await page.wait(`JSON.parse(bondline.execute('{"command":"document.inspect","params":{}}')).analysis_window_open === true`);
@@ -255,9 +261,24 @@ try {
     assert.equal((await second.command('bond.create',edit)).changed,true);
     assert.equal(await second.evaluate(`localStorage.getItem(${JSON.stringify(key)})`),source);
     assert.equal((await second.evaluate('JSON.parse(bondline.host_status())')).unsaved_in_tab,true);
+    const secondState = await second.command('document.inspect');
+    const secondCanvas = await second.evaluate('JSON.parse(bondline.canvas_geometry())');
+    await click(second,secondCanvas.x+secondCanvas.width/2,secondCanvas.y+secondCanvas.height/2+120);
+    assert.equal(await second.evaluate('navigator.userActivation.hasBeenActive'),true);
+    assert.deepEqual((await second.command('document.inspect')).document,secondState.document);
+    const eventStart = second.events.length;
+    const attemptedReload = second.call('Page.reload');
+    let dialog;
+    for (let i=0;i<100&&!dialog;i++) {
+        dialog = second.events.slice(eventStart).find(event=>event.method==='Page.javascriptDialogOpening');
+        if (!dialog) await delay(50);
+    }
+    assert.equal(dialog?.params.type,'beforeunload','actual activated tab must protect unrecovered edits');
+    await second.call('Page.handleJavaScriptDialog',{accept:false}); await attemptedReload;
+    assert.deepEqual((await second.command('document.inspect')).document,secondState.document);
     await second.command('history.undo');
     await second.call('Target.closeTarget',{targetId:second.id});
-    report.steps.push('second-tab edit cannot overwrite the writer draft');
+    report.steps.push('second-tab edit cannot overwrite the writer draft; Cancel on actual unload dialog retains its unsaved document');
     const corrupt = 'preserve externally replaced invalid XML < & β';
     await page.evaluate(`localStorage.setItem(${JSON.stringify(key)},${JSON.stringify(corrupt)})`);
     assert.equal((await page.command('bond.create',edit)).changed,true);

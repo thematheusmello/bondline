@@ -21,21 +21,34 @@ mod text;
 pub(crate) use caption::{append_caption, text_record as caption_text_record};
 pub(crate) use text::encode_caption_runs;
 
-/// In the certified skeletal layout, every directly owned Node has one position
-/// and direct Fragment/Node encounter order supplies the corresponding live atom IDs.
+/// The two streams use Node opening indices, independent of property order and raw IDs.
 pub(crate) fn skeletal_positions<'a>(
     source: &'a Document<'_>,
-) -> impl Iterator<Item = std::ops::Range<usize>> + 'a {
-    source.records().iter().filter_map(|r| {
-        let RecordKind::Property {
-            tag: POSITION,
-            payload,
-            ..
-        } = r.kind()
-        else {
-            return None;
-        };
-        matches!(object(source, r.parent()), Some((NODE, _))).then(|| payload.clone())
+) -> impl Iterator<Item = (usize, std::ops::Range<usize>)> + 'a {
+    property_ranges(source, POSITION)
+        .filter(|(node, _)| matches!(object(source, Some(*node)), Some((NODE, _))))
+}
+
+pub(crate) fn skeletal_label_bounds<'a>(
+    source: &'a Document<'_>,
+) -> impl Iterator<Item = (usize, std::ops::Range<usize>)> + 'a {
+    property_ranges(source, BOUNDING_BOX).filter_map(|(text, range)| {
+        let node = source.records().get(text)?.parent()?;
+        (matches!(object(source, Some(text)), Some((TEXT_OBJECT, _)))
+            && matches!(object(source, Some(node)), Some((NODE, _))))
+        .then_some((node, range))
+    })
+}
+
+fn property_ranges<'a>(
+    source: &'a Document<'_>,
+    field: u16,
+) -> impl Iterator<Item = (usize, std::ops::Range<usize>)> + 'a {
+    source.records().iter().filter_map(move |r| match r.kind() {
+        RecordKind::Property { tag, payload, .. } if *tag == field => {
+            Some((r.parent()?, payload.clone()))
+        }
+        _ => None,
     })
 }
 

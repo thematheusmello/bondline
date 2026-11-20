@@ -178,21 +178,22 @@ remain unimplemented. These are documentation photographs, not new approved gold
 ## Shared browser workspace, 2026-11-20
 
 [browser-workspace.png](browser-workspace.png) is an unedited owned Chrome CDP
-PNG,1160×800/DPR1,59,718B/SHA-256
-`4708256b5f0467ff96c933b54c35cf668aa2c6d09e9eb052024146613be125fd`.
-It captures the real egui/WebGPU workspace after a real pointer-drawn120pt C–C
-and View→Show Analysis Window. RDKit independently reads the source asCC/C2H6.
+PNG,1160×800/DPR1,63,973B/SHA-256
+`150990820fa47e19dc88f093388c3af5dfeb5eab3d55f2eca70f25fb11f68780`.
+It captures the real egui/WebGPU workspace after a pointer-drawn120pt C–C
+and View→Show Analysis Window. The panel displays C2H6, molecular weight30.070
+and monoisotopic mass30.046950Da. RDKit independently reads the same source.
 The original Bondline UI/icons and Apache Roboto retain their normal notices.
 No reference screen, generated mockup, composite, other user window or credential
 is included. This documentation image is not a human-approved render golden.
 
 Chrome157.0.8103.79/macOS arm64 uses a fresh owned headless profile, explicit
-headless WebGPU enablement and forcedDPR1. The build starts on mainf64a20e with
-the shared host in feat/web-workspace after transport33fa36f/SDK463b0c6. Exact
-artifact identity:dev WASM14,402,333B/SHA-256
-`9e8df27cd7854cc7c5ac315a6c20743781da9f6a60dbdbbe0da06882f076412a`,
-static bundle`fc431ed9dd2bf42bf8dc38bc89a1307c9d6aea2b96bbcca9940cfbcbad472468`.
+headless WebGPU enablement and forcedDPR1. The build integrates main6dbd4e6
+into feat/web-workspace after transport33fa36f/SDK463b0c6/host944ed26.
+Exact artifact identity:dev WASM14,656,923B/SHA-256
+`b137b5e96a8087530b14c42c408ec48afc40af5cac5e7e0ff5a430a5dd26dbe3`,
+static bundle`98a25eef73fbae05cabc5d3dcb258c7c74d70198d4b8848da84559857e862f8f`.
 [Receiving](../verification-web-workspace.md) records startup,1160×660, actual
-offline input/history, conflict/quota and independent source evidence separately
-from unverified browser/file/platform workflows. Native file controls are
-unavailable. All owned Chrome profiles, processes and servers have exited.
+offline input/history, conflict/quota/unload and independent source evidence
+separately from unverified browser/file/platform workflows. Native file controls
+are unavailable. All owned Chrome profiles, processes and servers have exited.

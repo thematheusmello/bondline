@@ -1451,6 +1451,10 @@ fn analysis_window_menu_shows_current_formula_selected_atoms_and_empty_state() -
     let drawing = f.warm();
     assert!(painted(&drawing, "Molecular formula"));
     assert!(painted(&drawing, "C2H6"));
+    assert!(painted(&drawing, "Molecular weight"));
+    assert!(painted(&drawing, "30.070"));
+    assert!(painted(&drawing, "Exact mass"));
+    assert!(painted(&drawing, "30.046950 Da"));
     f.command(
         "ui.selection",
         json!({"action":"set","expected_revision":1,"page_id":1,"atom_ids":[2]}),
@@ -1458,6 +1462,11 @@ fn analysis_window_menu_shows_current_formula_selected_atoms_and_empty_state() -
     let selected = f.warm();
     assert!(painted(&selected, "Selected-atom composition"));
     assert!(painted(&selected, "CH3"));
+    assert!(painted(&selected, "Weight contribution"));
+    assert!(painted(&selected, "15.035"));
+    assert!(painted(&selected, "Exact mass contribution"));
+    assert!(painted(&selected, "15.023475 Da"));
+    assert!(!painted(&selected, "30.046950 Da"));
     assert!(!painted(&selected, "C2H6"));
     f.command("history.undo", json!({}))?;
     assert!(painted(&f.warm(), "No atoms in this drawing."));
@@ -1590,5 +1599,62 @@ fn analysis_window_refreshes_on_skeletal_cdx_open_and_suppresses_previous_formul
         assert_eq!(f.state()?, state);
         last = display;
     }
+    f.command(
+        "document.open_cdx",
+        json!({"path":sources.join("cdx-mixed-skeleton/ethanol.cdx")}),
+    )?;
+    let revision = f.state()?["revision"].clone();
+    for (ids, formula, count) in [(&[3][..], "HO", 0), (&[2, 3], "CH3O", 1)] {
+        f.command(
+            "ui.selection",
+            json!({"action":"set","expected_revision":revision,"page_id":1,"atom_ids":ids}),
+        )?;
+        let panel = f.warm();
+        let shows = |text: &str| {
+            panel.shapes.iter().any(
+                |shape| matches!(&shape.shape, egui::Shape::Text(t) if t.galley.text() == text),
+            )
+        };
+        assert!(shows("Selected-atom composition") && shows(formula));
+        assert_eq!(
+            shows("The CDX valence default supplies hydrogen counts for 1 atom."),
+            count == 1
+        );
+        assert!(!shows("C2H6O"));
+    }
+    Ok(())
+}
+
+#[test]
+fn analysis_preserves_the_formula_when_an_element_has_no_natural_mass() -> TestResult {
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    f.command(
+        "bond.create",
+        json!({"page_id":1,"begin_x_pt":72,"begin_y_pt":72,"end_x_pt":120,"end_y_pt":72}),
+    )?;
+    f.command("atom.set_label", json!({"expected_revision":1,"page_id":1,"fragment_id":1,"atom_id":2,"element":43,"explicit_hydrogens":0}))?;
+    let seen = |frame: &egui::FullOutput, label: &str| {
+        frame
+            .shapes
+            .iter()
+            .any(|s| matches!(&s.shape, egui::Shape::Text(t) if t.galley.text() == label))
+    };
+    let unknown = f.warm();
+    assert!(seen(&unknown, "CH3Tc"));
+    assert!(seen(
+        &unknown,
+        "Unavailable (no standard atomic weight for element 43)"
+    ));
+    assert!(seen(
+        &unknown,
+        "Unavailable (no natural predominant isotope for element 43)"
+    ));
+    assert!(!seen(&unknown, "30.046950 Da"));
+    f.command("history.undo", json!({}))?;
+    let restored = f.warm();
+    assert!(seen(&restored, "30.046950 Da"));
+    assert!(!seen(&restored, "CH3Tc"));
     Ok(())
 }
