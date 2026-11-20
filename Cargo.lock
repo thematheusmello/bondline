@@ -4133,6 +4133,7 @@ version = "0.1.0"
 dependencies = [
  "bondline-cdx",
  "bondline-cdxml",
+ "bondline-commands",
  "bondline-io",
  "bondline-model",
  "serde",
