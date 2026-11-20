@@ -68,5 +68,32 @@ pub(super) fn verify() -> Result {
     {
         return Err("mandatory carbon label lost its data-only source boundary".into());
     }
+    for (binary, xml) in [
+        (
+            include_bytes!("../../tests/fixtures/cdx-mixed-skeleton/methanol.cdx").as_slice(),
+            include_bytes!("../../tests/fixtures/mixed-labels/methanol.cdxml").as_slice(),
+        ),
+        (
+            include_bytes!("../../tests/fixtures/cdx-mixed-skeleton/amino_alcohol.cdx").as_slice(),
+            include_bytes!("../../tests/fixtures/mixed-labels/amino_alcohol.cdxml").as_slice(),
+        ),
+    ] {
+        let stored = StoredDocument::from_cdx(Arc::from(binary), PageSize::A4)?;
+        let reference = StoredDocument::from_cdxml(Arc::from(xml), PageSize::A4)?;
+        let model = stored.model();
+        let atoms = model.pages()[0].fragments()[0].atoms();
+        if !stored.has_cdx_skeletal_label_preview()
+            || stored.has_cdx_skeletal_preview()
+            || stored.has_cdx_label_edit_profile()
+            || !atoms
+                .iter()
+                .any(|atom| atom.explicit_hydrogens.is_none() && atom.authored_label.is_none())
+            || !atoms.iter().any(|atom| atom.authored_label.is_some())
+            || cpu_scene(scene(&stored)?.scene())? != cpu_scene(scene(&reference)?.scene())?
+            || stored.export_cdx()? != binary
+        {
+            return Err("printed skeletal CDX lost its source, chemistry or paper".into());
+        }
+    }
     Ok(())
 }

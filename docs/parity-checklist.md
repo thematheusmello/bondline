@@ -42,8 +42,11 @@ font resources, general typography and broader platforms remain open.
 preserves the physical Poster dimensions. Save As and reopen preserve explicit
 and omitted hydrogen fields, the dormant node flag, and every source byte.
 CPU and Metal agree at 100% and 200%. **Verified** for skeletal atom movement
-through Marquee, drag, keyboard nudge, Undo, Redo and exact Save/reopen. Mixed
-hidden-carbon/printed-label depiction and other chemistry edits remain missing.
+through Marquee, drag, keyboard nudge, Undo, Redo and exact Save/reopen on the
+all-carbon profile. **Verified on macOS** for viewing hidden carbon vertices
+and printed heteroatoms together. Four original mixed CDX drawings preserve
+source bytes on Save As and reopen. Movement and label editing on mixed skeletal
+CDX remain open. [Mixed drawing evidence](verification-cdx-mixed-skeleton.md).
 [Movement evidence](verification-cdx-skeletal-movement.md). Windows and
 Linux native execution are unverified. [Acceptance](verification-cdx-skeletal.md).
 

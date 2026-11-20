@@ -531,20 +531,62 @@ passed 2,364 workspace tests, one ignored, all three AccessKit tests and
 all local checks. Main matched the tested tree and the feature ref was retired.
 [Formula examples and ordering conventions](docs/research/hill-formula.md).
 
+[PR 24](https://github.com/thematheusmello/bondline/pull/24) merged the
+all-carbon movement workflow into main at `d68390c`. The merged tree matched
+the tested feature with its final verification notes.
+
+### Printed heteroatoms on skeletal CDX paper
+
+[PR 25](https://github.com/thematheusmello/bondline/pull/25) adds native viewing
+of methanol, ethanol and 3-aminopropan-1-ol drawn with hidden carbon vertices.
+The four binary inputs include two encodings of methanol. Open, Unicode Save As
+and reopen preserved the original bytes. Actual macOS, CLI and initialized MCP
+returned matching CPU and Metal captures at 100% and 200%. FontTools verified
+the printed label bounds and bond clearance, and RDKit checked each formula
+and connectivity. The offline Chromium codec check and 10,000 AddressSanitizer
+iterations on the integrated parser passed. The full local gate at `a0269d2`
+passed 2,373 workspace tests with one ignored, all three macOS AccessKit tests
+and all required validation steps. [Tests and scope](docs/verification-cdx-mixed-skeleton.md).
+
+### Analysis window and literal molecular formulas
+
+[PR 26](https://github.com/thematheusmello/bondline/pull/26) adds the native
+View menu window and shared queries for a supported complete drawing or its
+selected atoms. The first 51 published command records retained their order
+and metadata across the CLI and initialized MCP. The two new commands are
+`analysis.formula` and `ui.analysis`.
+
+The frozen macOS run opened seven original skeletal CDX files and read the
+actual window’s AX values. It showed `C3H8` for fully declared propane,
+`CH4O` for fully declared methanol, the selected terminal contribution
+`CH3`, and the first unresolved atom for omitted counts. The read-only
+mixed profile retained its selection restriction. PID 15528 exited through
+the registered Close command. [Scope and receiving evidence](docs/verification-analysis-window.md).
+
+The combined full local gate on `3e4cd08` passed 2,390 workspace tests
+with zero failures and one ignored. All three additional macOS AccessKit
+tests, formatting, strict Clippy, layers, asset and runtime license checks,
+and the eight-file pinned corpus passed. The log SHA-256 was
+`d1cc50dc360a47b854bacab39979ff680043066ad25e3016f3b0c06d2431238f`.
+PR 25 landed on main at `40455fd`. Its ancestry merge into PR 26 at
+`6508ff2` changed two documentation files relative to that tested tree.
+PR 26 awaits its main merge. The local gate and native jobs are terminal.
+GitHub Actions remains disabled.
+
 ### Next executable work
 
-1. `../bondline-cdx-mixed-skeleton` started at `98f3edd` to display skeletal
-   carbon and printed heteroatoms together. Check actual methanol, ethanol and
-   amino-alcohol files, visible glyphs, bond clearance, source field presence
-   and exact Save/reopen. Keep source-specific authoring checks independent.
-2. `../bondline-analysis-window` started at `e1d6adb` to show the computed
-   formula through View, CLI and MCP. Verify whole-drawing and selected-atom
-   scopes, incomplete sources, unknown H and preservation of document history.
-3. `../bondline-web-workspace` started at `6fd6633` to run the actual egui
-   editor in a browser. Check offline startup, real bond creation and history,
-   safe recovery and the browser dependency licenses. The core codec's browser
-   tests cover a smaller workflow. Interactive Windows/Linux validation and
-   further work across M0–M5 remain outstanding.
+1. Land the tested Analysis branch and verify the main tree. Continue
+   source-qualified default H for eligible CDX structures independently of
+   the frozen literal result. Preserve the input H property’s absence across
+   Save/reopen and keep unsupported cases explicit. Mass, isotope distribution,
+   elemental percentages and live analysis captions remain open.
+2. `../bondline-cdx-mixed-skeletal-movement` is adding source-preserving
+   movement to the printed-label drawings. Verify position and dependent
+   bounding-box bytes together, then undo, redo and reopen.
+3. The web host in `../bondline-web-workspace` is exercising actual egui/WebGPU
+   startup, offline editing and history, and recovery across browser tabs.
+   The codec test exercises a separate headless Wasm entry point. Interactive
+   Windows/Linux validation and further work across M0–M5 remain outstanding.
    [Roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
