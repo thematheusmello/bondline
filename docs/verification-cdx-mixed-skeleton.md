@@ -39,3 +39,7 @@ zero (1,725,062 bytes, SHA-256
 The integrated AddressSanitizer run preserved all 257 input hashes, completed
 10,000 iterations with seed 20261124 and produced zero crash artifacts. The
 primary checkout retains these receipts under `target/mixed-skeleton-integration`.
+
+The final `cargo xtask ci` run at `a0269d2` passed 2,373 workspace tests
+with one ignored, all three macOS AccessKit tests, and the formatting, Clippy,
+layer, license, asset and corpus checks.
