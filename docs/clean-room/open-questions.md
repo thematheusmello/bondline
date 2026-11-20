@@ -29,7 +29,11 @@ published DTD lists a different order. General native and foreign CDXML
 DTD interoperability, adding missing CDX font resources, interleaved paint
 depths and placing new objects behind existing ink remain open. Qualified
 chemical CDX drawings support adding a new frontmost caption and editing its
-runs. [Caption creation](../verification-cdx-chemical-caption-creation.md).
+runs. Existing supported labels on mixed pages can now change their literal
+element and H. Bondline gives painted caption cells priority over an Alt-click
+on the atom behind them. The precise corresponding reference gesture remains
+undocumented. [Mixed label editing](../verification-cdx-mixed-label-edits.md),
+[caption creation](../verification-cdx-chemical-caption-creation.md).
 [Editing evidence](../verification-cdx-mixed-caption-edits.md). [Mixed pages](../verification-cdx-mixed-caption.md). An empty qualified Poster now
 accepts its first caption. [Empty-page evidence](../verification-cdx-empty-caption.md). [CDXML sources](../research/native-caption-creation.md),
 [CDX scope](../research/cdx-caption-creation.md).

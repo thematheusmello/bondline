@@ -193,7 +193,9 @@ source/model proof. It resolves the direct caption against its live ID and
 re-imports the whole candidate. Appending a caption records its re-imported
 profile beside the exact current bytes and model in the new history entry.
 A chemical-only page becomes mixed. Undo restores its earlier profile, bytes
-and atom-label edit capability. [Creation and history](research/cdx-chemical-caption-creation.md). [Mixed-page contract](research/cdx-mixed-caption.md),
+and page classification. Atom-label edits on a qualified chemical-only or mixed
+page resolve the current Node and its own Text, then check the same page
+classification and complete edited model after re-import. [Mixed atom-label editing](research/cdx-mixed-label-edits.md), [creation and history](research/cdx-chemical-caption-creation.md). [Mixed-page contract](research/cdx-mixed-caption.md),
 [mixed caption edits](research/cdx-mixed-caption-edits.md).
 
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and

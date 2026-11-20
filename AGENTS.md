@@ -12,8 +12,13 @@ paper, use the [append contract](docs/research/cdx-chemical-caption-creation.md)
 and [receiving tests](docs/verification-cdx-chemical-caption-creation.md).
 Store the current re-imported CDX profile in each history entry. A first
 caption on chemical ink uses depth one and changes AtomLabels to Mixed.
-Further captions use the next signed depth. Chemical editing on mixed pages
-and cross-format conversion still require their own source proofs.
+Further captions use the next signed depth. The [mixed atom-label writer](docs/research/cdx-mixed-label-edits.md)
+must use the current certified source, the exact Node and its direct Text,
+and re-import the full current profile. Keep the closed four-field edit,
+whole-page proof, fragment identity and cross-format guards. On mixed pages,
+exact Alt-primary over an exposed atom also works with Text selected.
+A frontmost painted caption cell blocks that chemical hit.
+[Workflow and verification](docs/verification-cdx-mixed-label-edits.md).
 
 An empty CDX Poster page follows the [empty-page contract](docs/research/cdx-empty-caption.md)
 and [verification](docs/verification-cdx-empty-caption.md). Require the closed Page, explicit

@@ -128,6 +128,9 @@ exact; it shares the old AtomSetLabel parameter shape without broadening that co
 Only a complete qualified no-p BoundingBox/Roboto Regular/face0 source or native model
 may use this operation on an existing authored label. The body, numeric element/H and
 box change together while Node/bond positions, IDs, styles and all unrelated source stay.
+On a qualified mixed CDX page, the command resolves the selected Node and its
+own child Text from the current bytes. Direct Page captions can reuse that
+raw ID and keep every byte of their own records. [Mixed label verification](verification-cdx-mixed-label-edits.md).
 The full final page and Save representation must pass before one history entry. No-op
 retains byte lexemes, Arc sharing, redo and weak contexts. This performs no valence
 inference or general text interpretation. Global `is_fully_mapped` remainsfalse; old
