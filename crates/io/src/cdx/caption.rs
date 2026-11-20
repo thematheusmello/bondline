@@ -1,8 +1,8 @@
 //! Whole-source proof and stable source identity for explicitly positioned CDX captions.
 use super::{
-    COLOR_TABLE, DOCUMENT, DRAWING_SPACE, FONT_TABLE, HEIGHT, MappingError, PAGE, POSITION, Scope,
-    TEXT, TEXT_OBJECT, WIDTH, Z_ORDER, coordinate, has_preview_header, payload, poster_size,
-    property_bytes, read_position,
+    COLOR_TABLE, DOCUMENT, DRAWING_SPACE, FONT_TABLE, HEIGHT, MappingError, PAGE, POSITION,
+    Preview, Scope, TEXT, TEXT_OBJECT, WIDTH, Z_ORDER, coordinate, has_preview_header, payload,
+    poster_size, property_bytes, read_position,
     text::{TextRole, decode_runs},
     verify_preview_page,
 };
@@ -147,8 +147,14 @@ fn read_identity(source: &Document<'_>, fields: &Fields) -> Option<TextId> {
 pub(crate) fn text_record<'record>(
     source: &'record Document<'_>,
     text: TextId,
+    profile: Preview,
 ) -> Option<&'record Record> {
-    let layout = layout(source, Scope::All)?;
+    let scope = match profile {
+        Preview::Caption => Scope::All,
+        Preview::Mixed => Scope::Captions,
+        _ => return None,
+    };
+    let layout = layout(source, scope)?;
     let fields = layout.captions.get(&text)?;
     source.records().get(*fields.get(&TEXT)?)
 }
