@@ -813,6 +813,8 @@ fn complete_foreign_and_collection_sources_never_gain_geometry_authority_from_se
             let first = selection_position(&f, 1)?;
             selection_click_at(&mut f, first, false)?;
             selection_expect(&f, &[1])?;
+            selection_marquee(&mut f, first, [first[0] + 20.0, first[1] + 15.0], false)?;
+            selection_authored_unchanged(&f, &before)?;
             selection_shortcut(&mut f, Key::A, false);
             selection_expect(&f, &[1, 2])?;
             f.frame(selection_key(Key::ArrowRight, Modifiers::NONE));

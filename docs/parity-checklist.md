@@ -724,7 +724,7 @@ establish chemical preview, data-edit UI or other platforms.
 | DP-025 | Bracket Properties dialog | 324-328 | missing | Polymer types, connectivity and labels. |
 | DP-026 | Define Average Molecular Weight (bracket context) | 113 | missing | Explicit nonnegative override and derived calculations. |
 | DP-027 | R-Logic Query dialog | 338-339 | missing | - |
-| DP-028 | Analysis window | 221-224 | wired | Formula verified for the bounded complete-source profiles. Mass, isotope distribution, percentages and Paste remain missing. [Coverage](research/analysis-window.md). |
+| DP-028 | Analysis window | 221-224 | wired | Formula verified for complete supported drawings, including V2000/V3000 omitted valence and selected atoms. Mass, isotope distribution, percentages and Paste remain missing. [MOL acceptance](verification-mol-analysis.md). [Coverage](research/analysis-window.md). |
 | DP-029 | Chemical Properties window/report | 228-235 | missing | Predictions must have documented method/limits and independent evidence. |
 | DP-030 | Stoichiometry grid | 200-202 | missing | Reactant/product role, equivalents and typed values. |
 | DP-031 | Add-in Manager | 380-382 | missing | Developer/optional integration interface; offline core independent. |

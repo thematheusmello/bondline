@@ -2444,3 +2444,10 @@ A complete V2000 or V3000 drawing supports transient whole or partial atom
 selection. The public guide describes selecting part or all of a structure in
 the Analysis window. Bondline retains original coordinates and refuses direct
 MOL translation while supporting inspection. [Guide, pp. 221–224](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf) · [Acceptance contract](research/mol-analysis.md).
+
+The modern BIOVIA default-valence table and its charge and radical rules
+govern read-only calculation for missing MOL valence on the covered
+nonmetals. The versioned CTfile specification governs the authored V2000
+and V3000 fields. RDKit independently reads the unchanged files and computes
+isotope-separated formulas. Bondline retains Hill order for carbon-free
+borane. [BIOVIA representation guide](https://manualzz.com/doc/44003874/biovia-chemical-representation) · [CTfile specification](https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf) · [RDKit valence reference](https://www.rdkit.org/docs/RDKit_Book.html#valence-calculation-and-allowed-valences) · [Evaluation and exclusions](research/mol-analysis.md).
