@@ -1,0 +1,5 @@
+# Mixed skeletal movement controls
+
+These original fixtures and Python generator are MIT OR Apache-2.0. The four outputs specify motion of a hidden carbon, a printed OH, two printed ends and a hidden middle carbon, and two atoms in different fragments. The last input deliberately reuses raw Node, Text and Bond IDs. Its Text closes before its owning Node's position record and its changed point and box have extended length headers.
+
+The Python reader resolves each field by its exact record owner. It adds one rational, ties-to-even signed 16.16 displacement to the selected coordinates. An independent XML transformation applies the same motion to an original CDXML control with decimal arithmetic and the opposite XML coordinate order. No Bondline writer generates expected bytes or expected XML. Run `python3 -B crates/io/tests/fixtures/cdx-mixed-skeletal-move/generate.py` to check all nine files. [Original chemical drawings](../cdx-mixed-skeleton/SOURCES.md) · [CDX coordinate representations](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm)
