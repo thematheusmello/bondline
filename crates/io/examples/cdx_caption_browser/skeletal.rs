@@ -4,7 +4,7 @@ use bondline_io::{
     StoredDocument,
     display::{DisplayError, drawing_page_scene_with_view},
 };
-use bondline_model::{PageId, PageSize, Point2};
+use bondline_model::{AtomId, Element, FragmentId, PageId, PageSize, Point2};
 use bondline_render::{Cancellation, PageView, cpu_scene};
 use std::sync::Arc;
 
@@ -84,7 +84,10 @@ pub(super) fn verify() -> Result {
         let atoms = model.pages()[0].fragments()[0].atoms();
         if !stored.has_cdx_skeletal_label_preview()
             || stored.has_cdx_skeletal_preview()
-            || stored.has_cdx_label_edit_profile()
+            || !stored.has_cdx_label_edit_profile()
+            || atoms.iter().any(|atom| {
+                stored.can_edit_cdx_atom_label(atom.id) != atom.authored_label.is_some()
+            })
             || !atoms
                 .iter()
                 .any(|atom| atom.explicit_hydrogens.is_none() && atom.authored_label.is_none())
@@ -94,6 +97,27 @@ pub(super) fn verify() -> Result {
         {
             return Err("printed skeletal CDX lost its source, chemistry or paper".into());
         }
+    }
+    let source = include_bytes!("../../tests/fixtures/cdx-mixed-skeletal-move/twins.cdx");
+    let expected = include_bytes!("../../tests/fixtures/cdx-skeletal-label-edit/twins.cdx");
+    let original = StoredDocument::from_cdx(Arc::from(source.as_slice()), PageSize::A4)?;
+    let edited = original.with_cdx_atom_label(
+        id,
+        FragmentId::new(2).ok_or("fragment")?,
+        AtomId::new(4).ok_or("atom")?,
+        Element::new(7).ok_or("nitrogen")?,
+        2,
+    )?;
+    let saved = edited.export_cdx()?;
+    let reopened = StoredDocument::from_cdx(Arc::from(saved), PageSize::A4)?;
+    let after = cpu_scene(scene(&edited)?.scene())?;
+    if saved != expected
+        || original.export_cdx()? != source
+        || reopened.model() != edited.model()
+        || after != cpu_scene(scene(&reopened)?.scene())?
+        || after == cpu_scene(scene(&original)?.scene())?
+    {
+        return Err("editing a repeated Node ID lost its fragment, bytes or visible label".into());
     }
     Ok(())
 }

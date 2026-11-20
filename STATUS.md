@@ -2532,6 +2532,9 @@ command history, actual CLI/MCP and App-frame copy/selection passed. Native
 macOS CDX, V2000 and V3000 receiving runs verified whole-drawing and partial
 percentages, byte-exact Unicode Save/reopen and normal Close. Chemistry
 `8e68c16`, command `f494ea0`, panel `8022578` and combined MOL checks
-`d5a5eb2` are pushed. The full workspace integration gate, other platform
-visuals and the remaining Analysis workflows are pending. Actions stays off.
+`d5a5eb2` are pushed. After integration with main through PR 31, the full local
+gate passed at `0b352b1` with 2,414 workspace tests passed, one ignored and
+three additional AccessKit tests passed. Windows and Linux visual acceptance,
+configurable precision, isotope distributions, overrides and live captions
+remain open. Actions stays off.
 [Source contract](docs/research/elemental-analysis.md) · [Checks and receipts](docs/verification-elemental-analysis.md).

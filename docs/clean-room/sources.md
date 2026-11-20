@@ -2463,3 +2463,17 @@ CDXML chemistry on coordinate-free carbon graphs distinguishes the plain documen
 Coordinate-free neutral carbon CDXML analysis applies the public elemental-node and minimum-valence H defaults only after checking every object, property and bond reference. Unused presentation resources remain in the original file. [Chemical coverage contract and public SDK properties](../research/cdxml-carbon-analysis.md).
 
 - Elemental analysis uses each element’s percentage of the molecular weight in the current scope. [Revvity Signals v25 guide, printed p. 221](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), [IUPAC mass fraction](https://goldbook.iupac.org/terms/view/M03722), [Bondline’s numeric and presentation conventions](../research/elemental-analysis.md).
+
+### Retaining CDX property length headers during replacement
+
+The public binary specification defines the unsigned short length and the 0xFFFF
+marker followed by a little-endian 32-bit length. Some imported short payloads
+use the extended representation. A source-preserving replacement can keep that
+width, even after the payload shrinks. A short header must grow when the new
+length reaches 65,535. The standalone opt-in writer checks the final encoded
+byte budget with the chosen width. [CDX property framing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm).
+
+
+### Editing a printed heteroatom on skeletal CDX paper
+
+A Fragment contains Nodes. A printed Node can carry both chemical fields and a child Text label. The binary point stores Y before X and the rectangle stores top, left, bottom and right as signed 16.16 coordinates. Bondline recomputes the selected label at the current atom position and checks the complete page before committing. Hidden carbon vertices retain their original Node and visibility records through editing and Save. [Node and its Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm), [explicit hydrogens](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm), [coordinate encoding](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm), [original witnesses](../../crates/io/tests/fixtures/cdx-skeletal-label-edit/SOURCES.md).

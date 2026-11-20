@@ -55,3 +55,14 @@ drags from the table heading to its last percentage, delivers a normal Copy even
 checks that the outgoing clipboard text exactly equals the displayed table. The document,
 selection and history inspection before and after the gesture is identical. Native
 Accessibility establishes visibility separately from this clipboard-output test.
+
+## Integrated local verification
+
+On macOS, `cargo xtask ci` exited successfully at
+`0b352b1d8fdf5b9e24677a97cc371dfeec20cf99`, including the merged MOL
+hydrogen and corpus changes from PRs 30 and 31. The workspace suite recorded
+2,414 passed, zero failed and one ignored. All three separately run AccessKit
+tests passed. Formatting, all-target Clippy, workspace layers, licenses,
+asset and corpus checks passed. The local receipt
+`target/analysis-ci/elemental-0b352b1.log` in the analysis-window checkout has
+SHA-256 `1c5813ee6a536f667797b80ac03d255cf15df66b408aa093ad97688cdbdae7b9`.

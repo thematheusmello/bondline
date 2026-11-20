@@ -357,7 +357,11 @@ fn check_label_preview(document: &Document<'_>, model: &bondline_model::Document
 fn check_skeletal_preview(stored: &bondline_io::StoredDocument, source: &Document<'_>) {
     check_label_preview(source, stored.model());
     assert!(stored.has_display_projection());
-    assert!(!stored.is_fully_mapped() && !stored.has_cdx_label_edit_profile());
+    assert!(!stored.is_fully_mapped());
+    assert_eq!(
+        stored.has_cdx_label_edit_profile(),
+        stored.has_cdx_skeletal_label_preview()
+    );
     assert!(!stored.can_create_caption() && !stored.can_edit_cdx_caption_run());
     assert!(stored.to_cdxml().is_err());
     assert_eq!(stored.export_cdx().unwrap(), source.as_bytes());
@@ -422,7 +426,6 @@ fn check_skeletal_preview(stored: &bondline_io::StoredDocument, source: &Documen
             if let Some(raw) = children.remove(&index) {
                 assert_ne!(atom.element.get(), 6);
                 assert!(terminal.is_none() && interior.is_none() && h.is_some());
-                assert!(!stored.can_edit_cdx_atom_label(atom.id));
                 check_label(
                     source,
                     resources.as_ref().unwrap(),
@@ -1031,12 +1034,23 @@ fn check_label_edit(stored: &bondline_io::StoredDocument, source: &Document<'_>)
         .iter()
         .map(|fragment| fragment.atoms().len())
         .sum::<usize>();
-    let (fragment, atom) = page
+    let mut targets = page
         .fragments()
         .iter()
-        .flat_map(|fragment| fragment.atoms().iter().map(|atom| (fragment.id(), atom)))
-        .nth(atoms / 2)
-        .unwrap();
+        .flat_map(|f| f.atoms().iter().map(|a| (f.id(), a)));
+    let skeletal = stored.has_cdx_skeletal_label_preview();
+    let (fragment, atom) = if skeletal {
+        let hidden = targets
+            .clone()
+            .find(|(_, a)| a.authored_label.is_none())
+            .unwrap()
+            .1;
+        assert!(!stored.can_edit_cdx_atom_label(hidden.id));
+        targets.find(|(_, a)| a.authored_label.is_some())
+    } else {
+        targets.nth(atoms / 2)
+    }
+    .unwrap();
     let unchanged = stored.with_cdx_atom_label(
         page.id(),
         fragment,
@@ -1079,7 +1093,11 @@ fn check_label_edit(stored: &bondline_io::StoredDocument, source: &Document<'_>)
     if let Ok(edited) = edited {
         let bytes = edited.export_cdx().unwrap();
         assert_ne!(bytes, original);
-        assert_eq!(edited.has_cdx_atom_label_preview(), !mixed);
+        assert_eq!(
+            edited.has_cdx_atom_label_preview(),
+            stored.has_cdx_atom_label_preview()
+        );
+        assert_eq!(edited.has_cdx_skeletal_label_preview(), skeletal);
         assert_eq!(edited.has_cdx_mixed_preview(), mixed);
         assert_eq!(edited.model().pages()[0].texts(), page.texts());
         let written = Document::parse(bytes).unwrap();
@@ -1213,6 +1231,10 @@ fuzz_target!(|data: &[u8]| {
     }) {
         check_skeletal_preview(stored, &document);
         skeletal_move::check(stored, &document);
+        if stored.has_cdx_skeletal_label_preview() {
+            assert!(stored.has_cdx_label_edit_profile());
+            check_label_edit(stored, &document);
+        }
     }
     if let Some(mut stored) = stored_page.filter(|stored| stored.has_cdx_caption_preview()) {
         assert_eq!(stored.export_cdx().unwrap(), data);
