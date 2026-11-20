@@ -33,9 +33,10 @@ adds single-line text to blank paper with stable IDs, Undo/Redo and editable nat
 CDXML Save/reopen. The same workflow now appends to qualified caption-only CDX
 pages and reopens with stable live IDs. An empty single Poster page with a qualifying
 font and white paper preserves its physical size and accepts its first caption.
-Mixed chemical and caption pages, missing font resources, multiline text,
+Qualified mixed CDX pages now display structures and frontmost captions together
+and save unchanged. Mixed-source edits, interleaved depths, missing font resources, multiline text,
 inherited styles, ambiguous starts and general shaping remain open.
-[CDX creation](docs/verification-cdx-caption-creation.md), [empty Poster verification](docs/verification-cdx-empty-caption.md).
+[CDX creation](docs/verification-cdx-caption-creation.md), [empty Poster verification](docs/verification-cdx-empty-caption.md), [mixed pages](docs/verification-cdx-mixed-caption.md).
 
 The [CDX Node label increment](docs/verification-cdx-node-labels.md)
 preserves explicit child Text beside literal atom fields. Independent

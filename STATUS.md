@@ -407,16 +407,34 @@ one ignored, plus three AccessKit tests and all local gates. The strengthened
 fallback assertions and their warnings-denied Clippy check also passed.
 [Contract](docs/research/cdx-empty-caption.md), [verification](docs/verification-cdx-empty-caption.md).
 
+[PR 17](https://github.com/thematheusmello/bondline/pull/17) landed the empty
+Poster workflow at `0f76377`, with the verified head tree and feature ref retired.
+
+### Mixed chemical structures and captions in CDX
+
+Source fixtures `3f69901`, decoder `8d31595`, native viewing `53136e5`
+and fuzz oracle `c5fa50a` are pushed on `feat/cdx-mixed-caption-preview`.
+The file now opens as one complete read-only drawing when its caption depths
+sit above the qualified chemical ink. The two source orders produced the
+same CPU and Metal images at 100% and 200%. Both 368-byte sources survived
+Unicode Save and reopen exactly. Fifteen App caption tests, the source
+oracle, three mixed IO tests, the shared run budget boundary and 10,000
+sanitizer trials passed. The actual Mac host was exercised in the background.
+The full local retry passed 2,329 workspace tests with one ignored, three
+AccessKit tests and all gates. The first attempt hit the existing intermittent
+MCP replacement-bind error on port 55042. Its cause remains open.
+[Scope and verification](docs/verification-cdx-mixed-caption.md).
+
 ### Next executable work
 
-1. Establish full-source and paint-order tests for direct Page captions beside
-   chemical Fragments. Exercise both sibling orders, a visible colored overlap,
-   legitimate repeated child IDs in separate containers, a same-container
-   collision and unknown peers. Preserve exact whole-source Save.
-2. Implement the combined read-only projection and verify its native capture and
-   source guards. Extend editing through whole-model and source proofs once the
-   drawing can be projected faithfully. Missing font resources, multiline text,
-   general typography, other platforms and the rest of M0–M5 remain open.
+1. Allow an existing direct Page caption run on the qualified mixed CDX
+   source to be edited. Prove the original owner and live ID, keep all
+   original Fragment and Node Text bytes, and revalidate the entire combined
+   scene before one history entry. Cover growth, shrinkage, Unicode,
+   Undo/Redo, exact Save/reopen and native hit testing where ink overlaps.
+2. Extend mixed authoring, tied/interleaved depths and richer sources using
+   their own public semantics and oracle evidence. All other open M0–M5
+   requirements remain in the roadmap and parity checklist.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read
