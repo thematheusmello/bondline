@@ -1,5 +1,26 @@
 # Pinned public corpus
 
+## Molecular formula evidence
+
+The checker opens each verified source through Bondline's command engine and reads `analysis.formula`. A separate RDKit 2026.09.2 process reads the same file bytes and calculates the reference formula. Each positive comparison checks the complete split-isotope Hill formula, charge and number of drawn atoms. The oracle retains physical hydrogen atoms, spells numbered H explicitly, and reorders carbon-free element groups alphabetically for strict Hill notation. The tests exercise isotope loss, hydrogen-first ordering in hydrogen bromide and a wrong atom count. [Reference reader](../../xtask/oracles/corpus_formula.py) · [Registry comparison](../../xtask/src/corpus/formula.rs) · [Hill convention](../research/hill-formula.md).
+
+| Pinned file | Bondline result on the complete source | Independent formula and per-record evidence |
+| --- | --- | --- |
+| `rdkit-chain1.cdxml` | Unsupported source | C4H10 |
+| `rdkit-methyl-radical.mol` | CH3 matched | CH3, one drawn atom |
+| `bondline-ordered-fields-v2000.sdf` | Unsupported collection | Both isolated mol blocks gave C2H6 in Bondline and RDKit, two drawn atoms each. The separate whole-supplier diagnostic returned one entry. |
+| `bondline-original-ethane-explicit.cdx` | Unsupported source | C2H6 |
+| `bondline-original-noncontiguous-v3000.mol` | C2H6 matched | C2H6, two drawn atoms |
+| `bondline-original-isotopic-chain.smi` | Unsupported collection | The record import refuses isotopic drawing labels. RDKit gives C[13C]H6O. |
+| `bondline-original-two-ring-labels.smi` | Unsupported collection | The record imports, and Analysis reports unsupported source. RDKit gives the combined C7H14. |
+| `bondline-original-salt-branch.smi` | Unsupported collection | The record import refuses this charged structure. RDKit gives the combined C4H9NaO. |
+
+Two of eight complete files returned a matching formula. Two of five record checks matched and three were unavailable. Each SDF comparison opens the original mol block as a standalone drawing with Bondline's MOL reader. The raw collection has its own reported outcome. SMILES component groups stay together within their original record. The printed reference for an unavailable result comes solely from RDKit. The corpus still needs independent comparisons for mass, aromaticity, stereo labels, canonical SMILES, InChI and names.
+
+Run `cargo xtask corpus --offline` after fetching the pinned files and setting `BONDLINE_PYTHON` to the RDKit interpreter. [Official molecular readers](https://www.rdkit.org/docs/source/rdkit.Chem.rdmolfiles.html) · [RDKit formula descriptor](https://www.rdkit.org/docs/source/rdkit.Chem.rdMolDescriptors.html#rdkit.Chem.rdMolDescriptors.CalcMolFormula).
+
+## Source bundles
+
 `cargo xtask corpus` checks eight reviewed files from five mandatory version1 source bundles:
 
 - [manifest.json](manifest.json) retains the two RDKit documents and their original pinned

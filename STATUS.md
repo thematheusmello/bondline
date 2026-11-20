@@ -604,6 +604,15 @@ tests, formatting, Clippy, layer, asset and license audits and the pinned corpus
 passed. The complete log SHA-256 is
 `e6b961822d311d5581944d3fb002e9fbf3403dfdcded32bbc6602baab1c98e3b`.
 
+### Pinned chemistry corpus
+
+The shared Analysis command and an independent RDKit reader now compare formulas
+across all eight pinned files. Two complete MOL files and the two isolated SDF mol
+blocks match. Six complete sources and three SMILES record attempts report their
+specific coverage limits. Cross-format molecule identity, stereo, canonical SMILES,
+InChI, names and corpus mass comparisons need separate checks.
+[Per-file results and replay](docs/corpus/README.md#molecular-formula-evidence).
+
 ### Next executable work
 
 1. Integrate molecular weight and monoisotopic mass with independently
