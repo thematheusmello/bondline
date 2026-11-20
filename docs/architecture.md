@@ -1,5 +1,14 @@
 # Architecture
 
+The [browser host](research/web-workspace.md) runs the same `show_workspace`, drawing
+state, command engine, document and rendering path through eframe WebRunner. Desktop
+network/server entry points and native file execution remain target-specific. A browser
+never fabricates a native file path or Save receipt. One Web Locks writer retains a
+bounded real CDXML recovery draft; exact observed source protects replacement, and a
+scope/version-specific service worker caches the checked static package. Current browser
+authoring/analysis, zoom and history remain the shared implementations. Native-only
+presentation controls stay unavailable. [Executed scope](verification-web-workspace.md).
+
 The [CDX caption editor](research/cdx-caption-edits.md) uses the same ordered
 source records as the caption reader to resolve a stable TextId. The encoder
 preserves raw styles, updates proven starts and patches one property. Captions

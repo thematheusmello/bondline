@@ -1,7 +1,7 @@
 [workspace]
 members = ["crates/model", "crates/cdxml", "crates/cdx", "crates/chem", "crates/commands", "crates/mcp", "crates/cli", "crates/ui", "crates/render", "crates/io", "compat/hexf-parse", "compat/libloading", "compat/clipboard-win", "xtask"]
 resolver = "3"
-exclude = ["vendor/eframe", "vendor/egui", "vendor/winit", "vendor/accesskit_macos", "fuzz"]
+exclude = ["vendor/eframe", "vendor/egui", "vendor/winit", "vendor/accesskit_macos", "vendor/wgpu", "vendor/wasm-bindgen-shared", "fuzz"]
 
 [workspace.package]
 version = "0.1.0"
@@ -40,3 +40,6 @@ accesskit_macos = { path = "vendor/accesskit_macos" }
 hexf-parse = { path = "compat/hexf-parse" }
 libloading = { path = "compat/libloading" }
 clipboard-win = { path = "compat/clipboard-win" }
+
+wgpu = { path = "vendor/wgpu" }
+wasm-bindgen-shared = { path = "vendor/wasm-bindgen-shared" }

@@ -11,6 +11,7 @@ const TARGETS: &[&str] = &[
     "aarch64-apple-darwin",
     "x86_64-pc-windows-msvc",
     "x86_64-unknown-linux-gnu",
+    "wasm32-unknown-unknown",
 ];
 
 pub(super) fn allowed(license: &str) -> bool {
@@ -46,7 +47,10 @@ fn runtime_packages(tree: &str) -> Result<BTreeSet<(String, String)>, Box<dyn Er
         .collect()
 }
 
-fn product_names(metadata: &serde_json::Value) -> Result<Vec<&str>, Box<dyn Error>> {
+fn product_names<'a>(
+    metadata: &'a serde_json::Value,
+    target: &str,
+) -> Result<Vec<&'a str>, Box<dyn Error>> {
     let members = metadata["workspace_members"]
         .as_array()
         .ok_or("missing workspace members")?;
@@ -59,6 +63,11 @@ fn product_names(metadata: &serde_json::Value) -> Result<Vec<&str>, Box<dyn Erro
         if !name.starts_with("bondline-") || !members.contains(&package["id"]) {
             continue;
         }
+        let product_kind = if target == "wasm32-unknown-unknown" {
+            "cdylib"
+        } else {
+            "bin"
+        };
         let binary = package["targets"]
             .as_array()
             .ok_or("missing Cargo targets")?
@@ -66,14 +75,14 @@ fn product_names(metadata: &serde_json::Value) -> Result<Vec<&str>, Box<dyn Erro
             .any(|target| {
                 target["kind"]
                     .as_array()
-                    .is_some_and(|kinds| kinds.iter().any(|kind| kind == "bin"))
+                    .is_some_and(|kinds| kinds.iter().any(|kind| kind == product_kind))
             });
         if binary {
             names.push(name);
         }
     }
     if names.is_empty() {
-        return Err("no product binaries selected for the license audit".into());
+        return Err("no product runtime selected for the license audit".into());
     }
     Ok(names)
 }
@@ -154,7 +163,7 @@ pub fn check() -> Result<(), Box<dyn Error>> {
             return Err(String::from_utf8_lossy(&output.stderr).into_owned().into());
         }
         let metadata: serde_json::Value = serde_json::from_slice(&output.stdout)?;
-        let products = product_names(&metadata)?;
+        let products = product_names(&metadata, target)?;
         let mut tree = Command::new("cargo");
         tree.args([
             "tree",
@@ -226,8 +235,26 @@ mod tests {
             ]
         });
         assert_eq!(
-            super::product_names(&metadata)?,
+            super::product_names(&metadata, "aarch64-apple-darwin")?,
             ["bondline-ui", "bondline-cli"]
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn browser_audit_selects_actual_wasm_libraries_and_excludes_native_only_binaries()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let metadata = serde_json::json!({
+            "workspace_members":["ui", "cli", "model"],
+            "packages":[
+                {"id":"ui", "name":"bondline-ui", "targets":[{"kind":["cdylib","rlib"]},{"kind":["bin"]}]},
+                {"id":"cli", "name":"bondline-cli", "targets":[{"kind":["bin"]}]},
+                {"id":"model", "name":"bondline-model", "targets":[{"kind":["lib"]}]}
+            ]
+        });
+        assert_eq!(
+            super::product_names(&metadata, "wasm32-unknown-unknown")?,
+            ["bondline-ui"]
         );
         Ok(())
     }

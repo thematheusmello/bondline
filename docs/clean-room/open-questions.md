@@ -504,8 +504,11 @@ acceptance does not prove native Text-tool, measured DPI, race or other-platform
 - Editable Office embedding and modern naming/prediction behavior need public evidence.
 - REA 6.9.0 was run externally using an existing Node 26.12.1 installation without changing
   the selected system runtime. It remains a development tool, outside the shipped application.
-- Before the M5 WebAssembly release, resolve the candidate browser graph's Unicode-licensed
-  identifier data. Current native license gates do not imply browser approval.
+- The initial shared browser runtime now excludes unused Unicode identifier helpers through
+  an exact reviewed wasm-bindgen-shared fork, retaining the native build-tool implementation.
+  Its actual wasm cdylib graph passes the same strict policy. Native audit success alone
+  still grants no browser approval; broader browser, release and source-audit work remains.
+  See [browser evidence](../verification-web-workspace.md).
 
 - The May2026 capability chart adds qualified axial stereo, descriptor/platform, file-direction,
   clipboard-placement and monomer cases; it is not an exact26.1 guide. Its chirality override,

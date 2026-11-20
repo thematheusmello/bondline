@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self'; worker-src 'self'; img-src 'self' data: blob:; object-src 'none'; base-uri 'none'">
+<title>Bondline</title>
+<link rel="license" href="./THIRD-PARTY-NOTICES.txt">
+<style>
+html, body {margin:0; width:100%; height:100%; overflow:hidden; background:#f6f8fa; font-family:system-ui,sans-serif}
+canvas {display:block; width:100%; height:100%; outline:none; touch-action:none}
+#startup {position:fixed; inset:0; display:grid; place-items:center; padding:2rem; color:#25303d; background:#f6f8fa}
+#startup[hidden] {display:none}
+</style>
+<canvas id="bondline" aria-label="Bondline chemical drawing workspace"></canvas>
+<output id="startup">Starting Bondline…</output>
+<script type="module" src="./bootstrap.js"></script>
+</html>

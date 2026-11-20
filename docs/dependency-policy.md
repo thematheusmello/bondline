@@ -92,4 +92,27 @@ Hosted aggregate/window checks pass on all three targets at product checkpoint c
 File I/O has native Mac/Windows and Linux Docker/hosted execution; interactive Windows/Linux
 file gestures remain unverified.
 Source cross-checks alone are not OS execution. The WebAssembly delivery remains M5: its current
-candidate graph includes Unicode-licensed identifier data and is not approved for shipment.
+candidate graph originally included Unicode-licensed identifier data; the browser increment
+below records the narrowly scoped resolution, without granting complete M5 acceptance.
+
+## Browser SDK closure, 2026-11-20
+
+The actual shared egui browser runtime uses the pinned existing SDK versions. Its graph
+originally failed the same strict allowlist at unicode-ident1.0.27. Runtime consumers of
+wasm-bindgen-shared0.2.130 use its schema/module-path utilities; identifier helpers are used
+by native build tools. The [reviewed fork](../vendor/wasm-bindgen-shared/BONDLINE-PATCH.md)
+retains that complete Unicode helper/dependency on native targets and excludes it on wasm.
+Schema files and CLI version remain exact. No Unicode license exception or replacement
+identifier implementation is introduced. Build tools remain distinct from shipped runtime.
+
+Current Chrome also rejects wgpu22's removed inter-stage component descriptor key. Its
+[reviewed fork](../vendor/wgpu/BONDLINE-PATCH.md) keeps the legacy path and uses the modern
+variable key with a conservative advertised bound; browser startup clamps the request to
+that bound. Only the WebGPU backend source changes; native backend sources remain exact.
+Original MIT/Apache notices, complete archive receipts and changed-file hashes are adjacent.
+
+The browser increment gates the actual wasm cdylib roots using target-selected normal,
+non-proc-macro runtime edges, alongside the existing three desktop binary targets. The
+allowlist and asset policy stay exact. [Browser receiving](verification-web-workspace.md)
+records actual graph counts and execution. This is a declaration/source-fork check, not a
+completed whole-release notice audit or evidence for unexecuted browser/platform workflows.

@@ -1,5 +1,18 @@
 # Clean-room source register
 
+The [shared browser workspace contract](../research/web-workspace.md), reviewed
+2026-11-20, uses the pinned public eframe WebRunner source, the official wasm-bindgen
+no-bundler guide, WebGPU supported limits, Web Locks and origin-local storage/service-
+worker documentation. It separates original recovery/zoom/lease policies from public
+browser APIs. [wgpu](../../vendor/wgpu/BONDLINE-PATCH.md) and
+[wasm-bindgen-shared](../../vendor/wasm-bindgen-shared/BONDLINE-PATCH.md) retain the
+published archive/VCS identity, source changes and exact original MIT/Apache notices.
+No reference-product code, font, screen, icon, preset or binary is used by this host.
+Its raw Unicode boundary uses the pinned js_sys UTF-16 validity API, the official
+wasm-bindgen string-conversion documentation and XML1.0's character production.
+An independently authored caption source proves that converting an invalid stored
+surrogate before validation loses an unrelated comment during an otherwise valid edit.
+
 The [Analysis window contract](../research/analysis-window.md) records the selected-atom and whole-drawing workflow in vendor support and guide v25, together with the independent Hill notation policy.
 
 The [binary skeletal carbon contract](../research/cdx-skeletal.md) uses the SDK property IDs, zero-length implied booleans, Node label precedence and Element/H defaults. Original CDX data and a matching CDXML drawing exercise hidden carbon vertices with literal and omitted hydrogen counts.

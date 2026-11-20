@@ -619,14 +619,20 @@ macOS AccessKit tests. Its log SHA-256 is
 
 ### Next executable work
 
-1. Integrate molecular weight and monoisotopic mass with independently
-   verified values in the existing Analysis window. Isotope distributions,
-   elemental percentages and live analysis captions remain open.
-2. Extend editing of printed label bodies on mixed CDX drawings with an
-   exact byte comparison, whole-page proof and a native Save/reopen check.
-3. The web host in `../bondline-web-workspace` is exercising actual egui/WebGPU
-   startup, offline editing and history, and recovery across browser tabs.
-   The codec test exercises a separate headless Wasm entry point. Interactive
+1. Extend Analysis beyond the now-delivered molecular weight and monoisotopic mass:
+   isotope distributions, elemental percentages, configurable precision and live
+   analysis captions remain open.
+2. Extend editing of printed label bodies on mixed CDX drawings with an exact
+   byte comparison, whole-page proof and a native Save/reopen check.
+3. The initial web host in `../bondline-web-workspace` now passes actual egui/WebGPU
+   pointer editing, keyboard history, Analysis and offline recovery at1160×800/660,
+   with all local server requests rejected. It protects quota/conflicting/corrupt
+   recovery data, retains runtime notices and gates the actual wasm dependency graph.
+   Transport33fa36f, SDK463b0c6 and host944ed26 are pushed in draft PR32.
+   Its combined main integration is on the same branch. [Receiving](docs/verification-web-workspace.md)
+   records exact artifact hashes, local checks and limits. Native file replacement,
+   browser accessibility, other engines/hardware and optimized release packaging are
+   next. The codec test remains a separate headless Wasm entry point. Interactive
    Windows/Linux validation and further work across M0–M5 remain outstanding.
    [Roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 
