@@ -815,7 +815,16 @@ fn allowed_during_order(command: &Command) -> bool {
     ) || matches!(command, Command::UiFile(params) if params.action == bondline_commands::UiFileAction::Cancel)
 }
 
+// A returned menu selection already matched the enabled button and its event target.
+// Assistive clients can press it while another window owns physical input.
+fn ax_menu_press(menu: Option<(usize, &'static str)>, index: usize, event: &egui::Event) -> bool {
+    menu.is_some_and(|(at, _)| at == index)
+        && matches!(event, egui::Event::AccessKitActionRequest(req)
+            if req.action == egui::accesskit::Action::Default)
+}
+
 struct ShortcutRouting<'a> {
+    menu: Option<(usize, &'static str)>,
     actions: &'a [(usize, view_controls::Action)],
     fields: Option<&'a mut SdfFieldsWorkflow>,
     files: Option<&'a mut FileWorkflow>,
@@ -835,6 +844,7 @@ fn replay_edit_shortcuts(
     routing: ShortcutRouting<'_>,
 ) {
     let ShortcutRouting {
+        menu,
         actions,
         mut fields,
         mut files,
@@ -931,7 +941,9 @@ fn replay_edit_shortcuts(
                 }
                 view_controls::wheel(engine, size, [width, height], *unit, *delta)
             });
-        if focused && let Some(command) = command {
+        if (focused || ax_menu_press(menu, index, event))
+            && let Some(command) = command
+        {
             if (order_busy_at_start || drawing.order.is_busy()) && !allowed_during_order(&command) {
                 *error = Some("A bond-order change is still pending. Wait or Cancel bond order before changing the document.".into());
                 continue;
@@ -1175,6 +1187,7 @@ fn show_workspace_with_preview(
             &events,
             blocked,
             ShortcutRouting {
+                menu: None,
                 actions: &[],
                 fields: sdf_fields.as_deref_mut(),
                 files: files.as_deref_mut(),
@@ -1472,6 +1485,7 @@ fn show_workspace_with_preview(
                         &events,
                         blocked,
                         ShortcutRouting {
+                            menu: selected,
                             actions: &view_actions,
                             fields: sdf_fields.as_deref_mut(),
                             files: files.as_deref_mut(),
@@ -1772,7 +1786,7 @@ fn show_workspace_with_preview(
                     _ => {}
                 }
                 // Resolve availability now: an earlier event may have populated Undo or Redo.
-                let history_command = if !blocked && focused {
+                let history_command = if !blocked && (focused || ax_menu_press(selected, index, event)) {
                     view_actions
                         .iter()
                         .find(|(at, _)| *at == index)
@@ -2582,6 +2596,7 @@ fn show_workspace_with_preview(
             &events,
             blocked,
             ShortcutRouting {
+                menu: selected,
                 actions: &view_actions,
                 fields: sdf_fields.as_deref_mut(),
                 files: files.as_deref_mut(),
