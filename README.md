@@ -40,7 +40,7 @@ terminal attachment, contextual9/0 fusion, history and editable Save/reopen chec
 Their perspective depictions leave stereochemistry unspecified.
 Atom-targeted Alt-sprout and a session Preferences checkbox now share the same guarded
 ring engine, with bounded macOS drawing, history and editable Save/reopen checks.
-General labels and chemical analysis are still being built.
+Use **View → Show Analysis Window** to read the formula for a supported drawing or the composition of selected atoms. Bondline counts recorded hydrogens, preserves numbered isotopes and reports an unresolved count when the source omits it. Mass, isotope distributions and general chemical-label editing remain in development. [Analysis coverage](docs/research/analysis-window.md).
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 
