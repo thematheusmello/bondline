@@ -81,19 +81,16 @@ def caption(live, selector):
 
 
 def model(live):
-    texts = []
+    page = {"id": 1, "size": dict(zip(("width_pt", "height_pt"), POSTER_SIZE)), "fragments": []}
     if live is not None:
-        texts.append({
+        page["texts"] = [{
             "id": live,
             "position": dict(zip(("x_pt", "y_pt"), BASELINE)),
             "runs": [{"text": BODY, "style": {
                 "font_family": "Roboto", "size_pt": 12.0, "face": 0, "rgb": [0.0] * 3,
             }}],
-        })
-    return {"pages": [{
-        "id": 1, "size": dict(zip(("width_pt", "height_pt"), POSTER_SIZE)),
-        "fragments": [], "texts": texts,
-    }]}
+        }]
+    return {"pages": [page]}
 
 
 def owned_fields(raw, records, owner):

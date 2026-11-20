@@ -1,4 +1,4 @@
-# Status — 2026-11-19
+# Status — 2026-11-20
 
 The full M0–M5 goal is **active**. Verified delivery lands into `main`.
 [PR 5](https://github.com/thematheusmello/bondline/pull/5) landed direct-Page CDX
@@ -391,29 +391,29 @@ and the pinned corpus. The preceding MCP listener replacement-bind failure
 is recorded separately. The retry passed with the listener code and test
 unchanged. All owned caption-creation checks exited. GitHub Actions stays off.
 
-### Empty CDX caption source lock
+### Creating the first caption on empty CDX paper
 
-The next branch `feat/cdx-empty-caption` starts from `c1bdbdd`. Six
-independent cases cover the existing five framings and an alternate font
-selector and paper palette. The 37 original files pass byte and resource
-replay with the frozen manifest. The baseline CLI opens all six empty
-sources at caller A4 and refuses creation. Controls retain the 18 existing
-data-only opens and one two-page refusal. The scope adds first-caption
-creation only when the same explicit font and paper resources are proved.
-[Contract](docs/research/cdx-empty-caption.md),
-[witnesses](crates/io/tests/fixtures/cdx-caption-empty/SOURCES.md).
+The implementation on `feat/cdx-empty-caption` follows source lock `c6f0a6f`.
+A single empty, qualified Poster opens at its physical size. Text creates its
+first caption at explicit signed depth zero. History, Unicode Save, reopening
+the sparse branched ID and editing it pass the App, executable and adapter
+checks. All six variants match independent complete files, with 19 unsupported
+sources retaining their previous behavior. Physical Mac input reached the
+draft. The background Mac host completed Apply, history, Save, reopen, existing
+draft inspection and Cancel. CPU and Metal captures match. The qualified
+10,000-run sanitizer check passes with 103 immutable seeds.
+[Contract](docs/research/cdx-empty-caption.md), [verification](docs/verification-cdx-empty-caption.md).
 
 ### Next executable work
 
-1. Run the receiving IO tests against the pinned empty Poster variants.
-   Admit the existing closed layout when a blank page supplies the
-   writer's explicit font and paper resources. Write explicit depth zero
-   for the first caption. Verify Open, create, Undo to the empty page,
-   Unicode Save/reopen and editing the saved first caption through the
-   shared registry and app. Keep mixed-object and unsupported-source refusals.
-2. Establish the independent mixed chemical and caption source, ordering
-   and retention proof. Multiline, general typography, broader platform
-   verification and the rest of M0–M5 remain open.
+1. Establish full-source and paint-order tests for direct Page captions beside
+   chemical Fragments. Exercise both sibling orders, a visible colored overlap,
+   legitimate repeated child IDs in separate containers, a same-container
+   collision and unknown peers. Preserve exact whole-source Save.
+2. Implement the combined read-only projection and verify its native capture and
+   source guards. Extend editing through whole-model and source proofs once the
+   drawing can be projected faithfully. Missing font resources, multiline text,
+   general typography, other platforms and the rest of M0–M5 remain open.
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

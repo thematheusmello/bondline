@@ -179,7 +179,10 @@ Qualified CDX caption pages append an owned Text and then its persistent ObjectT
 The second splice uses a handle from a fresh parse. Final re-import must match the
 entire expected model and fit the rendered page. Unmarked Text follows the original
 source-ID ordering and strict marked Text retains its live Text ID. Projection
-and run edits share the same lookup. [CDX contract](research/cdx-caption-creation.md).
+and run edits share the same lookup. An empty Page goes through the same
+closed layout and paper proof, with an explicit check for the writer's usable
+Roboto resource. Its first caption takes depth zero.
+[CDX contract](research/cdx-caption-creation.md), [empty page](research/cdx-empty-caption.md).
 
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks

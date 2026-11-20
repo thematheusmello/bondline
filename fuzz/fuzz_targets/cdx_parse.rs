@@ -450,7 +450,9 @@ fn check_batch(document: &Document<'_>) {
 
 fn check_caption_edit(stored: &bondline_io::StoredDocument, source: &Document<'_>) {
     let page = stored.model().pages().first().unwrap();
-    let caption = page.texts().last().unwrap();
+    let Some(caption) = page.texts().last() else {
+        return;
+    };
     let run = if source.as_bytes().len() % 2 == 0 {
         caption.runs().len() - 1
     } else {
@@ -511,7 +513,8 @@ fn check_caption_append(stored: &bondline_io::StoredDocument, source: &Document<
         .iter()
         .map(|caption| caption.id().get())
         .max()
-        .and_then(|id| id.checked_add(1))
+        .unwrap_or(0)
+        .checked_add(1)
         .and_then(TextId::new)
     else {
         return;
@@ -692,7 +695,7 @@ fuzz_target!(|data: &[u8]| {
     if document
         .records()
         .iter()
-        .any(|record| matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8006, .. }))
+        .any(|record| matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8001, .. }))
         && let Ok(mut stored) = bondline_io::StoredDocument::from_cdx(
             std::sync::Arc::from(data),
             bondline_model::PageSize::A4,
@@ -714,7 +717,6 @@ fuzz_target!(|data: &[u8]| {
             .iter()
             .filter(|record| matches!(record.kind(), RecordKind::ObjectStart { tag: 0x8006, .. }))
             .count();
-        assert!(source_texts > 0);
         assert_eq!(page.texts().len(), source_texts);
         let mut original: Vec<_> = document
             .records()
@@ -845,7 +847,17 @@ fuzz_target!(|data: &[u8]| {
         assert_eq!(stored.export_cdx().unwrap(), data);
         assert!(!stored.is_fully_mapped());
         let preview = stored.has_cdx_atom_label_preview();
-        assert_eq!(stored.has_display_projection(), preview);
+        let empty_caption_preview = stored.has_cdx_caption_preview();
+        if empty_caption_preview {
+            assert!(!preview);
+            assert!(!has_labels);
+            assert!(graph.fragments().is_empty());
+            assert!(stored.model().pages()[0].texts().is_empty());
+        }
+        assert_eq!(
+            stored.has_display_projection(),
+            preview || empty_caption_preview
+        );
         if preview {
             assert!(has_labels);
             check_label_preview(&document, stored.model());
@@ -876,6 +888,7 @@ fuzz_target!(|data: &[u8]| {
         assert!(stored.to_cdxml().is_err());
         stored = original;
         assert_eq!(stored.has_cdx_atom_label_preview(), preview);
+        assert_eq!(stored.has_cdx_caption_preview(), empty_caption_preview);
         assert_eq!(stored.to_cdx().unwrap().as_ref(), data);
     }
 

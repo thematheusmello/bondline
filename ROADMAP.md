@@ -31,9 +31,11 @@ those runs through the command adapters and repaints the app. The
 existing run in a qualified CDX or CDXML caption. [Caption creation](docs/verification-native-caption-creation.md)
 adds single-line text to blank paper with stable IDs, Undo/Redo and editable native
 CDXML Save/reopen. The same workflow now appends to qualified caption-only CDX
-pages and reopens with stable live IDs. Empty and mixed CDX pages, multiline text,
+pages and reopens with stable live IDs. An empty single Poster page with a qualifying
+font and white paper preserves its physical size and accepts its first caption.
+Mixed chemical and caption pages, missing font resources, multiline text,
 inherited styles, ambiguous starts and general shaping remain open.
-[CDX creation evidence](docs/verification-cdx-caption-creation.md).
+[CDX creation](docs/verification-cdx-caption-creation.md), [empty Poster verification](docs/verification-cdx-empty-caption.md).
 
 The [CDX Node label increment](docs/verification-cdx-node-labels.md)
 preserves explicit child Text beside literal atom fields. Independent

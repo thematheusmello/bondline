@@ -161,3 +161,98 @@ fn cdx_creation_keeps_exact_history_sparse_identity_and_both_run_edits() -> Test
     assert_eq!(fs::read(output)?, SPARSE);
     Ok(())
 }
+
+#[test]
+fn empty_cdx_creates_its_first_caption_and_reopens_the_sparse_undo_branch() -> TestResult {
+    let before = include_bytes!("../../io/tests/fixtures/cdx-caption-empty/implicit_before.cdx");
+    let first = include_bytes!("../../io/tests/fixtures/cdx-caption-empty/implicit_first.cdx");
+    let sparse =
+        include_bytes!("../../io/tests/fixtures/cdx-caption-empty/implicit_after_undo.cdx");
+    let unsupported_font =
+        include_bytes!("../../io/tests/fixtures/cdx-caption-empty/font_not_utf8.cdx");
+    let witnesses: Value = serde_json::from_str(include_str!(
+        "../../io/tests/fixtures/cdx-caption-empty/cases.json"
+    ))?;
+    let case = &witnesses["cases"]["implicit"];
+    let directory = files::FileTestDirectory::new()?;
+    let input = directory.path("empty-原-λ.cdx");
+    let output = directory.path("first-caption-保存-β.cdx");
+    fs::write(&input, before)?;
+    let mut engine = Engine::default();
+    let opened = engine.dispatch("document.open_cdx", json!({"path":input}))?;
+    let original = engine.content().clone();
+    let stored = engine.stored_document()?;
+    assert_eq!(stored.export_cdx()?, before);
+    assert!(stored.model().pages()[0].texts().is_empty());
+    let created = engine.dispatch("text.create", create(opened.revision, BODY))?;
+    assert_eq!(
+        serde_json::to_value(opened.document)?["pages"][0]["size"],
+        case["before"]["model"]["pages"][0]["size"]
+    );
+    assert!(created.changed && created.file.dirty);
+    assert_eq!(
+        (created.revision, created.undo_depth, created.redo_depth),
+        (2, 1, 0)
+    );
+    assert_eq!(
+        serde_json::to_value(created.document)?,
+        case["first"]["model"]
+    );
+    assert_eq!(engine.stored_document()?.export_cdx()?, first);
+    assert!(!engine.stored_document()?.is_fully_mapped());
+    assert!(!engine.selection_available());
+    reject(
+        &mut engine,
+        "bond.create",
+        json!({"page_id":1,"begin_x_pt":80,"begin_y_pt":80,"end_x_pt":120,"end_y_pt":80}),
+        "unsupported_content",
+    )?;
+
+    let undo = engine.dispatch("history.undo", json!({}))?;
+    assert!(!undo.file.dirty);
+    assert_eq!(engine.content(), &original);
+    assert_eq!(engine.stored_document()?.export_cdx()?, before);
+    let branched = engine.dispatch("text.create", create(undo.revision, BODY))?;
+    assert_eq!(
+        (branched.revision, branched.undo_depth, branched.redo_depth),
+        (4, 1, 0)
+    );
+    assert_eq!(
+        serde_json::to_value(branched.document)?,
+        case["after_undo"]["model"]
+    );
+    assert_eq!(engine.stored_document()?.export_cdx()?, sparse);
+
+    let saved = engine.dispatch("document.save_cdx", json!({"path":output}))?;
+    assert!(!saved.file.dirty);
+    let source = saved.source.ok_or("original empty CDX source")?;
+    assert_eq!((source.byte_length, source.modified), (before.len(), true));
+    assert_eq!(fs::read(&input)?, before);
+    assert_eq!(fs::read(&output)?, sparse);
+    let reopened = engine.dispatch("document.open_cdx", json!({"path":output}))?;
+    assert_eq!(
+        serde_json::to_value(reopened.document)?,
+        case["after_undo"]["model"]
+    );
+    assert_eq!(
+        (
+            reopened.undo_depth,
+            reopened.redo_depth,
+            reopened.file.dirty
+        ),
+        (0, 0, false)
+    );
+    assert_eq!(engine.stored_document()?.export_cdx()?, sparse);
+
+    let incompatible = directory.path("unsupported-font.cdx");
+    fs::write(&incompatible, unsupported_font)?;
+    let refused_source = engine.dispatch("document.open_cdx", json!({"path":incompatible}))?;
+    reject(
+        &mut engine,
+        "text.create",
+        create(refused_source.revision, BODY),
+        "unsupported_content",
+    )?;
+    assert_eq!(engine.stored_document()?.export_cdx()?, unsupported_font);
+    Ok(())
+}

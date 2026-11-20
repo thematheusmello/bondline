@@ -5,6 +5,7 @@ Python `struct` constructs the bytes. The repository's independent resource orac
 SHA-256 `a5a2df85a9fc1a2df9ba57b1a7b5538c812a6f724e18d25a42a16d98d6ad5db2`, reads back
 the exact framing, owners, field widths and resources. `cases.json` records the pinned
 file hashes and complete model expectations generated directly from this specification.
+An empty JSON page follows the existing serialization rule that omits its text array.
 
 Each source has one empty direct Page 90 with explicit Poster mode and positive signed
 16.16 dimensions 512.25 × 384.5 pt. The Height-first field order and extended Height and
