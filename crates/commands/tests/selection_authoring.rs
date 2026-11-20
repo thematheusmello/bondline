@@ -963,12 +963,31 @@ fn complete_foreign_sources_refuse_even_selection_activation_without_erasing_dat
             json!({"active":true,"epoch":old_epoch+1,
             "page_id":null,"atom_ids":[]})
         );
-        for params in [
-            action(&engine, "activate"),
-            set_params(&engine, &[1]),
-            json!({"action":"all","expected_revision":engine.state().revision,"page_id":1}),
-        ] {
-            failed(&mut engine, "ui.selection", params, "unsupported_content")?;
+        if open == "document.open_mol" {
+            select(&mut engine, &[1])?;
+            assert!(engine.selection_available() && !engine.selection_translation_available());
+            let params = json!({"expected_revision":engine.state().revision, "expected_selection_epoch":epoch(&engine)?, "delta_x_pt":10,"delta_y_pt":0});
+            failed(
+                &mut engine,
+                "selection.translate",
+                params,
+                "unsupported_content",
+            )?;
+            engine.dispatch(
+                "ui.selection",
+                json!({"action":"all","page_id":1,"expected_revision":engine.state().revision}),
+            )?;
+            assert_eq!(selected(&engine)?["atom_ids"], json!([1, 2]));
+            named_selection(&mut engine, "clear")?;
+            assert_eq!(engine.stored_document()?.export_mol()?, source);
+        } else {
+            for params in [
+                action(&engine, "activate"),
+                set_params(&engine, &[1]),
+                json!({"action":"all","expected_revision":engine.state().revision,"page_id":1}),
+            ] {
+                failed(&mut engine, "ui.selection", params, "unsupported_content")?;
+            }
         }
         let before = wire(&engine)?;
         assert_eq!(

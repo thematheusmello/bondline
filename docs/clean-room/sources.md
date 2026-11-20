@@ -2437,3 +2437,10 @@ Atom movement on certified skeletal CDX uses the published directly owned Node p
 Mixed skeletal CDX paper uses the Node's direct Text for printed heteroatoms, the documented Element/H defaults for hidden carbon, and the Text's enclosing rectangle. The authoring and source-completeness gates, optical policies and original independently constructed cases are recorded in [the binary mixed skeletal study](../research/cdx-mixed-skeleton.md). [Node](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) · [Attached H](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm) · [BoundingBox](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/BoundingBox.htm)
 
 The Analysis window resolves omitted carbon H counts on certified skeletal CDX using the complete fragment bond order before selection. The published CDX default specifies the minimum valence-satisfying count. Bondline reports the number of atoms that used this rule and keeps each original source property intact. [CDX attached hydrogen](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm) · [Analysis policy](../research/analysis-window.md).
+
+### MOL structure selection for Analysis
+
+A complete V2000 or V3000 drawing supports transient whole or partial atom
+selection. The public guide describes selecting part or all of a structure in
+the Analysis window. Bondline retains original coordinates and refuses direct
+MOL translation while supporting inspection. [Guide, pp. 221–224](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf) · [Acceptance contract](research/mol-analysis.md).
