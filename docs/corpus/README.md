@@ -2,7 +2,7 @@
 
 ## Molecular formula evidence
 
-The full local integration gate at `018cf0b` passed 2,407 workspace tests and three additional macOS AccessKit tests. One workspace test was ignored. Source and record counts below were observed in that gate.
+The full local integration gate at `018cf0b` passed 2,407 workspace tests and three additional macOS AccessKit tests. One workspace test was ignored. The record comparisons below also include the later SDF and SMILES checks.
 
 The checker opens each verified source through Bondline's command engine and reads `analysis.formula`. A separate RDKit 2026.09.2 process reads the same file bytes and calculates the reference formula. Each positive comparison checks the complete split-isotope Hill formula, charge and number of drawn atoms. The oracle retains physical hydrogen atoms, spells numbered H explicitly, and reorders carbon-free element groups alphabetically for strict Hill notation. The tests exercise isotope loss, hydrogen-first ordering in hydrogen bromide and a wrong atom count. [Reference reader](../../xtask/oracles/corpus_formula.py) · [Registry comparison](../../xtask/src/corpus/formula.rs) · [Hill convention](../research/hill-formula.md).
 
@@ -13,11 +13,11 @@ The checker opens each verified source through Bondline's command engine and rea
 | `bondline-ordered-fields-v2000.sdf` | Unsupported collection | The open collection returned C2H6 for records 1 and 2, two drawn atoms each. Both isolated MOL blocks independently reproduced the same results. The separate whole-supplier diagnostic returned one entry. |
 | `bondline-original-ethane-explicit.cdx` | Unsupported source | C2H6 |
 | `bondline-original-noncontiguous-v3000.mol` | C2H6 matched | C2H6, two drawn atoms |
-| `bondline-original-isotopic-chain.smi` | Unsupported collection | The record import refuses isotopic drawing labels. RDKit gives C[13C]H6O. |
-| `bondline-original-two-ring-labels.smi` | Unsupported collection | The record imports, and Analysis reports unsupported source. RDKit gives the combined C7H14. |
-| `bondline-original-salt-branch.smi` | Unsupported collection | The record import refuses this charged structure. RDKit gives the combined C4H9NaO. |
+| `bondline-original-isotopic-chain.smi` | Unsupported collection | Record 1 matched C[13C]H6O (three drawn atoms). Drawing import refuses its isotope label. |
+| `bondline-original-two-ring-labels.smi` | Unsupported collection | Record 1 matched C7H14 (seven drawn atoms across two rings). Chemistry on the imported drawing remains unavailable. |
+| `bondline-original-salt-branch.smi` | Unsupported collection | Record 1 matched C4H9NaO (six drawn atoms in two components). Drawing import refuses the charged structure. |
 
-Two of eight complete files returned a matching formula. Two of five record checks matched and three were unavailable. The SDF record count uses the result of querying the intact, SHA-256-verified collection through `analysis.properties`. Each extracted MOL block is checked separately against the same RDKit result. The two paths count each record once. The raw collection has its own reported outcome. SMILES component groups stay together within their original record. The printed reference for an unavailable result comes solely from RDKit. The corpus still needs independent comparisons for mass, aromaticity, stereo labels, canonical SMILES, InChI and names.
+Two of eight complete files returned a matching formula. All five record checks matched. Both raw record selectors queried the intact, SHA-256-verified collections through `analysis.properties`. Each extracted MOL block is checked separately against the same RDKit result. The two paths count each record once. The raw collection has its own reported outcome. SMILES component groups stay together within their original record. The printed reference for an unavailable result comes solely from RDKit. The corpus still needs independent comparisons for mass, aromaticity, stereo labels, canonical SMILES, InChI and names.
 
 Run `cargo xtask corpus --offline` after fetching the pinned files and setting `BONDLINE_PYTHON` to the RDKit interpreter. [Official molecular readers](https://www.rdkit.org/docs/source/rdkit.Chem.rdmolfiles.html) · [RDKit formula descriptor](https://www.rdkit.org/docs/source/rdkit.Chem.rdMolDescriptors.html#rdkit.Chem.rdMolDescriptors.CalcMolFormula).
 
