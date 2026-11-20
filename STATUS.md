@@ -573,18 +573,37 @@ PR 25 landed on main at `40455fd`. Its ancestry merge into PR 26 at
 PR 26 landed on main at `7050792`. The local gate and native jobs are terminal.
 GitHub Actions remains disabled.
 
+### Formulas for skeletal CDX with omitted hydrogen counts
+
+[PR 27](https://github.com/thematheusmello/bondline/pull/27) uses the
+complete qualified CDX drawing to count hydrogens for the whole structure
+or a selection. Selecting the middle carbon of propane gives `CH2`. Each
+of eight files matched RDKit before and after Unicode Save As and reopen.
+Every source byte, including the absence of hydrogen properties, survived.
+The native Analysis window identifies how many atoms used a default.
+Unsupported source chemistry still gives an explicit diagnostic.
+
+The full local gate at `0efcab9` passed 2,391 workspace tests with one
+ignored, all three additional macOS AccessKit tests, and every local audit.
+The local gate and native verification jobs have finished.
+[Acceptance and independent oracle](docs/verification-analysis-window.md).
+
+PR 27 landed on main at `f64a20e`.
+
+### Moving printed and hidden atoms together
+
+The native editor, CLI and initialized MCP can move selected atoms on four
+mixed skeletal CDX inputs. The fragment supplies hydrogen counts for selected
+atoms. RDKit checked the formula before and after movement and Unicode
+Save/reopen. [Movement evidence](docs/verification-cdx-mixed-skeletal-movement.md).
+
 ### Next executable work
 
-1. The Analysis window and CDX hydrogen defaults now run with mixed skeletal
-   movement. Whole drawings, selected printed oxygen, hidden carbons and mixed
-   selections pass formula checks using the complete fragment topology. The CLI
-   preserves source H omissions after movement and Unicode Save/reopen.
-   Mass, isotope distribution, elemental percentages and live captions remain open.
-   [Analysis evidence](docs/verification-analysis-window.md).
-2. Mixed skeletal CDX movement passes focused IO, command, App-frame, native
-   macOS, CLI and initialized MCP checks. Changing the printed label body on
-   these sources still needs its own byte and whole-page proof.
-   [Movement tests and scope](docs/verification-cdx-mixed-skeletal-movement.md).
+1. Integrate molecular weight and monoisotopic mass with independently
+   verified values in the existing Analysis window. Isotope distributions,
+   elemental percentages and live analysis captions remain open.
+2. Extend editing of printed label bodies on mixed CDX drawings with an
+   exact byte comparison, whole-page proof and a native Save/reopen check.
 3. The web host in `../bondline-web-workspace` is exercising actual egui/WebGPU
    startup, offline editing and history, and recovery across browser tabs.
    The codec test exercises a separate headless Wasm entry point. Interactive
