@@ -2459,3 +2459,5 @@ borane. [BIOVIA representation guide](https://manualzz.com/doc/44003874/biovia-c
 - Molecular weight, monoisotopic exact mass, nuclide completeness and ion conventions follow the [source register and numerical contract](../research/molecular-masses.md). It links the public v25 guide pp. 221–224, IUPAC definitions, CIAAW tables, NIST/CODATA and the MIT atomic-data revision.
 
 CDXML chemistry on coordinate-free carbon graphs distinguishes the plain document type declaration from an external system or public identifier. The lexical query preserves the validated source and treats text inside comments as ordinary comment data. [XML 1.0 document type declaration](https://www.w3.org/TR/xml/#NT-doctypedecl).
+
+Coordinate-free neutral carbon CDXML analysis applies the public elemental-node and minimum-valence H defaults only after checking every object, property and bond reference. Unused presentation resources remain in the original file. [Chemical coverage contract and public SDK properties](../research/cdxml-carbon-analysis.md).

@@ -1,3 +1,5 @@
+mod analysis;
+
 use super::{is_element, parse_position};
 use bondline_cdxml::{ObjectId, parse_integer};
 use bondline_model::{
