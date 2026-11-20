@@ -49,3 +49,12 @@ The corpus gate verified three matching complete drawings and five unsupported
 sources. Two individual SDF mol-block checks matched, and three SMILES record
 attempts remained unavailable. All 44 xtask tests and its warnings-denied
 Clippy check passed. [Corpus inventory](corpus/README.md).
+
+The existing CDXML parser fuzz target checks carbon valence conservation,
+written/omitted H identity and refusal of defaults after source-model
+detachment. An AddressSanitizer run with the original, the pinned file,
+double/triple and omitted-H variants, and stereo/DTD/valence negatives
+completed 10,000 inputs in eight seconds (seed 20261124). The eight immutable
+seed digests survived. The run reached a 727-byte mutation limit and 461 MiB
+reported RSS. Log SHA-256 was
+`2b96f6b29abd7a9afec83466d257eb3681adb73bf83ffb85e82af44dc5d86a2d`.
