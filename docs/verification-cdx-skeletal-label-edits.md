@@ -28,3 +28,9 @@ cargo test -p bondline-cli --test analysis_cdx --test sdf_capture_adapters -- pr
 ```
 
 Set `BONDLINE_PYTHON` to the pinned RDKit environment for CLI tests.
+
+## Browser and sanitizer checks
+
+A real headless Chromium session ran the maintained WebAssembly codec example, changed the second fragment of the twins drawing, compared all saved bytes with the independent file, reopened the model and compared the CPU paper. The module was 1,739,401 bytes, SHA-256 `d78f4abd61efbb33ca5cf6590f16cdb99d49009a3362350e3e33863da250178e`. Browser file import and a pointer-driven browser label edit require separate verification.
+
+AddressSanitizer with cargo-fuzz 0.13.2 and nightly 2026-04-01 completed 10,000 runs in two seconds. All 356 distinct original seeds retained their SHA-256 hashes. The largest reached input limit was 45,173 bytes and the final run produced zero crash artifacts. The initial seed pass exposed an obsolete harness assertion that had prohibited all mixed-label edits. Its 314-byte seed was replayed after changing the assertion to require the exact editing profile and retain the complete-mapping refusal. The final log SHA-256 is `c57796ff8101b5a078047a9e828f50df735c53f8d19afd684733279062510ec9`.
