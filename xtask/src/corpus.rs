@@ -11,6 +11,7 @@ use std::{
     process::{Command, Stdio},
 };
 
+mod formula;
 mod smiles;
 mod v3000;
 
@@ -500,6 +501,7 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
     if !cache.canonicalize()?.starts_with(&confined_root) {
         return Err("corpus cache escapes workspace".into());
     }
+    let mut chemistry = formula::Coverage::default();
     let mut round_trips = 0;
     let mut mol_checks = 0;
     let mut v3000_checks = 0;
@@ -535,6 +537,9 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
                 fs::rename(staged, path)?;
                 bytes
             };
+            chemistry
+                .check(file, &cache.join(&file.name), &bytes, output)
+                .map_err(|e| format!("{}: {e}", file.name))?;
             match file.format {
                 Format::Cdxml => {
                     let document = bondline_cdxml::Document::parse(&bytes)?;
@@ -620,7 +625,17 @@ fn check_at(root: &Path, offline: bool, output: &mut impl Write) -> Result<(), B
     )?;
     writeln!(
         output,
-        "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
+        "formula source files: {} matched RDKit, {} unavailable",
+        chemistry.files.matched, chemistry.files.unavailable
+    )?;
+    writeln!(
+        output,
+        "formula record checks: {} matched RDKit, {} unavailable",
+        chemistry.records.matched, chemistry.records.unavailable
+    )?;
+    writeln!(
+        output,
+        "additional corpus chemistry comparisons pending: mass, perceived aromaticity, stereo labels, canonical SMILES, InChI and names"
     )?;
     if round_trips == 0
         && mol_checks == 0
@@ -921,9 +936,8 @@ mod tests {
         assert!(output.contains("CDX original explicit field-vector byte/struct/RDKit checks: 0"));
         assert!(output.contains("SDF V2000 byte/ordered-field/per-record RDKit checks: 0"));
         assert!(output.contains("SMILES source/notation/literal/RDKit checks: 8"));
-        assert!(output.contains(
-            "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
-        ));
+        assert!(output.contains("formula source files: 0 matched RDKit, 8 unavailable"));
+        assert!(output.contains("formula record checks: 0 matched RDKit, 8 unavailable"));
         Ok(())
     }
 
@@ -1080,9 +1094,8 @@ mod tests {
                 .contains("MOL V3000 original-vector byte/source/literal/Decimal/RDKit checks: 5")
         );
         assert!(output.contains("MOL V2000 byte/source/RDKit/Decimal checks: 0"));
-        assert!(output.contains(
-            "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
-        ));
+        assert!(output.contains("formula source files: 5 matched RDKit, 0 unavailable"));
+        assert!(output.contains("formula record checks: 0 matched RDKit, 0 unavailable"));
         Ok(())
     }
 
@@ -1514,9 +1527,22 @@ mod tests {
         assert!(output.contains("CDX original explicit field-vector byte/struct/RDKit checks: 1"));
         assert!(output.contains("SMILES source/notation/literal/RDKit checks: 3"));
         assert!(output.contains("CDX foreign/general/application compatibility MISSING"));
-        assert!(output.contains(
-            "chemistry calculations (formula/mass/aromaticity/stereo/SMILES/InChI) MISSING"
-        ));
+        for expected in [
+            "rdkit-methyl-radical.mol drawing: Bondline CH3 matched RDKit",
+            "bondline-original-noncontiguous-v3000.mol drawing: Bondline C2H6 matched RDKit",
+            "bondline-original-ethane-explicit.cdx drawing: unsupported_source; RDKit reference C2H6",
+            "bondline-ordered-fields-v2000.sdf collection: unsupported_source; 2 molecule record(s)",
+            "bondline-ordered-fields-v2000.sdf isolated MOL block 1: Bondline C2H6 matched RDKit",
+            "bondline-ordered-fields-v2000.sdf isolated MOL block 2: Bondline C2H6 matched RDKit",
+            "bondline-original-isotopic-chain.smi SMILES record 1: import refused",
+            "RDKit reference C[13C]H6O",
+            "bondline-original-two-ring-labels.smi SMILES record 1: unsupported_source; RDKit reference C7H14",
+            "bondline-original-salt-branch.smi SMILES record 1: import refused",
+        ] {
+            assert_eq!(output.matches(expected).count(), 1, "{expected}");
+        }
+        assert!(output.contains("formula source files: 2 matched RDKit, 5 unavailable"));
+        assert!(output.contains("formula record checks: 2 matched RDKit, 3 unavailable"));
         Ok(())
     }
 
