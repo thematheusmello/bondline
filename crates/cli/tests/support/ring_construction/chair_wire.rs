@@ -112,7 +112,7 @@ fn same_session(result: &Value, before: &Value) -> TestResult {
 }
 fn controls(value: &Value, selected: &str) -> TestResult {
     let rows = value["controls"].as_array().ok_or("controls")?;
-    assert_eq!(rows.len(), 39);
+    assert_eq!(rows.len(), 40);
     for (kind, id, label) in [
         (ONE, "tool.ring.chair_1", "Cyclohexane chair 1"),
         (TWO, "tool.ring.chair_2", "Cyclohexane chair 2"),

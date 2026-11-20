@@ -365,7 +365,7 @@ fn schema_node<'a>(root: &'a Value, node: &'a Value) -> TestResult<&'a Value> {
 fn named_union_schema_and_native31_foreign20_14_10_controls_preserve_closed_source_authority()
 -> TestResult {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 51);
+    assert_eq!(registry.len(), 53);
     let row = registry
         .iter()
         .find(|r| r.name == "ui.ring_tool")
@@ -411,7 +411,7 @@ fn named_union_schema_and_native31_foreign20_14_10_controls_preserve_closed_sour
         std::collections::BTreeSet::from(["size", "kind", "chair"])
     );
     let mut e = Engine::default();
-    assert_eq!(e.controls().len(), 39);
+    assert_eq!(e.controls().len(), 40);
     for (kind, label, size) in [
         ("benzene", "Benzene", 6),
         ("cyclopentadiene", "Cyclopentadiene", 5),
@@ -474,7 +474,7 @@ fn named_union_schema_and_native31_foreign20_14_10_controls_preserve_closed_sour
             "bond_length_pt":48,"origin_x_pt":72,"origin_y_pt":72,"page_width_pt":210.0*72.0/25.4,"page_height_pt":297.0*72.0/25.4}))?;
         }
         let controls = foreign.controls();
-        assert_eq!(controls.len(), if projected { 22 } else { 12 });
+        assert_eq!(controls.len(), if projected { 23 } else { 13 });
         let settings = controls
             .iter()
             .find(|row| row.id == "file.document_settings")
@@ -497,7 +497,7 @@ fn named_union_schema_and_native31_foreign20_14_10_controls_preserve_closed_sour
     fs::write(&path, bytes)?;
     let mut sdf = Engine::default();
     sdf.dispatch("document.open_sdf", json!({"path":path}))?;
-    assert_eq!(sdf.controls().len(), 16);
+    assert_eq!(sdf.controls().len(), 17);
     let settings = sdf
         .controls()
         .into_iter()

@@ -1,5 +1,6 @@
 //! Native GPU workspace. Authoring controls dispatch through the shared command registry.
 
+mod analysis;
 mod atom_editor;
 #[cfg(test)]
 mod bond_history_tests;
@@ -110,6 +111,7 @@ pub fn configure_context(context: &egui::Context) {
 
 #[derive(Default)]
 pub struct DrawingState {
+    analysis: analysis::AnalysisWindow,
     settings: drawing_settings_editor::DrawingSettingsEditor,
     preferences: preferences_editor::PreferencesEditor,
     gesture: Option<BondGesture>,
@@ -808,8 +810,10 @@ fn pending_ui_blocks_authoring(state: &bondline_commands::CommandResult) -> bool
 }
 
 fn allowed_during_order(command: &Command) -> bool {
-    matches!(command, Command::UiView(_) | Command::Close(_))
-        || matches!(command, Command::UiFile(params) if params.action == bondline_commands::UiFileAction::Cancel)
+    matches!(
+        command,
+        Command::UiView(_) | Command::UiAnalysis(_) | Command::Close(_)
+    ) || matches!(command, Command::UiFile(params) if params.action == bondline_commands::UiFileAction::Cancel)
 }
 
 struct ShortcutRouting<'a> {
@@ -2583,6 +2587,7 @@ fn show_workspace_with_preview(
             },
         );
     }
+    drawing.analysis.show(context, engine);
     if authoring_modal_at_start
         || drawing.authoring_modal()
         || engine.state().ui_atom_label.is_some()

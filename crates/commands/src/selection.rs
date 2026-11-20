@@ -137,6 +137,13 @@ impl Engine {
         &self.selection.state
     }
 
+    pub(super) fn selected_source_is_current(&self) -> bool {
+        self.selection
+            .owner
+            .as_ref()
+            .is_some_and(|owner| self.capture_stamp_matches(owner))
+    }
+
     pub(super) fn has_full_native_source(&self) -> bool {
         self.stored_document().is_ok_and(|stored| {
             stored.is_fully_mapped()
@@ -383,11 +390,7 @@ impl Engine {
         if self.effective_tool != EffectiveTool::Selection
             || selected.atom_ids.is_empty()
             || selected.epoch != params.expected_selection_epoch
-            || self
-                .selection
-                .owner
-                .as_ref()
-                .is_none_or(|owner| !self.capture_stamp_matches(owner))
+            || !self.selected_source_is_current()
         {
             return Err(Error::StaleSelection);
         }

@@ -225,7 +225,7 @@ fn initialized_stdio_discovers_closed_import_and_saves_only_the_selected_record_
     client.send(json!({"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}))?;
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 51);
+    assert_eq!(tools.len(), 53);
     let names = tools
         .iter()
         .map(|tool| tool["name"].as_str().ok_or("name"))
@@ -234,7 +234,7 @@ fn initialized_stdio_discovers_closed_import_and_saves_only_the_selected_record_
         .iter()
         .copied()
         .collect::<std::collections::HashSet<_>>();
-    assert_eq!(unique.len(), 51);
+    assert_eq!(unique.len(), 53);
     for prior in [
         "document.new",
         "document.open_smiles",

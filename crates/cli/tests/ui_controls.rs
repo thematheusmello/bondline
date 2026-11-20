@@ -64,6 +64,7 @@ fn headless_controls_are_typed_bindings_and_never_claim_a_native_dialog()
             "view.fit",
             "view.magnify",
             "view.reduce",
+            "view.analysis",
             "tool.bond.single",
             "tool.bond.double",
             "tool.bond.triple",
