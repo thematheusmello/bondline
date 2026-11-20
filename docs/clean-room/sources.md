@@ -414,6 +414,12 @@ without inferring H, collapsing isotope bins, checking chemical validity or gran
 authority. No specification prose, external chemistry implementation or new dependency
 is shipped; notation, masses and Analysis UI remain missing.
 
+Molecular formula notation reviewed 2026-11-20 uses Hill's published element order,
+IUPAC isotope and charge conventions, and the separately executed RDKit descriptor.
+The library distinguishes combined element totals from numbered isotopes and uses
+an explicit ASCII charge suffix. Carbon-free formulas follow Hill's alphabetical
+ordering. [Sources, independently checked examples and qualifications](../research/hill-formula.md).
+
 Text edits reviewed2026-11-17 use [XML1.0](https://www.w3.org/TR/2008/REC-xml-20081126/)
 character-data rules and CDXML [Style](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Style.htm)/
 [Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm) structure. The original

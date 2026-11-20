@@ -802,10 +802,13 @@ selection, transforms, hotkeys, undo/redo and style sheets from public journal g
 
 ## M3: chemistry — in progress
 
-The [resolved numeric composition prerequisite](docs/verification-formula-composition.md)
-now has independent full-bound/literal/RDKit evidence and main full1831/0/1. It refuses
-unknown H and keeps isotope bins/charge exact. Source-aware inference, formula formatting,
-mass and the actual Analysis workflow remain missing; no command/tool is enabled here.
+Resolved composition now formats molecular formulas in strict Hill order.
+Combined element totals and numbered isotope terms both preserve the net charge.
+Twenty independently specified structures were checked with external RDKit.
+Carbon-free formulas use alphabetical element order. The library reports
+unresolved H explicitly. Source-aware inference, mass and the native Analysis
+workflow are still open. [Composition evidence](docs/verification-formula-composition.md)
+and [formula conventions and tests](docs/research/hill-formula.md).
 
 Valence, aromaticity, stereo/CIP, checking, cleanup, formula/mass, analysis, reactions,
 curved arrows, brackets and chemically formatted captions. Compare against independently

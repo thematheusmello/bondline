@@ -273,10 +273,11 @@ Chemical dependent labels, inherited defaults, mixed foreign diagrams and the co
 native Text editor remain required. That checkpoint's registry47/catalogue16/124 supersede the
 historical counts in the prerequisite paragraphs below.
 
-The [numeric composition library](verification-formula-composition.md) independently
-verifies explicitly resolved element/isotope/charge data. It does not implement inferred
-formula/mass or the Analysis window; those reference workflows remain missing. Registry46
-and catalogue16/124 remain unchanged.
+The chemistry library verifies resolved element, isotope and net-charge counts
+and formats them in Hill order. Independent tests include 20 structures and
+the carbon-free ordering difference from RDKit. User-facing mass, formula
+for unresolved structures and the Analysis window remain missing.
+[Composition](verification-formula-composition.md) and [Hill formulas](research/hill-formula.md).
 
 [Text-only syntax edits](verification-source-preserving-xml-text.md) are another M1
 prerequisite. Text/font/colour controls and general imported-label edit/render workflows
