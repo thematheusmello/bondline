@@ -256,3 +256,143 @@ fn empty_cdx_creates_its_first_caption_and_reopens_the_sparse_undo_branch() -> T
     assert_eq!(engine.stored_document()?.export_cdx()?, unsupported_font);
     Ok(())
 }
+
+#[test]
+fn chemistry_survives_new_cdx_caption_branch_save_and_reopen() -> TestResult {
+    let directory = files::FileTestDirectory::new()?;
+    let geometry: Value = serde_json::from_str(include_str!(
+        "../../io/tests/fixtures/cdx-label-preview/cases.json"
+    ))?;
+    let chemical = &geometry["renderable"]["boxed"]["model"]["pages"][0];
+    for (name, before, first, sparse, next_id) in [
+        (
+            "chemical",
+            include_bytes!("../../io/tests/fixtures/cdx-label-preview/boxed.cdx").as_slice(),
+            include_bytes!(
+                "../../io/tests/fixtures/cdx-chemical-caption-create/chemical_first.cdx"
+            )
+            .as_slice(),
+            include_bytes!(
+                "../../io/tests/fixtures/cdx-chemical-caption-create/chemical_after_undo.cdx"
+            )
+            .as_slice(),
+            1,
+        ),
+        (
+            "mixed",
+            include_bytes!("../../io/tests/fixtures/cdx-mixed-caption-edit/before.cdx").as_slice(),
+            include_bytes!("../../io/tests/fixtures/cdx-chemical-caption-create/mixed_first.cdx")
+                .as_slice(),
+            include_bytes!(
+                "../../io/tests/fixtures/cdx-chemical-caption-create/mixed_after_undo.cdx"
+            )
+            .as_slice(),
+            20,
+        ),
+    ] {
+        let input = directory.path(&format!("{name}-原.cdx"));
+        let output = directory.path(&format!("{name}-保存-β.cdx"));
+        fs::write(&input, before)?;
+        let mut engine = Engine::default();
+        let opened = engine.dispatch("document.open_cdx", json!({"path":input}))?;
+        let original = engine.content().clone();
+        let baseline = serde_json::to_value(opened.document)?;
+        assert_eq!(baseline["pages"][0]["fragments"], chemical["fragments"]);
+        let old_texts = baseline["pages"][0]["texts"]
+            .as_array()
+            .cloned()
+            .unwrap_or_default();
+        let old_ids: Vec<_> = old_texts.iter().map(|t| &t["id"]).collect();
+        assert_eq!(
+            json!(old_ids),
+            if name == "mixed" {
+                json!([1, 19])
+            } else {
+                json!([])
+            }
+        );
+        let expected = |id| {
+            let mut texts = old_texts.clone();
+            texts.push(json!({"id":id,"position":{"x_pt":144.25,"y_pt":216.75},
+                "runs":[{"text":BODY,"style":{"font_family":"Roboto","size_pt":12.0,"face":0,"rgb":[0.0,0.0,0.0]}}]}));
+            let mut document = baseline.clone();
+            document["pages"][0]["texts"] = json!(texts);
+            document
+        };
+        let created = engine.dispatch("text.create", create(opened.revision, BODY))?;
+        assert!(created.changed && created.file.dirty);
+        assert_eq!((created.undo_depth, created.redo_depth), (1, 0));
+        assert_eq!(serde_json::to_value(created.document)?, expected(next_id));
+        assert_eq!(engine.stored_document()?.export_cdx()?, first);
+        assert!(engine.stored_document()?.has_cdx_mixed_preview());
+        assert!(!engine.selection_available());
+
+        let undo = engine.dispatch("history.undo", json!({}))?;
+        assert!(!undo.file.dirty);
+        assert_eq!(engine.content(), &original);
+        assert_eq!(engine.stored_document()?.export_cdx()?, before);
+        engine.dispatch("history.redo", json!({}))?;
+        assert_eq!(engine.stored_document()?.export_cdx()?, first);
+        let undo = engine.dispatch("history.undo", json!({}))?;
+        reject(
+            &mut engine,
+            "text.create",
+            create(undo.revision, "   "),
+            "invalid_params",
+        )?;
+        let branch = engine.dispatch("text.create", create(undo.revision, BODY))?;
+        assert_eq!((branch.undo_depth, branch.redo_depth), (1, 0));
+        assert_eq!(
+            serde_json::to_value(branch.document)?,
+            expected(next_id + 1)
+        );
+        assert_eq!(engine.stored_document()?.export_cdx()?, sparse);
+        let lost = directory.path(&format!("{name}-loss.cdxml"));
+        reject(
+            &mut engine,
+            "document.save_cdxml",
+            json!({"path":lost}),
+            "unsupported_content",
+        )?;
+        assert!(!lost.exists());
+        let saved = engine.dispatch("document.save_cdx", json!({"path":output}))?;
+        assert!(!saved.file.dirty);
+        let source = saved.source.ok_or("retained chemical source")?;
+        assert_eq!((source.byte_length, source.modified), (before.len(), true));
+        let receipt = saved.file_operation.ok_or("Save As receipt")?;
+        assert_eq!(
+            (receipt.byte_length, receipt.input_revision),
+            (sparse.len(), branch.revision)
+        );
+        assert_eq!(fs::read(&input)?, before);
+        assert_eq!(fs::read(&output)?, sparse);
+        let reopened = engine.dispatch("document.open_cdx", json!({"path":output}))?;
+        assert_eq!(
+            serde_json::to_value(reopened.document)?,
+            expected(next_id + 1)
+        );
+        assert_eq!(
+            (
+                reopened.undo_depth,
+                reopened.redo_depth,
+                reopened.file.dirty
+            ),
+            (0, 0, false)
+        );
+        assert_eq!(engine.stored_document()?.export_cdx()?, sparse);
+        reject(
+            &mut engine,
+            "text.set_run",
+            edit(reopened.revision, next_id, "Gap"),
+            "invalid_document",
+        )?;
+        let editing = engine.dispatch(
+            "text.set_run",
+            edit(reopened.revision, next_id + 1, "Phase β & r"),
+        )?;
+        assert!(editing.changed);
+        engine.dispatch("history.undo", json!({}))?;
+        assert_eq!(engine.stored_document()?.export_cdx()?, sparse);
+    }
+    Ok(())
+}
