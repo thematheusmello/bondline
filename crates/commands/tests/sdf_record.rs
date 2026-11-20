@@ -71,6 +71,8 @@ fn sdf_record_query_schema_is_read_only_closed_and_keeps_all_eighteen_names() ->
             "atom.create_authored_label",
             "ui.caption",
             "text.create",
+            "analysis.formula",
+            "ui.analysis",
         ]
         .into_iter()
         .collect()

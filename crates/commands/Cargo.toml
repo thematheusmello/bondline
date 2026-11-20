@@ -9,6 +9,7 @@ license.workspace = true
 layer = 3
 
 [dependencies]
+bondline-chem = { path = "../chem" }
 bondline-model = { path = "../model" }
 bondline-render = { path = "../render" }
 bondline-io = { path = "../io" }

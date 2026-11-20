@@ -634,6 +634,24 @@ impl Engine {
                 selected: None,
             });
         }
+        controls.push(ControlInfo {
+            id: "view.analysis",
+            label: if self.analysis_window_open {
+                "Hide Analysis Window"
+            } else {
+                "Show Analysis Window"
+            },
+            menu: "View",
+            submenu: None,
+            shortcut: None,
+            command: Command::UiAnalysis(crate::UiAnalysis {
+                expected_revision: state.revision,
+                visible: !self.analysis_window_open,
+            }),
+            enabled: authoring_reason.is_none(),
+            disabled_reason: authoring_reason,
+            selected: Some(self.analysis_window_open),
+        });
         controls
     }
 }

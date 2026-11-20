@@ -943,7 +943,7 @@ fn all_six_bindings_use_one_effective_mode_and_same_ring_noop_preserves_an_armed
         assert_eq!(ring_selected(&f)?, vec![format!("tool.ring.{n}")]);
         let controls = f.command("ui.controls", json!({}))?;
         let rows = controls["controls"].as_array().ok_or("controls")?;
-        assert_eq!(rows.len(), 40);
+        assert_eq!(rows.len(), 41);
         assert!(rows.iter().any(|row| {
             row["id"] == "tool.caption" && row["enabled"] == true && row["selected"] == false
         }));
@@ -1105,7 +1105,7 @@ fn ring_cancellation_and_source_contexts_never_revive_an_old_preview_or_guess_a_
                 let bytes = include_bytes!("../../io/tests/fixtures/sdf/mixed-v2000-v3000.sdf");
                 fs::write(&input, bytes)?;
                 f.command("document.open_sdf", json!({"path":input}))?;
-                replacement = Some((input, bytes.to_vec(), 16));
+                replacement = Some((input, bytes.to_vec(), 17));
             }
             "raw_smiles" | "retained_smiles" => {
                 let input = f.directory.path("replacement-原.smi");
@@ -1118,7 +1118,7 @@ fn ring_cancellation_and_source_contexts_never_revive_an_old_preview_or_guess_a_
                 replacement = Some((
                     input,
                     bytes.to_vec(),
-                    if change == "retained_smiles" { 22 } else { 12 },
+                    if change == "retained_smiles" { 23 } else { 13 },
                 ));
             }
             _ => return Err("undeclared ring cancellation".into()),

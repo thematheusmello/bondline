@@ -29,7 +29,7 @@ fn metadata(rows: &[Value], mcp: bool) -> TestResult {
     let old: Vec<Value> = serde_json::from_str(&registry_fixture::with_cdx_caption_edit(
         include_str!("atom-child-old47.json"),
     ))?;
-    assert_eq!((old.len(), rows.len()), (47, 51));
+    assert_eq!((old.len(), rows.len()), (47, 53));
     for (row, expected) in rows.iter().zip(&old) {
         if mcp {
             assert_eq!(row["name"], expected["name"]);

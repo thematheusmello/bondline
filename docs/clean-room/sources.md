@@ -1,5 +1,7 @@
 # Clean-room source register
 
+The [Analysis window contract](../research/analysis-window.md) records the selected-atom and whole-drawing workflow in vendor support and guide v25, together with the independent Hill notation policy.
+
 The [mixed CDX atom-label edit contract](../research/cdx-mixed-label-edits.md) covers Node-owned Element, attached H, child Text, signed rectangles and retained Page caption depths. Independent source pairs pin aliases between different containers and a change crossing the paper boundary.
 
 The [chemical drawing caption creation contract](../research/cdx-chemical-caption-creation.md)

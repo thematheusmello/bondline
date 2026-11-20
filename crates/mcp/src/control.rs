@@ -184,6 +184,7 @@ async fn publish_result(
     let notify = result.as_ref().is_ok_and(|result| {
         result.changed
             || result.view_target_prepared
+            || result.analysis_visibility_changed
             || result.file_operation.is_some()
             || result.close_operation.is_some()
             || result.ui_file_operation.is_some()
@@ -377,6 +378,49 @@ mod tests {
     fn acknowledge_if_idle(executor: &CommandExecutor) -> Result<bool, Box<dyn std::error::Error>> {
         let mut engine = executor.engine().lock().map_err(|_| "engine")?;
         Ok(!executor.has_active_work() && engine.complete_close())
+    }
+
+    #[tokio::test(flavor = "current_thread")]
+    async fn analysis_visibility_repaints_once_per_transition_but_queries_never_wake()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let engine = Arc::new(Mutex::new(Engine::default()));
+        let executor = CommandExecutor::new(engine);
+        for (name, params, wake) in [
+            (
+                "ui.analysis",
+                json!({"expected_revision":0,"visible":true}),
+                true,
+            ),
+            (
+                "ui.analysis",
+                json!({"expected_revision":0,"visible":true}),
+                false,
+            ),
+            (
+                "analysis.formula",
+                json!({"expected_revision":0,"expected_selection_epoch":0}),
+                false,
+            ),
+            (
+                "ui.analysis",
+                json!({"expected_revision":0,"visible":false}),
+                true,
+            ),
+        ] {
+            let request = serde_json::to_vec(&json!({"command":name,"params":params}))?;
+            let (registered, publication) = executor
+                .prepare_json(&request)
+                .map_err(|e| e.info.message)?;
+            let result = executor.complete(registered, std::future::pending()).await;
+            let notified = AtomicBool::new(false);
+            publish_result(&mut tokio::io::sink(), result, publication, &|| {
+                assert!(!executor.has_active_work());
+                notified.store(true, Ordering::SeqCst);
+            })
+            .await?;
+            assert_eq!(notified.load(Ordering::SeqCst), wake, "{name}");
+        }
+        Ok(())
     }
 
     #[tokio::test(flavor = "current_thread")]

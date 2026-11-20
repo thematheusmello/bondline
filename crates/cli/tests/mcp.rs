@@ -125,7 +125,7 @@ fn stdio_smiles_record_query_is_bounded_exact_private_and_not_cached()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 51);
+    assert_eq!(tools.len(), 53);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "smiles.record.inspect")
@@ -367,7 +367,7 @@ fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 51);
+    assert_eq!(tools.len(), 53);
     let tool = tools
         .iter()
         .find(|t| t["name"] == "file.export_smiles_fragment")
@@ -424,7 +424,7 @@ fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real(
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 51);
+    assert_eq!(tools.len(), 53);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
@@ -1068,6 +1068,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
     assert_eq!(
         names,
         [
+            "analysis.formula",
             "atom.create_authored_label",
             "atom.set_authored_label",
             "atom.set_label",
@@ -1108,6 +1109,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
             "structure.paste_smiles",
             "text.create",
             "text.set_run",
+            "ui.analysis",
             "ui.atom_label",
             "ui.bond_tool",
             "ui.caption",
@@ -1747,7 +1749,7 @@ fn stdio_file_presentation_is_unavailable_without_a_host_and_cannot_forge_acknow
         queried["ui_file"],
         json!({"available":false,"epoch":0,"request":null})
     );
-    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 39);
+    assert_eq!(queried["controls"].as_array().ok_or("controls")?.len(), 40);
     assert!(queried.get("ui_file_operation").is_none());
     for (id, arguments, code) in [
         (
@@ -1813,4 +1815,96 @@ fn stdio_file_presentation_is_unavailable_without_a_host_and_cannot_forge_acknow
     assert!(inspected.get("ui_file_operation").is_none());
     client.finish()?;
     Ok(())
+}
+
+#[test]
+fn stdio_analysis_handles_show_selection_and_stale_requests()
+-> Result<(), Box<dyn std::error::Error>> {
+    let mut client = Client::start()?;
+    client.call(1,"initialize",json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"formula-test","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let list = client.call(2, "tools/list", json!({}))?;
+    let tools = list["result"]["tools"].as_array().ok_or("tools")?;
+    let cli = Command::new(env!("CARGO_BIN_EXE_bondline-cli"))
+        .arg("commands")
+        .output()?;
+    assert!(cli.status.success());
+    let cli: Value = serde_json::from_slice(&cli.stdout)?;
+    let python = std::env::var_os("BONDLINE_PYTHON").unwrap_or_else(|| {
+        if cfg!(windows) {
+            "python".into()
+        } else {
+            "python3".into()
+        }
+    });
+    let mut oracle = Command::new(python)
+        .arg(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../xtask/oracles/analysis_registry.py"
+        ))
+        .stdin(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()?;
+    serde_json::to_writer(oracle.stdin.take().ok_or("oracle stdin")?, &(&cli, tools))?;
+    let checked = oracle.wait_with_output()?;
+    assert!(
+        checked.status.success(),
+        "{}",
+        String::from_utf8_lossy(&checked.stderr)
+    );
+    let call = |name, params: Value| json!({"name":name,"arguments":params});
+    let shown = client.call(
+        3,
+        "tools/call",
+        call("ui.analysis", json!({"expected_revision":0,"visible":true})),
+    )?;
+    assert_eq!(
+        shown["result"]["structuredContent"]["analysis_window_open"],
+        true
+    );
+    client.call(
+        4,
+        "tools/call",
+        call(
+            "bond.create",
+            json!({"page_id":1,"begin_x_pt":72,"begin_y_pt":72,"end_x_pt":120,"end_y_pt":72}),
+        ),
+    )?;
+    let select = client.call(
+        5,
+        "tools/call",
+        call(
+            "ui.selection",
+            json!({"action":"set","expected_revision":1,"page_id":1,"atom_ids":[1]}),
+        ),
+    )?;
+    assert_eq!(
+        select["result"]["structuredContent"]["ui_selection"]["epoch"],
+        1
+    );
+    let result = client.call(
+        6,
+        "tools/call",
+        call(
+            "analysis.formula",
+            json!({"expected_revision":1,"expected_selection_epoch":1}),
+        ),
+    )?;
+    assert_eq!(
+        result["result"]["structuredContent"]["analysis"],
+        json!({"scope":"selection","status":"available","atom_count":1,"fragment_count":1,"partial_fragments":true,"formula":"CH3"})
+    );
+    let stale = client.call(
+        7,
+        "tools/call",
+        call(
+            "analysis.formula",
+            json!({"expected_revision":1,"expected_selection_epoch":0}),
+        ),
+    )?;
+    assert_eq!(
+        stale["result"]["structuredContent"]["error"]["code"],
+        "stale_selection"
+    );
+    client.finish()
 }

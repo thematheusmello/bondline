@@ -1,5 +1,9 @@
 # Open questions
 
+## Hydrogen counts at a selection boundary
+
+Guide v25 allows a partial structure selection. The hydrogen and charge treatment for a cut bond is unspecified. Bondline discloses the selected atoms’ recorded composition and leaves an excised or hydrogen-capped molecular formula unresolved. [Analysis window contract](../research/analysis-window.md).
+
 ## CDX caption identity on external resave, 2026-11-19
 
 Persistent ObjectTag resave is documented. Actual external treatment
