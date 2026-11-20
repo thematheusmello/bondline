@@ -544,7 +544,9 @@ and reopen preserved the original bytes. Actual macOS, CLI and initialized MCP
 returned matching CPU and Metal captures at 100% and 200%. FontTools verified
 the printed label bounds and bond clearance, and RDKit checked each formula
 and connectivity. The offline Chromium codec check and 10,000 AddressSanitizer
-iterations on the integrated parser passed. [Tests and scope](docs/verification-cdx-mixed-skeleton.md).
+iterations on the integrated parser passed. The full local gate at `a0269d2`
+passed 2,373 workspace tests with one ignored, all three macOS AccessKit tests
+and all required validation steps. [Tests and scope](docs/verification-cdx-mixed-skeleton.md).
 
 ### Next executable work
 
