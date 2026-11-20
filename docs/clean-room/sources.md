@@ -2459,3 +2459,12 @@ borane. [BIOVIA representation guide](https://manualzz.com/doc/44003874/biovia-c
 - Molecular weight, monoisotopic exact mass, nuclide completeness and ion conventions follow the [source register and numerical contract](../research/molecular-masses.md). It links the public v25 guide pp. 221–224, IUPAC definitions, CIAAW tables, NIST/CODATA and the MIT atomic-data revision.
 
 - Elemental analysis uses each element’s percentage of the molecular weight in the current scope. [Revvity Signals v25 guide, printed p. 221](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), [IUPAC mass fraction](https://goldbook.iupac.org/terms/view/M03722), [Bondline’s numeric and presentation conventions](../research/elemental-analysis.md).
+
+### Accessible menu activation, 2026-11-20
+
+Apple's public AXPress action is the native entry point for pressing a control.
+egui 0.29.1 reports a click for an enabled button targeted by AccessKit
+Default. Its published nested menu originally opens on hover. Bondline uses
+the existing button activation for nested menus and grants the same current
+menu action at its event index when the window lacks keyboard focus.
+[Apple AXPress](https://developer.apple.com/documentation/applicationservices/kaxpressaction) · [egui button response](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/context.rs) · [egui submenu](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/menu.rs) · [Verification](../verification-accessible-menus.md)
