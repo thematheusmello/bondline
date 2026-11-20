@@ -104,7 +104,12 @@ fn choose_record(ui: &mut egui::Ui, number: &mut u32, count: u32, format: &str) 
     let previous = *number;
     if count > 1 {
         ui.horizontal(|ui| {
-            let label = ui.label("Record number");
+            // The raw SMILES inspector has its own independent record selector.
+            let label = ui.label(if format == "SMILES" {
+                "Analysis record number"
+            } else {
+                "Record number"
+            });
             ui.add(egui::DragValue::new(number).range(1..=count).speed(1.0))
                 .labelled_by(label.id);
         });

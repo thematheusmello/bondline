@@ -1833,7 +1833,15 @@ fn analysis_reads_raw_smiles_records_and_resets_after_file_replacement() -> Test
     let first = fixture.warm();
     assert!(painted(&first, "SMILES record 1 of 3") && painted(&first, "C[13C]H6O"));
     let state = fixture.state()?;
-    fixture.choose("Next molecule")?;
+    use egui::accesskit::{Action, ActionRequest, Role};
+    let (analysis, _) = fixture.node("Analysis record number", &[Role::SpinButton])?;
+    let (inspector, _) = fixture.node("Record number", &[Role::SpinButton])?;
+    assert_ne!(analysis, inspector);
+    fixture.frame(vec![egui::Event::AccessKitActionRequest(ActionRequest {
+        action: Action::Increment,
+        target: analysis,
+        data: None,
+    })]);
     let second = fixture.warm();
     assert!(painted(&second, "SMILES record 2 of 3") && painted(&second, "C2H6"));
     assert!(painted(
