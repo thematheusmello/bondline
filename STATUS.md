@@ -18,6 +18,8 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each at
 commit as the user requires. The user now expressly authorizes merging completed feature
 PRs into main; release/publication and enabling Actions remain separate.
 
+The CDXML chain integration at `2df21f2` includes the merged Darwin listener fix and skeletal CDX label edits. Its fresh full local gate passed 2,427 workspace tests and three additional AccessKit tests, with one workspace case ignored. [Qualified source, native and aggregate evidence](docs/verification-cdxml-carbon-analysis.md).
+
 ## Current recoverable work and evidence
 
 Main integration is delivered: [PR1](https://github.com/thematheusmello/bondline/pull/1)
