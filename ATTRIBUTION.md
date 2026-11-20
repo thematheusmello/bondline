@@ -10,6 +10,7 @@ The original bond-loop B, custom path wordmark and light/dark/app-tile masters a
 | UI font | Google Roboto, Apache-2.0 | [Font notice](assets/fonts/LICENSE-Roboto.txt), exact revision/hash in [asset manifest](assets/manifest.json) |
 | Native framework source forks | eframe, egui, winit and AccessKit; their upstream MIT/Apache/BSD notices remain adjacent | [Dependency policy](docs/dependency-policy.md), vendor BONDLINE-PATCH.md files |
 | Compatibility adapters | Original Bondline implementations; package names retained for Cargo patch routing | [Agent instructions](AGENTS.md), [dependency policy](docs/dependency-policy.md) |
+| Atomic masses | elements_rs 0.2.8 and strum 0.28.0, MIT; proc macros strum_macros and heck, MIT choice | [Notices](docs/notices/molecular-masses), [dataset and conventions](docs/research/molecular-masses.md) |
 | Interchange test corpus | Reviewed RDKit fixtures, BSD-3-Clause; downloaded files are not committed | [Corpus manifest](docs/corpus/manifest.json), [BSD notice](docs/corpus/rdkit-license.txt) |
 | Documentation visuals | Original banners and actual native Bondline captures | [Media sources, build identity and hashes](docs/media/SOURCES.md) |
 
