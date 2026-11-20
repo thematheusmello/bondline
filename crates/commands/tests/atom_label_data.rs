@@ -75,7 +75,7 @@ fn source_free_and_exact_native_labels_refuse_dependent_commands_without_escapin
     let own = source_free_label()?;
     let canonical = StoredDocument::from_cdxml(own.to_cdxml()?.into_owned().into(), PageSize::A4)?;
     let registry = serde_json::to_string(&bondline_commands::registry())?;
-    assert_eq!(bondline_commands::registry().len(), 53);
+    assert_eq!(bondline_commands::registry().len(), 54);
     for stored in [own, canonical] {
         assert!(!stored.is_fully_mapped());
         let mut e = Engine::from_document(stored);

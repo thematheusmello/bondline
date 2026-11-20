@@ -402,6 +402,11 @@ mod tests {
                 false,
             ),
             (
+                "analysis.properties",
+                json!({"expected_revision":0,"expected_selection_epoch":0}),
+                false,
+            ),
+            (
                 "ui.analysis",
                 json!({"expected_revision":0,"visible":false}),
                 true,

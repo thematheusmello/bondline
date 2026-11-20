@@ -125,7 +125,7 @@ fn stdio_smiles_record_query_is_bounded_exact_private_and_not_cached()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 53);
+    assert_eq!(tools.len(), 54);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "smiles.record.inspect")
@@ -367,7 +367,7 @@ fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 53);
+    assert_eq!(tools.len(), 54);
     let tool = tools
         .iter()
         .find(|t| t["name"] == "file.export_smiles_fragment")
@@ -424,7 +424,7 @@ fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real(
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 53);
+    assert_eq!(tools.len(), 54);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
@@ -1069,6 +1069,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         names,
         [
             "analysis.formula",
+            "analysis.properties",
             "atom.create_authored_label",
             "atom.set_authored_label",
             "atom.set_label",
@@ -1906,20 +1907,35 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
         stale["result"]["structuredContent"]["error"]["code"],
         "stale_selection"
     );
+    let properties = client.call(
+        8,
+        "tools/call",
+        call(
+            "analysis.properties",
+            json!({"expected_revision":1,"expected_selection_epoch":1}),
+        ),
+    )?;
+    let state = &properties["result"]["structuredContent"];
+    assert_eq!(state["changed"], false);
+    assert_eq!(state["analysis"]["formula"], "CH3");
+    assert_eq!(state["analysis"]["partial_fragments"], true);
+    let mass = &state["analysis"]["masses"];
+    assert!((mass["molecular_weight"].as_f64().ok_or("weight")? - 15.035).abs() < 1e-8);
+    assert!((mass["exact_mass_da"].as_f64().ok_or("mass")? - 15.02347509669).abs() < 1e-8);
     let fixtures = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
     for (id, source, expected) in [
         (
-            8,
+            9,
             "cdx-skeletal/propane.cdx",
             json!({"scope":"document","status":"available","atom_count":3,"fragment_count":1,"partial_fragments":false,"formula":"C3H8"}),
         ),
         (
-            10,
+            11,
             "cdx-mixed-skeleton/literal_h.cdx",
             json!({"scope":"document","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":false,"formula":"CH4O"}),
         ),
         (
-            12,
+            13,
             "cdx-mixed-skeleton/amino_alcohol.cdx",
             json!({"scope":"document","status":"available","atom_count":5,"fragment_count":1,"partial_fragments":false,"formula":"C3H9NO","defaulted_hydrogen_atoms":3}),
         ),
@@ -1951,7 +1967,7 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
             false
         );
     }
-    let mut request_id = 14..;
+    let mut request_id = 15..;
     let mut run = |name, args| -> Result<Value, Box<dyn std::error::Error>> {
         let result = client.call(
             request_id.next().ok_or("request ID")?,
@@ -1993,4 +2009,53 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
         assert_eq!(stale["error"]["code"], "stale_selection");
     }
     client.finish()
+}
+
+#[test]
+fn stdio_mol_analysis_uses_unselected_neighbours_and_retains_original_valence_fields()
+-> Result<(), Box<dyn std::error::Error>> {
+    let directory = file_support::FileTestDirectory::new()?;
+    let source = include_str!("../../io/tests/fixtures/sdf-preview/valence-absent-mixed.sdf");
+    let end = source.find("M  END\n").ok_or("ethanol MOL block")? + "M  END\n".len();
+    let original = source.get(..end).ok_or("complete MOL block")?;
+    let input = directory.path("ethanol.mol");
+    let saved = directory.path("保存-ethanol.mol");
+    std::fs::write(&input, original)?;
+    let mut client = Client::start()?;
+    client.call(1, "initialize", json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"mol-analysis","version":"1"}}))?;
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let mut id = 1;
+    let mut call = |name: &str, arguments: Value| -> Result<Value, Box<dyn std::error::Error>> {
+        id += 1;
+        Ok(client.call(id,"tools/call",json!({"name":name,"arguments":arguments}))?["result"]["structuredContent"].clone())
+    };
+    let opened = call("document.open_mol", json!({"path":input}))?;
+    assert_eq!(opened["revision"], 1);
+    let selected = call(
+        "ui.selection",
+        json!({"action":"set","expected_revision":1,"page_id":1,"atom_ids":[2,3]}),
+    )?;
+    let epoch = &selected["ui_selection"]["epoch"];
+    let result = call(
+        "analysis.formula",
+        json!({"expected_revision":1,"expected_selection_epoch":epoch}),
+    )?;
+    assert_eq!(
+        result["analysis"],
+        json!({"scope":"selection","status":"available","formula":"CH3O","atom_count":2,"fragment_count":1,"partial_fragments":true,"defaulted_hydrogen_atoms":2})
+    );
+    let blocked = call(
+        "selection.translate",
+        json!({"expected_revision":1,"expected_selection_epoch":epoch,"delta_x_pt":1,"delta_y_pt":0}),
+    )?;
+    assert_eq!(blocked["error"]["code"], "unsupported_content");
+    let state = call("document.inspect", json!({}))?;
+    assert_eq!(state["document"], opened["document"]);
+    assert_eq!(state["ui_selection"], selected["ui_selection"]);
+    assert_eq!(state["undo_depth"], 0);
+    assert_eq!(state["file"]["dirty"], false);
+    call("document.save_mol", json!({"path":saved}))?;
+    assert_eq!(std::fs::read(&saved)?, original.as_bytes());
+    client.finish()?;
+    Ok(())
 }

@@ -165,7 +165,7 @@ fn schema_node<'a>(
 fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_name_order()
 -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 53);
+    assert_eq!(rows.len(), 54);
     assert_eq!(
         rows[..41].iter().map(|row| row.name).collect::<Vec<_>>(),
         OLD_NAMES
@@ -492,7 +492,7 @@ fn host_source_and_other_form_guards_fail_before_request_id_allocation() -> Test
             "old.mol",
             include_bytes!("../../io/tests/fixtures/mol/ethane-v2000.mol").as_slice(),
             "document.open_mol",
-            23,
+            26,
         ),
         (
             "old.cdx",
@@ -524,9 +524,21 @@ fn host_source_and_other_form_guards_fail_before_request_id_allocation() -> Test
             json!({"action":"open","expected_revision":1}),
             "unsupported_content",
         )?;
-        assert_eq!(engine.controls().len(), controls);
-        let preferences = engine
-            .controls()
+        let available = engine.controls();
+        assert_eq!(available.len(), controls, "{name}");
+        for (id, enabled) in [
+            ("tool.selection", true),
+            ("edit.select_all", true),
+            ("edit.deselect", false),
+        ] {
+            let control = available.iter().find(|c| c.id == id);
+            assert_eq!(
+                control.map(|row| row.enabled),
+                (command == "document.open_mol").then_some(enabled),
+                "{name}: {id}"
+            );
+        }
+        let preferences = available
             .into_iter()
             .find(|row| row.id == "file.preferences")
             .ok_or("Preferences remains available for every source family")?;

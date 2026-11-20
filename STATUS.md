@@ -2482,3 +2482,32 @@ ignored proposals/source reviews only; Root integrated and executed checks.
 3. Preserve initial native File-menu first-click uncertainty for a bounded own-app
    investigation; Cmd+O is verified. Fused/spiro/Shift/density and other-platform native
    acceptance remain required. GitHub Actions stays disabled; no unrequested publication.
+
+### Analysis molecular weight and exact mass
+
+[PR 29](https://github.com/thematheusmello/bondline/pull/29) contains chemistry
+`b2ea49b`, shared command `2939458`, native panel `0f909f9` and main/#27 ancestry
+`2e92757`. The Analysis window now shows both mass quantities for complete
+structures and uncapped selected-atom contributions. Tabulated data, convention,
+licensing and unavailable reasons are documented. The 25 chemistry, 10 focused
+command, three CLI, one MCP and four App-frame tests passed. An isolated macOS
+background host verified the values through its own accessibility tree and
+closed. The native licenses and four-target dependency delta passed.
+[Acceptance and replay](docs/verification-analysis-masses.md).
+
+The complete local gate passed on `523e0c4` with main/#28 in its ancestry:
+workspace 2,403 passed, zero failed, one ignored; the separate AccessKit suite
+passed all three tests. Formatting, both Clippy checks, layering, licenses,
+assets and corpus checks passed. Mixed CDX now also supplies a checked CH₃O
+selection with one defaulted carbon. Adjustable decimals, isotope distribution,
+elemental percentages, overrides and live captions remain open. Actions stays
+off and M0–M5 remains active.
+
+### MOL chemistry and selection
+
+[PR 30](https://github.com/thematheusmello/bondline/pull/30) extends analysis
+to qualified V2000 and V3000 valence defaults and selected-atom contributions.
+The local gate passed at `7c73558` with 2,406 passed, zero failed and one
+ignored, plus three AccessKit tests. The authenticated macOS app and MCP
+verified the source-preserving selection and Unicode save workflow.
+[Verification and full-gate digest](docs/verification-mol-analysis.md).
