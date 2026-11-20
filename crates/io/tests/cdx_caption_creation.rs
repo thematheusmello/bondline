@@ -272,7 +272,7 @@ fn first_caption_preserves_a_prior_owned_atom_label_edit_and_its_original_source
         expected_chemical_caption(labelled, 277, 1, 1)
     );
     assert!(with_text.has_cdx_mixed_preview());
-    assert!(!with_text.can_edit_cdx_atom_label(atom));
+    assert!(with_text.can_edit_cdx_atom_label(atom));
     assert!(edited.can_edit_cdx_atom_label(atom));
     assert_eq!(
         with_text.source_info().ok_or("provenance")?.byte_length,
@@ -290,13 +290,15 @@ fn mixed_creation_refuses_raw_id_and_front_depth_exhaustion_without_modifying_th
     let mut max_depth = include_bytes!("fixtures/cdx-mixed-caption/overlap_before.cdx").to_vec();
     assert_eq!(&max_depth[155..157], &7_i16.to_le_bytes());
     max_depth[155..157].copy_from_slice(&i16::MAX.to_le_bytes());
-    for (raw, reason) in [
-        (max_object, "an available raw object ID"),
-        (max_depth.as_slice(), "an available caption depth"),
+    let edited_at_max = include_bytes!("fixtures/cdx-mixed-label-edit/depth_max_oh.cdx");
+    for (raw, reason, next_id) in [
+        (max_object, "an available raw object ID", 2),
+        (max_depth.as_slice(), "an available caption depth", 2),
+        (edited_at_max.as_slice(), "an available caption depth", 21),
     ] {
         let source = read(raw)?;
         assert!(source.has_cdx_mixed_preview());
-        let result = source.with_cdx_caption(page_id()?, plain_caption(2, X_PT, Y_PT)?);
+        let result = source.with_cdx_caption(page_id()?, plain_caption(next_id, X_PT, Y_PT)?);
         assert!(
             matches!(result, Err(DocumentError::UnsupportedCdxCaption(message)) if message == reason)
         );

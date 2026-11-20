@@ -6,14 +6,20 @@ use bondline_model::{AtomId, Element, Fragment, FragmentId, PageId};
 use std::sync::Arc;
 
 impl StoredDocument {
+    fn cdx_label_source(&self) -> Option<(&[u8], CdxPreview)> {
+        self.cdx_source_for(|profile| matches!(profile, CdxPreview::AtomLabels | CdxPreview::Mixed))
+    }
+
+    /// The exact current CDX page supports targeting existing chemical labels.
+    pub fn has_cdx_label_edit_profile(&self) -> bool {
+        self.cdx_label_source().is_some()
+    }
+
     /// The current preview owns the fields needed to edit this atom's boxed label.
     pub fn can_edit_cdx_atom_label(&self, atom: AtomId) -> bool {
-        self.has_cdx_atom_label_preview()
-            && self
-                .export_cdx()
-                .ok()
-                .and_then(|bytes| Document::parse(bytes).ok())
-                .is_some_and(|source| LabelFields::find(&source, atom).is_some())
+        self.cdx_label_source()
+            .and_then(|(bytes, _)| Document::parse(bytes).ok())
+            .is_some_and(|source| LabelFields::find(&source, atom).is_some())
     }
 
     /// Edit one qualified label's element, explicit H count, text and bounds together.
@@ -29,9 +35,9 @@ impl StoredDocument {
         if !matches!(self.original, Some(OriginalSource::Cdx { .. })) {
             return Err(DocumentError::NoCdxSource);
         }
-        if !self.has_cdx_atom_label_preview() {
-            return Err(DocumentError::UnsupportedCdxEdit);
-        }
+        let (bytes, profile) = self
+            .cdx_label_source()
+            .ok_or(DocumentError::UnsupportedCdxEdit)?;
         let page = self
             .model
             .pages()
@@ -53,7 +59,7 @@ impl StoredDocument {
             .ok_or(DocumentError::UnsupportedCdxLabel(
                 "an atom in the specified fragment",
             ))?;
-        let source = Document::parse(self.export_cdx()?).map_err(MappingError::from)?;
+        let source = Document::parse(bytes).map_err(MappingError::from)?;
         let fields =
             LabelFields::find(&source, atom_id).ok_or(DocumentError::UnsupportedCdxLabel(
                 "an explicit H count and existing boxed Text and style records",
@@ -106,7 +112,7 @@ impl StoredDocument {
             output,
             expected,
             page.size(),
-            CdxPreview::AtomLabels,
+            profile,
             DocumentError::UnsupportedCdxLabel(
                 "complete agreement, page bounds and bond clearance after the edit",
             ),
