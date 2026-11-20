@@ -612,6 +612,10 @@ blocks match. Six complete sources and three SMILES record attempts report their
 specific coverage limits. Cross-format molecule identity, stereo, canonical SMILES,
 InChI, names and corpus mass comparisons need separate checks.
 [Per-file results and replay](docs/corpus/README.md#molecular-formula-evidence).
+After integration with PR 30, the complete local gate passed at `018cf0b`
+with 2,407 workspace tests passed, zero failed and one ignored, plus three
+macOS AccessKit tests. Its log SHA-256 is
+`fa5a4f0030145b4b218bd119b2419e930f3e1aa753cd00888684d774535ff8a0`.
 
 ### Next executable work
 
