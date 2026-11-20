@@ -2459,3 +2459,7 @@ borane. [BIOVIA representation guide](https://manualzz.com/doc/44003874/biovia-c
 - Molecular weight, monoisotopic exact mass, nuclide completeness and ion conventions follow the [source register and numerical contract](../research/molecular-masses.md). It links the public v25 guide pp. 221–224, IUPAC definitions, CIAAW tables, NIST/CODATA and the MIT atomic-data revision.
 
 - Elemental analysis uses each element’s percentage of the molecular weight in the current scope. [Revvity Signals v25 guide, printed p. 221](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), [IUPAC mass fraction](https://goldbook.iupac.org/terms/view/M03722), [Bondline’s numeric and presentation conventions](../research/elemental-analysis.md).
+
+### New child labels on skeletal CDX paper
+
+The Node object can carry both the element and attached-hydrogen fields and a direct Text child for its label. Bondline's test vectors use explicit run resources and justification, signed document coordinates and a newly allocated child ID. The retained input and an independent generator specify exactly which bytes change. [Published Node definition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) · [Published Text definition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm) · [Original witness provenance](../../crates/io/tests/fixtures/cdx-skeletal-label-creation/SOURCES.md).
