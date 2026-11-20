@@ -548,12 +548,38 @@ iterations on the integrated parser passed. The full local gate at `a0269d2`
 passed 2,373 workspace tests with one ignored, all three macOS AccessKit tests
 and all required validation steps. [Tests and scope](docs/verification-cdx-mixed-skeleton.md).
 
+### Analysis window and literal molecular formulas
+
+[PR 26](https://github.com/thematheusmello/bondline/pull/26) adds the native
+View menu window and shared queries for a supported complete drawing or its
+selected atoms. The first 51 published command records retained their order
+and metadata across the CLI and initialized MCP. The two new commands are
+`analysis.formula` and `ui.analysis`.
+
+The frozen macOS run opened seven original skeletal CDX files and read the
+actual window’s AX values. It showed `C3H8` for fully declared propane,
+`CH4O` for fully declared methanol, the selected terminal contribution
+`CH3`, and the first unresolved atom for omitted counts. The read-only
+mixed profile retained its selection restriction. PID 15528 exited through
+the registered Close command. [Scope and receiving evidence](docs/verification-analysis-window.md).
+
+The combined full local gate on `3e4cd08` passed 2,390 workspace tests
+with zero failures and one ignored. All three additional macOS AccessKit
+tests, formatting, strict Clippy, layers, asset and runtime license checks,
+and the eight-file pinned corpus passed. The log SHA-256 was
+`d1cc50dc360a47b854bacab39979ff680043066ad25e3016f3b0c06d2431238f`.
+PR 25 landed on main at `40455fd`. Its ancestry merge into PR 26 at
+`6508ff2` changed two documentation files relative to that tested tree.
+PR 26 awaits its main merge. The local gate and native jobs are terminal.
+GitHub Actions remains disabled.
+
 ### Next executable work
 
-1. Integrate the native Analysis window from `../bondline-analysis-window`.
-   Check the whole drawing and selected atoms through the real command adapters.
-   Source-specific hydrogen defaults for formula calculation need their own
-   evidence, including omissions that must survive Save/reopen.
+1. Land the tested Analysis branch and verify the main tree. Continue
+   source-qualified default H for eligible CDX structures independently of
+   the frozen literal result. Preserve the input H property’s absence across
+   Save/reopen and keep unsupported cases explicit. Mass, isotope distribution,
+   elemental percentages and live analysis captions remain open.
 2. `../bondline-cdx-mixed-skeletal-movement` is adding source-preserving
    movement to the printed-label drawings. Verify position and dependent
    bounding-box bytes together, then undo, redo and reopen.
