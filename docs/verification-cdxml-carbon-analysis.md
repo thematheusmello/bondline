@@ -58,3 +58,13 @@ completed 10,000 inputs in eight seconds (seed 20261124). The eight immutable
 seed digests survived. The run reached a 727-byte mutation limit and 461 MiB
 reported RSS. Log SHA-256 was
 `2b96f6b29abd7a9afec83466d257eb3681adb73bf83ffb85e82af44dc5d86a2d`.
+
+With the elemental analysis table enabled, an independent RDKit explicit-H
+read calculates H 17.34% and C 82.66% by weight. The CLI compares unrounded
+values, using both the pinned file and original fixture before and after
+Unicode Save. The egui frame and background macOS accessibility tree contain
+the two formatted rows; initialized MCP returned the same contributions and
+percentages. The integrated native receipt SHA-256 is
+`457387829e10bbc4c72e5d82e9a28e2d86de5e01aee3938b58e2ac3b9d1883ac`,
+and the MCP receipt SHA-256 is
+`04c3c72cc1e3f4f0f6e9af04f2239545f90ab5a9bfa90850daaf4abe204a4a25`.

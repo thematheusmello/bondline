@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 
+from analysis_elemental import check as compare_elemental_analysis
 from rdkit import Chem
 from rdkit.Chem import Descriptors, rdMolDescriptors
 
@@ -24,20 +25,25 @@ def reference(data):
     params.format = Chem.CDXMLFormat.CDXML
     params.removeHs = False
     mol, = Chem.MolsFromCDXML(data, params)
-    return rdMolDescriptors.CalcMolFormula(mol), Descriptors.MolWt(mol), Descriptors.ExactMolWt(mol)
+    return mol
 
 
 def verify(cli, path, destination, omitted):
     original = path.read_bytes()
-    expected, weight, exact = reference(original)
+    mol = reference(original)
+    expected = rdMolDescriptors.CalcMolFormula(mol)
+    weight = Descriptors.MolWt(mol)
+    exact = Descriptors.ExactMolWt(mol)
     path_open = lambda p: ("document.open_cdxml", {"path": str(p)})
-    query = {"expected_revision": 1, "expected_selection_epoch": 0}
+    query = {"expected_revision": 1, "expected_selection_epoch": 0, "include_elemental_analysis": True}
     commands(cli, [path_open(path), ("analysis.properties", query), ("document.save_cdxml", {"path": str(destination)})])
     for p in (path, destination):
         assert p.read_bytes() == original
-        assert reference(p.read_bytes()) == (expected, weight, exact)
+        reopened = reference(p.read_bytes())
+        assert rdMolDescriptors.CalcMolFormula(reopened) == expected
         state = commands(cli, [path_open(p), ("analysis.properties", query)])
         data = state["analysis"]
+        compare_elemental_analysis(reopened, data)
         assert (data["status"], data["scope"], data["formula"]) == ("available", "document", expected)
         assert data["defaulted_hydrogen_atoms"] == omitted and data["atom_count"] == 4
         # The published average weights agree to 1e-8 for C/H, isotope references to 1e-6 Da.

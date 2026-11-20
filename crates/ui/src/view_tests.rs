@@ -1720,6 +1720,7 @@ fn analysis_shows_cdxml_values_without_an_atom_canvas() -> TestResult {
         "C4H10",
         "58.124",
         "58.078250 Da",
+        "Element        Weight   Percent\nH              10.080    17.34%\nC              48.044    82.66%",
         "The CDXML valence default supplies hydrogen counts for 3 atoms.",
     ] {
         assert!(
