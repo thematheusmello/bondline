@@ -75,3 +75,5 @@ tests with zero failed and one ignored. All three additional macOS AccessKit
 tests, formatting, Clippy, layering, license and asset audits, and the pinned
 corpus passed. The 308,440-byte log SHA-256 was
 `b92c8920c430de76d4bb2b0511ef91851136de8f6b274e732c629638d23d4253`.
+
+After PRs #34 and #38 landed, a fresh complete `cargo xtask ci` on `2df21f255e6be7f4a9361e49ea4fdf3205cb60fa` passed 2,427 workspace tests in 369 result groups, with one ignored. The three additional macOS AccessKit tests passed. Warnings-denied Clippy, rustfmt, layering, license, asset and corpus gates passed. All eight pinned files retained their original bytes. The complete-source formula counts were three matched and five unavailable. Two isolated-record checks matched and three were unavailable. The local log at `target/analysis-ci/cdxml-chain-2df21f2.log` in the verification checkout contains 308,933 bytes, SHA-256 `78077bd49efde8d7f1ff2428cb590ea5dd4219becb1834ff714463e1b35cee07`.
