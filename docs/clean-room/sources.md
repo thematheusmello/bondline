@@ -2450,3 +2450,8 @@ use the extended representation. A source-preserving replacement can keep that
 width, even after the payload shrinks. A short header must grow when the new
 length reaches 65,535. The standalone opt-in writer checks the final encoded
 byte budget with the chosen width. [CDX property framing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm).
+
+
+### Editing a printed heteroatom on skeletal CDX paper
+
+A Fragment contains Nodes. A printed Node can carry both chemical fields and a child Text label. The binary point stores Y before X and the rectangle stores top, left, bottom and right as signed 16.16 coordinates. Bondline recomputes the selected label at the current atom position and checks the complete page before committing. Hidden carbon vertices retain their original Node and visibility records through editing and Save. [Node and its Text](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm), [explicit hydrogens](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm), [coordinate encoding](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXCoordinates.htm), [original witnesses](../../crates/io/tests/fixtures/cdx-skeletal-label-edit/SOURCES.md).

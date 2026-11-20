@@ -46,8 +46,7 @@ their original CDX through Save/reopen. Marquee now moves selected skeletal atom
 with Undo, Redo and source-preserving Save. Drawings with hidden carbons and
 explicitly positioned heteroatom labels support moving either kind of atom,
 including mixed selections across Fragments. The printed label moves with its atom
-and survives Undo, Redo and exact Save/reopen. Changing the label content and
-accepting additional drawing styles remain M1/M2 work. [Mixed movement](docs/verification-cdx-mixed-skeletal-movement.md). [Printed labels on skeletal paper](docs/verification-cdx-mixed-skeleton.md).
+and survives Undo, Redo and exact Save/reopen. Alt-click edits a printed heteroatom and saves the synchronized label and chemical fields. Creating a printed label at a hidden vertex and accepting further source styles remain M1/M2 work. [Editing verification](docs/verification-cdx-skeletal-label-edits.md). [Mixed movement](docs/verification-cdx-mixed-skeletal-movement.md). [Printed labels on skeletal paper](docs/verification-cdx-mixed-skeleton.md).
 [Movement verification](docs/verification-cdx-skeletal-movement.md). [Skeletal drawing acceptance](docs/verification-cdx-skeletal.md).
 General chemical edits on mixed pages, interleaved depths, missing font resources, multiline text,
 inherited styles, ambiguous starts and general shaping remain open.
