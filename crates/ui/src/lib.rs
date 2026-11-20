@@ -605,9 +605,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         if caption_preview && cdx_atom_label_preview {
             ui.label("Alt-click an exposed atom label to edit its element and attached H count.");
         }
-        if skeletal_labels {
-            ui.label("Read-only drawing. Save preserves the original CDX.");
-        } else if skeletal_preview {
+        if skeletal_preview || skeletal_labels {
             ui.label(if engine.effective_tool() == EffectiveTool::Selection {
                 "Select atoms, then drag them or use the arrow keys to move them."
             } else {
@@ -1905,8 +1903,7 @@ fn show_workspace_with_preview(
                     if engine.stored_document().is_ok_and(|stored|
                         stored.has_caption_projection() || stored.has_cdx_caption_preview()
                         || stored.has_cdx_atom_label_preview() || stored.has_cdx_mixed_preview()
-                        || stored.has_cdx_skeletal_label_preview()
-                        || (stored.has_cdx_skeletal_preview() && (!label_selection_input || label_alt_press)))
+                        || (stored.can_move_cdx_skeletal_atoms() && (!label_selection_input || label_alt_press)))
                         && !matches!(event,egui::Event::MouseWheel {..})
                     {
                         drawing.gesture=None;
