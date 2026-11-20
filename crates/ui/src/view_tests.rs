@@ -1455,6 +1455,8 @@ fn analysis_window_menu_shows_current_formula_selected_atoms_and_empty_state() -
     assert!(painted(&drawing, "30.070"));
     assert!(painted(&drawing, "Exact mass"));
     assert!(painted(&drawing, "30.046950 Da"));
+    assert!(painted(&drawing, "Elemental analysis (% by weight)"));
+    assert!(drawing.shapes.iter().any(|s| matches!(&s.shape, egui::Shape::Text(t) if t.galley.text().contains("79.89%") && t.galley.text().contains("20.11%"))));
     f.command(
         "ui.selection",
         json!({"action":"set","expected_revision":1,"page_id":1,"atom_ids":[2]}),
@@ -1466,6 +1468,8 @@ fn analysis_window_menu_shows_current_formula_selected_atoms_and_empty_state() -
     assert!(painted(&selected, "15.035"));
     assert!(painted(&selected, "Exact mass contribution"));
     assert!(painted(&selected, "15.023475 Da"));
+    assert!(painted(&selected, "Selected atoms (% by weight)"));
+    assert!(!painted(&selected, "Elemental analysis (% by weight)"));
     assert!(!painted(&selected, "30.046950 Da"));
     assert!(!painted(&selected, "C2H6"));
     f.command("history.undo", json!({}))?;
@@ -1652,6 +1656,11 @@ fn analysis_preserves_the_formula_when_an_element_has_no_natural_mass() -> TestR
         "Unavailable (no natural predominant isotope for element 43)"
     ));
     assert!(!seen(&unknown, "30.046950 Da"));
+    assert!(seen(
+        &unknown,
+        "Elemental analysis unavailable (no standard atomic weight for element 43)"
+    ));
+    assert!(!seen(&unknown, "Elemental analysis (% by weight)"));
     f.command("history.undo", json!({}))?;
     let restored = f.warm();
     assert!(seen(&restored, "30.046950 Da"));
