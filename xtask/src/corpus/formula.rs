@@ -41,6 +41,26 @@ enum Comparison {
     Unavailable(String),
 }
 
+// These exact sources have passed the whole-drawing comparison independently.
+const REQUIRED_DRAWINGS: &[&str] = &[
+    "fadcbe8eee438dfb55232cb2c3baca41ea6613edb0d6163af9486b6c84ff6fc9", // RDKit butane
+    "afd2352697ca20c0d580c4981fe8bd24da36c4e1661e9d2aee501a40364fd42d", // RDKit methyl radical
+    "1867a5904e742030431b523a31167951ff998007a89b9c3d94ec88cf7d4c4380", // V3000 ethane
+];
+
+fn require_proven_formula(file: &Fixture, result: &Comparison) -> Result<()> {
+    if let Comparison::Unavailable(reason) = result
+        && REQUIRED_DRAWINGS.contains(&file.sha256.as_str())
+    {
+        return Err(format!(
+            "{}: required source formula unavailable: {reason}",
+            file.name
+        )
+        .into());
+    }
+    Ok(())
+}
+
 fn compare(outcome: AnalysisOutcome, reference: &Reference) -> Result<Comparison> {
     match outcome {
         AnalysisOutcome::Available {
@@ -147,12 +167,11 @@ impl Coverage {
             let [reference] = refs.as_slice() else {
                 return Err("expected a whole-drawing reference".into());
             };
-            return self.files.record(
-                &format!("{name} drawing"),
-                reference,
-                compare(outcome, reference)?,
-                output,
-            );
+            let result = compare(outcome, reference)?;
+            require_proven_formula(file, &result)?;
+            return self
+                .files
+                .record(&format!("{name} drawing"), reference, result, output);
         }
         // A collection can contain unrelated structures. There is no reference formula
         // for adding its records together. Compare a molecular result only on that record.
@@ -278,6 +297,26 @@ impl Coverage {
 mod tests {
     use super::*;
     use bondline_model::{Atom, AtomId, Element, Fragment, FragmentId, PageId};
+
+    #[test]
+    fn a_required_formula_cannot_regress_to_an_unavailable_source() -> Result<()> {
+        let manifest: super::super::Manifest =
+            serde_json::from_slice(include_bytes!("../../../docs/corpus/manifest.json"))?;
+        for drawing in manifest.files {
+            let reason = require_proven_formula(
+                &drawing,
+                &Comparison::Unavailable("unsupported_source".into()),
+            )
+            .err()
+            .ok_or("a previously supported source must keep its chemistry coverage")?;
+            assert!(
+                reason
+                    .to_string()
+                    .contains("required source formula unavailable: unsupported_source")
+            );
+        }
+        Ok(())
+    }
 
     #[test]
     fn formula_oracle_checks_isotopes_carbon_free_hill_order_and_drawn_atom_count() -> Result<()> {

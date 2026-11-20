@@ -142,3 +142,23 @@ fn collecting_facts_does_not_admit_unsupported_xml() {
     ));
     assert!(matches!(Document::parse(b"\xff"), Err(Error::Utf8(_))));
 }
+
+#[test]
+fn bare_cdxml_doctype_is_distinct_from_a_system_or_different_declaration() -> TestResult {
+    for (source, bare) in [
+        ("<!DOCTYPE CDXML><CDXML/>", true),
+        ("<!DOCTYPE CDXML \n><CDXML/>", true),
+        ("<CDXML/>", false),
+        ("<!DOCTYPE CDXML SYSTEM 'unused.dtd'><CDXML/>", false),
+        (
+            "<!-- <!DOCTYPE CDXML> --><!DOCTYPE CDXML PUBLIC '-//Example' 'unused.dtd'><CDXML/>",
+            false,
+        ),
+        ("<!DOCTYPE Foreign><CDXML/>", false),
+    ] {
+        let doc = Document::parse(source.as_bytes())?;
+        assert_eq!(doc.has_bare_cdxml_doctype(), bare, "{source}");
+        assert_eq!(doc.to_bytes(), source.as_bytes());
+    }
+    Ok(())
+}

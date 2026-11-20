@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE CDXML>
+<CDXML CreationProgram="Original Bondline chemistry fixture">
+  <fonttable><font name="Étude β" id="19" charset="utf-8"/></fonttable>
+  <colortable><color r="0.2" g="0.3" b="0.4"/></colortable>
+  <page id="70"><fragment id="81">
+    <b id="16" B="24" E="75" Order="1"/>
+    <n id="42" Element="6" NumHydrogens="3"/>
+    <n id="75" NodeType="Element"/>
+    <b id="18" B="75" E="42" Order="1"/>
+    <n id="56" Element="6"/>
+    <n id="24" Element="6"/>
+    <b id="17" B="56" E="24" Order="1"/>
+  </fragment></page>
+</CDXML>

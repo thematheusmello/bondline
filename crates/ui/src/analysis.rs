@@ -76,14 +76,7 @@ impl AnalysisWindow {
                     return;
                 };
                 match report {
-                    Ok(report) => display(
-                        ui,
-                        report,
-                        matches!(report.scope, AnalysisScope::SdfRecord)
-                            || engine
-                                .stored_document()
-                                .is_ok_and(|d| d.mol_version().is_some()),
-                    ),
+                    Ok(report) => display(ui, report, engine),
                     Err(message) => {
                         ui.label(message);
                     }
@@ -133,7 +126,7 @@ fn choose_record(ui: &mut egui::Ui, number: &mut u32, count: u32, format: &str) 
     *number != previous
 }
 
-fn display(ui: &mut egui::Ui, report: &AnalysisReport, mol: bool) {
+fn display(ui: &mut egui::Ui, report: &AnalysisReport, engine: &Engine) {
     match report.scope {
         AnalysisScope::Document => {
             ui.weak("Entire drawing");
@@ -193,12 +186,15 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport, mol: bool) {
             ));
             if let Some(count) = defaulted_hydrogen_atoms {
                 let unit = if count.get() == 1 { "atom" } else { "atoms" };
-                let source = if matches!(report.scope, AnalysisScope::SmilesRecord) {
-                    "SMILES"
-                } else if mol {
-                    "MOL"
-                } else {
-                    "CDX"
+                let source = match engine.content().source_info().map(|s| s.format) {
+                    Some("mol") => "MOL",
+                    Some("sdf") if matches!(report.scope, AnalysisScope::SdfRecord) => "MOL",
+                    Some("smiles") if matches!(report.scope, AnalysisScope::SmilesRecord) => {
+                        "SMILES"
+                    }
+                    Some("cdxml") => "CDXML",
+                    Some("cdx") => "CDX",
+                    _ => "source",
                 };
                 ui.label(format!(
                     "The {source} valence default supplies hydrogen counts for {count} {unit}."

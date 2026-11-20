@@ -108,3 +108,26 @@ fn output_budget_includes_framing_and_rejects_growth_before_building_an_output()
     assert_eq!(document.as_bytes(), UNKNOWN);
     Ok(())
 }
+
+#[test]
+fn retained_length_edits_keep_an_extended_header_even_when_the_new_text_is_short()
+-> Result<(), Box<dyn std::error::Error>> {
+    let document = Document::parse(UNKNOWN)?;
+    let record = document.records().get(2).ok_or("extended property")?;
+    let mut expected = UNKNOWN.get(..43).ok_or("tag")?.to_vec();
+    expected.extend_from_slice(&[0xff, 0xff, 2, 0, 0, 0, 42, 19]);
+    expected.extend_from_slice(UNKNOWN.get(52..).ok_or("suffix")?);
+    assert_eq!(
+        document.replace_properties_preserving_lengths(&[(record, &[42, 19])])?,
+        expected
+    );
+    let short = document.records().first().ok_or("short property")?;
+    for len in [65534, 65535] {
+        let payload = vec![123; len];
+        assert_eq!(
+            document.replace_properties_preserving_lengths(&[(short, &payload)])?,
+            document.replace_property(short, &payload)?
+        );
+    }
+    Ok(())
+}

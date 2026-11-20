@@ -7,7 +7,12 @@ use std::sync::Arc;
 
 impl StoredDocument {
     fn cdx_label_source(&self) -> Option<(&[u8], CdxPreview)> {
-        self.cdx_source_for(|profile| matches!(profile, CdxPreview::AtomLabels | CdxPreview::Mixed))
+        self.cdx_source_for(|profile| {
+            matches!(
+                profile,
+                CdxPreview::AtomLabels | CdxPreview::Mixed | CdxPreview::SkeletalLabels
+            )
+        })
     }
 
     /// The exact current CDX page supports targeting existing chemical labels.
@@ -92,6 +97,7 @@ impl StoredDocument {
             explicit_hydrogens,
             run.text(),
             raw_bounds.as_flattened(),
+            profile == CdxPreview::SkeletalLabels,
         )?;
         let bounds = [left, top, right, bottom].map(|value| f64::from(value) / FIXED_SCALE);
         target.authored_label = Some(Arc::new(
