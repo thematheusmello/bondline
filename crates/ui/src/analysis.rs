@@ -69,6 +69,7 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
             partial_fragments,
             defaulted_hydrogen_atoms,
             formula,
+            ..
         } => {
             let title = if *partial_fragments {
                 "Selected-atom composition"

@@ -42,7 +42,7 @@ fn actual_cli_invalid_resource_queries_keep49_unchanged_saves_and_old_authority(
         "the previous 49 wire records must remain byte-for-byte exact"
     );
     let rows: Vec<Value> = serde_json::from_slice(&listed.stdout)?;
-    assert_eq!(rows.len(), 53);
+    assert_eq!(rows.len(), 54);
     assert_eq!(rows[49]["name"], "ui.caption");
     let opened = cli(&[request("document.open_cdx", json!({"path":input}))])?;
     assert_eq!(opened["revision"], 1);

@@ -38,7 +38,10 @@ mod smiles_paste;
 mod smiles_query;
 mod smiles_records;
 mod view;
-pub use analysis::{AnalysisFormula, AnalysisOutcome, AnalysisReport, AnalysisScope, UiAnalysis};
+pub use analysis::{
+    AnalysisFormula, AnalysisMass, AnalysisMasses, AnalysisOutcome, AnalysisReport, AnalysisScope,
+    UiAnalysis,
+};
 pub use atom::AtomSetLabel;
 pub use atom_ui::{UiAtomLabel, UiAtomLabelRequest};
 pub use bond::{
@@ -238,6 +241,7 @@ command_registry! {
     TextCreate(TextCreate) => ("text.create", "Create a single-line Roboto Regular caption at an explicit left baseline. Preserves supported CDXML and CDX source and validates the complete page before one history edit.", false),
     AnalysisFormula(AnalysisFormula) => ("analysis.formula", "Read the Hill formula for the current selection or complete drawing. Reports skeletal CDX hydrogen defaults, unresolved hydrogens, partial fragments and unsupported source coverage.", true),
     UiAnalysis(UiAnalysis) => ("ui.analysis", "Show or hide the Analysis window for this session without changing the drawing or its history.", false),
+    AnalysisProperties(AnalysisFormula) => ("analysis.properties", "Read formula, molecular weight and monoisotopic exact mass for the whole drawing or selection. Partial fragments report uncapped contributions; unavailable mass data identify the element or isotope.", true),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -837,9 +841,12 @@ impl Engine {
         let mut drawing_focus = None;
         let changed = match command {
             Command::Inspect(_) => false,
-            Command::AnalysisFormula(params) => {
+            Command::AnalysisFormula(ref params) | Command::AnalysisProperties(ref params) => {
                 return Ok(Prepared::immediate(CommandResult {
-                    analysis: Some(self.analysis_formula(params)?),
+                    analysis: Some(self.analysis_report(
+                        params,
+                        matches!(command, Command::AnalysisProperties(_)),
+                    )?),
                     ..self.state()
                 }));
             }
@@ -1533,6 +1540,7 @@ mod tests {
                 "text.create",
                 "analysis.formula",
                 "ui.analysis",
+                "analysis.properties",
             ]
             .into_iter()
             .collect()

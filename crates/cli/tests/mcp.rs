@@ -125,7 +125,7 @@ fn stdio_smiles_record_query_is_bounded_exact_private_and_not_cached()
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 53);
+    assert_eq!(tools.len(), 54);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "smiles.record.inspect")
@@ -367,7 +367,7 @@ fn stdio_export_selection_receipt_and_file_bytes_are_explicit_and_do_not_change_
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let listed = client.call(2, "tools/list", json!({}))?;
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 53);
+    assert_eq!(tools.len(), 54);
     let tool = tools
         .iter()
         .find(|t| t["name"] == "file.export_smiles_fragment")
@@ -424,7 +424,7 @@ fn stdio_conversion_discovery_publication_and_editable_native_workflow_are_real(
     client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
     let list = client.call(2, "tools/list", json!({}))?;
     let tools = list["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 53);
+    assert_eq!(tools.len(), 54);
     let tool = tools
         .iter()
         .find(|tool| tool["name"] == "file.convert_smiles_to_cdxml")
@@ -1906,6 +1906,21 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
         stale["result"]["structuredContent"]["error"]["code"],
         "stale_selection"
     );
+    let properties = client.call(
+        20,
+        "tools/call",
+        call(
+            "analysis.properties",
+            json!({"expected_revision":1,"expected_selection_epoch":1}),
+        ),
+    )?;
+    let state = &properties["result"]["structuredContent"];
+    assert_eq!(state["changed"], false);
+    assert_eq!(state["analysis"]["formula"], "CH3");
+    assert_eq!(state["analysis"]["partial_fragments"], true);
+    let mass = &state["analysis"]["masses"];
+    assert!((mass["molecular_weight"].as_f64().ok_or("weight")? - 15.035).abs() < 1e-8);
+    assert!((mass["exact_mass_da"].as_f64().ok_or("mass")? - 15.02347509669).abs() < 1e-8);
     let fixtures = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
     for (id, source, expected) in [
         (
