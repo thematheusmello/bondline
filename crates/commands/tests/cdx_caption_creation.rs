@@ -396,3 +396,39 @@ fn chemistry_survives_new_cdx_caption_branch_save_and_reopen() -> TestResult {
     }
     Ok(())
 }
+
+#[test]
+fn unsupported_chemical_ink_and_exhausted_mixed_raw_id_cannot_create_captions() -> TestResult {
+    let directory = files::FileTestDirectory::new()?;
+    for (name, source, mixed_preview) in [
+        (
+            "contradictory-label",
+            include_bytes!("../../io/tests/fixtures/cdx-label-preview/contradictory_ink_box.cdx")
+                .as_slice(),
+            false,
+        ),
+        (
+            "raw-id-exhausted",
+            include_bytes!("../../io/tests/fixtures/cdx-mixed-caption/boxed_after.cdx").as_slice(),
+            true,
+        ),
+    ] {
+        let path = directory.path(&format!("{name}.cdx"));
+        fs::write(&path, source)?;
+        let mut engine = Engine::default();
+        let opened = engine.dispatch("document.open_cdx", json!({"path":path}))?;
+        assert_eq!(
+            engine.stored_document()?.has_cdx_mixed_preview(),
+            mixed_preview
+        );
+        reject(
+            &mut engine,
+            "text.create",
+            create(opened.revision, BODY),
+            "unsupported_content",
+        )?;
+        assert_eq!(engine.stored_document()?.export_cdx()?, source);
+        assert_eq!(fs::read(&path)?, source);
+    }
+    Ok(())
+}
