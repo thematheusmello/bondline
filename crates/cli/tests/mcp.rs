@@ -1921,7 +1921,7 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
         (
             12,
             "cdx-mixed-skeleton/amino_alcohol.cdx",
-            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":2}),
+            json!({"scope":"document","status":"available","atom_count":5,"fragment_count":1,"partial_fragments":false,"formula":"C3H9NO","defaulted_hydrogen_atoms":3}),
         ),
     ] {
         let opened = client.call(

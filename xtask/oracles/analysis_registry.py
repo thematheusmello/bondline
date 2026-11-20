@@ -14,7 +14,7 @@ for rows, expected in [
 
 epoch = {"type": "integer", "format": "uint64", "minimum": 0}
 for i, title, description, other, value, read_only in [
-    (51, "AnalysisFormula", "Read the literal Hill formula for the current selection or complete drawing. Reports unresolved hydrogens, partial fragments and unsupported source coverage explicitly.", "expected_selection_epoch", epoch, True),
+    (51, "AnalysisFormula", "Read the Hill formula for the current selection or complete drawing. Reports skeletal CDX hydrogen defaults, unresolved hydrogens, partial fragments and unsupported source coverage.", "expected_selection_epoch", epoch, True),
     (52, "UiAnalysis", "Show or hide the Analysis window for this session without changing the drawing or its history.", "visible", {"type": "boolean"}, False),
 ]:
     schema = {

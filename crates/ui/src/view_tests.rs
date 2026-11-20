@@ -1566,23 +1566,18 @@ fn analysis_window_refreshes_on_skeletal_cdx_open_and_suppresses_previous_formul
     f.choose("Show Analysis Window")?;
     let sources = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
     let mut last = "No atoms in this drawing.";
-    for (source, display) in [
-        ("cdx-skeletal/propane.cdx", "C3H8"),
-        (
-            "cdx-skeletal/all_h_missing.cdx",
-            "Formula unavailable. Atom 1 has an unspecified attached-hydrogen count.",
-        ),
-        ("cdx-mixed-skeleton/literal_h.cdx", "CH4O"),
-        (
-            "cdx-mixed-skeleton/amino_alcohol.cdx",
-            "Formula unavailable. Atom 2 has an unspecified attached-hydrogen count.",
-        ),
+    let default_note = "The CDX valence default supplies hydrogen counts for 3 atoms.";
+    for (source, display, derived) in [
+        ("cdx-skeletal/all_h_missing.cdx", "C3H8", true),
+        ("cdx-mixed-skeleton/literal_h.cdx", "CH4O", false),
+        ("cdx-mixed-skeleton/amino_alcohol.cdx", "C3H9NO", true),
+        ("cdx-skeletal/propane.cdx", "C3H8", false),
     ] {
         f.command("document.open_cdx", json!({"path":sources.join(source)}))?;
         let state = f.state()?;
         assert_eq!(state["undo_depth"], 0);
         let painted = f.warm();
-        for (needle, expected) in [(display, true), (last, false)] {
+        for (needle, expected) in [(display, true), (last, false), (default_note, derived)] {
             assert_eq!(
                 painted
                     .shapes

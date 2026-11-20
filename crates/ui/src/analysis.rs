@@ -67,6 +67,7 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
             atom_count,
             fragment_count,
             partial_fragments,
+            defaulted_hydrogen_atoms,
             formula,
         } => {
             let title = if *partial_fragments {
@@ -95,8 +96,14 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
                     "fragments"
                 }
             ));
+            if let Some(count) = defaulted_hydrogen_atoms {
+                let unit = if count.get() == 1 { "atom" } else { "atoms" };
+                ui.label(format!(
+                    "The CDX valence default supplies hydrogen counts for {count} {unit}."
+                ));
+            }
             if *partial_fragments {
-                ui.label("Includes the selected atoms and their recorded hydrogens. Cut bonds are uncapped.");
+                ui.label("Includes the selected atoms and their attached hydrogens. Cut bonds are uncapped.");
             }
         }
         AnalysisOutcome::Empty => {

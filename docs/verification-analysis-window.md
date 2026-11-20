@@ -40,3 +40,37 @@ The standalone skeletal fixtures give propane with all three H counts declared, 
 The two profile extensions each first failed because a source with all H counts written returned `unsupported_source`. The final source gate reuses the exact complete-page certificates. Whole, partial and stale results were checked through command tests, actual CLI, initialized stdio MCP and actual BondlineApp frames. RDKit’s independent source reader confirms `C3H8` for propane and `CH4O` for the fully explicit methanol. It also infers H for the supplied comparison drawings. This analysis command continues to disclose H from the literal model.
 
 An activation-prohibited macOS test host opened seven original CDX files. Native AX text showed `C3H8`, `CH4O`, a selected terminal `CH3`, and the expected missing-H messages for atoms 1 and 2 as each source was opened. The mixed printed-label source refused a selection request and preserved the previous state. Queries preserved exact file and history state. PID 15528 exited after the registered Close action. Executable SHA-256 was `68fd1ad3b08f4abd93af6f74508665d593af0606fd605cb92fef8768b9fcc381`. The source and AX receipt was `2262bcdf119cda71858b781ecf669fcd87e68dce7f0a3247544f10084cf2733b`.
+
+## Source-qualified hydrogen defaults
+
+The earlier literal-only CLI reported unresolved H for six independently readable
+CDX files. RDKit derives a formula for each of them. The updated command uses
+the same complete CDX topology as the certified viewer and lets the composition
+library use a source default only when the stored count is absent.
+
+| Input | Formula | Drawn atoms with defaulted H |
+| --- | --- | ---: |
+| Propane with all, some or no H properties | C3H8 | 0, 1 or 3 |
+| Cyclobutane with all H counts omitted | C4H8 | 4 |
+| Methanol with recorded or omitted carbon H | CH4O | 0 or 1 |
+| Ethanol | C2H6O | 2 |
+| 3-aminopropan-1-ol | C3H9NO | 3 |
+
+The independent reader and actual CLI agree before and after Unicode Save As
+and reopen for all eight inputs. The check compares every source byte and the
+number of absent H properties in the reopened model. Reproduce with the pinned
+RDKit interpreter and a built CLI from the same checkout.
+
+```sh
+cargo build --locked -p bondline-cli
+"$BONDLINE_PYTHON" -B xtask/oracles/cdx_formula.py target/debug/bondline-cli
+```
+
+A background-only Apple Silicon app showed the formula and default count
+in its native accessibility tree. Selecting the middle atom of propane with
+its H count omitted showed `CH2` and one calculated count. A separate CDXML
+drawing with unresolved H still identified its atom, and an opaque source
+reported incomplete chemical coverage. The process closed through the registry.
+The native receipt's SHA-256 is
+`2c81ef6809a989872f8e9bc291335cf6c47a208645edd08c905e5cf7a366a2f5`.
+[RDKit and file oracle](../xtask/oracles/cdx_formula.py) · [Analysis policy](research/analysis-window.md).

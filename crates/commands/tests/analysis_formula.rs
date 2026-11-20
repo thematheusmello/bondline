@@ -213,26 +213,17 @@ fn exact_cdx_atom_labels_are_readable_and_detached_or_opaque_cdx_stays_unavailab
 }
 
 #[test]
-fn skeletal_cdx_counts_only_written_hydrogens_and_preserves_the_current_source() -> Test {
+fn skeletal_cdx_resolves_missing_carbon_hydrogens_and_preserves_source_presence() -> Test {
     let explicit = include_bytes!("../../io/tests/fixtures/cdx-skeletal/propane.cdx").as_slice();
     let central_missing =
         include_bytes!("../../io/tests/fixtures/cdx-skeletal/missing_h.cdx").as_slice();
     let all_missing =
         include_bytes!("../../io/tests/fixtures/cdx-skeletal/all_h_missing.cdx").as_slice();
-    for (bytes, expected) in [
-        (
-            explicit,
-            json!({"scope":"document","status":"available","atom_count":3,"fragment_count":1,"partial_fragments":false,"formula":"C3H8"}),
-        ),
-        (
-            central_missing,
-            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":2}),
-        ),
-        (
-            all_missing,
-            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":1}),
-        ),
-    ] {
+    for (bytes, missing) in [(explicit, 0), (central_missing, 1), (all_missing, 3)] {
+        let mut expected = json!({"scope":"document","status":"available","atom_count":3,"fragment_count":1,"partial_fragments":false,"formula":"C3H8"});
+        if missing != 0 {
+            expected["defaulted_hydrogen_atoms"] = json!(missing);
+        }
         let mut stored = StoredDocument::from_cdx(Arc::from(bytes), PageSize::A4)?;
         assert!(stored.has_cdx_skeletal_preview() && !stored.is_fully_mapped());
         let mut engine = Engine::from_document(stored.clone());
@@ -242,18 +233,21 @@ fn skeletal_cdx_counts_only_written_hydrogens_and_preserves_the_current_source()
             json!({"action":"set","expected_revision":0,"page_id":1,"atom_ids":[1]}),
         )?;
         let selected = read(&mut engine)?;
+        let mut contribution = json!({"scope":"selection","status":"available","atom_count":1,"fragment_count":1,"partial_fragments":true,"formula":"CH3"});
         if bytes == all_missing {
-            assert_eq!(
-                selected,
-                json!({"scope":"selection","status":"unresolved_hydrogens","atom_id":1})
-            );
-        } else {
-            assert_eq!(
-                selected,
-                json!({"scope":"selection","status":"available","atom_count":1,"fragment_count":1,"partial_fragments":true,"formula":"CH3"})
-            );
+            contribution["defaulted_hydrogen_atoms"] = json!(1);
         }
-        assert_eq!(engine.stored_document()?.export_cdx()?, bytes);
+        assert_eq!(selected, contribution);
+        let retained = engine.stored_document()?;
+        let atoms = retained.model().pages()[0].fragments()[0].atoms();
+        assert_eq!(
+            atoms
+                .iter()
+                .filter(|a| a.explicit_hydrogens.is_none())
+                .count(),
+            missing
+        );
+        assert_eq!(retained.export_cdx()?, bytes);
         stored
             .model_mut()
             .set_page_size(bondline_model::PageId::new(1).ok_or("page")?, PageSize::A4)?;
@@ -266,7 +260,7 @@ fn skeletal_cdx_counts_only_written_hydrogens_and_preserves_the_current_source()
 }
 
 #[test]
-fn mixed_skeletal_drawings_require_written_h_and_the_exact_current_source() -> Test {
+fn mixed_skeletal_drawings_resolve_cdx_carbon_defaults_without_authoring() -> Test {
     let literal =
         include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/literal_h.cdx").as_slice();
     let methanol =
@@ -275,24 +269,16 @@ fn mixed_skeletal_drawings_require_written_h_and_the_exact_current_source() -> T
         include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/ethanol.cdx").as_slice();
     let amino =
         include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/amino_alcohol.cdx").as_slice();
-    for (bytes, answer) in [
-        (
-            literal,
-            json!({"scope":"document","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":false,"formula":"CH4O"}),
-        ),
-        (
-            methanol,
-            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":1}),
-        ),
-        (
-            ethanol,
-            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":1}),
-        ),
-        (
-            amino,
-            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":2}),
-        ),
+    for (bytes, formula, count, defaulted) in [
+        (literal, "CH4O", 2, 0),
+        (methanol, "CH4O", 2, 1),
+        (ethanol, "C2H6O", 3, 2),
+        (amino, "C3H9NO", 5, 3),
     ] {
+        let mut answer = json!({"scope":"document","status":"available","atom_count":count,"fragment_count":1,"partial_fragments":false,"formula":formula});
+        if defaulted > 0 {
+            answer["defaulted_hydrogen_atoms"] = json!(defaulted);
+        }
         let mut stored = StoredDocument::from_cdx(Arc::from(bytes), PageSize::A4)?;
         assert!(stored.has_cdx_skeletal_label_preview() && !stored.is_fully_mapped());
         let mut e = Engine::from_document(stored.clone());

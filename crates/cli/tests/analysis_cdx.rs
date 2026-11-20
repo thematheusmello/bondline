@@ -39,7 +39,7 @@ fn open_and_analyze(relative_source: &str, atom: Option<u32>) -> Test<Value> {
 }
 
 #[test]
-fn skeletal_propane_analysis_after_open_uses_literal_h_and_the_selected_atom() -> Test {
+fn skeletal_propane_analysis_resolves_h_on_the_complete_graph_before_selection() -> Test {
     assert_eq!(
         open_and_analyze("cdx-skeletal/propane.cdx", None)?,
         json!({"scope":"document","status":"available","atom_count":3,"fragment_count":1,"partial_fragments":false,"formula":"C3H8"})
@@ -50,7 +50,15 @@ fn skeletal_propane_analysis_after_open_uses_literal_h_and_the_selected_atom() -
     );
     assert_eq!(
         open_and_analyze("cdx-skeletal/all_h_missing.cdx", None)?,
-        json!({"scope":"document","status":"unresolved_hydrogens","atom_id":1})
+        json!({"scope":"document","status":"available","atom_count":3,"fragment_count":1,"partial_fragments":false,"formula":"C3H8","defaulted_hydrogen_atoms":3})
+    );
+    assert_eq!(
+        open_and_analyze("cdx-skeletal/all_h_missing.cdx", Some(2))?,
+        json!({"scope":"selection","status":"available","atom_count":1,"fragment_count":1,"partial_fragments":true,"formula":"CH2","defaulted_hydrogen_atoms":1})
+    );
+    assert_eq!(
+        open_and_analyze("cdx-skeletal-cycle/cycle.cdx", None)?,
+        json!({"scope":"document","status":"available","atom_count":4,"fragment_count":1,"partial_fragments":false,"formula":"C4H8","defaulted_hydrogen_atoms":4})
     );
     Ok(())
 }
@@ -61,11 +69,15 @@ fn open_mixed_cdx_distinguishes_written_from_unspecified_hydrogens() -> Test {
         open_and_analyze("cdx-mixed-skeleton/literal_h.cdx", None)?,
         json!({"scope":"document","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":false,"formula":"CH4O"})
     );
-    for (name, id) in [("methanol", 1), ("ethanol", 1), ("amino_alcohol", 2)] {
+    for (name, formula, count, defaulted) in [
+        ("methanol", "CH4O", 2, 1),
+        ("ethanol", "C2H6O", 3, 2),
+        ("amino_alcohol", "C3H9NO", 5, 3),
+    ] {
         let path = format!("cdx-mixed-skeleton/{name}.cdx");
         assert_eq!(
             open_and_analyze(&path, None)?,
-            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":id})
+            json!({"scope":"document","status":"available","atom_count":count,"fragment_count":1,"partial_fragments":false,"formula":formula,"defaulted_hydrogen_atoms":defaulted})
         );
     }
     Ok(())

@@ -42,6 +42,8 @@ pub enum AnalysisOutcome {
         atom_count: usize,
         fragment_count: usize,
         partial_fragments: bool,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        defaulted_hydrogen_atoms: Option<std::num::NonZeroUsize>,
         formula: String,
     },
     Empty,
@@ -127,8 +129,23 @@ impl Engine {
             return Ok(report(AnalysisOutcome::Empty));
         }
         let atom_count = atoms.len();
-        let formula = match Composition::from_atoms(atoms, || false)
-            .and_then(|composition| composition.hill_formula(FormulaIsotopes::Separate))
+        let defaulted_hydrogen_atoms = std::num::NonZeroUsize::new(
+            atoms
+                .iter()
+                .filter(|atom| atom.explicit_hydrogens.is_none())
+                .count(),
+        );
+        let hydrogens = if defaulted_hydrogen_atoms.is_some() {
+            stored.cdx_skeletal_hydrogen_counts(&Default::default())?
+        } else {
+            Default::default()
+        };
+        let formula = match Composition::from_atoms_with_hydrogen_defaults(
+            atoms,
+            |id| hydrogens.get(&id).copied(),
+            || false,
+        )
+        .and_then(|composition| composition.hill_formula(FormulaIsotopes::Separate))
         {
             Ok(formula) => formula,
             Err(CompositionError::UnresolvedHydrogens(id)) => {
@@ -142,6 +159,7 @@ impl Engine {
             atom_count,
             fragment_count,
             partial_fragments,
+            defaulted_hydrogen_atoms,
             formula,
         }))
     }
