@@ -76,6 +76,40 @@ fn skeletal_cdx_cli_preserves_omitted_h_after_preview_and_exact_save() -> Result
 }
 
 #[test]
+fn printed_cdx_labels_survive_cli_save_reopen_and_match_the_xml_drawing() -> Result {
+    let directory = support::SdfTestDirectory::new()?;
+    let fixtures =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures/cdx-mixed-skeleton");
+    let capture = request(
+        "render.capture",
+        json!({"page_id":1,"width_px":512,"height_px":512,"backend":"cpu"}),
+    );
+    let control = cli(&[
+        request(
+            "document.open_cdxml",
+            json!({"path":fixtures.join("ethanol.cdxml")}),
+        ),
+        capture.clone(),
+    ])?;
+    let reference = control["capture"]["png_base64"]
+        .as_str()
+        .ok_or("control PNG")?;
+    assert!(!reference.is_empty());
+    let source = fixtures.join("ethanol.cdx");
+    let saved = directory.path("ethanol-保存.cdx");
+    let state = cli(&[
+        request("document.open_cdx", json!({"path":source})),
+        request("document.save_cdx", json!({"path":saved})),
+        request("document.open_cdx", json!({"path":saved})),
+        capture,
+    ])?;
+    assert_eq!(fs::read(source)?, fs::read(saved)?);
+    assert_eq!(state["capture"]["png_base64"], reference);
+    assert_eq!(state["file"]["dirty"], false);
+    Ok(())
+}
+
+#[test]
 fn skeletal_cdx_cli_moves_scoped_atoms_and_reopens_the_exact_bytes() -> Result {
     let fixture =
         Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures/cdx-skeletal-move");
