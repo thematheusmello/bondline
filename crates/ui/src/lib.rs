@@ -449,6 +449,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
     let cdx_atom_label_preview = engine
         .stored_document()
         .is_ok_and(|stored| stored.has_cdx_label_edit_profile());
+    let skeletal_preview = engine
+        .stored_document()
+        .is_ok_and(|stored| stored.has_cdx_skeletal_preview());
     let atom_label_preview = engine.effective_tool() != EffectiveTool::Selection
         && engine.stored_document().is_ok_and(|stored| {
             stored.has_boxed_atom_labels()
@@ -536,8 +539,14 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         }
         ui.add_space(8.0);
         ui.separator();
-        ui.weak("ACTIVE TOOL");
-        let tool = if engine.effective_tool() == EffectiveTool::Caption {
+        ui.weak(if skeletal_preview {
+            "VIEW"
+        } else {
+            "ACTIVE TOOL"
+        });
+        let tool = if skeletal_preview {
+            "Skeletal CDX preview".to_owned()
+        } else if engine.effective_tool() == EffectiveTool::Caption {
             "Text selected".to_owned()
         } else if caption_preview {
             "Caption preview".to_owned()
@@ -572,7 +581,8 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             }
         };
         ui.label(egui::RichText::new(tool).color(ACCENT).strong());
-        if !caption_preview
+        if !skeletal_preview
+            && !caption_preview
             && !cdx_atom_label_preview
             && !atom_label_preview
             && matches!(
@@ -591,7 +601,13 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         if caption_preview && cdx_atom_label_preview {
             ui.label("Alt-click an exposed atom label to edit its element and attached H count.");
         }
-        if engine.effective_tool() == EffectiveTool::Caption {
+        if skeletal_preview {
+            ui.label(if engine.effective_tool() == EffectiveTool::Selection {
+                "Select atoms, then drag them or use the arrow keys to move them."
+            } else {
+                "Choose Marquee selection to move atoms in this drawing."
+            });
+        } else if engine.effective_tool() == EffectiveTool::Caption {
             ui.label(if engine.caption_creation_available() {
                 "Click blank paper to add a caption, or click a caption run to edit its text."
             } else if engine.caption_available() {
@@ -1884,7 +1900,8 @@ fn show_workspace_with_preview(
                     }
                     if engine.stored_document().is_ok_and(|stored|
                         stored.has_caption_projection() || stored.has_cdx_caption_preview()
-                        || stored.has_cdx_atom_label_preview() || stored.has_cdx_mixed_preview())
+                        || stored.has_cdx_atom_label_preview() || stored.has_cdx_mixed_preview()
+                        || (stored.has_cdx_skeletal_preview() && (!label_selection_input || label_alt_press)))
                         && !matches!(event,egui::Event::MouseWheel {..})
                     {
                         drawing.gesture=None;
@@ -2400,15 +2417,11 @@ fn show_workspace_with_preview(
             });
             drawing.selection.sync(engine,key);
             drawing.ring.sync(engine, key, response.layer_id); drawing.chain.sync(engine, key, response.layer_id);
-            let mut preview_document=match drawing.selection.preview(engine) {
-                Some(Ok(candidate))=>Some(candidate),
+            let mut preview_document=match drawing.selection.preview_translation(engine).map(|params| engine.preview_selection_scene(&params,&viewport,key.page)) {
+                Some(Ok((candidate,preview)))=>{graph=Ok(preview);Some(candidate)},
                 Some(Err(failure))=>{*error=Some(failure.to_string());None},
                 None=>None,
             };
-            if let Some(candidate)=&preview_document
-                && let Some(page)=candidate.pages().iter().find(|page|page.id()==key.page) {
-                graph=viewport.graph_scene(page,&bondline_render::Cancellation::default()).map_err(Into::into);
-            }
             if let Some(preview) = drawing.ring.preview(engine, &viewport, density) {
                 match preview {
                     Ok((candidate, candidate_graph)) => {

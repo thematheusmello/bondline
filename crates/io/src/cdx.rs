@@ -21,6 +21,24 @@ mod text;
 pub(crate) use caption::{append_caption, text_record as caption_text_record};
 pub(crate) use text::encode_caption_runs;
 
+/// In the certified skeletal layout, every directly owned Node has one position
+/// and direct Fragment/Node encounter order supplies the corresponding live atom IDs.
+pub(crate) fn skeletal_positions<'a>(
+    source: &'a Document<'_>,
+) -> impl Iterator<Item = std::ops::Range<usize>> + 'a {
+    source.records().iter().filter_map(|r| {
+        let RecordKind::Property {
+            tag: POSITION,
+            payload,
+            ..
+        } = r.kind()
+        else {
+            return None;
+        };
+        matches!(object(source, r.parent()), Some((NODE, _))).then(|| payload.clone())
+    })
+}
+
 const DOCUMENT: u16 = 0x8000;
 const PAGE: u16 = 0x8001;
 const GROUP: u16 = 0x8002;
@@ -40,6 +58,8 @@ const ISOTOPE: u16 = 0x0420;
 const CHARGE: u16 = 0x0421;
 const RADICAL: u16 = 0x0422;
 const HYDROGENS: u16 = 0x042b;
+const SHOW_TERMINAL_CARBONS: u16 = 0x0442;
+const SHOW_NON_TERMINAL_CARBONS: u16 = 0x0443;
 const ATOM_CIP: u16 = 0x0437;
 const ATOM_ID: u16 = 0x044d;
 const ORDER: u16 = 0x0600;
@@ -62,6 +82,7 @@ pub(crate) enum Preview {
     Caption,
     AtomLabels,
     Mixed,
+    Skeletal,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -148,18 +169,16 @@ impl<'input> ElementalGraph<'input> {
         });
         // Failed label candidates keep the original elemental diagnostic and its precedence.
         let fragments = if label_candidate {
-            Self::read_fragments(&source, true).or_else(|_| Self::read_fragments(&source, false))?
+            Self::read_fragments(&source, Nodes::Labelled)
+                .or_else(|_| Self::read_fragments(&source, Nodes::Elemental))?
         } else {
-            Self::read_fragments(&source, false)?
+            Self::read_fragments(&source, Nodes::Elemental)?
         };
         Ok(Self { source, fragments })
     }
 
-    fn read_fragments(
-        source: &Document<'_>,
-        allow_labels: bool,
-    ) -> Result<Vec<Fragment>, MappingError> {
-        let layout = Layout::read(source, allow_labels, Scope::All)?;
+    fn read_fragments(source: &Document<'_>, nodes: Nodes) -> Result<Vec<Fragment>, MappingError> {
+        let layout = Layout::read(source, nodes, Scope::All)?;
         let resources = layout
             .node_labels
             .first_key_value()
@@ -325,6 +344,9 @@ pub(crate) fn project_document(
     if let Some(model) = mixed::preview(&source) {
         return Ok((model, Preview::Mixed));
     }
+    if let Some(model) = label_preview::skeletal(&source) {
+        return Ok((model, Preview::Skeletal));
+    }
     let graph = ElementalGraph::from_source(source)?;
     if let Some(model) = label_preview::preview(&graph) {
         return Ok((model, Preview::AtomLabels));
@@ -354,18 +376,25 @@ fn poster_size(
     bondline_model::PageSize::new(width, height).ok()
 }
 
-fn verify_preview_page(model: &bondline_model::Document) -> Option<()> {
-    use bondline_render::{Cancellation, PageView};
-
-    let page = model.pages().first()?;
-    let size = page.size();
+pub(crate) fn preview_view(model: &bondline_model::Document) -> Option<bondline_render::PageView> {
+    let size = model.pages().first()?.size();
     let center = Point2::new(size.width_pt() / 2.0, size.height_pt() / 2.0).ok()?;
-    let view = PageView::zoom(1, 1, size, 100.0, center)
-        .ok()?
-        .with_drawing_style(model.drawing_style())
-        .with_drawing_settings(model.drawing_settings());
+    Some(
+        bondline_render::PageView::zoom(1, 1, size, 100.0, center)
+            .ok()?
+            .with_drawing_style(model.drawing_style())
+            .with_drawing_settings(model.drawing_settings()),
+    )
+}
+
+fn verify_preview_page(model: &bondline_model::Document) -> Option<()> {
     // Check the source paper before clipping to the admission camera.
-    view.graph_scene(page, &Cancellation::default()).ok()?;
+    preview_view(model)?
+        .graph_scene(
+            model.pages().first()?,
+            &bondline_render::Cancellation::default(),
+        )
+        .ok()?;
     Some(())
 }
 
@@ -383,14 +412,22 @@ fn root_scalar(source: &Document<'_>, tag: u16) -> Option<f64> {
     Some(f64::from(i32::from_le_bytes(bytes)) / 65_536.0)
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Nodes {
+    Elemental,
+    Labelled,
+    Skeletal,
+}
+
 struct Layout {
+    nodes: Nodes,
     children: Vec<Vec<usize>>,
     fragments: Vec<usize>,
     node_labels: BTreeMap<usize, usize>,
 }
 
 impl Layout {
-    fn read(source: &Document<'_>, allow_labels: bool, scope: Scope) -> Result<Self, MappingError> {
+    fn read(source: &Document<'_>, nodes: Nodes, scope: Scope) -> Result<Self, MappingError> {
         let mut children = vec![Vec::new(); source.records().len()];
         let mut fragments = Vec::new();
         let mut node_labels = BTreeMap::new();
@@ -401,6 +438,11 @@ impl Layout {
                 let owner = match *tag {
                     POSITION | NODE_TYPE | ELEMENT | ISOTOPE | CHARGE | RADICAL | HYDROGENS
                     | ATOM_CIP | ATOM_ID => Some(NODE),
+                    SHOW_TERMINAL_CARBONS | SHOW_NON_TERMINAL_CARBONS
+                        if nodes == Nodes::Skeletal =>
+                    {
+                        Some(NODE)
+                    }
                     ORDER | DISPLAY | DISPLAY2 | DOUBLE_POSITION | BEGIN | END | BOND_CIP
                     | WARNING => Some(BOND),
                     _ => None,
@@ -408,7 +450,7 @@ impl Layout {
                 if let Some(owner) = owner {
                     let actual = object(source, record.parent()).map(|(tag, _)| tag);
                     let label_position =
-                        allow_labels && *tag == POSITION && actual == Some(TEXT_OBJECT);
+                        nodes == Nodes::Labelled && *tag == POSITION && actual == Some(TEXT_OBJECT);
                     if actual != Some(owner) && !label_position {
                         return Err(MappingError::UnsupportedProperty {
                             tag: *tag,
@@ -448,7 +490,7 @@ impl Layout {
                     }
                 }
                 NODE | BOND if parent == Some(FRAGMENT) => {}
-                TEXT_OBJECT if allow_labels && parent == Some(NODE) => {
+                TEXT_OBJECT if nodes == Nodes::Labelled && parent == Some(NODE) => {
                     let node = record
                         .parent()
                         .ok_or(MappingError::UnsupportedLayout { record: index })?;
@@ -464,6 +506,7 @@ impl Layout {
             }
         }
         Ok(Self {
+            nodes,
             children,
             fragments,
             node_labels,
@@ -642,10 +685,23 @@ fn read_atom(
             .children
             .get(index)
             .ok_or(MappingError::UnsupportedLayout { record: index })?,
-        &[
-            POSITION, NODE_TYPE, ELEMENT, ISOTOPE, CHARGE, RADICAL, HYDROGENS, Z_ORDER, ATOM_CIP,
-            ATOM_ID,
-        ],
+        match layout.nodes {
+            Nodes::Skeletal => &[
+                POSITION,
+                NODE_TYPE,
+                ELEMENT,
+                ISOTOPE,
+                CHARGE,
+                RADICAL,
+                HYDROGENS,
+                SHOW_TERMINAL_CARBONS,
+                SHOW_NON_TERMINAL_CARBONS,
+            ],
+            Nodes::Elemental | Nodes::Labelled => &[
+                POSITION, NODE_TYPE, ELEMENT, ISOTOPE, CHARGE, RADICAL, HYDROGENS, Z_ORDER,
+                ATOM_CIP, ATOM_ID,
+            ],
+        },
     )?;
     validate_metadata(source, &fields)?;
     if let Some(record) = fields.get(&NODE_TYPE)
@@ -683,6 +739,7 @@ fn read_literal_metadata(
 ) -> Result<(), MappingError> {
     for (&tag, &record) in fields {
         let widths: &[usize] = match tag {
+            SHOW_TERMINAL_CARBONS | SHOW_NON_TERMINAL_CARBONS => &[0],
             ISOTOPE | HYDROGENS => &[2],
             CHARGE => &[1, 4],
             RADICAL => &[1],
@@ -694,6 +751,8 @@ fn read_literal_metadata(
         }
         let invalid = || MappingError::InvalidProperty { tag, record };
         match tag {
+            SHOW_TERMINAL_CARBONS => atom.show_terminal_carbon_labels = Some(true),
+            SHOW_NON_TERMINAL_CARBONS => atom.show_non_terminal_carbon_labels = Some(true),
             ISOTOPE => {
                 let mass = i16::from_le_bytes(payload(source, record, tag)?);
                 atom.isotope = NonZeroU16::new(u16::try_from(mass).map_err(|_| invalid())?);

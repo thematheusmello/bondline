@@ -485,29 +485,67 @@ was retired after checking all 33 files against the committed tree. Full
 Windows/Linux desktop and browser UI workflows remain open.
 [Acceptance and reproduction](docs/verification-cdx-mixed-label-edits.md).
 
+[PR 21](https://github.com/thematheusmello/bondline/pull/21) merged the tested
+mixed-label writer at `6fd6633`. Local and remote main matched the merge.
+Its completed feature ref was retired.
+
+### Skeletal CDX drawings on their original paper
+
+The renderer at `868169c`, source reader at `0b3681f` and desktop controls at
+`f6015a0` display a source-qualified neutral single-bond carbon chain on its
+declared Poster. Five source encodings render identically while retaining their
+individual hydrogen fields and carbon visibility flags. Offline Chrome runs the
+same IO and CPU renderer at `895b067`. The sanitizer at `0ed5d77` checks the raw
+Node owners, degree, H and flags, exact source output and detached-model refusal.
+The separate ring regression at `00ec56f` verifies 1,776 black pixels, the
+four retained omitted H fields, and atomic Save As and reopen. Both native
+desktop targets type-checked. The browser UI build still reaches native MCP
+networking and fails in mio. The full local gate on `00ec56f` passed 2,363
+workspace tests with one ignored, all three AccessKit tests and all gates.
+[Acceptance and local reproduction](docs/verification-cdx-skeletal.md).
+
+[PR 22](https://github.com/thematheusmello/bondline/pull/22) merged the
+verified skeletal viewer at `df7790a`. The merge tree matched `8af98c8`
+and its completed feature branch was retired.
+
+### Move selected skeletal atoms
+
+The writer at `00ceb73` and native selection at `98f3edd` move owned Node
+positions, preserve original length headers, and support exact Undo, Redo and
+Unicode Save/reopen. Six independently predicted files include a long-form
+position and repeated raw IDs in different fragments. Native drag and nudge
+were exercised in App frames. CLI, MCP and macOS loopback all preserved the
+expected saved bytes and produced 12 matching CPU/Metal pairs per surface.
+The Rust WebAssembly file round trips and moved images passed in offline Chrome
+at `76d3358`. The raw coordinate movement oracle at `2922cd9` passed 10,000
+AddressSanitizer iterations from 245 verified seeds.
+[Contract](docs/research/cdx-skeletal-movement.md) and [acceptance](docs/verification-cdx-skeletal-movement.md).
+
+The integrated local gate at `e1a1cd3` passed 2,369 workspace tests with one
+ignored, plus all three macOS AccessKit tests. Both x86-64 Windows and Linux
+desktop binaries type-checked. Interactive tests on those systems remain open.
+
+[PR 23](https://github.com/thematheusmello/bondline/pull/23) landed Hill
+formula notation on main at `8f0e2f7`. The integrated gate at `db52782`
+passed 2,364 workspace tests, one ignored, all three AccessKit tests and
+all local checks. Main matched the tested tree and the feature ref was retired.
+[Formula examples and ordering conventions](docs/research/hill-formula.md).
+
 ### Next executable work
 
-1. **Display ordinary skeletal-carbon CDX drawings at their declared paper
-   size.** A 283-byte original propane source currently opens as data on A4
-   and saves exactly. A CPU capture refuses despite its declared 512 pt
-   Poster and physical solid-bond styles. Its independent SHA-256 is
-   `d000b90042e8e9d4aff3f291cb062fae560b6447f0cd60bbece2135050e31ce0`.
-   Preserve the three C nodes and explicit H counts 3, 2, 3. The independently
-   constructed same-geometry CDXML control yields matching CPU/Metal output,
-   638 black pixels and RGB SHA-256
-   `d6b93e3e5b750c8bfb1816584e55d97b7747e2d848cd80f6b25468c08ee1b520`.
-   Verify the actual CDX bytes, paper and pixels through Open, capture, Save and
-   reopen. Binary `ShowTerminalCarbonLabels` and `ShowNonTerminalCarbonLabels`
-   are implied booleans. Check the owner and permitted width. Reuse the existing
-   carbon visibility rules for terminal, interior, diatomic and collinear cases.
-   [Public binary flags](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/DataType/CDXBoolean.htm).
-2. The ignored `target/cdx-skeletal-planning/HANDOFF.md` holds the generator,
-   17 original byte cases, captured baseline and RDKit comparison. Translate
-   the independent fixtures into tracked regression tests. The 265-byte source
-   with all H counts omitted must retain literal absence through Open and Save.
-   Keep any derived display hydrogens separate from authored chemical data.
-   Other M0–M5 work, general interleaved depths and the raw-ID exhaustion
-   policy remain in the roadmap.
+1. `../bondline-cdx-mixed-skeleton` started at `98f3edd` to display skeletal
+   carbon and printed heteroatoms together. Check actual methanol, ethanol and
+   amino-alcohol files, visible glyphs, bond clearance, source field presence
+   and exact Save/reopen. Keep source-specific authoring checks independent.
+2. `../bondline-analysis-window` started at `e1d6adb` to show the computed
+   formula through View, CLI and MCP. Verify whole-drawing and selected-atom
+   scopes, incomplete sources, unknown H and preservation of document history.
+3. `../bondline-web-workspace` started at `6fd6633` to run the actual egui
+   editor in a browser. Check offline startup, real bond creation and history,
+   safe recovery and the browser dependency licenses. The core codec's browser
+   tests cover a smaller workflow. Interactive Windows/Linux validation and
+   further work across M0–M5 remain outstanding.
+   [Roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

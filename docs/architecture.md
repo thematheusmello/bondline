@@ -198,12 +198,25 @@ page resolve the current Node and its own Text, then check the same page
 classification and complete edited model after re-import. [Mixed atom-label editing](research/cdx-mixed-label-edits.md), [creation and history](research/cdx-chemical-caption-creation.md). [Mixed-page contract](research/cdx-mixed-caption.md),
 [mixed caption edits](research/cdx-mixed-caption-edits.md).
 
+The skeletal CDX display profile retains original Node fields and a separately
+certified model. IO computes temporary neutral-carbon H counts from graph degree
+for omitted fields. The same renderer checks source admission and every camera
+view, including mandatory glyphs and hit regions. A detached model loses this
+display proof. [Binary skeletal source contract](research/cdx-skeletal.md). The source-aware
+selection path translates the owned Node positions, checks every retained
+position against the previous model, and re-imports the entire drawing.
+Preview renders the certified candidate, including transient H-derived ink.
+[Movement and history](research/cdx-skeletal-movement.md).
+
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks
 cancellation/arithmetic and refuses unresolved H; bonds/geometry are not chemistry-inferred.
 It owns no cache, source permission, command or UI state. Later analysis adapters must
 prove complete source/selection and resolve H under a declared convention. See
 [contract](research/formula-composition.md) and [receiving](verification-formula-composition.md).
+`Composition::hill_formula` presents these resolved counts in combined or
+isotope-specific form. Charge has an unambiguous plain-text suffix.
+[Notation and interoperability](research/hill-formula.md).
 
 CDXML batch `SetText` changes decoded data in an owned empty/text-only element, preserving
 exact no-op lexemes, raw QNames/attributes and unrelated bytes. Mixed content refuses;

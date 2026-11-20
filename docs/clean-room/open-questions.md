@@ -4,6 +4,15 @@
 
 Guide v25 allows a partial structure selection. The hydrogen and charge treatment for a cut bond is unspecified. Bondline discloses the selected atoms’ recorded composition and leaves an excised or hydrogen-capped molecular formula unresolved. [Analysis window contract](../research/analysis-window.md).
 
+## Binary skeletal carbon visibility, 2026-11-20
+
+The SDK defines implied booleans and separate Node flags for terminal and
+nonterminal carbon. The documented binary scope for inherited root or object
+defaults, and the complete metrics for mandatory printed carbon labels, need
+independent evidence. Preserve the source and retain existing refusal or
+data-only behavior when those choices affect the picture.
+[Qualified profile and public sources](../research/cdx-skeletal.md).
+
 ## CDX caption identity on external resave, 2026-11-19
 
 Persistent ObjectTag resave is documented. Actual external treatment

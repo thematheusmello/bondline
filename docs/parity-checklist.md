@@ -38,6 +38,15 @@ Tied depths, other mixed object edits, missing
 font resources, general typography and broader platforms remain open.
 [CDX creation](verification-cdx-caption-creation.md), [empty Poster verification](verification-cdx-empty-caption.md).
 
+**Verified on macOS** for source-qualified binary skeletal drawings. Open
+preserves the physical Poster dimensions. Save As and reopen preserve explicit
+and omitted hydrogen fields, the dormant node flag, and every source byte.
+CPU and Metal agree at 100% and 200%. **Verified** for skeletal atom movement
+through Marquee, drag, keyboard nudge, Undo, Redo and exact Save/reopen. Mixed
+hidden-carbon/printed-label depiction and other chemistry edits remain missing.
+[Movement evidence](verification-cdx-skeletal-movement.md). Windows and
+Linux native execution are unverified. [Acceptance](verification-cdx-skeletal.md).
+
 The [Node child Text increment](verification-cdx-node-labels.md) verifies
 literal label and numeric atom data through read-only import and byte-exact
 native macOS Save/reopen. [Qualified label preview](verification-cdx-atom-label-preview.md)
@@ -264,10 +273,11 @@ Chemical dependent labels, inherited defaults, mixed foreign diagrams and the co
 native Text editor remain required. That checkpoint's registry47/catalogue16/124 supersede the
 historical counts in the prerequisite paragraphs below.
 
-The [numeric composition library](verification-formula-composition.md) independently
-verifies explicitly resolved element/isotope/charge data. It does not implement inferred
-formula/mass or the Analysis window; those reference workflows remain missing. Registry46
-and catalogue16/124 remain unchanged.
+The chemistry library verifies resolved element, isotope and net-charge counts
+and formats them in Hill order. Independent tests include 20 structures and
+the carbon-free ordering difference from RDKit. User-facing mass, formula
+for unresolved structures and the Analysis window remain missing.
+[Composition](verification-formula-composition.md) and [Hill formulas](research/hill-formula.md).
 
 [Text-only syntax edits](verification-source-preserving-xml-text.md) are another M1
 prerequisite. Text/font/colour controls and general imported-label edit/render workflows

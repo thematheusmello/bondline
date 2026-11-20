@@ -40,6 +40,12 @@ page accepts a new caption, with byte-exact Undo and editable Save/reopen.
 [Chemical drawing caption creation](docs/verification-cdx-chemical-caption-creation.md).
 Changing an existing supported atom label on the mixed drawing now preserves the
 new annotation and prior captions. [Mixed label editing](docs/verification-cdx-mixed-label-edits.md).
+
+Qualified binary skeletal carbon chains open on the declared paper and preserve
+their original CDX through Save/reopen. Marquee now moves selected skeletal atoms
+with undo, redo and source-preserving Save. Mixed hidden-carbon/heteroatom labels
+and additional chemical drawing styles remain M1/M2 work.
+[Movement verification](docs/verification-cdx-skeletal-movement.md). [Skeletal drawing acceptance](docs/verification-cdx-skeletal.md).
 General chemical edits on mixed pages, interleaved depths, missing font resources, multiline text,
 inherited styles, ambiguous starts and general shaping remain open.
 [CDX creation](docs/verification-cdx-caption-creation.md), [empty Poster verification](docs/verification-cdx-empty-caption.md), [mixed pages](docs/verification-cdx-mixed-caption.md), [mixed edits](docs/verification-cdx-mixed-caption-edits.md).
@@ -796,10 +802,13 @@ selection, transforms, hotkeys, undo/redo and style sheets from public journal g
 
 ## M3: chemistry — in progress
 
-The [resolved numeric composition prerequisite](docs/verification-formula-composition.md)
-now has independent full-bound/literal/RDKit evidence and main full1831/0/1. It refuses
-unknown H and keeps isotope bins/charge exact. Source-aware inference, formula formatting,
-mass and the actual Analysis workflow remain missing; no command/tool is enabled here.
+Resolved composition now formats molecular formulas in strict Hill order.
+Combined element totals and numbered isotope terms both preserve the net charge.
+Twenty independently specified structures were checked with external RDKit.
+Carbon-free formulas use alphabetical element order. The library reports
+unresolved H explicitly. Source-aware inference, mass and the native Analysis
+workflow are still open. [Composition evidence](docs/verification-formula-composition.md)
+and [formula conventions and tests](docs/research/hill-formula.md).
 
 Valence, aromaticity, stereo/CIP, checking, cleanup, formula/mass, analysis, reactions,
 curved arrows, brackets and chemically formatted captions. Compare against independently

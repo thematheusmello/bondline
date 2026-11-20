@@ -1,5 +1,8 @@
 #![no_main]
 
+#[path = "cdx_parse/skeletal_move.rs"]
+mod skeletal_move;
+
 use bondline_cdx::{
     Document, Error, Framing, MAX_INPUT_BYTES, MAX_RECORDS, PropertyInsertion, Record, RecordKind,
     ResourceError, StringError, Writer,
@@ -349,6 +352,85 @@ fn check_label_preview(document: &Document<'_>, model: &bondline_model::Document
         model.drawing_settings().chain_angle_degrees(),
         coordinate(0x0803)
     );
+}
+
+fn check_skeletal_preview(stored: &bondline_io::StoredDocument, source: &Document<'_>) {
+    check_label_preview(source, stored.model());
+    assert!(stored.has_display_projection());
+    assert!(!stored.is_fully_mapped() && !stored.has_cdx_label_edit_profile());
+    assert!(!stored.can_create_caption() && !stored.can_edit_cdx_caption_run());
+    assert!(stored.to_cdxml().is_err());
+    assert_eq!(stored.export_cdx().unwrap(), source.as_bytes());
+
+    // Raw owner order and property presence are independent of model IDs and inferred H.
+    let mut nodes = BTreeMap::new();
+    for (index, record) in source.records().iter().enumerate() {
+        match record.kind() {
+            RecordKind::ObjectStart { tag: 0x8004, .. } => {
+                nodes.insert(index, [None; 3]);
+            }
+            RecordKind::Property {
+                tag: tag @ (0x042b | 0x0442 | 0x0443),
+                ..
+            } => {
+                let slot = match tag {
+                    0x042b => 0,
+                    0x0442 => 1,
+                    _ => 2,
+                };
+                let fields = nodes.get_mut(&record.parent().unwrap()).unwrap();
+                assert!(
+                    fields[slot]
+                        .replace(source.payload(record).unwrap())
+                        .is_none()
+                );
+            }
+            _ => {}
+        }
+    }
+    let mut nodes = nodes.into_values();
+    let page = &stored.model().pages()[0];
+    for fragment in page.fragments() {
+        let mut degrees = BTreeMap::new();
+        for bond in fragment.bonds() {
+            assert_eq!(bond.order, bondline_model::BondOrder::Single);
+            for id in [bond.begin, bond.end] {
+                *degrees.entry(id).or_insert(0_usize) += 1;
+            }
+        }
+        for atom in fragment.atoms() {
+            let [h, terminal, interior] = nodes.next().unwrap();
+            let degree = degrees[&atom.id];
+            assert!((1..=4).contains(&degree));
+            assert_eq!(atom.element.get(), 6);
+            assert!(atom.authored_label.is_none() && atom.isotope.is_none());
+            assert_eq!(
+                (atom.charge, atom.radical),
+                (0, bondline_model::Radical::None)
+            );
+            assert_eq!(
+                atom.explicit_hydrogens,
+                h.map(|b| u16::from_le_bytes(b.try_into().unwrap()))
+            );
+            assert!(
+                atom.explicit_hydrogens
+                    .is_none_or(|h| usize::from(h) + degree == 4)
+            );
+            for flag in [terminal, interior].into_iter().flatten() {
+                assert!(flag.is_empty());
+            }
+            assert_eq!(atom.show_terminal_carbon_labels, terminal.map(|_| true));
+            assert_eq!(atom.show_non_terminal_carbon_labels, interior.map(|_| true));
+            assert!(if degree == 1 { terminal } else { interior }.is_none());
+        }
+    }
+    assert!(nodes.next().is_none());
+    let mut detached = stored.clone();
+    let size = bondline_model::PageSize::new(page.size().width_pt() + 1.0, page.size().height_pt())
+        .unwrap();
+    detached.model_mut().set_page_size(page.id(), size).unwrap();
+    assert!(!detached.has_cdx_skeletal_preview() && !detached.has_display_projection());
+    assert!(detached.export_cdx().is_err());
 }
 
 fn plain_bond(fields: [Option<&[u8]>; 4], bond: &bondline_model::Bond) {
@@ -1105,6 +1187,13 @@ fuzz_target!(|data: &[u8]| {
     {
         check_mixed_preview(stored, &document);
     }
+    if let Some(stored) = stored_page
+        .as_ref()
+        .filter(|stored| stored.has_cdx_skeletal_preview())
+    {
+        check_skeletal_preview(stored, &document);
+        skeletal_move::check(stored, &document);
+    }
     if let Some(mut stored) = stored_page.filter(|stored| stored.has_cdx_caption_preview()) {
         assert_eq!(stored.export_cdx().unwrap(), data);
         assert!(!stored.is_fully_mapped());
@@ -1260,7 +1349,7 @@ fuzz_target!(|data: &[u8]| {
         }
         assert_eq!(
             stored.has_display_projection(),
-            preview || empty_caption_preview
+            preview || empty_caption_preview || stored.has_cdx_skeletal_preview()
         );
         if preview {
             assert!(has_labels);

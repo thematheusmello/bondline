@@ -1,5 +1,17 @@
 # Bondline agent instructions
 
+For skeletal CDX, keep each Node's literal hydrogen and implied-boolean presence.
+Only the source-qualified view resolves absent H and the active visibility flag.
+Use the same whole-paper proof for admission, capture and native viewing. Check
+the CDX bytes and paper after Save/reopen with both dormant flag types.
+[Source contract](docs/research/cdx-skeletal.md) and [verification](docs/verification-cdx-skeletal.md).
+
+Marquee movement on a qualified skeletal CDX uses the current certified source.
+Quantize the common displacement once. Patch only the eight coordinate payload
+bytes at each selected Node and retain its original length header. Re-import
+and compare the entire page before publishing a history entry. Derive drag
+preview ink from the candidate's source. [Movement contract](docs/research/cdx-skeletal-movement.md).
+
 Mixed CDX viewing follows the [source contract](docs/research/cdx-mixed-caption.md) and
 [receiving evidence](docs/verification-cdx-mixed-caption.md). Preserve each original
 record index, exact owned subtree ends, same-container ID checks, one shared run

@@ -313,16 +313,10 @@ impl SelectionWorkflow {
             _ => Ok(None),
         }
     }
-    pub fn preview(
-        &self,
-        engine: &Engine,
-    ) -> Option<Result<std::sync::Arc<bondline_model::Document>, Error>> {
+    pub fn preview_translation(&self, engine: &Engine) -> Option<SelectionTranslate> {
         let gesture = self.gesture.as_ref()?;
-        (gesture.translate && gesture.dragging() && gesture.proof.is_current(engine)).then(|| {
-            engine
-                .preview_selection_translation(&gesture.params(engine))
-                .map(|candidate| candidate.model_snapshot())
-        })
+        (gesture.translate && gesture.dragging() && gesture.proof.is_current(engine))
+            .then(|| gesture.params(engine))
     }
     pub fn paint(
         &self,

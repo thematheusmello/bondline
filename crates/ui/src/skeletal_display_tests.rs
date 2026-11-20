@@ -497,3 +497,214 @@ fn entirely_glyphless_square_retains_four_real_bonds_and_corner_picking_at_actua
     assert_eq!(fs::read(&input)?, HIDDEN_SQUARE);
     Ok(())
 }
+
+#[test]
+fn skeletal_cdx_opens_the_real_poster_and_preserves_its_raw_hydrogen_fields() -> TestResult {
+    let choose_file = |f: &mut Fixture, path: &std::path::Path, action: &str| -> TestResult {
+        wait(f, |f, _| f.node("File name", &[Role::TextInput]).is_ok())?;
+        set(f, "File name", path.to_str().ok_or("Unicode path")?)?;
+        f.choose(action)?;
+        finish_actual_file_workflow(f)
+    };
+    for (source, hydrogens, text_selected) in [
+        ("propane", json!([3, 2, 3]), false),
+        ("missing_h", json!([3, null, 3]), true),
+        ("all_h_missing", json!([null, null, null]), false),
+        ("dormant_true", json!([3, 2, 3]), true),
+    ] {
+        let raw = fs::read(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../io/tests/fixtures/cdx-skeletal")
+                .join(format!("{source}.cdx")),
+        )?;
+        let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+        let path = f.directory.path("skeletal-原.cdx");
+        let output = f.directory.path("skeletal-保存-β.cdx");
+        fs::write(&path, &raw)?;
+        f.warm();
+        if text_selected {
+            f.choose("Text")?;
+        } else {
+            f.command("ui.ring_tool", json!({"size":8}))?;
+        }
+        shortcut(&mut f, Key::O, false);
+        choose_file(&mut f, &path, "Open")?;
+        f.command("ui.view", json!({"action":"actual"}))?;
+        let shown = f.warm();
+        let opened = f.state()?;
+        let page = &opened["document"]["pages"][0];
+        assert_eq!(page["size"], json!({"width_pt":512.0,"height_pt":512.0}));
+        let atoms = page["fragments"][0]["atoms"].as_array().ok_or("atoms")?;
+        let actual_h = atoms
+            .iter()
+            .map(|a| a["explicit_hydrogens"].clone())
+            .collect::<Vec<_>>();
+        assert_eq!(json!(actual_h), hydrogens);
+        {
+            let engine = f.app.engine.lock().map_err(|_| "engine")?;
+            let controls = engine.controls();
+            for id in [
+                "tool.bond.single",
+                "page.rotate",
+                "page.a4",
+                "page.letter",
+                "file.document_settings",
+            ] {
+                let control = controls.iter().find(|c| c.id == id).ok_or("control")?;
+                assert!(!control.enabled, "{id}");
+                assert_eq!(control.disabled_reason, Some("unsupported_content"), "{id}");
+            }
+            assert!(!controls.iter().any(|c| c.enabled && c.id == "tool.caption"));
+        }
+        assert!(
+            f.app
+                .engine
+                .lock()
+                .map_err(|_| "engine")?
+                .controls()
+                .iter()
+                .any(|c| c.id == "tool.selection" && c.enabled)
+        );
+        assert!(painted(&shown, "Skeletal CDX preview"));
+        let paper = canvas(&shown)?;
+        let paths = shown
+            .shapes
+            .iter()
+            .filter_map(|paint| match &paint.shape {
+                egui::Shape::Path(path)
+                    if path.closed
+                        && path.fill == egui::Color32::BLACK
+                        && path.points.len() == 4
+                        && path.points.iter().all(|p| paper.contains(*p)) =>
+                {
+                    Some(path)
+                }
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(paths.len(), 2);
+        for midpoint in [[192., 216.], [256., 216.]] {
+            let point = projected(paper, [512., 512.], 100., None, midpoint);
+            assert!(
+                paths
+                    .iter()
+                    .any(|p| egui::Rect::from_points(&p.points).contains(point))
+            );
+        }
+        for (start, end) in [
+            ([160., 240.], [160., 240.]),
+            ([192., 216.], [208., 232.]),
+            ([300., 300.], [330., 330.]),
+        ] {
+            let start = projected(paper, [512., 512.], 100., None, start);
+            let end = projected(paper, [512., 512.], 100., None, end);
+            f.frame(vec![Event::PointerMoved(start), super::button(start, true)]);
+            f.frame(vec![Event::PointerMoved(end), super::button(end, false)]);
+        }
+        click_alt(&mut f, [224., 192.])?;
+        assert_eq!(f.state()?, opened);
+        assert!(f.app.error.is_none(), "{:?}", f.app.error);
+        shortcut(&mut f, Key::S, true);
+        choose_file(&mut f, &output, "Save")?;
+        assert_eq!(fs::read(&output)?, raw);
+        assert_eq!(fs::read(&path)?, raw);
+        shortcut(&mut f, Key::O, false);
+        choose_file(&mut f, &output, "Open")?;
+        let reopened = f.state()?;
+        assert_eq!(reopened["document"], opened["document"]);
+        assert_eq!(reopened["file"]["dirty"], false);
+        assert_eq!(reopened["undo_depth"], 0);
+    }
+    Ok(())
+}
+
+#[test]
+fn skeletal_selection_drag_previews_the_moved_ink_and_commits_one_exact_edit() -> TestResult {
+    let raw = include_bytes!("../../io/tests/fixtures/cdx-skeletal/all_h_missing.cdx");
+    let after =
+        include_bytes!("../../io/tests/fixtures/cdx-skeletal-move/all_h_missing_center.cdx");
+    let mut f = Fixture::new(1160., 800., 1.)?;
+    let input = f.directory.path("selected-原.cdx");
+    let output = f.directory.path("moved-保存.cdx");
+    fs::write(&input, raw)?;
+    f.command("document.open_cdx", json!({"path":input}))?;
+    f.command("ui.view", json!({"action":"actual"}))?;
+    f.warm();
+    f.choose("Marquee selection")?;
+    let paper = canvas(&f.warm())?;
+    let to_screen = |p| projected(paper, [512., 512.], 100., None, p);
+    let center = to_screen([224., 192.]);
+    let shifted = to_screen([232.25, 186.875]);
+    f.frame(vec![
+        Event::PointerMoved(center),
+        super::button(center, true),
+    ]);
+    f.frame(vec![super::button(center, false)]);
+    assert_eq!(f.state()?["ui_selection"]["atom_ids"], json!([2]));
+    let original = f.state()?;
+    f.frame(vec![super::button(center, true)]);
+    let preview = f.frame(vec![Event::PointerMoved(shifted)]);
+    assert_eq!(f.state()?, original);
+    // The real uncommitted frame must use the missing-H skeletal source facts.
+    let centroids = preview
+        .shapes
+        .iter()
+        .filter_map(|shape| match &shape.shape {
+            egui::Shape::Path(p)
+                if p.closed
+                    && p.fill == egui::Color32::BLACK
+                    && p.points.len() == 4
+                    && p.points.iter().all(|p| paper.contains(*p)) =>
+            {
+                Some(egui::Rect::from_points(&p.points).center())
+            }
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(centroids.len(), 2);
+    for midpoint in [[196.125, 213.4375], [260.125, 213.4375]] {
+        assert!(
+            centroids
+                .iter()
+                .any(|p| p.distance(to_screen(midpoint)) < 0.25)
+        );
+    }
+    f.frame(vec![super::button(shifted, false)]);
+    let bytes = |f: &Fixture| -> TestResult<Vec<u8>> {
+        Ok(f.app
+            .engine
+            .lock()
+            .map_err(|_| "engine")?
+            .stored_document()?
+            .to_cdx()?
+            .into_owned())
+    };
+    assert_eq!(bytes(&f)?, after);
+    assert_eq!(f.state()?["undo_depth"], 1);
+    f.frame(vec![
+        super::key(Key::ArrowRight, true, egui::Modifiers::NONE),
+        super::key(Key::ArrowRight, false, egui::Modifiers::NONE),
+    ]);
+    assert_eq!(
+        f.state()?["document"]["pages"][0]["fragments"][0]["atoms"][1]["position"]["x_pt"],
+        233.25
+    );
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(bytes(&f)?, after);
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(bytes(&f)?, raw);
+    shortcut(&mut f, Key::Z, true);
+    shortcut(&mut f, Key::S, true);
+    wait(&mut f, |f, _| {
+        f.node("File name", &[Role::TextInput]).is_ok()
+    })?;
+    set(&mut f, "File name", output.to_str().ok_or("path")?)?;
+    f.choose("Save")?;
+    finish_actual_file_workflow(&mut f)?;
+    assert_eq!(fs::read(&input)?, raw);
+    assert_eq!(fs::read(&output)?, after);
+    f.command("document.open_cdx", json!({"path":output}))?;
+    assert_eq!(bytes(&f)?, after);
+    assert_eq!(f.state()?["file"]["dirty"], false);
+    Ok(())
+}
