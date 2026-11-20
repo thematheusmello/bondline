@@ -91,6 +91,7 @@ pub struct Document<'input> {
     source: &'input [u8],
     xml: roxmltree::Document<'input>,
     features: SyntaxFeatures,
+    bare_cdxml_doctype: bool,
 }
 
 impl<'input> Document<'input> {
@@ -99,7 +100,7 @@ impl<'input> Document<'input> {
             return Err(Error::InputTooLarge);
         }
         let source = std::str::from_utf8(input)?;
-        let features = preflight(source)?;
+        let (features, bare_cdxml_doctype) = preflight(source)?;
         let xml = roxmltree::Document::parse_with_options(
             source,
             roxmltree::ParsingOptions {
@@ -117,11 +118,16 @@ impl<'input> Document<'input> {
             source: input,
             xml,
             features,
+            bare_cdxml_doctype,
         })
     }
 
     pub fn xml(&self) -> &roxmltree::Document<'input> {
         &self.xml
+    }
+    /// True only for a CDXML doctype with no external identifier or internal subset.
+    pub fn has_bare_cdxml_doctype(&self) -> bool {
+        self.bare_cdxml_doctype
     }
     pub fn features(&self) -> SyntaxFeatures {
         self.features
@@ -134,12 +140,13 @@ impl<'input> Document<'input> {
     }
 }
 
-fn preflight(source: &str) -> Result<SyntaxFeatures, Error> {
+fn preflight(source: &str) -> Result<(SyntaxFeatures, bool), Error> {
     use quick_xml::{Reader, events::Event};
     let mut reader = Reader::from_str(source);
     let mut depth = 0_usize;
     let mut attributes = 0_usize;
     let mut features = SyntaxFeatures::default();
+    let mut bare_cdxml_doctype = false;
     loop {
         let event = reader.read_event()?;
         match &event {
@@ -161,6 +168,7 @@ fn preflight(source: &str) -> Result<SyntaxFeatures, Error> {
             }
             Event::DocType(doctype) => {
                 features.doctype = true;
+                bare_cdxml_doctype = doctype.trim_matches([' ', '\t', '\r', '\n']) == "CDXML";
                 let mut quote = None;
                 for character in doctype.chars() {
                     match (quote, character) {
@@ -192,7 +200,7 @@ fn preflight(source: &str) -> Result<SyntaxFeatures, Error> {
             Event::End(_) => depth = depth.saturating_sub(1),
             Event::PI(_) => features.processing_instructions = true,
             Event::CData(_) => features.cdata = true,
-            Event::Eof => return Ok(features),
+            Event::Eof => return Ok((features, bare_cdxml_doctype)),
             _ => {}
         }
     }
