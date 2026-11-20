@@ -616,6 +616,8 @@ InChI, names and corpus mass comparisons need separate checks.
 A background macOS Analysis panel and the CLI showed C4H10, 58.124 and
 58.078250 Da for the pinned CDXML source across exact Unicode Save/reopen.
 [Qualified chemistry-only source and receiving evidence](docs/verification-cdxml-carbon-analysis.md).
+The integrated full local gate passed on `dfe23cb` with 2,424 workspace tests
+passed, zero failed and one ignored, plus three macOS AccessKit tests.
 
 The preceding two-matching-file corpus gate passed at `018cf0b`
 after integration with PR 30

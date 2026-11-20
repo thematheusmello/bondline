@@ -68,3 +68,10 @@ percentages. The integrated native receipt SHA-256 is
 `457387829e10bbc4c72e5d82e9a28e2d86de5e01aee3938b58e2ac3b9d1883ac`,
 and the MCP receipt SHA-256 is
 `04c3c72cc1e3f4f0f6e9af04f2239545f90ab5a9bfa90850daaf4abe204a4a25`.
+
+The complete local `cargo xtask ci` on `dfe23cb`, including the elemental
+percentage and source-preserving CDX label workflows, passed 2,424 workspace
+tests with zero failed and one ignored. All three additional macOS AccessKit
+tests, formatting, Clippy, layering, license and asset audits, and the pinned
+corpus passed. The 308,440-byte log SHA-256 was
+`b92c8920c430de76d4bb2b0511ef91851136de8f6b274e732c629638d23d4253`.
