@@ -1,6 +1,8 @@
 //! Read-only formula for a published drawing/selection scope.
 use crate::{Engine, Error};
-use bondline_chem::{Composition, CompositionError, FormulaIsotopes};
+use bondline_chem::{
+    Composition, CompositionError, FormulaIsotopes, MassUnavailable, MolecularMasses,
+};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -35,6 +37,39 @@ pub struct AnalysisReport {
     pub outcome: AnalysisOutcome,
 }
 
+/// Available mass values are JSON numbers. On missing data each quantity
+/// reports its own structured reason while the resolved formula stays available.
+#[derive(Clone, Copy, Debug, Serialize)]
+#[serde(untagged)]
+pub enum AnalysisMass {
+    Value(f64),
+    Unavailable(MassUnavailable),
+}
+
+impl From<Result<f64, MassUnavailable>> for AnalysisMass {
+    fn from(value: Result<f64, MassUnavailable>) -> Self {
+        match value {
+            Ok(mass) => Self::Value(mass),
+            Err(reason) => Self::Unavailable(reason),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Serialize)]
+pub struct AnalysisMasses {
+    pub molecular_weight: AnalysisMass,
+    pub exact_mass_da: AnalysisMass,
+}
+
+impl From<MolecularMasses> for AnalysisMasses {
+    fn from(value: MolecularMasses) -> Self {
+        Self {
+            molecular_weight: value.molecular_weight.into(),
+            exact_mass_da: value.exact_mass_da.into(),
+        }
+    }
+}
+
 #[derive(Clone, Debug, Serialize)]
 #[serde(tag = "status", rename_all = "snake_case")]
 pub enum AnalysisOutcome {
@@ -45,6 +80,8 @@ pub enum AnalysisOutcome {
         #[serde(skip_serializing_if = "Option::is_none")]
         defaulted_hydrogen_atoms: Option<std::num::NonZeroUsize>,
         formula: String,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        masses: Option<AnalysisMasses>,
     },
     Empty,
     UnsupportedSource,
@@ -68,9 +105,10 @@ impl Engine {
         self.analysis_window_open
     }
 
-    pub(super) fn analysis_formula(
+    pub(super) fn analysis_report(
         &self,
-        params: AnalysisFormula,
+        params: &AnalysisFormula,
+        include_masses: bool,
     ) -> Result<AnalysisReport, Error> {
         if params.expected_revision != self.revision {
             return Err(Error::StaleRevision);
@@ -140,14 +178,12 @@ impl Engine {
         } else {
             Default::default()
         };
-        let formula = match Composition::from_atoms_with_hydrogen_defaults(
+        let composition = match Composition::from_atoms_with_hydrogen_defaults(
             atoms,
             |id| hydrogens.get(&id).copied(),
             || false,
-        )
-        .and_then(|composition| composition.hill_formula(FormulaIsotopes::Separate))
-        {
-            Ok(formula) => formula,
+        ) {
+            Ok(composition) => composition,
             Err(CompositionError::UnresolvedHydrogens(id)) => {
                 return Ok(report(AnalysisOutcome::UnresolvedHydrogens {
                     atom_id: id.get(),
@@ -160,7 +196,8 @@ impl Engine {
             fragment_count,
             partial_fragments,
             defaulted_hydrogen_atoms,
-            formula,
+            formula: composition.hill_formula(FormulaIsotopes::Separate)?,
+            masses: include_masses.then(|| composition.molecular_masses().into()),
         }))
     }
 }
@@ -188,7 +225,7 @@ mod tests {
         engine.document = Arc::new((*original).clone());
         assert_eq!(engine.document, original);
         assert!(matches!(
-            engine.analysis_formula(request),
+            engine.analysis_report(&request, false),
             Err(Error::StaleSelection)
         ));
         Ok(())

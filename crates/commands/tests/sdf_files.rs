@@ -71,6 +71,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "text.create",
             "analysis.formula",
             "ui.analysis",
+            "analysis.properties",
         ]
         .into_iter()
         .collect()

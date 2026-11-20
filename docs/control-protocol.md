@@ -2143,3 +2143,5 @@ convert an ordinary gesture. Click/drag generate the same complete ring.sprout c
 and existing full-scene guards. Exact original policies/limits are in the
 [lock](research/native-ring-sprout.md); [receiving](verification-native-ring-sprout.md)
 distinguishes independent App/adapter evidence from actual native platform checks.
+
+`analysis.properties` takes the same revision and selection epoch as `analysis.formula`. For a resolved composition it adds a `masses` object to the analysis result. `molecular_weight` is dimensionless and `exact_mass_da` is in daltons. Each is a JSON number or an object carrying `reason`, `atomic_number`, and for `unknown_isotope`, `mass_number`. For partial fragments both quantities describe the uncapped selection. An unsupported source, unresolved H, empty scope or bounded scan has the same status and omits calculated fields. [Numerical conventions](research/molecular-masses.md)
