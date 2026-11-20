@@ -1,5 +1,5 @@
 //! Independent first numeric-composition declaration; no notation reader/writer.
-use bondline_chem::{ElementCount, IsotopeCount, analyze_fragment};
+use bondline_chem::{ElementCount, FormulaIsotopes, IsotopeCount, analyze_fragment};
 use bondline_model::{Atom, AtomId, Element, Fragment, FragmentId};
 use std::num::NonZeroU16;
 
@@ -156,6 +156,11 @@ fn natural_and_numbered_h_nodes_are_not_double_counted_or_collapsed() -> TestRes
         ]
     );
     assert_eq!(composition.total_charge(), 0);
+    assert_eq!(composition.hill_formula(FormulaIsotopes::Combined)?, "C3H6");
+    assert_eq!(
+        composition.hill_formula(FormulaIsotopes::Separate)?,
+        "C[12C][13C]H3[1H][2H][3H]"
+    );
     assert_eq!(graph, original);
     Ok(())
 }
@@ -269,6 +274,7 @@ fn empty_isomeric_and_permuted_graphs_have_literal_not_topological_totals() -> T
     assert!(zero.element_counts().is_empty());
     assert!(zero.isotope_counts().is_empty());
     assert_eq!(zero.total_charge(), 0);
+    assert_eq!(zero.hill_formula(FormulaIsotopes::Separate)?, "");
     let ethanol = fragment(
         vec![
             atom(9, 6, None, Some(3), 0)?,
@@ -380,6 +386,10 @@ fn full_model_atom_and_bond_bounds_do_not_wrap_u32_counts_or_i8_charges() -> Tes
         }]
     );
     assert_eq!(result.total_charge(), 12_700_000);
+    assert_eq!(
+        result.hill_formula(FormulaIsotopes::Combined)?,
+        "H6553600000+12700000"
+    );
     let atoms = graph
         .atoms()
         .iter()
@@ -390,9 +400,11 @@ fn full_model_atom_and_bond_bounds_do_not_wrap_u32_counts_or_i8_charges() -> Tes
         })
         .collect();
     let negative = Fragment::new(graph.id(), atoms, graph.bonds().to_vec())?;
+    let negative = analyze_fragment(&negative, || false)?;
+    assert_eq!(negative.total_charge(), -12_800_000);
     assert_eq!(
-        analyze_fragment(&negative, || false)?.total_charge(),
-        -12_800_000
+        negative.hill_formula(FormulaIsotopes::Separate)?,
+        "H6553600000-12800000"
     );
     Ok(())
 }
@@ -429,6 +441,34 @@ fn cancellation_precedes_unknown_h_and_interrupts_a_nonempty_scan_without_mutati
     assert_eq!(
         analyze_fragment(&graph, || false)?.element_counts()[0].count,
         400
+    );
+    Ok(())
+}
+
+#[test]
+fn strict_hill_order_uses_symbols_and_plural_isotope_bins() -> TestResult {
+    let mut atoms = vec![
+        atom(8, 17, None, Some(0), -1)?,
+        atom(2, 7, None, Some(4), 1)?,
+        atom(4, 1, Some(2), Some(0), 0)?,
+        atom(9, 1, Some(2), Some(0), 0)?,
+    ];
+    let no_carbon = analyze_fragment(&fragment(atoms.clone(), &[])?, || false)?;
+    assert_eq!(no_carbon.hill_formula(FormulaIsotopes::Combined)?, "ClH6N");
+    assert_eq!(
+        no_carbon.hill_formula(FormulaIsotopes::Separate)?,
+        "ClH4[2H]2N"
+    );
+    atoms.push(atom(5, 6, Some(u16::MAX), Some(0), 0)?);
+    atoms.reverse();
+    let with_carbon = analyze_fragment(&fragment(atoms, &[])?, || false)?;
+    assert_eq!(
+        with_carbon.hill_formula(FormulaIsotopes::Combined)?,
+        "CH6ClN"
+    );
+    assert_eq!(
+        with_carbon.hill_formula(FormulaIsotopes::Separate)?,
+        "[65535C]H4[2H]2ClN"
     );
     Ok(())
 }
