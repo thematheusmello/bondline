@@ -2497,3 +2497,12 @@ the separate fork and exec stages. The experimental comparison uses the
 installed kernel and the real listener. The compatibility evidence identifies
 the older kernels and exact limits of the observed release guarantee.
 [Apple XNU fork and exec](https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_exec.c) · [Source decision and receiving evidence](../research/macos-listener-lifetime.md)
+
+### Accessible menu activation, 2026-11-20
+
+Apple's public AXPress action is the native entry point for pressing a control.
+egui 0.29.1 reports a click for an enabled button targeted by AccessKit
+Default. Its published nested menu originally opens on hover. Bondline uses
+the existing button activation for nested menus and grants the same current
+menu action at its event index when the window lacks keyboard focus.
+[Apple AXPress](https://developer.apple.com/documentation/applicationservices/kaxpressaction) · [egui button response](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/context.rs) · [egui submenu](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/menu.rs) · [Verification](../verification-accessible-menus.md)
