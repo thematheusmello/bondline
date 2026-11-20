@@ -72,6 +72,7 @@ fn sdf_registry_parameters_are_typed_closed_and_keep_every_existing_command() ->
             "analysis.formula",
             "ui.analysis",
             "analysis.properties",
+            "file.export_png",
         ]
         .into_iter()
         .collect()

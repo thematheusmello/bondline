@@ -192,6 +192,7 @@ fn removal_schema_is_closed_mutating_and_adds_only_the_twenty_ninth_command() ->
             "analysis.formula",
             "ui.analysis",
             "analysis.properties",
+            "file.export_png",
         ]
         .into_iter()
         .collect()

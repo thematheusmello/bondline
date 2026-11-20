@@ -87,6 +87,7 @@ fn setter_schema_is_closed_mutating_and_retains_all_nineteen_prior_commands() ->
             "analysis.formula",
             "ui.analysis",
             "analysis.properties",
+            "file.export_png",
         ]
         .into_iter()
         .collect()

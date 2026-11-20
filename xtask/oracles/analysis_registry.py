@@ -14,7 +14,7 @@ for rows, expected in [
     old_digest = ("8a25ff5a637e7e4bce0e81e9b41d9b72b0154090e6cefd7d09853b6e2552722b" if rows is cli
                   else "5d8d1358dac859440a50043fb899822f8605fa555857f7ce6be80cd4e3162d42")
     assert hashlib.sha256(old.encode()).hexdigest() == old_digest
-    assert [r["name"] for r in rows[51:]] == ["analysis.formula", "ui.analysis", "analysis.properties"]
+    assert [r["name"] for r in rows[51:]] == ["analysis.formula", "ui.analysis", "analysis.properties", "file.export_png"]
 
 epoch = {"type": "integer", "format": "uint64", "minimum": 0}
 for i, title, description, other, value, read_only in [
@@ -34,3 +34,24 @@ for i, title, description, other, value, read_only in [
     assert cli[i] == {"name": name, "description": description, "read_only": read_only, "input_schema": schema}
     assert mcp[i] == {"name": name, "description": description, "inputSchema": schema,
                       "annotations": {"readOnlyHint": read_only, "openWorldHint": False}}
+
+png_description = "Publish one complete drawing page as a new physical-resolution PNG file with opaque white or transparent paper. Preserve the document and its editable file association."
+png_schema = {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "ExportPng",
+    "type": "object",
+    "properties": {
+        "expected_revision": epoch,
+        "page_id": {"type": "integer", "format": "uint32", "minimum": 1},
+        "dpi": {"type": "integer", "format": "uint16", "minimum": 1, "maximum": 65535},
+        "transparent": {"type": "boolean"},
+        "output_path": {"type": "string"},
+    },
+    "additionalProperties": False,
+    "required": ["expected_revision", "page_id", "dpi", "transparent", "output_path"],
+}
+assert cli[54] == {"name": "file.export_png", "description": png_description,
+                   "read_only": False, "input_schema": png_schema}
+assert mcp[54] == {"name": "file.export_png", "description": png_description,
+                   "inputSchema": png_schema,
+                   "annotations": {"readOnlyHint": False, "openWorldHint": False}}

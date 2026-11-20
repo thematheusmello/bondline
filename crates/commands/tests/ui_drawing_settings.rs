@@ -165,7 +165,7 @@ fn schema_node<'a>(
 fn public_api_and_closed_schema_add_one_presentation_without_changing_the_old_name_order()
 -> TestResult {
     let rows = bondline_commands::registry();
-    assert_eq!(rows.len(), 54);
+    assert_eq!(rows.len(), 55);
     assert_eq!(
         rows[..41].iter().map(|row| row.name).collect::<Vec<_>>(),
         OLD_NAMES

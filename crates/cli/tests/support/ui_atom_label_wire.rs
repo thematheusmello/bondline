@@ -15,7 +15,7 @@ fn stdio_discovers_atom_presentation_but_does_not_fabricate_an_attached_native_h
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     assert_eq!(listed["id"], 2);
     let tools = listed["result"]["tools"].as_array().ok_or("tools")?;
-    assert_eq!(tools.len(), 54);
+    assert_eq!(tools.len(), 55);
     let found = tools
         .iter()
         .filter(|tool| tool["name"] == "ui.atom_label")

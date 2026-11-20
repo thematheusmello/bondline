@@ -87,6 +87,9 @@ impl FileError {
             Failure::Cancelled => "cancelled",
             Failure::Changed => "file_changed",
             Failure::Document(error) => error.code(),
+            Failure::Png(crate::Error::Display(error)) => error.code(),
+            Failure::Png(crate::Error::Frame(bondline_render::Error::Cancelled)) => "cancelled",
+            Failure::Png(_) => "render_failed",
             Failure::Sdf(error) => error.code(),
             Failure::Smiles(error) => error.code(),
             Failure::SmilesFile(error) => error.code(),
@@ -160,6 +163,8 @@ enum Failure {
     Changed,
     #[error(transparent)]
     Document(#[from] DocumentError),
+    #[error(transparent)]
+    Png(#[from] crate::Error),
     #[error(transparent)]
     Sdf(#[from] SdfError),
     #[error(transparent)]
@@ -502,6 +507,32 @@ fn save_format_with_hook(
             .map_err(Failure::from)
         },
         hook,
+    )
+}
+
+/// Publish a new physical PNG atomically, preserving an existing destination.
+pub fn export_png_file(
+    path: &Path,
+    drawing: &StoredDocument,
+    page: bondline_model::PageId,
+    dpi: u16,
+    transparent: bool,
+    cancel: &Cancellation,
+) -> Result<SaveReceipt, FileError> {
+    save_encoded_with_hook(
+        path,
+        false,
+        cancel,
+        || {
+            Ok(Cow::Owned(crate::encode_page_png(
+                drawing,
+                page,
+                dpi,
+                transparent,
+                cancel,
+            )?))
+        },
+        &mut |_| Ok(()),
     )
 }
 

@@ -188,6 +188,12 @@ pub struct FileOperation {
 
 #[derive(Debug)]
 pub(super) enum FilePlan {
+    ExportPng {
+        params: crate::ExportPng,
+        document: Arc<StoredContent>,
+        save_slot: Arc<()>,
+        generation: u64,
+    },
     ExportSmiles {
         params: crate::ExportSmilesFragment,
         document: Arc<StoredContent>,
@@ -225,6 +231,11 @@ pub struct Completed(pub(super) Completion);
 
 #[derive(Debug)]
 pub(super) enum Completion {
+    #[cfg(not(target_arch = "wasm32"))]
+    PublishedPng {
+        receipt: crate::PngExportReceipt,
+        save_slot: Arc<()>,
+    },
     #[cfg(not(target_arch = "wasm32"))]
     SmilesExport {
         receipt: crate::SmilesExportReceipt,
@@ -281,6 +292,9 @@ impl FilePlan {
             Self::ConvertSmiles { .. } => Err(Error::InvalidUiFileParameters(
                 "SMILES conversion is not a native file-presentation action",
             )),
+            Self::ExportPng { .. } => Err(Error::InvalidUiFileParameters(
+                "PNG export uses a separate publishing destination",
+            )),
             Self::ExportSmiles { .. } => Err(Error::InvalidUiFileParameters(
                 "SMILES fragment export is not a native file-presentation action",
             )),
@@ -292,6 +306,38 @@ impl FilePlan {
             use bondline_io::files::{canonical_save_path, read_cdxml_file, save_cdxml_file};
             use std::path::Path;
             Ok(Completed(match self {
+                Self::ExportPng {
+                    params,
+                    document,
+                    save_slot,
+                    generation,
+                } => {
+                    let page = bondline_model::PageId::new(params.page_id.get())
+                        .ok_or(Error::InvalidPageId)?;
+                    let path = canonical_save_path(Path::new(&params.output_path))?;
+                    if path.to_str().is_none() {
+                        return Err(Error::UnrepresentableFilePath { published: false });
+                    }
+                    let file = bondline_io::files::export_png_file(
+                        &path,
+                        document.drawing()?,
+                        page,
+                        params.dpi.get(),
+                        params.transparent,
+                        cancel,
+                    )?;
+                    Completion::PublishedPng {
+                        receipt: crate::PngExportReceipt {
+                            input_revision: params.expected_revision,
+                            session_generation: generation,
+                            page_id: params.page_id,
+                            dpi: params.dpi,
+                            transparent: params.transparent,
+                            output: file.try_into()?,
+                        },
+                        save_slot,
+                    }
+                }
                 Self::ExportSmiles {
                     params,
                     document,
@@ -529,6 +575,14 @@ impl Engine {
 
     pub fn finish(&mut self, completed: Completed) -> Result<CommandResult, Error> {
         match completed.0 {
+            #[cfg(not(target_arch = "wasm32"))]
+            Completion::PublishedPng {
+                receipt,
+                save_slot: _save_slot,
+            } => Ok(CommandResult {
+                png_export: Some(receipt),
+                ..self.state()
+            }),
             #[cfg(not(target_arch = "wasm32"))]
             Completion::SmilesExport {
                 receipt,

@@ -218,8 +218,8 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
         .iter()
         .map(|entry| entry.name)
         .collect::<BTreeSet<_>>();
-    assert_eq!(registry.len(), 54);
-    assert_eq!(names.len(), 54);
+    assert_eq!(registry.len(), 55);
+    assert_eq!(names.len(), 55);
     assert_eq!(
         names,
         [
@@ -277,6 +277,7 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
             "analysis.formula",
             "ui.analysis",
             "analysis.properties",
+            "file.export_png",
         ]
         .into_iter()
         .collect::<BTreeSet<_>>()
