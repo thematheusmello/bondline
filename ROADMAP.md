@@ -816,7 +816,9 @@ run RDKit, reference InChI and OPSIN; document conventions and tolerances before
 
 The Analysis window can inspect the individual MOL blocks of an SDF with exact same-format Save/reopen. SDF-wide summaries and further chemistry coverage remain open. [Per-record verification](docs/verification-sdf-record-analysis.md).
 
-## M4: publishing — planned
+## M4: publishing — in progress
+
+A source-qualified, physical-resolution PNG exporter now runs through the shared native registry. The desktop export dialog, SVG, PDF, printing and Office workflows still need implementation and independent acceptance. [PNG contract](docs/research/physical-png.md).
 
 SVG/PDF/PNG, physical-scale output, documented clipboard/Office workflows, atomic saving,
 recovery and independent export consumers. Editable embedding needs public evidence.

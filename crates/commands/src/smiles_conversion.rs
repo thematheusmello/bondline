@@ -64,6 +64,23 @@ pub struct ConversionOutput {
     pub directory_synced: bool,
 }
 
+#[cfg(not(target_arch = "wasm32"))]
+impl TryFrom<bondline_io::files::SaveReceipt> for ConversionOutput {
+    type Error = Error;
+
+    fn try_from(receipt: bondline_io::files::SaveReceipt) -> Result<Self, Self::Error> {
+        Ok(Self {
+            path: receipt
+                .path
+                .into_os_string()
+                .into_string()
+                .map_err(|_| Error::UnrepresentableFilePath { published: true })?,
+            byte_length: receipt.byte_length,
+            directory_synced: receipt.directory_synced,
+        })
+    }
+}
+
 /// Historical conversion identity and publication metadata, never a saved-session baseline.
 #[derive(Clone, Debug, Serialize)]
 pub struct ConversionReceipt {

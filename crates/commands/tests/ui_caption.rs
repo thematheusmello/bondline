@@ -60,7 +60,7 @@ fn request(engine: &mut Engine, revision: u64) -> TestResult<u64> {
 fn registry_appends_creation_and_keeps_the_existing_caption_action_schemas() -> TestResult {
     let rows = serde_json::to_value(bondline_commands::registry())?;
     let rows = rows.as_array().ok_or("registry")?;
-    assert_eq!(rows.len(), 54);
+    assert_eq!(rows.len(), 55);
     let caption = &rows[49];
     assert_eq!(caption["name"], "ui.caption");
     assert_eq!(caption["read_only"], false);

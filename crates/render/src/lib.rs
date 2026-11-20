@@ -54,6 +54,10 @@ pub enum Error {
     InvalidFrame,
     #[error("capture dimensions must be between 1 and 2048 pixels")]
     InvalidDimensions,
+    #[error(
+        "publication requires a positive DPI and a page of at most 36 million pixels and 16384 pixels per side"
+    )]
+    InvalidPublicationSize,
     #[error("viewport dimensions must be between 1 and 100000 pixels")]
     InvalidViewport,
     #[error(
@@ -147,7 +151,9 @@ pub use page::{
     PageViewport, carbon_page_scene, graph_page_scene, graph_page_scene_with_cancel,
     graph_page_scene_with_display_hydrogens,
 };
-pub use scene::{Primitive, Rectangle, Scene, cpu_scene, cpu_scene_with_cancel, page_scene};
+pub use scene::{
+    Primitive, Rectangle, Scene, cpu_publication, cpu_scene, cpu_scene_with_cancel, page_scene,
+};
 pub use skeletal::hidden_carbon_atoms;
 pub use stroke::{Stroke, centered_bond_strokes, centered_bond_strokes_with_unit};
 pub use text::{MAX_PAGE_TEXT_RUNS, validate_caption_run_joins};

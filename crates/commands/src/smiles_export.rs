@@ -91,15 +91,7 @@ impl SmilesExportReceipt {
             fragment_id: params.fragment_id,
             atom_count,
             bond_count,
-            output: ConversionOutput {
-                path: receipt
-                    .path
-                    .into_os_string()
-                    .into_string()
-                    .map_err(|_| Error::UnrepresentableFilePath { published: true })?,
-                byte_length: receipt.byte_length,
-                directory_synced: receipt.directory_synced,
-            },
+            output: receipt.try_into()?,
         })
     }
 }

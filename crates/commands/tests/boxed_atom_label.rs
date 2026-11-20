@@ -20,7 +20,7 @@ fn boxed_atom_command48_parses_the_closed_old_target_shape_with_the_qualified_re
     let old: Vec<Value> = serde_json::from_str(&registry_fixture::with_cdx_caption_edit(
         include_str!("../../cli/tests/support/atom-child-old47.json"),
     ))?;
-    assert_eq!(rows.len(), 54);
+    assert_eq!(rows.len(), 55);
     assert_eq!(old.len(), 47);
     assert_eq!(&rows[..47], old.as_slice());
     assert_eq!(rows[47]["name"], "atom.set_authored_label");

@@ -121,7 +121,7 @@ fn fail(engine: &mut Engine, params: Value, code: &str) -> TestResult {
 fn legacy_none_and_explicit_true_noops_preserve_redo_close_source_and_arc_after_validation()
 -> TestResult {
     let registry = bondline_commands::registry();
-    assert_eq!(registry.len(), 54, "restoration adds no command");
+    assert_eq!(registry.len(), 55, "restoration adds no command");
     assert_eq!(
         registry
             .iter()

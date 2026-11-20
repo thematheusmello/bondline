@@ -26,6 +26,7 @@ mod drawing_settings_ui;
 mod file_ui;
 mod files;
 mod new_document;
+mod png_export;
 mod preferences;
 mod ring;
 mod ring_tool;
@@ -73,6 +74,7 @@ pub use files::{
     OpenSdf, OpenSmiles, SaveCdx, SaveCdxml, SaveMol, SaveSdf, SaveSmiles,
 };
 pub use new_document::NewDocument;
+pub use png_export::{ExportPng, PngExportReceipt};
 pub use preferences::{
     ApplicationPreferences, UiPreferences, UiPreferencesOperation, UiPreferencesRequest,
 };
@@ -242,6 +244,7 @@ command_registry! {
     AnalysisFormula(AnalysisFormula) => ("analysis.formula", "Read the Hill formula for the current selection or complete drawing. Reports skeletal CDX hydrogen defaults, unresolved hydrogens, partial fragments and unsupported source coverage.", true),
     UiAnalysis(UiAnalysis) => ("ui.analysis", "Show or hide the Analysis window for this session without changing the drawing or its history.", false),
     AnalysisProperties(AnalysisProperties) => ("analysis.properties", "Read formula, molecular weight and monoisotopic exact mass for the whole drawing or selection. Partial fragments report uncapped contributions; unavailable mass data identify the element or isotope. Request elemental analysis for percent by weight or select one SDF molecule by record ID.", true),
+    ExportPng(ExportPng) => ("file.export_png", "Publish one complete drawing page as a new physical-resolution PNG file with opaque white or transparent paper. Preserve the document and its editable file association.", false),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -600,6 +603,8 @@ pub struct CommandResult {
     pub conversion: Option<ConversionReceipt>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub smiles_export: Option<SmilesExportReceipt>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub png_export: Option<PngExportReceipt>,
     pub close: CloseState,
     pub close_epoch: u64,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -782,6 +787,7 @@ impl Engine {
             file_operation: None,
             conversion: None,
             smiles_export: None,
+            png_export: None,
             close: self.close_state(),
             close_epoch: self.close_policy.epoch,
             close_operation: None,
@@ -941,6 +947,10 @@ impl Engine {
             }
             Command::ConvertSmilesToCdxml(params) => {
                 let plan = self.smiles_conversion_plan(params)?;
+                return Ok(Prepared::file(self.state(), plan));
+            }
+            Command::ExportPng(params) => {
+                let plan = self.png_export_plan(params)?;
                 return Ok(Prepared::file(self.state(), plan));
             }
             Command::ExportSmilesFragment(params) => {
@@ -1553,6 +1563,7 @@ mod tests {
                 "analysis.formula",
                 "ui.analysis",
                 "analysis.properties",
+                "file.export_png",
             ]
             .into_iter()
             .collect()

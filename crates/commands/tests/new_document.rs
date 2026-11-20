@@ -166,6 +166,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "analysis.formula",
             "ui.analysis",
             "analysis.properties",
+            "file.export_png",
         ]
         .into_iter()
         .collect()

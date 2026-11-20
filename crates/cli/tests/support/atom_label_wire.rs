@@ -121,10 +121,11 @@ fn names(values: &[Value]) -> TestResult {
             "analysis.formula",
             "ui.analysis",
             "analysis.properties",
+            "file.export_png",
         ])
         .collect::<std::collections::BTreeSet<_>>();
-    assert_eq!(values.len(), 54);
-    assert_eq!(unique.len(), 54);
+    assert_eq!(values.len(), 55);
+    assert_eq!(unique.len(), 55);
     assert_eq!(unique, expected);
     Ok(())
 }

@@ -18,6 +18,7 @@ pub struct PageViewport {
     paper: Rectangle,
     page: PageSize,
     exact_scale: Option<f64>,
+    pub(crate) output_background: Option<[u8; 4]>,
     raster: Option<RasterTransform>,
     style: DrawingStyle,
     settings: DrawingSettings,
@@ -59,6 +60,7 @@ impl PageViewport {
             },
             page,
             exact_scale: None,
+            output_background: None,
             raster: None,
             style: DrawingStyle::default(),
             settings: DrawingSettings::default(),
@@ -93,12 +95,42 @@ impl PageViewport {
                 },
                 page,
                 exact_scale: Some(scale),
+                output_background: None,
                 raster: None,
                 style: DrawingStyle::default(),
                 settings: DrawingSettings::default(),
             },
             source,
         ))
+    }
+
+    pub(crate) fn for_publication(
+        page: PageSize,
+        dpi: u16,
+        background: [u8; 4],
+    ) -> Result<Self, Error> {
+        if dpi == 0 {
+            return Err(Error::InvalidPublicationSize);
+        }
+        // Multiply before division so integral inch extents stay integral at e.g. 300 dpi.
+        let [width, height] = [page.width_pt(), page.height_pt()]
+            .map(|points| (points * f64::from(dpi) / 72.0).ceil() as u32);
+        crate::scene::publication_pixels(width, height)?;
+        Ok(Self {
+            paper: Rectangle {
+                x: 0,
+                y: 0,
+                width,
+                height,
+                color: background,
+            },
+            page,
+            exact_scale: Some(f64::from(dpi) / 72.0),
+            output_background: Some(background),
+            raster: None,
+            style: DrawingStyle::default(),
+            settings: DrawingSettings::default(),
+        })
     }
 
     /// Fresh physical geometry, preserving the logical Fit's rounded axes or exact Zoom.
@@ -128,6 +160,7 @@ impl PageViewport {
             },
             page: self.page,
             exact_scale: None,
+            output_background: self.output_background,
             raster: Some(RasterTransform {
                 origin,
                 axes: [
