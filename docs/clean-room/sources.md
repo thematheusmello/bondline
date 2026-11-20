@@ -2441,3 +2441,12 @@ Source-preserving movement on mixed skeletal CDX applies one signed fixed-point 
 The Analysis window resolves omitted carbon H counts on certified skeletal CDX using the complete fragment bond order before selection. The published CDX default specifies the minimum valence-satisfying count. Bondline reports the number of atoms that used this rule and keeps each original source property intact. [CDX attached hydrogen](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/properties/Atom_NumHydrogens.htm) · [Analysis policy](../research/analysis-window.md).
 
 - Molecular weight, monoisotopic exact mass, nuclide completeness and ion conventions follow the [source register and numerical contract](../research/molecular-masses.md). It links the public v25 guide pp. 221–224, IUPAC definitions, CIAAW tables, NIST/CODATA and the MIT atomic-data revision.
+
+### Retaining CDX property length headers during replacement
+
+The public binary specification defines the unsigned short length and the 0xFFFF
+marker followed by a little-endian 32-bit length. Some imported short payloads
+use the extended representation. A source-preserving replacement can keep that
+width, even after the payload shrinks. A short header must grow when the new
+length reaches 65,535. The standalone opt-in writer checks the final encoded
+byte budget with the chosen width. [CDX property framing](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/IntroCDX.htm).
