@@ -26,8 +26,9 @@ closing the editor. Exact Desktop 26.1 baseline offsets, confirmation,
 multiline behavior and initial style selection remain open. Native
 canonical CDXML retains its existing resource-table order while the
 published DTD lists a different order. General native and foreign CDXML
-DTD interoperability and CDX caption creation on empty or mixed source
-pages remain separate checks. [CDXML sources](../research/native-caption-creation.md),
+DTD interoperability, adding missing CDX font resources and combining CDX
+chemical fragments with captions remain open. An empty qualified Poster now
+accepts its first caption. [Empty-page evidence](../verification-cdx-empty-caption.md). [CDXML sources](../research/native-caption-creation.md),
 [CDX scope](../research/cdx-caption-creation.md).
 
 ## Existing native captions, 2026-11-19

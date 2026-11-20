@@ -53,12 +53,14 @@ byte-exact native CDXML qualify when they contain one complete page, no child at
 labels and representable caption identities. Reopening native CDXML recovers
 each live Text ID from the checked raw IDs. [CDXML contract](research/native-caption-creation.md).
 
-CDX creation requires a qualified caption-only Poster page with an existing
-caption and an explicit UTF-8 Roboto font entry. New baselines use signed 16.16
+CDX creation requires a single qualified Poster page with white paper, a usable
+UTF-8 Roboto entry and zero or more direct captions. The first caption on empty
+paper has explicit paint depth zero. New baselines use signed 16.16
 coordinates. Save writes the appended Text and its persistent live-ID ObjectTag
 into the original byte stream. Both formats commit one history edit after
 validating the complete scene and file representation. Undo retains the session's
-caption ID reservation. [CDX contract](research/cdx-caption-creation.md).
+caption ID reservation. [CDX contract](research/cdx-caption-creation.md),
+[empty page](research/cdx-empty-caption.md).
 
 ## Explicit child-label creation
 

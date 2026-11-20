@@ -99,6 +99,87 @@ fn cdx_created_model(id: u32) -> TestResult<Value> {
 }
 
 #[test]
+fn empty_cdx_paper_creates_its_first_caption_and_reopens_the_sparse_undo_branch() -> TestResult {
+    const BEFORE: &[u8] =
+        include_bytes!("../../io/tests/fixtures/cdx-caption-empty/implicit_before.cdx");
+    const FIRST: &[u8] =
+        include_bytes!("../../io/tests/fixtures/cdx-caption-empty/implicit_first.cdx");
+    const AFTER_UNDO: &[u8] =
+        include_bytes!("../../io/tests/fixtures/cdx-caption-empty/implicit_after_undo.cdx");
+    let witnesses: Value = serde_json::from_str(include_str!(
+        "../../io/tests/fixtures/cdx-caption-empty/cases.json"
+    ))?;
+    let case = &witnesses["cases"]["implicit"];
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    let input = f.directory.path("empty-caption-paper-原.cdx");
+    let output = f.directory.path("first-caption-保存-β.cdx");
+    fs::write(&input, BEFORE)?;
+    shortcut(&mut f, Key::O, false);
+    choose_file(&mut f, &input, "Open")?;
+    let imported = f.state()?;
+    assert_eq!(imported["document"], case["before"]["model"]);
+    assert_eq!(
+        imported["document"]["pages"][0]["size"],
+        json!({"width_pt":512.25,"height_pt":384.5})
+    );
+    assert!(imported["document"]["pages"][0].get("texts").is_none());
+    assert_eq!(imported["file"]["dirty"], false);
+    assert_eq!(current_cdx(&f)?, BEFORE);
+    f.command("ui.view", json!({"action":"actual"}))?;
+    f.choose("Text")?;
+    let original = f.state()?;
+
+    open_creation(&mut f, egui::vec2(1.0, 1.0))?;
+    apply_body(&mut f, BODY)?;
+    assert_eq!(f.state()?["document"], case["first"]["model"]);
+    assert_eq!(f.state()?["undo_depth"], 1);
+    assert_eq!(f.state()?["file"]["dirty"], true);
+    assert_eq!(current_cdx(&f)?, FIRST);
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(f.state()?["document"], original["document"]);
+    assert_eq!(f.state()?["file"]["dirty"], false);
+    assert_eq!(current_cdx(&f)?, BEFORE);
+    shortcut(&mut f, Key::Z, true);
+    assert_eq!(f.state()?["document"], case["first"]["model"]);
+    assert_eq!(current_cdx(&f)?, FIRST);
+    shortcut(&mut f, Key::Z, false);
+
+    open_creation(&mut f, egui::Vec2::ZERO)?;
+    apply_body(&mut f, BODY)?;
+    let branch = f.state()?;
+    assert_eq!(branch["document"], case["after_undo"]["model"]);
+    assert_eq!(branch["undo_depth"], 1);
+    assert_eq!(branch["redo_depth"], 0);
+    assert_eq!(current_cdx(&f)?, AFTER_UNDO);
+    shortcut(&mut f, Key::S, true);
+    choose_file(&mut f, &output, "Save")?;
+    assert_eq!(fs::read(&input)?, BEFORE);
+    assert_eq!(fs::read(&output)?, AFTER_UNDO);
+    assert_eq!(f.state()?["file"]["dirty"], false);
+    shortcut(&mut f, Key::O, false);
+    choose_file(&mut f, &output, "Open")?;
+    let reopened = f.state()?;
+    assert_eq!(reopened["document"], case["after_undo"]["model"]);
+    assert_eq!(reopened["undo_depth"], 0);
+    assert_eq!(reopened["file"]["dirty"], false);
+    assert_eq!(
+        reopened["source"],
+        json!({"format":"cdx","byte_length":AFTER_UNDO.len(),"modified":false})
+    );
+    assert_eq!(current_cdx(&f)?, AFTER_UNDO);
+    f.command("ui.view", json!({"action":"actual"}))?;
+    f.choose("Text")?;
+    open_run(&mut f, CDX_NEW_INK, 2, 0, 1, BODY)?;
+    f.choose("Cancel")?;
+    closed(&mut f)?;
+    assert_eq!(f.state()?["document"], case["after_undo"]["model"]);
+    assert_eq!(f.state()?["undo_depth"], 0);
+    assert_eq!(f.state()?["file"]["dirty"], false);
+    assert_eq!(current_cdx(&f)?, AFTER_UNDO);
+    Ok(())
+}
+
+#[test]
 fn cdx_paper_creation_keeps_sparse_history_and_unicode_save_reopens_both_editable_captions()
 -> TestResult {
     let witnesses: Value = serde_json::from_str(CDX_WITNESSES)?;

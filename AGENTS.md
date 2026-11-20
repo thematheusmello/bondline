@@ -1,5 +1,12 @@
 # Bondline agent instructions
 
+An empty CDX Poster page follows the [empty-page contract](docs/research/cdx-empty-caption.md)
+and [verification](docs/verification-cdx-empty-caption.md). Require the closed Page, explicit
+physical size, white paper and an existing platform-1 UTF-8 Roboto entry with matching
+ID and ordinal. Its first caption has explicit signed depth zero. Keep the populated-page
+depth rule and the session ID floor across Undo. A raw elemental scan may also accept
+the blank source. Use the exact display proof to distinguish it from data-only fallback.
+
 CDX caption creation follows docs/research/cdx-caption-creation.md and
 docs/verification-cdx-caption-creation.md. Share live Text IDs between projection
 and exact run lookup. Retain the old unmarked order and accept only the closed

@@ -196,27 +196,23 @@ pub(crate) fn append_caption(
         .max()
         .and_then(|id| id.checked_add(1))
         .ok_or(unsupported("an available raw object ID"))?;
-    let depth = layout
-        .captions
-        .values()
-        .try_fold(i16::MIN, |front, fields| {
-            paint_depth(source, fields).map(|depth| front.max(depth))
-        })
-        .and_then(|front| front.checked_add(1))
-        .ok_or(unsupported("an available caption depth"))?;
+    let depth = if layout.captions.is_empty() {
+        0
+    } else {
+        layout
+            .captions
+            .values()
+            .try_fold(i16::MIN, |front, fields| {
+                paint_depth(source, fields).map(|depth| front.max(depth))
+            })
+            .and_then(|front| front.checked_add(1))
+            .ok_or(unsupported("an available caption depth"))?
+    };
     let resources = source
         .resources()
         .map_err(|_| unsupported("font resources"))?;
-    let font = resources
-        .fonts()
-        .iter()
-        .find(|font| {
-            font.name_bytes() == b"Roboto"
-                && font.charset() == 65001
-                && font.ordinal() == usize::from(font.id())
-        })
-        .ok_or(unsupported("a declared UTF-8 Roboto font"))?;
-    let words = [1, 0, font.id(), 0, 240, 0].map(u16::to_le_bytes);
+    let font = creation_font_id(&resources).ok_or(unsupported("a declared UTF-8 Roboto font"))?;
+    let words = [1, 0, font, 0, 240, 0].map(u16::to_le_bytes);
     let mut text = Vec::new();
     text.try_reserve_exact(words.as_flattened().len() + run.text().len())
         .map_err(|_| MappingError::from(bondline_cdx::Error::Allocation))?;
@@ -289,10 +285,27 @@ fn paint_depth(source: &Document<'_>, fields: &Fields) -> Option<i16> {
     })
 }
 
+fn creation_font_id(resources: &Resources<'_, '_>) -> Option<u16> {
+    if resources.font_platform() != Some(1) {
+        return None;
+    }
+    resources
+        .fonts()
+        .iter()
+        .find(|font| {
+            font.name_bytes() == b"Roboto"
+                && font.charset() == 65001
+                && font.ordinal() == usize::from(font.id())
+        })
+        .map(|font| font.id())
+}
+
 pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document> {
     let layout = layout(source)?;
     let resources = source.resources().ok()?;
-    if resources.color(2).ok()? != [u16::MAX; 3] {
+    if resources.color(2).ok()? != [u16::MAX; 3]
+        || (layout.captions.is_empty() && creation_font_id(&resources).is_none())
+    {
         return None;
     }
     let mut ordered = BTreeMap::new();
@@ -313,9 +326,6 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
     }
     // The published description of the default zero group leaves this case ambiguous.
     if omitted && *ordered.first_key_value()?.0 < 0 {
-        return None;
-    }
-    if ordered.is_empty() {
         return None;
     }
     let mut document = bondline_model::Document::default();
