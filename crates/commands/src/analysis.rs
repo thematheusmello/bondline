@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 /// Bounded synchronous inspection while holding the session lock.
 pub const MAX_ANALYSIS_ITEMS: usize = 4096;
 /// Only the selected connection table is decoded while the session lock is held.
-const MAX_ANALYSIS_RECORD_BYTES: usize = 1024 * 1024;
+pub(super) const MAX_ANALYSIS_RECORD_BYTES: usize = 1024 * 1024;
 
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -197,15 +197,7 @@ impl Engine {
             let sdf = self.content().sdf()?;
             let id = bondline_io::sdf::RecordId::new(record_id.get())
                 .ok_or(bondline_io::sdf::SdfError::InvalidSpan)?;
-            let source = sdf
-                .record(id)
-                .ok_or(bondline_io::sdf::SdfError::MissingRecord {
-                    record_id: record_id.get(),
-                })?;
-            let bytes = sdf
-                .as_bytes()
-                .get(source.mol_range())
-                .ok_or(bondline_io::sdf::SdfError::InvalidSpan)?;
+            let bytes = sdf.mol_bytes(id)?;
             if bytes.len() > MAX_ANALYSIS_RECORD_BYTES {
                 return Ok(report(AnalysisOutcome::RecordByteLimit {
                     limit: MAX_ANALYSIS_RECORD_BYTES,

@@ -1781,3 +1781,41 @@ fn analysis_navigates_individual_sdf_molecules_and_resets_after_reopen() -> Test
     assert_eq!(std::fs::read(&input)?, source);
     Ok(())
 }
+
+#[test]
+fn analysis_keeps_the_selected_molecule_through_field_edits_and_history() -> TestResult {
+    let mut f = Fixture::new(1160., 800., 1.)?;
+    let input = f.directory.path("collection.sdf");
+    let source = include_bytes!("../../io/tests/fixtures/sdf-preview/valence-absent-mixed.sdf");
+    std::fs::write(&input, source)?;
+    f.command("document.open_sdf", json!({"path":input}))?;
+    f.warm();
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    f.choose("Next molecule")?;
+    assert!(painted(&f.warm(), "CH5N"));
+    // The first record changes length, so record two starts at a different byte offset.
+    let changed = f.command("sdf.field.set_value", json!({
+        "expected_revision":1, "record_id":1, "field_index":0, "value_lines":["corrected metadata"]
+    }))?;
+    assert_eq!(changed["undo_depth"], 1);
+    for step in [None, Some("history.undo"), Some("history.redo")] {
+        if let Some(command) = step {
+            f.command(command, json!({}))?;
+        }
+        let output = f.warm();
+        assert!(painted(&output, "SDF record 2 of 2") && painted(&output, "CH5N"));
+    }
+    let revision = f.state()?["revision"].as_u64().ok_or("expected revision")?;
+    f.command(
+        "sdf.record.remove",
+        json!({"expected_revision":revision,"record_id":1}),
+    )?;
+    let remaining = f.warm();
+    assert!(painted(&remaining, "SDF record 1 of 1") && painted(&remaining, "CH5N"));
+    f.command("history.undo", json!({}))?;
+    let restored = f.warm();
+    assert!(painted(&restored, "SDF record 1 of 2") && painted(&restored, "C2H6O"));
+    assert_eq!(std::fs::read(&input)?, source);
+    Ok(())
+}

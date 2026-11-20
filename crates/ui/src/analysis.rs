@@ -17,12 +17,13 @@ impl AnalysisWindow {
             self.record_number = 1;
             return;
         }
-        if self
-            .cached
-            .as_ref()
-            .is_some_and(|(stamp, _, _)| !engine.capture_stamp_matches(stamp))
+        if let Some((stamp, _, _)) = &self.cached
+            && !engine.capture_stamp_matches(stamp)
         {
-            self.record_number = 1;
+            if self.record_number > 1 && !engine.same_sdf_analysis_record(stamp, self.record_number)
+            {
+                self.record_number = 1;
+            }
             self.cached = None;
         }
         let mut open = true;
