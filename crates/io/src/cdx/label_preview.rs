@@ -2,13 +2,14 @@
 use super::{
     BEGIN, BOND, BOND_LENGTH, BOUNDING_BOX, CHAIN_ANGLE, CHARGE, COLOR_TABLE, DISPLAY, DISPLAY2,
     DOCUMENT, DOUBLE_POSITION, DRAWING_SPACE, ELEMENT, END, ElementalGraph, FONT_TABLE, FRAGMENT,
-    HEIGHT, HYDROGENS, ISOTOPE, NODE, NODE_TYPE, ORDER, PAGE, POSITION, RADICAL, TEXT, TEXT_OBJECT,
-    WIDTH,
+    HEIGHT, HYDROGENS, ISOTOPE, NODE, NODE_TYPE, ORDER, PAGE, POSITION, RADICAL, Scope, TEXT,
+    TEXT_OBJECT, WIDTH,
     atom_label::{JUSTIFICATION, LABEL_JUSTIFICATION},
-    coordinate, has_preview_header, object, payload, poster_size, verify_preview_page,
+    coordinate, has_preview_header, object, payload, poster_size, project_fragments,
+    verify_preview_page,
 };
-use bondline_cdx::{Document, RecordKind};
-use bondline_model::{DrawingSettings, DrawingStyle};
+use bondline_cdx::{Document, RecordKind, Resources};
+use bondline_model::{DrawingSettings, DrawingStyle, Fragment};
 use std::collections::BTreeMap;
 
 const BOND_SPACING: u16 = 0x0804;
@@ -17,12 +18,22 @@ const MARGIN_WIDTH: u16 = 0x0808;
 type Fields = BTreeMap<u16, usize>;
 
 pub(super) fn preview(graph: &ElementalGraph<'_>) -> Option<bondline_model::Document> {
-    let source = graph.source();
+    let model = model(graph.source(), graph.fragments(), Scope::All, None)?;
+    verify_preview_page(&model)?;
+    Some(model)
+}
+
+pub(super) fn model(
+    source: &Document<'_>,
+    fragments: &[Fragment],
+    scope: Scope,
+    resources: Option<&Resources<'_, '_>>,
+) -> Option<bondline_model::Document> {
     if !has_preview_header(source) {
         return None;
     }
     let (mut atoms, mut bonds) = (0_usize, 0_usize);
-    for fragment in graph.fragments() {
+    for fragment in fragments {
         atoms = atoms.saturating_add(fragment.atoms().len());
         bonds = bonds.saturating_add(fragment.bonds().len());
         if atoms.saturating_add(bonds) > bondline_render::MAX_HIT_REGIONS
@@ -37,9 +48,16 @@ pub(super) fn preview(graph: &ElementalGraph<'_>) -> Option<bondline_model::Docu
     if atoms == 0 {
         return None;
     }
-    let (root_fields, page_fields) = source_fields(source)?;
+    let (root_fields, page_fields) = source_fields(source, scope)?;
     let size = poster_size(source, &page_fields)?;
-    let resources = source.resources().ok()?;
+    let owned;
+    let resources = match resources {
+        Some(resources) => resources,
+        None => {
+            owned = source.resources().ok()?;
+            &owned
+        }
+    };
     if resources.color(2).ok()? != [u16::MAX; 3]
         || (bonds > 0 && resources.color(3).ok()? != [0; 3])
     {
@@ -58,7 +76,7 @@ pub(super) fn preview(graph: &ElementalGraph<'_>) -> Option<bondline_model::Docu
         .ok()?
         .with_margin_width(recorded(source, &root_fields, MARGIN_WIDTH)?.map(coordinate))
         .ok()?;
-    let mut model = graph.preview_document(size).ok()?;
+    let mut model = project_fragments(source, fragments, size).ok()?;
     if model.drawing_settings() != settings {
         return None;
     }
@@ -66,15 +84,14 @@ pub(super) fn preview(graph: &ElementalGraph<'_>) -> Option<bondline_model::Docu
     if bonds > 0 && !crate::display::connected_label_bonds(&model, model.pages().first()?) {
         return None;
     }
-    verify_preview_page(&model)?;
     Some(model)
 }
 
-fn source_fields(source: &Document<'_>) -> Option<(Fields, Fields)> {
+fn source_fields(source: &Document<'_>, scope: Scope) -> Option<(Fields, Fields)> {
     let root = source.framing().has_encoded_document().then_some(0);
     let mut page = None;
     let (mut root_fields, mut page_fields) = (Fields::new(), Fields::new());
-    for (index, record) in source.records().iter().enumerate() {
+    for (index, record) in scope.records(source) {
         let owner = record.parent();
         let kind = object(source, owner).map(|(tag, _)| tag);
         match *record.kind() {
@@ -88,16 +105,8 @@ fn source_fields(source: &Document<'_>) -> Option<(Fields, Fields)> {
             },
             RecordKind::Property { tag, .. } => {
                 let fields = if owner == root
-                    && matches!(
-                        tag,
-                        FONT_TABLE
-                            | COLOR_TABLE
-                            | CHAIN_ANGLE
-                            | BOND_LENGTH
-                            | BOND_SPACING
-                            | LINE_WIDTH
-                            | MARGIN_WIDTH
-                    ) {
+                    && (matches!(tag, FONT_TABLE | COLOR_TABLE) || is_drawing_property(tag))
+                {
                     &mut root_fields
                 } else if page.is_some()
                     && page == owner
@@ -135,6 +144,13 @@ fn source_fields(source: &Document<'_>) -> Option<(Fields, Fields)> {
         }
     }
     Some((root_fields, page_fields))
+}
+
+pub(super) fn is_drawing_property(tag: u16) -> bool {
+    matches!(
+        tag,
+        CHAIN_ANGLE | BOND_LENGTH | BOND_SPACING | LINE_WIDTH | MARGIN_WIDTH
+    )
 }
 
 fn recorded<const N: usize>(

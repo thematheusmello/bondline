@@ -475,6 +475,11 @@ impl StoredDocument {
         self.has_cdx_preview(CdxPreview::AtomLabels)
     }
 
+    /// Read-only display of qualified page captions over explicit atom labels.
+    pub fn has_cdx_mixed_preview(&self) -> bool {
+        self.has_cdx_preview(CdxPreview::Mixed)
+    }
+
     fn has_cdx_preview(&self, required: CdxPreview) -> bool {
         self.original
             .as_ref()
@@ -590,6 +595,7 @@ impl StoredDocument {
             || self.has_caption_projection()
             || self.has_cdx_caption_preview()
             || self.has_cdx_atom_label_preview()
+            || self.has_cdx_mixed_preview()
             || self.has_boxed_atom_labels()
             || self.has_connected_atom_labels()
             || self.has_mixed_atom_labels()

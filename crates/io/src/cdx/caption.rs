@@ -1,7 +1,7 @@
 //! Whole-source proof and stable source identity for explicitly positioned CDX captions.
 use super::{
-    COLOR_TABLE, DOCUMENT, DRAWING_SPACE, FONT_TABLE, HEIGHT, MappingError, PAGE, POSITION, TEXT,
-    TEXT_OBJECT, WIDTH, Z_ORDER, coordinate, has_preview_header, payload, poster_size,
+    COLOR_TABLE, DOCUMENT, DRAWING_SPACE, FONT_TABLE, HEIGHT, MappingError, PAGE, POSITION, Scope,
+    TEXT, TEXT_OBJECT, WIDTH, Z_ORDER, coordinate, has_preview_header, payload, poster_size,
     property_bytes, read_position,
     text::{TextRole, decode_runs},
     verify_preview_page,
@@ -34,7 +34,7 @@ struct CaptionLayout {
     captions: BTreeMap<TextId, Fields>,
 }
 
-fn layout(source: &Document<'_>) -> Option<CaptionLayout> {
+fn layout(source: &Document<'_>, scope: Scope) -> Option<CaptionLayout> {
     if !has_preview_header(source) {
         return None;
     }
@@ -44,7 +44,7 @@ fn layout(source: &Document<'_>) -> Option<CaptionLayout> {
     let mut text_fields = BTreeMap::<usize, SourceCaption>::new();
     let mut identities = BTreeMap::new();
     let mut named_ids = BTreeSet::new();
-    for (index, record) in source.records().iter().enumerate() {
+    for (index, record) in scope.records(source) {
         match *record.kind() {
             RecordKind::ObjectStart { tag: DOCUMENT, .. } if root == Some(index) => {}
             RecordKind::ObjectStart { tag: PAGE, .. }
@@ -148,7 +148,7 @@ pub(crate) fn text_record<'record>(
     source: &'record Document<'_>,
     text: TextId,
 ) -> Option<&'record Record> {
-    let layout = layout(source)?;
+    let layout = layout(source, Scope::All)?;
     let fields = layout.captions.get(&text)?;
     source.records().get(*fields.get(&TEXT)?)
 }
@@ -158,7 +158,7 @@ pub(crate) fn append_caption(
     caption: StyledText,
 ) -> Result<(Vec<u8>, StyledText), DocumentError> {
     let unsupported = DocumentError::UnsupportedCdxCaption;
-    let layout = layout(source).ok_or(unsupported("a certified caption-only page"))?;
+    let layout = layout(source, Scope::All).ok_or(unsupported("a certified caption-only page"))?;
     if layout.captions.contains_key(&caption.id()) {
         return Err(unsupported("an unused live caption ID"));
     }
@@ -301,23 +301,52 @@ fn creation_font_id(resources: &Resources<'_, '_>) -> Option<u16> {
 }
 
 pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document> {
-    let layout = layout(source)?;
+    let layout = layout(source, Scope::All)?;
     let resources = source.resources().ok()?;
     if resources.color(2).ok()? != [u16::MAX; 3]
         || (layout.captions.is_empty() && creation_font_id(&resources).is_none())
     {
         return None;
     }
+    let size = layout.size;
+    let mut remaining_runs = MAX_PAGE_TEXT_RUNS;
+    let texts = ordered_texts(source, layout, &resources, &mut remaining_runs, false)?;
+    let mut document = bondline_model::Document::default();
+    let page = document.pages().first()?.id();
+    document.set_page_size(page, size).ok()?;
+    document.append_texts(page, texts).ok()?;
+    verify_preview_page(&document)?;
+    Some(document)
+}
+
+pub(super) fn mixed_texts(
+    source: &Document<'_>,
+    resources: &Resources<'_, '_>,
+    remaining_runs: &mut usize,
+) -> Option<Vec<StyledText>> {
+    let layout = layout(source, Scope::Captions)?;
+    ordered_texts(source, layout, resources, remaining_runs, true)
+}
+
+fn ordered_texts(
+    source: &Document<'_>,
+    layout: CaptionLayout,
+    resources: &Resources<'_, '_>,
+    remaining_runs: &mut usize,
+    above_chemistry: bool,
+) -> Option<Vec<StyledText>> {
     let mut ordered = BTreeMap::new();
     let mut omitted = false;
-    let mut remaining_runs = MAX_PAGE_TEXT_RUNS;
     for (id, fields) in layout.captions {
         let depth = paint_depth(source, &fields)?;
+        if above_chemistry && depth <= 0 {
+            return None;
+        }
         omitted |= !fields.contains_key(&Z_ORDER);
         if ordered
             .insert(
                 depth,
-                project_text(source, &resources, &fields, id, &mut remaining_runs)?,
+                project_text(source, resources, &fields, id, remaining_runs)?,
             )
             .is_some()
         {
@@ -328,14 +357,7 @@ pub(super) fn preview(source: &Document<'_>) -> Option<bondline_model::Document>
     if omitted && *ordered.first_key_value()?.0 < 0 {
         return None;
     }
-    let mut document = bondline_model::Document::default();
-    let page = document.pages().first()?.id();
-    document.set_page_size(page, layout.size).ok()?;
-    document
-        .append_texts(page, ordered.into_values().collect())
-        .ok()?;
-    verify_preview_page(&document)?;
-    Some(document)
+    Some(ordered.into_values().collect())
 }
 
 fn project_text(
