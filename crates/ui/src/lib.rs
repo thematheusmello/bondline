@@ -446,7 +446,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         .is_ok_and(|stored| stored.has_caption_projection() || stored.can_edit_cdx_caption_run());
     let cdx_atom_label_preview = engine
         .stored_document()
-        .is_ok_and(|stored| stored.has_cdx_atom_label_preview());
+        .is_ok_and(|stored| stored.has_cdx_label_edit_profile());
     let atom_label_preview = engine.effective_tool() != EffectiveTool::Selection
         && engine.stored_document().is_ok_and(|stored| {
             stored.has_boxed_atom_labels()
@@ -585,6 +585,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
             } else {
                 "Alt-click an atom to sprout a separate ring."
             });
+        }
+        if caption_preview && cdx_atom_label_preview {
+            ui.label("Alt-click an exposed atom label to edit its element and attached H count.");
         }
         if engine.effective_tool() == EffectiveTool::Caption {
             ui.label(if engine.caption_creation_available() {
@@ -1777,7 +1780,11 @@ fn show_workspace_with_preview(
                 {
                     drawing.gesture = None;
                 }
-                if command.is_none() && engine.effective_tool() == EffectiveTool::Caption {
+                let mixed_label_alt = matches!(event, egui::Event::PointerButton {
+                    button: egui::PointerButton::Primary, pressed: true, modifiers, ..
+                } if *modifiers == egui::Modifiers::ALT)
+                    && engine.stored_document().is_ok_and(|stored| stored.has_cdx_mixed_preview());
+                if command.is_none() && engine.effective_tool() == EffectiveTool::Caption && !mixed_label_alt {
                     if discard_stale_canvas_input || text_focused {
                         drawing.captions.cancel_press();
                         continue;
@@ -1810,7 +1817,7 @@ fn show_workspace_with_preview(
                     button: egui::PointerButton::Primary, pressed: true, modifiers, ..
                 } if modifiers.alt);
                 if command.is_none()
-                    && engine.stored_document().is_ok_and(|stored| stored.has_boxed_atom_labels() || stored.has_connected_atom_labels() || stored.has_mixed_atom_labels() || stored.has_flagged_atom_labels() || stored.has_label_defaults_projection() || (label_alt_press && stored.has_cdx_atom_label_preview()))
+                    && engine.stored_document().is_ok_and(|stored| stored.has_boxed_atom_labels() || stored.has_connected_atom_labels() || stored.has_mixed_atom_labels() || stored.has_flagged_atom_labels() || stored.has_label_defaults_projection() || (label_alt_press && stored.has_cdx_label_edit_profile()))
                     && !matches!(event, egui::Event::MouseWheel { .. })
                     && (!label_selection_input || label_alt_press)
                 {
@@ -1832,8 +1839,13 @@ fn show_workspace_with_preview(
                         continue;
                     }
                     let Ok(current_graph) = &graph else { continue; };
+                    let point = local(*pos);
+                    // Mixed CDX captions paint above the chemical layer.
+                    if mixed_label_alt && !matches!(current_graph.caption_hit_test(point), Ok(None)) {
+                        continue;
+                    }
                     let Ok(Some(bondline_render::HitTarget::Atom { fragment_id, atom_id })) =
-                        current_graph.hit_test(local(*pos), 5.0 * density)
+                        current_graph.hit_test(point, 5.0 * density)
                     else { continue; };
                     command = Some(Ok(Command::UiAtomLabel(bondline_commands::UiAtomLabel::Open {
                         expected_revision: key.revision,

@@ -167,7 +167,7 @@ fn choose_file(f: &mut Fixture, path: &Path, action: &str) -> TestResult {
 }
 
 #[test]
-fn mixed_cdx_paints_caption_over_label_and_reserves_chemical_ink_for_viewing() -> TestResult {
+fn mixed_cdx_paints_caption_over_label_and_keeps_normal_chemical_gestures_locked() -> TestResult {
     let raw = include_bytes!("../../io/tests/fixtures/cdx-mixed-caption/overlap_before.cdx");
     let manifest: Value = serde_json::from_str(include_str!(
         "../../io/tests/fixtures/cdx-mixed-caption/cases.json"
@@ -256,7 +256,7 @@ fn mixed_cdx_paints_caption_over_label_and_reserves_chemical_ink_for_viewing() -
         );
         f.frame(vec![button(end, false)]);
         for (point, modifiers) in [
-            ([147.375, 123.125], Modifiers::ALT),
+            ([166.5, 122.5], Modifiers::ALT),
             ([159.5, 123.5], Modifiers::NONE),
         ] {
             let position = paper_point(&mut f, point)?;
@@ -299,6 +299,72 @@ fn mixed_cdx_paints_caption_over_label_and_reserves_chemical_ink_for_viewing() -
         assert_eq!(reopened["undo_depth"], 0);
         assert_eq!(reopened["file"]["dirty"], false);
     }
+    Ok(())
+}
+
+#[test]
+fn mixed_cdx_alt_click_edits_only_exposed_atoms_in_their_own_fragments() -> TestResult {
+    let raw = include_bytes!("../../io/tests/fixtures/cdx-chemical-caption-create/mixed_first.cdx");
+    let oh = include_bytes!("../../io/tests/fixtures/cdx-mixed-label-edit/mixed_first_oh.cdx");
+    let both = include_bytes!("../../io/tests/fixtures/cdx-mixed-label-edit/mixed_first_both.cdx");
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    let input = f.directory.path("mixed-labels-原.cdx");
+    let output = f.directory.path("mixed-labels-保存-β.cdx");
+    open_pinned(&mut f, &input, "cdx", raw)?;
+    let initial = f.state()?;
+
+    // Independent blue caption-only and overlap samples both screen the nearby red NH2.
+    for point in [[161.5, 124.5], [166.5, 122.5], [350., 350.]] {
+        let pos = paper_point(&mut f, point)?;
+        click(&mut f, pos, Modifiers::ALT);
+        assert_eq!(f.state()?, initial);
+        assert!(f.node("Element", &[Role::TextInput]).is_err());
+    }
+    for (point, id, old, symbol, hydrogens, expected) in [
+        ([159.5, 123.5], 1, "N", "O", "1", oh.as_slice()),
+        ([350.5, 277.75], 2, "Cl", "Br", "0", both.as_slice()),
+    ] {
+        let pos = paper_point(&mut f, point)?;
+        click(&mut f, pos, Modifiers::ALT);
+        let state = f.state()?;
+        let draft = &state["ui_atom_label"];
+        assert_eq!(draft["fragment_id"], id, "exposed atom at {point:?}");
+        assert_eq!(draft["atom_id"], id);
+        assert_eq!(draft["current"], true);
+        assert!(draft["creation_style"].is_null());
+        assert_eq!(field_value(&f, "Element")?, old);
+        set_field(&mut f, "Element", symbol)?;
+        set_field(&mut f, "Attached hydrogens", hydrogens)?;
+        f.choose("Apply")?;
+        f.warm();
+        assert!(f.state()?["ui_atom_label"].is_null());
+        assert_eq!(current_cdx(&f)?, expected);
+        assert_eq!(
+            f.state()?["document"]["pages"][0]["texts"],
+            initial["document"]["pages"][0]["texts"]
+        );
+    }
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(current_cdx(&f)?, oh);
+    shortcut(&mut f, Key::Z, false);
+    assert_eq!(current_cdx(&f)?, raw);
+    assert_eq!(f.state()?["file"]["dirty"], false);
+    shortcut(&mut f, Key::Z, true);
+    shortcut(&mut f, Key::Z, true);
+    assert_eq!(current_cdx(&f)?, both);
+    shortcut(&mut f, Key::S, true);
+    choose_file(&mut f, &output, "Save")?;
+    assert_eq!(fs::read(&input)?, raw);
+    assert_eq!(fs::read(&output)?, both);
+    shortcut(&mut f, Key::O, false);
+    choose_file(&mut f, &output, "Open")?;
+    assert_eq!(current_cdx(&f)?, both);
+    assert_eq!(f.state()?["undo_depth"], 0);
+    assert_eq!(f.state()?["file"]["dirty"], false);
+    f.choose("Text")?;
+    open_run(&mut f, [166.5, 122.5], 19, 0, 2, "H ")?;
+    f.choose("Cancel")?;
+    closed(&mut f)?;
     Ok(())
 }
 
