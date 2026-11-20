@@ -46,7 +46,7 @@ class Page {
         this.socket = socket; this.id = id; this.sequence = 0; this.pending = new Map(); this.events = [];
         socket.addEventListener('message', event => {
             const data = JSON.parse(event.data);
-            if (['Runtime.exceptionThrown','Runtime.consoleAPICalled','Log.entryAdded','Page.javascriptDialogOpening'].includes(data.method)) this.events.push(data);
+            if (data.method?.startsWith('ServiceWorker.') || ['Runtime.exceptionThrown','Runtime.consoleAPICalled','Log.entryAdded','Page.javascriptDialogOpening'].includes(data.method)) this.events.push(data);
             if (data.id) {
                 const pending = this.pending.get(data.id);
                 if (pending) {
@@ -97,7 +97,7 @@ async function connect(target) {
     const socket = new WebSocket(target.webSocketDebuggerUrl);
     await new Promise((resolve,reject) => {socket.addEventListener('open',resolve,{once:true});socket.addEventListener('error',reject,{once:true});});
     const page = new Page(socket, target.id); clients.push(page);
-    await page.call('Page.enable'); await page.call('Runtime.enable');
+    await page.call('Page.enable'); await page.call('Runtime.enable'); await page.call('ServiceWorker.enable');
     await page.call('Emulation.setDeviceMetricsOverride', {width:1160,height:800,deviceScaleFactor:1,mobile:false});
     return page;
 }
@@ -130,7 +130,7 @@ try {
     }
     assert(port, 'owned Chrome must expose its isolated CDP endpoint');
     const target = (await (await fetch(`http://127.0.0.1:${port}/json/list`)).json()).find(target => target.type==='page');
-    const page = await connect(target);
+    let page = await connect(target);
     report.browser = await page.call('Browser.getVersion');
     await page.call('Page.navigate', {url:origin}); await page.ready();
     const initial = await page.command('document.inspect');
@@ -151,6 +151,44 @@ try {
     report.registry_count = registry.length;
     await writeFile(path.join(output, 'registry.json'), JSON.stringify(registry));
     const key = await page.evaluate('bondline.recovery_key()');
+    const edit = {page_id:1,begin_x_pt:100,begin_y_pt:120,end_x_pt:148,end_y_pt:120};
+    const captionSource = await readFile(new URL('../../crates/io/tests/fixtures/captions/explicit.cdxml',import.meta.url),'utf8');
+    const malformedUtf16 = captionSource.replace('<fonttable>',`<!--${String.fromCharCode(0xd800)}--><fonttable>`);
+    assert.equal(malformedUtf16.isWellFormed(),false);
+    await page.evaluate(`localStorage.setItem(${JSON.stringify(key)},${JSON.stringify(malformedUtf16)})`);
+    await page.call('Target.closeTarget',{targetId:page.id});
+    const malformed = await newPage();
+    const admitted = await malformed.evaluate('JSON.parse(bondline.host_status())');
+    const textEdit = await malformed.command('text.set_run',{expected_revision:0,page_id:1,text_id:1,run_index:0,text:'Phase B'});
+    const retained = await malformed.evaluate(`localStorage.getItem(${JSON.stringify(key)}) === ${JSON.stringify(malformedUtf16)}`);
+    report.malformed_utf16 = {admitted:admitted.recovery_allowed,changed:textEdit.changed??false,retained};
+    assert.equal(retained,true,'invalid UTF-16 outside the edited caption must never be normalized and overwritten');
+    assert.equal(admitted.recovery_allowed,false);
+    assert.equal(await malformed.evaluate('(() => {try {bondline.execute(String.fromCharCode(0xd800));return false}catch(error){return String(error).includes("Unicode")}})()'),true);
+    await malformed.command('bond.create',edit);
+    assert.equal(await malformed.evaluate(`localStorage.getItem(${JSON.stringify(key)}) === ${JSON.stringify(malformedUtf16)}`),true);
+    report.steps.push('malformed UTF-16 storage is rejected before Unicode conversion and kept through later edits');
+    const validUnicode = captionSource.replace('<fonttable>','<!--β🧪--><fonttable>');
+    await malformed.evaluate(`localStorage.setItem(${JSON.stringify(key)},${JSON.stringify(validUnicode)})`);
+    await malformed.call('Target.closeTarget',{targetId:malformed.id});
+    const unicode = await newPage();
+    assert.equal((await unicode.evaluate('JSON.parse(bondline.host_status())')).recovery_allowed,true);
+    assert.equal((await unicode.command('text.set_run',{expected_revision:0,page_id:1,text_id:1,run_index:0,text:'Phase é'})).changed,true);
+    assert.equal(await unicode.evaluate(`localStorage.getItem(${JSON.stringify(key)})`),validUnicode.replace('Phase A','Phase é'));
+    const counterpart = captionSource.replace('<fonttable>','<!--�--><fonttable>');
+    await unicode.evaluate(`localStorage.setItem(${JSON.stringify(key)},${JSON.stringify(counterpart)})`);
+    await unicode.call('Target.closeTarget',{targetId:unicode.id});
+    const replaced = await newPage();
+    assert.equal((await replaced.evaluate('JSON.parse(bondline.host_status())')).recovery_allowed,true);
+    await replaced.evaluate(`localStorage.setItem(${JSON.stringify(key)},${JSON.stringify(malformedUtf16)})`);
+    assert.equal((await replaced.command('text.set_run',{expected_revision:0,page_id:1,text_id:1,run_index:0,text:'Phase B'})).changed,true);
+    assert.equal(await replaced.evaluate(`localStorage.getItem(${JSON.stringify(key)}) === ${JSON.stringify(malformedUtf16)}`),true);
+    assert.equal((await replaced.evaluate('JSON.parse(bondline.host_status())')).recovery_allowed,false);
+    report.steps.push('valid supplementary Unicode survives a caption edit; an external malformed normalized counterpart revokes writing');
+    await replaced.evaluate(`localStorage.removeItem(${JSON.stringify(key)})`);
+    await replaced.call('Target.closeTarget',{targetId:replaced.id});
+    page = await newPage();
+    assert.deepEqual((await page.command('document.inspect')).document,initial.document);
     const geometry = await page.evaluate('JSON.parse(bondline.canvas_geometry())');
     assert.equal(geometry.pixels_per_point, 1);
     const x = geometry.x + geometry.width/2, y = geometry.y + geometry.height/2;
@@ -237,7 +275,6 @@ try {
     await page.wait(`JSON.parse(bondline.execute('{"command":"document.inspect","params":{}}')).undo_depth === 0`);
     assert.equal(await page.evaluate(`localStorage.getItem(${JSON.stringify(key)})`),source);
     report.steps.push('660px offline reload starts readable; visible Fit/Actual and pointer/keyboard history preserve the exact drawing');
-    const edit = {page_id:1,begin_x_pt:100,begin_y_pt:120,end_x_pt:148,end_y_pt:120};
     assert.equal((await page.command('document.save_cdxml',{path:'/browser-is-not-a-filesystem.cdxml'})).error.code,'backend_unavailable');
     // Fill this isolated profile's real origin storage, retaining the previous draft.
     const quota = await page.evaluate(`(() => {
@@ -303,7 +340,7 @@ try {
     for (const [index, client] of clients.entries()) {
         try {
             await client.screenshot(`failure-${index}.png`);
-            report[`failure_page_${index}`] = await client.evaluate('({ready:window.bondlineReady,error:window.bondlineStartupError,body:document.body.innerText})');
+            report[`failure_page_${index}`] = await client.evaluate('(async()=>({ready:window.bondlineReady,error:window.bondlineStartupError,body:document.body.innerText,workers:await navigator.serviceWorker.getRegistrations().then(rs=>rs.map(r=>({active:r.active?.state,installing:r.installing?.state,waiting:r.waiting?.state}))),cache_keys:await caches.keys()}))()');
             report[`events_${index}`] = client.events;
         } catch {}
     }

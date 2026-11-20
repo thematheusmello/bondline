@@ -8,6 +8,10 @@ browser APIs. [wgpu](../../vendor/wgpu/BONDLINE-PATCH.md) and
 [wasm-bindgen-shared](../../vendor/wasm-bindgen-shared/BONDLINE-PATCH.md) retain the
 published archive/VCS identity, source changes and exact original MIT/Apache notices.
 No reference-product code, font, screen, icon, preset or binary is used by this host.
+Its raw Unicode boundary uses the pinned js_sys UTF-16 validity API, the official
+wasm-bindgen string-conversion documentation and XML1.0's character production.
+An independently authored caption source proves that converting an invalid stored
+surrogate before validation loses an unrelated comment during an otherwise valid edit.
 
 The [Analysis window contract](../research/analysis-window.md) records the selected-atom and whole-drawing workflow in vendor support and guide v25, together with the independent Hill notation policy.
 

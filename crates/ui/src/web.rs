@@ -60,6 +60,9 @@ impl WebHandle {
                 "The JSON request exceeds the 1 MiB limit.",
             ));
         }
+        if !request.is_valid_utf16() {
+            return Err(JsValue::from_str("The JSON request is not valid Unicode."));
+        }
         let request = request
             .as_string()
             .ok_or_else(|| JsValue::from_str("A JSON request string is required."))?;
@@ -132,6 +135,33 @@ struct BrowserApp {
     recovery_message: String,
 }
 
+// Storage's generated String binding normalizes lone surrogates before Rust can reject them.
+fn read_recovery(storage: &web_sys::Storage) -> Result<Option<String>, String> {
+    let unavailable = || "Browser recovery could not be read.".to_owned();
+    let get = js_sys::Reflect::get(storage, &JsValue::from_str("getItem"))
+        .map_err(|_| unavailable())?
+        .dyn_into::<js_sys::Function>()
+        .map_err(|_| unavailable())?;
+    let raw = get
+        .call1(storage, &JsValue::from_str(web_recovery::KEY))
+        .map_err(|_| unavailable())?;
+    if raw.is_null() {
+        return Ok(None);
+    }
+    let value = raw.dyn_ref::<js_sys::JsString>().ok_or_else(unavailable)?;
+    if value.length() as usize > web_recovery::MAX_BYTES {
+        return Err("The browser draft exceeds the 1 MiB recovery limit.".into());
+    }
+    if !value.is_valid_utf16() {
+        return Err("The browser draft is not valid Unicode.".into());
+    }
+    let source = value.as_string().ok_or_else(unavailable)?;
+    if source.len() > web_recovery::MAX_BYTES {
+        return Err("The browser draft exceeds the 1 MiB recovery limit.".into());
+    }
+    Ok(Some(source))
+}
+
 impl BrowserApp {
     fn new(
         cc: &eframe::CreationContext<'_>,
@@ -155,7 +185,7 @@ impl BrowserApp {
             .and_then(|window| window.local_storage())
         {
             Ok(Some(storage)) => {
-                match storage.get_item(web_recovery::KEY) {
+                match read_recovery(&storage) {
                     Ok(Some(source)) => match web_recovery::decode(&source) {
                         Ok(stored) => {
                             engine = Engine::from_document(stored);
@@ -173,9 +203,11 @@ impl BrowserApp {
                         }
                     },
                     Ok(None) => {}
-                    Err(_) => {
+                    Err(error) => {
                         recovery_allowed = false;
-                        message = "Browser recovery could not be read. Changes in this tab are not being saved.".into();
+                        message = format!(
+                            "Earlier browser data is preserved: {error} Changes in this tab are not being saved."
+                        );
                     }
                 }
                 Some(storage)
@@ -220,7 +252,10 @@ impl BrowserApp {
         }
         let result = web_recovery::encode(document).and_then(|source| {
             let storage = self.storage.as_ref().ok_or_else(|| "Browser recovery is unavailable.".to_owned())?;
-            let actual = storage.get_item(web_recovery::KEY).map_err(|_| "Browser recovery could not be read; the earlier data is preserved.".to_owned())?;
+            let actual = read_recovery(storage).map_err(|error| {
+                self.recovery_allowed = false;
+                format!("Earlier browser data is preserved: {error} Changes in this tab are not being saved.")
+            })?;
             if actual != self.observed_source {
                 self.recovery_allowed = false;
                 return Err("The browser draft changed elsewhere. That data is preserved; changes in this tab are not being saved.".to_owned());

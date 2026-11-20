@@ -165,3 +165,36 @@ The combined package/flow/source receipts are `package-main-6db.log`,
 `flow-main-unload/report.json` and `source-main-6db.json` in the same ignored evidence
 directory. The final image in docs/media is this combined actual Analysis window.
 Full combined local CI is the next gate; no complete aggregate is inferred yet.
+
+## Raw browser Unicode boundary
+
+The complete c770a6f local CI passed:workspace2,406/0/1 plus the separate AccessKit3/0,
+all fmt/Clippy/layers/license/asset/corpus gates. Log `ci-main-6db.log`, SHA-256
+`f7543341de8908595bd50a8a58034fe794dbf05eee67098aed13d247b38c7f29`.
+This predates the following wasm-only boundary correction and later main integration.
+
+An actual independent caption fixture with a lone UTF-16 surrogate inserted into an
+unrelated XML comment exposed data loss. The generated Storage String binding replaced
+the surrogate before Rust parsed it. The host admitted that normalized source, and
+editing Phase A→Phase B overwrote the unrelated stored code unit. `flow-utf16-first-red`
+records admitted=true/changed=true/retained=false; this is not a mock or self round trip.
+
+The host now reads a raw JS value, checks the shared size bound and the pinned SDK's
+UTF-16 validity API before conversion, then checks the exact UTF-8 bound. Startup and
+compare-before-write use the same reader. JSON strings also reject invalid UTF-16.
+Parser, model, registry, native source and authoring permissions are unchanged.
+`flow-after-cleanup` passes all11 stages:malformed startup is refused and retained;
+valid β/supplementary Unicode in a comment survives an accented caption edit; an
+externally substituted malformed counterpart cannot exploit normalization to pass the
+source equality check. Earlier pointer/history/Analysis/offline/660px/quota/conflict/
+unload cases remain unchanged and pass. Wasm Clippy passes with the known unused warnings.
+
+Its dev bundle is`11bed9e599653f4d34243f3e790337954913e3479927882acbf23727b820770e`,
+WASM14,664,032B/SHA-256
+`6233518ab7abdca1a1d33ffa1690eadcbe1edae2a24e98cb7b04786860996fd7`.
+Runtime graphs/notices are unchanged from the main6dbd4e6 checkpoint. The intermediate
+`flow-utf16-{red,green,complete}` attempts stopped at a failed Cache.addAll install and
+unresolved readiness promise, not at the tested Unicode assertions. The worker domain
+recorded a NetworkError and redundant registration. They are retained as failures; a
+full rerun after disk cleanup passes. No causal code fix for those installation failures
+is claimed. Current main and final aggregate are the next integration gate.

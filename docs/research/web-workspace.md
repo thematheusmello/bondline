@@ -25,6 +25,14 @@ The [Web Locks API](https://w3c.github.io/web-locks/) holds one cooperative writ
 per origin/page lifetime. A second tab or unsupported storage/locking remains visibly
 unable to save its edits. Unrecoverable in-tab edits retain the browser unload prompt;
 undo history and view state are not persisted. No native Save/close receipt is issued.
+Browser strings are inspected before UTF-8 ownership. The pinned js_sys `JsString`
+documents that an unpaired UTF-16 surrogate becomes a replacement character during
+[Rust string conversion](https://wasm-bindgen.github.io/wasm-bindgen/reference/types/str.html).
+Read Storage's raw JS value, check its length and `is_valid_utf16`, then convert and
+enforce the exact UTF-8 bound. Apply the same Unicode preflight to JSON requests.
+[XML1.0 characters](https://www.w3.org/TR/xml/#charsets) exclude surrogate code points;
+silently repairing that data would violate raw retention and stale-source comparison.
+This changes the host boundary, not parser acceptance or source/edit authority.
 New/restored browser sessions explicitly request100% through the shared `ui.view` command.
 This original host policy keeps the drawing readable in a660px-tall viewport. Explicit
 in-session zoom remains unchanged on resize. Existing View Fit/Actual controls and the

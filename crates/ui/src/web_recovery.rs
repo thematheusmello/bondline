@@ -4,7 +4,7 @@ use bondline_model::PageSize;
 
 #[cfg(target_arch = "wasm32")]
 pub(super) const KEY: &str = "bondline.browser-draft.cdxml.v1";
-const MAX_BYTES: usize = 1024 * 1024;
+pub(super) const MAX_BYTES: usize = 1024 * 1024;
 
 pub(super) fn decode(source: &str) -> Result<StoredDocument, String> {
     if source.len() > MAX_BYTES {
