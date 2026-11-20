@@ -1,0 +1,118 @@
+{
+  "boxed_after": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 12"
+  },
+  "boxed_reordered_after": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 11"
+  },
+  "cyanide_after": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 18"
+  },
+  "dioxide_automatic_after": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 17"
+  },
+  "dioxide_manual_after": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 17"
+  },
+  "water_after": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 14"
+  },
+  "boxed_before": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "overlap_before": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "overlap_after": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 12"
+  },
+  "two_captions": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "marked_sparse_caption": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 12"
+  },
+  "anonymous_caption": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 12"
+  },
+  "caption_negative": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "caption_zero": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "caption_without_z": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "duplicate_depth": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "duplicate_named_page_child": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "duplicate_live_id": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "unknown_identity_property": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "opaque_caption_property": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "duplicate_caption_z": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "short_caption_z": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "bare_caption_peer": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "unknown_page_peer": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "unsupported_group": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 6"
+  },
+  "chemical_contradictory_ink_box": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 12"
+  },
+  "chemical_local_margin": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 14"
+  },
+  "chemical_off_paper": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 12"
+  },
+  "chemical_raw_label_z": {
+    "code": "unsupported_content",
+    "detail": "unsupported object 0x8006 at record 12"
+  }
+}

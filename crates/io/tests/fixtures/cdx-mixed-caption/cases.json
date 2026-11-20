@@ -1,0 +1,2594 @@
+{
+  "boxed_after": {
+    "sha256": "eb4525fa4ab3cbad1c63eff56e01b1f6565f7d6dc122b092c539d4d76b1efed4",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ],
+      [
+        32774,
+        4294967295
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 7,
+                  "position": {
+                    "x_pt": 147.375,
+                    "y_pt": 123.125
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 2,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "NH2",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      140.818359375,
+                      114.359375,
+                      185.654296875,
+                      131.65625
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            },
+            {
+              "id": 2,
+              "atoms": [
+                {
+                  "id": 2,
+                  "element": 17,
+                  "position": {
+                    "x_pt": 350.5,
+                    "y_pt": 277.75
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "Cl",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      341.388671875,
+                      268.6328125,
+                      359.611328125,
+                      286.8671875
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            }
+          ],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "boxed_reordered_after": {
+    "sha256": "d3ed7b5f888b41b164e310422fc44b3f89e82788a9849e06a482eba82492597a",
+    "framing": "ExplicitDocumentFileEnd",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ],
+      [
+        32774,
+        4294967295
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 7,
+                  "position": {
+                    "x_pt": 147.375,
+                    "y_pt": 123.125
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 2,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "NH2",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      140.818359375,
+                      114.359375,
+                      185.654296875,
+                      131.65625
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            },
+            {
+              "id": 2,
+              "atoms": [
+                {
+                  "id": 2,
+                  "element": 17,
+                  "position": {
+                    "x_pt": 350.5,
+                    "y_pt": 277.75
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "Cl",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      341.388671875,
+                      268.6328125,
+                      359.611328125,
+                      286.8671875
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            }
+          ],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "cyanide_after": {
+    "sha256": "97d731e8a08c434e9e2ac0a9dd8c3053074f6760b37787005fdf9b30284ee2ee",
+    "framing": "HeaderDocument",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32774,
+        4294967295
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 1,
+                  "position": {
+                    "x_pt": 141.0,
+                    "y_pt": 309.5
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "H",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.611764705882353,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      134.443359375,
+                      300.96875,
+                      147.556640625,
+                      318.03125
+                    ]
+                  }
+                },
+                {
+                  "id": 2,
+                  "element": 6,
+                  "position": {
+                    "x_pt": 251.0,
+                    "y_pt": 309.5
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "C",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      244.431640625,
+                      300.734375,
+                      257.568359375,
+                      318.265625
+                    ]
+                  }
+                },
+                {
+                  "id": 3,
+                  "element": 7,
+                  "position": {
+                    "x_pt": 371.0,
+                    "y_pt": 309.5
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "N",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      364.443359375,
+                      300.96875,
+                      377.556640625,
+                      318.03125
+                    ]
+                  }
+                }
+              ],
+              "bonds": [
+                {
+                  "id": 1,
+                  "begin": 1,
+                  "end": 2,
+                  "order": "single"
+                },
+                {
+                  "id": 2,
+                  "begin": 2,
+                  "end": 3,
+                  "order": "triple"
+                }
+              ]
+            }
+          ],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "drawing_style": {
+        "line_width_pt": 1.5,
+        "margin_width_pt": 2.0,
+        "bond_spacing_percent": 12.5
+      },
+      "drawing_settings": {
+        "bond_length_pt": 48.0,
+        "chain_angle_degrees": 120.0
+      }
+    }
+  },
+  "dioxide_automatic_after": {
+    "sha256": "ef545f282e1546292a79f151034e0cdcb3d092a24831d1095cc1371a700216f5",
+    "framing": "ExplicitDocumentFileEnd",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32774,
+        4294967295
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 8,
+                  "position": {
+                    "x_pt": 145.5,
+                    "y_pt": 248.25
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "O",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      138.638671875,
+                      239.484375,
+                      152.361328125,
+                      257.015625
+                    ]
+                  }
+                },
+                {
+                  "id": 2,
+                  "element": 6,
+                  "position": {
+                    "x_pt": 256.0,
+                    "y_pt": 248.25
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "C",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      249.431640625,
+                      239.484375,
+                      262.568359375,
+                      257.015625
+                    ]
+                  }
+                },
+                {
+                  "id": 3,
+                  "element": 8,
+                  "position": {
+                    "x_pt": 366.75,
+                    "y_pt": 248.25
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "O",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.611764705882353,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      359.888671875,
+                      239.484375,
+                      373.611328125,
+                      257.015625
+                    ]
+                  }
+                }
+              ],
+              "bonds": [
+                {
+                  "id": 1,
+                  "begin": 2,
+                  "end": 1,
+                  "order": "double",
+                  "double_position": "center"
+                },
+                {
+                  "id": 2,
+                  "begin": 2,
+                  "end": 3,
+                  "order": "double",
+                  "double_position": "center"
+                }
+              ]
+            }
+          ],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "drawing_style": {
+        "line_width_pt": 1.5,
+        "margin_width_pt": 2.0,
+        "bond_spacing_percent": 12.5
+      },
+      "drawing_settings": {
+        "bond_length_pt": 48.0
+      }
+    }
+  },
+  "dioxide_manual_after": {
+    "sha256": "953a8e96bbb9fffba9f6ad2cae777167248f6607546b446886ece37693b591b9",
+    "framing": "ExplicitDocument",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32774,
+        4294967295
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 8,
+                  "position": {
+                    "x_pt": 145.5,
+                    "y_pt": 248.25
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "O",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      138.638671875,
+                      239.484375,
+                      152.361328125,
+                      257.015625
+                    ]
+                  }
+                },
+                {
+                  "id": 2,
+                  "element": 6,
+                  "position": {
+                    "x_pt": 256.0,
+                    "y_pt": 248.25
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "C",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      249.431640625,
+                      239.484375,
+                      262.568359375,
+                      257.015625
+                    ]
+                  }
+                },
+                {
+                  "id": 3,
+                  "element": 8,
+                  "position": {
+                    "x_pt": 366.75,
+                    "y_pt": 248.25
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "O",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.611764705882353,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      359.888671875,
+                      239.484375,
+                      373.611328125,
+                      257.015625
+                    ]
+                  }
+                }
+              ],
+              "bonds": [
+                {
+                  "id": 1,
+                  "begin": 2,
+                  "end": 1,
+                  "order": "double",
+                  "double_position": "center"
+                },
+                {
+                  "id": 2,
+                  "begin": 2,
+                  "end": 3,
+                  "order": "double",
+                  "double_position": "center"
+                }
+              ]
+            }
+          ],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "drawing_style": {
+        "line_width_pt": 1.5,
+        "margin_width_pt": 2.0,
+        "bond_spacing_percent": 12.5
+      },
+      "drawing_settings": {
+        "bond_length_pt": 48.0
+      }
+    }
+  },
+  "water_after": {
+    "sha256": "cf09ef4d42993b4837faf2f8cfbfe2483a3a8bce7008e08e0c32c5a6a5a1af97",
+    "framing": "ImplicitDocumentFileEnd",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32774,
+        4294967295
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 1,
+                  "position": {
+                    "x_pt": 191.5,
+                    "y_pt": 270.25
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "H",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      184.943359375,
+                      261.71875,
+                      198.056640625,
+                      278.78125
+                    ]
+                  }
+                },
+                {
+                  "id": 2,
+                  "element": 8,
+                  "position": {
+                    "x_pt": 256.0,
+                    "y_pt": 218.25
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "O",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      249.138671875,
+                      209.484375,
+                      262.861328125,
+                      227.015625
+                    ]
+                  }
+                },
+                {
+                  "id": 3,
+                  "element": 1,
+                  "position": {
+                    "x_pt": 321.75,
+                    "y_pt": 270.0
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "H",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.611764705882353,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      315.193359375,
+                      261.46875,
+                      328.306640625,
+                      278.53125
+                    ]
+                  }
+                }
+              ],
+              "bonds": [
+                {
+                  "id": 1,
+                  "begin": 1,
+                  "end": 2,
+                  "order": "single"
+                },
+                {
+                  "id": 2,
+                  "begin": 2,
+                  "end": 3,
+                  "order": "single"
+                }
+              ]
+            }
+          ],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "drawing_style": {
+        "line_width_pt": 1.5,
+        "margin_width_pt": 1.75
+      }
+    }
+  },
+  "boxed_before": {
+    "sha256": "f985cf119aa69a12b0ceb90fa9ce7e31dc49662d4a1c37cdceb991e89020b383",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 7,
+                  "position": {
+                    "x_pt": 147.375,
+                    "y_pt": 123.125
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 2,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "NH2",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      140.818359375,
+                      114.359375,
+                      185.654296875,
+                      131.65625
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            },
+            {
+              "id": 2,
+              "atoms": [
+                {
+                  "id": 2,
+                  "element": 17,
+                  "position": {
+                    "x_pt": 350.5,
+                    "y_pt": 277.75
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "Cl",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      341.388671875,
+                      268.6328125,
+                      359.611328125,
+                      286.8671875
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            }
+          ],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "overlap_before": {
+    "sha256": "8ba680826d495dda093c12809587ac5973698249a557a3b057259c885e1f81e5",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        73
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 7,
+                  "position": {
+                    "x_pt": 147.375,
+                    "y_pt": 123.125
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 2,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "NH2",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      140.818359375,
+                      114.359375,
+                      185.654296875,
+                      131.65625
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            },
+            {
+              "id": 2,
+              "atoms": [
+                {
+                  "id": 2,
+                  "element": 17,
+                  "position": {
+                    "x_pt": 350.5,
+                    "y_pt": 277.75
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "Cl",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      341.388671875,
+                      268.6328125,
+                      359.611328125,
+                      286.8671875
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            }
+          ],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 158.947265625,
+                "y_pt": 131.65625
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 24.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "optical_probes": [
+      {
+        "size_px": 512,
+        "zoom_percent": 100,
+        "center_pt": [
+          256,
+          256
+        ],
+        "samples": [
+          {
+            "kind": "overlap",
+            "xy": [
+              166,
+              122
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "caption_only",
+            "xy": [
+              161,
+              124
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "label_only",
+            "xy": [
+              159,
+              123
+            ],
+            "rgb": [
+              255,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "size_px": 1024,
+        "zoom_percent": 200,
+        "center_pt": [
+          256,
+          256
+        ],
+        "samples": [
+          {
+            "kind": "overlap",
+            "xy": [
+              332,
+              245
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "caption_only",
+            "xy": [
+              345,
+              247
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "label_only",
+            "xy": [
+              316,
+              247
+            ],
+            "rgb": [
+              255,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "overlap_after": {
+    "sha256": "deece0594c3c795c4bd3fcd5e26667a3236c3885f58411e5dff9031cd356ffb7",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ],
+      [
+        32774,
+        73
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 7,
+                  "position": {
+                    "x_pt": 147.375,
+                    "y_pt": 123.125
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 2,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "NH2",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      140.818359375,
+                      114.359375,
+                      185.654296875,
+                      131.65625
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            },
+            {
+              "id": 2,
+              "atoms": [
+                {
+                  "id": 2,
+                  "element": 17,
+                  "position": {
+                    "x_pt": 350.5,
+                    "y_pt": 277.75
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "Cl",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      341.388671875,
+                      268.6328125,
+                      359.611328125,
+                      286.8671875
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            }
+          ],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 158.947265625,
+                "y_pt": 131.65625
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 24.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "optical_probes": [
+      {
+        "size_px": 512,
+        "zoom_percent": 100,
+        "center_pt": [
+          256,
+          256
+        ],
+        "samples": [
+          {
+            "kind": "overlap",
+            "xy": [
+              166,
+              122
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "caption_only",
+            "xy": [
+              161,
+              124
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "label_only",
+            "xy": [
+              159,
+              123
+            ],
+            "rgb": [
+              255,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "size_px": 1024,
+        "zoom_percent": 200,
+        "center_pt": [
+          256,
+          256
+        ],
+        "samples": [
+          {
+            "kind": "overlap",
+            "xy": [
+              332,
+              245
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "caption_only",
+            "xy": [
+              345,
+              247
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "label_only",
+            "xy": [
+              316,
+              247
+            ],
+            "rgb": [
+              255,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "two_captions": {
+    "sha256": "2f26c58d50e4593c6eff0009d2f37de2350ae422a4e383bdff469a1e446c5322",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        73
+      ],
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 7,
+                  "position": {
+                    "x_pt": 147.375,
+                    "y_pt": 123.125
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 2,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "NH2",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      140.818359375,
+                      114.359375,
+                      185.654296875,
+                      131.65625
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            },
+            {
+              "id": 2,
+              "atoms": [
+                {
+                  "id": 2,
+                  "element": 17,
+                  "position": {
+                    "x_pt": 350.5,
+                    "y_pt": 277.75
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "Cl",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      341.388671875,
+                      268.6328125,
+                      359.611328125,
+                      286.8671875
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            }
+          ],
+          "texts": [
+            {
+              "id": 2,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 158.947265625,
+                "y_pt": 131.65625
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 24.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "optical_probes": [
+      {
+        "size_px": 512,
+        "zoom_percent": 100,
+        "center_pt": [
+          256,
+          256
+        ],
+        "samples": [
+          {
+            "kind": "overlap",
+            "xy": [
+              166,
+              122
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "caption_only",
+            "xy": [
+              161,
+              124
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "label_only",
+            "xy": [
+              159,
+              123
+            ],
+            "rgb": [
+              255,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "size_px": 1024,
+        "zoom_percent": 200,
+        "center_pt": [
+          256,
+          256
+        ],
+        "samples": [
+          {
+            "kind": "overlap",
+            "xy": [
+              332,
+              245
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "caption_only",
+            "xy": [
+              345,
+              247
+            ],
+            "rgb": [
+              0,
+              0,
+              255
+            ]
+          },
+          {
+            "kind": "label_only",
+            "xy": [
+              316,
+              247
+            ],
+            "rgb": [
+              255,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "marked_sparse_caption": {
+    "sha256": "a6395b7bbdf9de657d9b8681b8660b1506b52fed32adaa87cdc7a4aa19df03a0",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ],
+      [
+        32774,
+        23
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 7,
+                  "position": {
+                    "x_pt": 147.375,
+                    "y_pt": 123.125
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 2,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "NH2",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      140.818359375,
+                      114.359375,
+                      185.654296875,
+                      131.65625
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            },
+            {
+              "id": 2,
+              "atoms": [
+                {
+                  "id": 2,
+                  "element": 17,
+                  "position": {
+                    "x_pt": 350.5,
+                    "y_pt": 277.75
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "Cl",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      341.388671875,
+                      268.6328125,
+                      359.611328125,
+                      286.8671875
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            }
+          ],
+          "texts": [
+            {
+              "id": 19,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "anonymous_caption": {
+    "sha256": "2a955a1eb069e186a574f9b845e94f04af9441f70ad9b5c5add54ee82705e7fa",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ],
+      [
+        32774,
+        0
+      ]
+    ],
+    "model": {
+      "pages": [
+        {
+          "id": 1,
+          "size": {
+            "width_pt": 512.0,
+            "height_pt": 512.0
+          },
+          "fragments": [
+            {
+              "id": 1,
+              "atoms": [
+                {
+                  "id": 1,
+                  "element": 7,
+                  "position": {
+                    "x_pt": 147.375,
+                    "y_pt": 123.125
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 2,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "NH2",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            1.0,
+                            0.0,
+                            0.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      140.818359375,
+                      114.359375,
+                      185.654296875,
+                      131.65625
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            },
+            {
+              "id": 2,
+              "atoms": [
+                {
+                  "id": 2,
+                  "element": 17,
+                  "position": {
+                    "x_pt": 350.5,
+                    "y_pt": 277.75
+                  },
+                  "isotope": null,
+                  "charge": 0,
+                  "radical": "none",
+                  "explicit_hydrogens": 0,
+                  "authored_label": {
+                    "position": null,
+                    "justification": "left",
+                    "label_justification": "left",
+                    "label_alignment": null,
+                    "runs": [
+                      {
+                        "text": "Cl",
+                        "style": {
+                          "font_family": "Roboto",
+                          "size_pt": 24.0,
+                          "face": 0,
+                          "rgb": [
+                            0.0,
+                            0.0,
+                            1.0
+                          ]
+                        }
+                      }
+                    ],
+                    "bounding_box": [
+                      341.388671875,
+                      268.6328125,
+                      359.611328125,
+                      286.8671875
+                    ]
+                  }
+                }
+              ],
+              "bonds": []
+            }
+          ],
+          "texts": [
+            {
+              "id": 1,
+              "position": {
+                "x_pt": 80.25,
+                "y_pt": 100.75
+              },
+              "runs": [
+                {
+                  "text": "H",
+                  "style": {
+                    "font_family": "Roboto",
+                    "size_pt": 12.0,
+                    "face": 0,
+                    "rgb": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "caption_negative": {
+    "sha256": "cceb2d46b93cc3f4e817c15311e68805f95a1caaf87879fce5aadc615f453de8",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "caption_zero": {
+    "sha256": "4f97e8ba6935f6273c9e64bf437611addfecdc780abf5f46a0f42b9ae54e02c0",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "caption_without_z": {
+    "sha256": "8de83e599fba9f448f91c155c54fd7cb150a1ac4a4054a3de10240a61cef48c7",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "duplicate_depth": {
+    "sha256": "9b05bb9fcf1b9908a5080c40c1a215c16e98085be07d360fe63428290cef09db",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        73
+      ],
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "duplicate_named_page_child": {
+    "sha256": "377e76184c7b3291482df0f5ffb29be2d1fd0b2c78542a1cfef56bd457b86b7e",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        901
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "duplicate_live_id": {
+    "sha256": "2f22d4e15bb45bf6c8fd7776f20e28c375360f93a90be611494f4f254b190735",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        23
+      ],
+      [
+        32774,
+        73
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "unknown_identity_property": {
+    "sha256": "4a21d261397eac199d8f6dc1d22fc09d2650845d9ff4a9716563ef44fff8d96b",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "opaque_caption_property": {
+    "sha256": "a953f1e5f16253e2e06beb8e430cd1e822af1f09dbb1cb42a3f654aef37effe8",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "duplicate_caption_z": {
+    "sha256": "e57a3a157c9b43879b928eb51f65e279123634c75e9931aaf87d487d80e3d8dc",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "short_caption_z": {
+    "sha256": "1b1e4f6069b25b78a7cc612a9617bacf29a737bca0ea93a4f2c7347d5eef8657",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "bare_caption_peer": {
+    "sha256": "7190336b78cea60b5e9931d42bdb763374f32c38f69f8018aa3e1be5ddac5dd2",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32774,
+        12
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "unknown_page_peer": {
+    "sha256": "b78ca0b046bdf17c2a8d1eef2047444aa0ac85de668268dabb19fbbbfe3f4634",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        49169,
+        9
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "unsupported_group": {
+    "sha256": "712bcc6a3cd9c34e369f972fcdf664ab673c199a10f1fc0f3f9130a933b549af",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32774,
+        4294967295
+      ],
+      [
+        32770,
+        3
+      ],
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ]
+    ],
+    "model": null
+  },
+  "chemical_contradictory_ink_box": {
+    "sha256": "0bb5918709ace2372bb74b1a83479c24d43355e870f85252a5a7a2efc36161e3",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ],
+      [
+        32774,
+        4294967295
+      ]
+    ],
+    "model": null
+  },
+  "chemical_local_margin": {
+    "sha256": "b1f5492826cad17ea107be280327ee150f4feab3954005fabed50e60cfd953b9",
+    "framing": "ImplicitDocumentFileEnd",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32774,
+        4294967295
+      ]
+    ],
+    "model": null
+  },
+  "chemical_off_paper": {
+    "sha256": "85b6e4891df846c6da0e2f973d16a6040cd51705f24f6d6302fe912e62bb2a0b",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ],
+      [
+        32771,
+        903
+      ],
+      [
+        32774,
+        4294967295
+      ]
+    ],
+    "model": null
+  },
+  "chemical_raw_label_z": {
+    "sha256": "0b3c29c2b9190c453a2280969ef82e6819ea5eeb8f61917f970e179912f64d98",
+    "framing": "ImplicitDocument",
+    "page_children": [
+      [
+        32771,
+        901
+      ],
+      [
+        32771,
+        902
+      ],
+      [
+        32774,
+        4294967295
+      ]
+    ],
+    "model": null
+  }
+}

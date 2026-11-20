@@ -1,5 +1,10 @@
 # Clean-room source register
 
+The [mixed CDX page contract](../research/cdx-mixed-caption.md) uses the published
+Page, Fragment, Text, binary ID and ZOrder rules. Original witnesses combine
+atom-owned labels and direct captions in both source orders. Independent Roboto
+outline samples pin the visible color at their overlap.
+
 The empty CDX caption contract uses the public Page and DrawingSpace
 properties for an empty Poster with explicit extents. Its first Text uses
 explicit depth zero from the specified effective default. Resource
