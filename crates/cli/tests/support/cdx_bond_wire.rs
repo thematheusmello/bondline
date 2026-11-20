@@ -75,6 +75,49 @@ fn skeletal_cdx_cli_preserves_omitted_h_after_preview_and_exact_save() -> Result
     Ok(())
 }
 
+#[test]
+fn skeletal_cdx_cli_moves_scoped_atoms_and_reopens_the_exact_bytes() -> Result {
+    let fixture =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures/cdx-skeletal-move");
+    let original = fixture.join("aliased_extended.cdx");
+    let expected = fs::read(fixture.join("aliased_moved.cdx"))?;
+    let directory = support::SdfTestDirectory::new()?;
+    let dest = directory.path("moved-保存-β.cdx");
+    let open = request("document.open_cdx", json!({"path":original}));
+    let select = request(
+        "ui.selection",
+        json!({"expected_revision":1, "action":"set","page_id":1,"atom_ids":[4,2]}),
+    );
+    let selected = cli(&[open.clone(), select.clone()])?;
+    let epoch = selected["ui_selection"]["epoch"]
+        .as_u64()
+        .ok_or("selection epoch")?;
+    let result = cli(&[
+        open,
+        select,
+        request(
+            "selection.translate",
+            json!({"expected_revision":1, "expected_selection_epoch":epoch, "delta_x_pt":-5.125,"delta_y_pt":3.25}),
+        ),
+        request("history.undo", json!({})),
+        request("history.redo", json!({})),
+        request("document.save_cdx", json!({"path":dest})),
+        request("document.open_cdx", json!({"path":dest})),
+    ])?;
+    assert_eq!(fs::read(dest)?, expected);
+    let fragments = &result["document"]["pages"][0]["fragments"];
+    assert_eq!(
+        fragments[0]["atoms"][1]["position"],
+        json!({"x_pt":218.875,"y_pt":195.25})
+    );
+    assert_eq!(
+        fragments[1]["atoms"][0]["position"],
+        json!({"x_pt":186.875,"y_pt":371.25})
+    );
+    assert_eq!(result["file"]["dirty"], false);
+    Ok(())
+}
+
 fn exact(value: &Value, name: &str) -> Result {
     assert_eq!(value["document"], f::model(name)?);
     assert_eq!(value["file"]["format"], "cdx");

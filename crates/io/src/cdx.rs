@@ -21,6 +21,24 @@ mod text;
 pub(crate) use caption::{append_caption, text_record as caption_text_record};
 pub(crate) use text::encode_caption_runs;
 
+/// In the certified skeletal layout, every directly owned Node has one position
+/// and direct Fragment/Node encounter order supplies the corresponding live atom IDs.
+pub(crate) fn skeletal_positions<'a>(
+    source: &'a Document<'_>,
+) -> impl Iterator<Item = std::ops::Range<usize>> + 'a {
+    source.records().iter().filter_map(|r| {
+        let RecordKind::Property {
+            tag: POSITION,
+            payload,
+            ..
+        } = r.kind()
+        else {
+            return None;
+        };
+        matches!(object(source, r.parent()), Some((NODE, _))).then(|| payload.clone())
+    })
+}
+
 const DOCUMENT: u16 = 0x8000;
 const PAGE: u16 = 0x8001;
 const GROUP: u16 = 0x8002;

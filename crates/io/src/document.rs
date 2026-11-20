@@ -2,6 +2,7 @@
 mod carbon_label_tests;
 mod cdx_caption;
 mod cdx_label;
+mod cdx_move;
 mod smiles;
 
 use crate::cdx::Preview as CdxPreview;
@@ -41,6 +42,8 @@ pub enum DocumentError {
     UnsupportedCdxEdit,
     #[error("CDX atom label editing requires {0}")]
     UnsupportedCdxLabel(&'static str),
+    #[error("CDX atom movement requires {0}")]
+    UnsupportedCdxMove(&'static str),
     #[error("CDX caption editing requires {0}")]
     UnsupportedCdxCaption(&'static str),
     #[error("saving {from} source as {to} would discard source metadata")]
@@ -75,6 +78,7 @@ impl DocumentError {
             | Self::UnsupportedMolEdit
             | Self::UnsupportedCdxEdit
             | Self::UnsupportedCdxLabel(_)
+            | Self::UnsupportedCdxMove(_)
             | Self::UnsupportedCdxCaption(_)
             | Self::CrossFormatSource { .. }
             | Self::UnsupportedMolLayout(_) => "unsupported_content",

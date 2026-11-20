@@ -2,6 +2,8 @@
 //! Sparse IDs are supplied directly to the codec. Command history has its own tests.
 #[path = "cdx_caption_browser/skeletal.rs"]
 mod skeletal;
+#[path = "cdx_caption_browser/skeletal_move.rs"]
+mod skeletal_move;
 
 use std::{error::Error, sync::Arc};
 
@@ -166,5 +168,6 @@ fn main() -> Result {
     {
         return Err("raw ID exhaustion changed the source or failed for another reason".into());
     }
-    skeletal::verify()
+    skeletal::verify()?;
+    skeletal_move::verify()
 }

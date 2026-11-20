@@ -1,5 +1,8 @@
 #![no_main]
 
+#[path = "cdx_parse/skeletal_move.rs"]
+mod skeletal_move;
+
 use bondline_cdx::{
     Document, Error, Framing, MAX_INPUT_BYTES, MAX_RECORDS, PropertyInsertion, Record, RecordKind,
     ResourceError, StringError, Writer,
@@ -1189,6 +1192,7 @@ fuzz_target!(|data: &[u8]| {
         .filter(|stored| stored.has_cdx_skeletal_preview())
     {
         check_skeletal_preview(stored, &document);
+        skeletal_move::check(stored, &document);
     }
     if let Some(mut stored) = stored_page.filter(|stored| stored.has_cdx_caption_preview()) {
         assert_eq!(stored.export_cdx().unwrap(), data);

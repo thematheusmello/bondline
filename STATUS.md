@@ -504,20 +504,47 @@ networking and fails in mio. The full local gate on `00ec56f` passed 2,363
 workspace tests with one ignored, all three AccessKit tests and all gates.
 [Acceptance and local reproduction](docs/verification-cdx-skeletal.md).
 
+[PR 22](https://github.com/thematheusmello/bondline/pull/22) merged the
+verified skeletal viewer at `df7790a`. The merge tree matched `8af98c8`
+and its completed feature branch was retired.
+
+### Move selected skeletal atoms
+
+The writer at `00ceb73` and native selection at `98f3edd` move owned Node
+positions, preserve original length headers, and support exact Undo, Redo and
+Unicode Save/reopen. Six independently predicted files include a long-form
+position and repeated raw IDs in different fragments. Native drag and nudge
+were exercised in App frames. CLI, MCP and macOS loopback all preserved the
+expected saved bytes and produced 12 matching CPU/Metal pairs per surface.
+The Rust WebAssembly file round trips and moved images passed in offline Chrome
+at `76d3358`. The raw coordinate movement oracle at `2922cd9` passed 10,000
+AddressSanitizer iterations from 245 verified seeds.
+[Contract](docs/research/cdx-skeletal-movement.md) and [acceptance](docs/verification-cdx-skeletal-movement.md).
+
+The integrated local gate at `e1a1cd3` passed 2,369 workspace tests with one
+ignored, plus all three macOS AccessKit tests. Both x86-64 Windows and Linux
+desktop binaries type-checked. Interactive tests on those systems remain open.
+
+[PR 23](https://github.com/thematheusmello/bondline/pull/23) landed Hill
+formula notation on main at `8f0e2f7`. The integrated gate at `db52782`
+passed 2,364 workspace tests, one ignored, all three AccessKit tests and
+all local checks. Main matched the tested tree and the feature ref was retired.
+[Formula examples and ordering conventions](docs/research/hill-formula.md).
+
 ### Next executable work
 
-1. Implement source-preserving selection movement on this CDX profile. Verify
-   the signed 16.16 Node positions, a single history transaction, protected raw
-   headers, exact moved file, redo after a sub-grid no-op, and unchanged H/flags.
-   Test duplicate raw IDs across fragments, off-page and mandatory-label refusals.
-   A separate worktree `../bondline-cdx-skeletal-move` started on `f6015a0`.
-2. Extend the approved rendering profile to mixed hidden-carbon/printed-heteroatom
-   drawings. Source and optical acceptance must account for glyphs, clearance
-   and current graph visibility on every atom.
-3. Independently, `../bondline-formula-notation` starts from the verified numeric
-   composition in `bondline-chem` to produce a sourced molecular formula. Exercise
-   carbon-free ordering, isotopes and charge against independent conventions.
-   Windows/Linux runtime validation and the full browser editor remain outstanding.
+1. `../bondline-cdx-mixed-skeleton` started at `98f3edd` to display skeletal
+   carbon and printed heteroatoms together. Check actual methanol, ethanol and
+   amino-alcohol files, visible glyphs, bond clearance, source field presence
+   and exact Save/reopen. Keep source-specific authoring checks independent.
+2. `../bondline-analysis-window` started at `e1d6adb` to show the computed
+   formula through View, CLI and MCP. Verify whole-drawing and selected-atom
+   scopes, incomplete sources, unknown H and preservation of document history.
+3. `../bondline-web-workspace` started at `6fd6633` to run the actual egui
+   editor in a browser. Check offline startup, real bond creation and history,
+   safe recovery and the browser dependency licenses. The core codec's browser
+   tests cover a smaller workflow. Interactive Windows/Linux validation and
+   further work across M0–M5 remain outstanding.
    [Roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/

@@ -149,7 +149,8 @@ impl Engine {
     pub fn selection_available(&self) -> bool {
         self.has_full_native_source()
             || self.stored_document().is_ok_and(|stored| {
-                stored.has_boxed_atom_labels()
+                stored.has_cdx_skeletal_preview()
+                    || stored.has_boxed_atom_labels()
                     || stored.has_connected_atom_labels()
                     || stored.has_mixed_atom_labels()
                     || stored.has_flagged_atom_labels()
@@ -392,6 +393,15 @@ impl Engine {
         }
         let page_id = selected.page_id.ok_or(Error::StaleSelection)?;
         let page = self.selection_page(page_id)?;
+        let stored = self.stored_document()?;
+        if stored.has_cdx_skeletal_preview() {
+            return Ok(stored.with_cdx_skeletal_translation(
+                page.id(),
+                &selected.atom_ids,
+                params.delta_x_pt,
+                params.delta_y_pt,
+            )?);
+        }
         let mut replacements = Vec::new();
         for fragment in page.fragments() {
             if !fragment
@@ -479,6 +489,29 @@ impl Engine {
             })?;
         }
         Ok(candidate)
+    }
+
+    /// Render an uncommitted selection move at the caller's current canvas view.
+    pub fn preview_selection_scene(
+        &self,
+        params: &SelectionTranslate,
+        view: &bondline_render::PageView,
+        page_id: PageId,
+    ) -> Result<(Arc<bondline_model::Document>, bondline_render::GraphScene), Error> {
+        let candidate = self.preview_selection_translation(params)?;
+        let cancel = bondline_render::Cancellation::default();
+        let scene = if candidate.has_cdx_skeletal_preview() {
+            bondline_io::display::drawing_page_scene_with_view(view, &candidate, page_id, &cancel)?
+        } else {
+            let page = candidate
+                .model()
+                .pages()
+                .iter()
+                .find(|p| p.id() == page_id)
+                .ok_or(Error::InvalidPageId)?;
+            view.graph_scene(page, &cancel)?
+        };
+        Ok((candidate.model_snapshot(), scene))
     }
 
     pub(super) fn translate_selection(
