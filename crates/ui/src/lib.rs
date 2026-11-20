@@ -604,7 +604,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
                 "Alt-click an atom to sprout a separate ring."
             });
         }
-        if caption_preview && cdx_atom_label_preview {
+        if (caption_preview || skeletal_labels) && cdx_atom_label_preview {
             ui.label("Alt-click an exposed atom label to edit its element and attached H count.");
         }
         if skeletal_preview || skeletal_labels {
@@ -1809,7 +1809,7 @@ fn show_workspace_with_preview(
                 let mixed_label_alt = matches!(event, egui::Event::PointerButton {
                     button: egui::PointerButton::Primary, pressed: true, modifiers, ..
                 } if *modifiers == egui::Modifiers::ALT)
-                    && engine.stored_document().is_ok_and(|stored| stored.has_cdx_mixed_preview());
+                    && engine.stored_document().is_ok_and(|stored| stored.has_cdx_mixed_preview() || stored.has_cdx_skeletal_label_preview());
                 if command.is_none() && engine.effective_tool() == EffectiveTool::Caption && !mixed_label_alt {
                     if discard_stale_canvas_input || text_focused {
                         drawing.captions.cancel_press();
@@ -1873,6 +1873,10 @@ fn show_workspace_with_preview(
                     let Ok(Some(bondline_render::HitTarget::Atom { fragment_id, atom_id })) =
                         current_graph.hit_test(point, 5.0 * density)
                     else { continue; };
+                    if engine.stored_document().is_ok_and(|stored|
+                        stored.has_cdx_skeletal_label_preview() && !stored.can_edit_cdx_atom_label(atom_id)) {
+                        continue;
+                    }
                     command = Some(Ok(Command::UiAtomLabel(bondline_commands::UiAtomLabel::Open {
                         expected_revision: key.revision,
                         page_id: key.page.get(),

@@ -617,18 +617,19 @@ with 2,407 workspace tests passed, zero failed and one ignored, plus three
 macOS AccessKit tests. Its log SHA-256 is
 `fa5a4f0030145b4b218bd119b2419e930f3e1aa753cd00888684d774535ff8a0`.
 
+### Molecular analysis and existing skeletal labels
+
+Molecular weight and monoisotopic mass are available in the shared Analysis window. [PR 30](https://github.com/thematheusmello/bondline/pull/30) connected the documented MOL hydrogen defaults. [PR 33](https://github.com/thematheusmello/bondline/pull/33) added elemental weight percentages. Its full local gate passed 2,414 workspace tests with one ignored and three additional macOS AccessKit tests. The merged head for that workflow is `dce8cb0`.
+
+[PR 34](https://github.com/thematheusmello/bondline/pull/34) changes an existing printed heteroatom in a qualified skeletal CDX drawing through the label form. Four edits, including a moved atom and repeated raw IDs in separate fragments, match independently generated binary files through edit, Undo, Redo and Save. Three cases passed in a background macOS window with genuine accessibility input and matching CPU/Metal captures. A separate browser codec run and 10,000 parser sanitizer iterations passed. [Verification and scope](docs/verification-cdx-skeletal-label-edits.md).
+
+Both full local runs on `7df66a2` stopped after 1,629 passes at the same immediate listener-rebind assertion. macOS reported the addresses in use on ports 52920 and 59323. The second log SHA-256 is `76a1b2d3d45ebd3c272ca8a8f718d799e7f9be615e3da05147e90631815729cd`. A separate combined run on the coordinate-free CDXML branch passed 2,424 workspace tests with one ignored and three additional AccessKit tests. The dedicated listener change has its own controlled reproduction. The two historical port owners were unobserved. After merging the listener change, the complete local gate passed on `804c72a` with 2,421 workspace tests passed, zero failed and one ignored, plus three AccessKit tests. The integrated log SHA-256 is `f63be5200831c0fcf3b30a8d1130bb1465fe9bfbc2e0940eacfd3691aae5bfcc`. [Listener PR](https://github.com/thematheusmello/bondline/pull/38).
+
 ### Next executable work
 
-1. Integrate molecular weight and monoisotopic mass with independently
-   verified values in the existing Analysis window. Isotope distributions,
-   elemental percentages and live analysis captions remain open.
-2. Extend editing of printed label bodies on mixed CDX drawings with an
-   exact byte comparison, whole-page proof and a native Save/reopen check.
-3. The web host in `../bondline-web-workspace` is exercising actual egui/WebGPU
-   startup, offline editing and history, and recovery across browser tabs.
-   The codec test exercises a separate headless Wasm entry point. Interactive
-   Windows/Linux validation and further work across M0–M5 remain outstanding.
-   [Roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
+1. Finish integrating analysis of coordinate-free CDXML carbon structures and record-level SDF queries. The first has a separate source-coverage proof. The second keeps collection metadata and history while analyzing individual MOL blocks. [CDXML PR](https://github.com/thematheusmello/bondline/pull/35) · [SDF PR](https://github.com/thematheusmello/bondline/pull/36).
+2. Extend the CDX atom-label workflow to creating a printed heteroatom at a previously hidden carbon. Start with an independent expected file, resource selection, an exact scoped child ID, and the transition between the old and new complete-page representation. The current form edits existing labels. More general foreign files and mixed page styles are pending.
+3. Integrate the interactive WebAssembly host and verify offline recovery and simultaneous tabs. Windows and Linux still need native interaction evidence. Isotope distributions, general stereochemistry, live analysis captions, publishing, clipboard interoperability and the other M0–M5 work remain in the [roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 
 Recoverable plain CDX bond workflow: basebaa3d90, contract6c9fff0, independent originals/
 helperc29c1a1, IO37d094d, caller5afb434 and fuzz1606d62. Read

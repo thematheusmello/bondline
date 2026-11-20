@@ -173,3 +173,20 @@ fn elemental_analysis_of_imported_ethanol_and_an_uncapped_selection_agrees_with_
     }
     Ok(())
 }
+
+#[test]
+fn printed_skeletal_label_edits_reopen_with_the_exact_source_and_independent_formula() -> Test {
+    let oracle =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../xtask/oracles/cdx_skeletal_label.py");
+    let out = Command::new(std::env::var_os("BONDLINE_PYTHON").ok_or("pinned RDKit Python")?)
+        .arg("-B")
+        .arg(oracle)
+        .arg(env!("CARGO_BIN_EXE_bondline-cli"))
+        .output()?;
+    assert!(
+        out.status.success(),
+        "{}",
+        String::from_utf8_lossy(&out.stderr)
+    );
+    Ok(())
+}
