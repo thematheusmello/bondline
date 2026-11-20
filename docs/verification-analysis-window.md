@@ -34,3 +34,9 @@ cargo run -p bondline-cli -- run --cmd '{"command":"bond.create","params":{"page
 The public source scope, missing fields and prospective CDX profiles are recorded in the [Analysis window contract](research/analysis-window.md).
 
 The standalone skeletal fixtures give propane with all three H counts declared, its central count omitted, or every count omitted. Before admission the new command test returned `unsupported_source` for complete propane. After admission the command and CLI return the declared formula or the corresponding missing atom. An unchanged native-source Save representation and a detached-model negative are checked in the engine.
+
+## Skeletal and printed-label CDX receiving
+
+The two profile extensions each first failed because a source with all H counts written returned `unsupported_source`. The final source gate reuses the exact complete-page certificates. Whole, partial and stale results were checked through command tests, actual CLI, initialized stdio MCP and actual BondlineApp frames. RDKit’s independent source reader confirms `C3H8` for propane and `CH4O` for the fully explicit methanol. It also infers H for the supplied comparison drawings. This analysis command continues to disclose H from the literal model.
+
+An activation-prohibited macOS test host opened seven original CDX files. Native AX text showed `C3H8`, `CH4O`, a selected terminal `CH3`, and the expected missing-H messages for atoms 1 and 2 as each source was opened. The mixed printed-label source refused a selection request and preserved the previous state. Queries preserved exact file and history state. PID 15528 exited after the registered Close action. Executable SHA-256 was `68fd1ad3b08f4abd93af6f74508665d593af0606fd605cb92fef8768b9fcc381`. The source and AX receipt was `2262bcdf119cda71858b781ecf669fcd87e68dce7f0a3247544f10084cf2733b`.

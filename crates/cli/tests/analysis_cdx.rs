@@ -54,3 +54,19 @@ fn skeletal_propane_analysis_after_open_uses_literal_h_and_the_selected_atom() -
     );
     Ok(())
 }
+
+#[test]
+fn open_mixed_cdx_distinguishes_written_from_unspecified_hydrogens() -> Test {
+    assert_eq!(
+        open_and_analyze("cdx-mixed-skeleton/literal_h.cdx", None)?,
+        json!({"scope":"document","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":false,"formula":"CH4O"})
+    );
+    for (name, id) in [("methanol", 1), ("ethanol", 1), ("amino_alcohol", 2)] {
+        let path = format!("cdx-mixed-skeleton/{name}.cdx");
+        assert_eq!(
+            open_and_analyze(&path, None)?,
+            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":id})
+        );
+    }
+    Ok(())
+}

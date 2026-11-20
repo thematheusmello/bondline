@@ -1558,3 +1558,42 @@ fn analysis_header_drag_and_close_consume_their_paper_gestures_with_the_bond_too
     );
     Ok(())
 }
+
+#[test]
+fn analysis_window_refreshes_on_skeletal_cdx_open_and_suppresses_previous_formula() -> TestResult {
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    let sources = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
+    let mut last = "No atoms in this drawing.";
+    for (source, display) in [
+        ("cdx-skeletal/propane.cdx", "C3H8"),
+        (
+            "cdx-skeletal/all_h_missing.cdx",
+            "Formula unavailable. Atom 1 has an unspecified attached-hydrogen count.",
+        ),
+        ("cdx-mixed-skeleton/literal_h.cdx", "CH4O"),
+        (
+            "cdx-mixed-skeleton/amino_alcohol.cdx",
+            "Formula unavailable. Atom 2 has an unspecified attached-hydrogen count.",
+        ),
+    ] {
+        f.command("document.open_cdx", json!({"path":sources.join(source)}))?;
+        let state = f.state()?;
+        assert_eq!(state["undo_depth"], 0);
+        let painted = f.warm();
+        for (needle, expected) in [(display, true), (last, false)] {
+            assert_eq!(
+                painted
+                    .shapes
+                    .iter()
+                    .any(|s| matches!(&s.shape,egui::Shape::Text(t) if t.galley.text()==needle)),
+                expected,
+                "{source}: {needle}"
+            );
+        }
+        assert_eq!(f.state()?, state);
+        last = display;
+    }
+    Ok(())
+}

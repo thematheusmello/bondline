@@ -16,6 +16,8 @@ A source-free drawing supplies its entire atom model. Imported drawings must pas
 
 Certified skeletal CDX pages disclose only the literal model counts. Propane with written H counts of 3, 2 and 3 yields `C3H8`. When the middle count is absent, whole-drawing analysis identifies atom 2. Selecting a resolved terminal carbon still yields `CH3` as a partial-fragment contribution. With all H omitted the first atom is unresolved. A detached source loses its analysis grant. [Skeletal CDX contract](cdx-skeletal.md).
 
+For a certified binary drawing with hidden carbon and printed heteroatom labels, every atom still needs a recorded attached-H count. The original fully explicit methanol gives `CH4O`. The comparison drawings of methanol, ethanol and an amino alcohol omit the counts on hidden carbon. They identify the first unresolved atom in source projection order. This read-only mixed profile retains its existing selection restrictions. The standalone RDKit consumer separately infers formulas for those sources. [Mixed skeletal display contract](cdx-mixed-skeleton.md).
+
 ## Remaining Analysis work
 
 Exact mass, molecular weight, isotope distribution, elemental percentages, decimals, repeating groups, mixtures with stoichiometry and live pasted captions need separate sources and acceptance tests. A structure with unresolved H currently cannot produce a whole-drawing formula. Source-derived valence and partial-selection boundary conventions are separate chemistry decisions.

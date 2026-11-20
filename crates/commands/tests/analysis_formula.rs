@@ -264,3 +264,57 @@ fn skeletal_cdx_counts_only_written_hydrogens_and_preserves_the_current_source()
     }
     Ok(())
 }
+
+#[test]
+fn mixed_skeletal_drawings_require_written_h_and_the_exact_current_source() -> Test {
+    let literal =
+        include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/literal_h.cdx").as_slice();
+    let methanol =
+        include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/methanol.cdx").as_slice();
+    let ethanol =
+        include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/ethanol.cdx").as_slice();
+    let amino =
+        include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/amino_alcohol.cdx").as_slice();
+    for (bytes, answer) in [
+        (
+            literal,
+            json!({"scope":"document","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":false,"formula":"CH4O"}),
+        ),
+        (
+            methanol,
+            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":1}),
+        ),
+        (
+            ethanol,
+            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":1}),
+        ),
+        (
+            amino,
+            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":2}),
+        ),
+    ] {
+        let mut stored = StoredDocument::from_cdx(Arc::from(bytes), PageSize::A4)?;
+        assert!(stored.has_cdx_skeletal_label_preview() && !stored.is_fully_mapped());
+        let mut e = Engine::from_document(stored.clone());
+        assert_eq!(read(&mut e)?, answer);
+        assert!(!e.selection_available());
+        let error = e
+            .dispatch(
+                "ui.selection",
+                json!({"action":"set","expected_revision":0,"page_id":1,"atom_ids":[1]}),
+            )
+            .err()
+            .ok_or("unqualified atom selection")?;
+        assert_eq!(error.info().code, "unsupported_content");
+        assert_eq!(read(&mut e)?, answer);
+        assert_eq!(e.stored_document()?.export_cdx()?, bytes);
+        stored
+            .model_mut()
+            .set_page_size(bondline_model::PageId::new(1).ok_or("page")?, PageSize::A4)?;
+        assert_eq!(
+            read(&mut Engine::from_document(stored))?,
+            json!({"scope":"document","status":"unsupported_source"})
+        );
+    }
+    Ok(())
+}

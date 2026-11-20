@@ -1906,5 +1906,50 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
         stale["result"]["structuredContent"]["error"]["code"],
         "stale_selection"
     );
+    let fixtures = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
+    for (id, source, expected) in [
+        (
+            8,
+            "cdx-skeletal/propane.cdx",
+            json!({"scope":"document","status":"available","atom_count":3,"fragment_count":1,"partial_fragments":false,"formula":"C3H8"}),
+        ),
+        (
+            10,
+            "cdx-mixed-skeleton/literal_h.cdx",
+            json!({"scope":"document","status":"available","atom_count":2,"fragment_count":1,"partial_fragments":false,"formula":"CH4O"}),
+        ),
+        (
+            12,
+            "cdx-mixed-skeleton/amino_alcohol.cdx",
+            json!({"scope":"document","status":"unresolved_hydrogens","atom_id":2}),
+        ),
+    ] {
+        let opened = client.call(
+            id,
+            "tools/call",
+            call(
+                "document.open_cdx",
+                json!({"path":fixtures.join(source),"discard_unsaved":true}),
+            ),
+        )?;
+        let opened = &opened["result"]["structuredContent"];
+        let epoch = opened["ui_selection"]["epoch"].as_u64().unwrap_or(0);
+        let response = client.call(
+            id + 1,
+            "tools/call",
+            call(
+                "analysis.formula",
+                json!({"expected_revision":opened["revision"],"expected_selection_epoch":epoch}),
+            ),
+        )?;
+        assert_eq!(
+            response["result"]["structuredContent"]["analysis"],
+            expected
+        );
+        assert_eq!(
+            response["result"]["structuredContent"]["file"]["dirty"],
+            false
+        );
+    }
     client.finish()
 }
