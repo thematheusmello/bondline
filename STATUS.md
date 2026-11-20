@@ -20,6 +20,8 @@ PRs into main; release/publication and enabling Actions remain separate.
 
 The CDXML chain integration at `2df21f2` includes the merged Darwin listener fix and skeletal CDX label edits. Its fresh full local gate passed 2,427 workspace tests and three additional AccessKit tests, with one workspace case ignored. [Qualified source, native and aggregate evidence](docs/verification-cdxml-carbon-analysis.md).
 
+The accessible menu integration at `fb39e8f` includes main’s SDF record analysis. A true background macOS View → Show Analysis Window press opened the record panel, and Next/Previous updated the chemistry readout. Its full local gate passed 2,435 workspace tests with one ignored, plus three AccessKit platform tests. [Native and integration evidence](docs/verification-accessible-menus.md).
+
 ## Current recoverable work and evidence
 
 Main integration is delivered: [PR1](https://github.com/thematheusmello/bondline/pull/1)

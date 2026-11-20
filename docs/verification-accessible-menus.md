@@ -78,3 +78,11 @@ history empty. Unicode Save reproduced the source, SHA-256
 Reopening selected record 1. PID 66456 closed normally. The local receipt
 `target/ax-menu/native-9hfne3ip/receipt.json` has SHA-256
 `46a768821b1d862748eefb9052df80cb9d6fa7adf6b8a03ef57da694286d88f9`.
+
+The integrated tree at `fb39e8f` includes main `50a4e24`. Its full
+`cargo xtask ci` exited successfully on macOS arm64 with the pinned
+`BONDLINE_PYTHON`. It passed formatting, workspace Clippy, 2,435 workspace
+tests (zero failures and one ignored), three separate AccessKit platform
+tests, layer, license, asset and corpus checks. The log
+`target/analysis-ci/ax-menu-fb39e8f.log` has SHA-256
+`8408cd2fdf09b62aac3786f457484b612248db5f0f2a6a4d222dc02e4a691e74`.
