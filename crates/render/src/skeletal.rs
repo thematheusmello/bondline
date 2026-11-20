@@ -30,14 +30,17 @@ pub fn hidden_carbon_atoms(
 pub(crate) enum AtomDisplay<'a> {
     Literal,
     Resolved(&'a BTreeMap<AtomId, u16>),
-    ImpliedHidden(&'a BTreeMap<AtomId, u16>),
+    ImpliedHidden {
+        counts: &'a BTreeMap<AtomId, u16>,
+        allow_printed: bool,
+    },
 }
 
 impl<'a> AtomDisplay<'a> {
     pub(crate) fn counts(self) -> Option<&'a BTreeMap<AtomId, u16>> {
         match self {
             Self::Literal => None,
-            Self::Resolved(counts) | Self::ImpliedHidden(counts) => Some(counts),
+            Self::Resolved(counts) | Self::ImpliedHidden { counts, .. } => Some(counts),
         }
     }
 }
@@ -53,7 +56,7 @@ pub(crate) fn labels(
     cancel: &Cancellation,
 ) -> Result<BTreeMap<AtomId, CarbonLabel>, Error> {
     let mut labels = BTreeMap::new();
-    let implied = matches!(display, AtomDisplay::ImpliedHidden(_));
+    let implied = matches!(display, AtomDisplay::ImpliedHidden { .. });
     if !implied
         && !fragment.atoms().iter().any(|atom| {
             atom.element.get() == 6

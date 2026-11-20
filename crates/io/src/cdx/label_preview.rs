@@ -52,7 +52,9 @@ pub(super) fn model(
     paper_model(source, fragments, fields, resources, bonds)
 }
 
-pub(super) fn skeletal(source: &Document<'_>) -> Option<bondline_model::Document> {
+pub(super) fn skeletal(
+    source: &Document<'_>,
+) -> Option<(bondline_model::Document, super::Preview)> {
     if !has_preview_header(source) {
         return None;
     }
@@ -65,8 +67,31 @@ pub(super) fn skeletal(source: &Document<'_>) -> Option<bondline_model::Document
     if bonds == 0 {
         return None;
     }
+    let mut hidden = false;
+    let mut printed = false;
+    for atom in fragments.iter().flat_map(|fragment| fragment.atoms()) {
+        if atom.authored_label.is_some() {
+            if atom.element.get() == 6
+                || atom.show_terminal_carbon_labels.is_some()
+                || atom.show_non_terminal_carbon_labels.is_some()
+            {
+                return None;
+            }
+            printed = true;
+        } else {
+            hidden = true;
+        }
+    }
+    if !hidden {
+        return None;
+    }
     let model = paper_model(source, &fragments, fields, None, bonds)?;
-    crate::display::certify_cdx_skeletal_page(&model).then_some(model)
+    let profile = if printed {
+        super::Preview::SkeletalLabels
+    } else {
+        super::Preview::Skeletal
+    };
+    crate::display::certify_cdx_skeletal_page(&model, printed).then_some((model, profile))
 }
 
 fn paper_model(
@@ -133,7 +158,7 @@ fn source_fields(source: &Document<'_>, scope: Scope, nodes: Nodes) -> Option<(F
                         return None;
                     }
                 }
-                TEXT_OBJECT if nodes == Nodes::Labelled && kind == Some(NODE) => {}
+                TEXT_OBJECT if kind == Some(NODE) => {}
                 _ => return None,
             },
             RecordKind::Property { tag, .. } => {

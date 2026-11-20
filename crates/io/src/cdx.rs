@@ -83,6 +83,7 @@ pub(crate) enum Preview {
     AtomLabels,
     Mixed,
     Skeletal,
+    SkeletalLabels,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -344,8 +345,8 @@ pub(crate) fn project_document(
     if let Some(model) = mixed::preview(&source) {
         return Ok((model, Preview::Mixed));
     }
-    if let Some(model) = label_preview::skeletal(&source) {
-        return Ok((model, Preview::Skeletal));
+    if let Some(preview) = label_preview::skeletal(&source) {
+        return Ok(preview);
     }
     let graph = ElementalGraph::from_source(source)?;
     if let Some(model) = label_preview::preview(&graph) {
@@ -490,7 +491,7 @@ impl Layout {
                     }
                 }
                 NODE | BOND if parent == Some(FRAGMENT) => {}
-                TEXT_OBJECT if nodes == Nodes::Labelled && parent == Some(NODE) => {
+                TEXT_OBJECT if nodes != Nodes::Elemental && parent == Some(NODE) => {
                     let node = record
                         .parent()
                         .ok_or(MappingError::UnsupportedLayout { record: index })?;

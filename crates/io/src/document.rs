@@ -490,6 +490,11 @@ impl StoredDocument {
         self.has_cdx_preview(CdxPreview::Skeletal)
     }
 
+    /// Hidden carbons and boxed, explicitly printed heteroatoms share one read-only CDX page.
+    pub fn has_cdx_skeletal_label_preview(&self) -> bool {
+        self.has_cdx_preview(CdxPreview::SkeletalLabels)
+    }
+
     fn has_cdx_preview(&self, required: CdxPreview) -> bool {
         self.cdx_source_for(|preview| preview == required).is_some()
     }
@@ -609,6 +614,7 @@ impl StoredDocument {
             || self.has_cdx_atom_label_preview()
             || self.has_cdx_mixed_preview()
             || self.has_cdx_skeletal_preview()
+            || self.has_cdx_skeletal_label_preview()
             || self.has_boxed_atom_labels()
             || self.has_connected_atom_labels()
             || self.has_mixed_atom_labels()
