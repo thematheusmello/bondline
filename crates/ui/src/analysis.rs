@@ -1,5 +1,6 @@
 use bondline_commands::{
-    AnalysisOutcome, AnalysisReport, AnalysisScope, CaptureStamp, Command, Engine, UiAnalysis,
+    AnalysisMass, AnalysisOutcome, AnalysisReport, AnalysisScope, CaptureStamp, Command, Engine,
+    UiAnalysis,
 };
 use eframe::egui;
 
@@ -19,12 +20,12 @@ impl AnalysisWindow {
             !engine.capture_stamp_matches(stamp) || *previous != epoch
         }) {
             let report = engine
-                .execute(Command::AnalysisFormula(engine.analysis_request()))
+                .execute(Command::AnalysisProperties(engine.analysis_request()))
                 .map_err(|error| error.to_string())
                 .and_then(|state| {
                     state
                         .analysis
-                        .ok_or_else(|| "The formula result is unavailable.".into())
+                        .ok_or_else(|| "The analysis result is unavailable.".into())
                 });
             self.cached = Some((engine.capture_stamp(), epoch, report));
         }
@@ -41,7 +42,13 @@ impl AnalysisWindow {
                     return;
                 };
                 match report {
-                    Ok(report) => display(ui, report),
+                    Ok(report) => display(
+                        ui,
+                        report,
+                        engine
+                            .stored_document()
+                            .is_ok_and(|d| d.mol_version().is_some()),
+                    ),
                     Err(message) => {
                         ui.label(message);
                     }
@@ -57,7 +64,7 @@ impl AnalysisWindow {
     }
 }
 
-fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
+fn display(ui: &mut egui::Ui, report: &AnalysisReport, mol: bool) {
     match report.scope {
         AnalysisScope::Document => ui.weak("Entire drawing"),
         AnalysisScope::Selection => ui.weak("Current selection"),
@@ -69,6 +76,7 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
             partial_fragments,
             defaulted_hydrogen_atoms,
             formula,
+            masses,
         } => {
             let title = if *partial_fragments {
                 "Selected-atom composition"
@@ -87,6 +95,15 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
                             .selectable(true),
                     );
                 });
+            if let Some(masses) = masses {
+                let (weight, exact) = if *partial_fragments {
+                    ("Weight contribution", "Exact mass contribution")
+                } else {
+                    ("Molecular weight", "Exact mass")
+                };
+                mass_row(ui, weight, masses.molecular_weight, 3, "");
+                mass_row(ui, exact, masses.exact_mass_da, 6, " Da");
+            }
             ui.weak(format!(
                 "{atom_count} drawn {} · {fragment_count} {}",
                 if *atom_count == 1 { "atom" } else { "atoms" },
@@ -98,8 +115,9 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
             ));
             if let Some(count) = defaulted_hydrogen_atoms {
                 let unit = if count.get() == 1 { "atom" } else { "atoms" };
+                let source = if mol { "MOL" } else { "CDX" };
                 ui.label(format!(
-                    "The CDX valence default supplies hydrogen counts for {count} {unit}."
+                    "The {source} valence default supplies hydrogen counts for {count} {unit}."
                 ));
             }
             if *partial_fragments {
@@ -111,16 +129,30 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
         }
         AnalysisOutcome::UnresolvedHydrogens { atom_id } => {
             ui.label(format!(
-                "Formula unavailable. Atom {atom_id} has an unspecified attached-hydrogen count."
+                "Formula and masses unavailable. Atom {atom_id} has an unspecified attached-hydrogen count."
             ));
         }
         AnalysisOutcome::UnsupportedSource => {
             ui.label(
-                "Formula unavailable. Complete chemical coverage is required for this source.",
+                "Formula and masses unavailable. Complete chemical coverage is required for this source.",
             );
         }
         AnalysisOutcome::LimitExceeded { limit } => {
-            ui.label(format!("Formula unavailable. The analysis limit is {limit} drawn atoms and {limit} fragments."));
+            ui.label(format!("Formula and masses unavailable. The analysis limit is {limit} drawn atoms and {limit} fragments."));
         }
     }
+}
+
+fn mass_row(ui: &mut egui::Ui, title: &str, mass: AnalysisMass, decimals: usize, unit: &str) {
+    ui.horizontal_wrapped(|ui| {
+        ui.label(title);
+        match mass {
+            AnalysisMass::Value(value) => {
+                ui.add(egui::Label::new(format!("{value:.decimals$}{unit}")).selectable(true));
+            }
+            AnalysisMass::Unavailable(reason) => {
+                ui.weak(format!("Unavailable ({reason})"));
+            }
+        }
+    });
 }

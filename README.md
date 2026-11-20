@@ -40,7 +40,7 @@ terminal attachment, contextual9/0 fusion, history and editable Save/reopen chec
 Their perspective depictions leave stereochemistry unspecified.
 Atom-targeted Alt-sprout and a session Preferences checkbox now share the same guarded
 ring engine, with bounded macOS drawing, history and editable Save/reopen checks.
-Use **View → Show Analysis Window** to read the formula for a supported drawing or the composition of selected atoms. Bondline preserves numbered isotopes and shows when a skeletal CDX drawing supplies an omitted hydrogen count through valence. Other unresolved counts are reported in the panel. Mass, isotope distributions and general chemical-label editing remain in development. [Analysis coverage](docs/research/analysis-window.md).
+Use **View → Show Analysis Window** to read the formula, molecular weight and monoisotopic exact mass of a supported drawing or its selected atoms. The panel identifies missing atomic data and valence-based hydrogen counts in skeletal CDX and elemental V2000/V3000 MOL. Selecting ethanol’s oxygen gives `HO`. Including its adjacent carbon gives `CH3O`. [Analysis](docs/research/analysis-window.md) · [Mass conventions](docs/research/molecular-masses.md) · [MOL examples and limits](docs/verification-mol-analysis.md).
 M1 file interoperability is the active implementation milestone; the complete M1–M5 target
 is in [ROADMAP.md](ROADMAP.md). Full M0 is not yet complete.
 

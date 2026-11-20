@@ -2482,3 +2482,19 @@ ignored proposals/source reviews only; Root integrated and executed checks.
 3. Preserve initial native File-menu first-click uncertainty for a bounded own-app
    investigation; Cmd+O is verified. Fused/spiro/Shift/density and other-platform native
    acceptance remain required. GitHub Actions stays disabled; no unrequested publication.
+
+### Analysis molecular weight and exact mass
+
+[PR 29](https://github.com/thematheusmello/bondline/pull/29) contains chemistry
+`b2ea49b`, shared command `2939458`, native panel `0f909f9` and main/#27 ancestry
+`2e92757`. The Analysis window now shows both mass quantities for complete
+structures and uncapped selected-atom contributions. Tabulated data, convention,
+licensing and unavailable reasons are documented. The 25 chemistry, 10 focused
+command, three CLI, one MCP and four App-frame tests passed. An isolated macOS
+background host verified the values through its own accessibility tree and
+closed. The native licenses and four-target dependency delta passed.
+[Acceptance and replay](docs/verification-analysis-masses.md).
+
+Scoped tests finished and the PR awaits its combined workspace gate and main
+integration. Adjustable decimals, isotope distribution, elemental percentages,
+overrides and live captions remain open. Actions stays off and M0–M5 remains active.

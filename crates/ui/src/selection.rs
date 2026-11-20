@@ -134,7 +134,9 @@ impl SelectionWorkflow {
                 || *modifiers == egui::Modifiers::SHIFT) =>
             {
                 self.cancel();
-                if engine.selection().atom_ids.is_empty() {
+                if engine.selection().atom_ids.is_empty()
+                    || !engine.selection_translation_available()
+                {
                     return Ok(None);
                 }
                 let step = if modifiers.shift { 10.0 } else { 1.0 };
@@ -193,6 +195,7 @@ impl SelectionWorkflow {
                 }
                 let translate = if let Some(target) = target {
                     !modifiers.shift
+                        && engine.selection_translation_available()
                         && target_atoms(surface.page, target, false)?
                             .iter()
                             .all(|id| engine.selection().atom_ids.binary_search(id).is_ok())
