@@ -74,11 +74,11 @@ fn skeletal_move_uses_only_the_owned_positions_and_preserves_every_header() -> R
             delta_y_pt: dy,
         };
         let preview = e.preview_selection_translation(&params)?;
-        assert_eq!(preview.export_cdx()?.as_ref(), *moved);
-        assert_eq!(e.stored_document()?.export_cdx()?.as_ref(), *raw);
+        assert_eq!(preview.export_cdx()?, *moved);
+        assert_eq!(e.stored_document()?.export_cdx()?, *raw);
         assert!(e.capture_stamp_matches(&stamp));
         e.dispatch("selection.translate", serde_json::to_value(&params)?)?;
-        assert_eq!(e.stored_document()?.export_cdx()?.as_ref(), *moved);
+        assert_eq!(e.stored_document()?.export_cdx()?, *moved);
         assert_eq!(e.state().undo_depth, 1);
         e.dispatch("history.undo", json!({}))?;
         let epoch = select(&mut e, ids)?;
@@ -92,9 +92,9 @@ fn skeletal_move_uses_only_the_owned_positions_and_preserves_every_header() -> R
             assert!(e.capture_stamp_matches(&stamp));
             assert!(Arc::ptr_eq(&model, &e.stored_document()?.model_snapshot()));
         }
-        assert_eq!(e.stored_document()?.export_cdx()?.as_ref(), *raw);
+        assert_eq!(e.stored_document()?.export_cdx()?, *raw);
         e.dispatch("history.redo", json!({}))?;
-        assert_eq!(e.stored_document()?.export_cdx()?.as_ref(), *moved);
+        assert_eq!(e.stored_document()?.export_cdx()?, *moved);
     }
     Ok(())
 }
@@ -118,7 +118,7 @@ fn skeletal_move_rejects_out_of_paper_overflow_and_new_mandatory_carbon_ink() ->
         assert!(e.capture_stamp_matches(&stamp));
         assert!(Arc::ptr_eq(&model, &e.stored_document()?.model_snapshot()));
         assert_eq!(e.state().undo_depth, 0);
-        assert_eq!(e.stored_document()?.export_cdx()?.as_ref(), raw);
+        assert_eq!(e.stored_document()?.export_cdx()?, raw);
     }
     Ok(())
 }
