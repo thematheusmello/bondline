@@ -1,9 +1,9 @@
-//! Whole-source display admission for explicitly boxed CDX atom labels.
+//! Whole-source paper, resource and ink checks for labelled and skeletal CDX pages.
 use super::{
     BEGIN, BOND, BOND_LENGTH, BOUNDING_BOX, CHAIN_ANGLE, CHARGE, COLOR_TABLE, DISPLAY, DISPLAY2,
     DOCUMENT, DOUBLE_POSITION, DRAWING_SPACE, ELEMENT, END, ElementalGraph, FONT_TABLE, FRAGMENT,
-    HEIGHT, HYDROGENS, ISOTOPE, NODE, NODE_TYPE, ORDER, PAGE, POSITION, RADICAL, Scope, TEXT,
-    TEXT_OBJECT, WIDTH,
+    HEIGHT, HYDROGENS, ISOTOPE, NODE, NODE_TYPE, Nodes, ORDER, PAGE, POSITION, RADICAL,
+    SHOW_NON_TERMINAL_CARBONS, SHOW_TERMINAL_CARBONS, Scope, TEXT, TEXT_OBJECT, WIDTH,
     atom_label::{JUSTIFICATION, LABEL_JUSTIFICATION},
     coordinate, has_preview_header, object, payload, poster_size, project_fragments,
     verify_preview_page,
@@ -48,7 +48,34 @@ pub(super) fn model(
     if atoms == 0 {
         return None;
     }
-    let (root_fields, page_fields) = source_fields(source, scope)?;
+    let fields = source_fields(source, scope, Nodes::Labelled)?;
+    paper_model(source, fragments, fields, resources, bonds)
+}
+
+pub(super) fn skeletal(source: &Document<'_>) -> Option<bondline_model::Document> {
+    if !has_preview_header(source) {
+        return None;
+    }
+    let fields = source_fields(source, Scope::All, Nodes::Skeletal)?;
+    if !fields.0.contains_key(&LINE_WIDTH) || !fields.0.contains_key(&MARGIN_WIDTH) {
+        return None;
+    }
+    let fragments = ElementalGraph::read_fragments(source, Nodes::Skeletal).ok()?;
+    let bonds = fragments.iter().map(|f| f.bonds().len()).sum();
+    if bonds == 0 {
+        return None;
+    }
+    let model = paper_model(source, &fragments, fields, None, bonds)?;
+    crate::display::certify_cdx_skeletal_page(&model).then_some(model)
+}
+
+fn paper_model(
+    source: &Document<'_>,
+    fragments: &[Fragment],
+    (root_fields, page_fields): (Fields, Fields),
+    resources: Option<&Resources<'_, '_>>,
+    bonds: usize,
+) -> Option<bondline_model::Document> {
     let size = poster_size(source, &page_fields)?;
     let owned;
     let resources = match resources {
@@ -87,9 +114,10 @@ pub(super) fn model(
     Some(model)
 }
 
-fn source_fields(source: &Document<'_>, scope: Scope) -> Option<(Fields, Fields)> {
+fn source_fields(source: &Document<'_>, scope: Scope, nodes: Nodes) -> Option<(Fields, Fields)> {
     let root = source.framing().has_encoded_document().then_some(0);
     let mut page = None;
+    let mut hits = 0_usize;
     let (mut root_fields, mut page_fields) = (Fields::new(), Fields::new());
     for (index, record) in scope.records(source) {
         let owner = record.parent();
@@ -99,8 +127,13 @@ fn source_fields(source: &Document<'_>, scope: Scope) -> Option<(Fields, Fields)
                 DOCUMENT if root == Some(index) => {}
                 PAGE if owner == root && page.is_none() => page = Some(index),
                 FRAGMENT if page.is_some() && page == owner => {}
-                NODE | BOND if kind == Some(FRAGMENT) => {}
-                TEXT_OBJECT if kind == Some(NODE) => {}
+                NODE | BOND if kind == Some(FRAGMENT) => {
+                    hits += 1;
+                    if hits > bondline_render::MAX_HIT_REGIONS {
+                        return None;
+                    }
+                }
+                TEXT_OBJECT if nodes == Nodes::Labelled && kind == Some(NODE) => {}
                 _ => return None,
             },
             RecordKind::Property { tag, .. } => {
@@ -114,13 +147,21 @@ fn source_fields(source: &Document<'_>, scope: Scope) -> Option<(Fields, Fields)
                 {
                     &mut page_fields
                 } else {
-                    // The elemental reader has already checked duplicate fields and literal widths.
+                    // The elemental decoder checks duplicate fields and literal widths.
                     let known = match kind {
+                        Some(NODE)
+                            if matches!(tag, SHOW_TERMINAL_CARBONS | SHOW_NON_TERMINAL_CARBONS) =>
+                        {
+                            nodes == Nodes::Skeletal && source.payload(record).ok()?.is_empty()
+                        }
                         Some(NODE) if tag == CHARGE => source.payload(record).ok()?.len() == 1,
                         Some(NODE) => matches!(
                             tag,
                             POSITION | NODE_TYPE | ELEMENT | HYDROGENS | ISOTOPE | RADICAL
                         ),
+                        Some(BOND) if nodes == Nodes::Skeletal && tag == ORDER => {
+                            source.payload(record).ok()? == 1_u16.to_le_bytes()
+                        }
                         Some(BOND) => matches!(
                             tag,
                             ORDER | BEGIN | END | DISPLAY | DISPLAY2 | DOUBLE_POSITION
