@@ -9,11 +9,12 @@ The original bond-loop B, custom path wordmark and light/dark/app-tile masters a
 |---|---|---|
 | UI font | Google Roboto, Apache-2.0 | [Font notice](assets/fonts/LICENSE-Roboto.txt), exact revision/hash in [asset manifest](assets/manifest.json) |
 | Native framework source forks | eframe, egui, winit and AccessKit; their upstream MIT/Apache/BSD notices remain adjacent | [Dependency policy](docs/dependency-policy.md), vendor BONDLINE-PATCH.md files |
+| Browser SDK source forks | wgpu22.1.0 and wasm-bindgen-shared0.2.130, MIT OR Apache-2.0 | [WebGPU patch](vendor/wgpu/BONDLINE-PATCH.md), [shared helper patch](vendor/wasm-bindgen-shared/BONDLINE-PATCH.md); complete original notices retained |
 | Compatibility adapters | Original Bondline implementations; package names retained for Cargo patch routing | [Agent instructions](AGENTS.md), [dependency policy](docs/dependency-policy.md) |
 | Interchange test corpus | Reviewed RDKit fixtures, BSD-3-Clause; downloaded files are not committed | [Corpus manifest](docs/corpus/manifest.json), [BSD notice](docs/corpus/rdkit-license.txt) |
 | Documentation visuals | Original banners and actual native Bondline captures | [Media sources, build identity and hashes](docs/media/SOURCES.md) |
 
-Cargo.lock pins the dependency graph. `cargo xtask licenses` checks the declared native
+Cargo.lock pins the dependency graph. `cargo xtask licenses` checks the selected product
 runtime closure and the inventoried assets; it is not a completed release source/notice
 audit. In particular, the missing upstream windows-permissions notice remains recorded in
 [native-file-io.md](docs/native-file-io.md). Documentation media are not runtime app assets.

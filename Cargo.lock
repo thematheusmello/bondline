@@ -3450,8 +3450,6 @@ dependencies = [
 [[package]]
 name = "wasm-bindgen-shared"
 version = "0.2.130"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b1f9c3798725016c6ee5f2f57869ec0831e8bbc0ab0310a86e787e97f41389e"
 dependencies = [
  "unicode-ident",
 ]
@@ -3614,8 +3612,6 @@ dependencies = [
 [[package]]
 name = "wgpu"
 version = "22.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e1d1c4ba43f80542cf63a0a6ed3134629ae73e8ab51e4b765a67f3aa062eb433"
 dependencies = [
  "arrayvec",
  "cfg_aliases 0.1.1",
