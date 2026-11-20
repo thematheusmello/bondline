@@ -14,6 +14,26 @@ fn read(bytes: &[u8]) -> Result<StoredDocument> {
     Ok(StoredDocument::from_cdx(Arc::from(bytes), PageSize::A4)?)
 }
 
+#[test]
+fn independent_binary_inputs_and_rdkit_facts_reproduce() -> Result {
+    let directory =
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cdx-skeletal");
+    let python = std::env::var_os("BONDLINE_PYTHON")
+        .unwrap_or_else(|| if cfg!(windows) { "python" } else { "python3" }.into());
+    for script in ["generate.py", "check_rdkit.py"] {
+        let output = std::process::Command::new(&python)
+            .arg("-B")
+            .arg(directory.join(script))
+            .output()?;
+        assert!(
+            output.status.success(),
+            "{script}: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+    Ok(())
+}
+
 fn expected(h: [Option<u16>; 3], dormant: Option<(usize, &str)>) -> Value {
     let positions = [(160.0, 240.0), (224.0, 192.0), (288.0, 240.0)];
     let mut atoms = Vec::new();
