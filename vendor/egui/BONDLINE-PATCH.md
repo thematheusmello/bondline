@@ -52,3 +52,15 @@ The [public source](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e7
 and [contract](../../docs/research/ordered-native-modifiers.md) distinguish this original
 extension from upstream behavior. Independent workspace tests and actual Mac OS input
 are recorded in [receiving](../../docs/verification-ordered-native-modifiers.md).
+
+## Nested menu activation, 2026-11-20
+
+The 0.29.1 submenu exposes a clickable button. The published menu opens its
+child popup on pointer hover. Bondline also opens a closed submenu when egui
+reports a click, so a keyboard or assistive-technology activation can reach
+the existing child items. The popup uses its original placement and ownership.
+The published source SHA-256 is
+`19d12e15315ca4ebf2a317d8fb3ce689d6221aa928a5b88363c6a4ea50710c96`.
+The amended source, including its API comment, hashes to
+`daa6937bcfa222f89a6bd40a464ef6b046916b0a9728395d071323849ea909b5`.
+[Published menu source](https://github.com/emilk/egui/blob/fe368bacc4a15697e347607e73a56c0299b3d42d/crates/egui/src/menu.rs)

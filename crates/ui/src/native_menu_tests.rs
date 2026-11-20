@@ -82,3 +82,61 @@ fn ax_menu_keeps_focused_pointer_and_keyboard_activation_off_the_paper() -> Test
     );
     Ok(())
 }
+
+#[test]
+fn ax_menu_opens_nested_constraints_and_respects_the_current_tool() -> TestResult {
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    f.command("ui.chain_tool", json!({"action":"select","kind":"acyclic"}))?;
+    f.warm();
+    press(&mut f, "Object", false)?;
+    press(&mut f, "Chain constraints", false)?;
+    let (lengths, _) = f.node("Fixed Lengths", &[Role::Button])?;
+    let previous = f.command("ui.controls", json!({}))?;
+    let binding = |controls: &Value| -> TestResult<(bool, bool)> {
+        let control = controls["controls"]
+            .as_array()
+            .ok_or("controls")?
+            .iter()
+            .find(|c| c["id"] == "chain.fixed_lengths")
+            .ok_or("Fixed Lengths binding")?;
+        Ok((
+            control["enabled"].as_bool().ok_or("enabled")?,
+            control["selected"].as_bool().ok_or("selected")?,
+        ))
+    };
+    let (enabled, checked) = binding(&previous)?;
+    assert!(enabled);
+    let before = f.state()?;
+    f.frame_with_focus(vec![ax(lengths, Action::Default)], false);
+    let after = f.state()?;
+    assert_eq!(
+        binding(&f.command("ui.controls", json!({}))?)?,
+        (true, !checked)
+    );
+    for key in ["revision", "document", "undo_depth", "redo_depth"] {
+        assert_eq!(after[key], before[key]);
+    }
+
+    f.command("ui.bond_tool", json!({"order":"single"}))?;
+    f.warm();
+    assert_eq!(
+        binding(&f.command("ui.controls", json!({}))?)?,
+        (false, !checked)
+    );
+    press(&mut f, "Object", false)?;
+    press(&mut f, "Chain constraints", false)?;
+    assert!(
+        f.nodes
+            .get(&lengths)
+            .ok_or("rendered disabled Fixed Lengths")?
+            .is_disabled()
+    );
+    let disabled = f.state()?;
+    f.frame_with_focus(vec![ax(lengths, Action::Default)], false);
+    assert_eq!(f.state()?, disabled);
+    assert_eq!(
+        binding(&f.command("ui.controls", json!({}))?)?,
+        (false, !checked)
+    );
+    Ok(())
+}
