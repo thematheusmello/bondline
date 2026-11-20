@@ -708,3 +708,67 @@ fn skeletal_selection_drag_previews_the_moved_ink_and_commits_one_exact_edit() -
     assert_eq!(f.state()?["file"]["dirty"], false);
     Ok(())
 }
+
+#[test]
+fn mixed_skeletal_binary_shows_printed_paper_without_a_canvas_author() -> TestResult {
+    let raw = include_bytes!("../../io/tests/fixtures/cdx-mixed-skeleton/ethanol.cdx");
+    let mut f = Fixture::new(1160., 800., 1.)?;
+    let path = f.directory.path("éthanol-原.cdx");
+    let saved = f.directory.path("éthanol-保存-β.cdx");
+    fs::write(&path, raw)?;
+    f.warm();
+    f.choose("Marquee selection")?;
+    f.command("document.open_cdx", json!({"path":path}))?;
+    f.command("ui.view", json!({"action":"actual"}))?;
+    let shown = f.warm();
+    assert!(painted(&shown, "Skeletal CDX with printed labels"));
+    let area = canvas(&shown)?;
+    let opened = f.state()?;
+    {
+        let engine = f.app.engine.lock().map_err(|_| "engine")?;
+        assert!(
+            !engine
+                .controls()
+                .iter()
+                .any(|c| c.id == "tool.selection" && c.enabled)
+        );
+        for id in [
+            "tool.bond.single",
+            "page.rotate",
+            "page.a4",
+            "page.letter",
+            "file.document_settings",
+        ] {
+            assert!(
+                !engine
+                    .controls()
+                    .iter()
+                    .find(|c| c.id == id)
+                    .ok_or("control")?
+                    .enabled,
+                "{id}"
+            );
+        }
+        assert!(!engine.caption_creation_available() && !engine.selection_available());
+    }
+    for paper in [[56., 144.], [128., 192.], [205., 144.], [310., 290.]] {
+        let start = projected(area, [512., 512.], 100., None, paper);
+        let end = start + egui::vec2(8., 12.);
+        f.frame(vec![Event::PointerMoved(start), super::button(start, true)]);
+        f.frame(vec![Event::PointerMoved(end), super::button(end, false)]);
+        click_alt(&mut f, paper)?;
+    }
+    assert_eq!(f.state()?, opened);
+    assert!(f.app.error.is_none(), "{:?}", f.app.error);
+    shortcut(&mut f, Key::S, true);
+    wait(&mut f, |f, _| {
+        f.node("File name", &[Role::TextInput]).is_ok()
+    })?;
+    set(&mut f, "File name", saved.to_str().ok_or("path")?)?;
+    f.choose("Save")?;
+    finish_actual_file_workflow(&mut f)?;
+    assert_eq!(fs::read(&saved)?, raw);
+    f.command("document.open_cdx", json!({"path":saved}))?;
+    assert_eq!(f.state()?["document"], opened["document"]);
+    Ok(())
+}

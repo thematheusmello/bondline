@@ -388,7 +388,12 @@ fn check_skeletal_preview(stored: &bondline_io::StoredDocument, source: &Documen
             _ => {}
         }
     }
-    let mut nodes = nodes.into_values();
+    let mut children = child_label_records(source);
+    let printed = stored.has_cdx_skeletal_label_preview();
+    assert_eq!(!children.is_empty(), printed);
+    assert!(children.len() < nodes.len());
+    let resources = printed.then(|| source.resources().unwrap());
+    let mut nodes = nodes.into_iter();
     let page = &stored.model().pages()[0];
     for fragment in page.fragments() {
         let mut degrees = BTreeMap::new();
@@ -399,11 +404,8 @@ fn check_skeletal_preview(stored: &bondline_io::StoredDocument, source: &Documen
             }
         }
         for atom in fragment.atoms() {
-            let [h, terminal, interior] = nodes.next().unwrap();
-            let degree = degrees[&atom.id];
-            assert!((1..=4).contains(&degree));
-            assert_eq!(atom.element.get(), 6);
-            assert!(atom.authored_label.is_none() && atom.isotope.is_none());
+            let (index, [h, terminal, interior]) = nodes.next().unwrap();
+            assert!(atom.isotope.is_none());
             assert_eq!(
                 (atom.charge, atom.radical),
                 (0, bondline_model::Radical::None)
@@ -412,19 +414,43 @@ fn check_skeletal_preview(stored: &bondline_io::StoredDocument, source: &Documen
                 atom.explicit_hydrogens,
                 h.map(|b| u16::from_le_bytes(b.try_into().unwrap()))
             );
-            assert!(
-                atom.explicit_hydrogens
-                    .is_none_or(|h| usize::from(h) + degree == 4)
-            );
             for flag in [terminal, interior].into_iter().flatten() {
                 assert!(flag.is_empty());
             }
             assert_eq!(atom.show_terminal_carbon_labels, terminal.map(|_| true));
             assert_eq!(atom.show_non_terminal_carbon_labels, interior.map(|_| true));
+            if let Some(raw) = children.remove(&index) {
+                assert_ne!(atom.element.get(), 6);
+                assert!(terminal.is_none() && interior.is_none() && h.is_some());
+                assert!(!stored.can_edit_cdx_atom_label(atom.id));
+                check_label(
+                    source,
+                    resources.as_ref().unwrap(),
+                    raw,
+                    atom.authored_label.as_ref().unwrap(),
+                );
+                continue;
+            }
+            assert_eq!(atom.element.get(), 6);
+            assert!(atom.authored_label.is_none());
+            let degree = degrees[&atom.id];
+            assert!((1..=4).contains(&degree));
+            assert!(
+                atom.explicit_hydrogens
+                    .is_none_or(|h| usize::from(h) + degree == 4)
+            );
             assert!(if degree == 1 { terminal } else { interior }.is_none());
         }
     }
-    assert!(nodes.next().is_none());
+    assert!(nodes.next().is_none() && children.is_empty());
+    if printed {
+        assert!(!stored.has_cdx_skeletal_preview());
+        assert!(
+            stored
+                .with_cdx_skeletal_translation(page.id(), &[1], 1.0, 0.0)
+                .is_err()
+        );
+    }
     let mut detached = stored.clone();
     let size = bondline_model::PageSize::new(page.size().width_pt() + 1.0, page.size().height_pt())
         .unwrap();
@@ -1187,12 +1213,13 @@ fuzz_target!(|data: &[u8]| {
     {
         check_mixed_preview(stored, &document);
     }
-    if let Some(stored) = stored_page
-        .as_ref()
-        .filter(|stored| stored.has_cdx_skeletal_preview())
-    {
+    if let Some(stored) = stored_page.as_ref().filter(|stored| {
+        stored.has_cdx_skeletal_preview() || stored.has_cdx_skeletal_label_preview()
+    }) {
         check_skeletal_preview(stored, &document);
-        skeletal_move::check(stored, &document);
+        if stored.has_cdx_skeletal_preview() {
+            skeletal_move::check(stored, &document);
+        }
     }
     if let Some(mut stored) = stored_page.filter(|stored| stored.has_cdx_caption_preview()) {
         assert_eq!(stored.export_cdx().unwrap(), data);
@@ -1349,7 +1376,10 @@ fuzz_target!(|data: &[u8]| {
         }
         assert_eq!(
             stored.has_display_projection(),
-            preview || empty_caption_preview || stored.has_cdx_skeletal_preview()
+            preview
+                || empty_caption_preview
+                || stored.has_cdx_skeletal_preview()
+                || stored.has_cdx_skeletal_label_preview()
         );
         if preview {
             assert!(has_labels);

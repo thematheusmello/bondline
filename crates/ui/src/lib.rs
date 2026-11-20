@@ -450,6 +450,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
     let skeletal_preview = engine
         .stored_document()
         .is_ok_and(|stored| stored.has_cdx_skeletal_preview());
+    let skeletal_labels = engine
+        .stored_document()
+        .is_ok_and(|stored| stored.has_cdx_skeletal_label_preview());
     let atom_label_preview = engine.effective_tool() != EffectiveTool::Selection
         && engine.stored_document().is_ok_and(|stored| {
             stored.has_boxed_atom_labels()
@@ -537,12 +540,14 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         }
         ui.add_space(8.0);
         ui.separator();
-        ui.weak(if skeletal_preview {
+        ui.weak(if skeletal_preview || skeletal_labels {
             "VIEW"
         } else {
             "ACTIVE TOOL"
         });
-        let tool = if skeletal_preview {
+        let tool = if skeletal_labels {
+            "Skeletal CDX with printed labels".to_owned()
+        } else if skeletal_preview {
             "Skeletal CDX preview".to_owned()
         } else if engine.effective_tool() == EffectiveTool::Caption {
             "Text selected".to_owned()
@@ -580,6 +585,7 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         };
         ui.label(egui::RichText::new(tool).color(ACCENT).strong());
         if !skeletal_preview
+            && !skeletal_labels
             && !caption_preview
             && !cdx_atom_label_preview
             && !atom_label_preview
@@ -599,7 +605,9 @@ fn document_inspector(ui: &mut egui::Ui, engine: &Engine, error: Option<&str>) {
         if caption_preview && cdx_atom_label_preview {
             ui.label("Alt-click an exposed atom label to edit its element and attached H count.");
         }
-        if skeletal_preview {
+        if skeletal_labels {
+            ui.label("Read-only drawing. Save preserves the original CDX.");
+        } else if skeletal_preview {
             ui.label(if engine.effective_tool() == EffectiveTool::Selection {
                 "Select atoms, then drag them or use the arrow keys to move them."
             } else {
@@ -1897,6 +1905,7 @@ fn show_workspace_with_preview(
                     if engine.stored_document().is_ok_and(|stored|
                         stored.has_caption_projection() || stored.has_cdx_caption_preview()
                         || stored.has_cdx_atom_label_preview() || stored.has_cdx_mixed_preview()
+                        || stored.has_cdx_skeletal_label_preview()
                         || (stored.has_cdx_skeletal_preview() && (!label_selection_input || label_alt_press)))
                         && !matches!(event,egui::Event::MouseWheel {..})
                     {
