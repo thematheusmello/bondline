@@ -52,3 +52,29 @@ The isolated process (PID 24038) closed normally. Receipt SHA-256
 `473b6c8e9f39ae5945714393de9f4673293082f060723d49a8218bf073d0a27c`
 at `target/ax-menu/native-33404hsk/receipt.json`. Windows UI Automation,
 Linux AT-SPI and browser accessibility receiving remain unverified here.
+
+## SDF record navigation
+
+With the SDF selector integrated at `7473d6d`, a fresh background macOS
+process opened the original 740-byte `valence-absent-mixed.sdf`. Five
+targeted AXPress actions opened View → Show Analysis Window, advanced to
+the second molecule, returned to the first and advanced again. Each
+press targeted a unique AXButton in the process's own AXWindow. The
+menu press itself made the panel visible. Both records exposed their
+formula, weight, exact mass, elemental percentages and hydrogen-default
+count in the accessibility tree.
+
+| Record | Formula | Molecular weight | Exact mass in Da | Atoms with default H |
+| --- | --- | ---: | ---: | ---: |
+| 1 | C₂H₆O | 46.069 | 46.041865 | 3 |
+| 2 | CH₅N | 31.058 | 31.042199 | 2 |
+
+RDKit 2026.09.2 supplied the independent expectations. Molecular weight,
+elemental contributions and mass percentages agreed within `1e-8`, and
+exact mass within `1e-6` Da. A whole-collection query reported
+`unsupported_source`. Record navigation left the file clean and the
+history empty. Unicode Save reproduced the source, SHA-256
+`e5cbdc14329c59bad55148c5de37058de90f651af10966c30cf8b89b3b5efd39`.
+Reopening selected record 1. PID 66456 closed normally. The local receipt
+`target/ax-menu/native-9hfne3ip/receipt.json` has SHA-256
+`46a768821b1d862748eefb9052df80cb9d6fa7adf6b8a03ef57da694286d88f9`.
