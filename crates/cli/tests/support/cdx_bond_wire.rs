@@ -1,4 +1,4 @@
-//! Plain binary bond data never grants display, chemical-edit or lossy-save authority.
+//! Plain bond metadata and read-only display of complete skeletal CDX drawings.
 use super::{Client, cli, socket, support};
 use crate::registry_fixture;
 use bondline_commands::{Command as EngineCommand, Engine};
@@ -24,6 +24,57 @@ type Result<T = ()> = std::result::Result<T, Box<dyn std::error::Error>>;
 fn request(command: &str, params: Value) -> Value {
     json!({"command":command,"params":params})
 }
+#[test]
+fn skeletal_cdx_cli_preserves_omitted_h_after_preview_and_exact_save() -> Result {
+    let directory = support::SdfTestDirectory::new()?;
+    let fixtures = Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures/cdx-skeletal");
+    let capture = request(
+        "render.capture",
+        json!({
+            "page_id":1,"width_px":512,"height_px":512,"backend":"cpu"
+        }),
+    );
+    let control = cli(&[
+        request(
+            "document.open_cdxml",
+            json!({"path": fixtures.join("optical-control.cdxml")}),
+        ),
+        capture.clone(),
+    ])?;
+    let reference = control["capture"]["png_base64"]
+        .as_str()
+        .ok_or("control PNG")?;
+    assert!(!reference.is_empty());
+    for (name, expected_h) in [
+        ("propane", json!([3, 2, 3])),
+        ("missing_h", json!([3, null, 3])),
+        ("all_h_missing", json!([null, null, null])),
+        ("dormant_true", json!([3, 2, 3])),
+    ] {
+        let source = fixtures.join(format!("{name}.cdx"));
+        let output = directory.path(&format!("{name}-保存.cdx"));
+        let saved = cli(&[
+            request("document.open_cdx", json!({"path":source})),
+            request("document.save_cdx", json!({"path":output})),
+            request("document.open_cdx", json!({"path":output})),
+            capture.clone(),
+        ])?;
+        assert_eq!(fs::read(&source)?, fs::read(&output)?);
+        assert_eq!(saved["capture"]["png_base64"], reference, "{name}");
+        let page = &saved["document"]["pages"][0];
+        assert_eq!(page["size"], json!({"width_pt":512.0, "height_pt":512.0}));
+        let atoms = page["fragments"][0]["atoms"]
+            .as_array()
+            .ok_or("carbon atoms")?;
+        let h = atoms
+            .iter()
+            .map(|a| &a["explicit_hydrogens"])
+            .collect::<Vec<_>>();
+        assert_eq!(json!(h), expected_h);
+    }
+    Ok(())
+}
+
 fn exact(value: &Value, name: &str) -> Result {
     assert_eq!(value["document"], f::model(name)?);
     assert_eq!(value["file"]["format"], "cdx");
