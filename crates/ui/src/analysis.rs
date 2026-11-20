@@ -1,0 +1,119 @@
+use bondline_commands::{
+    AnalysisOutcome, AnalysisReport, AnalysisScope, CaptureStamp, Command, Engine, UiAnalysis,
+};
+use eframe::egui;
+
+#[derive(Default)]
+pub(super) struct AnalysisWindow {
+    cached: Option<(CaptureStamp, u64, Result<AnalysisReport, String>)>,
+}
+
+impl AnalysisWindow {
+    pub(super) fn show(&mut self, ctx: &egui::Context, engine: &mut Engine) {
+        if !engine.analysis_window_open() {
+            self.cached = None;
+            return;
+        }
+        let epoch = engine.selection().epoch;
+        if self.cached.as_ref().is_none_or(|(stamp, previous, _)| {
+            !engine.capture_stamp_matches(stamp) || *previous != epoch
+        }) {
+            let report = engine
+                .execute(Command::AnalysisFormula(engine.analysis_request()))
+                .map_err(|error| error.to_string())
+                .and_then(|state| {
+                    state
+                        .analysis
+                        .ok_or_else(|| "The formula result is unavailable.".into())
+                });
+            self.cached = Some((engine.capture_stamp(), epoch, report));
+        }
+        let mut open = true;
+        egui::Window::new("Analysis")
+            .open(&mut open)
+            .default_pos(egui::pos2(
+                (ctx.screen_rect().right() - 348.0).max(0.0),
+                76.0,
+            ))
+            .default_width(298.0)
+            .show(ctx, |ui| {
+                let Some((_, _, report)) = &self.cached else {
+                    return;
+                };
+                match report {
+                    Ok(report) => display(ui, report),
+                    Err(message) => {
+                        ui.label(message);
+                    }
+                }
+            });
+        if !open {
+            let _ = engine.execute(Command::UiAnalysis(UiAnalysis {
+                expected_revision: engine.analysis_request().expected_revision,
+                visible: false,
+            }));
+            self.cached = None;
+        }
+    }
+}
+
+fn display(ui: &mut egui::Ui, report: &AnalysisReport) {
+    match report.scope {
+        AnalysisScope::Document => ui.weak("Entire drawing"),
+        AnalysisScope::Selection => ui.weak("Current selection"),
+    };
+    match &report.outcome {
+        AnalysisOutcome::Available {
+            atom_count,
+            fragment_count,
+            partial_fragments,
+            formula,
+        } => {
+            let title = if *partial_fragments {
+                "Selected-atom composition"
+            } else if *fragment_count > 1 {
+                "Combined formula"
+            } else {
+                "Molecular formula"
+            };
+            ui.label(title);
+            egui::ScrollArea::vertical()
+                .max_height(132.0)
+                .show(ui, |ui| {
+                    ui.add(
+                        egui::Label::new(egui::RichText::new(formula).size(22.0).strong())
+                            .wrap()
+                            .selectable(true),
+                    );
+                });
+            ui.weak(format!(
+                "{atom_count} drawn {} · {fragment_count} {}",
+                if *atom_count == 1 { "atom" } else { "atoms" },
+                if *fragment_count == 1 {
+                    "fragment"
+                } else {
+                    "fragments"
+                }
+            ));
+            if *partial_fragments {
+                ui.label("Includes the selected atoms and their recorded hydrogens. Cut bonds are uncapped.");
+            }
+        }
+        AnalysisOutcome::Empty => {
+            ui.label("No atoms in this drawing.");
+        }
+        AnalysisOutcome::UnresolvedHydrogens { atom_id } => {
+            ui.label(format!(
+                "Formula unavailable. Atom {atom_id} has an unspecified attached-hydrogen count."
+            ));
+        }
+        AnalysisOutcome::UnsupportedSource => {
+            ui.label(
+                "Formula unavailable. Complete chemical coverage is required for this source.",
+            );
+        }
+        AnalysisOutcome::LimitExceeded { limit } => {
+            ui.label(format!("Formula unavailable. The analysis limit is {limit} drawn atoms and {limit} fragments."));
+        }
+    }
+}

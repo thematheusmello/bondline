@@ -291,7 +291,7 @@ render/edit workflows below; registry46 and catalogue16/124 retain their existin
 | Brackets, repeating units and annotations | GUIDE-25 | missing | M3 |
 | Document/object styles, journal settings | GUIDE-25 / DRAWING-SETTINGS-DATA-IMPLEMENTATION / DRAWING-SETTINGS-COMMAND / NATIVE-CARBON-CHAINS | partial: two native preferences and chain application verified | Optional BondLength/ChainAngle model/CDXML/CDX projection, atomic required-nullable set/clear, history, source preservation and whole-MOL loss guards pass independent core/CLI/MCP/socket/file checks. Native two-field form and later-chain application pass bounded Mac Save/reopen and independent file checks; old geometry stays. Inherited/object styles, remaining tools/settings and journal presets remain missing; public author-guideline sources still required. See verification-native-chains.md, verification-native-drawing-settings.md and verification-drawing-settings-data.md. |
 | Structure check and cleanup | GUIDE-25 | missing | M3; independent chemistry oracles |
-| Formula/mass and analysis | GUIDE-25 | missing | M3; pinned conventions |
+| Formula/mass and analysis | GUIDE-25 | partial | Resolved formula and selection have receiving tests. Mass and additional analyses remain missing. [Evidence](verification-analysis-window.md). |
 | Naming and mixtures | PROFESSIONAL-26.1 | missing | M5; public standards/oracles |
 | Associated-data label selection | PROFESSIONAL-26.1 | missing | Documented 26.1 behavior |
 | Separate CDXML/MDL paste entries | PROFESSIONAL-26.1 | missing | M4; platform clipboard evidence |
@@ -415,7 +415,7 @@ establish chemical preview, data-edit UI or other platforms.
 | MV-021 | View > Show Info Window | 111-112, 120 | missing | - |
 | MV-022 | View > Show Chemical Warnings | 127 | missing | - |
 | MV-023 | View > Show Reaction Interpretation | 198, 200 | missing | - |
-| MV-024 | View > Show Analysis Window | 222 | missing | - |
+| MV-024 | View > Show Analysis Window | 222 | verified | Show/Hide, current whole/selection formula and explicit unavailable states. [Receiving evidence](verification-analysis-window.md). |
 | MV-025 | View > Show Chemical Properties Window | 235 | missing | - |
 | MV-026 | View > Show Periodic Table Window | 54, 91 | missing | - |
 | MV-027 | View > Show Character Map Window | 94 | missing | - |
@@ -712,7 +712,7 @@ establish chemical preview, data-edit UI or other platforms.
 | DP-025 | Bracket Properties dialog | 324-328 | missing | Polymer types, connectivity and labels. |
 | DP-026 | Define Average Molecular Weight (bracket context) | 113 | missing | Explicit nonnegative override and derived calculations. |
 | DP-027 | R-Logic Query dialog | 338-339 | missing | - |
-| DP-028 | Analysis window | 221-224 | missing | Formula, mass, composition and supported derived fields. |
+| DP-028 | Analysis window | 221-224 | wired | Formula verified for the bounded complete-source profiles. Mass, isotope distribution, percentages and Paste remain missing. [Coverage](research/analysis-window.md). |
 | DP-029 | Chemical Properties window/report | 228-235 | missing | Predictions must have documented method/limits and independent evidence. |
 | DP-030 | Stoichiometry grid | 200-202 | missing | Reactant/product role, equivalents and typed values. |
 | DP-031 | Add-in Manager | 380-382 | missing | Developer/optional integration interface; offline core independent. |
