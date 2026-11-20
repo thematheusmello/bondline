@@ -617,6 +617,12 @@ A background macOS Analysis panel and the CLI showed C4H10, 58.124 and
 58.078250 Da for the pinned CDXML source across exact Unicode Save/reopen.
 [Qualified chemistry-only source and receiving evidence](docs/verification-cdxml-carbon-analysis.md).
 
+The preceding two-matching-file corpus gate passed at `018cf0b`
+after integration with PR 30
+with 2,407 workspace tests passed, zero failed and one ignored, plus three
+macOS AccessKit tests. Its log SHA-256 is
+`fa5a4f0030145b4b218bd119b2419e930f3e1aa753cd00888684d774535ff8a0`.
+
 ### Next executable work
 
 1. Integrate molecular weight and monoisotopic mass with independently
@@ -2499,6 +2505,19 @@ background host verified the values through its own accessibility tree and
 closed. The native licenses and four-target dependency delta passed.
 [Acceptance and replay](docs/verification-analysis-masses.md).
 
-Scoped tests finished and the PR awaits its combined workspace gate and main
-integration. Adjustable decimals, isotope distribution, elemental percentages,
-overrides and live captions remain open. Actions stays off and M0–M5 remains active.
+The complete local gate passed on `523e0c4` with main/#28 in its ancestry:
+workspace 2,403 passed, zero failed, one ignored; the separate AccessKit suite
+passed all three tests. Formatting, both Clippy checks, layering, licenses,
+assets and corpus checks passed. Mixed CDX now also supplies a checked CH₃O
+selection with one defaulted carbon. Adjustable decimals, isotope distribution,
+elemental percentages, overrides and live captions remain open. Actions stays
+off and M0–M5 remains active.
+
+### MOL chemistry and selection
+
+[PR 30](https://github.com/thematheusmello/bondline/pull/30) extends analysis
+to qualified V2000 and V3000 valence defaults and selected-atom contributions.
+The local gate passed at `7c73558` with 2,406 passed, zero failed and one
+ignored, plus three AccessKit tests. The authenticated macOS app and MCP
+verified the source-preserving selection and Unicode save workflow.
+[Verification and full-gate digest](docs/verification-mol-analysis.md).

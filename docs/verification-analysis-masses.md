@@ -35,3 +35,24 @@ cargo run -p bondline-cli -- run \
 ```
 
 The declared native runtime license gate passed for macOS (157 packages), Windows (168) and Linux (223), along with the seven existing asset checks. Relative to the pre-feature checkout, the UI’s normal non-procedural-macro closure adds only MIT elements_rs and MIT strum on each of those platforms and wasm32-unknown-unknown. The existing browser release and license qualifications still apply. [Dependency records](research/molecular-masses.md)
+
+## Combined workspace gate
+
+The complete local `cargo xtask ci` run on `523e0c4`, including PR 28, passed
+2,403 workspace tests with zero failures and one ignored test. The separate
+macOS AccessKit suite passed all three. Formatting, both Clippy checks,
+architecture, licenses, assets and the pinned corpus completed successfully.
+The warm checkout receipt `target/analysis-ci/masses-523e0c4.log` has SHA-256
+`271045175bb8fbae4585c3b83195a566c4d45fc1285be1823ea44306a9376ef6`.
+An earlier run found a stale CLI inventory expected-name list. The fresh gate
+includes the complete corrected lists and exact old-wire checks. The merged
+movement profile also allows the CH₃O end of ethanol to be selected. Its
+molecular weight contribution is 31.034 and its exact-mass contribution
+is 31.018390 Da, with the source valence default on one carbon.
+
+A separate exhaustive public Rust API sweep tried mass numbers 1 through 350
+on every element (41,300 calls). It returned both metrics for 3,414 tabulated
+nuclides and an exact typed missing-isotope result for the remaining 37,886.
+The actual sorted positive output SHA-256 is
+`9be5a97fca150cca599ea0522536e2869efa85225561f0fb3b04d2b8521c61f8`.
+Comparison of these API values with NIST reproduces the published table audit.

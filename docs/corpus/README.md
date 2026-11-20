@@ -2,6 +2,8 @@
 
 ## Molecular formula evidence
 
+The full local integration gate at `018cf0b` passed 2,407 workspace tests and three additional macOS AccessKit tests. One workspace test was ignored. That run matched two complete MOL files and both isolated mol blocks. The CDXML workflow below adds a third matching complete file.
+
 The checker opens each verified source through Bondline's command engine and reads `analysis.formula`. A separate RDKit 2026.09.2 process reads the same file bytes and calculates the reference formula. Each positive comparison checks the complete split-isotope Hill formula, charge and number of drawn atoms. The oracle retains physical hydrogen atoms, spells numbered H explicitly, and reorders carbon-free element groups alphabetically for strict Hill notation. The tests exercise isotope loss, hydrogen-first ordering in hydrogen bromide and a wrong atom count. [Reference reader](../../xtask/oracles/corpus_formula.py) · [Registry comparison](../../xtask/src/corpus/formula.rs) · [Hill convention](../research/hill-formula.md).
 
 | Pinned file | Bondline result on the complete source | Independent formula and per-record evidence |
