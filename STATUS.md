@@ -2515,3 +2515,20 @@ The local gate passed at `7c73558` with 2,406 passed, zero failed and one
 ignored, plus three AccessKit tests. The authenticated macOS app and MCP
 verified the source-preserving selection and Unicode save workflow.
 [Verification and full-gate digest](docs/verification-mol-analysis.md).
+
+### Elemental analysis by weight
+
+[PR 33](https://github.com/thematheusmello/bondline/pull/33) adds an ordered,
+selectable elemental analysis table to the Analysis window and an opt-in result
+on `analysis.properties`. The original formula and mass requests retain exact
+wire results. Independent weight/isotope tests, all 118 possible rows, read-only
+command history, actual CLI/MCP and App-frame copy/selection passed. Native
+macOS CDX, V2000 and V3000 receiving runs verified whole-drawing and partial
+percentages, byte-exact Unicode Save/reopen and normal Close. Chemistry
+`8e68c16`, command `f494ea0`, panel `8022578` and combined MOL checks
+`d5a5eb2` are pushed. After integration with main through PR 31, the full local
+gate passed at `0b352b1` with 2,414 workspace tests passed, one ignored and
+three additional AccessKit tests passed. Windows and Linux visual acceptance,
+configurable precision, isotope distributions, overrides and live captions
+remain open. Actions stays off.
+[Source contract](docs/research/elemental-analysis.md) · [Checks and receipts](docs/verification-elemental-analysis.md).

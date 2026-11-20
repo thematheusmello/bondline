@@ -1912,7 +1912,7 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
         "tools/call",
         call(
             "analysis.properties",
-            json!({"expected_revision":1,"expected_selection_epoch":1}),
+            json!({"expected_revision":1,"expected_selection_epoch":1,"include_elemental_analysis":true}),
         ),
     )?;
     let state = &properties["result"]["structuredContent"];
@@ -1922,6 +1922,16 @@ fn stdio_analysis_handles_show_selection_and_stale_requests()
     let mass = &state["analysis"]["masses"];
     assert!((mass["molecular_weight"].as_f64().ok_or("weight")? - 15.035).abs() < 1e-8);
     assert!((mass["exact_mass_da"].as_f64().ok_or("mass")? - 15.02347509669).abs() < 1e-8);
+    let elements = state["analysis"]["elemental_analysis"]["elements"]
+        .as_array()
+        .ok_or("elements")?;
+    assert_eq!(elements.len(), 2);
+    assert_eq!(elements[0]["symbol"], "H");
+    assert_eq!(elements[1]["symbol"], "C");
+    assert!(
+        (elements[0]["percent_by_weight"].as_f64().ok_or("H%")? - 100.0 * 3.024 / 15.035).abs()
+            < 1e-9
+    );
     let fixtures = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
     for (id, source, expected) in [
         (

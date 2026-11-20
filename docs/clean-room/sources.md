@@ -2457,3 +2457,5 @@ isotope-separated formulas. Bondline retains Hill order for carbon-free
 borane. [BIOVIA representation guide](https://manualzz.com/doc/44003874/biovia-chemical-representation) · [CTfile specification](https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf) · [RDKit valence reference](https://www.rdkit.org/docs/RDKit_Book.html#valence-calculation-and-allowed-valences) · [Evaluation and exclusions](../research/mol-analysis.md).
 
 - Molecular weight, monoisotopic exact mass, nuclide completeness and ion conventions follow the [source register and numerical contract](../research/molecular-masses.md). It links the public v25 guide pp. 221–224, IUPAC definitions, CIAAW tables, NIST/CODATA and the MIT atomic-data revision.
+
+- Elemental analysis uses each element’s percentage of the molecular weight in the current scope. [Revvity Signals v25 guide, printed p. 221](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), [IUPAC mass fraction](https://goldbook.iupac.org/terms/view/M03722), [Bondline’s numeric and presentation conventions](../research/elemental-analysis.md).

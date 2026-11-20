@@ -1455,6 +1455,8 @@ fn analysis_window_menu_shows_current_formula_selected_atoms_and_empty_state() -
     assert!(painted(&drawing, "30.070"));
     assert!(painted(&drawing, "Exact mass"));
     assert!(painted(&drawing, "30.046950 Da"));
+    assert!(painted(&drawing, "Elemental analysis (% by weight)"));
+    assert!(drawing.shapes.iter().any(|s| matches!(&s.shape, egui::Shape::Text(t) if t.galley.text().contains("79.89%") && t.galley.text().contains("20.11%"))));
     f.command(
         "ui.selection",
         json!({"action":"set","expected_revision":1,"page_id":1,"atom_ids":[2]}),
@@ -1466,6 +1468,8 @@ fn analysis_window_menu_shows_current_formula_selected_atoms_and_empty_state() -
     assert!(painted(&selected, "15.035"));
     assert!(painted(&selected, "Exact mass contribution"));
     assert!(painted(&selected, "15.023475 Da"));
+    assert!(painted(&selected, "Selected atoms (% by weight)"));
+    assert!(!painted(&selected, "Elemental analysis (% by weight)"));
     assert!(!painted(&selected, "30.046950 Da"));
     assert!(!painted(&selected, "C2H6"));
     f.command("history.undo", json!({}))?;
@@ -1652,9 +1656,52 @@ fn analysis_preserves_the_formula_when_an_element_has_no_natural_mass() -> TestR
         "Unavailable (no natural predominant isotope for element 43)"
     ));
     assert!(!seen(&unknown, "30.046950 Da"));
+    assert!(seen(
+        &unknown,
+        "Elemental analysis unavailable (no standard atomic weight for element 43)"
+    ));
+    assert!(!seen(&unknown, "Elemental analysis (% by weight)"));
     f.command("history.undo", json!({}))?;
     let restored = f.warm();
     assert!(seen(&restored, "30.046950 Da"));
     assert!(!seen(&restored, "CH3Tc"));
+    Ok(())
+}
+
+#[test]
+fn elemental_table_copies_the_displayed_rows_without_changing_the_drawing() -> TestResult {
+    let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+    f.command(
+        "bond.create",
+        json!({"page_id":1,"begin_x_pt":72,"begin_y_pt":72,"end_x_pt":120,"end_y_pt":72}),
+    )?;
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    let before = f.state()?;
+    let output = f.warm();
+    let table = output
+        .shapes
+        .iter()
+        .find_map(|shape| match &shape.shape {
+            egui::Shape::Text(t) if t.galley.text().starts_with("Element        Weight") => Some(t),
+            _ => None,
+        })
+        .ok_or("elemental table")?;
+    let first = table.galley.rows.first().ok_or("first row")?.rect;
+    let last = table.galley.rows.last().ok_or("final row")?.rect;
+    let start = table.pos + egui::vec2(first.left() + 0.1, first.center().y);
+    let end = table.pos + egui::vec2(last.right() - 0.1, last.center().y);
+    let button = |pos, pressed| Event::PointerButton {
+        pos,
+        button: egui::PointerButton::Primary,
+        pressed,
+        modifiers: Default::default(),
+    };
+    f.frame(vec![Event::PointerMoved(start), button(start, true)]);
+    f.frame(vec![Event::PointerMoved(end)]);
+    f.frame(vec![button(end, false)]);
+    let copied = f.frame(vec![Event::Copy]);
+    assert_eq!(copied.platform_output.copied_text, table.galley.text());
+    assert_eq!(f.state()?, before);
     Ok(())
 }
