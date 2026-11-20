@@ -1742,6 +1742,38 @@ fn analysis_navigates_individual_sdf_molecules_and_resets_after_reopen() -> Test
         )]);
         assert!(painted(&f.warm(), expected));
     }
+    use egui::accesskit::{Action, ActionRequest, Role};
+    for (action, number, formula) in [
+        (Action::Decrement, 1, "C2H6O"),
+        (Action::Decrement, 1, "C2H6O"),
+        (Action::Increment, 2, "CH5N"),
+        (Action::Increment, 2, "CH5N"),
+    ] {
+        let (target, _) = f.node("Record number", &[Role::SpinButton, Role::TextInput])?;
+        let stepped = f.frame(vec![egui::Event::AccessKitActionRequest(ActionRequest {
+            action,
+            target,
+            data: None,
+        })]);
+        assert!(painted(&stepped, &format!("SDF record {number} of 2")));
+        assert!(painted(&f.warm(), formula));
+    }
+    let (_, field) = f.node("Record number", &[Role::SpinButton])?;
+    f.frame(vec![
+        Event::PointerMoved(field.center()),
+        button(field.center(), true),
+    ]);
+    f.frame(vec![button(field.center(), false)]);
+    f.warm();
+    f.frame(vec![
+        key(Key::A, true, Modifiers::COMMAND),
+        key(Key::A, false, Modifiers::COMMAND),
+        Event::Text("1".into()),
+    ]);
+    f.frame(tap(Key::Enter));
+    assert!(painted(&f.warm(), "C2H6O"));
+    f.choose("Next molecule")?;
+    assert!(painted(&f.warm(), "CH5N"));
     assert_eq!(f.state()?, before);
     f.command("document.open_sdf", json!({"path":input}))?;
     let reopened = f.warm();

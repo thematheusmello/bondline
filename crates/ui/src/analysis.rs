@@ -96,9 +96,10 @@ fn choose_record(ui: &mut egui::Ui, number: &mut u32, count: u32) -> bool {
     if count > 1 {
         ui.horizontal(|ui| {
             let label = ui.label("Record number");
-            ui.add(egui::DragValue::new(number).range(1..=count))
+            ui.add(egui::DragValue::new(number).range(1..=count).speed(1.0))
                 .labelled_by(label.id);
         });
+        *number = (*number).clamp(1, count);
         ui.horizontal(|ui| {
             if ui
                 .add_enabled(*number > 1, egui::Button::new("Previous molecule"))
