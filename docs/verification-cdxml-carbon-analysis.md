@@ -40,3 +40,12 @@ the unsupported-source message. The host approved Close and its process exited.
 The test used no desktop input. Receipt SHA-256 was
 `e32947ab757563774ed6f7d5ee281d75594e91a194d10012efeeb73ce75f43a1`.
 Interactive Windows, Linux and web panel execution for this increment remains pending.
+
+Initialized stdio MCP independently opened the pinned file, queried the complete
+properties, checked both refused operations and repeated them on a byte-identical
+Unicode-named save. The result SHA-256 was
+`4238447c953ca2b021e0b58ed31c34bf239d5c33e15d76305500a205687d37fd`.
+The corpus gate verified three matching complete drawings and five unsupported
+sources. Two individual SDF mol-block checks matched, and three SMILES record
+attempts remained unavailable. All 44 xtask tests and its warnings-denied
+Clippy check passed. [Corpus inventory](corpus/README.md).
