@@ -448,12 +448,27 @@ fn check_batch(document: &Document<'_>) {
     }
 }
 
-fn check_caption_edit(stored: &bondline_io::StoredDocument, source: &Document<'_>) {
+fn check_caption_edit(
+    stored: &bondline_io::StoredDocument,
+    source: &Document<'_>,
+    mixed_owner: Option<usize>,
+) {
     let page = stored.model().pages().first().unwrap();
     let Some(caption) = page.texts().last() else {
         return;
     };
-    let run = if source.as_bytes().len() % 2 == 0 {
+    // Both original short/extended input encodings must produce the same exact prefix edit.
+    let witnessed = mixed_owner.is_some()
+        && [
+            include_bytes!("../../crates/io/tests/fixtures/cdx-mixed-caption-edit/before.cdx")
+                .as_slice(),
+            include_bytes!(
+                "../../crates/io/tests/fixtures/cdx-mixed-caption-edit/extended_before.cdx"
+            )
+            .as_slice(),
+        ]
+        .contains(&source.as_bytes());
+    let run = if !witnessed && source.as_bytes().len() % 2 == 0 {
         caption.runs().len() - 1
     } else {
         0
@@ -467,12 +482,42 @@ fn check_caption_edit(stored: &bondline_io::StoredDocument, source: &Document<'_
         &unchanged.model_snapshot()
     ));
     assert_eq!(unchanged.export_cdx().unwrap(), source.as_bytes());
-    let replacement = if old == "QX" { "MM" } else { "QX" };
-    if let Ok(edited) =
-        stored.with_cdx_caption_run(page.id(), caption.id(), run, replacement.to_owned())
-    {
-        assert!(edited.has_cdx_caption_preview());
+    let replacement = if witnessed {
+        "H H "
+    } else if old == "QX" {
+        "MM"
+    } else {
+        "QX"
+    };
+    let candidate =
+        stored.with_cdx_caption_run(page.id(), caption.id(), run, replacement.to_owned());
+    if witnessed {
+        assert_eq!(
+            candidate.as_ref().unwrap().export_cdx().unwrap(),
+            include_bytes!(
+                "../../crates/io/tests/fixtures/cdx-mixed-caption-edit/after_prefix.cdx"
+            )
+        );
+    }
+    if let Ok(edited) = candidate {
+        assert_eq!(edited.has_cdx_caption_preview(), mixed_owner.is_none());
+        assert_eq!(edited.has_cdx_mixed_preview(), mixed_owner.is_some());
+        assert!(edited.can_edit_cdx_caption_run());
+        if mixed_owner.is_some() {
+            assert!(!edited.can_create_caption());
+            assert!(!edited.has_cdx_atom_label_preview());
+            assert!(edited.to_cdxml().is_err());
+        }
         assert!(!edited.is_fully_mapped());
+        // Whole-model equality includes each atom, label, bond, peer caption, style and ID.
+        let mut expected = stored.model().clone();
+        expected
+            .replace_text(
+                page.id(),
+                caption.with_run_text(run, replacement.to_owned()).unwrap(),
+            )
+            .unwrap();
+        assert_eq!(edited.model(), &expected);
         let bytes = edited.export_cdx().unwrap();
         let parsed = Document::parse(bytes).unwrap();
         assert_eq!(parsed.framing(), source.framing());
@@ -490,6 +535,26 @@ fn check_caption_edit(stored: &bondline_io::StoredDocument, source: &Document<'_
                     after.kind(),
                     RecordKind::Property { tag: 0x0700, .. }
                 ));
+                if let Some(owner) = mixed_owner {
+                    assert_eq!(
+                        before.parent(),
+                        Some(owner),
+                        "edited a different Page or Node Text"
+                    );
+                    let old = source.string(before).unwrap();
+                    let new = parsed.string(after).unwrap();
+                    assert_eq!(old.runs().len(), new.runs().len());
+                    let mut offset = 0;
+                    let runs = expected.pages()[0].texts().last().unwrap().runs();
+                    for ((a, b), projected) in old.runs().zip(new.runs()).zip(runs) {
+                        assert_eq!(source.as_bytes()[a.range()][2..], bytes[b.range()][2..]);
+                        assert_eq!(usize::from(b.start()), offset);
+                        let end = offset + projected.text().len();
+                        assert_eq!(&new.text_bytes()[offset..end], projected.text().as_bytes());
+                        offset = end;
+                    }
+                    assert_eq!(offset, new.text_bytes().len());
+                }
                 changed += 1;
             }
         }
@@ -500,6 +565,8 @@ fn check_caption_edit(stored: &bondline_io::StoredDocument, source: &Document<'_
         )
         .unwrap();
         assert_eq!(reopened.model(), edited.model());
+        assert_eq!(reopened.export_cdx().unwrap(), bytes);
+        assert_eq!(reopened.has_cdx_mixed_preview(), mixed_owner.is_some());
     }
     assert_eq!(stored.export_cdx().unwrap(), source.as_bytes());
 }
@@ -662,6 +729,7 @@ fn check_mixed_preview(stored: &bondline_io::StoredDocument, source: &Document<'
         assert!(z > 0 && by_depth.insert(z, (owner, id)).is_none());
     }
     let resources = source.resources().unwrap();
+    let front_owner = by_depth.last_key_value().unwrap().1.0;
     for (projected, (owner, id)) in page.texts().iter().zip(by_depth.into_values()) {
         assert_eq!(projected.id().get(), id);
         let p = payload(owner, 0x0200);
@@ -701,10 +769,20 @@ fn check_mixed_preview(stored: &bondline_io::StoredDocument, source: &Document<'
         stored.with_cdx_caption(page.id(), caption.as_ref().clone()),
         Err(bondline_io::DocumentError::UnsupportedCdxEdit)
     ));
-    assert!(matches!(
-        stored.with_cdx_caption_run(page.id(), caption.id(), 0, "changed".into()),
-        Err(bondline_io::DocumentError::UnsupportedCdxEdit)
-    ));
+    check_caption_edit(stored, source, Some(front_owner));
+    let unused = (1..=u32::try_from(live.len() + 1).unwrap())
+        .find(|id| !live.contains(id))
+        .unwrap();
+    assert!(
+        stored
+            .with_cdx_caption_run(
+                page.id(),
+                bondline_model::TextId::new(unused).unwrap(),
+                0,
+                "changed".into()
+            )
+            .is_err()
+    );
     let (fragment, atom) = page
         .fragments()
         .iter()
@@ -731,6 +809,11 @@ fn check_mixed_preview(stored: &bondline_io::StoredDocument, source: &Document<'
         .unwrap();
     assert!(detached.source_info().unwrap().modified);
     assert!(!detached.has_cdx_mixed_preview());
+    assert!(!detached.can_edit_cdx_caption_run());
+    assert!(matches!(
+        detached.with_cdx_caption_run(page.id(), caption.id(), 0, "changed".into()),
+        Err(bondline_io::DocumentError::UnsupportedCdxEdit)
+    ));
     assert!(!detached.has_display_projection());
     assert!(detached.to_cdx().is_err());
     assert!(detached.to_cdxml().is_err());
@@ -898,7 +981,7 @@ fuzz_target!(|data: &[u8]| {
         assert!(!stored.has_caption_projection());
         assert!(stored.has_display_projection());
         assert!(stored.to_cdxml().is_err());
-        check_caption_edit(&stored, &document);
+        check_caption_edit(&stored, &document, None);
         check_caption_append(&stored, &document);
         let baseline = stored.clone();
         let page = stored.model().pages().first().unwrap();
