@@ -167,6 +167,123 @@ fn choose_file(f: &mut Fixture, path: &Path, action: &str) -> TestResult {
 }
 
 #[test]
+fn mixed_cdx_paints_caption_over_label_and_keeps_the_paper_read_only() -> TestResult {
+    let raw = include_bytes!("../../io/tests/fixtures/cdx-mixed-caption/overlap_before.cdx");
+    let manifest: Value = serde_json::from_str(include_str!(
+        "../../io/tests/fixtures/cdx-mixed-caption/cases.json"
+    ))?;
+    let case = &manifest["overlap_before"];
+    for retained_text_tool in [false, true] {
+        let mut f = Fixture::new(1160.0, 800.0, 1.0)?;
+        let input = f.directory.path("structure-and-caption-原.cdx");
+        let output = f.directory.path("structure-and-caption-保存-β.cdx");
+        fs::write(&input, raw)?;
+        f.warm();
+        if retained_text_tool {
+            f.choose("Text")?;
+        }
+        shortcut(&mut f, Key::O, false);
+        choose_file(&mut f, &input, "Open")?;
+        let opened = f.state()?;
+        assert_eq!(opened["document"], case["model"]);
+        assert_eq!(opened["file"]["dirty"], false);
+        {
+            let engine = f.app.engine.lock().map_err(|_| "engine")?;
+            assert_eq!(
+                engine.effective_tool() == bondline_commands::EffectiveTool::Caption,
+                retained_text_tool
+            );
+            let controls = engine.controls();
+            for id in [
+                "tool.bond.single",
+                "tool.caption",
+                "page.rotate",
+                "file.document_settings",
+            ] {
+                let control = controls.iter().find(|c| c.id == id).ok_or("tool control")?;
+                assert!(!control.enabled, "{id}");
+                assert_eq!(control.disabled_reason, Some("unsupported_content"));
+            }
+        }
+        f.frame(super::tap(Key::F5));
+        let shown = f.warm();
+        assert_eq!(f.view()?["zoom_percent"], 100.0);
+        for label in ["Read-only CDX preview", "1 caption"] {
+            assert!(
+                shown.shapes.iter().any(|paint| {
+                    matches!(&paint.shape, egui::Shape::Text(text) if text.galley.text() == label)
+                }),
+                "missing inspector label {label}"
+            );
+        }
+        let paper = canvas(&shown)?;
+        for sample in case["optical_probes"][0]["samples"]
+            .as_array()
+            .ok_or("ink probes")?
+        {
+            let point = [
+                sample["xy"][0].as_f64().ok_or("x")? + 0.5,
+                sample["xy"][1].as_f64().ok_or("y")? + 0.5,
+            ];
+            let position = projected(paper, [512.0, 512.0], 100.0, None, point);
+            let color = shown
+                .shapes
+                .iter()
+                .rev()
+                .find_map(|paint| match &paint.shape {
+                    egui::Shape::Rect(rect)
+                        if paint.clip_rect.contains(position) && rect.rect.contains(position) =>
+                    {
+                        Some(rect.fill)
+                    }
+                    _ => None,
+                })
+                .ok_or("painted paper pixel")?;
+            assert_eq!(
+                json!([color.r(), color.g(), color.b()]),
+                sample["rgb"],
+                "{sample}"
+            );
+        }
+        let blank = paper_point(&mut f, [350.0, 350.0])?;
+        let end = blank + egui::vec2(40.0, 0.0);
+        f.frame(vec![Event::PointerMoved(blank), button(blank, true)]);
+        f.frame(vec![Event::PointerMoved(end)]);
+        assert!(
+            f.app.drawing.gesture.is_none(),
+            "read-only paper started a bond"
+        );
+        f.frame(vec![button(end, false)]);
+        for (point, modifiers) in [
+            ([147.375, 123.125], Modifiers::ALT),
+            ([166.5, 122.5], Modifiers::NONE),
+            ([350.0, 350.0], Modifiers::NONE),
+        ] {
+            let position = paper_point(&mut f, point)?;
+            click(&mut f, position, modifiers);
+            assert_eq!(f.state()?, opened);
+        }
+        assert!(f.node("Caption text", &[Role::TextInput]).is_err());
+        assert!(f.node("Element", &[Role::TextInput]).is_err());
+        assert!(f.app.error.is_none(), "{:?}", f.app.error);
+        f.frame(super::tap(Key::F7));
+        assert_eq!(f.view()?["zoom_percent"], 125.0);
+        assert_eq!(f.state()?, opened);
+        shortcut(&mut f, Key::S, true);
+        choose_file(&mut f, &output, "Save")?;
+        assert_eq!(fs::read(&output)?, raw);
+        assert_eq!(fs::read(&input)?, raw);
+        shortcut(&mut f, Key::O, false);
+        choose_file(&mut f, &output, "Open")?;
+        let reopened = f.state()?;
+        assert_eq!(reopened["document"], case["model"]);
+        assert_eq!(reopened["undo_depth"], 0);
+        assert_eq!(reopened["file"]["dirty"], false);
+    }
+    Ok(())
+}
+
+#[test]
 fn text_tool_targets_top_painted_caption_and_ordered_runs_at_both_densities() -> TestResult {
     let witnesses: Value = serde_json::from_str(WITNESSES)?;
     let case = &witnesses["cases"]["multi_shift"];
