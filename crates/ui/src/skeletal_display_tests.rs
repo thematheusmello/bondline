@@ -601,7 +601,17 @@ fn skeletal_cdx_opens_the_real_poster_and_preserves_its_raw_hydrogen_fields() ->
             f.frame(vec![Event::PointerMoved(start), super::button(start, true)]);
             f.frame(vec![Event::PointerMoved(end), super::button(end, false)]);
         }
+        assert_eq!(f.state()?, opened);
         click_alt(&mut f, [224., 192.])?;
+        if source == "dormant_true" {
+            assert!(f.state()?["ui_atom_label"].is_null());
+        } else {
+            let form = f.state()?["ui_atom_label"].clone();
+            assert_eq!(form["atom_id"], 2);
+            assert_eq!(form["explicit_hydrogens"], hydrogens[1]);
+            assert!(form["creation_style"].is_object());
+            close_form(&mut f, "Cancel")?;
+        }
         assert_eq!(f.state()?, opened);
         assert!(f.app.error.is_none(), "{:?}", f.app.error);
         shortcut(&mut f, Key::S, true);
