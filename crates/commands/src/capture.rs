@@ -54,6 +54,28 @@ impl Engine {
         stamp == &self.capture_stamp()
     }
 
+    /// Keep an Analysis cursor across metadata edits only while its molecule still agrees.
+    pub fn same_sdf_analysis_record(&self, stamp: &CaptureStamp, record_number: u32) -> bool {
+        if self.session_generation() != stamp.generation {
+            return false;
+        }
+        let Some(previous) = stamp.owner.upgrade() else {
+            return false;
+        };
+        let (Ok(previous), Ok(current), Some(id)) = (
+            previous.sdf(),
+            self.content().sdf(),
+            bondline_io::sdf::RecordId::new(record_number),
+        ) else {
+            return false;
+        };
+        if previous.records().len() != current.records().len() {
+            return false;
+        }
+        matches!((previous.mol_bytes(id), current.mol_bytes(id)),
+            (Ok(a), Ok(b)) if a.len() <= crate::analysis::MAX_ANALYSIS_RECORD_BYTES && a == b)
+    }
+
     /// Shared current Drawing scene for native vector painting; it grants no edit authority.
     pub fn drawing_page_scene(
         &self,

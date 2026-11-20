@@ -2461,3 +2461,14 @@ borane. [BIOVIA representation guide](https://manualzz.com/doc/44003874/biovia-c
 - Elemental analysis uses each element’s percentage of the molecular weight in the current scope. [Revvity Signals v25 guide, printed p. 221](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), [IUPAC mass fraction](https://goldbook.iupac.org/terms/view/M03722), [Bondline’s numeric and presentation conventions](../research/elemental-analysis.md).
 
 SMILES record analysis applies OpenSMILES 1.0 normal valences to bare nonaromatic organic-subset atoms. Bracket H, numbered isotope, formal charge, dots and actual connected components retain their distinct meanings. [Source contract, pinned specification and external-reader differences](../research/smiles-record-analysis.md).
+
+### Analysis of individual SDF molecules
+
+An SDfile holds separate structure records with optional data fields. A record’s
+connection table supplies the molecule. Bondline selects the current one-based
+record ordinal, reads its validated MOL byte range, and applies the same valence,
+mass and isotope conventions as a separately opened MOL. Named data fields do
+not supply chemical values. Current-revision checks prevent an old ordinal from
+silently analyzing a different molecule after removal. [BIOVIA CTfile Formats
+2026, chapter 10](https://www.3ds.com/assets/invest/2026-01/biovia_chemistry_2026_ctfile_formats.pdf),
+[MOL analysis](../research/mol-analysis.md), [masses](../research/molecular-masses.md).
