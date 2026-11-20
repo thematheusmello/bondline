@@ -57,5 +57,25 @@ pub(super) fn verify() -> Result<(), Box<dyn Error>> {
     {
         return Err("scoped IDs or extended property lengths changed during movement".into());
     }
+    let twins = include_bytes!("../../tests/fixtures/cdx-mixed-skeletal-move/twins.cdx");
+    let shifted = include_bytes!("../../tests/fixtures/cdx-mixed-skeletal-move/scoped.cdx");
+    let input = StoredDocument::from_cdx(Arc::from(twins.as_slice()), PageSize::A4)?;
+    let changed = input.with_cdx_skeletal_translation(page, &[2, 3], -5.125, 3.25)?;
+    let xml = include_bytes!("../../tests/fixtures/cdx-mixed-skeletal-move/scoped.cdxml");
+    let control = StoredDocument::from_cdxml(Arc::from(xml.as_slice()), PageSize::A4)?;
+    let view = PageView::zoom(
+        512,
+        512,
+        PageSize::new(512., 512.)?,
+        100.,
+        Point2::new(256., 256.)?,
+    )?;
+    let scene = |doc| drawing_page_scene_with_view(&view, doc, page, &Cancellation::default());
+    if changed.export_cdx()? != shifted
+        || cpu_scene(scene(&changed)?.scene())? != cpu_scene(scene(&control)?.scene())?
+        || input.export_cdx()? != twins
+    {
+        return Err("moving mixed atoms changed the wrong source coordinates or label ink".into());
+    }
     Ok(())
 }
