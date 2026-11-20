@@ -6,7 +6,7 @@ import sys
 
 from rdkit import Chem
 
-def check(molecule, report, selected=None):
+def check(molecule, report, selected=None, *, natural_weights=None):
     initial_atoms = molecule.GetNumAtoms()
     expanded = Chem.AddHs(molecule)
     weights = defaultdict(Decimal)
@@ -17,7 +17,10 @@ def check(molecule, report, selected=None):
             origin = atom.GetIdx() if atom.GetIdx() < initial_atoms else atom.GetNeighbors()[0].GetIdx()
             if origin not in selected:
                 continue
-        weights[(atom.GetAtomicNum(), atom.GetSymbol())] += Decimal(str(atom.GetMass()))
+        weight = Decimal(str(atom.GetMass()))
+        if natural_weights and not atom.GetIsotope():
+            weight = natural_weights.get(atom.GetSymbol(), weight)
+        weights[(atom.GetAtomicNum(), atom.GetSymbol())] += weight
     total = sum(weights.values())
     rows = report["elemental_analysis"]["elements"]
     assert len(rows) == len(weights)

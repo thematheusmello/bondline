@@ -22,6 +22,11 @@ impl RecordId {
         self.0.get()
     }
 }
+impl From<NonZeroU32> for RecordId {
+    fn from(value: NonZeroU32) -> Self {
+        Self(value)
+    }
+}
 impl std::fmt::Display for RecordId {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         self.get().fmt(f)

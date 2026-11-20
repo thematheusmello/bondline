@@ -35,18 +35,26 @@ impl AnalysisWindow {
             ))
             .default_width(298.0)
             .show(ctx, |ui| {
-                let record_count = engine
-                    .content()
-                    .sdf()
-                    .ok()
-                    .and_then(|source| u32::try_from(source.records().len()).ok())
-                    .unwrap_or(0);
                 let mut request = engine.analysis_properties_request(true);
-                if record_count > 0 {
-                    if choose_record(ui, &mut self.record_number, record_count) {
+                let collection = match engine.content() {
+                    bondline_commands::StoredContent::SmilesFile(file) => Some((
+                        "SMILES",
+                        file.records().len(),
+                        &mut request.smiles_record_id,
+                    )),
+                    bondline_commands::StoredContent::Sdf { current, .. } => {
+                        Some(("SDF", current.records().len(), &mut request.sdf_record_id))
+                    }
+                    bondline_commands::StoredContent::Drawing(_) => None,
+                };
+                if let Some((label, records, selector)) = collection
+                    && let Ok(count) = u32::try_from(records)
+                    && count > 0
+                {
+                    if choose_record(ui, &mut self.record_number, count, label) {
                         self.cached = None;
                     }
-                    request.sdf_record_id = std::num::NonZeroU32::new(self.record_number);
+                    *selector = std::num::NonZeroU32::new(self.record_number);
                 }
                 let epoch = request.expected_selection_epoch;
                 if self
@@ -71,7 +79,7 @@ impl AnalysisWindow {
                     Ok(report) => display(
                         ui,
                         report,
-                        record_count > 0
+                        matches!(report.scope, AnalysisScope::SdfRecord)
                             || engine
                                 .stored_document()
                                 .is_ok_and(|d| d.mol_version().is_some()),
@@ -91,7 +99,7 @@ impl AnalysisWindow {
     }
 }
 
-fn choose_record(ui: &mut egui::Ui, number: &mut u32, count: u32) -> bool {
+fn choose_record(ui: &mut egui::Ui, number: &mut u32, count: u32, format: &str) -> bool {
     *number = (*number).clamp(1, count);
     let previous = *number;
     if count > 1 {
@@ -116,7 +124,7 @@ fn choose_record(ui: &mut egui::Ui, number: &mut u32, count: u32) -> bool {
             }
         });
     }
-    ui.label(format!("SDF record {number} of {count}"));
+    ui.label(format!("{format} record {number} of {count}"));
     *number != previous
 }
 
@@ -128,7 +136,7 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport, mol: bool) {
         AnalysisScope::Selection => {
             ui.weak("Current selection");
         }
-        AnalysisScope::SdfRecord => {}
+        AnalysisScope::SdfRecord | AnalysisScope::SmilesRecord => {}
     };
     match &report.outcome {
         AnalysisOutcome::Available {
@@ -180,7 +188,13 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport, mol: bool) {
             ));
             if let Some(count) = defaulted_hydrogen_atoms {
                 let unit = if count.get() == 1 { "atom" } else { "atoms" };
-                let source = if mol { "MOL" } else { "CDX" };
+                let source = if matches!(report.scope, AnalysisScope::SmilesRecord) {
+                    "SMILES"
+                } else if mol {
+                    "MOL"
+                } else {
+                    "CDX"
+                };
                 ui.label(format!(
                     "The {source} valence default supplies hydrogen counts for {count} {unit}."
                 ));

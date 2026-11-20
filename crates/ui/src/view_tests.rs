@@ -1819,3 +1819,39 @@ fn analysis_keeps_the_selected_molecule_through_field_edits_and_history() -> Tes
     assert_eq!(std::fs::read(&input)?, source);
     Ok(())
 }
+
+#[test]
+fn analysis_reads_raw_smiles_records_and_resets_after_file_replacement() -> TestResult {
+    let mut fixture = Fixture::new(1160., 800., 1.)?;
+    let input = fixture.directory.path("mélange.smi");
+    let source = b"[13CH3][CH2][OH] first\r\nC1.C1 ethane\r\nc1ccccc1 aromatic\r\n";
+    std::fs::write(&input, source)?;
+    fixture.command("document.open_smiles", json!({"path":input}))?;
+    fixture.warm();
+    fixture.choose("View")?;
+    fixture.choose("Show Analysis Window")?;
+    let first = fixture.warm();
+    assert!(painted(&first, "SMILES record 1 of 3") && painted(&first, "C[13C]H6O"));
+    let state = fixture.state()?;
+    fixture.choose("Next molecule")?;
+    let second = fixture.warm();
+    assert!(painted(&second, "SMILES record 2 of 3") && painted(&second, "C2H6"));
+    assert!(painted(
+        &second,
+        "The SMILES valence default supplies hydrogen counts for 2 atoms."
+    ));
+    fixture.choose("Next molecule")?;
+    let third = fixture.warm();
+    assert!(painted(&third, "SMILES record 3 of 3"));
+    assert!(painted(
+        &third,
+        "Formula and masses unavailable. Complete chemical coverage is required for this source."
+    ));
+    assert!(!painted(&third, "C2H6"));
+    assert_eq!(fixture.state()?, state);
+    fixture.command("document.open_smiles", json!({"path":input}))?;
+    let reopened = fixture.warm();
+    assert!(painted(&reopened, "SMILES record 1 of 3") && painted(&reopened, "C[13C]H6O"));
+    assert_eq!(std::fs::read(input)?, source);
+    Ok(())
+}
