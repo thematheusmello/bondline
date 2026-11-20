@@ -77,6 +77,7 @@ impl<'record, 'input> LabelFields<'record, 'input> {
         hydrogens: u16,
         body: &str,
         bounds: &[u8],
+        preserve_lengths: bool,
     ) -> Result<Vec<u8>, MappingError> {
         let mut text = self.run_prefix.to_vec();
         text.extend_from_slice(body.as_bytes());
@@ -90,7 +91,12 @@ impl<'record, 'input> LabelFields<'record, 'input> {
         let output = match self.element {
             Some(record) => {
                 let [h, text, bounds] = changes;
-                source.replace_properties(&[(record, &element_word), h, text, bounds])
+                let changes = [(record, element_word.as_slice()), h, text, bounds];
+                if preserve_lengths {
+                    source.replace_properties_preserving_lengths(&changes)
+                } else {
+                    source.replace_properties(&changes)
+                }
             }
             // The published default carries the element through a carbon H-only edit.
             None if element.get() == 6 => source.replace_properties(&changes),

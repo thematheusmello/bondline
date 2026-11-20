@@ -279,12 +279,7 @@ fn initialized_mcp_plain_cdx_bonds_keep_exact_discovery_refusals_and_unchanged_s
     let sentinel = directory.path("plain-mcp-preserved.cdx");
     fs::write(&input, f::source("ethyne"))?;
     fs::write(&sentinel, b"keep destination\n")?;
-    let mut client = Client::start()?;
-    client.send(json!({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"cdx-plain-bond-test","version":"1"}}}))?;
-    let initialized = client.replies.recv_timeout(Duration::from_secs(10))??;
-    assert_eq!(initialized["id"], 1);
-    assert!(initialized.get("error").is_none());
-    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    let mut client = initialized_client()?;
     client.send(json!({"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}))?;
     let listed = client.replies.recv_timeout(Duration::from_secs(10))??;
     assert_eq!(listed["id"], 2);
@@ -507,4 +502,46 @@ fn authenticated_plain_cdx_bonds_keep_auto_manual_source_owners_and_detached_pag
     drop(client);
     server.shutdown()?;
     Ok(())
+}
+
+fn initialized_client() -> std::result::Result<Client, Box<dyn std::error::Error>> {
+    let mut client = Client::start()?;
+    client.send(json!({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"cdx-plain-bond-test","version":"1"}}}))?;
+    let initialized = client.replies.recv_timeout(Duration::from_secs(10))??;
+    assert_eq!(initialized["id"], 1);
+    assert!(initialized.get("error").is_none());
+    client.send(json!({"jsonrpc":"2.0","method":"notifications/initialized"}))?;
+    Ok(client)
+}
+
+#[test]
+fn stdio_reopens_only_the_edited_printed_atom_in_the_second_fragment() -> Result {
+    let fixtures = Path::new(env!("CARGO_MANIFEST_DIR")).join("../io/tests/fixtures");
+    let dir = support::SdfTestDirectory::new()?;
+    let path = dir.path("二つの構造-β.cdx");
+    let mut client = initialized_client()?;
+    let opened = client.call(
+        2,
+        "document.open_cdx",
+        json!({"path":fixtures.join("cdx-mixed-skeletal-move/twins.cdx")}),
+    )?;
+    let edit = client.call(
+        3,
+        "atom.set_authored_label",
+        json!({
+            "expected_revision":opened["revision"],"page_id":1,"fragment_id":2,"atom_id":4,
+            "element":7,"explicit_hydrogens":2
+        }),
+    )?;
+    assert_eq!(edit["undo_depth"], 1);
+    client.call(4, "document.save_cdx", json!({"path":path}))?;
+    assert_eq!(
+        fs::read(&path)?,
+        fs::read(fixtures.join("cdx-skeletal-label-edit/twins.cdx"))?
+    );
+    let reopened = client.call(5, "document.open_cdx", json!({"path":path}))?;
+    assert_eq!(reopened["document"], edit["document"]);
+    let analysis = client.call(6, "analysis.formula", json!({"expected_revision":reopened["revision"], "expected_selection_epoch":reopened["ui_selection"]["epoch"].as_u64().unwrap_or(0)}))?;
+    assert_eq!(analysis["analysis"]["formula"], "C2H9NO");
+    client.finish()
 }
