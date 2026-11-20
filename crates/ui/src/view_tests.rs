@@ -4,6 +4,8 @@ use super::*;
 mod caption_app;
 #[path = "native_caption_tests.rs"]
 mod native_caption_tests;
+#[path = "native_menu_tests.rs"]
+mod native_menu;
 
 #[path = "native_drawing_settings_tests.rs"]
 mod native_drawing_settings;
@@ -70,13 +72,16 @@ impl Fixture {
         })
     }
     fn frame(&mut self, events: Vec<Event>) -> egui::FullOutput {
+        self.frame_with_focus(events, true)
+    }
+    fn frame_with_focus(&mut self, events: Vec<Event>, focused: bool) -> egui::FullOutput {
         let mut input = egui::RawInput {
             screen_rect: Some(egui::Rect::from_min_size(
                 Pos2::ZERO,
                 egui::vec2(self.width, self.height),
             )),
             events,
-            focused: true,
+            focused,
             ..Default::default()
         };
         input
