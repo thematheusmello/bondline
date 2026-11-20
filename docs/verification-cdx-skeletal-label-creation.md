@@ -21,3 +21,14 @@ cargo test --locked -p bondline-cli --test cdx_skeletal_creation
 ```
 
 Set `BONDLINE_PYTHON` to the pinned RDKit interpreter. The full local integration gate and native Windows/Linux interaction require their own evidence.
+
+## Desktop cross-target checks
+
+The combined desktop binary on `609e9d9` passed `cargo check --offline --locked --target <triple> -p bondline-ui --bin bondline` for both targets on the Apple Silicon host.
+
+| Rust target | Check log SHA-256 |
+| --- | --- |
+| `x86_64-unknown-linux-gnu` | `53fb48c9c48ab95eb50e80214e26537cd2a30c0a0ad3da10ecee90469c9c5e7e` |
+| `x86_64-pc-windows-msvc` | `0c45370bd675d762a107efd95fb72fb712df8b2a5252aebf2dd4f8948e9f031c` |
+
+These are compile checks. Interactive launch, file dialogs, drawing input and packaged installation still require Windows and Linux execution.
