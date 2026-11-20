@@ -34,9 +34,11 @@ CDXML Save/reopen. The same workflow now appends to qualified caption-only CDX
 pages and reopens with stable live IDs. An empty single Poster page with a qualifying
 font and white paper preserves its physical size and accepts its first caption.
 Qualified mixed CDX pages now display structures and frontmost captions together
-and save unchanged. Mixed-source edits, interleaved depths, missing font resources, multiline text,
+and support editing existing caption runs. The Text tool respects paint order
+when a caption overlaps a label. Creating mixed-source captions, editing mixed
+structures, interleaved depths, missing font resources, multiline text,
 inherited styles, ambiguous starts and general shaping remain open.
-[CDX creation](docs/verification-cdx-caption-creation.md), [empty Poster verification](docs/verification-cdx-empty-caption.md), [mixed pages](docs/verification-cdx-mixed-caption.md).
+[CDX creation](docs/verification-cdx-caption-creation.md), [empty Poster verification](docs/verification-cdx-empty-caption.md), [mixed pages](docs/verification-cdx-mixed-caption.md), [mixed edits](docs/verification-cdx-mixed-caption-edits.md).
 
 The [CDX Node label increment](docs/verification-cdx-node-labels.md)
 preserves explicit child Text beside literal atom fields. Independent

@@ -34,7 +34,9 @@ Apply checks exact host, revision, source, view, tool, file and modal
 ownership, then uses `text.set_run` or `text.create`. The native
 draft is limited to 16384 UTF-8 bytes. A refusal keeps the draft open,
 and Cancel can retire the exact stale request. Successful Apply or
-Cancel retires the presentation. Headless clients can call either
+Cancel retires the request. After an external Apply, a displayed native form
+closes when its field is pristine or matches the submitted text. A different
+local draft remains available to copy or cancel. Headless clients can call either
 authoring command directly. [Creation evidence](verification-native-caption-creation.md),
 [existing-run evidence](verification-native-caption-editing.md).
 
@@ -144,8 +146,10 @@ keys are required in a closed object:
 
 IDs name application Page/Text objects, not source XML or font IDs; `run_index` is
 zero-based. The command replaces decoded UTF-8 text while preserving style, position,
-identity and every other run. Source-free/complete-native captions and the separate
-explicit caption-only source capability are eligible. It does not grant chemical,
+identity and every other run. Source-free and complete-native captions, supported
+caption-only sources, and existing direct Page captions on qualified mixed CDX
+drawings are eligible. The mixed writer resolves the Page caption by live ID
+and certifies the full drawing after the source splice. [Mixed CDX verification](verification-cdx-mixed-caption-edits.md). It does not grant chemical,
 page-size or style authority on foreign captions. Stale revision, closed session,
 unsupported source, invalid/missing target and unrenderable candidate refuse atomically.
 A real edit receives one ordinary history step after final source-write and whole-page
