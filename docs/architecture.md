@@ -202,7 +202,11 @@ The skeletal CDX display profile retains original Node fields and a separately
 certified model. IO computes temporary neutral-carbon H counts from graph degree
 for omitted fields. The same renderer checks source admission and every camera
 view, including mandatory glyphs and hit regions. A detached model loses this
-display proof. [Binary skeletal source contract](research/cdx-skeletal.md).
+display proof. [Binary skeletal source contract](research/cdx-skeletal.md). The source-aware
+selection path translates the owned Node positions, checks every retained
+position against the previous model, and re-imports the entire drawing.
+Preview renders the certified candidate, including transient H-derived ink.
+[Movement and history](research/cdx-skeletal-movement.md).
 
 Model-only `chem::analyze_fragment` produces immutable numeric element/isotope counts and
 formal charge from fully specified atom H data. It supports full model bounds, checks

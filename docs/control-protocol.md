@@ -140,7 +140,10 @@ For qualified skeletal CDX, existing Open, inspection, render capture and Save
 commands operate on the declared paper. Inspect exposes omitted H as null, even
 after rendering. Native page controls are disabled for this profile. A direct
 page resize detaches the source, and Undo can restore the certified drawing.
-[Skeletal CDX verification](verification-cdx-skeletal.md).
+[Skeletal CDX verification](verification-cdx-skeletal.md). The existing `ui.selection` and
+`selection.translate` commands can now move selected skeletal atoms on certified
+paper. One quantized displacement applies to all selected atoms. Sub-grid
+no-ops preserve redo and source identity. [Movement contract](research/cdx-skeletal-movement.md).
 
 The existing exact-target `ui.atom_label` form chooses this operation under the same
 request/source/file/view/tool/close proof. Old requests and metadata stay exact. A

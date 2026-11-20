@@ -504,17 +504,29 @@ networking and fails in mio. The full local gate on `00ec56f` passed 2,363
 workspace tests with one ignored, all three AccessKit tests and all gates.
 [Acceptance and local reproduction](docs/verification-cdx-skeletal.md).
 
+[PR 22](https://github.com/thematheusmello/bondline/pull/22) merged the
+verified skeletal viewer at `df7790a`. The merge tree matched `8af98c8`
+and its completed feature branch was retired.
+
+### Move selected skeletal atoms
+
+The writer at `00ceb73` and native selection at `98f3edd` move owned Node
+positions, preserve original length headers, and support exact Undo, Redo and
+Unicode Save/reopen. Six independently predicted files include a long-form
+position and repeated raw IDs in different fragments. Native drag and nudge
+were exercised in App frames. CLI, MCP and macOS loopback all preserved the
+expected saved bytes and produced 12 matching CPU/Metal pairs per surface.
+The Rust WebAssembly file round trips and moved images passed in offline Chrome
+at `76d3358`. The raw coordinate movement oracle at `2922cd9` passed 10,000
+AddressSanitizer iterations from 245 verified seeds.
+[Contract](docs/research/cdx-skeletal-movement.md) and [acceptance](docs/verification-cdx-skeletal-movement.md).
+
 ### Next executable work
 
-1. Implement source-preserving selection movement on this CDX profile. Verify
-   the signed 16.16 Node positions, a single history transaction, protected raw
-   headers, exact moved file, redo after a sub-grid no-op, and unchanged H/flags.
-   Test duplicate raw IDs across fragments, off-page and mandatory-label refusals.
-   A separate worktree `../bondline-cdx-skeletal-move` started on `f6015a0`.
-2. Extend the approved rendering profile to mixed hidden-carbon/printed-heteroatom
+1. Extend the approved rendering profile to mixed hidden-carbon/printed-heteroatom
    drawings. Source and optical acceptance must account for glyphs, clearance
    and current graph visibility on every atom.
-3. Independently, `../bondline-formula-notation` starts from the verified numeric
+2. Independently, `../bondline-formula-notation` starts from the verified numeric
    composition in `bondline-chem` to produce a sourced molecular formula. Exercise
    carbon-free ordering, isotopes and charge against independent conventions.
    Windows/Linux runtime validation and the full browser editor remain outstanding.

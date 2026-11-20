@@ -41,8 +41,10 @@ font resources, general typography and broader platforms remain open.
 **Verified on macOS** for source-qualified binary skeletal drawings. Open
 preserves the physical Poster dimensions. Save As and reopen preserve explicit
 and omitted hydrogen fields, the dormant node flag, and every source byte.
-CPU and Metal agree at 100% and 200%. **Missing** on this source profile are
-chemical editing and mixed hidden-carbon/printed-label depiction. Windows and
+CPU and Metal agree at 100% and 200%. **Verified** for skeletal atom movement
+through Marquee, drag, keyboard nudge, Undo, Redo and exact Save/reopen. Mixed
+hidden-carbon/printed-label depiction and other chemistry edits remain missing.
+[Movement evidence](verification-cdx-skeletal-movement.md). Windows and
 Linux native execution are unverified. [Acceptance](verification-cdx-skeletal.md).
 
 The [Node child Text increment](verification-cdx-node-labels.md) verifies
