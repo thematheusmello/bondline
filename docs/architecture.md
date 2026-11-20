@@ -204,6 +204,9 @@ cancellation/arithmetic and refuses unresolved H; bonds/geometry are not chemist
 It owns no cache, source permission, command or UI state. Later analysis adapters must
 prove complete source/selection and resolve H under a declared convention. See
 [contract](research/formula-composition.md) and [receiving](verification-formula-composition.md).
+`Composition::hill_formula` presents these resolved counts in combined or
+isotope-specific form. Charge has an unambiguous plain-text suffix.
+[Notation and interoperability](research/hill-formula.md).
 
 CDXML batch `SetText` changes decoded data in an owned empty/text-only element, preserving
 exact no-op lexemes, raw QNames/attributes and unrelated bytes. Mixed content refuses;
