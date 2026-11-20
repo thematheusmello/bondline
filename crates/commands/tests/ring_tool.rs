@@ -347,6 +347,7 @@ fn ring_tool_schema_and_six_bindings_add_one_closed_command_without_placeholder_
     assert!(expected.insert("text.create"));
     assert!(expected.insert("analysis.formula"));
     assert!(expected.insert("ui.analysis"));
+    assert!(expected.insert("analysis.properties"));
     assert_eq!(
         registry.iter().map(|r| r.name).collect::<BTreeSet<_>>(),
         expected

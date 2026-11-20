@@ -165,6 +165,7 @@ fn new_schema_adds_only_the_thirtieth_command_and_a_qualified_file_binding() -> 
             "text.create",
             "analysis.formula",
             "ui.analysis",
+            "analysis.properties",
         ]
         .into_iter()
         .collect()

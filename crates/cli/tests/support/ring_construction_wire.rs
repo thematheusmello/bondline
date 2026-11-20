@@ -319,6 +319,7 @@ fn names(entries: &[Value]) -> TestResult {
                 "text.create",
                 "analysis.formula",
                 "ui.analysis",
+                "analysis.properties",
             ])
             .collect::<BTreeSet<_>>()
     );

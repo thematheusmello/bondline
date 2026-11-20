@@ -31,6 +31,7 @@ fn settings_schema(entries: &[Value], key: &str) -> TestResult {
                 "text.create",
                 "analysis.formula",
                 "ui.analysis",
+                "analysis.properties",
             ])
             .collect::<BTreeSet<_>>()
     );

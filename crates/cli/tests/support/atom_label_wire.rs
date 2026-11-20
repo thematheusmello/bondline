@@ -120,6 +120,7 @@ fn names(values: &[Value]) -> TestResult {
             "text.create",
             "analysis.formula",
             "ui.analysis",
+            "analysis.properties",
         ])
         .collect::<std::collections::BTreeSet<_>>();
     assert_eq!(values.len(), 54);

@@ -1069,6 +1069,7 @@ fn public_mcp_wire_messages_discover_edit_and_recover_from_oversized_input()
         names,
         [
             "analysis.formula",
+            "analysis.properties",
             "atom.create_authored_label",
             "atom.set_authored_label",
             "atom.set_label",

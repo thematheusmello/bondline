@@ -531,6 +531,7 @@ fn one_closed_registry_addition_and_invalid_inputs_are_atomic() -> TestResult {
     assert!(expected.insert("text.create"));
     assert!(expected.insert("analysis.formula"));
     assert!(expected.insert("ui.analysis"));
+    assert!(expected.insert("analysis.properties"));
     assert_eq!(
         registry.iter().map(|r| r.name).collect::<BTreeSet<_>>(),
         expected

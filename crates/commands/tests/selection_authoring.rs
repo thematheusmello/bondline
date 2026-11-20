@@ -276,6 +276,7 @@ fn schemas_add_only_two_closed_commands_and_invalid_wire_inputs_are_atomic() -> 
             "text.create",
             "analysis.formula",
             "ui.analysis",
+            "analysis.properties",
         ]
         .into_iter()
         .collect::<BTreeSet<_>>()

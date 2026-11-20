@@ -67,6 +67,7 @@ fn chain_ui_discovery(entries: &[Value], schema_key: &str) -> TestResult {
                 "text.create",
                 "analysis.formula",
                 "ui.analysis",
+                "analysis.properties",
             ])
             .collect::<BTreeSet<_>>()
     );

@@ -300,6 +300,7 @@ fn initialized_stdio_schema_required_nulls_noops_source_and_whole_history() -> T
                 "text.create",
                 "analysis.formula",
                 "ui.analysis",
+                "analysis.properties",
             ])
             .collect::<BTreeSet<_>>()
     );
