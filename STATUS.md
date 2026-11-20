@@ -570,16 +570,30 @@ and the eight-file pinned corpus passed. The log SHA-256 was
 `d1cc50dc360a47b854bacab39979ff680043066ad25e3016f3b0c06d2431238f`.
 PR 25 landed on main at `40455fd`. Its ancestry merge into PR 26 at
 `6508ff2` changed two documentation files relative to that tested tree.
-PR 26 awaits its main merge. The local gate and native jobs are terminal.
+PR 26 landed on main at `7050792`. The local gate and native jobs are terminal.
 GitHub Actions remains disabled.
+
+### Formulas for skeletal CDX with omitted hydrogen counts
+
+[PR 27](https://github.com/thematheusmello/bondline/pull/27) uses the
+complete qualified CDX drawing to count hydrogens for the whole structure
+or a selection. Selecting the middle carbon of propane gives `CH2`. Each
+of eight files matched RDKit before and after Unicode Save As and reopen.
+Every source byte, including the absence of hydrogen properties, survived.
+The native Analysis window identifies how many atoms used a default.
+Unsupported source chemistry still gives an explicit diagnostic.
+
+The full local gate at `0efcab9` passed 2,391 workspace tests with one
+ignored, all three additional macOS AccessKit tests, and every local audit.
+The local gate and native verification jobs have finished.
+[Acceptance and independent oracle](docs/verification-analysis-window.md).
 
 ### Next executable work
 
-1. Land the tested Analysis branch and verify the main tree. Continue
-   source-qualified default H for eligible CDX structures independently of
-   the frozen literal result. Preserve the input H property’s absence across
-   Save/reopen and keep unsupported cases explicit. Mass, isotope distribution,
-   elemental percentages and live analysis captions remain open.
+1. Integrate molecular weight and monoisotopic mass with independent reference
+   data, explicit missing values and the existing whole-drawing and selection
+   controls. Isotope distributions, elemental percentages and live analysis
+   captions remain open.
 2. `../bondline-cdx-mixed-skeletal-movement` is adding source-preserving
    movement to the printed-label drawings. Verify position and dependent
    bounding-box bytes together, then undo, redo and reopen.

@@ -78,3 +78,9 @@ reported incomplete chemical coverage. The process closed through the registry.
 The native receipt's SHA-256 is
 `2c81ef6809a989872f8e9bc291335cf6c47a208645edd08c905e5cf7a366a2f5`.
 [RDKit and file oracle](../xtask/oracles/cdx_formula.py) · [Analysis policy](research/analysis-window.md).
+
+The full local gate at `0efcab9` recorded 2,391 workspace tests passing,
+zero failures and one ignored. All three additional macOS AccessKit tests,
+formatting, strict Clippy, workspace layers, asset and dependency license
+checks, and the eight-file corpus passed. The local gate log SHA-256 is
+`6366f31f9d2d727decb56961ec4aa22c76a56cdc207d3e006806c66564d4bcd8`.
