@@ -124,6 +124,15 @@ impl Composition {
         atoms: impl IntoIterator<Item = &'a Atom>,
         cancelled: impl Fn() -> bool,
     ) -> Result<Self, CompositionError> {
+        Self::from_atoms_with_hydrogen_defaults(atoms, |_| None, cancelled)
+    }
+
+    /// Use the source's hydrogen convention only where the author omitted a count.
+    pub fn from_atoms_with_hydrogen_defaults<'a>(
+        atoms: impl IntoIterator<Item = &'a Atom>,
+        missing_count: impl Fn(AtomId) -> Option<u16>,
+        cancelled: impl Fn() -> bool,
+    ) -> Result<Self, CompositionError> {
         check_cancel(&cancelled)?;
         let hydrogen = Element::try_from(1)?;
         let mut counts = Counts::default();
@@ -131,6 +140,7 @@ impl Composition {
             check_cancel(&cancelled)?;
             let h = atom
                 .explicit_hydrogens
+                .or_else(|| missing_count(atom.id))
                 .ok_or(CompositionError::UnresolvedHydrogens(atom.id))?;
             counts.add(atom.element, atom.isotope, 1)?;
             counts.add(hydrogen, None, u64::from(h))?;
