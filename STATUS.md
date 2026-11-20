@@ -18,6 +18,8 @@ incomplete. **GitHub Actions stays OFF**; no enable/dispatch/rerun. Push each at
 commit as the user requires. The user now expressly authorizes merging completed feature
 PRs into main; release/publication and enabling Actions remain separate.
 
+The CDXML chain integration at `2df21f2` includes the merged Darwin listener fix and skeletal CDX label edits. Its fresh full local gate passed 2,427 workspace tests and three additional AccessKit tests, with one workspace case ignored. [Qualified source, native and aggregate evidence](docs/verification-cdxml-carbon-analysis.md).
+
 ## Current recoverable work and evidence
 
 Main integration is delivered: [PR1](https://github.com/thematheusmello/bondline/pull/1)
@@ -633,9 +635,11 @@ Molecular weight and monoisotopic mass are available in the shared Analysis wind
 
 Both full local runs on `7df66a2` stopped after 1,629 passes at the same immediate listener-rebind assertion. macOS reported the addresses in use on ports 52920 and 59323. The second log SHA-256 is `76a1b2d3d45ebd3c272ca8a8f718d799e7f9be615e3da05147e90631815729cd`. A separate combined run on the coordinate-free CDXML branch passed 2,424 workspace tests with one ignored and three additional AccessKit tests. The dedicated listener change has its own controlled reproduction. The two historical port owners were unobserved. After merging the listener change, the complete local gate passed on `804c72a` with 2,421 workspace tests passed, zero failed and one ignored, plus three AccessKit tests. The integrated log SHA-256 is `f63be5200831c0fcf3b30a8d1130bb1465fe9bfbc2e0940eacfd3691aae5bfcc`. [Listener PR](https://github.com/thematheusmello/bondline/pull/38).
 
+Per-record SDF Analysis is integrated on `a26c1de`. Navigation, direct typed queries and the intact-collection comparisons preserve data fields and history. The complete local gate passed 2,432 workspace tests, one ignored, and three macOS AccessKit tests. The integrated log SHA-256 is `b00129ab64a69d18f26bc9e0c8b51e25905453daf8b33472a7cf24aa8a8d01bd`. [SDF verification](docs/verification-sdf-record-analysis.md).
+
 ### Next executable work
 
-1. Finish integrating analysis of coordinate-free CDXML carbon structures and record-level SDF queries. The first has a separate source-coverage proof. The second keeps collection metadata and history while analyzing individual MOL blocks. [CDXML PR](https://github.com/thematheusmello/bondline/pull/35) · [SDF PR](https://github.com/thematheusmello/bondline/pull/36).
+1. Integrate direct raw SMILES record analysis against the pinned isotope, multiple-ring and salt examples. Coordinate-free CDXML and individual SDF records have full local verification. [SMILES PR](https://github.com/thematheusmello/bondline/pull/40).
 2. Extend the CDX atom-label workflow to creating a printed heteroatom at a previously hidden carbon. Start with an independent expected file, resource selection, an exact scoped child ID, and the transition between the old and new complete-page representation. The current form edits existing labels. More general foreign files and mixed page styles are pending.
 3. Integrate the interactive WebAssembly host and verify offline recovery and simultaneous tabs. Windows and Linux still need native interaction evidence. Isotope distributions, general stereochemistry, live analysis captions, publishing, clipboard interoperability and the other M0–M5 work remain in the [roadmap](ROADMAP.md) and [parity checklist](docs/parity-checklist.md).
 

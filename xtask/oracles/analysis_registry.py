@@ -19,7 +19,7 @@ for rows, expected in [
 epoch = {"type": "integer", "format": "uint64", "minimum": 0}
 for i, title, description, other, value, read_only in [
     (51, "AnalysisFormula", "Read the Hill formula for the current selection or complete drawing. Reports skeletal CDX hydrogen defaults, unresolved hydrogens, partial fragments and unsupported source coverage.", "expected_selection_epoch", epoch, True),
-    (53, "AnalysisProperties", "Read formula, molecular weight and monoisotopic exact mass for the whole drawing or selection. Partial fragments report uncapped contributions; unavailable mass data identify the element or isotope. Request elemental analysis for percent by weight.", "expected_selection_epoch", epoch, True),
+    (53, "AnalysisProperties", "Read formula, molecular weight and monoisotopic exact mass for the whole drawing or selection. Partial fragments report uncapped contributions; unavailable mass data identify the element or isotope. Request elemental analysis for percent by weight or select one SDF molecule by record ID.", "expected_selection_epoch", epoch, True),
     (52, "UiAnalysis", "Show or hide the Analysis window for this session without changing the drawing or its history.", "visible", {"type": "boolean"}, False),
 ]:
     schema = {
@@ -30,6 +30,7 @@ for i, title, description, other, value, read_only in [
     }
     if i == 53:
         schema["properties"]["include_elemental_analysis"] = {"type": "boolean", "default": False}
+        schema["properties"]["sdf_record_id"] = {"type": ["integer", "null"], "format": "uint32", "minimum": 1}
     name = ["analysis.formula", "ui.analysis", "analysis.properties"][i - 51]
     assert cli[i] == {"name": name, "description": description, "read_only": read_only, "input_schema": schema}
     assert mcp[i] == {"name": name, "description": description, "inputSchema": schema,
