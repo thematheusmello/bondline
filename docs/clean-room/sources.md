@@ -2478,6 +2478,13 @@ A Fragment contains Nodes. A printed Node can carry both chemical fields and a c
 
 The Node object can carry both the element and attached-hydrogen fields and a direct Text child for its label. Bondline's test vectors use explicit run resources and justification, signed document coordinates and a newly allocated child ID. The retained input and an independent generator specify exactly which bytes change. [Published Node definition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Node.htm) · [Published Text definition](https://iupac.github.io/IUPAC-FAIRSpec/cdx_sdk/Text.htm) · [Original witness provenance](../../crates/io/tests/fixtures/cdx-skeletal-label-creation/SOURCES.md).
 
-### CDX labels on hidden carbons
+The independent binary also covers creating the first printed atom and replacing the last hidden one. It checks that existing Element and NumHydrogens payloads can be replaced while retaining their framing. [Fixtures, font and colour resource choices](../../crates/io/tests/fixtures/cdx-skeletal-label-creation/SOURCES.md).
 
-Bondline writes a scoped Node Text, an explicit element and hydrogen count, a style run resolved from the existing font and colour tables, and a signed 16.16 bounding box. The independent binary witnesses document insertion order, replacement of existing payloads and the first and last hidden-carbon transitions. [Public SDK properties and original witnesses](../../crates/io/tests/fixtures/cdx-skeletal-label-creation/SOURCES.md).
+### Darwin loopback listener lifetime, 2026-11-20
+
+The macOS 27.2 public SDK `sys/fcntl.h` and `fcntl(2)` manual define
+`FD_CLOFORK`. Published XNU spawn and descriptor-table sources describe
+the separate fork and exec stages. The experimental comparison uses the
+installed kernel and the real listener. The compatibility evidence identifies
+the older kernels and exact limits of the observed release guarantee.
+[Apple XNU fork and exec](https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_exec.c) · [Source decision and receiving evidence](../research/macos-listener-lifetime.md)

@@ -394,6 +394,10 @@ acceptance does not prove native Text-tool, measured DPI, race or other-platform
   cause. See research/macos-listener-lifetime.md. The actual test, socket policy, timing and
   concurrency stay unchanged. Obtain known socket/process identity at a new natural failure
   before a causal repair; do not rerun exhausted contexts or consumed experiments.
+  A later controlled post-publication spawn reproduces a distinct listener
+  retention interval on macOS 27.2. Its bounded fix and older-kernel limits are
+  documented in [the listener research](../research/macos-listener-lifetime.md).
+  The natural failures still lack a failure-time owner.
 
 - The original external-writer CDX probe now reproduces an interoperability difference:
   Apache-2.0 Indigo1.47.0 emits two terminal zero words; unchanged Bondline/stdlib framing
